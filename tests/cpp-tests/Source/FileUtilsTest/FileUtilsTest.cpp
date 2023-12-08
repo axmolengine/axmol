@@ -960,7 +960,7 @@ void TestIsDirectoryExistAsync::onEnter()
 
     dir = util->getWritablePath();
     util->isDirectoryExist(dir, [=](bool exists) {
-        CCAssert(exists, "Writable path should exist");
+        AXASSERT(exists, "Writable path should exist");
         auto label = Label::createWithSystemFont(getMsg(exists, dir), "", 20);
         label->setPosition(x, y * 2);
         this->addChild(label);

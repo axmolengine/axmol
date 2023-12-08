@@ -83,7 +83,7 @@ Skin::Skin() : _bone(nullptr), _armature(nullptr), _displayName(), _skinTransfor
 
 bool Skin::initWithSpriteFrameName(std::string_view spriteFrameName)
 {
-    CCAssert(spriteFrameName != "", "");
+    AXASSERT(spriteFrameName != "", "");
 
     SpriteFrame* pFrame = SpriteFrameCache::getInstance()->findFrame(spriteFrameName);
     bool ret            = true;

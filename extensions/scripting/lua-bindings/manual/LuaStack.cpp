@@ -241,7 +241,7 @@ int LuaStack::executeString(const char* codes)
 
 int LuaStack::executeScriptFile(const char* filename)
 {
-    CCAssert(filename, "CCLuaStack::executeScriptFile() - invalid filename");
+    AXASSERT(filename, "CCLuaStack::executeScriptFile() - invalid filename");
 
     std::string filePath{filename};
     Data data = FileUtils::getInstance()->getDataFromFile(filePath);
