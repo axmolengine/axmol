@@ -91,58 +91,10 @@ ActionCoroutine* ActionCoroutine::create(const std::function<Coroutine()>& funct
     delete ret;
     return nullptr;
 }
-ActionCoroutine* ActionCoroutine::create(const std::function<Coroutine(void*)>& function, void* arg)
-{
-    auto ret = new (std::nothrow) ActionCoroutine();
-    if (ret && ret->initWithCoroutine(function, arg))
-    {
-        ret->autorelease();
-        return ret;
-    }
-    delete ret;
-    return nullptr;
-}
-ActionCoroutine* ActionCoroutine::create(const std::function<Coroutine(void*, void*)>& function, void* arg1, void* arg2)
-{
-    auto ret = new (std::nothrow) ActionCoroutine();
-    if (ret && ret->initWithCoroutine(function, arg1, arg2))
-    {
-        ret->autorelease();
-        return ret;
-    }
-    delete ret;
-    return nullptr;
-}
-ActionCoroutine* ActionCoroutine::create(const std::function<Coroutine(void*, void*, void*)>& function, void* arg1, void* arg2, void* arg3)
-{
-    auto ret = new (std::nothrow) ActionCoroutine();
-    if (ret && ret->initWithCoroutine(function, arg1, arg2, arg3))
-    {
-        ret->autorelease();
-        return ret;
-    }
-    delete ret;
-    return nullptr;
-}
 
 bool ActionCoroutine::initWithCoroutine(const std::function<Coroutine()>& function) noexcept
 {
     _coroutine = std::forward<Coroutine>(function());
-    return true;
-}
-bool ActionCoroutine::initWithCoroutine(const std::function<Coroutine(void*)>& function, void* arg) noexcept
-{
-    _coroutine = std::forward<Coroutine>(function(arg));
-    return true;
-}
-bool ActionCoroutine::initWithCoroutine(const std::function<Coroutine(void*, void*)>& function, void* arg1, void* arg2) noexcept
-{
-    _coroutine = std::forward<Coroutine>(function(arg1, arg2));
-    return true;
-}
-bool ActionCoroutine::initWithCoroutine(const std::function<Coroutine(void*, void*, void*)>& function, void* arg1, void* arg2, void* arg3) noexcept
-{
-    _coroutine = std::forward<Coroutine>(function(arg1, arg2, arg3));
     return true;
 }
 

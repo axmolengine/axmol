@@ -129,9 +129,6 @@ public:
      * @lua NA
      */
     static ActionCoroutine* create(const std::function<Coroutine()>& function);
-    static ActionCoroutine* create(const std::function<Coroutine(void*)>& function, void* arg);
-    static ActionCoroutine* create(const std::function<Coroutine(void*, void*)>& function, void* arg1, void* arg2);
-    static ActionCoroutine* create(const std::function<Coroutine(void*, void*, void*)>& function, void* arg1, void* arg2, void* arg3);
 
     //
     // Overrides
@@ -147,9 +144,6 @@ public:
      * @lua NA
      */
     bool initWithCoroutine(const std::function<Coroutine()>& function) noexcept;
-    bool initWithCoroutine(const std::function<Coroutine(void*)>& function, void* arg) noexcept;
-    bool initWithCoroutine(const std::function<Coroutine(void*, void*)>& function, void* arg1, void* arg2) noexcept;
-    bool initWithCoroutine(const std::function<Coroutine(void*, void*, void*)>& function, void* arg1, void* arg2, void* arg3) noexcept;
 
 protected:
     /** Coroutine */
