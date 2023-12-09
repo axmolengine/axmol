@@ -75,10 +75,16 @@ function setup_doxygen() {
 setup_doxygen
 
 Write-Host "Using doxygen $(doxygen --version)"
+
+$axver_file = (Resolve-Path $AX_ROOT/core/axmolver.h.in).Path
+$axver_content = $(Get-Content -Path $axver_file)
+function parse_axver($part) {
+    return ($axver_content | Select-String "#define AX_VERSION_$part").Line.Split(' ')[2]
+}
+
 function query_axmol_latest() {
-    $axver_file = (Resolve-Path $AX_ROOT/core/axmolver.h.in).Path
-    $content = ($(Get-Content -Path $axver_file) | Select-String 'AX_VERSION_STR')
-    $axver = $content[0].Line.Split(' ')[2].Replace('"', '')
+    
+    $axver = "$(parse_axver 'MAJOR').$(parse_axver 'MINOR').$(parse_axver 'PATCH')"
 
     $git_prog = (Get-Command 'git' -ErrorAction SilentlyContinue).Source
     if($git_prog) {

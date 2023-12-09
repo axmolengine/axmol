@@ -13,8 +13,12 @@ $myRoot = $PSScriptRoot
 # parse engine version
 $AX_ROOT = (Resolve-Path $myRoot/../..).Path
 $axver_file = (Resolve-Path $AX_ROOT/core/axmolver.h.in).Path
-$content = ($(Get-Content -Path $axver_file) | Select-String 'AX_VERSION_STR')
-$axmolVersion = $content[0].Line.Split(' ')[2].Replace('"', '')
+$content = $(Get-Content -Path $axver_file)
+
+function parse_axver($part) {
+    return ($content | Select-String "#define AX_VERSION_$part").Line.Split(' ')[2]
+}
+$axmolVersion = "$(parse_axver 'MAJOR').$(parse_axver 'MINOR').$(parse_axver 'PATCH')"
 
 $git_prog = (Get-Command 'git' -ErrorAction SilentlyContinue).Source
 if ($git_prog) {

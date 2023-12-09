@@ -7,15 +7,12 @@
 #define AX_VERSION_MINOR 1
 #define AX_VERSION_PATCH 0
 
-/* Define the axmol version string, easy for script parsing */
-#define AX_VERSION_STR "2.1.0"
-
 /* Define axmol version helper macros */
-#define AX_VERSION_MAKE(a,b,c) ((a << 16) | (b << 8) | (c & 0xff))
-#define AX_VERSION_NUM AX_VERSION_MAKE(AX_VERSION_MAJOR, AX_VERSION_MINOR, AX_VERSION_PATCH)
-#define AX_VERSION AX_VERSION_NUM
+#define AX_VERSION_MAKE(a, b, c) ((a << 16) | (b << 8) | (c & 0xff))
+#define AX_VERSION_NUM           AX_VERSION_MAKE(AX_VERSION_MAJOR, AX_VERSION_MINOR, AX_VERSION_PATCH)
+#define AX_VERSION               AX_VERSION_NUM
 
-/* #Define indicate whether axmol/.git present */
+/* Define whether axmol/.git present */
 #define AX_GIT_PRESENT @AX_GIT_PRESENT@
 
 /* Define to the library build number from git commit count */
@@ -26,3 +23,14 @@
 
 /* Define the hash of the head commit */
 #define AX_GIT_COMMIT_HASH "@AX_GIT_COMMIT_HASH@"
+
+/* Define the axmol version string */
+#define _AXSTR(R)      #R
+#define _AXMACROSTR(R) _AXSTR(R)
+#define AX_VERSION_STR _AXMACROSTR(AX_VERSION_MAJOR) "." _AXMACROSTR(AX_VERSION_MINOR) "." _AXMACROSTR(AX_VERSION_PATCH)
+
+#if AX_GIT_PRESENT
+#    define AX_VERSION_STR_FULL AX_VERSION_STR "-" AX_GIT_COMMIT_HASH
+#else
+#    define AX_VERSION_STR_FULL AX_VERSION_STR
+#endif

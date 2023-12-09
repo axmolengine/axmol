@@ -35,11 +35,7 @@ NS_AX_BEGIN
 
 AX_DLL const char* axmolVersion()
 {
-#if AX_GIT_PRESENT
-    return "axmol-" AX_VERSION_STR "-" AX_GIT_COMMIT_HASH;
-#else
-    return "axmol-" AX_VERSION_STR;
-#endif
+    return "axmol-" AX_VERSION_STR_FULL;
 }
 
 AX_DLL const char* cocos2dVersion()

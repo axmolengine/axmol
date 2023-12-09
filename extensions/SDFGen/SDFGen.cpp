@@ -100,7 +100,7 @@ public:
 
         xasset.writeStartObject();
 
-        xasset.writeString("version"sv, AX_VERSION_STR "-" AX_GIT_COMMIT_HASH);
+        xasset.writeString("version"sv, AX_VERSION_STR_FULL);
         xasset.writeString("type"sv, "fontatlas"sv);
         xasset.writeString("sourceFont"sv, _params->sourceFont);
         xasset.writeString("atlasName"sv, _atlasName);
@@ -269,7 +269,7 @@ void SDFGen::onImGuiDraw()
     ImGui::SetNextWindowSize(ImVec2{550, 660}, ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowContentSize(ImVec2{0, 0});
 
-    static std::string title = fmt::format("Axmol SDF Font Creator {}", AX_VERSION_STR "-" AX_GIT_COMMIT_HASH);
+    static std::string title = fmt::format("Axmol SDF Font Creator {}", AX_VERSION_STR_FULL);
     if (ImGui::Begin(title.c_str(), nullptr, ImGuiWindowFlags_HorizontalScrollbar))
     {
         if (ImGui::BeginCombo("Source Font File", _atlasParams->sourceFont.c_str()))
