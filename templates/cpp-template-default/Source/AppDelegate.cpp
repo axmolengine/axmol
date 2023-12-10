@@ -24,15 +24,13 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "MainScene.h"
 
 #define USE_AUDIO_ENGINE 1
 
 #if USE_AUDIO_ENGINE
 #    include "audio/AudioEngine.h"
 #endif
-
-USING_NS_AX;
 
 static ax::Size designResolutionSize = ax::Size(1280, 720);
 static ax::Size smallResolutionSize  = ax::Size(480, 320);
@@ -50,22 +48,22 @@ void AppDelegate::initGLContextAttrs()
     // set OpenGL context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
-    GLView::setGLContextAttrs(glContextAttrs);
+    ax::GLView::setGLContextAttrs(glContextAttrs);
 }
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // initialize director
-    auto director = Director::getInstance();
+    auto director = ax::Director::getInstance();
     auto glView   = director->getGLView();
     if (!glView)
     {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || \
     (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-        glView = GLViewImpl::createWithRect(
-            "HelloCpp", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        glView = ax::GLViewImpl::createWithRect(
+            "CPPTemplate", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
-        glView = GLViewImpl::create("HelloCpp");
+        glView = GLViewImpl::create("CPPTemplate");
 #endif
         director->setGLView(glView);
     }
@@ -100,7 +98,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     }
 
     // create a scene. it's an autorelease object
-    auto scene = utils::createInstance<HelloWorld>();
+    auto scene = ax::utils::createInstance<MainScene>();
 
     // run
     director->runWithScene(scene);
@@ -111,19 +109,19 @@ bool AppDelegate::applicationDidFinishLaunching()
 // This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.
 void AppDelegate::applicationDidEnterBackground()
 {
-    Director::getInstance()->stopAnimation();
+    ax::Director::getInstance()->stopAnimation();
 
 #if USE_AUDIO_ENGINE
-    AudioEngine::pauseAll();
+    ax::AudioEngine::pauseAll();
 #endif
 }
 
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground()
 {
-    Director::getInstance()->startAnimation();
+    ax::Director::getInstance()->startAnimation();
 
 #if USE_AUDIO_ENGINE
-    AudioEngine::resumeAll();
+    ax::AudioEngine::resumeAll();
 #endif
 }
