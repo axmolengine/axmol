@@ -63,9 +63,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || \
     (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
         glView = ax::GLViewImpl::createWithRect(
-            "CPPTemplate", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+            "Hello World", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
-        glView = GLViewImpl::create("CPPTemplate");
+        glView = GLViewImpl::create("Hello World");
 #endif
         director->setGLView(glView);
     }
