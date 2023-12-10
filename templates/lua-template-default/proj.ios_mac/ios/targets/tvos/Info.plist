@@ -35,7 +35,9 @@
         <string>UIInterfaceOrientationLandscapeRight</string>
         <string>UIInterfaceOrientationLandscapeLeft</string>
     </array>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
     <key>NSHumanReadableCopyright</key>
-    <string>Copyright © 2019. All rights reserved.</string>
+    <string>Copyright © 2023. All rights reserved.</string>
 </dict>
 </plist>
