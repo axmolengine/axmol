@@ -32,6 +32,8 @@
 #    include "audio/AudioEngine.h"
 #endif
 
+USING_NS_AX;
+
 static ax::Size designResolutionSize = ax::Size(1280, 720);
 static ax::Size smallResolutionSize  = ax::Size(480, 320);
 static ax::Size mediumResolutionSize = ax::Size(1024, 768);
