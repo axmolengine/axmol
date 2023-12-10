@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __MAINSCENE_H__
-#define __MAINSCENE_H__
+#ifndef __MAIN_SCENE_H__
+#define __MAIN_SCENE_H__
 
 #include "axmol.h"
 
@@ -67,4 +67,4 @@ private:
     GameState _gameState = GameState::init;
 };
 
-#endif  // __MAINSCENE_H__
+#endif  // __MAIN_SCENE_H__
