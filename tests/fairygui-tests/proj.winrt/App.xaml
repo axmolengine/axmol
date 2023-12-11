@@ -6,7 +6,7 @@
 
     <Application.Resources>
 
-      <x:String x:Key="AppName">fairygui_tests</x:String>
+      <x:String x:Key="AppName">fairygui-tests</x:String>
 
     </Application.Resources>
 </Application>
