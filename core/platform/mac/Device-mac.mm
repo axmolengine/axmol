@@ -67,7 +67,10 @@ int Device::getDPI()
 
 float Device::getPixelRatio() 
 {
-    return Device::getDPI() / 25.4f;
+    NSScreen* screen    = [NSScreen mainScreen];
+    const auto points = [screen frame];
+    const auto pixels = [screen convertRectToBacking:points];
+    return static_cast<float>(pixels.size.width / points.size.width);
 }
 
 void Device::setAccelerometerEnabled(bool isEnabled) {}
