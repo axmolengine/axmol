@@ -132,7 +132,7 @@ if (!(Test-Path $cpp_tests_dir -PathType Container)) {
     throw "Missing wasm cpp-tests, caused by last wasm ci build fail."
 }
 copy_tree_if $cpp_tests_dir $wasm_dist2
-copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/fairygui_tests') $wasm_dist2
+copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/fairygui-tests') $wasm_dist2
 copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/HelloLua') $wasm_dist2
 
 # build manuals
