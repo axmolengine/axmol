@@ -136,7 +136,7 @@ if (!$use_gradle) {
                 # project
                 $proj_name,
                 # engine
-                'CPPTemplate'
+                'HelloCpp'
             ),
             # github actions
             @(
