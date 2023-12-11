@@ -2,7 +2,7 @@
     "do_default": [
         {
             "action": "rep",
-            "from": "CPPTemplate",
+            "from": "HelloCpp",
             "to": "${projectName}",
             "files": [
                 "Source/AppDelegate.cpp",
@@ -17,7 +17,7 @@
         },
         {
             "action": "rep",
-            "from": "org.axmol.cpptemplate",
+            "from": "org.axmol.hellocpp",
             "to": "${packageName}",
             "files": [
                 "proj.android/app/build.gradle",
