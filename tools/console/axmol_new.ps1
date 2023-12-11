@@ -28,7 +28,7 @@ if ($lang -eq 'cpp' -or $lang -eq 'lua') {
     throw 'Invalid lang, valid is cpp or lua'
 }
 
-if ($pname.IndexOf('-') -ne -1) {
+if ($packageName.IndexOf('-') -ne -1) {
     # !!!reason:
     #   - android package not accept '-'
     #   - ios deploy device may failed with unknown error
