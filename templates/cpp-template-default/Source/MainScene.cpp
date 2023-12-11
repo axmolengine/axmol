@@ -116,11 +116,11 @@ bool MainScene::init()
         // add the label as a child to this layer
         this->addChild(label, 1);
     }
-    // add "HelloCpp" splash screen"
-    auto sprite = Sprite::create("Axmol.png"sv);
+    // add "HelloWorld" splash screen"
+    auto sprite = Sprite::create("HelloWorld.png"sv);
     if (sprite == nullptr)
     {
-        problemLoading("'Axmol.png'");
+        problemLoading("'HelloWorld.png'");
     }
     else
     {
