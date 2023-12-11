@@ -57,7 +57,7 @@ bool MainScene::init()
 
     // add a "close" icon to exit the progress. it's an autorelease object
     auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
-                                           AX_CALLBACK_1(MainScene::menuCloseCallback, this));
+        AX_CALLBACK_1(MainScene::menuCloseCallback, this));
 
     if (closeItem == nullptr || closeItem->getContentSize().width <= 0 || closeItem->getContentSize().height <= 0)
     {
