@@ -100,7 +100,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     }
 
     // create a scene. it's an autorelease object
-    auto scene = ax::utils::createInstance<MainScene>();
+    auto scene = utils::createInstance<MainScene>();
 
     // run
     director->runWithScene(scene);
