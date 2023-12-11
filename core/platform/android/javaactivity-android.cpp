@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "base/EventCustom.h"
 #include "base/EventType.h"
 #include "base/EventDispatcher.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "renderer/TextureCache.h"
 #include "platform/android/jni/JniHelper.h"
 
@@ -96,7 +96,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jcla
     }
     else
     {
-        backend::Device::getInstance()->resetState();
+        backend::DriverBase::getInstance()->resetState();
         ax::Director::getInstance()->resetMatrixStack();
         ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
         director->getEventDispatcher()->dispatchEvent(&recreatedEvent);

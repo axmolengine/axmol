@@ -129,7 +129,7 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
 RenderTargetMTL::Attachment RenderTargetMTL::getColorAttachment(int index) const
 {
     if (isDefaultRenderTarget() && index == 0)
-        return {DeviceMTL::getCurrentDrawable().texture, 0};
+        return {DriverMTL::getCurrentDrawable().texture, 0};
     auto& rb = this->_color[index];
     return RenderTargetMTL::Attachment{static_cast<bool>(rb) ? (id<MTLTexture>)(rb.texture->getHandler()) : nil,
                                        rb.level};

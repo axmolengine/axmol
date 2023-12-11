@@ -2,7 +2,7 @@
 #include "EffekseerForCocos2d-x.h"
 
 #ifdef AX_USE_METAL
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #endif
 
 namespace efk
@@ -715,7 +715,7 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
     if (!manager->isDistorted)
     {
         // allow frame buffer texture to be copied for distortion
-        cocos2d::backend::Device::getInstance()->setFrameBufferOnly(false);
+        cocos2d::backend::DriverBase::getInstance()->setFrameBufferOnly(false);
     }
 #endif
 

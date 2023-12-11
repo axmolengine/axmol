@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -30,7 +31,6 @@
 #include "Texture.h"
 #include "DepthStencilState.h"
 #include "ShaderCache.h"
-#include "DeviceInfo.h"
 
 #include "base/Ref.h"
 
@@ -48,26 +48,42 @@ class RenderTarget;
 class ProgramManager;
 class Program;
 
+enum class FeatureType : uint32_t
+{
+    ETC1,
+    ETC2,
+    S3TC,
+    AMD_COMPRESSED_ATC,
+    PVRTC,
+    IMG_FORMAT_BGRA8888,
+    DISCARD_FRAMEBUFFER,
+    PACKED_DEPTH_STENCIL,
+    VAO,
+    MAPBUFFER,
+    DEPTH24,
+    ASTC
+};
+
 /**
  * @addtogroup _backend
  * @{
  */
 
 /**
- * New or create resources from Device.
+ * New or create resources from DriverBase.
  */
-class AX_DLL Device : public ax::Ref
+class AX_DLL DriverBase : public ax::Ref
 {
 public:
     friend class ProgramManager;
     friend class ShaderCache;
 
     /**
-     * Returns a shared instance of the device.
+     * Returns a shared instance of the DriverBase.
      */
-    static Device* getInstance();
+    static DriverBase* getInstance();
 
-    virtual ~Device() = default;
+    virtual ~DriverBase() = default;
 
     /**
      * New a CommandBuffer object, not auto released.
@@ -129,13 +145,69 @@ public:
      */
     virtual Program* newProgram(std::string_view vertexShader, std::string_view fragmentShader) = 0;
 
-    /**
-     * Get a DeviceInfo object.
-     * @return A DeviceInfo object.
-     */
-    inline DeviceInfo* getDeviceInfo() const { return _deviceInfo; }
-
     virtual void resetState() {};
+
+    /// below is driver info
+     /**
+     * Get vendor device name.
+     * @return Vendor device name.
+     */
+    virtual const char* getVendor() const = 0;
+
+    /**
+     * Get the full name of the vendor device.
+     * @return The full name of the vendor device.
+     */
+    virtual const char* getRenderer() const = 0;
+
+    /**
+     * Get version name.
+     * @return Version name.
+     */
+    virtual const char* getVersion() const = 0;
+
+    virtual const char* getShaderVersion() const { return ""; }
+
+    /**
+     * Check does device has extension.
+     */
+    virtual bool hasExtension(std::string_view /*extName*/) const { return false; };
+
+    /**
+    * Dump all extensions to string
+    */
+    virtual std::string dumpExtensions() const { return {}; };
+
+    /**
+     * Check if feature supported by device.
+     * @param feature Specify feature to be query.
+     * @return true if the feature is supported, false otherwise.
+     */
+    virtual bool checkForFeatureSupported(FeatureType feature) = 0;
+
+    /**
+     * Get maximum texture size.
+     * @return Maximum texture size.
+     */
+    inline int getMaxTextureSize() const { return _maxTextureSize; }
+
+    /**
+     * Get maximum attribute counts.
+     * @return Maximum attribute counts.
+     */
+    inline int getMaxAttributes() const { return _maxAttributes; }
+
+    /**
+     * Get maximum texture unit.
+     * @return Maximum texture unit.
+     */
+    inline int getMaxTextureUnits() const { return _maxTextureUnits; }
+
+    /**
+     * Get maximum sampler count.
+     * @return Maximum sampler count.
+     */
+    inline int getMaxSamplesAllowed() const { return _maxSamplesAllowed; }
 
 protected:
     /**
@@ -146,10 +218,13 @@ protected:
      */
     virtual ShaderModule* newShaderModule(ShaderStage stage, std::string_view source) = 0;
 
-    DeviceInfo* _deviceInfo = nullptr;  ///< Device information.
+    int _maxAttributes     = 0;  ///< Maximum attribute count.
+    int _maxTextureSize    = 0;  ///< Maximum texture size.
+    int _maxTextureUnits   = 0;  ///< Maximum texture unit.
+    int _maxSamplesAllowed = 0;  ///< Maximum sampler count.
 
 private:
-    static Device* _instance;
+    static DriverBase* _instance;
 };
 
 // end of _backend group

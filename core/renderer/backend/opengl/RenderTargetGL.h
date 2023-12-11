@@ -5,7 +5,7 @@
 
 NS_AX_BACKEND_BEGIN
 
-class DeviceGL;
+class DriverGL;
 
 class RenderTargetGL : public RenderTarget
 {
@@ -13,7 +13,7 @@ public:
     /*
      * generateFBO, false, use for screen framebuffer
      */
-    RenderTargetGL(bool defaultRenderTarget, DeviceGL* deviceGL);
+    RenderTargetGL(bool defaultRenderTarget, DriverGL* driver);
     ~RenderTargetGL();
 
     void bindFrameBuffer() const;

@@ -44,7 +44,7 @@ THE SOFTWARE.
 #include "renderer/TextureCache.h"
 #include "renderer/Renderer.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "renderer/backend/Buffer.h"
 #include "base/Director.h"
 #include "base/UTF8.h"
@@ -276,8 +276,7 @@ void FastTMXLayer::updateVertexBuffer()
     unsigned int vertexBufferSize = (unsigned int)(sizeof(V3F_C4B_T2F) * _totalQuads.size() * 4);
     if (!_vertexBuffer)
     {
-        auto device   = backend::Device::getInstance();
-        _vertexBuffer = device->newBuffer(vertexBufferSize, backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
+        _vertexBuffer = backend::DriverBase::getInstance()->newBuffer(vertexBufferSize, backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
     }
     _vertexBuffer->updateData(&_totalQuads[0], vertexBufferSize);
 }
@@ -287,8 +286,7 @@ void FastTMXLayer::updateIndexBuffer()
     auto indexBufferSize = (sizeof(decltype(_indices)::value_type) * _indices.size());
     if (!_indexBuffer)
     {
-        auto device  = backend::Device::getInstance();
-        _indexBuffer = device->newBuffer(indexBufferSize, backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
+        _indexBuffer = backend::DriverBase::getInstance()->newBuffer(indexBufferSize, backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
     }
     _indexBuffer->updateData(&_indices[0], indexBufferSize);
 }

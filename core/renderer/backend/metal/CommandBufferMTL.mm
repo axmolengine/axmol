@@ -25,7 +25,7 @@
 
 #include "CommandBufferMTL.h"
 #include "BufferMTL.h"
-#include "DeviceMTL.h"
+#include "DriverMTL.h"
 #include "RenderPipelineMTL.h"
 #include "TextureMTL.h"
 #include "UtilsMTL.h"
@@ -160,8 +160,8 @@ inline int clamp(int value, int min, int max)
 }
 }
 
-CommandBufferMTL::CommandBufferMTL(DeviceMTL* deviceMTL)
-    : _mtlCommandQueue(deviceMTL->getMTLCommandQueue())
+CommandBufferMTL::CommandBufferMTL(DriverMTL* driver)
+    : _mtlCommandQueue(driver->getMTLCommandQueue())
     , _frameBoundarySemaphore(dispatch_semaphore_create(MAX_INFLIGHT_BUFFER))
 {}
 
@@ -270,13 +270,13 @@ void CommandBufferMTL::setWinding(Winding winding)
 void CommandBufferMTL::setVertexBuffer(Buffer* buffer)
 {
     // Vertex buffer is bound in index DEFAULT_ATTRIBS_BINDING_INDEX.
-    [_mtlRenderEncoder setVertexBuffer:static_cast<BufferMTL*>(buffer)->getMTLBuffer() offset:0 atIndex:DeviceMTL::DEFAULT_ATTRIBS_BINDING_INDEX];
+    [_mtlRenderEncoder setVertexBuffer:static_cast<BufferMTL*>(buffer)->getMTLBuffer() offset:0 atIndex:DriverMTL::DEFAULT_ATTRIBS_BINDING_INDEX];
 }
 
 void CommandBufferMTL::setInstanceBuffer(Buffer* buffer) {
     // Vertex instancing transform buffer is bound in index VBO_INSTANCING_BINDING_INDEX.
     // TODO: sync device binding macros to GLSLCC
-    [_mtlRenderEncoder setVertexBuffer:static_cast<BufferMTL*>(buffer)->getMTLBuffer() offset:0 atIndex:DeviceMTL::VBO_INSTANCING_BINDING_INDEX];
+    [_mtlRenderEncoder setVertexBuffer:static_cast<BufferMTL*>(buffer)->getMTLBuffer() offset:0 atIndex:DriverMTL::VBO_INSTANCING_BINDING_INDEX];
 }
 
 void CommandBufferMTL::setProgramState(ProgramState* programState)
@@ -354,7 +354,7 @@ void CommandBufferMTL::endFrame()
     [_mtlRenderEncoder release];
     _mtlRenderEncoder = nil;
 
-    auto currentDrawable = DeviceMTL::getCurrentDrawable();
+    auto currentDrawable = DriverMTL::getCurrentDrawable();
     [_mtlCommandBuffer presentDrawable:currentDrawable];
     _drawableTexture = currentDrawable.texture;
     [_mtlCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
@@ -365,7 +365,7 @@ void CommandBufferMTL::endFrame()
 
     flush();
 
-    DeviceMTL::resetCurrentDrawable();
+    DriverMTL::resetCurrentDrawable();
     [_autoReleasePool drain];
 }
 
@@ -412,7 +412,7 @@ void CommandBufferMTL::flushCaptureCommands()
                     CommandBufferMTL::readPixels(_drawableTexture, 0, 0, [_drawableTexture width],
                                                  [_drawableTexture height], screenPixelData);
                     // screen framebuffer copied, restore screen framebuffer only to true
-                    backend::Device::getInstance()->setFrameBufferOnly(true);
+                    backend::DriverBase::getInstance()->setFrameBufferOnly(true);
                 }
                 cb.second(screenPixelData);
             }
@@ -506,7 +506,7 @@ void CommandBufferMTL::setUniformBuffer() const
             cb.second(_programState, cb.first);
 
         // Uniform buffer: glsl-optimizer is bound to index 1, glslcc: bound to 0
-        constexpr int bindingIndex = DeviceMTL::VBO_BINDING_INDEX_START;
+        constexpr int bindingIndex = DriverMTL::VBO_BINDING_INDEX_START;
         std::size_t bufferSize = 0;
         auto vertexBuffer     = _programState->getVertexUniformBuffer(bufferSize);
         if (bufferSize)
@@ -580,10 +580,10 @@ void CommandBufferMTL::readPixels(id<MTLTexture> texture,
                                                            width:texWidth
                                                           height:texHeight
                                                        mipmapped:NO];
-    id<MTLDevice> device             = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLDevice();
+    id<MTLDevice> device             = static_cast<DriverMTL*>(DriverMTL::getInstance())->getMTLDevice();
     id<MTLTexture> readPixelsTexture = [device newTextureWithDescriptor:textureDescriptor];
 
-    id<MTLCommandQueue> commandQueue = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLCommandQueue();
+    id<MTLCommandQueue> commandQueue = static_cast<DriverMTL*>(DriverMTL::getInstance())->getMTLCommandQueue();
     auto commandBuffer               = [commandQueue commandBuffer];
     // [commandBuffer enqueue];
 

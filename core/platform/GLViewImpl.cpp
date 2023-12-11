@@ -48,11 +48,10 @@ THE SOFTWARE.
 
 #if defined(AX_USE_METAL)
 #    include <Metal/Metal.h>
-#    include "renderer/backend/metal/DeviceMTL.h"
+#    include "renderer/backend/metal/DriverMTL.h"
 #    include "renderer/backend/metal/UtilsMTL.h"
 #else
-#    include "renderer/backend/opengl/DeviceGL.h"
-#    include "renderer/backend/opengl/DeviceInfoGL.h"
+#    include "renderer/backend/opengl/DriverGL.h"
 #    include "renderer/backend/opengl/MacrosGL.h"
 #    include "renderer/backend/opengl/OpenGLState.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
@@ -530,7 +529,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     [layer setDrawableSize:size];
     layer.displaySyncEnabled = _glContextAttrs.vsync;
     [contentView setLayer:layer];
-    backend::DeviceMTL::setCAMetalLayer(layer);
+    backend::DriverMTL::setCAMetalLayer(layer);
 #endif
 
 #if defined(AX_USE_GL)
@@ -589,8 +588,8 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
     loadGL();
 
-    // Init device after load GL
-    backend::Device::getInstance();
+    // Init driver after load GL
+    backend::DriverBase::getInstance();
 #endif
 
 #if defined(AX_USE_GL)
@@ -1278,9 +1277,9 @@ static bool loadFboExtensions()
     // If the current opengl driver doesn't have framebuffers methods, check if an extension exists
     if (glGenFramebuffers == nullptr)
     {
-        auto deviceInfo = static_cast<backend::DeviceInfoGL*>(backend::DeviceGL::getInstance()->getDeviceInfo());
+        auto driver = backend::DriverGL::getInstance();
         ax::print("OpenGL: glGenFramebuffers is nullptr, try to detect an extension");
-        if (deviceInfo->hasExtension("ARB_framebuffer_object"sv))
+        if (driver->hasExtension("ARB_framebuffer_object"sv))
         {
             ax::print("OpenGL: ARB_framebuffer_object is supported");
 
@@ -1305,7 +1304,7 @@ static bool loadFboExtensions()
                 "glGetFramebufferAttachmentParameteriv");
             glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)glfwGetProcAddress("glGenerateMipmap");
         }
-        else if (deviceInfo->hasExtension("EXT_framebuffer_object"sv))
+        else if (driver->hasExtension("EXT_framebuffer_object"sv))
         {
             ax::print("OpenGL: EXT_framebuffer_object is supported");
             glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbufferEXT");
@@ -1330,7 +1329,7 @@ static bool loadFboExtensions()
                 "glGetFramebufferAttachmentParameterivEXT");
             glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)glfwGetProcAddress("glGenerateMipmapEXT");
         }
-        else if (deviceInfo->hasExtension("GL_ANGLE_framebuffer_blit"sv))
+        else if (driver->hasExtension("GL_ANGLE_framebuffer_blit"sv))
         {
             ax::print("OpenGL: GL_ANGLE_framebuffer_object is supported");
 

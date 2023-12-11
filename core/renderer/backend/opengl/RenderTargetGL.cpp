@@ -1,10 +1,10 @@
 #include "RenderTargetGL.h"
-#include "DeviceGL.h"
+#include "DriverGL.h"
 #include "renderer/backend/opengl/MacrosGL.h"
 
 NS_AX_BACKEND_BEGIN
 
-RenderTargetGL::RenderTargetGL(bool defaultRenderTarget, DeviceGL* deviceGL) : RenderTarget(defaultRenderTarget)
+RenderTargetGL::RenderTargetGL(bool defaultRenderTarget, DriverGL* driver) : RenderTarget(defaultRenderTarget)
 {
     if (!defaultRenderTarget)
     {
@@ -12,7 +12,7 @@ RenderTargetGL::RenderTargetGL(bool defaultRenderTarget, DeviceGL* deviceGL) : R
     }
     else
     {
-        _FBO = deviceGL->getDefaultFBO();
+        _FBO = driver->getDefaultFBO();
     }
 }
 RenderTargetGL::~RenderTargetGL()

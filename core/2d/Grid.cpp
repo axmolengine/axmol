@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "renderer/Texture2D.h"
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramState.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "renderer/backend/RenderTarget.h"
 #include "2d/Camera.h"
 
@@ -219,7 +219,7 @@ void GridBase::beforeDraw()
         _oldRenderTarget = renderer->getRenderTarget();
         AX_SAFE_RELEASE(_renderTarget);
         _renderTarget =
-            backend::Device::getInstance()->newRenderTarget(TargetBufferFlags::COLOR, _texture->getBackendTexture());
+            backend::DriverBase::getInstance()->newRenderTarget(TargetBufferFlags::COLOR, _texture->getBackendTexture());
         renderer->setRenderTarget(_renderTarget);
     };
     renderer->addCallbackCommand(beforeDrawCommandFunc);

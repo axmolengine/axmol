@@ -28,7 +28,7 @@
 #include "platform/Image.h"
 #include "platform/FileUtils.h"
 #include "renderer/backend/Texture.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "renderer/backend/PixelFormatUtils.h"
 
 NS_AX_BEGIN
@@ -215,7 +215,7 @@ bool TextureCube::init(std::string_view positive_x,
     textureDescriptor.samplerDescriptor.sAddressMode   = backend::SamplerAddressMode::CLAMP_TO_EDGE;
     textureDescriptor.samplerDescriptor.tAddressMode   = backend::SamplerAddressMode::CLAMP_TO_EDGE;
     _texture =
-        static_cast<backend::TextureCubemapBackend*>(backend::Device::getInstance()->newTexture(textureDescriptor));
+        static_cast<backend::TextureCubemapBackend*>(backend::DriverBase::getInstance()->newTexture(textureDescriptor));
     AXASSERT(_texture != nullptr, "TextureCubemap: texture can not be nullptr");
 
     for (int i = 0; i < 6; i++)

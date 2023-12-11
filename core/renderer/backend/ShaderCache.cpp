@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "ShaderCache.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 
 NS_AX_BACKEND_BEGIN
 
@@ -81,7 +81,7 @@ backend::ShaderModule* ShaderCache::newShaderModule(backend::ShaderStage stage, 
     if (_cachedShaders.end() != iter)
         return iter->second;
 
-    auto shader = backend::Device::getInstance()->newShaderModule(stage, shaderSource);
+    auto shader = backend::DriverBase::getInstance()->newShaderModule(stage, shaderSource);
     shader->setHashValue(key);
     _cachedShaders.emplace(key, shader);
 

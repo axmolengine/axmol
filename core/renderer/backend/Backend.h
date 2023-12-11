@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -26,7 +27,7 @@
 
 #include "renderer/backend/RenderPassDescriptor.h"
 #include "renderer/backend/RenderPipeline.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "renderer/backend/Types.h"
 #include "renderer/backend/CommandBuffer.h"
 #include "renderer/backend/Buffer.h"

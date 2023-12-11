@@ -43,7 +43,7 @@ THE SOFTWARE.
 #include "platform/PlatformMacros.h"
 #include "base/Director.h"
 #include "base/NinePatchImageParser.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "renderer/backend/ProgramState.h"
 #include "renderer/Shaders.h"
 #include "renderer/backend/PixelFormatUtils.h"
@@ -74,7 +74,7 @@ Texture2D::Texture2D()
 {
     backend::TextureDescriptor textureDescriptor;
     textureDescriptor.textureFormat = PixelFormat::NONE;
-    _texture = static_cast<backend::Texture2DBackend*>(backend::Device::getInstance()->newTexture(textureDescriptor));
+    _texture = static_cast<backend::Texture2DBackend*>(backend::DriverBase::getInstance()->newTexture(textureDescriptor));
 }
 
 Texture2D::~Texture2D()

@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -22,10 +23,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "Device.h"
+#include "DriverBase.h"
 
 NS_AX_BACKEND_BEGIN
 
-Device* Device::_instance = nullptr;
+DriverBase* DriverBase::_instance = nullptr;
 
 NS_AX_BACKEND_END

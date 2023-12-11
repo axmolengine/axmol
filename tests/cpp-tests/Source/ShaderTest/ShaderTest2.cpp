@@ -27,7 +27,7 @@
 #include "ShaderTest.h"
 #include "../testResource.h"
 #include "axmol.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include <tuple>
 
 USING_NS_AX;

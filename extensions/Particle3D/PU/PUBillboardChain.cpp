@@ -34,7 +34,7 @@
 #include "renderer/TextureCache.h"
 #include "renderer/backend/Types.h"
 #include "renderer/backend/Buffer.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "2d/Camera.h"
 #include "3d/MeshRenderer.h"
 
@@ -157,13 +157,13 @@ void PUBillboardChain::setupBuffers()
         AX_SAFE_RELEASE_NULL(_indexBuffer);
 
         size_t stride = sizeof(VertexInfo);
-        _vertexBuffer = backend::Device::getInstance()->newBuffer(
+        _vertexBuffer = backend::DriverBase::getInstance()->newBuffer(
             stride * _chainElementList.size() * 2, backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
         VertexInfo vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Vec4::ONE};
         _vertices.resize(_chainElementList.size() * 2, vi);
 
         _indexBuffer =
-            backend::Device::getInstance()->newBuffer(_chainCount * _maxElementsPerChain * 6 * sizeof(uint16_t),
+            backend::DriverBase::getInstance()->newBuffer(_chainCount * _maxElementsPerChain * 6 * sizeof(uint16_t),
                                                       backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
 
         _indices.resize(_chainCount * _maxElementsPerChain * 6, 0);

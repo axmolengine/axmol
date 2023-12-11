@@ -42,7 +42,7 @@
 #include "base/Director.h"
 
 #include "renderer/backend/Buffer.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 
 using namespace std;
 
@@ -111,7 +111,7 @@ void MeshVertexData::setVertexData(const std::vector<float>& vertexData)
 MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::IndexFormat format)
 {
     auto vertexdata           = new MeshVertexData();
-    vertexdata->_vertexBuffer = backend::Device::getInstance()->newBuffer(
+    vertexdata->_vertexBuffer = backend::DriverBase::getInstance()->newBuffer(
         meshdata.vertex.size() * sizeof(meshdata.vertex[0]), backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
     // AX_SAFE_RETAIN(vertexdata->_vertexBuffer);
 
@@ -133,7 +133,7 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
     for (size_t i = 0, size = meshdata.subMeshIndices.size(); i < size; ++i)
     {
         auto& indices = meshdata.subMeshIndices[i];
-        auto indexBuffer = backend::Device::getInstance()->newBuffer(
+        auto indexBuffer = backend::DriverBase::getInstance()->newBuffer(
             indices.bsize(), backend::BufferType::INDEX, backend::BufferUsage::STATIC);
         indexBuffer->autorelease();
 #if AX_ENABLE_CACHE_TEXTURE_DATA

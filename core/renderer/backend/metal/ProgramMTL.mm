@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -25,7 +26,7 @@
 #include "ProgramMTL.h"
 #include "ShaderModuleMTL.h"
 #include "base/Macros.h"
-#include "DeviceMTL.h"
+#include "DriverMTL.h"
 
 NS_AX_BACKEND_BEGIN
 namespace

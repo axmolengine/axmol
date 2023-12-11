@@ -59,38 +59,38 @@ public:
      * Set depthStencil status once
      * @param depthStencilState Specifies the depth and stencil status
      */
-    virtual void setDepthStencilState(DepthStencilState* depthStencilState) override;
+    void setDepthStencilState(DepthStencilState* depthStencilState) override;
 
     /**
      * Sets the current render pipeline state object once
      * @param renderPipeline An object that contains the graphics functions and configuration state used in a render
      * pass.
      */
-    virtual void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    void setRenderPipeline(RenderPipeline* renderPipeline) override;
 
     /// @name Setters & Getters
     /**
      * @brief Indicate the begining of a frame
      */
-    virtual bool beginFrame() override;
+    bool beginFrame() override;
 
     /**
      * Begin a render pass, initial color, depth and stencil attachment.
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
-    virtual void beginRenderPass(const RenderTarget* rt, const RenderPassDescriptor& descriptor) override;
+    void beginRenderPass(const RenderTarget* rt, const RenderPassDescriptor& descriptor) override;
 
     /**
      * Update depthStencil status, improvment: for metal backend cache it
      * @param depthStencilState Specifies the depth and stencil status
      */
-    virtual void updateDepthStencilState(const DepthStencilDescriptor& descriptor) override;
+    void updateDepthStencilState(const DepthStencilDescriptor& descriptor) override;
 
     /**
      * Update render pipeline status
      * @param depthStencilState Specifies the depth and stencil status
      */
-    virtual void updatePipelineState(const RenderTarget* rt, const PipelineDescriptor& descriptor) override;
+    void updatePipelineState(const RenderTarget* rt, const PipelineDescriptor& descriptor) override;
 
     /**
      * Fixed-function state
@@ -99,44 +99,44 @@ public:
      * @param w The width of the viewport, in pixels.
      * @param h The height of the viewport, in pixels.
      */
-    virtual void setViewport(int x, int y, unsigned int w, unsigned int h) override;
+    void setViewport(int x, int y, unsigned int w, unsigned int h) override;
 
     /**
      * Fixed-function state
      * @param mode Controls if primitives are culled when front facing, back facing, or not culled at all.
      */
-    virtual void setCullMode(CullMode mode) override;
+    void setCullMode(CullMode mode) override;
 
     /**
      * Fixed-function state
      * @param winding The winding order of front-facing primitives.
      */
-    virtual void setWinding(Winding winding) override;
+    void setWinding(Winding winding) override;
 
     /**
      * Set a global buffer for all vertex shaders at the given bind point index 0.
      * @param buffer The vertex buffer to be setted in the buffer argument table.
      */
-    virtual void setVertexBuffer(Buffer* buffer) override;
+    void setVertexBuffer(Buffer* buffer) override;
 
     /**
      * Set unifroms and textures
      * @param programState A programState object that hold the uniform and texture data.
      */
-    virtual void setProgramState(ProgramState* programState) override;
+    void setProgramState(ProgramState* programState) override;
 
     /**
      * Set indexes when drawing primitives with index list
      * @ buffer A buffer object that the device will read indexes from.
      * @ see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    virtual void setIndexBuffer(Buffer* buffer) override;
+    void setIndexBuffer(Buffer* buffer) override;
 
     /**
      * Set matrix tranform when drawing instances of the same model
      * @ buffer A buffer object that the device will read matrices from.
      */
-    virtual void setInstanceBuffer(Buffer* buffer) override;
+    void setInstanceBuffer(Buffer* buffer) override;
 
     /**
      * Draw primitives without an index list.
@@ -145,7 +145,7 @@ public:
      * @param count For each instance, the number of indexes to draw
      * @see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    virtual void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe = false) override;
+    void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe = false) override;
 
     /**
      * Draw primitives with an index list.
@@ -156,7 +156,7 @@ public:
      * @see `setIndexBuffer(Buffer* buffer)`
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
      */
-    virtual void drawElements(PrimitiveType primitiveType,
+    void drawElements(PrimitiveType primitiveType,
                               IndexFormat indexType,
                               std::size_t count,
                               std::size_t offset,
@@ -173,7 +173,7 @@ public:
      * @see `setIndexBuffer(Buffer* buffer)`
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
      */
-    virtual void drawElementsInstanced(PrimitiveType primitiveType,
+    void drawElementsInstanced(PrimitiveType primitiveType,
                                        IndexFormat indexType,
                                        std::size_t count,
                                        std::size_t offset,
@@ -183,12 +183,12 @@ public:
     /**
      * Do some resources release.
      */
-    virtual void endRenderPass() override;
+    void endRenderPass() override;
 
     /**
      * Present a drawable and commit a command buffer so it can be executed as soon as possible.
      */
-    virtual void endFrame() override;
+    void endFrame() override;
 
     /**
      * Fixed-function state
@@ -196,13 +196,13 @@ public:
      * @param wdith Specifies the width of the scissor box
      * @param height Specifies the height of the scissor box
      */
-    virtual void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
+    void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
 
     /**
      * Get a screen snapshot
      * @param callback A callback to deal with screen snapshot image.
      */
-    virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
+    void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
 
 protected:
     void readPixels(RenderTarget* rt,

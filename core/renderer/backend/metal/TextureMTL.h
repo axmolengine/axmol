@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -25,7 +26,7 @@
 #pragma once
 
 #include "../Texture.h"
-#include "DeviceMTL.h"
+#include "DriverMTL.h"
 #import <Metal/Metal.h>
 #include <array>
 

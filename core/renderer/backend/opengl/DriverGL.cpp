@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md)
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -23,10 +23,25 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "DeviceInfoGL.h"
-#include "platform/GL.h"
+#include "DriverGL.h"
+#include "RenderPipelineGL.h"
+#include "BufferGL.h"
+#include "ShaderModuleGL.h"
+#include "CommandBufferGL.h"
+#include "TextureGL.h"
+#include "DepthStencilStateGL.h"
+#include "ProgramGL.h"
+#include "DriverGL.h"
+#include "RenderTargetGL.h"
+#include "MacrosGL.h"
+#include "renderer/backend/ProgramManager.h"
+#if !defined(__APPLE__) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
+#    include "CommandBufferGLES2.h"
+#endif
+
 #include "base/axstd.h"
 #include "xxhash/xxhash.h"
+
 
 #if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
 #    define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
@@ -46,6 +61,210 @@ static inline uint32_t hashString(std::string_view str)
 {
     return !str.empty() ? XXH32(str.data(), str.length(), 0) : 0;
 }
+
+template <typename _Fty>
+static void GL_EnumAllExtensions(_Fty&& func)
+{
+#if AX_GLES_PROFILE != 200  // NOT GLES2.0
+    GLint NumberOfExtensions{0};
+    glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
+    for (GLint i = 0; i < NumberOfExtensions; ++i)
+    {
+        auto extName = (const char*)glGetStringi(GL_EXTENSIONS, i);
+        if (extName)
+            func(std::string_view{extName});
+    }
+#else
+    auto extensions = (const char*)glGetString(GL_EXTENSIONS);
+    if (extensions)
+    {
+        axstd::split_of_cb(extensions, " \f\n\r\t\v", [&func](const char* start, const char* end, char /*delim*/) {
+            if (start != end)
+                func(std::string_view{start, static_cast<size_t>(end - start)});
+        });
+    }
+#endif
+}
+
+DriverBase* DriverBase::getInstance()
+{
+    if (!_instance)
+        _instance = new DriverGL();
+
+    return _instance;
+}
+
+DriverGL::DriverGL()
+{
+    /// driver info
+    // These queries work with all GL/GLES versions!
+    _vendor    = (char const*)glGetString(GL_VENDOR);
+    _renderer  = (char const*)glGetString(GL_RENDERER);
+    _version   = (char const*)glGetString(GL_VERSION);
+    _shaderVer = (char const*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+    if (_version)
+    {
+        auto hint   = strstr(_version, "OpenGL ES");
+        _verInfo.es = !!hint;
+        if (_verInfo.es)
+        {
+            _verInfo.major = hint[10] - '0';
+            _verInfo.minor = hint[12] - '0';
+        }
+        else
+        {
+            _verInfo.major = (_version[0] - '0');
+            _verInfo.minor = (_version[2] - '0');
+        }
+    }
+
+    // check OpenGL version at first
+    constexpr int REQUIRED_GLES_MAJOR = (AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
+    if ((!_verInfo.es && (_verInfo.major < 3 || (_verInfo.major == 3 && _verInfo.minor < 3))) ||
+        (_verInfo.es && _verInfo.major < REQUIRED_GLES_MAJOR))
+    {
+        char strComplain[256] = {0};
+#if AX_GLES_PROFILE == 0
+        sprintf(strComplain,
+                "OpeGL 3.3+ is required (your version is %s). Please upgrade the driver of your video card.", _version);
+#else
+        sprintf(strComplain,
+                "OpeGL ES %d.%d+ is required (your version is %s). Please upgrade the driver of your video card.",
+                REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
+#endif
+        ccMessageBox(strComplain, "OpenGL version too old");
+        utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
+        return;
+    }
+
+    if (_version)
+        ax::print("[GL:%s] Ready for GLSL by %s", _version, axmolVersion());
+
+    // caps
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_maxAttributes);
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_maxTextureSize);
+    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &_maxTextureUnits);
+
+    // exts
+    GL_EnumAllExtensions([this](const std::string_view& ext) {
+        const auto key = hashString(ext);
+        _glExtensions.insert(key);
+    });
+
+    // texture compressions
+    axstd::pod_vector<GLint> formats;
+    GLint numFormats{0};
+    glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &numFormats);
+    if (numFormats > 0)
+    {
+        formats.resize(numFormats);
+        glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, formats.data());
+
+        const auto textureCompressions = std::set<int>{formats.begin(), formats.end()};
+
+        if (textureCompressions.find(GL_COMPRESSED_RGBA_ASTC_4x4_KHR) != textureCompressions.end())
+            _textureCompressionAstc = true;
+
+        if (textureCompressions.find(GL_COMPRESSED_RGBA8_ETC2_EAC) != textureCompressions.end())
+            _textureCompressionEtc2 = true;
+    }
+
+
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
+
+#if AX_GLES_PROFILE != 200
+    glGenVertexArrays(1, &_defaultVAO);
+    glBindVertexArray(_defaultVAO);
+    CHECK_GL_ERROR_DEBUG();
+#endif
+}
+
+DriverGL::~DriverGL()
+{
+    ProgramManager::destroyInstance();
+}
+
+GLint DriverGL::getDefaultFBO() const
+{
+    return _defaultFBO;
+}
+
+CommandBuffer* DriverGL::newCommandBuffer()
+{
+#if !defined(__APPLE__) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
+    return !isGLES2Only() ? new CommandBufferGL() : new CommandBufferGLES2();
+#else
+    return new CommandBufferGL();
+#endif
+}
+
+Buffer* DriverGL::newBuffer(std::size_t size, BufferType type, BufferUsage usage)
+{
+    return new BufferGL(size, type, usage);
+}
+
+TextureBackend* DriverGL::newTexture(const TextureDescriptor& descriptor)
+{
+    switch (descriptor.textureType)
+    {
+    case TextureType::TEXTURE_2D:
+        return new Texture2DGL(descriptor);
+    case TextureType::TEXTURE_CUBE:
+        return new TextureCubeGL(descriptor);
+    default:
+        return nullptr;
+    }
+}
+
+RenderTarget* DriverGL::newDefaultRenderTarget(TargetBufferFlags rtf)
+{
+    auto rtGL = new RenderTargetGL(true, this);
+    rtGL->setTargetFlags(rtf);
+    return rtGL;
+}
+
+RenderTarget* DriverGL::newRenderTarget(TargetBufferFlags rtf,
+                                        TextureBackend* colorAttachment,
+                                        TextureBackend* depthAttachment,
+                                        TextureBackend* stencilAttachhment)
+{
+    auto rtGL = new RenderTargetGL(false, this);
+    rtGL->setTargetFlags(rtf);
+    rtGL->bindFrameBuffer();
+    RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
+    rtGL->setColorAttachment(colors);
+    rtGL->setDepthAttachment(depthAttachment);
+    rtGL->setStencilAttachment(stencilAttachhment);
+    return rtGL;
+}
+
+ShaderModule* DriverGL::newShaderModule(ShaderStage stage, std::string_view source)
+{
+    return new ShaderModuleGL(stage, source);
+}
+
+DepthStencilState* DriverGL::newDepthStencilState()
+{
+    return new DepthStencilStateGL();
+}
+
+RenderPipeline* DriverGL::newRenderPipeline()
+{
+    return new RenderPipelineGL();
+}
+
+Program* DriverGL::newProgram(std::string_view vertexShader, std::string_view fragmentShader)
+{
+    return new ProgramGL(vertexShader, fragmentShader);
+}
+
+void DriverGL::resetState()
+{
+    OpenGLState::reset();
+}
+
+/// below is driver info APIs
 
 static GLuint compileShader(GLenum shaderType, const GLchar* source)
 {
@@ -248,132 +467,31 @@ void main()
     return supported;
 }
 
-template <typename _Fty>
-static void GL_EnumAllExtensions(_Fty&& func)
-{
-#if AX_GLES_PROFILE != 200  // NOT GLES2.0
-    GLint NumberOfExtensions{0};
-    glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
-    for (GLint i = 0; i < NumberOfExtensions; ++i)
-    {
-        auto extName = (const char*)glGetStringi(GL_EXTENSIONS, i);
-        if (extName)
-            func(std::string_view{extName});
-    }
-#else
-    auto extensions = (const char*)glGetString(GL_EXTENSIONS);
-    if (extensions)
-    {
-        axstd::split_of_cb(extensions, " \f\n\r\t\v", [&func](const char* start, const char* end, char /*delim*/) {
-            if (start != end)
-                func(std::string_view{start, static_cast<size_t>(end - start)});
-        });
-    }
-#endif
-}
-
-bool DeviceInfoGL::init()
-{
-    // These queries work with all GL/GLES versions!
-    _vendor    = (char const*)glGetString(GL_VENDOR);
-    _renderer  = (char const*)glGetString(GL_RENDERER);
-    _version   = (char const*)glGetString(GL_VERSION);
-    _shaderVer = (char const*)glGetString(GL_SHADING_LANGUAGE_VERSION);
-
-    if (_version)
-    {
-        auto hint   = strstr(_version, "OpenGL ES");
-        _verInfo.es = !!hint;
-        if (_verInfo.es)
-        {
-            _verInfo.major = hint[10] - '0';
-            _verInfo.minor = hint[12] - '0';
-        }
-        else
-        {
-            _verInfo.major = (_version[0] - '0');
-            _verInfo.minor = (_version[2] - '0');
-        }
-    }
-
-    // check OpenGL version at first
-    constexpr int REQUIRED_GLES_MAJOR = (AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
-    if ((!_verInfo.es && (_verInfo.major < 3 || (_verInfo.major == 3 && _verInfo.minor < 3))) ||
-        (_verInfo.es && _verInfo.major < REQUIRED_GLES_MAJOR))
-    {
-        char strComplain[256] = {0};
-#if AX_GLES_PROFILE == 0
-        sprintf(strComplain,
-                "OpeGL 3.3+ is required (your version is %s). Please upgrade the driver of your video card.", _version);
-#else
-        sprintf(strComplain,
-                "OpeGL ES %d.%d+ is required (your version is %s). Please upgrade the driver of your video card.",
-                REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
-#endif
-        ccMessageBox(strComplain, "OpenGL version too old");
-        utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
-        return false;
-    }
-
-    if (_version)
-        ax::print("[GL:%s] Ready for GLSL by %s", _version, axmolVersion());
-
-    // caps
-    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_maxAttributes);
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_maxTextureSize);
-    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &_maxTextureUnits);
-
-    // exts
-    GL_EnumAllExtensions([this](const std::string_view& ext) {
-        const auto key = hashString(ext);
-        _glExtensions.insert(key);
-    });
-
-    // texture compressions
-    axstd::pod_vector<GLint> formats;
-    GLint numFormats{0};
-    glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &numFormats);
-    if (numFormats > 0)
-    {
-        formats.resize(numFormats);
-        glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, formats.data());
-
-        const auto textureCompressions = std::set<int>{formats.begin(), formats.end()};
-
-        if (textureCompressions.find(GL_COMPRESSED_RGBA_ASTC_4x4_KHR) != textureCompressions.end())
-            _textureCompressionAstc = true;
-
-        if (textureCompressions.find(GL_COMPRESSED_RGBA8_ETC2_EAC) != textureCompressions.end())
-            _textureCompressionEtc2 = true;
-    }
-    return true;
-}
-
-bool DeviceInfoGL::isGLES2Only() const
+bool DriverGL::isGLES2Only() const
 {
     return _verInfo.es && _verInfo.major == 2;
 }
 
-const char* DeviceInfoGL::getVendor() const
+const char* DriverGL::getVendor() const
 {
     return _vendor;
 }
-const char* DeviceInfoGL::getRenderer() const
+const char* DriverGL::getRenderer() const
 {
     return _renderer;
 }
 
-const char* DeviceInfoGL::getVersion() const
+const char* DriverGL::getVersion() const
 {
     return _version;
 }
 
-const char* DeviceInfoGL::getShaderVersion() const
+const char* DriverGL::getShaderVersion() const
 {
     return _shaderVer;
 }
 
-bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
+bool DriverGL::checkForFeatureSupported(FeatureType feature)
 {
     bool featureSupported = false;
     switch (feature)
@@ -426,13 +544,13 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
     return featureSupported;
 }
 
-bool DeviceInfoGL::hasExtension(std::string_view searchName) const
+bool DriverGL::hasExtension(std::string_view searchName) const
 {
     const auto key = hashString(searchName);
     return _glExtensions.find(key) != _glExtensions.end();
 }
 
-std::string DeviceInfoGL::dumpExtensions() const
+std::string DriverGL::dumpExtensions() const
 {
     std::string strExts;
 

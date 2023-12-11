@@ -32,7 +32,7 @@
 #include "renderer/Pass.h"
 #include "renderer/TextureCache.h"
 #include "renderer/Texture2D.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "base/Properties.h"
 #include "base/Director.h"
 #include "platform/FileUtils.h"

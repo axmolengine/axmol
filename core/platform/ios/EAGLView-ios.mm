@@ -71,7 +71,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 #if defined(AX_USE_METAL)
 #    import <Metal/Metal.h>
-#    import "renderer/backend/metal/DeviceMTL.h"
+#    import "renderer/backend/metal/DriverMTL.h"
 #    import "renderer/backend/metal/UtilsMTL.h"
 #else
 #    import "platform/ios/GLViewImpl-ios.h"
@@ -201,7 +201,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         metalLayer.device          = device;
         metalLayer.pixelFormat     = MTLPixelFormatBGRA8Unorm;
         metalLayer.framebufferOnly = YES;
-        ax::backend::DeviceMTL::setCAMetalLayer(metalLayer);
+        ax::backend::DriverMTL::setCAMetalLayer(metalLayer);
 #else
         pixelformat_        = format;
         depthFormat_        = depth;

@@ -202,23 +202,23 @@ void Renderer::init()
     _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
     _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
 
-    auto device    = backend::Device::getInstance();
-    _commandBuffer = device->newCommandBuffer();
+    auto driver    = backend::DriverBase::getInstance();
+    _commandBuffer = driver->newCommandBuffer();
     // @MTL: the depth stencil flags must same render target and _dsDesc
     _dsDesc.flags = DepthStencilFlags::ALL;
-    _defaultRT    = device->newDefaultRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL);
+    _defaultRT    = driver->newDefaultRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL);
 
     _currentRT      = _defaultRT;
-    _renderPipeline = device->newRenderPipeline();
+    _renderPipeline = driver->newRenderPipeline();
     _commandBuffer->setRenderPipeline(_renderPipeline);
 
-    _depthStencilState = device->newDepthStencilState();
+    _depthStencilState = driver->newDepthStencilState();
     _commandBuffer->setDepthStencilState(_depthStencilState);
 }
 
 backend::RenderTarget* Renderer::getOffscreenRenderTarget() {
     if (_offscreenRT != nullptr) return _offscreenRT;
-    return (_offscreenRT = backend::Device::getInstance()->newRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL));
+    return (_offscreenRT = backend::DriverBase::getInstance()->newRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL));
 }
 
 void Renderer::addCallbackCommand(std::function<void()> func, float globalZOrder)
@@ -841,7 +841,7 @@ void Renderer::readPixels(backend::RenderTarget* rt,
     assert(!!rt);
     if (rt ==
         _defaultRT)  // read pixels from screen, metal renderer backend: screen texture must not be a framebufferOnly
-        backend::Device::getInstance()->setFrameBufferOnly(false);
+        backend::DriverBase::getInstance()->setFrameBufferOnly(false);
 
     _commandBuffer->readPixels(rt, std::move(callback));
 }
@@ -999,18 +999,18 @@ backend::Buffer* Renderer::TriangleCommandBufferManager::getIndexBuffer() const
 
 void Renderer::TriangleCommandBufferManager::createBuffer()
 {
-    auto device = backend::Device::getInstance();
+    auto driver = backend::DriverBase::getInstance();
 
     // Not initializing the buffer before passing it to updateData for Android/OpenGL ES.
     // This change does fix the Android/OpenGL ES performance problem
     // If for some reason we get reports of performance issues on OpenGL implementations,
     // then we can just add pre-processor checks for OpenGL and have the updateData() allocate the full size after buffer creation.
-    auto vertexBuffer = device->newBuffer(Renderer::VBO_SIZE * sizeof(_verts[0]), backend::BufferType::VERTEX,
+    auto vertexBuffer = driver->newBuffer(Renderer::VBO_SIZE * sizeof(_verts[0]), backend::BufferType::VERTEX,
                                           backend::BufferUsage::DYNAMIC);
     if (!vertexBuffer)
         return;
 
-    auto indexBuffer = device->newBuffer(Renderer::INDEX_VBO_SIZE * sizeof(_indices[0]), backend::BufferType::INDEX,
+    auto indexBuffer = driver->newBuffer(Renderer::INDEX_VBO_SIZE * sizeof(_indices[0]), backend::BufferType::INDEX,
                                          backend::BufferUsage::DYNAMIC);
     if (!indexBuffer)
     {

@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -23,7 +24,7 @@
  ****************************************************************************/
 
 #include "ShaderModuleMTL.h"
-#include "DeviceMTL.h"
+#include "DriverMTL.h"
 
 #include "yasio/ibstream.hpp"
 #include "yasio/sz.hpp"

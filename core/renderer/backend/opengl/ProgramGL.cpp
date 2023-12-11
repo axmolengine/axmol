@@ -310,7 +310,7 @@ void ProgramGL::computeUniformInfos()
 
     // OpenGL UBO: uloc[0]: block_offset, uloc[1]: offset in block
 
-    auto gpuDevice = Device::getInstance();
+    auto driver = DriverBase::getInstance();
     /* Query uniform blocks */
     clearUniformBuffers();
 
@@ -336,7 +336,7 @@ void ProgramGL::computeUniformInfos()
 
         // create uniform buffer object
         auto& desc = _uniformBuffers.emplace_back(
-            static_cast<BufferGL*>(gpuDevice->newBuffer(blockSize, BufferType::UNIFORM, BufferUsage::DYNAMIC)),
+            static_cast<BufferGL*>(driver->newBuffer(blockSize, BufferType::UNIFORM, BufferUsage::DYNAMIC)),
             static_cast<int>(_totalBufferSize), blockSize);
         desc._ubo->updateData(nullptr, blockSize);  // ubo data can be nullptr
 

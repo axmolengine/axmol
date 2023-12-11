@@ -35,7 +35,7 @@
 #include "MacrosGL.h"
 #include "UtilsGL.h"
 #include "RenderTargetGL.h"
-#include "DeviceGL.h"
+#include "DriverGL.h"
 #include <algorithm>
 
 NS_AX_BACKEND_BEGIN
