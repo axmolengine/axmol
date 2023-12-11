@@ -50,6 +50,10 @@ if (ANDROID)
     ax_target_compile_shaders(${LIB_NAME} FILES ${LIVE2D_TEGRA_SHADER_SOURCES} CUSTOM)
 endif()
 
-setup_ax_extension_config(${LIB_NAME} LINK_SCOPE PRIVATE)
+if (ANDROID)
+    setup_ax_extension_config(${LIB_NAME} LINK_SCOPE PRIVATE)
+else()
+    setup_ax_extension_config(${LIB_NAME})
+endif()
 
 unset(LIB_NAME)
