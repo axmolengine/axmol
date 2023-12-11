@@ -25,11 +25,11 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-set(APP_NAME HelloWorld)
+set(APP_NAME HelloCpp)
 
 project(${APP_NAME})
 
-if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloWorld into root project
+if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
     if(XCODE)
         set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
     endif()
