@@ -34,10 +34,10 @@
 
 USING_NS_AX;
 
-static Size designResolutionSize = Size(1280, 720);
-static Size smallResolutionSize  = Size(480, 320);
-static Size mediumResolutionSize = Size(1024, 768);
-static Size largeResolutionSize  = Size(2048, 1536);
+static ax::Size designResolutionSize = ax::Size(1280, 720);
+static ax::Size smallResolutionSize  = ax::Size(480, 320);
+static ax::Size mediumResolutionSize = ax::Size(1024, 768);
+static ax::Size largeResolutionSize  = ax::Size(2048, 1536);
 
 AppDelegate::AppDelegate() {}
 
