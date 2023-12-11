@@ -133,13 +133,20 @@ function axmol_deploy() {
         $apkDir = Join-Path $proj_dir "proj.android/app/build/outputs/apk/$optimize_flag_lower"
         $apkName = (Get-ChildItem -Path "$apkDir/*.apk").Name
         $apkFullPath = Join-Path $apkDir $apkName
+
+        # read applicationId aka package name
+        $outputMetaFile = Join-Path $apkDir 'output-metadata.json'
+        $outputMeta = ConvertFrom-Json $(Get-Content $outputMetaFile -raw)
+        $androidAppId = $outputMeta.applicationId 
+
+        # read activityName
         $androidManifestFile = Join-Path $proj_dir 'proj.android/app/AndroidManifest.xml'
         [XML]$androidManifest = Get-Content $androidManifestFile
-        $androidPackage = $androidManifest.manifest.package
         $androidActivity = $androidManifest.manifest.application.activity.name
+
         adb install -t -r $apkFullPath
         if ($?) {
-            println "axmol: Deploy $cmake_target done: $androidPackage/$androidActivity"
+            println "axmol: Deploy $cmake_target done: $androidAppId/$androidActivity"
         }
     }
     elseif ($TARGET_OS -eq 'ios' -or $TARGET_OS -eq 'tvos') {
@@ -171,7 +178,7 @@ function axmol_run() {
         Start-Process -FilePath $win32exePath -WorkingDirectory $(Split-Path $win32exePath -Parent)
     }
     elseif($TARGET_OS -eq 'android') {
-        adb shell am start -n "$androidPackage/$androidActivity"
+        adb shell am start -n "$androidAppId/$androidActivity"
     }
     elseif($TARGET_OS -eq 'ios') {
         if ($ios_bundle_id) {

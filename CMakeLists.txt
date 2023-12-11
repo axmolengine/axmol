@@ -74,20 +74,20 @@ if(AX_BUILD_TESTS)
     add_test_target(HelloCpp ${_AX_ROOT}/templates/cpp-template-default )
 
 	# add cpp tests default
-    add_test_target(cpp_tests ${_AX_ROOT}/tests/cpp-tests)
+    add_test_target(cpp-tests ${_AX_ROOT}/tests/cpp-tests)
     
 	# add fairygui tests when fairygui extension is enabled
     if(AX_ENABLE_EXT_FAIRYGUI)
-        add_test_target(fairygui_tests ${_AX_ROOT}/tests/fairygui-tests)
+        add_test_target(fairygui-tests ${_AX_ROOT}/tests/fairygui-tests)
     endif()
     
     if(AX_ENABLE_EXT_LIVE2D)
-        add_test_target(live2d_tests ${_AX_ROOT}/tests/live2d-tests)
+        add_test_target(live2d-tests ${_AX_ROOT}/tests/live2d-tests)
     endif()
 
     if(AX_ENABLE_EXT_LUA)
         add_test_target(HelloLua ${_AX_ROOT}/templates/lua-template-default)
-        add_test_target(lua_tests ${_AX_ROOT}/tests/lua-tests)
+        add_test_target(lua-tests ${_AX_ROOT}/tests/lua-tests)
     endif(AX_ENABLE_EXT_LUA)
     
 endif()

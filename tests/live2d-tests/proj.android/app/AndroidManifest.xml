@@ -13,7 +13,7 @@
         
         <!-- Tell AxmolActivity the name of our .so -->
         <meta-data android:name="android.app.lib_name"
-                   android:value="live2d_tests" />
+                   android:value="live2d-tests" />
 
         <activity
             android:name="org.axmol.cpp.AppActivity"

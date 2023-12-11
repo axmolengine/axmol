@@ -12,7 +12,7 @@
         
         <!-- Tell AxmolActivity the name of our .so -->
 		<meta-data android:name="android.app.lib_name"
-				   android:value="fairygui_tests" />
+				   android:value="fairygui-tests" />
 		
         <activity
             android:name=".AppActivity"

@@ -98,11 +98,30 @@ $is_ci = $env:GITHUB_ACTIONS -eq 'true'
 $b1k_script = (Resolve-Path -Path "$b1k_root/1k/build.ps1").Path
 $b1k_args = @()
 
+$cm_target_index = $options.xb.IndexOf('--target')
+if($cm_target_index -ne -1) {
+    $cmake_target = $options.xb[$cm_target_index + 1]
+}
+
 if ($is_engine -and $is_android) {
-    if ($is_ci) {
-        $source_proj_dir = Join-Path $myRoot 'tests/cpp-tests'
+    if (!$cmake_target) {
+        if ($is_ci) {
+            $source_proj_dir = Join-Path $myRoot 'tests/cpp-tests'
+        } else {
+            $source_proj_dir = Join-Path $myRoot 'templates/cpp-template-default'
+        }
     } else {
-        $source_proj_dir = Join-Path $myRoot 'templates/cpp-template-default'
+        $builtin_targets = @{
+            'HelloCpp' = 'templates/cpp-template-default'
+            'HelloLua' = 'templates/cpp-template-default'
+            'cpp-tests' = 'tests/cpp-tests'
+            'fairygui-tests' = 'tests/fairygui-tests'
+            'live2d-tests' = 'tests/live2d-tests'
+        }
+        if (!$builtin_targets.Contains($cmake_target)) {
+            throw "specified target '$cmake_target' not present in engine"
+        }
+        $source_proj_dir = Join-Path $myRoot $builtin_targets[$cmake_target]
     }
 }
 
@@ -127,8 +146,7 @@ if ($use_gradle) {
 }
 
 if (!$use_gradle) {
-    $cm_target_index = $options.xb.IndexOf('--target')
-    if ($cm_target_index -eq -1) {
+    if (!$cmake_target) {
         # non android, specific cmake target
         $cmake_targets = @(
             # local developer
@@ -143,18 +161,11 @@ if (!$use_gradle) {
                 # project
                 $proj_name,
                 # engine
-                'cpp_tests'
+                'cpp-tests'
             )
         )
         $cmake_target = $cmake_targets[$is_ci][$is_engine]
-
-        # reason:
-        #   - android package not accept '-'
-        #   - ios deploy device may failed with unknown error
-        $cmake_target = $cmake_target.Replace('-', '_')
         $options.xb += '--target', $cmake_target
-    } else {
-        $cmake_target = $options.xb[$cm_target_index + 1]
     }
 
     if($is_android) {
@@ -164,7 +175,7 @@ if (!$use_gradle) {
     }
 } else { # android gradle
     # engine ci
-    if ($is_engine -and $is_ci) {
+    if ($is_engine) {
         $options.xc += "-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks", '-PRELEASE_STORE_PASSWORD=axmol-ci', '-PRELEASE_KEY_ALIAS=axmol-ci', '-PRELEASE_KEY_PASSWORD=axmol-ci'
     }
 }

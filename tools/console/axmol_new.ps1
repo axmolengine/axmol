@@ -28,6 +28,14 @@ if ($lang -eq 'cpp' -or $lang -eq 'lua') {
     throw 'Invalid lang, valid is cpp or lua'
 }
 
+if ($pname.IndexOf('-') -ne -1) {
+    # !!!reason:
+    #   - android package not accept '-'
+    #   - ios deploy device may failed with unknown error
+    $packageName = $packageName.Replace('-', '_')
+    println "Warning: package name was converted to '$packageName'!"
+}
+
 if ($lang -eq 'cpp') {
     $sourcePath = Join-Path $env:AX_ROOT 'templates/cpp-template-default'
 }
