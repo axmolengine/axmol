@@ -6,7 +6,7 @@
 
     <Application.Resources>
 
-      <x:String x:Key="AppName">live2d_tests</x:String>
+      <x:String x:Key="AppName">live2d-tests</x:String>
 
     </Application.Resources>
 </Application>

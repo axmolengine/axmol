@@ -21,10 +21,6 @@
             "to": "${packageName}",
             "files": [
                 "proj.android/app/build.gradle",
-                "proj.android/app/AndroidManifest.xml",
-                "proj.ios_mac/mac/Info.plist",
-                "proj.ios_mac/ios/targets/ios/Info.plist",
-                "proj.ios_mac/ios/targets/tvos/Info.plist",
                 "CMakeLists.txt"
             ]
         },

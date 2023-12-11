@@ -6,7 +6,7 @@
 
     <Application.Resources>
 
-      <x:String x:Key="AppName">lua_tests</x:String>
+      <x:String x:Key="AppName">lua-tests</x:String>
 
     </Application.Resources>
 </Application>

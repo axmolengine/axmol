@@ -126,9 +126,10 @@ function copy_tree_if($source, $dest) {
 }
 
 download_zip_expand 'https://ci.appveyor.com/api/projects/halx99/axmol/artifacts/build_wasm.zip?branch=dev' $(Join-Path $AX_ROOT 'tmp/build_wasm.zip')
-$cpp_tests_dir = $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests')
+
+$cpp_tests_dir = $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp-tests')
 if (!(Test-Path $cpp_tests_dir -PathType Container)) {
-    throw "Missing wasm cpp_tests, caused by last wasm ci build fail."
+    throw "Missing wasm cpp-tests, caused by last wasm ci build fail."
 }
 copy_tree_if $cpp_tests_dir $wasm_dist2
 copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/fairygui_tests') $wasm_dist2
@@ -185,7 +186,8 @@ foreach($item in $verMap.GetEnumerator()) {
 }
 
 # redirect cpp_tests.html to isolated site
-$fake_cpp_tests = Join-Path $site_dist 'wasm/cpp_tests/'
+# don't modify, released news: gitee, github releases inuse
+$fake_cpp_tests = Join-Path $site_dist 'axmol/wasm/cpp_tests/'
 mkdirs $fake_cpp_tests
 $fake_cpp_tests_html = Join-Path $fake_cpp_tests 'cpp_tests.html'
 $redirect_content = @'
@@ -205,7 +207,7 @@ $redirect_content = @'
   Redirecting to <a href="{0}">{0}</a>
 </body>
 </html>
-'@ -f 'https://axmol.netlify.app/wasm/cpp_tests/cpp_tests'
+'@ -f 'https://axmol.netlify.app/wasm/cpp-tests/cpp-tests'
 Set-Content -Path $fake_cpp_tests_html -Value $redirect_content
 
 Set-Location $store_cwd

@@ -3,7 +3,7 @@
   <Identity Name="fe5bbe02-0ca6-4dc3-ab15-94260df03d68" Publisher="CN=axmol-ci" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="fe5bbe02-0ca6-4dc3-ab15-94260df03d68" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>HelloCpp</DisplayName>
+    <DisplayName>live2d-tests</DisplayName>
     <PublisherDisplayName>Microsoft Open Technologies, Inc.</PublisherDisplayName>
     <Logo>Content\StoreLogo.png</Logo>
   </Properties>
@@ -16,12 +16,12 @@
   <Applications>
     <Application Id="App" 
       Executable="$targetnametoken$.exe" 
-      EntryPoint="HelloCpp.App">
+      EntryPoint="live2d-tests.App">
       <uap:VisualElements 
-        DisplayName="HelloCpp" 
+        DisplayName="live2d-tests" 
         Square150x150Logo="Content\Square150x150Logo.png" 
 	Square44x44Logo="Content\Square44x44Logo.png" 
-	Description="HelloCpp" 
+	Description="live2d-tests" 
 	BackgroundColor="#464646">
         <uap:DefaultTile Wide310x150Logo="Content\Wide310x150Logo.png">
           <uap:ShowNameOnTiles>
