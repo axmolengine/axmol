@@ -23,15 +23,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#ifndef __MAIN_SCENE_H__
+#define __MAIN_SCENE_H__
 
 #include "axmol.h"
 
 
-class HelloWorld : public ax::Scene
+class MainScene : public ax::Scene
 {
-    enum class ExampleGameState
+    enum class GameState
     {
         init = 0,
         update,
@@ -64,7 +64,7 @@ public:
     void menuCloseCallback(Ref* sender);
 
 private:
-    ExampleGameState _gameState = ExampleGameState::init;
+    GameState _gameState = GameState::init;
 };
 
-#endif  // __HELLOWORLD_SCENE_H__
+#endif  // __MAIN_SCENE_H__
