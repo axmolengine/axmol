@@ -3,7 +3,7 @@
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/Texture.h"
 #include "renderer/backend/VertexLayout.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "renderer/backend/RenderTarget.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
@@ -2654,10 +2654,10 @@ int lua_register_ax_backend_TextureCubemapBackend(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_backend_Device_newDefaultRenderTarget(lua_State* tolua_S)
+int lua_ax_backend_DriverBase_newDefaultRenderTarget(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Device* cobj = nullptr;
+    ax::backend::DriverBase* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2666,15 +2666,15 @@ int lua_ax_backend_Device_newDefaultRenderTarget(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axb.Device",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Device*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Device_newDefaultRenderTarget'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_newDefaultRenderTarget'", nullptr);
         return 0;
     }
 #endif
@@ -2684,30 +2684,30 @@ int lua_ax_backend_Device_newDefaultRenderTarget(lua_State* tolua_S)
     {
         ax::backend::TargetBufferFlags arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.Device:newDefaultRenderTarget");
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.DriverBase:newDefaultRenderTarget");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Device_newDefaultRenderTarget'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newDefaultRenderTarget'", nullptr);
             return 0;
         }
         auto&& ret = cobj->newDefaultRenderTarget(arg0);
         object_to_luaval<ax::backend::RenderTarget>(tolua_S, "axb.RenderTarget",(ax::backend::RenderTarget*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.Device:newDefaultRenderTarget",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:newDefaultRenderTarget",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_Device_newDefaultRenderTarget'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_newDefaultRenderTarget'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_backend_Device_newRenderTarget(lua_State* tolua_S)
+int lua_ax_backend_DriverBase_newRenderTarget(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Device* cobj = nullptr;
+    ax::backend::DriverBase* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2716,15 +2716,15 @@ int lua_ax_backend_Device_newRenderTarget(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axb.Device",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Device*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Device_newRenderTarget'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
         return 0;
     }
 #endif
@@ -2734,10 +2734,10 @@ int lua_ax_backend_Device_newRenderTarget(lua_State* tolua_S)
     {
         ax::backend::TargetBufferFlags arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.Device:newRenderTarget");
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.DriverBase:newRenderTarget");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Device_newRenderTarget'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
             return 0;
         }
         auto&& ret = cobj->newRenderTarget(arg0);
@@ -2749,12 +2749,12 @@ int lua_ax_backend_Device_newRenderTarget(lua_State* tolua_S)
         ax::backend::TargetBufferFlags arg0;
         ax::backend::TextureBackend* arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.Device:newRenderTarget");
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.DriverBase:newRenderTarget");
 
-        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 3, "axb.TextureBackend",&arg1, "axb.Device:newRenderTarget");
+        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 3, "axb.TextureBackend",&arg1, "axb.DriverBase:newRenderTarget");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Device_newRenderTarget'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
             return 0;
         }
         auto&& ret = cobj->newRenderTarget(arg0, arg1);
@@ -2767,14 +2767,14 @@ int lua_ax_backend_Device_newRenderTarget(lua_State* tolua_S)
         ax::backend::TextureBackend* arg1;
         ax::backend::TextureBackend* arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.Device:newRenderTarget");
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.DriverBase:newRenderTarget");
 
-        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 3, "axb.TextureBackend",&arg1, "axb.Device:newRenderTarget");
+        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 3, "axb.TextureBackend",&arg1, "axb.DriverBase:newRenderTarget");
 
-        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 4, "axb.TextureBackend",&arg2, "axb.Device:newRenderTarget");
+        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 4, "axb.TextureBackend",&arg2, "axb.DriverBase:newRenderTarget");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Device_newRenderTarget'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
             return 0;
         }
         auto&& ret = cobj->newRenderTarget(arg0, arg1, arg2);
@@ -2788,36 +2788,36 @@ int lua_ax_backend_Device_newRenderTarget(lua_State* tolua_S)
         ax::backend::TextureBackend* arg2;
         ax::backend::TextureBackend* arg3;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.Device:newRenderTarget");
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.DriverBase:newRenderTarget");
 
-        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 3, "axb.TextureBackend",&arg1, "axb.Device:newRenderTarget");
+        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 3, "axb.TextureBackend",&arg1, "axb.DriverBase:newRenderTarget");
 
-        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 4, "axb.TextureBackend",&arg2, "axb.Device:newRenderTarget");
+        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 4, "axb.TextureBackend",&arg2, "axb.DriverBase:newRenderTarget");
 
-        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 5, "axb.TextureBackend",&arg3, "axb.Device:newRenderTarget");
+        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 5, "axb.TextureBackend",&arg3, "axb.DriverBase:newRenderTarget");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Device_newRenderTarget'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
             return 0;
         }
         auto&& ret = cobj->newRenderTarget(arg0, arg1, arg2, arg3);
         object_to_luaval<ax::backend::RenderTarget>(tolua_S, "axb.RenderTarget",(ax::backend::RenderTarget*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.Device:newRenderTarget",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:newRenderTarget",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_Device_newRenderTarget'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_newRenderTarget'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_backend_Device_newDepthStencilState(lua_State* tolua_S)
+int lua_ax_backend_DriverBase_newDepthStencilState(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Device* cobj = nullptr;
+    ax::backend::DriverBase* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2826,15 +2826,15 @@ int lua_ax_backend_Device_newDepthStencilState(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axb.Device",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Device*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Device_newDepthStencilState'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_newDepthStencilState'", nullptr);
         return 0;
     }
 #endif
@@ -2844,27 +2844,27 @@ int lua_ax_backend_Device_newDepthStencilState(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Device_newDepthStencilState'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newDepthStencilState'", nullptr);
             return 0;
         }
         auto&& ret = cobj->newDepthStencilState();
         object_to_luaval<ax::backend::DepthStencilState>(tolua_S, "axb.DepthStencilState",(ax::backend::DepthStencilState*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.Device:newDepthStencilState",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:newDepthStencilState",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_Device_newDepthStencilState'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_newDepthStencilState'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_backend_Device_newProgram(lua_State* tolua_S)
+int lua_ax_backend_DriverBase_newProgram(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Device* cobj = nullptr;
+    ax::backend::DriverBase* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2873,15 +2873,15 @@ int lua_ax_backend_Device_newProgram(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axb.Device",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Device*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Device_newProgram'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_newProgram'", nullptr);
         return 0;
     }
 #endif
@@ -2892,32 +2892,32 @@ int lua_ax_backend_Device_newProgram(lua_State* tolua_S)
         std::string_view arg0;
         std::string_view arg1;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.Device:newProgram");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.DriverBase:newProgram");
 
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axb.Device:newProgram");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axb.DriverBase:newProgram");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Device_newProgram'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newProgram'", nullptr);
             return 0;
         }
         auto&& ret = cobj->newProgram(arg0, arg1);
         object_to_luaval<ax::backend::Program>(tolua_S, "axb.Program",(ax::backend::Program*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.Device:newProgram",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:newProgram",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_Device_newProgram'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_newProgram'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_backend_Device_resetState(lua_State* tolua_S)
+int lua_ax_backend_DriverBase_resetState(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Device* cobj = nullptr;
+    ax::backend::DriverBase* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2926,15 +2926,15 @@ int lua_ax_backend_Device_resetState(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axb.Device",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Device*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Device_resetState'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_resetState'", nullptr);
         return 0;
     }
 #endif
@@ -2944,24 +2944,547 @@ int lua_ax_backend_Device_resetState(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Device_resetState'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_resetState'", nullptr);
             return 0;
         }
         cobj->resetState();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.Device:resetState",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:resetState",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_Device_resetState'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_resetState'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_backend_Device_getInstance(lua_State* tolua_S)
+int lua_ax_backend_DriverBase_getVendor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::DriverBase* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getVendor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getVendor'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getVendor();
+        tolua_pushstring(tolua_S,(const char*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:getVendor",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_getVendor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_DriverBase_getRenderer(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::DriverBase* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getRenderer'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getRenderer'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getRenderer();
+        tolua_pushstring(tolua_S,(const char*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:getRenderer",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_getRenderer'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_DriverBase_getVersion(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::DriverBase* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getVersion'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getVersion'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getVersion();
+        tolua_pushstring(tolua_S,(const char*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:getVersion",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_getVersion'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_DriverBase_getShaderVersion(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::DriverBase* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getShaderVersion'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getShaderVersion'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getShaderVersion();
+        tolua_pushstring(tolua_S,(const char*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:getShaderVersion",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_getShaderVersion'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_DriverBase_hasExtension(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::DriverBase* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_hasExtension'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.DriverBase:hasExtension");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_hasExtension'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->hasExtension(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:hasExtension",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_hasExtension'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_DriverBase_dumpExtensions(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::DriverBase* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_dumpExtensions'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_dumpExtensions'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->dumpExtensions();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:dumpExtensions",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_dumpExtensions'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_DriverBase_checkForFeatureSupported(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::DriverBase* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_checkForFeatureSupported'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::backend::FeatureType arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.DriverBase:checkForFeatureSupported");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_checkForFeatureSupported'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->checkForFeatureSupported(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:checkForFeatureSupported",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_checkForFeatureSupported'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_DriverBase_getMaxTextureSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::DriverBase* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getMaxTextureSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getMaxTextureSize'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getMaxTextureSize();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:getMaxTextureSize",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_getMaxTextureSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_DriverBase_getMaxAttributes(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::DriverBase* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getMaxAttributes'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getMaxAttributes'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getMaxAttributes();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:getMaxAttributes",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_getMaxAttributes'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_DriverBase_getMaxTextureUnits(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::DriverBase* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getMaxTextureUnits'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getMaxTextureUnits'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getMaxTextureUnits();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:getMaxTextureUnits",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_getMaxTextureUnits'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_DriverBase_getMaxSamplesAllowed(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::DriverBase* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getMaxSamplesAllowed'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getMaxSamplesAllowed'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getMaxSamplesAllowed();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:getMaxSamplesAllowed",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_getMaxSamplesAllowed'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_DriverBase_getInstance(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -2971,7 +3494,7 @@ int lua_ax_backend_Device_getInstance(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axb.Device",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -2980,43 +3503,54 @@ int lua_ax_backend_Device_getInstance(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Device_getInstance'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getInstance'", nullptr);
             return 0;
         }
-        auto&& ret = ax::backend::Device::getInstance();
-        object_to_luaval<ax::backend::Device>(tolua_S, "axb.Device",(ax::backend::Device*)ret);
+        auto&& ret = ax::backend::DriverBase::getInstance();
+        object_to_luaval<ax::backend::DriverBase>(tolua_S, "axb.DriverBase",(ax::backend::DriverBase*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axb.Device:getInstance",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axb.DriverBase:getInstance",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_Device_getInstance'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_getInstance'.",&tolua_err);
 #endif
     return 0;
 }
-static int lua_ax_backend_Device_finalize(lua_State* tolua_S)
+static int lua_ax_backend_DriverBase_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Device)");
+    printf("luabindings: finalizing LUA object (DriverBase)");
     return 0;
 }
 
-int lua_register_ax_backend_Device(lua_State* tolua_S)
+int lua_register_ax_backend_DriverBase(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"axb.Device");
-    tolua_cclass(tolua_S,"Device","axb.Device","ax.Ref",nullptr);
+    tolua_usertype(tolua_S,"axb.DriverBase");
+    tolua_cclass(tolua_S,"DriverBase","axb.DriverBase","ax.Ref",nullptr);
 
-    tolua_beginmodule(tolua_S,"Device");
-        tolua_function(tolua_S,"newDefaultRenderTarget",lua_ax_backend_Device_newDefaultRenderTarget);
-        tolua_function(tolua_S,"newRenderTarget",lua_ax_backend_Device_newRenderTarget);
-        tolua_function(tolua_S,"newDepthStencilState",lua_ax_backend_Device_newDepthStencilState);
-        tolua_function(tolua_S,"newProgram",lua_ax_backend_Device_newProgram);
-        tolua_function(tolua_S,"resetState",lua_ax_backend_Device_resetState);
-        tolua_function(tolua_S,"getInstance", lua_ax_backend_Device_getInstance);
+    tolua_beginmodule(tolua_S,"DriverBase");
+        tolua_function(tolua_S,"newDefaultRenderTarget",lua_ax_backend_DriverBase_newDefaultRenderTarget);
+        tolua_function(tolua_S,"newRenderTarget",lua_ax_backend_DriverBase_newRenderTarget);
+        tolua_function(tolua_S,"newDepthStencilState",lua_ax_backend_DriverBase_newDepthStencilState);
+        tolua_function(tolua_S,"newProgram",lua_ax_backend_DriverBase_newProgram);
+        tolua_function(tolua_S,"resetState",lua_ax_backend_DriverBase_resetState);
+        tolua_function(tolua_S,"getVendor",lua_ax_backend_DriverBase_getVendor);
+        tolua_function(tolua_S,"getRenderer",lua_ax_backend_DriverBase_getRenderer);
+        tolua_function(tolua_S,"getVersion",lua_ax_backend_DriverBase_getVersion);
+        tolua_function(tolua_S,"getShaderVersion",lua_ax_backend_DriverBase_getShaderVersion);
+        tolua_function(tolua_S,"hasExtension",lua_ax_backend_DriverBase_hasExtension);
+        tolua_function(tolua_S,"dumpExtensions",lua_ax_backend_DriverBase_dumpExtensions);
+        tolua_function(tolua_S,"checkForFeatureSupported",lua_ax_backend_DriverBase_checkForFeatureSupported);
+        tolua_function(tolua_S,"getMaxTextureSize",lua_ax_backend_DriverBase_getMaxTextureSize);
+        tolua_function(tolua_S,"getMaxAttributes",lua_ax_backend_DriverBase_getMaxAttributes);
+        tolua_function(tolua_S,"getMaxTextureUnits",lua_ax_backend_DriverBase_getMaxTextureUnits);
+        tolua_function(tolua_S,"getMaxSamplesAllowed",lua_ax_backend_DriverBase_getMaxSamplesAllowed);
+        tolua_function(tolua_S,"getInstance", lua_ax_backend_DriverBase_getInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::backend::Device).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axb.Device";
-    g_typeCast[typeName] = "axb.Device";
+    auto typeName = typeid(ax::backend::DriverBase).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axb.DriverBase";
+    g_typeCast[typeName] = "axb.DriverBase";
     return 1;
 }
 TOLUA_API int register_all_ax_backend(lua_State* tolua_S)
@@ -3052,7 +3586,7 @@ TOLUA_API int register_all_ax_backend(lua_State* tolua_S)
 	lua_register_ax_backend_TextureBackend(tolua_S);
 	lua_register_ax_backend_Texture2DBackend(tolua_S);
 	lua_register_ax_backend_TextureCubemapBackend(tolua_S);
-	lua_register_ax_backend_Device(tolua_S);
+	lua_register_ax_backend_DriverBase(tolua_S);
 
 	tolua_endmodule(tolua_S);
 	return 1;

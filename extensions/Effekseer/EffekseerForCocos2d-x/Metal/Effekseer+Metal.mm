@@ -70,11 +70,11 @@ DistortingCallbackMetal::~DistortingCallbackMetal()
 bool DistortingCallbackMetal::OnDistorting(EffekseerRenderer::Renderer* renderer)
 {
     // to get viewport
-    auto drawable = cocos2d::backend::DeviceMTL::getCurrentDrawable();
+    auto drawable = cocos2d::backend::DriverMTL::getCurrentDrawable();
 
     if(textureInternal_ == nullptr)
     {
-        auto deviceMTL = static_cast<cocos2d::backend::DeviceMTL*>(cocos2d::backend::Device::getInstance());
+        auto driver = static_cast<cocos2d::backend::DriverMTL*>(cocos2d::backend::DriverBase::getInstance());
         
         MTLTextureDescriptor* textureDescriptor =
         [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:cocos2d::backend::UtilsMTL::getDefaultColorAttachmentPixelFormat()
@@ -82,7 +82,7 @@ bool DistortingCallbackMetal::OnDistorting(EffekseerRenderer::Renderer* renderer
                                                           height:drawable.texture.height
                                                        mipmapped:NO];
         
-        texture = [deviceMTL->getMTLDevice() newTextureWithDescriptor:textureDescriptor];
+        texture = [driver->getMTLDevice() newTextureWithDescriptor:textureDescriptor];
         textureInternal_ = EffekseerRendererMetal::CreateTexture(renderer->GetGraphicsDevice(), texture);
     }
 
@@ -102,7 +102,7 @@ bool DistortingCallbackMetal::OnDistorting(EffekseerRenderer::Renderer* renderer
     
     [blitEncoder copyFromTexture:drawable.texture sourceSlice:0 sourceLevel:0 sourceOrigin:region.origin sourceSize:region.size toTexture:texture destinationSlice:0 destinationLevel:0 destinationOrigin:{0, 0, 0}];
     [blitEncoder endEncoding];
-    cocos2d::backend::Device::getInstance()->setFrameBufferOnly(true); // reset
+    cocos2d::backend::DriverBase::getInstance()->setFrameBufferOnly(true); // reset
     
     SetMTLObjectsFromCocos2d(commandList_);
     

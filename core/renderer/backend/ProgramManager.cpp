@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "ProgramManager.h"
-#include "Device.h"
+#include "DriverBase.h"
 #include "ShaderModule.h"
 #include "renderer/Shaders.h"
 #include "base/Macros.h"
@@ -208,7 +208,7 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
     auto fragFile   = fileUtils->fullPathForFilename(fsName);
     auto vertSource = fileUtils->getStringFromFile(vertFile);
     auto fragSource = fileUtils->getStringFromFile(fragFile);
-    auto program    = backend::Device::getInstance()->newProgram(vertSource, fragSource);
+    auto program    = backend::DriverBase::getInstance()->newProgram(vertSource, fragSource);
 
     if (program)
     {

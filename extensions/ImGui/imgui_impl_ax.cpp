@@ -1771,12 +1771,12 @@ IMGUI_IMPL_API void ImGui_ImplAx_RenderDrawData(ImDrawData* draw_data)
         // Upload vertex/index buffers
         const auto vsize = cmd_list->VtxBuffer.Size * sizeof(ImDrawVert);
         IM_ASSERT(vsize > 0);
-        auto vbuffer = backend::Device::getInstance()->newBuffer(vsize, BufferType::VERTEX, BufferUsage::STATIC);
+        auto vbuffer = backend::DriverBase::getInstance()->newBuffer(vsize, BufferType::VERTEX, BufferUsage::STATIC);
         vbuffer->autorelease();
         vbuffer->updateData(cmd_list->VtxBuffer.Data, vsize);
         const auto isize = cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx);
         IM_ASSERT(isize > 0);
-        auto ibuffer = backend::Device::getInstance()->newBuffer(isize, BufferType::INDEX, BufferUsage::STATIC);
+        auto ibuffer = backend::DriverBase::getInstance()->newBuffer(isize, BufferType::INDEX, BufferUsage::STATIC);
         ibuffer->autorelease();
         ibuffer->updateData(cmd_list->IdxBuffer.Data, isize);
 

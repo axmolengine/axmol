@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -23,7 +24,7 @@
  ****************************************************************************/
 
 #include "RenderPipelineMTL.h"
-#include "DeviceMTL.h"
+#include "DriverMTL.h"
 #include "RenderTargetMTL.h"
 #include "ShaderModuleMTL.h"
 #include "DepthStencilStateMTL.h"
@@ -255,8 +256,8 @@ void RenderPipelineMTL::setVertexLayout(MTLRenderPipelineDescriptor* mtlDescript
 
     int stride = vertexLayout->getStride();
     auto vertexDesc = mtlDescriptor.vertexDescriptor;
-    vertexDesc.layouts[DeviceMTL::DEFAULT_ATTRIBS_BINDING_INDEX].stride = stride;
-    vertexDesc.layouts[DeviceMTL::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction =
+    vertexDesc.layouts[DriverMTL::DEFAULT_ATTRIBS_BINDING_INDEX].stride = stride;
+    vertexDesc.layouts[DriverMTL::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction =
         toMTLVertexStepFunction(vertexLayout->getVertexStepMode());
 
     const auto& attributes = vertexLayout->getAttributes();
@@ -270,7 +271,7 @@ void RenderPipelineMTL::setVertexLayout(MTLRenderPipelineDescriptor* mtlDescript
             toMTLVertexFormat(attribute.format, attribute.needToBeNormallized);
         vertexDesc.attributes[attribute.index].offset = attribute.offset;
         // Buffer index will always be 0;
-        vertexDesc.attributes[attribute.index].bufferIndex = DeviceMTL::DEFAULT_ATTRIBS_BINDING_INDEX;
+        vertexDesc.attributes[attribute.index].bufferIndex = DriverMTL::DEFAULT_ATTRIBS_BINDING_INDEX;
         
     }
 }

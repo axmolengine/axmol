@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -24,11 +25,47 @@
 
 #pragma once
 
-#include "../Device.h"
+#include "../DriverBase.h"
 #import <Metal/Metal.h>
 #import <QuartzCore/CAMetalLayer.h>
 
 NS_AX_BACKEND_BEGIN
+
+enum class FeatureSet : int32_t
+{
+    Unknown                      = -1,
+    FeatureSet_iOS_GPUFamily1_v1 = 0,
+    FeatureSet_iOS_GPUFamily2_v1 = 1,
+
+    FeatureSet_iOS_GPUFamily1_v2 = 2,
+    FeatureSet_iOS_GPUFamily2_v2 = 3,
+    FeatureSet_iOS_GPUFamily3_v1 = 4,
+
+    FeatureSet_iOS_GPUFamily1_v3 = 5,
+    FeatureSet_iOS_GPUFamily2_v3 = 6,
+    FeatureSet_iOS_GPUFamily3_v2 = 7,
+
+    FeatureSet_iOS_GPUFamily1_v4 = 8,
+    FeatureSet_iOS_GPUFamily2_v4 = 9,
+    FeatureSet_iOS_GPUFamily3_v3 = 10,
+    FeatureSet_iOS_GPUFamily4_v1 = 11,
+
+    FeatureSet_iOS_GPUFamily1_v5 = 12,
+    FeatureSet_iOS_GPUFamily2_v5 = 13,
+    FeatureSet_iOS_GPUFamily3_v4 = 14,
+    FeatureSet_iOS_GPUFamily4_v2 = 15,
+
+    FeatureSet_macOS_GPUFamily1_v1 = 10000,
+
+    FeatureSet_macOS_GPUFamily1_v2         = 10001,
+    FeatureSet_macOS_ReadWriteTextureTier2 = 10002,
+
+    FeatureSet_macOS_GPUFamily1_v3 = 10003,
+
+    FeatureSet_macOS_GPUFamily1_v4 = 10004,
+    FeatureSet_macOS_GPUFamily2_v1 = 10005,
+};
+
 
 /**
  * @addtogroup _metal
@@ -38,7 +75,7 @@ NS_AX_BACKEND_BEGIN
 /**
  * Create resources from MTLDevice.
  */
-class DeviceMTL : public Device
+class DriverMTL : public DriverBase
 {
 public:
     /* The max vertex attribs, it's not how many device supports which may be lower. */
@@ -70,7 +107,7 @@ public:
      * Get a CAMetalLayer.
      * @return A CAMetalLayer object.
      */
-    static CAMetalLayer* getCAMetalLayer() { return DeviceMTL::_metalLayer; }
+    static CAMetalLayer* getCAMetalLayer() { return DriverMTL::_metalLayer; }
 
     /**
      * Get available Drawable.
@@ -84,15 +121,15 @@ public:
     static void resetCurrentDrawable();
 
     /// @name Constructor, Destructor and Initializers
-    DeviceMTL();
-    ~DeviceMTL();
+    DriverMTL();
+    ~DriverMTL();
 
     /// @name Setters & Getters
     /**
      * New a CommandBuffer object.
      * @return A CommandBuffer object.
      */
-    virtual CommandBuffer* newCommandBuffer() override;
+    CommandBuffer* newCommandBuffer() override;
 
     /**
      * New a Buffer object.
@@ -103,14 +140,14 @@ public:
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
-    virtual Buffer* newBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
+    Buffer* newBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
 
     /**
      * New a TextureBackend object.
      * @param descriptor Specifies texture description.
      * @return A TextureBackend object.
      */
-    virtual TextureBackend* newTexture(const TextureDescriptor& descriptor) override;
+    TextureBackend* newTexture(const TextureDescriptor& descriptor) override;
 
     RenderTarget* newDefaultRenderTarget(TargetBufferFlags rtf) override;
     RenderTarget* newRenderTarget(TargetBufferFlags rtf,
@@ -121,14 +158,14 @@ public:
     /**
      * New a DepthStencilState object.
      */
-    virtual DepthStencilState* newDepthStencilState() override;
+    DepthStencilState* newDepthStencilState() override;
 
     /**
      * New a RenderPipeline object.
      * @param descriptor Specifies render pipeline description.
      * @return A RenderPipeline object.
      */
-    virtual RenderPipeline* newRenderPipeline() override;
+    RenderPipeline* newRenderPipeline() override;
 
     /**
      * This property controls whether or not the drawables'
@@ -139,7 +176,7 @@ public:
      * optimized for display purposes that makes them unsuitable for sampling. The recommended value for most
      * applications is YES.
      */
-    virtual void setFrameBufferOnly(bool frameBufferOnly) override;
+    void setFrameBufferOnly(bool frameBufferOnly) override;
 
     /**
      * New a Program, not auto release.
@@ -147,7 +184,7 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    virtual Program* newProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* newProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
 
     /**
      * Get a MTLDevice object.
@@ -161,6 +198,36 @@ public:
      */
     inline id<MTLCommandQueue> getMTLCommandQueue() const { return _mtlCommandQueue; }
 
+    /// below is driver info
+\
+    /// @name Setters & Getters
+    /**
+     * Get vendor device name.
+     * @return Vendor device name.
+     */
+    const char* getVendor() const override;
+
+    /**
+     * Get the full name of the vendor device.
+     * @return The full name of the vendor device.
+     */
+    const char* getRenderer() const override;
+
+    /**
+     * Get featureSet name.
+     * @return FeatureSet name.
+     */
+    const char* getVersion() const override;
+
+    /**
+     * Check if feature supported by Metal.
+     * @param feature Specify feature to be query.
+     * @return true if the feature is supported, false otherwise.
+     */
+    bool checkForFeatureSupported(FeatureType feature) override;
+
+    static bool supportD24S8() { return _isDepth24Stencil8PixelFormatSupported; }
+
 protected:
     /**
      * New a shaderModule.
@@ -168,7 +235,7 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    virtual ShaderModule* newShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* newShaderModule(ShaderStage stage, std::string_view source) override;
 
 private:
     static CAMetalLayer* _metalLayer;
@@ -176,6 +243,10 @@ private:
 
     id<MTLDevice> _mtlDevice             = nil;
     id<MTLCommandQueue> _mtlCommandQueue = nil;
+
+    std::string _deviceName;
+    FeatureSet _featureSet = FeatureSet::Unknown;
+    static bool _isDepth24Stencil8PixelFormatSupported;
 };
 
 // end of _metal group

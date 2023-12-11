@@ -37,7 +37,7 @@ THE SOFTWARE.
 #include "renderer/Renderer.h"
 #include "2d/Camera.h"
 #include "renderer/TextureCache.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "renderer/backend/Texture.h"
 #include "renderer/backend/RenderTarget.h"
 
@@ -213,7 +213,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         }
         else
         {
-             _renderTarget = backend::Device::getInstance()->newRenderTarget(
+             _renderTarget = backend::DriverBase::getInstance()->newRenderTarget(
                  _renderTargetFlags, _texture2D ? _texture2D->getBackendTexture() : nullptr,
                  _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr,
                  _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);	        

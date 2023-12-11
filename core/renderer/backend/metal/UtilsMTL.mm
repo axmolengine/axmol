@@ -24,8 +24,7 @@
  ****************************************************************************/
 
 #include "UtilsMTL.h"
-#include "DeviceMTL.h"
-#include "DeviceInfoMTL.h"
+#include "DriverMTL.h"
 #include "TextureMTL.h"
 #include "../PixelFormatUtils.h"
 #include "base/Configuration.h"
@@ -41,7 +40,7 @@ MTLPixelFormat getSupportedDepthStencilFormat()
 {
     MTLPixelFormat pixelFormat = MTLPixelFormatDepth32Float_Stencil8;
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-    bool isDepth24Stencil8PixelFormatSupported = DeviceInfoMTL::supportD24S8();
+    bool isDepth24Stencil8PixelFormatSupported = DriverMTL::supportD24S8();
     if (isDepth24Stencil8PixelFormatSupported)
         pixelFormat = MTLPixelFormatDepth24Unorm_Stencil8;
 #endif
@@ -157,14 +156,14 @@ MTLPixelFormat UtilsMTL::toMTLPixelFormat(PixelFormat textureFormat)
 
 void UtilsMTL::resizeDefaultAttachmentTexture(std::size_t width, std::size_t height)
 {
-    [backend::DeviceMTL::getCAMetalLayer() setDrawableSize:CGSizeMake(width, height)];
+    [backend::DriverMTL::getCAMetalLayer() setDrawableSize:CGSizeMake(width, height)];
     [_defaultDepthStencilAttachmentTexture release];
     _defaultDepthStencilAttachmentTexture = UtilsMTL::createDepthStencilAttachmentTexture();
 }
 
 id<MTLTexture> UtilsMTL::createDepthStencilAttachmentTexture()
 {
-    auto CAMetalLayer                       = DeviceMTL::getCAMetalLayer();
+    auto CAMetalLayer                       = DriverMTL::getCAMetalLayer();
     MTLTextureDescriptor* textureDescriptor = [[MTLTextureDescriptor alloc] init];
     textureDescriptor.width                 = CAMetalLayer.drawableSize.width;
     textureDescriptor.height                = CAMetalLayer.drawableSize.height;
@@ -179,7 +178,7 @@ id<MTLTexture> UtilsMTL::createDepthStencilAttachmentTexture()
 
 void UtilsMTL::generateMipmaps(id<MTLTexture> texture)
 {
-    auto commandQueue                        = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLCommandQueue();
+    auto commandQueue                        = static_cast<DriverMTL*>(DriverMTL::getInstance())->getMTLCommandQueue();
     auto commandBuffer                       = [commandQueue commandBuffer];
     id<MTLBlitCommandEncoder> commandEncoder = [commandBuffer blitCommandEncoder];
     [commandEncoder generateMipmapsForTexture:texture];

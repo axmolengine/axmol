@@ -25,7 +25,7 @@
 #include "renderer/CustomCommand.h"
 #include "renderer/TextureAtlas.h"
 #include "renderer/backend/Buffer.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "base/Utils.h"
 #include <stddef.h>
 
@@ -141,8 +141,7 @@ void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capac
     _vertexCapacity  = capacity;
     _vertexDrawCount = capacity;
 
-    auto device   = backend::Device::getInstance();
-    _vertexBuffer = device->newBuffer(vertexSize * capacity, backend::BufferType::VERTEX, usage);
+    _vertexBuffer = backend::DriverBase::getInstance()->newBuffer(vertexSize * capacity, backend::BufferType::VERTEX, usage);
 }
 
 void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, BufferUsage usage)
@@ -154,8 +153,7 @@ void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, 
     _indexCapacity  = capacity;
     _indexDrawCount = capacity;
 
-    auto device  = backend::Device::getInstance();
-    _indexBuffer = device->newBuffer(_indexSize * capacity, backend::BufferType::INDEX, usage);
+    _indexBuffer = backend::DriverBase::getInstance()->newBuffer(_indexSize * capacity, backend::BufferType::INDEX, usage);
 }
 
 void CustomCommand::updateVertexBuffer(void* data, std::size_t offset, std::size_t length)

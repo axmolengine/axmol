@@ -27,7 +27,7 @@
 #    include <stddef.h>  // offsetof
 #    include "base/Types.h"
 #    include "renderer/backend/ProgramState.h"
-#    include "renderer/backend/Device.h"
+#    include "renderer/backend/DriverBase.h"
 #    include "renderer/Renderer.h"
 #    include "renderer/RenderState.h"
 #    include "renderer/Shaders.h"
@@ -183,7 +183,7 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
 
     if (!_vertexBuffer || _vertexBuffer->getSize() < _vertices.size() * sizeof(_vertices[0]))
     {
-        _vertexBuffer = backend::Device::getInstance()->newBuffer(
+        _vertexBuffer = backend::DriverBase::getInstance()->newBuffer(
             _vertices.size() * sizeof(_vertices[0]), backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
         _dirtyBuffer = true;
     }

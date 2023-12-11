@@ -39,7 +39,7 @@ THE SOFTWARE.
 #include "renderer/QuadCommand.h"
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramState.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 
 NS_AX_BEGIN
 

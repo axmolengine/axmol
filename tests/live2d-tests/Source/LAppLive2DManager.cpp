@@ -19,7 +19,7 @@
 
 //cocos2d
 #include "base/Director.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 
 using namespace Csm;
 using namespace LAppDefine;
@@ -98,7 +98,7 @@ LAppLive2DManager::LAppLive2DManager()
     }
 
 #ifdef CSM_TARGET_ANDROID_ES2
-    char *exts = (char*)backend::Device::getInstance()->getDeviceInfo()->getExtension();
+    char *exts = (char*)backend::DriverBase::getInstance()->getExtension();
     if(strstr(exts, "GL_NV_shader_framebuffer_fetch ")){
         Rendering::CubismRenderer_Cocos2dx::SetExtShaderMode( true , true );
     }

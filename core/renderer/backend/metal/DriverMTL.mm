@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md)
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -23,10 +23,26 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "DeviceInfoMTL.h"
-#include "base/Macros.h"
+#include "DriverMTL.h"
+#include "CommandBufferMTL.h"
+#include "BufferMTL.h"
+#include "RenderPipelineMTL.h"
+#include "ShaderModuleMTL.h"
+#include "DepthStencilStateMTL.h"
+#include "TextureMTL.h"
+#include "ProgramMTL.h"
+#include "RenderTargetMTL.h"
 #include "UtilsMTL.h"
+#include "base/Macros.h"
+
+#include "renderer/backend/ProgramManager.h"
+
 NS_AX_BACKEND_BEGIN
+
+inline FeatureSet operator--(FeatureSet& x)
+{
+    return x = (FeatureSet)(std::underlying_type<FeatureSet>::type(x) - 1);
+}
 
 namespace
 {
@@ -368,11 +384,43 @@ bool supportS3TC(FeatureSet featureSet)
 }
 }
 
-bool DeviceInfoMTL::_isDepth24Stencil8PixelFormatSupported = false;
+bool DriverMTL::_isDepth24Stencil8PixelFormatSupported = false;
 
-DeviceInfoMTL::DeviceInfoMTL(id<MTLDevice> device)
+CAMetalLayer* DriverMTL::_metalLayer            = nil;
+id<CAMetalDrawable> DriverMTL::_currentDrawable = nil;
+
+DriverBase* DriverBase::getInstance()
 {
-    _deviceName = [device.name UTF8String];
+    if (!DriverBase::_instance)
+        DriverBase::_instance = new DriverMTL();
+
+    return DriverBase::_instance;
+}
+
+void DriverMTL::setCAMetalLayer(CAMetalLayer* metalLayer)
+{
+    DriverMTL::_metalLayer = metalLayer;
+}
+
+id<CAMetalDrawable> DriverMTL::getCurrentDrawable()
+{
+    if (!DriverMTL::_currentDrawable)
+        DriverMTL::_currentDrawable = [DriverMTL::_metalLayer nextDrawable];
+
+    return DriverMTL::_currentDrawable;
+}
+
+void DriverMTL::resetCurrentDrawable()
+{
+    DriverMTL::_currentDrawable = nil;
+}
+
+DriverMTL::DriverMTL()
+{
+    _mtlDevice       = DriverMTL::_metalLayer.device;
+    _mtlCommandQueue = [_mtlDevice newCommandQueue];
+
+    _deviceName = [_mtlDevice.name UTF8String];
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
     const FeatureSet minRequiredFeatureSet = FeatureSet::FeatureSet_iOS_GPUFamily1_v1;
@@ -380,12 +428,12 @@ DeviceInfoMTL::DeviceInfoMTL(id<MTLDevice> device)
 #else
     const FeatureSet minRequiredFeatureSet = FeatureSet::FeatureSet_macOS_GPUFamily1_v1;
     const FeatureSet maxKnownFeatureSet    = FeatureSet::FeatureSet_macOS_GPUFamily2_v1;
-    _isDepth24Stencil8PixelFormatSupported = [device isDepth24Stencil8PixelFormatSupported];
+    _isDepth24Stencil8PixelFormatSupported = [_mtlDevice isDepth24Stencil8PixelFormatSupported];
 #endif
 
     for (auto featureSet = maxKnownFeatureSet; featureSet >= minRequiredFeatureSet; --featureSet)
     {
-        if ([device supportsFeatureSet:MTLFeatureSet(featureSet)])
+        if ([_mtlDevice supportsFeatureSet:MTLFeatureSet(featureSet)])
         {
             _featureSet = featureSet;
             break;
@@ -393,34 +441,104 @@ DeviceInfoMTL::DeviceInfoMTL(id<MTLDevice> device)
     }
 
     UtilsMTL::initGPUTextureFormats();
-}
 
-bool DeviceInfoMTL::init()
-{
     _maxAttributes     = getMaxVertexAttributes(_featureSet);
     _maxSamplesAllowed = getMaxSamplerEntries(_featureSet);
     _maxTextureUnits   = getMaxTextureEntries(_featureSet);
     _maxTextureSize    = getMaxTextureWidthHeight(_featureSet);
-
-    return true;
 }
 
-const char* DeviceInfoMTL::getVendor() const
+DriverMTL::~DriverMTL()
+{
+    ProgramManager::destroyInstance();
+}
+
+CommandBuffer* DriverMTL::newCommandBuffer()
+{
+    return new CommandBufferMTL(this);
+}
+
+Buffer* DriverMTL::newBuffer(std::size_t size, BufferType type, BufferUsage usage)
+{
+    return new BufferMTL(_mtlDevice, size, type, usage);
+}
+
+TextureBackend* DriverMTL::newTexture(const TextureDescriptor& descriptor)
+{
+    switch (descriptor.textureType)
+    {
+    case TextureType::TEXTURE_2D:
+        return new TextureMTL(_mtlDevice, descriptor);
+    case TextureType::TEXTURE_CUBE:
+        return new TextureCubeMTL(_mtlDevice, descriptor);
+    default:
+        AXASSERT(false, "invalidate texture type");
+        return nullptr;
+    }
+}
+
+RenderTarget* DriverMTL::newDefaultRenderTarget(TargetBufferFlags rtf)
+{
+    auto rtGL = new RenderTargetMTL(true);
+    rtGL->setTargetFlags(rtf);
+    return rtGL;
+}
+
+RenderTarget* DriverMTL::newRenderTarget(TargetBufferFlags rtf,
+                                         TextureBackend* colorAttachment,
+                                         TextureBackend* depthAttachment,
+                                         TextureBackend* stencilAttachhment)
+{
+    auto rtMTL = new RenderTargetMTL(false);
+    rtMTL->setTargetFlags(rtf);
+    RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
+    rtMTL->setColorAttachment(colors);
+    rtMTL->setDepthAttachment(depthAttachment);
+    rtMTL->setStencilAttachment(stencilAttachhment);
+    return rtMTL;
+}
+
+ShaderModule* DriverMTL::newShaderModule(ShaderStage stage, std::string_view source)
+{
+    return new ShaderModuleMTL(_mtlDevice, stage, source);
+}
+
+DepthStencilState* DriverMTL::newDepthStencilState()
+{
+    return new DepthStencilStateMTL(_mtlDevice);
+}
+
+RenderPipeline* DriverMTL::newRenderPipeline()
+{
+    return new RenderPipelineMTL(_mtlDevice);
+}
+
+Program* DriverMTL::newProgram(std::string_view vertexShader, std::string_view fragmentShader)
+{
+    return new ProgramMTL(vertexShader, fragmentShader);
+}
+
+void DriverMTL::setFrameBufferOnly(bool frameBufferOnly)
+{
+    [DriverMTL::_metalLayer setFramebufferOnly:frameBufferOnly];
+}
+
+const char* DriverMTL::getVendor() const
 {
     return "";
 }
 
-const char* DeviceInfoMTL::getRenderer() const
+const char* DriverMTL::getRenderer() const
 {
     return _deviceName.c_str();
 }
 
-const char* DeviceInfoMTL::getVersion() const
+const char* DriverMTL::getVersion() const
 {
     return featureSetToString(_featureSet);
 }
 
-bool DeviceInfoMTL::checkForFeatureSupported(FeatureType feature)
+bool DriverMTL::checkForFeatureSupported(FeatureType feature)
 {
     bool featureSupported = false;
     switch (feature)

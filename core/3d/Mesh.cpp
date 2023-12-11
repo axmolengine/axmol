@@ -448,7 +448,7 @@ void Mesh::draw(Renderer* renderer,
             AX_SAFE_RELEASE(_instanceTransformBuffer);
             AX_SAFE_DELETE_ARRAY(_instanceMatrixCache);
 
-            _instanceTransformBuffer = backend::Device::getInstance()->newBuffer(
+            _instanceTransformBuffer = backend::DriverBase::getInstance()->newBuffer(
                 _instanceCount * 64, backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
 
             _instanceMatrixCache = new float[_instanceCount * 16];

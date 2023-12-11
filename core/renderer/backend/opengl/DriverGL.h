@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -23,9 +24,10 @@
  ****************************************************************************/
 #pragma once
 
-#include "../Device.h"
+#include "../DriverBase.h"
 #include "platform/GL.h"
 #include "OpenGLState.h"
+#include "base/hlookup.h"
 
 NS_AX_BACKEND_BEGIN
 /**
@@ -36,11 +38,11 @@ NS_AX_BACKEND_BEGIN
 /**
  * Use to create resoureces.
  */
-class DeviceGL : public Device
+class DriverGL : public DriverBase
 {
 public:
-    DeviceGL();
-    ~DeviceGL();
+    DriverGL();
+    ~DriverGL();
 
     GLint getDefaultFBO() const;
 
@@ -48,7 +50,7 @@ public:
      * New a CommandBuffer object, not auto released.
      * @return A CommandBuffer object.
      */
-    virtual CommandBuffer* newCommandBuffer() override;
+    CommandBuffer* newCommandBuffer() override;
 
     /**
      * New a Buffer object, not auto released.
@@ -59,14 +61,14 @@ public:
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
-    virtual Buffer* newBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
+    Buffer* newBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
 
     /**
      * New a TextureBackend object, not auto released.
      * @param descriptor Specifies texture description.
      * @return A TextureBackend object.
      */
-    virtual TextureBackend* newTexture(const TextureDescriptor& descriptor) override;
+    TextureBackend* newTexture(const TextureDescriptor& descriptor) override;
 
     RenderTarget* newDefaultRenderTarget(TargetBufferFlags rtf) override;
     RenderTarget* newRenderTarget(TargetBufferFlags rtf,
@@ -74,19 +76,19 @@ public:
                                   TextureBackend* depthAttachment,
                                   TextureBackend* stencilAttachhment) override;
 
-    virtual DepthStencilState* newDepthStencilState() override;
+    DepthStencilState* newDepthStencilState() override;
 
     /**
      * New a RenderPipeline object, not auto released.
      * @param descriptor Specifies render pipeline description.
      * @return A RenderPipeline object.
      */
-    virtual RenderPipeline* newRenderPipeline() override;
+    RenderPipeline* newRenderPipeline() override;
 
     /**
      * Design for metal.
      */
-    virtual void setFrameBufferOnly(bool frameBufferOnly) override {}
+    void setFrameBufferOnly(bool frameBufferOnly) override {}
 
     /**
      * New a Program, not auto released.
@@ -94,9 +96,53 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    virtual Program* newProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* newProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
 
     void resetState() override;
+
+    /// below is driver info API
+
+    /**
+     * Get vendor device name.
+     * @return Vendor device name.
+     */
+    const char* getVendor() const override;
+
+    /**
+     * Get the full name of the vendor device.
+     * @return The full name of the vendor device.
+     */
+    const char* getRenderer() const override;
+
+    /**
+     * Get version name.
+     * @return Version name.
+     */
+    const char* getVersion() const override;
+
+    const char* getShaderVersion() const override;
+
+    /**
+     * Check does device has extension.
+     */
+    bool hasExtension(std::string_view /*extName*/) const override;
+
+    /**
+    * Dump all extensions to string
+    */
+    std::string dumpExtensions() const override;
+
+    /**
+     * Check if feature supported by OpenGL ES.
+     * @param feature Specify feature to be query.
+     * @return true if the feature is supported, false otherwise.
+     */
+    bool checkForFeatureSupported(FeatureType feature) override;
+
+    /*
+    * Check does the device only support GLES2.0
+    */
+    bool isGLES2Only() const;
 
 protected:
     /**
@@ -105,10 +151,28 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    virtual ShaderModule* newShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* newShaderModule(ShaderStage stage, std::string_view source) override;
 
     GLint _defaultFBO = 0;  // The value gets from glGetIntegerv, so need to use GLint
     GLuint _defaultVAO = 0;
+
+private:
+    std::set<uint32_t> _glExtensions;
+
+    const char* _vendor{nullptr};
+    const char* _renderer{nullptr};
+    const char* _version{nullptr};
+    const char* _shaderVer{nullptr};
+
+    struct VersionInfo
+    {
+        bool es{false};     // is GLES?
+        uint16_t major{0};  // major version
+        uint16_t minor{0};  // minor version
+    } _verInfo;
+
+    bool _textureCompressionAstc = false;
+    bool _textureCompressionEtc2 = false;
 };
 // end of _opengl group
 /// @}

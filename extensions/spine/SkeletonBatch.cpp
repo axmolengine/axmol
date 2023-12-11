@@ -38,7 +38,7 @@ USING_NS_CC;
 using std::max;
 #define INITIAL_SIZE (10000)
 
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "renderer/Shaders.h"
 #include "renderer/backend/Types.h"
 

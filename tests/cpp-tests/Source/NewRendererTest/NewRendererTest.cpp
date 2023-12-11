@@ -27,7 +27,7 @@
 #include "NewRendererTest.h"
 #include <chrono>
 #include <sstream>
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 
 namespace
 {

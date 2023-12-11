@@ -23,8 +23,7 @@ set(_AX_RENDERER_HEADER
     renderer/backend/Buffer.h
     renderer/backend/CommandBuffer.h
     renderer/backend/DepthStencilState.h
-    renderer/backend/Device.h
-    renderer/backend/DeviceInfo.h
+    renderer/backend/DriverBase.h
     renderer/backend/Enums.h
     renderer/backend/Macros.h
     renderer/backend/PixelBufferDescriptor.h
@@ -68,7 +67,7 @@ set(_AX_RENDERER_SRC
 
     renderer/backend/CommandBuffer.cpp
     renderer/backend/DepthStencilState.cpp
-    renderer/backend/Device.cpp
+    renderer/backend/DriverBase.cpp
     renderer/backend/ShaderModule.cpp
     renderer/backend/Texture.cpp
     renderer/backend/PixelFormatUtils.cpp
@@ -87,8 +86,7 @@ if(ANDROID OR WINDOWS OR LINUX OR AX_USE_GL)
         renderer/backend/opengl/CommandBufferGL.h
         renderer/backend/opengl/CommandBufferGLES2.h
         renderer/backend/opengl/DepthStencilStateGL.h
-        renderer/backend/opengl/DeviceGL.h
-        renderer/backend/opengl/DeviceInfoGL.h
+        renderer/backend/opengl/DriverGL.h
         renderer/backend/opengl/MacrosGL.h
         renderer/backend/opengl/ProgramGL.h
         renderer/backend/opengl/RenderPipelineGL.h
@@ -104,13 +102,12 @@ if(ANDROID OR WINDOWS OR LINUX OR AX_USE_GL)
         renderer/backend/opengl/CommandBufferGL.cpp
         renderer/backend/opengl/CommandBufferGLES2.cpp
         renderer/backend/opengl/DepthStencilStateGL.cpp
-        renderer/backend/opengl/DeviceGL.cpp
+        renderer/backend/opengl/DriverGL.cpp
         renderer/backend/opengl/ProgramGL.cpp
         renderer/backend/opengl/RenderPipelineGL.cpp
         renderer/backend/opengl/ShaderModuleGL.cpp
         renderer/backend/opengl/TextureGL.cpp
         renderer/backend/opengl/UtilsGL.cpp
-        renderer/backend/opengl/DeviceInfoGL.cpp
         renderer/backend/opengl/RenderTargetGL.cpp
     )
 else()
@@ -120,13 +117,12 @@ else()
         renderer/backend/metal/CommandBufferMTL.h
         renderer/backend/metal/RenderTargetMTL.h
         renderer/backend/metal/DepthStencilStateMTL.h
-        renderer/backend/metal/DeviceMTL.h
+        renderer/backend/metal/DriverMTL.h
         renderer/backend/metal/RenderPipelineMTL.h
         renderer/backend/metal/ShaderModuleMTL.h
         renderer/backend/metal/TextureMTL.h
         renderer/backend/metal/UtilsMTL.h
         renderer/backend/metal/ProgramMTL.h
-        renderer/backend/metal/DeviceInfoMTL.h
     )
 
     list(APPEND _AX_RENDERER_SRC
@@ -135,12 +131,11 @@ else()
         renderer/backend/metal/CommandBufferMTL.mm
         renderer/backend/metal/RenderTargetMTL.mm
         renderer/backend/metal/DepthStencilStateMTL.mm
-        renderer/backend/metal/DeviceMTL.mm
+        renderer/backend/metal/DriverMTL.mm
         renderer/backend/metal/RenderPipelineMTL.mm
         renderer/backend/metal/ShaderModuleMTL.mm
         renderer/backend/metal/TextureMTL.mm
         renderer/backend/metal/UtilsMTL.mm
         renderer/backend/metal/ProgramMTL.mm
-        renderer/backend/metal/DeviceInfoMTL.mm
     )
 endif()

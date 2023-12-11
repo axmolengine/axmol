@@ -42,7 +42,7 @@ THE SOFTWARE.
 #include "platform/FileUtils.h"
 #include "base/Utils.h"
 #include "base/NinePatchImageParser.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 
 using namespace std;
 

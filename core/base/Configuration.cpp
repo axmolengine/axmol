@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/EventCustom.h"
 #include "base/Director.h"
 #include "base/EventDispatcher.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 
 NS_AX_BEGIN
 
@@ -116,58 +116,56 @@ std::string Configuration::getInfo() const
 
 void Configuration::gatherGPUInfo()
 {
-    auto _deviceInfo = backend::Device::getInstance()->getDeviceInfo();
+    auto driver = backend::DriverBase::getInstance();
 
-    _valueDict["vendor"]   = Value(_deviceInfo->getVendor());
-    _valueDict["renderer"] = Value(_deviceInfo->getRenderer());
-    _valueDict["version"]  = Value(_deviceInfo->getVersion());
-    _valueDict["glsl"]     = Value(_deviceInfo->getShaderVersion());
+    _valueDict["vendor"]   = Value(driver->getVendor());
+    _valueDict["renderer"] = Value(driver->getRenderer());
+    _valueDict["version"]  = Value(driver->getVersion());
+    _valueDict["glsl"]     = Value(driver->getShaderVersion());
 
-    _valueDict["max_texture_size"]      = Value(_deviceInfo->getMaxTextureSize());
-    _valueDict["max_vertex_attributes"] = Value(_deviceInfo->getMaxAttributes());
-    _valueDict["max_texture_units"]     = Value(_deviceInfo->getMaxTextureUnits());
-    _valueDict["max_samples_allowed"]   = Value(_deviceInfo->getMaxSamplesAllowed());
+    _valueDict["max_texture_size"]      = Value(driver->getMaxTextureSize());
+    _valueDict["max_vertex_attributes"] = Value(driver->getMaxAttributes());
+    _valueDict["max_texture_units"]     = Value(driver->getMaxTextureUnits());
+    _valueDict["max_samples_allowed"]   = Value(driver->getMaxSamplesAllowed());
 
     _supportsNPOT               = true;
     _valueDict["supports_NPOT"] = Value(_supportsNPOT);
 
-    _supportsETC1               = _deviceInfo->checkForFeatureSupported(backend::FeatureType::ETC1);
+    _supportsETC1               = driver->checkForFeatureSupported(backend::FeatureType::ETC1);
     _valueDict["supports_ETC1"] = Value(_supportsETC1);
 
-    _supportsETC2               = _deviceInfo->checkForFeatureSupported(backend::FeatureType::ETC2);
+    _supportsETC2               = driver->checkForFeatureSupported(backend::FeatureType::ETC2);
     _valueDict["supports_ETC2"] = Value(_supportsETC2);
 
-    _supportsS3TC               = _deviceInfo->checkForFeatureSupported(backend::FeatureType::S3TC);
+    _supportsS3TC               = driver->checkForFeatureSupported(backend::FeatureType::S3TC);
     _valueDict["supports_S3TC"] = Value(_supportsS3TC);
 
-    _supportsATITC               = _deviceInfo->checkForFeatureSupported(backend::FeatureType::AMD_COMPRESSED_ATC);
+    _supportsATITC               = driver->checkForFeatureSupported(backend::FeatureType::AMD_COMPRESSED_ATC);
     _valueDict["supports_ATITC"] = Value(_supportsATITC);
 
-    _supportsASTC               = _deviceInfo->checkForFeatureSupported(backend::FeatureType::ASTC);
+    _supportsASTC               = driver->checkForFeatureSupported(backend::FeatureType::ASTC);
     _valueDict["supports_ASTC"] = Value(_supportsASTC);
 
-    _supportsPVRTC               = _deviceInfo->checkForFeatureSupported(backend::FeatureType::PVRTC);
+    _supportsPVRTC               = driver->checkForFeatureSupported(backend::FeatureType::PVRTC);
     _valueDict["supports_PVRTC"] = Value(_supportsPVRTC);
 
-    _supportsBGRA8888               = _deviceInfo->checkForFeatureSupported(backend::FeatureType::IMG_FORMAT_BGRA8888);
+    _supportsBGRA8888               = driver->checkForFeatureSupported(backend::FeatureType::IMG_FORMAT_BGRA8888);
     _valueDict["supports_BGRA8888"] = Value(_supportsBGRA8888);
 
-    _supportsDiscardFramebuffer = _deviceInfo->checkForFeatureSupported(backend::FeatureType::DISCARD_FRAMEBUFFER);
+    _supportsDiscardFramebuffer = driver->checkForFeatureSupported(backend::FeatureType::DISCARD_FRAMEBUFFER);
     _valueDict["supports_discard_framebuffer"] = Value(_supportsDiscardFramebuffer);
 
-    _supportsOESPackedDepthStencil = _deviceInfo->checkForFeatureSupported(backend::FeatureType::PACKED_DEPTH_STENCIL);
+    _supportsOESPackedDepthStencil = driver->checkForFeatureSupported(backend::FeatureType::PACKED_DEPTH_STENCIL);
     _valueDict["supports_OES_packed_depth_stencil"] = Value(_supportsOESPackedDepthStencil);
 
-    _supportsShareableVAO                      = _deviceInfo->checkForFeatureSupported(backend::FeatureType::VAO);
+    _supportsShareableVAO                      = driver->checkForFeatureSupported(backend::FeatureType::VAO);
     _valueDict["supports_vertex_array_object"] = Value(_supportsShareableVAO);
 
-    _supportsOESMapBuffer                 = _deviceInfo->checkForFeatureSupported(backend::FeatureType::MAPBUFFER);
+    _supportsOESMapBuffer                 = driver->checkForFeatureSupported(backend::FeatureType::MAPBUFFER);
     _valueDict["supports_OES_map_buffer"] = Value(_supportsOESMapBuffer);
 
-    _supportsOESDepth24                = _deviceInfo->checkForFeatureSupported(backend::FeatureType::DEPTH24);
+    _supportsOESDepth24                = driver->checkForFeatureSupported(backend::FeatureType::DEPTH24);
     _valueDict["supports_OES_depth24"] = Value(_supportsOESDepth24);
-
-    // _glExtensions = _deviceInfo->getExtension();
 }
 
 Configuration* Configuration::getInstance()
@@ -192,8 +190,7 @@ void Configuration::destroyInstance()
 //
 int Configuration::getMaxTextureSize() const
 {
-    auto _deviceInfo = backend::Device::getInstance()->getDeviceInfo();
-    return _deviceInfo->getMaxTextureSize();
+    return backend::DriverBase::getInstance()->getMaxTextureSize();
 }
 
 int Configuration::getMaxModelviewStackDepth() const
@@ -203,8 +200,7 @@ int Configuration::getMaxModelviewStackDepth() const
 
 int Configuration::getMaxTextureUnits() const
 {
-    auto _deviceInfo = backend::Device::getInstance()->getDeviceInfo();
-    return _deviceInfo->getMaxTextureUnits();
+    return backend::DriverBase::getInstance()->getMaxTextureUnits();
 }
 
 bool Configuration::supportsNPOT() const
@@ -407,8 +403,7 @@ void Configuration::loadConfigFile(std::string_view filename)
 
 int Configuration::getMaxAttributes() const
 {
-    auto _deviceInfo = backend::Device::getInstance()->getDeviceInfo();
-    return _deviceInfo->getMaxAttributes();
+    return backend::DriverBase::getInstance()->getMaxAttributes();
 }
 
 NS_AX_END

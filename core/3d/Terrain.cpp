@@ -32,7 +32,7 @@ USING_NS_AX;
 #include <stddef.h>  // offsetof
 #include "renderer/Renderer.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "renderer/backend/Program.h"
 #include "renderer/backend/Buffer.h"
 #include "base/Director.h"
@@ -734,7 +734,7 @@ Terrain::ChunkIndices Terrain::insertIndicesLOD(int neighborLod[4], int selfLod,
     lodIndices._relativeLod[4]     = selfLod;
     lodIndices._chunkIndices._size = size;
 
-    auto buffer = backend::Device::getInstance()->newBuffer(sizeof(uint16_t) * size, backend::BufferType::INDEX,
+    auto buffer = backend::DriverBase::getInstance()->newBuffer(sizeof(uint16_t) * size, backend::BufferType::INDEX,
                                                             backend::BufferUsage::STATIC);
     buffer->updateData(indices, sizeof(uint16_t) * size);
 
@@ -772,7 +772,7 @@ Terrain::ChunkIndices Terrain::insertIndicesLODSkirt(int selfLod, uint16_t* indi
     skirtIndices._selfLod            = selfLod;
     skirtIndices._chunkIndices._size = size;
 
-    auto buffer = backend::Device::getInstance()->newBuffer(sizeof(uint16_t) * size, backend::BufferType::INDEX,
+    auto buffer = backend::DriverBase::getInstance()->newBuffer(sizeof(uint16_t) * size, backend::BufferType::INDEX,
                                                             backend::BufferUsage::STATIC);
     buffer->updateData(indices, sizeof(uint16_t) * size);
 
@@ -911,7 +911,7 @@ void Terrain::Chunk::finish()
     // frequently
 
     AX_SAFE_RELEASE_NULL(_buffer);
-    _buffer = backend::Device::getInstance()->newBuffer(sizeof(TerrainVertexData) * _originalVertices.size(),
+    _buffer = backend::DriverBase::getInstance()->newBuffer(sizeof(TerrainVertexData) * _originalVertices.size(),
                                                         backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
 
     _buffer->updateData(&_originalVertices[0], sizeof(TerrainVertexData) * _originalVertices.size());

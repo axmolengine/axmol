@@ -26,7 +26,7 @@
 #include "../testResource.h"
 #include "axmol.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 
 USING_NS_AX;
 USING_NS_AX_EXT;

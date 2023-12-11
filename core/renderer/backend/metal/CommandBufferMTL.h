@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -25,7 +26,7 @@
 #pragma once
 
 #include "../CommandBuffer.h"
-#include "DeviceMTL.h"
+#include "DriverMTL.h"
 #include <unordered_map>
 
 NS_AX_BACKEND_BEGIN
@@ -47,23 +48,23 @@ class CommandBufferMTL : public CommandBuffer
 public:
     /// @name Constructor, Destructor and Initializers
     /**
-     * @param deviceMTL The device for which MTLCommandQueue object was created.
+     * @param driver The device for which MTLCommandQueue object was created.
      */
-    CommandBufferMTL(DeviceMTL* deviceMTL);
+    CommandBufferMTL(DriverMTL* driver);
     ~CommandBufferMTL();
 
     /**
      * Set depthStencil status
      * @param depthStencilState Specifies the depth and stencil status
      */
-    virtual void setDepthStencilState(DepthStencilState* depthStencilState) override;
+    void setDepthStencilState(DepthStencilState* depthStencilState) override;
 
     /**
      * Sets the current render pipeline state object once
      * @param renderPipeline An object that contains the graphics functions and configuration state used in a render
      * pass.
      */
-    virtual void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    void setRenderPipeline(RenderPipeline* renderPipeline) override;
 
     /// @name Setters & Getters
     /**
@@ -72,20 +73,20 @@ public:
      * Then create MTLCommandBuffer and enqueue it to MTLCommandQueue.
      * Then start schedule available MTLBuffer
      */
-    virtual bool beginFrame() override;
+    bool beginFrame() override;
 
     /**
      * Create a MTLRenderCommandEncoder object for graphics rendering to an attachment in a RenderPassDescriptor.
      * MTLRenderCommandEncoder is cached if current RenderPassDescriptor is identical to previous one.
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
-    virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassDescriptor& descriptor) override;
+    void beginRenderPass(const RenderTarget* renderTarget, const RenderPassDescriptor& descriptor) override;
 
     /**
      * Update depthStencil status, improvment: for metal backend cache it
      * @param depthStencilState Specifies the depth and stencil status
      */
-    virtual void updateDepthStencilState(const DepthStencilDescriptor& descriptor) override;
+    void updateDepthStencilState(const DepthStencilDescriptor& descriptor) override;
 
     /**
      * Update render pipeline status
@@ -94,7 +95,7 @@ public:
      * @param rt Specifies the render target.
      * @param pipelineDescriptor Specifies the pipeline descriptor.
      */
-    virtual void updatePipelineState(const RenderTarget* rt, const PipelineDescriptor& descriptor) override;
+    void updatePipelineState(const RenderTarget* rt, const PipelineDescriptor& descriptor) override;
 
     /**
      * Fixed-function state
@@ -103,39 +104,39 @@ public:
      * @param w The width of the viewport, in pixels.
      * @param h The height of the viewport, in pixels.
      */
-    virtual void setViewport(int x, int y, unsigned int w, unsigned int h) override;
+    void setViewport(int x, int y, unsigned int w, unsigned int h) override;
 
     /**
      * Fixed-function state
      * @param mode Controls if primitives are culled when front facing, back facing, or not culled at all.
      */
-    virtual void setCullMode(CullMode mode) override;
+    void setCullMode(CullMode mode) override;
 
     /**
      * Fixed-function state
      * @param winding The winding order of front-facing primitives.
      */
-    virtual void setWinding(Winding winding) override;
+    void setWinding(Winding winding) override;
 
     /**
      * Set a global buffer for all vertex shaders at the given bind point index 0.
      * @param buffer The buffer to set in the buffer argument table.
      */
-    virtual void setVertexBuffer(Buffer* buffer) override;
+    void setVertexBuffer(Buffer* buffer) override;
 
     /**
      * Set the uniform data at a given vertex and fragment buffer binding point 1
      * Set a global texture for all vertex and fragment shaders at the given bind location.
      * @param programState A programState object that hold the uniform and texture data.
      */
-    virtual void setProgramState(ProgramState* programState) override;
+    void setProgramState(ProgramState* programState) override;
 
     /**
      * Set indexes when drawing primitives with index list
      * @ buffer A buffer object that the device will read indexes from.
      * @ see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    virtual void setIndexBuffer(Buffer* buffer) override;
+    void setIndexBuffer(Buffer* buffer) override;
     
     void setInstanceBuffer(Buffer* buffer) override;
 
@@ -148,7 +149,7 @@ public:
 	 *
 	 * TODO: Implement a wireframe mode for METAL devices. Refer to: https://forums.ogre3d.org/viewtopic.php?t=95089
      */
-    virtual void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe) override;
+    void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe) override;
 
     /**
      * Draw primitives with an index list.
@@ -161,7 +162,7 @@ public:
 	 *
 	 * TODO: Implement a wireframe mode for METAL devices. Refer to: https://forums.ogre3d.org/viewtopic.php?t=95089
      */
-    virtual void drawElements(PrimitiveType primitiveType,
+    void drawElements(PrimitiveType primitiveType,
                               IndexFormat indexType,
                               std::size_t count,
                               std::size_t offset,
@@ -177,12 +178,12 @@ public:
     /**
      * Do some resources release.
      */
-    virtual void endRenderPass() override;
+    void endRenderPass() override;
 
     /**
      * Present a drawable and commit a command buffer so it can be executed as soon as possible.
      */
-    virtual void endFrame() override;
+    void endFrame() override;
 
     void endEncoding();
 
@@ -192,13 +193,13 @@ public:
      * @param wdith Specifies the width of the scissor box
      * @param height Specifies the height of the scissor box
      */
-    virtual void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
+    void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
 
     /**
      * Read pixels from RenderTarget
      * @param callback A callback to deal with pixel data read.
      */
-    virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
+    void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
     
     id<MTLRenderCommandEncoder> getRenderCommandEncoder() const { return _mtlRenderEncoder; }
 

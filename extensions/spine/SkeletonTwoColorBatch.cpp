@@ -36,7 +36,7 @@
 #include <spine/Extension.h>
 #include <stddef.h>// offsetof
 
-#include "renderer/backend/Device.h"
+#include "renderer/backend/DriverBase.h"
 #include "renderer/Shaders.h"
 #include "xxhash.h"
 
