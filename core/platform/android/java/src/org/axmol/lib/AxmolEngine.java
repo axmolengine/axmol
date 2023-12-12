@@ -404,12 +404,7 @@ public class AxmolEngine {
 
     private static int displayMetricsToDPI(DisplayMetrics metrics)
     {
-        if(metrics.xdpi != metrics.ydpi) {
-            Log.w(AxmolEngine.TAG, "xdpi != ydpi, use (xdpi + ydpi)/2 instead.");
-            return (int) ((metrics.xdpi + metrics.ydpi) / 2.0);
-        } else {
-            return (int)metrics.xdpi;
-        }
+        return metrics.densityDpi;
     }
 
     public static int getDPI()
