@@ -70,7 +70,7 @@ public:
     static void setMissingGlyphCharacter(char32_t charCode) { _mssingGlyphCharacter = charCode; };
 
     /**
-     * @brief Whether enable SDF font rendering globally, by default: disabled, since axmol-2.0.1
+     * @brief Whether enable SDF font rendering globally, by default: disabled, since axmol-2.1.0
      *
      * @param enabled
      */

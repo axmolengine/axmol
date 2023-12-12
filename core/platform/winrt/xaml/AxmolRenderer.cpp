@@ -59,7 +59,7 @@ void AxmolRenderer::Resume()
     if (!glview)
     {
         GLViewImpl* glview = GLViewImpl::createWithRect(
-            "AXMOL10", ax::Rect{0, 0, static_cast<float>(m_width), static_cast<float>(m_height)});
+            "axmol2", ax::Rect{0, 0, static_cast<float>(m_width), static_cast<float>(m_height)});
         glview->UpdateOrientation(m_orientation);
         glview->SetDPI(m_dpi);
         glview->setDispatcher(m_dispatcher);
