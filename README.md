@@ -114,6 +114,7 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
 - [Interesting related](https://github.com/axmolengine/axmol/discussions/694)
 - [Axmols contributing guide](https://github.com/axmolengine/axmol/discussions/411)
 - [Official Cocos2d-x](https://github.com/cocos2d/cocos2d-x)
+- [Axmol's Discord Server](https://discord.gg/apbJh4Ve)
 
 ## The axmol Active Stats
 
