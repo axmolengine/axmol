@@ -147,7 +147,7 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 
 ### iOS, tvOS and macOS
 
-  1. Install [CMake](https://cmake.org/)  3.28+  
+  1. Requires [CMake](https://cmake.org/) 3.28+ (will also be installed auotmatically via `axmol build` commands listed in step 6 if dependency is not met)
   2. Ensure xcode 13+ are installed
   3. Create a new project as shown [here](#creating-a-new-project)
   4. In a console window, navigate into the root directory of the project you created in the previous step
