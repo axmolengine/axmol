@@ -86,6 +86,7 @@ public:
     
     /**
      * Gets the device pixel ratio
+     * @since axmol-2.1.0
      */
     static float getPixelRatio();
 

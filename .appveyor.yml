@@ -6,6 +6,11 @@ version: 2.1.0.{build}
 install:
   - git submodule update --init --recursive
 
+skip_commits:
+  files:
+    - docs/*
+    - '**/*.md'
+
 build_script:
   - pwsh: .\build.ps1 -p wasm -xb '--target','cpp-tests','--config','Release' -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON','-DAX_WASM_THREADS=8'
   - pwsh: .\build.ps1 -p wasm -xb '--target','fairygui-tests','--config','Release' -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON','-DAX_WASM_THREADS=8'

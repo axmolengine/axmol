@@ -550,11 +550,11 @@ public:
 
     /**
      * Set the ttf/ttc font face size to determine how big to generate SDF bitmap
-     * since axmol-2.0.1
+     * since axmol-2.1.0
      */
     void setTTFFaceSize(int faceSize);
 
-    /** Gets ttf/ttc font face size, since axmol-2.0.1 */
+    /** Gets ttf/ttc font face size, since axmol-2.1.0 */
     int getTTFFaceSize() const;
 
     /**

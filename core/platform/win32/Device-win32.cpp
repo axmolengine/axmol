@@ -46,9 +46,12 @@ int Device::getDPI()
     return dpi;
 }
 
-float Device::getPixelRatio() 
+float Device::getPixelRatio()
 {
-    return Device::getDPI() / 96.0f;
+    const HDC dc    = GetDC(NULL);
+    const auto xdpi = GetDeviceCaps(dc, LOGPIXELSX);
+    ReleaseDC(nullptr, dc);
+    return xdpi / 96.0f;
 }
 
 void Device::setAccelerometerEnabled(bool isEnabled) {}
