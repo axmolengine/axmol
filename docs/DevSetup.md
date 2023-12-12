@@ -49,6 +49,25 @@ The `axmol build` command will auto setup general depended toolsets, so you can 
   - for simulator: `axmol build -p tvos -a x64`
 - wasm: `axmol build -p wasm` can runs on Windows 8.1+, Linux, macOS, require a preinstalled [python3](https://www.python.org/) should be in env `PATH`
 
+### Supported options for `axmol build`
+```
+-p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos,wasm
+    for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
+    if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
+-a: build arch: x86,x64,armv7,arm64
+-d: the build workspace, i.e project root which contains root CMakeLists.txt, empty use script run working directory aka cwd
+-cc: The C/C++ compiler toolchain: clang, msvc, gcc(mingw) or empty use default installed on current OS
+    msvc: msvc-120, msvc-141
+    ndk: ndk-r16b, ndk-r16b+
+-xt: cross build tool, default: cmake, for android can be gradlew, can be path of cross build tool program
+-xc: cross build tool configure options: i.e.  -xc '-Dbuild'
+-xb: cross build tool build options: i.e. -xb '--config','Release'
+-prefix: the install location for missing tools in system, default is "$HOME/build1k"
+-sdk: specific windows sdk version, i.e. -sdk '10.0.19041.0', leave empty, cmake will auto choose latest avaiable
+-setupOnly: this param present, only execute step: setup 
+-configOnly: if this param present, will skip build step
+```
+
 ## Quick build engine for host targets?
 
 Goto axmol root directory, double click or run `build.ps1` without any parameters, it will build `HelloCpp` by default
@@ -128,12 +147,13 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 
 ### iOS, tvOS and macOS
 
-  1. Ensure xcode 13+ are installed
-  2. Create a new project as shown [here](#creating-a-new-project)
-  3. In a console window, navigate into the root directory of the project you created in the previous step
-  4. Execute the following command
+  1. Install [CMake](https://cmake.org/)  3.28+  
+  2. Ensure xcode 13+ are installed
+  3. Create a new project as shown [here](#creating-a-new-project)
+  4. In a console window, navigate into the root directory of the project you created in the previous step
+  5. Execute the following command
    ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
-  5. Generate the relevant xcode project using one of the following commands:
+  6. Generate the relevant xcode project using one of the following commands:
      - for ios arm64:  
      ```axmol build -p ios -a arm64 -c```
      - for ios simulator x86_64:  
@@ -147,8 +167,8 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
      - for macos arm64(M1)
      ```axmol build -p osx -a arm64 -c```
 
-  6. After cmake finishes generating, you can open the xcode project at ```build_${plat}_${arch}``` folder and run cpp-tests or other test targets, for osx x64 should be `build_x64`
-  7. Notes  
+  7. After cmake finishes generating, you can open the xcode project at ```build_${plat}_${arch}``` folder and run cpp-tests or other test targets, for osx x64 should be `build_x64`
+  8. Notes  
      - **The code signing is required to run the ios/tvos app on your device, just change the bundle identifier until the auto manage signing is solved**  
      - **axmol only provides arm64, x86_64 prebuilt libraries for ios/tvos**
 
