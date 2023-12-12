@@ -146,8 +146,8 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
 
         rect.origin.x -= _tileSet->_tileSize.x;
         rect.origin.y -= _tileSet->_tileSize.y;
-        rect.size.x += s.x * (zoom / 2) / 2 + _tileSet->_tileSize.x * zoom;
-        rect.size.y += s.y * (zoom / 2) / 2 + _tileSet->_tileSize.y * zoom;
+        rect.size.x += s.x * zoom / 2 + _tileSet->_tileSize.x * zoom;
+        rect.size.y += s.y * zoom / 2 + _tileSet->_tileSize.y * zoom;
 
         Mat4 inv = transform;
         inv.inverse();
