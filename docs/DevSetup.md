@@ -101,7 +101,7 @@ Using a powershell console window, goto `axmol\tests\<testdir e.g. 'cpp-tests'>`
 
   6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`
 
-#### Windows UWP (Visual Studio 2022), ~because microsoft limit, only support C++17~, since axmol-2.1, migrated to cppwinrt, so c++20 supportedn
+#### Windows UWP (Visual Studio 2022), ~because microsoft limit, only support C++17~. Since axmol-2.1, migrated to CppWinRT, with c++20 support
   ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0" "-DAX_VS_DEPLOYMENT_TARGET=10.0.17763.0"```  
 
 ##### Creating the Visual Studio solution for all axmol test projects (Win/UWP)
