@@ -64,7 +64,7 @@ void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, hlookup::string_ma
         std::string_view type       = settings["type"];
         if (type != "fontatlas")
         {
-            ax::print("Load fontatlas %s fail, invalid asset type: ", fontatlasFile.data(), type.data());
+            ax::print("Load fontatlas %s fail, invalid asset type: %s", fontatlasFile.data(), type.data());
             return;
         }
 
