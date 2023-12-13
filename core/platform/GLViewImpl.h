@@ -94,6 +94,9 @@ public:
     void setFullscreen(GLFWmonitor* monitor, int w, int h, int refreshRate);
     void setWindowed(int width, int height);
 
+    void getWindowPosition(int* xpos, int* ypos);
+    void getWindowSize(int* width, int* height);
+
     int getMonitorCount() const;
     Vec2 getMonitorSize() const;
 
@@ -191,6 +194,7 @@ protected:
 
 public:
     // View will trigger an event when window is resized, gains or loses focus
+    static const std::string EVENT_WINDOW_POSITIONED;
     static const std::string EVENT_WINDOW_RESIZED;
     static const std::string EVENT_WINDOW_FOCUSED;
     static const std::string EVENT_WINDOW_UNFOCUSED;
