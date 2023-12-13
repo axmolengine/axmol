@@ -76,6 +76,22 @@ public:
     virtual std::string subtitle() const override;
 };
 
+class WindowTestResizedAndPositioned : public WindowTest
+{
+public:
+    CREATE_FUNC(WindowTestResizedAndPositioned);
+    virtual void onEnter() override;
+    virtual void onExit() override;
+    virtual std::string subtitle() const override;
+
+    void onWindowPositioned(ax::EventCustom* e);
+    void onWindowResized(ax::EventCustom* e);
+
+private:
+    ax::Label* label1;
+    ax::Label* label2;
+};
+
 #endif /* __WINDOWTEST_H__ */
 
 #endif
