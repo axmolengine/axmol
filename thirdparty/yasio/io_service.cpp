@@ -44,10 +44,7 @@ SOFTWARE.
 #  include "yasio/ssl.hpp"
 #endif
 
-#if YASIO__HAS_WIN32_TIMEAPI
-#  include <timeapi.h>
-#  pragma comment(lib, "Winmm.lib")
-#endif
+#include "yasio/wtimer_hres.hpp"
 
 #if defined(YASIO_ENABLE_KCP)
 #  include "kcp/ikcp.h"
@@ -145,7 +142,8 @@ namespace
 static const highp_time_t yasio__max_wait_usec = 5 * 60 * 1000 * 1000LL;
 // the max transport alloc size
 static const size_t yasio__max_tsize = (std::max)({sizeof(io_transport_tcp), sizeof(io_transport_udp), sizeof(io_transport_ssl), sizeof(io_transport_kcp)});
-static const int yasio_max_udp_data_mtu = static_cast<int>((std::numeric_limits<uint16_t>::max)() - (sizeof(yasio::ip::ip_hdr_st) + sizeof(yasio::ip::udp_hdr_st)));
+static const int yasio_max_udp_data_mtu =
+    static_cast<int>((std::numeric_limits<uint16_t>::max)() - (sizeof(yasio::ip::ip_hdr_st) + sizeof(yasio::ip::udp_hdr_st)));
 } // namespace
 struct yasio__global_state {
   enum
@@ -957,7 +955,7 @@ size_t io_service::dispatch(int max_count)
   return this->events_.count();
 }
 
-#if YASIO__HAS_WIN32_TIMEAPI
+#if defined(_WIN32)
 template <typename _Ty>
 struct minimal_optional {
   template <typename... _Args>
@@ -977,34 +975,15 @@ struct minimal_optional {
   uint8_t unintialized_memory_[sizeof(_Ty)];
   bool has_value_ = false;
 };
-struct auto_enable_hres_timer {
-  auto_enable_hres_timer()
-  {
-    UINT TARGET_RESOLUTION = 1; // 1 millisecond target resolution
-    TIMECAPS tc;
-    UINT wTimerRes = 0;
-    if (TIMERR_NOERROR == timeGetDevCaps(&tc, sizeof(TIMECAPS)))
-    {
-      wTimerRes = (std::min)((std::max)(tc.wPeriodMin, TARGET_RESOLUTION), tc.wPeriodMax);
-      timeBeginPeriod(wTimerRes);
-    }
-  }
-  ~auto_enable_hres_timer()
-  {
-    if (wTimerRes != 0)
-      timeEndPeriod(wTimerRes);
-  }
-  UINT wTimerRes = 0;
-};
 #endif
 void io_service::run()
 {
   yasio::set_thread_name("yasio");
 
-#if YASIO__HAS_WIN32_TIMEAPI
-  minimal_optional<auto_enable_hres_timer> __hres_timer_man;
+#if defined(_WIN32)
+  minimal_optional<yasio::wtimer_hres> __timer_hres_man;
   if (options_.hres_timer_)
-    __hres_timer_man.emplace();
+    __timer_hres_man.emplace();
 #endif
 
 #if defined(YASIO_SSL_BACKEND)
@@ -2266,7 +2245,7 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
     case YOPT_S_FORWARD_PACKET:
       options_.forward_packet_ = !!va_arg(ap, int);
       break;
-#if YASIO__HAS_WIN32_TIMEAPI
+#if defined(_WIN32)
     case YOPT_S_HRES_TIMER:
       options_.hres_timer_ = !!va_arg(ap, int);
       break;

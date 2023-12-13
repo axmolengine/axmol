@@ -1,25 +1,28 @@
 /*
-* cocos2d-x   https://axmolengine.github.io/
-*
-* Copyright (c) 2010-2014 - cocos2d-x community
-* Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-*
-* Portions Copyright (c) Microsoft Open Technologies, Inc.
-* All Rights Reserved
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and limitations under the License.
-*/
+ * cocos2d-x   https://axmolengine.github.io/
+ *
+ * Copyright (c) 2010-2014 - cocos2d-x community
+ * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ *
+ * Portions Copyright (c) Microsoft Open Technologies, Inc.
+ * All Rights Reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 #include "OpenGLESPage.h"
 #include "OpenGLESPage.g.cpp"
 
 #include "platform/winrt/GLViewImpl-winrt.h"
+#include "platform/Application.h"
+
+#include "yasio/wtimer_hres.hpp"
 
 #include <winrt/Windows.Graphics.h>
 #include <winrt/Windows.Graphics.Display.h>
@@ -100,8 +103,8 @@ void OpenGLESPage::CreateInput()
         // The CoreIndependentInputSource will raise pointer events for the specified device types on whichever thread
         // it's created on.
         mCoreInput = swapChainPanel().CreateCoreIndependentInputSource(Windows::UI::Core::CoreInputDeviceTypes::Mouse |
-                                                                     Windows::UI::Core::CoreInputDeviceTypes::Touch |
-                                                                     Windows::UI::Core::CoreInputDeviceTypes::Pen);
+                                                                       Windows::UI::Core::CoreInputDeviceTypes::Touch |
+                                                                       Windows::UI::Core::CoreInputDeviceTypes::Pen);
 
         // Register for pointer events, which will be raised on the background thread.
         mCoreInput.PointerPressed({this, &OpenGLESPage::_OnPointerPressed});
@@ -235,8 +238,9 @@ void OpenGLESPage::StartRenderLoop()
             thisUnsafe->mSleepCondition.notify_one();
         });
 
-        while (action.Status() == Windows::Foundation::AsyncStatus::Started)
-        {
+        // the actual render frame function
+        std::function<bool(void)> frameFunc = [&]() {
+
             if (!mVisible)
             {
                 mRenderer->Pause();
@@ -250,7 +254,7 @@ void OpenGLESPage::StartRenderLoop()
 
                 if (action.Status() != Windows::Foundation::AsyncStatus::Started)
                 {
-                    return;  // thread was cancelled. Exit thread
+                    return false;  // thread was cancelled. Exit thread
                 }
 
                 if (mVisible)
@@ -281,9 +285,9 @@ void OpenGLESPage::StartRenderLoop()
                 // run on main UI thread
                 auto thiz = this;
                 swapChainPanel().Dispatcher().RunAsync(Windows::UI::Core::CoreDispatcherPriority::High,
-                                                     ([thiz]() { thiz->TerminateApp(); }));
+                                                       ([thiz]() { thiz->TerminateApp(); }));
 
-                return;
+                return false;
             }
 
             EGLBoolean result = GL_FALSE;
@@ -301,11 +305,8 @@ void OpenGLESPage::StartRenderLoop()
 
                 // XAML objects like the SwapChainPanel must only be manipulated on the UI thread.
                 auto thiz = this;
-                swapChainPanel().Dispatcher().RunAsync(
-                    Windows::UI::Core::CoreDispatcherPriority::High,
-                    ([thiz]() {
-                        thiz->RecoverFromLostDevice();
-                        }));
+                swapChainPanel().Dispatcher().RunAsync(Windows::UI::Core::CoreDispatcherPriority::High,
+                                                       ([thiz]() { thiz->RecoverFromLostDevice(); }));
 
                 // wait until OpenGL is reset or thread is cancelled
                 while (mDeviceLost)
@@ -315,7 +316,7 @@ void OpenGLESPage::StartRenderLoop()
 
                     if (action.Status() != Windows::Foundation::AsyncStatus::Started)
                     {
-                        return;  // thread was cancelled. Exit thread
+                        return false;  // thread was cancelled. Exit thread
                     }
 
                     if (!mDeviceLost)
@@ -329,6 +330,17 @@ void OpenGLESPage::StartRenderLoop()
                     }
                 }
             }
+
+            return true;
+        };
+
+        // Sets Sleep(aka NtDelayExecution) resolution to 1ms
+        yasio::wtimer_hres __timer_hres_man;
+        auto application = ax::Application::getInstance();
+        while (action.Status() == Windows::Foundation::AsyncStatus::Started)
+        {
+            if (!application->frameStep(frameFunc))
+                return;
         }
     });
 
@@ -366,7 +378,8 @@ void OpenGLESPage::_OnPointerMoved(Windows::Foundation::IInspectable const& send
         args.CurrentPoint().PointerDevice().PointerDeviceType() == Windows::Devices::Input::PointerDeviceType::Mouse;
     if (mRenderer)
     {
-        mRenderer->QueuePointerEvent(isMouseEvent ? PointerEventType::MouseMoved : PointerEventType::PointerMoved, args);
+        mRenderer->QueuePointerEvent(isMouseEvent ? PointerEventType::MouseMoved : PointerEventType::PointerMoved,
+                                     args);
     }
 }
 
@@ -382,7 +395,8 @@ void OpenGLESPage::_OnPointerReleased(Windows::Foundation::IInspectable const& s
     }
 }
 
-void OpenGLESPage::_OnPointerWheelChanged(Windows::Foundation::IInspectable const& /*sender*/, PointerEventArgs const& args)
+void OpenGLESPage::_OnPointerWheelChanged(Windows::Foundation::IInspectable const& /*sender*/,
+                                          PointerEventArgs const& args)
 {
     bool isMouseEvent =
         args.CurrentPoint().PointerDevice().PointerDeviceType() == Windows::Devices::Input::PointerDeviceType::Mouse;
@@ -403,10 +417,10 @@ void OpenGLESPage::OnKeyPressed(CoreWindow const& sender, KeyEventArgs const& ar
 
 void OpenGLESPage::_OnCharacterReceived(CoreWindow const& sender, CharacterReceivedEventArgs const& args)
 {
-    //if (!e->KeyStatus.WasKeyDown)
+    // if (!e->KeyStatus.WasKeyDown)
     //{
-    //    log("OpenGLESPage::OnCharacterReceived %d", e->KeyCode);
-    //}
+    //     log("OpenGLESPage::OnCharacterReceived %d", e->KeyCode);
+    // }
 }
 
 void OpenGLESPage::OnKeyReleased(CoreWindow const& sender, KeyEventArgs const& args)
@@ -477,4 +491,3 @@ void OpenGLESPage::OnBackButtonPressed(Windows::Foundation::IInspectable const& 
 #endif
 
 }  // namespace winrt::AxmolAppWinRT::implementation
-

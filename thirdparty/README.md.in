@@ -253,7 +253,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 4.1.2
+- Version: 4.1.3
 - License: MIT WITH Anti-996
 
 ## zlib
