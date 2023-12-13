@@ -1,5 +1,5 @@
 set(lib_name curl)
-set(target_name lib${lib_name})
+set(target_name ${lib_name})
 
 project(${lib_name})
 

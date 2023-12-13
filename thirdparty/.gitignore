@@ -2,6 +2,5 @@
 .DS_Store
 build
 vlc/**/*
-c-ares/**/*
 **/*.zip
 _d*

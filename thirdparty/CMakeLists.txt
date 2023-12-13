@@ -4,24 +4,18 @@ project(thirdparty)
 option(OPT_BOX2D_OPTIMIZED "" OFF)
 option(AX_WITH_BOX2D "Build with internal Box2D support" ON)
 option(AX_WITH_CHIPMUNK "Build with internal chipmunk support" ON)
-option(AX_WITH_FREETYPE "Build with internal freetype support" ON)
 option(AX_WITH_RECAST "Build with internal recast support" ON)
 option(AX_WITH_BULLET "Build with internal bullet support" ON)
 option(AX_WITH_JPEG "Build with internal jpeg support" ON)
-option(AX_WITH_OPENSSL "Build with internal openssl support" ON)
 option(AX_WITH_WEBP "Build with internal webp support" ON)
-option(AX_WITH_PUGIXML "Build with internal pugixml support" ON)
 option(AX_WITH_CLIPPER2 "Build with internal Clipper2 support" ON)
-option(AX_WITH_CONVERTUTF "Build with internal ConvertUTF support" ON)
 option(AX_WITH_POLY2TRI "Build with internal poly2tri support" ON)
-option(AX_WITH_ZLIB "Build with internal zlib support" ON)
 option(AX_WITH_FASTLZ "Build with internal fastlz support" ON)
 option(AX_WITH_LZ4 "Build with internal lz4 support" OFF)
 option(AX_WITH_CURL "Build with internal curl support" ON)
 option(AX_WITH_UNZIP "Build with internal unzip support" ON)
 option(AX_WITH_ASTCENC "Build with internal ASTCENC support" ON)
 option(AX_WITH_CARES "Build with internal c-ares support" OFF)
-option(AX_WITH_LLHTTP "Build with lhttp support" ON)
 option(AX_WITH_YAML_CPP "Build with yaml-cpp support" OFF)
 option(AX_WITH_KCP "Build with internal kcp support" OFF)
 option(AX_WITH_OBOE "Build with oboe support" OFF)
@@ -146,15 +140,6 @@ if(AX_ISA_LEVEL)
     endif()
 endif()
 
-function(configure_target_outdir target)
-    set_target_properties(${target} PROPERTIES
-        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-        FOLDER "ThirdParty"
-    )
-endfunction()
-
 if (WINRT)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS=1)
 endif()
@@ -179,9 +164,66 @@ set(_1kfetch_manifest "${CMAKE_CURRENT_LIST_DIR}/manifest.json" CACHE STRING "" 
 # fetch prebuilts of 1k_dist and git sources
 include(${_AX_ROOT}/1k/fetch.cmake)
 
-macro(ax_add_3rd target_name)
-    target_link_libraries(thirdparty INTERFACE ${target_name})
-endmacro()
+function(xpm_parse_option OPTION)
+  string(REGEX MATCH "^[^ ]+" OPTION_KEY "${OPTION}")
+  string(LENGTH "${OPTION}" OPTION_LENGTH)
+  string(LENGTH "${OPTION_KEY}" OPTION_KEY_LENGTH)
+  if(OPTION_KEY_LENGTH STREQUAL OPTION_LENGTH)
+    # no value for key provided, assume user wants to set option to "ON"
+    set(OPTION_VALUE "ON")
+  else()
+    math(EXPR OPTION_KEY_LENGTH "${OPTION_KEY_LENGTH}+1")
+    string(SUBSTRING "${OPTION}" "${OPTION_KEY_LENGTH}" "-1" OPTION_VALUE)
+  endif()
+  set(OPTION_KEY
+      "${OPTION_KEY}"
+      PARENT_SCOPE
+  )
+  set(OPTION_VALUE
+      "${OPTION_VALUE}"
+      PARENT_SCOPE
+  )
+endfunction()
+
+function(ax_add_3rd source_dir)
+    set(options EXCLUDE_FROM_ALL NO_LINK)
+    set(multiValueArgs TARGETS OPTIONS)
+    cmake_parse_arguments(opt "${options}" "" "${multiValueArgs}" ${ARGN})
+
+    foreach(OPTION ${opt_OPTIONS})
+        xpm_parse_option("${OPTION}")
+        set(${OPTION_KEY} "${OPTION_VALUE}" CACHE BOOL "" FORCE)
+    endforeach()
+
+    if (opt_EXCLUDE_FROM_ALL)
+        add_subdirectory(${source_dir} EXCLUDE_FROM_ALL)
+    else()
+        add_subdirectory(${source_dir})
+    endif()
+
+    if(NOT opt_TARGETS) # if opt_TARGETS not specified use source_dir as target name
+        list(APPEND opt_TARGETS ${source_dir})
+    endif()
+    foreach(tgt ${opt_TARGETS})
+        get_target_property(tgt_type ${tgt} TYPE)
+        if (NOT ${opt_NO_LINK})
+            if(tgt_type STREQUAL "STATIC_LIBRARY" OR tgt_type STREQUAL "SHARED_LIBRARY" OR tgt_type STREQUAL "INTERFACE_LIBRARY")
+                target_link_libraries(thirdparty INTERFACE ${tgt})
+            endif()
+        else()
+            add_dependencies(thirdparty ${tgt})
+        endif()
+        get_target_property(is_imported_lib ${tgt} IMPORTED)
+        if ((NOT is_imported_lib) AND (NOT (tgt_type STREQUAL "INTERFACE_LIBRARY")))
+            set_target_properties(${tgt} PROPERTIES
+                ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+                LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+                RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+                FOLDER "ThirdParty"
+            )
+        endif()
+    endforeach()
+endfunction()
 
 # bellow are header only libs
 target_include_directories(thirdparty
@@ -194,12 +236,7 @@ if (ANDROID)
     )
 endif()
 
-add_subdirectory(fmt EXCLUDE_FROM_ALL)
-
-ax_add_3rd(fmt-header-only)
-set_target_properties(fmt PROPERTIES
-    FOLDER "ThirdParty"
-)
+ax_add_3rd(fmt EXCLUDE_FROM_ALL TARGETS fmt-header-only)
 
 # bellow are non header only libs
 
@@ -209,44 +246,29 @@ if(ANDROID)
 endif()
 
 if(NOT EMSCRIPTEN)
-    add_subdirectory(zlib)
-    ax_add_3rd(dep_zlib)
+    ax_add_3rd(zlib)
 endif(NOT EMSCRIPTEN)
 
 # libpng
-add_subdirectory(png)
-target_include_directories(png PRIVATE "${ZLIB_INCLUDE_DIR}")
-if(ANDROID)
-    target_include_directories(png PRIVATE ${cpufeatures_include_dir})
-    target_link_libraries(png INTERFACE cpufeatures)
-endif()
 ax_add_3rd(png)
-configure_target_outdir(png)
-
-set(PNG_PNG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/png" CACHE STRING "png include dir" FORCE)
-set(PNG_LIBRARY "png" CACHE STRING "png include dir" FORCE)
 
 if(AX_WITH_BOX2D)
-    set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "Build the Box2D unit tests" FORCE)
-    set(BOX2D_BUILD_TESTBED OFF CACHE BOOL "Build the Box2D testbed" FORCE)
+    set(box2d_opts "BOX2D_BUILD_UNIT_TESTS OFF" "BOX2D_BUILD_TESTBED OFF")
     if(OPT_BOX2D_OPTIMIZED)
         _1kfetch(box2d-optimized "https://github.com/mtsamis/box2d-optimized.git")
-        add_subdirectory(${box2d-optimized_SOURCE_DIR})
-        configure_target_outdir(box2d-optimized)
-        ax_add_3rd(box2d-optimized)
+        ax_add_3rd(${box2d-optimized_SOURCE_DIR} TARGETS box2d-optimized OPTIONS ${box2d_opts})
     else()
-        add_subdirectory(box2d)
-        configure_target_outdir(box2d)
-        ax_add_3rd(box2d)
+        ax_add_3rd(box2d OPTIONS ${box2d_opts})
     endif()
 endif(AX_WITH_BOX2D)
 
 if(AX_WITH_CHIPMUNK)
-    set(CP_BUILD_SHARED OFF CACHE BOOL "Build chipmunk as shared library" FORCE)
-    set(CP_BUILD_STATIC ON CACHE BOOL "Build chipmunk as static library" FORCE)
-    set(CP_BUILD_DEMOS OFF CACHE BOOL "Build chipmunk demos" FORCE)
-    set(CP_INSTALL_STATIC OFF CACHE BOOL "Install chipmunk static" FORCE)
-    add_subdirectory(chipmunk)
+    ax_add_3rd(chipmunk OPTIONS
+        "CP_BUILD_SHARED OFF"
+        "CP_BUILD_STATIC ON"
+        "CP_BUILD_DEMOS OFF"
+        "CP_INSTALL_STATIC OFF"
+    )
     set_target_properties(chipmunk PROPERTIES
       INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/chipmunk/include"
     )
@@ -254,113 +276,81 @@ if(AX_WITH_CHIPMUNK)
     # !important axmol not use double precision
     target_compile_definitions(chipmunk PUBLIC CP_USE_CGTYPES=0)
     target_compile_definitions(chipmunk PUBLIC CP_USE_DOUBLES=0)
-
-    #~ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/chipmunk/include")
-    ax_add_3rd(chipmunk)
-    configure_target_outdir(chipmunk)
 endif(AX_WITH_CHIPMUNK)
-if(AX_WITH_FREETYPE)
-    set(FT_WITH_ZLIB ON CACHE BOOL "Use system zlib instead of internal library." FORCE)
-    set(DISABLE_FORCE_DEBUG_POSTFIX ON CACHE BOOL "" FORCE)
-    set(SKIP_INSTALL_ALL TRUE CACHE BOOL "Skip freetype instal." FORCE)
-    set(FT_DISABLE_HARFBUZZ TRUE CACHE BOOL "Disable HarfBuzz." FORCE)
-    set(FT_DISABLE_BROTLI TRUE CACHE BOOL "Disable Brotli." FORCE)
-    set(FT_DISABLE_BZIP2 TRUE CACHE BOOL "Disable bzip2." FORCE)
-    add_subdirectory(freetype)
-    ax_add_3rd(freetype)
-    configure_target_outdir(freetype)
-    if (WINRT)
-        target_compile_definitions(freetype PUBLIC "generic=GenericFromFreeTypeLibrary")
-    endif()
-    target_include_directories(thirdparty INTERFACE "freetype/include")
+
+ax_add_3rd(freetype OPTIONS
+    "FT_WITH_ZLIB ON"
+    "DISABLE_FORCE_DEBUG_POSTFIX ON"
+    "SKIP_INSTALL_ALL TRUE"
+    "FT_DISABLE_HARFBUZZ TRUE"
+    "FT_DISABLE_BROTLI TRUE"
+    "FT_DISABLE_BZIP2 TRUE"
+)
+if (WINRT)
+    target_compile_definitions(freetype PUBLIC "generic=GenericFromFreeTypeLibrary")
 endif()
+target_include_directories(thirdparty INTERFACE "freetype/include")
+
 if(AX_WITH_RECAST)
-    add_subdirectory(recast)
     ax_add_3rd(recast)
-    configure_target_outdir(recast)
 endif(AX_WITH_RECAST)
+
 if(AX_WITH_BULLET)
-    add_subdirectory(bullet)
     ax_add_3rd(bullet)
-    configure_target_outdir(bullet)
 endif(AX_WITH_BULLET)
 
 if(AX_WITH_JPEG AND NOT WINRT AND NOT EMSCRIPTEN)
-    add_subdirectory(jpeg-turbo)
-    ax_add_3rd(dep_jpeg-turbo)
+    ax_add_3rd(jpeg-turbo)
 endif()
 
-if(AX_WITH_OPENSSL)
-    add_subdirectory(openssl)
-    if(ANDROID OR LINUX)
-        target_link_libraries(OpenSSL::SSL INTERFACE OpenSSL::Crypto)
-        ax_add_3rd(OpenSSL::SSL)
-    else()
-        target_link_libraries(thirdparty
-                           INTERFACE OpenSSL::Crypto
-                           INTERFACE OpenSSL::SSL)
-    endif()
-    target_compile_definitions(thirdparty INTERFACE OPENSSL_SUPPRESS_DEPRECATED=1)
+add_subdirectory(openssl)
+if(ANDROID OR LINUX)
+    target_link_libraries(OpenSSL::SSL INTERFACE OpenSSL::Crypto)
+    target_link_libraries(thirdparty INTERFACE OpenSSL::SSL)
+else()
+    target_link_libraries(thirdparty
+                        INTERFACE OpenSSL::Crypto
+                        INTERFACE OpenSSL::SSL)
 endif()
+target_compile_definitions(thirdparty INTERFACE OPENSSL_SUPPRESS_DEPRECATED=1)
 
 if(AX_WITH_WEBP)
-    add_subdirectory(webp)
     ax_add_3rd(webp)
-    configure_target_outdir(webp)
 endif(AX_WITH_WEBP)
 
-if(AX_WITH_PUGIXML)
-    add_subdirectory(pugixml)
-    ax_add_3rd(pugixml)
-    configure_target_outdir(pugixml)
-endif(AX_WITH_PUGIXML)
-
-add_subdirectory(xxhash)
+ax_add_3rd(pugixml)
 ax_add_3rd(xxhash)
-configure_target_outdir(xxhash)
 
 if (AX_WITH_FASTLZ)
-    add_subdirectory(fastlz)
     ax_add_3rd(fastlz)
-    configure_target_outdir(fastlz)
 endif()
 
 if(AX_WITH_LZ4)
-    _1kfetch(lz4 "https://github.com/lz4/lz4.git")
-    set(LZ4_BUILD_CLI OFF)
-    set(LZ4_BUILD_LEGACY_LZ4C OFF)
-    add_subdirectory(${lz4_SOURCE_DIR}/build/cmake)
     if (NOT BUILD_SHARED_LIBS)
         set(lz4_tgt lz4_static)
     else()
         set(lz4_tgt lz4_shared)
     endif()
-    ax_add_3rd(${lz4_tgt})
-    configure_target_outdir(${lz4_tgt})
+    _1kfetch(lz4 "https://github.com/lz4/lz4.git")
+    ax_add_3rd(${lz4_SOURCE_DIR}/build/cmake TARGETS ${lz4_tgt} OPTIONS
+      "LZ4_BUILD_CLI OFF"
+      "LZ4_BUILD_LEGACY_LZ4C OFF"
+    )
 endif()
 
 if(AX_WITH_CLIPPER2)
-    add_subdirectory(clipper2)
     ax_add_3rd(clipper2)
-    configure_target_outdir(clipper2)
 endif(AX_WITH_CLIPPER2)
-if(AX_WITH_CONVERTUTF)
-    add_subdirectory(ConvertUTF)
-    ax_add_3rd(ConvertUTF)
-    configure_target_outdir(ConvertUTF)
-endif(AX_WITH_CONVERTUTF)
+
+ax_add_3rd(ConvertUTF)
+
 if(AX_WITH_POLY2TRI)
-    add_subdirectory(poly2tri)
     ax_add_3rd(poly2tri)
-    # Build static lib
     target_compile_definitions(poly2tri PUBLIC P2T_STATIC_EXPORTS)
-    configure_target_outdir(poly2tri)
 endif(AX_WITH_POLY2TRI)
 
 if(AX_WITH_ASTCENC)
-    add_subdirectory(astcenc)
     ax_add_3rd(astcenc)
-    configure_target_outdir(astcenc)
 endif(AX_WITH_ASTCENC)
 
 # use lua/js specific libs by property to prevent conflict
@@ -377,45 +367,34 @@ if(AX_ENABLE_EXT_LUA)
 endif()
 
 if(AX_WITH_CURL AND NOT EMSCRIPTEN)
-    add_subdirectory(curl)
+    ax_add_3rd(curl)
     if(ANDROID OR LINUX)
-        target_link_libraries(libcurl INTERFACE OpenSSL::SSL)
+        target_link_libraries(curl INTERFACE OpenSSL::SSL)
     endif()
-    ax_add_3rd(libcurl)
 endif()
 
 # The openal-soft(LGPL 2.1)
 if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
-    set(ALSOFT_DLOPEN OFF CACHE BOOL "Check for the dlopen API for loading optional libs" FORCE)
-    set(ALSOFT_UTILS OFF CACHE BOOL "Build utility program" FORCE)
-    set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build example programs" FORCE)
-    set(ALSOFT_INSTALL OFF CACHE BOOL "Install main library" FORCE)
+    set(alsoft_opts "ALSOFT_DLOPEN OFF" "ALSOFT_UTILS OFF" "ALSOFT_EXAMPLES OFF" "ALSOFT_INSTALL OFF")
     if (ANDROID)
         if(AX_WITH_OBOE)
             _1kfetch(oboe "https://github.com/google/oboe.git")
             set(ALSOFT_BACKEND_OPENSL OFF CACHE BOOL "Enable OpenSL backend" FORCE)
             set(OBOE_SOURCE "${oboe_SOURCE_DIR}" CACHE STRING "Source directory for Oboe." FORCE)
         endif()
+        list(APPEND alsoft_opts "ALSOFT_RTKIT OFF")
         set(ALSOFT_RTKIT OFF CACHE BOOL "Enable RTKit support" FORCE)
     endif()
 
     if(WINDOWS)
-        set(ALSOFT_BACKEND_WASAPI ON CACHE BOOL "Enable WASAPI backend" FORCE)
-        set(ALSOFT_BACKEND_WAVE OFF CACHE BOOL "Enable Wave Writer backend" FORCE)
-        set(ALSOFT_BACKEND_DSOUND OFF CACHE BOOL "Enable DirectSound backend" FORCE)
-        set(ALSOFT_BACKEND_WINMM OFF CACHE BOOL "Enable Windows Multimedia backend" FORCE)
+        list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
     endif()
 
+    ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS alcommon;OpenAL OPTIONS ${alsoft_opts})
+
     target_include_directories(thirdparty INTERFACE openal)
-
-    add_subdirectory(openal EXCLUDE_FROM_ALL)
-    configure_target_outdir(alcommon)
-    configure_target_outdir(OpenAL)
-    ax_add_3rd(OpenAL)
     target_compile_definitions(thirdparty INTERFACE AX_USE_ALSOFT=1)
-
-    set_target_properties(alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
-    set_target_properties(OpenAL PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
+    set_target_properties(OpenAL alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
 
     if(ANDROID)
         set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
@@ -423,94 +402,72 @@ if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
 endif()
 
 # The ogg decoder
-add_subdirectory(ogg)
 ax_add_3rd(ogg)
-configure_target_outdir(ogg)
 
 if(WINDOWS OR LINUX OR ANDROID OR WASM)
-    add_subdirectory(glad)
     ax_add_3rd(glad)
-    configure_target_outdir(glad)
 endif()
 
 if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX)
-    set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation" FORCE)
-    set(GLFW_INSTALL OFF CACHE BOOL "Build the GLFW documentation" FORCE)
-    add_subdirectory(glfw)
-    configure_target_outdir(glfw)
-    set_target_properties(glfw PROPERTIES
-                      OUTPUT_NAME glfw)
-    ax_add_3rd(glfw)
+    ax_add_3rd(glfw OPTIONS
+      "GLFW_BUILD_DOCS OFF"
+      "GLFW_INSTALL OFF"
+    )
+    set_target_properties(glfw PROPERTIES OUTPUT_NAME glfw)
     if(NOT WINDOWS)
-        ax_add_3rd(pthread)
+        target_link_libraries(thirdparty INTERFACE pthread)
     endif()
     target_include_directories(thirdparty INTERFACE "glfw/include/GLFW")
 endif()
 
 # unzip depend on zlib
 if(AX_WITH_UNZIP)
-    add_subdirectory(unzip)
     ax_add_3rd(unzip)
-    configure_target_outdir(unzip)
 endif(AX_WITH_UNZIP)
 
 if(AX_WITH_CARES)
-    add_subdirectory(c-ares)
     ax_add_3rd(c-ares)
     target_compile_definitions(thirdparty INTERFACE YASIO_USE_CARES=1)
 endif(AX_WITH_CARES)
 
-if(AX_WITH_LLHTTP)
-    add_subdirectory(llhttp)
-    configure_target_outdir(llhttp)
-    ax_add_3rd(llhttp)
-endif()
+ax_add_3rd(llhttp)
 
 # libvlc
 if (AX_ENABLE_VLC_MEDIA AND (NOT _AX_HAVE_VLC))
     message(STATUS "Using axmol prebuilt libvlc")
-    add_subdirectory(vlc)
-    ax_add_3rd(VLC::vlc)
-    ax_add_3rd(VLC::vlccore)
+    ax_add_3rd(vlc TARGETS VLC::vlc;VLC::vlccore)
 endif()
 
 # yaml
 if(AX_WITH_YAML_CPP)
-    set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-    set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
-    set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "" FORCE)
-    set(YAML_CPP_INSTALL OFF CACHE BOOL "" FORCE)
-    set(YAML_CPP_CLANG_FORMAT_EXE OFF CACHE BOOL "" FORCE)
-    # set(YAML_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
     _1kfetch(yaml-cpp "https://github.com/jbeder/yaml-cpp.git")
-    add_subdirectory(${yaml-cpp_SOURCE_DIR})
-    configure_target_outdir(yaml-cpp)
-    add_dependencies(thirdparty yaml-cpp)
+    ax_add_3rd(${yaml-cpp_SOURCE_DIR} NO_LINK
+      TARGETS yaml-cpp
+      OPTIONS
+      "YAML_CPP_BUILD_TESTS OFF"
+      "YAML_CPP_BUILD_TOOLS OFF"
+      "YAML_CPP_BUILD_CONTRIB OFF"
+      "YAML_CPP_INSTALL OFF"
+      "YAML_CPP_CLANG_FORMAT_EXE OFF"
+    )
 endif()
 
 # kcp
 if(AX_WITH_KCP)
     set(BUILD_TESTING OFF)
     _1kfetch(kcp "https://github.com/skywind3000/kcp.git")
-    add_subdirectory(${kcp_SOURCE_DIR})
-    configure_target_outdir(kcp)
-    ax_add_3rd(kcp)
+    ax_add_3rd(${kcp_SOURCE_DIR} TARGETS kcp)
 endif()
 
 if (WIN32)
-    add_subdirectory(angle)
     if (WINRT)
-        ax_add_3rd(angle::GLESv2)
-        ax_add_3rd(angle::EGL)
+        ax_add_3rd(angle TARGETS angle::GLESv2;angle::EGL)
+    else()
+        add_subdirectory(angle)
     endif()
 endif()
 
-add_subdirectory(simdjson)
-configure_target_outdir(simdjson)
 ax_add_3rd(simdjson)
-
-# put "thirdparty" into thirdparty folder, too
-configure_target_outdir(thirdparty)
 
 if (ANDROID)
     function(config_android_shared_libs package_name target_folder)

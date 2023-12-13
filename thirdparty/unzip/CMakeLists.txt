@@ -17,6 +17,6 @@ target_include_directories(${target_name} PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 target_compile_definitions(${target_name} PUBLIC NOUNCRYPT=1)
 
 if(MACOSX OR ANDROID OR WINDOWS OR LINUX)
-  get_target_property(zlib_header dep_zlib INTERFACE_INCLUDE_DIRECTORIES)
+  get_target_property(zlib_header zlib INTERFACE_INCLUDE_DIRECTORIES)
   target_include_directories(${target_name} PRIVATE ${zlib_header})
 endif()
