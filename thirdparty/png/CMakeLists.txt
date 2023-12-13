@@ -57,3 +57,12 @@ target_include_directories(${target_name} PUBLIC "${CMAKE_CURRENT_LIST_DIR}")
 if(_PNG_ISA_SIMD)
     target_compile_definitions(${target_name} PUBLIC ${libpng_optimize_flag})
 endif()
+
+target_include_directories(${target_name} PRIVATE "${ZLIB_INCLUDE_DIR}")
+if(ANDROID)
+    target_include_directories(${target_name} PRIVATE ${cpufeatures_include_dir})
+    target_link_libraries(${target_name} INTERFACE cpufeatures)
+endif()
+
+set(PNG_PNG_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE STRING "png include dir" FORCE)
+set(PNG_LIBRARY "png" CACHE STRING "png include dir" FORCE)
