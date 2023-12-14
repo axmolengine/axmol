@@ -28,10 +28,10 @@ layout(location = NORMAL) out vec3 v_normal;
 
 layout(std140) uniform vs_ub {
 #if (MAX_POINT_LIGHT_NUM > 0)
-    vec3 u_PointLightSourcePosition[MAX_POINT_LIGHT_NUM];
+    vvec3_def(u_PointLightSourcePosition, MAX_POINT_LIGHT_NUM);
 #endif
 #if (MAX_SPOT_LIGHT_NUM > 0)
-    vec3 u_SpotLightSourcePosition[MAX_SPOT_LIGHT_NUM];
+    vvec3_def(u_SpotLightSourcePosition, MAX_SPOT_LIGHT_NUM);
 #endif
     mat4 u_MVMatrix;
     mat4 u_PMatrix;
@@ -44,14 +44,14 @@ void main(void)
 #if (MAX_POINT_LIGHT_NUM > 0)
     for (int i = 0; i < MAX_POINT_LIGHT_NUM; ++i)
     {
-        v_vertexToPointLightDirection[i] = u_PointLightSourcePosition[i].xyz - ePosition.xyz;
+        v_vertexToPointLightDirection[i] = vvec3_at(u_PointLightSourcePosition, i) - ePosition.xyz;
     }
 #endif
 
 #if (MAX_SPOT_LIGHT_NUM > 0)
     for (int i = 0; i < MAX_SPOT_LIGHT_NUM; ++i)
     {
-        v_vertexToSpotLightDirection[i] = u_SpotLightSourcePosition[i] - ePosition.xyz;
+        v_vertexToSpotLightDirection[i] = vvec3_at(u_SpotLightSourcePosition, i) - ePosition.xyz;
     }
 #endif
         
