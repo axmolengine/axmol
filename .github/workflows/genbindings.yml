@@ -6,6 +6,8 @@ on:
       - dev
     paths-ignore:
       - '**.md'
+      - '**/*.md.in'
+      - 'docs/**'
       
   workflow_dispatch:
 jobs:

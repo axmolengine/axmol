@@ -29,14 +29,14 @@ THE SOFTWARE.
 #include "platform/PlatformConfig.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
 
-#include "platform/StdC.h"
-#include "platform/Common.h"
-#include "platform/ApplicationProtocol.h"
-#include "platform/winrt/InputEvent.h"
-#include <string>
+#    include "platform/StdC.h"
+#    include "platform/Common.h"
+#    include "platform/ApplicationProtocol.h"
+#    include "platform/winrt/InputEvent.h"
+#    include <string>
+#    include <functional>
 
 NS_AX_BEGIN
-
 
 class AX_DLL Application : public ApplicationProtocol
 {
@@ -50,6 +50,11 @@ public:
     int run();
 
     /**
+    * @brief frame step with FPS control
+    */
+    bool frameStep(const std::function<bool()>& onFrame);
+
+    /**
     @brief    Get current application instance.
     @return Current application instance pointer.
     */
@@ -57,10 +62,10 @@ public:
 
     /* override functions */
     virtual void setAnimationInterval(float interval) override;
-    //virtual void setAnimationInterval(float interval, SetIntervalReason reason) override;
+    // virtual void setAnimationInterval(float interval, SetIntervalReason reason) override;
 
     virtual LanguageType getCurrentLanguage() override;
-    virtual const char * getCurrentLanguageCode() override;
+    virtual const char* getCurrentLanguageCode() override;
 
     /**
      @brief Get target platform
@@ -71,7 +76,7 @@ public:
      @brief Get application version
      */
     virtual std::string getVersion() override;
-    
+
     /**
      @brief Open url in default browser
      @param String with url to open.
@@ -83,30 +88,28 @@ public:
     @brief Set the callback responsible for opening a URL.
     @param del The delegate that will handle opening a URL. We can't pass back a Platform::String due to name clash.
     */
-    void SetXamlOpenURLDelegate(const std::function<void(const winrt::hstring&)>& del)
-    {
-        m_openURLDelegate = del;
-    }
+    void SetXamlOpenURLDelegate(const std::function<void(const winrt::hstring&)>& del) { m_openURLDelegate = del; }
 
     void setStartupScriptFilename(const std::string& startupScriptFile);
 
-    const std::string& getStartupScriptFilename(void)
-    {
-        return m_startupScriptFilename;
-    }
+    const std::string& getStartupScriptFilename(void) { return m_startupScriptFilename; }
 
 protected:
-    LARGE_INTEGER       m_nAnimationInterval;
-    std::string         m_resourceRootPath;
-    std::string         m_startupScriptFilename;
+    LARGE_INTEGER m_nAnimationInterval;
+    LARGE_INTEGER m_nFreq;
+    LARGE_INTEGER m_nLast;
+    LARGE_INTEGER m_nNow;
+    
+    std::string m_resourceRootPath;
+    std::string m_startupScriptFilename;
 
     std::function<void(const winrt::hstring&)> m_openURLDelegate;
 
-    static Application * sm_pSharedApplication;
+    static Application* sm_pSharedApplication;
 };
 
 NS_AX_END
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 
-#endif    // __AX_APPLICATION_WINRT_H__
+#endif  // __AX_APPLICATION_WINRT_H__

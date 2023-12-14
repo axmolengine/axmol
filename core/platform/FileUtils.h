@@ -775,7 +775,7 @@ public:
      *  @param mode The mode to open the file in, being READ | WRITE | APPEND
      *  @return Returns a pointer to the file stream
      */
-    virtual std::unique_ptr<IFileStream> openFileStream(std::string_view filePath, IFileStream::Mode mode);
+    virtual std::unique_ptr<IFileStream> openFileStream(std::string_view filePath, IFileStream::Mode mode) const;
 
 protected:
     /**

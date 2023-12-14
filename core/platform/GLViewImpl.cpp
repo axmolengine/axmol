@@ -180,9 +180,10 @@ private:
 };
 GLViewImpl* GLFWEventHandler::_view = nullptr;
 
-const std::string GLViewImpl::EVENT_WINDOW_RESIZED   = "glview_window_resized";
-const std::string GLViewImpl::EVENT_WINDOW_FOCUSED   = "glview_window_focused";
-const std::string GLViewImpl::EVENT_WINDOW_UNFOCUSED = "glview_window_unfocused";
+const std::string GLViewImpl::EVENT_WINDOW_POSITIONED   = "glview_window_positioned";
+const std::string GLViewImpl::EVENT_WINDOW_RESIZED      = "glview_window_resized";
+const std::string GLViewImpl::EVENT_WINDOW_FOCUSED      = "glview_window_focused";
+const std::string GLViewImpl::EVENT_WINDOW_UNFOCUSED    = "glview_window_unfocused";
 
 ////////////////////////////////////////////////////
 
@@ -866,6 +867,22 @@ void GLViewImpl::setWindowed(int width, int height)
     }
 }
 
+void GLViewImpl::getWindowPosition(int* xpos, int* ypos)
+{
+    if (_mainWindow != nullptr)
+    {
+        glfwGetWindowPos(_mainWindow, xpos, ypos);
+    }
+}
+
+void GLViewImpl::getWindowSize(int* width, int* height)
+{
+    if (_mainWindow != nullptr)
+    {
+        glfwGetWindowSize(_mainWindow, width, height);
+    }    
+}
+
 void GLViewImpl::updateWindowSize()
 {
     int w = 0, h = 0;
@@ -1208,9 +1225,12 @@ void GLViewImpl::onGLFWCharCallback(GLFWwindow* /*window*/, unsigned int charCod
     }
 }
 
-void GLViewImpl::onGLFWWindowPosCallback(GLFWwindow* /*window*/, int /*x*/, int /*y*/)
+void GLViewImpl::onGLFWWindowPosCallback(GLFWwindow* /*window*/, int x, int y)
 {
     Director::getInstance()->setViewport();
+
+    Vec2 pos(x, y);
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_POSITIONED, &pos);
 }
 
 void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
@@ -1243,7 +1263,8 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
         backend::UtilsMTL::resizeDefaultAttachmentTexture(fbWidth, fbHeight);
 #endif
 
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
+        Size size(w, h);
+        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, &size);
     }
 }
 

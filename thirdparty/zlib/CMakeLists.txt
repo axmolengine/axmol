@@ -1,6 +1,6 @@
 
 set(lib_name zlib)
-set(target_name dep_${lib_name})
+set(target_name ${lib_name})
 
 project(${lib_name})
 

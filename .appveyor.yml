@@ -6,10 +6,15 @@ version: 2.1.0.{build}
 install:
   - git submodule update --init --recursive
 
+branches:
+  only:
+    - dev
+
 skip_commits:
   files:
     - docs/*
     - '**/*.md'
+    - '**/*.md.in'
 
 build_script:
   - pwsh: .\build.ps1 -p wasm -xb '--target','cpp-tests','--config','Release' -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON','-DAX_WASM_THREADS=8'

@@ -35,6 +35,7 @@ WindowTests::WindowTests()
     ADD_TEST_CASE(WindowTestFullscreen1);
     ADD_TEST_CASE(WindowTestFullscreen2);
     ADD_TEST_CASE(WindowTestFullscreen3);
+    ADD_TEST_CASE(WindowTestResizedAndPositioned);
 }
 
 std::string WindowTest::title() const
@@ -102,6 +103,66 @@ bool WindowTestFullscreen3::init()
 std::string WindowTestFullscreen3::subtitle() const
 {
     return "Fullscreen Monitor 3 (if present)";
+}
+
+void WindowTestResizedAndPositioned::onEnter()
+{
+    WindowTest::onEnter();
+
+    auto s = _director->getWinSize();
+    auto glView = static_cast<GLViewImpl*>(_director->getGLView());
+
+    int x = 0;
+    int y = 0;
+    int width = 0;
+    int height = 0;
+    glView->getWindowPosition(&x, &y);
+    glView->getWindowSize(&width, &height);
+
+    label1 = Label::createWithTTF(StringUtils::format("pos : %d, %d", x, y), "fonts/Marker Felt.ttf", 16.0f);
+    label1->setPosition(s.width / 3 * 1, s.height / 2);
+    addChild(label1);
+
+    label2 = Label::createWithTTF(StringUtils::format("size : %d, %d", width, height), "fonts/Marker Felt.ttf", 16.0f);
+    label2->setPosition(s.width / 3 * 2, s.height / 2);
+    addChild(label2);
+
+    _director->getEventDispatcher()->addCustomEventListener(
+        GLViewImpl::EVENT_WINDOW_POSITIONED,
+        AX_CALLBACK_1(WindowTestResizedAndPositioned::onWindowPositioned, this));
+    _director->getEventDispatcher()->addCustomEventListener(
+        GLViewImpl::EVENT_WINDOW_RESIZED,
+        AX_CALLBACK_1(WindowTestResizedAndPositioned::onWindowResized, this));
+}
+
+void WindowTestResizedAndPositioned::onExit()
+{
+    WindowTest::onExit();
+    _director->getEventDispatcher()->removeCustomEventListeners(GLViewImpl::EVENT_WINDOW_POSITIONED);
+    _director->getEventDispatcher()->removeCustomEventListeners(GLViewImpl::EVENT_WINDOW_RESIZED);
+}
+
+std::string WindowTestResizedAndPositioned::subtitle() const
+{
+    return "Window Position And Size";
+}
+
+void WindowTestResizedAndPositioned::onWindowPositioned(EventCustom* e)
+{
+    auto pos = static_cast<Vec2*>(e->getUserData());
+    if (pos == nullptr)
+        return;
+
+    label1->setString(StringUtils::format("pos : %d, %d", (int)pos->x, (int)pos->y));
+}
+
+void WindowTestResizedAndPositioned::onWindowResized(EventCustom* e)
+{
+    auto size = static_cast<Size*>(e->getUserData());
+    if (size == nullptr)
+        return;
+
+    label2->setString(StringUtils::format("size : %d, %d", (int)size->width, (int)size->height));
 }
 
 #endif

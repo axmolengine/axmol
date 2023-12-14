@@ -1278,7 +1278,7 @@ private:
     bool no_dispatch_    = false; // since v4.0.0
     bool forward_packet_ = false; // since v3.39.8
 
-#if YASIO__HAS_WIN32_TIMEAPI
+#if defined(_WIN32)
     bool hres_timer_ = false;
 #endif
 

@@ -49,24 +49,19 @@ using namespace Windows::Foundation;
 NS_AX_BEGIN
 
 // sharedApplication pointer
-Application * Application::sm_pSharedApplication = nullptr;
-
-
-
-
+Application* Application::sm_pSharedApplication = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////
 // implement Application
 ////////////////////////////////////////////////////////////////////////////////
 
 // sharedApplication pointer
-Application * s_pSharedApplication = nullptr;
+Application* s_pSharedApplication = nullptr;
 
-Application::Application() :
-m_openURLDelegate(nullptr)
+Application::Application() : m_openURLDelegate(nullptr)
 {
     m_nAnimationInterval.QuadPart = 0;
-    AX_ASSERT(! sm_pSharedApplication);
+    AX_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
 }
 
@@ -84,21 +79,47 @@ int Application::run()
         return 0;
     }
 
-	GLViewImpl::sharedGLView()->Run();
-	return 0;
+    QueryPerformanceCounter(&m_nLast);
+
+    GLViewImpl::sharedGLView()->Run();
+    return 0;
+}
+
+bool Application::frameStep(const std::function<bool()>& onFrame)
+{
+    QueryPerformanceCounter(&m_nNow);
+    const auto interval = m_nNow.QuadPart - m_nLast.QuadPart;
+    if (interval > m_nAnimationInterval.QuadPart)
+    {
+        m_nLast.QuadPart = m_nNow.QuadPart;
+        return onFrame();
+    }
+    else
+    {
+        // The precision of timer on Windows is set to highest (1ms) by 'timeBeginPeriod' from above code,
+        // but it's still not precise enough. For example, if the precision of timer is 1ms,
+        // Sleep(3) may make a sleep of 2ms or 4ms. Therefore, we subtract 1ms here to make Sleep time shorter.
+        // If 'waitMS' is equal or less than 1ms, don't sleep and run into next loop to
+        // boost CPU to next frame accurately.
+        const auto waitMS =
+            static_cast<LONG>((m_nAnimationInterval.QuadPart - interval) * 1000LL / m_nFreq.QuadPart - 1L);
+        if (waitMS > 1L)
+            Sleep(waitMS);
+
+        return true;
+    }
 }
 
 void Application::setAnimationInterval(float interval)
 {
-    LARGE_INTEGER nFreq;
-    QueryPerformanceFrequency(&nFreq);
-    m_nAnimationInterval.QuadPart = (LONGLONG)(interval * nFreq.QuadPart);
+    QueryPerformanceFrequency(&m_nFreq);
+    m_nAnimationInterval.QuadPart = (LONGLONG)(interval * m_nFreq.QuadPart);
 }
 
-//void Application::setAnimationInterval(float interval, SetIntervalReason reason)
+// void Application::setAnimationInterval(float interval, SetIntervalReason reason)
 //{
-//    setAnimationInterval(interval);
-//}
+//     setAnimationInterval(interval);
+// }
 
 //////////////////////////////////////////////////////////////////////////
 // static member function
@@ -109,14 +130,13 @@ Application* Application::getInstance()
     return sm_pSharedApplication;
 }
 
-const char * Application::getCurrentLanguageCode()
+const char* Application::getCurrentLanguageCode()
 {
-	static std::string code = "en";
-    auto languages = Windows::System::UserProfile::GlobalizationPreferences::Languages();
-    code = PlatformStringToString(languages.GetAt(0));
+    static std::string code = "en";
+    auto languages          = Windows::System::UserProfile::GlobalizationPreferences::Languages();
+    code                    = PlatformStringToString(languages.GetAt(0));
     return code.c_str();
 }
-
 
 LanguageType Application::getCurrentLanguage()
 {
@@ -125,12 +145,12 @@ LanguageType Application::getCurrentLanguage()
     return utils::getLanguageTypeByISO2(code);
 }
 
-Application::Platform  Application::getTargetPlatform()
+Application::Platform Application::getTargetPlatform()
 {
     return Platform::WinUWP;
 }
 
-std::string  Application::getVersion()
+std::string Application::getVersion()
 {
     auto package   = winrt::Windows::ApplicationModel::Package::Current();
     auto packageId = package.Id();
@@ -143,9 +163,9 @@ bool Application::openURL(std::string_view url)
 {
     auto dispatcher = ax::GLViewImpl::sharedGLView()->getDispatcher();
     dispatcher.get().RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, DispatchedHandler([url]() {
-        auto uri = Windows::Foundation::Uri(PlatformStringFromString(url));
-        Windows::System::Launcher::LaunchUriAsync(uri);
-    }));
+                                  auto uri = Windows::Foundation::Uri(PlatformStringFromString(url));
+                                  Windows::System::Launcher::LaunchUriAsync(uri);
+                              }));
     return true;
 }
 
@@ -156,5 +176,3 @@ void Application::setStartupScriptFilename(const std::string& startupScriptFile)
 }
 
 NS_AX_END
-
-
