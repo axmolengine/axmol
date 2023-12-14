@@ -1039,7 +1039,7 @@ void FileUtils::listFilesRecursivelyAsync(std::string_view dirPath,
         std::move(callback));
 }
 
-std::unique_ptr<IFileStream> FileUtils::openFileStream(std::string_view filePath, IFileStream::Mode mode)
+std::unique_ptr<IFileStream> FileUtils::openFileStream(std::string_view filePath, IFileStream::Mode mode) const
 {
     FileStream fs;
     return fs.open(filePath, mode) ? std::make_unique<FileStream>(std::move(fs)) : nullptr;

@@ -94,6 +94,11 @@ SOFTWARE.
 // #define YASIO_NT_COMPAT_GAI 1
 
 /*
+** Uncomment or add compiler flag -DYASIO_NT_XHRES_TIMER to forcing use undocumented NT API to setup high-resolution timer
+*/
+// #define YASIO_NT_XHRES_TIMER 1
+
+/*
 ** Uncomment or add compiler flag -DYASIO_MINIFY_EVENT to minfy size of io_event
 */
 // #define YASIO_MINIFY_EVENT 1
@@ -134,9 +139,14 @@ SOFTWARE.
 */
 // #define YASIO_ENABLE_HPERF_IO 1
 
-#if defined(_WIN32) && defined(YASIO_ENABLE_HPERF_IO)
-#  undef YASIO__HAS_EPOLL
-#  define YASIO__HAS_EPOLL 1
+#if defined(_WIN32)
+#  if defined(YASIO_ENABLE_HPERF_IO)
+#    undef YASIO__HAS_EPOLL
+#    define YASIO__HAS_EPOLL 1
+#  endif
+#  if YASIO__HAS_WIN32_TIMEAPI && !defined(YASIO_NT_XHRES_TIMER)
+#    define YASIO__USE_TIMEAPI 1
+#  endif
 #endif
 
 #if defined(YASIO_HEADER_ONLY)
@@ -195,7 +205,7 @@ SOFTWARE.
 /*
 **  The yasio version macros
 */
-#define YASIO_VERSION_NUM 0x040102
+#define YASIO_VERSION_NUM 0x040103
 
 /*
 ** The macros used by io_service.
