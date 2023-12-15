@@ -89,9 +89,12 @@ bool FastTMXTiledMap::initWithXML(std::string_view tmxString, std::string_view r
     return true;
 }
 
-FastTMXTiledMap::FastTMXTiledMap() : _mapSize(Vec2::ZERO), _tileSize(Vec2::ZERO) {}
+FastTMXTiledMap::FastTMXTiledMap() : _mapSize(Vec2::ZERO), _tileSize(Vec2::ZERO), _mapInfo(nullptr) {}
 
-FastTMXTiledMap::~FastTMXTiledMap() {}
+FastTMXTiledMap::~FastTMXTiledMap()
+{
+    AX_SAFE_RELEASE(_mapInfo);
+}
 
 // private
 FastTMXLayer* FastTMXTiledMap::parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
@@ -191,6 +194,9 @@ void FastTMXTiledMap::buildWithMapInfo(TMXMapInfo* mapInfo)
     }
 
     _layerCount = idx;
+
+    _mapInfo = mapInfo;
+    AX_SAFE_RETAIN(_mapInfo);
 }
 
 // public
@@ -272,6 +278,36 @@ void FastTMXTiledMap::setTileAnimEnabled(bool enabled)
             }
         }
     }
+}
+
+TMXTilesetInfo* FastTMXTiledMap::getTilesetInfo(std::string_view tsxNameString)
+{
+    if (_mapInfo == nullptr)
+        return nullptr;
+
+    auto tileSets = _mapInfo->getTilesets();
+    for (auto tileSet : tileSets)
+    {
+        if (tileSet->_name.compare(tsxNameString) == 0)
+        {
+            return tileSet;
+        }
+    }
+    return nullptr;
+}
+
+Vector<FastTMXLayer*> FastTMXTiledMap::getLayers() const
+{
+    Vector<FastTMXLayer*> layers;
+    for (auto child : _children)
+    {
+        auto layer = dynamic_cast<FastTMXLayer*>(child);
+        if (layer)
+        {
+            layers.pushBack(layer);
+        }
+    }
+    return layers;
 }
 
 NS_AX_END
