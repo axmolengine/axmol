@@ -29,7 +29,7 @@
 #  define vvec2_at(x, y) vec2(vvec2_at1(x, y, 0), vvec2_at1(x, y, 1))
 
 #  define vvec3_def(x, y) vec4 x[(y * 3 + 3) / 4]
-#  define vvec3_at1(x, y, z) x[(y * 3) / 4][((y * 3) % 4) + z]
+#  define vvec3_at1(x, y, z) x[(y * 3 + z) / 4][((y * 3 + z) % 4)]
 #  define vvec3_at(x, y) vec3(vvec3_at1(x, y, 0), vvec3_at1(x, y, 1), vvec3_at1(x, y, 2))
 #else
 #  define vfloat_def(x, y) float x[y]
