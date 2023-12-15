@@ -288,7 +288,7 @@ TMXTilesetInfo* FastTMXTiledMap::getTilesetInfo(std::string_view tsxNameString)
     auto tileSets = _mapInfo->getTilesets();
     for (auto tileSet : tileSets)
     {
-        if (tileSet->_name.compare(tsxNameString) == 0)
+        if (tileSet->_name == tsxNameString)
         {
             return tileSet;
         }
