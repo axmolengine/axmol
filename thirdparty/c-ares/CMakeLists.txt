@@ -3,7 +3,7 @@ set(target_name c-ares)
 
 project(${target_name})
 
-_1kfetch_dist(curl "${PARENT_DIRECTORY}/_deps")
+_1kfetch_dist(cares "${PARENT_DIRECTORY}/_deps")
 
 if(WINDOWS)
   add_library(${target_name} SHARED IMPORTED GLOBAL)
@@ -12,7 +12,7 @@ else()
 endif()
 
 set_target_properties(${target_name} PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include/"
+  INTERFACE_INCLUDE_DIRECTORIES "${cares_INC_DIR}"
   INTERFACE_COMPILE_DEFINITIONS CARES_STATICLIB=1
 )
 
@@ -24,12 +24,12 @@ endif()
 
 if(WINDOWS)
   set_target_properties(${target_name} PROPERTIES
-    IMPORTED_IMPLIB "${platform_spec_path}/cares.lib"
+    IMPORTED_IMPLIB "${cares_LIB_DIR}/cares.lib"
   )
 else()
   set_target_properties(${target_name} PROPERTIES
-    IMPORTED_LOCATION "${platform_spec_path}/libcares.a"
+    IMPORTED_LOCATION "${cares_LIB_DIR}/libcares.a"
   )
 endif()
 
-set(CARES_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/include" CACHE STRING "c-ares Include Directory" )
+set(CARES_INCLUDE_DIR "${cares_INC_DIR}" CACHE STRING "c-ares Include Directory" )
