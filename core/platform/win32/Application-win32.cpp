@@ -33,6 +33,8 @@ THE SOFTWARE.
 #include <timeapi.h>
 
 #include "yasio/string_view.hpp"
+#include "yasio/wtimer_hres.hpp"
+
 #include "ntcvt/ntcvt.hpp"
 /**
 @brief    This function change the PVRFrame show/hide setting in register.
@@ -66,14 +68,7 @@ int Application::run()
     ///////////////////////////////////////////////////////////////////////////
     /////////////// changing timer resolution
     ///////////////////////////////////////////////////////////////////////////
-    UINT TARGET_RESOLUTION = 1;  // 1 millisecond target resolution
-    TIMECAPS tc;
-    UINT wTimerRes = 0;
-    if (TIMERR_NOERROR == timeGetDevCaps(&tc, sizeof(TIMECAPS)))
-    {
-        wTimerRes = std::min(std::max(tc.wPeriodMin, TARGET_RESOLUTION), tc.wPeriodMax);
-        timeBeginPeriod(wTimerRes);
-    }
+    yasio::wtimer_hres __timer_hres_main;  // 1 millisecond target resolution
 
     // Main message loop:
     LARGE_INTEGER nLast;
@@ -133,13 +128,6 @@ int Application::run()
     }
     glView->release();
 
-    ///////////////////////////////////////////////////////////////////////////
-    /////////////// restoring timer resolution
-    ///////////////////////////////////////////////////////////////////////////
-    if (wTimerRes != 0)
-    {
-        timeEndPeriod(wTimerRes);
-    }
     return 0;
 }
 
