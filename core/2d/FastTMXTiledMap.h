@@ -209,6 +209,12 @@ public:
 
     std::string_view getResourceFile() const { return _tmxFile; }
 
+    TMXMapInfo* getMapInfo() const { return _mapInfo; }
+
+    TMXTilesetInfo* getTilesetInfo(std::string_view tsxNameString);
+
+    Vector<ax::FastTMXLayer*> getLayers() const;
+
     /**
      * @js ctor
      */
@@ -247,6 +253,8 @@ protected:
     int _layerCount = 0;
 
     std::string _tmxFile;
+
+    TMXMapInfo* _mapInfo;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(FastTMXTiledMap);
