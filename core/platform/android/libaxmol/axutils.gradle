@@ -99,8 +99,11 @@ class axutils {
     @SuppressWarnings('unused')
     static String[] findNativeBuildTools(project, cmakeVer = "3.22.1+", ndkVer = "23.2.8568313") {
         // cmakeVer should overwrite by command line
-        if(project.properties.PROP_CMAKE_VERSION != null)
-            cmakeVer = project.properties.PROP_CMAKE_VERSION
+        if (project.properties.__1K_CMAKE_VERSION != null)
+            cmakeVer = project.properties.__1K_CMAKE_VERSION
+
+        if (project.properties.__ARCHS != null)
+            project.properties.PROP_APP_ABI = project.properties.__ARCHS
 
         // Detecting sdkRoot
         def sdkRoot = null
@@ -265,8 +268,8 @@ class axutils {
     private static void parseCMakeOptions(properties, rets) {
         def options = []
         for(item in properties) {
-            if (item.key.startsWith('AX_')) {
-                options.add("\"-D${item.key}=${item.value}\"")
+            if (item.key.startsWith('_1K_')) {
+                options.add("\"-D${item.key.substring(4)}=${item.value}\"")
             }
         }
         rets[3] = options

@@ -3608,7 +3608,8 @@ static int toaxlua_FileUtils_getDataFromFile(lua_State* tolua_S)
             if (!data.isNull())
                 lua_pushlstring(tolua_S, reinterpret_cast<const char*>(data.getBytes()),
                                 static_cast<size_t>(data.getSize()));
-
+            else
+                lua_pushnil(tolua_S);
             return 1;
         }
     }
