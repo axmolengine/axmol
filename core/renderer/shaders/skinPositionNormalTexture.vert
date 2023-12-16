@@ -38,11 +38,11 @@ layout(location = NORMAL) out vec3 v_normal;
 
 layout(std140) uniform vs_ub {
 #ifdef USE_NORMAL_MAPPING
-    vec3 u_DirLightSourceDirection[MAX_DIRECTIONAL_LIGHT_NUM];
-    vec3 u_SpotLightSourceDirection[MAX_SPOT_LIGHT_NUM];
+    vvec3_def(u_DirLightSourceDirection, MAX_DIRECTIONAL_LIGHT_NUM);
+    vvec3_def(u_SpotLightSourceDirection, MAX_SPOT_LIGHT_NUM);
 #endif
-    vec3 u_PointLightSourcePosition[MAX_POINT_LIGHT_NUM];
-    vec3 u_SpotLightSourcePosition[MAX_SPOT_LIGHT_NUM];
+    vvec3_def(u_PointLightSourcePosition, MAX_POINT_LIGHT_NUM);
+    vvec3_def(u_SpotLightSourcePosition, MAX_SPOT_LIGHT_NUM);
     vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];
     mat4 u_MVMatrix;
     mat3 u_NormalMatrix;
@@ -124,14 +124,15 @@ void main()
 
     for (int i = 0; i < MAX_DIRECTIONAL_LIGHT_NUM; ++i)
     {
-        v_dirLightDirection[i].x = dot(eTangent, u_DirLightSourceDirection[i]);
-        v_dirLightDirection[i].y = dot(eBinormal, u_DirLightSourceDirection[i]);
-        v_dirLightDirection[i].z = dot(eNormal, u_DirLightSourceDirection[i]);
+        vec3 pointD = vvec3_at(u_DirLightSourceDirection, i);
+        v_dirLightDirection[i].x = dot(eTangent, pointD);
+        v_dirLightDirection[i].y = dot(eBinormal, pointD);
+        v_dirLightDirection[i].z = dot(eNormal, pointD);
     }
 
     for (int i = 0; i < MAX_POINT_LIGHT_NUM; ++i)
     {
-        vec3 pointLightDir = u_PointLightSourcePosition[i].xyz - ePosition.xyz;
+        vec3 pointLightDir = vvec3_at(u_PointLightSourcePosition, i) - ePosition.xyz;
         v_vertexToPointLightDirection[i].x = dot(eTangent, pointLightDir);
         v_vertexToPointLightDirection[i].y = dot(eBinormal, pointLightDir);
         v_vertexToPointLightDirection[i].z = dot(eNormal, pointLightDir);
@@ -139,24 +140,25 @@ void main()
 
     for (int i = 0; i < MAX_SPOT_LIGHT_NUM; ++i)
     {
-        vec3 spotLightDir = u_SpotLightSourcePosition[i] - ePosition.xyz;
+        vec3 spotLightDir = vvec3_at(u_SpotLightSourcePosition, i) - ePosition.xyz;
         v_vertexToSpotLightDirection[i].x = dot(eTangent, spotLightDir);
         v_vertexToSpotLightDirection[i].y = dot(eBinormal, spotLightDir);
         v_vertexToSpotLightDirection[i].z = dot(eNormal, spotLightDir);
 
-        v_spotLightDirection[i].x = dot(eTangent, u_SpotLightSourceDirection[i]);
-        v_spotLightDirection[i].y = dot(eBinormal, u_SpotLightSourceDirection[i]);
-        v_spotLightDirection[i].z = dot(eNormal, u_SpotLightSourceDirection[i]);
+        vec3 pointP = vvec3_at(u_SpotLightSourceDirection, i);
+        v_spotLightDirection[i].x = dot(eTangent, pointP);
+        v_spotLightDirection[i].y = dot(eBinormal, pointP);
+        v_spotLightDirection[i].z = dot(eNormal, pointP);
     }
 #else
     for (int i = 0; i < MAX_POINT_LIGHT_NUM; ++i)
     {
-        v_vertexToPointLightDirection[i] = u_PointLightSourcePosition[i].xyz- ePosition.xyz;
+        v_vertexToPointLightDirection[i] = vvec3_at(u_PointLightSourcePosition, i) - ePosition.xyz;
     }
 
     for (int i = 0; i < MAX_SPOT_LIGHT_NUM; ++i)
     {
-        v_vertexToSpotLightDirection[i] = u_SpotLightSourcePosition[i] - ePosition.xyz;
+        v_vertexToSpotLightDirection[i] = vvec3_at(u_SpotLightSourcePosition, i) - ePosition.xyz;
     }
 
     v_normal = u_NormalMatrix * normal;

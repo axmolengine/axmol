@@ -159,6 +159,9 @@ mkdirs "$site_dist/assets/css"
 Copy-Item './style.css'  "$site_dist/assets/css/style.css"
 Copy-Item './index.html' "$site_dist/index.html"
 
+# copy logo used by site home page
+Copy-Item './logo.png' "$site_dist/logo.png"
+
 # build manuals
 foreach($item in $verMap.GetEnumerator()) {
     $ver = $item.Key

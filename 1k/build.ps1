@@ -2,21 +2,21 @@
 # // A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 # // client application.
 # //////////////////////////////////////////////////////////////////////////////////////////
-# 
+#
 # The MIT License (MIT)
-# 
+#
 # Copyright (c) 2012-2023 HALX99
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,12 +24,12 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-# 
-# 
+#
+#
 # The 1k/build.ps1, will be core script of project https://github.com/axmolengine/1k
 # options
 #  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos,wasm
-#      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
+#      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first,
 #      if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
 #  -a: build arch: x86,x64,armv7,arm64
 #  -d: the build workspace, i.e project root which contains root CMakeLists.txt, empty use script run working directory aka cwd
@@ -41,7 +41,7 @@
 #  -xb: cross build tool build options: i.e. -xb '--config','Release'
 #  -prefix: the install location for missing tools in system, default is "$HOME/build1k"
 #  -sdk: specific windows sdk version, i.e. -sdk '10.0.19041.0', leave empty, cmake will auto choose latest avaiable
-#  -setupOnly: this param present, only execute step: setup 
+#  -setupOnly: this param present, only execute step: setup
 #  -configOnly: if this param present, will skip build step
 # support matrix
 #   | OS       |   Build targets      |  C/C++ compiler toolchain | Cross Build tool |
@@ -49,6 +49,11 @@
 #   | Windows  |  win32,winuwp        | msvc,clang,gcc(mingw)     | cmake            |
 #   | Linux    | linux,android        | gcc,ndk                   | cmake,gradle     |
 #   | macOS    | osx,ios,tvos,watchos | xcode                     | cmake            |
+# android gradle, there a two props:
+#   - -P__1K_CMAKE_VERSION
+#   - -P__1k_ARCHS
+# startsWith('__1K') indicate 1k gradle props
+# startsWith('_1K') indicate it's a cmake config option
 #
 param(
     [switch]$configOnly,
@@ -61,7 +66,7 @@ $myRoot = $PSScriptRoot
 # ----------------- utils functions -----------------
 
 $HOST_WIN = 0 # targets: win,uwp,android
-$HOST_LINUX = 1 # targets: linux,android 
+$HOST_LINUX = 1 # targets: linux,android
 $HOST_MAC = 2 # targets: android,ios,osx(macos),tvos,watchos
 
 # 0: windows, 1: linux, 2: macos
@@ -143,7 +148,7 @@ class build1k {
                 $parentProcess = Get-Process -Id $instance.ParentProcessID -ErrorAction SilentlyContinue
                 if (!$parentProcess) { break }
             }
-            
+
             $executed_from_explorer = ($parentProcess.ProcessName -like "explorer")
         } while ($false)
         if ($executed_from_explorer) {
@@ -160,7 +165,7 @@ class build1k {
         return $Global:ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($path)
     }
 
-    [string] hash($content) {  
+    [string] hash($content) {
         $stringAsStream = [System.IO.MemoryStream]::new()
         $writer = [System.IO.StreamWriter]::new($stringAsStream)
         $writer.write($content)
@@ -198,22 +203,22 @@ $channels = @{}
 $cmdlinetools_rev = '10406996'
 
 $options = @{
-    p      = $null; 
-    a      = $null; 
-    d      = $null; 
-    cc     = $null; 
-    xt     = 'cmake'; 
-    prefix = $null; 
-    xc     = @(); 
-    xb     = @(); 
-    sdk    = $null; 
+    p      = $null;
+    a      = $null;
+    d      = $null;
+    cc     = $null;
+    xt     = 'cmake';
+    prefix = $null;
+    xc     = @();
+    xb     = @();
+    sdk    = $null;
     dll    = $false
 }
 
 $optName = $null
 foreach ($arg in $args) {
     if (!$optName) {
-        if ($arg.StartsWith('-')) { 
+        if ($arg.StartsWith('-')) {
             $optName = $arg.SubString(1)
         }
     }
@@ -276,10 +281,10 @@ $HOST_OS_NAME = $('windows', 'linux', 'macos').Get($HOST_OS)
 
 # determine toolchain
 $TOOLCHAIN = $options.cc
-$toolchains = @{ 
+$toolchains = @{
     'win32'   = 'msvc';
     'winuwp'  = 'msvc';
-    'linux'   = 'gcc'; 
+    'linux'   = 'gcc';
     'android' = 'ndk';
     'osx'     = 'xcode';
     'ios'     = 'xcode';
@@ -354,7 +359,7 @@ function validate_cmd_fs($source, $root) {
         if ($source -ne $root) {
             $b1k.println("info: the cmd follow symlink $root ==> $source")
         }
-        return $true 
+        return $true
     }
     $target = $fileinfo.Target
     if (![IO.Path]::IsPathRooted($target)) {
@@ -367,7 +372,7 @@ function validate_cmd_fs($source, $root) {
     }
     if ($target -eq $root) {
         $b1k.println("warning: detected cycle symlink for cmd $root")
-        return $true 
+        return $true
     }
     return (validate_cmd_fs $target $root)
 }
@@ -584,7 +589,7 @@ function setup_ninja() {
         $ninja_pkg = "$external_prefix/ninja-$suffix.zip"
         $b1k.rmdirs($ninja_bin)
         $b1k.del($ninja_pkg)
-        
+
         download_and_expand "https://github.com/ninja-build/ninja/releases/download/v$ninja_ver/ninja-$suffix.zip" $ninja_pkg "$external_prefix/ninja/"
     }
     if ($env:PATH.IndexOf($ninja_bin) -eq -1) {
@@ -614,7 +619,7 @@ function setup_cmake($skipOS = $false) {
         if ($cmake_dev_hash) {
             $cmake_ver = "$cmake_ver-$cmake_dev_hash"
         }
-        
+
         if ($HOST_OS -ne $HOST_MAC) {
             $cmake_pkg_name = "cmake-$cmake_ver-$HOST_OS_NAME-x86_64"
         }
@@ -639,7 +644,7 @@ function setup_cmake($skipOS = $false) {
             download_and_expand "$cmake_url" "$cmake_pkg_path" $external_prefix/
         }
 
-        if ($b1k.isdir($cmake_dir)) { 
+        if ($b1k.isdir($cmake_dir)) {
             $cmake_root0 = $cmake_dir
             if ($IsMacOS) {
                 $cmake_app_contents = Join-Path $cmake_dir 'CMake.app/Contents'
@@ -663,7 +668,7 @@ function setup_cmake($skipOS = $false) {
         if (!$cmake_prog) {
             throw "Install cmake $cmake_ver fail"
         }
-	
+
         $b1k.println("Using cmake: $cmake_prog, version: $cmake_ver")
     }
 
@@ -724,14 +729,14 @@ function setup_jdk() {
     $jdk_root = Join-Path $external_prefix "jdk"
     $java_home = if (!$IsMacOS) { $jdk_root } else { Join-Path $jdk_root 'Contents/Home' }
     $jdk_bin = Join-Path $java_home 'bin'
-    
+
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac' -path $jdk_bin -silent $true
     if (!$javac_prog) {
         $b1k.rmdirs($jdk_root)
 
         # refer to https://learn.microsoft.com/en-us/java/openjdk/download
         download_and_expand "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix" "$external_prefix/microsoft-jdk-$jdk_ver-$suffix" "$external_prefix/"
-        
+
         # move to plain folder name
         $folderName = (Get-ChildItem -Path $external_prefix -Filter "jdk-$jdk_ver+*").Name
         if ($folderName) {
@@ -765,8 +770,8 @@ function setup_llvm() {
         if (!$clang_prog) {
             # ensure 7z_prog
             $7z_cmd_info = Get-Command '7z' -ErrorAction SilentlyContinue
-            if ($7z_cmd_info) { 
-                $7z_prog = $7z_cmd_info.Path 
+            if ($7z_cmd_info) {
+                $7z_prog = $7z_cmd_info.Path
             }
             else {
                 $7z_prog = Join-Path $external_prefix '7z2301-x64\7z.exe'
@@ -819,7 +824,7 @@ function setup_android_sdk() {
     $sdk_dirs = @("$env:ANDROID_HOME", "$env:ANDROID_SDK_ROOT", $my_sdk_root)
 
     $ndk_minor_base = [int][char]'a'
-    
+
     # looking up require ndk installed in exists sdk roots
     $sdk_root = $null
     foreach ($sdk_dir in $sdk_dirs) {
@@ -970,7 +975,7 @@ function setup_emsdk() {
     }
 }
 
-# preprocess methods: 
+# preprocess methods:
 #   <param>-inputOptions</param> [CMAKE_OPTIONS]
 function preprocess_win([string[]]$inputOptions) {
     $outputOptions = $inputOptions
@@ -1012,7 +1017,7 @@ function preprocess_win([string[]]$inputOptions) {
                 $Script:cmake_generator += ' Win64'
             }
         }
-        
+
         # platform
         if ($TARGET_OS -eq "winuwp") {
             '-DCMAKE_SYSTEM_NAME=WindowsStore', '-DCMAKE_SYSTEM_VERSION=10.0'
@@ -1056,11 +1061,11 @@ function preprocess_andorid([string[]]$inputOptions) {
             $arch = $archlist[$i]
             $archlist[$i] = $t_archs[$arch]
         }
-    
+
         $archs = $archlist -join ':' # TODO: modify gradle, split by ';'
 
-        $outputOptions += "-PPROP_CMAKE_VERSION=$($manifest['cmake'])"
-        $outputOptions += "-PPROP_APP_ABI=$archs"
+        $outputOptions += "-P__1K_CMAKE_VERSION=$($manifest['cmake'])"
+        $outputOptions += "-P__1K_ARCHS=$archs"
         $outputOptions += '--parallel', '--info'
     }
     else {
@@ -1079,7 +1084,7 @@ function preprocess_andorid([string[]]$inputOptions) {
         # by default, we want find host program only when cross-compiling
         $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER'
     }
-    
+
     return $outputOptions
 }
 
@@ -1160,10 +1165,10 @@ function validHostAndToolchain() {
     }
 }
 
-$proprocessTable = @{ 
+$proprocessTable = @{
     'win32'   = ${function:preprocess_win};
     'winuwp'  = ${function:preprocess_win};
-    'linux'   = ${function:preprocess_linux}; 
+    'linux'   = ${function:preprocess_linux};
     'android' = ${function:preprocess_andorid};
     'osx'     = ${function:preprocess_osx};
     'ios'     = ${function:preprocess_ios};
@@ -1277,18 +1282,18 @@ if (!$setupOnly) {
                 $cmake_generator = if (!$IsWin) { 'Unix Makefiles' } else { 'Ninja' }
             }
         }
-    
+
         if ($cmake_generator) {
             $using_ninja = $cmake_generator.StartsWith('Ninja')
 
             if (!$is_wasm) {
                 $CONFIG_ALL_OPTIONS += '-G', $cmake_generator
             }
-        
+
             if ($cmake_generator -eq 'Unix Makefiles' -or $using_ninja) {
                 $CONFIG_ALL_OPTIONS += "-DCMAKE_BUILD_TYPE=$optimize_flag"
             }
-        
+
             if ($using_ninja -and $options.p -eq 'android') {
                 $CONFIG_ALL_OPTIONS += "-DCMAKE_MAKE_PROGRAM=$ninja_prog"
             }
@@ -1336,6 +1341,17 @@ if (!$setupOnly) {
             $INST_DIR = resolve_out_dir $cmake_install_prefix 'install'
             $CONFIG_ALL_OPTIONS += "-DCMAKE_INSTALL_PREFIX=$INST_DIR"
         }
+    } else { # android gradle
+        # replace all cmake config options -DXXX to -P_1K_XXX
+        $xopts = @()
+        foreach($opt in $options.xc) {
+            if($opt.startsWith('-D')) {
+                $xopts += "-P_1K_$($opt.substring(2))"
+            }
+            elseif($opt.startsWith('-P')) {
+                $xopts += $opt
+            } # ignore unknown option type
+        }
     }
 
     # step2. apply additional cross make options
@@ -1343,7 +1359,7 @@ if (!$setupOnly) {
         $b1k.println("Apply additional cross make options: $($xopts), Count={0}" -f $xopts.Count)
         $CONFIG_ALL_OPTIONS += $xopts
     }
-    
+
     $b1k.println("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
 
     if (($TARGET_OS -eq 'android') -and $is_gradlew) {
@@ -1363,10 +1379,10 @@ if (!$setupOnly) {
             & $build_tool tasks
         }
         Set-Location $storedLocation
-    } 
+    }
     else {
         # step3. configure
-       
+
         $workDir = $(Get-Location).Path
 
         $mainDep = Join-Path $workDir 'CMakeLists.txt'

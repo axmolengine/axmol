@@ -110829,6 +110829,150 @@ int lua_ax_base_FastTMXTiledMap_getResourceFile(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_FastTMXTiledMap_getMapInfo(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::FastTMXTiledMap* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.FastTMXTiledMap",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getMapInfo'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXTiledMap_getMapInfo'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getMapInfo();
+        object_to_luaval<ax::TMXMapInfo>(tolua_S, "ax.TMXMapInfo",(ax::TMXMapInfo*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXTiledMap:getMapInfo",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FastTMXTiledMap_getMapInfo'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_FastTMXTiledMap_getTilesetInfo(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::FastTMXTiledMap* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.FastTMXTiledMap",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getTilesetInfo'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FastTMXTiledMap:getTilesetInfo");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXTiledMap_getTilesetInfo'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getTilesetInfo(arg0);
+        object_to_luaval<ax::TMXTilesetInfo>(tolua_S, "ax.TMXTilesetInfo",(ax::TMXTilesetInfo*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXTiledMap:getTilesetInfo",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FastTMXTiledMap_getTilesetInfo'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_FastTMXTiledMap_getLayers(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::FastTMXTiledMap* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.FastTMXTiledMap",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getLayers'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXTiledMap_getLayers'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getLayers();
+        ccvector_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXTiledMap:getLayers",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FastTMXTiledMap_getLayers'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_FastTMXTiledMap_initWithTMXFile(lua_State* tolua_S)
 {
     int argc = 0;
@@ -111073,6 +111217,9 @@ int lua_register_ax_base_FastTMXTiledMap(lua_State* tolua_S)
         tolua_function(tolua_S,"setTileAnimEnabled",lua_ax_base_FastTMXTiledMap_setTileAnimEnabled);
         tolua_function(tolua_S,"getLayerCount",lua_ax_base_FastTMXTiledMap_getLayerCount);
         tolua_function(tolua_S,"getResourceFile",lua_ax_base_FastTMXTiledMap_getResourceFile);
+        tolua_function(tolua_S,"getMapInfo",lua_ax_base_FastTMXTiledMap_getMapInfo);
+        tolua_function(tolua_S,"getTilesetInfo",lua_ax_base_FastTMXTiledMap_getTilesetInfo);
+        tolua_function(tolua_S,"getLayers",lua_ax_base_FastTMXTiledMap_getLayers);
         tolua_function(tolua_S,"initWithTMXFile",lua_ax_base_FastTMXTiledMap_initWithTMXFile);
         tolua_function(tolua_S,"initWithXML",lua_ax_base_FastTMXTiledMap_initWithXML);
         tolua_function(tolua_S,"create", lua_ax_base_FastTMXTiledMap_create);
