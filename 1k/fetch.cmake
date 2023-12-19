@@ -6,10 +6,20 @@
 # 
 
 ### 1kdist url
-file(READ "${_1kfetch_manifest}" _manifest_content)
-string(JSON _1kdist_ver GET "${_manifest_content}" 1kdist)
-set(_1kdist_ver v${_1kdist_ver})
-set(_1kdist_base_url "https://github.com/axmolengine/1k/releases/download/${_1kdist_ver}" CACHE STRING "" FORCE)
+find_program(PWSH_COMMAND NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH REQUIRED)
+
+function(_1kfetch_init)
+    execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetchurl.ps1
+        -name "1kdist"
+        -cfg ${_1kfetch_manifest}
+        OUTPUT_VARIABLE _1kdist_url
+    )
+    string(REPLACE "#" ";" _1kdist_url ${_1kdist_url})
+    list(GET _1kdist_url 0 _1kdist_base_url)
+    list(GET _1kdist_url 1 _1kdist_ver)
+    set(_1kdist_base_url "${_1kdist_base_url}/v${_1kdist_ver}" PARENT_SCOPE)
+    set(_1kdist_ver ${_1kdist_ver} PARENT_SCOPE)
+endfunction()
 
 # fetch prebuilt from 1kdist
 # param package_name
@@ -17,7 +27,7 @@ function(_1kfetch_dist package_name)
     set(_prebuilt_root ${CMAKE_CURRENT_LIST_DIR}/_d)
     if(NOT IS_DIRECTORY ${_prebuilt_root})
         set (package_url "${_1kdist_base_url}/${package_name}.zip")
-        set (package_store "${_1kfetch_cache_dir}/${package_name}.${_1kdist_ver}.zip")
+        set (package_store "${_1kfetch_cache_dir}/1kdist/v${_1kdist_ver}/${package_name}.zip")
         message(AUTHOR_WARNING "Downloading ${package_url}")
         if (NOT EXISTS ${package_store})
             file(DOWNLOAD ${package_url} ${package_store} STATUS _status LOG _logs SHOW_PROGRESS)
@@ -41,26 +51,19 @@ function(_1kfetch_dist package_name)
 endfunction()
 
 # params: name, url
-function(_1kfetch name url)
-    if(NOT url) 
-        message(FATAL_ERROR "Missing url for package ${name}")
-    endif()
+function(_1kfetch name)
     set(_pkg_store "${_1kfetch_cache_dir}/${name}")
-    find_program(PWSH_COMMAND NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH REQUIRED)
     execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1 
-        -url "${url}"
         -name "${name}"
         -dest "${_pkg_store}"
         -cfg ${_1kfetch_manifest})
     set(${name}_SOURCE_DIR ${_pkg_store} PARENT_SCOPE)
 endfunction()
 
-function(_1klink source dest)
-    if(UNIX)
-        execute_process(COMMAND "${CMAKE_COMMAND}" -E create_symlink "${source}" "${dest}")
-    else()
-        file(TO_NATIVE_PATH "${dest}" _dstDir)
-        file(TO_NATIVE_PATH "${source}" _srcDir)
-        execute_process(COMMAND cmd.exe /c mklink /J "${_dstDir}" "${_srcDir}")
-    endif()
+function(_1klink src dest)
+    file(TO_NATIVE_PATH "${src}" _srcDir)
+    file(TO_NATIVE_PATH "${dest}" _dstDir)
+    execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fsync.ps1 -s "${_srcDir}" -d "${_dstDir}" -l 1)
 endfunction()
+
+_1kfetch_init()

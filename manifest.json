@@ -1,0 +1,32 @@
+{
+  "versions": {
+    "1kdist": "61",
+    "oboe": "1.8.0",
+    "kcp": "1.7-f2aa30e",
+    "lz4": "1.9.4",
+    "yaml-cpp": "0.8.0",
+    "box2d-optimized": "7ef46c1",
+    "sample-assets": "master"
+  },
+  "mirrors": {
+    "github": {
+      "1kdist": "axmolengine/1k/releases/download",
+      "oboe": "google/oboe.git",
+      "kcp": "skywind3000/kcp.git",
+      "lz4": "lz4/lz4.git",
+      "yaml-cpp": "jbeder/yaml-cpp.git",
+      "box2d-optimized": "mtsamis/box2d-optimized.git",
+      "sample-assets": "axmolengine/axmol-sample-assets.git"
+    },
+    "gitee":
+    {
+      "1kdist": "axmolengine/1k/releases/download",
+      "oboe": "axmolengine/oboe.git",
+      "kcp": "axmolengine/kcp.git",
+      "lz4": "axmolengine/lz4.git",
+      "yaml-cpp": "mirrors/yaml-cpp.git",
+      "box2d-optimized": "axmolengine/box2d-optimized.git",
+      "sample-assets": "axmolengine/axmol-sample-assets.git"
+    }    
+  }
+}

@@ -202,8 +202,6 @@ elseif(WINDOWS AND (NOT WINRT))
 endif()
 
 if ((NOT APPLE) AND (NOT WINRT))
-    ax_sync_target_res(${APP_NAME} LINK_TO "${CMAKE_CURRENT_SOURCE_DIR}/Content/res" SYNC_TARGET_ID "1" FOLDERS "${_AX_ROOT}/tests/cpp-tests/Content" SYM_LINK 1)
-
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
     ax_sync_lua_scripts(${APP_NAME} ${engine_script_folder} "${content_folder}/src/axmol")
     ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)

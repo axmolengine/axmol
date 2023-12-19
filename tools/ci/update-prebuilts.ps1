@@ -69,12 +69,12 @@ if ($newVerList.GetType() -eq [string]) {
     throw "Download version manifest file verlist.yml fail"
 }
 
-$manifest_old_hash = Get-FileHash -Path './thirdparty/manifest.json' -Algorithm MD5
+$manifest_old_hash = Get-FileHash -Path './manifest.json' -Algorithm MD5
 $readme_old_hash = Get-FileHash -Path './thirdparty/README.md.in' -Algorithm MD5
 
-$myVerList = ConvertFrom-Json (Get-Content './thirdparty/manifest.json' -raw)
+$myVerList = ConvertFrom-Json (Get-Content './manifest.json' -raw)
 
-println "Updating thirdparty/manifest.json, thirdparty/README.md ..."
+println "Updating manifest.json, thirdparty/README.md ..."
 
 # update README.md
 $content = $(Get-Content -Path ./thirdparty/README.md.in -raw)
@@ -83,21 +83,16 @@ foreach ($item in $newVerList.GetEnumerator() )
     $key = ([Regex]::Replace($item.Name, '-', '_')).ToUpper()
     $key = "${key}_VERSION"
     $content = $content -replace "\$\{$key\}",$item.Value
-
-    $curVer = $myVerList.PSObject.Properties[$item.Name]
-    if ($curVer -ne $item.Value) {
-        $myVerList.PSObject.Properties[$item.Name].Value = $curVer.Value
-    }
 }
 
 Set-Content -Path ./thirdparty/README.md -Value "$content"
 
-$myVerList.PSObject.Properties['1kdist'].Value = $VER.TrimStart('v')
+$myVerList.versions.PSObject.Properties['1kdist'].Value = $VER.TrimStart('v')
 $content = (ConvertTo-Json $myVerList).Replace("`r`n", "`n")
 $content += "`n"
-Set-Content -Path './thirdparty/manifest.json' -Value "$content" -NoNewline
+Set-Content -Path './manifest.json' -Value "$content" -NoNewline
 
-$manifest_new_hash = Get-FileHash -Path './thirdparty/manifest.json' -Algorithm MD5
+$manifest_new_hash = Get-FileHash -Path './manifest.json' -Algorithm MD5
 $readme_new_hash = Get-FileHash -Path './thirdparty/README.md.in' -Algorithm MD5
 
 $modified = ($manifest_new_hash.Hash -ne $manifest_old_hash.Hash) -or ($readme_new_hash.Hash -ne $readme_old_hash.Hash)
