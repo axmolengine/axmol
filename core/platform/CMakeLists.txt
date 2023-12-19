@@ -35,7 +35,6 @@ elseif(WINDOWS)
 
     if (NOT WINRT)
         set(_AX_PLATFORM_SPECIFIC_HEADER
-            platform/win32/compat/stdint.h
             platform/win32/Application-win32.h
             platform/win32/GL-win32.h
             platform/win32/FileUtils-win32.h
