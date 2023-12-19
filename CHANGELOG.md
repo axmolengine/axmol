@@ -18,7 +18,7 @@
   - Add simple cmake pkg manager aka `1k/fetch.cmake` to download all prebuilts,optionals,sample-assets at cmake config step
   - pkg config is in `$AX_ROOT/manifest.json`
   - Download cache dir is `$AX_ROOT/cache`
-  - Also support simple mirror to gitee.com for china region, create a empty file name with `.gitee` in dir `$AX_ROOT/1k/`
+  - Also support simple mirror to gitee.com for china region via create a empty file name with `.gitee` in dir `$AX_ROOT/1k/`
 - Add extension: JSONDefault by @sarooptech
 - Add virtual file system support to WICImageLoader by @rh101
 - Add support for Richtext vertical alignment by @rh101
