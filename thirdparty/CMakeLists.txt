@@ -158,8 +158,8 @@ endif()
 
 add_library(thirdparty INTERFACE)
 
-set(_1kfetch_cache_dir "${CMAKE_CURRENT_LIST_DIR}/_deps" CACHE STRING "" FORCE)
-set(_1kfetch_manifest "${CMAKE_CURRENT_LIST_DIR}/manifest.json" CACHE STRING "" FORCE)
+set(_1kfetch_cache_dir "${_AX_ROOT}/cache" CACHE STRING "" FORCE)
+set(_1kfetch_manifest "${_AX_ROOT}/manifest.json" CACHE STRING "" FORCE)
 
 # fetch prebuilts of 1k_dist and git sources
 include(${_AX_ROOT}/1k/fetch.cmake)
@@ -331,7 +331,7 @@ if(AX_WITH_LZ4)
     else()
         set(lz4_tgt lz4_shared)
     endif()
-    _1kfetch(lz4 "https://github.com/lz4/lz4.git")
+    _1kfetch(lz4)
     ax_add_3rd(${lz4_SOURCE_DIR}/build/cmake TARGETS ${lz4_tgt} OPTIONS
       "LZ4_BUILD_CLI OFF"
       "LZ4_BUILD_LEGACY_LZ4C OFF"
@@ -378,7 +378,7 @@ if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
     set(alsoft_opts "ALSOFT_DLOPEN OFF" "ALSOFT_UTILS OFF" "ALSOFT_EXAMPLES OFF" "ALSOFT_INSTALL OFF")
     if (ANDROID)
         if(AX_WITH_OBOE)
-            _1kfetch(oboe "https://github.com/google/oboe.git")
+            _1kfetch(oboe)
             set(ALSOFT_BACKEND_OPENSL OFF CACHE BOOL "Enable OpenSL backend" FORCE)
             set(OBOE_SOURCE "${oboe_SOURCE_DIR}" CACHE STRING "Source directory for Oboe." FORCE)
         endif()
@@ -440,7 +440,7 @@ endif()
 
 # yaml
 if(AX_WITH_YAML_CPP)
-    _1kfetch(yaml-cpp "https://github.com/jbeder/yaml-cpp.git")
+    _1kfetch(yaml-cpp)
     ax_add_3rd(${yaml-cpp_SOURCE_DIR} NO_LINK
       TARGETS yaml-cpp
       OPTIONS
@@ -455,7 +455,7 @@ endif()
 # kcp
 if(AX_WITH_KCP)
     set(BUILD_TESTING OFF)
-    _1kfetch(kcp "https://github.com/skywind3000/kcp.git")
+    _1kfetch(kcp)
     ax_add_3rd(${kcp_SOURCE_DIR} TARGETS kcp)
 endif()
 

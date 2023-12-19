@@ -224,3 +224,6 @@ tests/cpp-tests/Content
 tests/fairygui-tests/Content
 tests/live2d-tests/Content
 *.patch
+
+cache
+.gitee

@@ -58,12 +58,11 @@ if(AX_BUILD_TESTS)
     message(STATUS "CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
 
     # download optional test assets
-    if (NOT IS_DIRECTORY "${_AX_ROOT}/tests/cpp-tests/Content")
-        _1kfetch(sample-assets "https://github.com/axmolengine/axmol-sample-assets.git")
-        _1klink("${sample-assets_SOURCE_DIR}/cpp-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/tests/cpp-tests/Content")
-        _1klink("${sample-assets_SOURCE_DIR}/fairygui-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/tests/fairygui-tests/Content")
-        _1klink("${sample-assets_SOURCE_DIR}/live2d-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/tests/live2d-tests/Content")
-    endif()
+    _1kfetch(sample-assets)
+    _1klink("${sample-assets_SOURCE_DIR}/cpp-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/tests/cpp-tests/Content")
+    _1klink("${sample-assets_SOURCE_DIR}/fairygui-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/tests/fairygui-tests/Content")
+    _1klink("${sample-assets_SOURCE_DIR}/live2d-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/tests/live2d-tests/Content")
+    _1klink("${sample-assets_SOURCE_DIR}/cpp-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/tests/lua-tests/Content/res")
 
     macro(add_test_target target_name dir)
         add_subdirectory(${dir} ${CMAKE_BINARY_DIR}/tests/${target_name})
