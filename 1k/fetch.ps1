@@ -1,18 +1,26 @@
 param(
-    $url,
     $name,
     $dest,
     $cfg
 )
 
-if (!$url -or !$name -or !$dest) {
+if (!$name -or !$dest) {
     throw 'fetch.ps1: missing parameters'
 }
 
-$version_map = ConvertFrom-Json (Get-Content $cfg -raw)
+$mirror = if (!(Test-Path (Join-Path $PSScriptRoot '.gitee') -PathType Leaf)) {'github'} else {'gitee'}
+$url_base = @{'github' = 'https://github.com/'; 'gitee' = 'https://gitee.com/' }[$mirror]
 
+$manifest_map = ConvertFrom-Json (Get-Content $cfg -raw)
+$version_map = $manifest_map.versions
 $pkg_ver = $version_map.PSObject.Properties[$name].Value
 if ($pkg_ver) {
+    $url_path = $manifest_map.mirrors.PSObject.Properties[$mirror].Value.PSObject.Properties[$name].Value
+    if (!$url_path) {
+        throw "fetch.ps1 missing mirror config for package: '$name'"
+    }
+
+    $url = "$url_base/$url_path"
     if (Test-Path $dest -PathType Container) {
         if (!(Test-Path $(Join-Path $dest '.git') -PathType Container)) {
             Remove-Item $dest -Recurse -Force

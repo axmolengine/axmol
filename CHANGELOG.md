@@ -1,4 +1,123 @@
-axmol-2.0.0 Sep.9 2023
+# axmol-2.1.0 ?? 2023
+
+### Significant changes relative to 2.0.0:
+
+- Migrate Windows UWP from C++/CX to [cppwinrt](https://github.com/microsoft/cppwinrt) for c++20 codebase
+- Refactor Target Platfroms Enums
+- Update AGP to 8.x Android Studio 2022.3.1+
+- Add support enable TTF SDF rendering globally
+- Add extension: SDFGen to generate prebake font atlas
+- Add API: `FontAtlasCache::preloadFontAtlas` to support label SDF rendering with prebake atlas
+- Add API `Device::getPixelRatio`
+- Add ImGui android DPI scaling support
+- Add winuwp FPS control support
+- Add API: `compressGZ`, `decompressGZ`
+- Combine `backend::Device` and `backend::DeviceInfo` into `backend::DriverBase`
+- Improve axmol console scripts
+- Rebase main repo, repo size reduce from 1.1GB+ to ~80MB
+  - Add simple cmake pkg manager aka `1k/fetch.cmake` to download all prebuilts,optionals,sample-assets at cmake config step
+  - pkg config is in `$AX_ROOT/manifest.json`
+  - Download cache dir is `$AX_ROOT/cache`
+  - Also support simple mirror to gitee.com for china region via create a empty file name with `.gitee` in dir `$AX_ROOT/1k/`
+- Add extension: JSONDefault by @sarooptech
+- Add virtual file system support to WICImageLoader by @rh101
+- Add support for Richtext vertical alignment by @rh101
+- Update android API to 34
+- Add support for ActionCoroutine like Unity by @lich426
+- Add API: `DrawNode::drawPie` by @aismann
+- Add support for window resized and positioned by @lich426
+- Add extension: Inspector by @iAndyHD3
+
+### BugFixs
+
+- Fix MSL texture order does not follow GLSL binding order
+- Fix GLES3 shader scalar array layout incorrect
+- Fix Android ImGUI coord convertions
+- Fix Lua build on windows
+- Fix `axmol new` not support absolute path
+- Fix some ImGui issues
+  - Fix crash
+  - Fix wasm touch event not handle properly
+  - Fix add/remove render loop problem
+- Fix wasm HelloLua/lua_tests error
+- Fix wasm render system font aliasing problem, caused by incorrect premultiply alpha
+- Fix text rendering layout incorrect due to kernings not multiply content scale factor
+- Fix wasm RandomHelper always return 0 problem
+- Fix label outline not work on metal graphics backend
+- Fix command `axmol build` can't build android on macos
+- Fix cmake may geneate 2 targets for sync axslc folder
+- Fix windows prebuilt cache issue
+- Fix Lua `FileUtils getDataFromFile` may return path of file
+- Fix issue where RichText URL touch listener does not activate on touch by @rh101
+- Fix for missing scripts and resources in lua tests project by @rh101
+- Fix for UWP build issues by @rh101
+- Fix UWP issues in `EditBoxWinRT` by @rh101
+- Fix for TextField keyboard not opening on receiving focus on android by @rh101
+- Fix plist data and version by @paulocoutinhox
+- Fix build cannot correct handle '-' on the project name
+- Fix TMX Camera Culling by @DelinWorks
+- Fix Fix cmake project generation on platforms other than Android by @rh101
+
+### Improvements
+
+- Reduce memory usage when using getFileMD5Hash function by @rh101
+- Improve install-pwsh.sh
+- Apple platforms require cmake-3.28.0
+- Rename `AX_USE_SHARED_PREBUILT` to `BUILD_SHARED_LIBS` in AXLinkHelper.cmake
+- Rename GLFW view name to `axmol2`
+- Remove Apple Controller deprecated .gamePad check branch
+- Remove dep: libzip-dev for linux
+- Auto setup llvm for win32 target platform
+- Optimize Label memory size, reduce 40 bytes
+- Support adding custom properties to the inspector for derived types by @rh101
+- Use std containers instead uthash
+- Imgui and Inspector enhancements by @rh101
+- [Android] Reset the OpenGL state cache if the context is lost by @rh101
+- [Android] Fix corrupted FPS stats font textures on OpenGL context lost by @rh101
+- Update Live2D to work with Axmol 2.x by @rh101
+- [Android] Enable support for restarting application process if OpenGL context is lost by @rh101
+- Make AxmolEditBox invisible by default by @rh101
+- [UWP] Use Package to get app version information by @rh101
+- Improve `class DrawNode` by @aismann
+- [CMake] Use execute_process instead of deprecated exec_program by @rh101
+- Move fmt folder to Thirdparty folder within project by @rh101
+- Remove duplicated libz for ios/tvos
+- Improve info.plist for apple platforms by @paulocoutinhox
+- Improve android build.gradle by @paulocoutinhox
+- Fix large number of generated warnings by @rh101
+- Add useful chipmunk function to `axmol's internal physics engine` by @DelinWorks
+- Replace 'CCAssert' with 'AXASSERT' by @aismann
+- Improve the default templates by @aismann
+- Call Android native renderer while opengl context is still valid by @rh101
+- Make `FileUtils::openFileStream` a const method by @rh101
+- Improve cmake scripts for managing 3rd libs
+- Add `Get TMXTilesetInfo` by name support by @lich426
+
+### Break changes
+
+- Rename glview to correct representative name: `OpenGLView` ==> `GLView` by @paulocoutinhox
+
+### 3rdparties updates
+
+- astcenc: 4.5.0 ==> 4.6.1
+- c-ares: 1.19.1 ==> 1.23.0 (1.24.0 available)
+- clipper2: 1.2.2 ==> 1.3.0
+- curl: 8.2.1 ==> 8.5.0
+- jpeg-turbo: 3.0.0 ==> 3.0.1
+- llhttp: 9.0.1 ==> 9.1.3
+- ntcvt: 1.0.0 ==> 1.0.1
+- oboe: 1.7.0 ==> 1.8.0
+- openssl: 3.0.10 ==> 3.0.12
+- rapidjson: 1.0.0 ==> 1.0.0-b4a6da3
+- simdjson(NEW): 3.6.3
+- webp: 1.3.1 ==> 1.3.2
+- yasio: 4.1.0 ==> 4.3.0
+
+Notes:
+
+- WASM require win8.1+ on windows
+
+## axmol-2.0.0 Sep.9 2023
 
 -  Add *experimental* WebAssembly build support(WebGL 2.0) by [@nowasm](https://github.com/nowasm)
     - List of known issues maybe *help wanted*
@@ -44,7 +163,7 @@ axmol-2.0.0 Sep.9 2023
 - Many other improvements
   
   
-axmol-1.0.1 Sep.8 2023
+## axmol-1.0.1 Sep.8 2023
 
 - [NEW] Add [`install-pwsh.sh`](https://github.com/axmolengine/axmol/blob/dev/install-pwsh.sh) to make installing powershell on `macOS`, `Ubuntu`, `ArchLinux` more easier
 - [NEW] **Axmol console next**, now almost powershell (except luabinding generator required python3)
