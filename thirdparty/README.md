@@ -158,7 +158,7 @@
 
 ## oboe (Adnroid only)
 - [![Upstream](https://img.shields.io/github/v/tag/google/oboe?label=Upstream)](https://github.com/google/oboe)
-- Version: 1.7.0
+- Version: 1.8.0
 - License: Apache-2.0
 
 ## ogg & vorbis
@@ -218,7 +218,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 3.6.2
+- Version: 3.6.3
 - License: Apache-2.0
 
 ## stb (stb_image)
