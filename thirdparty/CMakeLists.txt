@@ -195,10 +195,19 @@ function(ax_add_3rd source_dir)
         set(${OPTION_KEY} "${OPTION_VALUE}" CACHE BOOL "" FORCE)
     endforeach()
 
+    set(binary_dir "")
+    if(IS_ABSOLUTE ${source_dir})
+        string(LENGTH "${_AX_ROOT}/cache/" _offset)
+        string(LENGTH ${source_dir} _len)
+        math(EXPR _len "${_len} - ${_offset}" OUTPUT_FORMAT DECIMAL)
+        string(SUBSTRING ${source_dir} ${_offset} ${_len} _path)
+        set(binary_dir "${ENGINE_BINARY_PATH}/thirdparty/${_path}")
+    endif()
+
     if (opt_EXCLUDE_FROM_ALL)
-        add_subdirectory(${source_dir} EXCLUDE_FROM_ALL)
+        add_subdirectory(${source_dir} ${binary_dir} EXCLUDE_FROM_ALL)
     else()
-        add_subdirectory(${source_dir})
+        add_subdirectory(${source_dir} ${binary_dir})
     endif()
 
     if(NOT opt_TARGETS) # if opt_TARGETS not specified use source_dir as target name
