@@ -72,21 +72,20 @@ $myRoot = $PSScriptRoot
 $workDir = $(Get-Location).Path
 
 # axroot
-$AX_ROOT = $env:AX_ROOT
-if (!$AX_ROOT -and (Test-Path "$myRoot/core/axmolver.h.in" -PathType Leaf)) {
+$AX_ROOT = $null
+if (Test-Path "$myRoot/core/axmolver.h.in" -PathType Leaf) {
     $AX_ROOT = $myRoot
     $env:AX_ROOT = $AX_ROOT
+} else {
+    throw "The axmol engine incompleted"
 }
 
-# b1kroot preferred axmol, but b1k(1k,build.ps1) can be copy to any isolated directory to work
-$b1k_root = $AX_ROOT
-if(!$b1k_root) {
-    if(Test-Path "$myRoot/1k/build.ps1" -PathType Leaf) {
-        $b1k_root = $myRoot
-    }
-    else {
-        throw "The 1k/build.ps1 not found"
-    }
+# 1k/build.ps1
+if(Test-Path "$myRoot/1k/build.ps1" -PathType Leaf) {
+    $b1k_root = $myRoot
+}
+else {
+    throw "The 1k/build.ps1 not found"
 }
 
 $source_proj_dir = if($options.d) { $options.d } else { $workDir }
