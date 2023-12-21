@@ -6,15 +6,15 @@ on:
   push:
     branches:
       - dev
+    paths-ignore:
+      - '.github/workflows/publish.yml'
+      - 'tools/ci/make-pkg.ps1'
 
 jobs:
-  build-site:
+  forward-push:
     runs-on: ubuntu-latest
+    if: ${{ github.repository == 'axmolengine/axmol' }}
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    
     - name: Repository Dispatch
       uses: peter-evans/repository-dispatch@v2
       with:

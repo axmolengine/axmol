@@ -22,9 +22,9 @@ $axmolVersion = "$(parse_axver 'MAJOR').$(parse_axver 'MINOR').$(parse_axver 'PA
 
 $git_prog = (Get-Command 'git' -ErrorAction SilentlyContinue).Source
 if ($git_prog) {
-    $branchName = $(git -C $AX_ROOT branch --show-current)
+    $branchName = $(git -C $AX_ROOT branch --show-current 2>$null)
     if ($branchName -eq 'dev') {
-        $commitHash = $(git -C $AX_ROOT rev-parse --short=7 HEAD)
+        $commitHash = $(git -C $AX_ROOT rev-parse --short=7 HEAD 2>$null)
         $axmolVersion += "-$commitHash"
     }
 }

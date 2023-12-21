@@ -250,13 +250,13 @@ ax_add_3rd(fmt EXCLUDE_FROM_ALL TARGETS fmt-header-only)
 # bellow are non header only libs
 
 # cpufeatures
-if(ANDROID)
+if(ANDROID) 
     add_subdirectory(android-specific/cpufeatures)
 endif()
 
 if(NOT EMSCRIPTEN)
     ax_add_3rd(zlib)
-endif(NOT EMSCRIPTEN)
+endif()
 
 # libpng
 ax_add_3rd(png)
@@ -269,7 +269,7 @@ if(AX_WITH_BOX2D)
     else()
         ax_add_3rd(box2d OPTIONS ${box2d_opts})
     endif()
-endif(AX_WITH_BOX2D)
+endif()
 
 if(AX_WITH_CHIPMUNK)
     ax_add_3rd(chipmunk OPTIONS
@@ -285,7 +285,7 @@ if(AX_WITH_CHIPMUNK)
     # !important axmol not use double precision
     target_compile_definitions(chipmunk PUBLIC CP_USE_CGTYPES=0)
     target_compile_definitions(chipmunk PUBLIC CP_USE_DOUBLES=0)
-endif(AX_WITH_CHIPMUNK)
+endif()
 
 ax_add_3rd(freetype OPTIONS
     "FT_WITH_ZLIB ON"
@@ -302,11 +302,11 @@ target_include_directories(thirdparty INTERFACE "freetype/include")
 
 if(AX_WITH_RECAST)
     ax_add_3rd(recast)
-endif(AX_WITH_RECAST)
+endif()
 
 if(AX_WITH_BULLET)
     ax_add_3rd(bullet)
-endif(AX_WITH_BULLET)
+endif()
 
 if(AX_WITH_JPEG AND NOT WINRT AND NOT EMSCRIPTEN)
     ax_add_3rd(jpeg-turbo)
@@ -325,7 +325,7 @@ target_compile_definitions(thirdparty INTERFACE OPENSSL_SUPPRESS_DEPRECATED=1)
 
 if(AX_WITH_WEBP)
     ax_add_3rd(webp)
-endif(AX_WITH_WEBP)
+endif()
 
 ax_add_3rd(pugixml)
 ax_add_3rd(xxhash)
@@ -349,18 +349,18 @@ endif()
 
 if(AX_WITH_CLIPPER2)
     ax_add_3rd(clipper2)
-endif(AX_WITH_CLIPPER2)
+endif()
 
 ax_add_3rd(ConvertUTF)
 
 if(AX_WITH_POLY2TRI)
     ax_add_3rd(poly2tri)
     target_compile_definitions(poly2tri PUBLIC P2T_STATIC_EXPORTS)
-endif(AX_WITH_POLY2TRI)
+endif()
 
 if(AX_WITH_ASTCENC)
     ax_add_3rd(astcenc)
-endif(AX_WITH_ASTCENC)
+endif()
 
 # use lua/js specific libs by property to prevent conflict
 if(AX_ENABLE_EXT_LUA)
@@ -432,12 +432,12 @@ endif()
 # unzip depend on zlib
 if(AX_WITH_UNZIP)
     ax_add_3rd(unzip)
-endif(AX_WITH_UNZIP)
+endif()
 
 if(AX_WITH_CARES)
     ax_add_3rd(c-ares)
     target_compile_definitions(thirdparty INTERFACE YASIO_USE_CARES=1)
-endif(AX_WITH_CARES)
+endif()
 
 ax_add_3rd(llhttp)
 

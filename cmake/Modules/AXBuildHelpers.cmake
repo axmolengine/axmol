@@ -489,7 +489,6 @@ macro (ax_setup_app_props app_name)
         )
         target_link_libraries(${APP_NAME} ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.targets)
     elseif(WASM)
-        message(STATUS "#### AX_WASM_EXPORTS=${AX_WASM_EXPORTS}")
         get_target_property(_APP_SOURCE_DIR ${app_name} SOURCE_DIR)
         set(CMAKE_EXECUTABLE_SUFFIX ".html")
         target_link_options(${app_name} PRIVATE
