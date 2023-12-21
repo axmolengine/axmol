@@ -3,11 +3,11 @@
 ### Significant changes relative to 2.0.0:
 
 - Migrate Windows UWP from C++/CX to [cppwinrt](https://github.com/microsoft/cppwinrt) for c++20 codebase
-- Refactor Target Platfroms Enums
+- Refactor Target Platforms Enums
 - Update AGP to 8.x Android Studio 2022.3.1+
-- Add support enable TTF SDF rendering globally
-- Add extension: SDFGen to generate prebake font atlas
-- Add API: `FontAtlasCache::preloadFontAtlas` to support label SDF rendering with prebake atlas
+- Add support for enabling TTF SDF rendering globally
+- Add extension: SDFGen to generate prebaked font atlas
+- Add API: `FontAtlasCache::preloadFontAtlas` to support label SDF rendering with prebaked atlas
 - Add API `Device::getPixelRatio`
 - Add ImGui android DPI scaling support
 - Add winuwp FPS control support
@@ -32,7 +32,7 @@
 
 - Fix MSL texture order does not follow GLSL binding order
 - Fix GLES3 shader scalar array layout incorrect
-- Fix Android ImGUI coord convertions
+- Fix Android ImGUI coord conversions
 - Fix Lua build on windows
 - Fix `axmol new` not support absolute path
 - Fix some ImGui issues
@@ -54,7 +54,7 @@
 - Fix UWP issues in `EditBoxWinRT` by @rh101
 - Fix for TextField keyboard not opening on receiving focus on android by @rh101
 - Fix plist data and version by @paulocoutinhox
-- Fix build cannot correct handle '-' on the project name
+- Fix build cannot correctly handle '-' on the project name
 - Fix TMX Camera Culling by @DelinWorks
 - Fix Fix cmake project generation on platforms other than Android by @rh101
 
