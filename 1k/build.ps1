@@ -193,7 +193,7 @@ $manifest = @{
     cmake        = '3.27.7+';
     ninja        = '1.11.1+';
     jdk          = '17.0.3+';
-    emsdk        = '3.1.50';
+    emsdk        = '3.1.51';
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 

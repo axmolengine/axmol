@@ -1,46 +1,81 @@
 name: publish
 
 on:
+  workflow_run:
+    workflows: [build]
+    types: [completed]
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
       version:
          # actions run ID
-         description: 'Please input release version'
+         description: 'Please input release version, example: 2.1.0'
          # Default value if no value is explicitly provided
-         default: ''
+         default: 'auto'
          # Input has to be provided for the workflow to run
          required: false
 jobs:
   publish:
-    # The CMake configure and build commands are platform agnostic and should work equally
-    # well on Windows or Mac.  You can convert this to a matrix build if you need
-    # cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
       with:
         submodules: 'recursive'
 
-    - name: Make package
-      id: make_pkg
+    - name: Check release ver from input
+      if: ${{ github.event.inputs.version != '' }}
+      id: check_ver
+      shell: pwsh
+      run: |
+        $release_ver = '${{ github.event.inputs.version }}'
+        echo "release_ver=$release_ver" >> ${env:GITHUB_OUTPUT}
+        echo "release_ver=$release_ver" >> ${env:GITHUB_ENV}
 
+    - name: Check release ver from commits
+      if: ${{ github.event.workflow_run.conclusion == 'success' && steps.check_ver.outputs.release_ver == '' }}
+      shell: pwsh
+      run: |
+        # commit message template: xxxx [release 2.1.0]
+        $commit_msg = "$(git show -s --format=%s)"
+        echo "commit_msg: $commit_msg"
+        $matchInfo = [Regex]::Match($commit_msg, '\[release\s(\d+\.)+(-)?(\*|\d+)\]')
+        if ($matchInfo.Success) { $matchInfo = [Regex]::Match($matchInfo.Value, '(\d+\.)+(-)?(\*|\d+)') }
+        $release_ver = if($matchInfo.Success) { $matchInfo.Value }
+        echo "release_ver=$release_ver" >> ${env:GITHUB_ENV}
+
+    - name: Forward release ver to step make_pkg
+      id: forward_ver
+      shell: pwsh
+      run: |
+        echo "Forwarding release_ver=$env:release_ver ..."
+        echo "release_ver=$env:release_ver" >> ${env:GITHUB_OUTPUT}
+
+    - name: Install linux dependencies
+      if: ${{ steps.forward_ver.outputs.release_ver != '' }}
+      run: |
+        AX_ROOT=`pwd`
+        echo -e "y" | pwsh $AX_ROOT/setup.ps1
+
+    - name: Make package
+      if: ${{ steps.forward_ver.outputs.release_ver != '' }}
+      id: make_pkg
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
       shell: pwsh
       run: |
-        .\build.ps1 -p win32 -xc '-DAX_WITH_LZ4=ON,-DAX_WITH_CARES=ON,-DAX_WITH_YAML_CPP=ON,-DAX_WITH_KCP=ON,-DAX_WITH_OBOE=ON' -c
-        .\tools\ci\make-pkg.ps1 -version "${{ github.event.inputs.version }}"
-        ls
+        $AX_ROOT = $(pwd).Path
+        ./1k/fetch.ps1 -name 'oboe' -dest $(Join-Path $AX_ROOT 'cache/oboe') -cfg $(Join-Path $AX_ROOT 'manifest.json')
+        ./build.ps1 -xc '-DAX_WITH_LZ4=ON,-DAX_WITH_CARES=ON,-DAX_WITH_YAML_CPP=ON,-DAX_WITH_KCP=ON' -c
+        ./tools/ci/make-pkg.ps1 -version "${{ steps.forward_ver.outputs.release_ver }}"
 
     - name: Publish to github release page
+      if: ${{ steps.make_pkg.outputs.release_tag != '' }}
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ steps.make_pkg.outputs.release_tag }}
         name: ${{ steps.make_pkg.outputs.release_tag }}
         files: ${{ steps.make_pkg.outputs.release_pkg }}
+        body_path: ${{ steps.make_pkg.outputs.release_note }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_REPOSITORY: simdsoft/axmol

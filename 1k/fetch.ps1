@@ -21,15 +21,21 @@ if ($pkg_ver) {
     }
 
     $url = "$url_base/$url_path"
-    if (Test-Path $dest -PathType Container) {
-        if (!(Test-Path $(Join-Path $dest '.git') -PathType Container)) {
+
+    $sentry = Join-Path $dest '_1kiss'
+    # if sentry file missing, re-clone
+    if (!(Test-Path $sentry -PathType Leaf)) {
+        if (Test-Path $dest -PathType Container) {
             Remove-Item $dest -Recurse -Force
-            git clone $url $dest
+        }
+        git clone $url $dest
+        if ($? -and (Test-Path $(Join-Path $dest '.git') -PathType Container)) {
+            [System.IO.File]::WriteAllText($sentry, "$(git -C $dest rev-parse HEAD)")
+        } else {
+            throw "fetch.ps1: execute git clone $url failed"
         }
     }
-    else {
-        git clone $url $dest
-    }
+
     $pkg_ver = $pkg_ver.Split('-')
     $use_hash = $pkg_ver.Count -gt 1
     $revision = $pkg_ver[$use_hash].Trim()

@@ -26,10 +26,10 @@ endfunction()
 function(_1kfetch_dist package_name)
     set(_prebuilt_root ${CMAKE_CURRENT_LIST_DIR}/_d)
     if(NOT IS_DIRECTORY ${_prebuilt_root})
-        set (package_url "${_1kdist_base_url}/${package_name}.zip")
         set (package_store "${_1kfetch_cache_dir}/1kdist/v${_1kdist_ver}/${package_name}.zip")
-        message(AUTHOR_WARNING "Downloading ${package_url}")
         if (NOT EXISTS ${package_store})
+            set (package_url "${_1kdist_base_url}/${package_name}.zip")
+            message(AUTHOR_WARNING "Downloading ${package_url}")
             file(DOWNLOAD ${package_url} ${package_store} STATUS _status LOG _logs SHOW_PROGRESS)
             list(GET _status 0 status_code)
             list(GET _status 1 status_string)
@@ -56,7 +56,12 @@ function(_1kfetch name)
     execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1 
         -name "${name}"
         -dest "${_pkg_store}"
-        -cfg ${_1kfetch_manifest})
+        -cfg ${_1kfetch_manifest}
+        RESULT_VARIABLE _errorcode
+        )
+    if (_errorcode)
+        message(FATAL_ERROR "aborted")
+    endif()
     set(${name}_SOURCE_DIR ${_pkg_store} PARENT_SCOPE)
 endfunction()
 

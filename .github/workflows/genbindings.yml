@@ -8,6 +8,8 @@ on:
       - '**.md'
       - '**/*.md.in'
       - 'docs/**'
+      - '.github/workflows/publish.yml'
+      - 'tools/ci/make-pkg.ps1'
       
   workflow_dispatch:
 jobs:
