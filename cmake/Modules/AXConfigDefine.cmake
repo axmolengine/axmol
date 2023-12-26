@@ -103,6 +103,10 @@ if(WINDOWS)
     endif()
 endif()
 
+if(EMSCRIPTEN_VERSION)
+    message(STATUS "Using emsdk generate axmol project, EMSCRIPTEN_VERSION: ${EMSCRIPTEN_VERSION}")
+endif()
+
 if (FUZZ_MSVC)
     add_compile_options(/GF)
 endif()

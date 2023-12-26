@@ -246,6 +246,13 @@ list(APPEND _AX_SRC ${_AX_HEADER})
 
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
 
+if(WASM)
+  if(${EMSCRIPTEN_VERSION} VERSION_GREATER_EQUAL "3.1.51")
+      target_link_options(${_AX_CORE_LIB} PUBLIC -sGL_ENABLE_GET_PROC_ADDRESS)
+  endif()
+  target_link_options(${_AX_CORE_LIB} PUBLIC -lwebsocket.js)
+endif()
+
 ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
 set(ax_builtin_shaders ${BUILTIN_SHADER_SOURCES} CACHE STATIC "" FORCE)
 
