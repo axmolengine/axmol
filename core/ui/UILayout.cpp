@@ -448,7 +448,7 @@ void Layout::setStencilClippingSize(const Vec2& /*size*/)
     if (_clippingEnabled && _clippingType == ClippingType::STENCIL)
     {
         _clippingStencil->clear();
-        _clippingStencil->drawSolidRect(Vec2::ZERO, _contentSize), Color4F::GREEN);  // Fix issue #1546 
+        _clippingStencil->drawSolidRect(Vec2::ZERO, _contentSize, Color4F::GREEN);  // Fix issue #1546 
     }
 }
 
