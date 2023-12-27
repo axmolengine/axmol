@@ -447,14 +447,8 @@ void Layout::setStencilClippingSize(const Vec2& /*size*/)
 {
     if (_clippingEnabled && _clippingType == ClippingType::STENCIL)
     {
-        Vec2 rect[4];
-        // rect[0].setZero(); Zero default
-        rect[1].set(_contentSize.width, 0.0f);
-        rect[2].set(_contentSize.width, _contentSize.height);
-        rect[3].set(0.0f, _contentSize.height);
-        Color4F green(0.0f, 1.0f, 0.0f, 1.0f);
         _clippingStencil->clear();
-        _clippingStencil->drawPolygon(rect, 4, green, 0, green);
+        _clippingStencil->drawSolidRect(Vec2::ZERO, Vec2(_contentSize.width, _contentSize.height), Color4F::GREEN);  // Fix issue #1546 
     }
 }
 
