@@ -823,7 +823,10 @@ void Director::replaceScene(Scene* scene)
         {
             _nextScene->onExit();
         }
-        _nextScene->cleanup();
+        if(_nextScene)
+        {
+            _nextScene->cleanup();
+        }
         _nextScene = nullptr;
     }
 
@@ -1135,7 +1138,10 @@ void Director::setNextScene()
         _runningScene->release();
     }
     _runningScene = _nextScene;
-    _nextScene->retain();
+    if(_nextScene)
+    {
+        _nextScene->retain();
+    }
     _nextScene = nullptr;
 
     if ((!runningIsTransition) && _runningScene)
