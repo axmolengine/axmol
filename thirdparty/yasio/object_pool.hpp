@@ -51,7 +51,7 @@ public:
   void destroy(void* _Ptr)
   {
     ((_Ty*)_Ptr)->~_Ty(); // call the destructor
-    release(_Ptr);
+    deallocate(_Ptr);
   }
 
   void* allocate()
