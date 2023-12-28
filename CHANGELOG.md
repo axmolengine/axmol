@@ -56,7 +56,10 @@
 - Fix plist data and version by @paulocoutinhox
 - Fix build cannot correctly handle '-' on the project name
 - Fix TMX Camera Culling by @DelinWorks
-- Fix Fix cmake project generation on platforms other than Android by @rh101
+- Fix cmake project generation on platforms other than Android by @rh101
+- Fix UILayout crash problem by @aismann
+- Fix replace scene missing nullcheck for next scene
+- Fix a crash caused by missing android view nullcheck
 
 ### Improvements
 
