@@ -15,6 +15,7 @@ if(EMSCRIPTEN)
         network/Downloader-wasm.cpp
         network/HttpCookie.cpp
         network/Uri.cpp
+        network/WebSocket-wasm.cpp
     )
 else()
     set(_AX_NETWORK_HEADER

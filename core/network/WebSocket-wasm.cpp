@@ -36,8 +36,8 @@ WebSocket::~WebSocket() {}
 
 bool WebSocket::open(Delegate* delegate,
                      std::string_view url,
-                     const char* protocols,
-                     std::string_view caFilePath)
+                     std::string_view caFilePath,
+                     const char* protocols)
 {
     if (url.empty())
     {
@@ -45,9 +45,7 @@ bool WebSocket::open(Delegate* delegate,
         return false;
     }
 
-    if(!protocols)
-        protocols = "binary";
-    EmscriptenWebSocketCreateAttributes ws_attrs = {url.data(), "default-protocol", EM_TRUE};
+    EmscriptenWebSocketCreateAttributes ws_attrs = {url.data(), protocols, EM_TRUE};
 
     AXLOG("ws open url: %s, protocols: %s", ws_attrs.url, ws_attrs.protocols);
 

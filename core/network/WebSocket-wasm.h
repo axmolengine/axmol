@@ -195,8 +195,8 @@ public:
      */
     bool open(Delegate* delegate,
               std::string_view url,
-              const char* protocols = nullptr,
-              std::string_view caFilePath               = "");
+              std::string_view caFilePath = "",
+              const char* protocols      = nullptr);
 
     /**
      *  @brief Sends string data to websocket server.

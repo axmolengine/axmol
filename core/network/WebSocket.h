@@ -242,15 +242,15 @@ public:
      *         It needs to be invoked right after websocket instance is allocated.
      *  @param delegate The delegate which want to receive event from websocket.
      *  @param url The URL of websocket server.
-     *  @param protocols The websocket protocols that agree with websocket server
      *  @param caFilePath The ca file path for wss connection
+     *  @param protocols The websocket protocols that agree with websocket server
      *  @return true: Success, false: Failure.
      *  @lua NA
      */
     bool open(Delegate* delegate,
               std::string_view url,
-              const char* protocols = nullptr,
-              std::string_view caFilePath               = "");
+              std::string_view caFilePath = "",
+              const char* protocols      = nullptr);
 
     /**
      *  @brief Sends string data to websocket server.

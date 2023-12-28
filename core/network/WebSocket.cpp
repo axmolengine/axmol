@@ -226,8 +226,8 @@ WebSocket::~WebSocket()
 
 bool WebSocket::open(Delegate* delegate,
                      std::string_view url,
-                     const char* protocols /* = nullptr*/,
-                     std::string_view caFilePath /* = ""*/)
+                     std::string_view caFilePath,
+                     const char* protocols)
 {
     _delegate   = delegate;
     _url        = url;

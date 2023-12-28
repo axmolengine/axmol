@@ -154,7 +154,7 @@ void WebSocketTest::startTestCallback(Ref* sender)
     _wsiSendBinary = new network::WebSocket();
     _wsiError      = new network::WebSocket();
 
-    if (!_wsiSendText->open(this, ECHO_SERVER_URL, "text", "cacert.pem"))
+    if (!_wsiSendText->open(this, ECHO_SERVER_URL))
     {
         AX_SAFE_DELETE(_wsiSendText);
     }
@@ -164,7 +164,7 @@ void WebSocketTest::startTestCallback(Ref* sender)
                    // WebSocketTest::onClose.
     }
 
-    if (!_wsiSendBinary->open(this, ECHO_SERVER_URL, "binary", "cacert.pem"))
+    if (!_wsiSendBinary->open(this, ECHO_SERVER_URL))
     {
         AX_SAFE_DELETE(_wsiSendBinary);
     }
@@ -482,7 +482,7 @@ void WebSocketDelayTest::startTestCallback(Ref* sender)
     _startTestMenu = nullptr;
 
     _wsiSendText = new network::WebSocket();
-    if (!_wsiSendText->open(this, ECHO_SERVER_URL, "binary,text", "cacert.pem"))
+    if (!_wsiSendText->open(this, ECHO_SERVER_URL))
     {
         AX_SAFE_DELETE(_wsiSendText);
     }
