@@ -27,6 +27,7 @@ else()
         network/HttpResponse.h
         network/HttpRequest.h
         network/HttpCookie.h
+        network/WebSocket.h
     )
 
     set(_AX_NETWORK_SRC
@@ -35,5 +36,6 @@ else()
         network/Downloader-curl.cpp
         network/HttpCookie.cpp
         network/Uri.cpp
+        network/WebSocket.cpp
     )
 endif()
