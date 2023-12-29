@@ -73,7 +73,7 @@ The `axmol build` command will auto setup general depended toolsets, so you can 
 Goto axmol root directory, double click or run `build.ps1` without any parameters, it will build `HelloCpp` by default
 
 ## Quick build a test project e.g. 'cpp-tests'?
-Using a powershell console window, goto `axmol\tests\<testdir e.g. 'cpp-tests'>` directory, perform`pwsh ../../build.ps1  -p android -a arm64`, it will build `cpp-tests` for android.
+Using a powershell console window, goto `axmol\tests\<testdir e.g. 'cpp-tests'>` directory, perform`axmol build -p android -a arm64`, it will build `cpp-tests` for android.
 
 ## Manually build with cmake
 
