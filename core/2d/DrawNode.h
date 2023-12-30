@@ -455,6 +455,8 @@ protected:
 
     ax::any_buffer _abuf;
 
+    bool _isConvex = true;
+
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode);
 };
