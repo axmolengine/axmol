@@ -33,7 +33,7 @@ using namespace std;
 DrawPrimitivesTests::DrawPrimitivesTests()
 {
     ADD_TEST_CASE(DrawNodeTest);
-    ADD_TEST_CASE(Issue11942Test);
+    ADD_TEST_CASE(DrawNodeBackwardsAPITest);
     ADD_TEST_CASE(BetterCircleRendering);
     ADD_TEST_CASE(DrawNodeTestNewFeature1);
     ADD_TEST_CASE(Issue829Test);
@@ -219,42 +219,56 @@ string DrawNodeTest::subtitle() const
 //
 // Issue11942Test
 //
-Issue11942Test::Issue11942Test()
+DrawNodeBackwardsAPITest::DrawNodeBackwardsAPITest()
 {
-    // DrawNode 0 ------------------------------------------
-    auto draw0 = DrawNode::create();
-    addChild(draw0, 10);
+    float o = 80;
+    float w = 20;
+    float h = 50;
 
-    // draw a circle thickness 10 
-    draw0->setLineWidth(10);
-    draw0->drawCircle(VisibleRect::center() - Vec2(140.0f, 40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
-    draw0->setLineWidth(1); // thickness 10 will replaced with thickness 1 (also for all 'same' draw commands before!)
-    draw0->drawCircle(VisibleRect::center() - Vec2(140.0f, -40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+    auto drawNode1 = DrawNode::create();
+    addChild(drawNode1);
+    drawNode1->setPosition(-40, 20);
 
+    int x = 0;
+    int y = 0;
+    Vec2 vertices[4];
+    drawNode1->setScale(0.5);
+    Color4F color;
+    for (int iy = 0; iy < 5; iy++)
+    {
+        x = 0;
+        for (int ix = 0; ix < 13; ix++)
+        {
+            vertices[0] = Vec2(x + o + w, y + o - h);
+            vertices[1] = Vec2(x + o + w * 2, y + o);
+            vertices[2] = Vec2(x + o + w * 2 + h, y + o + w);
+            vertices[3] = Vec2(x + o + w * 2, y + o + w * 2);
 
-    // DrawNode 1 ------------------------------------------
-    auto draw1 = DrawNode::create();
-    addChild(draw1, 10);
-
-    // draw a second circle thickness 1  
-    draw1->setLineWidth(1);
-    draw1->drawCircle(VisibleRect::center() + Vec2(140.0f, 40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
-    draw1->setLineWidth(20); // thickness 1 will replaced with thickness 10 (also for all 'same' draw commands before!)
-    draw1->drawCircle(VisibleRect::center() + Vec2(140.0f, -40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+            if (AXRANDOM_0_1() > 0.5f)
+            {
+                drawNode1->setIsConvex(true);
+                color = Color4F::YELLOW;
+            }
+            else
+            {
+                drawNode1->setIsConvex(false);  // default value!
+                color = Color4F::ORANGE;
+            }
+            drawNode1->drawPolygon(vertices, 4, Color4F(0.7f, 0.7f, 0.7f, 0.5f), 1, color);
+            x += 70;
+        }
+        y += 80;
+    }
 }
 
-string Issue11942Test::title() const
+string DrawNodeBackwardsAPITest::title() const
 {
-    return "GitHub Issue #11942 (axmol #137)";
+    return "API backwards compatible test";
 }
 
-string Issue11942Test::subtitle() const
+string DrawNodeBackwardsAPITest::subtitle() const
 {
-    return "setLineWidth() change the WHOLE DrawNode object 'line with'";
+    return "YELLOW=cocos2dx/axmol <=2.0 ORANGE=axmol >2.0";
 }
 
 //
@@ -262,7 +276,7 @@ string Issue11942Test::subtitle() const
 //
 BetterCircleRendering::BetterCircleRendering()
 {
-    //Add lines to see the correct "scale of the 'rings'" changing the window size
+    // Add lines to see the correct "scale of the 'rings'" changing the window size
 
     auto draw = DrawNode::create();
     draw->setLineWidth(1);
@@ -298,7 +312,8 @@ void BetterCircleRendering::changeThreshold(ax::Ref* pSender, ax::ui::Slider::Ev
     {
         ax::ui::Slider* sliderThreshold = dynamic_cast<ax::ui::Slider*>(pSender);
         threshold                       = static_cast<float>(sliderThreshold->getPercent());
-        _thresholdLabel->setString("drawCircle(pos, radius, ..., segments, ..., color, " + Value(threshold).asString() + ")");
+        _thresholdLabel->setString("drawCircle(pos, radius, ..., segments, ..., color, " + Value(threshold).asString() +
+                                   ")");
     }
 }
 
@@ -315,7 +330,7 @@ void BetterCircleRendering::initSliders()
     slider->addEventListener(AX_CALLBACK_2(BetterCircleRendering::changeThreshold, this));
 
     auto ttfConfig  = TTFConfig("fonts/arial.ttf", 8);
-    _thresholdLabel = Label::createWithTTF(ttfConfig, "drawCircle(pos, radius, ..., segments, ..., color, 0)"); 
+    _thresholdLabel = Label::createWithTTF(ttfConfig, "drawCircle(pos, radius, ..., segments, ..., color, 0)");
     addChild(_thresholdLabel, 20);
     _thresholdLabel->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 15));
 
@@ -336,8 +351,8 @@ void BetterCircleRendering::initSliders()
     addChild(sliderLineWidth, 20);
 }
 
- void BetterCircleRendering::update(float dt)
- {
+void BetterCircleRendering::update(float dt)
+{
     drawNode->clear();
     drawNode->setLineWidth(lineWidth);  // value from the slider
 
@@ -353,10 +368,10 @@ void BetterCircleRendering::initSliders()
     }
     drawNode->drawCircle(VisibleRect::center() - Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false, color,
                          threshold);
- }
+}
 
 string BetterCircleRendering::title() const
- {
+{
     return "Rendering drawCircle";
 }
 
@@ -364,7 +379,6 @@ string BetterCircleRendering::subtitle() const
 {
     return "Green: smoother rendering; Red: faster but badly rendering";
 }
-
 
 DrawNodeTestNewFeature1::DrawNodeTestNewFeature1()
 {
@@ -3937,8 +3951,7 @@ Issue1319Test::Issue1319Test()
         {148.671875f, 216.566895f}, {148.681152f, 216.764160f}, {148.693359f, 216.961670f}, {148.701660f, 217.097168f},
         {148.709473f, 217.235107f}, {148.720703f, 217.371826f}, {148.739746f, 217.504150f}, {148.770996f, 217.628906f},
         {148.817383f, 217.741943f}, {148.883301f, 217.840576f}, {148.973145f, 217.920898f}, {149.090332f, 217.979736f},
-        {149.239258f, 218.013916f}
-    };
+        {149.239258f, 218.013916f}};
 
     Vec2 vertices23[] = {
         {289.365723f, 227.168457f}, {289.388672f, 227.053467f}, {289.411621f, 226.938965f}, {289.435059f, 226.824219f},
@@ -4143,8 +4156,7 @@ Issue1319Test::Issue1319Test()
         {286.836914f, 230.352539f}, {287.020996f, 230.461182f}, {287.266113f, 230.535645f}, {287.574219f, 230.580078f},
         {287.949219f, 230.598145f}, {288.163574f, 230.299805f}, {288.369141f, 229.996338f}, {288.563477f, 229.685059f},
         {288.743164f, 229.365234f}, {288.905762f, 229.034912f}, {289.048828f, 228.692383f}, {289.169922f, 228.336670f},
-        {289.265137f, 227.965332f}, {289.332520f, 227.577148f}, {289.369629f, 227.170410f}
-    };
+        {289.265137f, 227.965332f}, {289.332520f, 227.577148f}, {289.369629f, 227.170410f}};
 
     Vec2 vertices24[] = {
         {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},  {100.250000f, 161.375000f},
@@ -4877,7 +4889,8 @@ Issue1319Test::Issue1319Test()
                                  2.0f, Color4F::WHITE);
 
     drawNode[0]->setPosition(Vec2(-30, -20));
-    drawNode[0]->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, 0.3f, Color4F::GREEN);
+    drawNode[0]->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, 0.3f,
+                             Color4F::GREEN);
 
     drawNode[1]->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color4F::YELLOW, 0.3f, Color4F::RED);
     drawNode[1]->drawPolygon(vertices2, sizeof(vertices2) / sizeof(vertices2[0]), Color4F::YELLOW, 0.3f, Color4F::RED);
@@ -4892,7 +4905,8 @@ Issue1319Test::Issue1319Test()
                              Color4F::RED);
     drawNode[1]->drawPolygon(vertices11, sizeof(vertices11) / sizeof(vertices11[0]), Color4F::YELLOW, 0.3f,
                              Color4F::RED);
-    drawNode[1]->drawPolygon(vertices12, sizeof(vertices12) / sizeof(vertices12[0]), Color4F::WHITE, 0.3f, Color4F::RED);
+    drawNode[1]->drawPolygon(vertices12, sizeof(vertices12) / sizeof(vertices12[0]), Color4F::WHITE, 0.3f,
+                             Color4F::RED);
     drawNode[1]->drawPolygon(vertices13, sizeof(vertices13) / sizeof(vertices13[0]), Color4F::YELLOW, 0.3f,
                              Color4F::RED);
     drawNode[1]->drawPolygon(vertices14, sizeof(vertices14) / sizeof(vertices14[0]), Color4F::YELLOW, 0.3f,
