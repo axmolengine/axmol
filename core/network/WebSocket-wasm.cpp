@@ -9,23 +9,44 @@ namespace network
 
 EM_BOOL WebSocket::em_ws_onopen(int eventType, const EmscriptenWebSocketOpenEvent* websocketEvent, void* userData)
 {
-    ax::print("### ----------- em_ws_onopen ");
+    auto ws = static_cast<WebSocket*>(userData);
+    if (!ws || !ws->_delegate)
+        return EM_TRUE;
+    ws->_state = WebSocket::State::OPEN;
+    ws->_delegate->onOpen(ws);
     return EM_TRUE;
 }
 
 EM_BOOL WebSocket::em_ws_onerror(int eventType, const EmscriptenWebSocketErrorEvent* websocketEvent, void* userData)
 {
-    ax::print("### ----------- em_ws_onerror ");
+    auto ws = static_cast<WebSocket*>(userData);
+    if (!ws || !ws->_delegate)
+        return EM_TRUE;
+    ws->_state = WebSocket::State::CLOSED;
+    ws->_delegate->onError(ws, ErrorCode::CONNECTION_FAILURE);
     return EM_TRUE;
 }
 
 EM_BOOL WebSocket::em_ws_onclose(int eventType, const EmscriptenWebSocketCloseEvent* websocketEvent, void* userData)
 {
+    auto ws = static_cast<WebSocket*>(userData);
+    if (!ws || !ws->_delegate)
+        return EM_TRUE;
+    ws->_state = WebSocket::State::CLOSED;
+    ws->_delegate->onClose(ws);
     return EM_TRUE;
 }
 
 EM_BOOL WebSocket::em_ws_onmessage(int eventType, const EmscriptenWebSocketMessageEvent* websocketEvent, void* userData)
 {
+    auto ws = static_cast<WebSocket*>(userData);
+    if (!ws || !ws->_delegate)
+        return EM_TRUE;
+    WebSocket::Data dataView;
+    dataView.bytes    = reinterpret_cast<const char*>(websocketEvent->data);
+    dataView.isBinary = !websocketEvent->isText;
+    dataView.len      = websocketEvent->numBytes;
+    ws->_delegate->onMessage(ws, dataView);
     return EM_TRUE;
 }
 
@@ -34,10 +55,7 @@ WebSocket::WebSocket() {}
 // TODO:
 WebSocket::~WebSocket() {}
 
-bool WebSocket::open(Delegate* delegate,
-                     std::string_view url,
-                     std::string_view caFilePath,
-                     const char* protocols)
+bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view caFilePath, const char* protocols)
 {
     if (url.empty())
     {
@@ -45,10 +63,13 @@ bool WebSocket::open(Delegate* delegate,
         return false;
     }
 
+    _delegate = delegate;
+
     EmscriptenWebSocketCreateAttributes ws_attrs = {url.data(), protocols, EM_TRUE};
 
     AXLOG("ws open url: %s, protocols: %s", ws_attrs.url, ws_attrs.protocols);
 
+    _state = WebSocket::State::CONNECTING;
     _wsfd = emscripten_websocket_new(&ws_attrs);
 
     // chrome/edge can't connect
@@ -81,7 +102,7 @@ void WebSocket::send(std::string_view message)
  */
 void WebSocket::send(const void* data, unsigned int len)
 {
-    auto result = emscripten_websocket_send_binary(_wsfd, (void*)data, len);
+    auto result = emscripten_websocket_send_binary(_wsfd, const_cast<void*>(data), len);
     if (result)
     {
         AXLOG("Failed to emscripten_websocket_send_binary(): %d", result);
@@ -105,13 +126,14 @@ void WebSocket::close()
  */
 void WebSocket::closeAsync()
 {
-    // close code: Uncaught DOMException: Failed to execute 'close' on 'WebSocket': 
+    // close code: Uncaught DOMException: Failed to execute 'close' on 'WebSocket':
     // The code must be either 1000, or between 3000 and 4999. 1024 is neither.
-    EMSCRIPTEN_RESULT result = emscripten_websocket_close(_wsfd, 3000 - yasio::errc::shutdown_by_localhost, "shutdown by localhost");
-    if (result)
-    {
+    EMSCRIPTEN_RESULT error =
+        emscripten_websocket_close(_wsfd, 3000 - yasio::errc::shutdown_by_localhost, "shutdown by localhost");
+    if (!error)
+        _state = WebSocket::State::CLOSING;
+    else
         AXLOG("Failed to emscripten_websocket_close(): %d", result);
-    }
 }
 
 }  // namespace network

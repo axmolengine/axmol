@@ -56,80 +56,12 @@ public:
         CLOSED,     /** &lt; value 3 */
     };
 
-    class Event : public ax::Ref
-    {
-    public:
-        enum class Type
-        {
-            ON_OPEN,
-            ON_ERROR,
-            ON_CLOSE,
-            ON_MESSAGE,
-        };
-        Type getType() const { return _type; }
-
-    protected:
-        Type _type;
-    };
-
-    class WsOpenEvent : public Event
-    {
-    public:
-        WsOpenEvent() { this->_type = Type::ON_OPEN; }
-    };
-
-    class CloseEvent : public Event
-    {
-    public:
-        CloseEvent() { this->_type = Type::ON_CLOSE; }
-    };
-
-    class ErrorEvent : public Event
-    {
-    public:
-        ErrorEvent(ErrorCode errorCode) : _errorCode(errorCode) { this->_type = Type::ON_ERROR; }
-
-        ErrorCode getErrorCode() const { return _errorCode; }
-
-    private:
-        ErrorCode _errorCode;
-    };
-
-    class MessageEvent : public Event
-    {
-    public:
-        MessageEvent(yasio::sbyte_buffer&& message, bool isBinary) : _message(std::move(message)), _isBinary(isBinary)
-        {
-            this->_type = Type::ON_MESSAGE;
-        }
-
-        yasio::sbyte_buffer& getMessage() { return _message; }
-        const yasio::sbyte_buffer& getMessage() const { return _message; }
-        bool isBinary() const { return _isBinary; }
-
-    private:
-        yasio::sbyte_buffer _message;
-        bool _isBinary;
-        /* TODO:
-        issued;
-        bool isBinary;
-        void* ext;
-        */
-    };
-
     /**
      * Data structure for message view
      */
     struct Data
     {
         Data() : bytes(nullptr), len(0), issued(0), isBinary(false), ext(nullptr) {}
-        Data(MessageEvent* event)
-            : bytes(event->getMessage().data())
-            , len(event->getMessage().size())
-            , isBinary(event->isBinary())
-            , issued(0)
-            , ext(nullptr)
-        {}
         const char* bytes;
         size_t len, issued;
         bool isBinary;
@@ -256,6 +188,8 @@ protected:
     State _state = State::CLOSED;
     std::string _url;
     std::string _selectedProtocol;
+
+    Delegate* _delegate{};
 };
 }  // namespace network
 
