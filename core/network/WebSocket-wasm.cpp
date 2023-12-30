@@ -52,7 +52,6 @@ EM_BOOL WebSocket::em_ws_onmessage(int eventType, const EmscriptenWebSocketMessa
 
 WebSocket::WebSocket() {}
 
-// TODO:
 WebSocket::~WebSocket() {}
 
 bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view caFilePath, const char* protocols)
@@ -90,7 +89,9 @@ bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view 
  */
 void WebSocket::send(std::string_view message)
 {
-    this->send(message.data(), static_cast<unsigned int>(message.size()));
+    auto error = emscripten_websocket_send_utf8_text(_wsfd, message.data());
+    if (error)
+        AXLOG("Failed to emscripten_websocket_send_binary(): %d", error);
 }
 
 /**
@@ -102,11 +103,9 @@ void WebSocket::send(std::string_view message)
  */
 void WebSocket::send(const void* data, unsigned int len)
 {
-    auto result = emscripten_websocket_send_binary(_wsfd, const_cast<void*>(data), len);
-    if (result)
-    {
-        AXLOG("Failed to emscripten_websocket_send_binary(): %d", result);
-    }
+    auto error = emscripten_websocket_send_binary(_wsfd, const_cast<void*>(data), len);
+    if (error)
+        AXLOG("Failed to emscripten_websocket_send_binary(): %d", error);
 }
 
 /**
