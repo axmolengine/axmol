@@ -22,8 +22,11 @@
   - AX_ENABLE_EXT_FAIRYGUI: the fairygui extension, default: `TRUE`
   - AX_ENABLE_EXT_IMGUI: the imgui extension, support macos,win,linux,android, default: `TRUE` 
   - AX_ENABLE_EXT_INSPECTOR: the imgui inspector extension, support macos,win,linux,android, default: `TRUE` 
+  - AX_ENABLE_EXT_SDFGEN: the SDF atlas generator, default: `TRUE`
   - AX_ENABLE_EXT_LIVE2D: the live2d extension, default: `FALSE` 
   - AX_ENABLE_EXT_EFFEKSEER: the effekseer extension, default: `FALSE` 
+  - AX_ENABLE_EXT_JSONDEFAULT: the UserDefault based on json, default: `FALSE`
+  - AX_ENABLE_EXT_LUA: the lua extension, default: `TRUE`
 - AX_WITH_XXX: usually user don't need care it
 - AX_VS_DEPLOYMENT_TARGET: specify windows store deploy target, default: `10.0.17763.0`
 - AX_USE_COMPAT_GL: whether use compat gl as renderer backend, default: win32: `TRUE`, others: `FALSE`
@@ -31,7 +34,7 @@
   - osx: whether use OpenGL instead Metal backend
   - ios/tvos: whether use GLES instead Metal backend
 - AX_ISA_LEVEL: specifiy SIMD Instructions Acceleration Level: 0~4, 0: disabled, 1: SSE2, 2: SSE4.1/NEON, 3: SSE4.2, 4: AVX2, default: 2
-- AX_GLES_PROFILE: speicify GLES profile version for GLES backend, valid value `200`, `300`
+- AX_GLES_PROFILE: specify GLES profile version for GLES backend, valid value `200`, `300`
 - AX_WASM_THREADS: specify wasm thread count, valid value: number: `>=0` , string: must be: `auto` or `navigator.hardwareConcurrency`(default), 
    - number: explicit set thread count, `0` means disable wasm thread support
    - string: 
