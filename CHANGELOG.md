@@ -27,6 +27,7 @@
 - Add API: `DrawNode::drawPie` by @aismann
 - Add support for window resized and positioned by @lich426
 - Add extension: Inspector by @iAndyHD3
+- Add *experimental* WebSocket support for both wasm and native platforms
 
 ### BugFixs
 
@@ -58,8 +59,8 @@
 - Fix TMX Camera Culling by @DelinWorks
 - Fix cmake project generation on platforms other than Android by @rh101
 - Fix UILayout crash problem by @aismann
-- Fix replace scene missing nullcheck for next scene
-- Fix a crash caused by missing android view nullcheck
+- Fix replace scene missing nullcheck for next scene by @armanhossiny
+- Fix a crash caused by missing android view nullcheck by @Arvant
 
 ### Improvements
 
