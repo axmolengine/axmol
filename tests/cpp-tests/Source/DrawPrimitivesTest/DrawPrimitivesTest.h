@@ -48,12 +48,12 @@ public:
     virtual std::string subtitle() const override;
 };
 
-class Issue11942Test : public DrawPrimitivesBaseTest
+class DrawNodeBackwardsAPITest : public DrawPrimitivesBaseTest
 {
 public:
-    CREATE_FUNC(Issue11942Test);
+    CREATE_FUNC(DrawNodeBackwardsAPITest);
 
-    Issue11942Test();
+    DrawNodeBackwardsAPITest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;

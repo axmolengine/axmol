@@ -397,6 +397,8 @@ public:
     // Get CocosStudio guide lines width.
     float getLineWidth();
 
+    void setIsConvex(bool isConvex) { _isConvex = isConvex; }; // Set backwards compatible with cocos2dx/axmol 2.0
+
     /**
      * When isolated is set, the position of the node is no longer affected by parent nodes.
      * Which means it will be drawn just like a root node.
@@ -454,6 +456,8 @@ protected:
     float _defaultLineWidth = 0.0f;
 
     ax::any_buffer _abuf;
+
+    bool _isConvex = true;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode);
