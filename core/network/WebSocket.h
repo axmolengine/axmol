@@ -43,6 +43,7 @@
 #    include <memory>  // for std::shared_ptr
 #    include <atomic>
 #    include <condition_variable>
+#    include <future>
 
 #    include "platform/PlatformMacros.h"
 #    include "platform/StdC.h"
@@ -250,7 +251,7 @@ public:
     bool open(Delegate* delegate,
               std::string_view url,
               std::string_view caFilePath = "",
-              const char* protocols      = nullptr);
+              const char* protocols       = nullptr);
 
     /**
      *  @brief Sends string data to websocket server.
