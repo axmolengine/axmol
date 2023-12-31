@@ -256,6 +256,10 @@ endif()
 
 if(NOT EMSCRIPTEN)
     ax_add_3rd(zlib)
+    option(AX_WITH_WEBSOCKET_PARSER "Build with websocket parser" ON)
+    if (AX_WITH_WEBSOCKET_PARSER)
+        ax_add_3rd(websocket-parser)
+    endif()
 endif()
 
 # libpng
