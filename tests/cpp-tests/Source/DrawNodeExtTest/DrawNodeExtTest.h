@@ -155,6 +155,7 @@ private:
     ax::ui::Slider* createSlider();
     ax::ui::ListView* createListView();
     ax::DrawNodeExt* draw;
+    ax::DrawNode* draw1;
     ax::Vec2* verticess;
 
     int _currentSeletedItemIndex = 0;

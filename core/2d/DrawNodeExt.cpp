@@ -98,11 +98,11 @@ Vec2* DrawNodeExt::transform(const Vec2* vertices, unsigned int count)
      //{
      //     const float coef = 2.0f * (float)M_PI / segments;
 
-    _dnPosition.x = 10.f;
-    _dnPosition.y = 0.f;
-    _dnRotation   = 0.f;
-    _dnScale.x    = 2.f;
-    _dnScale.y    = 2.f;
+    //_dnPosition.x = 10.f;
+    //_dnPosition.y = 0.f;
+    //_dnRotation   = 0.f;
+    //_dnScale.x    = 2.f;
+    //_dnScale.y    = 2.f;
 
      Vec2* vert = _abuf.get<Vec2>(count);
      memcpy(vert, vertices, count);
@@ -1006,7 +1006,7 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
             std::vector<CDT::V2d<float>> vertices;
             for (int i = 0; i < count; ++i)
             {
-                vertices.emplace_back((float)_vertices[i].x, (float)_vertices[i].y);
+                vertices.emplace_back(_vertices[i].x, _vertices[i].y);
                 vertices.emplace_back(CDT::V2d(_vertices[i].x, _vertices[i].y));
                 vertices.emplace_back(CDT::V2d<float>::make(_vertices[i].x, _vertices[i].y));
             }
@@ -1041,7 +1041,7 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
 
             for (int i = 0; i < count; ++i)
             {
-                p2points.emplace_back(&p2pointsStorage.emplace_back((double)_vertices[i].x, (double)_vertices[i].y));
+                p2points.emplace_back(&p2pointsStorage.emplace_back((float)_vertices[i].x, (float)_vertices[i].y));
             }
             p2t::CDT cdt(p2points);
             cdt.Triangulate();
@@ -1152,7 +1152,7 @@ inline void DrawNodeExt::_drawPoly(const Vec2* poli,
                                    float thickness)
 {
 
-    Vec2* _vertices = transform(poli, numberOfPoints);
+
 
     if (thickness != 1.0f)
     {

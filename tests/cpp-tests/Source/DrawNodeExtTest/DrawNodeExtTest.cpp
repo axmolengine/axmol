@@ -82,8 +82,8 @@ Vec2* DrawNodeExtBaseTest::makePolygons()
             ax::any_buffer myBuf;
             for (auto&& p : solution)
             {
-                int i    = 0;
-                verCount = p.size();
+                int i          = 0;
+                verCount       = p.size();
                 Vec2* vertices = myBuf.get<Vec2>(verCount);
                 for (auto&& pt : p)
                 {
@@ -93,14 +93,13 @@ Vec2* DrawNodeExtBaseTest::makePolygons()
                 if (verCount > 4)
                 {
                     isReal = true;
-                    //draw->drawPoly(vertices, verCount, true,
-                    //               Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
+                    // draw->drawPoly(vertices, verCount, true,
+                    //                Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
                     return vertices;
                 }
             }
         }
     } while (!isReal);
-    
 }
 
 string DrawNodeExtBaseTest::title() const
@@ -5089,9 +5088,14 @@ DrawNodePart1Test::DrawNodePart1Test()
     addChild(listview);
 
     draw = DrawNodeExt::create();
-    draw->setScale(0.5);
+    // draw->setScale(0.5);
     draw->setPosition(size / 4);
     addChild(draw);
+
+    draw1 = DrawNode::create();
+    draw1->setScale(0.5);
+    draw1->setPosition(size / 4);
+    addChild(draw1);
 
     auto thicknessSlider = createSlider();
     thicknessSlider->setPosition(Vec2(center.x, 60.0f));
@@ -5106,7 +5110,7 @@ DrawNodePart1Test::DrawNodePart1Test()
 
 std::string DrawNodePart1Test::title() const
 {
-    return "DrawNode #1 Test";
+    return "DrawNode #1 Scale/Rotation/LineWidth/Position Test";
 }
 
 ax::ui::Slider* DrawNodePart1Test::createSlider()
@@ -5133,7 +5137,7 @@ void DrawNodePart1Test::listviewCallback(ax::Ref* sender, ax::ui::ListView::Even
     }
     _currentSeletedItemIndex = (int)listview->getCurSelectedIndex();
     listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color3B::RED);
-    isDirty = true;
+    isDirty   = true;
     verticess = makePolygons();
 }
 
@@ -5323,8 +5327,8 @@ void DrawNodePart1Test::drawAll()
         bool isReal = false;
 
         draw->drawPoly(verticess, sizeof(verticess) / sizeof(verticess[0]), true,
-                           Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
-        
+                       Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
+
         Vec2 vertices[5] = {Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f),
                             Vec2(50.0f, 100.0f)};
         draw->drawPoly(vertices, 5, false, Color4B::BLUE, thickness);
@@ -5360,8 +5364,7 @@ void DrawNodePart1Test::drawAll()
     {
         // drawPolygon
 
-
-            Vec2 vertices24[] = {
+        Vec2 vertices24[] = {
             {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},
             {100.250000f, 161.375000f}, {65.500000f, 181.375000f},  {102.250000f, 179.125000f},
             {95.000000f, 215.125000f},  {129.331467f, 189.926208f}, {131.371460f, 206.366196f},
@@ -5381,31 +5384,36 @@ void DrawNodePart1Test::drawAll()
             {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
         };
         BENCHMARK_SECTION_BEGIN("drawPoly");
-                draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]),
-                                  Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0), thickness,
-                                  Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+        draw->setDNScale(Vec2(thickness, thickness));
+        draw->setDNPosition(Vec2(0, 0));
+        draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness,
+                          Color4F::YELLOW);
+        draw->setDNPosition(Vec2(10, 0));
+        draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness,
+                          Color4F::YELLOW);
         BENCHMARK_SECTION_END();
 
+        draw1->clear();
+        draw1->setPosition(Vec2(200, 0));
+        draw1->setScale(thickness);
+        draw1->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, thickness,
+                           Color4F::YELLOW);
 
-
-
-
-
-        //for (int i = 0; i < 0; i++)
+        // for (int i = 0; i < 0; i++)
         //{
-        //    PathsD solution, clip, subject;
-        //    PathD p, c;
-        //    for (int i = 0; i < 3; i++)
-        //    {
-        //        p.push_back(
-        //            PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
-        //        c.push_back(
-        //            PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
-        //    }
-        //   
-        //    subject.push_back(p);
-        //    clip.push_back(c);
-        //    solution = Intersect(subject, clip, FillRule::Positive);
+        //     PathsD solution, clip, subject;
+        //     PathD p, c;
+        //     for (int i = 0; i < 3; i++)
+        //     {
+        //         p.push_back(
+        //             PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
+        //         c.push_back(
+        //             PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
+        //     }
+        //
+        //     subject.push_back(p);
+        //     clip.push_back(c);
+        //     solution = Intersect(subject, clip, FillRule::Positive);
 
         //    if (solution.size() > 0)
         //    {
@@ -5425,45 +5433,46 @@ void DrawNodePart1Test::drawAll()
         //        }
         ////        if (verCount > 8)
         //        {
-        //            draw->drawPolygon(vertices, verCount, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0),
+        //            draw->drawPolygon(vertices, verCount, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(),
+        //            AXRANDOM_0_1(), 1.0),
         //                              thickness, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
         //        }
         //    }
 
-            // PathsD solution, clip, subject;
-            // PathD p, c;
-            // for (int i = 0; i < 10; i++)
-            //{
-            //     p.push_back(
-            //         PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
-            //     c.push_back(
-            //         PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
-            // }
-            // subject.push_back(p);
-            // clip.push_back(c);
-            // solution = Intersect(subject, clip, FillRule::NonZero);
-            // if (solution.size() > 0)
-            //{
-            //     Vec2* vertices;
-            //     int verCount = 0;
-            //     ax::any_buffer myBuf;
-            //     for (auto&& p : solution)
-            //     {
-            //         int i    = 0;
-            //         verCount = p.size();
-            //         vertices = myBuf.get<Vec2>(verCount+1);
-            //         for (auto&& pt : p)
-            //         {
-            //             vertices[i] = Vec2(pt.x, pt.y);
-            //             i++;
-            //         }
-            //     }
-            //     if (sizeof(vertices) / sizeof(vertices) > 8)
-            //     {
-            //         draw->drawPolygon(vertices, sizeof(vertices) / sizeof(vertices), Color4B::AX_TRANSPARENT,
-            //         thickness,
-            //                           Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.1f));
-            //     }
+        // PathsD solution, clip, subject;
+        // PathD p, c;
+        // for (int i = 0; i < 10; i++)
+        //{
+        //     p.push_back(
+        //         PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
+        //     c.push_back(
+        //         PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
+        // }
+        // subject.push_back(p);
+        // clip.push_back(c);
+        // solution = Intersect(subject, clip, FillRule::NonZero);
+        // if (solution.size() > 0)
+        //{
+        //     Vec2* vertices;
+        //     int verCount = 0;
+        //     ax::any_buffer myBuf;
+        //     for (auto&& p : solution)
+        //     {
+        //         int i    = 0;
+        //         verCount = p.size();
+        //         vertices = myBuf.get<Vec2>(verCount+1);
+        //         for (auto&& pt : p)
+        //         {
+        //             vertices[i] = Vec2(pt.x, pt.y);
+        //             i++;
+        //         }
+        //     }
+        //     if (sizeof(vertices) / sizeof(vertices) > 8)
+        //     {
+        //         draw->drawPolygon(vertices, sizeof(vertices) / sizeof(vertices), Color4B::AX_TRANSPARENT,
+        //         thickness,
+        //                           Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.1f));
+        //     }
         //}
 
         // Vec2 points[] = {Vec2(s.height / 4, 0.0f), Vec2(s.width, s.height / 5), Vec2(s.width / 3 * 2, s.height)};
