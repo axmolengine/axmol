@@ -101,10 +101,8 @@ Vec2* DrawNodeExt::transform(const Vec2* vertices, unsigned int count)
     _dnPosition.x = 10.f;
     _dnPosition.y = 0.f;
     _dnRotation   = 0.f;
-    _dnScale.x    = 0.f;
-    _dnScale.y    = 0.f;
-
-    // ax::any_buffer _buf;
+    _dnScale.x    = 2.f;
+    _dnScale.y    = 2.f;
 
      Vec2* vert = _abuf.get<Vec2>(count);
      memcpy(vert, vertices, count);
@@ -113,8 +111,8 @@ Vec2* DrawNodeExt::transform(const Vec2* vertices, unsigned int count)
      {
         if (_dnRotation == 0.0f)
         {
-            vert[i].x = vertices[i].x + _dnPosition.x;
-            vert[i].y = vertices[i].y + _dnPosition.y;
+            vert[i].x = vertices[i].x * _dnScale.x + _dnPosition.x;
+            vert[i].y = vertices[i].y * _dnScale.y + _dnPosition.y;
         }
         else
         {
@@ -134,8 +132,12 @@ Vec2* DrawNodeExt::transform(const Vec2* vertices, unsigned int count)
 
 // implementation of DrawNode
 
-DrawNodeExt::DrawNodeExt(float lineWidth) : _lineWidth(lineWidth), _defaultLineWidth(lineWidth), _isConvex(false)
-{
+DrawNodeExt::DrawNodeExt(float lineWidth) : _lineWidth(lineWidth)  , _defaultLineWidth(lineWidth)
+     , _isConvex(false)
+     , _dnPosition(Vec2::ZERO)
+     , _dnRotation(0.0f)
+     , _dnScale(Vec2::ONE)
+ {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     // TODO new-renderer: interface setupBuffer removal
@@ -980,13 +982,10 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
 
     Vec2* _vertices = transform(verts, count);
 
-    for (size_t i = 0; i < count; i++)
-    {
-        AXLOG("_vertices: %f %f  verts: %f %f", _vertices[i].x, _vertices[i].y, verts[i].x, verts[i].y);
-    }
-
-
-
+    //for (size_t i = 0; i < count; i++)
+    //{
+    //    AXLOG("_vertices: %f %f  verts: %f %f", _vertices[i].x, _vertices[i].y, verts[i].x, verts[i].y);
+    //}
 
     bool outline = (borderColo.a > 0.0f && borderWidth > 0.0f);
 
