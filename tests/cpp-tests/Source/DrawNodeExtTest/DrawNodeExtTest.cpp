@@ -5359,43 +5359,76 @@ void DrawNodePart1Test::drawAll()
     case 8:
     {
         // drawPolygon
-        for (int i = 0; i < 100; i++)
-        {
-            PathsD solution, clip, subject;
-            PathD p, c;
-            for (int i = 0; i < 10; i++)
-            {
-                p.push_back(
-                    PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
-                c.push_back(
-                    PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
-            }
-            subject.push_back(p);
-            clip.push_back(c);
-            solution = Intersect(subject, clip, FillRule::NonZero);
 
-            if (solution.size() > 0)
-            {
-                Vec2* vertices;
-                int verCount = 0;
-                ax::any_buffer myBuf;
-                for (auto&& p : solution)
-                {
-                    int i    = 0;
-                    verCount = p.size();
-                    vertices = myBuf.get<Vec2>(verCount);
-                    for (auto&& pt : p)
-                    {
-                        vertices[i] = Vec2(pt.x, pt.y);
-                        i++;
-                    }
-                }
-                if (verCount > 8)
-                {
-                    draw->drawPolygon(vertices, verCount, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0),
-                                      thickness, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
-                }
-            }
+
+                Vec2 vertices24[] = {
+            {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},
+            {100.250000f, 161.375000f}, {65.500000f, 181.375000f},  {102.250000f, 179.125000f},
+            {95.000000f, 215.125000f},  {129.331467f, 189.926208f}, {131.371460f, 206.366196f},
+            {139.651474f, 192.446198f}, {161.851471f, 200.606201f}, {151.000000f, 220.375000f},
+            {110.500000f, 244.375000f}, {153.750000f, 238.125000f}, {142.500000f, 253.875000f},
+            {220.750000f, 259.375000f}, {250.500000f, 244.375000f}, {168.750000f, 241.875000f},
+            {182.250000f, 154.125000f}, {190.250000f, 227.375000f}, {196.500000f, 197.375000f},
+            {208.750000f, 210.625000f}, {220.750000f, 194.375000f}, {208.750000f, 176.375000f},
+            {253.250000f, 173.875000f}, {243.750000f, 154.125000f}, {213.750000f, 161.375000f},
+            {202.250000f, 139.875000f}, {236.000000f, 131.875000f}, {218.500000f, 120.875000f},
+            {206.500000f, 125.625000f}, {184.500000f, 110.375000f}, {157.000000f, 108.625000f},
+            {147.500000f, 96.625000f},  {153.750000f, 85.125000f},  {147.500000f, 75.375000f},
+            {126.500000f, 74.125000f},  {110.500000f, 86.625000f},  {127.750000f, 85.125000f},
+            {135.250000f, 91.125000f},  {135.250000f, 97.875000f},  {124.000000f, 93.875000f},
+            {115.500000f, 100.875000f}, {115.500000f, 111.875000f}, {135.250000f, 108.625000f},
+            {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
+            {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
+        };
+        BENCHMARK_SECTION_BEGIN("drawPoly");
+                draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]),
+                                  Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0), thickness,
+                                  Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+        BENCHMARK_SECTION_END();
+
+
+
+
+
+
+        //for (int i = 0; i < 0; i++)
+        //{
+        //    PathsD solution, clip, subject;
+        //    PathD p, c;
+        //    for (int i = 0; i < 3; i++)
+        //    {
+        //        p.push_back(
+        //            PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
+        //        c.push_back(
+        //            PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
+        //    }
+        //   
+        //    subject.push_back(p);
+        //    clip.push_back(c);
+        //    solution = Intersect(subject, clip, FillRule::Positive);
+
+        //    if (solution.size() > 0)
+        //    {
+        //        Vec2* vertices;
+        //        int verCount = 0;
+        //        ax::any_buffer myBuf;
+        //        for (auto&& p : solution)
+        //        {
+        //            int i    = 0;
+        //            verCount = p.size();
+        //            vertices = myBuf.get<Vec2>(verCount);
+        //            for (auto&& pt : p)
+        //            {
+        //                vertices[i] = Vec2(pt.x, pt.y);
+        //                i++;
+        //            }
+        //        }
+        ////        if (verCount > 8)
+        //        {
+        //            draw->drawPolygon(vertices, verCount, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0),
+        //                              thickness, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+        //        }
+        //    }
 
             // PathsD solution, clip, subject;
             // PathD p, c;
@@ -5431,7 +5464,7 @@ void DrawNodePart1Test::drawAll()
             //         thickness,
             //                           Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.1f));
             //     }
-        }
+        //}
 
         // Vec2 points[] = {Vec2(s.height / 4, 0.0f), Vec2(s.width, s.height / 5), Vec2(s.width / 3 * 2, s.height)};
         // draw->drawPolygon(points, 3, Color4B::AX_TRANSPARENT, thickness, Color4F(0.0f, 0.0f, 1.0f, 0.5f));

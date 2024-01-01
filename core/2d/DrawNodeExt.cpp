@@ -89,33 +89,33 @@ static inline bool isConvex(const Vec2* verts, int count)
     return true;  // Polygon is convex
 }
 
-//Vec2*  DrawNode::transform(const Vec2* vertices, unsigned int count)
+// Vec2*  DrawNode::transform(const Vec2* vertices, unsigned int count)
 //{
 //
-//    // void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float
-//    // scaleX,
-//    //                                float scaleY, const Color4B& color)
-//    //{
-//    //     const float coef = 2.0f * (float)M_PI / segments;
+//     // void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float
+//     // scaleX,
+//     //                                float scaleY, const Color4B& color)
+//     //{
+//     //     const float coef = 2.0f * (float)M_PI / segments;
 //
-//    Vec2* vert = _abuf.get<Vec2>(count);
-//    for (int i = 0; i < count; i++)
-//    {
-//        vert->x = vertices->y + _dnPosition.x + cosf(_dnRotation) * _dnCenter.x;
-//        vert->y = vertices->y + _dnPosition.y + sinf(_dnRotation) * _dnCenter.y;
-//    }
+//     Vec2* vert = _abuf.get<Vec2>(count);
+//     for (int i = 0; i < count; i++)
+//     {
+//         vert->x = vertices->y + _dnPosition.x + cosf(_dnRotation) * _dnCenter.x;
+//         vert->y = vertices->y + _dnPosition.y + sinf(_dnRotation) * _dnCenter.y;
+//     }
 //
-//    //for (unsigned int i = 0; i < segments; i++)
-//    //{
-//    //    float rads = i * coef;
-//    //    float j    = radius * cosf(rads + angle) * scaleX + center.x;
-//    //    float k    = radius * sinf(rads + angle) * scaleY + center.y;
+//     //for (unsigned int i = 0; i < segments; i++)
+//     //{
+//     //    float rads = i * coef;
+//     //    float j    = radius * cosf(rads + angle) * scaleX + center.x;
+//     //    float k    = radius * sinf(rads + angle) * scaleY + center.y;
 //
-//    //    vertices[i].x = j;
-//    //    vertices[i].y = k;
-//    //}
-//    return vert;
-//}
+//     //    vertices[i].x = j;
+//     //    vertices[i].y = k;
+//     //}
+//     return vert;
+// }
 
 // implementation of DrawNode
 
@@ -234,9 +234,9 @@ void DrawNodeExt::updateShader()
 }
 
 void DrawNodeExt::updateShaderInternal(CustomCommand& cmd,
-                                    uint32_t programType,
-                                    CustomCommand::DrawType drawType,
-                                    CustomCommand::PrimitiveType primitiveType)
+                                       uint32_t programType,
+                                       CustomCommand::DrawType drawType,
+                                       CustomCommand::PrimitiveType primitiveType)
 {
     auto& pipelinePS = cmd.getPipelineDescriptor().programState;
     AX_SAFE_RELEASE(pipelinePS);
@@ -341,9 +341,9 @@ void DrawNodeExt::drawPoints(const Vec2* position, unsigned int numberOfPoints, 
 }
 
 void DrawNodeExt::drawPoints(const Vec2* position,
-                          unsigned int numberOfPoints,
-                          const float pointSize,
-                          const Color4B& color)
+                             unsigned int numberOfPoints,
+                             const float pointSize,
+                             const Color4B& color)
 {
     ensureCapacityGLPoint(numberOfPoints);
 
@@ -390,7 +390,7 @@ void DrawNodeExt::drawRect(const Vec2& origin, const Vec2& destination, const Co
     {
         Vec2 line[4] = {{origin}, {Vec2(destination.x, origin.y)}, {destination}, {Vec2(origin.x, destination.y)}};
         DrawNodeExt::Version tmp = _dnVersion;
-        _dnVersion                    = DrawNodeExt::Version::v1;
+        _dnVersion               = DrawNodeExt::Version::v1;
         _drawPoly(line, 4, true, color, thickness);
         _dnVersion = tmp;
         return;
@@ -405,10 +405,10 @@ void DrawNodeExt::drawRect(const Vec2& origin, const Vec2& destination, const Co
 }
 
 void DrawNodeExt::drawPoly(const Vec2* poli,
-                        unsigned int numberOfPoints,
-                        bool closePolygon,
-                        const Color4B& color,
-                        float thickness)
+                           unsigned int numberOfPoints,
+                           bool closePolygon,
+                           const Color4B& color,
+                           float thickness)
 {
     if (thickness != 1.0f)
     {
@@ -452,14 +452,14 @@ void DrawNodeExt::drawPoly(const Vec2* poli,
 }
 
 void DrawNodeExt::drawCircle(const Vec2& center,
-                          float radius,
-                          float angle,
-                          unsigned int segments,
-                          bool drawLineToCenter,
-                          float scaleX,
-                          float scaleY,
-                          const Color4B& color,
-                          float thickness)
+                             float radius,
+                             float angle,
+                             unsigned int segments,
+                             bool drawLineToCenter,
+                             float scaleX,
+                             float scaleY,
+                             const Color4B& color,
+                             float thickness)
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
@@ -473,7 +473,7 @@ void DrawNodeExt::drawCircle(const Vec2& center,
     }
 
     DrawNodeExt::Version tmp = _dnVersion;
-    _dnVersion                    = DrawNodeExt::Version::v1;
+    _dnVersion               = DrawNodeExt::Version::v1;
     if (thickness != 1.0f)
     {
 
@@ -494,22 +494,22 @@ void DrawNodeExt::drawCircle(const Vec2& center,
 }
 
 void DrawNodeExt::drawCircle(const Vec2& center,
-                          float radius,
-                          float angle,
-                          unsigned int segments,
-                          bool drawLineToCenter,
-                          const Color4B& color,
-                          float thickness)
+                             float radius,
+                             float angle,
+                             unsigned int segments,
+                             bool drawLineToCenter,
+                             const Color4B& color,
+                             float thickness)
 {
     drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color, thickness);
 }
 
 void DrawNodeExt::drawQuadBezier(const Vec2& origin,
-                              const Vec2& control,
-                              const Vec2& destination,
-                              unsigned int segments,
-                              const Color4B& color,
-                              float thickness)
+                                 const Vec2& control,
+                                 const Vec2& destination,
+                                 unsigned int segments,
+                                 const Color4B& color,
+                                 float thickness)
 {
     Vec2* vertices = _abuf.get<Vec2>(segments + 1);
 
@@ -526,12 +526,12 @@ void DrawNodeExt::drawQuadBezier(const Vec2& origin,
 }
 
 void DrawNodeExt::drawCubicBezier(const Vec2& origin,
-                               const Vec2& control1,
-                               const Vec2& control2,
-                               const Vec2& destination,
-                               unsigned int segments,
-                               const Color4B& color,
-                               float thickness)
+                                  const Vec2& control1,
+                                  const Vec2& control2,
+                                  const Vec2& destination,
+                                  unsigned int segments,
+                                  const Color4B& color,
+                                  float thickness)
 {
     Vec2* vertices = _abuf.get<Vec2>(segments + 1);
 
@@ -550,10 +550,10 @@ void DrawNodeExt::drawCubicBezier(const Vec2& origin,
 }
 
 void DrawNodeExt::drawCardinalSpline(PointArray* config,
-                                  float tension,
-                                  unsigned int segments,
-                                  const Color4B& color,
-                                  float thickness)
+                                     float tension,
+                                     unsigned int segments,
+                                     const Color4B& color,
+                                     float thickness)
 {
     Vec2* vertices = _abuf.get<Vec2>(segments + 1);
 
@@ -620,17 +620,17 @@ void DrawNodeExt::drawDot(const Vec2& pos, float radius, const Color4B& color)
 }
 
 void DrawNodeExt::drawRect(const Vec2& p1,
-                        const Vec2& p2,
-                        const Vec2& p3,
-                        const Vec2& p4,
-                        const Color4B& color,
-                        float thickness)
+                           const Vec2& p2,
+                           const Vec2& p3,
+                           const Vec2& p4,
+                           const Color4B& color,
+                           float thickness)
 {
     if (thickness != 1.0f)
     {
-        Vec2 line[4]                  = {{p1}, {p2}, {p3}, {p4}};
+        Vec2 line[4]             = {{p1}, {p2}, {p3}, {p4}};
         DrawNodeExt::Version tmp = _dnVersion;
-        _dnVersion                    = DrawNodeExt::Version::v1;
+        _dnVersion               = DrawNodeExt::Version::v1;
         _drawPoly(line, 4, true, color, thickness);
         _dnVersion = tmp;
     }
@@ -717,10 +717,10 @@ void DrawNodeExt::drawSegment(const Vec2& from, const Vec2& to, float radius, co
 }
 
 void DrawNodeExt::drawPolygon(const Vec2* verts,
-                           int count,
-                           const Color4B& fillColor,
-                           float borderWidth,
-                           const Color4B& borderColor)
+                              int count,
+                              const Color4B& fillColor,
+                              float borderWidth,
+                              const Color4B& borderColor)
 {
     AXLOG("# drawPolygon Count %i", count);
     for (size_t i = 0; i < count; i++)
@@ -732,9 +732,9 @@ void DrawNodeExt::drawPolygon(const Vec2* verts,
 
 void DrawNodeExt::drawSolidRect(const Vec2& origin, const Vec2& destination, const Color4B& color)
 {
-    Vec2 vertices[]               = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y)};
+    Vec2 vertices[]          = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y)};
     DrawNodeExt::Version tmp = _dnVersion;
-    _dnVersion                    = DrawNodeExt::Version::v1;
+    _dnVersion               = DrawNodeExt::Version::v1;
     _drawPolygon(vertices, 4, color, 0.0f, Color4B(), true);
     _dnVersion = tmp;
 }
@@ -745,16 +745,16 @@ void DrawNodeExt::drawSolidPoly(const Vec2* poli, unsigned int numberOfPoints, c
 }
 
 void DrawNodeExt::drawPie(const Vec2& center,
-                       float radius,
-                       float rotation,
-                       int startAngle,
-                       int endAngle,
-                       float scaleX,
-                       float scaleY,
-                       const Color4B& fillColor,
-                       const Color4B& borderColor,
-                       DrawMode drawMode,
-                       float thickness)
+                          float radius,
+                          float rotation,
+                          int startAngle,
+                          int endAngle,
+                          float scaleX,
+                          float scaleY,
+                          const Color4B& fillColor,
+                          const Color4B& borderColor,
+                          DrawMode drawMode,
+                          float thickness)
 {
     // not a real line!
     if (startAngle == endAngle)
@@ -817,14 +817,14 @@ void DrawNodeExt::drawPie(const Vec2& center,
 }
 
 void DrawNodeExt::drawSolidCircle(const Vec2& center,
-                               float radius,
-                               float angle,
-                               unsigned int segments,
-                               float scaleX,
-                               float scaleY,
-                               const Color4B& fillColor,
-                               float borderWidth,
-                               const Color4B& borderColor)
+                                  float radius,
+                                  float angle,
+                                  unsigned int segments,
+                                  float scaleX,
+                                  float scaleY,
+                                  const Color4B& fillColor,
+                                  float borderWidth,
+                                  const Color4B& borderColor)
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
@@ -840,18 +840,18 @@ void DrawNodeExt::drawSolidCircle(const Vec2& center,
         vertices[i].y = k;
     }
     DrawNodeExt::Version tmp = _dnVersion;
-    _dnVersion                    = DrawNodeExt::Version::v1;
+    _dnVersion               = DrawNodeExt::Version::v1;
     _drawPolygon(vertices, segments, fillColor, borderWidth, borderColor);
     _dnVersion = tmp;
 }
 
 void DrawNodeExt::drawSolidCircle(const Vec2& center,
-                               float radius,
-                               float angle,
-                               unsigned int segments,
-                               float scaleX,
-                               float scaleY,
-                               const Color4B& color)
+                                  float radius,
+                                  float angle,
+                                  unsigned int segments,
+                                  float scaleX,
+                                  float scaleY,
+                                  const Color4B& color)
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
@@ -867,17 +867,17 @@ void DrawNodeExt::drawSolidCircle(const Vec2& center,
         vertices[i].y = k;
     }
     DrawNodeExt::Version tmp = _dnVersion;
-    _dnVersion                    = DrawNodeExt::Version::v1;
+    _dnVersion               = DrawNodeExt::Version::v1;
     _drawPolygon(vertices, segments, color, 0.0f, Color4B(), true);
     _dnVersion = tmp;
     //   drawSolidPoly(vertices, segments, color);
 }
 
 void DrawNodeExt::drawSolidCircle(const Vec2& center,
-                               float radius,
-                               float angle,
-                               unsigned int segments,
-                               const Color4B& color)
+                                  float radius,
+                                  float angle,
+                                  unsigned int segments,
+                                  const Color4B& color)
 {
     drawSolidCircle(center, radius, angle, segments, 1.0f, 1.0f, color);
 }
@@ -889,7 +889,7 @@ void DrawNodeExt::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, c
         Vec2 poli[3] = {p1, p2, p3};
 
         DrawNodeExt::Version tmp = _dnVersion;
-        _dnVersion                    = DrawNodeExt::Version::v1;
+        _dnVersion               = DrawNodeExt::Version::v1;
         _drawPolygon(poli, 3, Color4B::AX_TRANSPARENT, thickness, color, true);
         _dnVersion = tmp;
         return;
@@ -958,11 +958,11 @@ void DrawNodeExt::visit(Renderer* renderer, const Mat4& parentTransform, uint32_
 }
 
 inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
-                                   int count,
-                                   const Color4B& fillColor,
-                                   float borderWidth,
-                                   const Color4B& borderColo,
-                                   bool closedPolygon)
+                                      int count,
+                                      const Color4B& fillColor,
+                                      float borderWidth,
+                                      const Color4B& borderColo,
+                                      bool closedPolygon)
 {
     AXASSERT(count >= 0, "invalid count value");
 
@@ -979,114 +979,74 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
 
     if (closedPolygon && count >= 3 && _dnVersion >= Version::v2 && !isConvex(verts, count))
     {
-        CDT::Triangulation<float> cdt;
-        std::vector<CDT::V2d<float>> vertices;
-        for (int i = 0; i < count; ++i)
+        if (0)  // CDT
         {
-            AXLOG("====  x: %f y: %f", verts[i].x, verts[i].x);
-            vertices.emplace_back(CDT::V2d(verts[i].x, verts[i].y));
+            CDT::Triangulation<float> cdt;
+            std::vector<CDT::V2d<float>> vertices;
+            for (int i = 0; i < count; ++i)
+            {
+                vertices.emplace_back((float)verts[i].x, (float)verts[i].y);
+                vertices.emplace_back(CDT::V2d(verts[i].x, verts[i].y));
+                vertices.emplace_back(CDT::V2d<float>::make(verts[i].x, verts[i].y));
+            }
+            cdt.insertVertices(vertices);
+            cdt.eraseSuperTriangle();
+            ///* access triangles */                = cdt.triangles;
+            ///* access vertices */                 = cdt.vertices;
+            ///* access boundary (fixed) edges */   = cdt.fixedEdges;
+            ///* calculate all edges (on demand) */ = CDT::extractEdgesFromTriangles(cdt.triangles);
+
+            for (auto&& t : cdt.triangles)
+            {
+                auto a = t.vertices;
+                AXLOG("%i %i %i", t.vertices[0], t.vertices[1], t.vertices[2]);
+                AXLOG("+++++++++  %d", CDT::V2d(t.vertices[0]).x);
+                float vvv = 10.0f;
+                // 20.0f;
+                V2F_C4B_T2F_Triangle tmp = {
+                    {Vec2(t.vertices[0] * vvv, t.vertices[1] * vvv), fillColor, Tex2F(0.0, 0.0)},
+                    {Vec2(t.vertices[1] * vvv, t.vertices[2] * vvv), fillColor, Tex2F(0.0, 0.0)},
+                    {Vec2(t.vertices[2] * vvv, t.vertices[0] * vvv), fillColor, Tex2F(0.0, 0.0)},
+                };
+                *cursor++ = tmp;
+            }
         }
-        cdt.insertVertices(vertices);
-        cdt.eraseSuperTriangle();
-        ///* access triangles */                = cdt.triangles;
-        ///* access vertices */                 = cdt.vertices;
-        ///* access boundary (fixed) edges */   = cdt.fixedEdges;
-        ///* calculate all edges (on demand) */ = CDT::extractEdgesFromTriangles(cdt.triangles);
-
-        //        if ((tris.size() * 3) > vertex_count)
-        //{
-        //    ensureCapacity((tris.size() * 3));
-        //    triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
-        //    cursor    = triangles;
-        //}
-
-        for (auto&& t : cdt.triangles)
+        else // poli2tri
         {
-            auto a = t.vertices;
-            AXLOG("%d %d %d", t.vertices[0], t.vertices[1], t.vertices[2]);
-            //p2t::Point* vec1 = t->->GetPoint(0);
-            //p2t::Point* vec2 = t->GetPoint(1);
-            //p2t::Point* vec3 = t->GetPoint(2);
-            float vvv                = 20.0f;
-            V2F_C4B_T2F_Triangle tmp = {
-                //{Vec2(vec1->x, vec1->y), fillColor, Tex2F(0.0, 0.0)},
-                //{Vec2(vec2->x, vec2->y), fillColor, Tex2F(0.0, 0.0)},
-                //{Vec2(vec3->x, vec3->y), fillColor, Tex2F(0.0, 0.0)},
-                {Vec2(t.vertices[0] * vvv, t.vertices[1] * vvv), fillColor, Tex2F(0.0, 0.0)},
-                {Vec2(t.vertices[1] * vvv, t.vertices[2] * vvv), fillColor, Tex2F(0.0, 0.0)},
-                {Vec2(t.vertices[2] * vvv, t.vertices[0] * vvv), fillColor, Tex2F(0.0, 0.0)},
-            };
-            *cursor++ = tmp;
+            std::vector<p2t::Point> p2pointsStorage;
+            p2pointsStorage.reserve(count);
+            std::vector<p2t::Point*> p2points;
+            p2points.reserve(count);
+
+            for (int i = 0; i < count; ++i)
+            {
+                p2points.emplace_back(&p2pointsStorage.emplace_back((double)verts[i].x, (double)verts[i].y));
+            }
+            p2t::CDT cdt(p2points);
+            cdt.Triangulate();
+            std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
+
+            if ((tris.size() * 3) > vertex_count)
+            {
+                ensureCapacity((tris.size() * 3));
+                triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
+                cursor    = triangles;
+            }
+
+            for (auto&& t : tris)
+            {
+                p2t::Point* vec1 = t->GetPoint(0);
+                p2t::Point* vec2 = t->GetPoint(1);
+                p2t::Point* vec3 = t->GetPoint(2);
+
+                V2F_C4B_T2F_Triangle tmp = {
+                    {Vec2(vec1->x, vec1->y), fillColor, Tex2F(0.0, 0.0)},
+                    {Vec2(vec2->x, vec2->y), fillColor, Tex2F(0.0, 0.0)},
+                    {Vec2(vec3->x, vec3->y), fillColor, Tex2F(0.0, 0.0)},
+                };
+                *cursor++ = tmp;
+            }
         }
-
-            // Write faces
-        //for (const auto& t : cdt.triangles)
-        //{
-        //    fout << "3 " << t.vertices[0] << ' ' << t.vertices[1] << ' ' << t.vertices[2] << "\n";
-        //}
-        //fout.close();
-
-        //EdgeUSet extractAllEdges(const CDT::Triangulation<T, TNearPointLocator>& cdt)
-        //{
-        //    EdgeUSet out;
-        //    for (const auto& t : cdt.triangles)
-        //    {
-        //        for (std::size_t i = 0; i < 3; ++i)
-        //        {
-        //            out.insert(Edge(t.vertices[i], t.vertices[(i + 1) % 3]));
-        //        }
-        //    }
-        //    return out;
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //std::vector<p2t::Point> p2pointsStorage;
-        //p2pointsStorage.reserve(count);
-        //std::vector<p2t::Point*> p2points;
-        //p2points.reserve(count);
-
-        //for (int i = 0; i < count; ++i)
-        //{
-        //    p2points.emplace_back(&p2pointsStorage.emplace_back((double)verts[i].x, (double)verts[i].y));
-        //}
-        //p2t::CDT cdt(p2points);
-        //cdt.Triangulate();
-        //std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
-
-        //if ((tris.size() * 3) > vertex_count)
-        //{
-        //    ensureCapacity((tris.size() * 3));
-        //    triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
-        //    cursor    = triangles;
-        //}
-
-        //for (auto&& t : tris)
-        //{
-        //    p2t::Point* vec1 = t->GetPoint(0);
-        //    p2t::Point* vec2 = t->GetPoint(1);
-        //    p2t::Point* vec3 = t->GetPoint(2);
-
-        //    V2F_C4B_T2F_Triangle tmp = {
-        //        {Vec2(vec1->x, vec1->y), fillColor, Tex2F(0.0, 0.0)},
-        //        {Vec2(vec2->x, vec2->y), fillColor, Tex2F(0.0, 0.0)},
-        //        {Vec2(vec3->x, vec3->y), fillColor, Tex2F(0.0, 0.0)},
-        //    };
-        //    *cursor++ = tmp;
-        //}
     }
     else
     {
@@ -1165,15 +1125,11 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
 }
 
 inline void DrawNodeExt::_drawPoly(const Vec2* poli,
-                                unsigned int numberOfPoints,
-                                bool closePolygon,
-                                const Color4B& color,
-                                float thickness)
+                                   unsigned int numberOfPoints,
+                                   bool closePolygon,
+                                   const Color4B& color,
+                                   float thickness)
 {
-
-
-
-
 
     if (thickness != 1.0f)
     {
