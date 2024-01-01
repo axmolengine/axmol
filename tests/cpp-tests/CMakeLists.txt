@@ -221,6 +221,7 @@ list(APPEND GAME_HEADER
      Source/UITest/CocoStudioGUITest/UIFocusTest/UIFocusTest.h
      Source/UITest/CocoStudioGUITest/UITextTest/UITextTest.h
      Source/DrawPrimitivesTest/DrawPrimitivesTest.h
+	 Source/DrawNodeExtTest/DrawNodeExtTest.h
      Source/BillBoardTest/BillBoardTest.h
      Source/SpriteFrameCacheTest/SpriteFrameCacheTest.h
      Source/EffectsAdvancedTest/EffectsAdvancedTest.h
@@ -287,6 +288,7 @@ list(APPEND GAME_SOURCE
      Source/NetworkTest/HttpClientTest/HttpClientTest.cpp
      Source/NetworkTest/WebSocketTest/WebSocketTest.cpp
      Source/DrawPrimitivesTest/DrawPrimitivesTest.cpp
+	 Source/DrawNodeExtTest/DrawNodeExtTest.cpp
      Source/EffectsAdvancedTest/EffectsAdvancedTest.cpp
      Source/EffectsTest/EffectsTest.cpp
      Source/ExtensionsTest/AssetsManagerExTest/AssetsManagerExTest.cpp

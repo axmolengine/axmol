@@ -72,6 +72,7 @@
 #include "DataVisitorTest/DataVisitorTest.h"
 #include "NetworkTest/NetworkTest.h"
 #include "DrawPrimitivesTest/DrawPrimitivesTest.h"
+#include "DrawNodeExtTest/DrawNodeExtTest.h"
 #include "EffectsAdvancedTest/EffectsAdvancedTest.h"
 #include "EffectsTest/EffectsTest.h"
 #include "ExtensionsTest/ExtensionsTest.h"

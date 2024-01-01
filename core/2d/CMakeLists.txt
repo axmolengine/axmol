@@ -63,6 +63,7 @@ set(_AX_2D_HEADER
     2d/MotionStreak.h
     2d/Menu.h
     2d/DrawNode.h
+	2d/DrawNodeExt.h
     #2d/TMXLayer.h
     2d/Camera.h
     2d/ParallaxNode.h
@@ -96,6 +97,7 @@ set(_AX_2D_SRC
     2d/ComponentContainer.cpp
     2d/Component.cpp
     2d/DrawNode.cpp
+	2d/DrawNodeExt.cpp
     2d/FastTMXLayer.cpp
     2d/FastTMXTiledMap.cpp
     2d/FontAtlasCache.cpp
