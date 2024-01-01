@@ -65,8 +65,8 @@ namespace network
 struct WebSocketProtocol;
 
 /**
- * WebSocket is wrapper of the libwebsockets-protocol, let the develop could call the websocket easily.
- * Please note that all public methods of WebSocket have to be invoked on Cocos Thread.
+ * WebSocket implementation using yasio.
+ * Please note that all public methods of WebSocket have to be invoked on Axmol Thread.
  */
 class AX_DLL WebSocket
 {
@@ -244,14 +244,16 @@ public:
      *  @param delegate The delegate which want to receive event from websocket.
      *  @param url The URL of websocket server.
      *  @param caFilePath The ca file path for wss connection
-     *  @param protocols The websocket protocols that agree with websocket server
+     *  @param extraHeaders Any optional headers that should be added to the connection
+     *  @param protocols Comma-separated list of sub-protocols that agree with websocket server
      *  @return true: Success, false: Failure.
      *  @lua NA
      */
     bool open(Delegate* delegate,
               std::string_view url,
               std::string_view caFilePath = "",
-              const char* protocols       = nullptr);
+              std::map<std::string, std::string> extraHeaders = {},
+              std::string_view protocols = {});
 
     /**
      *  @brief Sends string data to websocket server.
@@ -264,7 +266,7 @@ public:
     /**
      *  @brief Sends binary data to websocket server.
      *
-     *  @param binaryMsg binary string data.
+     *  @param data binary data.
      *  @param len the size of binary string data.
      *  @lua sendstring
      */
@@ -418,6 +420,8 @@ protected:
     EventListenerCustom* _resetDirectorListener;
 
     ConcurrentDeque<Event*> _eventQueue;
+    std::string _protocols;
+    std::map<std::string, std::string> _headers;
 };
 }  // namespace network
 
