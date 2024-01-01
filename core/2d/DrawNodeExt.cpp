@@ -37,6 +37,7 @@
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramState.h"
 #include "poly2tri/poly2tri.h"
+#include "../../../CDT/CDT/include/CDT.h"
 
 inline const char* benchmark_bb7_name;
 inline std::chrono::steady_clock::time_point benchmark_bb7_start;
@@ -978,39 +979,114 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
 
     if (closedPolygon && count >= 3 && _dnVersion >= Version::v2 && !isConvex(verts, count))
     {
-        std::vector<p2t::Point> p2pointsStorage;
-        p2pointsStorage.reserve(count);
-        std::vector<p2t::Point*> p2points;
-        p2points.reserve(count);
-
+        CDT::Triangulation<float> cdt;
+        std::vector<CDT::V2d<float>> vertices;
         for (int i = 0; i < count; ++i)
         {
-            p2points.emplace_back(&p2pointsStorage.emplace_back((double)verts[i].x, (double)verts[i].y));
+            AXLOG("====  x: %f y: %f", verts[i].x, verts[i].x);
+            vertices.emplace_back(CDT::V2d(verts[i].x, verts[i].y));
         }
-        p2t::CDT cdt(p2points);
-        cdt.Triangulate();
-        std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
+        cdt.insertVertices(vertices);
+        cdt.eraseSuperTriangle();
+        ///* access triangles */                = cdt.triangles;
+        ///* access vertices */                 = cdt.vertices;
+        ///* access boundary (fixed) edges */   = cdt.fixedEdges;
+        ///* calculate all edges (on demand) */ = CDT::extractEdgesFromTriangles(cdt.triangles);
 
-        if ((tris.size() * 3) > vertex_count)
+        //        if ((tris.size() * 3) > vertex_count)
+        //{
+        //    ensureCapacity((tris.size() * 3));
+        //    triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
+        //    cursor    = triangles;
+        //}
+
+        for (auto&& t : cdt.triangles)
         {
-            ensureCapacity((tris.size() * 3));
-            triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
-            cursor    = triangles;
-        }
-
-        for (auto&& t : tris)
-        {
-            p2t::Point* vec1 = t->GetPoint(0);
-            p2t::Point* vec2 = t->GetPoint(1);
-            p2t::Point* vec3 = t->GetPoint(2);
-
+            auto a = t.vertices;
+            AXLOG("%d %d %d", t.vertices[0], t.vertices[1], t.vertices[2]);
+            //p2t::Point* vec1 = t->->GetPoint(0);
+            //p2t::Point* vec2 = t->GetPoint(1);
+            //p2t::Point* vec3 = t->GetPoint(2);
+            float vvv                = 20.0f;
             V2F_C4B_T2F_Triangle tmp = {
-                {Vec2(vec1->x, vec1->y), fillColor, Tex2F(0.0, 0.0)},
-                {Vec2(vec2->x, vec2->y), fillColor, Tex2F(0.0, 0.0)},
-                {Vec2(vec3->x, vec3->y), fillColor, Tex2F(0.0, 0.0)},
+                //{Vec2(vec1->x, vec1->y), fillColor, Tex2F(0.0, 0.0)},
+                //{Vec2(vec2->x, vec2->y), fillColor, Tex2F(0.0, 0.0)},
+                //{Vec2(vec3->x, vec3->y), fillColor, Tex2F(0.0, 0.0)},
+                {Vec2(t.vertices[0] * vvv, t.vertices[1] * vvv), fillColor, Tex2F(0.0, 0.0)},
+                {Vec2(t.vertices[1] * vvv, t.vertices[2] * vvv), fillColor, Tex2F(0.0, 0.0)},
+                {Vec2(t.vertices[2] * vvv, t.vertices[0] * vvv), fillColor, Tex2F(0.0, 0.0)},
             };
             *cursor++ = tmp;
         }
+
+            // Write faces
+        //for (const auto& t : cdt.triangles)
+        //{
+        //    fout << "3 " << t.vertices[0] << ' ' << t.vertices[1] << ' ' << t.vertices[2] << "\n";
+        //}
+        //fout.close();
+
+        //EdgeUSet extractAllEdges(const CDT::Triangulation<T, TNearPointLocator>& cdt)
+        //{
+        //    EdgeUSet out;
+        //    for (const auto& t : cdt.triangles)
+        //    {
+        //        for (std::size_t i = 0; i < 3; ++i)
+        //        {
+        //            out.insert(Edge(t.vertices[i], t.vertices[(i + 1) % 3]));
+        //        }
+        //    }
+        //    return out;
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //std::vector<p2t::Point> p2pointsStorage;
+        //p2pointsStorage.reserve(count);
+        //std::vector<p2t::Point*> p2points;
+        //p2points.reserve(count);
+
+        //for (int i = 0; i < count; ++i)
+        //{
+        //    p2points.emplace_back(&p2pointsStorage.emplace_back((double)verts[i].x, (double)verts[i].y));
+        //}
+        //p2t::CDT cdt(p2points);
+        //cdt.Triangulate();
+        //std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
+
+        //if ((tris.size() * 3) > vertex_count)
+        //{
+        //    ensureCapacity((tris.size() * 3));
+        //    triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
+        //    cursor    = triangles;
+        //}
+
+        //for (auto&& t : tris)
+        //{
+        //    p2t::Point* vec1 = t->GetPoint(0);
+        //    p2t::Point* vec2 = t->GetPoint(1);
+        //    p2t::Point* vec3 = t->GetPoint(2);
+
+        //    V2F_C4B_T2F_Triangle tmp = {
+        //        {Vec2(vec1->x, vec1->y), fillColor, Tex2F(0.0, 0.0)},
+        //        {Vec2(vec2->x, vec2->y), fillColor, Tex2F(0.0, 0.0)},
+        //        {Vec2(vec3->x, vec3->y), fillColor, Tex2F(0.0, 0.0)},
+        //    };
+        //    *cursor++ = tmp;
+        //}
     }
     else
     {
