@@ -54,7 +54,7 @@ WebSocket::WebSocket() {}
 
 WebSocket::~WebSocket() {}
 
-bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view caFilePath, const char* protocols)
+bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view caFilePath, std::string_view protocols)
 {
     if (url.empty())
     {
@@ -64,7 +64,9 @@ bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view 
 
     _delegate = delegate;
 
-    EmscriptenWebSocketCreateAttributes ws_attrs = {url.data(), protocols, EM_TRUE};
+    EmscriptenWebSocketCreateAttributes ws_attrs = {
+            url.data(), protocols.empty() ? nullptr : std::string(protocols).c_str(),
+                                                        EM_TRUE};
 
     AXLOG("ws open url: %s, protocols: %s", ws_attrs.url, ws_attrs.protocols);
 

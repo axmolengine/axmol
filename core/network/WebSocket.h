@@ -244,7 +244,6 @@ public:
      *  @param delegate The delegate which want to receive event from websocket.
      *  @param url The URL of websocket server.
      *  @param caFilePath The ca file path for wss connection
-     *  @param extraHeaders Any optional headers that should be added to the connection
      *  @param protocols Comma-separated list of sub-protocols that agree with websocket server
      *  @return true: Success, false: Failure.
      *  @lua NA
@@ -252,8 +251,7 @@ public:
     bool open(Delegate* delegate,
               std::string_view url,
               std::string_view caFilePath = "",
-              std::map<std::string, std::string> extraHeaders = {},
-              std::string_view protocols = {});
+              std::string_view protocols = "");
 
     /**
      *  @brief Sends string data to websocket server.
@@ -295,12 +293,26 @@ public:
     /**
      *  @brief Gets the URL of websocket connection.
      */
-    inline std::string_view getUrl() const { return _url; }
+    std::string_view getUrl() const { return _url; }
 
     /**
      *  @brief Gets the protocol selected by websocket server.
      */
-    inline std::string_view getProtocol() const { return _selectedProtocol; }
+    std::string_view getProtocol() const { return _selectedProtocol; }
+
+    /**
+     * Set custom-defined headers.
+     *
+     * @param headers The string vector of custom-defined headers.
+     */
+    void setHeaders(const std::vector<std::string>& headers) { _headers = headers; }
+
+    /**
+     * Get custom headers.
+     *
+     * @return std::vector<std::string> the string vector of custom-defined headers.
+     */
+    const std::vector<std::string>& getHeaders() const { return _headers; }
 
 protected:
     void purgePendingEvents();
@@ -420,8 +432,8 @@ protected:
     EventListenerCustom* _resetDirectorListener;
 
     ConcurrentDeque<Event*> _eventQueue;
+    std::vector<std::string> _headers;  /// custom headers
     std::string _protocols;
-    std::map<std::string, std::string> _headers;
 };
 }  // namespace network
 

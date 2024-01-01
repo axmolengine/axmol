@@ -12,8 +12,8 @@ NS_AX_BEGIN
 namespace network
 {
 /**
- * WebSocket is wrapper of the libwebsockets-protocol, let the develop could call the websocket easily.
- * Please note that all public methods of WebSocket have to be invoked on Cocos Thread.
+ * WebSocket implementation using yasio.
+ * Please note that all public methods of WebSocket have to be invoked on Axmol Thread.
  */
 class AX_DLL WebSocket
 {
@@ -122,13 +122,14 @@ public:
      *  @param url The URL of websocket server.
      *  @param protocols The websocket protocols that agree with websocket server
      *  @param caFilePath The ca file path for wss connection
+     *  @param protocols Comma-separated list of sub-protocols that agree with websocket server
      *  @return true: Success, false: Failure.
      *  @lua NA
      */
     bool open(Delegate* delegate,
               std::string_view url,
               std::string_view caFilePath = "",
-              const char* protocols      = nullptr);
+              std::string_view protocols  = "");
 
     /**
      *  @brief Sends string data to websocket server.
@@ -141,7 +142,7 @@ public:
     /**
      *  @brief Sends binary data to websocket server.
      *
-     *  @param binaryMsg binary string data.
+     *  @param data binary string data.
      *  @param len the size of binary string data.
      *  @lua sendstring
      */
@@ -170,12 +171,12 @@ public:
     /**
      *  @brief Gets the URL of websocket connection.
      */
-    inline std::string_view getUrl() const { return _url; }
+    std::string_view getUrl() const { return _url; }
 
     /**
      *  @brief Gets the protocol selected by websocket server.
      */
-    inline std::string_view getProtocol() const { return _selectedProtocol; }
+    std::string_view getProtocol() const { return _selectedProtocol; }
 
 protected:
     static EM_BOOL em_ws_onopen(int eventType, const EmscriptenWebSocketOpenEvent *websocketEvent, void *userData);

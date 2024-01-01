@@ -229,7 +229,6 @@ WebSocket::~WebSocket()
 bool WebSocket::open(Delegate* delegate,
                      std::string_view url,
                      std::string_view caFilePath,
-                     std::map<std::string, std::string> extraHeaders,
                      std::string_view protocols)
 {
     _delegate   = delegate;
@@ -237,7 +236,6 @@ bool WebSocket::open(Delegate* delegate,
     _caFilePath = FileUtils::getInstance()->fullPathForFilename(caFilePath);
     _requestUri = Uri::parse(url);
     _protocols  = protocols;
-    _headers    = std::move(extraHeaders);
 
     setupParsers();
     generateHandshakeSecKey();
@@ -422,7 +420,7 @@ void WebSocket::send(std::string_view message)
 /**
  *  @brief Sends binary data to websocket server.
  *
- *  @param binaryMsg binary string data.
+ *  @param data binary data.
  *  @param len the size of binary string data.
  *  @lua sendstring
  */
@@ -606,7 +604,8 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
 
             for (auto&& header : _headers)
             {
-                obs.write_bytes(fmt::format("{0}: {1}\r\n", header.first, header.second));
+                obs.write_bytes(header);
+                obs.write_bytes("\r\n");
             }
 
             obs.write_bytes("User-Agent: yasio-ws\r\n");
