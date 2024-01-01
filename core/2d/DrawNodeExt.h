@@ -78,22 +78,22 @@ public:
         v4,
     };
 
-    //ax::Vec2 _dnScale;
-    //ax::Vec2 _dnCenter; 
-    //float _dnRotation;
-    //ax::Vec2 _dnPosition;
+    ax::Vec2 _dnScale;
+    ax::Vec2 _dnCenter; 
+    float _dnRotation;
+    ax::Vec2 _dnPosition;
 
     void setDNVersion(ax::DrawNodeExt::Version dnV) { _dnVersion = dnV; };
-    //void setDNScale(ax::Vec2 scale) { _dnScale = scale; };
-    //void setDNScaleX(float scaleX) { _dnScale.x = scaleX; };
-    //void setDNScaleY(float scaleY) { _dnScale.y = scaleY; };
-    //void setDNRotation(float rotation) { _dnRotation = rotation; };
-    //float getDNRotation() { return _dnRotation; };
-    //void setDNCenter(ax::Vec2 center) { _dnCenter = center; };
-    //ax::Vec2 getDNCenter() { return _dnCenter; };
-    //void setDNPosition(ax::Vec2 position) { _dnPosition = position; };
-    //ax::Vec2 getDNPosition() { return _dnPosition; };
-    //Vec2* transform(const Vec2* vertices, unsigned int count);
+    void setDNScale(ax::Vec2 scale) { _dnScale = scale; };
+    void setDNScaleX(float scaleX) { _dnScale.x = scaleX; };
+    void setDNScaleY(float scaleY) { _dnScale.y = scaleY; };
+    void setDNRotation(float rotation) { _dnRotation = rotation; };
+    float getDNRotation() { return _dnRotation; };
+    void setDNCenter(ax::Vec2 center) { _dnCenter = center; };
+    ax::Vec2 getDNCenter() { return _dnCenter; };
+    void setDNPosition(ax::Vec2 position) { _dnPosition = position; };
+    ax::Vec2 getDNPosition() { return _dnPosition; };
+    Vec2* transform(const Vec2* vertices, unsigned int count);
 
     /** creates and initialize a DrawNodeExt node.
      *
@@ -404,7 +404,7 @@ public:
                      const Color4B& borderColor);
 
         void _drawPolygon(const Vec2* verts,
-                     int count,
+                     unsigned int count,
                      const Color4B& fillColor,
                      float borderWidth,
                      const Color4B& borderColor,
@@ -442,7 +442,6 @@ public:
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     void setLineWidth(float lineWidth);
-
     // Get CocosStudio guide lines width.
     float getLineWidth();
 

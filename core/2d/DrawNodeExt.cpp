@@ -89,33 +89,48 @@ static inline bool isConvex(const Vec2* verts, int count)
     return true;  // Polygon is convex
 }
 
-// Vec2*  DrawNode::transform(const Vec2* vertices, unsigned int count)
-//{
-//
-//     // void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float
-//     // scaleX,
-//     //                                float scaleY, const Color4B& color)
-//     //{
-//     //     const float coef = 2.0f * (float)M_PI / segments;
-//
-//     Vec2* vert = _abuf.get<Vec2>(count);
-//     for (int i = 0; i < count; i++)
-//     {
-//         vert->x = vertices->y + _dnPosition.x + cosf(_dnRotation) * _dnCenter.x;
-//         vert->y = vertices->y + _dnPosition.y + sinf(_dnRotation) * _dnCenter.y;
-//     }
-//
-//     //for (unsigned int i = 0; i < segments; i++)
-//     //{
-//     //    float rads = i * coef;
-//     //    float j    = radius * cosf(rads + angle) * scaleX + center.x;
-//     //    float k    = radius * sinf(rads + angle) * scaleY + center.y;
-//
-//     //    vertices[i].x = j;
-//     //    vertices[i].y = k;
-//     //}
-//     return vert;
-// }
+Vec2* DrawNodeExt::transform(const Vec2* vertices, unsigned int count)
+{
+
+     // void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float
+     // scaleX,
+     //                                float scaleY, const Color4B& color)
+     //{
+     //     const float coef = 2.0f * (float)M_PI / segments;
+
+    _dnPosition.x = 10.f;
+    _dnPosition.y = 0.f;
+    _dnRotation   = 0.f;
+    _dnScale.x    = 0.f;
+    _dnScale.y    = 0.f;
+
+    // ax::any_buffer _buf;
+
+     Vec2* vert = _abuf.get<Vec2>(count);
+     memcpy(vert, vertices, count);
+
+     for (int i = 0; i < count; i++)
+     {
+        if (_dnRotation == 0.0f)
+        {
+            vert[i].x = vertices[i].x + _dnPosition.x;
+            vert[i].y = vertices[i].y + _dnPosition.y;
+        }
+        else
+        {
+            //    float rads = i * coef;
+            //    float j    = radius * cosf(rads + angle) * scaleX + center.x;
+            //    float k    = radius * sinf(rads + angle) * scaleY + center.y;
+
+            //    vertices[i].x = j;
+            //    vertices[i].y = k;
+            vert[i].x = vertices[i].x + _dnPosition.x + cosf(_dnRotation) * _dnCenter.x;
+            vert[i].y = vertices[i].y + _dnPosition.y + sinf(_dnRotation) * _dnCenter.y;
+        }
+
+     }
+     return vert;
+ }
 
 // implementation of DrawNode
 
@@ -474,9 +489,7 @@ void DrawNodeExt::drawCircle(const Vec2& center,
     _isConvex = false;
     if (thickness != 1.0f)
     {
-
         _drawPolygon(vertices, segments, Color4B::AX_TRANSPARENT, thickness, color, true);
-
     }
     else
     {
@@ -957,13 +970,23 @@ void DrawNodeExt::visit(Renderer* renderer, const Mat4& parentTransform, uint32_
 }
 
 inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
-                                      int count,
+                                      unsigned int count,
                                       const Color4B& fillColor,
                                       float borderWidth,
                                       const Color4B& borderColo,
                                       bool closedPolygon)
 {
     AXASSERT(count >= 0, "invalid count value");
+
+    Vec2* _vertices = transform(verts, count);
+
+    for (size_t i = 0; i < count; i++)
+    {
+        AXLOG("_vertices: %f %f  verts: %f %f", _vertices[i].x, _vertices[i].y, verts[i].x, verts[i].y);
+    }
+
+
+
 
     bool outline = (borderColo.a > 0.0f && borderWidth > 0.0f);
 
@@ -976,7 +999,7 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
     V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
     V2F_C4B_T2F_Triangle* cursor    = triangles;
 
-    if (closedPolygon && !_isConvex &&count >= 3 && !isConvex(verts, count))
+    if (closedPolygon && !_isConvex && count >= 3 && !isConvex(_vertices, count))
     {
         if (0)  // CDT
         {
@@ -984,9 +1007,9 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
             std::vector<CDT::V2d<float>> vertices;
             for (int i = 0; i < count; ++i)
             {
-                vertices.emplace_back((float)verts[i].x, (float)verts[i].y);
-                vertices.emplace_back(CDT::V2d(verts[i].x, verts[i].y));
-                vertices.emplace_back(CDT::V2d<float>::make(verts[i].x, verts[i].y));
+                vertices.emplace_back((float)_vertices[i].x, (float)_vertices[i].y);
+                vertices.emplace_back(CDT::V2d(_vertices[i].x, _vertices[i].y));
+                vertices.emplace_back(CDT::V2d<float>::make(_vertices[i].x, _vertices[i].y));
             }
             cdt.insertVertices(vertices);
             cdt.eraseSuperTriangle();
@@ -1019,7 +1042,7 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
 
             for (int i = 0; i < count; ++i)
             {
-                p2points.emplace_back(&p2pointsStorage.emplace_back((double)verts[i].x, (double)verts[i].y));
+                p2points.emplace_back(&p2pointsStorage.emplace_back((double)_vertices[i].x, (double)_vertices[i].y));
             }
             p2t::CDT cdt(p2points);
             cdt.Triangulate();
@@ -1052,9 +1075,9 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
         for (int i = 0; i < count - 2; i++)
         {
             V2F_C4B_T2F_Triangle tmp = {
-                {verts[0], fillColor, v2ToTex2F(Vec2::ZERO)},
-                {verts[i + 1], fillColor, v2ToTex2F(Vec2::ZERO)},
-                {verts[i + 2], fillColor, v2ToTex2F(Vec2::ZERO)},
+                {_vertices[0], fillColor, v2ToTex2F(Vec2::ZERO)},
+                {_vertices[i + 1], fillColor, v2ToTex2F(Vec2::ZERO)},
+                {_vertices[i + 2], fillColor, v2ToTex2F(Vec2::ZERO)},
             };
 
             *cursor++ = tmp;
@@ -1070,9 +1093,9 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
 
         for (int i = 0; i < count; i++)
         {
-            Vec2 v0 = verts[(i - 1 + count) % count];
-            Vec2 v1 = verts[i];
-            Vec2 v2 = verts[(i + 1) % count];
+            Vec2 v0 = _vertices[(i - 1 + count) % count];
+            Vec2 v1 = _vertices[i];
+            Vec2 v2 = _vertices[(i + 1) % count];
 
             Vec2 n1 = ((v1 - v0).getPerp()).getNormalized();
             Vec2 n2 = ((v2 - v1).getPerp()).getNormalized();
@@ -1084,8 +1107,8 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
         for (int i = 0; i < count; i++)
         {
             int j   = (i + 1) % count;
-            Vec2 v0 = verts[i];
-            Vec2 v1 = verts[j];
+            Vec2 v0 = _vertices[i];
+            Vec2 v1 = _vertices[j];
 
             Vec2 n0 = extrude[i].n;
 
@@ -1130,16 +1153,18 @@ inline void DrawNodeExt::_drawPoly(const Vec2* poli,
                                    float thickness)
 {
 
+    Vec2* _vertices = transform(poli, numberOfPoints);
+
     if (thickness != 1.0f)
     {
         if (closePolygon)
         {
-            _drawPolygon(poli, numberOfPoints, Color4B::AX_TRANSPARENT, thickness, color, true);
+            _drawPolygon(_vertices, numberOfPoints, Color4B::AX_TRANSPARENT, thickness, color, true);
             return;
         }
         else
         {
-            _drawPolygon(poli, numberOfPoints, Color4B::AX_TRANSPARENT, thickness, color, false);
+            _drawPolygon(_vertices, numberOfPoints, Color4B::AX_TRANSPARENT, thickness, color, false);
             return;
         }
     }
@@ -1162,14 +1187,14 @@ inline void DrawNodeExt::_drawPoly(const Vec2* poli,
         unsigned int i = 0;
         for (; i < numberOfPoints - 1; i++)
         {
-            *point       = {poli[i], color, Tex2F(0.0, 0.0)};
-            *(point + 1) = {poli[i + 1], color, Tex2F(0.0, 0.0)};
+            *point       = {_vertices[i], color, Tex2F(0.0, 0.0)};
+            *(point + 1) = {_vertices[i + 1], color, Tex2F(0.0, 0.0)};
             point += 2;
         }
         if (closePolygon)
         {
-            *point       = {poli[i], color, Tex2F(0.0, 0.0)};
-            *(point + 1) = {poli[0], color, Tex2F(0.0, 0.0)};
+            *point       = {_vertices[i], color, Tex2F(0.0, 0.0)};
+            *(point + 1) = {_vertices[0], color, Tex2F(0.0, 0.0)};
         }
 
         _customCommandLine.updateVertexBuffer(cursor, _bufferCountLine * sizeof(V2F_C4B_T2F),
