@@ -119,7 +119,7 @@ static inline bool isConvex(const Vec2* verts, int count)
 
 // implementation of DrawNode
 
-DrawNodeExt::DrawNodeExt(float lineWidth) : _lineWidth(lineWidth), _defaultLineWidth(lineWidth)
+DrawNodeExt::DrawNodeExt(float lineWidth) : _lineWidth(lineWidth), _defaultLineWidth(lineWidth), _isConvex(false)
 {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
@@ -389,10 +389,10 @@ void DrawNodeExt::drawRect(const Vec2& origin, const Vec2& destination, const Co
     if (thickness != 1.0f)
     {
         Vec2 line[4] = {{origin}, {Vec2(destination.x, origin.y)}, {destination}, {Vec2(origin.x, destination.y)}};
-        DrawNodeExt::Version tmp = _dnVersion;
-        _dnVersion               = DrawNodeExt::Version::v1;
+
+        _isConvex = true;
         _drawPoly(line, 4, true, color, thickness);
-        _dnVersion = tmp;
+        _isConvex = false;
         return;
     }
     else
@@ -471,14 +471,12 @@ void DrawNodeExt::drawCircle(const Vec2& center,
         vertices[i].x = radius * cosf(rads + angle) * scaleX + center.x;
         vertices[i].y = radius * sinf(rads + angle) * scaleY + center.y;
     }
-
-    DrawNodeExt::Version tmp = _dnVersion;
-    _dnVersion               = DrawNodeExt::Version::v1;
+    _isConvex = false;
     if (thickness != 1.0f)
     {
 
         _drawPolygon(vertices, segments, Color4B::AX_TRANSPARENT, thickness, color, true);
-        _dnVersion = tmp;
+
     }
     else
     {
@@ -490,7 +488,7 @@ void DrawNodeExt::drawCircle(const Vec2& center,
         else
             _drawPoly(vertices, segments + 1, true, color, thickness);
     }
-    _dnVersion = tmp;
+    _isConvex = true;
 }
 
 void DrawNodeExt::drawCircle(const Vec2& center,
@@ -522,7 +520,9 @@ void DrawNodeExt::drawQuadBezier(const Vec2& origin,
     }
     vertices[segments].x = destination.x;
     vertices[segments].y = destination.y;
+    _isConvex            = false;
     _drawPolygon(vertices, segments, Color4B::AX_TRANSPARENT, thickness, color, false);
+    _isConvex = true;
 }
 
 void DrawNodeExt::drawCubicBezier(const Vec2& origin,
@@ -546,7 +546,9 @@ void DrawNodeExt::drawCubicBezier(const Vec2& origin,
     }
     vertices[segments].x = destination.x;
     vertices[segments].y = destination.y;
+    _isConvex             = true;
     _drawPolygon(vertices, segments, Color4B::AX_TRANSPARENT, thickness, color, false);
+    _isConvex = false;
 }
 
 void DrawNodeExt::drawCardinalSpline(PointArray* config,
@@ -588,7 +590,9 @@ void DrawNodeExt::drawCardinalSpline(PointArray* config,
         vertices[i].x = newPos.x;
         vertices[i].y = newPos.y;
     }
+    _isConvex = true;
     _drawPolygon(vertices, segments, Color4B::AX_TRANSPARENT, thickness, color, false);
+    _isConvex = false;
 }
 
 void DrawNodeExt::drawCatmullRom(PointArray* points, unsigned int segments, const Color4B& color, float thickness)
@@ -629,10 +633,9 @@ void DrawNodeExt::drawRect(const Vec2& p1,
     if (thickness != 1.0f)
     {
         Vec2 line[4]             = {{p1}, {p2}, {p3}, {p4}};
-        DrawNodeExt::Version tmp = _dnVersion;
-        _dnVersion               = DrawNodeExt::Version::v1;
+        _isConvex    = true;
         _drawPoly(line, 4, true, color, thickness);
-        _dnVersion = tmp;
+        _isConvex = false;
     }
     else
     {
@@ -733,10 +736,9 @@ void DrawNodeExt::drawPolygon(const Vec2* verts,
 void DrawNodeExt::drawSolidRect(const Vec2& origin, const Vec2& destination, const Color4B& color)
 {
     Vec2 vertices[]          = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y)};
-    DrawNodeExt::Version tmp = _dnVersion;
-    _dnVersion               = DrawNodeExt::Version::v1;
+    _isConvex       = true;
     _drawPolygon(vertices, 4, color, 0.0f, Color4B(), true);
-    _dnVersion = tmp;
+    _isConvex = false;
 }
 
 void DrawNodeExt::drawSolidPoly(const Vec2* poli, unsigned int numberOfPoints, const Color4B& color)
@@ -839,10 +841,9 @@ void DrawNodeExt::drawSolidCircle(const Vec2& center,
         vertices[i].x = j;
         vertices[i].y = k;
     }
-    DrawNodeExt::Version tmp = _dnVersion;
-    _dnVersion               = DrawNodeExt::Version::v1;
+    _isConvex = true;
     _drawPolygon(vertices, segments, fillColor, borderWidth, borderColor);
-    _dnVersion = tmp;
+    _isConvex = false;
 }
 
 void DrawNodeExt::drawSolidCircle(const Vec2& center,
@@ -866,10 +867,9 @@ void DrawNodeExt::drawSolidCircle(const Vec2& center,
         vertices[i].x = j;
         vertices[i].y = k;
     }
-    DrawNodeExt::Version tmp = _dnVersion;
-    _dnVersion               = DrawNodeExt::Version::v1;
+    _isConvex = true;
     _drawPolygon(vertices, segments, color, 0.0f, Color4B(), true);
-    _dnVersion = tmp;
+    _isConvex = false;
     //   drawSolidPoly(vertices, segments, color);
 }
 
@@ -888,10 +888,9 @@ void DrawNodeExt::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, c
     {
         Vec2 poli[3] = {p1, p2, p3};
 
-        DrawNodeExt::Version tmp = _dnVersion;
-        _dnVersion               = DrawNodeExt::Version::v1;
+        _isConvex = true;
         _drawPolygon(poli, 3, Color4B::AX_TRANSPARENT, thickness, color, true);
-        _dnVersion = tmp;
+        _isConvex = false;
         return;
     }
 
@@ -977,7 +976,7 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
     V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
     V2F_C4B_T2F_Triangle* cursor    = triangles;
 
-    if (closedPolygon && count >= 3 && _dnVersion >= Version::v2 && !isConvex(verts, count))
+    if (closedPolygon && !_isConvex &&count >= 3 && !isConvex(verts, count))
     {
         if (0)  // CDT
         {
