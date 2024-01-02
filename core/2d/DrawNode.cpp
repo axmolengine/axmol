@@ -747,7 +747,6 @@ void DrawNode::drawPolygon(const Vec2* verts,
 void DrawNode::drawSolidRect(const Vec2& origin, const Vec2& destination, const Color4B& color)
 {
     Vec2 vertices[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y)};
-
     _isConvex = true;  // Fix issue #1546 of UILayout(#1549)
     drawSolidPoly(vertices, 4, color);
     _isConvex = false;
