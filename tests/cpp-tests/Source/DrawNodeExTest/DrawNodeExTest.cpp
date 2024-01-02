@@ -5857,7 +5857,7 @@ void DrawNodePart2Test::update(float dt)
 
             if (solution.size() > 0)
             {
-                Vec2* vertices;
+                Vec2* vertices = nullptr;
                 int verCount = 0;
                 ax::any_buffer myBuf;
                 for (auto&& p : solution)
