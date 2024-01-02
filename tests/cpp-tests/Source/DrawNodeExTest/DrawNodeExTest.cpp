@@ -35,8 +35,6 @@ USING_NS_AX_EXT;
 using namespace std;
 using namespace Clipper2Lib;
 
-
-
 DrawNodeExTests::DrawNodeExTests()
 {
     ADD_TEST_CASE(DrawNodePart1Test);
@@ -103,53 +101,50 @@ DrawNode2Test::DrawNode2Test()
 {
     auto s = Director::getInstance()->getWinSize();
 
-    auto draw = DrawNodeEx::create();
+    auto draw = ax::extension::DrawNodeEx::create();
     addChild(draw, 10);
 
-    // draw->drawPoint(Vec2(s.width / 2 - 120, s.height / 2 - 120), 10,
-    //                 Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+    draw->drawPoint(Vec2(s.width / 2 - 120, s.height / 2 - 120), 10,
+                    Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 
-    // draw->drawPoint(Vec2(s.width / 2 + 120, s.height / 2 + 120), 10,
-    //                 Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+    draw->drawPoint(Vec2(s.width / 2 + 120, s.height / 2 + 120), 10,
+                    Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 
-    //// draw 4 small points
-    // Vec2 position[] = {Vec2(60, 60), Vec2(70, 70), Vec2(60, 70), Vec2(70, 60)};
-    // draw->drawPoints(position, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+    // draw 4 small points
+    Vec2 position[] = {Vec2(60, 60), Vec2(70, 70), Vec2(60, 70), Vec2(70, 60)};
+    draw->drawPoints(position, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 
-    float thickness = 1.0f;
-
-    //// draw a line
-    draw->drawLine(Vec2(200, 200), Vec2(s.width - 200, s.height - 200), Color4F(1.0, 0.0, 0.0, 1.0), thickness);
-    draw->drawLine(Vec2(300, 3200), Vec2(s.width - 200, s.height - 200), Color4F(1.0, 1.0, 0.0, 1.0), thickness);
+    // draw a line
+    draw->drawLine(Vec2(0, 0), Vec2(s.width, s.height), Color4F(1.0, 0.0, 0.0, 0.5));
 
     // draw a rectangle
-    draw->drawRect(Vec2(23, 23), Vec2(7, 7), Color4F(1, 1, 0, 1), thickness);
+    draw->drawRect(Vec2(23, 23), Vec2(7, 7), Color4F(1, 1, 0, 1));
 
     draw->drawRect(Vec2(15, 30), Vec2(30, 15), Vec2(15, 0), Vec2(0, 15),
-                   Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1), thickness);
+                   Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 
-    //// draw a circle
-    // draw->drawCircle(VisibleRect::center() + Vec2(140, 0), 100, AX_DEGREES_TO_RADIANS(90), 50, true, 1.0f, 2.0f,
-    //                  Color4F(1.0f, 0.0f, 0.0f, 0.5f));
+    // draw a circle
+    draw->drawCircle(VisibleRect::center() + Vec2(140, 0), 100, AX_DEGREES_TO_RADIANS(90), 50, true, 1.0f, 2.0f,
+                     Color4F(1.0f, 0.0f, 0.0f, 0.5f));
 
-    // draw->drawCircle(VisibleRect::center() - Vec2(140, 0), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-    //                  Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f),80);
-
-    // draw->setOpacity(50);
+    draw->drawCircle(VisibleRect::center() - Vec2(140, 0), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
+                     Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
 
     // Draw some beziers
     draw->drawQuadBezier(Vec2(s.width - 150, s.height - 150), Vec2(s.width - 70, s.height - 10),
-                         Vec2(s.width - 10, s.height - 10), 10, Color4F::BLUE, thickness);
+                         Vec2(s.width - 10, s.height - 10), 10,
+                         Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
-    draw->drawQuadBezier(Vec2(0.0f + 100, s.height - 100), Vec2(s.width / 2, s.height / 2),
-                         Vec2(s.width - 100, s.height - 100), 50, Color4F::RED, thickness);
+    draw->drawQuadBezier(Vec2(0.0f, s.height), Vec2(s.width / 2, s.height / 2), Vec2(s.width, s.height), 50,
+                         Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
     draw->drawCubicBezier(VisibleRect::center(), Vec2(VisibleRect::center().x + 30, VisibleRect::center().y + 50),
                           Vec2(VisibleRect::center().x + 60, VisibleRect::center().y - 50), VisibleRect::right(), 100,
-                          Color4F::WHITE, thickness);
+                          Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
     draw->drawCubicBezier(Vec2(s.width - 250, 40.0f), Vec2(s.width - 70, 100.0f), Vec2(s.width - 30, 250.0f),
-                          Vec2(s.width - 10, s.height - 50), 10, Color4F::GRAY, thickness);
+                          Vec2(s.width - 10, s.height - 50), 10,
+                          Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
     auto array = ax::PointArray::create(20);
     array->addControlPoint(Vec2(0.0f, 0.0f));
@@ -159,7 +154,7 @@ DrawNode2Test::DrawNode2Test()
     array->addControlPoint(Vec2(80.0f, s.height - 80));
     array->addControlPoint(Vec2(80.0f, 80.0f));
     array->addControlPoint(Vec2(s.width / 2, s.height / 2));
-    draw->drawCardinalSpline(array, 0.5f, 50, Color4F::MAGENTA, thickness);
+    draw->drawCardinalSpline(array, 0.5f, 50, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
     auto array2 = ax::PointArray::create(20);
     array2->addControlPoint(Vec2(s.width / 2, 30.0f));
@@ -167,110 +162,109 @@ DrawNode2Test::DrawNode2Test()
     array2->addControlPoint(Vec2(s.width - 80, s.height - 80));
     array2->addControlPoint(Vec2(s.width / 2, s.height - 80));
     array2->addControlPoint(Vec2(s.width / 2, 30.0f));
-    draw->drawCatmullRom(array2, 50, Color4F::ORANGE, thickness);
+    draw->drawCatmullRom(array2, 50, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
-    //// open random color poly
-    // Vec2 vertices[] = {Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f),
-    //                    Vec2(50.0f, 100.0f)};
-    // draw->drawPoly(vertices, 5, false, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+    // open random color poly
+    Vec2 vertices[] = {Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f),
+                       Vec2(50.0f, 100.0f)};
+    draw->drawPoly(vertices, 5, false, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
 
-    //// closed random color poly
-    // Vec2 vertices2[] = {Vec2(30.0f, 130.0f), Vec2(30.0f, 230.0f), Vec2(50.0f, 200.0f)};
-    // draw->drawPoly(vertices2, 3, true, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+    // closed random color poly
+    Vec2 vertices2[] = {Vec2(30.0f, 130.0f), Vec2(30.0f, 230.0f), Vec2(50.0f, 200.0f)};
+    draw->drawPoly(vertices2, 3, true, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
 
-    //// Draw 10 circles
-    // for (int i = 0; i < 10; i++)
-    //{
-    //     draw->drawDot(Vec2(s.width / 2, s.height / 2), 10.f * (10 - i),
-    //                   Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
-    // }
+    // Draw 10 circles
+    for (int i = 0; i < 10; i++)
+    {
+        draw->drawDot(Vec2(s.width / 2, s.height / 2), 10 * (10 - i),
+                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+    }
 
-    //// Draw polygons
-    // Vec2 points[] = {Vec2(s.height / 4, 0.0f), Vec2(s.width, s.height / 5), Vec2(s.width / 3 * 2, s.height)};
-    // draw->drawPolygon(points, sizeof(points) / sizeof(points[0]), Color4F(1.0f, 0.0f, 0.0f, 0.5f), 4,
-    //                   Color4F(0.0f, 0.0f, 1.0f, 0.5f));
+    // Draw polygons
+    Vec2 points[] = {Vec2(s.height / 4, 0.0f), Vec2(s.width, s.height / 5), Vec2(s.width / 3 * 2, s.height)};
+    draw->drawPolygon(points, sizeof(points) / sizeof(points[0]), Color4F(1.0f, 0.0f, 0.0f, 0.5f), 4,
+                      Color4F(0.0f, 0.0f, 1.0f, 0.5f));
 
-    //// star poly (triggers buggs)
-    //{
-    //    const float o = 80;
-    //    const float w = 20;
-    //    const float h = 50;
-    //    Vec2 star[]   = {
-    //        Vec2(o + w, o - h), Vec2(o + w * 2, o),                  // lower spike
-    //        Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2),  // right spike
-    //        //              {o +w, o+w*2+h}, {o,o+w*2},                 // top spike
-    //        //              {o -h, o+w}, {o,o},                         // left spike
-    //    };
+    // star poly (triggers buggs)
+    {
+        const float o = 80;
+        const float w = 20;
+        const float h = 50;
+        Vec2 star[]   = {
+            Vec2(o + w, o - h), Vec2(o + w * 2, o),                  // lower spike
+            Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2),  // right spike
+            //              {o +w, o+w*2+h}, {o,o+w*2},                 // top spike
+            //              {o -h, o+w}, {o,o},                         // left spike
+        };
 
-    //    draw->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(1.0f, 0.0f, 0.0f, 0.5f), 1,
-    //                      Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-    //}
+        draw->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(1.0f, 0.0f, 0.0f, 0.5f), 1,
+                          Color4F(0.0f, 0.0f, 1.0f, 1.0f));
+    }
 
-    //// star poly (doesn't trigger bug... order is important un tesselation is supported.
-    //{
-    //    const float o = 180;
-    //    const float w = 20;
-    //    const float h = 50;
-    //    Vec2 star[]   = {
-    //        Vec2(o, o),
-    //        Vec2(o + w, o - h),
-    //        Vec2(o + w * 2, o),  // lower spike
-    //        Vec2(o + w * 2 + h, o + w),
-    //        Vec2(o + w * 2, o + w * 2),  // right spike
-    //        Vec2(o + w, o + w * 2 + h),
-    //        Vec2(o, o + w * 2),  // top spike
-    //        Vec2(o - h, o + w),  // left spike
-    //    };
+    // star poly (doesn't trigger bug... order is important un tesselation is supported.
+    {
+        const float o = 180;
+        const float w = 20;
+        const float h = 50;
+        Vec2 star[]   = {
+            Vec2(o, o),
+            Vec2(o + w, o - h),
+            Vec2(o + w * 2, o),  // lower spike
+            Vec2(o + w * 2 + h, o + w),
+            Vec2(o + w * 2, o + w * 2),  // right spike
+            Vec2(o + w, o + w * 2 + h),
+            Vec2(o, o + w * 2),  // top spike
+            Vec2(o - h, o + w),  // left spike
+        };
 
-    //    draw->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(1.0f, 0.0f, 0.0f, 0.5f), 1,
-    //                      Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-    //}
+        draw->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(1.0f, 0.0f, 0.0f, 0.5f), 1,
+                          Color4F(0.0f, 0.0f, 1.0f, 1.0f));
+    }
 
-    //// draw a solid polygon
-    // Vec2 vertices3[] = {Vec2(60.0f, 160.0f), Vec2(70.0f, 190.0f), Vec2(100.0f, 190.0f), Vec2(90.0f, 160.0f)};
-    // draw->drawSolidPoly(vertices3, 4, Color4F(1.0f, 1.0f, 0.0f, 1.0f));
+    // draw a solid polygon
+    Vec2 vertices3[] = {Vec2(60.0f, 160.0f), Vec2(70.0f, 190.0f), Vec2(100.0f, 190.0f), Vec2(90.0f, 160.0f)};
+    draw->drawSolidPoly(vertices3, 4, Color4F(1.0f, 1.0f, 0.0f, 1.0f));
 
-    //// draw a solid rectangle
-    // draw->drawSolidRect(Vec2(10.0f, 10.0f), Vec2(20.0f, 20.0f), Color4F(1.0f, 1.0f, 0.0f, 1.0f));
+    // draw a solid rectangle
+    draw->drawSolidRect(Vec2(10.0f, 10.0f), Vec2(20.0f, 20.0f), Color4F(1.0f, 1.0f, 0.0f, 1.0f));
 
-    //// draw a solid circle
-    // draw->drawSolidCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 40, AX_DEGREES_TO_RADIANS(90), 50, 2.0f, 2.0f,
-    //                       Color4F(0.0f, 1.0f, 0.0f, 1.0f));
+    // draw a solid circle
+    draw->drawSolidCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 40, AX_DEGREES_TO_RADIANS(90), 50, 2.0f, 2.0f,
+                          Color4F(0.0f, 1.0f, 0.0f, 1.0f));
 
-    //// Draw segment
-    // draw->drawSegment(Vec2(20.0f, s.height), Vec2(20.0f, s.height / 2), 10, Color4F(0.0f, 1.0f, 0.0f, 1.0f));
+    // Draw segment
+    draw->drawSegment(Vec2(20.0f, s.height), Vec2(20.0f, s.height / 2), 10, Color4F(0.0f, 1.0f, 0.0f, 1.0f));
 
-    // draw->drawSegment(Vec2(10.0f, s.height / 2), Vec2(s.width / 2, s.height / 2), 40, Color4F(1.0f, 0.0f, 1.0f,
-    // 0.5f));
+    draw->drawSegment(Vec2(10.0f, s.height / 2), Vec2(s.width / 2, s.height / 2), 40, Color4F(1.0f, 0.0f, 1.0f, 0.5f));
 
-    //// Draw triangle
-    // draw->drawTriangle(Vec2(10.0f, 10.0f), Vec2(70.0f, 30.0f), Vec2(100.0f, 140.0f),
-    //                    Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
+    // Draw triangle
+    draw->drawTriangle(Vec2(10.0f, 10.0f), Vec2(70.0f, 30.0f), Vec2(100.0f, 140.0f),
+                       Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
-    // for (int i = 0; i < 100; i++)
-    //{
-    //     draw->drawPoint(Vec2(i * 7.0f, 5.0f), (float)i / 5 + 1,
-    //                     Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
-    // }
+    for (int i = 0; i < 100; i++)
+    {
+        draw->drawPoint(Vec2(i * 7.0f, 5.0f), (float)i / 5 + 1,
+                        Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+    }
 
-    auto draw1 = DrawNodeEx::create();
+    auto draw1 = ax::extension::DrawNodeEx::create();
     this->addChild(draw1, 10);
-    // draw1->setLineWidth(4);
+    draw1->setLineWidth(4);
     draw1->drawLine(Vec2(0.0f, s.height), Vec2(s.width, s.height - 20), Color4F::YELLOW);
     draw1->drawLine(Vec2(0.0f, 0.0f), Vec2(s.width, s.height - 20), Color4F::YELLOW);
 
-    //  draw->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2f), FadeOut::create(1.2f), NULL)));
-    // draw1->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2f), FadeOut::create(1.2f), NULL)));
+    draw->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2), FadeOut::create(1.2), NULL)));
+    draw1->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2), FadeOut::create(1.2), NULL)));
 }
 
 string DrawNode2Test::title() const
 {
-    return "Test DrawNodeExt";
+    return "DrawNode vs DrawNodeEx";
 }
 
 string DrawNode2Test::subtitle() const
 {
-    return "Testing DrawNodeExt - batched draws.";
+    return "";
 }
 
 //
@@ -290,8 +284,8 @@ IndividualThicknessTest::IndividualThicknessTest()
     }
     initSliders();
 
-    drawNode = DrawNodeEx::create();
-    addChild(drawNode, 10);
+    drawNodeEx = DrawNodeEx::create();
+    addChild(drawNodeEx, 10);
 
     auto s = Director::getInstance()->getWinSize();
     // auto draw1 = DrawNodeExt::create();
@@ -340,26 +334,26 @@ void IndividualThicknessTest::update(float dt)
 {
     auto s = Director::getInstance()->getWinSize();
 
-    drawNode->clear();
+    drawNodeEx->clear();
     auto color = Color4F::GREEN;
-    drawNode->drawCircle(VisibleRect::center() /*- Vec2(120.0f, 0.0f)*/, 60, AX_DEGREES_TO_RADIANS(77), 36, false,
-                         color, thickness);
+    drawNodeEx->drawCircle(VisibleRect::center() /*- Vec2(120.0f, 0.0f)*/, 60, AX_DEGREES_TO_RADIANS(77), 36, false,
+                           color, thickness);
 
-    // drawNode->drawCircle(VisibleRect::center() /*- Vec2(120.0f, 0.0f)*/, 60, AX_DEGREES_TO_RADIANS(77), 36, false,
+    // drawNodeEx->drawCircle(VisibleRect::center() /*- Vec2(120.0f, 0.0f)*/, 60, AX_DEGREES_TO_RADIANS(77), 36, false,
     //                      Color4F::BLACK, 1);
 
-    // drawNode->drawLine(Vec2(0.0f, s.height), Vec2(s.width, s.height - 20), Color4F::YELLOW, thickness);
-    // drawNode->drawLine(Vec2(0.0f, 0.0f), Vec2(s.width, s.height - 20), Color4F::YELLOW, thickness);
+    // drawNodeEx->drawLine(Vec2(0.0f, s.height), Vec2(s.width, s.height - 20), Color4F::YELLOW, thickness);
+    // drawNodeEx->drawLine(Vec2(0.0f, 0.0f), Vec2(s.width, s.height - 20), Color4F::YELLOW, thickness);
 
     // draw a rectangles
-    drawNode->drawRect(Vec2(123, 123), Vec2(227, 227), Color4F(1, 1, 0, 1), thickness);
-    // drawNode->drawRect(Vec2(123, 123), Vec2(227, 227), Color4F::BLACK, 1);
+    drawNodeEx->drawRect(Vec2(123, 123), Vec2(227, 227), Color4F(1, 1, 0, 1), thickness);
+    // drawNodeEx->drawRect(Vec2(123, 123), Vec2(227, 227), Color4F::BLACK, 1);
 
-    drawNode->drawRect(Vec2(115, 130), Vec2(130, 115), Vec2(115, 100), Vec2(100, 115), Color4F::MAGENTA, thickness);
-    // drawNode->drawRect(Vec2(115, 130), Vec2(130, 115), Vec2(115, 100), Vec2(100, 115), Color4F::BLACK, 1);
+    drawNodeEx->drawRect(Vec2(115, 130), Vec2(130, 115), Vec2(115, 100), Vec2(100, 115), Color4F::MAGENTA, thickness);
+    // drawNodeEx->drawRect(Vec2(115, 130), Vec2(130, 115), Vec2(115, 100), Vec2(100, 115), Color4F::BLACK, 1);
 
-    drawNode->drawLine(Vec2(200.0f, s.height - 20), Vec2(s.width - 100, s.height - 20), Color4F::YELLOW, thickness);
-    drawNode->drawLine(Vec2(300.0f, 100.0f), Vec2(s.width - 200, s.height - 120), Color4F::GREEN, thickness);
+    drawNodeEx->drawLine(Vec2(200.0f, s.height - 20), Vec2(s.width - 100, s.height - 20), Color4F::YELLOW, thickness);
+    drawNodeEx->drawLine(Vec2(300.0f, 100.0f), Vec2(s.width - 200, s.height - 120), Color4F::GREEN, thickness);
 
     Vec2 vertices24[] = {
         {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},  {100.250000f, 161.375000f},
@@ -376,34 +370,34 @@ void IndividualThicknessTest::update(float dt)
         {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
         {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
     };
-    drawNode->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4B::AX_TRANSPARENT, thickness,
-                          Color4F::RED);
-    // drawNode->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4B::AX_TRANSPARENT, 0.5f,
+    drawNodeEx->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4B::AX_TRANSPARENT, thickness,
+                            Color4F::RED);
+    // drawNodeEx->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4B::AX_TRANSPARENT, 0.5f,
     //                       Color4F::BLACK);
 
     // open random color poly
     Vec2 vertices[] = {Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f),
                        Vec2(50.0f, 100.0f)};
-    drawNode->drawPoly(vertices, 5, false, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
+    drawNodeEx->drawPoly(vertices, 5, false, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
 
     // closed random color poly
     Vec2 vertices2[] = {Vec2(30.0f, 130.0f), Vec2(30.0f, 230.0f), Vec2(50.0f, 200.0f)};
-    drawNode->drawPoly(vertices2, 3, true, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
+    drawNodeEx->drawPoly(vertices2, 3, true, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
 
     // Draw some beziers
     // Draw some beziers
-    drawNode->drawQuadBezier(Vec2(s.width - 150, s.height - 150), Vec2(s.width - 70, s.height - 10),
-                             Vec2(s.width - 10, s.height - 10), 10, Color4F::BLUE, thickness);
+    drawNodeEx->drawQuadBezier(Vec2(s.width - 150, s.height - 150), Vec2(s.width - 70, s.height - 10),
+                               Vec2(s.width - 10, s.height - 10), 10, Color4F::BLUE, thickness);
 
-    drawNode->drawQuadBezier(Vec2(0.0f + 100, s.height - 100), Vec2(s.width / 2, s.height / 2),
-                             Vec2(s.width - 100, s.height - 100), 50, Color4F::RED, thickness);
+    drawNodeEx->drawQuadBezier(Vec2(0.0f + 100, s.height - 100), Vec2(s.width / 2, s.height / 2),
+                               Vec2(s.width - 100, s.height - 100), 50, Color4F::RED, thickness);
 
-    drawNode->drawCubicBezier(VisibleRect::center(), Vec2(VisibleRect::center().x + 30, VisibleRect::center().y + 50),
-                              Vec2(VisibleRect::center().x + 60, VisibleRect::center().y - 50), VisibleRect::right(),
-                              100, Color4F::WHITE, thickness);
+    drawNodeEx->drawCubicBezier(VisibleRect::center(), Vec2(VisibleRect::center().x + 30, VisibleRect::center().y + 50),
+                                Vec2(VisibleRect::center().x + 60, VisibleRect::center().y - 50), VisibleRect::right(),
+                                100, Color4F::WHITE, thickness);
 
-    drawNode->drawCubicBezier(Vec2(s.width - 250, 40.0f), Vec2(s.width - 70, 100.0f), Vec2(s.width - 30, 250.0f),
-                              Vec2(s.width - 10, s.height - 50), 10, Color4F::GRAY, thickness);
+    drawNodeEx->drawCubicBezier(Vec2(s.width - 250, 40.0f), Vec2(s.width - 70, 100.0f), Vec2(s.width - 30, 250.0f),
+                                Vec2(s.width - 10, s.height - 50), 10, Color4F::GRAY, thickness);
 
     auto array = ax::PointArray::create(20);
     array->addControlPoint(Vec2(0.0f, 0.0f));
@@ -413,7 +407,7 @@ void IndividualThicknessTest::update(float dt)
     array->addControlPoint(Vec2(80.0f, s.height - 80));
     array->addControlPoint(Vec2(80.0f, 80.0f));
     array->addControlPoint(Vec2(s.width / 2, s.height / 2));
-    drawNode->drawCardinalSpline(array, 0.5f, 50, Color4F::MAGENTA, thickness);
+    drawNodeEx->drawCardinalSpline(array, 0.5f, 50, Color4F::MAGENTA, thickness);
 
     auto array2 = ax::PointArray::create(20);
     array2->addControlPoint(Vec2(s.width / 2, 30.0f));
@@ -421,12 +415,12 @@ void IndividualThicknessTest::update(float dt)
     array2->addControlPoint(Vec2(s.width - 80, s.height - 80));
     array2->addControlPoint(Vec2(s.width / 2, s.height - 80));
     array2->addControlPoint(Vec2(s.width / 2, 30.0f));
-    drawNode->drawCatmullRom(array2, 50, Color4F::ORANGE, thickness);
+    drawNodeEx->drawCatmullRom(array2, 50, Color4F::ORANGE, thickness);
 }
 
 string IndividualThicknessTest::title() const
 {
-    return "Individual Thickness";
+    return "Individual line width";
 }
 
 string IndividualThicknessTest::subtitle() const
@@ -571,7 +565,7 @@ void DrawPieTest::update(float dt)
 
 string DrawPieTest::title() const
 {
-    return "DrawNodeExt::drawPie";
+    return "drawPie";
 }
 
 string DrawPieTest::subtitle() const
@@ -581,120 +575,41 @@ string DrawPieTest::subtitle() const
 
 DrawNode2PolygonTest::DrawNode2PolygonTest()
 {
-    // Vec2 vertices0[] = {{50.0, 20.0}, {100.0, 0.0}, {80.0, 50.0}, {100.0, 100.0},
-    //                     {50.0, 80.0}, {0.0, 100.0}, {20.0, 50.0}, {0, 0}};
+    auto director = Director::getInstance();
+    // director->setClearColor(Color4F(0, 0, 0, 0));
+    auto origin = director->getVisibleOrigin();
+    auto size   = director->getVisibleSize();
+    center = Vec2(origin.x + size.width / 2 + 50, origin.y + size.height / 2);
 
-    // Vec2 vertices4[] = {{362, 148}, {326, 241}, {295, 219}, {258, 88}, {440, 129},
-    //                     {370, 196}, {372, 275}, {348, 257}, {364, 148}};
+    float o    = 80;
+    float w    = 20;
+    float h    = 50;
+    drawNodeEx = DrawNodeEx::create();
+    addChild(drawNodeEx);
+    drawNodeEx->setPosition(center);
 
-    // Vec2* ver[] = {vertices0, vertices4};
 
-    // DrawNodeExt* drawNode[sizeof(ver) + 1];
-    // for (int i = 0; i < sizeof(ver); i++)
-    //{
-    //     drawNode[i] = DrawNodeExt::create();
-    //     addChild(drawNode[i]);
-    // }
+    {  // star
 
-    // drawNode[0]->drawPolygon(vertices0, sizeof(vertices0) / sizeof(vertices0[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 3,
-    //                          Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-    // drawNode[0]->setPosition({20, 200});
-    // drawDirection(vertices0, sizeof(vertices0) / sizeof(vertices0[0]), drawNode[0]->getPosition());
+        Vec2 star[] = {
+            Vec2(o, o),
+            Vec2(o + w, o - h),
+            Vec2(o + w * 2, o),  // lower spike
+            Vec2(o + w * 2 + h, o + w),
+            Vec2(o + w * 2, o + w * 2),  // right spike
+            Vec2(o + w, o + w * 2 + h),
+            Vec2(o, o + w * 2),  // top spike
+            Vec2(o - h, o + w),  // left spike
+        };
 
-    // drawNode[4]->drawPolygon(vertices4, sizeof(vertices4) / sizeof(vertices4[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 3,
-    //                          Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-    // drawNode[4]->setPosition({-70, -20});
-    // drawDirection(vertices4, sizeof(vertices4) / sizeof(vertices4[0]), drawNode[4]->getPosition());
-
-    {
-        float o = 80;
-        float w = 20;
-        float h = 50;
-
-        //{  // star
-        //    auto drawNode1 = DrawNodeExt::create();
-        //    addChild(drawNode1);
-        //    drawNode1->setPosition(300, 100);
-        //    Vec2 star[] = {
-        //        Vec2(o, o),
-        //        Vec2(o + w, o - h),
-        //        Vec2(o + w * 2, o),  // lower spike
-        //        Vec2(o + w * 2 + h, o + w),
-        //        Vec2(o + w * 2, o + w * 2),  // right spike
-        //        Vec2(o + w, o + w * 2 + h),
-        //        Vec2(o, o + w * 2),  // top spike
-        //        Vec2(o - h, o + w),  // left spike
-        //    };
-
-        //    drawNode1->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1,
-        //                           Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-
-        //    drawDirection(star, sizeof(star) / sizeof(star[0]), drawNode1->getPosition());
-        //}
-
-        {  // wrong order
-            auto drawNode1 = DrawNodeEx::create();
-            addChild(drawNode1);
-            drawNode1->setPosition(-40, 20);
-
-            int x = 0;
-            int y = 0;
-            Vec2 vertices[4];
-            drawNode1->setScale(0.5);
-            Color4F color;
-            for (int iy = 0; iy < 5; iy++)
-            {
-                x = 0;
-                for (int ix = 0; ix < 13; ix++)
-                {
-                    vertices[0] = Vec2(x + o + w, y + o - h);
-                    vertices[1] = Vec2(x + o + w * 2, y + o);
-                    vertices[2] = Vec2(x + o + w * 2 + h, y + o + w);
-                    vertices[3] = Vec2(x + o + w * 2, y + o + w * 2);
-
-                    if (AXRANDOM_0_1() > 0.5f)
-                    {
-                        drawNode1->setDNVersion(DrawNodeEx::Version::v1);
-                        color = Color4F::YELLOW;
-                    }
-                    else
-                    {
-                        drawNode1->setDNVersion(DrawNodeEx::Version::v2);
-                        color = Color4F::ORANGE;
-                    }
-                    drawNode1->drawPolygon(vertices, 4, Color4F(0.7f, 0.7f, 0.7f, 0.5f), 1, color);
-                    x += 70;
-                }
-                y += 80;
-            }
-        }
-
-        //{  // wrong order
-        //    auto drawNode1 = DrawNodeExt::create();
-        //    drawNode1->setDNVersion(DrawNodeExt::DrawNodeVersion::v1);
-        //    addChild(drawNode1);
-        //    drawNode1->setPosition(70, 20);
-        //    Vec2 wrongOrder[] = {Vec2(o + w, o - h), Vec2(o + w * 2, o), Vec2(o + w * 2 + h, o + w),
-        //                         Vec2(o + w * 2, o + w * 2)};
-
-        //    drawNode1->drawPolygon(wrongOrder, sizeof(wrongOrder) / sizeof(wrongOrder[0]),
-        //                           Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1, Color4F::RED);
-        //    drawDirection(wrongOrder, sizeof(wrongOrder) / sizeof(wrongOrder[0]), drawNode1->getPosition());
-        //}
-
-        //{  // correct order
-        //    Vec2 correctOrder[] = {Vec2(o + w * 2, o), Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2),
-        //                           Vec2(o + w, o - h)};
-        //    auto drawNode2      = DrawNodeExt::create();
-        //    drawNode2->setDNVersion(DrawNodeExt::DrawNodeVersion::v1);
-        //    addChild(drawNode2);
-        //    drawNode2->setPosition({-10, 20});
-        //    drawNode2->drawPolygon(correctOrder, sizeof(correctOrder) / sizeof(correctOrder[0]),
-        //                           Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1, Color4F::GREEN);
-
-        //    drawDirection(correctOrder, sizeof(correctOrder) / sizeof(correctOrder[0]), drawNode2->getPosition());
-        //}
+        drawNodeEx->setDNPosition(center);
+        drawNodeEx->setDNCenter(star[0]);
+        //   drawNodeEx->setDNRotation(rot);
+        drawNodeEx->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1,
+                                Color4F::BLUE);
     }
+
+
 }
 
 void DrawNode2PolygonTest::drawDirection(const Vec2* vec, const int size, Vec2 offset)
@@ -709,7 +624,7 @@ void DrawNode2PolygonTest::drawDirection(const Vec2* vec, const int size, Vec2 o
 
 string DrawNode2PolygonTest::title() const
 {
-    return "DrawNodeExt::DrawNodeVersion";
+    return "DrawNodeVersion and Rotation";
 }
 
 string DrawNode2PolygonTest::subtitle() const
@@ -717,9 +632,73 @@ string DrawNode2PolygonTest::subtitle() const
     return "YELLOW=v1 ORANGE=v2";
 }
 
+void DrawNode2PolygonTest::update(float dt)
+{
+    float rot = 0.1;
+    float o   = 80;
+    float w   = 20;
+    float h   = 50;
+    {  // star
+
+        Vec2 star[] = {
+            Vec2(o, o),
+            Vec2(o + w, o - h),
+            Vec2(o + w * 2, o),  // lower spike
+            Vec2(o + w * 2 + h, o + w),
+            Vec2(o + w * 2, o + w * 2),  // right spike
+            Vec2(o + w, o + w * 2 + h),
+            Vec2(o, o + w * 2),  // top spike
+            Vec2(o - h, o + w),  // left spike
+        };
+
+        drawNodeEx->setDNPosition(center);
+        drawNodeEx->setDNCenter(star[0]);
+     //   drawNodeEx->setDNRotation(rot);
+        drawNodeEx->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1,
+                                Color4F::BLUE);
+    }
+    {
+        int x = 0;
+        int y = 0;
+        Vec2 vertices[4];
+        drawNodeEx->setScale(0.5);
+        Color4F color;
+        for (int iy = 0; iy < 5; iy++)
+        {
+            x = 0;
+            for (int ix = 0; ix < 13; ix++)
+            {
+                vertices[0] = Vec2(x + o + w, y + o - h);
+                vertices[1] = Vec2(x + o + w * 2, y + o);
+                vertices[2] = Vec2(x + o + w * 2 + h, y + o + w);
+                vertices[3] = Vec2(x + o + w * 2, y + o + w * 2);
+
+                if (AXRANDOM_0_1() > 0.5f)
+                {
+                    drawNodeEx->setIsConvex(true);
+                    color = Color4F::YELLOW;
+                }
+                else
+                {
+                    drawNodeEx->setIsConvex(false);
+                    color = Color4F::ORANGE;
+                }
+       //         drawNodeEx->setDNRotation(rot);
+                // drawNodeEx->setDNCenter(vertices[0]);
+                drawNodeEx->setDNPosition(Vec2(-70.f, 60.f));
+                drawNodeEx->drawPolygon(vertices, 4, Color4F(0.7f, 0.7f, 0.7f, 0.5f), 1, color);
+                drawNodeEx->setIsConvex(false);
+                x += 70;
+            }
+            y += 80;
+        }
+    }
+
+    rot += 0.1;
+}
+
 DrawNode2FilledPolygonTest::DrawNode2FilledPolygonTest()
 {
-
     Vec2 vertices21[] = {
         {290.250000f, 98.1250000f}, {235.000000f, 90.8750000f}, {270.500000f, 109.875000f}, {235.000000f, 119.125000f},
         {275.250000f, 145.875000f}, {249.500000f, 145.875000f}, {249.500000f, 178.125000f}, {275.250000f, 187.375015f},
@@ -745,8 +724,6 @@ DrawNode2FilledPolygonTest::DrawNode2FilledPolygonTest()
         {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
     };
 
-    
-
     DrawNodeEx* drawNode[3];
     for (int i = 0; i < 3; i++)
     {
@@ -762,9 +739,8 @@ DrawNode2FilledPolygonTest::DrawNode2FilledPolygonTest()
                                  2.0f, Color4F::WHITE);
 
     drawNode[0]->setPosition(Vec2(-30, -20));
-    // drawNode[0]->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, 0.3f,
+    // drawNodeEx[0]->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, 0.3f,
     //                          Color4F::GREEN);
-
 
     drawNode[2]->drawPolygon(vertices21, sizeof(vertices21) / sizeof(vertices21[0]), Color4F::GREEN, 0.3f,
                              Color4F::YELLOW);
@@ -812,7 +788,7 @@ DrawNodePart1Test::DrawNodePart1Test()
     thicknessSlider->setPosition(Vec2(center.x, 60.0f));
     addChild(thicknessSlider);
 
-    label = Label::createWithTTF("Thickness: ", "fonts/Marker Felt.ttf", 10);
+    label = Label::createWithTTF("Value: ", "fonts/Marker Felt.ttf", 10);
     label->setPosition(Vec2(Vec2(center.x, 80.0f)));
     this->addChild(label, 1);
 
@@ -821,7 +797,7 @@ DrawNodePart1Test::DrawNodePart1Test()
 
 std::string DrawNodePart1Test::title() const
 {
-    return "DrawNode #1 Scale/Rotation/LineWidth/Position Test";
+    return "Scale/Rotation/LineWidth/Position";
 }
 
 string DrawNodePart1Test::subtitle() const
@@ -1042,8 +1018,8 @@ void DrawNodePart1Test::drawAll()
         // for (int n = 0; n < 10; n++)
         bool isReal = false;
 
-        //draw->drawPoly(verticess, sizeof(verticess) / sizeof(verticess[0]), true,
-        //               Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
+        // draw->drawPoly(verticess, sizeof(verticess) / sizeof(verticess[0]), true,
+        //                Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
 
         Vec2 vertices[5] = {Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f),
                             Vec2(50.0f, 100.0f)};
@@ -1111,7 +1087,6 @@ void DrawNodePart1Test::drawAll()
         draw->setDNCenter(vertices24[0]);
         draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness,
                           Color4F::YELLOW);
-
 
         draw1->clear();
         draw1->setPosition(Vec2(200, 0));
@@ -1583,7 +1558,7 @@ void DrawNodePart2Test::update(float dt)
             if (solution.size() > 0)
             {
                 Vec2* vertices = nullptr;
-                int verCount = 0;
+                int verCount   = 0;
                 ax::any_buffer myBuf;
                 for (auto&& p : solution)
                 {

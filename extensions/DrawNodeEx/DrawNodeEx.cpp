@@ -971,11 +971,6 @@ inline void DrawNodeEx::_drawPolygon(const Vec2* verts,
 
     Vec2* _vertices = transform(verts, count);
 
-    // for (size_t i = 0; i < count; i++)
-    //{
-    //     AXLOG("_vertices: %f %f  verts: %f %f", _vertices[i].x, _vertices[i].y, verts[i].x, verts[i].y);
-    // }
-
     bool outline = (borderColo.a > 0.0f && borderWidth > 0.0f);
 
     Color4B borderColor = borderColo;

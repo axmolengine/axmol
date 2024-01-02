@@ -78,7 +78,7 @@ public:
     // void changeLineWidth(Ref* pSender, ax::ui::Slider::EventType type);
 
 private:
-    ax::extension::DrawNodeEx* drawNode;
+    ax::extension::DrawNodeEx* drawNodeEx;
     // ax::Label* _lineWidthLabel;
     // float lineWidth = 0;
     ax::Label* _thicknessLabel;
@@ -95,6 +95,11 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
+    void update(float dt);
+
+private:
+   ax::extension::DrawNodeEx* drawNodeEx;
+   ax::Vec2 center;
 };
 
 class DrawNode2FilledPolygonTest : public DrawNodeExBaseTest
