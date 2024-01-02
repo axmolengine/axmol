@@ -505,33 +505,25 @@ void DrawNodeEx::drawCircle(const Vec2& center,
 
 void DrawNodeEx::drawStar(const Vec2& center,
                           float radius1,
-
                           float radius2,
                           unsigned int segments,
                           const Color4B& color,
                           float thickness)
 {
-    // float angle     = 2.0f * (float)M_PI / npoints;
     const float coef = 2.0f * (float)M_PI / segments;
 
-    float halfAngle = coef / 2.0;
+    float halfAngle = coef / 2.0f;
 
     auto vertices = _abuf.get<Vec2>(segments * 2);
     int i         = 0;
-    // for (float a = 0; a < M_PI; a += coef)
-    //{
-    for (unsigned int a = 0; a < segments*2; a++)
+    for (unsigned int a = 0; a < segments; a++)
     {
         float rads      = a * coef;
-        float sx        = center.x + cos(rads) * radius2;
-        float sy        = center.y + sin(rads) * radius2;
-        vertices[i]     = Vec2(sx, sy);
-        sx              = center.x + cos(rads + halfAngle) * radius1;
-        sy              = center.y + sin(rads + halfAngle) * radius1;
-        vertices[i + 1] = Vec2(sx, sy);
+        vertices[i]     = Vec2(center.x + cos(rads) * radius2, center.y + sin(rads) * radius2);
+        vertices[i + 1] = Vec2(center.x + cos(rads + halfAngle) * radius1, center.y + sin(rads + halfAngle) * radius1);
         i += 2;
     }
-    _drawPolygon(vertices, segments, Color4B::AX_TRANSPARENT, thickness, color, true);
+    _drawPolygon(vertices, segments*2, Color4B::AX_TRANSPARENT, thickness, color, true);
 }
 
 void DrawNodeEx::drawQuadBezier(const Vec2& origin,

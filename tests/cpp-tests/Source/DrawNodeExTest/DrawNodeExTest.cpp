@@ -929,7 +929,9 @@ void DrawNodePart1Test::drawAll()
         draw->drawLine(Vec2(200, 200), Vec2(s.width - 200, s.height - 200), Color4F(1.0, 0.0, 0.0, 1.0), thickness);
         draw->drawLine(Vec2(300, 320), Vec2(s.width - 200, s.height - 200), Color4F(1.0, 1.0, 0.0, 1.0), thickness);
 
-     //   draw->drawStar(Vec2(300, 320), 30, 60, 8, Color4F(1.0, 1.0, 0.0, 1.0), 1.0);
+        draw->drawStar(Vec2(300, 320), 30, 60, 8, Color4F(1.0, 1.0, 0.0, 1.0), 4.0);
+        draw->drawStar(Vec2(200, 200), 30, 60, 18, Color4F(1.0, 0.0, 0.0, 1.0), 1.0);
+        draw->drawStar(Vec2(s.width - 200, s.height - 200), 40, 60, 60, Color4F::GREEN, 1.0);
         break;
     }
     case 1:
