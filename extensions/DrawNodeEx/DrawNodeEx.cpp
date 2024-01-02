@@ -774,13 +774,28 @@ void DrawNodeEx::drawPolygon(const Vec2* verts,
                              float borderWidth,
                              const Color4B& borderColor)
 {
-    AXLOG("# drawPolygon Count %i", count);
-    for (size_t i = 0; i < count; i++)
-    {
-        AXLOG("  Count %i x: %f y: %f", i, verts[i].x, verts[i].y);
-    }
     _drawPolygon(verts, count, fillColor, borderWidth, borderColor, true);
 }
+
+void DrawNodeEx::drawPolygon(const Vec2* verts,
+                             int count,
+                             float borderWidth,
+                             const Color4B& borderColor)
+{
+    _drawPolygon(verts, count, Color4B::AX_TRANSPARENT, borderWidth, borderColor, true);
+}
+
+void DrawNodeEx::drawSolidPolygon(const Vec2* verts,
+                             int count,
+                             const Color4B& fillColor,
+                             float borderWidth,
+                             const Color4B& borderColor)
+{
+    _drawPolygon(verts, count, fillColor, borderWidth, borderColor, true);
+}
+
+
+
 
 void DrawNodeEx::drawSolidRect(const Vec2& origin, const Vec2& destination, const Color4B& color)
 {

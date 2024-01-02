@@ -454,7 +454,17 @@ public:
                      float borderWidth,
                      const ax::Color4B& borderColor);
 
-        void _drawPolygon(const ax::Vec2* verts,
+    void drawPolygon(const ax::Vec2* verts,
+                     int count,
+                     float borderWidth,
+                     const ax::Color4B& borderColor);
+    void drawSolidPolygon(const ax::Vec2* verts,
+                     int count,
+                     const ax::Color4B& fillColor,
+                     float borderWidth,
+                     const ax::Color4B& borderColor);
+
+    void _drawPolygon(const ax::Vec2* verts,
                      unsigned int count,
                       const ax::Color4B& fillColor,
                      float borderWidth,
