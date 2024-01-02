@@ -126,6 +126,7 @@ if (UNIX AND GLFW_BUILD_SHARED_LIBRARY)
 else()
     set(GLFW_LIB_NAME glfw3)
 endif()
+set(GLFW_LIB_NAME_SUFFIX "")
 
 set_target_properties(glfw PROPERTIES
                       OUTPUT_NAME ${GLFW_LIB_NAME}
@@ -182,6 +183,47 @@ if (GLFW_BUILD_WAYLAND)
         endif()
     endif()
 endif()
+
+# if (GLFW_BUILD_X11)
+#     find_package(X11 REQUIRED)
+#     target_include_directories(glfw PRIVATE "${X11_X11_INCLUDE_PATH}")
+# 
+#     # Check for XRandR (modern resolution switching and gamma control)
+#     if (NOT X11_Xrandr_INCLUDE_PATH)
+#         message(FATAL_ERROR "RandR headers not found; install libxrandr development package")
+#     endif()
+#     target_include_directories(glfw PRIVATE "${X11_Xrandr_INCLUDE_PATH}")
+# 
+#     # Check for Xinerama (legacy multi-monitor support)
+#     if (NOT X11_Xinerama_INCLUDE_PATH)
+#         message(FATAL_ERROR "Xinerama headers not found; install libxinerama development package")
+#     endif()
+#     target_include_directories(glfw PRIVATE "${X11_Xinerama_INCLUDE_PATH}")
+# 
+#     # Check for Xkb (X keyboard extension)
+#     if (NOT X11_Xkb_INCLUDE_PATH)
+#         message(FATAL_ERROR "XKB headers not found; install X11 development package")
+#     endif()
+#     target_include_directories(glfw PRIVATE "${X11_Xkb_INCLUDE_PATH}")
+# 
+#     # Check for Xcursor (cursor creation from RGBA images)
+#     if (NOT X11_Xcursor_INCLUDE_PATH)
+#         message(FATAL_ERROR "Xcursor headers not found; install libxcursor development package")
+#     endif()
+#     target_include_directories(glfw PRIVATE "${X11_Xcursor_INCLUDE_PATH}")
+# 
+#     # Check for XInput (modern HID input)
+#     if (NOT X11_Xi_INCLUDE_PATH)
+#         message(FATAL_ERROR "XInput headers not found; install libxi development package")
+#     endif()
+#     target_include_directories(glfw PRIVATE "${X11_Xi_INCLUDE_PATH}")
+# 
+#     # Check for X Shape (custom window input shape)
+#     if (NOT X11_Xshape_INCLUDE_PATH)
+#         message(FATAL_ERROR "X Shape headers not found; install libxext development package")
+#     endif()
+#     target_include_directories(glfw PRIVATE "${X11_Xshape_INCLUDE_PATH}")
+# endif()
 
 if (UNIX AND NOT APPLE)
     find_library(RT_LIBRARY rt)
@@ -274,10 +316,8 @@ if (MSVC90)
 endif()
 
 # Workaround for -std=c99 on Linux disabling _DEFAULT_SOURCE (POSIX 2008 and more)
-if (GLFW_BUILD_X11 OR GLFW_BUILD_WAYLAND)
-    if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
-        target_compile_definitions(glfw PRIVATE _DEFAULT_SOURCE)
-    endif()
+if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    target_compile_definitions(glfw PRIVATE _DEFAULT_SOURCE)
 endif()
 
 if (GLFW_BUILD_SHARED_LIBRARY)
@@ -296,6 +336,7 @@ if (GLFW_BUILD_SHARED_LIBRARY)
             # Add a suffix to the import library to avoid naming conflicts
             set_target_properties(glfw PROPERTIES IMPORT_SUFFIX "dll.lib")
         endif()
+        set (GLFW_LIB_NAME_SUFFIX "dll")
 
         target_compile_definitions(glfw INTERFACE GLFW_DLL)
     endif()
