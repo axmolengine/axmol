@@ -39,7 +39,8 @@
 #include "poly2tri/poly2tri.h"
 
 
-NS_AX_BEGIN
+//USING_NS_AX;
+NS_AX_EXT_BEGIN
 
 static inline Tex2F v2ToTex2F(const Vec2& v)
 {
@@ -119,8 +120,8 @@ Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
 
 // implementation of DrawNode
 
-DrawNodeEx::DrawNodeEx(float lineWidth)
-    : _lineWidth(lineWidth)
+DrawNodeEx::DrawNodeEx(float lineWidth) :
+    _lineWidth(lineWidth)
     , _defaultLineWidth(lineWidth)
     , _isConvex(false)
     , _dnPosition(Vec2::ZERO)
@@ -558,7 +559,7 @@ void DrawNodeEx::drawCubicBezier(const Vec2& origin,
     _isConvex = false;
 }
 
-void DrawNodeEx::drawCardinalSpline(PointArray* config,
+void DrawNodeEx::drawCardinalSpline(ax::PointArray* config,
                                      float tension,
                                      unsigned int segments,
                                      const Color4B& color,
@@ -602,7 +603,7 @@ void DrawNodeEx::drawCardinalSpline(PointArray* config,
     _isConvex = false;
 }
 
-void DrawNodeEx::drawCatmullRom(PointArray* points, unsigned int segments, const Color4B& color, float thickness)
+void DrawNodeEx::drawCatmullRom(ax::PointArray* points, unsigned int segments, const Color4B& color, float thickness)
 {
     drawCardinalSpline(points, 0.5f, segments, color, thickness);
 }
@@ -1161,5 +1162,4 @@ inline void DrawNodeEx::_drawPoly(const Vec2* poli,
         _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
     }
 }
-
-NS_AX_END
+NS_AX_EXT_END

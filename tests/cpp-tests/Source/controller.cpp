@@ -93,7 +93,7 @@ public:
         addTest("Node: Clipping", []() { return new ClippingNodeTests(); });
         addTest("Node: Draw", []() { return new DrawPrimitivesTests(); });
 #if __has_include("DrawNodeExTest.h")
-#    pragma message("The optional extension DrawNodeEx is enabled.")
+#pragma message("The optional extension DrawNodeEx is enabled.")
         addTest("DrawNodeEx *experimental*", []() { return new DrawNodeExTests(); });
 #endif
         addTest("Node: Label - New API", []() { return new NewLabelTests(); });

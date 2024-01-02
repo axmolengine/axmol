@@ -78,7 +78,7 @@ public:
     // void changeLineWidth(Ref* pSender, ax::ui::Slider::EventType type);
 
 private:
-    ax::DrawNodeEx* drawNode;
+    ax::extension::DrawNodeEx* drawNode;
     // ax::Label* _lineWidthLabel;
     // float lineWidth = 0;
     ax::Label* _thicknessLabel;
@@ -126,7 +126,7 @@ public:
     void changeThickness(ax::Ref* pSender, ax::ui::Slider::EventType type);
 
 private:
-    ax::DrawNodeEx* drawNode;
+    ax::extension::DrawNodeEx* drawNode;
     ax::Label* _StartAngleLabel;
     float startAngle = 0;
     ax::Label* _EndAngleLabel;
@@ -156,7 +156,7 @@ public:
 private:
     ax::ui::Slider* createSlider();
     ax::ui::ListView* createListView();
-    ax::DrawNodeEx* draw;
+    ax::extension::DrawNodeEx* draw;
     ax::DrawNode* draw1;
     ax::Vec2* verticess;
 
@@ -186,7 +186,7 @@ public:
 private:
     ax::ui::Slider* createSlider();
     ax::ui::ListView* createListView();
-    ax::DrawNodeEx* draw;
+    ax::extension::DrawNodeEx* draw;
 
     int _currentSeletedItemIndex = 0;
     int count                    = 1;

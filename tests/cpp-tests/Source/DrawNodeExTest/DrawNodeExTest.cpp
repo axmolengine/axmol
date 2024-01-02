@@ -30,6 +30,7 @@
 #include "base/any_buffer.h"
 
 USING_NS_AX;
+USING_NS_AX_EXT;
 
 using namespace std;
 using namespace Clipper2Lib;
@@ -150,7 +151,7 @@ DrawNode2Test::DrawNode2Test()
     draw->drawCubicBezier(Vec2(s.width - 250, 40.0f), Vec2(s.width - 70, 100.0f), Vec2(s.width - 30, 250.0f),
                           Vec2(s.width - 10, s.height - 50), 10, Color4F::GRAY, thickness);
 
-    auto array = PointArray::create(20);
+    auto array = ax::PointArray::create(20);
     array->addControlPoint(Vec2(0.0f, 0.0f));
     array->addControlPoint(Vec2(80.0f, 80.0f));
     array->addControlPoint(Vec2(s.width - 80, 80.0f));
@@ -160,7 +161,7 @@ DrawNode2Test::DrawNode2Test()
     array->addControlPoint(Vec2(s.width / 2, s.height / 2));
     draw->drawCardinalSpline(array, 0.5f, 50, Color4F::MAGENTA, thickness);
 
-    auto array2 = PointArray::create(20);
+    auto array2 = ax::PointArray::create(20);
     array2->addControlPoint(Vec2(s.width / 2, 30.0f));
     array2->addControlPoint(Vec2(s.width - 80, 30.0f));
     array2->addControlPoint(Vec2(s.width - 80, s.height - 80));
@@ -404,7 +405,7 @@ void IndividualThicknessTest::update(float dt)
     drawNode->drawCubicBezier(Vec2(s.width - 250, 40.0f), Vec2(s.width - 70, 100.0f), Vec2(s.width - 30, 250.0f),
                               Vec2(s.width - 10, s.height - 50), 10, Color4F::GRAY, thickness);
 
-    auto array = PointArray::create(20);
+    auto array = ax::PointArray::create(20);
     array->addControlPoint(Vec2(0.0f, 0.0f));
     array->addControlPoint(Vec2(80.0f, 80.0f));
     array->addControlPoint(Vec2(s.width - 80, 80.0f));
@@ -414,7 +415,7 @@ void IndividualThicknessTest::update(float dt)
     array->addControlPoint(Vec2(s.width / 2, s.height / 2));
     drawNode->drawCardinalSpline(array, 0.5f, 50, Color4F::MAGENTA, thickness);
 
-    auto array2 = PointArray::create(20);
+    auto array2 = ax::PointArray::create(20);
     array2->addControlPoint(Vec2(s.width / 2, 30.0f));
     array2->addControlPoint(Vec2(s.width - 80, 30.0f));
     array2->addControlPoint(Vec2(s.width - 80, s.height - 80));
@@ -5274,7 +5275,7 @@ void DrawNodePart1Test::drawAll()
     case 5:
     {
         // drawCardinalSpline
-        auto array = PointArray::create(20);
+        auto array = ax::PointArray::create(20);
         array->addControlPoint(Vec2(0.0f, 0.0f));
         array->addControlPoint(Vec2(80.0f, 80.0f));
         array->addControlPoint(Vec2(s.width - 80, 80.0f));
@@ -5284,7 +5285,7 @@ void DrawNodePart1Test::drawAll()
         array->addControlPoint(Vec2(s.width / 2, s.height / 2));
         draw->drawCardinalSpline(array, 0.5f, 50, Color4F::MAGENTA, thickness);
 
-        auto array2 = PointArray::create(20);
+        auto array2 = ax::PointArray::create(20);
         array2->addControlPoint(Vec2(s.width / 2, 80.0f));
         array2->addControlPoint(Vec2(s.width - 80, 80.0f));
         array2->addControlPoint(Vec2(s.width - 80, s.height - 80));
@@ -5296,7 +5297,7 @@ void DrawNodePart1Test::drawAll()
     case 6:
     {
         // drawCatmullRom
-        auto array2 = PointArray::create(20);
+        auto array2 = ax::PointArray::create(20);
         array2->addControlPoint(Vec2(s.width / 2, 80.0f));
         array2->addControlPoint(Vec2(s.width - 80, 80.0f));
         array2->addControlPoint(Vec2(s.width - 80, s.height - 80));
@@ -5304,7 +5305,7 @@ void DrawNodePart1Test::drawAll()
         array2->addControlPoint(Vec2(s.width / 2, 80.0f));
         draw->drawCatmullRom(array2, 50, Color4F::ORANGE, thickness);
 
-        auto array = PointArray::create(20);
+        auto array = ax::PointArray::create(20);
         array->addControlPoint(Vec2(0.0f, 0.0f));
         array->addControlPoint(Vec2(80.0f, 80.0f));
         array->addControlPoint(Vec2(s.width - 80, 80.0f));
