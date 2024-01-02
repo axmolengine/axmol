@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "DrawNodeExtTest.h"
+#include "DrawNodeExTest.h"
 #include "renderer/Renderer.h"
 #include "renderer/CustomCommand.h"
 
@@ -36,7 +36,7 @@ using namespace Clipper2Lib;
 
 
 
-DrawNodeExtTests::DrawNodeExtTests()
+DrawNodeExTests::DrawNodeExTests()
 {
     ADD_TEST_CASE(DrawNodePart1Test);
     ADD_TEST_CASE(DrawNodePart2Test);
@@ -47,7 +47,7 @@ DrawNodeExtTests::DrawNodeExtTests()
     ADD_TEST_CASE(DrawNode2FilledPolygonTest);
 }
 
-Vec2* DrawNodeExtBaseTest::makePolygons()
+Vec2* DrawNodeExBaseTest::makePolygons()
 {
     bool isReal = false;
     do
@@ -92,7 +92,7 @@ Vec2* DrawNodeExtBaseTest::makePolygons()
     } while (!isReal);
 }
 
-string DrawNodeExtBaseTest::title() const
+string DrawNodeExBaseTest::title() const
 {
     return "No title";
 }

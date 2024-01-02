@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-#include "2d/DrawNodeExt.h"
+#include "extensions/DrawNodeEx/DrawNodeEx.h"
 #include <stddef.h>  // offsetof
 #include "base/Types.h"
 #include "base/EventType.h"

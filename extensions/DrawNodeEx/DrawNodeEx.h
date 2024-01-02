@@ -41,7 +41,7 @@
 
 NS_AX_BEGIN
 
-//static const int DEFAULT_LINE_WIDTH = 2;
+static const int DEFAULT_LINEWIDTH = 2;
 
 class PointArray;
 /**
@@ -108,7 +108,7 @@ public:
      *
      * @return Return an autorelease object.
      */
-    static DrawNodeEx* create(float defaultLineWidth = DEFAULT_LINE_WIDTH);
+    static DrawNodeEx* create(float defaultLineWidth = DEFAULT_LINEWIDTH);
 
     /** Draw a point.
      *
@@ -464,7 +464,7 @@ public:
 
     bool isIsolated() const { return _isolated; }
 
-    DrawNodeEx(float lineWidth = DEFAULT_LINE_WIDTH);
+    DrawNodeEx(float lineWidth = DEFAULT_LINEWIDTH);
     virtual ~DrawNodeEx();
     virtual bool init() override;
 

@@ -26,12 +26,13 @@
 #include "axmol.h"
 #include "ui/CocosGUI.h"
 #include "../BaseTest.h"
+#include "extensions/DrawNodeEx/DrawNodeEx.h"
 
 #include <string>
 
-DEFINE_TEST_SUITE(DrawNodeExtTests);
+DEFINE_TEST_SUITE(DrawNodeExTests);
 
-class DrawNodeExtBaseTest : public TestCase
+class DrawNodeExBaseTest : public TestCase
 {
 public:
     virtual std::string title() const override;
@@ -39,7 +40,7 @@ public:
     ax::Vec2* makePolygons();
 };
 
-class DrawNode2Test : public DrawNodeExtBaseTest
+class DrawNode2Test : public DrawNodeExBaseTest
 {
 public:
     CREATE_FUNC(DrawNode2Test);
@@ -61,7 +62,7 @@ public:
 //    virtual std::string subtitle() const override;
 //};
 
-class IndividualThicknessTest : public DrawNodeExtBaseTest
+class IndividualThicknessTest : public DrawNodeExBaseTest
 {
 public:
     CREATE_FUNC(IndividualThicknessTest);
@@ -84,7 +85,7 @@ private:
     float thickness = 1.0f;
 };
 
-class DrawNode2PolygonTest : public DrawNodeExtBaseTest
+class DrawNode2PolygonTest : public DrawNodeExBaseTest
 {
 public:
     CREATE_FUNC(DrawNode2PolygonTest);
@@ -96,7 +97,7 @@ public:
     virtual std::string subtitle() const override;
 };
 
-class DrawNode2FilledPolygonTest : public DrawNodeExtBaseTest
+class DrawNode2FilledPolygonTest : public DrawNodeExBaseTest
 {
 public:
     CREATE_FUNC(DrawNode2FilledPolygonTest);
@@ -107,7 +108,7 @@ public:
     virtual std::string subtitle() const override;
 };
 
-class DrawPieTest : public DrawNodeExtBaseTest
+class DrawPieTest : public DrawNodeExBaseTest
 {
 public:
     CREATE_FUNC(DrawPieTest);
@@ -136,7 +137,7 @@ private:
     float thickness = 0;
 };
 
-class DrawNodePart1Test : public DrawNodeExtBaseTest
+class DrawNodePart1Test : public DrawNodeExBaseTest
 {
 public:
     CREATE_FUNC(DrawNodePart1Test);
@@ -166,7 +167,7 @@ private:
     ax::Label* label;
 };
 
-class DrawNodePart2Test : public DrawNodeExtBaseTest
+class DrawNodePart2Test : public DrawNodeExBaseTest
 {
 public:
     CREATE_FUNC(DrawNodePart2Test);
