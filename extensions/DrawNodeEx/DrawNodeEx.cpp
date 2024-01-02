@@ -526,6 +526,30 @@ void DrawNodeEx::drawStar(const Vec2& center,
     _drawPolygon(vertices, segments*2, Color4B::AX_TRANSPARENT, thickness, color, true);
 }
 
+void DrawNodeEx::drawSolidStar(const Vec2& center,
+                          float radius1,
+                          float radius2,
+                          unsigned int segments,
+                          const Color4B& color,
+                          const Color4B& filledColor,
+                          float thickness)
+{
+    const float coef = 2.0f * (float)M_PI / segments;
+
+    float halfAngle = coef / 2.0f;
+
+    auto vertices = _abuf.get<Vec2>(segments * 2);
+    int i         = 0;
+    for (unsigned int a = 0; a < segments; a++)
+    {
+        float rads      = a * coef;
+        vertices[i]     = Vec2(center.x + cos(rads) * radius2, center.y + sin(rads) * radius2);
+        vertices[i + 1] = Vec2(center.x + cos(rads + halfAngle) * radius1, center.y + sin(rads + halfAngle) * radius1);
+        i += 2;
+    }
+    _drawPolygon(vertices, segments * 2, filledColor, thickness, color, true);
+}
+
 void DrawNodeEx::drawQuadBezier(const Vec2& origin,
                                 const Vec2& control,
                                 const Vec2& destination,

@@ -241,6 +241,14 @@ public:
                   const Color4B& color,
                   float thickness = 1.0f);
 
+    void drawSolidStar(const Vec2& center,
+                  float radiusI,
+                  float radiusO,
+                  unsigned int segments,
+                  const Color4B& color,
+                  const Color4B& filledColor,
+                  float thickness = 1.0f);
+
     /** Draws a quad bezier path.
      *
      * @param origin The origin of the bezier path.
