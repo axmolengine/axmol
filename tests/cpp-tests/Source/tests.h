@@ -72,7 +72,10 @@
 #include "DataVisitorTest/DataVisitorTest.h"
 #include "NetworkTest/NetworkTest.h"
 #include "DrawPrimitivesTest/DrawPrimitivesTest.h"
-#include "DrawNodeExTest/DrawNodeExTest.h"
+#if __has_include("DrawNodeExTest.h")
+#        include "DrawNodeExTest/DrawNodeExTest.h"
+#endif
+
 #include "EffectsAdvancedTest/EffectsAdvancedTest.h"
 #include "EffectsTest/EffectsTest.h"
 #include "ExtensionsTest/ExtensionsTest.h"
