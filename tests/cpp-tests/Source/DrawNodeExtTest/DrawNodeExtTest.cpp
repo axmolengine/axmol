@@ -34,17 +34,7 @@ USING_NS_AX;
 using namespace std;
 using namespace Clipper2Lib;
 
-inline const char* benchmark_bb7_name;
-inline std::chrono::steady_clock::time_point benchmark_bb7_start;
-inline std::chrono::steady_clock::time_point benchmark_bb7_end;
-#define BENCHMARK_SECTION_BEGIN(name) \
-    benchmark_bb7_name  = name;       \
-    benchmark_bb7_start = std::chrono::high_resolution_clock::now();
-#define BENCHMARK_SECTION_END()                                                                                   \
-    benchmark_bb7_end = std::chrono::high_resolution_clock::now();                                                \
-    AXLOG("benchmark {%s} took: {%i} millis, {%i} micros", benchmark_bb7_name,                                    \
-          std::chrono::duration_cast<std::chrono::milliseconds>(benchmark_bb7_end - benchmark_bb7_start).count(), \
-          std::chrono::duration_cast<std::chrono::microseconds>(benchmark_bb7_end - benchmark_bb7_start).count());
+
 
 DrawNodeExtTests::DrawNodeExtTests()
 {
@@ -5360,9 +5350,9 @@ void DrawNodePart1Test::drawAll()
             {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
             {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
         };
-        BENCHMARK_SECTION_BEGIN("drawPoly");
+
         draw->drawPoly(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), true, Color4B::RED, thickness);
-        BENCHMARK_SECTION_END();
+
         break;
     }
     case 8:
@@ -5388,7 +5378,7 @@ void DrawNodePart1Test::drawAll()
             {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
             {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
         };
-        BENCHMARK_SECTION_BEGIN("drawPoly");
+
         draw->setDNScale(Vec2(thickness, thickness));
         draw->setDNPosition(Vec2(0, 0));
         draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness,
@@ -5396,7 +5386,7 @@ void DrawNodePart1Test::drawAll()
         draw->setDNPosition(Vec2(10, 0));
         draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness,
                           Color4F::YELLOW);
-        BENCHMARK_SECTION_END();
+
 
         draw1->clear();
         draw1->setPosition(Vec2(200, 0));
