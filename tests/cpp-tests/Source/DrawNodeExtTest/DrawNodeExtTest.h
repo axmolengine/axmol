@@ -144,6 +144,7 @@ public:
     DrawNodePart1Test();
 
     virtual std::string title() const override;
+    virtual std::string subtitle() const override;
     void update(float dt);
 
     void sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType type);
@@ -173,6 +174,7 @@ public:
     DrawNodePart2Test();
 
     virtual std::string title() const override;
+    virtual std::string subtitle() const override;
     void update(float dt);
 
     void sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType type);

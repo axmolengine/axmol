@@ -5088,7 +5088,7 @@ DrawNodePart1Test::DrawNodePart1Test()
     addChild(listview);
 
     draw = DrawNodeExt::create();
-    // draw->setScale(0.5);
+    draw->setScale(0.5);
     draw->setPosition(size / 4);
     addChild(draw);
 
@@ -5111,6 +5111,11 @@ DrawNodePart1Test::DrawNodePart1Test()
 std::string DrawNodePart1Test::title() const
 {
     return "DrawNode #1 Scale/Rotation/LineWidth/Position Test";
+}
+
+string DrawNodePart1Test::subtitle() const
+{
+    return "";
 }
 
 ax::ui::Slider* DrawNodePart1Test::createSlider()
@@ -5326,8 +5331,8 @@ void DrawNodePart1Test::drawAll()
         // for (int n = 0; n < 10; n++)
         bool isReal = false;
 
-        draw->drawPoly(verticess, sizeof(verticess) / sizeof(verticess[0]), true,
-                       Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
+        //draw->drawPoly(verticess, sizeof(verticess) / sizeof(verticess[0]), true,
+        //               Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
 
         Vec2 vertices[5] = {Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f),
                             Vec2(50.0f, 100.0f)};
@@ -5644,6 +5649,11 @@ DrawNodePart2Test::DrawNodePart2Test()
 std::string DrawNodePart2Test::title() const
 {
     return "DrawNode #2 Test";
+}
+
+string DrawNodePart2Test::subtitle() const
+{
+    return "";
 }
 
 ax::ui::Slider* DrawNodePart2Test::createSlider()
