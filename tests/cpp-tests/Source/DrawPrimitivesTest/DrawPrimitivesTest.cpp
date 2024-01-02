@@ -606,7 +606,6 @@ Issue1319Test::Issue1319Test()
         {362.750000f, 131.625000f}, {362.750000f, 106.875000f}, {306.500000f, 119.125000f}, {324.250000f, 85.1250000f},
         {227.500000f, 61.8750000}};
 
- 
     Vec2 vertices24[] = {
         {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},  {100.250000f, 161.375000f},
         {65.500000f, 181.375000f},  {102.250000f, 179.125000f}, {95.000000f, 215.125000f},  {129.331467f, 189.926208f},
@@ -621,9 +620,7 @@ Issue1319Test::Issue1319Test()
         {135.250000f, 97.875000f},  {124.000000f, 93.875000f},  {115.500000f, 100.875000f}, {115.500000f, 111.875000f},
         {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
         {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
-
     };
-
  
     DrawNode* drawNode[3];
     for (int i = 0; i < 3; i++)
@@ -633,21 +630,16 @@ Issue1319Test::Issue1319Test()
     }
 
     // draw a solid circle
-    drawNode[1]->drawSolidCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 40, AX_DEGREES_TO_RADIANS(90), 30, 2.0f,
-                                 2.0f, Color4F::BLUE);
+    drawNode[1]->drawSolidCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 40, AX_DEGREES_TO_RADIANS(90), 30, 2.0f,  2.0f, Color4F::BLUE);
 
-    drawNode[1]->drawSolidCircle(VisibleRect::center() + Vec2(-40.0f, 0.0f), 40, AX_DEGREES_TO_RADIANS(90), 30, 2.0f,
-                                 2.0f, Color4F::WHITE);
+    drawNode[1]->drawSolidCircle(VisibleRect::center() + Vec2(-40.0f, 0.0f), 40, AX_DEGREES_TO_RADIANS(90), 30, 2.0f, 2.0f, Color4F::WHITE);
 
     drawNode[0]->setPosition(Vec2(-30, -20));
-    drawNode[0]->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, 0.3f,
-                             Color4F::GREEN);
+    drawNode[0]->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, 0.3f, Color4F::GREEN);
 
     drawNode[2]->setPosition(Vec2(0, -10));
     drawNode[2]->setLocalZOrder(5);
-    drawNode[2]->drawPolygon(vertices21, sizeof(vertices21) / sizeof(vertices21[0]), Color4F::GREEN, 0.3f,
-                             Color4F::YELLOW);
-
+    drawNode[2]->drawPolygon(vertices21, sizeof(vertices21) / sizeof(vertices21[0]), Color4F::GREEN, 0.3f, Color4F::YELLOW);
     drawNode[2]->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::BLUE, 0.3f, Color4F::RED);
 }
 
