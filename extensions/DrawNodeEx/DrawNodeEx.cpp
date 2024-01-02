@@ -80,22 +80,7 @@ static inline bool isConvex(const Vec2* verts, int count)
 
 Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
 {
-
-    // void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float
-    // scaleX,
-    //                                float scaleY, const Color4B& color)
-    //{
-    //     const float coef = 2.0f * (float)M_PI / segments;
-
-    //_dnPosition.x = 10.f;
-    //_dnPosition.y = 0.f;
-    //_dnRotation   = 0.f;
-    //_dnScale.x    = 2.f;
-    //_dnScale.y    = 2.f;
-
     Vec2* vert = _abuf.get<Vec2>(count);
-    memcpy(vert, vertices, count);
-
     for (int i = 0; i < count; i++)
     {
         if (_dnRotation == 0.0f)
@@ -103,23 +88,32 @@ Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
             vert[i].x = vertices[i].x * _dnScale.x + _dnPosition.x;
             vert[i].y = vertices[i].y * _dnScale.y + _dnPosition.y;
         }
-        else
+        else // https://stackoverflow.com/questions/2259476/rotating-a-point-about-another-point-2d
         {
-            //    float rads = i * coef;
-            //    float j    = radius * cosf(rads + angle) * scaleX + center.x;
-            //    float k    = radius * sinf(rads + angle) * scaleY + center.y;
+            float s = sin(_dnRotation);
+            float c = cos(_dnRotation);
 
-            //    vertices[i].x = j;
-            //    vertices[i].y = k;
-            vert[i].x = vertices[i].x + _dnPosition.x + cosf(_dnRotation) * _dnCenter.x;
-            vert[i].y = vertices[i].y + _dnPosition.y + sinf(_dnRotation) * _dnCenter.y;
+            // translate point back to origin:
+            vert[i].x = vertices[i].x - _dnCenter.x;
+            vert[i].y = vertices[i].y - _dnCenter.y;
+
+            // rotate point
+            float xnew = vert[i].x * c - vert[i].y * s;
+            float ynew = vert[i].x * s + vert[i].y * c;
+
+            // translate point back:
+            vert[i].x = xnew + _dnCenter.x;
+            vert[i].y = ynew + _dnCenter.y;
+
+            // scale and position
+            vert[i].x = vert[i].x * _dnScale.x + _dnPosition.x;
+            vert[i].y = vert[i].y * _dnScale.y + _dnPosition.y;
         }
     }
     return vert;
 }
 
-// implementation of DrawNode
-
+// implementation of DrawNodeEx
 DrawNodeEx::DrawNodeEx(float lineWidth) :
     _lineWidth(lineWidth)
     , _defaultLineWidth(lineWidth)

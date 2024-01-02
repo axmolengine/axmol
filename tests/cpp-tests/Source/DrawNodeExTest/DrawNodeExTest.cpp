@@ -5382,9 +5382,13 @@ void DrawNodePart1Test::drawAll()
 
         draw->setDNScale(Vec2(thickness, thickness));
         draw->setDNPosition(Vec2(0, 0));
+        draw->setDNRotation(0);
         draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness,
                           Color4F::YELLOW);
-        draw->setDNPosition(Vec2(10, 0));
+        draw->setDNPosition(Vec2(0, 0));
+        draw->setDNRotation(thickness);
+        draw->setDNScale(Vec2(1, 1));
+        draw->setDNCenter(vertices24[0]);
         draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness,
                           Color4F::YELLOW);
 
