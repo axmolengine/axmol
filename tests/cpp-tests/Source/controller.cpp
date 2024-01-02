@@ -92,7 +92,7 @@ public:
         addTest("Node: Camera3D Test", []() { return new Camera3DTests(); });
         addTest("Node: Clipping", []() { return new ClippingNodeTests(); });
         addTest("Node: Draw", []() { return new DrawPrimitivesTests(); });
-        addTest("Node: DrawNodeEx *experimental*", []() { return new DrawNodeExTests(); });
+        addTest("DrawNodeEx *experimental*", []() { return new DrawNodeExTests(); });
         addTest("Node: Label - New API", []() { return new NewLabelTests(); });
         addTest("Node: Layer", []() { return new LayerTests(); });
         addTest("Node: Light", []() { return new LightTests(); });
