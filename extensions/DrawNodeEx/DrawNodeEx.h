@@ -214,7 +214,7 @@ public:
      * @param segments The number of segments.
      * @param drawLineToCenter Whether or not draw the line from the origin to center.
      * @param color Set the circle color.
-     * @param threshold  (optional) Set the threshold which will be draws a better rendered polygon.
+     * @param thickness  (optional) Set the threshold which will be draws a better rendered polygon.
      */
     void drawCircle(const Vec2& center,
                     float radius,
@@ -223,6 +223,24 @@ public:
                     bool drawLineToCenter,
                     const Color4B& color,
                     float thickness = 1.0f);  // 500 should "simulate/save" the backwards compatibility
+
+
+     /** Draws a star given the center, radius1, radius2 and number of segments.
+     *
+     * @param center The circle center point.
+     * @param radius1 The circle rotate of radius.
+     * @param radius2  The circle angle.
+     * @param segments The number of segments.
+     * @param drawLineToCenter Whether or not draw the line from the origin to center.
+     * @param color Set the circle color.
+     * @param thickness  (optional) Set the thickness which will be draws a better rendered polygon.
+     */
+    void drawStar(const Vec2& center,
+                  float radius1,
+                  float radius2,
+                  unsigned int segments,
+                  const Color4B& color,
+                  float thickness = 1.0f);
 
     /** Draws a quad bezier path.
      *

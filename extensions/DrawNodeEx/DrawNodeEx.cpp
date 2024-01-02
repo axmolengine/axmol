@@ -38,8 +38,7 @@
 #include "renderer/backend/ProgramState.h"
 #include "poly2tri/poly2tri.h"
 
-
-//USING_NS_AX;
+// USING_NS_AX;
 NS_AX_EXT_BEGIN
 
 static inline Tex2F v2ToTex2F(const Vec2& v)
@@ -88,7 +87,7 @@ Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
             vert[i].x = vertices[i].x * _dnScale.x + _dnPosition.x;
             vert[i].y = vertices[i].y * _dnScale.y + _dnPosition.y;
         }
-        else // https://stackoverflow.com/questions/2259476/rotating-a-point-about-another-point-2d
+        else  // https://stackoverflow.com/questions/2259476/rotating-a-point-about-another-point-2d
         {
             float s = sin(_dnRotation);
             float c = cos(_dnRotation);
@@ -114,8 +113,8 @@ Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
 }
 
 // implementation of DrawNodeEx
-DrawNodeEx::DrawNodeEx(float lineWidth) :
-    _lineWidth(lineWidth)
+DrawNodeEx::DrawNodeEx(float lineWidth)
+    : _lineWidth(lineWidth)
     , _defaultLineWidth(lineWidth)
     , _isConvex(false)
     , _dnPosition(Vec2::ZERO)
@@ -235,9 +234,9 @@ void DrawNodeEx::updateShader()
 }
 
 void DrawNodeEx::updateShaderInternal(CustomCommand& cmd,
-                                       uint32_t programType,
-                                       CustomCommand::DrawType drawType,
-                                       CustomCommand::PrimitiveType primitiveType)
+                                      uint32_t programType,
+                                      CustomCommand::DrawType drawType,
+                                      CustomCommand::PrimitiveType primitiveType)
 {
     auto& pipelinePS = cmd.getPipelineDescriptor().programState;
     AX_SAFE_RELEASE(pipelinePS);
@@ -342,9 +341,9 @@ void DrawNodeEx::drawPoints(const Vec2* position, unsigned int numberOfPoints, c
 }
 
 void DrawNodeEx::drawPoints(const Vec2* position,
-                             unsigned int numberOfPoints,
-                             const float pointSize,
-                             const Color4B& color)
+                            unsigned int numberOfPoints,
+                            const float pointSize,
+                            const Color4B& color)
 {
     ensureCapacityGLPoint(numberOfPoints);
 
@@ -409,10 +408,10 @@ void DrawNodeEx::drawRect(const Vec2& origin, const Vec2& destination, const Col
 }
 
 void DrawNodeEx::drawPoly(const Vec2* poli,
-                           unsigned int numberOfPoints,
-                           bool closePolygon,
-                           const Color4B& color,
-                           float thickness)
+                          unsigned int numberOfPoints,
+                          bool closePolygon,
+                          const Color4B& color,
+                          float thickness)
 {
     if (thickness != 1.0f)
     {
@@ -456,14 +455,14 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
 }
 
 void DrawNodeEx::drawCircle(const Vec2& center,
-                             float radius,
-                             float angle,
-                             unsigned int segments,
-                             bool drawLineToCenter,
-                             float scaleX,
-                             float scaleY,
-                             const Color4B& color,
-                             float thickness)
+                            float radius,
+                            float angle,
+                            unsigned int segments,
+                            bool drawLineToCenter,
+                            float scaleX,
+                            float scaleY,
+                            const Color4B& color,
+                            float thickness)
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
@@ -494,22 +493,53 @@ void DrawNodeEx::drawCircle(const Vec2& center,
 }
 
 void DrawNodeEx::drawCircle(const Vec2& center,
-                             float radius,
-                             float angle,
-                             unsigned int segments,
-                             bool drawLineToCenter,
-                             const Color4B& color,
-                             float thickness)
+                            float radius,
+                            float angle,
+                            unsigned int segments,
+                            bool drawLineToCenter,
+                            const Color4B& color,
+                            float thickness)
 {
     drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color, thickness);
 }
 
+void DrawNodeEx::drawStar(const Vec2& center,
+                          float radius1,
+
+                          float radius2,
+                          unsigned int segments,
+                          const Color4B& color,
+                          float thickness)
+{
+    // float angle     = 2.0f * (float)M_PI / npoints;
+    const float coef = 2.0f * (float)M_PI / segments;
+
+    float halfAngle = coef / 2.0;
+
+    auto vertices = _abuf.get<Vec2>(segments * 2);
+    int i         = 0;
+    // for (float a = 0; a < M_PI; a += coef)
+    //{
+    for (unsigned int a = 0; a < segments*2; a++)
+    {
+        float rads      = a * coef;
+        float sx        = center.x + cos(rads) * radius2;
+        float sy        = center.y + sin(rads) * radius2;
+        vertices[i]     = Vec2(sx, sy);
+        sx              = center.x + cos(rads + halfAngle) * radius1;
+        sy              = center.y + sin(rads + halfAngle) * radius1;
+        vertices[i + 1] = Vec2(sx, sy);
+        i += 2;
+    }
+    _drawPolygon(vertices, segments, Color4B::AX_TRANSPARENT, thickness, color, true);
+}
+
 void DrawNodeEx::drawQuadBezier(const Vec2& origin,
-                                 const Vec2& control,
-                                 const Vec2& destination,
-                                 unsigned int segments,
-                                 const Color4B& color,
-                                 float thickness)
+                                const Vec2& control,
+                                const Vec2& destination,
+                                unsigned int segments,
+                                const Color4B& color,
+                                float thickness)
 {
     Vec2* vertices = _abuf.get<Vec2>(segments + 1);
 
@@ -528,12 +558,12 @@ void DrawNodeEx::drawQuadBezier(const Vec2& origin,
 }
 
 void DrawNodeEx::drawCubicBezier(const Vec2& origin,
-                                  const Vec2& control1,
-                                  const Vec2& control2,
-                                  const Vec2& destination,
-                                  unsigned int segments,
-                                  const Color4B& color,
-                                  float thickness)
+                                 const Vec2& control1,
+                                 const Vec2& control2,
+                                 const Vec2& destination,
+                                 unsigned int segments,
+                                 const Color4B& color,
+                                 float thickness)
 {
     Vec2* vertices = _abuf.get<Vec2>(segments + 1);
 
@@ -554,10 +584,10 @@ void DrawNodeEx::drawCubicBezier(const Vec2& origin,
 }
 
 void DrawNodeEx::drawCardinalSpline(ax::PointArray* config,
-                                     float tension,
-                                     unsigned int segments,
-                                     const Color4B& color,
-                                     float thickness)
+                                    float tension,
+                                    unsigned int segments,
+                                    const Color4B& color,
+                                    float thickness)
 {
     Vec2* vertices = _abuf.get<Vec2>(segments + 1);
 
@@ -626,11 +656,11 @@ void DrawNodeEx::drawDot(const Vec2& pos, float radius, const Color4B& color)
 }
 
 void DrawNodeEx::drawRect(const Vec2& p1,
-                           const Vec2& p2,
-                           const Vec2& p3,
-                           const Vec2& p4,
-                           const Color4B& color,
-                           float thickness)
+                          const Vec2& p2,
+                          const Vec2& p3,
+                          const Vec2& p4,
+                          const Color4B& color,
+                          float thickness)
 {
     if (thickness != 1.0f)
     {
@@ -723,10 +753,10 @@ void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, con
 }
 
 void DrawNodeEx::drawPolygon(const Vec2* verts,
-                              int count,
-                              const Color4B& fillColor,
-                              float borderWidth,
-                              const Color4B& borderColor)
+                             int count,
+                             const Color4B& fillColor,
+                             float borderWidth,
+                             const Color4B& borderColor)
 {
     AXLOG("# drawPolygon Count %i", count);
     for (size_t i = 0; i < count; i++)
@@ -750,16 +780,16 @@ void DrawNodeEx::drawSolidPoly(const Vec2* poli, unsigned int numberOfPoints, co
 }
 
 void DrawNodeEx::drawPie(const Vec2& center,
-                          float radius,
-                          float rotation,
-                          int startAngle,
-                          int endAngle,
-                          float scaleX,
-                          float scaleY,
-                          const Color4B& fillColor,
-                          const Color4B& borderColor,
-                          DrawMode drawMode,
-                          float thickness)
+                         float radius,
+                         float rotation,
+                         int startAngle,
+                         int endAngle,
+                         float scaleX,
+                         float scaleY,
+                         const Color4B& fillColor,
+                         const Color4B& borderColor,
+                         DrawMode drawMode,
+                         float thickness)
 {
     // not a real line!
     if (startAngle == endAngle)
@@ -822,14 +852,14 @@ void DrawNodeEx::drawPie(const Vec2& center,
 }
 
 void DrawNodeEx::drawSolidCircle(const Vec2& center,
-                                  float radius,
-                                  float angle,
-                                  unsigned int segments,
-                                  float scaleX,
-                                  float scaleY,
-                                  const Color4B& fillColor,
-                                  float borderWidth,
-                                  const Color4B& borderColor)
+                                 float radius,
+                                 float angle,
+                                 unsigned int segments,
+                                 float scaleX,
+                                 float scaleY,
+                                 const Color4B& fillColor,
+                                 float borderWidth,
+                                 const Color4B& borderColor)
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
@@ -850,12 +880,12 @@ void DrawNodeEx::drawSolidCircle(const Vec2& center,
 }
 
 void DrawNodeEx::drawSolidCircle(const Vec2& center,
-                                  float radius,
-                                  float angle,
-                                  unsigned int segments,
-                                  float scaleX,
-                                  float scaleY,
-                                  const Color4B& color)
+                                 float radius,
+                                 float angle,
+                                 unsigned int segments,
+                                 float scaleX,
+                                 float scaleY,
+                                 const Color4B& color)
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
@@ -877,10 +907,10 @@ void DrawNodeEx::drawSolidCircle(const Vec2& center,
 }
 
 void DrawNodeEx::drawSolidCircle(const Vec2& center,
-                                  float radius,
-                                  float angle,
-                                  unsigned int segments,
-                                  const Color4B& color)
+                                 float radius,
+                                 float angle,
+                                 unsigned int segments,
+                                 const Color4B& color)
 {
     drawSolidCircle(center, radius, angle, segments, 1.0f, 1.0f, color);
 }
@@ -961,11 +991,11 @@ void DrawNodeEx::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
 }
 
 inline void DrawNodeEx::_drawPolygon(const Vec2* verts,
-                                      unsigned int count,
-                                      const Color4B& fillColor,
-                                      float borderWidth,
-                                      const Color4B& borderColo,
-                                      bool closedPolygon)
+                                     unsigned int count,
+                                     const Color4B& fillColor,
+                                     float borderWidth,
+                                     const Color4B& borderColo,
+                                     bool closedPolygon)
 {
     AXASSERT(count >= 0, "invalid count value");
 
@@ -1095,10 +1125,10 @@ inline void DrawNodeEx::_drawPolygon(const Vec2* verts,
 }
 
 inline void DrawNodeEx::_drawPoly(const Vec2* poli,
-                                   unsigned int numberOfPoints,
-                                   bool closePolygon,
-                                   const Color4B& color,
-                                   float thickness)
+                                  unsigned int numberOfPoints,
+                                  bool closePolygon,
+                                  const Color4B& color,
+                                  float thickness)
 {
 
     if (thickness != 1.0f)
