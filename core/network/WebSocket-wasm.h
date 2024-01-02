@@ -188,6 +188,7 @@ protected:
     int _wsfd = -1;
     State _state = State::CLOSED;
     std::string _url;
+    std::string _subProtocols;
     std::string _selectedProtocol;
 
     Delegate* _delegate{};
