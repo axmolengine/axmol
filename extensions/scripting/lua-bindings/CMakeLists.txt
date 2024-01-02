@@ -53,6 +53,7 @@ set(lua_bindings_manual_files
     manual/network/axlua_network_manual.cpp
     manual/network/lua_xml_http_request.cpp
     manual/network/lua_downloader.cpp
+    manual/network/lua_websocket.cpp
     manual/spine/axlua_spine_manual.cpp
     manual/spine/LuaSkeletonAnimation.cpp
     manual/ui/axlua_ui_manual.cpp
