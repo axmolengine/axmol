@@ -37,7 +37,6 @@
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramState.h"
 #include "poly2tri/poly2tri.h"
-#include "../../../CDT/CDT/include/CDT.h"
 
 inline const char* benchmark_bb7_name;
 inline std::chrono::steady_clock::time_point benchmark_bb7_start;
@@ -92,11 +91,11 @@ static inline bool isConvex(const Vec2* verts, int count)
 Vec2* DrawNodeExt::transform(const Vec2* vertices, unsigned int count)
 {
 
-     // void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float
-     // scaleX,
-     //                                float scaleY, const Color4B& color)
-     //{
-     //     const float coef = 2.0f * (float)M_PI / segments;
+    // void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float
+    // scaleX,
+    //                                float scaleY, const Color4B& color)
+    //{
+    //     const float coef = 2.0f * (float)M_PI / segments;
 
     //_dnPosition.x = 10.f;
     //_dnPosition.y = 0.f;
@@ -104,11 +103,11 @@ Vec2* DrawNodeExt::transform(const Vec2* vertices, unsigned int count)
     //_dnScale.x    = 2.f;
     //_dnScale.y    = 2.f;
 
-     Vec2* vert = _abuf.get<Vec2>(count);
-     memcpy(vert, vertices, count);
+    Vec2* vert = _abuf.get<Vec2>(count);
+    memcpy(vert, vertices, count);
 
-     for (int i = 0; i < count; i++)
-     {
+    for (int i = 0; i < count; i++)
+    {
         if (_dnRotation == 0.0f)
         {
             vert[i].x = vertices[i].x * _dnScale.x + _dnPosition.x;
@@ -125,19 +124,20 @@ Vec2* DrawNodeExt::transform(const Vec2* vertices, unsigned int count)
             vert[i].x = vertices[i].x + _dnPosition.x + cosf(_dnRotation) * _dnCenter.x;
             vert[i].y = vertices[i].y + _dnPosition.y + sinf(_dnRotation) * _dnCenter.y;
         }
-
-     }
-     return vert;
- }
+    }
+    return vert;
+}
 
 // implementation of DrawNode
 
-DrawNodeExt::DrawNodeExt(float lineWidth) : _lineWidth(lineWidth)  , _defaultLineWidth(lineWidth)
-     , _isConvex(false)
-     , _dnPosition(Vec2::ZERO)
-     , _dnRotation(0.0f)
-     , _dnScale(Vec2::ONE)
- {
+DrawNodeExt::DrawNodeExt(float lineWidth)
+    : _lineWidth(lineWidth)
+    , _defaultLineWidth(lineWidth)
+    , _isConvex(false)
+    , _dnPosition(Vec2::ZERO)
+    , _dnRotation(0.0f)
+    , _dnScale(Vec2::ONE)
+{
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     // TODO new-renderer: interface setupBuffer removal
@@ -386,7 +386,7 @@ void DrawNodeExt::drawLine(const Vec2& origin, const Vec2& destination, const Co
     }
     else
     {
-    //    Vec2* line      = _abuf.get<Vec2>(2);
+        //    Vec2* line      = _abuf.get<Vec2>(2);
         Vec2 line[2]    = {{origin}, {destination}};
         Vec2* _vertices = transform(line, 2);
 
@@ -564,7 +564,7 @@ void DrawNodeExt::drawCubicBezier(const Vec2& origin,
     }
     vertices[segments].x = destination.x;
     vertices[segments].y = destination.y;
-    _isConvex             = true;
+    _isConvex            = true;
     _drawPolygon(vertices, segments, Color4B::AX_TRANSPARENT, thickness, color, false);
     _isConvex = false;
 }
@@ -650,7 +650,7 @@ void DrawNodeExt::drawRect(const Vec2& p1,
 {
     if (thickness != 1.0f)
     {
-        Vec2 line[4]             = {{p1}, {p2}, {p3}, {p4}};
+        Vec2 line[4] = {{p1}, {p2}, {p3}, {p4}};
         _isConvex    = true;
         _drawPoly(line, 4, true, color, thickness);
         _isConvex = false;
@@ -666,7 +666,6 @@ void DrawNodeExt::drawRect(const Vec2& p1,
 
 void DrawNodeExt::drawSegment(const Vec2& from, const Vec2& to, float radius, const Color4B& color)
 {
-
 
     unsigned int vertex_count = 6 * 3;
     ensureCapacity(vertex_count);
@@ -755,7 +754,7 @@ void DrawNodeExt::drawPolygon(const Vec2* verts,
 
 void DrawNodeExt::drawSolidRect(const Vec2& origin, const Vec2& destination, const Color4B& color)
 {
-    Vec2 vertices[]          = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y)};
+    Vec2 vertices[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y)};
     _isConvex       = true;
     _drawPolygon(vertices, 4, color, 0.0f, Color4B(), true);
     _isConvex = false;
@@ -904,7 +903,7 @@ void DrawNodeExt::drawSolidCircle(const Vec2& center,
 
 void DrawNodeExt::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color4B& color, float thickness)
 {
-    Vec2 poli[3] = {p1, p2, p3};
+    Vec2 poli[3]              = {p1, p2, p3};
     unsigned int vertex_count = 3;
 
     if (thickness != 1.0f)
@@ -915,7 +914,6 @@ void DrawNodeExt::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, c
         return;
     }
     Vec2* _vertices = transform(poli, vertex_count);
-
 
     ensureCapacity(vertex_count);
 
@@ -989,10 +987,10 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
 
     Vec2* _vertices = transform(verts, count);
 
-    //for (size_t i = 0; i < count; i++)
+    // for (size_t i = 0; i < count; i++)
     //{
-    //    AXLOG("_vertices: %f %f  verts: %f %f", _vertices[i].x, _vertices[i].y, verts[i].x, verts[i].y);
-    //}
+    //     AXLOG("_vertices: %f %f  verts: %f %f", _vertices[i].x, _vertices[i].y, verts[i].x, verts[i].y);
+    // }
 
     bool outline = (borderColo.a > 0.0f && borderWidth > 0.0f);
 
@@ -1007,73 +1005,38 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
 
     if (closedPolygon && !_isConvex && count >= 3 && !isConvex(_vertices, count))
     {
-        if (0)  // CDT
-        {
-            CDT::Triangulation<float> cdt;
-            std::vector<CDT::V2d<float>> vertices;
-            for (int i = 0; i < count; ++i)
-            {
-                vertices.emplace_back(_vertices[i].x, _vertices[i].y);
-                vertices.emplace_back(CDT::V2d(_vertices[i].x, _vertices[i].y));
-                vertices.emplace_back(CDT::V2d<float>::make(_vertices[i].x, _vertices[i].y));
-            }
-            cdt.insertVertices(vertices);
-            cdt.eraseSuperTriangle();
-            ///* access triangles */                = cdt.triangles;
-            ///* access vertices */                 = cdt.vertices;
-            ///* access boundary (fixed) edges */   = cdt.fixedEdges;
-            ///* calculate all edges (on demand) */ = CDT::extractEdgesFromTriangles(cdt.triangles);
+        std::vector<p2t::Point> p2pointsStorage;
+        p2pointsStorage.reserve(count);
+        std::vector<p2t::Point*> p2points;
+        p2points.reserve(count);
 
-            for (auto&& t : cdt.triangles)
-            {
-                auto a = t.vertices;
-                AXLOG("%i %i %i", t.vertices[0], t.vertices[1], t.vertices[2]);
-                AXLOG("+++++++++  %d", CDT::V2d(t.vertices[0]).x);
-                float vvv = 10.0f;
-                // 20.0f;
-                V2F_C4B_T2F_Triangle tmp = {
-                    {Vec2(t.vertices[0] * vvv, t.vertices[1] * vvv), fillColor, Tex2F(0.0, 0.0)},
-                    {Vec2(t.vertices[1] * vvv, t.vertices[2] * vvv), fillColor, Tex2F(0.0, 0.0)},
-                    {Vec2(t.vertices[2] * vvv, t.vertices[0] * vvv), fillColor, Tex2F(0.0, 0.0)},
-                };
-                *cursor++ = tmp;
-            }
+        for (int i = 0; i < count; ++i)
+        {
+            p2points.emplace_back(&p2pointsStorage.emplace_back((float)_vertices[i].x, (float)_vertices[i].y));
         }
-        else // poli2tri
+        p2t::CDT cdt(p2points);
+        cdt.Triangulate();
+        std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
+
+        if ((tris.size() * 3) > vertex_count)
         {
-            std::vector<p2t::Point> p2pointsStorage;
-            p2pointsStorage.reserve(count);
-            std::vector<p2t::Point*> p2points;
-            p2points.reserve(count);
+            ensureCapacity((tris.size() * 3));
+            triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
+            cursor    = triangles;
+        }
 
-            for (int i = 0; i < count; ++i)
-            {
-                p2points.emplace_back(&p2pointsStorage.emplace_back((float)_vertices[i].x, (float)_vertices[i].y));
-            }
-            p2t::CDT cdt(p2points);
-            cdt.Triangulate();
-            std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
+        for (auto&& t : tris)
+        {
+            p2t::Point* vec1 = t->GetPoint(0);
+            p2t::Point* vec2 = t->GetPoint(1);
+            p2t::Point* vec3 = t->GetPoint(2);
 
-            if ((tris.size() * 3) > vertex_count)
-            {
-                ensureCapacity((tris.size() * 3));
-                triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
-                cursor    = triangles;
-            }
-
-            for (auto&& t : tris)
-            {
-                p2t::Point* vec1 = t->GetPoint(0);
-                p2t::Point* vec2 = t->GetPoint(1);
-                p2t::Point* vec3 = t->GetPoint(2);
-
-                V2F_C4B_T2F_Triangle tmp = {
-                    {Vec2(vec1->x, vec1->y), fillColor, Tex2F(0.0, 0.0)},
-                    {Vec2(vec2->x, vec2->y), fillColor, Tex2F(0.0, 0.0)},
-                    {Vec2(vec3->x, vec3->y), fillColor, Tex2F(0.0, 0.0)},
-                };
-                *cursor++ = tmp;
-            }
+            V2F_C4B_T2F_Triangle tmp = {
+                {Vec2(vec1->x, vec1->y), fillColor, Tex2F(0.0, 0.0)},
+                {Vec2(vec2->x, vec2->y), fillColor, Tex2F(0.0, 0.0)},
+                {Vec2(vec3->x, vec3->y), fillColor, Tex2F(0.0, 0.0)},
+            };
+            *cursor++ = tmp;
         }
     }
     else
