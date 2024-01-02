@@ -47,7 +47,10 @@ public:
 #pragma message("The optional extension Effekseer is enabled.")
         addTest("Effekseer", []() { return new EffekseerTests(); });
 #endif
-
+#if __has_include("DrawNodeExTest/DrawNodeExTest.h")
+#    pragma message("The optional extension DrawNodeEx is enabled.")
+        addTest("DrawNodeEx (draft)", []() { return new DrawNodeExTests(); });
+#endif
 //        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
         addTest("ImGui", []() { return new ImGuiTests(); });
@@ -92,10 +95,6 @@ public:
         addTest("Node: Camera3D Test", []() { return new Camera3DTests(); });
         addTest("Node: Clipping", []() { return new ClippingNodeTests(); });
         addTest("Node: Draw", []() { return new DrawPrimitivesTests(); });
-#if __has_include("DrawNodeExTest/DrawNodeExTest.h")
-#pragma message("The optional extension DrawNodeEx is enabled.")
-        addTest("DrawNodeEx *experimental*", []() { return new DrawNodeExTests(); });
-#endif
         addTest("Node: Label - New API", []() { return new NewLabelTests(); });
         addTest("Node: Layer", []() { return new LayerTests(); });
         addTest("Node: Light", []() { return new LightTests(); });
