@@ -52,7 +52,6 @@ public:
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
         addTest("ImGui", []() { return new ImGuiTests(); });
 #endif
-        addTest("Node: DrawNodeExt", []() { return new DrawNodeExtTests(); });
         addTest("Texture2D", []() { return new Texture2DTests(); });
         addTest("ActionManager", []() { return new ActionManagerTests(); });
         addTest("Actions - Basic", []() { return new ActionsTests(); });
@@ -93,6 +92,7 @@ public:
         addTest("Node: Camera3D Test", []() { return new Camera3DTests(); });
         addTest("Node: Clipping", []() { return new ClippingNodeTests(); });
         addTest("Node: Draw", []() { return new DrawPrimitivesTests(); });
+        addTest("Node: DrawNodeExt *experimental*", []() { return new DrawNodeExtTests(); });
         addTest("Node: Label - New API", []() { return new NewLabelTests(); });
         addTest("Node: Layer", []() { return new LayerTests(); });
         addTest("Node: Light", []() { return new LightTests(); });

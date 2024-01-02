@@ -78,10 +78,14 @@ public:
         v4,
     };
 
+    // DrawNodeExt stuff
+    Version _dnVersion = Version::v1;
     ax::Vec2 _dnScale;
     ax::Vec2 _dnCenter; 
-    float _dnRotation;
+    float _dnRotation = 0.0f;
     ax::Vec2 _dnPosition;
+    float _dnLineWidth        = 0.0f;
+    float _dnDefaultLineWidth = 0.0f;
 
     void setDNVersion(ax::DrawNodeExt::Version dnV) { _dnVersion = dnV; };
     void setDNScale(ax::Vec2 scale) { _dnScale = scale; };
@@ -93,7 +97,12 @@ public:
     ax::Vec2 getDNCenter() { return _dnCenter; };
     void setDNPosition(ax::Vec2 position) { _dnPosition = position; };
     ax::Vec2 getDNPosition() { return _dnPosition; };
+    void setDNLineWidth(float lineWidth) { _dnLineWidth = lineWidth; };
+    float getDNLineWidth() { return _dnLineWidth; };
     Vec2* transform(const Vec2* vertices, unsigned int count);
+
+
+
 
     /** creates and initialize a DrawNodeExt node.
      *
@@ -503,9 +512,7 @@ protected:
     float _lineWidth        = 0.0f;
     float _defaultLineWidth = 0.0f;
 
-    Version _dnVersion = Version::v2;
     bool _isConvex     = true;
-
 
     ax::any_buffer _abuf;
 
