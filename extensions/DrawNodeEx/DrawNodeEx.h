@@ -228,16 +228,15 @@ public:
      /** Draws a star given the center, radius1, radius2 and number of segments.
      *
      * @param center The circle center point.
-     * @param radius1 The circle rotate of radius.
-     * @param radius2  The circle angle.
+     * @param radiusI The inner radius.
+     * @param radiusO The outer radius.
      * @param segments The number of segments.
-     * @param drawLineToCenter Whether or not draw the line from the origin to center.
-     * @param color Set the circle color.
-     * @param thickness  (optional) Set the thickness which will be draws a better rendered polygon.
+     * @param color Set the star color.
+     * @param thickness  (optional) 
      */
     void drawStar(const Vec2& center,
-                  float radius1,
-                  float radius2,
+                  float radiusI,
+                  float radiusO,
                   unsigned int segments,
                   const Color4B& color,
                   float thickness = 1.0f);

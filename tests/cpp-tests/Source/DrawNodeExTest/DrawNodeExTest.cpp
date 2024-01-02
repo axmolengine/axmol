@@ -609,7 +609,7 @@ DrawNode2PolygonTest::DrawNode2PolygonTest()
                                 Color4F::BLUE);
     }
 
-
+        scheduleUpdate();
 }
 
 void DrawNode2PolygonTest::drawDirection(const Vec2* vec, const int size, Vec2 offset)
@@ -653,9 +653,8 @@ void DrawNode2PolygonTest::update(float dt)
 
         drawNodeEx->setDNPosition(center);
         drawNodeEx->setDNCenter(star[0]);
-     //   drawNodeEx->setDNRotation(rot);
-        drawNodeEx->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1,
-                                Color4F::BLUE);
+        drawNodeEx->setDNRotation(rot);
+        drawNodeEx->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1, Color4F::BLUE);
     }
     {
         int x = 0;
@@ -683,8 +682,8 @@ void DrawNode2PolygonTest::update(float dt)
                     drawNodeEx->setIsConvex(false);
                     color = Color4F::ORANGE;
                 }
-       //         drawNodeEx->setDNRotation(rot);
-                // drawNodeEx->setDNCenter(vertices[0]);
+                drawNodeEx->setDNRotation(rot);
+                 drawNodeEx->setDNCenter(vertices[0]);
                 drawNodeEx->setDNPosition(Vec2(-70.f, 60.f));
                 drawNodeEx->drawPolygon(vertices, 4, Color4F(0.7f, 0.7f, 0.7f, 0.5f), 1, color);
                 drawNodeEx->setIsConvex(false);
@@ -1083,225 +1082,18 @@ void DrawNodePart1Test::drawAll()
         draw->setDNScale(Vec2(thickness, thickness));
         draw->setDNPosition(Vec2(0, 0));
         draw->setDNRotation(0);
-        draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness,
-                          Color4F::YELLOW);
+        draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness, Color4F::YELLOW);
         draw->setDNPosition(Vec2(0, 0));
         draw->setDNRotation(thickness);
         draw->setDNScale(Vec2(thickness, thickness));
         draw->setDNCenter(vertices24[0]);
-        draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness,
-                          Color4F::YELLOW);
+        draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness, Color4F::YELLOW);
 
         draw1->clear();
         draw1->setPosition(Vec2(200, 0));
         draw1->setScale(thickness);
-        draw1->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, thickness,
-                           Color4F::YELLOW);
+        draw1->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, thickness, Color4F::YELLOW);
 
-        // for (int i = 0; i < 0; i++)
-        //{
-        //     PathsD solution, clip, subject;
-        //     PathD p, c;
-        //     for (int i = 0; i < 3; i++)
-        //     {
-        //         p.push_back(
-        //             PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
-        //         c.push_back(
-        //             PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
-        //     }
-        //
-        //     subject.push_back(p);
-        //     clip.push_back(c);
-        //     solution = Intersect(subject, clip, FillRule::Positive);
-
-        //    if (solution.size() > 0)
-        //    {
-        //        Vec2* vertices;
-        //        int verCount = 0;
-        //        ax::any_buffer myBuf;
-        //        for (auto&& p : solution)
-        //        {
-        //            int i    = 0;
-        //            verCount = p.size();
-        //            vertices = myBuf.get<Vec2>(verCount);
-        //            for (auto&& pt : p)
-        //            {
-        //                vertices[i] = Vec2(pt.x, pt.y);
-        //                i++;
-        //            }
-        //        }
-        ////        if (verCount > 8)
-        //        {
-        //            draw->drawPolygon(vertices, verCount, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(),
-        //            AXRANDOM_0_1(), 1.0),
-        //                              thickness, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
-        //        }
-        //    }
-
-        // PathsD solution, clip, subject;
-        // PathD p, c;
-        // for (int i = 0; i < 10; i++)
-        //{
-        //     p.push_back(
-        //         PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
-        //     c.push_back(
-        //         PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
-        // }
-        // subject.push_back(p);
-        // clip.push_back(c);
-        // solution = Intersect(subject, clip, FillRule::NonZero);
-        // if (solution.size() > 0)
-        //{
-        //     Vec2* vertices;
-        //     int verCount = 0;
-        //     ax::any_buffer myBuf;
-        //     for (auto&& p : solution)
-        //     {
-        //         int i    = 0;
-        //         verCount = p.size();
-        //         vertices = myBuf.get<Vec2>(verCount+1);
-        //         for (auto&& pt : p)
-        //         {
-        //             vertices[i] = Vec2(pt.x, pt.y);
-        //             i++;
-        //         }
-        //     }
-        //     if (sizeof(vertices) / sizeof(vertices) > 8)
-        //     {
-        //         draw->drawPolygon(vertices, sizeof(vertices) / sizeof(vertices), Color4B::AX_TRANSPARENT,
-        //         thickness,
-        //                           Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.1f));
-        //     }
-        //}
-
-        // Vec2 points[] = {Vec2(s.height / 4, 0.0f), Vec2(s.width, s.height / 5), Vec2(s.width / 3 * 2, s.height)};
-        // draw->drawPolygon(points, 3, Color4B::AX_TRANSPARENT, thickness, Color4F(0.0f, 0.0f, 1.0f, 0.5f));
-
-        // Vec2 vertices24[] = {
-        //     {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},
-        //     {100.250000f, 161.375000f}, {65.500000f, 181.375000f},  {102.250000f, 179.125000f},
-        //     {95.000000f, 215.125000f},  {129.331467f, 189.926208f}, {131.371460f, 206.366196f},
-        //     {139.651474f, 192.446198f}, {161.851471f, 200.606201f}, {151.000000f, 220.375000f},
-        //     {110.500000f, 244.375000f}, {153.750000f, 238.125000f}, {142.500000f, 253.875000f},
-        //     {220.750000f, 259.375000f}, {250.500000f, 244.375000f}, {168.750000f, 241.875000f},
-        //     {182.250000f, 154.125000f}, {190.250000f, 227.375000f}, {196.500000f, 197.375000f},
-        //     {208.750000f, 210.625000f}, {220.750000f, 194.375000f}, {208.750000f, 176.375000f},
-        //     {253.250000f, 173.875000f}, {243.750000f, 154.125000f}, {213.750000f, 161.375000f},
-        //     {202.250000f, 139.875000f}, {236.000000f, 131.875000f}, {218.500000f, 120.875000f},
-        //     {206.500000f, 125.625000f}, {184.500000f, 110.375000f}, {157.000000f, 108.625000f},
-        //     {147.500000f, 96.625000f},  {153.750000f, 85.125000f},  {147.500000f, 75.375000f},
-        //     {126.500000f, 74.125000f},  {110.500000f, 86.625000f},  {127.750000f, 85.125000f},
-        //     {135.250000f, 91.125000f},  {135.250000f, 97.875000f},  {124.000000f, 93.875000f},
-        //     {115.500000f, 100.875000f}, {115.500000f, 111.875000f}, {135.250000f, 108.625000f},
-        //     {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
-        //     {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
-        // };
-        // BENCHMARK_SECTION_BEGIN("drawPolygon");
-        // draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4B::AX_TRANSPARENT, thickness,
-        //                   Color4F::RED);
-        // BENCHMARK_SECTION_END()
-        ////     break;
-
-        // Vec2 vertices0[] = {{50.0, 20.0}, {100.0, 0.0}, {80.0, 50.0}, {100.0, 100.0},
-        //                     {50.0, 80.0}, {0.0, 100.0}, {20.0, 50.0}, {0, 0}};
-
-        // Vec2 vertices4[] = {{362, 148}, {326, 241}, {295, 219}, {258, 88}, {440, 129},
-        //                     {370, 196}, {372, 275}, {348, 257}, {364, 148}};
-
-        // Vec2* ver[] = {vertices0, vertices4};
-
-        // draw->drawPolygon(vertices0, sizeof(vertices0) / sizeof(vertices0[0]), Color4F::AX_TRANSPARENT, thickness,
-        //                   Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-
-        // draw->drawPolygon(vertices4, sizeof(vertices4) / sizeof(vertices4[0]), Color4F::AX_TRANSPARENT, thickness,
-        //                   Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-
-        // const float o = 80;
-        // const float w = 20;
-        // const float h = 50;
-        //{  // star
-        //     Vec2 star[] = {
-        //         Vec2(o, o),
-        //         Vec2(o + w, o - h),
-        //         Vec2(o + w * 2, o),  // lower spike
-        //         Vec2(o + w * 2 + h, o + w),
-        //         Vec2(o + w * 2, o + w * 2),  // right spike
-        //         Vec2(o + w, o + w * 2 + h),
-        //         Vec2(o, o + w * 2),  // top spike
-        //         Vec2(o - h, o + w),  // left spike
-        //     };
-
-        //    draw->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F::AX_TRANSPARENT, thickness,
-        //                      Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-        //}
-
-        //{  // wrong order
-
-        //    Vec2 wrongOrder[] = {Vec2(o + w, o - h), Vec2(o + w * 2, o), Vec2(o + w * 2 + h, o + w),
-        //                         Vec2(o + w * 2, o + w * 2)};
-
-        //    draw->drawPolygon(wrongOrder, sizeof(wrongOrder) / sizeof(wrongOrder[0]), Color4F::AX_TRANSPARENT,
-        //                      thickness, Color4F(1.0f, 0.0f, 0.0f, 1.0f));
-        //}
-        //{  // correct order
-        //    Vec2 correctOrder[] = {Vec2(o + w * 2, o), Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2),
-        //                           Vec2(o + w, o - h)};
-
-        //    draw->drawPolygon(correctOrder, sizeof(correctOrder) / sizeof(correctOrder[0]), Color4F::AX_TRANSPARENT,
-        //                      thickness, Color4F(0.0f, 1.0f, 0.0f, 1.0f));
-        //}
-        //{
-        //    Vec2 vertices0[] = {{50.0, 20.0}, {100.0, 0.0}, {80.0, 50.0}, {100.0, 100.0},
-        //                        {50.0, 80.0}, {0.0, 100.0}, {20.0, 50.0}, {0, 0}};
-
-        //    Vec2 vertices4[] = {{362, 148}, {326, 241}, {295, 219}, {258, 88}, {440, 129},
-        //                        {370, 196}, {372, 275}, {348, 257}, {364, 148}};
-
-        //    Vec2* ver[] = {vertices0, vertices4};
-
-        //    draw->drawPolygon(vertices0, sizeof(vertices0) / sizeof(vertices0[0]), Color4F::AX_TRANSPARENT, thickness,
-        //                      Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-
-        //    draw->drawPolygon(vertices4, sizeof(vertices4) / sizeof(vertices4[0]), Color4F::AX_TRANSPARENT, thickness,
-        //                      Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-        //}
-        //{
-        //    const float o = 80;
-        //    const float w = 20;
-        //    const float h = 50;
-        //    {  // star
-
-        //        Vec2 star[] = {
-        //            Vec2(o, o),
-        //            Vec2(o + w, o - h),
-        //            Vec2(o + w * 2, o),  // lower spike
-        //            Vec2(o + w * 2 + h, o + w),
-        //            Vec2(o + w * 2, o + w * 2),  // right spike
-        //            Vec2(o + w, o + w * 2 + h),
-        //            Vec2(o, o + w * 2),  // top spike
-        //            Vec2(o - h, o + w),  // left spike
-        //        };
-
-        //        draw->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F::AX_TRANSPARENT, thickness,
-        //                          Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-        //    }
-        //}
-
-        //{  // wrong order
-
-        //    Vec2 wrongOrder[] = {Vec2(o + w, o - h), Vec2(o + w * 2, o), Vec2(o + w * 2 + h, o + w),
-        //                         Vec2(o + w * 2, o + w * 2)};
-
-        //    draw->drawPolygon(wrongOrder, sizeof(wrongOrder) / sizeof(wrongOrder[0]), Color4F::AX_TRANSPARENT,
-        //                      thickness, Color4F(1.0f, 0.0f, 0.0f, 1.0f));
-        //}
-        //{  // correct order
-        //    Vec2 correctOrder[] = {Vec2(o + w * 2, o), Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2),
-        //                           Vec2(o + w, o - h)};
-
-        //    draw->drawPolygon(correctOrder, sizeof(correctOrder) / sizeof(correctOrder[0]), Color4F::AX_TRANSPARENT,
-        //                      thickness, Color4F(0.0f, 1.0f, 0.0f, 1.0f));
-        //}
         break;
     }
     default:
@@ -1522,28 +1314,6 @@ void DrawNodePart2Test::update(float dt)
     }
     case 6:
     {
-        // draw a solid polygon
-        // Paths64 subject, clip, solution;
-        // subject.push_back(MakePath({100, 50, 10, 79, 65, 2, 65, 98, 10, 21}));
-        // clip.push_back(MakePath({98, 63, 4, 68, 77, 8, 52, 100, 19, 12}));
-        // solution = Intersect(subject, clip, FillRule::NonZero);
-
-        // Vec2* vertices;
-        // int verCount = 0;
-        // ax::any_buffer myBuf;
-        // for (auto&& p : solution)
-        //{
-        //     int i    = 0;
-        //     verCount = p.size();
-        //     vertices = myBuf.get<Vec2>(verCount);
-        //     for (auto&& pt : p)
-        //     {
-        //         vertices[i] = Vec2(pt.x, pt.y);
-        //         i++;
-        //     }
-        // }
-        // draw->drawSolidPoly(vertices, verCount, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
-
         for (int i = 0; i < 1; i++)
         {
             PathsD solution, clip, subject;
@@ -1596,36 +1366,3 @@ void DrawNodePart2Test::update(float dt)
         break;
     }
 }
-//
-// makeP(int count)
-//{
-//    for (int i = 0; i < count; i++)
-//    {
-//        PathsD solution, clip, subject;
-//        PathD p, c;
-//        for (int i = 0; i < 5; i++)
-//        {
-//            p.push_back(PointD(AXRANDOM_0_1() * VisibleRect::leftTop().x, AXRANDOM_0_1() * VisibleRect::leftTop().y));
-//            c.push_back(PointD(AXRANDOM_0_1() * VisibleRect::leftTop().x, AXRANDOM_0_1() * VisibleRect::leftTop().y));
-//        }
-//        subject.push_back(p);
-//        clip.push_back(p);
-//        solution = Intersect(subject, clip, FillRule::NonZero);
-//
-//        Vec2* vertices;
-//        int verCount = 0;
-//        ax::any_buffer myBuf;
-//        for (auto&& p : solution)
-//        {
-//            int i    = 0;
-//            verCount = p.size();
-//            vertices = myBuf.get<Vec2>(verCount);
-//            for (auto&& pt : p)
-//            {
-//                vertices[i] = Vec2(pt.x, pt.y);
-//                i++;
-//            }
-//        }
-//        draw->drawSolidPoly(vertices, verCount, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
-//    }
-//}

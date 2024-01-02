@@ -821,20 +821,16 @@ void DrawNodeEx::drawPie(const Vec2& center,
     {
     case DrawMode::Fill:
         vertices[n++] = center;
-        //  drawSolidPoly(vertices, n, color);
         _drawPolygon(vertices, n, fillColor, thickness, borderColor, true);
         break;
     case DrawMode::Outline:
         vertices[n++] = center;
-        //     drawPoly(vertices, n, true, fillColor);
         _drawPolygon(vertices, n, Color4B::AX_TRANSPARENT, thickness, borderColor, true);
         break;
     case DrawMode::Line:
-        //     _drawPoly(vertices, n, false, borderColor, thickness);
         _drawPolygon(vertices, n, Color4B::AX_TRANSPARENT, thickness, borderColor, false);
         break;
     case DrawMode::Semi:
-        //    drawPoly(vertices, n, true, borderColor);
         _drawPolygon(vertices, n, fillColor, thickness, borderColor, true);
         break;
 
@@ -895,7 +891,6 @@ void DrawNodeEx::drawSolidCircle(const Vec2& center,
     _isConvex = true;
     _drawPolygon(vertices, segments, color, 0.0f, Color4B(), true);
     _isConvex = false;
-    //   drawSolidPoly(vertices, segments, color);
 }
 
 void DrawNodeEx::drawSolidCircle(const Vec2& center,
