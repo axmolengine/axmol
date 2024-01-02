@@ -1,5 +1,7 @@
 include(AXPlatform)
 
+ax_check_archs()
+
 if(NOT CMAKE_GENERATOR MATCHES "Ninja")
     set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
 else()

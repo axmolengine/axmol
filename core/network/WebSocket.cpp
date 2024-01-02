@@ -27,6 +27,8 @@
 
 #include "network/WebSocket.h"
 
+#include "fmt/format.h"
+
 using namespace yasio;
 
 #define WS_MAX_PAYLOAD_LENGTH (1 << 24)  // 16M
@@ -227,12 +229,13 @@ WebSocket::~WebSocket()
 bool WebSocket::open(Delegate* delegate,
                      std::string_view url,
                      std::string_view caFilePath,
-                     const char* protocols)
+                     std::string_view protocols)
 {
     _delegate   = delegate;
     _url        = url;
     _caFilePath = FileUtils::getInstance()->fullPathForFilename(caFilePath);
     _requestUri = Uri::parse(url);
+    _protocols  = protocols;
 
     setupParsers();
     generateHandshakeSecKey();
@@ -393,7 +396,7 @@ int WebSocket::on_frame_end(websocket_parser* parser)
         case WS_OP_PONG:
             AXLOG("WS: control frame: PONG");
             if (ws->_receivedData.size() != 4 || 0 != memcmp(ws->_receivedData.data(), "WSWS", 4))
-                AXLOG("WS: PONG frame from server mismatch!\n");
+                AXLOG("WS: Unsolicited PONG frame from server (possible keep-alive)\n\n");
             break;
         }
     }
@@ -417,7 +420,7 @@ void WebSocket::send(std::string_view message)
 /**
  *  @brief Sends binary data to websocket server.
  *
- *  @param binaryMsg binary string data.
+ *  @param data binary data.
  *  @param len the size of binary string data.
  *  @lua sendstring
  */
@@ -533,9 +536,9 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
 
                     // WebSocketProtocol::sendPing(*this);
 
-                    // starts websocket hartbeat timer
+                    // starts websocket heartbeat timer
                     //_heartbeatTimer->expires_from_now(std::chrono::seconds(30));
-                    //_heartbeatTimer->async_wait(*_service, [this](io_service& service) {
+                    //_heartbeatTimer->async_wait([this](io_service& service) {
                     //    WebSocketProtocol::sendFrame(*this, "WSWS", 4, ws::detail::opcode::ping);
                     //    return false;
                     //});
@@ -591,6 +594,19 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
             obs.write_bytes("Sec-WebSocket-Key: ");
             obs.write_bytes(_handshakeSecKey);
             obs.write_bytes("\r\n");
+
+            if (!_protocols.empty())
+            {
+                obs.write_bytes("Sec-WebSocket-Protocol: ");
+                obs.write_bytes(_protocols);
+                obs.write_bytes("\r\n");
+            }
+
+            for (auto&& header : _headers)
+            {
+                obs.write_bytes(header);
+                obs.write_bytes("\r\n");
+            }
 
             obs.write_bytes("User-Agent: yasio-ws\r\n");
 
