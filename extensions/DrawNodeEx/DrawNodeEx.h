@@ -30,8 +30,8 @@
  *
  */
 
-#ifndef __DRAW_NODE_EXT_H__
-#define __DRAW_NODE_EXT_H__
+#ifndef __DRAW_NODE_EX_H__
+#define __DRAW_NODE_EX_H__
 
 #include "2d/Node.h"
 #include "base/Types.h"
@@ -54,7 +54,7 @@ class PointArray;
  * Faster than the "drawing primitives" since they draws everything in one single batch.
  * @since v2.1
  */
-class AX_DLL DrawNodeExt : public Node
+class AX_DLL DrawNodeEx : public Node
 {
 public:
 
@@ -87,7 +87,7 @@ public:
     float _dnLineWidth        = 0.0f;
     float _dnDefaultLineWidth = 0.0f;
 
-    void setDNVersion(ax::DrawNodeExt::Version dnV) { _dnVersion = dnV; };
+    void setDNVersion(ax::DrawNodeEx::Version dnV) { _dnVersion = dnV; };
     void setDNScale(ax::Vec2 scale) { _dnScale = scale; };
     void setDNScaleX(float scaleX) { _dnScale.x = scaleX; };
     void setDNScaleY(float scaleY) { _dnScale.y = scaleY; };
@@ -108,7 +108,7 @@ public:
      *
      * @return Return an autorelease object.
      */
-    static DrawNodeExt* create(float defaultLineWidth = DEFAULT_LINE_WIDTH);
+    static DrawNodeEx* create(float defaultLineWidth = DEFAULT_LINE_WIDTH);
 
     /** Draw a point.
      *
@@ -464,8 +464,8 @@ public:
 
     bool isIsolated() const { return _isolated; }
 
-    DrawNodeExt(float lineWidth = DEFAULT_LINE_WIDTH);
-    virtual ~DrawNodeExt();
+    DrawNodeEx(float lineWidth = DEFAULT_LINE_WIDTH);
+    virtual ~DrawNodeEx();
     virtual bool init() override;
 
 protected:
@@ -517,9 +517,9 @@ protected:
     ax::any_buffer _abuf;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(DrawNodeExt);
+    AX_DISALLOW_COPY_AND_ASSIGN(DrawNodeEx);
 };
 /** @} */
 NS_AX_END
 
-#endif  // __DRAW_NODE_EXT_H__
+#endif  // __DRAW_NODE_EX_H__

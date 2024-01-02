@@ -77,7 +77,7 @@ static inline bool isConvex(const Vec2* verts, int count)
     return true;  // Polygon is convex
 }
 
-Vec2* DrawNodeExt::transform(const Vec2* vertices, unsigned int count)
+Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
 {
 
     // void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float
@@ -119,7 +119,7 @@ Vec2* DrawNodeExt::transform(const Vec2* vertices, unsigned int count)
 
 // implementation of DrawNode
 
-DrawNodeExt::DrawNodeExt(float lineWidth)
+DrawNodeEx::DrawNodeEx(float lineWidth)
     : _lineWidth(lineWidth)
     , _defaultLineWidth(lineWidth)
     , _isConvex(false)
@@ -141,7 +141,7 @@ DrawNodeExt::DrawNodeExt(float lineWidth)
 #endif
 }
 
-DrawNodeExt::~DrawNodeExt()
+DrawNodeEx::~DrawNodeEx()
 {
     AX_SAFE_FREE(_bufferTriangle);
     AX_SAFE_FREE(_bufferPoint);
@@ -152,9 +152,9 @@ DrawNodeExt::~DrawNodeExt()
     freeShaderInternal(_customCommandLine);
 }
 
-DrawNodeExt* DrawNodeExt::create(float defaultLineWidth)
+DrawNodeEx* DrawNodeEx::create(float defaultLineWidth)
 {
-    DrawNodeExt* ret = new DrawNodeExt(defaultLineWidth);
+    DrawNodeEx* ret = new DrawNodeEx(defaultLineWidth);
     if (ret->init())
     {
         ret->autorelease();
@@ -167,7 +167,7 @@ DrawNodeExt* DrawNodeExt::create(float defaultLineWidth)
     return ret;
 }
 
-void DrawNodeExt::ensureCapacity(int count)
+void DrawNodeEx::ensureCapacity(int count)
 {
     AXASSERT(count >= 0, "capacity must be >= 0");
 
@@ -182,7 +182,7 @@ void DrawNodeExt::ensureCapacity(int count)
     }
 }
 
-void DrawNodeExt::ensureCapacityGLPoint(int count)
+void DrawNodeEx::ensureCapacityGLPoint(int count)
 {
     AXASSERT(count >= 0, "capacity must be >= 0");
 
@@ -197,7 +197,7 @@ void DrawNodeExt::ensureCapacityGLPoint(int count)
     }
 }
 
-void DrawNodeExt::ensureCapacityGLLine(int count)
+void DrawNodeEx::ensureCapacityGLLine(int count)
 {
     AXASSERT(count >= 0, "capacity must be >= 0");
 
@@ -212,7 +212,7 @@ void DrawNodeExt::ensureCapacityGLLine(int count)
     }
 }
 
-bool DrawNodeExt::init()
+bool DrawNodeEx::init()
 {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
     updateShader();
@@ -227,7 +227,7 @@ bool DrawNodeExt::init()
     return true;
 }
 
-void DrawNodeExt::updateShader()
+void DrawNodeEx::updateShader()
 {
     updateShaderInternal(_customCommandTriangle, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
                          CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::TRIANGLE);
@@ -239,7 +239,7 @@ void DrawNodeExt::updateShader()
                          CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::LINE);
 }
 
-void DrawNodeExt::updateShaderInternal(CustomCommand& cmd,
+void DrawNodeEx::updateShaderInternal(CustomCommand& cmd,
                                        uint32_t programType,
                                        CustomCommand::DrawType drawType,
                                        CustomCommand::PrimitiveType primitiveType)
@@ -254,19 +254,19 @@ void DrawNodeExt::updateShaderInternal(CustomCommand& cmd,
     cmd.setDrawType(drawType);
 }
 
-void DrawNodeExt::setVertexLayout(CustomCommand& cmd)
+void DrawNodeEx::setVertexLayout(CustomCommand& cmd)
 {
     auto* programState = cmd.getPipelineDescriptor().programState;
     programState->validateSharedVertexLayout(backend::VertexLayoutType::DrawNode);
 }
 
-void DrawNodeExt::freeShaderInternal(CustomCommand& cmd)
+void DrawNodeEx::freeShaderInternal(CustomCommand& cmd)
 {
     auto& pipelinePS = cmd.getPipelineDescriptor().programState;
     AX_SAFE_RELEASE_NULL(pipelinePS);
 }
 
-void DrawNodeExt::updateBlendState(CustomCommand& cmd)
+void DrawNodeEx::updateBlendState(CustomCommand& cmd)
 {
     backend::BlendDescriptor& blendDescriptor = cmd.getPipelineDescriptor().blendDescriptor;
     blendDescriptor.blendEnabled              = true;
@@ -288,7 +288,7 @@ void DrawNodeExt::updateBlendState(CustomCommand& cmd)
     }
 }
 
-void DrawNodeExt::updateUniforms(const Mat4& transform, CustomCommand& cmd)
+void DrawNodeEx::updateUniforms(const Mat4& transform, CustomCommand& cmd)
 {
     auto& pipelineDescriptor = cmd.getPipelineDescriptor();
     const auto& matrixP      = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
@@ -301,7 +301,7 @@ void DrawNodeExt::updateUniforms(const Mat4& transform, CustomCommand& cmd)
     pipelineDescriptor.programState->setUniform(alphaUniformLocation, &alpha, sizeof(alpha));
 }
 
-void DrawNodeExt::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     if (_bufferCountTriangle)
     {
@@ -328,7 +328,7 @@ void DrawNodeExt::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
     }
 }
 
-void DrawNodeExt::drawPoint(const Vec2& position, const float pointSize, const Color4B& color)
+void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Color4B& color)
 {
     ensureCapacityGLPoint(1);
 
@@ -341,12 +341,12 @@ void DrawNodeExt::drawPoint(const Vec2& position, const float pointSize, const C
     _customCommandPoint.setVertexDrawInfo(0, _bufferCountPoint);
 }
 
-void DrawNodeExt::drawPoints(const Vec2* position, unsigned int numberOfPoints, const Color4B& color)
+void DrawNodeEx::drawPoints(const Vec2* position, unsigned int numberOfPoints, const Color4B& color)
 {
     drawPoints(position, numberOfPoints, 1.0, color);
 }
 
-void DrawNodeExt::drawPoints(const Vec2* position,
+void DrawNodeEx::drawPoints(const Vec2* position,
                              unsigned int numberOfPoints,
                              const float pointSize,
                              const Color4B& color)
@@ -366,7 +366,7 @@ void DrawNodeExt::drawPoints(const Vec2* position,
     _customCommandPoint.setVertexDrawInfo(0, _bufferCountPoint);
 }
 
-void DrawNodeExt::drawLine(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness)
+void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness)
 {
     if (thickness != 1.0)
     {
@@ -393,7 +393,7 @@ void DrawNodeExt::drawLine(const Vec2& origin, const Vec2& destination, const Co
     }
 }
 
-void DrawNodeExt::drawRect(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness)
+void DrawNodeEx::drawRect(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness)
 {
     if (thickness != 1.0f)
     {
@@ -413,7 +413,7 @@ void DrawNodeExt::drawRect(const Vec2& origin, const Vec2& destination, const Co
     }
 }
 
-void DrawNodeExt::drawPoly(const Vec2* poli,
+void DrawNodeEx::drawPoly(const Vec2* poli,
                            unsigned int numberOfPoints,
                            bool closePolygon,
                            const Color4B& color,
@@ -460,7 +460,7 @@ void DrawNodeExt::drawPoly(const Vec2* poli,
     }
 }
 
-void DrawNodeExt::drawCircle(const Vec2& center,
+void DrawNodeEx::drawCircle(const Vec2& center,
                              float radius,
                              float angle,
                              unsigned int segments,
@@ -498,7 +498,7 @@ void DrawNodeExt::drawCircle(const Vec2& center,
     _isConvex = true;
 }
 
-void DrawNodeExt::drawCircle(const Vec2& center,
+void DrawNodeEx::drawCircle(const Vec2& center,
                              float radius,
                              float angle,
                              unsigned int segments,
@@ -509,7 +509,7 @@ void DrawNodeExt::drawCircle(const Vec2& center,
     drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color, thickness);
 }
 
-void DrawNodeExt::drawQuadBezier(const Vec2& origin,
+void DrawNodeEx::drawQuadBezier(const Vec2& origin,
                                  const Vec2& control,
                                  const Vec2& destination,
                                  unsigned int segments,
@@ -532,7 +532,7 @@ void DrawNodeExt::drawQuadBezier(const Vec2& origin,
     _isConvex = true;
 }
 
-void DrawNodeExt::drawCubicBezier(const Vec2& origin,
+void DrawNodeEx::drawCubicBezier(const Vec2& origin,
                                   const Vec2& control1,
                                   const Vec2& control2,
                                   const Vec2& destination,
@@ -558,7 +558,7 @@ void DrawNodeExt::drawCubicBezier(const Vec2& origin,
     _isConvex = false;
 }
 
-void DrawNodeExt::drawCardinalSpline(PointArray* config,
+void DrawNodeEx::drawCardinalSpline(PointArray* config,
                                      float tension,
                                      unsigned int segments,
                                      const Color4B& color,
@@ -602,12 +602,12 @@ void DrawNodeExt::drawCardinalSpline(PointArray* config,
     _isConvex = false;
 }
 
-void DrawNodeExt::drawCatmullRom(PointArray* points, unsigned int segments, const Color4B& color, float thickness)
+void DrawNodeEx::drawCatmullRom(PointArray* points, unsigned int segments, const Color4B& color, float thickness)
 {
     drawCardinalSpline(points, 0.5f, segments, color, thickness);
 }
 
-void DrawNodeExt::drawDot(const Vec2& pos, float radius, const Color4B& color)
+void DrawNodeEx::drawDot(const Vec2& pos, float radius, const Color4B& color)
 {
     unsigned int vertex_count = 2 * 3;
     ensureCapacity(vertex_count);
@@ -630,7 +630,7 @@ void DrawNodeExt::drawDot(const Vec2& pos, float radius, const Color4B& color)
     _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
 }
 
-void DrawNodeExt::drawRect(const Vec2& p1,
+void DrawNodeEx::drawRect(const Vec2& p1,
                            const Vec2& p2,
                            const Vec2& p3,
                            const Vec2& p4,
@@ -653,7 +653,7 @@ void DrawNodeExt::drawRect(const Vec2& p1,
     }
 }
 
-void DrawNodeExt::drawSegment(const Vec2& from, const Vec2& to, float radius, const Color4B& color)
+void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, const Color4B& color)
 {
 
     unsigned int vertex_count = 6 * 3;
@@ -727,7 +727,7 @@ void DrawNodeExt::drawSegment(const Vec2& from, const Vec2& to, float radius, co
     _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
 }
 
-void DrawNodeExt::drawPolygon(const Vec2* verts,
+void DrawNodeEx::drawPolygon(const Vec2* verts,
                               int count,
                               const Color4B& fillColor,
                               float borderWidth,
@@ -741,7 +741,7 @@ void DrawNodeExt::drawPolygon(const Vec2* verts,
     _drawPolygon(verts, count, fillColor, borderWidth, borderColor, true);
 }
 
-void DrawNodeExt::drawSolidRect(const Vec2& origin, const Vec2& destination, const Color4B& color)
+void DrawNodeEx::drawSolidRect(const Vec2& origin, const Vec2& destination, const Color4B& color)
 {
     Vec2 vertices[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y)};
     _isConvex       = true;
@@ -749,12 +749,12 @@ void DrawNodeExt::drawSolidRect(const Vec2& origin, const Vec2& destination, con
     _isConvex = false;
 }
 
-void DrawNodeExt::drawSolidPoly(const Vec2* poli, unsigned int numberOfPoints, const Color4B& color)
+void DrawNodeEx::drawSolidPoly(const Vec2* poli, unsigned int numberOfPoints, const Color4B& color)
 {
     _drawPolygon(poli, numberOfPoints, color, 0.0f, Color4B(), true);
 }
 
-void DrawNodeExt::drawPie(const Vec2& center,
+void DrawNodeEx::drawPie(const Vec2& center,
                           float radius,
                           float rotation,
                           int startAngle,
@@ -826,7 +826,7 @@ void DrawNodeExt::drawPie(const Vec2& center,
     }
 }
 
-void DrawNodeExt::drawSolidCircle(const Vec2& center,
+void DrawNodeEx::drawSolidCircle(const Vec2& center,
                                   float radius,
                                   float angle,
                                   unsigned int segments,
@@ -854,7 +854,7 @@ void DrawNodeExt::drawSolidCircle(const Vec2& center,
     _isConvex = false;
 }
 
-void DrawNodeExt::drawSolidCircle(const Vec2& center,
+void DrawNodeEx::drawSolidCircle(const Vec2& center,
                                   float radius,
                                   float angle,
                                   unsigned int segments,
@@ -881,7 +881,7 @@ void DrawNodeExt::drawSolidCircle(const Vec2& center,
     //   drawSolidPoly(vertices, segments, color);
 }
 
-void DrawNodeExt::drawSolidCircle(const Vec2& center,
+void DrawNodeEx::drawSolidCircle(const Vec2& center,
                                   float radius,
                                   float angle,
                                   unsigned int segments,
@@ -890,7 +890,7 @@ void DrawNodeExt::drawSolidCircle(const Vec2& center,
     drawSolidCircle(center, radius, angle, segments, 1.0f, 1.0f, color);
 }
 
-void DrawNodeExt::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color4B& color, float thickness)
+void DrawNodeEx::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color4B& color, float thickness)
 {
     Vec2 poli[3]              = {p1, p2, p3};
     unsigned int vertex_count = 3;
@@ -921,7 +921,7 @@ void DrawNodeExt::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, c
     _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
 }
 
-void DrawNodeExt::clear()
+void DrawNodeEx::clear()
 {
     _bufferCountTriangle = 0;
     _dirtyTriangle       = true;
@@ -932,27 +932,27 @@ void DrawNodeExt::clear()
     _lineWidth           = _defaultLineWidth;
 }
 
-const BlendFunc& DrawNodeExt::getBlendFunc() const
+const BlendFunc& DrawNodeEx::getBlendFunc() const
 {
     return _blendFunc;
 }
 
-void DrawNodeExt::setBlendFunc(const BlendFunc& blendFunc)
+void DrawNodeEx::setBlendFunc(const BlendFunc& blendFunc)
 {
     _blendFunc = blendFunc;
 }
 
-void DrawNodeExt::setLineWidth(float lineWidth)
+void DrawNodeEx::setLineWidth(float lineWidth)
 {
     _lineWidth = lineWidth;
 }
 
-float DrawNodeExt::getLineWidth()
+float DrawNodeEx::getLineWidth()
 {
     return this->_lineWidth;
 }
 
-void DrawNodeExt::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void DrawNodeEx::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
     if (_isolated)
     {
@@ -965,7 +965,7 @@ void DrawNodeExt::visit(Renderer* renderer, const Mat4& parentTransform, uint32_
     }
 }
 
-inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
+inline void DrawNodeEx::_drawPolygon(const Vec2* verts,
                                       unsigned int count,
                                       const Color4B& fillColor,
                                       float borderWidth,
@@ -1104,7 +1104,7 @@ inline void DrawNodeExt::_drawPolygon(const Vec2* verts,
     _dirtyTriangle = true;
 }
 
-inline void DrawNodeExt::_drawPoly(const Vec2* poli,
+inline void DrawNodeEx::_drawPoly(const Vec2* poli,
                                    unsigned int numberOfPoints,
                                    bool closePolygon,
                                    const Color4B& color,

@@ -102,7 +102,7 @@ DrawNode2Test::DrawNode2Test()
 {
     auto s = Director::getInstance()->getWinSize();
 
-    auto draw = DrawNodeExt::create();
+    auto draw = DrawNodeEx::create();
     addChild(draw, 10);
 
     // draw->drawPoint(Vec2(s.width / 2 - 120, s.height / 2 - 120), 10,
@@ -252,7 +252,7 @@ DrawNode2Test::DrawNode2Test()
     //                     Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
     // }
 
-    auto draw1 = DrawNodeExt::create();
+    auto draw1 = DrawNodeEx::create();
     this->addChild(draw1, 10);
     // draw1->setLineWidth(4);
     draw1->drawLine(Vec2(0.0f, s.height), Vec2(s.width, s.height - 20), Color4F::YELLOW);
@@ -279,7 +279,7 @@ IndividualThicknessTest::IndividualThicknessTest()
 {
     // Add lines to see the correct "scale of the 'rings'" changing the window size
 
-    auto draw = DrawNodeExt::create();
+    auto draw = DrawNodeEx::create();
     draw->setLineWidth(1);
     addChild(draw, 10);
 
@@ -289,7 +289,7 @@ IndividualThicknessTest::IndividualThicknessTest()
     }
     initSliders();
 
-    drawNode = DrawNodeExt::create();
+    drawNode = DrawNodeEx::create();
     addChild(drawNode, 10);
 
     auto s = Director::getInstance()->getWinSize();
@@ -435,7 +435,7 @@ string IndividualThicknessTest::subtitle() const
 
 DrawPieTest::DrawPieTest()
 {
-    drawNode = DrawNodeExt::create();
+    drawNode = DrawNodeEx::create();
     addChild(drawNode, 10);
 
     initSliders();
@@ -632,7 +632,7 @@ DrawNode2PolygonTest::DrawNode2PolygonTest()
         //}
 
         {  // wrong order
-            auto drawNode1 = DrawNodeExt::create();
+            auto drawNode1 = DrawNodeEx::create();
             addChild(drawNode1);
             drawNode1->setPosition(-40, 20);
 
@@ -653,12 +653,12 @@ DrawNode2PolygonTest::DrawNode2PolygonTest()
 
                     if (AXRANDOM_0_1() > 0.5f)
                     {
-                        drawNode1->setDNVersion(DrawNodeExt::Version::v1);
+                        drawNode1->setDNVersion(DrawNodeEx::Version::v1);
                         color = Color4F::YELLOW;
                     }
                     else
                     {
-                        drawNode1->setDNVersion(DrawNodeExt::Version::v2);
+                        drawNode1->setDNVersion(DrawNodeEx::Version::v2);
                         color = Color4F::ORANGE;
                     }
                     drawNode1->drawPolygon(vertices, 4, Color4F(0.7f, 0.7f, 0.7f, 0.5f), 1, color);
@@ -4994,10 +4994,10 @@ DrawNode2FilledPolygonTest::DrawNode2FilledPolygonTest()
         {56.900002f, 2.500000f},
     };
 
-    DrawNodeExt* drawNode[3];
+    DrawNodeEx* drawNode[3];
     for (int i = 0; i < 3; i++)
     {
-        drawNode[i] = DrawNodeExt::create();
+        drawNode[i] = DrawNodeEx::create();
         addChild(drawNode[i]);
     }
 
@@ -5077,7 +5077,7 @@ DrawNodePart1Test::DrawNodePart1Test()
     listview->setPosition(Vec2(0.0f, 90.0f));
     addChild(listview);
 
-    draw = DrawNodeExt::create();
+    draw = DrawNodeEx::create();
     draw->setScale(0.5);
     draw->setPosition(size / 4);
     addChild(draw);
@@ -5620,7 +5620,7 @@ DrawNodePart2Test::DrawNodePart2Test()
     listview->setPosition(Vec2(0.0f, 90.0f));
     addChild(listview);
 
-    draw = DrawNodeExt::create();
+    draw = DrawNodeEx::create();
     draw->setScale(0.5);
     draw->setPosition(size / 4);
     addChild(draw);
