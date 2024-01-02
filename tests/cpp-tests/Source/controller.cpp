@@ -92,7 +92,7 @@ public:
         addTest("Node: Camera3D Test", []() { return new Camera3DTests(); });
         addTest("Node: Clipping", []() { return new ClippingNodeTests(); });
         addTest("Node: Draw", []() { return new DrawPrimitivesTests(); });
-#if __has_include("DrawNodeExTest.h")
+#if __has_include("DrawNodeExTest/DrawNodeExTest.h")
 #pragma message("The optional extension DrawNodeEx is enabled.")
         addTest("DrawNodeEx *experimental*", []() { return new DrawNodeExTests(); });
 #endif
