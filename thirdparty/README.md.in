@@ -82,7 +82,7 @@
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: git 57cbded on Dec 16, 2022 (4609)
+- Version: git b4c3ef9 on Dec 24, 2023 (4680)
 - License: zlib
 
 ## GHC (iOS devices only)
