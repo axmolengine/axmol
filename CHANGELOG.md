@@ -1,4 +1,4 @@
-# axmol-2.1.0 ?? 2023
+# axmol-2.1.0 ?? 2024
 
 ### Significant changes relative to 2.0.0:
 
@@ -28,6 +28,7 @@
 - Add support for window resized and positioned by @lich426
 - Add extension: Inspector by @iAndyHD3
 - Add *experimental* WebSocket support for both wasm and native platforms
+- Mark 32bit build deprecated, and will be removed in next release axmol-2.2.0
 
 ### BugFixs
 
