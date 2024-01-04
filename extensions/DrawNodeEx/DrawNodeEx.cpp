@@ -362,16 +362,16 @@ void DrawNodeEx::drawPoints(const Vec2* position,
 
 void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness)
 {
-    Vec2 line[2]    = {{origin}, {destination}};
-    Vec2* _vertices = transform(line, 2);
-
     if (thickness != 1.0)
     {
-        drawSegment(_vertices[0], _vertices[1], thickness, color);
+        drawSegment(origin, destination, thickness, color);
         return;
     }
     else
     {
+        Vec2 line[2]    = {origin, destination};
+        Vec2* _vertices = transform(line, 2);
+
         ensureCapacityGLLine(2);
 
         V2F_C4B_T2F* point = _bufferLine + _bufferCountLine;
@@ -419,6 +419,8 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
     }
     else
     {
+        Vec2* _vertices = transform(poli, numberOfPoints);
+
         unsigned int vertex_count;
         if (closePolygon)
         {
@@ -695,12 +697,14 @@ void DrawNodeEx::drawRect(const Vec2& p1,
 
 void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, const Color4B& color)
 {
+    Vec2 line[2]    = {from, to};
+    Vec2* _vertices  = transform(line, 2);
 
     unsigned int vertex_count = 6 * 3;
     ensureCapacity(vertex_count);
 
-    Vec2 a = from;
-    Vec2 b = to;
+    Vec2 a = _vertices[0];
+    Vec2 b = _vertices[1];
 
     Vec2 n = ((b - a).getPerp()).getNormalized();
     Vec2 t = n.getPerp();
