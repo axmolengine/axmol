@@ -41,7 +41,6 @@
 #include "base/any_buffer.h"
 #include "axmol.h"
 
-
 NS_AX_EXT_BEGIN
 
 static const int DEFAULT_LINEWIDTH = 2;
@@ -60,7 +59,6 @@ class PointArray;
 class AX_DLL DrawNodeEx : public ax::Node
 {
 public:
-
     /** Different draw modus types.
      *
      *.
@@ -84,11 +82,18 @@ public:
     // DrawNodeExt stuff
     Version _dnVersion = Version::v1;
     ax::Vec2 _dnScale;
-    ax::Vec2 _dnCenter; 
+    ax::Vec2 _dnCenter;
     float _dnRotation = 0.0f;
     ax::Vec2 _dnPosition;
     float _dnLineWidth        = 0.0f;
     float _dnDefaultLineWidth = 0.0f;
+
+    Version _dnVersionTmp   = _dnVersion;
+    ax::Vec2 _dnScaleTmp    = _dnScale;
+    ax::Vec2 _dnCenterTmp   = _dnCenter;
+    float _dnRotationTmp    = _dnRotation;
+    ax::Vec2 _dnPositionTmp = _dnPosition;
+    float _dnLineWidthTmp   = _dnLineWidth;
 
     void setDNVersion(ax::extension::DrawNodeEx::Version dnV) { _dnVersion = dnV; };
     void setDNScale(ax::Vec2 scale) { _dnScale = scale; };
@@ -103,9 +108,33 @@ public:
     void setDNLineWidth(float lineWidth) { _dnLineWidth = lineWidth; };
     float getDNLineWidth() { return _dnLineWidth; };
     ax::Vec2* transform(const ax::Vec2* vertices, unsigned int count);
-
-
-
+    void resetDNValues()
+    {
+        _dnVersion   = Version::v2;
+        _dnScale     = Vec2(1.f, 1.f);
+        _dnCenter    = Vec2(0.f, 0.f);
+        _dnRotation  = 0.0f;
+        _dnPosition  = Vec2(0.f, 0.f);
+        _dnLineWidth = 1.0f;
+    };
+    void ensureDNValues()
+    {
+        _dnVersionTmp   = _dnVersion;
+        _dnScaleTmp     = _dnScale;
+        _dnCenterTmp    = _dnCenter;
+        _dnRotationTmp  = _dnRotation;
+        _dnPositionTmp  = _dnPosition;
+        _dnLineWidthTmp = _dnLineWidth;
+    };
+    void restoreDNValues()
+    {
+        _dnVersion   = _dnVersionTmp;
+        _dnScale     = _dnScaleTmp;
+        _dnCenter    = _dnCenterTmp;
+        _dnRotation  = _dnRotationTmp;
+        _dnPosition  = _dnPositionTmp;
+        _dnLineWidth = _dnLineWidthTmp;
+    };
 
     /** creates and initialize a DrawNodeExt node.
      *
@@ -179,10 +208,10 @@ public:
                   const ax::Color4B& color,
                   float thickness = 1);
     void _drawPoly(const ax::Vec2* poli,
-                  unsigned int numberOfPoints,
-                  bool closePolygon,
+                   unsigned int numberOfPoints,
+                   bool closePolygon,
                    const ax::Color4B& color,
-                  float thickness = 1);
+                   float thickness = 1);
 
     /** Draws a circle given the center, radius and number of segments.
      *
@@ -204,7 +233,7 @@ public:
                     float scaleX,
                     float scaleY,
                     const ax::Color4B& color,
-                    float thickness = 1.0f);  // 500 should "simulate/save" the backwards compatibility  
+                    float thickness = 1.0f);  // 500 should "simulate/save" the backwards compatibility
 
     /** Draws a circle given the center, radius and number of segments.
      *
@@ -224,15 +253,14 @@ public:
                     const Color4B& color,
                     float thickness = 1.0f);  // 500 should "simulate/save" the backwards compatibility
 
-
-     /** Draws a star given the center, radius1, radius2 and number of segments.
+    /** Draws a star given the center, radius1, radius2 and number of segments.
      *
      * @param center The circle center point.
      * @param radiusI The inner radius.
      * @param radiusO The outer radius.
      * @param segments The number of segments.
      * @param color Set the star color.
-     * @param thickness  (optional) 
+     * @param thickness  (optional)
      */
     void drawStar(const Vec2& center,
                   float radiusI,
@@ -242,12 +270,12 @@ public:
                   float thickness = 1.0f);
 
     void drawSolidStar(const Vec2& center,
-                  float radiusI,
-                  float radiusO,
-                  unsigned int segments,
-                  const Color4B& color,
-                  const Color4B& filledColor,
-                  float thickness = 1.0f);
+                       float radiusI,
+                       float radiusO,
+                       unsigned int segments,
+                       const Color4B& color,
+                       const Color4B& filledColor,
+                       float thickness = 1.0f);
 
     /** Draws a quad bezier path.
      *
@@ -397,12 +425,12 @@ public:
      * @js NA
      */
     void drawSolidCircle(const ax::Vec2& center,
-                 float radius,
-                 float angle,
-                 unsigned int segments,
+                         float radius,
+                         float angle,
+                         unsigned int segments,
                          const ax::Color4B& color);
 
-     /** Draws a pie given the center, radius, angle, start angle, end angle  and number of segments.
+    /** Draws a pie given the center, radius, angle, start angle, end angle  and number of segments.
      * @param center The circle center point.
      * @param radius The circle rotate of radius.
      * @param angle  The circle angle.
@@ -411,7 +439,7 @@ public:
      * @param scaleX The scale value in x.
      * @param scaleY The scale value in y.
      * @param color The solid circle color.
-     * @param DrawMode The draw mode 
+     * @param DrawMode The draw mode
      * @js NA
      */
     void drawPie(const ax::Vec2& center,
@@ -454,22 +482,19 @@ public:
                      float borderWidth,
                      const ax::Color4B& borderColor);
 
-    void drawPolygon(const ax::Vec2* verts,
-                     int count,
-                     float borderWidth,
-                     const ax::Color4B& borderColor);
+    void drawPolygon(const ax::Vec2* verts, int count, float borderWidth, const ax::Color4B& borderColor);
     void drawSolidPolygon(const ax::Vec2* verts,
-                     int count,
-                     const ax::Color4B& fillColor,
-                     float borderWidth,
-                     const ax::Color4B& borderColor);
+                          int count,
+                          const ax::Color4B& fillColor,
+                          float borderWidth,
+                          const ax::Color4B& borderColor);
 
     void _drawPolygon(const ax::Vec2* verts,
-                     unsigned int count,
+                      unsigned int count,
                       const ax::Color4B& fillColor,
-                     float borderWidth,
+                      float borderWidth,
                       const ax::Color4B& borderColor,
-                     bool closedPolygon = true);
+                      bool closedPolygon = true);
 
     /** draw a triangle with color.
      *
@@ -481,10 +506,10 @@ public:
      */
 
     void drawTriangle(const ax::Vec2& p1,
-                          const ax::Vec2& p2,
-                          const ax::Vec2& p3,
-                          const ax::Color4B& color,
-                          float thickness = 1.0f);
+                      const ax::Vec2& p2,
+                      const ax::Vec2& p3,
+                      const ax::Color4B& color,
+                      float thickness = 1.0f);
 
     /** Clear the geometry in the node's buffer. */
     void clear();
@@ -510,7 +535,7 @@ public:
     // Get CocosStudio guide lines width.
     float getLineWidth();
 
-   void setIsConvex(bool isConvex) { _isConvex = isConvex; };  // Set backwards compatible with cocos2dx/axmol 2.0
+    void setIsConvex(bool isConvex) { _isConvex = isConvex; };  // Set backwards compatible with cocos2dx/axmol 2.0
 
     /**
      * When isolated is set, the position of the node is no longer affected by parent nodes.
@@ -541,18 +566,18 @@ protected:
     void updateBlendState(ax::CustomCommand& cmd);
     void updateUniforms(const ax::Mat4& transform, ax::CustomCommand& cmd);
 
-    int _bufferCapacityTriangle  = 0;
-    int _bufferCountTriangle     = 0;
+    int _bufferCapacityTriangle      = 0;
+    int _bufferCountTriangle         = 0;
     ax::V2F_C4B_T2F* _bufferTriangle = nullptr;
 
-    int _bufferCapacityPoint  = 0;
-    int _bufferCountPoint     = 0;
+    int _bufferCapacityPoint      = 0;
+    int _bufferCountPoint         = 0;
     ax::V2F_C4B_T2F* _bufferPoint = nullptr;
     ax::Color4F _pointColor;
     int _pointSize = 0;
 
-    int _bufferCapacityLine  = 0;
-    int _bufferCountLine     = 0;
+    int _bufferCapacityLine      = 0;
+    int _bufferCountLine         = 0;
     ax::V2F_C4B_T2F* _bufferLine = nullptr;
 
     ax::BlendFunc _blendFunc;
@@ -568,7 +593,7 @@ protected:
     float _lineWidth        = 0.0f;
     float _defaultLineWidth = 0.0f;
 
-    bool _isConvex     = true;
+    bool _isConvex = true;
 
     ax::any_buffer _abuf;
 

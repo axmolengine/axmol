@@ -362,17 +362,16 @@ void DrawNodeEx::drawPoints(const Vec2* position,
 
 void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness)
 {
+    Vec2 line[2]    = {{origin}, {destination}};
+    Vec2* _vertices = transform(line, 2);
+
     if (thickness != 1.0)
     {
-        drawSegment(origin, destination, thickness, color);
+        drawSegment(_vertices[0], _vertices[1], thickness, color);
         return;
     }
     else
     {
-        //    Vec2* line      = _abuf.get<Vec2>(2);
-        Vec2 line[2]    = {{origin}, {destination}};
-        Vec2* _vertices = transform(line, 2);
-
         ensureCapacityGLLine(2);
 
         V2F_C4B_T2F* point = _bufferLine + _bufferCountLine;

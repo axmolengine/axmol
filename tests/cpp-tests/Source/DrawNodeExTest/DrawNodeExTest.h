@@ -36,8 +36,6 @@ class DrawNodeExBaseTest : public TestCase
 {
 public:
     virtual std::string title() const override;
- //   ax::Vec2* vertices;
-    ax::Vec2* makePolygons();
 };
 
 class DrawNode2Test : public DrawNodeExBaseTest

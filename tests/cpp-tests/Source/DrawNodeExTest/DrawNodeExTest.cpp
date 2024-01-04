@@ -33,7 +33,30 @@ USING_NS_AX;
 USING_NS_AX_EXT;
 
 using namespace std;
-using namespace Clipper2Lib;
+
+Vec2 vertices1[] = {
+    {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},  {100.250000f, 161.375000f},
+    {65.500000f, 181.375000f},  {102.250000f, 179.125000f}, {95.000000f, 215.125000f},  {129.331467f, 189.926208f},
+    {131.371460f, 206.366196f}, {139.651474f, 192.446198f}, {161.851471f, 200.606201f}, {151.000000f, 220.375000f},
+    {110.500000f, 244.375000f}, {153.750000f, 238.125000f}, {142.500000f, 253.875000f}, {220.750000f, 259.375000f},
+    {250.500000f, 244.375000f}, {168.750000f, 241.875000f}, {182.250000f, 154.125000f}, {190.250000f, 227.375000f},
+    {196.500000f, 197.375000f}, {208.750000f, 210.625000f}, {220.750000f, 194.375000f}, {208.750000f, 176.375000f},
+    {253.250000f, 173.875000f}, {243.750000f, 154.125000f}, {213.750000f, 161.375000f}, {202.250000f, 139.875000f},
+    {236.000000f, 131.875000f}, {218.500000f, 120.875000f}, {206.500000f, 125.625000f}, {184.500000f, 110.375000f},
+    {157.000000f, 108.625000f}, {147.500000f, 96.625000f},  {153.750000f, 85.125000f},  {147.500000f, 75.375000f},
+    {126.500000f, 74.125000f},  {110.500000f, 86.625000f},  {127.750000f, 85.125000f},  {135.250000f, 91.125000f},
+    {135.250000f, 97.875000f},  {124.000000f, 93.875000f},  {115.500000f, 100.875000f}, {115.500000f, 111.875000f},
+    {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
+    {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f}};
+
+Vec2 vertices2[] = {
+    {290.250000f, 98.1250000f}, {235.000000f, 90.8750000f}, {270.500000f, 109.875000f}, {235.000000f, 119.125000f},
+    {275.250000f, 145.875000f}, {249.500000f, 145.875000f}, {249.500000f, 178.125000f}, {275.250000f, 187.375015f},
+    {294.750488f, 168.333344f}, {311.250000f, 181.125000f}, {257.000000f, 213.625015f}, {338.500000f, 193.125000f},
+    {300.000000f, 211.125015f}, {333.750000f, 211.125015f}, {368.250000f, 206.625000f}, {377.000000f, 178.125000f},
+    {421.750000f, 170.125000f}, {416.250000f, 115.375000f}, {391.250000f, 157.875000f}, {338.500000f, 131.625000f},
+    {362.750000f, 131.625000f}, {362.750000f, 106.875000f}, {306.500000f, 119.125000f}, {324.250000f, 85.1250000f},
+    {227.500000f, 61.8750000}};
 
 DrawNodeExTests::DrawNodeExTests()
 {
@@ -44,51 +67,6 @@ DrawNodeExTests::DrawNodeExTests()
     ADD_TEST_CASE(DrawPieTest);
     ADD_TEST_CASE(DrawNode2PolygonTest);
     ADD_TEST_CASE(DrawNode2FilledPolygonTest);
-}
-
-Vec2* DrawNodeExBaseTest::makePolygons()
-{
-    bool isReal = false;
-    do
-    {
-        PathsD solution, clip, subject;
-        PathD p, c;
-        for (int i = 0; i < 5; i++)
-        {
-            p.push_back(PointD(200 + AXRANDOM_0_1() * VisibleRect::rightTop().x - 300,
-                               200 + AXRANDOM_0_1() * VisibleRect::rightTop().y - 300));
-            c.push_back(PointD(200 + AXRANDOM_0_1() * VisibleRect::rightTop().x - 300,
-                               200 + AXRANDOM_0_1() * VisibleRect::rightTop().y - 300));
-        }
-        subject.push_back(p);
-        clip.push_back(c);
-        solution = Intersect(subject, clip, FillRule::EvenOdd);
-
-        if (solution.size() > 0)
-        {
-
-            int verCount = 0;
-            ax::any_buffer myBuf;
-            for (auto&& p : solution)
-            {
-                int i          = 0;
-                verCount       = p.size();
-                Vec2* vertices = myBuf.get<Vec2>(verCount);
-                for (auto&& pt : p)
-                {
-                    vertices[i] = Vec2(pt.x * 2, pt.y * 2);
-                    i++;
-                }
-                if (verCount > 4)
-                {
-                    isReal = true;
-                    // draw->drawPoly(vertices, verCount, true,
-                    //                Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
-                    return vertices;
-                }
-            }
-        }
-    } while (!isReal);
 }
 
 string DrawNodeExBaseTest::title() const
@@ -579,7 +557,7 @@ DrawNode2PolygonTest::DrawNode2PolygonTest()
     // director->setClearColor(Color4F(0, 0, 0, 0));
     auto origin = director->getVisibleOrigin();
     auto size   = director->getVisibleSize();
-    center = Vec2(origin.x + size.width / 2 + 50, origin.y + size.height / 2);
+    center      = Vec2(origin.x + size.width / 2 + 50, origin.y + size.height / 2);
 
     float o    = 80;
     float w    = 20;
@@ -587,7 +565,6 @@ DrawNode2PolygonTest::DrawNode2PolygonTest()
     drawNodeEx = DrawNodeEx::create();
     addChild(drawNodeEx);
     drawNodeEx->setPosition(center);
-
 
     {  // star
 
@@ -609,7 +586,7 @@ DrawNode2PolygonTest::DrawNode2PolygonTest()
                                 Color4F::BLUE);
     }
 
-        scheduleUpdate();
+    scheduleUpdate();
 }
 
 void DrawNode2PolygonTest::drawDirection(const Vec2* vec, const int size, Vec2 offset)
@@ -654,7 +631,8 @@ void DrawNode2PolygonTest::update(float dt)
         drawNodeEx->setDNPosition(center);
         drawNodeEx->setDNCenter(star[0]);
         drawNodeEx->setDNRotation(rot);
-        drawNodeEx->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1, Color4F::BLUE);
+        drawNodeEx->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1,
+                                Color4F::BLUE);
     }
     {
         int x = 0;
@@ -683,7 +661,7 @@ void DrawNode2PolygonTest::update(float dt)
                     color = Color4F::ORANGE;
                 }
                 drawNodeEx->setDNRotation(rot);
-                 drawNodeEx->setDNCenter(vertices[0]);
+                drawNodeEx->setDNCenter(vertices[0]);
                 drawNodeEx->setDNPosition(Vec2(-70.f, 60.f));
                 drawNodeEx->drawPolygon(vertices, 4, Color4F(0.7f, 0.7f, 0.7f, 0.5f), 1, color);
                 drawNodeEx->setIsConvex(false);
@@ -698,30 +676,6 @@ void DrawNode2PolygonTest::update(float dt)
 
 DrawNode2FilledPolygonTest::DrawNode2FilledPolygonTest()
 {
-    Vec2 vertices21[] = {
-        {290.250000f, 98.1250000f}, {235.000000f, 90.8750000f}, {270.500000f, 109.875000f}, {235.000000f, 119.125000f},
-        {275.250000f, 145.875000f}, {249.500000f, 145.875000f}, {249.500000f, 178.125000f}, {275.250000f, 187.375015f},
-        {294.750488f, 168.333344f}, {311.250000f, 181.125000f}, {257.000000f, 213.625015f}, {338.500000f, 193.125000f},
-        {300.000000f, 211.125015f}, {333.750000f, 211.125015f}, {368.250000f, 206.625000f}, {377.000000f, 178.125000f},
-        {421.750000f, 170.125000f}, {416.250000f, 115.375000f}, {391.250000f, 157.875000f}, {338.500000f, 131.625000f},
-        {362.750000f, 131.625000f}, {362.750000f, 106.875000f}, {306.500000f, 119.125000f}, {324.250000f, 85.1250000f},
-        {227.500000f, 61.8750000}};
-
-    Vec2 vertices24[] = {
-        {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},  {100.250000f, 161.375000f},
-        {65.500000f, 181.375000f},  {102.250000f, 179.125000f}, {95.000000f, 215.125000f},  {129.331467f, 189.926208f},
-        {131.371460f, 206.366196f}, {139.651474f, 192.446198f}, {161.851471f, 200.606201f}, {151.000000f, 220.375000f},
-        {110.500000f, 244.375000f}, {153.750000f, 238.125000f}, {142.500000f, 253.875000f}, {220.750000f, 259.375000f},
-        {250.500000f, 244.375000f}, {168.750000f, 241.875000f}, {182.250000f, 154.125000f}, {190.250000f, 227.375000f},
-        {196.500000f, 197.375000f}, {208.750000f, 210.625000f}, {220.750000f, 194.375000f}, {208.750000f, 176.375000f},
-        {253.250000f, 173.875000f}, {243.750000f, 154.125000f}, {213.750000f, 161.375000f}, {202.250000f, 139.875000f},
-        {236.000000f, 131.875000f}, {218.500000f, 120.875000f}, {206.500000f, 125.625000f}, {184.500000f, 110.375000f},
-        {157.000000f, 108.625000f}, {147.500000f, 96.625000f},  {153.750000f, 85.125000f},  {147.500000f, 75.375000f},
-        {126.500000f, 74.125000f},  {110.500000f, 86.625000f},  {127.750000f, 85.125000f},  {135.250000f, 91.125000f},
-        {135.250000f, 97.875000f},  {124.000000f, 93.875000f},  {115.500000f, 100.875000f}, {115.500000f, 111.875000f},
-        {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
-        {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
-    };
 
     DrawNodeEx* drawNode[3];
     for (int i = 0; i < 3; i++)
@@ -741,10 +695,10 @@ DrawNode2FilledPolygonTest::DrawNode2FilledPolygonTest()
     // drawNodeEx[0]->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, 0.3f,
     //                          Color4F::GREEN);
 
-    drawNode[2]->drawPolygon(vertices21, sizeof(vertices21) / sizeof(vertices21[0]), Color4F::GREEN, 0.3f,
+    drawNode[2]->drawPolygon(vertices2, sizeof(vertices2) / sizeof(vertices2[0]), Color4F::GREEN, 0.3f,
                              Color4F::YELLOW);
 
-    drawNode[2]->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::AX_TRANSPARENT, 5.3f,
+    drawNode[2]->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color4F::AX_TRANSPARENT, 5.3f,
                              Color4F::RED);
 }
 
@@ -775,7 +729,7 @@ DrawNodePart1Test::DrawNodePart1Test()
 
     draw = DrawNodeEx::create();
     draw->setScale(0.5);
-    draw->setPosition(size / 4);
+    draw->setPosition(center);
     addChild(draw);
 
     draw1 = DrawNode::create();
@@ -790,7 +744,7 @@ DrawNodePart1Test::DrawNodePart1Test()
     label = Label::createWithTTF("Value: ", "fonts/Marker Felt.ttf", 10);
     label->setPosition(Vec2(Vec2(center.x, 80.0f)));
     this->addChild(label, 1);
-
+    isDirty = true;
     scheduleUpdate();
 }
 
@@ -829,7 +783,6 @@ void DrawNodePart1Test::listviewCallback(ax::Ref* sender, ax::ui::ListView::Even
     _currentSeletedItemIndex = (int)listview->getCurSelectedIndex();
     listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color3B::RED);
     isDirty   = true;
-    verticess = makePolygons();
 }
 
 void DrawNodePart1Test::sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType type)
@@ -905,7 +858,7 @@ ax::ui::ListView* DrawNodePart1Test::createListView()
 
 void DrawNodePart1Test::update(float dt)
 {
-    if (isDirty)
+   // if (isDirty== true)
     {
         drawAll();
         isDirty = false;
@@ -914,7 +867,9 @@ void DrawNodePart1Test::update(float dt)
 
 void DrawNodePart1Test::drawAll()
 {
-
+    isDirty               = false;
+    static float rotation = 0.1;
+    rotation += 0.1;
     auto s = Director::getInstance()->getWinSize();
 
     draw->clear();
@@ -924,14 +879,36 @@ void DrawNodePart1Test::drawAll()
     {
     case 0:
     {
-        // drawLine
-        draw->drawLine(Vec2(200, 200), Vec2(s.width - 200, s.height - 200), Color4F(1.0, 0.0, 0.0, 1.0), thickness);
-        draw->drawLine(Vec2(300, 320), Vec2(s.width - 200, s.height - 200), Color4F(1.0, 1.0, 0.0, 1.0), thickness);
+        draw->setRotation(rotation *3);
+        draw->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        draw->setScale(0.3);
+       // draw->setPosition(0.1);
+        Vec2 gear1 = {280.f, 320.f};
+        Vec2 gear2 = {160.f, 320.f};
+        Vec2 gear3 = {200.f, 200.f};
+        Vec2 gear4 = {s.width - 200, s.height - 200};
 
-        draw->drawStar(Vec2(300, 320), 30, 60, 8, Color4F(1.0, 1.0, 0.0, 1.0), 4.0);
-        draw->drawSolidStar(Vec2(160, 320), 30, 60, 8, Color4F(1.0, 1.0, 0.0, 1.0), Color4F::YELLOW, 4.0);
-        draw->drawStar(Vec2(200, 200), 30, 60, 18, Color4F(1.0, 0.0, 0.0, 1.0), 1.0);
-        draw->drawStar(Vec2(s.width - 200, s.height - 200), 40, 60, 60, Color4F::GREEN, 1.0);
+      
+
+       draw->drawLine(gear2, gear4, Color4F::RED, thickness);  // line
+        draw->setDNCenter(gear1);
+        draw->setDNRotation(rotation+45);
+        draw->drawStar(Vec2(gear1), 30, 60, 8, Color4F::RED, 4.0);
+        draw->setDNRotation(-rotation);
+        draw->setDNCenter(gear2);
+        draw->drawSolidStar(gear2, 30, 60, 8, Color4F::GREEN, Color4F::YELLOW, 4.0);
+
+        draw->resetDNValues();
+        draw->setDNCenter(gear4);
+        draw->setDNRotation(rotation + 45);
+        draw->drawStar(gear3, 30, 60, 18, Color4F::RED, 1.0);
+        draw->drawLine(gear3, gear4, Color4F::YELLOW, thickness);  // line
+        draw->resetDNValues();
+        draw->setDNRotation(rotation - 45);
+        draw->setDNCenter(gear4);
+        draw->drawStar(gear4, 40, 60, 60, Color4F::GREEN, 1.0);
+        draw->resetDNValues();
+        isDirty = true;
         break;
     }
     case 1:
@@ -1032,27 +1009,7 @@ void DrawNodePart1Test::drawAll()
         Vec2 vertices2[3] = {Vec2(30.0f, 130.0f), Vec2(30.0f, 230.0f), Vec2(50.0f, 200.0f)};
         draw->drawPoly(vertices2, 3, true, Color4B::GREEN, thickness);
 
-        Vec2 vertices24[] = {
-            {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},
-            {100.250000f, 161.375000f}, {65.500000f, 181.375000f},  {102.250000f, 179.125000f},
-            {95.000000f, 215.125000f},  {129.331467f, 189.926208f}, {131.371460f, 206.366196f},
-            {139.651474f, 192.446198f}, {161.851471f, 200.606201f}, {151.000000f, 220.375000f},
-            {110.500000f, 244.375000f}, {153.750000f, 238.125000f}, {142.500000f, 253.875000f},
-            {220.750000f, 259.375000f}, {250.500000f, 244.375000f}, {168.750000f, 241.875000f},
-            {182.250000f, 154.125000f}, {190.250000f, 227.375000f}, {196.500000f, 197.375000f},
-            {208.750000f, 210.625000f}, {220.750000f, 194.375000f}, {208.750000f, 176.375000f},
-            {253.250000f, 173.875000f}, {243.750000f, 154.125000f}, {213.750000f, 161.375000f},
-            {202.250000f, 139.875000f}, {236.000000f, 131.875000f}, {218.500000f, 120.875000f},
-            {206.500000f, 125.625000f}, {184.500000f, 110.375000f}, {157.000000f, 108.625000f},
-            {147.500000f, 96.625000f},  {153.750000f, 85.125000f},  {147.500000f, 75.375000f},
-            {126.500000f, 74.125000f},  {110.500000f, 86.625000f},  {127.750000f, 85.125000f},
-            {135.250000f, 91.125000f},  {135.250000f, 97.875000f},  {124.000000f, 93.875000f},
-            {115.500000f, 100.875000f}, {115.500000f, 111.875000f}, {135.250000f, 108.625000f},
-            {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
-            {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
-        };
-
-        draw->drawPoly(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), true, Color4B::RED, thickness);
+        draw->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color4B::RED, thickness);
 
         break;
     }
@@ -1060,40 +1017,23 @@ void DrawNodePart1Test::drawAll()
     {
         // drawPolygon
 
-        Vec2 vertices24[] = {
-            {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},
-            {100.250000f, 161.375000f}, {65.500000f, 181.375000f},  {102.250000f, 179.125000f},
-            {95.000000f, 215.125000f},  {129.331467f, 189.926208f}, {131.371460f, 206.366196f},
-            {139.651474f, 192.446198f}, {161.851471f, 200.606201f}, {151.000000f, 220.375000f},
-            {110.500000f, 244.375000f}, {153.750000f, 238.125000f}, {142.500000f, 253.875000f},
-            {220.750000f, 259.375000f}, {250.500000f, 244.375000f}, {168.750000f, 241.875000f},
-            {182.250000f, 154.125000f}, {190.250000f, 227.375000f}, {196.500000f, 197.375000f},
-            {208.750000f, 210.625000f}, {220.750000f, 194.375000f}, {208.750000f, 176.375000f},
-            {253.250000f, 173.875000f}, {243.750000f, 154.125000f}, {213.750000f, 161.375000f},
-            {202.250000f, 139.875000f}, {236.000000f, 131.875000f}, {218.500000f, 120.875000f},
-            {206.500000f, 125.625000f}, {184.500000f, 110.375000f}, {157.000000f, 108.625000f},
-            {147.500000f, 96.625000f},  {153.750000f, 85.125000f},  {147.500000f, 75.375000f},
-            {126.500000f, 74.125000f},  {110.500000f, 86.625000f},  {127.750000f, 85.125000f},
-            {135.250000f, 91.125000f},  {135.250000f, 97.875000f},  {124.000000f, 93.875000f},
-            {115.500000f, 100.875000f}, {115.500000f, 111.875000f}, {135.250000f, 108.625000f},
-            {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
-            {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
-        };
-
         draw->setDNScale(Vec2(thickness, thickness));
         draw->setDNPosition(Vec2(0, 0));
         draw->setDNRotation(0);
-        draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness, Color4F::YELLOW);
+        draw->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color4F::GREEN, thickness,
+                          Color4F::YELLOW);
         draw->setDNPosition(Vec2(0, 0));
         draw->setDNRotation(thickness);
         draw->setDNScale(Vec2(thickness, thickness));
-        draw->setDNCenter(vertices24[0]);
-        draw->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::GREEN, thickness, Color4F::YELLOW);
+        draw->setDNCenter(vertices1[0]);
+        draw->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color4F::GREEN, thickness,
+                          Color4F::YELLOW);
 
         draw1->clear();
         draw1->setPosition(Vec2(200, 0));
         draw1->setScale(thickness);
-        draw1->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, thickness, Color4F::YELLOW);
+        draw1->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color4F::RED, thickness,
+                           Color4F::YELLOW);
 
         break;
     }
@@ -1315,41 +1255,14 @@ void DrawNodePart2Test::update(float dt)
     }
     case 6:
     {
-        for (int i = 0; i < 1; i++)
-        {
-            PathsD solution, clip, subject;
-            PathD p, c;
-            for (int i = 0; i < 10; i++)
-            {
-                p.push_back(
-                    PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
-                c.push_back(
-                    PointD(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y));
-            }
-            subject.push_back(p);
-            clip.push_back(c);
-            solution = Intersect(subject, clip, FillRule::NonZero);
-
-            if (solution.size() > 0)
-            {
-                Vec2* vertices = nullptr;
-                int verCount   = 0;
-                ax::any_buffer myBuf;
-                for (auto&& p : solution)
-                {
-                    int i    = 0;
-                    verCount = p.size();
-                    vertices = myBuf.get<Vec2>(verCount);
-                    for (auto&& pt : p)
-                    {
-                        vertices[i] = Vec2(pt.x, pt.y);
-                        i++;
-                    }
-                }
-                draw->drawSolidPoly(vertices, verCount, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
-            }
-        }
-
+        // draw a solid poly
+        draw->resetDNValues();
+        draw->setDNPosition(vertices1[0]);
+        draw->setDNRotation(count);
+    //    draw->setDNScale(Vec2(count, count));
+        draw->setDNCenter(vertices1[0]);
+        draw->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color4F::GREEN, count);
+        draw->resetDNValues();
         break;
     }
     case 7:
