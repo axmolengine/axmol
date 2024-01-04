@@ -880,9 +880,9 @@ void DrawNodePart1Test::drawAll()
     case 0:
     {
         draw->setRotation(rotation * 3);
-      //  draw->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
+        draw->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
         draw->setScale(0.3);
-        draw->setColor(Color3B::WHITE);
+
         // draw->setPosition(0.1);
         Vec2 gear1 = {280.f, 320.f};
         Vec2 gear2 = {160.f, 320.f};

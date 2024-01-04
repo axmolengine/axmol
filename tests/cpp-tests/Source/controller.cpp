@@ -49,7 +49,7 @@ public:
 #endif
 #if __has_include("DrawNodeExTest/DrawNodeExTest.h")
 #    pragma message("The optional extension DrawNodeEx is enabled.")
-        addTest("DrawNodeEx (draft)", []() { return new DrawNodeExTests(); });
+        addTest("DrawNodeEx", []() { return new DrawNodeExTests(); });
 #endif
 //        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
