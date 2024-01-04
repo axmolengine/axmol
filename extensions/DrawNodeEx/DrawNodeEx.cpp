@@ -50,7 +50,7 @@ static inline Tex2F v2ToTex2F(const Vec2& v)
  * @param verts A pointer to point coordinates.
  * @param count The number of verts measured in points.
  */
-static inline bool isConvex(const Vec2* verts, int count)
+static bool isConvex(const Vec2* verts, int count)
 {
     bool isPositive = false, isNegative = false;
     for (unsigned int i = 0; i < count; i++)
@@ -77,7 +77,7 @@ static inline bool isConvex(const Vec2* verts, int count)
     return true;  // Polygon is convex
 }
 
-inline Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
+Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
 {
     Vec2* vert = _abuf.get<Vec2>(count);
     for (unsigned int i = 0; i < count; i++)
@@ -1019,7 +1019,7 @@ void DrawNodeEx::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
     }
 }
 
-inline void DrawNodeEx::_drawPolygon(const Vec2* verts,
+void DrawNodeEx::_drawPolygon(const Vec2* verts,
                                      unsigned int count,
                                      const Color4B& fillColor,
                                      float borderWidth,
@@ -1153,7 +1153,7 @@ inline void DrawNodeEx::_drawPolygon(const Vec2* verts,
     _dirtyTriangle = true;
 }
 
-inline void DrawNodeEx::_drawPoly(const Vec2* poli,
+void DrawNodeEx::_drawPoly(const Vec2* poli,
                                   unsigned int numberOfPoints,
                                   bool closePolygon,
                                   const Color4B& color,
