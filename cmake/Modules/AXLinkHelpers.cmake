@@ -31,6 +31,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     message(STATUS "AX_ENABLE_EXT_SPINE=${AX_ENABLE_EXT_SPINE}")
     message(STATUS "AX_ENABLE_EXT_EFFEKSEER=${AX_ENABLE_EXT_EFFEKSEER}")
     message(STATUS "AX_ENABLE_EXT_LUA=${AX_ENABLE_EXT_LUA}")
+	message(STATUS "AX_ENABLE_EXT_DRAWNODEEX=${AX_ENABLE_EXT_DRAWNODEEX}")
     
     # compile defines can't inherit when link prebuits, so need add manually
     target_compile_definitions(${APP_NAME} 
@@ -173,6 +174,11 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     if (AX_ENABLE_EXT_SDFGEN)
         list(APPEND LIBS "SDFGen")
     endif()
+	
+	if (AX_ENABLE_EXT_DRAWNODEEX)
+        list(APPEND LIBS "DrawNodeEx")
+    endif()
+	
 	
     if (WINDOWS)
         target_link_libraries(${APP_NAME}
