@@ -782,7 +782,7 @@ void DrawNodePart1Test::listviewCallback(ax::Ref* sender, ax::ui::ListView::Even
     }
     _currentSeletedItemIndex = (int)listview->getCurSelectedIndex();
     listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color3B::RED);
-    isDirty   = true;
+    isDirty = true;
 }
 
 void DrawNodePart1Test::sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType type)
@@ -858,7 +858,7 @@ ax::ui::ListView* DrawNodePart1Test::createListView()
 
 void DrawNodePart1Test::update(float dt)
 {
-   // if (isDirty== true)
+    // if (isDirty== true)
     {
         drawAll();
         isDirty = false;
@@ -879,26 +879,25 @@ void DrawNodePart1Test::drawAll()
     {
     case 0:
     {
-        draw->setRotation(rotation *3);
+        draw->setRotation(rotation * 3);
         draw->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
         draw->setScale(0.3);
-       // draw->setPosition(0.1);
+        // draw->setPosition(0.1);
         Vec2 gear1 = {280.f, 320.f};
         Vec2 gear2 = {160.f, 320.f};
         Vec2 gear3 = {200.f, 200.f};
         Vec2 gear4 = {s.width - 200, s.height - 200};
 
-      
-
-       draw->drawLine(gear2, gear4, Color4F::RED, thickness);  // line
+        draw->drawLine(gear2, gear4, Color4F::RED, thickness);  // line
         draw->setDNCenter(gear1);
-        draw->setDNRotation(rotation+45);
-        draw->drawStar(Vec2(gear1), 30, 60, 8, Color4F::RED, 4.0);
+        draw->setDNRotation(rotation + 45);
+        draw->drawStar(Vec2(gear1), 30, 60, 8, Color4F::BLUE, 4.0);
         draw->setDNRotation(-rotation);
         draw->setDNCenter(gear2);
         draw->drawSolidStar(gear2, 30, 60, 8, Color4F::GREEN, Color4F::YELLOW, 4.0);
-
+ 
         draw->resetDNValues();
+        draw->drawLine(gear2, gear1, Color4F::RED, thickness);  // line
         draw->setDNCenter(gear4);
         draw->setDNRotation(rotation + 45);
         draw->drawStar(gear3, 30, 60, 18, Color4F::RED, 1.0);
@@ -1259,7 +1258,7 @@ void DrawNodePart2Test::update(float dt)
         draw->resetDNValues();
         draw->setDNPosition(vertices1[0]);
         draw->setDNRotation(count);
-    //    draw->setDNScale(Vec2(count, count));
+        //    draw->setDNScale(Vec2(count, count));
         draw->setDNCenter(vertices1[0]);
         draw->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color4F::GREEN, count);
         draw->resetDNValues();
