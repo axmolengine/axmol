@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd..
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -23,11 +24,6 @@
  ****************************************************************************/
 
 #include "DrawNodeExTest.h"
-#include "renderer/Renderer.h"
-#include "renderer/CustomCommand.h"
-
-#include "clipper2/clipper.h"
-#include "base/any_buffer.h"
 
 USING_NS_AX;
 USING_NS_AX_EXT;
