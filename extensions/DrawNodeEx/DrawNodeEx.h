@@ -33,30 +33,27 @@
 #ifndef __DRAW_NODE_EX_H__
 #define __DRAW_NODE_EX_H__
 
-#include "ExtensionMacros.h"
 #include "2d/Node.h"
 #include "base/Types.h"
 #include "renderer/CustomCommand.h"
 #include "math/Math.h"
 #include "base/any_buffer.h"
+
+#include "extensions/ExtensionMacros.h"
+#include "extensions/ExtensionExport.h"
 #include "axmol.h"
 
 NS_AX_EXT_BEGIN
 
 static const int DEFAULT_LINEWIDTH = 2;
 
-class PointArray;
-/**
- * @addtogroup _2d
- * @{
- */
 
 /** @class DrawNodeExt
  * @brief Node that draws dots, segments and polygons.
  * Faster than the "drawing primitives" since they draws everything in one single batch.
  * @since v2.1
  */
-class AX_DLL DrawNodeEx : public ax::Node
+class AX_EX_DLL DrawNodeEx : public ax::Node
 {
 public:
     /** Different draw modus types.
