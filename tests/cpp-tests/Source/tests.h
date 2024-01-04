@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -72,6 +73,11 @@
 #include "DataVisitorTest/DataVisitorTest.h"
 #include "NetworkTest/NetworkTest.h"
 #include "DrawPrimitivesTest/DrawPrimitivesTest.h"
+
+#if __has_include("DrawNodeExTest/DrawNodeExTest.h")
+#include "DrawNodeExTest/DrawNodeExTest.h"
+#endif
+
 #include "EffectsAdvancedTest/EffectsAdvancedTest.h"
 #include "EffectsTest/EffectsTest.h"
 #include "ExtensionsTest/ExtensionsTest.h"

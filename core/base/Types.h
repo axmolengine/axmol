@@ -122,6 +122,7 @@ struct AX_DLL Color4B
     static const Color4B BLACK;
     static const Color4B ORANGE;
     static const Color4B GRAY;
+    static const Color4B AX_TRANSPARENT;  // TRANSPARENT is defined on wingdi.h /*Background Modes*/
 };
 
 /**
@@ -158,6 +159,7 @@ struct AX_DLL Color4F
     static const Color4F BLACK;
     static const Color4F ORANGE;
     static const Color4F GRAY;
+    static const Color4F AX_TRANSPARENT;  // TRANSPARENT is defined on wingdi.h /*Background Modes*/
 };
 
 Color4F& operator+=(Color4F& lhs, const Color4F& rhs);
