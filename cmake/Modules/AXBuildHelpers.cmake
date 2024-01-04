@@ -363,6 +363,9 @@ endfunction()
 
 # setup a ax application
 function(ax_setup_app_config app_name)
+    set(options RUNTIME_OUTPUT_DIR opt_RUNTIME_OUTPUT_DIR)
+    cmake_parse_arguments(opt "" "${options}" ""
+                          "" ${ARGN} )
     if (WINRT)
         target_include_directories(${app_name} 
             PRIVATE "proj.winrt"
@@ -371,8 +374,11 @@ function(ax_setup_app_config app_name)
     if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
         target_link_options(${app_name} PRIVATE "/STACK:4194304")
     endif()
-    # put all output app into bin/${app_name}
-    set_target_properties(${app_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${app_name}")
+    if(NOT opt_RUNTIME_OUTPUT_DIR)
+        # put all output app into bin/${app_name}
+        set(opt_RUNTIME_OUTPUT_DIR "${CMAKE_BINARY_DIR}/bin/${app_name}")
+    endif()
+    set_target_properties(${app_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${opt_RUNTIME_OUTPUT_DIR}")
     if(APPLE)
         # output macOS/iOS .app
         set_target_properties(${app_name} PROPERTIES MACOSX_BUNDLE 1)
