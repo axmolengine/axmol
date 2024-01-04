@@ -539,6 +539,11 @@ if (AX_ENABLE_EXT_EFFEKSEER)
     list(APPEND GAME_SOURCE Source/EffekseerTest/EffekseerTest.cpp)
 endif()
 
+if (AX_ENABLE_EXT_DRAWNODEEX)
+    list(APPEND GAME_HEADER Source/DrawNodeExTest/DrawNodeExTest.h)
+    list(APPEND GAME_SOURCE Source/DrawNodeExTest/DrawNodeExTest.cpp)
+endif()
+
 
 list(APPEND GAME_SOURCE
         Source/UITest/CocoStudioGUITest/UIEditBoxTest.cpp

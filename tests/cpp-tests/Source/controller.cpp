@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -47,7 +48,10 @@ public:
 #pragma message("The optional extension Effekseer is enabled.")
         addTest("Effekseer", []() { return new EffekseerTests(); });
 #endif
-
+#if __has_include("DrawNodeExTest/DrawNodeExTest.h")
+#    pragma message("The optional extension DrawNodeEx is enabled.")
+        addTest("DrawNodeEx", []() { return new DrawNodeExTests(); });
+#endif
 //        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
         addTest("ImGui", []() { return new ImGuiTests(); });
