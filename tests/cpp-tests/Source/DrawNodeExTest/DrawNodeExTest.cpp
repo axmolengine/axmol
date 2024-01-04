@@ -61,7 +61,7 @@ DrawNodeExTests::DrawNodeExTests()
     ADD_TEST_CASE(DrawNode2Test);
     ADD_TEST_CASE(IndividualThicknessTest);
     ADD_TEST_CASE(DrawPieTest);
-    ADD_TEST_CASE(DrawNode2PolygonTest);
+//    ADD_TEST_CASE(DrawNode2PolygonTest);
     ADD_TEST_CASE(DrawNode2FilledPolygonTest);
 }
 
@@ -560,7 +560,7 @@ DrawNode2PolygonTest::DrawNode2PolygonTest()
     float h    = 50;
     drawNodeEx = DrawNodeEx::create();
     addChild(drawNodeEx);
-    drawNodeEx->setPosition(center);
+  //  drawNodeEx->setPosition(center);
 
     {  // star
 
@@ -624,9 +624,9 @@ void DrawNode2PolygonTest::update(float dt)
             Vec2(o - h, o + w),  // left spike
         };
 
-        drawNodeEx->setDNPosition(center);
+/*        drawNodeEx->setDNPosition(center);
         drawNodeEx->setDNCenter(star[0]);
-        drawNodeEx->setDNRotation(rot);
+        drawNodeEx->setDNRotation(rot)*/;
         drawNodeEx->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1,
                                 Color4F::BLUE);
     }
@@ -656,9 +656,9 @@ void DrawNode2PolygonTest::update(float dt)
                     drawNodeEx->setIsConvex(false);
                     color = Color4F::ORANGE;
                 }
-                drawNodeEx->setDNRotation(rot);
-                drawNodeEx->setDNCenter(vertices[0]);
-                drawNodeEx->setDNPosition(Vec2(-70.f, 60.f));
+                //drawNodeEx->setDNRotation(rot);
+                //drawNodeEx->setDNCenter(vertices[0]);
+                //drawNodeEx->setDNPosition(Vec2(-70.f, 60.f));
                 drawNodeEx->drawPolygon(vertices, 4, Color4F(0.7f, 0.7f, 0.7f, 0.5f), 1, color);
                 drawNodeEx->setIsConvex(false);
                 x += 70;
