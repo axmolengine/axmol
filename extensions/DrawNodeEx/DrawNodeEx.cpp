@@ -53,7 +53,7 @@ static inline Tex2F v2ToTex2F(const Vec2& v)
 static inline bool isConvex(const Vec2* verts, int count)
 {
     bool isPositive = false, isNegative = false;
-    for (int i = 0; i < count; i++)
+    for (unsigned int i = 0; i < count; i++)
     {
         Vec2 A = verts[i];
         Vec2 B = verts[(i + 1) % count];
@@ -77,10 +77,10 @@ static inline bool isConvex(const Vec2* verts, int count)
     return true;  // Polygon is convex
 }
 
-Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
+inline Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
 {
     Vec2* vert = _abuf.get<Vec2>(count);
-    for (int i = 0; i < count; i++)
+    for (unsigned int i = 0; i < count; i++)
     {
         if (_dnRotation == 0.0f)
         {
@@ -337,7 +337,7 @@ void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Co
 
 void DrawNodeEx::drawPoints(const Vec2* position, unsigned int numberOfPoints, const Color4B& color)
 {
-    drawPoints(position, numberOfPoints, 1.0, color);
+    drawPoints(position, numberOfPoints, 1.f, color);
 }
 
 void DrawNodeEx::drawPoints(const Vec2* position,
@@ -362,7 +362,7 @@ void DrawNodeEx::drawPoints(const Vec2* position,
 
 void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness)
 {
-    if (thickness != 1.0)
+    if (thickness != 1.0f)
     {
         drawSegment(origin, destination, thickness, color);
         return;
@@ -376,8 +376,8 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
 
         V2F_C4B_T2F* point = _bufferLine + _bufferCountLine;
 
-        *point       = {_vertices[0], color, Tex2F(0.0, 0.0)};
-        *(point + 1) = {_vertices[1], color, Tex2F(0.0, 0.0)};
+        *point       = {_vertices[0], color, Tex2F::ZERO};
+        *(point + 1) = {_vertices[1], color, Tex2F::ZERO};
 
         _customCommandLine.updateVertexBuffer(point, _bufferCountLine * sizeof(V2F_C4B_T2F), 2 * sizeof(V2F_C4B_T2F));
         _bufferCountLine += 2;
@@ -438,14 +438,14 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
         unsigned int i = 0;
         for (; i < numberOfPoints - 1; i++)
         {
-            *point       = {poli[i], color, Tex2F(0.0, 0.0)};
-            *(point + 1) = {poli[i + 1], color, Tex2F(0.0, 0.0)};
+            *point       = {poli[i], color, Tex2F::ZERO};
+            *(point + 1) = {poli[i + 1], color, Tex2F::ZERO};
             point += 2;
         }
         if (closePolygon)
         {
-            *point       = {poli[i], color, Tex2F(0.0, 0.0)};
-            *(point + 1) = {poli[0], color, Tex2F(0.0, 0.0)};
+            *point       = {poli[i], color, Tex2F::ZERO};
+            *(point + 1) = {poli[0], color, Tex2F::ZERO};
         }
 
         _customCommandLine.updateVertexBuffer(cursor, _bufferCountLine * sizeof(V2F_C4B_T2F),
@@ -654,10 +654,10 @@ void DrawNodeEx::drawDot(const Vec2& pos, float radius, const Color4B& color)
     unsigned int vertex_count = 2 * 3;
     ensureCapacity(vertex_count);
 
-    V2F_C4B_T2F a = {Vec2(pos.x - radius, pos.y - radius), color, Tex2F(-1.0, -1.0)};
-    V2F_C4B_T2F b = {Vec2(pos.x - radius, pos.y + radius), color, Tex2F(-1.0, 1.0)};
-    V2F_C4B_T2F c = {Vec2(pos.x + radius, pos.y + radius), color, Tex2F(1.0, 1.0)};
-    V2F_C4B_T2F d = {Vec2(pos.x + radius, pos.y - radius), color, Tex2F(1.0, -1.0)};
+    V2F_C4B_T2F a = {Vec2(pos.x - radius, pos.y - radius), color, Tex2F(-1.0f, -1.0f)};
+    V2F_C4B_T2F b = {Vec2(pos.x - radius, pos.y + radius), color, Tex2F(-1.0f, 1.0f)};
+    V2F_C4B_T2F c = {Vec2(pos.x + radius, pos.y + radius), color, Tex2F(1.0f, 1.0f)};
+    V2F_C4B_T2F d = {Vec2(pos.x + radius, pos.y - radius), color, Tex2F(1.0f, -1.0f)};
 
     V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
     V2F_C4B_T2F_Triangle triangle0  = {a, b, c};
@@ -960,9 +960,9 @@ void DrawNodeEx::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, co
 
     ensureCapacity(vertex_count);
 
-    V2F_C4B_T2F a = {_vertices[0], color, Tex2F(0.0, 0.0)};
-    V2F_C4B_T2F b = {_vertices[1], color, Tex2F(0.0, 0.0)};
-    V2F_C4B_T2F c = {_vertices[2], color, Tex2F(0.0, 0.0)};
+    V2F_C4B_T2F a = {_vertices[0], color, Tex2F::ZERO};
+    V2F_C4B_T2F b = {_vertices[1], color, Tex2F::ZERO};
+    V2F_C4B_T2F c = {_vertices[2], color, Tex2F::ZERO};
 
     V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
     V2F_C4B_T2F_Triangle triangle   = {a, b, c};
@@ -1070,9 +1070,9 @@ inline void DrawNodeEx::_drawPolygon(const Vec2* verts,
             p2t::Point* vec3 = t->GetPoint(2);
 
             V2F_C4B_T2F_Triangle tmp = {
-                {Vec2(vec1->x, vec1->y), fillColor, Tex2F(0.0, 0.0)},
-                {Vec2(vec2->x, vec2->y), fillColor, Tex2F(0.0, 0.0)},
-                {Vec2(vec3->x, vec3->y), fillColor, Tex2F(0.0, 0.0)},
+                {Vec2(vec1->x, vec1->y), fillColor, Tex2F::ZERO},
+                {Vec2(vec2->x, vec2->y), fillColor, Tex2F::ZERO},
+                {Vec2(vec3->x, vec3->y), fillColor, Tex2F::ZERO},
             };
             *cursor++ = tmp;
         }
@@ -1098,7 +1098,7 @@ inline void DrawNodeEx::_drawPolygon(const Vec2* verts,
         };
         struct ExtrudeVerts* extrude = (struct ExtrudeVerts*)malloc(sizeof(struct ExtrudeVerts) * count);
 
-        for (int i = 0; i < count; i++)
+        for (unsigned int i = 0; i < count; i++)
         {
             Vec2 v0 = _vertices[(i - 1 + count) % count];
             Vec2 v1 = _vertices[i];
@@ -1111,7 +1111,7 @@ inline void DrawNodeEx::_drawPolygon(const Vec2* verts,
             extrude[i]  = {offset, n2};
         }
 
-        for (int i = 0; i < count; i++)
+        for (unsigned int i = 0; i < count; i++)
         {
             int j   = (i + 1) % count;
             Vec2 v0 = _vertices[i];
@@ -1194,14 +1194,14 @@ inline void DrawNodeEx::_drawPoly(const Vec2* poli,
         unsigned int i = 0;
         for (; i < numberOfPoints - 1; i++)
         {
-            *point       = {_vertices[i], color, Tex2F(0.0, 0.0)};
-            *(point + 1) = {_vertices[i + 1], color, Tex2F(0.0, 0.0)};
+            *point       = {_vertices[i], color, Tex2F::ZERO};
+            *(point + 1) = {_vertices[i + 1], color, Tex2F::ZERO};
             point += 2;
         }
         if (closePolygon)
         {
-            *point       = {_vertices[i], color, Tex2F(0.0, 0.0)};
-            *(point + 1) = {_vertices[0], color, Tex2F(0.0, 0.0)};
+            *point       = {_vertices[i], color, Tex2F::ZERO};
+            *(point + 1) = {_vertices[0], color, Tex2F::ZERO};
         }
 
         _customCommandLine.updateVertexBuffer(cursor, _bufferCountLine * sizeof(V2F_C4B_T2F),
