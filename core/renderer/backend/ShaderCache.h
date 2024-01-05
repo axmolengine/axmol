@@ -43,11 +43,8 @@ NS_AX_BACKEND_BEGIN
 class AX_DLL ShaderCache : public Ref
 {
 public:
-    /** returns the shared instance */
-    static ShaderCache* getInstance();
-
     /** purges the cache. It releases the retained instance. */
-    static void destroyInstance();
+    static void purge();
 
     /**
      * Create a vertex shader module and add it to cache.
@@ -69,14 +66,6 @@ public:
     void removeUnusedShader();
 
 protected:
-    virtual ~ShaderCache();
-
-    /**
-     * Initial shader cache.
-     * @return true if initial successful, otherwise false.
-     */
-    bool init();
-
     /**
      * New a shaderModule.
      * If it was created before, then just return the cached shader module.
@@ -88,7 +77,6 @@ protected:
     static backend::ShaderModule* newShaderModule(backend::ShaderStage stage, std::string_view shaderSource);
 
     static std::unordered_map<std::size_t, backend::ShaderModule*> _cachedShaders;
-    static ShaderCache* _sharedShaderCache;
 };
 
 // end of _backend group
