@@ -64,10 +64,10 @@ endif()
 
 # The common cross-platforms source files and header files
 file(GLOB_RECURSE GAME_HEADER
-    Source/*.h
+    Source/*.h Source/*.hpp
     )
 file(GLOB_RECURSE GAME_SOURCE
-    Source/*.cpp
+    Source/*.cpp Source/*.c
     )
 
 set(GAME_INC_DIRS
