@@ -82,7 +82,6 @@ Texture2D::~Texture2D()
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     VolatileTextureMgr::removeTexture(this);
 #endif
-    AXLOGINFO("deallocing Texture2D: %p - id=%u", this, _name);
 
     AX_SAFE_DELETE(_ninePatchInfo);
 
@@ -237,7 +236,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     default:
         break;
     }
-#elif !AX_GLES_PROFILE 
+#elif !AX_GLES_PROFILE
     // Non-GLES doesn't support follow render formats, needs convert PixelFormat::RGBA8
     // Note: axmol-1.1 deprecated A8, L8, LA8 as renderFormat, preferred R8, RG8
     switch (renderFormat)
