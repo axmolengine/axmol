@@ -1571,12 +1571,12 @@ if (!$setupOnly) {
     } else {
         # google gn build system: only support vs2022 currently
         $CONFIG_ALL_OPTIONS = $options.xc
-        $is_winrt = $target_os -eq 'winrt'
+        $is_winrt = $TARGET_OS -eq 'winrt'
         if ($is_winrt) {
             $CONFIG_ALL_OPTIONS += 'target_os=\"winuwp\"'
         }
         Write-Output ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
-        $cmdStr="gn gen out/release --sln=angle-release --ide=vs2022 ""--args=target_cpu=\""$BUILD_ARCH\"" $CONFIG_ALL_OPTIONS"""
+        $cmdStr="gn gen out/release --sln=angle-release --ide=vs2022 ""--args=target_cpu=\""$TARGET_ARCH\"" $CONFIG_ALL_OPTIONS"""
         Write-Output "Executing command: {$cmdStr}"
         cmd /c $cmdStr
 

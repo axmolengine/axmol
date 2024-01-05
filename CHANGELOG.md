@@ -119,7 +119,7 @@
 - rapidjson: 1.0.0 ==> 1.0.0-b4a6da3
 - simdjson(NEW): 3.6.3
 - webp: 1.3.1 ==> 1.3.2
-- yasio: 4.1.0 ==> 4.3.0
+- yasio: 4.1.0 ==> 4.1.4
 
 Notes:
 
