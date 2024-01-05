@@ -29,6 +29,7 @@
 - Add extension: Inspector by @iAndyHD3
 - Add *experimental* WebSocket support for both wasm and native platforms
 - Mark 32bit build deprecated, and will be removed in next release axmol-2.2.0
+- Add extension: DrawNodeEx by @aismann
 
 ### BugFixs
 
@@ -62,6 +63,7 @@
 - Fix UILayout crash problem by @aismann
 - Fix replace scene missing nullcheck for next scene by @armanhossiny
 - Fix a crash caused by missing android view nullcheck by @Arvant
+- Fix shader cache leak by @@j-jorge
 
 ### Improvements
 
@@ -97,6 +99,7 @@
 - Make `FileUtils::openFileStream` a const method by @rh101
 - Improve cmake scripts for managing 3rd libs
 - Add `Get TMXTilesetInfo` by name support by @lich426
+- Include hpp and c files in CMakeLists.txt of cpp template by @@lich426
 
 ### Break changes
 

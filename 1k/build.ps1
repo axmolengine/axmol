@@ -5,7 +5,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2012-2023 HALX99
+# Copyright (c) 2012-2024 HALX99
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@
 #
 # The 1k/build.ps1, will be core script of project https://github.com/axmolengine/1k
 # options
-#  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos,wasm
+#  -p: build target platform: win32,winrt(winuwp),linux,android,osx(mac),ios,tvos,watchos,wasm
 #      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first,
 #      if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
 #  -a: build arch: x86,x64,armv7,arm64
@@ -39,14 +39,14 @@
 #  -xt: cross build tool, default: cmake, for android can be gradlew, can be path of cross build tool program
 #  -xc: cross build tool configure options: i.e.  -xc '-Dbuild'
 #  -xb: cross build tool build options: i.e. -xb '--config','Release'
-#  -prefix: the install location for missing tools in system, default is "$HOME/build1k"
+#  -prefix: the install location for missing tools in system, default is "$HOME/.1kiss"
 #  -sdk: specific windows sdk version, i.e. -sdk '10.0.19041.0', leave empty, cmake will auto choose latest avaiable
 #  -setupOnly: this param present, only execute step: setup
 #  -configOnly: if this param present, will skip build step
 # support matrix
 #   | OS       |   Build targets      |  C/C++ compiler toolchain | Cross Build tool |
 #   +----------+----------------------+---------------------------+------------------|
-#   | Windows  |  win32,winuwp        | msvc,clang,gcc(mingw)     | cmake            |
+#   | Windows  |  win32,winrt        | msvc,clang,gcc(mingw)     | cmake            |
 #   | Linux    | linux,android        | gcc,ndk                   | cmake,gradle     |
 #   | macOS    | osx,ios,tvos,watchos | xcode                     | cmake            |
 # android gradle, there a two props:
@@ -58,7 +58,8 @@
 param(
     [switch]$configOnly,
     [switch]$setupOnly,
-    [switch]$forceConfig
+    [switch]$forceConfig,
+    [switch]$ndkOnly
 )
 
 $myRoot = $PSScriptRoot
@@ -73,10 +74,10 @@ $HOST_MAC = 2 # targets: android,ios,osx(macos),tvos,watchos
 $Global:IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 if ($Global:IsWin) {
     $HOST_OS = $HOST_WIN
-    $envPathSep = ';'
+    $ENV_PATH_SEP = ';'
 }
 else {
-    $envPathSep = ':'
+    $ENV_PATH_SEP = ':'
     if ($IsLinux) {
         $HOST_OS = $HOST_LINUX
     }
@@ -84,7 +85,7 @@ else {
         $HOST_OS = $HOST_MAC
     }
     else {
-        throw "Unsupported host OS to run build1k.ps1"
+        throw "Unsupported host OS to run 1k/build.ps1"
     }
 }
 
@@ -94,11 +95,11 @@ $Script:cmake_generator = $null
 
 class build1k {
     [void] println($msg) {
-        Write-Host "build1k: $msg"
+        Write-Host "1kiss: $msg"
     }
 
     [void] print($msg) {
-        Write-Host "build1k: $msg" -NoNewline
+        Write-Host "1kiss: $msg" -NoNewline
     }
 
     [System.Boolean] isfile([string]$path) {
@@ -203,15 +204,16 @@ $channels = @{}
 $cmdlinetools_rev = '10406996'
 
 $options = @{
-    p      = $null;
-    a      = $null;
-    d      = $null;
-    cc     = $null;
-    xt     = 'cmake';
-    prefix = $null;
-    xc     = @();
-    xb     = @();
-    sdk    = $null;
+    p      = $null
+    a      = $null
+    d      = $null
+    cc     = $null
+    t      = '' # cb_target
+    xt     = 'cmake'
+    prefix = $null
+    xc     = @()
+    xb     = @()
+    sdk    = $null
     dll    = $false
 }
 
@@ -257,6 +259,10 @@ if (!$TARGET_OS) {
     # choose host target if not specified by command line automatically
     $TARGET_OS = $options.p = $('win32', 'linux', 'osx').Get($HOST_OS)
 }
+$target_os_norm = @{winuwp = 'winrt'; mac = 'osx' }[$TARGET_OS]
+if ($target_os_norm) {
+    $TARGET_OS = $target_os_norm
+}
 $is_wasm = $TARGET_OS -eq 'wasm'
 
 if (!$is_wasm) {
@@ -283,7 +289,7 @@ $HOST_OS_NAME = $('windows', 'linux', 'macos').Get($HOST_OS)
 $TOOLCHAIN = $options.cc
 $toolchains = @{
     'win32'   = 'msvc';
-    'winuwp'  = 'msvc';
+    'winrt'   = 'msvc';
     'linux'   = 'gcc';
     'android' = 'ndk';
     'osx'     = 'xcode';
@@ -308,7 +314,7 @@ if (!$TOOLCHAIN_VER) {
     $TOOLCHAIN_NAME = $TOOLCHAIN
 }
 
-$external_prefix = if ($options.prefix) { $options.prefix } else { Join-Path $HOME '.build1k' }
+$external_prefix = if ($options.prefix) { $options.prefix } else { Join-Path $HOME '.1kiss' }
 if (!$b1k.isdir($external_prefix)) {
     $b1k.mkdirs($external_prefix)
 }
@@ -396,7 +402,7 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
             $env:PATH = $path
         }
         elseif ($mode -eq 'BOTH') {
-            $env:PATH = "$path$envPathSep$env:PATH"
+            $env:PATH = "$path$ENV_PATH_SEP$env:PATH"
         }
     }
     else {
@@ -443,7 +449,7 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
 
     # needs restore immidiately since further cmd invoke maybe require system bins
     if ($path) {
-        $env:PATH = "$path$envPathSep$storedPATH"
+        $env:PATH = "$path$ENV_PATH_SEP$storedPATH"
     }
 
     $found_rets = $null # prog_path,prog_version
@@ -513,7 +519,13 @@ function download_file($url, $out) {
 function download_and_expand($url, $out, $dest) {
     download_file $url $out
     if ($out.EndsWith('.zip')) {
-        Expand-Archive -Path $out -DestinationPath $dest
+        try {
+            Expand-Archive -Path $out -DestinationPath $dest
+        }
+        catch {
+            Remove-Item $out -Force
+            throw "1kiss: Expand archive $out fail, please try again"
+        }
     }
     elseif ($out.EndsWith('.tar.gz')) {
         if (!$dest.EndsWith('/')) {
@@ -544,7 +556,7 @@ function setup_nuget() {
     }
 
     if ($env:PATH.IndexOf($nuget_bin) -eq -1) {
-        $env:PATH = "$nuget_bin$envPathSep$env:PATH"
+        $env:PATH = "$nuget_bin$ENV_PATH_SEP$env:PATH"
     }
     $b1k.println("Using nuget: $nuget_prog, version: $nuget_ver")
     return $nuget_prog
@@ -593,7 +605,7 @@ function setup_ninja() {
         download_and_expand "https://github.com/ninja-build/ninja/releases/download/v$ninja_ver/ninja-$suffix.zip" $ninja_pkg "$external_prefix/ninja/"
     }
     if ($env:PATH.IndexOf($ninja_bin) -eq -1) {
-        $env:PATH = "$ninja_bin$envPathSep$env:PATH"
+        $env:PATH = "$ninja_bin$ENV_PATH_SEP$env:PATH"
     }
     $ninja_prog = (Join-Path $ninja_bin "ninja$exeSuffix")
 
@@ -673,7 +685,7 @@ function setup_cmake($skipOS = $false) {
     }
 
     if (($null -ne $cmake_bin) -and ($env:PATH.IndexOf($cmake_bin) -eq -1)) {
-        $env:PATH = "$cmake_bin$envPathSep$env:PATH"
+        $env:PATH = "$cmake_bin$ENV_PATH_SEP$env:PATH"
     }
     return $cmake_prog
 }
@@ -701,7 +713,7 @@ function setup_nsis() {
     $nsis_prog, $nsis_ver = find_prog -name 'nsis' -cmd 'makensis' -params '/VERSION' -path $nsis_bin -silent $true
     if (!$nsis_prog) {
         $b1k.rmdirs($nsis_bin)
-
+        
         download_and_expand "https://nchc.dl.sourceforge.net/project/nsis/NSIS%203/$nsis_ver/nsis-$nsis_ver.zip" "$external_prefix/nsis-$nsis_ver.zip" "$external_prefix"
         $nsis_dir = "$nsis_bin-$nsis_ver"
         if ($b1k.isdir($nsis_dir)) {
@@ -710,12 +722,43 @@ function setup_nsis() {
     }
 
     if ($env:PATH.IndexOf($nsis_bin) -eq -1) {
-        $env:PATH = "$nsis_bin$envPathSep$env:PATH"
+        $env:PATH = "$nsis_bin$ENV_PATH_SEP$env:PATH"
     }
     $nsis_prog = (Join-Path $nsis_bin "makensis$exeSuffix")
 
     $b1k.println("Using nsis: $nsis_prog, version: $nsis_ver")
     return $nsis_prog
+}
+
+function setup_nasm() {
+    if (!$manifest['nasm']) { return $null }
+    $nasm_prog, $nasm_ver = find_prog -name 'nasm' -path "$external_prefix/nasm" -mode 'BOTH' -silent $true
+
+    if (!$nasm_prog) {
+        if ($IsWindows) {
+            $nasm_bin = Join-Path $external_prefix "nasm-$nasm_ver"
+
+            if (!(Test-Path $nasm_bin -PathType Container)) {
+                download_and_expand "https://www.nasm.us/pub/nasm/releasebuilds/$nasm_ver/win64/nasm-$nasm_ver-win64.zip" "$external_prefix/nasm-$nasm_ver-win64.zip" "$external_prefix"
+            }
+            if ($env:PATH.IndexOf($nsis_bin) -eq -1) {
+                $env:PATH = "$nasm_bin$ENV_PATH_SEP$env:PATH"
+            }
+        }
+        elseif ($IsLinux) {
+            if ($(which dpkg)) {
+                sudo apt-get install nasm
+            }
+        }
+        elseif ($IsMacOS) {
+            brew install nasm
+        }
+    }
+
+    $nasm_prog, $nasm_ver = find_prog -name 'nasm' -path "$external_prefix/nasm" -mode 'BOTH' -silent $true
+    if ($nasm_prog) {
+        $b1k.println("Using nasm: $nasm_prog, version: $nasm_ver")
+    }
 }
 
 function setup_jdk() {
@@ -747,7 +790,7 @@ function setup_jdk() {
     $env:JAVA_HOME = $java_home
     $env:CLASSPATH = ".;$java_home\lib\dt.jar;$java_home\lib\tools.jar"
     if ($env:PATH.IndexOf($jdk_bin) -eq -1) {
-        $env:PATH = "$jdk_bin$envPathSep$env:PATH"
+        $env:PATH = "$jdk_bin$ENV_PATH_SEP$env:PATH"
     }
     $javac_prog = find_prog -name 'jdk' -cmd 'javac' -path $jdk_bin -mode 'ONLY' -silent $true
     if (!$javac_prog) {
@@ -801,7 +844,7 @@ function setup_llvm() {
 
         # add our llvm root to PATH temporary
         if (($env:PATH.IndexOf($llvm_bin) -eq -1)) {
-            $env:PATH = "$llvm_bin$envPathSep$env:PATH"
+            $env:PATH = "$llvm_bin$ENV_PATH_SEP$env:PATH"
         }
     }
 }
@@ -930,8 +973,12 @@ function setup_android_sdk() {
             $ndkFullVer = $ndks[$ndk_ver]
 
             ((1..10 | ForEach-Object { "yes"; Start-Sleep -Milliseconds 100 }) | . $sdkmanager_prog --licenses --sdk_root=$sdk_root) | Out-Host
-            exec_prog -prog $sdkmanager_prog -params '--verbose', "--sdk_root=$sdk_root", 'platform-tools', 'cmdline-tools;latest', 'platforms;android-33', 'build-tools;30.0.3', 'cmake;3.22.1', $ndkFullVer | Out-Host
-
+            if (!$ndkOnly) {
+                exec_prog -prog $sdkmanager_prog -params '--verbose', "--sdk_root=$sdk_root", 'platform-tools', 'cmdline-tools;latest', 'platforms;android-33', 'build-tools;30.0.3', 'cmake;3.22.1', $ndkFullVer | Out-Host
+            }
+            else {
+                exec_prog -prog $sdkmanager_prog -params '--verbose', "--sdk_root=$sdk_root", $ndkFullVer | Out-Host
+            }
             $fullVer = $ndkFullVer.Split(';')[1]
             $ndk_root = (Resolve-Path -Path "$sdk_root/ndk/$fullVer").Path
         }
@@ -973,6 +1020,76 @@ function setup_emsdk() {
     else {
         $b1k.println("Using emcc: $emcc_prog, version: $emcc_ver")
     }
+}
+
+
+function find_vs() {
+    $vs_versions = "2022", "2019"
+    $vs_roots = "$env:ProgramFiles\Microsoft Visual Studio", "$env:ProgramFiles (x86)\Microsoft Visual Studio"
+    $vs_editions = "Enterprise", "Professional", "Community", "Preview"
+
+    Foreach ($vs_root in $vs_roots) {  
+        Foreach ($vs_version in $vs_versions) {
+            Foreach ($vs_edition in $vs_editions) {
+                $vs_path = "$vs_root\$vs_version\$vs_edition"
+                if (Test-Path "$vs_path" -PathType Container) {
+                    return $vs_path
+                }
+            }
+        }
+    }
+    
+    return $null
+}
+function setup_devenv($vs_path = $null) {
+    $cl_prog, $cl_ver = find_prog -name 'cl' -silent $true
+    if (!$cl_prog) {
+        if (!$vs_path) { $vs_path = find_vs }
+        if ($vs_path) {
+            Import-Module "$vs_path\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
+            Enter-VsDevShell -VsInstanceId a55efc1d -SkipAutomaticLocation -DevCmdArguments "-arch=$target_arch -host_arch=x64 -no_logo"
+
+            # msvc14x support
+            $use_msvcr14x = $null
+            if ([bool]::TryParse($env:use_msvcr14x, [ref]$use_msvcr14x) -and $use_msvcr14x) {
+                if ("$env:LIB".IndexOf('msvcr14x') -eq -1) {
+                    $msvcr14x_root = $env:msvcr14x_ROOT
+                    $env:Platform = $target_arch
+                    Invoke-Expression -Command "$msvcr14x_root\msvcr14x_nmake.ps1"
+                }
+            
+                println "LIB=$env:LIB"
+            }
+        } else {
+            throw "Visual Studio not installed!"
+        }
+    }
+}
+
+# google gn build system, current windows only for build angleproject/dawn on windows
+function setup_gclient() {
+    if (!$ninja_prog) {
+        $ninja_prog = setup_ninja
+    }
+
+    if ($TARGET_OS.StartsWith('win')) {
+        setup_devenv
+    }
+
+    # setup gclient tool
+    # download depot_tools
+    # git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git $gclient_dir
+    $gclient_dir = Join-Path $external_prefix 'depot_tools'
+    if(!(Test-Path $gclient_dir -PathType Container)) {
+        $b1k.mkdirs($gclient_dir)
+        Invoke-WebRequest -Uri "https://storage.googleapis.com/chrome-infra/depot_tools.zip" -OutFile "${gclient_dir}.zip"
+        Expand-Archive -Path "${gclient_dir}.zip" -DestinationPath $gclient_dir
+    }
+
+    if ($env:PATH.IndexOf($gclient_dir) -eq -1) {
+        $env:PATH = "${gclient_dir}$ENV_PATH_SEP${env:PATH}"
+    }
+    $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
 }
 
 # preprocess methods:
@@ -1019,7 +1136,7 @@ function preprocess_win([string[]]$inputOptions) {
         }
 
         # platform
-        if ($TARGET_OS -eq "winuwp") {
+        if ($TARGET_OS -eq "winrt") {
             '-DCMAKE_SYSTEM_NAME=WindowsStore', '-DCMAKE_SYSTEM_VERSION=10.0'
         }
 
@@ -1078,9 +1195,10 @@ function preprocess_andorid([string[]]$inputOptions) {
         # If set to ONLY, then only the roots in CMAKE_FIND_ROOT_PATH will be searched
         # If set to BOTH, then the host system paths and the paths in CMAKE_FIND_ROOT_PATH will be searched
         # If set to NEVER, then the roots in CMAKE_FIND_ROOT_PATH will be ignored and only the host system root will be used
-        $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH'
-        $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH'
-        $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH'
+        # CMAKE_FIND_ROOT_PATH is preferred for additional search directories when cross-compiling
+        # $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH'
+        # $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH'
+        # $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH'
         # by default, we want find host program only when cross-compiling
         $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER'
     }
@@ -1133,7 +1251,7 @@ function validHostAndToolchain() {
             'host'      = @{'windows' = $True };
             'toolchain' = @{'msvc' = $True; 'clang' = $True; 'gcc' = $True };
         };
-        'winuwp'  = @{
+        'winrt'   = @{
             'host'      = @{'windows' = $True };
             'toolchain' = @{'msvc' = $True; };
         };
@@ -1167,7 +1285,7 @@ function validHostAndToolchain() {
 
 $proprocessTable = @{
     'win32'   = ${function:preprocess_win};
-    'winuwp'  = ${function:preprocess_win};
+    'winrt'   = ${function:preprocess_win};
     'linux'   = ${function:preprocess_linux};
     'android' = ${function:preprocess_andorid};
     'osx'     = ${function:preprocess_osx};
@@ -1185,7 +1303,7 @@ $null = setup_glslcc
 
 $cmake_prog = setup_cmake
 
-if ($TARGET_OS -eq 'win32' -or $TARGET_OS -eq 'winuwp') {
+if ($TARGET_OS -eq 'win32' -or $TARGET_OS -eq 'winrt') {
     $nuget_prog = setup_nuget
 }
 
@@ -1209,7 +1327,7 @@ elseif ($TARGET_OS -eq 'android') {
     if (!(ensure_cmake_ninja $cmake_prog $ninja_prog)) {
         $cmake_prog = setup_cmake -Force
         if (!(ensure_cmake_ninja $cmake_prog $ninja_prog)) {
-            throw "Ensure ninja in cmake bin directory fail"
+            $b1k.println("Ensure ninja in cmake bin directory fail")
         }
     }
 }
@@ -1218,231 +1336,254 @@ elseif ($TARGET_OS -eq 'wasm') {
     . setup_emsdk
 }
 
+$is_host_target = ($TARGET_OS -eq 'win32') -or ($TARGET_OS -eq 'linux') -or ($TARGET_OS -eq 'osx')
+
 if (!$setupOnly) {
     $stored_cwd = $(Get-Location).Path
     if ($options.d) {
         Set-Location $options.d
     }
 
-    # parsing build optimize flag from build_options
-    $buildOptions = [array]$options.xb
-    $nopts = $buildOptions.Count
-    $optimize_flag = $null
-    for ($i = 0; $i -lt $nopts; ++$i) {
-        $optv = $buildOptions[$i]
-        switch ($optv) {
-            '--config' {
-                $optimize_flag = $buildOptions[$i++ + 1]
-            }
-            '--target' {
-                $cmake_target = $buildOptions[$i++ + 1]
+    if ($options.xt -ne 'gn') {
+        # parsing build optimize flag from build_options
+        $buildOptions = [array]$options.xb
+        $nopts = $buildOptions.Count
+        $optimize_flag = $null
+        for ($i = 0; $i -lt $nopts; ++$i) {
+            $optv = $buildOptions[$i]
+            switch ($optv) {
+                '--config' {
+                    $optimize_flag = $buildOptions[$i++ + 1]
+                }
+                '--target' {
+                    $cmake_target = $buildOptions[$i++ + 1]
+                }
             }
         }
-    }
 
-    $BUILD_ALL_OPTIONS = @()
-    $BUILD_ALL_OPTIONS += $buildOptions
-    if (!$optimize_flag) {
-        if ($cmake_optimize_flags) {
-            $optimize_flag = $cmake_optimize_flags[$TARGET_OS]
-        }
+        $BUILD_ALL_OPTIONS = @()
+        $BUILD_ALL_OPTIONS += $buildOptions
         if (!$optimize_flag) {
-            $optimize_flag = 'Release'
+            if ($cmake_optimize_flags) {
+                $optimize_flag = $cmake_optimize_flags[$TARGET_OS]
+            }
+            if (!$optimize_flag) {
+                $optimize_flag = 'Release'
+            }
+            $BUILD_ALL_OPTIONS += '--config', $optimize_flag
         }
-        $BUILD_ALL_OPTIONS += '--config', $optimize_flag
-    }
 
-    # enter building steps
-    $b1k.println("Building target $TARGET_OS on $HOST_OS_NAME with toolchain $TOOLCHAIN ...")
+        # enter building steps
+        $b1k.println("Building target $TARGET_OS on $HOST_OS_NAME with toolchain $TOOLCHAIN ...")
 
-    # step1. preprocess cross make options
-    $CONFIG_ALL_OPTIONS = [array]$(& $proprocessTable[$TARGET_OS] -inputOptions @() )
+        # step1. preprocess cross make options
+        $CONFIG_ALL_OPTIONS = [array]$(& $proprocessTable[$TARGET_OS] -inputOptions @() )
 
-    if (!$CONFIG_ALL_OPTIONS) {
-        $CONFIG_ALL_OPTIONS = @()
-    }
+        if (!$CONFIG_ALL_OPTIONS) {
+            $CONFIG_ALL_OPTIONS = @()
+        }
 
-    # determine generator, build_dir, inst_dir for non gradlew projects
-    if (!$is_gradlew) {
-        if (!$cmake_generator -and !$TARGET_OS.StartsWith('win')) {
-            # the default generator of unix targets: linux, osx, ios, android, wasm
-            if (!$cmake_generators) {
-                $cmake_generators = @{
-                    'linux'   = 'Unix Makefiles'
-                    'android' = 'Ninja'
-                    'wasm'    = 'Ninja'
-                    'osx'     = 'Xcode'
-                    'ios'     = 'Xcode'
-                    'tvos'    = 'Xcode'
-                    'watchos' = 'Xcode'
+        # determine generator, build_dir, inst_dir for non gradlew projects
+        if (!$is_gradlew) {
+            if (!$cmake_generator -and !$TARGET_OS.StartsWith('win')) {
+                # the default generator of unix targets: linux, osx, ios, android, wasm
+                if (!$cmake_generators) {
+                    $cmake_generators = @{
+                        'linux'   = 'Unix Makefiles'
+                        'android' = 'Ninja'
+                        'wasm'    = 'Ninja'
+                        'osx'     = 'Xcode'
+                        'ios'     = 'Xcode'
+                        'tvos'    = 'Xcode'
+                        'watchos' = 'Xcode'
+                    }
+                }
+                $cmake_generator = $cmake_generators[$TARGET_OS]
+                if ($null -eq $cmake_generator) {
+                    $cmake_generator = if (!$IsWin) { 'Unix Makefiles' } else { 'Ninja' }
                 }
             }
-            $cmake_generator = $cmake_generators[$options.p]
-            if ($null -eq $cmake_generator) {
-                $cmake_generator = if (!$IsWin) { 'Unix Makefiles' } else { 'Ninja' }
-            }
-        }
 
-        if ($cmake_generator) {
-            $using_ninja = $cmake_generator.StartsWith('Ninja')
+            if ($cmake_generator) {
+                $using_ninja = $cmake_generator.StartsWith('Ninja')
 
-            if (!$is_wasm) {
-                $CONFIG_ALL_OPTIONS += '-G', $cmake_generator
-            }
+                if (!$is_wasm) {
+                    $CONFIG_ALL_OPTIONS += '-G', $cmake_generator
+                }
 
-            if ($cmake_generator -eq 'Unix Makefiles' -or $using_ninja) {
-                $CONFIG_ALL_OPTIONS += "-DCMAKE_BUILD_TYPE=$optimize_flag"
-            }
+                if ($cmake_generator -eq 'Unix Makefiles' -or $using_ninja) {
+                    $CONFIG_ALL_OPTIONS += "-DCMAKE_BUILD_TYPE=$optimize_flag"
+                }
 
-            if ($using_ninja -and $options.p -eq 'android') {
-                $CONFIG_ALL_OPTIONS += "-DCMAKE_MAKE_PROGRAM=$ninja_prog"
-            }
-        }
-
-        $BUILD_DIR = $null
-        $INST_DIR = $null
-        $xopts_hints = 2
-        $xopt_presets = 0
-        $xprefix_optname = '-DCMAKE_INSTALL_PREFIX='
-        $xopts = [array]$options.xc
-        foreach ($opt in $xopts) {
-            if ($opt.StartsWith('-B')) {
-                $BUILD_DIR = $opt.Substring(2).Trim()
-                ++$xopt_presets
-            }
-            elseif ($opt.StartsWith($xprefix_optname)) {
-                ++$xopt_presets
-                $INST_DIR = $opt.SubString($xprefix_optname.Length)
-            }
-            if ($xopt_presets -eq $xopts_hints) {
-                break
-            }
-        }
-        $is_host_target = ($TARGET_OS -eq 'win32') -or ($TARGET_OS -eq 'linux') -or ($TARGET_OS -eq 'osx')
-        function resolve_out_dir($prefix, $category) {
-            if (!$prefix) {
-                $prefix = $category
-            }
-            if ($is_host_target) {
-                $out_dir = "${prefix}_${TARGET_ARCH}"
-            }
-            else {
-                $out_dir = "${prefix}_${TARGET_OS}"
-                if ($TARGET_ARCH -ne '*') {
-                    $out_dir += "_$TARGET_ARCH"
+                if ($using_ninja -and $TARGET_OS -eq 'android') {
+                    $CONFIG_ALL_OPTIONS += "-DCMAKE_MAKE_PROGRAM=$ninja_prog"
                 }
             }
-            return $b1k.realpath($out_dir)
-        }
-        if (!$BUILD_DIR) {
-            $BUILD_DIR = resolve_out_dir $cmake_build_prefix 'build'
-        }
-        if (!$INST_DIR) {
-            $INST_DIR = resolve_out_dir $cmake_install_prefix 'install'
-            $CONFIG_ALL_OPTIONS += "-DCMAKE_INSTALL_PREFIX=$INST_DIR"
-        }
-    } else { # android gradle
-        # replace all cmake config options -DXXX to -P_1K_XXX
-        $xopts = @()
-        foreach($opt in $options.xc) {
-            if($opt.startsWith('-D')) {
-                $xopts += "-P_1K_$($opt.substring(2))"
+
+            $BUILD_DIR = $null
+            $INST_DIR = $null
+            $xopts_hints = 2
+            $xopt_presets = 0
+            $xprefix_optname = '-DCMAKE_INSTALL_PREFIX='
+            $xopts = [array]$options.xc
+            foreach ($opt in $xopts) {
+                if ($opt.StartsWith('-B')) {
+                    $BUILD_DIR = $opt.Substring(2).Trim()
+                    ++$xopt_presets
+                }
+                elseif ($opt.StartsWith($xprefix_optname)) {
+                    ++$xopt_presets
+                    $INST_DIR = $opt.SubString($xprefix_optname.Length)
+                }
+                if ($xopt_presets -eq $xopts_hints) {
+                    break
+                }
             }
-            elseif($opt.startsWith('-P')) {
-                $xopts += $opt
-            } # ignore unknown option type
-        }
-    }
-
-    # step2. apply additional cross make options
-    if ($xopts.Count -gt 0) {
-        $b1k.println("Apply additional cross make options: $($xopts), Count={0}" -f $xopts.Count)
-        $CONFIG_ALL_OPTIONS += $xopts
-    }
-
-    $b1k.println("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
-
-    if (($TARGET_OS -eq 'android') -and $is_gradlew) {
-        $storedLocation = (Get-Location).Path
-        $build_tool = (Get-Command $options.xt).Source
-        $build_tool_dir = Split-Path $build_tool -Parent
-        Set-Location $build_tool_dir
-        if (!$configOnly) {
-            if ($optimize_flag -eq 'Debug') {
-                & $build_tool assembleDebug $CONFIG_ALL_OPTIONS | Out-Host
+            function resolve_out_dir($prefix, $category) {
+                if (!$prefix) {
+                    $prefix = $category
+                }
+                if ($is_host_target) {
+                    $out_dir = "${prefix}_${TARGET_ARCH}"
+                }
+                else {
+                    $out_dir = "${prefix}_${TARGET_OS}"
+                    if ($TARGET_ARCH -ne '*') {
+                        $out_dir += "_$TARGET_ARCH"
+                    }
+                }
+                return $b1k.realpath($out_dir)
             }
-            else {
-                & $build_tool assembleRelease $CONFIG_ALL_OPTIONS | Out-Host
+            if (!$BUILD_DIR) {
+                $BUILD_DIR = resolve_out_dir $cmake_build_prefix 'build'
+            }
+            if (!$INST_DIR) {
+                $INST_DIR = resolve_out_dir $cmake_install_prefix 'install'
+                $CONFIG_ALL_OPTIONS += "-DCMAKE_INSTALL_PREFIX=$INST_DIR"
             }
         }
         else {
-            & $build_tool tasks
-        }
-        Set-Location $storedLocation
-    }
-    else {
-        # step3. configure
-
-        $workDir = $(Get-Location).Path
-
-        $mainDep = Join-Path $workDir 'CMakeLists.txt'
-        if (!$b1k.isfile($mainDep)) {
-            throw "Missing CMakeLists.txt in $workDir"
-        }
-
-        $mainDepChanged = $false
-        # A Windows file time is a 64-bit value that represents the number of 100-nanosecond
-        $tempFileItem = Get-Item $mainDep
-        $lastWriteTime = $tempFileItem.LastWriteTime.ToFileTimeUTC()
-        $tempFile = Join-Path $BUILD_DIR 'b1k_cache.txt'
-
-        $storeHash = 0
-        if ($b1k.isfile($tempFile)) {
-            $storeHash = Get-Content $tempFile -Raw
-        }
-        $hashValue = $b1k.hash("$CONFIG_ALL_OPTIONS#$lastWriteTime")
-        $mainDepChanged = "$storeHash" -ne "$hashValue"
-        $cmakeCachePath = $b1k.realpath("$BUILD_DIR/CMakeCache.txt")
-
-        if ($mainDepChanged -or !$b1k.isfile($cmakeCachePath) -or $forceConfig) {
-            if (!$is_wasm) {
-                cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
+            # android gradle
+            # replace all cmake config options -DXXX to -P_1K_XXX
+            $xopts = @()
+            foreach ($opt in $options.xc) {
+                if ($opt.startsWith('-D')) {
+                    $xopts += "-P_1K_$($opt.substring(2))"
+                }
+                elseif ($opt.startsWith('-P')) {
+                    $xopts += $opt
+                } # ignore unknown option type
             }
-            else {
-                emcmake cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
-            }
-            Set-Content $tempFile $hashValue -NoNewline
         }
 
-        if (!$configOnly) {
-            if (!$is_engine) {
-                if (!$b1k.isfile($cmakeCachePath)) {
-                    throw "The cmake generate incomplete, pelase add '-f' to re-generate again"
+        # step2. apply additional cross make options
+        if ($xopts.Count -gt 0) {
+            $b1k.println("Apply additional cross make options: $($xopts), Count={0}" -f $xopts.Count)
+            $CONFIG_ALL_OPTIONS += $xopts
+        }
+
+        $b1k.println("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
+
+        if (($TARGET_OS -eq 'android') -and $is_gradlew) {
+            $storedLocation = (Get-Location).Path
+            $build_tool = (Get-Command $options.xt).Source
+            $build_tool_dir = Split-Path $build_tool -Parent
+            Set-Location $build_tool_dir
+            if (!$configOnly) {
+                if ($optimize_flag -eq 'Debug') {
+                    & $build_tool assembleDebug $CONFIG_ALL_OPTIONS | Out-Host
+                }
+                else {
+                    & $build_tool assembleRelease $CONFIG_ALL_OPTIONS | Out-Host
                 }
             }
-
-            # step4. build
-            # apply additional build options
-            $BUILD_ALL_OPTIONS += "--parallel"
-            if ($TARGET_OS -eq 'linux') {
-                $BUILD_ALL_OPTIONS += "$(nproc)"
+            else {
+                & $build_tool tasks
             }
-            if (($cmake_generator -eq 'Xcode') -and ($BUILD_ALL_OPTIONS.IndexOf('--verbose') -eq -1)) {
-                $BUILD_ALL_OPTIONS += '--', '-quiet'
-            }
-            $b1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
-
-            cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS | Out-Host
+            Set-Location $storedLocation
         }
-    }
+        else {
+            # step3. configure
 
-    $env:buildResult = ConvertTo-Json @{
-        buildDir     = $BUILD_DIR
-        targetOS     = $TARGET_OS
-        hostArch     = $hostArch
-        isHostArch   = $TARGET_ARCH -eq $hostArch
-        isHostTarget = $is_host_target
-        compilerID   = $TOOLCHAIN_NAME
+            $workDir = $(Get-Location).Path
+
+            $mainDep = Join-Path $workDir 'CMakeLists.txt'
+            if (!$b1k.isfile($mainDep)) {
+                $b1k.println("Missing CMakeLists.txt in $workDir")
+                Set-Location $stored_cwd
+                return
+            }
+
+            $mainDepChanged = $false
+            # A Windows file time is a 64-bit value that represents the number of 100-nanosecond
+            $tempFileItem = Get-Item $mainDep
+            $lastWriteTime = $tempFileItem.LastWriteTime.ToFileTimeUTC()
+            $tempFile = Join-Path $BUILD_DIR 'b1k_cache.txt'
+
+            $storeHash = 0
+            if ($b1k.isfile($tempFile)) {
+                $storeHash = Get-Content $tempFile -Raw
+            }
+            $hashValue = $b1k.hash("$CONFIG_ALL_OPTIONS#$lastWriteTime")
+            $mainDepChanged = "$storeHash" -ne "$hashValue"
+            $cmakeCachePath = $b1k.realpath("$BUILD_DIR/CMakeCache.txt")
+
+            if ($mainDepChanged -or !$b1k.isfile($cmakeCachePath) -or $forceConfig) {
+                if (!$is_wasm) {
+                    cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
+                }
+                else {
+                    emcmake cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
+                }
+                Set-Content $tempFile $hashValue -NoNewline
+            }
+
+            if (!$configOnly) {
+                if (!$is_engine) {
+                    if (!$b1k.isfile($cmakeCachePath)) {
+                        throw "The cmake generate incomplete, pelase add '-f' to re-generate again"
+                    }
+                }
+
+                # step4. build
+                # apply additional build options
+                $BUILD_ALL_OPTIONS += "--parallel"
+                if ($TARGET_OS -eq 'linux') {
+                    $BUILD_ALL_OPTIONS += "$(nproc)"
+                }
+                if (($cmake_generator -eq 'Xcode') -and ($BUILD_ALL_OPTIONS.IndexOf('--verbose') -eq -1)) {
+                    $BUILD_ALL_OPTIONS += '--', '-quiet'
+                }
+                $b1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
+
+                cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS | Out-Host
+            }
+        }
+
+        $env:buildResult = ConvertTo-Json @{
+            buildDir     = $BUILD_DIR
+            targetOS     = $TARGET_OS
+            hostArch     = $hostArch
+            isHostArch   = $TARGET_ARCH -eq $hostArch
+            isHostTarget = $is_host_target
+            compilerID   = $TOOLCHAIN_NAME
+        }
+    } else {
+        # google gn build system: only support vs2022 currently
+        $CONFIG_ALL_OPTIONS = $options.xc
+        $is_winrt = $target_os -eq 'winrt'
+        if ($is_winrt) {
+            $CONFIG_ALL_OPTIONS += 'target_os=\"winuwp\"'
+        }
+        Write-Output ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
+        $cmdStr="gn gen out/release --sln=angle-release --ide=vs2022 ""--args=target_cpu=\""$BUILD_ARCH\"" $CONFIG_ALL_OPTIONS"""
+        Write-Output "Executing command: {$cmdStr}"
+        cmd /c $cmdStr
+
+        # build
+        $cmdStr="autoninja -C out\release --verbose $(${options}.t)"
+        Write-Output "Executing command: {$cmdStr}"
+        cmd /c $cmdStr
     }
 
     Set-Location $stored_cwd
