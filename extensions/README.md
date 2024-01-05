@@ -61,3 +61,9 @@
 - Upstream: https://github.com/EsotericSoftware/spine-runtimes
 - Version: 4.1-c9af18e with changes to adapte axmol
 - License: Spine Runtimes License
+
+## DrawNodeEx
+
+- Upstream: https://github.com/axmolengine/axmol
+- Version: 0.9
+- License: MIT
