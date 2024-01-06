@@ -258,12 +258,19 @@ $TARGET_OS = $options.p
 if (!$TARGET_OS) {
     # choose host target if not specified by command line automatically
     $TARGET_OS = $options.p = $('win32', 'linux', 'osx').Get($HOST_OS)
+} else {
+    $target_os_norm = @{winuwp = 'winrt'; mac = 'osx' }[$TARGET_OS]
+    if ($target_os_norm) {
+        $TARGET_OS = $target_os_norm
+    }
 }
-$target_os_norm = @{winuwp = 'winrt'; mac = 'osx' }[$TARGET_OS]
-if ($target_os_norm) {
-    $TARGET_OS = $target_os_norm
-}
-$is_wasm = $TARGET_OS -eq 'wasm'
+# define some useful global vars
+$Global:is_wasm = $TARGET_OS -eq 'wasm'
+$Global:is_winrt = ($target_os -eq 'winrt')
+$Global:is_win_family = $is_winrt -or ($target_os -eq 'win32')
+$Global:is_apple_family = !!(@{'osx' = $true; 'ios' = $true; 'tvos' = $true }[$TARGET_OS])
+
+$Global:is_gh_act = "$env:GITHUB_ACTIONS" -eq 'true'
 
 if (!$is_wasm) {
     $TARGET_ARCH = $options.a
@@ -1322,6 +1329,14 @@ elseif ($TARGET_OS -eq 'android') {
     $sdk_root, $ndk_root = setup_android_sdk
     $env:ANDROID_HOME = $sdk_root
     $env:ANDROID_NDK = $ndk_root
+    # sync ndk env vars for some library required, i.e. will fix openssl issues:
+    # no NDK xxx-linux-android-gcc on $PATH at (eval 10) line 142.
+    # Note: github action vm also have follow env vars
+    $env:ANDROID_NDK_HOME = $ndk_root
+    $env:ANDROID_NDK_ROOT = $ndk_root
+
+    $ndk_host = @('win', 'linux', 'darwin').Get($HOST_OS)
+    $env:ANDROID_NDK_BIN = Join-Path $ndk_root "toolchains/llvm/prebuilt/$ndk_host-x86_64/bin"
 
     # ensure ninja in cmake_bin
     if (!(ensure_cmake_ninja $cmake_prog $ninja_prog)) {
@@ -1329,6 +1344,13 @@ elseif ($TARGET_OS -eq 'android') {
         if (!(ensure_cmake_ninja $cmake_prog $ninja_prog)) {
             $b1k.println("Ensure ninja in cmake bin directory fail")
         }
+    }
+
+    function active_ndk_toolchain() {
+        if ($env:PATH.IndexOf($env:ANDROID_NDK_BIN) -eq -1) {
+            $env:PATH = "$env:ANDROID_NDK_BIN$ENV_PATH_SEP$env:PATH"
+        }
+        $clang_prog, $clang_ver = find_prog -name 'clang'
     }
 }
 elseif ($TARGET_OS -eq 'wasm') {
