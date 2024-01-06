@@ -30,6 +30,7 @@
 - Add *experimental* WebSocket support for both wasm and native platforms
 - Mark 32bit build deprecated, and will be removed in next release axmol-2.2.0
 - Add extension: DrawNodeEx by @aismann
+- Add fairygui lua support by @Samoongeer
 
 ### BugFixs
 
@@ -108,7 +109,7 @@
 ### 3rdparties updates
 
 - astcenc: 4.5.0 ==> 4.6.1
-- c-ares: 1.19.1 ==> 1.23.0 (1.24.0 available)
+- c-ares: 1.19.1 ==> 1.23.0 (1.25.0 available)
 - clipper2: 1.2.2 ==> 1.3.0
 - curl: 8.2.1 ==> 8.5.0
 - jpeg-turbo: 3.0.0 ==> 3.0.1
@@ -120,6 +121,7 @@
 - simdjson(NEW): 3.6.3
 - webp: 1.3.1 ==> 1.3.2
 - yasio: 4.1.0 ==> 4.1.4
+- fmt: 10.1.1 ==> 10.2.1
 
 Notes:
 
