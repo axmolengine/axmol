@@ -92,7 +92,7 @@ function axmol_build() {
 function axmol_deploy() {
     $sub_args = $args
     . axmol_build @sub_args
-    if ($TARGET_OS -eq 'winuwp') {
+    if ($TARGET_OS -eq 'winrt') {
         $appxManifestFile = Join-Path $BUILD_DIR "bin/$cmake_target/$optimize_flag/Appx/AppxManifest.xml"
 
         # deploy by visual studio major program: devenv.exe
@@ -171,7 +171,7 @@ function axmol_deploy() {
 function axmol_run() {
     $sub_args = $args
     . axmol_deploy @sub_args
-    if ($TARGET_OS -eq 'winuwp') {
+    if ($TARGET_OS -eq 'winrt') {
         explorer.exe shell:AppsFolder\$appxPkgName!App
     }
     elseif($TARGET_OS -eq 'win32') {
@@ -234,7 +234,7 @@ Build projects to binary.
 
 options:
   -h: show this help message and exit
-  -p: build target platform, valid value are: win32,winuwp,linux,android,osx,ios,tvos,wasm
+  -p: build target platform, valid value are: win32,winuwp(winrt),linux,android,osx,ios,tvos,wasm
       for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first,
       if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
   -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'

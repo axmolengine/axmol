@@ -28,38 +28,14 @@
 NS_AX_BACKEND_BEGIN
 
 std::unordered_map<std::size_t, backend::ShaderModule*> ShaderCache::_cachedShaders;
-ShaderCache* ShaderCache::_sharedShaderCache = nullptr;
 
-ShaderCache* ShaderCache::getInstance()
-{
-    if (!_sharedShaderCache)
-    {
-        _sharedShaderCache = new ShaderCache();
-        if (!_sharedShaderCache->init())
-        {
-            AX_SAFE_DELETE(_sharedShaderCache);
-        }
-    }
-    return _sharedShaderCache;
-}
-
-void ShaderCache::destroyInstance()
-{
-    AX_SAFE_RELEASE_NULL(_sharedShaderCache);
-}
-
-ShaderCache::~ShaderCache()
+void ShaderCache::purge()
 {
     for (auto&& shaderModule : _cachedShaders)
     {
         AX_SAFE_RELEASE(shaderModule.second);
     }
-    AXLOGINFO("deallocing ShaderCache: %p", this);
-}
-
-bool ShaderCache::init()
-{
-    return true;
+    AXLOGINFO("purging ShaderCache");
 }
 
 backend::ShaderModule* ShaderCache::newVertexShaderModule(std::string_view shaderSource)
