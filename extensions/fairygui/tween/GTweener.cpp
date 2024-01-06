@@ -84,12 +84,7 @@ GTweener* GTweener::setTargetAny(void* value)
     return this;
 }
 
-GTweener* GTweener::setTarget(ax::Ref* value)
-{
-    return setTarget(value, TweenPropType::None);
-}
-
-GTweener* GTweener::setTarget(ax::Ref* target, TweenPropType propType)
+GTweener* GTweener::setTarget(ax::Ref* target, TweenPropType propType/* = TweenPropType::None*/)
 {
     AX_SAFE_RELEASE(_refTarget);
     _target = _refTarget = target;

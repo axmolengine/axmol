@@ -244,6 +244,7 @@ def main():
                     'ax_webview.ini' : ('ax_webview', 'axlua_webview_auto'), \
                     'ax_physics3d.ini' : ('ax_physics3d', 'axlua_physics3d_auto'), \
                     'ax_navmesh.ini' : ('ax_navmesh', 'axlua_navmesh_auto'), \
+                    'ax_fairygui.ini' : ('ax_fairygui', 'axlua_fairygui_auto'), \
                     }
         target = 'lua'
         generator_py = '%s/generator.py' % cxx_generator_root
@@ -251,7 +252,7 @@ def main():
             args = cmd_args[key]
             cfg = '%s/%s' % (tolua_root, key)
             print('Generating bindings for %s...' % (key[:-4]))
-            command = '%s %s %s -s %s -t %s -o %s -n %s' % (python_bin, generator_py, cfg, args[0], target, output_dir, args[1])
+            command = '"%s" %s %s -s %s -t %s -o %s -n %s' % (python_bin, generator_py, cfg, args[0], target, output_dir, args[1])
             print(command)
             _run_cmd(command)
 
