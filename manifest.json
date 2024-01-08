@@ -1,6 +1,6 @@
 {
   "versions": {
-    "1kdist": "61",
+    "1kdist": "71",
     "oboe": "1.8.0",
     "kcp": "1.7-f2aa30e",
     "lz4": "1.9.4",
@@ -20,13 +20,13 @@
     },
     "gitee":
     {
-      "1kdist": "axmolengine/1k/releases/download",
-      "oboe": "axmolengine/oboe.git",
-      "kcp": "axmolengine/kcp.git",
-      "lz4": "axmolengine/lz4.git",
+      "1kdist": "simdsoft/1kiss/releases/download",
+      "oboe": "simdsoft/oboe.git",
+      "kcp": "simdsoft/kcp.git",
+      "lz4": "simdsoft/lz4.git",
       "yaml-cpp": "mirrors/yaml-cpp.git",
-      "box2d-optimized": "axmolengine/box2d-optimized.git",
-      "sample-assets": "axmolengine/axmol-sample-assets.git"
+      "box2d-optimized": "simdsoft/box2d-optimized.git",
+      "sample-assets": "simdsoft/axmol-sample-assets.git"
     }    
   }
 }

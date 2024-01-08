@@ -109,7 +109,7 @@
 ### 3rdparties updates
 
 - astcenc: 4.5.0 ==> 4.6.1
-- c-ares: 1.19.1 ==> 1.23.0 (1.25.0 available)
+- c-ares: 1.19.1 ==> 1.25.0
 - clipper2: 1.2.2 ==> 1.3.0
 - curl: 8.2.1 ==> 8.5.0
 - jpeg-turbo: 3.0.0 ==> 3.0.1
