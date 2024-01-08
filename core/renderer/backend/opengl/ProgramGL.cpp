@@ -121,8 +121,8 @@ static void setUniform(bool isArray, GLuint location, unsigned int size, GLenum 
 ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentShader)
     : Program(vertexShader, fragmentShader)
 {
-    _vertexShaderModule   = static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(_vertexShader));
-    _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(_fragmentShader));
+    _vertexShaderModule   = static_cast<ShaderModuleGL*>(ShaderCache::getInstance()->newVertexShaderModule(_vertexShader));
+    _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::getInstance()->newFragmentShaderModule(_fragmentShader));
 
     AX_SAFE_RETAIN(_vertexShaderModule);
     AX_SAFE_RETAIN(_fragmentShaderModule);
