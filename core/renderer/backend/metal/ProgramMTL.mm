@@ -37,8 +37,8 @@ namespace
 ProgramMTL::ProgramMTL(std::string_view vertexShader, std::string_view fragmentShader)
     : Program(vertexShader, fragmentShader)
 {
-    _vertexShader = static_cast<ShaderModuleMTL*>(ShaderCache::newVertexShaderModule(vertexShader));
-    _fragmentShader = static_cast<ShaderModuleMTL*>(ShaderCache::newFragmentShaderModule(fragmentShader));
+    _vertexShader = static_cast<ShaderModuleMTL*>(ShaderCache::getInstance()->newVertexShaderModule(vertexShader));
+    _fragmentShader = static_cast<ShaderModuleMTL*>(ShaderCache::getInstance()->newFragmentShaderModule(fragmentShader));
 
     AX_SAFE_RETAIN(_vertexShader);
     AX_SAFE_RETAIN(_fragmentShader);

@@ -43,25 +43,24 @@ NS_AX_BACKEND_BEGIN
 class AX_DLL ShaderCache : public Ref
 {
 public:
-    /** returns the shared instance */
     static ShaderCache* getInstance();
 
     /** purges the cache. It releases the retained instance. */
-    static void destroyInstance();
+    void purge();
 
     /**
      * Create a vertex shader module and add it to cache.
      * If it is created before, then just return the cached shader module.
      * @param shaderSource The source code of the shader.
      */
-    static backend::ShaderModule* newVertexShaderModule(std::string_view shaderSource);
+    backend::ShaderModule* newVertexShaderModule(std::string_view shaderSource);
 
     /**
      * Create a fragment shader module.
      * If it is created before, then just return the cached shader module.
      * @param shaderSource The source code of the shader.
      */
-    static backend::ShaderModule* newFragmentShaderModule(std::string_view shaderSource);
+    backend::ShaderModule* newFragmentShaderModule(std::string_view shaderSource);
 
     /**
      * Remove all unused shaders.
@@ -69,14 +68,6 @@ public:
     void removeUnusedShader();
 
 protected:
-    virtual ~ShaderCache();
-
-    /**
-     * Initial shader cache.
-     * @return true if initial successful, otherwise false.
-     */
-    bool init();
-
     /**
      * New a shaderModule.
      * If it was created before, then just return the cached shader module.
@@ -85,10 +76,9 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    static backend::ShaderModule* newShaderModule(backend::ShaderStage stage, std::string_view shaderSource);
+    backend::ShaderModule* newShaderModule(backend::ShaderStage stage, std::string_view shaderSource);
 
-    static std::unordered_map<std::size_t, backend::ShaderModule*> _cachedShaders;
-    static ShaderCache* _sharedShaderCache;
+    std::unordered_map<std::size_t, backend::ShaderModule*> _cachedShaders;
 };
 
 // end of _backend group

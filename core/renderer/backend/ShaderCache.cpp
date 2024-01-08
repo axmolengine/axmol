@@ -27,61 +27,41 @@
 
 NS_AX_BACKEND_BEGIN
 
-std::unordered_map<std::size_t, backend::ShaderModule*> ShaderCache::_cachedShaders;
-ShaderCache* ShaderCache::_sharedShaderCache = nullptr;
-
 ShaderCache* ShaderCache::getInstance()
 {
-    if (!_sharedShaderCache)
+    static ShaderCache instance;
+    return &instance;
+}
+
+void ShaderCache::purge()
+{
+    for (auto& [_, shaderModule] : _cachedShaders)
     {
-        _sharedShaderCache = new ShaderCache();
-        if (!_sharedShaderCache->init())
-        {
-            AX_SAFE_DELETE(_sharedShaderCache);
-        }
+        AX_SAFE_RELEASE(shaderModule);
     }
-    return _sharedShaderCache;
-}
-
-void ShaderCache::destroyInstance()
-{
-    AX_SAFE_RELEASE_NULL(_sharedShaderCache);
-}
-
-ShaderCache::~ShaderCache()
-{
-    for (auto&& shaderModule : _cachedShaders)
-    {
-        AX_SAFE_RELEASE(shaderModule.second);
-    }
-    AXLOGINFO("deallocing ShaderCache: %p", this);
-}
-
-bool ShaderCache::init()
-{
-    return true;
+    AXLOGINFO("purging ShaderCache");
 }
 
 backend::ShaderModule* ShaderCache::newVertexShaderModule(std::string_view shaderSource)
 {
-    auto vertexShaderModule = newShaderModule(backend::ShaderStage::VERTEX, shaderSource);
-    return vertexShaderModule;
+    return newShaderModule(backend::ShaderStage::VERTEX, shaderSource);
 }
 
 backend::ShaderModule* ShaderCache::newFragmentShaderModule(std::string_view shaderSource)
 {
-    auto fragmenShaderModule = newShaderModule(backend::ShaderStage::FRAGMENT, shaderSource);
-    return fragmenShaderModule;
+    return newShaderModule(backend::ShaderStage::FRAGMENT, shaderSource);
 }
 
 backend::ShaderModule* ShaderCache::newShaderModule(backend::ShaderStage stage, std::string_view shaderSource)
 {
-    std::size_t key = std::hash<std::string_view>{}(shaderSource);
-    auto iter       = _cachedShaders.find(key);
+    const std::size_t key = std::hash<std::string_view>{}(shaderSource);
+    const auto iter = _cachedShaders.find(key);
+
     if (_cachedShaders.end() != iter)
         return iter->second;
 
-    auto shader = backend::DriverBase::getInstance()->newShaderModule(stage, shaderSource);
+    ShaderModule* const shader = backend::DriverBase::getInstance()->newShaderModule(stage, shaderSource);
+
     shader->setHashValue(key);
     _cachedShaders.emplace(key, shader);
 

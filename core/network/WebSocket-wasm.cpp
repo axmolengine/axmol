@@ -136,7 +136,7 @@ void WebSocket::closeAsync()
     if (!error)
         _state = WebSocket::State::CLOSING;
     else
-        AXLOG("Failed to emscripten_websocket_close(): %d", result);
+        AXLOG("Failed to emscripten_websocket_close(): %d", error);
 }
 
 }  // namespace network
