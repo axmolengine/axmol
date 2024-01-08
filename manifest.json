@@ -10,7 +10,7 @@
   },
   "mirrors": {
     "github": {
-      "1kdist": "axmolengine/1k/releases/download",
+      "1kdist": "simdsoft/1kiss/releases/download",
       "oboe": "google/oboe.git",
       "kcp": "skywind3000/kcp.git",
       "lz4": "lz4/lz4.git",
