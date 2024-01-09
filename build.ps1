@@ -1,8 +1,8 @@
 #
-# This script easy to build win32, linux, winuwp, ios, tvos, osx, android depends on $myRoot/1k/build.ps1
+# This script easy to build win32, linux, winuwp(winrt), ios, tvos, osx, android depends on $myRoot/1k/build.ps1
 # usage: pwsh build.ps1 -p <targetPlatform> -a <arch>
 # options
-#  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,wasm
+#  -p: build target platform: win32,winuwp(winrt),linux,android,osx,ios,tvos,wasm
 #      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
 #      if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
 #  -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'

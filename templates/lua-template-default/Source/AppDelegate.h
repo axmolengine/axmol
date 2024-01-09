@@ -36,7 +36,7 @@ class AppDelegate : private ax::Application
 {
 public:
     AppDelegate();
-    virtual ~AppDelegate();
+    ~AppDelegate() override;
 
     void initGLContextAttrs() override;
 
@@ -49,13 +49,11 @@ public:
 
     /**
     @brief  Called when the application moves to the background
-    @param  the pointer of the application
     */
     void applicationDidEnterBackground() override;
 
     /**
     @brief  Called when the application reenters the foreground
-    @param  the pointer of the application
     */
     void applicationWillEnterForeground() override;
 };

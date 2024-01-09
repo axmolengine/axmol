@@ -28,6 +28,8 @@ set(lua_bindings_manual_headers
     manual/cocostudio/CustomGUIReader.h
     manual/ui/axlua_ui_manual.hpp
     manual/controller/axlua_controller_manual.hpp
+    manual/fairygui/axlua_fairygui_manual.hpp
+    manual/fairygui/axlua_fairygui_conversions.h
     )
 
 set(lua_bindings_manual_files
@@ -53,6 +55,7 @@ set(lua_bindings_manual_files
     manual/network/axlua_network_manual.cpp
     manual/network/lua_xml_http_request.cpp
     manual/network/lua_downloader.cpp
+    manual/network/lua_websocket.cpp
     manual/spine/axlua_spine_manual.cpp
     manual/spine/LuaSkeletonAnimation.cpp
     manual/ui/axlua_ui_manual.cpp
@@ -60,6 +63,8 @@ set(lua_bindings_manual_files
     manual/physics3d/axlua_physics3d_manual.cpp
     manual/navmesh/axlua_navmesh_conversions.cpp
     manual/navmesh/axlua_navmesh_manual.cpp
+    manual/fairygui/axlua_fairygui_manual.cpp
+    manual/fairygui/axlua_fairygui_conversions.cpp
     )
 
 set(lua_bindings_auto_headers
@@ -76,6 +81,7 @@ set(lua_bindings_auto_headers
     auto/axlua_physics_auto.hpp
     auto/axlua_extension_auto.hpp
     auto/axlua_backend_auto.hpp
+    auto/axlua_fairygui_auto.hpp
     )
 
 set(lua_bindings_auto_files
@@ -92,6 +98,7 @@ set(lua_bindings_auto_files
     auto/axlua_physics3d_auto.cpp
     auto/axlua_navmesh_auto.cpp
     auto/axlua_backend_auto.cpp
+    auto/axlua_fairygui_auto.cpp
     )
 
 if(APPLE)
@@ -199,6 +206,7 @@ target_include_directories(${_AX_LUA_LIB}
     PRIVATE manual/platform/android/jni
     PRIVATE ${ax_root}/extensions/spine/runtime/include
     PRIVATE ${ax_root}/extensions/cocostudio
+    PRIVATE ${ax_root}/extensions/fairygui
     INTERFACE ${ax_root}/extensions/scripting/lua-bindings/manual
     PRIVATE ${ax_root}/extensions/spine/runtime/include
 )

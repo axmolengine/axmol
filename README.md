@@ -116,6 +116,8 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
 - [Axmols contributing guide](https://github.com/axmolengine/axmol/discussions/411)
 - [Official Cocos2d-x](https://github.com/cocos2d/cocos2d-x)
 
+`If Axmol Engine helped you please consider adding a star on GitHub. This means a lot to the authors.`
+
 ## The axmol Active Stats
 
 ![Alt](https://repobeats.axiom.co/api/embed/6fcb8168a3af91ba9e797a1f14a3c2edc42ac56a.svg "Repobeats analytics image")

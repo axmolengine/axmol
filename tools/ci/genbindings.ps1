@@ -7,7 +7,7 @@ $AX_ROOT = (Resolve-Path $myRoot/../..).Path
 # ensure prebuilt lib downloaded
 Push-Location $AX_ROOT
 $build_script = Join-Path $AX_ROOT 'build.ps1'
-&$build_script -xc '-DAX_USE_LUAJIT=ON' -c
+&$build_script -c
 Pop-Location
 
 (Get-Command python.exe).Path

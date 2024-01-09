@@ -1,4 +1,4 @@
-# axmol-2.1.0 ?? 2023
+# axmol-2.1.0 ?? 2024
 
 ### Significant changes relative to 2.0.0:
 
@@ -27,6 +27,10 @@
 - Add API: `DrawNode::drawPie` by @aismann
 - Add support for window resized and positioned by @lich426
 - Add extension: Inspector by @iAndyHD3
+- Add *experimental* WebSocket support for both wasm and native platforms
+- Mark 32bit build deprecated, and will be removed in next release axmol-2.2.0
+- Add extension: DrawNodeEx by @aismann
+- Add fairygui lua support by @Samoongeer
 
 ### BugFixs
 
@@ -56,7 +60,11 @@
 - Fix plist data and version by @paulocoutinhox
 - Fix build cannot correctly handle '-' on the project name
 - Fix TMX Camera Culling by @DelinWorks
-- Fix Fix cmake project generation on platforms other than Android by @rh101
+- Fix cmake project generation on platforms other than Android by @rh101
+- Fix UILayout crash problem by @aismann
+- Fix replace scene missing nullcheck for next scene by @armanhossiny
+- Fix a crash caused by missing android view nullcheck by @Arvant
+- Fix shader cache leak by @@j-jorge
 
 ### Improvements
 
@@ -92,6 +100,7 @@
 - Make `FileUtils::openFileStream` a const method by @rh101
 - Improve cmake scripts for managing 3rd libs
 - Add `Get TMXTilesetInfo` by name support by @lich426
+- Include hpp and c files in CMakeLists.txt of cpp template by @@lich426
 
 ### Break changes
 
@@ -100,7 +109,7 @@
 ### 3rdparties updates
 
 - astcenc: 4.5.0 ==> 4.6.1
-- c-ares: 1.19.1 ==> 1.23.0 (1.24.0 available)
+- c-ares: 1.19.1 ==> 1.25.0
 - clipper2: 1.2.2 ==> 1.3.0
 - curl: 8.2.1 ==> 8.5.0
 - jpeg-turbo: 3.0.0 ==> 3.0.1
@@ -111,7 +120,9 @@
 - rapidjson: 1.0.0 ==> 1.0.0-b4a6da3
 - simdjson(NEW): 3.6.3
 - webp: 1.3.1 ==> 1.3.2
-- yasio: 4.1.0 ==> 4.3.0
+- yasio: 4.1.0 ==> 4.1.4
+- fmt: 10.1.1 ==> 10.2.1
+- imgui: 1.89.8 ==> 1.90.0
 
 Notes:
 

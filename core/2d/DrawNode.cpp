@@ -78,7 +78,7 @@ inline bool isConvex(const Vec2* verts, int count)
 
 // implementation of DrawNode
 
-DrawNode::DrawNode(float lineWidth) : _lineWidth(lineWidth), _defaultLineWidth(lineWidth)
+DrawNode::DrawNode(float lineWidth) : _lineWidth(lineWidth), _defaultLineWidth(lineWidth), _isConvex(false)
 {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
@@ -400,7 +400,9 @@ void DrawNode::drawCircle(const Vec2& center,
     }
     if (_lineWidth > threshold)
     {
+        _isConvex = true;
         drawPolygon(vertices, segments, Color4B(1.0f, 0.0f, 0.0f, 1.0f), _lineWidth/4, color);
+        _isConvex = false;
     }
     else
     {
@@ -635,7 +637,7 @@ void DrawNode::drawPolygon(const Vec2* verts,
     V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
     V2F_C4B_T2F_Triangle* cursor    = triangles;
 
-    if (count >= 3 && !isConvex(verts, count))
+    if (!_isConvex && count >= 3 && !isConvex(verts, count))
     {
         std::vector<p2t::Point> p2pointsStorage;
         p2pointsStorage.reserve(count);
@@ -745,8 +747,9 @@ void DrawNode::drawPolygon(const Vec2* verts,
 void DrawNode::drawSolidRect(const Vec2& origin, const Vec2& destination, const Color4B& color)
 {
     Vec2 vertices[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y)};
-
+    _isConvex = true;  // Fix issue #1546 of UILayout(#1549)
     drawSolidPoly(vertices, 4, color);
+    _isConvex = false;
 }
 
 void DrawNode::drawSolidPoly(const Vec2* poli, unsigned int numberOfPoints, const Color4B& color)
@@ -843,8 +846,9 @@ void DrawNode::drawSolidCircle(const Vec2& center,
         vertices[i].x = j;
         vertices[i].y = k;
     }
-
+    _isConvex = true;
     drawPolygon(vertices, segments, fillColor, borderWidth, borderColor);
+    _isConvex = false;
 }
 
 void DrawNode::drawSolidCircle(const Vec2& center,

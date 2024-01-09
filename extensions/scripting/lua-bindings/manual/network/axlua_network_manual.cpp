@@ -24,6 +24,7 @@
  ****************************************************************************/
 #include "scripting/lua-bindings/manual/network/axlua_network_manual.h"
 #include "scripting/lua-bindings/manual/network/lua_xml_http_request.h"
+#include "scripting/lua-bindings/manual/network/lua_websocket.h"
 #include "scripting/lua-bindings/manual/network/lua_downloader.h"
 #include "scripting/lua-bindings/manual/LuaEngine.h"
 
@@ -32,6 +33,9 @@ int register_network_module(lua_State* L)
     lua_getglobal(L, "_G");
     if (lua_istable(L, -1))  // stack:...,_G,
     {
+        tolua_web_socket_open(L);
+        register_web_socket_manual(L);
+        
         register_xml_http_request(L);
         register_downloader(L);
     }

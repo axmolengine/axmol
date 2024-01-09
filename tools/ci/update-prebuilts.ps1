@@ -63,10 +63,10 @@ if ($null -eq (Get-Module -ListAvailable -Name powershell-yaml)) {
 }
 
 # check upstream prebuilts version
-download_file "https://github.com/axmolengine/1k/releases/download/$VER/verlist.yml" "./tmp/verlist.yml" $true
-$newVerList = ConvertFrom-Yaml -Yaml (Get-Content './tmp/verlist.yml' -raw)
+download_file "https://github.com/simdsoft/1kiss/releases/download/$VER/_1kiss.yml" "./tmp/_1kiss.yml" $true
+$newVerList = ConvertFrom-Yaml -Yaml (Get-Content './tmp/_1kiss.yml' -raw)
 if ($newVerList.GetType() -eq [string]) {
-    throw "Download version manifest file verlist.yml fail"
+    throw "Download version manifest file _1kiss.yml fail"
 }
 
 $manifest_old_hash = Get-FileHash -Path './manifest.json' -Algorithm MD5

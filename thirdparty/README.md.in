@@ -27,7 +27,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.23.0
+- Version: 1.25.0
 - License: MIT
 
 ## Chipmunk2D
@@ -67,7 +67,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 10.1.1
+- Version: 10.2.1
 - License: MIT
 
 ## FreeType
@@ -82,7 +82,7 @@
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: git 57cbded on Dec 16, 2022 (4609)
+- Version: git b4c3ef9 on Dec 24, 2023 (4680)
 - License: zlib
 
 ## GHC (iOS devices only)
@@ -253,7 +253,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 4.1.3
+- Version: 4.1.4
 - License: MIT WITH Anti-996
 
 ## zlib

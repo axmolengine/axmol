@@ -243,6 +243,7 @@ list(APPEND GAME_HEADER
      Source/NetworkTest/NetworkTest.h
      Source/NetworkTest/DownloaderTest/DownloaderTest.h
      Source/NetworkTest/HttpClientTest/HttpClientTest.h
+     Source/NetworkTest/WebSocketTest/WebSocketTest.h
      Source/OpenURLTest/OpenURLTest.h
      Source/ConsoleTest/ConsoleTest.h
      Source/MenuTest/MenuTest.h
@@ -284,6 +285,7 @@ list(APPEND GAME_SOURCE
      Source/NetworkTest/NetworkTest.cpp
      Source/NetworkTest/DownloaderTest/DownloaderTest.cpp
      Source/NetworkTest/HttpClientTest/HttpClientTest.cpp
+     Source/NetworkTest/WebSocketTest/WebSocketTest.cpp
      Source/DrawPrimitivesTest/DrawPrimitivesTest.cpp
      Source/EffectsAdvancedTest/EffectsAdvancedTest.cpp
      Source/EffectsTest/EffectsTest.cpp
@@ -535,6 +537,11 @@ endif()
 if (AX_ENABLE_EXT_EFFEKSEER)
     list(APPEND GAME_HEADER Source/EffekseerTest/EffekseerTest.h)
     list(APPEND GAME_SOURCE Source/EffekseerTest/EffekseerTest.cpp)
+endif()
+
+if (AX_ENABLE_EXT_DRAWNODEEX)
+    list(APPEND GAME_HEADER Source/DrawNodeExTest/DrawNodeExTest.h)
+    list(APPEND GAME_SOURCE Source/DrawNodeExTest/DrawNodeExTest.cpp)
 endif()
 
 

@@ -1,5 +1,7 @@
 include(AXPlatform)
 
+ax_check_archs()
+
 if(NOT CMAKE_GENERATOR MATCHES "Ninja")
     set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
 else()
@@ -29,6 +31,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     message(STATUS "AX_ENABLE_EXT_SPINE=${AX_ENABLE_EXT_SPINE}")
     message(STATUS "AX_ENABLE_EXT_EFFEKSEER=${AX_ENABLE_EXT_EFFEKSEER}")
     message(STATUS "AX_ENABLE_EXT_LUA=${AX_ENABLE_EXT_LUA}")
+	message(STATUS "AX_ENABLE_EXT_DRAWNODEEX=${AX_ENABLE_EXT_DRAWNODEEX}")
     
     # compile defines can't inherit when link prebuits, so need add manually
     target_compile_definitions(${APP_NAME} 
@@ -116,11 +119,6 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 
     # Linking engine and thirdparty libs
     set(LIBS
-        spine
-        particle3d
-        assets-manager
-        cocostudio
-        DragonBones
         axmol
         box2d
         chipmunk
@@ -144,6 +142,26 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         simdjson
         physics-nodes
     )
+    
+    if (AX_ENABLE_EXT_DRAGONBONES)
+        list(APPEND LIBS "cocostudio")
+    endif()
+    
+    if(AX_ENABLE_EXT_COCOSTUDIO)
+        list(APPEND LIBS "DragonBones")
+    endif()
+    
+    if(AX_ENABLE_EXT_ASSETMANAGER)
+        list(APPEND LIBS "assets-manager")
+    endif()
+
+    if(AX_ENABLE_EXT_PARTICLE3D)
+        list(APPEND LIBS "particle3d")
+    endif()
+
+    if(AX_ENABLE_EXT_SPINE)
+        list(APPEND LIBS "spine")
+    endif()
 
     if (AX_ENABLE_EXT_IMGUI)
         list(APPEND LIBS "ImGui")
@@ -152,8 +170,16 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 	if (AX_ENABLE_EXT_INSPECTOR)
         list(APPEND LIBS "Inspector")
     endif()
+    
+    if (AX_ENABLE_EXT_SDFGEN)
+        list(APPEND LIBS "SDFGen")
+    endif()
 	
-
+	if (AX_ENABLE_EXT_DRAWNODEEX)
+        list(APPEND LIBS "DrawNodeEx")
+    endif()
+	
+	
     if (WINDOWS)
         target_link_libraries(${APP_NAME}
             ${LIBS}

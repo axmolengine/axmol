@@ -22,7 +22,7 @@
 
 ## ImGui
 - [![Upstream](https://img.shields.io/github/v/release/ocornut/imgui?label=Upstream)](https://github.com/ocornut/imgui)
-- Version: 1.89.8-docking
+- Version: 1.90-docking
 - License: MIT
 
 ## Live2D (OFF default)
@@ -61,3 +61,9 @@
 - Upstream: https://github.com/EsotericSoftware/spine-runtimes
 - Version: 4.1-c9af18e with changes to adapte axmol
 - License: Spine Runtimes License
+
+## DrawNodeEx
+
+- Upstream: https://github.com/axmolengine/axmol
+- Version: 0.9
+- License: MIT
