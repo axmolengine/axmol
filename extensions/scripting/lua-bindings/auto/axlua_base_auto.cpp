@@ -32284,6 +32284,53 @@ int lua_ax_base_UserDefault_destroyInstance(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_base_UserDefault_setFileName(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.UserDefault",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_UserDefault_setFileName'", nullptr);
+            return 0;
+        }
+        ax::UserDefault::setFileName();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 1)
+    {
+        std::string arg0;
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ax.UserDefault:setFileName");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_UserDefault_setFileName'", nullptr);
+            return 0;
+        }
+        ax::UserDefault::setFileName(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.UserDefault:setFileName",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_UserDefault_setFileName'.",&tolua_err);
+#endif
+    return 0;
+}
 static int lua_ax_base_UserDefault_finalize(lua_State* tolua_S)
 {
     printf("luabindings: finalizing LUA object (UserDefault)");
@@ -32312,6 +32359,7 @@ int lua_register_ax_base_UserDefault(lua_State* tolua_S)
         tolua_function(tolua_S,"deleteValueForKey",lua_ax_base_UserDefault_deleteValueForKey);
         tolua_function(tolua_S,"setEncryptEnabled",lua_ax_base_UserDefault_setEncryptEnabled);
         tolua_function(tolua_S,"destroyInstance", lua_ax_base_UserDefault_destroyInstance);
+        tolua_function(tolua_S,"setFileName", lua_ax_base_UserDefault_setFileName);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::UserDefault).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.UserDefault";
