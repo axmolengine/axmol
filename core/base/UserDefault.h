@@ -257,6 +257,11 @@ public:
 
     void encrypt(std::string& inout, int enc);
 
+    /*
+    *
+    *set multi UserDefault file for multiplayer on local or windows
+    */
+    static void setFileName(std::string nameFile = "");
 protected:
     UserDefault();
     virtual ~UserDefault();
@@ -278,6 +283,8 @@ protected:
     hlookup::string_map<std::string> _values;
 
     static UserDefault* _userDefault;
+    static std::string  _userDefalutFileName;
+
     std::string _filePath;
     FileStream _fileStream;  // the file handle for data persistence
     std::shared_ptr<mio::mmap_sink> _rwmmap;
@@ -289,6 +296,7 @@ protected:
     bool _encryptEnabled = false;
     std::string _key;
     std::string _iv;
+
 };
 
 NS_AX_END
