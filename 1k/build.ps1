@@ -26,7 +26,7 @@
 # SOFTWARE.
 #
 #
-# The 1k/build.ps1, will be core script of project https://github.com/axmolengine/1k
+# The 1k/build.ps1, the core script of project 1kiss(1k)
 # options
 #  -p: build target platform: win32,winrt(winuwp),linux,android,osx(mac),ios,tvos,watchos,wasm
 #      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first,
@@ -191,7 +191,7 @@ $manifest = @{
     # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang 16.0.0 or newer.");
     llvm         = '16.0.6+'; # clang-cl msvc14.37 require 16.0.0+
     gcc          = '9.0.0+';
-    cmake        = '3.27.7+';
+    cmake        = '3.28.1+';
     ninja        = '1.11.1+';
     jdk          = '17.0.3+';
     emsdk        = '3.1.51';
@@ -280,6 +280,8 @@ if (!$is_wasm) {
             $TARGET_ARCH = $hostArch
         }
         $options.a = $TARGET_ARCH
+    } elseif($TARGET_ARCH -eq 'arm') {
+        $TARGET_ARCH = $options.a = 'armv7'
     }
 }
 else {
@@ -828,7 +830,7 @@ function setup_llvm() {
                 $7z_pkg_out = Join-Path $external_prefix '7z2301-x64.zip'
                 if (!(Test-Path $7z_prog -PathType Leaf)) {
                     # https://www.7-zip.org/download.html
-                    download_and_expand -url 'https://github.com/axmolengine/archive/releases/download/v1.0.0/7z2301-x64.zip' -out $7z_pkg_out $external_prefix/
+                    download_and_expand -url 'https://github.com/simdsoft/1kiss/releases/download/devtools/7z2301-x64.zip' -out $7z_pkg_out $external_prefix/
                 }
             }
 
@@ -1335,7 +1337,7 @@ elseif ($TARGET_OS -eq 'android') {
     $env:ANDROID_NDK_HOME = $ndk_root
     $env:ANDROID_NDK_ROOT = $ndk_root
 
-    $ndk_host = @('win', 'linux', 'darwin').Get($HOST_OS)
+    $ndk_host = @('windows', 'linux', 'darwin').Get($HOST_OS)
     $env:ANDROID_NDK_BIN = Join-Path $ndk_root "toolchains/llvm/prebuilt/$ndk_host-x86_64/bin"
 
     # ensure ninja in cmake_bin
