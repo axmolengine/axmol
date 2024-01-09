@@ -11,8 +11,13 @@
   - Use cmake option: OPT_BOX2D_OPTIMIZED=ON to enable it on "axmol\thirdparty\CMakeLists.txt")
 
   
-- **axmol 2D physics integration API** (Cpp Test: Node: Physics)
+- **Axmol 2D physics integration API** (Cpp Test: Node: Physics)
   - It using Chipmunk2D as internal 2D physics engine
+  - Tricks 'n' Tips 
+    - Problems with Physics with `setContentSize()` see also Issue #1573
+      
+      The most important thing to remember is: do not call setContentSize() after you have set the physics body on the sprite.
+      You can scale the sprite, rotate it, or anything else, just do not call setContentSize once a physics body is attached.
 
 - **Outdated/Abandom/Cocos2d-x**:
   - class PhysicsSprite: Be only part of the axmol for backwards compatibility with Cocos2d-x.
