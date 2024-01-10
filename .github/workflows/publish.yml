@@ -16,7 +16,7 @@ on:
          required: false
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -50,12 +50,6 @@ jobs:
       run: |
         echo "Forwarding release_ver=$env:release_ver ..."
         echo "release_ver=$env:release_ver" >> ${env:GITHUB_OUTPUT}
-
-    - name: Install linux dependencies
-      if: ${{ steps.forward_ver.outputs.release_ver != '' }}
-      run: |
-        AX_ROOT=`pwd`
-        echo -e "y" | pwsh $AX_ROOT/setup.ps1
 
     - name: Make package
       if: ${{ steps.forward_ver.outputs.release_ver != '' }}
