@@ -63,9 +63,9 @@ NS_AX_BEGIN
 
 UserDefault* UserDefault::_userDefault = nullptr;
 #if !USER_DEFAULT_PLAIN_MODE
-	std::string UserDefault::_userDefalutFileName = "UserDefault.bin";
+std::string UserDefault::_userDefalutFileName = "UserDefault.bin";
 #else
-	std::string UserDefault::_userDefalutFileName = "UserDefault.xml";
+std::string UserDefault::_userDefalutFileName = "UserDefault.xml";
 #endif
 
 static void ud_setkey(std::string& lhs, const cxx17::string_view& rhs)
@@ -396,8 +396,7 @@ void UserDefault::lazyInit()
     }
     else
     {  /// load to memory _values
-        _rwmmap = std::make_shared<mio::mmap_sink>(_fileStream.nativeHandle(), 0,
-                                                   mio::map_entire_file);
+        _rwmmap = std::make_shared<mio::mmap_sink>(_fileStream.nativeHandle(), 0, mio::map_entire_file);
         if (_rwmmap->is_mapped())
         {  // no error
             yasio::ibstream_view ibs(_rwmmap->data(), _rwmmap->length());
@@ -526,12 +525,12 @@ void UserDefault::deleteValueForKey(const char* key)
         flush();
 }
 
-void UserDefault::setFileName(std::string nameFile) {
-
-	if (USER_DEFAULT_PLAIN_MODE)
-		_userDefalutFileName =  nameFile + "UserDefault.xml";
-	else
-		_userDefalutFileName = nameFile + "UserDefault.bin";
+void UserDefault::setFileName(std::string_view nameFile)
+{
+    if (USER_DEFAULT_PLAIN_MODE)
+        _userDefalutFileName.assign(nameFile).append("UserDefault.xml"sv);
+    else
+        _userDefalutFileName.assign(nameFile).append("UserDefault.bin"sv);
 }
 
 NS_AX_END

@@ -91,8 +91,8 @@
 
 ### 参考链接
 
-- axmol引擎预编译库生成工具: [build1k](https://github.com/axmolengine/build1k), 
-- axmol专用shader编译工具: [axmolengine/glslcc](https://github.com/axmolengine/glslcc), 
+- [1kiss](https://github.com/simdsoft/1kiss): 一个使用 `PowerShell` 编写的自动配置构建工具链的跨平台构建脚本工具
+- [axmolengine/glslcc](https://github.com/axmolengine/glslcc): axmol专用shader编译工具
 - 一些基于axmol引擎的开源项目: https://github.com/axmolengine/axmol/discussions/694
 - official v4: https://gitee.com/mirrors/cocos2d-x
 - Git快速手册: https://github.com/axmolengine/axmol/discussions/411

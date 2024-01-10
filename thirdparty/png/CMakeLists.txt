@@ -52,6 +52,9 @@ add_library(${target_name} STATIC
   ${libpng_intel_sources}
 )
 
+# Avoid cmake builtin FindPNG.cmake add target again
+add_library(PNG::PNG ALIAS ${target_name})
+
 target_include_directories(${target_name} PUBLIC "${CMAKE_CURRENT_LIST_DIR}")
 
 if(_PNG_ISA_SIMD)

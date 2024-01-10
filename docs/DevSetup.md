@@ -16,7 +16,7 @@
   2. Run `pwsh setup.ps1`, restart the console after it has finished for environment variables to take effect
   3. Ensure C/C++ compiler toolset installed on your host machine
      - Windows: visual studio 2022 with desktop workflow
-     - macOS: xcode14.2
+     - macOS: xcode14.2+
      - Linux: GCC(G++)
 
 ## Creating A New Project
