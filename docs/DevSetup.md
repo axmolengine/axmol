@@ -6,7 +6,7 @@
   - powershell-7 is recommended, it's support Windows,macOS,Linux
   - How to Install:
       - Quick Install 
-          - macOS, Ubuntu, ArchLinux: you can simply run `install-pwsh.sh` in axmol root directory [`Recommended`]
+          - macOS, Ubuntu, ArchLinux: you can simply run `1k/install-pwsh.sh` in axmol root directory [`Recommended`]
           - win10+, system installed PowerShell 5.x should works, but you need run command `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force` to allow run powershell script file
       - Manually Install: [installing-powershell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) or download from [github release](https://github.com/PowerShell/PowerShell/releases)
 

@@ -244,7 +244,7 @@ if ($options.xb.GetType() -eq [string]) {
 }
 
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
-if ([System.Version]$pwsh_ver -lt [System.Version]"7.0.0.0") {
+if ([System.Version]$pwsh_ver -lt [System.Version]"7.0.0") {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 }
 
@@ -1609,34 +1609,58 @@ if (!$setupOnly) {
             compilerID   = $TOOLCHAIN_NAME
         }
     } else {
-        # google gn build system: only support vs2022 currently
-        $CONFIG_ALL_OPTIONS = $options.xc
+        # google gclient/gn build system
+        # refer: https://chromium.googlesource.com/chromium/src/+/eca97f87e275a7c9c5b7f13a65ff8635f0821d46/tools/gn/docs/reference.md#args_specifies-build-arguments-overrides-examples
+        
         $stored_env_path = $null
-
+        $gn_buildargs_overrides = @()
+        
         if ($Global:is_winrt) {
-            $CONFIG_ALL_OPTIONS += 'target_os=\"winuwp\"'
+            $gn_buildargs_overrides += 'target_os=\"winuwp\"'
         } elseif($Global:is_ios) {
-            $CONFIG_ALL_OPTIONS += 'target_os=\"ios\"'
+            $gn_buildargs_overrides += 'target_os=\"ios\"'
             if ($TARGET_CPU -eq 'x64') {
-                $CONFIG_ALL_OPTIONS += 'target_environment=\"simulator\"'
+                $gn_buildargs_overrides += 'target_environment=\"simulator\"'
             }
         } elseif($Global:is_android) {
-            $CONFIG_ALL_OPTIONS += 'target_os=\"android\"'
+            $gn_buildargs_overrides += 'target_os=\"android\"'
             $stored_env_path = $env:PATH
             active_ndk_toolchain
         }
-        Write-Output ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
-        $cmd_args = @('gen', 'out/release')
-        if ($Global:is_win_family) {
-            $cmd_args += '--sln=angle-release'
-            $cmd_args += '--ide=vs2022'
+        $gn_target_cpu = if ($TARGET_CPU -ne 'armv7') { $TARGET_CPU } else { 'arm' }
+        $gn_buildargs_overrides += "target_cpu=\`"$gn_target_cpu\`""
+
+        if ($options.xc) {
+            $gn_buildargs_overrides += $options.xc
         }
 
-        $translated_target_cpu = if ($TARGET_CPU -ne 'armv7') { $TARGET_CPU } else { 'arm' }
+        Write-Output ("gn_buildargs_overrides=$gn_buildargs_overrides, Count={0}" -f $gn_buildargs_overrides.Count)
+        
+        $gn_gen_args = @('gen', 'out/release')
+        if ($Global:is_win_family) {
+            $gn_gen_args += '--ide=vs2022','--sln=angle-release'
+        }
 
-        $cmd_args += "--args=target_cpu=\`"$translated_target_cpu\`" $CONFIG_ALL_OPTIONS"
-        Write-Output "Executing command: gn {$cmd_args}"
-        gn $cmd_args
+        if ($gn_buildargs_overrides) {
+            $gn_gen_args += "--args=`"$gn_buildargs_overrides`""
+        }
+
+        Write-Output "Executing command: {gn $gn_gen_args}"
+
+        # Note:
+        #  1. powershell 7.2.12 works: gn $gn_gen_args, but 7.4.0 not works
+        #  2. only --args="target_cpu=\"x64\"" works
+        #  3. --args='target_cpu="x64" not work invoke from pwsh
+        if($IsWin) {
+            cmd /c "gn $gn_gen_args"
+        }
+        else {
+            if ([System.Version]$pwsh_ver -ge [System.Version]'7.3.0') {
+                bash -c "gn $gn_gen_args"
+            } else {
+                gn $gn_gen_args
+            }
+        }
 
         # build
         autoninja -C out/release --verbose $options.t
