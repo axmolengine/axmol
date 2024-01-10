@@ -261,7 +261,7 @@ public:
     *
     *set multi UserDefault file for multiplayer on local or windows
     */
-    static void setFileName(std::string nameFile = "");
+    static void setFileName(std::string_view nameFile = "");
 protected:
     UserDefault();
     virtual ~UserDefault();

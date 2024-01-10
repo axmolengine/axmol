@@ -18,7 +18,7 @@ function check_pwsh {
     if command -v pwsh >/dev/null ; then
         pwsh_veri_a=$(pwsh --version)
         pwsh_veri_b="PowerShell $pwsh_ver"
-        if [[ "$pwsh_veri_b" < "$pwsh_veri_a" || "$pwsh_veri_b" == "$pwsh_veri_a" ]] ; then
+        if [ "$pwsh_veri_b" = "$pwsh_veri_a" ] ; then
             echo axmol: $pwsh_veri_a already installed.
             exit 0
         fi

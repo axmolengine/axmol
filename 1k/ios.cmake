@@ -1,6 +1,6 @@
 #
 # The minimal ios toolchain file: https://github.com/yasio/yasio/blob/dev/cmake/ios.cmake
-# version: 4.1.1
+# version: 4.1.2
 #
 # The supported params:
 #   PLAT: iOS, tvOS, default: iOS
@@ -84,13 +84,25 @@ if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
     set(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${CMAKE_OSX_DEPLOYMENT_TARGET} CACHE STRING "")
 endif()
 
-if(SIMULATOR)
+if (NOT SIMULATOR)
+    if(PLAT STREQUAL "iOS")
+        set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos")
+    elseif(PLAT STREQUAL "tvOS")
+        set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-appletvos")
+    elseif(PLAT STREQUAL "watchOS")
+        set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-watchos")
+    endif()
+else()
     if (PLAT STREQUAL "iOS")
         set(_SDK_NAME "iphonesimulator")
+        set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphonesimulator")
     elseif(PLAT STREQUAL "tvOS")
         set(_SDK_NAME "appletvsimulator")
+        set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-tvsimulator")
+
     elseif(PLAT STREQUAL "watchOS")
         set(_SDK_NAME "watchsimulator")
+        set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-watchsimulator")
     else()
         message(FATAL_ERROR "PLAT=${PLAT} unsupported!")
     endif()

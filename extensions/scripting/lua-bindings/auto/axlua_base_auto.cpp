@@ -32312,8 +32312,8 @@ int lua_ax_base_UserDefault_setFileName(lua_State* tolua_S)
     }
     if (argc == 1)
     {
-        std::string arg0;
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ax.UserDefault:setFileName");
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.UserDefault:setFileName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_UserDefault_setFileName'", nullptr);
