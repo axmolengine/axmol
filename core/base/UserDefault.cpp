@@ -53,12 +53,6 @@ THE SOFTWARE.
 
 #define USER_DEFAULT_PLAIN_MODE 0
 
-#if !USER_DEFAULT_PLAIN_MODE
-#    define USER_DEFAULT_FILENAME "UserDefault.bin"
-#else
-#    define USER_DEFAULT_FILENAME "UserDefault.xml"
-#endif
-
 typedef int32_t udflen_t;
 
 NS_AX_BEGIN
@@ -68,6 +62,11 @@ NS_AX_BEGIN
  */
 
 UserDefault* UserDefault::_userDefault = nullptr;
+#if !USER_DEFAULT_PLAIN_MODE
+std::string UserDefault::_userDefalutFileName = "UserDefault.bin";
+#else
+std::string UserDefault::_userDefalutFileName = "UserDefault.xml";
+#endif
 
 static void ud_setkey(std::string& lhs, const cxx17::string_view& rhs)
 {
@@ -375,7 +374,7 @@ void UserDefault::lazyInit()
         return;
 
 #if !USER_DEFAULT_PLAIN_MODE
-    _filePath = FileUtils::getInstance()->getNativeWritableAbsolutePath() + USER_DEFAULT_FILENAME;
+    _filePath = FileUtils::getInstance()->getNativeWritableAbsolutePath() + _userDefalutFileName;
 
     // construct file mapping
     if (!_fileStream.open(_filePath, IFileStream::Mode::OVERLAPPED))
@@ -397,8 +396,7 @@ void UserDefault::lazyInit()
     }
     else
     {  /// load to memory _values
-        _rwmmap = std::make_shared<mio::mmap_sink>(_fileStream.nativeHandle(), 0,
-                                                   mio::map_entire_file);
+        _rwmmap = std::make_shared<mio::mmap_sink>(_fileStream.nativeHandle(), 0, mio::map_entire_file);
         if (_rwmmap->is_mapped())
         {  // no error
             yasio::ibstream_view ibs(_rwmmap->data(), _rwmmap->length());
@@ -439,7 +437,7 @@ void UserDefault::lazyInit()
 #else
     pugi::xml_document doc;
 
-    _filePath = FileUtils::getInstance()->getWritablePath() + USER_DEFAULT_FILENAME;
+    _filePath = FileUtils::getInstance()->getWritablePath() + _userDefalutFileName;
 
     if (FileUtils::getInstance()->isFileExist(_filePath))
     {
@@ -525,6 +523,14 @@ void UserDefault::deleteValueForKey(const char* key)
 {
     if (this->_values.erase(key) > 0)
         flush();
+}
+
+void UserDefault::setFileName(std::string_view nameFile)
+{
+    if (USER_DEFAULT_PLAIN_MODE)
+        _userDefalutFileName.assign(nameFile).append("UserDefault.xml"sv);
+    else
+        _userDefalutFileName.assign(nameFile).append("UserDefault.bin"sv);
 }
 
 NS_AX_END
