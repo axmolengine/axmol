@@ -305,6 +305,12 @@ public:
     virtual std::string fullPathFromRelativeFile(std::string_view filename, std::string_view relativeFile) const;
 
     /**
+     * Returns the fullpath for a given dirname.
+     * @since 3.17.1
+     */
+    virtual std::string fullPathForDirectory(std::string_view dirname) const;
+
+    /**
      *  Sets the array of search paths.
      *
      *  You can use this array to modify the search path of the resources.
@@ -755,6 +761,9 @@ public:
     /** Returns the full path cache. */
     const hlookup::string_map<std::string> getFullPathCache() const { return _fullPathCache; }
 
+    /** Returns the full path cache. */
+    const hlookup::string_map<std::string> getFullPathCacheDir() const { return _fullPathCacheDir; }
+
     /**
      *  Checks whether a file exists without considering search paths and resolution orders.
      *  @param filename The file (with absolute path) to look up for
@@ -818,12 +827,6 @@ protected:
      */
     virtual std::string getFullPathForFilenameWithinDirectory(std::string_view directory,
                                                               std::string_view filename) const;
-
-    /**
-     * Returns the fullpath for a given dirname.
-     * @since 3.17.1
-     */
-    virtual std::string fullPathForDirectory(std::string_view dirname) const;
 
     /**
      * mutex used to protect fields.
