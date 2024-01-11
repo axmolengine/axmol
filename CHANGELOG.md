@@ -1,4 +1,4 @@
-# axmol-2.1.0 ?? 2024
+# axmol-2.1 Jan.13 2024
 
 ### Significant changes relative to 2.0.0:
 
@@ -28,9 +28,17 @@
 - Add support for window resized and positioned by @lich426
 - Add extension: Inspector by @iAndyHD3
 - Add *experimental* WebSocket support for both wasm and native platforms
-- Mark 32bit build deprecated, and will be removed in next release axmol-2.2.0
 - Add extension: DrawNodeEx by @aismann
 - Add fairygui lua support by @Samoongeer
+- Enable Mat4 SSE Istructions acceleration by @halx99
+- Add dotnet API styled class `JsonWriter` based on rapidjson by @halx99
+
+### Mark as deprecated, and will be removed in next release axmol-2.2.0
+- 32bit build
+- Extensions
+    - DragonBones
+    - GUI
+- Zwoptex (Commented on cpp-test)
 
 ### BugFixs
 
