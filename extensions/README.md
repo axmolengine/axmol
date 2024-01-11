@@ -37,10 +37,11 @@
 - Version: axmol-1.0
 - License: MIT
 
-## fairygui
+## FairyGUI
 
-- Upstream: https://github.com/fairygui/FairyGUI-cocos2dx
-- Version: 3.0.0
+- Upstream: https://github.com/axmolengine/axmol
+- original repo:  Upstream: https://github.com/fairygui/FairyGUI-cocos2dx
+- Version: axmol-1.0
 - License: MIT
 
 
