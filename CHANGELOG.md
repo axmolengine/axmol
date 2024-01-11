@@ -28,9 +28,15 @@
 - Add support for window resized and positioned by @lich426
 - Add extension: Inspector by @iAndyHD3
 - Add *experimental* WebSocket support for both wasm and native platforms
-- Mark 32bit build deprecated, and will be removed in next release axmol-2.2.0
 - Add extension: DrawNodeEx by @aismann
 - Add fairygui lua support by @Samoongeer
+
+### Mark as deprecated, and will be removed in next release axmol-2.2.0
+- 32bit build
+- Extensions
+    - DragonBones
+    - GUI
+- Zwoptex (Commented on cpp-test)
 
 ### BugFixs
 
