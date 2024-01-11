@@ -185,7 +185,7 @@ $b1k = [build1k]::new()
 # x.y.z~x2.y2.z2 : range
 $manifest = @{
     # C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.36.32532\vc_redist.x64.exe
-    msvc         = '19.37+'; # cl.exe @link.exe 14.37
+    msvc         = '14.37+'; # cl.exe @link.exe 14.37
     ndk          = 'r23c';
     xcode        = '13.0.0~15.0.0'; # range
     # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang 16.0.0 or newer.");
@@ -430,7 +430,7 @@ function find_cmd($cmd) {
 
     return $null
 }
-function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params = @('--version'), $silent = $false) {
+function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params = @('--version'), $silent = $false, $usefv = $false) {
     if ($path) {
         $storedPATH = $env:PATH
         if ($mode -eq 'ONLY') {
@@ -490,15 +490,20 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
     $found_rets = $null # prog_path,prog_version
     if ($cmd_info) {
         $prog_path = $cmd_info.Source
-        $verStr = $(. $cmd @params 2>$null) | Select-Object -First 1
-        if (!$verStr -or ($verStr.IndexOf('--version') -ne -1)) {
-            $verInfo = $cmd_info.Version
-            $verStr = "$($verInfo.Major).$($verInfo.Minor).$($verInfo.Build)"
-        }
 
-        # full pattern: '(\d+\.)+(\*|\d+)(\-[a-z]+[0-9]*)?' can match x.y.z-rc3, but not require for us
-        $matchInfo = [Regex]::Match($verStr, '(\d+\.)+(\*|\d+)(\-[a-z]+[0-9]*)?')
-        $foundVer = $matchInfo.Value
+        if(!$usefv) {
+            $verStr = $(. $cmd @params 2>$null) | Select-Object -First 1
+            if (!$verStr -or ($verStr.IndexOf('--version') -ne -1)) {
+                $verInfo = $cmd_info.Version
+                $verStr = "$($verInfo.Major).$($verInfo.Minor).$($verInfo.Build)"
+            }
+
+            # full pattern: '(\d+\.)+(\*|\d+)(\-[a-z]+[0-9]*)?' can match x.y.z-rc3, but not require for us
+            $matchInfo = [Regex]::Match($verStr, '(\d+\.)+(\*|\d+)(\-[a-z]+[0-9]*)?')
+            $foundVer = $matchInfo.Value
+        } else {
+            $foundVer = "$($cmd_info.Version)"
+        }
         [void]$requiredMin
         if ($checkVerCond) {
             $matched = Invoke-Expression $checkVerCond
@@ -1059,7 +1064,7 @@ function setup_emsdk() {
 
 
 function setup_msvc() {
-    $cl_prog, $cl_ver = find_prog -name 'msvc' -cmd 'cl' -silent $true
+    $cl_prog, $cl_ver = find_prog -name 'msvc' -cmd 'cl' -silent $true -usefv $true
     if (!$cl_prog) {
         if ($VS_INST) {
             Import-Module "$VS_PATH\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
@@ -1077,7 +1082,7 @@ function setup_msvc() {
                 println "LIB=$env:LIB"
             }
 
-            $cl_prog, $cl_ver = find_prog -name 'msvc' -cmd 'cl' -silent $true
+            $cl_prog, $cl_ver = find_prog -name 'msvc' -cmd 'cl' -silent $true -usefv $true
             $b1k.println("Using msvc: $cl_prog, version: $cl_ver")
         } else {
             throw "Visual Studio not installed!"
@@ -1107,6 +1112,9 @@ function setup_gclient() {
         } else {
             git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git $gclient_dir
         }
+
+        # for diag invalid token issue
+        git -C ${gclient_dir} apply $(Join-Path $myRoot 'gn-print-args.patch')
     }
 
     if ($env:PATH.IndexOf($gclient_dir) -eq -1) {
