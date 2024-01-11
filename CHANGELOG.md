@@ -32,6 +32,7 @@
 - Add fairygui lua support by @Samoongeer
 - Enable Mat4 SSE Istructions acceleration by @halx99
 - Add dotnet API styled class `JsonWriter` based on rapidjson by @halx99
+- Add donation page
 
 ### Mark as deprecated, and will be removed in next release axmol-2.2.0
 - 32bit build
