@@ -1113,8 +1113,6 @@ function setup_gclient() {
             git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git $gclient_dir
         }
 
-        # for diag invalid token issue
-        git -C ${gclient_dir} apply $(Join-Path $myRoot 'gn-print-args.patch')
     }
 
     if ($env:PATH.IndexOf($gclient_dir) -eq -1) {
