@@ -109,6 +109,7 @@ PhysicsBody::PhysicsBody()
     , _recordedAngle(0.0)
     , _recordScaleX(1.f)
     , _recordScaleY(1.f)
+    , _fixedUpdate(false)
 {
     _name = COMPONENT_NAME;
 }
@@ -795,7 +796,23 @@ void PhysicsBody::setResting(bool rest) const
 
 void PhysicsBody::update(float delta)
 {
+    if (!_fixedUpdate)
+        return;
+
     // damping compute
+    if (_isDamping && _dynamic && !isResting())
+    {
+        _cpBody->v.x *= cpfclamp(1.0f - delta * _linearDamping, 0.0f, 1.0f);
+        _cpBody->v.y *= cpfclamp(1.0f - delta * _linearDamping, 0.0f, 1.0f);
+        _cpBody->w *= cpfclamp(1.0f - delta * _angularDamping, 0.0f, 1.0f);
+    }
+}
+
+void PhysicsBody::fixedUpdate(float delta)
+{
+    if (_fixedUpdate)
+        return;
+
     if (_isDamping && _dynamic && !isResting())
     {
         _cpBody->v.x *= cpfclamp(1.0f - delta * _linearDamping, 0.0f, 1.0f);

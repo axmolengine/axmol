@@ -308,4 +308,19 @@ public:
     virtual std::string subtitle() const override;
 };
 
+class PhysicsDemoPyramidStackFixedUpdate : public PhysicsDemo
+{
+public:
+    CREATE_FUNC(PhysicsDemoPyramidStackFixedUpdate);
+
+    void onEnter() override;
+    virtual std::string title() const override;
+
+    virtual void fixedUpdate(float delta) override;
+
+private:
+    bool _isAddBall;
+    float _delayTime;
+};
+
 #endif  // #if AX_USE_PHYSICS

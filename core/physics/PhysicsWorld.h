@@ -324,6 +324,17 @@ public:
         if (updatesPerSecond > 0)
         {
             _fixedRate = updatesPerSecond;
+            for (auto body : _bodies)
+            {
+                body->setFixedUpdate(true);
+            }
+        }
+        else
+        {
+            for (auto body : _bodies)
+            {
+                body->setFixedUpdate(false);
+            }
         }
     }
     /** get the number of substeps */
