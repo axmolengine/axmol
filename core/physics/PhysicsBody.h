@@ -532,6 +532,9 @@ public:
     /** Get the rigid body of chipmunk. */
     cpBody* getCPBody() const { return _cpBody; }
 
+    /** Set fixed update state */
+    void setFixedUpdate(bool fixedUpdate) { _fixedUpdate = fixedUpdate; }
+
     virtual void onEnter() override;
     virtual void onExit() override;
     virtual void onAdd() override;
@@ -550,6 +553,7 @@ protected:
     virtual void setScale(float scaleX, float scaleY);
 
     void update(float delta) override;
+    void fixedUpdate(float delta);
 
     void removeJoint(PhysicsJoint* joint);
 
@@ -607,6 +611,9 @@ protected:
 
     float _recordPosX;
     float _recordPosY;
+
+    // fixed update state
+    bool _fixedUpdate;
 
     friend class PhysicsWorld;
     friend class PhysicsShape;
