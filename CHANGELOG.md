@@ -32,6 +32,7 @@
 - Add fairygui lua support by @Samoongeer
 - Enable Mat4 SSE Istructions acceleration by @halx99
 - Add dotnet API styled class `JsonWriter` based on rapidjson by @halx99
+- Add donation page
 
 ### Mark as deprecated, and will be removed in next release axmol-2.2.0
 - 32bit build
@@ -130,7 +131,7 @@
 - webp: 1.3.1 ==> 1.3.2
 - yasio: 4.1.0 ==> 4.1.4
 - fmt: 10.1.1 ==> 10.2.1
-- imgui: 1.89.8 ==> 1.90.0
+- imgui: 1.89.8 ==> 1.90.1
 
 Notes:
 
