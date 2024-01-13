@@ -797,9 +797,6 @@ void PhysicsBody::setResting(bool rest) const
 
 void PhysicsBody::update(float delta)
 {
-    if (!_fixedUpdate)
-        return;
-
     // damping compute
     if (!_fixedUpdate && _isDamping && _dynamic && !isResting())
     {
