@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -45,8 +46,9 @@ extern bool AX_DLL cc_assert_script_compatible(const char* msg);
                 {                                                             \
                     if (!(cond))                                              \
                     {                                                         \
-                        if (msg && *msg && !cc_assert_script_compatible(msg)) \
-                            ax::log("Assert failed: %s", msg);           \
+                        const char* m = (msg);                                \
+                        if (m && *m && !cc_assert_script_compatible(m))       \
+                            ax::log("Assert failed: %s", m);                  \
                         AX_ASSERT(cond);                                      \
                     }                                                         \
                 } while (0)
