@@ -1546,7 +1546,6 @@ void ImGui_ImplAx_Init()
 {
     auto bd                    = ImGui_ImplGlfw_GetBackendData();
     auto& io                   = ImGui::GetIO();
-    io.BackendRendererUserData = (void*)bd;
     io.BackendRendererName     = "imgui_impl_axmol";
     io.BackendFlags |=
         ImGuiBackendFlags_RendererHasViewports;  // We can create multi-viewports on the Renderer side (optional)
