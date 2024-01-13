@@ -1,4 +1,4 @@
-# axmol-2.1 Jan.13 2024
+# axmol-2.1.0 Jan.?? 2024
 
 ### Significant changes relative to 2.0.0:
 
@@ -33,6 +33,8 @@
 - Enable Mat4 SSE Istructions acceleration by @halx99
 - Add dotnet API styled class `JsonWriter` based on rapidjson by @halx99
 - Add donation page
+- Add multi UserDefault support by @armanhossiny
+- Add fixedUpdate method to Scene by @lich426
 
 ### Mark as deprecated, and will be removed in next release axmol-2.2.0
 - 32bit build
@@ -43,7 +45,7 @@
 
 ### BugFixs
 
-- Fix MSL texture order does not follow GLSL binding order
+- Fix translated metal shader texture order does not follow GLSL binding order
 - Fix GLES3 shader scalar array layout incorrect
 - Fix Android ImGUI coord conversions
 - Fix Lua build on windows
@@ -74,6 +76,7 @@
 - Fix replace scene missing nullcheck for next scene by @armanhossiny
 - Fix a crash caused by missing android view nullcheck by @Arvant
 - Fix shader cache leak by @@j-jorge
+- Fix AXASSERT() not working with more complex msg arguments by @smilediver
 
 ### Improvements
 
