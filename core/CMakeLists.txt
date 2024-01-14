@@ -140,7 +140,7 @@ option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 
 option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ON)
 
-option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" ON)
+option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" OFF)
 
 if(XCODE)
     # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
