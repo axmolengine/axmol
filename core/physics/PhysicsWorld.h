@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -324,6 +325,17 @@ public:
         if (updatesPerSecond > 0)
         {
             _fixedRate = updatesPerSecond;
+            for (auto body : _bodies)
+            {
+                body->setFixedUpdate(true);
+            }
+        }
+        else
+        {
+            for (auto body : _bodies)
+            {
+                body->setFixedUpdate(false);
+            }
         }
     }
     /** get the number of substeps */

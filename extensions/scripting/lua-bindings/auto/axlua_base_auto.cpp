@@ -12614,6 +12614,56 @@ int lua_ax_base_Scene_initPhysicsWorld(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Scene_fixedUpdate(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Scene* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Scene",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scene_fixedUpdate'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Scene:fixedUpdate");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_fixedUpdate'", nullptr);
+            return 0;
+        }
+        cobj->fixedUpdate(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:fixedUpdate",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_fixedUpdate'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Scene_stepPhysicsAndNavigation(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12826,6 +12876,7 @@ int lua_register_ax_base_Scene(lua_State* tolua_S)
         tolua_function(tolua_S,"getPhysicsWorld",lua_ax_base_Scene_getPhysicsWorld);
         tolua_function(tolua_S,"initWithPhysics",lua_ax_base_Scene_initWithPhysics);
         tolua_function(tolua_S,"initPhysicsWorld",lua_ax_base_Scene_initPhysicsWorld);
+        tolua_function(tolua_S,"fixedUpdate",lua_ax_base_Scene_fixedUpdate);
         tolua_function(tolua_S,"stepPhysicsAndNavigation",lua_ax_base_Scene_stepPhysicsAndNavigation);
         tolua_function(tolua_S,"create", lua_ax_base_Scene_create);
         tolua_function(tolua_S,"createWithSize", lua_ax_base_Scene_createWithSize);
@@ -32580,6 +32631,56 @@ int lua_ax_base_FileUtils_fullPathFromRelativeFile(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_FileUtils_fullPathForDirectory(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::FileUtils* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_fullPathForDirectory'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:fullPathForDirectory");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_fullPathForDirectory'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->fullPathForDirectory(arg0);
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:fullPathForDirectory",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_fullPathForDirectory'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_FileUtils_setSearchPaths(lua_State* tolua_S)
 {
     int argc = 0;
@@ -34659,6 +34760,7 @@ int lua_register_ax_base_FileUtils(lua_State* tolua_S)
         tolua_function(tolua_S,"getStringFromFile",lua_ax_base_FileUtils_getStringFromFile);
         tolua_function(tolua_S,"fullPathForFilename",lua_ax_base_FileUtils_fullPathForFilename);
         tolua_function(tolua_S,"fullPathFromRelativeFile",lua_ax_base_FileUtils_fullPathFromRelativeFile);
+        tolua_function(tolua_S,"fullPathForDirectory",lua_ax_base_FileUtils_fullPathForDirectory);
         tolua_function(tolua_S,"setSearchPaths",lua_ax_base_FileUtils_setSearchPaths);
         tolua_function(tolua_S,"getDefaultResourceRootPath",lua_ax_base_FileUtils_getDefaultResourceRootPath);
         tolua_function(tolua_S,"setDefaultResourceRootPath",lua_ax_base_FileUtils_setDefaultResourceRootPath);

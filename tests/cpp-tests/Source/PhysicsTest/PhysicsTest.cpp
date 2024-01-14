@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -52,6 +53,7 @@ PhysicsTests::PhysicsTests()
     ADD_TEST_CASE(PhysicsTransformTest);
     ADD_TEST_CASE(PhysicsIssue9959);
     ADD_TEST_CASE(PhysicsIssue15932);
+    ADD_TEST_CASE(PhysicsDemoPyramidStackFixedUpdate);
 }
 
 namespace
@@ -1956,6 +1958,68 @@ std::string PhysicsIssue15932::title() const
 std::string PhysicsIssue15932::subtitle() const
 {
     return "addComponent()/removeComponent() should not crash";
+}
+
+void PhysicsDemoPyramidStackFixedUpdate::onEnter()
+{
+    PhysicsDemo::onEnter();
+
+    auto touchListener          = EventListenerTouchOneByOne::create();
+    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoPyramidStackFixedUpdate::onTouchBegan, this);
+    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoPyramidStackFixedUpdate::onTouchMoved, this);
+    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoPyramidStackFixedUpdate::onTouchEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+
+    auto node = Node::create();
+    node->addComponent(PhysicsBody::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f),
+                                                      VisibleRect::rightBottom() + Vec2(0.0f, 50.0f)));
+    this->addChild(node);
+
+    auto ball = Sprite::create("Images/ball.png");
+    ball->setScale(1);
+    ball->setTag(100);
+    auto body = PhysicsBody::createCircle(10);
+    ball->addComponent(body);
+    body->setTag(DRAG_BODYS_TAG);
+    ball->setPosition(VisibleRect::bottom() + Vec2(0.0f, 60.0f));
+    this->addChild(ball);
+
+    _delayTime = 0;
+    _isAddBall = false;
+    _physicsWorld->setFixedUpdateRate(50);
+
+    int count = 1;
+    for (int i = 0; i < 14; i++)
+    {
+        for (int j = 0; j <= i; j++)
+        {
+            auto sp = addGrossiniAtPosition(VisibleRect::bottom() + Vec2((i / 2 - j) * 11, (14 - i) * 23 + 100), 0.2f);
+            sp->getPhysicsBody()->setTag(DRAG_BODYS_TAG);
+
+            auto label = Label::createWithTTF(StringUtils::format("%d", count++), "fonts/arial.ttf", 24);
+            label->setPosition(sp->getContentSize().width * 0.5f, sp->getContentSize().height * 0.5f);
+            sp->addChild(label, 1);
+        }
+    }
+
+    this->toggleDebug();
+}
+
+std::string PhysicsDemoPyramidStackFixedUpdate::title() const
+{
+    return "Pyramid Stack fixed update";
+}
+
+void PhysicsDemoPyramidStackFixedUpdate::fixedUpdate(float delta)
+{
+    _delayTime += delta;
+    if (_delayTime >= 3.0f && !_isAddBall)
+    {
+        _isAddBall = true;
+        auto ball = getChildByTag(100);
+        if (ball)
+            ball->setScale(ball->getScale() * 3);
+    }
 }
 
 #endif

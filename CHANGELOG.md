@@ -1,4 +1,4 @@
-# axmol-2.1.0 ?? 2024
+# axmol-2.1.0 Jan.?? 2024
 
 ### Significant changes relative to 2.0.0:
 
@@ -28,13 +28,24 @@
 - Add support for window resized and positioned by @lich426
 - Add extension: Inspector by @iAndyHD3
 - Add *experimental* WebSocket support for both wasm and native platforms
-- Mark 32bit build deprecated, and will be removed in next release axmol-2.2.0
 - Add extension: DrawNodeEx by @aismann
 - Add fairygui lua support by @Samoongeer
+- Enable Mat4 SSE Istructions acceleration by @halx99
+- Add dotnet API styled class `JsonWriter` based on rapidjson by @halx99
+- Add donation page
+- Add multi UserDefault support by @armanhossiny
+- Add fixedUpdate method to Scene by @lich426
+
+### Mark as deprecated, and will be removed in next release axmol-2.2.0
+- 32bit build
+- Extensions
+    - DragonBones
+    - GUI
+- Zwoptex (Commented on cpp-test)
 
 ### BugFixs
 
-- Fix MSL texture order does not follow GLSL binding order
+- Fix translated metal shader texture order does not follow GLSL binding order
 - Fix GLES3 shader scalar array layout incorrect
 - Fix Android ImGUI coord conversions
 - Fix Lua build on windows
@@ -65,6 +76,7 @@
 - Fix replace scene missing nullcheck for next scene by @armanhossiny
 - Fix a crash caused by missing android view nullcheck by @Arvant
 - Fix shader cache leak by @@j-jorge
+- Fix AXASSERT() not working with more complex msg arguments by @smilediver
 
 ### Improvements
 
@@ -122,7 +134,7 @@
 - webp: 1.3.1 ==> 1.3.2
 - yasio: 4.1.0 ==> 4.1.4
 - fmt: 10.1.1 ==> 10.2.1
-- imgui: 1.89.8 ==> 1.90.0
+- imgui: 1.89.8 ==> 1.90.1
 
 Notes:
 
