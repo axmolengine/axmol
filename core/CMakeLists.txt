@@ -51,7 +51,7 @@ endif()
 include(CMakeDependentOption)
 
 # by default: use angle on win32
-cmake_dependent_option(AX_USE_COMPAT_GL "Whether use compatibility GL as render backend" ON "WIN32" OFF)
+cmake_dependent_option(AX_USE_COMPAT_GL "Whether use compatibility GL as render backend" ${WIN32} "WIN32 OR APPLE" OFF)
 
 # choosing render backend for all target platforms: win32, winuwp, ios, tvos, android, linux, osx
 if(APPLE AND (NOT AX_USE_COMPAT_GL))
