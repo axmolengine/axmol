@@ -50,6 +50,9 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
 endif()
 
+_1kfetch(sample-assets)
+_1klink("${sample-assets_SOURCE_DIR}/live2d-tests/Content" "${_AX_ROOT}/tests/live2d-tests/Content")
+
 # record sources, headers, resources...
 file(GLOB GAME_SOURCE Source/*.cpp)
 file(GLOB GAME_HEADER Source/*.h)
