@@ -51,7 +51,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
 endif()
 
 _1kfetch(sample-assets)
-_1klink("${sample-assets_SOURCE_DIR}/live2d-tests/Content" "${_AX_ROOT}/tests/live2d-tests/Content")
+_1klink("${sample-assets_SOURCE_DIR}/live2d-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/Content")
 
 # record sources, headers, resources...
 file(GLOB GAME_SOURCE Source/*.cpp)

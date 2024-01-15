@@ -32,7 +32,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
 endif()
 
 _1kfetch(sample-assets)
-_1klink("${sample-assets_SOURCE_DIR}/cpp-tests/Content" "${_AX_ROOT}/tests/lua-tests/Content/res")
+_1klink("${sample-assets_SOURCE_DIR}/cpp-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/Content/res")
 
 # The common cross-platforms source files and header files
 file(GLOB_RECURSE GAME_HEADER
