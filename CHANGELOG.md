@@ -77,6 +77,8 @@
 - Fix a crash caused by missing android view nullcheck by @Arvant
 - Fix shader cache leak by @@j-jorge
 - Fix AXASSERT() not working with more complex msg arguments by @smilediver
+- Fix assertion fail when re-create axmol imgui backend by @Samoongeer
+
 
 ### Improvements
 
@@ -120,7 +122,7 @@
 
 ### 3rdparties updates
 
-- astcenc: 4.5.0 ==> 4.6.1
+- astcenc: 4.5.0 ==> 4.7.0
 - c-ares: 1.19.1 ==> 1.25.0
 - clipper2: 1.2.2 ==> 1.3.0
 - curl: 8.2.1 ==> 8.5.0
