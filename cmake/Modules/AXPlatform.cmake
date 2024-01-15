@@ -56,6 +56,10 @@ else()
     return()
 endif()
 
+if (NOT DEFINED WIN32)
+    set(WIN32 FALSE)
+endif()
+
 # generators that are capable of organizing into a hierarchy of folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # simplify generator condition, please use them everywhere
