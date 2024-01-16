@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2019-2022 Arm Limited
+// Copyright 2019-2023 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -351,6 +351,13 @@ struct vmask4
 		m[3] = d == false ? 0 : -1;
 	}
 
+	/**
+	 * @brief Get the scalar value of a single lane.
+	 */
+	template <int l> ASTCENC_SIMD_INLINE float lane() const
+	{
+		return m[l] != 0;
+	}
 
 	/**
 	 * @brief The vector ...

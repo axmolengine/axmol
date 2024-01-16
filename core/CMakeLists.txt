@@ -51,7 +51,7 @@ endif()
 include(CMakeDependentOption)
 
 # by default: use angle on win32
-cmake_dependent_option(AX_USE_COMPAT_GL "Whether use compatibility GL as render backend" ON "WIN32" OFF)
+cmake_dependent_option(AX_USE_COMPAT_GL "Whether use compatibility GL as render backend" ${WIN32} "WIN32 OR APPLE" OFF)
 
 # choosing render backend for all target platforms: win32, winuwp, ios, tvos, android, linux, osx
 if(APPLE AND (NOT AX_USE_COMPAT_GL))
@@ -140,7 +140,7 @@ option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 
 option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ON)
 
-option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" ON)
+option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" OFF)
 
 if(XCODE)
     # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
