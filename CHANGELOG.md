@@ -115,10 +115,7 @@
 - Improve cmake scripts for managing 3rd libs
 - Add `Get TMXTilesetInfo` by name support by @lich426
 - Include hpp and c files in CMakeLists.txt of cpp template by @@lich426
-- Improve Gradle Scripts
-  - Merge tasks `copyDebugContentToAssets`, `copyReleaseContentToAssets` to `copyContentAssets`
-  - Simplify tasks dependent definations
-  - Easy to add custom build-variants, refer #1571
+- Improve Gradle Scripts, onfig each build-variants for easy add custom build-variant, refer #1571
 - Allow to override AX_USE_COMPAT_GL from user's `CMakeLists.txt` by @smilediver
 
 ### Break changes
