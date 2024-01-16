@@ -115,8 +115,13 @@
 - Improve cmake scripts for managing 3rd libs
 - Add `Get TMXTilesetInfo` by name support by @lich426
 - Include hpp and c files in CMakeLists.txt of cpp template by @@lich426
-- Improve Gradle Scripts, onfig each build-variants for easy add custom build-variant, refer #1571
+- Improve gradle scripts, config each build-variants for easy add custom build-variant, refer #1571
 - Allow to override AX_USE_COMPAT_GL from user's `CMakeLists.txt` by @smilediver
+- Allow generated debug signed apk, and rename keystore props:
+  - RELEASE_STORE_FILE ==> KEY_STORE_FILE
+  - KEY_STORE_PASSWORD ==> KEY_STORE_PASSWORD
+  - RELEASE_KEY_ALIAS ==> KEY_ALIAS
+  - RELEASE_KEY_PASSWORD ==> KEY_PASSWORD
 
 ### Break changes
 

@@ -175,7 +175,7 @@ if (!$use_gradle) {
 } else { # android gradle
     # engine ci
     if ($is_engine) {
-        $options.xc += "-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks", '-PRELEASE_STORE_PASSWORD=axmol-ci', '-PRELEASE_KEY_ALIAS=axmol-ci', '-PRELEASE_KEY_PASSWORD=axmol-ci'
+        $options.xc += "-PKEY_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks", '-PKEY_STORE_PASSWORD=axmol-ci', '-PKEY_ALIAS=axmol-ci', '-PKEY_PASSWORD=axmol-ci'
     }
 }
 
