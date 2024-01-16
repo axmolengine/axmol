@@ -169,7 +169,8 @@ private:
         task->_block_y = block_y;
         task->_bsd     = aligned_malloc<block_size_descriptor>(sizeof(block_size_descriptor), ASTCENC_VECALIGN);
         init_block_size_descriptor(block_x, block_y, 1, false, 0 /*unused for decompress*/, 0, *task->_bsd);
-        task->_decompress_pm.init(total_blocks);
+        // since astcenc-4.7.0, add second argument=nullptr
+        task->_decompress_pm.init(total_blocks, nullptr);
 #else
         (void)astcenc_config_init(ASTCENC_PRF_LDR, block_x, block_y, 1, 0, ASTCENC_FLG_DECOMPRESS_ONLY, &task->_config);
         (void)astcenc_context_alloc(&task->_config, (unsigned int)_threads.size(), &task->_context);

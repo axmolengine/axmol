@@ -48,7 +48,7 @@ public:
 #pragma message("The optional extension Effekseer is enabled.")
         addTest("Effekseer", []() { return new EffekseerTests(); });
 #endif
-#if __has_include("DrawNodeExTest/DrawNodeExTest.h")
+#if __has_include("DrawNodeExTest.h")
 #    pragma message("The optional extension DrawNodeEx is enabled.")
         addTest("DrawNodeEx", []() { return new DrawNodeExTests(); });
 #endif
