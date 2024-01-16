@@ -4,7 +4,7 @@
 
 - Migrate Windows UWP from C++/CX to [cppwinrt](https://github.com/microsoft/cppwinrt) for c++20 codebase by @halx99
 - Refactor Target Platforms Enums
-- Update AGP to 8.x Android Studio 2022.3.1+
+- Update AGP to 8.2.1+ Android Studio 2023.1.1+
 - Add support for enabling TTF SDF rendering globally by @halx99
 - Add extension: SDFGen to generate prebaked font atlas by @halx99
 - Add API: `FontAtlasCache::preloadFontAtlas` to support label SDF rendering with prebaked atlas by @halx99
@@ -115,6 +115,11 @@
 - Improve cmake scripts for managing 3rd libs
 - Add `Get TMXTilesetInfo` by name support by @lich426
 - Include hpp and c files in CMakeLists.txt of cpp template by @@lich426
+- Improve Gradle Scripts
+  - Merge tasks `copyDebugContentToAssets`, `copyReleaseContentToAssets` to `copyContentAssets`
+  - Simplify tasks dependent definations
+  - Easy to add custom build-variants, refer #1571
+- Allow to override AX_USE_COMPAT_GL from user's `CMakeLists.txt` by @smilediver
 
 ### Break changes
 
