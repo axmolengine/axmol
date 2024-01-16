@@ -30,6 +30,8 @@ Due to Axmol Engine is a fork of Cocos2d-x-4.0, so the [Cocos2d-x AUTHORS](https
 
     aismann
     AsakuraMizu (Asakura Mizu)
+    armanhossiny
+    Arvant
     bwaiox
     crazyhappygame
     CodeAndWeb
@@ -50,6 +52,8 @@ Due to Axmol Engine is a fork of Cocos2d-x-4.0, so the [Cocos2d-x AUTHORS](https
     Obg1 (Oren Bengigi)
     paulocoutinhox (Paulo Coutinho)
     solan-solan
+    smilediver
+    Samoongeer
     Tas-I-te (Tan Shjie)
     tkzcfc
     theunwisewolf (TheUnwiseWolf)

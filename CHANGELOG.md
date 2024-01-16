@@ -2,19 +2,19 @@
 
 ### Significant changes relative to 2.0.0:
 
-- Migrate Windows UWP from C++/CX to [cppwinrt](https://github.com/microsoft/cppwinrt) for c++20 codebase
+- Migrate Windows UWP from C++/CX to [cppwinrt](https://github.com/microsoft/cppwinrt) for c++20 codebase by @halx99
 - Refactor Target Platforms Enums
 - Update AGP to 8.x Android Studio 2022.3.1+
-- Add support for enabling TTF SDF rendering globally
-- Add extension: SDFGen to generate prebaked font atlas
-- Add API: `FontAtlasCache::preloadFontAtlas` to support label SDF rendering with prebaked atlas
-- Add API `Device::getPixelRatio`
-- Add ImGui android DPI scaling support
-- Add winuwp FPS control support
-- Add API: `compressGZ`, `decompressGZ`
-- Combine `backend::Device` and `backend::DeviceInfo` into `backend::DriverBase`
-- Improve axmol console scripts
-- Rebase main repo, repo size reduce from 1.1GB+ to ~80MB
+- Add support for enabling TTF SDF rendering globally by @halx99
+- Add extension: SDFGen to generate prebaked font atlas by @halx99
+- Add API: `FontAtlasCache::preloadFontAtlas` to support label SDF rendering with prebaked atlas by @halx99
+- Add API `Device::getPixelRatio` by @halx99
+- Add ImGui android DPI scaling support by @halx99
+- Add winuwp FPS control support by @halx99
+- Add API: `compressGZ`, `decompressGZ` by @halx99
+- Combine `backend::Device` and `backend::DeviceInfo` into `backend::DriverBase` by @halx99
+- Improve axmol console scripts by @halx99
+- Rebase main repo, repo size reduce from 1.1GB+ to ~80MB by @halx99
   - Add simple cmake pkg manager aka `1k/fetch.cmake` to download all prebuilts,optionals,sample-assets at cmake config step
   - pkg config is in `$AX_ROOT/manifest.json`
   - Download cache dir is `$AX_ROOT/cache`
@@ -27,7 +27,7 @@
 - Add API: `DrawNode::drawPie` by @aismann
 - Add support for window resized and positioned by @lich426
 - Add extension: Inspector by @iAndyHD3
-- Add *experimental* WebSocket support for both wasm and native platforms
+- Add *experimental* WebSocket support for both wasm and native platforms by @halx99 & @rh101
 - Add extension: DrawNodeEx by @aismann
 - Add fairygui lua support by @Samoongeer
 - Enable Mat4 SSE Istructions acceleration by @halx99
@@ -75,7 +75,7 @@
 - Fix UILayout crash problem by @aismann
 - Fix replace scene missing nullcheck for next scene by @armanhossiny
 - Fix a crash caused by missing android view nullcheck by @Arvant
-- Fix shader cache leak by @@j-jorge
+- Fix shader cache leak by @j-jorge
 - Fix AXASSERT() not working with more complex msg arguments by @smilediver
 - Fix assertion fail when re-create axmol imgui backend by @Samoongeer
 
@@ -169,7 +169,7 @@ Notes:
 - Improve text rendering, label SDF outline support
 - Improve FileStream, handle large 4GB+ files
 - Improve ASTC hardware support detection
-- Use ANGLE as default renderer library on win32
+- Use ANGLE(d3d11) as default renderer library on win32
 - Thirdparty Updates
     - ANGLE: 113.0.5672.128 ==> 115.0.5790.173
     - curl: 8.1.2 ==> 8.2.1
