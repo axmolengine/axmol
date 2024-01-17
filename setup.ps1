@@ -199,7 +199,7 @@ else {
             }
         }
 
-        if ($profileContent.IndexOf('export PATH=$AX_ROOT/tools/console:')) {
+        if ($profileContent.IndexOf('export PATH=$AX_ROOT/tools/console:') -eq -1) {
             $profileContent += "# Add axmol console tool to PATH`n"
             $profileContent += 'export PATH=$AX_ROOT/tools/console:$PATH' -f "`n"
             ++$profileMods

@@ -203,6 +203,11 @@ $channels = @{}
 # refer to: https://developer.android.com/studio#command-line-tools-only
 $cmdlinetools_rev = '10406996'
 
+$android_sdk_tools = @{
+    'build-tools' = '34.0.0'
+    'platforms' = 'android-34'
+}
+
 $options = @{
     p      = $null
     a      = $null
@@ -1014,7 +1019,7 @@ function setup_android_sdk() {
 
             ((1..10 | ForEach-Object { "yes"; Start-Sleep -Milliseconds 100 }) | . $sdkmanager_prog --licenses --sdk_root=$sdk_root) | Out-Host
             if (!$ndkOnly) {
-                exec_prog -prog $sdkmanager_prog -params '--verbose', "--sdk_root=$sdk_root", 'platform-tools', 'cmdline-tools;latest', 'platforms;android-33', 'build-tools;30.0.3', 'cmake;3.22.1', $ndkFullVer | Out-Host
+                exec_prog -prog $sdkmanager_prog -params '--verbose', "--sdk_root=$sdk_root", 'platform-tools', 'cmdline-tools;latest', "platforms;$($android_sdk_tools['platforms'])", "build-tools;$($android_sdk_tools['build-tools'])", $ndkFullVer | Out-Host
             }
             else {
                 exec_prog -prog $sdkmanager_prog -params '--verbose', "--sdk_root=$sdk_root", $ndkFullVer | Out-Host

@@ -115,14 +115,14 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 
 ### Android (Android Studio)
 
-  1. Install Android Studio 2022.3.1+
+  1. Install Android Studio 2023.1.1+
   2. When starting Android Studio for the first time, it will guide you to install the SDK and other tools, so ensure that you do install them.
   3. Start Android and choose [Open an existing Android Studio Project] and select your project. For example, the existing cpp-test project located in ```axmol\tests\cpp-tests\proj.android```
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose the following tools and click the button ```Apply``` to install them:  
-     - Android SDK Platform 33  
-     - Android Gradle Plugin (AGP) 8.1.1  
-     - Android SDK Build-Tools 33.0.1 match with AGP, refer to: <https://developer.android.com/studio/releases/gradle-plugin>
-     - Gradle 8.3  
+     - Android SDK Platform 34  
+     - Android Gradle Plugin (AGP) 8.2.1  
+     - Android SDK Build-Tools 34.0.0 match with AGP, refer to: <https://developer.android.com/studio/releases/gradle-plugin>
+     - Gradle 8.5  
      - NDK r23c  
      - CMake 3.22.1+  
   5. Wait for ```Gradle sync``` finish.
