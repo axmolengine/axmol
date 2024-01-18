@@ -2,19 +2,20 @@
 
 ### Significant changes relative to 2.0.0:
 
-- Migrate Windows UWP from C++/CX to [cppwinrt](https://github.com/microsoft/cppwinrt) for c++20 codebase
+- Migrate Windows UWP from C++/CX to [cppwinrt](https://github.com/microsoft/cppwinrt) for c++20 codebase by @halx99
 - Refactor Target Platforms Enums
-- Update AGP to 8.x Android Studio 2022.3.1+
-- Add support for enabling TTF SDF rendering globally
-- Add extension: SDFGen to generate prebaked font atlas
-- Add API: `FontAtlasCache::preloadFontAtlas` to support label SDF rendering with prebaked atlas
-- Add API `Device::getPixelRatio`
-- Add ImGui android DPI scaling support
-- Add winuwp FPS control support
-- Add API: `compressGZ`, `decompressGZ`
-- Combine `backend::Device` and `backend::DeviceInfo` into `backend::DriverBase`
-- Improve axmol console scripts
-- Rebase main repo, repo size reduce from 1.1GB+ to ~80MB
+- Update AGP to 8.2.1 Android Studio 2023.1.1+
+  - Update android API to 34
+- Add support for enabling TTF SDF rendering globally by @halx99
+- Add extension: SDFGen to generate prebaked font atlas by @halx99
+- Add API: `FontAtlasCache::preloadFontAtlas` to support label SDF rendering with prebaked atlas by @halx99
+- Add API `Device::getPixelRatio` by @halx99
+- Add ImGui android DPI scaling support by @halx99
+- Add winuwp FPS control support by @halx99
+- Add API: `compressGZ`, `decompressGZ` by @halx99
+- Combine `backend::Device` and `backend::DeviceInfo` into `backend::DriverBase` by @halx99
+- Improve axmol console scripts by @halx99
+- Rebase main repo, repo size reduce from 1.1GB+ to ~80MB by @halx99
   - Add simple cmake pkg manager aka `1k/fetch.cmake` to download all prebuilts,optionals,sample-assets at cmake config step
   - pkg config is in `$AX_ROOT/manifest.json`
   - Download cache dir is `$AX_ROOT/cache`
@@ -22,12 +23,11 @@
 - Add extension: JSONDefault by @sarooptech
 - Add virtual file system support to WICImageLoader by @rh101
 - Add support for Richtext vertical alignment by @rh101
-- Update android API to 34
 - Add support for ActionCoroutine like Unity by @lich426
 - Add API: `DrawNode::drawPie` by @aismann
 - Add support for window resized and positioned by @lich426
 - Add extension: Inspector by @iAndyHD3
-- Add *experimental* WebSocket support for both wasm and native platforms
+- Add *experimental* WebSocket support for both wasm and native platforms by @halx99 & @rh101
 - Add extension: DrawNodeEx by @aismann
 - Add fairygui lua support by @Samoongeer
 - Enable Mat4 SSE Istructions acceleration by @halx99
@@ -75,8 +75,11 @@
 - Fix UILayout crash problem by @aismann
 - Fix replace scene missing nullcheck for next scene by @armanhossiny
 - Fix a crash caused by missing android view nullcheck by @Arvant
-- Fix shader cache leak by @@j-jorge
+- Fix shader cache leak by @j-jorge
 - Fix AXASSERT() not working with more complex msg arguments by @smilediver
+- Fix assertion fail when re-create axmol imgui backend by @Samoongeer
+- Fix AudioPlayer seek to incorrect frame after setTime invoked by @GuoliangWang
+
 
 ### Improvements
 
@@ -113,6 +116,13 @@
 - Improve cmake scripts for managing 3rd libs
 - Add `Get TMXTilesetInfo` by name support by @lich426
 - Include hpp and c files in CMakeLists.txt of cpp template by @@lich426
+- Improve gradle scripts, config each build-variants for easy add custom build-variant, refer #1571
+- Allow to override AX_USE_COMPAT_GL from user's `CMakeLists.txt` by @smilediver
+- Allow generate debug signed apk, and rename keystore props:
+  - RELEASE_STORE_FILE ==> KEY_STORE_FILE
+  - KEY_STORE_PASSWORD ==> KEY_STORE_PASSWORD
+  - RELEASE_KEY_ALIAS ==> KEY_ALIAS
+  - RELEASE_KEY_PASSWORD ==> KEY_PASSWORD
 
 ### Break changes
 
@@ -120,7 +130,7 @@
 
 ### 3rdparties updates
 
-- astcenc: 4.5.0 ==> 4.6.1
+- astcenc: 4.5.0 ==> 4.7.0
 - c-ares: 1.19.1 ==> 1.25.0
 - clipper2: 1.2.2 ==> 1.3.0
 - curl: 8.2.1 ==> 8.5.0
@@ -167,7 +177,7 @@ Notes:
 - Improve text rendering, label SDF outline support
 - Improve FileStream, handle large 4GB+ files
 - Improve ASTC hardware support detection
-- Use ANGLE as default renderer library on win32
+- Use ANGLE(d3d11) as default renderer library on win32
 - Thirdparty Updates
     - ANGLE: 113.0.5672.128 ==> 115.0.5790.173
     - curl: 8.1.2 ==> 8.2.1
