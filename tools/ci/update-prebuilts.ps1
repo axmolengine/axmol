@@ -25,12 +25,7 @@ function download_file($url, $out, $force = $false) {
         Remove-Item $out
     }
     Write-Host "Downloading $url to $out ..."
-    if ([System.Version]$pwsh_ver -ge [System.Version]'7.0.0.0') {
-        curl -L $url -o $out
-    }
-    else {
-        Invoke-WebRequest -Uri $url -OutFile $out
-    }
+    Invoke-WebRequest -Uri $url -OutFile $out
 }
 
 function download_and_expand($url, $out, $dest) {

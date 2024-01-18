@@ -6,12 +6,12 @@ HOST_OS=$(uname)
 
 myRoot=$(dirname "$0")
 
-$prefix = ~/.1kiss
+prefix=~/.1kiss
 mkdir -p $prefix
 
 pwsh_ver=$1
 if [ "$pwsh_ver" = "" ] ; then
-    pwsh_ver='7.4.0'
+    pwsh_ver='7.4.1'
 fi
 
 function check_pwsh {
