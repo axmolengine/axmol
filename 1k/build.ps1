@@ -743,6 +743,12 @@ function ensure_cmake_ninja($cmake_prog, $ninja_prog) {
         $ninja_symlink_target = Join-Path $cmake_bin (Split-Path $ninja_prog -Leaf)
         # try link ninja exist cmake bin directory
         & "$myRoot\fsync.ps1" -s $ninja_prog -d $ninja_symlink_target -l $true 2>$null
+
+        if(!$? -and $IsWin) { # try runas admin again
+            $mklink_args = "-Command ""& ""$myRoot\fsync.ps1"" -s '$ninja_prog' -d '$ninja_symlink_target' -l `$true 2>`$null"""
+            Write-Host "mklink_args={$mklink_args}"
+            Start-Process powershell -ArgumentList $mklink_args -Verb runas -Wait
+        }
     }
     return $?
 }

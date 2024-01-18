@@ -142,6 +142,14 @@ if ($IsWin) {
         # Re-eval env:PATH to system + users
         $env:PATH = RefreshPath $env:PATH # sync to PowerShell Terminal
     }
+
+    $execPolicy = powershell -Command 'Get-ExecutionPolicy'
+    if ($execPolicy -ne 'Bypass') {
+        println "axmol: Setting system installed powershell execution policy '$execPolicy'==>'Bypass', please click 'YES' on UAC dialog"
+        Start-Process powershell -ArgumentList '-Command "Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force"' -Wait -WindowStyle Hidden -Verb runas
+    } else {
+        println "axmol: Great, the system installed powershell execution policy is '$execPolicy'"
+    }
 }
 else {
     # update pwsh profile

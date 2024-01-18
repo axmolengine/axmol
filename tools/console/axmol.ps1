@@ -307,8 +307,8 @@ if (!$plugin) {
 }
 
 # -h will consumed by param
-$sub_args = $args[1..($args.Count - 1)]
-if (!$sub_args[0] -or $help -or $sub_args[0] -eq '--help') {
+$sub_args = if ($args.Count -gt 1) { $args[1..($args.Count - 1)] } else { $null }
+if (!$sub_args -or $help -or $sub_args[0] -eq '--help') {
     println $plugin.usage
     return
 }

@@ -83,6 +83,7 @@
 
 ### Improvements
 
+- Improve `setup.ps1`, auto set windows `powershell.exe` execution policy to `Bypass`
 - Reduce memory usage when using getFileMD5Hash function by @rh101
 - Improve install-pwsh.sh
 - Apple platforms require cmake-3.28.0
