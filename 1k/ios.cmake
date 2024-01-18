@@ -1,6 +1,6 @@
 #
 # The minimal ios toolchain file: https://github.com/yasio/yasio/blob/dev/cmake/ios.cmake
-# version: 4.1.2
+# version: 4.1.3
 #
 # The supported params:
 #   PLAT: iOS, tvOS, default: iOS
@@ -136,22 +136,15 @@ endif()
 # by default, we want find host program only when cross-compiling
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER CACHE STRING "")
 
-# Sets CMAKE_SYSTEM_PROCESSOR for device and simulator properly
-string(TOLOWER "${CMAKE_OSX_SYSROOT}" lowercase_CMAKE_OSX_SYSROOT)
-if("${lowercase_CMAKE_OSX_SYSROOT}" MATCHES ".*simulator")
-    if("${CMAKE_OSX_ARCHITECTURES}" MATCHES "i386")
-        set(CMAKE_SYSTEM_PROCESSOR i386)
-    elseif("${CMAKE_OSX_ARCHITECTURES}" MATCHES "x86_64")
-        set(CMAKE_SYSTEM_PROCESSOR x86_64)
-    else() # Since xcode12, default arch for simulator is arm64
-        if(${XCODE_VERSION} LESS "12.0.0")
-            set(CMAKE_SYSTEM_PROCESSOR x86_64)
-        else()
-            set(CMAKE_SYSTEM_PROCESSOR arm64)
-        endif()
-    endif()
-else()
-    set(CMAKE_SYSTEM_PROCESSOR arm64)
+# Sets CMAKE_SYSTEM_PROCESSOR properly
+if(ARCHS MATCHES "((arm64|arm64e|x86_64)(^|;|, )?)+")
+  set(CMAKE_C_SIZEOF_DATA_PTR 8)
+  set(CMAKE_CXX_SIZEOF_DATA_PTR 8)
+  if(ARCHS MATCHES "((arm64|arm64e)(^|;|, )?)+")
+    set(CMAKE_SYSTEM_PROCESSOR "arm64")
+  else()
+    set(CMAKE_SYSTEM_PROCESSOR "x86_64")
+  endif()
 endif()
 
 # This little function lets you set any XCode specific property, refer to: ios.toolchain.cmake

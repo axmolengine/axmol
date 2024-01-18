@@ -4,7 +4,8 @@
 
 - Migrate Windows UWP from C++/CX to [cppwinrt](https://github.com/microsoft/cppwinrt) for c++20 codebase by @halx99
 - Refactor Target Platforms Enums
-- Update AGP to 8.2.1+ Android Studio 2023.1.1+
+- Update AGP to 8.2.1 Android Studio 2023.1.1+
+  - Update android API to 34
 - Add support for enabling TTF SDF rendering globally by @halx99
 - Add extension: SDFGen to generate prebaked font atlas by @halx99
 - Add API: `FontAtlasCache::preloadFontAtlas` to support label SDF rendering with prebaked atlas by @halx99
@@ -22,7 +23,6 @@
 - Add extension: JSONDefault by @sarooptech
 - Add virtual file system support to WICImageLoader by @rh101
 - Add support for Richtext vertical alignment by @rh101
-- Update android API to 34
 - Add support for ActionCoroutine like Unity by @lich426
 - Add API: `DrawNode::drawPie` by @aismann
 - Add support for window resized and positioned by @lich426
@@ -78,6 +78,7 @@
 - Fix shader cache leak by @j-jorge
 - Fix AXASSERT() not working with more complex msg arguments by @smilediver
 - Fix assertion fail when re-create axmol imgui backend by @Samoongeer
+- Fix AudioPlayer seek to incorrect frame after setTime invoked by @GuoliangWang
 
 
 ### Improvements
@@ -117,7 +118,7 @@
 - Include hpp and c files in CMakeLists.txt of cpp template by @@lich426
 - Improve gradle scripts, config each build-variants for easy add custom build-variant, refer #1571
 - Allow to override AX_USE_COMPAT_GL from user's `CMakeLists.txt` by @smilediver
-- Allow generated debug signed apk, and rename keystore props:
+- Allow generate debug signed apk, and rename keystore props:
   - RELEASE_STORE_FILE ==> KEY_STORE_FILE
   - KEY_STORE_PASSWORD ==> KEY_STORE_PASSWORD
   - RELEASE_KEY_ALIAS ==> KEY_ALIAS
