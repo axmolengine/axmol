@@ -13,5 +13,3 @@ $manifest['glslcc'] = '1.9.4+'
 # android sdk tools
 $android_sdk_tools['build-tools'] = '34.0.0' # match with AGP, current 8.2.1 android studio 2023.1.1
 $android_sdk_tools['platforms'] = 'android-34'
-
-# [void]$manifest

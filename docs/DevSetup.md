@@ -9,6 +9,7 @@
           - macOS, Ubuntu, ArchLinux: you can simply run `1k/install-pwsh.sh` in axmol root directory [`Recommended`]
           - win10+, system installed PowerShell 5.x should works, but you need run command `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force` to allow run powershell script file
       - Manually Install: [installing-powershell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) or download from [github release](https://github.com/PowerShell/PowerShell/releases)
+- [cmake-3.28.1+](https://cmake.org/download/), install it on your host system manully is recommended(ensure add cmake bin to system `PATH``), otherwise the `axmol build` will auto setup it to `tools/external/cmake`
 
 ## Prerequisites
 
@@ -124,7 +125,6 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
      - Android SDK Build-Tools 34.0.0 match with AGP, refer to: <https://developer.android.com/studio/releases/gradle-plugin>
      - Gradle 8.5  
      - NDK r23c  
-     - CMake 3.22.1+  
   5. Wait for ```Gradle sync``` finish.
   6. Note: If you use non-sdk provided CMake edition, you will need to download ```ninja``` from <https://github.com/ninja-build/ninja/releases>, and copy ```ninja.exe``` to cmake's bin directory
   
@@ -138,7 +138,7 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
   # Install android devtools
   cd D:\dev\adt\
   mkdir sdk
-  .\cmdline-tools\bin\sdkmanager.bat --verbose --sdk_root=D:\dev\adt\sdk "platform-tools" "cmdline-tools;latest" "platforms;android-33" "build-tools;30.0.3" "cmake;3.22.1" "ndk;23.2.8568313"
+  .\cmdline-tools\bin\sdkmanager.bat --verbose --sdk_root=D:\dev\adt\sdk "platform-tools" "cmdline-tools;latest" "platforms;android-34" "build-tools;34.0.0" "ndk;23.2.8568313"
   set ANDROID_HOME=D:\dev\adt\sdk
   
   # Goto xxx\proj.android
@@ -147,13 +147,12 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 
 ### iOS, tvOS and macOS
 
-  1. Requires [CMake](https://cmake.org/) 3.28+ (will also be installed auotmatically via `axmol build` commands listed in step 6 if dependency is not met)
-  2. Ensure xcode 13+ are installed
-  3. Create a new project as shown [here](#creating-a-new-project)
-  4. In a console window, navigate into the root directory of the project you created in the previous step
-  5. Execute the following command
+  1. Ensure xcode 13+ are installed
+  2. Create a new project as shown [here](#creating-a-new-project)
+  3. In a console window, navigate into the root directory of the project you created in the previous step
+  4. Execute the following command
    ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
-  6. Generate the relevant xcode project using one of the following commands:
+  5. Generate the relevant xcode project using one of the following commands:
      - for ios arm64:  
      ```axmol build -p ios -a arm64 -c```
      - for ios simulator x86_64:  
@@ -167,8 +166,8 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
      - for macos arm64(M1)
      ```axmol build -p osx -a arm64 -c```
 
-  7. After cmake finishes generating, you can open the xcode project at ```build_${plat}_${arch}``` folder and run cpp-tests or other test targets, for osx x64 should be `build_x64`
-  8. Notes  
+  6. After cmake finishes generating, you can open the xcode project at ```build_${plat}_${arch}``` folder and run cpp-tests or other test targets, for osx x64 should be `build_x64`
+  7. Notes  
      - **The code signing is required to run the ios/tvos app on your device, just change the bundle identifier until the auto manage signing is solved**  
      - **axmol only provides arm64, x86_64 prebuilt libraries for ios/tvos**
 

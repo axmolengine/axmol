@@ -6,7 +6,7 @@ android {
     compileSdk PROP_COMPILE_SDK_VERSION.toInteger()
 
     // Setup native build tools: ndk & cmake
-    def nbtInfo = axutils.findNativeBuildTools(project)
+    def nbtInfo = axutils.findNativeBuildTools(project, '3.28.1+')
     ndkVersion = nbtInfo[0]
     if(nbtInfo[1]) {
         ndkPath = nbtInfo[1]
