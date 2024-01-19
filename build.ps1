@@ -34,7 +34,8 @@
 #
 param(
     [switch]$configOnly,
-    [switch]$forceConfig
+    [switch]$forceConfig,
+    [switch]$setupOnly
 )
 
 $options = @{p = $null; a = $null; d = $null; cc = $null; xc = @(); xb = @(); sdk = $null; dll = $false }
@@ -201,6 +202,9 @@ if ($configOnly) {
 }
 if ($forceConfig) {
     $forward_args['forceConfig'] = $true
+}
+if ($setupOnly) {
+    $forward_args['setupOnly'] = $true
 }
 
 . $b1k_script @b1k_args @forward_args

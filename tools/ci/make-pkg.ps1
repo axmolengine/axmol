@@ -89,8 +89,10 @@ function Compress-ArchiveEx() {
         Add-Type -AssemblyName System.IO.Compression.FileSystem
     }
 
-    $pwsh_ver = $PSVersionTable.PSVersion.ToString()
-    if (([System.Version]$pwsh_ver -ge [System.Version]'7.0.0.0') -and $IsWindows) {
+    # import VersionEx
+    . (Join-Path $AX_ROOT '1k/versionex.ps1')
+
+    if (([VersionEx]$PSVersionTable.PSVersion.ToString() -ge [VersionEx]'7.0') -and $IsWindows) {
 
         if (-not ([System.Management.Automation.PSTypeName]'UnixFileStream').Type) {
             Add-Type -TypeDefinition @"
