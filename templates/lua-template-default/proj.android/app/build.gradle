@@ -86,6 +86,10 @@ android {
     aaptOptions {
        noCompress 'mp3','ogg','wav','mp4','ttf','ttc'
     }
+    
+    buildFeatures {
+        aidl true
+    }
 }
 
 android.applicationVariants.configureEach { variant ->
