@@ -3,7 +3,7 @@ set(target_name ${lib_name})
 
 project(${lib_name})
 
-_1kfetch_dist(curl "${PARENT_DIRECTORY}/_deps")
+_1kfetch_dist(curl)
 
 if(WINDOWS)
   add_library(${target_name} SHARED IMPORTED GLOBAL)

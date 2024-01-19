@@ -3,7 +3,7 @@ set(lib_name angle)
 
 project(${lib_name})
 
-_1kfetch_dist(angle "${PARENT_DIRECTORY}/_deps")
+_1kfetch_dist(angle)
 
 if(WINRT)
   # -----macro: set openssl sub target-----

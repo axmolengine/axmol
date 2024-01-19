@@ -94,7 +94,7 @@ $exeSuffix = if ($HOST_OS -eq 0) { '.exe' } else { '' }
 $Script:cmake_generator = $null
 
 # import VersionEx
-. (Join-Path $PSScriptRoot 'versionex.ps1')
+. (Join-Path $PSScriptRoot 'extensions.ps1')
 
 class build1k {
     [void] println($msg) {
@@ -300,6 +300,8 @@ $Global:is_win_family = $Global:is_winrt -or $Global:is_win32
 $Global:is_darwin_embed_family = $Global:is_ios -or $Global:is_tvos -or $Global:is_watchos
 $Global:is_darwin_family = $Global:is_mac -or $Global:is_darwin_embed_family
 $Global:is_gh_act = "$env:GITHUB_ACTIONS" -eq 'true'
+
+$Script:cmake_ver = ''
 
 if (!$is_wasm) {
     $TARGET_CPU = $options.a
@@ -665,7 +667,7 @@ function setup_ninja() {
 function setup_cmake($skipOS = $false) {
     $cmake_prog, $cmake_ver = find_prog -name 'cmake'
     if ($cmake_prog -and (!$skipOS -or $cmake_prog.IndexOf($myRoot) -ne -1)) {
-        return $cmake_prog
+        return $cmake_prog, $cmake_ver
     }
 
     $cmake_root = $(Join-Path $external_prefix 'cmake')
@@ -731,7 +733,7 @@ function setup_cmake($skipOS = $false) {
     if (($null -ne $cmake_bin) -and ($env:PATH.IndexOf($cmake_bin) -eq -1)) {
         $env:PATH = "$cmake_bin$ENV_PATH_SEP$env:PATH"
     }
-    return $cmake_prog
+    return $cmake_prog, $cmake_ver
 }
 
 function ensure_cmake_ninja($cmake_prog, $ninja_prog) {
@@ -1254,7 +1256,7 @@ function preprocess_andorid([string[]]$inputOptions) {
 
         $archs = $archlist -join ':' # TODO: modify gradle, split by ';'
 
-        $outputOptions += "-P__1K_CMAKE_VERSION=$($manifest['cmake'])"
+        $outputOptions += "-P__1K_CMAKE_VERSION=$($Script:cmake_ver.TrimLast('-'))"
         $outputOptions += "-P__1K_ARCHS=$archs"
         $outputOptions += '--parallel', '--info'
     }
@@ -1374,7 +1376,7 @@ validHostAndToolchain
 
 $null = setup_glslcc
 
-$cmake_prog = setup_cmake
+$cmake_prog,$Script:cmake_ver = setup_cmake
 
 if ($Global:is_win_family) {
     find_vs_latest
@@ -1394,7 +1396,7 @@ elseif ($Global:is_android) {
     $ninja_prog = setup_ninja
     # ensure ninja in cmake_bin
     if (!(ensure_cmake_ninja $cmake_prog $ninja_prog)) {
-        $cmake_prog = setup_cmake -Force
+        $cmake_prog,$Script:cmake_ver = setup_cmake -Force
         if (!(ensure_cmake_ninja $cmake_prog $ninja_prog)) {
             $b1k.println("Ensure ninja in cmake bin directory fail")
         }
@@ -1576,10 +1578,9 @@ if (!$setupOnly) {
         $b1k.println("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
 
         if ($Global:is_android -and $is_gradlew) {
-            $storedLocation = (Get-Location).Path
             $build_tool = (Get-Command $options.xt).Source
             $build_tool_dir = Split-Path $build_tool -Parent
-            Set-Location $build_tool_dir
+            Push-Location $build_tool_dir
             if (!$configOnly) {
                 if ($optimize_flag -eq 'Debug') {
                     & $build_tool assembleDebug $CONFIG_ALL_OPTIONS | Out-Host
@@ -1591,65 +1592,64 @@ if (!$setupOnly) {
             else {
                 & $build_tool tasks
             }
-            Set-Location $storedLocation
+            Pop-Location
         }
         else {
             # step3. configure
-
             $workDir = $(Get-Location).Path
-
             $mainDep = Join-Path $workDir 'CMakeLists.txt'
-            if (!$b1k.isfile($mainDep)) {
-                $b1k.println("Missing CMakeLists.txt in $workDir")
-                Set-Location $stored_cwd
-                return
-            }
+            if ($b1k.isfile($mainDep)) {
+                $mainDepChanged = $false
+                # A Windows file time is a 64-bit value that represents the number of 100-nanosecond
+                $tempFileItem = Get-Item $mainDep
+                $lastWriteTime = $tempFileItem.LastWriteTime.ToFileTimeUTC()
+                $tempFile = Join-Path $BUILD_DIR 'b1k_cache.txt'
 
-            $mainDepChanged = $false
-            # A Windows file time is a 64-bit value that represents the number of 100-nanosecond
-            $tempFileItem = Get-Item $mainDep
-            $lastWriteTime = $tempFileItem.LastWriteTime.ToFileTimeUTC()
-            $tempFile = Join-Path $BUILD_DIR 'b1k_cache.txt'
-
-            $storeHash = 0
-            if ($b1k.isfile($tempFile)) {
-                $storeHash = Get-Content $tempFile -Raw
-            }
-            $hashValue = $b1k.hash("$CONFIG_ALL_OPTIONS#$lastWriteTime")
-            $mainDepChanged = "$storeHash" -ne "$hashValue"
-            $cmakeCachePath = $b1k.realpath("$BUILD_DIR/CMakeCache.txt")
-
-            if ($mainDepChanged -or !$b1k.isfile($cmakeCachePath) -or $forceConfig) {
-                if (!$is_wasm) {
-                    cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
+                $storeHash = 0
+                if ($b1k.isfile($tempFile)) {
+                    $storeHash = Get-Content $tempFile -Raw
                 }
-                else {
-                    emcmake cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
-                }
-                Set-Content $tempFile $hashValue -NoNewline
-            }
+                $hashValue = $b1k.hash("$CONFIG_ALL_OPTIONS#$lastWriteTime")
+                $mainDepChanged = "$storeHash" -ne "$hashValue"
+                $cmakeCachePath = $b1k.realpath("$BUILD_DIR/CMakeCache.txt")
 
-            if (!$configOnly) {
-                if (!$is_engine) {
-                    if (!$b1k.isfile($cmakeCachePath)) {
-                        throw "The cmake generate incomplete, pelase add '-f' to re-generate again"
+                if ($mainDepChanged -or !$b1k.isfile($cmakeCachePath) -or $forceConfig) {
+                    if (!$is_wasm) {
+                        cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
                     }
+                    else {
+                        emcmake cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
+                    }
+                    Set-Content $tempFile $hashValue -NoNewline
                 }
 
-                # step4. build
-                # apply additional build options
-                $BUILD_ALL_OPTIONS += "--parallel"
-                if ($Global:is_linux) {
-                    $BUILD_ALL_OPTIONS += "$(nproc)"
-                }
-                if (($cmake_generator -eq 'Xcode') -and ($BUILD_ALL_OPTIONS.IndexOf('--verbose') -eq -1)) {
-                    $BUILD_ALL_OPTIONS += '--', '-quiet'
-                }
-                $b1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
+                if (!$configOnly) {
+                    if (!$is_engine) {
+                        if (!$b1k.isfile($cmakeCachePath)) {
+                            Set-Location $stored_cwd
+                            throw "The cmake generate incomplete, pelase add '-f' to re-generate again"
+                        }
+                    }
 
-                cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS | Out-Host
+                    # step4. build
+                    # apply additional build options
+                    $BUILD_ALL_OPTIONS += "--parallel"
+                    if ($Global:is_linux) {
+                        $BUILD_ALL_OPTIONS += "$(nproc)"
+                    }
+                    if (($cmake_generator -eq 'Xcode') -and ($BUILD_ALL_OPTIONS.IndexOf('--verbose') -eq -1)) {
+                        $BUILD_ALL_OPTIONS += '--', '-quiet'
+                    }
+                    $b1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
+
+                    cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS | Out-Host
+                }
+            } else {
+                $b1k.println("Missing CMakeLists.txt in $workDir")
             }
         }
+
+        Set-Location $stored_cwd
     } else {
         # google gclient/gn build system
         # refer: https://chromium.googlesource.com/chromium/src/+/eca97f87e275a7c9c5b7f13a65ff8635f0821d46/tools/gn/docs/reference.md#args_specifies-build-arguments-overrides-examples
@@ -1728,7 +1728,5 @@ if (!$setupOnly) {
         isHostTarget = $is_host_target
         compilerID   = $TOOLCHAIN_NAME
     }
-
-    Set-Location $stored_cwd
 }
 

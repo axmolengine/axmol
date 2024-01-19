@@ -90,7 +90,7 @@ function Compress-ArchiveEx() {
     }
 
     # import VersionEx
-    . (Join-Path $AX_ROOT '1k/versionex.ps1')
+    . (Join-Path $AX_ROOT '1k/extensions.ps1')
 
     if (([VersionEx]$PSVersionTable.PSVersion.ToString() -ge [VersionEx]'7.0') -and $IsWindows) {
 

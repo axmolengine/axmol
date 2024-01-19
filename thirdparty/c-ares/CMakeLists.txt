@@ -3,7 +3,7 @@ set(target_name c-ares)
 
 project(${target_name})
 
-_1kfetch_dist(cares "${PARENT_DIRECTORY}/_deps")
+_1kfetch_dist(cares)
 
 if(WINDOWS)
   add_library(${target_name} SHARED IMPORTED GLOBAL)

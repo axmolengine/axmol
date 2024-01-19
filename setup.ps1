@@ -6,7 +6,7 @@ $AX_ROOT = $myRoot
 Set-Alias println Write-Host
 
 # import VersionEx
-. (Join-Path $PSScriptRoot '1k/versionex.ps1')
+. (Join-Path $PSScriptRoot '1k/extensions.ps1')
 
 $pwsh_ver = [VersionEx]$PSVersionTable.PSVersion.ToString()
 

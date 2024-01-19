@@ -327,4 +327,4 @@ if ($args[0] -eq 'new') {
     }
 }
 
-. $plugin.proc @sub_args @sub_opts
+. $plugin.proc $sub_args @sub_opts

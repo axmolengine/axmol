@@ -124,6 +124,7 @@
   - KEY_STORE_PASSWORD ==> KEY_STORE_PASSWORD
   - RELEASE_KEY_ALIAS ==> KEY_ALIAS
   - RELEASE_KEY_PASSWORD ==> KEY_PASSWORD
+- Enable template projects' `aidl` by default for In-app purchases by @armanhossiny
 
 ### Break changes
 
