@@ -20,6 +20,9 @@ if (!$projectName) {
     throw "The project name can't be empty"
 }
 
+# convert to absolute path
+$directory = realpath $directory
+
 if ($lang -eq 'cpp' -or $lang -eq 'lua') {
     if (!(Test-Path $directory -PathType Container)) {
         New-Item $directory -ItemType Directory
@@ -60,7 +63,11 @@ $template_cfg = ConvertFrom-Json (Get-Content $template_cfg_file -Raw)
 # variable for replace
 $projectDir = $(Resolve-Path $destinationPath).Path
 
-println "Creating project $projectName, is_portrait=$is_portrait ..."
+println "Creating project $projectName ..."
+println "==> packageName: $packageName"
+println "==> destinationPath: $destinationPath"
+println "==> lang: $lang"
+println "==> is_portrait: $is_portrait"
 
 # actionParam
 #   rep

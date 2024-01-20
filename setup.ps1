@@ -3,7 +3,7 @@
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
 
-Set-Alias println Write-Host
+function println($message) { Write-Host "axmol: $message" }
 
 # import VersionEx
 . (Join-Path $PSScriptRoot '1k/extensions.ps1')
@@ -148,10 +148,10 @@ if ($IsWin) {
 
     $execPolicy = powershell -Command 'Get-ExecutionPolicy'
     if ($execPolicy -ne 'Bypass') {
-        println "axmol: Setting system installed powershell execution policy '$execPolicy'==>'Bypass', please click 'YES' on UAC dialog"
+        println "Setting system installed powershell execution policy '$execPolicy'==>'Bypass', please click 'YES' on UAC dialog"
         Start-Process powershell -ArgumentList '-Command "Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force"' -WindowStyle Hidden -Wait -Verb runas
     } else {
-        println "axmol: Great, the system installed powershell execution policy is '$execPolicy'"
+        println "Great, the system installed powershell execution policy is '$execPolicy'"
     }
 }
 else {
