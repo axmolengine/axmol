@@ -140,7 +140,7 @@ class build1k {
     }
 
     [void] pause($msg) {
-        $executed_from_explorer = $false
+        $shoud_pause = $false
         do {
             if (!$Global:IsWin) { break }
             $myProcess = [System.Diagnostics.Process]::GetCurrentProcess()
@@ -154,8 +154,14 @@ class build1k {
             }
 
             $executed_from_explorer = ($parentProcess.ProcessName -like "explorer")
+            if ($executed_from_explorer) {
+                $procesCmdLineArgs = "$([System.Environment]::GetCommandLineArgs())"
+                if ($procesCmdLineArgs.IndexOf('.ps1') -ne -1 -and $procesCmdLineArgs.IndexOf('-noexit') -eq -1) {
+                    shoud_pause = $true
+                }
+            }
         } while ($false)
-        if ($executed_from_explorer) {
+        if ($shoud_pause) {
             $this.print("$msg, press any key to continue . . .")
             cmd /c pause 1>$null
         }
