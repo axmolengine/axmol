@@ -322,7 +322,7 @@ if (!$plugin) {
 }
 
 # -h will consumed by param
-# !!!Note: 3 condition statement: 'xxx = if(c) { v1 } else { v2 }' will lost switch parameter semantic
+# !!!Note: 3 condition statement: 'xxx = if(c) { v1 } else { v2 }' will lost array type if source array only 1 element
 if ($args.Count -gt 1) { 
     $sub_args = $args[1..($args.Count - 1)] 
 } 
@@ -336,7 +336,7 @@ if (!$sub_args -or $help -or $sub_args[0] -eq '--help') {
 
 # force convert sub_args to array if it's a single string
 if ($sub_args -isnot [array]) {
-    $sub_args = [array]$sub_args
+    $sub_args = @($sub_args)
 }
 
 $sub_opts = @{}
