@@ -32357,7 +32357,7 @@ int lua_ax_base_UserDefault_setFileName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_UserDefault_setFileName'", nullptr);
             return 0;
         }
-        ax::UserDefault::setFileName();
+        ax::UserDefault::getInstance()->setFileName();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -32370,7 +32370,7 @@ int lua_ax_base_UserDefault_setFileName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_UserDefault_setFileName'", nullptr);
             return 0;
         }
-        ax::UserDefault::setFileName(arg0);
+        ax::UserDefault::getInstance()->setFileName(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
