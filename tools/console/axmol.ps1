@@ -322,14 +322,22 @@ if (!$plugin) {
 }
 
 # -h will consumed by param
-$sub_args = if ($args.Count -gt 1) { $args[1..($args.Count - 1)] } else { $null }
+# !!!Note: 3 condition statement: 'xxx = if(c) { v1 } else { v2 }' will lost switch parameter semantic
+if ($args.Count -gt 1) { 
+    $sub_args = $args[1..($args.Count - 1)] 
+} 
+else {
+    $sub_args = $null 
+}
 if (!$sub_args -or $help -or $sub_args[0] -eq '--help') {
     println $plugin.usage
     return
 }
 
 # force convert sub_args to array if it's a single string
-$sub_args = [array]$sub_args
+if ($sub_args -isnot [array]) {
+    $sub_args = [array]$sub_args
+}
 
 $sub_opts = @{}
 if ($sub_args.IndexOf('-d') -eq -1) {
