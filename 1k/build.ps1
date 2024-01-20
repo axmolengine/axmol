@@ -157,7 +157,7 @@ class build1k {
             if ($executed_from_explorer) {
                 $procesCmdLineArgs = "$([System.Environment]::GetCommandLineArgs())"
                 if ($procesCmdLineArgs.IndexOf('.ps1') -ne -1 -and $procesCmdLineArgs.IndexOf('-noexit') -eq -1) {
-                    shoud_pause = $true
+                    $shoud_pause = $true
                 }
             }
         } while ($false)
