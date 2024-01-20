@@ -37,7 +37,8 @@ if (WINDOWS)
     if (NOT CMAKE_SYSTEM_VERSION)
         set(CMAKE_SYSTEM_VERSION ${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION})
     endif()
-    if (${CMAKE_SYSTEM_VERSION} VERSION_GREATER_EQUAL "10.0.22000.0")
+    # CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION aka selected windows sdk version
+    if (${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION} VERSION_GREATER_EQUAL "10.0.22000.0")
         set(CMAKE_C_STANDARD 11)
     else()
         # windows sdk < 10.0.22000.0, The c11 header stdalign.h was missing, so workaroud fallback C standard to 99
