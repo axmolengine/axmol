@@ -119,9 +119,9 @@
 - Include hpp and c files in CMakeLists.txt of cpp template by @@lich426
 - Improve gradle scripts, config each build-variants for easy add custom build-variant, refer #1571
 - Allow to override AX_USE_COMPAT_GL from user's `CMakeLists.txt` by @smilediver
-- Allow generate debug signed apk, and rename keystore props:
+- Fix android gradle AGP8 warnings, and rename keystore props:
   - RELEASE_STORE_FILE ==> KEY_STORE_FILE
-  - KEY_STORE_PASSWORD ==> KEY_STORE_PASSWORD
+  - RELEASE_KEY_STORE_PASSWORD ==> KEY_STORE_PASSWORD
   - RELEASE_KEY_ALIAS ==> KEY_ALIAS
   - RELEASE_KEY_PASSWORD ==> KEY_PASSWORD
 - Enable template projects' `aidl` by default for In-app purchases by @armanhossiny
