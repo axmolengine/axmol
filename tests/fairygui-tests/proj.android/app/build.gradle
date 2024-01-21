@@ -52,7 +52,7 @@ android {
     }
 
     signingConfigs {
-       common {
+       release {
             if (project.hasProperty("KEY_STORE_FILE")) {
                 storeFile file(KEY_STORE_FILE)
                 storePassword KEY_STORE_PASSWORD
@@ -71,7 +71,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             if (project.hasProperty("KEY_STORE_FILE")) {
-                signingConfig signingConfigs.common
+                signingConfig signingConfigs.release
             }
         }
 
@@ -79,9 +79,6 @@ android {
             debuggable true
             jniDebuggable true
             renderscriptDebuggable true
-            if (project.hasProperty("KEY_STORE_FILE")) {
-                signingConfig signingConfigs.common
-            }
         }
     }
 

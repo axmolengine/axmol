@@ -201,6 +201,21 @@ namespace System
             return v1.CompareTo(v2) >= 0;
         }
     }
+
+    public static class ExtensionMethods
+    {
+        public static string TrimLast(this Management.Automation.PSObject thiz, string separator)
+        {
+            var str = thiz.BaseObject as string;
+            var index = str.LastIndexOf(separator);
+            if (index != -1)
+                return str.Substring(0, index);
+            return str;
+        }
+    }
 }
 "@
+
+$TrimLastMethod = [ExtensionMethods].GetMethod('TrimLast')
+Update-TypeData -TypeName System.String -MemberName TrimLast -MemberType CodeMethod -Value $TrimLastMethod
 }

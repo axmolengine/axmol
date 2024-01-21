@@ -1,9 +1,6 @@
 name: publish
 
 on:
-  workflow_run:
-    workflows: [build]
-    types: [completed]
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
