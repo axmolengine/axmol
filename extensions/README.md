@@ -1,10 +1,5 @@
 # The Axmol extensions
 
-## DragonBones - Deprecrated, will be removed in axmol-2.2.0 (see #1602)
-- Upstream: https://github.com/DragonBones/DragonBonesCPP
-- Version: 4.5
-- License: MIT
-
 ## DrawNodeEx
 - Upstream: https://github.com/axmolengine/axmol
 - Version: 0.9
@@ -15,11 +10,6 @@
 - https://github.com/effekseer/EffekseerForCocos2d-x
 - https://github.com/effekseer/Effekseer
 - Version: 1.70
-- License: MIT
-
-## GUI - Deprecrated, will be removed in axmol-2.2.0 (see #1602)
-- Upstream: https://github.com/axmolengine/axmol
-- Version: axmol-1.0
 - License: MIT
 
 ## ImGui
