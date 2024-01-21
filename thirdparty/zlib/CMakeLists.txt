@@ -1,7 +1,7 @@
 set(target_name "zlib")
 project(${target_name})
 
-_1kfetch_dist(zlib "${PARENT_DIRECTORY}/_deps")
+_1kfetch_dist(zlib)
 
 if(WINDOWS)
   add_library(${target_name} SHARED IMPORTED GLOBAL)

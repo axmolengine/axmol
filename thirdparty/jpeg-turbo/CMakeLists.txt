@@ -4,7 +4,7 @@ set(target_name ${lib_name})
 
 project(${lib_name})
 
-_1kfetch_dist(jpeg-turbo "${PARENT_DIRECTORY}/_deps")
+_1kfetch_dist(jpeg-turbo)
 
 add_library(${target_name} STATIC IMPORTED GLOBAL)
 
