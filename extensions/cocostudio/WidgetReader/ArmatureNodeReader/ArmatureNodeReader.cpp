@@ -7,9 +7,9 @@
 #include "CSParseBinary_generated.h"
 #include "WidgetReader/ArmatureNodeReader/CSArmatureNode_generated.h"
 #include "Armature.h"
-#if defined(AX_ENABLE_EXT_DRAGONBONES)
-#    include "DragonBones/CCDragonBonesHeaders.h"
-#endif
+//#if defined(AX_ENABLE_EXT_DRAGONBONES)
+//#    include "DragonBones/CCDragonBonesHeaders.h"
+//#endif
 
 USING_NS_AX;
 using namespace cocostudio;
@@ -142,50 +142,50 @@ void ArmatureNodeReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffe
     if (FileUtils::getInstance()->isFileExist(filepath))
     {
         fileExist = true;
-#if defined(AX_ENABLE_EXT_DRAGONBONES)
-        auto filep = filepath.rfind('.');
-        if (filep != std::string::npos && strcmp(&filepath[filep], ".json") == 0)
-        {  // Currently, adjust by file ext, regard as DragonBones 4.5/5.0
-            // 4.5 texture info is fixed as texture.png, texture.json
-            // 5.o texture info is _tex.json _tex.png
-            auto sharedFactory         = dragonBones::CCFactory::getFactory();
-            const auto dragonBonesData = sharedFactory->loadDragonBonesData(filepath, filepath);
-
-            if (dragonBonesData != nullptr)
-            {
-                auto slash = filepath.rfind('/');
-                if (slash == std::string::npos)
-                    slash = filepath.rfind("\\");
-                if (slash != std::string::npos)
-                {
-                    auto folder = filepath.substr(0, slash + 1);
-                    // try dragonBones 5.0 firstly;
-                    std::string commonName;
-                    auto _skePos = filepath.find("_ske");
-                    if (_skePos != std::string::npos)
-                    {
-                        commonName = filepath.substr(slash + 1, _skePos - slash - 1);
-                    }
-                    auto succeed =
-                        sharedFactory->loadTextureAtlasData(folder + commonName + "_tex.json", filepath) != nullptr;
-                    if (succeed || sharedFactory->loadTextureAtlasData(folder + "texture.json", filepath) != nullptr)
-                    {
-                        std::string designArmatureName(options->currentArmatureName()->c_str());
-                        auto armatureNode = sharedFactory->buildArmatureDisplay(designArmatureName);
-
-                        armatureNode->setScale(options->armatureScale());
-                        armatureNode->getAnimation()->timeScale = options->timeScale();
-
-                        std::string currentname = options->currentAnimationName()->c_str();
-                        armatureNode->getAnimation()->play(currentname, options->isLoop() ? -1 : 1);
-
-                        *ppResult = armatureNode;
-                    }
-                }
-            }
-        }
-        else
-#endif
+//#if defined(AX_ENABLE_EXT_DRAGONBONES)
+//        auto filep = filepath.rfind('.');
+//        if (filep != std::string::npos && strcmp(&filepath[filep], ".json") == 0)
+//        {  // Currently, adjust by file ext, regard as DragonBones 4.5/5.0
+//            // 4.5 texture info is fixed as texture.png, texture.json
+//            // 5.o texture info is _tex.json _tex.png
+//            auto sharedFactory         = dragonBones::CCFactory::getFactory();
+//            const auto dragonBonesData = sharedFactory->loadDragonBonesData(filepath, filepath);
+//
+//            if (dragonBonesData != nullptr)
+//            {
+//                auto slash = filepath.rfind('/');
+//                if (slash == std::string::npos)
+//                    slash = filepath.rfind("\\");
+//                if (slash != std::string::npos)
+//                {
+//                    auto folder = filepath.substr(0, slash + 1);
+//                    // try dragonBones 5.0 firstly;
+//                    std::string commonName;
+//                    auto _skePos = filepath.find("_ske");
+//                    if (_skePos != std::string::npos)
+//                    {
+//                        commonName = filepath.substr(slash + 1, _skePos - slash - 1);
+//                    }
+//                    auto succeed =
+//                        sharedFactory->loadTextureAtlasData(folder + commonName + "_tex.json", filepath) != nullptr;
+//                    if (succeed || sharedFactory->loadTextureAtlasData(folder + "texture.json", filepath) != nullptr)
+//                    {
+//                        std::string designArmatureName(options->currentArmatureName()->c_str());
+//                        auto armatureNode = sharedFactory->buildArmatureDisplay(designArmatureName);
+//
+//                        armatureNode->setScale(options->armatureScale());
+//                        armatureNode->getAnimation()->timeScale = options->timeScale();
+//
+//                        std::string currentname = options->currentAnimationName()->c_str();
+//                        armatureNode->getAnimation()->play(currentname, options->isLoop() ? -1 : 1);
+//
+//                        *ppResult = armatureNode;
+//                    }
+//                }
+//            }
+//        }
+//        else
+//#endif
         {
             std::string fullpath = FileUtils::getInstance()->fullPathForFilename(filepath);
 

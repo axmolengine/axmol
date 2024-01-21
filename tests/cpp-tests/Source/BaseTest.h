@@ -28,9 +28,9 @@
 
 #include "axmol.h"
 #include "extensions/axmol-ext.h"
-#include "GUI/ControlExtension/ControlExtensions.h"
-#include "GUI/ScrollView/ScrollView.h"
-#include "GUI/ScrollView/TableView.h"
+//#include "GUI/ControlExtension/ControlExtensions.h"
+//#include "GUI/ScrollView/ScrollView.h"
+//#include "GUI/ScrollView/TableView.h"
 #include "VisibleRect.h"
 
 class TestSuite;
