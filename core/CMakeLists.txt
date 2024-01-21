@@ -116,14 +116,11 @@ option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 # total supported extensions count: 13
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
 
-option(AX_ENABLE_EXT_GUI "Build extension GUI" ON)
-
 option(AX_ENABLE_EXT_ASSETMANAGER "Build extension asset-manager" ON)
 option(AX_ENABLE_EXT_PARTICLE3D "Build extension Particle3D" ON)
 option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ON)
 
 option(AX_ENABLE_EXT_SPINE "Build extension spine" ON)
-option(AX_ENABLE_EXT_DRAGONBONES "Build extension DragonBones" ON)
 
 option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ON)
 
