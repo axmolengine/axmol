@@ -49,6 +49,7 @@ include(AXConfigDefine)
 # config libraries dependence
 include(AXConfigDepend)
 
+message(AUTHOR_WARNING "CMAKE_VERSION:" ${CMAKE_VERSION})
 message(STATUS "CMAKE_HOST_SYSTEM_NAME:" ${CMAKE_HOST_SYSTEM_NAME})
 message(STATUS "CMAKE_SYSTEM_NAME:" ${CMAKE_SYSTEM_NAME})
 message(STATUS "CMAKE_GENERATOR_PLATFORM:" ${CMAKE_GENERATOR_PLATFORM})
@@ -65,4 +66,4 @@ message(STATUS "PROJECT_BINARY_DIR:" ${PROJECT_BINARY_DIR})
 message(STATUS "ENGINE_BINARY_PATH:" ${ENGINE_BINARY_PATH})
 message(STATUS "ARCH_ALIAS:" ${ARCH_ALIAS})
 
-ax_check_archs()
+_1k_deprecated_32bit(axmol 2.2.0)

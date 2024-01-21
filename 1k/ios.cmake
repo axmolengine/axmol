@@ -1,6 +1,6 @@
 #
 # The minimal ios toolchain file: https://github.com/yasio/yasio/blob/dev/cmake/ios.cmake
-# version: 4.1.1
+# version: 4.1.3
 #
 # The supported params:
 #   PLAT: iOS, tvOS, default: iOS
@@ -84,13 +84,25 @@ if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
     set(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${CMAKE_OSX_DEPLOYMENT_TARGET} CACHE STRING "")
 endif()
 
-if(SIMULATOR)
+if (NOT SIMULATOR)
+    if(PLAT STREQUAL "iOS")
+        set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos")
+    elseif(PLAT STREQUAL "tvOS")
+        set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-appletvos")
+    elseif(PLAT STREQUAL "watchOS")
+        set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-watchos")
+    endif()
+else()
     if (PLAT STREQUAL "iOS")
         set(_SDK_NAME "iphonesimulator")
+        set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphonesimulator")
     elseif(PLAT STREQUAL "tvOS")
         set(_SDK_NAME "appletvsimulator")
+        set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-tvsimulator")
+
     elseif(PLAT STREQUAL "watchOS")
         set(_SDK_NAME "watchsimulator")
+        set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-watchsimulator")
     else()
         message(FATAL_ERROR "PLAT=${PLAT} unsupported!")
     endif()
@@ -124,22 +136,15 @@ endif()
 # by default, we want find host program only when cross-compiling
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER CACHE STRING "")
 
-# Sets CMAKE_SYSTEM_PROCESSOR for device and simulator properly
-string(TOLOWER "${CMAKE_OSX_SYSROOT}" lowercase_CMAKE_OSX_SYSROOT)
-if("${lowercase_CMAKE_OSX_SYSROOT}" MATCHES ".*simulator")
-    if("${CMAKE_OSX_ARCHITECTURES}" MATCHES "i386")
-        set(CMAKE_SYSTEM_PROCESSOR i386)
-    elseif("${CMAKE_OSX_ARCHITECTURES}" MATCHES "x86_64")
-        set(CMAKE_SYSTEM_PROCESSOR x86_64)
-    else() # Since xcode12, default arch for simulator is arm64
-        if(${XCODE_VERSION} LESS "12.0.0")
-            set(CMAKE_SYSTEM_PROCESSOR x86_64)
-        else()
-            set(CMAKE_SYSTEM_PROCESSOR arm64)
-        endif()
-    endif()
-else()
-    set(CMAKE_SYSTEM_PROCESSOR arm64)
+# Sets CMAKE_SYSTEM_PROCESSOR properly
+if(ARCHS MATCHES "((arm64|arm64e|x86_64)(^|;|, )?)+")
+  set(CMAKE_C_SIZEOF_DATA_PTR 8)
+  set(CMAKE_CXX_SIZEOF_DATA_PTR 8)
+  if(ARCHS MATCHES "((arm64|arm64e)(^|;|, )?)+")
+    set(CMAKE_SYSTEM_PROCESSOR "arm64")
+  else()
+    set(CMAKE_SYSTEM_PROCESSOR "x86_64")
+  endif()
 endif()
 
 # This little function lets you set any XCode specific property, refer to: ios.toolchain.cmake

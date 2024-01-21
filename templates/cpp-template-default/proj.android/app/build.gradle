@@ -6,7 +6,7 @@ android {
     compileSdk PROP_COMPILE_SDK_VERSION.toInteger()
 
     // Setup native build tools: ndk & cmake
-    def nbtInfo = axutils.findNativeBuildTools(project)
+    def nbtInfo = axutils.findNativeBuildTools(project, '3.28.1+')
     ndkVersion = nbtInfo[0]
     if(nbtInfo[1]) {
         ndkPath = nbtInfo[1]
@@ -50,13 +50,12 @@ android {
     }
 
     signingConfigs {
-
        release {
-            if (project.hasProperty("RELEASE_STORE_FILE")) {
-                storeFile file(RELEASE_STORE_FILE)
-                storePassword RELEASE_STORE_PASSWORD
-                keyAlias RELEASE_KEY_ALIAS
-                keyPassword RELEASE_KEY_PASSWORD
+            if (project.hasProperty("KEY_STORE_FILE")) {
+                storeFile file(KEY_STORE_FILE)
+                storePassword KEY_STORE_PASSWORD
+                keyAlias KEY_ALIAS
+                keyPassword KEY_PASSWORD
             }
         }
     }
@@ -69,7 +68,7 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            if (project.hasProperty("RELEASE_STORE_FILE")) {
+            if (project.hasProperty("KEY_STORE_FILE")) {
                 signingConfig signingConfigs.release
             }
         }
@@ -84,13 +83,15 @@ android {
     aaptOptions {
        noCompress 'mp3','ogg','wav','mp4','ttf','ttc'
     }
+
+    buildFeatures {
+        aidl true
+    }
 }
 
-android.applicationVariants.all { variant ->
-    def targetName = variant.name.capitalize()
-
-    def copyContentToAssets = "copy${targetName}ContentToAssets"
-    tasks.register(copyContentToAssets) {
+android.applicationVariants.configureEach { variant ->
+    def variantName = variant.name.capitalize()
+    tasks.register("copy${variantName}ContentToAssets") {
         doFirst {
             delete "${projectDir}/build/assets"
         }
@@ -100,15 +101,6 @@ android.applicationVariants.all { variant ->
                 into "${projectDir}/build/assets"
                 exclude "**/*.gz"
             }
-        }
-    }
-    tasks.getByName("pre${targetName}Build").dependsOn copyContentToAssets
-
-    tasks.register("copy${targetName}AxslcToAssets") {
-        doFirst {
-            delete "${projectDir}/build/assets/axslc"
-        }
-        doLast {
             copy {
                 from "${projectDir}/build/runtime/axslc"
                 into "${projectDir}/build/assets/axslc"
@@ -123,12 +115,14 @@ dependencies {
 }
 
 project.afterEvaluate {
-    if (tasks.findByName("externalNativeBuildDebug")) {
-        copyDebugAxslcToAssets.dependsOn externalNativeBuildDebug
-        compileDebugJavaWithJavac.dependsOn copyDebugAxslcToAssets
-    }
-    if (tasks.findByName("externalNativeBuildRelease")) {
-        copyReleaseAxslcToAssets.dependsOn externalNativeBuildRelease
-        compileReleaseJavaWithJavac.dependsOn copyReleaseAxslcToAssets
+    android.applicationVariants.configureEach { variant ->
+        def variantName = variant.name.capitalize()
+        def externalNativeBuild = tasks.named("externalNativeBuild${variantName}")
+        if (externalNativeBuild) {
+            def copyContentToAssets = tasks.named("copy${variantName}ContentToAssets")
+            copyContentToAssets
+            copyContentToAssets.get().dependsOn externalNativeBuild
+            tasks.named("compile${variantName}JavaWithJavac").get().dependsOn copyContentToAssets
+        }
     }
 }

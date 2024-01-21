@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -558,6 +559,7 @@ void PhysicsWorld::addBody(PhysicsBody* body)
     addBodyOrDelay(body);
     _bodies.pushBack(body);
     body->_world = this;
+    body->setFixedUpdate(_fixedRate > 0);
 }
 
 void PhysicsWorld::doAddBody(PhysicsBody* body)
@@ -961,11 +963,17 @@ void PhysicsWorld::update(float delta, bool userCall /* = false*/)
             while (_updateTime > step)
             {
                 _updateTime -= step;
+                for (auto&& body : _bodies)
+                {
+                    body->fixedUpdate(dt);
+                }
+                _scene->fixedUpdate(dt);
+
 #    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
                 cpSpaceStep(_cpSpace, dt);
 #    else
                 cpHastySpaceStep(_cpSpace, dt);
-#    endif
+#    endif                
             }
         }
         else
@@ -980,10 +988,6 @@ void PhysicsWorld::update(float delta, bool userCall /* = false*/)
 #    else
                     cpHastySpaceStep(_cpSpace, dt);
 #    endif
-                    for (auto&& body : _bodies)
-                    {
-                        body->update(dt);
-                    }
                 }
                 _updateRateCount = 0;
                 _updateTime      = 0.0f;

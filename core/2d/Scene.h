@@ -183,8 +183,8 @@ public:
     static Scene* createWithPhysics();
 
     bool initWithPhysics();
-
     bool initPhysicsWorld();
+    virtual void fixedUpdate(float delta) {}
 
 protected:
     void addChildToPhysicsWorld(Node* child);

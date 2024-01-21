@@ -48,7 +48,7 @@ public:
 #pragma message("The optional extension Effekseer is enabled.")
         addTest("Effekseer", []() { return new EffekseerTests(); });
 #endif
-#if __has_include("DrawNodeExTest/DrawNodeExTest.h")
+#if __has_include("DrawNodeExTest.h")
 #    pragma message("The optional extension DrawNodeEx is enabled.")
         addTest("DrawNodeEx", []() { return new DrawNodeExTests(); });
 #endif
@@ -138,7 +138,7 @@ public:
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
         addTest("Vibrate", []() { return new VibrateTests(); });
 #endif
-        addTest("Zwoptex", []() { return new ZwoptexTests(); });
+ //       addTest("Zwoptex Deprecrated, will be removed in release axmol-2.2.0 (see #1602)", []() { return new ZwoptexTests(); });
         addTest("SpriteFrameCache", []() { return new SpriteFrameCacheTests(); });  // TODO
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || \
      AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)

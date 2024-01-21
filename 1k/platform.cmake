@@ -56,6 +56,10 @@ else()
     return()
 endif()
 
+if (NOT DEFINED WIN32)
+    set(WIN32 FALSE)
+endif()
+
 # generators that are capable of organizing into a hierarchy of folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # simplify generator condition, please use them everywhere
@@ -65,8 +69,8 @@ elseif(CMAKE_GENERATOR MATCHES Visual)
     set(VS TRUE)
 endif()
 
-function(ax_check_archs)
+function(_1k_deprecated_32bit project_name release_ver)
     if(("${ARCH_ALIAS}" MATCHES "x86") OR ("${ARCH_ALIAS}" MATCHES "armeabi-v7a"))
-        message(WARNING "Building 32-bit[${ARCH_ALIAS}] axmol is deprecated, and will be removed in next release axmol-2.2.0")
+        message(WARNING "Building 32-bit[${ARCH_ALIAS}] ${project_name} is deprecated, and will be removed in next release ${release_ver}")
     endif()
 endfunction()

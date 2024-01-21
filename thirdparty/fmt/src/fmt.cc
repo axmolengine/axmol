@@ -63,8 +63,6 @@ module;
 #  if defined(__GLIBCXX__)
 #    include <ext/stdio_filebuf.h>
 #    include <ext/stdio_sync_filebuf.h>
-#  elif defined(_LIBCPP_VERSION)
-#    include <__std_stream>
 #  endif
 #  define WIN32_LEAN_AND_MEAN
 #  include <windows.h>
@@ -103,7 +101,7 @@ extern "C++" {
 
 // gcc doesn't yet implement private module fragments
 #if !FMT_GCC_VERSION
-module : private;
+module :private;
 #endif
 
 #include "format.cc"

@@ -32,8 +32,7 @@ public:
     GTweener* setTimeScale(float value);
     GTweener* setSnapping(bool value);
     GTweener* setTargetAny(void* value);
-    GTweener* setTarget(ax::Ref* target);
-    GTweener* setTarget(ax::Ref* target, TweenPropType propType);
+    GTweener* setTarget(ax::Ref* target, TweenPropType propType = TweenPropType::None);
     void* getTarget() const { return _target; }
     GTweener* setUserData(const ax::Value& value);
     GTweener* setPath(GPath* path);

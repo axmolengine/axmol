@@ -6,11 +6,12 @@ HOST_OS=$(uname)
 
 myRoot=$(dirname "$0")
 
-mkdir -p $myRoot/tmp
+prefix=~/.1kiss
+mkdir -p $prefix
 
 pwsh_ver=$1
 if [ "$pwsh_ver" = "" ] ; then
-    pwsh_ver='7.4.0'
+    pwsh_ver='7.4.1'
 fi
 
 function check_pwsh {
@@ -18,7 +19,7 @@ function check_pwsh {
     if command -v pwsh >/dev/null ; then
         pwsh_veri_a=$(pwsh --version)
         pwsh_veri_b="PowerShell $pwsh_ver"
-        if [[ "$pwsh_veri_b" < "$pwsh_veri_a" || "$pwsh_veri_b" == "$pwsh_veri_a" ]] ; then
+        if [ "$pwsh_veri_b" = "$pwsh_veri_a" ] ; then
             echo axmol: $pwsh_veri_a already installed.
             exit 0
         fi
@@ -34,7 +35,7 @@ fi
 if [ $HOST_OS = 'Darwin' ] ; then
     check_pwsh $pwsh_ver
     pwsh_pkg="powershell-$pwsh_ver-osx-$HOST_ARCH.pkg"
-    pwsh_pkg_out="$myRoot/tmp/$pwsh_pkg"
+    pwsh_pkg_out="$prefix/$pwsh_pkg"
     if [ ! -f  "$pwsh_pkg_out" ] ; then
         # https://github.com/PowerShell/PowerShell/releases/download/v7.3.6/powershell-7.3.6-osx-x64.pkg
         pwsh_url="https://github.com/PowerShell/PowerShell/releases/download/v$pwsh_ver/$pwsh_pkg"
@@ -47,7 +48,7 @@ elif [ $HOST_OS = 'Linux' ] ; then
     if which dpkg > /dev/null; then  # Linux distro: deb (ubuntu)
         check_pwsh $pwsh_ver
         pwsh_pkg="powershell_$pwsh_ver-1.deb_amd64.deb"
-        pwsh_pkg_out="$myRoot/tmp/$pwsh_pkg"
+        pwsh_pkg_out="$prefix/$pwsh_pkg"
         if [ ! -f  "$pwsh_pkg_out" ] ; then
             curl -L "https://github.com/PowerShell/PowerShell/releases/download/v$pwsh_ver/$pwsh_pkg" -o "$pwsh_pkg_out"
         fi
@@ -58,8 +59,8 @@ elif [ $HOST_OS = 'Linux' ] ; then
         # refer: https://ephos.github.io/posts/2018-9-17-Pwsh-ArchLinux
         # available pwsh version, refer to: https://aur.archlinux.org/packages/powershell-bin
         check_pwsh $pwsh_ver
-        git clone https://aur.archlinux.org/powershell-bin.git $myRoot/tmp/powershell-bin
-        cd $myRoot/tmp/powershell-bin
+        git clone https://aur.archlinux.org/powershell-bin.git $prefix/powershell-bin
+        cd $prefix/powershell-bin
         makepkg -si --needed --noconfirm
         cd -
     fi

@@ -97,7 +97,7 @@ media foundation `IMFMediaEngine`, the `MediaPlayer` support all native platform
 - Use SAX parser for all plist files
 - ASTC 4x4/6x6/8x8 support (if hardware decoding is not supported, then software decoding is used)
 - ETC2 RGB/RGBA support    (if hardware decoding is not supported, then software decoding is used)
-- Supported 2D physics engines (see also [APPENDIX.md](APPENDIX.md)):
+- Supported 2D physics engines (see also [2D-Physics-Engines-informations](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-informations)):
   - Box2D
   - Box2D-optimized
   - Chipmunk2D
@@ -106,12 +106,12 @@ media foundation `IMFMediaEngine`, the `MediaPlayer` support all native platform
 
 [Read Full changes since cocos2d-x-4.0](CHANGELOG.md)
 
-Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](https://github.com/axmolengine/axmol/milestones) for planed features too.
+Open [wiki](https://github.com/axmolengine/axmol/wiki) for additional information and see [Milestones](https://github.com/axmolengine/axmol/milestones) for planed features too.
 
 ## Reference links
 
-- [build1k](https://github.com/axmolengine/build1k), the axmol prebuilt build-bot
-- [axmolengine/glslcc](https://github.com/axmolengine/glslcc), a fork of glslcc for axmol new shader workflow tool
+- [1kiss](https://github.com/simdsoft/1kiss): A cross-platform one step build powershell script with auto setup general dependent tools
+- [axmolengine/glslcc](https://github.com/axmolengine/glslcc): A fork of glslcc for axmol new shader workflow tool
 - [Interesting related](https://github.com/axmolengine/axmol/discussions/694)
 - [Axmols contributing guide](https://github.com/axmolengine/axmol/discussions/411)
 - [Official Cocos2d-x](https://github.com/cocos2d/cocos2d-x)

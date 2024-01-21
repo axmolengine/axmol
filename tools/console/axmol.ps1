@@ -3,7 +3,7 @@ param(
     [switch]$uninst
 )
 # pwsh function alias
-Set-Alias println Write-Host
+function println($message) { Write-Host "axmol: $message" }
 
 $myRoot = $PSScriptRoot
 
@@ -18,6 +18,10 @@ $content = $(Get-Content -Path $axver_file)
 function parse_axver($part) {
     return ($content | Select-String "#define AX_VERSION_$part").Line.Split(' ')[2]
 }
+function realpath($path) {
+    return $Global:ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($path)
+}
+
 $axmolVersion = "$(parse_axver 'MAJOR').$(parse_axver 'MINOR').$(parse_axver 'PATCH')"
 
 $git_prog = (Get-Command 'git' -ErrorAction SilentlyContinue).Source
@@ -122,11 +126,11 @@ function axmol_deploy() {
         #     powershell -Command "Add-AppxPackage -Register '$appxManifestFile'"
         # }
         $appxPkgName = (powershell -Command "(Get-AppxPackage -Name '$appxIdentity' | Select-Object -Unique 'PackageFamilyName').PackageFamilyName")
-        println "axmol: Deploy $cmake_target done: $appxPkgName"
+        println "Deploy $cmake_target done: $appxPkgName"
     }
     elseif($TARGET_OS -eq 'win32') {
         $win32exePath = Join-Path $BUILD_DIR "bin/$cmake_target/$optimize_flag/$cmake_target.exe"
-        println "axmol: Deploy $cmake_target done: $win32exePath"
+        println "Deploy $cmake_target done: $win32exePath"
     }
     elseif ($TARGET_OS -eq 'android') {
         $optimize_flag_lower = $optimize_flag.ToLower()
@@ -146,7 +150,7 @@ function axmol_deploy() {
 
         adb install -t -r $apkFullPath
         if ($?) {
-            println "axmol: Deploy $cmake_target done: $androidAppId/$androidActivity"
+            println "Deploy $cmake_target done: $androidAppId/$androidActivity"
         }
     }
     elseif ($TARGET_OS -eq 'ios' -or $TARGET_OS -eq 'tvos') {
@@ -154,14 +158,14 @@ function axmol_deploy() {
             $ios_app_path = Join-Path $BUILD_DIR "bin/$cmake_target/$optimize_flag/$cmake_target.app"
             $ios_bundle_id = get_bundle_id($ios_app_path)
 
-            println 'axmol: Finding avaiable simualtor ...'
+            println 'Finding avaiable simualtor ...'
             $ios_simulator_id, $simulator_info = find_simulator_id($TARGET_OS)
 
-            println "axmol: Booting $simulator_info ..."
+            println "Booting $simulator_info ..."
             xcrun simctl boot $ios_simulator_id '--arch=x86_64'
-            println "axmol: Installing $ios_app_path ..."
+            println "Installing $ios_app_path ..."
             xcrun simctl install $ios_simulator_id $ios_app_path
-            println "axmol: Deploy $cmake_target done: $ios_bundle_id"
+            println "Deploy $cmake_target done: $ios_bundle_id"
         } else { # ios device
 
         }
@@ -192,15 +196,15 @@ function axmol_run() {
     }
     elseif($TARGET_OS -eq 'linux') {
         $launch_linuxapp = Join-Path $BUILD_DIR "bin/$cmake_target/$cmake_target"
-        println "axmol: Launching $launch_linuxapp ..."
+        println "Launching $launch_linuxapp ..."
         Start-Process -FilePath $launch_linuxapp -WorkingDirectory $(Split-Path $launch_linuxapp -Parent)
     }
     elseif($TARGET_OS -eq 'wasm') {
         $launch_wasmapp = Join-Path $BUILD_DIR "bin/$cmake_target/$cmake_target.html"
-        println "axmol: Launching $launch_wasmapp ..."
+        println "Launching $launch_wasmapp ..."
         emrun $launch_wasmapp
     }
-    println "axmol: Launch $cmake_target done, target platform is $($TARGET_OS)"
+    println "Launch $cmake_target done, target platform is $($TARGET_OS)"
 }
 
 $builtinPlugins = @{
@@ -299,18 +303,40 @@ options:
     }
 }
 
+# print version message
+if($cmdName -eq '--version' -or $cmdName -eq '-V') {
+    $version_msg = @"
+axmol version {0}
+
+Axmol Engine maintained and supported by axmol community (axmol.org)
+"@ -f $axmolVersion
+    Write-Host $version_msg
+    return
+}
+
 $plugin = $builtinPlugins[$cmdName]
 if (!$plugin) {
-    "axmol: command '$cmdName' not found"
+    println "The command '$cmdName' not found"
     println $tool_usage
     return
 }
 
 # -h will consumed by param
-$sub_args = $args[1..($args.Count - 1)]
-if (!$sub_args[0] -or $help -or $sub_args[0] -eq '--help') {
+# !!!Note: 3 condition statement: 'xxx = if(c) { v1 } else { v2 }' will lost array type if source array only 1 element
+if ($args.Count -gt 1) { 
+    $sub_args = $args[1..($args.Count - 1)] 
+} 
+else {
+    $sub_args = $null 
+}
+if (!$sub_args -or $help -or $sub_args[0] -eq '--help') {
     println $plugin.usage
     return
+}
+
+# force convert sub_args to array if it's a single string
+if ($sub_args -isnot [array]) {
+    $sub_args = @($sub_args)
 }
 
 $sub_opts = @{}

@@ -1,10 +1,7 @@
+set(target_name "zlib")
+project(${target_name})
 
-set(lib_name zlib)
-set(target_name ${lib_name})
-
-project(${lib_name})
-
-_1kfetch_dist(zlib "${PARENT_DIRECTORY}/_deps")
+_1kfetch_dist(zlib)
 
 if(WINDOWS)
   add_library(${target_name} SHARED IMPORTED GLOBAL)
@@ -30,3 +27,6 @@ endif()
 set_target_properties(${target_name} PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${zlib_INC_DIR}"
 )
+
+# Avoid cmake builtin FindPNG.cmake add target again
+add_library(ZLIB::ZLIB ALIAS zlib)

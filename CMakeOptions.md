@@ -27,7 +27,7 @@
   - AX_ENABLE_EXT_EFFEKSEER: the effekseer extension, default: `FALSE` 
   - AX_ENABLE_EXT_JSONDEFAULT: the UserDefault based on json, default: `FALSE`
   - AX_ENABLE_EXT_LUA: the lua extension, default: `TRUE`
-  - AX_ENABLE_EXT_DRAWNODEEX: the DrawNodeEx extension, default: `TRUE`
+  - AX_ENABLE_EXT_DRAWNODEEX: the DrawNodeEx extension, default: `FALSE`
 - AX_WITH_XXX: usually user don't need care it
 - AX_VS_DEPLOYMENT_TARGET: specify windows store deploy target, default: `10.0.17763.0`
 - AX_USE_COMPAT_GL: whether use compat gl as renderer backend, default: win32: `TRUE`, others: `FALSE`

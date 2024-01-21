@@ -25,12 +25,7 @@ function download_file($url, $out, $force = $false) {
         Remove-Item $out
     }
     Write-Host "Downloading $url to $out ..."
-    if ([System.Version]$pwsh_ver -ge [System.Version]'7.0.0.0') {
-        curl -L $url -o $out
-    }
-    else {
-        Invoke-WebRequest -Uri $url -OutFile $out
-    }
+    Invoke-WebRequest -Uri $url -OutFile $out
 }
 
 function download_and_expand($url, $out, $dest) {
@@ -63,10 +58,10 @@ if ($null -eq (Get-Module -ListAvailable -Name powershell-yaml)) {
 }
 
 # check upstream prebuilts version
-download_file "https://github.com/axmolengine/1k/releases/download/$VER/verlist.yml" "./tmp/verlist.yml" $true
-$newVerList = ConvertFrom-Yaml -Yaml (Get-Content './tmp/verlist.yml' -raw)
+download_file "https://github.com/simdsoft/1kiss/releases/download/$VER/_1kiss.yml" "./tmp/_1kiss.yml" $true
+$newVerList = ConvertFrom-Yaml -Yaml (Get-Content './tmp/_1kiss.yml' -raw)
 if ($newVerList.GetType() -eq [string]) {
-    throw "Download version manifest file verlist.yml fail"
+    throw "Download version manifest file _1kiss.yml fail"
 }
 
 $manifest_old_hash = Get-FileHash -Path './manifest.json' -Algorithm MD5

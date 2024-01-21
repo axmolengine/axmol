@@ -1,6 +1,5 @@
-include(AXPlatform)
-
-ax_check_archs()
+include(${_AX_ROOT}/1k/platform.cmake)
+_1k_deprecated_32bit(axmol 2.2.0)
 
 if(NOT CMAKE_GENERATOR MATCHES "Ninja")
     set(BUILD_CONFIG_DIR "\$\(Configuration\)/")

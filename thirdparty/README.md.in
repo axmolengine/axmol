@@ -6,7 +6,7 @@
 
 ## astcenc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 4.6.1
+- Version: 4.7.0
 - License: Apache-2.0
 
 ## Box2D
@@ -27,7 +27,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.23.0
+- Version: 1.25.0
 - License: MIT
 
 ## Chipmunk2D
@@ -67,7 +67,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 10.1.1
+- Version: 10.2.1
 - License: MIT
 
 ## FreeType

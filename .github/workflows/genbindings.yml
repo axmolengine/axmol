@@ -34,6 +34,6 @@ jobs:
       with:
         committer_name: GitHub Actions
         committer_email: 41898282+github-actions[bot]@users.noreply.github.com
-        message: 'Committing genbindings changes'
+        message: 'Committing genbindings changes[skip appveyor]'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
