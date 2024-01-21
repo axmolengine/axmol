@@ -80,7 +80,6 @@ media foundation `IMFMediaEngine`, the `MediaPlayer` support all native platform
   - Extensions license overview for easier publishing of your commercial apps based on axmol framework.
   - Spine support
   - ```FairyGUI``` support
-  - DragonBones support
   - Live2D support
   - **ImGui integrated, easy to write game embedded tools, very easy to use, read [ImGui](extensions/ImGui/README.md) for more info**
 - Refactor AudioEngine, OpenAL for all platforms
