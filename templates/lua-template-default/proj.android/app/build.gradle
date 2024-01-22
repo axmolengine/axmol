@@ -6,7 +6,7 @@ android {
     compileSdk PROP_COMPILE_SDK_VERSION.toInteger()
 
     // Setup native build tools: ndk & cmake
-    def nbtInfo = axutils.findNativeBuildTools(project)
+    def nbtInfo = axutils.findNativeBuildTools(project, '3.28.1+')
     ndkVersion = nbtInfo[0]
     if(nbtInfo[1]) {
         ndkPath = nbtInfo[1]
@@ -50,7 +50,7 @@ android {
     }
 
     signingConfigs {
-       common {
+       release {
             if (project.hasProperty("KEY_STORE_FILE")) {
                 storeFile file(KEY_STORE_FILE)
                 storePassword KEY_STORE_PASSWORD
@@ -69,7 +69,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             if (project.hasProperty("KEY_STORE_FILE")) {
-                signingConfig signingConfigs.common
+                signingConfig signingConfigs.release
             }
         }
 
@@ -77,14 +77,15 @@ android {
             debuggable true
             jniDebuggable true
             renderscriptDebuggable true
-            if (project.hasProperty("KEY_STORE_FILE")) {
-                signingConfig signingConfigs.common
-            }
         }
     }
 
     aaptOptions {
        noCompress 'mp3','ogg','wav','mp4','ttf','ttc'
+    }
+    
+    buildFeatures {
+        aidl true
     }
 }
 

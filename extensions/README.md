@@ -29,12 +29,12 @@
   
 ## Inspector
 - Upstream: https://github.com/axmolengine/axmol
-- Version: axmol-1.0
+- Version: axmol-2.1
 - License: MIT
 
 ## JSONDefault
 - Upstream: https://github.com/axmolengine/axmol
-- Version: axmol-1.0
+- Version: axmol-2.1
 - License: MIT
 
 ## Live2D (OFF default)
@@ -49,7 +49,7 @@
 
 ## SDFGen
 - Upstream: https://github.com/axmolengine/axmol
-- Version: axmol-1.0
+- Version: axmol-2.1
 - License: MIT
 
 ## Asset-Manager

@@ -3,7 +3,7 @@ set(lib_name openssl)
 
 project(${lib_name})
 
-_1kfetch_dist(openssl "${PARENT_DIRECTORY}/_deps")
+_1kfetch_dist(openssl)
 
 set(OPENSSL_INCLUDE_DIR "${openssl_INC_DIR}" CACHE STRING "OpenSSL include dir" FORCE)
 

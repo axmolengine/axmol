@@ -326,7 +326,7 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
                     if (_timeDirty)
                     {
                         _timeDirty  = false;
-                        offsetFrame = _currTime * decoder->getSampleRate();
+                        offsetFrame = _currTime * decoder->getSampleRate() * decoder->getChannelCount();
                         decoder->seek(offsetFrame);
                     }
                     else

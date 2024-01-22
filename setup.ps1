@@ -3,13 +3,16 @@
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
 
-$pwsh_ver = $PSVersionTable.PSVersion.ToString()
+function println($message) { Write-Host "axmol: $message" }
 
-Set-Alias println Write-Host
+# import VersionEx
+. (Join-Path $PSScriptRoot '1k/extensions.ps1')
+
+$pwsh_ver = [VersionEx]$PSVersionTable.PSVersion.ToString()
 
 function mkdirs([string]$path) {
     if (!(Test-Path $path -PathType Container)) {
-        if ([System.Version]$pwsh_ver -ge [System.Version]'5.0.0.0') {
+        if ($pwsh_ver -ge [VersionEx]'5.0') {
             New-Item $path -ItemType Directory 1>$null
         }
         else {
@@ -18,7 +21,7 @@ function mkdirs([string]$path) {
     }
 }
 
-if ([System.Version]$pwsh_ver -lt [System.Version]'5.0.0.0') {
+if ($pwsh_ver -lt [VersionEx]'5.0') {
     # try setup WMF5.1, require reboot, try run setup.ps1 several times
     Write-Host "Installing WMF5.1 ..."
     $osVer = [System.Environment]::OSVersion.Version
@@ -141,6 +144,14 @@ if ($IsWin) {
 
         # Re-eval env:PATH to system + users
         $env:PATH = RefreshPath $env:PATH # sync to PowerShell Terminal
+    }
+
+    $execPolicy = powershell -Command 'Get-ExecutionPolicy'
+    if ($execPolicy -ne 'Bypass') {
+        println "Setting system installed powershell execution policy '$execPolicy'==>'Bypass', please click 'YES' on UAC dialog"
+        Start-Process powershell -ArgumentList '-Command "Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force"' -WindowStyle Hidden -Wait -Verb runas
+    } else {
+        println "Great, the system installed powershell execution policy is '$execPolicy'"
     }
 }
 else {
