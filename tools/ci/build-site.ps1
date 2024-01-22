@@ -125,10 +125,14 @@ function copy_tree_if($source, $dest) {
     }
 }
 
-download_zip_expand 'https://ci.appveyor.com/api/projects/halx99/axmol/artifacts/build_wasm.zip?branch=dev' $(Join-Path $AX_ROOT 'tmp/build_wasm.zip')
+$store_path = $(Join-Path $AX_ROOT 'tmp/build_wasm.zip')
+download_zip_expand 'https://ci.appveyor.com/api/projects/halx99/axmol/artifacts/build_wasm.zip?branch=dev&pr=false' $store_path
 
 $cpp_tests_dir = $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp-tests')
 if (!(Test-Path $cpp_tests_dir -PathType Container)) {
+    if (Test-Path $store_path -PathType Leaf) {
+        Remove-Item $store_path -Force
+    }
     throw "Missing wasm cpp-tests, caused by last wasm ci build fail."
 }
 copy_tree_if $cpp_tests_dir $wasm_dist2
