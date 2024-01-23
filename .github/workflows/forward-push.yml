@@ -4,8 +4,6 @@ name: forward-push
 # events but only for the master branch
 on: 
   push:
-    branches:
-      - dev
     paths-ignore:
       - '.github/workflows/publish.yml'
       - 'tools/ci/make-pkg.ps1'
