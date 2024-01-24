@@ -7567,6 +7567,171 @@ tolua_lerror:
 #endif
 }
 
+static int tolua_cocos2d_utils_gettime(lua_State* tolua_S)
+{
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_istable(tolua_S, 1, 0, &tolua_err))
+        goto tolua_lerror;
+    else
+#endif
+    {
+        double time = ax::utils::gettime();
+        lua_pushnumber(tolua_S, time);
+        return 1;
+    }
+#if _AX_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_gettime'.", &tolua_err);
+    return 0;
+#endif
+}
+
+static int tolua_cocos2d_utils_getTimeInMilliseconds(lua_State* tolua_S)
+{
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_istable(tolua_S, 1, 0, &tolua_err))
+        goto tolua_lerror;
+    else
+#endif
+    {
+        long long time = ax::utils::getTimeInMilliseconds();
+        lua_pushnumber(tolua_S, time);
+        return 1;
+    }
+#if _AX_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getTimeInMilliseconds'.", &tolua_err);
+    return 0;
+#endif
+}
+
+
+static int tolua_cocos2d_utils_getFileMD5Hash(lua_State* tolua_S)
+{
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_istable(tolua_S, 1, 0, &tolua_err) || !tolua_isstring(tolua_S, 2, 0, &tolua_err) ||
+        !tolua_isnumber(tolua_S, 3, 0, &tolua_err))
+        goto tolua_lerror;
+    else
+#endif
+    {
+        std::string  filename = tolua_tocppstring(tolua_S, 2, "");
+        uint32_t  bufferSize = tolua_tonumber(tolua_S, 3, 0);
+        std::string hexOutput = ax::utils::getFileMD5Hash(filename,bufferSize);
+        lua_pushlstring(tolua_S, hexOutput.c_str(), hexOutput.size());
+        //delete[] hexOutput;
+        return 1;
+    }
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+                tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getFileMD5Hash'.", &tolua_err);
+                return 0;
+#endif
+}
+
+static int tolua_cocos2d_utils_getStringMD5Hash(lua_State* tolua_S)
+{
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_istable(tolua_S, 1, 0, &tolua_err) || !tolua_isstring(tolua_S, 2, 0, &tolua_err))
+        goto tolua_lerror;
+    else
+#endif
+    {
+        std::string  str = tolua_tocppstring(tolua_S, 2, "");
+        std::string hexOutput = ax::utils::getStringMD5Hash(std::string_view{str});
+
+        lua_pushlstring(tolua_S, hexOutput.c_str(), hexOutput.size());
+        //delete[] hexOutput;
+        return 1;
+    }
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+                tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getStringMD5Hash'.", &tolua_err);
+                return 0;
+#endif
+}
+
+
+static int tolua_cocos2d_utils_base64Encode(lua_State* tolua_S)
+{
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_istable(tolua_S, 1, 0, &tolua_err) || !tolua_isstring(tolua_S, 2, 0, &tolua_err) )
+        goto tolua_lerror;
+    else
+#endif
+    {
+        std::string  str = tolua_tocppstring(tolua_S, 2, "");
+        char *out;
+        unsigned char* in;
+        in = (unsigned char*)str.c_str();
+        unsigned int inLength = str.size();
+        int len = ax::utils::base64Encode(in, (unsigned int)inLength, &out);
+
+        lua_pushlstring(tolua_S, out,len);
+        //delete[] hexOutput;
+        return 1;
+    }
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+                tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_base64Encode'.", &tolua_err);
+                return 0;
+#endif
+}
+
+static int tolua_cocos2d_utils_base64Decode(lua_State* tolua_S)
+{
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_istable(tolua_S, 1, 0, &tolua_err) || !tolua_isstring(tolua_S, 2, 0, &tolua_err) )
+        goto tolua_lerror;
+    else
+#endif
+    {
+        std::string  base64String = tolua_tocppstring(tolua_S, 2, "");
+
+        unsigned char* decoded;
+        int length = ax::utils::base64Decode((const unsigned char*)base64String.c_str(), (unsigned int)base64String.size(), &decoded);
+        const char* d  = (const char*)decoded;
+        lua_pushlstring(tolua_S, d, length);
+        //delete[] hexOutput;
+        return 1;
+    }
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+                tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_base64Decode'.", &tolua_err);
+                return 0;
+#endif
+}
+
+static int tolua_cocos2d_utils_getCascadeBoundingBox(lua_State* tolua_S)
+{
+#if _AX_DEBUG >= 1
+                tolua_Error tolua_err;
+                if (!tolua_istable(tolua_S, 1, 0, &tolua_err) ||
+                    !tolua_isusertype(tolua_S, 2, "ax.Node", 0, &tolua_err))
+        goto tolua_lerror;
+                else
+#endif
+                {
+        ax::Node* node = static_cast<Node*>(tolua_tousertype(tolua_S, 2, nullptr));
+        Rect box            = ax::utils::getCascadeBoundingBox(node);
+        rect_to_luaval(tolua_S, box);
+        return 1;
+                }
+#if _AX_DEBUG >= 1
+tolua_lerror:
+                tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getCascadeBoundingBox'.", &tolua_err);
+                return 0;
+#endif
+}
+
+
+
 int register_all_ax_module_manual(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
@@ -7581,6 +7746,13 @@ int register_all_ax_module_manual(lua_State* tolua_S)
     tolua_function(tolua_S, "captureScreen", tolua_cocos2d_utils_captureScreen);
     tolua_function(tolua_S, "findChildren", tolua_cocos2d_utils_findChildren);
     tolua_function(tolua_S, "findChild", tolua_cocos2d_utils_findChild);
+    tolua_function(tolua_S, "gettime", tolua_cocos2d_utils_gettime);
+    tolua_function(tolua_S, "getTimeInMilliseconds", tolua_cocos2d_utils_getTimeInMilliseconds);
+    tolua_function(tolua_S, "getStringMD5Hash", tolua_cocos2d_utils_getStringMD5Hash);
+    tolua_function(tolua_S, "getFileMD5Hash", tolua_cocos2d_utils_getFileMD5Hash);
+    tolua_function(tolua_S, "base64Encode", tolua_cocos2d_utils_base64Encode);
+    tolua_function(tolua_S, "base64Decode", tolua_cocos2d_utils_base64Decode);
+    tolua_function(tolua_S, "getCascadeBoundingBox", tolua_cocos2d_utils_getCascadeBoundingBox);
     tolua_endmodule(tolua_S);
     tolua_endmodule(tolua_S);
 

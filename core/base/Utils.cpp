@@ -408,10 +408,15 @@ std::string getFileMD5Hash(std::string_view filename, uint32_t bufferSize)
 
 std::string getDataMD5Hash(const Data& data)
 {
-    if (data.isNull())
-        return std::string{};
+    //if (data.isNull())
+   //     return std::string{};
 
     return computeDigest(std::string_view{(const char*)data.getBytes(), (size_t)data.getSize()}, "md5"sv);
+}
+
+std::string getStringMD5Hash(std::string_view str)
+{
+    return computeDigest(str, "md5"sv);
 }
 
 std::string computeDigest(std::string_view data, std::string_view algorithm, bool toHex)
@@ -421,7 +426,7 @@ std::string computeDigest(std::string_view data, std::string_view algorithm, boo
 
     OpenSSL_add_all_digests();
     const EVP_MD* md = EVP_get_digestbyname(algorithm.data());
-    if (!md || data.empty())
+    if (!md)
         return std::string{};
 
     EVP_MD_CTX* mdctx = EVP_MD_CTX_create();
