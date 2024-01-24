@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <title>Redirecting</title>
   <noscript>
-    <meta http-equiv="refresh" content="1; url=https://axmolengine.github.io/manual/@VERSION@" />
+    <meta http-equiv="refresh" content="1; url=https://axmol.org/manual/@VERSION@" />
   </noscript>
   <script>
-    window.location.href = 'https://axmolengine.github.io/manual/@VERSION@';
+    window.location.href = 'https://axmol.org/manual/@VERSION@';
   </script>
 </head>
 <body>
-  Redirecting to <a href="https://axmolengine.github.io/manual/@VERSION@">https://axmolengine.github.io/manual/@VERSION@</a>
+  Redirecting to <a href="https://axmol.org/manual/@VERSION@">https://axmol.org/manual/@VERSION@</a>
 </body>
 </html>

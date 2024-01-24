@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -625,7 +626,7 @@ void Scheduler::pauseTarget(void* target)
     auto timerIt = _timersMap.find(target);
     if (timerIt != _timersMap.end())
     {
-        timerIt->second.paused = false;
+        timerIt->second.paused = true;
     }
 
     // update selector
