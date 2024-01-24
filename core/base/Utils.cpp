@@ -414,6 +414,14 @@ std::string getDataMD5Hash(const Data& data)
     return computeDigest(std::string_view{(const char*)data.getBytes(), (size_t)data.getSize()}, "md5"sv);
 }
 
+std::string getStringMD5Hash(std::string_view str)
+{
+    if (str.empty())
+        return std::string{};
+
+    return computeDigest(str, "md5"sv);
+}
+
 std::string computeDigest(std::string_view data, std::string_view algorithm, bool toHex)
 {
     unsigned char mdValue[EVP_MAX_MD_SIZE] = {0};
