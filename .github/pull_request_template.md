@@ -1,7 +1,7 @@
 Which branch your pull-request should merge into?
 
-- `dev`: Current 2.x BugFixs or Features
-- `1.x`: 1.x BugFixs
+- `2.1`: BugFixes and Improvements for Current LTS branch
+- `dev`: New features or remove deprecated features
 
 ## Describe your changes
 
