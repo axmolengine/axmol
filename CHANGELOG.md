@@ -1,4 +1,16 @@
-# axmol-2.1.0 Jan.20 2024
+## axmol-2.1.1 ?? 2024
+
+### BugFixes
+
+- Fix shaders not copying to final build on macOS for non Xcode builds by @smilediver
+- Fix `Scheduler::pauseTarget` can't timer targets, reported by @shaniamjad6
+- Fix build lua projects with engine prebuilts lib doesn't work, reported by @grif-on
+
+## Improvements
+
+- Add some utils functions and lua support by @bintester
+
+## axmol-2.1.0 Jan.20 2024
 
 ### Significant changes relative to 2.0.0:
 
@@ -43,7 +55,7 @@
     - GUI
 - Zwoptex (Commented on cpp-test)
 
-### BugFixs
+### BugFixes
 
 - Fix translated metal shader texture order does not follow GLSL binding order
 - Fix GLES3 shader scalar array layout incorrect
