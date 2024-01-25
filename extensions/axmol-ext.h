@@ -27,6 +27,9 @@
 
 #include "ExtensionMacros.h"
 
+#include "GUI/ScrollView/ScrollView.h"
+#include "GUI/ScrollView/TableView.h"
+
 // Physics integration
 #include "physics-nodes/PhysicsDebugNode.h"
 #include "physics-nodes/PhysicsDebugNodeBox2D.h"
