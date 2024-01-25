@@ -3,6 +3,2944 @@
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 
+int lua_ax_extension_ScrollView_initWithViewSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_initWithViewSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Size arg0;
+
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.ScrollView:initWithViewSize");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_initWithViewSize'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->initWithViewSize(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    if (argc == 2) 
+    {
+        ax::Size arg0;
+        ax::Node* arg1;
+
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.ScrollView:initWithViewSize");
+
+        ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "ax.ScrollView:initWithViewSize");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_initWithViewSize'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->initWithViewSize(arg0, arg1);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:initWithViewSize",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_initWithViewSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setContentOffset(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setContentOffset'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Vec2 arg0;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ScrollView:setContentOffset");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setContentOffset'", nullptr);
+            return 0;
+        }
+        cobj->setContentOffset(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 2) 
+    {
+        ax::Vec2 arg0;
+        bool arg1;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ScrollView:setContentOffset");
+
+        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.ScrollView:setContentOffset");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setContentOffset'", nullptr);
+            return 0;
+        }
+        cobj->setContentOffset(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setContentOffset",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setContentOffset'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_getContentOffset(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_getContentOffset'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_getContentOffset'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getContentOffset();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:getContentOffset",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_getContentOffset'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setContentOffsetInDuration(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setContentOffsetInDuration'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        ax::Vec2 arg0;
+        double arg1;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ScrollView:setContentOffsetInDuration");
+
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScrollView:setContentOffsetInDuration");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setContentOffsetInDuration'", nullptr);
+            return 0;
+        }
+        cobj->setContentOffsetInDuration(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setContentOffsetInDuration",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setContentOffsetInDuration'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_stopAnimatedContentOffset(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_stopAnimatedContentOffset'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_stopAnimatedContentOffset'", nullptr);
+            return 0;
+        }
+        cobj->stopAnimatedContentOffset();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:stopAnimatedContentOffset",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_stopAnimatedContentOffset'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setZoomScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setZoomScale'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 2) {
+            double arg0;
+            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScrollView:setZoomScale");
+
+            if (!ok) { break; }
+            bool arg1;
+            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.ScrollView:setZoomScale");
+
+            if (!ok) { break; }
+            cobj->setZoomScale(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 1) {
+            double arg0;
+            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScrollView:setZoomScale");
+
+            if (!ok) { break; }
+            cobj->setZoomScale(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.ScrollView:setZoomScale",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setZoomScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_getZoomScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_getZoomScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_getZoomScale'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getZoomScale();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:getZoomScale",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_getZoomScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setZoomScaleInDuration(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setZoomScaleInDuration'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        double arg0;
+        double arg1;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScrollView:setZoomScaleInDuration");
+
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScrollView:setZoomScaleInDuration");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setZoomScaleInDuration'", nullptr);
+            return 0;
+        }
+        cobj->setZoomScaleInDuration(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setZoomScaleInDuration",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setZoomScaleInDuration'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setMinScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setMinScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScrollView:setMinScale");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setMinScale'", nullptr);
+            return 0;
+        }
+        cobj->setMinScale(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setMinScale",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setMinScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setMaxScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setMaxScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScrollView:setMaxScale");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setMaxScale'", nullptr);
+            return 0;
+        }
+        cobj->setMaxScale(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setMaxScale",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setMaxScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_minContainerOffset(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_minContainerOffset'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_minContainerOffset'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->minContainerOffset();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:minContainerOffset",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_minContainerOffset'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_maxContainerOffset(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_maxContainerOffset'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_maxContainerOffset'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->maxContainerOffset();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:maxContainerOffset",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_maxContainerOffset'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_isNodeVisible(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_isNodeVisible'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Node* arg0;
+
+        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ScrollView:isNodeVisible");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_isNodeVisible'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->isNodeVisible(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:isNodeVisible",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_isNodeVisible'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_pause(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_pause'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Ref* arg0;
+
+        ok &= luaval_to_object<ax::Ref>(tolua_S, 2, "ax.Ref",&arg0, "ax.ScrollView:pause");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_pause'", nullptr);
+            return 0;
+        }
+        cobj->pause(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:pause",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_pause'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_resume(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_resume'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Ref* arg0;
+
+        ok &= luaval_to_object<ax::Ref>(tolua_S, 2, "ax.Ref",&arg0, "ax.ScrollView:resume");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_resume'", nullptr);
+            return 0;
+        }
+        cobj->resume(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:resume",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_resume'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setTouchEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setTouchEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ScrollView:setTouchEnabled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setTouchEnabled'", nullptr);
+            return 0;
+        }
+        cobj->setTouchEnabled(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setTouchEnabled",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setTouchEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_isTouchEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_isTouchEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_isTouchEnabled'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->isTouchEnabled();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:isTouchEnabled",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_isTouchEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setSwallowTouches(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setSwallowTouches'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ScrollView:setSwallowTouches");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setSwallowTouches'", nullptr);
+            return 0;
+        }
+        cobj->setSwallowTouches(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setSwallowTouches",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setSwallowTouches'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_isDragging(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_isDragging'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_isDragging'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->isDragging();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:isDragging",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_isDragging'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_isTouchMoved(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_isTouchMoved'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_isTouchMoved'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->isTouchMoved();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:isTouchMoved",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_isTouchMoved'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_isBounceable(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_isBounceable'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_isBounceable'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->isBounceable();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:isBounceable",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_isBounceable'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setBounceable(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setBounceable'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ScrollView:setBounceable");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setBounceable'", nullptr);
+            return 0;
+        }
+        cobj->setBounceable(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setBounceable",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setBounceable'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_getViewSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_getViewSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_getViewSize'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getViewSize();
+        size_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:getViewSize",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_getViewSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setViewSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setViewSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Size arg0;
+
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.ScrollView:setViewSize");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setViewSize'", nullptr);
+            return 0;
+        }
+        cobj->setViewSize(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setViewSize",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setViewSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_getContainer(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_getContainer'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_getContainer'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getContainer();
+        object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:getContainer",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_getContainer'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setContainer(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setContainer'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Node* arg0;
+
+        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ScrollView:setContainer");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setContainer'", nullptr);
+            return 0;
+        }
+        cobj->setContainer(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setContainer",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setContainer'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_getDirection(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_getDirection'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_getDirection'", nullptr);
+            return 0;
+        }
+        int ret = (int)cobj->getDirection();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:getDirection",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_getDirection'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setDirection(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setDirection'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::extension::ScrollView::Direction arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ScrollView:setDirection");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setDirection'", nullptr);
+            return 0;
+        }
+        cobj->setDirection(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setDirection",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setDirection'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_updateInset(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_updateInset'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_updateInset'", nullptr);
+            return 0;
+        }
+        cobj->updateInset();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:updateInset",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_updateInset'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_isClippingToBounds(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_isClippingToBounds'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_isClippingToBounds'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->isClippingToBounds();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:isClippingToBounds",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_isClippingToBounds'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_setClippingToBounds(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_setClippingToBounds'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ScrollView:setClippingToBounds");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setClippingToBounds'", nullptr);
+            return 0;
+        }
+        cobj->setClippingToBounds(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setClippingToBounds",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setClippingToBounds'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_onTouchBegan(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_onTouchBegan'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        ax::Touch* arg0;
+        ax::Event* arg1;
+
+        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "ax.ScrollView:onTouchBegan");
+
+        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "ax.ScrollView:onTouchBegan");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onTouchBegan'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->onTouchBegan(arg0, arg1);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:onTouchBegan",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onTouchBegan'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_onTouchMoved(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_onTouchMoved'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        ax::Touch* arg0;
+        ax::Event* arg1;
+
+        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "ax.ScrollView:onTouchMoved");
+
+        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "ax.ScrollView:onTouchMoved");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onTouchMoved'", nullptr);
+            return 0;
+        }
+        cobj->onTouchMoved(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:onTouchMoved",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onTouchMoved'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_onTouchEnded(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_onTouchEnded'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        ax::Touch* arg0;
+        ax::Event* arg1;
+
+        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "ax.ScrollView:onTouchEnded");
+
+        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "ax.ScrollView:onTouchEnded");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onTouchEnded'", nullptr);
+            return 0;
+        }
+        cobj->onTouchEnded(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:onTouchEnded",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onTouchEnded'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_onTouchCancelled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_onTouchCancelled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        ax::Touch* arg0;
+        ax::Event* arg1;
+
+        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "ax.ScrollView:onTouchCancelled");
+
+        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "ax.ScrollView:onTouchCancelled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onTouchCancelled'", nullptr);
+            return 0;
+        }
+        cobj->onTouchCancelled(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:onTouchCancelled",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onTouchCancelled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_updateTweenAction(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_updateTweenAction'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        double arg0;
+        std::string_view arg1;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScrollView:updateTweenAction");
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.ScrollView:updateTweenAction");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_updateTweenAction'", nullptr);
+            return 0;
+        }
+        cobj->updateTweenAction(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:updateTweenAction",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_updateTweenAction'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_hasVisibleParents(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_ScrollView_hasVisibleParents'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_hasVisibleParents'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->hasVisibleParents();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:hasVisibleParents",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_hasVisibleParents'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+
+    do 
+    {
+        if (argc == 0)
+        {
+            ax::extension::ScrollView* ret = ax::extension::ScrollView::create();
+            object_to_luaval<ax::extension::ScrollView>(tolua_S, "ax.ScrollView",(ax::extension::ScrollView*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do 
+    {
+        if (argc == 1)
+        {
+            ax::Size arg0;
+            ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.ScrollView:create");
+            if (!ok) { break; }
+            ax::extension::ScrollView* ret = ax::extension::ScrollView::create(arg0);
+            object_to_luaval<ax::extension::ScrollView>(tolua_S, "ax.ScrollView",(ax::extension::ScrollView*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do 
+    {
+        if (argc == 2)
+        {
+            ax::Size arg0;
+            ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.ScrollView:create");
+            if (!ok) { break; }
+            ax::Node* arg1;
+            ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "ax.ScrollView:create");
+            if (!ok) { break; }
+            ax::extension::ScrollView* ret = ax::extension::ScrollView::create(arg0, arg1);
+            object_to_luaval<ax::extension::ScrollView>(tolua_S, "ax.ScrollView",(ax::extension::ScrollView*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.ScrollView:create",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_create'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_extension_ScrollView_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::ScrollView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_constructor'", nullptr);
+            return 0;
+        }
+        cobj = new ax::extension::ScrollView();
+        cobj->autorelease();
+        int ID =  (int)cobj->_ID ;
+        int* luaID =  &cobj->_luaID ;
+        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ScrollView");
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:ScrollView",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_constructor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+
+static int lua_ax_extension_ScrollView_finalize(lua_State* tolua_S)
+{
+    printf("luabindings: finalizing LUA object (ScrollView)");
+    return 0;
+}
+
+int lua_register_ax_extension_ScrollView(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.ScrollView");
+    tolua_cclass(tolua_S,"ScrollView","ax.ScrollView","ax.Layer",nullptr);
+
+    tolua_beginmodule(tolua_S,"ScrollView");
+        tolua_function(tolua_S,"new",lua_ax_extension_ScrollView_constructor);
+        tolua_function(tolua_S,"initWithViewSize",lua_ax_extension_ScrollView_initWithViewSize);
+        tolua_function(tolua_S,"setContentOffset",lua_ax_extension_ScrollView_setContentOffset);
+        tolua_function(tolua_S,"getContentOffset",lua_ax_extension_ScrollView_getContentOffset);
+        tolua_function(tolua_S,"setContentOffsetInDuration",lua_ax_extension_ScrollView_setContentOffsetInDuration);
+        tolua_function(tolua_S,"stopAnimatedContentOffset",lua_ax_extension_ScrollView_stopAnimatedContentOffset);
+        tolua_function(tolua_S,"setZoomScale",lua_ax_extension_ScrollView_setZoomScale);
+        tolua_function(tolua_S,"getZoomScale",lua_ax_extension_ScrollView_getZoomScale);
+        tolua_function(tolua_S,"setZoomScaleInDuration",lua_ax_extension_ScrollView_setZoomScaleInDuration);
+        tolua_function(tolua_S,"setMinScale",lua_ax_extension_ScrollView_setMinScale);
+        tolua_function(tolua_S,"setMaxScale",lua_ax_extension_ScrollView_setMaxScale);
+        tolua_function(tolua_S,"minContainerOffset",lua_ax_extension_ScrollView_minContainerOffset);
+        tolua_function(tolua_S,"maxContainerOffset",lua_ax_extension_ScrollView_maxContainerOffset);
+        tolua_function(tolua_S,"isNodeVisible",lua_ax_extension_ScrollView_isNodeVisible);
+        tolua_function(tolua_S,"pause",lua_ax_extension_ScrollView_pause);
+        tolua_function(tolua_S,"resume",lua_ax_extension_ScrollView_resume);
+        tolua_function(tolua_S,"setTouchEnabled",lua_ax_extension_ScrollView_setTouchEnabled);
+        tolua_function(tolua_S,"isTouchEnabled",lua_ax_extension_ScrollView_isTouchEnabled);
+        tolua_function(tolua_S,"setSwallowTouches",lua_ax_extension_ScrollView_setSwallowTouches);
+        tolua_function(tolua_S,"isDragging",lua_ax_extension_ScrollView_isDragging);
+        tolua_function(tolua_S,"isTouchMoved",lua_ax_extension_ScrollView_isTouchMoved);
+        tolua_function(tolua_S,"isBounceable",lua_ax_extension_ScrollView_isBounceable);
+        tolua_function(tolua_S,"setBounceable",lua_ax_extension_ScrollView_setBounceable);
+        tolua_function(tolua_S,"getViewSize",lua_ax_extension_ScrollView_getViewSize);
+        tolua_function(tolua_S,"setViewSize",lua_ax_extension_ScrollView_setViewSize);
+        tolua_function(tolua_S,"getContainer",lua_ax_extension_ScrollView_getContainer);
+        tolua_function(tolua_S,"setContainer",lua_ax_extension_ScrollView_setContainer);
+        tolua_function(tolua_S,"getDirection",lua_ax_extension_ScrollView_getDirection);
+        tolua_function(tolua_S,"setDirection",lua_ax_extension_ScrollView_setDirection);
+        tolua_function(tolua_S,"updateInset",lua_ax_extension_ScrollView_updateInset);
+        tolua_function(tolua_S,"isClippingToBounds",lua_ax_extension_ScrollView_isClippingToBounds);
+        tolua_function(tolua_S,"setClippingToBounds",lua_ax_extension_ScrollView_setClippingToBounds);
+        tolua_function(tolua_S,"onTouchBegan",lua_ax_extension_ScrollView_onTouchBegan);
+        tolua_function(tolua_S,"onTouchMoved",lua_ax_extension_ScrollView_onTouchMoved);
+        tolua_function(tolua_S,"onTouchEnded",lua_ax_extension_ScrollView_onTouchEnded);
+        tolua_function(tolua_S,"onTouchCancelled",lua_ax_extension_ScrollView_onTouchCancelled);
+        tolua_function(tolua_S,"updateTweenAction",lua_ax_extension_ScrollView_updateTweenAction);
+        tolua_function(tolua_S,"hasVisibleParents",lua_ax_extension_ScrollView_hasVisibleParents);
+        tolua_function(tolua_S,"create", lua_ax_extension_ScrollView_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::extension::ScrollView).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ScrollView";
+    g_typeCast[typeName] = "ax.ScrollView";
+    return 1;
+}
+
+int lua_ax_extension_TableViewCell_getIdx(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableViewCell* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableViewCell",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableViewCell*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableViewCell_getIdx'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableViewCell_getIdx'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getIdx();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableViewCell:getIdx",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableViewCell_getIdx'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableViewCell_setIdx(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableViewCell* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableViewCell",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableViewCell*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableViewCell_setIdx'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ssize_t arg0;
+
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ax.TableViewCell:setIdx");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableViewCell_setIdx'", nullptr);
+            return 0;
+        }
+        cobj->setIdx(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableViewCell:setIdx",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableViewCell_setIdx'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableViewCell_reset(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableViewCell* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableViewCell",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableViewCell*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableViewCell_reset'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableViewCell_reset'", nullptr);
+            return 0;
+        }
+        cobj->reset();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableViewCell:reset",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableViewCell_reset'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableViewCell_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.TableViewCell",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableViewCell_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::extension::TableViewCell::create();
+        object_to_luaval<ax::extension::TableViewCell>(tolua_S, "ax.TableViewCell",(ax::extension::TableViewCell*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.TableViewCell:create",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableViewCell_create'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_extension_TableViewCell_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableViewCell* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableViewCell_constructor'", nullptr);
+            return 0;
+        }
+        cobj = new ax::extension::TableViewCell();
+        cobj->autorelease();
+        int ID =  (int)cobj->_ID ;
+        int* luaID =  &cobj->_luaID ;
+        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TableViewCell");
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableViewCell:TableViewCell",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableViewCell_constructor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+
+static int lua_ax_extension_TableViewCell_finalize(lua_State* tolua_S)
+{
+    printf("luabindings: finalizing LUA object (TableViewCell)");
+    return 0;
+}
+
+int lua_register_ax_extension_TableViewCell(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.TableViewCell");
+    tolua_cclass(tolua_S,"TableViewCell","ax.TableViewCell","ax.Node",nullptr);
+
+    tolua_beginmodule(tolua_S,"TableViewCell");
+        tolua_function(tolua_S,"new",lua_ax_extension_TableViewCell_constructor);
+        tolua_function(tolua_S,"getIdx",lua_ax_extension_TableViewCell_getIdx);
+        tolua_function(tolua_S,"setIdx",lua_ax_extension_TableViewCell_setIdx);
+        tolua_function(tolua_S,"reset",lua_ax_extension_TableViewCell_reset);
+        tolua_function(tolua_S,"create", lua_ax_extension_TableViewCell_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::extension::TableViewCell).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.TableViewCell";
+    g_typeCast[typeName] = "ax.TableViewCell";
+    return 1;
+}
+
+int lua_ax_extension_TableView_initWithViewSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableView_initWithViewSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Size arg0;
+
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.TableView:initWithViewSize");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_initWithViewSize'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->initWithViewSize(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    if (argc == 2) 
+    {
+        ax::Size arg0;
+        ax::Node* arg1;
+
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.TableView:initWithViewSize");
+
+        ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "ax.TableView:initWithViewSize");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_initWithViewSize'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->initWithViewSize(arg0, arg1);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:initWithViewSize",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView_initWithViewSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableView_setVerticalFillOrder(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableView_setVerticalFillOrder'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::extension::TableView::VerticalFillOrder arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.TableView:setVerticalFillOrder");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_setVerticalFillOrder'", nullptr);
+            return 0;
+        }
+        cobj->setVerticalFillOrder(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:setVerticalFillOrder",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView_setVerticalFillOrder'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableView_getVerticalFillOrder(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableView_getVerticalFillOrder'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_getVerticalFillOrder'", nullptr);
+            return 0;
+        }
+        int ret = (int)cobj->getVerticalFillOrder();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:getVerticalFillOrder",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView_getVerticalFillOrder'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableView_updateCellAtIndex(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableView_updateCellAtIndex'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ssize_t arg0;
+
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ax.TableView:updateCellAtIndex");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_updateCellAtIndex'", nullptr);
+            return 0;
+        }
+        cobj->updateCellAtIndex(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:updateCellAtIndex",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView_updateCellAtIndex'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableView_insertCellAtIndex(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableView_insertCellAtIndex'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ssize_t arg0;
+
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ax.TableView:insertCellAtIndex");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_insertCellAtIndex'", nullptr);
+            return 0;
+        }
+        cobj->insertCellAtIndex(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:insertCellAtIndex",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView_insertCellAtIndex'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableView_removeCellAtIndex(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableView_removeCellAtIndex'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ssize_t arg0;
+
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ax.TableView:removeCellAtIndex");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_removeCellAtIndex'", nullptr);
+            return 0;
+        }
+        cobj->removeCellAtIndex(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:removeCellAtIndex",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView_removeCellAtIndex'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableView_reloadData(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableView_reloadData'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_reloadData'", nullptr);
+            return 0;
+        }
+        cobj->reloadData();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:reloadData",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView_reloadData'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableView_dequeueCell(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableView_dequeueCell'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_dequeueCell'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->dequeueCell();
+        object_to_luaval<ax::extension::TableViewCell>(tolua_S, "ax.TableViewCell",(ax::extension::TableViewCell*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:dequeueCell",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView_dequeueCell'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableView_cellAtIndex(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableView_cellAtIndex'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ssize_t arg0;
+
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ax.TableView:cellAtIndex");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_cellAtIndex'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->cellAtIndex(arg0);
+        object_to_luaval<ax::extension::TableViewCell>(tolua_S, "ax.TableViewCell",(ax::extension::TableViewCell*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:cellAtIndex",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView_cellAtIndex'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableView_scrollViewDidScroll(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableView_scrollViewDidScroll'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::extension::ScrollView* arg0;
+
+        ok &= luaval_to_object<ax::extension::ScrollView>(tolua_S, 2, "ax.ScrollView",&arg0, "ax.TableView:scrollViewDidScroll");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_scrollViewDidScroll'", nullptr);
+            return 0;
+        }
+        cobj->scrollViewDidScroll(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:scrollViewDidScroll",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView_scrollViewDidScroll'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableView_scrollViewDidZoom(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableView_scrollViewDidZoom'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::extension::ScrollView* arg0;
+
+        ok &= luaval_to_object<ax::extension::ScrollView>(tolua_S, 2, "ax.ScrollView",&arg0, "ax.TableView:scrollViewDidZoom");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_scrollViewDidZoom'", nullptr);
+            return 0;
+        }
+        cobj->scrollViewDidZoom(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:scrollViewDidZoom",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView_scrollViewDidZoom'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableView__updateContentSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_extension_TableView__updateContentSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView__updateContentSize'", nullptr);
+            return 0;
+        }
+        cobj->_updateContentSize();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:_updateContentSize",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView__updateContentSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_TableView_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::extension::TableView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_constructor'", nullptr);
+            return 0;
+        }
+        cobj = new ax::extension::TableView();
+        cobj->autorelease();
+        int ID =  (int)cobj->_ID ;
+        int* luaID =  &cobj->_luaID ;
+        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TableView");
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:TableView",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_TableView_constructor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+
+static int lua_ax_extension_TableView_finalize(lua_State* tolua_S)
+{
+    printf("luabindings: finalizing LUA object (TableView)");
+    return 0;
+}
+
+int lua_register_ax_extension_TableView(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.TableView");
+    tolua_cclass(tolua_S,"TableView","ax.TableView","ax.ScrollView",nullptr);
+
+    tolua_beginmodule(tolua_S,"TableView");
+        tolua_function(tolua_S,"new",lua_ax_extension_TableView_constructor);
+        tolua_function(tolua_S,"initWithViewSize",lua_ax_extension_TableView_initWithViewSize);
+        tolua_function(tolua_S,"setVerticalFillOrder",lua_ax_extension_TableView_setVerticalFillOrder);
+        tolua_function(tolua_S,"getVerticalFillOrder",lua_ax_extension_TableView_getVerticalFillOrder);
+        tolua_function(tolua_S,"updateCellAtIndex",lua_ax_extension_TableView_updateCellAtIndex);
+        tolua_function(tolua_S,"insertCellAtIndex",lua_ax_extension_TableView_insertCellAtIndex);
+        tolua_function(tolua_S,"removeCellAtIndex",lua_ax_extension_TableView_removeCellAtIndex);
+        tolua_function(tolua_S,"reloadData",lua_ax_extension_TableView_reloadData);
+        tolua_function(tolua_S,"dequeueCell",lua_ax_extension_TableView_dequeueCell);
+        tolua_function(tolua_S,"cellAtIndex",lua_ax_extension_TableView_cellAtIndex);
+        tolua_function(tolua_S,"scrollViewDidScroll",lua_ax_extension_TableView_scrollViewDidScroll);
+        tolua_function(tolua_S,"scrollViewDidZoom",lua_ax_extension_TableView_scrollViewDidZoom);
+        tolua_function(tolua_S,"_updateContentSize",lua_ax_extension_TableView__updateContentSize);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::extension::TableView).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.TableView";
+    g_typeCast[typeName] = "ax.TableView";
+    return 1;
+}
+
 int lua_ax_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5790,6 +8728,9 @@ TOLUA_API int register_all_ax_extension(lua_State* tolua_S)
 	tolua_module(tolua_S,"ax",0);
 	tolua_beginmodule(tolua_S,"ax");
 
+	lua_register_ax_extension_ScrollView(tolua_S);
+	lua_register_ax_extension_TableViewCell(tolua_S);
+	lua_register_ax_extension_TableView(tolua_S);
 	lua_register_ax_extension_AssetsManager(tolua_S);
 	lua_register_ax_extension_EventAssetsManagerEx(tolua_S);
 	lua_register_ax_extension_Manifest(tolua_S);

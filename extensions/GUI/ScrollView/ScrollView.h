@@ -377,8 +377,8 @@ protected:
     /** Touch listener */
     EventListenerTouchOneByOne* _touchListener;
 
-    CustomCommand _beforeDrawCommand;
-    CustomCommand _afterDrawCommand;
+    //CustomCommand _beforeDrawCommand;
+    //CustomCommand _afterDrawCommand;
 
     /**
      * Action created with setContentOffsetInDuration(), saved so it can be halted
