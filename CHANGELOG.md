@@ -5,6 +5,8 @@
 - Fix shaders not copying to final build on macOS for non Xcode builds by @smilediver
 - Fix `Scheduler::pauseTarget` can't timer targets, reported by @shaniamjad6
 - Fix build lua projects with engine prebuilts lib doesn't work, reported by @grif-on
+- Fix GUI ScrollView clipping bug and add lua support by @bintester
+- Ensure scissor state is set to the correct value prior to a buffer clear by @rh101
 
 ## Improvements
 

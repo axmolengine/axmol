@@ -437,8 +437,6 @@ function(ax_setup_app_config app_name)
         # compile app shader to ${CMAKE_BINARY_DIR}/runtime/axslc/custom/
         ax_target_compile_shaders(${app_name} FILES ${app_shaders} CUSTOM)
         source_group("Source Files/Source/shaders" FILES ${app_shaders}) 
-    else()
-        message(STATUS "No shader found in ${app_shaders_dir}")
     endif()
 
     if (IS_DIRECTORY ${GLSLCC_OUT_DIR})
