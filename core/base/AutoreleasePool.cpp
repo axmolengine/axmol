@@ -25,11 +25,13 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "base/AutoreleasePool.h"
 #include "base/Macros.h"
+#include <memory>
 
 NS_AX_BEGIN
 
 AutoreleasePool::AutoreleasePool()
     : _name("")
+    , _needPop(true)
 #if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
     , _isClearing(false)
 #endif
@@ -53,7 +55,8 @@ AutoreleasePool::~AutoreleasePool()
     AXLOGINFO("deallocing AutoreleasePool: %p", this);
     clear();
 
-    PoolManager::getInstance()->pop();
+    if (_needPop)
+        PoolManager::getInstance()->pop();
 }
 
 void AutoreleasePool::addObject(Ref* object)
@@ -98,28 +101,31 @@ void AutoreleasePool::dump()
     }
 }
 
+void AutoreleasePool::setNeedPop(bool needPop)
+{
+    _needPop = needPop;
+}
+
 //--------------------------------------------------------------------
 //
 // PoolManager
 //
 //--------------------------------------------------------------------
 
-PoolManager* PoolManager::s_singleInstance = nullptr;
-
+std::shared_ptr<PoolManager> s_singleInstance = nullptr;
 PoolManager* PoolManager::getInstance()
 {
     if (s_singleInstance == nullptr)
     {
-        s_singleInstance = new PoolManager();
+        s_singleInstance = std::shared_ptr<PoolManager>(new PoolManager());
         // Add the first auto release pool
-        new AutoreleasePool("cocos2d autorelease pool");
+        new AutoreleasePool("axmol autorelease pool");
     }
-    return s_singleInstance;
+    return s_singleInstance.get();
 }
 
 void PoolManager::destroyInstance()
 {
-    delete s_singleInstance;
     s_singleInstance = nullptr;
 }
 
@@ -135,8 +141,9 @@ PoolManager::~PoolManager()
     while (!_releasePoolStack.empty())
     {
         AutoreleasePool* pool = _releasePoolStack.back();
-
+        pool->setNeedPop(false);
         delete pool;
+        _releasePoolStack.pop_back();
     }
 }
 

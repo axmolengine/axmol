@@ -77,7 +77,7 @@ class Console;
  Since the Director is a singleton, the standard way to use it is by calling:
  _ Director::getInstance()->methodName();
  */
-class AX_DLL Director : public Ref
+class AX_DLL Director
 {
 public:
     /** Director will trigger an event before set next scene. */

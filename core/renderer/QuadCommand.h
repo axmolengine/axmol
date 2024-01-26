@@ -71,11 +71,9 @@ protected:
     void reIndex(int indices);
 
     int _indexSize;
-    std::vector<uint16_t*> _ownedIndices;
 
     // shared across all instances
     static int __indexCapacity;
-    static uint16_t* __indices;
 };
 
 NS_AX_END

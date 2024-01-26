@@ -65,11 +65,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~ApplicationProtocol()
-    {
-        /** clean auto release pool. */
-        PoolManager::destroyInstance();
-    }
+    virtual ~ApplicationProtocol() {}
 
     /**
      * @brief    Implement Director and Scene init code here.

@@ -94,6 +94,13 @@ DriverBase* DriverBase::getInstance()
     return _instance;
 }
 
+
+/** purges the cache. It releases the retained instance. */
+void DriverBase::destroyInstance()
+{
+    AX_SAFE_DELETE(_instance);
+}
+
 DriverGL::DriverGL()
 {
     /// driver info

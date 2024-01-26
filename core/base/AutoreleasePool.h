@@ -122,6 +122,8 @@ public:
      */
     void dump();
 
+    void setNeedPop(bool needPop);
+
 private:
     /**
      * The underlying array of object managed by the pool.
@@ -134,6 +136,7 @@ private:
      */
     std::vector<Ref*> _managedObjectArray;
     std::string _name;
+    bool _needPop;
 
 #if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
     /**
@@ -155,6 +158,8 @@ public:
     static PoolManager* getInstance();
     static void destroyInstance();
 
+    ~PoolManager();
+
     /**
      * Get current auto release pool, there is at least one auto release pool that created by engine.
      * You can create your own auto release pool at demand, which will be put into auto release pool stack.
@@ -166,13 +171,10 @@ public:
     friend class AutoreleasePool;
 
 private:
-    PoolManager();
-    ~PoolManager();
+    PoolManager();    
 
     void push(AutoreleasePool* pool);
     void pop();
-
-    static PoolManager* s_singleInstance;
 
     std::vector<AutoreleasePool*> _releasePoolStack;
 };

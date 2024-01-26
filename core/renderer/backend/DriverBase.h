@@ -83,6 +83,9 @@ public:
      */
     static DriverBase* getInstance();
 
+    /** purges the cache. It releases the retained instance. */
+    static void destroyInstance();
+
     virtual ~DriverBase() = default;
 
     /**

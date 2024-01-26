@@ -71,9 +71,6 @@ using namespace std;
 NS_AX_BEGIN
 // FIXME: it should be a Director ivar. Move it there once support for multiple directors is added
 
-// singleton stuff
-static Director* s_SharedDirector = nullptr;
-
 #define kDefaultFPS 60  // 60 frames per second
 
 const char* Director::EVENT_BEFORE_SET_NEXT_SCENE = "director_before_set_next_scene";
@@ -88,17 +85,14 @@ const char* Director::EVENT_BEFORE_DRAW           = "director_before_draw";
 
 Director* Director::getInstance()
 {
-    if (!s_SharedDirector)
-    {
-        s_SharedDirector = new Director;
-        AXASSERT(s_SharedDirector, "FATAL: Not enough memory");
-        s_SharedDirector->init();
-    }
-
-    return s_SharedDirector;
+    static Director instance;
+    return &instance;
 }
 
-Director::Director() {}
+Director::Director()
+{
+    this->init();
+}
 
 bool Director::init()
 {
@@ -190,8 +184,6 @@ Director::~Director()
 
     Configuration::destroyInstance();
     ObjectFactory::destroyInstance();
-
-    s_SharedDirector = nullptr;
 
 #if AX_ENABLE_SCRIPT_BINDING
     ScriptEngineManager::destroyInstance();
@@ -662,7 +654,7 @@ void Director::purgeCachedData()
     FontFNT::purgeCachedData();
     FontAtlasCache::purgeCachedData();
 
-    if (s_SharedDirector->getGLView())
+    if (this->getGLView())
     {
         SpriteFrameCache::getInstance()->removeUnusedSpriteFrames();
         _textureCache->removeUnusedTextures();
@@ -1045,6 +1037,8 @@ void Director::reset()
     FileUtils::destroyInstance();
     AsyncTaskPool::destroyInstance();
     backend::ProgramManager::destroyInstance();
+    backend::ProgramStateRegistry::destroyInstance();
+    backend::DriverBase::destroyInstance();
 
     // axmol specific data structures
     UserDefault::destroyInstance();
@@ -1065,9 +1059,6 @@ void Director::purgeDirector()
         _glView->end();
         _glView = nullptr;
     }
-
-    // delete Director
-    release();
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     utils::killCurrentProcess();

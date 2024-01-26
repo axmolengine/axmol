@@ -35,17 +35,11 @@
 NS_AX_BEGIN
 
 int QuadCommand::__indexCapacity = -1;
-uint16_t* QuadCommand::__indices = nullptr;
+std::shared_ptr<uint16_t> __indices = nullptr;
 
-QuadCommand::QuadCommand() : _indexSize(-1), _ownedIndices() {}
+QuadCommand::QuadCommand() : _indexSize(-1) {}
 
-QuadCommand::~QuadCommand()
-{
-    for (auto&& indices : _ownedIndices)
-    {
-        AX_SAFE_DELETE_ARRAY(indices);
-    }
-}
+QuadCommand::~QuadCommand() {}
 
 void QuadCommand::reIndex(int indicesCount)
 {
@@ -63,19 +57,18 @@ void QuadCommand::reIndex(int indicesCount)
 
         AXLOG("axmol: QuadCommand: resizing index size from [%d] to [%d]", __indexCapacity, indicesCount);
 
-        _ownedIndices.emplace_back(__indices);
-        __indices       = new uint16_t[indicesCount];
+        __indices       = std::shared_ptr<uint16_t>(new uint16_t[indicesCount], std::default_delete<uint16_t[]>());
         __indexCapacity = indicesCount;
     }
 
     for (int i = 0; i < __indexCapacity / 6; i++)
     {
-        __indices[i * 6 + 0] = (uint16_t)(i * 4 + 0);
-        __indices[i * 6 + 1] = (uint16_t)(i * 4 + 1);
-        __indices[i * 6 + 2] = (uint16_t)(i * 4 + 2);
-        __indices[i * 6 + 3] = (uint16_t)(i * 4 + 3);
-        __indices[i * 6 + 4] = (uint16_t)(i * 4 + 2);
-        __indices[i * 6 + 5] = (uint16_t)(i * 4 + 1);
+        __indices.get()[i * 6 + 0] = (uint16_t)(i * 4 + 0);
+        __indices.get()[i * 6 + 1] = (uint16_t)(i * 4 + 1);
+        __indices.get()[i * 6 + 2] = (uint16_t)(i * 4 + 2);
+        __indices.get()[i * 6 + 3] = (uint16_t)(i * 4 + 3);
+        __indices.get()[i * 6 + 4] = (uint16_t)(i * 4 + 2);
+        __indices.get()[i * 6 + 5] = (uint16_t)(i * 4 + 1);
     }
 
     _indexSize = indicesCount;
@@ -95,7 +88,7 @@ void QuadCommand::init(float globalOrder,
     Triangles triangles;
     triangles.verts      = &quads->tl;
     triangles.vertCount  = (int)quadCount * 4;
-    triangles.indices    = __indices;
+    triangles.indices    = __indices.get();
     triangles.indexCount = (int)quadCount * 6;
     TrianglesCommand::init(globalOrder, texture, blendType, triangles, mv, flags);
 }
