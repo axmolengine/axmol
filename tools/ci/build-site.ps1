@@ -166,6 +166,12 @@ Copy-Item './index.html' "$site_dist/index.html"
 # copy logo used by site home page
 Copy-Item './logo.png' "$site_dist/logo.png"
 
+$branches = $(git branch -a)
+$canon_branches = @{}
+foreach($branch in $branches) {
+    $canon_branches[$branch.Trim()] = $true
+}
+
 # build manuals
 foreach($item in $verMap.GetEnumerator()) {
     $ver = $item.Key
@@ -176,8 +182,8 @@ foreach($item in $verMap.GetEnumerator()) {
     if ($ver -eq 'latest') {
         git checkout dev
         $release_tag = query_axmol_latest
-    } elseif($ver -eq '1.0') {
-        git checkout '1.x' # 1.x branch now for v1.0
+    } elseif($canon_branches.Contains($ver)) { # prefer LTS branch
+        git checkout $ver
     } else {
         git checkout $release_tag
     }
