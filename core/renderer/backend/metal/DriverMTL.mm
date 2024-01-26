@@ -397,6 +397,12 @@ DriverBase* DriverBase::getInstance()
     return DriverBase::_instance;
 }
 
+/** purges the cache. It releases the retained instance. */
+void DriverBase::destroyInstance()
+{
+    AX_SAFE_DELETE(DriverBase::_instance);
+}
+
 void DriverMTL::setCAMetalLayer(CAMetalLayer* metalLayer)
 {
     DriverMTL::_metalLayer = metalLayer;
