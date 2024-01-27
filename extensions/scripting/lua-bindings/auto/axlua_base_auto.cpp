@@ -11838,7 +11838,7 @@ int lua_ax_base_Node_initLayer(lua_State* tolua_S)
 
     return 0;
 }
-#if AX_USE_PHYSICS >= 1
+#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION))
 int lua_ax_base_Node_setPhysicsBody(lua_State* tolua_S)
 {
     int argc = 0;
