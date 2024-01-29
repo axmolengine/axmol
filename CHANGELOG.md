@@ -7,6 +7,8 @@
 - Fix build lua projects with engine prebuilts lib doesn't work, reported by @grif-on
 - Fix GUI ScrollView clipping bug and add lua support by @bintester
 - Ensure scissor state is set to the correct value prior to a buffer clear by @rh101
+- Fix memory leaks when app exit on non-embed systems by @halx99 and @lich426
+- Fix can't generate lua bindings for set/get Node localZOrder, reporeted by @bintester
 
 ## Improvements
 
