@@ -41,7 +41,7 @@ THE SOFTWARE.
 #define LOG_TAG "main"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
-void cocos_android_app_init(JNIEnv* env) __attribute__((weak));
+void axmol_android_app_init(JNIEnv* env) __attribute__((weak));
 
 USING_NS_AX;
 
@@ -75,7 +75,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 {
     JniHelper::setJavaVM(vm);
 
-    cocos_android_app_init(JniHelper::getEnv());
+    axmol_android_app_init(JniHelper::getEnv());
 
     return JNI_VERSION_1_4;
 }

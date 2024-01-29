@@ -112,7 +112,7 @@ PoolManager* PoolManager::getInstance()
     {
         s_singleInstance = new PoolManager();
         // Add the first auto release pool
-        new AutoreleasePool("cocos2d autorelease pool");
+        new AutoreleasePool("axmol autorelease pool");
     }
     return s_singleInstance;
 }
