@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -40,10 +41,13 @@ NS_AX_BACKEND_BEGIN
 /**
  * Create and reuse shader module.
  */
-class AX_DLL ShaderCache : public Ref
+class AX_DLL ShaderCache
 {
 public:
     static ShaderCache* getInstance();
+    static void destroyInstance();
+
+    ~ShaderCache();
 
     /** purges the cache. It releases the retained instance. */
     void purge();

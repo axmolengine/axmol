@@ -46,7 +46,7 @@ NS_AX_BACKEND_BEGIN
 /**
  * Cache and reuse program object.
  */
-class AX_DLL ProgramManager : public Ref
+class AX_DLL ProgramManager
 {
 public:
     /** returns the shared instance */

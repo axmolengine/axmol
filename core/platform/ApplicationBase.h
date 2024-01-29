@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -24,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_APPLICATION_PROTOCOL_H__
-#define __AX_APPLICATION_PROTOCOL_H__
+#ifndef __AX_APPLICATION_BASE_H__
+#define __AX_APPLICATION_BASE_H__
 
 #include "platform/PlatformMacros.h"
 #include "base/AutoreleasePool.h"
@@ -38,7 +39,7 @@ NS_AX_BEGIN
  * @{
  */
 
-class AX_DLL ApplicationProtocol
+class AX_DLL ApplicationBase
 {
 public:
     /** Since WINDOWS and ANDROID are defined as macros, we could not just use these keywords in enumeration(Platform).
@@ -65,11 +66,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~ApplicationProtocol()
-    {
-        /** clean auto release pool. */
-        PoolManager::destroyInstance();
-    }
+    virtual ~ApplicationBase();
 
     /**
      * @brief    Implement Director and Scene init code here.
@@ -151,6 +148,8 @@ public:
      */
     virtual bool openURL(std::string_view url) = 0;
 };
+
+using ApplicationProtocol = ApplicationBase;
 
 // end of platform group
 /** @} */

@@ -21,7 +21,7 @@ ProgramStateRegistry* ProgramStateRegistry::getInstance()
 /** purges the cache. It releases the retained instance. */
 void ProgramStateRegistry::destroyInstance()
 {
-    AX_SAFE_RELEASE_NULL(_sharedStateRegistry);
+    AX_SAFE_DELETE(_sharedStateRegistry);
 }
 
 bool ProgramStateRegistry::init()
