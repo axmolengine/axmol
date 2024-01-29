@@ -171,7 +171,7 @@ endif()
 set(_AX_PLATFORM_HEADER
     ${_AX_PLATFORM_SPECIFIC_HEADER}
     platform/Application.h
-    platform/ApplicationProtocol.h
+    platform/ApplicationBase.h
     platform/Common.h
     platform/Device.h
     platform/FileUtils.h
@@ -194,4 +194,5 @@ set(_AX_PLATFORM_SRC
     platform/FileUtils.cpp
     platform/Image.cpp
     platform/FileStream.cpp
+    platform/ApplicationBase.cpp
     )

@@ -15,7 +15,7 @@
 #pragma once
 
 #include "platform/Common.h"
-#include "platform/ApplicationProtocol.h"
+#include "platform/ApplicationBase.h"
 
 NS_AX_BEGIN
 

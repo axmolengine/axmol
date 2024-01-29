@@ -67,6 +67,8 @@ public:
               const Mat4& mv,
               uint32_t flags);
 
+    static void destroyIsolatedIndices();
+
 protected:
     void reIndex(int indices);
 

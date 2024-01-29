@@ -37,6 +37,12 @@ NS_AX_BEGIN
 int QuadCommand::__indexCapacity = -1;
 uint16_t* QuadCommand::__indices = nullptr;
 
+void QuadCommand::destroyIsolatedIndices()
+{
+    AX_SAFE_DELETE_ARRAY(__indices);
+    __indexCapacity = -1;
+}
+
 QuadCommand::QuadCommand() : _indexSize(-1), _ownedIndices() {}
 
 QuadCommand::~QuadCommand()

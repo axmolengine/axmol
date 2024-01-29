@@ -31,13 +31,13 @@ THE SOFTWARE.
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
 #include "platform/Common.h"
-#include "platform/ApplicationProtocol.h"
+#include "platform/ApplicationBase.h"
 #include <string>
 
 NS_AX_BEGIN
 class Rect;
 
-class Application : public ApplicationProtocol
+class Application : public ApplicationBase
 {
 public:
     /**

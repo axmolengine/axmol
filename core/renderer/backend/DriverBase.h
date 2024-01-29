@@ -82,6 +82,7 @@ public:
      * Returns a shared instance of the DriverBase.
      */
     static DriverBase* getInstance();
+    static void destroyInstance();
 
     virtual ~DriverBase() = default;
 

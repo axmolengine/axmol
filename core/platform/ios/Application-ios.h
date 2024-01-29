@@ -26,11 +26,11 @@ THE SOFTWARE.
 #pragma once
 
 #include "platform/Common.h"
-#include "platform/ApplicationProtocol.h"
+#include "platform/ApplicationBase.h"
 
 NS_AX_BEGIN
 
-class AX_DLL Application : public ApplicationProtocol
+class AX_DLL Application : public ApplicationBase
 {
 public:
     /**

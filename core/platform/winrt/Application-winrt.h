@@ -31,14 +31,14 @@ THE SOFTWARE.
 
 #    include "platform/StdC.h"
 #    include "platform/Common.h"
-#    include "platform/ApplicationProtocol.h"
+#    include "platform/ApplicationBase.h"
 #    include "platform/winrt/InputEvent.h"
 #    include <string>
 #    include <functional>
 
 NS_AX_BEGIN
 
-class AX_DLL Application : public ApplicationProtocol
+class AX_DLL Application : public ApplicationBase
 {
 public:
     Application();

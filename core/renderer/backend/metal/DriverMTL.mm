@@ -391,10 +391,15 @@ id<CAMetalDrawable> DriverMTL::_currentDrawable = nil;
 
 DriverBase* DriverBase::getInstance()
 {
-    if (!DriverBase::_instance)
-        DriverBase::_instance = new DriverMTL();
+    if (!_instance)
+        _instance = new DriverMTL();
 
-    return DriverBase::_instance;
+    return _instance;
+}
+
+void DriverBase::destroyInstance() 
+{
+    AX_SAFE_DELETE(_instance);
 }
 
 void DriverMTL::setCAMetalLayer(CAMetalLayer* metalLayer)

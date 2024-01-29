@@ -40,10 +40,13 @@ NS_AX_BACKEND_BEGIN
 /**
  * Create and reuse shader module.
  */
-class AX_DLL ShaderCache : public Ref
+class AX_DLL ShaderCache
 {
 public:
     static ShaderCache* getInstance();
+    static void destroyInstance();
+
+    ~ShaderCache();
 
     /** purges the cache. It releases the retained instance. */
     void purge();

@@ -27,10 +27,23 @@
 
 NS_AX_BACKEND_BEGIN
 
+static ShaderCache* s_instance;
+
 ShaderCache* ShaderCache::getInstance()
 {
-    static ShaderCache instance;
-    return &instance;
+    if (s_instance)
+        return s_instance;
+    return (s_instance = new ShaderCache());
+}
+
+void ShaderCache::destroyInstance()
+{
+    AX_SAFE_DELETE(s_instance);
+}
+
+ShaderCache::~ShaderCache()
+{
+    purge();
 }
 
 void ShaderCache::purge()
@@ -55,7 +68,7 @@ backend::ShaderModule* ShaderCache::newFragmentShaderModule(std::string_view sha
 backend::ShaderModule* ShaderCache::newShaderModule(backend::ShaderStage stage, std::string_view shaderSource)
 {
     const std::size_t key = std::hash<std::string_view>{}(shaderSource);
-    const auto iter = _cachedShaders.find(key);
+    const auto iter       = _cachedShaders.find(key);
 
     if (_cachedShaders.end() != iter)
         return iter->second;
