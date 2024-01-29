@@ -48,7 +48,7 @@ AnimationCache* AnimationCache::getInstance()
 
 void AnimationCache::destroyInstance()
 {
-    AX_SAFE_RELEASE_NULL(s_sharedAnimationCache);
+    AX_SAFE_DELETE(s_sharedAnimationCache);
 }
 
 bool AnimationCache::init()

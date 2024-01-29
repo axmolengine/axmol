@@ -60,7 +60,7 @@ SpriteFrameCache* SpriteFrameCache::getInstance()
 
 void SpriteFrameCache::destroyInstance()
 {
-    AX_SAFE_RELEASE_NULL(_sharedSpriteFrameCache);
+    AX_SAFE_DELETE(_sharedSpriteFrameCache);
 }
 
 bool SpriteFrameCache::init()

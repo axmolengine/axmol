@@ -52,7 +52,7 @@ ProgramManager* ProgramManager::getInstance()
 
 void ProgramManager::destroyInstance()
 {
-    AX_SAFE_RELEASE_NULL(_sharedProgramManager);
+    AX_SAFE_DELETE(_sharedProgramManager);
 }
 
 ProgramManager::ProgramManager()

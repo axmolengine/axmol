@@ -52,7 +52,7 @@ Before v0.99.5, the recommend way was to save them on the Sprite. Since v0.99.5,
 @since v0.99.5
 @js cc.animationCache
 */
-class AX_DLL AnimationCache : public Ref
+class AX_DLL AnimationCache
 {
 public:
     /**

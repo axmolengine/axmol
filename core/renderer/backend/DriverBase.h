@@ -72,7 +72,7 @@ enum class FeatureType : uint32_t
 /**
  * New or create resources from DriverBase.
  */
-class AX_DLL DriverBase : public ax::Ref
+class AX_DLL DriverBase
 {
 public:
     friend class ProgramManager;

@@ -50,7 +50,7 @@ class ProfilingTimer;
  To use it, enable set the AX_ENABLE_PROFILERS=1 in the ccConfig.h file
  */
 
-class AX_DLL Profiler : public Ref
+class AX_DLL Profiler
 {
 public:
     /**
