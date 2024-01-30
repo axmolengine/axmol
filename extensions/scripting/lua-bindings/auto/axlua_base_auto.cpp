@@ -11838,6 +11838,7 @@ int lua_ax_base_Node_initLayer(lua_State* tolua_S)
 
     return 0;
 }
+#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION))
 int lua_ax_base_Node_setPhysicsBody(lua_State* tolua_S)
 {
     int argc = 0;
@@ -11935,6 +11936,7 @@ int lua_ax_base_Node_getPhysicsBody(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION))
 int lua_ax_base_Node_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12195,8 +12197,10 @@ int lua_register_ax_base_Node(lua_State* tolua_S)
         tolua_function(tolua_S,"resetChild",lua_ax_base_Node_resetChild);
         tolua_function(tolua_S,"init",lua_ax_base_Node_init);
         tolua_function(tolua_S,"initLayer",lua_ax_base_Node_initLayer);
+#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION))
         tolua_function(tolua_S,"setPhysicsBody",lua_ax_base_Node_setPhysicsBody);
         tolua_function(tolua_S,"getPhysicsBody",lua_ax_base_Node_getPhysicsBody);
+#endif
         tolua_function(tolua_S,"create", lua_ax_base_Node_create);
         tolua_function(tolua_S,"getAttachedNodeCount", lua_ax_base_Node_getAttachedNodeCount);
     tolua_endmodule(tolua_S);
@@ -12473,6 +12477,41 @@ int lua_ax_base_Scene_onProjectionChanged(lua_State* tolua_S)
 
     return 0;
 }
+#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION))
+int lua_ax_base_Scene_createWithPhysics(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Scene",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_createWithPhysics'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::Scene::createWithPhysics();
+        object_to_luaval<ax::Scene>(tolua_S, "ax.Scene",(ax::Scene*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Scene:createWithPhysics",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_createWithPhysics'.",&tolua_err);
+#endif
+    return 0;
+}
 int lua_ax_base_Scene_getPhysicsWorld(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12664,6 +12703,8 @@ int lua_ax_base_Scene_fixedUpdate(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION))
+#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION) || AX_USE_NAVMESH)
 int lua_ax_base_Scene_stepPhysicsAndNavigation(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12714,6 +12755,7 @@ int lua_ax_base_Scene_stepPhysicsAndNavigation(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION) || AX_USE_NAVMESH)
 int lua_ax_base_Scene_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12784,40 +12826,6 @@ int lua_ax_base_Scene_createWithSize(lua_State* tolua_S)
 #endif
     return 0;
 }
-int lua_ax_base_Scene_createWithPhysics(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.Scene",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_createWithPhysics'", nullptr);
-            return 0;
-        }
-        auto&& ret = ax::Scene::createWithPhysics();
-        object_to_luaval<ax::Scene>(tolua_S, "ax.Scene",(ax::Scene*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Scene:createWithPhysics",argc, 0);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_createWithPhysics'.",&tolua_err);
-#endif
-    return 0;
-}
 int lua_ax_base_Scene_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12873,14 +12881,18 @@ int lua_register_ax_base_Scene(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSize",lua_ax_base_Scene_initWithSize);
         tolua_function(tolua_S,"setCameraOrderDirty",lua_ax_base_Scene_setCameraOrderDirty);
         tolua_function(tolua_S,"onProjectionChanged",lua_ax_base_Scene_onProjectionChanged);
+#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION))
+        tolua_function(tolua_S,"createWithPhysics",lua_ax_base_Scene_createWithPhysics);
         tolua_function(tolua_S,"getPhysicsWorld",lua_ax_base_Scene_getPhysicsWorld);
         tolua_function(tolua_S,"initWithPhysics",lua_ax_base_Scene_initWithPhysics);
         tolua_function(tolua_S,"initPhysicsWorld",lua_ax_base_Scene_initPhysicsWorld);
         tolua_function(tolua_S,"fixedUpdate",lua_ax_base_Scene_fixedUpdate);
+#endif
+#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION) || AX_USE_NAVMESH)
         tolua_function(tolua_S,"stepPhysicsAndNavigation",lua_ax_base_Scene_stepPhysicsAndNavigation);
+#endif
         tolua_function(tolua_S,"create", lua_ax_base_Scene_create);
         tolua_function(tolua_S,"createWithSize", lua_ax_base_Scene_createWithSize);
-        tolua_function(tolua_S,"createWithPhysics", lua_ax_base_Scene_createWithPhysics);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Scene).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Scene";
@@ -103688,42 +103700,6 @@ int lua_ax_base_AnimationCache_destroyInstance(lua_State* tolua_S)
 #endif
     return 0;
 }
-int lua_ax_base_AnimationCache_constructor(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::AnimationCache* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AnimationCache_constructor'", nullptr);
-            return 0;
-        }
-        cobj = new ax::AnimationCache();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.AnimationCache");
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AnimationCache:AnimationCache",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_AnimationCache_constructor'.",&tolua_err);
-#endif
-
-    return 0;
-}
 
 static int lua_ax_base_AnimationCache_finalize(lua_State* tolua_S)
 {
@@ -103737,7 +103713,6 @@ int lua_register_ax_base_AnimationCache(lua_State* tolua_S)
     tolua_cclass(tolua_S,"AnimationCache","ax.AnimationCache","ax.Ref",nullptr);
 
     tolua_beginmodule(tolua_S,"AnimationCache");
-        tolua_function(tolua_S,"new",lua_ax_base_AnimationCache_constructor);
         tolua_function(tolua_S,"init",lua_ax_base_AnimationCache_init);
         tolua_function(tolua_S,"addAnimation",lua_ax_base_AnimationCache_addAnimation);
         tolua_function(tolua_S,"removeAnimation",lua_ax_base_AnimationCache_removeAnimation);
