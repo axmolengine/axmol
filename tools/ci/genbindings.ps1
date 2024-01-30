@@ -50,7 +50,7 @@ Push-Location $AX_ROOT
 
 if ($env:GITHUB_ACTIONS -eq 'true') {
     $git_status = "$(git status)"
-    $no_changes = $git_status.IndexOf('modified:') -eq -1 -or $git_status.IndexOf('deleted:') -eq -1 -or $git_status.IndexOf('Untracked', [StringComparison]::OrdinalIgnoreCase) -eq -1
+    $no_changes = $git_status.IndexOf('modified:') -eq -1 # -and $git_status.IndexOf('deleted:') -eq -1 -and $git_status.IndexOf('Untracked', [StringComparison]::OrdinalIgnoreCase) -eq -1
     if ($no_changes) {
         echo "BINDING_NO_CHANGES=true" >> ${env:GITHUB_ENV}
     } else {
