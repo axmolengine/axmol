@@ -1092,6 +1092,40 @@ int lua_ax_base_ShaderCache_getInstance(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_base_ShaderCache_destroyInstance(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axb.ShaderCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShaderCache_destroyInstance'", nullptr);
+            return 0;
+        }
+        ax::backend::ShaderCache::destroyInstance();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axb.ShaderCache:destroyInstance",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ShaderCache_destroyInstance'.",&tolua_err);
+#endif
+    return 0;
+}
 static int lua_ax_base_ShaderCache_finalize(lua_State* tolua_S)
 {
     printf("luabindings: finalizing LUA object (ShaderCache)");
@@ -1101,7 +1135,7 @@ static int lua_ax_base_ShaderCache_finalize(lua_State* tolua_S)
 int lua_register_ax_base_ShaderCache(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"axb.ShaderCache");
-    tolua_cclass(tolua_S,"ShaderCache","axb.ShaderCache","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ShaderCache","axb.ShaderCache","",nullptr);
 
     tolua_beginmodule(tolua_S,"ShaderCache");
         tolua_function(tolua_S,"purge",lua_ax_base_ShaderCache_purge);
@@ -1109,6 +1143,7 @@ int lua_register_ax_base_ShaderCache(lua_State* tolua_S)
         tolua_function(tolua_S,"newFragmentShaderModule",lua_ax_base_ShaderCache_newFragmentShaderModule);
         tolua_function(tolua_S,"removeUnusedShader",lua_ax_base_ShaderCache_removeUnusedShader);
         tolua_function(tolua_S,"getInstance", lua_ax_base_ShaderCache_getInstance);
+        tolua_function(tolua_S,"destroyInstance", lua_ax_base_ShaderCache_destroyInstance);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::backend::ShaderCache).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axb.ShaderCache";
@@ -4768,6 +4803,56 @@ int lua_ax_base_Node_getDescription(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Node_setLocalZOrder(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Node* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Node",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setLocalZOrder'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        int arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Node:setLocalZOrder");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setLocalZOrder'", nullptr);
+            return 0;
+        }
+        cobj->setLocalZOrder(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:setLocalZOrder",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_setLocalZOrder'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Node_updateOrderOfArrival(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4849,7 +4934,7 @@ int lua_ax_base_Node_getLocalZOrder(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getLocalZOrder();
-        #pragma warning NO CONVERSION FROM NATIVE FOR ??;
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:getLocalZOrder",argc, 0);
@@ -12054,6 +12139,7 @@ int lua_register_ax_base_Node(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"Node");
         tolua_function(tolua_S,"new",lua_ax_base_Node_constructor);
         tolua_function(tolua_S,"getDescription",lua_ax_base_Node_getDescription);
+        tolua_function(tolua_S,"setLocalZOrder",lua_ax_base_Node_setLocalZOrder);
         tolua_function(tolua_S,"updateOrderOfArrival",lua_ax_base_Node_updateOrderOfArrival);
         tolua_function(tolua_S,"getLocalZOrder",lua_ax_base_Node_getLocalZOrder);
         tolua_function(tolua_S,"setGlobalZOrder",lua_ax_base_Node_setGlobalZOrder);
@@ -18100,6 +18186,40 @@ int lua_ax_base_Director_getInstance(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_base_Director_destroyInstance(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_destroyInstance'", nullptr);
+            return 0;
+        }
+        ax::Director::destroyInstance();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Director:destroyInstance",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_destroyInstance'.",&tolua_err);
+#endif
+    return 0;
+}
 static int lua_ax_base_Director_finalize(lua_State* tolua_S)
 {
     printf("luabindings: finalizing LUA object (Director)");
@@ -18183,6 +18303,7 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"isChildrenIndexerEnabled",lua_ax_base_Director_isChildrenIndexerEnabled);
         tolua_function(tolua_S,"isValid",lua_ax_base_Director_isValid);
         tolua_function(tolua_S,"getInstance", lua_ax_base_Director_getInstance);
+        tolua_function(tolua_S,"destroyInstance", lua_ax_base_Director_destroyInstance);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Director).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Director";
@@ -69161,7 +69282,7 @@ static int lua_ax_base_SpriteFrameCache_finalize(lua_State* tolua_S)
 int lua_register_ax_base_SpriteFrameCache(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.SpriteFrameCache");
-    tolua_cclass(tolua_S,"SpriteFrameCache","ax.SpriteFrameCache","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"SpriteFrameCache","ax.SpriteFrameCache","",nullptr);
 
     tolua_beginmodule(tolua_S,"SpriteFrameCache");
         tolua_function(tolua_S,"init",lua_ax_base_SpriteFrameCache_init);
@@ -69848,7 +69969,7 @@ static int lua_ax_base_ParticleEmissionMaskCache_finalize(lua_State* tolua_S)
 int lua_register_ax_base_ParticleEmissionMaskCache(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.ParticleEmissionMaskCache");
-    tolua_cclass(tolua_S,"ParticleEmissionMaskCache","ax.ParticleEmissionMaskCache","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ParticleEmissionMaskCache","ax.ParticleEmissionMaskCache","",nullptr);
 
     tolua_beginmodule(tolua_S,"ParticleEmissionMaskCache");
         tolua_function(tolua_S,"bakeEmissionMask",lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask);
@@ -103709,10 +103830,8 @@ int lua_ax_base_AnimationCache_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::AnimationCache();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.AnimationCache");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.AnimationCache");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AnimationCache:AnimationCache",argc, 0);
@@ -103734,7 +103853,7 @@ static int lua_ax_base_AnimationCache_finalize(lua_State* tolua_S)
 int lua_register_ax_base_AnimationCache(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.AnimationCache");
-    tolua_cclass(tolua_S,"AnimationCache","ax.AnimationCache","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"AnimationCache","ax.AnimationCache","",nullptr);
 
     tolua_beginmodule(tolua_S,"AnimationCache");
         tolua_function(tolua_S,"new",lua_ax_base_AnimationCache_constructor);
