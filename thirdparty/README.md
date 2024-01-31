@@ -184,7 +184,7 @@
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
-- Version: 1.6.40
+- Version: 1.6.42
 - License: PNG Reference Library License version 2
 
 ## poly2tri
@@ -218,7 +218,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 3.6.3
+- Version: 3.6.4
 - License: Apache-2.0
 
 ## stb (stb_image)

@@ -1,4 +1,4 @@
-## axmol-2.1.1 ?? 2024
+## axmol-2.1.1 Feb.1 2024
 
 ### BugFixes
 
@@ -10,9 +10,17 @@
 - Fix memory leaks when app exit on non-embed systems by @halx99 and @lich426
 - Fix can't generate lua bindings for set/get Node localZOrder, reporeted by @bintester
 
+## Break changes
+
+- Rename android entrypoint: `cocos_android_app_init` ==> `axmol_android_app_init`
+
 ## Improvements
 
 - Add some utils functions and lua support by @bintester
+
+### 3rdparties updates
+
+- simdjson: 3.6.3 ==> 3.6.4
 
 ## axmol-2.1.0 Jan.20 2024
 
