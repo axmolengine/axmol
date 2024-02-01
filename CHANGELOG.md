@@ -1,4 +1,4 @@
-## axmol-2.1.1 Feb.1 2024
+## axmol-2.1.1 Feb.2 2024
 
 ### BugFixes
 
@@ -9,6 +9,9 @@
 - Ensure scissor state is set to the correct value prior to a buffer clear by @rh101
 - Fix memory leaks when app exit on non-embed systems by @halx99 and @lich426
 - Fix can't generate lua bindings for set/get Node localZOrder, reporeted by @bintester
+- Fix lua template include incorrect module path, reported by @grif-on
+- Fix build win32 with clang error
+- Fix ci build-site download unexpected artifacts from appveyor
 
 ## Break changes
 
@@ -21,6 +24,14 @@
 ### 3rdparties updates
 
 - simdjson: 3.6.3 ==> 3.6.4
+- curl: 8.5.0 ==> 8.6.0
+- openssl: 3.0.12 ==> 3.0.13
+- yasio: 4.1.4 ==> 5.0.0
+- zlib: 1.3 ==> 1.3.1
+- jpeg-turbo: 3.0.1 ==> 3.0.2
+- libpng: 1.6.40 ==> 1.6.42
+- luajit: 2.1-43d0a19 ==> 2.1-9cc2e42
+
 
 ## axmol-2.1.0 Jan.20 2024
 

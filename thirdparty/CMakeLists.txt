@@ -439,7 +439,6 @@ endif()
 
 if(AX_WITH_CARES)
     ax_add_3rd(c-ares)
-    target_compile_definitions(thirdparty INTERFACE YASIO_USE_CARES=1)
 endif()
 
 ax_add_3rd(llhttp)
@@ -466,7 +465,6 @@ endif()
 
 # kcp
 if(AX_WITH_KCP)
-    set(BUILD_TESTING OFF)
     _1kfetch(kcp)
     ax_add_3rd(${kcp_SOURCE_DIR} TARGETS kcp)
 endif()
@@ -479,6 +477,10 @@ if (WIN32)
     endif()
 endif()
 
+# yasio
+ax_add_3rd(yasio)
+
+# simdjson
 ax_add_3rd(simdjson)
 
 if (ANDROID)

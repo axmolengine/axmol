@@ -55,7 +55,7 @@ SOFTWARE.
 #endif
 
 #if defined(YASIO_ENABLE_KCP)
-#  include "kcp/ikcp.h"
+#  include "ikcp.h"
 struct yasio_kcp_options;
 #endif
 
