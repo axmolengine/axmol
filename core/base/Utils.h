@@ -197,6 +197,12 @@ AX_DLL std::string getFileMD5Hash(std::string_view filename, uint32_t bufferSize
  *  @return The md5 hash for the data
  */
 AX_DLL std::string getDataMD5Hash(const Data& data);
+/**
+ *  Gets the md5 hash for the given string.
+ *  @param str The string to calculate md5 hash.
+ *  @return The md5 hash for the str
+ */
+AX_DLL std::string getStringMD5Hash(std::string_view str);
 
 /**
  *  Gets the hash for the given buffer with specific algorithm.
