@@ -4,7 +4,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 //
 //
-// Copyright (c) 2012-2023 HALX99 (halx99 at live dot com)
+// Copyright (c) 2012-2024 HALX99 (halx99 at live dot com)
 
 #pragma once
 

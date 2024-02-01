@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2023 HALX99
+Copyright (c) 2012-2024 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -49,7 +49,7 @@ YASIO__DECL yssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
   {
     int fail_count = -1;
     if (yasio__valid_str(opts.crtfile_))
-    {
+    { // CAfile for verify
       fail_count = 0;
       yssl_splitpath(opts.crtfile_, [&](char* first, char* last) {
         yssl_split_term null_term(last);
@@ -69,6 +69,11 @@ YASIO__DECL yssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
         return !ok;
       });
     }
+    /*
+    * client cert & key not implement yet, since it not common usecase
+    * SSL_CTX_use_certificate_chain_file
+    * SSL_CTX_use_PrivateKey_file
+    */
     if (!fail_count)
     {
       ::SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, ::SSL_CTX_get_verify_callback(ctx));
@@ -93,6 +98,14 @@ YASIO__DECL yssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
 
     if (yasio__valid_str(opts.keyfile_) && ::SSL_CTX_use_PrivateKey_file(ctx, opts.keyfile_, SSL_FILETYPE_PEM) <= 0)
       YASIO_LOG("[gobal] load server private key file failed!");
+
+    /* 
+    * If client provide cert, then verify, otherwise skip verify
+    * Note: if SSL_VERIFY_FAIL_IF_NO_PEER_CERT specified, client must provide
+    * cert & key which is not common use, means 100% online servers doesn't require
+    * client to provide cert
+    */
+    ::SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, ::SSL_CTX_get_verify_callback(ctx));
   }
 
   return ctx;

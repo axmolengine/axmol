@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2023 HALX99
+Copyright (c) 2012-2024 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,6 +36,7 @@ SOFTWARE.
 #include <vector>
 #include <chrono>
 #include <functional>
+#include <map>
 #include "yasio/sz.hpp"
 #include "yasio/config.hpp"
 #include "yasio/singleton.hpp"
@@ -54,7 +55,7 @@ SOFTWARE.
 #endif
 
 #if defined(YASIO_ENABLE_KCP)
-typedef struct IKCPCB ikcpcb;
+#  include "kcp/ikcp.h"
 struct yasio_kcp_options;
 #endif
 
@@ -398,6 +399,11 @@ typedef highp_timer deadline_timer;
 typedef highp_timer_ptr deadline_timer_ptr;
 typedef event_cb_t io_event_cb_t;
 typedef completion_cb_t io_completion_cb_t;
+
+namespace
+{
+static const int yasio__max_rcvbuf = YASIO_SZ(64, k);
+} // namespace
 
 // the ssl role
 enum ssl_role
@@ -774,8 +780,8 @@ protected:
 
   bool is_valid() const { return ctx_ != nullptr; }
 
-  char buffer_[YASIO_INET_BUFFER_SIZE]; // recv buffer, 64K
-  int offset_ = 0;                      // recv buffer offset
+  char buffer_[yasio__max_rcvbuf]; // recv buffer, 64K
+  int offset_ = 0;                 // recv buffer offset
 
   int expected_size_ = -1;
   sbyte_buffer expected_packet_;
@@ -834,7 +840,7 @@ protected:
   YASIO__DECL void confgure_remote(const ip::endpoint& peer);
 
   // process received data from low level
-  YASIO__DECL virtual int handle_input(const char* data, int bytes_transferred, int& error, highp_time_t& wait_duration);
+  YASIO__DECL virtual int handle_input(char* data, int bytes_transferred, int& error, highp_time_t& wait_duration);
 
   ip::endpoint peer_;                // for recv only, unstable
   mutable ip::endpoint destination_; // for sendto only, stable
@@ -842,24 +848,27 @@ protected:
 };
 #if defined(YASIO_ENABLE_KCP)
 class io_transport_kcp : public io_transport_udp {
+  friend class io_service;
 public:
   YASIO__DECL io_transport_kcp(io_channel* ctx, xxsocket_ptr&& s);
   YASIO__DECL ~io_transport_kcp();
   ikcpcb* internal_object() { return kcp_; }
 
 protected:
-  YASIO__DECL int write(io_send_buffer&&, completion_cb_t&&) override;
+  YASIO__DECL void set_primitives() override;
 
   YASIO__DECL int do_read(int revent, int& error, highp_time_t& wait_duration) override;
+
   YASIO__DECL bool do_write(highp_time_t& wait_duration) override;
 
-  YASIO__DECL int handle_input(const char* buf, int len, int& error, highp_time_t& wait_duration) override;
-
-  YASIO__DECL void check_timeout(highp_time_t& wait_duration) const;
+  YASIO__DECL int handle_input(char* buf, int len, int& error, highp_time_t& wait_duration) override;
+  
+  int interval() const { return kcp_->interval * std::milli::den; }
 
   sbyte_buffer rawbuf_; // the low level raw buffer
-  ikcpcb* kcp_;
-  std::recursive_mutex send_mtx_;
+  ikcpcb* kcp_{nullptr};
+  IUINT32 expire_time_{0}; // the next expire time(ms) to call ikcp_update
+  std::function<int(const void*, int, const ip::endpoint*, int&)> underlaying_write_cb_;
 };
 #else
 class io_transport_kcp {};
@@ -1234,15 +1243,13 @@ private:
   /* For log macro only */
   inline const print_fn2_t& __get_cprint() const { return options_.print_; }
 
-  void update_time() { this->time_ = yasio::steady_clock_t::now(); }
-
 private:
   state state_ = state::UNINITIALIZED; // The service state
   std::thread worker_;
   std::thread::id worker_id_;
 
   /* The current time according to the event loop. in msecs. */
-  std::chrono::time_point<yasio::steady_clock_t> time_;
+  std::chrono::time_point<yasio::steady_clock_t> current_time_;
 
   privacy::concurrent_queue<event_ptr, true> events_;
 
@@ -1253,6 +1260,7 @@ private:
 
   std::vector<transport_handle_t> transports_;
   std::vector<transport_handle_t> tpool_;
+  std::map<ip::endpoint, transport_handle_t> transport_map_;
 
   // timer support timer_pair, back is earliest expire timer
   std::vector<timer_impl_t> timer_queue_;
@@ -1262,6 +1270,9 @@ private:
   highp_time_t wait_duration_;
 
   io_watcher io_watcher_;
+
+  int nsched_     = 0;
+  int sched_freq_ = 5 * 60 * 1000 * 1000; // 5mins in us
 
   // options
   struct __unnamed_options {

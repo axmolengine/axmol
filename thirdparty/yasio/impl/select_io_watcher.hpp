@@ -3,7 +3,7 @@
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2012-2023 HALX99 (halx99 at live dot com)
+// Copyright (c) 2012-2024 HALX99 (halx99 at live dot com)
 #ifndef YASIO__SELECT_IO_WATCHER_HPP
 #define YASIO__SELECT_IO_WATCHER_HPP
 #include <vector>

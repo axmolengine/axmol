@@ -3,7 +3,7 @@
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2012-2023 HALX99 (halx99 at live dot com)
+// Copyright (c) 2012-2024 HALX99 (halx99 at live dot com)
 // Copyright (c) 2003-2020 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying

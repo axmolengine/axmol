@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2023 HALX99
+Copyright (c) 2012-2024 HALX99
 
 HAL: Hardware Abstraction Layer
 X99: Intel X99 Mainboard Platform
@@ -47,7 +47,6 @@ SOFTWARE.
 #include "yasio/wtimer_hres.hpp"
 
 #if defined(YASIO_ENABLE_KCP)
-#  include "kcp/ikcp.h"
 struct yasio_kcp_options {
   int kcp_conv_ = 0;
 
@@ -139,11 +138,10 @@ namespace
 {
 // By default we will wait no longer than 5 minutes. This will ensure that
 // any changes to the system clock are detected after no longer than this.
-static const highp_time_t yasio__max_wait_usec = 5 * 60 * 1000 * 1000LL;
+static const int yasio__max_wait_usec = 5 * 60 * 1000 * 1000LL;
 // the max transport alloc size
 static const size_t yasio__max_tsize = (std::max)({sizeof(io_transport_tcp), sizeof(io_transport_udp), sizeof(io_transport_ssl), sizeof(io_transport_kcp)});
-static const int yasio_max_udp_data_mtu =
-    static_cast<int>((std::numeric_limits<uint16_t>::max)() - (sizeof(yasio::ip::ip_hdr_st) + sizeof(yasio::ip::udp_hdr_st)));
+static const int yasio__udp_mss = static_cast<int>((std::numeric_limits<uint16_t>::max)() - (sizeof(yasio::ip::ip_hdr_st) + sizeof(yasio::ip::udp_hdr_st)));
 } // namespace
 struct yasio__global_state {
   enum
@@ -208,7 +206,7 @@ void highp_timer::cancel()
 
 std::chrono::microseconds highp_timer::wait_duration() const
 {
-  return std::chrono::duration_cast<std::chrono::microseconds>(this->expire_time_ - service_.time_);
+  return std::chrono::duration_cast<std::chrono::microseconds>(this->expire_time_ - service_.current_time_);
 }
 
 /// io_send_op
@@ -487,7 +485,7 @@ void io_transport::set_primitives()
   else // UDP
   {
     this->write_cb_ = [this](const void* data, int len, const ip::endpoint*, int& error) {
-      int n = socket_->send(data, (std::min)(len, yasio_max_udp_data_mtu), YASIO_MSG_FLAG);
+      int n = socket_->send(data, (std::min)(len, yasio__udp_mss), YASIO_MSG_FLAG);
       if (n < 0)
         error = xxsocket::get_last_errno();
       return n;
@@ -519,8 +517,9 @@ io_transport_ssl::io_transport_ssl(io_channel* ctx, xxsocket_ptr&& sock) : io_tr
 int io_transport_ssl::do_ssl_handshake(int& error)
 {
   int ret = yssl_do_handshake(ssl_, error);
-  if (ret == 0) // handshake succeed
-  {             // because we invoke handshake in call_read, so we emit EWOULDBLOCK to mark ssl transport status `ok`
+  // handshake succeed, because we invoke handshake in call_read, so we emit EWOULDBLOCK to mark ssl transport status `ok`
+  if (ret == 0 && !error)
+  {
     this->state_   = io_base::state::OPENED;
     this->read_cb_ = [this](void* data, int len, int revent, int& error) {
       if (revent)
@@ -543,7 +542,7 @@ int io_transport_ssl::do_ssl_handshake(int& error)
     else
     { // handshake failed, print reason
       char buf[256] = {0};
-      YASIO_KLOGE("[index: %d] do_ssl_handshake fail with %s", ctx_->index_, yssl_strerror(ssl_, ret, buf, sizeof(buf)));
+      YASIO_KLOGE("[index: %d] do_ssl_handshake fail with: %s", ctx_->index_, yssl_strerror(ssl_, ret, buf, sizeof(buf)));
       if (yasio__testbits(ctx_->properties_, YCM_CLIENT))
       {
         YASIO_KLOGE("[index: %d] connect server %s failed, ec=%d, detail:%s", ctx_->index_, ctx_->format_destination().c_str(), error,
@@ -635,7 +634,7 @@ void io_transport_udp::set_primitives()
   {
     this->write_cb_ = [this](const void* data, int len, const ip::endpoint* destination, int& error) {
       assert(destination);
-      int n = socket_->sendto(data, (std::min)(len, yasio_max_udp_data_mtu), *destination);
+      int n = socket_->sendto(data, (std::min)(len, yasio__udp_mss), *destination);
       if (n < 0)
       {
         error = xxsocket::get_last_errno();
@@ -660,9 +659,13 @@ void io_transport_udp::set_primitives()
     };
   }
 }
-int io_transport_udp::handle_input(const char* data, int bytes_transferred, int& /*error*/, highp_time_t&)
+int io_transport_udp::handle_input(char* data, int bytes_transferred, int& /*error*/, highp_time_t&)
 { // pure udp, dispatch to upper layer directly
-  get_service().fire_event(this->cindex(), io_packet{data, data + bytes_transferred}, this);
+  auto& service = get_service();
+  if (!service.options_.forward_packet_)
+    service.fire_event(this->cindex(), io_packet{data, data + bytes_transferred}, this);
+  else
+    service.forward_packet(this->cindex(), io_packet_view{data, bytes_transferred}, this);
   return bytes_transferred;
 }
 
@@ -672,30 +675,49 @@ io_transport_kcp::io_transport_kcp(io_channel* ctx, xxsocket_ptr&& s) : io_trans
 {
   auto& kopts = ctx->kcp_options();
   this->kcp_  = ::ikcp_create(static_cast<IUINT32>(kopts.kcp_conv_), this);
-  ::ikcp_nodelay(this->kcp_, kopts.kcp_nodelay_, kopts.kcp_interval_ /*kcp max interval is 5000(ms)*/, kopts.kcp_resend_, kopts.kcp_ncwnd_);
+  ::ikcp_nodelay(this->kcp_, kopts.kcp_nodelay_, kopts.kcp_interval_, kopts.kcp_resend_, kopts.kcp_ncwnd_);
   ::ikcp_wndsize(this->kcp_, kopts.kcp_sndwnd_, kopts.kcp_rcvwnd_);
   ::ikcp_setmtu(this->kcp_, kopts.kcp_mtu_);
   // Because of nodelaying config will change the value. so setting RTO min after call ikcp_nodely.
   this->kcp_->rx_minrto = kopts.kcp_minrto_;
 
-  this->rawbuf_.resize(YASIO_INET_BUFFER_SIZE);
+  this->rawbuf_.resize(yasio__max_rcvbuf);
   ::ikcp_setoutput(this->kcp_, [](const char* buf, int len, ::ikcpcb* /*kcp*/, void* user) {
     auto t         = (io_transport_kcp*)user;
     int ignored_ec = 0;
-    return t->write_cb_(buf, len, std::addressof(t->ensure_destination()), ignored_ec);
+    return t->underlaying_write_cb_(buf, len, std::addressof(t->ensure_destination()), ignored_ec);
   });
 }
 io_transport_kcp::~io_transport_kcp() { ::ikcp_release(this->kcp_); }
 
-int io_transport_kcp::write(io_send_buffer&& buffer, completion_cb_t&& handler)
+void io_transport_kcp::set_primitives()
 {
-  std::lock_guard<std::recursive_mutex> lck(send_mtx_);
-  int nsent = ::ikcp_send(kcp_, buffer.data(), static_cast<int>(buffer.size()));
-  assert(nsent > 0);
-  if (handler)
-    handler(nsent > 0 ? 0 : nsent, nsent);
-  get_service().wakeup();
-  return nsent;
+  io_transport_udp::set_primitives();
+  underlaying_write_cb_ = write_cb_;
+  write_cb_             = [this](const void* data, int len, const ip::endpoint*, int& error) {
+      int nsent = ::ikcp_send(kcp_, static_cast<const char*>(data), len /*(std::min)(static_cast<int>(kcp_->mss), len)*/);
+      if (nsent > 0)
+      {
+        ::ikcp_flush(kcp_);
+        expire_time_ = 0;
+      }
+      else
+        error = EMSGSIZE; // emit message too long
+      return nsent;
+  };
+}
+bool io_transport_kcp::do_write(highp_time_t& wait_duration)
+{
+  bool ret = io_transport_udp::do_write(wait_duration);
+
+  const auto current = static_cast<IUINT32>(std::chrono::duration_cast<std::chrono::milliseconds>(get_service().current_time_.time_since_epoch()).count());
+  if (((IINT32)(current - expire_time_)) >= 0)
+  {
+    ::ikcp_update(kcp_, current);
+    expire_time_ = ::ikcp_check(kcp_, current);
+  }
+
+  return ret;
 }
 int io_transport_kcp::do_read(int revent, int& error, highp_time_t& wait_duration)
 {
@@ -712,81 +734,17 @@ int io_transport_kcp::do_read(int revent, int& error, highp_time_t& wait_duratio
   }
   return n;
 }
-int io_transport_kcp::handle_input(const char* buf, int len, int& error, highp_time_t& wait_duration)
+int io_transport_kcp::handle_input(char* buf, int len, int& error, highp_time_t& wait_duration)
 {
   // ikcp in event always in service thread, so no need to lock
   if (0 == ::ikcp_input(kcp_, buf, len))
   {
-    this->check_timeout(wait_duration); // call ikcp_check
+    expire_time_ = 0;
     return len;
   }
-
   // simply regards -1,-2,-3 as error and trigger connection lost event.
   error = yasio::errc::invalid_packet;
   return -1;
-}
-bool io_transport_kcp::do_write(highp_time_t& wait_duration)
-{
-  std::lock_guard<std::recursive_mutex> lck(send_mtx_);
-
-  ::ikcp_update(kcp_, static_cast<IUINT32>(::yasio::clock()));
-  ::ikcp_flush(kcp_);
-  this->check_timeout(wait_duration); // call ikcp_check
-  return true;
-}
-static IINT32 yasio_itimediff(IUINT32 later, IUINT32 earlier) { return static_cast<IINT32>(later - earlier); }
-static IUINT32 yasio_ikcp_check(const ikcpcb* kcp, IUINT32 current, IUINT32 waitd_ms)
-{
-  IUINT32 ts_flush = kcp->ts_flush;
-  IINT32 tm_flush  = 0x7fffffff;
-  IINT32 tm_packet = 0x7fffffff;
-  IUINT32 minimal  = 0;
-  struct IQUEUEHEAD* p;
-
-  if (kcp->updated == 0)
-    return current;
-
-  if (yasio_itimediff(current, ts_flush) < -10000)
-    ts_flush = current;
-
-  if (yasio_itimediff(current, ts_flush) >= 0)
-    return current;
-
-  if (kcp->nsnd_que)
-    return current;
-  if (kcp->probe)
-    return current;
-
-  if (kcp->rmt_wnd == 0 && yasio_itimediff(kcp->current, kcp->ts_probe) >= 0)
-    return current;
-
-  tm_flush = yasio_itimediff(ts_flush, current);
-
-  for (p = kcp->snd_buf.next; p != &kcp->snd_buf; p = p->next)
-  {
-    const IKCPSEG* seg = iqueue_entry(p, const IKCPSEG, node);
-    IINT32 diff        = yasio_itimediff(seg->resendts, current);
-    if (diff <= 0)
-    {
-      return current;
-    }
-    if (diff < tm_packet)
-      tm_packet = diff;
-  }
-
-  minimal = kcp->nsnd_buf ? static_cast<IUINT32>(tm_packet < tm_flush ? tm_packet : tm_flush) : waitd_ms;
-
-  return current + minimal;
-}
-void io_transport_kcp::check_timeout(highp_time_t& wait_duration) const
-{
-  auto current          = static_cast<IUINT32>(::yasio::clock());
-  auto expire_time      = yasio_ikcp_check(kcp_, current, static_cast<IUINT32>(wait_duration / std::milli::den));
-  highp_time_t duration = static_cast<highp_time_t>(expire_time - current) * std::milli::den;
-  if (duration < 0)
-    duration = 0;
-  if (wait_duration > duration)
-    wait_duration = duration;
 }
 #endif
 // ------------------------ io_service ------------------------
@@ -880,7 +838,7 @@ void io_service::initialize(const io_hostent* channel_eps, int channel_count)
   ssl_roles_[YSSL_CLIENT] = ssl_roles_[YSSL_SERVER] = nullptr;
 #endif
 
-  this->wait_duration_ = yasio__max_wait_usec;
+  this->wait_duration_ = this->sched_freq_;
 
   // at least one channel
   if (channel_count < 1)
@@ -940,6 +898,7 @@ void io_service::destroy_channels()
 }
 void io_service::clear_transports()
 {
+  transport_map_.clear();
   for (auto transport : transports_)
   {
     cleanup_io(transport);
@@ -994,11 +953,10 @@ void io_service::run()
   ares_socket_t ares_socks[ARES_GETSOCK_MAXNUM] = {0};
 #endif
 
-  // Update time for 1st loop
-  this->update_time();
-
   do
   {
+    this->current_time_ = yasio::steady_clock_t::now();
+
     auto waitd_usec = get_timeout(this->wait_duration_); // Gets current wait duration
 #if defined(YASIO_USE_CARES)
     /**
@@ -1182,6 +1140,14 @@ void io_service::handle_close(transport_handle_t thandle)
   auto error        = thandle->error_;
   const bool client = yasio__testbits(ctx->properties_, YCM_CLIENT);
 
+  if (yasio__testbits(ctx->properties_, YCM_UDP))
+    transport_map_.erase(thandle->remote_endpoint());
+
+  if (yasio__testbits(ctx->properties_, YCM_KCP))
+  {
+    if (--nsched_ <= 0) // if no sched transport, reset sched_freq to max wait 5mins
+      sched_freq_ = yasio__max_wait_usec;
+  }
   if (thandle->state_ == io_base::state::OPENED)
   { // @Because we can't retrive peer endpoint when connect reset by peer, so use id to trace.
     YASIO_KLOGD("[index: %d] the connection #%u is lost, ec=%d, where=%d, detail:%s", ctx->index_, thandle->id_, error, (int)thandle->error_stage_,
@@ -1541,7 +1507,7 @@ void io_service::do_accept(io_channel* ctx)
     {
       if (yasio__testbits(ctx->properties_, YCPF_MCAST))
         ctx->join_multicast_group();
-      ctx->buffer_.resize(YASIO_INET_BUFFER_SIZE);
+      ctx->buffer_.resize(yasio__max_rcvbuf);
     }
     io_watcher_.mod_event(ctx->socket_->native_handle(), socket_event::read, 0);
     YASIO_KLOGI("[index: %d] open server succeed, socket.fd=%d listening at %s...", ctx->index_, (int)ctx->socket_->native_handle(), ep.to_string().c_str());
@@ -1628,16 +1594,10 @@ transport_handle_t io_service::do_dgram_accept(io_channel* ctx, const ip::endpoi
       b. for non-win32 multicast: same with win32, because the kernel can't route same udp peer as 1
          transport when the peer always sendto multicast address.
   */
-  const bool user_route = !YASIO__UDP_KROUTE || yasio__testbits(ctx->properties_, YCPF_MCAST);
-  if (user_route)
-  {
-    auto it = yasio__find_if(this->transports_, [&peer](const io_transport* transport) {
-      using namespace std;
-      return yasio__testbits(transport->ctx_->properties_, YCM_UDP) && static_cast<const io_transport_udp*>(transport)->remote_endpoint() == peer;
-    });
-    if (it != this->transports_.end())
-      return *it;
-  }
+  // both win32 and unix(like) should check does remote endpoint already assoc with a transport
+  auto it = this->transport_map_.find(peer);
+  if (it != this->transport_map_.end())
+    return it->second;
 
   auto new_sock = std::make_shared<xxsocket>();
   if (new_sock->popen(peer.af(), SOCK_DGRAM))
@@ -1651,10 +1611,13 @@ transport_handle_t io_service::do_dgram_accept(io_channel* ctx, const ip::endpoi
       auto transport = static_cast<io_transport_udp*>(allocate_transport(ctx, std::move(new_sock)));
       // We always establish 4 tuple with clients
       transport->confgure_remote(peer);
+      const bool user_route = !YASIO__UDP_KROUTE || yasio__testbits(ctx->properties_, YCPF_MCAST);
       if (user_route)
         active_transport(transport);
       else
         handle_connect_succeed(transport);
+
+      this->transport_map_.emplace(peer, transport);
       return transport;
     }
   }
@@ -1689,7 +1652,7 @@ void io_service::handle_connect_succeed(transport_handle_t transport)
   if (yasio__testbits(ctx->properties_, YCM_UDP))
   {
     constexpr int max_ip_mtu = static_cast<int>((std::numeric_limits<uint16_t>::max)());
-    transport->socket_->set_optval(SOL_SOCKET, SO_SNDBUF, max_ip_mtu);
+    transport->socket_->set_optval(SOL_SOCKET, SO_SNDBUF, max_ip_mtu + 1);
   }
 #endif
 
@@ -1700,6 +1663,15 @@ void io_service::active_transport(transport_handle_t t)
   auto ctx = t->ctx_;
   auto& s  = t->socket_;
   this->transports_.push_back(t);
+  if (yasio__testbits(ctx->properties_, YCM_KCP))
+  {
+    ++this->nsched_;
+#if defined(YASIO_ENABLE_KCP)
+    auto interval = static_cast<io_transport_kcp*>(t)->interval();
+    if (this->sched_freq_ > interval)
+      this->sched_freq_ = interval;
+#endif
+  }
   if (!yasio__testbits(ctx->properties_, YCM_SSL))
   {
     YASIO__UNUSED_PARAM(s);
@@ -1920,8 +1892,6 @@ bool io_service::close_internal(io_channel* ctx)
 }
 void io_service::process_timers()
 {
-  this->update_time();
-
   if (this->timer_queue_.empty())
     return;
 
@@ -1957,7 +1927,7 @@ void io_service::process_deferred_events()
 }
 highp_time_t io_service::get_timeout(highp_time_t usec)
 {
-  this->wait_duration_ = yasio__max_wait_usec; // Reset next wait duration per frame
+  this->wait_duration_ = this->sched_freq_; // Reset next wait duration per frame
 
   if (this->timer_queue_.empty())
     return usec;
@@ -2138,8 +2108,6 @@ const char* io_service::strerror(int error)
 {
   switch (error)
   {
-    case 0:
-      return "No error.";
     case yasio::errc::resolve_host_failed:
       return "Resolve host failed!";
     case yasio::errc::no_available_address:

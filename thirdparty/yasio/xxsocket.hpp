@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2023 HALX99
+Copyright (c) 2012-2024 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,6 +40,7 @@ SOFTWARE.
 #include <memory>
 #include "yasio/impl/socket.hpp"
 #include "yasio/logging.hpp"
+#include "yasio/string_view.hpp"
 
 namespace yasio
 {
@@ -217,6 +218,17 @@ public:
   endpoint(int family, const void* addr, unsigned short port) { as_in(family, addr, port); }
 
   explicit operator bool() const { return this->af() != AF_UNSPEC; }
+
+  friend bool operator<(const endpoint& lhs, const endpoint& rhs)
+  { // apply operator < to operands
+    if (lhs.af() == AF_INET)
+      return (static_cast<uint64_t>(lhs.in4_.sin_addr.s_addr) + lhs.in4_.sin_port) < (static_cast<uint64_t>(rhs.in4_.sin_addr.s_addr) + rhs.in4_.sin_port);
+    return ::memcmp(&lhs, &rhs, sizeof(rhs)) < 0;
+  }
+  friend bool operator==(const endpoint& lhs, const endpoint& rhs)
+  { // apply operator == to operands
+    return !(lhs < rhs) && !(rhs < lhs);
+  }
 
   endpoint& operator=(const endpoint& rhs) { return as_is(rhs); }
   endpoint& as_is(const endpoint& rhs)
@@ -542,7 +554,7 @@ public:
       auto offst = s.find(fmt);
       if (offst != std::string::npos)
       {
-        snprintf(snum,sizeof(snum), "%u", addr_bytes[idx]);
+        snprintf(snum, sizeof(snum), "%u", addr_bytes[idx]);
         s.replace(offst, _N0, snum);
       }
     }
@@ -1136,17 +1148,14 @@ using namespace yasio::inet;
 } // namespace yasio
 
 namespace std
-{ // VS2013 the operator must be at namespace std
-inline bool operator<(const yasio::inet::ip::endpoint& lhs, const yasio::inet::ip::endpoint& rhs)
-{ // apply operator < to operands
-  if (lhs.af() == AF_INET)
-    return (static_cast<uint64_t>(lhs.in4_.sin_addr.s_addr) + lhs.in4_.sin_port) < (static_cast<uint64_t>(rhs.in4_.sin_addr.s_addr) + rhs.in4_.sin_port);
-  return ::memcmp(&lhs, &rhs, sizeof(rhs)) < 0;
-}
-inline bool operator==(const yasio::inet::ip::endpoint& lhs, const yasio::inet::ip::endpoint& rhs)
-{ // apply operator == to operands
-  return !(lhs < rhs) && !(rhs < lhs);
-}
+{
+template <>
+struct hash<yasio::ip::endpoint> {
+  std::size_t operator()(const yasio::ip::endpoint& ep) const YASIO__NOEXCEPT
+  {
+    return std::hash<cxx17::string_view>()(cxx17::string_view{reinterpret_cast<const char*>(&ep), static_cast<size_t>(ep.len())});
+  }
+};
 } // namespace std
 
 #if defined(YASIO_HEADER_ONLY)

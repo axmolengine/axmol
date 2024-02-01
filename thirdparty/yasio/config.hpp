@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2023 HALX99
+Copyright (c) 2012-2024 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ SOFTWARE.
 ** Uncomment or add compiler flag -DYASIO_HEADER_ONLY to enable yasio core implementation header
 ** only
 */
-#define YASIO_HEADER_ONLY 1
+// #define YASIO_HEADER_ONLY 1
 
 /*
 ** Uncomment or add compiler flag -DYASIO_VERBOSE_LOG to enable verbose log
@@ -74,7 +74,7 @@ SOFTWARE.
 ** 1. -DYASIO_SSL_BACKEND=1: OpenSSL
 ** 2. -DYASIO_SSL_BACKEND=2: mbedtls
 */
-#define YASIO_SSL_BACKEND 1
+// #define YASIO_SSL_BACKEND 1
 
 /*
 ** Uncomment or add compiler flag -DYASIO_DISABLE_CONCURRENT_SINGLETON to disable concurrent
@@ -205,7 +205,7 @@ SOFTWARE.
 /*
 **  The yasio version macros
 */
-#define YASIO_VERSION_NUM 0x040104
+#define YASIO_VERSION_NUM 0x050000
 
 /*
 ** The macros used by io_service.
@@ -215,9 +215,6 @@ SOFTWARE.
 
 // The default ttl of multicast
 #define YASIO_DEFAULT_MULTICAST_TTL (int)128
-
-// The max internet buffer size
-#define YASIO_INET_BUFFER_SIZE 65536
 
 // The max pdu buffer length, avoid large memory allocation when application decode a huge length.
 #define YASIO_MAX_PDU_BUFFER_SIZE static_cast<int>(1 * 1024 * 1024)
