@@ -3,7 +3,7 @@ How to Use bindings-generator
 
 Prerequisites
 ------------
-1. Download libclang from https://github.com/axmolengine/buildware/releases/download/llvmorg-15.0.7/llvmorg-15.0.7.zip
+1. Download libclang from https://github.com/simdsoft/1kiss/releases/download/llvmorg-15.0.7/llvmorg-15.0.7.zip
 2. Copy `libclang.dll/libclang.dylib/libclang.so` (match with your OS) to `tools/bindings-generator/libclang/`, refer to `tools/win-ci/genbindings.ps1`
 
 On Windows:
