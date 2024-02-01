@@ -43,12 +43,13 @@ if (!(Test-Path "$AX_ROOT/core/axmolver.h" -PathType Leaf)) {
 Push-Location $AX_ROOT/tools/tolua
 
 python genbindings.py --ndk_root "$ndk_root"
+$succeed = $?
 
 Pop-Location
 
 Push-Location $AX_ROOT
 
-if ($env:GITHUB_ACTIONS -eq 'true') {
+if ($succeed -and $env:GITHUB_ACTIONS -eq 'true') {
     $git_status = "$(git status)"
     $no_changes = $git_status.IndexOf('modified:') -eq -1 # -and $git_status.IndexOf('deleted:') -eq -1 -and $git_status.IndexOf('Untracked', [StringComparison]::OrdinalIgnoreCase) -eq -1
     if ($no_changes) {
@@ -59,3 +60,7 @@ if ($env:GITHUB_ACTIONS -eq 'true') {
 }
 
 Pop-Location
+
+if(!$succeed) {
+    throw "Generating lua bindings fails"
+}

@@ -479,6 +479,9 @@ endif()
 
 # yasio
 ax_add_3rd(yasio)
+if(ANDROID) # stupid, public include not enough android
+    target_include_directories(thirdparty INTERFACE yasio)
+endif()
 
 # simdjson
 ax_add_3rd(simdjson)
