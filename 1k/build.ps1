@@ -378,6 +378,22 @@ if ($b1k.isfile($manifest_file)) {
     . $manifest_file
 }
 
+# choose mirror for 1kiss/devtools
+$sentry_file = Join-Path $myRoot '.gitee'
+$mirror = if ($b1k.isfile($sentry_file)) { 'gitee' } else { 'github' }
+$devtools_url_base = @{'github' = 'https://github.com/'; 'gitee' = 'https://gitee.com/' }[$mirror]
+$mirror_conf_file = $b1k.realpath("$myRoot/../manifest.json")
+$mirror_conf = $null
+if (Test-Path $mirror_conf_file -PathType Leaf) {
+    $mirror_conf = ConvertFrom-Json (Get-Content $mirror_conf_file -raw)
+    $devtools_url_base += $mirror_conf.mirrors.$mirror.'1kdist'
+    $devtools_url_base += '/devtools'
+}
+
+function devtool_url($filename) {
+    return "$devtools_url_base/$filename"
+}
+
 # accept x.y.z-rc1
 function version_eq($ver1, $ver2) {
     return $ver1 -eq $ver2
@@ -631,8 +647,10 @@ function setup_glslcc() {
     $b1k.rmdirs($glslcc_bin)
     $glslcc_pkg = Join-Path $external_prefix "glslcc-$suffix"
     $b1k.del($glslcc_pkg)
+    
+    $glscc_url = devtool_url glslcc-$glslcc_ver-$suffix
 
-    download_and_expand "https://github.com/axmolengine/glslcc/releases/download/v$glslcc_ver/glslcc-$glslcc_ver-$suffix" "$glslcc_pkg" $glslcc_bin
+    download_and_expand $glscc_url "$glslcc_pkg" $glslcc_bin
 
     $glslcc_prog = (Join-Path $glslcc_bin "glslcc$exeSuffix")
     if ($b1k.isfile($glslcc_prog)) {
@@ -879,7 +897,8 @@ function setup_llvm() {
                 $7z_pkg_out = Join-Path $external_prefix '7z2301-x64.zip'
                 if (!(Test-Path $7z_prog -PathType Leaf)) {
                     # https://www.7-zip.org/download.html
-                    download_and_expand -url 'https://github.com/simdsoft/1kiss/releases/download/devtools/7z2301-x64.zip' -out $7z_pkg_out $external_prefix/
+                    $7z_url = devtool_url '7z2301-x64.zip'
+                    download_and_expand -url $7z_url -out $7z_pkg_out $external_prefix/
                 }
             }
 
