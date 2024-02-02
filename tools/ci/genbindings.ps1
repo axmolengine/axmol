@@ -23,12 +23,12 @@ echo "after setup py_ver: $(python -V), PATH=$env:PATH"
 
 echo "$ndk_root=$ndk_root"
 
-$prefix = Join-Path $AX_ROOT 'tmp'
+$prefix = Join-Path $AX_ROOT 'cache'
 $llvm_out = Join-Path $prefix "llvmorg-$llvm_ver.zip"
 
 ## download win64 libclang.dll 
 $b1k.mkdirs($prefix)
-download_and_expand -url "https://github.com/axmolengine/buildware/releases/download/llvmorg-$llvm_ver/llvmorg-$llvm_ver.zip" -out "$llvm_out" -dest $prefix
+download_and_expand -url "https://github.com/simdsoft/1kiss/releases/download/llvmorg-$llvm_ver/llvmorg-$llvm_ver.zip" -out "$llvm_out" -dest $prefix
 Copy-Item "$prefix/llvmorg-$llvm_ver/llvm/prebuilt/windows/x64/libclang.dll" -Destination "$AX_ROOT/tools/bindings-generator/libclang"
 
 ## ensure $env:AX_ROOT/core/axmolver.h exists
@@ -43,5 +43,24 @@ if (!(Test-Path "$AX_ROOT/core/axmolver.h" -PathType Leaf)) {
 Push-Location $AX_ROOT/tools/tolua
 
 python genbindings.py --ndk_root "$ndk_root"
+$succeed = $?
 
 Pop-Location
+
+Push-Location $AX_ROOT
+
+if ($succeed -and $env:GITHUB_ACTIONS -eq 'true') {
+    $git_status = "$(git status)"
+    $no_changes = $git_status.IndexOf('modified:') -eq -1 # -and $git_status.IndexOf('deleted:') -eq -1 -and $git_status.IndexOf('Untracked', [StringComparison]::OrdinalIgnoreCase) -eq -1
+    if ($no_changes) {
+        echo "BINDING_NO_CHANGES=true" >> ${env:GITHUB_ENV}
+    } else {
+        echo "LAST_COMMIT_HASH=$(git rev-parse --short=7 HEAD)" >> ${env:GITHUB_ENV}
+    }
+}
+
+Pop-Location
+
+if(!$succeed) {
+    throw "Generating lua bindings fails"
+}

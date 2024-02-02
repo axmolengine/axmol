@@ -3,6 +3,7 @@ Copyright (c) 2010      Stuart Carnie
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -50,7 +51,7 @@ class ProfilingTimer;
  To use it, enable set the AX_ENABLE_PROFILERS=1 in the ccConfig.h file
  */
 
-class AX_DLL Profiler : public Ref
+class AX_DLL Profiler
 {
 public:
     /**

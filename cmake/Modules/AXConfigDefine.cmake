@@ -37,6 +37,10 @@ if (WINDOWS)
     if (NOT CMAKE_SYSTEM_VERSION)
         set(CMAKE_SYSTEM_VERSION ${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION})
     endif()
+    # Fix win32 llvm-clang
+    if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION)
+        set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION ${CMAKE_SYSTEM_VERSION})
+    endif()
     # CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION aka selected windows sdk version
     if (${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION} VERSION_GREATER_EQUAL "10.0.22000.0")
         set(CMAKE_C_STANDARD 11)
@@ -221,3 +225,6 @@ if(NOT EXISTS "${CMAKE_ASM_NASM_COMPILER}")
    set(CMAKE_ASM_NASM_COMPILER_LOADED FALSE CACHE BOOL "Does cmake asm nasm compiler loaded" FORCE)
    message(WARNING "The nasm compiler doesn't present on your system PATH, please download from: https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/")
 endif()
+
+# we don't need cmake BUILD_TESTING feature
+set(BUILD_TESTING FALSE CACHE BOOL "" FORCE)

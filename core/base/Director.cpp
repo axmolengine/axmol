@@ -90,12 +90,17 @@ Director* Director::getInstance()
 {
     if (!s_SharedDirector)
     {
-        s_SharedDirector = new Director;
+        s_SharedDirector = new Director();
         AXASSERT(s_SharedDirector, "FATAL: Not enough memory");
         s_SharedDirector->init();
     }
 
     return s_SharedDirector;
+}
+
+void Director::destroyInstance()
+{
+    AX_SAFE_DELETE(s_SharedDirector);
 }
 
 Director::Director() {}
@@ -193,9 +198,15 @@ Director::~Director()
 
     s_SharedDirector = nullptr;
 
+    backend::DriverBase::destroyInstance();
+    QuadCommand::destroyIsolatedIndices();
+
 #if AX_ENABLE_SCRIPT_BINDING
     ScriptEngineManager::destroyInstance();
 #endif
+
+    /** clean auto release pool. */
+    PoolManager::destroyInstance();
 }
 
 void Director::setDefaultValues()
@@ -953,7 +964,7 @@ void Director::popToSceneStackLevel(int level)
 
 void Director::end()
 {
-    _purgeDirectorInNextLoop = true;
+    _cleanupDirectorInNextLoop = true;
 }
 
 void Director::restart()
@@ -1044,6 +1055,7 @@ void Director::reset()
     SpriteFrameCache::destroyInstance();
     FileUtils::destroyInstance();
     AsyncTaskPool::destroyInstance();
+    backend::ProgramStateRegistry::destroyInstance();
     backend::ProgramManager::destroyInstance();
 
     // axmol specific data structures
@@ -1053,7 +1065,7 @@ void Director::reset()
     destroyTextureCache();
 }
 
-void Director::purgeDirector()
+void Director::cleanupDirector()
 {
     reset();
 
@@ -1065,9 +1077,6 @@ void Director::purgeDirector()
         _glView->end();
         _glView = nullptr;
     }
-
-    // delete Director
-    release();
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     utils::killCurrentProcess();
@@ -1523,10 +1532,10 @@ void Director::mainLoop()
     processOperations();
 #endif
 
-    if (_purgeDirectorInNextLoop)
+    if (_cleanupDirectorInNextLoop)
     {
-        _purgeDirectorInNextLoop = false;
-        purgeDirector();
+        _cleanupDirectorInNextLoop = false;
+        cleanupDirector();
     }
     else if (_restartDirectorInNextLoop)
     {

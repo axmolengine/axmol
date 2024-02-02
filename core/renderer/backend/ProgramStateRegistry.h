@@ -15,7 +15,7 @@ NS_AX_BACKEND_BEGIN
  * @{
  * #todo: Rename to ProgramStateRegistry
  */
-class AX_DLL ProgramStateRegistry : public Ref
+class AX_DLL ProgramStateRegistry
 {
 public:
     /** returns the shared instance */

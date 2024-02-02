@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var url_re =  /(axmolengine\.github\.io\/manual\/)(latest|(\d\.\d+|\d\.\d+\.\d+)(-beta\d)?)\//;
+  var url_re =  /(axmol\.org\/manual\/)(latest|(\d\.\d+|\d\.\d+\.\d+)(-beta\d)?)\//;
   var url_local =  /docs\/dist\/manual\/(latest|(\d\.\d+|\d\.\d+\.\d+)(-beta\d)?)\//;
   var current_version_local = '@VERSION@'
   var all_versions = [
@@ -39,8 +39,8 @@
   }
 
   function patch_url(url, new_version) {
-    if(url.includes("axmolengine.github.io")){
-      return url.replace(url_re, 'axmolengine.github.io/manual/' + new_version + '/');
+    if(url.includes("axmol.org")){
+      return url.replace(url_re, 'axmol.org/manual/' + new_version + '/');
     }
     else {
       return url.replace(url_local, 'docs/dist/manual/' + new_version + '/');

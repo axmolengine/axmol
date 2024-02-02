@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -52,7 +53,7 @@ Before v0.99.5, the recommend way was to save them on the Sprite. Since v0.99.5,
 @since v0.99.5
 @js cc.animationCache
 */
-class AX_DLL AnimationCache : public Ref
+class AX_DLL AnimationCache
 {
 public:
     /**

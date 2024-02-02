@@ -2,8 +2,6 @@ name: build
 
 on: 
   push:
-    branches:
-      - dev
 
     paths-ignore:
       - '**.md'
@@ -16,7 +14,7 @@ jobs:
   win32:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: 'recursive'
     - uses: ilammy/msvc-dev-cmd@v1.12.1
@@ -29,7 +27,7 @@ jobs:
   win32-dll:
         runs-on: windows-latest
         steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v4
           with:
             submodules: 'recursive'
         - uses: ilammy/msvc-dev-cmd@v1.12.1
@@ -43,7 +41,7 @@ jobs:
         # build uwp debug avoid github CI fail with memory issue
         runs-on: windows-latest
         steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v4
           with:
             submodules: 'recursive'
         - uses: ilammy/msvc-dev-cmd@v1.12.1
@@ -65,7 +63,7 @@ jobs:
           # Test winsdk < 10.0.22000.0 (missing C11 standard stdalign.h), axmol will auto fallback to C99 for resolving compiling issue.
           WINSDK_VER: '10.0.19041.0' 
         steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v4
           with:
             submodules: 'recursive'
     
@@ -80,7 +78,7 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: 'recursive'
 
@@ -102,7 +100,7 @@ jobs:
     env:
       BUILD_ARCH: ${{ matrix.arch }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: 'recursive'
     - uses: maxim-lobanov/setup-xcode@v1
@@ -123,7 +121,7 @@ jobs:
     env:
       BUILD_ARCH: ${{ matrix.arch }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: 'recursive'
     - uses: actions/setup-java@v3
@@ -151,7 +149,7 @@ jobs:
     env:
       TARGET_OS: ${{ matrix.target_os }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: 'recursive'
     - uses: maxim-lobanov/setup-xcode@v1

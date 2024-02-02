@@ -6,6 +6,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -88,7 +89,7 @@ class PolygonInfo;
  @since v0.9
  @js cc.spriteFrameCache
  */
-class AX_DLL SpriteFrameCache : public Ref
+class AX_DLL SpriteFrameCache
 {
 public:
     /** Returns the shared instance of the Sprite Frame cache.

@@ -181,7 +181,7 @@ Configuration* Configuration::getInstance()
 
 void Configuration::destroyInstance()
 {
-    AX_SAFE_RELEASE_NULL(s_sharedConfiguration);
+    AX_SAFE_DELETE(s_sharedConfiguration);
 }
 
 //
