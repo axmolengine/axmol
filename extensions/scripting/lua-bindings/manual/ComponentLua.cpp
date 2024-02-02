@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "lua-bindings/manual/ComponentLua.h"
+#include "ComponentLua.h"
 #include <string>
 #include "base/ScriptSupport.h"
 #include "platform/FileUtils.h"
