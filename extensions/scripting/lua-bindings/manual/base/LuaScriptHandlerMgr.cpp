@@ -22,14 +22,14 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
+#include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 #include <map>
 #include <string>
-#include "scripting/lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/tolua_fix.h"
 
-#include "scripting/lua-bindings/manual/LuaStack.h"
-#include "scripting/lua-bindings/manual/LuaValue.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/LuaStack.h"
+#include "lua-bindings/manual/LuaValue.h"
+#include "lua-bindings/manual/LuaEngine.h"
 
 USING_NS_AX;
 

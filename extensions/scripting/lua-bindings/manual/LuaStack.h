@@ -31,7 +31,7 @@ extern "C" {
 #include "lua.h"
 }
 
-#include "scripting/lua-bindings/manual/LuaValue.h"
+#include "lua-bindings/manual/LuaValue.h"
 
 /**
  * @addtogroup lua

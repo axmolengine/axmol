@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "lua_downloader.h"
-#include "scripting/lua-bindings/manual/LuaValue.h"
+#include "lua-bindings/manual/LuaValue.h"
 
 #include "network/Downloader.h"
 #include <iostream>
@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include <string>
 #include <sstream>
 
-#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/LuaEngine.h"
 
 USING_NS_AX;
 using namespace ax::network;

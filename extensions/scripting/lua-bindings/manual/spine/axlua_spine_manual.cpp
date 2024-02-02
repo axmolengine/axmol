@@ -22,17 +22,17 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "scripting/lua-bindings/manual/spine/axlua_spine_manual.hpp"
-#include "scripting/lua-bindings/auto/axlua_spine_auto.hpp"
+#include "lua-bindings/manual/spine/axlua_spine_manual.hpp"
+#include "lua-bindings/auto/axlua_spine_auto.hpp"
 
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "scripting/lua-bindings/manual/LuaValue.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
+#include "lua-bindings/manual/LuaValue.h"
 #include "spine/spine.h"
 #include "spine/spine-cocos2dx.h"
-#include "scripting/lua-bindings/manual/spine/LuaSkeletonAnimation.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/spine/LuaSkeletonAnimation.h"
+#include "lua-bindings/manual/LuaEngine.h"
 
 using namespace spine;
 

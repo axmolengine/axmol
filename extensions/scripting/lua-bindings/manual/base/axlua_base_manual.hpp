@@ -28,7 +28,7 @@
 
 #include "tolua++.h"
 
-#include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
+#include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 #include "base/EventListenerAcceleration.h"
 #include "base/EventListenerCustom.h"
 #include "2d/Node.h"

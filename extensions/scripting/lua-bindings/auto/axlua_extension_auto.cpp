@@ -1,7 +1,7 @@
-#include "scripting/lua-bindings/auto/axlua_extension_auto.hpp"
-#include "cocos-ext.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/auto/axlua_extension_auto.hpp"
+#include "extensions/cocos-ext.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_extension_ScrollView_initWithViewSize(lua_State* tolua_S)
 {

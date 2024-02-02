@@ -22,15 +22,15 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "scripting/lua-bindings/manual/extension/axlua_extension_manual.h"
-#include "scripting/lua-bindings/auto/axlua_extension_auto.hpp"
+#include "axlua_extension_manual.h"
+#include "lua-bindings/auto/axlua_extension_auto.hpp"
 
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/LuaValue.h"
-#include "axmol-ext.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
-#include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/LuaValue.h"
+#include "extensions/axmol-ext.h"
+#include "lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 
 USING_NS_AX;
 USING_NS_AX_EXT;

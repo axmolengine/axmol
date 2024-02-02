@@ -23,12 +23,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/ComponentLua.h"
+#include "lua-bindings/manual/ComponentLua.h"
 #include <string>
 #include "base/ScriptSupport.h"
 #include "platform/FileUtils.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 #include "base/UTF8.h"
 
 NS_AX_BEGIN

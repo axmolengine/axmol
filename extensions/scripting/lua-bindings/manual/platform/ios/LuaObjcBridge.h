@@ -25,7 +25,7 @@
 #ifndef __LUA_OBJC_BRIDGE_H_
 #define __LUA_OBJC_BRIDGE_H_
 
-#include "scripting/lua-bindings/manual/LuaBridge.h"
+#include "lua-bindings/manual/LuaBridge.h"
 
 /**
  * @addtogroup lua

@@ -22,11 +22,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "scripting/lua-bindings/manual/audioengine/axlua_audioengine_manual.h"
-#include "scripting/lua-bindings/auto/axlua_audioengine_auto.hpp"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/audioengine/axlua_audioengine_manual.h"
+#include "lua-bindings/auto/axlua_audioengine_auto.hpp"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/LuaEngine.h"
 #include "audio/AudioEngine.h"
 
 static int lua_get_AudioProfile_name(lua_State* L)

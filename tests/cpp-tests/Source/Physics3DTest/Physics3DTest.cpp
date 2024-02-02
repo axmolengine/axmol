@@ -30,7 +30,7 @@
 #include "3d/Terrain.h"
 #include "3d/Bundle3D.h"
 #include "physics3d/Physics3D.h"
-#include "extensions/Particle3D/PU/PUParticleSystem3D.h"
+#include "Particle3D/PU/PUParticleSystem3D.h"
 USING_NS_AX_EXT;
 USING_NS_AX;
 
