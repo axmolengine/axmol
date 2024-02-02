@@ -2,7 +2,9 @@
 #include "ImGuiTest.h"
 
 #include "ImGui/ImGuiPresenter.h"
-#include "SDFGen/SDFGen.h"
+#if !defined(__ANDROID__)
+#   include "SDFGen/SDFGen.h"
+#endif
 
 USING_NS_AX;
 USING_NS_AX_EXT;
