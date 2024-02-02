@@ -1,6 +1,6 @@
 set(target_name ImGui)
 
-include_directories(imgui)
+include_directories(src/ImGui/imgui)
 
 set(HEADER
     src/ImGui/ImGuiPresenter.h
@@ -32,11 +32,11 @@ set(SOURCE
 )
 
 if(ANDROID)
-    list(APPEND HEADER src/ImGui/imgui_impl_ax_android.cpp)
-    list(APPEND SOURCE src/ImGui/imgui_impl_ax_android.h)
+    list(APPEND SOURCE src/ImGui/imgui_impl_ax_android.cpp)
+    list(APPEND HEADER src/ImGui/imgui_impl_ax_android.h)
 else()
-    list(APPEND HEADER src/ImGui/imgui_impl_ax.cpp)
-    list(APPEND SOURCE src/ImGui/imgui_impl_ax.h)
+    list(APPEND SOURCE src/ImGui/imgui_impl_ax.cpp)
+    list(APPEND HEADER src/ImGui/imgui_impl_ax.h)
 endif()
 
 #~ if(AX_ENABLE_EXT_LUA)
@@ -74,8 +74,13 @@ add_library(${target_name} STATIC
         ${HEADER}
         ${SOURCE})
 
-target_include_directories(${target_name} PUBLIC src)
-target_include_directories(${target_name} PUBLIC src/ImGui/imgui)
+target_include_directories(${target_name} 
+    PUBLIC src
+    PUBLIC src/ImGui/imgui
+    
+    INTERFACE src
+    INTERFACE src/ImGui/imgui
+    )
 
 ax_find_shaders(${CMAKE_CURRENT_LIST_DIR}/shaders IMGUI_SHADER_SOURCES)
 ax_target_compile_shaders(${target_name} FILES ${IMGUI_SHADER_SOURCES} CUSTOM)
