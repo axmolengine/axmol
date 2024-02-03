@@ -1,6 +1,6 @@
 #include "lua-bindings/auto/axlua_studio_auto.hpp"
-#include "cocostudio/src/cocostudio/CocoStudio.h"
-#include "cocostudio/src/cocostudio/ComExtensionData.h"
+#include "cocostudio/CocoStudio.h"
+#include "cocostudio/ComExtensionData.h"
 #include "lua-bindings/manual/cocostudio/lua-cocostudio-conversions.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
