@@ -1,7 +1,7 @@
-#include "scripting/lua-bindings/auto/axlua_video_auto.hpp"
+#include "lua-bindings/auto/axlua_video_auto.hpp"
 #include "ui/UIMediaPlayer.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 TOLUA_API int register_all_ax_video(lua_State* tolua_S)
 {
 	tolua_open(tolua_S);

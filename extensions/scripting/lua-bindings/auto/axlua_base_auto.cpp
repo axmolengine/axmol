@@ -1,13 +1,13 @@
-#include "scripting/lua-bindings/auto/axlua_base_auto.hpp"
+#include "lua-bindings/auto/axlua_base_auto.hpp"
 #include "cocos2d.h"
 #include "2d/ProtectedNode.h"
 #include "base/AsyncTaskPool.h"
-#include "scripting/lua-bindings/manual/ComponentLua.h"
+#include "lua-bindings/manual/ComponentLua.h"
 #include "renderer/Renderer.h"
 #include "renderer/PipelineDescriptor.h"
 #include "renderer/backend/RenderTarget.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_base_Ref_retain(lua_State* tolua_S)
 {

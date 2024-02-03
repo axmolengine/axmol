@@ -1,7 +1,7 @@
-#include "scripting/lua-bindings/auto/axlua_spine_auto.hpp"
-#include "spine/spine-cocos2dx.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/auto/axlua_spine_auto.hpp"
+#include "spine/src/spine/spine-cocos2dx.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_spine_SkeletonRenderer_getSkeleton(lua_State* tolua_S)
 {

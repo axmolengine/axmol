@@ -23,15 +23,15 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "scripting/lua-bindings/manual/controller/axlua_controller_manual.hpp"
+#include "lua-bindings/manual/controller/axlua_controller_manual.hpp"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 
-#    include "scripting/lua-bindings/manual/tolua_fix.h"
-#    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#    include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#    include "scripting/lua-bindings/manual/LuaValue.h"
-#    include "scripting/lua-bindings/manual/LuaEngine.h"
+#    include "lua-bindings/manual/tolua_fix.h"
+#    include "lua-bindings/manual/LuaBasicConversions.h"
+#    include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
+#    include "lua-bindings/manual/LuaValue.h"
+#    include "lua-bindings/manual/LuaEngine.h"
 #    include "base/GameController.h"
 
 static void cloneEventListenerControllerHandler(const ax::EventListenerController* src,

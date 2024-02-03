@@ -1,9 +1,9 @@
-#include "scripting/lua-bindings/auto/axlua_navmesh_auto.hpp"
+#include "lua-bindings/auto/axlua_navmesh_auto.hpp"
 #if AX_USE_NAVMESH
 #include "navmesh/NavMesh.h"
-#include "scripting/lua-bindings/manual/navmesh/axlua_navmesh_conversions.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/navmesh/axlua_navmesh_conversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_navmesh_NavMeshAgent_setRadius(lua_State* tolua_S)
 {

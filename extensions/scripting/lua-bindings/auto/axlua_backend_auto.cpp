@@ -1,12 +1,12 @@
-#include "scripting/lua-bindings/auto/axlua_backend_auto.hpp"
+#include "lua-bindings/auto/axlua_backend_auto.hpp"
 #include "renderer/backend/Types.h"
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/Texture.h"
 #include "renderer/backend/VertexLayout.h"
 #include "renderer/backend/DriverBase.h"
 #include "renderer/backend/RenderTarget.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 
 int lua_register_ax_backend_BufferUsage(lua_State* tolua_S)

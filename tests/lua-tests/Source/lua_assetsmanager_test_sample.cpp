@@ -24,7 +24,7 @@
 
 #include "lua_assetsmanager_test_sample.h"
 
-#include "scripting/lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/tolua_fix.h"
 
 #include "cocos2d.h"
 #include "extensions/axmol-ext.h"

@@ -32,10 +32,10 @@ extern "C" {
 }
 
 #include "base/ScriptSupport.h"
-#include "scripting/lua-bindings/manual/LuaStack.h"
-#include "scripting/lua-bindings/manual/LuaValue.h"
-#include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "scripting/lua-bindings/manual/Lua-BindingsExport.h"
+#include "lua-bindings/manual/LuaStack.h"
+#include "lua-bindings/manual/LuaValue.h"
+#include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
+#include "lua-bindings/manual/Lua-BindingsExport.h"
 
 /**
  * @addtogroup lua

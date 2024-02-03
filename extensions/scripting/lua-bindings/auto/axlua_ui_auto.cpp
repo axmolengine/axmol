@@ -1,7 +1,7 @@
-#include "scripting/lua-bindings/auto/axlua_ui_auto.hpp"
+#include "lua-bindings/auto/axlua_ui_auto.hpp"
 #include "ui/CocosGUI.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_ui_LayoutParameter_getLayoutType(lua_State* tolua_S)
 {

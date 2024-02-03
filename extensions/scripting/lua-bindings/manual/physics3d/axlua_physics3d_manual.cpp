@@ -25,11 +25,11 @@
 #include "platform/PlatformConfig.h"
 #include "base/Config.h"
 #if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
-#    include "scripting/lua-bindings/manual/physics3d/axlua_physics3d_manual.h"
-#    include "scripting/lua-bindings/auto/axlua_physics3d_auto.hpp"
-#    include "scripting/lua-bindings/manual/tolua_fix.h"
-#    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#    include "scripting/lua-bindings/manual/LuaEngine.h"
+#    include "lua-bindings/manual/physics3d/axlua_physics3d_manual.h"
+#    include "lua-bindings/auto/axlua_physics3d_auto.hpp"
+#    include "lua-bindings/manual/tolua_fix.h"
+#    include "lua-bindings/manual/LuaBasicConversions.h"
+#    include "lua-bindings/manual/LuaEngine.h"
 #    include "physics3d/Physics3D.h"
 
 bool luaval_to_Physics3DRigidBodyDes(lua_State* L,

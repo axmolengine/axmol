@@ -1,42 +1,42 @@
 set(target_name ImGui)
 
-include_directories(imgui)
+include_directories(src/ImGui/imgui)
 
 set(HEADER
-    ImGuiPresenter.h
+    src/ImGui/ImGuiPresenter.h
     # CCImGuiColorTextEdit.h
-    imgui/imconfig.h
-    imgui/imgui.h
-    imgui/imgui_internal.h
-    imgui/imstb_rectpack.h
-    imgui/imstb_textedit.h
-    imgui/imstb_truetype.h
-    imgui/misc/cpp/imgui_stdlib.h
+    src/ImGui/imgui/imconfig.h
+    src/ImGui/imgui/imgui.h
+    src/ImGui/imgui/imgui_internal.h
+    src/ImGui/imgui/imstb_rectpack.h
+    src/ImGui/imgui/imstb_textedit.h
+    src/ImGui/imgui/imstb_truetype.h
+    src/ImGui/imgui/misc/cpp/imgui_stdlib.h
     #~ imgui_markdown/imgui_markdown.h
     #~ ImGuiColorTextEdit/TextEditor.h
     #~ implot/implot.h
 )
 
 set(SOURCE
-    ImGuiPresenter.cpp
+    src/ImGui/ImGuiPresenter.cpp
     # CCImGuiColorTextEdit.cpp
-    imgui/imgui.cpp
-    imgui/imgui_demo.cpp
-    imgui/imgui_draw.cpp
-    imgui/imgui_widgets.cpp
-    imgui/imgui_tables.cpp
-    imgui/misc/cpp/imgui_stdlib.cpp
+    src/ImGui/imgui/imgui.cpp
+    src/ImGui/imgui/imgui_demo.cpp
+    src/ImGui/imgui/imgui_draw.cpp
+    src/ImGui/imgui/imgui_widgets.cpp
+    src/ImGui/imgui/imgui_tables.cpp
+    src/ImGui/imgui/misc/cpp/imgui_stdlib.cpp
     #~ ImGuiColorTextEdit/TextEditor.cpp
     #~ implot/implot.cpp
     #~ implot/implot_demo.cpp
 )
 
 if(ANDROID)
-    list(APPEND HEADER imgui_impl_ax_android.cpp)
-    list(APPEND SOURCE imgui_impl_ax_android.h)
+    list(APPEND SOURCE src/ImGui/imgui_impl_ax_android.cpp)
+    list(APPEND HEADER src/ImGui/imgui_impl_ax_android.h)
 else()
-    list(APPEND HEADER imgui_impl_ax.cpp)
-    list(APPEND SOURCE imgui_impl_ax.h)
+    list(APPEND SOURCE src/ImGui/imgui_impl_ax.cpp)
+    list(APPEND HEADER src/ImGui/imgui_impl_ax.h)
 endif()
 
 #~ if(AX_ENABLE_EXT_LUA)
@@ -74,6 +74,13 @@ add_library(${target_name} STATIC
         ${HEADER}
         ${SOURCE})
 
+target_include_directories(${target_name} 
+    PUBLIC src
+    PUBLIC src/ImGui/imgui
+    
+    INTERFACE src
+    INTERFACE src/ImGui/imgui
+    )
 
 ax_find_shaders(${CMAKE_CURRENT_LIST_DIR}/shaders IMGUI_SHADER_SOURCES)
 ax_target_compile_shaders(${target_name} FILES ${IMGUI_SHADER_SOURCES} CUSTOM)

@@ -1,8 +1,8 @@
-#include "scripting/lua-bindings/auto/axlua_physics_auto.hpp"
+#include "lua-bindings/auto/axlua_physics_auto.hpp"
 #if AX_USE_PHYSICS
 #include "cocos2d.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_physics_PhysicsShape_getBody(lua_State* tolua_S)
 {

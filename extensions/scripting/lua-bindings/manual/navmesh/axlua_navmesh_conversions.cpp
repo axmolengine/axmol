@@ -23,11 +23,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/navmesh/axlua_navmesh_conversions.h"
+#include "lua-bindings/manual/navmesh/axlua_navmesh_conversions.h"
 #include "base/Config.h"
 #if AX_USE_NAVMESH
 
-#    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#    include "lua-bindings/manual/LuaBasicConversions.h"
 #    include "navmesh/NavMeshAgent.h"
 
 #    if _AX_DEBUG >= 1

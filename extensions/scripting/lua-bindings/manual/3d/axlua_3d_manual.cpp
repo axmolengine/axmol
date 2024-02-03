@@ -22,10 +22,10 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "scripting/lua-bindings/manual/3d/axlua_3d_manual.h"
-#include "scripting/lua-bindings/auto/axlua_3d_auto.hpp"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/3d/axlua_3d_manual.h"
+#include "lua-bindings/auto/axlua_3d_auto.hpp"
+#include "lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/LuaEngine.h"
 #include "3d/Bundle3D.h"
 #include "3d/MeshRenderer.h"
 #include "3d/Terrain.h"

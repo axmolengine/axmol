@@ -1935,7 +1935,7 @@ def main():
                 'clang_args': (config.get(s, 'extra_arguments') or "").split(" "),
                 'target': os.path.join(workingdir, "targets", t),
                 'outdir': outdir,
-                'search_paths': os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'core')) + ";" + os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'extensions')),
+                'search_paths': os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'core')) + ";" + os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'extensions/scripting')) + ";" + os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'extensions/spine/src')) + ";" + os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'extensions/spine/runtime')) + ";" + os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'extensions/cocostudio/src')) + ";" + os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'extensions/fairygui/src')) + ";" + os.path.abspath(config.get('DEFAULT', 'axdir')),
                 'remove_prefix': config.get(s, 'remove_prefix'),
                 'target_ns': config.get(s, 'target_namespace'),
                 'cpp_ns': config.get(s, 'cpp_namespace').split(' ') if config.has_option(s, 'cpp_namespace') else None,
