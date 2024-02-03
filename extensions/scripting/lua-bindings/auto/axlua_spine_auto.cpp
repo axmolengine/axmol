@@ -1,5 +1,5 @@
 #include "lua-bindings/auto/axlua_spine_auto.hpp"
-#include "spine/src/spine/spine-cocos2dx.h"
+#include "spine/spine-cocos2dx.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 
