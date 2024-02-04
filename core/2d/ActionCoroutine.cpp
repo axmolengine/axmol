@@ -82,7 +82,7 @@ bool Coroutine::moveNext() const
 //
 ActionCoroutine* ActionCoroutine::create(const std::function<Coroutine()>& function)
 {
-    auto ret = new (std::nothrow) ActionCoroutine();
+    auto ret = new ActionCoroutine();
     if (ret && ret->initWithCoroutine(function))
     {
         ret->autorelease();

@@ -239,7 +239,7 @@ public:
  * Particle emission mask cache.
  * @since axmol-1.0.0b8
  */
-class AX_DLL ParticleEmissionMaskCache : public ax::Ref
+class AX_DLL ParticleEmissionMaskCache
 {
 public:
     static ParticleEmissionMaskCache* getInstance();

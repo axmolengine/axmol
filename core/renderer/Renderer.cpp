@@ -887,6 +887,8 @@ void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigne
         if (bitmask::any(flags, ClearFlag::STENCIL))
             descriptor.clearStencilValue = stencil;
 
+        _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
+                                       _scissorState.rect.width, _scissorState.rect.height);
         _commandBuffer->beginRenderPass(_currentRT, descriptor);
         _commandBuffer->endRenderPass();
     };

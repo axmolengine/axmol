@@ -190,7 +190,7 @@ cc.UNIFORM_SAMPLER_S    = 'AX_Texture0'
 cc.UNIFORM_SIN_TIME_S   = 'AX_SinTime'
 cc.UNIFORM_TIME_S   = 'AX_Time'
 
--- refer to: ApplicationProtocol.h: enum class Platform
+-- refer to: ApplicationBase.h: enum class Platform
 cc.PLATFORM_UNKNOWN   = 0
 cc.PLATFORM_WIN32     = 1
 cc.PLATFORM_WINUWP    = 2

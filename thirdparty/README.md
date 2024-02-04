@@ -52,7 +52,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.5.0
+- Version: 8.6.0
 - License: Curl (MIT/X)
 
 ## FastLZ
@@ -123,7 +123,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-43d0a19
+  - Version: 2.1-9cc2e42
   - License: MIT
 
 - tolua
@@ -179,12 +179,12 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.12
+- Version: 3.0.13
 - License: Apache-2.0
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
-- Version: 1.6.40
+- Version: 1.6.42
 - License: PNG Reference Library License version 2
 
 ## poly2tri
@@ -218,7 +218,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 3.6.3
+- Version: 3.6.4
 - License: Apache-2.0
 
 ## stb (stb_image)
@@ -253,11 +253,11 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 4.1.4
+- Version: 5.0.0
 - License: MIT WITH Anti-996
 
 ## zlib
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
-- Version: 1.3
+- Version: 1.3.1
 - License: zlib
 

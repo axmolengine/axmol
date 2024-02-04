@@ -77,7 +77,7 @@ class Console;
  Since the Director is a singleton, the standard way to use it is by calling:
  _ Director::getInstance()->methodName();
  */
-class AX_DLL Director : public Ref
+class AX_DLL Director
 {
 public:
     /** Director will trigger an event before set next scene. */
@@ -123,6 +123,7 @@ public:
      * @js _getInstance
      */
     static Director* getInstance();
+    static void destroyInstance();
 
     /**
      * @js ctor
@@ -531,8 +532,8 @@ protected:
     virtual void startAnimation(SetIntervalReason reason);
     virtual void setAnimationInterval(float interval, SetIntervalReason reason);
 
-    void purgeDirector();
-    bool _purgeDirectorInNextLoop = false;  // this flag will be set to true in end()
+    void cleanupDirector();
+    bool _cleanupDirectorInNextLoop = false;  // this flag will be set to true in end()
 
     void restartDirector();
     bool _restartDirectorInNextLoop = false;  // this flag will be set to true in restart()

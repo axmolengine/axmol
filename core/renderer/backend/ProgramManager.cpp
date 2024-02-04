@@ -52,7 +52,7 @@ ProgramManager* ProgramManager::getInstance()
 
 void ProgramManager::destroyInstance()
 {
-    AX_SAFE_RELEASE_NULL(_sharedProgramManager);
+    AX_SAFE_DELETE(_sharedProgramManager);
 }
 
 ProgramManager::ProgramManager()
@@ -69,7 +69,7 @@ ProgramManager::~ProgramManager()
         AX_SAFE_RELEASE(program.second);
     }
     AXLOGINFO("deallocing ProgramManager: %p", this);
-    backend::ShaderCache::getInstance()->purge();
+    backend::ShaderCache::destroyInstance();
 }
 
 // ### end of vertex layout setup functions
