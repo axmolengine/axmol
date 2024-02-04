@@ -184,3 +184,6 @@ void conversionEncodingJNI(const char* src, int byteSize, const char* fromCharse
         methodInfo.env->DeleteLocalRef(methodInfo.classID);
     }
 }
+
+#undef LOGD
+#undef LOG_TAG

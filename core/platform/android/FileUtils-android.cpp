@@ -320,3 +320,9 @@ std::string FileUtilsAndroid::getNativeWritableAbsolutePath() const
 }
 
 NS_AX_END
+
+#undef DECLARE_GUARD
+#undef ASSETS_FOLDER_NAME_LENGTH
+#undef ASSETS_FOLDER_NAME
+#undef LOGD
+#undef LOG_TAG

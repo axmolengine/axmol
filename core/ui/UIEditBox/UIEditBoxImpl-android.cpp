@@ -249,4 +249,6 @@ const char* EditBoxImplAndroid::getNativeDefaultFontName()
 
 NS_AX_END
 
+#undef LOGD
+
 #endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) */
