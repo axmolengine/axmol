@@ -202,6 +202,7 @@ target_link_libraries(${_AX_LUA_LIB} ${lua_ext_depend})
 
 target_include_directories(${_AX_LUA_LIB}
     PUBLIC ${ax_root}/thirdparty/lua
+    PRIVATE ${ax_root}/thirdparty
     PRIVATE manual/platform/android
     PRIVATE manual/platform/android/jni
     PRIVATE ${ax_root}/extensions/spine/runtime/include

@@ -60,6 +60,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 
     target_include_directories(${APP_NAME}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/lua
+        PRIVATE ${AX_ROOT_DIR}/extensions/scripting
         PRIVATE ${AX_ROOT_DIR}/extensions/scripting/lua-bindings/manual
         PRIVATE ${AX_ROOT_DIR}
         PRIVATE ${AX_ROOT_DIR}/thirdparty
@@ -140,6 +141,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         simdjson
         physics-nodes
         yasio
+        websocket-parser
     )
     
     if (AX_ENABLE_EXT_DRAGONBONES)
@@ -213,7 +215,35 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             PRIVATE ${AX_ROOT_DIR}/extensions/GUI/src
         )         
     endif()
-	
+
+    if (AX_ENABLE_EXT_FAIRYGUI)
+        list(APPEND LIBS "fairygui")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/fairygui/src
+        )         
+    endif()
+
+	if (AX_ENABLE_EXT_LIVE2D)
+        list(APPEND LIBS "Live2D")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/Live2D/Framework/src
+        )        
+    endif()
+
+	if (AX_ENABLE_EXT_EFFEKSEER)
+        list(APPEND LIBS "EffekseerForCocos2d-x")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/Effekseer
+        )        
+    endif()
+
+    if (AX_ENABLE_EXT_PHYSICS_NODE)
+        list(APPEND LIBS "physics-nodes")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/physics-nodes/src
+        )        
+    endif()
+
     if (WINDOWS)
         target_link_libraries(${APP_NAME}
             ${LIBS}
