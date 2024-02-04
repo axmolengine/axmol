@@ -24,7 +24,7 @@
 
 #include "lua_test_bindings.h"
 #include "cocos2d.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 NS_AX_BEGIN
 

@@ -23,11 +23,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "scripting/lua-bindings/manual/base/axlua_base_manual.hpp"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/LuaValue.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/base/axlua_base_manual.hpp"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/LuaValue.h"
+#include "lua-bindings/manual/LuaEngine.h"
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #    include <WS2tcpip.h>
 #else

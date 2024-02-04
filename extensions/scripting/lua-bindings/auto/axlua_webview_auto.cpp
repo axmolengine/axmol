@@ -1,7 +1,7 @@
-#include "scripting/lua-bindings/auto/axlua_webview_auto.hpp"
+#include "lua-bindings/auto/axlua_webview_auto.hpp"
 #include "ui/UIWebView/UIWebView.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_webview_WebView_setJavascriptInterfaceScheme(lua_State* tolua_S)
 {

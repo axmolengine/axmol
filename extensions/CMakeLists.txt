@@ -68,7 +68,10 @@ if(AX_ENABLE_EXT_FAIRYGUI)
   if(BUILD_SHARED_LIBS)
     target_link_libraries(fairygui spine)
   else()
-    target_include_directories(fairygui PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/runtime/include)
+    target_include_directories(fairygui 
+        PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/runtime/include
+        PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/src
+    )
   endif()
 endif()
 
@@ -77,11 +80,11 @@ if(AX_ENABLE_EXT_IMGUI)
   option(AX_ENABLE_EXT_INSPECTOR "Enable extension Inspector" ON)
   if(AX_ENABLE_EXT_INSPECTOR)
       add_subdirectory(Inspector)
-      target_include_directories(Inspector PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ImGui)
+      target_include_directories(Inspector PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ImGui/src/ImGui)
   endif()
   if (AX_ENABLE_EXT_SDFGEN)
       add_subdirectory(SDFGen)
-      target_include_directories(SDFGen PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ImGui)
+      target_include_directories(SDFGen PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ImGui/src/ImGui)
   endif()
 endif()
 
@@ -92,13 +95,19 @@ if(AX_ENABLE_EXT_COCOSTUDIO)
     if(BUILD_SHARED_LIBS)
       target_link_libraries(cocostudio spine particle3d)
     else()
-      target_include_directories(cocostudio PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/runtime/include)
+      target_include_directories(cocostudio 
+        PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/runtime/include
+        PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/src
+        PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Particle3D/src
+      )
     endif()
   endif()
   if(AX_ENABLE_EXT_DRAGONBONES)
     target_compile_definitions(cocostudio PRIVATE AX_ENABLE_EXT_DRAGONBONES=1)
     if(BUILD_SHARED_LIBS)
       target_link_libraries(cocostudio DragonBones)
+    else()
+      target_include_directories(cocostudio PUBLIC ${CMAKE_CURRENT_LIST_DIR}/DragonBones/src)
     endif()
   endif()
 endif()

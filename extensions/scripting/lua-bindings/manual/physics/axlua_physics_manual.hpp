@@ -36,7 +36,7 @@ extern "C" {
 #endif
 
 
-#include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
+#include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 
 int register_all_ax_physics_manual(lua_State* tolua_S);
 

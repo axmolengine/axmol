@@ -1,5 +1,5 @@
 #include "axlua_fairygui_conversions.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 void margin_to_luaval(lua_State* L, const fairygui::Margin& _margin)
 {

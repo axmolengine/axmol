@@ -19,7 +19,10 @@ if(BUILD_SHARED_LIBS)
     )
 endif()
 
-target_include_directories(${target_name} PUBLIC "runtime/include")
+target_include_directories(
+    ${target_name} PUBLIC "runtime/include"
+    ${target_name} PUBLIC src
+)
 
 ax_find_shaders(${CMAKE_CURRENT_LIST_DIR}/shaders SPINE_SHADER_SOURCES)
 ax_target_compile_shaders(${target_name} FILES ${SPINE_SHADER_SOURCES} CUSTOM)

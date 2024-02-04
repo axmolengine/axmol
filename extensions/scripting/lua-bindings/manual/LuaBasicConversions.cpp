@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
 #include "base/Utils.h"
 #include <sstream>
 

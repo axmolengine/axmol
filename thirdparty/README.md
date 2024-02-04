@@ -97,7 +97,7 @@
 
 ## jpeg-turbo
 - [![Upstream](https://img.shields.io/github/v/release/libjpeg-turbo/libjpeg-turbo?label=Upstream)](https://github.com/libjpeg-turbo/libjpeg-turbo)
-- Version: 3.0.1
+- Version: 3.0.2
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp

@@ -24,14 +24,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/LuaEngine.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/tolua_fix.h"
 
-#include "extensions/GUI/ControlExtension/Control.h"
-#include "scripting/lua-bindings/manual/base/axlua_base_manual.hpp"
-#include "scripting/lua-bindings/manual/extension/axlua_extension_manual.h"
-#include "scripting/lua-bindings/manual/cocostudio/axlua_cocostudio_manual.hpp"
-#include "scripting/lua-bindings/manual/ui/axlua_ui_manual.hpp"
+#include "extensions/GUI/src/GUI/ControlExtension/Control.h"
+#include "lua-bindings/manual/base/axlua_base_manual.hpp"
+#include "lua-bindings/manual/extension/axlua_extension_manual.h"
+#include "lua-bindings/manual/cocostudio/axlua_cocostudio_manual.hpp"
+#include "lua-bindings/manual/ui/axlua_ui_manual.hpp"
 #include "2d/MenuItem.h"
 #include "base/Director.h"
 #include "base/EventCustom.h"
