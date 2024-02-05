@@ -30,6 +30,7 @@ target_include_directories(${target_name} PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 if(CARES_INCLUDE_DIR)
     target_compile_definitions(${target_name} PUBLIC YASIO_USE_CARES=1)
     target_include_directories(${target_name} PUBLIC ${CARES_INCLUDE_DIR})
+    target_link_libraries(${target_name} PUBLIC c-ares)
 endif()
 
 target_include_directories(${target_name} PUBLIC ${OPENSSL_INCLUDE_DIR})

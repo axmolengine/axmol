@@ -34,11 +34,17 @@ function(_1kfetch_dist package_name)
             list(GET _status 0 status_code)
             list(GET _status 1 status_string)
             if(NOT status_code EQUAL 0)
+                file(REMOVE ${package_store})
                 message(FATAL_ERROR "Download ${package_url} fail, ${status_string}, logs: ${_logs}")
             endif()
         endif()
         file(ARCHIVE_EXTRACT INPUT ${package_store} DESTINATION ${CMAKE_CURRENT_LIST_DIR}/)
-        file(RENAME ${CMAKE_CURRENT_LIST_DIR}/${package_name} ${_prebuilt_root})
+        if (IS_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/${package_name})
+            file(RENAME ${CMAKE_CURRENT_LIST_DIR}/${package_name} ${_prebuilt_root})
+        else() # download may fail
+            file(REMOVE ${package_store})
+            message(FATAL_ERROR "The package ${package_store} is malformed, please try again!")
+        endif()
     endif()
 
     # set platform specific path, PLATFORM_NAME provided by user: win32,winrt,mac,ios,android,tvos,watchos,linux
