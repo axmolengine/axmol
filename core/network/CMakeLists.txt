@@ -1,6 +1,6 @@
 
-option(AX_USE_HTTP "Build HTTP client based on yasio" ON)
-option(AX_USE_WEBSOCKET "Build Websocket client based on yasio" ON)
+option(AX_ENABLE_HTTP "Build HTTP client based on yasio" ON)
+option(AX_ENABLE_WEBSOCKET "Build Websocket client based on yasio" ON)
 
 if(EMSCRIPTEN)
     set(_AX_NETWORK_HEADER
@@ -16,7 +16,7 @@ if(EMSCRIPTEN)
         network/Uri.cpp
     )
     
-    if (AX_USE_HTTP)
+    if (AX_ENABLE_HTTP)
         list(APPEND _AX_NETWORK_HEADER
             network/HttpClient.h
             network/HttpResponse.h
@@ -30,7 +30,7 @@ if(EMSCRIPTEN)
         )    
     endif()
     
-    if (AX_USE_WEBSOCKET)
+    if (AX_ENABLE_WEBSOCKET)
         list(APPEND _AX_NETWORK_HEADER
             network/WebSocket.h
         )
@@ -54,7 +54,7 @@ else()
         network/Uri.cpp
     )
     
-    if (AX_USE_HTTP)
+    if (AX_ENABLE_HTTP)
         list(APPEND _AX_NETWORK_HEADER
             network/HttpClient.h
             network/HttpResponse.h
@@ -68,7 +68,7 @@ else()
         )    
     endif()
     
-    if (AX_USE_WEBSOCKET)
+    if (AX_ENABLE_WEBSOCKET)
         list(APPEND _AX_NETWORK_HEADER
             network/WebSocket.h
         )
