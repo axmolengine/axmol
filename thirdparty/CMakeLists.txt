@@ -19,6 +19,7 @@ option(AX_WITH_CARES "Build with internal c-ares support" OFF)
 option(AX_WITH_YAML_CPP "Build with yaml-cpp support" OFF)
 option(AX_WITH_KCP "Build with internal kcp support" OFF)
 option(AX_WITH_OBOE "Build with oboe support" OFF)
+option(AX_WITH_LLHTTP "Build with internal LLHTTP support" ON)
 
 # by default, enable ios,macOS openal-soft framework for legal license LGPL-2.1
 option(ALSOFT_OSX_FRAMEWORK "" ON)
@@ -458,7 +459,9 @@ if(AX_WITH_CARES)
     ax_add_3rd(c-ares)
 endif()
 
-ax_add_3rd(llhttp)
+if(AX_WITH_LLHTTP)
+    ax_add_3rd(llhttp)
+endif()
 
 # libvlc
 if (AX_ENABLE_VLC_MEDIA AND (NOT _AX_HAVE_VLC))
