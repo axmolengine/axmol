@@ -48,4 +48,6 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 #ifdef USE_WIN32_CONSOLE
     FreeConsole();
 #endif
+
+    return ret;
 }
