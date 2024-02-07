@@ -1,6 +1,6 @@
+//////////////////////////////////////////////////////////////////////////////////////////
 // A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
-//
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
@@ -25,24 +25,33 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef YASIO__FWD_HPP
-#define YASIO__FWD_HPP
-#include "yasio/compiler/feature_test.hpp"
+
+#pragma once
+
+#include "yasio/string.hpp"
+#include "yasio/string_view.hpp"
+#include <fstream>
 
 namespace yasio
 {
-YASIO__NS_INLINE
-namespace inet
+inline yasio::string read_text_file(cxx17::string_view file_path)
 {
-class highp_timer;
-class io_service;
-class io_event;
-class io_channel;
-typedef class io_transport* transport_handle_t;
-} // namespace inet
-#if !YASIO__HAS_CXX11
-using namespace yasio::inet;
-#endif
+  std::ifstream fin(file_path.data(), std::ios_base::binary);
+  if (fin.is_open())
+  {
+    fin.seekg(std::ios_base::end);
+    auto n = static_cast<size_t>(fin.tellg());
+    if (n > 0)
+    {
+      yasio::string ret;
+      ret.resize_and_overwrite(n, [&fin](char* out, size_t outlen) {
+        fin.seekg(std::ios_base::beg);
+        fin.read(out, outlen);
+        return outlen;
+      });
+      return ret;
+    }
+  }
+  return yasio::string{};
+}
 } // namespace yasio
-
-#endif
