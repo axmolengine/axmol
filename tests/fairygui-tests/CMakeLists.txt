@@ -29,6 +29,21 @@ set(APP_NAME fairygui-tests)
 
 project(${APP_NAME})
 
+set(AX_ENABLE_EXT_FAIRYGUI ON CACHE BOOL "Build extension FairyGUI" FORCE)
+set(AX_ENABLE_EXT_SPINE ON CACHE BOOL "Build extension spine" FORCE)
+
+set(AX_ENABLE_EXT_DRAGONBONES OFF CACHE BOOL "Build extension DragonBones" FORCE)
+set(AX_ENABLE_EXT_COCOSTUDIO OFF CACHE BOOL "Build extension cocostudio" FORCE)
+set(AX_ENABLE_EXT_ASSETMANAGER OFF CACHE BOOL "Build extension asset-manager" FORCE)
+set(AX_ENABLE_EXT_PARTICLE3D OFF CACHE BOOL "Build extension Particle3D" FORCE)
+set(AX_ENABLE_EXT_LUA OFF CACHE BOOL "Build lua libraries" FORCE)
+set(AX_ENABLE_EXT_INSPECTOR ON CACHE BOOL "Build lua libraries" FORCE)
+set(AX_ENABLE_HTTP OFF CACHE BOOL "Build HTTP client based on yasio" FORCE)
+set(AX_ENABLE_WEBSOCKET OFF CACHE BOOL "Build Websocket client based on yasio" FORCE)
+set(AX_ENABLE_EXT_GUI OFF CACHE BOOL "Build extension GUI" FORCE)
+set(AX_ENABLE_EXT_JSONDEFAULT OFF CACHE BOOL "Build extension JSONDefault" FORCE)
+set(AX_ENABLE_EXT_PHYSICS_NODE OFF CACHE BOOL "Build extension physics-nodes" FORCE)
+
 if(NOT DEFINED BUILD_ENGINE_DONE)
     if(XCODE)
         set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
