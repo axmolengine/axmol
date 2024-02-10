@@ -389,7 +389,6 @@ function(ax_setup_app_config app_name)
             # By default, explicit disable codesign for macOS PC
             set_xcode_property(${app_name} CODE_SIGN_IDENTITY "")
             set_xcode_property(${app_name} CODE_SIGNING_ALLOWED "NO")
-            set_xcode_property(${app_name} CODE_SIGN_IDENTITY "NO")
         endif()
     elseif(WINDOWS)
         # windows: visual studio/LLVM-clang default is Console app, but we need Windows app
