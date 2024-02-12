@@ -1,4 +1,4 @@
-# Development setup
+# Axmol Engine - Development setup
 
 ## Common requirements
 
