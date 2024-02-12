@@ -47,7 +47,7 @@ $ git checkout dev
 
 The patch must be _complete_. And by that, we mean:
 
--   For C++ code follow the [axmol C++ Coding Style](https://github.com/axmolengine/axmol/blob/d8d3137515a73e5c2395cae04d6b5ef6b1cc6777/CONTRIBUTING.md)
+-   For C++ code follow the [axmol C++ Coding Style](https://github.com/axmolengine/axmol/blob/2.1/docs/CODING_STYLE.md)
 -   For Python code follow the [PEP8 guidelines](https://www.python.org/dev/peps/pep-0008)
 -   Describe what the patch does
 -   Include test cases if applicable
