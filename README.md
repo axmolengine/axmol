@@ -66,12 +66,14 @@ Axmol Engine has iterated and improved over the Cocos2d-x v4.0 base. Now is fast
 * ANGLE GLES 3.0+ for Win32 and UWP
 * WebGL 2.0 (OpenGL ES 3.0): WASM
 
-**Architecture**:
+**Architectures**:
 * iOS (x64, arm64)
 * Android (x86, x64, armv7, arm64)
-* win (x86, x64), linux_x64
-* osx (x64, arm64)
-* UWP (x64, arm64), wasm32
+* Windows (x86, x64),
+* Linux (x64)
+* OSX (x64, arm64)
+* UWP (x64, arm64)
+* wasm32
 
 **Supported 2D physics engines** ([more info here](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-informations)):
 * Box2D
