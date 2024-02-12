@@ -2,13 +2,13 @@
 
 ## Common requirements
 
-- [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell): used to install Axmol. PowerShell 7 is recommended, it supports Windows, macOS and Linux.
+- **PowerShell**: used to install Axmol. PowerShell 7 is recommended, it supports Windows, macOS and Linux.
   - Quick installation: 
-     - macOS, Ubuntu, ArchLinux: run `1k/install-pwsh.sh` in `axmol` root directory (recommended)
+     - macOS, Ubuntu, ArchLinux: run `1k/install-pwsh.sh` in `axmol` root directory (recommended).
      - Windows 10+: system installed PowerShell 5.x should work, but in that case you'll need to run the command `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force` in order to allow PowerShell script file to run.
-  - Manual installation: [Install PowerShell instructions](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) /  [Download it from GitHub](https://github.com/PowerShell/PowerShell/releases)
-- [CMake 3.28.1+](https://cmake.org/download/)
-    - Manual installation is recommended. Make sure to add CMake bin to the system `PATH`, otherwise `axmol build` will auto-setup it to `tools/external/cmake`.
+  - Manual installation: [Instructions](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) /  [Download](https://github.com/PowerShell/PowerShell/releases)
+- **CMake 3.28.1**
+    - Manual installation is recommended ([download](https://cmake.org/download/)). Make sure to add CMake bin to the system `PATH`, otherwise `axmol build` will auto-setup it to `tools/external/cmake`.
 
 ## Prerequisites
 
@@ -22,7 +22,7 @@
 
 ## Creating a new project
 
-Enter to PowerShell running the command `pwsh`. This is the command to generate a new project:
+Enter to PowerShell (`pwsh`). This is the command to generate a new project:
 
 ```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua] [--portrait] PROJECT_NAME```
 
@@ -83,10 +83,10 @@ Using a PowerShell console window (command `pwsh`), go to `axmol\tests\<testdir 
 
 ### Windows (Visual Studio 2022)
 
-  1. Install [CMake](https://cmake.org/) 3.27.4+  
-  2. Install Visual Studio 2022 (VS 2019 should be supported, but VS 2022 is recommended)  
-  3. Create a new project as shown [here](#creating-a-new-project)
-  4. In a console window, navigate into the root directory of the project you created in the previous step
+  1. Install [CMake 3.27.4+](https://cmake.org/download/).
+  2. Install Visual Studio 2022 (VS 2019 should be supported, but VS 2022 is recommended).
+  3. Create a new project as shown [here](#creating-a-new-project).
+  4. In a console window, navigate into the root directory of the project you created in the previous step.
   5. Generate the relevant Visual Studio project using the cmake command:
   
      ```cmake -S SOURCE_DIR -B BUILD_DIR -G VISUAL_STUDIO_VERSION_STRING -A [Win32|x64]```
@@ -103,7 +103,7 @@ Using a PowerShell console window (command `pwsh`), go to `axmol\tests\<testdir 
         - 64 bit Visual Studio 2022:
             ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
 
-  6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`
+  6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`.
 
 #### Windows UWP (Visual Studio 2022)
     
@@ -123,9 +123,9 @@ Please see the [Windows workflow guide](https://github.com/axmolengine/axmol/iss
 
 ### Android (Android Studio)
 
-  1. Install [Android Studio 2023.1.1+](https://developer.android.com/studio)
+  1. Install [Android Studio 2023.1.1+](https://developer.android.com/studio).
   2. When starting Android Studio for the first time, it will guide you through the installation of the SDK and other tools. Please make sure that you do install them.
-  3. Start Android Studio and choose [Open an existing Android Studio Project] and select your project. For example, the existing `cpp-test` project located in `axmol\tests\cpp-tests\proj.android`
+  3. Start Android Studio and choose [Open an existing Android Studio Project] and select your project. For example, the existing `cpp-test` project located in `axmol\tests\cpp-tests\proj.android`.
   4. Start Android Studio and open 'Tools' -> 'SDKManager', then switch to 'SDK Tools', check the 'Show Package Details' field, and choose the following tools clicking the button 'Apply' to install them:  
      - Android SDK Platform 34  
      - Android Gradle Plugin (AGP) 8.2.1  
@@ -138,7 +138,7 @@ Note: if you use non-SDK provided CMake, you will need to download `ninja` from 
   
 ### Android Studio (without Android Studio)
 
-  1. Download [Android command-tools](https://developer.android.com/studio#command-tools)
+  1. Download [Android command-tools](https://developer.android.com/studio#command-tools).
   2. Install Android devtools. Example in Windows:
 
   ```bat
@@ -155,10 +155,10 @@ Note: if you use non-SDK provided CMake, you will need to download `ninja` from 
 
 ### iOS, tvOS and macOS
 
-  1. Ensure that XCode 13+ is installed
-  2. Create a new project as shown [here](#creating-a-new-project)
-  3. In a console window, navigate into the root directory of the project you created in the previous step
-  4. Execute the following command
+  1. Ensure that XCode 13+ is installed.
+  2. Create a new project as shown [here](#creating-a-new-project).
+  3. In a console window, navigate into the root directory of the project you created in the previous step.
+  4. Execute the following command:
    ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
   5. Generate the relevant XCode project using one of the following commands:
      - for iOS arm64:  
@@ -176,15 +176,15 @@ Note: if you use non-SDK provided CMake, you will need to download `ninja` from 
 
   6. After CMake finishes generating, you can open the XCode project at `build_${plat}_${arch}` folder and run cpp-tests or other test targets. For OSC x64 should be `build_x64`.
   7. Notes:  
-     - **Code signing is required to run the iOS / tvOS app on your device. Just change the bundle identifier until the auto manage signing is solved**  
-     - **Axmol only provides arm64, x86_64 prebuilt libraries for iOS / tvOS**
+     - **Code signing is required to run the iOS / tvOS app on your device. Just change the bundle identifier until the auto manage signing is solved.**  
+     - **Axmol only provides arm64, x86_64 prebuilt libraries for iOS / tvOS.**
 
 ### Linux (VSCode)
 
-1. Run `pwsh ./setup.ps1`
-2. Open axmol source folder with VSCode
-3. Install C++, CMake extensions for VSCode
-4. VSCode will auto prompt you to choose the toolset for building. Select the gcc matching with your system installed default gcc
+1. Run `pwsh ./setup.ps1`.
+2. Open axmol source folder with VSCode.
+3. Install C++, CMake extensions for VSCode.
+4. VSCode will auto prompt you to choose the toolset for building. Select the gcc matching with your system installed default gcc:
     ```sh
     # check gcc version
     gcc -v
