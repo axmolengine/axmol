@@ -309,12 +309,12 @@ use_ax_depend(${_AX_CORE_LIB})
 target_include_directories(${_AX_CORE_LIB}
     PUBLIC ${_AX_ROOT}
     PUBLIC ${_AX_ROOT}/thirdparty
-    PUBLIC ${_AX_ROOT}/extensions
+    PUBLIC ${_AX_ROOT}/extensions/scripting
     PUBLIC ${_AX_ROOT}/core
     PUBLIC ${_AX_ROOT}/core/platform
 
     INTERFACE ${_AX_ROOT}/thirdparty
-    INTERFACE ${_AX_ROOT}/extensions
+    INTERFACE ${_AX_ROOT}/extensions/scripting
     INTERFACE ${_AX_ROOT}/core/base
     INTERFACE ${_AX_ROOT}/core/audio
     INTERFACE ${_AX_ROOT}/core/platform/${PLATFORM_NAME}
@@ -385,7 +385,6 @@ add_subdirectory(${_AX_ROOT}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
 if(MSVC)
     target_sources(${_AX_CORE_LIB} PRIVATE ./axmol.natvis)
-    target_sources(${_AX_CORE_LIB} PRIVATE ../thirdparty/yasio/yasio.natvis)
     target_sources(${_AX_CORE_LIB} PRIVATE ../thirdparty/robin-map/tsl-robin-map.natvis)
     target_compile_options(${_AX_CORE_LIB} PUBLIC "/Zm2000")
 endif()

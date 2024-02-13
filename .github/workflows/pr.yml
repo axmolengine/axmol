@@ -17,7 +17,7 @@ jobs:
   build-win32:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: 'recursive'
       - uses: ilammy/msvc-dev-cmd@v1.12.1
@@ -31,7 +31,7 @@ jobs:
   build-winuwp:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: 'recursive'
       - uses: ilammy/msvc-dev-cmd@v1.12.1
@@ -46,7 +46,7 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: 'recursive'
       - name: Install deps
@@ -62,7 +62,7 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: 'recursive'
       - name: Build
@@ -80,7 +80,7 @@ jobs:
   build-osx:
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: 'recursive'
       - name: Build
@@ -94,7 +94,7 @@ jobs:
       GH_OS_NAME: osx
       BUILD_TARGET: ios
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
@@ -109,7 +109,7 @@ jobs:
       GH_OS_NAME: osx
       BUILD_TARGET: tvos
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 

@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "platform/FileUtils.h"
 #include "yasio/string_view.hpp"
 
-static const char* helperClassName = "org.axmol.lib.AxmolEngine";
+static const char* deviceHelperClassName = "org.axmol.lib.AxmolEngine";
 
 NS_AX_BEGIN
 
@@ -42,12 +42,12 @@ int Device::getDPI()
     static int dpi = -1;
     if (dpi == -1)
     {
-        dpi = JniHelper::callStaticIntMethod(helperClassName, "getDPI");
+        dpi = JniHelper::callStaticIntMethod(deviceHelperClassName, "getDPI");
     }
     return dpi;
 }
 
-float Device::getPixelRatio() 
+float Device::getPixelRatio()
 {
     // refer to: https://developer.android.com/training/multiscreen/screendensities?hl=en-us
     return Device::getDPI() / 160.0f;
@@ -57,17 +57,17 @@ void Device::setAccelerometerEnabled(bool isEnabled)
 {
     if (isEnabled)
     {
-        JniHelper::callStaticVoidMethod(helperClassName, "enableAccelerometer");
+        JniHelper::callStaticVoidMethod(deviceHelperClassName, "enableAccelerometer");
     }
     else
     {
-        JniHelper::callStaticVoidMethod(helperClassName, "disableAccelerometer");
+        JniHelper::callStaticVoidMethod(deviceHelperClassName, "disableAccelerometer");
     }
 }
 
 void Device::setAccelerometerInterval(float interval)
 {
-    JniHelper::callStaticVoidMethod(helperClassName, "setAccelerometerInterval", interval);
+    JniHelper::callStaticVoidMethod(deviceHelperClassName, "setAccelerometerInterval", interval);
 }
 
 class BitmapDC
@@ -182,33 +182,33 @@ Data Device::getTextureDataForText(std::string_view text,
 
 void Device::setKeepScreenOn(bool value)
 {
-    JniHelper::callStaticVoidMethod(helperClassName, "setKeepScreenOn", value);
+    JniHelper::callStaticVoidMethod(deviceHelperClassName, "setKeepScreenOn", value);
 }
 
 void Device::vibrate(float duration)
 {
-    JniHelper::callStaticVoidMethod(helperClassName, "vibrate", duration);
+    JniHelper::callStaticVoidMethod(deviceHelperClassName, "vibrate", duration);
 }
 
 void Device::prepareImpactFeedbackGenerator(ImpactFeedbackStyle style) {}
 
 void Device::impactOccurred(ImpactFeedbackStyle style)
 {
-    JniHelper::callStaticVoidMethod(helperClassName, "impactOccurred", (int)style);
+    JniHelper::callStaticVoidMethod(deviceHelperClassName, "impactOccurred", (int)style);
 }
 
 void Device::prepareNotificationFeedbackGenerator() {}
 
 void Device::notificationOccurred(NotificationFeedbackType type)
 {
-    JniHelper::callStaticVoidMethod(helperClassName, "notificationOccurred", (int)type);
+    JniHelper::callStaticVoidMethod(deviceHelperClassName, "notificationOccurred", (int)type);
 }
 
 void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged()
 {
-    JniHelper::callStaticVoidMethod(helperClassName, "selectionChanged");
+    JniHelper::callStaticVoidMethod(deviceHelperClassName, "selectionChanged");
 }
 
 NS_AX_END

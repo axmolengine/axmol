@@ -19,9 +19,20 @@ option(AX_WITH_CARES "Build with internal c-ares support" OFF)
 option(AX_WITH_YAML_CPP "Build with yaml-cpp support" OFF)
 option(AX_WITH_KCP "Build with internal kcp support" OFF)
 option(AX_WITH_OBOE "Build with oboe support" OFF)
+option(AX_WITH_LLHTTP "Build with internal LLHTTP support" ON)
 
 # by default, enable ios,macOS openal-soft framework for legal license LGPL-2.1
 option(ALSOFT_OSX_FRAMEWORK "" ON)
+
+# Enable static library for openal-soft. This has an impact on the
+# license of the final product since the source of the whole game must
+# then be available under terms compatible with the LGPL (e.g. GPL,
+# MPL). Consequently, we set it to OFF by default.
+option(
+  AX_USE_ALSOFT_STATIC
+  "Link with OpenAL as a static library (LGPL-compatible apps only)."
+  OFF
+)
 
 set(ANDROID_SHARED_LOADS "" CACHE INTERNAL "The android shared libraries load source code" )
 set(ANDROID_SHARED_LOAD_FILE_NAME "SharedLoader.java" CACHE INTERNAL "The android shared load java file name" )
@@ -58,11 +69,11 @@ if(AX_ISA_LEVEL)
     macro(ax_check_c_source source outputVar)
         if (NOT CMAKE_CROSSCOMPILING)
             check_c_source_runs("${source}" ${outputVar})
-        else() 
+        else()
             check_c_source_compiles("${source}" ${outputVar})
         endif()
     endmacro(ax_check_c_source source var)
-    
+
     # Checking intel SIMD Intrinsics
     include(CheckCSourceRuns)
     if(APPLE)
@@ -250,7 +261,7 @@ ax_add_3rd(fmt EXCLUDE_FROM_ALL TARGETS fmt-header-only)
 # bellow are non header only libs
 
 # cpufeatures
-if(ANDROID) 
+if(ANDROID)
     add_subdirectory(android-specific/cpufeatures)
 endif()
 
@@ -388,6 +399,11 @@ endif()
 # The openal-soft(LGPL 2.1)
 if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
     set(alsoft_opts "ALSOFT_DLOPEN OFF" "ALSOFT_UTILS OFF" "ALSOFT_EXAMPLES OFF" "ALSOFT_INSTALL OFF")
+
+    if (AX_USE_ALSOFT_STATIC)
+        list(APPEND alsoft_opts "LIBTYPE STATIC")
+    endif()
+
     if (ANDROID)
         if(AX_WITH_OBOE)
             _1kfetch(oboe)
@@ -408,7 +424,9 @@ if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
     target_compile_definitions(thirdparty INTERFACE AX_USE_ALSOFT=1)
     set_target_properties(OpenAL alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
 
-    if(ANDROID)
+    if (AX_USE_ALSOFT_STATIC)
+        target_compile_definitions(thirdparty INTERFACE AL_LIBTYPE_STATIC=1)
+    elseif(ANDROID)
         set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
     endif()
 endif()
@@ -439,10 +457,11 @@ endif()
 
 if(AX_WITH_CARES)
     ax_add_3rd(c-ares)
-    target_compile_definitions(thirdparty INTERFACE YASIO_USE_CARES=1)
 endif()
 
-ax_add_3rd(llhttp)
+if(AX_WITH_LLHTTP)
+    ax_add_3rd(llhttp)
+endif()
 
 # libvlc
 if (AX_ENABLE_VLC_MEDIA AND (NOT _AX_HAVE_VLC))
@@ -466,7 +485,6 @@ endif()
 
 # kcp
 if(AX_WITH_KCP)
-    set(BUILD_TESTING OFF)
     _1kfetch(kcp)
     ax_add_3rd(${kcp_SOURCE_DIR} TARGETS kcp)
 endif()
@@ -479,6 +497,10 @@ if (WIN32)
     endif()
 endif()
 
+# yasio
+ax_add_3rd(yasio)
+
+# simdjson
 ax_add_3rd(simdjson)
 
 if (ANDROID)

@@ -25,8 +25,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/LuaStack.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaStack.h"
+#include "lua-bindings/manual/tolua_fix.h"
 #include <string.h>
 extern "C" {
 #include "lua.h"
@@ -35,23 +35,23 @@ extern "C" {
 #include "lauxlib.h"
 }
 
-#include "scripting/lua-bindings/manual/AxluaLoader.h"
+#include "lua-bindings/manual/AxluaLoader.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-#    include "scripting/lua-bindings/manual/platform/ios/LuaObjcBridge.h"
+#    include "lua-bindings/manual/platform/ios/LuaObjcBridge.h"
 #endif
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#    include "scripting/lua-bindings/manual/platform/android/LuaJavaBridge.h"
+#    include "lua-bindings/manual/platform/android/LuaJavaBridge.h"
 #endif
 
-#include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "scripting/lua-bindings/auto/axlua_base_auto.hpp"
-#include "scripting/lua-bindings/manual/base/axlua_base_manual.hpp"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/auto/axlua_physics_auto.hpp"
-#include "scripting/lua-bindings/manual/physics/axlua_physics_manual.hpp"
-#include "scripting/lua-bindings/auto/axlua_backend_auto.hpp"
+#include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
+#include "lua-bindings/auto/axlua_base_auto.hpp"
+#include "lua-bindings/manual/base/axlua_base_manual.hpp"
+#include "lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/auto/axlua_physics_auto.hpp"
+#include "lua-bindings/manual/physics/axlua_physics_manual.hpp"
+#include "lua-bindings/auto/axlua_backend_auto.hpp"
 #include "base/ZipUtils.h"
 #include "platform/FileUtils.h"
 

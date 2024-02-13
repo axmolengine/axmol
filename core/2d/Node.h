@@ -172,13 +172,13 @@ public:
      *
      * @param localZOrder The local Z order value.
      */
-    virtual void setLocalZOrder(std::int32_t localZOrder);
+    virtual void setLocalZOrder(int localZOrder);
 
     /*
      Helper function used by `setLocalZOrder`. Don't use it unless you know what you are doing.
      @js NA
      */
-    virtual void _setLocalZOrder(std::int32_t z);
+    virtual void _setLocalZOrder(int z);
 
     /** !!! ONLY FOR INTERNAL USE
     * Sets the arrival order when this node has a same ZOrder with other children.
@@ -201,7 +201,7 @@ public:
      * @return The local (relative to its siblings) Z order.
      */
 
-    virtual std::int32_t getLocalZOrder() const { return _localZOrder; }
+    virtual int getLocalZOrder() const { return _localZOrder; }
 
     /**
      Defines the order in which the nodes are renderer.
@@ -1139,7 +1139,7 @@ public:
      * @param parentFlags Renderer flag.
      */
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags);
-    virtual void visit() final;
+    virtual void visit();
 
     /** Returns the Scene that contains the Node.
      It returns `nullptr` if the node doesn't belong to any Scene.

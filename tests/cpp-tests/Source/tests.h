@@ -54,7 +54,7 @@
 #    include "WindowTest/WindowTest.h"
 #endif
 
-#if __has_include("EffekseerForCocos2d-x.h")
+#if defined(AX_ENABLE_EXT_EFFEKSEER)
 #include "EffekseerTest/EffekseerTest.h"
 #endif
 
@@ -74,7 +74,7 @@
 #include "NetworkTest/NetworkTest.h"
 #include "DrawPrimitivesTest/DrawPrimitivesTest.h"
 
-#if __has_include("DrawNodeExTest/DrawNodeExTest.h")
+#if defined(AX_ENABLE_EXT_DRAWNODE)
 #include "DrawNodeExTest/DrawNodeExTest.h"
 #endif
 

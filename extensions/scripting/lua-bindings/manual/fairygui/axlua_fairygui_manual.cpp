@@ -1,12 +1,12 @@
 #include "axlua_fairygui_manual.hpp"
-#include "scripting/lua-bindings/auto/axlua_fairygui_auto.hpp"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/auto/axlua_fairygui_auto.hpp"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/LuaEngine.h"
 
-#include "FairyGUI.h"
-#include "FairyGUIMacros.h"
-#include "GLabel.h"
+#include "fairygui/FairyGUI.h"
+#include "fairygui/FairyGUIMacros.h"
+#include "fairygui/GLabel.h"
 
 static int handleFairyguiEvent(int handler, fairygui::EventContext* sender)
 {

@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -36,6 +37,12 @@ NS_AX_BEGIN
 
 int QuadCommand::__indexCapacity = -1;
 uint16_t* QuadCommand::__indices = nullptr;
+
+void QuadCommand::destroyIsolatedIndices()
+{
+    AX_SAFE_DELETE_ARRAY(__indices);
+    __indexCapacity = -1;
+}
 
 QuadCommand::QuadCommand() : _indexSize(-1), _ownedIndices() {}
 

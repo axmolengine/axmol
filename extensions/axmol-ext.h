@@ -27,23 +27,26 @@
 
 #include "ExtensionMacros.h"
 
-// Physics integration
-#include "physics-nodes/PhysicsDebugNode.h"
-#include "physics-nodes/PhysicsDebugNodeBox2D.h"
-#include "physics-nodes/PhysicsDebugNodeChipmunk2D.h"
-#include "physics-nodes/PhysicsSprite.h"
-#include "physics-nodes/PhysicsSpriteBox2D.h"
-#include "physics-nodes/PhysicsSpriteChipmunk2D.h"
+#include "GUI/src/GUI/ScrollView/ScrollView.h"
+#include "GUI/src/GUI/ScrollView/TableView.h"
 
-#include "assets-manager/AssetsManager.h"
-#include "assets-manager/AssetsManagerEx.h"
-#include "assets-manager/EventAssetsManagerEx.h"
-#include "assets-manager/EventListenerAssetsManagerEx.h"
-#include "assets-manager/Manifest.h"
+// Physics integration
+#include "physics-nodes/src/physics-nodes/PhysicsDebugNode.h"
+#include "physics-nodes/src/physics-nodes/PhysicsDebugNodeBox2D.h"
+#include "physics-nodes/src/physics-nodes/PhysicsDebugNodeChipmunk2D.h"
+#include "physics-nodes/src/physics-nodes/PhysicsSprite.h"
+#include "physics-nodes/src/physics-nodes/PhysicsSpriteBox2D.h"
+#include "physics-nodes/src/physics-nodes/PhysicsSpriteChipmunk2D.h"
+
+#include "assets-manager/src/assets-manager/AssetsManager.h"
+#include "assets-manager/src/assets-manager/AssetsManagerEx.h"
+#include "assets-manager/src/assets-manager/EventAssetsManagerEx.h"
+#include "assets-manager/src/assets-manager/EventListenerAssetsManagerEx.h"
+#include "assets-manager/src/assets-manager/Manifest.h"
 
 // Particle System, include Particle Universe Particle System
-#include "Particle3D/Particle3DRender.h"
-#include "Particle3D/ParticleSystem3D.h"
-#include "Particle3D/PU/PUParticleSystem3D.h"
+#include "Particle3D/src/Particle3D/Particle3DRender.h"
+#include "Particle3D/src/Particle3D/ParticleSystem3D.h"
+#include "Particle3D/src/Particle3D/PU/PUParticleSystem3D.h"
 
 #endif /* __AXMOL_EXT_H__ */

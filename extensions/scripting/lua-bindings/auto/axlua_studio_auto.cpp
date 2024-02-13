@@ -1,9 +1,9 @@
-#include "scripting/lua-bindings/auto/axlua_studio_auto.hpp"
+#include "lua-bindings/auto/axlua_studio_auto.hpp"
 #include "cocostudio/CocoStudio.h"
 #include "cocostudio/ComExtensionData.h"
-#include "scripting/lua-bindings/manual/cocostudio/lua-cocostudio-conversions.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/cocostudio/lua-cocostudio-conversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_studio_ActionFrame_setFrameIndex(lua_State* tolua_S)
 {
@@ -7442,56 +7442,6 @@ int lua_ax_studio_Bone_updateZOrder(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_studio_Bone_setLocalZOrder(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocostudio::Bone* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_setLocalZOrder'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        int arg0;
-
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.Bone:setLocalZOrder");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_setLocalZOrder'", nullptr);
-            return 0;
-        }
-        cobj->setLocalZOrder(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:setLocalZOrder",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_studio_Bone_setLocalZOrder'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_studio_Bone_getTween(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8654,7 +8604,6 @@ int lua_register_ax_studio_Bone(lua_State* tolua_S)
         tolua_function(tolua_S,"removeChildBone",lua_ax_studio_Bone_removeChildBone);
         tolua_function(tolua_S,"updateColor",lua_ax_studio_Bone_updateColor);
         tolua_function(tolua_S,"updateZOrder",lua_ax_studio_Bone_updateZOrder);
-        tolua_function(tolua_S,"setLocalZOrder",lua_ax_studio_Bone_setLocalZOrder);
         tolua_function(tolua_S,"getTween",lua_ax_studio_Bone_getTween);
         tolua_function(tolua_S,"setTransformDirty",lua_ax_studio_Bone_setTransformDirty);
         tolua_function(tolua_S,"isTransformDirty",lua_ax_studio_Bone_isTransformDirty);
@@ -24557,56 +24506,6 @@ int lua_ax_studio_BoneNode_getVisibleSkinsRect(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_studio_BoneNode_setLocalZOrder(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocostudio::timeline::BoneNode* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_setLocalZOrder'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        int arg0;
-
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.BoneNode:setLocalZOrder");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_setLocalZOrder'", nullptr);
-            return 0;
-        }
-        cobj->setLocalZOrder(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:setLocalZOrder",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_studio_BoneNode_setLocalZOrder'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_studio_BoneNode_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -24721,7 +24620,6 @@ int lua_register_ax_studio_BoneNode(lua_State* tolua_S)
         tolua_function(tolua_S,"setDebugDrawColor",lua_ax_studio_BoneNode_setDebugDrawColor);
         tolua_function(tolua_S,"getDebugDrawColor",lua_ax_studio_BoneNode_getDebugDrawColor);
         tolua_function(tolua_S,"getVisibleSkinsRect",lua_ax_studio_BoneNode_getVisibleSkinsRect);
-        tolua_function(tolua_S,"setLocalZOrder",lua_ax_studio_BoneNode_setLocalZOrder);
         tolua_function(tolua_S,"create", lua_ax_studio_BoneNode_create);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(cocostudio::timeline::BoneNode).name(); // rtti is literal storage

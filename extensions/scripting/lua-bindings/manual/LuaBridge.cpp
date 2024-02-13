@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/LuaBridge.h"
+#include "lua-bindings/manual/LuaBridge.h"
 
 NS_AX_BEGIN
 

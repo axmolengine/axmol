@@ -22,9 +22,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/tolua_fix.h"
 #include "base/Ref.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 #include <stdlib.h>
 
 USING_NS_AX;

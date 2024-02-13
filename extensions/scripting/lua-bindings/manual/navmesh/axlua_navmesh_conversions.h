@@ -27,7 +27,7 @@
 
 #if AX_USE_NAVMESH
 
-#    include "scripting/lua-bindings/manual/tolua_fix.h"
+#    include "lua-bindings/manual/tolua_fix.h"
 #    include "platform/PlatformMacros.h"
 
 NS_AX_BEGIN

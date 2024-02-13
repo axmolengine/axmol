@@ -37,8 +37,8 @@ namespace
 std::unique_ptr<AppDelegate> appDelegate;
 }
 
-void cocos_android_app_init(JNIEnv* env)
+void axmol_android_app_init(JNIEnv* env)
 {
-    LOGD("cocos_android_app_init");
+    LOGD("axmol_android_app_init");
     appDelegate.reset(new AppDelegate());
 }

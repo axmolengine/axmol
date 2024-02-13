@@ -70,7 +70,7 @@ elseif(CMAKE_GENERATOR MATCHES Visual)
 endif()
 
 function(_1k_deprecated_32bit project_name release_ver)
-    if(("${ARCH_ALIAS}" MATCHES "x86") OR ("${ARCH_ALIAS}" MATCHES "armeabi-v7a"))
+    if(("${ARCH_ALIAS}" STREQUAL "x86") OR ("${ARCH_ALIAS}" MATCHES "armeabi-v7a"))
         message(WARNING "Building 32-bit[${ARCH_ALIAS}] ${project_name} is deprecated, and will be removed in next release ${release_ver}")
     endif()
 endfunction()

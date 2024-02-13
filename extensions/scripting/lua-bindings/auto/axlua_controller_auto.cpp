@@ -1,8 +1,8 @@
-#include "scripting/lua-bindings/auto/axlua_controller_auto.hpp"
+#include "lua-bindings/auto/axlua_controller_auto.hpp"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 #include "base/GameController.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_controller_Controller_getDeviceName(lua_State* tolua_S)
 {

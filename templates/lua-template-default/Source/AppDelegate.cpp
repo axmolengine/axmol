@@ -24,9 +24,9 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/LuaEngine.h"
 #include "cocos2d.h"
-#include "scripting/lua-bindings/manual/lua_module_register.h"
+#include "lua-bindings/manual/lua_module_register.h"
 
 #define USE_AUDIO_ENGINE 1
 

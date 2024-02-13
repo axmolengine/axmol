@@ -1,10 +1,10 @@
-#include "scripting/lua-bindings/auto/axlua_fairygui_auto.hpp"
+#include "lua-bindings/auto/axlua_fairygui_auto.hpp"
 #include "fairygui/FairyGUI.h"
 #include "fairygui/FairyGUIMacros.h"
 #include "fairygui/utils/html/HtmlObject.h"
-#include "scripting/lua-bindings/manual/fairygui/axlua_fairygui_conversions.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/fairygui/axlua_fairygui_conversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_fairygui_InputEvent_getTarget(lua_State* tolua_S)
 {

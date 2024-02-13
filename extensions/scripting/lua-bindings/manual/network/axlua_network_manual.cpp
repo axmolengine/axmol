@@ -22,11 +22,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "scripting/lua-bindings/manual/network/axlua_network_manual.h"
-#include "scripting/lua-bindings/manual/network/lua_xml_http_request.h"
-#include "scripting/lua-bindings/manual/network/lua_websocket.h"
-#include "scripting/lua-bindings/manual/network/lua_downloader.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/network/axlua_network_manual.h"
+#include "lua-bindings/manual/network/lua_xml_http_request.h"
+#include "lua-bindings/manual/network/lua_websocket.h"
+#include "lua-bindings/manual/network/lua_downloader.h"
+#include "lua-bindings/manual/LuaEngine.h"
 
 int register_network_module(lua_State* L)
 {

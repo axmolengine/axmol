@@ -27,7 +27,7 @@
 #include "axmol.h"
 #include "ui/CocosGUI.h"
 #include "../BaseTest.h"
-#include "extensions/DrawNodeEx/DrawNodeEx.h"
+#include "DrawNodeEx/DrawNodeEx.h"
 
 
 DEFINE_TEST_SUITE(DrawNodeExTests);

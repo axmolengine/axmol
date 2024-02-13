@@ -60,6 +60,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 
     target_include_directories(${APP_NAME}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/lua
+        PRIVATE ${AX_ROOT_DIR}/extensions/scripting
         PRIVATE ${AX_ROOT_DIR}/extensions/scripting/lua-bindings/manual
         PRIVATE ${AX_ROOT_DIR}
         PRIVATE ${AX_ROOT_DIR}/thirdparty
@@ -90,15 +91,14 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         PRIVATE ${AX_ROOT_DIR}/thirdparty/lua/plainlua
         PRIVATE ${AX_ROOT_DIR}/thirdparty/lua/tolua/.
         PRIVATE ${AX_ROOT_DIR}/thirdparty/lua/lua-cjson/.
-        PRIVATE ${AX_ROOT_DIR}/extensions/cocostudio
-        PRIVATE ${AX_ROOT_DIR}/extensions/spine/runtime/include
-        PRIVATE ${AX_ROOT_DIR}/extensions/fairygui
-        PRIVATE ${AX_ROOT_DIR}/extensions/GUI
         PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/_d/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/_d/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/_d/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/_d/include
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/yasio
     )
+
+
 
     SET (CONFIGURATION_SUBFOLDER "")
     target_link_directories(${APP_NAME}
@@ -140,45 +140,110 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         llhttp
         simdjson
         physics-nodes
+        yasio
+        websocket-parser
     )
     
     if (AX_ENABLE_EXT_DRAGONBONES)
         list(APPEND LIBS "cocostudio")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/DragonBones/src
+        )          
     endif()
     
     if(AX_ENABLE_EXT_COCOSTUDIO)
         list(APPEND LIBS "DragonBones")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/cocostudio/src
+        )          
     endif()
     
     if(AX_ENABLE_EXT_ASSETMANAGER)
         list(APPEND LIBS "assets-manager")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/assets-manager/src
+        )          
     endif()
 
     if(AX_ENABLE_EXT_PARTICLE3D)
         list(APPEND LIBS "particle3d")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/Particle3D/src
+        )         
     endif()
 
     if(AX_ENABLE_EXT_SPINE)
         list(APPEND LIBS "spine")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/spine/runtime/include
+            PRIVATE ${AX_ROOT_DIR}/extensions/spine/src
+        )
     endif()
 
     if (AX_ENABLE_EXT_IMGUI)
         list(APPEND LIBS "ImGui")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/ImGui/src
+            PRIVATE ${AX_ROOT_DIR}/extensions/ImGui/src/ImGui/imgui
+        )
     endif()
 	
 	if (AX_ENABLE_EXT_INSPECTOR)
         list(APPEND LIBS "Inspector")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/Inspector/src
+        )        
     endif()
     
     if (AX_ENABLE_EXT_SDFGEN)
         list(APPEND LIBS "SDFGen")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/SDFGen/src
+        )         
     endif()
 	
 	if (AX_ENABLE_EXT_DRAWNODEEX)
         list(APPEND LIBS "DrawNodeEx")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/DrawNodeEx/src
+        )         
     endif()
 	
-	
+    if (AX_ENABLE_EXT_GUI)
+        list(APPEND LIBS "GUI")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/GUI/src
+        )         
+    endif()
+
+    if (AX_ENABLE_EXT_FAIRYGUI)
+        list(APPEND LIBS "fairygui")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/fairygui/src
+        )         
+    endif()
+
+	if (AX_ENABLE_EXT_LIVE2D)
+        list(APPEND LIBS "Live2D")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/Live2D/Framework/src
+        )        
+    endif()
+
+	if (AX_ENABLE_EXT_EFFEKSEER)
+        list(APPEND LIBS "EffekseerForCocos2d-x")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/Effekseer
+        )        
+    endif()
+
+    if (AX_ENABLE_EXT_PHYSICS_NODE)
+        list(APPEND LIBS "physics-nodes")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/physics-nodes/src
+        )        
+    endif()
+
     if (WINDOWS)
         target_link_libraries(${APP_NAME}
             ${LIBS}

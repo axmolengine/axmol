@@ -246,7 +246,7 @@ endif()
 if (_AX_USE_PREBUILT) # support windows and linux
     use_ax_compile_define(${APP_NAME})
 
-    include(${_AX_ROOT}/cmake/AXLinkHelpers.cmake)
+    include(AXLinkHelpers)
     ax_link_lua_prebuilt(${APP_NAME} ${_AX_ROOT} ${AX_PREBUILT_DIR})
 endif()
 

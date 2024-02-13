@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -26,13 +27,13 @@ THE SOFTWARE.
 #pragma once
 
 #include "platform/Common.h"
-#include "platform/ApplicationProtocol.h"
+#include "platform/ApplicationBase.h"
 #include <string>
 #include <chrono>
 
 NS_AX_BEGIN
 
-class AX_DLL Application : public ApplicationProtocol
+class AX_DLL Application : public ApplicationBase
 {
 public:
     /**

@@ -22,12 +22,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/platform/android/jni/LuaBridge.h"
+#include "LuaBridge.h"
 
 #if defined(__ANDROID__)
 #    include <android/log.h>
 
-#    include "scripting/lua-bindings/manual/platform/android/LuaJavaBridge.h"
+#    include "lua-bindings/manual/platform/android/LuaJavaBridge.h"
 
 #    include "base/UTF8.h"
 

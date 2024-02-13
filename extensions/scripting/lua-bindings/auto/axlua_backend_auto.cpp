@@ -1,12 +1,12 @@
-#include "scripting/lua-bindings/auto/axlua_backend_auto.hpp"
+#include "lua-bindings/auto/axlua_backend_auto.hpp"
 #include "renderer/backend/Types.h"
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/Texture.h"
 #include "renderer/backend/VertexLayout.h"
 #include "renderer/backend/DriverBase.h"
 #include "renderer/backend/RenderTarget.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 
 int lua_register_ax_backend_BufferUsage(lua_State* tolua_S)
@@ -3518,6 +3518,40 @@ int lua_ax_backend_DriverBase_getInstance(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_backend_DriverBase_destroyInstance(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_destroyInstance'", nullptr);
+            return 0;
+        }
+        ax::backend::DriverBase::destroyInstance();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axb.DriverBase:destroyInstance",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_DriverBase_destroyInstance'.",&tolua_err);
+#endif
+    return 0;
+}
 static int lua_ax_backend_DriverBase_finalize(lua_State* tolua_S)
 {
     printf("luabindings: finalizing LUA object (DriverBase)");
@@ -3527,7 +3561,7 @@ static int lua_ax_backend_DriverBase_finalize(lua_State* tolua_S)
 int lua_register_ax_backend_DriverBase(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"axb.DriverBase");
-    tolua_cclass(tolua_S,"DriverBase","axb.DriverBase","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"DriverBase","axb.DriverBase","",nullptr);
 
     tolua_beginmodule(tolua_S,"DriverBase");
         tolua_function(tolua_S,"newDefaultRenderTarget",lua_ax_backend_DriverBase_newDefaultRenderTarget);
@@ -3547,6 +3581,7 @@ int lua_register_ax_backend_DriverBase(lua_State* tolua_S)
         tolua_function(tolua_S,"getMaxTextureUnits",lua_ax_backend_DriverBase_getMaxTextureUnits);
         tolua_function(tolua_S,"getMaxSamplesAllowed",lua_ax_backend_DriverBase_getMaxSamplesAllowed);
         tolua_function(tolua_S,"getInstance", lua_ax_backend_DriverBase_getInstance);
+        tolua_function(tolua_S,"destroyInstance", lua_ax_backend_DriverBase_destroyInstance);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::backend::DriverBase).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axb.DriverBase";

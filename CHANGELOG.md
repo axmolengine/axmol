@@ -1,4 +1,39 @@
-# axmol-2.1.0 Jan.20 2024
+## axmol-2.1.1 Feb.2 2024
+
+### BugFixes
+
+- Fix shaders not copying to final build on macOS for non Xcode builds by @smilediver
+- Fix `Scheduler::pauseTarget` can't timer targets, reported by @shaniamjad6
+- Fix build lua projects with engine prebuilts lib doesn't work, reported by @grif-on
+- Fix GUI ScrollView clipping bug and add lua support by @bintester
+- Ensure scissor state is set to the correct value prior to a buffer clear by @rh101
+- Fix memory leaks when app exit on non-embed systems by @halx99 and @lich426
+- Fix can't generate lua bindings for set/get Node localZOrder, reporeted by @bintester
+- Fix lua template include incorrect module path, reported by @grif-on
+- Fix build win32 with clang error
+- Fix ci build-site download unexpected artifacts from appveyor
+
+## Break changes
+
+- Rename android entrypoint: `cocos_android_app_init` ==> `axmol_android_app_init`
+
+## Improvements
+
+- Add some utils functions and lua support by @bintester
+
+### 3rdparties updates
+
+- simdjson: 3.6.3 ==> 3.6.4
+- curl: 8.5.0 ==> 8.6.0
+- openssl: 3.0.12 ==> 3.0.13
+- yasio: 4.1.4 ==> 5.0.0
+- zlib: 1.3 ==> 1.3.1
+- jpeg-turbo: 3.0.1 ==> 3.0.2
+- libpng: 1.6.40 ==> 1.6.42
+- luajit: 2.1-43d0a19 ==> 2.1-9cc2e42
+
+
+## axmol-2.1.0 Jan.20 2024
 
 ### Significant changes relative to 2.0.0:
 
@@ -43,7 +78,7 @@
     - GUI
 - Zwoptex (Commented on cpp-test)
 
-### BugFixs
+### BugFixes
 
 - Fix translated metal shader texture order does not follow GLSL binding order
 - Fix GLES3 shader scalar array layout incorrect

@@ -22,14 +22,14 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "scripting/lua-bindings/manual/cocostudio/axlua_csloader_manual.hpp"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/LuaValue.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
-#include "ActionTimeline/ActionTimeline.h"
-#include "ActionTimeline/CSLoader.h"
-#include "ActionTimeline/ActionTimelineNode.h"
+#include "lua-bindings/manual/cocostudio/axlua_csloader_manual.hpp"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/LuaValue.h"
+#include "lua-bindings/manual/LuaEngine.h"
+#include "cocostudio/ActionTimeline/ActionTimeline.h"
+#include "cocostudio/ActionTimeline/CSLoader.h"
+#include "cocostudio/ActionTimeline/ActionTimelineNode.h"
 
 int axlua_csloader_CSLoader_createTimeline(lua_State* tolua_S)
 {

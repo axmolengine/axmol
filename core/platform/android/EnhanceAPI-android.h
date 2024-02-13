@@ -3,8 +3,9 @@
  * Developed by Game Engine part
  *
  * Copyright 2015 by Mobile Solution Lab, MSG, SRC-NJ.
- * Wang Ying
- * All rights reserved.
+ * Wang Ying, All rights reserved.
+ * Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ * 
  *
  * This software is the confidential and proprietary information of
  * Samsung Electronics, Inc. ("Confidential Information"). You
@@ -15,7 +16,7 @@
 #pragma once
 
 #include "platform/Common.h"
-#include "platform/ApplicationProtocol.h"
+#include "platform/ApplicationBase.h"
 
 NS_AX_BEGIN
 
