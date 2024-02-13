@@ -33,7 +33,7 @@ Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more 
 ## Building
 
 * [Download the latest release](https://github.com/axmolengine/axmol/releases) / [Mirror](https://gitee.com/simdsoft/axmol)
-* [How to install](https://github.com/axmolengine/axmol/blob/dev/docs/DevSetup.md)
+* [How to install](docs/DevSetup.md)
 
 If you have a Cocos2d-x project, migrating to Axmol Engine is easy. We have prepared a [Migration Guide](https://github.com/axmolengine/axmol/wiki/Cocos2d%E2%80%90x-migration-guide).
 
@@ -134,8 +134,8 @@ See the [Milestones](https://github.com/axmolengine/axmol/milestones) for planne
 How to contribute:
 
 * Suggestions, bug fixes, and improvements are highly appreciated!
-  - [Instructions for contributing](https://github.com/axmolengine/axmol/blob/d8d3137515a73e5c2395cae04d6b5ef6b1cc6777/CONTRIBUTING.md)
-  - [Collaborators list](https://github.com/axmolengine/axmol/blob/dev/AUTHORS.md)
+  - [Instructions for contributing](CONTRIBUTING.md)
+  - [Collaborators list](AUTHORS.md)
 * Please do not forget to add the topic `axmol` and `axmolengine` to any related repository you create!
 * Adding a star on GitHub will help Axmol grow as well. Thank you!
 
