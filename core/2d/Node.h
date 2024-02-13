@@ -1139,7 +1139,7 @@ public:
      * @param parentFlags Renderer flag.
      */
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags);
-    virtual void visit() final;
+    virtual void visit();
 
     /** Returns the Scene that contains the Node.
      It returns `nullptr` if the node doesn't belong to any Scene.
