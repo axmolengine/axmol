@@ -624,6 +624,15 @@ bool GLViewImpl::initWithFullScreen(std::string_view viewName)
         return false;
 
     const GLFWvidmode* videoMode = glfwGetVideoMode(_monitor);
+    
+    // These are soft constraints. If the video mode is retrieved at runtime, the resulting window and context should
+    // match these exactly. If invalid attribs are passed (eg. from an outdated cache), window creation will NOT fail
+    // but the actual window/context may differ.
+    glfwWindowHint(GLFW_REFRESH_RATE, videoMode->refreshRate);
+    glfwWindowHint(GLFW_RED_BITS, videoMode->redBits);
+    glfwWindowHint(GLFW_BLUE_BITS, videoMode->blueBits);
+    glfwWindowHint(GLFW_GREEN_BITS, videoMode->greenBits);
+    
     return initWithRect(viewName, ax::Rect(0, 0, (float)videoMode->width, (float)videoMode->height), 1.0f, false);
 }
 
