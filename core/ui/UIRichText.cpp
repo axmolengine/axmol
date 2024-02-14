@@ -620,27 +620,33 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
     };
 
     MyXMLVisitor::setTagDescription(
-        "h1", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 34); },
+        "h1", true,
+        [headerTagEnterHandler](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 34); },
         [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription(
-        "h2", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 30); },
+        "h2", true,
+        [headerTagEnterHandler](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 30); },
         [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription(
-        "h3", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 24); },
+        "h3", true,
+        [headerTagEnterHandler](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 24); },
         [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription(
-        "h4", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 20); },
+        "h4", true,
+        [headerTagEnterHandler](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 20); },
         [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription(
-        "h5", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 18); },
+        "h5", true,
+        [headerTagEnterHandler](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 18); },
         [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription(
-        "h6", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 16); },
+        "h6", true,
+        [headerTagEnterHandler](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 16); },
         [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription("outline", true, [](const ValueMap& tagAttrValueMap) {
