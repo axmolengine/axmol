@@ -288,12 +288,9 @@ RichElementNewLine* RichElementNewLine::create(int tag, const Color3B& color, ui
     return nullptr;
 }
 
-RichElementMultipleNewLine* RichElementMultipleNewLine::create(int tag,
-                                                               int quantity,
-                                                               const Color3B& color,
-                                                               uint8_t opacity)
+RichElementNewLine* RichElementNewLine::create(int tag, int quantity, const Color3B& color, uint8_t opacity)
 {
-    RichElementMultipleNewLine* element = new RichElementMultipleNewLine(quantity);
+    RichElementNewLine* element = new RichElementNewLine(quantity);
     if (element->init(tag, color, opacity))
     {
         element->autorelease();
@@ -593,7 +590,7 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
     });
 
     MyXMLVisitor::setTagDescription("p", false, nullptr,
-                                    [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+                                    [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     constexpr auto headerTagEnterHandler = [](const ValueMap& tagAttrValueMap,
                                               float defaultFontSize) -> std::pair<ValueMap, RichElement*> {
@@ -624,27 +621,27 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
 
     MyXMLVisitor::setTagDescription(
         "h1", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 34); },
-        [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription(
         "h2", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 30); },
-        [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription(
         "h3", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 24); },
-        [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription(
         "h4", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 20); },
-        [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription(
         "h5", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 18); },
-        [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription(
         "h6", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 16); },
-        [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription("outline", true, [](const ValueMap& tagAttrValueMap) {
         // supported attributes:
@@ -1741,12 +1738,7 @@ void RichText::formatText(bool force)
                 }
                 case RichElement::Type::NEWLINE:
                 {
-                    addNewLine();
-                    break;
-                }
-                case RichElement::Type::NEWLINE_MULTI:
-                {
-                    auto* newLineMulti = static_cast<RichElementMultipleNewLine*>(element);
+                    auto* newLineMulti = static_cast<RichElementNewLine*>(element);
 
                     addNewLine(newLineMulti->_quantity);
                     break;
@@ -1795,12 +1787,7 @@ void RichText::formatText(bool force)
                 }
                 case RichElement::Type::NEWLINE:
                 {
-                    addNewLine();
-                    break;
-                }
-                case RichElement::Type::NEWLINE_MULTI:
-                {
-                    auto* newLineMulti = static_cast<RichElementMultipleNewLine*>(element);
+                    auto* newLineMulti = static_cast<RichElementNewLine*>(element);
 
                     addNewLine(newLineMulti->_quantity);
                     break;

@@ -52,11 +52,10 @@ public:
      */
     enum class Type
     {
-        TEXT,    /*!< RichElementText */
-        IMAGE,   /*!< RichElementImage */
-        CUSTOM,  /*!< RichElementCustomNode */
-        NEWLINE, /*!< RichElementNewLine */
-        NEWLINE_MULTI  /*!< RichElementNewLine */
+        TEXT,   /*!< RichElementText */
+        IMAGE,  /*!< RichElementImage */
+        CUSTOM, /*!< RichElementCustomNode */
+        NEWLINE /*!< RichElementNewLine */
     };
 
     /**
@@ -344,7 +343,7 @@ public:
      * @lua new
      *
      */
-    RichElementNewLine() { _type = Type::NEWLINE; }
+    RichElementNewLine(int quantity = 1) : _quantity(quantity) { _type = Type::NEWLINE; }
 
     /**
      * @brief Default destructor.
@@ -363,31 +362,6 @@ public:
      */
     static RichElementNewLine* create(int tag, const Color3B& color, uint8_t opacity);
 
-protected:
-    friend class RichText;
-};
-
-/**
- *@brief Rich element for new line.
- */
-class AX_GUI_DLL RichElementMultipleNewLine : public RichElement
-{
-public:
-    /**
-     * @brief Default constructor.
-     * @js ctor
-     * @lua new
-     *
-     */
-    RichElementMultipleNewLine(int quantity) : _quantity(quantity) { _type = Type::NEWLINE_MULTI; }
-
-    /**
-     * @brief Default destructor.
-     * @js NA
-     * @lua NA
-     */
-    ~RichElementMultipleNewLine() override = default;
-
     /**
      * @brief Create a RichElementNewLine with various arguments.
      *
@@ -397,13 +371,12 @@ public:
      * @param opacity A opacity in GLubyte.
      * @return A RichElementNewLine instance.
      */
-    static RichElementMultipleNewLine* create(int tag, int quantity, const Color3B& color, uint8_t opacity);
+    static RichElementNewLine* create(int tag, int quantity, const Color3B& color, uint8_t opacity);
 
 protected:
     friend class RichText;
     int _quantity;
 };
-
 
 /**
  *@brief A container for displaying various RichElements.
