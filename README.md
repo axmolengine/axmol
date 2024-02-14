@@ -69,7 +69,7 @@ Axmol Engine has iterated and improved over the Cocos2d-x v4.0 base. Now is fast
 **Architectures**:
 * iOS (x64, arm64)
 * Android (x86, x64, armv7, arm64)
-* Windows (x86, x64),
+* Windows (x86, x64)
 * Linux (x64)
 * OSX (x64, arm64)
 * UWP (x64, arm64)

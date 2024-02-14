@@ -2,7 +2,7 @@
 
 # Axmol Engine - C++ coding style
 
-_v0.21 - Last updated November 12, 2024_
+_v0.21 - Last updated February 12, 2024_
 
 _Forked from [Google's C++ coding style](http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml) rev. 3.274_
 
