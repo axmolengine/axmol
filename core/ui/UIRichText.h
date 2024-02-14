@@ -59,20 +59,6 @@ public:
     };
 
     /**
-     * @brief Default constructor.
-     * @js ctor
-     * @lua new
-     */
-    RichElement() = default;
-
-    /**
-     * @brief Default destructor.
-     * @js NA
-     * @lua NA
-     */
-    ~RichElement() override = default;
-
-    /**
      * @brief Initialize a rich element with different arguments.
      *
      * @param tag A integer tag value.
@@ -86,10 +72,10 @@ public:
     void setColor(const Color3B& color);
 
 protected:
-    Type _type;       /*!< Rich element type. */
-    int _tag;         /*!< A integer tag value. */
-    Color3B _color;   /*!< A color in `Color3B`. */
-    uint8_t _opacity; /*!< A opacity value in `GLubyte`. */
+    Type _type{};       /*!< Rich element type. */
+    int _tag{};         /*!< A integer tag value. */
+    Color3B _color{};   /*!< A color in `Color3B`. */
+    uint8_t _opacity{}; /*!< A opacity value in `GLubyte`. */
     friend class RichText;
 };
 
@@ -104,7 +90,7 @@ public:
      * @js ctor
      * @lua new
      */
-    RichElementText() { _type = Type::TEXT; }
+    RichElementText() : _fontSize(0), _flags(0), _outlineSize(0), _shadowBlurRadius(0) { _type = Type::TEXT; }
 
     enum
     {
@@ -117,13 +103,6 @@ public:
         SHADOW_FLAG        = 1 << 6, /*!< shadow effect */
         GLOW_FLAG          = 1 << 7  /*!< glow effect */
     };
-
-    /**
-     *@brief Default destructor.
-     * @js NA
-     * @lua NA
-     */
-    ~RichElementText() override = default;
 
     /**
      * @brief Initialize a RichElementText with various arguments.
@@ -220,14 +199,7 @@ public:
      * @lua new
      *
      */
-    RichElementImage() { _type = Type::IMAGE; }
-
-    /**
-     * @brief Default destructor.
-     * @js NA
-     * @lua NA
-     */
-    ~RichElementImage() override = default;
+    RichElementImage(): _textureType(), _width(0), _height(0), _scaleX(0), _scaleY(0) { _type = Type::IMAGE; }
 
     /**
      * @brief Initialize a RichElementImage with various arguments.
@@ -267,9 +239,9 @@ public:
 
     void setWidth(int width);
     void setHeight(int height);
-    inline void setScale(float scale) { _scaleX = _scaleY = scale; }
-    inline void setScaleX(float scaleX) { _scaleX = scaleX; }
-    inline void setScaleY(float scaleY) { _scaleY = scaleY; }
+    void setScale(float scale) { _scaleX = _scaleY = scale; }
+    void setScaleX(float scaleX) { _scaleX = scaleX; }
+    void setScaleY(float scaleY) { _scaleY = scaleY; }
     void setUrl(std::string_view url);
 
 protected:
@@ -327,7 +299,7 @@ public:
     static RichElementCustomNode* create(int tag, const Color3B& color, uint8_t opacity, Node* customNode);
 
 protected:
-    Node* _customNode;
+    Node* _customNode{};
     friend class RichText;
 };
 
