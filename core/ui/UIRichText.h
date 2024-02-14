@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -22,9 +23,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
-#ifndef __UIRICHTEXT_H__
-#define __UIRICHTEXT_H__
+#pragma once
 
 #include "ui/UIWidget.h"
 #include "ui/GUIExport.h"
@@ -53,10 +52,11 @@ public:
      */
     enum class Type
     {
-        TEXT,   /*!< RichElementText */
-        IMAGE,  /*!< RichElementImage */
-        CUSTOM, /*!< RichElementCustomNode */
-        NEWLINE /*!< RichElementNewLine */
+        TEXT,    /*!< RichElementText */
+        IMAGE,   /*!< RichElementImage */
+        CUSTOM,  /*!< RichElementCustomNode */
+        NEWLINE, /*!< RichElementNewLine */
+        NEWLINE_MULTI  /*!< RichElementNewLine */
     };
 
     /**
@@ -64,14 +64,14 @@ public:
      * @js ctor
      * @lua new
      */
-    RichElement(){};
+    RichElement() = default;
 
     /**
      * @brief Default destructor.
      * @js NA
      * @lua NA
      */
-    virtual ~RichElement(){};
+    ~RichElement() override = default;
 
     /**
      * @brief Initialize a rich element with different arguments.
@@ -105,7 +105,7 @@ public:
      * @js ctor
      * @lua new
      */
-    RichElementText() { _type = Type::TEXT; };
+    RichElementText() { _type = Type::TEXT; }
 
     enum
     {
@@ -124,7 +124,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~RichElementText(){};
+    ~RichElementText() override = default;
 
     /**
      * @brief Initialize a RichElementText with various arguments.
@@ -221,14 +221,14 @@ public:
      * @lua new
      *
      */
-    RichElementImage() { _type = Type::IMAGE; };
+    RichElementImage() { _type = Type::IMAGE; }
 
     /**
      * @brief Default destructor.
      * @js NA
      * @lua NA
      */
-    virtual ~RichElementImage(){};
+    ~RichElementImage() override = default;
 
     /**
      * @brief Initialize a RichElementImage with various arguments.
@@ -296,14 +296,14 @@ public:
      * @js ctor
      * @lua new
      */
-    RichElementCustomNode() { _type = Type::CUSTOM; };
+    RichElementCustomNode() { _type = Type::CUSTOM; }
 
     /**
      * @brief Default destructor.
      * @js NA
      * @lua NA
      */
-    virtual ~RichElementCustomNode() { AX_SAFE_RELEASE(_customNode); };
+    ~RichElementCustomNode() override { AX_SAFE_RELEASE(_customNode); }
 
     /**
      * @brief Initialize a RichElementCustomNode with various arguments.
@@ -344,14 +344,14 @@ public:
      * @lua new
      *
      */
-    RichElementNewLine() { _type = Type::NEWLINE; };
+    RichElementNewLine() { _type = Type::NEWLINE; }
 
     /**
      * @brief Default destructor.
      * @js NA
      * @lua NA
      */
-    virtual ~RichElementNewLine(){};
+    ~RichElementNewLine() override = default;
 
     /**
      * @brief Create a RichElementNewLine with various arguments.
@@ -366,6 +366,44 @@ public:
 protected:
     friend class RichText;
 };
+
+/**
+ *@brief Rich element for new line.
+ */
+class AX_GUI_DLL RichElementMultipleNewLine : public RichElement
+{
+public:
+    /**
+     * @brief Default constructor.
+     * @js ctor
+     * @lua new
+     *
+     */
+    RichElementMultipleNewLine(int quantity) : _quantity(quantity) { _type = Type::NEWLINE_MULTI; }
+
+    /**
+     * @brief Default destructor.
+     * @js NA
+     * @lua NA
+     */
+    ~RichElementMultipleNewLine() override = default;
+
+    /**
+     * @brief Create a RichElementNewLine with various arguments.
+     *
+     * @param tag A integer tag value.
+     * @param quantity Number of new lines to add
+     * @param color A color in Color3B.
+     * @param opacity A opacity in GLubyte.
+     * @return A RichElementNewLine instance.
+     */
+    static RichElementMultipleNewLine* create(int tag, int quantity, const Color3B& color, uint8_t opacity);
+
+protected:
+    friend class RichText;
+    int _quantity;
+};
+
 
 /**
  *@brief A container for displaying various RichElements.
@@ -406,6 +444,7 @@ public:
      * @result text attributes and RichElement
      */
     typedef std::function<std::pair<ValueMap, RichElement*>(const ValueMap& tagAttrValueMap)> VisitEnterHandler;
+    typedef std::function<RichElement*()> VisitExitHandler;
 
     static const std::string KEY_VERTICAL_SPACE;                   /*!< key of vertical space */
     static const std::string KEY_WRAP_MODE;                        /*!< key of per word, or per char */
@@ -460,7 +499,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~RichText();
+    ~RichText() override;
 
     /**
      * @brief Create a empty RichText.
@@ -522,8 +561,8 @@ public:
     void formatText(bool force = false);
 
     // override functions.
-    virtual void ignoreContentAdaptWithSize(bool ignore) override;
-    virtual std::string getDescription() const override;
+    void ignoreContentAdaptWithSize(bool ignore) override;
+    std::string getDescription() const override;
 
     void setWrapMode(WrapMode wrapMode); /*!< sets the wrapping mode: WRAP_PER_CHAR or WRAP_PER_WORD */
     WrapMode getWrapMode() const;        /*!< returns the current wrapping mode */
@@ -540,7 +579,7 @@ public:
     float getFontSize();                     /*!< return the current font size */
     void setFontFace(std::string_view face); /*!< Set the font face. @param face the font face. */
     std::string getFontFace();               /*!< return the current font face */
-    void setAnchorFontColor(std::string_view color); /*!< Set the font color of a-tag. @param face the font color. */
+    void setAnchorFontColor(std::string_view color); /*!< Set the font color of a-tag. @param color the font color. */
     std::string getAnchorFontColor();                /*!< return the current font color of a-tag */
     ax::Color3B getAnchorFontColor3B();              /*!< return the current font color of a-tag */
     void setAnchorTextBold(bool enable);             /*!< enable bold text of a-tag */
@@ -579,9 +618,13 @@ public:
      * @brief add a callback to own tag.
      * @param tag tag's name
      * @param isFontElement use attributes of text tag
-     * @param handleVisitEnter callback
+     * @param handleVisitEnter callback at opening tag
+     * @param handleVisitExit callback at closing tag
      */
-    static void setTagDescription(std::string_view tag, bool isFontElement, VisitEnterHandler handleVisitEnter);
+    static void setTagDescription(std::string_view tag,
+                                  bool isFontElement,
+                                  VisitEnterHandler handleVisitEnter,
+                                  VisitExitHandler handleVisitExit = nullptr);
 
     /**
      * @brief remove a callback to own tag.
@@ -598,7 +641,7 @@ public:
      */
     void setOpenUrlHandler(const OpenUrlHandler& handleOpenUrl);
 
-    virtual bool init() override;
+    bool init() override;
 
     bool initWithXML(std::string_view xml,
                      const ValueMap& defaults            = ValueMap(),
@@ -607,9 +650,9 @@ public:
     bool setString(std::string_view text);
 
 protected:
-    virtual void adaptRenderers() override;
+    void adaptRenderers() override;
 
-    virtual void initRenderer() override;
+    void initRenderer() override;
     void pushToContainer(Node* renderer);
     void handleTextRenderer(std::string_view text,
                             std::string_view fontName,
@@ -635,7 +678,7 @@ protected:
                              float scaleY = 1.f);
     void handleCustomRenderer(Node* renderer);
     void formatRenderers();
-    void addNewLine();
+    void addNewLine(int quantity = 1);
     void doHorizontalAlignment(const Vector<Node*>& row, float rowWidth);
     float stripTrailingWhitespace(const Vector<Node*>& row);
 
@@ -657,5 +700,3 @@ protected:
 // end of ui group
 /// @}
 NS_AX_END
-
-#endif /* defined(__UIRichText__) */

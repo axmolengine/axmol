@@ -288,6 +288,21 @@ RichElementNewLine* RichElementNewLine::create(int tag, const Color3B& color, ui
     return nullptr;
 }
 
+RichElementMultipleNewLine* RichElementMultipleNewLine::create(int tag,
+                                                               int quantity,
+                                                               const Color3B& color,
+                                                               uint8_t opacity)
+{
+    RichElementMultipleNewLine* element = new RichElementMultipleNewLine(quantity);
+    if (element->init(tag, color, opacity))
+    {
+        element->autorelease();
+        return element;
+    }
+    AX_SAFE_DELETE(element);
+    return nullptr;
+}
+
 /** @brief parse a XML. */
 class MyXMLVisitor : public SAXDelegator
 {
@@ -340,6 +355,8 @@ public:
             , italics(false)
             , line(StyleLine::NONE)
             , effect(StyleEffect::NONE)
+            , outlineSize(0)
+            , shadowBlurRadius(0)
         {}
     };
 
@@ -352,6 +369,7 @@ private:
     {
         bool isFontElement;
         RichText::VisitEnterHandler handleVisitEnter;
+        RichText::VisitExitHandler handleVisitExit;
     };
     typedef hlookup::string_map<TagBehavior> TagTables;
 
@@ -359,7 +377,7 @@ private:
 
 public:
     explicit MyXMLVisitor(RichText* richText);
-    virtual ~MyXMLVisitor();
+    ~MyXMLVisitor() override;
 
     Color3B getColor() const;
 
@@ -397,7 +415,8 @@ public:
 
     static void setTagDescription(std::string_view tag,
                                   bool isFontElement,
-                                  RichText::VisitEnterHandler&& handleVisitEnter);
+                                  RichText::VisitEnterHandler&& handleVisitEnter,
+                                  RichText::VisitExitHandler&& handleVisitExit = nullptr);
 
     static void removeTagDescription(std::string_view tag);
 
@@ -572,6 +591,60 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         RichElementNewLine* richElement = RichElementNewLine::create(0, Color3B::WHITE, 255);
         return make_pair(ValueMap(), richElement);
     });
+
+    MyXMLVisitor::setTagDescription("p", false, nullptr,
+                                    [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+
+    constexpr auto headerTagEnterHandler = [](const ValueMap& tagAttrValueMap,
+                                              float defaultFontSize) -> std::pair<ValueMap, RichElement*> {
+        ValueMap attrValueMap;
+        if (tagAttrValueMap.find("size") != tagAttrValueMap.end())
+        {
+            attrValueMap[RichText::KEY_FONT_SIZE] = tagAttrValueMap.at("size").asString();
+        }
+        else
+        {
+            attrValueMap[RichText::KEY_FONT_SIZE] = defaultFontSize;
+        }
+
+        if (tagAttrValueMap.find("color") != tagAttrValueMap.end())
+        {
+            attrValueMap[RichText::KEY_FONT_COLOR_STRING] = tagAttrValueMap.at("color").asString();
+        }
+
+        if (tagAttrValueMap.find("face") != tagAttrValueMap.end())
+        {
+            attrValueMap[RichText::KEY_FONT_FACE] = tagAttrValueMap.at("face").asString();
+        }
+
+        attrValueMap[RichText::KEY_TEXT_BOLD] = true;
+
+        return make_pair(attrValueMap, nullptr);
+    };
+
+    MyXMLVisitor::setTagDescription(
+        "h1", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 34); },
+        [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+
+    MyXMLVisitor::setTagDescription(
+        "h2", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 30); },
+        [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+
+    MyXMLVisitor::setTagDescription(
+        "h3", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 24); },
+        [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+
+    MyXMLVisitor::setTagDescription(
+        "h4", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 20); },
+        [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+
+    MyXMLVisitor::setTagDescription(
+        "h5", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 18); },
+        [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
+
+    MyXMLVisitor::setTagDescription(
+        "h6", true, [](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 16); },
+        [] { return RichElementMultipleNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription("outline", true, [](const ValueMap& tagAttrValueMap) {
         // supported attributes:
@@ -915,6 +988,15 @@ void MyXMLVisitor::endElement(void* /*ctx*/, const char* elementName)
         {
             popBackFontElement();
         }
+
+        if (tagBehavior.handleVisitExit != nullptr)
+        {
+            auto* richElement = tagBehavior.handleVisitExit();
+            if (richElement)
+            {
+                pushBackElement(richElement);
+            }
+        }
     }
 }
 
@@ -974,14 +1056,12 @@ void MyXMLVisitor::pushBackElement(RichElement* element)
 
 void MyXMLVisitor::setTagDescription(std::string_view tag,
                                      bool isFontElement,
-                                     RichText::VisitEnterHandler&& handleVisitEnter)
+                                     RichText::VisitEnterHandler&& handleVisitEnter,
+                                     RichText::VisitExitHandler&& handleVisitExit)
 {
-    hlookup::set_item(
-        MyXMLVisitor::_tagTables, tag,
-        TagBehavior{
-            isFontElement,
-            std::move(
-                handleVisitEnter)});  // MyXMLVisitor::_tagTables[tag] = {isFontElement, std::move(handleVisitEnter)};
+    // MyXMLVisitor::_tagTables[tag] = {isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)};
+    hlookup::set_item(MyXMLVisitor::_tagTables, tag,
+                      TagBehavior{isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)});
 }
 
 void MyXMLVisitor::removeTagDescription(std::string_view tag)
@@ -1536,9 +1616,11 @@ std::string RichText::stringWithColor4B(const ax::Color4B& color4b)
     return std::string(buf, 9);
 }
 
-void RichText::setTagDescription(std::string_view tag, bool isFontElement, VisitEnterHandler handleVisitEnter)
+void RichText::setTagDescription(std::string_view tag,
+                                 bool isFontElement,
+                                 VisitEnterHandler handleVisitEnter, VisitExitHandler handleVisitExit)
 {
-    MyXMLVisitor::setTagDescription(tag, isFontElement, std::move(handleVisitEnter));
+    MyXMLVisitor::setTagDescription(tag, isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit));
 }
 
 void RichText::removeTagDescription(std::string_view tag)
@@ -1662,6 +1744,13 @@ void RichText::formatText(bool force)
                     addNewLine();
                     break;
                 }
+                case RichElement::Type::NEWLINE_MULTI:
+                {
+                    auto* newLineMulti = static_cast<RichElementMultipleNewLine*>(element);
+
+                    addNewLine(newLineMulti->_quantity);
+                    break;
+                }
                 default:
                     break;
                 }
@@ -1678,7 +1767,7 @@ void RichText::formatText(bool force)
             addNewLine();
             for (ssize_t i = 0, size = _richElements.size(); i < size; ++i)
             {
-                RichElement* element = static_cast<RichElement*>(_richElements.at(i));
+                RichElement* element = _richElements.at(i);
                 switch (element->_type)
                 {
                 case RichElement::Type::TEXT:
@@ -1707,6 +1796,13 @@ void RichText::formatText(bool force)
                 case RichElement::Type::NEWLINE:
                 {
                     addNewLine();
+                    break;
+                }
+                case RichElement::Type::NEWLINE_MULTI:
+                {
+                    auto* newLineMulti = static_cast<RichElementMultipleNewLine*>(element);
+
+                    addNewLine(newLineMulti->_quantity);
                     break;
                 }
                 default:
@@ -2049,11 +2145,15 @@ void RichText::handleCustomRenderer(ax::Node* renderer)
     }
 }
 
-void RichText::addNewLine()
+void RichText::addNewLine(int quantity)
 {
-    _leftSpaceWidth = _customSize.width;
-    _elementRenders.emplace_back();
-    _lineHeights.emplace_back();
+    do
+    {
+        _leftSpaceWidth = _customSize.width;
+        _elementRenders.emplace_back();
+        _lineHeights.emplace_back();
+    }
+    while (--quantity > 0);
 }
 
 void RichText::formatRenderers()
