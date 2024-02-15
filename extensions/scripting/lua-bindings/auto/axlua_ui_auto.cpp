@@ -26702,43 +26702,6 @@ int lua_ax_ui_RichElement_setColor(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_ui_RichElement_constructor(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::ui::RichElement* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElement_constructor'", nullptr);
-            return 0;
-        }
-        cobj = new ax::ui::RichElement();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"axui.RichElement");
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElement:RichElement",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichElement_constructor'.",&tolua_err);
-#endif
-
-    return 0;
-}
-
 static int lua_ax_ui_RichElement_finalize(lua_State* tolua_S)
 {
     printf("luabindings: finalizing LUA object (RichElement)");
@@ -26751,7 +26714,6 @@ int lua_register_ax_ui_RichElement(lua_State* tolua_S)
     tolua_cclass(tolua_S,"RichElement","axui.RichElement","ax.Ref",nullptr);
 
     tolua_beginmodule(tolua_S,"RichElement");
-        tolua_function(tolua_S,"new",lua_ax_ui_RichElement_constructor);
         tolua_function(tolua_S,"init",lua_ax_ui_RichElement_init);
         tolua_function(tolua_S,"equalType",lua_ax_ui_RichElement_equalType);
         tolua_function(tolua_S,"setColor",lua_ax_ui_RichElement_setColor);
@@ -28196,7 +28158,6 @@ int lua_ax_ui_RichElementNewLine_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -28205,26 +28166,50 @@ int lua_ax_ui_RichElementNewLine_create(lua_State* tolua_S)
     if (!tolua_isusertable(tolua_S,1,"axui.RichElementNewLine",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    argc = lua_gettop(tolua_S) - 1;
+    argc = lua_gettop(tolua_S)-1;
 
-    if (argc == 3)
+    do 
     {
-        int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementNewLine:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementNewLine:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementNewLine:create");
-        if(!ok)
+        if (argc == 4)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementNewLine_create'", nullptr);
-            return 0;
+            int arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementNewLine:create");
+            if (!ok) { break; }
+            int arg1;
+            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.RichElementNewLine:create");
+            if (!ok) { break; }
+            ax::Color3B arg2;
+            ok &= luaval_to_color3b(tolua_S, 4, &arg2, "axui.RichElementNewLine:create");
+            if (!ok) { break; }
+            uint16_t arg3;
+            ok &= luaval_to_uint16(tolua_S, 5,&arg3, "axui.RichElementNewLine:create");
+            if (!ok) { break; }
+            ax::ui::RichElementNewLine* ret = ax::ui::RichElementNewLine::create(arg0, arg1, arg2, arg3);
+            object_to_luaval<ax::ui::RichElementNewLine>(tolua_S, "axui.RichElementNewLine",(ax::ui::RichElementNewLine*)ret);
+            return 1;
         }
-        auto&& ret = ax::ui::RichElementNewLine::create(arg0, arg1, arg2);
-        object_to_luaval<ax::ui::RichElementNewLine>(tolua_S, "axui.RichElementNewLine",(ax::ui::RichElementNewLine*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichElementNewLine:create",argc, 3);
+    } while (0);
+    ok  = true;
+    do 
+    {
+        if (argc == 3)
+        {
+            int arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementNewLine:create");
+            if (!ok) { break; }
+            ax::Color3B arg1;
+            ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementNewLine:create");
+            if (!ok) { break; }
+            uint16_t arg2;
+            ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementNewLine:create");
+            if (!ok) { break; }
+            ax::ui::RichElementNewLine* ret = ax::ui::RichElementNewLine::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::RichElementNewLine>(tolua_S, "axui.RichElementNewLine",(ax::ui::RichElementNewLine*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "axui.RichElementNewLine:create",argc, 3);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
@@ -28253,6 +28238,23 @@ int lua_ax_ui_RichElementNewLine_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ui::RichElementNewLine();
+        cobj->autorelease();
+        int ID =  (int)cobj->_ID ;
+        int* luaID =  &cobj->_luaID ;
+        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"axui.RichElementNewLine");
+        return 1;
+    }
+    if (argc == 1) 
+    {
+        int arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementNewLine:RichElementNewLine");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementNewLine_constructor'", nullptr);
+            return 0;
+        }
+        cobj = new ax::ui::RichElementNewLine(arg0);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
