@@ -35,7 +35,8 @@
 param(
     [switch]$configOnly,
     [switch]$forceConfig,
-    [switch]$setupOnly
+    [switch]$setupOnly,
+    $jobCount = -1
 )
 
 $options = @{p = $null; a = $null; d = $null; cc = $null; xc = @(); xb = @(); sdk = $null; dll = $false }
@@ -207,7 +208,7 @@ if ($setupOnly) {
     $forward_args['setupOnly'] = $true
 }
 
-. $b1k_script @b1k_args @forward_args
+. $b1k_script @b1k_args @forward_args -j $jobCount
 
 if (!$configOnly) {
     $b1k.pause('Build done')
