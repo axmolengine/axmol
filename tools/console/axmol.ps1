@@ -1,7 +1,6 @@
 param(
     [switch]$help,
-    [switch]$uninst,
-    $jobCount = -1
+    [switch]$uninst
 )
 # pwsh function alias
 function println($message) { Write-Host "axmol: $message" }
@@ -87,10 +86,10 @@ function axmol_build() {
     $build_script = Join-Path $AX_ROOT 'build.ps1'
     if ("$args".IndexOf('-d') -ne -1) {
         # have proj dir
-        . $build_script @sub_args -j $jobCount
+        . $build_script @sub_args
     }
     else {
-        . $build_script @sub_args -j $jobCount -d (Get-Location).Path
+        . $build_script @sub_args -d (Get-Location).Path
     }
 }
 
