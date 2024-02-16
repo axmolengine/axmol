@@ -924,7 +924,7 @@ private:
 
     // Trim trailing whitespace if flag is set; leading was already trimmed by whitespace skip after
     // >
-    if (Flags & parse_trim_whitespace)
+    if (Flags & parse_trim_whitespace && !(Flags & parse_html_entity_translation))
     {
       if (Flags & parse_normalize_whitespace)
       {
