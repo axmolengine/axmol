@@ -203,6 +203,7 @@ $manifest = @{
     gcc          = '9.0.0+';
     cmake        = '3.28.1+';
     ninja        = '1.11.1+';
+    python       = '3.9.0+';
     jdk          = '17.0.3+';
     emsdk        = '3.1.51';
     cmdlinetools = '7.0+'; # android cmdlinetools
@@ -305,6 +306,18 @@ function eval($str, $raw = $false) {
     }
 }
 
+function create_symlink($sourcePath, $destPath) {
+    # try link ninja exist cmake bin directory
+    & "$myRoot\fsync.ps1" -s $sourcePath -d $destPath -l $true 2>$null
+
+    if (!$? -and $IsWin) {
+        # try runas admin again
+        $mklink_args = "-Command ""& ""$myRoot\fsync.ps1"" -s '$sourcePath' -d '$destPath' -l `$true 2>`$null"""
+        Write-Host "mklink_args={$mklink_args}"
+        Start-Process powershell -ArgumentList $mklink_args -WindowStyle Hidden -Wait -Verb runas
+    }
+}
+
 $darwin_sim_suffix = ''
 if ($TARGET_OS.EndsWith('-sim')) {
     $TARGET_OS = $TARGET_OS.TrimEnd('-sim')
@@ -325,6 +338,9 @@ $Global:is_darwin_family = $Global:is_mac -or $Global:is_darwin_embed_family
 $Global:is_gh_act = "$env:GITHUB_ACTIONS" -eq 'true'
 
 $Script:cmake_ver = ''
+
+$Script:use_msvcr14x = $null
+$null = [bool]::TryParse($env:use_msvcr14x, [ref]$Script:use_msvcr14x)
 
 if (!$is_wasm) {
     $TARGET_CPU = $options.a
@@ -653,6 +669,25 @@ function setup_nuget() {
     return $nuget_prog
 }
 
+# setup python3, not install automatically
+# ensure python3.exe is python.exe to solve unexpected error, i.e. 
+# google gclient require python3.exe, on windows 10/11 will locate to
+# a dummy C:\Users\halx99\AppData\Local\Microsoft\WindowsApps\python3.exe cause
+# shit strange error
+function setup_python3() {
+    if (!$manifest['python']) { return $null }
+    $python_prog, $python_ver = find_prog -name 'python'
+    if (!$python_prog) {
+        throw "python $($manifest['python']) required!"
+    }
+
+    $python3_prog, $_ = find_prog -name 'python' -cmd 'python3' -silent $true
+    if (!$python3_prog) {
+        $python3_prog = Join-Path (Split-Path $python_prog -Parent) (Split-Path $python_prog -Leaf).Replace('python', 'python3')
+        create_symlink $python_prog $python3_prog
+    }
+}
+
 # setup glslcc, not add to path
 function setup_glslcc() {
     if (!$manifest['glslcc']) { return $null }
@@ -786,14 +821,7 @@ function ensure_cmake_ninja($cmake_prog, $ninja_prog) {
     if (!$cmake_ninja_prog) {
         $ninja_symlink_target = Join-Path $cmake_bin (Split-Path $ninja_prog -Leaf)
         # try link ninja exist cmake bin directory
-        & "$myRoot\fsync.ps1" -s $ninja_prog -d $ninja_symlink_target -l $true 2>$null
-
-        if (!$? -and $IsWin) {
-            # try runas admin again
-            $mklink_args = "-Command ""& ""$myRoot\fsync.ps1"" -s '$ninja_prog' -d '$ninja_symlink_target' -l `$true 2>`$null"""
-            Write-Host "mklink_args={$mklink_args}"
-            Start-Process powershell -ArgumentList $mklink_args -WindowStyle Hidden -Wait -Verb runas
-        }
+        create_symlink $ninja_prog $ninja_symlink_target
     }
     return $?
 }
@@ -1127,18 +1155,6 @@ function setup_msvc() {
             Import-Module "$VS_PATH\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
             Enter-VsDevShell -VsInstanceId $VS_INST.instanceId -SkipAutomaticLocation -DevCmdArguments "-arch=$target_cpu -host_arch=x64 -no_logo"
 
-            # msvc14x support
-            $use_msvcr14x = $null
-            if ([bool]::TryParse($env:use_msvcr14x, [ref]$use_msvcr14x) -and $use_msvcr14x) {
-                if ("$env:LIB".IndexOf('msvcr14x') -eq -1) {
-                    $msvcr14x_root = $env:msvcr14x_ROOT
-                    $env:Platform = $target_cpu
-                    Invoke-Expression -Command "$msvcr14x_root\msvcr14x_nmake.ps1"
-                }
-            
-                println "LIB=$env:LIB"
-            }
-
             $cl_prog, $cl_ver = find_prog -name 'msvc' -cmd 'cl' -silent $true -usefv $true
             $b1k.println("Using msvc: $cl_prog, version: $cl_ver")
         }
@@ -1146,10 +1162,23 @@ function setup_msvc() {
             throw "Visual Studio not installed!"
         }
     }
+
+    # msvc14x support
+    if ($Script:use_msvcr14x) {
+        if ("$env:LIB".IndexOf('msvcr14x') -eq -1) {
+            $msvcr14x_root = $env:msvcr14x_ROOT
+            $env:Platform = $target_cpu
+            Invoke-Expression -Command "$msvcr14x_root\msvcr14x_nmake.ps1"
+        }
+
+        println "LIB=$env:LIB"
+    }
 }
 
 # google gn build system, current windows only for build angleproject/dawn on windows
 function setup_gclient() {
+    $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding
+    
     if (!$ninja_prog) {
         $ninja_prog = setup_ninja
     }
@@ -1157,6 +1186,8 @@ function setup_gclient() {
     if ($Global:is_win_family) {
         setup_msvc
     }
+
+    setup_python3
 
     # setup gclient tool
     # download depot_tools
@@ -1478,15 +1509,15 @@ $is_host_target = $Global:is_win32 -or $Global:is_linux -or $Global:is_mac
 if (!$setupOnly) {
     $BUILD_DIR = $null
 
-    function resolve_out_dir($prefix, $category) {
+    function resolve_out_dir($prefix, $sub_prefix) {
         if (!$prefix) {
-            $prefix = $category
+            $prefix = $sub_prefix
         }
         if ($is_host_target) {
-            $out_dir = "${prefix}_${TARGET_CPU}"
+            $out_dir = "${prefix}${TARGET_CPU}"
         }
         else {
-            $out_dir = "${prefix}_${TARGET_OS}"
+            $out_dir = "${prefix}${TARGET_OS}"
             if ($TARGET_CPU -ne '*') {
                 $out_dir += "_$TARGET_CPU"
             }
@@ -1595,10 +1626,10 @@ if (!$setupOnly) {
             }
             
             if (!$BUILD_DIR) {
-                $BUILD_DIR = resolve_out_dir $cmake_build_prefix 'build'
+                $BUILD_DIR = resolve_out_dir $cmake_build_prefix 'build_'
             }
             if (!$INST_DIR) {
-                $INST_DIR = resolve_out_dir $cmake_install_prefix 'install'
+                $INST_DIR = resolve_out_dir $cmake_install_prefix 'install_'
                 $CONFIG_ALL_OPTIONS += "-DCMAKE_INSTALL_PREFIX=$INST_DIR"
             }
 
@@ -1735,9 +1766,13 @@ if (!$setupOnly) {
             $gn_buildargs_overrides += 'ios_enable_code_signing=false'
         }
 
+        if ($Script:use_msvcr14x) {
+            $gn_buildargs_overrides += 'use_msvcr14x=true'
+        }
+
         Write-Output ("gn_buildargs_overrides=$gn_buildargs_overrides, Count={0}" -f $gn_buildargs_overrides.Count)
         
-        $BUILD_DIR = resolve_out_dir $null 'build'
+        $BUILD_DIR = resolve_out_dir $null 'out/'
 
         if ($rebuild) {
             $b1k.rmdirs($BUILD_DIR)
