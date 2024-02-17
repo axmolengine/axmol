@@ -894,8 +894,9 @@ void GLViewImpl::getWindowSize(int* width, int* height)
 
 void GLViewImpl::updateWindowSize()
 {
+    // !!!Note: axmol frameSize should be glfwWindowSize/frameZoomFactor aka screenSize
     int w = 0, h = 0;
-    glfwGetFramebufferSize(_mainWindow, &w, &h);
+    glfwGetWindowSize(_mainWindow, &w, &h);
     int frameWidth  = w / _frameZoomFactor;
     int frameHeight = h / _frameZoomFactor;
     setFrameSize(frameWidth, frameHeight);
