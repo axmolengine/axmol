@@ -77,7 +77,7 @@
 
 ## Glad
 - [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
-- Version: 2.0.4
+- Version: 2.0.5
 - License: MIT
 
 ## glfw
@@ -107,7 +107,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 9.1.3
+- Version: 9.2.0
 - License: MIT
 
 ## lua

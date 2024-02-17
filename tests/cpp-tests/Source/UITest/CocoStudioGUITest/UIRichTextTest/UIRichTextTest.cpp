@@ -1,5 +1,6 @@
 /****************************************************************************
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -50,6 +51,8 @@ UIRichTextTests::UIRichTextTests()
     ADD_TEST_CASE(UIRichTextXMLExtend);
     ADD_TEST_CASE(UIRichTextXMLSpace);
     ADD_TEST_CASE(UIRichTextNewline);
+    ADD_TEST_CASE(UIRichTextHeaders);
+    ADD_TEST_CASE(UIRichTextParagraph);
 }
 
 //
@@ -958,6 +961,86 @@ bool UIRichTextNewline::init()
         _richText->pushBackElement(textElement);
         _richText->ignoreContentAdaptWithSize(false);
         _richText->setContentSize(_defaultContentSize);
+        _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
+        _richText->setLocalZOrder(10);
+
+        _widget->addChild(_richText);
+
+        // test remove all children, this call won't effect the test
+        _richText->removeAllChildren();
+
+        return true;
+    }
+    return false;
+}
+
+bool UIRichTextHeaders::init()
+{
+    if (UIRichTextTestBase::init())
+    {
+        auto& widgetSize = _widget->getContentSize();
+
+        // Add the alert
+        Text* alert = Text::create("Header Tags", "fonts/Marker Felt.ttf", 30);
+        alert->setColor(Color3B(159, 168, 176));
+        alert->setPosition(
+            Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
+        _widget->addChild(alert);
+
+        createButtonPanel();
+
+#ifdef AX_PLATFORM_PC
+        _defaultContentSize = Size(290, 290);
+#endif
+
+        // RichText
+        _richText = RichText::createWithXML(
+            R"(<h1 face="fonts/arial.ttf">h1. HEADING</h1><h2 face="fonts/Marker Felt.ttf">h2. HEADING</h2><h3 face="fonts/American Typewriter.ttf">h3. HEADING</h3><h4>h4. HEADING</h4><h5>h5. HEADING</h5><h6>h6. HEADING</h6>)");
+        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setContentSize(_defaultContentSize);
+
+        _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
+        _richText->setLocalZOrder(10);
+
+        _widget->addChild(_richText);
+
+        // test remove all children, this call won't effect the test
+        _richText->removeAllChildren();
+
+        return true;
+    }
+    return false;
+}
+
+bool UIRichTextParagraph::init()
+{
+    if (UIRichTextTestBase::init())
+    {
+        auto& widgetSize = _widget->getContentSize();
+
+        // Add the alert
+        Text* alert = Text::create("Paragraph Tag", "fonts/Marker Felt.ttf", 30);
+        alert->setColor(Color3B(159, 168, 176));
+        alert->setPosition(
+            Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
+        _widget->addChild(alert);
+
+        createButtonPanel();
+
+#ifdef AX_PLATFORM_PC
+        _defaultContentSize = Size(290, 290);
+#endif
+
+        // RichText
+        _richText = RichText::createWithXML(
+            "<p><b>Paragraph1: </b>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et "
+            "dolore magna aliqua. Feugiat scelerisque varius morbi enim nunc. Dis parturient montes nascetur ridiculus "
+            "mus mauris vitae ultricies.</p><p><b>Paragraph2: </b>Lectus urna duis convallis convallis tellus id interdum velit. "
+            "Convallis a cras semper auctor neque vitae tempus quam pellentesque. Congue quisque egestas diam in arcu "
+            "cursus euismod quis.</p>");
+        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setContentSize(_defaultContentSize);
+
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
         _richText->setLocalZOrder(10);
 

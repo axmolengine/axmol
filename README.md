@@ -11,7 +11,7 @@ Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more 
 ***
 
 [![Latest Release](https://img.shields.io/github/v/release/axmolengine/axmol?include_prereleases&label=release)](https://github.com/axmolengine/axmol/releases)
-[![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axmolengine/axmol/blob/master/LICENSE)
+[![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axmolengine/axmol/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axmolengine/axmol&amp;utm_campaign=Badge_Grade)
 [![cxxstd](https://img.shields.io/badge/cxxstd-c++20-8A2BE2.svg)](https://github.com/axmolengine/axmol)  
 
@@ -33,7 +33,7 @@ Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more 
 ## Building
 
 * [Download the latest release](https://github.com/axmolengine/axmol/releases) / [Mirror](https://gitee.com/simdsoft/axmol)
-* [How to install](https://github.com/axmolengine/axmol/blob/dev/docs/DevSetup.md)
+* [How to install](docs/DevSetup.md)
 
 If you have a Cocos2d-x project, migrating to Axmol Engine is easy. We have prepared a [Migration Guide](https://github.com/axmolengine/axmol/wiki/Cocos2d%E2%80%90x-migration-guide).
 
@@ -69,7 +69,7 @@ Axmol Engine has iterated and improved over the Cocos2d-x v4.0 base. Now is fast
 **Architectures**:
 * iOS (x64, arm64)
 * Android (x86, x64, armv7, arm64)
-* Windows (x86, x64),
+* Windows (x86, x64)
 * Linux (x64)
 * OSX (x64, arm64)
 * UWP (x64, arm64)
@@ -134,8 +134,8 @@ See the [Milestones](https://github.com/axmolengine/axmol/milestones) for planne
 How to contribute:
 
 * Suggestions, bug fixes, and improvements are highly appreciated!
-  - [Instructions for contributing](https://github.com/axmolengine/axmol/blob/d8d3137515a73e5c2395cae04d6b5ef6b1cc6777/CONTRIBUTING.md)
-  - [Collaborators list](https://github.com/axmolengine/axmol/blob/dev/AUTHORS.md)
+  - [Instructions for contributing](CONTRIBUTING.md)
+  - [Collaborators list](AUTHORS.md)
 * Please do not forget to add the topic `axmol` and `axmolengine` to any related repository you create!
 * Adding a star on GitHub will help Axmol grow as well. Thank you!
 
