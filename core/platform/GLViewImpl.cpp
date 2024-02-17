@@ -75,9 +75,7 @@ THE SOFTWARE.
 #    endif
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
-
-#else
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_WASM)
 #    include <GLFW/glfw3native.h>
 #endif
 
@@ -545,7 +543,12 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
      *
      *  see declaration glfwCreateWindow
      */
+#if !defined(__APPLE__)
     applyWindowSize(windowSize.width, windowSize.height);
+#else
+    // sense retina
+    setFrameSize(rect.size.width, rect.size.height);
+#endif
 
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
     glfwSetCursorPosCallback(_mainWindow, GLFWEventHandler::onGLFWMouseMoveCallBack);
