@@ -92,6 +92,20 @@ private:
     ax::Label* label2;
 };
 
+class WindowTestClose : public WindowTest
+{
+public:
+    CREATE_FUNC(WindowTestClose);
+    virtual void onEnter() override;
+    virtual void onExit() override;
+    virtual std::string subtitle() const override;
+
+    void onWindowClose(ax::EventCustom* e);
+
+private:
+    ax::Label* label;
+};
+
 #endif /* __WINDOWTEST_H__ */
 
 #endif

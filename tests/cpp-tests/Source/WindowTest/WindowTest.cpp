@@ -36,6 +36,7 @@ WindowTests::WindowTests()
     ADD_TEST_CASE(WindowTestFullscreen2);
     ADD_TEST_CASE(WindowTestFullscreen3);
     ADD_TEST_CASE(WindowTestResizedAndPositioned);
+    ADD_TEST_CASE(WindowTestClose);
 }
 
 std::string WindowTest::title() const
@@ -163,6 +164,63 @@ void WindowTestResizedAndPositioned::onWindowResized(EventCustom* e)
         return;
 
     label2->setString(StringUtils::format("size : %d, %d", (int)size->width, (int)size->height));
+}
+
+void WindowTestClose::onEnter()
+{
+    WindowTest::onEnter();
+
+    label = nullptr;
+
+    _director->getEventDispatcher()->addCustomEventListener(GLViewImpl::EVENT_WINDOW_CLOSE,
+                                                            AX_CALLBACK_1(WindowTestClose::onWindowClose, this));
+}
+
+void WindowTestClose::onExit()
+{
+    WindowTest::onExit();
+    _director->getEventDispatcher()->removeCustomEventListeners(GLViewImpl::EVENT_WINDOW_CLOSE);
+}
+
+std::string WindowTestClose::subtitle() const
+{
+    return "Window close callback test";
+}
+
+void WindowTestClose::onWindowClose(EventCustom* e)
+{
+    auto isClose = static_cast<bool*>(e->getUserData());
+    if (isClose == nullptr)
+        return;
+
+    // false prevents the window from closing 
+    *isClose = false;
+
+    this->stopActionByTag(1);
+    if (label != nullptr)
+    {
+        label->removeFromParent();
+        label = nullptr;
+    }
+
+    auto s = _director->getWinSize();
+    label  = Label::createWithTTF(StringUtils::format("Window close button callback!"), "fonts/Marker Felt.ttf", 16.0f);
+    label->setPosition(s.width / 2, s.height / 2);
+    addChild(label);
+
+    auto delay    = DelayTime::create(3.0);
+    auto callFunc = CallFunc::create(
+        [this]()
+        {
+            if (label != nullptr)
+            {
+                label->removeFromParent();
+                label = nullptr;
+            }
+        });
+    auto sequence = Sequence::create(delay, callFunc, nullptr);
+    sequence->setTag(1);
+    this->runAction(sequence);
 }
 
 #endif

@@ -171,6 +171,7 @@ protected:
     void onGLFWWindowSizeCallback(GLFWwindow* window, int width, int height);
     void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified);
     void onGLFWWindowFocusCallback(GLFWwindow* window, int focused);
+    void onGLFWWindowCloseCallback(GLFWwindow* window);
 
     bool _isTouchDevice = false;
     bool _captured;
@@ -200,6 +201,7 @@ public:
     static const std::string EVENT_WINDOW_RESIZED;
     static const std::string EVENT_WINDOW_FOCUSED;
     static const std::string EVENT_WINDOW_UNFOCUSED;
+    static const std::string EVENT_WINDOW_CLOSE;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(GLViewImpl);
