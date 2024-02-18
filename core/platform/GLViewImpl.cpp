@@ -544,7 +544,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
      *  see declaration glfwCreateWindow
      */
 #if !defined(__APPLE__)
-    applyWindowSize(windowSize.width, windowSize.height);
+    handleWindowSize(windowSize.width, windowSize.height);
 #else
     // sense retina
     setFrameSize(rect.size.width, rect.size.height);
@@ -908,7 +908,7 @@ Vec2 GLViewImpl::getMonitorSize() const
     return Vec2::ZERO;
 }
 
-void GLViewImpl::applyWindowSize(float w, float h)
+void GLViewImpl::handleWindowSize(float w, float h)
 {
     /*
     * x-studio spec, fix view size incorrect when window size changed
@@ -1244,7 +1244,7 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
-        applyWindowSize(w, h);
+        handleWindowSize(w, h);
 
 #if defined(AX_USE_METAL)
         // update metal attachment texture size.
