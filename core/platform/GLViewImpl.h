@@ -150,9 +150,11 @@ protected:
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)  // Windows, Linux: use glad to loadGL
     bool loadGL();
 #endif
-    /* update frame layout when enter/exit full screen mode */
-    void updateWindowSize();
 
+    /* invoke when window size changed */
+    void applyWindowSize(float w, float h);
+
+    /* update frame size when user set zoomFactor, retina, frameSize */
     void updateFrameSize();
 
     // GLFW callbacks
