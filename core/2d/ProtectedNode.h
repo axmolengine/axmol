@@ -94,6 +94,15 @@ public:
      */
     virtual Node* getProtectedChildByTag(int tag);
 
+    /**
+     * Gets a child from the container with its name.
+     *
+     * @param name An identifier to find the child node.
+     *
+     * @return a Node object whose name equals to the input parameter.
+     */
+    virtual Node* getProtectedChildByName(std::string_view name);
+
     ////// REMOVES //////
 
     /**

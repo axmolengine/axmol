@@ -151,11 +151,12 @@ RichElementText* RichElementText::create(int tag,
                                          const Color3B& shadowColor,
                                          const Vec2& shadowOffset,
                                          int shadowBlurRadius,
-                                         const Color3B& glowColor)
+                                         const Color3B& glowColor,
+                                         std::string_view id)
 {
     RichElementText* element = new RichElementText();
     if (element->init(tag, color, opacity, text, fontName, fontSize, flags, url, outlineColor, outlineSize, shadowColor,
-                      shadowOffset, shadowBlurRadius, glowColor))
+                      shadowOffset, shadowBlurRadius, glowColor, id))
     {
         element->autorelease();
         return element;
@@ -177,7 +178,8 @@ bool RichElementText::init(int tag,
                            const Color3B& shadowColor,
                            const Vec2& shadowOffset,
                            int shadowBlurRadius,
-                           const Color3B& glowColor)
+                           const Color3B& glowColor,
+                           std::string_view id)
 {
     if (RichElement::init(tag, color, opacity))
     {
@@ -192,6 +194,7 @@ bool RichElementText::init(int tag,
         _shadowOffset     = shadowOffset;
         _shadowBlurRadius = shadowBlurRadius;
         _glowColor        = glowColor;
+        _id             = id;
         return true;
     }
     return false;
@@ -202,10 +205,11 @@ RichElementImage* RichElementImage::create(int tag,
                                            uint8_t opacity,
                                            std::string_view filePath,
                                            std::string_view url,
-                                           Widget::TextureResType texType)
+                                           Widget::TextureResType texType,
+                                           std::string_view id)
 {
     RichElementImage* element = new RichElementImage();
-    if (element->init(tag, color, opacity, filePath, url, texType))
+    if (element->init(tag, color, opacity, filePath, url, texType, id))
     {
         element->autorelease();
         return element;
@@ -219,7 +223,8 @@ bool RichElementImage::init(int tag,
                             uint8_t opacity,
                             std::string_view filePath,
                             std::string_view url,
-                            Widget::TextureResType texType)
+                            Widget::TextureResType texType,
+                            std::string_view id)
 {
     if (RichElement::init(tag, color, opacity))
     {
@@ -230,6 +235,7 @@ bool RichElementImage::init(int tag,
         _scaleY      = 1.0f;
         _url         = url;
         _textureType = texType;
+        _id          = id;
         return true;
     }
     return false;
@@ -250,13 +256,19 @@ void RichElementImage::setUrl(std::string_view url)
     _url = url;
 }
 
+void RichElementImage::setId(std::string_view id)
+{
+    _id = id;
+}
+
 RichElementCustomNode* RichElementCustomNode::create(int tag,
                                                      const Color3B& color,
                                                      uint8_t opacity,
-                                                     ax::Node* customNode)
+                                                     ax::Node* customNode,
+                                                     std::string_view id)
 {
     RichElementCustomNode* element = new RichElementCustomNode();
-    if (element->init(tag, color, opacity, customNode))
+    if (element->init(tag, color, opacity, customNode, id))
     {
         element->autorelease();
         return element;
@@ -265,11 +277,16 @@ RichElementCustomNode* RichElementCustomNode::create(int tag,
     return nullptr;
 }
 
-bool RichElementCustomNode::init(int tag, const Color3B& color, uint8_t opacity, ax::Node* customNode)
+bool RichElementCustomNode::init(int tag,
+                                 const Color3B& color,
+                                 uint8_t opacity,
+                                 ax::Node* customNode,
+                                 std::string_view id)
 {
     if (RichElement::init(tag, color, opacity))
     {
         _customNode = customNode;
+        _id         = id;
         _customNode->retain();
         return true;
     }
@@ -339,6 +356,7 @@ public:
         Vec2 shadowOffset;    /*!< shadow effect offset value */
         int shadowBlurRadius; /*!< the shadow effect blur radius */
         Color3B glowColor;    /*!< the glow effect color value */
+        std::string name;     /*!< the name of this element */
 
         void setColor(const Color3B& acolor)
         {
@@ -397,6 +415,8 @@ public:
     std::tuple<bool, Color3B, Vec2, int> getShadow() const;
 
     std::tuple<bool, Color3B> getGlow() const;
+
+    std::string getName() const;
 
     void startElement(void* ctx, const char* name, const char** atts) override;
 
@@ -569,6 +589,11 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
 
             elementImg->setScaleX(scaleX);
             elementImg->setScaleY(scaleY);
+
+            if (tagAttrValueMap.find("id") != tagAttrValueMap.end())
+            {
+                elementImg->setId(tagAttrValueMap.at("id").asString());
+            }
         }
         return make_pair(ValueMap(), elementImg);
     });
@@ -581,6 +606,12 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         {
             attrValueMap[RichText::KEY_URL] = tagAttrValueMap.at("href").asString();
         }
+
+        if (tagAttrValueMap.find("id") != tagAttrValueMap.end())
+        {
+            attrValueMap[RichText::KEY_ID] = tagAttrValueMap.at("id").asString();
+        }
+
         return make_pair(attrValueMap, nullptr);
     });
 
@@ -589,8 +620,33 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         return make_pair(ValueMap(), richElement);
     });
 
-    MyXMLVisitor::setTagDescription("p", false, nullptr,
-                                    [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
+    MyXMLVisitor::setTagDescription(
+        "p", true,
+        [](const ValueMap& tagAttrValueMap) -> std::pair<ValueMap, RichElement*> {
+            ValueMap attrValueMap;
+            if (tagAttrValueMap.find("size") != tagAttrValueMap.end())
+            {
+                attrValueMap[RichText::KEY_FONT_SIZE] = tagAttrValueMap.at("size").asString();
+            }
+
+            if (tagAttrValueMap.find("color") != tagAttrValueMap.end())
+            {
+                attrValueMap[RichText::KEY_FONT_COLOR_STRING] = tagAttrValueMap.at("color").asString();
+            }
+
+            if (tagAttrValueMap.find("face") != tagAttrValueMap.end())
+            {
+                attrValueMap[RichText::KEY_FONT_FACE] = tagAttrValueMap.at("face").asString();
+            }
+
+            if (tagAttrValueMap.find("id") != tagAttrValueMap.end())
+            {
+                attrValueMap[RichText::KEY_ID] = tagAttrValueMap.at("id").asString();
+            }
+
+            return make_pair(attrValueMap, nullptr);
+        },
+        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     constexpr auto headerTagEnterHandler = [](const ValueMap& tagAttrValueMap,
                                               float defaultFontSize) -> std::pair<ValueMap, RichElement*> {
@@ -615,6 +671,11 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         }
 
         attrValueMap[RichText::KEY_TEXT_BOLD] = true;
+
+        if (tagAttrValueMap.find("id") != tagAttrValueMap.end())
+        {
+            attrValueMap[RichText::KEY_ID] = tagAttrValueMap.at("id").asString();
+        }
 
         return make_pair(attrValueMap, nullptr);
     };
@@ -817,6 +878,16 @@ std::tuple<bool, Color3B> MyXMLVisitor::getGlow() const
     return std::make_tuple(false, Color3B::WHITE);
 }
 
+std::string MyXMLVisitor::getName() const
+{
+    for (auto i = _fontElements.rbegin(), iRend = _fontElements.rend(); i != iRend; ++i)
+    {
+        if (!i->name.empty())
+            return i->name;
+    }
+    return "";
+}
+
 void MyXMLVisitor::startElement(void* /*ctx*/, const char* elementName, const char** atts)
 {
     auto it = _tagTables.find(elementName);
@@ -960,7 +1031,49 @@ void MyXMLVisitor::startElement(void* /*ctx*/, const char* elementName, const ch
                         }
                     }
                 }
-
+                if (attrValueMap.find(RichText::KEY_URL) != attrValueMap.end())
+                {
+                    attributes.url = attrValueMap.at(RichText::KEY_URL).asString();
+                    attributes.setColor(_richText->getAnchorFontColor3B());
+                    if (_richText->isAnchorTextBoldEnabled())
+                    {
+                        attributes.bold = true;
+                    }
+                    if (_richText->isAnchorTextItalicEnabled())
+                    {
+                        attributes.italics = true;
+                    }
+                    if (_richText->isAnchorTextUnderlineEnabled())
+                    {
+                        attributes.line = StyleLine::UNDERLINE;
+                    }
+                    if (_richText->isAnchorTextDelEnabled())
+                    {
+                        attributes.line = StyleLine::STRIKETHROUGH;
+                    }
+                    if (_richText->isAnchorTextOutlineEnabled())
+                    {
+                        attributes.effect       = StyleEffect::OUTLINE;
+                        attributes.outlineColor = _richText->getAnchorTextOutlineColor3B();
+                        attributes.outlineSize  = _richText->getAnchorTextOutlineSize();
+                    }
+                    if (_richText->isAnchorTextShadowEnabled())
+                    {
+                        attributes.effect           = StyleEffect::SHADOW;
+                        attributes.shadowColor      = _richText->getAnchorTextShadowColor3B();
+                        attributes.shadowOffset     = _richText->getAnchorTextShadowOffset();
+                        attributes.shadowBlurRadius = _richText->getAnchorTextShadowBlurRadius();
+                    }
+                    if (_richText->isAnchorTextGlowEnabled())
+                    {
+                        attributes.effect    = StyleEffect::GLOW;
+                        attributes.glowColor = _richText->getAnchorTextGlowColor3B();
+                    }
+                }
+                if (attrValueMap.find(RichText::KEY_ID) != attrValueMap.end())
+                {
+                    attributes.name = attrValueMap.at(RichText::KEY_ID).asString();
+                }
                 pushBackFontElement(attributes);
             }
             if (richElement)
@@ -1017,6 +1130,7 @@ void MyXMLVisitor::textHandler(void* /*ctx*/, const char* str, size_t len)
     auto outline       = getOutline();
     auto shadow        = getShadow();
     auto glow          = getGlow();
+    auto name          = getName();
 
     uint32_t flags = 0;
     if (italics)
@@ -1038,7 +1152,7 @@ void MyXMLVisitor::textHandler(void* /*ctx*/, const char* str, size_t len)
 
     auto element = RichElementText::create(0, color, 255, text, face, fontSize, flags, url, std::get<1>(outline),
                                            std::get<2>(outline), std::get<1>(shadow), std::get<2>(shadow),
-                                           std::get<3>(shadow), std::get<1>(glow));
+                                           std::get<3>(shadow), std::get<1>(glow), name);
     _richText->pushBackElement(element);
 }
 
@@ -1125,6 +1239,7 @@ const std::string RichText::KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH("KEY_ANCHOR_TEXT
 const std::string RichText::KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT("KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT");
 const std::string RichText::KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS("KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS");
 const std::string RichText::KEY_ANCHOR_TEXT_GLOW_COLOR("KEY_ANCHOR_TEXT_GLOW_COLOR");
+const std::string RichText::KEY_ID("KEY_ID");
 
 RichText::RichText() : _formatTextDirty(true), _leftSpaceWidth(0.0f)
 {
@@ -1702,6 +1817,9 @@ void RichText::formatText(bool force)
                         label->enableGlow(Color4B(elmtText->_glowColor));
                     }
                     label->setTextColor(Color4B(elmtText->_color));
+
+                    label->setName(elmtText->_id);
+
                     elementRenderer = label;
                     break;
                 }
@@ -1732,6 +1850,7 @@ void RichText::formatText(bool force)
                             UrlTouchListenerComponent::create(elementRenderer, elmtImage->_url,
                                                       std::bind(&RichText::openUrl, this, std::placeholders::_1)));
                         elementRenderer->setColor(element->_color);
+                        elementRenderer->setName(elmtImage->_id);
                     }
                     break;
                 }
@@ -1774,7 +1893,7 @@ void RichText::formatText(bool force)
                     handleTextRenderer(elmtText->_text, elmtText->_fontName, elmtText->_fontSize, elmtText->_color,
                                        elmtText->_opacity, elmtText->_flags, elmtText->_url, elmtText->_outlineColor,
                                        elmtText->_outlineSize, elmtText->_shadowColor, elmtText->_shadowOffset,
-                                       elmtText->_shadowBlurRadius, elmtText->_glowColor);
+                                       elmtText->_shadowBlurRadius, elmtText->_glowColor, elmtText->_id);
                     break;
                 }
                 case RichElement::Type::IMAGE:
@@ -1782,13 +1901,13 @@ void RichText::formatText(bool force)
                     RichElementImage* elmtImage = static_cast<RichElementImage*>(element);
                     handleImageRenderer(elmtImage->_filePath, elmtImage->_textureType, elmtImage->_color,
                                         elmtImage->_opacity, elmtImage->_width, elmtImage->_height, elmtImage->_url,
-                                        elmtImage->_scaleX, elmtImage->_scaleY);
+                                        elmtImage->_scaleX, elmtImage->_scaleY, elmtImage->_id);
                     break;
                 }
                 case RichElement::Type::CUSTOM:
                 {
                     RichElementCustomNode* elmtCustom = static_cast<RichElementCustomNode*>(element);
-                    handleCustomRenderer(elmtCustom->_customNode);
+                    handleCustomRenderer(elmtCustom->_customNode, elmtCustom->_id);
                     break;
                 }
                 case RichElement::Type::NEWLINE:
@@ -1972,7 +2091,8 @@ void RichText::handleTextRenderer(std::string_view text,
                                   const Color3B& shadowColor,
                                   const Vec2& shadowOffset,
                                   int shadowBlurRadius,
-                                  const Color3B& glowColor)
+                                  const Color3B& glowColor,
+                                  std::string_view id)
 {
     bool fileExist              = FileUtils::getInstance()->isFileExist(fontName);
     RichText::WrapMode wrapMode = static_cast<RichText::WrapMode>(_defaults.at(KEY_WRAP_MODE).asInt());
@@ -1982,6 +2102,7 @@ void RichText::handleTextRenderer(std::string_view text,
     ss << text;
     std::string currentText;
     size_t realLines = 0;
+    auto isFirstLabel = true;
     while (std::getline(ss, currentText, '\n'))
     {
         if (realLines > 0)
@@ -2025,6 +2146,12 @@ void RichText::handleTextRenderer(std::string_view text,
 
             textRenderer->setTextColor(Color4B(color));
             textRenderer->setOpacity(opacity);
+
+            if (isFirstLabel && !id.empty())
+            {
+                textRenderer->setName(id);
+                isFirstLabel = false;
+            }
 
             // textRendererWidth will get 0.0f, when we've got glError: 0x0501 in Label::getContentSize
             // It happens when currentText is very very long so that can't generate a texture
@@ -2094,7 +2221,8 @@ void RichText::handleImageRenderer(std::string_view filePath,
                                    int height,
                                    std::string_view url,
                                    float scaleX,
-                                   float scaleY)
+                                   float scaleY,
+                                   std::string_view id)
 {
     Sprite* imageRenderer;
     if (textureType == Widget::TextureResType::LOCAL)
@@ -2110,6 +2238,8 @@ void RichText::handleImageRenderer(std::string_view filePath,
         if (height != -1)
             imageRenderer->setScaleY(height / currentSize.height);
 
+        imageRenderer->setName(id);
+
         imageRenderer->setScaleX(imageRenderer->getScaleX() * scaleX);
         imageRenderer->setScaleY(imageRenderer->getScaleY() * scaleY);
 
@@ -2122,9 +2252,15 @@ void RichText::handleImageRenderer(std::string_view filePath,
     }
 }
 
-void RichText::handleCustomRenderer(ax::Node* renderer)
+void RichText::handleCustomRenderer(ax::Node* renderer, std::string_view id)
 {
     Vec2 imgSize = renderer->getContentSize();
+
+    if (!id.empty())
+    {
+        renderer->setName(id);
+    }
+
     _leftSpaceWidth -= imgSize.width;
     if (_leftSpaceWidth < 0.0f)
     {
