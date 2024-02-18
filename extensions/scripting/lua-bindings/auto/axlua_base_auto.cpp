@@ -82304,6 +82304,56 @@ int lua_ax_base_ProtectedNode_getProtectedChildByTag(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_ProtectedNode_getProtectedChildByName(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ProtectedNode* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ProtectedNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_getProtectedChildByName'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ProtectedNode:getProtectedChildByName");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProtectedNode_getProtectedChildByName'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getProtectedChildByName(arg0);
+        object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ProtectedNode:getProtectedChildByName",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ProtectedNode_getProtectedChildByName'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_ProtectedNode_removeProtectedChild(lua_State* tolua_S)
 {
     int argc = 0;
@@ -82862,6 +82912,7 @@ int lua_register_ax_base_ProtectedNode(lua_State* tolua_S)
         tolua_function(tolua_S,"new",lua_ax_base_ProtectedNode_constructor);
         tolua_function(tolua_S,"addProtectedChild",lua_ax_base_ProtectedNode_addProtectedChild);
         tolua_function(tolua_S,"getProtectedChildByTag",lua_ax_base_ProtectedNode_getProtectedChildByTag);
+        tolua_function(tolua_S,"getProtectedChildByName",lua_ax_base_ProtectedNode_getProtectedChildByName);
         tolua_function(tolua_S,"removeProtectedChild",lua_ax_base_ProtectedNode_removeProtectedChild);
         tolua_function(tolua_S,"removeProtectedChildByTag",lua_ax_base_ProtectedNode_removeProtectedChildByTag);
         tolua_function(tolua_S,"removeAllProtectedChildren",lua_ax_base_ProtectedNode_removeAllProtectedChildren);
