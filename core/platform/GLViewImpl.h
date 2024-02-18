@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -171,6 +172,7 @@ protected:
     void onGLFWWindowSizeCallback(GLFWwindow* window, int width, int height);
     void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified);
     void onGLFWWindowFocusCallback(GLFWwindow* window, int focused);
+    void onGLFWWindowCloseCallback(GLFWwindow* window);
 
     bool _isTouchDevice = false;
     bool _captured;
@@ -200,6 +202,7 @@ public:
     static const std::string EVENT_WINDOW_RESIZED;
     static const std::string EVENT_WINDOW_FOCUSED;
     static const std::string EVENT_WINDOW_UNFOCUSED;
+    static const std::string EVENT_WINDOW_CLOSE;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(GLViewImpl);

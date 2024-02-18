@@ -173,6 +173,14 @@ public:
         }
     }
 
+    static void onGLFWWindowCloseCallback(GLFWwindow* window)
+    {
+        if (_view)
+        {
+            _view->onGLFWWindowCloseCallback(window);
+        }
+    }
+
 private:
     static GLViewImpl* _view;
 };
@@ -182,6 +190,7 @@ const std::string GLViewImpl::EVENT_WINDOW_POSITIONED = "glview_window_positione
 const std::string GLViewImpl::EVENT_WINDOW_RESIZED    = "glview_window_resized";
 const std::string GLViewImpl::EVENT_WINDOW_FOCUSED    = "glview_window_focused";
 const std::string GLViewImpl::EVENT_WINDOW_UNFOCUSED  = "glview_window_unfocused";
+const std::string GLViewImpl::EVENT_WINDOW_CLOSE      = "glview_window_close";
 
 ////////////////////////////////////////////////////
 
@@ -575,6 +584,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     glfwSetWindowSizeCallback(_mainWindow, GLFWEventHandler::onGLFWWindowSizeCallback);
     glfwSetWindowIconifyCallback(_mainWindow, GLFWEventHandler::onGLFWWindowIconifyCallback);
     glfwSetWindowFocusCallback(_mainWindow, GLFWEventHandler::onGLFWWindowFocusCallback);
+    glfwSetWindowCloseCallback(_mainWindow, GLFWEventHandler::onGLFWWindowCloseCallback);
 
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
     loadGL();
@@ -1279,6 +1289,16 @@ void GLViewImpl::onGLFWWindowFocusCallback(GLFWwindow* /*window*/, int focused)
     else
     {
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_UNFOCUSED, nullptr);
+    }
+}
+
+void GLViewImpl::onGLFWWindowCloseCallback(GLFWwindow* window)
+{
+    bool isClose = true;
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_CLOSE, &isClose);
+    if (isClose == false)
+    {
+        glfwSetWindowShouldClose(window, 0);
     }
 }
 
