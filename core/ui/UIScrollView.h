@@ -1,6 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -101,7 +102,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~ScrollView();
+    ~ScrollView() override;
 
     /**
      * Create an empty ScrollView.
@@ -340,24 +341,24 @@ public:
     virtual void addEventListener(const ccScrollViewCallback& callback);
 
     // override functions
-    virtual void addChild(Node* child) override;
-    virtual void addChild(Node* child, int localZOrder) override;
-    virtual void addChild(Node* child, int localZOrder, int tag) override;
-    virtual void addChild(Node* child, int localZOrder, std::string_view name) override;
-    virtual void removeAllChildren() override;
-    virtual void removeAllChildrenWithCleanup(bool cleanup) override;
-    virtual void removeChild(Node* child, bool cleanup = true) override;
-    virtual Vector<Node*>& getChildren() override;
-    virtual const Vector<Node*>& getChildren() const override;
-    virtual ssize_t getChildrenCount() const override;
-    virtual Node* getChildByTag(int tag) const override;
-    virtual Node* getChildByName(std::string_view name) const override;
+    void addChild(Node* child) override;
+    void addChild(Node* child, int localZOrder) override;
+    void addChild(Node* child, int localZOrder, int tag) override;
+    void addChild(Node* child, int localZOrder, std::string_view name) override;
+    void removeAllChildren() override;
+    void removeAllChildrenWithCleanup(bool cleanup) override;
+    void removeChild(Node* child, bool cleanup = true) override;
+    Vector<Node*>& getChildren() override;
+    const Vector<Node*>& getChildren() const override;
+    ssize_t getChildrenCount() const override;
+    Node* getChildByTag(int tag) const override;
+    Node* getChildByName(std::string_view name) const override;
     // touch event callback
-    virtual bool onTouchBegan(Touch* touch, Event* unusedEvent) override;
-    virtual void onTouchMoved(Touch* touch, Event* unusedEvent) override;
-    virtual void onTouchEnded(Touch* touch, Event* unusedEvent) override;
-    virtual void onTouchCancelled(Touch* touch, Event* unusedEvent) override;
-    virtual void update(float dt) override;
+    bool onTouchBegan(Touch* touch, Event* unusedEvent) override;
+    void onTouchMoved(Touch* touch, Event* unusedEvent) override;
+    void onTouchEnded(Touch* touch, Event* unusedEvent) override;
+    void onTouchCancelled(Touch* touch, Event* unusedEvent) override;
+    void update(float dt) override;
 
     /**
      * @brief Toggle bounce enabled when scroll to the edge.
@@ -453,7 +454,7 @@ public:
     /**
      * @brief Set the scroll bar's color
      *
-     * @param the scroll bar's color
+     * @param color the scroll bar's color
      */
     void setScrollBarColor(const Color3B& color);
 
@@ -467,7 +468,7 @@ public:
     /**
      * @brief Set the scroll bar's opacity
      *
-     * @param the scroll bar's opacity
+     * @param opacity the scroll bar's opacity
      */
     void setScrollBarOpacity(uint8_t opacity);
 
@@ -481,7 +482,7 @@ public:
     /**
      * @brief Set scroll bar auto hide state
      *
-     * @param scroll bar auto hide state
+     * @param autoHideEnabled scroll bar auto hide state
      */
     void setScrollBarAutoHideEnabled(bool autoHideEnabled);
 
@@ -495,7 +496,7 @@ public:
     /**
      * @brief Set scroll bar auto hide time
      *
-     * @param scroll bar auto hide time
+     * @param autoHideTime bar auto hide time
      */
     void setScrollBarAutoHideTime(float autoHideTime);
 
@@ -509,7 +510,7 @@ public:
     /**
      * @brief Set the touch total time threshold
      *
-     * @param the touch total time threshold
+     * @param touchTotalTimeThreshold the touch total time threshold
      */
     void setTouchTotalTimeThreshold(float touchTotalTimeThreshold);
 
@@ -526,7 +527,7 @@ public:
      * @see `Layout::Type`
      * @param type  Layout type enum.
      */
-    virtual void setLayoutType(Type type) override;
+    void setLayoutType(Type type) override;
 
     /**
      * Get the layout type for scrollview.
@@ -534,22 +535,22 @@ public:
      * @see `Layout::Type`
      * @return LayoutType
      */
-    virtual Type getLayoutType() const override;
+    Type getLayoutType() const override;
 
     /**
      * Return the "class name" of widget.
      */
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
 
     /**
      * @lua NA
      */
-    virtual void onExit() override;
+    void onExit() override;
 
     /**
      *  When a widget is in a layout, you could call this method to get the next focused widget within a specified
@@ -558,7 +559,22 @@ public:
      *@param current  the current focused widget
      *@return the next focused widget in a layout
      */
-    virtual Widget* findNextFocusedWidget(FocusDirection direction, Widget* current) override;
+    Widget* findNextFocusedWidget(FocusDirection direction, Widget* current) override;
+
+    /**
+     * Set the time in seconds to scroll between items.
+     * Subsequent calls of function 'scrollToItem', will take 'time' seconds for scrolling.
+     * @param time The seconds needed to scroll between two items. 'time' must be >= 0
+     * @see scrollToItem(ssize_t, const Vec2&, const Vec2&)
+     */
+    void setScrollDuration(float time);
+
+    /**
+     * Get the time in seconds to scroll between items.
+     * @return The time in seconds to scroll between items
+     * @see setScrollDuration(float)
+     */
+    float getScrollDuration() const;
 
     /**
      * @return Whether the user is currently dragging the ScrollView to scroll it
@@ -569,7 +585,26 @@ public:
      */
     bool isAutoScrolling() const { return _autoScrolling; }
 
-    virtual bool init() override;
+    bool init() override;
+
+    /**
+     * @brief Scroll to specific item
+     * @param item Item to scroll to
+     * @param positionRatioInView Specifies the position with ratio in list view's content size.
+     * @param itemAnchorPoint Specifies an anchor point of each item for position to calculate distance.
+     */
+    void scrollToItem(Node* item, const Vec2& positionRatioInView, const Vec2& itemAnchorPoint);
+
+    /**
+     * @brief Scroll to specific item
+     * @param item Item to scroll to
+     * @param positionRatioInView Specifies the position with ratio in list view's content size.
+     * @param itemAnchorPoint Specifies an anchor point of each item for position to calculate distance.
+     * @param timeInSec Scroll time
+     */
+    void scrollToItem(Node* item, const Vec2& positionRatioInView, const Vec2& itemAnchorPoint, float timeInSec);
+
+    static Vec2 calculateItemPositionWithAnchor(const Node* node, const Vec2& itemAnchorPoint);
 
 protected:
     enum class MoveDirection
@@ -580,14 +615,14 @@ protected:
         RIGHT,
     };
 
-    virtual void initRenderer() override;
+    void initRenderer() override;
 
-    virtual void onSizeChanged() override;
-    virtual void doLayout() override;
+    void onSizeChanged() override;
+    void doLayout() override;
 
-    virtual Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
-    virtual void copyClonedWidgetChildren(Widget* model) override;
+    Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
+    void copyClonedWidgetChildren(Widget* model) override;
 
     virtual void initScrollBar();
     virtual void removeScrollBar();
@@ -622,7 +657,7 @@ protected:
     virtual void handleMoveLogic(Touch* touch);
     virtual void handleReleaseLogic(Touch* touch);
 
-    virtual void interceptTouchEvent(Widget::TouchEventType event, Widget* sender, Touch* touch) override;
+    void interceptTouchEvent(Widget::TouchEventType event, Widget* sender, Touch* touch) override;
 
     void processScrollEvent(MoveDirection dir, bool bounce);
     void processScrollingEvent();
@@ -630,6 +665,8 @@ protected:
     void dispatchEvent(EventType eventType);
 
     void updateScrollBar(const Vec2& outOfBoundary);
+
+    Vec2 calculateItemDestination(const Vec2& positionRatioInView, const Node* item, const Vec2& itemAnchorPoint);
 
 protected:
     virtual float getAutoScrollStopEpsilon() const;
@@ -678,6 +715,8 @@ protected:
 
     Ref* _scrollViewEventListener;
     ccScrollViewCallback _eventCallback;
+
+    float _scrollTime;
 };
 
 }  // namespace ui
