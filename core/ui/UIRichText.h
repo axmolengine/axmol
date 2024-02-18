@@ -264,7 +264,7 @@ protected:
     float _scaleX;
     float _scaleY;
     std::string _url; /*!< attributes of anchor tag */
-    std::string_view _id;
+    std::string _id;  /*!< attributes of anchor tag */
 };
 
 /**
