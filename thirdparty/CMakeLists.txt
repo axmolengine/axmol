@@ -256,7 +256,7 @@ if (ANDROID)
     )
 endif()
 
-ax_add_3rd(fmt EXCLUDE_FROM_ALL TARGETS fmt-header-only)
+ax_add_3rd(fmt)
 
 # bellow are non header only libs
 
