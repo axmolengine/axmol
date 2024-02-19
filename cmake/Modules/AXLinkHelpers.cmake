@@ -282,7 +282,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             $<TARGET_FILE_DIR:${APP_NAME}>)
 
         if (BUILD_SHARED_LIBS)
-            add_custom_command(TARGET ${ax_target} POST_BUILD
+            add_custom_command(TARGET ${APP_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}glad.dll"
                 "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}glfw.dll"
