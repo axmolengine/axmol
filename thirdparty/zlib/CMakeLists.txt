@@ -21,6 +21,7 @@ else()
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_LOCATION "${zlib_LIB_DIR}/zlib1.dll"
     IMPORTED_IMPLIB "${zlib_LIB_DIR}/zlib.lib"
+    INTERFACE_COMPILE_DEFINITIONS ZLIB_DLL=1
   )
 endif()
 
