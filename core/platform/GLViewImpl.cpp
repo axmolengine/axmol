@@ -75,9 +75,7 @@ THE SOFTWARE.
 #    endif
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
-
-#else
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_WASM)
 #    include <GLFW/glfw3native.h>
 #endif
 
@@ -175,15 +173,24 @@ public:
         }
     }
 
+    static void onGLFWWindowCloseCallback(GLFWwindow* window)
+    {
+        if (_view)
+        {
+            _view->onGLFWWindowCloseCallback(window);
+        }
+    }
+
 private:
     static GLViewImpl* _view;
 };
 GLViewImpl* GLFWEventHandler::_view = nullptr;
 
-const std::string GLViewImpl::EVENT_WINDOW_POSITIONED   = "glview_window_positioned";
-const std::string GLViewImpl::EVENT_WINDOW_RESIZED      = "glview_window_resized";
-const std::string GLViewImpl::EVENT_WINDOW_FOCUSED      = "glview_window_focused";
-const std::string GLViewImpl::EVENT_WINDOW_UNFOCUSED    = "glview_window_unfocused";
+const std::string GLViewImpl::EVENT_WINDOW_POSITIONED = "glview_window_positioned";
+const std::string GLViewImpl::EVENT_WINDOW_RESIZED    = "glview_window_resized";
+const std::string GLViewImpl::EVENT_WINDOW_FOCUSED    = "glview_window_focused";
+const std::string GLViewImpl::EVENT_WINDOW_UNFOCUSED  = "glview_window_unfocused";
+const std::string GLViewImpl::EVENT_WINDOW_CLOSE      = "glview_window_close";
 
 ////////////////////////////////////////////////////
 
@@ -452,7 +459,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 
     _frameZoomFactor = frameZoomFactor;
 
-    Vec2 frameSize = rect.size;
+    Vec2 windowSize = rect.size * frameZoomFactor;
 
 #if AX_GLES_PROFILE
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
@@ -483,14 +490,12 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
 
-    int neededWidth  = static_cast<int>(frameSize.width * _frameZoomFactor);
-    int neededHeight = static_cast<int>(frameSize.height * _frameZoomFactor);
-
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     glfwxSetParent((HWND)_glContextAttrs.viewParent);
 #endif
 
-    _mainWindow = glfwCreateWindow(neededWidth, neededHeight, _viewName.c_str(), _monitor, nullptr);
+    _mainWindow = glfwCreateWindow(static_cast<int>(windowSize.width), static_cast<int>(windowSize.height),
+                                   _viewName.c_str(), _monitor, nullptr);
 
     if (_mainWindow == nullptr)
     {
@@ -537,7 +542,6 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     glfwMakeContextCurrent(_mainWindow);
     glfwSetWindowUserPointer(_mainWindow, backend::__gl);
 #endif
-
     /*
      *  Note that the created window and context may differ from what you requested,
      *  as not all parameters and hints are
@@ -548,16 +552,13 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
      *
      *  see declaration glfwCreateWindow
      */
-    int realW = 0, realH = 0;
-    glfwGetWindowSize(_mainWindow, &realW, &realH);
-    if (realW != neededWidth)
-    {
-        frameSize.width = realW / _frameZoomFactor;
-    }
-    if (realH != neededHeight)
-    {
-        frameSize.height = realH / _frameZoomFactor;
-    }
+#if !defined(__APPLE__)
+    handleWindowSize(windowSize.width, windowSize.height);
+#else
+    // sense retina
+    setFrameSize(rect.size.width, rect.size.height);
+#endif
+
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
     glfwSetCursorPosCallback(_mainWindow, GLFWEventHandler::onGLFWMouseMoveCallBack);
 #if defined(__EMSCRIPTEN__)
@@ -583,8 +584,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     glfwSetWindowSizeCallback(_mainWindow, GLFWEventHandler::onGLFWWindowSizeCallback);
     glfwSetWindowIconifyCallback(_mainWindow, GLFWEventHandler::onGLFWWindowIconifyCallback);
     glfwSetWindowFocusCallback(_mainWindow, GLFWEventHandler::onGLFWWindowFocusCallback);
-
-    setFrameSize(frameSize.width, frameSize.height);
+    glfwSetWindowCloseCallback(_mainWindow, GLFWEventHandler::onGLFWWindowCloseCallback);
 
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
     loadGL();
@@ -624,7 +624,7 @@ bool GLViewImpl::initWithFullScreen(std::string_view viewName)
         return false;
 
     const GLFWvidmode* videoMode = glfwGetVideoMode(_monitor);
-    
+
     // These are soft constraints. If the video mode is retrieved at runtime, the resulting window and context should
     // match these exactly. If invalid attribs are passed (eg. from an outdated cache), window creation will NOT fail
     // but the actual window/context may differ.
@@ -632,7 +632,7 @@ bool GLViewImpl::initWithFullScreen(std::string_view viewName)
     glfwWindowHint(GLFW_RED_BITS, videoMode->redBits);
     glfwWindowHint(GLFW_BLUE_BITS, videoMode->blueBits);
     glfwWindowHint(GLFW_GREEN_BITS, videoMode->greenBits);
-    
+
     return initWithRect(viewName, ax::Rect(0, 0, (float)videoMode->width, (float)videoMode->height), 1.0f, false);
 }
 
@@ -846,8 +846,6 @@ void GLViewImpl::setFullscreen(GLFWmonitor* monitor, int w, int h, int refreshRa
         refreshRate = videoMode->refreshRate;
 
     glfwSetWindowMonitor(_mainWindow, _monitor, 0, 0, w, h, refreshRate);
-
-    updateWindowSize();
 }
 
 void GLViewImpl::setWindowed(int width, int height)
@@ -860,6 +858,8 @@ void GLViewImpl::setWindowed(int width, int height)
     }
     else
     {
+        width *= _frameZoomFactor;
+        height *= _frameZoomFactor;
         const GLFWvidmode* videoMode = glfwGetVideoMode(_monitor);
         int xpos = 0, ypos = 0;
         glfwGetMonitorPos(_monitor, &xpos, &ypos);
@@ -871,8 +871,6 @@ void GLViewImpl::setWindowed(int width, int height)
         // on mac window will sometimes lose title when windowed
         glfwSetWindowTitle(_mainWindow, _viewName.c_str());
 #endif
-
-        updateWindowSize();
     }
 }
 
@@ -889,18 +887,7 @@ void GLViewImpl::getWindowSize(int* width, int* height)
     if (_mainWindow != nullptr)
     {
         glfwGetWindowSize(_mainWindow, width, height);
-    }    
-}
-
-void GLViewImpl::updateWindowSize()
-{
-    int w = 0, h = 0;
-    glfwGetFramebufferSize(_mainWindow, &w, &h);
-    int frameWidth  = w / _frameZoomFactor;
-    int frameHeight = h / _frameZoomFactor;
-    setFrameSize(frameWidth, frameHeight);
-    updateDesignResolutionSize();
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
+    }
 }
 
 int GLViewImpl::getMonitorCount() const
@@ -929,6 +916,27 @@ Vec2 GLViewImpl::getMonitorSize() const
         return size;
     }
     return Vec2::ZERO;
+}
+
+void GLViewImpl::handleWindowSize(float w, float h)
+{
+    /*
+    * x-studio spec, fix view size incorrect when window size changed
+    * diff with cocos2d-x, axmol don't call this->setFrameSize when window size changed,
+    * instead, invoke this function to apply screenSize, update design size(update viewport)
+
+      The cocos2d-x original behavior(incorrect):
+      1. first time enter full screen: w,h=1920,1080
+      2. second or later enter full screen: will trigger 2 times WindowSizeCallback
+        1). w,h=976,679
+        2). w,h=1024,768
+
+      @remark:
+      1. glfwSetWindowMonitor will fire window size change event in full screen mode
+    */
+    GLView::setFrameSize(w / _frameZoomFactor, h / _frameZoomFactor);
+
+    updateDesignResolutionSize();
 }
 
 void GLViewImpl::updateFrameSize()
@@ -1246,24 +1254,7 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
-        /* Invoke `GLView::setFrameSize` to sync screen size immediately,
-           this->setFrameSize will invoke `glfwSetWindowSize` which is unnecessary.
-        */
-        GLView::setFrameSize(w, h);
-
-        /*
-         x-studio spec, fix view size incorrect when window size changed.
-         The original code behavior:
-         1. first time enter full screen: w,h=1920,1080
-         2. second or later enter full screen: will trigger 2 times WindowSizeCallback
-           1). w,h=976,679
-           2). w,h=1024,768
-
-         @remark:
-         1. we should use glfwSetWindowMonitor to control the window size in full screen mode
-         @see also: updateWindowSize (call after enter/exit full screen mode)
-        */
-        updateDesignResolutionSize();
+        handleWindowSize(w, h);
 
 #if defined(AX_USE_METAL)
         // update metal attachment texture size.
@@ -1298,6 +1289,16 @@ void GLViewImpl::onGLFWWindowFocusCallback(GLFWwindow* /*window*/, int focused)
     else
     {
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_UNFOCUSED, nullptr);
+    }
+}
+
+void GLViewImpl::onGLFWWindowCloseCallback(GLFWwindow* window)
+{
+    bool isClose = true;
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_CLOSE, &isClose);
+    if (isClose == false)
+    {
+        glfwSetWindowShouldClose(window, 0);
     }
 }
 

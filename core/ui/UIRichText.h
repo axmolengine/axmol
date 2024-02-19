@@ -121,6 +121,7 @@ public:
      * @param shadowOffset shadow effect offset value
      * @param shadowBlurRadius the shadow effect blur radius
      * @param glowColor glow color
+     * @param id ID of element
      * @return True if initialize success, false otherwise.
      */
     bool init(int tag,
@@ -136,7 +137,8 @@ public:
               const Color3B& shadowColor  = Color3B::BLACK,
               const Vec2& shadowOffset    = Vec2(2.0, -2.0),
               int shadowBlurRadius        = 0,
-              const Color3B& glowColor    = Color3B::WHITE);
+              const Color3B& glowColor    = Color3B::WHITE,
+              std::string_view id         = ""sv);
 
     /**
      * @brief Create a RichElementText with various arguments.
@@ -155,6 +157,7 @@ public:
      * @param shadowOffset shadow effect offset value
      * @param shadowBlurRadius the shadow effect blur radius
      * @param glowColor glow color
+     * @param id ID of element
      * @return RichElementText instance.
      */
     static RichElementText* create(int tag,
@@ -170,7 +173,8 @@ public:
                                    const Color3B& shadowColor  = Color3B::BLACK,
                                    const Vec2& shadowOffset    = Vec2(2.0, -2.0),
                                    int shadowBlurRadius        = 0,
-                                   const Color3B& glowColor    = Color3B::WHITE);
+                                   const Color3B& glowColor    = Color3B::WHITE,
+                                   std::string_view id         = ""sv);
 
 protected:
     std::string _text;
@@ -184,6 +188,7 @@ protected:
     Vec2 _shadowOffset;    /*!< shadow effect offset value */
     int _shadowBlurRadius; /*!< the shadow effect blur radius */
     Color3B _glowColor;    /*!< attributes of glow tag */
+    std::string _id;       /*!< ID of this text field */
     friend class RichText;
 };
 
@@ -210,6 +215,7 @@ public:
      * @param filePath A image file name.
      * @param url uniform resource locator
      * @param texType texture type, may be a valid file path, or a sprite frame name
+     * @param id ID of element
      * @return True if initialize success, false otherwise.
      */
     bool init(int tag,
@@ -217,7 +223,8 @@ public:
               uint8_t opacity,
               std::string_view filePath,
               std::string_view url           = "",
-              Widget::TextureResType texType = Widget::TextureResType::LOCAL);
+              Widget::TextureResType texType = Widget::TextureResType::LOCAL,
+              std::string_view id            = ""sv);
 
     /**
      * @brief Create a RichElementImage with various arguments.
@@ -228,6 +235,7 @@ public:
      * @param filePath A image file name.
      * @param url uniform resource locator
      * @param texType texture type, may be a valid file path, or a sprite frame name
+     * @param id ID of element
      * @return A RichElementImage instance.
      */
     static RichElementImage* create(int tag,
@@ -235,7 +243,8 @@ public:
                                     uint8_t opacity,
                                     std::string_view filePath,
                                     std::string_view url           = "",
-                                    Widget::TextureResType texType = Widget::TextureResType::LOCAL);
+                                    Widget::TextureResType texType = Widget::TextureResType::LOCAL,
+                                    std::string_view id            = ""sv);
 
     void setWidth(int width);
     void setHeight(int height);
@@ -243,6 +252,7 @@ public:
     void setScaleX(float scaleX) { _scaleX = scaleX; }
     void setScaleY(float scaleY) { _scaleY = scaleY; }
     void setUrl(std::string_view url);
+    void setId(std::string_view id);
 
 protected:
     std::string _filePath;
@@ -254,6 +264,7 @@ protected:
     float _scaleX;
     float _scaleY;
     std::string _url; /*!< attributes of anchor tag */
+    std::string _id;  /*!< attributes of anchor tag */
 };
 
 /**
@@ -283,9 +294,10 @@ public:
      * @param color A color in Color3B.
      * @param opacity A opacity in GLubyte.
      * @param customNode A custom node pointer.
+     * @param id ID of element
      * @return True if initialize success, false otherwise.
      */
-    bool init(int tag, const Color3B& color, uint8_t opacity, Node* customNode);
+    bool init(int tag, const Color3B& color, uint8_t opacity, Node* customNode, std::string_view id = ""sv);
 
     /**
      * @brief Create a RichElementCustomNode with various arguments.
@@ -294,12 +306,19 @@ public:
      * @param color A color in Color3B.
      * @param opacity A opacity in GLubyte.
      * @param customNode A custom node pointer.
+     * @param id ID of element
      * @return A RichElementCustomNode instance.
      */
-    static RichElementCustomNode* create(int tag, const Color3B& color, uint8_t opacity, Node* customNode);
+    static RichElementCustomNode* create(int tag,
+                                         const Color3B& color,
+                                         uint8_t opacity,
+                                         Node* customNode,
+                                         std::string_view id = ""sv);
 
 protected:
     Node* _customNode{};
+    std::string _id;
+
     friend class RichText;
 };
 
@@ -394,7 +413,7 @@ public:
     static const std::string KEY_VERTICAL_SPACE;                   /*!< key of vertical space */
     static const std::string KEY_WRAP_MODE;                        /*!< key of per word, or per char */
     static const std::string KEY_HORIZONTAL_ALIGNMENT;             /*!< key of left, right, or center */
-    static const std::string KEY_VERTICAL_ALIGNMENT;             /*!< key of left, right, or center */
+    static const std::string KEY_VERTICAL_ALIGNMENT;               /*!< key of left, right, or center */
     static const std::string KEY_FONT_COLOR_STRING;                /*!< key of font color */
     static const std::string KEY_FONT_SIZE;                        /*!< key of font size */
     static const std::string KEY_FONT_SMALL;                       /*!< key of font size small */
@@ -431,6 +450,7 @@ public:
     static const std::string KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT; /*!< key of shadow offset (height) of anchor tag */
     static const std::string KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS;   /*!< key of shadow blur radius of anchor tag */
     static const std::string KEY_ANCHOR_TEXT_GLOW_COLOR;           /*!< key of glow color of anchor tag */
+    static const std::string KEY_ID;                               /*!< key of id */
 
     /**
      * @brief Default constructor.
@@ -611,7 +631,8 @@ protected:
                             const Color3B& shadowColor  = Color3B::BLACK,
                             const Vec2& shadowOffset    = Vec2(2.0, -2.0),
                             int shadowBlurRadius        = 0,
-                            const Color3B& glowColor    = Color3B::WHITE);
+                            const Color3B& glowColor    = Color3B::WHITE,
+                            std::string_view id         = ""sv);
     void handleImageRenderer(std::string_view filePath,
                              Widget::TextureResType textureType,
                              const Color3B& color,
@@ -619,9 +640,10 @@ protected:
                              int width,
                              int height,
                              std::string_view url,
-                             float scaleX = 1.f,
-                             float scaleY = 1.f);
-    void handleCustomRenderer(Node* renderer);
+                             float scaleX        = 1.f,
+                             float scaleY        = 1.f,
+                             std::string_view id = ""sv);
+    void handleCustomRenderer(Node* renderer, std::string_view id = ""sv);
     void formatRenderers();
     void addNewLine(int quantity = 1);
     void doHorizontalAlignment(const Vector<Node*>& row, float rowWidth);

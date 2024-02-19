@@ -220,4 +220,17 @@ public:
     bool init() override;
 };
 
+class UIRichTextScrollTo : public UIRichTextTestBase
+{
+public:
+    CREATE_FUNC(UIRichTextScrollTo);
+
+    bool init() override;
+
+protected:
+    void updateScrollViewSize();
+
+    ax::ui::ScrollView* _scrollView;
+};
+
 #endif /* defined(__TestCpp__UIRichTextTest__) */

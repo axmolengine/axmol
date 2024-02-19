@@ -128,6 +128,17 @@ Node* ProtectedNode::getProtectedChildByTag(int tag)
     return nullptr;
 }
 
+Node* ProtectedNode::getProtectedChildByName(std::string_view name)
+{
+    // AXASSERT(!name.empty(), "Invalid name");
+    for (auto&& child : _protectedChildren)
+    {
+        if (child && child->getName() == name)
+            return child;
+    }
+    return nullptr;
+}
+
 /* "remove" logic MUST only be on this method
  * If a class want's to extend the 'removeChild' behavior it only needs
  * to override this method
