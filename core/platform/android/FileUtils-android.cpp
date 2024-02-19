@@ -36,6 +36,8 @@ THE SOFTWARE.
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <android/log.h>
+
 #include "yasio/string_view.hpp"
 
 #define LOG_TAG "CCFileUtils-android.cpp"
