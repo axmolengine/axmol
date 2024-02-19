@@ -24,8 +24,7 @@ android {
         externalNativeBuild {
             cmake {
                 targets "fairygui-tests"
-                arguments "-DCMAKE_FIND_ROOT_PATH=", "-DANDROID_STL=c++_shared", "-DANDROID_TOOLCHAIN=clang",
-                        "-DANDROID_ARM_NEON=TRUE"
+                arguments = []
                 arguments.addAll(cmakeOptions)
                 cppFlags "-frtti -fexceptions -fsigned-char"
             }
