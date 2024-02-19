@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -22,36 +23,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCLIBGUI_H__
-#define __CCLIBGUI_H__
+#ifndef __AXLIBGUI_H__
+#define __AXLIBGUI_H__
 
-#if (defined(WIN32) && defined(_WINDOWS))
-#    ifdef __MINGW32__
-#        include <string.h>
-#    endif
+#include "PlatformDefine.h"
 
-#    if defined(AX_STATIC)
-#        define AX_GUI_DLL
-#    else
-#        if defined(_USEGUIDLL)
-#            define AX_GUI_DLL __declspec(dllexport)
-#        else
-#            define AX_GUI_DLL __declspec(dllimport)
-#        endif
-#    endif
+#define AX_GUI_DLL AX_API
 
-/* Define NULL pointer value */
-#    ifndef NULL
-#        ifdef __cplusplus
-#            define NULL 0
-#        else
-#            define NULL ((void*)0)
-#        endif
-#    endif
-#elif defined(_SHARED_)
-#    define AX_GUI_DLL __attribute__((visibility("default")))
-#else
-#    define AX_GUI_DLL
-#endif
-
-#endif /* __CCEXTENSIONEXPORT_H__*/
+#endif /* __AXLIBGUI_H__*/
