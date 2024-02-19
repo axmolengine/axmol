@@ -131,6 +131,7 @@ public:
     /** Helper constructor to create an array of sequenceable actions.
      *
      * @return An autoreleased Sequence object.
+     * @note ATTENTION! Last entry must be a 'nullptr' to correctly terminate the list.
      */
     static Sequence* create(FiniteTimeAction* action1, ...) AX_REQUIRES_NULL_TERMINATION;
 
@@ -151,6 +152,7 @@ public:
      * @param args The va_list variable.
      * @return An autoreleased Sequence object.
      * @js NA
+     * @note ATTENTION! Last entry must be a 'nullptr' to correctly terminate the list.
      */
     static Sequence* createWithVariableList(FiniteTimeAction* action1, va_list args);
     /** Creates the action.
