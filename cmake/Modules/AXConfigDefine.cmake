@@ -167,12 +167,7 @@ function(use_ax_compile_define target)
             # PUBLIC GLAD_GLAPI_EXPORT
         )
         if(BUILD_SHARED_LIBS)
-            target_compile_definitions(${target}
-                PRIVATE _USRDLL
-                PRIVATE _USEGUIDLL # ui
-            )
-        else()
-            target_compile_definitions(${target} PUBLIC AX_STATIC)
+            target_compile_definitions(${target} PRIVATE AX_DLLEXPORT INTERFACE AX_DLLIMPORT)
         endif()
     endif()
 endfunction()
