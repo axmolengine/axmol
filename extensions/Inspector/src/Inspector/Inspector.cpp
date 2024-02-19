@@ -7,10 +7,6 @@
 #    include <cxxabi.h>
 #endif
 
-#if !defined(FMT_HEADER_ONLY)
-#    define FMT_HEADER_ONLY
-#endif
-
 #include "fmt/format.h"
 #include <memory>
 #include <imgui/misc/cpp/imgui_stdlib.h>
