@@ -29,7 +29,6 @@ if(ANDROID)
         platform/android/Common-android.cpp
         platform/android/GLViewImpl-android.cpp
         platform/android/FileUtils-android.cpp
-        platform/android/EnhanceAPI-android.cpp
     )
 elseif(WINDOWS)
 
