@@ -32,6 +32,11 @@ THE SOFTWARE.
 
 #include <string.h>
 #include <assert.h>
+
+#if defined(__ANDROID__)
+#    include <android/log.h>
+#endif
+
 #define AX_ASSERT(cond)              assert(cond)
 #define AX_UNUSED_PARAM(unusedparam) (void)unusedparam
 
@@ -46,16 +51,16 @@ THE SOFTWARE.
 
 /* AX_API */
 #if defined(_WIN32)
-#  if defined(AX_DLLEXPORT)
-#    define AX_API __declspec(dllexport)
-#  elif defined(AX_DLLIMPORT)
-#    define AX_API __declspec(dllimport)
-#  endif
+#    if defined(AX_DLLEXPORT)
+#        define AX_API __declspec(dllexport)
+#    elif defined(AX_DLLIMPORT)
+#        define AX_API __declspec(dllimport)
+#    endif
 #elif defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT)
-#  define AX_API __attribute__((visibility("default")))
+#    define AX_API __attribute__((visibility("default")))
 #endif
 #ifndef AX_API
-#  define AX_API
+#    define AX_API
 #endif
 
 #define AX_DLL AX_API
