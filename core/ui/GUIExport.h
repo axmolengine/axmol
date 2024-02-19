@@ -26,7 +26,7 @@
 #ifndef __AXLIBGUI_H__
 #define __AXLIBGUI_H__
 
-#include "PlatformDefine.h"
+#include "platform/PlatformDefine.h"
 
 #define AX_GUI_DLL AX_API
 
