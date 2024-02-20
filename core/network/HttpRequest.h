@@ -73,6 +73,7 @@ public:
     enum class Type
     {
         GET,
+        PATCH,
         POST,
         PUT,
         DELETE,
