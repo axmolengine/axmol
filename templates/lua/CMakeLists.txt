@@ -25,12 +25,12 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-set(APP_NAME HelloLua)
+set(APP_NAME Dummy)
 
 project(${APP_NAME})
 
 set(_AX_TOP_LEVEL_APP FALSE)
-if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
+if(NOT DEFINED BUILD_ENGINE_DONE) # to test Dummy into root project
     set(_AX_TOP_LEVEL_APP TRUE)
     if(XCODE)
         set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
@@ -201,7 +201,7 @@ ax_setup_app_config(${APP_NAME})
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
-    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axmol.hellolua")
+    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axmol.dummy")
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES
                               MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist"

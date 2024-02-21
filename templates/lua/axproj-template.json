@@ -8,23 +8,25 @@
         },
         {
             "action": "rep",
-            "from": "HelloWorld",
+            "from": "Dummy",
             "to": "${projectName}",
             "files": [
                 "proj.android/settings.gradle",
                 "proj.android/app/res/values/strings.xml",
                 "proj.android/app/AndroidManifest.xml",
                 "proj.winrt/Package.appxmanifest",
-                "proj.winrt/App.xaml"
+                "proj.winrt/App.xaml",
+                "CMakeLists.txt",
+                "config.json",
+                "Dummy.xsxproj"
             ]
         },
         {
             "action": "rep",
-            "from": "HelloLua",
-            "to": "${projectName}",
+            "from": "org.axmol.dummy",
+            "to": "${packageName}",
             "files": [
-                "config.json",
-                "HelloLua.xsxproj",
+                "proj.android/app/build.gradle",
                 "CMakeLists.txt"
             ]
         },
@@ -40,17 +42,8 @@
             "to": "${projectDir}/Source/"
         },
         {
-            "action": "rep",
-            "from": "org.axmol.helloworld",
-            "to": "${packageName}",
-            "files": [
-                "proj.android/app/build.gradle",
-                "CMakeLists.txt"
-            ]
-        },
-        {
             "action": "ren",
-            "from": "${projectDir}/HelloLua.xsxproj",
+            "from": "${projectDir}/Dummy.xsxproj",
             "to": "${projectDir}/${projectName}.xsxproj"
         },
         {

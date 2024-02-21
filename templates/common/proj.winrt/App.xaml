@@ -6,7 +6,7 @@
 
     <Application.Resources>
 
-      <x:String x:Key="AppName">HelloWorld</x:String>
+      <x:String x:Key="AppName">Dummy</x:String>
 
     </Application.Resources>
 </Application>

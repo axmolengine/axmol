@@ -61,7 +61,7 @@
     <item path="CMakeLists.txt" dflag="131076" />
   </assets>
   <debug-options>
-    <start-program>build\bin\HelloLua\Debug\HelloLua.exe</start-program>
+    <start-program>build\bin\Dummy\Debug\Dummy.exe</start-program>
     <start-working-dir>.\Content</start-working-dir>
     <start-command></start-command>
     <search-paths>

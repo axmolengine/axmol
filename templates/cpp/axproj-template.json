@@ -8,28 +8,21 @@
         },
         {
             "action": "rep",
-            "from": "HelloWorld",
+            "from": "Dummy",
             "to": "${projectName}",
             "files": [
                 "proj.android/settings.gradle",
                 "proj.android/app/res/values/strings.xml",
                 "proj.android/app/AndroidManifest.xml",
                 "proj.winrt/Package.appxmanifest",
-                "proj.winrt/App.xaml"
+                "proj.winrt/App.xaml",
+                "CMakeLists.txt",
+                "Source/AppDelegate.cpp"
             ]
         },
         {
             "action": "rep",
-            "from": "HelloCpp",
-            "to": "${projectName}",
-            "files": [
-                "Source/AppDelegate.cpp",
-                "CMakeLists.txt"
-            ]
-        },
-        {
-            "action": "rep",
-            "from": "org.axmol.helloworld",
+            "from": "org.axmol.dummy",
             "to": "${packageName}",
             "files": [
                 "proj.android/app/build.gradle",

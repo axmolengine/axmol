@@ -1,6 +1,6 @@
 import java.nio.file.Paths
 include ':libaxmol'
 project(':libaxmol').projectDir = new File(Paths.get("${System.env.AX_ROOT}/core/platform/android/libaxmol").toUri())
-include ':HelloWorld'
-project(':HelloWorld').projectDir = new File(settingsDir, 'app')
-rootProject.name = "HelloWorld"
+include ':Dummy'
+project(':Dummy').projectDir = new File(settingsDir, 'app')
+rootProject.name = "Dummy"

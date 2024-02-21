@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply from: project(':libaxmol').projectDir.toString() + "/axutils.gradle"
 
 android {
-    namespace "org.axmol.helloworld"
+    namespace "org.axmol.dummy"
     compileSdk PROP_COMPILE_SDK_VERSION.toInteger()
 
     // Setup native build tools: ndk & cmake
@@ -15,7 +15,7 @@ android {
     def cmakeOptions = Eval.me(nbtInfo[3])
 
     defaultConfig {
-        applicationId "org.axmol.helloworld"
+        applicationId "org.axmol.dummy"
         minSdkVersion PROP_MIN_SDK_VERSION
         targetSdkVersion PROP_TARGET_SDK_VERSION
         versionCode 1
