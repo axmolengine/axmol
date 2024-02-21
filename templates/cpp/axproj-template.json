@@ -11,11 +11,19 @@
             "from": "HelloWorld",
             "to": "${projectName}",
             "files": [
-                "Source/AppDelegate.cpp",
                 "proj.android/settings.gradle",
                 "proj.android/app/res/values/strings.xml",
-                "proj.android/app/res/values/strings.xml",
+                "proj.android/app/AndroidManifest.xml",
                 "proj.winrt/Package.appxmanifest",
+                "proj.winrt/App.xaml"
+            ]
+        },
+        {
+            "action": "rep",
+            "from": "HelloCpp",
+            "to": "${projectName}",
+            "files": [
+                "Source/AppDelegate.cpp",
                 "CMakeLists.txt"
             ]
         },
