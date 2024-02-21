@@ -154,22 +154,12 @@ if (!$use_gradle) {
     if (!$cmake_target) {
         # non android, specific cmake target
         $cmake_targets = @(
-            # local developer
-            @(
-                # project
-                $proj_name,
-                # engine
-                'HelloCpp'
-            ),
-            # github actions
-            @(
-                # project
-                $proj_name,
-                # engine
-                'cpp-tests'
-            )
+            # project
+            $proj_name,
+            # engine
+            'cpp-tests'
         )
-        $cmake_target = $cmake_targets[$is_ci][$is_engine]
+        $cmake_target = $cmake_targets[$is_engine]
         $options.xb += '--target', $cmake_target
     }
 
