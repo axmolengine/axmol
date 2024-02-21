@@ -25,10 +25,10 @@
 
 #pragma once
 
-#include "cocos2d.h"
+#include "axmol.h"
 
 /**
-@brief    The cocos2d Application.
+@brief    The axmol Application.
 
 Private inheritance here hides part of interface from Director.
 */

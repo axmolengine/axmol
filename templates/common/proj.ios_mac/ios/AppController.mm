@@ -26,7 +26,7 @@
  ****************************************************************************/
 
 #import "AppController.h"
-#import "cocos2d.h"
+#import "axmol.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
 
@@ -37,7 +37,7 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
-// cocos2d application instance
+// axmol application instance
 static AppDelegate s_sharedApplication;
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
