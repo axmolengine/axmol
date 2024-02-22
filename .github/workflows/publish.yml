@@ -68,5 +68,6 @@ jobs:
         name: ${{ steps.make_pkg.outputs.release_tag }}
         files: ${{ steps.make_pkg.outputs.release_pkg }}
         body_path: ${{ steps.make_pkg.outputs.release_note }}
+        prerelease: ${{ steps.make_pkg.outputs.prerelease }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

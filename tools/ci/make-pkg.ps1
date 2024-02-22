@@ -4,24 +4,28 @@ param(
 
 $AX_ROOT = (Resolve-Path $PSScriptRoot/../..).Path
 
+$prerelease = 'false'
 if (!$version -or ($version -eq 'auto')) {
+    $prerelease = 'true'
     $axver_file = (Resolve-Path $AX_ROOT/core/axmolver.h.in).Path
     $axver_content = $(Get-Content -Path $axver_file)
     function parse_axver($part) {
         return ($axver_content | Select-String "#define AX_VERSION_$part").Line.Split(' ')[2]
     }
     function get_full_version() {
-        $axver = "$(parse_axver 'MAJOR').$(parse_axver 'MINOR').$(parse_axver 'PATCH')"
+        $axver = "$(parse_axver 'MAJOR').$(parse_axver 'MINOR')"
 
         $git_prog = (Get-Command 'git' -ErrorAction SilentlyContinue).Source
         if ($git_prog) {
             $branchName = $(git -C $AX_ROOT branch --show-current)
             if ($branchName -eq 'dev') {
                 $commitHash = $(git -C $AX_ROOT rev-parse --short=7 HEAD)
-                $axver += (Get-Date -Format "yyyyMMdd")
+                $axver += ".$(Get-Date -Format "yyyyMMdd")"
                 $axver += "-$commitHash"
                 $axver += '-nightly'
             }
+        } else {
+            $axver += $(parse_axver 'PATCH')
         }
         return $axver
     }
@@ -317,4 +321,5 @@ if ($env:GITHUB_ACTIONS -eq 'true') {
     echo "release_tag=v$version" >> ${env:GITHUB_OUTPUT}
     echo "release_pkg=$pkg_file_name" >> ${env:GITHUB_OUTPUT}
     echo "release_note=$release_note" >> ${env:GITHUB_OUTPUT}
+    echo "prerelease=$prerelease" >> ${env:GITHUB_OUTPUT}
 }
