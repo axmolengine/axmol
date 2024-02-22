@@ -18,7 +18,9 @@ if (!$version -or ($version -eq 'auto')) {
             $branchName = $(git -C $AX_ROOT branch --show-current)
             if ($branchName -eq 'dev') {
                 $commitHash = $(git -C $AX_ROOT rev-parse --short=7 HEAD)
+                $axver += (Get-Date -Format "yyyyMMdd")
                 $axver += "-$commitHash"
+                $axver += '-nightly'
             }
         }
         return $axver
