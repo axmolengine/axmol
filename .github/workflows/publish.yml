@@ -56,7 +56,7 @@ jobs:
       shell: pwsh
       run: |
         $AX_ROOT = $(pwd).Path
-        ./1k/fetch.ps1 -name 'oboe' -dest $(Join-Path $AX_ROOT 'cache/oboe') -cfg $(Join-Path $AX_ROOT 'manifest.json')
+        ./1k/fetch.ps1 -name 'oboe' -prefix $(Join-Path $AX_ROOT 'cache') -cfg $(Join-Path $AX_ROOT 'manifest.json')
         ./build.ps1 -xc '-DAX_WITH_LZ4=ON,-DAX_WITH_CARES=ON,-DAX_WITH_YAML_CPP=ON,-DAX_WITH_KCP=ON' -c
         ./tools/ci/make-pkg.ps1 -version "${{ steps.forward_ver.outputs.release_ver }}"
 
