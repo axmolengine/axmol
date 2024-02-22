@@ -485,7 +485,7 @@ macro (ax_setup_app_props app_name)
             ${APP_NAME}
             PROPERTIES
             # ----- C++/WinRT -----
-            # VS_PACKAGE_REFERENCES "Microsoft.Windows.CppWinRT_${AX_CPPWINRT_VERISON}"
+            # VS_PACKAGE_REFERENCES "Microsoft.Windows.CppWinRT_${AX_CPPWINRT_VERSION}"
             VS_PROJECT_IMPORT "${CMAKE_BINARY_DIR}/CppWinRT.props"
             VS_GLOBAL_CppWinRTOptimized true
             VS_GLOBAL_CppWinRTRootNamespaceAutoMerge true

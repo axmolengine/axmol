@@ -23,7 +23,7 @@ if (WINRT)
             unset(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
         endif()
     endif()
-    set(AX_CPPWINRT_VERISON "2.0.230706.1" CACHE STRING "")
+    set(AX_CPPWINRT_VERSION "2.0.240111.5" CACHE STRING "")
 endif()
 
 # config c standard
