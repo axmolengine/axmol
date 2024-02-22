@@ -10,10 +10,18 @@
 - Fix Update CONTRIBUTING.md by @grif-on in https://github.com/axmolengine/axmol/pull/1673
 - Fix crash during scene transition due to invalid camera by @rh101 in https://github.com/axmolengine/axmol/pull/1676
 - Fix trim leading and trailing whitespace characters for RichText XML text by @rh101 in https://github.com/axmolengine/axmol/pull/1687
-- Change extension folder structure to reduce file name conflicts by @rh101 in https://github.com/axmolengine/axmol/pull/1647
+- Fix can't start lua project on iOS by @halx99
+- Fix lua build for Android, iOS by @bintester in https://github.com/axmolengine/axmol/pull/1709
+- Fix #1704, control android cmake options by engine axutils.gradle by @halx99 in https://github.com/axmolengine/axmol/pull/1705
+- Fix #1703, unzip don't rely on zlib DLL export by @halx99
+- Fix screen size incorrect in retina display by @halx99, reported by @IcemarkUK
+- Fix OSX sandbox network issue by @halx99, reported by @IcemarkUK
+- Fix c-ares link issue
+- Fix DrawNode luabinding color type mismatch by @halx99, reported by @qq461787436
 
 ### Improvements
 
+- Change extension folder structure to reduce file name conflicts by @rh101 in https://github.com/axmolengine/axmol/pull/1647
 - Committing luabindings for commit 9f8962d by @axmol-bot in https://github.com/axmolengine/axmol/pull/1648
 - Use different global names and #undef the #defines to stay unity build friendly. by @j-jorge in https://github.com/axmolengine/axmol/pull/1653
 - Add AX_USE_ALSOFT_STATIC CMake option to compile and link OpenAL Soft as a static library. by @j-jorge in https://github.com/axmolengine/axmol/pull/1654
@@ -32,12 +40,22 @@
 - Ensure valid whitespace is not trimmed when html parsing mode is used by @rh101 in https://github.com/axmolengine/axmol/pull/1689
 - Add support for window close button calback by @lich426 in https://github.com/axmolengine/axmol/pull/1697
 - RichText and ScrollView enhancements by @rh101 in https://github.com/axmolengine/axmol/pull/1696
+- Improve project templates by @halx99 in https://github.com/axmolengine/axmol/pull/1713
+- [Android] Allow setting certain defines without modifying engine source by @rh101 in https://github.com/axmolengine/axmol/pull/1710
+- Improve dll support by @halx99 in https://github.com/axmolengine/axmol/pull/1706
+- Don't use fmt header only by @halx99 in https://github.com/axmolengine/axmol/pull/1707
+- Don't use yasio header only by @halx99
+
+### sdks updates
+
+- cppwinrt: 2.0.230706.1 ==> 2.0.240111.5
 
 ### 3rdparty updates
 
 - glad: 2.0.4 ==> 2.0.5
 - yasio: 4.2.0 ==> 4.2.1
 - llhttp: 9.1.3 == > 9.2.0
+- oboe: 1.8.0 ==> 1.8.1
 
 ## axmol-2.1.1 Feb.2 2024
 
