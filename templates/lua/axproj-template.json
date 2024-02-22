@@ -7,6 +7,16 @@
             "is_dir": true
         },
         {
+            "action": "cp",
+            "from": "$env:AX_ROOT/.clang-format",
+            "to": "${projectDir}/"
+        },
+        {
+            "action": "cp",
+            "from": "$env:AX_ROOT/.editorconfig",
+            "to": "${projectDir}/"
+        },
+        {
             "action": "rep",
             "from": "Dummy",
             "to": "${projectName}",
