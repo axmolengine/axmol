@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -25,33 +26,20 @@
 #ifndef __LUABINDINGEXPROT_H__
 #define __LUABINDINGEXPROT_H__
 
-#if (defined(WIN32) && defined(_WINDOWS))
-#    ifdef __MINGW32__
-#        include <string.h>
+/* AX_LUA_API */
+#if defined(_WIN32)
+#    if defined(AX_LUA_DLLEXPORT)
+#        define AX_LUA_API __declspec(dllexport)
+#    elif defined(AX_LUA_DLLIMPORT)
+#        define AX_LUA_API __declspec(dllimport)
 #    endif
-
-#    if defined(_USRLUASTATIC)
-#        define AX_LUA_DLL
-#    else
-#        if defined(_USRLUADLL)
-#            define AX_LUA_DLL __declspec(dllexport)
-#        else /* use a DLL library */
-#            define AX_LUA_DLL __declspec(dllimport)
-#        endif
-#    endif
-
-/* Define NULL pointer value */
-#    ifndef NULL
-#        ifdef __cplusplus
-#            define NULL 0
-#        else
-#            define NULL ((void*)0)
-#        endif
-#    endif
-#elif defined(_SHARED_)
-#    define AX_LUA_DLL __attribute__((visibility("default")))
-#else
-#    define AX_LUA_DLL
+#elif defined(AX_LUA_DLLEXPORT) || defined(AX_LUA_DLLIMPORT)
+#    define AX_LUA_API __attribute__((visibility("default")))
 #endif
+#ifndef AX_LUA_API
+#    define AX_LUA_API
+#endif
+
+#define AX_LUA_DLL AX_LUA_API
 
 #endif /* __CCEXTENSIONEXPORT_H__*/

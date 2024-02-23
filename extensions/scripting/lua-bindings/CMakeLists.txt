@@ -209,12 +209,16 @@ target_include_directories(${_AX_LUA_LIB}
     PRIVATE ${ax_root}/extensions/spine/src
     PRIVATE ${ax_root}/extensions/cocostudio/src
     PRIVATE ${ax_root}/extensions/fairygui/src
+    PRIVATE ${ax_root}/extensions/fairygui/src/fairygui
     PRIVATE ${ax_root}/extensions/Particle3D/src
     INTERFACE ${ax_root}/extensions/scripting/lua-bindings/manual
 )
 
+if(BUILD_SHARED_LIBS)
+    target_compile_definitions(${_AX_LUA_LIB} PRIVATE CCS_DLLIMPORT)
+endif()
+
 if(WINDOWS)
-    target_compile_definitions(${_AX_LUA_LIB} PUBLIC _USRLUASTATIC)
     if (WINRT)
         target_compile_options(${_AX_LUA_LIB} PUBLIC /wd4700)
     endif()

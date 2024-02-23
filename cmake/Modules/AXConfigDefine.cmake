@@ -23,7 +23,7 @@ if (WINRT)
             unset(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
         endif()
     endif()
-    set(AX_CPPWINRT_VERISON "2.0.230706.1" CACHE STRING "")
+    set(AX_CPPWINRT_VERSION "2.0.240111.5" CACHE STRING "")
 endif()
 
 # config c standard
@@ -167,12 +167,7 @@ function(use_ax_compile_define target)
             # PUBLIC GLAD_GLAPI_EXPORT
         )
         if(BUILD_SHARED_LIBS)
-            target_compile_definitions(${target}
-                PRIVATE _USRDLL
-                PRIVATE _USEGUIDLL # ui
-            )
-        else()
-            target_compile_definitions(${target} PUBLIC AX_STATIC)
+            target_compile_definitions(${target} PRIVATE AX_DLLEXPORT INTERFACE AX_DLLIMPORT)
         endif()
     endif()
 endfunction()

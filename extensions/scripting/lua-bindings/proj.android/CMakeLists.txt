@@ -25,5 +25,6 @@ target_include_directories(${target_name}
   PRIVATE ../../../../thirdparty
   PRIVATE ../../../../thirdparty/robin-map/include
   PRIVATE ../../../../thirdparty/jni.hpp/include
+  PRIVATE ../../../../thirdparty/yasio
 )
 

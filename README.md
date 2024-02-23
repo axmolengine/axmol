@@ -116,14 +116,13 @@ Some highlights:
     - Extensions license overview, for easier publishing of your commercial apps based on Axmol framework.
 - Reimplemented HttpClient based on yasio for concurrent http requests processing.
 - Modularized all optional extensions, move from engine core folder to an extensions folder.
-- Google [Angle](https://github.com/google/angle) renderer backend support
+- Use Google [Angle](https://github.com/google/angle) as default renderer backend on Windows.
 - Using GL loader Glad.
 - Using [pugixml](https://pugixml.org)
 - Using [curl](https://github.com/curl/curl) for transferring data with URL syntax
 - Using SAX parser for .plist files
 - ASTC 4x4 / 6x6 / 8x8 support (if hardware decoding is not supported, then software decoding is used)
 - ETC2 RGB / RGBA support (if hardware decoding is not supported, then software decoding is used)
-- iOS / tvOS SDK 11.0 as minimal deployment.
  
 Please read the [full list of changes since Cocos2d-x v4.0](CHANGELOG.md). 
 

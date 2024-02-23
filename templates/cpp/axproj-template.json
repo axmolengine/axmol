@@ -1,0 +1,110 @@
+{
+    "do_default": [
+        {
+            "action": "cp",
+            "from": "$env:AX_ROOT/templates/common/*",
+            "to": "${projectDir}/",
+            "is_dir": true
+        },
+        {
+            "action": "cp",
+            "from": "$env:AX_ROOT/.clang-format",
+            "to": "${projectDir}/"
+        },
+        {
+            "action": "cp",
+            "from": "$env:AX_ROOT/.editorconfig",
+            "to": "${projectDir}/"
+        },
+        {
+            "action": "rep",
+            "from": "Dummy",
+            "to": "${projectName}",
+            "files": [
+                "proj.android/settings.gradle",
+                "proj.android/app/res/values/strings.xml",
+                "proj.android/app/AndroidManifest.xml",
+                "proj.winrt/Package.appxmanifest",
+                "proj.winrt/App.xaml",
+                "CMakeLists.txt",
+                "Source/AppDelegate.cpp"
+            ]
+        },
+        {
+            "action": "rep",
+            "from": "org.axmol.dummy",
+            "to": "${packageName}",
+            "files": [
+                "proj.android/app/build.gradle",
+                "CMakeLists.txt"
+            ]
+        },
+        {
+            "action": "del",
+            "files": [
+                "axproj-template.json"
+            ]
+        }
+    ],
+    "do_portrait": [
+        {
+            "action": "rep",
+            "from": "UIInterfaceOrientationLandscapeRight",
+            "to": "UIInterfaceOrientationPortrait",
+            "files": [
+                "proj.ios_mac/ios/targets/ios/Info.plist"
+            ]
+        },
+        {
+            "action": "rep",
+            "from": "UIInterfaceOrientationLandscapeLeft",
+            "to": "UIInterfaceOrientationPortraitUpsideDown",
+            "files": [
+                "proj.ios_mac/ios/targets/ios/Info.plist"
+            ]
+        },
+        {
+            "action": "rep",
+            "pattern": "static\\s+ax\\:\\:Size\\s+([a-zA-Z_\\d]+)\\s*=\\s*ax\\:\\:Size\\(\\s*(\\d+),\\s*(\\d+)\\)",
+            "to": "static ax::Size `$1 = ax::Size(`$3, `$2)",
+            "files": [
+                "Source/AppDelegate.cpp"
+            ]
+        },
+        {
+            "action": "rep",
+            "pattern": "android:screenOrientation=\\\".*\\\"",
+            "to": "android:screenOrientation=`\"portrait`\"",
+            "files": [
+                "proj.android/app/AndroidManifest.xml"
+            ]
+        },
+        {
+            "action": "rep",
+            "pattern": "orientation=\\\".*\\\"",
+            "to": "orientation=`\"portrait`\"",
+            "files": [
+                "proj.ios_mac/ios/targets/ios/LaunchScreen.storyboard"
+            ]
+        },
+        {
+            "action": "rep",
+            "pattern": "image name=\\\".*\\\" width=\\\".*\\\" height=\\\".*\\\"",
+            "to": "image name=`\"LaunchScreenBackground.png`\" width=`\"1242`\" height=`\"2208`\"",
+            "files": [
+                "proj.ios_mac/ios/targets/ios/LaunchScreen.storyboard"
+            ]
+        },
+        {
+            "action": "cp",
+            "from": "${projectDir}/proj.ios_mac/ios/targets/ios/LaunchScreenBackgroundPortrait.png",
+            "to": "${projectDir}/proj.ios_mac/ios/targets/ios/LaunchScreenBackground.png"
+        },
+        {
+            "action": "del",
+            "files": [
+                "proj.ios_mac/ios/targets/ios/LaunchScreenBackgroundPortrait.png"
+            ]
+        }
+    ]
+}

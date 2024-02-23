@@ -14,7 +14,7 @@ function(setup_ax_extension_config target_name)
   target_link_libraries(${target_name} ${opt_LINK_SCOPE} ${_AX_CORE_LIB})
 
   if(BUILD_SHARED_LIBS)
-    target_compile_definitions(${target_name} PRIVATE _USREXDLL=1)
+    target_compile_definitions(${target_name} PRIVATE AX_EX_DLLEXPORT INTERFACE AX_EX_DLLIMPORT)
   endif()
 
   set_target_properties(${target_name}

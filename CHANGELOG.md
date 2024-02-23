@@ -1,3 +1,62 @@
+## axmol-2.1.2 ?? 2024
+
+### BugFixes
+
+- Fix screen size incorrect in retina display by @halx99 in https://github.com/axmolengine/axmol/pull/1692
+- Fix view size incorrect when frameZoomFactor not 1.0 by @halx99 in https://github.com/axmolengine/axmol/pull/1694
+- Fix lua build for Android, iOS and Windows by @rh101 in https://github.com/axmolengine/axmol/pull/1650
+- Fix missing return statement by @rh101 in https://github.com/axmolengine/axmol/pull/1657
+- Fix cross fade transition by @rh101 in https://github.com/axmolengine/axmol/pull/1664
+- Fix Update CONTRIBUTING.md by @grif-on in https://github.com/axmolengine/axmol/pull/1673
+- Fix crash during scene transition due to invalid camera by @rh101 in https://github.com/axmolengine/axmol/pull/1676
+- Fix trim leading and trailing whitespace characters for RichText XML text by @rh101 in https://github.com/axmolengine/axmol/pull/1687
+- Fix can't start lua project on iOS by @halx99
+- Fix lua build for Android, iOS by @bintester in https://github.com/axmolengine/axmol/pull/1709
+- Fix #1704, control android cmake options by engine axutils.gradle by @halx99 in https://github.com/axmolengine/axmol/pull/1705
+- Fix #1703, unzip don't rely on zlib DLL export by @halx99
+- Fix screen size incorrect in retina display by @halx99, reported by @IcemarkUK
+- Fix OSX sandbox network issue by @halx99, reported by @IcemarkUK
+- Fix c-ares link issue
+- Fix DrawNode luabinding color type mismatch by @halx99, reported by @qq461787436
+
+### Improvements
+
+- Change extension folder structure to reduce file name conflicts by @rh101 in https://github.com/axmolengine/axmol/pull/1647
+- Committing luabindings for commit 9f8962d by @axmol-bot in https://github.com/axmolengine/axmol/pull/1648
+- Use different global names and #undef the #defines to stay unity build friendly. by @j-jorge in https://github.com/axmolengine/axmol/pull/1653
+- Add AX_USE_ALSOFT_STATIC CMake option to compile and link OpenAL Soft as a static library. by @j-jorge in https://github.com/axmolengine/axmol/pull/1654
+- Ability to disable default implementations of HTTP and WebSocket clients by @rh101 in https://github.com/axmolengine/axmol/pull/1656
+- Remove duplicate CODE_SIGN_IDENTITY that is setting invalid value by @rh101 in https://github.com/axmolengine/axmol/pull/1666
+- Disable unused extensions in the FairyGUI and Live2D tests to speed up builds by @rh101 in https://github.com/axmolengine/axmol/pull/1665
+- Update README.md by @danialias in https://github.com/axmolengine/axmol/pull/1668
+- Spelling and formatting corrections for .md files by @danialias in https://github.com/axmolengine/axmol/pull/1671
+- Update CONTRIBUTING.md by @grif-on in https://github.com/axmolengine/axmol/pull/1670
+- Solved broken links in README.md by @danialias in https://github.com/axmolengine/axmol/pull/1677
+- Ensure correct video mode settings are applied when creating view by @rh101 in https://github.com/axmolengine/axmol/pull/1678
+- Solved more broken links in README.md by @grif-on in https://github.com/axmolengine/axmol/pull/1680
+- Some additions and corrections for readme files. by @danialias in https://github.com/axmolengine/axmol/pull/1682
+- RichText enhancements by @rh101 in https://github.com/axmolengine/axmol/pull/1683
+- Add -j to specify build cpu count  support by @halx99 in https://github.com/axmolengine/axmol/pull/1688
+- Ensure valid whitespace is not trimmed when html parsing mode is used by @rh101 in https://github.com/axmolengine/axmol/pull/1689
+- Add support for window close button calback by @lich426 in https://github.com/axmolengine/axmol/pull/1697
+- RichText and ScrollView enhancements by @rh101 in https://github.com/axmolengine/axmol/pull/1696
+- Improve project templates by @halx99 in https://github.com/axmolengine/axmol/pull/1713
+- [Android] Allow setting certain defines without modifying engine source by @rh101 in https://github.com/axmolengine/axmol/pull/1710
+- Improve dll support by @halx99 in https://github.com/axmolengine/axmol/pull/1706
+- Don't use fmt header only by @halx99 in https://github.com/axmolengine/axmol/pull/1707
+- Don't use yasio header only by @halx99
+
+### sdks updates
+
+- cppwinrt: 2.0.230706.1 ==> 2.0.240111.5
+
+### 3rdparty updates
+
+- glad: 2.0.4 ==> 2.0.5
+- yasio: 4.2.0 ==> 4.2.1
+- llhttp: 9.1.3 == > 9.2.0
+- oboe: 1.8.0 ==> 1.8.1
+
 ## axmol-2.1.1 Feb.2 2024
 
 ### BugFixes
@@ -13,11 +72,11 @@
 - Fix build win32 with clang error
 - Fix ci build-site download unexpected artifacts from appveyor
 
-## Break changes
+### Break changes
 
 - Rename android entrypoint: `cocos_android_app_init` ==> `axmol_android_app_init`
 
-## Improvements
+### Improvements
 
 - Add some utils functions and lua support by @bintester
 
@@ -26,7 +85,7 @@
 - simdjson: 3.6.3 ==> 3.6.4
 - curl: 8.5.0 ==> 8.6.0
 - openssl: 3.0.12 ==> 3.0.13
-- yasio: 4.1.4 ==> 5.0.0
+- yasio: 4.1.4 ==> 4.2.0(5.0.0)
 - zlib: 1.3 ==> 1.3.1
 - jpeg-turbo: 3.0.1 ==> 3.0.2
 - libpng: 1.6.40 ==> 1.6.42

@@ -356,7 +356,7 @@ if(WINDOWS)
 
         # intsall cppwinrt package for xaml apps
         execute_process(COMMAND "${NUGET_EXE}"
-                install "Microsoft.Windows.CppWinRT" -Version ${AX_CPPWINRT_VERISON} -ExcludeVersion -OutputDirectory "${CMAKE_BINARY_DIR}/packages")
+                install "Microsoft.Windows.CppWinRT" -Version ${AX_CPPWINRT_VERSION} -ExcludeVersion -OutputDirectory "${CMAKE_BINARY_DIR}/packages")
         set_target_properties(${_AX_CORE_LIB} PROPERTIES
             VS_PROJECT_IMPORT ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.props
         )

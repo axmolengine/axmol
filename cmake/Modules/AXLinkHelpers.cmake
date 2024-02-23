@@ -41,7 +41,6 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         PRIVATE BT_USE_SSE_IN_API=1
         PRIVATE CP_USE_DOUBLES=0
         PRIVATE CP_USE_CGTYPES=0
-        PRIVATE FMT_HEADER_ONLY=1
     )
 
     ax_config_pred(${APP_NAME} AX_USE_ALSOFT)
@@ -52,10 +51,8 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         target_compile_definitions(${APP_NAME} PRIVATE AX_USE_SSE=1)
     endif()
 
-    if (NOT BUILD_SHARED_LIBS)
-        target_compile_definitions(${APP_NAME}
-            PRIVATE AX_STATIC=1
-        )
+    if (BUILD_SHARED_LIBS)
+        target_compile_definitions(${APP_NAME} PRIVATE AX_DLLIMPORT=1)
     endif()
 
     target_include_directories(${APP_NAME}
@@ -265,6 +262,8 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             openal
         )
     endif()
+
+    target_link_libraries(${APP_NAME} debug fmtd optimized fmt)
 
     # Copy dlls to app bin dir
     if(WINDOWS)

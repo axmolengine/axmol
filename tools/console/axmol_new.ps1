@@ -23,14 +23,6 @@ if (!$projectName) {
 # convert to absolute path
 $directory = realpath $directory
 
-if ($lang -eq 'cpp' -or $lang -eq 'lua') {
-    if (!(Test-Path $directory -PathType Container)) {
-        New-Item $directory -ItemType Directory
-    }
-} else {
-    throw 'Invalid lang, valid is cpp or lua'
-}
-
 if ($packageName.IndexOf('-') -ne -1) {
     # !!!reason:
     #   - android package not accept '-'
@@ -39,11 +31,10 @@ if ($packageName.IndexOf('-') -ne -1) {
     println "Warning: package name was converted to '$packageName'!"
 }
 
-if ($lang -eq 'cpp') {
-    $sourcePath = Join-Path $env:AX_ROOT 'templates/cpp-template-default'
-}
-elseif ($lang -eq 'lua') {
-    $sourcePath = Join-Path $env:AX_ROOT 'templates/lua-template-default'
+$sourcePath = Join-Path $env:AX_ROOT "templates/$lang"
+
+if(!(Test-Path $sourcePath)) {
+    throw 'Invalid lang, valid is cpp or lua'
 }
 
 $destinationPath = Join-Path $directory $projectName

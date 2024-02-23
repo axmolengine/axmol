@@ -1,8 +1,8 @@
 name: build
 
-on: 
+on:
   push:
-
+    branches: dev
     paths-ignore:
       - '**.md'
       - '**/*.md.in'

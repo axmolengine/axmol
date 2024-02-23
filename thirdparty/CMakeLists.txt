@@ -256,7 +256,7 @@ if (ANDROID)
     )
 endif()
 
-ax_add_3rd(fmt EXCLUDE_FROM_ALL TARGETS fmt-header-only)
+ax_add_3rd(fmt)
 
 # bellow are non header only libs
 
@@ -416,6 +416,10 @@ if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
 
     if(WINDOWS)
         list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
+    endif()
+
+    if(WINRT)
+        set(ALSOFT_CPPWINRT_VERSION ${AX_CPPWINRT_VERSION} CACHE STRING "" FORCE)
     endif()
 
     ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS alcommon;OpenAL OPTIONS ${alsoft_opts})
