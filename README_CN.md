@@ -109,7 +109,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 - 使用内存映射文件 [mio](https://github.com/mandreyel/mio) 重构 UserDefault，速度提升百倍。 
 - 使用 yasio 重构 HttpClient 支持并发请求。
 - 模块化所有扩展，所有扩展均可选编译。
-- Google [Angle](https://github.com/google/angle) 渲染后端支持并作为 Windows 下默认渲染后端，提升设备兼容性。
+- Windows 下使用 Google [Angle](https://github.com/google/angle) 作为默认渲染后端，提升设备兼容性。
 - 使用更加现代的 GL 加载器：`Glad`。
 - 使用 [pugixml](https://pugixml.org) 作为引擎唯一 XML 解析和生成库。
 - 使用 [curl](https://github.com/curl/curl) 作为 Downloader 全平台实现库。
