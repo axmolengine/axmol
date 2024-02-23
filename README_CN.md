@@ -26,7 +26,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axmolengine/axmol/pulls)
 [![Discord](https://img.shields.io/discord/1099599084895088670?label=discord)](https://discord.gg/QjaQBhFVay)
 
-[Chinese ver. / 简体中文](README_CN.md)
+[英文版本 / English](README.md)
 
 ***
 
