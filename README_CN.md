@@ -49,24 +49,28 @@
 Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度更快，能力更强，同时保持轻量级。 [请查看对比差异](https://github.com/axmolengine/axmol/wiki/Axmol-vs-Cocos2d%E2%80%90x)。
 
 **支持平台**:
+
 * 移动设备: iOS, Android
 * 桌面设备: Windows, Linux, macOS, tvOS
 * 主机设备: Xbox (Windows通用平台)
-* Web: WebAssembly (预览版: [Axmol tests](https://axmol.netlify.app/wasm/cpp-tests/cpp-tests) / [FairyGUI tests](https://axmol.netlify.app/wasm/fairygui-tests/fairygui-tests))
+* Web: 主流浏览器 (Chrome，Edge，Firefox) (预览版: [Axmol tests](https://axmol.netlify.app/wasm/cpp-tests/cpp-tests) / [FairyGUI tests](https://axmol.netlify.app/wasm/fairygui-tests/fairygui-tests))
 
 **支持语言**:
+
 * C++
 * Lua
 
 **渲染后端**:
-* Metal： macOS and iOS
-* OpenGL 3.3+： Linux, macOS and Win32
+
+* Metal： macOS、iOS
+* OpenGL 3.3+： Linux、macOS、Win32
 * OpenGL ES 2.0+： Android
 * OpenGL ES 3.0+： iOS
-* ANGLE GLES 3.0+： Win32 and UWP
+* ANGLE GLES 3.0+： Win32、 UWP
 * WebGL 2.0 (OpenGL ES 3.0): WASM
 
 **支持架构**:
+
 * iOS (x64, arm64)
 * Android (x86, x64, armv7, arm64)
 * Windows (x86, x64)
@@ -75,15 +79,18 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 * UWP (x64, arm64)
 * wasm32
 
-**支持2D物理引擎** ([更多细节请查看](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-informations)):
+**支持2D物理引擎** ([更多相关信息](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-informations)):
+
 * Box2D
 * Box2D-optimized
 * Chipmunk2D
 
 **支持3D物理引擎**:
+
 * Bullet Physics SDK
 
 **支持扩展**:
+
 * FairyGUI
 * ImGUI
 * Spine
@@ -97,15 +104,14 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 
 一些亮点:
 
-- **全新媒体播放器**: 基于 MediaEngine 的视频纹理渲染，支持所有 Native 平台. [详见我们的 wiki 页](https://github.com/axmolengine/axmol/wiki/Media-Player).
-- **WebAssembly支持** (by @nowasm) - Preview: [Axmol tests](https://axmol.netlify.app/wasm/cpp-tests/cpp-tests)
-- **Universal Windows Platform** (UWP) support for Xbox consoles
-- **Apple M1 and Android x64 支持** (by @pietpukkel)
-- **Windows x64 构建支持**
-- **Windows SIMD加速指令矩阵计算支持**
-- 支持链接引擎预编译库。 详见 [Windows 工作流指导](https://github.com/axmolengine/axmol/issues/564).
-- 重构 AudioEngine, 所有平台均使用 OpenAL。
-   - .wav 音频格式支持
+- **全新媒体播放器**: 基于 MediaEngine 的视频纹理渲染，支持所有 Native 平台. [详见我们的 wiki 页](https://github.com/axmolengine/axmol/wiki/Media-Player)。
+- **WebAssembly 支持** (by @nowasm) - Preview: [Axmol tests](https://axmol.netlify.app/wasm/cpp-tests/cpp-tests)
+- **Windows 通用平台** (UWP) Xbox 主机平台支持。
+- **Apple M1 and Android x64 支持** (by @pietpukkel)。
+- **Windows x64 构建支持**。
+- **Windows SIMD 加速指令矩阵计算支持**。
+- 支持链接引擎预编译库。 详见 [Windows 工作流指导](https://github.com/axmolengine/axmol/issues/564)。
+- 重构 AudioEngine，所有平台均使用 OpenAL 并新增 `.wav` 音频格式支持。
 - 使用内存映射文件 [mio](https://github.com/mandreyel/mio) 重构 UserDefault，速度提升百倍。 
 - 使用 yasio 重构 HttpClient 支持并发请求。
 - 模块化所有扩展，所有扩展均可选编译。
@@ -113,9 +119,9 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 - 使用更加现代的 GL 加载器：`Glad`。
 - 使用 [pugixml](https://pugixml.org) 作为引擎唯一 XML 解析和生成库。
 - 使用 [curl](https://github.com/curl/curl) 作为 Downloader 全平台实现库。
-- 使用 SAX 解析 .plist 文件
-- 新增支持 ASTC 4x4 / 6x6 / 8x8 格式 (如果硬件不支持，则使用SIMD加速指令集进并行解码)
-- 新增 ETC2 RGB / RGBA 格式支持 (如果硬件不支持，则使用ANGLE提供的软解)。
+- 使用 SAX 解析 .plist 文件。
+- 新增 ASTC 4x4 / 6x6 / 8x8 格式支持 (如果硬件不支持，则使用SIMD加速指令集进并行解码)。
+- 新增 ETC2 RGB / RGBA 格式支持 (如果硬件不支持，则使用 ANGLE 提供的 API 进行软解)。
  
 [请阅读相对于 Cocos2d-x-4.0 的完整改动列表](CHANGELOG.md)。
 
@@ -131,7 +137,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 * 请不要忘记将主题添加 axmol 到 axmolengine 您创建的任何相关存储库中
 * 在 GitHub 上添加星也将有助于 Axmol 的成长。谢谢你
 
-如果您发现 Axmol 引擎有帮助，请考虑在 [Open Collective](https://opencollective.com/axmol) 或 in [GitHub Sponsors](https://github.com/sponsors/axmolengine)赞助，非常感谢！
+如果您发现 Axmol 引擎有帮助，请考虑在 [Open Collective](https://opencollective.com/axmol) 或 in [GitHub Sponsors](https://github.com/sponsors/axmolengine) 赞助，非常感谢！
 
 ## 社区
 
