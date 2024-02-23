@@ -4,9 +4,9 @@
 
 ## A Multi-platform Engine for Mobile, Desktop and Xbox.
 
-[Axmol Engine](https://axmol.org) 是一个开源的专为移动设备，桌面设备和XBox设备设计的C++多平台引擎。该项目于2019年11月作为`Cocos2d-X-4.0`的一个分支启动
+[Axmol Engine](https://axmol.org) 是一个开源的专为移动设备，桌面设备和XBox设备设计的C++多平台引擎。该项目于2019年11月作为`Cocos2d-X-4.0`的一个分支启动。
 
-请 [访问我们的Wiki](https://github.com/axmolengine/axmol/wiki) 了解关于 Axmol 的更多信息.
+请 [访问我们的 Wiki](https://github.com/axmolengine/axmol/wiki) 了解关于 Axmol 的更多信息。
 
 ***
 
@@ -35,7 +35,7 @@
 * [下载最新版本](https://github.com/axmolengine/axmol/releases) / [镜像仓库](https://gitee.com/simdsoft/axmol)
 * [如何安装](docs/DevSetup.md)
 
-如果你有一个 Cocos2d-x 项目, 可以很容易迁移到 Axmol。 我们准备了 [迁移引导](https://github.com/axmolengine/axmol/wiki/Cocos2d%E2%80%90x-migration-guide).
+如果你有一个 Cocos2d-x 项目, 可以很容易迁移到 Axmol。 我们准备了 [迁移指导](https://github.com/axmolengine/axmol/wiki/Cocos2d%E2%80%90x-migration-guide)。
 
 ## 教程和文档
 
@@ -44,9 +44,9 @@
 * [教程](https://github.com/axmolengine/axmol/wiki/Tutorials)
 * [常见问题](https://github.com/axmolengine/axmol/wiki/FAQ)
 
-## 概要
+## 引擎概要
 
-Axmol 引擎在 Cocos2d-x v4.0 的基础上经i行了迭代和改进。现在速度更快，能力更强，同时保持轻量级. [请查看对比差异](https://github.com/axmolengine/axmol/wiki/Axmol-vs-Cocos2d%E2%80%90x).
+Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度更快，能力更强，同时保持轻量级。 [请查看对比差异](https://github.com/axmolengine/axmol/wiki/Axmol-vs-Cocos2d%E2%80%90x)。
 
 **支持平台**:
 * 移动设备: iOS, Android
@@ -59,11 +59,11 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上经i行了迭代和改进。现在速
 * Lua
 
 **渲染后端**:
-* Metal for macOS and iOS
-* OpenGL 3.3+ for Linux, macOS and Win32
-* OpenGL ES 2.0+ for Android
-* OpenGL ES 3.0+ for iOS
-* ANGLE GLES 3.0+ for Win32 and UWP
+* Metal： macOS and iOS
+* OpenGL 3.3+： Linux, macOS and Win32
+* OpenGL ES 2.0+： Android
+* OpenGL ES 3.0+： iOS
+* ANGLE GLES 3.0+： Win32 and UWP
 * WebGL 2.0 (OpenGL ES 3.0): WASM
 
 **支持架构**:
@@ -89,45 +89,37 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上经i行了迭代和改进。现在速
 * Spine
 * Live2D
 * Effekseer
-* And more! Check our [Extensions Wiki Page](https://github.com/axmolengine/axmol/wiki/Extensions)
+* 更多 [扩展 Wiki 页](https://github.com/axmolengine/axmol/wiki/Extensions)
 
-[More extensions created by our community](https://github.com/axmolengine/axmol/wiki/Made-in-Axmol) 
+[由我们的社区创建的更多扩展](https://github.com/axmolengine/axmol/wiki/Made-in-Axmol) 
 
 ## 特性
 
 一些亮点:
 
-- **New MediaPlayer**: render video as texture2D using MediaEngine. [More info in our Wiki](https://github.com/axmolengine/axmol/wiki/Media-Player).
-- Windows video player support (based on Microsoft Media Foundation)
-- **WebAssembly support** (by @nowasm) - Preview: [Axmol tests](https://axmol.netlify.app/wasm/cpp-tests/cpp-tests)
+- **全新媒体播放器**: 基于 MediaEngine 的视频纹理渲染，支持所有 Native 平台. [详见我们的 wiki 页](https://github.com/axmolengine/axmol/wiki/Media-Player).
+- **WebAssembly支持** (by @nowasm) - Preview: [Axmol tests](https://axmol.netlify.app/wasm/cpp-tests/cpp-tests)
 - **Universal Windows Platform** (UWP) support for Xbox consoles
-- **Apple M1 and Android x64 support** (by @pietpukkel)
-- **Windows x64 build support**
-- Improved Windows workflow, supporting linking with engine prebuilt libs. Please read the [Windows workflow guide](https://github.com/axmolengine/axmol/issues/564).
-- Refactored AudioEngine, OpenAL for all platforms:
-    - [OpenAL Soft](https://github.com/kcat/openal-soft) (pass `-DAX_USE_ALSOFT=ON` to CMake to force enabling it)
-    - [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL) (if no `AX_USE_ALSOFT` option specified, cmake script will choose it on OSX/iOS/tvOS, even though it was marked as deprecated is still available)
-- Implemented all .wav formats supported by OpenAL Soft (MS-ADPCM, ADPCM, etc.)
-- Refactored UserDefault with [mio](https://github.com/mandreyel/mio)
-- [Upstream Version License](thirdparty/README.md) - Third-party:
-    - Third-party license overview, for easier publishing of your commercial apps based on Axmol framework.
-    - Some links to third party libs which support axmol too.
-- [Upstream Version License](extensions/README.md) - Extensions:
-    - Extensions license overview, for easier publishing of your commercial apps based on Axmol framework.
-- Reimplemented HttpClient based on yasio for concurrent http requests processing.
-- Modularized all optional extensions, move from engine core folder to an extensions folder.
-- Google [Angle](https://github.com/google/angle) renderer backend support
-- Using GL loader Glad.
-- Using [pugixml](https://pugixml.org)
-- Using [curl](https://github.com/curl/curl) for transferring data with URL syntax
-- Using SAX parser for .plist files
-- ASTC 4x4 / 6x6 / 8x8 support (if hardware decoding is not supported, then software decoding is used)
-- ETC2 RGB / RGBA support (if hardware decoding is not supported, then software decoding is used)
-- iOS / tvOS SDK 11.0 as minimal deployment.
+- **Apple M1 and Android x64 支持** (by @pietpukkel)
+- **Windows x64 构建支持**
+- **Windows SIMD加速指令矩阵计算支持**
+- 支持链接引擎预编译库。 详见 [Windows 工作流指导](https://github.com/axmolengine/axmol/issues/564).
+- 重构 AudioEngine, 所有平台均使用 OpenAL。
+   - .wav 音频格式支持
+- 使用内存映射文件 [mio](https://github.com/mandreyel/mio) 重构 UserDefault，速度提升百倍。 
+- 使用 yasio 重构 HttpClient 支持并发请求。
+- 模块化所有扩展，所有扩展均可选编译。
+- Google [Angle](https://github.com/google/angle) 渲染后端支持并作为 Windows 下默认渲染后端，提升设备兼容性。
+- 使用更加现代的 GL 加载器：`Glad`。
+- 使用 [pugixml](https://pugixml.org) 作为引擎唯一 XML 解析和生成库。
+- 使用 [curl](https://github.com/curl/curl) 作为 Downloader 全平台实现库。
+- 使用 SAX 解析 .plist 文件
+- 新增支持 ASTC 4x4 / 6x6 / 8x8 格式 (如果硬件不支持，则使用SIMD加速指令集进并行解码)
+- 新增 ETC2 RGB / RGBA 格式支持 (如果硬件不支持，则使用ANGLE提供的软解)。
  
-Please read the [full list of changes since Cocos2d-x v4.0](CHANGELOG.md). 
+[请阅读相对于 Cocos2d-x-4.0 的完整改动列表](CHANGELOG.md)。
 
-See the [Milestones](https://github.com/axmolengine/axmol/milestones) for planned features.
+版本计划，请查看[里程碑](https://github.com/axmolengine/axmol/milestones)。
 
 ## 贡献
 
@@ -144,17 +136,18 @@ See the [Milestones](https://github.com/axmolengine/axmol/milestones) for planne
 ## 社区
 
 我们的社区正在成长！请加入我们：
- * [GitHub 轮胎](https://github.com/axmolengine/axmol/discussions) (提问和讨论引擎的首选方式)
+ * [GitHub 论坛](https://github.com/axmolengine/axmol/discussions) (提问和讨论引擎的首选方式)
  * [Discord](https://discord.gg/QjaQBhFVay)
  * [Reddit](https://www.reddit.com/r/axmol/)
+ * [点击加入QQ交流群](https://jq.qq.com/?_wv=1027&k=nvNmzOIY)
 
 要查看我们的一些社区作品，请查看我们的 Axmol 展示：[Made in Axmol](https://github.com/axmolengine/axmol/wiki/Made-in-Axmol)
 
 ## 参考链接
 
-- [1kiss](https://github.com/simdsoft/1kiss): A cross-platform one step build powershell script, with auto setup general dependent tools.
-- [axmolengine/glslcc](https://github.com/axmolengine/glslcc): A fork of glslcc, for Axmol new shader workflow tool.
-- [Official Cocos2d-x](https://github.com/cocos2d/cocos2d-x)
+- [1kiss](https://github.com/simdsoft/1kiss): 一个由 PowerShell 编写的能够自动配置各平台编译工具链的跨平台构建工具。
+- [axmolengine/glslcc](https://github.com/axmolengine/glslcc): 一个glslcc的分支, 用于 Axmol 引擎 Shader 编译工作流。
+- [Cocos2d-x](https://github.com/cocos2d/cocos2d-x)：原 cocos2d-x 官方引擎仓库。
 
 ## Axmol 活跃状态
 
