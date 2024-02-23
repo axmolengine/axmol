@@ -4,7 +4,7 @@
 
 ## A Multi-platform Engine for Mobile, Desktop and Xbox.
 
-[Axmol Engine](https://axmol.org) 是一个开源的专为移动设备，桌面设备和XBox设备设计的C++多平台引擎。该项目于2019年11月作为`Cocos2d-X-4.0`的一个分支启动。
+[Axmol Engine](https://axmol.org) 是一个开源的专为移动、桌面和XBox设备设计的 C++ 多平台引擎。该项目于2019年11月作为`Cocos2d-X-4.0`的一个分支启动。
 
 请 [访问我们的 Wiki](https://github.com/axmolengine/axmol/wiki) 了解关于 Axmol 的更多信息。
 
@@ -77,7 +77,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 * Linux (x64)
 * OSX (x64, arm64)
 * UWP (x64, arm64)
-* wasm32
+* Wasm32
 
 **支持2D物理引擎** ([更多相关信息](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-informations)):
 
@@ -104,10 +104,10 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 
 一些亮点:
 
-- **全新媒体播放器**: 基于 MediaEngine 的视频纹理渲染，支持所有 Native 平台. [详见我们的 wiki 页](https://github.com/axmolengine/axmol/wiki/Media-Player)。
+- **全新媒体播放器**: 基于 MediaEngine 的视频纹理渲染，支持所有 Native 平台. [详见我们的 Wiki 页](https://github.com/axmolengine/axmol/wiki/Media-Player)。
 - **WebAssembly 支持** (by @nowasm) - Preview: [Axmol tests](https://axmol.netlify.app/wasm/cpp-tests/cpp-tests)
-- **Windows 通用平台** (UWP) Xbox 主机平台支持。
-- **Apple M1 and Android x64 支持** (by @pietpukkel)。
+- **Windows 通用** (UWP) Xbox 主机平台支持。
+- **Apple M1 和 Android x64 支持** (by @pietpukkel)。
 - **Windows x64 构建支持**。
 - **Windows SIMD 加速指令矩阵计算支持**。
 - 支持链接引擎预编译库。 详见 [Windows 工作流指导](https://github.com/axmolengine/axmol/issues/564)。
@@ -134,8 +134,8 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 * 非常感谢建议、错误修复和改进
   - [贡献说明](CONTRIBUTING.md)
   - [贡献者列表](AUTHORS.md)
-* 请不要忘记将主题添加 axmol 到 axmolengine 您创建的任何相关存储库中
-* 在 GitHub 上添加星也将有助于 Axmol 的成长。谢谢你
+* 请不要忘记将主题 axmol 和 axmolengine 添加到您创建的任何相关存储库中
+* 在 GitHub 上添加星也将有助于 Axmol 的成长。谢谢你!
 
 如果您发现 Axmol 引擎有帮助，请考虑在 [Open Collective](https://opencollective.com/axmol) 或 in [GitHub Sponsors](https://github.com/sponsors/axmolengine) 赞助，非常感谢！
 
@@ -147,13 +147,13 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
  * [Reddit](https://www.reddit.com/r/axmol/)
  * [点击加入QQ交流群](https://jq.qq.com/?_wv=1027&k=nvNmzOIY)
 
-要查看我们的一些社区作品，请查看我们的 Axmol 展示：[Made in Axmol](https://github.com/axmolengine/axmol/wiki/Made-in-Axmol)
+要查看我们的一些社区作品，请访问我们的 Axmol 展示页：[Made in Axmol](https://github.com/axmolengine/axmol/wiki/Made-in-Axmol)
 
 ## 参考链接
 
 - [1kiss](https://github.com/simdsoft/1kiss): 一个由 PowerShell 编写的能够自动配置各平台编译工具链的跨平台构建工具。
-- [axmolengine/glslcc](https://github.com/axmolengine/glslcc): 一个glslcc的分支, 用于 Axmol 引擎 Shader 编译工作流。
-- [Cocos2d-x](https://github.com/cocos2d/cocos2d-x)：原 cocos2d-x 官方引擎仓库。
+- [axmolengine/glslcc](https://github.com/axmolengine/glslcc): 一个 glslcc 的分支, 用于 Axmol 引擎跨平台 Shader 编译工作流。
+- [Cocos2d-x](https://github.com/cocos2d/cocos2d-x)：原 Cocos2d-x 官方引擎仓库。
 
 ## Axmol 活跃状态
 
