@@ -23,13 +23,13 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/base/axlua_base_manual.hpp"
+#include "lua-bindings/manual/base/axlua_base_manual.hpp"
 
 #if AX_USE_PHYSICS
-#    include "scripting/lua-bindings/manual/tolua_fix.h"
-#    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#    include "scripting/lua-bindings/manual/LuaValue.h"
-#    include "scripting/lua-bindings/manual/LuaEngine.h"
+#    include "lua-bindings/manual/tolua_fix.h"
+#    include "lua-bindings/manual/LuaBasicConversions.h"
+#    include "lua-bindings/manual/LuaValue.h"
+#    include "lua-bindings/manual/LuaEngine.h"
 #    include "2d/Scene.h"
 
 #    ifndef AX_SAFE_DELETE_ARRAY

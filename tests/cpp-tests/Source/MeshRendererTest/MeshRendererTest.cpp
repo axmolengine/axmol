@@ -30,7 +30,7 @@
 #include "3d/MeshMaterial.h"
 #include "3d/MotionStreak3D.h"
 
-#include "extensions/Particle3D/PU/PUParticleSystem3D.h"
+#include "Particle3D/PU/PUParticleSystem3D.h"
 
 #include <algorithm>
 #include "../testResource.h"

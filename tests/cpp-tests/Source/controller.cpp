@@ -44,11 +44,11 @@ class RootTests : public TestList
 public:
     RootTests()
     {
-#if __has_include("EffekseerForCocos2d-x.h")
+#if defined(AX_ENABLE_EXT_EFFEKSEER)
 #pragma message("The optional extension Effekseer is enabled.")
         addTest("Effekseer", []() { return new EffekseerTests(); });
 #endif
-#if __has_include("DrawNodeExTest.h")
+#if defined(AX_ENABLE_EXT_DRAWNODE)
 #    pragma message("The optional extension DrawNodeEx is enabled.")
         addTest("DrawNodeEx", []() { return new DrawNodeExTests(); });
 #endif

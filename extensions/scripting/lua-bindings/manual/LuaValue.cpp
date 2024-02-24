@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/LuaValue.h"
+#include "lua-bindings/manual/LuaValue.h"
 
 NS_AX_BEGIN
 

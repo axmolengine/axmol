@@ -22,10 +22,6 @@
 #ifndef _AX_FORMAT_H_
 #define _AX_FORMAT_H_
 
-#ifndef FMT_HEADER_ONLY
-#  define FMT_HEADER_ONLY
-#endif
-
 #include "fmt/format.h"
 
 namespace fmt

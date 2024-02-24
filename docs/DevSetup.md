@@ -1,137 +1,145 @@
-# Development setup
+# Axmol Engine - Development setup
 
-## Common Requirements
+## Common requirements
 
-- [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
-  - powershell-7 is recommended, it's support Windows,macOS,Linux
-  - How to Install:
-      - Quick Install 
-          - macOS, Ubuntu, ArchLinux: you can simply run `1k/install-pwsh.sh` in axmol root directory [`Recommended`]
-          - win10+, system installed PowerShell 5.x should works, but you need run command `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force` to allow run powershell script file
-      - Manually Install: [installing-powershell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) or download from [github release](https://github.com/PowerShell/PowerShell/releases)
-- [cmake-3.28.1+](https://cmake.org/download/), install it on your host system manully is recommended(ensure add cmake bin to system `PATH``), otherwise the `axmol build` will auto setup it to `tools/external/cmake`
+- **PowerShell**: used to install Axmol. PowerShell 7 is recommended, it supports Windows, macOS and Linux.
+  - Quick installation: 
+     - macOS, Ubuntu, ArchLinux: run `1k/install-pwsh.sh` in `axmol` root directory (recommended).
+     - Windows 10+: system installed PowerShell 5.x should work, but in that case you'll need to run the command `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force` in order to allow PowerShell script file to run.
+  - Manual installation: [Instructions](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) /  [Download](https://github.com/PowerShell/PowerShell/releases)
+- **CMake 3.28.1**
+    - Manual installation is recommended ([download](https://cmake.org/download/)). Make sure to add CMake bin to the system `PATH`, otherwise `axmol build` will auto-setup it to `tools/external/cmake`.
 
 ## Prerequisites
 
-  1. Enter `axmol` root directory
-  2. Run `pwsh setup.ps1`, restart the console after it has finished for environment variables to take effect
-  3. Ensure C/C++ compiler toolset installed on your host machine
-     - Windows: visual studio 2022 with desktop workflow
-     - macOS: xcode14.2+
-     - Linux: GCC(G++)
+  1. Download or clone Axmol from GitHub ([https://github.com/axmolengine/axmol](https://github.com/axmolengine/axmol)).
+  2. Enter `axmol` root directory.
+  3. Run `pwsh setup.ps1`. Restart the console after it has finished for environment variables to take effect.
+  4. Ensure that the C / C++ compiler toolset is installed on your host machine.
+     - Windows: Visual Studio 2022 with desktop workflow
+     - macOS: XCode 14.2+
+     - Linux: GCC (G++)
 
-## Creating A New Project
+## Creating a new project
 
-Using a powershell console window, an example of a command to generate a new project is as follows:
+Enter to PowerShell (`pwsh`). This is the command to generate a new project:
 
 ```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua] [--portrait] PROJECT_NAME```
 
-Type `axmol new --help` at the command line for more options you can pass to `axmol new`
+Note: Avoid using special characters in `YOUR.UNIQUE.ID`
+
+Type `axmol new --help` at the command line for more options.
 
 Examples:
 
 - Cpp: `axmol new -p org.axmol.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp`
 - Lua: `axmol new -p org.axmol.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua`
 
-## Quick build your new project by `axmol build` for all target platforms [`Recommended`]
+## Quick build for all target platforms (recommended)
 
-The `axmol build` command will auto setup general depended toolsets, so you can simply build your project for all platform targets, i.e.
+The `axmol build` command will auto-setup the general toolsets, so you'll be able to easily build your project for any platform. For example:
 
-- win32: `axmol build -p win32`
-- winuwp: `axmol build -p winuwp`
-- linux: `axmol build`
-- osx: `axmol build -p osx -a x64`
-- android: `axmol build -p android -a arm64` can runs on Windows,Linux,macOS and script will auto setup android sdk
-- ios:
-  - for device: `axmol build -p ios -a arm64 -c`, generate xcodeproj, open by xcode to setup code sign cert and build
+- Win32: `axmol build -p win32`
+- WinUWP: `axmol build -p winuwp`
+- Linux: `axmol build`
+- OSX: `axmol build -p osx -a x64`
+- Android: `axmol build -p android -a arm64` (can run on Windows, Linux and macOS, and script will auto setup Android SDK)
+- iOS:
+  - for devices: `axmol build -p ios -a arm64 -c` (generate a xcodeproj, open with XCode to setup the code sign cert and build)
   - for simulator: `axmol build -p ios -a x64`
-- tvos:
-  - for device: `axmol build -p tvos -a arm64 -c`, generate xcodeproj, open by xcode to setup code sign cert and build
+- tvOS:
+  - for devices: `axmol build -p tvos -a arm64 -c` (generate a xcodeproj, open with XCode to setup code sign cert and build)
   - for simulator: `axmol build -p tvos -a x64`
-- wasm: `axmol build -p wasm` can runs on Windows 8.1+, Linux, macOS, require a preinstalled [python3](https://www.python.org/) should be in env `PATH`
+- WASM: `axmol build -p wasm` (it can run on Windows 8.1+, Linux and macOS, it requires a preinstalled [python3](https://www.python.org/) in env `PATH`)
 
 ### Supported options for `axmol build`
 ```
--p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos,wasm
-    for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
-    if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
--a: build arch: x86,x64,armv7,arm64
--d: the build workspace, i.e project root which contains root CMakeLists.txt, empty use script run working directory aka cwd
--cc: The C/C++ compiler toolchain: clang, msvc, gcc(mingw) or empty use default installed on current OS
+-p: build target platforms: win32, winuwp, linux, android, osx, ios, tvos, watchos, wasm
+    For android: it will search the NDK in sdk_root first, which is specified by env ANDROID_HOME. 
+    If not found, by default it will install ndk-r16b, or you can specify by the option: -cc 'ndk-r23c'
+-a: build architecture: x86, x64, armv7, arm64
+-d: the build workspace. For example, the project root which contains root CMakeLists.txt, empty use script run working directory (aka cwd)
+-cc: The C/C++ compiler toolchain: clang, msvc or gcc(mingw). Leave it empty tou use the current installed default.
     msvc: msvc-120, msvc-141
     ndk: ndk-r16b, ndk-r16b+
--xt: cross build tool, default: cmake, for android can be gradlew, can be path of cross build tool program
--xc: cross build tool configure options: i.e.  -xc '-Dbuild'
--xb: cross build tool build options: i.e. -xb '--config','Release'
--prefix: the install location for missing tools in system, default is "$HOME/build1k"
--sdk: specific windows sdk version, i.e. -sdk '10.0.19041.0', leave empty, cmake will auto choose latest avaiable
--setupOnly: this param present, only execute step: setup 
--configOnly: if this param present, will skip build step
+-xt: cross build tool. Default: cmake. For Android it can be gradlew, or it can be the path of the cross-build tool program
+-xc: cross build tool configure options. For example,  -xc '-Dbuild'
+-xb: cross build tool build options. For example, -xb '--config','Release'
+-prefix: the install location for missing tools in the system. Default is "$HOME/build1k"
+-sdk: specific Windows SDK version. For example, -sdk '10.0.19041.0'. Leaved empty, cmake will auto-choose the latest available
+-setupOnly: this parameter is present, it only will execute the 'setup' step  
+-configOnly: if this parameter is present, it will skip the 'build' step
 ```
 
-## Quick build engine for host targets?
+## How to quick build the engine for host targets
 
-Goto axmol root directory, double click or run `build.ps1` without any parameters, it will build `HelloCpp` by default
+Go to `axmol` root directory and run `build.ps1` without any parameters. It will build `HelloCpp` by default.
 
-## Quick build a test project e.g. 'cpp-tests'?
-Using a powershell console window, goto `axmol\tests\<testdir e.g. 'cpp-tests'>` directory, perform`axmol build -p android -a arm64`, it will build `cpp-tests` for android.
+## How to quick build a test project (e.g. 'cpp-tests')
 
-## Manually build with cmake
+Using a PowerShell console window (command `pwsh`), go to `axmol\tests\<testdir e.g. 'cpp-tests'>` directory and perform `axmol build -p android -a arm64`. It will build `cpp-tests` for Android.
 
-### Windows (Visual Studio)
+## Manually build with CMake
 
-  1. Install [CMake](https://cmake.org/)  3.27.4+  
-  2. Install Visual Studio 2022 (VS2019 should be support, but VS2022 is recommended)  
-  3. Create a new project as shown [here](#creating-a-new-project)
-  4. In a console window, navigate into the root directory of the project you created in the previous step
+### Windows (Visual Studio 2022)
+
+  1. Install [CMake 3.27.4+](https://cmake.org/download/).
+  2. Install Visual Studio 2022 (VS 2019 should be supported, but VS 2022 is recommended).
+  3. Create a new project as shown [here](#creating-a-new-project).
+  4. In a console window, navigate into the root directory of the project you created in the previous step.
   5. Generate the relevant Visual Studio project using the cmake command:
   
      ```cmake -S SOURCE_DIR -B BUILD_DIR -G VISUAL_STUDIO_VERSION_STRING -A [Win32|x64]```
 
-     For example, say `SOURCE_DIR` is the current path `"."`, and `BUILD_DIR` (out-of-source build directory) is named `"build"`:
+     For example, let's say `SOURCE_DIR` is the current path `"."`, and `BUILD_DIR` (out-of-source build directory) is named `"build"`:
 
-     since axmol-2.1 c++20 required for all platforms
-        - for 32 bit Visual Studio 2019:
+     (Since Axmol 2.1 c++20 is required for all platforms)
+        - 32 bit Visual Studio 2019:
             ```cmake -S . -B build -G "Visual Studio 16 2019" -A Win32```
-        - for 64 bit Visual Studio 2019:
+        - 64 bit Visual Studio 2019:
             ```cmake -S . -B build -G "Visual Studio 16 2019" -A x64```
-        - for 32 bit Visual Studio 2022:
+        - 32 bit Visual Studio 2022:
             ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
-        - for 64 bit Visual Studio 2022:
+        - 64 bit Visual Studio 2022:
             ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
 
-  6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`
+  6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`.
 
-#### Windows UWP (Visual Studio 2022), ~because microsoft limit, only support C++17~. Since axmol-2.1, migrated to CppWinRT, with c++20 support
+#### Windows UWP (Visual Studio 2022)
+    
+~~It only supports C++17.~~ Since Axmol 2.1 migration to CppWinRT it has C++20 support.
+
   ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0" "-DAX_VS_DEPLOYMENT_TARGET=10.0.17763.0"```  
 
-##### Creating the Visual Studio solution for all axmol test projects (Win/UWP)
+#### Creating the Visual Studio solution for all Axmol test projects (Win / UWP)
 
-  - Perform steps 1.-6. or the Windows UWP step above (if not done)
+First, perform the steps 1. to 6., or the Windows UWP step above (if not is already done).
+
   7. Open the solution (".\build\axmol.sln" or ".\build_uwp\axmol.sln") in Visual Studio and build any of the test projects via the IDE.
 
-#### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
+#### Improving the Visual Studio workflow, supporting linking with engine prebuilt libraries
 
-See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
+Please see the [Windows workflow guide](https://github.com/axmolengine/axmol/issues/564).
 
 ### Android (Android Studio)
 
-  1. Install Android Studio 2023.1.1+
-  2. When starting Android Studio for the first time, it will guide you to install the SDK and other tools, so ensure that you do install them.
-  3. Start Android and choose [Open an existing Android Studio Project] and select your project. For example, the existing cpp-test project located in ```axmol\tests\cpp-tests\proj.android```
-  4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose the following tools and click the button ```Apply``` to install them:  
+  1. Install [Android Studio 2023.1.1+](https://developer.android.com/studio).
+  2. When starting Android Studio for the first time, it will guide you through the installation of the SDK and other tools. Please make sure that you do install them.
+  3. Start Android Studio and choose [Open an existing Android Studio Project] and select your project. For example, the existing `cpp-test` project located in `axmol\tests\cpp-tests\proj.android`.
+  4. Start Android Studio and open 'Tools' -> 'SDKManager', then switch to 'SDK Tools', check the 'Show Package Details' field, and choose the following tools clicking the button 'Apply' to install them:  
      - Android SDK Platform 34  
      - Android Gradle Plugin (AGP) 8.2.1  
      - Android SDK Build-Tools 34.0.0 match with AGP, refer to: <https://developer.android.com/studio/releases/gradle-plugin>
      - Gradle 8.5  
      - NDK r23c  
-  5. Wait for ```Gradle sync``` finish.
-  6. Note: If you use non-sdk provided CMake edition, you will need to download ```ninja``` from <https://github.com/ninja-build/ninja/releases>, and copy ```ninja.exe``` to cmake's bin directory
+  5. Wait for the `Gradle sync` to finish.
+
+Note: if you use non-SDK provided CMake, you will need to download `ninja` from <https://github.com/ninja-build/ninja/releases>, and copy `ninja.exe` to CMake's bin directory.
   
 ### Android Studio (without Android Studio)
 
-  1. Download command-tools from <https://developer.android.com/studio#command-tools>, for example: https://dl.google.com/android/repository/commandlinetools-win-9477386_latest.zip
-  2. Install Android devtools (for example in windows)
+  1. Download [Android command-tools](https://developer.android.com/studio#command-tools).
+  2. Install Android devtools. Example in Windows:
 
   ```bat
   # unzip command-tools at D:\dev\adt\
@@ -147,44 +155,42 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 
 ### iOS, tvOS and macOS
 
-  1. Ensure xcode 13+ are installed
-  2. Create a new project as shown [here](#creating-a-new-project)
-  3. In a console window, navigate into the root directory of the project you created in the previous step
-  4. Execute the following command
+  1. Ensure that XCode 13+ is installed.
+  2. Create a new project as shown [here](#creating-a-new-project).
+  3. In a console window, navigate into the root directory of the project you created in the previous step.
+  4. Execute the following command:
    ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
-  5. Generate the relevant xcode project using one of the following commands:
-     - for ios arm64:  
+  5. Generate the relevant XCode project using one of the following commands:
+     - for iOS arm64:  
      ```axmol build -p ios -a arm64 -c```
-     - for ios simulator x86_64:  
+     - for iOS simulator x86_64:  
      ```axmol build -p ios -a x64 -c```
-     - for tvos arm64:  
+     - for tvOS arm64:  
      ```axmol build -p tvos -a arm64 -c```
-     - for tvos simulator x86_64:  
+     - for tvOS simulator x86_64:  
      ```axmol build -p tvos -a x64 -c```
-     - for macos x86_64(Intel)
+     - for macOS x86_64(Intel)
      ```axmol build -p osx -c```
-     - for macos arm64(M1)
+     - for macOS arm64(M1)
      ```axmol build -p osx -a arm64 -c```
 
-  6. After cmake finishes generating, you can open the xcode project at ```build_${plat}_${arch}``` folder and run cpp-tests or other test targets, for osx x64 should be `build_x64`
-  7. Notes  
-     - **The code signing is required to run the ios/tvos app on your device, just change the bundle identifier until the auto manage signing is solved**  
-     - **axmol only provides arm64, x86_64 prebuilt libraries for ios/tvos**
+  6. After CMake finishes generating, you can open the XCode project at `build_${plat}_${arch}` folder and run cpp-tests or other test targets. For OSC x64 should be `build_x64`.
+  7. Notes:  
+     - **Code signing is required to run the iOS / tvOS app on your device. Just change the bundle identifier until the auto manage signing is solved.**  
+     - **Axmol only provides arm64, x86_64 prebuilt libraries for iOS / tvOS.**
 
 ### Linux (VSCode)
 
-1. run `pwsh ./setup.ps1`
-2. Open axmol source folder with vscode
-3. Install C++, CMake extensions for vscode
-4. vscode will auto prompt you to choose toolset for building, just select gcc match with your system installed default gcc
+1. Run `pwsh ./setup.ps1`.
+2. Open axmol source folder with VSCode.
+3. Install C++, CMake extensions for VSCode.
+4. VSCode will auto prompt you to choose the toolset for building. Select the gcc matching with your system installed default gcc:
     ```sh
     # check gcc version
     gcc -v
     ```
     i.e. `gcc version 11.3.0 (Ubuntu 11.3.0-1ubuntu1~22.04)`
-5. vscode will run cmake config automatically, after done, click `build` in taskbar, you can also choose specific target
-  to build and run
+5. VSCode will run CMake config automatically. After done, click `build` in taskbar. You can also choose specific target
+  to build and run.
 
-
-Notes: if you needs debug by vscode, remember ensure choose `CMake: [Debug]` in vscode taskbar
-
+Notes: if you need debug in VSCode, remember to choose `CMake: [Debug]` in the WSCode taskbar.

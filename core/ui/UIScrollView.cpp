@@ -1,6 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -32,19 +33,23 @@ THE SOFTWARE.
 #include "2d/Camera.h"
 NS_AX_BEGIN
 
-static const int NUMBER_OF_GATHERED_TOUCHES_FOR_MOVE_SPEED = 5;
-static const float OUT_OF_BOUNDARY_BREAKING_FACTOR         = 0.05f;
-static const float BOUNCE_BACK_DURATION                    = 1.0f;
+namespace
+{
+constexpr float DEFAULT_TIME_IN_SEC_FOR_SCROLL_TO_ITEM  = 1.0f;
+constexpr int NUMBER_OF_GATHERED_TOUCHES_FOR_MOVE_SPEED = 5;
+constexpr float OUT_OF_BOUNDARY_BREAKING_FACTOR         = 0.05f;
+constexpr float BOUNCE_BACK_DURATION                    = 1.0f;
 
-#define MOVE_INCH 7.0f / 160.0f
-
-static float convertDistanceFromPointToInch(const Vec2& dis)
+float convertDistanceFromPointToInch(const Vec2& dis)
 {
     auto glView    = Director::getInstance()->getGLView();
     int dpi        = Device::getDPI();
     float distance = Vec2(dis.x * glView->getScaleX() / dpi, dis.y * glView->getScaleY() / dpi).getLength();
     return distance;
 }
+}  // namespace
+
+#define MOVE_INCH (7.0f / 160.0f)
 
 namespace ui
 {
@@ -78,6 +83,7 @@ ScrollView::ScrollView()
     , _horizontalScrollBar(nullptr)
     , _scrollViewEventListener(nullptr)
     , _eventCallback(nullptr)
+    , _scrollTime(DEFAULT_TIME_IN_SEC_FOR_SCROLL_TO_ITEM)
 {
     setTouchEnabled(true);
     _propagateTouchEvents = false;
@@ -1586,6 +1592,51 @@ Widget* ScrollView::findNextFocusedWidget(ax::ui::Widget::FocusDirection directi
     {
         return Widget::findNextFocusedWidget(direction, current);
     }
+}
+
+void ScrollView::setScrollDuration(float time)
+{
+    if (time >= 0)
+        _scrollTime = time;
+}
+
+float ScrollView::getScrollDuration() const
+{
+    return _scrollTime;
+}
+
+Vec2 ScrollView::calculateItemPositionWithAnchor(const Node* node, const Vec2& itemAnchorPoint)
+{
+    auto boundingBox = node->getBoundingBox();
+    Vec2 origin(boundingBox.origin.x, boundingBox.origin.y);
+    Vec2 size = node->getContentSize();
+    return origin + Vec2(size.width * itemAnchorPoint.x, size.height * itemAnchorPoint.y);
+}
+
+Vec2 ScrollView::calculateItemDestination(const Vec2& positionRatioInView, const Node* item, const Vec2& itemAnchorPoint)
+{
+    const Vec2& contentSize = getContentSize();
+    Vec2 positionInView;
+    positionInView.x += contentSize.width * positionRatioInView.x;
+    positionInView.y += contentSize.height * positionRatioInView.y;
+
+    Vec2 itemPosition = calculateItemPositionWithAnchor(item, itemAnchorPoint);
+    return -(itemPosition - positionInView);
+}
+
+void ScrollView::scrollToItem(Node* item, const Vec2& positionRatioInView, const Vec2& itemAnchorPoint)
+{
+    scrollToItem(item, positionRatioInView, itemAnchorPoint, _scrollTime);
+}
+
+void ScrollView::scrollToItem(Node* item, const Vec2& positionRatioInView, const Vec2& itemAnchorPoint, float timeInSec)
+{
+    if (item == nullptr)
+    {
+        return;
+    }
+    auto destination = calculateItemDestination(positionRatioInView, item, itemAnchorPoint);
+    startAutoScrollToDestination(destination, timeInSec, true);
 }
 }  // namespace ui
 

@@ -77,21 +77,32 @@ YASIO_NI_API void yasio_init_globals(void(YASIO_INTEROP_DECL* pfn)(int level, co
 }
 YASIO_NI_API void yasio_cleanup_globals() { io_service::cleanup_globals(); }
 
-struct yasio_event_data {
-    int kind;
-    int status;
-    int channel;
-    void* session; // transport
-    void* packet;
-    void* user; // event source
+struct yasio_io_event {
+  int kind; //
+  int channel;
+  void* thandle;
+  union {
+    void* msg;
+    int status; //
+  };
+  void* user;
 };
-YASIO_NI_API void* yasio_create_service(int channel_count, void(YASIO_INTEROP_DECL* event_cb)(yasio_event_data* event), void* user)
+
+YASIO_NI_API void* yasio_create_service(int channel_count, void(YASIO_INTEROP_DECL* event_cb)(yasio_io_event* event), void* user)
 {
   assert(!!event_cb);
   io_service* service = new io_service(channel_count);
   service->start([=](event_ptr e) {
     auto& pkt = e->packet();
-    yasio_event_data event{e->kind(), e->status(), e->cindex(), e->transport(), !is_packet_empty(pkt) ? &pkt : nullptr, user};
+    yasio_io_event event;
+    event.kind    = e->kind();
+    event.channel = e->cindex();
+    event.thandle = e->transport();
+    event.user    = user;
+    if (event.kind == yasio::YEK_ON_PACKET)
+      event.msg = !is_packet_empty(pkt) ? &pkt : nullptr;
+    else
+      event.status = e->status();
     event_cb(&event);
   });
   return service;
@@ -239,15 +250,17 @@ YASIO_NI_API int yasio_write(void* service_ptr, void* thandle, const char* bytes
     return service->write(reinterpret_cast<transport_handle_t>(thandle), yasio::sbyte_buffer(bytes, bytes + len));
   return -1;
 }
-YASIO_NI_API int yasio_forward(void* service_ptr, void* thandle, void* bufferHandle, const char*(YASIO_INTEROP_DECL* pfnLockBuffer)(void* bufferHandle, int* bufferDataLen), void(YASIO_INTEROP_DECL* pfnUnlockBuffer)(void* bufferHandle))
+YASIO_NI_API int yasio_forward(void* service_ptr, void* thandle, void* bufferHandle,
+                               const char*(YASIO_INTEROP_DECL* pfnLockBuffer)(void* bufferHandle, int* bufferDataLen),
+                               void(YASIO_INTEROP_DECL* pfnUnlockBuffer)(void* bufferHandle))
 {
   auto service = reinterpret_cast<io_service*>(service_ptr);
-  if (service) {
-    int len = 0;
+  if (service)
+  {
+    int len    = 0;
     auto bytes = pfnLockBuffer(bufferHandle, &len);
-    return service->forward(reinterpret_cast<transport_handle_t>(thandle), bytes, len, [bufferHandle,pfnUnlockBuffer](int,size_t){
-      pfnUnlockBuffer(bufferHandle);
-    });
+    return service->forward(reinterpret_cast<transport_handle_t>(thandle), bytes, len,
+                            [bufferHandle, pfnUnlockBuffer](int, size_t) { pfnUnlockBuffer(bufferHandle); });
   }
   return -1;
 }

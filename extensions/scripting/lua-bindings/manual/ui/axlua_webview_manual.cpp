@@ -21,13 +21,13 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "scripting/lua-bindings/manual/ui/axlua_webview_manual.hpp"
+#include "lua-bindings/manual/ui/axlua_webview_manual.hpp"
 
 #include "ui/UIWebView/UIWebView.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/LuaValue.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/LuaValue.h"
+#include "lua-bindings/manual/LuaEngine.h"
 
 static int axlua_WebView_setOnShouldStartLoading(lua_State* L)
 {

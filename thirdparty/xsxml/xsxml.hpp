@@ -5,6 +5,8 @@
 /*
 The MIT License (MIT)
 Copyright (c) 2019 halx99
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -924,7 +926,7 @@ private:
 
     // Trim trailing whitespace if flag is set; leading was already trimmed by whitespace skip after
     // >
-    if (Flags & parse_trim_whitespace)
+    if (Flags & parse_trim_whitespace && !(Flags & parse_html_entity_translation))
     {
       if (Flags & parse_normalize_whitespace)
       {

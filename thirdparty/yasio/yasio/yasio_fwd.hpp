@@ -40,7 +40,7 @@ class io_event;
 class io_channel;
 typedef class io_transport* transport_handle_t;
 } // namespace inet
-#if !YASIO__HAS_NS_INLINE
+#if !YASIO__HAS_CXX11
 using namespace yasio::inet;
 #endif
 } // namespace yasio

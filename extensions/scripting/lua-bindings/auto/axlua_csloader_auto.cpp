@@ -1,7 +1,7 @@
-#include "scripting/lua-bindings/auto/axlua_csloader_auto.hpp"
+#include "lua-bindings/auto/axlua_csloader_auto.hpp"
 #include "cocostudio/ActionTimeline/CSLoader.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_csloader_CSLoader_init(lua_State* tolua_S)
 {

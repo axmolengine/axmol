@@ -28,7 +28,7 @@
 
 #include <string>
 #include <map>
-#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/LuaEngine.h"
 
 extern "C" {
 #include "lua.h"

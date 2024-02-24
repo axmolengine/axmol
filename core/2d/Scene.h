@@ -115,6 +115,9 @@ public:
      */
     virtual void render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eyeProjection = nullptr);
 
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit() override;
+
     /** override function */
     virtual void removeAllChildren() override;
 

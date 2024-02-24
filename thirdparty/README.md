@@ -77,12 +77,12 @@
 
 ## Glad
 - [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
-- Version: 2.0.4
+- Version: 2.0.5
 - License: MIT
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: git b4c3ef9 on Dec 24, 2023 (4680)
+- Version: 3.4 with modified for create as win32 child window support
 - License: zlib
 
 ## GHC (iOS devices only)
@@ -97,7 +97,7 @@
 
 ## jpeg-turbo
 - [![Upstream](https://img.shields.io/github/v/release/libjpeg-turbo/libjpeg-turbo?label=Upstream)](https://github.com/libjpeg-turbo/libjpeg-turbo)
-- Version: 3.0.1
+- Version: 3.0.2
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -107,7 +107,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 9.1.3
+- Version: 9.2.0
 - License: MIT
 
 ## lua
@@ -158,7 +158,7 @@
 
 ## oboe (Adnroid only)
 - [![Upstream](https://img.shields.io/github/v/tag/google/oboe?label=Upstream)](https://github.com/google/oboe)
-- Version: 1.8.0
+- Version: 1.8.1
 - License: Apache-2.0
 
 ## ogg & vorbis
@@ -184,7 +184,7 @@
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
-- Version: 1.6.42
+- Version: 1.6.43
 - License: PNG Reference Library License version 2
 
 ## poly2tri
@@ -253,7 +253,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 5.0.0
+- Version: 4.2.1
 - License: MIT WITH Anti-996
 
 ## zlib

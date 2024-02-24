@@ -695,15 +695,15 @@ void io_transport_kcp::set_primitives()
   io_transport_udp::set_primitives();
   underlaying_write_cb_ = write_cb_;
   write_cb_             = [this](const void* data, int len, const ip::endpoint*, int& error) {
-      int nsent = ::ikcp_send(kcp_, static_cast<const char*>(data), len /*(std::min)(static_cast<int>(kcp_->mss), len)*/);
-      if (nsent > 0)
-      {
-        ::ikcp_flush(kcp_);
-        expire_time_ = 0;
-      }
-      else
-        error = EMSGSIZE; // emit message too long
-      return nsent;
+    int nsent = ::ikcp_send(kcp_, static_cast<const char*>(data), len /*(std::min)(static_cast<int>(kcp_->mss), len)*/);
+    if (nsent > 0)
+    {
+      ::ikcp_flush(kcp_);
+      expire_time_ = 0;
+    }
+    else
+      error = EMSGSIZE; // emit message too long
+    return nsent;
   };
 }
 bool io_transport_kcp::do_write(highp_time_t& wait_duration)
@@ -1225,10 +1225,21 @@ void io_service::do_connect(io_channel* ctx)
     if (yasio__testbits(ctx->properties_, YCF_EXCLUSIVEADDRUSE))
       ctx->socket_->exclusive_address(true);
 
-    if (!yasio__testbits(ctx->properties_, YCM_UDS))
-    {
+    if (!yasio__testbits(ctx->properties_, YCM_UDS) && (!ctx->local_host_.empty() || ctx->local_port_ != 0 || yasio__testbits(ctx->properties_, YCM_UDP)))
+    { // Don't invoke socket.bind for tcp when not require bind network inteface or port explicitly
       auto ifaddr = ctx->local_host_.empty() ? YASIO_ADDR_ANY(ep.af()) : ctx->local_host_.c_str();
       ret         = ctx->socket_->bind(ifaddr, ctx->local_port_);
+      if (ret < 0 && xxsocket::get_last_errno() == EPERM)
+      {
+        /*
+        Supress EPERM: on macos the bind will always fail with EPERM when runs in code signing sandbox mode
+        even through provide ADDR_ANY and port=0 to require bind a random local endpoint, but on other systems,
+        require call bind before connect for UDP sockets.
+        refer issue: https://github.com/yasio/yasio/issues/441
+        */
+        YASIO_KLOGW("[warning] bind %s:%u fail", ifaddr, ctx->local_port_);
+        ret = 0;
+      }
     }
 
     if (ret == 0)

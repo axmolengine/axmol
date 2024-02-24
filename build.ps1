@@ -38,7 +38,9 @@ param(
     [switch]$setupOnly
 )
 
-$options = @{p = $null; a = $null; d = $null; cc = $null; xc = @(); xb = @(); sdk = $null; dll = $false }
+$unhandled_args = @()
+
+$options = @{p = $null; d = $null; xc = @(); xb = @(); }
 
 $optName = $null
 foreach ($arg in $args) {
@@ -50,6 +52,9 @@ foreach ($arg in $args) {
     else {
         if ($options.Contains($optName)) {
             $options[$optName] = $arg
+        } else {
+            $unhandled_args += "-$optName"
+            $unhandled_args += $arg
         }
         $optName = $null
     }
@@ -149,22 +154,12 @@ if (!$use_gradle) {
     if (!$cmake_target) {
         # non android, specific cmake target
         $cmake_targets = @(
-            # local developer
-            @(
-                # project
-                $proj_name,
-                # engine
-                'HelloCpp'
-            ),
-            # github actions
-            @(
-                # project
-                $proj_name,
-                # engine
-                'cpp-tests'
-            )
+            # project
+            $proj_name,
+            # engine
+            'cpp-tests'
         )
-        $cmake_target = $cmake_targets[$is_ci][$is_engine]
+        $cmake_target = $cmake_targets[$is_engine]
         $options.xb += '--target', $cmake_target
     }
 
@@ -207,7 +202,7 @@ if ($setupOnly) {
     $forward_args['setupOnly'] = $true
 }
 
-. $b1k_script @b1k_args @forward_args
+. $b1k_script @b1k_args @forward_args @unhandled_args
 
 if (!$configOnly) {
     $b1k.pause('Build done')

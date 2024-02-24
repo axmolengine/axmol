@@ -16,7 +16,10 @@ if(BUILD_SHARED_LIBS)
 endif()
 
 if(ANDROID)
-  target_compile_definitions(${target_name} PUBLIC GLAD_GLES2=1)
+  target_compile_definitions(${target_name} 
+    PUBLIC GLAD_GLES2=1 
+    PUBLIC GLAD_GLES2_USE_SYSTEM_EGL=1 # refer: https://github.com/Dav1dde/glad/pull/438
+  )
 endif()
 
 target_include_directories(${target_name} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

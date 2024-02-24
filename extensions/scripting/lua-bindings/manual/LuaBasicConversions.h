@@ -30,9 +30,9 @@
 
 #include <stdint.h>
 
-#include "scripting/lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/tolua_fix.h"
 
-#include "scripting/lua-bindings/manual/Lua-BindingsExport.h"
+#include "lua-bindings/manual/Lua-BindingsExport.h"
 #include "2d/Label.h"
 #include "2d/Sprite.h"
 #include "3d/Bundle3D.h"

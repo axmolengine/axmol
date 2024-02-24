@@ -1,6 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -106,7 +107,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~ListView();
+    ~ListView() override;
 
     /**
      * Create an empty ListView.
@@ -288,31 +289,16 @@ public:
      */
     float getBottomPadding() const;
 
-    /**
-     * Set the time in seconds to scroll between items.
-     * Subsequent calls of function 'scrollToItem', will take 'time' seconds for scrolling.
-     * @param time The seconds needed to scroll between two items. 'time' must be >= 0
-     * @see scrollToItem(ssize_t, const Vec2&, const Vec2&)
-     */
-    void setScrollDuration(float time);
-
-    /**
-     * Get the time in seconds to scroll between items.
-     * @return The time in seconds to scroll between items
-     * @see setScrollDuration(float)
-     */
-    float getScrollDuration() const;
-
     // override methods
-    virtual void doLayout() override;
-    virtual void requestDoLayout() override;
-    virtual void addChild(Node* child) override;
-    virtual void addChild(Node* child, int localZOrder) override;
-    virtual void addChild(Node* child, int zOrder, int tag) override;
-    virtual void addChild(Node* child, int zOrder, std::string_view name) override;
-    virtual void removeAllChildren() override;
-    virtual void removeAllChildrenWithCleanup(bool cleanup) override;
-    virtual void removeChild(Node* child, bool cleanup = true) override;
+    void doLayout() override;
+    void requestDoLayout() override;
+    void addChild(Node* child) override;
+    void addChild(Node* child, int localZOrder) override;
+    void addChild(Node* child, int zOrder, int tag) override;
+    void addChild(Node* child, int zOrder, std::string_view name) override;
+    void removeAllChildren() override;
+    void removeAllChildrenWithCleanup(bool cleanup) override;
+    void removeChild(Node* child, bool cleanup = true) override;
 
     /**
      * @brief Query the closest item to a specific position in inner container.
@@ -367,17 +353,17 @@ public:
     /**
      * Override functions
      */
-    virtual void jumpToBottom() override;
-    virtual void jumpToTop() override;
-    virtual void jumpToLeft() override;
-    virtual void jumpToRight() override;
-    virtual void jumpToTopLeft() override;
-    virtual void jumpToTopRight() override;
-    virtual void jumpToBottomLeft() override;
-    virtual void jumpToBottomRight() override;
-    virtual void jumpToPercentVertical(float percent) override;
-    virtual void jumpToPercentHorizontal(float percent) override;
-    virtual void jumpToPercentBothDirection(const Vec2& percent) override;
+    void jumpToBottom() override;
+    void jumpToTop() override;
+    void jumpToLeft() override;
+    void jumpToRight() override;
+    void jumpToTopLeft() override;
+    void jumpToTopRight() override;
+    void jumpToBottomLeft() override;
+    void jumpToBottomRight() override;
+    void jumpToPercentVertical(float percent) override;
+    void jumpToPercentHorizontal(float percent) override;
+    void jumpToPercentBothDirection(const Vec2& percent) override;
 
     /**
      * @brief Jump to specific item
@@ -391,15 +377,20 @@ public:
      * @brief Scroll to specific item
      * @param positionRatioInView Specifies the position with ratio in list view's content size.
      * @param itemAnchorPoint Specifies an anchor point of each item for position to calculate distance.
-     * @param timeInSec Scroll time
      */
     void scrollToItem(ssize_t itemIndex, const Vec2& positionRatioInView, const Vec2& itemAnchorPoint);
+
+    /**
+     * @brief Scroll to specific item
+     * @param positionRatioInView Specifies the position with ratio in list view's content size.
+     * @param itemAnchorPoint Specifies an anchor point of each item for position to calculate distance.
+     * @param timeInSec Scroll time
+     */
     void scrollToItem(ssize_t itemIndex, const Vec2& positionRatioInView, const Vec2& itemAnchorPoint, float timeInSec);
 
     /**
      * @brief Query current selected widget's index.
      *
-
      * @return An index of a selected item.
      */
     ssize_t getCurSelectedIndex() const;
@@ -423,14 +414,14 @@ public:
      *  Direction Direction::VERTICAL means vertical scroll, Direction::HORIZONTAL means horizontal scroll.
      * @param dir Set the list view's scroll direction.
      */
-    virtual void setDirection(Direction dir) override;
+    void setDirection(Direction dir) override;
 
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
-    virtual bool init() override;
+    bool init() override;
 
 protected:
-    virtual void handleReleaseLogic(Touch* touch) override;
+    void handleReleaseLogic(Touch* touch) override;
 
     virtual void onItemListChanged();
 
@@ -439,19 +430,18 @@ protected:
     void remedyVerticalLayoutParameter(LinearLayoutParameter* layoutParameter, ssize_t itemIndex);
     void remedyHorizontalLayoutParameter(LinearLayoutParameter* layoutParameter, ssize_t itemIndex);
 
-    virtual void onSizeChanged() override;
-    virtual Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
-    virtual void copyClonedWidgetChildren(Widget* model) override;
+    void onSizeChanged() override;
+    Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
+    void copyClonedWidgetChildren(Widget* model) override;
     void selectedItemEvent(TouchEventType event);
-    virtual void interceptTouchEvent(Widget::TouchEventType event, Widget* sender, Touch* touch) override;
+    void interceptTouchEvent(Widget::TouchEventType event, Widget* sender, Touch* touch) override;
 
-    virtual Vec2 getHowMuchOutOfBoundary(const Vec2& addition = Vec2::ZERO) override;
+    Vec2 getHowMuchOutOfBoundary(const Vec2& addition = Vec2::ZERO) override;
 
-    virtual void startAttenuatingAutoScroll(const Vec2& deltaMove, const Vec2& initialVelocity) override;
+    void startAttenuatingAutoScroll(const Vec2& deltaMove, const Vec2& initialVelocity) override;
 
     void startMagneticScroll();
-    Vec2 calculateItemDestination(const Vec2& positionRatioInView, Widget* item, const Vec2& itemAnchorPoint);
 
 protected:
     Widget* _model;
@@ -469,8 +459,6 @@ protected:
     float _topPadding;
     float _rightPadding;
     float _bottomPadding;
-
-    float _scrollTime;
 
     ssize_t _curSelectedIndex;
 

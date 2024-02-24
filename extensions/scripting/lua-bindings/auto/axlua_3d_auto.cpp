@@ -1,8 +1,8 @@
-#include "scripting/lua-bindings/auto/axlua_3d_auto.hpp"
+#include "lua-bindings/auto/axlua_3d_auto.hpp"
 #include "cocos2d.h"
 #include "3d/Bundle3D.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_3d_Animation3D_getDuration(lua_State* tolua_S)
 {

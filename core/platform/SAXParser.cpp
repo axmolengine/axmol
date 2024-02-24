@@ -4,6 +4,9 @@
  Copyright (c) 2013 Martell Malone
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-2020 simdsoft.com, @HALX99
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -134,8 +137,8 @@ bool SAXParser::parseIntrusive(char* xmlData, size_t dataLength, ParseOption opt
             break;
         case ParseOption::HTML:
             xsxml::xml_sax3_parser::parse<xsxml::parse_normal | xsxml::parse_html_entity_translation |
-                                          xsxml::parse_normalize_whitespace>(xmlData, static_cast<int>(dataLength),
-                                                                             handler);
+                                          xsxml::parse_normalize_whitespace | xsxml::parse_trim_whitespace>(
+                xmlData, static_cast<int>(dataLength), handler);
             break;
         case ParseOption::TRIM_WHITESPACE:
             xsxml::xml_sax3_parser::parse<xsxml::parse_normal | xsxml::parse_trim_whitespace>(

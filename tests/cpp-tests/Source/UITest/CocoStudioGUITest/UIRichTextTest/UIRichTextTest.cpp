@@ -1,5 +1,6 @@
 /****************************************************************************
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -50,6 +51,9 @@ UIRichTextTests::UIRichTextTests()
     ADD_TEST_CASE(UIRichTextXMLExtend);
     ADD_TEST_CASE(UIRichTextXMLSpace);
     ADD_TEST_CASE(UIRichTextNewline);
+    ADD_TEST_CASE(UIRichTextHeaders);
+    ADD_TEST_CASE(UIRichTextParagraph);
+    ADD_TEST_CASE(UIRichTextScrollTo);
 }
 
 //
@@ -969,4 +973,211 @@ bool UIRichTextNewline::init()
         return true;
     }
     return false;
+}
+
+bool UIRichTextHeaders::init()
+{
+    if (UIRichTextTestBase::init())
+    {
+        auto& widgetSize = _widget->getContentSize();
+
+        // Add the alert
+        Text* alert = Text::create("Header Tags", "fonts/Marker Felt.ttf", 30);
+        alert->setColor(Color3B(159, 168, 176));
+        alert->setPosition(
+            Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
+        _widget->addChild(alert);
+
+        createButtonPanel();
+
+#ifdef AX_PLATFORM_PC
+        _defaultContentSize = Size(290, 290);
+#endif
+
+        // RichText
+        _richText = RichText::createWithXML(
+            R"(<h1 face="fonts/arial.ttf">h1. HEADING</h1><h2 face="fonts/Marker Felt.ttf">h2. HEADING</h2><h3 face="fonts/American Typewriter.ttf">h3. HEADING</h3><h4>h4. HEADING</h4><h5>h5. HEADING</h5><h6>h6. HEADING</h6>)");
+        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setContentSize(_defaultContentSize);
+
+        _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
+        _richText->setLocalZOrder(10);
+
+        _widget->addChild(_richText);
+
+        // test remove all children, this call won't effect the test
+        _richText->removeAllChildren();
+
+        return true;
+    }
+    return false;
+}
+
+bool UIRichTextParagraph::init()
+{
+    if (UIRichTextTestBase::init())
+    {
+        auto& widgetSize = _widget->getContentSize();
+
+        // Add the alert
+        Text* alert = Text::create("Paragraph Tag", "fonts/Marker Felt.ttf", 30);
+        alert->setColor(Color3B(159, 168, 176));
+        alert->setPosition(
+            Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
+        _widget->addChild(alert);
+
+        createButtonPanel();
+
+#ifdef AX_PLATFORM_PC
+        _defaultContentSize = Size(290, 290);
+#endif
+
+        // RichText
+        _richText = RichText::createWithXML(
+            "<p><b>Paragraph1: </b>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et "
+            "dolore magna aliqua. Feugiat scelerisque varius morbi enim nunc. Dis parturient montes nascetur ridiculus "
+            "mus mauris vitae ultricies.</p><p><b>Paragraph2: </b>Lectus urna duis convallis convallis tellus id interdum velit. "
+            "Convallis a cras semper auctor neque vitae tempus quam pellentesque. Congue quisque egestas diam in arcu "
+            "cursus euismod quis.</p>");
+        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setContentSize(_defaultContentSize);
+
+        _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
+        _richText->setLocalZOrder(10);
+
+        _widget->addChild(_richText);
+
+        // test remove all children, this call won't effect the test
+        _richText->removeAllChildren();
+
+        return true;
+    }
+    return false;
+}
+
+bool UIRichTextScrollTo::init()
+{
+    if (UIRichTextTestBase::init())
+    {
+        auto& widgetSize = _widget->getContentSize();
+
+        // Add the alert
+        Text* alert = Text::create("Paragraph Tag", "fonts/Marker Felt.ttf", 30);
+        alert->setColor(Color3B(159, 168, 176));
+        alert->setPosition(
+            Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
+        _widget->addChild(alert);
+
+        createButtonPanel();
+
+#ifdef AX_PLATFORM_PC
+        _defaultContentSize = Size(290, 150);
+#endif
+
+        // ScrollView
+        _scrollView = ScrollView::create();
+        _scrollView->setContentSize(_defaultContentSize);
+        _scrollView->setInnerContainerSize(_defaultContentSize);
+        _scrollView->setBounceEnabled(true);
+        _scrollView->setDirection(ScrollView::Direction::VERTICAL);
+        _scrollView->setLayoutType(Layout::Type::VERTICAL);
+        _scrollView->setScrollBarEnabled(true);
+        _scrollView->setScrollBarWidth(4);
+        _scrollView->setScrollBarPositionFromCorner(Vec2(2, 2));
+        _scrollView->setScrollBarColor(Color3B::WHITE);
+        _scrollView->setScrollBarAutoHideEnabled(false);
+        _scrollView->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _scrollView->setPosition(_widget->getContentSize() / 2);
+        _scrollView->setLocalZOrder(10);
+        _widget->addChild(_scrollView);
+
+        ValueMap valMap;
+        valMap[RichText::KEY_ANCHOR_FONT_COLOR_STRING] = "#00ffdd";
+        
+        // RichText
+        _richText = RichText::createWithXML(
+            R"(<h1>Quick Links</h1>
+<a href="#fancy_header">Jump To Fancy Header</a><br/>
+<a href="#paragraph_2">Jump To Second Paragraph</a><br/>
+<a href="#some_link">Jump To Web Search</a><br/>
+<br/>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
+dolore magna aliqua. 
+Purus faucibus ornare suspendisse sed nisi. Viverra aliquet eget sit amet tellus cras adipiscing. 
+Ut tellus elementum sagittis vitae. 
+Risus feugiat in ante metus dictum at. Semper eget duis at tellus at. Iaculis eu non diam phasellus vestibulum 
+lorem sed risus. 
+Sed vulputate odio ut enim. Morbi tristique senectus et netus et malesuada fames.</p>
+<h1 id="fancy_header">Fancy Header</h1>
+<p id="paragraph_2">This is the second paragraph! Cras sed felis eget velit aliquet sagittis id consectetur purus. 
+Turpis nunc eget lorem dolor sed viverra ipsum nunc. 
+Ultrices tincidunt arcu non sodales neque sodales ut etiam sit. Risus feugiat in ante metus dictum at tempor. 
+Id neque aliquam vestibulum morbi blandit cursus risus.</p>
+<p>Tortor condimentum lacinia quis vel eros donec ac. Molestie ac feugiat sed lectus. 
+Aliquam id diam maecenas ultricies mi eget mauris. 
+Ullamcorper malesuada proin libero nunc consequat interdum varius. 
+Sollicitudin nibh sit amet commodo nulla facilisi nullam vehicula ipsum. 
+Diam quam nulla porttitor massa id neque aliquam vestibulum morbi. Sed velit dignissim sodales ut. 
+Morbi leo urna molestie at elementum eu facilisis. 
+Cursus metus aliquam eleifend mi in. Euismod lacinia at quis risus sed vulputate odio. 
+Sit amet mattis vulputate enim nulla aliquet porttitor lacus luctus.</p>
+<a id="some_link" href="https://google.com">Google!</a>)",
+            valMap);
+        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setContentSize(Size(_defaultContentSize.width, 0));
+        _richText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+        _richText->setOpenUrlHandler([this](std::string_view url) {
+            // Check if the href starts with a "#" character
+            if (url.starts_with('#'))
+            {
+                auto* node = _richText->getProtectedChildByName(url.substr(1));
+                if (node)
+                {
+                    // Scroll to the location of that node, and the reason it works is because
+                    // the ScrollView inner container is the same height as the RichText
+                    _scrollView->scrollToItem(node, Vec2::ANCHOR_MIDDLE_TOP, Vec2::ANCHOR_MIDDLE_TOP);
+                }
+            }
+            else if (!url.empty())
+            {
+                Application::getInstance()->openURL(url);
+            }
+        });
+
+        const auto contentSize = _scrollView->getInnerContainerSize();
+        _richText->setPosition(Vec2(contentSize.width / 2, contentSize.height));
+        _richText->setLocalZOrder(10);
+
+        _richText->formatText();
+        _scrollView->addChild(_richText);
+
+        updateScrollViewSize();
+
+        // test remove all children, this call won't effect the test
+        _richText->removeAllChildren();
+
+        return true;
+    }
+    return false;
+}
+
+void UIRichTextScrollTo::updateScrollViewSize()
+{
+    auto newHeight  = 0.f;
+    auto&& children = _scrollView->getChildren();
+    for (auto&& child : children)
+    {
+        auto&& contentSize = child->getContentSize();
+        newHeight += contentSize.height;
+        if (const auto* widget = dynamic_cast<Widget*>(child))
+        {
+            if (const auto* layoutParam = widget->getLayoutParameter())
+            {
+                auto&& margin = layoutParam->getMargin();
+                newHeight += margin.top + margin.bottom;
+            }
+        }
+    }
+    _scrollView->setInnerContainerSize(Size(_scrollView->getInnerContainerSize().width, newHeight));
+    _scrollView->scrollToTop(0.f, false);
 }

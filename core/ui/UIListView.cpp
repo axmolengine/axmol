@@ -1,6 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -28,8 +29,6 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-static const float DEFAULT_TIME_IN_SEC_FOR_SCROLL_TO_ITEM = 1.0f;
-
 namespace ui
 {
 
@@ -45,7 +44,6 @@ ListView::ListView()
     , _topPadding(0.0f)
     , _rightPadding(0.0f)
     , _bottomPadding(0.0f)
-    , _scrollTime(DEFAULT_TIME_IN_SEC_FOR_SCROLL_TO_ITEM)
     , _curSelectedIndex(-1)
     , _innerContainerDoLayoutDirty(true)
     , _eventCallback(nullptr)
@@ -523,17 +521,6 @@ float ListView::getBottomPadding() const
     return _bottomPadding;
 }
 
-void ListView::setScrollDuration(float time)
-{
-    if (time >= 0)
-        _scrollTime = time;
-}
-
-float ListView::getScrollDuration() const
-{
-    return _scrollTime;
-}
-
 void ListView::setDirection(Direction dir)
 {
     switch (dir)
@@ -642,13 +629,6 @@ void ListView::interceptTouchEvent(TouchEventType event, Widget* sender, Touch* 
     }
 }
 
-static Vec2 calculateItemPositionWithAnchor(Widget* item, const Vec2& itemAnchorPoint)
-{
-    Vec2 origin(item->getLeftBoundary(), item->getBottomBoundary());
-    Vec2 size = item->getContentSize();
-    return origin + Vec2(size.width * itemAnchorPoint.x, size.height * itemAnchorPoint.y);
-}
-
 static Widget* findClosestItem(const Vec2& targetPosition,
                                const Vector<Widget*>& items,
                                const Vec2& itemAnchorPoint,
@@ -676,7 +656,7 @@ static Widget* findClosestItem(const Vec2& targetPosition,
 
     // Binary search
     ssize_t midIndex      = (firstIndex + lastIndex) / 2;
-    Vec2 itemPosition     = calculateItemPositionWithAnchor(items.at(midIndex), itemAnchorPoint);
+    Vec2 itemPosition     = ListView::calculateItemPositionWithAnchor(items.at(midIndex), itemAnchorPoint);
     float distanceFromMid = (targetPosition - itemPosition).length();
     if (distanceFromFirst <= distanceFromLast)
     {
@@ -830,17 +810,6 @@ void ListView::jumpToPercentBothDirection(const Vec2& percent)
     ScrollView::jumpToPercentBothDirection(percent);
 }
 
-Vec2 ListView::calculateItemDestination(const Vec2& positionRatioInView, Widget* item, const Vec2& itemAnchorPoint)
-{
-    const Vec2& contentSize = getContentSize();
-    Vec2 positionInView;
-    positionInView.x += contentSize.width * positionRatioInView.x;
-    positionInView.y += contentSize.height * positionRatioInView.y;
-
-    Vec2 itemPosition = calculateItemPositionWithAnchor(item, itemAnchorPoint);
-    return -(itemPosition - positionInView);
-}
-
 void ListView::jumpToItem(ssize_t itemIndex, const Vec2& positionRatioInView, const Vec2& itemAnchorPoint)
 {
     Widget* item = getItem(itemIndex);
@@ -875,8 +844,7 @@ void ListView::scrollToItem(ssize_t itemIndex,
     {
         return;
     }
-    Vec2 destination = calculateItemDestination(positionRatioInView, item, itemAnchorPoint);
-    startAutoScrollToDestination(destination, timeInSec, true);
+    ScrollView::scrollToItem(item, positionRatioInView, itemAnchorPoint, timeInSec);
 }
 
 ssize_t ListView::getCurSelectedIndex() const
@@ -920,12 +888,12 @@ void ListView::copyClonedWidgetChildren(Widget* model)
     }
 }
 
-void ListView::copySpecialProperties(Widget* widget)
+void ListView::copySpecialProperties(Widget* model)
 {
-    ListView* listViewEx = dynamic_cast<ListView*>(widget);
+    ListView* listViewEx = dynamic_cast<ListView*>(model);
     if (listViewEx)
     {
-        ScrollView::copySpecialProperties(widget);
+        ScrollView::copySpecialProperties(model);
         setItemModel(listViewEx->_model);
         setItemsMargin(listViewEx->_itemsMargin);
         setGravity(listViewEx->_gravity);

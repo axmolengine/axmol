@@ -22,30 +22,30 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "scripting/lua-bindings/manual/ui/axlua_ui_manual.hpp"
-#include "scripting/lua-bindings/auto/axlua_ui_auto.hpp"
+#include "lua-bindings/manual/ui/axlua_ui_manual.hpp"
+#include "lua-bindings/auto/axlua_ui_auto.hpp"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
-#    include "scripting/lua-bindings/auto/axlua_video_auto.hpp"
-#    include "scripting/lua-bindings/manual/ui/axlua_video_manual.hpp"
-#    include "scripting/lua-bindings/auto/axlua_webview_auto.hpp"
-#    include "scripting/lua-bindings/manual/ui/axlua_webview_manual.hpp"
+#    include "lua-bindings/auto/axlua_video_auto.hpp"
+#    include "lua-bindings/manual/ui/axlua_video_manual.hpp"
+#    include "lua-bindings/auto/axlua_webview_auto.hpp"
+#    include "lua-bindings/manual/ui/axlua_webview_manual.hpp"
 #elif defined(_WIN32)
 #    if defined(AX_ENABLE_MFMEDIA)
-#        include "scripting/lua-bindings/auto/axlua_video_auto.hpp"
-#        include "scripting/lua-bindings/manual/ui/axlua_video_manual.hpp"
+#        include "lua-bindings/auto/axlua_video_auto.hpp"
+#        include "lua-bindings/manual/ui/axlua_video_manual.hpp"
 #    endif
 #    if defined(AX_ENABLE_MSEDGE_WEBVIEW2)
-#        include "scripting/lua-bindings/auto/axlua_webview_auto.hpp"
-#        include "scripting/lua-bindings/manual/ui/axlua_webview_manual.hpp"
+#        include "lua-bindings/auto/axlua_webview_auto.hpp"
+#        include "lua-bindings/manual/ui/axlua_webview_manual.hpp"
 #    endif
 #endif
 
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "scripting/lua-bindings/manual/LuaValue.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
+#include "lua-bindings/manual/LuaValue.h"
 #include "ui/CocosGUI.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/LuaEngine.h"
 #include "base/EventListenerFocus.h"
 
 using namespace ui;

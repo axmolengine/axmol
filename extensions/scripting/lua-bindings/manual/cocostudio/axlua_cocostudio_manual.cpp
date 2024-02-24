@@ -22,19 +22,19 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "scripting/lua-bindings/manual/cocostudio/axlua_cocostudio_manual.hpp"
-#include "scripting/lua-bindings/auto/axlua_studio_auto.hpp"
-#include "scripting/lua-bindings/auto/axlua_csloader_auto.hpp"
-#include "scripting/lua-bindings/manual/cocostudio/axlua_csloader_manual.hpp"
+#include "lua-bindings/manual/cocostudio/axlua_cocostudio_manual.hpp"
+#include "lua-bindings/auto/axlua_studio_auto.hpp"
+#include "lua-bindings/auto/axlua_csloader_auto.hpp"
+#include "lua-bindings/manual/cocostudio/axlua_csloader_manual.hpp"
 
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "scripting/lua-bindings/manual/LuaValue.h"
-#include "CocoStudio.h"
-#include "ActionTimeline/ActionTimelineCache.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
-#include "scripting/lua-bindings/manual/cocostudio/CustomGUIReader.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
+#include "lua-bindings/manual/LuaValue.h"
+#include "cocostudio/CocoStudio.h"
+#include "cocostudio/ActionTimeline/ActionTimelineCache.h"
+#include "lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/cocostudio/CustomGUIReader.h"
 
 using namespace cocostudio;
 

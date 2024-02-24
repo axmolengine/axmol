@@ -1,9 +1,9 @@
-#include "scripting/lua-bindings/auto/axlua_studio_auto.hpp"
+#include "lua-bindings/auto/axlua_studio_auto.hpp"
 #include "cocostudio/CocoStudio.h"
 #include "cocostudio/ComExtensionData.h"
-#include "scripting/lua-bindings/manual/cocostudio/lua-cocostudio-conversions.h"
-#include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "lua-bindings/manual/cocostudio/lua-cocostudio-conversions.h"
+#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/manual/LuaBasicConversions.h"
 
 int lua_ax_studio_ActionFrame_setFrameIndex(lua_State* tolua_S)
 {

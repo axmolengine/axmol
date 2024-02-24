@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/platform/ios/LuaObjcBridge.h"
+#include "lua-bindings/manual/platform/ios/LuaObjcBridge.h"
 #include <Foundation/Foundation.h>
 
 NS_AX_BEGIN
