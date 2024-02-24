@@ -443,10 +443,19 @@ if(WINDOWS OR LINUX OR ANDROID OR WASM)
 endif()
 
 if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX)
-    ax_add_3rd(glfw OPTIONS
-      "GLFW_BUILD_DOCS OFF"
-      "GLFW_INSTALL OFF"
-    )
+    if(NOT LINUX)
+        ax_add_3rd(glfw OPTIONS
+          "GLFW_BUILD_DOCS OFF"
+          "GLFW_INSTALL OFF"
+        )
+    else()
+        ax_add_3rd(glfw OPTIONS
+          "GLFW_BUILD_X11 ON"
+          "GLFW_BUILD_WAYLAND OFF"
+          "GLFW_BUILD_DOCS OFF"
+          "GLFW_INSTALL OFF"
+        )
+    endif()
     set_target_properties(glfw PROPERTIES OUTPUT_NAME glfw)
     if(NOT WINDOWS)
         target_link_libraries(thirdparty INTERFACE pthread)
