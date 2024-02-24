@@ -204,7 +204,7 @@ void WindowTestClose::onWindowClose(EventCustom* e)
     }
 
     auto s = _director->getWinSize();
-    label  = Label::createWithTTF(StringUtils::format("Window close button callback!"), "fonts/Marker Felt.ttf", 16.0f);
+    label  = Label::createWithTTF("Window close button callback!", "fonts/Marker Felt.ttf", 16.0f);
     label->setPosition(s.width / 2, s.height / 2);
     addChild(label);
 

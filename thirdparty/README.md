@@ -158,7 +158,7 @@
 
 ## oboe (Adnroid only)
 - [![Upstream](https://img.shields.io/github/v/tag/google/oboe?label=Upstream)](https://github.com/google/oboe)
-- Version: 1.8.0
+- Version: 1.8.1
 - License: Apache-2.0
 
 ## ogg & vorbis
