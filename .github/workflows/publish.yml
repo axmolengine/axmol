@@ -30,7 +30,7 @@ jobs:
         echo "release_ver=$release_ver" >> ${env:GITHUB_ENV}
 
     - name: Check release ver from commits
-      if: ${{ github.event.workflow_run.conclusion == 'success' && steps.check_ver.outputs.release_ver == '' }}
+      if: ${{ steps.check_ver.outputs.release_ver == '' }}
       shell: pwsh
       run: |
         # commit message template: xxxx [release 2.1.0]
