@@ -1,6 +1,9 @@
 name: publish
 
 on:
+  push:
+    paths:
+      - CHANGELOG.md
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
