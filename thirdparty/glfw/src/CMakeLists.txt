@@ -177,7 +177,7 @@ if (GLFW_BUILD_WAYLAND)
     endif()
 endif()
 
-if (GLFW_BUILD_X11)
+if (GLFW_BUILD_X11_EXPLICIT)
     find_package(X11 REQUIRED)
     target_include_directories(glfw PRIVATE "${X11_X11_INCLUDE_PATH}")
 
