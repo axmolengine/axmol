@@ -801,11 +801,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             else
                 _glfwInputKey(window, key, scancode, action, mods);
 
-            if ((wParam == VK_MENU || wParam == VK_F10) && !window->win32.keymenu) {
-                // x-studio spec
-                // #Fix: disable system default ALT process, solve dead block problem when glfw-window is a cross-thread child window.
-                return 0;
-            }
             break;
         }
 
@@ -1394,14 +1389,13 @@ static int createNativeWindow(_GLFWwindow* window,
     if (!wideTitle)
         return GLFW_FALSE;
 
-    window->win32.handleParent = wndconfig->win32.handleParent;
     window->win32.handle = CreateWindowExW(exStyle,
                                            MAKEINTATOM(_glfw.win32.mainWindowClass),
                                            wideTitle,
                                            style,
                                            frameX, frameY,
                                            frameWidth, frameHeight,
-                                           (HWND)wndconfig->win32.handleParent,  // x-studio spec, create as child window support.
+                                           (HWND)wndconfig->win32.handleParent,
                                            NULL, // No window menu
                                            _glfw.win32.instance,
                                            (LPVOID) wndconfig);
@@ -1507,6 +1501,8 @@ GLFWbool _glfwCreateWindowWin32(_GLFWwindow* window,
                                 const _GLFWctxconfig* ctxconfig,
                                 const _GLFWfbconfig* fbconfig)
 {
+    window->win32.handleParent = wndconfig->win32.handleParent;
+
     if (!createNativeWindow(window, wndconfig, fbconfig))
         return GLFW_FALSE;
 

@@ -1,4 +1,4 @@
-## axmol-2.1.2 ?? 2024
+## axmol-2.1.2 Feb.25 2024
 
 ### BugFixes
 
@@ -59,6 +59,7 @@
 - libpng: 1.6.42 ==> 1.6.43
 - glfw: git b4c3ef9 ==> 3.4
 - simdjson: 3.6.4 ==> 3.7.0
+- imgui: 1.90.1 ==> 1.90.4
 
 ## axmol-2.1.1 Feb.2 2024
 
