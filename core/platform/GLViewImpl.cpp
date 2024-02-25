@@ -79,10 +79,6 @@ THE SOFTWARE.
 #    include <GLFW/glfw3native.h>
 #endif
 
-#if defined(_WIN32)
-#    include "glfw3ext.h"
-#endif
-
 #if defined(__EMSCRIPTEN__)
 #    include <emscripten/html5.h>
 #endif
@@ -357,12 +353,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
     if (initglfw)
     {
         glfwSetErrorCallback(GLFWEventHandler::onGLFWError);
-
-#if defined(_WIN32)
-        glfwxInit();
-#else
         glfwInit();
-#endif
     }
 }
 
@@ -370,11 +361,7 @@ GLViewImpl::~GLViewImpl()
 {
     AXLOGINFO("deallocing GLViewImpl: %p", this);
     GLFWEventHandler::setGLViewImpl(nullptr);
-#if defined(_WIN32)
-    glfwxTerminate();
-#else
     glfwTerminate();
-#endif
 }
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
@@ -491,7 +478,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #endif
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-    glfwxSetParent((HWND)_glContextAttrs.viewParent);
+    glfwWindowHintPointer(GLFW_WIN32_HWND_PARENT, _glContextAttrs.viewParent);
 #endif
 
     _mainWindow = glfwCreateWindow(static_cast<int>(windowSize.width), static_cast<int>(windowSize.height),

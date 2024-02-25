@@ -24,7 +24,8 @@ if (!$version -or ($version -eq 'auto')) {
                 $axver += "-$commitHash"
                 $axver += '-nightly'
             }
-        } else {
+        }
+        else {
             $axver += $(parse_axver 'PATCH')
         }
         return $axver
@@ -306,6 +307,36 @@ public class UnixFileStream : FileStream
     return $Script:total
 }
 
+# Generate release note
+
+if ($prerelease -eq 'false') {
+    $release_note = Join-Path $AX_ROOT "release_note_${version}.txt"
+}
+else {
+    $release_note = Join-Path $AX_ROOT "release_note_draft.txt"
+}
+
+New-Item -Path $release_note -ItemType File -Force
+
+$changelog_lines = Get-Content (Join-Path $AX_ROOT 'CHANGELOG.md')
+$release_count = 0
+$release_note_content = ''
+foreach ($line in $changelog_lines) {
+    if ($line.StartsWith('## axmol-')) {
+        ++$release_count
+        if ($release_count -lt 2) {
+            $release_note_content += "*The $version release is a minor ``LTS`` release for bugfixes and improvements*`n"
+        } else {
+            break
+        }
+    }
+    else {
+        $release_note_content += "$line`n"
+    }
+}
+
+[System.IO.File]::AppendAllText($release_note, $release_note_content)
+
 # Compress-Archive @compress_args
 $total = Compress-ArchiveEx @compress_args -Force
 
@@ -316,8 +347,7 @@ Write-Host "Create package $pkg_file_path done, ${total} files found, MD5: $md5_
 Pop-Location
 
 if ($env:GITHUB_ACTIONS -eq 'true') {
-    $release_note = Join-Path $AX_ROOT "release_note_draft.txt"
-    [System.IO.File]::WriteAllText($release_note, "## MD5 Hash of the release artifacts`n  - ``${pkg_file_name}``: $md5_digest")
+    [System.IO.File]::AppendAllText($release_note, "## MD5 Hash of the release artifacts`n  - ``${pkg_file_name}``: $md5_digest")
     echo "release_tag=v$version" >> ${env:GITHUB_OUTPUT}
     echo "release_pkg=$pkg_file_name" >> ${env:GITHUB_OUTPUT}
     echo "release_note=$release_note" >> ${env:GITHUB_OUTPUT}

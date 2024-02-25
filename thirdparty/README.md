@@ -82,7 +82,7 @@
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: git b4c3ef9 on Dec 24, 2023 (4680)
+- Version: 3.4 with modified for create as win32 child window support
 - License: zlib
 
 ## GHC (iOS devices only)
@@ -158,7 +158,7 @@
 
 ## oboe (Adnroid only)
 - [![Upstream](https://img.shields.io/github/v/tag/google/oboe?label=Upstream)](https://github.com/google/oboe)
-- Version: 1.8.0
+- Version: 1.8.1
 - License: Apache-2.0
 
 ## ogg & vorbis
@@ -184,7 +184,7 @@
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
-- Version: 1.6.42
+- Version: 1.6.43
 - License: PNG Reference Library License version 2
 
 ## poly2tri
@@ -218,7 +218,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 3.6.4
+- Version: 3.7.0
 - License: Apache-2.0
 
 ## stb (stb_image)
