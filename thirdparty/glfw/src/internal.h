@@ -416,7 +416,7 @@ struct _GLFWwndconfig
     struct {
         GLFWbool  keymenu;
         GLFWbool  showDefault;
-        void*     handleParent; // x-studio spec, create with parent window support
+        void*     handleParent;
     } win32;
     struct {
         char      appId[256];

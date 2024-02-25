@@ -413,7 +413,7 @@ typedef struct _GLFWlibraryWGL
 typedef struct _GLFWwindowWin32
 {
     HWND                handle;
-    HWND                handleParent;  // x-studio spec, create with parent window support
+    HWND                handleParent;
     HICON               bigIcon;
     HICON               smallIcon;
 
