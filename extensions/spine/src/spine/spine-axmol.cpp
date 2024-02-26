@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated September 24, 2021. Replaces all prior versions.
+ * Last updated July 28, 2023. Replaces all prior versions.
  *
- * Copyright (c) 2013-2021, Esoteric Software LLC
+ * Copyright (c) 2013-2023, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software
- * or otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software or
+ * otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,25 +23,23 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
+ * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #include <spine/Extension.h>
-#include <spine/spine-cocos2dx.h>
+#include <spine/spine-axmol.h>
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace spine;
 
-Cocos2dAtlasAttachmentLoader::Cocos2dAtlasAttachmentLoader(Atlas *atlas) : AtlasAttachmentLoader(atlas) {
+AxmolAtlasAttachmentLoader::AxmolAtlasAttachmentLoader(Atlas *atlas) : AtlasAttachmentLoader(atlas) {
 }
 
-Cocos2dAtlasAttachmentLoader::~Cocos2dAtlasAttachmentLoader() {}
+AxmolAtlasAttachmentLoader::~AxmolAtlasAttachmentLoader() {}
 
-void Cocos2dAtlasAttachmentLoader::configureAttachment(Attachment *attachment) {
+void AxmolAtlasAttachmentLoader::configureAttachment(Attachment *attachment) {
 }
-
-#if COCOS2D_VERSION >= 0x0040000
 
 backend::SamplerAddressMode wrap(TextureWrap wrap) {
 	return wrap == TextureWrap_ClampToEdge ? backend::SamplerAddressMode::CLAMP_TO_EDGE : backend::SamplerAddressMode::REPEAT;
@@ -69,49 +67,15 @@ backend::SamplerFilter filter(TextureFilter filter) {
 	return backend::SamplerFilter::LINEAR;
 }
 
-#else
+AxmolTextureLoader::AxmolTextureLoader() : TextureLoader() {}
+AxmolTextureLoader::~AxmolTextureLoader() {}
 
-GLuint wrap(TextureWrap wrap) {
-	return wrap == TextureWrap_ClampToEdge ? GL_CLAMP_TO_EDGE : GL_REPEAT;
-}
-
-GLuint filter(TextureFilter filter) {
-	switch (filter) {
-		case TextureFilter_Unknown:
-			break;
-		case TextureFilter_Nearest:
-			return GL_NEAREST;
-		case TextureFilter_Linear:
-			return GL_LINEAR;
-		case TextureFilter_MipMap:
-			return GL_LINEAR_MIPMAP_LINEAR;
-		case TextureFilter_MipMapNearestNearest:
-			return GL_NEAREST_MIPMAP_NEAREST;
-		case TextureFilter_MipMapLinearNearest:
-			return GL_LINEAR_MIPMAP_NEAREST;
-		case TextureFilter_MipMapNearestLinear:
-			return GL_NEAREST_MIPMAP_LINEAR;
-		case TextureFilter_MipMapLinearLinear:
-			return GL_LINEAR_MIPMAP_LINEAR;
-	}
-	return GL_LINEAR;
-}
-
-#endif
-
-Cocos2dTextureLoader::Cocos2dTextureLoader() : TextureLoader() {}
-Cocos2dTextureLoader::~Cocos2dTextureLoader() {}
-
-void Cocos2dTextureLoader::load(AtlasPage &page, const spine::String &path) {
+void AxmolTextureLoader::load(AtlasPage &page, const spine::String &path) {
 	Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(path.buffer());
-	CCASSERT(texture != nullptr, "Invalid image");
+	AXASSERT(texture != nullptr, "Invalid image");
 	if (texture) {
 		texture->retain();
-#if COCOS2D_VERSION >= 0x0040000
 		Texture2D::TexParams textureParams(filter(page.minFilter), filter(page.magFilter), wrap(page.uWrap), wrap(page.vWrap));
-#else
-		Texture2D::TexParams textureParams = {filter(page.minFilter), filter(page.magFilter), wrap(page.uWrap), wrap(page.vWrap)};
-#endif
 		texture->setTexParameters(textureParams);
 
 		page.texture = texture;
@@ -120,35 +84,28 @@ void Cocos2dTextureLoader::load(AtlasPage &page, const spine::String &path) {
 	}
 }
 
-void Cocos2dTextureLoader::unload(void *texture) {
+void AxmolTextureLoader::unload(void *texture) {
 	if (texture) {
 		((Texture2D *) texture)->release();
 	}
 }
 
 
-Cocos2dExtension::Cocos2dExtension() : DefaultSpineExtension() {}
+AxmolExtension::AxmolExtension() : DefaultSpineExtension() {}
 
-Cocos2dExtension::~Cocos2dExtension() {}
+AxmolExtension::~AxmolExtension() {}
 
-char *Cocos2dExtension::_readFile(const spine::String &path, int *length) {
+char *AxmolExtension::_readFile(const spine::String &path, int *length) {
 	Data data = FileUtils::getInstance()->getDataFromFile(path.buffer());
 	if (data.isNull()) return nullptr;
 
-		// avoid buffer overflow (int is shorter than ssize_t in certain platforms)
-#if COCOS2D_VERSION >= 0x00031200
+	// avoid buffer overflow (int is shorter than ssize_t in certain platforms)
 	ssize_t tmpLen;
 	char *ret = (char *) data.takeBuffer(&tmpLen);
 	*length = static_cast<int>(tmpLen);
 	return ret;
-#else
-	*length = static_cast<int>(data.getSize());
-	auto bytes = SpineExtension::alloc<char>(*length, __FILE__, __LINE__);
-	memcpy(bytes, data.getBytes(), *length);
-	return bytes;
-#endif
 }
 
 SpineExtension *spine::getDefaultExtension() {
-	return new Cocos2dExtension();
+	return new AxmolExtension();
 }

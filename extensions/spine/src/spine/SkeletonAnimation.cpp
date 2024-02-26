@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated September 24, 2021. Replaces all prior versions.
+ * Last updated July 28, 2023. Replaces all prior versions.
  *
- * Copyright (c) 2013-2021, Esoteric Software LLC
+ * Copyright (c) 2013-2023, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software
- * or otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software or
+ * otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,16 +23,16 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
+ * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #include <algorithm>
 #include <spine/Extension.h>
 #include <spine/SkeletonAnimation.h>
-#include <spine/spine-cocos2dx.h>
+#include <spine/spine-axmol.h>
 
-USING_NS_CC;
+USING_NS_AX;
 using std::max;
 using std::min;
 using std::vector;
@@ -142,7 +142,7 @@ namespace spine {
 		if (_postUpdateListener) _postUpdateListener(this);
 	}
 
-	void SkeletonAnimation::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t transformFlags) {
+	void SkeletonAnimation::draw(axmol::Renderer *renderer, const axmol::Mat4 &transform, uint32_t transformFlags) {
 		if (_firstDraw) {
 			_firstDraw = false;
 			update(0);
@@ -151,7 +151,7 @@ namespace spine {
 	}
 
 	void SkeletonAnimation::setAnimationStateData(AnimationStateData *stateData) {
-		CCASSERT(stateData, "stateData cannot be null.");
+		AXASSERT(stateData, "stateData cannot be null.");
 
 		if (_ownsAnimationStateData) delete _state->getData();
 		delete _state;
