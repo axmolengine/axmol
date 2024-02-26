@@ -46,7 +46,7 @@ using namespace spine;
 #define NUM_SKELETONS 50
 #define SPINE_NODE_SCALE_FACTOR 0.4
 
-static Cocos2dTextureLoader textureLoader;
+static AxmolTextureLoader textureLoader;
 
 PowInterpolation pow2(2);
 PowOutInterpolation powOut2(2);
@@ -170,7 +170,7 @@ bool BatchingExample::init()
 
     // This attachment loader configures attachments with data needed for axmol rendering.
     // Do not dispose the attachment loader until the skeleton data is disposed!
-    _attachmentLoader = new (__FILE__, __LINE__) Cocos2dAtlasAttachmentLoader(_atlas);
+    _attachmentLoader = new (__FILE__, __LINE__) AxmolAtlasAttachmentLoader(_atlas);
 
     // Load the skeleton data.
     SkeletonJson* json = new (__FILE__, __LINE__) SkeletonJson(_attachmentLoader);
