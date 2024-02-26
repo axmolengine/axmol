@@ -30,17 +30,16 @@
 #ifndef SPINE_SKELETONBATCH_H_
 #define SPINE_SKELETONBATCH_H_
 
-#include "cocos2d.h"
-#if COCOS2D_VERSION >= 0x00040000
+#include "axmol.h"
 
 #include "renderer/backend/ProgramState.h"
 #include <spine/spine.h>
 #include <vector>
 
 namespace spine {
-	struct SkeletonCommand : public cocos2d::TrianglesCommand {
-		cocos2d::backend::UniformLocation _locMVP;
-		cocos2d::backend::UniformLocation _locTexture;
+	struct SkeletonCommand : public axmol::TrianglesCommand {
+		axmol::backend::UniformLocation _locMVP;
+		axmol::backend::UniformLocation _locTexture;
 	};
 	class SP_API SkeletonBatch {
 	public:
@@ -50,13 +49,13 @@ namespace spine {
 
 		void update(float delta);
 
-		cocos2d::V3F_C4B_T2F *allocateVertices(uint32_t numVertices);
+		axmol::V3F_C4B_T2F *allocateVertices(uint32_t numVertices);
 		void deallocateVertices(uint32_t numVertices);
 		unsigned short *allocateIndices(uint32_t numIndices);
 		void deallocateIndices(uint32_t numVertices);
-		cocos2d::TrianglesCommand *addCommand(cocos2d::Renderer *renderer, float globalOrder, cocos2d::Texture2D *texture, cocos2d::backend::ProgramState *programState, cocos2d::BlendFunc blendType, const cocos2d::TrianglesCommand::Triangles &triangles, const cocos2d::Mat4 &mv, uint32_t flags);
+		axmol::TrianglesCommand *addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, axmol::backend::ProgramState *programState, axmol::BlendFunc blendType, const axmol::TrianglesCommand::Triangles &triangles, const axmol::Mat4 &mv, uint32_t flags);
 
-		cocos2d::backend::ProgramState* updateCommandPipelinePS(SkeletonCommand* command, cocos2d::backend::ProgramState* programState);
+		axmol::backend::ProgramState* updateCommandPipelinePS(SkeletonCommand* command, axmol::backend::ProgramState* programState);
 
 	protected:
 		SkeletonBatch();
@@ -75,7 +74,7 @@ namespace spine {
 		uint32_t _nextFreeCommand;
 
 		// pool of vertices
-		std::vector<cocos2d::V3F_C4B_T2F> _vertices;
+		std::vector<axmol::V3F_C4B_T2F> _vertices;
 		uint32_t _numVertices;
 
 		// pool of indices
@@ -83,7 +82,5 @@ namespace spine {
 	};
 
 }// namespace spine
-
-#endif
 
 #endif// SPINE_SKELETONBATCH_H_

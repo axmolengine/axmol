@@ -6,7 +6,7 @@
 #include "CocosStudioExport.h"
 #include <functional>
 
-#if !defined(AX_USE_SPINE_CPP) || AX_USE_SPINE_CPP
+#if AX_SPINE_VERSION >= 0x030700
 class CCS_DLL SpineSkeletonDataCache
 {
 public:
