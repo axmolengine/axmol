@@ -118,9 +118,18 @@ class axutils {
 
         if (sdkRoot == null || !new File(sdkRoot).isDirectory()) {
             sdkRoot = Paths.get("${System.env.ANDROID_HOME}").toAbsolutePath().toString()
-            if (!new File(sdkRoot).isDirectory()) {
-                throw new  Exception('android sdk not specified properly in local.properties or system env ANDROID_HOME')
-            }
+            if (!new File(sdkRoot).isDirectory())
+                sdkRoot = null
+        }
+
+        if (sdkRoot == null) {
+            sdkRoot = Paths.get("${System.env.HOME}").toAbsolutePath().toString() + "/Library/android/sdk"
+            if (!new File(sdkRoot).isDirectory())
+                sdkRoot = null
+        }
+
+        if (sdkRoot == null) {
+            throw new Exception('Couldn\'t find android sdk. Specify path in local.properties or system env ANDROID_HOME')
         }
 
         def rets = new ArrayList(5) // ndkVer,ndkPath,cmakeVer,cmakeOptions(AX_USE_XXX, AX_ENABLE_XXX, AX_ENABLE_EXT_XXX),cmakeDir<nullable>
