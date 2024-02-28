@@ -298,27 +298,27 @@ class axutils {
         def found = null
         def properties = new Properties()
         File propertiesFile = new File("$ndkDir${File.separator}source.properties")
-        propertiesFile.withInputStream {
-            properties.load(it)
-            def foundNdkVer = properties['Pkg.Revision']
-            def ret = axutils.compareVersion(foundNdkVer, ndkVer)
-            if(ret == 0) {
-                println("Using found ndk (revision=$foundNdkVer,path=$ndkDir)")
-                found = true
-            }
-            else if(ret > 0){
-                if(allowNewerNdk) {
-                    println("Using found newer ndk (revision=$foundNdkVer,path=$ndkDir), (minimum required is: ${ndkVer})")
-                    ndkVer = foundNdkVer
+        try {
+            propertiesFile.withInputStream {
+                properties.load(it)
+                def foundNdkVer = properties['Pkg.Revision']
+                def ret = axutils.compareVersion(foundNdkVer, ndkVer)
+                if (ret == 0) {
+                    println("Using found ndk (revision=$foundNdkVer,path=$ndkDir)")
                     found = true
-                }
-                else {
-                    //throw new GradleException("The ndk ${ndkVer} is required, but $foundNdkVer found!")
+                } else if (ret > 0) {
+                    if (allowNewerNdk) {
+                        println("Using found newer ndk (revision=$foundNdkVer,path=$ndkDir), (minimum required is: ${ndkVer})")
+                        ndkVer = foundNdkVer
+                        found = true
+                    } else {
+                        //throw new GradleException("The ndk ${ndkVer} is required, but $foundNdkVer found!")
+                    }
+                } else {
+                    //throw new GradleException("The ndk ${ndkVer}+ is required, but $foundNdkVer found!")
                 }
             }
-            else {
-                //throw new GradleException("The ndk ${ndkVer}+ is required, but $foundNdkVer found!")
-            }
+        } catch (Exception) {
         }
         if (found) {
             rets[0] = ndkVer
