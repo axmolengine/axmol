@@ -104,6 +104,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 
 一些亮点:
 
+- **图形驱动升级：GLES3.0、OpenGL3.3核心模式支持，3D模型实例化渲染支持，全新跨平台 Shader 工作流**。
 - **全新媒体播放器**: 基于 MediaEngine 的视频纹理渲染，支持所有 Native 平台. [详见我们的 Wiki 页](https://github.com/axmolengine/axmol/wiki/Media-Player)。
 - **WebAssembly 支持** (by @nowasm) - Preview: [Axmol tests](https://axmol.netlify.app/wasm/cpp-tests/cpp-tests)
 - **Windows 通用** (UWP) Xbox 主机平台支持。
