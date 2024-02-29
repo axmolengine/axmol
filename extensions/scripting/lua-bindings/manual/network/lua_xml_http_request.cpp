@@ -791,6 +791,10 @@ static int axlua_XMLHttpRequest_open(lua_State* L)
             {
                 self->getHttpRequest()->setRequestType(network::HttpRequest::Type::GET);
             }
+            else if (method.compare("patch") == 0 || method.compare("PATCH") == 0)
+            {
+                self->getHttpRequest()->setRequestType(network::HttpRequest::Type::PATCH);
+            }
             else if (method.compare("put") == 0 || method.compare("PUT") == 0)
             {
                 self->getHttpRequest()->setRequestType(network::HttpRequest::Type::PUT);
