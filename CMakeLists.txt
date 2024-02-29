@@ -29,6 +29,10 @@
 
 cmake_minimum_required(VERSION 3.22)
 
+if(APPLE)
+    enable_language(OBJC OBJCXX)
+endif()
+
 project(axmol)
 
 if(XCODE)

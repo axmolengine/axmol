@@ -361,6 +361,48 @@ function(source_group_single_file single_file)
     source_group("${ide_file_group}" FILES ${single_file})
 endfunction()
 
+# Gets a list of all target libraries that a given target depends on. By target libraries
+# it is meant that libraries themselves are CMake targets.
+function(get_target_all_library_targets output_list target)
+    list(APPEND visited_targets ${target})
+    get_target_property(imported ${target} IMPORTED)
+    if (imported)
+        get_target_property(libs ${target} INTERFACE_LINK_LIBRARIES)
+    else()
+        get_target_property(libs ${target} LINK_LIBRARIES)
+    endif()
+    set(lib_targets "")
+    foreach(lib ${libs})
+        if(TARGET ${lib})
+            list(FIND visited_targets ${lib} visited)
+            if (${visited} EQUAL -1)
+                get_target_all_library_targets(link_lib_targets ${lib})
+                list(APPEND lib_targets ${lib} ${link_lib_targets})
+            endif()
+        endif()
+    endforeach()
+    set(visited_targets ${visited_targets} PARENT_SCOPE)
+    set(${output_list} ${lib_targets} PARENT_SCOPE)
+endfunction()
+
+# Gets a list of all compiled shaders that a given target depends on.
+#
+# A list of all compiled shaders that the executable or library target builds is kept in
+# `AX_COMPILED_SHADERS` property on the target. This function uses this property to gather
+# the list of all shaders from this target and all libraries that this target depends on.
+function(get_target_compiled_shaders output_list target)
+    get_target_all_library_targets(libs ${target})
+    list(APPEND libs ${target})
+    set(shaders)
+    foreach(lib ${libs})
+        get_target_property(target_shaders ${lib} AX_COMPILED_SHADERS)
+        if(target_shaders)
+            list(APPEND shaders ${target_shaders})
+        endif()
+    endforeach()
+    set(${output_list} ${shaders} PARENT_SCOPE)
+endfunction()
+
 # setup a ax application
 function(ax_setup_app_config app_name)
     set(options CONSOLE)
@@ -368,7 +410,7 @@ function(ax_setup_app_config app_name)
     cmake_parse_arguments(opt "${options}" "${oneValueArgs}" ""
                           "" ${ARGN} )
     if (WINRT)
-        target_include_directories(${app_name} 
+        target_include_directories(${app_name}
             PRIVATE "proj.winrt"
         )
     endif()
@@ -451,7 +493,7 @@ function(ax_setup_app_config app_name)
         message(STATUS "${app_shaders_count} shader sources found in ${app_shaders_dir}")
         # compile app shader to ${CMAKE_BINARY_DIR}/runtime/axslc/custom/
         ax_target_compile_shaders(${app_name} FILES ${app_shaders} CUSTOM)
-        source_group("Source Files/Source/shaders" FILES ${app_shaders}) 
+        source_group("Source Files/Source/shaders" FILES ${app_shaders})
     endif()
 
     if (IS_DIRECTORY ${GLSLCC_OUT_DIR})
@@ -466,8 +508,9 @@ function(ax_setup_app_config app_name)
             if (CMAKE_GENERATOR MATCHES "Xcode")
                 set_target_properties(${app_name} PROPERTIES XCODE_EMBED_RESOURCES ${GLSLCC_OUT_DIR})
             else()
-                ax_mark_multi_resources(compiled_shader_files RES_TO "Resources/axslc" FOLDERS ${GLSLCC_OUT_DIR})
-                target_sources(${app_name} PRIVATE ${compiled_shader_files})
+                get_target_compiled_shaders(shaders ${app_name})
+                ax_mark_resources(FILES ${shaders} BASEDIR ${GLSLCC_OUT_DIR} RESOURCEBASE "Resources/axslc")
+                target_sources(${app_name} PRIVATE ${shaders})
             endif()
         elseif(WINRT OR WASM)
             set(app_all_shaders)
@@ -476,7 +519,7 @@ function(ax_setup_app_config app_name)
             if (WINRT)
                 ax_target_embed_compiled_shaders(${app_name} ${rt_output} FILES ${app_all_shaders})
             else()
-                # --preload-file 
+                # --preload-file
                 # refer to: https://emscripten.org/docs/porting/files/packaging_files.html
                 target_link_options(${app_name} PRIVATE "--preload-file" ${GLSLCC_OUT_DIR}@axslc/)
             endif()
