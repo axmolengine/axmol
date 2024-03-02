@@ -139,7 +139,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 * 请不要忘记将主题 axmol 和 axmolengine 添加到您创建的任何相关存储库中
 * 在 GitHub 上添加星也将有助于 Axmol 的成长。谢谢你!
 
-如果您发现 Axmol 引擎有帮助，请考虑在 [Open Collective](https://opencollective.com/axmol) 或 in [GitHub Sponsors](https://github.com/sponsors/axmolengine) 赞助，非常感谢！
+如果您发现 Axmol 引擎有帮助，请考虑在 [Open Collective](https://opencollective.com/axmol) 或 [GitHub Sponsors](https://github.com/sponsors/axmolengine) 赞助，非常感谢！
 
 ## 社区
 
