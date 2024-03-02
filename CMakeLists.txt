@@ -30,6 +30,8 @@
 cmake_minimum_required(VERSION 3.22)
 
 project(axmol)
+# Enable Unity Build globally
+set(CMAKE_UNITY_BUILD ON)
 
 if(XCODE)
     set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
