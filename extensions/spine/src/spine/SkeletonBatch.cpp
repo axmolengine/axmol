@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated September 24, 2021. Replaces all prior versions.
+ * Last updated July 28, 2023. Replaces all prior versions.
  *
- * Copyright (c) 2013-2021, Esoteric Software LLC
+ * Copyright (c) 2013-2023, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software
- * or otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software or
+ * otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,17 +23,16 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
+ * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#include <spine/spine-cocos2dx.h>
-#if COCOS2D_VERSION >= 0x00040000
+#include <spine/spine-axmol.h>
 
 #include <algorithm>
 #include <spine/Extension.h>
 
-USING_NS_CC;
+USING_NS_AX;
 #define EVENT_AFTER_DRAW_RESET_POSITION "director_after_draw"
 using std::max;
 #define INITIAL_SIZE (10000)
@@ -77,12 +76,12 @@ namespace spine {
 		Director::getInstance()->getEventDispatcher()->removeCustomEventListeners(EVENT_AFTER_DRAW_RESET_POSITION);
 
 		for (unsigned int i = 0; i < _commandsPool.size(); i++) {
-			CC_SAFE_RELEASE(_commandsPool[i]->getPipelineDescriptor().programState);
+			AX_SAFE_RELEASE(_commandsPool[i]->getPipelineDescriptor().programState);
 			delete _commandsPool[i];
 			_commandsPool[i] = nullptr;
 		}
 
-		CC_SAFE_RELEASE(_programState);
+		AX_SAFE_RELEASE(_programState);
 	}
 
 	backend::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* command, backend::ProgramState* programState)
@@ -95,7 +94,7 @@ namespace spine {
 	#else
 		if(currentState == nullptr || currentState->getProgram() != programState->getProgram()) {
 	#endif
-			CC_SAFE_RELEASE(currentState);
+			AX_SAFE_RELEASE(currentState);
 			currentState = programState->clone();
 		
 			command->_locMVP     = currentState->getUniformLocation(backend::UNIFORM_NAME_MVP_MATRIX);
@@ -108,11 +107,11 @@ namespace spine {
 		reset();
 	}
 
-	cocos2d::V3F_C4B_T2F *SkeletonBatch::allocateVertices(uint32_t numVertices) {
+	axmol::V3F_C4B_T2F *SkeletonBatch::allocateVertices(uint32_t numVertices) {
 		if (_vertices.size() - _numVertices < numVertices) {
-			cocos2d::V3F_C4B_T2F *oldData = _vertices.data();
+			axmol::V3F_C4B_T2F *oldData = _vertices.data();
 			_vertices.resize((_vertices.size() + numVertices) * 2 + 1);
-			cocos2d::V3F_C4B_T2F *newData = _vertices.data();
+			axmol::V3F_C4B_T2F *newData = _vertices.data();
 			for (uint32_t i = 0; i < this->_nextFreeCommand; i++) {
 				SkeletonCommand *command = _commandsPool[i];
 				SkeletonCommand::Triangles &triangles = (SkeletonCommand::Triangles &) command->getTriangles();
@@ -120,7 +119,7 @@ namespace spine {
 			}
 		}
 
-		cocos2d::V3F_C4B_T2F *vertices = _vertices.data() + _numVertices;
+		axmol::V3F_C4B_T2F *vertices = _vertices.data() + _numVertices;
 		_numVertices += numVertices;
 		return vertices;
 	}
@@ -133,12 +132,12 @@ namespace spine {
 	unsigned short *SkeletonBatch::allocateIndices(uint32_t numIndices) {
 		if (_indices.getCapacity() - _indices.size() < numIndices) {
 			unsigned short *oldData = _indices.buffer();
-			int oldSize = _indices.size();
+			int oldSize = (int)_indices.size();
 			_indices.ensureCapacity(_indices.size() + numIndices);
 			unsigned short *newData = _indices.buffer();
 			for (uint32_t i = 0; i < this->_nextFreeCommand; i++) {
-				SkeletonCommand *command = _commandsPool[i];
-				SkeletonCommand::Triangles &triangles = (SkeletonCommand::Triangles &) command->getTriangles();
+				auto command = _commandsPool[i];
+				auto &triangles = (SkeletonCommand::Triangles &) command->getTriangles();
 				if (triangles.indices >= oldData && triangles.indices < oldData + oldSize) {
 					triangles.indices = newData + (triangles.indices - oldData);
 				}
@@ -155,14 +154,14 @@ namespace spine {
 	}
 
 
-	cocos2d::TrianglesCommand *SkeletonBatch::addCommand(cocos2d::Renderer *renderer, float globalOrder, cocos2d::Texture2D *texture, backend::ProgramState *programState, cocos2d::BlendFunc blendType, const cocos2d::TrianglesCommand::Triangles &triangles, const cocos2d::Mat4 &mv, uint32_t flags) {
+	axmol::TrianglesCommand *SkeletonBatch::addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, backend::ProgramState *programState, axmol::BlendFunc blendType, const axmol::TrianglesCommand::Triangles &triangles, const axmol::Mat4 &mv, uint32_t flags) {
 		SkeletonCommand *command = nextFreeCommand();
-		const cocos2d::Mat4 &projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+		const axmol::Mat4 &projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
 
 		if (programState == nullptr)
 			programState = _programState;
 
-		CCASSERT(programState, "programState should not be null");
+		AXASSERT(programState, "programState should not be null");
 
 		auto pipelinePS = updateCommandPipelinePS(command, programState);
 
@@ -181,8 +180,8 @@ namespace spine {
 	}
 
 	SkeletonCommand *SkeletonBatch::nextFreeCommand() {
-		if (_commandsPool.size() <= _nextFreeCommand) {
-			unsigned int newSize = _commandsPool.size() * 2 + 1;
+		if (_commandsPool.size() <= (int)_nextFreeCommand) {
+			unsigned int newSize = (int)_commandsPool.size() * 2 + 1;
 			for (int i = _commandsPool.size(); i < newSize; i++) {
 				_commandsPool.push_back(newCommand());
 			}
@@ -197,4 +196,3 @@ namespace spine {
 	}
 }// namespace spine
 
-#endif

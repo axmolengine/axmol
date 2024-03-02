@@ -59,21 +59,21 @@ Axmol Engine has iterated and improved over the Cocos2d-x v4.0 base. Now is fast
 * Lua
 
 **Renderer backends**:
-* Metal for macOS and iOS
+* Metal for macOS, iOS and tvOS
 * OpenGL 3.3+ for Linux, macOS and Win32
 * OpenGL ES 2.0+ for Android
-* OpenGL ES 3.0+ for iOS
+* OpenGL ES 3.0+ for iOS and tvOS
 * ANGLE GLES 3.0+ for Win32 and UWP
 * WebGL 2.0 (OpenGL ES 3.0): WASM
 
 **Architectures**:
-* iOS (x64, arm64)
+* iOS/tvOS (x64, arm64)
 * Android (x86, x64, armv7, arm64)
 * Windows (x86, x64)
 * Linux (x64)
 * OSX (x64, arm64)
 * UWP (x64, arm64)
-* wasm32
+* Wasm32
 
 **Supported 2D physics engines** ([more info here](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-informations)):
 * Box2D

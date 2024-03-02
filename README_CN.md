@@ -53,7 +53,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 * 移动设备: iOS, Android
 * 桌面设备: Windows, Linux, macOS, tvOS
 * 主机设备: Xbox (Windows通用平台)
-* Web: 主流浏览器 (Chrome，Edge，Firefox) (预览版: [Axmol tests](https://axmol.netlify.app/wasm/cpp-tests/cpp-tests) / [FairyGUI tests](https://axmol.netlify.app/wasm/fairygui-tests/fairygui-tests))
+* Web: 主流浏览器 (Chrome，Edge，Firefox) (在线预览: [Axmol tests](https://axmol.netlify.app/wasm/cpp-tests/cpp-tests) / [FairyGUI tests](https://axmol.netlify.app/wasm/fairygui-tests/fairygui-tests))
 
 **支持语言**:
 
@@ -62,7 +62,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 
 **渲染后端**:
 
-* Metal： macOS、iOS
+* Metal： macOS、iOS、tvOS
 * OpenGL 3.3+： Linux、macOS、Win32
 * OpenGL ES 2.0+： Android
 * OpenGL ES 3.0+： iOS
@@ -71,7 +71,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 
 **支持架构**:
 
-* iOS (x64, arm64)
+* iOS、tvOS (x64, arm64)
 * Android (x86, x64, armv7, arm64)
 * Windows (x86, x64)
 * Linux (x64)
@@ -104,6 +104,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 
 一些亮点:
 
+- **图形驱动升级：GLES3.0、OpenGL3.3核心模式支持，3D模型实例化渲染支持，全新跨平台 Shader 工作流**。
 - **全新媒体播放器**: 基于 MediaEngine 的视频纹理渲染，支持所有 Native 平台. [详见我们的 Wiki 页](https://github.com/axmolengine/axmol/wiki/Media-Player)。
 - **WebAssembly 支持** (by @nowasm) - Preview: [Axmol tests](https://axmol.netlify.app/wasm/cpp-tests/cpp-tests)
 - **Windows 通用** (UWP) Xbox 主机平台支持。
@@ -114,6 +115,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 - 重构 AudioEngine，所有平台均使用 OpenAL 并新增 `.wav` 音频格式支持。
 - 使用内存映射文件 [mio](https://github.com/mandreyel/mio) 重构 UserDefault，速度提升百倍。 
 - 使用 yasio 重构 HttpClient 支持并发请求。
+- 使用 yasio 重构 WebSocket。
 - 模块化所有扩展，所有扩展均可选编译。
 - Windows 下使用 Google [Angle](https://github.com/google/angle) 作为默认渲染后端，提升设备兼容性。
 - 使用更加现代的 GL 加载器：`Glad`。

@@ -27,93 +27,48 @@
  * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef Spine_PathConstraintData_h
-#define Spine_PathConstraintData_h
+#ifndef SPINE_AXMOL_H_
+#define SPINE_AXMOL_H_
 
-#include <spine/PositionMode.h>
-#include <spine/SpacingMode.h>
-#include <spine/RotateMode.h>
-#include <spine/Vector.h>
-#include <spine/SpineObject.h>
-#include <spine/SpineString.h>
-#include <spine/ConstraintData.h>
+#include "axmol.h"
+#include <spine/spine.h>
+
+#include <spine/SkeletonRenderer.h>
+#include <spine/SkeletonBatch.h>
+#include <spine/SkeletonTwoColorBatch.h>
+
+#include <spine/SkeletonAnimation.h>
+
+#define AX_SPINE_VERSION 0x040100
 
 namespace spine {
-	class BoneData;
-
-	class SlotData;
-
-	class SP_API PathConstraintData : public ConstraintData {
-		friend class SkeletonBinary;
-
-		friend class SkeletonJson;
-
-		friend class PathConstraint;
-
-		friend class Skeleton;
-
-		friend class PathConstraintMixTimeline;
-
-		friend class PathConstraintPositionTimeline;
-
-		friend class PathConstraintSpacingTimeline;
+	class SP_API AxmolAtlasAttachmentLoader : public AtlasAttachmentLoader {
 	public:
-		RTTI_DECL
-
-		explicit PathConstraintData(const String &name);
-
-		Vector<BoneData *> &getBones();
-
-		SlotData *getTarget();
-
-		void setTarget(SlotData *inValue);
-
-		PositionMode getPositionMode();
-
-		void setPositionMode(PositionMode inValue);
-
-		SpacingMode getSpacingMode();
-
-		void setSpacingMode(SpacingMode inValue);
-
-		RotateMode getRotateMode();
-
-		void setRotateMode(RotateMode inValue);
-
-		float getOffsetRotation();
-
-		void setOffsetRotation(float inValue);
-
-		float getPosition();
-
-		void setPosition(float inValue);
-
-		float getSpacing();
-
-		void setSpacing(float inValue);
-
-		float getMixRotate();
-
-		void setMixRotate(float inValue);
-
-		float getMixX();
-
-		void setMixX(float inValue);
-
-		float getMixY();
-
-		void setMixY(float inValue);
-
-	private:
-		Vector<BoneData *> _bones;
-		SlotData *_target;
-		PositionMode _positionMode;
-		SpacingMode _spacingMode;
-		RotateMode _rotateMode;
-		float _offsetRotation;
-		float _position, _spacing;
-		float _mixRotate, _mixX, _mixY;
+		AxmolAtlasAttachmentLoader(Atlas *atlas);
+		virtual ~AxmolAtlasAttachmentLoader();
+		virtual void configureAttachment(Attachment *attachment);
 	};
-}
 
-#endif /* Spine_PathConstraintData_h */
+	class SP_API AxmolTextureLoader : public TextureLoader {
+	public:
+		AxmolTextureLoader();
+
+		virtual ~AxmolTextureLoader();
+
+		virtual void load(AtlasPage &page, const String &path);
+
+		virtual void unload(void *texture);
+	};
+
+	class SP_API AxmolExtension : public DefaultSpineExtension {
+	public:
+		AxmolExtension();
+
+		virtual ~AxmolExtension();
+
+	protected:
+		virtual char *_readFile(const String &path, int *length);
+	};
+}// namespace spine
+
+#endif /* SPINE_AXMOL_H_ */

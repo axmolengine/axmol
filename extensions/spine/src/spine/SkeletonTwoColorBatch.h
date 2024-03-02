@@ -30,19 +30,17 @@
 #ifndef SPINE_SKELETONTWOCOLORBATCH_H_
 #define SPINE_SKELETONTWOCOLORBATCH_H_
 
-#include "cocos2d.h"
-#if COCOS2D_VERSION >= 0x00040000
-
+#include "axmol.h"
 #include "renderer/backend/ProgramState.h"
 #include <spine/spine.h>
 #include <vector>
 
 namespace spine {
 	struct V3F_C4B_C4B_T2F {
-		cocos2d::Vec3 position;
-		cocos2d::Color4B color;
-		cocos2d::Color4B color2;
-		cocos2d::Tex2F texCoords;
+		axmol::Vec3 position;
+		axmol::Color4B color;
+		axmol::Color4B color2;
+		axmol::Tex2F texCoords;
 	};
 
 	struct TwoColorTriangles {
@@ -52,21 +50,21 @@ namespace spine {
 		int indexCount;
 	};
 
-	class SP_API TwoColorTrianglesCommand : public cocos2d::CustomCommand {
+	class SP_API TwoColorTrianglesCommand : public axmol::CustomCommand {
 	public:
 		TwoColorTrianglesCommand();
 
 		~TwoColorTrianglesCommand();
 
-		void init(float globalOrder, cocos2d::Texture2D *texture, cocos2d::backend::ProgramState *programState, cocos2d::BlendFunc blendType, const TwoColorTriangles &triangles, const cocos2d::Mat4 &mv, uint32_t flags);
+		void init(float globalOrder, axmol::Texture2D *texture, axmol::backend::ProgramState *programState, axmol::BlendFunc blendType, const TwoColorTriangles &triangles, const axmol::Mat4 &mv, uint32_t flags);
 
-		void updateCommandPipelineDescriptor(cocos2d::backend::ProgramState *programState);
+		void updateCommandPipelineDescriptor(axmol::backend::ProgramState *programState);
 
-		inline cocos2d::backend::TextureBackend *getTexture() const { return _texture; }
+		inline axmol::backend::TextureBackend *getTexture() const { return _texture; }
 
-		void draw(cocos2d::Renderer *renderer);
+		void draw(axmol::Renderer *renderer);
 
-		void updateVertexAndIndexBuffer(cocos2d::Renderer *renderer, V3F_C4B_C4B_T2F *vertices, int verticesSize, uint16_t *indices, int indicesSize);
+		void updateVertexAndIndexBuffer(axmol::Renderer *renderer, V3F_C4B_C4B_T2F *vertices, int verticesSize, uint16_t *indices, int indicesSize);
 
 		inline uint32_t getMaterialID() const { return _materialID; }
 
@@ -80,9 +78,9 @@ namespace spine {
 
 		inline const unsigned short *getIndices() const { return _triangles.indices; }
 
-		inline cocos2d::BlendFunc getBlendType() const { return _blendType; }
+		inline axmol::BlendFunc getBlendType() const { return _blendType; }
 
-		inline const cocos2d::Mat4 &getModelView() const { return _mv; }
+		inline const axmol::Mat4 &getModelView() const { return _mv; }
 
 		void setForceFlush(bool forceFlush) { _forceFlush = forceFlush; }
 
@@ -94,14 +92,14 @@ namespace spine {
 
 
 		void *_prog = nullptr;
-		cocos2d::backend::TextureBackend *_texture = nullptr;
-		cocos2d::backend::ProgramState *_programState = nullptr;
-		cocos2d::backend::UniformLocation _locPMatrix;
-		cocos2d::backend::UniformLocation _locTexture;
+		axmol::backend::TextureBackend *_texture = nullptr;
+		axmol::backend::ProgramState *_programState = nullptr;
+		axmol::backend::UniformLocation _locPMatrix;
+		axmol::backend::UniformLocation _locTexture;
 
-		cocos2d::BlendFunc _blendType;
+		axmol::BlendFunc _blendType;
 		TwoColorTriangles _triangles;
-		cocos2d::Mat4 _mv;
+		axmol::Mat4 _mv;
 		bool _forceFlush;
 	};
 
@@ -119,11 +117,11 @@ namespace spine {
 		unsigned short *allocateIndices(uint32_t numIndices);
 		void deallocateIndices(uint32_t numIndices);
 
-		TwoColorTrianglesCommand *addCommand(cocos2d::Renderer *renderer, float globalOrder, cocos2d::Texture2D *texture, cocos2d::backend::ProgramState *programState, cocos2d::BlendFunc blendType, const TwoColorTriangles &triangles, const cocos2d::Mat4 &mv, uint32_t flags);
+		TwoColorTrianglesCommand *addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, axmol::backend::ProgramState *programState, axmol::BlendFunc blendType, const TwoColorTriangles &triangles, const axmol::Mat4 &mv, uint32_t flags);
 
-		void batch(cocos2d::Renderer *renderer, TwoColorTrianglesCommand *command);
+		void batch(axmol::Renderer *renderer, TwoColorTrianglesCommand *command);
 
-		void flush(cocos2d::Renderer *renderer, TwoColorTrianglesCommand *materialCommand);
+		void flush(axmol::Renderer *renderer, TwoColorTrianglesCommand *materialCommand);
 
 		uint32_t getNumBatches() { return _numBatches; };
 
@@ -160,7 +158,5 @@ namespace spine {
 		uint32_t _numBatches;
 	};
 }// namespace spine
-
-#endif
 
 #endif// SPINE_SKELETONTWOCOLORBATCH_H_
