@@ -9,8 +9,9 @@
 #  -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
 #  -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
 #  -xb: additional cross build options: i.e. -xb '--config','Release'
-#  -c(configOnly): no build, only generate natvie project file (vs .sln, xcodeproj)
+#  -c(configOnly): no build, only generate native project files (vs .sln, xcodeproj)
 #  -d: specify project dir to compile, i.e. -d /path/your/project/
+#  -f: force generate native project files. Useful if no changes are detected, such as with resource updates.
 # examples:
 #   - win32: 
 #     - pwsh build.ps1 -p win32
