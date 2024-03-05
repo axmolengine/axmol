@@ -546,7 +546,7 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
                 else
                 {
                     if (!_responseData.empty())
-                        ax::print("WebSocket: handshake fail, detail: %s", _responseData.c_str());
+                        AXLOGE("WebSocket: handshake fail, detail: {}", _responseData);
 
                     //_state = State::CLOSING;
                     _service->close(channelIndex);

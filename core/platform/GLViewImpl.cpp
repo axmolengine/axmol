@@ -1296,10 +1296,10 @@ static bool loadFboExtensions()
     if (glGenFramebuffers == nullptr)
     {
         auto driver = backend::DriverGL::getInstance();
-        ax::print("OpenGL: glGenFramebuffers is nullptr, try to detect an extension");
+        AXLOGW("OpenGL: glGenFramebuffers is nullptr, try to detect an extension");
         if (driver->hasExtension("ARB_framebuffer_object"sv))
         {
-            ax::print("OpenGL: ARB_framebuffer_object is supported");
+            AXLOGX("OpenGL: ARB_framebuffer_object is supported");
 
             glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbuffer");
             glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbuffer");
@@ -1324,7 +1324,7 @@ static bool loadFboExtensions()
         }
         else if (driver->hasExtension("EXT_framebuffer_object"sv))
         {
-            ax::print("OpenGL: EXT_framebuffer_object is supported");
+            AXLOGX("OpenGL: EXT_framebuffer_object is supported");
             glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbufferEXT");
             glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbufferEXT");
             glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)glfwGetProcAddress("glDeleteRenderbuffersEXT");
@@ -1349,7 +1349,7 @@ static bool loadFboExtensions()
         }
         else if (driver->hasExtension("GL_ANGLE_framebuffer_blit"sv))
         {
-            ax::print("OpenGL: GL_ANGLE_framebuffer_object is supported");
+            AXLOGX("OpenGL: GL_ANGLE_framebuffer_object is supported");
 
             glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbufferOES");
             glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbufferOES");
@@ -1373,8 +1373,8 @@ static bool loadFboExtensions()
         }
         else
         {
-            ax::print("OpenGL: No framebuffers extension is supported");
-            ax::print("OpenGL: Any call to Fbo will crash!");
+            AXLOGE("OpenGL: No framebuffers extension is supported");
+            AXLOGE("OpenGL: Any call to Fbo will crash!");
             return false;
         }
     }

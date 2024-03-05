@@ -143,7 +143,7 @@ DriverGL::DriverGL()
     }
 
     if (_version)
-        ax::print("[GL:%s] Ready for GLSL by %s", _version, axmolVersion());
+        AXLOGX("[GL:{}] Ready for GLSL by {}", _version, axmolVersion());
 
     // caps
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_maxAttributes);
@@ -291,11 +291,11 @@ static GLuint compileShader(GLenum shaderType, const GLchar* source)
     {
         auto errorLog = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
         glGetShaderInfoLog(shader, logLength, nullptr, static_cast<GLchar*>(errorLog.get()));
-        ax::print("axmol:ERROR: Failed to compile shader, detail: %s\n%s", errorLog.get(), source);
+        AXLOGE("axmol:ERROR: Failed to compile shader, detail: {}\n{}", errorLog.get(), source);
     }
     else
     {
-        ax::print("axmol:ERROR: Failed to compile shader without errors.");
+        AXLOGE("axmol:ERROR: Failed to compile shader without errors.");
     }
 
     glDeleteShader(shader);

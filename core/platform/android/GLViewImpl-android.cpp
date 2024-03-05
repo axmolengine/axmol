@@ -41,7 +41,7 @@ void GLViewImpl::loadGLES2()
 {
     auto glesVer = gladLoaderLoadGLES2();
     if (glesVer)
-        ax::print("Load GLES success, version: %d", glesVer);
+        AXLOGX("Load GLES success, version: {}", glesVer);
     else
         throw std::runtime_error("Load GLES fail");
 }

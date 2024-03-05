@@ -49,15 +49,64 @@ typedef SSIZE_T ssize_t;
 #include "base/Macros.h"
 #include "platform/PlatformMacros.h"
 
+#include "fmt/compile.h"
+
 NS_AX_BEGIN
 
-/// The max length of CCLog message.
-static const int MAX_LOG_LENGTH = 16 * 1024;
+#pragma region The new Log API since axmol-2.1.3
+
+enum class LogLevel
+{
+    Debug,
+    Info,
+    Warn,
+    Error,
+    Xrgent = 0x7FFF
+};
+
+void AX_API setLogLevel(LogLevel level);
+LogLevel AX_API getLogLevel();
+
+void AX_API setLogPrefixEnabled(bool enabled);
+
+/*
+ * @brief print raw message
+ * @param message the message to print
+ * @level the level of current log item see also LogLevel
+ * @tag optional, the log tag of current log item
+ */
+void AX_API printLog(std::string&& message, LogLevel level, const char* tag);
+
+template <typename... _Types>
+inline void printLogT(LogLevel level, _Types&&... args)
+{
+    if (level >= getLogLevel())
+    {
+        auto message = fmt::format(std::forward<_Types>(args)...);
+        printLog(std::move(message), level, "axmol");
+    }
+}
+
+// for internal use make log prefix: D/[2024-02-29 00:00:00.123][PID:][TID:]
+std::string make_log_prefix();
+
+#define AXLOGD(fmtOrMsg, ...) \
+    printLogT(LogLevel::Debug, FMT_COMPILE("D/{}" fmtOrMsg "\n"), make_log_prefix(), ##__VA_ARGS__)
+#define AXLOGI(fmtOrMsg, ...) \
+    printLogT(LogLevel::Info, FMT_COMPILE("I/{}" fmtOrMsg "\n"), make_log_prefix(), ##__VA_ARGS__)
+#define AXLOGW(fmtOrMsg, ...) \
+    printLogT(LogLevel::Warn, FMT_COMPILE("W/{}" fmtOrMsg "\n"), make_log_prefix(), ##__VA_ARGS__)
+#define AXLOGE(fmtOrMsg, ...) \
+    printLogT(LogLevel::Error, FMT_COMPILE("E/{}" fmtOrMsg "\n"), make_log_prefix(), ##__VA_ARGS__)
+#define AXLOGX(fmtOrMsg, ...) \
+    printLogT(LogLevel::Xrgent, FMT_COMPILE("X/{}" fmtOrMsg "\n"), make_log_prefix(), ##__VA_ARGS__)
+
+#pragma endregion
 
 /**
  @brief Output Debug message.
  */
-void AX_DLL print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
+/* AX_DEPRECATED_ATTRIBUTE*/ void AX_DLL print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
 
 /* AX_DEPRECATED_ATTRIBUTE*/ void AX_DLL log(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use print instead
 
@@ -195,11 +244,6 @@ public:
     void delCommand(std::string_view cmdName);
     void delSubCommand(std::string_view cmdName, std::string_view subCmdName);
     void delSubCommand(Command& cmd, std::string_view subCmdName);
-
-    /** print something in the console */
-    void print(const char* buf);
-
-    AX_DEPRECATED_ATTRIBUTE void log(const char* buf) { print(buf); }
 
     /**
      * set bind address

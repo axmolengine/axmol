@@ -168,7 +168,7 @@ VlcMediaEngine::VlcMediaEngine()
     _vlc = libvlc_new(0, nullptr);
     if (!_vlc)
     {
-        ax::print("VlcMediaEngine: libvlc_new fail, ensure install vlc and ubuntu-restricted-extras");
+        AXLOGX("VlcMediaEngine: libvlc_new fail, ensure install vlc and ubuntu-restricted-extras");
         return;
     }
 
@@ -312,7 +312,7 @@ bool VlcMediaEngine::updatePlaybackProperties()
             if (track->i_type == libvlc_track_video)
             {
                 track_codec_to_mime_type(track, _videoCodecMimeType);
-                ax::print("VlcMediaEngine: sourceUri: %s, codec: %s", _sourceUri.c_str(), _videoCodecMimeType.c_str());
+                AXLOGX("VlcMediaEngine: sourceUri: {}, codec: {}", _sourceUri, _videoCodecMimeType);
 
                 auto vdi = track->video;
                 _videoDim.set(vdi->i_width, vdi->i_height);
@@ -329,7 +329,7 @@ bool VlcMediaEngine::updatePlaybackProperties()
             {
                 auto track = libvlc_media_tracklist_at(tracks, 0);
                 track_codec_to_mime_type(track, _videoCodecMimeType);
-                ax::print("VlcMediaEngine: sourceUri: %s, codec: %s", _sourceUri.c_str(), _videoCodecMimeType.c_str());
+                AXLOGX("VlcMediaEngine: sourceUri: {}, codec: {}", _sourceUri, _videoCodecMimeType);
 
                 auto vdi = track->video;
                 _videoDim.set(vdi->i_width, vdi->i_height);
