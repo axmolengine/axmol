@@ -69,7 +69,6 @@ extern const char* axmolVersion(void);
 
 static const size_t SEND_BUFSIZ = 512;
 
-
 #pragma region The new Log API since axmol-2.1.3
 #if defined(_AX_DEBUG) && _AX_DEBUG == 1
 static LogLevel s_logLevel = LogLevel::Debug;
@@ -107,9 +106,11 @@ std::string make_log_prefix()
     if (s_logPrefixEnabled)
     {
 #if defined(_WIN32)
-#    define getpid()            (uintptr_t) GetCurrentProcessId()
-#    define gettid()            (uintptr_t) GetCurrentThreadId()
-#    define localtime_r(utc, t) localtime_s(t, utc)
+#    define getpid()            (uintptr_t)::GetCurrentProcessId()
+#    define gettid()            (uintptr_t)::GetCurrentThreadId()
+#    define localtime_r(utc, t) ::localtime_s(t, utc)
+#else
+#    define gettid() (uintptr_t)::pthread_self()
 #endif
         struct tm ts = {0};
         auto tv_msec = yasio::clock<yasio::system_clock_t>();
