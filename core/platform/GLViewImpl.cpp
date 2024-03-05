@@ -359,7 +359,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
 
 GLViewImpl::~GLViewImpl()
 {
-    AXLOGINFO("deallocing GLViewImpl: %p", this);
+    AXLOGI("deallocing GLViewImpl: {}", (void*)this);
     GLFWEventHandler::setGLViewImpl(nullptr);
     glfwTerminate();
 }
@@ -1019,7 +1019,7 @@ void GLViewImpl::onGLFWError(int errorID, const char* errorDesc)
     {
         _glfwError.append(StringUtils::format("GLFWError #%d Happen, %s\n", errorID, errorDesc));
     }
-    AXLOGERROR("%s", _glfwError.c_str());
+    AXLOGE("{}", _glfwError);
 }
 
 void GLViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int action, int /*modify*/)

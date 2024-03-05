@@ -379,7 +379,7 @@ void UserDefault::lazyInit()
     // construct file mapping
     if (!_fileStream.open(_filePath, IFileStream::Mode::OVERLAPPED))
     {
-        AXLOGE("[Warning] UserDefault::init open storage file '{}' failed!", _filePath.c_str());
+        AXLOGW("UserDefault::init open storage file '{}' failed!", _filePath);
         return;
     }
 
@@ -389,7 +389,7 @@ void UserDefault::lazyInit()
     {  // construct a empty file mapping
         if (!_fileStream.resize(_curMapSize))
         {
-            AXLOGE("[Warning] UserDefault::init failed to truncate '{}'.", _filePath.c_str());
+            AXLOGW("UserDefault::init failed to truncate '{}'.", _filePath);
             return;
         }
         _rwmmap = std::make_shared<mio::mmap_sink>(_fileStream.nativeHandle(), 0, _curMapSize);

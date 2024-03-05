@@ -535,14 +535,14 @@ bool Console::listenOnTCP(int port)
     if (sock.pserve(ep) != 0)
     {
         int ec = xxsocket::get_last_errno();
-        AXLOGX("Console: open server failed, ec:%d", ec);
+        AXLOGX("Console: open server failed, ec:{}", ec);
         return false;
     }
 
     if (ep.af() == AF_INET)
-        AXLOGX("Console: IPV4 server is listening on %s", ep.to_string().c_str());
+        AXLOGX("Console: IPV4 server is listening on {}", ep.to_string());
     else if (ep.af() == AF_INET6)
-        AXLOGX("Console: IPV6 server is listening on %s", ep.to_string().c_str());
+        AXLOGX("Console: IPV6 server is listening on {}", ep.to_string());
 
     return listenOnFileDescriptor(sock.release_handle());
 }
