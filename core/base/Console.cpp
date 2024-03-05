@@ -129,24 +129,27 @@ std::string make_log_prefix()
 void AX_DLL printLog(std::string&& message, LogLevel level, const char* tag)
 {
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-    struct trim_one_eol
     {
-        trim_one_eol(std::string& v) : value(v)
+        struct trim_one_eol
         {
-            trimed = !v.empty() && v.back() == '\n';
-            if (trimed)
-                value.back() = '\0';
-        }
-        ~trim_one_eol()
-        {
-            if (trimed)
-                value.back() = '\n';
-        }
-        operator const char*() const { return value.c_str(); }
-        std::string& value;
-        bool trimed{false};
-    };
-    __android_log_print(ANDROID_LOG_DEBUG, tag, "%s", trim_one_eol{message});
+            trim_one_eol(std::string& v) : value(v)
+            {
+                trimed = !v.empty() && v.back() == '\n';
+                if (trimed)
+                    value.back() = '\0';
+            }
+            ~trim_one_eol()
+            {
+                if (trimed)
+                    value.back() = '\n';
+            }
+            operator const char* const() const { return value.c_str(); }
+            std::string& value;
+            bool trimed{false};
+        };
+
+        __android_log_print(ANDROID_LOG_DEBUG, tag, "%s", static_cast<const char*>(trim_one_eol{message}));
+    }
 
 #elif defined(_WIN32)
     // print to debugger output window
