@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -101,7 +102,7 @@ bool Speed::initWithAction(ActionInterval* action, float speed)
     AXASSERT(action != nullptr, "action must not be NULL");
     if (action == nullptr)
     {
-        log("Speed::initWithAction error: action is nullptr!");
+        AXLOGE("Speed::initWithAction error: action is nullptr!");
         return false;
     }
 
@@ -128,7 +129,7 @@ void Speed::startWithTarget(Node* target)
         _innerAction->startWithTarget(target);
     }
     else
-        log("Speed::startWithTarget error: target(%p) or _innerAction(%p) is nullptr!", target, _innerAction);
+        AXLOGE("Speed::startWithTarget error: target({}) or _innerAction({}) is nullptr!", target, _innerAction);
 }
 
 void Speed::stop()
@@ -212,7 +213,7 @@ bool Follow::initWithTargetAndOffset(Node* followedNode, float xOffset, float yO
     AXASSERT(followedNode != nullptr, "FollowedNode can't be NULL");
     if (followedNode == nullptr)
     {
-        log("Follow::initWithTarget error: followedNode is nullptr!");
+        AXLOGE("Follow::initWithTarget error: followedNode is nullptr!");
         return false;
     }
 

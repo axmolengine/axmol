@@ -1391,13 +1391,13 @@ bool GLViewImpl::loadGL()
 #        if !AX_GLES_PROFILE
     if (!gladLoadGL(glfwGetProcAddress))
     {
-        log("glad: Failed to Load GL");
+        AXLOGE("glad: Failed to Load GL");
         return false;
     }
 #        else
     if (!gladLoadGLES2(glfwGetProcAddress))
     {
-        log("glad: Failed to Load GLES2");
+        AXLOGE("glad: Failed to Load GLES2");
         return false;
     }
 #        endif

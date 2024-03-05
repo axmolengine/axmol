@@ -176,14 +176,6 @@ void AX_DLL printLog(std::string&& message, LogLevel level, const char* tag)
 }
 #pragma endregion
 
-static void print_impl(std::string& buf)
-{
-    AXLOGD("Hello{}", "hello");
-
-    buf.push_back('\n');
-    printLog(std::move(buf), LogLevel::Debug, "axmol debug info");
-}
-
 void print(const char* format, ...)
 {
     va_list args;
@@ -192,7 +184,7 @@ void print(const char* format, ...)
     auto buf = StringUtils::vformat(format, args);
     va_end(args);
 
-    print_impl(buf);
+    printLog(std::move(buf += '\n'), LogLevel::Debug, "axmol debug info");
 }
 
 void log(const char* format, ...)
@@ -203,7 +195,7 @@ void log(const char* format, ...)
     auto buf = StringUtils::vformat(format, args);
     va_end(args);
 
-    print_impl(buf);
+    printLog(std::move(buf += '\n'), LogLevel::Debug, "axmol debug info");
 }
 
 // FIXME: Deprecated
@@ -728,7 +720,7 @@ void Console::loop()
                     int n = 0;
                     if (ioctl(fd, FIONREAD, &n) < 0)
                     {
-                        ax::log("Abnormal error in ioctl()\n");
+                        AXLOGE("Abnormal error in ioctl()\n");
                         break;
                     }
 #endif

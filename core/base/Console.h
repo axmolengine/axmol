@@ -106,9 +106,9 @@ std::string make_log_prefix();
 /**
  @brief Output Debug message.
  */
-/* AX_DEPRECATED_ATTRIBUTE*/ void AX_DLL print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
+/* AX_DEPRECATED_ATTRIBUTE*/ void AX_DLL print(const char* format, ...) AX_FORMAT_PRINTF(1, 2); // use AXLOGX instead
 
-/* AX_DEPRECATED_ATTRIBUTE*/ void AX_DLL log(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use print instead
+/* AX_DEPRECATED_ATTRIBUTE*/ void AX_DLL log(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use AXLOGX instead
 
 /** Console is helper class that lets the developer control the game from TCP connection.
  Console will spawn a new thread that will listen to a specified TCP port.

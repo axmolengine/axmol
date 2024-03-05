@@ -216,7 +216,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, const AudioPlayerSetting
 
         if (_audioIDInfoMap.size() >= _maxInstances)
         {
-            log("Fail to play %s cause by limited max instance of AudioEngine", filePath.data());
+            AXLOGE("Fail to play {} cause by limited max instance of AudioEngine", filePath);
             break;
         }
         if (profileHelper)
@@ -224,7 +224,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, const AudioPlayerSetting
             if (profileHelper->profile.maxInstances != 0 &&
                 profileHelper->audioIDs.size() >= profileHelper->profile.maxInstances)
             {
-                log("Fail to play %s cause by limited max instance of AudioProfile", filePath.data());
+                AXLOGE("Fail to play {} cause by limited max instance of AudioProfile", filePath);
                 break;
             }
             if (profileHelper->profile.minDelay > TIME_DELAY_PRECISION)
@@ -233,7 +233,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, const AudioPlayerSetting
                 if (profileHelper->lastPlayTime > TIME_DELAY_PRECISION &&
                     currTime - profileHelper->lastPlayTime <= profileHelper->profile.minDelay)
                 {
-                    log("Fail to play %s cause by limited minimum delay", filePath.data());
+                    AXLOGE("Fail to play {} cause by limited minimum delay", filePath);
                     break;
                 }
             }

@@ -957,8 +957,8 @@ void DownloaderCURL::startTask(std::shared_ptr<DownloadTask>& task)
     }
     else
     {
-        ax::log("DownloaderCURL createTask fail, error: %d, detail: %s", coTask->_errCode,
-                     coTask->_errDescription.c_str());
+        AXLOGE("DownloaderCURL createTask fail, error: {}, detail: {}", coTask->_errCode,
+                     coTask->_errDescription);
         task.reset();
     }
 }

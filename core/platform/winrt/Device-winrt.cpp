@@ -393,7 +393,7 @@ void Device::setAccelerometerEnabled(bool isEnabled)
         {
             // It's not a friendly experience and may cause crash.
             // MessageBox("This device does not have an accelerometer.","Alert");
-            log("This device does not have an accelerometer.");
+            AXLOGX("This device does not have an accelerometer.");
             return;
         }
 
@@ -519,7 +519,7 @@ Data Device::getTextureDataForText(std::string_view text,
 
         if (!textRenderer.setFont(textDefinition))
         {
-            log("Can't found font(%s), use system default", textDefinition._fontName.c_str());
+            AXLOGW("Can't found font({}), use system default", textDefinition._fontName);
         }
 
         // draw text

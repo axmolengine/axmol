@@ -210,10 +210,10 @@ void ProgramGL::compileProgram()
         {
             auto errorInfo = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(errorInfoLen));
             glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.get());
-            ax::log("axmol:ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.get());
+            AXLOGE("axmol:ERROR: {}: failed to link program: {} ", __FUNCTION__, errorInfo.get());
         }
         else
-            ax::log("axmol:ERROR: %s: failed to link program ", __FUNCTION__);
+            AXLOGE("axmol:ERROR: {}: failed to link program ", __FUNCTION__);
         glDeleteProgram(_program);
         _program = 0;
     }
