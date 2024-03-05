@@ -106,11 +106,12 @@ std::string make_log_prefix()
     if (s_logPrefixEnabled)
     {
 #if defined(_WIN32)
-#    define getpid()            (uintptr_t)::GetCurrentProcessId()
-#    define gettid()            (uintptr_t)::GetCurrentThreadId()
+#    define xmol_getpid()       (uintptr_t)::GetCurrentProcessId()
+#    define xmol_gettid()       (uintptr_t)::GetCurrentThreadId()
 #    define localtime_r(utc, t) ::localtime_s(t, utc)
 #else
-#    define gettid() (uintptr_t)::pthread_self()
+#    define xmol_getpid() (uintptr_t)::getpid()
+#    define xmol_gettid() (uintptr_t)::pthread_self()
 #endif
         struct tm ts = {0};
         auto tv_msec = yasio::clock<yasio::system_clock_t>();
@@ -119,7 +120,7 @@ std::string make_log_prefix()
 
         return fmt::format("[{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}.{:03d}][PID:{:x}][TID:{:x}]", ts.tm_year + 1900,
                            ts.tm_mon + 1, ts.tm_mday, ts.tm_hour, ts.tm_min, ts.tm_sec,
-                           static_cast<int>(tv_msec % std::milli::den), (uintptr_t)getpid(), (uintptr_t)gettid());
+                           static_cast<int>(tv_msec % std::milli::den), xmol_getpid(), xmol_gettid());
     }
     else
         return std::string{};
