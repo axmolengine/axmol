@@ -108,7 +108,7 @@ using LogBufferType = std::array<char, 128>;
 std::string_view AX_API makeLogPrefix(LogBufferType&& stack_buffer, LogLevel level);
 
 #define AXLOG_WITH_LEVEL(level, fmtOrMsg, ...) \
-    ax::printLogT(level, FMT_COMPILE("{}" fmtOrMsg "\n"), ax::makeLogPrefix(LogBufferType{}, level), ##__VA_ARGS__)
+    ax::printLogT(level, FMT_COMPILE("{}" fmtOrMsg "\n"), ax::makeLogPrefix(ax::LogBufferType{}, level), ##__VA_ARGS__)
 
 #define AXLOGD(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Debug, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGI(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Info, fmtOrMsg, ##__VA_ARGS__)
