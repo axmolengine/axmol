@@ -97,7 +97,7 @@ void AX_DLL printIPAddresses()
         if (hn.IPInformation() != nullptr)
         {
             std::string s = PlatformStringToString(hn.DisplayName());
-            AXLOGX("IP Address: {}:", s);
+            AXLOGI("IP Address: {}:", s);
         }
     }
 }

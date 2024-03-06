@@ -82,7 +82,7 @@ void Profiler::displayTimers()
     for (auto&& iter : _activeTimers)
     {
         ProfilingTimer* timer = iter.second;
-        AXLOGX("{}", timer->getDescription());
+        AXLOGI("{}", timer->getDescription());
     }
 }
 

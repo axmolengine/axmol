@@ -143,7 +143,7 @@ DriverGL::DriverGL()
     }
 
     if (_version)
-        AXLOGX("[GL:{}] Ready for GLSL by {}", _version, axmolVersion());
+        AXLOGI("[{}] Ready for GLSL by {}", _version, axmolVersion());
 
     // caps
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_maxAttributes);

@@ -157,17 +157,17 @@ void Ref::printLeaks()
     // Dump Ref object memory leaks
     if (__refAllocationList.empty())
     {
-        AXLOGX("[memory] All Ref objects successfully cleaned up (no leaks detected).\n");
+        AXLOGI("[memory] All Ref objects successfully cleaned up (no leaks detected).\n");
     }
     else
     {
-        AXLOGX("[memory] WARNING: {} Ref objects still active in memory.\n", (int)__refAllocationList.size());
+        AXLOGI("[memory] WARNING: {} Ref objects still active in memory.\n", (int)__refAllocationList.size());
 
         for (const auto& ref : __refAllocationList)
         {
             AX_ASSERT(ref);
             const char* type = typeid(*ref).name();
-            AXLOGX("[memory] LEAK: Ref object '{}' still active with reference count {}.\n", (type ? type : ""),
+            AXLOGI("[memory] LEAK: Ref object '{}' still active with reference count {}.\n", (type ? type : ""),
                 ref->getReferenceCount());
         }
     }
@@ -188,7 +188,7 @@ static void untrackRef(Ref* ref)
     auto iter = std::find(__refAllocationList.begin(), __refAllocationList.end(), ref);
     if (iter == __refAllocationList.end())
     {
-        AXLOGX("[memory] CORRUPTION: Attempting to free ({}) with invalid ref tracking record.\n", typeid(*ref).name());
+        AXLOGI("[memory] CORRUPTION: Attempting to free ({}) with invalid ref tracking record.\n", typeid(*ref).name());
         return;
     }
 

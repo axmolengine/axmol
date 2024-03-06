@@ -401,7 +401,7 @@ void Director::setGLView(GLView* glView)
         // Configuration. Gather GPU info
         Configuration* conf = Configuration::getInstance();
         conf->gatherGPUInfo();
-        AXLOGD("{}\n", conf->getInfo());
+        AXLOGI("{}\n", conf->getInfo());
 
         if (_glView)
             _glView->release();
@@ -680,7 +680,7 @@ void Director::purgeCachedData()
 
         // Note: some tests such as ActionsTest are leaking refcounted textures
         // There should be no test textures left in the cache
-        AXLOGX("{}\n", _textureCache->getCachedTextureInfo());
+        AXLOGI("{}\n", _textureCache->getCachedTextureInfo());
     }
     FileUtils::getInstance()->purgeCachedEntries();
 }

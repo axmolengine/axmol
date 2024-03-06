@@ -169,7 +169,7 @@ namespace spine {
 	TrackEntry *SkeletonAnimation::setAnimation(int trackIndex, const std::string &name, bool loop) {
 		Animation *animation = _skeleton->getData()->findAnimation(name.c_str());
 		if (!animation) {
-			log("Spine: Animation not found: %s", name.c_str());
+			AXLOGW("Spine: Animation not found: {}", name);
 			return 0;
 		}
 		return _state->setAnimation(trackIndex, animation, loop);
@@ -178,7 +178,7 @@ namespace spine {
 	TrackEntry *SkeletonAnimation::addAnimation(int trackIndex, const std::string &name, bool loop, float delay) {
 		Animation *animation = _skeleton->getData()->findAnimation(name.c_str());
 		if (!animation) {
-			log("Spine: Animation not found: %s", name.c_str());
+			AXLOGW("Spine: Animation not found: {}", name);
 			return 0;
 		}
 		return _state->addAnimation(trackIndex, animation, loop, delay);

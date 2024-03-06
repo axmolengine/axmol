@@ -41,7 +41,7 @@ namespace network
 
 DownloadTask::DownloadTask()
 {
-    DLLOG("Construct DownloadTask %p", this);
+    AXLOGD("Construct DownloadTask {}", fmt::ptr(this));
 }
 
 DownloadTask::DownloadTask(std::string_view srcUrl, std::string_view identifier)
@@ -68,7 +68,7 @@ DownloadTask::DownloadTask(std::string_view srcUrl,
 
 DownloadTask::~DownloadTask()
 {
-    DLLOG("Destruct DownloadTask %p", this);
+    AXLOGD("Destruct DownloadTask {}", fmt::ptr(this));
 }
 
 void DownloadTask::cancel()
@@ -83,7 +83,7 @@ Downloader::Downloader() : Downloader(DownloaderHints{6, 45, ".tmp"}) {}
 
 Downloader::Downloader(const DownloaderHints& hints)
 {
-    DLLOG("Construct Downloader %p", this);
+    AXLOGD("Construct Downloader {}", fmt::ptr(this));
     _impl.reset(new DownloaderImpl(hints));
     _impl->onTaskProgress = [this](const DownloadTask& task,
                                    std::function<int64_t(void* buffer, int64_t len)>& /*transferDataToBuffer*/) {
@@ -125,7 +125,7 @@ Downloader::Downloader(const DownloaderHints& hints)
 
 Downloader::~Downloader()
 {
-    DLLOG("Destruct Downloader %p", this);
+    AXLOGD("Destruct Downloader {}", fmt::ptr(this));
 }
 
 std::shared_ptr<DownloadTask> Downloader::createDownloadDataTask(std::string_view srcUrl,

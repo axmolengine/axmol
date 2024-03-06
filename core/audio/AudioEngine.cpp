@@ -505,7 +505,7 @@ bool AudioEngine::isLoop(AUDIO_ID audioID)
         return tmpIterator->second.loop;
     }
 
-    log("AudioEngine::isLoop-->The audio instance %d is non-existent", audioID);
+    AXLOGW("AudioEngine::isLoop-->The audio instance {} is non-existent", audioID);
     return false;
 }
 
@@ -517,7 +517,7 @@ float AudioEngine::getVolume(AUDIO_ID audioID)
         return tmpIterator->second.volume;
     }
 
-    log("AudioEngine::getVolume-->The audio instance %d is non-existent", audioID);
+    AXLOGW("AudioEngine::getVolume-->The audio instance {} is non-existent", audioID);
     return 0.0f;
 }
 

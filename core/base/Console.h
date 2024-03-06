@@ -63,7 +63,7 @@ enum class LogLevel
     Info,
     Warn,
     Error,
-    Xrgent = 0x7FFF
+    Silent /* only for setLogLevel(); must be last */
 };
 
 enum class LogFmtFlag
@@ -96,20 +96,21 @@ AX_API void setLogFmtFlag(LogFmtFlag flags);
 AX_API void setLogOutput(ILogOutput* output);
 
 /*
- * @brief print raw message
+ * @brief lowlevel print log message
  * @param message the message to print
  * @level the level of current log item see also LogLevel
+ * @prefixSize the prefix size
  * @tag optional, the log tag of current log item
  */
-AX_API void printLog(std::string&& message, LogLevel level, const char* tag);
+AX_API void printLog(std::string&& message, LogLevel level, size_t prefixSize, const char* tag);
 
-template <typename... _Types>
-inline void printLogT(LogLevel level, _Types&&... args)
+template <typename _FmtType, typename... _Types>
+inline void printLogT(LogLevel level, _FmtType&& fmt, std::string_view prefix, _Types&&... args)
 {
-    if (level >= getLogLevel())
+    if (getLogLevel() <= level)
     {
-        auto message = fmt::format(std::forward<_Types>(args)...);
-        printLog(std::move(message), level, "axmol");
+        auto message = fmt::format(std::forward<_FmtType>(fmt), prefix, std::forward<_Types>(args)...);
+        printLog(std::move(message), level, prefix.size(), "axmol");
     }
 }
 
@@ -124,16 +125,13 @@ AX_API std::string_view makeLogPrefix(LogBufferType&& stack_buffer, LogLevel lev
 #define AXLOGI(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Info, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGW(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Warn, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGE(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Error, fmtOrMsg, ##__VA_ARGS__)
-#define AXLOGX(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Xrgent, fmtOrMsg, ##__VA_ARGS__)
 
 #pragma endregion
 
 /**
  @brief Output Debug message.
  */
-/* AX_DEPRECATED_ATTRIBUTE*/ AX_API void print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use AXLOGX instead
-
-/* AX_DEPRECATED_ATTRIBUTE*/ AX_API void log(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use AXLOGX instead
+/* AX_DEPRECATED_ATTRIBUTE*/ AX_API void print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use AXLOGD instead
 
 /** Console is helper class that lets the developer control the game from TCP connection.
  Console will spawn a new thread that will listen to a specified TCP port.

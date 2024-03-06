@@ -202,7 +202,7 @@ bool ComRender::serialize(void* r)
                     rapidjson::Document doc;
                     if (!readJson(filePath, doc))
                     {
-                        log("read json file[%s] error!\n", filePath.c_str());
+                        AXLOGW("read json file[{}] error!\n", filePath);
                         continue;
                     }
                     const rapidjson::Value& subData = DICTOOL->getDictionaryFromArray_json(doc, "armature_data", 0);

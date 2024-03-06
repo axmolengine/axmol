@@ -155,7 +155,7 @@ void Controller::startDiscoveryController()
 
           if (iter == s_allController.end())
           {
-              AXLOGX("disconnect:Could not find the controller");
+              AXLOGW("disconnect:Could not find the controller");
               return;
           }
 
@@ -318,7 +318,7 @@ void Controller::registerListeners()
 
       if (iter == s_allController.end())
       {
-          AXLOGX("Could not find the controller");
+          AXLOGW("Could not find the controller");
           return;
       }
 

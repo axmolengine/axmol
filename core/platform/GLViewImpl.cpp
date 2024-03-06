@@ -1299,7 +1299,7 @@ static bool loadFboExtensions()
         AXLOGW("OpenGL: glGenFramebuffers is nullptr, try to detect an extension");
         if (driver->hasExtension("ARB_framebuffer_object"sv))
         {
-            AXLOGX("OpenGL: ARB_framebuffer_object is supported");
+            AXLOGI("OpenGL: ARB_framebuffer_object is supported");
 
             glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbuffer");
             glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbuffer");
@@ -1324,7 +1324,7 @@ static bool loadFboExtensions()
         }
         else if (driver->hasExtension("EXT_framebuffer_object"sv))
         {
-            AXLOGX("OpenGL: EXT_framebuffer_object is supported");
+            AXLOGI("OpenGL: EXT_framebuffer_object is supported");
             glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbufferEXT");
             glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbufferEXT");
             glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)glfwGetProcAddress("glDeleteRenderbuffersEXT");
@@ -1349,7 +1349,7 @@ static bool loadFboExtensions()
         }
         else if (driver->hasExtension("GL_ANGLE_framebuffer_blit"sv))
         {
-            AXLOGX("OpenGL: GL_ANGLE_framebuffer_object is supported");
+            AXLOGI("OpenGL: GL_ANGLE_framebuffer_object is supported");
 
             glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbufferOES");
             glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbufferOES");

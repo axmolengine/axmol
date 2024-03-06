@@ -114,7 +114,7 @@ AX_API std::string_view makeLogPrefix(LogBufferType&& stack_buffer, LogLevel lev
         size_t offset = 0;
         if (bitmask::any(s_logFmtFlags, LogFmtFlag::Level))
         {
-            char levelName = '?';
+            char levelName;
             switch (level)
             {
             case LogLevel::Debug:
@@ -129,9 +129,8 @@ AX_API std::string_view makeLogPrefix(LogBufferType&& stack_buffer, LogLevel lev
             case LogLevel::Error:
                 levelName = 'E';
                 break;
-            case LogLevel::Xrgent:
-                levelName = 'X';
-                break;
+            default:
+                levelName = '?';
             }
             offset += fmt::format_to_n(stack_buffer.data(), stack_buffer.size(), "{}/", levelName).size;
         }
@@ -161,9 +160,9 @@ AX_API std::string_view makeLogPrefix(LogBufferType&& stack_buffer, LogLevel lev
         return std::string_view{};
 }
 
-AX_DLL void printLog(std::string&& message, LogLevel level, const char* tag)
+AX_DLL void printLog(std::string&& message, LogLevel level, size_t prefixSize, const char* tag)
 {
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#if defined(__ANDROID__)
     struct trim_one_eol
     {
         explicit trim_one_eol(std::string& v) : value(v)
@@ -181,16 +180,31 @@ AX_DLL void printLog(std::string&& message, LogLevel level, const char* tag)
         std::string& value;
         bool trimed{false};
     };
-
-    __android_log_print(ANDROID_LOG_DEBUG, tag, "%s", static_cast<const char*>(trim_one_eol{message}));
-
-#elif defined(_WIN32)
+    int prio;
+    switch(level) {
+        case LogLevel::Info:
+            prio = ANDROID_LOG_INFO;
+            break;
+        case LogLevel::Warn:
+            prio = ANDROID_LOG_WARN;
+            break;
+        case LogLevel::Error:
+            prio = ANDROID_LOG_ERROR;
+            break;
+        default:
+            prio = ANDROID_LOG_DEBUG;
+    }
+    __android_log_print(prio, tag, "%s", static_cast<const char*>(trim_one_eol{message}) + prefixSize);
+#else
+    AX_UNUSED_PARAM(prefixSize);
+    AX_UNUSED_PARAM(tag);
+#    if defined(_WIN32)
     // print to debugger output window
     std::wstring wbuf = ntcvt::from_chars(message);
 
     OutputDebugStringW(wbuf.c_str());
 
-#    if AX_LOG_TO_CONSOLE
+#        if AX_LOG_TO_CONSOLE
     auto hStdout = ::GetStdHandle(STD_OUTPUT_HANDLE);
     if (hStdout)
     {
@@ -200,14 +214,16 @@ AX_DLL void printLog(std::string&& message, LogLevel level, const char* tag)
         DWORD wcch = static_cast<DWORD>(wbuf.size());
         ::WriteConsoleW(hStdout, wbuf.c_str(), wcch, nullptr, 0);
     }
-#    endif
-#else
+#        endif
+#    else
     // Linux, Mac, iOS, etc
     fprintf(stdout, "%s", message.c_str());
     fflush(stdout);
+#    endif
 #endif
 
-    if(s_logOutput) s_logOutput->write(std::move(message));
+    if (s_logOutput)
+        s_logOutput->write(std::move(message));
 }
 #pragma endregion
 
@@ -219,18 +235,7 @@ AX_API void print(const char* format, ...)
     auto buf = StringUtils::vformat(format, args);
     va_end(args);
 
-    printLog(std::move(buf += '\n'), LogLevel::Debug, "axmol debug info");
-}
-
-AX_API void log(const char* format, ...)
-{
-    va_list args;
-
-    va_start(args, format);
-    auto buf = StringUtils::vformat(format, args);
-    va_end(args);
-
-    printLog(std::move(buf += '\n'), LogLevel::Debug, "axmol debug info");
+    printLog(std::move(buf += '\n'), LogLevel::Debug, 0, "axmol debug info");
 }
 
 // FIXME: Deprecated
@@ -570,14 +575,14 @@ bool Console::listenOnTCP(int port)
     if (sock.pserve(ep) != 0)
     {
         int ec = xxsocket::get_last_errno();
-        AXLOGX("Console: open server failed, ec:{}", ec);
+        AXLOGW("Console: open server failed, ec:{}", ec);
         return false;
     }
 
     if (ep.af() == AF_INET)
-        AXLOGX("Console: IPV4 server is listening on {}", ep.to_string());
+        AXLOGI("Console: IPV4 server is listening on {}", ep.to_string());
     else if (ep.af() == AF_INET6)
-        AXLOGX("Console: IPV6 server is listening on {}", ep.to_string());
+        AXLOGI("Console: IPV6 server is listening on {}", ep.to_string());
 
     return listenOnFileDescriptor(sock.release_handle());
 }
@@ -586,7 +591,7 @@ bool Console::listenOnFileDescriptor(int fd)
 {
     if (_running)
     {
-        AXLOGX("Console already started. 'stop' it before calling 'listen' again");
+        AXLOGW("Console already started. 'stop' it before calling 'listen' again");
         return false;
     }
 
@@ -717,7 +722,7 @@ void Console::loop()
         {
             /* error */
             if (errno != EINTR)
-                AXLOGX("Abnormal error in poll_io()\n");
+                AXLOGW("Abnormal error in poll_io()\n");
             continue;
         }
         else if (nready == 0)

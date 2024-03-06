@@ -68,7 +68,7 @@ if(AX_ENABLE_EXT_FAIRYGUI)
   if(BUILD_SHARED_LIBS)
     target_link_libraries(fairygui spine)
   else()
-    target_include_directories(fairygui 
+    target_include_directories(fairygui
         PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/runtime/include
         PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/src
     )
@@ -95,7 +95,7 @@ if(AX_ENABLE_EXT_COCOSTUDIO)
     if(BUILD_SHARED_LIBS)
       target_link_libraries(cocostudio spine particle3d)
     else()
-      target_include_directories(cocostudio 
+      target_include_directories(cocostudio
         PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/runtime/include
         PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/src
         PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Particle3D/src

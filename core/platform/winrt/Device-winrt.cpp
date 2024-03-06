@@ -393,7 +393,7 @@ void Device::setAccelerometerEnabled(bool isEnabled)
         {
             // It's not a friendly experience and may cause crash.
             // MessageBox("This device does not have an accelerometer.","Alert");
-            AXLOGX("This device does not have an accelerometer.");
+            AXLOGI("This device does not have an accelerometer.");
             return;
         }
 

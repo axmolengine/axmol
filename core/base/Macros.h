@@ -41,16 +41,16 @@ THE SOFTWARE.
 #    if _AX_DEBUG > 0
 #        if AX_ENABLE_SCRIPT_BINDING
 extern bool AX_DLL cc_assert_script_compatible(const char* msg);
-#            define AXASSERT(cond, msg)                                       \
-                do                                                            \
-                {                                                             \
-                    if (!(cond))                                              \
-                    {                                                         \
-                        const char* m = (msg);                                \
-                        if (m && *m && !cc_assert_script_compatible(m))       \
-                            ax::log("Assert failed: %s", m);                  \
-                        AX_ASSERT(cond);                                      \
-                    }                                                         \
+#            define AXASSERT(cond, msg)                                 \
+                do                                                      \
+                {                                                       \
+                    if (!(cond))                                        \
+                    {                                                   \
+                        const char* m = (msg);                          \
+                        if (m && *m && !cc_assert_script_compatible(m)) \
+                            AXLOGE("Assert failed: {}", m);             \
+                        AX_ASSERT(cond);                                \
+                    }                                                   \
                 } while (0)
 #        else
 #            define AXASSERT(cond, msg) AX_ASSERT(cond)
@@ -69,7 +69,7 @@ extern bool AX_DLL cc_assert_script_compatible(const char* msg);
 
 #include "base/Random.h"
 
-#define AX_HALF_PI (M_PI * 0.5f)
+#define AX_HALF_PI   (M_PI * 0.5f)
 
 #define AX_DOUBLE_PI (M_PI * 2)
 
@@ -86,15 +86,15 @@ extern bool AX_DLL cc_assert_script_compatible(const char* msg);
 /** @def AX_DEGREES_TO_RADIANS
  converts degrees to radians
  */
-#define AX_DEGREES_TO_RADIANS(__ANGLE__) ((__ANGLE__)*0.01745329252f)  // PI / 180
+#define AX_DEGREES_TO_RADIANS(__ANGLE__) ((__ANGLE__) * 0.01745329252f)  // PI / 180
 
 /** @def AX_RADIANS_TO_DEGREES
  converts radians to degrees
  */
-#define AX_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__)*57.29577951f)  // PI * 180
+#define AX_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) * 57.29577951f)  // PI * 180
 
-#define AX_REPEAT_FOREVER (UINT_MAX - 1)
-#define kRepeatForever AX_REPEAT_FOREVER
+#define AX_REPEAT_FOREVER                (UINT_MAX - 1)
+#define kRepeatForever                   AX_REPEAT_FOREVER
 
 /** @def AX_BLEND_SRC
 default gl blend src function. Compatible with premultiplied alpha images.
@@ -114,11 +114,11 @@ default gl blend src function. Compatible with premultiplied alpha images.
 
  @since v0.99.4
  */
-#define AX_DIRECTOR_END()                                        \
-    do                                                           \
-    {                                                            \
+#define AX_DIRECTOR_END()                              \
+    do                                                 \
+    {                                                  \
         auto __director = ax::Director::getInstance(); \
-        __director->end();                                       \
+        __director->end();                             \
     } while (0)
 
 /** @def AX_CONTENT_SCALE_FACTOR
@@ -134,20 +134,20 @@ On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
 /** @def AX_RECT_PIXELS_TO_POINTS
  Converts a rect in pixels to points
  */
-#define AX_RECT_PIXELS_TO_POINTS(__rect_in_pixels__)                           \
+#define AX_RECT_PIXELS_TO_POINTS(__rect_in_pixels__)                      \
     ax::Rect((__rect_in_pixels__).origin.x / AX_CONTENT_SCALE_FACTOR(),   \
-                  (__rect_in_pixels__).origin.y / AX_CONTENT_SCALE_FACTOR(),   \
-                  (__rect_in_pixels__).size.width / AX_CONTENT_SCALE_FACTOR(), \
-                  (__rect_in_pixels__).size.height / AX_CONTENT_SCALE_FACTOR())
+             (__rect_in_pixels__).origin.y / AX_CONTENT_SCALE_FACTOR(),   \
+             (__rect_in_pixels__).size.width / AX_CONTENT_SCALE_FACTOR(), \
+             (__rect_in_pixels__).size.height / AX_CONTENT_SCALE_FACTOR())
 
 /** @def AX_RECT_POINTS_TO_PIXELS
  Converts a rect in points to pixels
  */
-#define AX_RECT_POINTS_TO_PIXELS(__rect_in_points_points__)                          \
+#define AX_RECT_POINTS_TO_PIXELS(__rect_in_points_points__)                     \
     ax::Rect((__rect_in_points_points__).origin.x* AX_CONTENT_SCALE_FACTOR(),   \
-                  (__rect_in_points_points__).origin.y* AX_CONTENT_SCALE_FACTOR(),   \
-                  (__rect_in_points_points__).size.width* AX_CONTENT_SCALE_FACTOR(), \
-                  (__rect_in_points_points__).size.height* AX_CONTENT_SCALE_FACTOR())
+             (__rect_in_points_points__).origin.y* AX_CONTENT_SCALE_FACTOR(),   \
+             (__rect_in_points_points__).size.width* AX_CONTENT_SCALE_FACTOR(), \
+             (__rect_in_points_points__).size.height* AX_CONTENT_SCALE_FACTOR())
 
 /** @def AX_POINT_PIXELS_TO_POINTS
  Converts a rect in pixels to points
@@ -164,15 +164,16 @@ On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
 /** @def AX_POINT_PIXELS_TO_POINTS
  Converts a rect in pixels to points
  */
-#define AX_SIZE_PIXELS_TO_POINTS(__size_in_pixels__)             \
+#define AX_SIZE_PIXELS_TO_POINTS(__size_in_pixels__)                 \
     ax::Vec2((__size_in_pixels__).width / AX_CONTENT_SCALE_FACTOR(), \
-         (__size_in_pixels__).height / AX_CONTENT_SCALE_FACTOR())
+             (__size_in_pixels__).height / AX_CONTENT_SCALE_FACTOR())
 
 /** @def AX_POINT_POINTS_TO_PIXELS
  Converts a rect in points to pixels
  */
-#define AX_SIZE_POINTS_TO_PIXELS(__size_in_points__) \
-    ax::Vec2((__size_in_points__).width* AX_CONTENT_SCALE_FACTOR(), (__size_in_points__).height* AX_CONTENT_SCALE_FACTOR())
+#define AX_SIZE_POINTS_TO_PIXELS(__size_in_points__)                \
+    ax::Vec2((__size_in_points__).width* AX_CONTENT_SCALE_FACTOR(), \
+             (__size_in_points__).height* AX_CONTENT_SCALE_FACTOR())
 
 #ifndef FLT_EPSILON
 #    define FLT_EPSILON 1.192092896e-07F
@@ -190,13 +191,13 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 */
 
 /// when define returns true it means that our architecture uses big endian
-#define AX_HOST_IS_BIG_ENDIAN (bool)(*(unsigned short*)"\0\xff" < 0x100)
-#define AX_SWAP32(i) ((i & 0x000000ff) << 24 | (i & 0x0000ff00) << 8 | (i & 0x00ff0000) >> 8 | (i & 0xff000000) >> 24)
-#define AX_SWAP16(i) ((i & 0x00ff) << 8 | (i & 0xff00) >> 8)
+#define AX_HOST_IS_BIG_ENDIAN           (bool)(*(unsigned short*)"\0\xff" < 0x100)
+#define AX_SWAP32(i)                    ((i & 0x000000ff) << 24 | (i & 0x0000ff00) << 8 | (i & 0x00ff0000) >> 8 | (i & 0xff000000) >> 24)
+#define AX_SWAP16(i)                    ((i & 0x00ff) << 8 | (i & 0xff00) >> 8)
 #define AX_SWAP_INT32_LITTLE_TO_HOST(i) ((AX_HOST_IS_BIG_ENDIAN == true) ? AX_SWAP32(i) : (i))
 #define AX_SWAP_INT16_LITTLE_TO_HOST(i) ((AX_HOST_IS_BIG_ENDIAN == true) ? AX_SWAP16(i) : (i))
-#define AX_SWAP_INT32_BIG_TO_HOST(i) ((AX_HOST_IS_BIG_ENDIAN == true) ? (i) : AX_SWAP32(i))
-#define AX_SWAP_INT16_BIG_TO_HOST(i) ((AX_HOST_IS_BIG_ENDIAN == true) ? (i) : AX_SWAP16(i))
+#define AX_SWAP_INT32_BIG_TO_HOST(i)    ((AX_HOST_IS_BIG_ENDIAN == true) ? (i) : AX_SWAP32(i))
+#define AX_SWAP_INT16_BIG_TO_HOST(i)    ((AX_HOST_IS_BIG_ENDIAN == true) ? (i) : AX_SWAP16(i))
 
 /**********************/
 /** Profiling Macros **/
@@ -204,11 +205,11 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 #if AX_ENABLE_PROFILERS
 
 #    define AX_PROFILER_DISPLAY_TIMERS() NS_AX::Profiler::getInstance()->displayTimers()
-#    define AX_PROFILER_PURGE_ALL() NS_AX::Profiler::getInstance()->releaseAllTimers()
+#    define AX_PROFILER_PURGE_ALL()      NS_AX::Profiler::getInstance()->releaseAllTimers()
 
-#    define AX_PROFILER_START(__name__) NS_AX::ProfilingBeginTimingBlock(__name__)
-#    define AX_PROFILER_STOP(__name__) NS_AX::ProfilingEndTimingBlock(__name__)
-#    define AX_PROFILER_RESET(__name__) NS_AX::ProfilingResetTimingBlock(__name__)
+#    define AX_PROFILER_START(__name__)  NS_AX::ProfilingBeginTimingBlock(__name__)
+#    define AX_PROFILER_STOP(__name__)   NS_AX::ProfilingEndTimingBlock(__name__)
+#    define AX_PROFILER_RESET(__name__)  NS_AX::ProfilingResetTimingBlock(__name__)
 
 #    define AX_PROFILER_START_CATEGORY(__cat__, __name__)   \
         do                                                  \
@@ -349,7 +350,7 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 #define AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(__drawcalls__, __vertices__) \
     do                                                                          \
     {                                                                           \
-        auto __renderer__ = ax::Director::getInstance()->getRenderer();    \
+        auto __renderer__ = ax::Director::getInstance() -> getRenderer();       \
         __renderer__->addDrawnBatches(__drawcalls__);                           \
         __renderer__->addDrawnVertices(__vertices__);                           \
     } while (0)
