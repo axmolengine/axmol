@@ -82,7 +82,7 @@ class ILogOutput
 {
 public:
     virtual ~ILogOutput() {}
-    virtual void write(std::string&&) = 0;
+    virtual void write(std::string&&, LogLevel) = 0;
 };
 
 /* @brief control log level */
