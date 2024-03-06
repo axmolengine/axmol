@@ -76,15 +76,7 @@ static LogLevel s_logLevel = LogLevel::Debug;
 static LogLevel s_logLevel = LogLevel::Info;
 #endif
 
-static bool s_logPrefixEnabled = false;
-
-enum class LogFmtFlag
-{
-    Level     = 1,  // D,I,W,E
-    Tag       = 2,  // axmol
-    TimeStamp = 4,  // 2024-03-05T01:26:37.123+8:00
-    ThreadId  = 8,  // 3ABDE
-};
+static LogFmtFlag s_logFmtFlags = LogFmtFlag::Null;
 
 void AX_API setLogLevel(LogLevel level)
 {
@@ -96,14 +88,14 @@ LogLevel AX_API getLogLevel()
     return s_logLevel;
 }
 
-void AX_API setLogPrefixEnabled(bool enabled)
+void AX_API setLogFmtFlag(LogFmtFlag flags)
 {
-    s_logPrefixEnabled = enabled;
+    s_logFmtFlags = flags;
 }
 
-std::string make_log_prefix()
+std::string_view AX_API makeLogPrefix(LogBufferType&& stack_buffer, LogLevel level)
 {
-    if (s_logPrefixEnabled)
+    if (s_logFmtFlags != LogFmtFlag::Null)
     {
 #if defined(_WIN32)
 #    define xmol_getpid()       (uintptr_t)::GetCurrentProcessId()
@@ -113,17 +105,53 @@ std::string make_log_prefix()
 #    define xmol_getpid() (uintptr_t)::getpid()
 #    define xmol_gettid() (uintptr_t)::pthread_self()
 #endif
-        struct tm ts = {0};
-        auto tv_msec = yasio::clock<yasio::system_clock_t>();
-        auto tv_sec  = static_cast<time_t>(tv_msec / std::milli::den);
-        localtime_r(&tv_sec, &ts);
-
-        return fmt::format("[{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}.{:03d}][PID:{:x}][TID:{:x}]", ts.tm_year + 1900,
-                           ts.tm_mon + 1, ts.tm_mday, ts.tm_hour, ts.tm_min, ts.tm_sec,
-                           static_cast<int>(tv_msec % std::milli::den), xmol_getpid(), xmol_gettid());
+        size_t offset = 0;
+        if (bitmask::any(s_logFmtFlags, LogFmtFlag::Level))
+        {
+            char levelName = 'A';
+            switch (level)
+            {
+            case LogLevel::Debug:
+                levelName = 'D';
+            case LogLevel::Info:
+                levelName = 'I';
+                break;
+            case LogLevel::Warn:
+                levelName = 'W';
+                break;
+            case LogLevel::Error:
+                levelName = 'E';
+                break;
+            case LogLevel::Xrgent:
+                levelName = 'X';
+                break;
+            }
+            offset += fmt::format_to_n(stack_buffer.data(), stack_buffer.size(), "{}/", levelName).size;
+        }
+        if (bitmask::any(s_logFmtFlags, LogFmtFlag::TimeStamp))
+        {
+            struct tm ts = {0};
+            auto tv_msec = yasio::clock<yasio::system_clock_t>();
+            auto tv_sec  = static_cast<time_t>(tv_msec / std::milli::den);
+            localtime_r(&tv_sec, &ts);
+            offset += fmt::format_to_n(stack_buffer.data() + offset, stack_buffer.size() - offset,
+                                       "[{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}.{:03d}]", ts.tm_year + 1900,
+                                       ts.tm_mon + 1, ts.tm_mday, ts.tm_hour, ts.tm_min, ts.tm_sec,
+                                       static_cast<int>(tv_msec % std::milli::den))
+                          .size;
+        }
+        if (bitmask::any(s_logFmtFlags, LogFmtFlag::ProcessId))
+            offset += fmt::format_to_n(stack_buffer.data() + offset, stack_buffer.size() - offset, "[PID:{:x}]",
+                                       xmol_getpid())
+                          .size;
+        if (bitmask::any(s_logFmtFlags, LogFmtFlag::ThreadId))
+            offset += fmt::format_to_n(stack_buffer.data() + offset, stack_buffer.size() - offset, "[TID:{:x}]",
+                                       xmol_gettid())
+                          .size;
+        return std::string_view{stack_buffer.data(), offset};
     }
     else
-        return std::string{};
+        return std::string_view{};
 }
 
 void AX_DLL printLog(std::string&& message, LogLevel level, const char* tag)

@@ -42,11 +42,13 @@ typedef SSIZE_T ssize_t;
 #include <functional>
 #include <string>
 #include <mutex>
+#include <array>
 #include <stdarg.h>
 #include "yasio/io_watcher.hpp"
 
 #include "base/Ref.h"
 #include "base/Macros.h"
+#include "base/bitmask.h"
 #include "platform/PlatformMacros.h"
 
 #include "fmt/compile.h"
@@ -64,10 +66,24 @@ enum class LogLevel
     Xrgent = 0x7FFF
 };
 
+enum class LogFmtFlag
+{
+    Null,
+    Level     = 1,
+    TimeStamp = 1 << 1,
+    ProcessId = 1 << 2,
+    ThreadId  = 1 << 3,
+    Full      = Level | TimeStamp | ProcessId | ThreadId,
+};
+
+AX_ENABLE_BITMASK_OPS(LogFmtFlag);
+
+/* @brief control log level */
 void AX_API setLogLevel(LogLevel level);
 LogLevel AX_API getLogLevel();
 
-void AX_API setLogPrefixEnabled(bool enabled);
+/* @brief control log prefix format */
+void AX_API setLogFmtFlag(LogFmtFlag flags);
 
 /*
  * @brief print raw message
@@ -87,26 +103,25 @@ inline void printLogT(LogLevel level, _Types&&... args)
     }
 }
 
+using LogBufferType = std::array<char, 128>;
 // for internal use make log prefix: D/[2024-02-29 00:00:00.123][PID:][TID:]
-std::string make_log_prefix();
+std::string_view AX_API makeLogPrefix(LogBufferType&& stack_buffer, LogLevel level);
 
-#define AXLOGD(fmtOrMsg, ...) \
-    ax::printLogT(ax::LogLevel::Debug, FMT_COMPILE("D/{}" fmtOrMsg "\n"), ax::make_log_prefix(), ##__VA_ARGS__)
-#define AXLOGI(fmtOrMsg, ...) \
-    ax::printLogT(ax::LogLevel::Info, FMT_COMPILE("I/{}" fmtOrMsg "\n"), ax::make_log_prefix(), ##__VA_ARGS__)
-#define AXLOGW(fmtOrMsg, ...) \
-    ax::printLogT(ax::LogLevel::Warn, FMT_COMPILE("W/{}" fmtOrMsg "\n"), ax::make_log_prefix(), ##__VA_ARGS__)
-#define AXLOGE(fmtOrMsg, ...) \
-    ax::printLogT(ax::LogLevel::Error, FMT_COMPILE("E/{}" fmtOrMsg "\n"), ax::make_log_prefix(), ##__VA_ARGS__)
-#define AXLOGX(fmtOrMsg, ...) \
-    ax::printLogT(ax::LogLevel::Xrgent, FMT_COMPILE("X/{}" fmtOrMsg "\n"), ax::make_log_prefix(), ##__VA_ARGS__)
+#define AXLOG_WITH_LEVEL(level, fmtOrMsg, ...) \
+    ax::printLogT(level, FMT_COMPILE("{}" fmtOrMsg "\n"), ax::makeLogPrefix(LogBufferType{}, level), ##__VA_ARGS__)
+
+#define AXLOGD(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Debug, fmtOrMsg, ##__VA_ARGS__)
+#define AXLOGI(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Info, fmtOrMsg, ##__VA_ARGS__)
+#define AXLOGW(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Warn, fmtOrMsg, ##__VA_ARGS__)
+#define AXLOGE(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Error, fmtOrMsg, ##__VA_ARGS__)
+#define AXLOGX(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Xrgent, fmtOrMsg, ##__VA_ARGS__)
 
 #pragma endregion
 
 /**
  @brief Output Debug message.
  */
-/* AX_DEPRECATED_ATTRIBUTE*/ void AX_DLL print(const char* format, ...) AX_FORMAT_PRINTF(1, 2); // use AXLOGX instead
+/* AX_DEPRECATED_ATTRIBUTE*/ void AX_DLL print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use AXLOGX instead
 
 /* AX_DEPRECATED_ATTRIBUTE*/ void AX_DLL log(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use AXLOGX instead
 

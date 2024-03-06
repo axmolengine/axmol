@@ -401,7 +401,7 @@ void Director::setGLView(GLView* glView)
         // Configuration. Gather GPU info
         Configuration* conf = Configuration::getInstance();
         conf->gatherGPUInfo();
-        AXLOG("%s\n", conf->getInfo().c_str());
+        AXLOGD("{}\n", conf->getInfo());
 
         if (_glView)
             _glView->release();
