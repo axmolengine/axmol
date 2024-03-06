@@ -73,7 +73,7 @@ bool Bug914Layer::init()
 
 void Bug914Layer::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
 {
-    log("Number of touches: %d", (int)touches.size());
+    ax::print("Number of touches: %d", (int)touches.size());
 }
 
 void Bug914Layer::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)

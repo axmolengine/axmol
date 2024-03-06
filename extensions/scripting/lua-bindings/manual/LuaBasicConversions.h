@@ -62,7 +62,7 @@ void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const
     if (!(condition))                                                                            \
     {                                                                                            \
         AXLOGE("lua: ERROR: File {}: Line: {}, Function: {}", __FILE__, __LINE__, __FUNCTION__); \
-        AXLOGE(__VA_ARGS__)                                                                      \
+        AXLOGE(##__VA_ARGS__);                                                                   \
     }
 
 /**
