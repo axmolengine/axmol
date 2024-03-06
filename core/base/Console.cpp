@@ -113,6 +113,7 @@ std::string_view AX_API makeLogPrefix(LogBufferType&& stack_buffer, LogLevel lev
             {
             case LogLevel::Debug:
                 levelName = 'D';
+                break;
             case LogLevel::Info:
                 levelName = 'I';
                 break;
