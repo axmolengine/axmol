@@ -91,15 +91,15 @@ inline void printLogT(LogLevel level, _Types&&... args)
 std::string make_log_prefix();
 
 #define AXLOGD(fmtOrMsg, ...) \
-    printLogT(LogLevel::Debug, FMT_COMPILE("D/{}" fmtOrMsg "\n"), make_log_prefix(), ##__VA_ARGS__)
+    ax::printLogT(ax::LogLevel::Debug, FMT_COMPILE("D/{}" fmtOrMsg "\n"), ax::make_log_prefix(), ##__VA_ARGS__)
 #define AXLOGI(fmtOrMsg, ...) \
-    printLogT(LogLevel::Info, FMT_COMPILE("I/{}" fmtOrMsg "\n"), make_log_prefix(), ##__VA_ARGS__)
+    ax::printLogT(ax::LogLevel::Info, FMT_COMPILE("I/{}" fmtOrMsg "\n"), ax::make_log_prefix(), ##__VA_ARGS__)
 #define AXLOGW(fmtOrMsg, ...) \
-    printLogT(LogLevel::Warn, FMT_COMPILE("W/{}" fmtOrMsg "\n"), make_log_prefix(), ##__VA_ARGS__)
+    ax::printLogT(ax::LogLevel::Warn, FMT_COMPILE("W/{}" fmtOrMsg "\n"), ax::make_log_prefix(), ##__VA_ARGS__)
 #define AXLOGE(fmtOrMsg, ...) \
-    printLogT(LogLevel::Error, FMT_COMPILE("E/{}" fmtOrMsg "\n"), make_log_prefix(), ##__VA_ARGS__)
+    ax::printLogT(ax::LogLevel::Error, FMT_COMPILE("E/{}" fmtOrMsg "\n"), ax::make_log_prefix(), ##__VA_ARGS__)
 #define AXLOGX(fmtOrMsg, ...) \
-    printLogT(LogLevel::Xrgent, FMT_COMPILE("X/{}" fmtOrMsg "\n"), make_log_prefix(), ##__VA_ARGS__)
+    ax::printLogT(ax::LogLevel::Xrgent, FMT_COMPILE("X/{}" fmtOrMsg "\n"), ax::make_log_prefix(), ##__VA_ARGS__)
 
 #pragma endregion
 
