@@ -77,23 +77,29 @@ static LogLevel s_logLevel = LogLevel::Info;
 #endif
 
 static LogFmtFlag s_logFmtFlags = LogFmtFlag::Null;
+static ILogOutput* s_logOutput  = nullptr;
 
-void AX_API setLogLevel(LogLevel level)
+AX_API void setLogLevel(LogLevel level)
 {
     s_logLevel = level;
 }
 
-LogLevel AX_API getLogLevel()
+AX_API LogLevel getLogLevel()
 {
     return s_logLevel;
 }
 
-void AX_API setLogFmtFlag(LogFmtFlag flags)
+AX_API void setLogFmtFlag(LogFmtFlag flags)
 {
     s_logFmtFlags = flags;
 }
 
-std::string_view AX_API makeLogPrefix(LogBufferType&& stack_buffer, LogLevel level)
+AX_API void setLogOutput(ILogOutput* output)
+{
+    s_logOutput = output;
+}
+
+AX_API std::string_view makeLogPrefix(LogBufferType&& stack_buffer, LogLevel level)
 {
     if (s_logFmtFlags != LogFmtFlag::Null)
     {
@@ -108,7 +114,7 @@ std::string_view AX_API makeLogPrefix(LogBufferType&& stack_buffer, LogLevel lev
         size_t offset = 0;
         if (bitmask::any(s_logFmtFlags, LogFmtFlag::Level))
         {
-            char levelName = 'A';
+            char levelName = '?';
             switch (level)
             {
             case LogLevel::Debug:
@@ -155,7 +161,7 @@ std::string_view AX_API makeLogPrefix(LogBufferType&& stack_buffer, LogLevel lev
         return std::string_view{};
 }
 
-void AX_DLL printLog(std::string&& message, LogLevel level, const char* tag)
+AX_DLL void printLog(std::string&& message, LogLevel level, const char* tag)
 {
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     struct trim_one_eol
@@ -201,11 +207,11 @@ void AX_DLL printLog(std::string&& message, LogLevel level, const char* tag)
     fflush(stdout);
 #endif
 
-    // TODO: Log to file
+    if(s_logOutput) s_logOutput->write(std::move(message));
 }
 #pragma endregion
 
-void print(const char* format, ...)
+AX_API void print(const char* format, ...)
 {
     va_list args;
 
@@ -216,7 +222,7 @@ void print(const char* format, ...)
     printLog(std::move(buf += '\n'), LogLevel::Debug, "axmol debug info");
 }
 
-void log(const char* format, ...)
+AX_API void log(const char* format, ...)
 {
     va_list args;
 
