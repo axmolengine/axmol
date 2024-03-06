@@ -312,7 +312,7 @@ bool VlcMediaEngine::updatePlaybackProperties()
             if (track->i_type == libvlc_track_video)
             {
                 track_codec_to_mime_type(track, _videoCodecMimeType);
-                AXLAXLOGIOGX("VlcMediaEngine: sourceUri: {}, codec: {}", _sourceUri, _videoCodecMimeType);
+                AXLOGD("VlcMediaEngine: sourceUri: {}, codec: {}", _sourceUri, _videoCodecMimeType);
 
                 auto vdi = track->video;
                 _videoDim.set(vdi->i_width, vdi->i_height);
