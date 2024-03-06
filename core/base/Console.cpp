@@ -223,7 +223,7 @@ AX_DLL void printLog(std::string&& message, LogLevel level, size_t prefixSize, c
 #endif
 
     if (s_logOutput)
-        s_logOutput->write(std::move(message));
+        s_logOutput->write(std::move(message), level);
 }
 #pragma endregion
 
