@@ -73,9 +73,9 @@ enum class LogFmtFlag
     TimeStamp = 1 << 1,
     ProcessId = 1 << 2,
     ThreadId  = 1 << 3,
-    Full      = Level | TimeStamp | ProcessId | ThreadId,
+    Colored   = 1 << 4,
+    Full      = Level | TimeStamp | ProcessId | ThreadId | Colored,
 };
-
 AX_ENABLE_BITMASK_OPS(LogFmtFlag);
 
 class ILogOutput

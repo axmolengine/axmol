@@ -32,6 +32,7 @@
 #include <cctype>
 #include <locale>
 #include <sstream>
+#include <optional>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -56,9 +57,7 @@
 #include "yasio/xxsocket.hpp"
 #include "yasio/utils.hpp"
 
-#if !defined(AX_LOG_TO_CONSOLE)
-#    define AX_LOG_TO_CONSOLE 1
-#endif
+#include "fmt/color.h"
 
 NS_AX_BEGIN
 
@@ -111,6 +110,7 @@ AX_API std::string_view makeLogPrefix(LogBufferType&& stack_buffer, LogLevel lev
 #    define xmol_getpid() (uintptr_t)::getpid()
 #    define xmol_gettid() (uintptr_t)::pthread_self()
 #endif
+
         size_t offset = 0;
         if (bitmask::any(s_logFmtFlags, LogFmtFlag::Level))
         {
@@ -181,45 +181,59 @@ AX_DLL void printLog(std::string&& message, LogLevel level, size_t prefixSize, c
         bool trimed{false};
     };
     int prio;
-    switch(level) {
-        case LogLevel::Info:
-            prio = ANDROID_LOG_INFO;
-            break;
-        case LogLevel::Warn:
-            prio = ANDROID_LOG_WARN;
-            break;
-        case LogLevel::Error:
-            prio = ANDROID_LOG_ERROR;
-            break;
-        default:
-            prio = ANDROID_LOG_DEBUG;
+    switch (level)
+    {
+    case LogLevel::Info:
+        prio = ANDROID_LOG_INFO;
+        break;
+    case LogLevel::Warn:
+        prio = ANDROID_LOG_WARN;
+        break;
+    case LogLevel::Error:
+        prio = ANDROID_LOG_ERROR;
+        break;
+    default:
+        prio = ANDROID_LOG_DEBUG;
     }
     __android_log_print(prio, tag, "%s", static_cast<const char*>(trim_one_eol{message}) + prefixSize);
 #else
     AX_UNUSED_PARAM(prefixSize);
     AX_UNUSED_PARAM(tag);
-#    if defined(_WIN32)
-    // print to debugger output window
-    std::wstring wbuf = ntcvt::from_chars(message);
-
-    OutputDebugStringW(wbuf.c_str());
-
-#        if AX_LOG_TO_CONSOLE
-    auto hStdout = ::GetStdHandle(STD_OUTPUT_HANDLE);
-    if (hStdout)
+    std::optional<fmt::text_style> color;
+    if (bitmask::any(s_logFmtFlags, LogFmtFlag::Colored))
     {
-        // print to console if possible
-        // since we use win32 API, the ::fflush call doesn't required.
-        // see: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-flushfilebuffers#return-value
-        DWORD wcch = static_cast<DWORD>(wbuf.size());
-        ::WriteConsoleW(hStdout, wbuf.c_str(), wcch, nullptr, 0);
+        switch (level)
+        {
+        case LogLevel::Info:
+            color.emplace(fmt::fg(fmt::color::light_green));
+            break;
+        case LogLevel::Warn:
+            color.emplace(fmt::fg(fmt::color::yellow));
+            break;
+        case LogLevel::Error:
+            color.emplace(fmt::fg(fmt::color::red));
+            break;
+        default:;
+        }
     }
-#        endif
+    if (!color.has_value())
+    { // write normal color text to console
+#    if defined(_WIN32)
+        auto hStdout = ::GetStdHandle(level != LogLevel::Error ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE);
+        if (hStdout)
+        {
+            // print to console if possible
+            // since we use win32 API, the ::fflush call doesn't required.
+            // see: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-flushfilebuffers#return-value
+            ::WriteFile(hStdout, message.c_str(), static_cast<DWORD>(message.size()), nullptr, nullptr);
+        }
 #    else
-    // Linux, Mac, iOS, etc
-    fprintf(stdout, "%s", message.c_str());
-    fflush(stdout);
+        // Linux, Mac, iOS, etc
+        auto fd = ::fileno(level != LogLevel::Error ? stdout : stderr);
+        ::write(fd, message.c_str(), message.size());
 #    endif
+    } else
+        fmt::print(color.value(), "{}", message);
 #endif
 
     if (s_logOutput)
