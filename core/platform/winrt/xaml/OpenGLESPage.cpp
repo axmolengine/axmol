@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2010-2014 - cocos2d-x community
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ * Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
  *
  * Portions Copyright (c) Microsoft Open Technologies, Inc.
  * All Rights Reserved
@@ -408,24 +409,18 @@ void OpenGLESPage::_OnPointerWheelChanged(Windows::Foundation::IInspectable cons
 
 void OpenGLESPage::OnKeyPressed(CoreWindow const& sender, KeyEventArgs const& args)
 {
-    // log("OpenGLESPage::OnKeyPressed %d", e->VirtualKey);
     if (mRenderer)
     {
         mRenderer->QueueKeyboardEvent(WinRTKeyboardEventType::KeyPressed, args);
     }
 }
 
-void OpenGLESPage::_OnCharacterReceived(CoreWindow const& sender, CharacterReceivedEventArgs const& args)
+void OpenGLESPage::_OnCharacterReceived(CoreWindow const& /*sender*/, CharacterReceivedEventArgs const& /*args*/)
 {
-    // if (!e->KeyStatus.WasKeyDown)
-    //{
-    //     log("OpenGLESPage::OnCharacterReceived %d", e->KeyCode);
-    // }
 }
 
-void OpenGLESPage::OnKeyReleased(CoreWindow const& sender, KeyEventArgs const& args)
+void OpenGLESPage::OnKeyReleased(CoreWindow const& /*sender*/, KeyEventArgs const& args)
 {
-    // log("OpenGLESPage::OnKeyReleased %d", e->VirtualKey);
     if (mRenderer)
     {
         mRenderer->QueueKeyboardEvent(WinRTKeyboardEventType::KeyReleased, args);

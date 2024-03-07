@@ -238,7 +238,7 @@ static bool load_gtk3() {
                 GTK_DLSYM(g_main_context_iteration);
                 GTK_DLSYM(g_type_check_instance_cast);
             } catch(const std::exception& ex) {
-                ax::log("load gtk function: %s fail", ex.what());
+                AXLOGE("load gtk function: {} fail", ex.what());
                 dlclose(gtk3);
                 gtk3 = nullptr;
             }

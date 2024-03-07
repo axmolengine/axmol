@@ -1,5 +1,6 @@
-﻿//
+//
 // Copyright (c) 2014-2020 Simdsoft Limited - All Rights Reserved
+// Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 //
 #include "ui/LayoutHelper.h"
 
@@ -56,7 +57,7 @@ void LayoutHelper::setDesignSizeNoBorder(const Vec2& designSize)
         LayoutHelper::s_adjustedScale = scaleY / (frameSize.width / LayoutHelper::s_designSize.width);
     }
 
-    ax::log("x: %f; y: %f; scale: %f", scaleX, scaleY, s_adjustedScale);
+    AXLOGD("x: {}; y: {}; scale: {}", scaleX, scaleY, s_adjustedScale);
 
     pEGLView->setDesignResolutionSize(LayoutHelper::s_designSize.width * s_adjustedScale,
                                       LayoutHelper::s_designSize.height * s_adjustedScale, ResolutionPolicy::NO_BORDER);

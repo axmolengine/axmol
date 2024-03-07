@@ -293,7 +293,7 @@ MediaPlayer::MediaPlayer()
     }
     else
     {
-        ax::log("Create MediaPlayer backend failed");
+        AXLOGE("Create MediaPlayer backend failed");
     }
 }
 

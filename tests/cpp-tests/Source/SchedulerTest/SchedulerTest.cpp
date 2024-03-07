@@ -185,17 +185,17 @@ void SchedulerPauseResumeAll::onExit()
 
 void SchedulerPauseResumeAll::tick1(float /*dt*/)
 {
-    log("tick1");
+    ax::print("tick1");
 }
 
 void SchedulerPauseResumeAll::tick2(float /*dt*/)
 {
-    log("tick2");
+    ax::print("tick2");
 }
 
 void SchedulerPauseResumeAll::pause(float /*dt*/)
 {
-    log("Pausing, tick1 should be called six times and tick2 three times");
+    ax::print("Pausing, tick1 should be called six times and tick2 three times");
     auto scheduler = Director::getInstance()->getScheduler();
     _pausedTargets = scheduler->pauseAllTargets();
 
@@ -208,7 +208,7 @@ void SchedulerPauseResumeAll::pause(float /*dt*/)
 
 void SchedulerPauseResumeAll::resume(float /*dt*/)
 {
-    log("Resuming");
+    ax::print("Resuming");
     auto director = Director::getInstance();
     director->getScheduler()->resumeTargets(_pausedTargets);
     _pausedTargets.clear();
@@ -262,17 +262,17 @@ void SchedulerPauseResumeAllUser::onExit()
 
 void SchedulerPauseResumeAllUser::tick1(float /*dt*/)
 {
-    log("tick1");
+    ax::print("tick1");
 }
 
 void SchedulerPauseResumeAllUser::tick2(float /*dt*/)
 {
-    log("tick2");
+    ax::print("tick2");
 }
 
 void SchedulerPauseResumeAllUser::pause(float /*dt*/)
 {
-    log("Pausing, tick1 and tick2 should be called three times");
+    ax::print("Pausing, tick1 and tick2 should be called three times");
     auto director  = Director::getInstance();
     _pausedTargets = director->getScheduler()->pauseAllTargetsWithMinPriority(Scheduler::PRIORITY_NON_SYSTEM_MIN);
     // because target 'this' has been paused above, so use another node(tag:123) as target
@@ -281,7 +281,7 @@ void SchedulerPauseResumeAllUser::pause(float /*dt*/)
 
 void SchedulerPauseResumeAllUser::resume(float /*dt*/)
 {
-    log("Resuming");
+    ax::print("Resuming");
     getScheduler()->resumeTargets(_pausedTargets);
     _pausedTargets.clear();
 }
@@ -547,7 +547,7 @@ TestNode::~TestNode() {}
 
 void TestNode::update(float /*dt*/)
 {
-    log("%s", _string.c_str());
+    ax::print("%s", _string.c_str());
 }
 
 //------------------------------------------------------------------
@@ -645,7 +645,7 @@ void SchedulerUpdateAndCustom::tick(float dt)
 
 void SchedulerUpdateAndCustom::stopSelectors(float /*dt*/)
 {
-    log("SchedulerUpdateAndCustom::stopSelectors");
+    ax::print("SchedulerUpdateAndCustom::stopSelectors");
     unscheduleAllCallbacks();
 }
 
@@ -757,7 +757,7 @@ std::string SchedulerDelayAndRepeat::subtitle() const
 
 void SchedulerDelayAndRepeat::update(float dt)
 {
-    log("update called:%f", dt);
+    ax::print("update called:%f", dt);
 }
 
 // SchedulerTimeScale
@@ -1004,7 +1004,7 @@ public:
 
     ~TestNode2()
     {
-        ax::log("Delete TestNode (should not crash)");
+        ax::print("Delete TestNode (should not crash)");
         this->unscheduleAllCallbacks();
     }
 
@@ -1073,11 +1073,11 @@ void SchedulerIssueWithReschedule::onEnter()
 
     _scheduler->schedule(
         [this, verified](float dt) {
-            log("SchedulerIssueWithReschedule - first timer");
+            ax::print("SchedulerIssueWithReschedule - first timer");
 
             _scheduler->schedule(
                 [verified](float dt) {
-                    log("SchedulerIssueWithReschedule - second timer. OK");
+                    ax::print("SchedulerIssueWithReschedule - second timer. OK");
                     *verified = true;
                 },
                 this, 0.1f, 0, 0, false, "test_timer");
@@ -1088,13 +1088,13 @@ void SchedulerIssueWithReschedule::onEnter()
         [verified, status_text](float dt) {
             if (*verified)
             {
-                log("SchedulerIssueWithReschedule - test OK");
+                ax::print("SchedulerIssueWithReschedule - test OK");
                 status_text->setString("OK");
                 status_text->setColor(Color3B(0, 255, 0));
             }
             else
             {
-                log("SchedulerIssueWithReschedule - test failed!");
+                ax::print("SchedulerIssueWithReschedule - test failed!");
                 status_text->setString("Failed");
                 status_text->setColor(Color3B(255, 0, 0));
             }
@@ -1132,14 +1132,14 @@ schedule(global_function, ...)\n\
 
 static void ScheduleCallbackTest_global_callback(float dt)
 {
-    log("In the callback of schedule(global_function, ...), dt = %f", dt);
+    ax::print("In the callback of schedule(global_function, ...), dt = %f", dt);
 }
 
 void ScheduleCallbackTest::onEnter()
 {
     SchedulerTestLayer::onEnter();
 
-    _scheduler->schedule([](float dt) { log("In the callback of schedule(lambda, ...), dt = %f", dt); }, this, 1.0f,
+    _scheduler->schedule([](float dt) { ax::print("In the callback of schedule(lambda, ...), dt = %f", dt); }, this, 1.0f,
                          false, "lambda");
 
     _scheduler->schedule(AX_CALLBACK_1(ScheduleCallbackTest::callback, this), this, 1.0f, false, "member_function");
@@ -1149,7 +1149,7 @@ void ScheduleCallbackTest::onEnter()
 
 void ScheduleCallbackTest::callback(float dt)
 {
-    log("In the callback of schedule(AX_CALLBACK_1(XXX::member_function), this), this, ...), dt = %f", dt);
+    ax::print("In the callback of schedule(AX_CALLBACK_1(XXX::member_function), this), this, ...), dt = %f", dt);
 }
 
 // ScheduleUpdatePriority
@@ -1197,13 +1197,13 @@ void SchedulerIssue10232::onEnter()
 
     this->scheduleOnce(SEL_SCHEDULE(&SchedulerIssue2268::update), 0.25f);
 
-    this->scheduleOnce([](float /*dt*/) { log("SchedulerIssue10232:Schedules a lambda function"); }, 0.25f,
+    this->scheduleOnce([](float /*dt*/) { ax::print("SchedulerIssue10232:Schedules a lambda function"); }, 0.25f,
                        "SchedulerIssue10232");
 }
 
 void SchedulerIssue10232::update(float /*dt*/)
 {
-    log("SchedulerIssue10232:Schedules a selector");
+    ax::print("SchedulerIssue10232:Schedules a selector");
 }
 
 std::string SchedulerIssue10232::title() const
@@ -1446,7 +1446,7 @@ void SchedulerRemoveSelectorDuringCall::callback(float)
 {
     if (!_scheduled)
     {
-        ax::log("Error: unscheduled callback must not be called.");
+        ax::print("Error: unscheduled callback must not be called.");
         return;
     }
 

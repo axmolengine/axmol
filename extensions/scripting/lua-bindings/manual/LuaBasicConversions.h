@@ -58,11 +58,11 @@ extern std::unordered_map<cxx17::string_view, const char*> g_typeCast;
 void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const char* funcName = "");
 #endif
 
-#define LUA_PRECONDITION(condition, ...)                                                               \
-    if (!(condition))                                                                                  \
-    {                                                                                                  \
-        ax::log("lua: ERROR: File %s: Line: %d, Function: %s", __FILE__, __LINE__, __FUNCTION__); \
-        ax::log(__VA_ARGS__);                                                                     \
+#define LUA_PRECONDITION(condition, ...)                                                         \
+    if (!(condition))                                                                            \
+    {                                                                                            \
+        AXLOGE("lua: ERROR: File {}: Line: {}, Function: {}", __FILE__, __LINE__, __FUNCTION__); \
+        AXLOGE(##__VA_ARGS__);                                                                   \
     }
 
 /**
@@ -323,11 +323,8 @@ extern bool luaval_to_color4f(lua_State* L, int lo, Color4F* outValue, const cha
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_physics_material(lua_State* L,
-                                       int lo,
-                                       ax::PhysicsMaterial* outValue,
-                                       const char* funcName = "");
-#endif  //#if AX_USE_PHYSICS
+extern bool luaval_to_physics_material(lua_State* L, int lo, ax::PhysicsMaterial* outValue, const char* funcName = "");
+#endif  // #if AX_USE_PHYSICS
 
 /**
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
@@ -383,11 +380,7 @@ extern bool luaval_to_mat4(lua_State* L, int lo, ax::Mat4* outValue, const char*
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_array_of_vec2(lua_State* L,
-                                    int lo,
-                                    ax::Vec2** points,
-                                    int* numPoints,
-                                    const char* funcName = "");
+extern bool luaval_to_array_of_vec2(lua_State* L, int lo, ax::Vec2** points, int* numPoints, const char* funcName = "");
 
 /**
  * Get a ax::ValueVector object value by the argc numbers of Lua values in the stack.
@@ -749,10 +742,7 @@ bool luaval_to_object(lua_State* L, int lo, const char* type, T** ret, const cha
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_mesh_vertex_attrib(lua_State* L,
-                                         int lo,
-                                         ax::MeshVertexAttrib* ret,
-                                         const char* funcName = "");
+extern bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, ax::MeshVertexAttrib* ret, const char* funcName = "");
 
 /**
  * Get a pointer points to a std::vector<float> from a Lua array table in the stack.
@@ -804,10 +794,7 @@ extern bool luaval_to_quaternion(lua_State* L, int lo, ax::Quaternion* outValue,
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_texparams(lua_State* L,
-                                int lo,
-                                ax::Texture2D::TexParams* outValue,
-                                const char* funcName = "");
+extern bool luaval_to_texparams(lua_State* L, int lo, ax::Texture2D::TexParams* outValue, const char* funcName = "");
 
 /**
  * Get a ax::V3F_C4B_T2F object value from the given acceptable index of stack.
@@ -1002,7 +989,7 @@ extern void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo
  * @param data a ax::PhysicsContactData object.
  */
 extern void physics_contactdata_to_luaval(lua_State* L, const PhysicsContactData* data);
-#endif  //#if AX_USE_PHYSICS
+#endif  // #if AX_USE_PHYSICS
 
 /**
  * Push a table converted from a ax::AffineTransform object into the Lua stack.
@@ -1236,8 +1223,8 @@ void object_to_luaval(lua_State* L, const char* type, T* ret)
         {
             // use c style cast, T may not polymorphic
             ax::Ref* dynObject = (ax::Ref*)(ret);
-            int ID                  = (int)(dynObject->_ID);
-            int* luaID              = &(dynObject->_luaID);
+            int ID             = (int)(dynObject->_ID);
+            int* luaID         = &(dynObject->_luaID);
             toluafix_pushusertype_ccobject(L, ID, luaID, (void*)ret, type);
         }
         else
@@ -1368,7 +1355,6 @@ AX_LUA_DLL void uniformLocation_to_luaval(lua_State* L, const ax::backend::Unifo
 
 AX_LUA_DLL void program_activeattrs_to_luaval(lua_State* L,
                                               const hlookup::string_map<ax::backend::AttributeBindInfo>& map);
-
 
 /**
  * convert ax::ResourceData to lua object

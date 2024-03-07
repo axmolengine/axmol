@@ -1395,10 +1395,10 @@ void EventDispatcher::sortEventListenersOfSceneGraphPriority(std::string_view li
                      });
 
 #if DUMP_LISTENER_ITEM_PRIORITY_INFO
-    log("-----------------------------------");
+    AXLOGI("-----------------------------------");
     for (auto&& l : *sceneGraphListeners)
     {
-        log("listener priority: node ([%s]%p), priority (%d)", typeid(*l->_node).name(), l->_node,
+        AXLOGI("listener priority: node ([{}]{}), priority ({})", typeid(*l->_node).name(), l->_node,
             _nodePriorityMap[l->_node]);
     }
 #endif
@@ -1433,10 +1433,10 @@ void EventDispatcher::sortEventListenersOfFixedPriority(std::string_view listene
     listeners->setGt0Index(index);
 
 #if DUMP_LISTENER_ITEM_PRIORITY_INFO
-    log("-----------------------------------");
+    AXLOGI("-----------------------------------");
     for (auto&& l : *fixedListeners)
     {
-        log("listener priority: node (%p), fixed (%d)", l->_node, l->_fixedPriority);
+        AXLOGI("listener priority: node ({}), fixed ({})", l->_node, l->_fixedPriority);
     }
 #endif
 }

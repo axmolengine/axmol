@@ -505,6 +505,6 @@ void HttpClientClearRequestsTest::onHttpRequestCompleted(HttpClient* sender, Htt
     if (!response->isSucceed())
     {
         ax::print("response failed");
-        // log("error buffer: %s", response->getErrorBuffer());
+        // ax::print("error buffer: %s", response->getErrorBuffer());
     }
 }

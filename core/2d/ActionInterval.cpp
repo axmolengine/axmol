@@ -241,7 +241,7 @@ bool Sequence::initWithTwoActions(FiniteTimeAction* actionOne, FiniteTimeAction*
     AXASSERT(actionTwo != nullptr, "actionTwo can't be nullptr!");
     if (actionOne == nullptr || actionTwo == nullptr)
     {
-        log("Sequence::initWithTwoActions error: action is nullptr!!");
+        AXLOGE("Sequence::initWithTwoActions error: action is nullptr!!");
         return false;
     }
 
@@ -295,12 +295,12 @@ void Sequence::startWithTarget(Node* target)
 {
     if (target == nullptr)
     {
-        log("Sequence::startWithTarget error: target is nullptr!");
+        AXLOGE("Sequence::startWithTarget error: target is nullptr!");
         return;
     }
     if (_actions[0] == nullptr || _actions[1] == nullptr)
     {
-        log("Sequence::startWithTarget error: _actions[0] or _actions[1] is nullptr!");
+        AXLOGE("Sequence::startWithTarget error: _actions[0] or _actions[1] is nullptr!");
         return;
     }
     if (_duration > FLT_EPSILON)
@@ -552,7 +552,7 @@ bool RepeatForever::initWithAction(ActionInterval* action)
     AXASSERT(action != nullptr, "action can't be nullptr!");
     if (action == nullptr)
     {
-        log("RepeatForever::initWithAction error:action is nullptr!");
+        AXLOGE("RepeatForever::initWithAction error:action is nullptr!");
         return false;
     }
 
@@ -697,7 +697,7 @@ bool Spawn::initWithTwoActions(FiniteTimeAction* action1, FiniteTimeAction* acti
     AXASSERT(action2 != nullptr, "action2 can't be nullptr!");
     if (action1 == nullptr || action2 == nullptr)
     {
-        log("Spawn::initWithTwoActions error: action is nullptr!");
+        AXLOGE("Spawn::initWithTwoActions error: action is nullptr!");
         return false;
     }
 
@@ -750,12 +750,12 @@ void Spawn::startWithTarget(Node* target)
 {
     if (target == nullptr)
     {
-        log("Spawn::startWithTarget error: target is nullptr!");
+        AXLOGE("Spawn::startWithTarget error: target is nullptr!");
         return;
     }
     if (_one == nullptr || _two == nullptr)
     {
-        log("Spawn::startWithTarget error: _one or _two is nullptr!");
+        AXLOGE("Spawn::startWithTarget error: _one or _two is nullptr!");
         return;
     }
 
@@ -1545,7 +1545,7 @@ bool JumpBy::initWithDuration(float duration, const Vec2& position, float height
     AXASSERT(jumps >= 0, "Number of jumps must be >= 0");
     if (jumps < 0)
     {
-        log("JumpBy::initWithDuration error: Number of jumps must be >= 0");
+        AXLOGE("JumpBy::initWithDuration error: Number of jumps must be >= 0");
         return false;
     }
 
@@ -1626,7 +1626,7 @@ bool JumpTo::initWithDuration(float duration, const Vec2& position, float height
     AXASSERT(jumps >= 0, "Number of jumps must be >= 0");
     if (jumps < 0)
     {
-        log("JumpTo::initWithDuration error:Number of jumps must be >= 0");
+        AXLOGE("JumpTo::initWithDuration error:Number of jumps must be >= 0");
         return false;
     }
 
@@ -2002,7 +2002,7 @@ bool Blink::initWithDuration(float duration, int blinks)
     AXASSERT(blinks >= 0, "blinks should be >= 0");
     if (blinks < 0)
     {
-        log("Blink::initWithDuration error:blinks should be >= 0");
+        AXLOGE("Blink::initWithDuration error:blinks should be >= 0");
         return false;
     }
 
@@ -2386,7 +2386,7 @@ bool ReverseTime::initWithAction(FiniteTimeAction* action)
     AXASSERT(action != _other, "action doesn't equal to _other!");
     if (action == nullptr || action == _other)
     {
-        log("ReverseTime::initWithAction error: action is null or action equal to _other");
+        AXLOGE("ReverseTime::initWithAction error: action is null or action equal to _other");
         return false;
     }
 
@@ -2475,7 +2475,7 @@ bool Animate::initWithAnimation(Animation* animation)
     AXASSERT(animation != nullptr, "Animate: argument Animation must be non-nullptr");
     if (animation == nullptr)
     {
-        log("Animate::initWithAnimation: argument Animation must be non-nullptr");
+        AXLOGE("Animate::initWithAnimation: argument Animation must be non-nullptr");
         return false;
     }
 

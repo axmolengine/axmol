@@ -221,13 +221,13 @@ void Issue2572::update(float dt)
         case 0:
         case 1:
         case 2:
-            log("--child count-- %zd", _childList.size());
+            ax::print("--child count-- %zd", _childList.size());
             for (const auto& obj : _childList)
             {
                 Sprite* obstacle = dynamic_cast<Sprite*>(obj);
-                log("child position : (%.2f, %.2f)", obstacle->getPositionX(), obstacle->getPositionY());
+                ax::print("child position : (%.2f, %.2f)", obstacle->getPositionX(), obstacle->getPositionY());
             }
-            log("-------------------");
+            ax::print("-------------------");
             _printCount++;
             break;
         case 3:

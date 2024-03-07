@@ -41,11 +41,11 @@ namespace ax { namespace network {
             ,bytesReceived(0)
             ,fetch(NULL)
             {
-                DLLOG("Construct DownloadTaskEmscripten: %p", this);
+                AXLOGD("Construct DownloadTaskEmscripten: {}", fmt::ptr(this));
             }
             virtual  ~DownloadTaskEmscripten()
             {
-                DLLOG("Destruct DownloadTaskEmscripten: %p", this);
+                AXLOGD("Destruct DownloadTaskEmscripten: {}", fmt::ptr(this));
             }
 
             int bytesReceived;
@@ -58,12 +58,12 @@ namespace ax { namespace network {
         : _id(++sDownloaderCounter)
         , hints(hints)
         {
-            DLLOG("Construct DownloaderEmscripten: %p", this);
+            AXLOGD("Construct DownloaderEmscripten: {}", fmt::ptr(this));
         }
 
         DownloaderEmscripten::~DownloaderEmscripten()
         {
-            DLLOG("Destruct DownloaderEmscripten: %p", this);
+            AXLOGD("Destruct DownloaderEmscripten: {}", fmt::ptr(this));
             for (auto iter = _taskMap.begin(); iter != _taskMap.end(); ++iter)
             {
                 if(iter->second->fetch != NULL) {
@@ -92,7 +92,7 @@ namespace ax { namespace network {
             DownloadTaskEmscripten *coTask = new DownloadTaskEmscripten(fetch->id);
             coTask->task = task;
             
-            DLLOG("DownloaderEmscripten::createCoTask id: %d", coTask->id);
+            AXLOGD("DownloaderEmscripten::createCoTask id: {}", coTask->id);
             _taskMap.insert(make_pair(coTask->id, coTask));
         }
 
@@ -100,12 +100,12 @@ namespace ax { namespace network {
         {
             unsigned int taskId = fetch->id;
             uint64_t size = fetch->numBytes;
-            DLLOG("DownloaderEmscripten::onDataLoad(taskId: %d, size: %d)", taskId, size);
+            AXLOGD("DownloaderEmscripten::onDataLoad(taskId: {}, size: {})", taskId, size);
             DownloaderEmscripten* downloader = reinterpret_cast<DownloaderEmscripten*>(fetch->userData);
             auto iter = downloader->_taskMap.find(taskId);
             if (downloader->_taskMap.end() == iter)
             {
-                DLLOG("DownloaderEmscripten::onDataLoad can't find task with id: %i, size: %i", taskId, size);
+                AXLOGD("DownloaderEmscripten::onDataLoad can't find task with id: {}, size: {}", taskId, size);
                 return;
             }
             DownloadTaskEmscripten *coTask = iter->second;
@@ -128,12 +128,12 @@ namespace ax { namespace network {
         {
             unsigned int taskId = fetch->id;
             uint64_t size = fetch->numBytes;
-            DLLOG("DownloaderEmscripten::onLoad(taskId: %i, size: %i)", taskId, size);
+            AXLOGD("DownloaderEmscripten::onLoad(taskId: {}, size: {})", taskId, size);
             DownloaderEmscripten* downloader = reinterpret_cast<DownloaderEmscripten*>(fetch->userData);
             auto iter = downloader->_taskMap.find(taskId);
             if (downloader->_taskMap.end() == iter)
             {
-                DLLOG("DownloaderEmscripten::onLoad can't find task with id: %i, size: %i", taskId, size);
+                AXLOGD("DownloaderEmscripten::onLoad can't find task with id: {}, size: {}", taskId, size);
                 return;
             }
             DownloadTaskEmscripten *coTask = iter->second;
@@ -214,17 +214,17 @@ namespace ax { namespace network {
             uint64_t dlTotal = fetch->totalBytes;
             uint64_t dlNow = fetch->dataOffset;
             unsigned int taskId = fetch->id;
-            DLLOG("DownloaderEmscripten::onProgress(taskId: %i, dlnow: %d, dltotal: %d)", taskId, dlNow, dlTotal);
+            AXLOGD("DownloaderEmscripten::onProgress(taskId: {}, dlnow: {}, dltotal: {})", taskId, dlNow, dlTotal);
             DownloaderEmscripten* downloader = reinterpret_cast<DownloaderEmscripten*>(fetch->userData);
             auto iter = downloader->_taskMap.find(taskId);
             if (downloader->_taskMap.end() == iter)
             {
-                DLLOG("DownloaderEmscripten::onProgress can't find task with id: %i", taskId);
+                AXLOGD("DownloaderEmscripten::onProgress can't find task with id: {}", taskId);
                 return;
             }
 
             if (dlTotal == 0) {
-                DLLOG("DownloaderEmscripten::onProgress dlTotal unknown, usually caused by unknown content-length header %i", taskId);
+                AXLOGD("DownloaderEmscripten::onProgress dlTotal unknown, usually caused by unknown content-length header {}", taskId);
                 return;
             }
 
@@ -238,13 +238,13 @@ namespace ax { namespace network {
         void DownloaderEmscripten::onError(emscripten_fetch_t *fetch)
         {
             unsigned int taskId = fetch->id;
-            DLLOG("DownloaderEmscripten::onLoad(taskId: %i)", taskId);
+            AXLOGD("DownloaderEmscripten::onLoad(taskId: {})", taskId);
             DownloaderEmscripten* downloader = reinterpret_cast<DownloaderEmscripten*>(fetch->userData);
             auto iter = downloader->_taskMap.find(taskId);
             if (downloader->_taskMap.end() == iter)
             {
                 emscripten_fetch_close(fetch);
-                DLLOG("DownloaderEmscripten::onLoad can't find task with id: %i", taskId);
+                AXLOGD("DownloaderEmscripten::onLoad can't find task with id: {}", taskId);
                 return;
             }
             DownloadTaskEmscripten *coTask = iter->second;

@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2017 Chukong Technologies
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -156,17 +157,17 @@ void Ref::printLeaks()
     // Dump Ref object memory leaks
     if (__refAllocationList.empty())
     {
-        log("[memory] All Ref objects successfully cleaned up (no leaks detected).\n");
+        AXLOGI("[memory] All Ref objects successfully cleaned up (no leaks detected).\n");
     }
     else
     {
-        log("[memory] WARNING: %d Ref objects still active in memory.\n", (int)__refAllocationList.size());
+        AXLOGI("[memory] WARNING: {} Ref objects still active in memory.\n", (int)__refAllocationList.size());
 
         for (const auto& ref : __refAllocationList)
         {
             AX_ASSERT(ref);
             const char* type = typeid(*ref).name();
-            log("[memory] LEAK: Ref object '%s' still active with reference count %d.\n", (type ? type : ""),
+            AXLOGI("[memory] LEAK: Ref object '{}' still active with reference count {}.\n", (type ? type : ""),
                 ref->getReferenceCount());
         }
     }
@@ -187,7 +188,7 @@ static void untrackRef(Ref* ref)
     auto iter = std::find(__refAllocationList.begin(), __refAllocationList.end(), ref);
     if (iter == __refAllocationList.end())
     {
-        log("[memory] CORRUPTION: Attempting to free (%s) with invalid ref tracking record.\n", typeid(*ref).name());
+        AXLOGI("[memory] CORRUPTION: Attempting to free ({}) with invalid ref tracking record.\n", typeid(*ref).name());
         return;
     }
 

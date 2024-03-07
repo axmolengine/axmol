@@ -9,7 +9,7 @@ SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 
 SpineSkeletonDataCache::SpineSkeletonDataCache()
 {
-    _reportError = &ax::log;
+    _reportError = &ax::print;
 }
 
 void SpineSkeletonDataCache::setErrorReportFunc(void (*errorfunc)(const char* pszFormat, ...))
@@ -142,7 +142,7 @@ SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 
 SpineSkeletonDataCache::SpineSkeletonDataCache()
 {
-    _reportError = &ax::log;
+    _reportError = &ax::print;
 }
 
 void SpineSkeletonDataCache::setErrorReportFunc(void (*errorfunc)(const char* pszFormat, ...))

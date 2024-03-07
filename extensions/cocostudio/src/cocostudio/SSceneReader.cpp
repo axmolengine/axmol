@@ -160,7 +160,7 @@ ax::Node* SceneReader::createNodeWithSceneFile(
     }
     else
     {
-        log("read file [%s] error!\n", fileName.data());
+        AXLOGW("read file [{}] error!\n", fileName);
     }
     return nullptr;
 }

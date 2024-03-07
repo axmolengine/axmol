@@ -278,13 +278,13 @@ int astc_decompress_image(const uint8_t* in,
         benchmark_printer(const char* fmt, int w, int h, float den)
             : _fmt(fmt), _w(w), _h(h), _den(den), _start(yasio::highp_clock())
         {}
-        ~benchmark_printer() { ax::log(_fmt, _w, _h, (yasio::highp_clock() - _start) / _den); }
+        ~benchmark_printer() { AXLOGI(_fmt, _w, _h, (yasio::highp_clock() - _start) / _den); }
         const char* _fmt;
         int _w, _h;
         float _den;
         yasio::highp_time_t _start;
     };
-    benchmark_printer __printer("decompress astc image (%dx%d) cost: %.3lf(ms)", dim_x, dim_y, (float)std::milli::den);
+    benchmark_printer __printer("decompress astc image ({}x{}) cost: {}(ms)", dim_x, dim_y, (float)std::milli::den);
 #endif
     return astc_decompress_job_manager::get_instance()->decompress_parallel_sync(in, inlen, out, dim_x, dim_y, block_x,
                                                                                  block_y);

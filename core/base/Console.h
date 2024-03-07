@@ -42,24 +42,96 @@ typedef SSIZE_T ssize_t;
 #include <functional>
 #include <string>
 #include <mutex>
+#include <array>
 #include <stdarg.h>
 #include "yasio/io_watcher.hpp"
 
 #include "base/Ref.h"
 #include "base/Macros.h"
+#include "base/bitmask.h"
 #include "platform/PlatformMacros.h"
+
+#include "fmt/compile.h"
 
 NS_AX_BEGIN
 
-/// The max length of CCLog message.
-static const int MAX_LOG_LENGTH = 16 * 1024;
+#pragma region The new Log API since axmol-2.1.3
+
+enum class LogLevel
+{
+    Debug,
+    Info,
+    Warn,
+    Error,
+    Silent /* only for setLogLevel(); must be last */
+};
+
+enum class LogFmtFlag
+{
+    Null,
+    Level     = 1,
+    TimeStamp = 1 << 1,
+    ProcessId = 1 << 2,
+    ThreadId  = 1 << 3,
+    Full      = Level | TimeStamp | ProcessId | ThreadId,
+};
+
+AX_ENABLE_BITMASK_OPS(LogFmtFlag);
+
+class ILogOutput
+{
+public:
+    virtual ~ILogOutput() {}
+    virtual void write(std::string&&, LogLevel) = 0;
+};
+
+/* @brief control log level */
+AX_API void setLogLevel(LogLevel level);
+AX_API LogLevel getLogLevel();
+
+/* @brief control log prefix format */
+AX_API void setLogFmtFlag(LogFmtFlag flags);
+
+/* @brief set log output */
+AX_API void setLogOutput(ILogOutput* output);
+
+/*
+ * @brief lowlevel print log message
+ * @param message the message to print
+ * @level the level of current log item see also LogLevel
+ * @prefixSize the prefix size
+ * @tag optional, the log tag of current log item
+ */
+AX_API void printLog(std::string&& message, LogLevel level, size_t prefixSize, const char* tag);
+
+template <typename _FmtType, typename... _Types>
+inline void printLogT(LogLevel level, _FmtType&& fmt, std::string_view prefix, _Types&&... args)
+{
+    if (getLogLevel() <= level)
+    {
+        auto message = fmt::format(std::forward<_FmtType>(fmt), prefix, std::forward<_Types>(args)...);
+        printLog(std::move(message), level, prefix.size(), "axmol");
+    }
+}
+
+using LogBufferType = std::array<char, 128>;
+// for internal use make log prefix: D/[2024-02-29 00:00:00.123][PID:][TID:]
+AX_API std::string_view makeLogPrefix(LogBufferType&& stack_buffer, LogLevel level);
+
+#define AXLOG_WITH_LEVEL(level, fmtOrMsg, ...) \
+    ax::printLogT(level, FMT_COMPILE("{}" fmtOrMsg "\n"), ax::makeLogPrefix(ax::LogBufferType{}, level), ##__VA_ARGS__)
+
+#define AXLOGD(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Debug, fmtOrMsg, ##__VA_ARGS__)
+#define AXLOGI(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Info, fmtOrMsg, ##__VA_ARGS__)
+#define AXLOGW(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Warn, fmtOrMsg, ##__VA_ARGS__)
+#define AXLOGE(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Error, fmtOrMsg, ##__VA_ARGS__)
+
+#pragma endregion
 
 /**
  @brief Output Debug message.
  */
-void AX_DLL print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
-
-/* AX_DEPRECATED_ATTRIBUTE*/ void AX_DLL log(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use print instead
+/* AX_DEPRECATED_ATTRIBUTE*/ AX_API void print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use AXLOGD instead
 
 /** Console is helper class that lets the developer control the game from TCP connection.
  Console will spawn a new thread that will listen to a specified TCP port.
@@ -195,11 +267,6 @@ public:
     void delCommand(std::string_view cmdName);
     void delSubCommand(std::string_view cmdName, std::string_view subCmdName);
     void delSubCommand(Command& cmd, std::string_view subCmdName);
-
-    /** print something in the console */
-    void print(const char* buf);
-
-    AX_DEPRECATED_ATTRIBUTE void log(const char* buf) { print(buf); }
 
     /**
      * set bind address

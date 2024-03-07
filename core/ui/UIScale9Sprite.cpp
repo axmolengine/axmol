@@ -125,7 +125,7 @@ Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(std::string_view spriteFra
     }
     AX_SAFE_DELETE(ret);
 
-    log("Could not allocate Scale9Sprite()");
+    AXLOGE("Could not allocate Scale9Sprite()");
     return nullptr;
 }
 

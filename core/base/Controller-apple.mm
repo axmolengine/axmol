@@ -2,6 +2,7 @@
  Copyright (c) 2014 cocos2d-x.org
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -154,7 +155,7 @@ void Controller::startDiscoveryController()
 
           if (iter == s_allController.end())
           {
-              log("disconnect:Could not find the controller");
+              AXLOGW("disconnect:Could not find the controller");
               return;
           }
 
@@ -317,7 +318,7 @@ void Controller::registerListeners()
 
       if (iter == s_allController.end())
       {
-          log("Could not find the controller");
+          AXLOGW("Could not find the controller");
           return;
       }
 

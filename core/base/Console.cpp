@@ -54,85 +54,157 @@
 #include "base/UTF8.h"
 
 #include "yasio/xxsocket.hpp"
-
-// !FIXME: the previous version of ax::log not thread safe
-// since axmol make it multi-threading safe by default
-#if !defined(AX_LOG_MULTITHREAD)
-#    define AX_LOG_MULTITHREAD 1
-#endif
+#include "yasio/utils.hpp"
 
 #if !defined(AX_LOG_TO_CONSOLE)
 #    define AX_LOG_TO_CONSOLE 1
 #endif
 
-#define AX_VSNPRINTF_BUFFER_LENGTH 512
-
 NS_AX_BEGIN
 
 extern const char* axmolVersion(void);
 
-#define PROMPT "> "
+#define PROMPT                    "> "
 #define DEFAULT_COMMAND_SEPARATOR '|'
 
 static const size_t SEND_BUFSIZ = 512;
 
-/** private functions */
-namespace
-{
-#if defined(__MINGW32__)
-// inet
-const char* inet_ntop(int af, const void* src, char* dst, int cnt)
-{
-    struct sockaddr_in srcaddr;
-
-    memset(&srcaddr, 0, sizeof(struct sockaddr_in));
-    memcpy(&(srcaddr.sin_addr), src, sizeof(srcaddr.sin_addr));
-
-    srcaddr.sin_family = af;
-    if (WSAAddressToStringA((struct sockaddr*)&srcaddr, sizeof(struct sockaddr_in), 0, dst, (LPDWORD)&cnt) != 0)
-    {
-        return nullptr;
-    }
-    return dst;
-}
+#pragma region The new Log API since axmol-2.1.3
+#if defined(_AX_DEBUG) && _AX_DEBUG == 1
+static LogLevel s_logLevel = LogLevel::Debug;
+#else
+static LogLevel s_logLevel = LogLevel::Info;
 #endif
 
-//
-// Free functions to log
-//
+static LogFmtFlag s_logFmtFlags = LogFmtFlag::Null;
+static ILogOutput* s_logOutput  = nullptr;
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-void SendLogToWindow(const char* log)
+AX_API void setLogLevel(LogLevel level)
 {
-    static const int AXLOG_STRING_TAG = 1;
-    // Send data as a message
-    COPYDATASTRUCT myCDS;
-    myCDS.dwData = AXLOG_STRING_TAG;
-    myCDS.cbData = (DWORD)strlen(log) + 1;
-    myCDS.lpData = (PVOID)log;
-    if (Director::getInstance()->getGLView())
-    {
-        HWND hwnd = Director::getInstance()->getGLView()->getWin32Window();
-        // use non-block version of SendMessage
-        PostMessage(hwnd, WM_COPYDATA, (WPARAM)(HWND)hwnd, (LPARAM)(LPVOID)&myCDS);
-    }
+    s_logLevel = level;
 }
+
+AX_API LogLevel getLogLevel()
+{
+    return s_logLevel;
+}
+
+AX_API void setLogFmtFlag(LogFmtFlag flags)
+{
+    s_logFmtFlags = flags;
+}
+
+AX_API void setLogOutput(ILogOutput* output)
+{
+    s_logOutput = output;
+}
+
+AX_API std::string_view makeLogPrefix(LogBufferType&& stack_buffer, LogLevel level)
+{
+    if (s_logFmtFlags != LogFmtFlag::Null)
+    {
+#if defined(_WIN32)
+#    define xmol_getpid()       (uintptr_t)::GetCurrentProcessId()
+#    define xmol_gettid()       (uintptr_t)::GetCurrentThreadId()
+#    define localtime_r(utc, t) ::localtime_s(t, utc)
+#else
+#    define xmol_getpid() (uintptr_t)::getpid()
+#    define xmol_gettid() (uintptr_t)::pthread_self()
 #endif
-}  // namespace
+        size_t offset = 0;
+        if (bitmask::any(s_logFmtFlags, LogFmtFlag::Level))
+        {
+            char levelName;
+            switch (level)
+            {
+            case LogLevel::Debug:
+                levelName = 'D';
+                break;
+            case LogLevel::Info:
+                levelName = 'I';
+                break;
+            case LogLevel::Warn:
+                levelName = 'W';
+                break;
+            case LogLevel::Error:
+                levelName = 'E';
+                break;
+            default:
+                levelName = '?';
+            }
+            offset += fmt::format_to_n(stack_buffer.data(), stack_buffer.size(), "{}/", levelName).size;
+        }
+        if (bitmask::any(s_logFmtFlags, LogFmtFlag::TimeStamp))
+        {
+            struct tm ts = {0};
+            auto tv_msec = yasio::clock<yasio::system_clock_t>();
+            auto tv_sec  = static_cast<time_t>(tv_msec / std::milli::den);
+            localtime_r(&tv_sec, &ts);
+            offset += fmt::format_to_n(stack_buffer.data() + offset, stack_buffer.size() - offset,
+                                       "[{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}.{:03d}]", ts.tm_year + 1900,
+                                       ts.tm_mon + 1, ts.tm_mday, ts.tm_hour, ts.tm_min, ts.tm_sec,
+                                       static_cast<int>(tv_msec % std::milli::den))
+                          .size;
+        }
+        if (bitmask::any(s_logFmtFlags, LogFmtFlag::ProcessId))
+            offset += fmt::format_to_n(stack_buffer.data() + offset, stack_buffer.size() - offset, "[PID:{:x}]",
+                                       xmol_getpid())
+                          .size;
+        if (bitmask::any(s_logFmtFlags, LogFmtFlag::ThreadId))
+            offset += fmt::format_to_n(stack_buffer.data() + offset, stack_buffer.size() - offset, "[TID:{:x}]",
+                                       xmol_gettid())
+                          .size;
+        return std::string_view{stack_buffer.data(), offset};
+    }
+    else
+        return std::string_view{};
+}
 
-static void print_impl(std::string& buf) {
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-    __android_log_print(ANDROID_LOG_DEBUG, "axmol debug info", "%s", buf.c_str());
-
-#elif defined(_WIN32)
-    buf.push_back('\n');
-
+AX_DLL void printLog(std::string&& message, LogLevel level, size_t prefixSize, const char* tag)
+{
+#if defined(__ANDROID__)
+    struct trim_one_eol
+    {
+        explicit trim_one_eol(std::string& v) : value(v)
+        {
+            trimed = !v.empty() && v.back() == '\n';
+            if (trimed)
+                value.back() = '\0';
+        }
+        ~trim_one_eol()
+        {
+            if (trimed)
+                value.back() = '\n';
+        }
+        operator const char* const() const { return value.c_str(); }
+        std::string& value;
+        bool trimed{false};
+    };
+    int prio;
+    switch(level) {
+        case LogLevel::Info:
+            prio = ANDROID_LOG_INFO;
+            break;
+        case LogLevel::Warn:
+            prio = ANDROID_LOG_WARN;
+            break;
+        case LogLevel::Error:
+            prio = ANDROID_LOG_ERROR;
+            break;
+        default:
+            prio = ANDROID_LOG_DEBUG;
+    }
+    __android_log_print(prio, tag, "%s", static_cast<const char*>(trim_one_eol{message}) + prefixSize);
+#else
+    AX_UNUSED_PARAM(prefixSize);
+    AX_UNUSED_PARAM(tag);
+#    if defined(_WIN32)
     // print to debugger output window
-    std::wstring wbuf = ntcvt::from_chars(buf);
+    std::wstring wbuf = ntcvt::from_chars(message);
 
     OutputDebugStringW(wbuf.c_str());
 
-#    if AX_LOG_TO_CONSOLE
+#        if AX_LOG_TO_CONSOLE
     auto hStdout = ::GetStdHandle(STD_OUTPUT_HANDLE);
     if (hStdout)
     {
@@ -142,25 +214,20 @@ static void print_impl(std::string& buf) {
         DWORD wcch = static_cast<DWORD>(wbuf.size());
         ::WriteConsoleW(hStdout, wbuf.c_str(), wcch, nullptr, 0);
     }
-#    endif
-
-#    if !AX_LOG_MULTITHREAD
-    // print to log window
-    SendLogToWindow(buf.c_str());
-#    endif
-#else
-    buf.push_back('\n');
+#        endif
+#    else
     // Linux, Mac, iOS, etc
-    fprintf(stdout, "%s", buf.c_str());
+    fprintf(stdout, "%s", message.c_str());
     fflush(stdout);
+#    endif
 #endif
 
-#if !AX_LOG_MULTITHREAD
-    Director::getInstance()->getConsole()->print(buf.c_str());
-#endif
+    if (s_logOutput)
+        s_logOutput->write(std::move(message), level);
 }
+#pragma endregion
 
-void print(const char* format, ...)
+AX_API void print(const char* format, ...)
 {
     va_list args;
 
@@ -168,18 +235,7 @@ void print(const char* format, ...)
     auto buf = StringUtils::vformat(format, args);
     va_end(args);
 
-    print_impl(buf);
-}
-
-void log(const char* format, ...)
-{
-    va_list args;
-
-    va_start(args, format);
-    auto buf = StringUtils::vformat(format, args);
-    va_end(args);
-
-    print_impl(buf);
+    printLog(std::move(buf += '\n'), LogLevel::Debug, 0, "axmol debug info");
 }
 
 // FIXME: Deprecated
@@ -513,19 +569,20 @@ bool Console::listenOnTCP(int port)
         return ipsv == ipsv_dual_stack;
     });
 
-    const char* finalBindAddr = this->_bindAddress.empty() ? (ipsv != ipsv_ipv6 ? "0.0.0.0" : ("::")) : this->_bindAddress.c_str();
+    const char* finalBindAddr =
+        this->_bindAddress.empty() ? (ipsv != ipsv_ipv6 ? "0.0.0.0" : ("::")) : this->_bindAddress.c_str();
     ip::endpoint ep{finalBindAddr, static_cast<u_short>(port)};
     if (sock.pserve(ep) != 0)
     {
         int ec = xxsocket::get_last_errno();
-        ax::print("Console: open server failed, ec:%d", ec);
+        AXLOGW("Console: open server failed, ec:{}", ec);
         return false;
     }
 
     if (ep.af() == AF_INET)
-        ax::print("Console: IPV4 server is listening on %s", ep.to_string().c_str());
+        AXLOGI("Console: IPV4 server is listening on {}", ep.to_string());
     else if (ep.af() == AF_INET6)
-        ax::print("Console: IPV6 server is listening on %s", ep.to_string().c_str());
+        AXLOGI("Console: IPV6 server is listening on {}", ep.to_string());
 
     return listenOnFileDescriptor(sock.release_handle());
 }
@@ -534,7 +591,7 @@ bool Console::listenOnFileDescriptor(int fd)
 {
     if (_running)
     {
-        ax::print("Console already started. 'stop' it before calling 'listen' again");
+        AXLOGW("Console already started. 'stop' it before calling 'listen' again");
         return false;
     }
 
@@ -636,16 +693,6 @@ void Console::delSubCommand(Command& cmd, std::string_view subCmdName)
     cmd.delSubCommand(subCmdName);
 }
 
-void Console::print(const char* buf)
-{
-    if (_sendDebugStrings)
-    {
-        _DebugStringsMutex.lock();
-        _DebugStrings.emplace_back(buf);
-        _DebugStringsMutex.unlock();
-    }
-}
-
 void Console::setBindAddress(std::string_view address)
 {
     _bindAddress = address;
@@ -675,7 +722,7 @@ void Console::loop()
         {
             /* error */
             if (errno != EINTR)
-                ax::print("Abnormal error in poll_io()\n");
+                AXLOGW("Abnormal error in poll_io()\n");
             continue;
         }
         else if (nready == 0)
@@ -713,7 +760,7 @@ void Console::loop()
                     int n = 0;
                     if (ioctl(fd, FIONREAD, &n) < 0)
                     {
-                        ax::log("Abnormal error in ioctl()\n");
+                        AXLOGE("Abnormal error in ioctl()\n");
                         break;
                     }
 #endif
@@ -1236,7 +1283,7 @@ void Console::commandResolution(socket_native_type /*fd*/, std::string_view args
     Scheduler* sched = Director::getInstance()->getScheduler();
     sched->runOnAxmolThread([=]() {
         Director::getInstance()->getGLView()->setDesignResolutionSize(width, height,
-                                                                          static_cast<ResolutionPolicy>(policy));
+                                                                      static_cast<ResolutionPolicy>(policy));
     });
 }
 
