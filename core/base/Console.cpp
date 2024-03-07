@@ -217,7 +217,7 @@ AX_DLL void printLog(std::string&& message, LogLevel level, size_t prefixSize, c
         }
     }
     if (!color.has_value())
-    { // write normal color text to console
+    {  // write normal color text to console
 #    if defined(_WIN32)
         auto hStdout = ::GetStdHandle(level != LogLevel::Error ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE);
         if (hStdout)
@@ -228,12 +228,22 @@ AX_DLL void printLog(std::string&& message, LogLevel level, size_t prefixSize, c
             ::WriteFile(hStdout, message.c_str(), static_cast<DWORD>(message.size()), nullptr, nullptr);
         }
 #    else
-        // Linux, Mac, iOS, etc
+       // Linux, Mac, iOS, etc
         auto fd = ::fileno(level != LogLevel::Error ? stdout : stderr);
         ::write(fd, message.c_str(), message.size());
 #    endif
-    } else
+    }
+    else
+    {
         fmt::print(color.value(), "{}", message);
+
+         // reset color on non-win32 platforms
+#    if !defined(_WIN32)
+        constexpr auto default_color = "\x1b[0m"sv;
+        auto fd                      = ::fileno(level != LogLevel::Error ? stdout : stderr);
+        ::write(fd, default_color.data(), default_color.size());
+#    endif
+    }
 #endif
 
     if (s_logOutput)
