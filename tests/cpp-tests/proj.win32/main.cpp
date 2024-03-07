@@ -34,6 +34,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 
     #include "platform/win32/EmbedConsole.h"
 
+    ax::setLogFmtFlag(ax::LogFmtFlag::Full);
+
     // create the application instance
     AppDelegate app;
     return Application::getInstance()->run();
