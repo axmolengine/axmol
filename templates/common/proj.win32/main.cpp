@@ -27,6 +27,9 @@
 #include "AppDelegate.h"
 #include "axmol.h"
 
+// Uncomment to enable win32 console
+// #define USE_WIN32_CONSOLE
+
 USING_NS_AX;
 
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
@@ -36,19 +39,12 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 
     // create the application instance
 #ifdef USE_WIN32_CONSOLE
-    AllocConsole();
-    freopen("CONIN$", "r", stdin);
-    freopen("CONOUT$", "w", stdout);
-    freopen("CONOUT$", "w", stderr);
+#    include "platform/win32/EmbedConsole.h"
 #endif
 
     // create the application instance
     AppDelegate app;
     int ret = Application::getInstance()->run();
-
-#ifdef USE_WIN32_CONSOLE
-    FreeConsole();
-#endif
 
     return ret;
 }

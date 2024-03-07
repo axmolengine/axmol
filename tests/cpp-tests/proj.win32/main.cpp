@@ -32,6 +32,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
+    #include "platform/win32/EmbedConsole.h"
+
     // create the application instance
     AppDelegate app;
     return Application::getInstance()->run();
