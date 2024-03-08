@@ -80,8 +80,8 @@ AX_ENABLE_BITMASK_OPS(LogFmtFlag);
 
 class LogItem
 {
-    friend LogItem& preprocessLog(LogItem&& logItem);
-    friend void outputLog(LogItem& item, const char* tag);
+    friend AX_API LogItem& preprocessLog(LogItem&& logItem);
+    friend AX_API void outputLog(LogItem& item, const char* tag);
 
 public:
     static constexpr auto COLOR_PREFIX_SIZE    = 5;                      // \x1b[00m
@@ -160,7 +160,7 @@ inline void printLogT(LogLevel level, _FmtType&& fmt, LogItem& item, _Types&&...
 }
 
 #define AXLOG_WITH_LEVEL(level, fmtOrMsg, ...) \
-    ax::printLogT(level, FMT_COMPILE("{}" fmtOrMsg "\n"), preprocessLog(ax::LogItem{level}), ##__VA_ARGS__)
+    ax::printLogT(level, FMT_COMPILE("{}" fmtOrMsg "\n"), ax::preprocessLog(ax::LogItem{level}), ##__VA_ARGS__)
 
 #define AXLOGD(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Debug, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGI(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Info, fmtOrMsg, ##__VA_ARGS__)
