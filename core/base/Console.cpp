@@ -167,6 +167,8 @@ AX_API LogItem& preprocessLog(LogItem&& item)
     return item;
 }
 
+static int hints = 0;
+
 AX_DLL void outputLog(LogItem& item, const char* tag)
 {
 #if defined(__ANDROID__)
@@ -239,12 +241,12 @@ AX_API void print(const char* format, ...)
     va_list args;
 
     va_start(args, format);
-    auto buf = StringUtils::vformat(format, args);
+    auto message = StringUtils::vformat(format, args);
     va_end(args);
 
-    auto& item = preprocessLog(LogItem{LogLevel::Debug});
-    item.format(FMT_COMPILE("{}\n"), buf);
-    outputLog(item, "axmol debug info");
+    if (!message.empty())
+        outputLog(LogItem::vformat(FMT_COMPILE("{}{}\n"), preprocessLog(LogItem{LogLevel::Silent}), message),
+                  "axmol debug info");
 }
 
 //
