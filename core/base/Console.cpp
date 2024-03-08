@@ -98,7 +98,7 @@ AX_API void setLogOutput(ILogOutput* output)
     s_logOutput = output;
 }
 
-AX_API LogItem& makeLogItem(LogItem&& item)
+AX_API LogItem& preprocessLog(LogItem&& item)
 {
     if (s_logFmtFlags != LogFmtFlag::Null)
     {
@@ -110,15 +110,14 @@ AX_API LogItem& makeLogItem(LogItem&& item)
 #    define xmol_getpid() (uintptr_t)::getpid()
 #    define xmol_gettid() (uintptr_t)::pthread_self()
 #endif
-        const auto level  = item.level_;
-        auto wptr         = item.prefix_buffer_.data();
-        auto buffer_size  = item.prefix_buffer_.size();
-        auto& prefix_size = item.prefix_size_;
+        auto wptr              = item.prefix_buffer_;
+        const auto buffer_size = sizeof(item.prefix_buffer_);
+        auto& prefix_size      = item.prefix_size_;
         if (bitmask::any(s_logFmtFlags, LogFmtFlag::Level | LogFmtFlag::Colored))
         {
             std::string_view levelName;
             std::string_view colorMask;
-            switch (level)
+            switch (item.level_)
             {
             case LogLevel::Debug:
                 levelName = "D/"sv;
@@ -168,7 +167,7 @@ AX_API LogItem& makeLogItem(LogItem&& item)
     return item;
 }
 
-AX_DLL void flushLogItem(LogItem& item, const char* tag)
+AX_DLL void outputLog(LogItem& item, const char* tag)
 {
 #if defined(__ANDROID__)
     int prio;
@@ -203,7 +202,8 @@ AX_DLL void flushLogItem(LogItem& item, const char* tag)
         std::string& value;
         bool trimed{false};
     };
-    __android_log_print(prio, tag, "%s", static_cast<const char*>(trim_one_eol{item.qualified_message_} + item.prefix_size_));
+    __android_log_print(prio, tag, "%s",
+                        static_cast<const char*>(trim_one_eol{item.qualified_message_} + item.prefix_size_));
 #else
     AX_UNUSED_PARAM(tag);
 #    if defined(_WIN32)

@@ -80,8 +80,9 @@ AX_ENABLE_BITMASK_OPS(LogFmtFlag);
 
 class LogItem
 {
-    friend LogItem& makeLogItem(LogItem&& logItem);
-    friend void flushLogItem(LogItem& item, const char* tag);
+    friend LogItem& preprocessLog(LogItem&& logItem);
+    friend void outputLog(LogItem& item, const char* tag);
+
 public:
     static constexpr auto COLOR_PREFIX_SIZE    = 5;                      // \x1b[00m
     static constexpr auto COLOR_QUALIFIER_SIZE = COLOR_PREFIX_SIZE + 3;  // \x1b[m
@@ -100,7 +101,7 @@ public:
     inline void format(_FmtType&& fmt, _Types&&... args)
     {
         qualified_message_ =
-            fmt::format(std::forward<_FmtType>(fmt), std::string_view{prefix_buffer_.data(), prefix_size_},
+            fmt::format(std::forward<_FmtType>(fmt), std::string_view{prefix_buffer_, prefix_size_},
                         std::forward<_Types>(args)...);
 
         qualifier_size_ = prefix_size_ + 1 /*for \n*/;
@@ -114,7 +115,7 @@ public:
 private:
     void writePrefix(std::string_view data)
     {
-        memcpy(prefix_buffer_.data() + prefix_size_, data.data(), data.size());
+        memcpy(prefix_buffer_ + prefix_size_, data.data(), data.size());
         prefix_size_ += data.size();
     }
     LogLevel level_;
@@ -122,7 +123,7 @@ private:
     size_t prefix_size_{0};     // \x1b[00mD/[2024-02-29 00:00:00.123][PID:][TID:]
     size_t qualifier_size_{0};  // prefix_size_ + \x1b[m (optional) + \n
     std::string qualified_message_;
-    std::array<char, 128> prefix_buffer_;
+    char prefix_buffer_[128];
 };
 
 class ILogOutput
@@ -143,10 +144,10 @@ AX_API void setLogFmtFlag(LogFmtFlag flags);
 AX_API void setLogOutput(ILogOutput* output);
 
 /* @brief internal use */
-AX_API LogItem& makeLogItem(LogItem&& logItem);
+AX_API LogItem& preprocessLog(LogItem&& logItem);
 
 /* @brief internal use */
-AX_API void flushLogItem(LogItem& item, const char* tag);
+AX_API void outputLog(LogItem& item, const char* tag);
 
 template <typename _FmtType, typename... _Types>
 inline void printLogT(LogLevel level, _FmtType&& fmt, LogItem& item, _Types&&... args)
@@ -154,12 +155,12 @@ inline void printLogT(LogLevel level, _FmtType&& fmt, LogItem& item, _Types&&...
     if (getLogLevel() <= level)
     {
         item.format(std::forward<_FmtType>(fmt), std::forward<_Types>(args)...);
-        flushLogItem(item, "axmol");
+        outputLog(item, "axmol");
     }
 }
 
 #define AXLOG_WITH_LEVEL(level, fmtOrMsg, ...) \
-    ax::printLogT(level, FMT_COMPILE("{}" fmtOrMsg "\n"), makeLogItem(ax::LogItem{level}), ##__VA_ARGS__)
+    ax::printLogT(level, FMT_COMPILE("{}" fmtOrMsg "\n"), preprocessLog(ax::LogItem{level}), ##__VA_ARGS__)
 
 #define AXLOGD(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Debug, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGI(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Info, fmtOrMsg, ##__VA_ARGS__)
