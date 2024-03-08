@@ -224,7 +224,7 @@ AX_DLL void outputLog(LogItem& item, const char* tag)
     }
 #    else
     // Linux, Mac, iOS, etc
-    auto fd = ::fileno(level != LogLevel::Error ? stdout : stderr);
+    auto fd = ::fileno(item.level_ != LogLevel::Error ? stdout : stderr);
     ::write(fd, item.qualified_message_.c_str(), item.qualified_message_.size());
 #    endif
 #endif
@@ -242,11 +242,10 @@ AX_API void print(const char* format, ...)
     auto buf = StringUtils::vformat(format, args);
     va_end(args);
 
-    // printLog(std::move(buf += '\n'), LogLevel::Debug, 0, "axmol debug info");
+    auto& item = preprocessLog(LogItem{LogLevel::Debug});
+    item.format(FMT_COMPILE("{}\n"), buf);
+    outputLog(item, "axmol debug info");
 }
-
-// FIXME: Deprecated
-// void CCLog(const char * format, ...);
 
 //
 //  Utility code
