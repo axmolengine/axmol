@@ -199,23 +199,31 @@ AX_DLL void printLog(std::string&& message, LogLevel level, size_t prefixSize, c
 #else
     AX_UNUSED_PARAM(prefixSize);
     AX_UNUSED_PARAM(tag);
+#    if defined(_WIN32)
+    if (::IsDebuggerPresent())
+        OutputDebugStringW(ntcvt::from_chars(message).c_str());
+#    endif
+
     std::optional<fmt::text_style> color;
+#    if !defined(__APPLE__)
     if (bitmask::any(s_logFmtFlags, LogFmtFlag::Colored))
     {
         switch (level)
         {
         case LogLevel::Info:
-            color.emplace(fmt::fg(fmt::color::light_green));
+            color.emplace(fmt::fg(fmt::terminal_color::bright_green));
             break;
         case LogLevel::Warn:
-            color.emplace(fmt::fg(fmt::color::yellow));
+            color.emplace(fmt::fg(fmt::terminal_color::yellow));
             break;
         case LogLevel::Error:
-            color.emplace(fmt::fg(fmt::color::red));
+            color.emplace(fmt::fg(fmt::terminal_color::red));
             break;
         default:;
         }
     }
+#    endif
+
     if (!color.has_value())
     {  // write normal color text to console
 #    if defined(_WIN32)
@@ -236,13 +244,6 @@ AX_DLL void printLog(std::string&& message, LogLevel level, size_t prefixSize, c
     else
     {
         fmt::print(color.value(), "{}", message);
-
-         // reset color on non-win32 platforms
-#    if !defined(_WIN32)
-        constexpr auto default_color = "\x1b[0m"sv;
-        auto fd                      = ::fileno(level != LogLevel::Error ? stdout : stderr);
-        ::write(fd, default_color.data(), default_color.size());
-#    endif
     }
 #endif
 
