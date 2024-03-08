@@ -116,7 +116,6 @@ AX_API LogItem& preprocessLog(LogItem&& item)
         if (bitmask::any(s_logFmtFlags, LogFmtFlag::Level | LogFmtFlag::Colored))
         {
             std::string_view levelName;
-            std::string_view colorMask;
             switch (item.level_)
             {
             case LogLevel::Debug:
@@ -124,24 +123,42 @@ AX_API LogItem& preprocessLog(LogItem&& item)
                 break;
             case LogLevel::Info:
                 levelName = "I/"sv;
-                colorMask = "\x1b[92m"sv;
                 break;
             case LogLevel::Warn:
                 levelName = "W/"sv;
-                colorMask = "\x1b[33m"sv;
                 break;
             case LogLevel::Error:
                 levelName = "E/"sv;
-                colorMask = "\x1b[31m"sv;
                 break;
             default:
                 levelName = "?/"sv;
             }
 
 #if !defined(__APPLE__) && !defined(__ANDROID__)
-            item.has_style_ = bitmask::any(s_logFmtFlags, LogFmtFlag::Colored) && !colorMask.empty();
-            if (item.has_style_)
-                item.writePrefix(colorMask);
+            if (bitmask::any(s_logFmtFlags, LogFmtFlag::Colored))
+            {
+                constexpr auto colorCodeOfLevel = [](LogLevel level) ->std::string_view
+                {
+                    switch (level)
+                    {
+                    case LogLevel::Info:
+                        return "\x1b[92m"sv;
+                    case LogLevel::Warn:
+                        return "\x1b[33m"sv;
+                    case LogLevel::Error:
+                        return "\x1b[31m"sv;
+                    default:
+                        return std::string_view{};
+                    }
+                };
+
+                auto colorCode = colorCodeOfLevel(item.level_);
+                if (!colorCode.empty())
+                {
+                    item.writePrefix(colorCode);
+                    item.has_style_ = true;
+                }
+            }
 #endif
             item.writePrefix(levelName);
         }
