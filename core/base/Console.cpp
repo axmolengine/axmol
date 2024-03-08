@@ -171,7 +171,7 @@ AX_DLL void outputLog(LogItem& item, const char* tag)
 {
 #if defined(__ANDROID__)
     int prio;
-    switch (item.level)
+    switch (item.level_)
     {
     case LogLevel::Info:
         prio = ANDROID_LOG_INFO;
