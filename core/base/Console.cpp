@@ -98,7 +98,7 @@ AX_API void setLogOutput(ILogOutput* output)
     s_logOutput = output;
 }
 
-AX_API std::string_view makeLogPrefix(LogBufferType&& stack_buffer, LogLevel level)
+AX_API LogItem& preprocessLog(LogItem&& item)
 {
     if (s_logFmtFlags != LogFmtFlag::Null)
     {
@@ -110,29 +110,57 @@ AX_API std::string_view makeLogPrefix(LogBufferType&& stack_buffer, LogLevel lev
 #    define xmol_getpid() (uintptr_t)::getpid()
 #    define xmol_gettid() (uintptr_t)::pthread_self()
 #endif
-
-        size_t offset = 0;
-        if (bitmask::any(s_logFmtFlags, LogFmtFlag::Level))
+        auto wptr              = item.prefix_buffer_;
+        const auto buffer_size = sizeof(item.prefix_buffer_);
+        auto& prefix_size      = item.prefix_size_;
+        if (bitmask::any(s_logFmtFlags, LogFmtFlag::Level | LogFmtFlag::Colored))
         {
-            char levelName;
-            switch (level)
+            std::string_view levelName;
+            switch (item.level_)
             {
             case LogLevel::Debug:
-                levelName = 'D';
+                levelName = "D/"sv;
                 break;
             case LogLevel::Info:
-                levelName = 'I';
+                levelName = "I/"sv;
                 break;
             case LogLevel::Warn:
-                levelName = 'W';
+                levelName = "W/"sv;
                 break;
             case LogLevel::Error:
-                levelName = 'E';
+                levelName = "E/"sv;
                 break;
             default:
-                levelName = '?';
+                levelName = "?/"sv;
             }
-            offset += fmt::format_to_n(stack_buffer.data(), stack_buffer.size(), "{}/", levelName).size;
+
+#if !defined(__APPLE__) && !defined(__ANDROID__)
+            if (bitmask::any(s_logFmtFlags, LogFmtFlag::Colored))
+            {
+                constexpr auto colorCodeOfLevel = [](LogLevel level) ->std::string_view
+                {
+                    switch (level)
+                    {
+                    case LogLevel::Info:
+                        return "\x1b[92m"sv;
+                    case LogLevel::Warn:
+                        return "\x1b[33m"sv;
+                    case LogLevel::Error:
+                        return "\x1b[31m"sv;
+                    default:
+                        return std::string_view{};
+                    }
+                };
+
+                auto colorCode = colorCodeOfLevel(item.level_);
+                if (!colorCode.empty())
+                {
+                    item.writePrefix(colorCode);
+                    item.has_style_ = true;
+                }
+            }
+#endif
+            item.writePrefix(levelName);
         }
         if (bitmask::any(s_logFmtFlags, LogFmtFlag::TimeStamp))
         {
@@ -140,29 +168,42 @@ AX_API std::string_view makeLogPrefix(LogBufferType&& stack_buffer, LogLevel lev
             auto tv_msec = yasio::clock<yasio::system_clock_t>();
             auto tv_sec  = static_cast<time_t>(tv_msec / std::milli::den);
             localtime_r(&tv_sec, &ts);
-            offset += fmt::format_to_n(stack_buffer.data() + offset, stack_buffer.size() - offset,
-                                       "[{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}.{:03d}]", ts.tm_year + 1900,
-                                       ts.tm_mon + 1, ts.tm_mday, ts.tm_hour, ts.tm_min, ts.tm_sec,
-                                       static_cast<int>(tv_msec % std::milli::den))
-                          .size;
+            prefix_size += fmt::format_to_n(wptr + prefix_size, buffer_size - prefix_size,
+                                            "[{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}.{:03d}]", ts.tm_year + 1900,
+                                            ts.tm_mon + 1, ts.tm_mday, ts.tm_hour, ts.tm_min, ts.tm_sec,
+                                            static_cast<int>(tv_msec % std::milli::den))
+                               .size;
         }
         if (bitmask::any(s_logFmtFlags, LogFmtFlag::ProcessId))
-            offset += fmt::format_to_n(stack_buffer.data() + offset, stack_buffer.size() - offset, "[PID:{:x}]",
-                                       xmol_getpid())
-                          .size;
+            prefix_size +=
+                fmt::format_to_n(wptr + prefix_size, buffer_size - prefix_size, "[PID:{:x}]", xmol_getpid()).size;
         if (bitmask::any(s_logFmtFlags, LogFmtFlag::ThreadId))
-            offset += fmt::format_to_n(stack_buffer.data() + offset, stack_buffer.size() - offset, "[TID:{:x}]",
-                                       xmol_gettid())
-                          .size;
-        return std::string_view{stack_buffer.data(), offset};
+            prefix_size +=
+                fmt::format_to_n(wptr + prefix_size, buffer_size - prefix_size, "[TID:{:x}]", xmol_gettid()).size;
     }
-    else
-        return std::string_view{};
+    return item;
 }
 
-AX_DLL void printLog(std::string&& message, LogLevel level, size_t prefixSize, const char* tag)
+static int hints = 0;
+
+AX_DLL void outputLog(LogItem& item, const char* tag)
 {
 #if defined(__ANDROID__)
+    int prio;
+    switch (item.level_)
+    {
+    case LogLevel::Info:
+        prio = ANDROID_LOG_INFO;
+        break;
+    case LogLevel::Warn:
+        prio = ANDROID_LOG_WARN;
+        break;
+    case LogLevel::Error:
+        prio = ANDROID_LOG_ERROR;
+        break;
+    default:
+        prio = ANDROID_LOG_DEBUG;
+    }
     struct trim_one_eol
     {
         explicit trim_one_eol(std::string& v) : value(v)
@@ -180,76 +221,36 @@ AX_DLL void printLog(std::string&& message, LogLevel level, size_t prefixSize, c
         std::string& value;
         bool trimed{false};
     };
-    int prio;
-    switch (level)
-    {
-    case LogLevel::Info:
-        prio = ANDROID_LOG_INFO;
-        break;
-    case LogLevel::Warn:
-        prio = ANDROID_LOG_WARN;
-        break;
-    case LogLevel::Error:
-        prio = ANDROID_LOG_ERROR;
-        break;
-    default:
-        prio = ANDROID_LOG_DEBUG;
-    }
-    __android_log_print(prio, tag, "%s", static_cast<const char*>(trim_one_eol{message}) + prefixSize);
+    __android_log_print(prio, tag, "%s",
+                        static_cast<const char*>(trim_one_eol{item.qualified_message_} + item.prefix_size_));
 #else
-    AX_UNUSED_PARAM(prefixSize);
     AX_UNUSED_PARAM(tag);
 #    if defined(_WIN32)
     if (::IsDebuggerPresent())
-        OutputDebugStringW(ntcvt::from_chars(message).c_str());
+        OutputDebugStringW(ntcvt::from_chars(item.message()).c_str());
 #    endif
 
-    std::optional<fmt::text_style> color;
-#    if !defined(__APPLE__)
-    if (bitmask::any(s_logFmtFlags, LogFmtFlag::Colored))
-    {
-        switch (level)
-        {
-        case LogLevel::Info:
-            color.emplace(fmt::fg(fmt::terminal_color::bright_green));
-            break;
-        case LogLevel::Warn:
-            color.emplace(fmt::fg(fmt::terminal_color::yellow));
-            break;
-        case LogLevel::Error:
-            color.emplace(fmt::fg(fmt::terminal_color::red));
-            break;
-        default:;
-        }
-    }
-#    endif
-
-    if (!color.has_value())
-    {  // write normal color text to console
+        // write normal color text to console
 #    if defined(_WIN32)
-        auto hStdout = ::GetStdHandle(level != LogLevel::Error ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE);
-        if (hStdout)
-        {
-            // print to console if possible
-            // since we use win32 API, the ::fflush call doesn't required.
-            // see: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-flushfilebuffers#return-value
-            ::WriteFile(hStdout, message.c_str(), static_cast<DWORD>(message.size()), nullptr, nullptr);
-        }
-#    else
-       // Linux, Mac, iOS, etc
-        auto fd = ::fileno(level != LogLevel::Error ? stdout : stderr);
-        ::write(fd, message.c_str(), message.size());
-#    endif
-    }
-    else
+    auto hStdout = ::GetStdHandle(item.level_ != LogLevel::Error ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE);
+    if (hStdout)
     {
-        fmt::print(color.value(), "{}", message);
+        // print to console if possible
+        // since we use win32 API, the ::fflush call doesn't required.
+        // see: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-flushfilebuffers#return-value
+        ::WriteFile(hStdout, item.qualified_message_.c_str(), static_cast<DWORD>(item.qualified_message_.size()),
+                    nullptr, nullptr);
     }
+#    else
+    // Linux, Mac, iOS, etc
+    auto fd = ::fileno(item.level_ != LogLevel::Error ? stdout : stderr);
+    ::write(fd, item.qualified_message_.c_str(), item.qualified_message_.size());
+#    endif
 #endif
-
     if (s_logOutput)
-        s_logOutput->write(std::move(message), level);
+        s_logOutput->write(item.message(), item.level_);
 }
+
 #pragma endregion
 
 AX_API void print(const char* format, ...)
@@ -257,14 +258,13 @@ AX_API void print(const char* format, ...)
     va_list args;
 
     va_start(args, format);
-    auto buf = StringUtils::vformat(format, args);
+    auto message = StringUtils::vformat(format, args);
     va_end(args);
 
-    printLog(std::move(buf += '\n'), LogLevel::Debug, 0, "axmol debug info");
+    if (!message.empty())
+        outputLog(LogItem::vformat(FMT_COMPILE("{}{}\n"), preprocessLog(LogItem{LogLevel::Silent}), message),
+                  "axmol debug info");
 }
-
-// FIXME: Deprecated
-// void CCLog(const char * format, ...);
 
 //
 //  Utility code

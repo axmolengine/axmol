@@ -78,11 +78,61 @@ enum class LogFmtFlag
 };
 AX_ENABLE_BITMASK_OPS(LogFmtFlag);
 
+class LogItem
+{
+    friend AX_API LogItem& preprocessLog(LogItem&& logItem);
+    friend AX_API void outputLog(LogItem& item, const char* tag);
+
+public:
+    static constexpr auto COLOR_PREFIX_SIZE    = 5;                      // \x1b[00m
+    static constexpr auto COLOR_QUALIFIER_SIZE = COLOR_PREFIX_SIZE + 3;  // \x1b[m
+
+    explicit LogItem(LogLevel lvl) : level_(lvl) {}
+    LogItem(const LogItem&) = delete;
+
+    LogLevel level() const { return level_; }
+
+    std::string_view message() const
+    {
+        return has_style_ ? std::string_view{qualified_message_.data() + COLOR_PREFIX_SIZE,
+                                             qualified_message_.size() - COLOR_QUALIFIER_SIZE}
+                          : std::string_view{qualified_message_};
+    }
+
+    template <typename _FmtType, typename... _Types>
+    inline static LogItem& vformat(_FmtType&& fmt, LogItem& item, _Types&&... args)
+    {
+        item.qualified_message_ = fmt::format(std::forward<_FmtType>(fmt), std::string_view{item.prefix_buffer_, item.prefix_size_},
+                                         std::forward<_Types>(args)...);
+
+        item.qualifier_size_ = item.prefix_size_ + 1 /*for \n*/;
+        if (item.has_style_)
+        {
+            item.qualified_message_.append("\x1b[m"sv);
+            item.qualifier_size_ += (COLOR_QUALIFIER_SIZE - COLOR_PREFIX_SIZE);
+        }
+        return item;
+    }
+
+private:
+    void writePrefix(std::string_view data)
+    {
+        memcpy(prefix_buffer_ + prefix_size_, data.data(), data.size());
+        prefix_size_ += data.size();
+    }
+    LogLevel level_;
+    bool has_style_{false};
+    size_t prefix_size_{0};     // \x1b[00mD/[2024-02-29 00:00:00.123][PID:][TID:]
+    size_t qualifier_size_{0};  // prefix_size_ + \x1b[m (optional) + \n
+    std::string qualified_message_;
+    char prefix_buffer_[128];
+};
+
 class ILogOutput
 {
 public:
     virtual ~ILogOutput() {}
-    virtual void write(std::string&&, LogLevel) = 0;
+    virtual void write(std::string_view message, LogLevel) = 0;
 };
 
 /* @brief control log level */
@@ -95,31 +145,21 @@ AX_API void setLogFmtFlag(LogFmtFlag flags);
 /* @brief set log output */
 AX_API void setLogOutput(ILogOutput* output);
 
-/*
- * @brief lowlevel print log message
- * @param message the message to print
- * @level the level of current log item see also LogLevel
- * @prefixSize the prefix size
- * @tag optional, the log tag of current log item
- */
-AX_API void printLog(std::string&& message, LogLevel level, size_t prefixSize, const char* tag);
+/* @brief internal use */
+AX_API LogItem& preprocessLog(LogItem&& logItem);
+
+/* @brief internal use */
+AX_API void outputLog(LogItem& item, const char* tag);
 
 template <typename _FmtType, typename... _Types>
-inline void printLogT(LogLevel level, _FmtType&& fmt, std::string_view prefix, _Types&&... args)
+inline void printLogT(_FmtType&& fmt, LogItem& item, _Types&&... args)
 {
-    if (getLogLevel() <= level)
-    {
-        auto message = fmt::format(std::forward<_FmtType>(fmt), prefix, std::forward<_Types>(args)...);
-        printLog(std::move(message), level, prefix.size(), "axmol");
-    }
+    if (item.level() >= getLogLevel())
+        outputLog(LogItem::vformat(std::forward<_FmtType>(fmt), item, std::forward<_Types>(args)...), "axmol");
 }
 
-using LogBufferType = std::array<char, 128>;
-// for internal use make log prefix: D/[2024-02-29 00:00:00.123][PID:][TID:]
-AX_API std::string_view makeLogPrefix(LogBufferType&& stack_buffer, LogLevel level);
-
 #define AXLOG_WITH_LEVEL(level, fmtOrMsg, ...) \
-    ax::printLogT(level, FMT_COMPILE("{}" fmtOrMsg "\n"), ax::makeLogPrefix(ax::LogBufferType{}, level), ##__VA_ARGS__)
+    ax::printLogT(FMT_COMPILE("{}" fmtOrMsg "\n"), ax::preprocessLog(ax::LogItem{level}), ##__VA_ARGS__)
 
 #define AXLOGD(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Debug, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGI(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Info, fmtOrMsg, ##__VA_ARGS__)
