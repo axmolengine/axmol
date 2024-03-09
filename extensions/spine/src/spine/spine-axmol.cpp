@@ -107,7 +107,5 @@ char *AxmolExtension::_readFile(const spine::String &path, int *length) {
 }
 
 SpineExtension *spine::getDefaultExtension() {
-    // static std::unique_ptr<AxmolExtension> _instance{new AxmolExtension()};
-    static AxmolExtension _instance;
-    return &_instance;
+    return new AxmolExtension();
 }
