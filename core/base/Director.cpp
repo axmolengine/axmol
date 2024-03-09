@@ -169,12 +169,6 @@ Director::~Director()
     _rendererRecreatedListener = nullptr;
 #endif
 
-    AX_SAFE_RELEASE(_FPSLabel);
-    AX_SAFE_RELEASE(_drawnVerticesLabel);
-    AX_SAFE_RELEASE(_drawnBatchesLabel);
-
-    AX_SAFE_RELEASE(_runningScene);
-    AX_SAFE_RELEASE(_notificationNode);
     AX_SAFE_RELEASE(_scheduler);
     AX_SAFE_RELEASE(_actionManager);
 
@@ -188,17 +182,12 @@ Director::~Director()
     AX_SAFE_RELEASE(_eventProjectionChanged);
     AX_SAFE_RELEASE(_eventResetDirector);
 
-    delete _renderer;
     delete _console;
 
     AX_SAFE_RELEASE(_eventDispatcher);
 
     Configuration::destroyInstance();
     ObjectFactory::destroyInstance();
-
-    s_SharedDirector = nullptr;
-
-    backend::DriverBase::destroyInstance();
     QuadCommand::destroyIsolatedIndices();
 
 #if AX_ENABLE_SCRIPT_BINDING
@@ -207,6 +196,8 @@ Director::~Director()
 
     /** clean auto release pool. */
     PoolManager::destroyInstance();
+
+    s_SharedDirector = nullptr;
 }
 
 void Director::setDefaultValues()
@@ -1069,7 +1060,16 @@ void Director::cleanupDirector()
 {
     reset();
 
-    //    CHECK_GL_ERROR_DEBUG();
+    // cleanup graphics before release glView, otherwise, will cause crash on linux
+    AX_SAFE_RELEASE(_FPSLabel);
+    AX_SAFE_RELEASE(_drawnVerticesLabel);
+    AX_SAFE_RELEASE(_drawnBatchesLabel);
+
+    AX_SAFE_RELEASE(_runningScene);
+    AX_SAFE_RELEASE(_notificationNode);
+
+    AX_SAFE_DELETE(_renderer);
+    backend::DriverBase::destroyInstance();
 
     // OpenGL view
     if (_glView)

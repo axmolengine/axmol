@@ -24,6 +24,9 @@ THE SOFTWARE.
 
 #include "TransformHelp.h"
 
+#include "base/Director.h"
+#include "base/EventDispatcher.h"
+
 USING_NS_AX;
 
 namespace cocostudio
@@ -35,9 +38,11 @@ AffineTransform TransformHelp::helpMatrix2;
 Vec2 TransformHelp::helpPoint1;
 Vec2 TransformHelp::helpPoint2;
 
-BaseData helpParentNode;
-
-TransformHelp::TransformHelp() {}
+BaseData& helpParentNode()
+{
+    static BaseData _instance;
+    return _instance;
+}
 
 void TransformHelp::transformFromParent(BaseData& node, const BaseData& parentNode)
 {
@@ -63,13 +68,12 @@ void TransformHelp::transformToParent(BaseData& node, const BaseData& parentNode
 
 void TransformHelp::transformFromParentWithoutScale(BaseData& node, const BaseData& parentNode)
 {
-
-    helpParentNode.copy(&parentNode);
-    helpParentNode.scaleX = 1;
-    helpParentNode.scaleY = 1;
+    helpParentNode().copy(&parentNode);
+    helpParentNode().scaleX = 1;
+    helpParentNode().scaleY = 1;
 
     nodeToMatrix(node, helpMatrix1);
-    nodeToMatrix(helpParentNode, helpMatrix2);
+    nodeToMatrix(helpParentNode(), helpMatrix2);
 
     helpMatrix2 = AffineTransformInvert(helpMatrix2);
     helpMatrix1 = AffineTransformConcat(helpMatrix1, helpMatrix2);
@@ -80,12 +84,12 @@ void TransformHelp::transformFromParentWithoutScale(BaseData& node, const BaseDa
 void TransformHelp::transformToParentWithoutScale(BaseData& node, const BaseData& parentNode)
 {
 
-    helpParentNode.copy(&parentNode);
-    helpParentNode.scaleX = 1;
-    helpParentNode.scaleY = 1;
+    helpParentNode().copy(&parentNode);
+    helpParentNode().scaleX = 1;
+    helpParentNode().scaleY = 1;
 
     nodeToMatrix(node, helpMatrix1);
-    nodeToMatrix(helpParentNode, helpMatrix2);
+    nodeToMatrix(helpParentNode(), helpMatrix2);
 
     helpMatrix1 = AffineTransformConcat(helpMatrix1, helpMatrix2);
 
