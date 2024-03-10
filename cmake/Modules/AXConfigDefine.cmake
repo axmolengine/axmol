@@ -184,7 +184,7 @@ function(use_ax_compile_options target)
 endfunction()
 
 if(EMSCRIPTEN)
-    set(AX_WASM_THREADS "navigator.hardwareConcurrency" CACHE STRING "Wasm threads count")
+    set(AX_WASM_THREADS "4" CACHE STRING "Wasm threads count")
 
     set(_AX_WASM_THREADS_INT 0)
     if (AX_WASM_THREADS STREQUAL "auto") # not empty string or not 0
