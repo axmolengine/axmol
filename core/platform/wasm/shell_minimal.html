@@ -68,6 +68,13 @@
         preRun: [],
         postRun: [],
         print: (function() {
+          // #region axmol-spec
+          const pattern = [
+              '[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
+              '(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~]))'
+            ].join('|');
+          const ansiRegex = new RegExp(pattern, 'g');
+          // #endregion axmol-spec
           var element = document.getElementById('output');
           if (element) element.value = ''; // clear browser cache
           return function(text) {
@@ -76,10 +83,10 @@
             //text = text.replace(/&/g, "&amp;");
             //text = text.replace(/</g, "&lt;");
             //text = text.replace(/>/g, "&gt;");
-            //text = text.replace('\n', '<br>', 'g');
+            //text = text.replace('\n', '<br>', 'g'); 
             console.log(text);
             if (element) {
-              element.value += text + "\n";
+              element.value += text.replace(ansiRegex, ''); // axmol-mod: strip ansi color escape and remove suffix '\n'
               element.scrollTop = element.scrollHeight; // focus on bottom
             }
           };
