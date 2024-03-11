@@ -137,8 +137,7 @@ AX_API LogItem& preprocessLog(LogItem&& item)
 #if !defined(__APPLE__) && !defined(__ANDROID__)
             if (bitmask::any(s_logFmtFlags, LogFmtFlag::Colored))
             {
-                constexpr auto colorCodeOfLevel = [](LogLevel level) ->std::string_view
-                {
+                constexpr auto colorCodeOfLevel = [](LogLevel level) -> std::string_view {
                     switch (level)
                     {
                     case LogLevel::Info:
@@ -243,8 +242,14 @@ AX_DLL void outputLog(LogItem& item, const char* tag)
     }
 #    else
     // Linux, Mac, iOS, etc
-    auto fd = ::fileno(item.level_ != LogLevel::Error ? stdout : stderr);
-    ::write(fd, item.qualified_message_.c_str(), item.qualified_message_.size());
+    auto outfp = item.level_ != LogLevel::Error ? stdout : stderr;
+    auto outfd = ::fileno(outfp);
+    ::fflush(outfp);
+#        if AX_TARGET_PLATFORM != AX_PLATFORM_WASM
+    ::write(outfd, item.qualified_message_.c_str(), item.qualified_message_.size());
+#        else
+    ::write(outfd, item.qualified_message_.c_str(), item.qualified_message_.size() - 1);
+#        endif
 #    endif
 #endif
     if (s_logOutput)

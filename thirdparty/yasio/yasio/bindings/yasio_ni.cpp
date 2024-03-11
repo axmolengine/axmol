@@ -32,6 +32,7 @@ SOFTWARE.
 #include <array>
 #include <string.h>
 #include "yasio/yasio.hpp"
+#include "yasio/split.hpp"
 
 #if defined(_WINDLL)
 #  define YASIO_NI_API __declspec(dllexport)
@@ -45,25 +46,6 @@ using namespace yasio;
 
 namespace
 {
-template <typename _CStr, typename _Fn>
-inline void fast_split(_CStr s, size_t slen, typename std::remove_pointer<_CStr>::type delim, _Fn func)
-{
-  auto _Start = s; // the start of every string
-  auto _Ptr   = s; // source string iterator
-  auto _End   = s + slen;
-  while ((_Ptr = strchr(_Ptr, delim)))
-  {
-    if (_Start < _Ptr)
-      if (func(_Start, _Ptr))
-        return;
-    _Start = _Ptr + 1;
-    ++_Ptr;
-  }
-  if (_Start < _End)
-  {
-    func(_Start, _End);
-  }
-}
 inline int svtoi(cxx17::string_view& sv) { return !sv.empty() ? atoi(sv.data()) : 0; }
 inline const char* svtoa(cxx17::string_view& sv) { return !sv.empty() ? sv.data() : ""; }
 } // namespace
@@ -154,7 +136,7 @@ YASIO_NI_API void yasio_set_resolv_fn(void* service_ptr, int(YASIO_INTEROP_DECL*
 YASIO_NI_API void yasio_set_option(void* service_ptr, int opt, const char* pszArgs)
 {
   auto service = reinterpret_cast<io_service*>(service_ptr);
-  if (!service)
+  if (!service || !pszArgs || !*pszArgs)
     return;
 
   // process one arg
@@ -174,10 +156,10 @@ YASIO_NI_API void yasio_set_option(void* service_ptr, int opt, const char* pszAr
   std::string strArgs = pszArgs;
   std::array<cxx17::string_view, YASIO_MAX_OPTION_ARGC> args;
   int argc = 0;
-  fast_split(&strArgs.front(), strArgs.length(), ';', [&](char* s, char* e) {
-    *e         = '\0'; // to c style string
-    args[argc] = cxx17::string_view(s, e - s);
-    return (++argc == YASIO_MAX_OPTION_ARGC);
+  yasio::split_if(&strArgs.front(), ';', [&](char* s, char* e) {
+    *e           = '\0'; // to c style string
+    args[argc++] = cxx17::string_view(s, e - s);
+    return (argc < YASIO_MAX_OPTION_ARGC);
   });
 
   switch (opt)

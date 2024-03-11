@@ -105,12 +105,14 @@ public:
         item.qualified_message_ = fmt::format(std::forward<_FmtType>(fmt), std::string_view{item.prefix_buffer_, item.prefix_size_},
                                          std::forward<_Types>(args)...);
 
-        item.qualifier_size_ = item.prefix_size_ + 1 /*for \n*/;
-        if (item.has_style_)
-        {
-            item.qualified_message_.append("\x1b[m"sv);
-            item.qualifier_size_ += (COLOR_QUALIFIER_SIZE - COLOR_PREFIX_SIZE);
-        }
+        item.qualifier_size_ = item.prefix_size_;
+
+        auto old_size = item.qualified_message_.size();
+        if (!item.has_style_)
+            item.qualified_message_.append("\n"sv);
+        else
+            item.qualified_message_.append("\x1b[m\n"sv);
+        item.qualifier_size_ += (item.qualified_message_.size() - old_size);
         return item;
     }
 
@@ -159,7 +161,7 @@ inline void printLogT(_FmtType&& fmt, LogItem& item, _Types&&... args)
 }
 
 #define AXLOG_WITH_LEVEL(level, fmtOrMsg, ...) \
-    ax::printLogT(FMT_COMPILE("{}" fmtOrMsg "\n"), ax::preprocessLog(ax::LogItem{level}), ##__VA_ARGS__)
+    ax::printLogT(FMT_COMPILE("{}" fmtOrMsg), ax::preprocessLog(ax::LogItem{level}), ##__VA_ARGS__)
 
 #define AXLOGD(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Debug, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGI(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Info, fmtOrMsg, ##__VA_ARGS__)
