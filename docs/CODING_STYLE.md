@@ -1,4 +1,4 @@
-<p align="center"><a href="https://axmol.org" target="_blank" rel="noopener noreferrer"><img width="160" src="logo.png" alt="axmol logo"></a></p>
+<p align="center"><a href="https://axmol.dev" target="_blank" rel="noopener noreferrer"><img width="160" src="logo.png" alt="axmol logo"></a></p>
 
 # Axmol Engine - C++ coding style
 

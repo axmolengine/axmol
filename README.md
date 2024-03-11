@@ -1,10 +1,10 @@
-<p align="center"><a href="https://axmol.org" target="_blank" rel="noopener noreferrer"><img width="160" src="docs/logo.png" alt="axmol logo"></a></p>
+<p align="center"><a href="https://axmol.dev" target="_blank" rel="noopener noreferrer"><img width="160" src="docs/logo.png" alt="axmol logo"></a></p>
 
 # Axmol Engine
 
 ## A Multi-platform Engine for Mobile, Desktop and Xbox.
 
-[Axmol Engine](https://axmol.org) is an open-source, C++ multi-platform engine designed for mobile devices, desktop, and Xbox, well-suited for 2D game development. It was launched in November 2019 as a fork of Cocos2d-x v4.0.
+[Axmol Engine](https://axmol.dev) is an open-source, C++ multi-platform engine designed for mobile devices, desktop, and Xbox, well-suited for 2D game development. It was launched in November 2019 as a fork of Cocos2d-x v4.0.
 
 Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more about Axmol.
 
@@ -39,7 +39,7 @@ If you have a Cocos2d-x project, migrating to Axmol Engine is easy. We have prep
 
 ## Learning and docs
 
-* [Documentation](https://axmol.org/manual/latest/)
+* [Documentation](https://axmol.dev/manual/latest/)
 * [Axmol Wiki](https://github.com/axmolengine/axmol/wiki)
 * [Tutorials Page](https://github.com/axmolengine/axmol/wiki/Tutorials)
 * [Frequently Asked Questions](https://github.com/axmolengine/axmol/wiki/FAQ)

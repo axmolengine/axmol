@@ -39,8 +39,8 @@
   }
 
   function patch_url(url, new_version) {
-    if(url.includes("axmol.org")){
-      return url.replace(url_re, 'axmol.org/manual/' + new_version + '/');
+    if(url.includes("axmol.dev")){
+      return url.replace(url_re, 'axmol.dev/manual/' + new_version + '/');
     }
     else {
       return url.replace(url_local, 'docs/dist/manual/' + new_version + '/');
