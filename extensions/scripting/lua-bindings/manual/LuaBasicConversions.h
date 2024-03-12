@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ 
  https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -62,7 +63,7 @@ void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const
     if (!(condition))                                                                            \
     {                                                                                            \
         AXLOGE("lua: ERROR: File {}: Line: {}, Function: {}", __FILE__, __LINE__, __FUNCTION__); \
-        AXLOGE(##__VA_ARGS__);                                                                   \
+        AXLOGE(__VA_ARGS__);                                                                   \
     }
 
 /**
