@@ -23,10 +23,6 @@
 #ifndef MATH_VEC4_H
 #define MATH_VEC4_H
 
-#ifdef AX_USE_SSE
-#    include <xmmintrin.h>
-#endif
-
 #include "math/MathBase.h"
 
 /**
@@ -44,39 +40,36 @@ class Mat4;
 class AX_DLL Vec4
 {
 public:
-#ifdef AX_USE_SSE
     union
     {
         struct
         {
+            /**
+             * The x-coordinate.
+             */
             float x;
+
+            /**
+             * The y-coordinate.
+             */
             float y;
+
+            /**
+             * The z-coordinate.
+             */
             float z;
+
+            /**
+             * The w-coordinate.
+             */
             float w;
         };
-        __m128 v;
+        struct
+        {
+            float r, g, b, a;
+        };
     };
-#else
-    /**
-     * The x-coordinate.
-     */
-    float x;
 
-    /**
-     * The y-coordinate.
-     */
-    float y;
-
-    /**
-     * The z-coordinate.
-     */
-    float z;
-
-    /**
-     * The w-coordinate.
-     */
-    float w;
-#endif
     /**
      * Constructs a new vector initialized to all zeros.
      */
