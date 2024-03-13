@@ -227,7 +227,7 @@ public class EditBoxHelper {
                 if (editBox != null) {
                     mEditBoxArray.remove(index);
                     mFrameLayout.removeView(editBox);
-                    Log.e(TAG, "remove EditBox");
+                    Log.d(TAG, "remove EditBox");
                 }
             }
         });
