@@ -61,6 +61,32 @@ if ($succeed -and $env:GITHUB_ACTIONS -eq 'true') {
 
 Pop-Location
 
+echo 'Stripping header empty lines ...'
+$autogen_dir = Join-Path $AX_ROOT 'extensions/scripting/lua-bindings/auto/*.hpp'
+$header_files = Get-ChildItem $autogen_dir
+$UTF8Encoding = [System.Text.Encoding]::UTF8
+foreach($file in $header_files) {
+    $file_path = "$file"
+    $code_lines =  Get-Content $file_path
+    $fs = [System.IO.File]::OpenWrite($file_path)
+    $eol = $UTF8Encoding.GetBytes("`n")
+    $empty_lines = 0
+    foreach($line in $code_lines) {
+        if ($line) {
+            $buf = $UTF8Encoding.GetBytes($line)
+            $fs.Write($buf, 0, $buf.Length)
+            $fs.Write($eol, 0, $eol.Length)
+        } else {
+            ++$empty_lines
+        }
+    }
+
+    $fs.Write($eol, 0, $eol.Length)
+    $fs.Dispose()
+    
+    echo "Removed $empty_lines empty lines for file $file_path"
+}
+
 if(!$succeed) {
     throw "Generating lua bindings fails"
 }
