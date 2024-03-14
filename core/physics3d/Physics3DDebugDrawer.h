@@ -77,13 +77,7 @@ protected:
     void onAfterDraw();
 
 protected:
-    struct V3F_V4F
-    {
-        ax::Vec3 vertex;
-        ax::Vec4 color;
-    };
-
-    std::vector<V3F_V4F> _buffer;
+    std::vector<V3F_C4F> _buffer;
     ax::backend::UniformLocation _locMVP;
 
     ax::BlendFunc _blendFunc = BlendFunc::DISABLE;
