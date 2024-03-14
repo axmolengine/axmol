@@ -31,5 +31,6 @@
 #include "math/Mat4.h"
 #include "math/Rect.h"
 #include "math/Quaternion.h"
+#include "math/Color.h"
 
 #endif

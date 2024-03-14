@@ -12,6 +12,7 @@ set(_AX_MATH_HEADER
     math/Math.h
     math/Rect.h
     math/FastRNG.h
+    math/Color.h
     )
 
 set(_AX_MATH_SRC
@@ -25,4 +26,5 @@ set(_AX_MATH_SRC
     math/Vec3.cpp
     math/Vec4.cpp
     math/Rect.cpp
+    math/Color.cpp
     )

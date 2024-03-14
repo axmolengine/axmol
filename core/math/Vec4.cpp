@@ -27,9 +27,9 @@
 
 NS_AX_MATH_BEGIN
 
-Vec4::Vec4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
+Vec4::Vec4() : Vec4Base() {}
 
-Vec4::Vec4(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
+Vec4::Vec4(float xx, float yy, float zz, float ww) : Vec4Base(xx, yy, zz, ww) {}
 
 Vec4::Vec4(const float* src)
 {
@@ -61,8 +61,6 @@ Vec4 Vec4::fromColor(unsigned int color)
     return value;
 }
 
-Vec4::~Vec4() {}
-
 bool Vec4::isZero() const
 {
     return x == 0.0f && y == 0.0f && z == 0.0f && w == 0.0f;
@@ -80,14 +78,6 @@ float Vec4::angle(const Vec4& v1, const Vec4& v2)
     float dz = v1.w * v2.z - v1.z * v2.w - v1.x * v2.y + v1.y * v2.x;
 
     return std::atan2(std::sqrt(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
-}
-
-void Vec4::add(const Vec4& v)
-{
-    x += v.x;
-    y += v.y;
-    z += v.z;
-    w += v.w;
 }
 
 void Vec4::add(const Vec4& v1, const Vec4& v2, Vec4* dst)
@@ -203,14 +193,6 @@ float Vec4::lengthSquared() const
     return (x * x + y * y + z * z + w * w);
 }
 
-void Vec4::negate()
-{
-    x = -x;
-    y = -y;
-    z = -z;
-    w = -w;
-}
-
 void Vec4::normalize()
 {
     float n = x * x + y * y + z * z + w * w;
@@ -235,14 +217,6 @@ Vec4 Vec4::getNormalized() const
     Vec4 v(*this);
     v.normalize();
     return v;
-}
-
-void Vec4::scale(float scalar)
-{
-    x *= scalar;
-    y *= scalar;
-    z *= scalar;
-    w *= scalar;
 }
 
 void Vec4::set(float xx, float yy, float zz, float ww)
@@ -277,14 +251,6 @@ void Vec4::set(const Vec4& p1, const Vec4& p2)
     y = p2.y - p1.y;
     z = p2.z - p1.z;
     w = p2.w - p1.w;
-}
-
-void Vec4::subtract(const Vec4& v)
-{
-    x -= v.x;
-    y -= v.y;
-    z -= v.z;
-    w -= v.w;
 }
 
 void Vec4::subtract(const Vec4& v1, const Vec4& v2, Vec4* dst)
