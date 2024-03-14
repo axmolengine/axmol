@@ -311,7 +311,7 @@ if($cmdName -eq '--version' -or $cmdName -eq '-V') {
     $version_msg = @"
 axmol version {0}
 
-Axmol Engine maintained and supported by axmol community (axmol.org)
+Axmol Engine maintained and supported by axmol community (axmol.dev)
 "@ -f $axmolVersion
     Write-Host $version_msg
     return
