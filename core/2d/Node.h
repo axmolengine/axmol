@@ -1609,11 +1609,18 @@ public:
     Vec2 convertTouchToNodeSpaceAR(Touch* touch) const;
 
     /**
-     * Gets position of widget in world space.
+     * Gets position of node in world space.
      *
-     * @return Position of widget in world space.
+     * @return Position of node in world space.
      */
     Vec2 getWorldPosition() const;
+
+    /**
+     * Sets position of node in world space.
+     *
+     * @param position Position of node in world space.
+     */
+    void setWorldPosition(const Vec2& position);
 
     /**
      *  Sets an additional transform matrix to the node.
