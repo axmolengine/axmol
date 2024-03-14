@@ -150,6 +150,7 @@ public:
         this->y *= s.y;
         this->z *= s.z;
         this->w *= s.w;
+        return *static_cast<impl_type*>(this);
     }
 
     /**
