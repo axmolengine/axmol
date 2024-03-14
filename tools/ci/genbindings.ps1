@@ -49,18 +49,6 @@ Pop-Location
 
 Push-Location $AX_ROOT
 
-if ($succeed -and $env:GITHUB_ACTIONS -eq 'true') {
-    $git_status = "$(git status)"
-    $no_changes = $git_status.IndexOf('modified:') -eq -1 # -and $git_status.IndexOf('deleted:') -eq -1 -and $git_status.IndexOf('Untracked', [StringComparison]::OrdinalIgnoreCase) -eq -1
-    if ($no_changes) {
-        echo "BINDING_NO_CHANGES=true" >> ${env:GITHUB_ENV}
-    } else {
-        echo "LAST_COMMIT_HASH=$(git rev-parse --short=7 HEAD)" >> ${env:GITHUB_ENV}
-    }
-}
-
-Pop-Location
-
 echo 'Stripping header empty lines ...'
 $autogen_dir = Join-Path $AX_ROOT 'extensions/scripting/lua-bindings/auto/*.hpp'
 $header_files = Get-ChildItem $autogen_dir
@@ -86,6 +74,18 @@ foreach($file in $header_files) {
     
     echo "Removed $empty_lines empty lines for file $file_path"
 }
+
+if ($succeed -and $env:GITHUB_ACTIONS -eq 'true') {
+    $git_status = "$(git status)"
+    $no_changes = $git_status.IndexOf('modified:') -eq -1 # -and $git_status.IndexOf('deleted:') -eq -1 -and $git_status.IndexOf('Untracked', [StringComparison]::OrdinalIgnoreCase) -eq -1
+    if ($no_changes) {
+        echo "BINDING_NO_CHANGES=true" >> ${env:GITHUB_ENV}
+    } else {
+        echo "LAST_COMMIT_HASH=$(git rev-parse --short=7 HEAD)" >> ${env:GITHUB_ENV}
+    }
+}
+
+Pop-Location
 
 if(!$succeed) {
     throw "Generating lua bindings fails"
