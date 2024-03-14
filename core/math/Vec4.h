@@ -34,42 +34,198 @@ NS_AX_MATH_BEGIN
 
 class Mat4;
 
-/**
- * Defines 4-element floating point vector.
+/*
+ * @brief A 4-floats class template with base math operators
  */
-class AX_DLL Vec4
+template <typename _ImplType>
+class Vec4Base
 {
 public:
+    using impl_type = _ImplType;
+
+    Vec4Base() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
+    Vec4Base(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
     union
     {
         struct
         {
-            /**
-             * The x-coordinate.
-             */
-            float x;
-
-            /**
-             * The y-coordinate.
-             */
-            float y;
-
-            /**
-             * The z-coordinate.
-             */
-            float z;
-
-            /**
-             * The w-coordinate.
-             */
-            float w;
+            float x, y, z, w;
         };
         struct
         {
             float r, g, b, a;
         };
+        struct
+        {
+            float h, s;
+            union
+            {
+                float v, l;
+            };
+        };
+        float comps[4];
     };
 
+    impl_type& negate()
+    {
+        x = -x;
+        y = -y;
+        z = -z;
+        w = -w;
+        return *static_cast<impl_type*>(this);
+    }
+
+    impl_type& add(const impl_type& v)
+    {
+        x += v.x;
+        y += v.y;
+        z += v.z;
+        w += v.w;
+        return *static_cast<impl_type*>(this);
+    }
+
+    /**
+     * Subtracts this vector and the specified vector as (this - v)
+     * and stores the result in this vector.
+     *
+     * @param v The vector to subtract.
+     */
+    impl_type& subtract(const impl_type& v)
+    {
+        x -= v.x;
+        y -= v.y;
+        z -= v.z;
+        w -= v.w;
+        return *static_cast<impl_type*>(this);
+    }
+
+    impl_type& scale(float scalar)
+    {
+        x *= scalar;
+        y *= scalar;
+        z *= scalar;
+        w *= scalar;
+        return *static_cast<impl_type*>(this);
+    }
+
+    inline impl_type& operator-() { return impl_type{*static_cast<impl_type*>(this)}.negate(); }
+
+    /**
+     * Adds the given vector to this vector.
+     *
+     * @param v The vector to add.
+     * @return This vector, after the addition occurs.
+     */
+    inline impl_type& operator+=(const impl_type& v) { return this->add(v); }
+
+    /**
+     * Subtracts the given vector from this vector.
+     *
+     * @param v The vector to subtract.
+     * @return This vector, after the subtraction occurs.
+     */
+    inline impl_type& operator-=(const impl_type& v) { return this->subtract(v); }
+
+    /**
+     * Scales this vector by the given value.
+     *
+     * @param s The value to scale by.
+     * @return This vector, after the scale occurs.
+     */
+    inline impl_type& operator*=(float s)
+    {
+        scale(s);
+        return *static_cast<impl_type*>(this);
+    }
+
+    /**
+     * Scales this vector by the given value.
+     *
+     * @param s The value to scale by.
+     * @return This vector, after the scale occurs.
+     */
+    inline impl_type& operator*=(const impl_type& s)
+    {
+        this->x *= s.x;
+        this->y *= s.y;
+        this->z *= s.z;
+        this->w *= s.w;
+        return *static_cast<impl_type*>(this);
+    }
+
+    /**
+     * Divide this vector by the given value.
+     *
+     * @param s The value to scale by.
+     * @return This vector, after the scale occurs.
+     */
+    inline impl_type& operator/=(float s)
+    {
+        this->x /= s;
+        this->y /= s;
+        this->z /= s;
+        this->w /= s;
+        return *static_cast<impl_type*>(this);
+    }
+
+    /**
+     * Divide this vector by the given value.
+     *
+     * @param s The value to scale by.
+     * @return This vector, after the scale occurs.
+     */
+    inline impl_type& operator/=(const impl_type& s)
+    {
+        this->x /= s.x;
+        this->y /= s.y;
+        this->z /= s.z;
+        this->w /= s.w;
+        return *static_cast<impl_type*>(this);
+    }
+
+    /**
+     * Determines if this vector is equal to the given vector.
+     *
+     * @param v The vector to compare against.
+     *
+     * @return True if this vector is equal to the given vector, false otherwise.
+     */
+    friend inline bool operator==(const impl_type& lhs, const impl_type& rhs)
+    {
+        return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.w == rhs.w;
+    }
+
+    /**
+     * Determines if this vector is not equal to the given vector.
+     *
+     * @param v The vector to compare against.
+     *
+     * @return True if this vector is not equal to the given vector, false otherwise.
+     */
+    friend inline bool operator!=(const impl_type& lhs, const impl_type& rhs)
+    {
+        return lhs.x != rhs.x || lhs.y != rhs.y || lhs.z != rhs.z || lhs.w != rhs.w;
+    }
+
+    friend inline impl_type operator+(const impl_type& lhs, const impl_type& rhs) { return impl_type{lhs} += rhs; }
+
+    friend inline impl_type operator-(const impl_type& lhs, const impl_type& rhs) { return impl_type{lhs} -= rhs; }
+
+    friend inline impl_type operator*(const impl_type& lhs, float s) { return impl_type{lhs} *= s; }
+
+    friend inline impl_type operator*(float x, const impl_type& v) { return impl_type{v} *= x; }
+
+    friend inline impl_type operator/(const impl_type& lhs, const float s) { return impl_type{lhs} /= s; }
+};
+
+/**
+ * Defines 4-element floating point vector.
+ */
+class AX_DLL Vec4 : public Vec4Base<Vec4>
+{
+    using Vec4Base = Vec4Base<Vec4>;
+
+public:
     /**
      * Constructs a new vector initialized to all zeros.
      */
@@ -120,11 +276,6 @@ public:
     static Vec4 fromColor(unsigned int color);
 
     /**
-     * Destructor.
-     */
-    ~Vec4();
-
-    /**
      * Indicates whether this vector contains all zeros.
      *
      * @return true if this vector contains all zeros, false otherwise.
@@ -147,13 +298,6 @@ public:
      * @return The angle between the two vectors (in radians).
      */
     static float angle(const Vec4& v1, const Vec4& v2);
-
-    /**
-     * Adds the elements of the specified vector to this one.
-     *
-     * @param v The vector to add.
-     */
-    void add(const Vec4& v);
 
     /**
      * Adds the specified vectors and stores the result in dst.
@@ -252,11 +396,6 @@ public:
     float lengthSquared() const;
 
     /**
-     * Negates this vector.
-     */
-    void negate();
-
-    /**
      * Normalizes this vector.
      *
      * This method normalizes this Vec4 so that it is of
@@ -273,13 +412,6 @@ public:
      * Get the normalized vector.
      */
     Vec4 getNormalized() const;
-
-    /**
-     * Scales all elements of this vector by the specified value.
-     *
-     * @param scalar The scalar value.
-     */
-    void scale(float scalar);
 
     /**
      * Sets the elements of this vector to the specified values.
@@ -314,14 +446,6 @@ public:
     void set(const Vec4& p1, const Vec4& p2);
 
     /**
-     * Subtracts this vector and the specified vector as (this - v)
-     * and stores the result in this vector.
-     *
-     * @param v The vector to subtract.
-     */
-    void subtract(const Vec4& v);
-
-    /**
      * Subtracts the specified vectors and stores the result in dst.
      * The resulting vector is computed as (v1 - v2).
      *
@@ -330,106 +454,6 @@ public:
      * @param dst The destination vector.
      */
     static void subtract(const Vec4& v1, const Vec4& v2, Vec4* dst);
-
-    /**
-     * Calculates the sum of this vector with the given vector.
-     *
-     * Note: this does not modify this vector.
-     *
-     * @param v The vector to add.
-     * @return The vector sum.
-     */
-    inline Vec4 operator+(const Vec4& v) const;
-
-    /**
-     * Adds the given vector to this vector.
-     *
-     * @param v The vector to add.
-     * @return This vector, after the addition occurs.
-     */
-    inline Vec4& operator+=(const Vec4& v);
-
-    /**
-     * Calculates the sum of this vector with the given vector.
-     *
-     * Note: this does not modify this vector.
-     *
-     * @param v The vector to add.
-     * @return The vector sum.
-     */
-    inline Vec4 operator-(const Vec4& v) const;
-
-    /**
-     * Subtracts the given vector from this vector.
-     *
-     * @param v The vector to subtract.
-     * @return This vector, after the subtraction occurs.
-     */
-    inline Vec4& operator-=(const Vec4& v);
-
-    /**
-     * Calculates the negation of this vector.
-     *
-     * Note: this does not modify this vector.
-     *
-     * @return The negation of this vector.
-     */
-    inline Vec4 operator-() const;
-
-    /**
-     * Calculates the scalar product of this vector with the given value.
-     *
-     * Note: this does not modify this vector.
-     *
-     * @param s The value to scale by.
-     * @return The scaled vector.
-     */
-    inline Vec4 operator*(float s) const;
-
-    /**
-     * Scales this vector by the given value.
-     *
-     * @param s The value to scale by.
-     * @return This vector, after the scale occurs.
-     */
-    inline Vec4& operator*=(float s);
-
-    /**
-     * Returns the components of this vector divided by the given constant
-     *
-     * Note: this does not modify this vector.
-     *
-     * @param s the constant to divide this vector with
-     * @return a smaller vector
-     */
-    inline Vec4 operator/(float s) const;
-
-    /**
-     * Determines if this vector is less than the given vector.
-     *
-     * @param v The vector to compare against.
-     *
-     * @return True if this vector is less than the given vector, false otherwise.
-     */
-    inline bool operator<(const Vec4& v) const;
-
-    /**
-     * Determines if this vector is equal to the given vector.
-     *
-     * @param v The vector to compare against.
-     *
-     * @return True if this vector is equal to the given vector, false otherwise.
-     */
-    inline bool operator==(const Vec4& v) const;
-
-    /**
-     * Determines if this vector is not equal to the given vector.
-     *
-     * @param v The vector to compare against.
-     *
-     * @return True if this vector is not equal to the given vector, false otherwise.
-     */
-    inline bool operator!=(const Vec4& v) const;
 
     /** equals to Vec4(0,0,0,0) */
     static const Vec4 ZERO;
@@ -445,20 +469,10 @@ public:
     static const Vec4 UNIT_W;
 };
 
-/**
- * Calculates the scalar product of the given vector with the given value.
- *
- * @param x The value to scale by.
- * @param v The vector to scale.
- * @return The scaled vector.
- */
-inline Vec4 operator*(float x, const Vec4& v);
-
 NS_AX_MATH_END
 /**
  end of base group
  @}
  */
-#include "math/Vec4.inl"
 
 #endif  // MATH_VEC4_H
