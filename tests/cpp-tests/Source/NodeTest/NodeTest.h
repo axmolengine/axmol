@@ -352,4 +352,21 @@ public:
     virtual void onExit() override;
 };
 
+class NodeWorldSpace : public TestCocosNodeDemo
+{
+public:
+    CREATE_FUNC(NodeWorldSpace);
+    void update(float dt) override;
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+    float elapsedTime;
+
+    ax::Sprite* parent;
+    ax::Sprite* child;
+
+    virtual void onEnter() override;
+    virtual void onExit() override;
+};
+
 #endif
