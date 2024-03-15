@@ -1,19 +1,25 @@
-# Contributing to axmol
+# Contributing to Axmol Engine
 
+## General considerations
 
-## For general questions
+### Providing correct and relevant information is key
 
+When asking a question, reporting a bug, or submitting a patch, it is **very important** to write down clearly all the relevant information the reviewer may need. For a bug report, provide the steps to reproduce it; for a pull request, outline the changes made and the reasons behind them. This will assist the reviewers and make the process of improving Axmol smoother for everybody.
 
-You can ask general questions by using:
+## For questions
+
+Please revise our [FAQ](https://github.com/axmolengine/axmol/wiki/FAQ) and check the [GitHub Discussions](https://github.com/axmolengine/axmol/discussions), your question may have been already answered.
+
+If that is not the case, you can ask general questions by using:
 
 -   Forum (preferred way): https://github.com/axmolengine/axmol/discussions
 
 ## Reporting bugs
 
-To report bugs, please use the [Issue Tracker](https://github.com/axmolengine/axmol/issues)
+To report bugs, please use the [Issue Tracker](https://github.com/axmolengine/axmol/issues).
 
 Steps to report a bug:
-* Open the [url](https://github.com/axmolengine/axmol/issues/new)
+* Open the [issues url](https://github.com/axmolengine/axmol/issues/new)
 * Add all the needed information to reproduce the bug, the information include
     * engine version
     * steps to reproduce the bug
@@ -47,8 +53,8 @@ $ git checkout dev
 
 The patch must be _complete_. And by that, we mean:
 
--   For C++ code follow the [axmol C++ Coding Style][1]
--   For Python code follow the [PEP8 guidelines][3]
+-   For C++ code follow the [axmol C++ Coding Style](docs/CODING_STYLE.md)
+-   For Python code follow the [PEP8 guidelines](https://www.python.org/dev/peps/pep-0008)
 -   Describe what the patch does
 -   Include test cases if applicable
 -   Include unit tests if applicable
@@ -67,4 +73,6 @@ The patch must be _complete_. And by that, we mean:
 
 [*]: If you don't have access to test your code in all the supported platforms, let us know.
 
-__TBD__: Is this applicable for big features ? What is the best way to merge big features ?
+## About branch management
+
+Please read [this announcement](https://github.com/axmolengine/axmol/discussions/1271).

@@ -74,7 +74,7 @@ void Bug624Layer::switchLayer(float dt)
 
 void Bug624Layer::onAcceleration(Acceleration* acc, Event* event)
 {
-    log("Layer1 accel");
+    ax::print("Layer1 accel");
 }
 
 ////////////////////////////////////////////////////////
@@ -120,5 +120,5 @@ void Bug624Layer2::switchLayer(float dt)
 
 void Bug624Layer2::onAcceleration(Acceleration* acc, Event* event)
 {
-    log("Layer2 accel");
+    ax::print("Layer2 accel");
 }

@@ -23,7 +23,7 @@ if (WINRT)
             unset(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
         endif()
     endif()
-    set(AX_CPPWINRT_VERISON "2.0.230706.1" CACHE STRING "")
+    set(AX_CPPWINRT_VERSION "2.0.240111.5" CACHE STRING "")
 endif()
 
 # config c standard
@@ -111,12 +111,16 @@ if(EMSCRIPTEN_VERSION)
     message(STATUS "Using emsdk generate axmol project, EMSCRIPTEN_VERSION: ${EMSCRIPTEN_VERSION}")
 endif()
 
+set(_ax_compile_options)
+
 if (FUZZ_MSVC)
-    add_compile_options(/GF)
+    list(APPEND _ax_compile_options /GF /Zc:char8_t-)
+else() # others
+    list(APPEND _ax_compile_options -fno-char8_t)
 endif()
 
 if (FULL_MSVC)
-    add_compile_options(/Bv)
+    list(APPEND _ax_compile_options /Bv)
 endif()
 
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
@@ -167,12 +171,7 @@ function(use_ax_compile_define target)
             # PUBLIC GLAD_GLAPI_EXPORT
         )
         if(BUILD_SHARED_LIBS)
-            target_compile_definitions(${target}
-                PRIVATE _USRDLL
-                PRIVATE _USEGUIDLL # ui
-            )
-        else()
-            target_compile_definitions(${target} PUBLIC AX_STATIC)
+            target_compile_definitions(${target} PRIVATE AX_DLLEXPORT INTERFACE AX_DLLIMPORT)
         endif()
     endif()
 endfunction()
@@ -189,7 +188,7 @@ function(use_ax_compile_options target)
 endfunction()
 
 if(EMSCRIPTEN)
-    set(AX_WASM_THREADS "navigator.hardwareConcurrency" CACHE STRING "Wasm threads count")
+    set(AX_WASM_THREADS "4" CACHE STRING "Wasm threads count")
 
     set(_AX_WASM_THREADS_INT 0)
     if (AX_WASM_THREADS STREQUAL "auto") # not empty string or not 0
@@ -204,7 +203,7 @@ if(EMSCRIPTEN)
     message(STATUS "_AX_WASM_THREADS_INT=${_AX_WASM_THREADS_INT}")
 
     if (_AX_WASM_THREADS_INT)
-        add_compile_options(-pthread)
+        list(APPEND _ax_compile_options -pthread)
         add_link_options(-pthread -sPTHREAD_POOL_SIZE=${_AX_WASM_THREADS_INT})
     endif()
 
@@ -215,6 +214,9 @@ if(EMSCRIPTEN)
     set(CMAKE_C_FLAGS  ${_AX_EMCC_FLAGS})
     set(CMAKE_CXX_FLAGS  ${_AX_EMCC_FLAGS})
 endif()
+
+# apply axmol spec compile options
+add_compile_options(${_ax_compile_options})
 
 # Try enable asm & nasm compiler support
 set(can_use_assembler TRUE)

@@ -1139,7 +1139,7 @@ public:
      * @param parentFlags Renderer flag.
      */
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags);
-    virtual void visit() final;
+    virtual void visit();
 
     /** Returns the Scene that contains the Node.
      It returns `nullptr` if the node doesn't belong to any Scene.
@@ -1609,11 +1609,18 @@ public:
     Vec2 convertTouchToNodeSpaceAR(Touch* touch) const;
 
     /**
-     * Gets position of widget in world space.
+     * Gets position of node in world space.
      *
-     * @return Position of widget in world space.
+     * @return Position of node in world space.
      */
     Vec2 getWorldPosition() const;
+
+    /**
+     * Sets position of node in world space.
+     *
+     * @param position Position of node in world space.
+     */
+    void setWorldPosition(const Vec2& position);
 
     /**
      *  Sets an additional transform matrix to the node.

@@ -428,7 +428,7 @@ Data Device::getTextureDataForText(std::string_view text,
 
         if (!dc.setFont(textDefinition._fontName.c_str(), (int)textDefinition._fontSize, false))
         {
-            log("Can't found font(%s), use system default", textDefinition._fontName.c_str());
+            AXLOGW("Can't found font({}), use system default", textDefinition._fontName);
         }
 
         // draw text

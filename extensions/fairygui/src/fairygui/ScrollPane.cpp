@@ -1249,7 +1249,7 @@ float ScrollPane::updateTargetAndDuration(float pos, int axis)
             v *= ratio;
             sp_setField(_velocity, axis, v);
 
-            duration = log(60 / v2) / log(_decelerationRate) / 60;
+            duration = ::log(60 / v2) / ::log(_decelerationRate) / 60;
             float change = (int)(v * duration * 0.4f);
             pos += change;
         }

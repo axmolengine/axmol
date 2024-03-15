@@ -94,23 +94,23 @@ void Bug14327Layer::update(float dt)
 
 void Bug14327Layer::editBoxEditingDidBegin(ax::ui::EditBox* editBox)
 {
-    log("editBox %p DidBegin !", editBox);
+    ax::print("editBox %p DidBegin !", editBox);
 }
 
 void Bug14327Layer::editBoxEditingDidEndWithAction(ax::ui::EditBox* editBox,
                                                    ax::ui::EditBoxDelegate::EditBoxEndAction EditBoxEndAction)
 {
-    log("editBox %p DidEnd !", editBox);
+    ax::print("editBox %p DidEnd !", editBox);
 }
 
 void Bug14327Layer::editBoxTextChanged(ax::ui::EditBox* editBox, std::string_view text)
 {
-    log("editBox %p TextChanged, text: %s ", editBox, text.data());
+    ax::print("editBox %p TextChanged, text: %s ", editBox, text.data());
 }
 
 void Bug14327Layer::editBoxReturn(ui::EditBox* editBox)
 {
-    log("editBox %p was returned !", editBox);
+    ax::print("editBox %p was returned !", editBox);
 }
 
 #endif

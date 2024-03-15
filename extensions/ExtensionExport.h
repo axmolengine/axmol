@@ -25,33 +25,21 @@
 #ifndef __EXTENSIONEXPORT_H__
 #define __EXTENSIONEXPORT_H__
 
-#if (defined(WIN32) && defined(_WINDOWS)) || defined(WINRT) || defined(WP8)
-#    ifdef __MINGW32__
-#        include <string.h>
-#    endif
+#include "platform/PlatformDefine.h"
 
-#    if defined(AX_STATIC)
-#        define AX_EX_DLL
-#    else
-#        if defined(_USREXDLL)
-#            define AX_EX_DLL __declspec(dllexport)
-#        else /* use a DLL library */
-#            define AX_EX_DLL __declspec(dllimport)
-#        endif
-#    endif
-
-/* Define NULL pointer value */
-#    ifndef NULL
-#        ifdef __cplusplus
-#            define NULL 0
-#        else
-#            define NULL ((void*)0)
-#        endif
-#    endif
-#elif defined(_SHARED_)
-#    define AX_EX_DLL __attribute__((visibility("default")))
-#else
-#    define AX_EX_DLL
+#if defined(_WIN32)
+#  if defined(AX_EX_DLLEXPORT)
+#    define AX_EX_API __declspec(dllexport)
+#  elif defined(AX_EX_DLLIMPORT)
+#    define AX_EX_API __declspec(dllimport)
+#  endif
+#elif defined(AX_EX_DLLEXPORT) || defined(AX_EX_DLLIMPORT)
+#  define AX_EX_API __attribute__((visibility("default")))
 #endif
+#ifndef AX_EX_API
+#  define AX_EX_API
+#endif
+
+#define AX_EX_DLL AX_EX_API
 
 #endif /* __EXTENSIONEXPORT_H__*/

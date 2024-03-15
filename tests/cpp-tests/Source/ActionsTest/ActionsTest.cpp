@@ -673,7 +673,7 @@ void ActionAnimate::onEnter()
     _frameDisplayedListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [](EventCustom* event) {
         auto userData = static_cast<AnimationFrame::DisplayedEventInfo*>(event->getUserData());
 
-        log("target %p with data %s", userData->target, Value(userData->userInfo).getDescription().c_str());
+        ax::print("target %p with data %s", userData->target, Value(userData->userInfo).getDescription().c_str());
     });
 
     _eventDispatcher->addEventListenerWithFixedPriority(_frameDisplayedListener, -1);
@@ -1651,7 +1651,7 @@ void Issue1305::onEnter()
     centerSprites(0);
 
     _spriteTmp = Sprite::create("Images/grossini.png");
-    _spriteTmp->runAction(CallFunc::create(std::bind(&Issue1305::log, this, _spriteTmp)));
+    _spriteTmp->runAction(CallFunc::create(std::bind(&Issue1305::print, this, _spriteTmp)));
     _spriteTmp->retain();
 
     scheduleOnce(
@@ -1662,9 +1662,9 @@ void Issue1305::onEnter()
         2, "update_key");
 }
 
-void Issue1305::log(Node* sender)
+void Issue1305::print(Node* sender)
 {
-    ax::log("This message SHALL ONLY appear when the sprite is added to the scene, NOT BEFORE");
+    ax::print("This message SHALL ONLY appear when the sprite is added to the scene, NOT BEFORE");
 }
 
 void Issue1305::onExit()
@@ -1728,22 +1728,22 @@ void Issue1305_2::onEnter()
 
 void Issue1305_2::printLog1()
 {
-    log("1st block");
+    ax::print("1st block");
 }
 
 void Issue1305_2::printLog2()
 {
-    log("2nd block");
+    ax::print("2nd block");
 }
 
 void Issue1305_2::printLog3()
 {
-    log("3rd block");
+    ax::print("3rd block");
 }
 
 void Issue1305_2::printLog4()
 {
-    log("4th block");
+    ax::print("4th block");
 }
 
 std::string Issue1305_2::title() const
@@ -1841,14 +1841,14 @@ std::string Issue1327::subtitle() const
 
 void Issue1327::logSprRotation(Sprite* sender)
 {
-    log("%f", sender->getRotation());
+    ax::print("%f", sender->getRotation());
 }
 
 // Issue1398
 void Issue1398::incrementInteger()
 {
     _testInteger++;
-    log("incremented to %d", _testInteger);
+    ax::print("incremented to %d", _testInteger);
 }
 
 void Issue1398::onEnter()
@@ -1857,7 +1857,7 @@ void Issue1398::onEnter()
     this->centerSprites(0);
 
     _testInteger = 0;
-    log("testInt = %d", _testInteger);
+    ax::print("testInt = %d", _testInteger);
 
     this->runAction(
         Sequence::create(CallFunc::create(std::bind(&Issue1398::incrementIntegerCallback, this, (void*)"1")),
@@ -1873,7 +1873,7 @@ void Issue1398::onEnter()
 void Issue1398::incrementIntegerCallback(void* data)
 {
     this->incrementInteger();
-    log("%s", (char*)data);
+    ax::print("%s", (char*)data);
 }
 
 std::string Issue1398::subtitle() const
@@ -1892,14 +1892,14 @@ void Issue2599::onEnter()
     this->centerSprites(0);
 
     _count = 0;
-    log("before: count = %d", _count);
+    ax::print("before: count = %d", _count);
 
-    log("start count up 50 times using Repeat action");
+    ax::print("start count up 50 times using Repeat action");
     auto delay        = 1.0f / 50;
     auto repeatAction = Repeat::create(
         Sequence::createWithTwoActions(CallFunc::create([&]() { this->_count++; }), DelayTime::create(delay)), 50);
     this->runAction(Sequence::createWithTwoActions(
-        repeatAction, CallFunc::create([&]() { log("after: count = %d", this->_count); })));
+        repeatAction, CallFunc::create([&]() { ax::print("after: count = %d", this->_count); })));
 }
 
 std::string Issue2599::subtitle() const
@@ -2080,7 +2080,7 @@ void PauseResumeActions::onEnter()
 
     this->schedule(
         [&](float dt) {
-        log("Pausing");
+        ax::print("Pausing");
         auto director = Director::getInstance();
 
         _pausedTargets = director->getActionManager()->pauseAllRunningActions();
@@ -2089,7 +2089,7 @@ void PauseResumeActions::onEnter()
 
     this->schedule(
         [&](float dt) {
-        log("Resuming");
+        ax::print("Resuming");
         auto director = Director::getInstance();
         director->getActionManager()->resumeTargets(_pausedTargets);
         _pausedTargets.clear();
@@ -2313,7 +2313,7 @@ void SequenceWithFinalInstant::onEnter()
 
     bool called(false);
     const auto f([&called]() -> void {
-        ax::log("Callback called.");
+        ax::print("Callback called.");
         called = true;
     });
 

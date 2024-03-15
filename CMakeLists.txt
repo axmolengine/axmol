@@ -61,9 +61,6 @@ if(AX_BUILD_TESTS)
         add_subdirectory(${dir} ${CMAKE_BINARY_DIR}/tests/${target_name})
         set_target_properties(${target_name} PROPERTIES FOLDER "Apps")
     endmacro()
-    
-    # add cpp-template-default into project(axmol) for tmp test
-    add_test_target(HelloCpp ${_AX_ROOT}/templates/cpp-template-default )
 
 	# add cpp tests default
     add_test_target(cpp-tests ${_AX_ROOT}/tests/cpp-tests)
@@ -78,7 +75,6 @@ if(AX_BUILD_TESTS)
     endif()
 
     if(AX_ENABLE_EXT_LUA)
-        add_test_target(HelloLua ${_AX_ROOT}/templates/lua-template-default)
         add_test_target(lua-tests ${_AX_ROOT}/tests/lua-tests)
     endif(AX_ENABLE_EXT_LUA)
     

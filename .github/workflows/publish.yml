@@ -1,6 +1,9 @@
 name: publish
 
 on:
+  push:
+    paths:
+      - CHANGELOG.md
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
@@ -30,7 +33,7 @@ jobs:
         echo "release_ver=$release_ver" >> ${env:GITHUB_ENV}
 
     - name: Check release ver from commits
-      if: ${{ github.event.workflow_run.conclusion == 'success' && steps.check_ver.outputs.release_ver == '' }}
+      if: ${{ steps.check_ver.outputs.release_ver == '' }}
       shell: pwsh
       run: |
         # commit message template: xxxx [release 2.1.0]
@@ -56,9 +59,9 @@ jobs:
       shell: pwsh
       run: |
         $AX_ROOT = $(pwd).Path
-        ./1k/fetch.ps1 -name 'oboe' -dest $(Join-Path $AX_ROOT 'cache/oboe') -cfg $(Join-Path $AX_ROOT 'manifest.json')
+        ./1k/fetch.ps1 -name 'oboe' -prefix $(Join-Path $AX_ROOT 'cache') -cfg $(Join-Path $AX_ROOT 'manifest.json')
         ./build.ps1 -xc '-DAX_WITH_LZ4=ON,-DAX_WITH_CARES=ON,-DAX_WITH_YAML_CPP=ON,-DAX_WITH_KCP=ON' -c
-        ./tools/ci/make-pkg.ps1 -version "${{ steps.forward_ver.outputs.release_ver }}"
+        ./tools/ci/publish.ps1 -version "${{ steps.forward_ver.outputs.release_ver }}"
 
     - name: Publish to github release page
       if: ${{ steps.make_pkg.outputs.release_tag != '' }}
@@ -68,5 +71,6 @@ jobs:
         name: ${{ steps.make_pkg.outputs.release_tag }}
         files: ${{ steps.make_pkg.outputs.release_pkg }}
         body_path: ${{ steps.make_pkg.outputs.release_note }}
+        prerelease: ${{ steps.make_pkg.outputs.prerelease }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

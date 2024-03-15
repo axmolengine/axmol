@@ -193,9 +193,6 @@ THE SOFTWARE.
 #    include "platform/android/GLViewImpl-android.h"
 #    include "platform/android/GL-android.h"
 #    include "platform/android/StdC-android.h"
-// Enhance modification begin
-#    include "platform/android/EnhanceAPI-android.h"
-// Enhance modification end
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)

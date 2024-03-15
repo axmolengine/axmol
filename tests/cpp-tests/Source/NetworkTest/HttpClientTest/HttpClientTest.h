@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -42,6 +43,7 @@ public:
 
     // Menu Callbacks
     void onMenuGetTestClicked(ax::Ref* sender);
+    void onMenuPatchTestClicked(ax::Ref* sender);
     void onMenuPostTestClicked(ax::Ref* sender);
     void onMenuPostBinaryTestClicked(ax::Ref* sender);
     void onMenuPutTestClicked(ax::Ref* sender);

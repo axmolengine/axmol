@@ -235,7 +235,7 @@ void GLoader3D::onChangeSpine()
     if (skeletonAni == nullptr)
         return;
 
-#if !defined(AX_USE_SPINE_CPP) || AX_USE_SPINE_CPP
+#if !defined(AX_SPINE_VERSION) || AX_SPINE_VERSION >= 0x030700
     spine::AnimationState* state = skeletonAni->getState();
 
     spine::Animation* aniToUse = !_animationName.empty() ? skeletonAni->findAnimation(_animationName) : nullptr;

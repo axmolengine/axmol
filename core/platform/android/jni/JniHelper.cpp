@@ -349,3 +349,7 @@ void JniHelper::reportError(const char* className, const char* methodName, const
 }
 
 NS_AX_END  // namespace ax
+
+#undef LOGE
+#undef LOGD
+#undef LOG_TAG

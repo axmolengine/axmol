@@ -1935,6 +1935,18 @@ Vec2 Node::getWorldPosition() const
     return convertToWorldSpace(Vec2(_anchorPoint.x * _contentSize.width, _anchorPoint.y * _contentSize.height));
 }
 
+void Node::setWorldPosition(const Vec2& position)
+{
+    auto p = getParent();
+    if (p)
+    {
+        auto m = p->getNodeToWorldTransform();
+        auto v = m.getInversed() * (Vec3(-m.m[12], -m.m[13], 0) + Vec3(position.x, position.y, 0));
+        setPosition(Vec2(v.x, v.y));
+    }
+    else setPosition(position);
+}
+
 void Node::updateTransform()
 {
     // Recursively iterate over children

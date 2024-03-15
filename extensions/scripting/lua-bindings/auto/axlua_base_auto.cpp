@@ -369,56 +369,6 @@ int lua_ax_base_Console_delCommand(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Console_print(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Console* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Console",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::Console*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Console_print'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        const char* arg0;
-
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Console:print"); arg0 = arg0_tmp.c_str();
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Console_print'", nullptr);
-            return 0;
-        }
-        cobj->print(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Console:print",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Console_print'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_Console_setBindAddress(lua_State* tolua_S)
 {
     int argc = 0;
@@ -582,7 +532,6 @@ int lua_register_ax_base_Console(lua_State* tolua_S)
         tolua_function(tolua_S,"listenOnFileDescriptor",lua_ax_base_Console_listenOnFileDescriptor);
         tolua_function(tolua_S,"stop",lua_ax_base_Console_stop);
         tolua_function(tolua_S,"delCommand",lua_ax_base_Console_delCommand);
-        tolua_function(tolua_S,"print",lua_ax_base_Console_print);
         tolua_function(tolua_S,"setBindAddress",lua_ax_base_Console_setBindAddress);
         tolua_function(tolua_S,"isIpv6Server",lua_ax_base_Console_isIpv6Server);
         tolua_function(tolua_S,"setCommandSeparator",lua_ax_base_Console_setCommandSeparator);
@@ -10149,6 +10098,56 @@ int lua_ax_base_Node_getWorldPosition(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Node_setWorldPosition(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Node* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Node",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setWorldPosition'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Vec2 arg0;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.Node:setWorldPosition");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setWorldPosition'", nullptr);
+            return 0;
+        }
+        cobj->setWorldPosition(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:setWorldPosition",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_setWorldPosition'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Node_getComponent(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12246,6 +12245,7 @@ int lua_register_ax_base_Node(lua_State* tolua_S)
         tolua_function(tolua_S,"convertTouchToNodeSpace",lua_ax_base_Node_convertTouchToNodeSpace);
         tolua_function(tolua_S,"convertTouchToNodeSpaceAR",lua_ax_base_Node_convertTouchToNodeSpaceAR);
         tolua_function(tolua_S,"getWorldPosition",lua_ax_base_Node_getWorldPosition);
+        tolua_function(tolua_S,"setWorldPosition",lua_ax_base_Node_setWorldPosition);
         tolua_function(tolua_S,"getComponent",lua_ax_base_Node_getComponent);
         tolua_function(tolua_S,"addComponent",lua_ax_base_Node_addComponent);
         tolua_function(tolua_S,"removeComponent",lua_ax_base_Node_removeComponent);
@@ -82304,6 +82304,56 @@ int lua_ax_base_ProtectedNode_getProtectedChildByTag(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_ProtectedNode_getProtectedChildByName(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ProtectedNode* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ProtectedNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_getProtectedChildByName'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ProtectedNode:getProtectedChildByName");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProtectedNode_getProtectedChildByName'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getProtectedChildByName(arg0);
+        object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ProtectedNode:getProtectedChildByName",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ProtectedNode_getProtectedChildByName'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_ProtectedNode_removeProtectedChild(lua_State* tolua_S)
 {
     int argc = 0;
@@ -82862,6 +82912,7 @@ int lua_register_ax_base_ProtectedNode(lua_State* tolua_S)
         tolua_function(tolua_S,"new",lua_ax_base_ProtectedNode_constructor);
         tolua_function(tolua_S,"addProtectedChild",lua_ax_base_ProtectedNode_addProtectedChild);
         tolua_function(tolua_S,"getProtectedChildByTag",lua_ax_base_ProtectedNode_getProtectedChildByTag);
+        tolua_function(tolua_S,"getProtectedChildByName",lua_ax_base_ProtectedNode_getProtectedChildByName);
         tolua_function(tolua_S,"removeProtectedChild",lua_ax_base_ProtectedNode_removeProtectedChild);
         tolua_function(tolua_S,"removeProtectedChildByTag",lua_ax_base_ProtectedNode_removeProtectedChildByTag);
         tolua_function(tolua_S,"removeAllProtectedChildren",lua_ax_base_ProtectedNode_removeAllProtectedChildren);

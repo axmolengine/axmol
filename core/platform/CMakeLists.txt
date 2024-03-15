@@ -29,7 +29,6 @@ if(ANDROID)
         platform/android/Common-android.cpp
         platform/android/GLViewImpl-android.cpp
         platform/android/FileUtils-android.cpp
-        platform/android/EnhanceAPI-android.cpp
     )
 elseif(WINDOWS)
 
@@ -39,7 +38,6 @@ elseif(WINDOWS)
             platform/win32/GL-win32.h
             platform/win32/FileUtils-win32.h
             platform/win32/StdC-win32.h
-            platform/win32/PlatformDefine-win32.h
             platform/GLViewImpl.h
             )
         set(_AX_PLATFORM_SPECIFIC_SRC
@@ -68,7 +66,6 @@ elseif(APPLE)
         set(_AX_PLATFORM_SPECIFIC_HEADER
             ${_AX_PLATFORM_SPECIFIC_HEADER}
             platform/mac/StdC-mac.h
-            platform/mac/PlatformDefine-mac.h
             platform/mac/Application-mac.h
             platform/GLViewImpl.h
             )
@@ -87,7 +84,6 @@ elseif(APPLE)
             platform/ios/DirectorCaller-ios.h
             platform/ios/EAGLView-ios.h
             platform/ios/GLViewImpl-ios.h
-            platform/ios/PlatformDefine-ios.h
             platform/ios/StdC-ios.h
             platform/ios/InputView-ios.h
             )
@@ -133,7 +129,6 @@ elseif(LINUX)
         platform/linux/GL-linux.h
         platform/linux/StdC-linux.h
         platform/linux/FileUtils-linux.h
-        platform/linux/PlatformDefine-linux.h
         platform/GLViewImpl.h
         )
     set(_AX_PLATFORM_SPECIFIC_SRC
@@ -153,7 +148,6 @@ elseif(EMSCRIPTEN)
         platform/wasm/GL-wasm.h
         platform/wasm/StdC-wasm.h
         platform/wasm/FileUtils-wasm.h
-        platform/wasm/PlatformDefine-wasm.h
         platform/GLViewImpl.h # wasm can share GLviewImpl-desktop based on GLFW
         )
     set(_AX_PLATFORM_SPECIFIC_SRC

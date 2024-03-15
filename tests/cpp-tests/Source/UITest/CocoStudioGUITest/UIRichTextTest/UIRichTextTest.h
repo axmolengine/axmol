@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -201,6 +202,35 @@ public:
     CREATE_FUNC(UIRichTextNewline);
 
     bool init() override;
+};
+
+class UIRichTextHeaders : public UIRichTextTestBase
+{
+public:
+    CREATE_FUNC(UIRichTextHeaders);
+
+    bool init() override;
+};
+
+class UIRichTextParagraph : public UIRichTextTestBase
+{
+public:
+    CREATE_FUNC(UIRichTextParagraph);
+
+    bool init() override;
+};
+
+class UIRichTextScrollTo : public UIRichTextTestBase
+{
+public:
+    CREATE_FUNC(UIRichTextScrollTo);
+
+    bool init() override;
+
+protected:
+    void updateScrollViewSize();
+
+    ax::ui::ScrollView* _scrollView;
 };
 
 #endif /* defined(__TestCpp__UIRichTextTest__) */

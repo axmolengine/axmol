@@ -979,7 +979,10 @@ void Mat4::transformVector(const Vec4& vector, Vec4* dst) const
 {
     GP_ASSERT(dst);
 #ifdef AX_USE_SSE
-    MathUtil::transformVec4(col, vector.v, dst->v);
+    alignas(16) Vec4 inVal{vector};
+    alignas(16) Vec4 outVal;
+    MathUtil::transformVec4(col, reinterpret_cast<const __m128&>(inVal), reinterpret_cast<__m128&>(outVal));
+    *dst = outVal;
 #else
     MathUtil::transformVec4(m, (const float*)&vector, (float*)dst);
 #endif

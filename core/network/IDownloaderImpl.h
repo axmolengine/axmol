@@ -32,16 +32,6 @@
 
 #include "base/Console.h"
 
-// #define AX_DOWNLOADER_DEBUG
-#if defined(AX_DOWNLOADER_DEBUG) || defined(_DEBUG)
-#    define DLLOG(format, ...) ax::log(format, ##__VA_ARGS__)
-#else
-#    define DLLOG(...) \
-        do             \
-        {              \
-        } while (0)
-#endif
-
 NS_AX_BEGIN
 
 namespace network

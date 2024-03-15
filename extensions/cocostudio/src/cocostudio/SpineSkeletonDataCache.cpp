@@ -1,6 +1,6 @@
 #include "SpineSkeletonDataCache.h"
 
-#if !defined(AX_USE_SPINE_CPP) || AX_USE_SPINE_CPP
+#if !defined(AX_SPINE_VERSION) || AX_SPINE_VERSION >= 0x030700
 SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 {
     static SpineSkeletonDataCache internalShared;
@@ -9,7 +9,7 @@ SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 
 SpineSkeletonDataCache::SpineSkeletonDataCache()
 {
-    _reportError = &ax::log;
+    _reportError = &ax::print;
 }
 
 void SpineSkeletonDataCache::setErrorReportFunc(void (*errorfunc)(const char* pszFormat, ...))
@@ -43,7 +43,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
 
     auto fileExtension = ax::FileUtils::getInstance()->getFileExtension(dataFile);
 
-    static spine::Cocos2dTextureLoader s_textureLoader;
+    static spine::AxmolTextureLoader s_textureLoader;
 
     do
     {
@@ -52,7 +52,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
         if (nullptr == (atlas))
             break;
 
-        loader = new (__FILE__, __LINE__) spine::Cocos2dAtlasAttachmentLoader(atlas);
+        loader = new (__FILE__, __LINE__) spine::AxmolAtlasAttachmentLoader(atlas);
 
         int failed = 0;
 
@@ -142,7 +142,7 @@ SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 
 SpineSkeletonDataCache::SpineSkeletonDataCache()
 {
-    _reportError = &ax::log;
+    _reportError = &ax::print;
 }
 
 void SpineSkeletonDataCache::setErrorReportFunc(void (*errorfunc)(const char* pszFormat, ...))

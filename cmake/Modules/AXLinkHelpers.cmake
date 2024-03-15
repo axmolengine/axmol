@@ -41,7 +41,6 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         PRIVATE BT_USE_SSE_IN_API=1
         PRIVATE CP_USE_DOUBLES=0
         PRIVATE CP_USE_CGTYPES=0
-        PRIVATE FMT_HEADER_ONLY=1
     )
 
     ax_config_pred(${APP_NAME} AX_USE_ALSOFT)
@@ -52,14 +51,13 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         target_compile_definitions(${APP_NAME} PRIVATE AX_USE_SSE=1)
     endif()
 
-    if (NOT BUILD_SHARED_LIBS)
-        target_compile_definitions(${APP_NAME}
-            PRIVATE AX_STATIC=1
-        )
+    if (BUILD_SHARED_LIBS)
+        target_compile_definitions(${APP_NAME} PRIVATE AX_DLLIMPORT=1)
     endif()
 
     target_include_directories(${APP_NAME}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/lua
+        PRIVATE ${AX_ROOT_DIR}/extensions/scripting
         PRIVATE ${AX_ROOT_DIR}/extensions/scripting/lua-bindings/manual
         PRIVATE ${AX_ROOT_DIR}
         PRIVATE ${AX_ROOT_DIR}/thirdparty
@@ -140,6 +138,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         simdjson
         physics-nodes
         yasio
+        websocket-parser
     )
     
     if (AX_ENABLE_EXT_DRAGONBONES)
@@ -213,7 +212,35 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             PRIVATE ${AX_ROOT_DIR}/extensions/GUI/src
         )         
     endif()
-	
+
+    if (AX_ENABLE_EXT_FAIRYGUI)
+        list(APPEND LIBS "fairygui")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/fairygui/src
+        )         
+    endif()
+
+	if (AX_ENABLE_EXT_LIVE2D)
+        list(APPEND LIBS "Live2D")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/Live2D/Framework/src
+        )        
+    endif()
+
+	if (AX_ENABLE_EXT_EFFEKSEER)
+        list(APPEND LIBS "EffekseerForCocos2d-x")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/Effekseer
+        )        
+    endif()
+
+    if (AX_ENABLE_EXT_PHYSICS_NODE)
+        list(APPEND LIBS "physics-nodes")
+        target_include_directories(${APP_NAME}        
+            PRIVATE ${AX_ROOT_DIR}/extensions/physics-nodes/src
+        )        
+    endif()
+
     if (WINDOWS)
         target_link_libraries(${APP_NAME}
             ${LIBS}
@@ -236,6 +263,8 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         )
     endif()
 
+    target_link_libraries(${APP_NAME} debug fmtd optimized fmt)
+
     # Copy dlls to app bin dir
     if(WINDOWS)
         set(ssl_dll_suffix "")
@@ -252,7 +281,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             $<TARGET_FILE_DIR:${APP_NAME}>)
 
         if (BUILD_SHARED_LIBS)
-            add_custom_command(TARGET ${ax_target} POST_BUILD
+            add_custom_command(TARGET ${APP_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}glad.dll"
                 "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}glfw.dll"

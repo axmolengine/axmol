@@ -105,7 +105,7 @@ elseif(LINUX)
     endif()
 elseif(EMSCRIPTEN)
     set(_AX_UI_SPECIFIC_SRC
-        ui/UIEditBox/UIEditBoxImpl-stub.cpp
+        ui/UIEditBox/UIEditBoxImpl-wasm.cpp
     )
 elseif(ANDROID)
     set(_AX_UI_SPECIFIC_HEADER

@@ -92,7 +92,7 @@ private:
     std::mem_fn(memf)(inst);
   }
 
-  static void delay_init(_Ty* inst)
+  static void delay_init(_Ty* /*inst*/)
   { // dummy init without delay init member func, same as no delay constructor
   }
 };

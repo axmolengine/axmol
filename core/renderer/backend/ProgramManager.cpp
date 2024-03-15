@@ -201,7 +201,7 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
     if (it != _cachedPrograms.end())
         return it->second;
 
-    AXLOG("Loading shader: %" PRIu64 " %s, %s ...", progId, vsName.data(), fsName.data());
+    AXLOGD("Loading shader: {} {}, {} ...", progId, vsName.data(), fsName.data());
 
     auto fileUtils  = FileUtils::getInstance();
     auto vertFile   = fileUtils->fullPathForFilename(vsName);

@@ -1,37 +1,22 @@
-﻿#ifndef __CCCOCOSSTUDIO_H__
+#ifndef __CCCOCOSSTUDIO_H__
 #define __CCCOCOSSTUDIO_H__
-
-/// The libeditor
-#if (defined(WIN32) && defined(_WINDOWS)) || defined(WINRT) || defined(WP8)
-#    ifdef __MINGW32__
-#        include <string.h>
-#    endif
-
-#    if defined(AX_STATIC)
-#        define CCS_DLL
-#    else
-#        if defined(_USRCCS_DLL)
-#            define CCS_DLL __declspec(dllexport)
-#        else /* use a DLL library */
-#            define CCS_DLL __declspec(dllimport)
-#        endif
-#    endif
-
-/* Define NULL pointer value */
-#    ifndef NULL
-#        ifdef __cplusplus
-#            define NULL 0
-#        else
-#            define NULL ((void*)0)
-#        endif
-#    endif
-#elif defined(_SHARED_)
-#    define CCS_DLL __attribute__((visibility("default")))
-#else
-#    define CCS_DLL
-#endif
 
 #include "base/hlookup.h"
 #include "platform/PlatformMacros.h"
+
+#if defined(_WIN32)
+#  if defined(CCS_DLLEXPORT)
+#    define CCS_API __declspec(dllexport)
+#  elif defined(CCS_DLLIMPORT)
+#    define CCS_API __declspec(dllimport)
+#  endif
+#elif defined(CCS_DLLEXPORT) || defined(CCS_DLLIMPORT)
+#  define CCS_API __attribute__((visibility("default")))
+#endif
+#ifndef CCS_API
+#  define CCS_API
+#endif
+
+#define CCS_DLL CCS_API
 
 #endif /* __CCEXTENSIONEXPORT_H__*/

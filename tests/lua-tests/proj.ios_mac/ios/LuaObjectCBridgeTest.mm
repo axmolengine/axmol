@@ -25,8 +25,8 @@
 #import "LuaObjectCBridgeTest.h"
 
 #include "cocos2d.h"
-#include "scripting/lua-bindings/manual/LuaEngine.h"
-#include "scripting/lua-bindings/manual/LuaBridge.h"
+#include "lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/manual/LuaBridge.h"
 
 USING_NS_AX;
 

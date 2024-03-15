@@ -142,7 +142,7 @@ void WebSocketTest::onExit()
         _wsiError->closeAsync();
         AX_SAFE_DELETE(_wsiError);
     }
-    Node::onExit();
+    TestCase::onExit();
 }
 
 void WebSocketTest::startTestCallback(Ref* sender)
@@ -473,7 +473,7 @@ void WebSocketDelayTest::onExit()
         _wsiSendText = nullptr;
     }
 
-    Node::onExit();
+    TestCase::onExit();
 }
 
 void WebSocketDelayTest::startTestCallback(Ref* sender)

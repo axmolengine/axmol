@@ -118,15 +118,24 @@ class axutils {
 
         if (sdkRoot == null || !new File(sdkRoot).isDirectory()) {
             sdkRoot = Paths.get("${System.env.ANDROID_HOME}").toAbsolutePath().toString()
-            if (!new File(sdkRoot).isDirectory()) {
-                throw new  Exception('android sdk not specified properly in local.properties or system env ANDROID_HOME')
-            }
+            if (!new File(sdkRoot).isDirectory())
+                sdkRoot = null
+        }
+
+        if (sdkRoot == null) {
+            sdkRoot = Paths.get("${System.env.HOME}").toAbsolutePath().toString() + "/Library/android/sdk"
+            if (!new File(sdkRoot).isDirectory())
+                sdkRoot = null
+        }
+
+        if (sdkRoot == null) {
+            throw new Exception('Couldn\'t find android sdk. Specify path in local.properties or system env ANDROID_HOME')
         }
 
         def rets = new ArrayList(5) // ndkVer,ndkPath,cmakeVer,cmakeOptions(AX_USE_XXX, AX_ENABLE_XXX, AX_ENABLE_EXT_XXX),cmakeDir<nullable>
         findNDK(sdkRoot, ndkVer, rets)
         findCMake(sdkRoot, cmakeVer, rets)
-        parseCMakeOptions(project.properties, rets)
+        parseCMakeOptions(project, rets)
         def cmakeDir = rets[4]
         if (cmakeDir != null) {
             def symlinkDir = joinPath(sdkRoot, 'cmake', rets[2])
@@ -265,13 +274,19 @@ class axutils {
         return Paths.get(first, more).toString()
     }
 
-    private static void parseCMakeOptions(properties, rets) {
+    private static void parseCMakeOptions(project, rets) {
         def options = []
-        for(item in properties) {
+        for(item in project.properties) {
             if (item.key.startsWith('_1K_')) {
                 options.add("\"-D${item.key.substring(4)}=${item.value}\"")
             }
         }
+        def androidProjDir = project.projectDir.toString().replaceAll("\\\\", "/");
+        options.add('"-DCMAKE_FIND_ROOT_PATH="')
+        options.add('"-DANDROID_STL=c++_shared"')
+        options.add('"-DANDROID_TOOLCHAIN=clang"')
+        options.add('"-DANDROID_ARM_NEON=TRUE"')
+        options.add("\"-D_AX_ANDROID_PROJECT_DIR=${androidProjDir}\"")
         rets[3] = options
     }
 
@@ -283,27 +298,27 @@ class axutils {
         def found = null
         def properties = new Properties()
         File propertiesFile = new File("$ndkDir${File.separator}source.properties")
-        propertiesFile.withInputStream {
-            properties.load(it)
-            def foundNdkVer = properties['Pkg.Revision']
-            def ret = axutils.compareVersion(foundNdkVer, ndkVer)
-            if(ret == 0) {
-                println("Using found ndk (revision=$foundNdkVer,path=$ndkDir)")
-                found = true
-            }
-            else if(ret > 0){
-                if(allowNewerNdk) {
-                    println("Using found newer ndk (revision=$foundNdkVer,path=$ndkDir), (minimum required is: ${ndkVer})")
-                    ndkVer = foundNdkVer
+        try {
+            propertiesFile.withInputStream {
+                properties.load(it)
+                def foundNdkVer = properties['Pkg.Revision']
+                def ret = axutils.compareVersion(foundNdkVer, ndkVer)
+                if (ret == 0) {
+                    println("Using found ndk (revision=$foundNdkVer,path=$ndkDir)")
                     found = true
-                }
-                else {
-                    //throw new GradleException("The ndk ${ndkVer} is required, but $foundNdkVer found!")
+                } else if (ret > 0) {
+                    if (allowNewerNdk) {
+                        println("Using found newer ndk (revision=$foundNdkVer,path=$ndkDir), (minimum required is: ${ndkVer})")
+                        ndkVer = foundNdkVer
+                        found = true
+                    } else {
+                        //throw new GradleException("The ndk ${ndkVer} is required, but $foundNdkVer found!")
+                    }
+                } else {
+                    //throw new GradleException("The ndk ${ndkVer}+ is required, but $foundNdkVer found!")
                 }
             }
-            else {
-                //throw new GradleException("The ndk ${ndkVer}+ is required, but $foundNdkVer found!")
-            }
+        } catch (Exception) {
         }
         if (found) {
             rets[0] = ndkVer

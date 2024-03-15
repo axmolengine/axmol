@@ -216,7 +216,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, const AudioPlayerSetting
 
         if (_audioIDInfoMap.size() >= _maxInstances)
         {
-            log("Fail to play %s cause by limited max instance of AudioEngine", filePath.data());
+            AXLOGE("Fail to play {} cause by limited max instance of AudioEngine", filePath);
             break;
         }
         if (profileHelper)
@@ -224,7 +224,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, const AudioPlayerSetting
             if (profileHelper->profile.maxInstances != 0 &&
                 profileHelper->audioIDs.size() >= profileHelper->profile.maxInstances)
             {
-                log("Fail to play %s cause by limited max instance of AudioProfile", filePath.data());
+                AXLOGE("Fail to play {} cause by limited max instance of AudioProfile", filePath);
                 break;
             }
             if (profileHelper->profile.minDelay > TIME_DELAY_PRECISION)
@@ -233,7 +233,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, const AudioPlayerSetting
                 if (profileHelper->lastPlayTime > TIME_DELAY_PRECISION &&
                     currTime - profileHelper->lastPlayTime <= profileHelper->profile.minDelay)
                 {
-                    log("Fail to play %s cause by limited minimum delay", filePath.data());
+                    AXLOGE("Fail to play {} cause by limited minimum delay", filePath);
                     break;
                 }
             }
@@ -505,7 +505,7 @@ bool AudioEngine::isLoop(AUDIO_ID audioID)
         return tmpIterator->second.loop;
     }
 
-    log("AudioEngine::isLoop-->The audio instance %d is non-existent", audioID);
+    AXLOGW("AudioEngine::isLoop-->The audio instance {} is non-existent", audioID);
     return false;
 }
 
@@ -517,7 +517,7 @@ float AudioEngine::getVolume(AUDIO_ID audioID)
         return tmpIterator->second.volume;
     }
 
-    log("AudioEngine::getVolume-->The audio instance %d is non-existent", audioID);
+    AXLOGW("AudioEngine::getVolume-->The audio instance {} is non-existent", audioID);
     return 0.0f;
 }
 

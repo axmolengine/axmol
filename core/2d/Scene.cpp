@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -254,6 +255,39 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
         _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     }
 #endif
+
+    Camera::_visitingCamera = nullptr;
+}
+
+void Scene::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+{
+    Node::visit(renderer, parentTransform, parentFlags);
+}
+
+void Scene::visit()
+{
+    const auto eyeTransform = Mat4::IDENTITY;
+
+    for (const auto& camera : getCameras())
+    {
+        if (!camera->isVisible())
+            continue;
+
+        Camera::_visitingCamera = camera;
+
+        camera->setAdditionalTransform(eyeTransform.getInversed());
+        _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION,
+                              Camera::_visitingCamera->getViewProjectionMatrix());
+
+        camera->apply();
+        // clear background with max depth
+        camera->clearBackground();
+        // visit the scene
+        Node::visit();
+
+        _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    }
 
     Camera::_visitingCamera = nullptr;
 }

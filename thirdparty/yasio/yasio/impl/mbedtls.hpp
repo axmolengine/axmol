@@ -31,6 +31,8 @@ SOFTWARE.
 
 #if YASIO_SSL_BACKEND == 2
 
+#  include "yasio/split.hpp"
+
 YASIO__DECL yssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
 {
   auto ctx = new yssl_ctx_st();
@@ -63,17 +65,16 @@ YASIO__DECL yssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
     if (yasio__valid_str(opts.crtfile_)) // the cafile_ must be full path
     {
       int fail_count = 0;
-      yssl_splitpath(opts.crtfile_, [&](char* first, char* last) {
-        yssl_split_term null_term(last);
+      yasio::split(
+          opts.crtfile_, ',', [&](char* first, char* last) {
+            yasio::split_term null_term(last);
 
-        if ((ret = ::mbedtls_x509_crt_parse_file(&ctx->cert, first)) != 0)
-        {
-          ++fail_count;
-          YASIO_LOG("mbedtls_x509_crt_parse_file with ret=-0x%x", (unsigned int)-ret);
-        }
-
-        return !!ret;
-      });
+            if ((ret = ::mbedtls_x509_crt_parse_file(&ctx->cert, first)) != 0)
+            {
+              ++fail_count;
+              YASIO_LOG("mbedtls_x509_crt_parse_file with ret=-0x%x", (unsigned int)-ret);
+            }
+          });
       if (!fail_count)
         authmode = MBEDTLS_SSL_VERIFY_REQUIRED;
     }

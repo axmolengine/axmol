@@ -1,6 +1,8 @@
-# ![][1] C++ coding style
+<p align="center"><a href="https://axmol.dev" target="_blank" rel="noopener noreferrer"><img width="160" src="logo.png" alt="axmol logo"></a></p>
 
-_v0.2 - Last updated November 8, 2013_
+# Axmol Engine - C++ coding style
+
+_v0.21 - Last updated February 12, 2024_
 
 _Forked from [Google's C++ coding style](http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml) rev. 3.274_
 
@@ -144,15 +146,15 @@ The following rules will guide you through the various pitfalls of using header 
 
 All header files should have `#define` guards to prevent multiple inclusion. The format of the symbol name should be `<PROJECT>_<PATH>_<FILE>_H_.`
 
-To guarantee uniqueness, they should be based on the full path in a project's source tree. For example, the file `cocos2dx/sprites_nodes/CCSprite.h` in project foo should have the following guard:
+To guarantee uniqueness, they should be based on the full path in a project's source tree. For example, the file `axmol/core/2d/Sprite.h` in project foo should have the following guard:
 
 ```cpp
-#ifndef COCOS2DX_SPRITE_NODES_CCSPRITE_H_
-#define COCOS2DX_SPRITE_NODES_CCSPRITE_H_
+#ifndef AX_CORE_2D_SPRITE_H_
+#define AX_CORE_2D_SPRITE_H_
 
 ...
 
-#endif  // COCOS2DX_SPRITE_NODES_CCSPRITE_H_
+#endif  // AX_CORE_2D_SPRITE_H_
 ```
 
 ```cpp
@@ -2843,7 +2845,4 @@ If you are editing code, take a few minutes to look at the code around you and d
 The point of having style guidelines is to have a common vocabulary of coding so people can concentrate on what you are saying, rather than on how you are saying it. We present global style rules here so people know the vocabulary. But local style is also important. If code you add to a file looks drastically different from the existing code around it, the discontinuity throws readers out of their rhythm when they go to read it. Try to avoid this.
 
 OK, enough writing about writing code; the code itself is much more interesting. Have fun!
-
-
-[1]: https://lh3.googleusercontent.com/-glwwzmFyUmk/UQgPnlx40uI/AAAAAAAArzg/WPRW10kkecM/s144/cocos2d-x-logo.png
 
