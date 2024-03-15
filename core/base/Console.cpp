@@ -267,7 +267,7 @@ AX_API void print(const char* format, ...)
     va_end(args);
 
     if (!message.empty())
-        outputLog(LogItem::vformat(FMT_COMPILE("{}{}\n"), preprocessLog(LogItem{LogLevel::Silent}), message),
+        outputLog(LogItem::vformat(FMT_COMPILE("{}{}"), preprocessLog(LogItem{LogLevel::Silent}), message),
                   "axmol debug info");
 }
 
