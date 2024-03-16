@@ -849,7 +849,7 @@ void Scheduler::update(float dt)
     //
     // Functions allocated from another thread
     //
-    const auto temp = [](){
+    const auto temp = [this](){
         // fixed #4123: Save the callback functions, they must be invoked after '_performMutex.unlock()', otherwise if
         // new functions are added in callback, it will cause thread deadlock.
         std::lock_guard<std::mutex> lock(_performMutex);
