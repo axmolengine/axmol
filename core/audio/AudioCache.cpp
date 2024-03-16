@@ -105,7 +105,7 @@ AudioCache::~AudioCache()
     }
     else
     {
-        ALOGW("AudioCache (%p), id=%u, buffer isn't ready, state=%d", this, _id, (int)_state);
+        ALOGW("AudioCache (%p), id=%u, buffer isn't ready, state=%d", this, _id, (int)_state.load());
     }
 
     if (_queBufferFrames > 0)
@@ -358,7 +358,7 @@ void AudioCache::addPlayCallback(const std::function<void()>& callback)
         break;
 
     default:
-        ALOGE("Invalid state: %d", (int)_state);
+        ALOGE("Invalid state: %d", (int)_state.load());
         break;
     }
 }
@@ -392,7 +392,7 @@ void AudioCache::addLoadCallback(const std::function<void(bool)>& callback)
         break;
 
     default:
-        ALOGE("Invalid state: %d", (int)_state);
+        ALOGE("Invalid state: %d", (int)_state.load());
         break;
     }
 }
