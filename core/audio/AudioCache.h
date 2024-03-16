@@ -95,7 +95,7 @@ protected:
 
     std::mutex _readDataTaskMutex;
 
-    State _state;
+    std::atomic<State> _state;
 
     std::shared_ptr<bool> _isDestroyed;
     std::string _fileFullPath;
