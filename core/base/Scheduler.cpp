@@ -849,21 +849,16 @@ void Scheduler::update(float dt)
     //
     // Functions allocated from another thread
     //
-
-    // Testing size is faster than locking / unlocking.
-    // And almost never there will be functions scheduled to be called.
-    if (!_actionsToPerform.empty())
-    {
-        _performMutex.lock();
+    const auto temp = [](){
         // fixed #4123: Save the callback functions, they must be invoked after '_performMutex.unlock()', otherwise if
         // new functions are added in callback, it will cause thread deadlock.
-        auto temp = std::move(_actionsToPerform);
-        _performMutex.unlock();
+        std::lock_guard<std::mutex> lock(_performMutex);
+        return std::move(_actionsToPerform);
+    }();
 
-        for (const auto& function : temp)
-        {
-            function();
-        }
+    for (const auto& function : temp)
+    {
+        function();
     }
 }
 
