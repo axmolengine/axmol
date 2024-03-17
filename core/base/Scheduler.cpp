@@ -720,6 +720,7 @@ void Scheduler::runOnAxmolThread(std::function<void()> action)
 {
     std::lock_guard<std::mutex> lock(_performMutex);
     _actionsToPerform.emplace_back(std::move(action));
+    _actionsToPerformEmpty.store(false, std::memory_order_release);
 }
 
 void Scheduler::removeAllPendingActions()
@@ -850,15 +851,16 @@ void Scheduler::update(float dt)
     // Functions allocated from another thread
     //
 
-    // Testing size is faster than locking / unlocking.
+    // Testing atomic is faster than locking / unlocking.
     // And almost never there will be functions scheduled to be called.
-    if (!_actionsToPerform.empty())
+    if (!_actionsToPerformEmpty.load(std::memory_order_acquire))
     {
         _performMutex.lock();
         // fixed #4123: Save the callback functions, they must be invoked after '_performMutex.unlock()', otherwise if
         // new functions are added in callback, it will cause thread deadlock.
         auto temp = std::move(_actionsToPerform);
         _performMutex.unlock();
+        _actionsToPerformEmpty.store(false, std::memory_order_release);
 
         for (const auto& function : temp)
         {
