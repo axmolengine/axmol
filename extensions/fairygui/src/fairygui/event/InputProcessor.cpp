@@ -699,7 +699,10 @@ void InputProcessor::onKeyDown(ax::EventKeyboard::KeyCode keyCode, ax::Event * e
 
     _recentInput._keyCode = keyCode;
     _recentInput._target = _owner;
-    _recentInput._target->dispatchEvent(UIEventType::KeyDown);
+
+	_activeProcessor = this; // add by binxiaojiao
+	_recentInput._target->dispatchEvent(UIEventType::KeyDown);
+	_activeProcessor = nullptr; // add by binxiaojiao
 }
 
 void InputProcessor::onKeyUp(ax::EventKeyboard::KeyCode keyCode, ax::Event *)
@@ -713,7 +716,10 @@ void InputProcessor::onKeyUp(ax::EventKeyboard::KeyCode keyCode, ax::Event *)
 
     _recentInput._keyCode = keyCode;
     _recentInput._target = _owner;
+
+	_activeProcessor = this; // add by binxiaojiao
     _recentInput._target->dispatchEvent(UIEventType::KeyUp);
+	_activeProcessor = nullptr; // add by binxiaojiao
 }
 
 TouchInfo::TouchInfo() :
