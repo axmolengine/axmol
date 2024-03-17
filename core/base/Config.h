@@ -34,6 +34,13 @@ THE SOFTWARE.
  * cocos2d (cc) configuration file.
  */
 
+/** @def AX_ENABLE_3D
+ * If enabled, allows the use of 3D functionality.
+ */
+#ifndef AX_ENABLE_3D
+#    define AX_ENABLE_3D 0
+#endif
+
 /** @def AX_ENABLE_STACKABLE_ACTIONS
  * If enabled, actions that alter the position property (eg: MoveBy, JumpBy, BezierBy, etc..) will be stacked.
  * If you run 2 or more 'position' actions at the same time on a node, then end position will be the sum of all the
@@ -274,7 +281,7 @@ THE SOFTWARE.
          AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_WINRT ||   \
          AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || \
          AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
-#        define AX_USE_3D_PHYSICS 1
+#        define AX_USE_3D_PHYSICS 0
 #    endif
 #endif
 
@@ -287,7 +294,7 @@ THE SOFTWARE.
 
 /** Use 3D navigation API */
 #ifndef AX_USE_NAVMESH
-#    define AX_USE_NAVMESH 1
+#    define AX_USE_NAVMESH 0
 #endif
 
 /** Use culling or not. */

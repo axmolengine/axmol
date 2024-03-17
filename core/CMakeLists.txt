@@ -142,6 +142,11 @@ option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ON)
 
 option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" OFF)
 
+option(AX_ENABLE_3D "Build 3D support" ON)
+option(AX_ENABLE_PHYSICS3D "Build Physics3D support" ON)
+option(AX_ENABLE_NAVMESH "Build NavMesh support" ON)
+option(AX_ENABLE_MEDIA "Build media support" ON)
+
 if(XCODE)
     # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
     # set(CMAKE_INSTALL_RPATH "@executable_path/Frameworks")
@@ -192,34 +197,39 @@ configure_file(
 #   "NOT (AX_GIT_BRANCH STREQUAL \"dev\")" OFF)
 
 include(2d/CMakeLists.txt)
-include(3d/CMakeLists.txt)
+if(AX_ENABLE_3D)
+    include(3d/CMakeLists.txt)
+endif()
 include(platform/CMakeLists.txt)
 include(physics/CMakeLists.txt)
-include(physics3d/CMakeLists.txt)
+if(AX_ENABLE_PHYSICS3D)
+    include(physics3d/CMakeLists.txt)
+endif()
 include(math/CMakeLists.txt)
-include(navmesh/CMakeLists.txt)
+if(AX_ENABLE_NAVMESH)
+    include(navmesh/CMakeLists.txt)
+endif()
 include(renderer/CMakeLists.txt)
 include(base/CMakeLists.txt)
 include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(audio/CMakeLists.txt)
 
-file(GLOB_RECURSE _AX_MEDIA_HEADER media/*.h)
-file(GLOB_RECURSE _AX_MEDIA_SRC media/*.cpp)
+if(AX_ENABLE_MEDIA)
+    file(GLOB_RECURSE _AX_MEDIA_HEADER media/*.h)
+    file(GLOB_RECURSE _AX_MEDIA_SRC media/*.cpp)
 
-if (APPLE)
-    list(APPEND _AX_MEDIA_SRC media/AvfMediaEngine.mm)
-    set_source_files_properties(media/MediaEngine.cpp PROPERTIES LANGUAGE OBJCXX)
+    if (APPLE)
+        list(APPEND _AX_MEDIA_SRC media/AvfMediaEngine.mm)
+        set_source_files_properties(media/MediaEngine.cpp PROPERTIES LANGUAGE OBJCXX)
+    endif()
 endif()
 
 set(_AX_HEADER axmol.h
     ${_AX_2D_HEADER}
-    ${_AX_3D_HEADER}
     ${_AX_PLATFORM_HEADER}
     ${_AX_PHYSICS_HEADER}
-    ${_AX_PHYSICS3D_HEADER}
     ${_AX_MATH_HEADER}
-    ${_AX_NAVMESH_HEADER}
     ${_AX_RENDERER_HEADER}
     ${_AX_BASE_HEADER}
     ${_AX_AUDIO_HEADER}
@@ -230,12 +240,9 @@ set(_AX_HEADER axmol.h
 
 set(_AX_SRC axmol.cpp
     ${_AX_2D_SRC}
-    ${_AX_3D_SRC}
     ${_AX_PLATFORM_SRC}
     ${_AX_PHYSICS_SRC}
-    ${_AX_PHYSICS3D_SRC}
     ${_AX_MATH_SRC}
-    ${_AX_NAVMESH_SRC}
     ${_AX_RENDERER_SRC}
     ${_AX_BASE_SRC}
     ${_AX_AUDIO_SRC}
@@ -243,6 +250,23 @@ set(_AX_SRC axmol.cpp
     ${_AX_NETWORK_SRC}
     ${_AX_MEDIA_SRC}
     )
+
+if(AX_ENABLE_3D)
+    list(APPEND _AX_HEADER ${_AX_3D_HEADER})
+    list(APPEND _AX_SRC ${_AX_3D_SRC})
+endif()
+if(AX_ENABLE_PHYSICS3D)
+    list(APPEND _AX_HEADER ${_AX_PHYSICS3D_HEADER})
+    list(APPEND _AX_SRC ${_AX_PHYSICS3D_SRC})
+endif()
+if(AX_ENABLE_NAVMESH)
+    list(APPEND _AX_HEADER ${_AX_NAVMESH_HEADER})
+    list(APPEND _AX_SRC ${_AX_NAVMESH_SRC})
+endif()
+if(AX_ENABLE_MEDIA)
+    list(APPEND _AX_HEADER ${_AX_MEDIA_HEADER})
+    list(APPEND _AX_SRC ${_AX_MEDIA_SRC})
+endif()
 
 list(APPEND _AX_SRC ${_AX_HEADER})
 

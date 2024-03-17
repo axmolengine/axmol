@@ -28,7 +28,9 @@ THE SOFTWARE.
 #pragma once
 
 #include "2d/Node.h"
+#if AX_ENABLE_3D
 #include "3d/Frustum.h"
+#endif
 #include "renderer/QuadCommand.h"
 #include "renderer/CustomCommand.h"
 #include "base/Director.h"
@@ -190,10 +192,12 @@ public:
      */
     void unprojectGL(const Vec2& size, const Vec3* src, Vec3* dst) const;
 
+#if AX_ENABLE_3D
     /**
      * Is this aabb visible in frustum
      */
     bool isVisibleInFrustum(const AABB* aabb) const;
+#endif
 
     /**
      * Get object depth towards camera
@@ -357,8 +361,10 @@ protected:
     mutable bool _viewProjectionDirty = true;
     bool _viewProjectionUpdated = false;  // Whether or not the viewprojection matrix was updated since the last frame.
     CameraFlag _cameraFlag      = CameraFlag::DEFAULT;  // camera flag
+#if AX_ENABLE_3D
     mutable Frustum _frustum;                           // camera frustum
     mutable bool _frustumDirty = true;
+#endif
     int8_t _depth = -1;  // camera depth, the depth of camera with CameraFlag::DEFAULT flag is 0 by default, a camera
                          // with larger depth is drawn on top of camera with smaller depth
 

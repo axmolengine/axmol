@@ -104,8 +104,8 @@ struct VertexLayoutHelper
     static void setupSkyBox(Program* program)
     {
         auto vertexLayout = program->getVertexLayout();
-        auto attrNameLoc  = program->getAttributeLocation(shaderinfos::attribute::ATTRIBUTE_NAME_POSITION);
-        vertexLayout->setAttrib(shaderinfos::attribute::ATTRIBUTE_NAME_POSITION, attrNameLoc,
+        auto attrNameLoc  = program->getAttributeLocation(backend::ATTRIBUTE_NAME_POSITION);
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION, attrNameLoc,
                                 backend::VertexFormat::FLOAT3, 0, false);
         vertexLayout->setStride(sizeof(Vec3));
     }
