@@ -860,7 +860,7 @@ void Scheduler::update(float dt)
         // new functions are added in callback, it will cause thread deadlock.
         auto temp = std::move(_actionsToPerform);
         _performMutex.unlock();
-        _actionsToPerformEmpty.store(false, std::memory_order_release);
+        _actionsToPerformEmpty.store(true, std::memory_order_release);
 
         for (const auto& function : temp)
         {
