@@ -92,15 +92,15 @@ cpBool ChipmunkDemoLeftDown   = cpFalse;
 double ChipmunkDemoTime;
 
 cpBody* mouse_body        = cpBodyNewKinematic();
-cpConstraint* mouse_joint = NULL;
+static cpConstraint* mouse_joint = nullptr;
 
-char const* ChipmunkDemoMessageString = NULL;
+char const* ChipmunkDemoMessageString = nullptr;
 
 #define GRABBABLE_MASK_BIT (1 << 31)
 cpShapeFilter GRAB_FILTER          = {CP_NO_GROUP, (unsigned int)GRABBABLE_MASK_BIT, (unsigned int)GRABBABLE_MASK_BIT};
 cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBABLE_MASK_BIT};
 
-ax::DrawNode* drawCP = NULL;
+ax::DrawNode* drawCP = nullptr;
 
 void ChipmunkDemoDefaultDrawImpl(cpSpace* space){};
 
@@ -217,7 +217,7 @@ static char PrintStringBuffer[1024 * 8];
 static char* PrintStringCursor;
 void ChipmunkDemoPrintString(char const* fmt, ...)
 {
-    if (PrintStringCursor == NULL)
+    if (PrintStringCursor == nullptr)
     {
         return;
     }
@@ -235,7 +235,7 @@ void ChipmunkDemoPrintString(char const* fmt, ...)
     else
     {
         // encoding error or overflow, prevent further use until reinitialized
-        PrintStringCursor = NULL;
+        PrintStringCursor = nullptr;
     }
     va_end(args);
 
@@ -262,18 +262,19 @@ static void ShapeFreeWrap(cpSpace* space, cpShape* shape, void* unused)
 
 static void PostShapeFree(cpShape* shape, cpSpace* space)
 {
-    cpSpaceAddPostStepCallback(space, (cpPostStepFunc)ShapeFreeWrap, shape, NULL);
+    cpSpaceAddPostStepCallback(space, (cpPostStepFunc)ShapeFreeWrap, shape, nullptr);
 }
 
 static void ConstraintFreeWrap(cpSpace* space, cpConstraint* constraint, void* unused)
 {
+    mouse_joint = nullptr;
     cpSpaceRemoveConstraint(space, constraint);
     cpConstraintFree(constraint);
 }
 
 static void PostConstraintFree(cpConstraint* constraint, cpSpace* space)
 {
-    cpSpaceAddPostStepCallback(space, (cpPostStepFunc)ConstraintFreeWrap, constraint, NULL);
+    cpSpaceAddPostStepCallback(space, (cpPostStepFunc)ConstraintFreeWrap, constraint, nullptr);
 }
 
 static void BodyFreeWrap(cpSpace* space, cpBody* body, void* unused)
@@ -284,7 +285,7 @@ static void BodyFreeWrap(cpSpace* space, cpBody* body, void* unused)
 
 static void PostBodyFree(cpBody* body, cpSpace* space)
 {
-    cpSpaceAddPostStepCallback(space, (cpPostStepFunc)BodyFreeWrap, body, NULL);
+    cpSpaceAddPostStepCallback(space, (cpPostStepFunc)BodyFreeWrap, body, nullptr);
 }
 
 // Safe and future proof way to remove and free all objects that have been added to the space.
@@ -455,7 +456,7 @@ void ChipmunkTestBed::onMouseDown(Event* event)
         {
             cpSpaceRemoveConstraint(_space, mouse_joint);
             cpConstraintFree(mouse_joint);
-            mouse_joint = NULL;
+            mouse_joint = nullptr;
         }
         ChipmunkDemoRightDown  = cpTrue;
         ChipmunkDemoRightClick = cpTrue;
@@ -470,7 +471,7 @@ void ChipmunkTestBed::onMouseUp(Event* event)
     {
         cpSpaceRemoveConstraint(_space, mouse_joint);
         cpConstraintFree(mouse_joint);
-        mouse_joint = NULL;
+        mouse_joint = nullptr;
     }
     ChipmunkDemoLeftDown   = cpFalse;
     ChipmunkDemoRightDown  = cpFalse;

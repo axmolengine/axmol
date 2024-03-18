@@ -4418,23 +4418,23 @@ void NodeSort::reorderSprite(float dt)
 {
     unschedule("reorder_sprite_key");
 
-    log("Before reorder--");
+    ax::print("Before reorder--");
 
     auto& children = _node->getChildren();
 
     for (const auto& child : children)
     {
-        log("tag %i z %i", (int)child->getTag(), (int)child->getLocalZOrder());
+        ax::print("tag %i z %i", (int)child->getTag(), (int)child->getLocalZOrder());
     }
     // z-4
     _node->reorderChild(_node->getChildren().at(0), -6);
 
     _node->sortAllChildren();
 
-    log("After reorder--");
+    ax::print("After reorder--");
     for (const auto& child : children)
     {
-        log("tag %i z %i", (int)child->getTag(), (int)child->getLocalZOrder());
+        ax::print("tag %i z %i", (int)child->getTag(), (int)child->getLocalZOrder());
     }
 }
 
@@ -4487,7 +4487,7 @@ void SpriteBatchNodeReorderSameIndex::reorderSprite(float dt)
 
     for (const auto& sprite : _batchNode->getDescendants())
     {
-        log("tag %i", sprite->getTag());
+        ax::print("tag %i", sprite->getTag());
     }
 }
 

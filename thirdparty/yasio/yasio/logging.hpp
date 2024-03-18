@@ -30,7 +30,10 @@ SOFTWARE.
 #include "yasio/strfmt.hpp"
 
 #if defined(__EMSCRIPTEN__)
-#  define YASIO_LOG_TAG(tag, format, ...) printf((tag format "\n"), ##__VA_ARGS__)
+#  include <stdio.h>
+#  include <unistd.h>
+inline void yasio__print(std::string&& message) { ::write(::fileno(stdout), message.c_str(), message.size()); }
+#  define YASIO_LOG_TAG(tag, format, ...) yasio__print(::yasio::strfmt(127, (tag format), ##__VA_ARGS__))
 #elif defined(_WIN32)
 #  define YASIO_LOG_TAG(tag, format, ...) OutputDebugStringA(::yasio::strfmt(127, (tag format "\n"), ##__VA_ARGS__).c_str())
 #elif defined(ANDROID) || defined(__ANDROID__)

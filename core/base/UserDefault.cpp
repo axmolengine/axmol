@@ -379,7 +379,7 @@ void UserDefault::lazyInit()
     // construct file mapping
     if (!_fileStream.open(_filePath, IFileStream::Mode::OVERLAPPED))
     {
-        log("[Warning] UserDefault::init open storage file '%s' failed!", _filePath.c_str());
+        AXLOGW("UserDefault::init open storage file '{}' failed!", _filePath);
         return;
     }
 
@@ -389,7 +389,7 @@ void UserDefault::lazyInit()
     {  // construct a empty file mapping
         if (!_fileStream.resize(_curMapSize))
         {
-            log("[Warning] UserDefault::init failed to truncate '%s'.", _filePath.c_str());
+            AXLOGW("UserDefault::init failed to truncate '{}'.", _filePath);
             return;
         }
         _rwmmap = std::make_shared<mio::mmap_sink>(_fileStream.nativeHandle(), 0, _curMapSize);
@@ -429,9 +429,9 @@ void UserDefault::lazyInit()
         {
             closeFileMapping();
             ::remove(_filePath.c_str());
-            log("[Warning] UserDefault::init map file '%s' failed, we can't save data persisit this time, next time "
+            AXLOGW("UserDefault::init map file '{}' failed, we can't save data persisit this time, next time "
                 "we will retry!",
-                _filePath.c_str());
+                _filePath);
         }
     }
 #else
@@ -450,7 +450,7 @@ void UserDefault::lazyInit()
         }
         else
         {
-            log("UserDefault::init load xml file: %s failed, %s", _filePath.c_str(), ret.description());
+            AXLOGE("UserDefault::init load xml file: {} failed, {}", _filePath, ret.description());
         }
     }
 
@@ -488,7 +488,7 @@ void UserDefault::flush()
                 _curMapSize <<= 1;  // X2
 
             if (!_fileStream.resize(_curMapSize))
-                ax::log("[Warning] UserDefault::flush failed to truncate '%s'.", _filePath.c_str());
+                AXLOGW("UserDefault::flush failed to truncate '{}'.", _filePath);
 
             _rwmmap->map(_fileStream.nativeHandle(), 0, _curMapSize, error);
         }

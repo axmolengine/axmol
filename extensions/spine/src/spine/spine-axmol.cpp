@@ -107,5 +107,5 @@ char *AxmolExtension::_readFile(const spine::String &path, int *length) {
 }
 
 SpineExtension *spine::getDefaultExtension() {
-	return new AxmolExtension();
+    return new AxmolExtension();
 }

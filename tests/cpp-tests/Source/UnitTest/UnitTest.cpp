@@ -325,12 +325,12 @@ void TemplateVectorTest::onEnter()
     // Set the seed by time
     std::srand((unsigned)time(nullptr));
     Vector<Node*> vecForRandom = createVector();
-    log("<--- begin ---->");
+    ax::print("<--- begin ---->");
     for (int i = 0; i < vecForRandom.size(); ++i)
     {
-        log("Vector: random object tag = %d", vecForRandom.getRandomObject()->getTag());
+        ax::print("Vector: random object tag = %d", vecForRandom.getRandomObject()->getTag());
     }
-    log("<---- end  ---->");
+    ax::print("<---- end  ---->");
 
     // Self assignment
     Vector<Node*> vecSelfAssign = createVector();
@@ -359,7 +359,7 @@ void TemplateVectorTest::onEnter()
 
 void TemplateVectorTest::constFunc(const Vector<Node*>& vec) const
 {
-    log("vec[8] = %d", vec.at(8)->getTag());
+    ax::print("vec[8] = %d", vec.at(8)->getTag());
 }
 
 std::string TemplateVectorTest::subtitle() const
@@ -439,25 +439,25 @@ void TemplateMapTest::onEnter()
     }
 
     // bucket_count, bucket_size(n), bucket
-    log("--------------");
-    log("bucket_count = %d", static_cast<int>(map4.bucketCount()));
-    log("size = %d", static_cast<int>(map4.size()));
+    ax::print("--------------");
+    ax::print("bucket_count = %d", static_cast<int>(map4.bucketCount()));
+    ax::print("size = %d", static_cast<int>(map4.size()));
     for (int i = 0; i < map4.bucketCount(); ++i)
     {
-        log("bucket_size(%d) = %d", i, static_cast<int>(map4.bucketSize(i)));
+        ax::print("bucket_size(%d) = %d", i, static_cast<int>(map4.bucketSize(i)));
     }
     for (const auto& e : map4)
     {
-        log("bucket(\"%s\"), bucket index = %d", e.first.c_str(), static_cast<int>(map4.bucket(e.first)));
+        ax::print("bucket(\"%s\"), bucket index = %d", e.first.c_str(), static_cast<int>(map4.bucket(e.first)));
     }
 
-    log("----- all keys---------");
+    ax::print("----- all keys---------");
 
     // keys and at
     auto keys = map4.keys();
     for (const auto& key : keys)
     {
-        log("key = %s", key.c_str());
+        ax::print("key = %s", key.c_str());
     }
 
     auto node10Key = map4.at("10");
@@ -465,13 +465,13 @@ void TemplateMapTest::onEnter()
     map4.insert("101", node10Key);
     map4.insert("102", node10Key);
 
-    log("------ keys for object --------");
+    ax::print("------ keys for object --------");
     auto keysForObject = map4.keys(node10Key);
     for (const auto& key : keysForObject)
     {
-        log("key = %s", key.c_str());
+        ax::print("key = %s", key.c_str());
     }
-    log("--------------");
+    ax::print("--------------");
 
     // at in const function
     constFunc(map4);
@@ -532,12 +532,12 @@ void TemplateMapTest::onEnter()
     // Set the seed by time
     std::srand((unsigned)time(nullptr));
     StringMap<Node*> mapForRandom = createMap();
-    log("<--- begin ---->");
+    ax::print("<--- begin ---->");
     for (int i = 0; i < mapForRandom.size(); ++i)
     {
-        log("Map: random object tag = %d", mapForRandom.getRandomObject()->getTag());
+        ax::print("Map: random object tag = %d", mapForRandom.getRandomObject()->getTag());
     }
-    log("<---- end  ---->");
+    ax::print("<---- end  ---->");
 
     // Self assignment
     StringMap<Node*> mapForSelfAssign = createMap();
@@ -562,8 +562,8 @@ void TemplateMapTest::onEnter()
 
 void TemplateMapTest::constFunc(const StringMap<Node*>& map) const
 {
-    log("[%s]=(tag)%d", "0", map.at("0")->getTag());
-    log("[%s]=(tag)%d", "1", map.find("1")->second->getTag());
+    ax::print("[%s]=(tag)%d", "0", map.at("0")->getTag());
+    ax::print("[%s]=(tag)%d", "1", map.find("1")->second->getTag());
 }
 
 std::string TemplateMapTest::subtitle() const
@@ -1436,18 +1436,18 @@ using namespace UnitTest::ax;
 
 static void __checkMathUtilResult(const char* description, const float* a1, const float* a2, int size)
 {
-    log("-------------checking %s ----------------------------", description);
+    ax::print("-------------checking %s ----------------------------", description);
     // Check whether the result of the optimized instruction is the same as which is implemented in C
     for (int i = 0; i < size; ++i)
     {
         bool r = fabs(a1[i] - a2[i]) < 0.00001f;  // FLT_EPSILON;
         if (r)
         {
-            log("Correct: a1[%d]=%f, a2[%d]=%f", i, a1[i], i, a2[i]);
+            ax::print("Correct: a1[%d]=%f, a2[%d]=%f", i, a1[i], i, a2[i]);
         }
         else
         {
-            log("Wrong: a1[%d]=%f, a2[%d]=%f", i, a1[i], i, a2[i]);
+            ax::print("Wrong: a1[%d]=%f, a2[%d]=%f", i, a1[i], i, a2[i]);
         }
         AXASSERT(r, "The optimized instruction is implemented in a wrong way, please check it!");
     }

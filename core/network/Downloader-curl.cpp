@@ -83,7 +83,7 @@ public:
 
     {
         _initInternal();
-        DLLOG("Construct DownloadTaskCURL %p", this);
+        AXLOGD("Construct DownloadTaskCURL {}", fmt::ptr(this));
     }
 
     virtual ~DownloadTaskCURL()
@@ -104,7 +104,7 @@ public:
         if (_requestHeaders)
             curl_slist_free_all(_requestHeaders);
 
-        DLLOG("Destruct DownloadTaskCURL %p", this);
+        AXLOGD("Destruct DownloadTaskCURL {}", fmt::ptr(this));
     }
 
     bool init(std::string_view filename, std::string_view tempSuffix)
@@ -369,10 +369,10 @@ public:
     Impl()
     //        : _thread(nullptr)
     {
-        DLLOG("Construct DownloaderCURL::Impl %p", this);
+        AXLOGD("Construct DownloaderCURL::Impl {}", fmt::ptr(this));
     }
 
-    ~Impl() { DLLOG("Destruct DownloaderCURL::Impl %p", this); }
+    ~Impl() { AXLOGD("Destruct DownloaderCURL::Impl {}", fmt::ptr(this)); }
 
     void addTask(std::shared_ptr<DownloadTask> task, DownloadTaskCURL* coTask)
     {
@@ -454,7 +454,7 @@ private:
     static size_t _outputHeaderCallbackProc(void* buffer, size_t size, size_t count, void* userdata)
     {
         int strLen = int(size * count);
-        DLLOG("    _outputHeaderCallbackProc: %.*s", strLen, buffer);
+        AXLOGD("    _outputHeaderCallbackProc: {} {}", strLen, buffer);
         DownloadTaskCURL& coTask = *((DownloadTaskCURL*)(userdata));
         coTask._header.append((const char*)buffer, strLen);
         return strLen;
@@ -462,7 +462,7 @@ private:
 
     static size_t _outputDataCallbackProc(void* buffer, size_t size, size_t count, void* userdata)
     {
-        //            DLLOG("    _outputDataCallbackProc: size(%ld), count(%ld)", size, count);
+        // AXLOGD("    _outputDataCallbackProc: size({}), count({})", size, count);
         DownloadTaskCURL* coTask = (DownloadTaskCURL*)userdata;
 
         // If your callback function returns CURL_WRITEFUNC_PAUSE it will cause this transfer to become paused.
@@ -646,7 +646,7 @@ private:
 
     void _threadProc()
     {
-        DLLOG("++++DownloaderCURL::Impl::_threadProc begin %p", this);
+        AXLOGD("++++DownloaderCURL::Impl::_threadProc begin {}", fmt::ptr(this));
         // the holder prevent DownloaderCURL::Impl class instance be destruct in main thread
         auto holder                        = this->shared_from_this();
         auto thisThreadId                  = std::this_thread::get_id();
@@ -716,7 +716,7 @@ private:
 
                 if (rc < 0)
                 {
-                    DLLOG("    _threadProc: select return unexpect code: %d", rc);
+                    AXLOGD("    _threadProc: select return unexpect code: {}", rc);
                 }
             }
 
@@ -806,7 +806,7 @@ private:
                             continue;
                         }
                         curl_easy_cleanup(curlHandle);
-                        DLLOG("    _threadProc task clean cur handle :%p with errCode:%d", curlHandle, errCode);
+                        AXLOGD("    _threadProc task clean cur handle :{} with errCode:{}", fmt::ptr(curlHandle), static_cast<int>(errCode));
 
                         // remove from coTaskMap
                         coTaskMap.erase(curlHandle);
@@ -877,7 +877,7 @@ private:
                     continue;
                 }
 
-                DLLOG("    _threadProc task create curl handle:%p", curlHandle);
+                AXLOGD("    _threadProc task create curl handle:{}", fmt::ptr(curlHandle));
                 coTaskMap[curlHandle] = task;
                 std::lock_guard<std::mutex> lock(_processMutex);
                 _processSet.insert(task);
@@ -887,7 +887,7 @@ private:
         _tasksFinished = true;
 
         curl_multi_cleanup(curlmHandle);
-        DLLOG("----DownloaderCURL::Impl::_threadProc end");
+        AXLOGD("----DownloaderCURL::Impl::_threadProc end");
     }
 
     std::thread _thread;
@@ -909,7 +909,7 @@ public:
 //  Implementation DownloaderCURL
 DownloaderCURL::DownloaderCURL(const DownloaderHints& hints) : _impl(std::make_shared<Impl>()), _currTask(nullptr)
 {
-    DLLOG("Construct DownloaderCURL %p", this);
+    AXLOGD("Construct DownloaderCURL {}", fmt::ptr(this));
     _impl->hints  = hints;
     _impl->_owner = this;
 
@@ -935,7 +935,7 @@ DownloaderCURL::~DownloaderCURL()
         _scheduler->release();
     }
     _impl->stop();
-    DLLOG("Destruct DownloaderCURL %p", this);
+    AXLOGD("Destruct DownloaderCURL {}", fmt::ptr(this));
 }
 
 void DownloaderCURL::startTask(std::shared_ptr<DownloadTask>& task)
@@ -944,7 +944,7 @@ void DownloaderCURL::startTask(std::shared_ptr<DownloadTask>& task)
     task->_coTask.reset(coTask);  // coTask auto managed by task
     if (coTask->init(task->storagePath, _impl->hints.tempFileNameSuffix))
     {
-        DLLOG("DownloaderCURL: createTask: Id(%d)", coTask->serialId);
+        AXLOGD("DownloaderCURL: createTask: Id({})", coTask->serialId);
 
         _impl->addTask(task, coTask);
         _impl->run();
@@ -957,8 +957,8 @@ void DownloaderCURL::startTask(std::shared_ptr<DownloadTask>& task)
     }
     else
     {
-        ax::log("DownloaderCURL createTask fail, error: %d, detail: %s", coTask->_errCode,
-                     coTask->_errDescription.c_str());
+        AXLOGE("DownloaderCURL createTask fail, error: {}, detail: {}", coTask->_errCode,
+                     coTask->_errDescription);
         task.reset();
     }
 }
@@ -1134,7 +1134,7 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task, int checkState)
 
     // needn't lock coTask here, because tasks has removed form _impl
     onTaskFinish(task, coTask._errCode, coTask._errCodeInternal, coTask._errDescription, coTask._buf);
-    DLLOG("    DownloaderCURL: finish Task: Id(%d)", coTask.serialId);
+    AXLOGD("    DownloaderCURL: finish Task: Id({})", coTask.serialId);
 }
 
 }  // namespace network

@@ -90,7 +90,7 @@ void JSONDefault::lazyInit()
 
         if (_doc.HasParseError())
         {
-            log("JSONDefault::init load json file: %s failed", _filePath.c_str());
+            AXLOGW("JSONDefault::init load json file: {} failed", _filePath);
             return;
         }
     }

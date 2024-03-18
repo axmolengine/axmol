@@ -161,13 +161,22 @@ void EditBoxImplCommon::setFont(const char* pFontName, int fontSize)
     _fontName = pFontName;
     _fontSize = fontSize;
     this->setNativeFont(pFontName, fontSize * _label->getNodeToWorldAffineTransform().a);
-    if (!_fontName.empty())
+    // edit by bixniaojiao
+    if (FileUtils::getInstance()->isFileExist(pFontName))
     {
-        _label->setSystemFontName(pFontName);
+        TTFConfig ttfConfig(pFontName, fontSize);
+        _label->setTTFConfig(ttfConfig);
     }
-    if (fontSize > 0)
+    else
     {
-        _label->setSystemFontSize(fontSize);
+        if (!_fontName.empty())
+        {
+            _label->setSystemFontName(pFontName);
+        }
+        if (fontSize > 0)
+        {
+            _label->setSystemFontSize(fontSize);
+        }
     }
 }
 
@@ -183,13 +192,22 @@ void EditBoxImplCommon::setPlaceholderFont(const char* pFontName, int fontSize)
     _placeholderFontName = pFontName;
     _placeholderFontSize = fontSize;
     this->setNativePlaceholderFont(pFontName, fontSize * _labelPlaceHolder->getNodeToWorldAffineTransform().a);
-    if (!_placeholderFontName.empty())
+    // edit by bixniaojiao
+    if (FileUtils::getInstance()->isFileExist(pFontName))
     {
-        _labelPlaceHolder->setSystemFontName(pFontName);
+        TTFConfig ttfConfig(pFontName, fontSize);
+        _labelPlaceHolder->setTTFConfig(ttfConfig);
     }
-    if (fontSize > 0)
+    else
     {
-        _labelPlaceHolder->setSystemFontSize(fontSize);
+        if (!_fontName.empty())
+        {
+            _labelPlaceHolder->setSystemFontName(pFontName);
+        }
+        if (fontSize > 0)
+        {
+            _labelPlaceHolder->setSystemFontSize(fontSize);
+        }
     }
 }
 

@@ -104,7 +104,7 @@ bool UIPageViewTest::init()
         pageView->removeItem(0);
         pageView->scrollToItem(pageCount - 2);
 
-        ax::log("TODO in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
+        ax::print("TODO in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
 
         pageView->setIndicatorIndexNodesOpacity(255);
 
@@ -219,7 +219,7 @@ void UIPageViewButtonTest::onButtonClicked(Ref* sender, Widget::TouchEventType t
 {
     if (type == Widget::TouchEventType::ENDED)
     {
-        log("button %s clicked", static_cast<Button*>(sender)->getName().data());
+        ax::print("button %s clicked", static_cast<Button*>(sender)->getName().data());
     }
 }
 

@@ -230,7 +230,7 @@ void ConsoleUploadFile::uploadFile()
             if (ret < 3)
             {
                 // eof
-                log("Reach the end, total send: %d bytes", (int)offset);
+                ax::print("Reach the end, total send: %d bytes", (int)offset);
                 break;
             }
         }

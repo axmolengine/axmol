@@ -72,6 +72,7 @@ CocosNodeTests::CocosNodeTests()
     ADD_TEST_CASE(NodeNameTest);
     ADD_TEST_CASE(Issue16100Test);
     ADD_TEST_CASE(Issue16735Test);
+    ADD_TEST_CASE(NodeWorldSpace);
 }
 
 TestCocosNodeDemo::TestCocosNodeDemo(void) {}
@@ -420,7 +421,7 @@ SchedulerCallbackTest::SchedulerCallbackTest()
     node->schedule(
         [&](float dt) {
             _total += dt;
-            log("hello world: %f - total: %f", dt, _total);
+            ax::print("hello world: %f - total: %f", dt, _total);
         },
         0.5, "some_key");
 
@@ -436,7 +437,7 @@ SchedulerCallbackTest::SchedulerCallbackTest()
 void SchedulerCallbackTest::onEnter()
 {
     TestCocosNodeDemo::onEnter();
-    log("--onEnter-- Must be called before the scheduled lambdas");
+    ax::print("--onEnter-- Must be called before the scheduled lambdas");
 }
 
 std::string SchedulerCallbackTest::subtitle() const
@@ -1250,7 +1251,7 @@ void NodeNameTest::test(float dt)
     {
         sprintf(name, "node%d", i);
         auto node = parent->getChildByName(name);
-        log("find child: %s", node->getName().data());
+        ax::print("find child: %s", node->getName().data());
     }
 
     // enumerateChildren()
@@ -1519,4 +1520,51 @@ std::string Issue16735Test::title() const
 std::string Issue16735Test::subtitle() const
 {
     return "Sprite should appear on the center of screen";
+}
+
+//------------------------------------------------------------------
+//
+// NodeWorldSpace
+//
+//------------------------------------------------------------------
+void NodeWorldSpace::onEnter()
+{
+    TestCocosNodeDemo::onEnter();
+
+    scheduleUpdate();
+
+    parent = Sprite::create("Images/grossini.png");
+    addChild(parent);
+
+    child = Sprite::create("Images/grossini.png");
+    child->setScale(0.5);
+    parent->addChild(child);
+}
+
+void NodeWorldSpace::onExit()
+{
+    TestCocosNodeDemo::onExit();
+}
+
+void NodeWorldSpace::update(float dt)
+{
+    elapsedTime += dt;
+
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    auto origin      = Director::getInstance()->getVisibleOrigin();
+
+    parent->setPosition(Vec2(visibleSize.x / 2 + sin(elapsedTime * 2) * 100, 50));
+    parent->setRotation(elapsedTime * 180);
+
+    child->setWorldPosition(visibleSize / 2);
+}
+
+std::string NodeWorldSpace::title() const
+{
+    return "World Space Position";
+}
+
+std::string NodeWorldSpace::subtitle() const
+{
+    return "Child sprite (small one) should always stay at the center of screen\nthe child sprite is a child of the moving parent sprite";
 }

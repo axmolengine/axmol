@@ -211,7 +211,7 @@ bool SceneTestLayer3::init()
 
 void SceneTestLayer3::testDealloc(float dt)
 {
-    log("Layer3:testDealloc");
+    ax::print("Layer3:testDealloc");
 }
 
 void SceneTestLayer3::item0Clicked(Ref* sender)

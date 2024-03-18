@@ -483,14 +483,14 @@ std::vector<Vec2> AutoPolygon::reduce(const std::vector<Vec2>& points, const Rec
     // if there are less than 3 points, then we have nothing
     if (size < 3)
     {
-        log("AUTOPOLYGON: cannot reduce points for %s that has less than 3 points in input, e: %f", _filename.c_str(),
+        AXLOGE("AUTOPOLYGON: cannot reduce points for {} that has less than 3 points in input, e: {}", _filename,
             epsilon);
         return std::vector<Vec2>();
     }
     // if there are less than 9 points (but more than 3), then we don't need to reduce it
     else if (size < 9)
     {
-        log("AUTOPOLYGON: cannot reduce points for %s e: %f", _filename.c_str(), epsilon);
+        AXLOGE("AUTOPOLYGON: cannot reduce points for {} e: {}", _filename, epsilon);
         return points;
     }
     float maxEp              = MIN(rect.size.width, rect.size.height);
@@ -511,7 +511,7 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
     // if there are less than 3 points, then we have nothing
     if (points.size() < 3)
     {
-        log("AUTOPOLYGON: cannot expand points for %s with less than 3 points, e: %f", _filename.c_str(), epsilon);
+        AXLOGE("AUTOPOLYGON: cannot expand points for {} with less than 3 points, e: {}", _filename, epsilon);
         return std::vector<Vec2>();
     }
 
@@ -589,7 +589,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
     // if there are less than 3 points, then we can't triangulate
     if (points.size() < 3)
     {
-        log("AUTOPOLYGON: cannot triangulate %s with less than 3 points", _filename.c_str());
+        AXLOGE("AUTOPOLYGON: cannot triangulate {} with less than 3 points", _filename);
         return TrianglesCommand::Triangles();
     }
 

@@ -42,24 +42,138 @@ typedef SSIZE_T ssize_t;
 #include <functional>
 #include <string>
 #include <mutex>
+#include <array>
 #include <stdarg.h>
 #include "yasio/io_watcher.hpp"
 
 #include "base/Ref.h"
 #include "base/Macros.h"
+#include "base/bitmask.h"
 #include "platform/PlatformMacros.h"
+
+#include "fmt/compile.h"
 
 NS_AX_BEGIN
 
-/// The max length of CCLog message.
-static const int MAX_LOG_LENGTH = 16 * 1024;
+#pragma region The new Log API since axmol-2.1.3
+
+enum class LogLevel
+{
+    Debug,
+    Info,
+    Warn,
+    Error,
+    Silent /* only for setLogLevel(); must be last */
+};
+
+enum class LogFmtFlag
+{
+    Null,
+    Level     = 1,
+    TimeStamp = 1 << 1,
+    ProcessId = 1 << 2,
+    ThreadId  = 1 << 3,
+    Colored   = 1 << 4,
+    Full      = Level | TimeStamp | ProcessId | ThreadId | Colored,
+};
+AX_ENABLE_BITMASK_OPS(LogFmtFlag);
+
+class LogItem
+{
+    friend AX_API LogItem& preprocessLog(LogItem&& logItem);
+    friend AX_API void outputLog(LogItem& item, const char* tag);
+
+public:
+    static constexpr auto COLOR_PREFIX_SIZE    = 5;                      // \x1b[00m
+    static constexpr auto COLOR_QUALIFIER_SIZE = COLOR_PREFIX_SIZE + 3;  // \x1b[m
+
+    explicit LogItem(LogLevel lvl) : level_(lvl) {}
+    LogItem(const LogItem&) = delete;
+
+    LogLevel level() const { return level_; }
+
+    std::string_view message() const
+    {
+        return has_style_ ? std::string_view{qualified_message_.data() + COLOR_PREFIX_SIZE,
+                                             qualified_message_.size() - COLOR_QUALIFIER_SIZE}
+                          : std::string_view{qualified_message_};
+    }
+
+    template <typename _FmtType, typename... _Types>
+    inline static LogItem& vformat(_FmtType&& fmt, LogItem& item, _Types&&... args)
+    {
+        item.qualified_message_ = fmt::format(std::forward<_FmtType>(fmt), std::string_view{item.prefix_buffer_, item.prefix_size_},
+                                         std::forward<_Types>(args)...);
+
+        item.qualifier_size_ = item.prefix_size_;
+
+        auto old_size = item.qualified_message_.size();
+        if (!item.has_style_)
+            item.qualified_message_.append("\n"sv);
+        else
+            item.qualified_message_.append("\x1b[m\n"sv);
+        item.qualifier_size_ += (item.qualified_message_.size() - old_size);
+        return item;
+    }
+
+private:
+    void writePrefix(std::string_view data)
+    {
+        memcpy(prefix_buffer_ + prefix_size_, data.data(), data.size());
+        prefix_size_ += data.size();
+    }
+    LogLevel level_;
+    bool has_style_{false};
+    size_t prefix_size_{0};     // \x1b[00mD/[2024-02-29 00:00:00.123][PID:][TID:]
+    size_t qualifier_size_{0};  // prefix_size_ + \x1b[m (optional) + \n
+    std::string qualified_message_;
+    char prefix_buffer_[128];
+};
+
+class ILogOutput
+{
+public:
+    virtual ~ILogOutput() {}
+    virtual void write(std::string_view message, LogLevel) = 0;
+};
+
+/* @brief control log level */
+AX_API void setLogLevel(LogLevel level);
+AX_API LogLevel getLogLevel();
+
+/* @brief control log prefix format */
+AX_API void setLogFmtFlag(LogFmtFlag flags);
+
+/* @brief set log output */
+AX_API void setLogOutput(ILogOutput* output);
+
+/* @brief internal use */
+AX_API LogItem& preprocessLog(LogItem&& logItem);
+
+/* @brief internal use */
+AX_API void outputLog(LogItem& item, const char* tag);
+
+template <typename _FmtType, typename... _Types>
+inline void printLogT(_FmtType&& fmt, LogItem& item, _Types&&... args)
+{
+    if (item.level() >= getLogLevel())
+        outputLog(LogItem::vformat(std::forward<_FmtType>(fmt), item, std::forward<_Types>(args)...), "axmol");
+}
+
+#define AXLOG_WITH_LEVEL(level, fmtOrMsg, ...) \
+    ax::printLogT(FMT_COMPILE("{}" fmtOrMsg), ax::preprocessLog(ax::LogItem{level}), ##__VA_ARGS__)
+
+#define AXLOGD(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Debug, fmtOrMsg, ##__VA_ARGS__)
+#define AXLOGI(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Info, fmtOrMsg, ##__VA_ARGS__)
+#define AXLOGW(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Warn, fmtOrMsg, ##__VA_ARGS__)
+#define AXLOGE(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Error, fmtOrMsg, ##__VA_ARGS__)
+
+#pragma endregion
 
 /**
  @brief Output Debug message.
  */
-void AX_DLL print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
-
-/* AX_DEPRECATED_ATTRIBUTE*/ void AX_DLL log(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use print instead
+/* AX_DEPRECATED_ATTRIBUTE*/ AX_API void print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use AXLOGD instead
 
 /** Console is helper class that lets the developer control the game from TCP connection.
  Console will spawn a new thread that will listen to a specified TCP port.
@@ -195,11 +309,6 @@ public:
     void delCommand(std::string_view cmdName);
     void delSubCommand(std::string_view cmdName, std::string_view subCmdName);
     void delSubCommand(Command& cmd, std::string_view subCmdName);
-
-    /** print something in the console */
-    void print(const char* buf);
-
-    AX_DEPRECATED_ATTRIBUTE void log(const char* buf) { print(buf); }
 
     /**
      * set bind address

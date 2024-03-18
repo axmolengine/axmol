@@ -1,7 +1,4 @@
 /****************************************************************************
-Copyright (c) 2011      Laschweinski
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
@@ -24,20 +21,43 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/Common.h"
-#include "platform/linux/StdC-linux.h"
-#include "base/Console.h"
+#pragma once
 
-NS_AX_BEGIN
+#if defined(_WIN32)
 
-void ccMessageBox(const char* msg, const char* title)
+// A inline helper class for anyone want enable win32 console in main.cpp
+class EmbedConsole
 {
-    AXLOGE("{}: {}", title, msg);
-}
+public:
+    EmbedConsole()
+    {
+        ::AllocConsole();
+        freopen("CONIN$", "r", stdin);
+        freopen("CONOUT$", "w", stdout);
+        freopen("CONOUT$", "w", stderr);
 
-void LuaLog(const char* format)
-{
-    puts(format);
-}
+        ::SetConsoleOutputCP(CP_UTF8);
 
-NS_AX_END
+        configConsoleMode(STD_OUTPUT_HANDLE);
+        configConsoleMode(STD_ERROR_HANDLE);
+    }
+
+    ~EmbedConsole() { ::FreeConsole(); }
+
+private:
+    void configConsoleMode(DWORD id)
+    {
+        auto handle = ::GetStdHandle(id);
+        if (handle)
+        {
+            DWORD mode{};
+            ::GetConsoleMode(handle, &mode);
+            mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+            ::SetConsoleMode(handle, mode);
+        }
+    }
+};
+
+EmbedConsole __win32_embed_console;
+
+#endif

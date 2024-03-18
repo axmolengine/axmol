@@ -321,7 +321,7 @@ void KeyBoardWinRT::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventAr
     }
     else
     {
-        log("GLViewImpl::OnWinRTKeyboardEvent Virtual Key Code %d not supported", key);
+        AXLOGW("GLViewImpl::OnWinRTKeyboardEvent Virtual Key Code {} not supported", key);
     }
 }
 
