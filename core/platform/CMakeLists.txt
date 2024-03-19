@@ -140,7 +140,7 @@ elseif(LINUX)
         )
 elseif(EMSCRIPTEN)
     include_directories(
-        PUBLIC "${_AX_ROOT}/thirdparty/angle/_d/include"
+        PUBLIC "${_AX_ROOT}/3rdparty/angle/_d/include"
         PUBLIC "${_AX_ROOT}/core"
     )
     set(_AX_PLATFORM_SPECIFIC_HEADER

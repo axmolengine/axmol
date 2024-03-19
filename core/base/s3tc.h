@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef COCOS2DX_PLATFORM_THIRDPARTY_S3TC_
-#define COCOS2DX_PLATFORM_THIRDPARTY_S3TC_
+#ifndef AXMOL_S3TC_
+#define AXMOL_S3TC_
 /// @cond DO_NOT_SHOW
 
 #include "platform/StdC.h"
@@ -44,4 +44,4 @@ void s3tc_decode(uint8_t* encode_data,
                  S3TCDecodeFlag decodeFlag);
 
 /// @endcond
-#endif /* defined(COCOS2DX_PLATFORM_THIRDPARTY_S3TC_) */
+#endif /* defined(AXMOL_S3TC_) */

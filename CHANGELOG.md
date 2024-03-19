@@ -358,7 +358,7 @@ axmol-1.0.0  Aug.9 2023
 - [HIGHLIGHT] Add extension `Live2D` support
 - [HIGHLIGHT] Use curl for transferring data with URL syntax
 - [HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
-- [HIGHLIGHT] Improve thirdparty libs building, 100% of them build from sources or github actions with latest toolchain, see also: `axmolengine/buildware`
+- [HIGHLIGHT] Improve thirdparty libs building, 100% of them build from sources or github actions with latest toolchain, see also: `simdsoft/1kiss`
 - [HIGHLIGHT] Add new API `Director::setChildrenIndexerEnabled` for speed up getChildByTag & getChildByName support
 - [HIGHLIGHT] Add new API `FontFreeType::setStreamParsingEnabled` for stream parsing support . It's very useful for reducing memory costs when loading a large .ttf font file
 - [HIGHLIGHT] Remove all unnecessary `std::nothrow` stubs

@@ -190,7 +190,7 @@ endif()
 
 # The optional thirdparties(not dependent by engine)
 if (AX_WITH_YAML_CPP)
-    list(APPEND GAME_INC_DIRS "${_AX_ROOT}/thirdparty/yaml-cpp/include")
+    list(APPEND GAME_INC_DIRS "${_AX_ROOT}/3rdparty/yaml-cpp/include")
 endif()
 
 target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})

@@ -204,7 +204,7 @@ function(ax_sync_target_dlls ax_target)
         )
     endforeach()
 
-    # copy thirdparty dlls to target bin dir
+    # copy 3rdparty dlls to target bin dir
     if(NOT CMAKE_GENERATOR MATCHES "Ninja")
         set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
     endif()
@@ -529,7 +529,7 @@ macro(ax_setup_winrt_sources )
 
     ax_mark_multi_resources(platform_content_files RES_TO "Content" FOLDERS "${CMAKE_CURRENT_SOURCE_DIR}/proj.winrt/Content")
 
-    get_target_depends_ext_dlls(thirdparty prebuilt_dlls)
+    get_target_depends_ext_dlls(3rdparty prebuilt_dlls)
 
     if (NOT prebuilt_dlls) 
         set(prebuilt_dlls
