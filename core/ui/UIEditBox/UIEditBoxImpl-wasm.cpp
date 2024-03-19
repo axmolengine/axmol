@@ -153,7 +153,7 @@ void EditBoxImplWasm::setNativeVisible(bool visible)
 {
     EM_ASM({
         var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
-
+        
         if ($0 == 0)
             input.style.display = "none";
         else
@@ -174,8 +174,14 @@ void EditBoxImplWasm::setNativeVisible(bool visible)
             }
             
             input.style.display = "";
-            if(input.parentElement == null) {
-                document.body.appendChild(input);
+            var canvas = document.getElementById('canvas');
+            var inputParent = input.parentNode;
+            var canvasParent = canvas.parentNode;
+            if(inputParent != canvasParent) {
+                if (inputParent != null) {
+                    inputParent.removeChild(input);
+                }
+                canvasParent.insertBefore(input, canvas);
             }
         }
     }, (int)visible, (int)_editBoxInputMode, (int)_editBoxInputFlag);
