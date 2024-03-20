@@ -122,7 +122,7 @@ void TextureInfoGL::recreateAll(GLenum target)
     {
         if (texID)
         {
-            glDeleteTextures(1, &texID);
+            __gl->deleteTexture(target, texID);
             texID = 0;
             ensure(idx, target);
         }
