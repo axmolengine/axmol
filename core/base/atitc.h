@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef COCOS2DX_PLATFORM_THIRDPARTY_ATITC_
-#define COCOS2DX_PLATFORM_THIRDPARTY_ATITC_
+#ifndef AXMOL_ATITC_
+#define AXMOL_ATITC_
 /// @cond DO_NOT_SHOW
 
 #include "platform/StdC.h"
@@ -44,4 +44,4 @@ void atitc_decode(uint8_t* encode_data,
                   ATITCDecodeFlag decodeFlag);
 
 /// @endcond
-#endif /* defined(COCOS2DX_PLATFORM_THIRDPARTY_ATITC_) */
+#endif /* defined(AXMOL_ATITC_) */
