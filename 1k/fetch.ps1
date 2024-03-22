@@ -1,8 +1,8 @@
 # fetch repo directly
 param(
-    [Alias("name")]
-    $uri, # uri
+    $name,
     $prefix, # fetch dest repo prefix
+    $uri = $null, # uri
     $version = $null, # version hint
     $revision = $null, # revision
     $cfg = $null
@@ -49,6 +49,7 @@ if (!$cfg) {
 
     $lib_src = Join-Path $prefix $folder_name
 
+    Set-Variable -Name "${name}_src" -Value $lib_src -Scope global
     function fetch_repo($url, $out) {
         if (!$url.EndsWith('.git')) {
             download_file $url $out
@@ -102,11 +103,14 @@ if (!$cfg) {
     if ($is_git_repo) {
         $old_rev_hash = $(git -C $lib_src rev-parse HEAD)
 
+        println "old_rev_hash=$old_rev_hash"
         $pred_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
+        println "(1)parsed pred_rev_hash: $revision@$pred_rev_hash"
 
         if(!$pred_rev_hash) {
             git -C $lib_src fetch
             $pred_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
+            println "(2)parsed pred_rev_hash: $revision@$pred_rev_hash"
             if(!$pred_rev_hash) {
                 throw "Could not found commit hash of $revision"
             }
@@ -116,6 +120,8 @@ if (!$cfg) {
             git -C $lib_src checkout $revision 1>$null 2>$null
 
             $new_rev_hash = $(git -C $lib_src rev-parse HEAD)
+
+            println "checked out to $revision@$new_rev_hash"
             
             if (!$is_rev_modified) {
                 $is_rev_modified = $old_rev_hash -ne $new_rev_hash
@@ -156,7 +162,6 @@ if (!$cfg) {
 }
 else {
     # fetch by config file
-    $name = $uri
     $lib_src = Join-Path $prefix $name
     $mirror = if (!(Test-Path (Join-Path $PSScriptRoot '.gitee') -PathType Leaf)) { 'github' } else { 'gitee' }
     $url_base = @{'github' = 'https://github.com/'; 'gitee' = 'https://gitee.com/' }[$mirror]

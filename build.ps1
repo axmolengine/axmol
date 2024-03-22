@@ -165,7 +165,8 @@ if (!$use_gradle) {
     }
 
     if($is_android) {
-        if ($options.xc.IndexOf('-DANDROID_STL')) {
+        Write-Host $options.xc
+        if (!"$($options.xc)".Contains('-DANDROID_STL')) {
             $options.xc += '-DANDROID_STL=c++_shared'
         }
     }
