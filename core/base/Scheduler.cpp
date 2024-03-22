@@ -859,8 +859,8 @@ void Scheduler::update(float dt)
         // fixed #4123: Save the callback functions, they must be invoked after '_performMutex.unlock()', otherwise if
         // new functions are added in callback, it will cause thread deadlock.
         auto temp = std::move(_actionsToPerform);
-        _performMutex.unlock();
         _actionsToPerformEmpty.store(true, std::memory_order_release);
+        _performMutex.unlock();
 
         for (const auto& function : temp)
         {
