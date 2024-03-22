@@ -6,7 +6,11 @@
 # 
 
 ### 1kdist url
-find_program(PWSH_COMMAND NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH REQUIRED)
+find_program(PWSH_COMMAND NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+
+if(NOT PWSH_COMMAND)
+    message(WARNING "fetch.cmake: PowerShell is missing, the function _1kfetch not work, please install from https://github.com/PowerShell/PowerShell/releases")
+endif()
 
 function(_1kfetch_init)
     execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetchurl.ps1
@@ -58,11 +62,26 @@ endfunction()
 
 # params: name, url
 function(_1kfetch name)
+    set(oneValueArgs VERSION URI)
+    cmake_parse_arguments(opt "" "${oneValueArgs}" "" ${ARGN})
+
+    set(_pkg_ver)
+    if(opt_VERSION)
+        set(_pkg_ver ${opt_VERSION})
+    endif()
+
+    if(NOT opt_URI)
+        set(_pkg_uri ${_1kfetch_manifest})
+    else()
+        set(_pkg_uri ${opt_URI})
+    endif()
+     
     set(_pkg_store "${_1kfetch_cache_dir}/${name}")
     execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1 
         -name "${name}"
-        -uri ${_1kfetch_manifest}
+        -uri "${_pkg_uri}"
         -prefix "${_1kfetch_cache_dir}"
+        -version "${_pkg_ver}"
         RESULT_VARIABLE _errorcode
         )
     if (_errorcode)

@@ -165,11 +165,8 @@ if (!$use_gradle) {
         $options.xb += '--target', $cmake_target
     }
 
-    if($is_android) {
-        Write-Host $options.xc
-        if (!"$($options.xc)".Contains('-DANDROID_STL')) {
-            $options.xc += '-DANDROID_STL=c++_shared'
-        }
+    if($is_android -and !"$($options.xc)".Contains('-DANDROID_STL')) {
+        $options.xc += '-DANDROID_STL=c++_shared'
     }
 } else { # android gradle
     # engine ci

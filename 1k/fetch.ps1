@@ -100,18 +100,24 @@ if ($uri -match '^([a-z]+://|git@)') {
     }
 
     # checkout revision for git repo
+    if (!$revision) { $revision = $version }
     if ($is_git_repo) {
         $old_rev_hash = $(git -C $lib_src rev-parse HEAD)
+
+        $tag_info = git -C $lib_src tag | Select-String $revision
+        if ($tag_info) {
+            $revision = ([array]$tag_info.Line)[0]
+        }
 
         println "old_rev_hash=$old_rev_hash"
         $pred_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
         println "(1)parsed pred_rev_hash: $revision@$pred_rev_hash"
 
-        if(!$pred_rev_hash) {
+        if (!$pred_rev_hash) {
             git -C $lib_src fetch
             $pred_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
             println "(2)parsed pred_rev_hash: $revision@$pred_rev_hash"
-            if(!$pred_rev_hash) {
+            if (!$pred_rev_hash) {
                 throw "Could not found commit hash of $revision"
             }
         }
@@ -167,8 +173,14 @@ else {
     $url_base = @{'github' = 'https://github.com/'; 'gitee' = 'https://gitee.com/' }[$mirror]
 
     $manifest_map = ConvertFrom-Json (Get-Content $uri -raw)
-    $version_map = $manifest_map.versions
-    $pkg_ver = $version_map.PSObject.Properties[$name].Value
+
+    if (!$version) {
+        $version_map = $manifest_map.versions
+        $pkg_ver = $version_map.PSObject.Properties[$name].Value
+    }
+    else {
+        $pkg_ver = $version
+    }
     if ($pkg_ver) {
         $url_path = $manifest_map.mirrors.PSObject.Properties[$mirror].Value.PSObject.Properties[$name].Value
         if (!$url_path) {
