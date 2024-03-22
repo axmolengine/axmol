@@ -53,7 +53,7 @@ static long getCurrentMillSecond() {
 }
 
 Application::Application()
-: _animationInterval(60.0f)
+: _animationInterval(1 / 60.0f * 1000.0f)
 {
     AX_ASSERT(! sm_pSharedApplication);
     sm_pSharedApplication = this;
@@ -90,7 +90,7 @@ int Application::run()
     glview->retain();
 
     //emscripten_set_main_loop(&mainLoopIter, 0, 1);
-    emscripten_set_main_loop(&mainLoopIter, _animationInterval, 1);
+    emscripten_set_main_loop(&mainLoopIter, 1.0f / (_animationInterval / 1000.0f), 1);
     // TODO: ? does these cleanup really run?
     /* Only work on Desktop
     *  Director::mainLoop is really one frame logic
@@ -109,7 +109,7 @@ int Application::run()
 
 void Application::setAnimationInterval(float interval)
 {
-    _animationInterval = 1.0f / interval;
+    _animationInterval = interval * 1000.0f;
 }
 
 void Application::setResourceRootPath(const std::string& rootResDir)
