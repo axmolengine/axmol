@@ -1,11 +1,10 @@
-# fetch repo directly
+# fetch pkg by url or manifest.json path
 param(
-    [Alias("name")]
-    $uri, # uri
-    $prefix, # fetch dest repo prefix
+    $name, # pkg name
+    $uri, # url or manifest.json path to locate pkg
+    $prefix, # the prefix to store
     $version = $null, # version hint
-    $revision = $null, # revision
-    $cfg = $null
+    $revision = $null # revision hint
 )
 
 # content of _1kiss with yaml format
@@ -16,7 +15,7 @@ param(
 
 Set-Alias println Write-Host
 
-if (!$uri -or !$prefix) {
+if (!$name -or !$uri -or !$prefix) {
     throw 'fetch.ps1: missing parameters'
 }
 
@@ -39,7 +38,8 @@ if (!(Test-Path $cache_dir -PathType Container)) {
     mkdirs $cache_dir
 }
 
-if (!$cfg) {
+# simple match url/ssh schema
+if ($uri -match '^([a-z]+://|git@)') {
     # fetch by url directly
     $url = $uri
     $folder_name = (Split-Path $url -leafbase)
@@ -49,6 +49,7 @@ if (!$cfg) {
 
     $lib_src = Join-Path $prefix $folder_name
 
+    Set-Variable -Name "${name}_src" -Value $lib_src -Scope global
     function fetch_repo($url, $out) {
         if (!$url.EndsWith('.git')) {
             download_file $url $out
@@ -99,15 +100,24 @@ if (!$cfg) {
     }
 
     # checkout revision for git repo
+    if (!$revision) { $revision = $version }
     if ($is_git_repo) {
         $old_rev_hash = $(git -C $lib_src rev-parse HEAD)
 
-        $pred_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
+        $tag_info = git -C $lib_src tag | Select-String $revision
+        if ($tag_info) {
+            $revision = ([array]$tag_info.Line)[0]
+        }
 
-        if(!$pred_rev_hash) {
+        println "old_rev_hash=$old_rev_hash"
+        $pred_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
+        println "(1)parsed pred_rev_hash: $revision@$pred_rev_hash"
+
+        if (!$pred_rev_hash) {
             git -C $lib_src fetch
             $pred_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
-            if(!$pred_rev_hash) {
+            println "(2)parsed pred_rev_hash: $revision@$pred_rev_hash"
+            if (!$pred_rev_hash) {
                 throw "Could not found commit hash of $revision"
             }
         }
@@ -116,6 +126,8 @@ if (!$cfg) {
             git -C $lib_src checkout $revision 1>$null 2>$null
 
             $new_rev_hash = $(git -C $lib_src rev-parse HEAD)
+
+            println "checked out to $revision@$new_rev_hash"
             
             if (!$is_rev_modified) {
                 $is_rev_modified = $old_rev_hash -ne $new_rev_hash
@@ -156,14 +168,19 @@ if (!$cfg) {
 }
 else {
     # fetch by config file
-    $name = $uri
     $lib_src = Join-Path $prefix $name
     $mirror = if (!(Test-Path (Join-Path $PSScriptRoot '.gitee') -PathType Leaf)) { 'github' } else { 'gitee' }
     $url_base = @{'github' = 'https://github.com/'; 'gitee' = 'https://gitee.com/' }[$mirror]
 
-    $manifest_map = ConvertFrom-Json (Get-Content $cfg -raw)
-    $version_map = $manifest_map.versions
-    $pkg_ver = $version_map.PSObject.Properties[$name].Value
+    $manifest_map = ConvertFrom-Json (Get-Content $uri -raw)
+
+    if (!$version) {
+        $version_map = $manifest_map.versions
+        $pkg_ver = $version_map.PSObject.Properties[$name].Value
+    }
+    else {
+        $pkg_ver = $version
+    }
     if ($pkg_ver) {
         $url_path = $manifest_map.mirrors.PSObject.Properties[$mirror].Value.PSObject.Properties[$name].Value
         if (!$url_path) {

@@ -148,7 +148,7 @@ if(XCODE)
     set(CMAKE_XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/Frameworks" CACHE INTERNAL "")
 endif()
 
-set(_AX_THIRDPARTY_NAME "thirdparty" CACHE INTERNAL "" )
+set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "" )
 
 if (WIN32)
     option(WIN32_PATH_USE_ACP "" OFF)
@@ -295,9 +295,9 @@ ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
 
-# use thirdparty libs
-add_subdirectory(${_AX_ROOT}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
-target_link_libraries(${_AX_CORE_LIB} thirdparty)
+# use 3rdparty libs
+add_subdirectory(${_AX_ROOT}/3rdparty ${ENGINE_BINARY_PATH}/3rdparty)
+target_link_libraries(${_AX_CORE_LIB} 3rdparty)
 
 # add base macro define and compile options
 use_ax_compile_define(${_AX_CORE_LIB})
@@ -308,12 +308,12 @@ use_ax_depend(${_AX_CORE_LIB})
 
 target_include_directories(${_AX_CORE_LIB}
     PUBLIC ${_AX_ROOT}
-    PUBLIC ${_AX_ROOT}/thirdparty
+    PUBLIC ${_AX_ROOT}/3rdparty
     PUBLIC ${_AX_ROOT}/extensions/scripting
     PUBLIC ${_AX_ROOT}/core
     PUBLIC ${_AX_ROOT}/core/platform
 
-    INTERFACE ${_AX_ROOT}/thirdparty
+    INTERFACE ${_AX_ROOT}/3rdparty
     INTERFACE ${_AX_ROOT}/extensions/scripting
     INTERFACE ${_AX_ROOT}/core/base
     INTERFACE ${_AX_ROOT}/core/audio
@@ -385,7 +385,7 @@ add_subdirectory(${_AX_ROOT}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
 if(MSVC)
     target_sources(${_AX_CORE_LIB} PRIVATE ./axmol.natvis)
-    target_sources(${_AX_CORE_LIB} PRIVATE ../thirdparty/robin-map/tsl-robin-map.natvis)
+    target_sources(${_AX_CORE_LIB} PRIVATE ../3rdparty/robin-map/tsl-robin-map.natvis)
     target_compile_options(${_AX_CORE_LIB} PUBLIC "/Zm2000")
 endif()
 
