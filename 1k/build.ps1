@@ -1707,7 +1707,7 @@ if (!$setupOnly) {
                 }
 
                 if (!$configOnly) {
-                    if (!$is_engine) {
+                    if (!$is_gradlew) {
                         if (!$b1k.isfile($cmakeCachePath)) {
                             Set-Location $stored_cwd
                             throw "The cmake generate incomplete, pelase add '-f' to re-generate again"

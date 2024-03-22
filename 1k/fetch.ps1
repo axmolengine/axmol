@@ -1,11 +1,10 @@
-# fetch repo directly
+# fetch pkg by url or manifest.json path
 param(
-    $name,
-    $prefix, # fetch dest repo prefix
-    $uri = $null, # uri
+    $name, # pkg name
+    $uri, # url or manifest.json path to locate pkg
+    $prefix, # the prefix to store
     $version = $null, # version hint
-    $revision = $null, # revision
-    $cfg = $null
+    $revision = $null # revision hint
 )
 
 # content of _1kiss with yaml format
@@ -16,7 +15,7 @@ param(
 
 Set-Alias println Write-Host
 
-if ((!$name -and !$uri) -or !$prefix) {
+if (!$name -or !$uri -or !$prefix) {
     throw 'fetch.ps1: missing parameters'
 }
 
@@ -39,7 +38,8 @@ if (!(Test-Path $cache_dir -PathType Container)) {
     mkdirs $cache_dir
 }
 
-if (!$cfg) {
+# simple match url/ssh schema
+if ($uri -match '^([a-z]+://|git@)') {
     # fetch by url directly
     $url = $uri
     $folder_name = (Split-Path $url -leafbase)
@@ -166,7 +166,7 @@ else {
     $mirror = if (!(Test-Path (Join-Path $PSScriptRoot '.gitee') -PathType Leaf)) { 'github' } else { 'gitee' }
     $url_base = @{'github' = 'https://github.com/'; 'gitee' = 'https://gitee.com/' }[$mirror]
 
-    $manifest_map = ConvertFrom-Json (Get-Content $cfg -raw)
+    $manifest_map = ConvertFrom-Json (Get-Content $uri -raw)
     $version_map = $manifest_map.versions
     $pkg_ver = $version_map.PSObject.Properties[$name].Value
     if ($pkg_ver) {

@@ -1,4 +1,4 @@
-include(${_AX_ROOT}/1k/platform.cmake)
+include(${_AX_ROOT}/1k/platforms.cmake)
 _1k_deprecated_32bit(axmol 2.2.0)
 
 if(NOT CMAKE_GENERATOR MATCHES "Ninja")

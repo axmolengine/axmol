@@ -61,8 +61,8 @@ function(_1kfetch name)
     set(_pkg_store "${_1kfetch_cache_dir}/${name}")
     execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1 
         -name "${name}"
+        -uri ${_1kfetch_manifest}
         -prefix "${_1kfetch_cache_dir}"
-        -cfg ${_1kfetch_manifest}
         RESULT_VARIABLE _errorcode
         )
     if (_errorcode)
