@@ -16,7 +16,7 @@ param(
 
 Set-Alias println Write-Host
 
-if (!$uri -or !$prefix) {
+if ((!$name -and !$uri) -or !$prefix) {
     throw 'fetch.ps1: missing parameters'
 }
 
