@@ -99,7 +99,6 @@ $source_proj_dir = if($options.d) { $options.d } else { $workDir }
 $Global:is_axmol_engine = ($source_proj_dir -eq $AX_ROOT)
 $Global:is_axmol_app = (Test-Path (Join-Path $source_proj_dir '.axproj.json') -PathType Leaf)
 $is_android = $options.p -eq 'android'
-$is_ci = $env:GITHUB_ACTIONS -eq 'true'
 
 # start construct full cmd line
 $b1k_script = (Resolve-Path -Path "$b1k_root/1k/build.ps1").Path
@@ -112,15 +111,9 @@ if($cm_target_index -ne -1) {
 
 if ($is_axmol_engine -and $is_android) {
     if (!$cmake_target) {
-        if ($is_ci) {
-            $source_proj_dir = Join-Path $myRoot 'tests/cpp-tests'
-        } else {
-            $source_proj_dir = Join-Path $myRoot 'templates/cpp-template-default'
-        }
+        $source_proj_dir = Join-Path $myRoot 'tests/cpp-tests'
     } else {
         $builtin_targets = @{
-            'HelloCpp' = 'templates/cpp-template-default'
-            'HelloLua' = 'templates/cpp-template-default'
             'cpp-tests' = 'tests/cpp-tests'
             'fairygui-tests' = 'tests/fairygui-tests'
             'live2d-tests' = 'tests/live2d-tests'
