@@ -88,10 +88,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         PRIVATE ${AX_ROOT_DIR}/3rdparty/lua/plainlua
         PRIVATE ${AX_ROOT_DIR}/3rdparty/lua/tolua/.
         PRIVATE ${AX_ROOT_DIR}/3rdparty/lua/lua-cjson/.
-        PRIVATE ${AX_ROOT_DIR}/3rdparty/zlib/_d/include
-        PRIVATE ${AX_ROOT_DIR}/3rdparty/jpeg-turbo/_d/include
-        PRIVATE ${AX_ROOT_DIR}/3rdparty/openssl/_d/include
-        PRIVATE ${AX_ROOT_DIR}/3rdparty/curl/_d/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/zlib/_x/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/jpeg-turbo/_x/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/openssl/_x/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/curl/_x/include
         PRIVATE ${AX_ROOT_DIR}/3rdparty/yasio
     )
 
@@ -99,10 +99,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 
     SET (CONFIGURATION_SUBFOLDER "")
     target_link_directories(${APP_NAME}
-        PRIVATE ${AX_ROOT_DIR}/3rdparty/openssl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/3rdparty/zlib/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/3rdparty/jpeg-turbo/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/3rdparty/curl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/jpeg-turbo/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib  # cmake will auto add suffix '/$(Configuration)', refer to https://github.com/Kitware/CMake/blob/master/Source/cmVisualStudio10TargetGenerator.cxx#L4145
     )
 
@@ -273,10 +273,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         endif()
         add_custom_command(TARGET ${APP_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${AX_ROOT_DIR}/3rdparty/openssl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
-            "${AX_ROOT_DIR}/3rdparty/openssl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
-            "${AX_ROOT_DIR}/3rdparty/curl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll"
-            "${AX_ROOT_DIR}/3rdparty/zlib/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll"
+            "${AX_ROOT_DIR}/3rdparty/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
+            "${AX_ROOT_DIR}/3rdparty/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
+            "${AX_ROOT_DIR}/3rdparty/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll"
+            "${AX_ROOT_DIR}/3rdparty/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll"
             "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
             $<TARGET_FILE_DIR:${APP_NAME}>)
 
@@ -301,9 +301,9 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         if (AX_GLES_PROFILE)
             add_custom_command(TARGET ${APP_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${AX_ROOT_DIR}/3rdparty/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
-                ${AX_ROOT_DIR}/3rdparty/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
-                ${AX_ROOT_DIR}/3rdparty/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll
+                ${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
+                ${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
+                ${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll
                 $<TARGET_FILE_DIR:${APP_NAME}>
             )
         endif()
