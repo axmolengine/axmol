@@ -195,7 +195,7 @@ $b1k = [build1k]::new()
 # x.y.z~x2.y2.z2 : range
 $manifest = @{
     # C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.36.32532\vc_redist.x64.exe
-    msvc         = '14.37+'; # cl.exe @link.exe 14.37
+    msvc         = '14.39+'; # cl.exe @link.exe 14.39 VS2022 17.9.x
     ndk          = 'r23c';
     xcode        = '13.0.0~15.0.0'; # range
     # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang 16.0.0 or newer.");
@@ -204,7 +204,7 @@ $manifest = @{
     cmake        = '3.28.1+';
     ninja        = '1.11.1+';
     python       = '3.8.0+';
-    jdk          = '17.0.3+';
+    jdk          = '17.0.10+';
     emsdk        = '3.1.51';
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
@@ -279,7 +279,10 @@ if ([VersionEx]$pwsh_ver -lt [VersionEx]"7.0") {
 }
 
 $osVer = if ($IsWin) { "Microsoft Windows $([System.Environment]::OSVersion.Version.ToString())" } else { $PSVersionTable.OS }
-$hostArch = [System.Runtime.InteropServices.RuntimeInformation, mscorlib]::OSArchitecture.ToString().ToLower()
+
+# arm64,x64
+# uname -m: arm64/aarch64,x86_64
+$HOST_CPU = [System.Runtime.InteropServices.RuntimeInformation, mscorlib]::OSArchitecture.ToString().ToLower()
 
 $b1k.println("PowerShell $pwsh_ver on $osVer")
 
@@ -324,7 +327,7 @@ if ($TARGET_OS.EndsWith('-sim')) {
     $darwin_sim_suffix = '-sim'
 }
 $Global:is_wasm = $TARGET_OS -eq 'wasm'
-$Global:Is_win32 = $TARGET_OS -eq 'win32'
+$Global:is_win32 = $TARGET_OS -eq 'win32'
 $Global:is_winrt = $TARGET_OS -eq 'winrt'
 $Global:is_mac = $TARGET_OS -eq 'osx'
 $Global:is_linux = $TARGET_OS -eq 'linux'
@@ -347,7 +350,7 @@ if (!$is_wasm) {
     if (!$TARGET_CPU) {
         $TARGET_CPU = @{'ios' = 'arm64'; 'tvos' = 'arm64'; 'watchos' = 'arm64'; 'android' = 'arm64'; }[$TARGET_OS]
         if (!$TARGET_CPU) {
-            $TARGET_CPU = $hostArch
+            $TARGET_CPU = $HOST_CPU
         }
         $options.a = $TARGET_CPU
     }
@@ -887,7 +890,8 @@ function setup_nasm() {
 
 function setup_jdk() {
     if (!$manifest['jdk']) { return $null }
-    $suffix = $('windows-x64.zip', 'linux-x64.tar.gz', 'macOS-x64.tar.gz').Get($HOST_OS)
+    $arch_suffix = if ($HOST_CPU -eq 'x64') { 'x64' } else { 'aarch64' }
+    $suffix = $("windows-$arch_suffix.zip", "linux-$arch_suffix.tar.gz", "macOS-$arch_suffix.tar.gz").Get($HOST_OS)
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac'
     if ($javac_prog) {
         return $javac_prog
@@ -1770,9 +1774,10 @@ if (!$setupOnly) {
             $gn_buildargs_overrides += 'use_msvcr14x=true'
         }
 
-        if($optimize_flag -eq 'Debug') {
+        if ($optimize_flag -eq 'Debug') {
             $gn_buildargs_overrides += 'is_debug=true'
-        } else {
+        }
+        else {
             $gn_buildargs_overrides += 'is_debug=false'
         }
 
@@ -1826,10 +1831,9 @@ if (!$setupOnly) {
     $env:buildResult = ConvertTo-Json @{
         buildDir     = $BUILD_DIR
         targetOS     = $TARGET_OS
-        hostArch     = $hostArch
-        isHostArch   = $TARGET_CPU -eq $hostArch
+        targetCPU    = $TARGET_CPU
+        hostCPU      = $HOST_CPU
         isHostTarget = $is_host_target
         compilerID   = $TOOLCHAIN_NAME
     }
 }
-
