@@ -134,9 +134,11 @@ if (!$is_git_repo) {
     if ($match_info.Success) {
         $version = $match_info.Value
     }
+    $lib_src = Join-Path $prefix $url_pkg_name
 }
-
-$lib_src = Join-Path $prefix $name
+else {
+    $lib_src = Join-Path $prefix $name
+}
 
 if (!$version) {
     throw "fetch.ps1: can't determine package version of '$name'"
