@@ -386,6 +386,9 @@ $toolchains = @{
 if (!$TOOLCHAIN) {
     $TOOLCHAIN = $toolchains[$TARGET_OS]
 }
+if (!$TOOLCHAIN) {
+    throw "1kiss: Unsupported target os: $TARGET_OS"
+}
 $TOOLCHAIN_INFO = $TOOLCHAIN.Split('-')
 $TOOLCHAIN_VER = $null
 if ($TOOLCHAIN_INFO.Count -ge 2) {
