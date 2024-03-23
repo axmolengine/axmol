@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -54,7 +55,7 @@ struct TextureInfoGL
     }
 
     GLuint ensure(int index, GLenum target);
-    void recreateAll(GLenum target);
+    void onRendererRecreated(GLenum target);
 
     void destroy(GLenum target)
     {
@@ -205,7 +206,7 @@ private:
     void initWithZeros();
 
     TextureInfoGL _textureInfo;
-    EventListener* _backToForegroundListener = nullptr;
+    EventListener* _rendererRecreatedListener = nullptr;
 };
 
 /**
@@ -258,7 +259,7 @@ public:
 
 private:
     TextureInfoGL _textureInfo;
-    EventListener* _backToForegroundListener = nullptr;
+    EventListener* _rendererRecreatedListener = nullptr;
 };
 
 // end of _opengl group
