@@ -288,7 +288,7 @@ struct DownloaderTest : public TestCase
         // define failed callback
         downloader->onTaskError = [this](const ax::network::DownloadTask& task, int errorCode,
                                          int errorCodeInternal, std::string_view errorStr) {
-            log("Failed to download : %s, identifier(%s) error code(%d), internal error code(%d) desc(%s)",
+            ax::print("Failed to download : %s, identifier(%s) error code(%d), internal error code(%d) desc(%s)",
                 task.requestURL.c_str(), task.identifier.c_str(), errorCode, errorCodeInternal, errorStr.data());
             auto view   = this->getChildByName(task.identifier);
             auto status = (Label*)view->getChildByTag(TAG_STATUS);
@@ -327,16 +327,16 @@ struct DownloaderMultiTask : public TestCase
         {
             sprintf(name, "%d_%s", i, sNameList[0]);
             sprintf(path, "%sCppTests/DownloaderTest/%s", FileUtils::getInstance()->getWritablePath().c_str(), name);
-            log("downloader task create: %s", name);
+            ax::print("downloader task create: %s", name);
             this->downloader->createDownloadFileTask(sURLList[0], path, name);
         }
 
         downloader->onFileTaskSuccess =
-            ([](const network::DownloadTask& task) { log("downloader task success: %s", task.identifier.c_str()); });
+            ([](const network::DownloadTask& task) { ax::print("downloader task success: %s", task.identifier.c_str()); });
 
         downloader->onTaskError =
             ([](const network::DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorStr) {
-                log("downloader task failed : %s, identifier(%s) error code(%d), internal error code(%d) desc(%s)",
+                ax::print("downloader task failed : %s, identifier(%s) error code(%d), internal error code(%d) desc(%s)",
                     task.requestURL.c_str(), task.identifier.c_str(), errorCode, errorCodeInternal, errorStr.data());
             });
     }

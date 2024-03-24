@@ -85,7 +85,7 @@ int lua_print(lua_State* L)
 {
     std::string t;
     get_string_for_print(L, &t);
-    AXLOG("[LUA-print] %s", t.c_str());
+    AXLOGD("[LUA-print] {}", t);
 
     return 0;
 }
@@ -94,7 +94,7 @@ int lua_release_print(lua_State* L)
 {
     std::string t;
     get_string_for_print(L, &t);
-    log("[LUA-print] %s", t.c_str());
+    AXLOG_WITH_LEVEL(ax::LogLevel::Silent, "[LUA-print] {}", t);
 
     return 0;
 }

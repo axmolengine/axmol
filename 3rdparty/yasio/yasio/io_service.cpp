@@ -2258,7 +2258,7 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
         channel->uparams_.no_bswap = va_arg(ap, int);
       break;
     }
-    case YOPT_C_LFBFD_FN: {
+    case YOPT_C_UNPACK_FN: {
       auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
       if (channel)
         channel->decode_len_ = *va_arg(ap, decode_len_fn_t*);

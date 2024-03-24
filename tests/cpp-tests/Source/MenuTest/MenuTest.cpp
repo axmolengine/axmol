@@ -175,7 +175,7 @@ void MenuLayerMainMenu::allowTouches(float dt)
 {
     _eventDispatcher->setPriority(_touchListener, 1);
     unscheduleAllCallbacks();
-    log("TOUCHES ALLOWED AGAIN");
+    ax::print("TOUCHES ALLOWED AGAIN");
 }
 
 void MenuLayerMainMenu::menuCallbackDisabled(Ref* sender)
@@ -183,7 +183,7 @@ void MenuLayerMainMenu::menuCallbackDisabled(Ref* sender)
     // hijack all touch events for 5 seconds
     _eventDispatcher->setPriority(_touchListener, -1);
     schedule(AX_SCHEDULE_SELECTOR(MenuLayerMainMenu::allowTouches), 5.0f);
-    log("TOUCHES DISABLED FOR 5 SECONDS");
+    ax::print("TOUCHES DISABLED FOR 5 SECONDS");
 }
 
 void MenuLayerMainMenu::menuCallback2(Ref* sender)
@@ -339,7 +339,7 @@ MenuLayer3::MenuLayer3()
     auto spriteDisabled = Sprite::create(s_MenuItem, Rect(0, 23 * 0, 115, 23));
 
     auto item3    = MenuItemSprite::create(spriteNormal, spriteSelected, spriteDisabled,
-                                           [](Ref* sender) { log("sprite clicked!"); });
+                                           [](Ref* sender) { ax::print("sprite clicked!"); });
     _disabledItem = item3;
     item3->retain();
     _disabledItem->setEnabled(false);
@@ -475,7 +475,7 @@ void BugsTest::issue1410MenuCallback(Ref* sender)
     menu->setEnabled(false);
     menu->setEnabled(true);
 
-    log("NO CRASHES");
+    ax::print("NO CRASHES");
 }
 
 void BugsTest::issue1410v2MenuCallback(ax::Ref* pSender)
@@ -484,7 +484,7 @@ void BugsTest::issue1410v2MenuCallback(ax::Ref* pSender)
     menu->setEnabled(true);
     menu->setEnabled(false);
 
-    log("NO CRASHES. AND MENU SHOULD STOP WORKING");
+    ax::print("NO CRASHES. AND MENU SHOULD STOP WORKING");
 }
 
 void BugsTest::backMenuCallback(ax::Ref* pSender)

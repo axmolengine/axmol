@@ -10,7 +10,7 @@ axmol is a open source project is designed to be a cross-platform 2D game engine
 It runs on top of OpenGL 3.3(ES 2.0)/Metal and is written in C++.\n
 This project is a fork of <A HREF="https://github.com/cocos2d/cocos2d-x">"cocos2d-x-4.0"</A>.\n
 
-- website:                          https://axmol.org/
+- website:                          https://axmol.dev/
 
 - <A HREF="https://github.com/axmolengine/axmol/issues">FAQ</A>
 

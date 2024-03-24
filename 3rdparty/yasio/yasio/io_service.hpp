@@ -301,9 +301,10 @@ enum
   YOPT_B_SOCKOPT = 201,
 };
 
-// channel masks: only for internal use, not for user
+// channel masks and kinds
 enum
 {
+  // masks: only for internal use, not for user
   YCM_CLIENT = 1,
   YCM_SERVER = 1 << 1,
   YCM_TCP    = 1 << 2,
@@ -311,11 +312,8 @@ enum
   YCM_KCP    = 1 << 4,
   YCM_SSL    = 1 << 5,
   YCM_UDS    = 1 << 6, // IPC: posix domain socket
-};
 
-// channel kinds: for user to call io_service::open
-enum
-{
+  // kinds
   YCK_TCP_CLIENT = YCM_TCP | YCM_CLIENT,
   YCK_TCP_SERVER = YCM_TCP | YCM_SERVER,
   YCK_UDP_CLIENT = YCM_UDP | YCM_CLIENT,
@@ -849,6 +847,7 @@ protected:
 #if defined(YASIO_ENABLE_KCP)
 class io_transport_kcp : public io_transport_udp {
   friend class io_service;
+
 public:
   YASIO__DECL io_transport_kcp(io_channel* ctx, xxsocket_ptr&& s);
   YASIO__DECL ~io_transport_kcp();
@@ -862,7 +861,7 @@ protected:
   YASIO__DECL bool do_write(highp_time_t& wait_duration) override;
 
   YASIO__DECL int handle_input(char* buf, int len, int& error, highp_time_t& wait_duration) override;
-  
+
   int interval() const { return kcp_->interval * std::milli::den; }
 
   sbyte_buffer rawbuf_; // the low level raw buffer

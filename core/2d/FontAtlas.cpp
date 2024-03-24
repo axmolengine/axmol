@@ -64,7 +64,7 @@ void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, hlookup::string_ma
         std::string_view type       = settings["type"];
         if (type != "fontatlas")
         {
-            ax::print("Load fontatlas %s fail, invalid asset type: %s", fontatlasFile.data(), type.data());
+            AXLOGE("Load fontatlas {} fail, invalid asset type: {}", fontatlasFile, type);
             return;
         }
 
@@ -76,8 +76,8 @@ void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, hlookup::string_ma
         {
             if (it->second->getReferenceCount() != 1)
             {
-                ax::print("Load fontatlas %s fail, due to exist fontatlas with same key %s and in used",
-                          fontatlasFile.data(), atlasName.data());
+                AXLOGE("Load fontatlas {} fail, due to exist fontatlas with same key {} and in used", fontatlasFile,
+                       atlasName);
                 return;
             }
             else
@@ -90,8 +90,7 @@ void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, hlookup::string_ma
         auto font = FontFreeType::create(sourceFont, faceSize, GlyphCollection::DYNAMIC, ""sv, true, 0.0f);
         if (!font)
         {
-            ax::print("Load fontatils %s fail due to create source font %s fail", fontatlasFile.data(),
-                      sourceFont.data());
+            AXLOGE("Load fontatils {} fail due to create source font {} fail", fontatlasFile, sourceFont);
             return;
         }
 
@@ -121,7 +120,7 @@ void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, hlookup::string_ma
     }
     catch (std::exception& ex)
     {
-        ax::print("Load fontatils %s fail due to exception occured: %s", fontatlasFile.data(), ex.what());
+        AXLOGE("Load fontatils {} fail due to exception occured: {}", fontatlasFile, ex.what());
     }
 }
 
@@ -225,8 +224,8 @@ void FontAtlas::initWithSettings(void* opaque /*simdjson::ondemand::document*/)
     std::string strCharCode;
     for (auto field : settings["letters"].get_object())
     {
-        strCharCode         = static_cast<std::string_view>(field.unescaped_key());
-        auto letterInfo     = field.value();
+        strCharCode       = static_cast<std::string_view>(field.unescaped_key());
+        auto letterInfo   = field.value();
         tempDef.U         = static_cast<float>(letterInfo["U"].get_double());
         tempDef.V         = static_cast<float>(letterInfo["V"].get_double());
         tempDef.xAdvance  = static_cast<float>(letterInfo["advance"].get_double());
@@ -362,7 +361,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
     for (auto&& charCode : charCodeSet)
     {
         auto bitmap = _fontFreeType->getGlyphBitmap(charCode, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
-        if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)
+                    if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)
         {
             tempDef.validDefinition = true;
             tempDef.width           = tempRect.size.width + _letterPadding + _letterEdgeExtend;
@@ -390,8 +389,8 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
                 _currLineHeight = glyphHeight;
             }
             _fontFreeType->renderCharAt(_currentPageData, (int)_currentPageOrigX + adjustForExtend,
-                                        (int)_currentPageOrigY + adjustForExtend, bitmap, bitmapWidth, bitmapHeight,
-                                        _width, _height);
+                                       (int)_currentPageOrigY + adjustForExtend, bitmap, bitmapWidth, bitmapHeight,
+                                       _width, _height);
 
             tempDef.U         = _currentPageOrigX;
             tempDef.V         = _currentPageOrigY;

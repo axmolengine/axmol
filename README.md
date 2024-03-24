@@ -1,10 +1,10 @@
-<p align="center"><a href="https://axmol.org" target="_blank" rel="noopener noreferrer"><img width="160" src="docs/logo.png" alt="axmol logo"></a></p>
+<p align="center"><a href="https://axmol.dev" target="_blank" rel="noopener noreferrer"><img width="160" src="docs/logo.png" alt="axmol logo"></a></p>
 
 # Axmol Engine
 
 ## A Multi-platform Engine for Mobile, Desktop and Xbox.
 
-[Axmol Engine](https://axmol.org) is an open-source, C++ multi-platform engine designed for mobile devices, desktop, and Xbox, well-suited for 2D game development. It was launched in November 2019 as a fork of Cocos2d-x v4.0.
+[Axmol Engine](https://axmol.dev) is an open-source, C++ multi-platform engine designed for mobile devices, desktop, and Xbox, well-suited for 2D game development. It was launched in November 2019 as a fork of Cocos2d-x v4.0.
 
 Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more about Axmol.
 
@@ -39,7 +39,7 @@ If you have a Cocos2d-x project, migrating to Axmol Engine is easy. We have prep
 
 ## Learning and docs
 
-* [Documentation](https://axmol.org/manual/latest/)
+* [Documentation](https://axmol.dev/manual/latest/)
 * [Axmol Wiki](https://github.com/axmolengine/axmol/wiki)
 * [Tutorials Page](https://github.com/axmolengine/axmol/wiki/Tutorials)
 * [Frequently Asked Questions](https://github.com/axmolengine/axmol/wiki/FAQ)
@@ -59,21 +59,21 @@ Axmol Engine has iterated and improved over the Cocos2d-x v4.0 base. Now is fast
 * Lua
 
 **Renderer backends**:
-* Metal for macOS and iOS
+* Metal for macOS, iOS and tvOS
 * OpenGL 3.3+ for Linux, macOS and Win32
 * OpenGL ES 2.0+ for Android
-* OpenGL ES 3.0+ for iOS
+* OpenGL ES 3.0+ for iOS and tvOS
 * ANGLE GLES 3.0+ for Win32 and UWP
 * WebGL 2.0 (OpenGL ES 3.0): WASM
 
 **Architectures**:
-* iOS (x64, arm64)
+* iOS/tvOS (x64, arm64)
 * Android (x86, x64, armv7, arm64)
 * Windows (x86, x64)
 * Linux (x64)
 * OSX (x64, arm64)
 * UWP (x64, arm64)
-* wasm32
+* Wasm32
 
 **Supported 2D physics engines** ([more info here](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-informations)):
 * Box2D
@@ -109,7 +109,7 @@ Some highlights:
     - [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL) (if no `AX_USE_ALSOFT` option specified, cmake script will choose it on OSX/iOS/tvOS, even though it was marked as deprecated is still available)
 - Implemented all .wav formats supported by OpenAL Soft (MS-ADPCM, ADPCM, etc.)
 - Refactored UserDefault with [mio](https://github.com/mandreyel/mio)
-- [Upstream Version License](thirdparty/README.md) - Third-party:
+- [Upstream Version License](3rdparty/README.md) - Third-party:
     - Third-party license overview, for easier publishing of your commercial apps based on Axmol framework.
     - Some links to third party libs which support axmol too.
 - [Upstream Version License](extensions/README.md) - Extensions:

@@ -25,6 +25,11 @@
 
 #include "DrawNodeExTest.h"
 
+#if defined(_WIN32)
+#    pragma push_macro("TRANSPARENT")
+#    undef TRANSPARENT
+#endif
+
 USING_NS_AX;
 USING_NS_AX_EXT;
 
@@ -344,9 +349,9 @@ void IndividualThicknessTest::update(float dt)
         {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
         {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
     };
-    drawNodeEx->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4B::AX_TRANSPARENT, thickness,
+    drawNodeEx->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4B::TRANSPARENT, thickness,
                             Color4F::RED);
-    // drawNodeEx->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4B::AX_TRANSPARENT, 0.5f,
+    // drawNodeEx->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4B::TRANSPARENT, 0.5f,
     //                       Color4F::BLACK);
 
     // open random color poly
@@ -530,7 +535,7 @@ void DrawPieTest::update(float dt)
     drawNode->drawPie(VisibleRect::center() - Vec2(170.0f, -35.0f), 50, rotation, startAngle, endAngle, 1.0f, 1.0f,
                       Color4F::RED, Color4F::BLUE, drawNode->DrawMode::Fill, thickness);
     drawNode->drawPie(VisibleRect::center() - Vec2(60.0f, -35.0f), 50, rotation, startAngle, endAngle, 1.0f, 1.0f,
-                      Color4F::AX_TRANSPARENT, Color4F::BLUE, drawNode->DrawMode::Outline, thickness);
+                      Color4F::TRANSPARENT, Color4F::BLUE, drawNode->DrawMode::Outline, thickness);
     drawNode->drawPie(VisibleRect::center() + Vec2(60.0f, 35.0f), 50, rotation, startAngle, endAngle, 1.0f, 1.0f,
                       Color4F::RED, Color4F::BLUE, drawNode->DrawMode::Line, thickness);
     drawNode->drawPie(VisibleRect::center() + Vec2(170.0f, 35.0f), 50, rotation, startAngle, endAngle, 1.0f, 1.0f,
@@ -694,7 +699,7 @@ DrawNode2FilledPolygonTest::DrawNode2FilledPolygonTest()
     drawNode[2]->drawPolygon(vertices2, sizeof(vertices2) / sizeof(vertices2[0]), Color4F::GREEN, 0.3f,
                              Color4F::YELLOW);
 
-    drawNode[2]->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color4F::AX_TRANSPARENT, 5.3f,
+    drawNode[2]->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color4F::TRANSPARENT, 5.3f,
                              Color4F::RED);
 }
 
@@ -1276,3 +1281,7 @@ void DrawNodePart2Test::update(float dt)
         break;
     }
 }
+
+#if defined(_WIN32)
+#    pragma pop_macro("TRANSPARENT")
+#endif

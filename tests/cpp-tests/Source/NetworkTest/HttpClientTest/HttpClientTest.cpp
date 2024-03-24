@@ -53,7 +53,8 @@ HttpClientTest::HttpClientTest() : _labelStatusCode(nullptr)
     const int MARGIN = 40;
     const int SPACE  = 35;
 
-    const int LEFT  = winSize.width / 2;
+    const int LEFT  = winSize.width / 4 * 1;
+    const int CENTER  = winSize.width / 2;
     const int RIGHT = winSize.width / 4 * 3;
 
     auto menuRequest = Menu::create();
@@ -63,32 +64,38 @@ HttpClientTest::HttpClientTest() : _labelStatusCode(nullptr)
     // Get
     auto labelGet = Label::createWithTTF("Test Get", "fonts/arial.ttf", 22);
     auto itemGet  = MenuItemLabel::create(labelGet, AX_CALLBACK_1(HttpClientTest::onMenuGetTestClicked, this));
-    itemGet->setPosition(LEFT, winSize.height - MARGIN - SPACE);
+    itemGet->setPosition(CENTER, winSize.height - MARGIN - SPACE);
     menuRequest->addChild(itemGet);
+
+    // Patch
+    auto labelPatch = Label::createWithTTF("Test Patch", "fonts/arial.ttf", 22);
+    auto itemPatch  = MenuItemLabel::create(labelPatch, AX_CALLBACK_1(HttpClientTest::onMenuPatchTestClicked, this));
+    itemPatch->setPosition(CENTER, winSize.height - MARGIN - 2 * SPACE);
+    menuRequest->addChild(itemPatch);
 
     // Post
     auto labelPost = Label::createWithTTF("Test Post", "fonts/arial.ttf", 22);
     auto itemPost  = MenuItemLabel::create(labelPost, AX_CALLBACK_1(HttpClientTest::onMenuPostTestClicked, this));
-    itemPost->setPosition(LEFT, winSize.height - MARGIN - 2 * SPACE);
+    itemPost->setPosition(LEFT, winSize.height - MARGIN - 3 * SPACE);
     menuRequest->addChild(itemPost);
 
     // Post Binary
     auto labelPostBinary = Label::createWithTTF("Test Post Binary", "fonts/arial.ttf", 22);
     auto itemPostBinary =
         MenuItemLabel::create(labelPostBinary, AX_CALLBACK_1(HttpClientTest::onMenuPostBinaryTestClicked, this));
-    itemPostBinary->setPosition(LEFT, winSize.height - MARGIN - 3 * SPACE);
+    itemPostBinary->setPosition(RIGHT, winSize.height - MARGIN - 3 * SPACE);
     menuRequest->addChild(itemPostBinary);
 
     // Put
     auto labelPut = Label::createWithTTF("Test Put", "fonts/arial.ttf", 22);
     auto itemPut  = MenuItemLabel::create(labelPut, AX_CALLBACK_1(HttpClientTest::onMenuPutTestClicked, this));
-    itemPut->setPosition(LEFT, winSize.height - MARGIN - 4 * SPACE);
+    itemPut->setPosition(CENTER, winSize.height - MARGIN - 4 * SPACE);
     menuRequest->addChild(itemPut);
 
     // Delete
     auto labelDelete = Label::createWithTTF("Test Delete", "fonts/arial.ttf", 22);
     auto itemDelete  = MenuItemLabel::create(labelDelete, AX_CALLBACK_1(HttpClientTest::onMenuDeleteTestClicked, this));
-    itemDelete->setPosition(LEFT, winSize.height - MARGIN - 5 * SPACE);
+    itemDelete->setPosition(CENTER, winSize.height - MARGIN - 5 * SPACE);
     menuRequest->addChild(itemDelete);
 
     // Response Code Label
@@ -150,6 +157,45 @@ void HttpClientTest::onMenuGetTestClicked(ax::Ref* sender)
         request->setHeaders(std::vector<std::string>{CHROME_UA});
         request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test5");
+        HttpClient::getInstance()->send(request);
+        request->release();
+    }
+
+    // waiting
+    _labelStatusCode->setString("waiting...");
+}
+
+void HttpClientTest::onMenuPatchTestClicked(Ref* sender)
+{
+    // test 1
+    {
+        HttpRequest* request = new HttpRequest();
+        request->setUrl("https://httpbin.org/patch");
+        request->setRequestType(HttpRequest::Type::PATCH);
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+
+        // write the body data
+        const char* bodyData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+        request->setRequestData(bodyData, strlen(bodyData));
+        request->setTag("PATCH Binary test1");
+        HttpClient::getInstance()->send(request);
+        request->release();
+    }
+
+    // test 2: set Content-Type
+    {
+        HttpRequest* request = new HttpRequest();
+        request->setUrl("https://httpbin.org/patch");
+        request->setRequestType(HttpRequest::Type::PATCH);
+        std::vector<std::string> headers;
+        headers.emplace_back("Content-Type: application/json; charset=utf-8");
+        request->setHeaders(headers);
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+
+        // write the post data
+        const char* bodyData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+        request->setRequestData(bodyData, strlen(bodyData));
+        request->setTag("PATCH Binary test2");
         HttpClient::getInstance()->send(request);
         request->release();
     }
@@ -459,6 +505,6 @@ void HttpClientClearRequestsTest::onHttpRequestCompleted(HttpClient* sender, Htt
     if (!response->isSucceed())
     {
         ax::print("response failed");
-        // log("error buffer: %s", response->getErrorBuffer());
+        // ax::print("error buffer: %s", response->getErrorBuffer());
     }
 }

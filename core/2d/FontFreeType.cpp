@@ -303,7 +303,7 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, int faceSize)
 
     FT_Done_Face(face);
 
-    ax::log("Init font '%s' failed, only unicode ttf/ttc was supported.", fontPath.data());
+    AXLOGW("Init font '{}' failed, only unicode ttf/ttc was supported.", fontPath);
     return false;
 }
 
@@ -406,8 +406,7 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
 
             if (charUTF8 == "\n")
                 charUTF8 = "\\n";
-            ax::log("The font face: %s doesn't contains char: <%s>", _fontFace->charmap->face->family_name,
-                    charUTF8.c_str());
+            AXLOGW("The font face: {} doesn't contains char: <{}>", _fontFace->charmap->face->family_name, charUTF8);
 
             if (_mssingGlyphCharacter != 0)
             {

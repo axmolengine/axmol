@@ -35,9 +35,6 @@
 USING_NS_AX;
 
 static ax::Size designResolutionSize = ax::Size(1280, 720);
-static ax::Size smallResolutionSize  = ax::Size(480, 320);
-static ax::Size mediumResolutionSize = ax::Size(1024, 768);
-static ax::Size largeResolutionSize  = ax::Size(2048, 1536);
 
 AppDelegate::AppDelegate() {}
 
@@ -79,25 +76,6 @@ bool AppDelegate::applicationDidFinishLaunching()
     // Set the design resolution
     glView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
                                     ResolutionPolicy::SHOW_ALL);
-    auto frameSize = glView->getFrameSize();
-    // if the frame's height is larger than the height of medium size.
-    if (frameSize.height > mediumResolutionSize.height)
-    {
-        director->setContentScaleFactor(MIN(largeResolutionSize.height / designResolutionSize.height,
-                                            largeResolutionSize.width / designResolutionSize.width));
-    }
-    // if the frame's height is larger than the height of small size.
-    else if (frameSize.height > smallResolutionSize.height)
-    {
-        director->setContentScaleFactor(MIN(mediumResolutionSize.height / designResolutionSize.height,
-                                            mediumResolutionSize.width / designResolutionSize.width));
-    }
-    // if the frame's height is smaller than the height of medium size.
-    else
-    {
-        director->setContentScaleFactor(MIN(smallResolutionSize.height / designResolutionSize.height,
-                                            smallResolutionSize.width / designResolutionSize.width));
-    }
 
     // create a scene. it's an autorelease object
     auto scene = utils::createInstance<MainScene>();

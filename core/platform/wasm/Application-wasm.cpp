@@ -2,8 +2,9 @@
 Copyright (c) 2011      Laschweinski
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
-http://www.cocos2d-x.org
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -52,7 +53,7 @@ static long getCurrentMillSecond() {
 }
 
 Application::Application()
-: _animationInterval(1.0f/60.0f*1000.0f)
+: _animationSpeed(60)
 {
     AX_ASSERT(! sm_pSharedApplication);
     sm_pSharedApplication = this;
@@ -88,7 +89,8 @@ int Application::run()
     // Retain glview to avoid glview being released in the while loop
     glview->retain();
 
-    emscripten_set_main_loop(&mainLoopIter, 0, 1);
+    //emscripten_set_main_loop(&mainLoopIter, 0, 1);
+    emscripten_set_main_loop(&mainLoopIter, _animationSpeed, 1);
     // TODO: ? does these cleanup really run?
     /* Only work on Desktop
     *  Director::mainLoop is really one frame logic
@@ -107,7 +109,7 @@ int Application::run()
 
 void Application::setAnimationInterval(float interval)
 {
-    _animationInterval = interval*1000.0f;
+    _animationSpeed = 1.0f / interval;
 }
 
 void Application::setResourceRootPath(const std::string& rootResDir)

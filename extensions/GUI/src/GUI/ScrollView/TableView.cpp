@@ -521,18 +521,18 @@ void TableView::scrollViewDidScroll(ScrollView* /*view*/)
     CCARRAY_FOREACH(_cellsUsed, pObj)
     {
         TableViewCell* pCell = static_cast<TableViewCell*>(pObj);
-        log("cells Used index %d, value = %d", i, pCell->getIdx());
+        AXLOGD("cells Used index {}, value = {}", i, pCell->getIdx());
         i++;
     }
-    log("---------------------------------------");
+    AXLOGD("---------------------------------------");
     i = 0;
     CCARRAY_FOREACH(_cellsFreed, pObj)
     {
         TableViewCell* pCell = static_cast<TableViewCell*>(pObj);
-        log("cells freed index %d, value = %d", i, pCell->getIdx());
+        AXLOGD("cells freed index {}, value = {}", i, pCell->getIdx());
         i++;
     }
-    log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    AXLOGD("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 #endif
 
     if (!_cellsUsed.empty())

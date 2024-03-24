@@ -70,7 +70,7 @@ void TestSearchPath::onEnter()
         AXASSERT(ret != 0, "fwrite function returned zero value");
         fclose(fp);
         if (ret != 0)
-            log("Writing file to writable path succeed.");
+            ax::print("Writing file to writable path succeed.");
     }
 
     searchPaths.insert(searchPaths.begin(), writablePath);
@@ -82,12 +82,12 @@ void TestSearchPath::onEnter()
     {
         auto filename = StringUtils::format("file%d.txt", i);
         ret           = sharedFileUtils->fullPathForFilename(filename);
-        log("%s -> %s", filename.c_str(), ret.c_str());
+        ax::print("%s -> %s", filename.c_str(), ret.c_str());
     }
 
     // Gets external.txt from writable path
     std::string fullPath = sharedFileUtils->fullPathForFilename("external.txt");
-    log("external file path = %s", fullPath.c_str());
+    ax::print("external file path = %s", fullPath.c_str());
     if (fullPath.length() > 0)
     {
         fp = fopen(fullPath.c_str(), "rb");
@@ -96,7 +96,7 @@ void TestSearchPath::onEnter()
             char szReadBuf[100] = {0};
             size_t read         = fread(szReadBuf, 1, strlen(szReadBuf), fp);
             if (read > 0)
-                log("The content of file from writable path: %s", szReadBuf);
+                ax::print("The content of file from writable path: %s", szReadBuf);
             fclose(fp);
         }
     }
@@ -425,12 +425,12 @@ void TestWriteString::onEnter()
     std::string fullPath     = writablePath + fileName;
     if (FileUtils::getInstance()->writeStringToFile(writeDataStr, fullPath.c_str()))
     {
-        log("see the plist file at %s", fullPath.c_str());
+        ax::print("see the plist file at %s", fullPath.c_str());
         writeResult->setString("write success:" + writeDataStr);
     }
     else
     {
-        log("write plist file failed");
+        ax::print("write plist file failed");
         writeResult->setString("write fail");
     }
 
@@ -567,12 +567,12 @@ void TestWriteData::onEnter()
     std::string fullPath = writablePath + fileName;
     if (FileUtils::getInstance()->writeDataToFile(writeData, fullPath.c_str()))
     {
-        log("see the plist file at %s", fullPath.c_str());
+        ax::print("see the plist file at %s", fullPath.c_str());
         writeResult->setString("write success:" + writeDataStr);
     }
     else
     {
-        log("write plist file failed");
+        ax::print("write plist file failed");
         writeResult->setString("write fail");
     }
 
@@ -654,12 +654,12 @@ void TestWriteValueMap::onEnter()
     std::string fullPath     = writablePath + "testWriteValueMap.plist";
     if (FileUtils::getInstance()->writeValueMapToFile(valueMap, fullPath.c_str()))
     {
-        log("see the plist file at %s", fullPath.c_str());
+        ax::print("see the plist file at %s", fullPath.c_str());
         writeResult->setString("write success");
     }
     else
     {
-        log("write plist file failed");
+        ax::print("write plist file failed");
         writeResult->setString("write failed");
     }
 
@@ -756,12 +756,12 @@ void TestWriteValueVector::onEnter()
     std::string fullPath     = writablePath + "testWriteValueVector.plist";
     if (FileUtils::getInstance()->writeValueVectorToFile(array, fullPath.c_str()))
     {
-        log("see the plist file at %s", fullPath.c_str());
+        ax::print("see the plist file at %s", fullPath.c_str());
         writeResult->setString("write success");
     }
     else
     {
-        log("write plist file failed");
+        ax::print("write plist file failed");
         writeResult->setString("write failed");
     }
 
@@ -871,7 +871,7 @@ void TestUnicodePath::onEnter()
             memcpy(buffer, readData.getBytes(), readData.getSize());
             buffer[readData.getSize()] = '\0';
             // vc can't treat unicode string correctly, don't use unicode string in code
-            log("The content of file from writable path: %s", buffer);
+            ax::print("The content of file from writable path: %s", buffer);
             free(buffer);
 
             // remove test file

@@ -63,7 +63,7 @@ set_target_properties(${target_name}
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-    FOLDER "ThirdParty"
+    FOLDER "3rdparty"
 )
 
 if(WIN32 OR MACOSX)

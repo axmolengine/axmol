@@ -251,7 +251,7 @@ bool AudioControlTest::init()
 
                 button->setEnabled(false);
                 AudioEngine::setFinishCallback(_audioID, [&](int id, std::string_view filePath) {
-                    log("_audioID(%d), _isStopped:(%d), played over!!!", _audioID, _isStopped);
+                    ax::print("_audioID(%d), _isStopped:(%d), played over!!!", _audioID, _isStopped);
 
                     _playOverLabel->setVisible(true);
 
@@ -557,10 +557,10 @@ bool PlaySimultaneouslyTest::init()
             }
             else
             {
-                log("%s,%d,Fail to play file:%s", __FILE__, __LINE__, _files[index].c_str());
+                ax::print("%s,%d,Fail to play file:%s", __FILE__, __LINE__, _files[index].c_str());
             }
         }
-        log("diff time:%lf", utils::gettime() - startTime);
+        ax::print("diff time:%lf", utils::gettime() - startTime);
     });
     playItem->setPositionNormalized(Vec2(0.5f, 0.5f));
     this->addChild(playItem);
@@ -1092,11 +1092,11 @@ void AudioPreloadSameFileMultipleTimes::onEnter()
     for (int i = 0; i < 10; ++i)
     {
         AudioEngine::preload("audio/SoundEffectsFX009/FX082.mp3", [i](bool isSucceed) {
-            log("111: %d preload %s", i, isSucceed ? "succeed" : "failed");
+            ax::print("111: %d preload %s", i, isSucceed ? "succeed" : "failed");
             AudioEngine::preload("audio/SoundEffectsFX009/FX082.mp3", [i](bool isSucceed) {
-                log("222: %d preload %s", i, isSucceed ? "succeed" : "failed");
+                ax::print("222: %d preload %s", i, isSucceed ? "succeed" : "failed");
                 AudioEngine::preload("audio/SoundEffectsFX009/FX082.mp3", [i](bool isSucceed) {
-                    log("333: %d preload %s", i, isSucceed ? "succeed" : "failed");
+                    ax::print("333: %d preload %s", i, isSucceed ? "succeed" : "failed");
                 });
             });
         });
@@ -1194,7 +1194,7 @@ void AudioPlayInFinishedCB::doPlay(std::string_view filename)
     int playID = AudioEngine::play2d(filename, false, 1);
     AudioEngine::setFinishCallback(playID, [this](int finishID, std::string_view file) {
         _playList.pop_front();
-        log("finish music %s", file.data());
+        ax::print("finish music %s", file.data());
         if (!_playList.empty())
         {
             std::string_view name = _playList.front();

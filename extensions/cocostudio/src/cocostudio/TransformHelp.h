@@ -40,8 +40,6 @@ namespace cocostudio
 class CCS_DLL TransformHelp
 {
 public:
-    TransformHelp();
-
     static void transformFromParent(BaseData& node, const BaseData& parentNode);
     static void transformToParent(BaseData& node, const BaseData& parentNode);
 

@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -115,14 +116,15 @@ GLuint TextureInfoGL::ensure(int index, GLenum target)
     return texID;
 }
 
-void TextureInfoGL::recreateAll(GLenum target)
+void TextureInfoGL::onRendererRecreated(GLenum target)
 {
     int idx = 0;
     for (auto&& texID : textures)
     {
         if (texID)
         {
-            glDeleteTextures(1, &texID);
+            // NOTE: glDeleteTextures() doesn't need to be called here, because the textures were
+            // destroyed when the GL context was lost.
             texID = 0;
             ensure(idx, target);
         }
@@ -137,11 +139,11 @@ Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor)
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on Android.
-    _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
-        _textureInfo.recreateAll(GL_TEXTURE_2D);
+    _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
+        _textureInfo.onRendererRecreated(GL_TEXTURE_2D);
         this->initWithZeros();
     });
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
 #endif
 }
 
@@ -181,7 +183,7 @@ void Texture2DGL::initWithZeros()
 Texture2DGL::~Texture2DGL()
 {
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-    Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
+    Director::getInstance()->getEventDispatcher()->removeEventListener(_rendererRecreatedListener);
 #endif
     _textureInfo.destroy(GL_TEXTURE_2D);
 }
@@ -317,9 +319,9 @@ TextureCubeGL::TextureCubeGL(const TextureDescriptor& descriptor)
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on Android.
-    _backToForegroundListener = EventListenerCustom::create(
-        EVENT_COME_TO_FOREGROUND, [this](EventCustom*) { _textureInfo.recreateAll(GL_TEXTURE_CUBE_MAP); });
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
+    _rendererRecreatedListener = EventListenerCustom::create(
+        EVENT_RENDERER_RECREATED, [this](EventCustom*) { _textureInfo.onRendererRecreated(GL_TEXTURE_CUBE_MAP); });
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
 #endif
     CHECK_GL_ERROR_DEBUG();
 }
@@ -337,7 +339,7 @@ void TextureCubeGL::updateTextureDescriptor(const ax::backend::TextureDescriptor
 TextureCubeGL::~TextureCubeGL()
 {
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-    Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
+    Director::getInstance()->getEventDispatcher()->removeEventListener(_rendererRecreatedListener);
 #endif
     _textureInfo.destroy(GL_TEXTURE_CUBE_MAP);
 }

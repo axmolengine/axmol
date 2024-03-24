@@ -277,6 +277,10 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
             case HttpRequest::Type::GET:
                 obs.write_bytes("GET");
                 break;
+            case HttpRequest::Type::PATCH:
+                obs.write_bytes("PATCH");
+                usePostData = true;
+                break;
             case HttpRequest::Type::POST:
                 obs.write_bytes("POST");
                 usePostData = true;

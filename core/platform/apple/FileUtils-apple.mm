@@ -3,6 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -151,7 +152,7 @@ static int unlink_cb(const char* fpath, const struct stat* sb, int typeflag, str
     auto ret = remove(fpath);
     if (ret)
     {
-        log("Fail to remove: %s ", fpath);
+        AXLOGE("Fail to remove: {} ", fpath);
     }
 
     return ret;

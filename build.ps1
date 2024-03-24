@@ -9,8 +9,9 @@
 #  -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
 #  -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
 #  -xb: additional cross build options: i.e. -xb '--config','Release'
-#  -c(configOnly): no build, only generate natvie project file (vs .sln, xcodeproj)
+#  -c(configOnly): no build, only generate native project files (vs .sln, xcodeproj)
 #  -d: specify project dir to compile, i.e. -d /path/your/project/
+#  -f: force generate native project files. Useful if no changes are detected, such as with resource updates.
 # examples:
 #   - win32: 
 #     - pwsh build.ps1 -p win32
@@ -95,9 +96,9 @@ else {
 }
 
 $source_proj_dir = if($options.d) { $options.d } else { $workDir }
-$is_engine = ($source_proj_dir -eq $AX_ROOT)
+$Global:is_axmol_engine = ($source_proj_dir -eq $AX_ROOT)
+$Global:is_axmol_app = (Test-Path (Join-Path $source_proj_dir '.axproj.json') -PathType Leaf)
 $is_android = $options.p -eq 'android'
-$is_ci = $env:GITHUB_ACTIONS -eq 'true'
 
 # start construct full cmd line
 $b1k_script = (Resolve-Path -Path "$b1k_root/1k/build.ps1").Path
@@ -108,17 +109,11 @@ if($cm_target_index -ne -1) {
     $cmake_target = $options.xb[$cm_target_index + 1]
 }
 
-if ($is_engine -and $is_android) {
+if ($is_axmol_engine -and $is_android) {
     if (!$cmake_target) {
-        if ($is_ci) {
-            $source_proj_dir = Join-Path $myRoot 'tests/cpp-tests'
-        } else {
-            $source_proj_dir = Join-Path $myRoot 'templates/cpp-template-default'
-        }
+        $source_proj_dir = Join-Path $myRoot 'tests/cpp-tests'
     } else {
         $builtin_targets = @{
-            'HelloCpp' = 'templates/cpp-template-default'
-            'HelloLua' = 'templates/cpp-template-default'
             'cpp-tests' = 'tests/cpp-tests'
             'fairygui-tests' = 'tests/fairygui-tests'
             'live2d-tests' = 'tests/live2d-tests'
@@ -159,18 +154,16 @@ if (!$use_gradle) {
             # engine
             'cpp-tests'
         )
-        $cmake_target = $cmake_targets[$is_engine]
+        $cmake_target = $cmake_targets[$is_axmol_engine]
         $options.xb += '--target', $cmake_target
     }
 
-    if($is_android) {
-        if ($options.xc.IndexOf('-DANDROID_STL')) {
-            $options.xc += '-DANDROID_STL=c++_shared'
-        }
+    if($is_android -and !"$($options.xc)".Contains('-DANDROID_STL')) {
+        $options.xc += '-DANDROID_STL=c++_shared'
     }
 } else { # android gradle
     # engine ci
-    if ($is_engine) {
+    if ($is_axmol_engine) {
         $options.xc += "-PKEY_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks", '-PKEY_STORE_PASSWORD=axmol-ci', '-PKEY_ALIAS=axmol-ci', '-PKEY_PASSWORD=axmol-ci'
     }
 }

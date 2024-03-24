@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated September 24, 2021. Replaces all prior versions.
+ * Last updated July 28, 2023. Replaces all prior versions.
  *
- * Copyright (c) 2013-2021, Esoteric Software LLC
+ * Copyright (c) 2013-2023, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software
- * or otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software or
+ * otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,20 +23,20 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
+ * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #ifndef SPINE_SKELETONRENDERER_H_
 #define SPINE_SKELETONRENDERER_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include <spine/spine.h>
 
 namespace spine {
 
 	/* Draws a skeleton. */
-	class SP_API SkeletonRenderer : public cocos2d::Node, public cocos2d::BlendProtocol {
+	class SP_API SkeletonRenderer : public axmol::Node, public axmol::BlendProtocol {
 	public:
 		CREATE_FUNC(SkeletonRenderer);
 		static SkeletonRenderer *createWithSkeleton(Skeleton *skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false);
@@ -45,8 +45,8 @@ namespace spine {
 		static SkeletonRenderer *createWithFile(const std::string &skeletonDataFile, const std::string &atlasFile, float scale = 1);
 
 		void update(float deltaTime) override;
-		void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t transformFlags) override;
-		cocos2d::Rect getBoundingBox() const override;
+		void draw(axmol::Renderer *renderer, const axmol::Mat4 &transform, uint32_t transformFlags) override;
+		axmol::Rect getBoundingBox() const override;
 		void onEnter() override;
 		void onExit() override;
 
@@ -104,12 +104,12 @@ namespace spine {
 		void setSlotsRange(int startSlotIndex, int endSlotIndex);
 
 		// --- BlendProtocol
-		void setBlendFunc(const cocos2d::BlendFunc &blendFunc) override;
-		const cocos2d::BlendFunc &getBlendFunc() const override;
+		void setBlendFunc(const axmol::BlendFunc &blendFunc) override;
+		const axmol::BlendFunc &getBlendFunc() const override;
 		void setOpacityModifyRGB(bool value) override;
 		bool isOpacityModifyRGB() const override;
 
-		CC_CONSTRUCTOR_ACCESS : SkeletonRenderer();
+		SkeletonRenderer();
 		SkeletonRenderer(Skeleton *skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false, bool ownsAtlas = false);
 		SkeletonRenderer(SkeletonData *skeletonData, bool ownsSkeletonData = false);
 		SkeletonRenderer(const std::string &skeletonDataFile, Atlas *atlas, float scale = 1);
@@ -129,15 +129,15 @@ namespace spine {
 	protected:
 		void setSkeletonData(SkeletonData *skeletonData, bool ownsSkeletonData);
 		void setupGLProgramState(bool twoColorTintEnabled);
-		virtual void drawDebug(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t transformFlags);
+		virtual void drawDebug(axmol::Renderer *renderer, const axmol::Mat4 &transform, uint32_t transformFlags);
 
 		bool _ownsSkeletonData;
 		bool _ownsSkeleton;
 		bool _ownsAtlas = false;
 		Atlas *_atlas;
 		AttachmentLoader *_attachmentLoader;
-		cocos2d::CustomCommand _debugCommand;
-		cocos2d::BlendFunc _blendFunc;
+		axmol::CustomCommand _debugCommand;
+		axmol::BlendFunc _blendFunc;
 		bool _premultipliedAlpha;
 		Skeleton *_skeleton;
 		float _timeScale;
@@ -146,7 +146,7 @@ namespace spine {
 		bool _debugMeshes;
 		bool _debugBoundingRect;
 		SkeletonClipping *_clipper;		
-		cocos2d::Rect _boundingRect;
+		axmol::Rect _boundingRect;
 
 		int _startSlotIndex;
 		int _endSlotIndex;

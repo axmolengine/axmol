@@ -117,6 +117,7 @@ struct OpenGLState
     };
 
     constexpr static int MAX_VERTEX_ATTRIBS = 16;
+    constexpr static int MAX_TEXTURE_UNITS  = 16;
 
     template <typename _Left>
     static inline void try_enable(GLenum target, _Left& opt)
@@ -259,12 +260,20 @@ struct OpenGLState
     void stencilMaskFront(GLuint v) { try_callu(glStencilMaskSeparate, GL_FRONT, _stencilMaskFront, v); }
     void stencilMaskBack(GLuint v) { try_callu(glStencilMaskSeparate, GL_BACK, _stencilMaskBack, v); }
     void activeTexture(GLenum v) { try_call(glActiveTexture, _activeTexture, v); }
-    void bindTexture(GLenum target, GLuint handle) { try_callx(glBindTexture, _textureBinding, target, handle); }
+    void bindTexture(GLenum target, GLuint handle) {
+        auto activeLayer = _activeTexture.has_value() ? _activeTexture.value() - GL_TEXTURE0 : 0;
+        if(activeLayer < MAX_TEXTURE_UNITS)
+            try_callx(glBindTexture, _textureBindings[activeLayer], target, handle);
+    }
     void deleteTexture(GLenum target, GLuint handle)
     {
         glDeleteTextures(1, &handle);
-        if (_textureBinding.has_value() && _textureBinding->handle == handle)
-            _textureBinding.reset();
+
+        for (auto& textureBinding : _textureBindings)
+        {
+            if (textureBinding.has_value() && textureBinding->handle == handle)
+                textureBinding.reset();
+        }
     }
     GLenum bindBuffer(BufferType type, GLuint buffer)
     {
@@ -388,6 +397,7 @@ private:
     uint32_t _attribBits{0}; // vertexAttribArray bitset
     uint32_t _divisorBits{0}; // divisor bitset
     std::optional<GLuint> _bufferBindings[(int)BufferType::COUNT];
+    std::optional<CommonBindState> _textureBindings[MAX_TEXTURE_UNITS];
 
     std::optional<Viewport> _viewPort;
     std::optional<Winding> _winding;
@@ -416,7 +426,6 @@ private:
     std::optional<GLuint> _stencilMaskFront;
     std::optional<GLuint> _stencilMaskBack;
     std::optional<GLenum> _activeTexture;
-    std::optional<CommonBindState> _textureBinding;
     std::optional<UniformBufferBaseBindState> _uniformBufferState;
 };
 

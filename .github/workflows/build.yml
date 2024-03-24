@@ -25,7 +25,7 @@ jobs:
         submodules: 'recursive'
     - uses: ilammy/msvc-dev-cmd@v1
       with:
-        toolset: '14.37'
+        toolset: '14.39'
         arch: 'x64'
     - name: Build
       shell: pwsh
@@ -38,7 +38,7 @@ jobs:
             submodules: 'recursive'
         - uses: ilammy/msvc-dev-cmd@v1
           with:
-            toolset: '14.37'
+            toolset: '14.39'
             arch: 'x64'
         - name: Build
           shell: pwsh
@@ -52,7 +52,7 @@ jobs:
             submodules: 'recursive'
         - uses: ilammy/msvc-dev-cmd@v1
           with:
-            toolset: '14.37'
+            toolset: '14.39'
             arch: 'x64'
             uwp: true
         - name: Build
@@ -80,7 +80,7 @@ jobs:
     
         - name: Build
           shell: pwsh
-          run: .\build.ps1 -p win32 -a 'x64' -cc clang -winsdk $env:WINSDK_VER
+          run: .\build.ps1 -p win32 -a 'x64' -cc clang -sdk $env:WINSDK_VER
   linux:
     runs-on: ubuntu-latest
     steps:

@@ -1,4 +1,4 @@
-include(${_AX_ROOT}/1k/platform.cmake)
+include(${_AX_ROOT}/1k/platforms.cmake)
 _1k_deprecated_32bit(axmol 2.2.0)
 
 if(NOT CMAKE_GENERATOR MATCHES "Ninja")
@@ -56,53 +56,53 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     endif()
 
     target_include_directories(${APP_NAME}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/lua
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/lua
         PRIVATE ${AX_ROOT_DIR}/extensions/scripting
         PRIVATE ${AX_ROOT_DIR}/extensions/scripting/lua-bindings/manual
         PRIVATE ${AX_ROOT_DIR}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty
+        PRIVATE ${AX_ROOT_DIR}/3rdparty
         PRIVATE ${AX_ROOT_DIR}/extensions
         PRIVATE ${AX_ROOT_DIR}/core
         PRIVATE ${AX_ROOT_DIR}/core/platform
         PRIVATE ${AX_ROOT_DIR}/core/base
         PRIVATE ${AX_ROOT_DIR}/core/audio
         PRIVATE ${AX_ROOT_DIR}/core/platform/win32
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/fmt/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/robin-map/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/freetype/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/glfw/include/GLFW
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/box2d/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/chipmunk/include
-        PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/engine/thirdparty/freetype/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/webp/src/webp
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/pugixml
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/xxhash
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/ConvertUTF
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/openal/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/ogg/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/glad/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/glfw/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/png
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/unzip/.
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/llhttp/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/lua/plainlua
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/lua/tolua/.
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/lua/lua-cjson/.
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/_d/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/_d/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/_d/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/_d/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/yasio
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/fmt/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/robin-map/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/freetype/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/glfw/include/GLFW
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/box2d/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/chipmunk/include
+        PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/engine/3rdparty/freetype/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/webp/src/webp
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/pugixml
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/xxhash
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/ConvertUTF
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/openal/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/ogg/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/glad/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/glfw/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/png
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/unzip/.
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/llhttp/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/lua/plainlua
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/lua/tolua/.
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/lua/lua-cjson/.
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/zlib/_x/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/jpeg-turbo/_x/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/openssl/_x/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/curl/_x/include
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/yasio
     )
 
 
 
     SET (CONFIGURATION_SUBFOLDER "")
     target_link_directories(${APP_NAME}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/jpeg-turbo/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/3rdparty/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib  # cmake will auto add suffix '/$(Configuration)', refer to https://github.com/Kitware/CMake/blob/master/Source/cmVisualStudio10TargetGenerator.cxx#L4145
     )
 
@@ -113,7 +113,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         target_link_libraries(${APP_NAME} X11 fontconfig)
     endif()
 
-    # Linking engine and thirdparty libs
+    # Linking engine and 3rdparty libs
     set(LIBS
         axmol
         box2d
@@ -273,10 +273,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         endif()
         add_custom_command(TARGET ${APP_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${AX_ROOT_DIR}/thirdparty/openssl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
-            "${AX_ROOT_DIR}/thirdparty/openssl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
-            "${AX_ROOT_DIR}/thirdparty/curl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll"
-            "${AX_ROOT_DIR}/thirdparty/zlib/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll"
+            "${AX_ROOT_DIR}/3rdparty/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
+            "${AX_ROOT_DIR}/3rdparty/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
+            "${AX_ROOT_DIR}/3rdparty/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll"
+            "${AX_ROOT_DIR}/3rdparty/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll"
             "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
             $<TARGET_FILE_DIR:${APP_NAME}>)
 
@@ -301,9 +301,9 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         if (AX_GLES_PROFILE)
             add_custom_command(TARGET ${APP_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${AX_ROOT_DIR}/thirdparty/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
-                ${AX_ROOT_DIR}/thirdparty/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
-                ${AX_ROOT_DIR}/thirdparty/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll
+                ${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
+                ${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
+                ${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll
                 $<TARGET_FILE_DIR:${APP_NAME}>
             )
         endif()

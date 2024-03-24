@@ -38,7 +38,12 @@
 #include "renderer/backend/ProgramState.h"
 #include "poly2tri/poly2tri.h"
 
-// USING_NS_AX;
+
+#if defined(_WIN32)
+#    pragma push_macro("TRANSPARENT")
+#    undef TRANSPARENT
+#endif
+
 NS_AX_EXT_BEGIN
 
 static inline Tex2F v2ToTex2F(const Vec2& v)
@@ -414,7 +419,7 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
 {
     if (thickness != 1.0f)
     {
-        _drawPolygon(poli, numberOfPoints, Color4B::AX_TRANSPARENT, thickness, color, closePolygon);
+        _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness, color, closePolygon);
         return;
     }
     else
@@ -478,7 +483,7 @@ void DrawNodeEx::drawCircle(const Vec2& center,
     _isConvex = false;
     if (thickness != 1.0f)
     {
-        _drawPolygon(vertices, segments, Color4B::AX_TRANSPARENT, thickness, color, true);
+        _drawPolygon(vertices, segments, Color4B::TRANSPARENT, thickness, color, true);
     }
     else
     {
@@ -524,7 +529,7 @@ void DrawNodeEx::drawStar(const Vec2& center,
         vertices[i + 1] = Vec2(center.x + cos(rads + halfAngle) * radius1, center.y + sin(rads + halfAngle) * radius1);
         i += 2;
     }
-    _drawPolygon(vertices, segments*2, Color4B::AX_TRANSPARENT, thickness, color, true);
+    _drawPolygon(vertices, segments*2, Color4B::TRANSPARENT, thickness, color, true);
 }
 
 void DrawNodeEx::drawSolidStar(const Vec2& center,
@@ -570,7 +575,7 @@ void DrawNodeEx::drawQuadBezier(const Vec2& origin,
     vertices[segments].x = destination.x;
     vertices[segments].y = destination.y;
     _isConvex            = false;
-    _drawPolygon(vertices, segments, Color4B::AX_TRANSPARENT, thickness, color, false);
+    _drawPolygon(vertices, segments, Color4B::TRANSPARENT, thickness, color, false);
     _isConvex = true;
 }
 
@@ -596,7 +601,7 @@ void DrawNodeEx::drawCubicBezier(const Vec2& origin,
     vertices[segments].x = destination.x;
     vertices[segments].y = destination.y;
     _isConvex            = true;
-    _drawPolygon(vertices, segments, Color4B::AX_TRANSPARENT, thickness, color, false);
+    _drawPolygon(vertices, segments, Color4B::TRANSPARENT, thickness, color, false);
     _isConvex = false;
 }
 
@@ -640,7 +645,7 @@ void DrawNodeEx::drawCardinalSpline(ax::PointArray* config,
         vertices[i].y = newPos.y;
     }
     _isConvex = true;
-    _drawPolygon(vertices, segments, Color4B::AX_TRANSPARENT, thickness, color, false);
+    _drawPolygon(vertices, segments, Color4B::TRANSPARENT, thickness, color, false);
     _isConvex = false;
 }
 
@@ -785,7 +790,7 @@ void DrawNodeEx::drawPolygon(const Vec2* verts,
                              float borderWidth,
                              const Color4B& borderColor)
 {
-    _drawPolygon(verts, count, Color4B::AX_TRANSPARENT, borderWidth, borderColor, true);
+    _drawPolygon(verts, count, Color4B::TRANSPARENT, borderWidth, borderColor, true);
 }
 
 void DrawNodeEx::drawSolidPolygon(const Vec2* verts,
@@ -867,10 +872,10 @@ void DrawNodeEx::drawPie(const Vec2& center,
         break;
     case DrawMode::Outline:
         vertices[n++] = center;
-        _drawPolygon(vertices, n, Color4B::AX_TRANSPARENT, thickness, borderColor, true);
+        _drawPolygon(vertices, n, Color4B::TRANSPARENT, thickness, borderColor, true);
         break;
     case DrawMode::Line:
-        _drawPolygon(vertices, n, Color4B::AX_TRANSPARENT, thickness, borderColor, false);
+        _drawPolygon(vertices, n, Color4B::TRANSPARENT, thickness, borderColor, false);
         break;
     case DrawMode::Semi:
         _drawPolygon(vertices, n, fillColor, thickness, borderColor, true);
@@ -952,7 +957,7 @@ void DrawNodeEx::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, co
     if (thickness != 1.0f)
     {
         _isConvex = true;
-        _drawPolygon(poli, vertex_count, Color4B::AX_TRANSPARENT, thickness, color, true);
+        _drawPolygon(poli, vertex_count, Color4B::TRANSPARENT, thickness, color, true);
         _isConvex = false;
         return;
     }
@@ -1129,7 +1134,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             borderColor = borderColo;
             if (i >= count - 1 && !closedPolygon)  // /-2  ??
             {
-                borderColor = Color4B::AX_TRANSPARENT;
+                borderColor = Color4B::TRANSPARENT;
             }
 
             V2F_C4B_T2F_Triangle tmp1 = {{inner0, borderColor, v2ToTex2F(-n0)},
@@ -1164,12 +1169,12 @@ void DrawNodeEx::_drawPoly(const Vec2* poli,
     {
         if (closePolygon)
         {
-            _drawPolygon(poli, numberOfPoints, Color4B::AX_TRANSPARENT, thickness, color, true);
+            _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness, color, true);
             return;
         }
         else
         {
-            _drawPolygon(poli, numberOfPoints, Color4B::AX_TRANSPARENT, thickness, color, false);
+            _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness, color, false);
             return;
         }
     }
@@ -1211,3 +1216,7 @@ void DrawNodeEx::_drawPoly(const Vec2* poli,
     }
 }
 NS_AX_EXT_END
+
+#if defined(_WIN32)
+#    pragma pop_macro("TRANSPARENT")
+#endif

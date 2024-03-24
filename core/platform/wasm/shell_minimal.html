@@ -65,9 +65,14 @@
         nodeProperties[i] = document.getElementById('nodeProperty' + i);
       }
       var Module = {
+        preInit: [],
         preRun: [],
         postRun: [],
         print: (function() {
+          // #region axmol-spec
+          var escapeDeep = 0;
+          var stashedEscape = null;
+          // #endregion axmol-spec
           var element = document.getElementById('output');
           if (element) element.value = ''; // clear browser cache
           return function(text) {
@@ -77,9 +82,43 @@
             //text = text.replace(/</g, "&lt;");
             //text = text.replace(/>/g, "&gt;");
             //text = text.replace('\n', '<br>', 'g');
+
+            // #region axmol-spec
+            var curEscape = null;
+            var escapeList = text.match(/\x1b\[(\d{2})?m/g);
+            if(escapeList != null) {
+              for(var i = 0; i < escapeList.length; ++i) {
+                var escape = escapeList[i];
+                if (escape !== "\x1b[m") {
+                  curEscape = escape;
+                  ++escapeDeep;
+                } else {
+                  --escapeDeep;
+                }
+              }
+            }
+            if (escapeDeep > 0) { // still in escape
+              if (stashedEscape != null) { // check stashedEscape
+                if(text.startsWith("\x1b[m")) {
+                  text = text.substring(3);
+                }
+                if (!text.startsWith("\x1b[")) { // due to end color removed, it's must start color or not.
+                  text = stashedEscape + text;
+                }
+              }
+
+              if(curEscape) {
+                // store this text last escape
+                stashedEscape = curEscape;
+              }
+            } else {
+              stashedEscape = null;
+            }
+            // #endregion axmol-spec
+
             console.log(text);
             if (element) {
-              element.value += text + "\n";
+              element.value += text.replace(/\x1b\[(\d{2})?m/g, '') + "\n"; // axmol-mod: strip ansi color
               element.scrollTop = element.scrollHeight; // focus on bottom
             }
           };
@@ -143,6 +182,32 @@
           }
           removeRunDependency('sync_writable_path')
         })
+        // #region axmol-spec, enable output as-is to console without split by \n
+        TTY.stream_ops.write = function(stream, buffer, offset, length, pos) {
+          var tty = stream.tty;
+          if (!tty || !tty.ops.put_char) {
+            throw new FS.ErrnoError(60);
+          }
+          try {
+            for (var i = 0; i < length; i++) {
+              var val = buffer[offset+i];
+              if (val === null) {
+                continue;
+              } else {
+                if (val != 0) tty.output.push(val); // val == 0 would cut text output off in the middle.
+              }
+            }
+          } catch (e) {
+            throw new FS.ErrnoError(29);
+          }
+          out(UTF8ArrayToString(tty.output, 0));
+          tty.output = [];
+          if (length) {
+            stream.node.timestamp = Date.now();
+          }
+          return i;
+        }
+        //  #endregion axmol-spec
       })
     </script>
     {{{ SCRIPT }}}

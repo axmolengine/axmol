@@ -1,5 +1,5 @@
 
-project(thirdparty)
+project(3rdparty)
 
 option(OPT_BOX2D_OPTIMIZED "" OFF)
 option(AX_WITH_BOX2D "Build with internal Box2D support" ON)
@@ -167,7 +167,7 @@ else()
     set (AX_LUA_ENGINE "luajit"  CACHE INTERNAL "")
 endif()
 
-add_library(thirdparty INTERFACE)
+add_library(3rdparty INTERFACE)
 
 set(_1kfetch_cache_dir "${_AX_ROOT}/cache" CACHE STRING "" FORCE)
 set(_1kfetch_manifest "${_AX_ROOT}/manifest.json" CACHE STRING "" FORCE)
@@ -212,7 +212,7 @@ function(ax_add_3rd source_dir)
         string(LENGTH ${source_dir} _len)
         math(EXPR _len "${_len} - ${_offset}" OUTPUT_FORMAT DECIMAL)
         string(SUBSTRING ${source_dir} ${_offset} ${_len} _path)
-        set(binary_dir "${ENGINE_BINARY_PATH}/thirdparty/${_path}")
+        set(binary_dir "${ENGINE_BINARY_PATH}/3rdparty/${_path}")
     endif()
 
     if (opt_EXCLUDE_FROM_ALL)
@@ -228,10 +228,10 @@ function(ax_add_3rd source_dir)
         get_target_property(tgt_type ${tgt} TYPE)
         if (NOT ${opt_NO_LINK})
             if(tgt_type STREQUAL "STATIC_LIBRARY" OR tgt_type STREQUAL "SHARED_LIBRARY" OR tgt_type STREQUAL "INTERFACE_LIBRARY")
-                target_link_libraries(thirdparty INTERFACE ${tgt})
+                target_link_libraries(3rdparty INTERFACE ${tgt})
             endif()
         else()
-            add_dependencies(thirdparty ${tgt})
+            add_dependencies(3rdparty ${tgt})
         endif()
         get_target_property(is_imported_lib ${tgt} IMPORTED)
         if ((NOT is_imported_lib) AND (NOT (tgt_type STREQUAL "INTERFACE_LIBRARY")))
@@ -239,19 +239,19 @@ function(ax_add_3rd source_dir)
                 ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                 LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                 RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-                FOLDER "ThirdParty"
+                FOLDER "3rdparty"
             )
         endif()
     endforeach()
 endfunction()
 
 # bellow are header only libs
-target_include_directories(thirdparty
+target_include_directories(3rdparty
     INTERFACE "robin-map/include"
 )
 
 if (ANDROID)
-    target_include_directories(thirdparty
+    target_include_directories(3rdparty
         INTERFACE "jni.hpp/include"
     )
 endif()
@@ -279,7 +279,7 @@ ax_add_3rd(png)
 if(AX_WITH_BOX2D)
     set(box2d_opts "BOX2D_BUILD_UNIT_TESTS OFF" "BOX2D_BUILD_TESTBED OFF")
     if(OPT_BOX2D_OPTIMIZED)
-        _1kfetch(box2d-optimized "https://github.com/mtsamis/box2d-optimized.git")
+        _1kfetch(box2d-optimized)
         ax_add_3rd(${box2d-optimized_SOURCE_DIR} TARGETS box2d-optimized OPTIONS ${box2d_opts})
     else()
         ax_add_3rd(box2d OPTIONS ${box2d_opts})
@@ -312,7 +312,7 @@ ax_add_3rd(freetype OPTIONS
 if (WINRT)
     target_compile_definitions(freetype PUBLIC "generic=GenericFromFreeTypeLibrary")
 endif()
-target_include_directories(thirdparty INTERFACE "freetype/include")
+target_include_directories(3rdparty INTERFACE "freetype/include")
 
 if(AX_WITH_RECAST)
     ax_add_3rd(recast)
@@ -329,13 +329,13 @@ endif()
 add_subdirectory(openssl)
 if(ANDROID OR LINUX)
     target_link_libraries(OpenSSL::SSL INTERFACE OpenSSL::Crypto)
-    target_link_libraries(thirdparty INTERFACE OpenSSL::SSL)
+    target_link_libraries(3rdparty INTERFACE OpenSSL::SSL)
 else()
-    target_link_libraries(thirdparty
+    target_link_libraries(3rdparty
                         INTERFACE OpenSSL::Crypto
                         INTERFACE OpenSSL::SSL)
 endif()
-target_compile_definitions(thirdparty INTERFACE OPENSSL_SUPPRESS_DEPRECATED=1)
+target_compile_definitions(3rdparty INTERFACE OPENSSL_SUPPRESS_DEPRECATED=1)
 
 if(AX_WITH_WEBP)
     ax_add_3rd(webp)
@@ -381,7 +381,7 @@ if(AX_ENABLE_EXT_LUA)
     add_subdirectory(lua/${AX_LUA_ENGINE})
     add_subdirectory(lua/tolua)
     add_subdirectory(lua/lua-cjson)
-    set_property(TARGET thirdparty APPEND PROPERTY
+    set_property(TARGET 3rdparty APPEND PROPERTY
         AX_LUA_DEPEND ${AX_LUA_ENGINE} tolua lua-cjson
     )
     if (AX_USE_LUAJIT)
@@ -424,12 +424,12 @@ if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
 
     ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS alcommon;OpenAL OPTIONS ${alsoft_opts})
 
-    target_include_directories(thirdparty INTERFACE openal)
-    target_compile_definitions(thirdparty INTERFACE AX_USE_ALSOFT=1)
+    target_include_directories(3rdparty INTERFACE openal)
+    target_compile_definitions(3rdparty INTERFACE AX_USE_ALSOFT=1)
     set_target_properties(OpenAL alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
 
     if (AX_USE_ALSOFT_STATIC)
-        target_compile_definitions(thirdparty INTERFACE AL_LIBTYPE_STATIC=1)
+        target_compile_definitions(3rdparty INTERFACE AL_LIBTYPE_STATIC=1)
     elseif(ANDROID)
         set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
     endif()
@@ -458,9 +458,9 @@ if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX)
     endif()
     set_target_properties(glfw PROPERTIES OUTPUT_NAME glfw)
     if(NOT WINDOWS)
-        target_link_libraries(thirdparty INTERFACE pthread)
+        target_link_libraries(3rdparty INTERFACE pthread)
     endif()
-    target_include_directories(thirdparty INTERFACE "glfw/include/GLFW")
+    target_include_directories(3rdparty INTERFACE "glfw/include/GLFW")
 endif()
 
 # unzip depend on zlib

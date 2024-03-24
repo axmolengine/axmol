@@ -68,5 +68,5 @@ bool Bug458Layer::init()
 
 void Bug458Layer::selectAnswer(Ref* sender)
 {
-    log("Selected");
+    ax::print("Selected");
 }

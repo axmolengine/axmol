@@ -296,26 +296,26 @@ void TestLayer1::step(float dt) {}
 void TestLayer1::onEnter()
 {
     Layer::onEnter();
-    log("Scene 1 onEnter");
+    ax::print("Scene 1 onEnter");
 }
 
 void TestLayer1::onEnterTransitionDidFinish()
 {
     Layer::onEnterTransitionDidFinish();
-    log("Scene 1: onEnterTransitionDidFinish");
+    ax::print("Scene 1: onEnterTransitionDidFinish");
 }
 
 void TestLayer1::onExitTransitionDidStart()
 {
     Layer::onExitTransitionDidStart();
-    log("Scene 1: onExitTransitionDidStart");
+    ax::print("Scene 1: onExitTransitionDidStart");
 }
 
 void TestLayer1::onExit()
 {
     Layer::onExit();
     Director::getInstance()->getRenderer()->setDepthTest(false);
-    log("Scene 1 onExit");
+    ax::print("Scene 1 onExit");
 }
 
 TestLayer2* TestLayer2::create(std::string_view transitionName)
@@ -366,24 +366,24 @@ void TestLayer2::step(float dt) {}
 void TestLayer2::onEnter()
 {
     Layer::onEnter();
-    log("Scene 2 onEnter");
+    ax::print("Scene 2 onEnter");
 }
 
 void TestLayer2::onEnterTransitionDidFinish()
 {
     Layer::onEnterTransitionDidFinish();
-    log("Scene 2: onEnterTransitionDidFinish");
+    ax::print("Scene 2: onEnterTransitionDidFinish");
 }
 
 void TestLayer2::onExitTransitionDidStart()
 {
     Layer::onExitTransitionDidStart();
-    log("Scene 2: onExitTransitionDidStart");
+    ax::print("Scene 2: onExitTransitionDidStart");
 }
 
 void TestLayer2::onExit()
 {
     Layer::onExit();
     Director::getInstance()->getRenderer()->setDepthTest(false);
-    log("Scene 2 onExit");
+    ax::print("Scene 2 onExit");
 }
