@@ -45,7 +45,6 @@ function fetch_repo($url, $name, $dest, $ext) {
     else {
         $out = Join-Path $cache_dir "${name}$ext"
         download_file $url $out
-
         try {
             if ($ext -eq '.zip') {
                 Expand-Archive -Path $out -DestinationPath $prefix -Force
@@ -55,10 +54,11 @@ function fetch_repo($url, $name, $dest, $ext) {
             }
         }
         catch {
-            throw "fetch.ps1: extract $out failed, $_"
+	    Remove-Item $out -Force
+            throw "fetch.ps1: extract $out failed, try again"
         }
 
-        if (!(Test-Path $dest)) {
+        if (!(Test-Path $dest -PathType Container)) {
             throw "fetch.ps1: the package name mismatch for $out"
         }
     }
@@ -175,12 +175,8 @@ if (!$revision) {
 }
 if ($is_git_repo) {
     $old_rev_hash = $(git -C $lib_src rev-parse HEAD)
-
     $tag_info = git -C $lib_src tag | Select-String $revision
-    if ($tag_info) {
-        $revision = ([array]$tag_info.Line)[0]
-    }
-
+    if ($tag_info) { $revision = ([array]$tag_info.Line)[0] }
     $cur_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
 
     if (!$cur_rev_hash) {
@@ -193,9 +189,7 @@ if ($is_git_repo) {
 
     if ($old_rev_hash -ne $cur_rev_hash) {
         git -C $lib_src checkout $revision 1>$null 2>$null
-
         $new_rev_hash = $(git -C $lib_src rev-parse HEAD)
-
         println "fetch.ps1: Checked out to $revision@$new_rev_hash"
         
         if (!$is_rev_modified) {
@@ -209,7 +203,6 @@ if ($is_git_repo) {
 
 if ($is_rev_modified) {
     $sentry_content = "ver: $version"
-
     if ($is_git_repo) {
         $branch_name = $(git -C $lib_src branch --show-current)
         if ($branch_name) {
@@ -225,7 +218,7 @@ if ($is_rev_modified) {
 
     [System.IO.File]::WriteAllText($sentry, $sentry_content)
 
-    git -C $lib_src add '_1kiss'
+    if ($is_git_repo) { git -C $lib_src add '_1kiss' }
 }
 
 # google gclient spec
@@ -233,7 +226,8 @@ if (Test-Path (Join-Path $lib_src '.gn') -PathType Leaf) {
     # the repo use google gn build system manage deps and build
     Push-Location $lib_src
     # angle (A GLES native implementation by google)
-    if (Test-Path 'scripts/bootstrap.py' -PathType Leaf) {
+    if (Test-Path 'scripts/bootstrap.py' -PathType Leaf)
+    {
         python scripts/bootstrap.py
     }
     # darwin (A WebGPU native implementation by google)
