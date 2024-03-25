@@ -172,29 +172,8 @@ add_library(3rdparty INTERFACE)
 set(_1kfetch_cache_dir "${_AX_ROOT}/cache" CACHE STRING "" FORCE)
 set(_1kfetch_manifest "${_AX_ROOT}/manifest.json" CACHE STRING "" FORCE)
 
-# fetch prebuilts of 1k_dist and git sources
+# fetch prebuilts of 1kdist and git sources
 include(${_AX_ROOT}/1k/fetch.cmake)
-
-function(xpm_parse_option OPTION)
-  string(REGEX MATCH "^[^ ]+" OPTION_KEY "${OPTION}")
-  string(LENGTH "${OPTION}" OPTION_LENGTH)
-  string(LENGTH "${OPTION_KEY}" OPTION_KEY_LENGTH)
-  if(OPTION_KEY_LENGTH STREQUAL OPTION_LENGTH)
-    # no value for key provided, assume user wants to set option to "ON"
-    set(OPTION_VALUE "ON")
-  else()
-    math(EXPR OPTION_KEY_LENGTH "${OPTION_KEY_LENGTH}+1")
-    string(SUBSTRING "${OPTION}" "${OPTION_KEY_LENGTH}" "-1" OPTION_VALUE)
-  endif()
-  set(OPTION_KEY
-      "${OPTION_KEY}"
-      PARENT_SCOPE
-  )
-  set(OPTION_VALUE
-      "${OPTION_VALUE}"
-      PARENT_SCOPE
-  )
-endfunction()
 
 function(ax_add_3rd source_dir)
     set(options EXCLUDE_FROM_ALL NO_LINK)
@@ -202,7 +181,7 @@ function(ax_add_3rd source_dir)
     cmake_parse_arguments(opt "${options}" "" "${multiValueArgs}" ${ARGN})
 
     foreach(OPTION ${opt_OPTIONS})
-        xpm_parse_option("${OPTION}")
+        _1kparse_option("${OPTION}")
         set(${OPTION_KEY} "${OPTION_VALUE}" CACHE BOOL "" FORCE)
     endforeach()
 
