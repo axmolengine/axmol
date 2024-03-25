@@ -118,6 +118,9 @@ AX_API LogItem& preprocessLog(LogItem&& item)
             std::string_view levelName;
             switch (item.level_)
             {
+            case LogLevel::Trace:
+                levelName = "T/"sv;
+                break;
             case LogLevel::Debug:
                 levelName = "D/"sv;
                 break;

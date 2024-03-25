@@ -59,6 +59,7 @@ NS_AX_BEGIN
 
 enum class LogLevel
 {
+    Trace,
     Debug,
     Info,
     Warn,
@@ -163,6 +164,7 @@ inline void printLogT(_FmtType&& fmt, LogItem& item, _Types&&... args)
 #define AXLOG_WITH_LEVEL(level, fmtOrMsg, ...) \
     ax::printLogT(FMT_COMPILE("{}" fmtOrMsg), ax::preprocessLog(ax::LogItem{level}), ##__VA_ARGS__)
 
+#define AXLOGT(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Trace, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGD(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Debug, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGI(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Info, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGW(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Warn, fmtOrMsg, ##__VA_ARGS__)
