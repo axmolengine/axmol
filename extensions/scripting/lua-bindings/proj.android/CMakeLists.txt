@@ -22,9 +22,9 @@ target_include_directories(${target_name}
   PRIVATE ${lua_header}
   PRIVATE ${tolua_header}
   PRIVATE ../../../../core
-  PRIVATE ../../../../thirdparty
-  PRIVATE ../../../../thirdparty/robin-map/include
-  PRIVATE ../../../../thirdparty/jni.hpp/include
-  PRIVATE ../../../../thirdparty/yasio
+  PRIVATE ../../../../3rdparty
+  PRIVATE ../../../../3rdparty/robin-map/include
+  PRIVATE ../../../../3rdparty/jni.hpp/include
+  PRIVATE ../../../../3rdparty/yasio
 )
 

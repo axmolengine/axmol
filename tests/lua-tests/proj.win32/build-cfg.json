@@ -17,7 +17,7 @@
             "to": "src/core"
         },
         {
-            "from": "../../../../thirdparty/lua/luasocket",
+            "from": "../../../../3rdparty/lua/luasocket",
             "to": "",
             "include": [
                 "*.lua"

@@ -164,7 +164,7 @@ VlcMediaEngine::VlcMediaEngine()
     AXLOG("libvlc-version: %s", libvlc_get_version());
 
     // too late set vlc plugins path at hete, vlc maybe read it at DllMain
-    //_putenv_s("VLC_PLUGIN_PATH", R"(D:\dev\axmol\thirdparty\vlc\win\lib)");
+    //_putenv_s("VLC_PLUGIN_PATH", R"(D:\dev\axmol\3rdparty\vlc\win\lib)");
     _vlc = libvlc_new(0, nullptr);
     if (!_vlc)
     {

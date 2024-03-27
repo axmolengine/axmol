@@ -84,7 +84,7 @@ function axmol_build() {
     $sub_args = $args
     println $sub_args
     $build_script = Join-Path $AX_ROOT 'build.ps1'
-    if ("$args".IndexOf('-d') -ne -1) {
+    if ("$args".Contains('-d')) {
         # have proj dir
         . $build_script @sub_args
     }
@@ -343,15 +343,15 @@ if ($sub_args -isnot [array]) {
 }
 
 $sub_opts = @{}
-if ($sub_args.IndexOf('-d') -eq -1) {
+if (!$sub_args.Contains('-d')) {
     $sub_opts['d'] = $(Get-Location).Path
 }
 
 if ($args[0] -eq 'new') {
-    if ($sub_args.IndexOf('-p') -eq -1) {
+    if (!$sub_args.Contains('-p')) {
         $sub_opts['p'] = 'org.axmol.demo'
     }
-    if ($sub_args.IndexOf('-l') -eq -1) {
+    if (!$sub_args.Contains('-l')) {
         $sub_opts['l'] = 'cpp'
     }
 }

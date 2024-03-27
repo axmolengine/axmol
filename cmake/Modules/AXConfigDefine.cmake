@@ -1,4 +1,4 @@
-include(${_AX_ROOT}/1k/platform.cmake)
+include(${_AX_ROOT}/1k/platforms.cmake)
 
 # custom target property for lua/js link
 define_property(TARGET

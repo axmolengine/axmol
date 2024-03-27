@@ -225,6 +225,8 @@ tests/fairygui-tests/Content
 tests/live2d-tests/Content
 *.patch
 
-cache
+/cache
+/_cache
+
 .gitee
 release_note_draft.txt
