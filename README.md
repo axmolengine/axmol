@@ -109,7 +109,7 @@ Some highlights:
     - [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL) (if no `AX_USE_ALSOFT` option specified, cmake script will choose it on OSX/iOS/tvOS, even though it was marked as deprecated is still available)
 - Implemented all .wav formats supported by OpenAL Soft (MS-ADPCM, ADPCM, etc.)
 - Refactored UserDefault with [mio](https://github.com/mandreyel/mio)
-- [Upstream Version License](thirdparty/README.md) - Third-party:
+- [Upstream Version License](3rdparty/README.md) - Third-party:
     - Third-party license overview, for easier publishing of your commercial apps based on Axmol framework.
     - Some links to third party libs which support axmol too.
 - [Upstream Version License](extensions/README.md) - Extensions:

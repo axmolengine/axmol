@@ -182,8 +182,8 @@ set(lua_bindings_headers
 
 set(lua_bindings_files
     ${lua_bindings_files}
-    "${ax_root}/thirdparty/yasio/yasio/bindings/lyasio.cpp"
-    "${ax_root}/thirdparty/yasio/yasio/bindings/yasio_axlua.cpp")
+    "${ax_root}/3rdparty/yasio/yasio/bindings/lyasio.cpp"
+    "${ax_root}/3rdparty/yasio/yasio/bindings/yasio_axlua.cpp")
 
 list(APPEND lua_bindings_files ${lua_bindings_headers})
 
@@ -197,12 +197,12 @@ if(MSVC)
     target_compile_options(${_AX_LUA_LIB} PRIVATE /bigobj)
 endif()
 
-get_target_property(lua_ext_depend thirdparty AX_LUA_DEPEND)
+get_target_property(lua_ext_depend 3rdparty AX_LUA_DEPEND)
 target_link_libraries(${_AX_LUA_LIB} ${lua_ext_depend})
 
 target_include_directories(${_AX_LUA_LIB}
-    PUBLIC ${ax_root}/thirdparty/lua
-    PRIVATE ${ax_root}/thirdparty
+    PUBLIC ${ax_root}/3rdparty/lua
+    PRIVATE ${ax_root}/3rdparty
     PRIVATE manual/platform/android
     PRIVATE manual/platform/android/jni
     PRIVATE ${ax_root}/extensions/spine/runtime/include

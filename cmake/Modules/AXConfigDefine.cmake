@@ -1,4 +1,4 @@
-include(${_AX_ROOT}/1k/platform.cmake)
+include(${_AX_ROOT}/1k/platforms.cmake)
 
 # custom target property for lua/js link
 define_property(TARGET
@@ -129,6 +129,16 @@ set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Norma
 # see also: https://github.com/axmolengine/axmol/discussions/614
 if (ANDROID)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--hash-style=both")
+endif()
+
+# The global rpath settings
+if(LINUX OR APPLE)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE CACHE BOOL "" FORCE)
+    if(LINUX)
+        set(CMAKE_INSTALL_RPATH ".:\$ORIGIN:\$ORIGIN/../lib:${CMAKE_BINARY_DIR}/lib")
+    elseif(APPLE)
+        set(CMAKE_SKIP_BUILD_RPATH TRUE CACHE BOOL "" FORCE)
+    endif()
 endif()
 
 # Set macro definitions for special platforms

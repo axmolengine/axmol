@@ -147,13 +147,7 @@ option(AX_ENABLE_PHYSICS3D "Build Physics3D support" ON)
 option(AX_ENABLE_NAVMESH "Build NavMesh support" ON)
 option(AX_ENABLE_MEDIA "Build media support" ON)
 
-if(XCODE)
-    # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
-    # set(CMAKE_INSTALL_RPATH "@executable_path/Frameworks")
-    set(CMAKE_XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/Frameworks" CACHE INTERNAL "")
-endif()
-
-set(_AX_THIRDPARTY_NAME "thirdparty" CACHE INTERNAL "" )
+set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "" )
 
 if (WIN32)
     option(WIN32_PATH_USE_ACP "" OFF)
@@ -232,10 +226,8 @@ set(_AX_HEADER axmol.h
     ${_AX_MATH_HEADER}
     ${_AX_RENDERER_HEADER}
     ${_AX_BASE_HEADER}
-    ${_AX_AUDIO_HEADER}
     ${_AX_UI_HEADER}
     ${_AX_NETWORK_HEADER}
-    ${_AX_MEDIA_HEADER}
     )
 
 set(_AX_SRC axmol.cpp
@@ -245,10 +237,8 @@ set(_AX_SRC axmol.cpp
     ${_AX_MATH_SRC}
     ${_AX_RENDERER_SRC}
     ${_AX_BASE_SRC}
-    ${_AX_AUDIO_SRC}
     ${_AX_UI_SRC}
     ${_AX_NETWORK_SRC}
-    ${_AX_MEDIA_SRC}
     )
 
 if(AX_ENABLE_3D)
@@ -266,6 +256,10 @@ endif()
 if(AX_ENABLE_MEDIA)
     list(APPEND _AX_HEADER ${_AX_MEDIA_HEADER})
     list(APPEND _AX_SRC ${_AX_MEDIA_SRC})
+endif()
+if(AX_ENABLE_AUDIO)
+    list(APPEND _AX_HEADER ${_AX_AUDIO_HEADER})
+    list(APPEND _AX_SRC ${_AX_AUDIO_SRC})
 endif()
 
 list(APPEND _AX_SRC ${_AX_HEADER})
@@ -318,10 +312,15 @@ ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
 
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_3D)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_PHYSICS3D)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_NAVMESH)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MEDIA)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_AUDIO)
 
-# use thirdparty libs
-add_subdirectory(${_AX_ROOT}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
-target_link_libraries(${_AX_CORE_LIB} thirdparty)
+# use 3rdparty libs
+add_subdirectory(${_AX_ROOT}/3rdparty ${ENGINE_BINARY_PATH}/3rdparty)
+target_link_libraries(${_AX_CORE_LIB} 3rdparty)
 
 # add base macro define and compile options
 use_ax_compile_define(${_AX_CORE_LIB})
@@ -332,12 +331,14 @@ use_ax_depend(${_AX_CORE_LIB})
 
 target_include_directories(${_AX_CORE_LIB}
     PUBLIC ${_AX_ROOT}
-    PUBLIC ${_AX_ROOT}/thirdparty
+
+    PUBLIC ${_AX_ROOT}/3rdparty
     PUBLIC ${_AX_ROOT}/extensions/scripting
     PUBLIC ${_AX_ROOT}/core
     PUBLIC ${_AX_ROOT}/core/platform
 
-    INTERFACE ${_AX_ROOT}/thirdparty
+
+    INTERFACE ${_AX_ROOT}/3rdparty
     INTERFACE ${_AX_ROOT}/extensions/scripting
     INTERFACE ${_AX_ROOT}/core/base
     INTERFACE ${_AX_ROOT}/core/audio
@@ -409,7 +410,7 @@ add_subdirectory(${_AX_ROOT}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
 if(MSVC)
     target_sources(${_AX_CORE_LIB} PRIVATE ./axmol.natvis)
-    target_sources(${_AX_CORE_LIB} PRIVATE ../thirdparty/robin-map/tsl-robin-map.natvis)
+    target_sources(${_AX_CORE_LIB} PRIVATE ../3rdparty/robin-map/tsl-robin-map.natvis)
     target_compile_options(${_AX_CORE_LIB} PUBLIC "/Zm2000")
 endif()
 

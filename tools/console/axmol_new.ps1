@@ -23,7 +23,7 @@ if (!$projectName) {
 # convert to absolute path
 $directory = realpath $directory
 
-if ($packageName.IndexOf('-') -ne -1) {
+if ($packageName.Contains('-')) {
     # !!!reason:
     #   - android package not accept '-'
     #   - ios deploy device may failed with unknown error

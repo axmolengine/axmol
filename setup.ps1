@@ -102,7 +102,7 @@ if ($IsWin) {
     }
 
     #  checking evaluated env:PATH with system + user
-    $Global:isMeInPath = $env:PATH.IndexOf($AX_CONSOLE_ROOT) -ne -1
+    $Global:isMeInPath = $env:PATH.Contains($AX_CONSOLE_ROOT)
     $Global:oldCmdRoot = $null
     $Global:cmdInfo = Get-Command 'axmol' -ErrorAction SilentlyContinue
     if ($cmdInfo) {
@@ -177,7 +177,7 @@ else {
         ++$profileMods
     }
 
-    if ($profileContent.IndexOf('$env:PATH = ') -eq -1 -or !($axmolCmdInfo = (Get-Command axmol -ErrorAction SilentlyContinue)) -or $axmolCmdInfo.Source -ne "$AX_CONSOLE_ROOT/axmol") {
+    if (!$profileContent.Contains('$env:PATH = ') -or !($axmolCmdInfo = (Get-Command axmol -ErrorAction SilentlyContinue)) -or $axmolCmdInfo.Source -ne "$AX_CONSOLE_ROOT/axmol") {
         $profileContent += "# Add axmol console tool to PATH`n"
         $profileContent += '$env:PATH = "${env:AX_ROOT}/tools/console:${env:PATH}"'
         $profileContent += "`n"
@@ -210,7 +210,7 @@ else {
             }
         }
 
-        if ($profileContent.IndexOf('export PATH=$AX_ROOT/tools/console:') -eq -1) {
+        if (!$profileContent.Contains('export PATH=$AX_ROOT/tools/console:')) {
             $profileContent += "# Add axmol console tool to PATH`n"
             $profileContent += 'export PATH=$AX_ROOT/tools/console:$PATH' -f "`n"
             ++$profileMods
@@ -297,6 +297,6 @@ if (!(Test-Path $prefix -PathType Container)) {
 }
 
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
-. $build1kPath -setupOnly -prefix $prefix @args
+. $build1kPath -setupOnly -prefix $prefix @args -p android
 
 $b1k.pause("setup successfully, please restart the terminal to make added system variables take effect")

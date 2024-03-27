@@ -204,7 +204,7 @@ function(ax_sync_target_dlls ax_target)
         )
     endforeach()
 
-    # copy thirdparty dlls to target bin dir
+    # copy 3rdparty dlls to target bin dir
     if(NOT CMAKE_GENERATOR MATCHES "Ninja")
         set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
     endif()
@@ -218,9 +218,9 @@ function(ax_sync_target_dlls ax_target)
     if (WIN32 AND AX_GLES_PROFILE)
         add_custom_command(TARGET ${ax_target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll
             $<TARGET_FILE_DIR:${ax_target}>
         )
     endif()
@@ -382,11 +382,26 @@ function(ax_setup_app_config app_name)
     if(APPLE)
         # output macOS/iOS .app
         set_target_properties(${app_name} PROPERTIES MACOSX_BUNDLE 1)
-        if(IOS AND (NOT ("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
+
+        # determine rpath & codesign
+        set(_should_codesign FALSE)
+        if(IOS)
+            set(_target_rpath "@executable_path/Frameworks")
+            if((NOT ("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
+                set(_should_codesign TRUE)
+            endif()
+        else()
+            set(_target_rpath "@executable_path/../Frameworks")
+        endif()
+
+        # apply rpath & codesign
+        set_target_properties(${app_name} PROPERTIES INSTALL_RPATH ${_target_rpath})
+
+        if(_should_codesign)
             set_xcode_property(${app_name} CODE_SIGNING_REQUIRED "YES")
             set_xcode_property(${app_name} CODE_SIGNING_ALLOWED "YES")
         else()
-            # By default, explicit disable codesign for macOS PC
+            # By default, explicit disable codesign for macOS or ios Simulator
             set_xcode_property(${app_name} CODE_SIGN_IDENTITY "")
             set_xcode_property(${app_name} CODE_SIGNING_ALLOWED "NO")
         endif()
@@ -529,17 +544,17 @@ macro(ax_setup_winrt_sources )
 
     ax_mark_multi_resources(platform_content_files RES_TO "Content" FOLDERS "${CMAKE_CURRENT_SOURCE_DIR}/proj.winrt/Content")
 
-    get_target_depends_ext_dlls(thirdparty prebuilt_dlls)
+    get_target_depends_ext_dlls(3rdparty prebuilt_dlls)
 
     if (NOT prebuilt_dlls) 
         set(prebuilt_dlls
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/zlib/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3-x64.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3-x64.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/curl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll)
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3-x64.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3-x64.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll)
     endif()
     ax_mark_multi_resources(prebuilt_dlls RES_TO "." FILES ${prebuilt_dlls})
 

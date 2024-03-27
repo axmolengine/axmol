@@ -94,7 +94,7 @@ if(BUILD_VULKAN_COMPILER OR BUILD_TOOL)
 
     ExternalProject_Add(
       EP_glslang
-      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glslang
+      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/glslang
       PREFIX ${CMAKE_CURRENT_BINARY_DIR}/EP/Build/glslang
       INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/EP/Install/glslang
       CMAKE_ARGS
@@ -134,7 +134,7 @@ if(BUILD_VULKAN_COMPILER OR BUILD_TOOL)
 
     ExternalProject_Add(
       EP_SPIRV-Cross
-      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SPIRV-Cross
+      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/SPIRV-Cross
       PREFIX ${CMAKE_CURRENT_BINARY_DIR}/EP/Build/SPIRV-Cross
       INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/EP/Install/SPIRV-Cross
       CMAKE_ARGS

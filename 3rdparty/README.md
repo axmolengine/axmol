@@ -23,7 +23,7 @@
 - [![Upstream](https://img.shields.io/github/v/release/bulletphysics/bullet3?label=Upstream)](https://github.com/bulletphysics/bullet3)
 - Version: 3.25
 - License: zlib
-- Update method: Compare `axmol/thirdparty/bullet` with `bullet3/src`
+- Update method: Compare `axmol/3rdparty/bullet` with `bullet3/src`
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
@@ -218,7 +218,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 3.7.0
+- Version: 3.8.0
 - License: Apache-2.0
 
 ## stb (stb_image)

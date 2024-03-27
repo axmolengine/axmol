@@ -1,3 +1,44 @@
+## axmol-2.1.3 ?? 2024
+
+### BugFixes
+
+- Fix android build by @smilediver in https://github.com/axmolengine/axmol/pull/1723
+- Fix EditBox error by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1755
+- Fix InputEvent in fairyGUI onKeyDown and onKeyUp by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1757
+- Fix wasm FPS control not working by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1762
+- Fix texture recreation when GL context is lost by @smilediver in https://github.com/axmolengine/axmol/pull/1763
+- Fix DebugDraw issue in 3D physics by @halx99
+- Fix OpenGLState cache error, reported by @solan-solan in https://github.com/axmolengine/axmol/issues/1759
+- Fix linux crash after close window by @halx99
+
+### Improvements
+
+- Disable c++20 char8_t
+- Improve build system
+- Add wasm EditBox support
+- HttpClient: add support for PATCH method by @smilediver in https://github.com/axmolengine/axmol/pull/1722
+- Add -f switch info to axmol command help output by @rh101 in https://github.com/axmolengine/axmol/pull/1729
+- Implement new axmol log system based on fmtlib by @halx99 in https://github.com/axmolengine/axmol/pull/1732
+- Logging colorful support by @halx99 in https://github.com/axmolengine/axmol/pull/1735
+- Improve logging color style by @halx99 in https://github.com/axmolengine/axmol/pull/1739
+- Add support for verbose trace level logging by @rh101 in https://github.com/axmolengine/axmol/pull/1764
+- Adapt DrawNodeEx to the changes on: Move color types to math/Color.h axmolengine#1741 by @aismann in https://github.com/axmolengine/axmol/pull/1760
+- Removed the '\n' which creates a second (empty) line. by @aismann in https://github.com/axmolengine/axmol/pull/1746
+- Add Node World Space Positioning by @DelinWorks in https://github.com/axmolengine/axmol/pull/1743
+- Move color types to math/Color.h by @halx99 in https://github.com/axmolengine/axmol/pull/1741
+- Removing EditBox should not result in logging an error message by @rh101 in https://github.com/axmolengine/axmol/pull/1740
+- Update TLD axmol.org -> axmol.dev
+- Rename folder thirdparty ==> 3rdparty
+- Update spine to 4.1-54fac9d
+
+### sdks updates
+
+- emsdk: 3.1.53 ==> 3.1.56
+
+### 3rdparty updates
+
+- simdjson: 3.7.0 ==> 3.8.0
+
 ## axmol-2.1.2 Feb.25 2024
 
 ### BugFixes
@@ -358,7 +399,7 @@ axmol-1.0.0  Aug.9 2023
 - [HIGHLIGHT] Add extension `Live2D` support
 - [HIGHLIGHT] Use curl for transferring data with URL syntax
 - [HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
-- [HIGHLIGHT] Improve thirdparty libs building, 100% of them build from sources or github actions with latest toolchain, see also: `axmolengine/buildware`
+- [HIGHLIGHT] Improve thirdparty libs building, 100% of them build from sources or github actions with latest toolchain, see also: `simdsoft/1kiss`
 - [HIGHLIGHT] Add new API `Director::setChildrenIndexerEnabled` for speed up getChildByTag & getChildByName support
 - [HIGHLIGHT] Add new API `FontFreeType::setStreamParsingEnabled` for stream parsing support . It's very useful for reducing memory costs when loading a large .ttf font file
 - [HIGHLIGHT] Remove all unnecessary `std::nothrow` stubs

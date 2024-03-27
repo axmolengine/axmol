@@ -38,7 +38,12 @@
 #include "renderer/backend/ProgramState.h"
 #include "poly2tri/poly2tri.h"
 
-// USING_NS_AX;
+
+#if defined(_WIN32)
+#    pragma push_macro("TRANSPARENT")
+#    undef TRANSPARENT
+#endif
+
 NS_AX_EXT_BEGIN
 
 static inline Tex2F v2ToTex2F(const Vec2& v)
@@ -1211,3 +1216,7 @@ void DrawNodeEx::_drawPoly(const Vec2* poli,
     }
 }
 NS_AX_EXT_END
+
+#if defined(_WIN32)
+#    pragma pop_macro("TRANSPARENT")
+#endif
