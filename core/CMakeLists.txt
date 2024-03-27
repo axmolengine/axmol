@@ -142,12 +142,6 @@ option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ON)
 
 option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" OFF)
 
-if(XCODE)
-    # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
-    # set(CMAKE_INSTALL_RPATH "@executable_path/Frameworks")
-    set(CMAKE_XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/Frameworks" CACHE INTERNAL "")
-endif()
-
 set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "" )
 
 if (WIN32)
