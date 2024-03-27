@@ -249,8 +249,13 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             libcrypto
             libssl
             libcurl_imp
-            OpenAL32
         )
+        
+        if (AX_ENABLE_AUDIO)
+            target_link_libraries(${APP_NAME}
+                OpenAL32
+            )   
+        endif()
     else()
         target_link_libraries(${APP_NAME}
             ${LIBS}
@@ -259,8 +264,13 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             curl
             ssl
             crypto
-            openal
         )
+        
+        if (AX_ENABLE_AUDIO)
+            target_link_libraries(${APP_NAME}
+                openal
+            )        
+        endif()        
     endif()
 
     target_link_libraries(${APP_NAME} debug fmtd optimized fmt)
@@ -277,8 +287,14 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             "${AX_ROOT_DIR}/3rdparty/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
             "${AX_ROOT_DIR}/3rdparty/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll"
             "${AX_ROOT_DIR}/3rdparty/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll"
-            "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
             $<TARGET_FILE_DIR:${APP_NAME}>)
+
+        if (AX_ENABLE_AUDIO)
+            add_custom_command(TARGET ${APP_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
+                $<TARGET_FILE_DIR:${APP_NAME}>)        
+        endif()
 
         if (BUILD_SHARED_LIBS)
             add_custom_command(TARGET ${APP_NAME} POST_BUILD

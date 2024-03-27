@@ -41,6 +41,13 @@ THE SOFTWARE.
 #    define AX_ENABLE_3D 0
 #endif
 
+/** @def AX_ENABLE_AUDIO
+ * If enabled, allows the use of audio functionality.
+ */
+#ifndef AX_ENABLE_AUDIO
+#    define AX_ENABLE_AUDIO 0
+#endif
+
 /** @def AX_ENABLE_STACKABLE_ACTIONS
  * If enabled, actions that alter the position property (eg: MoveBy, JumpBy, BezierBy, etc..) will be stacked.
  * If you run 2 or more 'position' actions at the same time on a node, then end position will be the sum of all the

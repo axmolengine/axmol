@@ -146,6 +146,7 @@ option(AX_ENABLE_3D "Build 3D support" ON)
 option(AX_ENABLE_PHYSICS3D "Build Physics3D support" ON)
 option(AX_ENABLE_NAVMESH "Build NavMesh support" ON)
 option(AX_ENABLE_MEDIA "Build media support" ON)
+option(AX_ENABLE_AUDIO "Build audio support" ON)
 
 set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "" )
 
@@ -207,7 +208,9 @@ include(renderer/CMakeLists.txt)
 include(base/CMakeLists.txt)
 include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
-include(audio/CMakeLists.txt)
+if(AX_ENABLE_AUDIO)
+    include(audio/CMakeLists.txt)
+endif()
 
 if(AX_ENABLE_MEDIA)
     file(GLOB_RECURSE _AX_MEDIA_HEADER media/*.h)
