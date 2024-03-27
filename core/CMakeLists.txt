@@ -334,12 +334,10 @@ use_ax_depend(${_AX_CORE_LIB})
 
 target_include_directories(${_AX_CORE_LIB}
     PUBLIC ${_AX_ROOT}
-
     PUBLIC ${_AX_ROOT}/3rdparty
     PUBLIC ${_AX_ROOT}/extensions/scripting
     PUBLIC ${_AX_ROOT}/core
     PUBLIC ${_AX_ROOT}/core/platform
-
 
     INTERFACE ${_AX_ROOT}/3rdparty
     INTERFACE ${_AX_ROOT}/extensions/scripting
