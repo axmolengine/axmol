@@ -131,6 +131,16 @@ if (ANDROID)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--hash-style=both")
 endif()
 
+# The global rpath settings
+if(LINUX OR APPLE)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE CACHE BOOL "" FORCE)
+    if(LINUX)
+        set(CMAKE_INSTALL_RPATH ".:\$ORIGIN:\$ORIGIN/../lib:${CMAKE_BINARY_DIR}/lib")
+    elseif(APPLE)
+        set(CMAKE_SKIP_BUILD_RPATH TRUE CACHE BOOL "" FORCE)
+    endif()
+endif()
+
 # Set macro definitions for special platforms
 function(use_ax_compile_define target)
     target_compile_definitions(${target} PUBLIC $<$<CONFIG:Debug>:_AX_DEBUG=1>)
