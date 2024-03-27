@@ -1,5 +1,3 @@
-add_definitions(-DAX_ENABLE_3D=1)
-
 set(_AX_3D_HEADER
 
     3d/BillBoard.h
