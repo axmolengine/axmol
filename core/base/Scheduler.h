@@ -541,6 +541,7 @@ protected:
     // Used for "perform action"
     std::vector<std::function<void()>> _actionsToPerform;
     std::mutex _performMutex;
+    std::atomic<bool> _actionsToPerformEmpty = true;
 };
 
 // end of base group
