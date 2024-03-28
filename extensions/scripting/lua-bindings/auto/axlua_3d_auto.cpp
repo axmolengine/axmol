@@ -1,4 +1,5 @@
 #include "lua-bindings/auto/axlua_3d_auto.hpp"
+#if defined(AX_ENABLE_3D)
 #include "cocos2d.h"
 #include "3d/Bundle3D.h"
 #include "lua-bindings/manual/tolua_fix.h"
@@ -7747,3 +7748,4 @@ TOLUA_API int register_all_ax_3d(lua_State* tolua_S)
 	return 1;
 }
 
+#endif
