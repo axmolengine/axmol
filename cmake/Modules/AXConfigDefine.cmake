@@ -124,6 +124,7 @@ if (FULL_MSVC)
 endif()
 
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
+set(CMAKE_PLATFORM_NO_VERSIONED_SONAME TRUE CACHE BOOL "Disable dynamic libraries symblink." FORCE)
 
 # set hash style to both for android old device compatible
 # see also: https://github.com/axmolengine/axmol/discussions/614
