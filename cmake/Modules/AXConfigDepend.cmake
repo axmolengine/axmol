@@ -43,7 +43,7 @@ macro(ax_depend)
             ${COREMEDIA_LIBRARY}
             )
 
-        if(NOT AX_USE_ALSOFT)
+        if(AX_ENABLE_AUDIO AND NOT AX_USE_ALSOFT)
             find_library(OPENAL_LIBRARY OpenAL)
             set(_AX_APPLE_LIBS 
             ${OPENAL_LIBRARY}
@@ -106,7 +106,9 @@ macro(ax_depend)
             endif()
         endif()
     elseif(WASM)
-        list(APPEND openal) # refer to: https://emscripten.org/docs/porting/Audio.html
+        if (AX_ENABLE_AUDIO)
+            list(APPEND openal) # refer to: https://emscripten.org/docs/porting/Audio.html
+        endif()
     endif()
 endmacro()
 

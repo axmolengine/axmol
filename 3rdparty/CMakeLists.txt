@@ -375,47 +375,50 @@ if(AX_WITH_CURL AND NOT EMSCRIPTEN)
     endif()
 endif()
 
-# The openal-soft(LGPL 2.1)
-if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
-    set(alsoft_opts "ALSOFT_DLOPEN OFF" "ALSOFT_UTILS OFF" "ALSOFT_EXAMPLES OFF" "ALSOFT_INSTALL OFF")
+if (AX_ENABLE_AUDIO)
+    # The openal-soft(LGPL 2.1)
+    if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
+        set(alsoft_opts "ALSOFT_DLOPEN OFF" "ALSOFT_UTILS OFF" "ALSOFT_EXAMPLES OFF" "ALSOFT_INSTALL OFF")
 
-    if (AX_USE_ALSOFT_STATIC)
-        list(APPEND alsoft_opts "LIBTYPE STATIC")
-    endif()
-
-    if (ANDROID)
-        if(AX_WITH_OBOE)
-            _1kfetch(oboe)
-            set(ALSOFT_BACKEND_OPENSL OFF CACHE BOOL "Enable OpenSL backend" FORCE)
-            set(OBOE_SOURCE "${oboe_SOURCE_DIR}" CACHE STRING "Source directory for Oboe." FORCE)
+        if (AX_USE_ALSOFT_STATIC)
+            list(APPEND alsoft_opts "LIBTYPE STATIC")
         endif()
-        list(APPEND alsoft_opts "ALSOFT_RTKIT OFF")
-        set(ALSOFT_RTKIT OFF CACHE BOOL "Enable RTKit support" FORCE)
+
+        if (ANDROID)
+            if(AX_WITH_OBOE)
+                _1kfetch(oboe)
+                set(ALSOFT_BACKEND_OPENSL OFF CACHE BOOL "Enable OpenSL backend" FORCE)
+                set(OBOE_SOURCE "${oboe_SOURCE_DIR}" CACHE STRING "Source directory for Oboe." FORCE)
+            endif()
+            list(APPEND alsoft_opts "ALSOFT_RTKIT OFF")
+            set(ALSOFT_RTKIT OFF CACHE BOOL "Enable RTKit support" FORCE)
+        endif()
+
+        if(WINDOWS)
+            list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
+        endif()
+
+        if(WINRT)
+            set(ALSOFT_CPPWINRT_VERSION ${AX_CPPWINRT_VERSION} CACHE STRING "" FORCE)
+        endif()
+
+        ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS alcommon;OpenAL OPTIONS ${alsoft_opts})
+
+        target_include_directories(3rdparty INTERFACE openal)
+        target_compile_definitions(3rdparty INTERFACE AX_USE_ALSOFT=1)
+        set_target_properties(OpenAL alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
+
+        if (AX_USE_ALSOFT_STATIC)
+            target_compile_definitions(3rdparty INTERFACE AL_LIBTYPE_STATIC=1)
+        elseif(ANDROID)
+            set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
+        endif()
     endif()
 
-    if(WINDOWS)
-        list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
-    endif()
 
-    if(WINRT)
-        set(ALSOFT_CPPWINRT_VERSION ${AX_CPPWINRT_VERSION} CACHE STRING "" FORCE)
-    endif()
-
-    ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS alcommon;OpenAL OPTIONS ${alsoft_opts})
-
-    target_include_directories(3rdparty INTERFACE openal)
-    target_compile_definitions(3rdparty INTERFACE AX_USE_ALSOFT=1)
-    set_target_properties(OpenAL alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
-
-    if (AX_USE_ALSOFT_STATIC)
-        target_compile_definitions(3rdparty INTERFACE AL_LIBTYPE_STATIC=1)
-    elseif(ANDROID)
-        set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
-    endif()
+    # The ogg decoder
+    ax_add_3rd(ogg)
 endif()
-
-# The ogg decoder
-ax_add_3rd(ogg)
 
 if(WINDOWS OR LINUX OR ANDROID OR WASM)
     ax_add_3rd(glad)

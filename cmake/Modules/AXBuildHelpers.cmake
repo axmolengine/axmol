@@ -427,7 +427,7 @@ function(ax_setup_app_config app_name)
     endif()
     target_link_libraries(${app_name} ${_AX_EXTENSION_LIBS})
 
-    if(XCODE AND AX_USE_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
+    if(XCODE AND AX_ENABLE_AUDIO AND AX_USE_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
         # Embedded soft_oal embedded framework
         # XCODE_LINK_BUILD_PHASE_MODE BUILT_ONLY
         # ???CMake BUG: XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY works for first app

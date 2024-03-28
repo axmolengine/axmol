@@ -1,3 +1,5 @@
+add_definitions(-DAX_USE_NAVMESH=1)
+
 set(_AX_NAVMESH_HEADER
     navmesh/NavMeshAgent.h
     navmesh/NavMeshObstacle.h
