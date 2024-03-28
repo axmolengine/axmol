@@ -1,4 +1,5 @@
 #include "lua-bindings/auto/axlua_video_auto.hpp"
+#if defined(AX_ENABLE_MEDIA)
 #include "ui/UIMediaPlayer.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
@@ -14,3 +15,4 @@ TOLUA_API int register_all_ax_video(lua_State* tolua_S)
 	return 1;
 }
 
+#endif
