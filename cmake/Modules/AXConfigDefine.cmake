@@ -180,12 +180,15 @@ endfunction()
 
 # Set compiler options for engine lib: axmol
 function(use_ax_compile_options target)
-    if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    if (FULL_MSVC)
         # Enable msvc multi-process building
         target_compile_options(${target} PUBLIC /MP)
-    elseif(WASM)
+    endif()
+    if(WASM)
         # refer to: https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
         target_link_options(${target} PUBLIC -sFORCE_FILESYSTEM=1 -sFETCH=1 -sUSE_GLFW=3)
+    elseif(NOT WIN32)
+        target_link_options(${target} PUBLIC "-lpthread")
     endif()
 endfunction()
 
