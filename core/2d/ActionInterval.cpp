@@ -933,7 +933,7 @@ void RotateTo::update(float time)
         }
         else
         {
-#if AX_ENABLE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
             if (_startAngle.x == _startAngle.y && _diffAngle.x == _diffAngle.y)
             {
                 _target->setRotation(_startAngle.x + _diffAngle.x * time);
@@ -946,7 +946,7 @@ void RotateTo::update(float time)
 #else
             _target->setRotationSkewX(_startAngle.x + _diffAngle.x * time);
             _target->setRotationSkewY(_startAngle.y + _diffAngle.y * time);
-#endif  // AX_ENABLE_PHYSICS
+#endif  // defined(AX_ENABLE_PHYSICS)
         }
     }
 }
@@ -1078,7 +1078,7 @@ void RotateBy::update(float time)
         }
         else
         {
-#if AX_ENABLE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
             if (_startAngle.x == _startAngle.y && _deltaAngle.x == _deltaAngle.y)
             {
                 _target->setRotation(_startAngle.x + _deltaAngle.x * time);
@@ -1091,7 +1091,7 @@ void RotateBy::update(float time)
 #else
             _target->setRotationSkewX(_startAngle.x + _deltaAngle.x * time);
             _target->setRotationSkewY(_startAngle.y + _deltaAngle.y * time);
-#endif  // AX_ENABLE_PHYSICS
+#endif  // defined(AX_ENABLE_PHYSICS)
         }
     }
 }

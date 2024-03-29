@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "base/UTF8.h"
 #include "renderer/Renderer.h"
 
-#if AX_ENABLE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 #    include "physics/PhysicsWorld.h"
 #endif
 
@@ -75,7 +75,7 @@ Scene::~Scene()
     _director->getEventDispatcher()->removeEventListener(_event);
     AX_SAFE_RELEASE(_event);
 
-#if AX_ENABLE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
     delete _physicsWorld;
 #endif
 
@@ -325,7 +325,7 @@ void Scene::setNavMeshDebugCamera(Camera* camera)
 
 #endif
 
-#if (AX_ENABLE_PHYSICS || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION))
+#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION))
 
 Scene* Scene::createWithPhysics()
 {
@@ -350,7 +350,7 @@ bool Scene::initWithPhysics()
 
 bool Scene::initPhysicsWorld()
 {
-#    if AX_ENABLE_PHYSICS
+#    if defined(AX_ENABLE_PHYSICS)
     _physicsWorld = PhysicsWorld::construct(this);
 #    endif
 
@@ -373,10 +373,10 @@ bool Scene::initPhysicsWorld()
 
 #endif
 
-#if (AX_ENABLE_PHYSICS || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || defined(AX_ENABLE_NAVMESH))
+#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || defined(AX_ENABLE_NAVMESH))
 void Scene::stepPhysicsAndNavigation(float deltaTime)
 {
-#    if AX_ENABLE_PHYSICS
+#    if defined(AX_ENABLE_PHYSICS)
     if (_physicsWorld && _physicsWorld->isAutoStep())
         _physicsWorld->update(deltaTime);
 #    endif

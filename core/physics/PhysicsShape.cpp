@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "physics/PhysicsShape.h"
-#if AX_ENABLE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 
 #    include <climits>
 #    include <cmath>
@@ -976,4 +976,4 @@ bool PhysicsShape::containsPoint(const Vec2& point) const
 
 NS_AX_END
 
-#endif  // AX_ENABLE_PHYSICS
+#endif  // defined(AX_ENABLE_PHYSICS)

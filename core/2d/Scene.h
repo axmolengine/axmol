@@ -40,7 +40,7 @@ class BaseLight;
 class Renderer;
 class EventListenerCustom;
 class EventCustom;
-#if AX_ENABLE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 class PhysicsWorld;
 #endif
 #if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
@@ -158,7 +158,7 @@ private:
 
 #if (AX_ENABLE_PHYSICS || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION))
 public:
-#    if AX_ENABLE_PHYSICS
+#    if defined(AX_ENABLE_PHYSICS)
     /** Get the physics world of the scene.
      * @return The physics world of the scene.
      * @js NA
@@ -192,7 +192,7 @@ public:
 protected:
     void addChildToPhysicsWorld(Node* child);
 
-#    if AX_ENABLE_PHYSICS
+#    if defined(AX_ENABLE_PHYSICS)
     PhysicsWorld* _physicsWorld = nullptr;
 #    endif
 
@@ -200,7 +200,7 @@ protected:
     Physics3DWorld* _physics3DWorld = nullptr;
     Camera* _physics3dDebugCamera   = nullptr;
 #    endif
-#endif  // (AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS))
+#endif  // (defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS))
 
 #if defined(AX_ENABLE_NAVMESH)
 public:
@@ -218,7 +218,7 @@ protected:
     Camera* _navMeshDebugCamera = nullptr;
 #endif
 
-#if (AX_ENABLE_PHYSICS || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || defined(AX_ENABLE_NAVMESH))
+#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || defined(AX_ENABLE_NAVMESH))
 public:
     void stepPhysicsAndNavigation(float deltaTime);
 #endif

@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "physics/PhysicsContact.h"
-#if AX_ENABLE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 #    include "chipmunk/chipmunk.h"
 
 #    include "physics/PhysicsBody.h"
@@ -431,4 +431,4 @@ EventListenerPhysicsContactWithGroup* EventListenerPhysicsContactWithGroup::clon
 }
 
 NS_AX_END
-#endif  // AX_ENABLE_PHYSICS
+#endif  // defined(AX_ENABLE_PHYSICS)

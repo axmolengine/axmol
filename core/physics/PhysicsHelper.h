@@ -28,7 +28,7 @@
 #define __CCPHYSICS_HELPER_H__
 
 #include "base/Config.h"
-#if AX_ENABLE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 
 #    include "chipmunk/chipmunk.h"
 #    include "platform/PlatformMacros.h"

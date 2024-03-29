@@ -29,7 +29,7 @@
 
 #include "../BaseTest.h"
 
-#if AX_ENABLE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 
 DEFINE_TEST_SUITE(PhysicsTests);
 
@@ -324,4 +324,4 @@ private:
     float _delayTime;
 };
 
-#endif  // #if AX_ENABLE_PHYSICS
+#endif  // #if defined(AX_ENABLE_PHYSICS)

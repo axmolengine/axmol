@@ -255,10 +255,7 @@ THE SOFTWARE.
 /** Use physics integration API. */
 //  It works with:
 // Chipmunk2D or Box2D
-#ifndef AX_ENABLE_PHYSICS
-#    define AX_ENABLE_PHYSICS 1
-#endif
-#if (AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS)
 /** Use Chipmunk2D physics 2d engine on physics integration API. */
 #    ifndef AX_ENABLE_CHIPMUNK_INTEGRATION
 #        define AX_ENABLE_CHIPMUNK_INTEGRATION 0
@@ -267,7 +264,7 @@ THE SOFTWARE.
 #    ifndef AX_ENABLE_BOX2D_INTEGRATION
 #        define AX_ENABLE_BOX2D_INTEGRATION 1
 #    endif
-#endif  // AX_ENABLE_PHYSICS
+#endif  // defined(AX_ENABLE_PHYSICS)
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 /** Use bullet physics engine. */

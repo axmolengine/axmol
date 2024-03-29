@@ -41,7 +41,7 @@ struct AgentUserData
 
 NavMeshTests::NavMeshTests()
 {
-#if !defined(AX_ENABLE_NAVMESH) || (AX_ENABLE_PHYSICS == 0)
+#if !defined(AX_ENABLE_NAVMESH) || !defined(AX_ENABLE_PHYSICS)
     ADD_TEST_CASE(NavMeshDisabled);
 #else
     ADD_TEST_CASE(NavMeshBasicTestDemo);
@@ -49,12 +49,12 @@ NavMeshTests::NavMeshTests()
 #endif
 };
 
-#if !defined(AX_ENABLE_NAVMESH) || (AX_ENABLE_PHYSICS == 0)
+#if !defined(AX_ENABLE_NAVMESH) || !defined(AX_ENABLE_PHYSICS)
 void NavMeshDisabled::onEnter()
 {
     TTFConfig ttfConfig("fonts/arial.ttf", 16);
     auto label =
-        Label::createWithTTF(ttfConfig, "Should enable AX_ENABLE_NAVMESH & define AX_ENABLE_PHYSICS\n to run this test case");
+        Label::createWithTTF(ttfConfig, "Should enable AX_ENABLE_NAVMESH & AX_ENABLE_PHYSICS\n to run this test case");
 
     auto size = Director::getInstance()->getWinSize();
     label->setPosition(Vec2(size.width / 2, size.height / 2));

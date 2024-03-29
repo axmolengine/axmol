@@ -143,7 +143,8 @@ option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ON)
 option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" OFF)
 
 option(AX_ENABLE_3D "Build 3D support" ON)
-option(AX_ENABLE_3D_PHYSICS "Build Physics3D support" ON)
+option(AX_ENABLE_3D_PHYSICS "Build 3D Physics support" ON)
+option(AX_ENABLE_PHYSICS "Build Physics support" ON)
 option(AX_ENABLE_NAVMESH "Build NavMesh support" ON)
 option(AX_ENABLE_MEDIA "Build media support" ON)
 option(AX_ENABLE_AUDIO "Build audio support" ON)
@@ -196,7 +197,9 @@ if(AX_ENABLE_3D)
     include(3d/CMakeLists.txt)
 endif()
 include(platform/CMakeLists.txt)
-include(physics/CMakeLists.txt)
+if(AX_ENABLE_PHYSICS)
+    include(physics/CMakeLists.txt)
+endif()
 if(AX_ENABLE_3D_PHYSICS)
     include(physics3d/CMakeLists.txt)
 endif()
@@ -225,7 +228,6 @@ endif()
 set(_AX_HEADER axmol.h
     ${_AX_2D_HEADER}
     ${_AX_PLATFORM_HEADER}
-    ${_AX_PHYSICS_HEADER}
     ${_AX_MATH_HEADER}
     ${_AX_RENDERER_HEADER}
     ${_AX_BASE_HEADER}
@@ -236,7 +238,6 @@ set(_AX_HEADER axmol.h
 set(_AX_SRC axmol.cpp
     ${_AX_2D_SRC}
     ${_AX_PLATFORM_SRC}
-    ${_AX_PHYSICS_SRC}
     ${_AX_MATH_SRC}
     ${_AX_RENDERER_SRC}
     ${_AX_BASE_SRC}
@@ -247,6 +248,10 @@ set(_AX_SRC axmol.cpp
 if(AX_ENABLE_3D)
     list(APPEND _AX_HEADER ${_AX_3D_HEADER})
     list(APPEND _AX_SRC ${_AX_3D_SRC})
+endif()
+if(AX_ENABLE_PHYSICS)
+    list(APPEND _AX_HEADER ${_AX_PHYSICS_HEADER})
+    list(APPEND _AX_SRC ${_AX_PHYSICS_SRC})
 endif()
 if(AX_ENABLE_3D_PHYSICS)
     list(APPEND _AX_HEADER ${_AX_PHYSICS3D_HEADER})
@@ -315,6 +320,7 @@ ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
 
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_PHYSICS)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_3D)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_3D_PHYSICS)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_NAVMESH)

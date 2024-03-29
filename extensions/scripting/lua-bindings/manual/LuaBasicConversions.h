@@ -309,7 +309,7 @@ extern bool luaval_to_color4b(lua_State* L, int lo, Color4B* outValue, const cha
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 extern bool luaval_to_color4f(lua_State* L, int lo, Color4F* outValue, const char* funcName = "");
-#if AX_ENABLE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 
 /**
  * Get a PhysicsMaterial object value from the given acceptable index of stack.
@@ -325,7 +325,7 @@ extern bool luaval_to_color4f(lua_State* L, int lo, Color4F* outValue, const cha
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 extern bool luaval_to_physics_material(lua_State* L, int lo, ax::PhysicsMaterial* outValue, const char* funcName = "");
-#endif  // #if AX_ENABLE_PHYSICS
+#endif  // #if defined(AX_ENABLE_PHYSICS)
 
 /**
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
@@ -961,7 +961,7 @@ extern void color4f_to_luaval(lua_State* L, const Color4F& cc);
 
 void std_thread_id_to_luaval(lua_State* L, const std::thread::id& value);
 
-#if AX_ENABLE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 
 /**
  * Push a table converted from a ax::PhysicsMaterial object into the Lua stack.
@@ -990,7 +990,7 @@ extern void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo
  * @param data a ax::PhysicsContactData object.
  */
 extern void physics_contactdata_to_luaval(lua_State* L, const PhysicsContactData* data);
-#endif  // #if AX_ENABLE_PHYSICS
+#endif  // #if defined(AX_ENABLE_PHYSICS)
 
 /**
  * Push a table converted from a ax::AffineTransform object into the Lua stack.

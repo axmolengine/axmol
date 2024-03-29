@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "physics/PhysicsJoint.h"
-#if AX_ENABLE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 #    include "chipmunk/chipmunk.h"
 
 #    include "physics/PhysicsBody.h"
