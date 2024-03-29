@@ -6,10 +6,20 @@
 # 
 
 ### 1kdist url
-find_program(PWSH_COMMAND NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+find_program(GIT_PROG NAMES git NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
 
 function(_1kfetch_init)
-    execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetchurl.ps1
+    if(NOT _1kfetch_cache_dir)
+        file(REAL_PATH "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../cache" _1kfetch_cache_dir)
+        set(_1kfetch_cache_dir "${_1kfetch_cache_dir}" CACHE STRING "" FORCE)
+    endif()
+    if(NOT _1kfetch_manifest)
+        file(REAL_PATH "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../manifest.json" _1kfetch_manifest)
+        set(_1kfetch_manifest "${_1kfetch_manifest}" CACHE STRING "" FORCE)
+    endif()
+
+    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetchurl.ps1
         -name "1kdist"
         -manifest ${_1kfetch_manifest}
         OUTPUT_VARIABLE _1kdist_url
@@ -19,14 +29,6 @@ function(_1kfetch_init)
     list(GET _1kdist_url 1 _1kdist_ver)
     set(_1kdist_base_url "${_1kdist_base_url}/v${_1kdist_ver}" PARENT_SCOPE)
     set(_1kdist_ver ${_1kdist_ver} PARENT_SCOPE)
-    if(NOT _1kfetch_cache_dir)
-        file(REAL_PATH "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../cache" _1kfetch_cache_dir)
-        set(_1kfetch_cache_dir "${_1kfetch_cache_dir}" CACHE STRING "" FORCE)
-    endif()
-    if(NOT _1kfetch_manifest)
-        file(REAL_PATH "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../manifest.json" _1kfetch_manifest)
-        set(_1kfetch_manifest "${_1kfetch_manifest}" CACHE STRING "" FORCE)
-    endif()
 endfunction()
 
 # fetch prebuilt from 1kdist
@@ -71,7 +73,7 @@ function(_1kfetch uri)
     _1kparse_name(${uri} "${opt_NAME}")
     
     set(_pkg_store "${_1kfetch_cache_dir}/${_pkg_name}")
-    execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
+    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
         -uri "${uri}"
         -prefix "${_1kfetch_cache_dir}"
         -manifest "${_1kfetch_manifest}"
@@ -83,6 +85,45 @@ function(_1kfetch uri)
     endif()
     set(${_pkg_name}_SOURCE_DIR ${_pkg_store} PARENT_SCOPE)
     set(source_dir ${_pkg_store} PARENT_SCOPE)
+endfunction()
+
+# developing, not available yet
+function(_1kfetch_fast uri)
+    _1kperf_start("_1kfetch: ${uri}")
+
+    set(oneValueArgs NAME)
+    cmake_parse_arguments(opt "" "${oneValueArgs}" "" ${ARGN})
+
+    _1kparse_name(${uri} "${opt_NAME}")
+    
+    set(_pkg_store "${_1kfetch_cache_dir}/${_pkg_name}")
+
+    set(_sentry_file "${_pkg_store}/_1kiss")
+
+    if(NOT _manifest_conf)
+        file(READ "${_1kfetch_manifest}" _manifest_conf)
+    endif()
+    string(JSON _url GET "${_manifest_conf}" "mirrors" "github" "${_pkg_name}")
+    string(JSON _version GET "${_manifest_conf}" "versions" "${_pkg_name}")
+    string(PREPEND _url "https://github.com/")
+    if(NOT EXISTS "${_sentry_file}")
+        execute_process(COMMAND ${GIT_PROG} clone --progress ${_url} "${_pkg_store}" RESULT_VARIABLE _errorcode)
+        file(WRITE "${_sentry_file}" "ver: ${_version}")
+    endif()
+
+    if(EXISTS "${_sentry_file}")
+        execute_process(COMMAND ${GIT_PROG} -C ${_pkg_store} checkout ${_version} RESULT_VARIABLE _errorcode)
+        if(_errorcode)
+            execute_process(COMMAND ${GIT_PROG} -C ${_pkg_store} checkout v${_version} RESULT_VARIABLE _errorcode)
+        endif()
+    else()
+        message(FATAL_ERROR "fetch repo ${uri} fail, try again")
+    endif()
+
+    set(${_pkg_name}_SOURCE_DIR ${_pkg_store} PARENT_SCOPE)
+    set(source_dir ${_pkg_store} PARENT_SCOPE)
+
+    _1kperf_end("_1kfetch")
 endfunction()
 
 # simple cmake pkg management:
@@ -120,7 +161,7 @@ endfunction()
 function(_1klink src dest)
     file(TO_NATIVE_PATH "${src}" _srcDir)
     file(TO_NATIVE_PATH "${dest}" _dstDir)
-    execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fsync.ps1 -s "${_srcDir}" -d "${_dstDir}" -l 1)
+    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fsync.ps1 -s "${_srcDir}" -d "${_dstDir}" -l 1)
 endfunction()
 
 function(_1kparse_option OPTION)
@@ -171,7 +212,7 @@ macro(_1kperf_end tag)
     message(STATUS "[${_fetch_end_msec}ms][1kperf] end of ${tag}, cost: ${_fetch_cost_msec}ms" )
 endmacro()
 
-if(PWSH_COMMAND)
+if(PWSH_PROG)
     _1kfetch_init()
 else()
     message(WARNING "fetch.cmake: PowerShell is missing, the fetch functions not work, please install from https://github.com/PowerShell/PowerShell/releases")
