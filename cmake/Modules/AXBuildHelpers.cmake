@@ -383,21 +383,8 @@ function(ax_setup_app_config app_name)
         # output macOS/iOS .app
         set_target_properties(${app_name} PROPERTIES MACOSX_BUNDLE 1)
 
-        # determine rpath & codesign
-        set(_should_codesign FALSE)
-        if(IOS)
-            set(_target_rpath "@executable_path/Frameworks")
-            if((NOT ("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
-                set(_should_codesign TRUE)
-            endif()
-        else()
-            set(_target_rpath "@executable_path/../Frameworks")
-        endif()
-
-        # apply rpath & codesign
-        set_target_properties(${app_name} PROPERTIES INSTALL_RPATH ${_target_rpath})
-
-        if(_should_codesign)
+        # set codesign
+        if(IOS AND (NOT ("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
             set_xcode_property(${app_name} CODE_SIGNING_REQUIRED "YES")
             set_xcode_property(${app_name} CODE_SIGNING_ALLOWED "YES")
         else()

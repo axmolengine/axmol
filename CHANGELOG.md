@@ -14,7 +14,7 @@
 ### Improvements
 
 - Disable c++20 char8_t
-- Improve build system
+- Improve build system, set rpath properly for platforms: linux, apple
 - Add wasm EditBox support
 - HttpClient: add support for PATCH method by @smilediver in https://github.com/axmolengine/axmol/pull/1722
 - Add -f switch info to axmol command help output by @rh101 in https://github.com/axmolengine/axmol/pull/1729
@@ -27,9 +27,12 @@
 - Add Node World Space Positioning by @DelinWorks in https://github.com/axmolengine/axmol/pull/1743
 - Move color types to math/Color.h by @halx99 in https://github.com/axmolengine/axmol/pull/1741
 - Removing EditBox should not result in logging an error message by @rh101 in https://github.com/axmolengine/axmol/pull/1740
+- Allow certain code modules to be removed from build process by @rh101 in https://github.com/axmolengine/axmol/pull/1769
+- Update LUA config for new build options by @rh101 in https://github.com/axmolengine/axmol/pull/1772
 - Update TLD axmol.org -> axmol.dev
 - Rename folder thirdparty ==> 3rdparty
 - Update spine to 4.1-54fac9d
+- Set cmake minmal require to 3.29.0+ for supress xcode 15 duplicated linking warnings
 
 ### sdks updates
 
