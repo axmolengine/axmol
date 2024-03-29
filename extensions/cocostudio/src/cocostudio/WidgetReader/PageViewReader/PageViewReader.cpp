@@ -281,7 +281,7 @@ Offset<Table> PageViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
     Color f_bgColor(255, bgColor.r, bgColor.g, bgColor.b);
     Color f_bgStartColor(255, bgStartColor.r, bgStartColor.g, bgStartColor.b);
     Color f_bgEndColor(255, bgEndColor.r, bgEndColor.g, bgEndColor.b);
-    ColorVector f_colorVector(colorVector.x, colorVector.y);
+    FVec2 f_colorVector(colorVector.x, colorVector.y);
     CapInsets f_capInsets(capInsets.origin.x, capInsets.origin.y, capInsets.size.width, capInsets.size.height);
     FlatSize f_scale9Size(scale9Size.width, scale9Size.height);
 
@@ -313,7 +313,7 @@ void PageViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::
     Color3B bgEndColor(f_bgEndColor->r(), f_bgEndColor->g(), f_bgEndColor->b());
 
     auto f_colorVecor = options->colorVector();
-    Vec2 colorVector(f_colorVecor->vectorX(), f_colorVecor->vectorY());
+    Vec2 colorVector(f_colorVecor->x(), f_colorVecor->y());
     pageView->setBackGroundColorVector(colorVector);
 
     int bgColorOpacity = options->bgColorOpacity();

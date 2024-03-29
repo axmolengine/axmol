@@ -254,10 +254,10 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node o
         child = child.next_sibling();
     }
 
-    RotationSkew f_rotationskew(rotationSkew.x, rotationSkew.y);
+    FVec2 f_rotationskew(rotationSkew.x, rotationSkew.y);
     FVec2 f_position(position.x, position.y);
-    Scale f_scale(scale.x, scale.y);
-    AnchorPoint f_anchortpoint(anchorPoint.x, anchorPoint.y);
+    FVec2 f_scale(scale.x, scale.y);
+    FVec2 f_anchortpoint(anchorPoint.x, anchorPoint.y);
     Color f_color(color.a, color.r, color.g, color.b);
     FlatSize f_size(size.x, size.y);
     auto f_layoutComponent = CreateLayoutComponentTable(

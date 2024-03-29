@@ -62,7 +62,7 @@
 
 ## flatbuffers
 - [![Upstream](https://img.shields.io/github/v/release/google/flatbuffers?label=Upstream)](https://github.com/google/flatbuffers)
-- Version: 2.0.8
+- Version: 24.3.25
 - License: Apache-2.0
 
 ## {fmt}

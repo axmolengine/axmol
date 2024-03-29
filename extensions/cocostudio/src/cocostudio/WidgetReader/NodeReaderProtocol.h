@@ -32,16 +32,12 @@
 #include "pugixml/pugixml.hpp"
 #include "pugixml/pugiext.hpp"
 
+#include "flatbuffers/flatbuffers.h"
+
 #define CCS_DEF_FONT "Microsoft YaHei"
 
 namespace flatbuffers
 {
-class FlatBufferBuilder;
-template <typename T>
-struct Offset;
-
-class Table;
-
 struct ResourceData;  // x-studio spec, csb batch load support, assets hook functions.
 }  // namespace flatbuffers
 

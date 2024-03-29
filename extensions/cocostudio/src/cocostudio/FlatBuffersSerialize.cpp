@@ -849,7 +849,7 @@ Offset<flatbuffers::ScaleFrame> FlatBuffersSerialize::createScaleFrame(pugi::xml
         attribute = attribute.next_attribute();
     }
 
-    Scale f_scale(scale.x, scale.y);
+    FVec2 f_scale(scale.x, scale.y);
 
     return CreateScaleFrame(*_builder, frameIndex, tween, &f_scale, createEasingData(objectData.first_child()));
 }

@@ -38,6 +38,7 @@
 ### 3rdparty updates
 
 - simdjson: 3.7.0 ==> 3.8.0
+- flatbuffers: 2.0.8 ==> 24.3.25
 
 ## axmol-2.1.2 Feb.25 2024
 

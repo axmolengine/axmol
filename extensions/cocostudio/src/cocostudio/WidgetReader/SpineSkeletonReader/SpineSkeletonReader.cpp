@@ -221,8 +221,8 @@ void SpineSkeletonReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuff
     uint8_t green = (uint8_t)nodeOptions->color()->g();
     uint8_t blue  = (uint8_t)nodeOptions->color()->b();
 
-    implNode->setScaleX(nodeOptions->scale()->scaleX());
-    implNode->setScaleY(nodeOptions->scale()->scaleY());
+    implNode->setScaleX(nodeOptions->scale()->x());
+    implNode->setScaleY(nodeOptions->scale()->y());
 
     implNode->setColor(Color3B(red, green, blue));
     implNode->setOpacity(alpha);

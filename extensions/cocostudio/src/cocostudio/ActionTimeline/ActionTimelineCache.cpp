@@ -660,7 +660,7 @@ Frame* ActionTimelineCache::loadScaleFrameWithFlatBuffers(const flatbuffers::Sca
     ScaleFrame* frame = ScaleFrame::create();
 
     auto f_scale = flatbuffers->scale();
-    Vec2 scale(f_scale->scaleX(), f_scale->scaleY());
+    Vec2 scale(f_scale->x(), f_scale->y());
     frame->setScaleX(scale.x);
     frame->setScaleY(scale.y);
 
@@ -684,7 +684,7 @@ Frame* ActionTimelineCache::loadRotationSkewFrameWithFlatBuffers(const flatbuffe
     RotationSkewFrame* frame = RotationSkewFrame::create();
 
     auto f_scale = flatbuffers->scale();
-    Vec2 rotationSkew(f_scale->scaleX(), f_scale->scaleY());
+    Vec2 rotationSkew(f_scale->x(), f_scale->y());
     frame->setSkewX(rotationSkew.x);
     frame->setSkewY(rotationSkew.y);
 
@@ -829,7 +829,7 @@ Frame* ActionTimelineCache::loadAnchorPointFrameWithFlatBuffers(const flatbuffer
     AnchorPointFrame* frame = AnchorPointFrame::create();
 
     auto f_scale = flatbuffers->scale();
-    Vec2 scale(f_scale->scaleX(), f_scale->scaleY());
+    Vec2 scale(f_scale->x(), f_scale->y());
     frame->setAnchorPoint(scale);
 
     int frameIndex = flatbuffers->frameIndex();
