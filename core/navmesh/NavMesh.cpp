@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "navmesh/NavMesh.h"
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 
 #    include "platform/FileUtils.h"
 #    include "renderer/Renderer.h"
@@ -662,4 +662,4 @@ void ax::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec3>
 
 NS_AX_END
 
-#endif  // AX_USE_NAVMESH
+#endif  // AX_ENABLE_NAVMESH

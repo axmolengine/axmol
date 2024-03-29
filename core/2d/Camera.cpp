@@ -120,7 +120,7 @@ const Mat4& Camera::getViewMatrix() const
     if (memcmp(viewInv.m, _viewInv.m, count) != 0)
     {
         _viewProjectionDirty = true;
-#if AX_ENABLE_3D
+#if defined(AX_ENABLE_3D)
         _frustumDirty        = true;
 #endif
         _viewInv             = viewInv;
@@ -259,7 +259,7 @@ bool Camera::initPerspective(float fieldOfView, float aspectRatio, float nearPla
 
     Mat4::createPerspective(_fieldOfView, aspectRatio, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
-#if AX_ENABLE_3D
+#if defined(AX_ENABLE_3D)
     _frustumDirty = true;
 #endif
 
@@ -274,7 +274,7 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
     _farPlane  = farPlane;
     Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
-#if AX_ENABLE_3D
+#if defined(AX_ENABLE_3D)
     _frustumDirty = true;
 #endif
 
@@ -371,7 +371,7 @@ void Camera::unprojectGL(const Vec2& viewport, const Vec3* src, Vec3* dst) const
     dst->set(screen.x, screen.y, screen.z);
 }
 
-#if AX_ENABLE_3D
+#if defined(AX_ENABLE_3D)
 bool Camera::isVisibleInFrustum(const AABB* aabb) const
 {
     if (_frustumDirty)

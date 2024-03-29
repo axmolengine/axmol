@@ -506,7 +506,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const ch
     return ok;
 }
 
-#if AX_USE_PHYSICS
+#if AX_ENABLE_PHYSICS
 bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
@@ -542,7 +542,7 @@ bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue,
     }
     return ok;
 }
-#endif  //#if AX_USE_PHYSICS
+#endif  //#if AX_ENABLE_PHYSICS
 
 bool luaval_to_ssize_t(lua_State* L, int lo, ssize_t* outValue, const char* funcName)
 {
@@ -2255,7 +2255,7 @@ int vec4_to_luaval(lua_State* L, const ax::Vec4& vec4)
     return 1;
 }
 
-#if AX_USE_PHYSICS
+#if AX_ENABLE_PHYSICS
 void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm)
 {
     if (nullptr == L)
@@ -2333,7 +2333,7 @@ void physics_contactdata_to_luaval(lua_State* L, const PhysicsContactData* data)
     lua_pushnumber(L, data->POINT_MAX);
     lua_rawset(L, -3);
 }
-#endif  //#if AX_USE_PHYSICS
+#endif  //#if AX_ENABLE_PHYSICS
 
 void size_to_luaval(lua_State* L, const Size& sz)
 {

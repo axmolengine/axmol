@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -24,7 +25,7 @@
  ****************************************************************************/
 
 #include "physics/PhysicsJoint.h"
-#if AX_USE_PHYSICS
+#if AX_ENABLE_PHYSICS
 #    include "chipmunk/chipmunk.h"
 
 #    include "physics/PhysicsBody.h"
@@ -931,4 +932,4 @@ void PhysicsJointMotor::setRate(float rate)
 }
 
 NS_AX_END
-#endif  // AX_USE_PHYSICS
+#endif  // AX_ENABLE_PHYSICS

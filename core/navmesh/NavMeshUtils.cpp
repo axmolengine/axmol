@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -23,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "navmesh/NavMeshUtils.h"
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 
 #    include "recast/DetourCommon.h"
 #    include "recast/DetourNavMeshBuilder.h"
@@ -291,4 +292,4 @@ bool inRange(const float* v1, const float* v2, const float r, const float h)
 
 NS_AX_END
 
-#endif  // AX_USE_NAVMESH
+#endif  // AX_ENABLE_NAVMESH

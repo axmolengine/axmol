@@ -40,13 +40,13 @@ class BaseLight;
 class Renderer;
 class EventListenerCustom;
 class EventCustom;
-#if AX_USE_PHYSICS
+#if AX_ENABLE_PHYSICS
 class PhysicsWorld;
 #endif
-#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
 class Physics3DWorld;
 #endif
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 class NavMesh;
 #endif
 
@@ -156,9 +156,9 @@ protected:
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Scene);
 
-#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION))
+#if (AX_ENABLE_PHYSICS || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION))
 public:
-#    if AX_USE_PHYSICS
+#    if AX_ENABLE_PHYSICS
     /** Get the physics world of the scene.
      * @return The physics world of the scene.
      * @js NA
@@ -166,7 +166,7 @@ public:
     PhysicsWorld* getPhysicsWorld() const { return _physicsWorld; }
 #    endif
 
-#    if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#    if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
     /** Get the 3d physics world of the scene.
      * @return The 3d physics world of the scene.
      * @js NA
@@ -192,17 +192,17 @@ public:
 protected:
     void addChildToPhysicsWorld(Node* child);
 
-#    if AX_USE_PHYSICS
+#    if AX_ENABLE_PHYSICS
     PhysicsWorld* _physicsWorld = nullptr;
 #    endif
 
-#    if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#    if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
     Physics3DWorld* _physics3DWorld = nullptr;
     Camera* _physics3dDebugCamera   = nullptr;
 #    endif
-#endif  // (AX_USE_PHYSICS || AX_USE_3D_PHYSICS)
+#endif  // (AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS))
 
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 public:
     /** set navigation mesh */
     void setNavMesh(NavMesh* navMesh);
@@ -218,7 +218,7 @@ protected:
     Camera* _navMeshDebugCamera = nullptr;
 #endif
 
-#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION) || AX_USE_NAVMESH)
+#if (AX_ENABLE_PHYSICS || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || defined(AX_ENABLE_NAVMESH))
 public:
     void stepPhysicsAndNavigation(float deltaTime);
 #endif

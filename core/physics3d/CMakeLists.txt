@@ -1,5 +1,3 @@
-add_definitions(-DAX_USE_3D_PHYSICS=1)
-
 set(_AX_PHYSICS3D_HEADER
     physics3d/Physics3DConstraint.h
     physics3d/Physics3DShape.h

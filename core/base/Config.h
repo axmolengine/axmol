@@ -35,20 +35,6 @@ THE SOFTWARE.
  * cocos2d (cc) configuration file.
  */
 
-/** @def AX_ENABLE_3D
- * If enabled, allows the use of 3D functionality.
- */
-#ifndef AX_ENABLE_3D
-#    define AX_ENABLE_3D 0
-#endif
-
-/** @def AX_ENABLE_AUDIO
- * If enabled, allows the use of audio functionality.
- */
-#ifndef AX_ENABLE_AUDIO
-#    define AX_ENABLE_AUDIO 0
-#endif
-
 /** @def AX_ENABLE_STACKABLE_ACTIONS
  * If enabled, actions that alter the position property (eg: MoveBy, JumpBy, BezierBy, etc..) will be stacked.
  * If you run 2 or more 'position' actions at the same time on a node, then end position will be the sum of all the
@@ -269,10 +255,10 @@ THE SOFTWARE.
 /** Use physics integration API. */
 //  It works with:
 // Chipmunk2D or Box2D
-#ifndef AX_USE_PHYSICS
-#    define AX_USE_PHYSICS 1
+#ifndef AX_ENABLE_PHYSICS
+#    define AX_ENABLE_PHYSICS 1
 #endif
-#if (AX_USE_PHYSICS)
+#if (AX_ENABLE_PHYSICS)
 /** Use Chipmunk2D physics 2d engine on physics integration API. */
 #    ifndef AX_ENABLE_CHIPMUNK_INTEGRATION
 #        define AX_ENABLE_CHIPMUNK_INTEGRATION 0
@@ -281,28 +267,13 @@ THE SOFTWARE.
 #    ifndef AX_ENABLE_BOX2D_INTEGRATION
 #        define AX_ENABLE_BOX2D_INTEGRATION 1
 #    endif
-#endif  // AX_USE_PHYSICS
+#endif  // AX_ENABLE_PHYSICS
 
-/** Use 3d physics integration API. */
-#ifndef AX_USE_3D_PHYSICS
-#    if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC ||       \
-         AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_WINRT ||   \
-         AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || \
-         AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
-#        define AX_USE_3D_PHYSICS 0
-#    endif
-#endif
-
-#if (AX_USE_3D_PHYSICS)
+#if defined(AX_ENABLE_3D_PHYSICS)
 /** Use bullet physics engine. */
 #    ifndef AX_ENABLE_BULLET_INTEGRATION
 #        define AX_ENABLE_BULLET_INTEGRATION 1
 #    endif
-#endif
-
-/** Use 3D navigation API */
-#ifndef AX_USE_NAVMESH
-#    define AX_USE_NAVMESH 0
 #endif
 
 /** Use culling or not. */

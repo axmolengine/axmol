@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -932,7 +933,7 @@ void RotateTo::update(float time)
         }
         else
         {
-#if AX_USE_PHYSICS
+#if AX_ENABLE_PHYSICS
             if (_startAngle.x == _startAngle.y && _diffAngle.x == _diffAngle.y)
             {
                 _target->setRotation(_startAngle.x + _diffAngle.x * time);
@@ -945,7 +946,7 @@ void RotateTo::update(float time)
 #else
             _target->setRotationSkewX(_startAngle.x + _diffAngle.x * time);
             _target->setRotationSkewY(_startAngle.y + _diffAngle.y * time);
-#endif  // AX_USE_PHYSICS
+#endif  // AX_ENABLE_PHYSICS
         }
     }
 }
@@ -1077,7 +1078,7 @@ void RotateBy::update(float time)
         }
         else
         {
-#if AX_USE_PHYSICS
+#if AX_ENABLE_PHYSICS
             if (_startAngle.x == _startAngle.y && _deltaAngle.x == _deltaAngle.y)
             {
                 _target->setRotation(_startAngle.x + _deltaAngle.x * time);
@@ -1090,7 +1091,7 @@ void RotateBy::update(float time)
 #else
             _target->setRotationSkewX(_startAngle.x + _deltaAngle.x * time);
             _target->setRotationSkewY(_startAngle.y + _deltaAngle.y * time);
-#endif  // AX_USE_PHYSICS
+#endif  // AX_ENABLE_PHYSICS
         }
     }
 }

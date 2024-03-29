@@ -29,7 +29,7 @@ THE SOFTWARE.
 #pragma once
 
 #include "2d/Node.h"
-#if AX_ENABLE_3D
+#if defined(AX_ENABLE_3D)
 #include "3d/Frustum.h"
 #endif
 #include "renderer/QuadCommand.h"
@@ -193,7 +193,7 @@ public:
      */
     void unprojectGL(const Vec2& size, const Vec3* src, Vec3* dst) const;
 
-#if AX_ENABLE_3D
+#if defined(AX_ENABLE_3D)
     /**
      * Is this aabb visible in frustum
      */
@@ -362,7 +362,7 @@ protected:
     mutable bool _viewProjectionDirty = true;
     bool _viewProjectionUpdated = false;  // Whether or not the viewprojection matrix was updated since the last frame.
     CameraFlag _cameraFlag      = CameraFlag::DEFAULT;  // camera flag
-#if AX_ENABLE_3D
+#if defined(AX_ENABLE_3D)
     mutable Frustum _frustum;                           // camera frustum
     mutable bool _frustumDirty = true;
 #endif

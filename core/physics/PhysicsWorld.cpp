@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "physics/PhysicsWorld.h"
-#if AX_USE_PHYSICS
+#if AX_ENABLE_PHYSICS
 #    include <algorithm>
 #    include <climits>
 
@@ -1103,4 +1103,4 @@ void PhysicsWorld::setPreUpdateCallback(const std::function<void()>& callback)
 
 NS_AX_END
 
-#endif  // AX_USE_PHYSICS
+#endif  // AX_ENABLE_PHYSICS
