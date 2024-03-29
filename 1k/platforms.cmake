@@ -13,10 +13,11 @@
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(WINDOWS TRUE)
-    if("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32")
+    string(TOLOWER "${CMAKE_GENERATOR_PLATFORM}" _gp_lcase)
+    if("${_gp_lcase}" MATCHES "win32")
         set(WIN32 TRUE)
         set(ARCH_ALIAS "x86")
-    elseif("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "arm64")
+    elseif("${_gp_lcase}" STREQUAL "arm64")
         set(WIN64 TRUE)
         set(ARCH_ALIAS "arm64")
     else()
