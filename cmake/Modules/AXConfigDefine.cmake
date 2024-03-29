@@ -114,9 +114,10 @@ endif()
 set(_ax_compile_options)
 
 if (FUZZ_MSVC)
-    list(APPEND _ax_compile_options /GF /Zc:char8_t-)
+    list(APPEND _ax_compile_options /GF)
+    set(CMAKE_CXX_FLAGS "/Zc:char8_t ${CMAKE_CXX_FLAGS}")
 else() # others
-    list(APPEND _ax_compile_options -fno-char8_t)
+    set(CMAKE_CXX_FLAGS "-fno-char8_t ${CMAKE_CXX_FLAGS}")
 endif()
 
 if (FULL_MSVC)
