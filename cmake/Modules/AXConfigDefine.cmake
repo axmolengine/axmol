@@ -114,9 +114,10 @@ endif()
 set(_ax_compile_options)
 
 if (FUZZ_MSVC)
-    list(APPEND _ax_compile_options /GF /Zc:char8_t-)
+    list(APPEND _ax_compile_options /GF)
+    set(CMAKE_CXX_FLAGS "/Zc:char8_t ${CMAKE_CXX_FLAGS}")
 else() # others
-    list(APPEND _ax_compile_options -fno-char8_t)
+    set(CMAKE_CXX_FLAGS "-fno-char8_t ${CMAKE_CXX_FLAGS}")
 endif()
 
 if (FULL_MSVC)
@@ -124,6 +125,7 @@ if (FULL_MSVC)
 endif()
 
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
+set(CMAKE_PLATFORM_NO_VERSIONED_SONAME TRUE CACHE BOOL "Disable dynamic libraries symblink." FORCE)
 
 # set hash style to both for android old device compatible
 # see also: https://github.com/axmolengine/axmol/discussions/614
@@ -178,12 +180,15 @@ endfunction()
 
 # Set compiler options for engine lib: axmol
 function(use_ax_compile_options target)
-    if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    if (FULL_MSVC)
         # Enable msvc multi-process building
         target_compile_options(${target} PUBLIC /MP)
-    elseif(WASM)
+    endif()
+    if(WASM)
         # refer to: https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
         target_link_options(${target} PUBLIC -sFORCE_FILESYSTEM=1 -sFETCH=1 -sUSE_GLFW=3)
+    elseif(LINUX)
+        target_link_options(${target} PUBLIC "-lpthread")
     endif()
 endfunction()
 

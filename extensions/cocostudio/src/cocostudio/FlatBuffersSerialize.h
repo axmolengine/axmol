@@ -35,13 +35,10 @@
 
 #include "pugixml/pugixml.hpp"
 
+#include "flatbuffers/flatbuffers.h"
+
 namespace flatbuffers
 {
-class FlatBufferBuilder;
-template <typename T>
-struct Offset;
-struct String;
-
 struct CSParseBinary;
 struct NodeTree;
 

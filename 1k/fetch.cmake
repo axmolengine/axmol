@@ -6,16 +6,22 @@
 # 
 
 ### 1kdist url
-find_program(PWSH_COMMAND NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
-
-if(NOT PWSH_COMMAND)
-    message(WARNING "fetch.cmake: PowerShell is missing, the function _1kfetch not work, please install from https://github.com/PowerShell/PowerShell/releases")
-endif()
+find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+find_program(GIT_PROG NAMES git NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
 
 function(_1kfetch_init)
-    execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetchurl.ps1
+    if(NOT _1kfetch_cache_dir)
+        file(REAL_PATH "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../cache" _1kfetch_cache_dir)
+        set(_1kfetch_cache_dir "${_1kfetch_cache_dir}" CACHE STRING "" FORCE)
+    endif()
+    if(NOT _1kfetch_manifest)
+        file(REAL_PATH "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../manifest.json" _1kfetch_manifest)
+        set(_1kfetch_manifest "${_1kfetch_manifest}" CACHE STRING "" FORCE)
+    endif()
+
+    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetchurl.ps1
         -name "1kdist"
-        -cfg ${_1kfetch_manifest}
+        -manifest ${_1kfetch_manifest}
         OUTPUT_VARIABLE _1kdist_url
     )
     string(REPLACE "#" ";" _1kdist_url ${_1kdist_url})
@@ -28,7 +34,7 @@ endfunction()
 # fetch prebuilt from 1kdist
 # param package_name
 function(_1kfetch_dist package_name)
-    set(_prebuilt_root ${CMAKE_CURRENT_LIST_DIR}/_d)
+    set(_prebuilt_root ${CMAKE_CURRENT_LIST_DIR}/_x)
     if(NOT IS_DIRECTORY ${_prebuilt_root})
         set (package_store "${_1kfetch_cache_dir}/1kdist/v${_1kdist_ver}/${package_name}.zip")
         if (NOT EXISTS ${package_store})
@@ -60,40 +66,154 @@ function(_1kfetch_dist package_name)
     set(${package_name}_LIB_DIR ${_prebuilt_lib_dir} PARENT_SCOPE)
 endfunction()
 
-# params: name, url
-function(_1kfetch name)
-    set(oneValueArgs VERSION URI)
+function(_1kfetch uri)
+    set(oneValueArgs NAME)
     cmake_parse_arguments(opt "" "${oneValueArgs}" "" ${ARGN})
 
-    set(_pkg_ver)
-    if(opt_VERSION)
-        set(_pkg_ver ${opt_VERSION})
-    endif()
-
-    if(NOT opt_URI)
-        set(_pkg_uri ${_1kfetch_manifest})
-    else()
-        set(_pkg_uri ${opt_URI})
-    endif()
-     
-    set(_pkg_store "${_1kfetch_cache_dir}/${name}")
-    execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1 
-        -name "${name}"
-        -uri "${_pkg_uri}"
+    _1kparse_name(${uri} "${opt_NAME}")
+    
+    set(_pkg_store "${_1kfetch_cache_dir}/${_pkg_name}")
+    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
+        -uri "${uri}"
         -prefix "${_1kfetch_cache_dir}"
-        -version "${_pkg_ver}"
+        -manifest "${_1kfetch_manifest}"
+        -name "${_pkg_name}"
         RESULT_VARIABLE _errorcode
         )
     if (_errorcode)
-        message(FATAL_ERROR "aborted")
+        message(FATAL_ERROR "fetch content ${uri} failed")
     endif()
-    set(${name}_SOURCE_DIR ${_pkg_store} PARENT_SCOPE)
+    set(${_pkg_name}_SOURCE_DIR ${_pkg_store} PARENT_SCOPE)
+    set(source_dir ${_pkg_store} PARENT_SCOPE)
+endfunction()
+
+# developing, not available yet
+function(_1kfetch_fast uri)
+    _1kperf_start("_1kfetch: ${uri}")
+
+    set(oneValueArgs NAME)
+    cmake_parse_arguments(opt "" "${oneValueArgs}" "" ${ARGN})
+
+    _1kparse_name(${uri} "${opt_NAME}")
+    
+    set(_pkg_store "${_1kfetch_cache_dir}/${_pkg_name}")
+
+    set(_sentry_file "${_pkg_store}/_1kiss")
+
+    if(NOT _manifest_conf)
+        file(READ "${_1kfetch_manifest}" _manifest_conf)
+    endif()
+    string(JSON _url GET "${_manifest_conf}" "mirrors" "github" "${_pkg_name}")
+    string(JSON _version GET "${_manifest_conf}" "versions" "${_pkg_name}")
+    string(PREPEND _url "https://github.com/")
+    if(NOT EXISTS "${_sentry_file}")
+        execute_process(COMMAND ${GIT_PROG} clone --progress ${_url} "${_pkg_store}" RESULT_VARIABLE _errorcode)
+        file(WRITE "${_sentry_file}" "ver: ${_version}")
+    endif()
+
+    if(EXISTS "${_sentry_file}")
+        execute_process(COMMAND ${GIT_PROG} -C ${_pkg_store} checkout ${_version} RESULT_VARIABLE _errorcode)
+        if(_errorcode)
+            execute_process(COMMAND ${GIT_PROG} -C ${_pkg_store} checkout v${_version} RESULT_VARIABLE _errorcode)
+        endif()
+    else()
+        message(FATAL_ERROR "fetch repo ${uri} fail, try again")
+    endif()
+
+    set(${_pkg_name}_SOURCE_DIR ${_pkg_store} PARENT_SCOPE)
+    set(source_dir ${_pkg_store} PARENT_SCOPE)
+
+    _1kperf_end("_1kfetch")
+endfunction()
+
+# simple cmake pkg management:
+# for example: _1kadd_pkg("gh:yasio/yasio#4.2.1")
+function(_1kadd_pkg uri)
+    set(optValueArgs EXCLUDE_FROM_ALL)
+    set(oneValueArgs BINARY_DIR NAME)
+    set(multiValueArgs OPTIONS)
+    cmake_parse_arguments(opt "${optValueArgs}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    _1kparse_name(${uri} "${opt_NAME}")
+
+    if(NOT TARGET ${_pkg_name})
+        _1kfetch(${uri} ${ARGN} NAME ${_pkg_name})
+
+        foreach(OPTION ${opt_OPTIONS})
+            _1kparse_option("${OPTION}")
+            set(${OPTION_KEY} "${OPTION_VALUE}" CACHE BOOL "" FORCE)
+        endforeach()
+
+        if(opt_BINARY_DIR)
+            set(binary_dir "${opt_BINARY_DIR}/${_pkg_name}")
+        else()
+            set(binary_dir "${CMAKE_BINARY_DIR}/1kiss/${_pkg_name}")
+        endif()
+        
+        if (opt_EXCLUDE_FROM_ALL)
+            add_subdirectory(${source_dir} ${binary_dir} EXCLUDE_FROM_ALL)
+        else()
+            add_subdirectory(${source_dir} ${binary_dir})
+        endif()
+    endif()
 endfunction()
 
 function(_1klink src dest)
     file(TO_NATIVE_PATH "${src}" _srcDir)
     file(TO_NATIVE_PATH "${dest}" _dstDir)
-    execute_process(COMMAND ${PWSH_COMMAND} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fsync.ps1 -s "${_srcDir}" -d "${_dstDir}" -l 1)
+    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fsync.ps1 -s "${_srcDir}" -d "${_dstDir}" -l 1)
 endfunction()
 
-_1kfetch_init()
+function(_1kparse_option OPTION)
+  string(REGEX MATCH "^[^ ]+" OPTION_KEY "${OPTION}")
+  string(LENGTH "${OPTION}" OPTION_LENGTH)
+  string(LENGTH "${OPTION_KEY}" OPTION_KEY_LENGTH)
+  if(OPTION_KEY_LENGTH STREQUAL OPTION_LENGTH)
+    # no value for key provided, assume user wants to set option to "ON"
+    set(OPTION_VALUE "ON")
+  else()
+    math(EXPR OPTION_KEY_LENGTH "${OPTION_KEY_LENGTH}+1")
+    string(SUBSTRING "${OPTION}" "${OPTION_KEY_LENGTH}" "-1" OPTION_VALUE)
+  endif()
+  set(OPTION_KEY
+      "${OPTION_KEY}"
+      PARENT_SCOPE
+  )
+  set(OPTION_VALUE
+      "${OPTION_VALUE}"
+      PARENT_SCOPE
+  )
+endfunction()
+
+macro(_1kparse_name uri opt_NAME)
+    if(opt_NAME)
+        set(_pkg_name ${opt_NAME})
+    else()
+        set(_trimmed_uri "")
+        # parse pkg name for pkg_store due to we can't get from execute_process properly
+        string(REGEX REPLACE "#.*" "" _trimmed_uri "${uri}")
+        get_filename_component(_pkg_name ${_trimmed_uri} NAME_WE)
+        set(_pkg_name ${_pkg_name})
+    endif()
+endmacro()
+
+macro(_1kperf_start tag)
+    string(TIMESTAMP _current_sec "%s" UTC)
+    string(TIMESTAMP _current_usec "%f" UTC)
+    math(EXPR _fetch_start_msec "${_current_sec} * 1000 + ${_current_usec} / 1000" OUTPUT_FORMAT DECIMAL)
+    message(STATUS "[${_fetch_start_msec}ms][1kperf] start of ${tag} ..." )
+endmacro()
+
+macro(_1kperf_end tag)
+    string(TIMESTAMP _current_sec "%s" UTC)
+    string(TIMESTAMP _current_usec "%f" UTC)
+    math(EXPR _fetch_end_msec "${_current_sec} * 1000 + ${_current_usec} / 1000" OUTPUT_FORMAT DECIMAL)
+    math(EXPR _fetch_cost_msec "${_fetch_end_msec} - ${_fetch_start_msec}")
+    message(STATUS "[${_fetch_end_msec}ms][1kperf] end of ${tag}, cost: ${_fetch_cost_msec}ms" )
+endmacro()
+
+if(PWSH_PROG)
+    _1kfetch_init()
+else()
+    message(WARNING "fetch.cmake: PowerShell is missing, the fetch functions not work, please install from https://github.com/PowerShell/PowerShell/releases")
+endif()

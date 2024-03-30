@@ -410,10 +410,10 @@ Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
         child = child.next_sibling();
     }
 
-    RotationSkew f_rotationskew(rotationSkew.x, rotationSkew.y);
+    FVec2 f_rotationskew(rotationSkew.x, rotationSkew.y);
     FVec2 f_position(position.x, position.y);
-    Scale f_scale(scale.x, scale.y);
-    AnchorPoint f_anchortpoint(anchorPoint.x, anchorPoint.y);
+    FVec2 f_scale(scale.x, scale.y);
+    FVec2 f_anchortpoint(anchorPoint.x, anchorPoint.y);
     Color f_color(color.a, color.r, color.g, color.b);
     FlatSize f_size(size.x, size.y);
     auto f_layoutComponent = CreateLayoutComponentTable(
@@ -438,13 +438,13 @@ void NodeReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Tabl
     std::string name = options->name()->c_str();
     float x          = options->position()->x();
     float y          = options->position()->y();
-    float scalex     = options->scale()->scaleX();
-    float scaley     = options->scale()->scaleY();
+    float scalex     = options->scale()->x();
+    float scaley     = options->scale()->y();
     //    float rotation      = options.rotation();
-    float rotationSkewX = options->rotationSkew()->rotationSkewX();
-    float rotationSkewY = options->rotationSkew()->rotationSkewY();
-    float anchorx       = options->anchorPoint()->scaleX();
-    float anchory       = options->anchorPoint()->scaleY();
+    float rotationSkewX = options->rotationSkew()->x();
+    float rotationSkewY = options->rotationSkew()->y();
+    float anchorx       = options->anchorPoint()->x();
+    float anchory       = options->anchorPoint()->y();
     int zorder          = options->zOrder();
     int tag             = options->tag();
     int actionTag       = options->actionTag();

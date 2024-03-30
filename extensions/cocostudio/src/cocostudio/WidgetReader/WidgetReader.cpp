@@ -752,10 +752,10 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
         child = child.next_sibling();
     }
 
-    RotationSkew f_rotationskew(rotationSkew.x, rotationSkew.y);
+    FVec2 f_rotationskew(rotationSkew.x, rotationSkew.y);
     FVec2 f_position(position.x, position.y);
-    Scale f_scale(scale.x, scale.y);
-    AnchorPoint f_anchortpoint(anchorPoint.x, anchorPoint.y);
+    FVec2 f_scale(scale.x, scale.y);
+    FVec2 f_anchortpoint(anchorPoint.x, anchorPoint.y);
     Color f_color(color.a, color.r, color.g, color.b);
     FlatSize f_size(size.x, size.y);
     auto f_layoutComponent = CreateLayoutComponentTable(
@@ -821,14 +821,14 @@ void WidgetReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
     Vec2 position(options->position()->x(), options->position()->y());
     widget->setPosition(position);
 
-    float scaleX = options->scale()->scaleX();
+    float scaleX = options->scale()->x();
     widget->setScaleX(scaleX);
-    float scaleY = options->scale()->scaleY();
+    float scaleY = options->scale()->y();
     widget->setScaleY(scaleY);
 
-    float rotationSkewX = options->rotationSkew()->rotationSkewX();
+    float rotationSkewX = options->rotationSkew()->x();
     widget->setRotationSkewX(rotationSkewX);
-    float rotationSkewY = options->rotationSkew()->rotationSkewY();
+    float rotationSkewY = options->rotationSkew()->y();
     widget->setRotationSkewY(rotationSkewY);
 
     bool visible = options->visible() != 0;
@@ -845,7 +845,7 @@ void WidgetReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
     widget->setOpacity(alpha);
 
     auto f_anchorPoint = options->anchorPoint();
-    Vec2 anchorPoint(f_anchorPoint->scaleX(), f_anchorPoint->scaleY());
+    Vec2 anchorPoint(f_anchorPoint->x(), f_anchorPoint->y());
     widget->setAnchorPoint(anchorPoint);
 
     bool flippedX = options->flipX() != 0;

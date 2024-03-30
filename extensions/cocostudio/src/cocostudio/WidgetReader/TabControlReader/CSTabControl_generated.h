@@ -8,9 +8,9 @@
 
 // Ensure the included flatbuffers.h is the same version as when this file was
 // generated, otherwise it may not be compatible.
-static_assert(FLATBUFFERS_VERSION_MAJOR == 2 &&
-              FLATBUFFERS_VERSION_MINOR == 0 &&
-              FLATBUFFERS_VERSION_REVISION == 8,
+static_assert(FLATBUFFERS_VERSION_MAJOR == 24 &&
+              FLATBUFFERS_VERSION_MINOR == 3 &&
+              FLATBUFFERS_VERSION_REVISION == 25,
              "Non-compatible flatbuffers version included");
 
 #include "cocostudio/CSParseBinary_generated.h"
@@ -26,7 +26,7 @@ struct TabHeaderOptionBuilder;
 struct TabItemOption;
 struct TabItemOptionBuilder;
 
-struct TabControlOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct TabControlOption FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TabControlOptionBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -59,10 +59,10 @@ struct TabControlOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint8_t ignoreHeaderTextureSize() const {
     return GetField<uint8_t>(VT_IGNOREHEADERTEXTURESIZE, 0);
   }
-  const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::TabItemOption>> *tabItems() const {
-    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::TabItemOption>> *>(VT_TABITEMS);
+  const ::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::TabItemOption>> *tabItems() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::TabItemOption>> *>(VT_TABITEMS);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -81,9 +81,9 @@ struct TabControlOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct TabControlOptionBuilder {
   typedef TabControlOption Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(TabControlOption::VT_NODEOPTIONS, nodeOptions);
   }
   void add_headerPlace(int32_t headerPlace) {
@@ -104,30 +104,30 @@ struct TabControlOptionBuilder {
   void add_ignoreHeaderTextureSize(uint8_t ignoreHeaderTextureSize) {
     fbb_.AddElement<uint8_t>(TabControlOption::VT_IGNOREHEADERTEXTURESIZE, ignoreHeaderTextureSize, 0);
   }
-  void add_tabItems(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::TabItemOption>>> tabItems) {
+  void add_tabItems(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::TabItemOption>>> tabItems) {
     fbb_.AddOffset(TabControlOption::VT_TABITEMS, tabItems);
   }
-  explicit TabControlOptionBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TabControlOptionBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<TabControlOption> Finish() {
+  ::flatbuffers::Offset<TabControlOption> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TabControlOption>(end);
+    auto o = ::flatbuffers::Offset<TabControlOption>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<TabControlOption> CreateTabControlOption(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+inline ::flatbuffers::Offset<TabControlOption> CreateTabControlOption(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
     int32_t headerPlace = 0,
     int32_t headerWidth = 0,
     int32_t headerHeight = 0,
     float selectedTabZoom = 0.0f,
     int32_t selectedTabIndex = 0,
     uint8_t ignoreHeaderTextureSize = 0,
-    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::TabItemOption>>> tabItems = 0) {
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::TabItemOption>>> tabItems = 0) {
   TabControlOptionBuilder builder_(_fbb);
   builder_.add_tabItems(tabItems);
   builder_.add_selectedTabIndex(selectedTabIndex);
@@ -140,17 +140,17 @@ inline flatbuffers::Offset<TabControlOption> CreateTabControlOption(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<TabControlOption> CreateTabControlOptionDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+inline ::flatbuffers::Offset<TabControlOption> CreateTabControlOptionDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
     int32_t headerPlace = 0,
     int32_t headerWidth = 0,
     int32_t headerHeight = 0,
     float selectedTabZoom = 0.0f,
     int32_t selectedTabIndex = 0,
     uint8_t ignoreHeaderTextureSize = 0,
-    const std::vector<flatbuffers::Offset<flatbuffers::TabItemOption>> *tabItems = nullptr) {
-  auto tabItems__ = tabItems ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::TabItemOption>>(*tabItems) : 0;
+    const std::vector<::flatbuffers::Offset<flatbuffers::TabItemOption>> *tabItems = nullptr) {
+  auto tabItems__ = tabItems ? _fbb.CreateVector<::flatbuffers::Offset<flatbuffers::TabItemOption>>(*tabItems) : 0;
   return flatbuffers::CreateTabControlOption(
       _fbb,
       nodeOptions,
@@ -163,7 +163,7 @@ inline flatbuffers::Offset<TabControlOption> CreateTabControlOptionDirect(
       tabItems__);
 }
 
-struct TabHeaderOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct TabHeaderOption FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TabHeaderOptionBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -186,8 +186,8 @@ struct TabHeaderOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t fontSize() const {
     return GetField<int32_t>(VT_FONTSIZE, 0);
   }
-  const flatbuffers::String *titleText() const {
-    return GetPointer<const flatbuffers::String *>(VT_TITLETEXT);
+  const ::flatbuffers::String *titleText() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_TITLETEXT);
   }
   const flatbuffers::Color *textColor() const {
     return GetStruct<const flatbuffers::Color *>(VT_TEXTCOLOR);
@@ -207,7 +207,7 @@ struct TabHeaderOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::ResourceData *crossDisableFile() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_CROSSDISABLEFILE);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -233,61 +233,61 @@ struct TabHeaderOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct TabHeaderOptionBuilder {
   typedef TabHeaderOption Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(TabHeaderOption::VT_NODEOPTIONS, nodeOptions);
   }
-  void add_fontRes(flatbuffers::Offset<flatbuffers::ResourceData> fontRes) {
+  void add_fontRes(::flatbuffers::Offset<flatbuffers::ResourceData> fontRes) {
     fbb_.AddOffset(TabHeaderOption::VT_FONTRES, fontRes);
   }
   void add_fontSize(int32_t fontSize) {
     fbb_.AddElement<int32_t>(TabHeaderOption::VT_FONTSIZE, fontSize, 0);
   }
-  void add_titleText(flatbuffers::Offset<flatbuffers::String> titleText) {
+  void add_titleText(::flatbuffers::Offset<::flatbuffers::String> titleText) {
     fbb_.AddOffset(TabHeaderOption::VT_TITLETEXT, titleText);
   }
   void add_textColor(const flatbuffers::Color *textColor) {
     fbb_.AddStruct(TabHeaderOption::VT_TEXTCOLOR, textColor);
   }
-  void add_normalBackFile(flatbuffers::Offset<flatbuffers::ResourceData> normalBackFile) {
+  void add_normalBackFile(::flatbuffers::Offset<flatbuffers::ResourceData> normalBackFile) {
     fbb_.AddOffset(TabHeaderOption::VT_NORMALBACKFILE, normalBackFile);
   }
-  void add_pressBackFile(flatbuffers::Offset<flatbuffers::ResourceData> pressBackFile) {
+  void add_pressBackFile(::flatbuffers::Offset<flatbuffers::ResourceData> pressBackFile) {
     fbb_.AddOffset(TabHeaderOption::VT_PRESSBACKFILE, pressBackFile);
   }
-  void add_disableBackFile(flatbuffers::Offset<flatbuffers::ResourceData> disableBackFile) {
+  void add_disableBackFile(::flatbuffers::Offset<flatbuffers::ResourceData> disableBackFile) {
     fbb_.AddOffset(TabHeaderOption::VT_DISABLEBACKFILE, disableBackFile);
   }
-  void add_crossNormalFile(flatbuffers::Offset<flatbuffers::ResourceData> crossNormalFile) {
+  void add_crossNormalFile(::flatbuffers::Offset<flatbuffers::ResourceData> crossNormalFile) {
     fbb_.AddOffset(TabHeaderOption::VT_CROSSNORMALFILE, crossNormalFile);
   }
-  void add_crossDisableFile(flatbuffers::Offset<flatbuffers::ResourceData> crossDisableFile) {
+  void add_crossDisableFile(::flatbuffers::Offset<flatbuffers::ResourceData> crossDisableFile) {
     fbb_.AddOffset(TabHeaderOption::VT_CROSSDISABLEFILE, crossDisableFile);
   }
-  explicit TabHeaderOptionBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TabHeaderOptionBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<TabHeaderOption> Finish() {
+  ::flatbuffers::Offset<TabHeaderOption> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TabHeaderOption>(end);
+    auto o = ::flatbuffers::Offset<TabHeaderOption>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<TabHeaderOption> CreateTabHeaderOption(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fontRes = 0,
+inline ::flatbuffers::Offset<TabHeaderOption> CreateTabHeaderOption(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fontRes = 0,
     int32_t fontSize = 0,
-    flatbuffers::Offset<flatbuffers::String> titleText = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> titleText = 0,
     const flatbuffers::Color *textColor = nullptr,
-    flatbuffers::Offset<flatbuffers::ResourceData> normalBackFile = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> pressBackFile = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> disableBackFile = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> crossNormalFile = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> crossDisableFile = 0) {
+    ::flatbuffers::Offset<flatbuffers::ResourceData> normalBackFile = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> pressBackFile = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> disableBackFile = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> crossNormalFile = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> crossDisableFile = 0) {
   TabHeaderOptionBuilder builder_(_fbb);
   builder_.add_crossDisableFile(crossDisableFile);
   builder_.add_crossNormalFile(crossNormalFile);
@@ -302,18 +302,18 @@ inline flatbuffers::Offset<TabHeaderOption> CreateTabHeaderOption(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<TabHeaderOption> CreateTabHeaderOptionDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fontRes = 0,
+inline ::flatbuffers::Offset<TabHeaderOption> CreateTabHeaderOptionDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fontRes = 0,
     int32_t fontSize = 0,
     const char *titleText = nullptr,
     const flatbuffers::Color *textColor = nullptr,
-    flatbuffers::Offset<flatbuffers::ResourceData> normalBackFile = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> pressBackFile = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> disableBackFile = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> crossNormalFile = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> crossDisableFile = 0) {
+    ::flatbuffers::Offset<flatbuffers::ResourceData> normalBackFile = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> pressBackFile = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> disableBackFile = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> crossNormalFile = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> crossDisableFile = 0) {
   auto titleText__ = titleText ? _fbb.CreateString(titleText) : 0;
   return flatbuffers::CreateTabHeaderOption(
       _fbb,
@@ -329,7 +329,7 @@ inline flatbuffers::Offset<TabHeaderOption> CreateTabHeaderOptionDirect(
       crossDisableFile);
 }
 
-struct TabItemOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct TabItemOption FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TabItemOptionBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_HEADER = 4,
@@ -341,7 +341,7 @@ struct TabItemOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::NodeTree *container() const {
     return GetPointer<const flatbuffers::NodeTree *>(VT_CONTAINER);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_HEADER) &&
            verifier.VerifyTable(header()) &&
@@ -353,29 +353,29 @@ struct TabItemOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct TabItemOptionBuilder {
   typedef TabItemOption Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_header(flatbuffers::Offset<flatbuffers::TabHeaderOption> header) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_header(::flatbuffers::Offset<flatbuffers::TabHeaderOption> header) {
     fbb_.AddOffset(TabItemOption::VT_HEADER, header);
   }
-  void add_container(flatbuffers::Offset<flatbuffers::NodeTree> container) {
+  void add_container(::flatbuffers::Offset<flatbuffers::NodeTree> container) {
     fbb_.AddOffset(TabItemOption::VT_CONTAINER, container);
   }
-  explicit TabItemOptionBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TabItemOptionBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<TabItemOption> Finish() {
+  ::flatbuffers::Offset<TabItemOption> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TabItemOption>(end);
+    auto o = ::flatbuffers::Offset<TabItemOption>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<TabItemOption> CreateTabItemOption(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::TabHeaderOption> header = 0,
-    flatbuffers::Offset<flatbuffers::NodeTree> container = 0) {
+inline ::flatbuffers::Offset<TabItemOption> CreateTabItemOption(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::TabHeaderOption> header = 0,
+    ::flatbuffers::Offset<flatbuffers::NodeTree> container = 0) {
   TabItemOptionBuilder builder_(_fbb);
   builder_.add_container(container);
   builder_.add_header(header);
@@ -383,32 +383,32 @@ inline flatbuffers::Offset<TabItemOption> CreateTabItemOption(
 }
 
 inline const flatbuffers::TabControlOption *GetTabControlOption(const void *buf) {
-  return flatbuffers::GetRoot<flatbuffers::TabControlOption>(buf);
+  return ::flatbuffers::GetRoot<flatbuffers::TabControlOption>(buf);
 }
 
 inline const flatbuffers::TabControlOption *GetSizePrefixedTabControlOption(const void *buf) {
-  return flatbuffers::GetSizePrefixedRoot<flatbuffers::TabControlOption>(buf);
+  return ::flatbuffers::GetSizePrefixedRoot<flatbuffers::TabControlOption>(buf);
 }
 
 inline bool VerifyTabControlOptionBuffer(
-    flatbuffers::Verifier &verifier) {
+    ::flatbuffers::Verifier &verifier) {
   return verifier.VerifyBuffer<flatbuffers::TabControlOption>(nullptr);
 }
 
 inline bool VerifySizePrefixedTabControlOptionBuffer(
-    flatbuffers::Verifier &verifier) {
+    ::flatbuffers::Verifier &verifier) {
   return verifier.VerifySizePrefixedBuffer<flatbuffers::TabControlOption>(nullptr);
 }
 
 inline void FinishTabControlOptionBuffer(
-    flatbuffers::FlatBufferBuilder &fbb,
-    flatbuffers::Offset<flatbuffers::TabControlOption> root) {
+    ::flatbuffers::FlatBufferBuilder &fbb,
+    ::flatbuffers::Offset<flatbuffers::TabControlOption> root) {
   fbb.Finish(root);
 }
 
 inline void FinishSizePrefixedTabControlOptionBuffer(
-    flatbuffers::FlatBufferBuilder &fbb,
-    flatbuffers::Offset<flatbuffers::TabControlOption> root) {
+    ::flatbuffers::FlatBufferBuilder &fbb,
+    ::flatbuffers::Offset<flatbuffers::TabControlOption> root) {
   fbb.FinishSizePrefixed(root);
 }
 

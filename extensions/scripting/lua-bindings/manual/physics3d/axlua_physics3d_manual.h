@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -25,7 +26,7 @@
 #ifndef SCRIPTING_AXLUA_PHYSICS3D_MANUAL_H__
 #define SCRIPTING_AXLUA_PHYSICS3D_MANUAL_H__
 
-#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
 
 #include "tolua++.h"
 
@@ -47,5 +48,5 @@ TOLUA_API int register_physics3d_module(lua_State* L);
 // end group
 /// @}
 
-#endif  // #if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#endif  // #if AX_ENABLE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
 #endif  // #ifndef SCRIPTING_AXLUA_PHYSICS3D_MANUAL_H__

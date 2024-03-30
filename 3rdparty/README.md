@@ -62,7 +62,7 @@
 
 ## flatbuffers
 - [![Upstream](https://img.shields.io/github/v/release/google/flatbuffers?label=Upstream)](https://github.com/google/flatbuffers)
-- Version: 2.0.8
+- Version: 24.3.25
 - License: Apache-2.0
 
 ## {fmt}
@@ -218,7 +218,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 3.7.0
+- Version: 3.8.0
 - License: Apache-2.0
 
 ## stb (stb_image)

@@ -32,10 +32,10 @@
 #include "base/Data.h"
 #include "ui/UIWidget.h"
 
+#include "flatbuffers/flatbuffers.h"
+
 namespace flatbuffers
 {
-class FlatBufferBuilder;
-
 struct NodeTree;
 
 struct WidgetOptions;

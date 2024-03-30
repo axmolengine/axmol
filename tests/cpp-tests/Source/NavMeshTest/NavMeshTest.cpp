@@ -2,6 +2,7 @@
  Copyright (c) 2012 cocos2d-x.org
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -40,7 +41,7 @@ struct AgentUserData
 
 NavMeshTests::NavMeshTests()
 {
-#if (AX_USE_NAVMESH == 0) || (AX_USE_PHYSICS == 0)
+#if !defined(AX_ENABLE_NAVMESH) || !defined(AX_ENABLE_PHYSICS)
     ADD_TEST_CASE(NavMeshDisabled);
 #else
     ADD_TEST_CASE(NavMeshBasicTestDemo);
@@ -48,12 +49,12 @@ NavMeshTests::NavMeshTests()
 #endif
 };
 
-#if (AX_USE_NAVMESH == 0) || (AX_USE_PHYSICS == 0)
+#if !defined(AX_ENABLE_NAVMESH) || !defined(AX_ENABLE_PHYSICS)
 void NavMeshDisabled::onEnter()
 {
     TTFConfig ttfConfig("fonts/arial.ttf", 16);
     auto label =
-        Label::createWithTTF(ttfConfig, "Should define AX_USE_NAVMESH & AX_USE_PHYSICS\n to run this test case");
+        Label::createWithTTF(ttfConfig, "Should enable AX_ENABLE_NAVMESH & AX_ENABLE_PHYSICS\n to run this test case");
 
     auto size = Director::getInstance()->getWinSize();
     label->setPosition(Vec2(size.width / 2, size.height / 2));

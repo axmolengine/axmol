@@ -60,7 +60,9 @@ THE SOFTWARE.
 #include "base/AsyncTaskPool.h"
 #include "base/ObjectFactory.h"
 #include "platform/Application.h"
-#include "audio/AudioEngine.h"
+#if defined(AX_ENABLE_AUDIO)
+    #include "audio/AudioEngine.h"
+#endif
 
 #if AX_ENABLE_SCRIPT_BINDING
 #    include "base/ScriptSupport.h"
@@ -297,7 +299,7 @@ void Director::drawScene()
 
     if (_runningScene)
     {
-#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION) || AX_USE_NAVMESH)
+#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || defined(AX_ENABLE_NAVMESH))
         _runningScene->stepPhysicsAndNavigation(_deltaTime);
 #endif
         // clear draw stats
@@ -988,9 +990,11 @@ void Director::reset()
     if (_eventDispatcher)
         _eventDispatcher->dispatchEvent(_eventResetDirector);
 
+#if defined(AX_ENABLE_AUDIO)
     // Fix github issue: https://github.com/axmolengine/axmol/issues/550
     // !!!The AudioEngine hold scheduler must end before Director destroyed, otherwise, just lead app crash
     AudioEngine::end();
+#endif
 
     // cleanup scheduler
     getScheduler()->unscheduleAll();

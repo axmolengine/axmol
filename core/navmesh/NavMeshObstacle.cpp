@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -24,7 +25,7 @@
  ****************************************************************************/
 
 #include "navmesh/NavMeshObstacle.h"
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 
 #    include "navmesh/NavMesh.h"
 #    include "2d/Node.h"
@@ -164,4 +165,4 @@ void NavMeshObstacle::syncToObstacle()
 
 NS_AX_END
 
-#endif  // AX_USE_NAVMESH
+#endif  // AX_ENABLE_NAVMESH

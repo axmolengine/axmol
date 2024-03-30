@@ -142,11 +142,12 @@ option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ON)
 
 option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" OFF)
 
-if(XCODE)
-    # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
-    # set(CMAKE_INSTALL_RPATH "@executable_path/Frameworks")
-    set(CMAKE_XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/Frameworks" CACHE INTERNAL "")
-endif()
+option(AX_ENABLE_3D "Build 3D support" ON)
+option(AX_ENABLE_3D_PHYSICS "Build 3D Physics support" ON)
+option(AX_ENABLE_PHYSICS "Build Physics support" ON)
+option(AX_ENABLE_NAVMESH "Build NavMesh support" ON)
+option(AX_ENABLE_MEDIA "Build media support" ON)
+option(AX_ENABLE_AUDIO "Build audio support" ON)
 
 set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "" )
 
@@ -160,18 +161,18 @@ if (WIN32)
 endif()
 
 # axmolver.h
-find_program(GIT_COMMAND NAMES git)
-if(AX_UPDATE_BUILD_VERSION AND GIT_COMMAND AND EXISTS "${_AX_ROOT}/.git")
+find_program(GIT_PROG NAMES git)
+if(AX_UPDATE_BUILD_VERSION AND GIT_PROG AND EXISTS "${_AX_ROOT}/.git")
     # Get the current working branch and its latest abbreviated commit hash
-    execute_process(COMMAND ${GIT_COMMAND} -C "${_AX_ROOT}" rev-list --count HEAD
+    execute_process(COMMAND ${GIT_PROG} -C "${_AX_ROOT}" rev-list --count HEAD
         TIMEOUT 5
         OUTPUT_VARIABLE AX_BUILD_NUM
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-    execute_process(COMMAND ${GIT_COMMAND} -C "${_AX_ROOT}" branch --show-current
+    execute_process(COMMAND ${GIT_PROG} -C "${_AX_ROOT}" branch --show-current
         TIMEOUT 5
         OUTPUT_VARIABLE AX_GIT_BRANCH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-    execute_process(COMMAND ${GIT_COMMAND} -C "${_AX_ROOT}" rev-parse --short=7 HEAD
+    execute_process(COMMAND ${GIT_PROG} -C "${_AX_ROOT}" rev-parse --short=7 HEAD
         TIMEOUT 5
         OUTPUT_VARIABLE AX_GIT_COMMIT_HASH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -192,57 +193,82 @@ configure_file(
 #   "NOT (AX_GIT_BRANCH STREQUAL \"dev\")" OFF)
 
 include(2d/CMakeLists.txt)
-include(3d/CMakeLists.txt)
+if(AX_ENABLE_3D)
+    include(3d/CMakeLists.txt)
+endif()
 include(platform/CMakeLists.txt)
-include(physics/CMakeLists.txt)
-include(physics3d/CMakeLists.txt)
+if(AX_ENABLE_PHYSICS)
+    include(physics/CMakeLists.txt)
+endif()
+if(AX_ENABLE_3D_PHYSICS)
+    include(physics3d/CMakeLists.txt)
+endif()
 include(math/CMakeLists.txt)
-include(navmesh/CMakeLists.txt)
+if(AX_ENABLE_NAVMESH)
+    include(navmesh/CMakeLists.txt)
+endif()
 include(renderer/CMakeLists.txt)
 include(base/CMakeLists.txt)
 include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
-include(audio/CMakeLists.txt)
+if(AX_ENABLE_AUDIO)
+    include(audio/CMakeLists.txt)
+endif()
 
-file(GLOB_RECURSE _AX_MEDIA_HEADER media/*.h)
-file(GLOB_RECURSE _AX_MEDIA_SRC media/*.cpp)
+if(AX_ENABLE_MEDIA)
+    file(GLOB_RECURSE _AX_MEDIA_HEADER media/*.h)
+    file(GLOB_RECURSE _AX_MEDIA_SRC media/*.cpp)
 
-if (APPLE)
-    list(APPEND _AX_MEDIA_SRC media/AvfMediaEngine.mm)
-    set_source_files_properties(media/MediaEngine.cpp PROPERTIES LANGUAGE OBJCXX)
+    if (APPLE)
+        list(APPEND _AX_MEDIA_SRC media/AvfMediaEngine.mm)
+        set_source_files_properties(media/MediaEngine.cpp PROPERTIES LANGUAGE OBJCXX)
+    endif()
 endif()
 
 set(_AX_HEADER axmol.h
     ${_AX_2D_HEADER}
-    ${_AX_3D_HEADER}
     ${_AX_PLATFORM_HEADER}
-    ${_AX_PHYSICS_HEADER}
-    ${_AX_PHYSICS3D_HEADER}
     ${_AX_MATH_HEADER}
-    ${_AX_NAVMESH_HEADER}
     ${_AX_RENDERER_HEADER}
     ${_AX_BASE_HEADER}
-    ${_AX_AUDIO_HEADER}
     ${_AX_UI_HEADER}
     ${_AX_NETWORK_HEADER}
-    ${_AX_MEDIA_HEADER}
     )
 
 set(_AX_SRC axmol.cpp
     ${_AX_2D_SRC}
-    ${_AX_3D_SRC}
     ${_AX_PLATFORM_SRC}
-    ${_AX_PHYSICS_SRC}
-    ${_AX_PHYSICS3D_SRC}
     ${_AX_MATH_SRC}
-    ${_AX_NAVMESH_SRC}
     ${_AX_RENDERER_SRC}
     ${_AX_BASE_SRC}
-    ${_AX_AUDIO_SRC}
     ${_AX_UI_SRC}
     ${_AX_NETWORK_SRC}
-    ${_AX_MEDIA_SRC}
     )
+
+if(AX_ENABLE_3D)
+    list(APPEND _AX_HEADER ${_AX_3D_HEADER})
+    list(APPEND _AX_SRC ${_AX_3D_SRC})
+endif()
+if(AX_ENABLE_PHYSICS)
+    list(APPEND _AX_HEADER ${_AX_PHYSICS_HEADER})
+    list(APPEND _AX_SRC ${_AX_PHYSICS_SRC})
+endif()
+if(AX_ENABLE_3D_PHYSICS)
+    list(APPEND _AX_HEADER ${_AX_PHYSICS3D_HEADER})
+    list(APPEND _AX_SRC ${_AX_PHYSICS3D_SRC})
+endif()
+if(AX_ENABLE_NAVMESH)
+    list(APPEND _AX_HEADER ${_AX_NAVMESH_HEADER})
+    list(APPEND _AX_SRC ${_AX_NAVMESH_SRC})
+endif()
+if(AX_ENABLE_MEDIA)
+    list(APPEND _AX_HEADER ${_AX_MEDIA_HEADER})
+    list(APPEND _AX_SRC ${_AX_MEDIA_SRC})
+endif()
+if(AX_ENABLE_AUDIO)
+    list(APPEND _AX_HEADER ${_AX_AUDIO_HEADER})
+    list(APPEND _AX_SRC ${_AX_AUDIO_SRC})
+endif()
 
 list(APPEND _AX_SRC ${_AX_HEADER})
 
@@ -294,6 +320,12 @@ ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
 
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_PHYSICS)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_3D)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_3D_PHYSICS)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_NAVMESH)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MEDIA)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_AUDIO)
 
 # use 3rdparty libs
 add_subdirectory(${_AX_ROOT}/3rdparty ${ENGINE_BINARY_PATH}/3rdparty)

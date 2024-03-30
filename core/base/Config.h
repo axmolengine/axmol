@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/axmol
 
@@ -254,10 +255,7 @@ THE SOFTWARE.
 /** Use physics integration API. */
 //  It works with:
 // Chipmunk2D or Box2D
-#ifndef AX_USE_PHYSICS
-#    define AX_USE_PHYSICS 1
-#endif
-#if (AX_USE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS)
 /** Use Chipmunk2D physics 2d engine on physics integration API. */
 #    ifndef AX_ENABLE_CHIPMUNK_INTEGRATION
 #        define AX_ENABLE_CHIPMUNK_INTEGRATION 0
@@ -266,28 +264,13 @@ THE SOFTWARE.
 #    ifndef AX_ENABLE_BOX2D_INTEGRATION
 #        define AX_ENABLE_BOX2D_INTEGRATION 1
 #    endif
-#endif  // AX_USE_PHYSICS
+#endif  // defined(AX_ENABLE_PHYSICS)
 
-/** Use 3d physics integration API. */
-#ifndef AX_USE_3D_PHYSICS
-#    if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC ||       \
-         AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_WINRT ||   \
-         AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || \
-         AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
-#        define AX_USE_3D_PHYSICS 1
-#    endif
-#endif
-
-#if (AX_USE_3D_PHYSICS)
+#if defined(AX_ENABLE_3D_PHYSICS)
 /** Use bullet physics engine. */
 #    ifndef AX_ENABLE_BULLET_INTEGRATION
 #        define AX_ENABLE_BULLET_INTEGRATION 1
 #    endif
-#endif
-
-/** Use 3D navigation API */
-#ifndef AX_USE_NAVMESH
-#    define AX_USE_NAVMESH 1
 #endif
 
 /** Use culling or not. */

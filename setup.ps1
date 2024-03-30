@@ -3,6 +3,8 @@
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
 
+$Global:is_axmol_app = $true
+
 function println($message) { Write-Host "axmol: $message" }
 
 # import VersionEx
@@ -297,6 +299,6 @@ if (!(Test-Path $prefix -PathType Container)) {
 }
 
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
-. $build1kPath -setupOnly -prefix $prefix @args -p android
+. $build1kPath -setupOnly -prefix $prefix @args
 
 $b1k.pause("setup successfully, please restart the terminal to make added system variables take effect")

@@ -321,7 +321,9 @@ static int lua_downloader_cleanup(lua_State* L)
 {
     Downloader* d = checkDownloader(L);
 
-    // std::cout << "ax.Downloader __gc" << std::endl;
+    // fix memory leak: placement new need invoke destructor explicitly
+    if (d)
+        d->~Downloader();
 
     // remove callback table
     lua_pushlightuserdata(L, (void*)d);

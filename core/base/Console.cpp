@@ -118,6 +118,9 @@ AX_API LogItem& preprocessLog(LogItem&& item)
             std::string_view levelName;
             switch (item.level_)
             {
+            case LogLevel::Trace:
+                levelName = "T/"sv;
+                break;
             case LogLevel::Debug:
                 levelName = "D/"sv;
                 break;
@@ -140,6 +143,10 @@ AX_API LogItem& preprocessLog(LogItem&& item)
                 constexpr auto colorCodeOfLevel = [](LogLevel level) -> std::string_view {
                     switch (level)
                     {
+                    case LogLevel::Trace:
+                        return "\x1b[37m"sv;
+                    case LogLevel::Debug:
+                        return "\x1b[36m"sv;
                     case LogLevel::Info:
                         return "\x1b[92m"sv;
                     case LogLevel::Warn:

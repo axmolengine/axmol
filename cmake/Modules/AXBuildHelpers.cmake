@@ -1,8 +1,8 @@
 include(CMakeParseArguments)
 
-find_program(PWSH_COMMAND NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
 
-if(NOT PWSH_COMMAND)
+if(NOT PWSH_PROG)
     message("powershell not found.")
     message(FATAL_ERROR "Please install it https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell, and run CMake again.")
 endif()
@@ -37,7 +37,7 @@ function(ax_sync_target_res ax_target)
             #get_filename_component(link_folder ${opt_LINK_TO} DIRECTORY)
             get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
             add_custom_command(TARGET ${sync_target_name} POST_BUILD
-                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/fsync.ps1
+                COMMAND ${PWSH_PROG} ARGS ${_AX_ROOT}/1k/fsync.ps1
                     -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
             )
         endforeach()
@@ -77,18 +77,18 @@ function(ax_sync_lua_scripts ax_target src_dir dst_dir)
     endif()
     if(MSVC)
         add_custom_command(TARGET ${luacompile_target} POST_BUILD
-            COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/fsync.ps1
+            COMMAND ${PWSH_PROG} ARGS ${_AX_ROOT}/1k/fsync.ps1
                 -s ${src_dir} -d ${dst_dir}
         )
     else()
         if("${CMAKE_BUILD_TYPE}" STREQUAL "")
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/fsync.ps1
+                COMMAND ${PWSH_PROG} ARGS ${_AX_ROOT}/1k/fsync.ps1
                 -s ${src_dir} -d ${dst_dir}
             )
         else()
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/fsync.ps1
+                COMMAND ${PWSH_PROG} ARGS ${_AX_ROOT}/1k/fsync.ps1
                     -s ${src_dir} -d ${dst_dir}
             )
         endif()
@@ -218,9 +218,9 @@ function(ax_sync_target_dlls ax_target)
     if (WIN32 AND AX_GLES_PROFILE)
         add_custom_command(TARGET ${ax_target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll
             $<TARGET_FILE_DIR:${ax_target}>
         )
     endif()
@@ -382,11 +382,13 @@ function(ax_setup_app_config app_name)
     if(APPLE)
         # output macOS/iOS .app
         set_target_properties(${app_name} PROPERTIES MACOSX_BUNDLE 1)
+
+        # set codesign
         if(IOS AND (NOT ("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
             set_xcode_property(${app_name} CODE_SIGNING_REQUIRED "YES")
             set_xcode_property(${app_name} CODE_SIGNING_ALLOWED "YES")
         else()
-            # By default, explicit disable codesign for macOS PC
+            # By default, explicit disable codesign for macOS or ios Simulator
             set_xcode_property(${app_name} CODE_SIGN_IDENTITY "")
             set_xcode_property(${app_name} CODE_SIGNING_ALLOWED "NO")
         endif()
@@ -412,7 +414,7 @@ function(ax_setup_app_config app_name)
     endif()
     target_link_libraries(${app_name} ${_AX_EXTENSION_LIBS})
 
-    if(XCODE AND AX_USE_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
+    if(XCODE AND AX_ENABLE_AUDIO AND AX_USE_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
         # Embedded soft_oal embedded framework
         # XCODE_LINK_BUILD_PHASE_MODE BUILT_ONLY
         # ???CMake BUG: XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY works for first app
@@ -533,13 +535,13 @@ macro(ax_setup_winrt_sources )
 
     if (NOT prebuilt_dlls) 
         set(prebuilt_dlls
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/zlib/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3-x64.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3-x64.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/curl/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_d/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll)
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3-x64.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3-x64.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll)
     endif()
     ax_mark_multi_resources(prebuilt_dlls RES_TO "." FILES ${prebuilt_dlls})
 

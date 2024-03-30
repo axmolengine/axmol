@@ -8,9 +8,9 @@
 
 // Ensure the included flatbuffers.h is the same version as when this file was
 // generated, otherwise it may not be compatible.
-static_assert(FLATBUFFERS_VERSION_MAJOR == 2 &&
-              FLATBUFFERS_VERSION_MINOR == 0 &&
-              FLATBUFFERS_VERSION_REVISION == 8,
+static_assert(FLATBUFFERS_VERSION_MAJOR == 24 &&
+              FLATBUFFERS_VERSION_MINOR == 3 &&
+              FLATBUFFERS_VERSION_REVISION == 25,
              "Non-compatible flatbuffers version included");
 
 #include "cocostudio/CSParseBinary_generated.h"
@@ -23,7 +23,7 @@ struct CSArmatureNodeOptionBuilder;
 struct ResourceItemData;
 struct ResourceItemDataBuilder;
 
-struct CSArmatureNodeOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct CSArmatureNodeOption FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef CSArmatureNodeOptionBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -47,11 +47,11 @@ struct CSArmatureNodeOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
   bool isAutoPlay() const {
     return GetField<uint8_t>(VT_ISAUTOPLAY, 1) != 0;
   }
-  const flatbuffers::String *currentAnimationName() const {
-    return GetPointer<const flatbuffers::String *>(VT_CURRENTANIMATIONNAME);
+  const ::flatbuffers::String *currentAnimationName() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CURRENTANIMATIONNAME);
   }
-  const flatbuffers::String *currentArmatureName() const {
-    return GetPointer<const flatbuffers::String *>(VT_CURRENTARMATURENAME);
+  const ::flatbuffers::String *currentArmatureName() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CURRENTARMATURENAME);
   }
   float timeScale() const {
     return GetField<float>(VT_TIMESCALE, 0.0f);
@@ -59,7 +59,7 @@ struct CSArmatureNodeOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
   float armatureScale() const {
     return GetField<float>(VT_ARMATURESCALE, 0.0f);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -79,12 +79,12 @@ struct CSArmatureNodeOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
 
 struct CSArmatureNodeOptionBuilder {
   typedef CSArmatureNodeOption Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(CSArmatureNodeOption::VT_NODEOPTIONS, nodeOptions);
   }
-  void add_fileData(flatbuffers::Offset<flatbuffers::ResourceItemData> fileData) {
+  void add_fileData(::flatbuffers::Offset<flatbuffers::ResourceItemData> fileData) {
     fbb_.AddOffset(CSArmatureNodeOption::VT_FILEDATA, fileData);
   }
   void add_isLoop(bool isLoop) {
@@ -93,10 +93,10 @@ struct CSArmatureNodeOptionBuilder {
   void add_isAutoPlay(bool isAutoPlay) {
     fbb_.AddElement<uint8_t>(CSArmatureNodeOption::VT_ISAUTOPLAY, static_cast<uint8_t>(isAutoPlay), 1);
   }
-  void add_currentAnimationName(flatbuffers::Offset<flatbuffers::String> currentAnimationName) {
+  void add_currentAnimationName(::flatbuffers::Offset<::flatbuffers::String> currentAnimationName) {
     fbb_.AddOffset(CSArmatureNodeOption::VT_CURRENTANIMATIONNAME, currentAnimationName);
   }
-  void add_currentArmatureName(flatbuffers::Offset<flatbuffers::String> currentArmatureName) {
+  void add_currentArmatureName(::flatbuffers::Offset<::flatbuffers::String> currentArmatureName) {
     fbb_.AddOffset(CSArmatureNodeOption::VT_CURRENTARMATURENAME, currentArmatureName);
   }
   void add_timeScale(float timeScale) {
@@ -105,25 +105,25 @@ struct CSArmatureNodeOptionBuilder {
   void add_armatureScale(float armatureScale) {
     fbb_.AddElement<float>(CSArmatureNodeOption::VT_ARMATURESCALE, armatureScale, 0.0f);
   }
-  explicit CSArmatureNodeOptionBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit CSArmatureNodeOptionBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<CSArmatureNodeOption> Finish() {
+  ::flatbuffers::Offset<CSArmatureNodeOption> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<CSArmatureNodeOption>(end);
+    auto o = ::flatbuffers::Offset<CSArmatureNodeOption>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<CSArmatureNodeOption> CreateCSArmatureNodeOption(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceItemData> fileData = 0,
+inline ::flatbuffers::Offset<CSArmatureNodeOption> CreateCSArmatureNodeOption(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceItemData> fileData = 0,
     bool isLoop = true,
     bool isAutoPlay = true,
-    flatbuffers::Offset<flatbuffers::String> currentAnimationName = 0,
-    flatbuffers::Offset<flatbuffers::String> currentArmatureName = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> currentAnimationName = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> currentArmatureName = 0,
     float timeScale = 0.0f,
     float armatureScale = 0.0f) {
   CSArmatureNodeOptionBuilder builder_(_fbb);
@@ -138,10 +138,10 @@ inline flatbuffers::Offset<CSArmatureNodeOption> CreateCSArmatureNodeOption(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<CSArmatureNodeOption> CreateCSArmatureNodeOptionDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceItemData> fileData = 0,
+inline ::flatbuffers::Offset<CSArmatureNodeOption> CreateCSArmatureNodeOptionDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceItemData> fileData = 0,
     bool isLoop = true,
     bool isAutoPlay = true,
     const char *currentAnimationName = nullptr,
@@ -162,7 +162,7 @@ inline flatbuffers::Offset<CSArmatureNodeOption> CreateCSArmatureNodeOptionDirec
       armatureScale);
 }
 
-struct ResourceItemData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ResourceItemData FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ResourceItemDataBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_TYPE = 4,
@@ -171,10 +171,10 @@ struct ResourceItemData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t type() const {
     return GetField<int32_t>(VT_TYPE, 0);
   }
-  const flatbuffers::String *path() const {
-    return GetPointer<const flatbuffers::String *>(VT_PATH);
+  const ::flatbuffers::String *path() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_PATH);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_TYPE, 4) &&
            VerifyOffset(verifier, VT_PATH) &&
@@ -185,37 +185,37 @@ struct ResourceItemData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct ResourceItemDataBuilder {
   typedef ResourceItemData Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_type(int32_t type) {
     fbb_.AddElement<int32_t>(ResourceItemData::VT_TYPE, type, 0);
   }
-  void add_path(flatbuffers::Offset<flatbuffers::String> path) {
+  void add_path(::flatbuffers::Offset<::flatbuffers::String> path) {
     fbb_.AddOffset(ResourceItemData::VT_PATH, path);
   }
-  explicit ResourceItemDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ResourceItemDataBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ResourceItemData> Finish() {
+  ::flatbuffers::Offset<ResourceItemData> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ResourceItemData>(end);
+    auto o = ::flatbuffers::Offset<ResourceItemData>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ResourceItemData> CreateResourceItemData(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<ResourceItemData> CreateResourceItemData(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t type = 0,
-    flatbuffers::Offset<flatbuffers::String> path = 0) {
+    ::flatbuffers::Offset<::flatbuffers::String> path = 0) {
   ResourceItemDataBuilder builder_(_fbb);
   builder_.add_path(path);
   builder_.add_type(type);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ResourceItemData> CreateResourceItemDataDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<ResourceItemData> CreateResourceItemDataDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t type = 0,
     const char *path = nullptr) {
   auto path__ = path ? _fbb.CreateString(path) : 0;
@@ -226,32 +226,32 @@ inline flatbuffers::Offset<ResourceItemData> CreateResourceItemDataDirect(
 }
 
 inline const flatbuffers::CSArmatureNodeOption *GetCSArmatureNodeOption(const void *buf) {
-  return flatbuffers::GetRoot<flatbuffers::CSArmatureNodeOption>(buf);
+  return ::flatbuffers::GetRoot<flatbuffers::CSArmatureNodeOption>(buf);
 }
 
 inline const flatbuffers::CSArmatureNodeOption *GetSizePrefixedCSArmatureNodeOption(const void *buf) {
-  return flatbuffers::GetSizePrefixedRoot<flatbuffers::CSArmatureNodeOption>(buf);
+  return ::flatbuffers::GetSizePrefixedRoot<flatbuffers::CSArmatureNodeOption>(buf);
 }
 
 inline bool VerifyCSArmatureNodeOptionBuffer(
-    flatbuffers::Verifier &verifier) {
+    ::flatbuffers::Verifier &verifier) {
   return verifier.VerifyBuffer<flatbuffers::CSArmatureNodeOption>(nullptr);
 }
 
 inline bool VerifySizePrefixedCSArmatureNodeOptionBuffer(
-    flatbuffers::Verifier &verifier) {
+    ::flatbuffers::Verifier &verifier) {
   return verifier.VerifySizePrefixedBuffer<flatbuffers::CSArmatureNodeOption>(nullptr);
 }
 
 inline void FinishCSArmatureNodeOptionBuffer(
-    flatbuffers::FlatBufferBuilder &fbb,
-    flatbuffers::Offset<flatbuffers::CSArmatureNodeOption> root) {
+    ::flatbuffers::FlatBufferBuilder &fbb,
+    ::flatbuffers::Offset<flatbuffers::CSArmatureNodeOption> root) {
   fbb.Finish(root);
 }
 
 inline void FinishSizePrefixedCSArmatureNodeOptionBuffer(
-    flatbuffers::FlatBufferBuilder &fbb,
-    flatbuffers::Offset<flatbuffers::CSArmatureNodeOption> root) {
+    ::flatbuffers::FlatBufferBuilder &fbb,
+    ::flatbuffers::Offset<flatbuffers::CSArmatureNodeOption> root) {
   fbb.FinishSizePrefixed(root);
 }
 

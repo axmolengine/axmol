@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -25,7 +26,7 @@
 #ifndef __SCRIPTING_AXLUA_NAVMESH_CONVERSIONS_H__
 #define __SCRIPTING_AXLUA_NAVMESH_CONVERSIONS_H__
 
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 
 #    include "lua-bindings/manual/tolua_fix.h"
 #    include "platform/PlatformMacros.h"
@@ -47,5 +48,5 @@ extern bool luaval_to_offmeshlinkdata(lua_State* L,
 extern void navmeshagentparam_to_luaval(lua_State* L, const ax::NavMeshAgentParam& inValue);
 extern void offmeshlinkdata_to_luaval(lua_State* L, const ax::OffMeshLinkData& inValue);
 
-#endif  // #if AX_USE_NAVMESH
+#endif  // #if defined(AX_ENABLE_NAVMESH)
 #endif  // __COCOS_SCRIPTING_LUA_BINDING_MANUAL_NAVMESH_LUA_NAVMESH_CONVERSIONS_H__

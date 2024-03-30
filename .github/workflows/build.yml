@@ -95,7 +95,9 @@ jobs:
 
     - name: Build
       shell: pwsh
-      run: ./build.ps1 -p linux -a x64
+      run: |
+        ./build.ps1 -p linux -a x64
+        ./build.ps1 -p linux -a x64 -xb '--target,lua-tests'
   osx:
     runs-on: macos-13
     strategy:

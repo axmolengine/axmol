@@ -50,7 +50,7 @@ $excludes = @(
     'tools/external'
     'axmol-*.zip'
     'out'
-    '*/_d/*'
+    '*/_x/*'
 )
 
 $pkg_file_name = "axmol-$version.zip"
