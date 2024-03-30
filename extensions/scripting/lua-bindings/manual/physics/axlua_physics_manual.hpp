@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
  https://axmolengine.github.io/
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,7 +26,7 @@
 #ifndef COCOS2DX_SCRIPT_LUA_COCOS2DX_SUPPORT_GENERATED_LUA_COCOS2DX_PHYSICS_MANUAL_H
 #define COCOS2DX_SCRIPT_LUA_COCOS2DX_SUPPORT_GENERATED_LUA_COCOS2DX_PHYSICS_MANUAL_H
 
-#if AX_USE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,6 +41,6 @@ extern "C" {
 
 int register_all_ax_physics_manual(lua_State* tolua_S);
 
-#endif // AX_USE_PHYSICS
+#endif // defined(AX_ENABLE_PHYSICS)
 
 #endif // #ifndef COCOS2DX_SCRIPT_LUA_COCOS2DX_SUPPORT_GENERATED_LUA_COCOS2DX_PHYSICS_MANUAL_H

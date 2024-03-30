@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -27,7 +28,7 @@
 #define __CCNAV_MESH_AGENT_H__
 
 #include "base/Config.h"
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 #    include "2d/Component.h"
 
 #    include "base/Ref.h"
@@ -232,6 +233,6 @@ private:
 
 NS_AX_END
 
-#endif  // AX_USE_NAVMESH
+#endif  // AX_ENABLE_NAVMESH
 
 #endif  // __CCNAV_MESH_AGENT_H__

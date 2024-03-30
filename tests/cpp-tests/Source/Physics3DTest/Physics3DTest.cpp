@@ -56,7 +56,7 @@ static ax::Scene* physicsScene = nullptr;
 
 Physics3DTests::Physics3DTests()
 {
-#if AX_USE_3D_PHYSICS == 0
+#if !defined(AX_ENABLE_3D_PHYSICS)
     ADD_TEST_CASE(Physics3DDemoDisabled);
 #else
     ADD_TEST_CASE(BasicPhysics3DDemo);
@@ -68,11 +68,11 @@ Physics3DTests::Physics3DTests()
 #endif
 };
 
-#if AX_USE_3D_PHYSICS == 0
+#if !defined(AX_ENABLE_3D_PHYSICS)
 void Physics3DDemoDisabled::onEnter()
 {
     TTFConfig ttfConfig("fonts/arial.ttf", 16);
-    auto label = Label::createWithTTF(ttfConfig, "Should define AX_USE_3D_PHYSICS\n to run this test case");
+    auto label = Label::createWithTTF(ttfConfig, "Should enable AX_ENABLE_3D_PHYSICS\n to run this test case");
 
     auto size = Director::getInstance()->getWinSize();
     label->setPosition(Vec2(size.width / 2, size.height / 2));

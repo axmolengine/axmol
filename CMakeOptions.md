@@ -9,7 +9,7 @@
   - AX_ENABLE_HTTP: whether enable http client, default: `TRUE`
   - AX_ENABLE_WEBSOCKET: whether enable websockets client, default: `TRUE`
   - AX_ENABLE_3D: whether to enable 3D support, default: `TRUE`
-  - AX_ENABLE_PHYSICS3D: whether to enable 3D physics support, default: `TRUE`
+  - AX_ENABLE_3D_PHYSICS: whether to enable 3D physics support, default: `TRUE`
   - AX_ENABLE_NAVMESH: whether to enable NavMesh support default: `TRUE`
   - AX_ENABLE_MEDIA: whether to enable media support, default: `TRUE`
   - AX_ENABLE_AUDIO: whether to enable audio support, default: `TRUE`
