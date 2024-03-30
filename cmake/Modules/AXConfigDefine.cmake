@@ -187,7 +187,7 @@ function(use_ax_compile_options target)
     if(WASM)
         # refer to: https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
         target_link_options(${target} PUBLIC -sFORCE_FILESYSTEM=1 -sFETCH=1 -sUSE_GLFW=3)
-    elseif(NOT WIN32)
+    elseif(LINUX)
         target_link_options(${target} PUBLIC "-lpthread")
     endif()
 endfunction()
