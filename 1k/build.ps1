@@ -231,6 +231,7 @@ $options = @{
     xb     = @()
     j      = -1
     sdk    = $null
+    env    = ''
     dll    = $false
 }
 
@@ -321,11 +322,11 @@ function create_symlink($sourcePath, $destPath) {
     }
 }
 
-$darwin_sim_suffix = ''
-if ($TARGET_OS.EndsWith('-sim')) {
-    $TARGET_OS = $TARGET_OS.TrimEnd('-sim')
-    $darwin_sim_suffix = '-sim'
+$Global:darwin_sim_suffix = $null
+if ($options.env.StartsWith('sim')) {
+    $Global:darwin_sim_suffix = '_sim'
 }
+
 $Global:is_wasm = $TARGET_OS -eq 'wasm'
 $Global:is_win32 = $TARGET_OS -eq 'win32'
 $Global:is_winrt = $TARGET_OS -eq 'winrt'
@@ -1393,6 +1394,9 @@ function preprocess_ios([string[]]$inputOptions) {
         elseif ($Global:is_watchos) {
             $outputOptions += '-DPLAT=watchOS'
         }
+        if($Global:darwin_sim_suffix) {
+            $outputOptions += '-DSIMULATOR=TRUE'
+        }
     }
     return $outputOptions
 }
@@ -1528,6 +1532,9 @@ if (!$setupOnly) {
             if ($TARGET_CPU -ne '*') {
                 $out_dir += "_$TARGET_CPU"
             }
+        }
+        if ($Global:darwin_sim_suffix) {
+            $out_dir += $Global:darwin_sim_suffix
         }
         return $b1k.realpath($out_dir)
     }
@@ -1753,7 +1760,7 @@ if (!$setupOnly) {
         }
         elseif ($Global:is_ios) {
             $gn_buildargs_overrides += 'target_os=\"ios\"'
-            if ($TARGET_CPU -eq 'x64') {
+            if ($TARGET_CPU -eq 'x64' -or $Global:darwin_sim_suffix) {
                 $gn_buildargs_overrides += 'target_environment=\"simulator\"'
             }
         }
@@ -1795,7 +1802,7 @@ if (!$setupOnly) {
         $gn_gen_args = @('gen', $BUILD_DIR)
         if ($Global:is_win_family) {
             $sln_name = Split-Path $(Get-Location).Path -Leaf
-            $gn_gen_args += '--ide=vs2022', '--sln=$sln_name'
+            $gn_gen_args += '--ide=vs2022', "--sln=$sln_name"
         }
 
         if ($gn_buildargs_overrides) {
