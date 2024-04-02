@@ -305,7 +305,7 @@ else {
 
 $Global:target_minsdk = $options.minsdk
 if(!$Global:target_minsdk) {
-    $Global:target_minsdk = @{osx = '10.13'; winrt = '10.0.17763.0'}[$TARGET_OS]
+    $Global:target_minsdk = @{osx = '10.15'; winrt = '10.0.17763.0'}[$TARGET_OS]
 }
 
 # define some useful global vars

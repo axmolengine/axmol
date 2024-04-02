@@ -33,6 +33,7 @@
 - Rename folder thirdparty ==> 3rdparty
 - Update spine to 4.1-54fac9d
 - Set cmake minmal require to 3.29.0+ for supress xcode 15 duplicated linking warnings
+- Remove unnecessary cmake option: `AX_VS_DEPLOYMENT_TARGET`
 
 ### sdks updates
 
@@ -43,6 +44,7 @@
 - simdjson: 3.7.0 ==> 3.8.0
 - flatbuffers: 2.0.8 ==> 24.3.25
 - curl: 8.6.0 ==> 8.7.1
+- glad: 2.0.5 ==> 2.0.6
 - luajit: 2.1-9cc2e42 ==> 2.1-d06beb0
 - c-ares: 1.25.0 ==> 1.28.1
 
