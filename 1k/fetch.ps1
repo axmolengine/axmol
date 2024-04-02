@@ -54,7 +54,7 @@ function fetch_repo($url, $name, $dest, $ext) {
             }
         }
         catch {
-	    Remove-Item $out -Force
+            Remove-Item $out -Force
             throw "fetch.ps1: extract $out failed, try again"
         }
 
@@ -175,10 +175,8 @@ if (!$revision) {
 }
 if ($is_git_repo) {
     $old_rev_hash = $(git -C $lib_src rev-parse HEAD)
-    $tag_info = git -C $lib_src tag | Select-String $revision
-    if ($tag_info) { $revision = ([array]$tag_info.Line)[0] }
+    
     $cur_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
-
     if (!$cur_rev_hash) {
         git -C $lib_src fetch
         $cur_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
@@ -226,8 +224,7 @@ if (Test-Path (Join-Path $lib_src '.gn') -PathType Leaf) {
     # the repo use google gn build system manage deps and build
     Push-Location $lib_src
     # angle (A GLES native implementation by google)
-    if (Test-Path 'scripts/bootstrap.py' -PathType Leaf)
-    {
+    if (Test-Path 'scripts/bootstrap.py' -PathType Leaf) {
         python scripts/bootstrap.py
     }
     # darwin (A WebGPU native implementation by google)

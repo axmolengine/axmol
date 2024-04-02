@@ -27,7 +27,7 @@ function(_1kfetch_init)
     string(REPLACE "#" ";" _1kdist_url ${_1kdist_url})
     list(GET _1kdist_url 0 _1kdist_base_url)
     list(GET _1kdist_url 1 _1kdist_ver)
-    set(_1kdist_base_url "${_1kdist_base_url}/v${_1kdist_ver}" PARENT_SCOPE)
+    set(_1kdist_base_url "${_1kdist_base_url}/${_1kdist_ver}" PARENT_SCOPE)
     set(_1kdist_ver ${_1kdist_ver} PARENT_SCOPE)
 endfunction()
 
@@ -36,7 +36,7 @@ endfunction()
 function(_1kfetch_dist package_name)
     set(_prebuilt_root ${CMAKE_CURRENT_LIST_DIR}/_x)
     if(NOT IS_DIRECTORY ${_prebuilt_root})
-        set (package_store "${_1kfetch_cache_dir}/1kdist/v${_1kdist_ver}/${package_name}.zip")
+        set (package_store "${_1kfetch_cache_dir}/1kdist/${_1kdist_ver}/${package_name}.zip")
         if (NOT EXISTS ${package_store})
             set (package_url "${_1kdist_base_url}/${package_name}.zip")
             message(AUTHOR_WARNING "Downloading ${package_url}")
@@ -67,10 +67,16 @@ function(_1kfetch_dist package_name)
 endfunction()
 
 function(_1kfetch uri)
-    set(oneValueArgs NAME)
+    set(oneValueArgs NAME REV)
     cmake_parse_arguments(opt "" "${oneValueArgs}" "" ${ARGN})
 
     _1kparse_name(${uri} "${opt_NAME}")
+
+    # rev: the explicit rev to checkout, i.e. git release tag name
+    set(_pkg_rev "")
+    if(opt_REV)
+        set(_pkg_rev ${opt_REV})
+    endif()
     
     set(_pkg_store "${_1kfetch_cache_dir}/${_pkg_name}")
     execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
@@ -78,6 +84,7 @@ function(_1kfetch uri)
         -prefix "${_1kfetch_cache_dir}"
         -manifest "${_1kfetch_manifest}"
         -name "${_pkg_name}"
+        -rev "${_pkg_rev}"
         RESULT_VARIABLE _errorcode
         )
     if (_errorcode)
@@ -91,7 +98,7 @@ endfunction()
 function(_1kfetch_fast uri)
     _1kperf_start("_1kfetch: ${uri}")
 
-    set(oneValueArgs NAME)
+    set(oneValueArgs NAME REV)
     cmake_parse_arguments(opt "" "${oneValueArgs}" "" ${ARGN})
 
     _1kparse_name(${uri} "${opt_NAME}")

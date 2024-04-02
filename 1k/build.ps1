@@ -230,8 +230,7 @@ $options = @{
     xc     = @()
     xb     = @()
     j      = -1
-    sdk    = $null
-    env    = ''
+    sdk    = ''
     dll    = $false
 }
 
@@ -240,6 +239,9 @@ foreach ($arg in $args) {
     if (!$optName) {
         if ($arg.StartsWith('-')) {
             $optName = $arg.SubString(1)
+            if($optName.EndsWith(':')) { 
+                $optName = $optName.TrimEnd(':') 
+            }
             if ($optName.startsWith('j')) {
                 $job_count = $null
                 if ([int]::TryParse($optName.substring(1), [ref] $job_count)) {
@@ -322,11 +324,6 @@ function create_symlink($sourcePath, $destPath) {
     }
 }
 
-$Global:darwin_sim_suffix = $null
-if ($options.env.StartsWith('sim')) {
-    $Global:darwin_sim_suffix = '_sim'
-}
-
 $Global:is_wasm = $TARGET_OS -eq 'wasm'
 $Global:is_win32 = $TARGET_OS -eq 'win32'
 $Global:is_winrt = $TARGET_OS -eq 'winrt'
@@ -363,7 +360,14 @@ else {
     $TARGET_CPU = $options.a = '*'
 }
 
-$Global:is_darwin_embed_device = $Global:is_darwin_embed_family -and $TARGET_CPU -ne 'x64' -and !$darwin_sim_suffix
+$Global:darwin_sim_suffix = $null
+if ($Global:is_darwin_embed_family) {
+    if ($options.sdk.StartsWith('sim')) {
+        $Global:darwin_sim_suffix = '_sim'
+    }
+    $Global:is_ios_sim = $Global:darwin_sim_suffix -or ($TARGET_CPU -eq 'x64')
+}
+$Global:is_darwin_embed_device = $Global:is_darwin_embed_family -and !$Global:is_ios_sim
 
 if (!$setupOnly) {
     $b1k.println("$(Out-String -InputObject $options)")
@@ -1394,7 +1398,7 @@ function preprocess_ios([string[]]$inputOptions) {
         elseif ($Global:is_watchos) {
             $outputOptions += '-DPLAT=watchOS'
         }
-        if($Global:darwin_sim_suffix) {
+        if($Global:is_ios_sim) {
             $outputOptions += '-DSIMULATOR=TRUE'
         }
     }
@@ -1533,7 +1537,7 @@ if (!$setupOnly) {
                 $out_dir += "_$TARGET_CPU"
             }
         }
-        if ($Global:darwin_sim_suffix) {
+        if ($Global:is_ios_sim) {
             $out_dir += $Global:darwin_sim_suffix
         }
         return $b1k.realpath($out_dir)
@@ -1760,7 +1764,7 @@ if (!$setupOnly) {
         }
         elseif ($Global:is_ios) {
             $gn_buildargs_overrides += 'target_os=\"ios\"'
-            if ($TARGET_CPU -eq 'x64' -or $Global:darwin_sim_suffix) {
+            if ($Global:is_ios_sim) {
                 $gn_buildargs_overrides += 'target_environment=\"simulator\"'
             }
         }
