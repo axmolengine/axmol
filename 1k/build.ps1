@@ -231,6 +231,7 @@ $options = @{
     xb     = @()
     j      = -1
     sdk    = ''
+    minsdk = $null
     dll    = $false
 }
 
@@ -300,6 +301,11 @@ else {
     if ($target_os_norm) {
         $TARGET_OS = $target_os_norm
     }
+}
+
+$Global:target_minsdk = $options.minsdk
+if(!$Global:target_minsdk) {
+    $Global:target_minsdk = @{osx = '10.13'; winrt = '10.0.17763.0'}[$TARGET_OS]
 }
 
 # define some useful global vars
@@ -1299,7 +1305,10 @@ function preprocess_win([string[]]$inputOptions) {
 
         # platform
         if ($Global:is_winrt) {
-            '-DCMAKE_SYSTEM_NAME=WindowsStore', '-DCMAKE_SYSTEM_VERSION=10.0'
+            $outputOptions += '-DCMAKE_SYSTEM_NAME=WindowsStore', '-DCMAKE_SYSTEM_VERSION=10.0'
+            if($Global:target_minsdk) {
+                $outputOptions += "-DCMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION=$Global:target_minsdk"
+            }
         }
 
         if ($options.dll) {
@@ -1379,6 +1388,9 @@ function preprocess_osx([string[]]$inputOptions) {
     }
 
     $outputOptions += "-DCMAKE_OSX_ARCHITECTURES=$arch"
+    if($Global:target_minsdk) {
+        $outputOptions += "-DCMAKE_OSX_DEPLOYMENT_TARGET=$Global:target_minsdk"
+    }
     return $outputOptions
 }
 

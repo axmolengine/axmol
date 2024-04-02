@@ -603,28 +603,6 @@ macro(get_all_targets_recursive targets dir)
     list(APPEND ${targets} ${current_targets})
 endmacro()
 
-function (ax_uwp_set_all_targets_deploy_min_version)
-    if (WINRT)
-        if (DEFINED CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
-            message(STATUS "You are using a cmake version which is support CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION}, \nskip set VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION for targets one by one.")
-        else()
-            set(oneValueArgs TARGET_PLATFORM_MIN_VERSION)
-            cmake_parse_arguments(opt "" "${oneValueArgs}" "" ${ARGN})
-            if (NOT opt_TARGET_PLATFORM_MIN_VERSION)
-                # The minmal deploy target version: Windows 10, version 1809 (Build 10.0.17763) for building msix package
-                # refer to: https://learn.microsoft.com/en-us/windows/msix/supported-platforms?source=recommendations
-                set(opt_TARGET_PLATFORM_MIN_VERSION ${AX_VS_DEPLOYMENT_TARGET})
-            endif()
-            
-            get_all_targets(all_targets)
-
-            foreach(target ${all_targets})
-                set_target_properties(${target} PROPERTIES VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "${opt_TARGET_PLATFORM_MIN_VERSION}")
-            endforeach()
-        endif()
-    endif()
-endfunction()
-
 # set Xcode property for application, include all depend target
 macro(ax_config_app_xcode_property ax_app)
     set(depend_libs)

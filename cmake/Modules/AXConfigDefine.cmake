@@ -9,20 +9,9 @@ define_property(TARGET
 
 # UWP min deploy target support, VS property: targetPlatformMinVersion
 if (WINRT)
-    if (NOT DEFINED AX_VS_DEPLOYMENT_TARGET)
-        set(AX_VS_DEPLOYMENT_TARGET "10.0.17763.0")
-    endif()
-    if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}" VERSION_GREATER_EQUAL "3.27.0")
-        if (NOT DEFINED)
-            # The minmal deploy target version: Windows 10, version 1809 (Build 10.0.17763) for building msix package
-            # refer to: https://learn.microsoft.com/en-us/windows/msix/supported-platforms?source=recommendations
-            set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION ${AX_VS_DEPLOYMENT_TARGET})
-        endif()
-    else()
-        if(DEFINED CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
-            unset(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
-        endif()
-    endif()
+    # The minmal deploy target version: Windows 10, version 1809 (Build 10.0.17763) for building msix package
+    # refer to: https://learn.microsoft.com/en-us/windows/msix/supported-platforms?source=recommendations
+    set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "10.0.17763" CACHE STRING "")
     set(AX_CPPWINRT_VERSION "2.0.240111.5" CACHE STRING "")
 endif()
 

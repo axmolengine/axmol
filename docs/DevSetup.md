@@ -109,7 +109,7 @@ Using a PowerShell console window (command `pwsh`), go to `axmol\tests\<testdir 
     
 ~~It only supports C++17.~~ Since Axmol 2.1 migration to CppWinRT it has C++20 support.
 
-  ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0" "-DAX_VS_DEPLOYMENT_TARGET=10.0.17763.0"```  
+  ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0"```  
 
 #### Creating the Visual Studio solution for all Axmol test projects (Win / UWP)
 
