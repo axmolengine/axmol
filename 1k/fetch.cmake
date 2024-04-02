@@ -58,9 +58,13 @@ function(_1kfetch_dist package_name)
     endif()
 
     # set platform specific path, PLATFORM_NAME provided by user: win32,winrt,mac,ios,android,tvos,watchos,linux
-    set(_prebuilt_lib_dir "${_prebuilt_root}/lib/${PLATFORM_NAME}")
-    if(ANDROID OR WIN32)
-        set(_prebuilt_lib_dir "${_prebuilt_lib_dir}/${ARCH_ALIAS}")
+    if(APPLE) # since 1kiss_dist v80+, xcframework don't require platform spec sub folder
+        set(_prebuilt_lib_dir "${_prebuilt_root}/lib")
+    else()
+        set(_prebuilt_lib_dir "${_prebuilt_root}/lib/${PLATFORM_NAME}")
+        if(ANDROID OR WIN32)
+            set(_prebuilt_lib_dir "${_prebuilt_lib_dir}/${ARCH_ALIAS}")
+        endif()
     endif()
     set(${package_name}_INC_DIR ${_prebuilt_root}/include PARENT_SCOPE)
     set(${package_name}_LIB_DIR ${_prebuilt_lib_dir} PARENT_SCOPE)

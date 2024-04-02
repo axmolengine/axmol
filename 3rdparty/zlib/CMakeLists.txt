@@ -16,6 +16,11 @@ if(NOT WINDOWS)
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_LOCATION "${zlib_LIB_DIR}/libz.a"
   )
+elseif(APPLE)
+  set(ZLIB_LIBRARY "${zlib_LIB_DIR}/zlib.xcframework" CACHE STRING "zlib library" FORCE)
+  set_target_properties(${target_name} PROPERTIES
+    IMPORTED_LOCATION "${zlib_LIB_DIR}/zlib.xcframework"
+  )
 else()
   set(ZLIB_LIBRARY "${zlib_LIB_DIR}/zlib.lib" CACHE STRING "zlib library" FORCE)
   set_target_properties(${target_name} PROPERTIES
