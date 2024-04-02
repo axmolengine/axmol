@@ -11,17 +11,22 @@ endif()
 
 set(ZLIB_INCLUDE_DIR "${zlib_INC_DIR}" CACHE STRING "zlib include dir" FORCE)
 
-if(NOT WINDOWS)
-  set(ZLIB_LIBRARY "${zlib_LIB_DIR}/libz.a" CACHE STRING "zlib library" FORCE)
-  set_target_properties(${target_name} PROPERTIES
-    IMPORTED_LOCATION "${zlib_LIB_DIR}/libz.a"
-  )
-else()
+if(WINDOWS)
   set(ZLIB_LIBRARY "${zlib_LIB_DIR}/zlib.lib" CACHE STRING "zlib library" FORCE)
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_LOCATION "${zlib_LIB_DIR}/zlib1.dll"
     IMPORTED_IMPLIB "${zlib_LIB_DIR}/zlib.lib"
     INTERFACE_COMPILE_DEFINITIONS ZLIB_DLL=1
+  )
+elseif(APPLE)
+  set(ZLIB_LIBRARY "${zlib_LIB_DIR}/zlib.xcframework" CACHE STRING "zlib library" FORCE)
+  set_target_properties(${target_name} PROPERTIES
+    IMPORTED_LOCATION "${zlib_LIB_DIR}/zlib.xcframework"
+  )
+else()
+  set(ZLIB_LIBRARY "${zlib_LIB_DIR}/libz.a" CACHE STRING "zlib library" FORCE)
+  set_target_properties(${target_name} PROPERTIES
+    IMPORTED_LOCATION "${zlib_LIB_DIR}/libz.a"
   )
 endif()
 

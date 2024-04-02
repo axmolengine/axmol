@@ -26,6 +26,10 @@ if(WINDOWS)
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_IMPLIB "${cares_LIB_DIR}/cares.lib"
   )
+elseif(APPLE)
+  set_target_properties(${target_name} PROPERTIES
+    IMPORTED_LOCATION "${cares_LIB_DIR}/cares.xcframework"
+  )
 else()
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_LOCATION "${cares_LIB_DIR}/libcares.a"

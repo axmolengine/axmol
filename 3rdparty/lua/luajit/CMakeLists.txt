@@ -20,6 +20,10 @@ if(WINDOWS)
     IMPORTED_LOCATION "${luajit_LIB_DIR}/lua51.dll"
     IMPORTED_IMPLIB "${luajit_LIB_DIR}/lua51.lib"
   )
+elseif(APPLE)
+  set_target_properties(${target_name} PROPERTIES
+    IMPORTED_LOCATION "${luajit_LIB_DIR}/${lib_name}.xcframework"
+  )
 else()
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_LOCATION "${luajit_LIB_DIR}/lib${lib_name}.a"

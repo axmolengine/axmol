@@ -27,7 +27,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.25.0
+- Version: 1.28.1
 - License: MIT
 
 ## Chipmunk2D
@@ -52,7 +52,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.6.0
+- Version: 8.7.1
 - License: Curl (MIT/X)
 
 ## FastLZ
@@ -123,7 +123,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-9cc2e42
+  - Version: 2.1-d06beb0
   - License: MIT
 
 - tolua
