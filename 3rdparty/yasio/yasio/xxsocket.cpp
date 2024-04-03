@@ -128,8 +128,7 @@ int xxsocket::xpconnect_n(const char* hostname, u_short port, const std::chrono:
             else if (flags & ipsv_ipv6)
             {
               xxsocket::resolve_i([&](const addrinfo* ai6) { return 0 == (error = pconnect_n(ip::endpoint{ai6}, wtimeout, local_port)); }, hostname, port,
-                                  AF_INET6,
-                                  AI_V4MAPPED);
+                                  AF_INET6, AI_V4MAPPED);
             }
             break;
           case AF_INET6:
@@ -231,7 +230,8 @@ bool xxsocket::popen(int af, int type, int protocol)
   return ok;
 }
 
-int xxsocket::paccept(socket_native_type& new_sock) {
+int xxsocket::paccept(socket_native_type& new_sock)
+{
   for (;;)
   {
     // Accept the waiting connection.
@@ -986,7 +986,7 @@ const char* xxsocket::strerror(int error)
 #else
     return ::strerror(error);
 #endif
-  } 
+  }
   return YASIO_NO_ERROR;
 }
 
@@ -1035,7 +1035,11 @@ struct ws2_32_gc {
   ~ws2_32_gc(void) { WSACleanup(); }
 };
 
+#  pragma warning(push)
+#  pragma warning(disable : 4073)
+#  pragma init_seg(lib)
 ws2_32_gc __ws32_lib_gc;
+#  pragma warning(pop)
 } // namespace
 #endif
 

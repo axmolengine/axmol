@@ -27,13 +27,16 @@ SOFTWARE.
 */
 
 #pragma once
+
+#include <cstddef>
 #include <type_traits>
+#include "yasio/sz.hpp"
 
 namespace yasio
 {
 template <typename _Ty>
 struct aligned_storage_size {
-  static const size_t value = sizeof(typename std::aligned_storage<sizeof(_Ty)>::type);
+  static const size_t value = YASIO_SZ_ALIGN(sizeof(_Ty), sizeof(std::max_align_t));
 };
 template <typename _Ty>
 struct is_aligned_storage {
