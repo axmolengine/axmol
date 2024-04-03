@@ -166,7 +166,7 @@ void TableView::updateCellAtIndex(ssize_t idx)
     {
         return;
     }
-    long countOfItems = _dataSource->numberOfCellsInTableView(this);
+    auto countOfItems = _dataSource->numberOfCellsInTableView(this);
     if (0 == countOfItems || idx > countOfItems - 1)
     {
         return;
@@ -177,7 +177,7 @@ void TableView::updateCellAtIndex(ssize_t idx)
     {
         this->_moveCellOutOfSight(cell);
     }
-    cell = _dataSource->tableCellAtIndex(this, idx);
+    cell = _dataSource->tableCellAtIndex(this, (ssize_t)idx);
     this->_setIndexForCell(idx, cell);
     this->_addCellIfNecessary(cell);
 }
@@ -189,20 +189,20 @@ void TableView::insertCellAtIndex(ssize_t idx)
         return;
     }
 
-    long countOfItems = _dataSource->numberOfCellsInTableView(this);
+    auto countOfItems = _dataSource->numberOfCellsInTableView(this);
     if (0 == countOfItems || idx > countOfItems - 1)
     {
         return;
     }
 
-    long newIdx = 0;
+    ssize_t newIdx = 0;
 
     auto cell = cellAtIndex(idx);
     if (cell)
     {
         newIdx = _cellsUsed.getIndex(cell);
         // Move all cells behind the inserted position
-        for (long i = newIdx; i < _cellsUsed.size(); i++)
+        for (auto i = newIdx; i < _cellsUsed.size(); i++)
         {
             cell = _cellsUsed.at(i);
             this->_setIndexForCell(cell->getIdx() + 1, cell);
@@ -225,7 +225,7 @@ void TableView::removeCellAtIndex(ssize_t idx)
         return;
     }
 
-    long uCountOfItems = _dataSource->numberOfCellsInTableView(this);
+    auto uCountOfItems = _dataSource->numberOfCellsInTableView(this);
     if (0 == uCountOfItems || idx > uCountOfItems - 1)
     {
         return;
@@ -349,10 +349,10 @@ Vec2 TableView::__offsetFromIndex(ssize_t index)
     return offset;
 }
 
-long TableView::_indexFromOffset(Vec2 offset)
+ssize_t TableView::_indexFromOffset(Vec2 offset)
 {
-    long index        = 0;
-    const long maxIdx = _dataSource->numberOfCellsInTableView(this) - 1;
+    ssize_t index        = 0;
+    const auto maxIdx = _dataSource->numberOfCellsInTableView(this) - 1;
 
     if (_vordering == VerticalFillOrder::TOP_DOWN)
     {
@@ -371,10 +371,10 @@ long TableView::_indexFromOffset(Vec2 offset)
     return index;
 }
 
-long TableView::__indexFromOffset(Vec2 offset)
+ssize_t TableView::__indexFromOffset(Vec2 offset)
 {
-    long low  = 0;
-    long high = _dataSource->numberOfCellsInTableView(this) - 1;
+    ssize_t low  = 0;
+    ssize_t high = _dataSource->numberOfCellsInTableView(this) - 1;
     float search;
     switch (this->getDirection())
     {
@@ -388,7 +388,7 @@ long TableView::__indexFromOffset(Vec2 offset)
 
     while (high >= low)
     {
-        long index      = low + (high - low) / 2;
+        ssize_t index      = low + (high - low) / 2;
         float cellStart = _vCellsPositions[index];
         float cellEnd   = _vCellsPositions[index + 1];
 
@@ -443,7 +443,7 @@ void TableView::_setIndexForCell(ssize_t index, TableViewCell* cell)
 
 void TableView::_updateCellPositions()
 {
-    long cellsCount = _dataSource->numberOfCellsInTableView(this);
+    ssize_t cellsCount = _dataSource->numberOfCellsInTableView(this);
     _vCellsPositions.resize(cellsCount + 1, 0.0);
 
     if (cellsCount > 0)
@@ -472,7 +472,7 @@ void TableView::scrollViewDidScroll(ScrollView* /*view*/)
 {
     if (!_dataSource)
         return;
-    long countOfItems = _dataSource->numberOfCellsInTableView(this);
+    ssize_t countOfItems = _dataSource->numberOfCellsInTableView(this);
     if (0 == countOfItems)
     {
         return;
@@ -574,7 +574,7 @@ void TableView::scrollViewDidScroll(ScrollView* /*view*/)
         }
     }
 
-    for (long i = startIdx; i <= endIdx; i++)
+    for (ssize_t i = startIdx; i <= endIdx; i++)
     {
         if (_indices->find(i) != _indices->end())
         {
@@ -627,7 +627,7 @@ bool TableView::onTouchBegan(Touch* pTouch, Event* pEvent)
 
     if (_touches.size() == 1)
     {
-        long index;
+        ssize_t index;
         Vec2 point;
 
         point = this->getContainer()->convertTouchToNodeSpace(pTouch);
