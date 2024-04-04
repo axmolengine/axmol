@@ -35,6 +35,11 @@
 - Set cmake minmal require to 3.29.0+ for supress xcode 15 duplicated linking warnings
 - Remove unnecessary cmake option: `AX_VS_DEPLOYMENT_TARGET`
 
+### Break Changes
+
+- Remove `ax::log`, use `AXLOGD` instead
+- Remove cmake function: `ax_uwp_set_all_targets_deploy_min_version`
+
 ### sdks updates
 
 - emsdk: 3.1.53 ==> 3.1.56
@@ -53,7 +58,7 @@
 
 ### BugFixes
 
-- Fix screen size incorrect in retina display by @halx99 in https://github.com/axmolengine/axmol/pull/1692
+- Fix screen size incorrect in retina display by @halx99 in https://github.com/axmolengine/axmol/pull/1692, reported by @IcemarkUK
 - Fix view size incorrect when frameZoomFactor not 1.0 by @halx99 in https://github.com/axmolengine/axmol/pull/1694
 - Fix lua build for Android, iOS and Windows by @rh101 in https://github.com/axmolengine/axmol/pull/1650
 - Fix missing return statement by @rh101 in https://github.com/axmolengine/axmol/pull/1657
@@ -65,7 +70,6 @@
 - Fix lua build for Android, iOS by @bintester in https://github.com/axmolengine/axmol/pull/1709
 - Fix #1704, control android cmake options by engine axutils.gradle by @halx99 in https://github.com/axmolengine/axmol/pull/1705
 - Fix #1703, unzip don't rely on zlib DLL export by @halx99
-- Fix screen size incorrect in retina display by @halx99, reported by @IcemarkUK
 - Fix OSX sandbox network issue by @halx99, reported by @IcemarkUK
 - Fix c-ares link issue
 - Fix DrawNode luabinding color type mismatch by @halx99, reported by @qq461787436
