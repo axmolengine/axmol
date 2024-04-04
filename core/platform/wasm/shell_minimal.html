@@ -114,6 +114,13 @@
             } else {
               stashedEscape = null;
             }
+            /* trim end: (\n)?\x1b[m */
+            if(text.endsWith("\n\x1b[m")) {
+              text = text.substring(0, text.length - 4);
+            }
+            else if(text.endsWith("\x1b[m")) {
+              text = text.substring(0, text.length - 3);
+            }
             // #endregion axmol-spec
 
             console.log(text);

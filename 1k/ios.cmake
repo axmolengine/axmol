@@ -1,5 +1,5 @@
 #
-# The minimal ios toolchain file: https://github.com/yasio/yasio/blob/dev/cmake/ios.cmake
+# The minimal ios toolchain file: https://github.com/simdsoft/1kiss/blob/dev/1k/ios.cmake
 # version: 4.1.3
 #
 # The supported params:

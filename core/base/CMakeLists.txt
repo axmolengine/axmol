@@ -34,6 +34,7 @@ set(_AX_BASE_HEADER
     base/etc1.h
     base/etc2.h
     base/GameController.h
+    base/Logging.h
     base/Console.h
     base/Constants.h
     base/Event.h
@@ -87,6 +88,7 @@ set(_AX_BASE_SRC
     base/AsyncTaskPool.cpp
     base/AutoreleasePool.cpp
     base/Configuration.cpp
+    base/Logging.cpp
     base/Console.cpp
     base/Controller.cpp
     base/Data.cpp

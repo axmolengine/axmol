@@ -2,6 +2,7 @@
 
 ### BugFixes
 
+- Fix fullscreen incorrect in retina display by @halx99, reported by @TyelorD
 - Fix android build by @smilediver in https://github.com/axmolengine/axmol/pull/1723
 - Fix EditBox error by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1755
 - Fix InputEvent in fairyGUI onKeyDown and onKeyUp by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1757
@@ -33,6 +34,12 @@
 - Rename folder thirdparty ==> 3rdparty
 - Update spine to 4.1-54fac9d
 - Set cmake minmal require to 3.29.0+ for supress xcode 15 duplicated linking warnings
+- Remove unnecessary cmake option: `AX_VS_DEPLOYMENT_TARGET`
+
+### Break Changes
+
+- Remove `ax::log`, use `AXLOGD` instead
+- Remove cmake function: `ax_uwp_set_all_targets_deploy_min_version`
 
 ### sdks updates
 
@@ -42,12 +49,17 @@
 
 - simdjson: 3.7.0 ==> 3.8.0
 - flatbuffers: 2.0.8 ==> 24.3.25
+- curl: 8.6.0 ==> 8.7.1
+- glad: 2.0.5 ==> 2.0.6
+- yasio: 4.2.1 ==> 4.2.2
+- luajit: 2.1-9cc2e42 ==> 2.1-d06beb0
+- c-ares: 1.25.0 ==> 1.28.1
 
 ## axmol-2.1.2 Feb.25 2024
 
 ### BugFixes
 
-- Fix screen size incorrect in retina display by @halx99 in https://github.com/axmolengine/axmol/pull/1692
+- Fix screen size incorrect in retina display by @halx99 in https://github.com/axmolengine/axmol/pull/1692, reported by @IcemarkUK
 - Fix view size incorrect when frameZoomFactor not 1.0 by @halx99 in https://github.com/axmolengine/axmol/pull/1694
 - Fix lua build for Android, iOS and Windows by @rh101 in https://github.com/axmolengine/axmol/pull/1650
 - Fix missing return statement by @rh101 in https://github.com/axmolengine/axmol/pull/1657
@@ -59,7 +71,6 @@
 - Fix lua build for Android, iOS by @bintester in https://github.com/axmolengine/axmol/pull/1709
 - Fix #1704, control android cmake options by engine axutils.gradle by @halx99 in https://github.com/axmolengine/axmol/pull/1705
 - Fix #1703, unzip don't rely on zlib DLL export by @halx99
-- Fix screen size incorrect in retina display by @halx99, reported by @IcemarkUK
 - Fix OSX sandbox network issue by @halx99, reported by @IcemarkUK
 - Fix c-ares link issue
 - Fix DrawNode luabinding color type mismatch by @halx99, reported by @qq461787436

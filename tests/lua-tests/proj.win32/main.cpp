@@ -37,20 +37,14 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
     UNREFERENCED_PARAMETER(lpCmdLine);
 
 #ifdef USE_WIN32_CONSOLE
-    AllocConsole();
-    freopen("CONIN$", "r", stdin);
-    freopen("CONOUT$", "w", stdout);
-    freopen("CONOUT$", "w", stderr);
+    ax::setLogFmtFlag(ax::LogFmtFlag::Colored);
+    #include "platform/win32/EmbedConsole.h"
 #endif
 
     // create the application instance
     AppDelegate app;
 
     int ret = Application::getInstance()->run();
-
-#ifdef USE_WIN32_CONSOLE
-    FreeConsole();
-#endif
 
     return ret;
 }

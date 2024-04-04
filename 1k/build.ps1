@@ -230,7 +230,8 @@ $options = @{
     xc     = @()
     xb     = @()
     j      = -1
-    sdk    = $null
+    sdk    = ''
+    minsdk = $null
     dll    = $false
 }
 
@@ -239,6 +240,9 @@ foreach ($arg in $args) {
     if (!$optName) {
         if ($arg.StartsWith('-')) {
             $optName = $arg.SubString(1)
+            if($optName.EndsWith(':')) { 
+                $optName = $optName.TrimEnd(':') 
+            }
             if ($optName.startsWith('j')) {
                 $job_count = $null
                 if ([int]::TryParse($optName.substring(1), [ref] $job_count)) {
@@ -299,6 +303,11 @@ else {
     }
 }
 
+$Global:target_minsdk = $options.minsdk
+if(!$Global:target_minsdk) {
+    $Global:target_minsdk = @{osx = '10.15'; winrt = '10.0.17763.0'}[$TARGET_OS]
+}
+
 # define some useful global vars
 function eval($str, $raw = $false) {
     if (!$raw) {
@@ -321,11 +330,6 @@ function create_symlink($sourcePath, $destPath) {
     }
 }
 
-$darwin_sim_suffix = ''
-if ($TARGET_OS.EndsWith('-sim')) {
-    $TARGET_OS = $TARGET_OS.TrimEnd('-sim')
-    $darwin_sim_suffix = '-sim'
-}
 $Global:is_wasm = $TARGET_OS -eq 'wasm'
 $Global:is_win32 = $TARGET_OS -eq 'win32'
 $Global:is_winrt = $TARGET_OS -eq 'winrt'
@@ -362,7 +366,14 @@ else {
     $TARGET_CPU = $options.a = '*'
 }
 
-$Global:is_darwin_embed_device = $Global:is_darwin_embed_family -and $TARGET_CPU -ne 'x64' -and !$darwin_sim_suffix
+$Global:darwin_sim_suffix = $null
+if ($Global:is_darwin_embed_family) {
+    if ($options.sdk.StartsWith('sim')) {
+        $Global:darwin_sim_suffix = '_sim'
+    }
+    $Global:is_ios_sim = $Global:darwin_sim_suffix -or ($TARGET_CPU -eq 'x64')
+}
+$Global:is_darwin_embed_device = $Global:is_darwin_embed_family -and !$Global:is_ios_sim
 
 if (!$setupOnly) {
     $b1k.println("$(Out-String -InputObject $options)")
@@ -1294,7 +1305,10 @@ function preprocess_win([string[]]$inputOptions) {
 
         # platform
         if ($Global:is_winrt) {
-            '-DCMAKE_SYSTEM_NAME=WindowsStore', '-DCMAKE_SYSTEM_VERSION=10.0'
+            $outputOptions += '-DCMAKE_SYSTEM_NAME=WindowsStore', '-DCMAKE_SYSTEM_VERSION=10.0'
+            if($Global:target_minsdk) {
+                $outputOptions += "-DCMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION=$Global:target_minsdk"
+            }
         }
 
         if ($options.dll) {
@@ -1374,6 +1388,9 @@ function preprocess_osx([string[]]$inputOptions) {
     }
 
     $outputOptions += "-DCMAKE_OSX_ARCHITECTURES=$arch"
+    if($Global:target_minsdk) {
+        $outputOptions += "-DCMAKE_OSX_DEPLOYMENT_TARGET=$Global:target_minsdk"
+    }
     return $outputOptions
 }
 
@@ -1392,6 +1409,9 @@ function preprocess_ios([string[]]$inputOptions) {
         }
         elseif ($Global:is_watchos) {
             $outputOptions += '-DPLAT=watchOS'
+        }
+        if($Global:is_ios_sim) {
+            $outputOptions += '-DSIMULATOR=TRUE'
         }
     }
     return $outputOptions
@@ -1528,6 +1548,9 @@ if (!$setupOnly) {
             if ($TARGET_CPU -ne '*') {
                 $out_dir += "_$TARGET_CPU"
             }
+        }
+        if ($Global:is_ios_sim) {
+            $out_dir += $Global:darwin_sim_suffix
         }
         return $b1k.realpath($out_dir)
     }
@@ -1753,7 +1776,7 @@ if (!$setupOnly) {
         }
         elseif ($Global:is_ios) {
             $gn_buildargs_overrides += 'target_os=\"ios\"'
-            if ($TARGET_CPU -eq 'x64') {
+            if ($Global:is_ios_sim) {
                 $gn_buildargs_overrides += 'target_environment=\"simulator\"'
             }
         }
@@ -1795,7 +1818,7 @@ if (!$setupOnly) {
         $gn_gen_args = @('gen', $BUILD_DIR)
         if ($Global:is_win_family) {
             $sln_name = Split-Path $(Get-Location).Path -Leaf
-            $gn_gen_args += '--ide=vs2022', '--sln=$sln_name'
+            $gn_gen_args += '--ide=vs2022', "--sln=$sln_name"
         }
 
         if ($gn_buildargs_overrides) {

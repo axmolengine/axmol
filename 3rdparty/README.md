@@ -27,7 +27,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.25.0
+- Version: 1.28.1
 - License: MIT
 
 ## Chipmunk2D
@@ -52,7 +52,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.6.0
+- Version: 8.7.1
 - License: Curl (MIT/X)
 
 ## FastLZ
@@ -77,7 +77,7 @@
 
 ## Glad
 - [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
-- Version: 2.0.5
+- Version: 2.0.6
 - License: MIT
 
 ## glfw
@@ -123,7 +123,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-9cc2e42
+  - Version: 2.1-d06beb0
   - License: MIT
 
 - tolua
@@ -253,7 +253,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 4.2.1
+- Version: 4.2.2
 - License: MIT WITH Anti-996
 
 ## zlib
