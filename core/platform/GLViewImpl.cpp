@@ -682,14 +682,6 @@ void GLViewImpl::enableRetina(bool enabled)
 {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     _isRetinaEnabled = enabled;
-    if (_isRetinaEnabled)
-    {
-        _retinaFactor = 1;
-    }
-    else
-    {
-        _retinaFactor = 2;
-    }
     updateFrameSize();
 #endif
 }
@@ -939,31 +931,18 @@ void GLViewImpl::updateFrameSize()
         int fbWidth = 0, fbHeight = 0;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
 
-        if (fbWidth == 2 * w && fbHeight == 2 * h)
+        _isInRetinaMonitor = fbWidth == 2 * w && fbHeight == 2 * h;
+        if (_isInRetinaMonitor)
         {
-            if (_isRetinaEnabled)
-            {
-                _retinaFactor = 1;
-            }
-            else
-            {
-                _retinaFactor = 2;
-            }
+            _retinaFactor = _isRetinaEnabled ? 1 : 2;
             glfwSetWindowSize(_mainWindow, _screenSize.width / 2 * _retinaFactor * _frameZoomFactor,
                               _screenSize.height / 2 * _retinaFactor * _frameZoomFactor);
-
-            _isInRetinaMonitor = true;
         }
         else
         {
-            if (_isInRetinaMonitor)
-            {
-                _retinaFactor = 1;
-            }
+            _retinaFactor = 1;
             glfwSetWindowSize(_mainWindow, (int)(_screenSize.width * _retinaFactor * _frameZoomFactor),
                               (int)(_screenSize.height * _retinaFactor * _frameZoomFactor));
-
-            _isInRetinaMonitor = false;
         }
     }
 }
