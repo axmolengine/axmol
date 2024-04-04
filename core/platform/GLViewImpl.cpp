@@ -922,7 +922,10 @@ void GLViewImpl::handleWindowSize(float w, float h)
       1. glfwSetWindowMonitor will fire window size change event in full screen mode
     */
     GLView::setFrameSize(w / _frameZoomFactor, h / _frameZoomFactor);
-
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+    // Fix #1787, update retina state when switch between fullscreen and windowed mode
+    updateFrameSize();
+#endif
     updateDesignResolutionSize();
 }
 
@@ -933,10 +936,10 @@ void GLViewImpl::updateFrameSize()
         int w = 0, h = 0;
         glfwGetWindowSize(_mainWindow, &w, &h);
 
-        int frameBufferW = 0, frameBufferH = 0;
-        glfwGetFramebufferSize(_mainWindow, &frameBufferW, &frameBufferH);
+        int fbWidth = 0, fbHeight = 0;
+        glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
 
-        if (frameBufferW == 2 * w && frameBufferH == 2 * h)
+        if (fbWidth == 2 * w && fbHeight == 2 * h)
         {
             if (_isRetinaEnabled)
             {

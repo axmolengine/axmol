@@ -2,6 +2,7 @@
 
 ### BugFixes
 
+- Fix fullscreen incorrect in retina display by @halx99, reported by @TyelorD
 - Fix android build by @smilediver in https://github.com/axmolengine/axmol/pull/1723
 - Fix EditBox error by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1755
 - Fix InputEvent in fairyGUI onKeyDown and onKeyUp by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1757
