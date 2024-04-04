@@ -540,7 +540,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
      *  see declaration glfwCreateWindow
      */
 #if !defined(__APPLE__)
-    handleWindowSize(windowSize.width, windowSize.height);
+    handleWindowSize(static_cast<int>(windowSize.width), static_cast<int>(windowSize.height));
 #else
     // sense retina
     setFrameSize(rect.size.width, rect.size.height);
@@ -897,7 +897,7 @@ Vec2 GLViewImpl::getMonitorSize() const
     return Vec2::ZERO;
 }
 
-void GLViewImpl::handleWindowSize(float w, float h)
+void GLViewImpl::handleWindowSize(int w, int h)
 {
     /*
     * x-studio spec, fix view size incorrect when window size changed
@@ -916,7 +916,13 @@ void GLViewImpl::handleWindowSize(float w, float h)
     GLView::setFrameSize(w / _frameZoomFactor, h / _frameZoomFactor);
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     // Fix #1787, update retina state when switch between fullscreen and windowed mode
-    updateFrameSize();
+    int fbWidth = 0, fbHeight = 0;
+    glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
+    _isInRetinaMonitor = fbWidth == 2 * w && fbHeight == 2 * h;
+    if (_isInRetinaMonitor)
+        _retinaFactor = _isRetinaEnabled ? 1 : 2;
+    else
+        _retinaFactor = 1;
 #endif
     updateDesignResolutionSize();
 }

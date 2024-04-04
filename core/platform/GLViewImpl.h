@@ -153,7 +153,7 @@ protected:
 #endif
 
     /* invoke when window size changed */
-    void handleWindowSize(float w, float h);
+    void handleWindowSize(int w, int h);
 
     /* update frame size when user set zoomFactor, retina, frameSize */
     void updateFrameSize();
