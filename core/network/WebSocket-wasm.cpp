@@ -1,6 +1,6 @@
 #include "network/WebSocket-wasm.h"
 #include "yasio/errc.hpp"
-#include "base/Console.h"
+#include "base/Logging.h"
 
 NS_AX_BEGIN
 

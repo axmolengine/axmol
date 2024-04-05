@@ -27,7 +27,7 @@
 
 #include "base/UTF8.h"
 #include "platform/Common.h"
-#include "base/Console.h"
+#include "base/Logging.h"
 #include "ConvertUTF.h"
 #include <limits>
 

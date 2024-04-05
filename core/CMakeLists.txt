@@ -114,6 +114,7 @@ endif()
 option(AX_ENABLE_PHYSICS "Build Physics support" ON)
 option(AX_ENABLE_MEDIA "Build media support" ON)
 option(AX_ENABLE_AUDIO "Build audio support" ON)
+option(AX_ENABLE_CONSOLE "Build axmol debug tool: console support" ON)
 
 option(AX_ENABLE_3D "Build 3D support" ON)
 cmake_dependent_option(AX_ENABLE_3D_PHYSICS "Build 3D Physics support" ON "AX_ENABLE_3D" OFF)
@@ -322,6 +323,7 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_3D_PHYSICS)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_NAVMESH)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_AUDIO)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_CONSOLE)
 
 # use 3rdparty libs
 add_subdirectory(${_AX_ROOT}/3rdparty ${ENGINE_BINARY_PATH}/3rdparty)

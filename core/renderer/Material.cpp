@@ -36,7 +36,7 @@
 #include "base/Properties.h"
 #include "base/Director.h"
 #include "platform/FileUtils.h"
-#include "base/Console.h"
+#include "base/Logging.h"
 
 #include <sstream>
 
@@ -50,20 +50,14 @@ namespace
 {
 std::string replaceDefines(std::string_view compileTimeDefines)
 {
-
-    auto defineParts = Console::Utility::split(compileTimeDefines, ';');
     std::stringstream ss;
-    for (auto&& p : defineParts)
-    {
-        if (p.find("#define ") == std::string::npos)
-        {
+    axstd::split_cb(compileTimeDefines, ';', [&ss](const char* start, const char* end) {
+        std::string_view p{start, static_cast<size_t>(end - start)};
+        if (p.find("#define ") == std::string_view::npos)
             ss << "#define " << p << std::endl;
-        }
         else
-        {
             ss << p << std::endl;
-        }
-    }
+    });
     return ss.str();
 }
 }  // namespace

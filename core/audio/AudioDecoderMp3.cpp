@@ -29,7 +29,7 @@
 #include "audio/AudioMacros.h"
 #include "platform/FileUtils.h"
 
-#include "base/Console.h"
+#include "base/Logging.h"
 
 #if !AX_USE_MPG123
 #    define MINIMP3_IMPLEMENTATION
