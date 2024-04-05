@@ -41,7 +41,7 @@ THE SOFTWARE.
 #include "base/AsyncTaskPool.h"
 #include "base/AutoreleasePool.h"
 #include "base/Configuration.h"
-#include "base/Console.h"
+#include "base/Logging.h"
 #include "base/Data.h"
 #include "base/Director.h"
 #include "base/IMEDelegate.h"

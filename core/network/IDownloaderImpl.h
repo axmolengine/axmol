@@ -30,7 +30,7 @@
 #include <unordered_map>
 #include <memory>
 
-#include "base/Console.h"
+#include "base/Logging.h"
 
 NS_AX_BEGIN
 
