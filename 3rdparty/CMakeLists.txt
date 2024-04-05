@@ -2,10 +2,6 @@
 project(3rdparty)
 
 option(OPT_BOX2D_OPTIMIZED "" OFF)
-option(AX_WITH_BOX2D "Build with internal Box2D support" ON)
-option(AX_WITH_CHIPMUNK "Build with internal chipmunk support" ON)
-option(AX_WITH_RECAST "Build with internal recast support" ON)
-option(AX_WITH_BULLET "Build with internal bullet support" ON)
 option(AX_WITH_JPEG "Build with internal jpeg support" ON)
 option(AX_WITH_WEBP "Build with internal webp support" ON)
 option(AX_WITH_CLIPPER2 "Build with internal Clipper2 support" ON)
@@ -255,7 +251,7 @@ endif()
 # libpng
 ax_add_3rd(png)
 
-if(AX_WITH_BOX2D)
+if(AX_ENABLE_PHYSICS)
     set(box2d_opts "BOX2D_BUILD_UNIT_TESTS OFF" "BOX2D_BUILD_TESTBED OFF")
     if(OPT_BOX2D_OPTIMIZED)
         _1kfetch(box2d-optimized)
@@ -265,7 +261,7 @@ if(AX_WITH_BOX2D)
     endif()
 endif()
 
-if(AX_WITH_CHIPMUNK)
+if(AX_ENABLE_PHYSICS)
     ax_add_3rd(chipmunk OPTIONS
         "CP_BUILD_SHARED OFF"
         "CP_BUILD_STATIC ON"
@@ -293,11 +289,11 @@ if (WINRT)
 endif()
 target_include_directories(3rdparty INTERFACE "freetype/include")
 
-if(AX_WITH_RECAST)
+if(AX_ENABLE_NAVMESH)
     ax_add_3rd(recast)
 endif()
 
-if(AX_WITH_BULLET)
+if(AX_ENABLE_3D_PHYSICS)
     ax_add_3rd(bullet)
 endif()
 

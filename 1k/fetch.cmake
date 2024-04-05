@@ -4,6 +4,7 @@
 #   _1kfetch_cache_dir
 #   _1kfetch_manifest
 # 
+cmake_minimum_required(VERSION 3.23)
 
 ### 1kdist url
 find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)

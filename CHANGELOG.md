@@ -14,6 +14,7 @@
 
 ### Improvements
 
+- Allow certain code modules to be removed from build process by @rh101 in https://github.com/axmolengine/axmol/pull/1769, i.e. remove 3d features by `-DAX_ENABLE_3D=OFF`
 - Disable c++20 char8_t
 - Improve build system, set rpath properly for platforms: linux, apple
 - Add wasm EditBox support
@@ -28,7 +29,6 @@
 - Add Node World Space Positioning by @DelinWorks in https://github.com/axmolengine/axmol/pull/1743
 - Move color types to math/Color.h by @halx99 in https://github.com/axmolengine/axmol/pull/1741
 - Removing EditBox should not result in logging an error message by @rh101 in https://github.com/axmolengine/axmol/pull/1740
-- Allow certain code modules to be removed from build process by @rh101 in https://github.com/axmolengine/axmol/pull/1769
 - Update LUA config for new build options by @rh101 in https://github.com/axmolengine/axmol/pull/1772
 - Update TLD axmol.org -> axmol.dev
 - Rename folder thirdparty ==> 3rdparty

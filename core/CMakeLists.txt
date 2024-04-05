@@ -110,44 +110,40 @@ else()
     option(AX_USE_ALSOFT "Use ALSOFT on apple" OFF)
 endif()
 
+
+option(AX_ENABLE_PHYSICS "Build Physics support" ON)
+option(AX_ENABLE_MEDIA "Build media support" ON)
+option(AX_ENABLE_AUDIO "Build audio support" ON)
+
+option(AX_ENABLE_3D "Build 3D support" ON)
+cmake_dependent_option(AX_ENABLE_3D_PHYSICS "Build 3D Physics support" ON "AX_ENABLE_3D" OFF)
+cmake_dependent_option(AX_ENABLE_NAVMESH "Build NavMesh support" ON "AX_ENABLE_3D" OFF)
+
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
+option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 
 # default value for axmol extensions modules to Build
 # total supported extensions count: 13
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
 
 option(AX_ENABLE_EXT_GUI "Build extension GUI" ON)
-
 option(AX_ENABLE_EXT_ASSETMANAGER "Build extension asset-manager" ON)
-option(AX_ENABLE_EXT_PARTICLE3D "Build extension Particle3D" ON)
-option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ON)
-
 option(AX_ENABLE_EXT_SPINE "Build extension spine" ON)
 option(AX_ENABLE_EXT_DRAGONBONES "Build extension DragonBones" ON)
-
 option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ON)
-
 option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
-
 option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
+cmake_dependent_option(AX_ENABLE_EXT_PARTICLE3D "Build extension Particle3D" ON "AX_ENABLE_3D" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ON "AX_ENABLE_PHYSICS" OFF)
 cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
-cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
-cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR WASM" OFF)
-
-option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ON "AX_ENABLE_EXT_IMGUI" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ON "AX_ENABLE_EXT_IMGUI" OFF)
 
 option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ON)
 
 option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" OFF)
-
-option(AX_ENABLE_3D "Build 3D support" ON)
-option(AX_ENABLE_3D_PHYSICS "Build 3D Physics support" ON)
-option(AX_ENABLE_PHYSICS "Build Physics support" ON)
-option(AX_ENABLE_NAVMESH "Build NavMesh support" ON)
-option(AX_ENABLE_MEDIA "Build media support" ON)
-option(AX_ENABLE_AUDIO "Build audio support" ON)
 
 set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "" )
 
