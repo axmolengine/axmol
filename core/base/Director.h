@@ -41,6 +41,9 @@ THE SOFTWARE.
 #if defined(AX_PLATFORM_PC)
 #    include "concurrentqueue/concurrentqueue.h"
 #endif
+#ifdef AX_ENABLE_CONSOLE
+#include "base/Console.h"
+#endif
 
 NS_AX_BEGIN
 
@@ -62,10 +65,6 @@ class EventListenerCustom;
 class TextureCache;
 class Renderer;
 class Camera;
-
-#ifdef AX_ENABLE_CONSOLE
-class Console;
-#endif
 
 /**
  @brief Class that creates and handles the main Window and manages how

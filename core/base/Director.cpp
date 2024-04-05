@@ -55,9 +55,6 @@ THE SOFTWARE.
 #include "base/EventDispatcher.h"
 #include "base/EventCustom.h"
 #include "base/Logging.h"
-#ifdef AX_ENABLE_CONSOLE
-#include "base/Console.h"
-#endif
 #include "base/AutoreleasePool.h"
 #include "base/Configuration.h"
 #include "base/AsyncTaskPool.h"
