@@ -166,6 +166,9 @@ if (!(Test-Path $sentry -PathType Leaf)) {
     }
 }
 
+# re-check does valid local git repo
+if (!(Test-Path "$lib_src/.git" -PathType Container)) { $is_git_repo = $false }
+
 # checkout revision for git repo
 if (!$revision) {
     $ver_pair = [array]$version.Split('-')
