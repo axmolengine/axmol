@@ -1,5 +1,16 @@
 ## axmol-2.1.3 ?? 2024
 
+### Significant changes relative to 2.1.2:
+
+- Allow certain code modules to be removed from build process by @rh101 in https://github.com/axmolengine/axmol/pull/1769, i.e. remove 3d features by `-DAX_ENABLE_3D=OFF`
+- New logging system with general log level and colored support
+  - Implement new axmol log system based on fmtlib by @halx99 in https://github.com/axmolengine/axmol/pull/1732
+  - Logging colorful support by @halx99 in https://github.com/axmolengine/axmol/pull/1735
+  - Improve logging color style by @halx99 in https://github.com/axmolengine/axmol/pull/1739
+  - Add support for verbose trace level logging by @rh101 in https://github.com/axmolengine/axmol/pull/1764
+  - Removed the '\n' which creates a second (empty) line. by @aismann in https://github.com/axmolengine/axmol/pull/1746
+- Add wasm EditBox support
+
 ### BugFixes
 
 - Fix fullscreen incorrect in retina display by @halx99, reported by @TyelorD
@@ -14,18 +25,11 @@
 
 ### Improvements
 
-- Allow certain code modules to be removed from build process by @rh101 in https://github.com/axmolengine/axmol/pull/1769, i.e. remove 3d features by `-DAX_ENABLE_3D=OFF`
 - Disable c++20 char8_t
 - Improve build system, set rpath properly for platforms: linux, apple
-- Add wasm EditBox support
 - HttpClient: add support for PATCH method by @smilediver in https://github.com/axmolengine/axmol/pull/1722
 - Add -f switch info to axmol command help output by @rh101 in https://github.com/axmolengine/axmol/pull/1729
-- Implement new axmol log system based on fmtlib by @halx99 in https://github.com/axmolengine/axmol/pull/1732
-- Logging colorful support by @halx99 in https://github.com/axmolengine/axmol/pull/1735
-- Improve logging color style by @halx99 in https://github.com/axmolengine/axmol/pull/1739
-- Add support for verbose trace level logging by @rh101 in https://github.com/axmolengine/axmol/pull/1764
 - Adapt DrawNodeEx to the changes on: Move color types to math/Color.h axmolengine#1741 by @aismann in https://github.com/axmolengine/axmol/pull/1760
-- Removed the '\n' which creates a second (empty) line. by @aismann in https://github.com/axmolengine/axmol/pull/1746
 - Add Node World Space Positioning by @DelinWorks in https://github.com/axmolengine/axmol/pull/1743
 - Move color types to math/Color.h by @halx99 in https://github.com/axmolengine/axmol/pull/1741
 - Removing EditBox should not result in logging an error message by @rh101 in https://github.com/axmolengine/axmol/pull/1740
