@@ -1,5 +1,5 @@
-# the setup script of axmol, for powershell <= 5.1, 
-# please execute command 'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force' in PowerShell Terminal
+# the setup script of axmol
+# for powershell <= 5.1: please execute command 'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force' in PowerShell Terminal
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
 
@@ -209,6 +209,7 @@ else {
             $stmtLine = 'export AX_ROOT="{0}"' -f $AX_ROOT
             if ($matchRet.Value -ne $stmtLine) {
                 $profileContent = [Regex]::Replace($profileContent, "export AX_ROOT\=.*", $stmtLine)
+                ++$profileMods
             }
         }
 
