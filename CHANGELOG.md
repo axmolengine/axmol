@@ -22,6 +22,7 @@
 - Fix DebugDraw issue in 3D physics by @halx99
 - Fix OpenGLState cache error, reported by @solan-solan in https://github.com/axmolengine/axmol/issues/1759
 - Fix linux crash after close window by @halx99
+- Fix setup.ps1 not update AX_ROOT in unix profile by @halx99
 
 ### Improvements
 
@@ -39,6 +40,7 @@
 - Update spine to 4.1-54fac9d
 - Set cmake minmal require to 3.29.0+ for supress xcode 15 duplicated linking warnings
 - Remove unnecessary cmake option: `AX_VS_DEPLOYMENT_TARGET`
+- Make FileStream open file for write share flags same with cstd
 
 ### Break Changes
 
