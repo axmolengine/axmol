@@ -41,6 +41,7 @@
 - Set cmake minmal require to 3.29.0+ for supress xcode 15 duplicated linking warnings
 - Remove unnecessary cmake option: `AX_VS_DEPLOYMENT_TARGET`
 - Make FileStream open file for write share flags same with cstd
+- Fix some compile warnings
 
 ### Break Changes
 
@@ -53,11 +54,12 @@
 
 ### 3rdparty updates
 
-- simdjson: 3.7.0 ==> 3.8.0
+- simdjson: 3.7.0 ==> 3.9.1
 - flatbuffers: 2.0.8 ==> 24.3.25
 - curl: 8.6.0 ==> 8.7.1
 - glad: 2.0.5 ==> 2.0.6
 - yasio: 4.2.1 ==> 4.2.2
+- stb_image: 2.28 ==> 2.29
 - luajit: 2.1-9cc2e42 ==> 2.1-d06beb0
 - c-ares: 1.25.0 ==> 1.28.1
 
