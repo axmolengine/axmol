@@ -223,7 +223,7 @@
 
 ## stb (stb_image)
 - Upstream: https://github.com/nothings/stb
-- Version: 2.28
+- Version: 2.29
 - License: MIT
 
 ## unzip (minizip-1.2)
