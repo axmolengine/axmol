@@ -708,7 +708,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
                 // int sizeHint = s.width * s.height * sizeof(uint32_t);
                 ssize_t sizeHint = s.width * s.height * sizeof(unsigned int);
 
-                buffer = ZipUtils::decompressGZ(std::span{buffer}, sizeHint);
+                buffer = ZipUtils::decompressGZ(std::span{buffer}, static_cast<int>(sizeHint));
                 AXASSERT(buffer.size() == sizeHint, "inflatedLen should be equal to sizeHint!");
 
                 if (buffer.empty())

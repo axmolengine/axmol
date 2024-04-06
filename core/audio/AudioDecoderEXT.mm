@@ -86,7 +86,7 @@ bool AudioDecoderEXT::open(std::string_view fullPath)
         _outputFormat.mFramesPerPacket  = 1;
         _outputFormat.mBitsPerChannel   = 16;
         _outputFormat.mFormatFlags =
-            kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger;
+            static_cast<int>(kAudioFormatFlagsNativeEndian) | static_cast<int>(kAudioFormatFlagIsPacked) | static_cast<int>(kAudioFormatFlagIsSignedInteger);
 
         _sampleRate    = _outputFormat.mSampleRate;
         _channelCount  = _outputFormat.mChannelsPerFrame;

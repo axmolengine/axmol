@@ -233,7 +233,7 @@ void FontAtlas::initWithSettings(void* opaque /*simdjson::ondemand::document*/)
         tempDef.height    = static_cast<float>(letterInfo["height"].get_double());
         tempDef.offsetX   = static_cast<float>(letterInfo["offsetX"].get_double());
         tempDef.offsetY   = static_cast<float>(letterInfo["offsetY"].get_double());
-        tempDef.textureID = letterInfo["page"].get_int64();
+        tempDef.textureID = static_cast<int>(letterInfo["page"].get_int64());
 
         auto charCode = atoi(strCharCode.c_str());
 
