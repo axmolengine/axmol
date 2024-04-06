@@ -1,5 +1,9 @@
 # the setup script of axmol
 # for powershell <= 5.1: please execute command 'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force' in PowerShell Terminal
+param(
+    # whether sync gradle wrapper & plugin version from template to test projects
+    [switch]$updateGradle 
+)
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
 
@@ -301,5 +305,22 @@ if (!(Test-Path $prefix -PathType Container)) {
 
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
 . $build1kPath -setupOnly -prefix $prefix @args
+
+if ($updateGradle) {
+    # sync gradle
+    $aproj_source_root = Join-Path $AX_ROOT 'templates/common/proj.android'
+    $aproj_source_gradle = Join-Path $aproj_source_root 'build.gradle'
+    $aproj_source_gradle_wrapper = Join-Path $aproj_source_root 'gradle/wrapper/*'
+    function update_gradle_for_test($testName) {
+        $aproj_root = Join-Path $AX_ROOT "tests/$testName/proj.android"
+        Copy-Item $aproj_source_gradle $aproj_root -Force
+        Copy-Item $aproj_source_gradle_wrapper (Join-Path $aproj_root 'gradle/wrapper') -Force
+    }
+
+    update_gradle_for_test 'cpp-tests'
+    update_gradle_for_test 'fairygui-tests'
+    update_gradle_for_test 'live2d-tests'
+    update_gradle_for_test 'lua-tests'
+}
 
 $b1k.pause("setup successfully, please restart the terminal to make added system variables take effect")

@@ -212,7 +212,7 @@ $manifest = @{
 $channels = @{}
 
 # refer to: https://developer.android.com/studio#command-line-tools-only
-$cmdlinetools_rev = '10406996'
+$cmdlinetools_rev = '11076708'
 
 $android_sdk_tools = @{
     'build-tools' = '34.0.0'
@@ -1703,7 +1703,7 @@ if (!$setupOnly) {
                 }
             }
             else {
-                & $build_tool tasks
+                & $build_tool wrapper
             }
             Pop-Location
         }

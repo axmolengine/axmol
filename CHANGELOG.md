@@ -51,6 +51,7 @@
 ### sdks updates
 
 - emsdk: 3.1.53 ==> 3.1.56
+- AGP: 8.2.1 ==> 8.2.2
 
 ### 3rdparty updates
 
