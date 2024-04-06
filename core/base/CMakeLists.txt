@@ -34,7 +34,7 @@ set(_AX_BASE_HEADER
     base/etc1.h
     base/etc2.h
     base/GameController.h
-    base/Console.h
+    base/Logging.h
     base/Constants.h
     base/Event.h
     base/Types.h
@@ -87,7 +87,7 @@ set(_AX_BASE_SRC
     base/AsyncTaskPool.cpp
     base/AutoreleasePool.cpp
     base/Configuration.cpp
-    base/Console.cpp
+    base/Logging.cpp
     base/Controller.cpp
     base/Data.cpp
     base/NinePatchImageParser.cpp
@@ -138,3 +138,8 @@ set(_AX_BASE_SRC
     base/astc.cpp
     ${_AX_BASE_SPECIFIC_SRC}
     )
+
+if(AX_ENABLE_CONSOLE)
+    set(_AX_BASE_HEADER ${_AX_BASE_HEADER} base/Console.h)
+    set(_AX_BASE_SRC ${_AX_BASE_SRC} base/Console.cpp)
+endif()

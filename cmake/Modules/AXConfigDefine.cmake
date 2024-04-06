@@ -9,20 +9,9 @@ define_property(TARGET
 
 # UWP min deploy target support, VS property: targetPlatformMinVersion
 if (WINRT)
-    if (NOT DEFINED AX_VS_DEPLOYMENT_TARGET)
-        set(AX_VS_DEPLOYMENT_TARGET "10.0.17763.0")
-    endif()
-    if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}" VERSION_GREATER_EQUAL "3.27.0")
-        if (NOT DEFINED)
-            # The minmal deploy target version: Windows 10, version 1809 (Build 10.0.17763) for building msix package
-            # refer to: https://learn.microsoft.com/en-us/windows/msix/supported-platforms?source=recommendations
-            set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION ${AX_VS_DEPLOYMENT_TARGET})
-        endif()
-    else()
-        if(DEFINED CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
-            unset(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
-        endif()
-    endif()
+    # The minmal deploy target version: Windows 10, version 1809 (Build 10.0.17763) for building msix package
+    # refer to: https://learn.microsoft.com/en-us/windows/msix/supported-platforms?source=recommendations
+    set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "10.0.17763" CACHE STRING "")
     set(AX_CPPWINRT_VERSION "2.0.240111.5" CACHE STRING "")
 endif()
 
@@ -114,9 +103,10 @@ endif()
 set(_ax_compile_options)
 
 if (FUZZ_MSVC)
-    list(APPEND _ax_compile_options /GF /Zc:char8_t-)
+    list(APPEND _ax_compile_options /GF)
+    set(CMAKE_CXX_FLAGS "/Zc:char8_t ${CMAKE_CXX_FLAGS}")
 else() # others
-    list(APPEND _ax_compile_options -fno-char8_t)
+    set(CMAKE_CXX_FLAGS "-fno-char8_t ${CMAKE_CXX_FLAGS}")
 endif()
 
 if (FULL_MSVC)
@@ -124,6 +114,7 @@ if (FULL_MSVC)
 endif()
 
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
+set(CMAKE_PLATFORM_NO_VERSIONED_SONAME TRUE CACHE BOOL "Disable dynamic libraries symblink." FORCE)
 
 # set hash style to both for android old device compatible
 # see also: https://github.com/axmolengine/axmol/discussions/614
@@ -178,12 +169,15 @@ endfunction()
 
 # Set compiler options for engine lib: axmol
 function(use_ax_compile_options target)
-    if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    if (FULL_MSVC)
         # Enable msvc multi-process building
         target_compile_options(${target} PUBLIC /MP)
-    elseif(WASM)
+    endif()
+    if(WASM)
         # refer to: https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
         target_link_options(${target} PUBLIC -sFORCE_FILESYSTEM=1 -sFETCH=1 -sUSE_GLFW=3)
+    elseif(LINUX)
+        target_link_options(${target} PUBLIC "-lpthread")
     endif()
 endfunction()
 

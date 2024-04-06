@@ -2439,7 +2439,7 @@ tolua_lerror:
     return 0;
 }
 
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 #    include "navmesh/NavMesh.h"
 int axlua_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
 {
@@ -2591,7 +2591,7 @@ tolua_lerror:
     return 0;
 }
 
-#endif  //#if AX_USE_NAVMESH
+#endif  //#if defined(AX_ENABLE_NAVMESH)
 
 static int tolua_cocos2d_Spawn_create(lua_State* tolua_S)
 {
@@ -3787,7 +3787,7 @@ tolua_lerror:
     return 0;
 }
 
-#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
 #    include "physics3d/Physics3DWorld.h"
 int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
@@ -3896,12 +3896,12 @@ static void extendScene(lua_State* tolua_S)
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
-#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
         tolua_function(tolua_S, "getPhysics3DWorld", axlua_Scene_getPhysics3DWorld);
         tolua_function(tolua_S, "setPhysics3DDebugCamera", axlua_Scene_setPhysics3DDebugCamera);
 #endif
 
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
         tolua_function(tolua_S, "setNavMeshDebugCamera", axlua_Scene_setNavMeshDebugCamera);
         tolua_function(tolua_S, "setNavMesh", axlua_Scene_setNavMesh);
         tolua_function(tolua_S, "getNavMesh", axlua_Scene_getNavMesh);

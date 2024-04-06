@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -25,7 +26,7 @@
 #ifndef SCRIPTING_AXLUA_NAVMESH_MANUAL_H__
 #define SCRIPTING_AXLUA_NAVMESH_MANUAL_H__
 
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 
 #include "tolua++.h"
 
@@ -47,5 +48,5 @@ TOLUA_API int register_navmesh_module(lua_State* L);
 // end group
 /// @}
 
-#endif  // #if AX_USE_NAVMESH
+#endif  // #if defined(AX_ENABLE_NAVMESH)
 #endif  // #ifndef COCOS_SCRIPTING_LUA_BINDINGS_MANUAL_PHYSICS3D_LUA_COCOS2DX_NAVMESH_MANUAL_H__

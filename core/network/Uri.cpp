@@ -19,7 +19,7 @@
  */
 
 #include "network/Uri.h"
-#include "base/Console.h"  // For AXLOGERROR macro
+#include "base/Logging.h"  // For AXLOGERROR macro
 
 #include <regex>
 #include <sstream>

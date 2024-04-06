@@ -33,6 +33,7 @@ Due to Axmol Engine is a fork of Cocos2d-x-4.0, so the [Cocos2d-x AUTHORS](https
     armanhossiny
     Arvant
     bwaiox
+    binxiaojiao
     crazyhappygame
     CodeAndWeb
     clawfinger (Dmitry Vassiliev)

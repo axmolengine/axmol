@@ -29,7 +29,7 @@
 #include "base/Config.h"
 #include "math/Math.h"
 
-#if AX_USE_3D_PHYSICS
+#if defined(AX_ENABLE_3D_PHYSICS)
 
 #    include "physics3d/Physics3DShape.h"
 #    include "physics3d/PhysicsMeshRenderer.h"
@@ -66,6 +66,6 @@ btQuaternion convertQuatTobtQuat(const ax::Quaternion& quat);
 
 #    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // AX_USE_3D_PHYSICS
+#endif  // defined(AX_ENABLE_3D_PHYSICS)
 
 #endif  // __PHYSICS_3D_H__

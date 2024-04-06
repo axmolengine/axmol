@@ -1,8 +1,8 @@
 include(CMakeParseArguments)
 
-find_program(PWSH_COMMAND NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
 
-if(NOT PWSH_COMMAND)
+if(NOT PWSH_PROG)
     message("powershell not found.")
     message(FATAL_ERROR "Please install it https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell, and run CMake again.")
 endif()
@@ -37,7 +37,7 @@ function(ax_sync_target_res ax_target)
             #get_filename_component(link_folder ${opt_LINK_TO} DIRECTORY)
             get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
             add_custom_command(TARGET ${sync_target_name} POST_BUILD
-                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/fsync.ps1
+                COMMAND ${PWSH_PROG} ARGS ${_AX_ROOT}/1k/fsync.ps1
                     -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
             )
         endforeach()
@@ -77,18 +77,18 @@ function(ax_sync_lua_scripts ax_target src_dir dst_dir)
     endif()
     if(MSVC)
         add_custom_command(TARGET ${luacompile_target} POST_BUILD
-            COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/fsync.ps1
+            COMMAND ${PWSH_PROG} ARGS ${_AX_ROOT}/1k/fsync.ps1
                 -s ${src_dir} -d ${dst_dir}
         )
     else()
         if("${CMAKE_BUILD_TYPE}" STREQUAL "")
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/fsync.ps1
+                COMMAND ${PWSH_PROG} ARGS ${_AX_ROOT}/1k/fsync.ps1
                 -s ${src_dir} -d ${dst_dir}
             )
         else()
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/fsync.ps1
+                COMMAND ${PWSH_PROG} ARGS ${_AX_ROOT}/1k/fsync.ps1
                     -s ${src_dir} -d ${dst_dir}
             )
         endif()
@@ -382,11 +382,13 @@ function(ax_setup_app_config app_name)
     if(APPLE)
         # output macOS/iOS .app
         set_target_properties(${app_name} PROPERTIES MACOSX_BUNDLE 1)
+
+        # set codesign
         if(IOS AND (NOT ("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
             set_xcode_property(${app_name} CODE_SIGNING_REQUIRED "YES")
             set_xcode_property(${app_name} CODE_SIGNING_ALLOWED "YES")
         else()
-            # By default, explicit disable codesign for macOS PC
+            # By default, explicit disable codesign for macOS or ios Simulator
             set_xcode_property(${app_name} CODE_SIGN_IDENTITY "")
             set_xcode_property(${app_name} CODE_SIGNING_ALLOWED "NO")
         endif()
@@ -412,7 +414,7 @@ function(ax_setup_app_config app_name)
     endif()
     target_link_libraries(${app_name} ${_AX_EXTENSION_LIBS})
 
-    if(XCODE AND AX_USE_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
+    if(XCODE AND AX_ENABLE_AUDIO AND AX_USE_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
         # Embedded soft_oal embedded framework
         # XCODE_LINK_BUILD_PHASE_MODE BUILT_ONLY
         # ???CMake BUG: XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY works for first app
@@ -600,28 +602,6 @@ macro(get_all_targets_recursive targets dir)
     get_property(current_targets DIRECTORY ${dir} PROPERTY BUILDSYSTEM_TARGETS)
     list(APPEND ${targets} ${current_targets})
 endmacro()
-
-function (ax_uwp_set_all_targets_deploy_min_version)
-    if (WINRT)
-        if (DEFINED CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
-            message(STATUS "You are using a cmake version which is support CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION}, \nskip set VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION for targets one by one.")
-        else()
-            set(oneValueArgs TARGET_PLATFORM_MIN_VERSION)
-            cmake_parse_arguments(opt "" "${oneValueArgs}" "" ${ARGN})
-            if (NOT opt_TARGET_PLATFORM_MIN_VERSION)
-                # The minmal deploy target version: Windows 10, version 1809 (Build 10.0.17763) for building msix package
-                # refer to: https://learn.microsoft.com/en-us/windows/msix/supported-platforms?source=recommendations
-                set(opt_TARGET_PLATFORM_MIN_VERSION ${AX_VS_DEPLOYMENT_TARGET})
-            endif()
-            
-            get_all_targets(all_targets)
-
-            foreach(target ${all_targets})
-                set_target_properties(${target} PROPERTIES VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "${opt_TARGET_PLATFORM_MIN_VERSION}")
-            endforeach()
-        endif()
-    endif()
-endfunction()
 
 # set Xcode property for application, include all depend target
 macro(ax_config_app_xcode_property ax_app)

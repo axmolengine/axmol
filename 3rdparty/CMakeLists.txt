@@ -2,10 +2,6 @@
 project(3rdparty)
 
 option(OPT_BOX2D_OPTIMIZED "" OFF)
-option(AX_WITH_BOX2D "Build with internal Box2D support" ON)
-option(AX_WITH_CHIPMUNK "Build with internal chipmunk support" ON)
-option(AX_WITH_RECAST "Build with internal recast support" ON)
-option(AX_WITH_BULLET "Build with internal bullet support" ON)
 option(AX_WITH_JPEG "Build with internal jpeg support" ON)
 option(AX_WITH_WEBP "Build with internal webp support" ON)
 option(AX_WITH_CLIPPER2 "Build with internal Clipper2 support" ON)
@@ -172,29 +168,8 @@ add_library(3rdparty INTERFACE)
 set(_1kfetch_cache_dir "${_AX_ROOT}/cache" CACHE STRING "" FORCE)
 set(_1kfetch_manifest "${_AX_ROOT}/manifest.json" CACHE STRING "" FORCE)
 
-# fetch prebuilts of 1k_dist and git sources
+# fetch prebuilts of 1kdist and git sources
 include(${_AX_ROOT}/1k/fetch.cmake)
-
-function(xpm_parse_option OPTION)
-  string(REGEX MATCH "^[^ ]+" OPTION_KEY "${OPTION}")
-  string(LENGTH "${OPTION}" OPTION_LENGTH)
-  string(LENGTH "${OPTION_KEY}" OPTION_KEY_LENGTH)
-  if(OPTION_KEY_LENGTH STREQUAL OPTION_LENGTH)
-    # no value for key provided, assume user wants to set option to "ON"
-    set(OPTION_VALUE "ON")
-  else()
-    math(EXPR OPTION_KEY_LENGTH "${OPTION_KEY_LENGTH}+1")
-    string(SUBSTRING "${OPTION}" "${OPTION_KEY_LENGTH}" "-1" OPTION_VALUE)
-  endif()
-  set(OPTION_KEY
-      "${OPTION_KEY}"
-      PARENT_SCOPE
-  )
-  set(OPTION_VALUE
-      "${OPTION_VALUE}"
-      PARENT_SCOPE
-  )
-endfunction()
 
 function(ax_add_3rd source_dir)
     set(options EXCLUDE_FROM_ALL NO_LINK)
@@ -202,7 +177,7 @@ function(ax_add_3rd source_dir)
     cmake_parse_arguments(opt "${options}" "" "${multiValueArgs}" ${ARGN})
 
     foreach(OPTION ${opt_OPTIONS})
-        xpm_parse_option("${OPTION}")
+        _1kparse_option("${OPTION}")
         set(${OPTION_KEY} "${OPTION_VALUE}" CACHE BOOL "" FORCE)
     endforeach()
 
@@ -276,7 +251,7 @@ endif()
 # libpng
 ax_add_3rd(png)
 
-if(AX_WITH_BOX2D)
+if(AX_ENABLE_PHYSICS)
     set(box2d_opts "BOX2D_BUILD_UNIT_TESTS OFF" "BOX2D_BUILD_TESTBED OFF")
     if(OPT_BOX2D_OPTIMIZED)
         _1kfetch(box2d-optimized)
@@ -286,7 +261,7 @@ if(AX_WITH_BOX2D)
     endif()
 endif()
 
-if(AX_WITH_CHIPMUNK)
+if(AX_ENABLE_PHYSICS)
     ax_add_3rd(chipmunk OPTIONS
         "CP_BUILD_SHARED OFF"
         "CP_BUILD_STATIC ON"
@@ -314,11 +289,11 @@ if (WINRT)
 endif()
 target_include_directories(3rdparty INTERFACE "freetype/include")
 
-if(AX_WITH_RECAST)
+if(AX_ENABLE_NAVMESH)
     ax_add_3rd(recast)
 endif()
 
-if(AX_WITH_BULLET)
+if(AX_ENABLE_3D_PHYSICS)
     ax_add_3rd(bullet)
 endif()
 
@@ -330,6 +305,8 @@ add_subdirectory(openssl)
 if(ANDROID OR LINUX)
     target_link_libraries(OpenSSL::SSL INTERFACE OpenSSL::Crypto)
     target_link_libraries(3rdparty INTERFACE OpenSSL::SSL)
+elseif(APPLE)
+    target_link_libraries(3rdparty INTERFACE openssl)
 else()
     target_link_libraries(3rdparty
                         INTERFACE OpenSSL::Crypto
@@ -396,47 +373,50 @@ if(AX_WITH_CURL AND NOT EMSCRIPTEN)
     endif()
 endif()
 
-# The openal-soft(LGPL 2.1)
-if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
-    set(alsoft_opts "ALSOFT_DLOPEN OFF" "ALSOFT_UTILS OFF" "ALSOFT_EXAMPLES OFF" "ALSOFT_INSTALL OFF")
+if (AX_ENABLE_AUDIO)
+    # The openal-soft(LGPL 2.1)
+    if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
+        set(alsoft_opts "ALSOFT_DLOPEN OFF" "ALSOFT_UTILS OFF" "ALSOFT_EXAMPLES OFF" "ALSOFT_INSTALL OFF")
 
-    if (AX_USE_ALSOFT_STATIC)
-        list(APPEND alsoft_opts "LIBTYPE STATIC")
-    endif()
-
-    if (ANDROID)
-        if(AX_WITH_OBOE)
-            _1kfetch(oboe)
-            set(ALSOFT_BACKEND_OPENSL OFF CACHE BOOL "Enable OpenSL backend" FORCE)
-            set(OBOE_SOURCE "${oboe_SOURCE_DIR}" CACHE STRING "Source directory for Oboe." FORCE)
+        if (AX_USE_ALSOFT_STATIC)
+            list(APPEND alsoft_opts "LIBTYPE STATIC")
         endif()
-        list(APPEND alsoft_opts "ALSOFT_RTKIT OFF")
-        set(ALSOFT_RTKIT OFF CACHE BOOL "Enable RTKit support" FORCE)
+
+        if (ANDROID)
+            if(AX_WITH_OBOE)
+                _1kfetch(oboe)
+                set(ALSOFT_BACKEND_OPENSL OFF CACHE BOOL "Enable OpenSL backend" FORCE)
+                set(OBOE_SOURCE "${oboe_SOURCE_DIR}" CACHE STRING "Source directory for Oboe." FORCE)
+            endif()
+            list(APPEND alsoft_opts "ALSOFT_RTKIT OFF")
+            set(ALSOFT_RTKIT OFF CACHE BOOL "Enable RTKit support" FORCE)
+        endif()
+
+        if(WINDOWS)
+            list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
+        endif()
+
+        if(WINRT)
+            set(ALSOFT_CPPWINRT_VERSION ${AX_CPPWINRT_VERSION} CACHE STRING "" FORCE)
+        endif()
+
+        ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS alcommon;OpenAL OPTIONS ${alsoft_opts})
+
+        target_include_directories(3rdparty INTERFACE openal)
+        target_compile_definitions(3rdparty INTERFACE AX_USE_ALSOFT=1)
+        set_target_properties(OpenAL alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
+
+        if (AX_USE_ALSOFT_STATIC)
+            target_compile_definitions(3rdparty INTERFACE AL_LIBTYPE_STATIC=1)
+        elseif(ANDROID)
+            set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
+        endif()
     endif()
 
-    if(WINDOWS)
-        list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
-    endif()
 
-    if(WINRT)
-        set(ALSOFT_CPPWINRT_VERSION ${AX_CPPWINRT_VERSION} CACHE STRING "" FORCE)
-    endif()
-
-    ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS alcommon;OpenAL OPTIONS ${alsoft_opts})
-
-    target_include_directories(3rdparty INTERFACE openal)
-    target_compile_definitions(3rdparty INTERFACE AX_USE_ALSOFT=1)
-    set_target_properties(OpenAL alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
-
-    if (AX_USE_ALSOFT_STATIC)
-        target_compile_definitions(3rdparty INTERFACE AL_LIBTYPE_STATIC=1)
-    elseif(ANDROID)
-        set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
-    endif()
+    # The ogg decoder
+    ax_add_3rd(ogg)
 endif()
-
-# The ogg decoder
-ax_add_3rd(ogg)
 
 if(WINDOWS OR LINUX OR ANDROID OR WASM)
     ax_add_3rd(glad)

@@ -877,7 +877,7 @@ int base64Encode(const unsigned char* in, unsigned int inLength, char** out)
         auto ret = ax::base64::encode(tmp, in, inLength);
         tmp[ret] = '\0';
         *out     = tmp;
-        return ret;
+        return static_cast<int>(ret);
     }
     *out = nullptr;
     return 0;
@@ -897,7 +897,7 @@ AX_DLL int base64Decode(const unsigned char* in, unsigned int inLength, unsigned
             *out = nullptr;
             free(tmp);
         }
-        return n;
+        return static_cast<int>(n);
     }
     *out = nullptr;
     return 0;

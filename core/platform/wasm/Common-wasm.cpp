@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "platform/Common.h"
 #include "platform/wasm/StdC-wasm.h"
-#include "base/Console.h"
+#include "base/Logging.h"
 #include <emscripten/emscripten.h>
 
 NS_AX_BEGIN

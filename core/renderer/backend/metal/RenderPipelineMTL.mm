@@ -254,7 +254,7 @@ void RenderPipelineMTL::setVertexLayout(MTLRenderPipelineDescriptor* mtlDescript
     if (!vertexLayout->isValid())
         return;
 
-    int stride = vertexLayout->getStride();
+    int stride = static_cast<int>(vertexLayout->getStride());
     auto vertexDesc = mtlDescriptor.vertexDescriptor;
     vertexDesc.layouts[DriverMTL::DEFAULT_ATTRIBS_BINDING_INDEX].stride = stride;
     vertexDesc.layouts[DriverMTL::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction =

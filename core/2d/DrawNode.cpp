@@ -654,7 +654,7 @@ void DrawNode::drawPolygon(const Vec2* verts,
 
         if ((tris.size() * 3) > vertex_count)
         {
-            ensureCapacity((tris.size() * 3));
+            ensureCapacity(static_cast<int>(tris.size() * 3));
             triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
             cursor    = triangles;
         }

@@ -28,7 +28,7 @@
 #define __CCPHYSICS_SHAPE_H__
 
 #include "base/Config.h"
-#if AX_USE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 
 #    include "base/Ref.h"
 #    include "math/Math.h"
@@ -786,5 +786,5 @@ protected:
 
 NS_AX_END
 
-#endif  // AX_USE_PHYSICS
+#endif  // defined(AX_ENABLE_PHYSICS)
 #endif  // __CCPHYSICS_FIXTURE_H__

@@ -33,10 +33,10 @@ THE SOFTWARE.
 #include "TimelineMacro.h"
 #include "cocostudio/CocosStudioExport.h"
 
+#include "flatbuffers/flatbuffers.h"
+
 namespace flatbuffers
 {
-class FlatBufferBuilder;
-
 struct NodeAction;
 struct TimeLine;
 struct PointFrame;

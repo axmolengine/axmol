@@ -1,5 +1,5 @@
 #include "lua-bindings/auto/axlua_navmesh_auto.hpp"
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 #include "navmesh/NavMesh.h"
 #include "lua-bindings/manual/navmesh/axlua_navmesh_conversions.h"
 #include "lua-bindings/manual/tolua_fix.h"

@@ -37,6 +37,7 @@
 #include <sstream>
 
 #include "base/axstd.h"
+#include "fmt/compile.h"
 
 NS_AX_BEGIN
 
@@ -281,16 +282,15 @@ void HttpCookie::writeFile()
         line.append(1, '\t');
         cookie.secure ? line.append("TRUE") : line.append("FALSE");
         line.append(1, '\t');
-        sprintf(expires, "%lld", static_cast<long long>(cookie.expires));
-        line.append(expires);
+        fmt::format_to(std::back_inserter(line), FMT_COMPILE("{}"), cookie.expires);
         line.append(1, '\t');
         line.append(cookie.name);
         line.append(1, '\t');
         line.append(cookie.value);
         // line.append(1, '\n');
 
-        out->write(line.c_str(), line.length());
-        out->write(endLine.data(), endLine.size());
+        out->write(line.c_str(), static_cast<unsigned int>(line.length()));
+        out->write(endLine.data(), static_cast<unsigned int>(endLine.size()));
     }
 
     out->close();

@@ -26,7 +26,7 @@
 
 #include "physics3d/Physics3D.h"
 
-#if AX_USE_3D_PHYSICS
+#if defined(AX_ENABLE_3D_PHYSICS)
 
 #    if (AX_ENABLE_BULLET_INTEGRATION)
 
@@ -102,4 +102,4 @@ NS_AX_END
 
 #    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // AX_USE_3D_PHYSICS
+#endif  // defined(AX_ENABLE_3D_PHYSICS)

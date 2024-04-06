@@ -88,7 +88,7 @@ HSV ControlUtils::HSVfromRGB(RGBA value)
 RGBA ControlUtils::RGBfromHSV(HSV value)
 {
     double hh, p, q, t, ff;
-    long i;
+    int i;
     RGBA out;
     out.a = 1;
 
@@ -113,7 +113,7 @@ RGBA ControlUtils::RGBfromHSV(HSV value)
     if (hh >= 360.0)
         hh = 0.0;
     hh /= 60.0;
-    i  = (long)hh;
+    i  = static_cast<int>(hh);
     ff = hh - i;
     p  = value.v * (1.0 - value.s);
     q  = value.v * (1.0 - (value.s * ff));

@@ -1,8 +1,74 @@
+## axmol-2.1.3 ?? 2024
+
+### Significant changes relative to 2.1.2:
+
+- Allow certain code modules to be removed from build process by @rh101 in https://github.com/axmolengine/axmol/pull/1769, i.e. remove 3d features by `-DAX_ENABLE_3D=OFF`
+- New logging system with general log level and colored support
+  - Implement new axmol log system based on fmtlib by @halx99 in https://github.com/axmolengine/axmol/pull/1732
+  - Logging colorful support by @halx99 in https://github.com/axmolengine/axmol/pull/1735
+  - Improve logging color style by @halx99 in https://github.com/axmolengine/axmol/pull/1739
+  - Add support for verbose trace level logging by @rh101 in https://github.com/axmolengine/axmol/pull/1764
+  - Removed the '\n' which creates a second (empty) line. by @aismann in https://github.com/axmolengine/axmol/pull/1746
+- Add wasm EditBox support
+
+### BugFixes
+
+- Fix fullscreen incorrect in retina display by @halx99, reported by @TyelorD
+- Fix android build by @smilediver in https://github.com/axmolengine/axmol/pull/1723
+- Fix EditBox error by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1755
+- Fix InputEvent in fairyGUI onKeyDown and onKeyUp by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1757
+- Fix wasm FPS control not working by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1762
+- Fix texture recreation when GL context is lost by @smilediver in https://github.com/axmolengine/axmol/pull/1763
+- Fix DebugDraw issue in 3D physics by @halx99
+- Fix OpenGLState cache error, reported by @solan-solan in https://github.com/axmolengine/axmol/issues/1759
+- Fix linux crash after close window by @halx99
+- Fix setup.ps1 not update AX_ROOT in unix profile by @halx99
+
+### Improvements
+
+- Disable c++20 char8_t
+- Improve build system, set rpath properly for platforms: linux, apple
+- HttpClient: add support for PATCH method by @smilediver in https://github.com/axmolengine/axmol/pull/1722
+- Add -f switch info to axmol command help output by @rh101 in https://github.com/axmolengine/axmol/pull/1729
+- Adapt DrawNodeEx to the changes on: Move color types to math/Color.h axmolengine#1741 by @aismann in https://github.com/axmolengine/axmol/pull/1760
+- Add Node World Space Positioning by @DelinWorks in https://github.com/axmolengine/axmol/pull/1743
+- Move color types to math/Color.h by @halx99 in https://github.com/axmolengine/axmol/pull/1741
+- Removing EditBox should not result in logging an error message by @rh101 in https://github.com/axmolengine/axmol/pull/1740
+- Update LUA config for new build options by @rh101 in https://github.com/axmolengine/axmol/pull/1772
+- Update TLD axmol.org -> axmol.dev
+- Rename folder thirdparty ==> 3rdparty
+- Update spine to 4.1-54fac9d
+- Set cmake minmal require to 3.29.0+ for supress xcode 15 duplicated linking warnings
+- Remove unnecessary cmake option: `AX_VS_DEPLOYMENT_TARGET`
+- Make FileStream open file for write share flags same with cstd
+- Fix some compile warnings
+
+### Break Changes
+
+- Remove `ax::log`, use `AXLOGD` instead
+- Remove cmake function: `ax_uwp_set_all_targets_deploy_min_version`
+
+### sdks updates
+
+- emsdk: 3.1.53 ==> 3.1.56
+- AGP: 8.2.1 ==> 8.2.2
+
+### 3rdparty updates
+
+- simdjson: 3.7.0 ==> 3.9.1
+- flatbuffers: 2.0.8 ==> 24.3.25
+- curl: 8.6.0 ==> 8.7.1
+- glad: 2.0.5 ==> 2.0.6
+- yasio: 4.2.1 ==> 4.2.2
+- stb_image: 2.28 ==> 2.29
+- luajit: 2.1-9cc2e42 ==> 2.1-d06beb0
+- c-ares: 1.25.0 ==> 1.28.1
+
 ## axmol-2.1.2 Feb.25 2024
 
 ### BugFixes
 
-- Fix screen size incorrect in retina display by @halx99 in https://github.com/axmolengine/axmol/pull/1692
+- Fix screen size incorrect in retina display by @halx99 in https://github.com/axmolengine/axmol/pull/1692, reported by @IcemarkUK
 - Fix view size incorrect when frameZoomFactor not 1.0 by @halx99 in https://github.com/axmolengine/axmol/pull/1694
 - Fix lua build for Android, iOS and Windows by @rh101 in https://github.com/axmolengine/axmol/pull/1650
 - Fix missing return statement by @rh101 in https://github.com/axmolengine/axmol/pull/1657
@@ -14,7 +80,6 @@
 - Fix lua build for Android, iOS by @bintester in https://github.com/axmolengine/axmol/pull/1709
 - Fix #1704, control android cmake options by engine axutils.gradle by @halx99 in https://github.com/axmolengine/axmol/pull/1705
 - Fix #1703, unzip don't rely on zlib DLL export by @halx99
-- Fix screen size incorrect in retina display by @halx99, reported by @IcemarkUK
 - Fix OSX sandbox network issue by @halx99, reported by @IcemarkUK
 - Fix c-ares link issue
 - Fix DrawNode luabinding color type mismatch by @halx99, reported by @qq461787436

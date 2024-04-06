@@ -16,6 +16,10 @@ if(WINDOWS)
     set_target_properties(${target_name} PROPERTIES
         IMPORTED_LOCATION "${jpeg-turbo_LIB_DIR}/jpeg-static.lib"
     )
+elseif(APPLE)
+    set_target_properties(${target_name} PROPERTIES
+      IMPORTED_LOCATION "${jpeg-turbo_LIB_DIR}/jpeg.xcframework"
+    )
 else()
     set_target_properties(${target_name} PROPERTIES
         IMPORTED_LOCATION "${jpeg-turbo_LIB_DIR}/libjpeg.a"

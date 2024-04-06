@@ -8,9 +8,9 @@
 
 // Ensure the included flatbuffers.h is the same version as when this file was
 // generated, otherwise it may not be compatible.
-static_assert(FLATBUFFERS_VERSION_MAJOR == 2 &&
-              FLATBUFFERS_VERSION_MINOR == 0 &&
-              FLATBUFFERS_VERSION_REVISION == 8,
+static_assert(FLATBUFFERS_VERSION_MAJOR == 24 &&
+              FLATBUFFERS_VERSION_MINOR == 3 &&
+              FLATBUFFERS_VERSION_REVISION == 25,
              "Non-compatible flatbuffers version included");
 
 namespace flatbuffers {
@@ -150,19 +150,11 @@ struct InnerActionFrameBuilder;
 struct EasingData;
 struct EasingDataBuilder;
 
-struct RotationSkew;
-
 struct FVec2;
 
 struct FVec3;
 
-struct Scale;
-
-struct AnchorPoint;
-
 struct Color;
-
-struct ColorVector;
 
 struct FlatSize;
 
@@ -176,29 +168,6 @@ struct ResourceDataBuilder;
 struct BlendFrame;
 struct BlendFrameBuilder;
 
-FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) RotationSkew FLATBUFFERS_FINAL_CLASS {
- private:
-  float rotationSkewX_;
-  float rotationSkewY_;
-
- public:
-  RotationSkew()
-      : rotationSkewX_(0),
-        rotationSkewY_(0) {
-  }
-  RotationSkew(float _rotationSkewX, float _rotationSkewY)
-      : rotationSkewX_(flatbuffers::EndianScalar(_rotationSkewX)),
-        rotationSkewY_(flatbuffers::EndianScalar(_rotationSkewY)) {
-  }
-  float rotationSkewX() const {
-    return flatbuffers::EndianScalar(rotationSkewX_);
-  }
-  float rotationSkewY() const {
-    return flatbuffers::EndianScalar(rotationSkewY_);
-  }
-};
-FLATBUFFERS_STRUCT_END(RotationSkew, 8);
-
 FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) FVec2 FLATBUFFERS_FINAL_CLASS {
  private:
   float x_;
@@ -210,14 +179,14 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) FVec2 FLATBUFFERS_FINAL_CLASS {
         y_(0) {
   }
   FVec2(float _x, float _y)
-      : x_(flatbuffers::EndianScalar(_x)),
-        y_(flatbuffers::EndianScalar(_y)) {
+      : x_(::flatbuffers::EndianScalar(_x)),
+        y_(::flatbuffers::EndianScalar(_y)) {
   }
   float x() const {
-    return flatbuffers::EndianScalar(x_);
+    return ::flatbuffers::EndianScalar(x_);
   }
   float y() const {
-    return flatbuffers::EndianScalar(y_);
+    return ::flatbuffers::EndianScalar(y_);
   }
 };
 FLATBUFFERS_STRUCT_END(FVec2, 8);
@@ -235,67 +204,21 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) FVec3 FLATBUFFERS_FINAL_CLASS {
         z_(0) {
   }
   FVec3(float _x, float _y, float _z)
-      : x_(flatbuffers::EndianScalar(_x)),
-        y_(flatbuffers::EndianScalar(_y)),
-        z_(flatbuffers::EndianScalar(_z)) {
+      : x_(::flatbuffers::EndianScalar(_x)),
+        y_(::flatbuffers::EndianScalar(_y)),
+        z_(::flatbuffers::EndianScalar(_z)) {
   }
   float x() const {
-    return flatbuffers::EndianScalar(x_);
+    return ::flatbuffers::EndianScalar(x_);
   }
   float y() const {
-    return flatbuffers::EndianScalar(y_);
+    return ::flatbuffers::EndianScalar(y_);
   }
   float z() const {
-    return flatbuffers::EndianScalar(z_);
+    return ::flatbuffers::EndianScalar(z_);
   }
 };
 FLATBUFFERS_STRUCT_END(FVec3, 12);
-
-FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) Scale FLATBUFFERS_FINAL_CLASS {
- private:
-  float scaleX_;
-  float scaleY_;
-
- public:
-  Scale()
-      : scaleX_(0),
-        scaleY_(0) {
-  }
-  Scale(float _scaleX, float _scaleY)
-      : scaleX_(flatbuffers::EndianScalar(_scaleX)),
-        scaleY_(flatbuffers::EndianScalar(_scaleY)) {
-  }
-  float scaleX() const {
-    return flatbuffers::EndianScalar(scaleX_);
-  }
-  float scaleY() const {
-    return flatbuffers::EndianScalar(scaleY_);
-  }
-};
-FLATBUFFERS_STRUCT_END(Scale, 8);
-
-FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) AnchorPoint FLATBUFFERS_FINAL_CLASS {
- private:
-  float scaleX_;
-  float scaleY_;
-
- public:
-  AnchorPoint()
-      : scaleX_(0),
-        scaleY_(0) {
-  }
-  AnchorPoint(float _scaleX, float _scaleY)
-      : scaleX_(flatbuffers::EndianScalar(_scaleX)),
-        scaleY_(flatbuffers::EndianScalar(_scaleY)) {
-  }
-  float scaleX() const {
-    return flatbuffers::EndianScalar(scaleX_);
-  }
-  float scaleY() const {
-    return flatbuffers::EndianScalar(scaleY_);
-  }
-};
-FLATBUFFERS_STRUCT_END(AnchorPoint, 8);
 
 FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(1) Color FLATBUFFERS_FINAL_CLASS {
  private:
@@ -312,48 +235,25 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(1) Color FLATBUFFERS_FINAL_CLASS {
         b_(0) {
   }
   Color(uint8_t _a, uint8_t _r, uint8_t _g, uint8_t _b)
-      : a_(flatbuffers::EndianScalar(_a)),
-        r_(flatbuffers::EndianScalar(_r)),
-        g_(flatbuffers::EndianScalar(_g)),
-        b_(flatbuffers::EndianScalar(_b)) {
+      : a_(::flatbuffers::EndianScalar(_a)),
+        r_(::flatbuffers::EndianScalar(_r)),
+        g_(::flatbuffers::EndianScalar(_g)),
+        b_(::flatbuffers::EndianScalar(_b)) {
   }
   uint8_t a() const {
-    return flatbuffers::EndianScalar(a_);
+    return ::flatbuffers::EndianScalar(a_);
   }
   uint8_t r() const {
-    return flatbuffers::EndianScalar(r_);
+    return ::flatbuffers::EndianScalar(r_);
   }
   uint8_t g() const {
-    return flatbuffers::EndianScalar(g_);
+    return ::flatbuffers::EndianScalar(g_);
   }
   uint8_t b() const {
-    return flatbuffers::EndianScalar(b_);
+    return ::flatbuffers::EndianScalar(b_);
   }
 };
 FLATBUFFERS_STRUCT_END(Color, 4);
-
-FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) ColorVector FLATBUFFERS_FINAL_CLASS {
- private:
-  float vectorX_;
-  float vectorY_;
-
- public:
-  ColorVector()
-      : vectorX_(0),
-        vectorY_(0) {
-  }
-  ColorVector(float _vectorX, float _vectorY)
-      : vectorX_(flatbuffers::EndianScalar(_vectorX)),
-        vectorY_(flatbuffers::EndianScalar(_vectorY)) {
-  }
-  float vectorX() const {
-    return flatbuffers::EndianScalar(vectorX_);
-  }
-  float vectorY() const {
-    return flatbuffers::EndianScalar(vectorY_);
-  }
-};
-FLATBUFFERS_STRUCT_END(ColorVector, 8);
 
 FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) FlatSize FLATBUFFERS_FINAL_CLASS {
  private:
@@ -366,14 +266,14 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) FlatSize FLATBUFFERS_FINAL_CLASS {
         height_(0) {
   }
   FlatSize(float _width, float _height)
-      : width_(flatbuffers::EndianScalar(_width)),
-        height_(flatbuffers::EndianScalar(_height)) {
+      : width_(::flatbuffers::EndianScalar(_width)),
+        height_(::flatbuffers::EndianScalar(_height)) {
   }
   float width() const {
-    return flatbuffers::EndianScalar(width_);
+    return ::flatbuffers::EndianScalar(width_);
   }
   float height() const {
-    return flatbuffers::EndianScalar(height_);
+    return ::flatbuffers::EndianScalar(height_);
   }
 };
 FLATBUFFERS_STRUCT_END(FlatSize, 8);
@@ -393,22 +293,22 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) CapInsets FLATBUFFERS_FINAL_CLASS {
         height_(0) {
   }
   CapInsets(float _x, float _y, float _width, float _height)
-      : x_(flatbuffers::EndianScalar(_x)),
-        y_(flatbuffers::EndianScalar(_y)),
-        width_(flatbuffers::EndianScalar(_width)),
-        height_(flatbuffers::EndianScalar(_height)) {
+      : x_(::flatbuffers::EndianScalar(_x)),
+        y_(::flatbuffers::EndianScalar(_y)),
+        width_(::flatbuffers::EndianScalar(_width)),
+        height_(::flatbuffers::EndianScalar(_height)) {
   }
   float x() const {
-    return flatbuffers::EndianScalar(x_);
+    return ::flatbuffers::EndianScalar(x_);
   }
   float y() const {
-    return flatbuffers::EndianScalar(y_);
+    return ::flatbuffers::EndianScalar(y_);
   }
   float width() const {
-    return flatbuffers::EndianScalar(width_);
+    return ::flatbuffers::EndianScalar(width_);
   }
   float height() const {
-    return flatbuffers::EndianScalar(height_);
+    return ::flatbuffers::EndianScalar(height_);
   }
 };
 FLATBUFFERS_STRUCT_END(CapInsets, 16);
@@ -424,19 +324,19 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) BlendFunc FLATBUFFERS_FINAL_CLASS {
         dst_(0) {
   }
   BlendFunc(int32_t _src, int32_t _dst)
-      : src_(flatbuffers::EndianScalar(_src)),
-        dst_(flatbuffers::EndianScalar(_dst)) {
+      : src_(::flatbuffers::EndianScalar(_src)),
+        dst_(::flatbuffers::EndianScalar(_dst)) {
   }
   int32_t src() const {
-    return flatbuffers::EndianScalar(src_);
+    return ::flatbuffers::EndianScalar(src_);
   }
   int32_t dst() const {
-    return flatbuffers::EndianScalar(dst_);
+    return ::flatbuffers::EndianScalar(dst_);
   }
 };
 FLATBUFFERS_STRUCT_END(BlendFunc, 8);
 
-struct CSParseBinary FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct CSParseBinary FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef CSParseBinaryBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_VERSION = 4,
@@ -446,14 +346,14 @@ struct CSParseBinary FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_ACTION = 12,
     VT_ANIMATIONLIST = 14
   };
-  const flatbuffers::String *version() const {
-    return GetPointer<const flatbuffers::String *>(VT_VERSION);
+  const ::flatbuffers::String *version() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_VERSION);
   }
-  const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>> *textures() const {
-    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>> *>(VT_TEXTURES);
+  const ::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>> *textures() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>> *>(VT_TEXTURES);
   }
-  const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>> *texturePngs() const {
-    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>> *>(VT_TEXTUREPNGS);
+  const ::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>> *texturePngs() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>> *>(VT_TEXTUREPNGS);
   }
   const flatbuffers::NodeTree *nodeTree() const {
     return GetPointer<const flatbuffers::NodeTree *>(VT_NODETREE);
@@ -461,10 +361,10 @@ struct CSParseBinary FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::NodeAction *action() const {
     return GetPointer<const flatbuffers::NodeAction *>(VT_ACTION);
   }
-  const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::AnimationInfo>> *animationList() const {
-    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::AnimationInfo>> *>(VT_ANIMATIONLIST);
+  const ::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::AnimationInfo>> *animationList() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::AnimationInfo>> *>(VT_ANIMATIONLIST);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_VERSION) &&
            verifier.VerifyString(version()) &&
@@ -487,45 +387,45 @@ struct CSParseBinary FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct CSParseBinaryBuilder {
   typedef CSParseBinary Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_version(flatbuffers::Offset<flatbuffers::String> version) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_version(::flatbuffers::Offset<::flatbuffers::String> version) {
     fbb_.AddOffset(CSParseBinary::VT_VERSION, version);
   }
-  void add_textures(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> textures) {
+  void add_textures(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>>> textures) {
     fbb_.AddOffset(CSParseBinary::VT_TEXTURES, textures);
   }
-  void add_texturePngs(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> texturePngs) {
+  void add_texturePngs(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>>> texturePngs) {
     fbb_.AddOffset(CSParseBinary::VT_TEXTUREPNGS, texturePngs);
   }
-  void add_nodeTree(flatbuffers::Offset<flatbuffers::NodeTree> nodeTree) {
+  void add_nodeTree(::flatbuffers::Offset<flatbuffers::NodeTree> nodeTree) {
     fbb_.AddOffset(CSParseBinary::VT_NODETREE, nodeTree);
   }
-  void add_action(flatbuffers::Offset<flatbuffers::NodeAction> action) {
+  void add_action(::flatbuffers::Offset<flatbuffers::NodeAction> action) {
     fbb_.AddOffset(CSParseBinary::VT_ACTION, action);
   }
-  void add_animationList(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::AnimationInfo>>> animationList) {
+  void add_animationList(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::AnimationInfo>>> animationList) {
     fbb_.AddOffset(CSParseBinary::VT_ANIMATIONLIST, animationList);
   }
-  explicit CSParseBinaryBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit CSParseBinaryBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<CSParseBinary> Finish() {
+  ::flatbuffers::Offset<CSParseBinary> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<CSParseBinary>(end);
+    auto o = ::flatbuffers::Offset<CSParseBinary>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<CSParseBinary> CreateCSParseBinary(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> version = 0,
-    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> textures = 0,
-    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> texturePngs = 0,
-    flatbuffers::Offset<flatbuffers::NodeTree> nodeTree = 0,
-    flatbuffers::Offset<flatbuffers::NodeAction> action = 0,
-    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::AnimationInfo>>> animationList = 0) {
+inline ::flatbuffers::Offset<CSParseBinary> CreateCSParseBinary(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> version = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>>> textures = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<::flatbuffers::String>>> texturePngs = 0,
+    ::flatbuffers::Offset<flatbuffers::NodeTree> nodeTree = 0,
+    ::flatbuffers::Offset<flatbuffers::NodeAction> action = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::AnimationInfo>>> animationList = 0) {
   CSParseBinaryBuilder builder_(_fbb);
   builder_.add_animationList(animationList);
   builder_.add_action(action);
@@ -536,18 +436,18 @@ inline flatbuffers::Offset<CSParseBinary> CreateCSParseBinary(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<CSParseBinary> CreateCSParseBinaryDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<CSParseBinary> CreateCSParseBinaryDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *version = nullptr,
-    const std::vector<flatbuffers::Offset<flatbuffers::String>> *textures = nullptr,
-    const std::vector<flatbuffers::Offset<flatbuffers::String>> *texturePngs = nullptr,
-    flatbuffers::Offset<flatbuffers::NodeTree> nodeTree = 0,
-    flatbuffers::Offset<flatbuffers::NodeAction> action = 0,
-    const std::vector<flatbuffers::Offset<flatbuffers::AnimationInfo>> *animationList = nullptr) {
+    const std::vector<::flatbuffers::Offset<::flatbuffers::String>> *textures = nullptr,
+    const std::vector<::flatbuffers::Offset<::flatbuffers::String>> *texturePngs = nullptr,
+    ::flatbuffers::Offset<flatbuffers::NodeTree> nodeTree = 0,
+    ::flatbuffers::Offset<flatbuffers::NodeAction> action = 0,
+    const std::vector<::flatbuffers::Offset<flatbuffers::AnimationInfo>> *animationList = nullptr) {
   auto version__ = version ? _fbb.CreateString(version) : 0;
-  auto textures__ = textures ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::String>>(*textures) : 0;
-  auto texturePngs__ = texturePngs ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::String>>(*texturePngs) : 0;
-  auto animationList__ = animationList ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::AnimationInfo>>(*animationList) : 0;
+  auto textures__ = textures ? _fbb.CreateVector<::flatbuffers::Offset<::flatbuffers::String>>(*textures) : 0;
+  auto texturePngs__ = texturePngs ? _fbb.CreateVector<::flatbuffers::Offset<::flatbuffers::String>>(*texturePngs) : 0;
+  auto animationList__ = animationList ? _fbb.CreateVector<::flatbuffers::Offset<flatbuffers::AnimationInfo>>(*animationList) : 0;
   return flatbuffers::CreateCSParseBinary(
       _fbb,
       version__,
@@ -558,7 +458,7 @@ inline flatbuffers::Offset<CSParseBinary> CreateCSParseBinaryDirect(
       animationList__);
 }
 
-struct NodeTree FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct NodeTree FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef NodeTreeBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_CLASSNAME = 4,
@@ -566,19 +466,19 @@ struct NodeTree FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_OPTIONS = 8,
     VT_CUSTOMCLASSNAME = 10
   };
-  const flatbuffers::String *classname() const {
-    return GetPointer<const flatbuffers::String *>(VT_CLASSNAME);
+  const ::flatbuffers::String *classname() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CLASSNAME);
   }
-  const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::NodeTree>> *children() const {
-    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::NodeTree>> *>(VT_CHILDREN);
+  const ::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::NodeTree>> *children() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::NodeTree>> *>(VT_CHILDREN);
   }
   const flatbuffers::Options *options() const {
     return GetPointer<const flatbuffers::Options *>(VT_OPTIONS);
   }
-  const flatbuffers::String *customClassName() const {
-    return GetPointer<const flatbuffers::String *>(VT_CUSTOMCLASSNAME);
+  const ::flatbuffers::String *customClassName() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CUSTOMCLASSNAME);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_CLASSNAME) &&
            verifier.VerifyString(classname()) &&
@@ -595,37 +495,37 @@ struct NodeTree FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct NodeTreeBuilder {
   typedef NodeTree Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_classname(flatbuffers::Offset<flatbuffers::String> classname) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_classname(::flatbuffers::Offset<::flatbuffers::String> classname) {
     fbb_.AddOffset(NodeTree::VT_CLASSNAME, classname);
   }
-  void add_children(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::NodeTree>>> children) {
+  void add_children(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::NodeTree>>> children) {
     fbb_.AddOffset(NodeTree::VT_CHILDREN, children);
   }
-  void add_options(flatbuffers::Offset<flatbuffers::Options> options) {
+  void add_options(::flatbuffers::Offset<flatbuffers::Options> options) {
     fbb_.AddOffset(NodeTree::VT_OPTIONS, options);
   }
-  void add_customClassName(flatbuffers::Offset<flatbuffers::String> customClassName) {
+  void add_customClassName(::flatbuffers::Offset<::flatbuffers::String> customClassName) {
     fbb_.AddOffset(NodeTree::VT_CUSTOMCLASSNAME, customClassName);
   }
-  explicit NodeTreeBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit NodeTreeBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<NodeTree> Finish() {
+  ::flatbuffers::Offset<NodeTree> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<NodeTree>(end);
+    auto o = ::flatbuffers::Offset<NodeTree>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<NodeTree> CreateNodeTree(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> classname = 0,
-    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::NodeTree>>> children = 0,
-    flatbuffers::Offset<flatbuffers::Options> options = 0,
-    flatbuffers::Offset<flatbuffers::String> customClassName = 0) {
+inline ::flatbuffers::Offset<NodeTree> CreateNodeTree(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> classname = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::NodeTree>>> children = 0,
+    ::flatbuffers::Offset<flatbuffers::Options> options = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> customClassName = 0) {
   NodeTreeBuilder builder_(_fbb);
   builder_.add_customClassName(customClassName);
   builder_.add_options(options);
@@ -634,14 +534,14 @@ inline flatbuffers::Offset<NodeTree> CreateNodeTree(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<NodeTree> CreateNodeTreeDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<NodeTree> CreateNodeTreeDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *classname = nullptr,
-    const std::vector<flatbuffers::Offset<flatbuffers::NodeTree>> *children = nullptr,
-    flatbuffers::Offset<flatbuffers::Options> options = 0,
+    const std::vector<::flatbuffers::Offset<flatbuffers::NodeTree>> *children = nullptr,
+    ::flatbuffers::Offset<flatbuffers::Options> options = 0,
     const char *customClassName = nullptr) {
   auto classname__ = classname ? _fbb.CreateString(classname) : 0;
-  auto children__ = children ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::NodeTree>>(*children) : 0;
+  auto children__ = children ? _fbb.CreateVector<::flatbuffers::Offset<flatbuffers::NodeTree>>(*children) : 0;
   auto customClassName__ = customClassName ? _fbb.CreateString(customClassName) : 0;
   return flatbuffers::CreateNodeTree(
       _fbb,
@@ -651,7 +551,7 @@ inline flatbuffers::Offset<NodeTree> CreateNodeTreeDirect(
       customClassName__);
 }
 
-struct Options FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct Options FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef OptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_DATA = 4
@@ -659,7 +559,7 @@ struct Options FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::WidgetOptions *data() const {
     return GetPointer<const flatbuffers::WidgetOptions *>(VT_DATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_DATA) &&
            verifier.VerifyTable(data()) &&
@@ -669,31 +569,31 @@ struct Options FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct OptionsBuilder {
   typedef Options Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_data(flatbuffers::Offset<flatbuffers::WidgetOptions> data) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_data(::flatbuffers::Offset<flatbuffers::WidgetOptions> data) {
     fbb_.AddOffset(Options::VT_DATA, data);
   }
-  explicit OptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit OptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<Options> Finish() {
+  ::flatbuffers::Offset<Options> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<Options>(end);
+    auto o = ::flatbuffers::Offset<Options>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<Options> CreateOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> data = 0) {
+inline ::flatbuffers::Offset<Options> CreateOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> data = 0) {
   OptionsBuilder builder_(_fbb);
   builder_.add_data(data);
   return builder_.Finish();
 }
 
-struct WidgetOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WidgetOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef WidgetOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NAME = 4,
@@ -720,14 +620,14 @@ struct WidgetOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_CASCADECOLORENABLED = 46,
     VT_CASCADEOPACITYENABLED = 48
   };
-  const flatbuffers::String *name() const {
-    return GetPointer<const flatbuffers::String *>(VT_NAME);
+  const ::flatbuffers::String *name() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_NAME);
   }
   int32_t actionTag() const {
     return GetField<int32_t>(VT_ACTIONTAG, 0);
   }
-  const flatbuffers::RotationSkew *rotationSkew() const {
-    return GetStruct<const flatbuffers::RotationSkew *>(VT_ROTATIONSKEW);
+  const flatbuffers::FVec2 *rotationSkew() const {
+    return GetStruct<const flatbuffers::FVec2 *>(VT_ROTATIONSKEW);
   }
   int32_t zOrder() const {
     return GetField<int32_t>(VT_ZORDER, 0);
@@ -744,11 +644,11 @@ struct WidgetOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::FVec2 *position() const {
     return GetStruct<const flatbuffers::FVec2 *>(VT_POSITION);
   }
-  const flatbuffers::Scale *scale() const {
-    return GetStruct<const flatbuffers::Scale *>(VT_SCALE);
+  const flatbuffers::FVec2 *scale() const {
+    return GetStruct<const flatbuffers::FVec2 *>(VT_SCALE);
   }
-  const flatbuffers::AnchorPoint *anchorPoint() const {
-    return GetStruct<const flatbuffers::AnchorPoint *>(VT_ANCHORPOINT);
+  const flatbuffers::FVec2 *anchorPoint() const {
+    return GetStruct<const flatbuffers::FVec2 *>(VT_ANCHORPOINT);
   }
   const flatbuffers::Color *color() const {
     return GetStruct<const flatbuffers::Color *>(VT_COLOR);
@@ -768,17 +668,17 @@ struct WidgetOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool touchEnabled() const {
     return GetField<uint8_t>(VT_TOUCHENABLED, 0) != 0;
   }
-  const flatbuffers::String *frameEvent() const {
-    return GetPointer<const flatbuffers::String *>(VT_FRAMEEVENT);
+  const ::flatbuffers::String *frameEvent() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_FRAMEEVENT);
   }
-  const flatbuffers::String *customProperty() const {
-    return GetPointer<const flatbuffers::String *>(VT_CUSTOMPROPERTY);
+  const ::flatbuffers::String *customProperty() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CUSTOMPROPERTY);
   }
-  const flatbuffers::String *callBackType() const {
-    return GetPointer<const flatbuffers::String *>(VT_CALLBACKTYPE);
+  const ::flatbuffers::String *callBackType() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CALLBACKTYPE);
   }
-  const flatbuffers::String *callBackName() const {
-    return GetPointer<const flatbuffers::String *>(VT_CALLBACKNAME);
+  const ::flatbuffers::String *callBackName() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CALLBACKNAME);
   }
   const flatbuffers::LayoutComponentTable *layoutComponent() const {
     return GetPointer<const flatbuffers::LayoutComponentTable *>(VT_LAYOUTCOMPONENT);
@@ -789,19 +689,19 @@ struct WidgetOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool cascadeOpacityEnabled() const {
     return GetField<uint8_t>(VT_CASCADEOPACITYENABLED, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NAME) &&
            verifier.VerifyString(name()) &&
            VerifyField<int32_t>(verifier, VT_ACTIONTAG, 4) &&
-           VerifyField<flatbuffers::RotationSkew>(verifier, VT_ROTATIONSKEW, 4) &&
+           VerifyField<flatbuffers::FVec2>(verifier, VT_ROTATIONSKEW, 4) &&
            VerifyField<int32_t>(verifier, VT_ZORDER, 4) &&
            VerifyField<uint8_t>(verifier, VT_VISIBLE, 1) &&
            VerifyField<uint8_t>(verifier, VT_ALPHA, 1) &&
            VerifyField<int32_t>(verifier, VT_TAG, 4) &&
            VerifyField<flatbuffers::FVec2>(verifier, VT_POSITION, 4) &&
-           VerifyField<flatbuffers::Scale>(verifier, VT_SCALE, 4) &&
-           VerifyField<flatbuffers::AnchorPoint>(verifier, VT_ANCHORPOINT, 4) &&
+           VerifyField<flatbuffers::FVec2>(verifier, VT_SCALE, 4) &&
+           VerifyField<flatbuffers::FVec2>(verifier, VT_ANCHORPOINT, 4) &&
            VerifyField<flatbuffers::Color>(verifier, VT_COLOR, 1) &&
            VerifyField<flatbuffers::FlatSize>(verifier, VT_SIZE, 4) &&
            VerifyField<uint8_t>(verifier, VT_FLIPX, 1) &&
@@ -826,15 +726,15 @@ struct WidgetOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct WidgetOptionsBuilder {
   typedef WidgetOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_name(flatbuffers::Offset<flatbuffers::String> name) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_name(::flatbuffers::Offset<::flatbuffers::String> name) {
     fbb_.AddOffset(WidgetOptions::VT_NAME, name);
   }
   void add_actionTag(int32_t actionTag) {
     fbb_.AddElement<int32_t>(WidgetOptions::VT_ACTIONTAG, actionTag, 0);
   }
-  void add_rotationSkew(const flatbuffers::RotationSkew *rotationSkew) {
+  void add_rotationSkew(const flatbuffers::FVec2 *rotationSkew) {
     fbb_.AddStruct(WidgetOptions::VT_ROTATIONSKEW, rotationSkew);
   }
   void add_zOrder(int32_t zOrder) {
@@ -852,10 +752,10 @@ struct WidgetOptionsBuilder {
   void add_position(const flatbuffers::FVec2 *position) {
     fbb_.AddStruct(WidgetOptions::VT_POSITION, position);
   }
-  void add_scale(const flatbuffers::Scale *scale) {
+  void add_scale(const flatbuffers::FVec2 *scale) {
     fbb_.AddStruct(WidgetOptions::VT_SCALE, scale);
   }
-  void add_anchorPoint(const flatbuffers::AnchorPoint *anchorPoint) {
+  void add_anchorPoint(const flatbuffers::FVec2 *anchorPoint) {
     fbb_.AddStruct(WidgetOptions::VT_ANCHORPOINT, anchorPoint);
   }
   void add_color(const flatbuffers::Color *color) {
@@ -876,19 +776,19 @@ struct WidgetOptionsBuilder {
   void add_touchEnabled(bool touchEnabled) {
     fbb_.AddElement<uint8_t>(WidgetOptions::VT_TOUCHENABLED, static_cast<uint8_t>(touchEnabled), 0);
   }
-  void add_frameEvent(flatbuffers::Offset<flatbuffers::String> frameEvent) {
+  void add_frameEvent(::flatbuffers::Offset<::flatbuffers::String> frameEvent) {
     fbb_.AddOffset(WidgetOptions::VT_FRAMEEVENT, frameEvent);
   }
-  void add_customProperty(flatbuffers::Offset<flatbuffers::String> customProperty) {
+  void add_customProperty(::flatbuffers::Offset<::flatbuffers::String> customProperty) {
     fbb_.AddOffset(WidgetOptions::VT_CUSTOMPROPERTY, customProperty);
   }
-  void add_callBackType(flatbuffers::Offset<flatbuffers::String> callBackType) {
+  void add_callBackType(::flatbuffers::Offset<::flatbuffers::String> callBackType) {
     fbb_.AddOffset(WidgetOptions::VT_CALLBACKTYPE, callBackType);
   }
-  void add_callBackName(flatbuffers::Offset<flatbuffers::String> callBackName) {
+  void add_callBackName(::flatbuffers::Offset<::flatbuffers::String> callBackName) {
     fbb_.AddOffset(WidgetOptions::VT_CALLBACKNAME, callBackName);
   }
-  void add_layoutComponent(flatbuffers::Offset<flatbuffers::LayoutComponentTable> layoutComponent) {
+  void add_layoutComponent(::flatbuffers::Offset<flatbuffers::LayoutComponentTable> layoutComponent) {
     fbb_.AddOffset(WidgetOptions::VT_LAYOUTCOMPONENT, layoutComponent);
   }
   void add_cascadeColorEnabled(bool cascadeColorEnabled) {
@@ -897,40 +797,40 @@ struct WidgetOptionsBuilder {
   void add_cascadeOpacityEnabled(bool cascadeOpacityEnabled) {
     fbb_.AddElement<uint8_t>(WidgetOptions::VT_CASCADEOPACITYENABLED, static_cast<uint8_t>(cascadeOpacityEnabled), 0);
   }
-  explicit WidgetOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WidgetOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<WidgetOptions> Finish() {
+  ::flatbuffers::Offset<WidgetOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<WidgetOptions>(end);
+    auto o = ::flatbuffers::Offset<WidgetOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<WidgetOptions> CreateWidgetOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> name = 0,
+inline ::flatbuffers::Offset<WidgetOptions> CreateWidgetOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> name = 0,
     int32_t actionTag = 0,
-    const flatbuffers::RotationSkew *rotationSkew = nullptr,
+    const flatbuffers::FVec2 *rotationSkew = nullptr,
     int32_t zOrder = 0,
     bool visible = true,
     uint8_t alpha = 255,
     int32_t tag = 0,
     const flatbuffers::FVec2 *position = nullptr,
-    const flatbuffers::Scale *scale = nullptr,
-    const flatbuffers::AnchorPoint *anchorPoint = nullptr,
+    const flatbuffers::FVec2 *scale = nullptr,
+    const flatbuffers::FVec2 *anchorPoint = nullptr,
     const flatbuffers::Color *color = nullptr,
     const flatbuffers::FlatSize *size = nullptr,
     bool flipX = false,
     bool flipY = false,
     bool ignoreSize = false,
     bool touchEnabled = false,
-    flatbuffers::Offset<flatbuffers::String> frameEvent = 0,
-    flatbuffers::Offset<flatbuffers::String> customProperty = 0,
-    flatbuffers::Offset<flatbuffers::String> callBackType = 0,
-    flatbuffers::Offset<flatbuffers::String> callBackName = 0,
-    flatbuffers::Offset<flatbuffers::LayoutComponentTable> layoutComponent = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> frameEvent = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> customProperty = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> callBackType = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> callBackName = 0,
+    ::flatbuffers::Offset<flatbuffers::LayoutComponentTable> layoutComponent = 0,
     bool cascadeColorEnabled = false,
     bool cascadeOpacityEnabled = false) {
   WidgetOptionsBuilder builder_(_fbb);
@@ -960,18 +860,18 @@ inline flatbuffers::Offset<WidgetOptions> CreateWidgetOptions(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<WidgetOptions> CreateWidgetOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<WidgetOptions> CreateWidgetOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *name = nullptr,
     int32_t actionTag = 0,
-    const flatbuffers::RotationSkew *rotationSkew = nullptr,
+    const flatbuffers::FVec2 *rotationSkew = nullptr,
     int32_t zOrder = 0,
     bool visible = true,
     uint8_t alpha = 255,
     int32_t tag = 0,
     const flatbuffers::FVec2 *position = nullptr,
-    const flatbuffers::Scale *scale = nullptr,
-    const flatbuffers::AnchorPoint *anchorPoint = nullptr,
+    const flatbuffers::FVec2 *scale = nullptr,
+    const flatbuffers::FVec2 *anchorPoint = nullptr,
     const flatbuffers::Color *color = nullptr,
     const flatbuffers::FlatSize *size = nullptr,
     bool flipX = false,
@@ -982,7 +882,7 @@ inline flatbuffers::Offset<WidgetOptions> CreateWidgetOptionsDirect(
     const char *customProperty = nullptr,
     const char *callBackType = nullptr,
     const char *callBackName = nullptr,
-    flatbuffers::Offset<flatbuffers::LayoutComponentTable> layoutComponent = 0,
+    ::flatbuffers::Offset<flatbuffers::LayoutComponentTable> layoutComponent = 0,
     bool cascadeColorEnabled = false,
     bool cascadeOpacityEnabled = false) {
   auto name__ = name ? _fbb.CreateString(name) : 0;
@@ -1017,7 +917,7 @@ inline flatbuffers::Offset<WidgetOptions> CreateWidgetOptionsDirect(
       cascadeOpacityEnabled);
 }
 
-struct LayoutComponentTable FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct LayoutComponentTable FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef LayoutComponentTableBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_POSITIONXPERCENTENABLED = 4,
@@ -1067,11 +967,11 @@ struct LayoutComponentTable FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
   bool stretchVerticalEnabled() const {
     return GetField<uint8_t>(VT_STRETCHVERTICALENABLED, 0) != 0;
   }
-  const flatbuffers::String *horizontalEdge() const {
-    return GetPointer<const flatbuffers::String *>(VT_HORIZONTALEDGE);
+  const ::flatbuffers::String *horizontalEdge() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_HORIZONTALEDGE);
   }
-  const flatbuffers::String *verticalEdge() const {
-    return GetPointer<const flatbuffers::String *>(VT_VERTICALEDGE);
+  const ::flatbuffers::String *verticalEdge() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_VERTICALEDGE);
   }
   float leftMargin() const {
     return GetField<float>(VT_LEFTMARGIN, 0.0f);
@@ -1085,7 +985,7 @@ struct LayoutComponentTable FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
   float bottomMargin() const {
     return GetField<float>(VT_BOTTOMMARGIN, 0.0f);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_POSITIONXPERCENTENABLED, 1) &&
            VerifyField<uint8_t>(verifier, VT_POSITIONYPERCENTENABLED, 1) &&
@@ -1111,8 +1011,8 @@ struct LayoutComponentTable FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
 
 struct LayoutComponentTableBuilder {
   typedef LayoutComponentTable Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_positionXPercentEnabled(bool positionXPercentEnabled) {
     fbb_.AddElement<uint8_t>(LayoutComponentTable::VT_POSITIONXPERCENTENABLED, static_cast<uint8_t>(positionXPercentEnabled), 0);
   }
@@ -1143,10 +1043,10 @@ struct LayoutComponentTableBuilder {
   void add_stretchVerticalEnabled(bool stretchVerticalEnabled) {
     fbb_.AddElement<uint8_t>(LayoutComponentTable::VT_STRETCHVERTICALENABLED, static_cast<uint8_t>(stretchVerticalEnabled), 0);
   }
-  void add_horizontalEdge(flatbuffers::Offset<flatbuffers::String> horizontalEdge) {
+  void add_horizontalEdge(::flatbuffers::Offset<::flatbuffers::String> horizontalEdge) {
     fbb_.AddOffset(LayoutComponentTable::VT_HORIZONTALEDGE, horizontalEdge);
   }
-  void add_verticalEdge(flatbuffers::Offset<flatbuffers::String> verticalEdge) {
+  void add_verticalEdge(::flatbuffers::Offset<::flatbuffers::String> verticalEdge) {
     fbb_.AddOffset(LayoutComponentTable::VT_VERTICALEDGE, verticalEdge);
   }
   void add_leftMargin(float leftMargin) {
@@ -1161,19 +1061,19 @@ struct LayoutComponentTableBuilder {
   void add_bottomMargin(float bottomMargin) {
     fbb_.AddElement<float>(LayoutComponentTable::VT_BOTTOMMARGIN, bottomMargin, 0.0f);
   }
-  explicit LayoutComponentTableBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit LayoutComponentTableBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<LayoutComponentTable> Finish() {
+  ::flatbuffers::Offset<LayoutComponentTable> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<LayoutComponentTable>(end);
+    auto o = ::flatbuffers::Offset<LayoutComponentTable>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<LayoutComponentTable> CreateLayoutComponentTable(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<LayoutComponentTable> CreateLayoutComponentTable(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     bool positionXPercentEnabled = false,
     bool positionYPercentEnabled = false,
     float positionXPercent = 0.0f,
@@ -1184,8 +1084,8 @@ inline flatbuffers::Offset<LayoutComponentTable> CreateLayoutComponentTable(
     float sizeYPercent = 0.0f,
     bool stretchHorizontalEnabled = false,
     bool stretchVerticalEnabled = false,
-    flatbuffers::Offset<flatbuffers::String> horizontalEdge = 0,
-    flatbuffers::Offset<flatbuffers::String> verticalEdge = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> horizontalEdge = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> verticalEdge = 0,
     float leftMargin = 0.0f,
     float rightMargin = 0.0f,
     float topMargin = 0.0f,
@@ -1210,8 +1110,8 @@ inline flatbuffers::Offset<LayoutComponentTable> CreateLayoutComponentTable(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<LayoutComponentTable> CreateLayoutComponentTableDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<LayoutComponentTable> CreateLayoutComponentTableDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     bool positionXPercentEnabled = false,
     bool positionYPercentEnabled = false,
     float positionXPercent = 0.0f,
@@ -1250,7 +1150,7 @@ inline flatbuffers::Offset<LayoutComponentTable> CreateLayoutComponentTableDirec
       bottomMargin);
 }
 
-struct SingleNodeOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct SingleNodeOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef SingleNodeOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4
@@ -1258,7 +1158,7 @@ struct SingleNodeOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::WidgetOptions *nodeOptions() const {
     return GetPointer<const flatbuffers::WidgetOptions *>(VT_NODEOPTIONS);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -1268,31 +1168,31 @@ struct SingleNodeOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct SingleNodeOptionsBuilder {
   typedef SingleNodeOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(SingleNodeOptions::VT_NODEOPTIONS, nodeOptions);
   }
-  explicit SingleNodeOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit SingleNodeOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<SingleNodeOptions> Finish() {
+  ::flatbuffers::Offset<SingleNodeOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<SingleNodeOptions>(end);
+    auto o = ::flatbuffers::Offset<SingleNodeOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<SingleNodeOptions> CreateSingleNodeOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0) {
+inline ::flatbuffers::Offset<SingleNodeOptions> CreateSingleNodeOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0) {
   SingleNodeOptionsBuilder builder_(_fbb);
   builder_.add_nodeOptions(nodeOptions);
   return builder_.Finish();
 }
 
-struct SpriteOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct SpriteOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef SpriteOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -1320,7 +1220,7 @@ struct SpriteOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::FVec3 *filter() const {
     return GetStruct<const flatbuffers::FVec3 *>(VT_FILTER);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -1336,12 +1236,12 @@ struct SpriteOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct SpriteOptionsBuilder {
   typedef SpriteOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(SpriteOptions::VT_NODEOPTIONS, nodeOptions);
   }
-  void add_fileNameData(flatbuffers::Offset<flatbuffers::ResourceData> fileNameData) {
+  void add_fileNameData(::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData) {
     fbb_.AddOffset(SpriteOptions::VT_FILENAMEDATA, fileNameData);
   }
   void add_blendFunc(const flatbuffers::BlendFunc *blendFunc) {
@@ -1356,21 +1256,21 @@ struct SpriteOptionsBuilder {
   void add_filter(const flatbuffers::FVec3 *filter) {
     fbb_.AddStruct(SpriteOptions::VT_FILTER, filter);
   }
-  explicit SpriteOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit SpriteOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<SpriteOptions> Finish() {
+  ::flatbuffers::Offset<SpriteOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<SpriteOptions>(end);
+    auto o = ::flatbuffers::Offset<SpriteOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<SpriteOptions> CreateSpriteOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0,
+inline ::flatbuffers::Offset<SpriteOptions> CreateSpriteOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0,
     const flatbuffers::BlendFunc *blendFunc = nullptr,
     bool intelliShadingEnabled = false,
     const flatbuffers::FVec3 *hsv = nullptr,
@@ -1385,7 +1285,7 @@ inline flatbuffers::Offset<SpriteOptions> CreateSpriteOptions(
   return builder_.Finish();
 }
 
-struct ParticleSystemOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ParticleSystemOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ParticleSystemOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -1401,7 +1301,7 @@ struct ParticleSystemOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Tabl
   const flatbuffers::BlendFunc *blendFunc() const {
     return GetStruct<const flatbuffers::BlendFunc *>(VT_BLENDFUNC);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -1414,32 +1314,32 @@ struct ParticleSystemOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Tabl
 
 struct ParticleSystemOptionsBuilder {
   typedef ParticleSystemOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(ParticleSystemOptions::VT_NODEOPTIONS, nodeOptions);
   }
-  void add_fileNameData(flatbuffers::Offset<flatbuffers::ResourceData> fileNameData) {
+  void add_fileNameData(::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData) {
     fbb_.AddOffset(ParticleSystemOptions::VT_FILENAMEDATA, fileNameData);
   }
   void add_blendFunc(const flatbuffers::BlendFunc *blendFunc) {
     fbb_.AddStruct(ParticleSystemOptions::VT_BLENDFUNC, blendFunc);
   }
-  explicit ParticleSystemOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ParticleSystemOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ParticleSystemOptions> Finish() {
+  ::flatbuffers::Offset<ParticleSystemOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ParticleSystemOptions>(end);
+    auto o = ::flatbuffers::Offset<ParticleSystemOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ParticleSystemOptions> CreateParticleSystemOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0,
+inline ::flatbuffers::Offset<ParticleSystemOptions> CreateParticleSystemOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0,
     const flatbuffers::BlendFunc *blendFunc = nullptr) {
   ParticleSystemOptionsBuilder builder_(_fbb);
   builder_.add_blendFunc(blendFunc);
@@ -1448,7 +1348,7 @@ inline flatbuffers::Offset<ParticleSystemOptions> CreateParticleSystemOptions(
   return builder_.Finish();
 }
 
-struct SpineSkeletonOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct SpineSkeletonOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef SpineSkeletonOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -1462,17 +1362,17 @@ struct SpineSkeletonOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
   const flatbuffers::WidgetOptions *nodeOptions() const {
     return GetPointer<const flatbuffers::WidgetOptions *>(VT_NODEOPTIONS);
   }
-  const flatbuffers::String *dataFile() const {
-    return GetPointer<const flatbuffers::String *>(VT_DATAFILE);
+  const ::flatbuffers::String *dataFile() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_DATAFILE);
   }
-  const flatbuffers::String *atlasFile() const {
-    return GetPointer<const flatbuffers::String *>(VT_ATLASFILE);
+  const ::flatbuffers::String *atlasFile() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_ATLASFILE);
   }
-  const flatbuffers::String *animation() const {
-    return GetPointer<const flatbuffers::String *>(VT_ANIMATION);
+  const ::flatbuffers::String *animation() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_ANIMATION);
   }
-  const flatbuffers::String *skin() const {
-    return GetPointer<const flatbuffers::String *>(VT_SKIN);
+  const ::flatbuffers::String *skin() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_SKIN);
   }
   bool loop() const {
     return GetField<uint8_t>(VT_LOOP, 0) != 0;
@@ -1480,7 +1380,7 @@ struct SpineSkeletonOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
   float timeScale() const {
     return GetField<float>(VT_TIMESCALE, 0.0f);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -1500,21 +1400,21 @@ struct SpineSkeletonOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
 
 struct SpineSkeletonOptionsBuilder {
   typedef SpineSkeletonOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(SpineSkeletonOptions::VT_NODEOPTIONS, nodeOptions);
   }
-  void add_dataFile(flatbuffers::Offset<flatbuffers::String> dataFile) {
+  void add_dataFile(::flatbuffers::Offset<::flatbuffers::String> dataFile) {
     fbb_.AddOffset(SpineSkeletonOptions::VT_DATAFILE, dataFile);
   }
-  void add_atlasFile(flatbuffers::Offset<flatbuffers::String> atlasFile) {
+  void add_atlasFile(::flatbuffers::Offset<::flatbuffers::String> atlasFile) {
     fbb_.AddOffset(SpineSkeletonOptions::VT_ATLASFILE, atlasFile);
   }
-  void add_animation(flatbuffers::Offset<flatbuffers::String> animation) {
+  void add_animation(::flatbuffers::Offset<::flatbuffers::String> animation) {
     fbb_.AddOffset(SpineSkeletonOptions::VT_ANIMATION, animation);
   }
-  void add_skin(flatbuffers::Offset<flatbuffers::String> skin) {
+  void add_skin(::flatbuffers::Offset<::flatbuffers::String> skin) {
     fbb_.AddOffset(SpineSkeletonOptions::VT_SKIN, skin);
   }
   void add_loop(bool loop) {
@@ -1523,24 +1423,24 @@ struct SpineSkeletonOptionsBuilder {
   void add_timeScale(float timeScale) {
     fbb_.AddElement<float>(SpineSkeletonOptions::VT_TIMESCALE, timeScale, 0.0f);
   }
-  explicit SpineSkeletonOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit SpineSkeletonOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<SpineSkeletonOptions> Finish() {
+  ::flatbuffers::Offset<SpineSkeletonOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<SpineSkeletonOptions>(end);
+    auto o = ::flatbuffers::Offset<SpineSkeletonOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<SpineSkeletonOptions> CreateSpineSkeletonOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::String> dataFile = 0,
-    flatbuffers::Offset<flatbuffers::String> atlasFile = 0,
-    flatbuffers::Offset<flatbuffers::String> animation = 0,
-    flatbuffers::Offset<flatbuffers::String> skin = 0,
+inline ::flatbuffers::Offset<SpineSkeletonOptions> CreateSpineSkeletonOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> dataFile = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> atlasFile = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> animation = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> skin = 0,
     bool loop = false,
     float timeScale = 0.0f) {
   SpineSkeletonOptionsBuilder builder_(_fbb);
@@ -1554,9 +1454,9 @@ inline flatbuffers::Offset<SpineSkeletonOptions> CreateSpineSkeletonOptions(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<SpineSkeletonOptions> CreateSpineSkeletonOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+inline ::flatbuffers::Offset<SpineSkeletonOptions> CreateSpineSkeletonOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
     const char *dataFile = nullptr,
     const char *atlasFile = nullptr,
     const char *animation = nullptr,
@@ -1578,7 +1478,7 @@ inline flatbuffers::Offset<SpineSkeletonOptions> CreateSpineSkeletonOptionsDirec
       timeScale);
 }
 
-struct ControlSwitchOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ControlSwitchOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ControlSwitchOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -1610,7 +1510,7 @@ struct ControlSwitchOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
   bool enabled() const {
     return GetField<uint8_t>(VT_ENABLED, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -1630,21 +1530,21 @@ struct ControlSwitchOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
 
 struct ControlSwitchOptionsBuilder {
   typedef ControlSwitchOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(ControlSwitchOptions::VT_NODEOPTIONS, nodeOptions);
   }
-  void add_maskImage(flatbuffers::Offset<flatbuffers::ResourceData> maskImage) {
+  void add_maskImage(::flatbuffers::Offset<flatbuffers::ResourceData> maskImage) {
     fbb_.AddOffset(ControlSwitchOptions::VT_MASKIMAGE, maskImage);
   }
-  void add_onImage(flatbuffers::Offset<flatbuffers::ResourceData> onImage) {
+  void add_onImage(::flatbuffers::Offset<flatbuffers::ResourceData> onImage) {
     fbb_.AddOffset(ControlSwitchOptions::VT_ONIMAGE, onImage);
   }
-  void add_offImage(flatbuffers::Offset<flatbuffers::ResourceData> offImage) {
+  void add_offImage(::flatbuffers::Offset<flatbuffers::ResourceData> offImage) {
     fbb_.AddOffset(ControlSwitchOptions::VT_OFFIMAGE, offImage);
   }
-  void add_thumbImage(flatbuffers::Offset<flatbuffers::ResourceData> thumbImage) {
+  void add_thumbImage(::flatbuffers::Offset<flatbuffers::ResourceData> thumbImage) {
     fbb_.AddOffset(ControlSwitchOptions::VT_THUMBIMAGE, thumbImage);
   }
   void add_on(bool on) {
@@ -1653,24 +1553,24 @@ struct ControlSwitchOptionsBuilder {
   void add_enabled(bool enabled) {
     fbb_.AddElement<uint8_t>(ControlSwitchOptions::VT_ENABLED, static_cast<uint8_t>(enabled), 0);
   }
-  explicit ControlSwitchOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ControlSwitchOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ControlSwitchOptions> Finish() {
+  ::flatbuffers::Offset<ControlSwitchOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ControlSwitchOptions>(end);
+    auto o = ::flatbuffers::Offset<ControlSwitchOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ControlSwitchOptions> CreateControlSwitchOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> maskImage = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> onImage = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> offImage = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> thumbImage = 0,
+inline ::flatbuffers::Offset<ControlSwitchOptions> CreateControlSwitchOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> maskImage = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> onImage = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> offImage = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> thumbImage = 0,
     bool on = false,
     bool enabled = false) {
   ControlSwitchOptionsBuilder builder_(_fbb);
@@ -1684,7 +1584,7 @@ inline flatbuffers::Offset<ControlSwitchOptions> CreateControlSwitchOptions(
   return builder_.Finish();
 }
 
-struct LayerColorOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct LayerColorOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef LayerColorOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4
@@ -1692,7 +1592,7 @@ struct LayerColorOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::WidgetOptions *nodeOptions() const {
     return GetPointer<const flatbuffers::WidgetOptions *>(VT_NODEOPTIONS);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -1702,31 +1602,31 @@ struct LayerColorOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct LayerColorOptionsBuilder {
   typedef LayerColorOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(LayerColorOptions::VT_NODEOPTIONS, nodeOptions);
   }
-  explicit LayerColorOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit LayerColorOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<LayerColorOptions> Finish() {
+  ::flatbuffers::Offset<LayerColorOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<LayerColorOptions>(end);
+    auto o = ::flatbuffers::Offset<LayerColorOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<LayerColorOptions> CreateLayerColorOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0) {
+inline ::flatbuffers::Offset<LayerColorOptions> CreateLayerColorOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0) {
   LayerColorOptionsBuilder builder_(_fbb);
   builder_.add_nodeOptions(nodeOptions);
   return builder_.Finish();
 }
 
-struct GameMapOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct GameMapOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GameMapOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -1738,7 +1638,7 @@ struct GameMapOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::ResourceData *fileNameData() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_FILENAMEDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -1750,36 +1650,36 @@ struct GameMapOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct GameMapOptionsBuilder {
   typedef GameMapOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(GameMapOptions::VT_NODEOPTIONS, nodeOptions);
   }
-  void add_fileNameData(flatbuffers::Offset<flatbuffers::ResourceData> fileNameData) {
+  void add_fileNameData(::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData) {
     fbb_.AddOffset(GameMapOptions::VT_FILENAMEDATA, fileNameData);
   }
-  explicit GameMapOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit GameMapOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<GameMapOptions> Finish() {
+  ::flatbuffers::Offset<GameMapOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<GameMapOptions>(end);
+    auto o = ::flatbuffers::Offset<GameMapOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<GameMapOptions> CreateGameMapOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0) {
+inline ::flatbuffers::Offset<GameMapOptions> CreateGameMapOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0) {
   GameMapOptionsBuilder builder_(_fbb);
   builder_.add_fileNameData(fileNameData);
   builder_.add_nodeOptions(nodeOptions);
   return builder_.Finish();
 }
 
-struct ButtonOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ButtonOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ButtonOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -1826,11 +1726,11 @@ struct ButtonOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::ResourceData *fontResource() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_FONTRESOURCE);
   }
-  const flatbuffers::String *text() const {
-    return GetPointer<const flatbuffers::String *>(VT_TEXT);
+  const ::flatbuffers::String *text() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_TEXT);
   }
-  const flatbuffers::String *fontName() const {
-    return GetPointer<const flatbuffers::String *>(VT_FONTNAME);
+  const ::flatbuffers::String *fontName() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_FONTNAME);
   }
   int32_t fontSize() const {
     return GetField<int32_t>(VT_FONTSIZE, 0);
@@ -1895,7 +1795,7 @@ struct ButtonOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool strikethroughEnabled() const {
     return GetField<uint8_t>(VT_STRIKETHROUGHENABLED, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -1938,27 +1838,27 @@ struct ButtonOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct ButtonOptionsBuilder {
   typedef ButtonOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(ButtonOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_normalData(flatbuffers::Offset<flatbuffers::ResourceData> normalData) {
+  void add_normalData(::flatbuffers::Offset<flatbuffers::ResourceData> normalData) {
     fbb_.AddOffset(ButtonOptions::VT_NORMALDATA, normalData);
   }
-  void add_pressedData(flatbuffers::Offset<flatbuffers::ResourceData> pressedData) {
+  void add_pressedData(::flatbuffers::Offset<flatbuffers::ResourceData> pressedData) {
     fbb_.AddOffset(ButtonOptions::VT_PRESSEDDATA, pressedData);
   }
-  void add_disabledData(flatbuffers::Offset<flatbuffers::ResourceData> disabledData) {
+  void add_disabledData(::flatbuffers::Offset<flatbuffers::ResourceData> disabledData) {
     fbb_.AddOffset(ButtonOptions::VT_DISABLEDDATA, disabledData);
   }
-  void add_fontResource(flatbuffers::Offset<flatbuffers::ResourceData> fontResource) {
+  void add_fontResource(::flatbuffers::Offset<flatbuffers::ResourceData> fontResource) {
     fbb_.AddOffset(ButtonOptions::VT_FONTRESOURCE, fontResource);
   }
-  void add_text(flatbuffers::Offset<flatbuffers::String> text) {
+  void add_text(::flatbuffers::Offset<::flatbuffers::String> text) {
     fbb_.AddOffset(ButtonOptions::VT_TEXT, text);
   }
-  void add_fontName(flatbuffers::Offset<flatbuffers::String> fontName) {
+  void add_fontName(::flatbuffers::Offset<::flatbuffers::String> fontName) {
     fbb_.AddOffset(ButtonOptions::VT_FONTNAME, fontName);
   }
   void add_fontSize(int32_t fontSize) {
@@ -2024,26 +1924,26 @@ struct ButtonOptionsBuilder {
   void add_strikethroughEnabled(bool strikethroughEnabled) {
     fbb_.AddElement<uint8_t>(ButtonOptions::VT_STRIKETHROUGHENABLED, static_cast<uint8_t>(strikethroughEnabled), 0);
   }
-  explicit ButtonOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ButtonOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ButtonOptions> Finish() {
+  ::flatbuffers::Offset<ButtonOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ButtonOptions>(end);
+    auto o = ::flatbuffers::Offset<ButtonOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ButtonOptions> CreateButtonOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> normalData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> pressedData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> disabledData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
-    flatbuffers::Offset<flatbuffers::String> text = 0,
-    flatbuffers::Offset<flatbuffers::String> fontName = 0,
+inline ::flatbuffers::Offset<ButtonOptions> CreateButtonOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> normalData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> pressedData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> disabledData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> text = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> fontName = 0,
     int32_t fontSize = 0,
     const flatbuffers::Color *textColor = nullptr,
     const flatbuffers::CapInsets *capInsets = nullptr,
@@ -2097,13 +1997,13 @@ inline flatbuffers::Offset<ButtonOptions> CreateButtonOptions(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ButtonOptions> CreateButtonOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> normalData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> pressedData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> disabledData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
+inline ::flatbuffers::Offset<ButtonOptions> CreateButtonOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> normalData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> pressedData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> disabledData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
     const char *text = nullptr,
     const char *fontName = nullptr,
     int32_t fontSize = 0,
@@ -2161,7 +2061,7 @@ inline flatbuffers::Offset<ButtonOptions> CreateButtonOptionsDirect(
       strikethroughEnabled);
 }
 
-struct CheckBoxOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct CheckBoxOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef CheckBoxOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -2197,7 +2097,7 @@ struct CheckBoxOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool displaystate() const {
     return GetField<uint8_t>(VT_DISPLAYSTATE, 1) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -2219,24 +2119,24 @@ struct CheckBoxOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct CheckBoxOptionsBuilder {
   typedef CheckBoxOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(CheckBoxOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_backGroundBoxData(flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxData) {
+  void add_backGroundBoxData(::flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxData) {
     fbb_.AddOffset(CheckBoxOptions::VT_BACKGROUNDBOXDATA, backGroundBoxData);
   }
-  void add_backGroundBoxSelectedData(flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxSelectedData) {
+  void add_backGroundBoxSelectedData(::flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxSelectedData) {
     fbb_.AddOffset(CheckBoxOptions::VT_BACKGROUNDBOXSELECTEDDATA, backGroundBoxSelectedData);
   }
-  void add_frontCrossData(flatbuffers::Offset<flatbuffers::ResourceData> frontCrossData) {
+  void add_frontCrossData(::flatbuffers::Offset<flatbuffers::ResourceData> frontCrossData) {
     fbb_.AddOffset(CheckBoxOptions::VT_FRONTCROSSDATA, frontCrossData);
   }
-  void add_backGroundBoxDisabledData(flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxDisabledData) {
+  void add_backGroundBoxDisabledData(::flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxDisabledData) {
     fbb_.AddOffset(CheckBoxOptions::VT_BACKGROUNDBOXDISABLEDDATA, backGroundBoxDisabledData);
   }
-  void add_frontCrossDisabledData(flatbuffers::Offset<flatbuffers::ResourceData> frontCrossDisabledData) {
+  void add_frontCrossDisabledData(::flatbuffers::Offset<flatbuffers::ResourceData> frontCrossDisabledData) {
     fbb_.AddOffset(CheckBoxOptions::VT_FRONTCROSSDISABLEDDATA, frontCrossDisabledData);
   }
   void add_selectedState(bool selectedState) {
@@ -2245,25 +2145,25 @@ struct CheckBoxOptionsBuilder {
   void add_displaystate(bool displaystate) {
     fbb_.AddElement<uint8_t>(CheckBoxOptions::VT_DISPLAYSTATE, static_cast<uint8_t>(displaystate), 1);
   }
-  explicit CheckBoxOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit CheckBoxOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<CheckBoxOptions> Finish() {
+  ::flatbuffers::Offset<CheckBoxOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<CheckBoxOptions>(end);
+    auto o = ::flatbuffers::Offset<CheckBoxOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<CheckBoxOptions> CreateCheckBoxOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxSelectedData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> frontCrossData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxDisabledData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> frontCrossDisabledData = 0,
+inline ::flatbuffers::Offset<CheckBoxOptions> CreateCheckBoxOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxSelectedData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> frontCrossData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxDisabledData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> frontCrossDisabledData = 0,
     bool selectedState = true,
     bool displaystate = true) {
   CheckBoxOptionsBuilder builder_(_fbb);
@@ -2278,7 +2178,7 @@ inline flatbuffers::Offset<CheckBoxOptions> CreateCheckBoxOptions(
   return builder_.Finish();
 }
 
-struct RadioButtonOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct RadioButtonOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef RadioButtonOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -2314,7 +2214,7 @@ struct RadioButtonOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool displaystate() const {
     return GetField<uint8_t>(VT_DISPLAYSTATE, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -2336,24 +2236,24 @@ struct RadioButtonOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct RadioButtonOptionsBuilder {
   typedef RadioButtonOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(RadioButtonOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_backGroundBoxData(flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxData) {
+  void add_backGroundBoxData(::flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxData) {
     fbb_.AddOffset(RadioButtonOptions::VT_BACKGROUNDBOXDATA, backGroundBoxData);
   }
-  void add_backGroundBoxSelectedData(flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxSelectedData) {
+  void add_backGroundBoxSelectedData(::flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxSelectedData) {
     fbb_.AddOffset(RadioButtonOptions::VT_BACKGROUNDBOXSELECTEDDATA, backGroundBoxSelectedData);
   }
-  void add_frontCrossData(flatbuffers::Offset<flatbuffers::ResourceData> frontCrossData) {
+  void add_frontCrossData(::flatbuffers::Offset<flatbuffers::ResourceData> frontCrossData) {
     fbb_.AddOffset(RadioButtonOptions::VT_FRONTCROSSDATA, frontCrossData);
   }
-  void add_backGroundBoxDisabledData(flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxDisabledData) {
+  void add_backGroundBoxDisabledData(::flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxDisabledData) {
     fbb_.AddOffset(RadioButtonOptions::VT_BACKGROUNDBOXDISABLEDDATA, backGroundBoxDisabledData);
   }
-  void add_frontCrossDisabledData(flatbuffers::Offset<flatbuffers::ResourceData> frontCrossDisabledData) {
+  void add_frontCrossDisabledData(::flatbuffers::Offset<flatbuffers::ResourceData> frontCrossDisabledData) {
     fbb_.AddOffset(RadioButtonOptions::VT_FRONTCROSSDISABLEDDATA, frontCrossDisabledData);
   }
   void add_selectedState(bool selectedState) {
@@ -2362,25 +2262,25 @@ struct RadioButtonOptionsBuilder {
   void add_displaystate(bool displaystate) {
     fbb_.AddElement<uint8_t>(RadioButtonOptions::VT_DISPLAYSTATE, static_cast<uint8_t>(displaystate), 0);
   }
-  explicit RadioButtonOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit RadioButtonOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<RadioButtonOptions> Finish() {
+  ::flatbuffers::Offset<RadioButtonOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<RadioButtonOptions>(end);
+    auto o = ::flatbuffers::Offset<RadioButtonOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<RadioButtonOptions> CreateRadioButtonOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxSelectedData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> frontCrossData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxDisabledData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> frontCrossDisabledData = 0,
+inline ::flatbuffers::Offset<RadioButtonOptions> CreateRadioButtonOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxSelectedData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> frontCrossData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundBoxDisabledData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> frontCrossDisabledData = 0,
     bool selectedState = false,
     bool displaystate = false) {
   RadioButtonOptionsBuilder builder_(_fbb);
@@ -2395,7 +2295,7 @@ inline flatbuffers::Offset<RadioButtonOptions> CreateRadioButtonOptions(
   return builder_.Finish();
 }
 
-struct RadioButtonGroupOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct RadioButtonGroupOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef RadioButtonGroupOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -2407,7 +2307,7 @@ struct RadioButtonGroupOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Ta
   bool allowedNoSelection() const {
     return GetField<uint8_t>(VT_ALLOWEDNOSELECTION, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -2418,28 +2318,28 @@ struct RadioButtonGroupOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Ta
 
 struct RadioButtonGroupOptionsBuilder {
   typedef RadioButtonGroupOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(RadioButtonGroupOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
   void add_allowedNoSelection(bool allowedNoSelection) {
     fbb_.AddElement<uint8_t>(RadioButtonGroupOptions::VT_ALLOWEDNOSELECTION, static_cast<uint8_t>(allowedNoSelection), 0);
   }
-  explicit RadioButtonGroupOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit RadioButtonGroupOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<RadioButtonGroupOptions> Finish() {
+  ::flatbuffers::Offset<RadioButtonGroupOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<RadioButtonGroupOptions>(end);
+    auto o = ::flatbuffers::Offset<RadioButtonGroupOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<RadioButtonGroupOptions> CreateRadioButtonGroupOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+inline ::flatbuffers::Offset<RadioButtonGroupOptions> CreateRadioButtonGroupOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
     bool allowedNoSelection = false) {
   RadioButtonGroupOptionsBuilder builder_(_fbb);
   builder_.add_widgetOptions(widgetOptions);
@@ -2447,7 +2347,7 @@ inline flatbuffers::Offset<RadioButtonGroupOptions> CreateRadioButtonGroupOption
   return builder_.Finish();
 }
 
-struct ImageViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ImageViewOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ImageViewOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -2471,7 +2371,7 @@ struct ImageViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool scale9Enabled() const {
     return GetField<uint8_t>(VT_SCALE9ENABLED, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -2486,12 +2386,12 @@ struct ImageViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct ImageViewOptionsBuilder {
   typedef ImageViewOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(ImageViewOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_fileNameData(flatbuffers::Offset<flatbuffers::ResourceData> fileNameData) {
+  void add_fileNameData(::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData) {
     fbb_.AddOffset(ImageViewOptions::VT_FILENAMEDATA, fileNameData);
   }
   void add_capInsets(const flatbuffers::CapInsets *capInsets) {
@@ -2503,21 +2403,21 @@ struct ImageViewOptionsBuilder {
   void add_scale9Enabled(bool scale9Enabled) {
     fbb_.AddElement<uint8_t>(ImageViewOptions::VT_SCALE9ENABLED, static_cast<uint8_t>(scale9Enabled), 0);
   }
-  explicit ImageViewOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ImageViewOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ImageViewOptions> Finish() {
+  ::flatbuffers::Offset<ImageViewOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ImageViewOptions>(end);
+    auto o = ::flatbuffers::Offset<ImageViewOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ImageViewOptions> CreateImageViewOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0,
+inline ::flatbuffers::Offset<ImageViewOptions> CreateImageViewOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0,
     const flatbuffers::CapInsets *capInsets = nullptr,
     const flatbuffers::FlatSize *scale9Size = nullptr,
     bool scale9Enabled = false) {
@@ -2530,7 +2430,7 @@ inline flatbuffers::Offset<ImageViewOptions> CreateImageViewOptions(
   return builder_.Finish();
 }
 
-struct TextAtlasOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct TextAtlasOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TextAtlasOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -2546,11 +2446,11 @@ struct TextAtlasOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::ResourceData *charMapFileData() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_CHARMAPFILEDATA);
   }
-  const flatbuffers::String *stringValue() const {
-    return GetPointer<const flatbuffers::String *>(VT_STRINGVALUE);
+  const ::flatbuffers::String *stringValue() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_STRINGVALUE);
   }
-  const flatbuffers::String *startCharMap() const {
-    return GetPointer<const flatbuffers::String *>(VT_STARTCHARMAP);
+  const ::flatbuffers::String *startCharMap() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_STARTCHARMAP);
   }
   int32_t itemWidth() const {
     return GetField<int32_t>(VT_ITEMWIDTH, 0);
@@ -2558,7 +2458,7 @@ struct TextAtlasOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t itemHeight() const {
     return GetField<int32_t>(VT_ITEMHEIGHT, 0);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -2576,18 +2476,18 @@ struct TextAtlasOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct TextAtlasOptionsBuilder {
   typedef TextAtlasOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(TextAtlasOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_charMapFileData(flatbuffers::Offset<flatbuffers::ResourceData> charMapFileData) {
+  void add_charMapFileData(::flatbuffers::Offset<flatbuffers::ResourceData> charMapFileData) {
     fbb_.AddOffset(TextAtlasOptions::VT_CHARMAPFILEDATA, charMapFileData);
   }
-  void add_stringValue(flatbuffers::Offset<flatbuffers::String> stringValue) {
+  void add_stringValue(::flatbuffers::Offset<::flatbuffers::String> stringValue) {
     fbb_.AddOffset(TextAtlasOptions::VT_STRINGVALUE, stringValue);
   }
-  void add_startCharMap(flatbuffers::Offset<flatbuffers::String> startCharMap) {
+  void add_startCharMap(::flatbuffers::Offset<::flatbuffers::String> startCharMap) {
     fbb_.AddOffset(TextAtlasOptions::VT_STARTCHARMAP, startCharMap);
   }
   void add_itemWidth(int32_t itemWidth) {
@@ -2596,23 +2496,23 @@ struct TextAtlasOptionsBuilder {
   void add_itemHeight(int32_t itemHeight) {
     fbb_.AddElement<int32_t>(TextAtlasOptions::VT_ITEMHEIGHT, itemHeight, 0);
   }
-  explicit TextAtlasOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TextAtlasOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<TextAtlasOptions> Finish() {
+  ::flatbuffers::Offset<TextAtlasOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TextAtlasOptions>(end);
+    auto o = ::flatbuffers::Offset<TextAtlasOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<TextAtlasOptions> CreateTextAtlasOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> charMapFileData = 0,
-    flatbuffers::Offset<flatbuffers::String> stringValue = 0,
-    flatbuffers::Offset<flatbuffers::String> startCharMap = 0,
+inline ::flatbuffers::Offset<TextAtlasOptions> CreateTextAtlasOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> charMapFileData = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> stringValue = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> startCharMap = 0,
     int32_t itemWidth = 0,
     int32_t itemHeight = 0) {
   TextAtlasOptionsBuilder builder_(_fbb);
@@ -2625,10 +2525,10 @@ inline flatbuffers::Offset<TextAtlasOptions> CreateTextAtlasOptions(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<TextAtlasOptions> CreateTextAtlasOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> charMapFileData = 0,
+inline ::flatbuffers::Offset<TextAtlasOptions> CreateTextAtlasOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> charMapFileData = 0,
     const char *stringValue = nullptr,
     const char *startCharMap = nullptr,
     int32_t itemWidth = 0,
@@ -2645,7 +2545,7 @@ inline flatbuffers::Offset<TextAtlasOptions> CreateTextAtlasOptionsDirect(
       itemHeight);
 }
 
-struct TextBMFontOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct TextBMFontOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TextBMFontOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -2659,13 +2559,13 @@ struct TextBMFontOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::ResourceData *fileNameData() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_FILENAMEDATA);
   }
-  const flatbuffers::String *text() const {
-    return GetPointer<const flatbuffers::String *>(VT_TEXT);
+  const ::flatbuffers::String *text() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_TEXT);
   }
   bool isLocalized() const {
     return GetField<uint8_t>(VT_ISLOCALIZED, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -2680,36 +2580,36 @@ struct TextBMFontOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct TextBMFontOptionsBuilder {
   typedef TextBMFontOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(TextBMFontOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_fileNameData(flatbuffers::Offset<flatbuffers::ResourceData> fileNameData) {
+  void add_fileNameData(::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData) {
     fbb_.AddOffset(TextBMFontOptions::VT_FILENAMEDATA, fileNameData);
   }
-  void add_text(flatbuffers::Offset<flatbuffers::String> text) {
+  void add_text(::flatbuffers::Offset<::flatbuffers::String> text) {
     fbb_.AddOffset(TextBMFontOptions::VT_TEXT, text);
   }
   void add_isLocalized(bool isLocalized) {
     fbb_.AddElement<uint8_t>(TextBMFontOptions::VT_ISLOCALIZED, static_cast<uint8_t>(isLocalized), 0);
   }
-  explicit TextBMFontOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TextBMFontOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<TextBMFontOptions> Finish() {
+  ::flatbuffers::Offset<TextBMFontOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TextBMFontOptions>(end);
+    auto o = ::flatbuffers::Offset<TextBMFontOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<TextBMFontOptions> CreateTextBMFontOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0,
-    flatbuffers::Offset<flatbuffers::String> text = 0,
+inline ::flatbuffers::Offset<TextBMFontOptions> CreateTextBMFontOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> text = 0,
     bool isLocalized = false) {
   TextBMFontOptionsBuilder builder_(_fbb);
   builder_.add_text(text);
@@ -2719,10 +2619,10 @@ inline flatbuffers::Offset<TextBMFontOptions> CreateTextBMFontOptions(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<TextBMFontOptions> CreateTextBMFontOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0,
+inline ::flatbuffers::Offset<TextBMFontOptions> CreateTextBMFontOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0,
     const char *text = nullptr,
     bool isLocalized = false) {
   auto text__ = text ? _fbb.CreateString(text) : 0;
@@ -2734,7 +2634,7 @@ inline flatbuffers::Offset<TextBMFontOptions> CreateTextBMFontOptionsDirect(
       isLocalized);
 }
 
-struct TextOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct TextOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TextOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -2770,14 +2670,14 @@ struct TextOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::ResourceData *fontResource() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_FONTRESOURCE);
   }
-  const flatbuffers::String *fontName() const {
-    return GetPointer<const flatbuffers::String *>(VT_FONTNAME);
+  const ::flatbuffers::String *fontName() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_FONTNAME);
   }
   int32_t fontSize() const {
     return GetField<int32_t>(VT_FONTSIZE, 0);
   }
-  const flatbuffers::String *text() const {
-    return GetPointer<const flatbuffers::String *>(VT_TEXT);
+  const ::flatbuffers::String *text() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_TEXT);
   }
   int32_t areaWidth() const {
     return GetField<int32_t>(VT_AREAWIDTH, 0);
@@ -2842,7 +2742,7 @@ struct TextOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool strikethroughEnabled() const {
     return GetField<uint8_t>(VT_STRIKETHROUGHENABLED, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -2880,21 +2780,21 @@ struct TextOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct TextOptionsBuilder {
   typedef TextOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(TextOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_fontResource(flatbuffers::Offset<flatbuffers::ResourceData> fontResource) {
+  void add_fontResource(::flatbuffers::Offset<flatbuffers::ResourceData> fontResource) {
     fbb_.AddOffset(TextOptions::VT_FONTRESOURCE, fontResource);
   }
-  void add_fontName(flatbuffers::Offset<flatbuffers::String> fontName) {
+  void add_fontName(::flatbuffers::Offset<::flatbuffers::String> fontName) {
     fbb_.AddOffset(TextOptions::VT_FONTNAME, fontName);
   }
   void add_fontSize(int32_t fontSize) {
     fbb_.AddElement<int32_t>(TextOptions::VT_FONTSIZE, fontSize, 0);
   }
-  void add_text(flatbuffers::Offset<flatbuffers::String> text) {
+  void add_text(::flatbuffers::Offset<::flatbuffers::String> text) {
     fbb_.AddOffset(TextOptions::VT_TEXT, text);
   }
   void add_areaWidth(int32_t areaWidth) {
@@ -2960,24 +2860,24 @@ struct TextOptionsBuilder {
   void add_strikethroughEnabled(bool strikethroughEnabled) {
     fbb_.AddElement<uint8_t>(TextOptions::VT_STRIKETHROUGHENABLED, static_cast<uint8_t>(strikethroughEnabled), 0);
   }
-  explicit TextOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TextOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<TextOptions> Finish() {
+  ::flatbuffers::Offset<TextOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TextOptions>(end);
+    auto o = ::flatbuffers::Offset<TextOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<TextOptions> CreateTextOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
-    flatbuffers::Offset<flatbuffers::String> fontName = 0,
+inline ::flatbuffers::Offset<TextOptions> CreateTextOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> fontName = 0,
     int32_t fontSize = 0,
-    flatbuffers::Offset<flatbuffers::String> text = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> text = 0,
     int32_t areaWidth = 0,
     int32_t areaHeight = 0,
     int32_t hAlignment = 0,
@@ -3029,10 +2929,10 @@ inline flatbuffers::Offset<TextOptions> CreateTextOptions(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<TextOptions> CreateTextOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
+inline ::flatbuffers::Offset<TextOptions> CreateTextOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
     const char *fontName = nullptr,
     int32_t fontSize = 0,
     const char *text = nullptr,
@@ -3089,7 +2989,7 @@ inline flatbuffers::Offset<TextOptions> CreateTextOptionsDirect(
       strikethroughEnabled);
 }
 
-struct RichTextOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct RichTextOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef RichTextOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -3098,10 +2998,10 @@ struct RichTextOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::WidgetOptions *widgetOptions() const {
     return GetPointer<const flatbuffers::WidgetOptions *>(VT_WIDGETOPTIONS);
   }
-  const flatbuffers::String *xmlDefinition() const {
-    return GetPointer<const flatbuffers::String *>(VT_XMLDEFINITION);
+  const ::flatbuffers::String *xmlDefinition() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_XMLDEFINITION);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -3113,38 +3013,38 @@ struct RichTextOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct RichTextOptionsBuilder {
   typedef RichTextOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(RichTextOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_xmlDefinition(flatbuffers::Offset<flatbuffers::String> xmlDefinition) {
+  void add_xmlDefinition(::flatbuffers::Offset<::flatbuffers::String> xmlDefinition) {
     fbb_.AddOffset(RichTextOptions::VT_XMLDEFINITION, xmlDefinition);
   }
-  explicit RichTextOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit RichTextOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<RichTextOptions> Finish() {
+  ::flatbuffers::Offset<RichTextOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<RichTextOptions>(end);
+    auto o = ::flatbuffers::Offset<RichTextOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<RichTextOptions> CreateRichTextOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::String> xmlDefinition = 0) {
+inline ::flatbuffers::Offset<RichTextOptions> CreateRichTextOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> xmlDefinition = 0) {
   RichTextOptionsBuilder builder_(_fbb);
   builder_.add_xmlDefinition(xmlDefinition);
   builder_.add_widgetOptions(widgetOptions);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<RichTextOptions> CreateRichTextOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+inline ::flatbuffers::Offset<RichTextOptions> CreateRichTextOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
     const char *xmlDefinition = nullptr) {
   auto xmlDefinition__ = xmlDefinition ? _fbb.CreateString(xmlDefinition) : 0;
   return flatbuffers::CreateRichTextOptions(
@@ -3153,7 +3053,7 @@ inline flatbuffers::Offset<RichTextOptions> CreateRichTextOptionsDirect(
       xmlDefinition__);
 }
 
-struct TextFieldOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct TextFieldOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TextFieldOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -3177,23 +3077,23 @@ struct TextFieldOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::ResourceData *fontResource() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_FONTRESOURCE);
   }
-  const flatbuffers::String *fontName() const {
-    return GetPointer<const flatbuffers::String *>(VT_FONTNAME);
+  const ::flatbuffers::String *fontName() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_FONTNAME);
   }
   int32_t fontSize() const {
     return GetField<int32_t>(VT_FONTSIZE, 0);
   }
-  const flatbuffers::String *text() const {
-    return GetPointer<const flatbuffers::String *>(VT_TEXT);
+  const ::flatbuffers::String *text() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_TEXT);
   }
-  const flatbuffers::String *placeHolder() const {
-    return GetPointer<const flatbuffers::String *>(VT_PLACEHOLDER);
+  const ::flatbuffers::String *placeHolder() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_PLACEHOLDER);
   }
   bool passwordEnabled() const {
     return GetField<uint8_t>(VT_PASSWORDENABLED, 0) != 0;
   }
-  const flatbuffers::String *passwordStyleText() const {
-    return GetPointer<const flatbuffers::String *>(VT_PASSWORDSTYLETEXT);
+  const ::flatbuffers::String *passwordStyleText() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_PASSWORDSTYLETEXT);
   }
   bool maxLengthEnabled() const {
     return GetField<uint8_t>(VT_MAXLENGTHENABLED, 0) != 0;
@@ -3213,7 +3113,7 @@ struct TextFieldOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool isLocalized() const {
     return GetField<uint8_t>(VT_ISLOCALIZED, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -3241,30 +3141,30 @@ struct TextFieldOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct TextFieldOptionsBuilder {
   typedef TextFieldOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(TextFieldOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_fontResource(flatbuffers::Offset<flatbuffers::ResourceData> fontResource) {
+  void add_fontResource(::flatbuffers::Offset<flatbuffers::ResourceData> fontResource) {
     fbb_.AddOffset(TextFieldOptions::VT_FONTRESOURCE, fontResource);
   }
-  void add_fontName(flatbuffers::Offset<flatbuffers::String> fontName) {
+  void add_fontName(::flatbuffers::Offset<::flatbuffers::String> fontName) {
     fbb_.AddOffset(TextFieldOptions::VT_FONTNAME, fontName);
   }
   void add_fontSize(int32_t fontSize) {
     fbb_.AddElement<int32_t>(TextFieldOptions::VT_FONTSIZE, fontSize, 0);
   }
-  void add_text(flatbuffers::Offset<flatbuffers::String> text) {
+  void add_text(::flatbuffers::Offset<::flatbuffers::String> text) {
     fbb_.AddOffset(TextFieldOptions::VT_TEXT, text);
   }
-  void add_placeHolder(flatbuffers::Offset<flatbuffers::String> placeHolder) {
+  void add_placeHolder(::flatbuffers::Offset<::flatbuffers::String> placeHolder) {
     fbb_.AddOffset(TextFieldOptions::VT_PLACEHOLDER, placeHolder);
   }
   void add_passwordEnabled(bool passwordEnabled) {
     fbb_.AddElement<uint8_t>(TextFieldOptions::VT_PASSWORDENABLED, static_cast<uint8_t>(passwordEnabled), 0);
   }
-  void add_passwordStyleText(flatbuffers::Offset<flatbuffers::String> passwordStyleText) {
+  void add_passwordStyleText(::flatbuffers::Offset<::flatbuffers::String> passwordStyleText) {
     fbb_.AddOffset(TextFieldOptions::VT_PASSWORDSTYLETEXT, passwordStyleText);
   }
   void add_maxLengthEnabled(bool maxLengthEnabled) {
@@ -3285,27 +3185,27 @@ struct TextFieldOptionsBuilder {
   void add_isLocalized(bool isLocalized) {
     fbb_.AddElement<uint8_t>(TextFieldOptions::VT_ISLOCALIZED, static_cast<uint8_t>(isLocalized), 0);
   }
-  explicit TextFieldOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TextFieldOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<TextFieldOptions> Finish() {
+  ::flatbuffers::Offset<TextFieldOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TextFieldOptions>(end);
+    auto o = ::flatbuffers::Offset<TextFieldOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<TextFieldOptions> CreateTextFieldOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
-    flatbuffers::Offset<flatbuffers::String> fontName = 0,
+inline ::flatbuffers::Offset<TextFieldOptions> CreateTextFieldOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> fontName = 0,
     int32_t fontSize = 0,
-    flatbuffers::Offset<flatbuffers::String> text = 0,
-    flatbuffers::Offset<flatbuffers::String> placeHolder = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> text = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> placeHolder = 0,
     bool passwordEnabled = false,
-    flatbuffers::Offset<flatbuffers::String> passwordStyleText = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> passwordStyleText = 0,
     bool maxLengthEnabled = false,
     int32_t maxLength = 0,
     int32_t areaWidth = 0,
@@ -3330,10 +3230,10 @@ inline flatbuffers::Offset<TextFieldOptions> CreateTextFieldOptions(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<TextFieldOptions> CreateTextFieldOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
+inline ::flatbuffers::Offset<TextFieldOptions> CreateTextFieldOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
     const char *fontName = nullptr,
     int32_t fontSize = 0,
     const char *text = nullptr,
@@ -3368,7 +3268,7 @@ inline flatbuffers::Offset<TextFieldOptions> CreateTextFieldOptionsDirect(
       isLocalized);
 }
 
-struct LoadingBarOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct LoadingBarOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef LoadingBarOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -3388,7 +3288,7 @@ struct LoadingBarOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t direction() const {
     return GetField<int32_t>(VT_DIRECTION, 0);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -3402,12 +3302,12 @@ struct LoadingBarOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct LoadingBarOptionsBuilder {
   typedef LoadingBarOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(LoadingBarOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_textureData(flatbuffers::Offset<flatbuffers::ResourceData> textureData) {
+  void add_textureData(::flatbuffers::Offset<flatbuffers::ResourceData> textureData) {
     fbb_.AddOffset(LoadingBarOptions::VT_TEXTUREDATA, textureData);
   }
   void add_percent(int32_t percent) {
@@ -3416,21 +3316,21 @@ struct LoadingBarOptionsBuilder {
   void add_direction(int32_t direction) {
     fbb_.AddElement<int32_t>(LoadingBarOptions::VT_DIRECTION, direction, 0);
   }
-  explicit LoadingBarOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit LoadingBarOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<LoadingBarOptions> Finish() {
+  ::flatbuffers::Offset<LoadingBarOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<LoadingBarOptions>(end);
+    auto o = ::flatbuffers::Offset<LoadingBarOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<LoadingBarOptions> CreateLoadingBarOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> textureData = 0,
+inline ::flatbuffers::Offset<LoadingBarOptions> CreateLoadingBarOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> textureData = 0,
     int32_t percent = 80,
     int32_t direction = 0) {
   LoadingBarOptionsBuilder builder_(_fbb);
@@ -3441,7 +3341,7 @@ inline flatbuffers::Offset<LoadingBarOptions> CreateLoadingBarOptions(
   return builder_.Finish();
 }
 
-struct SliderOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct SliderOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef SliderOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -3477,7 +3377,7 @@ struct SliderOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool displaystate() const {
     return GetField<uint8_t>(VT_DISPLAYSTATE, 1) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -3499,24 +3399,24 @@ struct SliderOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct SliderOptionsBuilder {
   typedef SliderOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(SliderOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_barFileNameData(flatbuffers::Offset<flatbuffers::ResourceData> barFileNameData) {
+  void add_barFileNameData(::flatbuffers::Offset<flatbuffers::ResourceData> barFileNameData) {
     fbb_.AddOffset(SliderOptions::VT_BARFILENAMEDATA, barFileNameData);
   }
-  void add_ballNormalData(flatbuffers::Offset<flatbuffers::ResourceData> ballNormalData) {
+  void add_ballNormalData(::flatbuffers::Offset<flatbuffers::ResourceData> ballNormalData) {
     fbb_.AddOffset(SliderOptions::VT_BALLNORMALDATA, ballNormalData);
   }
-  void add_ballPressedData(flatbuffers::Offset<flatbuffers::ResourceData> ballPressedData) {
+  void add_ballPressedData(::flatbuffers::Offset<flatbuffers::ResourceData> ballPressedData) {
     fbb_.AddOffset(SliderOptions::VT_BALLPRESSEDDATA, ballPressedData);
   }
-  void add_ballDisabledData(flatbuffers::Offset<flatbuffers::ResourceData> ballDisabledData) {
+  void add_ballDisabledData(::flatbuffers::Offset<flatbuffers::ResourceData> ballDisabledData) {
     fbb_.AddOffset(SliderOptions::VT_BALLDISABLEDDATA, ballDisabledData);
   }
-  void add_progressBarData(flatbuffers::Offset<flatbuffers::ResourceData> progressBarData) {
+  void add_progressBarData(::flatbuffers::Offset<flatbuffers::ResourceData> progressBarData) {
     fbb_.AddOffset(SliderOptions::VT_PROGRESSBARDATA, progressBarData);
   }
   void add_percent(int32_t percent) {
@@ -3525,25 +3425,25 @@ struct SliderOptionsBuilder {
   void add_displaystate(bool displaystate) {
     fbb_.AddElement<uint8_t>(SliderOptions::VT_DISPLAYSTATE, static_cast<uint8_t>(displaystate), 1);
   }
-  explicit SliderOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit SliderOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<SliderOptions> Finish() {
+  ::flatbuffers::Offset<SliderOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<SliderOptions>(end);
+    auto o = ::flatbuffers::Offset<SliderOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<SliderOptions> CreateSliderOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> barFileNameData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> ballNormalData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> ballPressedData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> ballDisabledData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> progressBarData = 0,
+inline ::flatbuffers::Offset<SliderOptions> CreateSliderOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> barFileNameData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> ballNormalData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> ballPressedData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> ballDisabledData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> progressBarData = 0,
     int32_t percent = 50,
     bool displaystate = true) {
   SliderOptionsBuilder builder_(_fbb);
@@ -3558,7 +3458,7 @@ inline flatbuffers::Offset<SliderOptions> CreateSliderOptions(
   return builder_.Finish();
 }
 
-struct PanelOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct PanelOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef PanelOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -3598,8 +3498,8 @@ struct PanelOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint8_t bgColorOpacity() const {
     return GetField<uint8_t>(VT_BGCOLOROPACITY, 255);
   }
-  const flatbuffers::ColorVector *colorVector() const {
-    return GetStruct<const flatbuffers::ColorVector *>(VT_COLORVECTOR);
+  const flatbuffers::FVec2 *colorVector() const {
+    return GetStruct<const flatbuffers::FVec2 *>(VT_COLORVECTOR);
   }
   const flatbuffers::CapInsets *capInsets() const {
     return GetStruct<const flatbuffers::CapInsets *>(VT_CAPINSETS);
@@ -3610,7 +3510,7 @@ struct PanelOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool backGroundScale9Enabled() const {
     return GetField<uint8_t>(VT_BACKGROUNDSCALE9ENABLED, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -3622,7 +3522,7 @@ struct PanelOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            VerifyField<flatbuffers::Color>(verifier, VT_BGENDCOLOR, 1) &&
            VerifyField<int32_t>(verifier, VT_COLORTYPE, 4) &&
            VerifyField<uint8_t>(verifier, VT_BGCOLOROPACITY, 1) &&
-           VerifyField<flatbuffers::ColorVector>(verifier, VT_COLORVECTOR, 4) &&
+           VerifyField<flatbuffers::FVec2>(verifier, VT_COLORVECTOR, 4) &&
            VerifyField<flatbuffers::CapInsets>(verifier, VT_CAPINSETS, 4) &&
            VerifyField<flatbuffers::FlatSize>(verifier, VT_SCALE9SIZE, 4) &&
            VerifyField<uint8_t>(verifier, VT_BACKGROUNDSCALE9ENABLED, 1) &&
@@ -3632,12 +3532,12 @@ struct PanelOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct PanelOptionsBuilder {
   typedef PanelOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(PanelOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_backGroundImageData(flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData) {
+  void add_backGroundImageData(::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData) {
     fbb_.AddOffset(PanelOptions::VT_BACKGROUNDIMAGEDATA, backGroundImageData);
   }
   void add_clipEnabled(bool clipEnabled) {
@@ -3658,7 +3558,7 @@ struct PanelOptionsBuilder {
   void add_bgColorOpacity(uint8_t bgColorOpacity) {
     fbb_.AddElement<uint8_t>(PanelOptions::VT_BGCOLOROPACITY, bgColorOpacity, 255);
   }
-  void add_colorVector(const flatbuffers::ColorVector *colorVector) {
+  void add_colorVector(const flatbuffers::FVec2 *colorVector) {
     fbb_.AddStruct(PanelOptions::VT_COLORVECTOR, colorVector);
   }
   void add_capInsets(const flatbuffers::CapInsets *capInsets) {
@@ -3670,28 +3570,28 @@ struct PanelOptionsBuilder {
   void add_backGroundScale9Enabled(bool backGroundScale9Enabled) {
     fbb_.AddElement<uint8_t>(PanelOptions::VT_BACKGROUNDSCALE9ENABLED, static_cast<uint8_t>(backGroundScale9Enabled), 0);
   }
-  explicit PanelOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit PanelOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<PanelOptions> Finish() {
+  ::flatbuffers::Offset<PanelOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<PanelOptions>(end);
+    auto o = ::flatbuffers::Offset<PanelOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<PanelOptions> CreatePanelOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
+inline ::flatbuffers::Offset<PanelOptions> CreatePanelOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
     bool clipEnabled = false,
     const flatbuffers::Color *bgColor = nullptr,
     const flatbuffers::Color *bgStartColor = nullptr,
     const flatbuffers::Color *bgEndColor = nullptr,
     int32_t colorType = 0,
     uint8_t bgColorOpacity = 255,
-    const flatbuffers::ColorVector *colorVector = nullptr,
+    const flatbuffers::FVec2 *colorVector = nullptr,
     const flatbuffers::CapInsets *capInsets = nullptr,
     const flatbuffers::FlatSize *scale9Size = nullptr,
     bool backGroundScale9Enabled = false) {
@@ -3711,7 +3611,7 @@ inline flatbuffers::Offset<PanelOptions> CreatePanelOptions(
   return builder_.Finish();
 }
 
-struct ScrollViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ScrollViewOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ScrollViewOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -3757,8 +3657,8 @@ struct ScrollViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint8_t bgColorOpacity() const {
     return GetField<uint8_t>(VT_BGCOLOROPACITY, 255);
   }
-  const flatbuffers::ColorVector *colorVector() const {
-    return GetStruct<const flatbuffers::ColorVector *>(VT_COLORVECTOR);
+  const flatbuffers::FVec2 *colorVector() const {
+    return GetStruct<const flatbuffers::FVec2 *>(VT_COLORVECTOR);
   }
   const flatbuffers::CapInsets *capInsets() const {
     return GetStruct<const flatbuffers::CapInsets *>(VT_CAPINSETS);
@@ -3787,7 +3687,7 @@ struct ScrollViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   float scrollbarAutoHideTime() const {
     return GetField<float>(VT_SCROLLBARAUTOHIDETIME, 0.2f);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -3799,7 +3699,7 @@ struct ScrollViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            VerifyField<flatbuffers::Color>(verifier, VT_BGENDCOLOR, 1) &&
            VerifyField<int32_t>(verifier, VT_COLORTYPE, 4) &&
            VerifyField<uint8_t>(verifier, VT_BGCOLOROPACITY, 1) &&
-           VerifyField<flatbuffers::ColorVector>(verifier, VT_COLORVECTOR, 4) &&
+           VerifyField<flatbuffers::FVec2>(verifier, VT_COLORVECTOR, 4) &&
            VerifyField<flatbuffers::CapInsets>(verifier, VT_CAPINSETS, 4) &&
            VerifyField<flatbuffers::FlatSize>(verifier, VT_SCALE9SIZE, 4) &&
            VerifyField<uint8_t>(verifier, VT_BACKGROUNDSCALE9ENABLED, 1) &&
@@ -3815,12 +3715,12 @@ struct ScrollViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct ScrollViewOptionsBuilder {
   typedef ScrollViewOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(ScrollViewOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_backGroundImageData(flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData) {
+  void add_backGroundImageData(::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData) {
     fbb_.AddOffset(ScrollViewOptions::VT_BACKGROUNDIMAGEDATA, backGroundImageData);
   }
   void add_clipEnabled(bool clipEnabled) {
@@ -3841,7 +3741,7 @@ struct ScrollViewOptionsBuilder {
   void add_bgColorOpacity(uint8_t bgColorOpacity) {
     fbb_.AddElement<uint8_t>(ScrollViewOptions::VT_BGCOLOROPACITY, bgColorOpacity, 255);
   }
-  void add_colorVector(const flatbuffers::ColorVector *colorVector) {
+  void add_colorVector(const flatbuffers::FVec2 *colorVector) {
     fbb_.AddStruct(ScrollViewOptions::VT_COLORVECTOR, colorVector);
   }
   void add_capInsets(const flatbuffers::CapInsets *capInsets) {
@@ -3871,28 +3771,28 @@ struct ScrollViewOptionsBuilder {
   void add_scrollbarAutoHideTime(float scrollbarAutoHideTime) {
     fbb_.AddElement<float>(ScrollViewOptions::VT_SCROLLBARAUTOHIDETIME, scrollbarAutoHideTime, 0.2f);
   }
-  explicit ScrollViewOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ScrollViewOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ScrollViewOptions> Finish() {
+  ::flatbuffers::Offset<ScrollViewOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ScrollViewOptions>(end);
+    auto o = ::flatbuffers::Offset<ScrollViewOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ScrollViewOptions> CreateScrollViewOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
+inline ::flatbuffers::Offset<ScrollViewOptions> CreateScrollViewOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
     bool clipEnabled = false,
     const flatbuffers::Color *bgColor = nullptr,
     const flatbuffers::Color *bgStartColor = nullptr,
     const flatbuffers::Color *bgEndColor = nullptr,
     int32_t colorType = 0,
     uint8_t bgColorOpacity = 255,
-    const flatbuffers::ColorVector *colorVector = nullptr,
+    const flatbuffers::FVec2 *colorVector = nullptr,
     const flatbuffers::CapInsets *capInsets = nullptr,
     const flatbuffers::FlatSize *scale9Size = nullptr,
     bool backGroundScale9Enabled = false,
@@ -3924,7 +3824,7 @@ inline flatbuffers::Offset<ScrollViewOptions> CreateScrollViewOptions(
   return builder_.Finish();
 }
 
-struct PageViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct PageViewOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef PageViewOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -3964,8 +3864,8 @@ struct PageViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint8_t bgColorOpacity() const {
     return GetField<uint8_t>(VT_BGCOLOROPACITY, 255);
   }
-  const flatbuffers::ColorVector *colorVector() const {
-    return GetStruct<const flatbuffers::ColorVector *>(VT_COLORVECTOR);
+  const flatbuffers::FVec2 *colorVector() const {
+    return GetStruct<const flatbuffers::FVec2 *>(VT_COLORVECTOR);
   }
   const flatbuffers::CapInsets *capInsets() const {
     return GetStruct<const flatbuffers::CapInsets *>(VT_CAPINSETS);
@@ -3976,7 +3876,7 @@ struct PageViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool backGroundScale9Enabled() const {
     return GetField<uint8_t>(VT_BACKGROUNDSCALE9ENABLED, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -3988,7 +3888,7 @@ struct PageViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            VerifyField<flatbuffers::Color>(verifier, VT_BGENDCOLOR, 1) &&
            VerifyField<int32_t>(verifier, VT_COLORTYPE, 4) &&
            VerifyField<uint8_t>(verifier, VT_BGCOLOROPACITY, 1) &&
-           VerifyField<flatbuffers::ColorVector>(verifier, VT_COLORVECTOR, 4) &&
+           VerifyField<flatbuffers::FVec2>(verifier, VT_COLORVECTOR, 4) &&
            VerifyField<flatbuffers::CapInsets>(verifier, VT_CAPINSETS, 4) &&
            VerifyField<flatbuffers::FlatSize>(verifier, VT_SCALE9SIZE, 4) &&
            VerifyField<uint8_t>(verifier, VT_BACKGROUNDSCALE9ENABLED, 1) &&
@@ -3998,12 +3898,12 @@ struct PageViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct PageViewOptionsBuilder {
   typedef PageViewOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(PageViewOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_backGroundImageData(flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData) {
+  void add_backGroundImageData(::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData) {
     fbb_.AddOffset(PageViewOptions::VT_BACKGROUNDIMAGEDATA, backGroundImageData);
   }
   void add_clipEnabled(bool clipEnabled) {
@@ -4024,7 +3924,7 @@ struct PageViewOptionsBuilder {
   void add_bgColorOpacity(uint8_t bgColorOpacity) {
     fbb_.AddElement<uint8_t>(PageViewOptions::VT_BGCOLOROPACITY, bgColorOpacity, 255);
   }
-  void add_colorVector(const flatbuffers::ColorVector *colorVector) {
+  void add_colorVector(const flatbuffers::FVec2 *colorVector) {
     fbb_.AddStruct(PageViewOptions::VT_COLORVECTOR, colorVector);
   }
   void add_capInsets(const flatbuffers::CapInsets *capInsets) {
@@ -4036,28 +3936,28 @@ struct PageViewOptionsBuilder {
   void add_backGroundScale9Enabled(bool backGroundScale9Enabled) {
     fbb_.AddElement<uint8_t>(PageViewOptions::VT_BACKGROUNDSCALE9ENABLED, static_cast<uint8_t>(backGroundScale9Enabled), 0);
   }
-  explicit PageViewOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit PageViewOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<PageViewOptions> Finish() {
+  ::flatbuffers::Offset<PageViewOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<PageViewOptions>(end);
+    auto o = ::flatbuffers::Offset<PageViewOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<PageViewOptions> CreatePageViewOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
+inline ::flatbuffers::Offset<PageViewOptions> CreatePageViewOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
     bool clipEnabled = false,
     const flatbuffers::Color *bgColor = nullptr,
     const flatbuffers::Color *bgStartColor = nullptr,
     const flatbuffers::Color *bgEndColor = nullptr,
     int32_t colorType = 0,
     uint8_t bgColorOpacity = 255,
-    const flatbuffers::ColorVector *colorVector = nullptr,
+    const flatbuffers::FVec2 *colorVector = nullptr,
     const flatbuffers::CapInsets *capInsets = nullptr,
     const flatbuffers::FlatSize *scale9Size = nullptr,
     bool backGroundScale9Enabled = false) {
@@ -4077,7 +3977,7 @@ inline flatbuffers::Offset<PageViewOptions> CreatePageViewOptions(
   return builder_.Finish();
 }
 
-struct ListViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ListViewOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ListViewOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDGETOPTIONS = 4,
@@ -4124,8 +4024,8 @@ struct ListViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint8_t bgColorOpacity() const {
     return GetField<uint8_t>(VT_BGCOLOROPACITY, 255);
   }
-  const flatbuffers::ColorVector *colorVector() const {
-    return GetStruct<const flatbuffers::ColorVector *>(VT_COLORVECTOR);
+  const flatbuffers::FVec2 *colorVector() const {
+    return GetStruct<const flatbuffers::FVec2 *>(VT_COLORVECTOR);
   }
   const flatbuffers::CapInsets *capInsets() const {
     return GetStruct<const flatbuffers::CapInsets *>(VT_CAPINSETS);
@@ -4148,16 +4048,16 @@ struct ListViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t itemMargin() const {
     return GetField<int32_t>(VT_ITEMMARGIN, 0);
   }
-  const flatbuffers::String *directionType() const {
-    return GetPointer<const flatbuffers::String *>(VT_DIRECTIONTYPE);
+  const ::flatbuffers::String *directionType() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_DIRECTIONTYPE);
   }
-  const flatbuffers::String *horizontalType() const {
-    return GetPointer<const flatbuffers::String *>(VT_HORIZONTALTYPE);
+  const ::flatbuffers::String *horizontalType() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_HORIZONTALTYPE);
   }
-  const flatbuffers::String *verticalType() const {
-    return GetPointer<const flatbuffers::String *>(VT_VERTICALTYPE);
+  const ::flatbuffers::String *verticalType() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_VERTICALTYPE);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_WIDGETOPTIONS) &&
            verifier.VerifyTable(widgetOptions()) &&
@@ -4169,7 +4069,7 @@ struct ListViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            VerifyField<flatbuffers::Color>(verifier, VT_BGENDCOLOR, 1) &&
            VerifyField<int32_t>(verifier, VT_COLORTYPE, 4) &&
            VerifyField<uint8_t>(verifier, VT_BGCOLOROPACITY, 1) &&
-           VerifyField<flatbuffers::ColorVector>(verifier, VT_COLORVECTOR, 4) &&
+           VerifyField<flatbuffers::FVec2>(verifier, VT_COLORVECTOR, 4) &&
            VerifyField<flatbuffers::CapInsets>(verifier, VT_CAPINSETS, 4) &&
            VerifyField<flatbuffers::FlatSize>(verifier, VT_SCALE9SIZE, 4) &&
            VerifyField<uint8_t>(verifier, VT_BACKGROUNDSCALE9ENABLED, 1) &&
@@ -4189,12 +4089,12 @@ struct ListViewOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct ListViewOptionsBuilder {
   typedef ListViewOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_widgetOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_widgetOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions) {
     fbb_.AddOffset(ListViewOptions::VT_WIDGETOPTIONS, widgetOptions);
   }
-  void add_backGroundImageData(flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData) {
+  void add_backGroundImageData(::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData) {
     fbb_.AddOffset(ListViewOptions::VT_BACKGROUNDIMAGEDATA, backGroundImageData);
   }
   void add_clipEnabled(bool clipEnabled) {
@@ -4215,7 +4115,7 @@ struct ListViewOptionsBuilder {
   void add_bgColorOpacity(uint8_t bgColorOpacity) {
     fbb_.AddElement<uint8_t>(ListViewOptions::VT_BGCOLOROPACITY, bgColorOpacity, 255);
   }
-  void add_colorVector(const flatbuffers::ColorVector *colorVector) {
+  void add_colorVector(const flatbuffers::FVec2 *colorVector) {
     fbb_.AddStruct(ListViewOptions::VT_COLORVECTOR, colorVector);
   }
   void add_capInsets(const flatbuffers::CapInsets *capInsets) {
@@ -4239,37 +4139,37 @@ struct ListViewOptionsBuilder {
   void add_itemMargin(int32_t itemMargin) {
     fbb_.AddElement<int32_t>(ListViewOptions::VT_ITEMMARGIN, itemMargin, 0);
   }
-  void add_directionType(flatbuffers::Offset<flatbuffers::String> directionType) {
+  void add_directionType(::flatbuffers::Offset<::flatbuffers::String> directionType) {
     fbb_.AddOffset(ListViewOptions::VT_DIRECTIONTYPE, directionType);
   }
-  void add_horizontalType(flatbuffers::Offset<flatbuffers::String> horizontalType) {
+  void add_horizontalType(::flatbuffers::Offset<::flatbuffers::String> horizontalType) {
     fbb_.AddOffset(ListViewOptions::VT_HORIZONTALTYPE, horizontalType);
   }
-  void add_verticalType(flatbuffers::Offset<flatbuffers::String> verticalType) {
+  void add_verticalType(::flatbuffers::Offset<::flatbuffers::String> verticalType) {
     fbb_.AddOffset(ListViewOptions::VT_VERTICALTYPE, verticalType);
   }
-  explicit ListViewOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ListViewOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ListViewOptions> Finish() {
+  ::flatbuffers::Offset<ListViewOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ListViewOptions>(end);
+    auto o = ::flatbuffers::Offset<ListViewOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ListViewOptions> CreateListViewOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
+inline ::flatbuffers::Offset<ListViewOptions> CreateListViewOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
     bool clipEnabled = false,
     const flatbuffers::Color *bgColor = nullptr,
     const flatbuffers::Color *bgStartColor = nullptr,
     const flatbuffers::Color *bgEndColor = nullptr,
     int32_t colorType = 0,
     uint8_t bgColorOpacity = 255,
-    const flatbuffers::ColorVector *colorVector = nullptr,
+    const flatbuffers::FVec2 *colorVector = nullptr,
     const flatbuffers::CapInsets *capInsets = nullptr,
     const flatbuffers::FlatSize *scale9Size = nullptr,
     bool backGroundScale9Enabled = false,
@@ -4277,9 +4177,9 @@ inline flatbuffers::Offset<ListViewOptions> CreateListViewOptions(
     int32_t direction = 0,
     bool bounceEnabled = false,
     int32_t itemMargin = 0,
-    flatbuffers::Offset<flatbuffers::String> directionType = 0,
-    flatbuffers::Offset<flatbuffers::String> horizontalType = 0,
-    flatbuffers::Offset<flatbuffers::String> verticalType = 0) {
+    ::flatbuffers::Offset<::flatbuffers::String> directionType = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> horizontalType = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> verticalType = 0) {
   ListViewOptionsBuilder builder_(_fbb);
   builder_.add_verticalType(verticalType);
   builder_.add_horizontalType(horizontalType);
@@ -4303,17 +4203,17 @@ inline flatbuffers::Offset<ListViewOptions> CreateListViewOptions(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ListViewOptions> CreateListViewOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
+inline ::flatbuffers::Offset<ListViewOptions> CreateListViewOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
     bool clipEnabled = false,
     const flatbuffers::Color *bgColor = nullptr,
     const flatbuffers::Color *bgStartColor = nullptr,
     const flatbuffers::Color *bgEndColor = nullptr,
     int32_t colorType = 0,
     uint8_t bgColorOpacity = 255,
-    const flatbuffers::ColorVector *colorVector = nullptr,
+    const flatbuffers::FVec2 *colorVector = nullptr,
     const flatbuffers::CapInsets *capInsets = nullptr,
     const flatbuffers::FlatSize *scale9Size = nullptr,
     bool backGroundScale9Enabled = false,
@@ -4350,7 +4250,7 @@ inline flatbuffers::Offset<ListViewOptions> CreateListViewOptionsDirect(
       verticalType__);
 }
 
-struct TextFieldExOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct TextFieldExOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TextFieldExOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -4375,23 +4275,23 @@ struct TextFieldExOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::ResourceData *fontResource() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_FONTRESOURCE);
   }
-  const flatbuffers::String *fontName() const {
-    return GetPointer<const flatbuffers::String *>(VT_FONTNAME);
+  const ::flatbuffers::String *fontName() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_FONTNAME);
   }
   int32_t fontSize() const {
     return GetField<int32_t>(VT_FONTSIZE, 0);
   }
-  const flatbuffers::String *text() const {
-    return GetPointer<const flatbuffers::String *>(VT_TEXT);
+  const ::flatbuffers::String *text() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_TEXT);
   }
-  const flatbuffers::String *placeholderText() const {
-    return GetPointer<const flatbuffers::String *>(VT_PLACEHOLDERTEXT);
+  const ::flatbuffers::String *placeholderText() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_PLACEHOLDERTEXT);
   }
   bool passwordEnabled() const {
     return GetField<uint8_t>(VT_PASSWORDENABLED, 0) != 0;
   }
-  const flatbuffers::String *passwordStyleText() const {
-    return GetPointer<const flatbuffers::String *>(VT_PASSWORDSTYLETEXT);
+  const ::flatbuffers::String *passwordStyleText() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_PASSWORDSTYLETEXT);
   }
   int32_t maxLength() const {
     return GetField<int32_t>(VT_MAXLENGTH, 0);
@@ -4414,7 +4314,7 @@ struct TextFieldExOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool isLocalized() const {
     return GetField<uint8_t>(VT_ISLOCALIZED, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -4443,30 +4343,30 @@ struct TextFieldExOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct TextFieldExOptionsBuilder {
   typedef TextFieldExOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(TextFieldExOptions::VT_NODEOPTIONS, nodeOptions);
   }
-  void add_fontResource(flatbuffers::Offset<flatbuffers::ResourceData> fontResource) {
+  void add_fontResource(::flatbuffers::Offset<flatbuffers::ResourceData> fontResource) {
     fbb_.AddOffset(TextFieldExOptions::VT_FONTRESOURCE, fontResource);
   }
-  void add_fontName(flatbuffers::Offset<flatbuffers::String> fontName) {
+  void add_fontName(::flatbuffers::Offset<::flatbuffers::String> fontName) {
     fbb_.AddOffset(TextFieldExOptions::VT_FONTNAME, fontName);
   }
   void add_fontSize(int32_t fontSize) {
     fbb_.AddElement<int32_t>(TextFieldExOptions::VT_FONTSIZE, fontSize, 0);
   }
-  void add_text(flatbuffers::Offset<flatbuffers::String> text) {
+  void add_text(::flatbuffers::Offset<::flatbuffers::String> text) {
     fbb_.AddOffset(TextFieldExOptions::VT_TEXT, text);
   }
-  void add_placeholderText(flatbuffers::Offset<flatbuffers::String> placeholderText) {
+  void add_placeholderText(::flatbuffers::Offset<::flatbuffers::String> placeholderText) {
     fbb_.AddOffset(TextFieldExOptions::VT_PLACEHOLDERTEXT, placeholderText);
   }
   void add_passwordEnabled(bool passwordEnabled) {
     fbb_.AddElement<uint8_t>(TextFieldExOptions::VT_PASSWORDENABLED, static_cast<uint8_t>(passwordEnabled), 0);
   }
-  void add_passwordStyleText(flatbuffers::Offset<flatbuffers::String> passwordStyleText) {
+  void add_passwordStyleText(::flatbuffers::Offset<::flatbuffers::String> passwordStyleText) {
     fbb_.AddOffset(TextFieldExOptions::VT_PASSWORDSTYLETEXT, passwordStyleText);
   }
   void add_maxLength(int32_t maxLength) {
@@ -4490,27 +4390,27 @@ struct TextFieldExOptionsBuilder {
   void add_isLocalized(bool isLocalized) {
     fbb_.AddElement<uint8_t>(TextFieldExOptions::VT_ISLOCALIZED, static_cast<uint8_t>(isLocalized), 0);
   }
-  explicit TextFieldExOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TextFieldExOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<TextFieldExOptions> Finish() {
+  ::flatbuffers::Offset<TextFieldExOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TextFieldExOptions>(end);
+    auto o = ::flatbuffers::Offset<TextFieldExOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<TextFieldExOptions> CreateTextFieldExOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
-    flatbuffers::Offset<flatbuffers::String> fontName = 0,
+inline ::flatbuffers::Offset<TextFieldExOptions> CreateTextFieldExOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> fontName = 0,
     int32_t fontSize = 0,
-    flatbuffers::Offset<flatbuffers::String> text = 0,
-    flatbuffers::Offset<flatbuffers::String> placeholderText = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> text = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> placeholderText = 0,
     bool passwordEnabled = false,
-    flatbuffers::Offset<flatbuffers::String> passwordStyleText = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> passwordStyleText = 0,
     int32_t maxLength = 0,
     const flatbuffers::Color *textColor = nullptr,
     const flatbuffers::Color *placeholderColor = nullptr,
@@ -4537,10 +4437,10 @@ inline flatbuffers::Offset<TextFieldExOptions> CreateTextFieldExOptions(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<TextFieldExOptions> CreateTextFieldExOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
+inline ::flatbuffers::Offset<TextFieldExOptions> CreateTextFieldExOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fontResource = 0,
     const char *fontName = nullptr,
     int32_t fontSize = 0,
     const char *text = nullptr,
@@ -4577,7 +4477,7 @@ inline flatbuffers::Offset<TextFieldExOptions> CreateTextFieldExOptionsDirect(
       isLocalized);
 }
 
-struct ProjectNodeOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ProjectNodeOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ProjectNodeOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -4587,13 +4487,13 @@ struct ProjectNodeOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::WidgetOptions *nodeOptions() const {
     return GetPointer<const flatbuffers::WidgetOptions *>(VT_NODEOPTIONS);
   }
-  const flatbuffers::String *fileName() const {
-    return GetPointer<const flatbuffers::String *>(VT_FILENAME);
+  const ::flatbuffers::String *fileName() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_FILENAME);
   }
   float innerActionSpeed() const {
     return GetField<float>(VT_INNERACTIONSPEED, 0.0f);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -4606,32 +4506,32 @@ struct ProjectNodeOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct ProjectNodeOptionsBuilder {
   typedef ProjectNodeOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(ProjectNodeOptions::VT_NODEOPTIONS, nodeOptions);
   }
-  void add_fileName(flatbuffers::Offset<flatbuffers::String> fileName) {
+  void add_fileName(::flatbuffers::Offset<::flatbuffers::String> fileName) {
     fbb_.AddOffset(ProjectNodeOptions::VT_FILENAME, fileName);
   }
   void add_innerActionSpeed(float innerActionSpeed) {
     fbb_.AddElement<float>(ProjectNodeOptions::VT_INNERACTIONSPEED, innerActionSpeed, 0.0f);
   }
-  explicit ProjectNodeOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ProjectNodeOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ProjectNodeOptions> Finish() {
+  ::flatbuffers::Offset<ProjectNodeOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ProjectNodeOptions>(end);
+    auto o = ::flatbuffers::Offset<ProjectNodeOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ProjectNodeOptions> CreateProjectNodeOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::String> fileName = 0,
+inline ::flatbuffers::Offset<ProjectNodeOptions> CreateProjectNodeOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> fileName = 0,
     float innerActionSpeed = 0.0f) {
   ProjectNodeOptionsBuilder builder_(_fbb);
   builder_.add_innerActionSpeed(innerActionSpeed);
@@ -4640,9 +4540,9 @@ inline flatbuffers::Offset<ProjectNodeOptions> CreateProjectNodeOptions(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ProjectNodeOptions> CreateProjectNodeOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+inline ::flatbuffers::Offset<ProjectNodeOptions> CreateProjectNodeOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
     const char *fileName = nullptr,
     float innerActionSpeed = 0.0f) {
   auto fileName__ = fileName ? _fbb.CreateString(fileName) : 0;
@@ -4653,7 +4553,7 @@ inline flatbuffers::Offset<ProjectNodeOptions> CreateProjectNodeOptionsDirect(
       innerActionSpeed);
 }
 
-struct ComponentOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ComponentOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ComponentOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -4663,13 +4563,13 @@ struct ComponentOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::WidgetOptions *nodeOptions() const {
     return GetPointer<const flatbuffers::WidgetOptions *>(VT_NODEOPTIONS);
   }
-  const flatbuffers::String *type() const {
-    return GetPointer<const flatbuffers::String *>(VT_TYPE);
+  const ::flatbuffers::String *type() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_TYPE);
   }
   const flatbuffers::ComAudioOptions *comAudioOptions() const {
     return GetPointer<const flatbuffers::ComAudioOptions *>(VT_COMAUDIOOPTIONS);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -4683,33 +4583,33 @@ struct ComponentOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct ComponentOptionsBuilder {
   typedef ComponentOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(ComponentOptions::VT_NODEOPTIONS, nodeOptions);
   }
-  void add_type(flatbuffers::Offset<flatbuffers::String> type) {
+  void add_type(::flatbuffers::Offset<::flatbuffers::String> type) {
     fbb_.AddOffset(ComponentOptions::VT_TYPE, type);
   }
-  void add_comAudioOptions(flatbuffers::Offset<flatbuffers::ComAudioOptions> comAudioOptions) {
+  void add_comAudioOptions(::flatbuffers::Offset<flatbuffers::ComAudioOptions> comAudioOptions) {
     fbb_.AddOffset(ComponentOptions::VT_COMAUDIOOPTIONS, comAudioOptions);
   }
-  explicit ComponentOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ComponentOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ComponentOptions> Finish() {
+  ::flatbuffers::Offset<ComponentOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ComponentOptions>(end);
+    auto o = ::flatbuffers::Offset<ComponentOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ComponentOptions> CreateComponentOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::String> type = 0,
-    flatbuffers::Offset<flatbuffers::ComAudioOptions> comAudioOptions = 0) {
+inline ::flatbuffers::Offset<ComponentOptions> CreateComponentOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> type = 0,
+    ::flatbuffers::Offset<flatbuffers::ComAudioOptions> comAudioOptions = 0) {
   ComponentOptionsBuilder builder_(_fbb);
   builder_.add_comAudioOptions(comAudioOptions);
   builder_.add_type(type);
@@ -4717,11 +4617,11 @@ inline flatbuffers::Offset<ComponentOptions> CreateComponentOptions(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ComponentOptions> CreateComponentOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+inline ::flatbuffers::Offset<ComponentOptions> CreateComponentOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
     const char *type = nullptr,
-    flatbuffers::Offset<flatbuffers::ComAudioOptions> comAudioOptions = 0) {
+    ::flatbuffers::Offset<flatbuffers::ComAudioOptions> comAudioOptions = 0) {
   auto type__ = type ? _fbb.CreateString(type) : 0;
   return flatbuffers::CreateComponentOptions(
       _fbb,
@@ -4730,7 +4630,7 @@ inline flatbuffers::Offset<ComponentOptions> CreateComponentOptionsDirect(
       comAudioOptions);
 }
 
-struct ComAudioOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ComAudioOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ComAudioOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -4743,8 +4643,8 @@ struct ComAudioOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::WidgetOptions *nodeOptions() const {
     return GetPointer<const flatbuffers::WidgetOptions *>(VT_NODEOPTIONS);
   }
-  const flatbuffers::String *name() const {
-    return GetPointer<const flatbuffers::String *>(VT_NAME);
+  const ::flatbuffers::String *name() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_NAME);
   }
   bool enabled() const {
     return GetField<uint8_t>(VT_ENABLED, 0) != 0;
@@ -4758,7 +4658,7 @@ struct ComAudioOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::ResourceData *fileNameData() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_FILENAMEDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -4775,12 +4675,12 @@ struct ComAudioOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct ComAudioOptionsBuilder {
   typedef ComAudioOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(ComAudioOptions::VT_NODEOPTIONS, nodeOptions);
   }
-  void add_name(flatbuffers::Offset<flatbuffers::String> name) {
+  void add_name(::flatbuffers::Offset<::flatbuffers::String> name) {
     fbb_.AddOffset(ComAudioOptions::VT_NAME, name);
   }
   void add_enabled(bool enabled) {
@@ -4792,28 +4692,28 @@ struct ComAudioOptionsBuilder {
   void add_volume(int32_t volume) {
     fbb_.AddElement<int32_t>(ComAudioOptions::VT_VOLUME, volume, 0);
   }
-  void add_fileNameData(flatbuffers::Offset<flatbuffers::ResourceData> fileNameData) {
+  void add_fileNameData(::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData) {
     fbb_.AddOffset(ComAudioOptions::VT_FILENAMEDATA, fileNameData);
   }
-  explicit ComAudioOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ComAudioOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ComAudioOptions> Finish() {
+  ::flatbuffers::Offset<ComAudioOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ComAudioOptions>(end);
+    auto o = ::flatbuffers::Offset<ComAudioOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ComAudioOptions> CreateComAudioOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
-    flatbuffers::Offset<flatbuffers::String> name = 0,
+inline ::flatbuffers::Offset<ComAudioOptions> CreateComAudioOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> name = 0,
     bool enabled = false,
     bool loop = false,
     int32_t volume = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0) {
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0) {
   ComAudioOptionsBuilder builder_(_fbb);
   builder_.add_fileNameData(fileNameData);
   builder_.add_volume(volume);
@@ -4824,14 +4724,14 @@ inline flatbuffers::Offset<ComAudioOptions> CreateComAudioOptions(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ComAudioOptions> CreateComAudioOptionsDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+inline ::flatbuffers::Offset<ComAudioOptions> CreateComAudioOptionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
     const char *name = nullptr,
     bool enabled = false,
     bool loop = false,
     int32_t volume = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0) {
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fileNameData = 0) {
   auto name__ = name ? _fbb.CreateString(name) : 0;
   return flatbuffers::CreateComAudioOptions(
       _fbb,
@@ -4843,15 +4743,15 @@ inline flatbuffers::Offset<ComAudioOptions> CreateComAudioOptionsDirect(
       fileNameData);
 }
 
-struct AnimationInfo FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct AnimationInfo FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef AnimationInfoBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NAME = 4,
     VT_STARTINDEX = 6,
     VT_ENDINDEX = 8
   };
-  const flatbuffers::String *name() const {
-    return GetPointer<const flatbuffers::String *>(VT_NAME);
+  const ::flatbuffers::String *name() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_NAME);
   }
   int32_t startIndex() const {
     return GetField<int32_t>(VT_STARTINDEX, 0);
@@ -4859,7 +4759,7 @@ struct AnimationInfo FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t endIndex() const {
     return GetField<int32_t>(VT_ENDINDEX, 0);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NAME) &&
            verifier.VerifyString(name()) &&
@@ -4871,9 +4771,9 @@ struct AnimationInfo FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct AnimationInfoBuilder {
   typedef AnimationInfo Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_name(flatbuffers::Offset<flatbuffers::String> name) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_name(::flatbuffers::Offset<::flatbuffers::String> name) {
     fbb_.AddOffset(AnimationInfo::VT_NAME, name);
   }
   void add_startIndex(int32_t startIndex) {
@@ -4882,20 +4782,20 @@ struct AnimationInfoBuilder {
   void add_endIndex(int32_t endIndex) {
     fbb_.AddElement<int32_t>(AnimationInfo::VT_ENDINDEX, endIndex, 0);
   }
-  explicit AnimationInfoBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit AnimationInfoBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<AnimationInfo> Finish() {
+  ::flatbuffers::Offset<AnimationInfo> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<AnimationInfo>(end);
+    auto o = ::flatbuffers::Offset<AnimationInfo>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<AnimationInfo> CreateAnimationInfo(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> name = 0,
+inline ::flatbuffers::Offset<AnimationInfo> CreateAnimationInfo(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> name = 0,
     int32_t startIndex = 0,
     int32_t endIndex = 0) {
   AnimationInfoBuilder builder_(_fbb);
@@ -4905,8 +4805,8 @@ inline flatbuffers::Offset<AnimationInfo> CreateAnimationInfo(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<AnimationInfo> CreateAnimationInfoDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<AnimationInfo> CreateAnimationInfoDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *name = nullptr,
     int32_t startIndex = 0,
     int32_t endIndex = 0) {
@@ -4918,7 +4818,7 @@ inline flatbuffers::Offset<AnimationInfo> CreateAnimationInfoDirect(
       endIndex);
 }
 
-struct NodeAction FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct NodeAction FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef NodeActionBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_DURATION = 4,
@@ -4932,13 +4832,13 @@ struct NodeAction FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   float speed() const {
     return GetField<float>(VT_SPEED, 0.0f);
   }
-  const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::TimeLine>> *timeLines() const {
-    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::TimeLine>> *>(VT_TIMELINES);
+  const ::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::TimeLine>> *timeLines() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::TimeLine>> *>(VT_TIMELINES);
   }
-  const flatbuffers::String *currentAnimationName() const {
-    return GetPointer<const flatbuffers::String *>(VT_CURRENTANIMATIONNAME);
+  const ::flatbuffers::String *currentAnimationName() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CURRENTANIMATIONNAME);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_DURATION, 4) &&
            VerifyField<float>(verifier, VT_SPEED, 4) &&
@@ -4953,37 +4853,37 @@ struct NodeAction FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct NodeActionBuilder {
   typedef NodeAction Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_duration(int32_t duration) {
     fbb_.AddElement<int32_t>(NodeAction::VT_DURATION, duration, 0);
   }
   void add_speed(float speed) {
     fbb_.AddElement<float>(NodeAction::VT_SPEED, speed, 0.0f);
   }
-  void add_timeLines(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::TimeLine>>> timeLines) {
+  void add_timeLines(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::TimeLine>>> timeLines) {
     fbb_.AddOffset(NodeAction::VT_TIMELINES, timeLines);
   }
-  void add_currentAnimationName(flatbuffers::Offset<flatbuffers::String> currentAnimationName) {
+  void add_currentAnimationName(::flatbuffers::Offset<::flatbuffers::String> currentAnimationName) {
     fbb_.AddOffset(NodeAction::VT_CURRENTANIMATIONNAME, currentAnimationName);
   }
-  explicit NodeActionBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit NodeActionBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<NodeAction> Finish() {
+  ::flatbuffers::Offset<NodeAction> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<NodeAction>(end);
+    auto o = ::flatbuffers::Offset<NodeAction>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<NodeAction> CreateNodeAction(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<NodeAction> CreateNodeAction(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t duration = 0,
     float speed = 0.0f,
-    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::TimeLine>>> timeLines = 0,
-    flatbuffers::Offset<flatbuffers::String> currentAnimationName = 0) {
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::TimeLine>>> timeLines = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> currentAnimationName = 0) {
   NodeActionBuilder builder_(_fbb);
   builder_.add_currentAnimationName(currentAnimationName);
   builder_.add_timeLines(timeLines);
@@ -4992,13 +4892,13 @@ inline flatbuffers::Offset<NodeAction> CreateNodeAction(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<NodeAction> CreateNodeActionDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<NodeAction> CreateNodeActionDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t duration = 0,
     float speed = 0.0f,
-    const std::vector<flatbuffers::Offset<flatbuffers::TimeLine>> *timeLines = nullptr,
+    const std::vector<::flatbuffers::Offset<flatbuffers::TimeLine>> *timeLines = nullptr,
     const char *currentAnimationName = nullptr) {
-  auto timeLines__ = timeLines ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::TimeLine>>(*timeLines) : 0;
+  auto timeLines__ = timeLines ? _fbb.CreateVector<::flatbuffers::Offset<flatbuffers::TimeLine>>(*timeLines) : 0;
   auto currentAnimationName__ = currentAnimationName ? _fbb.CreateString(currentAnimationName) : 0;
   return flatbuffers::CreateNodeAction(
       _fbb,
@@ -5008,23 +4908,23 @@ inline flatbuffers::Offset<NodeAction> CreateNodeActionDirect(
       currentAnimationName__);
 }
 
-struct TimeLine FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct TimeLine FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TimeLineBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_PROPERTY = 4,
     VT_ACTIONTAG = 6,
     VT_FRAMES = 8
   };
-  const flatbuffers::String *property() const {
-    return GetPointer<const flatbuffers::String *>(VT_PROPERTY);
+  const ::flatbuffers::String *property() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_PROPERTY);
   }
   int32_t actionTag() const {
     return GetField<int32_t>(VT_ACTIONTAG, 0);
   }
-  const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::Frame>> *frames() const {
-    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::Frame>> *>(VT_FRAMES);
+  const ::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::Frame>> *frames() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::Frame>> *>(VT_FRAMES);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_PROPERTY) &&
            verifier.VerifyString(property()) &&
@@ -5038,33 +4938,33 @@ struct TimeLine FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct TimeLineBuilder {
   typedef TimeLine Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_property(flatbuffers::Offset<flatbuffers::String> property) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_property(::flatbuffers::Offset<::flatbuffers::String> property) {
     fbb_.AddOffset(TimeLine::VT_PROPERTY, property);
   }
   void add_actionTag(int32_t actionTag) {
     fbb_.AddElement<int32_t>(TimeLine::VT_ACTIONTAG, actionTag, 0);
   }
-  void add_frames(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::Frame>>> frames) {
+  void add_frames(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::Frame>>> frames) {
     fbb_.AddOffset(TimeLine::VT_FRAMES, frames);
   }
-  explicit TimeLineBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TimeLineBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<TimeLine> Finish() {
+  ::flatbuffers::Offset<TimeLine> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TimeLine>(end);
+    auto o = ::flatbuffers::Offset<TimeLine>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<TimeLine> CreateTimeLine(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> property = 0,
+inline ::flatbuffers::Offset<TimeLine> CreateTimeLine(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> property = 0,
     int32_t actionTag = 0,
-    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::Frame>>> frames = 0) {
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<flatbuffers::Frame>>> frames = 0) {
   TimeLineBuilder builder_(_fbb);
   builder_.add_frames(frames);
   builder_.add_actionTag(actionTag);
@@ -5072,13 +4972,13 @@ inline flatbuffers::Offset<TimeLine> CreateTimeLine(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<TimeLine> CreateTimeLineDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<TimeLine> CreateTimeLineDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *property = nullptr,
     int32_t actionTag = 0,
-    const std::vector<flatbuffers::Offset<flatbuffers::Frame>> *frames = nullptr) {
+    const std::vector<::flatbuffers::Offset<flatbuffers::Frame>> *frames = nullptr) {
   auto property__ = property ? _fbb.CreateString(property) : 0;
-  auto frames__ = frames ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::Frame>>(*frames) : 0;
+  auto frames__ = frames ? _fbb.CreateVector<::flatbuffers::Offset<flatbuffers::Frame>>(*frames) : 0;
   return flatbuffers::CreateTimeLine(
       _fbb,
       property__,
@@ -5086,7 +4986,7 @@ inline flatbuffers::Offset<TimeLine> CreateTimeLineDirect(
       frames__);
 }
 
-struct Frame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct Frame FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef FrameBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_POINTFRAME = 4,
@@ -5126,7 +5026,7 @@ struct Frame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::BlendFrame *blendFrame() const {
     return GetPointer<const flatbuffers::BlendFrame *>(VT_BLENDFRAME);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_POINTFRAME) &&
            verifier.VerifyTable(pointFrame()) &&
@@ -5152,57 +5052,57 @@ struct Frame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct FrameBuilder {
   typedef Frame Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_pointFrame(flatbuffers::Offset<flatbuffers::PointFrame> pointFrame) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_pointFrame(::flatbuffers::Offset<flatbuffers::PointFrame> pointFrame) {
     fbb_.AddOffset(Frame::VT_POINTFRAME, pointFrame);
   }
-  void add_scaleFrame(flatbuffers::Offset<flatbuffers::ScaleFrame> scaleFrame) {
+  void add_scaleFrame(::flatbuffers::Offset<flatbuffers::ScaleFrame> scaleFrame) {
     fbb_.AddOffset(Frame::VT_SCALEFRAME, scaleFrame);
   }
-  void add_colorFrame(flatbuffers::Offset<flatbuffers::ColorFrame> colorFrame) {
+  void add_colorFrame(::flatbuffers::Offset<flatbuffers::ColorFrame> colorFrame) {
     fbb_.AddOffset(Frame::VT_COLORFRAME, colorFrame);
   }
-  void add_textureFrame(flatbuffers::Offset<flatbuffers::TextureFrame> textureFrame) {
+  void add_textureFrame(::flatbuffers::Offset<flatbuffers::TextureFrame> textureFrame) {
     fbb_.AddOffset(Frame::VT_TEXTUREFRAME, textureFrame);
   }
-  void add_eventFrame(flatbuffers::Offset<flatbuffers::EventFrame> eventFrame) {
+  void add_eventFrame(::flatbuffers::Offset<flatbuffers::EventFrame> eventFrame) {
     fbb_.AddOffset(Frame::VT_EVENTFRAME, eventFrame);
   }
-  void add_intFrame(flatbuffers::Offset<flatbuffers::IntFrame> intFrame) {
+  void add_intFrame(::flatbuffers::Offset<flatbuffers::IntFrame> intFrame) {
     fbb_.AddOffset(Frame::VT_INTFRAME, intFrame);
   }
-  void add_boolFrame(flatbuffers::Offset<flatbuffers::BoolFrame> boolFrame) {
+  void add_boolFrame(::flatbuffers::Offset<flatbuffers::BoolFrame> boolFrame) {
     fbb_.AddOffset(Frame::VT_BOOLFRAME, boolFrame);
   }
-  void add_innerActionFrame(flatbuffers::Offset<flatbuffers::InnerActionFrame> innerActionFrame) {
+  void add_innerActionFrame(::flatbuffers::Offset<flatbuffers::InnerActionFrame> innerActionFrame) {
     fbb_.AddOffset(Frame::VT_INNERACTIONFRAME, innerActionFrame);
   }
-  void add_blendFrame(flatbuffers::Offset<flatbuffers::BlendFrame> blendFrame) {
+  void add_blendFrame(::flatbuffers::Offset<flatbuffers::BlendFrame> blendFrame) {
     fbb_.AddOffset(Frame::VT_BLENDFRAME, blendFrame);
   }
-  explicit FrameBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit FrameBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<Frame> Finish() {
+  ::flatbuffers::Offset<Frame> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<Frame>(end);
+    auto o = ::flatbuffers::Offset<Frame>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<Frame> CreateFrame(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::PointFrame> pointFrame = 0,
-    flatbuffers::Offset<flatbuffers::ScaleFrame> scaleFrame = 0,
-    flatbuffers::Offset<flatbuffers::ColorFrame> colorFrame = 0,
-    flatbuffers::Offset<flatbuffers::TextureFrame> textureFrame = 0,
-    flatbuffers::Offset<flatbuffers::EventFrame> eventFrame = 0,
-    flatbuffers::Offset<flatbuffers::IntFrame> intFrame = 0,
-    flatbuffers::Offset<flatbuffers::BoolFrame> boolFrame = 0,
-    flatbuffers::Offset<flatbuffers::InnerActionFrame> innerActionFrame = 0,
-    flatbuffers::Offset<flatbuffers::BlendFrame> blendFrame = 0) {
+inline ::flatbuffers::Offset<Frame> CreateFrame(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::PointFrame> pointFrame = 0,
+    ::flatbuffers::Offset<flatbuffers::ScaleFrame> scaleFrame = 0,
+    ::flatbuffers::Offset<flatbuffers::ColorFrame> colorFrame = 0,
+    ::flatbuffers::Offset<flatbuffers::TextureFrame> textureFrame = 0,
+    ::flatbuffers::Offset<flatbuffers::EventFrame> eventFrame = 0,
+    ::flatbuffers::Offset<flatbuffers::IntFrame> intFrame = 0,
+    ::flatbuffers::Offset<flatbuffers::BoolFrame> boolFrame = 0,
+    ::flatbuffers::Offset<flatbuffers::InnerActionFrame> innerActionFrame = 0,
+    ::flatbuffers::Offset<flatbuffers::BlendFrame> blendFrame = 0) {
   FrameBuilder builder_(_fbb);
   builder_.add_blendFrame(blendFrame);
   builder_.add_innerActionFrame(innerActionFrame);
@@ -5216,7 +5116,7 @@ inline flatbuffers::Offset<Frame> CreateFrame(
   return builder_.Finish();
 }
 
-struct PointFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct PointFrame FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef PointFrameBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_FRAMEINDEX = 4,
@@ -5236,7 +5136,7 @@ struct PointFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::EasingData *easingData() const {
     return GetPointer<const flatbuffers::EasingData *>(VT_EASINGDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_FRAMEINDEX, 4) &&
            VerifyField<uint8_t>(verifier, VT_TWEEN, 1) &&
@@ -5249,8 +5149,8 @@ struct PointFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct PointFrameBuilder {
   typedef PointFrame Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_frameIndex(int32_t frameIndex) {
     fbb_.AddElement<int32_t>(PointFrame::VT_FRAMEINDEX, frameIndex, 0);
   }
@@ -5260,26 +5160,26 @@ struct PointFrameBuilder {
   void add_position(const flatbuffers::FVec2 *position) {
     fbb_.AddStruct(PointFrame::VT_POSITION, position);
   }
-  void add_easingData(flatbuffers::Offset<flatbuffers::EasingData> easingData) {
+  void add_easingData(::flatbuffers::Offset<flatbuffers::EasingData> easingData) {
     fbb_.AddOffset(PointFrame::VT_EASINGDATA, easingData);
   }
-  explicit PointFrameBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit PointFrameBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<PointFrame> Finish() {
+  ::flatbuffers::Offset<PointFrame> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<PointFrame>(end);
+    auto o = ::flatbuffers::Offset<PointFrame>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<PointFrame> CreatePointFrame(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<PointFrame> CreatePointFrame(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t frameIndex = 0,
     bool tween = true,
     const flatbuffers::FVec2 *position = nullptr,
-    flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
+    ::flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
   PointFrameBuilder builder_(_fbb);
   builder_.add_easingData(easingData);
   builder_.add_position(position);
@@ -5288,7 +5188,7 @@ inline flatbuffers::Offset<PointFrame> CreatePointFrame(
   return builder_.Finish();
 }
 
-struct ScaleFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ScaleFrame FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ScaleFrameBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_FRAMEINDEX = 4,
@@ -5302,17 +5202,17 @@ struct ScaleFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool tween() const {
     return GetField<uint8_t>(VT_TWEEN, 1) != 0;
   }
-  const flatbuffers::Scale *scale() const {
-    return GetStruct<const flatbuffers::Scale *>(VT_SCALE);
+  const flatbuffers::FVec2 *scale() const {
+    return GetStruct<const flatbuffers::FVec2 *>(VT_SCALE);
   }
   const flatbuffers::EasingData *easingData() const {
     return GetPointer<const flatbuffers::EasingData *>(VT_EASINGDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_FRAMEINDEX, 4) &&
            VerifyField<uint8_t>(verifier, VT_TWEEN, 1) &&
-           VerifyField<flatbuffers::Scale>(verifier, VT_SCALE, 4) &&
+           VerifyField<flatbuffers::FVec2>(verifier, VT_SCALE, 4) &&
            VerifyOffset(verifier, VT_EASINGDATA) &&
            verifier.VerifyTable(easingData()) &&
            verifier.EndTable();
@@ -5321,37 +5221,37 @@ struct ScaleFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct ScaleFrameBuilder {
   typedef ScaleFrame Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_frameIndex(int32_t frameIndex) {
     fbb_.AddElement<int32_t>(ScaleFrame::VT_FRAMEINDEX, frameIndex, 0);
   }
   void add_tween(bool tween) {
     fbb_.AddElement<uint8_t>(ScaleFrame::VT_TWEEN, static_cast<uint8_t>(tween), 1);
   }
-  void add_scale(const flatbuffers::Scale *scale) {
+  void add_scale(const flatbuffers::FVec2 *scale) {
     fbb_.AddStruct(ScaleFrame::VT_SCALE, scale);
   }
-  void add_easingData(flatbuffers::Offset<flatbuffers::EasingData> easingData) {
+  void add_easingData(::flatbuffers::Offset<flatbuffers::EasingData> easingData) {
     fbb_.AddOffset(ScaleFrame::VT_EASINGDATA, easingData);
   }
-  explicit ScaleFrameBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ScaleFrameBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ScaleFrame> Finish() {
+  ::flatbuffers::Offset<ScaleFrame> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ScaleFrame>(end);
+    auto o = ::flatbuffers::Offset<ScaleFrame>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ScaleFrame> CreateScaleFrame(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<ScaleFrame> CreateScaleFrame(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t frameIndex = 0,
     bool tween = true,
-    const flatbuffers::Scale *scale = nullptr,
-    flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
+    const flatbuffers::FVec2 *scale = nullptr,
+    ::flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
   ScaleFrameBuilder builder_(_fbb);
   builder_.add_easingData(easingData);
   builder_.add_scale(scale);
@@ -5360,7 +5260,7 @@ inline flatbuffers::Offset<ScaleFrame> CreateScaleFrame(
   return builder_.Finish();
 }
 
-struct ColorFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ColorFrame FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ColorFrameBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_FRAMEINDEX = 4,
@@ -5380,7 +5280,7 @@ struct ColorFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::EasingData *easingData() const {
     return GetPointer<const flatbuffers::EasingData *>(VT_EASINGDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_FRAMEINDEX, 4) &&
            VerifyField<uint8_t>(verifier, VT_TWEEN, 1) &&
@@ -5393,8 +5293,8 @@ struct ColorFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct ColorFrameBuilder {
   typedef ColorFrame Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_frameIndex(int32_t frameIndex) {
     fbb_.AddElement<int32_t>(ColorFrame::VT_FRAMEINDEX, frameIndex, 0);
   }
@@ -5404,26 +5304,26 @@ struct ColorFrameBuilder {
   void add_color(const flatbuffers::Color *color) {
     fbb_.AddStruct(ColorFrame::VT_COLOR, color);
   }
-  void add_easingData(flatbuffers::Offset<flatbuffers::EasingData> easingData) {
+  void add_easingData(::flatbuffers::Offset<flatbuffers::EasingData> easingData) {
     fbb_.AddOffset(ColorFrame::VT_EASINGDATA, easingData);
   }
-  explicit ColorFrameBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ColorFrameBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ColorFrame> Finish() {
+  ::flatbuffers::Offset<ColorFrame> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ColorFrame>(end);
+    auto o = ::flatbuffers::Offset<ColorFrame>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ColorFrame> CreateColorFrame(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<ColorFrame> CreateColorFrame(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t frameIndex = 0,
     bool tween = true,
     const flatbuffers::Color *color = nullptr,
-    flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
+    ::flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
   ColorFrameBuilder builder_(_fbb);
   builder_.add_easingData(easingData);
   builder_.add_color(color);
@@ -5432,7 +5332,7 @@ inline flatbuffers::Offset<ColorFrame> CreateColorFrame(
   return builder_.Finish();
 }
 
-struct TextureFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct TextureFrame FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TextureFrameBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_FRAMEINDEX = 4,
@@ -5452,7 +5352,7 @@ struct TextureFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::EasingData *easingData() const {
     return GetPointer<const flatbuffers::EasingData *>(VT_EASINGDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_FRAMEINDEX, 4) &&
            VerifyField<uint8_t>(verifier, VT_TWEEN, 1) &&
@@ -5466,37 +5366,37 @@ struct TextureFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct TextureFrameBuilder {
   typedef TextureFrame Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_frameIndex(int32_t frameIndex) {
     fbb_.AddElement<int32_t>(TextureFrame::VT_FRAMEINDEX, frameIndex, 0);
   }
   void add_tween(bool tween) {
     fbb_.AddElement<uint8_t>(TextureFrame::VT_TWEEN, static_cast<uint8_t>(tween), 1);
   }
-  void add_textureFile(flatbuffers::Offset<flatbuffers::ResourceData> textureFile) {
+  void add_textureFile(::flatbuffers::Offset<flatbuffers::ResourceData> textureFile) {
     fbb_.AddOffset(TextureFrame::VT_TEXTUREFILE, textureFile);
   }
-  void add_easingData(flatbuffers::Offset<flatbuffers::EasingData> easingData) {
+  void add_easingData(::flatbuffers::Offset<flatbuffers::EasingData> easingData) {
     fbb_.AddOffset(TextureFrame::VT_EASINGDATA, easingData);
   }
-  explicit TextureFrameBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TextureFrameBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<TextureFrame> Finish() {
+  ::flatbuffers::Offset<TextureFrame> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TextureFrame>(end);
+    auto o = ::flatbuffers::Offset<TextureFrame>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<TextureFrame> CreateTextureFrame(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<TextureFrame> CreateTextureFrame(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t frameIndex = 0,
     bool tween = true,
-    flatbuffers::Offset<flatbuffers::ResourceData> textureFile = 0,
-    flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
+    ::flatbuffers::Offset<flatbuffers::ResourceData> textureFile = 0,
+    ::flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
   TextureFrameBuilder builder_(_fbb);
   builder_.add_easingData(easingData);
   builder_.add_textureFile(textureFile);
@@ -5505,7 +5405,7 @@ inline flatbuffers::Offset<TextureFrame> CreateTextureFrame(
   return builder_.Finish();
 }
 
-struct EventFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct EventFrame FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef EventFrameBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_FRAMEINDEX = 4,
@@ -5519,13 +5419,13 @@ struct EventFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool tween() const {
     return GetField<uint8_t>(VT_TWEEN, 1) != 0;
   }
-  const flatbuffers::String *value() const {
-    return GetPointer<const flatbuffers::String *>(VT_VALUE);
+  const ::flatbuffers::String *value() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_VALUE);
   }
   const flatbuffers::EasingData *easingData() const {
     return GetPointer<const flatbuffers::EasingData *>(VT_EASINGDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_FRAMEINDEX, 4) &&
            VerifyField<uint8_t>(verifier, VT_TWEEN, 1) &&
@@ -5539,37 +5439,37 @@ struct EventFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct EventFrameBuilder {
   typedef EventFrame Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_frameIndex(int32_t frameIndex) {
     fbb_.AddElement<int32_t>(EventFrame::VT_FRAMEINDEX, frameIndex, 0);
   }
   void add_tween(bool tween) {
     fbb_.AddElement<uint8_t>(EventFrame::VT_TWEEN, static_cast<uint8_t>(tween), 1);
   }
-  void add_value(flatbuffers::Offset<flatbuffers::String> value) {
+  void add_value(::flatbuffers::Offset<::flatbuffers::String> value) {
     fbb_.AddOffset(EventFrame::VT_VALUE, value);
   }
-  void add_easingData(flatbuffers::Offset<flatbuffers::EasingData> easingData) {
+  void add_easingData(::flatbuffers::Offset<flatbuffers::EasingData> easingData) {
     fbb_.AddOffset(EventFrame::VT_EASINGDATA, easingData);
   }
-  explicit EventFrameBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit EventFrameBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<EventFrame> Finish() {
+  ::flatbuffers::Offset<EventFrame> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<EventFrame>(end);
+    auto o = ::flatbuffers::Offset<EventFrame>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<EventFrame> CreateEventFrame(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<EventFrame> CreateEventFrame(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t frameIndex = 0,
     bool tween = true,
-    flatbuffers::Offset<flatbuffers::String> value = 0,
-    flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
+    ::flatbuffers::Offset<::flatbuffers::String> value = 0,
+    ::flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
   EventFrameBuilder builder_(_fbb);
   builder_.add_easingData(easingData);
   builder_.add_value(value);
@@ -5578,12 +5478,12 @@ inline flatbuffers::Offset<EventFrame> CreateEventFrame(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<EventFrame> CreateEventFrameDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<EventFrame> CreateEventFrameDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t frameIndex = 0,
     bool tween = true,
     const char *value = nullptr,
-    flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
+    ::flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
   auto value__ = value ? _fbb.CreateString(value) : 0;
   return flatbuffers::CreateEventFrame(
       _fbb,
@@ -5593,7 +5493,7 @@ inline flatbuffers::Offset<EventFrame> CreateEventFrameDirect(
       easingData);
 }
 
-struct IntFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct IntFrame FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef IntFrameBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_FRAMEINDEX = 4,
@@ -5613,7 +5513,7 @@ struct IntFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::EasingData *easingData() const {
     return GetPointer<const flatbuffers::EasingData *>(VT_EASINGDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_FRAMEINDEX, 4) &&
            VerifyField<uint8_t>(verifier, VT_TWEEN, 1) &&
@@ -5626,8 +5526,8 @@ struct IntFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct IntFrameBuilder {
   typedef IntFrame Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_frameIndex(int32_t frameIndex) {
     fbb_.AddElement<int32_t>(IntFrame::VT_FRAMEINDEX, frameIndex, 0);
   }
@@ -5637,26 +5537,26 @@ struct IntFrameBuilder {
   void add_value(int32_t value) {
     fbb_.AddElement<int32_t>(IntFrame::VT_VALUE, value, 0);
   }
-  void add_easingData(flatbuffers::Offset<flatbuffers::EasingData> easingData) {
+  void add_easingData(::flatbuffers::Offset<flatbuffers::EasingData> easingData) {
     fbb_.AddOffset(IntFrame::VT_EASINGDATA, easingData);
   }
-  explicit IntFrameBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit IntFrameBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<IntFrame> Finish() {
+  ::flatbuffers::Offset<IntFrame> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<IntFrame>(end);
+    auto o = ::flatbuffers::Offset<IntFrame>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<IntFrame> CreateIntFrame(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<IntFrame> CreateIntFrame(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t frameIndex = 0,
     bool tween = true,
     int32_t value = 0,
-    flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
+    ::flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
   IntFrameBuilder builder_(_fbb);
   builder_.add_easingData(easingData);
   builder_.add_value(value);
@@ -5665,7 +5565,7 @@ inline flatbuffers::Offset<IntFrame> CreateIntFrame(
   return builder_.Finish();
 }
 
-struct BoolFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct BoolFrame FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef BoolFrameBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_FRAMEINDEX = 4,
@@ -5685,7 +5585,7 @@ struct BoolFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::EasingData *easingData() const {
     return GetPointer<const flatbuffers::EasingData *>(VT_EASINGDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_FRAMEINDEX, 4) &&
            VerifyField<uint8_t>(verifier, VT_TWEEN, 1) &&
@@ -5698,8 +5598,8 @@ struct BoolFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct BoolFrameBuilder {
   typedef BoolFrame Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_frameIndex(int32_t frameIndex) {
     fbb_.AddElement<int32_t>(BoolFrame::VT_FRAMEINDEX, frameIndex, 0);
   }
@@ -5709,26 +5609,26 @@ struct BoolFrameBuilder {
   void add_value(bool value) {
     fbb_.AddElement<uint8_t>(BoolFrame::VT_VALUE, static_cast<uint8_t>(value), 1);
   }
-  void add_easingData(flatbuffers::Offset<flatbuffers::EasingData> easingData) {
+  void add_easingData(::flatbuffers::Offset<flatbuffers::EasingData> easingData) {
     fbb_.AddOffset(BoolFrame::VT_EASINGDATA, easingData);
   }
-  explicit BoolFrameBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit BoolFrameBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<BoolFrame> Finish() {
+  ::flatbuffers::Offset<BoolFrame> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<BoolFrame>(end);
+    auto o = ::flatbuffers::Offset<BoolFrame>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<BoolFrame> CreateBoolFrame(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<BoolFrame> CreateBoolFrame(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t frameIndex = 0,
     bool tween = true,
     bool value = true,
-    flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
+    ::flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
   BoolFrameBuilder builder_(_fbb);
   builder_.add_easingData(easingData);
   builder_.add_frameIndex(frameIndex);
@@ -5737,7 +5637,7 @@ inline flatbuffers::Offset<BoolFrame> CreateBoolFrame(
   return builder_.Finish();
 }
 
-struct InnerActionFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct InnerActionFrame FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef InnerActionFrameBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_FRAMEINDEX = 4,
@@ -5756,8 +5656,8 @@ struct InnerActionFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t innerActionType() const {
     return GetField<int32_t>(VT_INNERACTIONTYPE, 0);
   }
-  const flatbuffers::String *currentAniamtionName() const {
-    return GetPointer<const flatbuffers::String *>(VT_CURRENTANIAMTIONNAME);
+  const ::flatbuffers::String *currentAniamtionName() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CURRENTANIAMTIONNAME);
   }
   int32_t singleFrameIndex() const {
     return GetField<int32_t>(VT_SINGLEFRAMEINDEX, 0);
@@ -5765,7 +5665,7 @@ struct InnerActionFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::EasingData *easingData() const {
     return GetPointer<const flatbuffers::EasingData *>(VT_EASINGDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_FRAMEINDEX, 4) &&
            VerifyField<uint8_t>(verifier, VT_TWEEN, 1) &&
@@ -5781,8 +5681,8 @@ struct InnerActionFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct InnerActionFrameBuilder {
   typedef InnerActionFrame Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_frameIndex(int32_t frameIndex) {
     fbb_.AddElement<int32_t>(InnerActionFrame::VT_FRAMEINDEX, frameIndex, 0);
   }
@@ -5792,34 +5692,34 @@ struct InnerActionFrameBuilder {
   void add_innerActionType(int32_t innerActionType) {
     fbb_.AddElement<int32_t>(InnerActionFrame::VT_INNERACTIONTYPE, innerActionType, 0);
   }
-  void add_currentAniamtionName(flatbuffers::Offset<flatbuffers::String> currentAniamtionName) {
+  void add_currentAniamtionName(::flatbuffers::Offset<::flatbuffers::String> currentAniamtionName) {
     fbb_.AddOffset(InnerActionFrame::VT_CURRENTANIAMTIONNAME, currentAniamtionName);
   }
   void add_singleFrameIndex(int32_t singleFrameIndex) {
     fbb_.AddElement<int32_t>(InnerActionFrame::VT_SINGLEFRAMEINDEX, singleFrameIndex, 0);
   }
-  void add_easingData(flatbuffers::Offset<flatbuffers::EasingData> easingData) {
+  void add_easingData(::flatbuffers::Offset<flatbuffers::EasingData> easingData) {
     fbb_.AddOffset(InnerActionFrame::VT_EASINGDATA, easingData);
   }
-  explicit InnerActionFrameBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit InnerActionFrameBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<InnerActionFrame> Finish() {
+  ::flatbuffers::Offset<InnerActionFrame> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<InnerActionFrame>(end);
+    auto o = ::flatbuffers::Offset<InnerActionFrame>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<InnerActionFrame> CreateInnerActionFrame(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<InnerActionFrame> CreateInnerActionFrame(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t frameIndex = 0,
     bool tween = true,
     int32_t innerActionType = 0,
-    flatbuffers::Offset<flatbuffers::String> currentAniamtionName = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> currentAniamtionName = 0,
     int32_t singleFrameIndex = 0,
-    flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
+    ::flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
   InnerActionFrameBuilder builder_(_fbb);
   builder_.add_easingData(easingData);
   builder_.add_singleFrameIndex(singleFrameIndex);
@@ -5830,14 +5730,14 @@ inline flatbuffers::Offset<InnerActionFrame> CreateInnerActionFrame(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<InnerActionFrame> CreateInnerActionFrameDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<InnerActionFrame> CreateInnerActionFrameDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t frameIndex = 0,
     bool tween = true,
     int32_t innerActionType = 0,
     const char *currentAniamtionName = nullptr,
     int32_t singleFrameIndex = 0,
-    flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
+    ::flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
   auto currentAniamtionName__ = currentAniamtionName ? _fbb.CreateString(currentAniamtionName) : 0;
   return flatbuffers::CreateInnerActionFrame(
       _fbb,
@@ -5849,7 +5749,7 @@ inline flatbuffers::Offset<InnerActionFrame> CreateInnerActionFrameDirect(
       easingData);
 }
 
-struct EasingData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct EasingData FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef EasingDataBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_TYPE = 4,
@@ -5858,10 +5758,10 @@ struct EasingData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t type() const {
     return GetField<int32_t>(VT_TYPE, -1);
   }
-  const flatbuffers::Vector<const flatbuffers::FVec2 *> *points() const {
-    return GetPointer<const flatbuffers::Vector<const flatbuffers::FVec2 *> *>(VT_POINTS);
+  const ::flatbuffers::Vector<const flatbuffers::FVec2 *> *points() const {
+    return GetPointer<const ::flatbuffers::Vector<const flatbuffers::FVec2 *> *>(VT_POINTS);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_TYPE, 4) &&
            VerifyOffset(verifier, VT_POINTS) &&
@@ -5872,37 +5772,37 @@ struct EasingData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct EasingDataBuilder {
   typedef EasingData Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_type(int32_t type) {
     fbb_.AddElement<int32_t>(EasingData::VT_TYPE, type, -1);
   }
-  void add_points(flatbuffers::Offset<flatbuffers::Vector<const flatbuffers::FVec2 *>> points) {
+  void add_points(::flatbuffers::Offset<::flatbuffers::Vector<const flatbuffers::FVec2 *>> points) {
     fbb_.AddOffset(EasingData::VT_POINTS, points);
   }
-  explicit EasingDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit EasingDataBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<EasingData> Finish() {
+  ::flatbuffers::Offset<EasingData> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<EasingData>(end);
+    auto o = ::flatbuffers::Offset<EasingData>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<EasingData> CreateEasingData(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<EasingData> CreateEasingData(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t type = -1,
-    flatbuffers::Offset<flatbuffers::Vector<const flatbuffers::FVec2 *>> points = 0) {
+    ::flatbuffers::Offset<::flatbuffers::Vector<const flatbuffers::FVec2 *>> points = 0) {
   EasingDataBuilder builder_(_fbb);
   builder_.add_points(points);
   builder_.add_type(type);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<EasingData> CreateEasingDataDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<EasingData> CreateEasingDataDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t type = -1,
     const std::vector<flatbuffers::FVec2> *points = nullptr) {
   auto points__ = points ? _fbb.CreateVectorOfStructs<flatbuffers::FVec2>(*points) : 0;
@@ -5912,23 +5812,23 @@ inline flatbuffers::Offset<EasingData> CreateEasingDataDirect(
       points__);
 }
 
-struct ResourceData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct ResourceData FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef ResourceDataBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_PATH = 4,
     VT_PLISTFILE = 6,
     VT_RESOURCETYPE = 8
   };
-  const flatbuffers::String *path() const {
-    return GetPointer<const flatbuffers::String *>(VT_PATH);
+  const ::flatbuffers::String *path() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_PATH);
   }
-  const flatbuffers::String *plistFile() const {
-    return GetPointer<const flatbuffers::String *>(VT_PLISTFILE);
+  const ::flatbuffers::String *plistFile() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_PLISTFILE);
   }
   int32_t resourceType() const {
     return GetField<int32_t>(VT_RESOURCETYPE, 0);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_PATH) &&
            verifier.VerifyString(path()) &&
@@ -5941,32 +5841,32 @@ struct ResourceData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct ResourceDataBuilder {
   typedef ResourceData Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_path(flatbuffers::Offset<flatbuffers::String> path) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_path(::flatbuffers::Offset<::flatbuffers::String> path) {
     fbb_.AddOffset(ResourceData::VT_PATH, path);
   }
-  void add_plistFile(flatbuffers::Offset<flatbuffers::String> plistFile) {
+  void add_plistFile(::flatbuffers::Offset<::flatbuffers::String> plistFile) {
     fbb_.AddOffset(ResourceData::VT_PLISTFILE, plistFile);
   }
   void add_resourceType(int32_t resourceType) {
     fbb_.AddElement<int32_t>(ResourceData::VT_RESOURCETYPE, resourceType, 0);
   }
-  explicit ResourceDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ResourceDataBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<ResourceData> Finish() {
+  ::flatbuffers::Offset<ResourceData> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ResourceData>(end);
+    auto o = ::flatbuffers::Offset<ResourceData>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ResourceData> CreateResourceData(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> path = 0,
-    flatbuffers::Offset<flatbuffers::String> plistFile = 0,
+inline ::flatbuffers::Offset<ResourceData> CreateResourceData(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> path = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> plistFile = 0,
     int32_t resourceType = 0) {
   ResourceDataBuilder builder_(_fbb);
   builder_.add_resourceType(resourceType);
@@ -5975,8 +5875,8 @@ inline flatbuffers::Offset<ResourceData> CreateResourceData(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ResourceData> CreateResourceDataDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<ResourceData> CreateResourceDataDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *path = nullptr,
     const char *plistFile = nullptr,
     int32_t resourceType = 0) {
@@ -5989,7 +5889,7 @@ inline flatbuffers::Offset<ResourceData> CreateResourceDataDirect(
       resourceType);
 }
 
-struct BlendFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct BlendFrame FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef BlendFrameBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_FRAMEINDEX = 4,
@@ -6009,7 +5909,7 @@ struct BlendFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::EasingData *easingData() const {
     return GetPointer<const flatbuffers::EasingData *>(VT_EASINGDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_FRAMEINDEX, 4) &&
            VerifyField<uint8_t>(verifier, VT_TWEEN, 1) &&
@@ -6022,8 +5922,8 @@ struct BlendFrame FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct BlendFrameBuilder {
   typedef BlendFrame Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
   void add_frameIndex(int32_t frameIndex) {
     fbb_.AddElement<int32_t>(BlendFrame::VT_FRAMEINDEX, frameIndex, 0);
   }
@@ -6033,26 +5933,26 @@ struct BlendFrameBuilder {
   void add_blendFunc(const flatbuffers::BlendFunc *blendFunc) {
     fbb_.AddStruct(BlendFrame::VT_BLENDFUNC, blendFunc);
   }
-  void add_easingData(flatbuffers::Offset<flatbuffers::EasingData> easingData) {
+  void add_easingData(::flatbuffers::Offset<flatbuffers::EasingData> easingData) {
     fbb_.AddOffset(BlendFrame::VT_EASINGDATA, easingData);
   }
-  explicit BlendFrameBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit BlendFrameBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<BlendFrame> Finish() {
+  ::flatbuffers::Offset<BlendFrame> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<BlendFrame>(end);
+    auto o = ::flatbuffers::Offset<BlendFrame>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<BlendFrame> CreateBlendFrame(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<BlendFrame> CreateBlendFrame(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t frameIndex = 0,
     bool tween = true,
     const flatbuffers::BlendFunc *blendFunc = nullptr,
-    flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
+    ::flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
   BlendFrameBuilder builder_(_fbb);
   builder_.add_easingData(easingData);
   builder_.add_blendFunc(blendFunc);
@@ -6062,32 +5962,32 @@ inline flatbuffers::Offset<BlendFrame> CreateBlendFrame(
 }
 
 inline const flatbuffers::CSParseBinary *GetCSParseBinary(const void *buf) {
-  return flatbuffers::GetRoot<flatbuffers::CSParseBinary>(buf);
+  return ::flatbuffers::GetRoot<flatbuffers::CSParseBinary>(buf);
 }
 
 inline const flatbuffers::CSParseBinary *GetSizePrefixedCSParseBinary(const void *buf) {
-  return flatbuffers::GetSizePrefixedRoot<flatbuffers::CSParseBinary>(buf);
+  return ::flatbuffers::GetSizePrefixedRoot<flatbuffers::CSParseBinary>(buf);
 }
 
 inline bool VerifyCSParseBinaryBuffer(
-    flatbuffers::Verifier &verifier) {
+    ::flatbuffers::Verifier &verifier) {
   return verifier.VerifyBuffer<flatbuffers::CSParseBinary>(nullptr);
 }
 
 inline bool VerifySizePrefixedCSParseBinaryBuffer(
-    flatbuffers::Verifier &verifier) {
+    ::flatbuffers::Verifier &verifier) {
   return verifier.VerifySizePrefixedBuffer<flatbuffers::CSParseBinary>(nullptr);
 }
 
 inline void FinishCSParseBinaryBuffer(
-    flatbuffers::FlatBufferBuilder &fbb,
-    flatbuffers::Offset<flatbuffers::CSParseBinary> root) {
+    ::flatbuffers::FlatBufferBuilder &fbb,
+    ::flatbuffers::Offset<flatbuffers::CSParseBinary> root) {
   fbb.Finish(root);
 }
 
 inline void FinishSizePrefixedCSParseBinaryBuffer(
-    flatbuffers::FlatBufferBuilder &fbb,
-    flatbuffers::Offset<flatbuffers::CSParseBinary> root) {
+    ::flatbuffers::FlatBufferBuilder &fbb,
+    ::flatbuffers::Offset<flatbuffers::CSParseBinary> root) {
   fbb.FinishSizePrefixed(root);
 }
 

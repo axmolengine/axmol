@@ -54,13 +54,15 @@ THE SOFTWARE.
 #include "base/Macros.h"
 #include "base/EventDispatcher.h"
 #include "base/EventCustom.h"
-#include "base/Console.h"
+#include "base/Logging.h"
 #include "base/AutoreleasePool.h"
 #include "base/Configuration.h"
 #include "base/AsyncTaskPool.h"
 #include "base/ObjectFactory.h"
 #include "platform/Application.h"
-#include "audio/AudioEngine.h"
+#if defined(AX_ENABLE_AUDIO)
+    #include "audio/AudioEngine.h"
+#endif
 
 #if AX_ENABLE_SCRIPT_BINDING
 #    include "base/ScriptSupport.h"
@@ -113,9 +115,9 @@ bool Director::init()
 
     // FPS
     _lastUpdate = std::chrono::steady_clock::now();
-
+#ifdef AX_ENABLE_CONSOLE
     _console = new Console;
-
+#endif
     // scheduler
     _scheduler = new Scheduler();
     // action manager
@@ -181,9 +183,9 @@ Director::~Director()
     AX_SAFE_RELEASE(_eventAfterVisit);
     AX_SAFE_RELEASE(_eventProjectionChanged);
     AX_SAFE_RELEASE(_eventResetDirector);
-
+#ifdef AX_ENABLE_CONSOLE
     delete _console;
-
+#endif
     AX_SAFE_RELEASE(_eventDispatcher);
 
     Configuration::destroyInstance();
@@ -297,7 +299,7 @@ void Director::drawScene()
 
     if (_runningScene)
     {
-#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION) || AX_USE_NAVMESH)
+#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || defined(AX_ENABLE_NAVMESH))
         _runningScene->stepPhysicsAndNavigation(_deltaTime);
 #endif
         // clear draw stats
@@ -988,9 +990,11 @@ void Director::reset()
     if (_eventDispatcher)
         _eventDispatcher->dispatchEvent(_eventResetDirector);
 
+#if defined(AX_ENABLE_AUDIO)
     // Fix github issue: https://github.com/axmolengine/axmol/issues/550
     // !!!The AudioEngine hold scheduler must end before Director destroyed, otherwise, just lead app crash
     AudioEngine::end();
+#endif
 
     // cleanup scheduler
     getScheduler()->unscheduleAll();

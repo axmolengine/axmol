@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -31,7 +32,7 @@
 
 #include "2d/Component.h"
 
-#if AX_USE_3D_PHYSICS
+#if defined(AX_ENABLE_3D_PHYSICS)
 
 #    if (AX_ENABLE_BULLET_INTEGRATION)
 
@@ -145,6 +146,6 @@ NS_AX_END
 
 #    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // AX_USE_3D_PHYSICS
+#endif  // defined(AX_ENABLE_3D_PHYSICS)
 
 #endif  // __PHYSICS_3D_COMPONENT_H__

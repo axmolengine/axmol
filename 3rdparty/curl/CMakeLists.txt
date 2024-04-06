@@ -20,6 +20,10 @@ if(WINDOWS)
     IMPORTED_LOCATION "${curl_LIB_DIR}/lib${lib_name}.dll"
     IMPORTED_IMPLIB "${curl_LIB_DIR}/lib${lib_name}_imp.lib"
   )
+elseif(APPLE)
+  set_target_properties(${target_name} PROPERTIES
+    IMPORTED_LOCATION "${curl_LIB_DIR}/${lib_name}.xcframework"
+  )
 else()
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_LOCATION "${curl_LIB_DIR}/lib${lib_name}.a"
