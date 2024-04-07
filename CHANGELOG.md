@@ -44,6 +44,7 @@
 - Remove unnecessary cmake option: `AX_VS_DEPLOYMENT_TARGET`
 - Make FileStream open file for write share flags same with cstd
 - Fix some compile warnings
+- Add ttf fallback render support
 
 ### Break Changes
 
