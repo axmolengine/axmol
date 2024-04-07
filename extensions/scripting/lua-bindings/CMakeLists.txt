@@ -190,8 +190,6 @@ list(APPEND lua_bindings_files ${lua_bindings_headers})
 set(_AX_LUA_LIB axlua CACHE INTERNAL "The axmol lua bindings lib name" )
 
 add_library(${_AX_LUA_LIB} STATIC ${lua_bindings_files})
-target_link_libraries(${_AX_LUA_LIB} ${_AX_CORE_LIB})
-add_dependencies(${_AX_LUA_LIB} ${_AX_CORE_LIB})
 
 if(MSVC)
     target_compile_options(${_AX_LUA_LIB} PRIVATE /bigobj)
@@ -200,9 +198,11 @@ endif()
 get_target_property(lua_ext_depend 3rdparty AX_LUA_DEPEND)
 target_link_libraries(${_AX_LUA_LIB} ${lua_ext_depend})
 
+setup_ax_extension_config(${_AX_LUA_LIB})
+
 target_include_directories(${_AX_LUA_LIB}
-    PUBLIC ${ax_root}/3rdparty/lua
     PRIVATE ${ax_root}/3rdparty
+    PUBLIC ${ax_root}/3rdparty/lua
     PRIVATE manual/platform/android
     PRIVATE manual/platform/android/jni
     PRIVATE ${ax_root}/extensions/spine/runtime/include
