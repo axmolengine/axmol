@@ -31,12 +31,22 @@ THE SOFTWARE.
 #include "base/UTF8.h"
 #include "freetype/ftmodapi.h"
 #include "platform/FileUtils.h"
+#include "platform/FileStream.h"
+#include "platform/Application.h"
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
 #include FT_STROKER_H
 #include FT_BBOX_H
 #include FT_FONT_FORMATS_H
+
+#include "yasio/singleton.hpp"
+#include "yasio/string_view.hpp"
+#include "pugixml/pugixml.hpp"
+
+#include "xxhash/xxhash.h"
+
+#include "base/filesystem.h"
 
 NS_AX_BEGIN
 
@@ -95,6 +105,35 @@ static void ft_stream_close_callback(FT_Stream stream)
     stream->descriptor.pointer = nullptr;
 }
 
+static IFontEngine* s_FontEngine{nullptr};
+
+FontFreeType* FontFreeType::createWithFaceInfo(FontFaceInfo* info, FontFreeType* mainFont)
+{
+    if (stdfs::is_regular_file(info->path))
+    {
+        // create our new face for render
+        FT_Face face;
+        auto error = FT_New_Face(getFTLibrary(), info->path.data(), info->face->face_index, &face);
+        if (!error)
+        {
+            FontFreeType* tempFont = new FontFreeType(mainFont->isDistanceFieldEnabled(), mainFont->getOutlineSize());
+            tempFont->setGlyphCollection(mainFont->_usedGlyphs, mainFont->getGlyphCollection());
+            if (tempFont->initWithFontFace(face, info->path, mainFont->_faceSize))
+            {
+                tempFont->autorelease();
+                return tempFont;
+            }
+            delete tempFont;
+        }
+    }
+    return nullptr;
+}
+
+void FontFreeType::setFontEngine(IFontEngine* fe)
+{
+    s_FontEngine = fe;
+}
+
 FontFreeType* FontFreeType::create(std::string_view fontName,
                                    int faceSize,
                                    GlyphCollection glyphs,
@@ -106,7 +145,7 @@ FontFreeType* FontFreeType::create(std::string_view fontName,
 
     tempFont->setGlyphCollection(glyphs, customGlyphs);
 
-    if (tempFont->loadFontFace(fontName, faceSize))
+    if (tempFont->initWithFontPath(fontName, faceSize))
     {
         tempFont->autorelease();
         return tempFont;
@@ -197,7 +236,7 @@ FontFreeType::~FontFreeType()
     }
 }
 
-bool FontFreeType::loadFontFace(std::string_view fontPath, int faceSize)
+bool FontFreeType::initWithFontPath(std::string_view fontPath, int faceSize)
 {
     FT_Face face;
     if (_streamParsingEnabled)
@@ -248,6 +287,11 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, int faceSize)
             return false;
     }
 
+    return initWithFontFace(face, fontPath, faceSize);
+}
+
+bool FontFreeType::initWithFontFace(FT_Face face, std::string_view fontPath, int faceSize)
+{
     do
     {
         if (!face->charmap || face->charmap->encoding != FT_ENCODING_UNICODE)
@@ -303,7 +347,7 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, int faceSize)
 
     FT_Done_Face(face);
 
-    AXLOGW("Init font '{}' failed, only unicode ttf/ttc was supported.", fontPath);
+    AXLOGI("Init font '{}' failed, only unicode ttf/ttc was supported.", fontPath);
     return false;
 }
 
@@ -385,39 +429,62 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
                                             int& outWidth,
                                             int& outHeight,
                                             Rect& outRect,
-                                            int& xAdvance)
+                                            int& xAdvance,
+                                            FontFaceInfo** ppFallbackInfo)
+{
+    unsigned char* ret = nullptr;
+
+    // @remark: glyphIndex=0 means charactor is mssing on current font face
+    auto glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(charCode));
+    if (glyphIndex == 0)
+    {
+#if defined(_AX_DEBUG) && _AX_DEBUG > 0
+        char32_t ntcs[2] = {charCode, (char32_t)0};
+        std::u32string_view charUTF32(ntcs, 1);
+        std::string charUTF8;
+        ax::StringUtils::UTF32ToUTF8(charUTF32, charUTF8);
+
+        if (charUTF8 == "\n")
+            charUTF8 = "\\n";
+        AXLOGW("The font face: {} doesn't contains char: <{}>", _fontFace->charmap->face->family_name,
+                     charUTF8);
+#endif
+
+        if (ppFallbackInfo && s_FontEngine)
+        { // try fallback
+            auto faceInfo = s_FontEngine->lookupFontFaceForCodepoint(charCode);
+            if (faceInfo)
+            {
+                *ppFallbackInfo = faceInfo;
+                return nullptr;
+            }
+        }
+
+		// Not found charCode in system fallback fonts
+		if (_mssingGlyphCharacter != 0)
+        {
+            if (_mssingGlyphCharacter == 0x1A) {
+			    xAdvance = 0;
+                return nullptr;  // don't render anything for this character
+			}
+            // Try get new glyph index with missing glyph character code
+            glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(_mssingGlyphCharacter));
+        }
+    }
+
+    return getGlyphBitmapByIndex(glyphIndex, outWidth, outHeight, outRect, xAdvance);
+}
+
+unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
+                                                   int& outWidth,
+                                                   int& outHeight,
+                                                   Rect& outRect,
+                                                   int& xAdvance)
 {
     unsigned char* ret = nullptr;
 
     do
     {
-        if (_fontFace == nullptr)
-            break;
-
-        // @remark: glyphIndex=0 means character is missing on current font face
-        auto glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(charCode));
-#if defined(_AX_DEBUG) && _AX_DEBUG > 0
-        if (glyphIndex == 0)
-        {
-            char32_t ntcs[2] = {charCode, (char32_t)0};
-            std::u32string_view charUTF32(ntcs, 1);
-            std::string charUTF8;
-            ax::StringUtils::UTF32ToUTF8(charUTF32, charUTF8);
-
-            if (charUTF8 == "\n")
-                charUTF8 = "\\n";
-            AXLOGW("The font face: {} doesn't contains char: <{}>", _fontFace->charmap->face->family_name, charUTF8);
-
-            if (_mssingGlyphCharacter != 0)
-            {
-                if (_mssingGlyphCharacter == 0x1A)
-                    break;  // don't render anything for this character
-
-                // Try get new glyph index with missing glyph character code
-                glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(_mssingGlyphCharacter));
-            }
-        }
-#endif
         if (FT_Load_Glyph(_fontFace, glyphIndex, FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT))
             break;
 

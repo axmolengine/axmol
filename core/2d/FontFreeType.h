@@ -27,15 +27,8 @@
 #pragma once
 
 #include "2d/Font.h"
+#include "2d/IFontEngine.h"
 #include <string>
-
-/* freetype fwd decls */
-
-typedef struct FT_LibraryRec_* FT_Library;
-typedef struct FT_StreamRec_* FT_Stream;
-typedef struct FT_FaceRec_* FT_Face;
-typedef struct FT_StrokerRec_* FT_Stroker;
-typedef struct FT_BBox_ FT_BBox;
 
 NS_AX_BEGIN
 
@@ -45,15 +38,21 @@ NS_AX_BEGIN
  */
 
 /** @class FontFreeType
-* @brief FontFreeType is a class of rendering ttf/ttc characters
-*/
+ * @brief FontFreeType is a class of rendering ttf/ttc characters
+ */
 class AX_DLL FontFreeType : public Font
 {
 public:
     static const int DistanceMapSpread;
     static constexpr int DEFAULT_BASE_FONT_SIZE = 32;
 
-     /**
+    /**
+     * Set font engine for ttf fallback render support
+     * @since axmol-2.1.3
+     */
+    static void setFontEngine(IFontEngine*);
+
+    /**
      * @remark: if you want enable stream parsing, you need do one of follow steps
      *          a. disable .ttf compress on .apk, see:
      *             https://simdsoft.com/notes/#build-apk-config-nocompress-file-type-at-appbuildgradle
@@ -99,6 +98,8 @@ public:
                                 bool distanceFieldEnabled = false,
                                 float outline             = 0);
 
+    static FontFreeType* createWithFaceInfo(FontFaceInfo* info, FontFreeType* mainFont);
+
     static void shutdownFreeType();
 
     bool isDistanceFieldEnabled() const { return _distanceFieldEnabled; }
@@ -116,7 +117,18 @@ public:
 
     int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
 
-    unsigned char* getGlyphBitmap(char32_t charCode, int& outWidth, int& outHeight, Rect& outRect, int& xAdvance);
+    unsigned char* getGlyphBitmap(char32_t charCode,
+                                  int& outWidth,
+                                  int& outHeight,
+                                  Rect& outRect,
+                                  int& xAdvance,
+                                  FontFaceInfo** ppFallbackInfo = nullptr);
+
+    unsigned char* getGlyphBitmapByIndex(unsigned int glyphIndex,
+                                         int& outWidth,
+                                         int& outHeight,
+                                         Rect& outRect,
+                                         int& xAdvance);
 
     int getFontAscender() const;
     const char* getFontFamily() const;
@@ -144,7 +156,9 @@ private:
     FontFreeType(bool distanceFieldEnabled = false, float outline = 0);
     virtual ~FontFreeType();
 
-    bool loadFontFace(std::string_view fontPath, int faceSize);
+    bool initWithFontPath(std::string_view fontPath, int faceSize);
+
+    bool initWithFontFace(FT_Face face, std::string_view fontPath, int faceSize);
 
     int getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const;
     unsigned char* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
