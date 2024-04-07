@@ -20,7 +20,7 @@ function(_1kfetch_init)
         set(_1kfetch_manifest "${_1kfetch_manifest}" CACHE STRING "" FORCE)
     endif()
 
-    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/resolv_uri.ps1
+    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/resolv-uri.ps1
         -name "1kdist"
         -manifest ${_1kfetch_manifest}
         OUTPUT_VARIABLE _1kdist_url

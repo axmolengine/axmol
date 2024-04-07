@@ -1,6 +1,5 @@
 param(
-    [switch]$help,
-    [switch]$uninst
+    [switch]$help
 )
 # pwsh function alias
 function println($message) { Write-Host "axmol: $message" }
@@ -56,10 +55,10 @@ Example:
 '@ -f $axmolVersion, $pwsh_ver
 
 $cmdName = $args[0]
-if (!$cmdName) {
-    println $tool_usage
-    return
-}
+# if (!$cmdName) {
+#     println $tool_usage
+#     return
+# }
 
 if ($IsMacOS) {
     function find_simulator_id($plat, $deviceName = '') {
@@ -232,7 +231,7 @@ options:
     build  = @{
         proc  = ${function:axmol_build};
         usage = @"
-axmol: axmol build -p win32 -a x64
+usage: axmol [build] -p win32 -a x64
 
 Build projects to binary.
 
@@ -250,19 +249,19 @@ options:
   -f: force generate native project files. Useful if no changes are detected, such as with resource updates.
  examples:
    - win32:
-     - axmol build -p win32
-     - axmol build -p win32 -cc clang
+     - axmol [build] -p win32
+     - axmol [build] -p win32 -cc clang
    - winuwp: axmol build -p winuwp
    - linux: axmol build -p linux
    - android:
-     - axmol build -p android -a arm64
-     - axmol build -p android -a 'arm64;x64'
+     - axmol [build] -p android -a arm64
+     - axmol [build] -p android -a 'arm64;x64'
    - osx:
-     - axmol build -p osx -a x64
-     - axmol build -p osx -a arm64
-   - ios: axmol build -p ios -a x64
-   - tvos: axmol build -p tvos -a x64
-   - wasm: axmol build -p wasm
+     - axmol [build] -p osx -a x64
+     - axmol [build] -p osx -a arm64
+   - ios: axmol [build] -p ios -a x64
+   - tvos: axmol [build] -p tvos -a x64
+   - wasm: axmol [build] -p wasm
 "@;
     };
     deploy = @{
@@ -317,22 +316,27 @@ Axmol Engine maintained and supported by axmol community (axmol.dev)
     return
 }
 
-$plugin = $builtinPlugins[$cmdName]
-if (!$plugin) {
-    println "The command '$cmdName' not found"
-    println $tool_usage
-    return
+$plugin = $builtinPlugins["$cmdName"]
+if($plugin) {
+    # -h will consumed by param
+    # !!!Note: 3 condition statement: 'xxx = if(c) { v1 } else { v2 }' will lost array type if source array only 1 element
+    if ($args.Count -gt 1) { 
+        $sub_args = $args[1..($args.Count - 1)] 
+    } 
+    else {
+        $sub_args = $null 
+    }
+} else {
+    $plugin = $builtinPlugins['build']
+    $sub_args = $args
 }
 
-# -h will consumed by param
-# !!!Note: 3 condition statement: 'xxx = if(c) { v1 } else { v2 }' will lost array type if source array only 1 element
-if ($args.Count -gt 1) { 
-    $sub_args = $args[1..($args.Count - 1)] 
-} 
-else {
-    $sub_args = $null 
+if($help) {
+    println $plugin.usage
+    return 
 }
-if (!$sub_args -or $help -or $sub_args[0] -eq '--help') {
+
+if (($sub_args -and $sub_args[0] -eq '--help')) {
     println $plugin.usage
     return
 }

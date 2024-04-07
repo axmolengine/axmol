@@ -1703,7 +1703,7 @@ if (!$setupOnly) {
                 }
             }
             else {
-                & $build_tool wrapper
+                & $build_tool tasks
             }
             Pop-Location
         }

@@ -125,7 +125,7 @@ if ($is_axmol_engine -and $is_android) {
     }
 }
 
-$search_paths = if ($source_proj_dir -ne $myRoot) { @($source_proj_dir, $myRoot) } else { @($source_proj_dir) }
+$search_paths = @($source_proj_dir)
 function search_proj_file($file_path, $type) {
     foreach ($search_path in $search_paths) {
         $full_path = Join-Path $search_path $file_path
@@ -138,6 +138,7 @@ function search_proj_file($file_path, $type) {
 }
 
 $proj_dir = search_proj_file 'CMakeLists.txt' 'Leaf'
+if(!$proj_dir) { throw "The directory $source_proj_dir doesn't contains CMakeLists.txt!" }
 $proj_name = (Get-Item $proj_dir).BaseName
 
 $use_gradle = $is_android -and (Test-Path $(Join-Path $proj_dir 'proj.android/gradlew') -PathType Leaf)
