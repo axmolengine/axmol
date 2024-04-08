@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "2d/FontAtlas.h"
 #include "base/Director.h"
 #include "base/UTF8.h"
+#include "base/filesystem.h"
 #include "freetype/ftmodapi.h"
 #include "platform/FileUtils.h"
 #include "platform/FileStream.h"
@@ -39,14 +40,6 @@ THE SOFTWARE.
 #include FT_STROKER_H
 #include FT_BBOX_H
 #include FT_FONT_FORMATS_H
-
-#include "yasio/singleton.hpp"
-#include "yasio/string_view.hpp"
-#include "pugixml/pugixml.hpp"
-
-#include "xxhash/xxhash.h"
-
-#include "base/filesystem.h"
 
 NS_AX_BEGIN
 
