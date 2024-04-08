@@ -500,15 +500,13 @@ UniformLocation ProgramGL::getUniformLocation(std::string_view uniform) const
     auto iter = _activeUniformInfos.find(uniform);
     if (iter != _activeUniformInfos.end())
     {
-        uniformLocation.shaderStage = ShaderStage::VERTEX;
-
         const auto& uniformInfo = iter->second;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-        uniformLocation.location[0] = _mapToOriginalLocation.at(uniformInfo.location);
+        uniformLocation.vertStage.location = _mapToOriginalLocation.at(uniformInfo.location);
 #else
-        uniformLocation.location[0] = uniformInfo.location;
+        uniformLocation.vertStage.location = uniformInfo.location;
 #endif
-        uniformLocation.location[1] = uniformInfo.bufferOffset;
+        uniformLocation.vertStage.offset = uniformInfo.bufferOffset;
     }
 
     return uniformLocation;
