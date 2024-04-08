@@ -23,6 +23,7 @@ target_include_directories(${target_name}
   PRIVATE ${tolua_header}
   PRIVATE ../../../../core
   PRIVATE ../../../../3rdparty
+  PRIVATE ../../../../3rdparty/fmt/include
   PRIVATE ../../../../3rdparty/robin-map/include
   PRIVATE ../../../../3rdparty/jni.hpp/include
   PRIVATE ../../../../3rdparty/yasio

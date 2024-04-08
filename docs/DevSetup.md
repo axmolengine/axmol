@@ -150,7 +150,7 @@ Note: if you use non-SDK provided CMake, you will need to download `ninja` from 
   set ANDROID_HOME=D:\dev\adt\sdk
   
   # Goto xxx\proj.android
-  .\gradlew.bat assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=arm64-v8a --parallel --info
+  .\gradlew.bat assembleRelease -P__1K_ARCHS=arm64-v8a --parallel --info
   ```
 
 ### iOS, tvOS and macOS

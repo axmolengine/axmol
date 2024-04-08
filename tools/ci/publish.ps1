@@ -308,34 +308,31 @@ public class UnixFileStream : FileStream
 }
 
 # Generate release note
-
+$release_note_content = ''
 if ($prerelease -eq 'false') {
     $release_note = Join-Path $AX_ROOT "release_note_${version}.txt"
+
+    $changelog_lines = Get-Content (Join-Path $AX_ROOT 'CHANGELOG.md')
+    $release_count = 0
+    foreach ($line in $changelog_lines) {
+        if ($line.StartsWith('## axmol-')) {
+            ++$release_count
+            if ($release_count -lt 2) {
+                $release_note_content += "*The $version release is a minor ``LTS`` release for bugfixes and improvements*`n"
+            } else {
+                break
+            }
+        }
+        else {
+            $release_note_content += "$line`n"
+        }
+    }
 }
 else {
     $release_note = Join-Path $AX_ROOT "release_note_draft.txt"
 }
 
-New-Item -Path $release_note -ItemType File -Force
-
-$changelog_lines = Get-Content (Join-Path $AX_ROOT 'CHANGELOG.md')
-$release_count = 0
-$release_note_content = ''
-foreach ($line in $changelog_lines) {
-    if ($line.StartsWith('## axmol-')) {
-        ++$release_count
-        if ($release_count -lt 2) {
-            $release_note_content += "*The $version release is a minor ``LTS`` release for bugfixes and improvements*`n"
-        } else {
-            break
-        }
-    }
-    else {
-        $release_note_content += "$line`n"
-    }
-}
-
-[System.IO.File]::AppendAllText($release_note, $release_note_content)
+New-Item -Path $release_note -ItemType File -Value $release_note_content -Force
 
 # Compress-Archive @compress_args
 $total = Compress-ArchiveEx @compress_args -Force

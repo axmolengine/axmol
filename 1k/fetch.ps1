@@ -196,6 +196,10 @@ if ($is_git_repo) {
         if (!$is_rev_modified) {
             $is_rev_modified = $old_rev_hash -ne $new_rev_hash
         }
+
+        if((Test-Path (Join-Path $lib_src '.gitmodules') -PathType Leaf)) {
+            git -C $lib_src submodule update --recursive --init
+        }
     }
     else {
         println "fetch.ps1: HEAD is now at $revision@$cur_rev_hash"

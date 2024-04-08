@@ -2,7 +2,7 @@
 # for powershell <= 5.1: please execute command 'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force' in PowerShell Terminal
 param(
     # whether sync gradle wrapper & plugin version from template to test projects
-    [switch]$updateGradle 
+    [string]$gradlewVersion = $null
 )
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
@@ -306,21 +306,55 @@ if (!(Test-Path $prefix -PathType Container)) {
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
 . $build1kPath -setupOnly -prefix $prefix @args
 
-if ($updateGradle) {
-    # sync gradle
+if ($gradlewVersion) {
     $aproj_source_root = Join-Path $AX_ROOT 'templates/common/proj.android'
     $aproj_source_gradle = Join-Path $aproj_source_root 'build.gradle'
-    $aproj_source_gradle_wrapper = Join-Path $aproj_source_root 'gradle/wrapper/*'
+    $aproj_source_gradle_wrapper = Join-Path $aproj_source_root 'gradle/wrapper/'
+    $vernums = $gradlewVersion.Split('.')
+    if($vernums.Count -lt 3) {
+        $gradle_tag = "v$gradlewVersion.0"
+    } else {
+        $gradle_tag = "v$gradlewVersion"
+    }
+
+    $gradle_settings_file = Join-Path $aproj_source_gradle_wrapper 'gradle-wrapper.properties'
+    $settings_content = [System.IO.File]::ReadAllText($gradle_settings_file)
+    $settings_content = [Regex]::Replace($settings_content, 'gradle-.+-bin.zip', "gradle-$gradlewVersion-bin.zip")
+    [System.IO.File]::WriteAllText($gradle_settings_file, $settings_content)
+
+    # download gradle-wrapper.jar gradlew and gradlew.bat from upstream
+    download_file "https://raw.githubusercontent.com/gradle/gradle/$gradle_tag/gradlew" $aproj_source_root
+    download_file "https://raw.githubusercontent.com/gradle/gradle/$gradle_tag/gradlew.bat" $aproj_source_root
+    download_file "https://github.com/gradle/gradle/raw/$gradle_tag/gradle/wrapper/gradle-wrapper.jar" $aproj_source_gradle_wrapper
+
     function update_gradle_for_test($testName) {
         $aproj_root = Join-Path $AX_ROOT "tests/$testName/proj.android"
         Copy-Item $aproj_source_gradle $aproj_root -Force
-        Copy-Item $aproj_source_gradle_wrapper (Join-Path $aproj_root 'gradle/wrapper') -Force
+        Copy-Item "${aproj_source_gradle_wrapper}*" (Join-Path $aproj_root 'gradle/wrapper') -Force
+
+        Copy-Item (Join-Path $aproj_source_root 'gradlew') $aproj_root -Force
+        Copy-Item (Join-Path $aproj_source_root 'gradlew.bat') $aproj_root -Force
     }
 
     update_gradle_for_test 'cpp-tests'
     update_gradle_for_test 'fairygui-tests'
     update_gradle_for_test 'live2d-tests'
     update_gradle_for_test 'lua-tests'
+}
+
+if ($IsLinux -and (Test-Path '/etc/wsl.conf' -PathType Leaf)) {
+    Write-Host "Are want remove host windows path from wsl? (y/n) " -NoNewline
+    $answer = Read-Host
+    if ($answer -like 'y*') {
+        $wsl_conf = [System.IO.File]::ReadAllText('/etc/wsl.conf')
+        if (!$wsl_conf.Contains('appendWindowsPath')) {
+            $wsl_conf += "`n[interop]`nappendWindowsPath = false"
+            $wsl_conf_tmp_file = (Join-Path $AX_ROOT 'wsl.conf')
+            [System.IO.File]::WriteAllText($wsl_conf_tmp_file, $wsl_conf)
+            sudo mv -f $wsl_conf_tmp_file /etc/wsl.conf
+            println "Update /etc/wsl.conf success, please run 'wsl --shutdown' on your host windows, then re-enter wsl"
+        }
+    }
 }
 
 $b1k.pause("setup successfully, please restart the terminal to make added system variables take effect")

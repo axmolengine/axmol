@@ -233,6 +233,7 @@ $options = @{
     sdk    = ''
     minsdk = $null
     dll    = $false
+    u = $false # whether delete 1kdist cross-platform prebuilt folder: path/to/_x
 }
 
 $optName = $null
@@ -240,8 +241,8 @@ foreach ($arg in $args) {
     if (!$optName) {
         if ($arg.StartsWith('-')) {
             $optName = $arg.SubString(1)
-            if($optName.EndsWith(':')) { 
-                $optName = $optName.TrimEnd(':') 
+            if($optName.EndsWith(':')) {
+                $optName = $optName.TrimEnd(':')
             }
             if ($optName.startsWith('j')) {
                 $job_count = $null
@@ -687,7 +688,7 @@ function setup_nuget() {
 }
 
 # setup python3, not install automatically
-# ensure python3.exe is python.exe to solve unexpected error, i.e. 
+# ensure python3.exe is python.exe to solve unexpected error, i.e.
 # google gclient require python3.exe, on windows 10/11 will locate to
 # a dummy C:\Users\halx99\AppData\Local\Microsoft\WindowsApps\python3.exe cause
 # shit strange error
@@ -718,7 +719,7 @@ function setup_glslcc() {
     $b1k.rmdirs($glslcc_bin)
     $glslcc_pkg = Join-Path $external_prefix "glslcc-$suffix"
     $b1k.del($glslcc_pkg)
-    
+
     $glscc_url = devtool_url glslcc-$glslcc_ver-$suffix
 
     download_and_expand $glscc_url "$glslcc_pkg" $glslcc_bin
@@ -854,7 +855,7 @@ function setup_nsis() {
     $nsis_prog, $nsis_ver = find_prog -name 'nsis' -cmd 'makensis' -params '/VERSION' -path $nsis_bin -silent $true
     if (!$nsis_prog) {
         $b1k.rmdirs($nsis_bin)
-        
+
         download_and_expand "https://nchc.dl.sourceforge.net/project/nsis/NSIS%203/$nsis_ver/nsis-$nsis_ver.zip" "$external_prefix/nsis-$nsis_ver.zip" "$external_prefix"
         $nsis_dir = "$nsis_bin-$nsis_ver"
         if ($b1k.isdir($nsis_dir)) {
@@ -1196,7 +1197,7 @@ function setup_msvc() {
 # google gn build system, current windows only for build angleproject/dawn on windows
 function setup_gclient() {
     $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding
-    
+
     if (!$ninja_prog) {
         $ninja_prog = setup_ninja
     }
@@ -1575,7 +1576,7 @@ if (!$setupOnly) {
             }
         }
     }
-    
+
     if ($options.xt -ne 'gn') {
         $BUILD_ALL_OPTIONS = @()
         $BUILD_ALL_OPTIONS += $buildOptions
@@ -1597,6 +1598,10 @@ if (!$setupOnly) {
 
         if (!$CONFIG_ALL_OPTIONS) {
             $CONFIG_ALL_OPTIONS = @()
+        }
+
+        if($options.u) {
+            $CONFIG_ALL_OPTIONS += '-D_1KFETCH_DIST_UPGRADE=TRUE'
         }
 
         # determine generator, build_dir, inst_dir for non gradlew projects
@@ -1654,7 +1659,7 @@ if (!$setupOnly) {
                     break
                 }
             }
-            
+
             if (!$BUILD_DIR) {
                 $BUILD_DIR = resolve_out_dir $cmake_build_prefix 'build_'
             }
@@ -1703,7 +1708,11 @@ if (!$setupOnly) {
                 }
             }
             else {
-                & $build_tool wrapper
+                if ($optimize_flag -eq 'Debug') {
+                    & $build_tool configureCMakeDebug prepareKotlinBuildScriptModel $CONFIG_ALL_OPTIONS | Out-Host
+                } else {
+                    & $build_tool configureCMakeRelWithDebInfo prepareKotlinBuildScriptModel $CONFIG_ALL_OPTIONS | Out-Host
+                }
             }
             Pop-Location
         }
@@ -1748,7 +1757,7 @@ if (!$setupOnly) {
                     # apply additional build options
                     $BUILD_ALL_OPTIONS += "--parallel"
                     $BUILD_ALL_OPTIONS += "$($options.j)"
-                    
+
                     if (($cmake_generator -eq 'Xcode') -and !$BUILD_ALL_OPTIONS.Contains('--verbose')) {
                         $BUILD_ALL_OPTIONS += '--', '-quiet'
                     }
@@ -1767,10 +1776,10 @@ if (!$setupOnly) {
     else {
         # google gclient/gn build system
         # refer: https://chromium.googlesource.com/chromium/src/+/eca97f87e275a7c9c5b7f13a65ff8635f0821d46/tools/gn/docs/reference.md#args_specifies-build-arguments-overrides-examples
-        
+
         $stored_env_path = $null
         $gn_buildargs_overrides = @()
-        
+
         if ($Global:is_winrt) {
             $gn_buildargs_overrides += 'target_os=\"winuwp\"'
         }
@@ -1808,7 +1817,7 @@ if (!$setupOnly) {
         }
 
         Write-Output ("gn_buildargs_overrides=$gn_buildargs_overrides, Count={0}" -f $gn_buildargs_overrides.Count)
-        
+
         $BUILD_DIR = resolve_out_dir $null 'out/'
 
         if ($rebuild) {

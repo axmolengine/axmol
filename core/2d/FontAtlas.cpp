@@ -360,8 +360,44 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 
     for (auto&& charCode : charCodeSet)
     {
-        auto bitmap = _fontFreeType->getGlyphBitmap(charCode, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
-                    if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)
+        auto missingIt             = _missingGlyphFallbackFonts.find(charCode);
+        uint8_t* bitmap            = nullptr;
+        FontFreeType* charRenderer = _fontFreeType;
+        if (missingIt == _missingGlyphFallbackFonts.end())
+        {
+            FontFaceInfo* fallbackFaceInfo = nullptr;
+            bitmap = charRenderer->getGlyphBitmap(charCode, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance,
+                                                  &fallbackFaceInfo);
+            if (!bitmap && fallbackFaceInfo)
+            {
+                auto fallbackIt = _missingFallbackFonts.find(fallbackFaceInfo->family);
+                if (fallbackIt != _missingFallbackFonts.end())
+                {
+                    charRenderer = fallbackIt->second;
+                }
+                else
+                {
+                    charRenderer = FontFreeType::createWithFaceInfo(fallbackFaceInfo, _fontFreeType);
+                    if (charRenderer)
+                        _missingFallbackFonts.insert(fallbackFaceInfo->family, charRenderer);
+                }
+
+                if (charRenderer)
+                {
+                    unsigned int glyphIndex = fallbackFaceInfo->currentGlyphIndex;
+                    bitmap =
+                        charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
+                    _missingGlyphFallbackFonts.emplace(charCode, std::make_pair(charRenderer, glyphIndex));
+                }
+            }
+        }
+        else
+        {  // found fallback font for missing charas, getGlyphBitmap without fallback
+            charRenderer = missingIt->second.first;
+            unsigned int glyphIndex = missingIt->second.second;
+            bitmap = charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
+        }
+        if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)
         {
             tempDef.validDefinition = true;
             tempDef.width           = tempRect.size.width + _letterPadding + _letterEdgeExtend;
@@ -388,9 +424,9 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
             {
                 _currLineHeight = glyphHeight;
             }
-            _fontFreeType->renderCharAt(_currentPageData, (int)_currentPageOrigX + adjustForExtend,
+            charRenderer->renderCharAt(_currentPageData, (int)_currentPageOrigX + adjustForExtend,
                                        (int)_currentPageOrigY + adjustForExtend, bitmap, bitmapWidth, bitmapHeight,
-                                       _width, _height);
+                                        _width, _height);
 
             tempDef.U         = _currentPageOrigX;
             tempDef.V         = _currentPageOrigY;
@@ -432,7 +468,7 @@ void FontAtlas::updateTextureContent(backend::PixelFormat format, int startY)
 {
     auto data = _currentPageData + (_width * (int)startY << _strideShift);
     _atlasTextures[_currentPage]->updateWithSubData(data, 0, startY, _width,
-                                                    (int)_currentPageOrigY - startY + _currLineHeight);
+                                                    (std::min)((int)_currentPageOrigY - startY + _currLineHeight, _height));
 }
 
 void FontAtlas::addNewPage()

@@ -20,7 +20,7 @@ function(_1kfetch_init)
         set(_1kfetch_manifest "${_1kfetch_manifest}" CACHE STRING "" FORCE)
     endif()
 
-    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/resolv_uri.ps1
+    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/resolv-uri.ps1
         -name "1kdist"
         -manifest ${_1kfetch_manifest}
         OUTPUT_VARIABLE _1kdist_url
@@ -41,6 +41,9 @@ endfunction()
 # param package_name
 function(_1kfetch_dist package_name)
     set(_prebuilt_root ${CMAKE_CURRENT_LIST_DIR}/_x)
+    if(_1KFETCH_DIST_UPGRADE AND IS_DIRECTORY ${_prebuilt_root})
+        file(REMOVE_RECURSE ${_prebuilt_root})
+    endif()
     if(NOT IS_DIRECTORY ${_prebuilt_root})
         set (package_store "${_1kfetch_cache_dir}/1kdist/${_1kdist_ver}/${package_name}.zip")
         if (NOT EXISTS ${package_store})
