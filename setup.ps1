@@ -2,7 +2,7 @@
 # for powershell <= 5.1: please execute command 'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force' in PowerShell Terminal
 param(
     # whether sync gradle wrapper & plugin version from template to test projects
-    [switch]$updateGradle 
+    [string]$updateGradleVersion = $null
 )
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
@@ -306,15 +306,34 @@ if (!(Test-Path $prefix -PathType Container)) {
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
 . $build1kPath -setupOnly -prefix $prefix @args
 
-if ($updateGradle) {
-    # sync gradle
+if ($updateGradleVersion) {
     $aproj_source_root = Join-Path $AX_ROOT 'templates/common/proj.android'
     $aproj_source_gradle = Join-Path $aproj_source_root 'build.gradle'
-    $aproj_source_gradle_wrapper = Join-Path $aproj_source_root 'gradle/wrapper/*'
+    $aproj_source_gradle_wrapper = Join-Path $aproj_source_root 'gradle/wrapper/'
+    $vernums = $updateGradleVersion.Split('.')
+    if($vernums.Count -lt 3) {
+        $gradle_tag = "v$updateGradleVersion.0"
+    } else {
+        $gradle_tag = "v$updateGradleVersion"
+    }
+
+    $gradle_settings_file = Join-Path $aproj_source_gradle_wrapper 'gradle-wrapper.properties'
+    $settings_content = [System.IO.File]::ReadAllText($gradle_settings_file)
+    $settings_content = [Regex]::Replace($settings_content, 'gradle-.+-bin.zip', "gradle-$updateGradleVersion-bin.zip")
+    [System.IO.File]::WriteAllText($gradle_settings_file, $settings_content)
+
+    # download gradle-wrapper.jar gradlew and gradlew.bat from upstream
+    download_file "https://raw.githubusercontent.com/gradle/gradle/$gradle_tag/gradlew" $aproj_source_root
+    download_file "https://raw.githubusercontent.com/gradle/gradle/$gradle_tag/gradlew.bat" $aproj_source_root
+    download_file "https://github.com/gradle/gradle/raw/$gradle_tag/gradle/wrapper/gradle-wrapper.jar" $aproj_source_gradle_wrapper
+
     function update_gradle_for_test($testName) {
         $aproj_root = Join-Path $AX_ROOT "tests/$testName/proj.android"
         Copy-Item $aproj_source_gradle $aproj_root -Force
-        Copy-Item $aproj_source_gradle_wrapper (Join-Path $aproj_root 'gradle/wrapper') -Force
+        Copy-Item "${aproj_source_gradle_wrapper}*" (Join-Path $aproj_root 'gradle/wrapper') -Force
+
+        Copy-Item (Join-Path $aproj_source_root 'gradlew') $aproj_root -Force
+        Copy-Item (Join-Path $aproj_source_root 'gradlew.bat') $aproj_root -Force
     }
 
     update_gradle_for_test 'cpp-tests'
