@@ -198,7 +198,7 @@ endif()
 get_target_property(lua_ext_depend 3rdparty AX_LUA_DEPEND)
 target_link_libraries(${_AX_LUA_LIB} ${lua_ext_depend})
 
-setup_ax_extension_config(${_AX_LUA_LIB})
+setup_ax_extension_config(${_AX_LUA_LIB} DNTLINK)
 
 target_include_directories(${_AX_LUA_LIB}
     PRIVATE ${ax_root}/3rdparty
