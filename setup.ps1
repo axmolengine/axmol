@@ -342,4 +342,19 @@ if ($updateGradleVersion) {
     update_gradle_for_test 'lua-tests'
 }
 
+if ($IsLinux -and (Test-Path '/etc/wsl.conf' -PathType Leaf)) {
+    Write-Host "Are want remove host windows path from wsl? (y/n) " -NoNewline
+    $answer = Read-Host
+    if ($answer -like 'y*') {
+        $wsl_conf = [System.IO.File]::ReadAllText('/etc/wsl.conf')
+        if (!$wsl_conf.Contains('appendWindowsPath')) {
+            $wsl_conf += "`n[interop]`nappendWindowsPath = false"
+            $wsl_conf_tmp_file = (Join-Path $AX_ROOT 'wsl.conf')
+            [System.IO.File]::WriteAllText($wsl_conf_tmp_file, $wsl_conf)
+            sudo mv -f $wsl_conf_tmp_file /etc/wsl.conf
+            println "Update /etc/wsl.conf success, please run 'wsl --shutdown' on your host windows, then re-enter wsl"
+        }
+    }
+}
+
 $b1k.pause("setup successfully, please restart the terminal to make added system variables take effect")
