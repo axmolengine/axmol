@@ -1,7 +1,7 @@
-# axmol-console
+# axmol-cmdline
 
 
-## Vision of axmol-console
+## Vision of axmol-cmdline
 
 
 A command line tool that lets you create, run, publish, debug, etc… your game. It is the swiss-army knife for axmol.
@@ -32,7 +32,7 @@ $ axmol run -p android
 To get a list of all the registered plugins:
 
 ```
-$ axmol
+$ axmol -h
 ```
 
 To run the "new" plugin:

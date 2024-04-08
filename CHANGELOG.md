@@ -10,7 +10,8 @@
   - Add support for verbose trace level logging by @rh101 in https://github.com/axmolengine/axmol/pull/1764
   - Removed the '\n' which creates a second (empty) line. by @aismann in https://github.com/axmolengine/axmol/pull/1746
 - Add wasm EditBox support
-- Linking prebuilt xcframework for apple platforms, please do clean `AX_ROOT` by `git clean -fdx -e '*.zip' -e 'tools' -e 'cache' ; git -C cache/sample-assets checkout -- .` if you tracking axmol engine git repo
+- Simplify axmol cmdlines build command, now you can use command `axmol` instead `axmol build` to build your project
+- Linking prebuilt xcframework for apple platforms, please do clean `AX_ROOT` by `axmol -c -u` if you tracking axmol engine git repo
 
 ### BugFixes
 
@@ -25,6 +26,8 @@
 - Fix linux crash after close window by @halx99
 - Fix setup.ps1 not update AX_ROOT in unix profile by @halx99
 - Fix a regression introduced by 2.1.2 that template gradlew permission incorrect
+- Fix build android with axmol cmdline arch not working
+- Fix crash on iOS by @smilediver in https://github.com/axmolengine/axmol/pull/1799
 
 ### Improvements
 

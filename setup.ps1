@@ -2,7 +2,7 @@
 # for powershell <= 5.1: please execute command 'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force' in PowerShell Terminal
 param(
     # whether sync gradle wrapper & plugin version from template to test projects
-    [string]$updateGradleVersion = $null
+    [string]$gradlewVersion = $null
 )
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
@@ -306,20 +306,20 @@ if (!(Test-Path $prefix -PathType Container)) {
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
 . $build1kPath -setupOnly -prefix $prefix @args
 
-if ($updateGradleVersion) {
+if ($gradlewVersion) {
     $aproj_source_root = Join-Path $AX_ROOT 'templates/common/proj.android'
     $aproj_source_gradle = Join-Path $aproj_source_root 'build.gradle'
     $aproj_source_gradle_wrapper = Join-Path $aproj_source_root 'gradle/wrapper/'
-    $vernums = $updateGradleVersion.Split('.')
+    $vernums = $gradlewVersion.Split('.')
     if($vernums.Count -lt 3) {
-        $gradle_tag = "v$updateGradleVersion.0"
+        $gradle_tag = "v$gradlewVersion.0"
     } else {
-        $gradle_tag = "v$updateGradleVersion"
+        $gradle_tag = "v$gradlewVersion"
     }
 
     $gradle_settings_file = Join-Path $aproj_source_gradle_wrapper 'gradle-wrapper.properties'
     $settings_content = [System.IO.File]::ReadAllText($gradle_settings_file)
-    $settings_content = [Regex]::Replace($settings_content, 'gradle-.+-bin.zip', "gradle-$updateGradleVersion-bin.zip")
+    $settings_content = [Regex]::Replace($settings_content, 'gradle-.+-bin.zip', "gradle-$gradlewVersion-bin.zip")
     [System.IO.File]::WriteAllText($gradle_settings_file, $settings_content)
 
     # download gradle-wrapper.jar gradlew and gradlew.bat from upstream

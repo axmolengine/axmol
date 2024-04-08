@@ -233,6 +233,7 @@ $options = @{
     sdk    = ''
     minsdk = $null
     dll    = $false
+    u = $false # whether delete 1kdist cross-platform prebuilt folder: path/to/_x
 }
 
 $optName = $null
@@ -1597,6 +1598,10 @@ if (!$setupOnly) {
 
         if (!$CONFIG_ALL_OPTIONS) {
             $CONFIG_ALL_OPTIONS = @()
+        }
+
+        if($options.u) {
+            $CONFIG_ALL_OPTIONS += '-D_1KFETCH_DIST_UPGRADE=TRUE'
         }
 
         # determine generator, build_dir, inst_dir for non gradlew projects

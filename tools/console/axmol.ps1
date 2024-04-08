@@ -62,9 +62,9 @@ $cmdName = $args[0]
 
 if ($IsMacOS) {
     function find_simulator_id($plat, $deviceName = '') {
-        $selStr = @{ios = 'iPhone'; tvos = 'Apple TV'}[$plat]
+        $selStr = @{ios = 'iPhone'; tvos = 'Apple TV' }[$plat]
         [array]$emulators = (xcrun xctrace list devices | Select-String $selStr)
-        foreach($emulator in $emulators) {
+        foreach ($emulator in $emulators) {
             $emuInfoStr = $emulator.Line
             if ($emuInfoStr.StartsWith($deviceName) -or !$deviceName) {
                 return ($emuInfoStr -split "\(|\)")[3], $emuInfoStr
@@ -100,7 +100,7 @@ function axmol_deploy() {
 
         # deploy by visual studio major program: devenv.exe
         $vswherePath = Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\Installer\vswhere.exe"
-        $devenvPath =  &$vswherePath -latest -requires Microsoft.Component.MSBuild -find Common*\IDE\devenv.exe | select-object -first 1
+        $devenvPath = &$vswherePath -latest -requires Microsoft.Component.MSBuild -find Common*\IDE\devenv.exe | select-object -first 1
 
         if (Test-Path $devenvPath -PathType Leaf) {
             $devenvRoot = Split-Path $devenvPath -Parent
@@ -127,7 +127,7 @@ function axmol_deploy() {
         $appxPkgName = (powershell -Command "(Get-AppxPackage -Name '$appxIdentity' | Select-Object -Unique 'PackageFamilyName').PackageFamilyName")
         println "Deploy $cmake_target done: $appxPkgName"
     }
-    elseif($TARGET_OS -eq 'win32') {
+    elseif ($TARGET_OS -eq 'win32') {
         $win32exePath = Join-Path $BUILD_DIR "bin/$cmake_target/$optimize_flag/$cmake_target.exe"
         println "Deploy $cmake_target done: $win32exePath"
     }
@@ -165,7 +165,9 @@ function axmol_deploy() {
             println "Installing $ios_app_path ..."
             xcrun simctl install $ios_simulator_id $ios_app_path
             println "Deploy $cmake_target done: $ios_bundle_id"
-        } else { # ios device
+        }
+        else {
+            # ios device
 
         }
     }
@@ -177,28 +179,28 @@ function axmol_run() {
     if ($TARGET_OS -eq 'winrt') {
         explorer.exe shell:AppsFolder\$appxPkgName!App
     }
-    elseif($TARGET_OS -eq 'win32') {
+    elseif ($TARGET_OS -eq 'win32') {
         Start-Process -FilePath $win32exePath -WorkingDirectory $(Split-Path $win32exePath -Parent)
     }
-    elseif($TARGET_OS -eq 'android') {
+    elseif ($TARGET_OS -eq 'android') {
         adb shell am start -n "$androidAppId/$androidActivity"
     }
-    elseif($TARGET_OS -eq 'ios') {
+    elseif ($TARGET_OS -eq 'ios') {
         if ($ios_bundle_id) {
             println "Launching $cmake_target ..."
             xcrun simctl launch $ios_simulator_id $ios_bundle_id
         }
     }
-    elseif($TARGET_OS -eq 'osx') {
+    elseif ($TARGET_OS -eq 'osx') {
         $launch_macapp = Join-Path $BUILD_DIR "bin/$cmake_target/$optimize_flag/$cmake_target.app/Contents/MacOS/$cmake_target"
         & $launch_macapp
     }
-    elseif($TARGET_OS -eq 'linux') {
+    elseif ($TARGET_OS -eq 'linux') {
         $launch_linuxapp = Join-Path $BUILD_DIR "bin/$cmake_target/$cmake_target"
         println "Launching $launch_linuxapp ..."
         Start-Process -FilePath $launch_linuxapp -WorkingDirectory $(Split-Path $launch_linuxapp -Parent)
     }
-    elseif($TARGET_OS -eq 'wasm') {
+    elseif ($TARGET_OS -eq 'wasm') {
         $launch_wasmapp = Join-Path $BUILD_DIR "bin/$cmake_target/$cmake_target.html"
         println "Launching $launch_wasmapp ..."
         emrun $launch_wasmapp
@@ -247,6 +249,7 @@ options:
   -c: no build, only generate native project files (vs .sln, xcodeproj)
   -d: specify project dir to compile, i.e. -d /path/your/project/
   -f: force generate native project files. Useful if no changes are detected, such as with resource updates.
+  -u: request upgrade prebuilt 3rd
  examples:
    - win32:
      - axmol [build] -p win32
@@ -306,7 +309,7 @@ options:
 }
 
 # print version message
-if($cmdName -eq '--version' -or $cmdName -eq '-V') {
+if ($cmdName -eq '--version' -or $cmdName -eq '-V') {
     $version_msg = @"
 axmol version {0}
 
@@ -317,29 +320,31 @@ Axmol Engine maintained and supported by axmol community (axmol.dev)
 }
 
 $plugin = $builtinPlugins["$cmdName"]
-if($plugin) {
+if ($plugin) {
     # -h will consumed by param
     # !!!Note: 3 condition statement: 'xxx = if(c) { v1 } else { v2 }' will lost array type if source array only 1 element
     if ($args.Count -gt 1) { 
         $sub_args = $args[1..($args.Count - 1)] 
     } 
     else {
-        $sub_args = $null 
+        $sub_args = $null
     }
-} else {
-    $plugin = $builtinPlugins['build']
+}
+else {
     $sub_args = $args
 }
 
-if($help) {
-    println $plugin.usage
+if ($help -or ($sub_args -and $sub_args[0] -eq '--help')) {
+    if ($plugin) {
+        println $plugin.usage
+    }
+    else {
+        println $tool_usage
+    }
     return 
 }
 
-if (($sub_args -and $sub_args[0] -eq '--help')) {
-    println $plugin.usage
-    return
-}
+if (!$plugin) { $plugin = $builtinPlugins['build'] }
 
 # force convert sub_args to array if it's a single string
 if ($sub_args -isnot [array]) {
