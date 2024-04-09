@@ -67,6 +67,7 @@
 - original repo:  Upstream: https://github.com/fairygui/FairyGUI-cocos2dx
 - Version: axmol-1.0
 - License: MIT
+- Fairy-GUI-Editor: https://en.fairygui.com/download
 
 ## physics-nodes
 - Upstream: https://github.com/axmolengine/axmol
