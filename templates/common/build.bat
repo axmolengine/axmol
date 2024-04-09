@@ -1,2 +1,2 @@
 @echo off
-axmol build -p win32
+%AX_ROOT%\tools\console\axmol build -p win32
