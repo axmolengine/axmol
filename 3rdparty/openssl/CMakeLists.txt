@@ -55,7 +55,7 @@ if(NOT APPLE)
   set_openssl_sub_target(${target_name})
 else()
   # -----sub target 1: ssl-----
-  set(target_name OpenSSL::SSL ssl)
+  set(target_name ssl)
   add_library(${target_name} STATIC IMPORTED GLOBAL)
   set_target_properties(${target_name} PROPERTIES
       INTERFACE_INCLUDE_DIRECTORIES "${openssl_INC_DIR}"
@@ -63,7 +63,7 @@ else()
     )
 
   # -----sub target 2: crypto-----
-  set(target_name OpenSSL::Crypto crypto)
+  set(target_name crypto)
   add_library(${target_name} STATIC IMPORTED GLOBAL)
   set_target_properties(${target_name} PROPERTIES
       INTERFACE_INCLUDE_DIRECTORIES "${openssl_INC_DIR}"

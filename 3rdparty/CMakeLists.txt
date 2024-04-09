@@ -306,7 +306,9 @@ if(ANDROID OR LINUX)
     target_link_libraries(OpenSSL::SSL INTERFACE OpenSSL::Crypto)
     target_link_libraries(3rdparty INTERFACE OpenSSL::SSL)
 elseif(APPLE)
-    target_link_libraries(3rdparty INTERFACE openssl)
+    target_link_libraries(3rdparty
+                        INTERFACE crypto
+                        INTERFACE ssl)
 else()
     target_link_libraries(3rdparty
                         INTERFACE OpenSSL::Crypto
