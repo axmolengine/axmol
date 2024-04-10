@@ -137,7 +137,7 @@ MTLBlendFactor toMTLBlendFactor(BlendFactor factor)
         return MTLBlendFactorOneMinusDestinationAlpha;
     case BlendFactor::SRC_ALPHA_SATURATE:
         return MTLBlendFactorSourceAlphaSaturated;
-    case BlendFactor::BLEND_CLOLOR:
+    case BlendFactor::BLEND_COLOR:
         return MTLBlendFactorBlendColor;
     default:
         return MTLBlendFactorZero;

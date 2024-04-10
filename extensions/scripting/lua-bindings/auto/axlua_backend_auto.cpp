@@ -323,7 +323,7 @@ int lua_register_ax_backend_BlendFactor(lua_State* tolua_S)
         tolua_constant(tolua_S, "CONSTANT_ALPHA", 10);
         tolua_constant(tolua_S, "SRC_ALPHA_SATURATE", 11);
         tolua_constant(tolua_S, "ONE_MINUS_CONSTANT_ALPHA", 12);
-        tolua_constant(tolua_S, "BLEND_CLOLOR", 13);
+        tolua_constant(tolua_S, "BLEND_COLOR", 13);
     tolua_endmodule(tolua_S);
 
     auto typeName = typeid(ax::backend::BlendFactor).name(); // rtti is literal storage
