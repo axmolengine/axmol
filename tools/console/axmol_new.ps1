@@ -1,7 +1,8 @@
 param(
     $packageName,
     $directory,
-    $lang
+    $lang,
+    [switch]$isolated
 )
 
 $params = [System.Collections.ArrayList]$args
@@ -119,6 +120,29 @@ if ($is_portrait) {
     foreach($actionParam in $template_cfg.do_portrait)
     {
         perform_action $actionParam
+    }
+}
+
+# engine sources for isolated project, but share axmol cmdlinetool
+if($isolated) {
+    println "==> Copy whole engine sources to isolated project: $projectName"
+    $_ax_root = Join-Path $projectDir 'axmol'
+    New-Item $_ax_root -ItemType Directory 1>$null
+    $_ax_source_folders = @(
+        '1k'
+        '3rdparty'
+        'cmake'
+        'core'
+        'extensions'
+        'manifest.json'
+    )
+    foreach($path in $_ax_source_folders) {
+        $source_path = Join-Path $env:AX_ROOT $path
+        if(Test-Path $source_path -PathType Container) {
+            Copy-Item $source_path $_ax_root -Container -Recurse -Force
+        } else {
+            Copy-Item $source_path $_ax_root -Force
+        }
     }
 }
 
