@@ -296,7 +296,7 @@ int lua_register_ax_backend_BlendOperation(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"BlendOperation");
         tolua_constant(tolua_S, "ADD", 0);
         tolua_constant(tolua_S, "SUBTRACT", 1);
-        tolua_constant(tolua_S, "RESERVE_SUBTRACT", 2);
+        tolua_constant(tolua_S, "REVERSE_SUBTRACT", 2);
     tolua_endmodule(tolua_S);
 
     auto typeName = typeid(ax::backend::BlendOperation).name(); // rtti is literal storage

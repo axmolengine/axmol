@@ -245,7 +245,7 @@ enum class BlendOperation : uint32_t
 {
     ADD,
     SUBTRACT,
-    RESERVE_SUBTRACT
+    REVERSE_SUBTRACT
 };
 
 enum class BlendFactor : uint32_t

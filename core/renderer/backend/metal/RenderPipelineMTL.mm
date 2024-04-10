@@ -152,7 +152,7 @@ MTLBlendOperation toMTLBlendOperation(BlendOperation operation)
         return MTLBlendOperationAdd;
     case BlendOperation::SUBTRACT:
         return MTLBlendOperationSubtract;
-    case BlendOperation::RESERVE_SUBTRACT:
+    case BlendOperation::REVERSE_SUBTRACT:
         return MTLBlendOperationReverseSubtract;
     default:
         return MTLBlendOperationAdd;

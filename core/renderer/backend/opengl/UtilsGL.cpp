@@ -375,7 +375,7 @@ GLenum UtilsGL::toGLBlendOperation(BlendOperation blendOperation)
     case BlendOperation::SUBTRACT:
         ret = GL_FUNC_SUBTRACT;
         break;
-    case BlendOperation::RESERVE_SUBTRACT:
+    case BlendOperation::REVERSE_SUBTRACT:
         ret = GL_FUNC_REVERSE_SUBTRACT;
         break;
     default:
