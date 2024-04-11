@@ -127,22 +127,24 @@ option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 # total supported extensions count: 13
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
 
-option(AX_ENABLE_EXT_GUI "Build extension GUI" ON)
-option(AX_ENABLE_EXT_ASSETMANAGER "Build extension asset-manager" ON)
-option(AX_ENABLE_EXT_SPINE "Build extension spine" ON)
-option(AX_ENABLE_EXT_DRAGONBONES "Build extension DragonBones" ON)
-option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ON)
-option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
+option(AX_EXT_HINT "The default extensions hint" ON)
+
+option(AX_ENABLE_EXT_GUI "Build extension GUI" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_ASSETMANAGER "Build extension asset-manager" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_SPINE "Build extension spine" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_DRAGONBONES "Build extension DragonBones" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
-cmake_dependent_option(AX_ENABLE_EXT_PARTICLE3D "Build extension Particle3D" ON "AX_ENABLE_3D" OFF)
-cmake_dependent_option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ON "AX_ENABLE_PHYSICS" OFF)
-cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
-cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ON "AX_ENABLE_EXT_IMGUI" OFF)
-cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ON "AX_ENABLE_EXT_IMGUI" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_PARTICLE3D "Build extension Particle3D" ${AX_EXT_HINT} "AX_ENABLE_3D" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ${AX_EXT_HINT} "AX_ENABLE_PHYSICS" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ${AX_EXT_HINT} "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
 
-option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ON)
+option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ${AX_EXT_HINT})
 
 option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" OFF)
 
