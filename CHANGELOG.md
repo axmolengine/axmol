@@ -28,6 +28,8 @@
 - Fix a regression introduced by 2.1.2 that template gradlew permission incorrect
 - Fix build android with axmol cmdline arch not working
 - Fix crash on iOS by @smilediver in https://github.com/axmolengine/axmol/pull/1799
+- Fix typo: BLEND_CLOLOR ==> BLEND_COLOR
+- Fix typo: RESERVE_SUBTRACT ==> REVERSE_SUBTRACT
 
 ### Improvements
 
@@ -48,6 +50,7 @@
 - Make FileStream open file for write share flags same with cstd
 - Fix some compile warnings
 - Add ttf fallback render support
+- Add cmake option: `AX_EXT_HINT` to set default extensions state
 
 ### Break Changes
 

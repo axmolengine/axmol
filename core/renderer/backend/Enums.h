@@ -245,7 +245,7 @@ enum class BlendOperation : uint32_t
 {
     ADD,
     SUBTRACT,
-    RESERVE_SUBTRACT
+    REVERSE_SUBTRACT
 };
 
 enum class BlendFactor : uint32_t
@@ -263,7 +263,7 @@ enum class BlendFactor : uint32_t
     CONSTANT_ALPHA,
     SRC_ALPHA_SATURATE,
     ONE_MINUS_CONSTANT_ALPHA,
-    BLEND_CLOLOR
+    BLEND_COLOR
 };
 
 enum class ColorWriteMask : uint32_t

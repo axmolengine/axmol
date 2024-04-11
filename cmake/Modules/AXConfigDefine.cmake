@@ -109,10 +109,6 @@ else() # others
     set(CMAKE_CXX_FLAGS "-fno-char8_t ${CMAKE_CXX_FLAGS}")
 endif()
 
-if (FULL_MSVC)
-    list(APPEND _ax_compile_options /Bv)
-endif()
-
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
 set(CMAKE_PLATFORM_NO_VERSIONED_SONAME TRUE CACHE BOOL "Disable dynamic libraries symblink." FORCE)
 

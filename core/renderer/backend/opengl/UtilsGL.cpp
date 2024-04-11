@@ -375,7 +375,7 @@ GLenum UtilsGL::toGLBlendOperation(BlendOperation blendOperation)
     case BlendOperation::SUBTRACT:
         ret = GL_FUNC_SUBTRACT;
         break;
-    case BlendOperation::RESERVE_SUBTRACT:
+    case BlendOperation::REVERSE_SUBTRACT:
         ret = GL_FUNC_REVERSE_SUBTRACT;
         break;
     default:
@@ -422,7 +422,7 @@ GLenum UtilsGL::toGLBlendFactor(BlendFactor blendFactor)
     case BlendFactor::SRC_ALPHA_SATURATE:
         ret = GL_SRC_ALPHA_SATURATE;
         break;
-    case BlendFactor::BLEND_CLOLOR:
+    case BlendFactor::BLEND_COLOR:
         ret = GL_BLEND_COLOR;
         break;
     default:

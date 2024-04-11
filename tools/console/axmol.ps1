@@ -228,6 +228,8 @@ options:
                         Major programming language you want to use, should be [cpp | lua]
     --portrait
                         Set the project be portrait.
+    -i[solated]
+                        optionl, if present, will copy full engine sources to path/to/project/axmol
 "@;
     };
     build  = @{

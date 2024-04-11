@@ -595,7 +595,7 @@ backend::BlendFactor toBackendBlendFactor(int factor)
     case GLBlendConst::SRC_ALPHA_SATURATE:
         return backend::BlendFactor::SRC_ALPHA_SATURATE;
     case GLBlendConst::BLEND_COLOR:
-        return backend::BlendFactor::BLEND_CLOLOR;
+        return backend::BlendFactor::BLEND_COLOR;
     case GLBlendConst::CONSTANT_ALPHA:
         return backend::BlendFactor::CONSTANT_ALPHA;
     case GLBlendConst::ONE_MINUS_CONSTANT_ALPHA:
@@ -645,7 +645,7 @@ int toGLBlendFactor(backend::BlendFactor blendFactor)
     case backend::BlendFactor::SRC_ALPHA_SATURATE:
         ret = GLBlendConst::SRC_ALPHA_SATURATE;
         break;
-    case backend::BlendFactor::BLEND_CLOLOR:
+    case backend::BlendFactor::BLEND_COLOR:
         ret = GLBlendConst::BLEND_COLOR;
         break;
     default:
