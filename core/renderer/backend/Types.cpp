@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -26,14 +27,19 @@
 
 NS_AX_BACKEND_BEGIN
 
+bool StageUniformLocation::operator==(const StageUniformLocation& other) const
+{
+    return location == other.location && offset == other.offset;
+}
+
 bool UniformLocation::operator==(const UniformLocation& other) const
 {
-    return (shaderStage == other.shaderStage && location[0] == other.location[0] && location[1] == other.location[1]);
+    return vertStage == other.vertStage && fragStage == other.fragStage;
 }
 
 std::size_t UniformLocation::operator()(const UniformLocation& uniform) const
 {
-    return (((size_t)shaderStage) & 0xF) | ((size_t)(location[0] << 4)) | ((size_t)(location[1] << 8));
+    return size_t(vertStage.location) ^ size_t(fragStage.location << 16);
 }
 
 NS_AX_BACKEND_END

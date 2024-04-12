@@ -62,20 +62,28 @@ int ProgramMTL::getAttributeLocation(std::string_view name) const
 
 UniformLocation ProgramMTL::getUniformLocation(backend::Uniform name) const
 {
-    UniformLocation uniformLocation;
-    uniformLocation = _vertexShader->getUniformLocation(name);
-    if (uniformLocation.location[0] != -1)
-        return uniformLocation;
-    return _fragmentShader->getUniformLocation(name);
+    auto& vert = _vertexShader->getUniformInfo(name);
+    auto& frag = _fragmentShader->getUniformInfo(name);
+
+    return UniformLocation {
+        { vert.location, vert.location == -1 ? -1 : static_cast<int>(vert.bufferOffset) },
+        { frag.location, frag.location == -1 ? -1 : static_cast<int>(frag.bufferOffset) }
+    };
 }
 
 UniformLocation ProgramMTL::getUniformLocation(std::string_view uniform) const
 {
-    UniformLocation uniformLocation;
-    uniformLocation = _vertexShader->getUniformLocation(uniform);
-    if (uniformLocation.location[0] != -1)
-        return uniformLocation;
-    return _fragmentShader->getUniformLocation(uniform);
+    auto& vert = _vertexShader->getUniformInfo(uniform);
+    auto& frag = _fragmentShader->getUniformInfo(uniform);
+
+    if (vert.location != -1 && frag.location != -1)
+        AXASSERT(vert.type == frag.type && vert.count == frag.count && vert.size == frag.size,
+            "Same vertex and fragment uniform must much in type and size");
+
+    return UniformLocation {
+        { vert.location, vert.location == -1 ? -1 : static_cast<int>(vert.bufferOffset) },
+        { frag.location, frag.location == -1 ? -1 : static_cast<int>(frag.bufferOffset) }
+    };
 }
 
 int ProgramMTL::getMaxVertexLocation() const

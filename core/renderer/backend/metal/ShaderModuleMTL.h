@@ -81,18 +81,18 @@ public:
     inline const hlookup::string_map<AttributeBindInfo>& getAttributeInfo() const { return _attributeInfo; }
 
     /**
-     * Get uniform location by engine built-in uniform enum name.
+     * Get uniform info by engine built-in uniform enum name.
      * @param name Specifies the engine built-in uniform enum name.
      * @return The uniform location.
      */
-    UniformLocation getUniformLocation(Uniform name) const;
+    const UniformInfo& getUniformInfo(Uniform name) const;
 
     /**
-     * Get uniform location by name.
+     * Get uniform info by name.
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    UniformLocation getUniformLocation(std::string_view name) const;
+    const UniformInfo& getUniformInfo(std::string_view name) const;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
@@ -128,8 +128,8 @@ private:
     int _attributeLocation[ATTRIBUTE_MAX];
     
     int _maxLocation = -1;
-    UniformLocation _uniformLocation[UNIFORM_MAX]; // the builtin uniform locations
-    
+    UniformInfo _builtinUniforms[UNIFORM_MAX];
+
     std::size_t _uniformBufferSize = 0;
 };
 
