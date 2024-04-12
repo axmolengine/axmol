@@ -232,8 +232,10 @@ void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, c
 {
     if (uniformLocation.vertStage)
         setVertexUniform(uniformLocation.vertStage.location, data, size, uniformLocation.vertStage.offset);
+#ifdef AX_USE_METAL
     if (uniformLocation.fragStage)
         setFragmentUniform(uniformLocation.fragStage.location, data, size, uniformLocation.fragStage.offset);
+#endif
 }
 
 void ProgramState::setVertexUniform(int location, const void* data, std::size_t size, std::size_t offset)
@@ -249,17 +251,15 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
 #endif
 }
 
+#ifdef AX_USE_METAL
 void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size, std::size_t offset)
 {
     if (location < 0)
         return;
 
-#ifdef AX_USE_METAL
     memcpy(_uniformBuffers.data() + _vertexUniformBufferSize + location + offset, data, size);
-#else
-    assert(false);
-#endif
 }
+#endif
 
 void ProgramState::setVertexAttrib(std::string_view name,
                                    std::size_t index,
@@ -333,8 +333,10 @@ void ProgramState::setTexture(const backend::UniformLocation& uniformLocation,
 {
     if (uniformLocation.vertStage)
         setTexture(uniformLocation.vertStage.location, slot, index, texture, _vertexTextureInfos);
+#ifdef AX_USE_METAL
     if (uniformLocation.fragStage)
         setTexture(uniformLocation.fragStage.location, slot, index, texture, _fragmentTextureInfos);
+#endif
 }
 
 void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocation,
@@ -343,8 +345,10 @@ void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocati
 {
     if (uniformLocation.vertStage)
         setTextureArray(uniformLocation.vertStage.location, std::move(slots), std::move(textures), _vertexTextureInfos);
+#ifdef AX_USE_METAL
     if (uniformLocation.fragStage)
         setTextureArray(uniformLocation.fragStage.location, std::move(slots), std::move(textures), _fragmentTextureInfos);
+#endif
 }
 
 void ProgramState::setTexture(int location,
