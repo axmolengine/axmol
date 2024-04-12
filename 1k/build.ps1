@@ -233,7 +233,7 @@ $options = @{
     sdk    = ''
     minsdk = $null
     dll    = $false
-    u = $false # whether delete 1kdist cross-platform prebuilt folder: path/to/_x
+    u      = $false # whether delete 1kdist cross-platform prebuilt folder: path/to/_x
 }
 
 $optName = $null
@@ -241,7 +241,7 @@ foreach ($arg in $args) {
     if (!$optName) {
         if ($arg.StartsWith('-')) {
             $optName = $arg.SubString(1)
-            if($optName.EndsWith(':')) {
+            if ($optName.EndsWith(':')) {
                 $optName = $optName.TrimEnd(':')
             }
             if ($optName.startsWith('j')) {
@@ -305,8 +305,8 @@ else {
 }
 
 $Global:target_minsdk = $options.minsdk
-if(!$Global:target_minsdk) {
-    $Global:target_minsdk = @{osx = '10.15'; winrt = '10.0.17763.0'}[$TARGET_OS]
+if (!$Global:target_minsdk) {
+    $Global:target_minsdk = @{osx = '10.15'; winrt = '10.0.17763.0' }[$TARGET_OS]
 }
 
 # define some useful global vars
@@ -331,7 +331,7 @@ function create_symlink($sourcePath, $destPath) {
     }
 }
 
-$Global:is_wasm = $TARGET_OS -eq 'wasm'
+$Global:is_wasm = $TARGET_OS.StartsWith('wasm')
 $Global:is_win32 = $TARGET_OS -eq 'win32'
 $Global:is_winrt = $TARGET_OS -eq 'winrt'
 $Global:is_mac = $TARGET_OS -eq 'osx'
@@ -394,6 +394,7 @@ $toolchains = @{
     'tvos'    = 'clang'; # xcode clang
     'watchos' = 'clang'; # xcode clang
     'wasm'    = 'clang'; # emcc clang
+    'wasm64'  = 'clang'; # emcc clang
 }
 if (!$TOOLCHAIN) {
     $TOOLCHAIN = $toolchains[$TARGET_OS]
@@ -1307,7 +1308,7 @@ function preprocess_win([string[]]$inputOptions) {
         # platform
         if ($Global:is_winrt) {
             $outputOptions += '-DCMAKE_SYSTEM_NAME=WindowsStore', '-DCMAKE_SYSTEM_VERSION=10.0'
-            if($Global:target_minsdk) {
+            if ($Global:target_minsdk) {
                 $outputOptions += "-DCMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION=$Global:target_minsdk"
             }
         }
@@ -1389,7 +1390,7 @@ function preprocess_osx([string[]]$inputOptions) {
     }
 
     $outputOptions += "-DCMAKE_OSX_ARCHITECTURES=$arch"
-    if($Global:target_minsdk) {
+    if ($Global:target_minsdk) {
         $outputOptions += "-DCMAKE_OSX_DEPLOYMENT_TARGET=$Global:target_minsdk"
     }
     return $outputOptions
@@ -1411,7 +1412,7 @@ function preprocess_ios([string[]]$inputOptions) {
         elseif ($Global:is_watchos) {
             $outputOptions += '-DPLAT=watchOS'
         }
-        if($Global:is_ios_sim) {
+        if ($Global:is_ios_sim) {
             $outputOptions += '-DSIMULATOR=TRUE'
         }
     }
@@ -1419,6 +1420,7 @@ function preprocess_ios([string[]]$inputOptions) {
 }
 
 function preprocess_wasm([string[]]$inputOptions) {
+    if ($options.p -eq 'wasm64') { $inputOptions += '-DCMAKE_C_FLAGS="-sMEMORY64 -Wno-experimental"', '-DCMAKE_CXX_FLAGS=-sMEMORY64 -Wno-experimental'}
     return $inputOptions
 }
 
@@ -1452,6 +1454,10 @@ function validHostAndToolchain() {
             'host'      = @{'windows' = $True; 'linux' = $True; 'macos' = $True };
             'toolchain' = @{'clang' = $True; };
         };
+        'wasm64'    = @{
+            'host'      = @{'windows' = $True; 'linux' = $True; 'macos' = $True };
+            'toolchain' = @{'clang' = $True; };
+        };
     }
     $validInfo = $validTable[$TARGET_OS]
     $validOS = $validInfo.host[$HOST_OS_NAME]
@@ -1474,6 +1480,7 @@ $proprocessTable = @{
     'tvos'    = ${function:preprocess_ios};
     'watchos' = ${function:preprocess_ios};
     'wasm'    = ${Function:preprocess_wasm};
+    'wasm64'    = ${Function:preprocess_wasm};
 }
 
 validHostAndToolchain
@@ -1600,7 +1607,7 @@ if (!$setupOnly) {
             $CONFIG_ALL_OPTIONS = @()
         }
 
-        if($options.u) {
+        if ($options.u) {
             $CONFIG_ALL_OPTIONS += '-D_1KFETCH_DIST_UPGRADE=TRUE'
         }
 
@@ -1613,6 +1620,7 @@ if (!$setupOnly) {
                         'linux'   = 'Unix Makefiles'
                         'android' = 'Ninja'
                         'wasm'    = 'Ninja'
+                        'wasm64'  = 'Ninja'
                         'osx'     = 'Xcode'
                         'ios'     = 'Xcode'
                         'tvos'    = 'Xcode'
@@ -1710,7 +1718,8 @@ if (!$setupOnly) {
             else {
                 if ($optimize_flag -eq 'Debug') {
                     & $build_tool configureCMakeDebug prepareKotlinBuildScriptModel $CONFIG_ALL_OPTIONS | Out-Host
-                } else {
+                }
+                else {
                     & $build_tool configureCMakeRelWithDebInfo prepareKotlinBuildScriptModel $CONFIG_ALL_OPTIONS | Out-Host
                 }
             }
