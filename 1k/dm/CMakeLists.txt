@@ -1,0 +1,36 @@
+
+cmake_minimum_required(VERSION 3.23)
+
+project(dm)
+
+find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+
+message(STATUS "CMAKE_C_COMPILER=${CMAKE_C_COMPILER}")
+message(STATUS "CMAKE_C_FLAGS=${CMAKE_C_FLAGS}")
+message(STATUS "ANDROID_NATIVE_API_LEVEL=${ANDROID_NATIVE_API_LEVEL}")
+
+set(cross_flags "")
+if(ANDROID)
+  if(CMAKE_ANDROID_ARCH_ABI MATCHES "arm64-v8a")
+    set(cross_flags "-target aarch64-none-linux-android${ANDROID_NATIVE_API_LEVEL}")
+  elseif(CMAKE_ANDROID_ARCH_ABI MATCHES "x86_64")
+    set(cross_flags "-target x86_64-none-linux-android${ANDROID_NATIVE_API_LEVEL}")
+  elseif(CMAKE_ANDROID_ARCH_ABI MATCHES "x86")
+    set(cross_flags "-target x86-none-linux-android${ANDROID_NATIVE_API_LEVEL}")
+  else()
+    set(cross_flags "-target arm-none-linux-android${ANDROID_NATIVE_API_LEVEL}")
+  endif()
+elseif(APPLE)
+  if(NOT CMAKE_OSX_ARCHITECTURES)
+    set(CMAKE_OSX_ARCHITECTURES ${CMAKE_HOST_SYSTEM_PROCESSOR})
+  endif()
+  if(CMAKE_OSX_ARCHITECTURES MATCHES "arm64")
+    set(cross_flags "-arch arm64")
+  elseif(CMAKE_OSX_ARCHITECTURES MATCHES "x86_64")
+    set(cross_flags "-arch x86_64")
+  endif()
+endif()
+
+if(NOT ${CMAKE_C_COMPILER} MATCHES ".*cl\.exe" OR "${MSVC_VERSION}" GREATER_EQUAL 1928)
+  execute_process(COMMAND ${PWSH_PROG} "${CMAKE_CURRENT_SOURCE_DIR}/dm.ps1" "${CMAKE_C_COMPILER}" "${CMAKE_C_FLAGS} ${cross_flags}")
+endif()

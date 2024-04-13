@@ -16,6 +16,7 @@
 ### BugFixes
 
 - Fix fullscreen incorrect in retina display by @halx99, reported by @TyelorD
+- Fix same uniforms in fragment and vertex shaders not working in Metal by @smilediver in https://github.com/axmolengine/axmol/pull/1808
 - Fix android build by @smilediver in https://github.com/axmolengine/axmol/pull/1723
 - Fix EditBox error by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1755
 - Fix InputEvent in fairyGUI onKeyDown and onKeyUp by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1757
@@ -51,6 +52,7 @@
 - Fix some compile warnings
 - Add ttf fallback render support
 - Add cmake option: `AX_EXT_HINT` to set default extensions state
+- Add axmol cmdline option `-dm` to dump compiler preprocessors before build
 
 ### Break Changes
 
@@ -59,7 +61,7 @@
 
 ### sdks updates
 
-- emsdk: 3.1.53 ==> 3.1.56
+- emsdk: 3.1.53 ==> 3.1.57
 - AGP: 8.2.1 ==> 8.2.2
 
 ### 3rdparty updates
