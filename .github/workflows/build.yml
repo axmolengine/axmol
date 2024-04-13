@@ -42,7 +42,7 @@ jobs:
             arch: 'x64'
         - name: Build
           shell: pwsh
-          run: .\build.ps1 -p win32 -a x64 -dll true
+          run: .\build.ps1 -p win32 -a x64 -dll
   winuwp:
         # build uwp debug avoid github CI fail with memory issue
         runs-on: windows-latest

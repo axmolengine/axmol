@@ -43,7 +43,7 @@ $unhandled_args = @()
 
 $1k_switch_options = @{ 'dll' = $true; 'u' = $true; 'dm' = $true }
 
-$options = @{d = $null; xc = @(); xb = @(); }
+$options = @{p = $null; d = $null; xc = @(); xb = @(); }
 
 $optName = $null
 foreach ($arg in $args) {
@@ -51,7 +51,7 @@ foreach ($arg in $args) {
         if ($arg.StartsWith('-')) { 
             $optName = $arg.SubString(1).TrimEnd(':')
         }
-        if($1k_switch_options.Contains($optName)) {
+        if($1k_switch_options.Contains("$optName")) {
             $unhandled_args += $arg
             $optName = $null
             continue
