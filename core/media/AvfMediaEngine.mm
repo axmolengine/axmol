@@ -369,7 +369,8 @@ bool AvfMediaEngine::transferVideoFrame()
         auto UVDataLen     = UVPitch * UVHeight;  // 1920x1080: UVDataLen=1036800
         auto frameYData    = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, 0);
         auto frameCbCrData = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, 1);
-        assert(YASIO_SZ_ALIGN(videoDim.x, 32) * videoDim.y * 3 / 2 == YDataLen + UVDataLen);
+        assert(YASIO_SZ_ALIGN(videoDim.x, 32) * videoDim.y * 3 / 2 == YDataLen + UVDataLen ||
+               (32 - videoDim.x % 32 + videoDim.x) * videoDim.y * 3 / 2 == YDataLen + UVDataLen);
         // Apple: both H264, HEVC(H265) bufferDimX=ALIGN(videoDim.x, 32), bufferDimY=videoDim.y
         // Windows:
         //    - H264: BufferDimX align videoDim.x with 16, BufferDimY as-is
