@@ -107,7 +107,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 9.2.0
+- Version: 9.2.1
 - License: MIT
 
 ## lua

@@ -31,6 +31,7 @@
 - Fix crash on iOS by @smilediver in https://github.com/axmolengine/axmol/pull/1799
 - Fix typo: BLEND_CLOLOR ==> BLEND_COLOR
 - Fix typo: RESERVE_SUBTRACT ==> REVERSE_SUBTRACT
+- Fix video player crash on apple platforms, reported by @asnagni in https://github.com/axmolengine/axmol/issues/1815
 
 ### Improvements
 
@@ -71,6 +72,7 @@
 - curl: 8.6.0 ==> 8.7.1
 - glad: 2.0.5 ==> 2.0.6
 - yasio: 4.2.1 ==> 4.2.2
+- llhttp: 9.2.0 ==> 9.2.1
 - stb_image: 2.28 ==> 2.29
 - luajit: 2.1-9cc2e42 ==> 2.1-d06beb0
 - c-ares: 1.25.0 ==> 1.28.1
