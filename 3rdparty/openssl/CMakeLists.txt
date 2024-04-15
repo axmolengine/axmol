@@ -31,7 +31,7 @@ if(WINDOWS)
   )
 elseif(APPLE)
    set_target_properties(${sub_target_name} PROPERTIES
-    IMPORTED_LOCATION "${openssl_LIB_DIR}/ossl-${sub_lib_name}.xcframework"
+    IMPORTED_LOCATION "${openssl_LIB_DIR}/openssl.xcframework"
   )
 else()
   set_target_properties(${sub_target_name} PROPERTIES
