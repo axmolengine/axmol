@@ -230,16 +230,12 @@ void ProgramState::setCallbackUniform(const backend::UniformLocation& uniformLoc
 
 void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, const void* data, std::size_t size)
 {
-    switch (uniformLocation.shaderStage)
-    {
-    case backend::ShaderStage::VERTEX:
-        setVertexUniform(uniformLocation.location[0], data, size, uniformLocation.location[1]);
-        break;
-    case backend::ShaderStage::FRAGMENT:
-        setFragmentUniform(uniformLocation.location[0], data, size, uniformLocation.location[1]);
-        break;
-    default:;
-    }
+    if (uniformLocation.vertStage)
+        setVertexUniform(uniformLocation.vertStage.location, data, size, uniformLocation.vertStage.offset);
+#ifdef AX_USE_METAL
+    if (uniformLocation.fragStage)
+        setFragmentUniform(uniformLocation.fragStage.location, data, size, uniformLocation.fragStage.offset);
+#endif
 }
 
 void ProgramState::setVertexUniform(int location, const void* data, std::size_t size, std::size_t offset)
@@ -255,17 +251,15 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
 #endif
 }
 
+#ifdef AX_USE_METAL
 void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size, std::size_t offset)
 {
     if (location < 0)
         return;
 
-#ifdef AX_USE_METAL
     memcpy(_uniformBuffers.data() + _vertexUniformBufferSize + location + offset, data, size);
-#else
-    assert(false);
-#endif
 }
+#endif
 
 void ProgramState::setVertexAttrib(std::string_view name,
                                    std::size_t index,
@@ -337,32 +331,24 @@ void ProgramState::setTexture(const backend::UniformLocation& uniformLocation,
                               int index,
                               backend::TextureBackend* texture)
 {
-    switch (uniformLocation.shaderStage)
-    {
-    case backend::ShaderStage::VERTEX:
-        setTexture(uniformLocation.location[0], slot, index, texture, _vertexTextureInfos);
-        break;
-    case backend::ShaderStage::FRAGMENT:
-        setTexture(uniformLocation.location[0], slot, index, texture, _fragmentTextureInfos);
-        break;
-    default:;
-    }
+    if (uniformLocation.vertStage)
+        setTexture(uniformLocation.vertStage.location, slot, index, texture, _vertexTextureInfos);
+#ifdef AX_USE_METAL
+    if (uniformLocation.fragStage)
+        setTexture(uniformLocation.fragStage.location, slot, index, texture, _fragmentTextureInfos);
+#endif
 }
 
 void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocation,
                                    std::vector<int> slots,
                                    std::vector<backend::TextureBackend*> textures)
 {
-    switch (uniformLocation.shaderStage)
-    {
-    case backend::ShaderStage::VERTEX:
-        setTextureArray(uniformLocation.location[0], std::move(slots), std::move(textures), _vertexTextureInfos);
-        break;
-    case backend::ShaderStage::FRAGMENT:
-        setTextureArray(uniformLocation.location[0], std::move(slots), std::move(textures), _fragmentTextureInfos);
-        break;
-    default:;
-    }
+    if (uniformLocation.vertStage)
+        setTextureArray(uniformLocation.vertStage.location, std::move(slots), std::move(textures), _vertexTextureInfos);
+#ifdef AX_USE_METAL
+    if (uniformLocation.fragStage)
+        setTextureArray(uniformLocation.fragStage.location, std::move(slots), std::move(textures), _fragmentTextureInfos);
+#endif
 }
 
 void ProgramState::setTexture(int location,

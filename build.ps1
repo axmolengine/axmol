@@ -41,6 +41,8 @@ param(
 
 $unhandled_args = @()
 
+$1k_switch_options = @{ 'dll' = $true; 'u' = $true; 'dm' = $true }
+
 $options = @{p = $null; d = $null; xc = @(); xb = @(); }
 
 $optName = $null
@@ -49,11 +51,17 @@ foreach ($arg in $args) {
         if ($arg.StartsWith('-')) { 
             $optName = $arg.SubString(1).TrimEnd(':')
         }
+        if($1k_switch_options.Contains("$optName")) {
+            $unhandled_args += $arg
+            $optName = $null
+            continue
+        }
     }
     else {
         if ($options.Contains($optName)) {
             $options[$optName] = $arg
-        } else {
+        }
+        else {
             $unhandled_args += "-$optName"
             $unhandled_args += $arg
         }
@@ -83,19 +91,20 @@ $AX_ROOT = $null
 if (Test-Path "$myRoot/core/axmolver.h.in" -PathType Leaf) {
     $AX_ROOT = $myRoot
     $env:AX_ROOT = $AX_ROOT
-} else {
+}
+else {
     throw "The axmol engine incompleted"
 }
 
 # 1k/build.ps1
-if(Test-Path "$myRoot/1k/build.ps1" -PathType Leaf) {
+if (Test-Path "$myRoot/1k/build.ps1" -PathType Leaf) {
     $b1k_root = $myRoot
 }
 else {
     throw "The 1k/build.ps1 not found"
 }
 
-$source_proj_dir = if($options.d) { $options.d } else { $workDir }
+$source_proj_dir = if ($options.d) { $options.d } else { $workDir }
 $Global:is_axmol_engine = ($source_proj_dir -eq $AX_ROOT)
 $Global:is_axmol_app = (Test-Path (Join-Path $source_proj_dir '.axproj.json') -PathType Leaf)
 $is_android = $options.p -eq 'android'
@@ -105,18 +114,19 @@ $b1k_script = (Resolve-Path -Path "$b1k_root/1k/build.ps1").Path
 $b1k_args = @()
 
 $cm_target_index = $options.xb.IndexOf('--target')
-if($cm_target_index -ne -1) {
+if ($cm_target_index -ne -1) {
     $cmake_target = $options.xb[$cm_target_index + 1]
 }
 
 if ($is_axmol_engine -and $is_android) {
     if (!$cmake_target) {
         $source_proj_dir = Join-Path $myRoot 'tests/cpp-tests'
-    } else {
+    }
+    else {
         $builtin_targets = @{
-            'cpp-tests' = 'tests/cpp-tests'
+            'cpp-tests'      = 'tests/cpp-tests'
             'fairygui-tests' = 'tests/fairygui-tests'
-            'live2d-tests' = 'tests/live2d-tests'
+            'live2d-tests'   = 'tests/live2d-tests'
         }
         if (!$builtin_targets.Contains($cmake_target)) {
             throw "specified target '$cmake_target' not present in engine"
@@ -138,7 +148,7 @@ function search_proj_file($file_path, $type) {
 }
 
 $proj_dir = search_proj_file 'CMakeLists.txt' 'Leaf'
-if(!$proj_dir) { throw "The directory $source_proj_dir doesn't contains CMakeLists.txt!" }
+if (!$proj_dir) { throw "The directory $source_proj_dir doesn't contains CMakeLists.txt!" }
 $proj_name = (Get-Item $proj_dir).BaseName
 
 $use_gradle = $is_android -and (Test-Path $(Join-Path $proj_dir 'proj.android/gradlew') -PathType Leaf)
@@ -159,10 +169,12 @@ if (!$use_gradle) {
         $options.xb += '--target', $cmake_target
     }
 
-    if($is_android -and !"$($options.xc)".Contains('-DANDROID_STL')) {
+    if ($is_android -and !"$($options.xc)".Contains('-DANDROID_STL')) {
         $options.xc += '-DANDROID_STL=c++_shared'
     }
-} else { # android gradle
+}
+else {
+    # android gradle
     # engine ci
     if ($is_axmol_engine) {
         $options.xc += "-PKEY_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks", '-PKEY_STORE_PASSWORD=axmol-ci', '-PKEY_ALIAS=axmol-ci', '-PKEY_PASSWORD=axmol-ci'

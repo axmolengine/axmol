@@ -16,6 +16,7 @@
 ### BugFixes
 
 - Fix fullscreen incorrect in retina display by @halx99, reported by @TyelorD
+- Fix same uniforms in fragment and vertex shaders not working in Metal by @smilediver in https://github.com/axmolengine/axmol/pull/1808
 - Fix android build by @smilediver in https://github.com/axmolengine/axmol/pull/1723
 - Fix EditBox error by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1755
 - Fix InputEvent in fairyGUI onKeyDown and onKeyUp by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1757
@@ -30,6 +31,7 @@
 - Fix crash on iOS by @smilediver in https://github.com/axmolengine/axmol/pull/1799
 - Fix typo: BLEND_CLOLOR ==> BLEND_COLOR
 - Fix typo: RESERVE_SUBTRACT ==> REVERSE_SUBTRACT
+- Fix video player crash on apple platforms, reported by @asnagni in https://github.com/axmolengine/axmol/issues/1815
 
 ### Improvements
 
@@ -51,6 +53,7 @@
 - Fix some compile warnings
 - Add ttf fallback render support
 - Add cmake option: `AX_EXT_HINT` to set default extensions state
+- Add axmol cmdline option `-dm` to dump compiler preprocessors before build
 
 ### Break Changes
 
@@ -59,7 +62,7 @@
 
 ### sdks updates
 
-- emsdk: 3.1.53 ==> 3.1.56
+- emsdk: 3.1.53 ==> 3.1.57
 - AGP: 8.2.1 ==> 8.2.2
 
 ### 3rdparty updates
@@ -69,6 +72,7 @@
 - curl: 8.6.0 ==> 8.7.1
 - glad: 2.0.5 ==> 2.0.6
 - yasio: 4.2.1 ==> 4.2.2
+- llhttp: 9.2.0 ==> 9.2.1
 - stb_image: 2.28 ==> 2.29
 - luajit: 2.1-9cc2e42 ==> 2.1-d06beb0
 - c-ares: 1.25.0 ==> 1.28.1

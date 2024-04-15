@@ -332,6 +332,7 @@ protected:
      */
     void setVertexUniform(int location, const void* data, std::size_t size, std::size_t offset);
 
+#ifdef AX_USE_METAL
     /**
      * Set the fargment uniform data.
      * @param location Specifies the uniform location.
@@ -339,6 +340,7 @@ protected:
      * @param size Specifies the uniform data size.
      */
     void setFragmentUniform(int location, const void* data, std::size_t size, std::size_t offset);
+#endif
 
     /**
      * Set texture.

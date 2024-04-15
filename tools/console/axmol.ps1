@@ -200,7 +200,7 @@ function axmol_run() {
         println "Launching $launch_linuxapp ..."
         Start-Process -FilePath $launch_linuxapp -WorkingDirectory $(Split-Path $launch_linuxapp -Parent)
     }
-    elseif ($TARGET_OS -eq 'wasm') {
+    elseif ($TARGET_OS.startsWith('wasm')) {
         $launch_wasmapp = Join-Path $BUILD_DIR "bin/$cmake_target/$cmake_target.html"
         println "Launching $launch_wasmapp ..."
         emrun $launch_wasmapp
