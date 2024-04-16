@@ -159,7 +159,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
 
                 mPlayer = new ExoPlayer.Builder(sContext, mediaEngine).build();
                 mVideoRenderer = (MediaCodecVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
-                mVideoRenderer.handleMessage(MediaCodecVideoRenderer.MSG_SET_VIDEO_OUTPUT, mediaEngine);
+                mVideoRenderer.setOutput(mediaEngine);
                 mPlayer.setVideoFrameMetadataListener(mediaEngine);
                 mPlayer.addListener(mediaEngine);
                 mPlayer.setMediaSource(mediaSource);
@@ -180,7 +180,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
             mPlayer = null;
             final AxmolMediaEngine mediaEngine = this;
             AxmolEngine.getActivity().runOnUiThread(() -> {
-                mVideoRenderer.setOutputHandler(null);
+                mVideoRenderer.setOutput(null);
                 player.removeListener(mediaEngine);
                 player.stop();
                 player.release();
