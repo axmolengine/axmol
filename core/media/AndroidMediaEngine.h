@@ -35,7 +35,7 @@ public:
     MEMediaState getState() const override;
     bool transferVideoFrame() override;
 
-    void handleVideoSample(const uint8_t* buf, size_t len, int outputX, int outputY, int videoX, int videoY);
+    void handleVideoSample(const uint8_t* buf, size_t len, int outputX, int outputY, int videoX, int videoY, int rotation);
 
 private:
     void* context{};  // java object strong-refs
@@ -44,6 +44,7 @@ private:
 
     MEIntPoint _outputDim;
     MEIntPoint _videoDim;
+    int _videoRotation{0};
 
     yasio::byte_buffer _frameBuffer1;  // for write
     yasio::byte_buffer _frameBuffer2;  // for read

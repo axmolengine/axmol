@@ -77,6 +77,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     Point mOutputDim = new Point(); // The output dim match with buffer
     Point mVideoDim = new Point(); // The video dim (validate image dim)
 
+    private int mVideoRotation = 0;
 
     /** ------ native methods ------- */
     public static native void nativeHandleEvent(long nativeObj, int arg1);
@@ -282,6 +283,10 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         }
         else
             mVideoDim.y = mOutputDim.y;
+
+        if(format.containsKey(MediaFormat.KEY_ROTATION)) {
+            mVideoRotation = format.getInteger(MediaFormat.KEY_ROTATION);
+        }
 
         return format;
     }
