@@ -15,7 +15,7 @@
  *
  * Copy from: https://github.com/androidx/media/blob/release/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/video/MediaCodecVideoRenderer.java
  * and modified to works on ByteBuffer mode for retrieve video/raw NV12 data
- * match with AndroidX Media3 1.0.2
+ * match with AndroidX Media3 1.0.2, but also works on 1.1.0+
  */
 package org.axmol.lib;
 
@@ -109,7 +109,7 @@ import androidx.media3.exoplayer.video.VideoFrameMetadataListener;
  */
 
 
-public class AxmolVideoRenderer extends MediaCodecRenderer {
+@UnstableApi public class MediaCodecVideoRenderer extends MediaCodecRenderer {
   public static final int DESIRED_PIXEL_FORMAT = CodecCapabilities.COLOR_FormatYUV420SemiPlanar; // desired pixel format: NV12
 
   private static final String TAG = "AxmolVideoRenderer";
@@ -175,10 +175,6 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
 
   private OutputHandler outputHandler;
 
-  public void setOutputHandler(OutputHandler handler) {
-    outputHandler = handler;
-  }
-
   public interface OutputHandler {
     void handleVideoSample(MediaCodecAdapter codec, int index, long presentationTimeUs);
   }
@@ -196,7 +192,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    * @param context A context.
    * @param mediaCodecSelector A decoder selector.
    */
-  public AxmolVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector) {
+  public MediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector) {
     this(context, mediaCodecSelector, 0);
   }
 
@@ -206,7 +202,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    * @param allowedJoiningTimeMs The maximum duration in milliseconds for which this video renderer
    *     can attempt to seamlessly join an ongoing playback.
    */
-  public AxmolVideoRenderer(
+  public MediaCodecVideoRenderer(
       Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs) {
     this(
         context,
@@ -228,7 +224,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    * @param maxDroppedFramesToNotify The maximum number of frames that can be dropped between
    *     invocations of {@link VideoRendererEventListener#onDroppedFrames(int, long)}.
    */
-  public AxmolVideoRenderer(
+  public MediaCodecVideoRenderer(
       Context context,
       MediaCodecSelector mediaCodecSelector,
       long allowedJoiningTimeMs,
@@ -261,7 +257,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    * @param maxDroppedFramesToNotify The maximum number of frames that can be dropped between
    *     invocations of {@link VideoRendererEventListener#onDroppedFrames(int, long)}.
    */
-  public AxmolVideoRenderer(
+  public MediaCodecVideoRenderer(
       Context context,
       MediaCodecSelector mediaCodecSelector,
       long allowedJoiningTimeMs,
@@ -297,7 +293,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    * @param maxDroppedFramesToNotify The maximum number of frames that can be dropped between
    *     invocations of {@link VideoRendererEventListener#onDroppedFrames(int, long)}.
    */
-  public AxmolVideoRenderer(
+  public MediaCodecVideoRenderer(
       Context context,
       MediaCodecAdapter.Factory codecAdapterFactory,
       MediaCodecSelector mediaCodecSelector,
@@ -340,7 +336,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    *     this renderer are assumed to meet implicitly (i.e. without the operating rate being set
    *     explicitly using {@link MediaFormat#KEY_OPERATING_RATE}).
    */
-  public AxmolVideoRenderer(
+  public MediaCodecVideoRenderer(
       Context context,
       MediaCodecAdapter.Factory codecAdapterFactory,
       MediaCodecSelector mediaCodecSelector,
@@ -690,8 +686,9 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     }
   }
 
-  private void setOutput(@Nullable Object output) {
+  public void setOutput(@Nullable Object output) {
     // Handle unsupported (i.e., non-Surface) outputs by clearing the surface.
+      outputHandler = (OutputHandler)output;
   }
 
   @Override

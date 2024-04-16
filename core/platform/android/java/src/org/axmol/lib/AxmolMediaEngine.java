@@ -8,10 +8,13 @@ import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+import androidx.media3.common.Format;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
 import androidx.media3.common.VideoSize;
+import androidx.media3.common.util.UnstableApi;
 import androidx.media3.datasource.DataSource;
 import androidx.media3.datasource.DefaultDataSource;
 import androidx.media3.exoplayer.DefaultRenderersFactory;
@@ -21,14 +24,15 @@ import androidx.media3.exoplayer.mediacodec.MediaCodecAdapter;
 import androidx.media3.exoplayer.mediacodec.MediaCodecSelector;
 import androidx.media3.exoplayer.source.MediaSource;
 import androidx.media3.exoplayer.source.ProgressiveMediaSource;
+import androidx.media3.exoplayer.video.VideoFrameMetadataListener;
 import androidx.media3.exoplayer.video.VideoRendererEventListener;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings("unused")
-public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.Listener, AxmolVideoRenderer.OutputHandler  {
+@UnstableApi @SuppressWarnings("unused")
+public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.Listener, MediaCodecVideoRenderer.OutputHandler, VideoFrameMetadataListener  {
     // The native media events, match with MEMediaEventType
     public static final int EVENT_PLAYING = 0;
     public static final int EVENT_PAUSED = 1;
@@ -61,27 +65,23 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
      */
 
     public static final String TAG = "AxmolMediaEngine";
-
     public static Context sContext = null;
-
     private ExoPlayer mPlayer;
-    private AxmolVideoRenderer mVideoRenderer;
+    private MediaCodecVideoRenderer mVideoRenderer;
+    private MediaFormat mOutputFormat;
     private boolean mAutoPlay = false;
     private boolean mLooping = false;
     private long mNativeObj = 0; // native object address for send event to C++, weak ref
 
     private boolean mPlaybackEnded = false;
-
     private AtomicInteger mState = new AtomicInteger(STATE_CLOSED);
-
     Point mOutputDim = new Point(); // The output dim match with buffer
     Point mVideoDim = new Point(); // The video dim (validate image dim)
-
     private int mVideoRotation = 0;
 
     /** ------ native methods ------- */
     public static native void nativeHandleEvent(long nativeObj, int arg1);
-    public static native void nativeHandleVideoSample(long nativeObj, ByteBuffer sampleData, int sampleLen, int outputX, int outputY, int videoX, int videoY);
+    public static native void nativeHandleVideoSample(long nativeObj, ByteBuffer sampleData, int sampleLen, int outputX, int outputY, int videoX, int videoY, int rotation);
 
     public static void setContext(Activity activity) {
         sContext = activity.getApplicationContext();
@@ -119,7 +119,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         long allowedVideoJoiningTimeMs,
         ArrayList<Renderer> out) {
         out.add(
-            new AxmolVideoRenderer(
+            new MediaCodecVideoRenderer(
                 context,
                 getCodecAdapterFactory(),
                 mediaCodecSelector,
@@ -158,8 +158,9 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
                         .createMediaSource(MediaItem.fromUri(Uri.parse(sourceUri)));
 
                 mPlayer = new ExoPlayer.Builder(sContext, mediaEngine).build();
-                mVideoRenderer = (AxmolVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
-                mVideoRenderer.setOutputHandler(mediaEngine);
+                mVideoRenderer = (MediaCodecVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
+                mVideoRenderer.handleMessage(MediaCodecVideoRenderer.MSG_SET_VIDEO_OUTPUT, mediaEngine);
+                mPlayer.setVideoFrameMetadataListener(mediaEngine);
                 mPlayer.addListener(mediaEngine);
                 mPlayer.setMediaSource(mediaSource);
                 mPlayer.prepare();
@@ -263,48 +264,51 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         return mState.get();
     }
 
+    @Override
+    public void onVideoFrameAboutToBeRendered(
+        long presentationTimeUs,
+        long releaseTimeNs,
+        Format format,
+        @Nullable MediaFormat mediaFormat) {
+        if (mOutputFormat != mediaFormat) {
+            mOutputFormat = mediaFormat;
+            updateVideoMeta();
+        }
+    }
+
     /** update video informations */
-    private MediaFormat updateVideoInfo() {
-        MediaFormat format = mVideoRenderer.getOutputMediaFormat();
-        mOutputDim.x = format.getInteger(MediaFormat.KEY_WIDTH);
-        if (format.containsKey(MediaFormat.KEY_CROP_LEFT)
-            && format.containsKey(MediaFormat.KEY_CROP_RIGHT)) {
-            mVideoDim.x = format.getInteger(MediaFormat.KEY_CROP_RIGHT) + 1
-                - format.getInteger(MediaFormat.KEY_CROP_LEFT);
-        }
-        else
-            mVideoDim.x = mOutputDim.x;
+    private void updateVideoMeta() {
+        MediaFormat format = mOutputFormat;
+        // String mimeType = format.getString(MediaFormat.KEY_MIME); // "video/raw" (NV12)
+        // Integer colorFormat = format.getInteger(MediaFormat.KEY_COLOR_FORMAT);
+        // boolean NV12 = colorFormat == MediaCodecVideoRenderer.DESIRED_PIXEL_FORMAT;
+        if(format != null) {
+            mOutputDim.x = format.getInteger(MediaFormat.KEY_WIDTH);
+            if (format.containsKey(MediaFormat.KEY_CROP_LEFT)
+                && format.containsKey(MediaFormat.KEY_CROP_RIGHT)) {
+                mVideoDim.x = format.getInteger(MediaFormat.KEY_CROP_RIGHT) + 1
+                    - format.getInteger(MediaFormat.KEY_CROP_LEFT);
+            } else
+                mVideoDim.x = mOutputDim.x;
 
-        mOutputDim.y = format.getInteger(MediaFormat.KEY_HEIGHT);
-        if (format.containsKey(MediaFormat.KEY_CROP_TOP)
-            && format.containsKey(MediaFormat.KEY_CROP_BOTTOM)) {
-            mVideoDim.y = format.getInteger(MediaFormat.KEY_CROP_BOTTOM) + 1
-                - format.getInteger(MediaFormat.KEY_CROP_TOP);
-        }
-        else
-            mVideoDim.y = mOutputDim.y;
+            mOutputDim.y = format.getInteger(MediaFormat.KEY_HEIGHT);
+            if (format.containsKey(MediaFormat.KEY_CROP_TOP)
+                && format.containsKey(MediaFormat.KEY_CROP_BOTTOM)) {
+                mVideoDim.y = format.getInteger(MediaFormat.KEY_CROP_BOTTOM) + 1
+                    - format.getInteger(MediaFormat.KEY_CROP_TOP);
+            } else
+                mVideoDim.y = mOutputDim.y;
 
-        if(format.containsKey(MediaFormat.KEY_ROTATION)) {
-            mVideoRotation = format.getInteger(MediaFormat.KEY_ROTATION);
+            if (format.containsKey(MediaFormat.KEY_ROTATION)) {
+                mVideoRotation = format.getInteger(MediaFormat.KEY_ROTATION);
+            }
         }
-
-        return format;
     }
 
     /** handler or listener methods */
 
     @Override
     public void handleVideoSample(MediaCodecAdapter codec, int index, long presentationTimeUs) {
-//        MediaFormat format = updateVideoInfo();
-
-//        String mimeType = format.getString(MediaFormat.KEY_MIME); // "video/raw" (NV12)
-//        Integer colorFormat = format.getInteger(MediaFormat.KEY_COLOR_FORMAT);
-//        boolean NV12 = colorFormat == AxmolVideoRenderer.DESIRED_PIXEL_FORMAT;
-
-        if(presentationTimeUs == 0) {
-            updateVideoInfo();
-        }
-
         if (mState.get() != STATE_PLAYING) {
             mPlaybackEnded = false;
             mState.set(STATE_PLAYING);
@@ -312,7 +316,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         }
 
         ByteBuffer tmpBuffer = codec.getOutputBuffer(index);
-        nativeHandleVideoSample(mNativeObj, tmpBuffer, tmpBuffer.remaining(), mOutputDim.x, mOutputDim.y, mVideoDim.x, mVideoDim.y);
+        nativeHandleVideoSample(mNativeObj, tmpBuffer, tmpBuffer.remaining(), mOutputDim.x, mOutputDim.y, mVideoDim.x, mVideoDim.y, mVideoRotation);
     }
 
     @Override
@@ -374,7 +378,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     public void onVideoSizeChanged(VideoSize videoSize) {
         Log.d(TAG, String.format("[Individual]onVideoSizeChanged: (%d,%d)", videoSize.width, videoSize.height));
         if(mPlayer != null)
-            updateVideoInfo();
+            updateVideoMeta();
     }
 
     @Override
