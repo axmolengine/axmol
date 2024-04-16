@@ -827,12 +827,10 @@ void GLViewImpl::setFullscreen(GLFWmonitor* monitor, int w, int h, int refreshRa
     glfwSetWindowMonitor(_mainWindow, _monitor, 0, 0, w, h, refreshRate);
 }
 
-void GLViewImpl::setWindowed(int width, int height, bool borderless)
+void GLViewImpl::setWindowed(int width, int height)
 {
     if (!this->isFullscreen())
     {
-        glfwSetWindowAttrib(_mainWindow, GLFW_DECORATED, borderless ? GLFW_FALSE : GLFW_TRUE);
-
         if (glfwGetWindowAttrib(_mainWindow, GLFW_MAXIMIZED))
             glfwRestoreWindow(_mainWindow);
         this->setFrameSize((float)width, (float)height);

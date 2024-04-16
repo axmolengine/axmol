@@ -93,7 +93,7 @@ public:
 
     /* for internal use */
     void setFullscreen(GLFWmonitor* monitor, int w, int h, int refreshRate);
-    void setWindowed(int width, int height, bool borderless = false);
+    void setWindowed(int width, int height);
 
     void getWindowPosition(int* xpos, int* ypos);
     void getWindowSize(int* width, int* height);
