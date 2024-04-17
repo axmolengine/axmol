@@ -827,10 +827,12 @@ void GLViewImpl::setFullscreen(GLFWmonitor* monitor, int w, int h, int refreshRa
     glfwSetWindowMonitor(_mainWindow, _monitor, 0, 0, w, h, refreshRate);
 }
 
-void GLViewImpl::setWindowed(int width, int height)
+void GLViewImpl::setWindowed(int width, int height, bool borderless)
 {
     if (!this->isFullscreen())
     {
+        glfwSetWindowAttrib(_mainWindow, GLFW_DECORATED, borderless ? GLFW_FALSE : GLFW_TRUE);
+
         if (glfwGetWindowAttrib(_mainWindow, GLFW_MAXIMIZED))
             glfwRestoreWindow(_mainWindow);
         this->setFrameSize((float)width, (float)height);
@@ -845,6 +847,7 @@ void GLViewImpl::setWindowed(int width, int height)
         xpos += (int)((videoMode->width - width) * 0.5f);
         ypos += (int)((videoMode->height - height) * 0.5f);
         _monitor = nullptr;
+        glfwSetWindowAttrib(_mainWindow, GLFW_DECORATED, borderless ? GLFW_FALSE : GLFW_TRUE);
         glfwSetWindowMonitor(_mainWindow, nullptr, xpos, ypos, width, height, GLFW_DONT_CARE);
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
         // on mac window will sometimes lose title when windowed
