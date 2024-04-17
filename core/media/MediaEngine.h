@@ -131,10 +131,11 @@ struct MEVideoPixelDesc
     MEVideoPixelDesc(MEVideoPixelFormat pixelFormat, const MEIntPoint& dim) : _PF(pixelFormat), _dim(dim) {}
     MEVideoPixelFormat _PF;  // the pixel format
     MEIntPoint _dim;         // the aligned frame size
+    int _rotation{0};
     bool _fullRange = true;
     bool equals(const MEVideoPixelDesc& rhs) const
     {
-        return _dim.equals(rhs._dim) && _PF == rhs._PF && _fullRange == rhs._fullRange;
+        return _dim.equals(rhs._dim) && _PF == rhs._PF && _fullRange == rhs._fullRange && _rotation == rhs._rotation;
     }
 };
 

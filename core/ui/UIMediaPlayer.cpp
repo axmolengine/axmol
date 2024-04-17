@@ -87,9 +87,13 @@ struct PrivateVideoDescriptor
         auto& videoSize = _vrender->getContentSize();
         if (videoSize.x > 0 && videoSize.y > 0)
         {  // rescale video to view node
-            auto& viewSize = videoView->getContentSize();
+            auto viewSize = videoView->getContentSize();
             if (viewSize.x > 0 && viewSize.y > 0)
             {
+                if(_vpixelDesc._rotation % 180 != 0)
+                    std::swap(viewSize.x, viewSize.y);
+                _vrender->setRotation(_vpixelDesc._rotation);
+
                 if (!videoView->isKeepAspectRatioEnabled())
                 {
                     _vrender->setScale(viewSize.x / videoSize.x, viewSize.y / videoSize.y);

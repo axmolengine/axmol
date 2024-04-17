@@ -269,6 +269,7 @@ protected:
     BOOL m_bIsH264 = FALSE;
     BOOL m_bIsHEVC = FALSE;  // hvc1,hev1
     GUID m_VideoOutputFormat{};
+    MFVideoRotationFormat m_VideoRotation{MFVideoRotationFormat_0};
 
     std::function<void(MEMediaEventType)> _onMediaEvent;
     std::function<void(const MEVideoFrame&)> _onVideoFrame;
