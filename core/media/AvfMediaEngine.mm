@@ -15,6 +15,8 @@
 
 USING_NS_AX;
 
+#define AX_ALIGN_ANY(x, a) ((((x) + (a) - 1) / (a)) * (a))
+
 @interface AVMediaSessionHandler : NSObject
 - (AVMediaSessionHandler*)initWithMediaEngine:(AvfMediaEngine*)me;
 - (void)dealloc;
@@ -299,7 +301,8 @@ void AvfMediaEngine::onStatusNotification(void* context)
 
             CGAffineTransform transform = [assetTrack preferredTransform];
             double radians = atan2(transform.b, transform.a);
-            _videoRotation = YASIO_SZ_ALIGN(static_cast<int>(radians * 180.0 / M_PI), 90);
+            int degrees = static_cast<int>(radians * 180.0 / M_PI);
+            _videoRotation = AX_ALIGN_ANY(degrees, 90);
 
             _bFullColorRange = false;
             switch (videoOutputPF)
@@ -380,6 +383,7 @@ bool AvfMediaEngine::transferVideoFrame()
         //    - H264: BufferDimX align videoDim.x with 16, BufferDimY as-is
         //    - HEVC(H265): BufferDim(X,Y) align videoDim(X,Y) with 32
         MEVideoFrame frame{frameYData, frameCbCrData, static_cast<size_t>(YDataLen + UVDataLen), MEVideoPixelDesc{_videoPF, MEIntPoint{YPitch, YHeight}}, videoDim};
+        frame._vpd._rotation = _videoRotation;
 #if defined(_DEBUG) || !defined(_NDEBUG)
         auto& ycbcrDesc = frame._ycbcrDesc;
         ycbcrDesc.YDim.x = YWidth;
