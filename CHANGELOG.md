@@ -32,9 +32,14 @@
 - Fix typo: BLEND_CLOLOR ==> BLEND_COLOR
 - Fix typo: RESERVE_SUBTRACT ==> REVERSE_SUBTRACT
 - Fix video player crash on apple platforms, reported by @asnagni in https://github.com/axmolengine/axmol/issues/1815
+- Fix an issue where ProgressTimer didn't properly set or cascade its opacity by @TyelorD in https://github.com/axmolengine/axmol/pull/1830
+- Fix ClippingNode stencil needing global z set manually by @TyelorD in https://github.com/axmolengine/axmol/pull/1831
+- Fix FileUtilsApple::getPathForDirectory() checking wrong path by smilediver in https://github.com/axmolengine/axmol/pull/1828
+- Fix issue where UIWidget couldn't be reselected by @TyelorD in https://github.com/axmolengine/axmol/pull/1827
 
 ### Improvements
 
+- Improve MediaPlayer: handle video rotation properly
 - Disable c++20 char8_t
 - Improve build system, set rpath properly for platforms: linux, apple
 - HttpClient: add support for PATCH method by @smilediver in https://github.com/axmolengine/axmol/pull/1722
@@ -54,6 +59,9 @@
 - Add ttf fallback render support
 - Add cmake option: `AX_EXT_HINT` to set default extensions state
 - Add axmol cmdline option `-dm` to dump compiler preprocessors before build
+- Display cmake command used by build script in console by @rh101 in https://github.com/axmolengine/axmol/pull/1834
+- Add Borderless Windowed Mode by @TyelorD in https://github.com/axmolengine/axmol/pull/1826
+- Add CC_USE_CULLING Alias to cocos2d.h by @TyelorD in https://github.com/axmolengine/axmol/pull/1825
 
 ### Break Changes
 
@@ -64,6 +72,7 @@
 
 - emsdk: 3.1.53 ==> 3.1.57
 - AGP: 8.2.1 ==> 8.2.2
+- androidx.media3: 1.0.2 ==> 1.2.1
 
 ### 3rdparty updates
 
