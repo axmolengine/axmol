@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @UnstableApi @SuppressWarnings("unused")
-public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.Listener, MediaCodecVideoRenderer.OutputHandler, VideoFrameMetadataListener  {
+public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.Listener, MediaCodecVideoRenderer.VideoFrameProcessor, VideoFrameMetadataListener  {
     // The native media events, match with MEMediaEventType
     public static final int EVENT_PLAYING = 0;
     public static final int EVENT_PAUSED = 1;
@@ -308,7 +308,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     /** handler or listener methods */
 
     @Override
-    public void handleVideoSample(MediaCodecAdapter codec, int index, long presentationTimeUs) {
+    public void processVideoFrame(MediaCodecAdapter codec, int index, long presentationTimeUs) {
         if (mState.get() != STATE_PLAYING) {
             mPlaybackEnded = false;
             mState.set(STATE_PLAYING);
@@ -377,6 +377,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     @Override
     public void onVideoSizeChanged(VideoSize videoSize) {
         Log.d(TAG, String.format("[Individual]onVideoSizeChanged: (%d,%d)", videoSize.width, videoSize.height));
+
         if(mPlayer != null)
             updateVideoMeta();
     }
