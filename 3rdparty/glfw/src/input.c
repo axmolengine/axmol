@@ -348,7 +348,6 @@ void _glfwInputMouseClick(_GLFWwindow* window, int button, int action, int mods)
 {
     assert(window != NULL);
     assert(button >= 0);
-    assert(button <= GLFW_MOUSE_BUTTON_LAST);
     assert(action == GLFW_PRESS || action == GLFW_RELEASE);
     assert(mods == (mods & GLFW_MOD_MASK));
 
