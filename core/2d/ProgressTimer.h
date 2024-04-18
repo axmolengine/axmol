@@ -156,6 +156,7 @@ public:
     virtual const Color3B& getColor() const override;
     virtual void setOpacity(uint8_t opacity) override;
     virtual uint8_t getOpacity() const override;
+    virtual uint8_t getDisplayedOpacity() const override;
 
     /**
      * @js ctor
