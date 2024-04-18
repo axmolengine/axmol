@@ -226,8 +226,8 @@ void Node::cleanup()
 
     // This will stop Axmol from leaking event listeners on any objects that create them:
     //
-    // Note: If you're moving a Node from one parent to another then you must remember to always call either removeChild,
-    // or removeFromParentWithCleanup with a cleanup bool parameter of false. Otherwise Nodes with listeners (e.g. buttons)
+    // Note: If you're moving a Node from one parent to another then you must remember to always call either removeChild(),
+    // or removeFromParentAndCleanup() with a cleanup bool parameter of false. Otherwise Nodes with listeners (e.g. buttons)
     // will stop working when it's removed from it's parent and then added as a child to any Node.
     //
     // For more details read: https://discuss.cocos2d-x.org/t/note-compatibility-issue-of-node-cleanup-in-cocos2d-x-v3-16
