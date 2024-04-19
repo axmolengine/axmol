@@ -7018,7 +7018,7 @@ int lua_ax_base_Node_getParent(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Node_removeFromParentAndCleanup(lua_State* tolua_S)
+int lua_ax_base_Node_removeFromParent(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Node* cobj = nullptr;
@@ -7034,7 +7034,7 @@ int lua_ax_base_Node_removeFromParentAndCleanup(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_removeFromParentAndCleanup'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_removeFromParent'", nullptr);
         return 0;
     }
 #endif
@@ -7042,10 +7042,10 @@ int lua_ax_base_Node_removeFromParentAndCleanup(lua_State* tolua_S)
     do{
         if (argc == 1) {
             bool arg0;
-            ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Node:removeFromParentAndCleanup");
+            ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Node:removeFromParent");
 
             if (!ok) { break; }
-            cobj->removeFromParentAndCleanup(arg0);
+            cobj->removeFromParent(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -7059,12 +7059,12 @@ int lua_ax_base_Node_removeFromParentAndCleanup(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.Node:removeFromParent",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d or %d \n",  "ax.Node:removeFromParent",argc, 0, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_removeFromParentAndCleanup'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_removeFromParent'.",&tolua_err);
 #endif
 
     return 0;
@@ -11821,7 +11821,7 @@ int lua_register_ax_base_Node(lua_State* tolua_S)
         tolua_function(tolua_S,"getChildrenCount",lua_ax_base_Node_getChildrenCount);
         tolua_function(tolua_S,"setParent",lua_ax_base_Node_setParent);
         tolua_function(tolua_S,"getParent",lua_ax_base_Node_getParent);
-        tolua_function(tolua_S,"removeFromParent",lua_ax_base_Node_removeFromParentAndCleanup);
+        tolua_function(tolua_S,"removeFromParent",lua_ax_base_Node_removeFromParent);
         tolua_function(tolua_S,"removeChild",lua_ax_base_Node_removeChild);
         tolua_function(tolua_S,"removeChildByTag",lua_ax_base_Node_removeChildByTag);
         tolua_function(tolua_S,"removeChildByName",lua_ax_base_Node_removeChildByName);
