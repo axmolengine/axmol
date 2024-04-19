@@ -1057,12 +1057,7 @@ void Node::addChild(Node* child)
     this->addChild(child, child->getLocalZOrder(), child->_name);
 }
 
-void Node::removeFromParent()
-{
-    this->removeFromParentAndCleanup(true);
-}
-
-void Node::removeFromParentAndCleanup(bool cleanup)
+void Node::removeFromParent(bool cleanup)
 {
     if (_parent != nullptr)
     {

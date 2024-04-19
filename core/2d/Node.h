@@ -870,19 +870,13 @@ public:
     ////// REMOVES //////
 
     /**
-     * Removes this node itself from its parent node with a cleanup.
-     * If the node orphan, then nothing happens.
-     * @see `removeFromParentAndCleanup(bool)`
-     */
-    virtual void removeFromParent();
-    /**
-     * Removes this node itself from its parent node.
+     * Removes this node itself from its parent node with an optional cleanup, defaulting to true.
      * If the node orphan, then nothing happens.
      * @param cleanup   true if all actions and callbacks on this node should be removed, false otherwise.
      * @js removeFromParent
      * @lua removeFromParent
      */
-    virtual void removeFromParentAndCleanup(bool cleanup);
+    virtual void removeFromParent(bool cleanup = true);
 
     /**
      * Removes a child from the container. It will also cleanup all running actions depending on the cleanup parameter.

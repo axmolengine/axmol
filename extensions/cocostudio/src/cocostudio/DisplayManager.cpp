@@ -1,5 +1,6 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -62,7 +63,7 @@ DisplayManager::~DisplayManager()
 
     if (_displayRenderNode)
     {
-        _displayRenderNode->removeFromParentAndCleanup(true);
+        _displayRenderNode->removeFromParent();
         if (_displayRenderNode->getReferenceCount() > 0)
             AX_SAFE_RELEASE_NULL(_displayRenderNode);
     }
@@ -228,7 +229,7 @@ void DisplayManager::changeDisplayWithIndex(int index, bool force)
     {
         if (_displayRenderNode)
         {
-            _displayRenderNode->removeFromParentAndCleanup(true);
+            _displayRenderNode->removeFromParent();
             setCurrentDecorativeDisplay(nullptr);
         }
         return;
@@ -276,7 +277,7 @@ void DisplayManager::setCurrentDecorativeDisplay(DecorativeDisplay* decoDisplay)
         {
             _bone->setChildArmature(nullptr);
         }
-        _displayRenderNode->removeFromParentAndCleanup(true);
+        _displayRenderNode->removeFromParent();
         _displayRenderNode->release();
     }
 
