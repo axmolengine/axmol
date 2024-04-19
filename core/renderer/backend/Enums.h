@@ -142,12 +142,12 @@ enum class PixelFormat : uint32_t
     R8,
     //! 16-bit read and green channel, GL3/GLES3/Metal  (R,G,0,0)
     RG8,
-    //! 8-bit textures used as masks, GLES2/GLES3/Metal (0,0,0,A) deprecated
-    A8,
-    //! 8-bit Luminance texture, GLES2/GLES3/Metal ONLY (L,L,L,1) deprecated
-    L8,
-    //! 16-bit Luminance with alpha, GLES2/GLES3 ONLY   (L,L,L,A) deprecated
-    LA8,
+    // //! 8-bit textures used as masks, GLES2/GLES3/Metal (0,0,0,A) deprecated
+    // A8,
+    // //! 8-bit Luminance texture, GLES2/GLES3/Metal ONLY (L,L,L,1) deprecated
+    // L8,
+    // //! 16-bit Luminance with alpha, GLES2/GLES3 ONLY   (L,L,L,A) deprecated
+    // LA8,
     //!!!Please append normal pixel format
     //! 32-bit texture: RGBA8888
     RGBA32F,

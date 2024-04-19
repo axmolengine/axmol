@@ -2,6 +2,8 @@
 precision highp float;
 precision highp int;
 
+#include "base.glsl"
+
 layout(location = COLOR0) in vec4 v_color;
 layout(location = TEXCOORD0) in vec2 v_texCoord;
 
@@ -15,13 +17,7 @@ layout(location = SV_Target0) out vec4 FragColor;
 
 void main()
 {
-#ifndef GLES2
     FragColor =  v_color * vec4(u_textColor.rgb,// RGB from uniform
         u_textColor.a * texture(u_tex0, v_texCoord).x// x from texture & uniform
     );
-#else
-    FragColor =  v_color * vec4(u_textColor.rgb,// RGB from uniform
-        u_textColor.a * texture(u_tex0, v_texCoord).w// x from texture & uniform
-    );
-#endif
 }

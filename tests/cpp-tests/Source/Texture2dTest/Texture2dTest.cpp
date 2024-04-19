@@ -2382,9 +2382,9 @@ void TextureConvertRGB888::onEnter()
     addImageToDemo(*this, 1 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA8);
     addImageToDemo(*this, 2 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB8);
     addImageToDemo(*this, 3 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGB565);
-    addImageToDemo(*this, 4 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::A8);
-    addImageToDemo(*this, 5 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::L8);
-    addImageToDemo(*this, 6 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::LA8);
+    addImageToDemo(*this, 4 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::R8);
+    addImageToDemo(*this, 5 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::R8);
+    addImageToDemo(*this, 6 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RG8);
     addImageToDemo(*this, 7 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 8 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
 
@@ -2414,9 +2414,9 @@ void TextureConvertRGBA8888::onEnter()
     addImageToDemo(*this, 1 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA8);
     addImageToDemo(*this, 2 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB8);
     addImageToDemo(*this, 3 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGB565);
-    addImageToDemo(*this, 4 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::A8);
-    addImageToDemo(*this, 5 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::L8);
-    addImageToDemo(*this, 6 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::LA8);
+    addImageToDemo(*this, 4 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::R8);
+    addImageToDemo(*this, 5 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::R8);
+    addImageToDemo(*this, 6 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RG8);
     addImageToDemo(*this, 7 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 8 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
 
@@ -2446,9 +2446,9 @@ void TextureConvertL8::onEnter()
     addImageToDemo(*this, 1 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA8);
     addImageToDemo(*this, 2 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB8);
     addImageToDemo(*this, 3 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGB565);
-    addImageToDemo(*this, 4 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::A8);
-    addImageToDemo(*this, 5 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::L8);
-    addImageToDemo(*this, 6 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::LA8);
+    addImageToDemo(*this, 4 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::R8);
+    addImageToDemo(*this, 5 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::R8);
+    addImageToDemo(*this, 6 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RG8);
     addImageToDemo(*this, 7 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 8 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
 
@@ -2478,9 +2478,9 @@ void TextureConvertLA8::onEnter()
     addImageToDemo(*this, 1 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA8);
     addImageToDemo(*this, 2 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB8);
     addImageToDemo(*this, 3 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGB565);
-    addImageToDemo(*this, 4 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::A8);
-    addImageToDemo(*this, 5 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::L8);
-    addImageToDemo(*this, 6 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::LA8);
+    addImageToDemo(*this, 4 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::R8);
+    addImageToDemo(*this, 5 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::R8);
+    addImageToDemo(*this, 6 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RG8);
     addImageToDemo(*this, 7 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 8 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
 

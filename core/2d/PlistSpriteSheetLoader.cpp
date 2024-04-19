@@ -342,11 +342,8 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dict,
         {"RGB5A1", backend::PixelFormat::RGB5A1},
         {"RGBA5551", backend::PixelFormat::RGB5A1},
         {"RGB565", backend::PixelFormat::RGB565},
-        {"A8", backend::PixelFormat::A8},
-        {"ALPHA", backend::PixelFormat::A8},
-        {"I8", backend::PixelFormat::L8},
-        {"AI88", backend::PixelFormat::LA8},
-        {"ALPHA_INTENSITY", backend::PixelFormat::LA8},
+        {"R8", backend::PixelFormat::R8},
+        {"RG8", backend::PixelFormat::RG8},
         //{"BGRA8888", backend::PixelFormat::BGRA8888}, no Image conversion RGBA -> BGRA
         {"RGB888", backend::PixelFormat::RGB8}};
 

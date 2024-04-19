@@ -144,7 +144,7 @@ FontAtlas::FontAtlas(Font* theFont, int atlasWidth, int atlasHeight, float scale
         if (outlineSize > 0)
         {
             _strideShift         = 1;
-            _pixelFormat         = AX_GLES_PROFILE != 200 ? backend::PixelFormat::RG8 : backend::PixelFormat::LA8;
+            _pixelFormat         = backend::PixelFormat::RG8;
             _currentPageDataSize = _width * _height << _strideShift;
 
             _lineHeight += 2 * outlineSize;
@@ -152,7 +152,7 @@ FontAtlas::FontAtlas(Font* theFont, int atlasWidth, int atlasHeight, float scale
         else
         {
             _strideShift         = 0;
-            _pixelFormat         = AX_GLES_PROFILE != 200 ? backend::PixelFormat::R8 : backend::PixelFormat::A8;
+            _pixelFormat         = backend::PixelFormat::R8;
             _currentPageDataSize = _width * _height;
         }
 
