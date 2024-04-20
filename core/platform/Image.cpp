@@ -922,12 +922,12 @@ bool Image::decodeWithWIC(const unsigned char* data, ssize_t dataLen)
 
         if (memcmp(&format, &GUID_WICPixelFormat8bppGray, sizeof(WICPixelFormatGUID)) == 0)
         {
-            _pixelFormat = backend::PixelFormat::L8;
+            _pixelFormat = backend::PixelFormat::R8;
         }
 
         if (memcmp(&format, &GUID_WICPixelFormat8bppAlpha, sizeof(WICPixelFormatGUID)) == 0)
         {
-            _pixelFormat = backend::PixelFormat::LA8;
+            _pixelFormat = backend::PixelFormat::RG8;
         }
 
         if (memcmp(&format, &GUID_WICPixelFormat24bppRGB, sizeof(WICPixelFormatGUID)) == 0)

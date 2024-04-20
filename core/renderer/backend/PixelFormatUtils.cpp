@@ -494,11 +494,8 @@ static PixelFormat convertBGRA8ToFormat(const unsigned char* data,
  1.PixelFormat::RGBA8
  2.PixelFormat::RGB8
  3.PixelFormat::RGB565
- 4.PixelFormat::A8
- 5.PixelFormat::L8
- 6.PixelFormat::LA8
- 7.PixelFormat::RGBA4
- 8.PixelFormat::RGB5A1
+ 4.PixelFormat::RGBA4
+ 5.PixelFormat::RGB5A1
 
  gray(5) -> 1235678
  gray alpha(6) -> 12345678
