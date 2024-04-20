@@ -116,6 +116,136 @@ uint32_t computeRowPitch(PixelFormat format, uint32_t width)
 //////////////////////////////////////////////////////////////////////////
 // convertor function
 
+// IIIIIIII -> RRRRRRRRGGGGGGGGGBBBBBBBB
+static void convertR8ToRGB8(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    for (size_t i = 0; i < dataLen; ++i)
+    {
+        *outData++ = data[i];  // R
+        *outData++ = data[i];  // G
+        *outData++ = data[i];  // B
+    }
+}
+
+// IIIIIIIIAAAAAAAA -> RRRRRRRRGGGGGGGGBBBBBBBB
+static void convertRG8ToRGB8(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    for (ssize_t i = 0, l = dataLen - 1; i < l; i += 2)
+    {
+        *outData++ = data[i];  // R
+        *outData++ = data[i + 1];  // G
+        *outData++ = data[i];  // B
+    }
+}
+
+// IIIIIIIIAAAAAAAA -> RRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA
+static void convertRG8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    for (ssize_t i = 0, l = dataLen - 1; i < l; i += 2)
+    {
+        *outData++ = data[i];      // R
+        *outData++ = data[i + 1];      // G
+        *outData++ = data[i];      // B
+        *outData++ = data[i + 1];  // A
+    }
+}
+
+// IIIIIIII -> RRRRRGGGGGGBBBBB
+static void convertR8ToRGB565(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    unsigned short* out16 = (unsigned short*)outData;
+    for (size_t i = 0; i < dataLen; ++i)
+    {
+        *out16++ = (data[i] & 0x00F8) << 8     // R
+                   | (data[i] & 0x00FC) << 3   // G
+                   | (data[i] & 0x00F8) >> 3;  // B
+    }
+}
+
+// IIIIIIIIAAAAAAAA -> RRRRRGGGGGGBBBBB
+static void convertRG8ToRGB565(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    unsigned short* out16 = (unsigned short*)outData;
+    for (ssize_t i = 0, l = dataLen - 1; i < l; i += 2)
+    {
+        *out16++ = (data[i] & 0x00F8) << 8     // R
+                   | (data[i + 1] & 0x00FC) << 3   // G
+                   | (data[i] & 0x00F8) >> 3;  // B
+    }
+}
+
+// IIIIIIII -> RRRRGGGGBBBBAAAA
+static void convertR8ToRGBA4(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    unsigned short* out16 = (unsigned short*)outData;
+    for (size_t i = 0; i < dataLen; ++i)
+    {
+        *out16++ = (data[i] & 0x00F0) << 8    // R
+                   | (data[i] & 0x00F0) << 4  // G
+                   | (data[i] & 0x00F0)       // B
+                   | 0x000F;                  // A
+    }
+}
+
+// IIIIIIIIAAAAAAAA -> RRRRGGGGBBBBAAAA
+static void convertRG8ToRGBA4(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    unsigned short* out16 = (unsigned short*)outData;
+    for (ssize_t i = 0, l = dataLen - 1; i < l; i += 2)
+    {
+        *out16++ = (data[i] & 0x00F0) << 8         // R
+                   | (data[i + 1] & 0x00F0) << 4   // G
+                   | (data[i] & 0x00F0)            // B
+                   | (data[i + 1] & 0x00F0) >> 4;  // A
+    }
+}
+
+// IIIIIIII -> RRRRRGGGGGBBBBBA
+static void convertR8ToRGB5A1(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    unsigned short* out16 = (unsigned short*)outData;
+    for (size_t i = 0; i < dataLen; ++i)
+    {
+        *out16++ = (data[i] & 0x00F8) << 8    // R
+                   | (data[i] & 0x00F8) << 3  // G
+                   | (data[i] & 0x00F8) >> 2  // B
+                   | 0x0001;                  // A
+    }
+}
+
+// IIIIIIIIAAAAAAAA -> RRRRRGGGGGBBBBBA
+static void convertRG8ToRGB5A1(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    unsigned short* out16 = (unsigned short*)outData;
+    for (ssize_t i = 0, l = dataLen - 1; i < l; i += 2)
+    {
+        *out16++ = (data[i] & 0x00F8) << 8         // R
+                   | (data[i + 1] & 0x00F8) << 3   // G
+                   | (data[i] & 0x00F8) >> 2       // B
+                   | (data[i + 1] & 0x0080) >> 7;  // A
+    }
+}
+
+// IIIIIIII -> IIIIIIIIAAAAAAAA
+static void convertR8ToRG8(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    unsigned short* out16 = (unsigned short*)outData;
+    for (size_t i = 0; i < dataLen; ++i)
+    {
+        *out16++ = 0xFF00      // A
+                   | data[i];  // I
+    }
+}
+
+// IIIIIIIIAAAAAAAA -> AAAAAAAA
+static void convertRG8ToR8(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    for (size_t i = 1; i < dataLen; i += 2)
+    {
+        *outData++ = data[i];  // A
+    }
+}
+
 // RRRRRRRRGGGGGGGGBBBBBBBB -> RRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA
 static void convertRGB8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData)
 {
@@ -160,6 +290,44 @@ static void convertRGBA8ToRGB565(const unsigned char* data, size_t dataLen, unsi
         *out16++ = (data[i] & 0x00F8) << 8         // R
                    | (data[i + 1] & 0x00FC) << 3   // G
                    | (data[i + 2] & 0x00F8) >> 3;  // B
+    }
+}
+
+// RRRRRRRRGGGGGGGGBBBBBBBB -> AAAAAAAA
+static void convertRGB8ToR8(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    for (ssize_t i = 0, l = dataLen - 2; i < l; i += 3)
+    {
+        *outData++ = data[i];
+    }
+}
+
+// RRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA -> AAAAAAAA
+static void convertRGBA8ToR8(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    for (ssize_t i = 0, l = dataLen - 3; i < l; i += 4)
+    {
+        *outData++ = data[i];  // A
+    }
+}
+
+// RRRRRRRRGGGGGGGGBBBBBBBB -> IIIIIIIIAAAAAAAA
+static void convertRGB8ToRG8(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    for (ssize_t i = 0, l = dataLen - 2; i < l; i += 3)
+    {
+        *outData++ = data[i];
+        *outData++ = data[i + 1];
+    }
+}
+
+// RRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA -> IIIIIIIIAAAAAAAA
+static void convertRGBA8ToRG8(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    for (ssize_t i = 0, l = dataLen - 3; i < l; i += 4)
+    {
+        *outData++ = data[i];
+        *outData++ = data[i + 1];
     }
 }
 
@@ -260,6 +428,17 @@ static void convertRGBA4ToRGBA8(const unsigned char* data, size_t dataLen, unsig
     }
 }
 
+static void convertR8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData)
+{
+    for (size_t i = 0; i < dataLen; i++)
+    {
+        *outData++ = data[i];
+        *outData++ = data[i];
+        *outData++ = data[i];
+        *outData++ = data[i];
+    }
+}
+
 static void convertBGRA8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData)
 {
     const size_t pixelCounts = dataLen / 4;
@@ -274,6 +453,122 @@ static void convertBGRA8ToRGBA8(const unsigned char* data, size_t dataLen, unsig
 
 // converter function end
 //////////////////////////////////////////////////////////////////////////
+
+static ax::backend::PixelFormat convertR8ToFormat(const unsigned char* data,
+                                                size_t dataLen,
+                                                PixelFormat format,
+                                                unsigned char** outData,
+                                                size_t* outDataLen)
+{
+    switch (format)
+    {
+    case PixelFormat::RGBA8:
+        *outDataLen = dataLen * 4;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertR8ToRGBA8(data, dataLen, *outData);
+        break;
+    case PixelFormat::RGB8:
+        *outDataLen = dataLen * 3;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertR8ToRGB8(data, dataLen, *outData);
+        break;
+    case PixelFormat::RGB565:
+        *outDataLen = dataLen * 2;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertR8ToRGB565(data, dataLen, *outData);
+        break;
+    case PixelFormat::RGBA4:
+        *outDataLen = dataLen * 2;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertR8ToRGBA4(data, dataLen, *outData);
+        break;
+    case PixelFormat::RGB5A1:
+        *outDataLen = dataLen * 2;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertR8ToRGB5A1(data, dataLen, *outData);
+        break;
+    case PixelFormat::R8:
+        *outData    = (unsigned char*)data;
+        *outDataLen = dataLen;
+        break;
+    case PixelFormat::RG8:
+        *outDataLen = dataLen * 2;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertR8ToRG8(data, dataLen, *outData);
+        break;
+    default:
+        // unsupported conversion or don't need to convert
+        if (format != PixelFormat::R8)
+        {
+            AXLOG(
+                "Can not convert image format PixelFormat::L8 to format ID:%d, we will use it's origin format "
+                "PixelFormat::L8",
+                static_cast<int>(format));
+        }
+
+        *outData    = (unsigned char*)data;
+        *outDataLen = dataLen;
+        return PixelFormat::R8;
+    }
+
+    return format;
+}
+
+static ax::backend::PixelFormat convertRG8ToFormat(const unsigned char* data,
+                                                 size_t dataLen,
+                                                 PixelFormat format,
+                                                 unsigned char** outData,
+                                                 size_t* outDataLen)
+{
+    switch (format)
+    {
+    case PixelFormat::RGBA8:
+        *outDataLen = dataLen * 2;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertRG8ToRGBA8(data, dataLen, *outData);
+        break;
+    case PixelFormat::RGB8:
+        *outDataLen = dataLen / 2 * 3;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertRG8ToRGB8(data, dataLen, *outData);
+        break;
+    case PixelFormat::RGB565:
+        *outDataLen = dataLen;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertRG8ToRGB565(data, dataLen, *outData);
+        break;
+    case PixelFormat::RGBA4:
+        *outDataLen = dataLen;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertRG8ToRGBA4(data, dataLen, *outData);
+        break;
+    case PixelFormat::RGB5A1:
+        *outDataLen = dataLen;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertRG8ToRGB5A1(data, dataLen, *outData);
+        break;
+    case PixelFormat::R8:
+        *outDataLen = dataLen / 2;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertRG8ToR8(data, dataLen, *outData);
+        break;
+    default:
+        // unsupported conversion or don't need to convert
+        if (format != PixelFormat::RG8)
+        {
+            AXLOG(
+                "Can not convert image format PixelFormat::LA8 to format ID:%d, we will use it's origin format "
+                "PixelFormat::RG8",
+                static_cast<int>(format));
+        }
+        *outData    = (unsigned char*)data;
+        *outDataLen = dataLen;
+        return PixelFormat::RG8;
+        break;
+    }
+
+    return format;
+}
 
 static ax::backend::PixelFormat convertRGB8ToFormat(const unsigned char* data,
                                                   size_t dataLen,
@@ -302,6 +597,16 @@ static ax::backend::PixelFormat convertRGB8ToFormat(const unsigned char* data,
         *outDataLen = dataLen / 3 * 2;
         *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
         convertRGB8ToRGB5A1(data, dataLen, *outData);
+        break;
+    case PixelFormat::R8:
+        *outDataLen = dataLen / 3;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertRGB8ToR8(data, dataLen, *outData);
+        break;
+    case PixelFormat::RG8:
+        *outDataLen = dataLen / 3 * 2;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertRGB8ToRG8(data, dataLen, *outData);
         break;
     default:
         // unsupported conversion or don't need to convert
@@ -348,6 +653,16 @@ static ax::backend::PixelFormat convertRGBA8ToFormat(const unsigned char* data,
         *outDataLen = dataLen / 2;
         *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
         convertRGBA8ToRGB5A1(data, dataLen, *outData);
+        break;
+    case PixelFormat::R8:
+        *outDataLen = dataLen / 4;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertRGBA8ToR8(data, dataLen, *outData);
+        break;
+    case PixelFormat::RG8:
+        *outDataLen = dataLen / 2;
+        *outData    = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+        convertRGBA8ToRG8(data, dataLen, *outData);
         break;
     default:
         // unsupported conversion or don't need to convert
@@ -494,8 +809,10 @@ static PixelFormat convertBGRA8ToFormat(const unsigned char* data,
  1.PixelFormat::RGBA8
  2.PixelFormat::RGB8
  3.PixelFormat::RGB565
- 4.PixelFormat::RGBA4
- 5.PixelFormat::RGB5A1
+ 4.PixelFormat::R8
+ 5.PixelFormat::RG8
+ 6.PixelFormat::RGBA4
+ 7.PixelFormat::RGB5A1
 
  gray(5) -> 1235678
  gray alpha(6) -> 12345678
@@ -520,6 +837,10 @@ ax::backend::PixelFormat convertDataToFormat(const unsigned char* data,
 
     switch (originFormat)
     {
+    case PixelFormat::R8:
+        return convertR8ToFormat(data, dataLen, format, outData, outDataLen);
+    case PixelFormat::RG8:
+        return convertRG8ToFormat(data, dataLen, format, outData, outDataLen);
     case PixelFormat::RGB8:
         return convertRGB8ToFormat(data, dataLen, format, outData, outDataLen);
     case PixelFormat::RGBA8:
