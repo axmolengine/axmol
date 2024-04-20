@@ -2379,14 +2379,13 @@ void TextureConvertRGB888::onEnter()
     addChild(background, -1);
 
     const char* img = "Images/test_image_rgb888.png";
-    addImageToDemo(*this, 1 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA8);
-    addImageToDemo(*this, 2 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB8);
-    addImageToDemo(*this, 3 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGB565);
-    addImageToDemo(*this, 4 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::R8);
-    addImageToDemo(*this, 5 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::R8);
-    addImageToDemo(*this, 6 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RG8);
-    addImageToDemo(*this, 7 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
-    addImageToDemo(*this, 8 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
+    addImageToDemo(*this, 1 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGBA8);
+    addImageToDemo(*this, 2 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RGB8);
+    addImageToDemo(*this, 3 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGB565);
+    addImageToDemo(*this, 4 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::R8);
+    addImageToDemo(*this, 5 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RG8);
+    addImageToDemo(*this, 6 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
+    addImageToDemo(*this, 7 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
 
     ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
@@ -2398,7 +2397,7 @@ std::string TextureConvertRGB888::title() const
 
 std::string TextureConvertRGB888::subtitle() const
 {
-    return "RGBA8888,RGB888,RGB565,A8,I8,AI88,RGBA4444,RGB5A1";
+    return "RGBA8888,RGB888,RGB565,R8,RG8,RGBA4444,RGB5A1";
 }
 // TextureConvertRGBA8888
 void TextureConvertRGBA8888::onEnter()
@@ -2411,14 +2410,13 @@ void TextureConvertRGBA8888::onEnter()
     addChild(background, -1);
 
     const char* img = "Images/test_image_rgba8888.png";
-    addImageToDemo(*this, 1 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA8);
-    addImageToDemo(*this, 2 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB8);
-    addImageToDemo(*this, 3 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGB565);
-    addImageToDemo(*this, 4 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::R8);
-    addImageToDemo(*this, 5 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::R8);
-    addImageToDemo(*this, 6 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RG8);
-    addImageToDemo(*this, 7 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
-    addImageToDemo(*this, 8 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
+    addImageToDemo(*this, 1 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGBA8);
+    addImageToDemo(*this, 2 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RGB8);
+    addImageToDemo(*this, 3 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGB565);
+    addImageToDemo(*this, 4 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::R8);
+    addImageToDemo(*this, 5 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RG8);
+    addImageToDemo(*this, 6 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
+    addImageToDemo(*this, 7 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
 
     ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
@@ -2430,7 +2428,7 @@ std::string TextureConvertRGBA8888::title() const
 
 std::string TextureConvertRGBA8888::subtitle() const
 {
-    return "RGBA8888,RGB888,RGB565,A8,I8,AI88,RGBA4444,RGB5A1";
+    return "RGBA8888,RGB888,RGB565,R8,RG8,RGBA4444,RGB5A1";
 }
 // TextureConvertL8
 void TextureConvertL8::onEnter()
@@ -2443,14 +2441,13 @@ void TextureConvertL8::onEnter()
     addChild(background, -1);
 
     const char* img = "Images/test_image_i8.png";
-    addImageToDemo(*this, 1 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA8);
-    addImageToDemo(*this, 2 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB8);
-    addImageToDemo(*this, 3 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGB565);
-    addImageToDemo(*this, 4 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::R8);
-    addImageToDemo(*this, 5 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::R8);
-    addImageToDemo(*this, 6 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RG8);
-    addImageToDemo(*this, 7 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
-    addImageToDemo(*this, 8 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
+    addImageToDemo(*this, 1 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGBA8);
+    addImageToDemo(*this, 2 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RGB8);
+    addImageToDemo(*this, 3 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGB565);
+    addImageToDemo(*this, 4 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::R8);
+    addImageToDemo(*this, 5 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RG8);
+    addImageToDemo(*this, 6 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
+    addImageToDemo(*this, 7 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
 
     ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
@@ -2462,7 +2459,7 @@ std::string TextureConvertL8::title() const
 
 std::string TextureConvertL8::subtitle() const
 {
-    return "RGBA8888,RGB888,RGB565,A8,I8,AI88,RGBA4444,RGB5A1";
+    return "RGBA8888,RGB888,RGB565,R8,RG8,RGBA4444,RGB5A1";
 }
 // TextureConvertLA8
 void TextureConvertLA8::onEnter()
@@ -2475,14 +2472,13 @@ void TextureConvertLA8::onEnter()
     addChild(background, -1);
 
     const char* img = "Images/test_image_ai88.png";
-    addImageToDemo(*this, 1 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA8);
-    addImageToDemo(*this, 2 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB8);
-    addImageToDemo(*this, 3 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGB565);
-    addImageToDemo(*this, 4 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::R8);
-    addImageToDemo(*this, 5 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::R8);
-    addImageToDemo(*this, 6 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RG8);
-    addImageToDemo(*this, 7 * s.width / 9, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
-    addImageToDemo(*this, 8 * s.width / 9, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
+    addImageToDemo(*this, 1 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGBA8);
+    addImageToDemo(*this, 2 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RGB8);
+    addImageToDemo(*this, 3 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGB565);
+    addImageToDemo(*this, 4 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::R8);
+    addImageToDemo(*this, 5 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RG8);
+    addImageToDemo(*this, 6 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
+    addImageToDemo(*this, 7 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
 
     ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
@@ -2494,5 +2490,5 @@ std::string TextureConvertLA8::title() const
 
 std::string TextureConvertLA8::subtitle() const
 {
-    return "RGBA8888,RGB888,RGB565,A8,I8,AI88,RGBA4444,RGB5A1";
+    return "RGBA8888,RGB888,RGB565,R8,RG8,RGBA4444,RGB5A1";
 }
