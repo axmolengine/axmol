@@ -11,10 +11,6 @@ layout(location = SV_Target0) out vec4 FragColor;
 
 void main()
 {
-#ifndef GLES2
     float fontAlpha = texture(u_tex0, v_texCoord).x;
-#else
-    float fontAlpha = texture(u_tex0, v_texCoord).w;
-#endif
     FragColor = vec4(v_color.rgb, v_color.a * fontAlpha);
 }

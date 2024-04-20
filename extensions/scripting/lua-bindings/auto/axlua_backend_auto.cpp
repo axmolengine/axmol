@@ -117,12 +117,9 @@ int lua_register_ax_backend_PixelFormat(lua_State* tolua_S)
         tolua_constant(tolua_S, "RGB5A1", 25);
         tolua_constant(tolua_S, "R8", 26);
         tolua_constant(tolua_S, "RG8", 27);
-        tolua_constant(tolua_S, "A8", 28);
-        tolua_constant(tolua_S, "L8", 29);
-        tolua_constant(tolua_S, "LA8", 30);
-        tolua_constant(tolua_S, "RGBA32F", 31);
-        tolua_constant(tolua_S, "D24S8", 32);
-        tolua_constant(tolua_S, "COUNT", 33);
+        tolua_constant(tolua_S, "RGBA32F", 28);
+        tolua_constant(tolua_S, "D24S8", 29);
+        tolua_constant(tolua_S, "COUNT", 30);
         tolua_constant(tolua_S, "NONE", 65535);
     tolua_endmodule(tolua_S);
 

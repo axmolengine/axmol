@@ -1,6 +1,7 @@
 #version 310 es
 precision highp float;
 precision highp int;
+#include "base.glsl"
 
 layout(location = COLOR0) in vec4 v_color;
 layout(location = TEXCOORD0) in vec2 v_texCoord;
@@ -15,13 +16,9 @@ layout(location = SV_Target0) out vec4 FragColor;
 
 void main()
 {
-#ifndef GLES2
     float dist = texture(u_tex0, v_texCoord).x;
-    float smoothing = fwidth(dist); // ESSL300, GLSL330 support fwidth
-#else
-    float dist = texture(u_tex0, v_texCoord).w;
-    float smoothing = 0.04;
-#endif
+    float smoothing = fwidth(dist);
+
     float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, dist) * u_textColor.a;
     FragColor = v_color * vec4(u_textColor.rgb,alpha);
 }
