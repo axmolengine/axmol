@@ -87,9 +87,13 @@ struct PrivateVideoDescriptor
         auto& videoSize = _vrender->getContentSize();
         if (videoSize.x > 0 && videoSize.y > 0)
         {  // rescale video to view node
-            auto& viewSize = videoView->getContentSize();
+            auto viewSize = videoView->getContentSize();
             if (viewSize.x > 0 && viewSize.y > 0)
             {
+                if(_vpixelDesc._rotation % 180 != 0)
+                    std::swap(viewSize.x, viewSize.y);
+                _vrender->setRotation(_vpixelDesc._rotation);
+
                 if (!videoView->isKeepAspectRatioEnabled())
                 {
                     _vrender->setScale(viewSize.x / videoSize.x, viewSize.y / videoSize.y);
@@ -234,32 +238,19 @@ MediaPlayer::MediaPlayer()
             {
             case MEVideoPixelFormat::YUY2:
             {
-#if AX_GLES_PROFILE != 200
                 pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RG8, PixelFormat::RG8,
                                                bufferDim.x, bufferDim.y, false, 0);
-#else
-                pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::LA8, PixelFormat::LA8,
-                                               bufferDim.x, bufferDim.y, false, 0);
-#endif
                 pvd->_vchromaTexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
                                                      PixelFormat::RGBA8, bufferDim.x >> 1, bufferDim.y, false, 0);
                 break;
             }
             case MEVideoPixelFormat::NV12:
             {
-#    if AX_GLES_PROFILE != 200
                 pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::R8,
                                                PixelFormat::R8, bufferDim.x, bufferDim.y, false, 0);
                 pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, (bufferDim.x * bufferDim.y) >> 1,
                                                      PixelFormat::RG8, PixelFormat::RG8, bufferDim.x >> 1,
                                                      bufferDim.y >> 1, false, 0);
-#else
-                pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::A8,
-                                               PixelFormat::A8, bufferDim.x, bufferDim.y, false, 0);
-                pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, (bufferDim.x * bufferDim.y) >> 1,
-                                                     PixelFormat::LA8, PixelFormat::LA8, bufferDim.x >> 1,
-                                                     bufferDim.y >> 1, false, 0);
-#endif
                 break;
             }
             case MEVideoPixelFormat::RGB32:

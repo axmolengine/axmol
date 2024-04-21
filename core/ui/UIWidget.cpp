@@ -1284,6 +1284,8 @@ void Widget::setFocused(bool focus)
         {
             _focusNavigationController->setFirstFocusedWidget(this);
         }
+    } else if(_focusedWidget == this) {
+        _focusedWidget = nullptr;
     }
 }
 

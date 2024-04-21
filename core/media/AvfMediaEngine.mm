@@ -15,6 +15,8 @@
 
 USING_NS_AX;
 
+#define AX_ALIGN_ANY(x, a) ((((x) + (a) - 1) / (a)) * (a))
+
 @interface AVMediaSessionHandler : NSObject
 - (AVMediaSessionHandler*)initWithMediaEngine:(AvfMediaEngine*)me;
 - (void)dealloc;
@@ -297,6 +299,11 @@ void AvfMediaEngine::onStatusNotification(void* context)
                 }
             }
 
+            CGAffineTransform transform = [assetTrack preferredTransform];
+            double radians = atan2(transform.b, transform.a);
+            int degrees = static_cast<int>(radians * 180.0 / M_PI);
+            _videoRotation = AX_ALIGN_ANY(degrees, 90);
+
             _bFullColorRange = false;
             switch (videoOutputPF)
             {
@@ -369,13 +376,14 @@ bool AvfMediaEngine::transferVideoFrame()
         auto UVDataLen     = UVPitch * UVHeight;  // 1920x1080: UVDataLen=1036800
         auto frameYData    = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, 0);
         auto frameCbCrData = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, 1);
-        assert(YASIO_SZ_ALIGN(videoDim.x, 32) * videoDim.y * 3 / 2 == YDataLen + UVDataLen ||
-               (32 - videoDim.x % 32 + videoDim.x) * videoDim.y * 3 / 2 == YDataLen + UVDataLen);
+        assert(_videoRotation % 180 == 0 ? YASIO_SZ_ALIGN(videoDim.x, 32) * videoDim.y * 3 / 2 == YDataLen + UVDataLen :
+               YASIO_SZ_ALIGN(videoDim.y, 32) * videoDim.x * 3 / 2 == YDataLen + UVDataLen);
         // Apple: both H264, HEVC(H265) bufferDimX=ALIGN(videoDim.x, 32), bufferDimY=videoDim.y
         // Windows:
         //    - H264: BufferDimX align videoDim.x with 16, BufferDimY as-is
         //    - HEVC(H265): BufferDim(X,Y) align videoDim(X,Y) with 32
         MEVideoFrame frame{frameYData, frameCbCrData, static_cast<size_t>(YDataLen + UVDataLen), MEVideoPixelDesc{_videoPF, MEIntPoint{YPitch, YHeight}}, videoDim};
+        frame._vpd._rotation = _videoRotation;
 #if defined(_DEBUG) || !defined(_NDEBUG)
         auto& ycbcrDesc = frame._ycbcrDesc;
         ycbcrDesc.YDim.x = YWidth;

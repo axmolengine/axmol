@@ -1735,7 +1735,7 @@ bool ImGui_ImplAx_CreateFontsTexture()
 
     bd->FontTexture->setAntiAliasTexParameters();
     bd->FontTexture->initWithData(pixels, width * height,
-                                  AX_GLES_PROFILE != 200 ? backend ::PixelFormat::R8 : backend ::PixelFormat::A8, width,
+                                  backend ::PixelFormat::R8, width,
                                   height);
     //#endif
     io.Fonts->TexID = (ImTextureID)bd->FontTexture;

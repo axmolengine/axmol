@@ -227,6 +227,16 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
     _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
+void ClippingNode::setGlobalZOrder(float globalZOrder)
+{
+    Node::setGlobalZOrder(globalZOrder);
+    
+    if (_stencil) {
+        // Make sure our stencil stays on the same globalZOrder:
+        _stencil->setGlobalZOrder(globalZOrder);
+    }
+}
+
 void ClippingNode::setCameraMask(unsigned short mask, bool applyChildren)
 {
     Node::setCameraMask(mask, applyChildren);
@@ -279,6 +289,9 @@ void ClippingNode::setStencil(Node* stencil)
 
     if (_stencil != nullptr)
     {
+        // Make sure our stencil stays on the same globalZOrder:
+        _stencil->setGlobalZOrder(getGlobalZOrder());
+        
         _originalStencilProgramState[_stencil] = _stencil->getProgramState();
         auto& children                         = _stencil->getChildren();
         for (const auto& child : children)

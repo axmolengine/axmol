@@ -227,8 +227,8 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     case PixelFormat::RGB5A1:
     case PixelFormat::RGBA4:
 #    endif
-    case PixelFormat::L8:
-    case PixelFormat::LA8:
+    case PixelFormat::R8:
+    case PixelFormat::RG8:
     case PixelFormat::RGB8:
         // Note: conversion to RGBA8 will happends
         renderFormat = PixelFormat::RGBA8;
@@ -241,9 +241,8 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     // Note: axmol-1.1 deprecated A8, L8, LA8 as renderFormat, preferred R8, RG8
     switch (renderFormat)
     {
-    case PixelFormat::A8:
-    case PixelFormat::L8:
-    case PixelFormat::LA8:
+    case PixelFormat::R8:
+    case PixelFormat::RG8:
         // Note: conversion to RGBA8 will happends
         renderFormat = PixelFormat::RGBA8;
     }

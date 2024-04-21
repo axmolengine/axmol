@@ -51,6 +51,7 @@ private:
     std::function<void(const MEVideoFrame&)> _onVideoFrame;
     MEVideoPixelFormat _videoPF = MEVideoPixelFormat::INVALID;
     MEMediaState _state = MEMediaState::Closed;
+    int _videoRotation{0};
     MEIntPoint _videoExtent;
     AVPlayer* _player = nil;
     AVPlayerItem* _playerItem = nil;

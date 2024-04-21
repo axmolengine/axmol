@@ -315,7 +315,16 @@ bool VlcMediaEngine::updatePlaybackProperties()
                 AXLOGD("VlcMediaEngine: sourceUri: {}, codec: {}", _sourceUri, _videoCodecMimeType);
 
                 auto vdi = track->video;
-                _videoDim.set(vdi->i_width, vdi->i_height);
+                auto vdw = vdi->i_width;
+                auto vdh = vdi->i_height;
+                switch (vdi->i_orientation)
+                {
+                case libvlc_video_orient_left_bottom: /**< Rotated 90 degrees clockwise (or 270 anti-clockwise) */
+                case libvlc_video_orient_right_top:   /**< Rotated 90 degrees anti-clockwise */
+                    std::swap(vdw, vdh);
+                default:;
+                }
+                _videoDim.set(vdw, vdh);
                 break;
             }
         }
