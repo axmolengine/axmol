@@ -167,3 +167,19 @@ jobs:
     - name: Build
       shell: pwsh
       run: ./build.ps1 -p $env:TARGET_OS -a 'x64'
+
+  ios_new:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+    - name: Setup
+      run: |
+        AX_ROOT=`pwd`
+        echo -e "y" | pwsh $AX_ROOT/setup.ps1
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '14.2'
+    - run: axmol new -p org.axmol.myhellocpp -d .  -l cpp --portrait MyHelloCpp
+    - run: axmol build -p ios -a x64
