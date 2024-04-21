@@ -181,5 +181,6 @@ jobs:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: '14.2'
-    - run: axmol new -p org.axmol.myhellocpp -d .  -l cpp --portrait MyHelloCpp
-    - run: axmol build -p ios -a x64
+    - run: ./tools/console/axmol new -p org.axmol.myhellocpp -d .  -l cpp --portrait MyHelloCpp
+    - run: ./../tools/console/axmol build -p ios -a x64
+      working-directory: MyHelloCpp
