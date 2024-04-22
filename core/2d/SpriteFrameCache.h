@@ -199,7 +199,7 @@ public:
      */
     void removeUnusedSpriteFrames();
 
-    void removeUnusedSpriteSheetFile();
+    void removeUnusedSpriteSheets();
 
     /** Deletes an sprite frame from the sprite frame cache.
      *
