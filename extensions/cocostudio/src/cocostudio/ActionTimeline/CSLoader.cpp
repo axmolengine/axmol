@@ -287,7 +287,6 @@ Node* CSLoader::createNode(std::string_view filename)
     auto suffix = path.substr(pos + 1, path.length());
 
     CSLoader* load = CSLoader::getInstance();
-    load->_loadedPlists.clear();
 
     if (suffix == "csb")
     {
@@ -308,7 +307,6 @@ Node* CSLoader::createNode(std::string_view filename, const ccNodeLoadCallback& 
     auto suffix = path.substr(pos + 1, path.length());
 
     CSLoader* load = CSLoader::getInstance();
-    load->_loadedPlists.clear();
 
     if (suffix == "csb")
     {
@@ -468,9 +466,8 @@ Node* CSLoader::loadNodeWithContent(std::string_view content)
         std::string png   = DICTOOL->getStringValueFromArray_json(doc, TEXTURES_PNG, i);
         plist             = _jsonPath + plist;
         png               = _jsonPath + png;
-        if (!_loadedPlists.contains(plist + png))
+        if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
         {
-            _loadedPlists.insert(plist + png);
             SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist, png);
         }
     }
@@ -900,8 +897,6 @@ inline void fast_split(_Elem* s, typename std::remove_const<_Elem>::type delim, 
 Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
 {
     CSLoader* loader = CSLoader::getInstance();
-    loader->_loadedPlists.clear();
-
     Node* node       = nullptr;
     do
     {
@@ -958,9 +953,8 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
         for (int i = 0; i < textureSize; ++i)
         {
             std::string plist = textures->Get(i)->c_str();
-            if (!loader->_loadedPlists.contains(plist))
+            if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
             {
-                loader->_loadedPlists.insert(plist);
                 SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
             }
         }
@@ -1086,9 +1080,8 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
     for (int i = 0; i < textureSize; ++i)
     {
         std::string plist = textures->Get(i)->c_str();
-        if (!_loadedPlists.contains(plist))
+        if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
         {
-            _loadedPlists.insert(plist);
             SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
         }
     }
@@ -1455,9 +1448,8 @@ Node* CSLoader::createNodeWithFlatBuffersForSimulator(std::string_view filename)
     for (int i = 0; i < textureSize; ++i)
     {
         std::string plist = textures->Get(i)->c_str();
-        if (!_loadedPlists.contains(plist))
+        if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
         {
-            _loadedPlists.insert(plist);
             SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
         }
     }
