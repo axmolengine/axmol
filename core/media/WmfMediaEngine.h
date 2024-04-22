@@ -160,6 +160,9 @@ public:
         return SUCCEEDED(SetPosition(static_cast<MFTIME>((std::nano::den / 100) * sec)));
     }
 
+    double getCurrentTime() override;
+    double getDuration() override;
+
     // Set position in 100ns units, will reply if play ended
     // see: https://docs.microsoft.com/en-us/windows/win32/medfound/mf-pd-duration-attribute
     HRESULT SetPosition(MFTIME hnsPosition);

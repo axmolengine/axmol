@@ -199,6 +199,8 @@ public:
     virtual bool setLoop(bool bLooping)                                              = 0;
     virtual bool setRate(double fRate)                                               = 0;
     virtual bool setCurrentTime(double fSeekTimeInSec)                               = 0;
+    virtual double getCurrentTime()                                                  = 0;
+    virtual double getDuration()                                                    = 0;
     virtual bool play()                                                              = 0;
     virtual bool pause()                                                             = 0;
     virtual bool stop()                                                              = 0;

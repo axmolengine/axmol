@@ -894,6 +894,16 @@ MFTIME WmfMediaEngine::GetCurrentPosition() const
     return hnsPosition;
 }
 
+double WmfMediaEngine::getCurrentTime()
+{
+    return GetCurrentPosition() / (std::nano::den / 100.0);
+}
+
+double WmfMediaEngine::getDuration()
+{
+    return GetDuration() / (std::nano::den / 100.0);
+}
+
 HRESULT WmfMediaEngine::SetPosition(MFTIME hnsPosition)
 {
     AutoLock lock(m_critsec);

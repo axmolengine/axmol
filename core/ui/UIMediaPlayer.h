@@ -58,20 +58,28 @@ public:
     bool init() override;
     void initRenderer() override;
 
-    void onPressStateChangedToNormal() override;
     void onPressStateChangedToPressed() override;
-    void onPressStateChangedToDisabled() override;
-    void updateControllerState();
+    void setContentSize(const Vec2& contentSize) override;
+    void update(float delta) override;
+    void onEnter() override;
+    void setGlobalZOrder(float globalZOrder) override;
+
+    virtual void updateControllerState();
 
 protected:
-    RefPtr<MediaPlayer> _mediaPlayer = nullptr;
-    Button* _playButton;
-    Button* _stopButton;
-    Button* _pauseButton;
-    Button* _forwardButton;
-    Button* _reverseButton;
+    MediaPlayer* _mediaPlayer  = nullptr;
+    Button* _playButton        = nullptr;
+    Button* _stopButton        = nullptr;
+    Button* _pauseButton       = nullptr;
+    Button* _fastForwardButton = nullptr;
+    Button* _fastRewindButton  = nullptr;
+    Sprite* _timelineSelector  = nullptr;
+    Sprite* _timelineTotal     = nullptr;
+    Sprite* _timelinePlayed    = nullptr;
+
+    EventListenerTouchOneByOne* _timelineTouchListener = nullptr;
+    float _playRate                                    = 1.f;
     std::chrono::steady_clock::time_point _lastTouch;
-    float _playRate = 1.f;
 };
 
 /**
@@ -211,6 +219,20 @@ public:
     virtual void seekTo(float sec);
 
     /**
+     * Gets the current media position.
+     *
+     * @return float The current position in seconds
+     */
+    virtual float getCurrentTime();
+
+    /**
+     * Gets total video duration
+     *
+     * @return float The duration in seconds
+     */
+    virtual float getDuration();
+
+    /**
      * Checks whether the MediaPlayer is playing.
      *
      * @return True if currently playing, false otherwise.
@@ -269,7 +291,6 @@ public:
      * @brief A function which will be called when video is playing.
      *
      * @param event @see MediaPlayer::EventType.
-
      */
     virtual void onPlayEvent(int event);
     virtual void setVisible(bool visible) override;
@@ -278,7 +299,16 @@ public:
     virtual void onExit() override;
 
     void setContentSize(const Size& contentSize) override;
+
+    /**
+     * @brief Get current state of the media
+     *
+     * @return MediaState
+     */
     MediaState getState() const;
+
+    void setMediaControllerEnabled(bool enable);
+    void setMediaController(MediaController* controller);
 
     MediaPlayer();
     virtual ~MediaPlayer();
@@ -286,6 +316,7 @@ public:
 protected:
     virtual ax::ui::Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
+    virtual void updateMediaController();
 
 #    if AX_VIDEOPLAYER_DEBUG_DRAW
     DrawNode* _debugDrawNode;

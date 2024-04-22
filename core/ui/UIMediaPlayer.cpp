@@ -26,8 +26,6 @@
 
 #include "ui/UIMediaPlayer.h"
 
-#include "UIButton.h"
-#include "UISlider.h"
 
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
 #if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__) || defined(AX_ENABLE_VLC_MEDIA)
@@ -40,6 +38,7 @@
 #    include "ui/UIHelper.h"
 #    include "media/MediaEngine.h"
 #    include "ui/LayoutHelper.h"
+#    include "UIButton.h"
 #    include "yasio/byte_buffer.hpp"
 //-----------------------------------------------------------------------------------------------------------
 
@@ -139,9 +138,25 @@ struct PrivateVideoDescriptor
         PS_SET_UNIFORM_R(ps, "colorTransform", colorTransform);
     }
 };
-}  // namespace
 
-static std::unique_ptr<MediaEngineFactory> _meFactory = MediaEngineFactory::create();
+std::unique_ptr<MediaEngineFactory> _meFactory = MediaEngineFactory::create();
+
+const char* CIRCLE_IMAGE =
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/"
+    "9hAAAAB3RJTUUH6AQWDgQPSHxoUwAAAAlwSFlzAAAewQAAHsEBw2lUUwAAAARnQU1BAACxjwv8YQUAAACbSURBVHjaY2BAA////"
+    "+cH4mogXgrEJ4B4LxDPBeICIGZnwAeACnyA+PJ/3ABkoDkuzbVA/PE/"
+    "YfASiFPRNVsD8VsiNMPAPSCWgmlmBuKNJGiGgZkwA7zI0AwCX4FYDmRAFZkGgEAayIBFFBjQCzJgBQUGTIRFH0Ve8CVTMzwQKYtGihMSVZIyVTITWn"
+    "au/A9JH4eA+DCUjTU7AwAEsTgY+YCLcQAAAABJRU5ErkJggg==";
+
+const char* BODY_IMAGE_1_PIXEL_HEIGHT =
+    "iVBORw0KGgoAAAANSUhEUgAAAAwAAAABCAMAAADdNb8LAAAAA1BMVEX///+nxBvIAAAACklEQVR4AWNABgAADQABYc2cpAAAAABJRU5ErkJggg==";
+
+const char* CIRCLE_IMAGE_KEY              = "/__circle16x16Image";
+const char* BODY_IMAGE_1_PIXEL_HEIGHT_KEY = "/__bodyImage";
+
+constexpr auto TIMELINE_BAR_HEIGHT = 15.f;
+
+}  // namespace
 
 MediaController::MediaController(MediaPlayer* player)
     : _mediaPlayer(player)
@@ -183,7 +198,12 @@ void MediaController::initRenderer()
 {
     Widget::initRenderer();
 
-    // Play button
+    auto primaryButtonPanel = Widget::create();
+    primaryButtonPanel->setContentSize(Vec2(150, 60));
+    primaryButtonPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    primaryButtonPanel->setPositionNormalized(Vec2(0.5f, 0.5f));
+    addProtectedChild(primaryButtonPanel);
+
     _playButton = Button::create("");
     _playButton->addClickEventListener([this](Ref* ref) {
         if (getOpacity() <= 50)
@@ -195,10 +215,10 @@ void MediaController::initRenderer()
     });
     _playButton->setSwallowTouches(false);
     _playButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xb5", "Helvetica", 56));
-    _playButton->setPositionNormalized(Vec2(0.5f, 0.5f));
+    _playButton->setPosition(Vec2(0.0f, primaryButtonPanel->getContentSize().height / 2));
     _playButton->setCascadeOpacityEnabled(true);
     _playButton->setVisible(false);
-    addProtectedChild(_playButton, 1, -1);
+    primaryButtonPanel->addProtectedChild(_playButton, 1, -1);
 
     _stopButton = Button::create("");
     _stopButton->addClickEventListener([this](Ref* ref) {
@@ -211,10 +231,10 @@ void MediaController::initRenderer()
     });
     _stopButton->setSwallowTouches(false);
     _stopButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xb9", "Helvetica", 56));
-    _stopButton->setPositionNormalized(Vec2(0.6f, 0.5f));
+    _stopButton->setPosition(Vec2(80, primaryButtonPanel->getContentSize().height / 2));
     _stopButton->setCascadeOpacityEnabled(true);
     _stopButton->setVisible(false);
-    addProtectedChild(_stopButton, 1, -1);
+    primaryButtonPanel->addProtectedChild(_stopButton, 1, -1);
 
     _pauseButton = Button::create("");
     _pauseButton->addClickEventListener([this](Ref* ref) {
@@ -227,13 +247,13 @@ void MediaController::initRenderer()
     });
     _pauseButton->setSwallowTouches(false);
     _pauseButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xb8", "Helvetica", 56));
-    _pauseButton->setPositionNormalized(Vec2(0.5f, 0.5f));
+    _pauseButton->setPosition(Vec2(0, primaryButtonPanel->getContentSize().height / 2));
     _pauseButton->setCascadeOpacityEnabled(true);
     _pauseButton->setVisible(false);
-    addProtectedChild(_pauseButton, 1, -1);
+    primaryButtonPanel->addProtectedChild(_pauseButton, 1, -1);
 
-    _forwardButton = Button::create("");
-    _forwardButton->addClickEventListener([this](Ref* ref) {
+    _fastForwardButton = Button::create("");
+    _fastForwardButton->addClickEventListener([this](Ref* ref) {
         if (getOpacity() <= 50)
             return;
         if (_playRate >= 4.f)
@@ -242,15 +262,15 @@ void MediaController::initRenderer()
         _playRate *= 2;
         _mediaPlayer->setPlayRate(_playRate);
     });
-    _forwardButton->setSwallowTouches(false);
-    _forwardButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xa9", "Helvetica", 56));
-    _forwardButton->setCascadeOpacityEnabled(true);
-    _forwardButton->setPositionNormalized(Vec2(0.7f, 0.5f));
-    _forwardButton->setVisible(false);
-    addProtectedChild(_forwardButton, 1, -1);
+    _fastForwardButton->setSwallowTouches(false);
+    _fastForwardButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xa9", "Helvetica", 56));
+    _fastForwardButton->setCascadeOpacityEnabled(true);
+    _fastForwardButton->setPositionNormalized(Vec2(0.75f, 0.5f));
+    _fastForwardButton->setVisible(false);
+    addProtectedChild(_fastForwardButton, 1, -1);
 
-    _reverseButton = Button::create("");
-    _reverseButton->addClickEventListener([this](Ref* ref) {
+    _fastRewindButton = Button::create("");
+    _fastRewindButton->addClickEventListener([this](Ref* ref) {
         if (getOpacity() <= 50)
             return;
         if (_playRate <= (1.f / 4.f))
@@ -259,16 +279,75 @@ void MediaController::initRenderer()
         _playRate /= 2;
         _mediaPlayer->setPlayRate(_playRate);
     });
-    _reverseButton->setSwallowTouches(false);
-    _reverseButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xaa", "Helvetica", 56));
-    _reverseButton->setCascadeOpacityEnabled(true);
-    _reverseButton->setPositionNormalized(Vec2(0.3f, 0.5f));
-    _reverseButton->setVisible(false);
-    addProtectedChild(_reverseButton, 1, -1);
-}
+    _fastRewindButton->setSwallowTouches(false);
+    _fastRewindButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xaa", "Helvetica", 56));
+    _fastRewindButton->setCascadeOpacityEnabled(true);
+    _fastRewindButton->setPositionNormalized(Vec2(0.25f, 0.5f));
+    _fastRewindButton->setVisible(false);
+    addProtectedChild(_fastRewindButton, 1, -1);
 
-void MediaController::onPressStateChangedToNormal()
-{
+    _timelineTotal = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
+    _timelineTotal->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    _timelineTotal->setStretchEnabled(true);
+    _timelineTotal->setPosition(Vec2(getContentSize().width / 2, 80));
+    _timelineTotal->setColor(Color3B::GRAY);
+    _timelineTotal->setVisible(false);
+    _timelineTotal->setCascadeOpacityEnabled(true);
+    addProtectedChild(_timelineTotal, 1);
+
+    _timelinePlayed = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
+    _timelinePlayed->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    _timelinePlayed->setStretchEnabled(true);
+    _timelinePlayed->setPositionNormalized(Vec2(0.0f, 0.5f));
+    _timelinePlayed->setColor(Color3B::WHITE);
+    _timelinePlayed->setCascadeOpacityEnabled(true);
+    _timelineTotal->addChild(_timelinePlayed, 5);
+
+    _timelineSelector = utils::createSpriteFromBase64Cached(CIRCLE_IMAGE, CIRCLE_IMAGE_KEY);
+    _timelineSelector->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _timelineSelector->setPositionNormalized(Vec2(1.f, 0.5f));
+    _timelineSelector->setCascadeOpacityEnabled(true);
+    _timelineSelector->setStretchEnabled(true);
+    _timelineSelector->setContentSize(Size(TIMELINE_BAR_HEIGHT * 1.5f, TIMELINE_BAR_HEIGHT * 1.5f));
+    _timelineSelector->setVisible(false);
+    _timelinePlayed->addChild(_timelineSelector, 10);
+
+    _timelineTouchListener = EventListenerTouchOneByOne::create();
+    _timelineTouchListener->setSwallowTouches(true);
+    _timelineTouchListener->onTouchBegan = [this](ax::Touch* touch, ax::Event* event) -> bool {
+        auto target               = event->getCurrentTarget();
+        const auto locationInNode = target->convertToNodeSpace(touch->getLocation());
+        const auto& size          = target->getContentSize();
+        const auto rect           = ax::Rect(0, 0, size.width, size.height);
+
+        if (rect.containsPoint(locationInNode))
+        {
+            auto percent  = locationInNode.x / rect.size.x;
+            auto duration = _mediaPlayer->getDuration();
+            auto newTime  = percent * duration;
+            _mediaPlayer->seekTo(newTime);
+            _timelineSelector->setVisible(true);
+            return true;
+        }
+
+        return false;
+    };
+    _timelineTouchListener->onTouchMoved = [this](Touch* touch, Event* event) {
+        auto target               = event->getCurrentTarget();
+        const auto locationInNode = target->convertToNodeSpace(touch->getLocation());
+        const auto& size          = target->getContentSize();
+        const auto rect           = ax::Rect(0, 0, size.width, size.height);
+
+        if (rect.containsPoint(locationInNode))
+        {
+            auto percent  = locationInNode.x / rect.size.x;
+            auto duration = _mediaPlayer->getDuration();
+            auto newTime  = percent * duration;
+            _mediaPlayer->seekTo(newTime);
+        }
+    };
+    _timelineTouchListener->onTouchEnded = [this](Touch* touch, Event* event) { _timelineSelector->setVisible(false); };
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(_timelineTouchListener, _timelineTotal);
 }
 
 void MediaController::onPressStateChangedToPressed()
@@ -283,27 +362,68 @@ void MediaController::onPressStateChangedToPressed()
     updateControllerState();
 
     runAction(Sequence::create(FadeIn::create(1.0f), CallFunc::create([this] {
+        if (isScheduled("__media_controller_fader"sv))
+            return;
+
         schedule(
             [this](float) {
             auto now       = std::chrono::steady_clock::now();
             auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastTouch);
-            if (deltaTime > std::chrono::milliseconds{5000})
+            if (deltaTime > std::chrono::milliseconds{2500})
             {
-                unschedule("__media_controller_fader");
+                unschedule("__media_controller_fader"sv);
                 runAction(Sequence::create(FadeOut::create(0.5f), nullptr));
             }
-        }, 1.f, "__media_controller_fader");
+        },
+            1.f, "__media_controller_fader"sv);
     }), nullptr));
 }
 
-void MediaController::onPressStateChangedToDisabled()
+void MediaController::setContentSize(const Vec2& contentSize)
 {
+    Widget::setContentSize(contentSize);
+    _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT));
+    _timelineTotal->setPositionX(contentSize.width / 2);
+}
+
+void MediaController::update(float delta)
+{
+    Widget::update(delta);
+    if (_mediaPlayer)
+    {
+        const auto currentTime = _mediaPlayer->getCurrentTime();
+        const auto duration    = _mediaPlayer->getDuration();
+        auto& totalSize        = _timelineTotal->getContentSize();
+        _timelinePlayed->setContentSize(Size(totalSize.width * (currentTime / duration), totalSize.height));
+    }
+}
+
+void MediaController::onEnter()
+{
+    Widget::onEnter();
+    scheduleUpdate();
+}
+
+void MediaController::setGlobalZOrder(float globalZOrder)
+{
+    Widget::setGlobalZOrder(globalZOrder);
+
+    _timelineTotal->setGlobalZOrder(globalZOrder);
+    _timelinePlayed->setGlobalZOrder(globalZOrder);
+    _timelineSelector->setGlobalZOrder(globalZOrder);
 }
 
 void MediaController::updateControllerState()
 {
     if (!_mediaPlayer)
         return;
+
+    bool restrictedSize     = false;
+    const auto& contentSize = getContentSize();
+    if (contentSize.width < 600 || contentSize.height < 400)
+    {
+        restrictedSize = true;
+    }
 
     auto state = _mediaPlayer->getState();
     if (state == MediaPlayer::MediaState::LOADING ||
@@ -313,13 +433,15 @@ void MediaController::updateControllerState()
         _playButton->setVisible(false);
         _pauseButton->setVisible(false);
         _stopButton->setVisible(false);
-        _forwardButton->setVisible(false);
-        _reverseButton->setVisible(false);        
+        _fastForwardButton->setVisible(false);
+        _fastRewindButton->setVisible(false);
+        _timelineTotal->setVisible(false);
     }
     else
     {
-        _forwardButton->setVisible(true);
-        _reverseButton->setVisible(true);
+        _fastForwardButton->setVisible(!restrictedSize);
+        _fastRewindButton->setVisible(!restrictedSize);
+        _timelineTotal->setVisible(true);
 
         switch (state)
         {
@@ -499,7 +621,7 @@ MediaPlayer::~MediaPlayer()
 
     removeAllProtectedChildren();
 
-    AX_SAFE_RELEASE(_mediaController);
+    AX_SAFE_RELEASE_NULL(_mediaController);
 
     if (pvd->_engine)
         _meFactory->destroyMediaEngine(pvd->_engine);
@@ -517,12 +639,6 @@ bool MediaPlayer::init()
     {
         return false;
     }
-
-    _mediaController = MediaController::create(this);
-    _mediaController->setPositionNormalized(Vec2(0.5f, 0.5f));
-    _mediaController->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    _mediaController->retain();
-    addProtectedChild(_mediaController, 1);
 
     return true;
 }
@@ -632,6 +748,33 @@ MediaPlayer::MediaState MediaPlayer::getState() const
     return MediaState::CLOSED;
 }
 
+void MediaPlayer::setMediaControllerEnabled(bool enable)
+{
+    _controllerEnabled = enable;
+    if (_mediaController)
+    {
+        _mediaController->setEnabled(_controllerEnabled);
+    }
+    else if (_controllerEnabled)
+    {
+        setMediaController(MediaController::create(this));
+    }
+}
+
+void MediaPlayer::setMediaController(MediaController* controller)
+{
+    AX_SAFE_RELEASE(_mediaController);
+    _mediaController = controller;
+    if (_mediaController)
+    {
+        AX_SAFE_RETAIN(_mediaController);
+        _mediaController->setPositionNormalized(Vec2(0.5f, 0.5f));
+        _mediaController->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _mediaController->setEnabled(_controllerEnabled);
+        addProtectedChild(_mediaController, 1);
+    }
+}
+
 void MediaPlayer::setFullScreenEnabled(bool enabled)
 {
     if (_fullScreenEnabled != enabled)
@@ -683,9 +826,8 @@ void MediaPlayer::play()
             default:
                 engine->play();
             }
+            updateMediaController();
         }
-
-        _mediaController->updateControllerState();
     }
 }
 
@@ -697,7 +839,7 @@ void MediaPlayer::pause()
         if (engine)
         {
             engine->pause();
-            _mediaController->updateControllerState();
+            updateMediaController();
         }
     }
 }
@@ -716,7 +858,7 @@ void MediaPlayer::resume()
                 engine->play();
             }
 
-            _mediaController->updateControllerState();
+            updateMediaController();
         }
     }
 }
@@ -729,7 +871,7 @@ void MediaPlayer::stop()
         if (engine)
         {
             engine->stop();
-            _mediaController->updateControllerState();
+            updateMediaController();
         }
     }
 }
@@ -742,9 +884,37 @@ void MediaPlayer::seekTo(float sec)
         if (engine)
         {
             engine->setCurrentTime(sec);
-            _mediaController->updateControllerState();
+            updateMediaController();
         }
     }
+}
+
+float MediaPlayer::getCurrentTime()
+{
+    if (!_videoURL.empty())
+    {
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
+        {
+            return static_cast<float>(engine->getCurrentTime());
+        }
+    }
+
+    return 0.f;
+}
+
+float MediaPlayer::getDuration()
+{
+    if (!_videoURL.empty())
+    {
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
+        {
+            return static_cast<float>(engine->getDuration());
+        }
+    }
+
+    return 0.f;
 }
 
 bool MediaPlayer::isPlaying() const
@@ -815,6 +985,16 @@ void MediaPlayer::copySpecialProperties(Widget* widget)
         _videoPlayerIndex       = videoPlayer->_videoPlayerIndex;
         _eventCallback          = videoPlayer->_eventCallback;
     }
+}
+
+void MediaPlayer::updateMediaController()
+{
+    if (!_controllerEnabled || !_mediaController)
+    {
+        return;
+    }
+
+    _mediaController->updateControllerState();
 }
 
 #endif
