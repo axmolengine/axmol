@@ -25,6 +25,7 @@
  ****************************************************************************/
 #pragma once
 
+#include "UIButton.h"
 #include "ui/UIWidget.h"
 
 #if AX_TARGET_PLATFORM != AX_PLATFORM_LINUX || defined(AX_ENABLE_VLC_MEDIA)
@@ -43,6 +44,35 @@
 NS_AX_BEGIN
 namespace ui
 {
+
+class MediaPlayer;
+
+class AX_GUI_DLL MediaController : public ax::ui::Widget
+{
+public:
+    MediaController(MediaPlayer* player);
+    ~MediaController() override;
+
+    static MediaController* create(MediaPlayer* mediaPlayer);
+
+    bool init() override;
+    void initRenderer() override;
+
+    void onPressStateChangedToNormal() override;
+    void onPressStateChangedToPressed() override;
+    void onPressStateChangedToDisabled() override;
+    void updateControllerState();
+
+protected:
+    RefPtr<MediaPlayer> _mediaPlayer = nullptr;
+    Button* _playButton;
+    Button* _stopButton;
+    Button* _pauseButton;
+    Button* _forwardButton;
+    Button* _reverseButton;
+    std::chrono::steady_clock::time_point _lastTouch;
+    float _playRate = 1.f;
+};
 
 /**
  * @class MediaPlayer
@@ -67,6 +97,17 @@ public:
         ERROR
     };
 
+    enum class MediaState
+    {
+        CLOSED = 0,
+        LOADING,
+        PLAYING,
+        PAUSED,
+        STOPPED,
+        FINISHED,
+        ERROR
+    };
+
     /**
      * Styles of how the the video player is presented
      * For now only used on iOS to use either MPMovieControlStyleEmbedded (DEFAULT) or
@@ -87,6 +128,8 @@ public:
      *Static create method for instancing a MediaPlayer.
      */
     CREATE_FUNC(MediaPlayer);
+
+    bool init() override;
 
     /**
      * Sets a file path as a video source for MediaPlayer.
@@ -235,6 +278,7 @@ public:
     virtual void onExit() override;
 
     void setContentSize(const Size& contentSize) override;
+    MediaState getState() const;
 
     MediaPlayer();
     virtual ~MediaPlayer();
@@ -259,6 +303,7 @@ protected:
     bool _fullScreenDirty        = false;
     bool _fullScreenEnabled      = false;
     bool _keepAspectRatioEnabled = false;
+    bool _controllerEnabled      = true;
 
     StyleType _styleType = StyleType::DEFAULT;
 
@@ -269,6 +314,8 @@ protected:
     ccVideoPlayerCallback _eventCallback = nullptr;
 
     void* _videoContext = nullptr;
+
+    MediaController* _mediaController = nullptr;
 };
 using VideoPlayer = MediaPlayer;
 }  // namespace ui
