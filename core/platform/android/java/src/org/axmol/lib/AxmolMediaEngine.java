@@ -237,7 +237,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
                     mPlayer.seekTo(0);
                 }
                 mPlayer.play();
-                nativeSetDuration(mPlayer.getContentDuration() / 1000.0);
+                nativeSetDuration(mNativeObj,mPlayer.getContentDuration() / 1000.0);
             }
         });
         return true;
@@ -255,7 +255,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         AxmolEngine.getActivity().runOnUiThread(() -> {
             if (mPlayer != null) {
                 mPlayer.stop();
-                nativeSetDuration(0.0);
+                nativeSetDuration(mNativeObj,0.0);
             }
         });
         return true;
