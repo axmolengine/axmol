@@ -287,6 +287,7 @@ Node* CSLoader::createNode(std::string_view filename)
     auto suffix = path.substr(pos + 1, path.length());
 
     CSLoader* load = CSLoader::getInstance();
+    load->_loadedPlists.clear();
 
     if (suffix == "csb")
     {
@@ -307,6 +308,7 @@ Node* CSLoader::createNode(std::string_view filename, const ccNodeLoadCallback& 
     auto suffix = path.substr(pos + 1, path.length());
 
     CSLoader* load = CSLoader::getInstance();
+    load->_loadedPlists.clear();
 
     if (suffix == "csb")
     {
@@ -466,7 +468,11 @@ Node* CSLoader::loadNodeWithContent(std::string_view content)
         std::string png   = DICTOOL->getStringValueFromArray_json(doc, TEXTURES_PNG, i);
         plist             = _jsonPath + plist;
         png               = _jsonPath + png;
-        SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist, png);
+        if (!_loadedPlists.contains(plist + png))
+        {
+            _loadedPlists.insert(plist + png);
+            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist, png);
+        }
     }
 
     // decode node tree
@@ -894,6 +900,8 @@ inline void fast_split(_Elem* s, typename std::remove_const<_Elem>::type delim, 
 Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
 {
     CSLoader* loader = CSLoader::getInstance();
+    loader->_loadedPlists.clear();
+
     Node* node       = nullptr;
     do
     {
@@ -950,7 +958,11 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
         for (int i = 0; i < textureSize; ++i)
         {
             std::string plist = textures->Get(i)->c_str();
-            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+            if (!loader->_loadedPlists.contains(plist))
+            {
+                loader->_loadedPlists.insert(plist);
+                SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+            }
         }
 
         node = loader->nodeWithFlatBuffers(csparsebinary->nodeTree(), callback);
@@ -1074,7 +1086,11 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
     for (int i = 0; i < textureSize; ++i)
     {
         std::string plist = textures->Get(i)->c_str();
-        SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+        if (!_loadedPlists.contains(plist))
+        {
+            _loadedPlists.insert(plist);
+            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+        }
     }
 
     Node* node = nodeWithFlatBuffers(csparsebinary->nodeTree(), callback);
@@ -1438,7 +1454,12 @@ Node* CSLoader::createNodeWithFlatBuffersForSimulator(std::string_view filename)
     //    AXLOG("textureSize = %d", textureSize);
     for (int i = 0; i < textureSize; ++i)
     {
-        SpriteFrameCache::getInstance()->addSpriteFramesWithFile(textures->Get(i)->c_str());
+        std::string plist = textures->Get(i)->c_str();
+        if (!_loadedPlists.contains(plist))
+        {
+            _loadedPlists.insert(plist);
+            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+        }
     }
 
     auto nodeTree = csparsebinary->nodeTree();

@@ -173,6 +173,8 @@ protected:
     ax::Vector<ax::Node*> _callbackHandlers;
 
     std::string _csBuildID;
+
+    std::set<std::string> _loadedPlists;
 };
 
 NS_AX_END
