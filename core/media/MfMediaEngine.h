@@ -89,6 +89,8 @@ public:
     bool isPlaybackEnded() const override { return m_bPlaybackEnded; }
 
     bool setCurrentTime(double fPosInSeconds) override;
+    double getCurrentTime() override;
+    double getDuration() override;
 
     MEMediaState getState() const override { return m_state; }
 

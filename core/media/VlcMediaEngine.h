@@ -31,6 +31,8 @@ public:
     bool setLoop(bool bLooping) override;
     bool setRate(double fRate) override;
     bool setCurrentTime(double fSeekTimeInSec) override;
+    double getCurrentTime() override;
+    double getDuration() override;
     bool play() override;
     bool pause() override;
     bool stop() override;

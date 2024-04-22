@@ -457,6 +457,29 @@ bool AvfMediaEngine::setCurrentTime(double fSeekTimeInSec)
         [_player seekToTime:CMTimeMake(fSeekTimeInSec, 1)];
     return true;
 }
+
+double AvfMediaEngine::getCurrentTime()
+{
+    if (_player != nil) {
+        CMTime currTime = [_player currentTime];
+        if (CMTIME_IS_VALID(currTime))
+            return CMTimeGetSeconds(currTime)
+    }
+        
+    return 0.0;
+}
+
+double AvfMediaEngine::getDuration()
+{
+    if (_player != nil) {
+        if (_player.currentItem != nil) {
+            CMTime duration = _player.currentItem.asset.duration;
+            return CMTimeGetSeconds(duration);
+        }
+    }
+    return 0.0;
+}
+
 bool AvfMediaEngine::play()
 {
     if (_state != MEMediaState::Playing)

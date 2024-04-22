@@ -81,7 +81,8 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
 
     /** ------ native methods ------- */
     public static native void nativeHandleEvent(long nativeObj, int arg1);
-    public static native void nativeHandleVideoSample(long nativeObj, ByteBuffer sampleData, int sampleLen, int outputX, int outputY, int videoX, int videoY, int rotation);
+    public static native void nativeHandleVideoSample(long nativeObj, ByteBuffer sampleData, int sampleLen, int outputX, int outputY, int videoX, int videoY, int rotation, double currentContentTime);
+    public static native void nativeSetDuration(long nativeObj, double duration);
 
     public static void setContext(Activity activity) {
         sContext = activity.getApplicationContext();
@@ -236,6 +237,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
                     mPlayer.seekTo(0);
                 }
                 mPlayer.play();
+                nativeSetDuration(mPlayer.getContentDuration() / 1000.0);
             }
         });
         return true;
@@ -251,8 +253,10 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     public boolean stop() {
         if(mPlayer == null) return false;
         AxmolEngine.getActivity().runOnUiThread(() -> {
-            if (mPlayer != null)
+            if (mPlayer != null) {
                 mPlayer.stop();
+                nativeSetDuration(0.0);
+            }
         });
         return true;
     }
@@ -315,8 +319,9 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
             nativeEvent(EVENT_PLAYING);
         }
 
+        double currentTime = mPlayer.getCurrentPosition() / 1000.0;
         ByteBuffer tmpBuffer = codec.getOutputBuffer(index);
-        nativeHandleVideoSample(mNativeObj, tmpBuffer, tmpBuffer.remaining(), mOutputDim.x, mOutputDim.y, mVideoDim.x, mVideoDim.y, mVideoRotation);
+        nativeHandleVideoSample(mNativeObj, tmpBuffer, tmpBuffer.remaining(), mOutputDim.x, mOutputDim.y, mVideoDim.x, mVideoDim.y, mVideoRotation, currentTime);
     }
 
     @Override

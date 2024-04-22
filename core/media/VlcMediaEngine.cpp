@@ -389,6 +389,17 @@ bool VlcMediaEngine::setCurrentTime(double fSeekTimeInSec)
 #    endif
     return true;
 }
+
+double VlcMediaEngine::getCurrentTime() override
+{
+    return libvlc_media_player_get_time(_mp) / 1000.0;
+}
+
+double VlcMediaEngine::getDuration() override
+{
+    return libvlc_media_player_get_length(_mp) / 1000.0;
+}
+
 bool VlcMediaEngine::play()
 {
     if (_mlp && _state != MEMediaState::Closed)

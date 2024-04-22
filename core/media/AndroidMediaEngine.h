@@ -28,6 +28,8 @@ public:
     bool setLoop(bool bLooping) override;
     bool setRate(double fRate) override;
     bool setCurrentTime(double fSeekTimeInSec) override;
+    double getCurrentTime() override { return _currentTime; }
+    double getDuration() override { return _duration; }
     bool play() override;
     bool pause() override;
     bool stop() override;
@@ -36,6 +38,8 @@ public:
     bool transferVideoFrame() override;
 
     void handleVideoSample(const uint8_t* buf, size_t len, int outputX, int outputY, int videoX, int videoY, int rotation);
+    void updateCurrentTime(double currentTime) { _currentTime = currentTime; }
+    void updateDuration(double duration) { _duration = duration; }
 
 private:
     void* context{};  // java object strong-refs
@@ -49,6 +53,9 @@ private:
     yasio::byte_buffer _frameBuffer1;  // for write
     yasio::byte_buffer _frameBuffer2;  // for read
     mutable std::mutex _frameBuffer1Mtx;
+
+    double _currentTime{};
+    double _duration{};
 };
 
 struct AndroidMediaEngineFactory : public MediaEngineFactory
