@@ -462,7 +462,7 @@ void MediaController::updateControllerState()
             _stopButton->setVisible(false);
             break;
         default:;
-        }        
+        }
     }
 }
 

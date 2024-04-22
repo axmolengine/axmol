@@ -20,8 +20,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeHandleVideoSamp
                                                                               int outputY,
                                                                               int videoX,
                                                                               int videoY,
-                                                                              int rotation, 
-                                                                              double currentContentTime)
+                                                                              int rotation)
 {
     auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
     if (!mediaEngine)
@@ -30,7 +29,6 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeHandleVideoSamp
     auto sampleData = static_cast<uint8_t*>(env->GetDirectBufferAddress(sampleBuffer));
 
     mediaEngine->handleVideoSample(sampleData, sampleLen, outputX, outputY, videoX, videoY, rotation);
-    mediaEngine->updateCurrentTime(currentContentTime);
 }
 
 JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeSetDuration(JNIEnv* env,
@@ -43,6 +41,18 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeSetDuration(JNI
         return;
 
     mediaEngine->updateDuration(duration);
+}
+
+JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeSetCurrentTime(JNIEnv* env,
+                                                                              jclass,
+                                                                              jlong pME,
+                                                                              double currentTime)
+{
+    auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
+    if (!mediaEngine)
+        return;
+
+    mediaEngine->updateCurrentTime(currentTime);
 }
 }
 
