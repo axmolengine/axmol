@@ -170,6 +170,33 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
     }
 }
 
+void SpriteFrameCache::removeUnusedSpriteSheetFile()
+{
+    std::vector<string> willRemoveSpriteSheetFileNames;
+    for (auto&& it : _spriteSheets)
+    {
+        bool isUsed = false;
+        for (auto&& frame : it.second->frames)
+        {
+            auto spriteFrame = getSpriteFrameByName(frame);
+            if (spriteFrame && spriteFrame->getReferenceCount() > 1)
+            {
+                isUsed = true;
+                break;
+            }
+        }
+
+        if (!isUsed)
+            willRemoveSpriteSheetFileNames.push_back(it.first);
+    }
+
+    for (auto& spriteSheetFileName : willRemoveSpriteSheetFileNames)
+    {
+        AXLOG("axmol: SpriteFrameCache: removing unused sprite sheet file : %s", spriteSheetFileName.c_str());
+        removeSpriteSheet(spriteSheetFileName);
+    }
+}
+
 void SpriteFrameCache::removeSpriteFrameByName(std::string_view name)
 {
     // explicit nil handling
@@ -374,6 +401,18 @@ bool SpriteFrameCache::isSpriteSheetInUse(std::string_view spriteSheetFileName) 
 SpriteFrame* SpriteFrameCache::findFrame(std::string_view frame)
 {
     return _spriteFrames.at(frame);
+}
+
+std::string SpriteFrameCache::getSpriteFrameName(SpriteFrame* frame)
+{
+    for (auto& it : _spriteFrames)
+    {
+        if (it.second == frame)
+        {
+            return it.first;
+        }
+    }
+    return "";
 }
 
 void SpriteFrameCache::addSpriteFrameCapInset(SpriteFrame* spriteFrame, const Rect& capInsets, Texture2D* texture)
