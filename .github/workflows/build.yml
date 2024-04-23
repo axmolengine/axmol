@@ -96,8 +96,8 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        axmol -p linux -a x64
-        axmol -p linux -a x64 -xb '--target,lua-tests'
+        ./tools/cmdline/build.ps1 -p linux -a x64
+        ./tools/cmdline/build.ps1 -p linux -a x64 -xb '--target,lua-tests'
   osx:
     runs-on: macos-13
     strategy:
