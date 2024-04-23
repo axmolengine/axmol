@@ -192,7 +192,7 @@ void SpriteFrameCache::removeUnusedSpriteSheets()
 
     for (auto& spriteSheetFileName : willRemoveSpriteSheetFileNames)
     {
-        AXLOG("axmol: SpriteFrameCache: removing unused sprite sheet file : %s", spriteSheetFileName.c_str());
+        AXLOG("axmol: SpriteFrameCache: removing unused sprite sheet file : %s", spriteSheetFileName.data());
         removeSpriteSheet(spriteSheetFileName);
     }
 }
