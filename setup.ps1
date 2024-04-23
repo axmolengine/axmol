@@ -1,9 +1,25 @@
-# the setup script of axmol
-# for powershell <= 5.1: please execute command 'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force' in PowerShell Terminal
-param(
-    # whether sync gradle wrapper & plugin version from template to test projects
-    [string]$gradlewVersion = $null
-)
+#!/bin/bash
+` # \
+# PowerShell Param statement : every line must end in #\ except the last line must with <#\
+# And, you can't use backticks in this section        #\
+# refer https://gist.github.com/ryanmaclean/a1f3135f49c1ab3fa7ec958ac3f8babe #\
+param( [string]$gradlewVersion,                       #\
+    [switch]$setupCMake                               #\
+    )                                                <#\
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `
+#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+# Bash Start ------------------------------------------------------------
+scriptdir="`dirname "${BASH_SOURCE[0]}"`";
+echo BASH. Script is running from $scriptdir
+$scriptdir/1k/install-pwsh.sh
+pwsh $scriptdir/setup.ps1 "$@"
+# Bash End --------------------------------------------------------------
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+echo > /dev/null <<"out-null" ###
+'@ | out-null
+#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+# Powershell Start ----------------------------------------------------#>
+
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
 
@@ -306,6 +322,10 @@ if (!(Test-Path $prefix -PathType Container)) {
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
 . $build1kPath -setupOnly -prefix $prefix @args
 
+if ($setupCMake) {
+    setup_cmake -scope 'global'
+}
+
 if ($gradlewVersion) {
     $aproj_source_root = Join-Path $AX_ROOT 'templates/common/proj.android'
     $aproj_source_gradle = Join-Path $aproj_source_root 'build.gradle'
@@ -358,3 +378,7 @@ if ($IsLinux -and (Test-Path '/etc/wsl.conf' -PathType Leaf)) {
 }
 
 $b1k.pause("setup successfully, please restart the terminal to make added system variables take effect")
+
+# Powershell End -------------------------------------------------------
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+out-null

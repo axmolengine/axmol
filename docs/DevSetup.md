@@ -4,17 +4,17 @@
 
 - **PowerShell**: used to install Axmol. PowerShell 7 is recommended, it supports Windows, macOS and Linux.
   - Quick installation: 
-     - macOS, Ubuntu, ArchLinux: run `1k/install-pwsh.sh` in `axmol` root directory (recommended).
+     - macOS, Ubuntu, ArchLinux: run `setup.ps1` in `axmol` root directory (recommended).
      - Windows 10+: system installed PowerShell 5.x should work, but in that case you'll need to run the command `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force` in order to allow PowerShell script file to run.
   - Manual installation: [Instructions](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) /  [Download](https://github.com/PowerShell/PowerShell/releases)
-- **CMake 3.28.1**
+- **CMake 3.28.1+**
     - Manual installation is recommended ([download](https://cmake.org/download/)). Make sure to add CMake bin to the system `PATH`, otherwise `axmol build` will auto-setup it to `tools/external/cmake`.
 
 ## Prerequisites
 
   1. Download or clone Axmol from GitHub ([https://github.com/axmolengine/axmol](https://github.com/axmolengine/axmol)).
   2. Enter `axmol` root directory.
-  3. Run `pwsh setup.ps1`. Restart the console after it has finished for environment variables to take effect.
+  3. Run `setup.ps1` in windows powershell or (macOS/Linux/ArchLinux terminal). Restart the console after it has finished for environment variables to take effect.
   4. Ensure that the C / C++ compiler toolset is installed on your host machine.
      - Windows: Visual Studio 2022 with desktop workflow
      - macOS: XCode 14.2+
@@ -22,7 +22,7 @@
 
 ## Creating a new project
 
-Enter to PowerShell (`pwsh`). This is the command to generate a new project:
+Open any terminal(cmd.exe/powershell/pwsh/bash/zsh/WindowsTerminal/iTerm2). This is the command to generate a new project:
 
 ```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua] [--portrait] PROJECT_NAME```
 
