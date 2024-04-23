@@ -808,7 +808,11 @@ void MediaPlayer::setMediaControllerEnabled(bool enable)
 
 void MediaPlayer::setMediaController(MediaController* controller)
 {
-    AX_SAFE_RELEASE(_mediaController);
+    if (_mediaController)
+    {
+        removeProtectedChild(_mediaController, true);
+        AX_SAFE_RELEASE(_mediaController);
+    }
     _mediaController = controller;
     if (_mediaController)
     {
