@@ -25,10 +25,12 @@
  ****************************************************************************/
 #pragma once
 
-#include "UIButton.h"
-#include "ui/UIWidget.h"
-
 #if AX_TARGET_PLATFORM != AX_PLATFORM_LINUX || defined(AX_ENABLE_VLC_MEDIA)
+
+#    include "UIButton.h"
+#    include "ui/UIWidget.h"
+#    include <chrono>
+
 
 #    if AX_VIDEOPLAYER_DEBUG_DRAW
 #        include "2d/DrawNode.h"
