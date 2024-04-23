@@ -68231,6 +68231,53 @@ int lua_ax_base_SpriteFrameCache_removeUnusedSpriteFrames(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_SpriteFrameCache_removeUnusedSpriteSheets(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_removeUnusedSpriteSheets'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpriteFrameCache_removeUnusedSpriteSheets'", nullptr);
+            return 0;
+        }
+        cobj->removeUnusedSpriteSheets();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.SpriteFrameCache:removeUnusedSpriteSheets",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_SpriteFrameCache_removeUnusedSpriteSheets'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_SpriteFrameCache_removeSpriteFrameByName(lua_State* tolua_S)
 {
     int argc = 0;
@@ -68581,6 +68628,56 @@ int lua_ax_base_SpriteFrameCache_findFrame(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_SpriteFrameCache_getSpriteFrameName(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_getSpriteFrameName'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::SpriteFrame* arg0;
+
+        ok &= luaval_to_object<ax::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "ax.SpriteFrameCache:getSpriteFrameName");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpriteFrameCache_getSpriteFrameName'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getSpriteFrameName(arg0);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.SpriteFrameCache:getSpriteFrameName",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_SpriteFrameCache_getSpriteFrameName'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_SpriteFrameCache_eraseFrame(lua_State* tolua_S)
 {
     int argc = 0;
@@ -68873,6 +68970,7 @@ int lua_register_ax_base_SpriteFrameCache(lua_State* tolua_S)
         tolua_function(tolua_S,"isSpriteFramesWithFileLoaded",lua_ax_base_SpriteFrameCache_isSpriteFramesWithFileLoaded);
         tolua_function(tolua_S,"removeSpriteFrames",lua_ax_base_SpriteFrameCache_removeSpriteFrames);
         tolua_function(tolua_S,"removeUnusedSpriteFrames",lua_ax_base_SpriteFrameCache_removeUnusedSpriteFrames);
+        tolua_function(tolua_S,"removeUnusedSpriteSheets",lua_ax_base_SpriteFrameCache_removeUnusedSpriteSheets);
         tolua_function(tolua_S,"removeSpriteFrameByName",lua_ax_base_SpriteFrameCache_removeSpriteFrameByName);
         tolua_function(tolua_S,"removeSpriteFramesFromFile",lua_ax_base_SpriteFrameCache_removeSpriteFramesFromFile);
         tolua_function(tolua_S,"removeSpriteFramesFromFileContent",lua_ax_base_SpriteFrameCache_removeSpriteFramesFromFileContent);
@@ -68880,6 +68978,7 @@ int lua_register_ax_base_SpriteFrameCache(lua_State* tolua_S)
         tolua_function(tolua_S,"getSpriteFrame",lua_ax_base_SpriteFrameCache_getSpriteFrameByName);
         tolua_function(tolua_S,"reloadTexture",lua_ax_base_SpriteFrameCache_reloadTexture);
         tolua_function(tolua_S,"findFrame",lua_ax_base_SpriteFrameCache_findFrame);
+        tolua_function(tolua_S,"getSpriteFrameName",lua_ax_base_SpriteFrameCache_getSpriteFrameName);
         tolua_function(tolua_S,"eraseFrame",lua_ax_base_SpriteFrameCache_eraseFrame);
         tolua_function(tolua_S,"addSpriteFrameCapInset",lua_ax_base_SpriteFrameCache_addSpriteFrameCapInset);
         tolua_function(tolua_S,"deregisterSpriteSheetLoader",lua_ax_base_SpriteFrameCache_deregisterSpriteSheetLoader);
