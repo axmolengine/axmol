@@ -186,7 +186,10 @@ bool BasicMediaController::init()
     setCascadeOpacityEnabled(true);
     setOpacity(0);
     updateControllerState();
-
+    if (_mediaPlayer)
+    {
+        setContentSize(_mediaPlayer->getContentSize());
+    }
     return true;
 }
 
