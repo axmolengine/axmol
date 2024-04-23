@@ -30,6 +30,7 @@
 #    include "UIButton.h"
 #    include "ui/UIWidget.h"
 #    include "ui/UILayout.h"
+#    include "2d/Sprite.h"
 #    include <chrono>
 
 
@@ -88,16 +89,17 @@ public:
     virtual void updateControlsForContentSize(const Vec2& contentSize);
 
 protected:
-    Widget* _controlPanel      = nullptr;
-    Button* _playButton        = nullptr;
-    Button* _stopButton        = nullptr;
-    Button* _pauseButton       = nullptr;
-    Button* _fastForwardButton = nullptr;
-    Button* _fastRewindButton  = nullptr;
-    Sprite* _timelineSelector  = nullptr;
-    Sprite* _timelineTotal     = nullptr;
-    Sprite* _timelinePlayed    = nullptr;
-    Layout* _mediaOverlay      = nullptr;
+    Widget* _controlPanel       = nullptr;
+    Button* _playButton         = nullptr;
+    Button* _stopButton         = nullptr;
+    Button* _pauseButton        = nullptr;
+    Button* _fastForwardButton  = nullptr;
+    Button* _fastRewindButton   = nullptr;
+    Sprite* _timelineSelector   = nullptr;
+    Sprite* _timelineTotal      = nullptr;
+    Sprite* _timelinePlayed     = nullptr;
+    Layout* _mediaOverlay       = nullptr;
+    Widget* _primaryButtonPanel = nullptr;
 
     EventListenerTouchOneByOne* _timelineTouchListener = nullptr;
     float _playRate                                    = 1.f;

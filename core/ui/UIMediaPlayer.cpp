@@ -329,12 +329,12 @@ void BasicMediaController::createControls()
     _controlPanel->setOpacity(0);
     addProtectedChild(_controlPanel, 10);
 
-    auto primaryButtonPanel = Widget::create();
-    primaryButtonPanel->setContentSize(Vec2(150, 60));
-    primaryButtonPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    primaryButtonPanel->setPositionNormalized(Vec2(0.5f, 0.5f));
-    primaryButtonPanel->setScale(1 / scale);
-    _controlPanel->addProtectedChild(primaryButtonPanel);
+    _primaryButtonPanel = Widget::create();
+    _primaryButtonPanel->setContentSize(Vec2(150, 60));
+    _primaryButtonPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _primaryButtonPanel->setPositionNormalized(Vec2(0.5f, 0.5f));
+    _primaryButtonPanel->setScale(1 / scale);
+    _controlPanel->addProtectedChild(_primaryButtonPanel);
 
     _playButton = Button::create("");
     _playButton->addClickEventListener([this](Ref* ref) {
@@ -350,7 +350,7 @@ void BasicMediaController::createControls()
     _playButton->setPositionNormalized(Vec2(0.25f, 0.5f));
     _playButton->setCascadeOpacityEnabled(true);
     _playButton->setVisible(false);
-    primaryButtonPanel->addProtectedChild(_playButton, 1, -1);
+    _primaryButtonPanel->addProtectedChild(_playButton, 1, -1);
 
     _stopButton = Button::create("");
     _stopButton->addClickEventListener([this](Ref* ref) {
@@ -366,7 +366,7 @@ void BasicMediaController::createControls()
     _stopButton->setPositionNormalized(Vec2(0.75f, 0.5f));
     _stopButton->setCascadeOpacityEnabled(true);
     _stopButton->setVisible(false);
-    primaryButtonPanel->addProtectedChild(_stopButton, 1, -1);
+    _primaryButtonPanel->addProtectedChild(_stopButton, 1, -1);
 
     _pauseButton = Button::create("");
     _pauseButton->addClickEventListener([this](Ref* ref) {
@@ -382,7 +382,7 @@ void BasicMediaController::createControls()
     _pauseButton->setPositionNormalized(Vec2(0.25f, 0.5f));
     _pauseButton->setCascadeOpacityEnabled(true);
     _pauseButton->setVisible(false);
-    primaryButtonPanel->addProtectedChild(_pauseButton, 1, -1);
+    _primaryButtonPanel->addProtectedChild(_pauseButton, 1, -1);
 
     _fastForwardButton = Button::create("");
     _fastForwardButton->addClickEventListener([this](Ref* ref) {
@@ -504,11 +504,11 @@ void BasicMediaController::updateControls()
 
 void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
 {
-    auto scale = Director::getInstance()->getGLView()->getScaleY();
-
     _mediaOverlay->setContentSize(contentSize);
     _controlPanel->setContentSize(contentSize);
 
+    auto scale = Director::getInstance()->getGLView()->getScaleY();
+    _primaryButtonPanel->setScale(1 / scale);
     _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT / scale));
 }
 
