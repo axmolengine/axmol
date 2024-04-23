@@ -234,6 +234,7 @@ void BasicMediaController::setContentSize(const Vec2& contentSize)
 {
     Widget::setContentSize(contentSize);
     updateControlsForContentSize(contentSize);
+    updateControllerState();
 }
 
 void BasicMediaController::update(float delta)
@@ -259,13 +260,6 @@ void BasicMediaController::updateControllerState()
     if (!_mediaPlayer)
         return;
 
-    bool restrictedSize     = false;
-    const auto& contentSize = getContentSize();
-    if (contentSize.width < 600 || contentSize.height < 400)
-    {
-        restrictedSize = true;
-    }
-
     auto state = _mediaPlayer->getState();
     if (state == MediaPlayer::MediaState::LOADING ||
         state == MediaPlayer::MediaState::CLOSED ||
@@ -274,14 +268,10 @@ void BasicMediaController::updateControllerState()
         _playButton->setVisible(false);
         _pauseButton->setVisible(false);
         _stopButton->setVisible(false);
-        _fastForwardButton->setVisible(false);
-        _fastRewindButton->setVisible(false);
         _timelineTotal->setVisible(false);
     }
     else
     {
-        _fastForwardButton->setVisible(!restrictedSize);
-        _fastRewindButton->setVisible(!restrictedSize);
         _timelineTotal->setVisible(true);
 
         switch (state)
@@ -383,40 +373,6 @@ void BasicMediaController::createControls()
     _pauseButton->setCascadeOpacityEnabled(true);
     _pauseButton->setVisible(false);
     _primaryButtonPanel->addProtectedChild(_pauseButton, 1, -1);
-
-    _fastForwardButton = Button::create("");
-    _fastForwardButton->addClickEventListener([this](Ref* ref) {
-        if (_controlPanel->getOpacity() <= 50)
-            return;
-        if (_playRate >= 4.f)
-            return;
-
-        _playRate *= 2;
-        _mediaPlayer->setPlayRate(_playRate);
-    });
-    _fastForwardButton->setSwallowTouches(false);
-    _fastForwardButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xa9", "Helvetica", 56));
-    _fastForwardButton->setCascadeOpacityEnabled(true);
-    _fastForwardButton->setPositionNormalized(Vec2(0.75f, 0.5f));
-    _fastForwardButton->setVisible(false);
-    _controlPanel->addProtectedChild(_fastForwardButton, 1, -1);
-
-    _fastRewindButton = Button::create("");
-    _fastRewindButton->addClickEventListener([this](Ref* ref) {
-        if (_controlPanel->getOpacity() <= 50)
-            return;
-        if (_playRate <= (1.f / 4.f))
-            return;
-
-        _playRate /= 2;
-        _mediaPlayer->setPlayRate(_playRate);
-    });
-    _fastRewindButton->setSwallowTouches(false);
-    _fastRewindButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xaa", "Helvetica", 56));
-    _fastRewindButton->setCascadeOpacityEnabled(true);
-    _fastRewindButton->setPositionNormalized(Vec2(0.25f, 0.5f));
-    _fastRewindButton->setVisible(false);
-    _controlPanel->addProtectedChild(_fastRewindButton, 1, -1);
 
     _timelineTotal = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
     _timelineTotal->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
@@ -836,8 +792,7 @@ void MediaPlayer::setFullScreenEnabled(bool enabled)
         _fullScreenEnabled = enabled;
 
         auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
-        Widget::setContentSize(enabled ? _director->getGLView()->getDesignResolutionSize()
-                                       : pvd->_originalViewSize);
+        setContentSize(enabled ? _director->getGLView()->getDesignResolutionSize() : pvd->_originalViewSize);
     }
 }
 

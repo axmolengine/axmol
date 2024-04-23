@@ -93,8 +93,6 @@ protected:
     Button* _playButton         = nullptr;
     Button* _stopButton         = nullptr;
     Button* _pauseButton        = nullptr;
-    Button* _fastForwardButton  = nullptr;
-    Button* _fastRewindButton   = nullptr;
     Sprite* _timelineSelector   = nullptr;
     Sprite* _timelineTotal      = nullptr;
     Sprite* _timelinePlayed     = nullptr;
