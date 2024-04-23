@@ -161,12 +161,7 @@ bool MfMediaEngine::pause()
 {
     if (m_mediaEngine)
     {
-        if (SUCCEEDED(m_mediaEngine->Pause())
-        {
-            // to get accurate timing in GetCurrentTime
-            m_mediaEngine->FrameStep(true);
-            return true;
-        }
+        return SUCCEEDED(m_mediaEngine->Pause());
     }
     return false;
 }
@@ -234,7 +229,7 @@ bool MfMediaEngine::setCurrentTime(double fPosInSeconds)
     return false;
 }
 
-double MfMediaEngine::getCurrentTime() override
+double MfMediaEngine::getCurrentTime()
 {
     if (m_mediaEngine)
         return m_mediaEngine->GetCurrentTime();
@@ -242,7 +237,7 @@ double MfMediaEngine::getCurrentTime() override
     return 0.0;
 }
 
-double MfMediaEngine::getDuration() override
+double MfMediaEngine::getDuration()
 {
     if (m_mediaEngine)
         return m_mediaEngine->GetDuration();
