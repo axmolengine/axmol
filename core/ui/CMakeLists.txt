@@ -19,15 +19,6 @@ if(WINDOWS)
         list(APPEND _AX_UI_SPECIFIC_HEADER ui/UIWebView/UIWebViewImpl-win32.h ui/UIWebView/UIWebView.h)
         list(APPEND _AX_UI_SPECIFIC_SRC ui/UIWebView/UIWebViewImpl-win32.cpp ui/UIWebView/UIWebView.cpp)
     endif()
-
-    if (AX_ENABLE_MFMEDIA)
-        set(_AX_UI_SPECIFIC_HEADER ${_AX_UI_SPECIFIC_HEADER}
-            ui/UIMediaPlayer.h
-            )
-        set(_AX_UI_SPECIFIC_SRC ${_AX_UI_SPECIFIC_SRC}
-            ui/UIMediaPlayer.cpp
-            )
-    endif()
 elseif(APPLE)
     if(MACOSX)
         set(_AX_UI_SPECIFIC_HEADER
@@ -90,8 +81,6 @@ elseif(APPLE)
                 )
         endif()
     endif()
-    set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
-    set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
 elseif(LINUX)
     set(_AX_UI_SPECIFIC_HEADER
         ui/UIEditBox/UIEditBoxImpl-linux.h
@@ -99,10 +88,6 @@ elseif(LINUX)
     set(_AX_UI_SPECIFIC_SRC
         ui/UIEditBox/UIEditBoxImpl-linux.cpp
         )
-    if(AX_ENABLE_VLC_MEDIA)
-        set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
-        set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
-    endif()
 elseif(EMSCRIPTEN)
     set(_AX_UI_SPECIFIC_SRC
         ui/UIEditBox/UIEditBoxImpl-wasm.cpp
@@ -119,8 +104,12 @@ elseif(ANDROID)
         # it's special for android, not a common file
         ui/UIWebView/UIWebView.cpp
         )
-    set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
-    set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
+ 
+endif()
+
+if(AX_ENABLE_MEDIA)
+   set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
+   set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
 endif()
 
 set(_AX_UI_HEADER

@@ -238,7 +238,7 @@ function(ax_sync_target_dlls ax_target)
     # copy libvlc plugins dir for windows
     if(AX_ENABLE_VLC_MEDIA)
         add_custom_command(TARGET ${ax_target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/vlc/win/lib/vlc/plugins
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${_AX_ROOT}/cache/vlc/lib/vlc/plugins
         $<TARGET_FILE_DIR:${ax_target}>/plugins
         )
     endif()
