@@ -26,9 +26,6 @@
 
 #include "ui/UIMediaPlayer.h"
 
-#include "UILayout.h"
-
-
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
 #if defined(AX_ENABLE_MEDIA)
 #    include <unordered_map>
@@ -41,6 +38,7 @@
 #    include "media/MediaEngine.h"
 #    include "ui/LayoutHelper.h"
 #    include "UIButton.h"
+#    include "UILayout.h"
 #    include "yasio/byte_buffer.hpp"
 //-----------------------------------------------------------------------------------------------------------
 
@@ -158,7 +156,285 @@ const char* BODY_IMAGE_1_PIXEL_HEIGHT_KEY = "/__bodyImage";
 
 constexpr auto TIMELINE_BAR_HEIGHT = 12.f;
 
+RefPtr<Texture2D> g_mediaControlsTexture = nullptr;
+
+enum class MediaControlButtonId
+{
+    Play,
+    Stop,
+    Pause,
+    EnterFullscreen,
+    ExitFullscreen
+};
+
+std::map<MediaControlButtonId, Rect> g_mediaControlTextureRegions;
+
+void createMediaControlTexture()
+{
+    if (g_mediaControlsTexture)
+        return;
+
+    constexpr auto panelW = 64.f;
+    constexpr auto panelH = 64.f;
+    constexpr auto iconW  = 32.f;
+    constexpr auto iconH  = 32.f;
+    constexpr auto gap    = 10.f;
+    constexpr auto border = 2;
+
+    auto* drawNode = DrawNode::create();
+
+    auto DrawStop = [&](const Vec2& middle) -> void {
+        auto s = Vec2(middle.x - iconW / 2.f, middle.y + iconH / 2.f);
+        drawNode->drawSolidRect(s, s + Vec2(iconW, -iconH), Color4F::WHITE);
+    };
+
+    auto DrawPlay = [&](const Vec2& middle) -> void {
+        auto p1 = Vec2(middle.x - iconW / 2.f, middle.y + iconH / 2.f);
+        auto p2 = Vec2(middle.x + iconW / 2.f, middle.y);
+        auto p3 = Vec2(middle.x - iconW / 2.f, middle.y - iconH / 2.f);
+
+        drawNode->drawTriangle(p1, p2, p3, Color4B::WHITE);
+    };
+
+    auto DrawPause = [&](const Vec2& middle) -> void {
+        auto start = Vec2(middle.x - 3, middle.y + iconH / 2.f);
+        drawNode->drawSolidRect(start, start + Vec2(-6, -iconH), Color4B::WHITE);
+
+        start = Vec2(middle.x + 3, middle.y + iconH / 2.f);
+        drawNode->drawSolidRect(start, start + Vec2(6, -iconH), Color4B::WHITE);
+    };
+
+    auto DrawEnterFullscreen = [&](const Vec2& middle) -> void {
+        auto topLeft     = Vec2(middle.x - panelW / 2.f + 6, middle.y + panelH / 2.f - 6);
+        auto topRight    = Vec2(middle.x + panelW / 2.f - 6, middle.y + panelH / 2.f - 6);
+        auto bottomLeft  = Vec2(middle.x - panelW / 2.f + 6, middle.y - panelH / 2.f + 6);
+        auto bottomRight = Vec2(middle.x + panelW / 2.f - 6, middle.y - panelH / 2.f + 6);
+
+        // Top left
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(20, -6), Color4B::WHITE);
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(6, -20), Color4B::WHITE);
+
+        // Top right
+        drawNode->drawSolidRect(topRight, topRight + Vec2(-20, -6), Color4B::WHITE);
+        drawNode->drawSolidRect(topRight, topRight + Vec2(-6, -20), Color4B::WHITE);
+
+        // Bottom left
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(20, 6), Color4B::WHITE);
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(6, 20), Color4B::WHITE);
+
+        // Bottom right
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(-20, 6), Color4B::WHITE);
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(-6, 20), Color4B::WHITE);
+    };
+
+    auto DrawExitFullScreen = [&](const Vec2& middle) -> void {
+        auto topLeft     = Vec2(middle.x - 4, middle.y + 4);
+        auto topRight    = Vec2(middle.x + 4, middle.y + 4);
+        auto bottomLeft  = Vec2(middle.x - 4, middle.y - 4);
+        auto bottomRight = Vec2(middle.x + 4, middle.y - 4);
+
+        // Top left
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(-20, 6), Color4B::WHITE);
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(-6, 20), Color4B::WHITE);
+
+        // Top right
+        drawNode->drawSolidRect(topRight, topRight + Vec2(20, 6), Color4B::WHITE);
+        drawNode->drawSolidRect(topRight, topRight + Vec2(6, 20), Color4B::WHITE);
+
+        // Bottom left
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(-20, -6), Color4B::WHITE);
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(-6, -20), Color4B::WHITE);
+
+        // Bottom right
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(20, -6), Color4B::WHITE);
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(6, -20), Color4B::WHITE);
+    };
+
+    std::map<MediaControlButtonId, std::function<void(const Vec2&)>> items = {
+        {MediaControlButtonId::Play, DrawPlay},
+        {MediaControlButtonId::Stop, DrawStop},
+        {MediaControlButtonId::Pause, DrawPause},
+        {MediaControlButtonId::EnterFullscreen, DrawEnterFullscreen},
+        {MediaControlButtonId::ExitFullscreen, DrawExitFullScreen}};
+
+    auto nextPow2 = [](int v) -> int {
+        int p = 1;
+        while (p < v)
+        {
+            p = p * 2;
+        }
+        return p;
+    };
+
+    auto numItems    = static_cast<int>(items.size());
+    auto totalWidth  = nextPow2(numItems * panelW + (numItems - 1) * gap + (border * 2));
+    auto totalHeight = nextPow2(border * 2 + panelH);
+    auto imageSize   = Size(static_cast<float>(totalWidth), static_cast<float>(totalHeight));
+    auto* node       = Node::create();
+    node->setContentSize(imageSize);
+    node->setIgnoreAnchorPointForPosition(false);
+    node->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    node->setPosition(0, 0);
+    node->addChild(drawNode);
+
+    auto* rt = RenderTexture::create(totalWidth, totalHeight, PixelFormat::RGBA8, false);
+    rt->beginWithClear(0, 0, 0, 0);
+
+    g_mediaControlTextureRegions.clear();
+
+    int i = 0;
+    for (auto&& item : items)
+    {
+        auto midPoint =
+            Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
+        item.second(midPoint);
+        g_mediaControlTextureRegions[item.first] =
+            Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);
+        ++i;
+    }
+
+    node->visit();
+    rt->end();
+    Director::getInstance()->getRenderer()->render();
+
+    g_mediaControlsTexture = rt->getSprite()->getTexture();
+}
+
 }  // namespace
+
+static const float ZOOM_ACTION_TIME_STEP = 0.05f;
+
+MediaPlayerControl* MediaPlayerControl::create(SpriteFrame* frame)
+{
+    auto* widget = new MediaPlayerControl();
+    if (widget->init(frame))
+    {
+        widget->autorelease();
+        return widget;
+    }
+    AX_SAFE_DELETE(widget);
+    return nullptr;
+}
+
+MediaPlayerControl::~MediaPlayerControl()
+{
+    AX_SAFE_RELEASE(_overlay);
+}
+
+bool MediaPlayerControl::init(SpriteFrame* frame)
+{
+    if (!Button::init(""))
+    {
+        return false;
+    }
+
+    if (frame)
+    {
+        _overlay = Sprite::createWithSpriteFrame(frame);
+        AX_SAFE_RETAIN(_overlay);
+        auto spriteSize = _overlay->getContentSize();
+        setContentSize(spriteSize);
+        _overlay->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _overlay->setPosition(_contentSize.width * 0.5f, _contentSize.height * 0.5f);
+        addProtectedChild(_overlay, -2, -1);
+
+        if (!_ignoreSize && _customSize.equals(Vec2::ZERO))
+        {
+            _customSize = _overlay->getContentSize();
+        }
+        this->updateChildrenDisplayedRGBA();
+        if (_unifySize)
+        {
+            if (!_scale9Enabled)
+            {
+                updateContentSizeWithTextureSize(spriteSize);
+            }
+        }
+        else
+        {
+            updateContentSizeWithTextureSize(spriteSize);
+        }
+    }
+
+    return true;
+}
+
+void MediaPlayerControl::onSizeChanged()
+{
+    Button::onSizeChanged();
+    if (_overlay)
+    {
+        _overlay->setPosition(_contentSize.width * 0.5f, _contentSize.height * 0.5f);
+    }
+}
+
+Vec2 MediaPlayerControl::getVirtualRendererSize() const
+{
+    if (_unifySize)
+    {
+        return this->getNormalSize();
+    }
+
+    if (nullptr != _overlay)
+    {
+        Vec2 overlaySize = _overlay->getContentSize();
+        if (!_normalTextureLoaded)
+        {
+            return overlaySize;
+        }
+    }
+    return _normalTextureSize;
+}
+
+Vec2 MediaPlayerControl::getNormalSize() const
+{
+    if (_overlay)
+    {
+        return _overlay->getContentSize();
+    }
+
+    return Button::getNormalSize();
+}
+
+void MediaPlayerControl::onPressStateChangedToNormal()
+{
+    Button::onPressStateChangedToNormal();
+
+    if (nullptr != _overlay)
+    {
+        _overlay->stopAllActions();
+        if (_unifySize)
+        {
+            Action* zoomTitleAction = ScaleTo::create(ZOOM_ACTION_TIME_STEP, 1.0f, 1.0f);
+            _overlay->runAction(zoomTitleAction);
+        }
+        else
+        {
+            _overlay->setScaleX(1.0f);
+            _overlay->setScaleY(1.0f);
+        }
+    }
+}
+
+void MediaPlayerControl::onPressStateChangedToPressed()
+{
+    Button::onPressStateChangedToPressed();
+    if (nullptr != _overlay)
+    {
+        _overlay->stopAllActions();
+        Action* zoomTitleAction = ScaleTo::create(ZOOM_ACTION_TIME_STEP, 1.0f + _zoomScale, 1.0f + _zoomScale);
+        _overlay->runAction(zoomTitleAction);
+    }
+}
+
+void MediaPlayerControl::onPressStateChangedToDisabled()
+{
+    Button::onPressStateChangedToDisabled();
+    if (nullptr != _overlay)
+    {
+        _overlay->setScale(1.0);
+    }
+}
 
 BasicMediaController::BasicMediaController(MediaPlayer* player)
     : MediaController(player)
@@ -179,6 +455,8 @@ BasicMediaController* BasicMediaController::create(MediaPlayer* mediaPlayer)
 
 bool BasicMediaController::init()
 {
+    createMediaControlTexture();
+
     if (!Widget::init())
     {
         return false;
@@ -269,10 +547,14 @@ void BasicMediaController::updateControllerState()
         _pauseButton->setVisible(false);
         _stopButton->setVisible(false);
         _timelineTotal->setVisible(false);
+        _fullScreenExitButton->setVisible(false);
+        _fullScreenEnterButton->setVisible(false);
     }
     else
     {
         _timelineTotal->setVisible(true);
+        _fullScreenExitButton->setVisible(_mediaPlayer->isFullScreenEnabled());
+        _fullScreenEnterButton->setVisible(!_mediaPlayer->isFullScreenEnabled());
 
         switch (state)
         {
@@ -326,7 +608,8 @@ void BasicMediaController::createControls()
     _primaryButtonPanel->setScale(1 / scale);
     _controlPanel->addProtectedChild(_primaryButtonPanel);
 
-    _playButton = Button::create("");
+    _playButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
+        g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::Play]));
     _playButton->addClickEventListener([this](Ref* ref) {
         if (_controlPanel->getOpacity() <= 50)
             return;
@@ -336,13 +619,13 @@ void BasicMediaController::createControls()
         updateControllerState();
     });
     _playButton->setSwallowTouches(false);
-    _playButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xb5", "Helvetica", 64));
     _playButton->setPositionNormalized(Vec2(0.25f, 0.5f));
     _playButton->setCascadeOpacityEnabled(true);
     _playButton->setVisible(false);
     _primaryButtonPanel->addProtectedChild(_playButton, 1, -1);
 
-    _stopButton = Button::create("");
+    _stopButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
+        g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::Stop]));
     _stopButton->addClickEventListener([this](Ref* ref) {
         if (_controlPanel->getOpacity() <= 50)
             return;
@@ -352,13 +635,13 @@ void BasicMediaController::createControls()
         updateControllerState();
     });
     _stopButton->setSwallowTouches(false);
-    _stopButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xb9", "Helvetica", 64));
     _stopButton->setPositionNormalized(Vec2(0.75f, 0.5f));
     _stopButton->setCascadeOpacityEnabled(true);
     _stopButton->setVisible(false);
     _primaryButtonPanel->addProtectedChild(_stopButton, 1, -1);
 
-    _pauseButton = Button::create("");
+    _pauseButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
+        g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::Pause]));
     _pauseButton->addClickEventListener([this](Ref* ref) {
         if (_controlPanel->getOpacity() <= 50)
             return;
@@ -368,11 +651,42 @@ void BasicMediaController::createControls()
         updateControllerState();
     });
     _pauseButton->setSwallowTouches(false);
-    _pauseButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xb8", "Helvetica", 64));
     _pauseButton->setPositionNormalized(Vec2(0.25f, 0.5f));
     _pauseButton->setCascadeOpacityEnabled(true);
     _pauseButton->setVisible(false);
     _primaryButtonPanel->addProtectedChild(_pauseButton, 1, -1);
+
+    _fullScreenEnterButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
+        g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::EnterFullscreen]));
+    _fullScreenEnterButton->addClickEventListener([this](Ref* ref) {
+        if (_controlPanel->getOpacity() <= 50)
+            return;
+        _mediaPlayer->setFullScreenEnabled(true);
+        updateControllerState();
+    });
+    _fullScreenEnterButton->setSwallowTouches(false);
+    _fullScreenEnterButton->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    _fullScreenEnterButton->setPositionNormalized(Vec2(0.05f, 0.95f));
+    _fullScreenEnterButton->setCascadeOpacityEnabled(true);
+    _fullScreenEnterButton->setVisible(false);
+    _fullScreenEnterButton->setScale(1 / scale);
+    _controlPanel->addProtectedChild(_fullScreenEnterButton, 1, -1);
+
+    _fullScreenExitButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
+        g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::ExitFullscreen]));
+    _fullScreenExitButton->addClickEventListener([this](Ref* ref) {
+        if (_controlPanel->getOpacity() <= 50)
+            return;
+        _mediaPlayer->setFullScreenEnabled(false);
+        updateControllerState();
+    });
+    _fullScreenExitButton->setSwallowTouches(false);
+    _fullScreenExitButton->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    _fullScreenExitButton->setPositionNormalized(Vec2(0.15f, 0.95f));
+    _fullScreenExitButton->setCascadeOpacityEnabled(true);
+    _fullScreenExitButton->setVisible(false);
+    _fullScreenExitButton->setScale(1 / scale);
+    _controlPanel->addProtectedChild(_fullScreenExitButton, 1, -1);
 
     _timelineTotal = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
     _timelineTotal->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
@@ -466,19 +780,17 @@ void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
     auto scale = Director::getInstance()->getGLView()->getScaleY();
     _primaryButtonPanel->setScale(1 / scale);
     _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT / scale));
+    _fullScreenEnterButton->setScale(1 / scale);
+    _fullScreenExitButton->setScale(1 / scale);
+
+    _fullScreenEnterButton->setPositionNormalized(Vec2());
+    _fullScreenEnterButton->setPositionNormalized(Vec2(0.03f, 0.97f));
+    _fullScreenExitButton->setPositionNormalized(Vec2());
+    _fullScreenExitButton->setPositionNormalized(Vec2(0.03f, 0.97f));
 }
 
 
 MediaPlayer::MediaPlayer()
-    : _fullScreenDirty(false)
-    , _fullScreenEnabled(false)
-    , _keepAspectRatioEnabled(false)
-    , _videoPlayerIndex(-1)
-    , _eventCallback(nullptr)
-    , _isPlaying(false)
-    , _isLooping(false)
-    , _isUserInputEnabled(true)
-    , _styleType(StyleType::DEFAULT)
 {
     auto pvd      = new PrivateVideoDescriptor{};
     _videoContext = pvd;
@@ -632,6 +944,11 @@ MediaPlayer::~MediaPlayer()
     AX_SAFE_RELEASE(pvd->_vtexture);
     AX_SAFE_RELEASE(pvd->_vchromaTexture);
 
+    if (g_mediaControlsTexture && g_mediaControlsTexture->getReferenceCount() == 1)
+    {
+        g_mediaControlsTexture = nullptr;
+    }
+
     delete pvd;
 }
 
@@ -678,11 +995,6 @@ void MediaPlayer::setLooping(bool looping)
     auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
     if (pvd->_engine)
         pvd->_engine->setLoop(looping);
-}
-
-void MediaPlayer::setUserInputEnabled(bool enableInput)
-{
-    _isUserInputEnabled = enableInput;
 }
 
 void MediaPlayer::setStyle(StyleType style)
@@ -791,8 +1103,13 @@ void MediaPlayer::setFullScreenEnabled(bool enabled)
     {
         _fullScreenEnabled = enabled;
 
-        auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
-        setContentSize(enabled ? _director->getGLView()->getDesignResolutionSize() : pvd->_originalViewSize);
+        auto pvd               = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
+        const auto contentSize = enabled ? _director->getGLView()->getDesignResolutionSize() : pvd->_originalViewSize;
+        Widget::setContentSize(contentSize);
+        if (_mediaController)
+        {
+            _mediaController->setContentSize(contentSize);
+        }
     }
 }
 
@@ -936,9 +1253,9 @@ bool MediaPlayer::isLooping() const
     return _isLooping;
 }
 
-bool MediaPlayer::isUserInputEnabled() const
+bool MediaPlayer::isMediaControllerEnabled() const
 {
-    return _isUserInputEnabled;
+    return _controllerEnabled;
 }
 
 void MediaPlayer::setVisible(bool visible)
@@ -984,7 +1301,7 @@ void MediaPlayer::copySpecialProperties(Widget* widget)
     {
         _isPlaying              = videoPlayer->_isPlaying;
         _isLooping              = videoPlayer->_isLooping;
-        _isUserInputEnabled     = videoPlayer->_isUserInputEnabled;
+        _controllerEnabled      = videoPlayer->_controllerEnabled;
         _styleType              = videoPlayer->_styleType;
         _fullScreenEnabled      = videoPlayer->_fullScreenEnabled;
         _fullScreenDirty        = videoPlayer->_fullScreenDirty;

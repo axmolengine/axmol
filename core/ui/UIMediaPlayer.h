@@ -64,11 +64,32 @@ protected:
 };
 inline MediaController::~MediaController() = default;  // Required since the destructor is pure virtual
 
+class MediaPlayerControl : public ax::ui::Button
+{
+public:
+    static MediaPlayerControl* create(SpriteFrame* frame);
+
+    MediaPlayerControl() = default;
+    ~MediaPlayerControl() override;
+
+    virtual bool init(SpriteFrame* frame);
+
+    void onSizeChanged() override;
+    Vec2 getVirtualRendererSize() const override;
+    Vec2 getNormalSize() const override;
+
+    void onPressStateChangedToNormal() override;
+    void onPressStateChangedToPressed() override;
+    void onPressStateChangedToDisabled() override;
+
+protected:
+    Sprite* _overlay = nullptr;
+};
+
 class AX_GUI_DLL BasicMediaController : public MediaController
 {
 public:
     explicit BasicMediaController(MediaPlayer* player);
-    ~BasicMediaController() override = default;
 
     static BasicMediaController* create(MediaPlayer* mediaPlayer);
 
@@ -89,10 +110,14 @@ public:
     virtual void updateControlsForContentSize(const Vec2& contentSize);
 
 protected:
-    Widget* _controlPanel       = nullptr;
-    Button* _playButton         = nullptr;
-    Button* _stopButton         = nullptr;
-    Button* _pauseButton        = nullptr;
+    Widget* _controlPanel = nullptr;
+
+    MediaPlayerControl* _fullScreenEnterButton = nullptr;
+    MediaPlayerControl* _fullScreenExitButton  = nullptr;
+    MediaPlayerControl* _playButton            = nullptr;
+    MediaPlayerControl* _stopButton            = nullptr;
+    MediaPlayerControl* _pauseButton           = nullptr;
+
     Sprite* _timelineSelector   = nullptr;
     Sprite* _timelineTotal      = nullptr;
     Sprite* _timelinePlayed     = nullptr;
@@ -193,13 +218,6 @@ public:
     virtual void setLooping(bool looping);
 
     /**
-     * Set if the player will enable user input for basic pause and resume of video
-     *
-     * @param enableInput If true, input will be handled for basic functionality (pause/resume)
-     */
-    virtual void setUserInputEnabled(bool enableInput);
-
-    /**
      * Set the style of the player
      *
      * @param style The corresponding style
@@ -273,7 +291,13 @@ public:
      *
      * @return true if the videoplayer user input is set, false otherwise.
      */
-    virtual bool isUserInputEnabled() const;
+    virtual bool isMediaControllerEnabled() const;
+
+    /**
+     * Sets whether the MediaPlayer is enabled
+     *
+     */
+    virtual void setMediaControllerEnabled(bool enable);
 
     /**
      * Causes the video player to keep aspect ratio or no when displaying the video.
@@ -329,7 +353,6 @@ public:
      */
     MediaState getState() const;
 
-    void setMediaControllerEnabled(bool enable);
     void setMediaController(MediaController* controller);
 
     MediaPlayer();
@@ -352,11 +375,10 @@ protected:
 
     bool _isPlaying              = false;
     bool _isLooping              = false;
-    bool _isUserInputEnabled     = true;
     bool _fullScreenDirty        = false;
     bool _fullScreenEnabled      = false;
     bool _keepAspectRatioEnabled = false;
-    bool _controllerEnabled      = true;
+    bool _controllerEnabled      = false;
 
     StyleType _styleType = StyleType::DEFAULT;
 
