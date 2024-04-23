@@ -26,6 +26,8 @@
 
 #include "ui/UIMediaPlayer.h"
 
+#include "UILayout.h"
+
 
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
 #if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__) || defined(AX_ENABLE_VLC_MEDIA)
@@ -183,8 +185,7 @@ bool BasicMediaController::init()
     }
 
     setTouchEnabled(true);
-    setCascadeOpacityEnabled(true);
-    setOpacity(0);
+    setCascadeOpacityEnabled(false);
     updateControllerState();
     if (_mediaPlayer)
     {
@@ -203,28 +204,29 @@ void BasicMediaController::onPressStateChangedToPressed()
 {
     _lastTouch = std::chrono::steady_clock::now();
 
-    if (getOpacity() == 255)
+    if (_controlPanel->getOpacity() == 255)
     {
         return;
     }
 
     updateControllerState();
 
-    runAction(Sequence::create(FadeIn::create(1.0f), CallFunc::create([this] {
-        if (isScheduled("__media_controller_fader"sv))
+    _mediaOverlay->runAction(Sequence::create(FadeTo::create(0.5f, 150), nullptr));
+    _controlPanel->runAction(Sequence::create(FadeIn::create(0.5f), CallFunc::create([this] {
+        if (_controlPanel->isScheduled("__media_controller_fader"sv))
             return;
 
-        schedule(
+        _controlPanel->schedule(
             [this](float) {
             auto now       = std::chrono::steady_clock::now();
             auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastTouch);
             if (deltaTime > std::chrono::milliseconds{2500})
             {
-                unschedule("__media_controller_fader"sv);
-                runAction(Sequence::create(FadeOut::create(0.5f), nullptr));
+                _controlPanel->unschedule("__media_controller_fader"sv);
+                _controlPanel->runAction(Sequence::create(FadeOut::create(0.5f), nullptr));
+                _mediaOverlay->runAction(Sequence::create(FadeOut::create(0.5f), nullptr));
             }
-        },
-            1.f, "__media_controller_fader"sv);
+        }, 1.f, "__media_controller_fader"sv);
     }), nullptr));
 }
 
@@ -307,15 +309,34 @@ void BasicMediaController::updateControllerState()
 
 void BasicMediaController::createControls()
 {
+    const auto& contentSize = getContentSize();
+
+    _mediaOverlay = Layout::create();
+    _mediaOverlay->setBackGroundColor(Color3B::BLACK);
+    _mediaOverlay->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
+    _mediaOverlay->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _mediaOverlay->setPositionNormalized(Vec2(0.5f, 0.5f));
+    _mediaOverlay->setContentSize(contentSize);
+    _mediaOverlay->setOpacity(0);
+    addProtectedChild(_mediaOverlay, 1);
+
+    _controlPanel = Widget::create();
+    _controlPanel->setContentSize(contentSize);
+    _controlPanel->setPositionNormalized(Vec2(0.5f, 0.5f));
+    _controlPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _controlPanel->setCascadeOpacityEnabled(true);
+    _controlPanel->setOpacity(0);
+    addProtectedChild(_controlPanel, 10);
+
     auto primaryButtonPanel = Widget::create();
     primaryButtonPanel->setContentSize(Vec2(150, 60));
     primaryButtonPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
     primaryButtonPanel->setPositionNormalized(Vec2(0.5f, 0.5f));
-    addProtectedChild(primaryButtonPanel);
+    _controlPanel->addProtectedChild(primaryButtonPanel);
 
     _playButton = Button::create("");
     _playButton->addClickEventListener([this](Ref* ref) {
-        if (getOpacity() <= 50)
+        if (_controlPanel->getOpacity() <= 50)
             return;
         _playRate = 1.f;
         _mediaPlayer->setPlayRate(_playRate);
@@ -331,7 +352,7 @@ void BasicMediaController::createControls()
 
     _stopButton = Button::create("");
     _stopButton->addClickEventListener([this](Ref* ref) {
-        if (getOpacity() <= 50)
+        if (_controlPanel->getOpacity() <= 50)
             return;
         _playRate = 1.f;
         _mediaPlayer->setPlayRate(_playRate);
@@ -347,7 +368,7 @@ void BasicMediaController::createControls()
 
     _pauseButton = Button::create("");
     _pauseButton->addClickEventListener([this](Ref* ref) {
-        if (getOpacity() <= 50)
+        if (_controlPanel->getOpacity() <= 50)
             return;
         _playRate = 1.f;
         _mediaPlayer->setPlayRate(_playRate);
@@ -363,7 +384,7 @@ void BasicMediaController::createControls()
 
     _fastForwardButton = Button::create("");
     _fastForwardButton->addClickEventListener([this](Ref* ref) {
-        if (getOpacity() <= 50)
+        if (_controlPanel->getOpacity() <= 50)
             return;
         if (_playRate >= 4.f)
             return;
@@ -376,11 +397,11 @@ void BasicMediaController::createControls()
     _fastForwardButton->setCascadeOpacityEnabled(true);
     _fastForwardButton->setPositionNormalized(Vec2(0.75f, 0.5f));
     _fastForwardButton->setVisible(false);
-    addProtectedChild(_fastForwardButton, 1, -1);
+    _controlPanel->addProtectedChild(_fastForwardButton, 1, -1);
 
     _fastRewindButton = Button::create("");
     _fastRewindButton->addClickEventListener([this](Ref* ref) {
-        if (getOpacity() <= 50)
+        if (_controlPanel->getOpacity() <= 50)
             return;
         if (_playRate <= (1.f / 4.f))
             return;
@@ -393,7 +414,7 @@ void BasicMediaController::createControls()
     _fastRewindButton->setCascadeOpacityEnabled(true);
     _fastRewindButton->setPositionNormalized(Vec2(0.25f, 0.5f));
     _fastRewindButton->setVisible(false);
-    addProtectedChild(_fastRewindButton, 1, -1);
+    _controlPanel->addProtectedChild(_fastRewindButton, 1, -1);
 
     _timelineTotal = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
     _timelineTotal->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
@@ -402,7 +423,7 @@ void BasicMediaController::createControls()
     _timelineTotal->setColor(Color3B::GRAY);
     _timelineTotal->setVisible(false);
     _timelineTotal->setCascadeOpacityEnabled(true);
-    addProtectedChild(_timelineTotal, 1);
+    _controlPanel->addProtectedChild(_timelineTotal, 1);
 
     _timelinePlayed = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
     _timelinePlayed->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
@@ -461,6 +482,7 @@ void BasicMediaController::createControls()
 
 void BasicMediaController::updateControlsGlobalZ(float globalZOrder)
 {
+    _controlPanel->setGlobalZOrder(globalZOrder);
     _timelineTotal->setGlobalZOrder(globalZOrder);
     _timelinePlayed->setGlobalZOrder(globalZOrder);
     _timelineSelector->setGlobalZOrder(globalZOrder);
@@ -479,6 +501,8 @@ void BasicMediaController::updateControls()
 
 void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
 {
+    _mediaOverlay->setContentSize(contentSize);
+    _controlPanel->setContentSize(contentSize);
     _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT));
     _timelineTotal->setPositionX(contentSize.width / 2);
 }

@@ -1,4 +1,7 @@
 // VlcMediaEngine.h
+// Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+// https://axmolengine.github.io/
+
 #pragma once
 
 #    include "MediaEngine.h"
