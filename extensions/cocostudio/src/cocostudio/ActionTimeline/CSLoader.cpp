@@ -952,7 +952,7 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
         AXLOG("textureSize = %d", textureSize);
         for (int i = 0; i < textureSize; ++i)
         {
-            std::string plist = textures->Get(i)->c_str();
+            std::string_view plist = textures->Get(i)->c_str();
             if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
             {
                 SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
@@ -1079,7 +1079,7 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
     int textureSize = textures->size();
     for (int i = 0; i < textureSize; ++i)
     {
-        std::string plist = textures->Get(i)->c_str();
+        std::string_view plist = textures->Get(i)->c_str();
         if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
         {
             SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
@@ -1447,7 +1447,7 @@ Node* CSLoader::createNodeWithFlatBuffersForSimulator(std::string_view filename)
     //    AXLOG("textureSize = %d", textureSize);
     for (int i = 0; i < textureSize; ++i)
     {
-        std::string plist = textures->Get(i)->c_str();
+        std::string_view plist = textures->Get(i)->c_str();
         if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
         {
             SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);

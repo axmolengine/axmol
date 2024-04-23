@@ -248,7 +248,7 @@ public:
 
     SpriteFrame* findFrame(std::string_view frame);
 
-    std::string getSpriteFrameName(SpriteFrame* frame);
+    std::string_view getSpriteFrameName(SpriteFrame* frame);
 
     /**  Record SpriteFrame with plist and frame name, add frame name
      *    and plist to index

@@ -403,7 +403,7 @@ SpriteFrame* SpriteFrameCache::findFrame(std::string_view frame)
     return _spriteFrames.at(frame);
 }
 
-std::string SpriteFrameCache::getSpriteFrameName(SpriteFrame* frame)
+std::string_view SpriteFrameCache::getSpriteFrameName(SpriteFrame* frame)
 {
     for (auto& it : _spriteFrames)
     {
