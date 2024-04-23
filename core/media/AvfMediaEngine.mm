@@ -463,7 +463,7 @@ double AvfMediaEngine::getCurrentTime()
     if (_player != nil) {
         CMTime currTime = [_player currentTime];
         if (CMTIME_IS_VALID(currTime))
-            return CMTimeGetSeconds(currTime)
+            return CMTimeGetSeconds(currTime);
     }
         
     return 0.0;
