@@ -96,8 +96,8 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        ./tools/console/build.ps1 -p linux -a x64
-        ./tools/console/build.ps1 -p linux -a x64 -xb '--target,lua-tests'
+        axmol -p linux -a x64
+        axmol -p linux -a x64 -xb '--target,lua-tests'
   osx:
     runs-on: macos-13
     strategy:
@@ -116,7 +116,7 @@ jobs:
         xcode-version: '15.1'
     - name: Build
       shell: pwsh
-      run: ./tools/console/build.ps1 -p osx -a $env:BUILD_ARCH
+      run: ./tools/cmdline/build.ps1 -p osx -a $env:BUILD_ARCH
   android:
     runs-on: ubuntu-latest
     strategy:
@@ -140,7 +140,7 @@ jobs:
       shell: pwsh
       run: |
         $AX_ROOT = $(Get-Location).Path
-        ./tools/console/build.ps1 -p android -a $env:BUILD_ARCH
+        ./tools/cmdline/build.ps1 -p android -a $env:BUILD_ARCH
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ matrix.arch }}
@@ -166,4 +166,4 @@ jobs:
 
     - name: Build
       shell: pwsh
-      run: ./tools/console/build.ps1 -p $env:TARGET_OS -a 'x64'
+      run: ./tools/cmdline/build.ps1 -p $env:TARGET_OS -a 'x64'

@@ -112,7 +112,7 @@ if ($pwsh_ver -lt [VersionEx]'5.0') {
 }
 
 # powershell 7 require mark as global explicit if want access in function via $Global:xxx
-$Global:AX_CONSOLE_ROOT = Join-Path $AX_ROOT 'tools/console'
+$Global:AX_CLI_ROOT = Join-Path $AX_ROOT 'tools/cmdline'
 
 # https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables
 $IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
@@ -124,12 +124,12 @@ if ($IsWin) {
     }
 
     #  checking evaluated env:PATH with system + user
-    $Global:isMeInPath = $env:PATH.Contains($AX_CONSOLE_ROOT)
+    $Global:isMeInPath = $env:PATH.Contains($AX_CLI_ROOT)
     $Global:oldCmdRoot = $null
     $Global:cmdInfo = Get-Command 'axmol' -ErrorAction SilentlyContinue
     if ($cmdInfo) {
         $cmdRootTmp = Split-Path $cmdInfo.Source -Parent
-        if ($cmdRootTmp -ne $AX_CONSOLE_ROOT) {
+        if ($cmdRootTmp -ne $AX_CLI_ROOT) {
             $oldCmdRoot = $cmdRootTmp
         }
     }
@@ -147,13 +147,13 @@ if ($IsWin) {
         }
         
         if ($Global:isMeInPath) {
-            if ($pathList[0] -ne $Global:AX_CONSOLE_ROOT) {
-                $pathList.Remove($Global:AX_CONSOLE_ROOT)
-                $pathList.Insert(0, $Global:AX_CONSOLE_ROOT)
+            if ($pathList[0] -ne $Global:AX_CLI_ROOT) {
+                $pathList.Remove($Global:AX_CLI_ROOT)
+                $pathList.Insert(0, $Global:AX_CLI_ROOT)
             }
         }
         else {
-            $pathList.Insert(0, $Global:AX_CONSOLE_ROOT)
+            $pathList.Insert(0, $Global:AX_CLI_ROOT)
         }
         return $pathList -join ';'
     }
@@ -199,9 +199,9 @@ else {
         ++$profileMods
     }
 
-    if (!$profileContent.Contains('$env:PATH = ') -or !($axmolCmdInfo = (Get-Command axmol -ErrorAction SilentlyContinue)) -or $axmolCmdInfo.Source -ne "$AX_CONSOLE_ROOT/axmol") {
+    if (!$profileContent.Contains('$env:PATH = ') -or !($axmolCmdInfo = (Get-Command axmol -ErrorAction SilentlyContinue)) -or $axmolCmdInfo.Source -ne "$AX_CLI_ROOT/axmol") {
         $profileContent += "# Add axmol console tool to PATH`n"
-        $profileContent += '$env:PATH = "${env:AX_ROOT}/tools/console:${env:PATH}"'
+        $profileContent += '$env:PATH = "${env:AX_ROOT}/tools/cmdline:${env:PATH}"'
         $profileContent += "`n"
         ++$profileMods
     }
@@ -233,9 +233,9 @@ else {
             }
         }
 
-        if (!$profileContent.Contains('export PATH=$AX_ROOT/tools/console:')) {
+        if (!$profileContent.Contains('export PATH=$AX_ROOT/tools/cmdline:')) {
             $profileContent += "# Add axmol console tool to PATH`n"
-            $profileContent += 'export PATH=$AX_ROOT/tools/console:$PATH' -f "`n"
+            $profileContent += 'export PATH=$AX_ROOT/tools/cmdline:$PATH' -f "`n"
             ++$profileMods
         }
         if ($profileMods) {
