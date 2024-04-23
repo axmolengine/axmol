@@ -156,7 +156,7 @@ const char* BODY_IMAGE_1_PIXEL_HEIGHT =
 const char* CIRCLE_IMAGE_KEY              = "/__circle16x16Image";
 const char* BODY_IMAGE_1_PIXEL_HEIGHT_KEY = "/__bodyImage";
 
-constexpr auto TIMELINE_BAR_HEIGHT = 15.f;
+constexpr auto TIMELINE_BAR_HEIGHT = 12.f;
 
 }  // namespace
 
@@ -310,6 +310,7 @@ void BasicMediaController::updateControllerState()
 void BasicMediaController::createControls()
 {
     const auto& contentSize = getContentSize();
+    auto scale              = Director::getInstance()->getGLView()->getScaleY();
 
     _mediaOverlay = Layout::create();
     _mediaOverlay->setBackGroundColor(Color3B::BLACK);
@@ -330,8 +331,9 @@ void BasicMediaController::createControls()
 
     auto primaryButtonPanel = Widget::create();
     primaryButtonPanel->setContentSize(Vec2(150, 60));
-    primaryButtonPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    primaryButtonPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     primaryButtonPanel->setPositionNormalized(Vec2(0.5f, 0.5f));
+    primaryButtonPanel->setScale(1 / scale);
     _controlPanel->addProtectedChild(primaryButtonPanel);
 
     _playButton = Button::create("");
@@ -344,8 +346,8 @@ void BasicMediaController::createControls()
         updateControllerState();
     });
     _playButton->setSwallowTouches(false);
-    _playButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xb5", "Helvetica", 56));
-    _playButton->setPosition(Vec2(0.0f, primaryButtonPanel->getContentSize().height / 2));
+    _playButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xb5", "Helvetica", 64));
+    _playButton->setPositionNormalized(Vec2(0.25f, 0.5f));
     _playButton->setCascadeOpacityEnabled(true);
     _playButton->setVisible(false);
     primaryButtonPanel->addProtectedChild(_playButton, 1, -1);
@@ -360,8 +362,8 @@ void BasicMediaController::createControls()
         updateControllerState();
     });
     _stopButton->setSwallowTouches(false);
-    _stopButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xb9", "Helvetica", 56));
-    _stopButton->setPosition(Vec2(80, primaryButtonPanel->getContentSize().height / 2));
+    _stopButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xb9", "Helvetica", 64));
+    _stopButton->setPositionNormalized(Vec2(0.75f, 0.5f));
     _stopButton->setCascadeOpacityEnabled(true);
     _stopButton->setVisible(false);
     primaryButtonPanel->addProtectedChild(_stopButton, 1, -1);
@@ -376,8 +378,8 @@ void BasicMediaController::createControls()
         updateControllerState();
     });
     _pauseButton->setSwallowTouches(false);
-    _pauseButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xb8", "Helvetica", 56));
-    _pauseButton->setPosition(Vec2(0, primaryButtonPanel->getContentSize().height / 2));
+    _pauseButton->setTitleLabel(Label::createWithSystemFont("\xe2\x8f\xb8", "Helvetica", 64));
+    _pauseButton->setPositionNormalized(Vec2(0.25f, 0.5f));
     _pauseButton->setCascadeOpacityEnabled(true);
     _pauseButton->setVisible(false);
     primaryButtonPanel->addProtectedChild(_pauseButton, 1, -1);
@@ -419,10 +421,11 @@ void BasicMediaController::createControls()
     _timelineTotal = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
     _timelineTotal->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
     _timelineTotal->setStretchEnabled(true);
-    _timelineTotal->setPosition(Vec2(getContentSize().width / 2, 80));
+    _timelineTotal->setPositionNormalized(Vec2(0.5f, 0.1f));
     _timelineTotal->setColor(Color3B::GRAY);
     _timelineTotal->setVisible(false);
     _timelineTotal->setCascadeOpacityEnabled(true);
+    _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT / scale));
     _controlPanel->addProtectedChild(_timelineTotal, 1);
 
     _timelinePlayed = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
@@ -438,7 +441,7 @@ void BasicMediaController::createControls()
     _timelineSelector->setPositionNormalized(Vec2(1.f, 0.5f));
     _timelineSelector->setCascadeOpacityEnabled(true);
     _timelineSelector->setStretchEnabled(true);
-    _timelineSelector->setContentSize(Size(TIMELINE_BAR_HEIGHT * 1.5f, TIMELINE_BAR_HEIGHT * 1.5f));
+    _timelineSelector->setContentSize(Size(TIMELINE_BAR_HEIGHT * 1.5f, TIMELINE_BAR_HEIGHT * 1.5f) / scale);
     _timelineSelector->setVisible(false);
     _timelinePlayed->addChild(_timelineSelector, 10);
 
@@ -501,10 +504,12 @@ void BasicMediaController::updateControls()
 
 void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
 {
+    auto scale = Director::getInstance()->getGLView()->getScaleY();
+
     _mediaOverlay->setContentSize(contentSize);
     _controlPanel->setContentSize(contentSize);
-    _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT));
-    _timelineTotal->setPositionX(contentSize.width / 2);
+
+    _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT / scale));
 }
 
 
