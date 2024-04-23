@@ -47,7 +47,7 @@ THE SOFTWARE.
 #include "ui/UIHBox.h"
 #include "ui/UIVBox.h"
 #include "ui/UIRelativeBox.h"
-#if !defined(_WIN32) || (defined(AX_ENABLE_MFMEDIA) || defined(AX_ENABLE_VLC_MEDIA))
+#if defined(AX_ENABLE_MEDIA)
 #    include "ui/UIMediaPlayer.h"
 #endif
 #if !defined(_WIN32) || defined(AX_ENABLE_MSEDGE_WEBVIEW2)

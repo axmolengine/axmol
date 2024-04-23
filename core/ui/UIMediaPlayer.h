@@ -25,7 +25,7 @@
  ****************************************************************************/
 #pragma once
 
-#if AX_TARGET_PLATFORM != AX_PLATFORM_LINUX || defined(AX_ENABLE_VLC_MEDIA)
+#if defined(AX_ENABLE_MEDIA)
 
 #    include "UIButton.h"
 #    include "ui/UIWidget.h"

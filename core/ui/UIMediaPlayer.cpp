@@ -30,7 +30,7 @@
 
 
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
-#if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__) || defined(AX_ENABLE_VLC_MEDIA)
+#if defined(AX_ENABLE_MEDIA)
 #    include <unordered_map>
 #    include <stdlib.h>
 #    include <string>

@@ -376,7 +376,7 @@ list(APPEND GAME_SOURCE
      Source/ZipTest/ZipTests.cpp
      )
 
-if(ANDROID OR MACOSX OR IOS OR (WINDOWS AND AX_ENABLE_MFMEDIA) OR AX_ENABLE_VLC_MEDIA)
+if(AX_ENABLE_MEDIA)
     list(APPEND GAME_HEADER
              Source/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.h)
     list(APPEND GAME_SOURCE
