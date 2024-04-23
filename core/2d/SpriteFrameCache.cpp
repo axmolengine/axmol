@@ -172,7 +172,7 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
 
 void SpriteFrameCache::removeUnusedSpriteSheets()
 {
-    std::vector<string> willRemoveSpriteSheetFileNames;
+    std::vector<std::string_view> willRemoveSpriteSheetFileNames;
     for (auto&& it : _spriteSheets)
     {
         bool isUsed = false;
