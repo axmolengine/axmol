@@ -158,18 +158,14 @@ constexpr auto TIMELINE_BAR_HEIGHT = 15.f;
 
 }  // namespace
 
-MediaController::MediaController(MediaPlayer* player)
-    : _mediaPlayer(player)
+BasicMediaController::BasicMediaController(MediaPlayer* player)
+    : MediaController(player)
 {
 }
 
-MediaController::~MediaController()
+BasicMediaController* BasicMediaController::create(MediaPlayer* mediaPlayer)
 {
-}
-
-MediaController* MediaController::create(MediaPlayer* mediaPlayer)
-{
-    auto* widget = new MediaController(mediaPlayer);
+    auto* widget = new BasicMediaController(mediaPlayer);
     if (widget->init())
     {
         widget->autorelease();
@@ -179,7 +175,7 @@ MediaController* MediaController::create(MediaPlayer* mediaPlayer)
     return nullptr;
 }
 
-bool MediaController::init()
+bool BasicMediaController::init()
 {
     if (!Widget::init())
     {
@@ -194,10 +190,120 @@ bool MediaController::init()
     return true;
 }
 
-void MediaController::initRenderer()
+void BasicMediaController::initRenderer()
 {
     Widget::initRenderer();
+    createControls();
+}
 
+void BasicMediaController::onPressStateChangedToPressed()
+{
+    _lastTouch = std::chrono::steady_clock::now();
+
+    if (getOpacity() == 255)
+    {
+        return;
+    }
+
+    updateControllerState();
+
+    runAction(Sequence::create(FadeIn::create(1.0f), CallFunc::create([this] {
+        if (isScheduled("__media_controller_fader"sv))
+            return;
+
+        schedule(
+            [this](float) {
+            auto now       = std::chrono::steady_clock::now();
+            auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastTouch);
+            if (deltaTime > std::chrono::milliseconds{2500})
+            {
+                unschedule("__media_controller_fader"sv);
+                runAction(Sequence::create(FadeOut::create(0.5f), nullptr));
+            }
+        },
+            1.f, "__media_controller_fader"sv);
+    }), nullptr));
+}
+
+void BasicMediaController::setContentSize(const Vec2& contentSize)
+{
+    Widget::setContentSize(contentSize);
+    updateControlsForContentSize(contentSize);
+}
+
+void BasicMediaController::update(float delta)
+{
+    Widget::update(delta);
+    updateControls();
+}
+
+void BasicMediaController::onEnter()
+{
+    Widget::onEnter();
+    scheduleUpdate();
+}
+
+void BasicMediaController::setGlobalZOrder(float globalZOrder)
+{
+    Widget::setGlobalZOrder(globalZOrder);
+    updateControlsGlobalZ(globalZOrder);
+}
+
+void BasicMediaController::updateControllerState()
+{
+    if (!_mediaPlayer)
+        return;
+
+    bool restrictedSize     = false;
+    const auto& contentSize = getContentSize();
+    if (contentSize.width < 600 || contentSize.height < 400)
+    {
+        restrictedSize = true;
+    }
+
+    auto state = _mediaPlayer->getState();
+    if (state == MediaPlayer::MediaState::LOADING ||
+        state == MediaPlayer::MediaState::CLOSED ||
+        state == MediaPlayer::MediaState::ERROR)
+    {
+        _playButton->setVisible(false);
+        _pauseButton->setVisible(false);
+        _stopButton->setVisible(false);
+        _fastForwardButton->setVisible(false);
+        _fastRewindButton->setVisible(false);
+        _timelineTotal->setVisible(false);
+    }
+    else
+    {
+        _fastForwardButton->setVisible(!restrictedSize);
+        _fastRewindButton->setVisible(!restrictedSize);
+        _timelineTotal->setVisible(true);
+
+        switch (state)
+        {
+        case MediaPlayer::MediaState::PLAYING:
+            _playButton->setVisible(false);
+            _pauseButton->setVisible(true);
+            _stopButton->setVisible(true);
+            break;
+        case MediaPlayer::MediaState::PAUSED:
+            _playButton->setVisible(true);
+            _pauseButton->setVisible(false);
+            _stopButton->setVisible(true);
+            break;
+        case MediaPlayer::MediaState::STOPPED:
+        case MediaPlayer::MediaState::FINISHED:
+            _playButton->setVisible(true);
+            _pauseButton->setVisible(false);
+            _stopButton->setVisible(false);
+            break;
+        default:;
+        }
+    }
+}
+
+void BasicMediaController::createControls()
+{
     auto primaryButtonPanel = Widget::create();
     primaryButtonPanel->setContentSize(Vec2(150, 60));
     primaryButtonPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
@@ -350,45 +456,15 @@ void MediaController::initRenderer()
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(_timelineTouchListener, _timelineTotal);
 }
 
-void MediaController::onPressStateChangedToPressed()
+void BasicMediaController::updateControlsGlobalZ(float globalZOrder)
 {
-    _lastTouch = std::chrono::steady_clock::now();
-
-    if (getOpacity() == 255)
-    {
-        return;
-    }
-
-    updateControllerState();
-
-    runAction(Sequence::create(FadeIn::create(1.0f), CallFunc::create([this] {
-        if (isScheduled("__media_controller_fader"sv))
-            return;
-
-        schedule(
-            [this](float) {
-            auto now       = std::chrono::steady_clock::now();
-            auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastTouch);
-            if (deltaTime > std::chrono::milliseconds{2500})
-            {
-                unschedule("__media_controller_fader"sv);
-                runAction(Sequence::create(FadeOut::create(0.5f), nullptr));
-            }
-        },
-            1.f, "__media_controller_fader"sv);
-    }), nullptr));
+    _timelineTotal->setGlobalZOrder(globalZOrder);
+    _timelinePlayed->setGlobalZOrder(globalZOrder);
+    _timelineSelector->setGlobalZOrder(globalZOrder);
 }
 
-void MediaController::setContentSize(const Vec2& contentSize)
+void BasicMediaController::updateControls()
 {
-    Widget::setContentSize(contentSize);
-    _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT));
-    _timelineTotal->setPositionX(contentSize.width / 2);
-}
-
-void MediaController::update(float delta)
-{
-    Widget::update(delta);
     if (_mediaPlayer)
     {
         const auto currentTime = _mediaPlayer->getCurrentTime();
@@ -398,72 +474,10 @@ void MediaController::update(float delta)
     }
 }
 
-void MediaController::onEnter()
+void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
 {
-    Widget::onEnter();
-    scheduleUpdate();
-}
-
-void MediaController::setGlobalZOrder(float globalZOrder)
-{
-    Widget::setGlobalZOrder(globalZOrder);
-
-    _timelineTotal->setGlobalZOrder(globalZOrder);
-    _timelinePlayed->setGlobalZOrder(globalZOrder);
-    _timelineSelector->setGlobalZOrder(globalZOrder);
-}
-
-void MediaController::updateControllerState()
-{
-    if (!_mediaPlayer)
-        return;
-
-    bool restrictedSize     = false;
-    const auto& contentSize = getContentSize();
-    if (contentSize.width < 600 || contentSize.height < 400)
-    {
-        restrictedSize = true;
-    }
-
-    auto state = _mediaPlayer->getState();
-    if (state == MediaPlayer::MediaState::LOADING ||
-        state == MediaPlayer::MediaState::CLOSED ||
-        state == MediaPlayer::MediaState::ERROR)
-    {
-        _playButton->setVisible(false);
-        _pauseButton->setVisible(false);
-        _stopButton->setVisible(false);
-        _fastForwardButton->setVisible(false);
-        _fastRewindButton->setVisible(false);
-        _timelineTotal->setVisible(false);
-    }
-    else
-    {
-        _fastForwardButton->setVisible(!restrictedSize);
-        _fastRewindButton->setVisible(!restrictedSize);
-        _timelineTotal->setVisible(true);
-
-        switch (state)
-        {
-        case MediaPlayer::MediaState::PLAYING:
-            _playButton->setVisible(false);
-            _pauseButton->setVisible(true);
-            _stopButton->setVisible(true);
-            break;
-        case MediaPlayer::MediaState::PAUSED:
-            _playButton->setVisible(true);
-            _pauseButton->setVisible(false);
-            _stopButton->setVisible(true);
-            break;
-        case MediaPlayer::MediaState::STOPPED:
-        case MediaPlayer::MediaState::FINISHED:
-            _playButton->setVisible(true);
-            _pauseButton->setVisible(false);
-            _stopButton->setVisible(false);
-            break;
-        default:;
-        }
-    }
+    _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT));
+    _timelineTotal->setPositionX(contentSize.width / 2);
 }
 
 
@@ -640,6 +654,11 @@ bool MediaPlayer::init()
         return false;
     }
 
+    if (_controllerEnabled)
+    {
+        setMediaController(BasicMediaController::create(this));
+    }
+
     return true;
 }
 
@@ -717,7 +736,6 @@ void MediaPlayer::setContentSize(const Size& contentSize)
     {
         _mediaController->setContentSize(contentSize);
     }
-    //updatePlayerView();
 }
 
 MediaPlayer::MediaState MediaPlayer::getState() const
@@ -757,7 +775,7 @@ void MediaPlayer::setMediaControllerEnabled(bool enable)
     }
     else if (_controllerEnabled)
     {
-        setMediaController(MediaController::create(this));
+        setMediaController(BasicMediaController::create(this));
     }
 }
 

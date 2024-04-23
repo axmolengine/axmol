@@ -52,10 +52,23 @@ class MediaPlayer;
 class AX_GUI_DLL MediaController : public ax::ui::Widget
 {
 public:
-    MediaController(MediaPlayer* player);
-    ~MediaController() override;
+    explicit MediaController(MediaPlayer* player) : _mediaPlayer(player) {}
+    ~MediaController() override = 0;
 
-    static MediaController* create(MediaPlayer* mediaPlayer);
+    virtual void updateControllerState() = 0;
+
+protected:
+    MediaPlayer* _mediaPlayer = nullptr;
+};
+inline MediaController::~MediaController() = default;  // Required since the destructor is pure virtual
+
+class AX_GUI_DLL BasicMediaController : public MediaController
+{
+public:
+    explicit BasicMediaController(MediaPlayer* player);
+    ~BasicMediaController() override = default;
+
+    static BasicMediaController* create(MediaPlayer* mediaPlayer);
 
     bool init() override;
     void initRenderer() override;
@@ -66,10 +79,14 @@ public:
     void onEnter() override;
     void setGlobalZOrder(float globalZOrder) override;
 
-    virtual void updateControllerState();
+    void updateControllerState() override;
+
+    virtual void createControls();
+    virtual void updateControlsGlobalZ(float globalZOrder);
+    virtual void updateControls();
+    virtual void updateControlsForContentSize(const Vec2& contentSize);
 
 protected:
-    MediaPlayer* _mediaPlayer  = nullptr;
     Button* _playButton        = nullptr;
     Button* _stopButton        = nullptr;
     Button* _pauseButton       = nullptr;
@@ -201,12 +218,12 @@ public:
     /**
      * Pauses playback.
      */
-    virtual void pause() override;
+    void pause() override;
 
     /**
      * Resumes playback.
      */
-    virtual void resume() override;
+    void resume() override;
 
     /**
      * Stops playback.
@@ -295,10 +312,10 @@ public:
      * @param event @see MediaPlayer::EventType.
      */
     virtual void onPlayEvent(int event);
-    virtual void setVisible(bool visible) override;
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void setVisible(bool visible) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void onEnter() override;
+    void onExit() override;
 
     void setContentSize(const Size& contentSize) override;
 
@@ -313,11 +330,11 @@ public:
     void setMediaController(MediaController* controller);
 
     MediaPlayer();
-    virtual ~MediaPlayer();
+    ~MediaPlayer() override;
 
 protected:
-    virtual ax::ui::Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
+    ax::ui::Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
     virtual void updateMediaController();
 
 #    if AX_VIDEOPLAYER_DEBUG_DRAW
