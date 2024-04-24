@@ -278,7 +278,7 @@ void createMediaControlTexture()
         Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
         item.second(midPoint);
 
-#if defined(AX_USE_GL) || defined(AX_USE_GLES)
+#if defined(AX_USE_GL)
         g_mediaControlTextureRegions[item.first] =
         Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);
 #else // For Metal renderer
