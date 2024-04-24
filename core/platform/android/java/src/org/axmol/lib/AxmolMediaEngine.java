@@ -1,3 +1,26 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmolengine.github.io/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 package org.axmol.lib;
 
 import android.app.Activity;
@@ -82,6 +105,8 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     /** ------ native methods ------- */
     public static native void nativeHandleEvent(long nativeObj, int arg1);
     public static native void nativeHandleVideoSample(long nativeObj, ByteBuffer sampleData, int sampleLen, int outputX, int outputY, int videoX, int videoY, int rotation);
+    public static native void nativeSetDuration(long nativeObj, double duration);
+    public static native void nativeSetCurrentTime(long nativeObj, double currentTime);
 
     public static void setContext(Activity activity) {
         sContext = activity.getApplicationContext();
@@ -251,8 +276,10 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     public boolean stop() {
         if(mPlayer == null) return false;
         AxmolEngine.getActivity().runOnUiThread(() -> {
-            if (mPlayer != null)
+            if (mPlayer != null) {
                 mPlayer.stop();
+                nativeSetDuration(mNativeObj,0.0);
+            }
         });
         return true;
     }
@@ -317,6 +344,13 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
 
         ByteBuffer tmpBuffer = codec.getOutputBuffer(index);
         nativeHandleVideoSample(mNativeObj, tmpBuffer, tmpBuffer.remaining(), mOutputDim.x, mOutputDim.y, mVideoDim.x, mVideoDim.y, mVideoRotation);
+
+        AxmolEngine.getActivity().runOnUiThread(() -> {
+            if (mPlayer != null) {
+                long currentPos = mPlayer.getCurrentPosition();
+                nativeSetCurrentTime(mNativeObj,currentPos / 1000.0);
+            }
+        });
     }
 
     @Override
@@ -351,6 +385,11 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         switch (playbackState) {
             case Player.STATE_READY:
                 Log.d(TAG, "[Individual]onPlaybackStateChanged: decoder: " + mVideoRenderer.getCodecName());
+                AxmolEngine.getActivity().runOnUiThread(() -> {
+                    if (mPlayer != null) {
+                        nativeSetDuration(mNativeObj,mPlayer.getContentDuration() / 1000.0);
+                    }
+                });
                 break;
             case Player.STATE_ENDED:
                 mPlaybackEnded = true;

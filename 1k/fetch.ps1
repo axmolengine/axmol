@@ -59,7 +59,12 @@ function fetch_repo($url, $name, $dest, $ext) {
         }
 
         if (!(Test-Path $dest -PathType Container)) {
-            throw "fetch.ps1: the package name mismatch for $out"
+            $original_lib_src = Join-Path $prefix $Script:url_pkg_name
+            if (Test-Path $original_lib_src -PathType Container) {
+                Rename-Item $original_lib_src $dest 
+            } else {
+                throw "fetch.ps1: the package name mismatch for $out"
+            }
         }
     }
 }
@@ -114,30 +119,27 @@ if (!$url) {
 }
 
 $url_pkg_ext = $null
-$url_pkg_name = $null
+$Script:url_pkg_name = $null
 $match_info = [Regex]::Match($url, '(\.git)|(\.zip)|(\.tar\.(gz|bz2|xz))$')
 if ($match_info.Success) {
     $url_pkg_ext = $match_info.Value
     $url_file_name = Split-Path $url -Leaf
-    $url_pkg_name = $url_file_name.Substring(0, $url_file_name.Length - $url_pkg_ext.Length)
+    $Script:url_pkg_name = $url_file_name.Substring(0, $url_file_name.Length - $url_pkg_ext.Length)
     if (!$name) {
-        $name = $url_pkg_name
+        $name = $Script:url_pkg_name
     }
 }
 else {
     throw "fetch.ps1: invalid url, must be endswith .git, .zip, .tar.xx"
 }
 
+$lib_src = Join-Path $prefix $name
 $is_git_repo = $url_pkg_ext -eq '.git'
 if (!$is_git_repo) {
     $match_info = [Regex]::Match($url, '(\d+\.)+(-)?(\*|\d+)')
     if ($match_info.Success) {
         $version = $match_info.Value
     }
-    $lib_src = Join-Path $prefix $url_pkg_name
-}
-else {
-    $lib_src = Join-Path $prefix $name
 }
 
 if (!$version) {

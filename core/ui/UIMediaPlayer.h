@@ -25,9 +25,14 @@
  ****************************************************************************/
 #pragma once
 
-#include "ui/UIWidget.h"
+#if defined(AX_ENABLE_MEDIA)
 
-#if AX_TARGET_PLATFORM != AX_PLATFORM_LINUX || defined(AX_ENABLE_VLC_MEDIA)
+#    include "UIButton.h"
+#    include "ui/UIWidget.h"
+#    include "ui/UILayout.h"
+#    include "2d/Sprite.h"
+#    include <chrono>
+
 
 #    if AX_VIDEOPLAYER_DEBUG_DRAW
 #        include "2d/DrawNode.h"
@@ -43,6 +48,86 @@
 NS_AX_BEGIN
 namespace ui
 {
+
+class MediaPlayer;
+
+class AX_GUI_DLL MediaController : public ax::ui::Widget
+{
+public:
+    explicit MediaController(MediaPlayer* player) : _mediaPlayer(player) {}
+    ~MediaController() override = 0;
+
+    virtual void updateControllerState() = 0;
+
+protected:
+    MediaPlayer* _mediaPlayer = nullptr;
+};
+inline MediaController::~MediaController() = default;  // Required since the destructor is pure virtual
+
+class MediaPlayerControl : public ax::ui::Button
+{
+public:
+    static MediaPlayerControl* create(SpriteFrame* frame);
+
+    MediaPlayerControl() = default;
+    ~MediaPlayerControl() override;
+
+    virtual bool init(SpriteFrame* frame);
+
+    void onSizeChanged() override;
+    Vec2 getVirtualRendererSize() const override;
+    Vec2 getNormalSize() const override;
+
+    void onPressStateChangedToNormal() override;
+    void onPressStateChangedToPressed() override;
+    void onPressStateChangedToDisabled() override;
+
+protected:
+    Sprite* _overlay = nullptr;
+};
+
+class AX_GUI_DLL BasicMediaController : public MediaController
+{
+public:
+    explicit BasicMediaController(MediaPlayer* player);
+
+    static BasicMediaController* create(MediaPlayer* mediaPlayer);
+
+    bool init() override;
+    void initRenderer() override;
+
+    void onPressStateChangedToPressed() override;
+    void setContentSize(const Vec2& contentSize) override;
+    void update(float delta) override;
+    void onEnter() override;
+    void setGlobalZOrder(float globalZOrder) override;
+
+    void updateControllerState() override;
+
+    virtual void createControls();
+    virtual void updateControlsGlobalZ(float globalZOrder);
+    virtual void updateControls();
+    virtual void updateControlsForContentSize(const Vec2& contentSize);
+
+protected:
+    Widget* _controlPanel = nullptr;
+
+    MediaPlayerControl* _fullScreenEnterButton = nullptr;
+    MediaPlayerControl* _fullScreenExitButton  = nullptr;
+    MediaPlayerControl* _playButton            = nullptr;
+    MediaPlayerControl* _stopButton            = nullptr;
+    MediaPlayerControl* _pauseButton           = nullptr;
+
+    Sprite* _timelineSelector   = nullptr;
+    Sprite* _timelineTotal      = nullptr;
+    Sprite* _timelinePlayed     = nullptr;
+    Layout* _mediaOverlay       = nullptr;
+    Widget* _primaryButtonPanel = nullptr;
+
+    EventListenerTouchOneByOne* _timelineTouchListener = nullptr;
+    float _playRate                                    = 1.f;
+    std::chrono::steady_clock::time_point _lastTouch;
+};
 
 /**
  * @class MediaPlayer
@@ -67,6 +152,17 @@ public:
         ERROR
     };
 
+    enum class MediaState
+    {
+        CLOSED = 0,
+        LOADING,
+        PLAYING,
+        PAUSED,
+        STOPPED,
+        FINISHED,
+        ERROR
+    };
+
     /**
      * Styles of how the the video player is presented
      * For now only used on iOS to use either MPMovieControlStyleEmbedded (DEFAULT) or
@@ -87,6 +183,8 @@ public:
      *Static create method for instancing a MediaPlayer.
      */
     CREATE_FUNC(MediaPlayer);
+
+    bool init() override;
 
     /**
      * Sets a file path as a video source for MediaPlayer.
@@ -148,12 +246,12 @@ public:
     /**
      * Pauses playback.
      */
-    virtual void pause() override;
+    void pause() override;
 
     /**
      * Resumes playback.
      */
-    virtual void resume() override;
+    void resume() override;
 
     /**
      * Stops playback.
@@ -166,6 +264,20 @@ public:
      * @param sec   The offset in seconds from the start to seek to.
      */
     virtual void seekTo(float sec);
+
+    /**
+     * Gets the current media position.
+     *
+     * @return float The current position in seconds
+     */
+    virtual float getCurrentTime();
+
+    /**
+     * Gets total video duration
+     *
+     * @return float The duration in seconds
+     */
+    virtual float getDuration();
 
     /**
      * Checks whether the MediaPlayer is playing.
@@ -226,22 +338,31 @@ public:
      * @brief A function which will be called when video is playing.
      *
      * @param event @see MediaPlayer::EventType.
-
      */
     virtual void onPlayEvent(int event);
-    virtual void setVisible(bool visible) override;
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void setVisible(bool visible) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void onEnter() override;
+    void onExit() override;
 
     void setContentSize(const Size& contentSize) override;
 
+    /**
+     * @brief Get current state of the media
+     *
+     * @return MediaState
+     */
+    MediaState getState() const;
+
+    void setMediaController(MediaController* controller);
+
     MediaPlayer();
-    virtual ~MediaPlayer();
+    ~MediaPlayer() override;
 
 protected:
-    virtual ax::ui::Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
+    ax::ui::Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
+    virtual void updateMediaController();
 
 #    if AX_VIDEOPLAYER_DEBUG_DRAW
     DrawNode* _debugDrawNode;
@@ -255,10 +376,10 @@ protected:
 
     bool _isPlaying              = false;
     bool _isLooping              = false;
-    bool _isUserInputEnabled     = true;
     bool _fullScreenDirty        = false;
     bool _fullScreenEnabled      = false;
     bool _keepAspectRatioEnabled = false;
+    bool _userInputEnabled       = false;
 
     StyleType _styleType = StyleType::DEFAULT;
 
@@ -269,6 +390,8 @@ protected:
     ccVideoPlayerCallback _eventCallback = nullptr;
 
     void* _videoContext = nullptr;
+
+    MediaController* _mediaController = nullptr;
 };
 using VideoPlayer = MediaPlayer;
 }  // namespace ui

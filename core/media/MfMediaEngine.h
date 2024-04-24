@@ -5,6 +5,9 @@
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
+// Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+// 
+// https://axmolengine.github.io/
 //-------------------------------------------------------------------------------------
 
 #pragma once
@@ -89,6 +92,8 @@ public:
     bool isPlaybackEnded() const override { return m_bPlaybackEnded; }
 
     bool setCurrentTime(double fPosInSeconds) override;
+    double getCurrentTime() override;
+    double getDuration() override;
 
     MEMediaState getState() const override { return m_state; }
 
