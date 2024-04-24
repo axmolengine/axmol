@@ -82,7 +82,7 @@ if ($IsMacOS) {
 function axmol_build() {
     $sub_args = $args
     println $sub_args
-    $build_script = Join-Path $AX_ROOT 'build.ps1'
+    $build_script = Join-Path $PSScriptRoot 'build.ps1'
     if ("$args".Contains('-d')) {
         # have proj dir
         . $build_script @sub_args
