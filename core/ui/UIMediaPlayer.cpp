@@ -141,17 +141,9 @@ struct PrivateVideoDescriptor
 
 std::unique_ptr<MediaEngineFactory> _meFactory = MediaEngineFactory::create();
 
-const char* CIRCLE_IMAGE =
-    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/"
-    "9hAAAAB3RJTUUH6AQWDgQPSHxoUwAAAAlwSFlzAAAewQAAHsEBw2lUUwAAAARnQU1BAACxjwv8YQUAAACbSURBVHjaY2BAA////"
-    "+cH4mogXgrEJ4B4LxDPBeICIGZnwAeACnyA+PJ/3ABkoDkuzbVA/PE/"
-    "YfASiFPRNVsD8VsiNMPAPSCWgmlmBuKNJGiGgZkwA7zI0AwCX4FYDmRAFZkGgEAayIBFFBjQCzJgBQUGTIRFH0Ve8CVTMzwQKYtGihMSVZIyVTITWn"
-    "au/A9JH4eA+DCUjTU7AwAEsTgY+YCLcQAAAABJRU5ErkJggg==";
-
 const char* BODY_IMAGE_1_PIXEL_HEIGHT =
     "iVBORw0KGgoAAAANSUhEUgAAAAwAAAABCAMAAADdNb8LAAAAA1BMVEX///+nxBvIAAAACklEQVR4AWNABgAADQABYc2cpAAAAABJRU5ErkJggg==";
 
-const char* CIRCLE_IMAGE_KEY              = "/__circle16x16Image";
 const char* BODY_IMAGE_1_PIXEL_HEIGHT_KEY = "/__bodyImage";
 
 constexpr auto TIMELINE_BAR_HEIGHT = 12.f;
@@ -164,7 +156,8 @@ enum class MediaControlButtonId
     Stop,
     Pause,
     EnterFullscreen,
-    ExitFullscreen
+    ExitFullscreen,
+    TimelineSliderButton
 };
 
 std::map<MediaControlButtonId, Rect> g_mediaControlTextureRegions;
@@ -250,12 +243,17 @@ void createMediaControlTexture()
         drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(6, -20), Color4B::WHITE);
     };
 
+    auto DrawSliderControlButton = [&](const Vec2& middle) -> void {
+        drawNode->drawSolidCircle(middle, 16, 0, 180, Color4B::WHITE);
+    };
+
     std::map<MediaControlButtonId, std::function<void(const Vec2&)>> items = {
         {MediaControlButtonId::Play, DrawPlay},
         {MediaControlButtonId::Stop, DrawStop},
         {MediaControlButtonId::Pause, DrawPause},
         {MediaControlButtonId::EnterFullscreen, DrawEnterFullscreen},
-        {MediaControlButtonId::ExitFullscreen, DrawExitFullScreen}};
+        {MediaControlButtonId::ExitFullscreen, DrawExitFullScreen},
+        {MediaControlButtonId::TimelineSliderButton, DrawSliderControlButton}};
 
     auto nextPow2 = [](int v) -> int {
         int p = 1;
@@ -706,12 +704,13 @@ void BasicMediaController::createControls()
     _timelinePlayed->setCascadeOpacityEnabled(true);
     _timelineTotal->addChild(_timelinePlayed, 5);
 
-    _timelineSelector = utils::createSpriteFromBase64Cached(CIRCLE_IMAGE, CIRCLE_IMAGE_KEY);
+    _timelineSelector = Sprite::createWithTexture(
+        g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::TimelineSliderButton]);
     _timelineSelector->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     _timelineSelector->setPositionNormalized(Vec2(1.f, 0.5f));
     _timelineSelector->setCascadeOpacityEnabled(true);
     _timelineSelector->setStretchEnabled(true);
-    _timelineSelector->setContentSize(Size(TIMELINE_BAR_HEIGHT * 1.5f, TIMELINE_BAR_HEIGHT * 1.5f) / scale);
+    _timelineSelector->setContentSize(Size(TIMELINE_BAR_HEIGHT, TIMELINE_BAR_HEIGHT) * 3.f / scale);
     _timelineSelector->setVisible(false);
     _timelinePlayed->addChild(_timelineSelector, 10);
 
@@ -780,6 +779,7 @@ void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
     auto scale = Director::getInstance()->getGLView()->getScaleY();
     _primaryButtonPanel->setScale(1 / scale);
     _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT / scale));
+    _timelineSelector->setContentSize(Size(TIMELINE_BAR_HEIGHT, TIMELINE_BAR_HEIGHT) * 3.f / scale);
     _fullScreenEnterButton->setScale(1 / scale);
     _fullScreenExitButton->setScale(1 / scale);
 
