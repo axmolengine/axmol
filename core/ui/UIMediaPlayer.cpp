@@ -433,7 +433,7 @@ void MediaPlayerControl::onPressStateChangedToDisabled()
 }
 
 BasicMediaController::BasicMediaController(MediaPlayer* player)
-    : MediaController(player)
+    : MediaController(player), _timelineBarHeight(TIMELINE_BAR_HEIGHT)
 {
 }
 
@@ -573,6 +573,15 @@ void BasicMediaController::updateControllerState()
     }
 }
 
+void BasicMediaController::setTimelineBarHeight(float height)
+{
+    _timelineBarHeight = height;
+    if (_timelineBarHeight < TIMELINE_BAR_HEIGHT)
+        _timelineBarHeight = TIMELINE_BAR_HEIGHT;
+
+    updateControlsForContentSize(getContentSize());
+}
+
 void BasicMediaController::createControls()
 {
     createMediaControlTexture();
@@ -697,7 +706,7 @@ void BasicMediaController::createControls()
     _timelineTotal->setColor(Color3B::GRAY);
     _timelineTotal->setVisible(false);
     _timelineTotal->setCascadeOpacityEnabled(true);
-    _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT / scale));
+    _timelineTotal->setContentSize(Size(contentSize.width - 40, _timelineBarHeight / scale));
     _controlPanel->addProtectedChild(_timelineTotal, 1);
 
     _timelinePlayed = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
@@ -714,7 +723,7 @@ void BasicMediaController::createControls()
     _timelineSelector->setPositionNormalized(Vec2(1.f, 0.5f));
     _timelineSelector->setCascadeOpacityEnabled(true);
     _timelineSelector->setStretchEnabled(true);
-    _timelineSelector->setContentSize(Size(TIMELINE_BAR_HEIGHT, TIMELINE_BAR_HEIGHT) * 1.5f / scale);
+    _timelineSelector->setContentSize(Size(_timelineBarHeight, _timelineBarHeight) * 1.5f / scale);
     _timelineSelector->setVisible(false);
     _timelinePlayed->addChild(_timelineSelector, 10);
 
@@ -790,8 +799,8 @@ void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
 
     auto scale = Director::getInstance()->getGLView()->getScaleY();
     _primaryButtonPanel->setScale(1 / scale);
-    _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT / scale));
-    _timelineSelector->setContentSize(Size(TIMELINE_BAR_HEIGHT, TIMELINE_BAR_HEIGHT) * 1.5f / scale);
+    _timelineTotal->setContentSize(Size(contentSize.width - 40, _timelineBarHeight / scale));
+    _timelineSelector->setContentSize(Size(_timelineBarHeight, _timelineBarHeight) * 1.5f / scale);
     _fullScreenEnterButton->setScale(1 / scale);
     _fullScreenExitButton->setScale(1 / scale);
 

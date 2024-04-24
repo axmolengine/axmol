@@ -58,6 +58,7 @@ public:
     ~MediaController() override = 0;
 
     virtual void updateControllerState() = 0;
+    virtual void setTimelineBarHeight(float height) = 0;
 
 protected:
     MediaPlayer* _mediaPlayer = nullptr;
@@ -103,6 +104,7 @@ public:
     void setGlobalZOrder(float globalZOrder) override;
 
     void updateControllerState() override;
+    void setTimelineBarHeight(float height) override;
 
     virtual void createControls();
     virtual void updateControlsGlobalZ(float globalZOrder);
@@ -127,7 +129,8 @@ protected:
     EventListenerTouchOneByOne* _timelineTouchListener = nullptr;
     float _playRate                                    = 1.f;
     std::chrono::steady_clock::time_point _lastTouch;
-    bool _controlsReady = false;
+    bool _controlsReady      = false;
+    float _timelineBarHeight;
 };
 
 /**
@@ -356,6 +359,7 @@ public:
     MediaState getState() const;
 
     void setMediaController(MediaController* controller);
+    MediaController* getMediaController() const { return _mediaController; }
 
     MediaPlayer();
     ~MediaPlayer() override;
