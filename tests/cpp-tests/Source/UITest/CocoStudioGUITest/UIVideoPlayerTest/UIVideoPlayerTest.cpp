@@ -417,7 +417,7 @@ void SimpleVideoPlayerTest::switchUserInputCallback(Ref* sender)
     _userInputEnabled = !_userInputEnabled;
     if (_videoPlayer)
     {
-        _videoPlayer->setUserInputEnabled(_userInputEnabled);
+        _videoPlayer->setMediaControllerEnabled(_userInputEnabled);
     }
 
     updateButtonsTexts();
@@ -440,7 +440,7 @@ void SimpleVideoPlayerTest::createVideo()
     _videoPlayer->setContentSize(Size(widgetSize.width * 0.4f, widgetSize.height * 0.4f));
     _videoPlayer->setLooping(true);
     _videoPlayer->setStyle(_style);
-    _videoPlayer->setUserInputEnabled(_userInputEnabled);
+    _videoPlayer->setMediaControllerEnabled(_userInputEnabled);
     _videoPlayer->setKeepAspectRatioEnabled(true);
 
     _uiLayer->addChild(_videoPlayer);
