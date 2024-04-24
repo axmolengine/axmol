@@ -33,14 +33,9 @@ NS_AX_BEGIN
 
 #define MAX_LEN (ax::kMaxLogLen + 1)
 
-void ccMessageBox(const char* pszMsg, const char* pszTitle)
+void messageBox(const char* pszMsg, const char* pszTitle)
 {
     JniHelper::callStaticVoidMethod("org.axmol.lib.AxmolEngine", "showDialog", pszTitle, pszMsg);
-}
-
-void LuaLog(const char* pszFormat)
-{
-    __android_log_write(ANDROID_LOG_DEBUG, "cocos2d-x debug info", pszFormat);
 }
 
 NS_AX_END

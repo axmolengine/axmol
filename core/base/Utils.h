@@ -43,10 +43,12 @@ Misc free functions
 */
 
 NS_AX_BEGIN
-/*
-ccNextPOT function is licensed under the same license that is used in Texture2D.m.
-*/
 
+class Sprite;
+class Image;
+
+namespace utils
+{
 /** Returns the Next Power of Two value.
 
 Examples:
@@ -55,16 +57,10 @@ Examples:
 - If "value" is 17, it will return 32.
 @param value The value to get next power of two.
 @return Returns the next power of two value.
-@since v0.99.5
+@since axmol-2.1.3: move ax::ccNextPOT to ax::utils::nextPOT
 */
+int nextPOT(int value);
 
-int ccNextPOT(int value);
-
-class Sprite;
-class Image;
-
-namespace utils
-{
 /** Capture the entire screen.
  * To ensure the snapshot is applied after everything is updated and rendered in the current frame,
  * we need to wrap the operation with a custom command which is then inserted into the tail of the render queue.

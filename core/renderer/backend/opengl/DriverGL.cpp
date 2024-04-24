@@ -137,7 +137,7 @@ DriverGL::DriverGL()
                 "OpeGL ES %d.%d+ is required (your version is %s). Please upgrade the driver of your video card.",
                 REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
 #endif
-        ccMessageBox(strComplain, "OpenGL version too old");
+        messageBox(strComplain, "OpenGL version too old");
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return;
     }

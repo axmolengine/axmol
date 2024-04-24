@@ -51,8 +51,8 @@ bool GridBase::initWithSize(const Vec2& gridSize, const ax::Rect& rect)
     Director* director = Director::getInstance();
     Vec2 s             = director->getWinSizeInPixels();
 
-    auto POTWide = ccNextPOT((unsigned int)s.width);
-    auto POTHigh = ccNextPOT((unsigned int)s.height);
+    auto POTWide = utils::nextPOT((unsigned int)s.width);
+    auto POTHigh = utils::nextPOT((unsigned int)s.height);
 
     Texture2D* texture = new Texture2D();
 

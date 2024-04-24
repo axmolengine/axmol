@@ -398,7 +398,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
             outDataLen = 0;
         }
 
-        if (i > 0 && (width != height || ccNextPOT(width) != width))
+        if (i > 0 && (width != height || utils::nextPOT(width) != width))
         {
             AXLOG(
                 "axmol: Texture2D. WARNING. Mipmap level %u is not squared. Texture won't render correctly. width=%d "
@@ -727,7 +727,7 @@ void Texture2D::setTexParameters(const Texture2D::TexParams& desc)
 
 void Texture2D::generateMipmap()
 {
-    AXASSERT(_pixelsWide == ccNextPOT(_pixelsWide) && _pixelsHigh == ccNextPOT(_pixelsHigh),
+    AXASSERT(_pixelsWide == utils::nextPOT(_pixelsWide) && _pixelsHigh == utils::nextPOT(_pixelsHigh),
              "Mipmap texture only works in POT textures");
 
     _texture->generateMipmaps();
