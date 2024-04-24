@@ -959,7 +959,7 @@ bool MediaPlayer::init()
         return false;
     }
 
-    if (_controllerEnabled)
+    if (_userInputEnabled)
     {
         setMediaController(BasicMediaController::create(this));
     }
@@ -995,6 +995,19 @@ void MediaPlayer::setLooping(bool looping)
     auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
     if (pvd->_engine)
         pvd->_engine->setLoop(looping);
+}
+
+void MediaPlayer::setUserInputEnabled(bool enableInput)
+{
+    _userInputEnabled = enableInput;
+    if (_mediaController)
+    {
+        _mediaController->setEnabled(_userInputEnabled);
+    }
+    else if (_userInputEnabled)
+    {
+        setMediaController(BasicMediaController::create(this));
+    }
 }
 
 void MediaPlayer::setStyle(StyleType style)
@@ -1066,19 +1079,6 @@ MediaPlayer::MediaState MediaPlayer::getState() const
     return MediaState::CLOSED;
 }
 
-void MediaPlayer::setMediaControllerEnabled(bool enable)
-{
-    _controllerEnabled = enable;
-    if (_mediaController)
-    {
-        _mediaController->setEnabled(_controllerEnabled);
-    }
-    else if (_controllerEnabled)
-    {
-        setMediaController(BasicMediaController::create(this));
-    }
-}
-
 void MediaPlayer::setMediaController(MediaController* controller)
 {
     if (_mediaController)
@@ -1092,7 +1092,7 @@ void MediaPlayer::setMediaController(MediaController* controller)
         AX_SAFE_RETAIN(_mediaController);
         _mediaController->setPositionNormalized(Vec2(0.5f, 0.5f));
         _mediaController->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-        _mediaController->setEnabled(_controllerEnabled);
+        _mediaController->setEnabled(_userInputEnabled);
         addProtectedChild(_mediaController, 1);
     }
 }
@@ -1253,9 +1253,9 @@ bool MediaPlayer::isLooping() const
     return _isLooping;
 }
 
-bool MediaPlayer::isMediaControllerEnabled() const
+bool MediaPlayer::isUserInputEnabled() const
 {
-    return _controllerEnabled;
+    return _userInputEnabled;
 }
 
 void MediaPlayer::setVisible(bool visible)
@@ -1301,7 +1301,7 @@ void MediaPlayer::copySpecialProperties(Widget* widget)
     {
         _isPlaying              = videoPlayer->_isPlaying;
         _isLooping              = videoPlayer->_isLooping;
-        _controllerEnabled      = videoPlayer->_controllerEnabled;
+        _userInputEnabled      = videoPlayer->_userInputEnabled;
         _styleType              = videoPlayer->_styleType;
         _fullScreenEnabled      = videoPlayer->_fullScreenEnabled;
         _fullScreenDirty        = videoPlayer->_fullScreenDirty;
@@ -1315,7 +1315,7 @@ void MediaPlayer::copySpecialProperties(Widget* widget)
 
 void MediaPlayer::updateMediaController()
 {
-    if (!_controllerEnabled || !_mediaController)
+    if (!_userInputEnabled || !_mediaController)
     {
         return;
     }

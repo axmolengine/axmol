@@ -218,6 +218,13 @@ public:
     virtual void setLooping(bool looping);
 
     /**
+     * Set if the player will enable user input for basic pause and resume of video
+     *
+     * @param enableInput If true, input will be handled for basic functionality (pause/resume)
+     */
+    virtual void setUserInputEnabled(bool enableInput);
+
+    /**
      * Set the style of the player
      *
      * @param style The corresponding style
@@ -291,13 +298,7 @@ public:
      *
      * @return true if the videoplayer user input is set, false otherwise.
      */
-    virtual bool isMediaControllerEnabled() const;
-
-    /**
-     * Sets whether the MediaPlayer is enabled
-     *
-     */
-    virtual void setMediaControllerEnabled(bool enable);
+    virtual bool isUserInputEnabled() const;
 
     /**
      * Causes the video player to keep aspect ratio or no when displaying the video.
@@ -378,7 +379,7 @@ protected:
     bool _fullScreenDirty        = false;
     bool _fullScreenEnabled      = false;
     bool _keepAspectRatioEnabled = false;
-    bool _controllerEnabled      = false;
+    bool _userInputEnabled       = false;
 
     StyleType _styleType = StyleType::DEFAULT;
 
