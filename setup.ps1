@@ -9,14 +9,17 @@ param( [string]$gradlewVersion,                       #\
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `
 #vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 # Bash Start ------------------------------------------------------------
-scriptdir="`dirname "${BASH_SOURCE[0]}"`";
-echo BASH. Script is running from $scriptdir
-$scriptdir/1k/install-pwsh.sh
+scriptdir="`dirname "${BASH_SOURCE[0]}"`"
+if ! which dpkg > /dev/null; then
+    $scriptdir/1k/install-pwsh.sh
+fi
 pwsh $scriptdir/setup.ps1 "$@"
 # Bash End --------------------------------------------------------------
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-echo > /dev/null <<"out-null" ###
-'@ | out-null
+# emit powershell code, in bash:
+# the here document key can be any, but out-null is valid powershell nop cmdlet
+# echo > /dev/null don't output line-end to termainl
+echo > /dev/null <<"out-null"
 #vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 # Powershell Start ----------------------------------------------------#>
 

@@ -2,6 +2,8 @@
 
 ### Significant changes relative to 2.1.2:
 
+
+- Implement cross-platform media controller for video playback by @rh101 in https://github.com/axmolengine/axmol/pull/1845
 - Allow certain code modules to be removed from build process by @rh101 in https://github.com/axmolengine/axmol/pull/1769, i.e. remove 3d features by `-DAX_ENABLE_3D=OFF`
 - New logging system with general log level and colored support
   - Implement new axmol log system based on fmtlib by @halx99 in https://github.com/axmolengine/axmol/pull/1732
@@ -36,6 +38,7 @@
 - Fix ClippingNode stencil needing global z set manually by @TyelorD in https://github.com/axmolengine/axmol/pull/1831
 - Fix FileUtilsApple::getPathForDirectory() checking wrong path by smilediver in https://github.com/axmolengine/axmol/pull/1828
 - Fix issue where UIWidget couldn't be reselected by @TyelorD in https://github.com/axmolengine/axmol/pull/1827
+- Fix glfw crash on macOS for large mouse button ids by @smilediver in https://github.com/axmolengine/axmol/pull/1835
 
 ### Improvements
 
@@ -62,11 +65,13 @@
 - Display cmake command used by build script in console by @rh101 in https://github.com/axmolengine/axmol/pull/1834
 - Add Borderless Windowed Mode by @TyelorD in https://github.com/axmolengine/axmol/pull/1826
 - Add CC_USE_CULLING Alias to cocos2d.h by @TyelorD in https://github.com/axmolengine/axmol/pull/1825
+- Prevent repeated loading of plist files when loading csb files by @tkzcfc in https://github.com/axmolengine/axmol/pull/1844
 
 ### Break Changes
 
 - Remove `ax::log`, use `AXLOGD` instead
 - Remove cmake function: `ax_uwp_set_all_targets_deploy_min_version`
+- Remove deprecated pixel formats L8, A8, LA8 in https://github.com/axmolengine/axmol/pull/1839
 
 ### sdks updates
 
