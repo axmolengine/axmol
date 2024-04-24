@@ -1,7 +1,5 @@
 .vscode
 .DS_Store
 build
-vlc/**/*
 **/*.zip
 _x*
-_d*
