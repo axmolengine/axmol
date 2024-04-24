@@ -255,18 +255,9 @@ void createMediaControlTexture()
         {MediaControlButtonId::ExitFullscreen, DrawExitFullScreen},
         {MediaControlButtonId::TimelineSliderButton, DrawSliderControlButton}};
 
-    auto nextPow2 = [](int v) -> int {
-        int p = 1;
-        while (p < v)
-        {
-            p = p * 2;
-        }
-        return p;
-    };
-
     auto numItems    = static_cast<int>(items.size());
-    auto totalWidth  = nextPow2(numItems * panelW + (numItems - 1) * gap + (border * 2));
-    auto totalHeight = nextPow2(border * 2 + panelH);
+    auto totalWidth  = utils::nextPOT(numItems * panelW + (numItems - 1) * gap + (border * 2));
+    auto totalHeight = utils::nextPOT(border * 2 + panelH);
     auto imageSize   = Size(static_cast<float>(totalWidth), static_cast<float>(totalHeight));
     auto* node       = Node::create();
     node->setContentSize(imageSize);
@@ -275,7 +266,7 @@ void createMediaControlTexture()
     node->setPosition(0, 0);
     node->addChild(drawNode);
 
-    auto* rt = RenderTexture::create(totalWidth, totalHeight, PixelFormat::RGBA8, false);
+    auto* rt = RenderTexture::create(totalWidth, totalHeight, PixelFormat::RGBA8, true);
     rt->beginWithClear(0, 0, 0, 0);
 
     g_mediaControlTextureRegions.clear();
@@ -284,10 +275,17 @@ void createMediaControlTexture()
     for (auto&& item : items)
     {
         auto midPoint =
-            Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
+        Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
         item.second(midPoint);
+
+#if defined(AX_USE_GL) || defined(AX_USE_GLES)
         g_mediaControlTextureRegions[item.first] =
-            Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);
+        Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);
+#else // For Metal renderer
+        g_mediaControlTextureRegions[item.first] =
+        Rect(border + (panelW * i) + (gap * i), border, panelW, panelH);
+#endif
+        
         ++i;
     }
 
@@ -453,8 +451,6 @@ BasicMediaController* BasicMediaController::create(MediaPlayer* mediaPlayer)
 
 bool BasicMediaController::init()
 {
-    createMediaControlTexture();
-
     if (!Widget::init())
     {
         return false;
@@ -473,14 +469,13 @@ bool BasicMediaController::init()
 void BasicMediaController::initRenderer()
 {
     Widget::initRenderer();
-    createControls();
 }
 
 void BasicMediaController::onPressStateChangedToPressed()
 {
     _lastTouch = std::chrono::steady_clock::now();
 
-    if (_controlPanel->getOpacity() == 255)
+    if (!_controlsReady || _controlPanel->getOpacity() == 255)
     {
         return;
     }
@@ -522,6 +517,7 @@ void BasicMediaController::update(float delta)
 void BasicMediaController::onEnter()
 {
     Widget::onEnter();
+    createControls();
     scheduleUpdate();
 }
 
@@ -533,7 +529,7 @@ void BasicMediaController::setGlobalZOrder(float globalZOrder)
 
 void BasicMediaController::updateControllerState()
 {
-    if (!_mediaPlayer)
+    if (!_mediaPlayer || !_controlsReady)
         return;
 
     auto state = _mediaPlayer->getState();
@@ -579,6 +575,14 @@ void BasicMediaController::updateControllerState()
 
 void BasicMediaController::createControls()
 {
+    createMediaControlTexture();
+    
+    // Check if controls are already created
+    if (_controlsReady)
+    {
+        return;
+    }
+    
     const auto& contentSize = getContentSize();
     auto scale              = Director::getInstance()->getGLView()->getScaleY();
 
@@ -750,10 +754,15 @@ void BasicMediaController::createControls()
     };
     _timelineTouchListener->onTouchEnded = [this](Touch* touch, Event* event) { _timelineSelector->setVisible(false); };
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(_timelineTouchListener, _timelineTotal);
+    
+    _controlsReady = true;
 }
 
 void BasicMediaController::updateControlsGlobalZ(float globalZOrder)
 {
+    if (!_mediaPlayer || !_controlsReady)
+        return;
+
     _controlPanel->setGlobalZOrder(globalZOrder);
     _timelineTotal->setGlobalZOrder(globalZOrder);
     _timelinePlayed->setGlobalZOrder(globalZOrder);
@@ -762,7 +771,7 @@ void BasicMediaController::updateControlsGlobalZ(float globalZOrder)
 
 void BasicMediaController::updateControls()
 {
-    if (_mediaPlayer)
+    if (_mediaPlayer && _controlsReady)
     {
         const auto currentTime = _mediaPlayer->getCurrentTime();
         const auto duration    = _mediaPlayer->getDuration();
@@ -773,6 +782,9 @@ void BasicMediaController::updateControls()
 
 void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
 {
+    if (!_controlsReady)
+        return;
+    
     _mediaOverlay->setContentSize(contentSize);
     _controlPanel->setContentSize(contentSize);
 

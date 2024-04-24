@@ -127,6 +127,7 @@ protected:
     EventListenerTouchOneByOne* _timelineTouchListener = nullptr;
     float _playRate                                    = 1.f;
     std::chrono::steady_clock::time_point _lastTouch;
+    bool _controlsReady = false;
 };
 
 /**
