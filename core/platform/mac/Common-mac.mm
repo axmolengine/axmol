@@ -33,13 +33,8 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-void LuaLog(const char* format)
-{
-    puts(format);
-}
-
 // ios no MessageBox, use log instead
-void ccMessageBox(const char* msg, const char* title)
+void messageBox(const char* msg, const char* title)
 {
     NSString* tmpTitle = (title) ? [NSString stringWithUTF8String:title] : nil;
     NSString* tmpMsg   = (msg) ? [NSString stringWithUTF8String:msg] : nil;

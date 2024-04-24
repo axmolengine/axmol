@@ -62,17 +62,6 @@ using namespace std::string_view_literals;
 
 NS_AX_BEGIN
 
-int ccNextPOT(int x)
-{
-    x = x - 1;
-    x = x | (x >> 1);
-    x = x | (x >> 2);
-    x = x | (x >> 4);
-    x = x | (x >> 8);
-    x = x | (x >> 16);
-    return x + 1;
-}
-
 namespace utils
 {
 namespace base64
@@ -86,6 +75,17 @@ inline int decBound(int sourceLen)
     return sourceLen / 4 * 3 + 1;
 }
 }  // namespace base64
+
+int nextPOT(int x)
+{
+    --x;
+    x |= (x >> 1);
+    x |= (x >> 2);
+    x |= (x >> 4);
+    x |= (x >> 8);
+    x |= (x >> 16);
+    return ++x;
+}
 
 /*
  * Capture screen interface

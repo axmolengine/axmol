@@ -30,14 +30,9 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-void ccMessageBox(const char* msg, const char* title)
+void messageBox(const char* msg, const char* title)
 {
     AXLOGE("{}: {}", title, msg);
-}
-
-void LuaLog(const char* format)
-{
-    puts(format);
 }
 
 NS_AX_END

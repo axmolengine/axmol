@@ -493,7 +493,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
             message.append(_glfwError);
         }
 
-        ccMessageBox(message.c_str(), "Error launch application");
+        messageBox(message.c_str(), "Error launch application");
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return false;
     }

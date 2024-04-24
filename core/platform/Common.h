@@ -38,14 +38,9 @@ NS_AX_BEGIN
  */
 
 /**
- * lua can not deal with ...
- */
-void AX_DLL LuaLog(const char* format);
-
-/**
 @brief Pop out a message box
 */
-void AX_DLL ccMessageBox(const char* msg, const char* title);
+void AX_DLL messageBox(const char* msg, const char* title);
 
 /**
 @brief Enum the language type supported now

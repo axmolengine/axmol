@@ -180,8 +180,8 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         }
         else
         {
-            powW = ccNextPOT(w);
-            powH = ccNextPOT(h);
+            powW = utils::nextPOT(w);
+            powH = utils::nextPOT(h);
         }
 
         backend::TextureDescriptor descriptor;
