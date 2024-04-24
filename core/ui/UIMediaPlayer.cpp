@@ -677,7 +677,7 @@ void BasicMediaController::createControls()
     });
     _fullScreenEnterButton->setSwallowTouches(false);
     _fullScreenEnterButton->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-    _fullScreenEnterButton->setPositionNormalized(Vec2(0.05f, 0.95f));
+    _fullScreenEnterButton->setPositionNormalized(Vec2(0.03f, 0.97f));
     _fullScreenEnterButton->setCascadeOpacityEnabled(true);
     _fullScreenEnterButton->setVisible(false);
     _fullScreenEnterButton->setScale(1 / scale);
@@ -693,7 +693,7 @@ void BasicMediaController::createControls()
     });
     _fullScreenExitButton->setSwallowTouches(false);
     _fullScreenExitButton->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-    _fullScreenExitButton->setPositionNormalized(Vec2(0.15f, 0.95f));
+    _fullScreenExitButton->setPositionNormalized(Vec2(0.03f, 0.97f));
     _fullScreenExitButton->setCascadeOpacityEnabled(true);
     _fullScreenExitButton->setVisible(false);
     _fullScreenExitButton->setScale(1 / scale);
