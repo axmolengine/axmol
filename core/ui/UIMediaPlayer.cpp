@@ -469,6 +469,14 @@ bool BasicMediaController::init()
 void BasicMediaController::initRenderer()
 {
     Widget::initRenderer();
+    
+    // scheduleOnce is used to create the controls on the next update
+    // loop. This is a work-around for a RenderTexture issue
+    // when being created such places as a button click event handler
+    // on Apple platforms/Metal renderer backend
+    scheduleOnce([this](float){
+        createControls();
+    }, 0.f, "__create_video_controls"sv);
 }
 
 void BasicMediaController::onPressStateChangedToPressed()
@@ -517,7 +525,6 @@ void BasicMediaController::update(float delta)
 void BasicMediaController::onEnter()
 {
     Widget::onEnter();
-    createControls();
     scheduleUpdate();
 }
 
