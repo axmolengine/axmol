@@ -255,18 +255,9 @@ void createMediaControlTexture()
         {MediaControlButtonId::ExitFullscreen, DrawExitFullScreen},
         {MediaControlButtonId::TimelineSliderButton, DrawSliderControlButton}};
 
-    auto nextPow2 = [](int v) -> int {
-        int p = 1;
-        while (p < v)
-        {
-            p = p * 2;
-        }
-        return p;
-    };
-
     auto numItems    = static_cast<int>(items.size());
-    auto totalWidth  = nextPow2(numItems * panelW + (numItems - 1) * gap + (border * 2));
-    auto totalHeight = nextPow2(border * 2 + panelH);
+    auto totalWidth  = utils::nextPOT(numItems * panelW + (numItems - 1) * gap + (border * 2));
+    auto totalHeight = utils::nextPOT(border * 2 + panelH);
     auto imageSize   = Size(static_cast<float>(totalWidth), static_cast<float>(totalHeight));
     auto* node       = Node::create();
     node->setContentSize(imageSize);
@@ -275,7 +266,7 @@ void createMediaControlTexture()
     node->setPosition(0, 0);
     node->addChild(drawNode);
 
-    auto* rt = RenderTexture::create(totalWidth, totalHeight, PixelFormat::RGBA8, false);
+    auto* rt = RenderTexture::create(totalWidth, totalHeight, PixelFormat::RGBA8, true);
     rt->beginWithClear(0, 0, 0, 0);
 
     g_mediaControlTextureRegions.clear();
@@ -284,10 +275,17 @@ void createMediaControlTexture()
     for (auto&& item : items)
     {
         auto midPoint =
-            Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
+        Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
         item.second(midPoint);
+
+#if defined(AX_USE_GL)
         g_mediaControlTextureRegions[item.first] =
-            Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);
+        Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);
+#else // For Metal renderer
+        g_mediaControlTextureRegions[item.first] =
+        Rect(border + (panelW * i) + (gap * i), border, panelW, panelH);
+#endif
+        
         ++i;
     }
 
@@ -435,7 +433,7 @@ void MediaPlayerControl::onPressStateChangedToDisabled()
 }
 
 BasicMediaController::BasicMediaController(MediaPlayer* player)
-    : MediaController(player)
+    : MediaController(player), _timelineBarHeight(TIMELINE_BAR_HEIGHT)
 {
 }
 
@@ -453,8 +451,6 @@ BasicMediaController* BasicMediaController::create(MediaPlayer* mediaPlayer)
 
 bool BasicMediaController::init()
 {
-    createMediaControlTexture();
-
     if (!Widget::init())
     {
         return false;
@@ -473,14 +469,21 @@ bool BasicMediaController::init()
 void BasicMediaController::initRenderer()
 {
     Widget::initRenderer();
-    createControls();
+    
+    // scheduleOnce is used to create the controls on the next update
+    // loop. This is a work-around for a RenderTexture issue
+    // when being created such places as a button click event handler
+    // on Apple platforms/Metal renderer backend
+    scheduleOnce([this](float){
+        createControls();
+    }, 0.f, "__create_video_controls"sv);
 }
 
 void BasicMediaController::onPressStateChangedToPressed()
 {
     _lastTouch = std::chrono::steady_clock::now();
 
-    if (_controlPanel->getOpacity() == 255)
+    if (!_controlsReady || _controlPanel->getOpacity() == 255)
     {
         return;
     }
@@ -533,7 +536,7 @@ void BasicMediaController::setGlobalZOrder(float globalZOrder)
 
 void BasicMediaController::updateControllerState()
 {
-    if (!_mediaPlayer)
+    if (!_mediaPlayer || !_controlsReady)
         return;
 
     auto state = _mediaPlayer->getState();
@@ -577,8 +580,25 @@ void BasicMediaController::updateControllerState()
     }
 }
 
+void BasicMediaController::setTimelineBarHeight(float height)
+{
+    _timelineBarHeight = height;
+    if (_timelineBarHeight < TIMELINE_BAR_HEIGHT)
+        _timelineBarHeight = TIMELINE_BAR_HEIGHT;
+
+    updateControlsForContentSize(getContentSize());
+}
+
 void BasicMediaController::createControls()
 {
+    createMediaControlTexture();
+    
+    // Check if controls are already created
+    if (_controlsReady)
+    {
+        return;
+    }
+    
     const auto& contentSize = getContentSize();
     auto scale              = Director::getInstance()->getGLView()->getScaleY();
 
@@ -664,7 +684,7 @@ void BasicMediaController::createControls()
     });
     _fullScreenEnterButton->setSwallowTouches(false);
     _fullScreenEnterButton->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-    _fullScreenEnterButton->setPositionNormalized(Vec2(0.05f, 0.95f));
+    _fullScreenEnterButton->setPositionNormalized(Vec2(0.03f, 0.97f));
     _fullScreenEnterButton->setCascadeOpacityEnabled(true);
     _fullScreenEnterButton->setVisible(false);
     _fullScreenEnterButton->setScale(1 / scale);
@@ -680,7 +700,7 @@ void BasicMediaController::createControls()
     });
     _fullScreenExitButton->setSwallowTouches(false);
     _fullScreenExitButton->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-    _fullScreenExitButton->setPositionNormalized(Vec2(0.15f, 0.95f));
+    _fullScreenExitButton->setPositionNormalized(Vec2(0.03f, 0.97f));
     _fullScreenExitButton->setCascadeOpacityEnabled(true);
     _fullScreenExitButton->setVisible(false);
     _fullScreenExitButton->setScale(1 / scale);
@@ -693,7 +713,7 @@ void BasicMediaController::createControls()
     _timelineTotal->setColor(Color3B::GRAY);
     _timelineTotal->setVisible(false);
     _timelineTotal->setCascadeOpacityEnabled(true);
-    _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT / scale));
+    _timelineTotal->setContentSize(Size(contentSize.width - 40, _timelineBarHeight / scale));
     _controlPanel->addProtectedChild(_timelineTotal, 1);
 
     _timelinePlayed = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
@@ -710,7 +730,7 @@ void BasicMediaController::createControls()
     _timelineSelector->setPositionNormalized(Vec2(1.f, 0.5f));
     _timelineSelector->setCascadeOpacityEnabled(true);
     _timelineSelector->setStretchEnabled(true);
-    _timelineSelector->setContentSize(Size(TIMELINE_BAR_HEIGHT, TIMELINE_BAR_HEIGHT) * 1.5f / scale);
+    _timelineSelector->setContentSize(Size(_timelineBarHeight, _timelineBarHeight) * 1.5f / scale);
     _timelineSelector->setVisible(false);
     _timelinePlayed->addChild(_timelineSelector, 10);
 
@@ -750,10 +770,15 @@ void BasicMediaController::createControls()
     };
     _timelineTouchListener->onTouchEnded = [this](Touch* touch, Event* event) { _timelineSelector->setVisible(false); };
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(_timelineTouchListener, _timelineTotal);
+    
+    _controlsReady = true;
 }
 
 void BasicMediaController::updateControlsGlobalZ(float globalZOrder)
 {
+    if (!_mediaPlayer || !_controlsReady)
+        return;
+
     _controlPanel->setGlobalZOrder(globalZOrder);
     _timelineTotal->setGlobalZOrder(globalZOrder);
     _timelinePlayed->setGlobalZOrder(globalZOrder);
@@ -762,7 +787,7 @@ void BasicMediaController::updateControlsGlobalZ(float globalZOrder)
 
 void BasicMediaController::updateControls()
 {
-    if (_mediaPlayer)
+    if (_mediaPlayer && _controlsReady)
     {
         const auto currentTime = _mediaPlayer->getCurrentTime();
         const auto duration    = _mediaPlayer->getDuration();
@@ -773,13 +798,16 @@ void BasicMediaController::updateControls()
 
 void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
 {
+    if (!_controlsReady)
+        return;
+    
     _mediaOverlay->setContentSize(contentSize);
     _controlPanel->setContentSize(contentSize);
 
     auto scale = Director::getInstance()->getGLView()->getScaleY();
     _primaryButtonPanel->setScale(1 / scale);
-    _timelineTotal->setContentSize(Size(contentSize.width - 40, TIMELINE_BAR_HEIGHT / scale));
-    _timelineSelector->setContentSize(Size(TIMELINE_BAR_HEIGHT, TIMELINE_BAR_HEIGHT) * 1.5f / scale);
+    _timelineTotal->setContentSize(Size(contentSize.width - 40, _timelineBarHeight / scale));
+    _timelineSelector->setContentSize(Size(_timelineBarHeight, _timelineBarHeight) * 1.5f / scale);
     _fullScreenEnterButton->setScale(1 / scale);
     _fullScreenExitButton->setScale(1 / scale);
 
@@ -788,7 +816,6 @@ void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
     _fullScreenExitButton->setPositionNormalized(Vec2());
     _fullScreenExitButton->setPositionNormalized(Vec2(0.03f, 0.97f));
 }
-
 
 MediaPlayer::MediaPlayer()
 {
@@ -1110,6 +1137,8 @@ void MediaPlayer::setFullScreenEnabled(bool enabled)
         {
             _mediaController->setContentSize(contentSize);
         }
+
+        sendEvent((int)EventType::FULLSCREEN_SWITCH);
     }
 }
 
@@ -1283,6 +1312,11 @@ void MediaPlayer::onPlayEvent(int event)
 {
     _isPlaying = (event == (int)MediaPlayer::EventType::PLAYING);
 
+    sendEvent(event);
+}
+
+void MediaPlayer::sendEvent(int event)
+{
     if (_eventCallback)
     {
         _director->getScheduler()->runOnAxmolThread(std::bind(_eventCallback, this, (MediaPlayer::EventType)event));
