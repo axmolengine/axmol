@@ -46,12 +46,12 @@ USING_NS_AX;
 
 //-----------------------------------------------------------------------------------------------------------
 
-#    define PS_SET_UNIFORM(ps, name, value)                       \
-        do                                                        \
-        {                                                         \
-            decltype(value) __v = value;                          \
+#    define PS_SET_UNIFORM(ps, name, value)                         \
+        do                                                          \
+        {                                                           \
+            decltype(value) __v = value;                            \
             auto __loc          = (ps)->getUniformLocation(name); \
-            (ps)->setUniform(__loc, &__v, sizeof(__v));           \
+            (ps)->setUniform(__loc, &__v, sizeof(__v));             \
         } while (false)
 
 #    define PS_SET_UNIFORM_R(ps, name, value)               \
@@ -67,7 +67,7 @@ namespace
 {
 struct PrivateVideoDescriptor
 {
-    MediaEngine* _engine      = nullptr;
+    MediaEngine* _engine       = nullptr;
     Texture2D* _vtexture       = nullptr;
     Texture2D* _vchromaTexture = nullptr;
     Sprite* _vrender           = nullptr;
@@ -92,19 +92,32 @@ struct PrivateVideoDescriptor
             auto viewSize = videoView->getContentSize();
             if (viewSize.x > 0 && viewSize.y > 0)
             {
-                if(_vpixelDesc._rotation % 180 != 0)
+                if (_vpixelDesc._rotation % 180 != 0)
                     std::swap(viewSize.x, viewSize.y);
                 _vrender->setRotation(_vpixelDesc._rotation);
 
                 if (!videoView->isKeepAspectRatioEnabled())
                 {
                     _vrender->setScale(viewSize.x / videoSize.x, viewSize.y / videoSize.y);
+
+                    auto* mediaController = videoView->getMediaController();
+                    if (mediaController)
+                    {
+                        mediaController->setContentSize(videoSize *
+                                                        Vec2(viewSize.x / videoSize.x, viewSize.y / videoSize.y));
+                    }
                 }
                 else
                 {
                     const auto aspectRatio = (std::min)(viewSize.x / videoSize.x, viewSize.y / (videoSize.y));
 
                     _vrender->setScale(aspectRatio);
+
+                    auto* mediaController = videoView->getMediaController();
+                    if (mediaController)
+                    {
+                        mediaController->setContentSize(videoSize * aspectRatio);
+                    }
                 }
 
                 LayoutHelper::centerNode(_vrender);
@@ -275,17 +288,16 @@ void createMediaControlTexture()
     for (auto&& item : items)
     {
         auto midPoint =
-        Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
+            Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
         item.second(midPoint);
 
-#if defined(AX_USE_GL)
+#    if defined(AX_USE_GL)
         g_mediaControlTextureRegions[item.first] =
-        Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);
-#else // For Metal renderer
-        g_mediaControlTextureRegions[item.first] =
-        Rect(border + (panelW * i) + (gap * i), border, panelW, panelH);
-#endif
-        
+            Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);
+#    else  // For Metal renderer
+        g_mediaControlTextureRegions[item.first] = Rect(border + (panelW * i) + (gap * i), border, panelW, panelH);
+#    endif
+
         ++i;
     }
 
@@ -434,8 +446,7 @@ void MediaPlayerControl::onPressStateChangedToDisabled()
 
 BasicMediaController::BasicMediaController(MediaPlayer* player)
     : MediaController(player), _timelineBarHeight(TIMELINE_BAR_HEIGHT)
-{
-}
+{}
 
 BasicMediaController* BasicMediaController::create(MediaPlayer* mediaPlayer)
 {
@@ -469,13 +480,15 @@ bool BasicMediaController::init()
 void BasicMediaController::initRenderer()
 {
     Widget::initRenderer();
-    
+
     // scheduleOnce is used to create the controls on the next update
     // loop. This is a work-around for a RenderTexture issue
     // when being created such places as a button click event handler
     // on Apple platforms/Metal renderer backend
     scheduleOnce([this](float){
         createControls();
+        updateControlsForContentSize(_mediaPlayer->getContentSize());
+        updateControllerState();
     }, 0.f, "__create_video_controls"sv);
 }
 
@@ -592,13 +605,13 @@ void BasicMediaController::setTimelineBarHeight(float height)
 void BasicMediaController::createControls()
 {
     createMediaControlTexture();
-    
+
     // Check if controls are already created
     if (_controlsReady)
     {
         return;
     }
-    
+
     const auto& contentSize = getContentSize();
     auto scale              = Director::getInstance()->getGLView()->getScaleY();
 
@@ -770,7 +783,7 @@ void BasicMediaController::createControls()
     };
     _timelineTouchListener->onTouchEnded = [this](Touch* touch, Event* event) { _timelineSelector->setVisible(false); };
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(_timelineTouchListener, _timelineTotal);
-    
+
     _controlsReady = true;
 }
 
@@ -800,7 +813,7 @@ void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
 {
     if (!_controlsReady)
         return;
-    
+
     _mediaOverlay->setContentSize(contentSize);
     _controlPanel->setContentSize(contentSize);
 
@@ -1048,7 +1061,7 @@ void MediaPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 
     auto pvd     = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
     auto vrender = pvd->_vrender;
-    auto engine = pvd->_engine;
+    auto engine  = pvd->_engine;
     if (!vrender || !engine)
         return;
 
@@ -1070,7 +1083,7 @@ void MediaPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 void MediaPlayer::setContentSize(const Size& contentSize)
 {
     Widget::setContentSize(contentSize);
-    auto videoContext = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
+    auto videoContext               = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
     videoContext->_originalViewSize = contentSize;
     if (_mediaController)
     {
@@ -1335,7 +1348,7 @@ void MediaPlayer::copySpecialProperties(Widget* widget)
     {
         _isPlaying              = videoPlayer->_isPlaying;
         _isLooping              = videoPlayer->_isLooping;
-        _userInputEnabled      = videoPlayer->_userInputEnabled;
+        _userInputEnabled       = videoPlayer->_userInputEnabled;
         _styleType              = videoPlayer->_styleType;
         _fullScreenEnabled      = videoPlayer->_fullScreenEnabled;
         _fullScreenDirty        = videoPlayer->_fullScreenDirty;
