@@ -144,6 +144,8 @@ protected:
 class AX_GUI_DLL MediaPlayer : public ax::ui::Widget
 {
 public:
+    static const char* FULLSCREEN_SWITCH;
+
     /**
      * Videoplayer play event type.
      */

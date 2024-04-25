@@ -817,6 +817,7 @@ void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
     _fullScreenExitButton->setPositionNormalized(Vec2(0.03f, 0.97f));
 }
 
+const char* MediaPlayer::FULLSCREEN_SWITCH = "__ax_VIDEO_FULLSCREEN_SWITCH";
 
 MediaPlayer::MediaPlayer()
 {
@@ -1138,6 +1139,9 @@ void MediaPlayer::setFullScreenEnabled(bool enabled)
         {
             _mediaController->setContentSize(contentSize);
         }
+
+        auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+        eventDispatcher->dispatchCustomEvent(FULLSCREEN_SWITCH, this);
     }
 }
 
