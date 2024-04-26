@@ -29,7 +29,7 @@ USING_NS_AX;
 using namespace ax::ui;
 
 static MenuItemFont* createMenuFontWithColor(std::string_view title,
-                                             ax::ccMenuCallback&& cb,
+                                             ax::menuCallback&& cb,
                                              const Color3B& color = Color3B::RED)
 {
     auto menuFont = ax::MenuItemFont::create(title, cb);

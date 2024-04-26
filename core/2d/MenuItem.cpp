@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -48,10 +49,10 @@ const unsigned int kZoomActionTag = 0xc0c05002;
 
 MenuItem* MenuItem::create()
 {
-    return MenuItem::create((const ccMenuCallback&)nullptr);
+    return MenuItem::create((const menuCallback&)nullptr);
 }
 
-MenuItem* MenuItem::create(const ccMenuCallback& callback)
+MenuItem* MenuItem::create(const menuCallback& callback)
 {
     MenuItem* ret = new MenuItem();
     ret->initWithCallback(callback);
@@ -59,7 +60,7 @@ MenuItem* MenuItem::create(const ccMenuCallback& callback)
     return ret;
 }
 
-bool MenuItem::initWithCallback(const ccMenuCallback& callback)
+bool MenuItem::initWithCallback(const menuCallback& callback)
 {
     setAnchorPoint(Vec2(0.5f, 0.5f));
     _callback = callback;
@@ -117,7 +118,7 @@ bool MenuItem::isSelected() const
     return _selected;
 }
 
-void MenuItem::setCallback(const ccMenuCallback& callback)
+void MenuItem::setCallback(const menuCallback& callback)
 {
     _callback = callback;
 }
@@ -148,7 +149,7 @@ void MenuItemLabel::setLabel(Node* var)
     _label = var;
 }
 
-MenuItemLabel* MenuItemLabel::create(Node* label, const ccMenuCallback& callback)
+MenuItemLabel* MenuItemLabel::create(Node* label, const menuCallback& callback)
 {
     MenuItemLabel* ret = new MenuItemLabel();
     ret->initWithLabel(label, callback);
@@ -159,12 +160,12 @@ MenuItemLabel* MenuItemLabel::create(Node* label, const ccMenuCallback& callback
 MenuItemLabel* MenuItemLabel::create(Node* label)
 {
     MenuItemLabel* ret = new MenuItemLabel();
-    ret->initWithLabel(label, (const ccMenuCallback&)nullptr);
+    ret->initWithLabel(label, (const menuCallback&)nullptr);
     ret->autorelease();
     return ret;
 }
 
-bool MenuItemLabel::initWithLabel(Node* label, const ccMenuCallback& callback)
+bool MenuItemLabel::initWithLabel(Node* label, const menuCallback& callback)
 {
     MenuItem::initWithCallback(callback);
     _originalScale = 1.0f;
@@ -266,7 +267,7 @@ MenuItemAtlasFont* MenuItemAtlasFont::create(std::string_view value,
                                              char startCharMap)
 {
     return MenuItemAtlasFont::create(value, charMapFile, itemWidth, itemHeight, startCharMap,
-                                     (const ccMenuCallback&)nullptr);
+                                     (const menuCallback&)nullptr);
 }
 
 MenuItemAtlasFont* MenuItemAtlasFont::create(std::string_view value,
@@ -274,7 +275,7 @@ MenuItemAtlasFont* MenuItemAtlasFont::create(std::string_view value,
                                              int itemWidth,
                                              int itemHeight,
                                              char startCharMap,
-                                             const ccMenuCallback& callback)
+                                             const menuCallback& callback)
 {
     MenuItemAtlasFont* ret = new MenuItemAtlasFont();
     ret->initWithString(value, charMapFile, itemWidth, itemHeight, startCharMap, callback);
@@ -287,7 +288,7 @@ bool MenuItemAtlasFont::initWithString(std::string_view value,
                                        int itemWidth,
                                        int itemHeight,
                                        char startCharMap,
-                                       const ccMenuCallback& callback)
+                                       const menuCallback& callback)
 {
     AXASSERT(value.size() != 0, "value length must be greater than 0");
     LabelAtlas* label = LabelAtlas::create(value, charMapFile, itemWidth, itemHeight, startCharMap);
@@ -327,7 +328,7 @@ std::string_view MenuItemFont::getFontName()
     return _globalFontName;
 }
 
-MenuItemFont* MenuItemFont::create(std::string_view value, const ccMenuCallback& callback)
+MenuItemFont* MenuItemFont::create(std::string_view value, const menuCallback& callback)
 {
     MenuItemFont* ret = new MenuItemFont();
     ret->initWithString(value, callback);
@@ -338,7 +339,7 @@ MenuItemFont* MenuItemFont::create(std::string_view value, const ccMenuCallback&
 MenuItemFont* MenuItemFont::create(std::string_view value)
 {
     MenuItemFont* ret = new MenuItemFont();
-    ret->initWithString(value, (const ccMenuCallback&)nullptr);
+    ret->initWithString(value, (const menuCallback&)nullptr);
     ret->autorelease();
     return ret;
 }
@@ -350,7 +351,7 @@ MenuItemFont::~MenuItemFont()
     AXLOGINFO("In the destructor of MenuItemFont (%p).", this);
 }
 
-bool MenuItemFont::initWithString(std::string_view value, const ccMenuCallback& callback)
+bool MenuItemFont::initWithString(std::string_view value, const menuCallback& callback)
 {
     AXASSERT(!value.empty(), "Value length must be greater than 0");
 
@@ -463,10 +464,10 @@ void MenuItemSprite::setDisabledImage(Node* image)
 
 MenuItemSprite* MenuItemSprite::create(Node* normalSprite, Node* selectedSprite, Node* disabledSprite)
 {
-    return MenuItemSprite::create(normalSprite, selectedSprite, disabledSprite, (const ccMenuCallback&)nullptr);
+    return MenuItemSprite::create(normalSprite, selectedSprite, disabledSprite, (const menuCallback&)nullptr);
 }
 
-MenuItemSprite* MenuItemSprite::create(Node* normalSprite, Node* selectedSprite, const ccMenuCallback& callback)
+MenuItemSprite* MenuItemSprite::create(Node* normalSprite, Node* selectedSprite, const menuCallback& callback)
 {
     return MenuItemSprite::create(normalSprite, selectedSprite, nullptr, callback);
 }
@@ -474,7 +475,7 @@ MenuItemSprite* MenuItemSprite::create(Node* normalSprite, Node* selectedSprite,
 MenuItemSprite* MenuItemSprite::create(Node* normalSprite,
                                        Node* selectedSprite,
                                        Node* disabledSprite,
-                                       const ccMenuCallback& callback)
+                                       const menuCallback& callback)
 {
     MenuItemSprite* ret = new MenuItemSprite();
     ret->initWithNormalSprite(normalSprite, selectedSprite, disabledSprite, callback);
@@ -485,7 +486,7 @@ MenuItemSprite* MenuItemSprite::create(Node* normalSprite,
 bool MenuItemSprite::initWithNormalSprite(Node* normalSprite,
                                           Node* selectedSprite,
                                           Node* disabledSprite,
-                                          const ccMenuCallback& callback)
+                                          const menuCallback& callback)
 {
     MenuItem::initWithCallback(callback);
     setNormalImage(normalSprite);
@@ -597,17 +598,17 @@ MenuItemImage* MenuItemImage::create()
 
 bool MenuItemImage::init()
 {
-    return initWithNormalImage("", "", "", (const ccMenuCallback&)nullptr);
+    return initWithNormalImage("", "", "", (const menuCallback&)nullptr);
 }
 
 MenuItemImage* MenuItemImage::create(std::string_view normalImage, std::string_view selectedImage)
 {
-    return MenuItemImage::create(normalImage, selectedImage, "", (const ccMenuCallback&)nullptr);
+    return MenuItemImage::create(normalImage, selectedImage, "", (const menuCallback&)nullptr);
 }
 
 MenuItemImage* MenuItemImage::create(std::string_view normalImage,
                                      std::string_view selectedImage,
-                                     const ccMenuCallback& callback)
+                                     const menuCallback& callback)
 {
     return MenuItemImage::create(normalImage, selectedImage, "", callback);
 }
@@ -615,7 +616,7 @@ MenuItemImage* MenuItemImage::create(std::string_view normalImage,
 MenuItemImage* MenuItemImage::create(std::string_view normalImage,
                                      std::string_view selectedImage,
                                      std::string_view disabledImage,
-                                     const ccMenuCallback& callback)
+                                     const menuCallback& callback)
 {
     MenuItemImage* ret = new MenuItemImage();
     if (ret->initWithNormalImage(normalImage, selectedImage, disabledImage, callback))
@@ -632,7 +633,7 @@ MenuItemImage* MenuItemImage::create(std::string_view normalImage,
                                      std::string_view disabledImage)
 {
     MenuItemImage* ret = new MenuItemImage();
-    if (ret->initWithNormalImage(normalImage, selectedImage, disabledImage, (const ccMenuCallback&)nullptr))
+    if (ret->initWithNormalImage(normalImage, selectedImage, disabledImage, (const menuCallback&)nullptr))
     {
         ret->autorelease();
         return ret;
@@ -644,7 +645,7 @@ MenuItemImage* MenuItemImage::create(std::string_view normalImage,
 bool MenuItemImage::initWithNormalImage(std::string_view normalImage,
                                         std::string_view selectedImage,
                                         std::string_view disabledImage,
-                                        const ccMenuCallback& callback)
+                                        const menuCallback& callback)
 {
     Node* normalSprite   = nullptr;
     Node* selectedSprite = nullptr;
@@ -689,7 +690,7 @@ void MenuItemImage::setDisabledSpriteFrame(SpriteFrame* frame)
 // MenuItemToggle
 //
 
-MenuItemToggle* MenuItemToggle::createWithCallback(const ccMenuCallback& callback, const Vector<MenuItem*>& menuItems)
+MenuItemToggle* MenuItemToggle::createWithCallback(const menuCallback& callback, const Vector<MenuItem*>& menuItems)
 {
     MenuItemToggle* ret = new MenuItemToggle();
     ret->MenuItem::initWithCallback(callback);
@@ -713,7 +714,7 @@ MenuItemToggle* MenuItemToggle::createWithCallback(const ccMenuCallback& callbac
     return ret;
 }
 
-MenuItemToggle* MenuItemToggle::createWithCallback(const ccMenuCallback& callback, MenuItem* item, ...)
+MenuItemToggle* MenuItemToggle::createWithCallback(const menuCallback& callback, MenuItem* item, ...)
 {
     va_list args;
     va_start(args, item);
@@ -732,7 +733,7 @@ MenuItemToggle* MenuItemToggle::create()
     return ret;
 }
 
-bool MenuItemToggle::initWithCallback(const ccMenuCallback& callback, MenuItem* item, va_list args)
+bool MenuItemToggle::initWithCallback(const menuCallback& callback, MenuItem* item, va_list args)
 {
     MenuItem::initWithCallback(callback);
 
@@ -770,7 +771,7 @@ MenuItemToggle* MenuItemToggle::create(MenuItem* item)
 
 bool MenuItemToggle::initWithItem(MenuItem* item)
 {
-    MenuItem::initWithCallback((const ccMenuCallback&)nullptr);
+    MenuItem::initWithCallback((const menuCallback&)nullptr);
 
     if (item)
     {

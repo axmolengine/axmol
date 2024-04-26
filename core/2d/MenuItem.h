@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -38,7 +39,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-typedef std::function<void(Ref*)> ccMenuCallback;
+typedef std::function<void(Ref*)> menuCallback;
 
 class Label;
 class LabelAtlas;
@@ -61,7 +62,7 @@ public:
     /** Creates a MenuItem with no target/selector. */
     static MenuItem* create();
     /** Creates a MenuItem with a target/selector. */
-    static MenuItem* create(const ccMenuCallback& callback);
+    static MenuItem* create(const menuCallback& callback);
 
     /** Returns the outside box. */
     Rect rect() const;
@@ -84,7 +85,7 @@ public:
      * @endcode
      * @lua NA
      */
-    void setCallback(const ccMenuCallback& callback);
+    void setCallback(const menuCallback& callback);
 
     /**
      * @js NA
@@ -104,13 +105,13 @@ public:
     /** Initializes a MenuItem with a target/selector.
      * @lua NA
      */
-    bool initWithCallback(const ccMenuCallback& callback);
+    bool initWithCallback(const menuCallback& callback);
 
 protected:
     bool _selected;
     bool _enabled;
     // callback
-    ccMenuCallback _callback;
+    menuCallback _callback;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(MenuItem);
@@ -128,7 +129,7 @@ class AX_DLL MenuItemLabel : public MenuItem
 {
 public:
     /** Creates a MenuItemLabel with a Label and a callback. */
-    static MenuItemLabel* create(Node* label, const ccMenuCallback& callback);
+    static MenuItemLabel* create(Node* label, const menuCallback& callback);
 
     /** Creates a MenuItemLabel with a Label. Target and selector will be nil. */
     static MenuItemLabel* create(Node* label);
@@ -168,7 +169,7 @@ public:
     virtual ~MenuItemLabel();
 
     /** Initializes a MenuItemLabel with a Label, target and selector. */
-    bool initWithLabel(Node* label, const ccMenuCallback& callback);
+    bool initWithLabel(Node* label, const menuCallback& callback);
 
 protected:
     Color3B _colorBackup;
@@ -201,7 +202,7 @@ public:
                                      int itemWidth,
                                      int itemHeight,
                                      char startCharMap,
-                                     const ccMenuCallback& callback);
+                                     const menuCallback& callback);
 
     /**
      * @js ctor
@@ -219,7 +220,7 @@ public:
                         int itemWidth,
                         int itemHeight,
                         char startCharMap,
-                        const ccMenuCallback& callback);
+                        const menuCallback& callback);
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(MenuItemAtlasFont);
@@ -234,7 +235,7 @@ public:
     /** Creates a menu item from a string without target/selector. To be used with MenuItemToggle. */
     static MenuItemFont* create(std::string_view value = "");
     /** Creates a menu item from a string with a target/selector. */
-    static MenuItemFont* create(std::string_view value, const ccMenuCallback& callback);
+    static MenuItemFont* create(std::string_view value, const menuCallback& callback);
 
     /** Set default font size. */
     static void setFontSize(int size);
@@ -285,7 +286,7 @@ public:
     virtual ~MenuItemFont();
 
     /** Initializes a menu item from a string with a target/selector. */
-    bool initWithString(std::string_view value, const ccMenuCallback& callback);
+    bool initWithString(std::string_view value, const menuCallback& callback);
 
 protected:
     int _fontSize;
@@ -309,12 +310,12 @@ public:
     /** Creates a menu item with a normal, selected and disabled image.*/
     static MenuItemSprite* create(Node* normalSprite, Node* selectedSprite, Node* disabledSprite = nullptr);
     /** Creates a menu item with a normal and selected image with a callable object. */
-    static MenuItemSprite* create(Node* normalSprite, Node* selectedSprite, const ccMenuCallback& callback);
+    static MenuItemSprite* create(Node* normalSprite, Node* selectedSprite, const menuCallback& callback);
     /** Creates a menu item with a normal,selected  and disabled image with target/selector. */
     static MenuItemSprite* create(Node* normalSprite,
                                   Node* selectedSprite,
                                   Node* disabledSprite,
-                                  const ccMenuCallback& callback);
+                                  const menuCallback& callback);
 
     /** Gets the image used when the item is not selected. */
     Node* getNormalImage() const { return _normalImage; }
@@ -352,7 +353,7 @@ public:
     bool initWithNormalSprite(Node* normalSprite,
                               Node* selectedSprite,
                               Node* disabledSprite,
-                              const ccMenuCallback& callback);
+                              const menuCallback& callback);
 
 protected:
     virtual void updateImagesVisibility();
@@ -390,12 +391,12 @@ public:
     /** Creates a menu item with a normal and selected image with a callable object. */
     static MenuItemImage* create(std::string_view normalImage,
                                  std::string_view selectedImage,
-                                 const ccMenuCallback& callback);
+                                 const menuCallback& callback);
     /** Creates a menu item with a normal,selected and disabled image with a callable object. */
     static MenuItemImage* create(std::string_view normalImage,
                                  std::string_view selectedImage,
                                  std::string_view disabledImage,
-                                 const ccMenuCallback& callback);
+                                 const menuCallback& callback);
 
     /** Sets the sprite frame for the normal image. */
     void setNormalSpriteFrame(SpriteFrame* frame);
@@ -420,7 +421,7 @@ public:
     bool initWithNormalImage(std::string_view normalImage,
                              std::string_view selectedImage,
                              std::string_view disabledImage,
-                             const ccMenuCallback& callback);
+                             const menuCallback& callback);
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(MenuItemImage);
@@ -436,9 +437,9 @@ public:
     /**
      *@brief Creates a menu item from a Array with a callable object.
      */
-    static MenuItemToggle* createWithCallback(const ccMenuCallback& callback, const Vector<MenuItem*>& menuItems);
+    static MenuItemToggle* createWithCallback(const menuCallback& callback, const Vector<MenuItem*>& menuItems);
     /** Creates a menu item from a list of items with a callable object. */
-    static MenuItemToggle* createWithCallback(const ccMenuCallback& callback,
+    static MenuItemToggle* createWithCallback(const menuCallback& callback,
                                               MenuItem* item,
                                               ...) AX_REQUIRES_NULL_TERMINATION;
     /** Creates a menu item with no target/selector and no items. */
@@ -484,7 +485,7 @@ public:
     MenuItemToggle() : _selectedIndex(0), _selectedItem(nullptr) {}
 
     /** Initializes a menu item from a list of items with a callable object. */
-    bool initWithCallback(const ccMenuCallback& callback, MenuItem* item, va_list args);
+    bool initWithCallback(const menuCallback& callback, MenuItem* item, va_list args);
 
     /** Initializes a menu item with a item. */
     bool initWithItem(MenuItem* item);
