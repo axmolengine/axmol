@@ -498,6 +498,13 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
         return false;
     }
 
+    int actualWidth, actualHeight;
+    glfwGetWindowSize(_mainWindow, &actualWidth, &actualHeight);
+    if (static_cast<int>(windowSize.width) != actualWidth || static_cast<int>(windowSize.height) != actualHeight)
+    {
+        windowSize.set(static_cast<float>(actualWidth), static_cast<float>(actualHeight));
+    }
+
 #if defined(AX_USE_METAL)
     int fbWidth, fbHeight;
     glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
