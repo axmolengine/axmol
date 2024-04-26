@@ -1800,6 +1800,7 @@ if (!$setupOnly) {
                     }
                     $b1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
 
+                    $b1k.println("cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS")
                     cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS | Out-Host
                 }
             }
