@@ -363,8 +363,9 @@ endfunction()
 
 # setup a ax application
 function(ax_setup_app_config app_name)
-    set(options RUNTIME_OUTPUT_DIR opt_RUNTIME_OUTPUT_DIR)
-    cmake_parse_arguments(opt "" "${options}" ""
+    set(options CONSOLE)
+    set(oneValueArgs RUNTIME_OUTPUT_DIR)
+    cmake_parse_arguments(opt "${options}" "${oneValueArgs}" ""
                           "" ${ARGN} )
     if (WINRT)
         target_include_directories(${app_name} 
@@ -395,9 +396,17 @@ function(ax_setup_app_config app_name)
     elseif(WINDOWS)
         # windows: visual studio/LLVM-clang default is Console app, but we need Windows app
         if(MSVC)
-            set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "/SUBSYSTEM:WINDOWS")
+            if(opt_CONSOLE)
+                set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "/SUBSYSTEM:CONSOLE")
+            else()
+                set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "/SUBSYSTEM:WINDOWS")
+            endif()
         elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-            set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "-Xlinker /subsystem:windows")
+            if(opt_CONSOLE)
+                set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "-Xlinker /subsystem:console")
+            else()
+                set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "-Xlinker /subsystem:windows")
+            endif()
         endif()
     endif()
     # auto mark code files for IDE when mark app
