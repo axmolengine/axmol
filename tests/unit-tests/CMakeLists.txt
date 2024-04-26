@@ -39,9 +39,25 @@ endif()
 #_1kfetch(sample-assets)
 #_1klink("${sample-assets_SOURCE_DIR}/unit-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/Content")
 
-# record sources, headers, resources...
-file(GLOB_RECURSE GAME_SOURCE Source/**.cpp)
-file(GLOB_RECURSE GAME_HEADER Source/**.h)
+set(GAME_SOURCE
+    Source/AppDelegate.cpp
+    Source/doctest.cpp
+
+    Source/core/base/MapTests.cpp
+    Source/core/base/UTF8Tests.cpp
+    Source/core/base/UtilsTests.cpp
+    Source/core/base/ValueTests.cpp
+    Source/core/base/VectorTests.cpp
+
+    Source/core/math/MathUtilTests.cpp
+
+    Source/core/network/UriTests.cpp
+
+    Source/core/platform/FileUtilsTests.cpp
+
+    Source/core/ui/UIHelperTests.cpp
+)
+
 
 set(GAME_INC_DIRS
     "${CMAKE_CURRENT_SOURCE_DIR}/Source"
