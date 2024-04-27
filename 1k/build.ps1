@@ -197,7 +197,7 @@ $manifest = @{
     # C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.36.32532\vc_redist.x64.exe
     msvc         = '14.39+'; # cl.exe @link.exe 14.39 VS2022 17.9.x
     ndk          = 'r23c';
-    xcode        = '13.0.0~15.0.0'; # range
+    xcode        = '13.0.0+'; # range
     # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang 16.0.0 or newer.");
     llvm         = '16.0.6+'; # clang-cl msvc14.37 require 16.0.0+
     gcc          = '9.0.0+';
@@ -1204,6 +1204,13 @@ function setup_msvc() {
     }
 }
 
+function setup_xcode() {
+    $xcode_prog, $xcode_ver = find_prog -name 'xcode' -cmd "xcodebuild" -params @('-version')
+    if (!$xcode_prog) {
+        throw "Missing Xcode, please install"
+    }
+}
+
 # google gn build system, current windows only for build angleproject/dawn on windows
 function setup_gclient() {
     $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding
@@ -1655,6 +1662,10 @@ if (!$setupOnly) {
 
                 if ($using_ninja -and $Global:is_android) {
                     $CONFIG_ALL_OPTIONS += "-DCMAKE_MAKE_PROGRAM=$ninja_prog"
+                }
+
+                if($cmake_generator -eq 'Xcode') {
+                    setup_xcode
                 }
             }
 
