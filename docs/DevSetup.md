@@ -71,10 +71,6 @@ The `axmol build` command will auto-setup the general toolsets, so you'll be abl
 -configOnly: if this parameter is present, it will skip the 'build' step
 ```
 
-## How to quick build the engine for host targets
-
-Go to `axmol` root directory and run `build.ps1` without any parameters. It will build `HelloCpp` by default.
-
 ## How to quick build a test project (e.g. 'cpp-tests')
 
 Using a PowerShell console window (command `pwsh`), go to `axmol\tests\<testdir e.g. 'cpp-tests'>` directory and perform `axmol build -p android -a arm64`. It will build `cpp-tests` for Android.
