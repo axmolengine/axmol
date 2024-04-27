@@ -38,6 +38,9 @@
 #include "platform/StdC.h"  // ssize_t on windows
 #include "renderer/Texture2D.h"
 
+#include "base/Map.h"
+#include "2d/FontFreeType.h"
+
 NS_AX_BEGIN
 
 class Font;
@@ -145,6 +148,9 @@ protected:
 
     std::unordered_map<unsigned int, Texture2D*> _atlasTextures;
     std::unordered_map<char32_t, FontLetterDefinition> _letterDefinitions;
+
+    StringMap<FontFreeType*> _missingFallbackFonts; // maybe style no needs?
+    std::unordered_map<char32_t, std::pair<FontFreeType*, unsigned int>> _missingGlyphFallbackFonts;
 
     Font* _font                 = nullptr;
     FontFreeType* _fontFreeType = nullptr;

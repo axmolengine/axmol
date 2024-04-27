@@ -4,6 +4,7 @@
 #   _1kfetch_cache_dir
 #   _1kfetch_manifest
 # 
+cmake_minimum_required(VERSION 3.23)
 
 ### 1kdist url
 find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -19,7 +20,7 @@ function(_1kfetch_init)
         set(_1kfetch_manifest "${_1kfetch_manifest}" CACHE STRING "" FORCE)
     endif()
 
-    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/resolv_uri.ps1
+    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/resolv-uri.ps1
         -name "1kdist"
         -manifest ${_1kfetch_manifest}
         OUTPUT_VARIABLE _1kdist_url
@@ -40,6 +41,9 @@ endfunction()
 # param package_name
 function(_1kfetch_dist package_name)
     set(_prebuilt_root ${CMAKE_CURRENT_LIST_DIR}/_x)
+    if(_1KFETCH_DIST_UPGRADE AND IS_DIRECTORY ${_prebuilt_root})
+        file(REMOVE_RECURSE ${_prebuilt_root})
+    endif()
     if(NOT IS_DIRECTORY ${_prebuilt_root})
         set (package_store "${_1kfetch_cache_dir}/1kdist/${_1kdist_ver}/${package_name}.zip")
         if (NOT EXISTS ${package_store})
@@ -81,19 +85,21 @@ function(_1kfetch uri)
 
     _1kparse_name(${uri} "${opt_NAME}")
 
-    # rev: the explicit rev to checkout, i.e. git release tag name
-    set(_pkg_rev "")
-    if(opt_REV)
-        set(_pkg_rev ${opt_REV})
-    endif()
-    
     set(_pkg_store "${_1kfetch_cache_dir}/${_pkg_name}")
-    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
+
+    set(_fetch_args 
         -uri "${uri}"
         -prefix "${_1kfetch_cache_dir}"
         -manifest "${_1kfetch_manifest}"
         -name "${_pkg_name}"
-        -rev "${_pkg_rev}"
+    )
+    # rev: the explicit rev to checkout, i.e. git release tag name
+    if(opt_REV)
+        list(APPEND _fetch_args -rev ${opt_REV})
+    endif()
+
+    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
+        ${_fetch_args}
         RESULT_VARIABLE _errorcode
         )
     if (_errorcode)

@@ -31,7 +31,7 @@
 
 #include "base/Ref.h"
 #include "platform/PlatformMacros.h"
-#include "base/Console.h"
+#include "base/Logging.h"
 
 NS_AX_BEGIN
 

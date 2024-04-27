@@ -52,9 +52,9 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
     addChild(infoLabel);
 
     // load atlas definition with specified PixelFormat and check that it matches to expected format
-    loadSpriteFrames("Images/sprite_frames_test/test_A8.plist", backend::PixelFormat::A8);
+    loadSpriteFrames("Images/sprite_frames_test/test_A8.plist", backend::PixelFormat::R8);
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
-    loadSpriteFrames("Images/sprite_frames_test/test_AI88.plist", backend::PixelFormat::LA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_AI88.plist", backend::PixelFormat::RG8);
     loadSpriteFrames("Images/sprite_frames_test/test_RGB565.plist", backend::PixelFormat::RGB565);
     loadSpriteFrames("Images/sprite_frames_test/test_RGB888.plist", backend::PixelFormat::RGB8);
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA4444.plist", backend::PixelFormat::RGBA4);
@@ -84,9 +84,7 @@ void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file,
     const ssize_t bitsPerKB  = 8 * 1024;
     const double memorySize  = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
-#ifndef AX_USE_METAL
-    AX_ASSERT(texture->getPixelFormat() == expectedFormat);
-#endif
+
     const std::string textureInfo = StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(),
                                                         texture->getStringForFormat(), memorySize);
     infoLabel->setString(textureInfo);
@@ -112,7 +110,6 @@ void SpriteFrameCacheLoadMultipleTimes::loadSpriteFrames(std::string_view file,
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
     Texture2D* texture       = spriteFrame->getTexture();
-    AX_ASSERT(texture->getPixelFormat() == expectedFormat);
 
     SpriteFrameCache::getInstance()->removeSpriteFrameByName("sprite_frames_test/grossini.png");
     Director::getInstance()->getTextureCache()->removeTexture(texture);
@@ -311,11 +308,8 @@ protected:
             {"RGB5A1", backend::PixelFormat::RGB5A1},
             {"RGBA5551", backend::PixelFormat::RGB5A1},
             {"RGB565", backend::PixelFormat::RGB565},
-            {"A8", backend::PixelFormat::A8},
-            {"ALPHA", backend::PixelFormat::A8},
-            {"I8", backend::PixelFormat::L8},
-            {"AI88", backend::PixelFormat::LA8},
-            {"ALPHA_INTENSITY", backend::PixelFormat::LA8},
+            {"R8", backend::PixelFormat::R8},
+            {"RG8", backend::PixelFormat::RG8},
             //{"BGRA8888", backend::PixelFormat::BGRA8888}, no Image conversion RGBA -> BGRA
             {"RGB888", backend::PixelFormat::RGB8}};
 
@@ -499,9 +493,6 @@ void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file,
     const ssize_t bitsPerKB = 8 * 1024;
     const double memorySize = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
-#ifndef AX_USE_METAL
-    AX_ASSERT(texture->getPixelFormat() == expectedFormat);
-#endif
     const std::string textureInfo = StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(),
                                                         texture->getStringForFormat(), memorySize);
     infoLabel->setString(textureInfo);

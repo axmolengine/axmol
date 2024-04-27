@@ -3,6 +3,9 @@
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
+// Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+// 
+// https://axmolengine.github.io/
 //-------------------------------------------------------------------------------------
 
 #include "media/MfMediaEngine.h"
@@ -160,7 +163,9 @@ bool MfMediaEngine::play()
 bool MfMediaEngine::pause()
 {
     if (m_mediaEngine)
+    {
         return SUCCEEDED(m_mediaEngine->Pause());
+    }
     return false;
 }
 
@@ -226,6 +231,23 @@ bool MfMediaEngine::setCurrentTime(double fPosInSeconds)
         return SUCCEEDED(m_mediaEngine->SetCurrentTime(fPosInSeconds));
     return false;
 }
+
+double MfMediaEngine::getCurrentTime()
+{
+    if (m_mediaEngine)
+        return m_mediaEngine->GetCurrentTime();
+
+    return 0.0;
+}
+
+double MfMediaEngine::getDuration()
+{
+    if (m_mediaEngine)
+        return m_mediaEngine->GetDuration();
+
+    return 0.0;
+}
+
 
 bool MfMediaEngine::transferVideoFrame()
 {

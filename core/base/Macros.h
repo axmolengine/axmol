@@ -34,7 +34,7 @@ THE SOFTWARE.
 #    define _USE_MATH_DEFINES
 #endif
 
-#include "base/Console.h"
+#include "base/Logging.h"
 #include "platform/StdC.h"
 
 #ifndef AXASSERT

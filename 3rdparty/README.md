@@ -107,7 +107,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 9.2.0
+- Version: 9.2.1
 - License: MIT
 
 ## lua
@@ -218,12 +218,12 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 3.8.0
+- Version: 3.9.1
 - License: Apache-2.0
 
 ## stb (stb_image)
 - Upstream: https://github.com/nothings/stb
-- Version: 2.28
+- Version: 2.29
 - License: MIT
 
 ## unzip (minizip-1.2)

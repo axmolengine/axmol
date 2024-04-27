@@ -986,7 +986,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
         _particleData.size[i] = MAX(0, _particleData.size[i]);
     }
 
-    if (_endSize != START_SIZE_EQUAL_TO_END_SIZE)
+    if (_endSize != static_cast<float>(START_SIZE_EQUAL_TO_END_SIZE))
     {
         for (int i = start; i < _particleCount; ++i)
         {
@@ -1093,7 +1093,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
                 AX_DEGREES_TO_RADIANS(modeB.rotatePerSecond + modeB.rotatePerSecondVar * _rng.rangef());
         }
 
-        if (modeB.endRadius == START_RADIUS_EQUAL_TO_END_RADIUS)
+        if (modeB.endRadius == static_cast<float>(START_RADIUS_EQUAL_TO_END_RADIUS))
             std::fill_n(_particleData.modeB.deltaRadius + start, _particleCount - start, 0.0F);
         else
         {
@@ -1482,8 +1482,8 @@ bool ParticleSystem::addAnimationIndex(unsigned short index, ax::Rect rect, bool
 
 void ParticleSystem::simulate(float seconds, float frameRate)
 {
-    seconds             = seconds == SIMULATION_USE_PARTICLE_LIFETIME ? getLife() + getLifeVar() : seconds;
-    frameRate           = frameRate == SIMULATION_USE_GAME_ANIMATION_INTERVAL
+    seconds             = seconds == static_cast<float>(SIMULATION_USE_PARTICLE_LIFETIME) ? getLife() + getLifeVar() : seconds;
+    frameRate           = frameRate == static_cast<float>(SIMULATION_USE_GAME_ANIMATION_INTERVAL)
                               ? 1.0F / Director::getInstance()->getAnimationInterval()
                               : frameRate;
     auto delta          = 1.0F / frameRate;
@@ -1597,7 +1597,7 @@ void ParticleSystem::update(float dt)
         _elapsed += dt;
         if (_elapsed < 0.f)
             _elapsed = 0.f;
-        if (_duration != DURATION_INFINITY && _duration < _elapsed)
+        if (_duration != static_cast<float>(DURATION_INFINITY) && _duration < _elapsed)
         {
             this->stopSystem();
         }

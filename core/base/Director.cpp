@@ -54,7 +54,7 @@ THE SOFTWARE.
 #include "base/Macros.h"
 #include "base/EventDispatcher.h"
 #include "base/EventCustom.h"
-#include "base/Console.h"
+#include "base/Logging.h"
 #include "base/AutoreleasePool.h"
 #include "base/Configuration.h"
 #include "base/AsyncTaskPool.h"
@@ -115,9 +115,9 @@ bool Director::init()
 
     // FPS
     _lastUpdate = std::chrono::steady_clock::now();
-
+#ifdef AX_ENABLE_CONSOLE
     _console = new Console;
-
+#endif
     // scheduler
     _scheduler = new Scheduler();
     // action manager
@@ -183,9 +183,9 @@ Director::~Director()
     AX_SAFE_RELEASE(_eventAfterVisit);
     AX_SAFE_RELEASE(_eventProjectionChanged);
     AX_SAFE_RELEASE(_eventResetDirector);
-
+#ifdef AX_ENABLE_CONSOLE
     delete _console;
-
+#endif
     AX_SAFE_RELEASE(_eventDispatcher);
 
     Configuration::destroyInstance();

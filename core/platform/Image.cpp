@@ -239,9 +239,9 @@ static const _pixel2_formathash::value_type v2_pixel_formathash_value[] = {
     _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGBA5551, backend::PixelFormat::RGB5A1),
     _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGB565, backend::PixelFormat::RGB565),
     _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGB888, backend::PixelFormat::RGB8),
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::A8, backend::PixelFormat::A8),
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::I8, backend::PixelFormat::L8),
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::AI88, backend::PixelFormat::LA8),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::A8, backend::PixelFormat::R8),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::I8, backend::PixelFormat::R8),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::AI88, backend::PixelFormat::RG8),
 
     _pixel2_formathash::value_type(PVR2TexturePixelFormat::PVRTC2BPP_RGBA, backend::PixelFormat::PVRTC2A),
     _pixel2_formathash::value_type(PVR2TexturePixelFormat::PVRTC4BPP_RGBA, backend::PixelFormat::PVRTC4A),
@@ -260,9 +260,9 @@ static _pixel3_formathash::value_type v3_pixel_formathash_value[] = {
     _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGBA5551, backend::PixelFormat::RGB5A1),
     _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGB565, backend::PixelFormat::RGB565),
     _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGB888, backend::PixelFormat::RGB8),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::A8, backend::PixelFormat::A8),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::L8, backend::PixelFormat::L8),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::LA88, backend::PixelFormat::LA8),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::A8, backend::PixelFormat::R8),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::L8, backend::PixelFormat::R8),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::LA88, backend::PixelFormat::RG8),
 
     _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC2BPP_RGB, backend::PixelFormat::PVRTC2),
     _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC2BPP_RGBA, backend::PixelFormat::PVRTC2A),
@@ -922,12 +922,12 @@ bool Image::decodeWithWIC(const unsigned char* data, ssize_t dataLen)
 
         if (memcmp(&format, &GUID_WICPixelFormat8bppGray, sizeof(WICPixelFormatGUID)) == 0)
         {
-            _pixelFormat = backend::PixelFormat::L8;
+            _pixelFormat = backend::PixelFormat::R8;
         }
 
         if (memcmp(&format, &GUID_WICPixelFormat8bppAlpha, sizeof(WICPixelFormatGUID)) == 0)
         {
-            _pixelFormat = backend::PixelFormat::LA8;
+            _pixelFormat = backend::PixelFormat::RG8;
         }
 
         if (memcmp(&format, &GUID_WICPixelFormat24bppRGB, sizeof(WICPixelFormatGUID)) == 0)
@@ -1112,7 +1112,7 @@ bool Image::initWithJpgData(uint8_t* data, ssize_t dataLen)
         // we only support RGB or grayscale
         if (cinfo.jpeg_color_space == JCS_GRAYSCALE)
         {
-            _pixelFormat = backend::PixelFormat::L8;
+            _pixelFormat = backend::PixelFormat::R8;
         }
         else
         {
@@ -1243,10 +1243,10 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
         switch (color_type)
         {
         case PNG_COLOR_TYPE_GRAY:
-            _pixelFormat = backend::PixelFormat::L8;
+            _pixelFormat = backend::PixelFormat::R8;
             break;
         case PNG_COLOR_TYPE_GRAY_ALPHA:
-            _pixelFormat = backend::PixelFormat::LA8;
+            _pixelFormat = backend::PixelFormat::RG8;
             break;
         case PNG_COLOR_TYPE_RGB:
             _pixelFormat = backend::PixelFormat::RGB8;
@@ -1414,7 +1414,7 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
             // gray
             if (8 == tgaData->pixelDepth)
             {
-                _pixelFormat = backend::PixelFormat::L8;
+                _pixelFormat = backend::PixelFormat::R8;
             }
             else
             {
@@ -1481,8 +1481,8 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         AXLOG("axmol: WARNING: Image is flipped. Regenerate it using PVRTexTool");
     }
 
-    if (!configuration->supportsNPOT() && (static_cast<int>(header->width) != ccNextPOT(header->width) ||
-                                           static_cast<int>(header->height) != ccNextPOT(header->height)))
+    if (!configuration->supportsNPOT() && (static_cast<int>(header->width) != utils::nextPOT(header->width) ||
+                                           static_cast<int>(header->height) != utils::nextPOT(header->height)))
     {
         AXLOG("axmol: ERROR: Loading an NPOT texture (%dx%d) but is not supported on this device", header->width,
               header->height);

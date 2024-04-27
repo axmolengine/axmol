@@ -1,5 +1,4 @@
-#
-# This script easy to build win32, linux, winuwp(winrt), ios, tvos, osx, android depends on $myRoot/1k/build.ps1
+# This script easy to build win32, linux, winuwp(winrt), ios, tvos, osx, android depends on $AX_ROOT/1k/build.ps1
 # usage: pwsh build.ps1 -p <targetPlatform> -a <arch>
 # options
 #  -p: build target platform: win32,winuwp(winrt),linux,android,osx,ios,tvos,wasm
@@ -35,11 +34,12 @@
 #
 param(
     [switch]$configOnly,
-    [switch]$forceConfig,
-    [switch]$setupOnly
+    [switch]$forceConfig
 )
 
 $unhandled_args = @()
+
+$1k_switch_options = @{ 'dll' = $true; 'u' = $true; 'dm' = $true }
 
 $options = @{p = $null; d = $null; xc = @(); xb = @(); }
 
@@ -49,11 +49,17 @@ foreach ($arg in $args) {
         if ($arg.StartsWith('-')) { 
             $optName = $arg.SubString(1).TrimEnd(':')
         }
+        if ($1k_switch_options.Contains("$optName")) {
+            $unhandled_args += $arg
+            $optName = $null
+            continue
+        }
     }
     else {
         if ($options.Contains($optName)) {
             $options[$optName] = $arg
-        } else {
+        }
+        else {
             $unhandled_args += "-$optName"
             $unhandled_args += $arg
         }
@@ -75,57 +81,52 @@ if ($options.xc.Count -ne 0) {
     [array]$options.xc = (translate_array_opt $options.xc)
 }
 
-$myRoot = $PSScriptRoot
+$AX_ROOT = (Resolve-Path $PSScriptRoot/../..).Path
 $workDir = $(Get-Location).Path
-
-# axroot
-$AX_ROOT = $null
-if (Test-Path "$myRoot/core/axmolver.h.in" -PathType Leaf) {
-    $AX_ROOT = $myRoot
+if (Test-Path (Join-Path $AX_ROOT 'core/axmolver.h.in') -PathType Leaf) {
     $env:AX_ROOT = $AX_ROOT
-} else {
+}
+else {
     throw "The axmol engine incompleted"
 }
 
 # 1k/build.ps1
-if(Test-Path "$myRoot/1k/build.ps1" -PathType Leaf) {
-    $b1k_root = $myRoot
-}
-else {
+$b1k_script = Join-Path $AX_ROOT '1k/build.ps1'
+if (!(Test-Path $b1k_script -PathType Leaf)) {
     throw "The 1k/build.ps1 not found"
 }
 
-$source_proj_dir = if($options.d) { $options.d } else { $workDir }
+$source_proj_dir = if ($options.d) { $options.d } else { $workDir }
 $Global:is_axmol_engine = ($source_proj_dir -eq $AX_ROOT)
 $Global:is_axmol_app = (Test-Path (Join-Path $source_proj_dir '.axproj.json') -PathType Leaf)
 $is_android = $options.p -eq 'android'
 
 # start construct full cmd line
-$b1k_script = (Resolve-Path -Path "$b1k_root/1k/build.ps1").Path
 $b1k_args = @()
 
 $cm_target_index = $options.xb.IndexOf('--target')
-if($cm_target_index -ne -1) {
+if ($cm_target_index -ne -1) {
     $cmake_target = $options.xb[$cm_target_index + 1]
 }
 
 if ($is_axmol_engine -and $is_android) {
     if (!$cmake_target) {
-        $source_proj_dir = Join-Path $myRoot 'tests/cpp-tests'
-    } else {
+        $source_proj_dir = Join-Path $AX_ROOT 'tests/cpp-tests'
+    }
+    else {
         $builtin_targets = @{
-            'cpp-tests' = 'tests/cpp-tests'
+            'cpp-tests'      = 'tests/cpp-tests'
             'fairygui-tests' = 'tests/fairygui-tests'
-            'live2d-tests' = 'tests/live2d-tests'
+            'live2d-tests'   = 'tests/live2d-tests'
         }
         if (!$builtin_targets.Contains($cmake_target)) {
             throw "specified target '$cmake_target' not present in engine"
         }
-        $source_proj_dir = Join-Path $myRoot $builtin_targets[$cmake_target]
+        $source_proj_dir = Join-Path $AX_ROOT $builtin_targets[$cmake_target]
     }
 }
 
-$search_paths = if ($source_proj_dir -ne $myRoot) { @($source_proj_dir, $myRoot) } else { @($source_proj_dir) }
+$search_paths = @($source_proj_dir)
 function search_proj_file($file_path, $type) {
     foreach ($search_path in $search_paths) {
         $full_path = Join-Path $search_path $file_path
@@ -138,6 +139,7 @@ function search_proj_file($file_path, $type) {
 }
 
 $proj_dir = search_proj_file 'CMakeLists.txt' 'Leaf'
+if (!$proj_dir) { throw "The directory $source_proj_dir doesn't contains CMakeLists.txt!" }
 $proj_name = (Get-Item $proj_dir).BaseName
 
 $use_gradle = $is_android -and (Test-Path $(Join-Path $proj_dir 'proj.android/gradlew') -PathType Leaf)
@@ -158,10 +160,12 @@ if (!$use_gradle) {
         $options.xb += '--target', $cmake_target
     }
 
-    if($is_android -and !"$($options.xc)".Contains('-DANDROID_STL')) {
+    if ($is_android -and !"$($options.xc)".Contains('-DANDROID_STL')) {
         $options.xc += '-DANDROID_STL=c++_shared'
     }
-} else { # android gradle
+}
+else {
+    # android gradle
     # engine ci
     if ($is_axmol_engine) {
         $options.xc += "-PKEY_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks", '-PKEY_STORE_PASSWORD=axmol-ci', '-PKEY_ALIAS=axmol-ci', '-PKEY_PASSWORD=axmol-ci'
@@ -171,7 +175,7 @@ if (!$use_gradle) {
 if ($proj_dir) {
     $b1k_args += '-d', "$proj_dir"
 }
-$prefix = Join-Path $b1k_root 'tools/external'
+$prefix = Join-Path $AX_ROOT 'tools/external'
 $b1k_args += '-prefix', "$prefix"
 
 # remove arg we don't want forward to
@@ -191,9 +195,6 @@ if ($configOnly) {
 if ($forceConfig) {
     $forward_args['forceConfig'] = $true
 }
-if ($setupOnly) {
-    $forward_args['setupOnly'] = $true
-}
 
 . $b1k_script @b1k_args @forward_args @unhandled_args
 
@@ -203,4 +204,3 @@ if (!$configOnly) {
 else {
     $b1k.pause('Generate done')
 }
-

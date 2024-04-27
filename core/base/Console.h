@@ -49,8 +49,6 @@ typedef SSIZE_T ssize_t;
 #include "base/Ref.h"
 #include "base/Macros.h"
 
-#include "base/Logging.h"
-
 NS_AX_BEGIN
 
 /** Console is helper class that lets the developer control the game from TCP connection.

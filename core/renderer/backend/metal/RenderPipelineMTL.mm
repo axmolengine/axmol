@@ -137,7 +137,7 @@ MTLBlendFactor toMTLBlendFactor(BlendFactor factor)
         return MTLBlendFactorOneMinusDestinationAlpha;
     case BlendFactor::SRC_ALPHA_SATURATE:
         return MTLBlendFactorSourceAlphaSaturated;
-    case BlendFactor::BLEND_CLOLOR:
+    case BlendFactor::BLEND_COLOR:
         return MTLBlendFactorBlendColor;
     default:
         return MTLBlendFactorZero;
@@ -152,7 +152,7 @@ MTLBlendOperation toMTLBlendOperation(BlendOperation operation)
         return MTLBlendOperationAdd;
     case BlendOperation::SUBTRACT:
         return MTLBlendOperationSubtract;
-    case BlendOperation::RESERVE_SUBTRACT:
+    case BlendOperation::REVERSE_SUBTRACT:
         return MTLBlendOperationReverseSubtract;
     default:
         return MTLBlendOperationAdd;
@@ -254,7 +254,7 @@ void RenderPipelineMTL::setVertexLayout(MTLRenderPipelineDescriptor* mtlDescript
     if (!vertexLayout->isValid())
         return;
 
-    int stride = vertexLayout->getStride();
+    int stride = static_cast<int>(vertexLayout->getStride());
     auto vertexDesc = mtlDescriptor.vertexDescriptor;
     vertexDesc.layouts[DriverMTL::DEFAULT_ATTRIBS_BINDING_INDEX].stride = stride;
     vertexDesc.layouts[DriverMTL::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction =

@@ -13,6 +13,7 @@
   - AX_ENABLE_NAVMESH: whether to enable NavMesh support default: `TRUE`
   - AX_ENABLE_MEDIA: whether to enable media support, default: `TRUE`
   - AX_ENABLE_AUDIO: whether to enable audio support, default: `TRUE`
+  - AX_ENABLE_CONSOLE: whether to enable debug tool console support, default: `TRUE`
 - AX_USE_XXX:
   - AX_USE_ALSOFT: whether use openal-soft for all platforms
     - Apple platform: Use openal-soft instead system deprecated: `OpenAL.framework`

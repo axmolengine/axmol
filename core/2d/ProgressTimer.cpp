@@ -231,8 +231,21 @@ void ProgressTimer::updateDisplayedOpacity(uint8_t parentOpacity)
 {
     Node::updateDisplayedOpacity(parentOpacity);
 
-    _sprite->updateDisplayedOpacity(_displayedOpacity);
+    _displayedOpacity = _realOpacity * parentOpacity / 0xFF;
+    
+    _sprite->setOpacity(_displayedOpacity);
+    updateColor();
     updateProgress();
+    
+    if (_cascadeOpacityEnabled)
+    {
+        _sprite->updateDisplayedOpacity(_displayedOpacity);
+        
+        for(const auto& child : _children)
+        {
+            child->updateDisplayedOpacity(_displayedOpacity);
+        }
+    }
 }
 
 void ProgressTimer::updateColor()
@@ -242,7 +255,11 @@ void ProgressTimer::updateColor()
 
     if (!_vertexData.empty())
     {
-        const auto& sc = _sprite->getQuad().tl.colors;
+        auto sc = _sprite->getQuad().tl.colors;
+        sc.r = sc.r * _sprite->getOpacity() / 255.0f;
+        sc.g = sc.g * _sprite->getOpacity() / 255.0f;
+        sc.b = sc.b * _sprite->getOpacity() / 255.0f;
+        sc.a = sc.a * _sprite->getOpacity() / 255.0f;
         for (auto& d : _vertexData)
         {
             d.colors = sc;
@@ -288,13 +305,22 @@ const Color3B& ProgressTimer::getColor() const
 
 void ProgressTimer::setOpacity(uint8_t opacity)
 {
-    _sprite->setOpacity(opacity);
+    _displayedOpacity = _realOpacity = opacity;
+    
+    _sprite->setOpacity(_displayedOpacity);
     updateColor();
+    
+    updateCascadeOpacity();
 }
 
 uint8_t ProgressTimer::getOpacity() const
 {
     return _sprite->getOpacity();
+}
+
+uint8_t ProgressTimer::getDisplayedOpacity() const
+{
+    return _sprite->getDisplayedOpacity();
 }
 
 void ProgressTimer::setMidpoint(const Vec2& midPoint)
@@ -596,8 +622,8 @@ Vec2 ProgressTimer::boundaryTexCoord(char index)
             return Vec2((kProgressTextureCoords >> ((index << 1) + 1)) & 1,
                         (kProgressTextureCoords >> (index << 1)) & 1);
     }
-    else
-        return Vec2::ZERO;
+    
+    return Vec2::ZERO;
 }
 
 void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)

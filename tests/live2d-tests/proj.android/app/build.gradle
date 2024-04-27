@@ -31,8 +31,7 @@ android {
         }
 
         ndk {
-            abiFilters = []
-            abiFilters.addAll(PROP_APP_ABI.split(':').collect{it as String})
+            abiFilters = __1K_ARCHS.split(':').collect{it as String}
         }
     }
 

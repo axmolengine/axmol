@@ -260,20 +260,18 @@ void ShaderModuleMTL::parseTexture(SLCReflectContext* context)
     }
 }
 
-UniformLocation ShaderModuleMTL::getUniformLocation(Uniform name) const
+const UniformInfo& ShaderModuleMTL::getUniformInfo(Uniform name) const
 {
-    return _uniformLocation[name];
+    return _builtinUniforms[name];
 }
 
-UniformLocation ShaderModuleMTL::getUniformLocation(std::string_view name) const
+const UniformInfo& ShaderModuleMTL::getUniformInfo(std::string_view name) const
 {
+    static UniformInfo none;
     auto iter = _activeUniformInfos.find(name);
     if (iter != _activeUniformInfos.end())
-    {
-        return UniformLocation{static_cast<int>(iter->second.location),
-            static_cast<int>(iter->second.bufferOffset), _stage};
-    }
-    return UniformLocation{};
+        return iter->second;
+    return none;
 }
 
 void ShaderModuleMTL::setBuiltinLocations()
@@ -295,22 +293,22 @@ void ShaderModuleMTL::setBuiltinLocations()
     /*--- Builtin Uniforms ---*/
 
     /// u_MVPMatrix
-    _uniformLocation[Uniform::MVP_MATRIX] = getUniformLocation(UNIFORM_NAME_MVP_MATRIX);
+    _builtinUniforms[Uniform::MVP_MATRIX] = getUniformInfo(UNIFORM_NAME_MVP_MATRIX);
 
     /// u_tex0
-    _uniformLocation[Uniform::TEXTURE] = getUniformLocation(UNIFORM_NAME_TEXTURE);
+    _builtinUniforms[Uniform::TEXTURE] = getUniformInfo(UNIFORM_NAME_TEXTURE);
 
     /// u_tex1
-    _uniformLocation[Uniform::TEXTURE1] = getUniformLocation(UNIFORM_NAME_TEXTURE1);
+    _builtinUniforms[Uniform::TEXTURE1] = getUniformInfo(UNIFORM_NAME_TEXTURE1);
 
     /// u_textColor
-    _uniformLocation[Uniform::TEXT_COLOR] = getUniformLocation(UNIFORM_NAME_TEXT_COLOR);
+    _builtinUniforms[Uniform::TEXT_COLOR] = getUniformInfo(UNIFORM_NAME_TEXT_COLOR);
 
     /// u_effectColor
-    _uniformLocation[Uniform::EFFECT_COLOR] = getUniformLocation(UNIFORM_NAME_EFFECT_COLOR);
+    _builtinUniforms[Uniform::EFFECT_COLOR] = getUniformInfo(UNIFORM_NAME_EFFECT_COLOR);
 
     /// u_effectType
-    _uniformLocation[Uniform::EFFECT_TYPE] = getUniformLocation(UNIFORM_NAME_EFFECT_TYPE);
+    _builtinUniforms[Uniform::EFFECT_TYPE] = getUniformInfo(UNIFORM_NAME_EFFECT_TYPE);
 }
 
 int ShaderModuleMTL::getAttributeLocation(Attribute name) const

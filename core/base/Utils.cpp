@@ -62,17 +62,6 @@ using namespace std::string_view_literals;
 
 NS_AX_BEGIN
 
-int ccNextPOT(int x)
-{
-    x = x - 1;
-    x = x | (x >> 1);
-    x = x | (x >> 2);
-    x = x | (x >> 4);
-    x = x | (x >> 8);
-    x = x | (x >> 16);
-    return x + 1;
-}
-
 namespace utils
 {
 namespace base64
@@ -86,6 +75,17 @@ inline int decBound(int sourceLen)
     return sourceLen / 4 * 3 + 1;
 }
 }  // namespace base64
+
+int nextPOT(int x)
+{
+    --x;
+    x |= (x >> 1);
+    x |= (x >> 2);
+    x |= (x >> 4);
+    x |= (x >> 8);
+    x |= (x >> 16);
+    return ++x;
+}
 
 /*
  * Capture screen interface
@@ -595,7 +595,7 @@ backend::BlendFactor toBackendBlendFactor(int factor)
     case GLBlendConst::SRC_ALPHA_SATURATE:
         return backend::BlendFactor::SRC_ALPHA_SATURATE;
     case GLBlendConst::BLEND_COLOR:
-        return backend::BlendFactor::BLEND_CLOLOR;
+        return backend::BlendFactor::BLEND_COLOR;
     case GLBlendConst::CONSTANT_ALPHA:
         return backend::BlendFactor::CONSTANT_ALPHA;
     case GLBlendConst::ONE_MINUS_CONSTANT_ALPHA:
@@ -645,7 +645,7 @@ int toGLBlendFactor(backend::BlendFactor blendFactor)
     case backend::BlendFactor::SRC_ALPHA_SATURATE:
         ret = GLBlendConst::SRC_ALPHA_SATURATE;
         break;
-    case backend::BlendFactor::BLEND_CLOLOR:
+    case backend::BlendFactor::BLEND_COLOR:
         ret = GLBlendConst::BLEND_COLOR;
         break;
     default:
@@ -877,7 +877,7 @@ int base64Encode(const unsigned char* in, unsigned int inLength, char** out)
         auto ret = ax::base64::encode(tmp, in, inLength);
         tmp[ret] = '\0';
         *out     = tmp;
-        return ret;
+        return static_cast<int>(ret);
     }
     *out = nullptr;
     return 0;
@@ -897,7 +897,7 @@ AX_DLL int base64Decode(const unsigned char* in, unsigned int inLength, unsigned
             *out = nullptr;
             free(tmp);
         }
-        return n;
+        return static_cast<int>(n);
     }
     *out = nullptr;
     return 0;

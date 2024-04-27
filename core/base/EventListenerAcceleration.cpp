@@ -25,7 +25,7 @@
 
 #include "base/EventListenerAcceleration.h"
 #include "base/EventAcceleration.h"
-#include "base/Console.h"
+#include "base/Logging.h"
 
 NS_AX_BEGIN
 

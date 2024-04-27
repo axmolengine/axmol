@@ -6,10 +6,9 @@ if(BUILD_SHARED_LIBS)
 endif()
 
 function(setup_ax_extension_config target_name)
-  set(options DNTLINK opt_DNTLINK)
-  set(options LINK_SCOPE opt_LINK_SCOPE)
-  cmake_parse_arguments(opt "" "${options}" ""
-                          "" ${ARGN} )
+  set(options DNTLINK)
+  set(oneValueArgs LINK_SCOPE)
+  cmake_parse_arguments(opt "${options}" "${oneValueArgs}" "" ${ARGN})
 
   target_link_libraries(${target_name} ${opt_LINK_SCOPE} ${_AX_CORE_LIB})
 

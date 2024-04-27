@@ -32,7 +32,7 @@
 # include_guard (GLOBAL)
 
 # The version number
-set(_AX_VERSION 2.0)
+set(_AX_VERSION 2.1)
 
 if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
@@ -86,23 +86,16 @@ endif()
 # print renderer backend profile
 message(AUTHOR_WARNING "AX_USE_GL=${AX_USE_GL}, AX_USE_METAL=${AX_USE_METAL}, AX_GLES_PROFILE=${AX_GLES_PROFILE}")
 
-option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ON)
-
-if (NOT WINRT)
-    option (AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ON)
-else() # we not support webview2 and vidio player for WINRT target
-    set(AX_ENABLE_MSEDGE_WEBVIEW2 OFF CACHE BOOL "Use Microsoft Edge webview2" FORCE)
-    # set(AX_ENABLE_MFMEDIA OFF CACHE BOOL "Enabling microsoft media foundation for windows video player" FORCE)
-endif()
-
 if (LINUX)
     include(CheckIncludeFile)
     check_include_file(vlc/vlc.h _AX_HAVE_VLC)
+    cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" ON "_AX_HAVE_VLC" OFF)
 endif()
 
-cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" ON "_AX_HAVE_VLC" OFF)
+cmake_dependent_option(AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ON "WIN32 AND NOT WINRT" OFF)
 
-message(STATUS "AX_ENABLE_VLC_MEDIA=${AX_ENABLE_VLC_MEDIA}")
+cmake_dependent_option(AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ON "WIN32" OFF)
+cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" OFF "(WIN32 AND NOT WINRT) OR LINUX" OFF)
 
 if(NOT APPLE AND (NOT EMSCRIPTEN))
     set(AX_USE_ALSOFT ON CACHE BOOL "" FORCE)
@@ -110,44 +103,42 @@ else()
     option(AX_USE_ALSOFT "Use ALSOFT on apple" OFF)
 endif()
 
+option(AX_ENABLE_PHYSICS "Build Physics support" ON)
+cmake_dependent_option(AX_ENABLE_MEDIA "Build media support" ON "AX_ENABLE_MFMEDIA OR AX_ENABLE_VLC_MEDIA OR APPLE OR ANDROID" OFF)
+option(AX_ENABLE_AUDIO "Build audio support" ON)
+option(AX_ENABLE_CONSOLE "Build axmol debug tool: console support" ON)
+
+option(AX_ENABLE_3D "Build 3D support" ON)
+cmake_dependent_option(AX_ENABLE_3D_PHYSICS "Build 3D Physics support" ON "AX_ENABLE_3D" OFF)
+cmake_dependent_option(AX_ENABLE_NAVMESH "Build NavMesh support" ON "AX_ENABLE_3D" OFF)
+
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
+option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 
 # default value for axmol extensions modules to Build
 # total supported extensions count: 13
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
 
-option(AX_ENABLE_EXT_GUI "Build extension GUI" ON)
+option(AX_EXT_HINT "The default extensions hint" ON)
 
-option(AX_ENABLE_EXT_ASSETMANAGER "Build extension asset-manager" ON)
-option(AX_ENABLE_EXT_PARTICLE3D "Build extension Particle3D" ON)
-option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ON)
-
-option(AX_ENABLE_EXT_SPINE "Build extension spine" ON)
-option(AX_ENABLE_EXT_DRAGONBONES "Build extension DragonBones" ON)
-
-option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ON)
-
-option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
-
+option(AX_ENABLE_EXT_GUI "Build extension GUI" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_ASSETMANAGER "Build extension asset-manager" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_SPINE "Build extension spine" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_DRAGONBONES "Build extension DragonBones" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
-cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
-cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
-cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR WASM" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_PARTICLE3D "Build extension Particle3D" ${AX_EXT_HINT} "AX_ENABLE_3D" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ${AX_EXT_HINT} "AX_ENABLE_PHYSICS" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ${AX_EXT_HINT} "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
 
-option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
-
-option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ON)
+option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ${AX_EXT_HINT})
 
 option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" OFF)
-
-option(AX_ENABLE_3D "Build 3D support" ON)
-option(AX_ENABLE_3D_PHYSICS "Build 3D Physics support" ON)
-option(AX_ENABLE_PHYSICS "Build Physics support" ON)
-option(AX_ENABLE_NAVMESH "Build NavMesh support" ON)
-option(AX_ENABLE_MEDIA "Build media support" ON)
-option(AX_ENABLE_AUDIO "Build audio support" ON)
 
 set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "" )
 
@@ -326,6 +317,7 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_3D_PHYSICS)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_NAVMESH)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_AUDIO)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_CONSOLE)
 
 # use 3rdparty libs
 add_subdirectory(${_AX_ROOT}/3rdparty ${ENGINE_BINARY_PATH}/3rdparty)

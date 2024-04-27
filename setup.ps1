@@ -1,5 +1,28 @@
-# the setup script of axmol, for powershell <= 5.1, 
-# please execute command 'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force' in PowerShell Terminal
+#!/bin/bash
+` # \
+# PowerShell Param statement : every line must end in #\ except the last line must with <#\
+# And, you can't use backticks in this section        #\
+# refer https://gist.github.com/ryanmaclean/a1f3135f49c1ab3fa7ec958ac3f8babe #\
+param( [string]$gradlewVersion,                       #\
+    [switch]$setupCMake                               #\
+    )                                                <#\
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `
+#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+# Bash Start ------------------------------------------------------------
+scriptdir="`dirname "${BASH_SOURCE[0]}"`"
+if ! which dpkg > /dev/null; then
+    $scriptdir/1k/install-pwsh.sh
+fi
+pwsh $scriptdir/setup.ps1 "$@"
+# Bash End --------------------------------------------------------------
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# emit powershell code, in bash:
+# the here document key can be any, but out-null is valid powershell nop cmdlet
+# echo > /dev/null don't output line-end to termainl
+echo > /dev/null <<"out-null"
+#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+# Powershell Start ----------------------------------------------------#>
+
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
 
@@ -92,7 +115,7 @@ if ($pwsh_ver -lt [VersionEx]'5.0') {
 }
 
 # powershell 7 require mark as global explicit if want access in function via $Global:xxx
-$Global:AX_CONSOLE_ROOT = Join-Path $AX_ROOT 'tools/console'
+$Global:AX_CLI_ROOT = Join-Path $AX_ROOT 'tools/cmdline'
 
 # https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables
 $IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
@@ -104,12 +127,12 @@ if ($IsWin) {
     }
 
     #  checking evaluated env:PATH with system + user
-    $Global:isMeInPath = $env:PATH.Contains($AX_CONSOLE_ROOT)
+    $Global:isMeInPath = $env:PATH.Contains($AX_CLI_ROOT)
     $Global:oldCmdRoot = $null
     $Global:cmdInfo = Get-Command 'axmol' -ErrorAction SilentlyContinue
     if ($cmdInfo) {
         $cmdRootTmp = Split-Path $cmdInfo.Source -Parent
-        if ($cmdRootTmp -ne $AX_CONSOLE_ROOT) {
+        if ($cmdRootTmp -ne $AX_CLI_ROOT) {
             $oldCmdRoot = $cmdRootTmp
         }
     }
@@ -127,13 +150,13 @@ if ($IsWin) {
         }
         
         if ($Global:isMeInPath) {
-            if ($pathList[0] -ne $Global:AX_CONSOLE_ROOT) {
-                $pathList.Remove($Global:AX_CONSOLE_ROOT)
-                $pathList.Insert(0, $Global:AX_CONSOLE_ROOT)
+            if ($pathList[0] -ne $Global:AX_CLI_ROOT) {
+                $pathList.Remove($Global:AX_CLI_ROOT)
+                $pathList.Insert(0, $Global:AX_CLI_ROOT)
             }
         }
         else {
-            $pathList.Insert(0, $Global:AX_CONSOLE_ROOT)
+            $pathList.Insert(0, $Global:AX_CLI_ROOT)
         }
         return $pathList -join ';'
     }
@@ -179,9 +202,9 @@ else {
         ++$profileMods
     }
 
-    if (!$profileContent.Contains('$env:PATH = ') -or !($axmolCmdInfo = (Get-Command axmol -ErrorAction SilentlyContinue)) -or $axmolCmdInfo.Source -ne "$AX_CONSOLE_ROOT/axmol") {
+    if (!$profileContent.Contains('$env:PATH = ') -or !($axmolCmdInfo = (Get-Command axmol -ErrorAction SilentlyContinue)) -or $axmolCmdInfo.Source -ne "$AX_CLI_ROOT/axmol") {
         $profileContent += "# Add axmol console tool to PATH`n"
-        $profileContent += '$env:PATH = "${env:AX_ROOT}/tools/console:${env:PATH}"'
+        $profileContent += '$env:PATH = "${env:AX_ROOT}/tools/cmdline:${env:PATH}"'
         $profileContent += "`n"
         ++$profileMods
     }
@@ -209,12 +232,13 @@ else {
             $stmtLine = 'export AX_ROOT="{0}"' -f $AX_ROOT
             if ($matchRet.Value -ne $stmtLine) {
                 $profileContent = [Regex]::Replace($profileContent, "export AX_ROOT\=.*", $stmtLine)
+                ++$profileMods
             }
         }
 
-        if (!$profileContent.Contains('export PATH=$AX_ROOT/tools/console:')) {
+        if (!$profileContent.Contains('export PATH=$AX_ROOT/tools/cmdline:')) {
             $profileContent += "# Add axmol console tool to PATH`n"
-            $profileContent += 'export PATH=$AX_ROOT/tools/console:$PATH' -f "`n"
+            $profileContent += 'export PATH=$AX_ROOT/tools/cmdline:$PATH' -f "`n"
             ++$profileMods
         }
         if ($profileMods) {
@@ -301,4 +325,63 @@ if (!(Test-Path $prefix -PathType Container)) {
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
 . $build1kPath -setupOnly -prefix $prefix @args
 
+if ($setupCMake) {
+    setup_cmake -scope 'global'
+}
+
+if ($gradlewVersion) {
+    $aproj_source_root = Join-Path $AX_ROOT 'templates/common/proj.android'
+    $aproj_source_gradle = Join-Path $aproj_source_root 'build.gradle'
+    $aproj_source_gradle_wrapper = Join-Path $aproj_source_root 'gradle/wrapper/'
+    $vernums = $gradlewVersion.Split('.')
+    if($vernums.Count -lt 3) {
+        $gradle_tag = "v$gradlewVersion.0"
+    } else {
+        $gradle_tag = "v$gradlewVersion"
+    }
+
+    $gradle_settings_file = Join-Path $aproj_source_gradle_wrapper 'gradle-wrapper.properties'
+    $settings_content = [System.IO.File]::ReadAllText($gradle_settings_file)
+    $settings_content = [Regex]::Replace($settings_content, 'gradle-.+-bin.zip', "gradle-$gradlewVersion-bin.zip")
+    [System.IO.File]::WriteAllText($gradle_settings_file, $settings_content)
+
+    # download gradle-wrapper.jar gradlew and gradlew.bat from upstream
+    download_file "https://raw.githubusercontent.com/gradle/gradle/$gradle_tag/gradlew" $aproj_source_root
+    download_file "https://raw.githubusercontent.com/gradle/gradle/$gradle_tag/gradlew.bat" $aproj_source_root
+    download_file "https://github.com/gradle/gradle/raw/$gradle_tag/gradle/wrapper/gradle-wrapper.jar" $aproj_source_gradle_wrapper
+
+    function update_gradle_for_test($testName) {
+        $aproj_root = Join-Path $AX_ROOT "tests/$testName/proj.android"
+        Copy-Item $aproj_source_gradle $aproj_root -Force
+        Copy-Item "${aproj_source_gradle_wrapper}*" (Join-Path $aproj_root 'gradle/wrapper') -Force
+
+        Copy-Item (Join-Path $aproj_source_root 'gradlew') $aproj_root -Force
+        Copy-Item (Join-Path $aproj_source_root 'gradlew.bat') $aproj_root -Force
+    }
+
+    update_gradle_for_test 'cpp-tests'
+    update_gradle_for_test 'fairygui-tests'
+    update_gradle_for_test 'live2d-tests'
+    update_gradle_for_test 'lua-tests'
+}
+
+if ($IsLinux -and (Test-Path '/etc/wsl.conf' -PathType Leaf)) {
+    Write-Host "Are want remove host windows path from wsl? (y/n) " -NoNewline
+    $answer = Read-Host
+    if ($answer -like 'y*') {
+        $wsl_conf = [System.IO.File]::ReadAllText('/etc/wsl.conf')
+        if (!$wsl_conf.Contains('appendWindowsPath')) {
+            $wsl_conf += "`n[interop]`nappendWindowsPath = false"
+            $wsl_conf_tmp_file = (Join-Path $AX_ROOT 'wsl.conf')
+            [System.IO.File]::WriteAllText($wsl_conf_tmp_file, $wsl_conf)
+            sudo mv -f $wsl_conf_tmp_file /etc/wsl.conf
+            println "Update /etc/wsl.conf success, please run 'wsl --shutdown' on your host windows, then re-enter wsl"
+        }
+    }
+}
+
 $b1k.pause("setup successfully, please restart the terminal to make added system variables take effect")
+
+# Powershell End -------------------------------------------------------
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+out-null

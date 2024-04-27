@@ -1,8 +1,36 @@
 ## axmol-2.1.3 ?? 2024
 
+### Significant changes relative to 2.1.2:
+
+
+- Implement cross-platform media controller for video playback by @rh101 in https://github.com/axmolengine/axmol/pull/1845
+  - Adjust media control positioning if video aspect ratio is maintained by @rh101 in https://github.com/axmolengine/axmol/pull/1851
+- Allow certain code modules to be removed from build process by @rh101 in https://github.com/axmolengine/axmol/pull/1769, i.e. remove 3d features by `-DAX_ENABLE_3D=OFF`
+- New logging system with general log level and colored support
+  - Implement new axmol log system based on fmtlib by @halx99 in https://github.com/axmolengine/axmol/pull/1732
+  - Logging colorful support by @halx99 in https://github.com/axmolengine/axmol/pull/1735
+  - Improve logging color style by @halx99 in https://github.com/axmolengine/axmol/pull/1739
+  - Add support for verbose trace level logging by @rh101 in https://github.com/axmolengine/axmol/pull/1764
+  - Removed the '\n' which creates a second (empty) line. by @aismann in https://github.com/axmolengine/axmol/pull/1746
+- Add wasm EditBox support
+- Simplify axmol cmdlines build command, now you can use command `axmol` instead `axmol build` to build your project
+- Linking prebuilt xcframework for apple platforms, please do clean `AX_ROOT` by `axmol -c -u` if you tracking axmol engine git repo
+
+### Break Changes
+
+- Remove `ax::log`, use `AXLOGD` instead
+- Remove cmake function: `ax_uwp_set_all_targets_deploy_min_version`
+- Remove deprecated pixel formats L8, A8, LA8 in https://github.com/axmolengine/axmol/pull/1839
+- Move `axmol/build.ps1` to `axmol/tools/cmdline/build.ps1`
+- Rename ax::ccMessageBox to ax::messageBox
+- Move ax::ccNextPOT to ax::utils::nextPOT
+- Remove unused API: ax::LuaLog
+- Change parameter 'sharedRT' of RenderTexture::create to false
+
 ### BugFixes
 
 - Fix fullscreen incorrect in retina display by @halx99, reported by @TyelorD
+- Fix same uniforms in fragment and vertex shaders not working in Metal by @smilediver in https://github.com/axmolengine/axmol/pull/1808
 - Fix android build by @smilediver in https://github.com/axmolengine/axmol/pull/1723
 - Fix EditBox error by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1755
 - Fix InputEvent in fairyGUI onKeyDown and onKeyUp by @binxiaojiao in https://github.com/axmolengine/axmol/pull/1757
@@ -11,47 +39,64 @@
 - Fix DebugDraw issue in 3D physics by @halx99
 - Fix OpenGLState cache error, reported by @solan-solan in https://github.com/axmolengine/axmol/issues/1759
 - Fix linux crash after close window by @halx99
+- Fix setup.ps1 not update AX_ROOT in unix profile by @halx99
+- Fix a regression introduced by 2.1.2 that template gradlew permission incorrect
+- Fix build android with axmol cmdline arch not working
+- Fix crash on iOS by @smilediver in https://github.com/axmolengine/axmol/pull/1799
+- Fix typo: BLEND_CLOLOR ==> BLEND_COLOR
+- Fix typo: RESERVE_SUBTRACT ==> REVERSE_SUBTRACT
+- Fix video player crash on apple platforms, reported by @asnagni in https://github.com/axmolengine/axmol/issues/1815
+- Fix an issue where ProgressTimer didn't properly set or cascade its opacity by @TyelorD in https://github.com/axmolengine/axmol/pull/1830
+- Fix ClippingNode stencil needing global z set manually by @TyelorD in https://github.com/axmolengine/axmol/pull/1831
+- Fix FileUtilsApple::getPathForDirectory() checking wrong path by smilediver in https://github.com/axmolengine/axmol/pull/1828
+- Fix issue where UIWidget couldn't be reselected by @TyelorD in https://github.com/axmolengine/axmol/pull/1827
+- Fix glfw crash on macOS for large mouse button ids by @smilediver in https://github.com/axmolengine/axmol/pull/1835
+- Fix 1k/fetch.cmake not working on powershell 5.1
 
 ### Improvements
 
+- Improve MediaPlayer: handle video rotation properly
 - Disable c++20 char8_t
 - Improve build system, set rpath properly for platforms: linux, apple
-- Add wasm EditBox support
 - HttpClient: add support for PATCH method by @smilediver in https://github.com/axmolengine/axmol/pull/1722
 - Add -f switch info to axmol command help output by @rh101 in https://github.com/axmolengine/axmol/pull/1729
-- Implement new axmol log system based on fmtlib by @halx99 in https://github.com/axmolengine/axmol/pull/1732
-- Logging colorful support by @halx99 in https://github.com/axmolengine/axmol/pull/1735
-- Improve logging color style by @halx99 in https://github.com/axmolengine/axmol/pull/1739
-- Add support for verbose trace level logging by @rh101 in https://github.com/axmolengine/axmol/pull/1764
 - Adapt DrawNodeEx to the changes on: Move color types to math/Color.h axmolengine#1741 by @aismann in https://github.com/axmolengine/axmol/pull/1760
-- Removed the '\n' which creates a second (empty) line. by @aismann in https://github.com/axmolengine/axmol/pull/1746
 - Add Node World Space Positioning by @DelinWorks in https://github.com/axmolengine/axmol/pull/1743
 - Move color types to math/Color.h by @halx99 in https://github.com/axmolengine/axmol/pull/1741
 - Removing EditBox should not result in logging an error message by @rh101 in https://github.com/axmolengine/axmol/pull/1740
-- Allow certain code modules to be removed from build process by @rh101 in https://github.com/axmolengine/axmol/pull/1769
 - Update LUA config for new build options by @rh101 in https://github.com/axmolengine/axmol/pull/1772
 - Update TLD axmol.org -> axmol.dev
 - Rename folder thirdparty ==> 3rdparty
 - Update spine to 4.1-54fac9d
 - Set cmake minmal require to 3.29.0+ for supress xcode 15 duplicated linking warnings
 - Remove unnecessary cmake option: `AX_VS_DEPLOYMENT_TARGET`
-
-### Break Changes
-
-- Remove `ax::log`, use `AXLOGD` instead
-- Remove cmake function: `ax_uwp_set_all_targets_deploy_min_version`
+- Make FileStream open file for write share flags same with cstd
+- Fix some compile warnings
+- Add ttf fallback render support
+- Add cmake option: `AX_EXT_HINT` to set default extensions state
+- Add axmol cmdline option `-dm` to dump compiler preprocessors before build
+- Display cmake command used by build script in console by @rh101 in https://github.com/axmolengine/axmol/pull/1834
+- Add Borderless Windowed Mode by @TyelorD in https://github.com/axmolengine/axmol/pull/1826
+- Add CC_USE_CULLING Alias to cocos2d.h by @TyelorD in https://github.com/axmolengine/axmol/pull/1825
+- Prevent repeated loading of plist files when loading csb files by @tkzcfc in https://github.com/axmolengine/axmol/pull/1844
+- Remove Info.plist from mac Resources by @martinking71 https://github.com/axmolengine/axmol/pull/1849
+- Add libvlc prebuilt entry CMakeLists.txt
 
 ### sdks updates
 
-- emsdk: 3.1.53 ==> 3.1.56
+- emsdk: 3.1.53 ==> 3.1.57
+- AGP: 8.2.1 ==> 8.2.2
+- androidx.media3: 1.0.2 ==> 1.2.1
 
 ### 3rdparty updates
 
-- simdjson: 3.7.0 ==> 3.8.0
+- simdjson: 3.7.0 ==> 3.9.1
 - flatbuffers: 2.0.8 ==> 24.3.25
 - curl: 8.6.0 ==> 8.7.1
 - glad: 2.0.5 ==> 2.0.6
 - yasio: 4.2.1 ==> 4.2.2
+- llhttp: 9.2.0 ==> 9.2.1
+- stb_image: 2.28 ==> 2.29
 - luajit: 2.1-9cc2e42 ==> 2.1-d06beb0
 - c-ares: 1.25.0 ==> 1.28.1
 

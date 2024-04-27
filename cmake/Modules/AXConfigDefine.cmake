@@ -109,10 +109,6 @@ else() # others
     set(CMAKE_CXX_FLAGS "-fno-char8_t ${CMAKE_CXX_FLAGS}")
 endif()
 
-if (FULL_MSVC)
-    list(APPEND _ax_compile_options /Bv)
-endif()
-
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
 set(CMAKE_PLATFORM_NO_VERSIONED_SONAME TRUE CACHE BOOL "Disable dynamic libraries symblink." FORCE)
 
@@ -205,8 +201,8 @@ if(EMSCRIPTEN)
     # must via CMAKE_C_FLAGS and CMAKE_CXX_FLAGS?
     set(_AX_EMCC_FLAGS "-sUSE_LIBJPEG=1 -sUSE_ZLIB=1")
 
-    set(CMAKE_C_FLAGS  ${_AX_EMCC_FLAGS})
-    set(CMAKE_CXX_FLAGS  ${_AX_EMCC_FLAGS})
+    set(CMAKE_C_FLAGS  "${_AX_EMCC_FLAGS} ${CMAKE_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS  "${_AX_EMCC_FLAGS} ${CMAKE_CXX_FLAGS}")
 endif()
 
 # apply axmol spec compile options

@@ -102,9 +102,6 @@ class axutils {
         if (project.properties.__1K_CMAKE_VERSION != null)
             cmakeVer = project.properties.__1K_CMAKE_VERSION
 
-        if (project.properties.__ARCHS != null)
-            project.properties.PROP_APP_ABI = project.properties.__ARCHS
-
         // Detecting sdkRoot
         def sdkRoot = null
         Properties localProps = new Properties()

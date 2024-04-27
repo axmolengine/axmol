@@ -29,37 +29,45 @@ set(APP_NAME Dummy)
 
 project(${APP_NAME})
 
-if(NOT DEFINED BUILD_ENGINE_DONE) # to test Dummy into root project
-    if(XCODE)
-        set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
-    endif()
+if(XCODE)
+    set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
+endif()
 
-    # config quick starter batch script run.bat for windows
-    if(WIN32)
-        file(RELATIVE_PATH CMAKE_BUILD_RELATIVE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
-        configure_file("${CMAKE_CURRENT_SOURCE_DIR}/run.bat.in" "${CMAKE_CURRENT_SOURCE_DIR}/run.bat" @ONLY)
-    endif()
+# config quick starter batch script run.bat for windows
+if(WIN32)
+    file(RELATIVE_PATH CMAKE_BUILD_RELATIVE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/run.bat.in" "${CMAKE_CURRENT_SOURCE_DIR}/run.bat" @ONLY)
+endif()
 
+set(_is_axmol_embed FALSE)
+if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/axmol")
+    set(_AX_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/axmol")
+    set(_is_axmol_embed TRUE)
+    message(STATUS "Building isolated project: ${APP_NAME}")
+else()
     set(_AX_ROOT "$ENV{AX_ROOT}")
-
     if(NOT (_AX_ROOT STREQUAL ""))
         file(TO_CMAKE_PATH ${_AX_ROOT} _AX_ROOT)
         message(STATUS "Using system env var _AX_ROOT=${_AX_ROOT}")
     else()
         message(FATAL_ERROR "Please run setup.ps1 add system env var 'AX_ROOT' to specific the engine root")
     endif()
+endif()
 
-    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
+set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
 
-    include(AXBuildSet)
-    set(_AX_USE_PREBUILT FALSE)
+include(AXBuildSet)
+
+set(_AX_USE_PREBUILT FALSE)
+
+if(NOT _is_axmol_embed)
     if ((WIN32 OR LINUX) AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${_AX_ROOT}/${AX_PREBUILT_DIR})
         set(_AX_USE_PREBUILT TRUE)
     endif()
+endif()
 
-    if (NOT _AX_USE_PREBUILT)
-        add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
-    endif()
+if (NOT _AX_USE_PREBUILT)
+    add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
 endif()
 
 # The common cross-platforms source files and header files
@@ -144,7 +152,6 @@ elseif(APPLE)
     elseif(MACOSX)
         set(APP_UI_RES
             proj.ios_mac/mac/Icon.icns
-            proj.ios_mac/mac/Info.plist
             )
         list(APPEND GAME_SOURCE
              proj.ios_mac/mac/main.cpp
@@ -169,10 +176,6 @@ else()
     config_android_shared_libs("org.axmol.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
-if (NOT _AX_USE_PREBUILT)
-    target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
-endif()
-
 # The optional thirdparties(not dependent by engine)
 if (AX_WITH_YAML_CPP)
     list(APPEND GAME_INC_DIRS "${_AX_ROOT}/3rdparty/yaml-cpp/include")
@@ -183,6 +186,10 @@ target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 
 # mark app resources, resource will be copy auto after mark
 ax_setup_app_config(${APP_NAME})
+if (NOT _AX_USE_PREBUILT)
+    target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
+endif()
+
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")

@@ -493,9 +493,16 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
             message.append(_glfwError);
         }
 
-        ccMessageBox(message.c_str(), "Error launch application");
+        messageBox(message.c_str(), "Error launch application");
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return false;
+    }
+
+    int actualWidth, actualHeight;
+    glfwGetWindowSize(_mainWindow, &actualWidth, &actualHeight);
+    if (static_cast<int>(windowSize.width) != actualWidth || static_cast<int>(windowSize.height) != actualHeight)
+    {
+        windowSize.set(static_cast<float>(actualWidth), static_cast<float>(actualHeight));
     }
 
 #if defined(AX_USE_METAL)
@@ -827,10 +834,12 @@ void GLViewImpl::setFullscreen(GLFWmonitor* monitor, int w, int h, int refreshRa
     glfwSetWindowMonitor(_mainWindow, _monitor, 0, 0, w, h, refreshRate);
 }
 
-void GLViewImpl::setWindowed(int width, int height)
+void GLViewImpl::setWindowed(int width, int height, bool borderless)
 {
     if (!this->isFullscreen())
     {
+        glfwSetWindowAttrib(_mainWindow, GLFW_DECORATED, borderless ? GLFW_FALSE : GLFW_TRUE);
+
         if (glfwGetWindowAttrib(_mainWindow, GLFW_MAXIMIZED))
             glfwRestoreWindow(_mainWindow);
         this->setFrameSize((float)width, (float)height);
@@ -845,6 +854,7 @@ void GLViewImpl::setWindowed(int width, int height)
         xpos += (int)((videoMode->width - width) * 0.5f);
         ypos += (int)((videoMode->height - height) * 0.5f);
         _monitor = nullptr;
+        glfwSetWindowAttrib(_mainWindow, GLFW_DECORATED, borderless ? GLFW_FALSE : GLFW_TRUE);
         glfwSetWindowMonitor(_mainWindow, nullptr, xpos, ypos, width, height, GLFW_DONT_CARE);
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
         // on mac window will sometimes lose title when windowed
