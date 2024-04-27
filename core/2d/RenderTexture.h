@@ -3,6 +3,7 @@ Copyright (c) 2009      Jason Booth
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -71,7 +72,7 @@ public:
      * @param depthStencilFormat The depthStencil format.
      * @param sharedRenderTarget Select whether to use a new or shared render target.
      */
-    static RenderTexture* create(int w, int h, backend::PixelFormat format, backend::PixelFormat depthStencilFormat, bool sharedRenderTarget = true);
+    static RenderTexture* create(int w, int h, backend::PixelFormat format, backend::PixelFormat depthStencilFormat, bool sharedRenderTarget = false);
 
     /** Creates a RenderTexture object with width and height in Points and a pixel format, only RGB and RGBA formats are
      * valid.
@@ -81,7 +82,7 @@ public:
      * @param format In Points and a pixel format( only RGB and RGBA formats are valid ).
      * @param sharedRenderTarget Select whether to use a new or shared render target.
      */
-    static RenderTexture* create(int w, int h, backend::PixelFormat format, bool sharedRenderTarget = true);
+    static RenderTexture* create(int w, int h, backend::PixelFormat format, bool sharedRenderTarget = false);
 
     /** Creates a RenderTexture object with width and height in Points, pixel format is RGBA8888.
      *
@@ -89,7 +90,7 @@ public:
      * @param h The RenderTexture object height.
      * @param sharedRenderTarget Select wether to use a new or shared render target.
      */
-    static RenderTexture* create(int w, int h, bool sharedRenderTarget = true);
+    static RenderTexture* create(int w, int h, bool sharedRenderTarget = false);
 
     // Overrides
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
