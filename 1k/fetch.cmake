@@ -85,19 +85,21 @@ function(_1kfetch uri)
 
     _1kparse_name(${uri} "${opt_NAME}")
 
-    # rev: the explicit rev to checkout, i.e. git release tag name
-    set(_pkg_rev "")
-    if(opt_REV)
-        set(_pkg_rev ${opt_REV})
-    endif()
-    
     set(_pkg_store "${_1kfetch_cache_dir}/${_pkg_name}")
-    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
+
+    set(_fetch_args 
         -uri "${uri}"
         -prefix "${_1kfetch_cache_dir}"
         -manifest "${_1kfetch_manifest}"
         -name "${_pkg_name}"
-        -rev "${_pkg_rev}"
+    )
+    # rev: the explicit rev to checkout, i.e. git release tag name
+    if(opt_REV)
+        list(APPEND _fetch_args -rev ${opt_REV})
+    endif()
+
+    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
+        ${_fetch_args}
         RESULT_VARIABLE _errorcode
         )
     if (_errorcode)
