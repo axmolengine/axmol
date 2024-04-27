@@ -4,6 +4,7 @@
 
 
 - Implement cross-platform media controller for video playback by @rh101 in https://github.com/axmolengine/axmol/pull/1845
+  - Adjust media control positioning if video aspect ratio is maintained by @rh101 in https://github.com/axmolengine/axmol/pull/1851
 - Allow certain code modules to be removed from build process by @rh101 in https://github.com/axmolengine/axmol/pull/1769, i.e. remove 3d features by `-DAX_ENABLE_3D=OFF`
 - New logging system with general log level and colored support
   - Implement new axmol log system based on fmtlib by @halx99 in https://github.com/axmolengine/axmol/pull/1732
@@ -39,6 +40,7 @@
 - Fix FileUtilsApple::getPathForDirectory() checking wrong path by smilediver in https://github.com/axmolengine/axmol/pull/1828
 - Fix issue where UIWidget couldn't be reselected by @TyelorD in https://github.com/axmolengine/axmol/pull/1827
 - Fix glfw crash on macOS for large mouse button ids by @smilediver in https://github.com/axmolengine/axmol/pull/1835
+- Fix 1k/fetch.cmake not working on powershell 5.1
 
 ### Improvements
 
@@ -66,12 +68,19 @@
 - Add Borderless Windowed Mode by @TyelorD in https://github.com/axmolengine/axmol/pull/1826
 - Add CC_USE_CULLING Alias to cocos2d.h by @TyelorD in https://github.com/axmolengine/axmol/pull/1825
 - Prevent repeated loading of plist files when loading csb files by @tkzcfc in https://github.com/axmolengine/axmol/pull/1844
+- Remove Info.plist from mac Resources by @martinking71 https://github.com/axmolengine/axmol/pull/1849
+- Add libvlc prebuilt entry CMakeLists.txt
 
 ### Break Changes
 
 - Remove `ax::log`, use `AXLOGD` instead
 - Remove cmake function: `ax_uwp_set_all_targets_deploy_min_version`
 - Remove deprecated pixel formats L8, A8, LA8 in https://github.com/axmolengine/axmol/pull/1839
+- Move `axmol/build.ps1` to `axmol/tools/cmdline/build.ps1`
+- Rename ax::ccMessageBox to ax::messageBox
+- Move ax::ccNextPOT to ax::utils::nextPOT
+- Remove unused API: ax::LuaLog
+- Change parameter 'sharedRT' of RenderTexture::create to false
 
 ### sdks updates
 
