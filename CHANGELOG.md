@@ -16,6 +16,17 @@
 - Simplify axmol cmdlines build command, now you can use command `axmol` instead `axmol build` to build your project
 - Linking prebuilt xcframework for apple platforms, please do clean `AX_ROOT` by `axmol -c -u` if you tracking axmol engine git repo
 
+### Break Changes
+
+- Remove `ax::log`, use `AXLOGD` instead
+- Remove cmake function: `ax_uwp_set_all_targets_deploy_min_version`
+- Remove deprecated pixel formats L8, A8, LA8 in https://github.com/axmolengine/axmol/pull/1839
+- Move `axmol/build.ps1` to `axmol/tools/cmdline/build.ps1`
+- Rename ax::ccMessageBox to ax::messageBox
+- Move ax::ccNextPOT to ax::utils::nextPOT
+- Remove unused API: ax::LuaLog
+- Change parameter 'sharedRT' of RenderTexture::create to false
+
 ### BugFixes
 
 - Fix fullscreen incorrect in retina display by @halx99, reported by @TyelorD
@@ -70,17 +81,6 @@
 - Prevent repeated loading of plist files when loading csb files by @tkzcfc in https://github.com/axmolengine/axmol/pull/1844
 - Remove Info.plist from mac Resources by @martinking71 https://github.com/axmolengine/axmol/pull/1849
 - Add libvlc prebuilt entry CMakeLists.txt
-
-### Break Changes
-
-- Remove `ax::log`, use `AXLOGD` instead
-- Remove cmake function: `ax_uwp_set_all_targets_deploy_min_version`
-- Remove deprecated pixel formats L8, A8, LA8 in https://github.com/axmolengine/axmol/pull/1839
-- Move `axmol/build.ps1` to `axmol/tools/cmdline/build.ps1`
-- Rename ax::ccMessageBox to ax::messageBox
-- Move ax::ccNextPOT to ax::utils::nextPOT
-- Remove unused API: ax::LuaLog
-- Change parameter 'sharedRT' of RenderTexture::create to false
 
 ### sdks updates
 
