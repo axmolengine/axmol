@@ -15,6 +15,8 @@
 //  https://github.com/microsoft/Windows-classic-samples/tree/main/Samples/Win7Samples/multimedia/mediafoundation/protectedplayback
 //  b. https://docs.microsoft.com/en-us/windows/win32/medfound/seeking--fast-forward--and-reverse-play
 //
+// Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+// https://axmolengine.github.io/
 //////////////////////////////////////////////////////////////////////////
 
 #if defined(_WIN32)
@@ -160,6 +162,9 @@ public:
         return SUCCEEDED(SetPosition(static_cast<MFTIME>((std::nano::den / 100) * sec)));
     }
 
+    double getCurrentTime() override;
+    double getDuration() override;
+
     // Set position in 100ns units, will reply if play ended
     // see: https://docs.microsoft.com/en-us/windows/win32/medfound/mf-pd-duration-attribute
     HRESULT SetPosition(MFTIME hnsPosition);
@@ -269,6 +274,7 @@ protected:
     BOOL m_bIsH264 = FALSE;
     BOOL m_bIsHEVC = FALSE;  // hvc1,hev1
     GUID m_VideoOutputFormat{};
+    MFVideoRotationFormat m_VideoRotation{MFVideoRotationFormat_0};
 
     std::function<void(MEMediaEventType)> _onMediaEvent;
     std::function<void(const MEVideoFrame&)> _onVideoFrame;

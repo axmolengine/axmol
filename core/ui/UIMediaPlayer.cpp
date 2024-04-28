@@ -27,7 +27,7 @@
 #include "ui/UIMediaPlayer.h"
 
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
-#if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__) || defined(AX_ENABLE_VLC_MEDIA)
+#if defined(AX_ENABLE_MEDIA)
 #    include <unordered_map>
 #    include <stdlib.h>
 #    include <string>
@@ -37,6 +37,8 @@
 #    include "ui/UIHelper.h"
 #    include "media/MediaEngine.h"
 #    include "ui/LayoutHelper.h"
+#    include "UIButton.h"
+#    include "UILayout.h"
 #    include "yasio/byte_buffer.hpp"
 //-----------------------------------------------------------------------------------------------------------
 
@@ -44,12 +46,12 @@ USING_NS_AX;
 
 //-----------------------------------------------------------------------------------------------------------
 
-#    define PS_SET_UNIFORM(ps, name, value)                       \
-        do                                                        \
-        {                                                         \
-            decltype(value) __v = value;                          \
+#    define PS_SET_UNIFORM(ps, name, value)                         \
+        do                                                          \
+        {                                                           \
+            decltype(value) __v = value;                            \
             auto __loc          = (ps)->getUniformLocation(name); \
-            (ps)->setUniform(__loc, &__v, sizeof(__v));           \
+            (ps)->setUniform(__loc, &__v, sizeof(__v));             \
         } while (false)
 
 #    define PS_SET_UNIFORM_R(ps, name, value)               \
@@ -65,7 +67,7 @@ namespace
 {
 struct PrivateVideoDescriptor
 {
-    MediaEngine* _engine      = nullptr;
+    MediaEngine* _engine       = nullptr;
     Texture2D* _vtexture       = nullptr;
     Texture2D* _vchromaTexture = nullptr;
     Sprite* _vrender           = nullptr;
@@ -87,18 +89,35 @@ struct PrivateVideoDescriptor
         auto& videoSize = _vrender->getContentSize();
         if (videoSize.x > 0 && videoSize.y > 0)
         {  // rescale video to view node
-            auto& viewSize = videoView->getContentSize();
+            auto viewSize = videoView->getContentSize();
             if (viewSize.x > 0 && viewSize.y > 0)
             {
+                if (_vpixelDesc._rotation % 180 != 0)
+                    std::swap(viewSize.x, viewSize.y);
+                _vrender->setRotation(_vpixelDesc._rotation);
+
                 if (!videoView->isKeepAspectRatioEnabled())
                 {
                     _vrender->setScale(viewSize.x / videoSize.x, viewSize.y / videoSize.y);
+
+                    auto* mediaController = videoView->getMediaController();
+                    if (mediaController)
+                    {
+                        mediaController->setContentSize(videoSize *
+                                                        Vec2(viewSize.x / videoSize.x, viewSize.y / videoSize.y));
+                    }
                 }
                 else
                 {
                     const auto aspectRatio = (std::min)(viewSize.x / videoSize.x, viewSize.y / (videoSize.y));
 
                     _vrender->setScale(aspectRatio);
+
+                    auto* mediaController = videoView->getMediaController();
+                    if (mediaController)
+                    {
+                        mediaController->setContentSize(videoSize * aspectRatio);
+                    }
                 }
 
                 LayoutHelper::centerNode(_vrender);
@@ -132,20 +151,686 @@ struct PrivateVideoDescriptor
         PS_SET_UNIFORM_R(ps, "colorTransform", colorTransform);
     }
 };
+
+std::unique_ptr<MediaEngineFactory> _meFactory = MediaEngineFactory::create();
+
+const char* BODY_IMAGE_1_PIXEL_HEIGHT =
+    "iVBORw0KGgoAAAANSUhEUgAAAAwAAAABCAMAAADdNb8LAAAAA1BMVEX///+nxBvIAAAACklEQVR4AWNABgAADQABYc2cpAAAAABJRU5ErkJggg==";
+
+const char* BODY_IMAGE_1_PIXEL_HEIGHT_KEY = "/__bodyImage";
+
+constexpr auto TIMELINE_BAR_HEIGHT = 12.f;
+
+RefPtr<Texture2D> g_mediaControlsTexture = nullptr;
+
+enum class MediaControlButtonId
+{
+    Play,
+    Stop,
+    Pause,
+    EnterFullscreen,
+    ExitFullscreen,
+    TimelineSliderButton
+};
+
+std::map<MediaControlButtonId, Rect> g_mediaControlTextureRegions;
+
+void createMediaControlTexture()
+{
+    if (g_mediaControlsTexture)
+        return;
+
+    constexpr auto panelW = 64.f;
+    constexpr auto panelH = 64.f;
+    constexpr auto iconW  = 32.f;
+    constexpr auto iconH  = 32.f;
+    constexpr auto gap    = 10.f;
+    constexpr auto border = 2;
+
+    auto* drawNode = DrawNode::create();
+
+    auto DrawStop = [&](const Vec2& middle) -> void {
+        auto s = Vec2(middle.x - iconW / 2.f, middle.y + iconH / 2.f);
+        drawNode->drawSolidRect(s, s + Vec2(iconW, -iconH), Color4F::WHITE);
+    };
+
+    auto DrawPlay = [&](const Vec2& middle) -> void {
+        auto p1 = Vec2(middle.x - iconW / 2.f, middle.y + iconH / 2.f);
+        auto p2 = Vec2(middle.x + iconW / 2.f, middle.y);
+        auto p3 = Vec2(middle.x - iconW / 2.f, middle.y - iconH / 2.f);
+
+        drawNode->drawTriangle(p1, p2, p3, Color4B::WHITE);
+    };
+
+    auto DrawPause = [&](const Vec2& middle) -> void {
+        auto start = Vec2(middle.x - 3, middle.y + iconH / 2.f);
+        drawNode->drawSolidRect(start, start + Vec2(-6, -iconH), Color4B::WHITE);
+
+        start = Vec2(middle.x + 3, middle.y + iconH / 2.f);
+        drawNode->drawSolidRect(start, start + Vec2(6, -iconH), Color4B::WHITE);
+    };
+
+    auto DrawEnterFullscreen = [&](const Vec2& middle) -> void {
+        auto topLeft     = Vec2(middle.x - panelW / 2.f + 6, middle.y + panelH / 2.f - 6);
+        auto topRight    = Vec2(middle.x + panelW / 2.f - 6, middle.y + panelH / 2.f - 6);
+        auto bottomLeft  = Vec2(middle.x - panelW / 2.f + 6, middle.y - panelH / 2.f + 6);
+        auto bottomRight = Vec2(middle.x + panelW / 2.f - 6, middle.y - panelH / 2.f + 6);
+
+        // Top left
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(20, -6), Color4B::WHITE);
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(6, -20), Color4B::WHITE);
+
+        // Top right
+        drawNode->drawSolidRect(topRight, topRight + Vec2(-20, -6), Color4B::WHITE);
+        drawNode->drawSolidRect(topRight, topRight + Vec2(-6, -20), Color4B::WHITE);
+
+        // Bottom left
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(20, 6), Color4B::WHITE);
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(6, 20), Color4B::WHITE);
+
+        // Bottom right
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(-20, 6), Color4B::WHITE);
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(-6, 20), Color4B::WHITE);
+    };
+
+    auto DrawExitFullScreen = [&](const Vec2& middle) -> void {
+        auto topLeft     = Vec2(middle.x - 4, middle.y + 4);
+        auto topRight    = Vec2(middle.x + 4, middle.y + 4);
+        auto bottomLeft  = Vec2(middle.x - 4, middle.y - 4);
+        auto bottomRight = Vec2(middle.x + 4, middle.y - 4);
+
+        // Top left
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(-20, 6), Color4B::WHITE);
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(-6, 20), Color4B::WHITE);
+
+        // Top right
+        drawNode->drawSolidRect(topRight, topRight + Vec2(20, 6), Color4B::WHITE);
+        drawNode->drawSolidRect(topRight, topRight + Vec2(6, 20), Color4B::WHITE);
+
+        // Bottom left
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(-20, -6), Color4B::WHITE);
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(-6, -20), Color4B::WHITE);
+
+        // Bottom right
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(20, -6), Color4B::WHITE);
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(6, -20), Color4B::WHITE);
+    };
+
+    auto DrawSliderControlButton = [&](const Vec2& middle) -> void {
+        drawNode->drawSolidCircle(middle, panelW / 2, 0, 180, Color4B::WHITE);
+    };
+
+    std::map<MediaControlButtonId, std::function<void(const Vec2&)>> items = {
+        {MediaControlButtonId::Play, DrawPlay},
+        {MediaControlButtonId::Stop, DrawStop},
+        {MediaControlButtonId::Pause, DrawPause},
+        {MediaControlButtonId::EnterFullscreen, DrawEnterFullscreen},
+        {MediaControlButtonId::ExitFullscreen, DrawExitFullScreen},
+        {MediaControlButtonId::TimelineSliderButton, DrawSliderControlButton}};
+
+    auto numItems    = static_cast<int>(items.size());
+    auto totalWidth  = utils::nextPOT(numItems * panelW + (numItems - 1) * gap + (border * 2));
+    auto totalHeight = utils::nextPOT(border * 2 + panelH);
+    auto imageSize   = Size(static_cast<float>(totalWidth), static_cast<float>(totalHeight));
+    auto* node       = Node::create();
+    node->setContentSize(imageSize);
+    node->setIgnoreAnchorPointForPosition(false);
+    node->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    node->setPosition(0, 0);
+    node->addChild(drawNode);
+
+    auto* rt = RenderTexture::create(totalWidth, totalHeight, PixelFormat::RGBA8, true);
+    rt->beginWithClear(0, 0, 0, 0);
+
+    g_mediaControlTextureRegions.clear();
+
+    int i = 0;
+    for (auto&& item : items)
+    {
+        auto midPoint =
+            Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
+        item.second(midPoint);
+
+#    if defined(AX_USE_GL)
+        g_mediaControlTextureRegions[item.first] =
+            Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);
+#    else  // For Metal renderer
+        g_mediaControlTextureRegions[item.first] = Rect(border + (panelW * i) + (gap * i), border, panelW, panelH);
+#    endif
+
+        ++i;
+    }
+
+    node->visit();
+    rt->end();
+    Director::getInstance()->getRenderer()->render();
+
+    g_mediaControlsTexture = rt->getSprite()->getTexture();
+}
+
 }  // namespace
 
-static std::unique_ptr<MediaEngineFactory> _meFactory = MediaEngineFactory::create();
+static const float ZOOM_ACTION_TIME_STEP = 0.05f;
+
+MediaPlayerControl* MediaPlayerControl::create(SpriteFrame* frame)
+{
+    auto* widget = new MediaPlayerControl();
+    if (widget->init(frame))
+    {
+        widget->autorelease();
+        return widget;
+    }
+    AX_SAFE_DELETE(widget);
+    return nullptr;
+}
+
+MediaPlayerControl::~MediaPlayerControl()
+{
+    AX_SAFE_RELEASE(_overlay);
+}
+
+bool MediaPlayerControl::init(SpriteFrame* frame)
+{
+    if (!Button::init(""))
+    {
+        return false;
+    }
+
+    if (frame)
+    {
+        _overlay = Sprite::createWithSpriteFrame(frame);
+        AX_SAFE_RETAIN(_overlay);
+        auto spriteSize = _overlay->getContentSize();
+        setContentSize(spriteSize);
+        _overlay->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _overlay->setPosition(_contentSize.width * 0.5f, _contentSize.height * 0.5f);
+        addProtectedChild(_overlay, -2, -1);
+
+        if (!_ignoreSize && _customSize.equals(Vec2::ZERO))
+        {
+            _customSize = _overlay->getContentSize();
+        }
+        this->updateChildrenDisplayedRGBA();
+        if (_unifySize)
+        {
+            if (!_scale9Enabled)
+            {
+                updateContentSizeWithTextureSize(spriteSize);
+            }
+        }
+        else
+        {
+            updateContentSizeWithTextureSize(spriteSize);
+        }
+    }
+
+    return true;
+}
+
+void MediaPlayerControl::onSizeChanged()
+{
+    Button::onSizeChanged();
+    if (_overlay)
+    {
+        _overlay->setPosition(_contentSize.width * 0.5f, _contentSize.height * 0.5f);
+    }
+}
+
+Vec2 MediaPlayerControl::getVirtualRendererSize() const
+{
+    if (_unifySize)
+    {
+        return this->getNormalSize();
+    }
+
+    if (nullptr != _overlay)
+    {
+        Vec2 overlaySize = _overlay->getContentSize();
+        if (!_normalTextureLoaded)
+        {
+            return overlaySize;
+        }
+    }
+    return _normalTextureSize;
+}
+
+Vec2 MediaPlayerControl::getNormalSize() const
+{
+    if (_overlay)
+    {
+        return _overlay->getContentSize();
+    }
+
+    return Button::getNormalSize();
+}
+
+void MediaPlayerControl::onPressStateChangedToNormal()
+{
+    Button::onPressStateChangedToNormal();
+
+    if (nullptr != _overlay)
+    {
+        _overlay->stopAllActions();
+        if (_unifySize)
+        {
+            Action* zoomTitleAction = ScaleTo::create(ZOOM_ACTION_TIME_STEP, 1.0f, 1.0f);
+            _overlay->runAction(zoomTitleAction);
+        }
+        else
+        {
+            _overlay->setScaleX(1.0f);
+            _overlay->setScaleY(1.0f);
+        }
+    }
+}
+
+void MediaPlayerControl::onPressStateChangedToPressed()
+{
+    Button::onPressStateChangedToPressed();
+    if (nullptr != _overlay)
+    {
+        _overlay->stopAllActions();
+        Action* zoomTitleAction = ScaleTo::create(ZOOM_ACTION_TIME_STEP, 1.0f + _zoomScale, 1.0f + _zoomScale);
+        _overlay->runAction(zoomTitleAction);
+    }
+}
+
+void MediaPlayerControl::onPressStateChangedToDisabled()
+{
+    Button::onPressStateChangedToDisabled();
+    if (nullptr != _overlay)
+    {
+        _overlay->setScale(1.0);
+    }
+}
+
+BasicMediaController::BasicMediaController(MediaPlayer* player)
+    : MediaController(player), _timelineBarHeight(TIMELINE_BAR_HEIGHT)
+{}
+
+BasicMediaController* BasicMediaController::create(MediaPlayer* mediaPlayer)
+{
+    auto* widget = new BasicMediaController(mediaPlayer);
+    if (widget->init())
+    {
+        widget->autorelease();
+        return widget;
+    }
+    AX_SAFE_DELETE(widget);
+    return nullptr;
+}
+
+bool BasicMediaController::init()
+{
+    if (!Widget::init())
+    {
+        return false;
+    }
+
+    setTouchEnabled(true);
+    setCascadeOpacityEnabled(false);
+    updateControllerState();
+    if (_mediaPlayer)
+    {
+        setContentSize(_mediaPlayer->getContentSize());
+    }
+    return true;
+}
+
+void BasicMediaController::initRenderer()
+{
+    Widget::initRenderer();
+
+    // scheduleOnce is used to create the controls on the next update
+    // loop. This is a work-around for a RenderTexture issue
+    // when being created such places as a button click event handler
+    // on Apple platforms/Metal renderer backend
+    scheduleOnce([this](float){
+        createControls();
+        updateControlsForContentSize(_mediaPlayer->getContentSize());
+        updateControllerState();
+    }, 0.f, "__create_video_controls"sv);
+}
+
+void BasicMediaController::onPressStateChangedToPressed()
+{
+    _lastTouch = std::chrono::steady_clock::now();
+
+    if (!_controlsReady || _controlPanel->getOpacity() == 255)
+    {
+        return;
+    }
+
+    updateControllerState();
+
+    _mediaOverlay->runAction(Sequence::create(FadeTo::create(0.5f, 150), nullptr));
+    _controlPanel->runAction(Sequence::create(FadeIn::create(0.5f), CallFunc::create([this] {
+        if (_controlPanel->isScheduled("__media_controller_fader"sv))
+            return;
+
+        _controlPanel->schedule(
+            [this](float) {
+            auto now       = std::chrono::steady_clock::now();
+            auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastTouch);
+            if (deltaTime > std::chrono::milliseconds{2500})
+            {
+                _controlPanel->unschedule("__media_controller_fader"sv);
+                _controlPanel->runAction(Sequence::create(FadeOut::create(0.5f), nullptr));
+                _mediaOverlay->runAction(Sequence::create(FadeOut::create(0.5f), nullptr));
+            }
+        }, 1.f, "__media_controller_fader"sv);
+    }), nullptr));
+}
+
+void BasicMediaController::setContentSize(const Vec2& contentSize)
+{
+    Widget::setContentSize(contentSize);
+    updateControlsForContentSize(contentSize);
+    updateControllerState();
+}
+
+void BasicMediaController::update(float delta)
+{
+    Widget::update(delta);
+    updateControls();
+}
+
+void BasicMediaController::onEnter()
+{
+    Widget::onEnter();
+    scheduleUpdate();
+}
+
+void BasicMediaController::setGlobalZOrder(float globalZOrder)
+{
+    Widget::setGlobalZOrder(globalZOrder);
+    updateControlsGlobalZ(globalZOrder);
+}
+
+void BasicMediaController::updateControllerState()
+{
+    if (!_mediaPlayer || !_controlsReady)
+        return;
+
+    auto state = _mediaPlayer->getState();
+    if (state == MediaPlayer::MediaState::LOADING ||
+        state == MediaPlayer::MediaState::CLOSED ||
+        state == MediaPlayer::MediaState::ERROR)
+    {
+        _playButton->setVisible(false);
+        _pauseButton->setVisible(false);
+        _stopButton->setVisible(false);
+        _timelineTotal->setVisible(false);
+        _fullScreenExitButton->setVisible(false);
+        _fullScreenEnterButton->setVisible(false);
+    }
+    else
+    {
+        _timelineTotal->setVisible(true);
+        _fullScreenExitButton->setVisible(_mediaPlayer->isFullScreenEnabled());
+        _fullScreenEnterButton->setVisible(!_mediaPlayer->isFullScreenEnabled());
+
+        switch (state)
+        {
+        case MediaPlayer::MediaState::PLAYING:
+            _playButton->setVisible(false);
+            _pauseButton->setVisible(true);
+            _stopButton->setVisible(true);
+            break;
+        case MediaPlayer::MediaState::PAUSED:
+            _playButton->setVisible(true);
+            _pauseButton->setVisible(false);
+            _stopButton->setVisible(true);
+            break;
+        case MediaPlayer::MediaState::STOPPED:
+        case MediaPlayer::MediaState::FINISHED:
+            _playButton->setVisible(true);
+            _pauseButton->setVisible(false);
+            _stopButton->setVisible(false);
+            break;
+        default:;
+        }
+    }
+}
+
+void BasicMediaController::setTimelineBarHeight(float height)
+{
+    _timelineBarHeight = height;
+    if (_timelineBarHeight < TIMELINE_BAR_HEIGHT)
+        _timelineBarHeight = TIMELINE_BAR_HEIGHT;
+
+    updateControlsForContentSize(getContentSize());
+}
+
+void BasicMediaController::createControls()
+{
+    createMediaControlTexture();
+
+    // Check if controls are already created
+    if (_controlsReady)
+    {
+        return;
+    }
+
+    const auto& contentSize = getContentSize();
+    auto scale              = Director::getInstance()->getGLView()->getScaleY();
+
+    _mediaOverlay = Layout::create();
+    _mediaOverlay->setBackGroundColor(Color3B::BLACK);
+    _mediaOverlay->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
+    _mediaOverlay->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _mediaOverlay->setPositionNormalized(Vec2(0.5f, 0.5f));
+    _mediaOverlay->setContentSize(contentSize);
+    _mediaOverlay->setOpacity(0);
+    addProtectedChild(_mediaOverlay, 1);
+
+    _controlPanel = Widget::create();
+    _controlPanel->setContentSize(contentSize);
+    _controlPanel->setPositionNormalized(Vec2(0.5f, 0.5f));
+    _controlPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _controlPanel->setCascadeOpacityEnabled(true);
+    _controlPanel->setOpacity(0);
+    addProtectedChild(_controlPanel, 10);
+
+    _primaryButtonPanel = Widget::create();
+    _primaryButtonPanel->setContentSize(Vec2(150, 60));
+    _primaryButtonPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _primaryButtonPanel->setPositionNormalized(Vec2(0.5f, 0.5f));
+    _primaryButtonPanel->setScale(1 / scale);
+    _controlPanel->addProtectedChild(_primaryButtonPanel);
+
+    _playButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
+        g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::Play]));
+    _playButton->addClickEventListener([this](Ref* ref) {
+        if (_controlPanel->getOpacity() <= 50)
+            return;
+        _playRate = 1.f;
+        _mediaPlayer->setPlayRate(_playRate);
+        _mediaPlayer->play();
+        updateControllerState();
+    });
+    _playButton->setSwallowTouches(false);
+    _playButton->setPositionNormalized(Vec2(0.25f, 0.5f));
+    _playButton->setCascadeOpacityEnabled(true);
+    _playButton->setVisible(false);
+    _primaryButtonPanel->addProtectedChild(_playButton, 1, -1);
+
+    _stopButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
+        g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::Stop]));
+    _stopButton->addClickEventListener([this](Ref* ref) {
+        if (_controlPanel->getOpacity() <= 50)
+            return;
+        _playRate = 1.f;
+        _mediaPlayer->setPlayRate(_playRate);
+        _mediaPlayer->stop();
+        updateControllerState();
+    });
+    _stopButton->setSwallowTouches(false);
+    _stopButton->setPositionNormalized(Vec2(0.75f, 0.5f));
+    _stopButton->setCascadeOpacityEnabled(true);
+    _stopButton->setVisible(false);
+    _primaryButtonPanel->addProtectedChild(_stopButton, 1, -1);
+
+    _pauseButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
+        g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::Pause]));
+    _pauseButton->addClickEventListener([this](Ref* ref) {
+        if (_controlPanel->getOpacity() <= 50)
+            return;
+        _playRate = 1.f;
+        _mediaPlayer->setPlayRate(_playRate);
+        _mediaPlayer->pause();
+        updateControllerState();
+    });
+    _pauseButton->setSwallowTouches(false);
+    _pauseButton->setPositionNormalized(Vec2(0.25f, 0.5f));
+    _pauseButton->setCascadeOpacityEnabled(true);
+    _pauseButton->setVisible(false);
+    _primaryButtonPanel->addProtectedChild(_pauseButton, 1, -1);
+
+    _fullScreenEnterButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
+        g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::EnterFullscreen]));
+    _fullScreenEnterButton->addClickEventListener([this](Ref* ref) {
+        if (_controlPanel->getOpacity() <= 50)
+            return;
+        _mediaPlayer->setFullScreenEnabled(true);
+        updateControllerState();
+    });
+    _fullScreenEnterButton->setSwallowTouches(false);
+    _fullScreenEnterButton->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    _fullScreenEnterButton->setPositionNormalized(Vec2(0.03f, 0.97f));
+    _fullScreenEnterButton->setCascadeOpacityEnabled(true);
+    _fullScreenEnterButton->setVisible(false);
+    _fullScreenEnterButton->setScale(1 / scale);
+    _controlPanel->addProtectedChild(_fullScreenEnterButton, 1, -1);
+
+    _fullScreenExitButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
+        g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::ExitFullscreen]));
+    _fullScreenExitButton->addClickEventListener([this](Ref* ref) {
+        if (_controlPanel->getOpacity() <= 50)
+            return;
+        _mediaPlayer->setFullScreenEnabled(false);
+        updateControllerState();
+    });
+    _fullScreenExitButton->setSwallowTouches(false);
+    _fullScreenExitButton->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    _fullScreenExitButton->setPositionNormalized(Vec2(0.03f, 0.97f));
+    _fullScreenExitButton->setCascadeOpacityEnabled(true);
+    _fullScreenExitButton->setVisible(false);
+    _fullScreenExitButton->setScale(1 / scale);
+    _controlPanel->addProtectedChild(_fullScreenExitButton, 1, -1);
+
+    _timelineTotal = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
+    _timelineTotal->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    _timelineTotal->setStretchEnabled(true);
+    _timelineTotal->setPositionNormalized(Vec2(0.5f, 0.1f));
+    _timelineTotal->setColor(Color3B::GRAY);
+    _timelineTotal->setVisible(false);
+    _timelineTotal->setCascadeOpacityEnabled(true);
+    _timelineTotal->setContentSize(Size(contentSize.width - 40, _timelineBarHeight / scale));
+    _controlPanel->addProtectedChild(_timelineTotal, 1);
+
+    _timelinePlayed = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
+    _timelinePlayed->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    _timelinePlayed->setStretchEnabled(true);
+    _timelinePlayed->setPositionNormalized(Vec2(0.0f, 0.5f));
+    _timelinePlayed->setColor(Color3B::WHITE);
+    _timelinePlayed->setCascadeOpacityEnabled(true);
+    _timelineTotal->addChild(_timelinePlayed, 5);
+
+    _timelineSelector = Sprite::createWithTexture(
+        g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::TimelineSliderButton]);
+    _timelineSelector->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _timelineSelector->setPositionNormalized(Vec2(1.f, 0.5f));
+    _timelineSelector->setCascadeOpacityEnabled(true);
+    _timelineSelector->setStretchEnabled(true);
+    _timelineSelector->setContentSize(Size(_timelineBarHeight, _timelineBarHeight) * 1.5f / scale);
+    _timelineSelector->setVisible(false);
+    _timelinePlayed->addChild(_timelineSelector, 10);
+
+    _timelineTouchListener = EventListenerTouchOneByOne::create();
+    _timelineTouchListener->setSwallowTouches(true);
+    _timelineTouchListener->onTouchBegan = [this](ax::Touch* touch, ax::Event* event) -> bool {
+        auto target               = event->getCurrentTarget();
+        const auto locationInNode = target->convertToNodeSpace(touch->getLocation());
+        const auto& size          = target->getContentSize();
+        const auto rect           = ax::Rect(0, 0, size.width, size.height);
+
+        if (rect.containsPoint(locationInNode))
+        {
+            auto percent  = locationInNode.x / rect.size.x;
+            auto duration = _mediaPlayer->getDuration();
+            auto newTime  = percent * duration;
+            _mediaPlayer->seekTo(newTime);
+            _timelineSelector->setVisible(true);
+            return true;
+        }
+
+        return false;
+    };
+    _timelineTouchListener->onTouchMoved = [this](Touch* touch, Event* event) {
+        auto target               = event->getCurrentTarget();
+        const auto locationInNode = target->convertToNodeSpace(touch->getLocation());
+        const auto& size          = target->getContentSize();
+        const auto rect           = ax::Rect(0, 0, size.width, size.height);
+
+        if (rect.containsPoint(locationInNode))
+        {
+            auto percent  = locationInNode.x / rect.size.x;
+            auto duration = _mediaPlayer->getDuration();
+            auto newTime  = percent * duration;
+            _mediaPlayer->seekTo(newTime);
+        }
+    };
+    _timelineTouchListener->onTouchEnded = [this](Touch* touch, Event* event) { _timelineSelector->setVisible(false); };
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(_timelineTouchListener, _timelineTotal);
+
+    _controlsReady = true;
+}
+
+void BasicMediaController::updateControlsGlobalZ(float globalZOrder)
+{
+    if (!_mediaPlayer || !_controlsReady)
+        return;
+
+    _controlPanel->setGlobalZOrder(globalZOrder);
+    _timelineTotal->setGlobalZOrder(globalZOrder);
+    _timelinePlayed->setGlobalZOrder(globalZOrder);
+    _timelineSelector->setGlobalZOrder(globalZOrder);
+}
+
+void BasicMediaController::updateControls()
+{
+    if (_mediaPlayer && _controlsReady)
+    {
+        const auto currentTime = _mediaPlayer->getCurrentTime();
+        const auto duration    = _mediaPlayer->getDuration();
+        auto& totalSize        = _timelineTotal->getContentSize();
+        _timelinePlayed->setContentSize(Size(totalSize.width * (currentTime / duration), totalSize.height));
+    }
+}
+
+void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
+{
+    if (!_controlsReady)
+        return;
+
+    _mediaOverlay->setContentSize(contentSize);
+    _controlPanel->setContentSize(contentSize);
+
+    auto scale = Director::getInstance()->getGLView()->getScaleY();
+    _primaryButtonPanel->setScale(1 / scale);
+    _timelineTotal->setContentSize(Size(contentSize.width - 40, _timelineBarHeight / scale));
+    _timelineSelector->setContentSize(Size(_timelineBarHeight, _timelineBarHeight) * 1.5f / scale);
+    _fullScreenEnterButton->setScale(1 / scale);
+    _fullScreenExitButton->setScale(1 / scale);
+
+    _fullScreenEnterButton->setPositionNormalized(Vec2());
+    _fullScreenEnterButton->setPositionNormalized(Vec2(0.03f, 0.97f));
+    _fullScreenExitButton->setPositionNormalized(Vec2());
+    _fullScreenExitButton->setPositionNormalized(Vec2(0.03f, 0.97f));
+}
 
 MediaPlayer::MediaPlayer()
-    : _fullScreenDirty(false)
-    , _fullScreenEnabled(false)
-    , _keepAspectRatioEnabled(false)
-    , _videoPlayerIndex(-1)
-    , _eventCallback(nullptr)
-    , _isPlaying(false)
-    , _isLooping(false)
-    , _isUserInputEnabled(true)
-    , _styleType(StyleType::DEFAULT)
 {
     auto pvd      = new PrivateVideoDescriptor{};
     _videoContext = pvd;
@@ -234,32 +919,19 @@ MediaPlayer::MediaPlayer()
             {
             case MEVideoPixelFormat::YUY2:
             {
-#if AX_GLES_PROFILE != 200
                 pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RG8, PixelFormat::RG8,
                                                bufferDim.x, bufferDim.y, false, 0);
-#else
-                pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::LA8, PixelFormat::LA8,
-                                               bufferDim.x, bufferDim.y, false, 0);
-#endif
                 pvd->_vchromaTexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
                                                      PixelFormat::RGBA8, bufferDim.x >> 1, bufferDim.y, false, 0);
                 break;
             }
             case MEVideoPixelFormat::NV12:
             {
-#    if AX_GLES_PROFILE != 200
                 pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::R8,
                                                PixelFormat::R8, bufferDim.x, bufferDim.y, false, 0);
                 pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, (bufferDim.x * bufferDim.y) >> 1,
                                                      PixelFormat::RG8, PixelFormat::RG8, bufferDim.x >> 1,
                                                      bufferDim.y >> 1, false, 0);
-#else
-                pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::A8,
-                                               PixelFormat::A8, bufferDim.x, bufferDim.y, false, 0);
-                pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, (bufferDim.x * bufferDim.y) >> 1,
-                                                     PixelFormat::LA8, PixelFormat::LA8, bufferDim.x >> 1,
-                                                     bufferDim.y >> 1, false, 0);
-#endif
                 break;
             }
             case MEVideoPixelFormat::RGB32:
@@ -303,6 +975,8 @@ MediaPlayer::~MediaPlayer()
 
     removeAllProtectedChildren();
 
+    AX_SAFE_RELEASE_NULL(_mediaController);
+
     if (pvd->_engine)
         _meFactory->destroyMediaEngine(pvd->_engine);
 
@@ -310,7 +984,27 @@ MediaPlayer::~MediaPlayer()
     AX_SAFE_RELEASE(pvd->_vtexture);
     AX_SAFE_RELEASE(pvd->_vchromaTexture);
 
+    if (g_mediaControlsTexture && g_mediaControlsTexture->getReferenceCount() == 1)
+    {
+        g_mediaControlsTexture = nullptr;
+    }
+
     delete pvd;
+}
+
+bool MediaPlayer::init()
+{
+    if (!Widget::init())
+    {
+        return false;
+    }
+
+    if (_userInputEnabled)
+    {
+        setMediaController(BasicMediaController::create(this));
+    }
+
+    return true;
 }
 
 void MediaPlayer::setFileName(std::string_view fileName)
@@ -345,7 +1039,15 @@ void MediaPlayer::setLooping(bool looping)
 
 void MediaPlayer::setUserInputEnabled(bool enableInput)
 {
-    _isUserInputEnabled = enableInput;
+    _userInputEnabled = enableInput;
+    if (_mediaController)
+    {
+        _mediaController->setEnabled(_userInputEnabled);
+    }
+    else if (_userInputEnabled)
+    {
+        setMediaController(BasicMediaController::create(this));
+    }
 }
 
 void MediaPlayer::setStyle(StyleType style)
@@ -359,7 +1061,7 @@ void MediaPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 
     auto pvd     = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
     auto vrender = pvd->_vrender;
-    auto engine = pvd->_engine;
+    auto engine  = pvd->_engine;
     if (!vrender || !engine)
         return;
 
@@ -381,7 +1083,58 @@ void MediaPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 void MediaPlayer::setContentSize(const Size& contentSize)
 {
     Widget::setContentSize(contentSize);
-    reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_originalViewSize = contentSize;
+    auto videoContext               = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
+    videoContext->_originalViewSize = contentSize;
+    if (_mediaController)
+    {
+        _mediaController->setContentSize(contentSize);
+    }
+}
+
+MediaPlayer::MediaState MediaPlayer::getState() const
+{
+    if (_videoURL.empty())
+        return MediaState::CLOSED;
+
+    auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+    if (engine)
+    {
+        switch (engine->getState())
+        {
+        case MEMediaState::Closed:
+            return MediaState::CLOSED;
+        case MEMediaState::Preparing:
+            return MediaState::LOADING;
+        case MEMediaState::Playing:
+            return MediaState::PLAYING;
+        case MEMediaState::Paused:
+            return MediaState::PAUSED;
+        case MEMediaState::Stopped:
+            return MediaState::STOPPED;
+        case MEMediaState::Error:
+            return MediaState::ERROR;
+        }
+    }
+
+    return MediaState::CLOSED;
+}
+
+void MediaPlayer::setMediaController(MediaController* controller)
+{
+    if (_mediaController)
+    {
+        removeProtectedChild(_mediaController, true);
+        AX_SAFE_RELEASE(_mediaController);
+    }
+    _mediaController = controller;
+    if (_mediaController)
+    {
+        AX_SAFE_RETAIN(_mediaController);
+        _mediaController->setPositionNormalized(Vec2(0.5f, 0.5f));
+        _mediaController->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _mediaController->setEnabled(_userInputEnabled);
+        addProtectedChild(_mediaController, 1);
+    }
 }
 
 void MediaPlayer::setFullScreenEnabled(bool enabled)
@@ -390,9 +1143,15 @@ void MediaPlayer::setFullScreenEnabled(bool enabled)
     {
         _fullScreenEnabled = enabled;
 
-        auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
-        Widget::setContentSize(enabled ? _director->getGLView()->getDesignResolutionSize()
-                                       : pvd->_originalViewSize);
+        auto pvd               = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
+        const auto contentSize = enabled ? _director->getGLView()->getDesignResolutionSize() : pvd->_originalViewSize;
+        Widget::setContentSize(contentSize);
+        if (_mediaController)
+        {
+            _mediaController->setContentSize(contentSize);
+        }
+
+        sendEvent((int)EventType::FULLSCREEN_SWITCH);
     }
 }
 
@@ -432,10 +1191,10 @@ void MediaPlayer::play()
             case MEMediaState::Closed:
                 engine->setAutoPlay(true);
                 engine->open(_videoURL);
-                break;
             default:
                 engine->play();
             }
+            updateMediaController();
         }
     }
 }
@@ -446,7 +1205,10 @@ void MediaPlayer::pause()
     {
         auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
         if (engine)
+        {
             engine->pause();
+            updateMediaController();
+        }
     }
 }
 
@@ -463,6 +1225,8 @@ void MediaPlayer::resume()
             case MEMediaState::Paused:
                 engine->play();
             }
+
+            updateMediaController();
         }
     }
 }
@@ -473,7 +1237,10 @@ void MediaPlayer::stop()
     {
         auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
         if (engine)
+        {
             engine->stop();
+            updateMediaController();
+        }
     }
 }
 
@@ -483,8 +1250,39 @@ void MediaPlayer::seekTo(float sec)
     {
         auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
         if (engine)
+        {
             engine->setCurrentTime(sec);
+            updateMediaController();
+        }
     }
+}
+
+float MediaPlayer::getCurrentTime()
+{
+    if (!_videoURL.empty())
+    {
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
+        {
+            return static_cast<float>(engine->getCurrentTime());
+        }
+    }
+
+    return 0.f;
+}
+
+float MediaPlayer::getDuration()
+{
+    if (!_videoURL.empty())
+    {
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
+        {
+            return static_cast<float>(engine->getDuration());
+        }
+    }
+
+    return 0.f;
 }
 
 bool MediaPlayer::isPlaying() const
@@ -499,7 +1297,7 @@ bool MediaPlayer::isLooping() const
 
 bool MediaPlayer::isUserInputEnabled() const
 {
-    return _isUserInputEnabled;
+    return _userInputEnabled;
 }
 
 void MediaPlayer::setVisible(bool visible)
@@ -527,6 +1325,11 @@ void MediaPlayer::onPlayEvent(int event)
 {
     _isPlaying = (event == (int)MediaPlayer::EventType::PLAYING);
 
+    sendEvent(event);
+}
+
+void MediaPlayer::sendEvent(int event)
+{
     if (_eventCallback)
     {
         _director->getScheduler()->runOnAxmolThread(std::bind(_eventCallback, this, (MediaPlayer::EventType)event));
@@ -545,7 +1348,7 @@ void MediaPlayer::copySpecialProperties(Widget* widget)
     {
         _isPlaying              = videoPlayer->_isPlaying;
         _isLooping              = videoPlayer->_isLooping;
-        _isUserInputEnabled     = videoPlayer->_isUserInputEnabled;
+        _userInputEnabled       = videoPlayer->_userInputEnabled;
         _styleType              = videoPlayer->_styleType;
         _fullScreenEnabled      = videoPlayer->_fullScreenEnabled;
         _fullScreenDirty        = videoPlayer->_fullScreenDirty;
@@ -555,6 +1358,16 @@ void MediaPlayer::copySpecialProperties(Widget* widget)
         _videoPlayerIndex       = videoPlayer->_videoPlayerIndex;
         _eventCallback          = videoPlayer->_eventCallback;
     }
+}
+
+void MediaPlayer::updateMediaController()
+{
+    if (!_userInputEnabled || !_mediaController)
+    {
+        return;
+    }
+
+    _mediaController->updateControllerState();
 }
 
 #endif

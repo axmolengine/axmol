@@ -41,6 +41,9 @@ THE SOFTWARE.
 #if defined(AX_PLATFORM_PC)
 #    include "concurrentqueue/concurrentqueue.h"
 #endif
+#ifdef AX_ENABLE_CONSOLE
+#include "base/Console.h"
+#endif
 
 NS_AX_BEGIN
 
@@ -62,8 +65,6 @@ class EventListenerCustom;
 class TextureCache;
 class Renderer;
 class Camera;
-
-class Console;
 
 /**
  @brief Class that creates and handles the main Window and manages how
@@ -433,12 +434,13 @@ public:
      */
     Renderer* getRenderer() const { return _renderer; }
 
+#ifdef AX_ENABLE_CONSOLE
     /** Returns the Console associated with this director.
      * @since v3.0
      * @js NA
      */
     Console* getConsole() const { return _console; }
-
+#endif
     /* Gets delta time since last tick to main loop. */
     float getDeltaTime() const;
 
@@ -513,8 +515,8 @@ public:
     bool isChildrenIndexerEnabled() const { return _childrenIndexerEnabled; }
 
     /** since Axmol-1.0
-    * queue a priority operation in render thread, even through app in background
-    */
+     * queue a priority operation in render thread, even through app in background
+     */
     void queueOperation(AsyncOperation op, void* param = nullptr);
 
     /**
@@ -650,10 +652,10 @@ protected:
     Renderer* _renderer = nullptr;
 
     Color4F _clearColor = {0, 0, 0, 1};
-
+#ifdef AX_ENABLE_CONSOLE
     /* Console for the director */
     Console* _console = nullptr;
-
+#endif
     bool _isStatusLabelUpdated = true;
 
     /* whether or not the director is in a valid state */

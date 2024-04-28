@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -119,7 +120,9 @@ const Mat4& Camera::getViewMatrix() const
     if (memcmp(viewInv.m, _viewInv.m, count) != 0)
     {
         _viewProjectionDirty = true;
+#if defined(AX_ENABLE_3D)
         _frustumDirty        = true;
+#endif
         _viewInv             = viewInv;
         _view                = viewInv.getInversed();
     }
@@ -256,7 +259,9 @@ bool Camera::initPerspective(float fieldOfView, float aspectRatio, float nearPla
 
     Mat4::createPerspective(_fieldOfView, aspectRatio, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
-    _frustumDirty        = true;
+#if defined(AX_ENABLE_3D)
+    _frustumDirty = true;
+#endif
 
     return true;
 }
@@ -269,7 +274,9 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
     _farPlane  = farPlane;
     Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
-    _frustumDirty        = true;
+#if defined(AX_ENABLE_3D)
+    _frustumDirty = true;
+#endif
 
     return true;
 }
@@ -364,6 +371,7 @@ void Camera::unprojectGL(const Vec2& viewport, const Vec3* src, Vec3* dst) const
     dst->set(screen.x, screen.y, screen.z);
 }
 
+#if defined(AX_ENABLE_3D)
 bool Camera::isVisibleInFrustum(const AABB* aabb) const
 {
     if (_frustumDirty)
@@ -373,6 +381,7 @@ bool Camera::isVisibleInFrustum(const AABB* aabb) const
     }
     return !_frustum.isOutOfFrustum(*aabb);
 }
+#endif
 
 float Camera::getDepthInView(const Mat4& transform) const
 {

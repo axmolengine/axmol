@@ -1405,8 +1405,8 @@ MZAPI int unzReadCurrentFile(unzFile file, voidp buf, uint32_t len)
 
             s->pfile_in_zip_read->total_out_64 = s->pfile_in_zip_read->total_out_64 + n;
             s->pfile_in_zip_read->rest_read_uncompressed -= n;
-            s->pfile_in_zip_read->crc32 = (uint32_t)crc32(s->pfile_in_zip_read->crc32,
-                                s->pfile_in_zip_read->stream.next_out, n);
+            // s->pfile_in_zip_read->crc32 = (uint32_t)crc32(s->pfile_in_zip_read->crc32,
+            //                     s->pfile_in_zip_read->stream.next_out, n);
 
             s->pfile_in_zip_read->stream.avail_in -= n;
             s->pfile_in_zip_read->stream.avail_out -= n;
@@ -1447,7 +1447,7 @@ MZAPI int unzReadCurrentFile(unzFile file, voidp buf, uint32_t len)
 
             s->pfile_in_zip_read->total_out_64 = s->pfile_in_zip_read->total_out_64 + out_bytes;
             s->pfile_in_zip_read->rest_read_uncompressed -= out_bytes;
-            s->pfile_in_zip_read->crc32 = crc32(s->pfile_in_zip_read->crc32, buf_before, (uint32_t)out_bytes);
+            // s->pfile_in_zip_read->crc32 = crc32(s->pfile_in_zip_read->crc32, buf_before, (uint32_t)out_bytes);
 
             read += (uint32_t)out_bytes;
 
@@ -1495,8 +1495,8 @@ MZAPI int unzReadCurrentFile(unzFile file, voidp buf, uint32_t len)
 
             s->pfile_in_zip_read->total_out_64 += out_bytes;
             s->pfile_in_zip_read->rest_read_uncompressed -= out_bytes;
-            s->pfile_in_zip_read->crc32 =
-                crc32(s->pfile_in_zip_read->crc32, buf_before, (uint32_t)out_bytes);
+            // s->pfile_in_zip_read->crc32 =
+            //     crc32(s->pfile_in_zip_read->crc32, buf_before, (uint32_t)out_bytes);
 
             read += (uint32_t)out_bytes;
 
@@ -1539,8 +1539,8 @@ MZAPI int unzReadCurrentFile(unzFile file, voidp buf, uint32_t len)
 
             s->pfile_in_zip_read->total_out_64 += out_bytes;
             s->pfile_in_zip_read->rest_read_uncompressed -= out_bytes;
-            s->pfile_in_zip_read->crc32 =
-                (uint32_t)crc32(s->pfile_in_zip_read->crc32,buf_before, (uint32_t)out_bytes);
+            // s->pfile_in_zip_read->crc32 =
+            //     (uint32_t)crc32(s->pfile_in_zip_read->crc32,buf_before, (uint32_t)out_bytes);
 
             read += (uint32_t)out_bytes;
 

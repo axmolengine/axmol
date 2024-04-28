@@ -9,6 +9,9 @@
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
+// Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+// 
+// https://axmolengine.github.io/
 //////////////////////////////////////////////////////////////////////////
 
 #include "WmfMediaEngine.h"
@@ -525,6 +528,7 @@ bool WmfMediaEngine::transferVideoFrame()
             (m_videoPF == MEVideoPixelFormat::NV12) ? buffer.data() + m_frameExtent.x * m_frameExtent.y : nullptr;
         MEVideoFrame frame{buffer.data(), cbcrData, buffer.size(),
                            MEVideoPixelDesc{m_videoPF, MEIntPoint{m_frameExtent.x, m_frameExtent.y}}, m_videoExtent};
+        frame._vpd._rotation = static_cast<int>(m_VideoRotation);
 #    if defined(_DEBUG)
         switch (m_videoPF)
         {
@@ -741,6 +745,8 @@ HRESULT WmfMediaEngine::OnTopologyReady(IMFMediaEvent* pEvent)
     m_videoExtent.x = cx;
     m_videoExtent.y = cy;
 
+    // MFVideoRotationFormat
+    m_VideoRotation = static_cast<MFVideoRotationFormat>(MFGetAttributeUINT32(m_videoInputType.Get(), MF_MT_VIDEO_ROTATION, FALSE));
     if (m_bAutoPlay)
         StartPlayback(nullptr);
 
@@ -889,6 +895,16 @@ MFTIME WmfMediaEngine::GetCurrentPosition() const
     }
 
     return hnsPosition;
+}
+
+double WmfMediaEngine::getCurrentTime()
+{
+    return GetCurrentPosition() / (std::nano::den / 100.0);
+}
+
+double WmfMediaEngine::getDuration()
+{
+    return GetDuration() / (std::nano::den / 100.0);
 }
 
 HRESULT WmfMediaEngine::SetPosition(MFTIME hnsPosition)

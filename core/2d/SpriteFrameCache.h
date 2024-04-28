@@ -199,6 +199,8 @@ public:
      */
     void removeUnusedSpriteFrames();
 
+    void removeUnusedSpriteSheets();
+
     /** Deletes an sprite frame from the sprite frame cache.
      *
      * @param name The name of the sprite frame that needs to removed.
@@ -245,6 +247,8 @@ public:
     bool reloadTexture(std::string_view spriteSheetFileName);
 
     SpriteFrame* findFrame(std::string_view frame);
+
+    std::string_view getSpriteFrameName(SpriteFrame* frame);
 
     /**  Record SpriteFrame with plist and frame name, add frame name
      *    and plist to index

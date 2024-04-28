@@ -76,30 +76,24 @@ struct UniformInfo
     unsigned int bufferOffset = 0;
 };
 
+struct StageUniformLocation
+{
+    int location = -1;
+    int offset = -1;
+
+    operator bool() const { return location != -1; }
+    bool operator==(const StageUniformLocation& other) const;
+};
+
 struct UniformLocation
 {
-    UniformLocation()
-    {
-        location[0] = -1;
-        location[1] = -1;
-        shaderStage = ShaderStage::UNKNOWN;
-    }
-    UniformLocation(int loc, int offset, ShaderStage stage = ShaderStage::VERTEX)
-    {
-        location[0] = loc;
-        location[1] = offset;
-        shaderStage = stage;
-    }
-    /**
-     * both opengl and metal, location[0] represent the location, and location[1] represent location offset in uniform
-     * block.
-     */
-    int location[2];
-    ShaderStage shaderStage;
-    operator bool() { return shaderStage != ShaderStage::UNKNOWN; }
-    void reset() { location[0] = location[1] = -1; }
+    StageUniformLocation vertStage;
+    StageUniformLocation fragStage;
+
+    operator bool() const { return vertStage or fragStage; }
+    void reset() { vertStage = {}; fragStage = {}; }
     bool operator==(const UniformLocation& other) const;
-    std::size_t operator()(const UniformLocation& uniform) const;
+    std::size_t operator()(const UniformLocation& uniform) const; // used as a hash function
 };
 
 struct AttributeBindInfo

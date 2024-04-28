@@ -6,6 +6,9 @@ labels: ''
 assignees: ''
 
 ---
+**About funding flow** see also: #1819
+
+**How much do you want sponsor somebody to solve this feature: $0**
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]

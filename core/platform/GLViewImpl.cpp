@@ -493,9 +493,16 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
             message.append(_glfwError);
         }
 
-        ccMessageBox(message.c_str(), "Error launch application");
+        messageBox(message.c_str(), "Error launch application");
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return false;
+    }
+
+    int actualWidth, actualHeight;
+    glfwGetWindowSize(_mainWindow, &actualWidth, &actualHeight);
+    if (static_cast<int>(windowSize.width) != actualWidth || static_cast<int>(windowSize.height) != actualHeight)
+    {
+        windowSize.set(static_cast<float>(actualWidth), static_cast<float>(actualHeight));
     }
 
 #if defined(AX_USE_METAL)
@@ -540,7 +547,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
      *  see declaration glfwCreateWindow
      */
 #if !defined(__APPLE__)
-    handleWindowSize(windowSize.width, windowSize.height);
+    handleWindowSize(static_cast<int>(windowSize.width), static_cast<int>(windowSize.height));
 #else
     // sense retina
     setFrameSize(rect.size.width, rect.size.height);
@@ -682,14 +689,6 @@ void GLViewImpl::enableRetina(bool enabled)
 {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     _isRetinaEnabled = enabled;
-    if (_isRetinaEnabled)
-    {
-        _retinaFactor = 1;
-    }
-    else
-    {
-        _retinaFactor = 2;
-    }
     updateFrameSize();
 #endif
 }
@@ -835,10 +834,12 @@ void GLViewImpl::setFullscreen(GLFWmonitor* monitor, int w, int h, int refreshRa
     glfwSetWindowMonitor(_mainWindow, _monitor, 0, 0, w, h, refreshRate);
 }
 
-void GLViewImpl::setWindowed(int width, int height)
+void GLViewImpl::setWindowed(int width, int height, bool borderless)
 {
     if (!this->isFullscreen())
     {
+        glfwSetWindowAttrib(_mainWindow, GLFW_DECORATED, borderless ? GLFW_FALSE : GLFW_TRUE);
+
         if (glfwGetWindowAttrib(_mainWindow, GLFW_MAXIMIZED))
             glfwRestoreWindow(_mainWindow);
         this->setFrameSize((float)width, (float)height);
@@ -853,6 +854,7 @@ void GLViewImpl::setWindowed(int width, int height)
         xpos += (int)((videoMode->width - width) * 0.5f);
         ypos += (int)((videoMode->height - height) * 0.5f);
         _monitor = nullptr;
+        glfwSetWindowAttrib(_mainWindow, GLFW_DECORATED, borderless ? GLFW_FALSE : GLFW_TRUE);
         glfwSetWindowMonitor(_mainWindow, nullptr, xpos, ypos, width, height, GLFW_DONT_CARE);
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
         // on mac window will sometimes lose title when windowed
@@ -905,7 +907,7 @@ Vec2 GLViewImpl::getMonitorSize() const
     return Vec2::ZERO;
 }
 
-void GLViewImpl::handleWindowSize(float w, float h)
+void GLViewImpl::handleWindowSize(int w, int h)
 {
     /*
     * x-studio spec, fix view size incorrect when window size changed
@@ -922,7 +924,16 @@ void GLViewImpl::handleWindowSize(float w, float h)
       1. glfwSetWindowMonitor will fire window size change event in full screen mode
     */
     GLView::setFrameSize(w / _frameZoomFactor, h / _frameZoomFactor);
-
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+    // Fix #1787, update retina state when switch between fullscreen and windowed mode
+    int fbWidth = 0, fbHeight = 0;
+    glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
+    _isInRetinaMonitor = fbWidth == 2 * w && fbHeight == 2 * h;
+    if (_isInRetinaMonitor)
+        _retinaFactor = _isRetinaEnabled ? 1 : 2;
+    else
+        _retinaFactor = 1;
+#endif
     updateDesignResolutionSize();
 }
 
@@ -933,34 +944,21 @@ void GLViewImpl::updateFrameSize()
         int w = 0, h = 0;
         glfwGetWindowSize(_mainWindow, &w, &h);
 
-        int frameBufferW = 0, frameBufferH = 0;
-        glfwGetFramebufferSize(_mainWindow, &frameBufferW, &frameBufferH);
+        int fbWidth = 0, fbHeight = 0;
+        glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
 
-        if (frameBufferW == 2 * w && frameBufferH == 2 * h)
+        _isInRetinaMonitor = fbWidth == 2 * w && fbHeight == 2 * h;
+        if (_isInRetinaMonitor)
         {
-            if (_isRetinaEnabled)
-            {
-                _retinaFactor = 1;
-            }
-            else
-            {
-                _retinaFactor = 2;
-            }
+            _retinaFactor = _isRetinaEnabled ? 1 : 2;
             glfwSetWindowSize(_mainWindow, _screenSize.width / 2 * _retinaFactor * _frameZoomFactor,
                               _screenSize.height / 2 * _retinaFactor * _frameZoomFactor);
-
-            _isInRetinaMonitor = true;
         }
         else
         {
-            if (_isInRetinaMonitor)
-            {
-                _retinaFactor = 1;
-            }
+            _retinaFactor = 1;
             glfwSetWindowSize(_mainWindow, (int)(_screenSize.width * _retinaFactor * _frameZoomFactor),
                               (int)(_screenSize.height * _retinaFactor * _frameZoomFactor));
-
-            _isInRetinaMonitor = false;
         }
     }
 }

@@ -27,7 +27,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.25.0
+- Version: 1.28.1
 - License: MIT
 
 ## Chipmunk2D
@@ -52,7 +52,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.6.0
+- Version: 8.7.1
 - License: Curl (MIT/X)
 
 ## FastLZ
@@ -62,7 +62,7 @@
 
 ## flatbuffers
 - [![Upstream](https://img.shields.io/github/v/release/google/flatbuffers?label=Upstream)](https://github.com/google/flatbuffers)
-- Version: 2.0.8
+- Version: 24.3.25
 - License: Apache-2.0
 
 ## {fmt}
@@ -77,7 +77,7 @@
 
 ## Glad
 - [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
-- Version: 2.0.5
+- Version: 2.0.6
 - License: MIT
 
 ## glfw
@@ -107,7 +107,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 9.2.0
+- Version: 9.2.1
 - License: MIT
 
 ## lua
@@ -123,7 +123,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-9cc2e42
+  - Version: 2.1-d06beb0
   - License: MIT
 
 - tolua
@@ -218,12 +218,12 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 3.8.0
+- Version: 3.9.1
 - License: Apache-2.0
 
 ## stb (stb_image)
 - Upstream: https://github.com/nothings/stb
-- Version: 2.28
+- Version: 2.29
 - License: MIT
 
 ## unzip (minizip-1.2)
@@ -253,7 +253,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 4.2.1
+- Version: 4.2.2
 - License: MIT WITH Anti-996
 
 ## zlib

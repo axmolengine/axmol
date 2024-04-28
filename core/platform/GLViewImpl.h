@@ -93,7 +93,7 @@ public:
 
     /* for internal use */
     void setFullscreen(GLFWmonitor* monitor, int w, int h, int refreshRate);
-    void setWindowed(int width, int height);
+    void setWindowed(int width, int height, bool borderless = false);
 
     void getWindowPosition(int* xpos, int* ypos);
     void getWindowSize(int* width, int* height);
@@ -153,7 +153,7 @@ protected:
 #endif
 
     /* invoke when window size changed */
-    void handleWindowSize(float w, float h);
+    void handleWindowSize(int w, int h);
 
     /* update frame size when user set zoomFactor, retina, frameSize */
     void updateFrameSize();

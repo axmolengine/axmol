@@ -28,7 +28,7 @@
 #define __CCPHYSICS_WORLD_H__
 
 #include "base/Config.h"
-#if AX_USE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 
 #    include <list>
 #    include "base/Vector.h"
@@ -476,5 +476,5 @@ extern const float AX_DLL PHYSICS_INFINITY;
 
 NS_AX_END
 
-#endif  // AX_USE_PHYSICS
+#endif  // defined(AX_ENABLE_PHYSICS)
 #endif  // __CCPHYSICS_WORLD_H__

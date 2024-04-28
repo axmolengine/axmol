@@ -15,13 +15,14 @@
  *
  * Copy from: https://github.com/androidx/media/blob/release/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/video/MediaCodecVideoRenderer.java
  * and modified to works on ByteBuffer mode for retrieve video/raw NV12 data
- * match with AndroidX Media3 1.0.2
+ * patch based on AndroidX Media3 1.2.1, but also works on 1.1.0+
  */
 package org.axmol.lib;
 
 import static android.view.Display.DEFAULT_DISPLAY;
 import static androidx.media3.common.util.Assertions.checkNotNull;
 import static androidx.media3.common.util.Assertions.checkState;
+import static androidx.media3.common.util.Util.msToUs;
 import static androidx.media3.exoplayer.DecoderReuseEvaluation.DISCARD_REASON_MAX_INPUT_SIZE_EXCEEDED;
 import static androidx.media3.exoplayer.DecoderReuseEvaluation.DISCARD_REASON_VIDEO_MAX_RESOLUTION_EXCEEDED;
 import static androidx.media3.exoplayer.DecoderReuseEvaluation.REUSE_RESULT_NO;
@@ -40,6 +41,7 @@ import android.media.MediaCrypto;
 import android.media.MediaFormat;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Pair;
@@ -54,8 +56,11 @@ import androidx.media3.common.DrmInitData;
 import androidx.media3.common.Format;
 import androidx.media3.common.MimeTypes;
 import androidx.media3.common.VideoSize;
+import androidx.media3.common.util.Clock;
+import androidx.media3.common.util.HandlerWrapper;
 import androidx.media3.common.util.Log;
 import androidx.media3.common.util.MediaFormatUtil;
+import androidx.media3.common.util.Size;
 import androidx.media3.common.util.TraceUtil;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.common.util.Util;
@@ -76,7 +81,9 @@ import androidx.media3.exoplayer.mediacodec.MediaCodecSelector;
 import androidx.media3.exoplayer.mediacodec.MediaCodecUtil;
 import androidx.media3.exoplayer.mediacodec.MediaCodecUtil.DecoderQueryException;
 import androidx.media3.exoplayer.video.VideoRendererEventListener.EventDispatcher;
+
 import com.google.common.collect.ImmutableList;
+
 import java.nio.ByteBuffer;
 import java.util.List;
 
@@ -85,6 +92,15 @@ import androidx.media3.exoplayer.video.MediaCodecVideoDecoderException;
 import androidx.media3.exoplayer.video.VideoRendererEventListener;
 import androidx.media3.exoplayer.video.VideoFrameReleaseHelper;
 import androidx.media3.exoplayer.video.VideoFrameMetadataListener;
+
+class ClockUtils {
+  public static long nanoTime() {
+    return System.nanoTime();
+  }
+  public static long elapsedRealtime() {
+    return android.os.SystemClock.elapsedRealtime();
+  }
+}
 
 /**
  * Decodes and renders video using {@link MediaCodec}.
@@ -96,6 +112,8 @@ import androidx.media3.exoplayer.video.VideoFrameMetadataListener;
  *   <li>Message with type {@link #MSG_SET_VIDEO_OUTPUT} to set the output. The message payload
  *       should be the target {@link Surface}, or null to clear the output. Other non-null payloads
  *       have the effect of clearing the output.
+ *   <li>Message with type to set the output resolution.
+ *       The message payload should be the output resolution in {@link Size}.
  *   <li>Message with type {@link #MSG_SET_SCALING_MODE} to set the video scaling mode. The message
  *       payload should be one of the integer scaling modes in {@link C.VideoScalingMode}. Note that
  *       the scaling mode only applies if the {@link Surface} targeted by this renderer is owned by
@@ -107,12 +125,34 @@ import androidx.media3.exoplayer.video.VideoFrameMetadataListener;
  *       VideoFrameMetadataListener}, or null.
  * </ul>
  */
+@UnstableApi
+public class MediaCodecVideoRenderer extends MediaCodecRenderer {
+  // region ByteBufferMode
+  public interface VideoFrameProcessor {
+    void processVideoFrame(MediaCodecAdapter codec, int index, long presentationTimeUs);
+  }
 
 
-public class AxmolVideoRenderer extends MediaCodecRenderer {
+
+    /**
+   * The first frame was not rendered yet, and is only allowed to be rendered if the renderer is
+   * started.
+   */
+  @UnstableApi public static final int FIRST_FRAME_NOT_RENDERED_ONLY_ALLOWED_IF_STARTED = 0;
+
+  /** The first frame was not rendered after the last reset, output surface or stream change. */
+  @UnstableApi public static final int FIRST_FRAME_NOT_RENDERED = 1;
+
+  /** The first frame was not rendered after the last stream change. */
+  @UnstableApi public static final int FIRST_FRAME_NOT_RENDERED_AFTER_STREAM_CHANGE = 2;
+
+  /** The first frame was rendered. */
+  @UnstableApi public static final int FIRST_FRAME_RENDERED = 3;
+
   public static final int DESIRED_PIXEL_FORMAT = CodecCapabilities.COLOR_FormatYUV420SemiPlanar; // desired pixel format: NV12
+  // #endregion ByteBufferMode
 
-  private static final String TAG = "AxmolVideoRenderer";
+  private static final String TAG = "MediaCodecVideoRenderer";
   private static final String KEY_CROP_LEFT = "crop-left";
   private static final String KEY_CROP_RIGHT = "crop-right";
   private static final String KEY_CROP_BOTTOM = "crop-bottom";
@@ -134,6 +174,9 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
   /** The minimum input buffer size for HEVC. */
   private static final int HEVC_MAX_INPUT_SIZE_THRESHOLD = 2 * 1024 * 1024;
 
+  /** The maximum earliest time, in microseconds, to release a frame on the surface. */
+  private static final long MAX_EARLY_US_THRESHOLD = 50_000;
+
   private final Context context;
   private final VideoFrameReleaseHelper frameReleaseHelper;
   private final EventDispatcher eventDispatcher;
@@ -143,12 +186,10 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
 
   private CodecMaxValues codecMaxValues;
   private boolean codecHandlesHdr10PlusOutOfBandMetadata;
-
+  @Nullable private VideoFrameProcessor output = null;
   private boolean haveReportedFirstFrameRenderedForCurrentSurface;
   private @C.VideoScalingMode int scalingMode;
-  private boolean renderedFirstFrameAfterReset;
-  private boolean mayRenderFirstFrameAfterEnableIfNotStarted;
-  private boolean renderedFirstFrameAfterEnable;
+  private int firstFrameState;
   private long initialPositionUs;
   private long joiningDeadlineMs;
   private long droppedFrameAccumulationStartTimeMs;
@@ -160,45 +201,26 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
   private long totalVideoFrameProcessingOffsetUs;
   private int videoFrameProcessingOffsetCount;
   private long lastFrameReleaseTimeNs;
-
-  private int currentWidth;
-  private int currentHeight;
-  private int currentUnappliedRotationDegrees;
-  private float currentPixelWidthHeightRatio;
+  private VideoSize decodedVideoSize;
   @Nullable private VideoSize reportedVideoSize;
 
   private boolean tunneling;
   private int tunnelingAudioSessionId;
-
   /* package */ @Nullable OnFrameRenderedListenerV23 tunnelingOnFrameRenderedListener;
   @Nullable private VideoFrameMetadataListener frameMetadataListener;
 
-  private OutputHandler outputHandler;
-
-  public void setOutputHandler(OutputHandler handler) {
-    outputHandler = handler;
-  }
-
-  public interface OutputHandler {
-    void handleVideoSample(MediaCodecAdapter codec, int index, long presentationTimeUs);
-  }
-
-  public MediaFormat getOutputMediaFormat() {
-      return this.getCodecOutputMediaFormat();
-  }
-
   public String getCodecName() {
-      MediaCodecInfo info = getCodecInfo();
-      return info != null ? info.mimeType : "";
+    MediaCodecInfo info = getCodecInfo();
+    return info != null ? info.mimeType : "";
   }
 
-  /**
-   * @param context A context.
-   * @param mediaCodecSelector A decoder selector.
-   */
-  public AxmolVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector) {
-    this(context, mediaCodecSelector, 0);
-  }
+//  /**
+//   * @param context A context.
+//   * @param mediaCodecSelector A decoder selector.
+//   */
+//  public MediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector) {
+//    this(context, mediaCodecSelector, 0);
+//  }
 
   /**
    * @param context A context.
@@ -206,7 +228,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    * @param allowedJoiningTimeMs The maximum duration in milliseconds for which this video renderer
    *     can attempt to seamlessly join an ongoing playback.
    */
-  public AxmolVideoRenderer(
+  public MediaCodecVideoRenderer(
       Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs) {
     this(
         context,
@@ -228,7 +250,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    * @param maxDroppedFramesToNotify The maximum number of frames that can be dropped between
    *     invocations of {@link VideoRendererEventListener#onDroppedFrames(int, long)}.
    */
-  public AxmolVideoRenderer(
+  public MediaCodecVideoRenderer(
       Context context,
       MediaCodecSelector mediaCodecSelector,
       long allowedJoiningTimeMs,
@@ -261,7 +283,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    * @param maxDroppedFramesToNotify The maximum number of frames that can be dropped between
    *     invocations of {@link VideoRendererEventListener#onDroppedFrames(int, long)}.
    */
-  public AxmolVideoRenderer(
+  public MediaCodecVideoRenderer(
       Context context,
       MediaCodecSelector mediaCodecSelector,
       long allowedJoiningTimeMs,
@@ -297,7 +319,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    * @param maxDroppedFramesToNotify The maximum number of frames that can be dropped between
    *     invocations of {@link VideoRendererEventListener#onDroppedFrames(int, long)}.
    */
-  public AxmolVideoRenderer(
+  public MediaCodecVideoRenderer(
       Context context,
       MediaCodecAdapter.Factory codecAdapterFactory,
       MediaCodecSelector mediaCodecSelector,
@@ -306,7 +328,6 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
       @Nullable Handler eventHandler,
       @Nullable VideoRendererEventListener eventListener,
       int maxDroppedFramesToNotify) {
-
     this(
         context,
         codecAdapterFactory,
@@ -340,7 +361,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    *     this renderer are assumed to meet implicitly (i.e. without the operating rate being set
    *     explicitly using {@link MediaFormat#KEY_OPERATING_RATE}).
    */
-  public AxmolVideoRenderer(
+  public MediaCodecVideoRenderer(
       Context context,
       MediaCodecAdapter.Factory codecAdapterFactory,
       MediaCodecSelector mediaCodecSelector,
@@ -363,12 +384,10 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     eventDispatcher = new EventDispatcher(eventHandler, eventListener);
     deviceNeedsNoPostProcessWorkaround = deviceNeedsNoPostProcessWorkaround();
     joiningDeadlineMs = C.TIME_UNSET;
-    currentWidth = Format.NO_VALUE;
-    currentHeight = Format.NO_VALUE;
-    currentPixelWidthHeightRatio = Format.NO_VALUE;
     scalingMode = C.VIDEO_SCALING_MODE_DEFAULT;
+    decodedVideoSize = VideoSize.UNKNOWN;
     tunnelingAudioSessionId = C.AUDIO_SESSION_ID_UNSET;
-    clearReportedVideoSize();
+    firstFrameState = FIRST_FRAME_NOT_RENDERED_ONLY_ALLOWED_IF_STARTED;
   }
 
   @Override
@@ -484,6 +503,8 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
         format);
   }
 
+  // Other methods
+
   /**
    * Returns a list of decoders that can decode media in the specified format, in the priority order
    * specified by the {@link MediaCodecSelector}. Note that since the {@link MediaCodecSelector}
@@ -501,36 +522,36 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    * @throws DecoderQueryException Thrown if there was an error querying decoders.
    */
   private static List<MediaCodecInfo> getDecoderInfos(
-      Context context,
-      MediaCodecSelector mediaCodecSelector,
-      Format format,
-      boolean requiresSecureDecoder,
-      boolean requiresTunnelingDecoder)
-      throws DecoderQueryException {
+    Context context,
+    MediaCodecSelector mediaCodecSelector,
+    Format format,
+    boolean requiresSecureDecoder,
+    boolean requiresTunnelingDecoder)
+    throws DecoderQueryException {
     @Nullable String mimeType = format.sampleMimeType;
     if (mimeType == null) {
       return ImmutableList.of();
     }
     List<MediaCodecInfo> decoderInfos =
-        mediaCodecSelector.getDecoderInfos(
-            mimeType, requiresSecureDecoder, requiresTunnelingDecoder);
+      mediaCodecSelector.getDecoderInfos(
+        mimeType, requiresSecureDecoder, requiresTunnelingDecoder);
     @Nullable String alternativeMimeType = MediaCodecUtil.getAlternativeCodecMimeType(format);
     if (alternativeMimeType == null) {
       return ImmutableList.copyOf(decoderInfos);
     }
     List<MediaCodecInfo> alternativeDecoderInfos =
-        mediaCodecSelector.getDecoderInfos(
-            alternativeMimeType, requiresSecureDecoder, requiresTunnelingDecoder);
+      mediaCodecSelector.getDecoderInfos(
+        alternativeMimeType, requiresSecureDecoder, requiresTunnelingDecoder);
     if (Util.SDK_INT >= 26
-        && MimeTypes.VIDEO_DOLBY_VISION.equals(format.sampleMimeType)
-        && !alternativeDecoderInfos.isEmpty()
-        && !Api26.doesDisplaySupportDolbyVision(context)) {
+      && MimeTypes.VIDEO_DOLBY_VISION.equals(format.sampleMimeType)
+      && !alternativeDecoderInfos.isEmpty()
+      && !Api26.doesDisplaySupportDolbyVision(context)) {
       return ImmutableList.copyOf(alternativeDecoderInfos);
     }
     return ImmutableList.<MediaCodecInfo>builder()
-        .addAll(decoderInfos)
-        .addAll(alternativeDecoderInfos)
-        .build();
+      .addAll(decoderInfos)
+      .addAll(alternativeDecoderInfos)
+      .build();
   }
 
   @RequiresApi(26)
@@ -566,14 +587,23 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
       releaseCodec();
     }
     eventDispatcher.enabled(decoderCounters);
-    mayRenderFirstFrameAfterEnableIfNotStarted = mayRenderStartOfStream;
-    renderedFirstFrameAfterEnable = false;
+    firstFrameState =
+        mayRenderStartOfStream
+            ? FIRST_FRAME_NOT_RENDERED
+            : FIRST_FRAME_NOT_RENDERED_ONLY_ALLOWED_IF_STARTED;
   }
+
+//  @Override
+//  public void enableMayRenderStartOfStream() {
+//    if (firstFrameState == FIRST_FRAME_NOT_RENDERED_ONLY_ALLOWED_IF_STARTED) {
+//      firstFrameState = FIRST_FRAME_NOT_RENDERED;
+//    }
+//  }
 
   @Override
   protected void onPositionReset(long positionUs, boolean joining) throws ExoPlaybackException {
     super.onPositionReset(positionUs, joining);
-    clearRenderedFirstFrame();
+    lowerFirstFrameState(FIRST_FRAME_NOT_RENDERED);
     frameReleaseHelper.onPositionReset();
     lastBufferPresentationTimeUs = C.TIME_UNSET;
     initialPositionUs = C.TIME_UNSET;
@@ -585,10 +615,16 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     }
   }
 
+  /**
+   * Returns the {@link Clock}.
+   *
+   * <p>Must only be used after the renderer has been initialized by the player.
+   */
+
   @Override
   public boolean isReady() {
     if (super.isReady()
-        && (renderedFirstFrameAfterReset
+        && (firstFrameState == FIRST_FRAME_RENDERED
             || getCodec() == null
             || tunneling)) {
       // Ready. If we were joining then we've now joined, so clear the joining deadline.
@@ -597,7 +633,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     } else if (joiningDeadlineMs == C.TIME_UNSET) {
       // Not joining.
       return false;
-    } else if (SystemClock.elapsedRealtime() < joiningDeadlineMs) {
+    } else if (ClockUtils.elapsedRealtime() < joiningDeadlineMs) {
       // Joining and still within the joining deadline.
       return true;
     } else {
@@ -611,8 +647,9 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
   protected void onStarted() {
     super.onStarted();
     droppedFrames = 0;
-    droppedFrameAccumulationStartTimeMs = SystemClock.elapsedRealtime();
-    lastRenderRealtimeUs = SystemClock.elapsedRealtime() * 1000;
+    long elapsedRealtimeMs = ClockUtils.elapsedRealtime();
+    droppedFrameAccumulationStartTimeMs = elapsedRealtimeMs;
+    lastRenderRealtimeUs = msToUs(elapsedRealtimeMs);
     totalVideoFrameProcessingOffsetUs = 0;
     videoFrameProcessingOffsetCount = 0;
     frameReleaseHelper.onStarted();
@@ -629,14 +666,15 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
 
   @Override
   protected void onDisabled() {
-    clearReportedVideoSize();
-    clearRenderedFirstFrame();
+    reportedVideoSize = null;
+    lowerFirstFrameState(FIRST_FRAME_NOT_RENDERED_ONLY_ALLOWED_IF_STARTED);
     haveReportedFirstFrameRenderedForCurrentSurface = false;
     tunnelingOnFrameRenderedListener = null;
     try {
       super.onDisabled();
     } finally {
       eventDispatcher.disabled(decoderCounters);
+      eventDispatcher.videoSizeChanged(VideoSize.UNKNOWN);
     }
   }
 
@@ -646,7 +684,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     try {
       super.onReset();
     } finally {
-        ;
+      ;
     }
   }
 
@@ -658,14 +696,14 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
         setOutput(message);
         break;
       case MSG_SET_SCALING_MODE:
-        scalingMode = (Integer) message;
+        scalingMode = (int) checkNotNull(message);
         @Nullable MediaCodecAdapter codec = getCodec();
         if (codec != null) {
           codec.setVideoScalingMode(scalingMode);
         }
         break;
       case MSG_SET_CHANGE_FRAME_RATE_STRATEGY:
-        frameReleaseHelper.setChangeFrameRateStrategy((int) message);
+        frameReleaseHelper.setChangeFrameRateStrategy((int) checkNotNull(message));
         break;
       case MSG_SET_VIDEO_FRAME_METADATA_LISTENER:
         frameMetadataListener = (VideoFrameMetadataListener) message;
@@ -690,8 +728,9 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     }
   }
 
-  private void setOutput(@Nullable Object output) {
+  public void setOutput(@Nullable Object output) {
     // Handle unsupported (i.e., non-Surface) outputs by clearing the surface.
+    this.output = (VideoFrameProcessor)output;
   }
 
   @Override
@@ -724,8 +763,18 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
             tunneling ? tunnelingAudioSessionId : C.AUDIO_SESSION_ID_UNSET);
 
     mediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, DESIRED_PIXEL_FORMAT);
+    maybeSetKeyAllowFrameDrop(mediaFormat);
     return MediaCodecAdapter.Configuration.createForVideoDecoding(
-        codecInfo, mediaFormat, format, null, crypto);
+        codecInfo,
+        mediaFormat,
+        format,
+        null,
+        crypto);
+  }
+
+  @SuppressWarnings("InlinedApi") // VideoSink will check the API level
+  private void maybeSetKeyAllowFrameDrop(MediaFormat mediaFormat) {
+    mediaFormat.setInteger(MediaFormat.KEY_ALLOW_FRAME_DROP, 0);
   }
 
   @Override
@@ -734,6 +783,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     DecoderReuseEvaluation evaluation = codecInfo.canReuseCodec(oldFormat, newFormat);
 
     @DecoderDiscardReasons int discardReasons = evaluation.discardReasons;
+    CodecMaxValues codecMaxValues = checkNotNull(this.codecMaxValues);
     if (newFormat.width > codecMaxValues.width || newFormat.height > codecMaxValues.height) {
       discardReasons |= DISCARD_REASON_VIDEO_MAX_RESOLUTION_EXCEEDED;
     }
@@ -758,7 +808,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
 
   @Override
   public void setPlaybackSpeed(float currentPlaybackSpeed, float targetPlaybackSpeed)
-      throws ExoPlaybackException {
+    throws ExoPlaybackException {
     super.setPlaybackSpeed(currentPlaybackSpeed, targetPlaybackSpeed);
     frameReleaseHelper.onPlaybackSpeed(currentPlaybackSpeed);
   }
@@ -779,7 +829,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
       return Format.NO_VALUE;
     }
 
-    String sampleMimeType = format.sampleMimeType;
+    String sampleMimeType = checkNotNull(format.sampleMimeType);
     if (MimeTypes.VIDEO_DOLBY_VISION.equals(sampleMimeType)) {
       // Dolby vision can be a wrapper around H264 or H265. We assume it's wrapping H265 by default
       // because it's the common case, and because some devices may fail to allocate the codec when
@@ -849,6 +899,10 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     return maxFrameRate == -1 ? CODEC_OPERATING_RATE_UNSET : (maxFrameRate * targetPlaybackSpeed);
   }
 
+  //@Override
+  //protected void onReadyToInitializeCodec(Format format) throws ExoPlaybackException {
+  //}
+
   @Override
   protected void onCodecInitialized(
       String name,
@@ -879,7 +933,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
   protected DecoderReuseEvaluation onInputFormatChanged(FormatHolder formatHolder)
       throws ExoPlaybackException {
     @Nullable DecoderReuseEvaluation evaluation = super.onInputFormatChanged(formatHolder);
-    eventDispatcher.inputFormatChanged(formatHolder.format, evaluation);
+    eventDispatcher.inputFormatChanged(checkNotNull(formatHolder.format), evaluation);
     return evaluation;
   }
 
@@ -913,9 +967,14 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
       // Must be applied each time the output format changes.
       codec.setVideoScalingMode(scalingMode);
     }
+    int width;
+    int height;
+    int unappliedRotationDegrees = 0;
+    float pixelWidthHeightRatio;
+
     if (tunneling) {
-      currentWidth = format.width;
-      currentHeight = format.height;
+      width = format.width;
+      height = format.height;
     } else {
       checkNotNull(mediaFormat);
       boolean hasCrop =
@@ -923,30 +982,32 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
               && mediaFormat.containsKey(KEY_CROP_LEFT)
               && mediaFormat.containsKey(KEY_CROP_BOTTOM)
               && mediaFormat.containsKey(KEY_CROP_TOP);
-      currentWidth =
+      width =
           hasCrop
               ? mediaFormat.getInteger(KEY_CROP_RIGHT) - mediaFormat.getInteger(KEY_CROP_LEFT) + 1
               : mediaFormat.getInteger(MediaFormat.KEY_WIDTH);
-      currentHeight =
+      height =
           hasCrop
               ? mediaFormat.getInteger(KEY_CROP_BOTTOM) - mediaFormat.getInteger(KEY_CROP_TOP) + 1
               : mediaFormat.getInteger(MediaFormat.KEY_HEIGHT);
     }
-    currentPixelWidthHeightRatio = format.pixelWidthHeightRatio;
-    if (Util.SDK_INT >= 21) {
+    pixelWidthHeightRatio = format.pixelWidthHeightRatio;
+    if (codecAppliesRotation()) {
       // On API level 21 and above the decoder applies the rotation when rendering to the surface.
       // Hence currentUnappliedRotation should always be 0. For 90 and 270 degree rotations, we need
       // to flip the width, height and pixel aspect ratio to reflect the rotation that was applied.
       if (format.rotationDegrees == 90 || format.rotationDegrees == 270) {
-        int rotatedHeight = currentWidth;
-        currentWidth = currentHeight;
-        currentHeight = rotatedHeight;
-        currentPixelWidthHeightRatio = 1 / currentPixelWidthHeightRatio;
+        int rotatedHeight = width;
+        width = height;
+        height = rotatedHeight;
+        pixelWidthHeightRatio = 1 / pixelWidthHeightRatio;
       }
     } else {
-      // On API level 20 and below the decoder does not apply the rotation.
-      currentUnappliedRotationDegrees = format.rotationDegrees;
+      // Neither the codec nor the video sink applies the rotation.
+      unappliedRotationDegrees = format.rotationDegrees;
     }
+    decodedVideoSize =
+        new VideoSize(width, height, unappliedRotationDegrees, pixelWidthHeightRatio);
     frameReleaseHelper.onFormatChanged(format.frameRate);
   }
 
@@ -976,7 +1037,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
         byte[] hdr10PlusInfo = new byte[data.remaining()];
         data.get(hdr10PlusInfo);
         data.position(0);
-        setHdr10PlusInfoV29(getCodec(), hdr10PlusInfo);
+        setHdr10PlusInfoV29(checkNotNull(getCodec()), hdr10PlusInfo);
       }
     }
   }
@@ -1014,33 +1075,18 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
       return true;
     }
 
-    // Note: Use of double rather than float is intentional for accuracy in the calculations below.
-    double playbackSpeed = getPlaybackSpeed();
     boolean isStarted = getState() == STATE_STARTED;
-    long elapsedRealtimeNowUs = SystemClock.elapsedRealtime() * 1000;
+    long earlyUs =
+        calculateEarlyTimeUs(
+            positionUs,
+            elapsedRealtimeUs,
+            bufferPresentationTimeUs,
+            isStarted,
+            getPlaybackSpeed());
 
-    // Calculate how early we are. In other words, the realtime duration that needs to elapse whilst
-    // the renderer is started before the frame should be rendered. A negative value means that
-    // we're already late.
-    long earlyUs = (long) ((bufferPresentationTimeUs - positionUs) / playbackSpeed);
-    if (isStarted) {
-      // Account for the elapsed time since the start of this iteration of the rendering loop.
-      earlyUs -= elapsedRealtimeNowUs - elapsedRealtimeUs;
-    }
-
-    long elapsedSinceLastRenderUs = elapsedRealtimeNowUs - lastRenderRealtimeUs;
-    boolean shouldRenderFirstFrame =
-        !renderedFirstFrameAfterEnable
-            ? (isStarted || mayRenderFirstFrameAfterEnableIfNotStarted)
-            : !renderedFirstFrameAfterReset;
-    // Don't force output until we joined and the position reached the current stream.
-    boolean forceRenderOutputBuffer =
-        joiningDeadlineMs == C.TIME_UNSET
-            && positionUs >= outputStreamOffsetUs
-            && (shouldRenderFirstFrame
-                || (isStarted && shouldForceRenderOutputBuffer(earlyUs, elapsedSinceLastRenderUs)));
+    boolean forceRenderOutputBuffer = shouldForceRender(positionUs, earlyUs);
     if (forceRenderOutputBuffer) {
-      long releaseTimeNs = System.nanoTime();
+      long releaseTimeNs = ClockUtils.nanoTime();
       notifyFrameMetadataListener(presentationTimeUs, releaseTimeNs, format);
       renderOutputBuffer(codec, bufferIndex, presentationTimeUs);
       updateVideoFrameProcessingOffsetCounters(earlyUs);
@@ -1052,13 +1098,11 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     }
 
     // Compute the buffer's desired release time in nanoseconds.
-    long systemTimeNs = System.nanoTime();
+    long systemTimeNs = ClockUtils.nanoTime();
     long unadjustedFrameReleaseTimeNs = systemTimeNs + (earlyUs * 1000);
-
     // Apply a timestamp adjustment, if there is one.
     long adjustedReleaseTimeNs = frameReleaseHelper.adjustReleaseTime(unadjustedFrameReleaseTimeNs);
     earlyUs = (adjustedReleaseTimeNs - systemTimeNs) / 1000;
-
     boolean treatDroppedBuffersAsSkipped = joiningDeadlineMs != C.TIME_UNSET;
     if (shouldDropBuffersToKeyframe(earlyUs, elapsedRealtimeUs, isLastBuffer)
         && maybeDropBuffersToKeyframe(positionUs, treatDroppedBuffersAsSkipped)) {
@@ -1075,7 +1119,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
 
     if (Util.SDK_INT >= 21) {
       // Let the underlying framework time the release.
-      if (earlyUs < 50000) {
+      if (earlyUs < MAX_EARLY_US_THRESHOLD) {
         if (adjustedReleaseTimeNs == lastFrameReleaseTimeNs) {
           // This frame should be displayed on the same vsync with the previous released frame. We
           // are likely rendering frames at a rate higher than the screen refresh rate. Skip
@@ -1115,6 +1159,61 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     return false;
   }
 
+  /** Returns whether a buffer or a processed frame should be force rendered. */
+  private boolean shouldForceRender(long positionUs, long earlyUs) {
+    if (joiningDeadlineMs != C.TIME_UNSET) {
+      // No force rendering during joining.
+      return false;
+    }
+    boolean isStarted = getState() == STATE_STARTED;
+    switch (firstFrameState) {
+      case FIRST_FRAME_NOT_RENDERED_ONLY_ALLOWED_IF_STARTED:
+        return isStarted;
+      case FIRST_FRAME_NOT_RENDERED:
+        return true;
+      case FIRST_FRAME_NOT_RENDERED_AFTER_STREAM_CHANGE:
+        return positionUs >= 0;
+      case FIRST_FRAME_RENDERED:
+        long elapsedSinceLastRenderUs = msToUs(ClockUtils.elapsedRealtime()) - lastRenderRealtimeUs;
+        return isStarted && shouldForceRenderOutputBuffer(earlyUs, elapsedSinceLastRenderUs);
+      default:
+        throw new IllegalStateException();
+    }
+  }
+
+  /**
+   * Calculates the time interval between the current player position and the buffer presentation
+   * time.
+   *
+   * @param positionUs The current media time in microseconds, measured at the start of the current
+   *     iteration of the rendering loop.
+   * @param elapsedRealtimeUs {@link SystemClock#elapsedRealtime()} in microseconds, measured at the
+   *     start of the current iteration of the rendering loop.
+   * @param bufferPresentationTimeUs The presentation time of the output buffer in microseconds,
+   *     with {@linkplain #getOutputStreamOffsetUs() stream offset added}.
+   * @param isStarted Whether the playback is in {@link #STATE_STARTED}.
+   * @param playbackSpeed The current playback speed.
+   * @return The calculated early time, in microseconds.
+   */
+  private static long calculateEarlyTimeUs(
+      long positionUs,
+      long elapsedRealtimeUs,
+      long bufferPresentationTimeUs,
+      boolean isStarted,
+      float playbackSpeed) {
+    // Calculate how early we are. In other words, the realtime duration that needs to elapse whilst
+    // the renderer is started before the frame should be rendered. A negative value means that
+    // we're already late.
+    // Note: Use of double rather than float is intentional for accuracy in the calculations below.
+    long earlyUs = (long) ((bufferPresentationTimeUs - positionUs) / (double) playbackSpeed);
+    if (isStarted) {
+      // Account for the elapsed time since the start of this iteration of the rendering loop.
+      earlyUs -= Util.msToUs(ClockUtils.elapsedRealtime()) - elapsedRealtimeUs;
+    }
+
+    return earlyUs;
+  }
+
   private void notifyFrameMetadataListener(
       long presentationTimeUs, long releaseTimeNs, Format format) {
     if (frameMetadataListener != null) {
@@ -1126,7 +1225,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
   /** Called when a buffer was processed in tunneling mode. */
   protected void onProcessedTunneledBuffer(long presentationTimeUs) throws ExoPlaybackException {
     updateOutputFormatForTime(presentationTimeUs);
-    maybeNotifyVideoSizeChanged();
+    maybeNotifyVideoSizeChanged(decodedVideoSize);
     decoderCounters.renderedOutputBufferCount++;
     maybeNotifyRenderedFirstFrame();
     onProcessedOutputBuffer(presentationTimeUs);
@@ -1149,7 +1248,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
   @Override
   protected void onProcessedStreamChange() {
     super.onProcessedStreamChange();
-    clearRenderedFirstFrame();
+    lowerFirstFrameState(FIRST_FRAME_NOT_RENDERED_AFTER_STREAM_CHANGE);
   }
 
   /**
@@ -1180,6 +1279,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
       long earlyUs, long elapsedRealtimeUs, boolean isLastBuffer) {
     return isBufferVeryLate(earlyUs) && !isLastBuffer;
   }
+
 
   /**
    * Returns whether to force rendering an output buffer.
@@ -1292,31 +1392,32 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    * Renders the output buffer with the specified index. This method is only called if the platform
    * API version of the device is less than 21.
    *
-   * @param codec The codec that owns the output buffer.
-   * @param index The index of the output buffer to drop.
+   * @param codec        The codec that owns the output buffer.
+   * @param index        The index of the output buffer to drop.
    * @param presentationTimeUs The presentation time of the output buffer, in microseconds.
    */
   protected void renderOutputBuffer(MediaCodecAdapter codec, int index, long presentationTimeUs) {
-    maybeNotifyVideoSizeChanged();
-    outputHandler.handleVideoSample(codec, index, presentationTimeUs);
+    this.output.processVideoFrame(codec, index, presentationTimeUs);
     TraceUtil.beginSection("releaseOutputBuffer");
     codec.releaseOutputBuffer(index, false);
     TraceUtil.endSection();
-    lastRenderRealtimeUs = SystemClock.elapsedRealtime() * 1000;
     decoderCounters.renderedOutputBufferCount++;
     consecutiveDroppedFrameCount = 0;
+
+    lastRenderRealtimeUs = msToUs(ClockUtils.elapsedRealtime());
+    maybeNotifyVideoSizeChanged(decodedVideoSize);
     maybeNotifyRenderedFirstFrame();
   }
 
   private void setJoiningDeadlineMs() {
     joiningDeadlineMs =
         allowedJoiningTimeMs > 0
-            ? (SystemClock.elapsedRealtime() + allowedJoiningTimeMs)
+            ? (ClockUtils.elapsedRealtime() + allowedJoiningTimeMs)
             : C.TIME_UNSET;
   }
 
-  private void clearRenderedFirstFrame() {
-    renderedFirstFrameAfterReset = false;
+  private void lowerFirstFrameState(int firstFrameState) {
+    this.firstFrameState = min(this.firstFrameState, firstFrameState);
     // The first frame notification is triggered by renderOutputBuffer or renderOutputBufferV21 for
     // non-tunneled playback, onQueueInputBuffer for tunneled playback prior to API level 23, and
     // OnFrameRenderedListenerV23.onFrameRenderedListener for tunneled playback on API level 23 and
@@ -1330,38 +1431,24 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     }
   }
 
-  /* package */ void maybeNotifyRenderedFirstFrame() {
-    renderedFirstFrameAfterEnable = true;
-    if (!renderedFirstFrameAfterReset) {
-      renderedFirstFrameAfterReset = true;
-      eventDispatcher.renderedFirstFrame(null);
+  private void maybeNotifyRenderedFirstFrame() {
+    if (this.output != null && firstFrameState != FIRST_FRAME_RENDERED) {
+      firstFrameState = FIRST_FRAME_RENDERED;
+      eventDispatcher.renderedFirstFrame(this.output);
       haveReportedFirstFrameRenderedForCurrentSurface = true;
     }
   }
 
   private void maybeRenotifyRenderedFirstFrame() {
-    if (haveReportedFirstFrameRenderedForCurrentSurface) {
-      eventDispatcher.renderedFirstFrame(null);
+    if (this.output != null && haveReportedFirstFrameRenderedForCurrentSurface) {
+      eventDispatcher.renderedFirstFrame(this.output);
     }
   }
 
-  private void clearReportedVideoSize() {
-    reportedVideoSize = null;
-  }
-
-  private void maybeNotifyVideoSizeChanged() {
-    if ((currentWidth != Format.NO_VALUE || currentHeight != Format.NO_VALUE)
-        && (reportedVideoSize == null
-            || reportedVideoSize.width != currentWidth
-            || reportedVideoSize.height != currentHeight
-            || reportedVideoSize.unappliedRotationDegrees != currentUnappliedRotationDegrees
-            || reportedVideoSize.pixelWidthHeightRatio != currentPixelWidthHeightRatio)) {
-      reportedVideoSize =
-          new VideoSize(
-              currentWidth,
-              currentHeight,
-              currentUnappliedRotationDegrees,
-              currentPixelWidthHeightRatio);
+  /** Notifies the new video size. */
+  private void maybeNotifyVideoSizeChanged(VideoSize newOutputSize) {
+    if (!newOutputSize.equals(VideoSize.UNKNOWN) && !newOutputSize.equals(reportedVideoSize)) {
+      reportedVideoSize = newOutputSize;
       eventDispatcher.videoSizeChanged(reportedVideoSize);
     }
   }
@@ -1374,7 +1461,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
 
   private void maybeNotifyDroppedFrames() {
     if (droppedFrames > 0) {
-      long now = SystemClock.elapsedRealtime();
+      long now = ClockUtils.elapsedRealtime();
       long elapsedMs = now - droppedFrameAccumulationStartTimeMs;
       eventDispatcher.droppedFrames(droppedFrames, elapsedMs);
       droppedFrames = 0;
@@ -1552,6 +1639,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     return new MediaCodecVideoDecoderException(cause, codecInfo, null);
   }
 
+
   /**
    * Returns a maximum video size to use when configuring a codec for {@code format} in a way that
    * will allow possible adaptation to other compatible formats that are expected to have the same
@@ -1579,7 +1667,8 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
                 isVerticalVideo ? shortEdgePx : longEdgePx,
                 isVerticalVideo ? longEdgePx : shortEdgePx);
         float frameRate = format.frameRate;
-        if (codecInfo.isVideoSizeAndRateSupportedV21(alignedSize.x, alignedSize.y, frameRate)) {
+        if (alignedSize != null
+            && codecInfo.isVideoSizeAndRateSupportedV21(alignedSize.x, alignedSize.y, frameRate)) {
           return alignedSize;
         }
       } else {
@@ -1624,6 +1713,11 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     }
   }
 
+  private static boolean codecAppliesRotation() {
+    // axmol: ByteBuffer Mode always doesn't applies rotation by video decoder
+    return false; /*Util.SDK_INT >= 21*/
+  }
+
   /**
    * Returns whether the device is known to do post processing by default that isn't compatible with
    * ExoPlayer.
@@ -1641,6 +1735,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
     // logic for skipping decode-only frames.
     return "NVIDIA".equals(Util.MANUFACTURER);
   }
+
 
   protected static final class CodecMaxValues {
 

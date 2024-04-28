@@ -1,3 +1,27 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmolengine.github.io/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+
 #if defined(__ANDROID__)
 #    include "AndroidMediaEngine.h"
 #    include "platform/android/jni/JniHelper.h"
@@ -19,7 +43,8 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeHandleVideoSamp
                                                                               int outputX,
                                                                               int outputY,
                                                                               int videoX,
-                                                                              int videoY)
+                                                                              int videoY,
+                                                                              int rotation)
 {
     auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
     if (!mediaEngine)
@@ -27,7 +52,31 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeHandleVideoSamp
 
     auto sampleData = static_cast<uint8_t*>(env->GetDirectBufferAddress(sampleBuffer));
 
-    mediaEngine->handleVideoSample(sampleData, sampleLen, outputX, outputY, videoX, videoY);
+    mediaEngine->handleVideoSample(sampleData, sampleLen, outputX, outputY, videoX, videoY, rotation);
+}
+
+JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeSetDuration(JNIEnv* env,
+                                                                              jclass,
+                                                                              jlong pME,
+                                                                              double duration)
+{
+    auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
+    if (!mediaEngine)
+        return;
+
+    mediaEngine->updateDuration(duration);
+}
+
+JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeSetCurrentTime(JNIEnv* env,
+                                                                              jclass,
+                                                                              jlong pME,
+                                                                              double currentTime)
+{
+    auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
+    if (!mediaEngine)
+        return;
+
+    mediaEngine->updateCurrentTime(currentTime);
 }
 }
 
@@ -113,6 +162,7 @@ bool AndroidMediaEngine::transferVideoFrame()
 
             ax::MEVideoFrame frame{buffer.data(), buffer.data() + _outputDim.x * _outputDim.y, buffer.size(),
                                    ax::MEVideoPixelDesc{ax::MEVideoPixelFormat::NV12, _outputDim}, _videoDim};
+            frame._vpd._rotation = _videoRotation;
             assert(static_cast<int>(frame._dataLen) >= frame._vpd._dim.x * frame._vpd._dim.y * 3 / 2);
             _onVideoFrame(frame);
             _frameBuffer2.clear();
@@ -127,12 +177,14 @@ void AndroidMediaEngine::handleVideoSample(const uint8_t* buf,
                                            int outputX,
                                            int outputY,
                                            int videoX,
-                                           int videoY)
+                                           int videoY,
+                                           int rotation)
 {
     std::unique_lock<std::mutex> lck(_frameBuffer1Mtx);
     _frameBuffer1.assign(buf, buf + len);
     _outputDim.set(outputX, outputY);
     _videoDim.set(videoX, videoY);
+    _videoRotation = rotation;
 }
 
 NS_AX_END

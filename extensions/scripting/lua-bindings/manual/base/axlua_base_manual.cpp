@@ -2439,7 +2439,7 @@ tolua_lerror:
     return 0;
 }
 
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 #    include "navmesh/NavMesh.h"
 int axlua_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
 {
@@ -2591,7 +2591,7 @@ tolua_lerror:
     return 0;
 }
 
-#endif  //#if AX_USE_NAVMESH
+#endif  //#if defined(AX_ENABLE_NAVMESH)
 
 static int tolua_cocos2d_Spawn_create(lua_State* tolua_S)
 {
@@ -3787,7 +3787,7 @@ tolua_lerror:
     return 0;
 }
 
-#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
 #    include "physics3d/Physics3DWorld.h"
 int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
@@ -3896,12 +3896,12 @@ static void extendScene(lua_State* tolua_S)
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
-#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
         tolua_function(tolua_S, "getPhysics3DWorld", axlua_Scene_getPhysics3DWorld);
         tolua_function(tolua_S, "setPhysics3DDebugCamera", axlua_Scene_setPhysics3DDebugCamera);
 #endif
 
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
         tolua_function(tolua_S, "setNavMeshDebugCamera", axlua_Scene_setNavMeshDebugCamera);
         tolua_function(tolua_S, "setNavMesh", axlua_Scene_setNavMesh);
         tolua_function(tolua_S, "getNavMesh", axlua_Scene_getNavMesh);
@@ -5972,181 +5972,6 @@ static void extendTMXTiledMap(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
-static int axlua_Console_send(lua_State* tolua_S)
-{
-    ax::Console* cobj = nullptr;
-    int argc               = 0;
-    bool ok                = true;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S, 1, "ax.Console", 0, &tolua_err))
-        goto tolua_lerror;
-#endif
-    cobj = (ax::Console*)tolua_tousertype(tolua_S, 1, 0);
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_Console_send'", NULL);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 2)
-    {
-        int arg0;
-        ok &= luaval_to_int32(tolua_S, 2, &arg0, "ax.Console:send");
-        std::string arg1;
-        ok &= luaval_to_std_string(tolua_S, 3, &arg1, "ax.Console:send");
-        if (!ok)
-            return 0;
-
-        send(arg0, arg1.c_str(), arg1.length(), 0);
-        return 0;
-    }
-    ok = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.Console:send", argc, 2);
-    return 0;
-#if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_Console_send'.", &tolua_err);
-#endif
-
-    return 0;
-}
-
-static int axlua_Console_wait(lua_State* tolua_S)
-{
-    ax::Console* cobj = nullptr;
-    int argc               = 0;
-    bool ok                = true;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S, 1, "ax.Console", 0, &tolua_err))
-        goto tolua_lerror;
-#endif
-    cobj = (ax::Console*)tolua_tousertype(tolua_S, 1, 0);
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_Console_wait'", NULL);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 1)
-    {
-        int arg0;
-        ok &= luaval_to_int32(tolua_S, 2, &arg0, "ax.Console:wait");
-        if (!ok)
-            return 0;
-
-        std::chrono::milliseconds dura(arg0 * 1000);
-        std::this_thread::sleep_for(dura);
-        return 0;
-    }
-    ok = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.Console:wait", argc, 2);
-    return 0;
-#if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_Console_wait'.", &tolua_err);
-#endif
-
-    return 0;
-}
-
-static int axlua_Console_addCommand(lua_State* tolua_S)
-{
-    ax::Console* cobj = nullptr;
-    int argc               = 0;
-    bool ok                = true;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S, 1, "ax.Console", 0, &tolua_err))
-        goto tolua_lerror;
-#endif
-
-    cobj = (ax::Console*)tolua_tousertype(tolua_S, 1, 0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_Console_addCommand'", NULL);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-    if (ok && argc == 2)
-    {
-        ValueMap arg0;
-        ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.Console:addCommand");
-        //
-        std::string name = std::string(arg0["name"].asString());
-        std::string help = std::string(arg0["help"].asString());
-
-#if _AX_DEBUG >= 1
-        if (!toluafix_isfunction(tolua_S, 3, "LUA_FUNCTION", 0, &tolua_err))
-        {
-            goto tolua_lerror;
-        }
-#endif
-        LUA_FUNCTION handler = 0;
-        if (ok)
-        {
-            handler = (toluafix_ref_function(tolua_S, 3, 0));
-            ScriptHandlerMgr::getInstance()->addCustomHandler((void*)cobj, handler);
-
-            Console::Command outValue = {name, help, [=](int fd, std::string_view args) {
-                                             auto stack = LuaEngine::getInstance()->getLuaStack();
-                                             auto Ls    = stack->getLuaState();
-                                             // lua-callback, the third param;
-                                             tolua_pushnumber(Ls, fd);
-                                             tolua_pushstring(Ls, args.data());
-
-                                             stack->executeFunctionByHandler(handler, 2);
-                                         }};
-            cobj->addCommand(outValue);
-        }
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.Console:addCommand", argc, 2);
-    return 0;
-#if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_Console_addCommand'.", &tolua_err);
-#endif
-
-    return 0;
-}
-
-static void extendConsole(lua_State* tolua_S)
-{
-    lua_pushstring(tolua_S, "ax.Console");
-    lua_rawget(tolua_S, LUA_REGISTRYINDEX);
-    if (lua_istable(tolua_S, -1))
-    {
-        tolua_function(tolua_S, "wait", axlua_Console_wait);
-        tolua_function(tolua_S, "send", axlua_Console_send);
-        tolua_function(tolua_S, "addCommand", axlua_Console_addCommand);
-    }
-    lua_pop(tolua_S, 1);
-}
-
 static int axlua_OrbitCamera_sphericalRadius(lua_State* tolua_S)
 {
     int argc                   = 0;
@@ -7417,7 +7242,6 @@ int register_all_ax_manual(lua_State* tolua_S)
 
     extendLabel(tolua_S);
     extendTMXTiledMap(tolua_S);
-    extendConsole(tolua_S);
     extendOrbitCamera(tolua_S);
     extendTMXLayer(tolua_S);
     extendFastTMXLayer(tolua_S);

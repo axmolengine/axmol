@@ -35,16 +35,16 @@ THE SOFTWARE.
 #include "base/UTF8.h"
 #include "renderer/Renderer.h"
 
-#if AX_USE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 #    include "physics/PhysicsWorld.h"
 #endif
 
-#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
 #    include "physics3d/Physics3DWorld.h"
 #    include "physics3d/Physics3DComponent.h"
 #endif
 
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 #    include "navmesh/NavMesh.h"
 #endif
 
@@ -65,17 +65,17 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
     AX_SAFE_RELEASE(_physics3DWorld);
     AX_SAFE_RELEASE(_physics3dDebugCamera);
 #endif
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
     AX_SAFE_RELEASE(_navMesh);
 #endif
     _director->getEventDispatcher()->removeEventListener(_event);
     AX_SAFE_RELEASE(_event);
 
-#if AX_USE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
     delete _physicsWorld;
 #endif
 
@@ -88,7 +88,7 @@ Scene::~Scene()
 #endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
 }
 
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 void Scene::setNavMesh(NavMesh* navMesh)
 {
     if (_navMesh != navMesh)
@@ -216,7 +216,7 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
         camera->clearBackground();
         // visit the scene
         visit(renderer, transform, 0);
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
         if (_navMesh && _navMeshDebugCamera == camera)
         {
             _navMesh->debugDraw(renderer);
@@ -232,7 +232,7 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
         //        camera->setNodeToParentTransform(eyeCopy);
     }
 
-#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
     if (_physics3DWorld && _physics3DWorld->isDebugDrawEnabled())
     {
         Camera* physics3dDebugCamera = _physics3dDebugCamera != nullptr ? _physics3dDebugCamera : defaultCamera;
@@ -306,7 +306,7 @@ void Scene::removeAllChildren()
     }
 }
 
-#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
 void Scene::setPhysics3DDebugCamera(Camera* camera)
 {
     AX_SAFE_RETAIN(camera);
@@ -315,7 +315,7 @@ void Scene::setPhysics3DDebugCamera(Camera* camera)
 }
 #endif
 
-#if AX_USE_NAVMESH
+#if defined(AX_ENABLE_NAVMESH)
 void Scene::setNavMeshDebugCamera(Camera* camera)
 {
     AX_SAFE_RETAIN(camera);
@@ -325,7 +325,7 @@ void Scene::setNavMeshDebugCamera(Camera* camera)
 
 #endif
 
-#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION))
+#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION))
 
 Scene* Scene::createWithPhysics()
 {
@@ -350,7 +350,7 @@ bool Scene::initWithPhysics()
 
 bool Scene::initPhysicsWorld()
 {
-#    if AX_USE_PHYSICS
+#    if defined(AX_ENABLE_PHYSICS)
     _physicsWorld = PhysicsWorld::construct(this);
 #    endif
 
@@ -359,7 +359,7 @@ bool Scene::initPhysicsWorld()
     {
         this->setContentSize(_director->getWinSize());
 
-#    if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#    if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
         Physics3DWorldDes info;
         AX_BREAK_IF(!(_physics3DWorld = Physics3DWorld::create(&info)));
         _physics3DWorld->retain();
@@ -373,21 +373,21 @@ bool Scene::initPhysicsWorld()
 
 #endif
 
-#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION) || AX_USE_NAVMESH)
+#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || defined(AX_ENABLE_NAVMESH))
 void Scene::stepPhysicsAndNavigation(float deltaTime)
 {
-#    if AX_USE_PHYSICS
+#    if defined(AX_ENABLE_PHYSICS)
     if (_physicsWorld && _physicsWorld->isAutoStep())
         _physicsWorld->update(deltaTime);
 #    endif
 
-#    if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#    if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
     if (_physics3DWorld)
     {
         _physics3DWorld->stepSimulate(deltaTime);
     }
 #    endif
-#    if AX_USE_NAVMESH
+#    if defined(AX_ENABLE_NAVMESH)
     if (_navMesh)
     {
         _navMesh->update(deltaTime);

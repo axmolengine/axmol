@@ -31,12 +31,12 @@
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UIWindow.h>
 #include "base/Director.h"
-#include "base/Console.h"
+#include "base/Logging.h"
 
 NS_AX_BEGIN
 
 // ios no MessageBox, use log instead
-void ccMessageBox(const char* msg, const char* title)
+void messageBox(const char* msg, const char* title)
 {
     // only enable it on iOS.
     // FIXME: Implement it for tvOS
@@ -57,11 +57,6 @@ void ccMessageBox(const char* msg, const char* title)
     auto rootViewController = [UIApplication sharedApplication].windows[0].rootViewController;
     [rootViewController presentViewController:alertController animated:YES completion:nil];
 #endif
-}
-
-void LuaLog(const char* format)
-{
-    puts(format);
 }
 
 NS_AX_END

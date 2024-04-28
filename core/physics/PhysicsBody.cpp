@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "physics/PhysicsBody.h"
-#if AX_USE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 
 #    include <climits>
 #    include <algorithm>
@@ -1023,4 +1023,4 @@ void PhysicsBody::removeFromPhysicsWorld()
 
 NS_AX_END
 
-#endif  // AX_USE_PHYSICS
+#endif  // defined(AX_ENABLE_PHYSICS)

@@ -4,17 +4,17 @@
 
 - **PowerShell**: used to install Axmol. PowerShell 7 is recommended, it supports Windows, macOS and Linux.
   - Quick installation: 
-     - macOS, Ubuntu, ArchLinux: run `1k/install-pwsh.sh` in `axmol` root directory (recommended).
+     - macOS, Ubuntu, ArchLinux: run `setup.ps1` in `axmol` root directory (recommended).
      - Windows 10+: system installed PowerShell 5.x should work, but in that case you'll need to run the command `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force` in order to allow PowerShell script file to run.
   - Manual installation: [Instructions](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) /  [Download](https://github.com/PowerShell/PowerShell/releases)
-- **CMake 3.28.1**
+- **CMake 3.28.1+**
     - Manual installation is recommended ([download](https://cmake.org/download/)). Make sure to add CMake bin to the system `PATH`, otherwise `axmol build` will auto-setup it to `tools/external/cmake`.
 
 ## Prerequisites
 
   1. Download or clone Axmol from GitHub ([https://github.com/axmolengine/axmol](https://github.com/axmolengine/axmol)).
   2. Enter `axmol` root directory.
-  3. Run `pwsh setup.ps1`. Restart the console after it has finished for environment variables to take effect.
+  3. Run `setup.ps1` in windows powershell or (macOS/Linux/ArchLinux terminal). Restart the console after it has finished for environment variables to take effect.
   4. Ensure that the C / C++ compiler toolset is installed on your host machine.
      - Windows: Visual Studio 2022 with desktop workflow
      - macOS: XCode 14.2+
@@ -22,7 +22,7 @@
 
 ## Creating a new project
 
-Enter to PowerShell (`pwsh`). This is the command to generate a new project:
+Open any terminal(cmd.exe/powershell/pwsh/bash/zsh/WindowsTerminal/iTerm2). This is the command to generate a new project:
 
 ```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua] [--portrait] PROJECT_NAME```
 
@@ -71,10 +71,6 @@ The `axmol build` command will auto-setup the general toolsets, so you'll be abl
 -configOnly: if this parameter is present, it will skip the 'build' step
 ```
 
-## How to quick build the engine for host targets
-
-Go to `axmol` root directory and run `build.ps1` without any parameters. It will build `HelloCpp` by default.
-
 ## How to quick build a test project (e.g. 'cpp-tests')
 
 Using a PowerShell console window (command `pwsh`), go to `axmol\tests\<testdir e.g. 'cpp-tests'>` directory and perform `axmol build -p android -a arm64`. It will build `cpp-tests` for Android.
@@ -109,7 +105,7 @@ Using a PowerShell console window (command `pwsh`), go to `axmol\tests\<testdir 
     
 ~~It only supports C++17.~~ Since Axmol 2.1 migration to CppWinRT it has C++20 support.
 
-  ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0" "-DAX_VS_DEPLOYMENT_TARGET=10.0.17763.0"```  
+  ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0"```  
 
 #### Creating the Visual Studio solution for all Axmol test projects (Win / UWP)
 
@@ -150,7 +146,7 @@ Note: if you use non-SDK provided CMake, you will need to download `ninja` from 
   set ANDROID_HOME=D:\dev\adt\sdk
   
   # Goto xxx\proj.android
-  .\gradlew.bat assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=arm64-v8a --parallel --info
+  .\gradlew.bat assembleRelease -P__1K_ARCHS=arm64-v8a --parallel --info
   ```
 
 ### iOS, tvOS and macOS

@@ -34,36 +34,12 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-
-void ccMessageBox(const char * pszMsg, const char * pszTitle)
+void messageBox(const char * pszMsg, const char * pszTitle)
 {
     // Create the message dialog and set its content
     auto message = PlatformStringFromString(pszMsg);
     auto title = PlatformStringFromString(pszTitle);
     GLViewImpl::sharedGLView()->ShowMessageBox(title, message);
-}
-
-void LuaLog(const char *pszMsg)
-{
-#if defined(_AX_DEBUG)
-    int bufflen = MultiByteToWideChar(CP_UTF8, 0, pszMsg, -1, NULL, 0);
-    WCHAR* widebuff = new WCHAR[bufflen + 1];
-    memset(widebuff, 0, sizeof(WCHAR) * (bufflen + 1));
-    MultiByteToWideChar(CP_UTF8, 0, pszMsg, -1, widebuff, bufflen);
-
-
-    OutputDebugStringW(widebuff);
-    OutputDebugStringA("\n");
-
-	bufflen = WideCharToMultiByte(CP_ACP, 0, widebuff, -1, NULL, 0, NULL, NULL);
-	char* buff = new char[bufflen + 1];
-	memset(buff, 0, sizeof(char) * (bufflen + 1));
-	WideCharToMultiByte(CP_ACP, 0, widebuff, -1, buff, bufflen, NULL, NULL);
-	puts(buff);
-
-	delete[] widebuff;
-	delete[] buff;
-#endif
 }
 
 NS_AX_END

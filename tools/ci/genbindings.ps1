@@ -11,8 +11,8 @@ $succeed = $true
 if (($stage -band 1)) {
     # ensure prebuilt lib downloaded
     Push-Location $AX_ROOT
-    $build_script = Join-Path $AX_ROOT 'build.ps1'
-    &$build_script -c
+    ./setup.ps1
+    axmol -c
     Pop-Location
 
     (Get-Command python.exe).Path

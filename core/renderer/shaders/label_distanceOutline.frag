@@ -1,5 +1,6 @@
 #version 310 es
 precision highp float;
+#include "base.glsl"
 
 const float thickness = 0.15;
 
@@ -17,13 +18,9 @@ layout(location = SV_Target0) out vec4 FragColor;
 
 void main()
 {
-#ifndef GLES2
     float dist = texture(u_tex0, v_texCoord).x;
     float smoothing = fwidth(dist);
-#else
-    float dist = texture(u_tex0, v_texCoord).w;
-    float smoothing = 0.04;
-#endif
+
     float pivot = abs(0.5 - thickness * u_effectColor.w);
     float alpha = smoothstep(pivot - smoothing, pivot + smoothing, dist);
     float border = smoothstep(0.5 - smoothing, 0.5 + smoothing, dist);

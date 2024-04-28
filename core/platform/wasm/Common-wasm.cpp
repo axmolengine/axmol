@@ -30,21 +30,16 @@ THE SOFTWARE.
 
 #include "platform/Common.h"
 #include "platform/wasm/StdC-wasm.h"
-#include "base/Console.h"
+#include "base/Logging.h"
 #include <emscripten/emscripten.h>
 
 NS_AX_BEGIN
 
-void ccMessageBox(const char * msg, const char * title)
+void messageBox(const char * msg, const char * title)
 {
     EM_ASM_ARGS({
         window.alert(UTF8ToString($0) + ": " + UTF8ToString($1));
     }, title, msg);
-}
-
-void LuaLog(const char * format)
-{
-    puts(format);
 }
 
 NS_AX_END

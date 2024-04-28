@@ -272,8 +272,8 @@ public:
     virtual void onTouchCancelled(Touch* pTouch, Event* pEvent) override;
 
 protected:
-    long __indexFromOffset(Vec2 offset);
-    long _indexFromOffset(Vec2 offset);
+    ssize_t __indexFromOffset(Vec2 offset);
+    ssize_t _indexFromOffset(Vec2 offset);
     Vec2 __offsetFromIndex(ssize_t index);
     Vec2 _offsetFromIndex(ssize_t index);
 

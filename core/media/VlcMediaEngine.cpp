@@ -5,6 +5,30 @@ required codec-runtime: ubuntu-restricted-extras (contains intel-media-va-driver
 sudo apt install ubuntu-restricted-extras
 
 */
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmolengine.github.io/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+
 #if defined(AX_ENABLE_VLC_MEDIA)
 #    include "VlcMediaEngine.h"
 
@@ -315,7 +339,16 @@ bool VlcMediaEngine::updatePlaybackProperties()
                 AXLOGD("VlcMediaEngine: sourceUri: {}, codec: {}", _sourceUri, _videoCodecMimeType);
 
                 auto vdi = track->video;
-                _videoDim.set(vdi->i_width, vdi->i_height);
+                auto vdw = vdi->i_width;
+                auto vdh = vdi->i_height;
+                switch (vdi->i_orientation)
+                {
+                case libvlc_video_orient_left_bottom: /**< Rotated 90 degrees clockwise (or 270 anti-clockwise) */
+                case libvlc_video_orient_right_top:   /**< Rotated 90 degrees anti-clockwise */
+                    std::swap(vdw, vdh);
+                default:;
+                }
+                _videoDim.set(vdw, vdh);
                 break;
             }
         }
@@ -380,6 +413,17 @@ bool VlcMediaEngine::setCurrentTime(double fSeekTimeInSec)
 #    endif
     return true;
 }
+
+double VlcMediaEngine::getCurrentTime()
+{
+    return libvlc_media_player_get_time(_mp) / 1000.0;
+}
+
+double VlcMediaEngine::getDuration()
+{
+    return libvlc_media_player_get_length(_mp) / 1000.0;
+}
+
 bool VlcMediaEngine::play()
 {
     if (_mlp && _state != MEMediaState::Closed)

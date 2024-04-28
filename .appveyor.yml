@@ -17,8 +17,8 @@ skip_commits:
     - '**/*.md.in'
 
 build_script:
-  - pwsh: .\build.ps1 -p wasm -xb '--target','cpp-tests','--config','Release' -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON','-DAX_WASM_THREADS=8'
-  - pwsh: .\build.ps1 -p wasm -xb '--target','fairygui-tests','--config','Release' -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON','-DAX_WASM_THREADS=8'
+  - pwsh: .\tools\cmdline\build.ps1 -p wasm -xb '--target','cpp-tests','--config','Release' -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON','-DAX_WASM_THREADS=8'
+  - pwsh: .\tools\cmdline\build.ps1 -p wasm -xb '--target','fairygui-tests','--config','Release' -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON','-DAX_WASM_THREADS=8'
   - pwsh: 7z a build_wasm.zip build_wasm/bin/**/*
 
 artifacts:

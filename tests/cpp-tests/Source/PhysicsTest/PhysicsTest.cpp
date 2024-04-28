@@ -25,7 +25,7 @@
 
 #include "PhysicsTest.h"
 
-#if AX_USE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 
 #    include <cmath>
 #    include "ui/CocosGUI.h"
@@ -64,7 +64,7 @@ const int DRAG_BODYS_TAG = 0x80;
 
 void PhysicsDemo::toggleDebug()
 {
-#    if AX_USE_PHYSICS
+#    if defined(AX_ENABLE_PHYSICS)
     _debugDraw = !_debugDraw;
     _physicsWorld->setDebugDrawMask(_debugDraw ? PhysicsWorld::DEBUGDRAW_ALL : PhysicsWorld::DEBUGDRAW_NONE);
 #    endif

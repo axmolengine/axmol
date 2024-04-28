@@ -2,6 +2,7 @@
 precision highp float;
 precision highp int;
 
+#include "base.glsl"
 #include "colorUtils.glsl"
 
 layout(location = COLOR0) in vec4 v_color;
@@ -20,13 +21,8 @@ void main()
 {
     vec3 YUV;
 
-#ifndef GLES2
     YUV.x = texture(u_tex0, v_texCoord).x; // Y
-    YUV.yz = texture(u_tex1, v_texCoord).xy; // CbCr
-#else
-    YUV.x = texture(u_tex0, v_texCoord).w; // Y
-    YUV.yz = texture(u_tex1, v_texCoord).xw; // CbCr
-#endif
+    YUV.yz = texture(u_tex1, v_texCoord).RG8_CHANNEL; // CbCr
 	
     /* Convert YUV to RGB */
     vec4 OutColor;

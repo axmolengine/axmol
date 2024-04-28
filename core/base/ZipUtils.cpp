@@ -72,7 +72,7 @@ yasio::byte_buffer ZipUtils::compressGZ(const void* in, size_t inlen, int level)
     d_stream.opaque = (voidpf)0;
 
     d_stream.next_in   = (Bytef*)in;
-    d_stream.avail_in  = inlen;
+    d_stream.avail_in  = static_cast<uInt>(inlen);
     d_stream.next_out  = buffer;
     d_stream.avail_out = sizeof(buffer);
     yasio::byte_buffer output;
@@ -131,7 +131,7 @@ yasio::byte_buffer ZipUtils::decompressGZ(const void* in, size_t inlen, int expe
     d_stream.opaque = (voidpf)0;
 
     d_stream.next_in   = (Bytef*)in;
-    d_stream.avail_in  = inlen;
+    d_stream.avail_in  = static_cast<uInt>(inlen);
     d_stream.next_out  = buffer;
     d_stream.avail_out = sizeof(buffer);
     yasio::byte_buffer output;
@@ -349,7 +349,7 @@ int ZipUtils::inflateGZipFile(const char* path, unsigned char** out)
     auto totalSize = buffer.size();
     if (out)
         *out = buffer.release_pointer();
-    return totalSize;
+    return static_cast<int>(totalSize);
 }
 
 bool ZipUtils::isCCZFile(const char* path)

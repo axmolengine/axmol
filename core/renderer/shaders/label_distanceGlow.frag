@@ -1,6 +1,8 @@
 #version 310 es
 precision highp float;
 
+#include "base.glsl"
+
 layout(location = COLOR0) in vec4 v_color;
 layout(location = TEXCOORD0) in vec2 v_texCoord;
 
@@ -15,13 +17,9 @@ layout(location = SV_Target0) out vec4 FragColor;
 
 void main()
 {
-#ifndef GLES2
     float dist = texture(u_tex0, v_texCoord).x;
-    float smoothing = fwidth(dist);
-#else
-    float dist = texture(u_tex0, v_texCoord).w;
-    float smoothing = 0.04;
-#endif
+    float smoothing = FWIDTH(dist);
+
     float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, dist);
     float mu = smoothstep(0.5, 1.0, sqrt(dist));
     vec4 color = u_effectColor*(1.0-alpha) + u_textColor*alpha;

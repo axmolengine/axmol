@@ -1,3 +1,27 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmolengine.github.io/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+
 #include "AvfMediaEngine.h"
 
 #if defined(__APPLE__)
@@ -14,6 +38,8 @@
 #endif
 
 USING_NS_AX;
+
+#define AX_ALIGN_ANY(x, a) ((((x) + (a) - 1) / (a)) * (a))
 
 @interface AVMediaSessionHandler : NSObject
 - (AVMediaSessionHandler*)initWithMediaEngine:(AvfMediaEngine*)me;
@@ -297,6 +323,11 @@ void AvfMediaEngine::onStatusNotification(void* context)
                 }
             }
 
+            CGAffineTransform transform = [assetTrack preferredTransform];
+            double radians = atan2(transform.b, transform.a);
+            int degrees = static_cast<int>(radians * 180.0 / M_PI);
+            _videoRotation = AX_ALIGN_ANY(degrees, 90);
+
             _bFullColorRange = false;
             switch (videoOutputPF)
             {
@@ -369,12 +400,14 @@ bool AvfMediaEngine::transferVideoFrame()
         auto UVDataLen     = UVPitch * UVHeight;  // 1920x1080: UVDataLen=1036800
         auto frameYData    = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, 0);
         auto frameCbCrData = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, 1);
-        assert(YASIO_SZ_ALIGN(videoDim.x, 32) * videoDim.y * 3 / 2 == YDataLen + UVDataLen);
+        assert(_videoRotation % 180 == 0 ? YASIO_SZ_ALIGN(videoDim.x, 32) * videoDim.y * 3 / 2 == YDataLen + UVDataLen :
+               YASIO_SZ_ALIGN(videoDim.y, 32) * videoDim.x * 3 / 2 == YDataLen + UVDataLen);
         // Apple: both H264, HEVC(H265) bufferDimX=ALIGN(videoDim.x, 32), bufferDimY=videoDim.y
         // Windows:
         //    - H264: BufferDimX align videoDim.x with 16, BufferDimY as-is
         //    - HEVC(H265): BufferDim(X,Y) align videoDim(X,Y) with 32
         MEVideoFrame frame{frameYData, frameCbCrData, static_cast<size_t>(YDataLen + UVDataLen), MEVideoPixelDesc{_videoPF, MEIntPoint{YPitch, YHeight}}, videoDim};
+        frame._vpd._rotation = _videoRotation;
 #if defined(_DEBUG) || !defined(_NDEBUG)
         auto& ycbcrDesc = frame._ycbcrDesc;
         ycbcrDesc.YDim.x = YWidth;
@@ -448,6 +481,29 @@ bool AvfMediaEngine::setCurrentTime(double fSeekTimeInSec)
         [_player seekToTime:CMTimeMake(fSeekTimeInSec, 1)];
     return true;
 }
+
+double AvfMediaEngine::getCurrentTime()
+{
+    if (_player != nil) {
+        CMTime currTime = [_player currentTime];
+        if (CMTIME_IS_VALID(currTime))
+            return CMTimeGetSeconds(currTime);
+    }
+        
+    return 0.0;
+}
+
+double AvfMediaEngine::getDuration()
+{
+    if (_player != nil) {
+        if (_player.currentItem != nil) {
+            CMTime duration = _player.currentItem.asset.duration;
+            return CMTimeGetSeconds(duration);
+        }
+    }
+    return 0.0;
+}
+
 bool AvfMediaEngine::play()
 {
     if (_state != MEMediaState::Playing)

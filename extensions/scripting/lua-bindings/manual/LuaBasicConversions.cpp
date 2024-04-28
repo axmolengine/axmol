@@ -506,7 +506,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const ch
     return ok;
 }
 
-#if AX_USE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
@@ -542,7 +542,7 @@ bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue,
     }
     return ok;
 }
-#endif  //#if AX_USE_PHYSICS
+#endif  //#if defined(AX_ENABLE_PHYSICS)
 
 bool luaval_to_ssize_t(lua_State* L, int lo, ssize_t* outValue, const char* funcName)
 {
@@ -2255,7 +2255,7 @@ int vec4_to_luaval(lua_State* L, const ax::Vec4& vec4)
     return 1;
 }
 
-#if AX_USE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm)
 {
     if (nullptr == L)
@@ -2333,7 +2333,7 @@ void physics_contactdata_to_luaval(lua_State* L, const PhysicsContactData* data)
     lua_pushnumber(L, data->POINT_MAX);
     lua_rawset(L, -3);
 }
-#endif  //#if AX_USE_PHYSICS
+#endif  //#if defined(AX_ENABLE_PHYSICS)
 
 void size_to_luaval(lua_State* L, const Size& sz)
 {
@@ -3089,34 +3089,70 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     return true;
 }
 
+bool luaval_to_stageUniformLocation(lua_State* L, int pos, ax::backend::StageUniformLocation& loc, const char* message)
+{
+    if (L == nullptr)
+        return false;
+
+    if (pos < 0)
+        pos -= 1; // since we'll be pushing keys for table access
+
+    lua_pushstring(L, "location");
+    if (lua_gettable(L, pos) == LUA_TNIL)
+    {
+        AXASSERT(false, "invalidate UniformLocation value");
+    }
+    loc.location = int(lua_tointeger(L, -1));
+    lua_pop(L, 1);
+
+    lua_pushstring(L, "offset");
+    if (lua_gettable(L, pos) == LUA_TNIL)
+    {
+        AXASSERT(false, "invalidate UniformLocation value");
+    }
+    loc.offset = int(lua_tointeger(L, -1));
+    lua_pop(L, 1);
+
+    return true;
+}
+
+void stageUniformLocation_to_luaval(lua_State* L, const ax::backend::StageUniformLocation& loc)
+{
+    if (L == nullptr)
+        return;
+
+    lua_newtable(L);
+
+    lua_pushstring(L, "location");
+    lua_pushinteger(L, loc.location);
+    lua_rawset(L, -3);
+
+    lua_pushstring(L, "offset");
+    lua_pushinteger(L, loc.offset);
+    lua_rawset(L, -3);
+}
+
 bool luaval_to_uniformLocation(lua_State* L, int pos, ax::backend::UniformLocation& loc, const char* message)
 {
     if (L == nullptr)
         return false;
 
-    lua_pushstring(L, "location");
-    lua_gettable(L, pos);
-    if (lua_isnil(L, -1))
+    lua_pushstring(L, "vertStage");
+    if (lua_gettable(L, pos) == LUA_TNIL)
     {
         AXASSERT(false, "invalidate UniformLocation value");
     }
-    int len = lua_objlen(L, -1);
-    for (int i = 0; i < len; i++)
-    {
-        lua_rawgeti(L, -1, i + 1);
-        loc.location[i] = lua_tointeger(L, -1);
-        lua_pop(L, 1);
-    }
+    luaval_to_stageUniformLocation(L, -1, loc.vertStage, "");
     lua_pop(L, 1);
 
-    lua_pushstring(L, "shaderStage");
-    lua_gettable(L, pos);
-    if (lua_isnil(L, -1))
+    lua_pushstring(L, "fragStage");
+    if (lua_gettable(L, pos) == LUA_TNIL)
     {
         AXASSERT(false, "invalidate UniformLocation value");
     }
-    loc.shaderStage = static_cast<ax::backend::ShaderStage>(lua_tointeger(L, -1));
+    luaval_to_stageUniformLocation(L, -1, loc.fragStage, "");
     lua_pop(L, 1);
+
     return true;
 }
 
@@ -3126,18 +3162,13 @@ void uniformLocation_to_luaval(lua_State* L, const ax::backend::UniformLocation&
         return;
 
     lua_newtable(L);
-    lua_pushstring(L, "location");
-    lua_newtable(L);
-    for (int i = 1; i <= 2; i++)
-    {
-        lua_pushnumber(L, i);
-        lua_pushinteger(L, static_cast<int>(loc.location[i - 1]));
-        lua_rawset(L, -3);
-    }
+
+    lua_pushstring(L, "vertStage");
+    stageUniformLocation_to_luaval(L, loc.vertStage);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "shaderStage");
-    lua_pushinteger(L, static_cast<int>(loc.shaderStage));
+    lua_pushstring(L, "fragStage");
+    stageUniformLocation_to_luaval(L, loc.fragStage);
     lua_rawset(L, -3);
 }
 

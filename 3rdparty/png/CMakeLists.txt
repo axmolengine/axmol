@@ -52,9 +52,6 @@ add_library(${target_name} STATIC
   ${libpng_intel_sources}
 )
 
-# Avoid cmake builtin FindPNG.cmake add target again
-add_library(PNG::PNG ALIAS ${target_name})
-
 target_include_directories(${target_name} PUBLIC "${CMAKE_CURRENT_LIST_DIR}")
 
 if(_PNG_ISA_SIMD)
@@ -67,5 +64,7 @@ if(ANDROID)
     target_link_libraries(${target_name} INTERFACE cpufeatures)
 endif()
 
+# Export png as PNG::PNG to avoid cmake builtin FindPNG.cmake add target again
+add_library(PNG::PNG ALIAS ${target_name})
 set(PNG_PNG_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE STRING "png include dir" FORCE)
-set(PNG_LIBRARY "png" CACHE STRING "png include dir" FORCE)
+set(PNG_LIBRARY "PNG::PNG" CACHE STRING "png include dir" FORCE)

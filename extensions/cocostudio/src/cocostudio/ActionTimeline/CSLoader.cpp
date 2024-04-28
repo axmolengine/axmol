@@ -466,7 +466,10 @@ Node* CSLoader::loadNodeWithContent(std::string_view content)
         std::string png   = DICTOOL->getStringValueFromArray_json(doc, TEXTURES_PNG, i);
         plist             = _jsonPath + plist;
         png               = _jsonPath + png;
-        SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist, png);
+        if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
+        {
+            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist, png);
+        }
     }
 
     // decode node tree
@@ -933,14 +936,14 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
                     break;
                 }
             });
-
-            AXASSERT(readerVersion >= writterVersion,
-                     StringUtils::format(
-                         "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
-                         ") and the reader build id in your axis(", loader->_csBuildID.c_str(),
-                         ") are not match.\n", "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
-                         "https://github.com/axmolengine/axmol", " and replace it in your axis")
-                         .c_str());
+#    if _AX_DEBUG > 0
+            auto prompt = StringUtils::format(
+                    "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
+                    ") and the reader build id in your axmol(", loader->_csBuildID.c_str(),
+                    ") are not match.\n", "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
+                    "https://github.com/axmolengine/axmol", " and replace it in your axmol");
+            AXASSERT(readerVersion >= writterVersion, prompt.c_str());
+#endif
         }
 
         // decode plist
@@ -949,8 +952,11 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
         AXLOG("textureSize = %d", textureSize);
         for (int i = 0; i < textureSize; ++i)
         {
-            std::string plist = textures->Get(i)->c_str();
-            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+            std::string_view plist = textures->Get(i)->c_str();
+            if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
+            {
+                SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+            }
         }
 
         node = loader->nodeWithFlatBuffers(csparsebinary->nodeTree(), callback);
@@ -1050,15 +1056,14 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
                 break;
             }
         });
-
-        AXASSERT(readerVersion >= writterVersion,
-                 StringUtils::format(
-                     "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
-                     ") and the reader build id in your axis(", _csBuildID.c_str(), ") are not match.\n",
-                     "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
-                     "https://github.com/axmolengine/axmol", " and replace it in your axis")
-                     .c_str());
-
+#    if _AX_DEBUG > 0
+        auto prompt = StringUtils::format(
+                "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
+                ") and the reader build id in your axmol(", _csBuildID.c_str(), ") are not match.\n",
+                "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
+                "https://github.com/axmolengine/axmol", " and replace it in your axmol");
+        AXASSERT(readerVersion >= writterVersion, prompt.c_str());
+#endif
         if (readerVersion < writterVersion)
         {
             auto exceptionMsg =
@@ -1074,8 +1079,11 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
     int textureSize = textures->size();
     for (int i = 0; i < textureSize; ++i)
     {
-        std::string plist = textures->Get(i)->c_str();
-        SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+        std::string_view plist = textures->Get(i)->c_str();
+        if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
+        {
+            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+        }
     }
 
     Node* node = nodeWithFlatBuffers(csparsebinary->nodeTree(), callback);
@@ -1164,7 +1172,7 @@ Node* CSLoader::nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree, const
                 auto exceptionMsg = StringUtils::format(
                     R"(error: Missing custom reader class name:%s, please config at your project fiile xxx.xsxproj like follow:
     <Project>
-      <publish-opts> 
+      <publish-opts>
          <custom-readers>
            <item>%s</item>
          </custom-readers>
@@ -1439,7 +1447,11 @@ Node* CSLoader::createNodeWithFlatBuffersForSimulator(std::string_view filename)
     //    AXLOG("textureSize = %d", textureSize);
     for (int i = 0; i < textureSize; ++i)
     {
-        SpriteFrameCache::getInstance()->addSpriteFramesWithFile(textures->Get(i)->c_str());
+        std::string_view plist = textures->Get(i)->c_str();
+        if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
+        {
+            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+        }
     }
 
     auto nodeTree = csparsebinary->nodeTree();

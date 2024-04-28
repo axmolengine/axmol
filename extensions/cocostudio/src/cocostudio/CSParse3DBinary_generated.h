@@ -8,9 +8,9 @@
 
 // Ensure the included flatbuffers.h is the same version as when this file was
 // generated, otherwise it may not be compatible.
-static_assert(FLATBUFFERS_VERSION_MAJOR == 2 &&
-              FLATBUFFERS_VERSION_MINOR == 0 &&
-              FLATBUFFERS_VERSION_REVISION == 8,
+static_assert(FLATBUFFERS_VERSION_MAJOR == 24 &&
+              FLATBUFFERS_VERSION_MINOR == 3 &&
+              FLATBUFFERS_VERSION_REVISION == 25,
              "Non-compatible flatbuffers version included");
 
 #include "CSParseBinary_generated.h"
@@ -35,7 +35,7 @@ struct GameNode3DOptionBuilder;
 struct Light3DOption;
 struct Light3DOptionBuilder;
 
-struct Node3DOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct Node3DOption FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef Node3DOptionBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODEOPTIONS = 4,
@@ -59,7 +59,7 @@ struct Node3DOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t cameramask() const {
     return GetField<int32_t>(VT_CAMERAMASK, 0);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODEOPTIONS) &&
            verifier.VerifyTable(nodeOptions()) &&
@@ -73,9 +73,9 @@ struct Node3DOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct Node3DOptionBuilder {
   typedef Node3DOption Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_nodeOptions(flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_nodeOptions(::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions) {
     fbb_.AddOffset(Node3DOption::VT_NODEOPTIONS, nodeOptions);
   }
   void add_position3D(const flatbuffers::FVec3 *position3D) {
@@ -90,20 +90,20 @@ struct Node3DOptionBuilder {
   void add_cameramask(int32_t cameramask) {
     fbb_.AddElement<int32_t>(Node3DOption::VT_CAMERAMASK, cameramask, 0);
   }
-  explicit Node3DOptionBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit Node3DOptionBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<Node3DOption> Finish() {
+  ::flatbuffers::Offset<Node3DOption> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<Node3DOption>(end);
+    auto o = ::flatbuffers::Offset<Node3DOption>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<Node3DOption> CreateNode3DOption(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
+inline ::flatbuffers::Offset<Node3DOption> CreateNode3DOption(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::WidgetOptions> nodeOptions = 0,
     const flatbuffers::FVec3 *position3D = nullptr,
     const flatbuffers::FVec3 *rotation3D = nullptr,
     const flatbuffers::FVec3 *scale3D = nullptr,
@@ -117,7 +117,7 @@ inline flatbuffers::Offset<Node3DOption> CreateNode3DOption(
   return builder_.Finish();
 }
 
-struct Sprite3DOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct Sprite3DOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef Sprite3DOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODE3DOPTION = 4,
@@ -141,7 +141,7 @@ struct Sprite3DOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t lightFlag() const {
     return GetField<int32_t>(VT_LIGHTFLAG, 0);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODE3DOPTION) &&
            verifier.VerifyTable(node3DOption()) &&
@@ -156,12 +156,12 @@ struct Sprite3DOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct Sprite3DOptionsBuilder {
   typedef Sprite3DOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_node3DOption(flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_node3DOption(::flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption) {
     fbb_.AddOffset(Sprite3DOptions::VT_NODE3DOPTION, node3DOption);
   }
-  void add_fileData(flatbuffers::Offset<flatbuffers::ResourceData> fileData) {
+  void add_fileData(::flatbuffers::Offset<flatbuffers::ResourceData> fileData) {
     fbb_.AddOffset(Sprite3DOptions::VT_FILEDATA, fileData);
   }
   void add_runAction(bool runAction) {
@@ -173,21 +173,21 @@ struct Sprite3DOptionsBuilder {
   void add_lightFlag(int32_t lightFlag) {
     fbb_.AddElement<int32_t>(Sprite3DOptions::VT_LIGHTFLAG, lightFlag, 0);
   }
-  explicit Sprite3DOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit Sprite3DOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<Sprite3DOptions> Finish() {
+  ::flatbuffers::Offset<Sprite3DOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<Sprite3DOptions>(end);
+    auto o = ::flatbuffers::Offset<Sprite3DOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<Sprite3DOptions> CreateSprite3DOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fileData = 0,
+inline ::flatbuffers::Offset<Sprite3DOptions> CreateSprite3DOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fileData = 0,
     bool runAction = false,
     bool isFlipped = false,
     int32_t lightFlag = 0) {
@@ -200,7 +200,7 @@ inline flatbuffers::Offset<Sprite3DOptions> CreateSprite3DOptions(
   return builder_.Finish();
 }
 
-struct Particle3DOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct Particle3DOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef Particle3DOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODE3DOPTION = 4,
@@ -212,7 +212,7 @@ struct Particle3DOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::ResourceData *fileData() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_FILEDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODE3DOPTION) &&
            verifier.VerifyTable(node3DOption()) &&
@@ -224,36 +224,36 @@ struct Particle3DOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct Particle3DOptionsBuilder {
   typedef Particle3DOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_node3DOption(flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_node3DOption(::flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption) {
     fbb_.AddOffset(Particle3DOptions::VT_NODE3DOPTION, node3DOption);
   }
-  void add_fileData(flatbuffers::Offset<flatbuffers::ResourceData> fileData) {
+  void add_fileData(::flatbuffers::Offset<flatbuffers::ResourceData> fileData) {
     fbb_.AddOffset(Particle3DOptions::VT_FILEDATA, fileData);
   }
-  explicit Particle3DOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit Particle3DOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<Particle3DOptions> Finish() {
+  ::flatbuffers::Offset<Particle3DOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<Particle3DOptions>(end);
+    auto o = ::flatbuffers::Offset<Particle3DOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<Particle3DOptions> CreateParticle3DOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> fileData = 0) {
+inline ::flatbuffers::Offset<Particle3DOptions> CreateParticle3DOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> fileData = 0) {
   Particle3DOptionsBuilder builder_(_fbb);
   builder_.add_fileData(fileData);
   builder_.add_node3DOption(node3DOption);
   return builder_.Finish();
 }
 
-struct UserCameraOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct UserCameraOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef UserCameraOptionsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODE3DOPTION = 4,
@@ -305,7 +305,7 @@ struct UserCameraOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::ResourceData *backFileData() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_BACKFILEDATA);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODE3DOPTION) &&
            verifier.VerifyTable(node3DOption()) &&
@@ -332,9 +332,9 @@ struct UserCameraOptions FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct UserCameraOptionsBuilder {
   typedef UserCameraOptions Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_node3DOption(flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_node3DOption(::flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption) {
     fbb_.AddOffset(UserCameraOptions::VT_NODE3DOPTION, node3DOption);
   }
   void add_fov(float fov) {
@@ -352,49 +352,49 @@ struct UserCameraOptionsBuilder {
   void add_skyBoxEnabled(bool skyBoxEnabled) {
     fbb_.AddElement<uint8_t>(UserCameraOptions::VT_SKYBOXENABLED, static_cast<uint8_t>(skyBoxEnabled), 0);
   }
-  void add_leftFileData(flatbuffers::Offset<flatbuffers::ResourceData> leftFileData) {
+  void add_leftFileData(::flatbuffers::Offset<flatbuffers::ResourceData> leftFileData) {
     fbb_.AddOffset(UserCameraOptions::VT_LEFTFILEDATA, leftFileData);
   }
-  void add_rightFileData(flatbuffers::Offset<flatbuffers::ResourceData> rightFileData) {
+  void add_rightFileData(::flatbuffers::Offset<flatbuffers::ResourceData> rightFileData) {
     fbb_.AddOffset(UserCameraOptions::VT_RIGHTFILEDATA, rightFileData);
   }
-  void add_upFileData(flatbuffers::Offset<flatbuffers::ResourceData> upFileData) {
+  void add_upFileData(::flatbuffers::Offset<flatbuffers::ResourceData> upFileData) {
     fbb_.AddOffset(UserCameraOptions::VT_UPFILEDATA, upFileData);
   }
-  void add_downFileData(flatbuffers::Offset<flatbuffers::ResourceData> downFileData) {
+  void add_downFileData(::flatbuffers::Offset<flatbuffers::ResourceData> downFileData) {
     fbb_.AddOffset(UserCameraOptions::VT_DOWNFILEDATA, downFileData);
   }
-  void add_forwardFileData(flatbuffers::Offset<flatbuffers::ResourceData> forwardFileData) {
+  void add_forwardFileData(::flatbuffers::Offset<flatbuffers::ResourceData> forwardFileData) {
     fbb_.AddOffset(UserCameraOptions::VT_FORWARDFILEDATA, forwardFileData);
   }
-  void add_backFileData(flatbuffers::Offset<flatbuffers::ResourceData> backFileData) {
+  void add_backFileData(::flatbuffers::Offset<flatbuffers::ResourceData> backFileData) {
     fbb_.AddOffset(UserCameraOptions::VT_BACKFILEDATA, backFileData);
   }
-  explicit UserCameraOptionsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit UserCameraOptionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<UserCameraOptions> Finish() {
+  ::flatbuffers::Offset<UserCameraOptions> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<UserCameraOptions>(end);
+    auto o = ::flatbuffers::Offset<UserCameraOptions>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<UserCameraOptions> CreateUserCameraOptions(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption = 0,
+inline ::flatbuffers::Offset<UserCameraOptions> CreateUserCameraOptions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption = 0,
     float fov = 60.0f,
     float nearClip = 1.0f,
     float farClip = 1000.0f,
     int32_t cameraFlag = 0,
     bool skyBoxEnabled = false,
-    flatbuffers::Offset<flatbuffers::ResourceData> leftFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> rightFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> upFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> downFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> forwardFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backFileData = 0) {
+    ::flatbuffers::Offset<flatbuffers::ResourceData> leftFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> rightFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> upFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> downFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> forwardFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backFileData = 0) {
   UserCameraOptionsBuilder builder_(_fbb);
   builder_.add_backFileData(backFileData);
   builder_.add_forwardFileData(forwardFileData);
@@ -411,7 +411,7 @@ inline flatbuffers::Offset<UserCameraOptions> CreateUserCameraOptions(
   return builder_.Finish();
 }
 
-struct GameNode3DOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct GameNode3DOption FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GameNode3DOptionBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NAME = 4,
@@ -427,8 +427,8 @@ struct GameNode3DOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_CUSTOMPROPERTY = 24,
     VT_USEDEFAULTLIGHT = 26
   };
-  const flatbuffers::String *name() const {
-    return GetPointer<const flatbuffers::String *>(VT_NAME);
+  const ::flatbuffers::String *name() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_NAME);
   }
   int32_t skyBoxMask() const {
     return GetField<int32_t>(VT_SKYBOXMASK, 0);
@@ -454,16 +454,16 @@ struct GameNode3DOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::ResourceData *backFileData() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_BACKFILEDATA);
   }
-  const flatbuffers::String *frameEvent() const {
-    return GetPointer<const flatbuffers::String *>(VT_FRAMEEVENT);
+  const ::flatbuffers::String *frameEvent() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_FRAMEEVENT);
   }
-  const flatbuffers::String *customProperty() const {
-    return GetPointer<const flatbuffers::String *>(VT_CUSTOMPROPERTY);
+  const ::flatbuffers::String *customProperty() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CUSTOMPROPERTY);
   }
   bool useDefaultLight() const {
     return GetField<uint8_t>(VT_USEDEFAULTLIGHT, 0) != 0;
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NAME) &&
            verifier.VerifyString(name()) &&
@@ -492,9 +492,9 @@ struct GameNode3DOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct GameNode3DOptionBuilder {
   typedef GameNode3DOption Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_name(flatbuffers::Offset<flatbuffers::String> name) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_name(::flatbuffers::Offset<::flatbuffers::String> name) {
     fbb_.AddOffset(GameNode3DOption::VT_NAME, name);
   }
   void add_skyBoxMask(int32_t skyBoxMask) {
@@ -503,57 +503,57 @@ struct GameNode3DOptionBuilder {
   void add_skyBoxEnabled(bool skyBoxEnabled) {
     fbb_.AddElement<uint8_t>(GameNode3DOption::VT_SKYBOXENABLED, static_cast<uint8_t>(skyBoxEnabled), 0);
   }
-  void add_leftFileData(flatbuffers::Offset<flatbuffers::ResourceData> leftFileData) {
+  void add_leftFileData(::flatbuffers::Offset<flatbuffers::ResourceData> leftFileData) {
     fbb_.AddOffset(GameNode3DOption::VT_LEFTFILEDATA, leftFileData);
   }
-  void add_rightFileData(flatbuffers::Offset<flatbuffers::ResourceData> rightFileData) {
+  void add_rightFileData(::flatbuffers::Offset<flatbuffers::ResourceData> rightFileData) {
     fbb_.AddOffset(GameNode3DOption::VT_RIGHTFILEDATA, rightFileData);
   }
-  void add_upFileData(flatbuffers::Offset<flatbuffers::ResourceData> upFileData) {
+  void add_upFileData(::flatbuffers::Offset<flatbuffers::ResourceData> upFileData) {
     fbb_.AddOffset(GameNode3DOption::VT_UPFILEDATA, upFileData);
   }
-  void add_downFileData(flatbuffers::Offset<flatbuffers::ResourceData> downFileData) {
+  void add_downFileData(::flatbuffers::Offset<flatbuffers::ResourceData> downFileData) {
     fbb_.AddOffset(GameNode3DOption::VT_DOWNFILEDATA, downFileData);
   }
-  void add_forwardFileData(flatbuffers::Offset<flatbuffers::ResourceData> forwardFileData) {
+  void add_forwardFileData(::flatbuffers::Offset<flatbuffers::ResourceData> forwardFileData) {
     fbb_.AddOffset(GameNode3DOption::VT_FORWARDFILEDATA, forwardFileData);
   }
-  void add_backFileData(flatbuffers::Offset<flatbuffers::ResourceData> backFileData) {
+  void add_backFileData(::flatbuffers::Offset<flatbuffers::ResourceData> backFileData) {
     fbb_.AddOffset(GameNode3DOption::VT_BACKFILEDATA, backFileData);
   }
-  void add_frameEvent(flatbuffers::Offset<flatbuffers::String> frameEvent) {
+  void add_frameEvent(::flatbuffers::Offset<::flatbuffers::String> frameEvent) {
     fbb_.AddOffset(GameNode3DOption::VT_FRAMEEVENT, frameEvent);
   }
-  void add_customProperty(flatbuffers::Offset<flatbuffers::String> customProperty) {
+  void add_customProperty(::flatbuffers::Offset<::flatbuffers::String> customProperty) {
     fbb_.AddOffset(GameNode3DOption::VT_CUSTOMPROPERTY, customProperty);
   }
   void add_useDefaultLight(bool useDefaultLight) {
     fbb_.AddElement<uint8_t>(GameNode3DOption::VT_USEDEFAULTLIGHT, static_cast<uint8_t>(useDefaultLight), 0);
   }
-  explicit GameNode3DOptionBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit GameNode3DOptionBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<GameNode3DOption> Finish() {
+  ::flatbuffers::Offset<GameNode3DOption> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<GameNode3DOption>(end);
+    auto o = ::flatbuffers::Offset<GameNode3DOption>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<GameNode3DOption> CreateGameNode3DOption(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> name = 0,
+inline ::flatbuffers::Offset<GameNode3DOption> CreateGameNode3DOption(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> name = 0,
     int32_t skyBoxMask = 0,
     bool skyBoxEnabled = false,
-    flatbuffers::Offset<flatbuffers::ResourceData> leftFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> rightFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> upFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> downFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> forwardFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backFileData = 0,
-    flatbuffers::Offset<flatbuffers::String> frameEvent = 0,
-    flatbuffers::Offset<flatbuffers::String> customProperty = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> leftFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> rightFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> upFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> downFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> forwardFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backFileData = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> frameEvent = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> customProperty = 0,
     bool useDefaultLight = false) {
   GameNode3DOptionBuilder builder_(_fbb);
   builder_.add_customProperty(customProperty);
@@ -571,17 +571,17 @@ inline flatbuffers::Offset<GameNode3DOption> CreateGameNode3DOption(
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<GameNode3DOption> CreateGameNode3DOptionDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
+inline ::flatbuffers::Offset<GameNode3DOption> CreateGameNode3DOptionDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *name = nullptr,
     int32_t skyBoxMask = 0,
     bool skyBoxEnabled = false,
-    flatbuffers::Offset<flatbuffers::ResourceData> leftFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> rightFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> upFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> downFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> forwardFileData = 0,
-    flatbuffers::Offset<flatbuffers::ResourceData> backFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> leftFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> rightFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> upFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> downFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> forwardFileData = 0,
+    ::flatbuffers::Offset<flatbuffers::ResourceData> backFileData = 0,
     const char *frameEvent = nullptr,
     const char *customProperty = nullptr,
     bool useDefaultLight = false) {
@@ -604,7 +604,7 @@ inline flatbuffers::Offset<GameNode3DOption> CreateGameNode3DOptionDirect(
       useDefaultLight);
 }
 
-struct Light3DOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct Light3DOption FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef Light3DOptionBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NODE3DOPTION = 4,
@@ -636,7 +636,7 @@ struct Light3DOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   float outerAngle() const {
     return GetField<float>(VT_OUTERANGLE, 0.0f);
   }
-  bool Verify(flatbuffers::Verifier &verifier) const {
+  bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_NODE3DOPTION) &&
            verifier.VerifyTable(node3DOption()) &&
@@ -652,9 +652,9 @@ struct Light3DOption FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 
 struct Light3DOptionBuilder {
   typedef Light3DOption Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_node3DOption(flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption) {
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_node3DOption(::flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption) {
     fbb_.AddOffset(Light3DOption::VT_NODE3DOPTION, node3DOption);
   }
   void add_enabled(bool enabled) {
@@ -675,20 +675,20 @@ struct Light3DOptionBuilder {
   void add_outerAngle(float outerAngle) {
     fbb_.AddElement<float>(Light3DOption::VT_OUTERANGLE, outerAngle, 0.0f);
   }
-  explicit Light3DOptionBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit Light3DOptionBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  flatbuffers::Offset<Light3DOption> Finish() {
+  ::flatbuffers::Offset<Light3DOption> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<Light3DOption>(end);
+    auto o = ::flatbuffers::Offset<Light3DOption>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<Light3DOption> CreateLight3DOption(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption = 0,
+inline ::flatbuffers::Offset<Light3DOption> CreateLight3DOption(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<flatbuffers::Node3DOption> node3DOption = 0,
     bool enabled = false,
     int32_t type = 0,
     int32_t flag = 0,
@@ -707,32 +707,32 @@ inline flatbuffers::Offset<Light3DOption> CreateLight3DOption(
 }
 
 inline const flatbuffers::Node3DOption *GetNode3DOption(const void *buf) {
-  return flatbuffers::GetRoot<flatbuffers::Node3DOption>(buf);
+  return ::flatbuffers::GetRoot<flatbuffers::Node3DOption>(buf);
 }
 
 inline const flatbuffers::Node3DOption *GetSizePrefixedNode3DOption(const void *buf) {
-  return flatbuffers::GetSizePrefixedRoot<flatbuffers::Node3DOption>(buf);
+  return ::flatbuffers::GetSizePrefixedRoot<flatbuffers::Node3DOption>(buf);
 }
 
 inline bool VerifyNode3DOptionBuffer(
-    flatbuffers::Verifier &verifier) {
+    ::flatbuffers::Verifier &verifier) {
   return verifier.VerifyBuffer<flatbuffers::Node3DOption>(nullptr);
 }
 
 inline bool VerifySizePrefixedNode3DOptionBuffer(
-    flatbuffers::Verifier &verifier) {
+    ::flatbuffers::Verifier &verifier) {
   return verifier.VerifySizePrefixedBuffer<flatbuffers::Node3DOption>(nullptr);
 }
 
 inline void FinishNode3DOptionBuffer(
-    flatbuffers::FlatBufferBuilder &fbb,
-    flatbuffers::Offset<flatbuffers::Node3DOption> root) {
+    ::flatbuffers::FlatBufferBuilder &fbb,
+    ::flatbuffers::Offset<flatbuffers::Node3DOption> root) {
   fbb.Finish(root);
 }
 
 inline void FinishSizePrefixedNode3DOptionBuffer(
-    flatbuffers::FlatBufferBuilder &fbb,
-    flatbuffers::Offset<flatbuffers::Node3DOption> root) {
+    ::flatbuffers::FlatBufferBuilder &fbb,
+    ::flatbuffers::Offset<flatbuffers::Node3DOption> root) {
   fbb.FinishSizePrefixed(root);
 }
 

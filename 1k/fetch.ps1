@@ -54,12 +54,17 @@ function fetch_repo($url, $name, $dest, $ext) {
             }
         }
         catch {
-	    Remove-Item $out -Force
+            Remove-Item $out -Force
             throw "fetch.ps1: extract $out failed, try again"
         }
 
         if (!(Test-Path $dest -PathType Container)) {
-            throw "fetch.ps1: the package name mismatch for $out"
+            $original_lib_src = Join-Path $prefix $Script:url_pkg_name
+            if (Test-Path $original_lib_src -PathType Container) {
+                Rename-Item $original_lib_src $dest 
+            } else {
+                throw "fetch.ps1: the package name mismatch for $out"
+            }
         }
     }
 }
@@ -114,30 +119,27 @@ if (!$url) {
 }
 
 $url_pkg_ext = $null
-$url_pkg_name = $null
+$Script:url_pkg_name = $null
 $match_info = [Regex]::Match($url, '(\.git)|(\.zip)|(\.tar\.(gz|bz2|xz))$')
 if ($match_info.Success) {
     $url_pkg_ext = $match_info.Value
     $url_file_name = Split-Path $url -Leaf
-    $url_pkg_name = $url_file_name.Substring(0, $url_file_name.Length - $url_pkg_ext.Length)
+    $Script:url_pkg_name = $url_file_name.Substring(0, $url_file_name.Length - $url_pkg_ext.Length)
     if (!$name) {
-        $name = $url_pkg_name
+        $name = $Script:url_pkg_name
     }
 }
 else {
     throw "fetch.ps1: invalid url, must be endswith .git, .zip, .tar.xx"
 }
 
+$lib_src = Join-Path $prefix $name
 $is_git_repo = $url_pkg_ext -eq '.git'
 if (!$is_git_repo) {
     $match_info = [Regex]::Match($url, '(\d+\.)+(-)?(\*|\d+)')
     if ($match_info.Success) {
         $version = $match_info.Value
     }
-    $lib_src = Join-Path $prefix $url_pkg_name
-}
-else {
-    $lib_src = Join-Path $prefix $name
 }
 
 if (!$version) {
@@ -166,6 +168,9 @@ if (!(Test-Path $sentry -PathType Leaf)) {
     }
 }
 
+# re-check does valid local git repo
+if (!(Test-Path "$lib_src/.git" -PathType Container)) { $is_git_repo = $false }
+
 # checkout revision for git repo
 if (!$revision) {
     $ver_pair = [array]$version.Split('-')
@@ -175,10 +180,8 @@ if (!$revision) {
 }
 if ($is_git_repo) {
     $old_rev_hash = $(git -C $lib_src rev-parse HEAD)
-    $tag_info = git -C $lib_src tag | Select-String $revision
-    if ($tag_info) { $revision = ([array]$tag_info.Line)[0] }
+    
     $cur_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
-
     if (!$cur_rev_hash) {
         git -C $lib_src fetch
         $cur_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
@@ -194,6 +197,10 @@ if ($is_git_repo) {
         
         if (!$is_rev_modified) {
             $is_rev_modified = $old_rev_hash -ne $new_rev_hash
+        }
+
+        if((Test-Path (Join-Path $lib_src '.gitmodules') -PathType Leaf)) {
+            git -C $lib_src submodule update --recursive --init
         }
     }
     else {
@@ -226,8 +233,7 @@ if (Test-Path (Join-Path $lib_src '.gn') -PathType Leaf) {
     # the repo use google gn build system manage deps and build
     Push-Location $lib_src
     # angle (A GLES native implementation by google)
-    if (Test-Path 'scripts/bootstrap.py' -PathType Leaf)
-    {
+    if (Test-Path 'scripts/bootstrap.py' -PathType Leaf) {
         python scripts/bootstrap.py
     }
     # darwin (A WebGPU native implementation by google)

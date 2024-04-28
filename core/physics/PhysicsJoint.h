@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -29,7 +30,7 @@
 #include <functional>
 
 #include "base/Config.h"
-#if AX_USE_PHYSICS
+#if defined(AX_ENABLE_PHYSICS)
 
 #    include "base/Ref.h"
 #    include "math/Math.h"
@@ -603,5 +604,5 @@ protected:
 
 NS_AX_END
 
-#endif  // AX_USE_PHYSICS
+#endif  // defined(AX_ENABLE_PHYSICS)
 #endif  // __CCPHYSICS_JOINT_H__
