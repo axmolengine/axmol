@@ -1481,8 +1481,8 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         AXLOG("axmol: WARNING: Image is flipped. Regenerate it using PVRTexTool");
     }
 
-    if (!configuration->supportsNPOT() && (static_cast<int>(header->width) != ccNextPOT(header->width) ||
-                                           static_cast<int>(header->height) != ccNextPOT(header->height)))
+    if (!configuration->supportsNPOT() && (static_cast<int>(header->width) != utils::nextPOT(header->width) ||
+                                           static_cast<int>(header->height) != utils::nextPOT(header->height)))
     {
         AXLOG("axmol: ERROR: Loading an NPOT texture (%dx%d) but is not supported on this device", header->width,
               header->height);

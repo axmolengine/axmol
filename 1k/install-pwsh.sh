@@ -12,7 +12,7 @@ mkdir -p $cacheDir
 
 pwsh_ver=$1
 if [ "$pwsh_ver" = "" ] ; then
-    pwsh_ver='7.4.1'
+    pwsh_ver='7.4.2'
 fi
 
 function check_pwsh {

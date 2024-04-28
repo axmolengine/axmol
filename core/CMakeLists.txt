@@ -32,7 +32,7 @@
 # include_guard (GLOBAL)
 
 # The version number
-set(_AX_VERSION 2.0)
+set(_AX_VERSION 2.1)
 
 if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
@@ -86,23 +86,16 @@ endif()
 # print renderer backend profile
 message(AUTHOR_WARNING "AX_USE_GL=${AX_USE_GL}, AX_USE_METAL=${AX_USE_METAL}, AX_GLES_PROFILE=${AX_GLES_PROFILE}")
 
-option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ON)
-
-if (NOT WINRT)
-    option (AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ON)
-else() # we not support webview2 and vidio player for WINRT target
-    set(AX_ENABLE_MSEDGE_WEBVIEW2 OFF CACHE BOOL "Use Microsoft Edge webview2" FORCE)
-    # set(AX_ENABLE_MFMEDIA OFF CACHE BOOL "Enabling microsoft media foundation for windows video player" FORCE)
-endif()
-
 if (LINUX)
     include(CheckIncludeFile)
     check_include_file(vlc/vlc.h _AX_HAVE_VLC)
+    cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" ON "_AX_HAVE_VLC" OFF)
 endif()
 
-cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" ON "_AX_HAVE_VLC" OFF)
+cmake_dependent_option(AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ON "WIN32 AND NOT WINRT" OFF)
 
-message(STATUS "AX_ENABLE_VLC_MEDIA=${AX_ENABLE_VLC_MEDIA}")
+cmake_dependent_option(AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ON "WIN32" OFF)
+cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" OFF "(WIN32 AND NOT WINRT) OR LINUX" OFF)
 
 if(NOT APPLE AND (NOT EMSCRIPTEN))
     set(AX_USE_ALSOFT ON CACHE BOOL "" FORCE)
@@ -110,9 +103,8 @@ else()
     option(AX_USE_ALSOFT "Use ALSOFT on apple" OFF)
 endif()
 
-
 option(AX_ENABLE_PHYSICS "Build Physics support" ON)
-option(AX_ENABLE_MEDIA "Build media support" ON)
+cmake_dependent_option(AX_ENABLE_MEDIA "Build media support" ON "AX_ENABLE_MFMEDIA OR AX_ENABLE_VLC_MEDIA OR APPLE OR ANDROID" OFF)
 option(AX_ENABLE_AUDIO "Build audio support" ON)
 option(AX_ENABLE_CONSOLE "Build axmol debug tool: console support" ON)
 

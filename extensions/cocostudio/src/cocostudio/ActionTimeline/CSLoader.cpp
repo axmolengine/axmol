@@ -466,7 +466,10 @@ Node* CSLoader::loadNodeWithContent(std::string_view content)
         std::string png   = DICTOOL->getStringValueFromArray_json(doc, TEXTURES_PNG, i);
         plist             = _jsonPath + plist;
         png               = _jsonPath + png;
-        SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist, png);
+        if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
+        {
+            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist, png);
+        }
     }
 
     // decode node tree
@@ -949,8 +952,11 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
         AXLOG("textureSize = %d", textureSize);
         for (int i = 0; i < textureSize; ++i)
         {
-            std::string plist = textures->Get(i)->c_str();
-            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+            std::string_view plist = textures->Get(i)->c_str();
+            if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
+            {
+                SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+            }
         }
 
         node = loader->nodeWithFlatBuffers(csparsebinary->nodeTree(), callback);
@@ -1073,8 +1079,11 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
     int textureSize = textures->size();
     for (int i = 0; i < textureSize; ++i)
     {
-        std::string plist = textures->Get(i)->c_str();
-        SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+        std::string_view plist = textures->Get(i)->c_str();
+        if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
+        {
+            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+        }
     }
 
     Node* node = nodeWithFlatBuffers(csparsebinary->nodeTree(), callback);
@@ -1438,7 +1447,11 @@ Node* CSLoader::createNodeWithFlatBuffersForSimulator(std::string_view filename)
     //    AXLOG("textureSize = %d", textureSize);
     for (int i = 0; i < textureSize; ++i)
     {
-        SpriteFrameCache::getInstance()->addSpriteFramesWithFile(textures->Get(i)->c_str());
+        std::string_view plist = textures->Get(i)->c_str();
+        if (!SpriteFrameCache::getInstance()->isSpriteFramesWithFileLoaded(plist))
+        {
+            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
+        }
     }
 
     auto nodeTree = csparsebinary->nodeTree();

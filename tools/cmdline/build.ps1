@@ -1,5 +1,4 @@
-#
-# This script easy to build win32, linux, winuwp(winrt), ios, tvos, osx, android depends on $myRoot/1k/build.ps1
+# This script easy to build win32, linux, winuwp(winrt), ios, tvos, osx, android depends on $AX_ROOT/1k/build.ps1
 # usage: pwsh build.ps1 -p <targetPlatform> -a <arch>
 # options
 #  -p: build target platform: win32,winuwp(winrt),linux,android,osx,ios,tvos,wasm
@@ -35,8 +34,7 @@
 #
 param(
     [switch]$configOnly,
-    [switch]$forceConfig,
-    [switch]$setupOnly
+    [switch]$forceConfig
 )
 
 $unhandled_args = @()
@@ -51,7 +49,7 @@ foreach ($arg in $args) {
         if ($arg.StartsWith('-')) { 
             $optName = $arg.SubString(1).TrimEnd(':')
         }
-        if($1k_switch_options.Contains("$optName")) {
+        if ($1k_switch_options.Contains("$optName")) {
             $unhandled_args += $arg
             $optName = $null
             continue
@@ -83,13 +81,9 @@ if ($options.xc.Count -ne 0) {
     [array]$options.xc = (translate_array_opt $options.xc)
 }
 
-$myRoot = $PSScriptRoot
+$AX_ROOT = (Resolve-Path $PSScriptRoot/../..).Path
 $workDir = $(Get-Location).Path
-
-# axroot
-$AX_ROOT = $null
-if (Test-Path "$myRoot/core/axmolver.h.in" -PathType Leaf) {
-    $AX_ROOT = $myRoot
+if (Test-Path (Join-Path $AX_ROOT 'core/axmolver.h.in') -PathType Leaf) {
     $env:AX_ROOT = $AX_ROOT
 }
 else {
@@ -97,10 +91,8 @@ else {
 }
 
 # 1k/build.ps1
-if (Test-Path "$myRoot/1k/build.ps1" -PathType Leaf) {
-    $b1k_root = $myRoot
-}
-else {
+$b1k_script = Join-Path $AX_ROOT '1k/build.ps1'
+if (!(Test-Path $b1k_script -PathType Leaf)) {
     throw "The 1k/build.ps1 not found"
 }
 
@@ -110,7 +102,6 @@ $Global:is_axmol_app = (Test-Path (Join-Path $source_proj_dir '.axproj.json') -P
 $is_android = $options.p -eq 'android'
 
 # start construct full cmd line
-$b1k_script = (Resolve-Path -Path "$b1k_root/1k/build.ps1").Path
 $b1k_args = @()
 
 $cm_target_index = $options.xb.IndexOf('--target')
@@ -120,7 +111,7 @@ if ($cm_target_index -ne -1) {
 
 if ($is_axmol_engine -and $is_android) {
     if (!$cmake_target) {
-        $source_proj_dir = Join-Path $myRoot 'tests/cpp-tests'
+        $source_proj_dir = Join-Path $AX_ROOT 'tests/cpp-tests'
     }
     else {
         $builtin_targets = @{
@@ -131,7 +122,7 @@ if ($is_axmol_engine -and $is_android) {
         if (!$builtin_targets.Contains($cmake_target)) {
             throw "specified target '$cmake_target' not present in engine"
         }
-        $source_proj_dir = Join-Path $myRoot $builtin_targets[$cmake_target]
+        $source_proj_dir = Join-Path $AX_ROOT $builtin_targets[$cmake_target]
     }
 }
 
@@ -184,7 +175,7 @@ else {
 if ($proj_dir) {
     $b1k_args += '-d', "$proj_dir"
 }
-$prefix = Join-Path $b1k_root 'tools/external'
+$prefix = Join-Path $AX_ROOT 'tools/external'
 $b1k_args += '-prefix', "$prefix"
 
 # remove arg we don't want forward to
@@ -204,9 +195,6 @@ if ($configOnly) {
 if ($forceConfig) {
     $forward_args['forceConfig'] = $true
 }
-if ($setupOnly) {
-    $forward_args['setupOnly'] = $true
-}
 
 . $b1k_script @b1k_args @forward_args @unhandled_args
 
@@ -216,4 +204,3 @@ if (!$configOnly) {
 else {
     $b1k.pause('Generate done')
 }
-

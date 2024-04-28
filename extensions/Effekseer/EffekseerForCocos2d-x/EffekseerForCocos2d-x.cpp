@@ -1,5 +1,6 @@
 
 #include "EffekseerForCocos2d-x.h"
+#include "base/Utils.h"
 
 #ifdef AX_USE_METAL
 #include "renderer/backend/DriverBase.h"
@@ -41,17 +42,6 @@ void CleanupTextureData(::Effekseer::TextureRef textureData);
 ::EffekseerRenderer::DistortingCallback* CreateDistortingCallback(::EffekseerRenderer::RendererRef, Effekseer::RefPtr<::EffekseerRenderer::CommandList>);
 
 void ResetBackground(::EffekseerRenderer::RendererRef renderer);
-
-int ccNextPOT(int x)
-{
-	x = x - 1;
-	x = x | (x >> 1);
-	x = x | (x >> 2);
-	x = x | (x >> 4);
-	x = x | (x >> 8);
-	x = x | (x >> 16);
-	return x + 1;
-}
 
 static std::u16string getFilenameWithoutExt(const char16_t* path)
 {
@@ -216,8 +206,8 @@ Effekseer::TextureRef TextureLoader::Load(const EFK_CHAR* path, ::Effekseer::Tex
 #ifdef AX_USE_METAL
 					texture->generateMipmap();
 #else
-					if (texture->getPixelsWide() == ccNextPOT(texture->getPixelsWide()) &&
-						texture->getPixelsHigh() == ccNextPOT(texture->getPixelsHigh()))
+					if (texture->getPixelsWide() == ax::utils::nextPOT(texture->getPixelsWide()) &&
+						texture->getPixelsHigh() == ax::utils::nextPOT(texture->getPixelsHigh()))
 					{
 						texture->generateMipmap();
 					}
