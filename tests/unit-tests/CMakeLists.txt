@@ -36,8 +36,8 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
 endif()
 
-#_1kfetch(sample-assets)
-#_1klink("${sample-assets_SOURCE_DIR}/unit-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/Content")
+_1kfetch(sample-assets)
+_1klink("${sample-assets_SOURCE_DIR}/unit-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/Content")
 
 set(GAME_SOURCE
     Source/AppDelegate.cpp
@@ -212,7 +212,7 @@ endif()
 
 if((NOT IOS) AND (NOT WINRT))
     message("CMake ${APP_NAME} target_precompile_headers")
-    target_precompile_headers(${APP_NAME} PRIVATE 
+    target_precompile_headers(${APP_NAME} PRIVATE
       "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
     )
 endif()
