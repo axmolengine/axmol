@@ -174,7 +174,7 @@ target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 if(NOT _AX_USE_PREBUILT)
     target_link_libraries(${APP_NAME} ${_AX_LUA_LIB})
 endif()
-ax_setup_app_config(${APP_NAME})
+ax_setup_app_config(${APP_NAME} CONSOLE)
 
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
