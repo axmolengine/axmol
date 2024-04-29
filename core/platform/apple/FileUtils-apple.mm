@@ -51,6 +51,14 @@ private:
     NSBundle* bundle_;
 };
 
+static std::string appendTrailingSlashToDir(std::string_view dir)
+{
+    auto result = std::string(dir);
+    if (not result.empty() and result.back() != '/')
+        result.push_back('/');
+    return result;
+}
+
 FileUtilsApple::FileUtilsApple() : pimpl_(new IMPL([NSBundle mainBundle])) {}
 
 FileUtilsApple::~FileUtilsApple() = default;
@@ -188,7 +196,7 @@ std::string FileUtilsApple::getPathForDirectory(std::string_view dir,
         BOOL isDir = false;
         if ([s_fileManager fileExistsAtPath:[NSString stringWithUTF8String:path.data()] isDirectory:&isDir])
         {
-            return isDir ? path : "";
+            return appendTrailingSlashToDir(isDir ? path : "");
         }
     }
     else
@@ -197,7 +205,7 @@ std::string FileUtilsApple::getPathForDirectory(std::string_view dir,
                                                            ofType:nil];
         if (fullpath != nil)
         {
-            return [fullpath UTF8String];
+            return appendTrailingSlashToDir([fullpath UTF8String]);
         }
     }
     return "";
