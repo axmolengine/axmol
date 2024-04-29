@@ -1330,7 +1330,7 @@ int64_t FileUtils::getFileSize(std::string_view filepath) const
     {
         fullpath = fullPathForFilename(filepath);
         if (fullpath.empty())
-            return 0;
+            return -1;
         path = fullpath;
     }
     else
