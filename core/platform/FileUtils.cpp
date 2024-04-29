@@ -754,14 +754,14 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
                 }
             }
 
-            if (result.empty() and isPopupNotify())
+            if (result.empty() && isPopupNotify())
             {
                 AXLOG("axmol: fullPathForDirectory: No directory found at %s. Possible missing directory.", dir.data());
             }
         }
     }
 
-    if (not result.empty() and result.back() != '/')
+    if (!result.empty() && result.back() != '/')
     {
         result += '/';
     }
