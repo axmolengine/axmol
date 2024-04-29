@@ -363,8 +363,9 @@ endfunction()
 
 # setup a ax application
 function(ax_setup_app_config app_name)
-    set(options RUNTIME_OUTPUT_DIR opt_RUNTIME_OUTPUT_DIR)
-    cmake_parse_arguments(opt "" "${options}" ""
+    set(options CONSOLE)
+    set(oneValueArgs RUNTIME_OUTPUT_DIR)
+    cmake_parse_arguments(opt "${options}" "${oneValueArgs}" ""
                           "" ${ARGN} )
     if (WINRT)
         target_include_directories(${app_name} 
@@ -394,10 +395,23 @@ function(ax_setup_app_config app_name)
         endif()
     elseif(WINDOWS)
         # windows: visual studio/LLVM-clang default is Console app, but we need Windows app
-        if(MSVC)
-            set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "/SUBSYSTEM:WINDOWS")
-        elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-            set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "-Xlinker /subsystem:windows")
+        set(_win32_linker_flags "")
+        set(_win32_console_app FALSE)
+        
+        if (NOT opt_CONSOLE OR WINRT)
+            set(_win32_linker_flags "/SUBSYSTEM:WINDOWS")
+        else()
+            set(_win32_linker_flags "/SUBSYSTEM:CONSOLE")
+            set(_win32_console_app TRUE)
+        endif()
+
+        if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+            set(_win32_linker_flags "-Xlinker ${_win32_linker_flags}")
+        endif()
+
+        set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "${_win32_linker_flags}")
+        if (_win32_console_app)
+            set_source_files_properties(proj.win32/main.cpp PROPERTIES COMPILE_DEFINITIONS _CONSOLE=1)
         endif()
     endif()
     # auto mark code files for IDE when mark app
