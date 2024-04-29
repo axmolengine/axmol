@@ -63,6 +63,14 @@ FileUtilsApple::FileUtilsApple() : pimpl_(new IMPL([NSBundle mainBundle])) {}
 
 FileUtilsApple::~FileUtilsApple() = default;
 
+bool FileUtilsApple::init()
+{
+    _defaultResRootPath = appendTrailingSlashToDir([[[NSBundle mainBundle] resourcePath] UTF8String]);
+
+    bool ret = FileUtils::init();
+    return ret;
+}
+
 #if AX_FILEUTILS_APPLE_ENABLE_OBJC
 void FileUtilsApple::setBundle(NSBundle* bundle)
 {
