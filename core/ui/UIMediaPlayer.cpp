@@ -1191,6 +1191,7 @@ void MediaPlayer::play()
             case MEMediaState::Closed:
                 engine->setAutoPlay(true);
                 engine->open(_videoURL);
+                break;
             default:
                 engine->play();
             }
