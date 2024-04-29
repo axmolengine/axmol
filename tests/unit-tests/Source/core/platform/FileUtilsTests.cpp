@@ -98,8 +98,11 @@ TEST_SUITE("platform/FileUtils") {
 
     TEST_CASE("isFileExist" * doctest::timeout(10)) {
         CHECK(fu->isFileExist("text/123.txt"));
-        CHECK(not fu->isFileExist("text"));
+        CHECK(fu->isFileExist(fu->fullPathForFilename("text/123.txt")));
         CHECK(not fu->isFileExist("text/doesnt_exist.txt"));
+        CHECK(not fu->isFileExist("/text/doesnt_exist"));
+        CHECK(not fu->isFileExist("text"));
+        CHECK(not fu->isFileExist(fu->fullPathForDirectory("text")));
 
         auto run = AsyncRunner<bool>();
         fu->isFileExist("text/123.txt", [&](bool exists) {
@@ -111,8 +114,11 @@ TEST_SUITE("platform/FileUtils") {
 
     TEST_CASE("isDirectoryExist") {
         CHECK(fu->isDirectoryExist("text"));
+        CHECK(fu->isDirectoryExist(fu->fullPathForDirectory("text")));
         CHECK(not fu->isDirectoryExist("doesnt_exist"));
+        CHECK(not fu->isDirectoryExist("/doesnt_exist"));
         CHECK(not fu->isDirectoryExist("text/123.txt"));
+        CHECK(not fu->isDirectoryExist(fu->fullPathForFilename("text/123.txt")));
 
         auto run = AsyncRunner<bool>();
         fu->isDirectoryExist(fu->fullPathForDirectory("text"), [&](bool exists) {
