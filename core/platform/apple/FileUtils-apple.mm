@@ -148,13 +148,18 @@ bool FileUtilsApple::isFileExistInternal(std::string_view filePath) const
                                                       inDirectory:[NSString stringWithUTF8String:path.c_str()]];
         if (fullpath != nil)
         {
-            ret = true;
+            BOOL isDir = NO;
+            if ([s_fileManager fileExistsAtPath:fullpath isDirectory:&isDir] && !isDir)
+            {
+                ret = true;
+            }
         }
     }
     else
     {
         // Search path is an absolute path.
-        if ([s_fileManager fileExistsAtPath:[NSString stringWithUTF8String:filePath.data()]])
+        BOOL isDir = NO;
+        if ([s_fileManager fileExistsAtPath:[NSString stringWithUTF8String:filePath.data()] isDirectory:&isDir] && !isDir)
         {
             ret = true;
         }
@@ -201,7 +206,7 @@ std::string FileUtilsApple::getPathForDirectory(std::string_view dir,
 
     if (path[0] == '/')
     {
-        BOOL isDir = false;
+        BOOL isDir = NO;
         if ([s_fileManager fileExistsAtPath:[NSString stringWithUTF8String:path.data()] isDirectory:&isDir])
         {
             return appendTrailingSlashToDir(isDir ? path : "");
@@ -222,27 +227,33 @@ std::string FileUtilsApple::getPathForDirectory(std::string_view dir,
 std::string FileUtilsApple::getFullPathForFilenameWithinDirectory(std::string_view directory,
                                                                   std::string_view filename) const
 {
+    auto fullPath = std::string();
+
+    // Build full path for the file
     if (directory[0] != '/')
     {
-        NSString* fullpath = [pimpl_->getBundle() pathForResource:[NSString stringWithUTF8String:filename.data()]
-                                                           ofType:nil
-                                                      inDirectory:[NSString stringWithUTF8String:directory.data()]];
-        if (fullpath != nil)
+        NSString* path = [pimpl_->getBundle() pathForResource:[NSString stringWithUTF8String:filename.data()]
+                                                       ofType:nil
+                                                  inDirectory:[NSString stringWithUTF8String:directory.data()]];
+        if (path != nil)
         {
-            return [fullpath UTF8String];
+            fullPath = [path UTF8String];
         }
     }
     else
     {
-        std::string fullPath{directory};
+        fullPath = directory;
         fullPath += filename;
-        // Search path is an absolute path.
-        if ([s_fileManager fileExistsAtPath:[NSString stringWithUTF8String:fullPath.c_str()]])
-        {
-            return fullPath;
-        }
     }
-    return "";
+
+    // Check if there's a file at path
+    BOOL isDir = NO;
+    if (![s_fileManager fileExistsAtPath:[NSString stringWithUTF8String:fullPath.c_str()] isDirectory:&isDir] || isDir)
+    {
+        fullPath.clear();
+    }
+
+    return fullPath;
 }
 
 bool FileUtilsApple::createDirectory(std::string_view path) const
