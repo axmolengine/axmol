@@ -46,6 +46,21 @@ TEST_SUITE("platform/FileUtils") {
     }
 
 
+    TEST_CASE("fullPathForDirectory") {
+        CHECK(fu->fullPathForDirectory("") == "");
+
+        CHECK(fu->fullPathForDirectory("doesnt_exist") == "");
+        CHECK(fu->fullPathForDirectory("/doesnt_exist") == "/doesnt_exist/");
+
+        auto path = fu->fullPathForDirectory("text");
+        REQUIRE(not path.empty());
+        CHECK(path.back() == '/');
+        CHECK(fu->isAbsolutePath(path));
+
+        CHECK(fu->fullPathForDirectory(path) == path);
+    }
+
+
     TEST_CASE("search_paths") {
         fu->purgeCachedEntries();
 
@@ -67,6 +82,8 @@ TEST_SUITE("platform/FileUtils") {
 
         SUBCASE("setDefaultResourceRootPath") {
             auto originalDefaultResourceRootPath = fu->getDefaultResourceRootPath();
+
+            REQUIRE(not originalDefaultResourceRootPath.empty());
 
             CHECK(fu->fullPathForFilename("123.txt") == "");
 
