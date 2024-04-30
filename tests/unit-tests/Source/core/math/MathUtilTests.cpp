@@ -41,12 +41,12 @@
     #elif defined(__ARM_NEON__)
         #define INCLUDE_NEON32
     #endif
-#elif defined(__SSE__)
+#elif defined(AX_USE_SSE)
     #define USE_SSE
     #define INCLUDE_SSE
 #endif
 
-#if defined(USE_NEON32) || defined(USE_NEON64) || defined(USE_SSE)
+#if defined(USE_NEON32) || defined(USE_NEON64) // || defined(USE_SSE)
     #define SKIP_SIMD_TEST doctest::skip(false)
 #else
     #define SKIP_SIMD_TEST doctest::skip(true)
@@ -65,7 +65,7 @@ namespace UnitTest {
 #endif
 
 #ifdef INCLUDE_SSE
-    #include "math/MathUtilSSE.inl"
+    // #include "math/MathUtilSSE.inl"
 #endif
 
 #include "math/MathUtil.inl"
