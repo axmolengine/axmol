@@ -29,8 +29,9 @@ jobs:
         arch: 'x64'
     - name: Build
       shell: pwsh
-      run: .\tools\cmdline\build.ps1 -p win32 -a x64
-      run: .\tools\cmdline\build.ps1 -p win32 -a x64 -xb '--target,unit-tests'
+      run: |
+        .\tools\cmdline\build.ps1 -p win32 -a x64
+        .\tools\cmdline\build.ps1 -p win32 -a x64 -xb '--target,unit-tests'
   win32-dll:
         runs-on: windows-latest
         steps:
@@ -115,8 +116,9 @@ jobs:
         submodules: 'recursive'
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/build.ps1 -p osx -a $env:BUILD_ARCH
-      run: ./tools/cmdline/build.ps1 -p osx -a $env:BUILD_ARCH -xb '--target,unit-tests'
+      run: |
+        ./tools/cmdline/build.ps1 -p osx -a $env:BUILD_ARCH
+        ./tools/cmdline/build.ps1 -p osx -a $env:BUILD_ARCH -xb '--target,unit-tests'
   android:
     runs-on: ubuntu-latest
     strategy:
