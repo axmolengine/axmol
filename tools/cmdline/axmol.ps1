@@ -329,7 +329,7 @@ if ($plugin) {
         $sub_args = $args[1..($args.Count - 1)] 
     } 
     else {
-        $sub_args = $null
+        $sub_args = @()
     }
 }
 else {
