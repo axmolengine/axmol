@@ -121,7 +121,7 @@ jobs:
       run: |
         ./tools/cmdline/build.ps1 -p osx -a $env:BUILD_ARCH
         ./tools/cmdline/build.ps1 -p osx -a $env:BUILD_ARCH -xb '--target,unit-tests'
-        ./build_$($env:BUILD_ARCH)/bin/unit-tests/Release/unit-tests.app/Contents/MacOS/unit-tests
+        ./build_${env:BUILD_ARCH}/bin/unit-tests/Release/unit-tests.app/Contents/MacOS/unit-tests
   android:
     runs-on: ubuntu-latest
     strategy:
