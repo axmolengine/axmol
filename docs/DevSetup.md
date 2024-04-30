@@ -28,7 +28,21 @@ Open any terminal(cmd.exe/powershell/pwsh/bash/zsh/WindowsTerminal/iTerm2). This
 
 Note: Avoid using special characters in `YOUR.UNIQUE.ID`
 
-Type `axmol new --help` at the command line for more options.
+Type `axmol new --help` at the command line for the latest options. The options at the time of updating this document:
+```
+options:
+    -h                  Show this help message and exit
+    -p PACKAGE_NAME
+                        Set a package name for project.
+    -d DIRECTORY
+                        Set the path where to place the new project.
+    -l {cpp,lua}
+                        Major programming language you want to use, should be [cpp | lua]
+    --portrait
+                        Set the project be portrait.
+    -i[solated]
+                        optionl, if present, will copy full engine sources to path/to/project/axmol
+```
 
 Examples:
 
@@ -37,38 +51,64 @@ Examples:
 
 ## Quick build for all target platforms (recommended)
 
-The `axmol build` command will auto-setup the general toolsets, so you'll be able to easily build your project for any platform. For example:
+The `axmol build` command will auto-setup the general toolsets, so you'll be able to easily build your project for any platform.
 
-- Win32: `axmol build -p win32`
+- Win32: 
+  - To generate project and build in console: `axmol build -p win32`
+  - To just generate project: `axmol build -p win32 -c`
 - WinUWP: `axmol build -p winuwp`
+  - To generate project and build in console: `axmol build -p winuwp`
+  - To just generate project: `axmol build -p winuwp -c`
 - Linux: `axmol build`
-- OSX: `axmol build -p osx -a x64`
+- OSX:
+  - for Intel (x64): `axmol build -p osx -a x64 -c` (generate a xcodeproj, open with XCode to setup the code sign cert and build)
+  - for Apple Silicon (arm64): `axmol build -p ios -a arm64 -c` (generate a xcodeproj, open with XCode to setup the code sign cert and build)
 - Android: `axmol build -p android -a arm64` (can run on Windows, Linux and macOS, and script will auto setup Android SDK)
 - iOS:
   - for devices: `axmol build -p ios -a arm64 -c` (generate a xcodeproj, open with XCode to setup the code sign cert and build)
-  - for simulator: `axmol build -p ios -a x64`
+  - for simulators:
+      - for Intel (x64): `axmol build -p ios -a x64 -c`
+      - for Apple Silicon (arm64): `axmol build -p ios -a arm64 -c`
 - tvOS:
   - for devices: `axmol build -p tvos -a arm64 -c` (generate a xcodeproj, open with XCode to setup code sign cert and build)
   - for simulator: `axmol build -p tvos -a x64`
 - WASM: `axmol build -p wasm` (it can run on Windows 8.1+, Linux and macOS, it requires a preinstalled [python3](https://www.python.org/) in env `PATH`)
 
+
 ### Supported options for `axmol build`
+
+Type `axmol build --help` at the command line for the latest options. The options at the time of updating this document:
 ```
--p: build target platforms: win32, winuwp, linux, android, osx, ios, tvos, watchos, wasm
-    For android: it will search the NDK in sdk_root first, which is specified by env ANDROID_HOME. 
-    If not found, by default it will install ndk-r16b, or you can specify by the option: -cc 'ndk-r23c'
--a: build architecture: x86, x64, armv7, arm64
--d: the build workspace. For example, the project root which contains root CMakeLists.txt, empty use script run working directory (aka cwd)
--cc: The C/C++ compiler toolchain: clang, msvc or gcc(mingw). Leave it empty tou use the current installed default.
-    msvc: msvc-120, msvc-141
-    ndk: ndk-r16b, ndk-r16b+
--xt: cross build tool. Default: cmake. For Android it can be gradlew, or it can be the path of the cross-build tool program
--xc: cross build tool configure options. For example,  -xc '-Dbuild'
--xb: cross build tool build options. For example, -xb '--config','Release'
--prefix: the install location for missing tools in the system. Default is "$HOME/build1k"
--sdk: specific Windows SDK version. For example, -sdk '10.0.19041.0'. Leaved empty, cmake will auto-choose the latest available
--setupOnly: this parameter is present, it only will execute the 'setup' step  
--configOnly: if this parameter is present, it will skip the 'build' step
+To print out the help in console: axmol build -h
+
+options:
+  -h: show this help message and exit
+  -p: build target platform, valid value are: win32,winuwp(winrt),linux,android,osx,ios,tvos,wasm
+      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first,
+      if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
+  -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
+  -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
+  -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
+  -xb: additional cross build options: i.e. -xb '--config','Release'
+  -c: no build, only generate native project files (vs .sln, xcodeproj)
+  -d: specify project dir to compile, i.e. -d /path/your/project/
+  -f: force generate native project files. Useful if no changes are detected, such as with resource updates.
+  -u: request upgrade prebuilt 3rd
+ examples:
+   - win32:
+     - axmol [build] -p win32
+     - axmol [build] -p win32 -cc clang
+   - winuwp: axmol build -p winuwp
+   - linux: axmol build -p linux
+   - android:
+     - axmol [build] -p android -a arm64
+     - axmol [build] -p android -a 'arm64;x64'
+   - osx:
+     - axmol [build] -p osx -a x64
+     - axmol [build] -p osx -a arm64
+   - ios: axmol [build] -p ios -a x64
+   - tvos: axmol [build] -p tvos -a x64
+   - wasm: axmol [build] -p wasm
 ```
 
 ## How to quick build a test project (e.g. 'cpp-tests')
@@ -85,6 +125,8 @@ Using a PowerShell console window (command `pwsh`), go to `axmol\tests\<testdir 
   4. In a console window, navigate into the root directory of the project you created in the previous step.
   5. Generate the relevant Visual Studio project using the cmake command:
   
+     ```axmol build``` command described in the previous sections (preferred method)
+     or
      ```cmake -S SOURCE_DIR -B BUILD_DIR -G VISUAL_STUDIO_VERSION_STRING -A [Win32|x64]```
 
      For example, let's say `SOURCE_DIR` is the current path `"."`, and `BUILD_DIR` (out-of-source build directory) is named `"build"`:
