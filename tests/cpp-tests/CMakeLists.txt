@@ -132,8 +132,6 @@ list(APPEND GAME_HEADER
      Source/testBasic.h
      Source/ZwoptexTest/ZwoptexTest.h
      Source/CurlTest/CurlTest.h
-     Source/UnitTest/UnitTest.h
-#    Source/UnitTest/RefPtrTest.h
      Source/ConfigurationTest/ConfigurationTest.h
      Source/CurrentLanguageTest/CurrentLanguageTest.h
      Source/AppDelegate.h
@@ -236,7 +234,6 @@ list(APPEND GAME_HEADER
      Source/SpritePolygonTest/SpritePolygonTest.h
      Source/TexturePackerEncryptionTest/TextureAtlasEncryptionTest.h
      Source/NodeTest/NodeTest.h
-     Source/FileUtilsTest/FileUtilsTest.h
      Source/RenderTextureTest/RenderTextureTest.h
      Source/LayerTest/LayerTest.h
      Source/SpriteTest/SpriteTest.h
@@ -297,7 +294,6 @@ list(APPEND GAME_SOURCE
      Source/ExtensionsTest/ExtensionsTest.cpp
      Source/ExtensionsTest/TableViewTest/CustomTableViewCell.cpp
      Source/ExtensionsTest/TableViewTest/TableViewTestScene.cpp
-     Source/FileUtilsTest/FileUtilsTest.cpp
      Source/FontTest/FontTest.cpp
      Source/InputTest/MouseTest.cpp
      Source/IntervalTest/IntervalTest.cpp
@@ -364,8 +360,6 @@ list(APPEND GAME_SOURCE
      Source/UITest/CocoStudioGUITest/UIWidgetAddNodeTest/UIWidgetAddNodeTest.cpp
      Source/UITest/CocoStudioGUITest/UITabControlTest/UITabControlTest.cpp
      Source/UITest/UITest.cpp
-#     Source/UnitTest/RefPtrTest.cpp
-     Source/UnitTest/UnitTest.cpp
      Source/UserDefaultTest/UserDefaultTest.cpp
      Source/ImGuiTest/ImGuiTest.cpp
      Source/VisibleRect.cpp

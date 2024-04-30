@@ -64,12 +64,16 @@ if(AX_BUILD_TESTS)
 
 	# add cpp tests default
     add_test_target(cpp-tests ${_AX_ROOT}/tests/cpp-tests)
-    
+
+    if(LINUX OR MACOSX OR WINDOWS)
+        add_test_target(unit-tests ${_AX_ROOT}/tests/unit-tests)
+    endif()
+
 	# add fairygui tests when fairygui extension is enabled
     if(AX_ENABLE_EXT_FAIRYGUI)
         add_test_target(fairygui-tests ${_AX_ROOT}/tests/fairygui-tests)
     endif()
-    
+
     if(AX_ENABLE_EXT_LIVE2D)
         add_test_target(live2d-tests ${_AX_ROOT}/tests/live2d-tests)
     endif()
@@ -77,5 +81,5 @@ if(AX_BUILD_TESTS)
     if(AX_ENABLE_EXT_LUA)
         add_test_target(lua-tests ${_AX_ROOT}/tests/lua-tests)
     endif(AX_ENABLE_EXT_LUA)
-    
+
 endif()
