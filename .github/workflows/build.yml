@@ -32,6 +32,7 @@ jobs:
       run: |
         .\tools\cmdline\build.ps1 -p win32 -a x64
         .\tools\cmdline\build.ps1 -p win32 -a x64 -xb '--target,unit-tests'
+        .\build_x64\bin\unit-tests\Release\unit-tests.exe
   win32-dll:
         runs-on: windows-latest
         steps:
@@ -101,6 +102,7 @@ jobs:
         ./tools/cmdline/build.ps1 -p linux -a x64
         ./tools/cmdline/build.ps1 -p linux -a x64 -xb '--target,lua-tests'
         ./tools/cmdline/build.ps1 -p linux -a x64 -xb '--target,unit-tests'
+        ./build_x64/bin/unit-tests/unit-tests
   osx:
     runs-on: macos-13
     strategy:
@@ -119,6 +121,7 @@ jobs:
       run: |
         ./tools/cmdline/build.ps1 -p osx -a $env:BUILD_ARCH
         ./tools/cmdline/build.ps1 -p osx -a $env:BUILD_ARCH -xb '--target,unit-tests'
+        ./build_$($env:BUILD_ARCH)/bin/unit-tests/Release/unit-tests.app/Contents/MacOS/unit-tests
   android:
     runs-on: ubuntu-latest
     strategy:
