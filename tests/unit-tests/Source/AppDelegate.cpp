@@ -95,6 +95,14 @@ void AppDelegate::applicationWillEnterForeground()
 
 
 int AppDelegate::run(int argc, char** argv) {
+    printf("Running unit tests...\n");
+    fflush(stdout);
+    printf("Default resource path: %s\n", FileUtils::getInstance()->getDefaultResourceRootPath().c_str());
+    printf("Writable path: %s\n", FileUtils::getInstance()->getWritablePath().c_str());
+    for (auto& path: FileUtils::getInstance()->getSearchPaths())
+        printf("Search path: %s\n", path.c_str());
+    fflush(stdout);
+
     ax::Director::getInstance()->init();
 
     doctest::Context context;
@@ -102,7 +110,7 @@ int AppDelegate::run(int argc, char** argv) {
     //context.addFilter("test-case-exclude", "*math*"); // exclude test cases with "math" in their name
     //context.setOption("abort-after", 5);              // stop test execution after 5 failed assertions
 
-    context.setOption("order-by", "name");            // sort the test cases by their name
+    //context.setOption("order-by", "name");            // sort the test cases by their name
 
     context.applyCommandLine(argc, argv);
 

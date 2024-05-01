@@ -198,6 +198,10 @@ function is_console_app($path) {
 function axmol_run() {
     $sub_args = $args
     . axmol_deploy @sub_args
+    if($is_host_target -and $TARGET_CPU -ne $HOST_CPU) {
+        println "Skip launch $cmake_target, due to $TARGET_OS-$TARGET_CPU apps can't runs on $HOST_OS_NAME-$HOST_CPU"
+        return
+    }
     if ($TARGET_OS -eq 'winrt') {
         explorer.exe shell:AppsFolder\$appxPkgName!App
     }

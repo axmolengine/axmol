@@ -30,8 +30,8 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        .\tools\cmdline\build.ps1 -p win32 -a x64
-        .\tools\cmdline\build.ps1 -p win32 -a x64 -xb '--target,unit-tests'
+        .\tools\cmdline\axmol.ps1 -p win32 -a x64
+        .\tools\cmdline\axmol.ps1 run -p win32 -a x64 -xb '--target,unit-tests'
   win32-dll:
         runs-on: windows-latest
         steps:
@@ -100,16 +100,9 @@ jobs:
       run: |
         ./tools/cmdline/build.ps1 -p linux -a x64
         ./tools/cmdline/build.ps1 -p linux -a x64 -xb '--target,lua-tests'
-        ./tools/cmdline/build.ps1 -p linux -a x64 -xb '--target,unit-tests'
-  osx:
-    runs-on: macos-13
-    strategy:
-      matrix:
-        arch:
-          - x64
-          - arm64
-    env:
-      BUILD_ARCH: ${{ matrix.arch }}
+        ./tools/cmdline/axmol.ps1 run -p linux -a x64 -xb '--target,unit-tests' -wait
+  osx-arm64:
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
       with:
@@ -117,8 +110,19 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        ./tools/cmdline/build.ps1 -p osx -a $env:BUILD_ARCH
-        ./tools/cmdline/build.ps1 -p osx -a $env:BUILD_ARCH -xb '--target,unit-tests'
+        ./tools/cmdline/build.ps1 -p osx
+        ./tools/cmdline/axmol.ps1 run -p osx -xb '--target,unit-tests'
+  osx-x64:
+    runs-on: macos-13
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+    - name: Build
+      shell: pwsh
+      run: |
+        ./tools/cmdline/build.ps1 -p osx
+        ./tools/cmdline/axmol.ps1 run -p osx -xb '--target,unit-tests'
   android:
     runs-on: ubuntu-latest
     strategy:

@@ -31,8 +31,10 @@ USING_NS_AX;
 
 
 TEST_SUITE("platform/FileUtils") {
-    auto fu = FileUtils::getInstance();
-
+    // !!!Don't invoke FileUtils::getInstacne at here, it's dangerous due to
+    // The test suite function will invoke before entrypoint `main`, it will cause
+    // crash on Linux(maybe others), crt not initalized properly yet.
+#define fu FileUtils::getInstance()
 
     TEST_CASE("getWritablePath") {
         REQUIRE(not fu->getWritablePath().empty());
