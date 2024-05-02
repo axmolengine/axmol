@@ -15,6 +15,9 @@
 - Add wasm EditBox support
 - Simplify axmol cmdlines build command, now you can use command `axmol` instead `axmol build` to build your project
 - Linking prebuilt xcframework for apple platforms, please do clean `AX_ROOT` by `axmol -c -u` if you tracking axmol engine git repo
+- Add unit tests by @smilediver in https://github.com/axmolengine/axmol/pull/1862
+  - https://github.com/axmolengine/axmol/pull/1870
+  - https://github.com/axmolengine/axmol/pull/1871
 
 ### Break Changes
 
@@ -52,6 +55,8 @@
 - Fix issue where UIWidget couldn't be reselected by @TyelorD in https://github.com/axmolengine/axmol/pull/1827
 - Fix glfw crash on macOS for large mouse button ids by @smilediver in https://github.com/axmolengine/axmol/pull/1835
 - Fix 1k/fetch.cmake not working on powershell 5.1
+- Fix spine two color tint data not being copied across to backend buffer on first frame by @rh101 in https://github.com/axmolengine/axmol/pull/1875
+- Fix FileUtils issues on macOS by @smilediver in https://github.com/axmolengine/axmol/pull/1863
 
 ### Improvements
 
@@ -81,6 +86,7 @@
 - Prevent repeated loading of plist files when loading csb files by @tkzcfc in https://github.com/axmolengine/axmol/pull/1844
 - Remove Info.plist from mac Resources by @martinking71 https://github.com/axmolengine/axmol/pull/1849
 - Add libvlc prebuilt entry CMakeLists.txt
+- Add ability to create console apps by @smilediver in https://github.com/axmolengine/axmol/pull/1859
 
 ### sdks updates
 
@@ -99,6 +105,7 @@
 - stb_image: 2.28 ==> 2.29
 - luajit: 2.1-9cc2e42 ==> 2.1-d06beb0
 - c-ares: 1.25.0 ==> 1.28.1
+- imgui: 1.90.4 ==> 1.90.5
 
 ## axmol-2.1.2 Feb.25 2024
 

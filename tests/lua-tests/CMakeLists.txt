@@ -1,3 +1,28 @@
+#/****************************************************************************
+# Copyright (c) 2013-2014 cocos2d-x.org
+# Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+#
+# https://axmolengine.github.io/
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+# ****************************************************************************/
+
 cmake_minimum_required(VERSION 3.10)
 
 set(APP_NAME lua-tests)
@@ -31,9 +56,6 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     endif()
 endif()
 
-_1kfetch(sample-assets)
-_1klink("${sample-assets_SOURCE_DIR}/cpp-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/Content/res")
-
 # The common cross-platforms source files and header files
 file(GLOB_RECURSE GAME_HEADER
     Source/*.h
@@ -46,23 +68,22 @@ set(GAME_INC_DIRS
   "${CMAKE_CURRENT_SOURCE_DIR}/Source"
 )
 
+_1kfetch(sample-assets)
 
-set(shared_content_folder "${_AX_ROOT}/tests/cpp-tests/Content")
 set(content_folder "${CMAKE_CURRENT_SOURCE_DIR}/Content")
-set(engine_script_folder "${_AX_ROOT}/extensions/scripting/lua-bindings/script")
 
+_1klink("${sample-assets_SOURCE_DIR}/cpp-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/Content/res")
+_1klink("${_AX_ROOT}/extensions/scripting/lua-bindings/script" "${CMAKE_CURRENT_LIST_DIR}/Content/src/axmol")
+
+set(content_folder
+    "${CMAKE_CURRENT_SOURCE_DIR}/Content"
+    )
 if(APPLE)
-    ax_mark_multi_resources(content_files RES_TO "Resources" FOLDERS ${content_folder})
-    ax_mark_multi_resources(shared_content_files RES_TO "Resources/res" FOLDERS ${shared_content_folder})
-    set(common_content_files ${content_files} ${shared_content_files})
-    ax_mark_multi_resources(engine_script_files RES_TO "Resources/src/axmol" FOLDERS ${engine_script_folder})
-    set(common_content_files ${common_content_files} ${engine_script_files})
+    ax_mark_multi_resources(common_content_files RES_TO "Resources" FOLDERS ${content_folder})
 elseif(WINDOWS)
-    ax_mark_multi_resources(content_files RES_TO "Content" FOLDERS ${content_folder})
-    set(common_content_files ${content_files})
-    ax_mark_multi_resources(engine_script_files RES_TO "Content/src/axmol" FOLDERS ${engine_script_folder})
-    set(common_content_files ${common_content_files} ${engine_script_files})
+    ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${content_folder})
 endif()
+
 
 if(ANDROID)
     # the APP_NAME should match on AndroidManifest.xml
@@ -86,11 +107,10 @@ elseif(WINDOWS)
              )
         list(APPEND GAME_SOURCE
              proj.win32/main.cpp
+             ${common_content_files}
              )
     else()
         ax_setup_winrt_sources()
-        ax_mark_multi_resources(res_files RES_TO "Content/res" FOLDERS "${_AX_ROOT}/tests/cpp-tests/Content")
-        list(APPEND common_content_files ${res_files})
     endif()
     list(APPEND GAME_SOURCE ${common_content_files})
 elseif(APPLE)
@@ -174,7 +194,7 @@ target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 if(NOT _AX_USE_PREBUILT)
     target_link_libraries(${APP_NAME} ${_AX_LUA_LIB})
 endif()
-ax_setup_app_config(${APP_NAME})
+ax_setup_app_config(${APP_NAME} CONSOLE)
 
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
@@ -205,7 +225,6 @@ endif()
 
 if ((NOT APPLE) AND (NOT WINRT))
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
-    ax_sync_lua_scripts(${APP_NAME} ${engine_script_folder} "${content_folder}/src/axmol")
     ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)
 
     if((WINDOWS AND (NOT (CMAKE_GENERATOR MATCHES "Ninja"))))
@@ -223,7 +242,7 @@ endif()
 if (_AX_USE_PREBUILT) # support windows and linux
     use_ax_compile_define(${APP_NAME})
 
-    include(${_AX_ROOT}/cmake/AXLinkHelpers.cmake)
+    include(AXLinkHelpers)
     ax_link_lua_prebuilt(${APP_NAME} ${_AX_ROOT} ${AX_PREBUILT_DIR})
 endif()
 

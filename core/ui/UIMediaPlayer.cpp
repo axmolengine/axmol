@@ -1146,10 +1146,6 @@ void MediaPlayer::setFullScreenEnabled(bool enabled)
         auto pvd               = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
         const auto contentSize = enabled ? _director->getGLView()->getDesignResolutionSize() : pvd->_originalViewSize;
         Widget::setContentSize(contentSize);
-        if (_mediaController)
-        {
-            _mediaController->setContentSize(contentSize);
-        }
 
         sendEvent((int)EventType::FULLSCREEN_SWITCH);
     }
@@ -1191,6 +1187,7 @@ void MediaPlayer::play()
             case MEMediaState::Closed:
                 engine->setAutoPlay(true);
                 engine->open(_videoURL);
+                break;
             default:
                 engine->play();
             }
