@@ -151,7 +151,7 @@ public:
     virtual ~MeshRendererFakeShadowTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void Move(ax::Ref* sender, int value);
+    void Move(ax::Object* sender, int value);
     void updateCamera(float fDelta);
     void move3D(float elapsedTime);
     void updateState(float elapsedTime);
@@ -243,7 +243,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void menuCallback_asyncLoadMesh(ax::Ref* sender);
+    void menuCallback_asyncLoadMesh(ax::Object* sender);
 
     void asyncLoad_Callback(ax::MeshRenderer* mesh, void* param);
 
@@ -261,7 +261,7 @@ public:
 
     void addNewMeshWithCoords(ax::Vec2 p);
 
-    void switchAnimationQualityCallback(ax::Ref* sender);
+    void switchAnimationQualityCallback(ax::Object* sender);
     void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
     std::string getAnimationQualityMessage() const;
@@ -360,7 +360,7 @@ public:
     void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     void addNewMeshWithCoords(ax::Vec2 p);
 
-    void menuCallback_reSkin(ax::Ref* sender);
+    void menuCallback_reSkin(ax::Object* sender);
 
 protected:
     void applyCurSkin();
@@ -395,8 +395,8 @@ public:
     void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
     void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void addOBBCallback(ax::Ref* sender);
-    void delOBBCallback(ax::Ref* sender);
+    void addOBBCallback(ax::Object* sender);
+    void delOBBCallback(ax::Object* sender);
     void addOBBWithCount(float value);
     void delOBBWithCount(float value);
 
@@ -466,7 +466,7 @@ public:
 
     virtual void update(float delta) override;
 
-    void menuCallback_Message(ax::Ref* sender);
+    void menuCallback_Message(ax::Object* sender);
 
 protected:
     void switchCase();
@@ -543,7 +543,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void menuCallback_SwitchShader(ax::Ref* sender);
+    void menuCallback_SwitchShader(ax::Object* sender);
 
 protected:
     ShaderType _shaderType;
@@ -582,7 +582,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void switch_CameraClearMode(ax::Ref* sender);
+    void switch_CameraClearMode(ax::Object* sender);
 
 protected:
     ax::Camera* _camera;
@@ -641,9 +641,9 @@ public:
     virtual std::string subtitle() const override;
     virtual void update(float delta) override;
 
-    void printMeshName(ax::Ref* sender);
-    void removeUsedTexture(ax::Ref* sender);
-    void resetTexture(ax::Ref* sender);
+    void printMeshName(ax::Object* sender);
+    void removeUsedTexture(ax::Object* sender);
+    void resetTexture(ax::Object* sender);
 
     void refreshMeshRender();
 

@@ -31,7 +31,7 @@
 #include "renderer/MeshCommand.h"
 #include "renderer/CallbackCommand.h"
 #include "renderer/backend/Buffer.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 
 NS_AX_BEGIN

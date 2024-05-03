@@ -27,7 +27,7 @@
 
 #include "../Macros.h"
 #include "../Types.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/EventListenerCustom.h"
 #include "platform/GL.h"
 #include "../Program.h"

@@ -28,7 +28,7 @@
 #define __PHYSICS_3D_WORLD_H__
 
 #include "math/Math.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Config.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
@@ -75,7 +75,7 @@ struct AX_DLL Physics3DWorldDes
  * @brief The physics information container, include Physics3DObjects, Physics3DConstraints, collision information and
  * so on.
  */
-class AX_DLL Physics3DWorld : public Ref
+class AX_DLL Physics3DWorld : public Object
 {
     friend class Physics3DComponent;
 

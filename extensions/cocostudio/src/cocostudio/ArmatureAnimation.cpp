@@ -456,13 +456,13 @@ std::string ArmatureAnimation::getCurrentMovementID() const
     return _movementID;
 }
 
-void ArmatureAnimation::setMovementEventCallFunc(Ref* target, SEL_MovementEventCallFunc callFunc)
+void ArmatureAnimation::setMovementEventCallFunc(Object* target, SEL_MovementEventCallFunc callFunc)
 {
     _movementEventTarget   = target;
     _movementEventCallFunc = callFunc;
 }
 
-void ArmatureAnimation::setFrameEventCallFunc(Ref* target, SEL_FrameEventCallFunc callFunc)
+void ArmatureAnimation::setFrameEventCallFunc(Object* target, SEL_FrameEventCallFunc callFunc)
 {
     _frameEventTarget   = target;
     _frameEventCallFunc = callFunc;
@@ -480,7 +480,7 @@ void ArmatureAnimation::setFrameEventCallFunc(
     _frameEventListener = listener;
 }
 
-void ArmatureAnimation::setUserObject(Ref* pUserObject)
+void ArmatureAnimation::setUserObject(Object* pUserObject)
 {
     AX_SAFE_RETAIN(pUserObject);
     AX_SAFE_RELEASE(_userObject);

@@ -38,7 +38,7 @@ public:
     UITextFieldTest();
     ~UITextFieldTest();
     virtual bool init() override;
-    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
+    void textFieldEvent(ax::Object* sender, ax::ui::TextField::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -52,7 +52,7 @@ public:
     UITextFieldTest_MaxLength();
     ~UITextFieldTest_MaxLength();
     virtual bool init() override;
-    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
+    void textFieldEvent(ax::Object* sender, ax::ui::TextField::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -66,7 +66,7 @@ public:
     UITextFieldTest_Password();
     ~UITextFieldTest_Password();
     virtual bool init() override;
-    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
+    void textFieldEvent(ax::Object* sender, ax::ui::TextField::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -80,7 +80,7 @@ public:
     UITextFieldTest_LineWrap();
     ~UITextFieldTest_LineWrap();
     virtual bool init() override;
-    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
+    void textFieldEvent(ax::Object* sender, ax::ui::TextField::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -94,7 +94,7 @@ public:
     UITextFieldTest_TrueTypeFont();
     ~UITextFieldTest_TrueTypeFont();
     virtual bool init() override;
-    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
+    void textFieldEvent(ax::Object* sender, ax::ui::TextField::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -108,7 +108,7 @@ public:
     UITextFieldTest_BMFont();
     ~UITextFieldTest_BMFont();
     virtual bool init() override;
-    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
+    void textFieldEvent(ax::Object* sender, ax::ui::TextField::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -122,7 +122,7 @@ public:
     UITextFieldTest_PlaceHolderColor();
     ~UITextFieldTest_PlaceHolderColor();
     virtual bool init() override;
-    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
+    void textFieldEvent(ax::Object* sender, ax::ui::TextField::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;

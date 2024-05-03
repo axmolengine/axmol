@@ -35,7 +35,7 @@ public:
 
     void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
     void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void restart(ax::Ref* sender);
+    void restart(ax::Object* sender);
 
     CREATE_FUNC(Bug914Layer);
 };

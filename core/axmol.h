@@ -50,7 +50,7 @@ THE SOFTWARE.
 #include "base/NS.h"
 #include "base/Profiling.h"
 #include "base/Properties.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/RefPtr.h"
 #include "base/Scheduler.h"
 #include "base/UserDefault.h"

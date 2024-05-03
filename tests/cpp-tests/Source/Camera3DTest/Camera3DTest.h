@@ -118,9 +118,9 @@ public:
     void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
     void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    void scaleCameraCallback(ax::Ref* sender, float value);
-    void rotateCameraCallback(ax::Ref* sender, float value);
-    void SwitchViewCallback(ax::Ref* sender, CameraType cameraType);
+    void scaleCameraCallback(ax::Object* sender, float value);
+    void rotateCameraCallback(ax::Object* sender, float value);
+    void SwitchViewCallback(ax::Object* sender, CameraType cameraType);
     void updateCamera(float fDelta);
     void move3D(float elapsedTime);
     void updateState(float elapsedTime);
@@ -174,9 +174,9 @@ public:
     // overrides
     virtual std::string title() const override;
     void reachEndCallBack();
-    void switchViewCallback(ax::Ref* sender);
-    void addMeshCallback(ax::Ref* sender);
-    void delMeshCallback(ax::Ref* sender);
+    void switchViewCallback(ax::Object* sender);
+    void addMeshCallback(ax::Object* sender);
+    void delMeshCallback(ax::Object* sender);
 
     void drawCameraFrustum();
 
@@ -208,8 +208,8 @@ public:
     // overrides
     virtual std::string title() const override;
 
-    void switchOperateCallback(ax::Ref* sender);
-    void switchTargetCallback(ax::Ref* sender);
+    void switchOperateCallback(ax::Object* sender);
+    void switchTargetCallback(ax::Object* sender);
     void onTouchsMoved(const std::vector<ax::Touch*>& touchs, ax::Event* event);
     void updateCameraTransform();
     void calculateArcBall(ax::Vec3& axis,
@@ -252,7 +252,7 @@ public:
 
     void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    void switchTypeCallback(ax::Ref* sender, int type);
+    void switchTypeCallback(ax::Object* sender, int type);
 
 protected:
     CameraType _cameraType                         = CameraType::Free;

@@ -11,7 +11,7 @@ NS_FGUI_BEGIN
 struct AtlasSprite;
 class ByteBuffer;
 
-class UIPackage : public ax::Ref
+class UIPackage : public ax::Object
 {
 public:
     UIPackage();

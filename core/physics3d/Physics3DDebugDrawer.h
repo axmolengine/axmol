@@ -28,7 +28,7 @@
 #define __PHYSICS_3D_VIEWER_H__
 
 #include "math/Math.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Types.h"
 #include "base/Config.h"
 #include "renderer/CustomCommand.h"

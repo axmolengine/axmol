@@ -110,7 +110,7 @@ Box2DTest::~Box2DTest()
     AX_SAFE_DELETE(world);
 }
 
-void Box2DTest::toggleDebugCallback(Ref* sender)
+void Box2DTest::toggleDebugCallback(Object* sender)
 {
     showDebugDraw = !showDebugDraw;
     drawBox2D->clear();
@@ -247,7 +247,7 @@ void Box2DTest::initPhysics()
 void Box2DTest::createResetButton()
 {
     auto reset = MenuItemImage::create("Images/r1.png", "Images/r2.png",
-                                       [&](Ref* sender) { getTestSuite()->restartCurrTest(); });
+                                       [&](Object* sender) { getTestSuite()->restartCurrTest(); });
 
     auto menu = Menu::create(reset, nullptr);
 

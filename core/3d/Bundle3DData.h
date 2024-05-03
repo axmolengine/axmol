@@ -27,7 +27,7 @@
 #ifndef __AX_BUNDLE_3D_DATA_H__
 #define __AX_BUNDLE_3D_DATA_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Types.h"
 #include "math/Math.h"
 #include "3d/AABB.h"

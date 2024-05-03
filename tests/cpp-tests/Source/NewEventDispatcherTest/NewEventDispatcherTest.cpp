@@ -216,13 +216,13 @@ void TouchableSpriteTest::onEnter()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1->clone(), sprite2);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1->clone(), sprite3);
 
-    auto removeAllTouchItem = MenuItemFont::create("Remove All Touch Listeners", [this](Ref* sender) {
+    auto removeAllTouchItem = MenuItemFont::create("Remove All Touch Listeners", [this](Object* sender) {
         auto senderItem = static_cast<MenuItemFont*>(sender);
         senderItem->setString("Only Next item could be clicked");
 
         _eventDispatcher->removeEventListenersForType(EventListener::Type::TOUCH_ONE_BY_ONE);
 
-        auto nextItem = MenuItemFont::create("Next", [=](Ref* sender) { getTestSuite()->enterNextTest(); });
+        auto nextItem = MenuItemFont::create("Next", [=](Object* sender) { getTestSuite()->enterNextTest(); });
 
         nextItem->setFontSizeObj(16);
         nextItem->setPosition(VisibleRect::right() + Vec2(-100.0f, -30.0f));
@@ -416,7 +416,7 @@ void RemoveListenerWhenDispatching::onEnter()
     std::shared_ptr<bool> enable(new bool(true));
     // Enable/Disable item
     auto toggleItem = MenuItemToggle::createWithCallback(
-        [=](Ref* sender) {
+        [=](Object* sender) {
             if (*enable)
             {
                 _eventDispatcher->removeEventListener(listener1);
@@ -475,7 +475,7 @@ void CustomEventTest::onEnter()
 
     _eventDispatcher->addEventListenerWithFixedPriority(_listener, 1);
 
-    auto sendItem = MenuItemFont::create("Send Custom Event 1", [=](Ref* sender) {
+    auto sendItem = MenuItemFont::create("Send Custom Event 1", [=](Object* sender) {
         static int count = 0;
         ++count;
         char* buf = new char[10];
@@ -501,7 +501,7 @@ void CustomEventTest::onEnter()
 
     _eventDispatcher->addEventListenerWithFixedPriority(_listener2, 1);
 
-    auto sendItem2 = MenuItemFont::create("Send Custom Event 2", [=](Ref* sender) {
+    auto sendItem2 = MenuItemFont::create("Send Custom Event 2", [=](Object* sender) {
         static int count = 0;
         ++count;
         char* buf = new char[10];
@@ -779,7 +779,7 @@ void RemoveListenerAfterAddingTest::onEnter()
 {
     EventDispatcherTestDemo::onEnter();
 
-    auto item1 = MenuItemFont::create("Click Me 1", [this](Ref* sender) {
+    auto item1 = MenuItemFont::create("Click Me 1", [this](Object* sender) {
         auto listener          = EventListenerTouchOneByOne::create();
         listener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
             AXASSERT(false, "Should not come here!");
@@ -794,7 +794,7 @@ void RemoveListenerAfterAddingTest::onEnter()
 
     auto addNextButton = [this]() {
         auto next = MenuItemFont::create("Please Click Me To Reset!",
-                                         [this](Ref* sender) { getTestSuite()->restartCurrTest(); });
+                                         [this](Object* sender) { getTestSuite()->restartCurrTest(); });
         next->setPosition(VisibleRect::center() + Vec2(0.0f, -40.0f));
 
         auto menu = Menu::create(next, nullptr);
@@ -803,7 +803,7 @@ void RemoveListenerAfterAddingTest::onEnter()
         this->addChild(menu);
     };
 
-    auto item2 = MenuItemFont::create("Click Me 2", [=](Ref* sender) {
+    auto item2 = MenuItemFont::create("Click Me 2", [=](Object* sender) {
         auto listener          = EventListenerTouchOneByOne::create();
         listener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
             AXASSERT(false, "Should not come here!");
@@ -818,7 +818,7 @@ void RemoveListenerAfterAddingTest::onEnter()
 
     item2->setPosition(VisibleRect::center() + Vec2(0.0f, 40.0f));
 
-    auto item3 = MenuItemFont::create("Click Me 3", [=](Ref* sender) {
+    auto item3 = MenuItemFont::create("Click Me 3", [=](Object* sender) {
         auto listener          = EventListenerTouchOneByOne::create();
         listener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
             AXASSERT(false, "Should not come here!");
@@ -1222,14 +1222,14 @@ PauseResumeTargetTest::PauseResumeTargetTest()
     sprite3->setPosition(Vec2(0, 0));
     sprite2->addChild(sprite3, -1);
 
-    auto popup = MenuItemFont::create("Popup", [=](Ref* sender) {
+    auto popup = MenuItemFont::create("Popup", [=](Object* sender) {
         sprite3->getListener()->setEnabled(false);
         _eventDispatcher->pauseEventListenersForTarget(this, true);
 
         auto colorLayer = LayerColor::create(Color4B(0, 0, 255, 100));
         this->addChild(colorLayer, 99999);
 
-        auto closeItem = MenuItemFont::create("close", [=](Ref* sender) {
+        auto closeItem = MenuItemFont::create("close", [=](Object* sender) {
             colorLayer->removeFromParent();
             _eventDispatcher->resumeEventListenersForTarget(this, true);
             sprite3->getListener()->setEnabled(true);
@@ -1279,7 +1279,7 @@ PauseResumeTargetTest2::PauseResumeTargetTest2()
     _touchableSprite->setPosition(origin + Vec2(size.width / 2, size.height / 2) + Vec2(-80.0f, 40.0f));
     addChild(_touchableSprite);
 
-    _itemPauseTouch = MenuItemFont::create("pauseTouch", [=](Ref* sender) {
+    _itemPauseTouch = MenuItemFont::create("pauseTouch", [=](Object* sender) {
         _itemPauseTouch->setEnabled(false);
         _itemResumeTouch->setEnabled(true);
 
@@ -1289,7 +1289,7 @@ PauseResumeTargetTest2::PauseResumeTargetTest2()
     _itemPauseTouch->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     _itemPauseTouch->setPosition(VisibleRect::right() + Vec2(-150.0f, 0.0f));
 
-    _itemResumeTouch = MenuItemFont::create("resumeTouch", [=](Ref* sender) {
+    _itemResumeTouch = MenuItemFont::create("resumeTouch", [=](Object* sender) {
         _itemPauseTouch->setEnabled(true);
         _itemResumeTouch->setEnabled(false);
 
@@ -1299,7 +1299,7 @@ PauseResumeTargetTest2::PauseResumeTargetTest2()
     _itemResumeTouch->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     _itemResumeTouch->setPosition(VisibleRect::right() + Vec2(0, 0));
 
-    _itemAddToScene = MenuItemFont::create("addToScene", [=](Ref* sender) {
+    _itemAddToScene = MenuItemFont::create("addToScene", [=](Object* sender) {
         _itemAddToScene->setEnabled(false);
         _itemRemoveFromScene->setEnabled(true);
 
@@ -1309,7 +1309,7 @@ PauseResumeTargetTest2::PauseResumeTargetTest2()
     _itemAddToScene->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     _itemAddToScene->setPosition(VisibleRect::right() + Vec2(-150.0f, -50.0f));
 
-    _itemRemoveFromScene = MenuItemFont::create("removeFromScene", [=](Ref* sender) {
+    _itemRemoveFromScene = MenuItemFont::create("removeFromScene", [=](Object* sender) {
         _itemAddToScene->setEnabled(true);
         _itemRemoveFromScene->setEnabled(false);
         _touchableSprite->removeFromParentAndCleanup(false);
@@ -1359,7 +1359,7 @@ PauseResumeTargetTest3::PauseResumeTargetTest3()
     _touchableSprite->setPosition(origin + Vec2(size.width / 2, size.height / 2) + Vec2(-80.0f, 40.0f));
     addChild(_touchableSprite);
 
-    auto item = MenuItemFont::create("addListener", [=](Ref* sender) {
+    auto item = MenuItemFont::create("addListener", [=](Object* sender) {
         MenuItemFont* senderItem = static_cast<MenuItemFont*>(sender);
         senderItem->setEnabled(false);
 
@@ -1427,13 +1427,13 @@ Issue4129::Issue4129() : _bugFixed(false)
         _bugFixed = true;
     });
 
-    auto removeAllTouchItem = MenuItemFont::create("Remove All Listeners", [this](Ref* sender) {
+    auto removeAllTouchItem = MenuItemFont::create("Remove All Listeners", [this](Object* sender) {
         auto senderItem = static_cast<MenuItemFont*>(sender);
         senderItem->setString("Only 'Reset' item could be clicked");
 
         _eventDispatcher->removeAllEventListeners();
 
-        auto nextItem = MenuItemFont::create("Reset", [=](Ref* sender) {
+        auto nextItem = MenuItemFont::create("Reset", [=](Object* sender) {
             AXASSERT(_bugFixed, "This issue was not fixed!");
             getTestSuite()->restartCurrTest();
         });
@@ -1723,7 +1723,7 @@ Issue8194::Issue8194()
 
     // When click this menuitem, it will add two node A and B, then send a custom event.
     // Because Node B's localZOrder < A's, the custom event should process by node B.
-    auto menuItem = MenuItemFont::create("Dispatch Custom Event", [this](Ref* sender) {
+    auto menuItem = MenuItemFont::create("Dispatch Custom Event", [this](Object* sender) {
         // add nodeA to scene
         auto nodeA = Node::create();
         addChild(nodeA, 1, tagA);
@@ -1785,7 +1785,7 @@ Issue9898::Issue9898()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_listener, nodeA);
 
     auto menuItem = MenuItemFont::create("Dispatch Custom Event",
-                                         [&](Ref* sender) { _eventDispatcher->dispatchCustomEvent("Issue9898"); });
+                                         [&](Object* sender) { _eventDispatcher->dispatchCustomEvent("Issue9898"); });
     menuItem->setPosition(origin.x + size.width / 2, origin.y + size.height / 2);
     auto menu = Menu::create(menuItem, nullptr);
     menu->setPosition(Vec2::ZERO);

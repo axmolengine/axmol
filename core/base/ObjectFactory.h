@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include <string>
 #include <unordered_map>
 #include <functional>
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "platform/PlatformMacros.h"
 
 NS_AX_BEGIN
@@ -37,8 +37,8 @@ NS_AX_BEGIN
 class AX_DLL ObjectFactory
 {
 public:
-    typedef ax::Ref* (*Instance)(void);
-    typedef std::function<ax::Ref*(void)> InstanceFunc;
+    typedef ax::Object* (*Instance)(void);
+    typedef std::function<ax::Object*(void)> InstanceFunc;
     struct AX_DLL TInfo
     {
         TInfo();
@@ -55,7 +55,7 @@ public:
 
     static ObjectFactory* getInstance();
     static void destroyInstance();
-    ax::Ref* createObject(std::string_view name);
+    ax::Object* createObject(std::string_view name);
 
     void registerType(const TInfo& t);
     void removeAll();

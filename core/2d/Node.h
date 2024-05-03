@@ -114,7 +114,7 @@ Node and override `draw`.
 
  */
 
-class AX_DLL Node : public Ref
+class AX_DLL Node : public Object
 {
 public:
     /** Default tag used for all the nodes */
@@ -1031,11 +1031,11 @@ public:
      * @return A user assigned Object.
      * @lua NA
      */
-    virtual Ref* getUserObject() { return _userObject; }
+    virtual Object* getUserObject() { return _userObject; }
     /**
      * @lua NA
      */
-    virtual const Ref* getUserObject() const { return _userObject; }
+    virtual const Object* getUserObject() const { return _userObject; }
 
     /**
      * Returns a user assigned Object.
@@ -1047,7 +1047,7 @@ public:
      *
      * @param userObject    A user assigned Object.
      */
-    virtual void setUserObject(Ref* userObject);
+    virtual void setUserObject(Object* userObject);
 
     /// @} end of Tag & User Data
 
@@ -1972,7 +1972,7 @@ protected:
     uint64_t _hashOfName;  ///< hash value of _name, used for speed in getChildByName
 
     void* _userData;   ///< A user assigned void pointer, Can be point to any cpp object
-    Ref* _userObject;  ///< A user assigned Object
+    Object* _userObject;  ///< A user assigned Object
 
     Scheduler* _scheduler;  ///< scheduler used to schedule timers and updates
 

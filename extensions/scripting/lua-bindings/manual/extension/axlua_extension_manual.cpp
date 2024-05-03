@@ -36,10 +36,10 @@ USING_NS_AX;
 USING_NS_AX_EXT;
 
 
-class LuaRefMap : public Ref
+class LuaRefMap : public Object
 {
 protected:
-    ax::Map<std::string, ax::Ref*> __map;
+    ax::Map<std::string, ax::Object*> __map;
 
 public:
     LuaRefMap() {
@@ -51,7 +51,7 @@ public:
         AXLOGINFO("deallocing LuaRefMap: %p", this);
         __map.clear();
     }
-    void setObject(Ref* pObject, const std::string& key) {
+    void setObject(Object* pObject, const std::string& key) {
         __map.insert(key, pObject);
     }
 
@@ -59,8 +59,8 @@ public:
     void removeAllObjects() { __map.clear(); 
     }
 
-    Ref* objectForKey(const std::string& key) {
-        Ref* pRetObject = nullptr;
+    Object* objectForKey(const std::string& key) {
+        Object* pRetObject = nullptr;
         pRetObject      = __map.at(key);
         return pRetObject;
     }
@@ -77,7 +77,7 @@ public:
 
 };
 
-class LuaAssetsManagerDelegateProtocol : public Ref, public AssetsManagerDelegateProtocol
+class LuaAssetsManagerDelegateProtocol : public Object, public AssetsManagerDelegateProtocol
 {
 public:
     virtual ~LuaAssetsManagerDelegateProtocol() {}
@@ -409,7 +409,7 @@ static void extendParticlePool(lua_State* tolua_S)
 
 
 
-class LuaScrollViewDelegate:public Ref, public ScrollViewDelegate
+class LuaScrollViewDelegate:public Object, public ScrollViewDelegate
 {
 public:
     virtual ~LuaScrollViewDelegate()
@@ -609,7 +609,7 @@ static void extendScrollView(lua_State* tolua_S)
 #define KEY_TABLEVIEW_DATA_SOURCE  "TableViewDataSource"
 #define KEY_TABLEVIEW_DELEGATE     "TableViewDelegate"
 
-class LUA_TableViewDelegate:public Ref, public TableViewDelegate
+class LUA_TableViewDelegate:public Object, public TableViewDelegate
 {
 public:
     LUA_TableViewDelegate(){}
@@ -761,7 +761,7 @@ tolua_lerror:
 #endif
 }
 
-class LUA_TableViewDataSource:public Ref,public TableViewDataSource
+class LUA_TableViewDataSource:public Object,public TableViewDataSource
 {
 public:
     LUA_TableViewDataSource(){}

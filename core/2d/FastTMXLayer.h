@@ -394,7 +394,7 @@ protected:
 /** @brief TMXTileAnimTask represents the frame-tick task of an animated tile.
  * It is a assistant class for TMXTileAnimTicker.
  */
-class AX_DLL TMXTileAnimTask : public Ref
+class AX_DLL TMXTileAnimTask : public Object
 {
 public:
     TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag = 0);
@@ -429,7 +429,7 @@ protected:
 
 /** @brief TMXTileAnimManager controls all tile animation of a layer.
  */
-class AX_DLL TMXTileAnimManager : public Ref
+class AX_DLL TMXTileAnimManager : public Object
 {
 public:
     static TMXTileAnimManager* create(FastTMXLayer* layer);

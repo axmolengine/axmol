@@ -27,7 +27,7 @@
 #ifndef __AX_PU_PARTICLE_3D_BEAM_RENDER_H__
 #define __AX_PU_PARTICLE_3D_BEAM_RENDER_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "Particle3D/Particle3DRender.h"
 #include "Particle3D/PU/PUListener.h"
@@ -37,7 +37,7 @@
 
 NS_AX_BEGIN
 
-class PUParticle3DBeamVisualData : public Ref
+class PUParticle3DBeamVisualData : public Object
 {
 public:
     PUParticle3DBeamVisualData(size_t index, PUBillboardChain* bbChain)

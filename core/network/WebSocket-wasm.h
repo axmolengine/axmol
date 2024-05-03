@@ -2,7 +2,7 @@
 
 #include "platform/PlatformMacros.h"
 #include <string>
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "yasio/byte_buffer.hpp"
 
 #include <emscripten/websocket.h>

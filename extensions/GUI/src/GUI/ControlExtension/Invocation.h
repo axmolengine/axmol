@@ -33,7 +33,7 @@
 #ifndef __CCINVOCATION_H__
 #define __CCINVOCATION_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "../../ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 #include "Control.h"
@@ -49,28 +49,28 @@ NS_AX_EXT_BEGIN
 
 #define cccontrol_selector(_SELECTOR) static_cast<ax::extension::Control::Handler>(&_SELECTOR)
 
-class AX_EX_DLL Invocation : public Ref
+class AX_EX_DLL Invocation : public Object
 {
 public:
     /**
      * @js NA
      * @lua NA
      */
-    static Invocation* create(Ref* target, Control::Handler action, Control::EventType controlEvent);
+    static Invocation* create(Object* target, Control::Handler action, Control::EventType controlEvent);
     /**
      * @js NA
      * @lua NA
      */
-    Invocation(Ref* target, Control::Handler action, Control::EventType controlEvent);
+    Invocation(Object* target, Control::Handler action, Control::EventType controlEvent);
     /**
      * @js NA
      * @lua NA
      */
-    void invoke(Ref* sender);
+    void invoke(Object* sender);
 
 protected:
     AX_SYNTHESIZE_READONLY(Control::Handler, _action, Action);
-    AX_SYNTHESIZE_READONLY(Ref*, _target, Target);
+    AX_SYNTHESIZE_READONLY(Object*, _target, Target);
     AX_SYNTHESIZE_READONLY(Control::EventType, _controlEvent, ControlEvent);
 };
 

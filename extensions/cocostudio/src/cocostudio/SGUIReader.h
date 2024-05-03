@@ -50,10 +50,10 @@ struct stExpCocoNode;
 
 #define kCCSVersion 1.0
 
-typedef void (ax::Ref::*SEL_ParseEvent)(std::string_view, ax::Ref*, const rapidjson::Value&);
+typedef void (ax::Object::*SEL_ParseEvent)(std::string_view, ax::Object*, const rapidjson::Value&);
 #define parseselector(_SELECTOR) (SEL_ParseEvent)(&_SELECTOR)
 
-class CCS_DLL GUIReader : public ax::Ref
+class CCS_DLL GUIReader : public ax::Object
 {
 public:
     AX_DEPRECATED_ATTRIBUTE static GUIReader* shareReader() { return GUIReader::getInstance(); };
@@ -81,12 +81,12 @@ public:
 
     void registerTypeAndCallBack(std::string_view classType,
                                  ax::ObjectFactory::Instance ins,
-                                 Ref* object,
+                                 Object* object,
                                  SEL_ParseEvent callBack);
 
     void registerTypeAndCallBack(std::string_view classType,
                                  ax::ObjectFactory::InstanceFunc ins,
-                                 Ref* object,
+                                 Object* object,
                                  SEL_ParseEvent callBack);
 
 protected:
@@ -98,7 +98,7 @@ protected:
 
     typedef hlookup::string_map<SEL_ParseEvent> ParseCallBackMap;
     ParseCallBackMap _mapParseSelector;
-    typedef hlookup::string_map<Ref*> ParseObjectMap;
+    typedef hlookup::string_map<Object*> ParseObjectMap;
     ParseObjectMap _mapObject;
 
 public:
@@ -106,7 +106,7 @@ public:
     ParseObjectMap* getParseObjectMap() { return &_mapObject; };
 };
 
-class CCS_DLL WidgetPropertiesReader : public ax::Ref
+class CCS_DLL WidgetPropertiesReader : public ax::Object
 {
 public:
     virtual ax::ui::Widget* createWidget(const rapidjson::Value& dic,

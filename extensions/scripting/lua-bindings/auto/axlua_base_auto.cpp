@@ -12,7 +12,7 @@
 int lua_ax_base_Ref_retain(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Ref* cobj = nullptr;
+    ax::Object* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21,10 +21,10 @@ int lua_ax_base_Ref_retain(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Ref",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.Object",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Ref*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Object*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -46,7 +46,7 @@ int lua_ax_base_Ref_retain(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Ref:retain",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Object:retain",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -59,7 +59,7 @@ int lua_ax_base_Ref_retain(lua_State* tolua_S)
 int lua_ax_base_Ref_release(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Ref* cobj = nullptr;
+    ax::Object* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -68,10 +68,10 @@ int lua_ax_base_Ref_release(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Ref",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.Object",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Ref*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Object*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -93,7 +93,7 @@ int lua_ax_base_Ref_release(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Ref:release",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Object:release",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -106,7 +106,7 @@ int lua_ax_base_Ref_release(lua_State* tolua_S)
 int lua_ax_base_Ref_getReferenceCount(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Ref* cobj = nullptr;
+    ax::Object* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -115,10 +115,10 @@ int lua_ax_base_Ref_getReferenceCount(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Ref",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.Object",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Ref*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Object*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -140,7 +140,7 @@ int lua_ax_base_Ref_getReferenceCount(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Ref:getReferenceCount",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Object:getReferenceCount",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -152,23 +152,23 @@ int lua_ax_base_Ref_getReferenceCount(lua_State* tolua_S)
 }
 static int lua_ax_base_Ref_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Ref)");
+    printf("luabindings: finalizing LUA object (Object)");
     return 0;
 }
 
 int lua_register_ax_base_Ref(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.Ref");
-    tolua_cclass(tolua_S,"Ref","ax.Ref","",nullptr);
+    tolua_usertype(tolua_S,"ax.Object");
+    tolua_cclass(tolua_S,"Object","ax.Object","",nullptr);
 
-    tolua_beginmodule(tolua_S,"Ref");
+    tolua_beginmodule(tolua_S,"Object");
         tolua_function(tolua_S,"retain",lua_ax_base_Ref_retain);
         tolua_function(tolua_S,"release",lua_ax_base_Ref_release);
         tolua_function(tolua_S,"getReferenceCount",lua_ax_base_Ref_getReferenceCount);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::Ref).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Ref";
-    g_typeCast[typeName] = "ax.Ref";
+    auto typeName = typeid(ax::Object).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Object";
+    g_typeCast[typeName] = "ax.Object";
     return 1;
 }
 
@@ -372,7 +372,7 @@ static int lua_ax_base_EventListener_finalize(lua_State* tolua_S)
 int lua_register_ax_base_EventListener(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.EventListener");
-    tolua_cclass(tolua_S,"EventListener","ax.EventListener","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"EventListener","ax.EventListener","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"EventListener");
         tolua_function(tolua_S,"checkAvailable",lua_ax_base_EventListener_checkAvailable);
@@ -2658,7 +2658,7 @@ static int lua_ax_base_Texture2D_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Texture2D(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Texture2D");
-    tolua_cclass(tolua_S,"Texture2D","ax.Texture2D","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Texture2D","ax.Texture2D","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Texture2D");
         tolua_function(tolua_S,"new",lua_ax_base_Texture2D_constructor);
@@ -3296,7 +3296,7 @@ static int lua_ax_base_Touch_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Touch(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Touch");
-    tolua_cclass(tolua_S,"Touch","ax.Touch","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Touch","ax.Touch","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Touch");
         tolua_function(tolua_S,"new",lua_ax_base_Touch_constructor);
@@ -3555,7 +3555,7 @@ static int lua_ax_base_Event_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Event(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Event");
-    tolua_cclass(tolua_S,"Event","ax.Event","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Event","ax.Event","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Event");
         tolua_function(tolua_S,"new",lua_ax_base_Event_constructor);
@@ -4314,7 +4314,7 @@ static int lua_ax_base_Component_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Component(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Component");
-    tolua_cclass(tolua_S,"Component","ax.Component","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Component","ax.Component","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Component");
         tolua_function(tolua_S,"init",lua_ax_base_Component_init);
@@ -7643,9 +7643,9 @@ int lua_ax_base_Node_setUserObject(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Ref* arg0;
+        ax::Object* arg0;
 
-        ok &= luaval_to_object<ax::Ref>(tolua_S, 2, "ax.Ref",&arg0, "ax.Node:setUserObject");
+        ok &= luaval_to_object<ax::Object>(tolua_S, 2, "ax.Object",&arg0, "ax.Node:setUserObject");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setUserObject'", nullptr);
@@ -11763,7 +11763,7 @@ static int lua_ax_base_Node_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Node(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Node");
-    tolua_cclass(tolua_S,"Node","ax.Node","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Node","ax.Node","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Node");
         tolua_function(tolua_S,"new",lua_ax_base_Node_constructor);
@@ -14350,7 +14350,7 @@ static int lua_ax_base_GLView_finalize(lua_State* tolua_S)
 int lua_register_ax_base_GLView(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.GLView");
-    tolua_cclass(tolua_S,"GLView","ax.GLView","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"GLView","ax.GLView","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"GLView");
         tolua_function(tolua_S,"endToLua",lua_ax_base_GLView_end);
@@ -18246,7 +18246,7 @@ static int lua_ax_base_Timer_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Timer(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Timer");
-    tolua_cclass(tolua_S,"Timer","ax.Timer","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Timer","ax.Timer","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Timer");
         tolua_function(tolua_S,"setupTimerWithInterval",lua_ax_base_Timer_setupTimerWithInterval);
@@ -18507,7 +18507,7 @@ static int lua_ax_base_Scheduler_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Scheduler(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Scheduler");
-    tolua_cclass(tolua_S,"Scheduler","ax.Scheduler","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Scheduler","ax.Scheduler","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Scheduler");
         tolua_function(tolua_S,"new",lua_ax_base_Scheduler_constructor);
@@ -19518,7 +19518,7 @@ static int lua_ax_base_Action_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Action(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Action");
-    tolua_cclass(tolua_S,"Action","ax.Action","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Action","ax.Action","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Action");
         tolua_function(tolua_S,"clone",lua_ax_base_Action_clone);
@@ -21262,7 +21262,7 @@ static int lua_ax_base_Image_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Image(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Image");
-    tolua_cclass(tolua_S,"Image","ax.Image","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Image","ax.Image","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Image");
         tolua_function(tolua_S,"new",lua_ax_base_Image_constructor);
@@ -23337,7 +23337,7 @@ static int lua_ax_base_SpriteFrame_finalize(lua_State* tolua_S)
 int lua_register_ax_base_SpriteFrame(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.SpriteFrame");
-    tolua_cclass(tolua_S,"SpriteFrame","ax.SpriteFrame","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"SpriteFrame","ax.SpriteFrame","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"SpriteFrame");
         tolua_function(tolua_S,"new",lua_ax_base_SpriteFrame_constructor);
@@ -23855,7 +23855,7 @@ static int lua_ax_base_AnimationFrame_finalize(lua_State* tolua_S)
 int lua_register_ax_base_AnimationFrame(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.AnimationFrame");
-    tolua_cclass(tolua_S,"AnimationFrame","ax.AnimationFrame","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"AnimationFrame","ax.AnimationFrame","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"AnimationFrame");
         tolua_function(tolua_S,"new",lua_ax_base_AnimationFrame_constructor);
@@ -24928,7 +24928,7 @@ static int lua_ax_base_Animation_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Animation(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Animation");
-    tolua_cclass(tolua_S,"Animation","ax.Animation","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Animation","ax.Animation","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Animation");
         tolua_function(tolua_S,"new",lua_ax_base_Animation_constructor);
@@ -35561,7 +35561,7 @@ static int lua_ax_base_EventDispatcher_finalize(lua_State* tolua_S)
 int lua_register_ax_base_EventDispatcher(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.EventDispatcher");
-    tolua_cclass(tolua_S,"EventDispatcher","ax.EventDispatcher","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"EventDispatcher","ax.EventDispatcher","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"EventDispatcher");
         tolua_function(tolua_S,"new",lua_ax_base_EventDispatcher_constructor);
@@ -47548,7 +47548,7 @@ static int lua_ax_base_ActionManager_finalize(lua_State* tolua_S)
 int lua_register_ax_base_ActionManager(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.ActionManager");
-    tolua_cclass(tolua_S,"ActionManager","ax.ActionManager","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ActionManager","ax.ActionManager","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ActionManager");
         tolua_function(tolua_S,"new",lua_ax_base_ActionManager_constructor);
@@ -63572,7 +63572,7 @@ int lua_ax_base_MenuItemLabel_initWithLabel(lua_State* tolua_S)
     if (argc == 2) 
     {
         ax::Node* arg0;
-        std::function<void (ax::Ref *)> arg1;
+        std::function<void (ax::Object *)> arg1;
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.MenuItemLabel:initWithLabel");
 
@@ -63697,7 +63697,7 @@ int lua_ax_base_MenuItemAtlasFont_initWithString(lua_State* tolua_S)
         int arg2;
         int arg3;
         int32_t arg4;
-        std::function<void (ax::Ref *)> arg5;
+        std::function<void (ax::Object *)> arg5;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.MenuItemAtlasFont:initWithString");
 
@@ -64014,7 +64014,7 @@ int lua_ax_base_MenuItemFont_initWithString(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        std::function<void (ax::Ref *)> arg1;
+        std::function<void (ax::Object *)> arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.MenuItemFont:initWithString");
 
@@ -64714,7 +64714,7 @@ int lua_ax_base_MenuItemSprite_initWithNormalSprite(lua_State* tolua_S)
         ax::Node* arg0;
         ax::Node* arg1;
         ax::Node* arg2;
-        std::function<void (ax::Ref *)> arg3;
+        std::function<void (ax::Object *)> arg3;
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.MenuItemSprite:initWithNormalSprite");
 
@@ -65041,7 +65041,7 @@ int lua_ax_base_MenuItemImage_initWithNormalImage(lua_State* tolua_S)
         std::string_view arg0;
         std::string_view arg1;
         std::string_view arg2;
-        std::function<void (ax::Ref *)> arg3;
+        std::function<void (ax::Object *)> arg3;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.MenuItemImage:initWithNormalImage");
 
@@ -91455,7 +91455,7 @@ static int lua_ax_base_CameraBackgroundBrush_finalize(lua_State* tolua_S)
 int lua_register_ax_base_CameraBackgroundBrush(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.CameraBackgroundBrush");
-    tolua_cclass(tolua_S,"CameraBackgroundBrush","ax.CameraBackgroundBrush","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"CameraBackgroundBrush","ax.CameraBackgroundBrush","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"CameraBackgroundBrush");
         tolua_function(tolua_S,"new",lua_ax_base_CameraBackgroundBrush_constructor);
@@ -93206,7 +93206,7 @@ static int lua_ax_base_GridBase_finalize(lua_State* tolua_S)
 int lua_register_ax_base_GridBase(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.GridBase");
-    tolua_cclass(tolua_S,"GridBase","ax.GridBase","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"GridBase","ax.GridBase","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"GridBase");
         tolua_function(tolua_S,"beforeBlit",lua_ax_base_GridBase_beforeBlit);
@@ -95249,7 +95249,7 @@ static int lua_ax_base_RenderState_finalize(lua_State* tolua_S)
 int lua_register_ax_base_RenderState(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.RenderState");
-    tolua_cclass(tolua_S,"RenderState","ax.RenderState","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"RenderState","ax.RenderState","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"RenderState");
         tolua_function(tolua_S,"getName",lua_ax_base_RenderState_getName);
@@ -95682,7 +95682,7 @@ static int lua_ax_base_Technique_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Technique(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Technique");
-    tolua_cclass(tolua_S,"Technique","ax.Technique","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Technique","ax.Technique","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Technique");
         tolua_function(tolua_S,"addPass",lua_ax_base_Technique_addPass);
@@ -96712,7 +96712,7 @@ static int lua_ax_base_Material_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Material(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Material");
-    tolua_cclass(tolua_S,"Material","ax.Material","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Material","ax.Material","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Material");
         tolua_function(tolua_S,"draw",lua_ax_base_Material_draw);
@@ -98147,7 +98147,7 @@ static int lua_ax_base_Pass_finalize(lua_State* tolua_S)
 int lua_register_ax_base_Pass(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Pass");
-    tolua_cclass(tolua_S,"Pass","ax.Pass","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Pass","ax.Pass","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Pass");
         tolua_function(tolua_S,"getProgramState",lua_ax_base_Pass_getProgramState);
@@ -102172,7 +102172,7 @@ static int lua_ax_base_TextureCache_finalize(lua_State* tolua_S)
 int lua_register_ax_base_TextureCache(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.TextureCache");
-    tolua_cclass(tolua_S,"TextureCache","ax.TextureCache","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"TextureCache","ax.TextureCache","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"TextureCache");
         tolua_function(tolua_S,"new",lua_ax_base_TextureCache_constructor);
@@ -105613,7 +105613,7 @@ static int lua_ax_base_TMXObjectGroup_finalize(lua_State* tolua_S)
 int lua_register_ax_base_TMXObjectGroup(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.TMXObjectGroup");
-    tolua_cclass(tolua_S,"TMXObjectGroup","ax.TMXObjectGroup","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"TMXObjectGroup","ax.TMXObjectGroup","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"TMXObjectGroup");
         tolua_function(tolua_S,"new",lua_ax_base_TMXObjectGroup_constructor);
@@ -105777,7 +105777,7 @@ static int lua_ax_base_TMXLayerInfo_finalize(lua_State* tolua_S)
 int lua_register_ax_base_TMXLayerInfo(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.TMXLayerInfo");
-    tolua_cclass(tolua_S,"TMXLayerInfo","ax.TMXLayerInfo","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"TMXLayerInfo","ax.TMXLayerInfo","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"TMXLayerInfo");
         tolua_function(tolua_S,"new",lua_ax_base_TMXLayerInfo_constructor);
@@ -105886,7 +105886,7 @@ static int lua_ax_base_TMXTilesetInfo_finalize(lua_State* tolua_S)
 int lua_register_ax_base_TMXTilesetInfo(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.TMXTilesetInfo");
-    tolua_cclass(tolua_S,"TMXTilesetInfo","ax.TMXTilesetInfo","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"TMXTilesetInfo","ax.TMXTilesetInfo","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"TMXTilesetInfo");
         tolua_function(tolua_S,"new",lua_ax_base_TMXTilesetInfo_constructor);
@@ -109837,7 +109837,7 @@ static int lua_ax_base_TMXTileAnimTask_finalize(lua_State* tolua_S)
 int lua_register_ax_base_TMXTileAnimTask(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.TMXTileAnimTask");
-    tolua_cclass(tolua_S,"TMXTileAnimTask","ax.TMXTileAnimTask","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"TMXTileAnimTask","ax.TMXTileAnimTask","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"TMXTileAnimTask");
         tolua_function(tolua_S,"new",lua_ax_base_TMXTileAnimTask_constructor);
@@ -110078,7 +110078,7 @@ static int lua_ax_base_TMXTileAnimManager_finalize(lua_State* tolua_S)
 int lua_register_ax_base_TMXTileAnimManager(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.TMXTileAnimManager");
-    tolua_cclass(tolua_S,"TMXTileAnimManager","ax.TMXTileAnimManager","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"TMXTileAnimManager","ax.TMXTileAnimManager","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"TMXTileAnimManager");
         tolua_function(tolua_S,"new",lua_ax_base_TMXTileAnimManager_constructor);

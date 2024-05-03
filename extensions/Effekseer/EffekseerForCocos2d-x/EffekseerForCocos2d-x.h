@@ -27,7 +27,7 @@ class InternalManager;
 	\~Japanese
 	1.41以降、autoreleaseにより自動的に解放されます。
 */
-class Effect : public cocos2d::Ref
+class Effect : public cocos2d::Object
 {
 private:
 	::Effekseer::EffectRef effect = nullptr;
@@ -307,7 +307,7 @@ public:
 	void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags) override;
 };
 
-class EffectManager : public cocos2d::Ref
+class EffectManager : public cocos2d::Object
 {
 	friend class EffectEmitter;
 
@@ -435,7 +435,7 @@ public:
     Effekseer::RefPtr<::EffekseerRenderer::CommandList> getInternalCommandList() { return commandList_; }
 };
 
-class NetworkServer : public cocos2d::Ref
+class NetworkServer : public cocos2d::Object
 {
 private:
 	InternalManager* internalManager_ = nullptr;

@@ -31,7 +31,7 @@
 
 namespace cocostudio
 {
-class CCS_DLL GameMapReader : public ax::Ref, public NodeReaderProtocol
+class CCS_DLL GameMapReader : public ax::Object, public NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 

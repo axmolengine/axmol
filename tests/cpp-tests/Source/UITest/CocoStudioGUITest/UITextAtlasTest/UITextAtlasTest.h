@@ -35,7 +35,7 @@ public:
     CREATE_FUNC(UITextAtlasTest);
 
     virtual bool init() override;
-    void printWidgetResources(ax::Ref* sender);
+    void printWidgetResources(ax::Object* sender);
 
 protected:
     ax::ui::TextAtlas* _textAtlas;
@@ -47,7 +47,7 @@ public:
     CREATE_FUNC(UITextAtlasETC1ShadowTest);
 
     virtual bool init() override;
-    void printWidgetResources(ax::Ref* sender);
+    void printWidgetResources(ax::Object* sender);
 
 protected:
     ax::ui::TextAtlas* _textAtlas;

@@ -27,7 +27,7 @@
 #ifndef __AX_PU_PARTICLE_3D_EVENT_HANDLER_H__
 #define __AX_PU_PARTICLE_3D_EVENT_HANDLER_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include <vector>
 #include <string>
@@ -39,7 +39,7 @@ struct PUParticle3D;
 class PUObserver;
 class PUParticleSystem3D;
 
-class AX_EX_DLL PUEventHandler : public Ref
+class AX_EX_DLL PUEventHandler : public Object
 {
 public:
     /** Todo

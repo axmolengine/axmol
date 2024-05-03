@@ -12,7 +12,7 @@ class TransitionItem;
 class GTweener;
 class ByteBuffer;
 
-class Transition : public ax::Ref
+class Transition : public ax::Object
 {
 public:
     typedef std::function<void()> PlayCompleteCallback;

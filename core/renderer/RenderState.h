@@ -31,7 +31,7 @@
 #include <cstdint>
 
 #include "platform/PlatformMacros.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Types.h"
 #include "base/Vector.h"
 
@@ -52,7 +52,7 @@ using DepthFunction = backend::CompareFunction;
 /**
  * Defines the rendering state of the graphics device.
  */
-class AX_DLL RenderState : public Ref
+class AX_DLL RenderState : public Object
 {
     friend class Material;
     friend class Technique;
@@ -71,7 +71,7 @@ public:
      * Defines a block of fixed-function render states that can be applied to a
      * RenderState object.
      */
-    class AX_DLL StateBlock  // : public Ref
+    class AX_DLL StateBlock  // : public Object
     {
         friend class RenderState;
         friend class Pass;

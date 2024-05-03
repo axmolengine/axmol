@@ -81,7 +81,7 @@ void Bug422Layer::check(Node* t)
     }
 }
 
-void Bug422Layer::menuCallback(Ref* sender)
+void Bug422Layer::menuCallback(Object* sender)
 {
     reset();
 }

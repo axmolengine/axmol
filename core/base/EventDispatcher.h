@@ -60,7 +60,7 @@ from within an EventListener, while events are being
 dispatched.
 @js NA
 */
-class AX_DLL EventDispatcher : public Ref
+class AX_DLL EventDispatcher : public Object
 {
 public:
     // Adds event listener.

@@ -44,7 +44,7 @@ namespace cocostudio
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL DecorativeDisplay : public ax::Ref
+class CCS_DLL DecorativeDisplay : public ax::Object
 {
 public:
     static DecorativeDisplay* create();

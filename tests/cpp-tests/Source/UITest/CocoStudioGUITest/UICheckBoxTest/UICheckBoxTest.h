@@ -39,9 +39,9 @@ public:
     ~UICheckBoxTest();
 
     virtual bool init() override;
-    void selectedEvent(ax::Ref* sender, ax::ui::CheckBox::EventType type);
+    void selectedEvent(ax::Object* sender, ax::ui::CheckBox::EventType type);
 
-    void printWidgetResources(ax::Ref* sender);
+    void printWidgetResources(ax::Object* sender);
 
 protected:
     ax::ui::Text* _displayValueLabel;

@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include <mutex>
 #include <set>
 #include "base/axstd.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Vector.h"
 
 NS_AX_BEGIN
@@ -45,7 +45,7 @@ typedef std::function<void(float)> ccSchedulerFunc;
 /**
  * @cond
  */
-class AX_DLL Timer : public Ref
+class AX_DLL Timer : public Object
 {
 protected:
     Timer();
@@ -83,7 +83,7 @@ public:
      * delay in seconds. */
     bool initWithSelector(Scheduler* scheduler,
                           SEL_SCHEDULE selector,
-                          Ref* target,
+                          Object* target,
                           float seconds,
                           unsigned int repeat,
                           float delay);
@@ -94,7 +94,7 @@ public:
     virtual void cancel() override;
 
 protected:
-    Ref* _target;
+    Object* _target;
     SEL_SCHEDULE _selector;
 };
 
@@ -192,7 +192,7 @@ The 'custom selectors' should be avoided when possible. It is faster, and consum
 selector'.
 
 */
-class AX_DLL Scheduler : public Ref
+class AX_DLL Scheduler : public Object
 {
 public:
     /** Priority level reserved for system services.
@@ -303,7 +303,7 @@ public:
      @param paused Whether or not to pause the schedule.
      @since v3.0
      */
-    void schedule(SEL_SCHEDULE selector, Ref* target, float interval, unsigned int repeat, float delay, bool paused);
+    void schedule(SEL_SCHEDULE selector, Object* target, float interval, unsigned int repeat, float delay, bool paused);
 
     /** The scheduled method will be called every `interval` seconds for ever.
      @param selector The callback function.
@@ -312,7 +312,7 @@ public:
      frame.
      @param paused Whether or not to pause the schedule.
      */
-    void schedule(SEL_SCHEDULE selector, Ref* target, float interval, bool paused);
+    void schedule(SEL_SCHEDULE selector, Object* target, float interval, bool paused);
 
     /** Schedules the 'update' selector for a given target with a given priority.
      The 'update' selector will be called every frame.
@@ -357,7 +357,7 @@ public:
      @param target The target of the unscheduled selector.
      @since v3.0
      */
-    void unschedule(SEL_SCHEDULE selector, Ref* target);
+    void unschedule(SEL_SCHEDULE selector, Object* target);
 
     /** Unschedules the update selector for a given target
      @param target The target to be unscheduled.
@@ -414,7 +414,7 @@ public:
      @return True if the specified selector is invoked, false if not.
      @since v3.0
      */
-    bool isScheduled(SEL_SCHEDULE selector, const Ref* target) const;
+    bool isScheduled(SEL_SCHEDULE selector, const Object* target) const;
 
     /////////////////////////////////////
 

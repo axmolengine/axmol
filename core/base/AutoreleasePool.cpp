@@ -56,7 +56,7 @@ AutoreleasePool::~AutoreleasePool()
     PoolManager::getInstance()->pop();
 }
 
-void AutoreleasePool::addObject(Ref* object)
+void AutoreleasePool::addObject(Object* object)
 {
     _managedObjectArray.emplace_back(object);
 }
@@ -66,7 +66,7 @@ void AutoreleasePool::clear()
 #if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
     _isClearing = true;
 #endif
-    std::vector<Ref*> releasings;
+    std::vector<Object*> releasings;
     releasings.swap(_managedObjectArray);
     for (const auto& obj : releasings)
     {
@@ -77,7 +77,7 @@ void AutoreleasePool::clear()
 #endif
 }
 
-bool AutoreleasePool::contains(Ref* object) const
+bool AutoreleasePool::contains(Object* object) const
 {
     for (const auto& obj : _managedObjectArray)
     {
@@ -145,7 +145,7 @@ AutoreleasePool* PoolManager::getCurrentPool() const
     return _releasePoolStack.back();
 }
 
-bool PoolManager::isObjectInPools(Ref* obj) const
+bool PoolManager::isObjectInPools(Object* obj) const
 {
     for (const auto& pool : _releasePoolStack)
     {

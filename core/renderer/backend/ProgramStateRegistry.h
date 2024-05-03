@@ -1,6 +1,6 @@
 #pragma once
 #include "Macros.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "platform/PlatformMacros.h"
 #include "Program.h"
 #include "ProgramState.h"

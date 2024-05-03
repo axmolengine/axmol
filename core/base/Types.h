@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include <string>
 
 #include "math/Math.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "renderer/backend/Types.h"
 
 #include "Enums.h"
@@ -414,7 +414,7 @@ struct AX_DLL FontDefinition
 /** @struct Acceleration
  * The device accelerometer reports values for each axis in units of g-force.
  */
-class AX_DLL Acceleration : public Ref
+class AX_DLL Acceleration : public Object
 {
 public:
     double x = 0;

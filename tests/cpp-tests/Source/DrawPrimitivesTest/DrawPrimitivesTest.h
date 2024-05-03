@@ -71,8 +71,8 @@ public:
     void update(float dt);
 
     void initSliders();
-    void changeThreshold(Ref* pSender, ax::ui::Slider::EventType type);
-    void changeLineWidth(Ref* pSender, ax::ui::Slider::EventType type);
+    void changeThreshold(Object* pSender, ax::ui::Slider::EventType type);
+    void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);
 
 private:
     ax::DrawNode* drawNode;
@@ -117,9 +117,9 @@ public:
     void update(float dt);
 
     void initSliders();
-    void changeStartAngle(Ref* pSender, ax::ui::Slider::EventType type);
-    void changeEndAngle(Ref* pSender, ax::ui::Slider::EventType type);
-    void changeAngle(Ref* pSender, ax::ui::Slider::EventType type);
+    void changeStartAngle(Object* pSender, ax::ui::Slider::EventType type);
+    void changeEndAngle(Object* pSender, ax::ui::Slider::EventType type);
+    void changeAngle(Object* pSender, ax::ui::Slider::EventType type);
 
 private:
     ax::DrawNode* drawNode;

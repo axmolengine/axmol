@@ -97,7 +97,7 @@ ChipmunkTest::ChipmunkTest()
     scheduleUpdate();
 }
 
-void ChipmunkTest::toggleDebugCallback(Ref* sender)
+void ChipmunkTest::toggleDebugCallback(Object* sender)
 {
     _debugLayer->setVisible(!_debugLayer->isVisible());
 }
@@ -197,7 +197,7 @@ void ChipmunkTest::createResetButton()
     this->addChild(menu, -1);
 }
 
-void ChipmunkTest::reset(Ref* sender)
+void ChipmunkTest::reset(Object* sender)
 {
     getTestSuite()->restartCurrTest();
 }

@@ -73,7 +73,7 @@ void LuaEngine::addLuaLoader(lua_CFunction func)
     _stack->addLuaLoader(func);
 }
 
-void LuaEngine::removeScriptObjectByObject(Ref* pObj)
+void LuaEngine::removeScriptObjectByObject(Object* pObj)
 {
     _stack->removeScriptObjectByObject(pObj);
     ScriptHandlerMgr::getInstance()->removeObjectAllHandlers(pObj);
@@ -115,7 +115,7 @@ int LuaEngine::executeMenuItemEvent(MenuItem* pMenuItem)
     return 0;
 }
 
-int LuaEngine::executeCallFuncActionEvent(CallFunc* pAction, Ref* pTarget /* = NULL*/)
+int LuaEngine::executeCallFuncActionEvent(CallFunc* pAction, Object* pTarget /* = NULL*/)
 {
     return 0;
 }
@@ -147,13 +147,13 @@ int LuaEngine::executeAccelerometerEvent(Layer* pLayer, Acceleration* pAccelerat
 
 int LuaEngine::executeEvent(int nHandler,
                             const char* pEventName,
-                            Ref* pEventSource /* = NULL*/,
+                            Object* pEventSource /* = NULL*/,
                             const char* pEventSourceClassName /* = NULL*/)
 {
     _stack->pushString(pEventName);
     if (pEventSource)
     {
-        _stack->pushObject(pEventSource, pEventSourceClassName ? pEventSourceClassName : "ax.Ref");
+        _stack->pushObject(pEventSource, pEventSourceClassName ? pEventSourceClassName : "ax.Object");
     }
     int ret = _stack->executeFunctionByHandler(nHandler, pEventSource ? 2 : 1);
     _stack->clean();
@@ -304,7 +304,7 @@ int LuaEngine::handleCallFuncActionEvent(void* data)
     if (0 == handler)
         return 0;
 
-    Ref* target = static_cast<Ref*>(basicScriptData->value);
+    Object* target = static_cast<Object*>(basicScriptData->value);
     if (NULL != target)
     {
         _stack->pushObject(target, "ax.Node");
@@ -404,7 +404,7 @@ int LuaEngine::handleCommonEvent(void* data)
         }
         else
         {
-            _stack->pushObject(commonInfo->eventSource, "ax.Ref");
+            _stack->pushObject(commonInfo->eventSource, "ax.Object");
         }
     }
     int ret = _stack->executeFunctionByHandler(commonInfo->handler, commonInfo->eventSource ? 2 : 1);
@@ -546,7 +546,7 @@ int LuaEngine::handlerControlEvent(void* data)
 
             if (0 != handler)
             {
-                _stack->pushObject((Ref*)basicScriptData->nativeObject, "ax.Ref");
+                _stack->pushObject((Object*)basicScriptData->nativeObject, "ax.Object");
                 _stack->pushInt(controlEvents);
                 ret = _stack->executeFunctionByHandler(handler, 2);
                 _stack->clean();
@@ -836,7 +836,7 @@ int LuaEngine::handleTableViewEvent(ScriptHandlerMgr::HandlerType type, void* da
     if (0 == handler)
         return 0;
 
-    Ref* obj = static_cast<Ref*>(eventData->nativeObject);
+    Object* obj = static_cast<Object*>(eventData->nativeObject);
     if (nullptr == obj)
         return 0;
 
@@ -855,7 +855,7 @@ int LuaEngine::handleTableViewEvent(ScriptHandlerMgr::HandlerType type, void* da
     case ScriptHandlerMgr::HandlerType::TABLECELL_UNHIGHLIGHT:
     case ScriptHandlerMgr::HandlerType::TABLECELL_WILL_RECYCLE:
     {
-        Ref* cellObject = static_cast<Ref*>(tableViewData->value);
+        Object* cellObject = static_cast<Object*>(tableViewData->value);
         if (nullptr == cellObject)
         {
             break;
@@ -891,7 +891,7 @@ int LuaEngine::handleTableViewEvent(ScriptHandlerMgr::HandlerType handlerType,
     if (0 == handler)
         return 0;
 
-    Ref* obj = static_cast<Ref*>(eventData->nativeObject);
+    Object* obj = static_cast<Object*>(eventData->nativeObject);
     if (nullptr == obj)
         return 0;
 

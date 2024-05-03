@@ -2517,7 +2517,7 @@ static int lua_ax_navmesh_NavMesh_finalize(lua_State* tolua_S)
 int lua_register_ax_navmesh_NavMesh(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.NavMesh");
-    tolua_cclass(tolua_S,"NavMesh","ax.NavMesh","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"NavMesh","ax.NavMesh","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"NavMesh");
         tolua_function(tolua_S,"new",lua_ax_navmesh_NavMesh_constructor);

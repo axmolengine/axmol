@@ -50,7 +50,7 @@ struct stExpCocoNode;
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL DataReaderHelper : ax::Ref
+class CCS_DLL DataReaderHelper : ax::Object
 {
 protected:
     enum ConfigType
@@ -66,7 +66,7 @@ protected:
         std::string fileContent;
         ConfigType configType;
         std::string baseFilePath;
-        ax::Ref* target;
+        ax::Object* target;
         ax::SEL_SCHEDULE selector;
         bool autoLoadSpriteFile;
 
@@ -118,7 +118,7 @@ public:
     void addDataFromFileAsync(std::string_view imagePath,
                               std::string_view plistPath,
                               std::string_view filePath,
-                              ax::Ref* target,
+                              ax::Object* target,
                               ax::SEL_SCHEDULE selector);
 
     void addDataAsyncCallBack(float dt);

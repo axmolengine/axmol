@@ -58,7 +58,7 @@ struct ManifestAsset
 
 typedef hlookup::string_map<DownloadUnit> DownloadUnits;
 
-class AX_EX_DLL Manifest : public Ref
+class AX_EX_DLL Manifest : public Object
 {
 public:
     friend class AssetsManagerEx;

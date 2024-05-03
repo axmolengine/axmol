@@ -276,7 +276,7 @@ AX_DLL void killCurrentProcess();
 * Create a Game Object, like CREATE_FUNC, but more powerful
 
 * @return  Returns a RefPtr<T> game object
-* @remark  Auto manage ax::Ref reference count, use std::unique_ptr
+* @remark  Auto manage ax::Object reference count, use std::unique_ptr
 * @limition  The init function finit must be public
 */
 template <typename T, typename F, typename... Ts>
@@ -294,7 +294,7 @@ static RefPtr<T> makeInstance(F&& memf, Ts&&... args)
 * Create a Game Object with 'bool T::init()', like CREATE_FUNC, but more powerful
 
 * @return  Returns a autorelease game object
-* @remark  Auto manage ax::Ref reference count, use std::unique_ptr
+* @remark  Auto manage ax::Object reference count, use std::unique_ptr
 * @limition  The init function finit must be public
 */
 template <typename T>
@@ -307,7 +307,7 @@ inline static RefPtr<T> makeInstance()
 * Create a Game Object, like CREATE_FUNC, but more powerful
 
 * @return  Returns a autorelease game object
-* @remark  Auto manage ax::Ref reference count, use AutoReleasePool
+* @remark  Auto manage ax::Object reference count, use AutoReleasePool
 * @limition The init function finit must be public
 */
 template <typename T, typename F, typename... Ts>
@@ -328,7 +328,7 @@ inline T* createInstance(F&& finit, Ts&&... args)
 * Create a Game Object with 'bool T::init()', like CREATE_FUNC, but more powerful
 
 * @return  Returns a autorelease game object
-* @remark  Auto manage ax::Ref reference count, use AutoReleasePool
+* @remark  Auto manage ax::Object reference count, use AutoReleasePool
 * @limition  The init function finit must be public
 */
 template <typename T>

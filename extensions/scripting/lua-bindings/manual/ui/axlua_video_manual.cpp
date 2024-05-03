@@ -65,10 +65,10 @@ static int axlua_video_VideoPlayer_addEventListener(lua_State* L)
 
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
-        self->addEventListener([=](ax::Ref* ref, ax::ui::VideoPlayer::EventType eventType) {
+        self->addEventListener([=](ax::Object* ref, ax::ui::VideoPlayer::EventType eventType) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
 
-            stack->pushObject(ref, "ax.Ref");
+            stack->pushObject(ref, "ax.Object");
             stack->pushInt((int)eventType);
 
             stack->executeFunctionByHandler(handler, 2);

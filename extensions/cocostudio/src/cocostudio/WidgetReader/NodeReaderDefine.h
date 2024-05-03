@@ -35,10 +35,10 @@
 #define DECLARE_CLASS_NODE_READER_INFO           \
 public:                                          \
     static ax::ObjectFactory::TInfo __Type; \
-    static ax::Ref* createInstance(void);
+    static ax::Object* createInstance(void);
 
 #define IMPLEMENT_CLASS_NODE_READER_INFO(className)                                    \
-    ax::Ref* className::createInstance(void) { return className::getInstance(); } \
+    ax::Object* className::createInstance(void) { return className::getInstance(); } \
     ax::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
 
 #define CREATE_CLASS_NODE_READER_INFO(className) ax::ObjectFactory::TInfo(#className, &className::createInstance)

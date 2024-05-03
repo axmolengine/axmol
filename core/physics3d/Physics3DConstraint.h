@@ -28,7 +28,7 @@
 #define __PHYSICS_3D_CONSTRAINT_H__
 
 #include "math/Math.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Config.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
@@ -48,7 +48,7 @@ class Physics3DRigidBody;
 
 /** @brief Physics3DConstraint: Constraint affects the movement of physics object, it usually connect one or two physics
  * object. There are some types of physics constraints. */
-class AX_DLL Physics3DConstraint : public Ref
+class AX_DLL Physics3DConstraint : public Object
 {
 public:
     enum class ConstraintType

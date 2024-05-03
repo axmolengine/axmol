@@ -27,7 +27,7 @@
 #ifndef __AX_PU_SCRIPT_LEXER_H__
 #define __AX_PU_SCRIPT_LEXER_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include <vector>
 #include <string>
 #include "extensions/ExtensionExport.h"

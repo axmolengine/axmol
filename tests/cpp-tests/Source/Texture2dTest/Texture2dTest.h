@@ -546,8 +546,8 @@ public:
     virtual void onEnter() override;
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void updateImage(ax::Ref* sender);
-    void changeBackgroundVisible(ax::Ref* sender);
+    void updateImage(ax::Object* sender);
+    void changeBackgroundVisible(ax::Object* sender);
 
 private:
     ax::Sprite* _background;

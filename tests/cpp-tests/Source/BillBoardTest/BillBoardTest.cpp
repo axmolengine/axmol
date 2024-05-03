@@ -199,7 +199,7 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
     schedule(AX_SCHEDULE_SELECTOR(BillBoardTest::update));
 }
 
-void BillBoardTest::menuCallback_orientedPoint(Ref* sender)
+void BillBoardTest::menuCallback_orientedPoint(Object* sender)
 {
     for (auto&& billboard : _billboards)
     {
@@ -207,7 +207,7 @@ void BillBoardTest::menuCallback_orientedPoint(Ref* sender)
     }
 }
 
-void BillBoardTest::menuCallback_orientedPlane(Ref* sender)
+void BillBoardTest::menuCallback_orientedPlane(Object* sender)
 {
     for (auto&& billboard : _billboards)
     {
@@ -296,7 +296,7 @@ void BillBoardTest::onTouchesMoved(const std::vector<Touch*>& touches, Event* ev
     }
 }
 
-void BillBoardTest::rotateCameraCallback(Ref* sender, float value)
+void BillBoardTest::rotateCameraCallback(Object* sender, float value)
 {
     Vec3 rotation3D = _camera->getRotation3D();
     rotation3D.y += value;

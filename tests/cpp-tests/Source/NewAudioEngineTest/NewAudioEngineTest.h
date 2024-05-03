@@ -44,7 +44,7 @@ public:
     virtual std::string title() const override;
     virtual void onExit() override;
 
-    virtual void onBackCallback(ax::Ref* sender) override;
+    virtual void onBackCallback(ax::Object* sender) override;
 
 protected:
     std::shared_ptr<bool> _isDestroyed;

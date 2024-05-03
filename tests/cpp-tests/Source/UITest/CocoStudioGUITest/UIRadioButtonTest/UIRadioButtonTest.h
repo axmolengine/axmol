@@ -40,8 +40,8 @@ public:
 
     virtual bool init() override;
 
-    void addRadioButton(Ref* sender);
-    void deleteRadioButton(Ref* sender);
+    void addRadioButton(Object* sender);
+    void deleteRadioButton(Object* sender);
 
 private:
     ax::ui::RadioButtonGroup* _radioButtonGroup;
@@ -64,7 +64,7 @@ public:
                                     int index,
                                     ax::ui::RadioButtonGroup::EventType type);
     void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
-    void clearRadioButtonGroup(Ref* sender);
+    void clearRadioButtonGroup(Object* sender);
 
 protected:
     void addLog(std::string_view log);

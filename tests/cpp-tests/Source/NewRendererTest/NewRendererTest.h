@@ -126,8 +126,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addSpritesCallback(Ref*);
-    void delSpritesCallback(Ref*);
+    void addSpritesCallback(Object*);
+    void delSpritesCallback(Object*);
 
     void updateSpriteCountLabel(int x);
 
@@ -168,7 +168,7 @@ protected:
     CaptureScreenTest();
     ~CaptureScreenTest();
 
-    void onCaptured(ax::Ref*);
+    void onCaptured(ax::Object*);
     void afterCaptured(bool succeed, std::string_view outputFile);
 
     std::string _filename;
@@ -187,7 +187,7 @@ protected:
     CaptureNodeTest();
     ~CaptureNodeTest();
 
-    void onCaptured(ax::Ref*);
+    void onCaptured(ax::Object*);
 
     std::string _filename;
 };

@@ -32,7 +32,7 @@ THE SOFTWARE.
 namespace cocostudio
 {
 
-class CCS_DLL BaseTriggerCondition : public ax::Ref
+class CCS_DLL BaseTriggerCondition : public ax::Object
 {
 protected:
     BaseTriggerCondition(void);
@@ -46,7 +46,7 @@ public:
     virtual void removeAll();
 };
 
-class CCS_DLL BaseTriggerAction : public ax::Ref
+class CCS_DLL BaseTriggerAction : public ax::Object
 {
 protected:
     BaseTriggerAction(void);
@@ -60,7 +60,7 @@ public:
     virtual void removeAll();
 };
 
-class CCS_DLL TriggerObj : public ax::Ref
+class CCS_DLL TriggerObj : public ax::Object
 {
 public:
     TriggerObj(void);

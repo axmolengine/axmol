@@ -29,7 +29,7 @@
 #include <string>
 #include <vector>
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "platform/PlatformMacros.h"
 #include "base/Logging.h"
 
@@ -45,7 +45,7 @@ NS_AX_BEGIN
  * @js NA
  * @lua NA
  */
-class BundleReader : public ax::Ref
+class BundleReader : public ax::Object
 {
 public:
     /**

@@ -38,8 +38,8 @@ public:
     UISliderTest();
     ~UISliderTest();
     virtual bool init() override;
-    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
-    void printWidgetResources(ax::Ref* sender);
+    void sliderEvent(ax::Object* sender, ax::ui::Slider::EventType type);
+    void printWidgetResources(ax::Object* sender);
 
 protected:
     ax::ui::TextBMFont* _displayValueLabel;
@@ -54,7 +54,7 @@ public:
     UISliderTest_Scale9();
     ~UISliderTest_Scale9();
     virtual bool init() override;
-    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
+    void sliderEvent(ax::Object* sender, ax::ui::Slider::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -68,7 +68,7 @@ public:
     UISliderTest_Scale9_State_Change();
     ~UISliderTest_Scale9_State_Change();
     virtual bool init() override;
-    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
+    void sliderEvent(ax::Object* sender, ax::ui::Slider::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -121,7 +121,7 @@ public:
     UISliderIssue12249Test();
     ~UISliderIssue12249Test();
     virtual bool init() override;
-    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
+    void sliderEvent(ax::Object* sender, ax::ui::Slider::EventType type);
 
 protected:
     ax::ui::TextBMFont* _displayValueLabel;

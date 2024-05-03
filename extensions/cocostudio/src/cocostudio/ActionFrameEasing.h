@@ -25,7 +25,7 @@ THE SOFTWARE.
 #ifndef __ActionFrameEasing_H__
 #define __ActionFrameEasing_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "CocosStudioExport.h"
 
 namespace cocostudio
@@ -58,7 +58,7 @@ enum FrameEasingType
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ActionFrameEasing : public ax::Ref
+class CCS_DLL ActionFrameEasing : public ax::Object
 {
 protected:
     FrameEasingType _type;

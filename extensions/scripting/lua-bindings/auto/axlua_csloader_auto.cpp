@@ -642,7 +642,7 @@ int lua_ax_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.CSLoader:createNodeWithVisibleSize");
             if (!ok) { break; }
-            std::function<void (ax::Ref *)> arg1;
+            std::function<void (ax::Object *)> arg1;
             do {
 			// Lambda binding for lua is not supported.
 			assert(false);

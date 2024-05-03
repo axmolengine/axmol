@@ -27,7 +27,7 @@
 #include "Macros.h"
 #include "Types.h"
 
-#include "base/Ref.h"
+#include "base/Object.h"
 
 NS_AX_BACKEND_BEGIN
 
@@ -69,7 +69,7 @@ struct DepthStencilDescriptor
 /**
  * Store Depth and stencil status.
  */
-class DepthStencilState : public ax::Ref
+class DepthStencilState : public ax::Object
 {
 public:
     virtual void update(const DepthStencilDescriptor& desc);
