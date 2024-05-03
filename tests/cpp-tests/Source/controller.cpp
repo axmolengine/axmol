@@ -84,7 +84,6 @@ public:
         addTest("Effects - Advanced", []() { return new EffectAdvanceTests(); });
         addTest("Effects - Basic", []() { return new EffectTests(); });
         addTest("Extensions", []() { return new ExtensionsTests(); });
-        addTest("FileUtils", []() { return new FileUtilsTests(); });
         addTest("Fonts", []() { return new FontTests(); });
         addTest("Interval", []() { return new IntervalTests(); });
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
@@ -131,7 +130,6 @@ public:
         addTest("TexturePacker Encryption", []() { return new TextureAtlasEncryptionTests(); });
         addTest("Touches", []() { return new TouchesTests(); });
         addTest("Transitions", []() { return new TransitionsTests(); });
-        addTest("Unit Test", []() { return new UnitTests(); });
         addTest("Unzip Test", []() { return new ZipTests(); });
         addTest("URL Open Test", []() { return new OpenURLTests(); });
         addTest("UserDefault", []() { return new UserDefaultTests(); });

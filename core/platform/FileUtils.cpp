@@ -715,48 +715,58 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
 {
     DECLARE_GUARD;
 
+    auto result = std::string();
+
     if (dir.empty())
     {
-        return "";
+        // result is ""
     }
-
-    if (isAbsolutePath(dir))
+    else if (isAbsolutePath(dir))
     {
-        return std::string{dir};
+        result = dir;
     }
-
-    // Already Cached ?
-    auto cacheIter = _fullPathCacheDir.find(dir);
-    if (cacheIter != _fullPathCacheDir.end())
+    else
     {
-        return cacheIter->second;
-    }
-    std::string longdir{dir};
-    std::string fullpath;
-
-    if (longdir[longdir.length() - 1] != '/')
-    {
-        longdir += "/";
-    }
-
-    for (const auto& searchIt : _searchPathArray)
-    {
-        fullpath = this->getPathForDirectory(longdir, searchIt);
-        if (!fullpath.empty() && isDirectoryExistInternal(fullpath))
+        // Already Cached ?
+        auto cacheIter = _fullPathCacheDir.find(dir);
+        if (cacheIter != _fullPathCacheDir.end())
         {
-            // Using the filename passed in as key.
-            _fullPathCacheDir.emplace(dir, fullpath);
-            return fullpath;
+            result = cacheIter->second;
+        }
+        else
+        {
+            std::string longdir{dir};
+
+            if (longdir[longdir.length() - 1] != '/')
+            {
+                longdir += "/";
+            }
+
+            for (const auto& searchIt : _searchPathArray)
+            {
+                auto fullpath = this->getPathForDirectory(longdir, searchIt);
+                if (!fullpath.empty() && isDirectoryExistInternal(fullpath))
+                {
+                    // Using the filename passed in as key.
+                    _fullPathCacheDir.emplace(dir, fullpath);
+                    result = fullpath;
+                    break;
+                }
+            }
+
+            if (result.empty() && isPopupNotify())
+            {
+                AXLOG("axmol: fullPathForDirectory: No directory found at %s. Possible missing directory.", dir.data());
+            }
         }
     }
 
-    if (isPopupNotify())
+    if (!result.empty() && result.back() != '/')
     {
-        AXLOG("axmol: fullPathForDirectory: No directory found at %s. Possible missing directory.", dir.data());
+        result += '/';
     }
 
-    // The file wasn't found, return empty string.
-    return "";
+    return result;
 }
 
 std::string FileUtils::fullPathFromRelativeFile(std::string_view filename, std::string_view relativeFile) const
@@ -1330,7 +1340,7 @@ int64_t FileUtils::getFileSize(std::string_view filepath) const
     {
         fullpath = fullPathForFilename(filepath);
         if (fullpath.empty())
-            return 0;
+            return -1;
         path = fullpath;
     }
     else

@@ -29,7 +29,9 @@ jobs:
         arch: 'x64'
     - name: Build
       shell: pwsh
-      run: .\tools\cmdline\build.ps1 -p win32 -a x64
+      run: |
+        .\tools\cmdline\axmol.ps1 -p win32 -a x64
+        .\tools\cmdline\axmol.ps1 run -p win32 -a x64 -xb '--target,unit-tests'
   win32-dll:
         runs-on: windows-latest
         steps:
@@ -67,17 +69,17 @@ jobs:
         runs-on: windows-latest
         env:
           # Test winsdk < 10.0.22000.0 (missing C11 standard stdalign.h), axmol will auto fallback to C99 for resolving compiling issue.
-          WINSDK_VER: '10.0.19041.0' 
+          WINSDK_VER: '10.0.19041.0'
         steps:
         - uses: actions/checkout@v4
           with:
             submodules: 'recursive'
-    
+
         - name: Install LLVM and Clang
           uses: KyleMayes/install-llvm-action@v1
           with:
             version: "16.0"
-    
+
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\build.ps1 -p win32 -a 'x64' -cc clang -sdk $env:WINSDK_VER
@@ -98,22 +100,29 @@ jobs:
       run: |
         ./tools/cmdline/build.ps1 -p linux -a x64
         ./tools/cmdline/build.ps1 -p linux -a x64 -xb '--target,lua-tests'
-  osx:
-    runs-on: macos-13
-    strategy:
-      matrix:
-        arch:
-          - x64
-          - arm64
-    env:
-      BUILD_ARCH: ${{ matrix.arch }}
+        ./tools/cmdline/axmol.ps1 run -p linux -a x64 -xb '--target,unit-tests' -wait
+  osx-arm64:
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
       with:
         submodules: 'recursive'
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/build.ps1 -p osx -a $env:BUILD_ARCH
+      run: |
+        ./tools/cmdline/build.ps1 -p osx
+        ./tools/cmdline/axmol.ps1 run -p osx -xb '--target,unit-tests'
+  osx-x64:
+    runs-on: macos-13
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+    - name: Build
+      shell: pwsh
+      run: |
+        ./tools/cmdline/build.ps1 -p osx
+        ./tools/cmdline/axmol.ps1 run -p osx -xb '--target,unit-tests'
   android:
     runs-on: ubuntu-latest
     strategy:

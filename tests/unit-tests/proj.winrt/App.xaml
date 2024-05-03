@@ -1,0 +1,12 @@
+<Application
+    x:Class="AxmolAppWinRT.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AxmolAppWinRT">
+
+    <Application.Resources>
+
+      <x:String x:Key="AppName">unit-tests</x:String>
+
+    </Application.Resources>
+</Application>
