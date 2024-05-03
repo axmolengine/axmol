@@ -129,7 +129,7 @@ public:
     void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void toggleItem(ax::Ref* sender);
+    void toggleItem(ax::Object* sender);
 };
 
 class LayerGradientTest2 : public LayerTest
@@ -146,7 +146,7 @@ class LayerIgnoreAnchorPointPos : public LayerTest
 public:
     CREATE_FUNC(LayerIgnoreAnchorPointPos);
     virtual void onEnter() override;
-    void onToggle(ax::Ref* pObject);
+    void onToggle(ax::Object* pObject);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -156,7 +156,7 @@ class LayerIgnoreAnchorPointRot : public LayerTest
 public:
     CREATE_FUNC(LayerIgnoreAnchorPointRot);
     virtual void onEnter() override;
-    void onToggle(ax::Ref* pObject);
+    void onToggle(ax::Object* pObject);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -166,7 +166,7 @@ class LayerIgnoreAnchorPointScale : public LayerTest
 public:
     CREATE_FUNC(LayerIgnoreAnchorPointScale);
     virtual void onEnter() override;
-    void onToggle(ax::Ref* pObject);
+    void onToggle(ax::Object* pObject);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -228,8 +228,8 @@ public:
     virtual void onEnter() override;
     virtual std::string title() const override;
 
-    void sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType type);
-    void listviewCallback(ax::Ref* sender, ax::ui::ListView::EventType type);
+    void sliderCallback(ax::Object* sender, ax::ui::Slider::EventType type);
+    void listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type);
 
 private:
     ax::ui::Slider* createSlider();

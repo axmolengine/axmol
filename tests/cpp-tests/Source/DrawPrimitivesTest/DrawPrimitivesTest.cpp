@@ -296,7 +296,7 @@ BetterCircleRendering::BetterCircleRendering()
     scheduleUpdate();
 }
 
-void BetterCircleRendering::changeLineWidth(ax::Ref* pSender, ax::ui::Slider::EventType type)
+void BetterCircleRendering::changeLineWidth(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -306,7 +306,7 @@ void BetterCircleRendering::changeLineWidth(ax::Ref* pSender, ax::ui::Slider::Ev
     }
 }
 
-void BetterCircleRendering::changeThreshold(ax::Ref* pSender, ax::ui::Slider::EventType type)
+void BetterCircleRendering::changeThreshold(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -390,7 +390,7 @@ DrawNodeTestNewFeature1::DrawNodeTestNewFeature1()
     scheduleUpdate();
 }
 
-void DrawNodeTestNewFeature1::changeEndAngle(ax::Ref* pSender, ax::ui::Slider::EventType type)
+void DrawNodeTestNewFeature1::changeEndAngle(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -400,7 +400,7 @@ void DrawNodeTestNewFeature1::changeEndAngle(ax::Ref* pSender, ax::ui::Slider::E
     }
 }
 
-void DrawNodeTestNewFeature1::changeStartAngle(ax::Ref* pSender, ax::ui::Slider::EventType type)
+void DrawNodeTestNewFeature1::changeStartAngle(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -410,7 +410,7 @@ void DrawNodeTestNewFeature1::changeStartAngle(ax::Ref* pSender, ax::ui::Slider:
     }
 }
 
-void DrawNodeTestNewFeature1::changeAngle(ax::Ref* pSender, ax::ui::Slider::EventType type)
+void DrawNodeTestNewFeature1::changeAngle(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {

@@ -72,7 +72,7 @@ public:
     /**
      * PageView page turn event callback.
      */
-    typedef std::function<void(Ref*, EventType)> ccPageViewCallback;
+    typedef std::function<void(Object*, EventType)> ccPageViewCallback;
 
     /**
      * Default constructor

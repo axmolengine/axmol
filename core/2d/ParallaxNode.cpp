@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-class PointObject : public Ref
+class PointObject : public Object
 {
 public:
     static PointObject* create(Vec2 ratio, Vec2 offset)

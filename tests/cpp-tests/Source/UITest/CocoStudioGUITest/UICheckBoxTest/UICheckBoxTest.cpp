@@ -81,7 +81,7 @@ bool UICheckBoxTest::init()
     return false;
 }
 
-void UICheckBoxTest::selectedEvent(Ref* pSender, CheckBox::EventType type)
+void UICheckBoxTest::selectedEvent(Object* pSender, CheckBox::EventType type)
 {
     switch (type)
     {
@@ -98,7 +98,7 @@ void UICheckBoxTest::selectedEvent(Ref* pSender, CheckBox::EventType type)
     }
 }
 
-void UICheckBoxTest::printWidgetResources(ax::Ref* sender)
+void UICheckBoxTest::printWidgetResources(ax::Object* sender)
 {
     ax::ResourceData backGroundFileName = _checkBox->getBackNormalFile();
     AXLOG("backGroundFile  Name : %s, Type: %d", backGroundFileName.file.c_str(), backGroundFileName.type);

@@ -28,7 +28,7 @@ THE SOFTWARE.
 #ifndef __AX_IMAGE_H__
 #define __AX_IMAGE_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "renderer/Texture2D.h"
 #include "base/Data.h"
 
@@ -63,7 +63,7 @@ typedef struct _MipmapInfo
 } MipmapInfo;
 
 /** The Image class for loading all images supported by axmol . */
-class AX_DLL Image : public Ref
+class AX_DLL Image : public Object
 {
 public:
     friend class TextureCache;

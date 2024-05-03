@@ -75,7 +75,7 @@ bool UITextFieldTest::init()
     return false;
 }
 
-void UITextFieldTest::textFieldEvent(Ref* pSender, TextField::EventType type)
+void UITextFieldTest::textFieldEvent(Object* pSender, TextField::EventType type)
 {
     switch (type)
     {
@@ -150,7 +150,7 @@ bool UITextFieldTest_MaxLength::init()
     return false;
 }
 
-void UITextFieldTest_MaxLength::textFieldEvent(Ref* pSender, TextField::EventType type)
+void UITextFieldTest_MaxLength::textFieldEvent(Object* pSender, TextField::EventType type)
 {
     switch (type)
     {
@@ -231,7 +231,7 @@ bool UITextFieldTest_Password::init()
     return false;
 }
 
-void UITextFieldTest_Password::textFieldEvent(Ref* pSender, TextField::EventType type)
+void UITextFieldTest_Password::textFieldEvent(Object* pSender, TextField::EventType type)
 {
     switch (type)
     {
@@ -310,7 +310,7 @@ bool UITextFieldTest_LineWrap::init()
     return false;
 }
 
-void UITextFieldTest_LineWrap::textFieldEvent(Ref* pSender, TextField::EventType type)
+void UITextFieldTest_LineWrap::textFieldEvent(Object* pSender, TextField::EventType type)
 {
     switch (type)
     {
@@ -384,7 +384,7 @@ bool UITextFieldTest_TrueTypeFont::init()
     return false;
 }
 
-void UITextFieldTest_TrueTypeFont::textFieldEvent(Ref* pSender, TextField::EventType type)
+void UITextFieldTest_TrueTypeFont::textFieldEvent(Object* pSender, TextField::EventType type)
 {
     switch (type)
     {
@@ -457,7 +457,7 @@ bool UITextFieldTest_BMFont::init()
     return false;
 }
 
-void UITextFieldTest_BMFont::textFieldEvent(Ref* pSender, TextField::EventType type)
+void UITextFieldTest_BMFont::textFieldEvent(Object* pSender, TextField::EventType type)
 {
     switch (type)
     {
@@ -533,7 +533,7 @@ bool UITextFieldTest_PlaceHolderColor::init()
     return false;
 }
 
-void UITextFieldTest_PlaceHolderColor::textFieldEvent(Ref* pSender, TextField::EventType type)
+void UITextFieldTest_PlaceHolderColor::textFieldEvent(Object* pSender, TextField::EventType type)
 {
     switch (type)
     {

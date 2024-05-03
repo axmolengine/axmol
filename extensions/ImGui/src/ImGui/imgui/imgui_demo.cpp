@@ -2089,7 +2089,7 @@ static void ShowDemoWindowWidgets()
         if (side_preview)
         {
             ImGui::SameLine();
-            ImGui::Checkbox("With Ref Color", &ref_color);
+            ImGui::Checkbox("With Object Color", &ref_color);
             if (ref_color)
             {
                 ImGui::SameLine();
@@ -6669,10 +6669,10 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
     { bool border = (style.PopupBorderSize > 0.0f);  if (ImGui::Checkbox("PopupBorder",  &border)) { style.PopupBorderSize  = border ? 1.0f : 0.0f; } }
 
     // Save/Revert button
-    if (ImGui::Button("Save Ref"))
+    if (ImGui::Button("Save Object"))
         *ref = ref_saved_style = style;
     ImGui::SameLine();
-    if (ImGui::Button("Revert Ref"))
+    if (ImGui::Button("Revert Object"))
         style = *ref;
     ImGui::SameLine();
     HelpMarker(

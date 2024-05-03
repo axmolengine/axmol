@@ -128,7 +128,7 @@ void Control::sendActionsForControlEvents(EventType controlEvents)
     }
     release();
 }
-void Control::addTargetWithActionForControlEvents(Ref* target, Handler action, EventType controlEvents)
+void Control::addTargetWithActionForControlEvents(Object* target, Handler action, EventType controlEvents)
 {
     // For each control events
     for (int i = 0; i < kControlEventTotalNumber; i++)
@@ -154,7 +154,7 @@ void Control::addTargetWithActionForControlEvents(Ref* target, Handler action, E
  * @param controlEvent A control event for which the action message is sent.
  * See "CCControlEvent" for constants.
  */
-void Control::addTargetWithActionForControlEvent(Ref* target, Handler action, EventType controlEvent)
+void Control::addTargetWithActionForControlEvent(Object* target, Handler action, EventType controlEvent)
 {
     // Create the invocation object
     Invocation* invocation = Invocation::create(target, action, controlEvent);
@@ -164,7 +164,7 @@ void Control::addTargetWithActionForControlEvent(Ref* target, Handler action, Ev
     eventInvocationList.pushBack(invocation);
 }
 
-void Control::removeTargetWithActionForControlEvents(Ref* target, Handler action, EventType controlEvents)
+void Control::removeTargetWithActionForControlEvents(Object* target, Handler action, EventType controlEvents)
 {
     // For each control events
     for (int i = 0; i < kControlEventTotalNumber; i++)
@@ -177,7 +177,7 @@ void Control::removeTargetWithActionForControlEvents(Ref* target, Handler action
     }
 }
 
-void Control::removeTargetWithActionForControlEvent(Ref* target, Handler action, EventType controlEvent)
+void Control::removeTargetWithActionForControlEvent(Object* target, Handler action, EventType controlEvent)
 {
     // Retrieve all invocations for the given control event
     auto& eventInvocationList = this->dispatchListforControlEvent(controlEvent);

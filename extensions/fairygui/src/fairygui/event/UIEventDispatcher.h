@@ -40,7 +40,7 @@ private:
 
 class InputProcessor;
 
-class UIEventDispatcher : public ax::Ref
+class UIEventDispatcher : public ax::Object
 {
 public:
     UIEventDispatcher();

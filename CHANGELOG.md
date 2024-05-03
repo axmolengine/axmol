@@ -21,6 +21,7 @@
 
 ### Break Changes
 
+- Rename `ax::Ref` ==> `ax::Object`
 - Remove `ax::log`, use `AXLOGD` instead
 - Remove cmake function: `ax_uwp_set_all_targets_deploy_min_version`
 - Remove deprecated pixel formats L8, A8, LA8 in https://github.com/axmolengine/axmol/pull/1839

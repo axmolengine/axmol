@@ -25,12 +25,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/AutoreleasePool.h"
 #include "base/Macros.h"
 #include "base/ScriptSupport.h"
 
-#if AX_REF_LEAK_DETECTION
+#if AX_OBJECT_LEAK_DETECTION
 #    include <algorithm>  // std::find
 #    include <thread>
 #    include <mutex>
@@ -39,13 +39,13 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-#if AX_REF_LEAK_DETECTION
-static void trackRef(Ref* ref);
-static void untrackRef(Ref* ref);
+#if AX_OBJECT_LEAK_DETECTION
+static void trackRef(Object* ref);
+static void untrackRef(Object* ref);
 #endif
 
-Ref::Ref()
-    : _referenceCount(1)  // when the Ref is created, the reference count of it is 1
+Object::Object()
+    : _referenceCount(1)  // when the Object is created, the reference count of it is 1
 #if AX_ENABLE_SCRIPT_BINDING
     , _luaID(0)
     , _scriptObject(nullptr)
@@ -57,12 +57,12 @@ Ref::Ref()
     _ID                              = ++uObjectCount;
 #endif
 
-#if AX_REF_LEAK_DETECTION
+#if AX_OBJECT_LEAK_DETECTION
     trackRef(this);
 #endif
 }
 
-Ref::~Ref()
+Object::~Object()
 {
 #if AX_ENABLE_SCRIPT_BINDING
     ScriptEngineProtocol* pEngine = ScriptEngineManager::getInstance()->getScriptEngine();
@@ -73,19 +73,19 @@ Ref::~Ref()
     }
 #endif  // AX_ENABLE_SCRIPT_BINDING
 
-#if AX_REF_LEAK_DETECTION
+#if AX_OBJECT_LEAK_DETECTION
     if (_referenceCount != 0)
         untrackRef(this);
 #endif
 }
 
-void Ref::retain()
+void Object::retain()
 {
     AXASSERT(_referenceCount > 0, "reference count should be greater than 0");
     ++_referenceCount;
 }
 
-void Ref::release()
+void Object::release()
 {
     AXASSERT(_referenceCount > 0, "reference count should be greater than 0");
     --_referenceCount;
@@ -96,19 +96,19 @@ void Ref::release()
         auto poolManager = PoolManager::getInstance();
         if (!poolManager->getCurrentPool()->isClearing() && poolManager->isObjectInPools(this))
         {
-            // Trigger an assert if the reference count is 0 but the Ref is still in autorelease pool.
+            // Trigger an assert if the reference count is 0 but the Object is still in autorelease pool.
             // This happens when 'autorelease/release' were not used in pairs with 'new/retain'.
             //
             // Wrong usage (1):
             //
-            // auto obj = Node::create();   // Ref = 1, but it's an autorelease Ref which means it was in the
+            // auto obj = Node::create();   // Object = 1, but it's an autorelease Object which means it was in the
             // autorelease pool. obj->autorelease();   // Wrong: If you wish to invoke autorelease several times, you
             // should retain `obj` first.
             //
             // Wrong usage (2):
             //
             // auto obj = Node::create();
-            // obj->release();   // Wrong: obj is an autorelease Ref, it will be released when clearing current pool.
+            // obj->release();   // Wrong: obj is an autorelease Object, it will be released when clearing current pool.
             //
             // Correct usage (1):
             //
@@ -128,52 +128,52 @@ void Ref::release()
         }
 #endif
 
-#if AX_REF_LEAK_DETECTION
+#if AX_OBJECT_LEAK_DETECTION
         untrackRef(this);
 #endif
         delete this;
     }
 }
 
-Ref* Ref::autorelease()
+Object* Object::autorelease()
 {
     PoolManager::getInstance()->getCurrentPool()->addObject(this);
     return this;
 }
 
-unsigned int Ref::getReferenceCount() const
+unsigned int Object::getReferenceCount() const
 {
     return _referenceCount;
 }
 
-#if AX_REF_LEAK_DETECTION
+#if AX_OBJECT_LEAK_DETECTION
 
-static std::vector<Ref*> __refAllocationList;
+static std::vector<Object*> __refAllocationList;
 static std::mutex __refMutex;
 
-void Ref::printLeaks()
+void Object::printLeaks()
 {
     std::lock_guard<std::mutex> refLockGuard(__refMutex);
-    // Dump Ref object memory leaks
+    // Dump Object object memory leaks
     if (__refAllocationList.empty())
     {
-        AXLOGI("[memory] All Ref objects successfully cleaned up (no leaks detected).\n");
+        AXLOGI("[memory] All Object objects successfully cleaned up (no leaks detected).\n");
     }
     else
     {
-        AXLOGI("[memory] WARNING: {} Ref objects still active in memory.\n", (int)__refAllocationList.size());
+        AXLOGI("[memory] WARNING: {} objects still active in memory.\n", (int)__refAllocationList.size());
 
         for (const auto& ref : __refAllocationList)
         {
             AX_ASSERT(ref);
             const char* type = typeid(*ref).name();
-            AXLOGI("[memory] LEAK: Ref object '{}' still active with reference count {}.\n", (type ? type : ""),
+            AXLOGI("[memory] LEAK: object '{}' still active with reference count {}.\n", (type ? type : ""),
                 ref->getReferenceCount());
         }
     }
 }
 
-static void trackRef(Ref* ref)
+static void trackRef(Object* ref)
 {
     std::lock_guard<std::mutex> refLockGuard(__refMutex);
     AXASSERT(ref, "Invalid parameter, ref should not be null!");
@@ -182,7 +182,7 @@ static void trackRef(Ref* ref)
     __refAllocationList.emplace_back(ref);
 }
 
-static void untrackRef(Ref* ref)
+static void untrackRef(Object* ref)
 {
     std::lock_guard<std::mutex> refLockGuard(__refMutex);
     auto iter = std::find(__refAllocationList.begin(), __refAllocationList.end(), ref);
@@ -195,6 +195,6 @@ static void untrackRef(Ref* ref)
     __refAllocationList.erase(iter);
 }
 
-#endif  // #if AX_REF_LEAK_DETECTION
+#endif  // #if AX_OBJECT_LEAK_DETECTION
 
 NS_AX_END

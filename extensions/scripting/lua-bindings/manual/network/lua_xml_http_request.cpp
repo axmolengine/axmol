@@ -41,7 +41,7 @@
 USING_NS_AX;
 using namespace ax::network;
 
-class LuaMinXmlHttpRequest : public ax::Ref
+class LuaMinXmlHttpRequest : public ax::Object
 {
 public:
     enum class ResponseType
@@ -1171,7 +1171,7 @@ TOLUA_API int register_xml_http_request(lua_State* L)
     lua_reg_xml_http_request(L);
     tolua_module(L, "ax", 0);
     tolua_beginmodule(L, "ax");
-    tolua_cclass(L, "XMLHttpRequest", "ax.XMLHttpRequest", "ax.Ref", lua_collect_xml_http_request);
+    tolua_cclass(L, "XMLHttpRequest", "ax.XMLHttpRequest", "ax.Object", lua_collect_xml_http_request);
     tolua_beginmodule(L, "XMLHttpRequest");
     tolua_variable(L, "responseType", lua_get_XMLHttpRequest_responseType, lua_set_XMLHttpRequest_responseType);
     tolua_variable(L, "withCredentials", lua_get_XMLHttpRequest_withCredentials,

@@ -715,9 +715,9 @@ int lua_ax_extension_ScrollView_pause(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Ref* arg0;
+        ax::Object* arg0;
 
-        ok &= luaval_to_object<ax::Ref>(tolua_S, 2, "ax.Ref",&arg0, "ax.ScrollView:pause");
+        ok &= luaval_to_object<ax::Object>(tolua_S, 2, "ax.Object",&arg0, "ax.ScrollView:pause");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_pause'", nullptr);
@@ -765,9 +765,9 @@ int lua_ax_extension_ScrollView_resume(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Ref* arg0;
+        ax::Object* arg0;
 
-        ok &= luaval_to_object<ax::Ref>(tolua_S, 2, "ax.Ref",&arg0, "ax.ScrollView:resume");
+        ok &= luaval_to_object<ax::Object>(tolua_S, 2, "ax.Object",&arg0, "ax.ScrollView:resume");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_resume'", nullptr);
@@ -4694,7 +4694,7 @@ static int lua_ax_extension_Manifest_finalize(lua_State* tolua_S)
 int lua_register_ax_extension_Manifest(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Manifest");
-    tolua_cclass(tolua_S,"Manifest","ax.Manifest","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Manifest","ax.Manifest","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Manifest");
         tolua_function(tolua_S,"isVersionLoaded",lua_ax_extension_Manifest_isVersionLoaded);
@@ -5335,7 +5335,7 @@ static int lua_ax_extension_AssetsManagerEx_finalize(lua_State* tolua_S)
 int lua_register_ax_extension_AssetsManagerEx(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.AssetsManagerEx");
-    tolua_cclass(tolua_S,"AssetsManagerEx","ax.AssetsManagerEx","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"AssetsManagerEx","ax.AssetsManagerEx","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"AssetsManagerEx");
         tolua_function(tolua_S,"new",lua_ax_extension_AssetsManagerEx_constructor);

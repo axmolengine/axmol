@@ -42,12 +42,12 @@ public:
     virtual ~HttpClientTest();
 
     // Menu Callbacks
-    void onMenuGetTestClicked(ax::Ref* sender);
-    void onMenuPatchTestClicked(ax::Ref* sender);
-    void onMenuPostTestClicked(ax::Ref* sender);
-    void onMenuPostBinaryTestClicked(ax::Ref* sender);
-    void onMenuPutTestClicked(ax::Ref* sender);
-    void onMenuDeleteTestClicked(ax::Ref* sender);
+    void onMenuGetTestClicked(ax::Object* sender);
+    void onMenuPatchTestClicked(ax::Object* sender);
+    void onMenuPostTestClicked(ax::Object* sender);
+    void onMenuPostBinaryTestClicked(ax::Object* sender);
+    void onMenuPutTestClicked(ax::Object* sender);
+    void onMenuDeleteTestClicked(ax::Object* sender);
 
     // Http Response Callback
     void onHttpRequestCompleted(ax::network::HttpClient* sender, ax::network::HttpResponse* response);
@@ -67,8 +67,8 @@ public:
     virtual ~HttpClientClearRequestsTest();
 
     // Menu Callbacks
-    void onMenuCancelAllClicked(ax::Ref* sender);
-    void onMenuCancelSomeClicked(ax::Ref* sender);
+    void onMenuCancelAllClicked(ax::Object* sender);
+    void onMenuCancelSomeClicked(ax::Object* sender);
 
     // Http Response Callback
     void onHttpRequestCompleted(ax::network::HttpClient* sender, ax::network::HttpResponse* response);

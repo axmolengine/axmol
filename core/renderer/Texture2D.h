@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include <map>
 #include <unordered_map>
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "base/Types.h"
 #include "renderer/CustomCommand.h"
@@ -71,7 +71,7 @@ class ProgramState;
  * texture dimensions i.e. "contentSize" != (pixelsWide, pixelsHigh) and (maxS, maxT) != (1.0, 1.0). Be aware that the
  * content of the generated textures will be upside-down!
  */
-class AX_DLL Texture2D : public Ref
+class AX_DLL Texture2D : public Object
 {
 public:
     struct PixelFormatInfo

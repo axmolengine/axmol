@@ -25,7 +25,7 @@
 #pragma once
 
 #include "Macros.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "platform/PlatformMacros.h"
 #include "Types.h"
 #include "ShaderCache.h"
@@ -69,7 +69,7 @@ enum class VertexLayoutType
 /**
  * A program.
  */
-class AX_DLL Program : public Ref
+class AX_DLL Program : public Object
 {
 public:
     ~Program();

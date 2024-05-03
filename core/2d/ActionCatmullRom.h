@@ -55,7 +55,7 @@ class Node;
  * @ingroup Actions
  * @js NA
  */
-class AX_DLL PointArray : public Ref, public Clonable
+class AX_DLL PointArray : public Object, public Clonable
 {
 public:
     /** Creates and initializes a Points array with capacity.

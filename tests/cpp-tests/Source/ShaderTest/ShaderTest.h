@@ -112,8 +112,8 @@ public:
     virtual std::string subtitle() const override;
     virtual bool init() override;
     void createSliderCtls();
-    void onRadiusChanged(ax::Ref* sender, ax::extension::Control::EventType controlEvent);
-    void onSampleNumChanged(ax::Ref* sender, ax::extension::Control::EventType controlEvent);
+    void onRadiusChanged(ax::Object* sender, ax::extension::Control::EventType controlEvent);
+    void onSampleNumChanged(ax::Object* sender, ax::extension::Control::EventType controlEvent);
 
 protected:
     SpriteBlur* _blurSprite;
@@ -212,7 +212,7 @@ public:
     CREATE_FUNC(ShaderMultiTexture);
     ShaderMultiTexture();
     ax::ui::Slider* createSliderCtl();
-    void changeTexture(ax::Ref*);
+    void changeTexture(ax::Object*);
     int _changedTextureId;
     ax::Sprite* _sprite;
 

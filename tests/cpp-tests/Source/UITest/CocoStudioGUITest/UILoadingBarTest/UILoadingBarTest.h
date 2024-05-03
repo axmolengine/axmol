@@ -39,7 +39,7 @@ public:
     ~UILoadingBarTest_Left();
     virtual bool init() override;
     void update(float delta) override;
-    void printWidgetResources(ax::Ref* sender);
+    void printWidgetResources(ax::Object* sender);
 
 protected:
     int _count;

@@ -37,10 +37,10 @@ public:
     ~UIRichTextTestBase() override = 0; // Pure virtual to prevent instancing this class
 
     bool init() override;
-    virtual void touchEvent(Ref* pSender, ax::ui::Widget::TouchEventType type);
-    virtual void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    virtual void switchHorizontalAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    virtual void switchVerticalAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    virtual void touchEvent(Object* pSender, ax::ui::Widget::TouchEventType type);
+    virtual void switchWrapMode(ax::Object* sender, ax::ui::Widget::TouchEventType type);
+    virtual void switchHorizontalAlignment(ax::Object* sender, ax::ui::Widget::TouchEventType type);
+    virtual void switchVerticalAlignment(ax::Object* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
     virtual void createButtonPanel();

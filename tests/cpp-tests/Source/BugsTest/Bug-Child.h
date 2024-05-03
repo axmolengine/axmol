@@ -43,7 +43,7 @@ public:
     virtual bool init() override;
     virtual std::string title() const override { return "BugChild"; }
 
-    void switchChild(ax::Ref* sender);
+    void switchChild(ax::Object* sender);
 
 protected:
     ax::Sprite* parent1;
@@ -62,7 +62,7 @@ public:
     virtual bool init() override;
     virtual std::string title() const override { return "BugCameraMask"; }
 
-    void switchSpriteFlag(ax::Ref* sender);
+    void switchSpriteFlag(ax::Object* sender);
     void updateSpriteMaskLabel();
     Node* _sprite;
     ax::Label* _spriteMaskLabel;

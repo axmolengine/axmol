@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "2d/Node.h"
 #include "2d/AutoPolygon.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 
 NS_AX_BEGIN
@@ -56,7 +56,7 @@ class Texture2D;
     sprite->setSpriteFrame(frame);
  @endcode
  */
-class AX_DLL SpriteFrame : public Ref, public Clonable
+class AX_DLL SpriteFrame : public Object, public Clonable
 {
 public:
     /** Create a SpriteFrame with a texture filename, rect in points.

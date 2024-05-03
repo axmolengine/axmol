@@ -11,7 +11,7 @@ NS_FGUI_BEGIN
 
 class GPath;
 
-class GTweener : public ax::Ref
+class GTweener : public ax::Object
 {
 public:
     typedef std::function<void(GTweener* tweener)> GTweenCallback;
@@ -32,7 +32,7 @@ public:
     GTweener* setTimeScale(float value);
     GTweener* setSnapping(bool value);
     GTweener* setTargetAny(void* value);
-    GTweener* setTarget(ax::Ref* target, TweenPropType propType = TweenPropType::None);
+    GTweener* setTarget(ax::Object* target, TweenPropType propType = TweenPropType::None);
     void* getTarget() const { return _target; }
     GTweener* setUserData(const ax::Value& value);
     GTweener* setPath(GPath* path);
@@ -72,7 +72,7 @@ private:
 
 private:
     void* _target;
-    ax::Ref* _refTarget;
+    ax::Object* _refTarget;
     TweenPropType _propType;
     bool _killed;
     bool _paused;

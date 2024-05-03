@@ -891,7 +891,7 @@ bool PUEmitter::isEmitterDone() const
     return !(_isEnabled || _dynRepeatDelaySet);
 }
 
-Ref* PUEmitter::getEmitsEntityPtr() const
+Object* PUEmitter::getEmitsEntityPtr() const
 {
     return _emitsEntity;
 }

@@ -145,7 +145,7 @@ void WebSocketTest::onExit()
     TestCase::onExit();
 }
 
-void WebSocketTest::startTestCallback(Ref* sender)
+void WebSocketTest::startTestCallback(Object* sender)
 {
     removeChild(_startTestMenu);
     _startTestMenu = nullptr;
@@ -288,7 +288,7 @@ void WebSocketTest::onError(network::WebSocket* ws, const network::WebSocket::Er
 }
 
 // Menu Callbacks
-void WebSocketTest::onMenuSendTextClicked(ax::Ref* sender)
+void WebSocketTest::onMenuSendTextClicked(ax::Object* sender)
 {
     if (!_wsiSendText)
     {
@@ -308,7 +308,7 @@ void WebSocketTest::onMenuSendTextClicked(ax::Ref* sender)
     }
 }
 
-void WebSocketTest::onMenuSendMultipleTextClicked(ax::Ref* sender)
+void WebSocketTest::onMenuSendMultipleTextClicked(ax::Object* sender)
 {
     if (!_wsiSendText)
     {
@@ -331,7 +331,7 @@ void WebSocketTest::onMenuSendMultipleTextClicked(ax::Ref* sender)
     }
 }
 
-void WebSocketTest::onMenuSendBinaryClicked(ax::Ref* sender)
+void WebSocketTest::onMenuSendBinaryClicked(ax::Object* sender)
 {
     if (!_wsiSendBinary)
     {
@@ -365,7 +365,7 @@ WebSocketCloseTest::WebSocketCloseTest() : _wsiTest(nullptr)
     }
 
     auto closeItem =
-        MenuItemImage::create(s_pathClose, s_pathClose, [](Ref* sender) { Director::getInstance()->end(); });
+        MenuItemImage::create(s_pathClose, s_pathClose, [](Object* sender) { Director::getInstance()->end(); });
     closeItem->setPosition(VisibleRect::right().x / 2, VisibleRect::top().y * 2 / 3);
 
     auto menu = Menu::create(closeItem, nullptr);
@@ -476,7 +476,7 @@ void WebSocketDelayTest::onExit()
     TestCase::onExit();
 }
 
-void WebSocketDelayTest::startTestCallback(Ref* sender)
+void WebSocketDelayTest::startTestCallback(Object* sender)
 {
     removeChild(_startTestMenu);
     _startTestMenu = nullptr;
@@ -574,7 +574,7 @@ void WebSocketDelayTest::onError(network::WebSocket* ws, const network::WebSocke
 }
 
 // Menu Callbacks
-void WebSocketDelayTest::onMenuSendTextClicked(ax::Ref* sender)
+void WebSocketDelayTest::onMenuSendTextClicked(ax::Object* sender)
 {
     if (!_wsiSendText)
     {

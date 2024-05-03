@@ -27,7 +27,7 @@
 #define __CCSKELETON3D_H__
 
 #include "3d/Bundle3DData.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Vector.h"
 
 NS_AX_BEGIN
@@ -41,7 +41,7 @@ NS_AX_BEGIN
  * @brief Defines a basic hierarchical structure of transformation spaces.
  * @lua NA
  */
-class AX_DLL Bone3D : public Ref
+class AX_DLL Bone3D : public Object
 {
     friend class Skeleton3D;
     friend class MeshSkin;
@@ -177,7 +177,7 @@ protected:
  * Skeleton
  *
  */
-class AX_DLL Skeleton3D : public Ref
+class AX_DLL Skeleton3D : public Object
 {
 public:
     /**

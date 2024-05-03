@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2017 Chukong Technologies
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -24,13 +25,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __BASE_CCREF_H__
-#define __BASE_CCREF_H__
+#ifndef __BASE_OBJECT_H__
+#define __BASE_OBJECT_H__
 
 #include "platform/PlatformMacros.h"
 #include "base/Config.h"
 
-#define AX_REF_LEAK_DETECTION 0
+#define AX_OBJECT_LEAK_DETECTION 0
 
 /**
  * @addtogroup base
@@ -38,17 +39,17 @@ THE SOFTWARE.
  */
 NS_AX_BEGIN
 
-class Ref;
+class Object;
 
 /**
- * Interface that defines how to clone an Ref.
+ * Interface that defines how to clone an Object.
  * @lua NA
  * @js NA
  */
 class AX_DLL Clonable
 {
 public:
-    /** Returns a copy of the Ref. */
+    /** Returns a copy of the Object. */
     virtual Clonable* clone() const = 0;
 
     /**
@@ -59,17 +60,17 @@ public:
 };
 
 /**
- * Ref is used for reference count management. If a class inherits from Ref,
+ * Object is used for reference count management. If a class inherits from Object,
  * then it is easy to be shared in different places.
  * @js NA
  */
-class AX_DLL Ref
+class AX_DLL Object
 {
 public:
     /**
      * Retains the ownership.
      *
-     * This increases the Ref's reference count.
+     * This increases the Object's reference count.
      *
      * @see release, autorelease
      * @js NA
@@ -79,9 +80,9 @@ public:
     /**
      * Releases the ownership immediately.
      *
-     * This decrements the Ref's reference count.
+     * This decrements the Object's reference count.
      *
-     * If the reference count reaches 0 after the decrement, this Ref is
+     * If the reference count reaches 0 after the decrement, this Object is
      * destructed.
      *
      * @see retain, autorelease
@@ -92,24 +93,24 @@ public:
     /**
      * Releases the ownership sometime soon automatically.
      *
-     * This decrements the Ref's reference count at the end of current
+     * This decrements the Object's reference count at the end of current
      * autorelease pool block.
      *
-     * If the reference count reaches 0 after the decrement, this Ref is
+     * If the reference count reaches 0 after the decrement, this Object is
      * destructed.
      *
-     * @returns The Ref itself.
+     * @returns The Object itself.
      *
      * @see AutoreleasePool, retain, release
      * @js NA
      * @lua NA
      */
-    Ref* autorelease();
+    Object* autorelease();
 
     /**
-     * Returns the Ref's current reference count.
+     * Returns the Object's current reference count.
      *
-     * @returns The Ref's reference count.
+     * @returns The Object's reference count.
      * @js NA
      */
     unsigned int getReferenceCount() const;
@@ -118,10 +119,10 @@ protected:
     /**
      * Constructor
      *
-     * The Ref's reference count is 1 after construction.
+     * The Object's reference count is 1 after construction.
      * @js NA
      */
-    Ref();
+    Object();
 
 public:
     /**
@@ -130,7 +131,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~Ref();
+    virtual ~Object();
 
 protected:
     /// count of references
@@ -153,8 +154,8 @@ public:
     bool _rooted;
 #endif
 
-    // Memory leak diagnostic data (only included when AX_REF_LEAK_DETECTION is defined and its value isn't zero)
-#if AX_REF_LEAK_DETECTION
+    // Memory leak diagnostic data (only included when AX_OBJECT_LEAK_DETECTION is defined and its value isn't zero)
+#if AX_OBJECT_LEAK_DETECTION
 public:
     static void printLeaks();
 #endif
@@ -162,12 +163,12 @@ public:
 
 class Node;
 
-typedef void (Ref::*SEL_CallFunc)();
-typedef void (Ref::*SEL_CallFuncN)(Node*);
-typedef void (Ref::*SEL_CallFuncND)(Node*, void*);
-typedef void (Ref::*SEL_CallFuncO)(Ref*);
-typedef void (Ref::*SEL_MenuHandler)(Ref*);
-typedef void (Ref::*SEL_SCHEDULE)(float);
+typedef void (Object::*SEL_CallFunc)();
+typedef void (Object::*SEL_CallFuncN)(Node*);
+typedef void (Object::*SEL_CallFuncND)(Node*, void*);
+typedef void (Object::*SEL_CallFuncO)(Object*);
+typedef void (Object::*SEL_MenuHandler)(Object*);
+typedef void (Object::*SEL_SCHEDULE)(float);
 
 #define AX_CALLFUNC_SELECTOR(_SELECTOR) static_cast<ax::SEL_CallFunc>(&_SELECTOR)
 #define AX_CALLFUNCN_SELECTOR(_SELECTOR) static_cast<ax::SEL_CallFuncN>(&_SELECTOR)

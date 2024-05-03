@@ -253,7 +253,7 @@ static int lua_ax_3d_Animation3D_finalize(lua_State* tolua_S)
 int lua_register_ax_3d_Animation3D(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Animation3D");
-    tolua_cclass(tolua_S,"Animation3D","ax.Animation3D","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Animation3D","ax.Animation3D","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Animation3D");
         tolua_function(tolua_S,"new",lua_ax_3d_Animation3D_constructor);
@@ -1417,7 +1417,7 @@ static int lua_ax_3d_TextureCube_finalize(lua_State* tolua_S)
 int lua_register_ax_3d_TextureCube(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.TextureCube");
-    tolua_cclass(tolua_S,"TextureCube","ax.TextureCube","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"TextureCube","ax.TextureCube","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"TextureCube");
         tolua_function(tolua_S,"new",lua_ax_3d_TextureCube_constructor);
@@ -3110,7 +3110,7 @@ static int lua_ax_3d_Mesh_finalize(lua_State* tolua_S)
 int lua_register_ax_3d_Mesh(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Mesh");
-    tolua_cclass(tolua_S,"Mesh","ax.Mesh","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Mesh","ax.Mesh","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Mesh");
         tolua_function(tolua_S,"new",lua_ax_3d_Mesh_constructor);
@@ -3629,7 +3629,7 @@ static int lua_ax_3d_Skeleton3D_finalize(lua_State* tolua_S)
 int lua_register_ax_3d_Skeleton3D(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Skeleton3D");
-    tolua_cclass(tolua_S,"Skeleton3D","ax.Skeleton3D","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Skeleton3D","ax.Skeleton3D","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Skeleton3D");
         tolua_function(tolua_S,"new",lua_ax_3d_Skeleton3D_constructor);

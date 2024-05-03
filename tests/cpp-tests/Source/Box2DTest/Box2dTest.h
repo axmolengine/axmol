@@ -51,7 +51,7 @@ public:
     void update(float dt) override;
     void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    void toggleDebugCallback(ax::Ref* sender);
+    void toggleDebugCallback(ax::Object* sender);
 
 private:
     b2World* world;

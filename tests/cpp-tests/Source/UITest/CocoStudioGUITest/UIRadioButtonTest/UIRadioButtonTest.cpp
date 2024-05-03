@@ -85,7 +85,7 @@ bool UIRadioButtonTest::init()
         Button* allowNoSelectionToggle = Button::create("cocosui/backtotopnormal.png", "cocosui/backtotoppressed.png");
         allowNoSelectionToggle->setTitleText("Toggle Allow-No-Selection");
         allowNoSelectionToggle->setPosition(Vec2(widgetSize.width / 2.0f + 100, widgetSize.height / 2.0f - 65));
-        allowNoSelectionToggle->addClickEventListener([this](Ref*) {
+        allowNoSelectionToggle->addClickEventListener([this](Object*) {
             _radioButtonGroup->setAllowedNoSelection(!_radioButtonGroup->isAllowedNoSelection());
             _allowNoSelectionText->setString(_radioButtonGroup->isAllowedNoSelection() ? "No selection is allowed."
                                                                                        : "No selection is disallowed.");
@@ -103,7 +103,7 @@ bool UIRadioButtonTest::init()
     return false;
 }
 
-void UIRadioButtonTest::addRadioButton(Ref* sender)
+void UIRadioButtonTest::addRadioButton(Object* sender)
 {
     Vec2 pos;
     if (_radioButtonGroup->getNumberOfRadioButtons() > 0)
@@ -125,7 +125,7 @@ void UIRadioButtonTest::addRadioButton(Ref* sender)
     _uiLayer->addChild(radioButton);
 }
 
-void UIRadioButtonTest::deleteRadioButton(Ref* sender)
+void UIRadioButtonTest::deleteRadioButton(Object* sender)
 {
     if (_radioButtonGroup->getNumberOfRadioButtons() > 0)
     {
@@ -281,7 +281,7 @@ void UIRadioButtonTwoGroupsTest::onChangedRadioButtonSelect(RadioButton* radioBu
     addLog(text);
 }
 
-void UIRadioButtonTwoGroupsTest::clearRadioButtonGroup(Ref* sender)
+void UIRadioButtonTwoGroupsTest::clearRadioButtonGroup(Object* sender)
 {
     for (int i = 0; i < 2; ++i)
     {

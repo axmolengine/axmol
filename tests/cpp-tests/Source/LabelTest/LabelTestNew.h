@@ -170,8 +170,8 @@ public:
     void snapArrowsToEdge();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void stringChanged(ax::Ref* sender);
-    void alignmentChanged(ax::Ref* sender);
+    void stringChanged(ax::Object* sender);
+    void alignmentChanged(ax::Object* sender);
     void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
     void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
@@ -286,9 +286,9 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    void setAlignmentLeft(ax::Ref* sender);
-    void setAlignmentCenter(ax::Ref* sender);
-    void setAlignmentRight(ax::Ref* sender);
+    void setAlignmentLeft(ax::Object* sender);
+    void setAlignmentCenter(ax::Object* sender);
+    void setAlignmentRight(ax::Object* sender);
     void updateAlignment();
 
     ax::Label* _label;
@@ -374,7 +374,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
+    void sliderEvent(ax::Object* sender, ax::ui::Slider::EventType type);
 
 private:
     ax::Label* shadowLabelOutline;
@@ -459,12 +459,12 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    void setAlignmentLeft(ax::Ref* sender);
-    void setAlignmentCenter(ax::Ref* sender);
-    void setAlignmentRight(ax::Ref* sender);
-    void setAlignmentTop(ax::Ref* sender);
-    void setAlignmentMiddle(ax::Ref* sender);
-    void setAlignmentBottom(ax::Ref* sender);
+    void setAlignmentLeft(ax::Object* sender);
+    void setAlignmentCenter(ax::Object* sender);
+    void setAlignmentRight(ax::Object* sender);
+    void setAlignmentTop(ax::Object* sender);
+    void setAlignmentMiddle(ax::Object* sender);
+    void setAlignmentBottom(ax::Object* sender);
 
     ax::Label* _label;
 };
@@ -501,7 +501,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
+    void sliderEvent(ax::Object* sender, ax::ui::Slider::EventType type);
 
 private:
     ax::Label* label;
@@ -517,7 +517,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
+    void sliderEvent(ax::Object* sender, ax::ui::Slider::EventType type);
 
 private:
     ax::Label* label;
@@ -706,15 +706,15 @@ public:
     LabelLayoutBaseTest();
     void updateDrawNodeSize(const ax::Size& drawNodeSize);
     ax::extension::ControlStepper* makeControlStepper();
-    void valueChanged(ax::Ref* sender, ax::extension::Control::EventType controlEvent);
+    void valueChanged(ax::Object* sender, ax::extension::Control::EventType controlEvent);
 
 protected:
-    void setAlignmentLeft(ax::Ref* sender);
-    void setAlignmentCenter(ax::Ref* sender);
-    void setAlignmentRight(ax::Ref* sender);
-    void setAlignmentTop(ax::Ref* sender);
-    void setAlignmentMiddle(ax::Ref* sender);
-    void setAlignmentBottom(ax::Ref* sender);
+    void setAlignmentLeft(ax::Object* sender);
+    void setAlignmentCenter(ax::Object* sender);
+    void setAlignmentRight(ax::Object* sender);
+    void setAlignmentTop(ax::Object* sender);
+    void setAlignmentMiddle(ax::Object* sender);
+    void setAlignmentBottom(ax::Object* sender);
 
     void initWrapOption(const ax::Size& size);
     void initToggleLabelTypeOption(const ax::Size& size);

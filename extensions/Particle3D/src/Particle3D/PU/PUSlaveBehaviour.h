@@ -27,7 +27,7 @@
 #ifndef __AX_PU_PARTICLE_3D_SLAVE_BEHAVIOUR_H__
 #define __AX_PU_PARTICLE_3D_SLAVE_BEHAVIOUR_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include "Particle3D/PU/PUBehaviour.h"

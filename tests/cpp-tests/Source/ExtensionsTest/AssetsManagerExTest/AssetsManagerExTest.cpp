@@ -114,7 +114,7 @@ void AssetsManagerExLoaderScene::onLoadEnd()
     backgroundSprite->setPosition(VisibleRect::center());
 }
 
-void AssetsManagerExLoaderScene::startDownloadCallback(Ref* sender)
+void AssetsManagerExLoaderScene::startDownloadCallback(Object* sender)
 {
     removeChild(_downloadMenu);
     _downloadMenu = nullptr;

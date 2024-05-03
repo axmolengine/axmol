@@ -163,7 +163,7 @@ void ControlColourPicker::updateHueAndControlPicker()
     _colourPicker->updateDraggerWithHSV(_hsv);
 }
 
-void ControlColourPicker::hueSliderValueChanged(Ref* sender, Control::EventType /*controlEvent*/)
+void ControlColourPicker::hueSliderValueChanged(Object* sender, Control::EventType /*controlEvent*/)
 {
     _hsv.h = ((ControlHuePicker*)sender)->getHue();
 
@@ -177,7 +177,7 @@ void ControlColourPicker::hueSliderValueChanged(Ref* sender, Control::EventType 
     updateControlPicker();
 }
 
-void ControlColourPicker::colourSliderValueChanged(Ref* sender, Control::EventType /*controlEvent*/)
+void ControlColourPicker::colourSliderValueChanged(Object* sender, Control::EventType /*controlEvent*/)
 {
     _hsv.s = ((ControlSaturationBrightnessPicker*)sender)->getSaturation();
     _hsv.v = ((ControlSaturationBrightnessPicker*)sender)->getBrightness();

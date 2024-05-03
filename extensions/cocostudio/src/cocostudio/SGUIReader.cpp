@@ -162,7 +162,7 @@ ax::Size GUIReader::getFileDesignSize(const char* fileName) const
 
 void GUIReader::registerTypeAndCallBack(std::string_view classType,
                                         ObjectFactory::Instance ins,
-                                        Ref* object,
+                                        Object* object,
                                         SEL_ParseEvent callBack)
 {
     ObjectFactory* factoryCreate = ObjectFactory::getInstance();
@@ -183,7 +183,7 @@ void GUIReader::registerTypeAndCallBack(std::string_view classType,
 
 void GUIReader::registerTypeAndCallBack(std::string_view classType,
                                         ObjectFactory::InstanceFunc ins,
-                                        Ref* object,
+                                        Object* object,
                                         SEL_ParseEvent callBack)
 {
     ObjectFactory* factoryCreate = ObjectFactory::getInstance();
@@ -346,14 +346,14 @@ ax::ui::Widget* WidgetPropertiesReader::createGUI(std::string_view classname)
 {
     std::string name = this->getGUIClassName(classname);
 
-    Ref* object = ObjectFactory::getInstance()->createObject(name);
+    Object* object = ObjectFactory::getInstance()->createObject(name);
 
     return dynamic_cast<ui::Widget*>(object);
 }
 
 WidgetReaderProtocol* WidgetPropertiesReader::createWidgetReaderProtocol(std::string_view classname)
 {
-    Ref* object = ObjectFactory::getInstance()->createObject(classname);
+    Object* object = ObjectFactory::getInstance()->createObject(classname);
 
     return dynamic_cast<WidgetReaderProtocol*>(object);
 }
@@ -535,7 +535,7 @@ Widget* WidgetPropertiesReader0250::createWidget(const rapidjson::Value& data,
     //    ActionManager::getInstance()->releaseActions();
     /* ********************** */
     //    AXLOG("file name == [%s]",fileName);
-    Ref* rootWidget = (Ref*)widget;
+    Object* rootWidget = (Object*)widget;
     ActionManagerEx::getInstance()->initWithDictionary(fileName, actions, rootWidget);
     return widget;
 }
@@ -1312,7 +1312,7 @@ Widget* WidgetPropertiesReader0300::createWidget(const rapidjson::Value& data,
     //    ActionManager::getInstance()->releaseActions();
     /* ********************** */
     //    AXLOG("file name == [%s]",fileName);
-    Ref* rootWidget = (Ref*)widget;
+    Object* rootWidget = (Object*)widget;
     ActionManagerEx::getInstance()->initWithDictionary(fileName, actions, rootWidget);
     return widget;
 }
@@ -1389,7 +1389,7 @@ ax::ui::Widget* WidgetPropertiesReader0300::createWidgetFromBinary(CocoLoader* c
         std::string key = optionChildNode[k].GetName(cocoLoader);
         if (key == "animation")
         {
-            Ref* rootWidget = (Ref*)widget;
+            Object* rootWidget = (Object*)widget;
             ActionManagerEx::getInstance()->initWithBinary(fileName, rootWidget, cocoLoader, &optionChildNode[k]);
             break;
         }
@@ -1647,8 +1647,8 @@ void WidgetPropertiesReader0300::setPropsForAllCustomWidgetFromJsonDictionary(st
 {
     GUIReader* guiReader = GUIReader::getInstance();
 
-    hlookup::string_map<Ref*>* object_map = guiReader->getParseObjectMap();
-    Ref* object                           = (*object_map)[classType];
+    hlookup::string_map<Object*>* object_map = guiReader->getParseObjectMap();
+    Object* object                           = (*object_map)[classType];
 
     hlookup::string_map<SEL_ParseEvent>* selector_map = guiReader->getParseCallBackMap();
     SEL_ParseEvent selector                           = (*selector_map)[classType];

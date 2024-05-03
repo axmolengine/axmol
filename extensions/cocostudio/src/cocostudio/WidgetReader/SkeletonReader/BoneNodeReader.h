@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "cocostudio/WidgetReader/NodeReaderProtocol.h"
 #include "cocostudio/WidgetReader/NodeReaderDefine.h"
 
-class BoneNodeReader : public ax::Ref, public cocostudio::NodeReaderProtocol
+class BoneNodeReader : public ax::Object, public cocostudio::NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 

@@ -27,7 +27,7 @@
 #ifndef __AX_PU_PARTICLE_3D_DO_ENABLE_COMPONENT_EVENT_HANDLER_H__
 #define __AX_PU_PARTICLE_3D_DO_ENABLE_COMPONENT_EVENT_HANDLER_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include "Particle3D/PU/PUEventHandler.h"

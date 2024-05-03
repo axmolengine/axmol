@@ -126,7 +126,7 @@ public:
 
     ImWchar* addGlyphRanges(std::string_view key, const std::vector<ImWchar>& ranges);
     static void mergeFontGlyphs(ImFont* dst, ImFont* src, ImWchar start, ImWchar end);
-    int getCCRefId(Ref* p);
+    int getCCRefId(Object* p);
 
 private:
     static void loadCustomFonts(void*);
@@ -148,9 +148,9 @@ private:
 
     std::unordered_map<uint32_t, ImGuiLoop> _renderLoops;
 
-    std::unordered_map<Ref*, int> usedCCRefIdMap;
+    std::unordered_map<Object*, int> usedCCRefIdMap;
     // cocos objects should be retained until next frame
-    Vector<Ref*> usedCCRef;
+    Vector<Object*> usedCCRef;
     hlookup::string_map<std::vector<ImWchar>> glyphRanges;
 
     float _contentZoomFactor = 1.0f;

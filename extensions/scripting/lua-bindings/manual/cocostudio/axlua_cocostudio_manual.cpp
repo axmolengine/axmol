@@ -38,7 +38,7 @@
 
 using namespace cocostudio;
 
-class LuaArmatureWrapper : public Ref
+class LuaArmatureWrapper : public Object
 {
 public:
     LuaArmatureWrapper();
@@ -575,7 +575,7 @@ int lua_register_axis_coco_studio_CustomGUIReader(lua_State* L)
     tolua_beginmodule(L, "ccs");
 
     tolua_usertype(L, "ccs.CustomGUIReader");
-    tolua_cclass(L, "CustomGUIReader", "ccs.CustomGUIReader", "ax.Ref", nullptr);
+    tolua_cclass(L, "CustomGUIReader", "ccs.CustomGUIReader", "ax.Object", nullptr);
 
     tolua_beginmodule(L, "CustomGUIReader");
     tolua_function(L, "create", axlua_CustomGUIReader_create);

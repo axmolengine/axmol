@@ -548,13 +548,13 @@ void SpriteCreation::doTest()
     spriteCache.clear();
 }
 
-void SpriteCreation::addSpritesCallback(ax::Ref*)
+void SpriteCreation::addSpritesCallback(ax::Object*)
 {
     updateSpriteCountLabel(totalSprites + suggestDelta);
     doTest();
 }
 
-void SpriteCreation::delSpritesCallback(ax::Ref*)
+void SpriteCreation::delSpritesCallback(ax::Object*)
 {
     updateSpriteCountLabel(totalSprites - suggestDelta);
     doTest();
@@ -649,7 +649,7 @@ std::string CaptureScreenTest::subtitle() const
     return "Capture screen test, press the menu items to capture the screen";
 }
 
-void CaptureScreenTest::onCaptured(Ref*)
+void CaptureScreenTest::onCaptured(Object*)
 {
     Director::getInstance()->getTextureCache()->removeTextureForKey(_filename);
     removeChildByTag(childTag);
@@ -722,7 +722,7 @@ std::string CaptureNodeTest::subtitle() const
     return "Capture node test, press the menu items to capture this scene with scale 0.5";
 }
 
-void CaptureNodeTest::onCaptured(Ref*)
+void CaptureNodeTest::onCaptured(Object*)
 {
     Director::getInstance()->getTextureCache()->removeTextureForKey(_filename);
     removeChildByTag(childTag);

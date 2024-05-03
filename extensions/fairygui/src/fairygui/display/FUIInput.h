@@ -36,7 +36,7 @@ public:
 private:
     void continueInit();
 
-    void _touchDownAction(ax::Ref *sender, ax::ui::Widget::TouchEventType controlEvent);
+    void _touchDownAction(ax::Object *sender, ax::ui::Widget::TouchEventType controlEvent);
 
     TextFormat* _textFormat;
     bool _password;

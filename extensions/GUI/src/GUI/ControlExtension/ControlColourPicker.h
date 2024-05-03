@@ -70,8 +70,8 @@ public:
     virtual void setEnabled(bool bEnabled) override;
 
     // virtual ~ControlColourPicker();
-    void hueSliderValueChanged(Ref* sender, Control::EventType controlEvent);
-    void colourSliderValueChanged(Ref* sender, Control::EventType controlEvent);
+    void hueSliderValueChanged(Object* sender, Control::EventType controlEvent);
+    void colourSliderValueChanged(Object* sender, Control::EventType controlEvent);
 
 protected:
     void updateControlPicker();

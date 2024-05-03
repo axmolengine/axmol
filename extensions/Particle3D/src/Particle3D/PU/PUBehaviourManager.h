@@ -27,7 +27,7 @@
 #ifndef __AX_PU_PARTICLE_3D_BEHAVIOUR_MANAGER_H__
 #define __AX_PU_PARTICLE_3D_BEHAVIOUR_MANAGER_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "Particle3D/PU/PUScriptTranslator.h"
 #include "Particle3D/PU/PUBehaviour.h"
 #include "Particle3D/PU/PUSlaveBehaviourTranslator.h"

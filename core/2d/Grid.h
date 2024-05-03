@@ -27,7 +27,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Types.h"
 #include "base/Director.h"
 #include "renderer/GroupCommand.h"
@@ -53,7 +53,7 @@ class RenderTarget;
 
 /** Base class for Other grid.
  */
-class AX_DLL GridBase : public Ref
+class AX_DLL GridBase : public Object
 {
 public:
     /**

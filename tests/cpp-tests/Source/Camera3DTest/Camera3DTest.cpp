@@ -199,7 +199,7 @@ std::string Camera3DTestDemo::title() const
     return "Testing Camera";
 }
 
-void Camera3DTestDemo::scaleCameraCallback(Ref* sender, float value)
+void Camera3DTestDemo::scaleCameraCallback(Object* sender, float value)
 {
     if (_camera && _cameraType != CameraType::FirstPerson)
     {
@@ -208,7 +208,7 @@ void Camera3DTestDemo::scaleCameraCallback(Ref* sender, float value)
         _camera->setPosition3D(cameraPos);
     }
 }
-void Camera3DTestDemo::rotateCameraCallback(Ref* sender, float value)
+void Camera3DTestDemo::rotateCameraCallback(Object* sender, float value)
 {
     if (_cameraType == CameraType::Free || _cameraType == CameraType::FirstPerson)
     {
@@ -217,7 +217,7 @@ void Camera3DTestDemo::rotateCameraCallback(Ref* sender, float value)
         _camera->setRotation3D(rotation3D);
     }
 }
-void Camera3DTestDemo::SwitchViewCallback(Ref* sender, CameraType cameraType)
+void Camera3DTestDemo::SwitchViewCallback(Object* sender, CameraType cameraType)
 {
     if (_cameraType == cameraType)
     {
@@ -829,7 +829,7 @@ void CameraCullingDemo::reachEndCallBack()
     _cameraFirst->runAction(seq);
 }
 
-void CameraCullingDemo::switchViewCallback(Ref* sender)
+void CameraCullingDemo::switchViewCallback(Object* sender)
 {
     auto s = Director::getInstance()->getWinSize();
 
@@ -872,7 +872,7 @@ void CameraCullingDemo::switchViewCallback(Ref* sender)
     }
 }
 
-void CameraCullingDemo::addMeshCallback(Ref* sender)
+void CameraCullingDemo::addMeshCallback(Object* sender)
 {
     _layer3D->removeAllChildren();
     _objects.clear();
@@ -900,7 +900,7 @@ void CameraCullingDemo::addMeshCallback(Ref* sender)
     _labelMeshCount->setString(szText);
 }
 
-void CameraCullingDemo::delMeshCallback(Ref* sender)
+void CameraCullingDemo::delMeshCallback(Object* sender)
 {
     if (_row == 0)
         return;
@@ -1170,7 +1170,7 @@ void CameraArcBallDemo::updateCameraTransform()
     _camera->setNodeToParentTransform(result);
 }
 
-void CameraArcBallDemo::switchOperateCallback(Ref* sender)
+void CameraArcBallDemo::switchOperateCallback(Object* sender)
 {
     if (_operate == OperateCamType::MoveCamera)
     {
@@ -1182,7 +1182,7 @@ void CameraArcBallDemo::switchOperateCallback(Ref* sender)
     }
 }
 
-void CameraArcBallDemo::switchTargetCallback(Ref* sender)
+void CameraArcBallDemo::switchTargetCallback(Object* sender)
 {
     if (_target == 0)
     {
@@ -1321,7 +1321,7 @@ void FogTestDemo::onEnter()
 #endif
 }
 
-void FogTestDemo::switchTypeCallback(Ref* sender, int type)
+void FogTestDemo::switchTypeCallback(Object* sender, int type)
 {
     if (type == 0)
     {
@@ -1526,7 +1526,7 @@ void BackgroundColorBrushTest::onEnter()
         slider->loadProgressBarTexture("cocosui/sliderProgress.png");
         slider->setPosition(Vec2(s.width / 2, s.height / 4));
         slider->setPercent(50);
-        slider->addEventListener([slider, colorBrush](Ref*, ui::Slider::EventType) {
+        slider->addEventListener([slider, colorBrush](Object*, ui::Slider::EventType) {
             colorBrush->setColor(Color4F(.1f, .1f, 1.f, (float)slider->getPercent() / 100.f));
         });
         addChild(slider);

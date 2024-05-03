@@ -274,7 +274,7 @@ static int lua_ax_ui_LayoutParameter_finalize(lua_State* tolua_S)
 int lua_register_ax_ui_LayoutParameter(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"axui.LayoutParameter");
-    tolua_cclass(tolua_S,"LayoutParameter","axui.LayoutParameter","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"LayoutParameter","axui.LayoutParameter","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"LayoutParameter");
         tolua_function(tolua_S,"new",lua_ax_ui_LayoutParameter_constructor);
@@ -5913,7 +5913,7 @@ int lua_ax_ui_Layout_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::Layout::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Layout:createInstance",argc, 0);
@@ -8127,7 +8127,7 @@ int lua_ax_ui_Button_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::Button::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Button:createInstance",argc, 0);
@@ -9587,7 +9587,7 @@ int lua_ax_ui_CheckBox_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (ax::Ref *, ax::ui::CheckBox::EventType)> arg0;
+        std::function<void (ax::Object *, ax::ui::CheckBox::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -9636,7 +9636,7 @@ int lua_ax_ui_CheckBox_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::CheckBox::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.CheckBox:createInstance",argc, 0);
@@ -9904,7 +9904,7 @@ int lua_ax_ui_RadioButton_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::RadioButton::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RadioButton:createInstance",argc, 0);
@@ -11295,7 +11295,7 @@ int lua_ax_ui_ImageView_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::ImageView::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.ImageView:createInstance",argc, 0);
@@ -13174,7 +13174,7 @@ int lua_ax_ui_Text_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::Text::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Text:createInstance",argc, 0);
@@ -13652,7 +13652,7 @@ int lua_ax_ui_TextAtlas_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::TextAtlas::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.TextAtlas:createInstance",argc, 0);
@@ -14310,7 +14310,7 @@ int lua_ax_ui_LoadingBar_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::LoadingBar::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.LoadingBar:createInstance",argc, 0);
@@ -16252,7 +16252,7 @@ int lua_ax_ui_ScrollView_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (ax::Ref *, ax::ui::ScrollView::EventType)> arg0;
+        std::function<void (ax::Object *, ax::ui::ScrollView::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -17684,7 +17684,7 @@ int lua_ax_ui_ScrollView_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::ScrollView::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.ScrollView:createInstance",argc, 0);
@@ -19864,7 +19864,7 @@ int lua_ax_ui_ListView_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (ax::Ref *, ax::ui::ListView::EventType)> arg0;
+        std::function<void (ax::Object *, ax::ui::ListView::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -19913,7 +19913,7 @@ int lua_ax_ui_ListView_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::ListView::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.ListView:createInstance",argc, 0);
@@ -21112,7 +21112,7 @@ int lua_ax_ui_Slider_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (ax::Ref *, ax::ui::Slider::EventType)> arg0;
+        std::function<void (ax::Object *, ax::ui::Slider::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -21681,7 +21681,7 @@ int lua_ax_ui_Slider_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::Slider::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Slider:createInstance",argc, 0);
@@ -23480,7 +23480,7 @@ int lua_ax_ui_TextField_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (ax::Ref *, ax::ui::TextField::EventType)> arg0;
+        std::function<void (ax::Object *, ax::ui::TextField::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -24067,7 +24067,7 @@ int lua_ax_ui_TextField_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::TextField::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.TextField:createInstance",argc, 0);
@@ -24544,7 +24544,7 @@ int lua_ax_ui_TextBMFont_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::TextBMFont::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.TextBMFont:createInstance",argc, 0);
@@ -25161,7 +25161,7 @@ int lua_ax_ui_PageView_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (ax::Ref *, ax::ui::PageView::EventType)> arg0;
+        std::function<void (ax::Object *, ax::ui::PageView::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -26200,7 +26200,7 @@ int lua_ax_ui_PageView_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ui::PageView::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.PageView:createInstance",argc, 0);
@@ -26826,7 +26826,7 @@ static int lua_ax_ui_RichElement_finalize(lua_State* tolua_S)
 int lua_register_ax_ui_RichElement(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"axui.RichElement");
-    tolua_cclass(tolua_S,"RichElement","axui.RichElement","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"RichElement","axui.RichElement","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"RichElement");
         tolua_function(tolua_S,"init",lua_ax_ui_RichElement_init);

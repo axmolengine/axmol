@@ -17,7 +17,7 @@ class EventContext;
 class ByteBuffer;
 class GTweener;
 
-class ScrollPane : public ax::Ref
+class ScrollPane : public ax::Object
 {
 public:
     ScrollPane(GComponent* owner);

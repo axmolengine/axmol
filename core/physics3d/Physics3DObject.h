@@ -28,7 +28,7 @@
 #define __PHYSICS_3D_OBJECT_H__
 
 #include "math/Math.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Config.h"
 
 #include <vector>
@@ -71,9 +71,9 @@ struct AX_DLL Physics3DCollisionInfo
     std::vector<CollisionPoint> collisionPointList;
 };
 /**
- * @brief Inherit from Ref, base class
+ * @brief Inherit from Object, base class
  */
-class AX_DLL Physics3DObject : public Ref
+class AX_DLL Physics3DObject : public Object
 {
 public:
     typedef std::function<void(const Physics3DCollisionInfo& ci)> CollisionCallbackFunc;

@@ -26,7 +26,7 @@
 
 #include "Macros.h"
 #include "Types.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "renderer/PipelineDescriptor.h"
 #include "renderer/backend/RenderPassDescriptor.h"
 
@@ -40,7 +40,7 @@ class RenderTarget;
 /**
  * Render pipeline
  */
-class RenderPipeline : public ax::Ref
+class RenderPipeline : public ax::Object
 {
 public:
     virtual void update(const RenderTarget*, const PipelineDescriptor& pipelineDescirptor) = 0;

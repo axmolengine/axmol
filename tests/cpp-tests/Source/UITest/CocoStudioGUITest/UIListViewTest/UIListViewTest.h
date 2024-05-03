@@ -40,8 +40,8 @@ public:
     ~UIListViewTest_Vertical();
 
     virtual bool init() override;
-    void selectedItemEvent(ax::Ref* sender, ax::ui::ListView::EventType type);
-    void selectedItemEventScrollView(ax::Ref* sender, ax::ui::ScrollView::EventType type);
+    void selectedItemEvent(ax::Object* sender, ax::ui::ListView::EventType type);
+    void selectedItemEventScrollView(ax::Object* sender, ax::ui::ScrollView::EventType type);
     virtual void update(float dt) override;
 
 protected:
@@ -78,7 +78,7 @@ public:
     ~UIListViewTest_Horizontal();
 
     virtual bool init() override;
-    void selectedItemEvent(ax::Ref* sender, ax::ui::ListView::EventType type);
+    void selectedItemEvent(ax::Object* sender, ax::ui::ListView::EventType type);
     virtual void update(float dt) override;
 
 protected:
@@ -191,7 +191,7 @@ protected:
     virtual bool init() override;
     virtual ax::ui::ScrollView::Direction getListViewDirection() const = 0;
 
-    void sliderEvent(ax::Ref* pSender, ax::ui::Slider::EventType type);
+    void sliderEvent(ax::Object* pSender, ax::ui::Slider::EventType type);
 
     ax::ui::ListView* _listView;
     ax::ui::Text* _titleLabel;

@@ -72,8 +72,8 @@ public:
     void update(float dt);
 
     void initSliders();
-    void changeThickness(ax::Ref* pSender, ax::ui::Slider::EventType type);
-    // void changeLineWidth(Ref* pSender, ax::ui::Slider::EventType type);
+    void changeThickness(ax::Object* pSender, ax::ui::Slider::EventType type);
+    // void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);
 
 private:
     ax::extension::DrawNodeEx* drawNodeEx;
@@ -123,10 +123,10 @@ public:
     void update(float dt);
 
     void initSliders();
-    void changeStartAngle(ax::Ref* pSender, ax::ui::Slider::EventType type);
-    void changeEndAngle(ax::Ref* pSender, ax::ui::Slider::EventType type);
-    void changeRotation(ax::Ref* pSender, ax::ui::Slider::EventType type);
-    void changeThickness(ax::Ref* pSender, ax::ui::Slider::EventType type);
+    void changeStartAngle(ax::Object* pSender, ax::ui::Slider::EventType type);
+    void changeEndAngle(ax::Object* pSender, ax::ui::Slider::EventType type);
+    void changeRotation(ax::Object* pSender, ax::ui::Slider::EventType type);
+    void changeThickness(ax::Object* pSender, ax::ui::Slider::EventType type);
 
 private:
     ax::extension::DrawNodeEx* drawNode;
@@ -151,8 +151,8 @@ public:
     virtual std::string subtitle() const override;
     void update(float dt);
 
-    void sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType type);
-    void listviewCallback(ax::Ref* sender, ax::ui::ListView::EventType type);
+    void sliderCallback(ax::Object* sender, ax::ui::Slider::EventType type);
+    void listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type);
 
     void drawAll();
 
@@ -181,8 +181,8 @@ public:
     virtual std::string subtitle() const override;
     void update(float dt);
 
-    void sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType type);
-    void listviewCallback(ax::Ref* sender, ax::ui::ListView::EventType type);
+    void sliderCallback(ax::Object* sender, ax::ui::Slider::EventType type);
+    void listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type);
 
     void drawAll();
 

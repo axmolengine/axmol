@@ -60,7 +60,7 @@ public:
      * A callback which will be called after certain CheckBox event issue.
      * @see `CheckBox::EventType`
      */
-    typedef std::function<void(Ref*, CheckBox::EventType)> ccCheckBoxCallback;
+    typedef std::function<void(Object*, CheckBox::EventType)> ccCheckBoxCallback;
 
     /**
      * Default constructor.
@@ -131,7 +131,7 @@ protected:
 
 protected:
     // if you use the old event callback, it will retain the _checkBoxEventListener
-    Ref* _checkBoxEventListener;
+    Object* _checkBoxEventListener;
 
     ccCheckBoxCallback _checkBoxEventCallback;
 };

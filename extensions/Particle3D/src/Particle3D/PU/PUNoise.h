@@ -27,7 +27,7 @@
 #ifndef __AX_PU_PARTICLE_3D_NOISE_H__
 #define __AX_PU_PARTICLE_3D_NOISE_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 
 NS_AX_BEGIN

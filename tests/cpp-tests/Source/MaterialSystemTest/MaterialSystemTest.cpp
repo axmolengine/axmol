@@ -152,7 +152,7 @@ void Material_2DEffects::onEnter()
 
     schedule(AX_SCHEDULE_SELECTOR(Material_2DEffects::updateCCTimeUniforms));
 
-    // properties is not a "Ref" object
+    // properties is not a "Object" object
     AX_SAFE_DELETE(properties);
 }
 
@@ -269,7 +269,7 @@ void Material_AutoBindings::onEnter()
     _locationTime      = _noiseProgramState->getUniformLocation("u_Time");
 
     schedule(AX_SCHEDULE_SELECTOR(Material_AutoBindings::updateUniformTime));
-    // properties is not a "Ref" object
+    // properties is not a "Object" object
     AX_SAFE_DELETE(properties);
 }
 
@@ -411,7 +411,7 @@ void Material_parsePerformance::onEnter()
     slider->setPercent(50);
 
     slider->setPosition(Vec2(screenSize.width / 2.0f, screenSize.height / 3.0f));
-    slider->addEventListener([&](Ref* sender, ui::Slider::EventType type) {
+    slider->addEventListener([&](Object* sender, ui::Slider::EventType type) {
         if (type == ui::Slider::EventType::ON_SLIDEBALL_UP)
         {
             ui::Slider* slider = dynamic_cast<ui::Slider*>(sender);

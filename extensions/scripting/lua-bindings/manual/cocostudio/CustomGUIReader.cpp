@@ -39,12 +39,12 @@ CustomGUIReader* CustomGUIReader::create(std::string& className, int createFunc,
     return reader;
 }
 
-Ref* CustomGUIReader::createInstance()
+Object* CustomGUIReader::createInstance()
 {
-    Ref* result     = nullptr;
+    Object* result     = nullptr;
     LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
     stack->executeFunction(_createFunc, 0, 1, [&result](lua_State* L, int numReturn) {
-        result = static_cast<Ref*>(tolua_tousertype(L, -1, nullptr));
+        result = static_cast<Object*>(tolua_tousertype(L, -1, nullptr));
         lua_pop(L, 1);
     });
     return result;
@@ -86,7 +86,7 @@ void CustomGUIReader::init(std::string& className, int createFunc, int setPropsF
 }
 
 void CustomGUIReader::setCustomProps(std::string_view classType,
-                                     ax::Ref* widget,
+                                     ax::Object* widget,
                                      const rapidjson::Value& customOptions)
 {
     if (_setPropsFunc != 0)
@@ -97,7 +97,7 @@ void CustomGUIReader::setCustomProps(std::string_view classType,
 
         auto stack = LuaEngine::getInstance()->getLuaStack();
         stack->pushString(classType);
-        stack->pushObject(widget, "ax.Ref");
+        stack->pushObject(widget, "ax.Object");
         stack->pushString(buffer.GetString(), static_cast<int>(buffer.GetSize()));
         stack->executeFunctionByHandler(_setPropsFunc, 3);
     }
