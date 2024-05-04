@@ -9,7 +9,7 @@
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 
-int lua_ax_base_Ref_retain(lua_State* tolua_S)
+int lua_ax_base_Object_retain(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Object* cobj = nullptr;
@@ -29,7 +29,7 @@ int lua_ax_base_Ref_retain(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ref_retain'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Object_retain'", nullptr);
         return 0;
     }
 #endif
@@ -39,7 +39,7 @@ int lua_ax_base_Ref_retain(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Ref_retain'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Object_retain'", nullptr);
             return 0;
         }
         cobj->retain();
@@ -51,12 +51,12 @@ int lua_ax_base_Ref_retain(lua_State* tolua_S)
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Ref_retain'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Object_retain'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_Ref_release(lua_State* tolua_S)
+int lua_ax_base_Object_release(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Object* cobj = nullptr;
@@ -76,7 +76,7 @@ int lua_ax_base_Ref_release(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ref_release'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Object_release'", nullptr);
         return 0;
     }
 #endif
@@ -86,7 +86,7 @@ int lua_ax_base_Ref_release(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Ref_release'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Object_release'", nullptr);
             return 0;
         }
         cobj->release();
@@ -98,12 +98,12 @@ int lua_ax_base_Ref_release(lua_State* tolua_S)
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Ref_release'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Object_release'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_Ref_getReferenceCount(lua_State* tolua_S)
+int lua_ax_base_Object_getReferenceCount(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Object* cobj = nullptr;
@@ -123,7 +123,7 @@ int lua_ax_base_Ref_getReferenceCount(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ref_getReferenceCount'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Object_getReferenceCount'", nullptr);
         return 0;
     }
 #endif
@@ -133,7 +133,7 @@ int lua_ax_base_Ref_getReferenceCount(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Ref_getReferenceCount'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Object_getReferenceCount'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getReferenceCount();
@@ -145,26 +145,26 @@ int lua_ax_base_Ref_getReferenceCount(lua_State* tolua_S)
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Ref_getReferenceCount'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Object_getReferenceCount'.",&tolua_err);
 #endif
 
     return 0;
 }
-static int lua_ax_base_Ref_finalize(lua_State* tolua_S)
+static int lua_ax_base_Object_finalize(lua_State* tolua_S)
 {
     printf("luabindings: finalizing LUA object (Object)");
     return 0;
 }
 
-int lua_register_ax_base_Ref(lua_State* tolua_S)
+int lua_register_ax_base_Object(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Object");
     tolua_cclass(tolua_S,"Object","ax.Object","",nullptr);
 
     tolua_beginmodule(tolua_S,"Object");
-        tolua_function(tolua_S,"retain",lua_ax_base_Ref_retain);
-        tolua_function(tolua_S,"release",lua_ax_base_Ref_release);
-        tolua_function(tolua_S,"getReferenceCount",lua_ax_base_Ref_getReferenceCount);
+        tolua_function(tolua_S,"retain",lua_ax_base_Object_retain);
+        tolua_function(tolua_S,"release",lua_ax_base_Object_release);
+        tolua_function(tolua_S,"getReferenceCount",lua_ax_base_Object_getReferenceCount);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Object).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Object";
@@ -112338,7 +112338,7 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
 	tolua_module(tolua_S,"ax",0);
 	tolua_beginmodule(tolua_S,"ax");
 
-	lua_register_ax_base_Ref(tolua_S);
+	lua_register_ax_base_Object(tolua_S);
 	lua_register_ax_base_EventListener(tolua_S);
 	lua_register_ax_base_EventListenerCustom(tolua_S);
 	lua_register_ax_base_ShaderCache(tolua_S);
