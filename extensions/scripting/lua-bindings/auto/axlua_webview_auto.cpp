@@ -907,10 +907,8 @@ int lua_ax_webview_WebView_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ui::WebView();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"axui.WebView");
+        tolua_pushusertype(tolua_S,(void*)cobj,"axui.WebView");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:WebView",argc, 0);

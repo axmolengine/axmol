@@ -1954,10 +1954,8 @@ int lua_ax_extension_ScrollView_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::ScrollView();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ScrollView");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ScrollView");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:ScrollView",argc, 0);
@@ -2227,10 +2225,8 @@ int lua_ax_extension_TableViewCell_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::TableViewCell();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TableViewCell");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TableViewCell");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableViewCell:TableViewCell",argc, 0);
@@ -2893,10 +2889,8 @@ int lua_ax_extension_TableView_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::TableView();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TableView");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TableView");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:TableView",argc, 0);
@@ -3596,10 +3590,8 @@ int lua_ax_extension_AssetsManager_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::AssetsManager();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.AssetsManager");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.AssetsManager");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 1) 
@@ -3613,10 +3605,8 @@ int lua_ax_extension_AssetsManager_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::AssetsManager(arg0);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.AssetsManager");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.AssetsManager");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 2) 
@@ -3633,10 +3623,8 @@ int lua_ax_extension_AssetsManager_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::AssetsManager(arg0, arg1);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.AssetsManager");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.AssetsManager");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 3) 
@@ -3656,10 +3644,8 @@ int lua_ax_extension_AssetsManager_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::AssetsManager(arg0, arg1, arg2);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.AssetsManager");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.AssetsManager");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:AssetsManager",argc, 0);
@@ -4111,10 +4097,8 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 4) 
@@ -4137,10 +4121,8 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 5) 
@@ -4166,10 +4148,8 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 6) 
@@ -4198,10 +4178,8 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 7) 
@@ -4233,10 +4211,8 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 8) 
@@ -4271,10 +4247,8 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 9) 
@@ -4312,10 +4286,8 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventAssetsManagerEx");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:EventAssetsManagerEx",argc, 3);
@@ -5310,10 +5282,8 @@ int lua_ax_extension_AssetsManagerEx_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::extension::AssetsManagerEx(arg0, arg1);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.AssetsManagerEx");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.AssetsManagerEx");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:AssetsManagerEx",argc, 2);
@@ -5436,10 +5406,8 @@ int lua_ax_extension_EventListenerAssetsManagerEx_constructor(lua_State* tolua_S
             return 0;
         }
         cobj = new ax::extension::EventListenerAssetsManagerEx();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventListenerAssetsManagerEx");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventListenerAssetsManagerEx");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerAssetsManagerEx:EventListenerAssetsManagerEx",argc, 0);
@@ -6458,10 +6426,8 @@ int lua_ax_extension_ParticleSystem3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleSystem3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleSystem3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleSystem3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:ParticleSystem3D",argc, 0);
@@ -8643,10 +8609,8 @@ int lua_ax_extension_PUParticleSystem3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::PUParticleSystem3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.PUParticleSystem3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.PUParticleSystem3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:PUParticleSystem3D",argc, 0);

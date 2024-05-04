@@ -1493,10 +1493,8 @@ int lua_ax_navmesh_NavMeshAgent_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::NavMeshAgent();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.NavMeshAgent");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.NavMeshAgent");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:NavMeshAgent",argc, 0);
@@ -1991,10 +1989,8 @@ int lua_ax_navmesh_NavMeshObstacle_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::NavMeshObstacle();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.NavMeshObstacle");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.NavMeshObstacle");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshObstacle:NavMeshObstacle",argc, 0);
@@ -2492,10 +2488,8 @@ int lua_ax_navmesh_NavMesh_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::NavMesh();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.NavMesh");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.NavMesh");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMesh:NavMesh",argc, 0);

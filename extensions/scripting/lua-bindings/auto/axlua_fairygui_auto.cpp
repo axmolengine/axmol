@@ -1468,10 +1468,8 @@ int lua_ax_fairygui_UIEventDispatcher_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::UIEventDispatcher();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.UIEventDispatcher");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.UIEventDispatcher");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.UIEventDispatcher:UIEventDispatcher",argc, 0);
@@ -2453,10 +2451,8 @@ int lua_ax_fairygui_GController_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GController();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GController");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GController");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GController:GController",argc, 0);
@@ -6840,10 +6836,8 @@ int lua_ax_fairygui_GObject_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GObject();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GObject");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GObject");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GObject:GObject",argc, 0);
@@ -7718,10 +7712,8 @@ int lua_ax_fairygui_UIPackage_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::UIPackage();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.UIPackage");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.UIPackage");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.UIPackage:UIPackage",argc, 0);
@@ -8410,10 +8402,8 @@ int lua_ax_fairygui_GImage_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GImage();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GImage");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GImage");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GImage:GImage",argc, 0);
@@ -9049,10 +9039,8 @@ int lua_ax_fairygui_GMovieClip_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GMovieClip();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GMovieClip");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GMovieClip");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GMovieClip:GMovieClip",argc, 0);
@@ -10110,10 +10098,8 @@ int lua_ax_fairygui_GBasicTextField_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GBasicTextField();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GBasicTextField");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GBasicTextField");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GBasicTextField:GBasicTextField",argc, 0);
@@ -10252,10 +10238,8 @@ int lua_ax_fairygui_GRichTextField_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GRichTextField();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GRichTextField");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GRichTextField");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GRichTextField:GRichTextField",argc, 0);
@@ -10595,10 +10579,8 @@ int lua_ax_fairygui_GTextInput_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GTextInput();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GTextInput");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GTextInput");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GTextInput:GTextInput",argc, 0);
@@ -11170,10 +11152,8 @@ int lua_ax_fairygui_GGraph_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GGraph();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GGraph");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GGraph");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GGraph:GGraph",argc, 0);
@@ -12624,10 +12604,8 @@ int lua_ax_fairygui_GLoader_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GLoader();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GLoader");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GLoader");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GLoader:GLoader",argc, 0);
@@ -13590,10 +13568,8 @@ int lua_ax_fairygui_GGroup_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GGroup();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GGroup");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GGroup");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GGroup:GGroup",argc, 0);
@@ -16584,10 +16560,8 @@ int lua_ax_fairygui_ScrollPane_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::ScrollPane(arg0);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.ScrollPane");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.ScrollPane");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.ScrollPane:ScrollPane",argc, 1);
@@ -17658,10 +17632,8 @@ int lua_ax_fairygui_Transition_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::Transition(arg0);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.Transition");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.Transition");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.Transition:Transition",argc, 1);
@@ -20415,10 +20387,8 @@ int lua_ax_fairygui_GComponent_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GComponent();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GComponent");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GComponent");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GComponent:GComponent",argc, 0);
@@ -21383,10 +21353,8 @@ int lua_ax_fairygui_GButton_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GButton();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GButton");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GButton");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GButton:GButton",argc, 0);
@@ -24042,10 +24010,8 @@ int lua_ax_fairygui_GList_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GList();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GList");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GList");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GList:GList",argc, 0);
@@ -25046,10 +25012,8 @@ int lua_ax_fairygui_GComboBox_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GComboBox();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GComboBox");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GComboBox");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GComboBox:GComboBox",argc, 0);
@@ -25647,10 +25611,8 @@ int lua_ax_fairygui_GProgressBar_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GProgressBar();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GProgressBar");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GProgressBar");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GProgressBar:GProgressBar",argc, 0);
@@ -26234,10 +26196,8 @@ int lua_ax_fairygui_GSlider_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GSlider();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GSlider");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GSlider");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GSlider:GSlider",argc, 0);
@@ -26536,10 +26496,8 @@ int lua_ax_fairygui_GScrollBar_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GScrollBar();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GScrollBar");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GScrollBar");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GScrollBar:GScrollBar",argc, 0);
@@ -27836,10 +27794,8 @@ int lua_ax_fairygui_Window_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::Window();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.Window");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.Window");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.Window:Window",argc, 0);
@@ -29559,10 +29515,8 @@ int lua_ax_fairygui_GRoot_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GRoot();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GRoot");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GRoot");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GRoot:GRoot",argc, 0);
@@ -30516,10 +30470,8 @@ int lua_ax_fairygui_PopupMenu_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::PopupMenu();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.PopupMenu");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.PopupMenu");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.PopupMenu:PopupMenu",argc, 0);
@@ -32243,10 +32195,8 @@ int lua_ax_fairygui_GTweener_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new fairygui::GTweener();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"fgui.GTweener");
+        tolua_pushusertype(tolua_S,(void*)cobj,"fgui.GTweener");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GTweener:GTweener",argc, 0);

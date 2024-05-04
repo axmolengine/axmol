@@ -9,169 +9,6 @@
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 
-int lua_ax_base_Ref_retain(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Object* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Object",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::Object*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ref_retain'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Ref_retain'", nullptr);
-            return 0;
-        }
-        cobj->retain();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Object:retain",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Ref_retain'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Ref_release(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Object* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Object",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::Object*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ref_release'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Ref_release'", nullptr);
-            return 0;
-        }
-        cobj->release();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Object:release",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Ref_release'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Ref_getReferenceCount(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Object* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Object",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::Object*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ref_getReferenceCount'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Ref_getReferenceCount'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->getReferenceCount();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Object:getReferenceCount",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Ref_getReferenceCount'.",&tolua_err);
-#endif
-
-    return 0;
-}
-static int lua_ax_base_Ref_finalize(lua_State* tolua_S)
-{
-    printf("luabindings: finalizing LUA object (Object)");
-    return 0;
-}
-
-int lua_register_ax_base_Ref(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"ax.Object");
-    tolua_cclass(tolua_S,"Object","ax.Object","",nullptr);
-
-    tolua_beginmodule(tolua_S,"Object");
-        tolua_function(tolua_S,"retain",lua_ax_base_Ref_retain);
-        tolua_function(tolua_S,"release",lua_ax_base_Ref_release);
-        tolua_function(tolua_S,"getReferenceCount",lua_ax_base_Ref_getReferenceCount);
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::Object).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Object";
-    g_typeCast[typeName] = "ax.Object";
-    return 1;
-}
-
 int lua_ax_base_EventListener_checkAvailable(lua_State* tolua_S)
 {
     int argc = 0;
@@ -407,10 +244,8 @@ int lua_ax_base_EventListenerCustom_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventListenerCustom();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventListenerCustom");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventListenerCustom");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerCustom:EventListenerCustom",argc, 0);
@@ -2633,10 +2468,8 @@ int lua_ax_base_Texture2D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Texture2D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Texture2D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Texture2D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Texture2D:Texture2D",argc, 0);
@@ -3271,10 +3104,8 @@ int lua_ax_base_Touch_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Touch();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Touch");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Touch");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Touch:Touch",argc, 0);
@@ -3530,10 +3361,8 @@ int lua_ax_base_Event_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Event(arg0);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Event");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Event");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Event:Event",argc, 1);
@@ -3688,10 +3517,8 @@ int lua_ax_base_EventTouch_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventTouch();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventTouch");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventTouch");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventTouch:EventTouch",argc, 0);
@@ -3753,10 +3580,8 @@ int lua_ax_base_EventKeyboard_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventKeyboard(arg0, arg1);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventKeyboard");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventKeyboard");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventKeyboard:EventKeyboard",argc, 2);
@@ -11738,10 +11563,8 @@ int lua_ax_base_Node_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Node();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Node");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Node");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:Node",argc, 0);
@@ -12555,10 +12378,8 @@ int lua_ax_base_Scene_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Scene();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Scene");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Scene");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:Scene",argc, 0);
@@ -18482,10 +18303,8 @@ int lua_ax_base_Scheduler_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Scheduler();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Scheduler");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Scheduler");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scheduler:Scheduler",argc, 0);
@@ -19967,10 +19786,8 @@ int lua_ax_base_Speed_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Speed();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Speed");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Speed");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Speed:Speed",argc, 0);
@@ -20383,10 +20200,8 @@ int lua_ax_base_Follow_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Follow();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Follow");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Follow");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Follow:Follow",argc, 0);
@@ -21237,10 +21052,8 @@ int lua_ax_base_Image_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Image();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Image");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Image");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Image:Image",argc, 0);
@@ -23312,10 +23125,8 @@ int lua_ax_base_SpriteFrame_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::SpriteFrame();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.SpriteFrame");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.SpriteFrame");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.SpriteFrame:SpriteFrame",argc, 0);
@@ -23830,10 +23641,8 @@ int lua_ax_base_AnimationFrame_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::AnimationFrame();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.AnimationFrame");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.AnimationFrame");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AnimationFrame:AnimationFrame",argc, 0);
@@ -24903,10 +24712,8 @@ int lua_ax_base_Animation_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Animation();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Animation");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Animation");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Animation:Animation",argc, 0);
@@ -25299,10 +25106,8 @@ int lua_ax_base_Sequence_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Sequence();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Sequence");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Sequence");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Sequence:Sequence",argc, 0);
@@ -25546,10 +25351,8 @@ int lua_ax_base_Repeat_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Repeat();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Repeat");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Repeat");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Repeat:Repeat",argc, 0);
@@ -25790,10 +25593,8 @@ int lua_ax_base_RepeatForever_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::RepeatForever();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.RepeatForever");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.RepeatForever");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RepeatForever:RepeatForever",argc, 0);
@@ -25954,10 +25755,8 @@ int lua_ax_base_Spawn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Spawn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Spawn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Spawn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Spawn:Spawn",argc, 0);
@@ -26153,10 +25952,8 @@ int lua_ax_base_RotateTo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::RotateTo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.RotateTo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.RotateTo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RotateTo:RotateTo",argc, 0);
@@ -26368,10 +26165,8 @@ int lua_ax_base_RotateBy_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::RotateBy();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.RotateBy");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.RotateBy");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RotateBy:RotateBy",argc, 0);
@@ -26544,10 +26339,8 @@ int lua_ax_base_MoveBy_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::MoveBy();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.MoveBy");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.MoveBy");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MoveBy:MoveBy",argc, 0);
@@ -26720,10 +26513,8 @@ int lua_ax_base_MoveTo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::MoveTo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.MoveTo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.MoveTo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MoveTo:MoveTo",argc, 0);
@@ -26875,10 +26666,8 @@ int lua_ax_base_SkewTo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::SkewTo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.SkewTo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.SkewTo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.SkewTo:SkewTo",argc, 0);
@@ -27030,10 +26819,8 @@ int lua_ax_base_SkewBy_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::SkewBy();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.SkewBy");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.SkewBy");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.SkewBy:SkewBy",argc, 0);
@@ -27190,10 +26977,8 @@ int lua_ax_base_JumpBy_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::JumpBy();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.JumpBy");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.JumpBy");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.JumpBy:JumpBy",argc, 0);
@@ -27350,10 +27135,8 @@ int lua_ax_base_JumpTo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::JumpTo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.JumpTo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.JumpTo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.JumpTo:JumpTo",argc, 0);
@@ -27463,10 +27246,8 @@ int lua_ax_base_BezierBy_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::BezierBy();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.BezierBy");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.BezierBy");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.BezierBy:BezierBy",argc, 0);
@@ -27575,10 +27356,8 @@ int lua_ax_base_BezierTo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::BezierTo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.BezierTo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.BezierTo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.BezierTo:BezierTo",argc, 0);
@@ -27803,10 +27582,8 @@ int lua_ax_base_ScaleTo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ScaleTo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ScaleTo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ScaleTo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScaleTo:ScaleTo",argc, 0);
@@ -27941,10 +27718,8 @@ int lua_ax_base_ScaleBy_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ScaleBy();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ScaleBy");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ScaleBy");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScaleBy:ScaleBy",argc, 0);
@@ -28090,10 +27865,8 @@ int lua_ax_base_Blink_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Blink();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Blink");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Blink");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Blink:Blink",argc, 0);
@@ -28240,10 +28013,8 @@ int lua_ax_base_FadeTo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FadeTo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FadeTo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FadeTo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FadeTo:FadeTo",argc, 0);
@@ -28385,10 +28156,8 @@ int lua_ax_base_FadeIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FadeIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FadeIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FadeIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FadeIn:FadeIn",argc, 0);
@@ -28530,10 +28299,8 @@ int lua_ax_base_FadeOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FadeOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FadeOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FadeOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FadeOut:FadeOut",argc, 0);
@@ -28708,10 +28475,8 @@ int lua_ax_base_TintTo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TintTo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TintTo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TintTo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TintTo:TintTo",argc, 0);
@@ -28868,10 +28633,8 @@ int lua_ax_base_TintBy_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TintBy();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TintBy");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TintBy");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TintBy:TintBy",argc, 0);
@@ -28963,10 +28726,8 @@ int lua_ax_base_DelayTime_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::DelayTime();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.DelayTime");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.DelayTime");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DelayTime:DelayTime",argc, 0);
@@ -29251,10 +29012,8 @@ int lua_ax_base_Animate_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Animate();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Animate");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Animate");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Animate:Animate",argc, 0);
@@ -29501,10 +29260,8 @@ int lua_ax_base_TargetedAction_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TargetedAction();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TargetedAction");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TargetedAction");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TargetedAction:TargetedAction",argc, 0);
@@ -29671,10 +29428,8 @@ int lua_ax_base_ActionFloat_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ActionFloat();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ActionFloat");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ActionFloat");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ActionFloat:ActionFloat",argc, 0);
@@ -34599,10 +34354,8 @@ int lua_ax_base_EventCustom_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventCustom(arg0);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventCustom");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventCustom");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventCustom:EventCustom",argc, 1);
@@ -35536,10 +35289,8 @@ int lua_ax_base_EventDispatcher_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventDispatcher();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventDispatcher");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventDispatcher");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventDispatcher:EventDispatcher",argc, 0);
@@ -35615,10 +35366,8 @@ int lua_ax_base_EventFocus_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventFocus(arg0, arg1);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventFocus");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventFocus");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventFocus:EventFocus",argc, 2);
@@ -35726,10 +35475,8 @@ int lua_ax_base_EventListenerAcceleration_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventListenerAcceleration();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventListenerAcceleration");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventListenerAcceleration");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerAcceleration:EventListenerAcceleration",argc, 0);
@@ -35831,10 +35578,8 @@ int lua_ax_base_EventListenerFocus_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventListenerFocus();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventListenerFocus");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventListenerFocus");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerFocus:EventListenerFocus",argc, 0);
@@ -35936,10 +35681,8 @@ int lua_ax_base_EventListenerKeyboard_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventListenerKeyboard();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventListenerKeyboard");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventListenerKeyboard");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerKeyboard:EventListenerKeyboard",argc, 0);
@@ -36717,10 +36460,8 @@ int lua_ax_base_EventMouse_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventMouse(arg0);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventMouse");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventMouse");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:EventMouse",argc, 1);
@@ -36836,10 +36577,8 @@ int lua_ax_base_EventListenerMouse_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventListenerMouse();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventListenerMouse");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventListenerMouse");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerMouse:EventListenerMouse",argc, 0);
@@ -37057,10 +36796,8 @@ int lua_ax_base_EventListenerTouchOneByOne_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventListenerTouchOneByOne();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventListenerTouchOneByOne");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventListenerTouchOneByOne");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerTouchOneByOne:EventListenerTouchOneByOne",argc, 0);
@@ -37164,10 +36901,8 @@ int lua_ax_base_EventListenerTouchAllAtOnce_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EventListenerTouchAllAtOnce();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventListenerTouchAllAtOnce");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventListenerTouchAllAtOnce");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerTouchAllAtOnce:EventListenerTouchAllAtOnce",argc, 0);
@@ -37514,10 +37249,8 @@ int lua_ax_base_EventController_constructor(lua_State* tolua_S)
 
             if (!ok) { break; }
             cobj = new ax::EventController(arg0, arg1, arg2);
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventController");
+            tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventController");
+            tolua_register_gc(tolua_S,lua_gettop(tolua_S));
             return 1;
         }
     }while(0);
@@ -37537,10 +37270,8 @@ int lua_ax_base_EventController_constructor(lua_State* tolua_S)
 
             if (!ok) { break; }
             cobj = new ax::EventController(arg0, arg1, arg2);
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventController");
+            tolua_pushusertype(tolua_S,(void*)cobj,"ax.EventController");
+            tolua_register_gc(tolua_S,lua_gettop(tolua_S));
             return 1;
         }
     }while(0);
@@ -37906,10 +37637,8 @@ int lua_ax_base_ActionCamera_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ActionCamera();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ActionCamera");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ActionCamera");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ActionCamera:ActionCamera",argc, 0);
@@ -38085,10 +37814,8 @@ int lua_ax_base_OrbitCamera_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::OrbitCamera();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.OrbitCamera");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.OrbitCamera");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.OrbitCamera:OrbitCamera",argc, 0);
@@ -38297,10 +38024,8 @@ int lua_ax_base_CardinalSplineTo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::CardinalSplineTo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.CardinalSplineTo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.CardinalSplineTo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CardinalSplineTo:CardinalSplineTo",argc, 0);
@@ -38357,10 +38082,8 @@ int lua_ax_base_CardinalSplineBy_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::CardinalSplineBy();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.CardinalSplineBy");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.CardinalSplineBy");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CardinalSplineBy:CardinalSplineBy",argc, 0);
@@ -38925,10 +38648,8 @@ int lua_ax_base_EaseExponentialIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseExponentialIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseExponentialIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseExponentialIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseExponentialIn:EaseExponentialIn",argc, 0);
@@ -39019,10 +38740,8 @@ int lua_ax_base_EaseExponentialOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseExponentialOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseExponentialOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseExponentialOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseExponentialOut:EaseExponentialOut",argc, 0);
@@ -39113,10 +38832,8 @@ int lua_ax_base_EaseExponentialInOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseExponentialInOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseExponentialInOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseExponentialInOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseExponentialInOut:EaseExponentialInOut",argc, 0);
@@ -39207,10 +38924,8 @@ int lua_ax_base_EaseSineIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseSineIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseSineIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseSineIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseSineIn:EaseSineIn",argc, 0);
@@ -39301,10 +39016,8 @@ int lua_ax_base_EaseSineOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseSineOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseSineOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseSineOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseSineOut:EaseSineOut",argc, 0);
@@ -39395,10 +39108,8 @@ int lua_ax_base_EaseSineInOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseSineInOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseSineInOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseSineInOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseSineInOut:EaseSineInOut",argc, 0);
@@ -39508,10 +39219,8 @@ int lua_ax_base_EaseBounceIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseBounceIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseBounceIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseBounceIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseBounceIn:EaseBounceIn",argc, 0);
@@ -39602,10 +39311,8 @@ int lua_ax_base_EaseBounceOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseBounceOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseBounceOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseBounceOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseBounceOut:EaseBounceOut",argc, 0);
@@ -39696,10 +39403,8 @@ int lua_ax_base_EaseBounceInOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseBounceInOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseBounceInOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseBounceInOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseBounceInOut:EaseBounceInOut",argc, 0);
@@ -39790,10 +39495,8 @@ int lua_ax_base_EaseBackIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseBackIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseBackIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseBackIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseBackIn:EaseBackIn",argc, 0);
@@ -39884,10 +39587,8 @@ int lua_ax_base_EaseBackOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseBackOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseBackOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseBackOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseBackOut:EaseBackOut",argc, 0);
@@ -39978,10 +39679,8 @@ int lua_ax_base_EaseBackInOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseBackInOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseBackInOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseBackInOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseBackInOut:EaseBackInOut",argc, 0);
@@ -40072,10 +39771,8 @@ int lua_ax_base_EaseQuadraticActionIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseQuadraticActionIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseQuadraticActionIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseQuadraticActionIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseQuadraticActionIn:EaseQuadraticActionIn",argc, 0);
@@ -40166,10 +39863,8 @@ int lua_ax_base_EaseQuadraticActionOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseQuadraticActionOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseQuadraticActionOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseQuadraticActionOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseQuadraticActionOut:EaseQuadraticActionOut",argc, 0);
@@ -40260,10 +39955,8 @@ int lua_ax_base_EaseQuadraticActionInOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseQuadraticActionInOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseQuadraticActionInOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseQuadraticActionInOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseQuadraticActionInOut:EaseQuadraticActionInOut",argc, 0);
@@ -40354,10 +40047,8 @@ int lua_ax_base_EaseQuarticActionIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseQuarticActionIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseQuarticActionIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseQuarticActionIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseQuarticActionIn:EaseQuarticActionIn",argc, 0);
@@ -40448,10 +40139,8 @@ int lua_ax_base_EaseQuarticActionOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseQuarticActionOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseQuarticActionOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseQuarticActionOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseQuarticActionOut:EaseQuarticActionOut",argc, 0);
@@ -40542,10 +40231,8 @@ int lua_ax_base_EaseQuarticActionInOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseQuarticActionInOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseQuarticActionInOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseQuarticActionInOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseQuarticActionInOut:EaseQuarticActionInOut",argc, 0);
@@ -40636,10 +40323,8 @@ int lua_ax_base_EaseQuinticActionIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseQuinticActionIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseQuinticActionIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseQuinticActionIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseQuinticActionIn:EaseQuinticActionIn",argc, 0);
@@ -40730,10 +40415,8 @@ int lua_ax_base_EaseQuinticActionOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseQuinticActionOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseQuinticActionOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseQuinticActionOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseQuinticActionOut:EaseQuinticActionOut",argc, 0);
@@ -40824,10 +40507,8 @@ int lua_ax_base_EaseQuinticActionInOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseQuinticActionInOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseQuinticActionInOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseQuinticActionInOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseQuinticActionInOut:EaseQuinticActionInOut",argc, 0);
@@ -40918,10 +40599,8 @@ int lua_ax_base_EaseCircleActionIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseCircleActionIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseCircleActionIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseCircleActionIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseCircleActionIn:EaseCircleActionIn",argc, 0);
@@ -41012,10 +40691,8 @@ int lua_ax_base_EaseCircleActionOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseCircleActionOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseCircleActionOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseCircleActionOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseCircleActionOut:EaseCircleActionOut",argc, 0);
@@ -41106,10 +40783,8 @@ int lua_ax_base_EaseCircleActionInOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseCircleActionInOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseCircleActionInOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseCircleActionInOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseCircleActionInOut:EaseCircleActionInOut",argc, 0);
@@ -41200,10 +40875,8 @@ int lua_ax_base_EaseCubicActionIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseCubicActionIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseCubicActionIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseCubicActionIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseCubicActionIn:EaseCubicActionIn",argc, 0);
@@ -41294,10 +40967,8 @@ int lua_ax_base_EaseCubicActionOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseCubicActionOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseCubicActionOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseCubicActionOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseCubicActionOut:EaseCubicActionOut",argc, 0);
@@ -41388,10 +41059,8 @@ int lua_ax_base_EaseCubicActionInOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseCubicActionInOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseCubicActionInOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseCubicActionInOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseCubicActionInOut:EaseCubicActionInOut",argc, 0);
@@ -41484,10 +41153,8 @@ int lua_ax_base_EaseIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseIn:EaseIn",argc, 0);
@@ -41580,10 +41247,8 @@ int lua_ax_base_EaseOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseOut:EaseOut",argc, 0);
@@ -41676,10 +41341,8 @@ int lua_ax_base_EaseInOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseInOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseInOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseInOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseInOut:EaseInOut",argc, 0);
@@ -41971,10 +41634,8 @@ int lua_ax_base_EaseElasticIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseElasticIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseElasticIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseElasticIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseElasticIn:EaseElasticIn",argc, 0);
@@ -42080,10 +41741,8 @@ int lua_ax_base_EaseElasticOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseElasticOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseElasticOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseElasticOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseElasticOut:EaseElasticOut",argc, 0);
@@ -42189,10 +41848,8 @@ int lua_ax_base_EaseElasticInOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseElasticInOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseElasticInOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseElasticInOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseElasticInOut:EaseElasticInOut",argc, 0);
@@ -42342,10 +41999,8 @@ int lua_ax_base_EaseBezierAction_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::EaseBezierAction();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EaseBezierAction");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.EaseBezierAction");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EaseBezierAction:EaseBezierAction",argc, 0);
@@ -42454,10 +42109,8 @@ int lua_ax_base_Show_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Show();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Show");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Show");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Show:Show",argc, 0);
@@ -42546,10 +42199,8 @@ int lua_ax_base_Hide_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Hide();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Hide");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Hide");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Hide:Hide",argc, 0);
@@ -42638,10 +42289,8 @@ int lua_ax_base_ToggleVisibility_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ToggleVisibility();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ToggleVisibility");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ToggleVisibility");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ToggleVisibility:ToggleVisibility",argc, 0);
@@ -42793,10 +42442,8 @@ int lua_ax_base_RemoveSelf_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::RemoveSelf();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.RemoveSelf");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.RemoveSelf");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RemoveSelf:RemoveSelf",argc, 0);
@@ -42938,10 +42585,8 @@ int lua_ax_base_FlipX_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FlipX();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FlipX");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FlipX");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FlipX:FlipX",argc, 0);
@@ -43083,10 +42728,8 @@ int lua_ax_base_FlipY_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FlipY();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FlipY");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FlipY");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FlipY:FlipY",argc, 0);
@@ -43228,10 +42871,8 @@ int lua_ax_base_Place_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Place();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Place");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Place");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Place:Place",argc, 0);
@@ -43334,10 +42975,8 @@ int lua_ax_base_CallFunc_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::CallFunc();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.CallFunc");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.CallFunc");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CallFunc:CallFunc",argc, 0);
@@ -43633,10 +43272,8 @@ int lua_ax_base_StopGrid_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::StopGrid();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.StopGrid");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.StopGrid");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.StopGrid:StopGrid",argc, 0);
@@ -43777,10 +43414,8 @@ int lua_ax_base_ReuseGrid_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ReuseGrid();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ReuseGrid");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ReuseGrid");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ReuseGrid:ReuseGrid",argc, 0);
@@ -44131,10 +43766,8 @@ int lua_ax_base_Waves3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Waves3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Waves3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Waves3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Waves3D:Waves3D",argc, 0);
@@ -44333,10 +43966,8 @@ int lua_ax_base_FlipX3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FlipX3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FlipX3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FlipX3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FlipX3D:FlipX3D",argc, 0);
@@ -44429,10 +44060,8 @@ int lua_ax_base_FlipY3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FlipY3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FlipY3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FlipY3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FlipY3D:FlipY3D",argc, 0);
@@ -44832,10 +44461,8 @@ int lua_ax_base_Lens3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Lens3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Lens3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Lens3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Lens3D:Lens3D",argc, 0);
@@ -45298,10 +44925,8 @@ int lua_ax_base_Ripple3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Ripple3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Ripple3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Ripple3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Ripple3D:Ripple3D",argc, 0);
@@ -45464,10 +45089,8 @@ int lua_ax_base_Shaky3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Shaky3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Shaky3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Shaky3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Shaky3D:Shaky3D",argc, 0);
@@ -45818,10 +45441,8 @@ int lua_ax_base_Liquid_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Liquid();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Liquid");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Liquid");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Liquid:Liquid",argc, 0);
@@ -46186,10 +45807,8 @@ int lua_ax_base_Waves_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Waves();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Waves");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Waves");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Waves:Waves",argc, 0);
@@ -46646,10 +46265,8 @@ int lua_ax_base_Twirl_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Twirl();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Twirl");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Twirl");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Twirl:Twirl",argc, 0);
@@ -47523,10 +47140,8 @@ int lua_ax_base_ActionManager_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ActionManager();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ActionManager");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ActionManager");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ActionManager:ActionManager",argc, 0);
@@ -47745,10 +47360,8 @@ int lua_ax_base_ProgressTo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ProgressTo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ProgressTo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ProgressTo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ProgressTo:ProgressTo",argc, 0);
@@ -47900,10 +47513,8 @@ int lua_ax_base_ProgressFromTo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ProgressFromTo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ProgressFromTo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ProgressFromTo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ProgressFromTo:ProgressFromTo",argc, 0);
@@ -48060,10 +47671,8 @@ int lua_ax_base_ShakyTiles3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ShakyTiles3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ShakyTiles3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ShakyTiles3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ShakyTiles3D:ShakyTiles3D",argc, 0);
@@ -48220,10 +47829,8 @@ int lua_ax_base_ShatteredTiles3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ShatteredTiles3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ShatteredTiles3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ShatteredTiles3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ShatteredTiles3D:ShatteredTiles3D",argc, 0);
@@ -48425,10 +48032,8 @@ int lua_ax_base_ShuffleTiles_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ShuffleTiles();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ShuffleTiles");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ShuffleTiles");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ShuffleTiles:ShuffleTiles",argc, 0);
@@ -48729,10 +48334,8 @@ int lua_ax_base_FadeOutTRTiles_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FadeOutTRTiles();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FadeOutTRTiles");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FadeOutTRTiles");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FadeOutTRTiles:FadeOutTRTiles",argc, 0);
@@ -48829,10 +48432,8 @@ int lua_ax_base_FadeOutBLTiles_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FadeOutBLTiles();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FadeOutBLTiles");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FadeOutBLTiles");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FadeOutBLTiles:FadeOutBLTiles",argc, 0);
@@ -48925,10 +48526,8 @@ int lua_ax_base_FadeOutUpTiles_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FadeOutUpTiles();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FadeOutUpTiles");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FadeOutUpTiles");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FadeOutUpTiles:FadeOutUpTiles",argc, 0);
@@ -49021,10 +48620,8 @@ int lua_ax_base_FadeOutDownTiles_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FadeOutDownTiles();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FadeOutDownTiles");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FadeOutDownTiles");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FadeOutDownTiles:FadeOutDownTiles",argc, 0);
@@ -49292,10 +48889,8 @@ int lua_ax_base_TurnOffTiles_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TurnOffTiles();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TurnOffTiles");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TurnOffTiles");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TurnOffTiles:TurnOffTiles",argc, 0);
@@ -49648,10 +49243,8 @@ int lua_ax_base_WavesTiles3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::WavesTiles3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.WavesTiles3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.WavesTiles3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.WavesTiles3D:WavesTiles3D",argc, 0);
@@ -50006,10 +49599,8 @@ int lua_ax_base_JumpTiles3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::JumpTiles3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.JumpTiles3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.JumpTiles3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.JumpTiles3D:JumpTiles3D",argc, 0);
@@ -50160,10 +49751,8 @@ int lua_ax_base_SplitRows_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::SplitRows();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.SplitRows");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.SplitRows");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.SplitRows:SplitRows",argc, 0);
@@ -50310,10 +49899,8 @@ int lua_ax_base_SplitCols_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::SplitCols();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.SplitCols");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.SplitCols");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.SplitCols:SplitCols",argc, 0);
@@ -50585,10 +50172,8 @@ int lua_ax_base_ActionCoroutine_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ActionCoroutine();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ActionCoroutine");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ActionCoroutine");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ActionCoroutine:ActionCoroutine",argc, 0);
@@ -51239,10 +50824,8 @@ int lua_ax_base_AtlasNode_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::AtlasNode();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.AtlasNode");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.AtlasNode");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AtlasNode:AtlasNode",argc, 0);
@@ -53411,10 +52994,8 @@ int lua_ax_base_DrawNode_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::DrawNode();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.DrawNode");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.DrawNode");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 1) 
@@ -53428,10 +53009,8 @@ int lua_ax_base_DrawNode_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::DrawNode(arg0);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.DrawNode");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.DrawNode");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:DrawNode",argc, 0);
@@ -58019,10 +57598,8 @@ int lua_ax_base_LabelAtlas_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::LabelAtlas();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.LabelAtlas");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.LabelAtlas");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.LabelAtlas:LabelAtlas",argc, 0);
@@ -60248,10 +59825,8 @@ int lua_ax_base_Sprite_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Sprite();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Sprite");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Sprite");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Sprite:Sprite",argc, 0);
@@ -60682,10 +60257,8 @@ int lua_ax_base_LayerColor_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::LayerColor();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.LayerColor");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.LayerColor");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.LayerColor:LayerColor",argc, 0);
@@ -61460,10 +61033,8 @@ int lua_ax_base_LayerGradient_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::LayerGradient();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.LayerGradient");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.LayerGradient");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.LayerGradient:LayerGradient",argc, 0);
@@ -62530,10 +62101,8 @@ int lua_ax_base_LayerRadialGradient_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::LayerRadialGradient();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.LayerRadialGradient");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.LayerRadialGradient");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.LayerRadialGradient:LayerRadialGradient",argc, 0);
@@ -62816,10 +62385,8 @@ int lua_ax_base_LayerMultiplex_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::LayerMultiplex();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.LayerMultiplex");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.LayerMultiplex");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.LayerMultiplex:LayerMultiplex",argc, 0);
@@ -63209,10 +62776,8 @@ int lua_ax_base_MenuItem_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::MenuItem();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.MenuItem");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.MenuItem");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MenuItem:MenuItem",argc, 0);
@@ -63621,10 +63186,8 @@ int lua_ax_base_MenuItemLabel_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::MenuItemLabel();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.MenuItemLabel");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.MenuItemLabel");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MenuItemLabel:MenuItemLabel",argc, 0);
@@ -63754,10 +63317,8 @@ int lua_ax_base_MenuItemAtlasFont_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::MenuItemAtlasFont();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.MenuItemAtlasFont");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.MenuItemAtlasFont");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MenuItemAtlasFont:MenuItemAtlasFont",argc, 0);
@@ -64203,10 +63764,8 @@ int lua_ax_base_MenuItemFont_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::MenuItemFont();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.MenuItemFont");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.MenuItemFont");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MenuItemFont:MenuItemFont",argc, 0);
@@ -64767,10 +64326,8 @@ int lua_ax_base_MenuItemSprite_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::MenuItemSprite();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.MenuItemSprite");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.MenuItemSprite");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MenuItemSprite:MenuItemSprite",argc, 0);
@@ -65094,10 +64651,8 @@ int lua_ax_base_MenuItemImage_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::MenuItemImage();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.MenuItemImage");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.MenuItemImage");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MenuItemImage:MenuItemImage",argc, 0);
@@ -65450,10 +65005,8 @@ int lua_ax_base_MenuItemToggle_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::MenuItemToggle();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.MenuItemToggle");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.MenuItemToggle");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MenuItemToggle:MenuItemToggle",argc, 0);
@@ -65854,10 +65407,8 @@ int lua_ax_base_Menu_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Menu();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Menu");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Menu");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Menu:Menu",argc, 0);
@@ -66659,10 +66210,8 @@ int lua_ax_base_MotionStreak_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::MotionStreak();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.MotionStreak");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.MotionStreak");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MotionStreak:MotionStreak",argc, 0);
@@ -67019,10 +66568,8 @@ int lua_ax_base_NodeGrid_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::NodeGrid();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.NodeGrid");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.NodeGrid");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NodeGrid:NodeGrid",argc, 0);
@@ -67787,10 +67334,8 @@ int lua_ax_base_ParticleBatchNode_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleBatchNode();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleBatchNode");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleBatchNode");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleBatchNode:ParticleBatchNode",argc, 0);
@@ -78194,10 +77739,8 @@ int lua_ax_base_ParticleSystem_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleSystem();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleSystem");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleSystem");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem:ParticleSystem",argc, 0);
@@ -78667,10 +78210,8 @@ int lua_ax_base_ParticleSystemQuad_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleSystemQuad();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleSystemQuad");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleSystemQuad");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystemQuad:ParticleSystemQuad",argc, 0);
@@ -78799,10 +78340,8 @@ int lua_ax_base_ParticleFire_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleFire();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleFire");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleFire");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleFire:ParticleFire",argc, 0);
@@ -79025,10 +78564,8 @@ int lua_ax_base_ParticleFireworks_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleFireworks();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleFireworks");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleFireworks");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleFireworks:ParticleFireworks",argc, 0);
@@ -79253,10 +78790,8 @@ int lua_ax_base_ParticleSun_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleSun();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleSun");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleSun");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSun:ParticleSun",argc, 0);
@@ -79481,10 +79016,8 @@ int lua_ax_base_ParticleGalaxy_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleGalaxy();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleGalaxy");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleGalaxy");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleGalaxy:ParticleGalaxy",argc, 0);
@@ -79709,10 +79242,8 @@ int lua_ax_base_ParticleFlower_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleFlower();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleFlower");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleFlower");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleFlower:ParticleFlower",argc, 0);
@@ -79937,10 +79468,8 @@ int lua_ax_base_ParticleMeteor_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleMeteor();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleMeteor");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleMeteor");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleMeteor:ParticleMeteor",argc, 0);
@@ -80165,10 +79694,8 @@ int lua_ax_base_ParticleSpiral_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleSpiral();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleSpiral");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleSpiral");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSpiral:ParticleSpiral",argc, 0);
@@ -80393,10 +79920,8 @@ int lua_ax_base_ParticleExplosion_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleExplosion();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleExplosion");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleExplosion");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleExplosion:ParticleExplosion",argc, 0);
@@ -80621,10 +80146,8 @@ int lua_ax_base_ParticleSmoke_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleSmoke();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleSmoke");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleSmoke");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSmoke:ParticleSmoke",argc, 0);
@@ -80849,10 +80372,8 @@ int lua_ax_base_ParticleSnow_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleSnow();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleSnow");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleSnow");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSnow:ParticleSnow",argc, 0);
@@ -81077,10 +80598,8 @@ int lua_ax_base_ParticleRain_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParticleRain();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParticleRain");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParticleRain");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleRain:ParticleRain",argc, 0);
@@ -81806,10 +81325,8 @@ int lua_ax_base_ProgressTimer_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ProgressTimer();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ProgressTimer");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ProgressTimer");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ProgressTimer:ProgressTimer",argc, 0);
@@ -82562,10 +82079,8 @@ int lua_ax_base_ProtectedNode_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ProtectedNode();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ProtectedNode");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ProtectedNode");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ProtectedNode:ProtectedNode",argc, 0);
@@ -84312,10 +83827,8 @@ int lua_ax_base_RenderTexture_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::RenderTexture();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.RenderTexture");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.RenderTexture");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexture:RenderTexture",argc, 0);
@@ -84744,10 +84257,8 @@ int lua_ax_base_TransitionScene_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionScene();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionScene");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionScene");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionScene:TransitionScene",argc, 0);
@@ -84903,10 +84414,8 @@ int lua_ax_base_TransitionSceneOriented_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionSceneOriented();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionSceneOriented");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionSceneOriented");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionSceneOriented:TransitionSceneOriented",argc, 0);
@@ -85000,10 +84509,8 @@ int lua_ax_base_TransitionRotoZoom_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionRotoZoom();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionRotoZoom");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionRotoZoom");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionRotoZoom:TransitionRotoZoom",argc, 0);
@@ -85096,10 +84603,8 @@ int lua_ax_base_TransitionJumpZoom_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionJumpZoom();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionJumpZoom");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionJumpZoom");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionJumpZoom:TransitionJumpZoom",argc, 0);
@@ -85289,10 +84794,8 @@ int lua_ax_base_TransitionMoveInL_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionMoveInL();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionMoveInL");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionMoveInL");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionMoveInL:TransitionMoveInL",argc, 0);
@@ -85387,10 +84890,8 @@ int lua_ax_base_TransitionMoveInR_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionMoveInR();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionMoveInR");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionMoveInR");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionMoveInR:TransitionMoveInR",argc, 0);
@@ -85483,10 +84984,8 @@ int lua_ax_base_TransitionMoveInT_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionMoveInT();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionMoveInT");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionMoveInT");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionMoveInT:TransitionMoveInT",argc, 0);
@@ -85579,10 +85078,8 @@ int lua_ax_base_TransitionMoveInB_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionMoveInB();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionMoveInB");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionMoveInB");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionMoveInB:TransitionMoveInB",argc, 0);
@@ -85772,10 +85269,8 @@ int lua_ax_base_TransitionSlideInL_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionSlideInL();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionSlideInL");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionSlideInL");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionSlideInL:TransitionSlideInL",argc, 0);
@@ -85870,10 +85365,8 @@ int lua_ax_base_TransitionSlideInR_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionSlideInR();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionSlideInR");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionSlideInR");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionSlideInR:TransitionSlideInR",argc, 0);
@@ -85966,10 +85459,8 @@ int lua_ax_base_TransitionSlideInB_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionSlideInB();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionSlideInB");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionSlideInB");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionSlideInB:TransitionSlideInB",argc, 0);
@@ -86062,10 +85553,8 @@ int lua_ax_base_TransitionSlideInT_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionSlideInT();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionSlideInT");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionSlideInT");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionSlideInT:TransitionSlideInT",argc, 0);
@@ -86208,10 +85697,8 @@ int lua_ax_base_TransitionShrinkGrow_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionShrinkGrow();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionShrinkGrow");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionShrinkGrow");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionShrinkGrow:TransitionShrinkGrow",argc, 0);
@@ -86324,10 +85811,8 @@ int lua_ax_base_TransitionFlipX_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionFlipX();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionFlipX");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionFlipX");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionFlipX:TransitionFlipX",argc, 0);
@@ -86439,10 +85924,8 @@ int lua_ax_base_TransitionFlipY_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionFlipY();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionFlipY");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionFlipY");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionFlipY:TransitionFlipY",argc, 0);
@@ -86554,10 +86037,8 @@ int lua_ax_base_TransitionFlipAngular_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionFlipAngular();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionFlipAngular");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionFlipAngular");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionFlipAngular:TransitionFlipAngular",argc, 0);
@@ -86669,10 +86150,8 @@ int lua_ax_base_TransitionZoomFlipX_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionZoomFlipX();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionZoomFlipX");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionZoomFlipX");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionZoomFlipX:TransitionZoomFlipX",argc, 0);
@@ -86784,10 +86263,8 @@ int lua_ax_base_TransitionZoomFlipY_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionZoomFlipY();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionZoomFlipY");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionZoomFlipY");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionZoomFlipY:TransitionZoomFlipY",argc, 0);
@@ -86899,10 +86376,8 @@ int lua_ax_base_TransitionZoomFlipAngular_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionZoomFlipAngular();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionZoomFlipAngular");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionZoomFlipAngular");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionZoomFlipAngular:TransitionZoomFlipAngular",argc, 0);
@@ -87081,10 +86556,8 @@ int lua_ax_base_TransitionFade_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionFade();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionFade");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionFade");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionFade:TransitionFade",argc, 0);
@@ -87178,10 +86651,8 @@ int lua_ax_base_TransitionCrossFade_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionCrossFade();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionCrossFade");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionCrossFade");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionCrossFade:TransitionCrossFade",argc, 0);
@@ -87324,10 +86795,8 @@ int lua_ax_base_TransitionTurnOffTiles_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionTurnOffTiles();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionTurnOffTiles");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionTurnOffTiles");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionTurnOffTiles:TransitionTurnOffTiles",argc, 0);
@@ -87518,10 +86987,8 @@ int lua_ax_base_TransitionSplitCols_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionSplitCols();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionSplitCols");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionSplitCols");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionSplitCols:TransitionSplitCols",argc, 0);
@@ -87616,10 +87083,8 @@ int lua_ax_base_TransitionSplitRows_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionSplitRows();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionSplitRows");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionSplitRows");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionSplitRows:TransitionSplitRows",argc, 0);
@@ -87812,10 +87277,8 @@ int lua_ax_base_TransitionFadeTR_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionFadeTR();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionFadeTR");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionFadeTR");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionFadeTR:TransitionFadeTR",argc, 0);
@@ -87910,10 +87373,8 @@ int lua_ax_base_TransitionFadeBL_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionFadeBL();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionFadeBL");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionFadeBL");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionFadeBL:TransitionFadeBL",argc, 0);
@@ -88006,10 +87467,8 @@ int lua_ax_base_TransitionFadeUp_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionFadeUp();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionFadeUp");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionFadeUp");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionFadeUp:TransitionFadeUp",argc, 0);
@@ -88102,10 +87561,8 @@ int lua_ax_base_TransitionFadeDown_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionFadeDown();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionFadeDown");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionFadeDown");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionFadeDown:TransitionFadeDown",argc, 0);
@@ -88306,10 +87763,8 @@ int lua_ax_base_TransitionPageTurn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionPageTurn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionPageTurn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionPageTurn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionPageTurn:TransitionPageTurn",argc, 0);
@@ -88404,10 +87859,8 @@ int lua_ax_base_TransitionProgress_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionProgress();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionProgress");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionProgress");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionProgress:TransitionProgress",argc, 0);
@@ -88500,10 +87953,8 @@ int lua_ax_base_TransitionProgressRadialCCW_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionProgressRadialCCW();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionProgressRadialCCW");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionProgressRadialCCW");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionProgressRadialCCW:TransitionProgressRadialCCW",argc, 0);
@@ -88596,10 +88047,8 @@ int lua_ax_base_TransitionProgressRadialCW_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionProgressRadialCW();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionProgressRadialCW");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionProgressRadialCW");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionProgressRadialCW:TransitionProgressRadialCW",argc, 0);
@@ -88692,10 +88141,8 @@ int lua_ax_base_TransitionProgressHorizontal_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionProgressHorizontal();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionProgressHorizontal");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionProgressHorizontal");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionProgressHorizontal:TransitionProgressHorizontal",argc, 0);
@@ -88788,10 +88235,8 @@ int lua_ax_base_TransitionProgressVertical_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionProgressVertical();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionProgressVertical");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionProgressVertical");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionProgressVertical:TransitionProgressVertical",argc, 0);
@@ -88884,10 +88329,8 @@ int lua_ax_base_TransitionProgressInOut_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionProgressInOut();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionProgressInOut");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionProgressInOut");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionProgressInOut:TransitionProgressInOut",argc, 0);
@@ -88980,10 +88423,8 @@ int lua_ax_base_TransitionProgressOutIn_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TransitionProgressOutIn();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TransitionProgressOutIn");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TransitionProgressOutIn");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TransitionProgressOutIn:TransitionProgressOutIn",argc, 0);
@@ -90976,10 +90417,8 @@ int lua_ax_base_Camera_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Camera();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Camera");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Camera");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:Camera",argc, 0);
@@ -91430,10 +90869,8 @@ int lua_ax_base_CameraBackgroundBrush_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::CameraBackgroundBrush();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.CameraBackgroundBrush");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.CameraBackgroundBrush");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CameraBackgroundBrush:CameraBackgroundBrush",argc, 0);
@@ -91581,10 +91018,8 @@ int lua_ax_base_CameraBackgroundDepthBrush_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::CameraBackgroundDepthBrush();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.CameraBackgroundDepthBrush");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.CameraBackgroundDepthBrush");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CameraBackgroundDepthBrush:CameraBackgroundDepthBrush",argc, 0);
@@ -91728,10 +91163,8 @@ int lua_ax_base_CameraBackgroundColorBrush_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::CameraBackgroundColorBrush();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.CameraBackgroundColorBrush");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.CameraBackgroundColorBrush");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CameraBackgroundColorBrush:CameraBackgroundColorBrush",argc, 0);
@@ -92091,10 +91524,8 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::CameraBackgroundSkyBoxBrush();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.CameraBackgroundSkyBoxBrush");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.CameraBackgroundSkyBoxBrush");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CameraBackgroundSkyBoxBrush:CameraBackgroundSkyBoxBrush",argc, 0);
@@ -93447,10 +92878,8 @@ int lua_ax_base_Grid3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::Grid3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Grid3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.Grid3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Grid3D:Grid3D",argc, 0);
@@ -94165,10 +93594,8 @@ int lua_ax_base_DirectionLight_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::DirectionLight();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.DirectionLight");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.DirectionLight");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DirectionLight:DirectionLight",argc, 0);
@@ -94363,10 +93790,8 @@ int lua_ax_base_PointLight_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::PointLight();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.PointLight");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.PointLight");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointLight:PointLight",argc, 0);
@@ -94998,10 +94423,8 @@ int lua_ax_base_SpotLight_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::SpotLight();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.SpotLight");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.SpotLight");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.SpotLight:SpotLight",argc, 0);
@@ -95103,10 +94526,8 @@ int lua_ax_base_AmbientLight_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::AmbientLight();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.AmbientLight");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.AmbientLight");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AmbientLight:AmbientLight",argc, 0);
@@ -102147,10 +101568,8 @@ int lua_ax_base_TextureCache_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TextureCache();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TextureCache");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TextureCache");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TextureCache:TextureCache",argc, 0);
@@ -104817,10 +104236,8 @@ int lua_ax_base_SpriteBatchNode_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::SpriteBatchNode();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.SpriteBatchNode");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.SpriteBatchNode");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.SpriteBatchNode:SpriteBatchNode",argc, 0);
@@ -105040,10 +104457,8 @@ int lua_ax_base_ParallaxNode_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ParallaxNode();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ParallaxNode");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ParallaxNode");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParallaxNode:ParallaxNode",argc, 0);
@@ -105588,10 +105003,8 @@ int lua_ax_base_TMXObjectGroup_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TMXObjectGroup();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TMXObjectGroup");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TMXObjectGroup");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TMXObjectGroup:TMXObjectGroup",argc, 0);
@@ -105752,10 +105165,8 @@ int lua_ax_base_TMXLayerInfo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TMXLayerInfo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TMXLayerInfo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TMXLayerInfo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TMXLayerInfo:TMXLayerInfo",argc, 0);
@@ -105861,10 +105272,8 @@ int lua_ax_base_TMXTilesetInfo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TMXTilesetInfo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TMXTilesetInfo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TMXTilesetInfo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TMXTilesetInfo:TMXTilesetInfo",argc, 0);
@@ -107892,10 +107301,8 @@ int lua_ax_base_TMXMapInfo_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TMXMapInfo();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TMXMapInfo");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TMXMapInfo");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TMXMapInfo:TMXMapInfo",argc, 0);
@@ -108241,10 +107648,8 @@ int lua_ax_base_TileMapAtlas_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TileMapAtlas();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TileMapAtlas");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TileMapAtlas");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TileMapAtlas:TileMapAtlas",argc, 0);
@@ -109492,10 +108897,8 @@ int lua_ax_base_FastTMXLayer_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FastTMXLayer();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FastTMXLayer");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FastTMXLayer");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXLayer:FastTMXLayer",argc, 0);
@@ -109785,10 +109188,8 @@ int lua_ax_base_TMXTileAnimTask_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TMXTileAnimTask(arg0, arg1, arg2);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TMXTileAnimTask");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TMXTileAnimTask");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 4) 
@@ -109812,10 +109213,8 @@ int lua_ax_base_TMXTileAnimTask_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TMXTileAnimTask(arg0, arg1, arg2, arg3);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TMXTileAnimTask");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TMXTileAnimTask");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TMXTileAnimTask:TMXTileAnimTask",argc, 3);
@@ -110053,10 +109452,8 @@ int lua_ax_base_TMXTileAnimManager_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TMXTileAnimManager(arg0);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TMXTileAnimManager");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.TMXTileAnimManager");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TMXTileAnimManager:TMXTileAnimManager",argc, 1);
@@ -111264,10 +110661,8 @@ int lua_ax_base_FastTMXTiledMap_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::FastTMXTiledMap();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.FastTMXTiledMap");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.FastTMXTiledMap");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXTiledMap:FastTMXTiledMap",argc, 0);
@@ -112086,10 +111481,8 @@ int lua_ax_base_MotionStreak3D_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::MotionStreak3D();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.MotionStreak3D");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.MotionStreak3D");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MotionStreak3D:MotionStreak3D",argc, 0);
@@ -112293,10 +111686,8 @@ int lua_ax_base_ComponentLua_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::ComponentLua(arg0);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ComponentLua");
+        tolua_pushusertype(tolua_S,(void*)cobj,"ax.ComponentLua");
+        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ComponentLua:ComponentLua",argc, 1);
@@ -112338,7 +111729,6 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
 	tolua_module(tolua_S,"ax",0);
 	tolua_beginmodule(tolua_S,"ax");
 
-	lua_register_ax_base_Ref(tolua_S);
 	lua_register_ax_base_EventListener(tolua_S);
 	lua_register_ax_base_EventListenerCustom(tolua_S);
 	lua_register_ax_base_ShaderCache(tolua_S);
