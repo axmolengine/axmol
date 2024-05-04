@@ -37,22 +37,22 @@ public:
 
     virtual bool init() override;
 
-    void menuCloseCallback(ax::Ref* sender);
+    void menuCloseCallback(ax::Object* sender);
 
-    void menuRatioCallback(ax::Ref* sender);
-    void menuResourceVideoCallback(ax::Ref* sender);
-    void menuOnlineVideoCallback(ax::Ref* sender);
+    void menuRatioCallback(ax::Object* sender);
+    void menuResourceVideoCallback(ax::Object* sender);
+    void menuOnlineVideoCallback(ax::Object* sender);
 
-    void menuFullScreenCallback(ax::Ref* sender);
-    void menuPauseCallback(ax::Ref* sender);
-    void menuResumeCallback(ax::Ref* sender);
-    void menuStopCallback(ax::Ref* sender);
-    void menuHintCallback(ax::Ref* sender);
-    void menuLoopCallback(ax::Ref* sender);
+    void menuFullScreenCallback(ax::Object* sender);
+    void menuPauseCallback(ax::Object* sender);
+    void menuResumeCallback(ax::Object* sender);
+    void menuStopCallback(ax::Object* sender);
+    void menuHintCallback(ax::Object* sender);
+    void menuLoopCallback(ax::Object* sender);
 
-    void sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType eventType);
+    void sliderCallback(ax::Object* sender, ax::ui::Slider::EventType eventType);
 
-    void videoEventCallback(ax::Ref* sender, ax::ui::VideoPlayer::EventType eventType);
+    void videoEventCallback(ax::Object* sender, ax::ui::VideoPlayer::EventType eventType);
 
     void onEnter() override;
     void onExit() override;
@@ -76,9 +76,9 @@ public:
 
     virtual bool init() override;
 
-    void menuCloseCallback(ax::Ref* sender);
-    void switchStyleCallback(ax::Ref* sender);
-    void switchUserInputCallback(ax::Ref* sender);
+    void menuCloseCallback(ax::Object* sender);
+    void switchStyleCallback(ax::Object* sender);
+    void switchUserInputCallback(ax::Object* sender);
 
     void onEnter() override;
     void onExit() override;

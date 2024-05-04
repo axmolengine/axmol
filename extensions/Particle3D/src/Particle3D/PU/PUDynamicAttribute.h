@@ -27,7 +27,7 @@
 #ifndef __AX_PU_PARTICLE_3D_DYNAMIC_ATTRIBUTE_H__
 #define __AX_PU_PARTICLE_3D_DYNAMIC_ATTRIBUTE_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "PUSimpleSpline.h"
 #include <vector>
@@ -57,7 +57,7 @@ struct PUControlPointSorter
     but where implementation of this behaviour may not be scattered or duplicated within the application that needs
     it.
 */
-class AX_EX_DLL PUDynamicAttribute : public Ref
+class AX_EX_DLL PUDynamicAttribute : public Object
 {
 public:
     enum DynamicAttributeType

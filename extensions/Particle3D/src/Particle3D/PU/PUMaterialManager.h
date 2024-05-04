@@ -33,7 +33,7 @@
 
 NS_AX_BEGIN
 
-class AX_EX_DLL PUMaterial : public Ref
+class AX_EX_DLL PUMaterial : public Object
 {
 public:
     PUMaterial();

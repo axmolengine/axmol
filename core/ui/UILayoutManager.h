@@ -26,7 +26,7 @@
 #ifndef __cocos2d_libs__CCLayoutManager__
 #define __cocos2d_libs__CCLayoutManager__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Vector.h"
 #include "ui/GUIExport.h"
 
@@ -47,7 +47,7 @@ class RelativeLayoutParameter;
  *@brief Base class for managing layout.
  * All the concrete layout manager should inherit from this class.
  */
-class AX_GUI_DLL LayoutManager : public Ref
+class AX_GUI_DLL LayoutManager : public Object
 {
 public:
     virtual ~LayoutManager(){}

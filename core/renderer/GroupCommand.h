@@ -29,7 +29,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "renderer/RenderCommand.h"
 
 /**
@@ -40,7 +40,7 @@
 NS_AX_BEGIN
 
 // Used for internal
-class GroupCommandManager : public Ref
+class GroupCommandManager : public Object
 {
 public:
     int getGroupID();

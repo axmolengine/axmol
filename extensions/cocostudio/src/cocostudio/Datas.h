@@ -25,7 +25,7 @@ THE SOFTWARE.
 #ifndef __CCARMATURE_DATAS_H__
 #define __CCARMATURE_DATAS_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Types.h"
 #include "base/Vector.h"
 #include "base/Map.h"
@@ -66,7 +66,7 @@ namespace cocostudio
  * @js NA
  * @lua NA
  */
-class CCS_DLL BaseData : public ax::Ref
+class CCS_DLL BaseData : public ax::Object
 {
 public:
     AX_CREATE_NO_PARAM_NO_INIT(BaseData)
@@ -135,7 +135,7 @@ enum DisplayType
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL DisplayData : public ax::Ref
+class CCS_DLL DisplayData : public ax::Object
 {
 public:
     AX_CREATE_NO_PARAM_NO_INIT(DisplayData)
@@ -265,7 +265,7 @@ public:
  * @js NA
  * @lua NA
  */
-class CCS_DLL ArmatureData : public ax::Ref
+class CCS_DLL ArmatureData : public ax::Object
 {
 public:
     AX_CREATE_NO_PARAM(ArmatureData)
@@ -360,7 +360,7 @@ public:
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL MovementBoneData : public ax::Ref
+class CCS_DLL MovementBoneData : public ax::Object
 {
 public:
     AX_CREATE_NO_PARAM(MovementBoneData)
@@ -393,7 +393,7 @@ public:
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL MovementData : public ax::Ref
+class CCS_DLL MovementData : public ax::Object
 {
 public:
     AX_CREATE_NO_PARAM_NO_INIT(MovementData)
@@ -456,7 +456,7 @@ public:
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL AnimationData : public ax::Ref
+class CCS_DLL AnimationData : public ax::Object
 {
 public:
     AX_CREATE_NO_PARAM_NO_INIT(AnimationData)
@@ -486,7 +486,7 @@ public:
  * @js NA
  * @lua NA
  */
-class CCS_DLL ContourData : public ax::Ref
+class CCS_DLL ContourData : public ax::Object
 {
 public:
     AX_CREATE_NO_PARAM(ContourData)
@@ -513,7 +513,7 @@ public:
  * @js NA
  * @lua NA
  */
-class CCS_DLL TextureData : public ax::Ref
+class CCS_DLL TextureData : public ax::Object
 {
 public:
     AX_CREATE_NO_PARAM(TextureData)

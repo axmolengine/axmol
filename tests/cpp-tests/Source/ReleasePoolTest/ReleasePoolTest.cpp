@@ -31,7 +31,7 @@ ReleasePoolTests::ReleasePoolTests()
     ADD_TEST_CASE(ReleasePoolTest);
 }
 
-class TestObject : public Ref
+class TestObject : public Object
 {
 public:
     TestObject() : _name("") {}

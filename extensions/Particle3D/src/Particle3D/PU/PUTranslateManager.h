@@ -27,7 +27,7 @@
 #ifndef __AX_PU_PARTICLE_3D_TRANSLATE_MANAGER_H__
 #define __AX_PU_PARTICLE_3D_TRANSLATE_MANAGER_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "Particle3D/PU/PUParticleSystem3DTranslator.h"
 #include "Particle3D/PU/PUTechniqueTranslator.h"
 #include "Particle3D/PU/PURendererTranslator.h"

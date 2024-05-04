@@ -39,7 +39,7 @@ public:
     ~UIPageViewTest();
     virtual bool init() override;
 
-    void pageViewEvent(ax::Ref* sender, ax::ui::PageView::EventType type);
+    void pageViewEvent(ax::Object* sender, ax::ui::PageView::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -54,8 +54,8 @@ public:
     ~UIPageViewButtonTest();
     virtual bool init() override;
 
-    void pageViewEvent(ax::Ref* sender, ax::ui::PageView::EventType type);
-    void onButtonClicked(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void pageViewEvent(ax::Object* sender, ax::ui::PageView::EventType type);
+    void onButtonClicked(ax::Object* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -70,8 +70,8 @@ public:
     ~UIPageViewTouchPropagationTest();
     virtual bool init() override;
 
-    void pageViewEvent(ax::Ref* sender, ax::ui::PageView::EventType type);
-    void onButtonClicked(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void pageViewEvent(ax::Object* sender, ax::ui::PageView::EventType type);
+    void onButtonClicked(ax::Object* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -86,8 +86,8 @@ public:
     ~UIPageViewDynamicAddAndRemoveTest();
     virtual bool init() override;
 
-    void pageViewEvent(ax::Ref* sender, ax::ui::PageView::EventType type);
-    void onButtonClicked(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void pageViewEvent(ax::Object* sender, ax::ui::PageView::EventType type);
+    void onButtonClicked(ax::Object* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -115,7 +115,7 @@ public:
     ~UIPageViewVerticalTest();
     virtual bool init() override;
 
-    void pageViewEvent(ax::Ref* sender, ax::ui::PageView::EventType type);
+    void pageViewEvent(ax::Object* sender, ax::ui::PageView::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -143,7 +143,7 @@ public:
     ~UIPageViewChildSizeTest();
     virtual bool init() override;
 
-    void pageViewEvent(ax::Ref* sender, ax::ui::PageView::EventType type);
+    void pageViewEvent(ax::Object* sender, ax::ui::PageView::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;

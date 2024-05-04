@@ -29,7 +29,7 @@
 #include "cocostudio/WidgetReader/NodeReaderDefine.h"
 #include "cocostudio/WidgetReader/TabControlReader/CSTabControl_generated.h"
 
-class TabControlReader : public ax::Ref, public cocostudio::NodeReaderProtocol
+class TabControlReader : public ax::Object, public cocostudio::NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -52,7 +52,7 @@ private:
     static TabControlReader* _tabReaderInstance;
 };
 
-class TabHeaderReader : public ax::Ref, public cocostudio::NodeReaderProtocol
+class TabHeaderReader : public ax::Object, public cocostudio::NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -77,7 +77,7 @@ private:
     int getResourceType(std::string_view key);
 };
 
-class TabItemReader : public ax::Ref, public cocostudio::NodeReaderProtocol
+class TabItemReader : public ax::Object, public cocostudio::NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 

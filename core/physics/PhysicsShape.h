@@ -30,7 +30,7 @@
 #include "base/Config.h"
 #if defined(AX_ENABLE_PHYSICS)
 
-#    include "base/Ref.h"
+#    include "base/Object.h"
 #    include "math/Math.h"
 
 struct cpShape;
@@ -66,7 +66,7 @@ const PhysicsMaterial PHYSICSSHAPE_MATERIAL_DEFAULT;
  * @brief A shape for body. You do not create PhysicsWorld objects directly, instead, you can view PhysicsBody to see
  * how to create it.
  */
-class AX_DLL PhysicsShape : public Ref
+class AX_DLL PhysicsShape : public Object
 {
 public:
     enum class Type

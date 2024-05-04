@@ -27,7 +27,7 @@ THE SOFTWARE.
 // Implement GLView based on GLFW for targets: win32,osx,web(wasm)
 #pragma once
 #include "platform/GL.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "platform/Common.h"
 #include "platform/GLView.h"
 #include <GLFW/glfw3.h>

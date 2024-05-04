@@ -2128,7 +2128,7 @@ void TextureMemoryAlloc::onEnter()
     menu2->setPosition(Vec2(s.width / 2, s.height / 4));
 }
 
-void TextureMemoryAlloc::changeBackgroundVisible(ax::Ref* sender)
+void TextureMemoryAlloc::changeBackgroundVisible(ax::Object* sender)
 {
     if (_background)
     {
@@ -2136,7 +2136,7 @@ void TextureMemoryAlloc::changeBackgroundVisible(ax::Ref* sender)
     }
 }
 
-void TextureMemoryAlloc::updateImage(ax::Ref* sender)
+void TextureMemoryAlloc::updateImage(ax::Object* sender)
 {
     if (_background)
     {

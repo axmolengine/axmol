@@ -31,7 +31,7 @@
 
 #include <string>
 #include "renderer/RenderState.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "platform/PlatformMacros.h"
 #include "base/Vector.h"
 
@@ -46,7 +46,7 @@ class ProgramState;
 }
 
 /// Technique
-class AX_DLL Technique : public Ref
+class AX_DLL Technique : public Object
 {
     friend class Material;
     friend class Renderer;

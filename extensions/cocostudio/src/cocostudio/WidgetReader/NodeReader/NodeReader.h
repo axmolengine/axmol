@@ -31,7 +31,7 @@
 
 namespace cocostudio
 {
-class CCS_DLL NodeReader : public ax::Ref, public NodeReaderProtocol
+class CCS_DLL NodeReader : public ax::Object, public NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 

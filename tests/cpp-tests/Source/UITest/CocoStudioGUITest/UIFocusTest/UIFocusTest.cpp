@@ -103,7 +103,7 @@ bool UIFocusTestBase::init()
     return false;
 }
 
-void UIFocusTestBase::onImageViewClicked(ax::Ref* ref, Widget::TouchEventType touchType)
+void UIFocusTestBase::onImageViewClicked(ax::Object* ref, Widget::TouchEventType touchType)
 {
     if (touchType == Widget::TouchEventType::ENDED)
     {
@@ -211,7 +211,7 @@ bool UIFocusTestHorizontal::init()
     return false;
 }
 
-void UIFocusTestHorizontal::toggleFocusLoop(ax::Ref* pObjc, Widget::TouchEventType type)
+void UIFocusTestHorizontal::toggleFocusLoop(ax::Object* pObjc, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {
@@ -271,7 +271,7 @@ bool UIFocusTestVertical::init()
     return false;
 }
 
-void UIFocusTestVertical::toggleFocusLoop(ax::Ref* pObjc, Widget::TouchEventType type)
+void UIFocusTestVertical::toggleFocusLoop(ax::Object* pObjc, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {
@@ -367,7 +367,7 @@ bool UIFocusTestNestedLayout1::init()
     return false;
 }
 
-void UIFocusTestNestedLayout1::toggleFocusLoop(ax::Ref* pObjc, Widget::TouchEventType type)
+void UIFocusTestNestedLayout1::toggleFocusLoop(ax::Object* pObjc, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {
@@ -463,7 +463,7 @@ bool UIFocusTestNestedLayout2::init()
     return false;
 }
 
-void UIFocusTestNestedLayout2::toggleFocusLoop(ax::Ref* pObjc, Widget::TouchEventType type)
+void UIFocusTestNestedLayout2::toggleFocusLoop(ax::Object* pObjc, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {
@@ -564,7 +564,7 @@ bool UIFocusTestNestedLayout3::init()
     return false;
 }
 
-void UIFocusTestNestedLayout3::toggleFocusLoop(ax::Ref* pObjc, Widget::TouchEventType type)
+void UIFocusTestNestedLayout3::toggleFocusLoop(ax::Object* pObjc, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {

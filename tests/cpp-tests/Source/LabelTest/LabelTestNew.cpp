@@ -760,7 +760,7 @@ std::string LabelFNTMultiLineAlignment::getItemString(ax::MenuItemFont* item)
     return str;
 }
 
-void LabelFNTMultiLineAlignment::stringChanged(ax::Ref* sender)
+void LabelFNTMultiLineAlignment::stringChanged(ax::Object* sender)
 {
     auto item = (MenuItemFont*)sender;
 
@@ -769,7 +769,7 @@ void LabelFNTMultiLineAlignment::stringChanged(ax::Ref* sender)
     this->snapArrowsToEdge();
 }
 
-void LabelFNTMultiLineAlignment::alignmentChanged(ax::Ref* sender)
+void LabelFNTMultiLineAlignment::alignmentChanged(ax::Object* sender)
 {
     auto item = static_cast<MenuItemFont*>(sender);
 
@@ -1095,19 +1095,19 @@ void LabelTTFDynamicAlignment::updateAlignment()
     }
 }
 
-void LabelTTFDynamicAlignment::setAlignmentLeft(Ref* sender)
+void LabelTTFDynamicAlignment::setAlignmentLeft(Object* sender)
 {
     _horizAlign = TextHAlignment::LEFT;
     this->updateAlignment();
 }
 
-void LabelTTFDynamicAlignment::setAlignmentCenter(Ref* sender)
+void LabelTTFDynamicAlignment::setAlignmentCenter(Object* sender)
 {
     _horizAlign = TextHAlignment::CENTER;
     this->updateAlignment();
 }
 
-void LabelTTFDynamicAlignment::setAlignmentRight(Ref* sender)
+void LabelTTFDynamicAlignment::setAlignmentRight(Object* sender)
 {
     _horizAlign = TextHAlignment::RIGHT;
     this->updateAlignment();
@@ -1451,7 +1451,7 @@ void LabelShadowTest::onEnter()
     addChild(shadowLabelBMFont);
 }
 
-void LabelShadowTest::sliderEvent(Ref* pSender, ui::Slider::EventType type)
+void LabelShadowTest::sliderEvent(Object* pSender, ui::Slider::EventType type)
 {
     if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -1711,32 +1711,32 @@ LabelAlignmentTest::LabelAlignmentTest()
     addChild(_label);
 }
 
-void LabelAlignmentTest::setAlignmentLeft(Ref* sender)
+void LabelAlignmentTest::setAlignmentLeft(Object* sender)
 {
     _label->setHorizontalAlignment(TextHAlignment::LEFT);
 }
 
-void LabelAlignmentTest::setAlignmentCenter(Ref* sender)
+void LabelAlignmentTest::setAlignmentCenter(Object* sender)
 {
     _label->setHorizontalAlignment(TextHAlignment::CENTER);
 }
 
-void LabelAlignmentTest::setAlignmentRight(Ref* sender)
+void LabelAlignmentTest::setAlignmentRight(Object* sender)
 {
     _label->setHorizontalAlignment(TextHAlignment::RIGHT);
 }
 
-void LabelAlignmentTest::setAlignmentTop(Ref* sender)
+void LabelAlignmentTest::setAlignmentTop(Object* sender)
 {
     _label->setVerticalAlignment(TextVAlignment::TOP);
 }
 
-void LabelAlignmentTest::setAlignmentMiddle(Ref* sender)
+void LabelAlignmentTest::setAlignmentMiddle(Object* sender)
 {
     _label->setVerticalAlignment(TextVAlignment::CENTER);
 }
 
-void LabelAlignmentTest::setAlignmentBottom(Ref* sender)
+void LabelAlignmentTest::setAlignmentBottom(Object* sender)
 {
     _label->setVerticalAlignment(TextVAlignment::BOTTOM);
 }
@@ -1824,7 +1824,7 @@ LabelLineHeightTest::LabelLineHeightTest()
     addChild(slider);
 }
 
-void LabelLineHeightTest::sliderEvent(Ref* sender, ui::Slider::EventType type)
+void LabelLineHeightTest::sliderEvent(Object* sender, ui::Slider::EventType type)
 {
     if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -1868,7 +1868,7 @@ LabelAdditionalKerningTest::LabelAdditionalKerningTest()
     addChild(slider);
 }
 
-void LabelAdditionalKerningTest::sliderEvent(Ref* sender, ui::Slider::EventType type)
+void LabelAdditionalKerningTest::sliderEvent(Object* sender, ui::Slider::EventType type)
 {
     if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -2201,7 +2201,7 @@ LabelIssue10688Test::LabelIssue10688Test()
     auto label = Label::createWithTTF("Glow MenuItemLabel", "fonts/arial.ttf", 30);
     label->setTextColor(Color4B::RED);
     label->enableGlow(Color4B::YELLOW);
-    auto menuItem1 = MenuItemLabel::create(label, [](Ref*) {});
+    auto menuItem1 = MenuItemLabel::create(label, [](Object*) {});
     menuItem1->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
     menuItem1->setPosition(center.x - label->getContentSize().width / 2, center.y);
 
@@ -2323,7 +2323,7 @@ void LabelLayoutBaseTest::initWrapOption(const ax::Size& size)
     checkBox->setSelected(true);
     checkBox->setName("toggleWrap");
 
-    checkBox->addEventListener([=](Ref* ref, CheckBox::EventType event) {
+    checkBox->addEventListener([=](Object* ref, CheckBox::EventType event) {
         if (event == CheckBox::EventType::SELECTED)
         {
             _label->enableWrap(true);
@@ -2354,7 +2354,7 @@ void LabelLayoutBaseTest::initToggleLabelTypeOption(const ax::Size& size)
 
     auto stepper = (ControlStepper*)this->getChildByName("stepper");
 
-    checkBox->addEventListener([=](Ref* ref, CheckBox::EventType event) {
+    checkBox->addEventListener([=](Object* ref, CheckBox::EventType event) {
         float fontSize = stepper->getValue();
 
         if (event == CheckBox::EventType::SELECTED)
@@ -2419,7 +2419,7 @@ void LabelLayoutBaseTest::initSliders(const ax::Size& size)
     addChild(slider2);
     auto winSize = Director::getInstance()->getVisibleSize();
 
-    slider->addEventListener([=](Ref* ref, Slider::EventType event) {
+    slider->addEventListener([=](Object* ref, Slider::EventType event) {
         float percent     = slider->getPercent();
         auto labelSize    = _label->getContentSize();
         auto drawNodeSize = Size(percent / 100.0 * winSize.width, labelSize.height);
@@ -2431,7 +2431,7 @@ void LabelLayoutBaseTest::initSliders(const ax::Size& size)
         this->updateDrawNodeSize(drawNodeSize);
     });
 
-    slider2->addEventListener([=](Ref* ref, Slider::EventType event) {
+    slider2->addEventListener([=](Object* ref, Slider::EventType event) {
         float percent     = slider2->getPercent();
         auto labelSize    = _label->getContentSize();
         auto drawNodeSize = Size(labelSize.width, percent / 100.0 * winSize.height);
@@ -2465,37 +2465,37 @@ void LabelLayoutBaseTest::initDrawNode(const ax::Size& size)
     this->updateDrawNodeSize(_label->getContentSize());
 }
 
-void LabelLayoutBaseTest::setAlignmentLeft(Ref* sender)
+void LabelLayoutBaseTest::setAlignmentLeft(Object* sender)
 {
     _label->setHorizontalAlignment(TextHAlignment::LEFT);
 }
 
-void LabelLayoutBaseTest::setAlignmentCenter(Ref* sender)
+void LabelLayoutBaseTest::setAlignmentCenter(Object* sender)
 {
     _label->setHorizontalAlignment(TextHAlignment::CENTER);
 }
 
-void LabelLayoutBaseTest::setAlignmentRight(Ref* sender)
+void LabelLayoutBaseTest::setAlignmentRight(Object* sender)
 {
     _label->setHorizontalAlignment(TextHAlignment::RIGHT);
 }
 
-void LabelLayoutBaseTest::setAlignmentTop(Ref* sender)
+void LabelLayoutBaseTest::setAlignmentTop(Object* sender)
 {
     _label->setVerticalAlignment(TextVAlignment::TOP);
 }
 
-void LabelLayoutBaseTest::setAlignmentMiddle(Ref* sender)
+void LabelLayoutBaseTest::setAlignmentMiddle(Object* sender)
 {
     _label->setVerticalAlignment(TextVAlignment::CENTER);
 }
 
-void LabelLayoutBaseTest::setAlignmentBottom(Ref* sender)
+void LabelLayoutBaseTest::setAlignmentBottom(Object* sender)
 {
     _label->setVerticalAlignment(TextVAlignment::BOTTOM);
 }
 
-void LabelLayoutBaseTest::valueChanged(ax::Ref* sender, ax::extension::Control::EventType controlEvent)
+void LabelLayoutBaseTest::valueChanged(ax::Object* sender, ax::extension::Control::EventType controlEvent)
 {
     ControlStepper* pControl = (ControlStepper*)sender;
     // Change value of label.
@@ -2663,7 +2663,7 @@ LabelResizeTest::LabelResizeTest()
     slider2->setVisible(false);
 
     auto winSize = Director::getInstance()->getVisibleSize();
-    slider1->addEventListener([=](Ref* ref, Slider::EventType event) {
+    slider1->addEventListener([=](Object* ref, Slider::EventType event) {
         float percent     = slider1->getPercent();
         auto drawNodeSize = Size(percent / 100.0 * winSize.width, _label->getContentSize().height);
         if (drawNodeSize.height <= 0)
@@ -2690,7 +2690,7 @@ LabelResizeTest::LabelResizeTest()
     checkBox->setSelected(false);
     checkBox->setName("LineBreak");
 
-    checkBox->addEventListener([=](Ref* ref, CheckBox::EventType event) {
+    checkBox->addEventListener([=](Object* ref, CheckBox::EventType event) {
         if (event == CheckBox::EventType::SELECTED)
         {
             _label->setLineBreakWithoutSpace(true);
@@ -2729,7 +2729,7 @@ LabelToggleTypeTest::LabelToggleTypeTest()
     slider2->setVisible(false);
 
     auto winSize = Director::getInstance()->getVisibleSize();
-    slider1->addEventListener([=](Ref* ref, Slider::EventType event) {
+    slider1->addEventListener([=](Object* ref, Slider::EventType event) {
         float percent     = slider1->getPercent();
         auto drawNodeSize = Size(percent / 100.0 * winSize.width, _label->getContentSize().height);
         if (drawNodeSize.height <= 0)
@@ -2756,7 +2756,7 @@ LabelToggleTypeTest::LabelToggleTypeTest()
     checkBox->setSelected(false);
     checkBox->setName("LineBreak");
 
-    checkBox->addEventListener([=](Ref* ref, CheckBox::EventType event) {
+    checkBox->addEventListener([=](Object* ref, CheckBox::EventType event) {
         if (event == CheckBox::EventType::SELECTED)
         {
             _label->setLineBreakWithoutSpace(true);
@@ -2875,7 +2875,7 @@ LabelSystemFontTest::LabelSystemFontTest()
     auto slider1 = (ui::Slider*)this->getChildByTag(1);
 
     auto winSize = Director::getInstance()->getVisibleSize();
-    slider1->addEventListener([=](Ref* ref, Slider::EventType event) {
+    slider1->addEventListener([=](Object* ref, Slider::EventType event) {
         float percent     = slider1->getPercent();
         auto drawNodeSize = Size(percent / 100.0 * winSize.width, _label->getContentSize().height);
         if (drawNodeSize.height <= 0)
@@ -2899,7 +2899,7 @@ LabelSystemFontTest::LabelSystemFontTest()
     checkBox->setSelected(false);
     checkBox->setName("LineBreak");
 
-    checkBox->addEventListener([=](Ref* ref, CheckBox::EventType event) {
+    checkBox->addEventListener([=](Object* ref, CheckBox::EventType event) {
         if (event == CheckBox::EventType::SELECTED)
         {
             _label->setLineBreakWithoutSpace(true);
@@ -3104,7 +3104,7 @@ LabelItalics::LabelItalics()
     addChild(_label2a, 0, kTagBitmapAtlas2);
     _label2a->setPosition(Vec2(s.width / 2, s.height * 1 / 6));
 
-    auto menuItem = MenuItemFont::create("disable italics", [&](ax::Ref* sender) {
+    auto menuItem = MenuItemFont::create("disable italics", [&](ax::Object* sender) {
         _label2a->disableEffect(LabelEffect::ITALICS);
         _label1a->disableEffect(LabelEffect::ITALICS);
     });
@@ -3156,7 +3156,7 @@ LabelBold::LabelBold()
     addChild(_label2a, 0, kTagBitmapAtlas2);
     _label2a->setPosition(Vec2(s.width / 2, s.height * 1 / 6));
 
-    auto menuItem = MenuItemFont::create("disable bold", [&](ax::Ref* sender) {
+    auto menuItem = MenuItemFont::create("disable bold", [&](ax::Object* sender) {
         _label2a->disableEffect(LabelEffect::BOLD);
         _label1a->disableEffect(LabelEffect::BOLD);
     });
@@ -3208,7 +3208,7 @@ LabelUnderline::LabelUnderline()
     addChild(_label2a, 0, kTagBitmapAtlas2);
     _label2a->setPosition(Vec2(s.width / 2, s.height * 1 / 6));
 
-    auto menuItem = MenuItemFont::create("disable underline", [&](ax::Ref* sender) {
+    auto menuItem = MenuItemFont::create("disable underline", [&](ax::Object* sender) {
         _label2a->disableEffect(LabelEffect::UNDERLINE);
         _label1a->disableEffect(LabelEffect::UNDERLINE);
     });
@@ -3250,7 +3250,7 @@ LabelUnderlineMultiline::LabelUnderlineMultiline()
     addChild(_label2a, 0, kTagBitmapAtlas2);
     _label2a->setPosition(Vec2(s.width / 2, s.height * 1 / 3));
 
-    auto menuItem = MenuItemFont::create("disable underline", [&](ax::Ref* sender) {
+    auto menuItem = MenuItemFont::create("disable underline", [&](ax::Object* sender) {
         _label2a->disableEffect(LabelEffect::UNDERLINE);
         _label1a->disableEffect(LabelEffect::UNDERLINE);
     });
@@ -3292,7 +3292,7 @@ LabelStrikethrough::LabelStrikethrough()
     addChild(_label2a, 0, kTagBitmapAtlas2);
     _label2a->setPosition(Vec2(s.width / 2, s.height * 1 / 3));
 
-    auto menuItem = MenuItemFont::create("disable underline", [&](ax::Ref* sender) {
+    auto menuItem = MenuItemFont::create("disable underline", [&](ax::Object* sender) {
         _label2a->disableEffect(LabelEffect::STRIKETHROUGH);
         _label1a->disableEffect(LabelEffect::STRIKETHROUGH);
     });

@@ -39,7 +39,7 @@ class Bone;
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL DisplayManager : public ax::Ref
+class CCS_DLL DisplayManager : public ax::Object
 {
 public:
     static DisplayManager* create(Bone* bone);

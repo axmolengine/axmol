@@ -85,7 +85,7 @@ bool UITextTest_LineWrap::init()
         text->setTextHorizontalAlignment(TextHAlignment::CENTER);
         text->setTouchScaleChangeEnabled(true);
         text->setTouchEnabled(true);
-        text->addTouchEventListener([=](Ref* sender, Widget::TouchEventType type) {
+        text->addTouchEventListener([=](Object* sender, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
                 if ((int)text->getContentSize().width == 280)
@@ -164,7 +164,7 @@ bool UILabelTest_Effect::init()
         disableOutlineBtn->setTitleFontName("fonts/Marker Felt.ttf");
         disableOutlineBtn->setPosition(Vec2(widgetSize.width * 0.3f, widgetSize.height * 0.7f));
         disableOutlineBtn->setPressedActionEnabled(true);
-        disableOutlineBtn->addClickEventListener([=](Ref*) {
+        disableOutlineBtn->addClickEventListener([=](Object*) {
             outline_label->disableEffect(LabelEffect::OUTLINE);
             AXLOG("content size after disable outline: %f %f", outline_label->getContentSize().width,
                   outline_label->getContentSize().height);
@@ -176,13 +176,13 @@ bool UILabelTest_Effect::init()
         auto disableGlowBtn = (Button*)disableOutlineBtn->clone();
         disableGlowBtn->setPosition(disableOutlineBtn->getPosition() + Vec2(buttonWidth + 40, 0.0f));
         disableGlowBtn->setTitleText("Disable Glow");
-        disableGlowBtn->addClickEventListener([=](Ref*) { glow_label->disableEffect(LabelEffect::GLOW); });
+        disableGlowBtn->addClickEventListener([=](Object*) { glow_label->disableEffect(LabelEffect::GLOW); });
         this->addChild(disableGlowBtn);
 
         auto disableShadowBtn = (Button*)disableGlowBtn->clone();
         disableShadowBtn->setPosition(disableGlowBtn->getPosition() + Vec2(buttonWidth + 40, 0.0f));
         disableShadowBtn->setTitleText("Disable Shadow");
-        disableShadowBtn->addClickEventListener([=](Ref*) { shadow_label->disableEffect(LabelEffect::SHADOW); });
+        disableShadowBtn->addClickEventListener([=](Object*) { shadow_label->disableEffect(LabelEffect::SHADOW); });
         this->addChild(disableShadowBtn);
 
         return true;
@@ -243,7 +243,7 @@ bool UITextTest_IgnoreContentSize::init()
 
         auto halighButton = Button::create();
         halighButton->setTitleText("Alignment Right");
-        halighButton->addClickEventListener([=](Ref*) {
+        halighButton->addClickEventListener([=](Object*) {
             leftText->setTextHorizontalAlignment(TextHAlignment::RIGHT);
             rightText->setTextHorizontalAlignment(TextHAlignment::RIGHT);
         });

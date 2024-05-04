@@ -140,7 +140,7 @@ int axlua_physics_PhysicsWorld_getScene(lua_State* tolua_S)
         ax::Scene& ret = cobj->getScene();
         do
         {
-            auto className = getLuaTypeName<Ref>(&ret, "ax.Scene");
+            auto className = getLuaTypeName<Object>(&ret, "ax.Scene");
 
             int ID     = (int)(ret._ID);
             int* luaID = &(ret._luaID);

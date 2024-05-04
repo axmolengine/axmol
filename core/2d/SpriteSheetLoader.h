@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include <unordered_map>
 #include <string>
 #include "2d/SpriteFrame.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Value.h"
 #include "base/Map.h"
 #include "base/Data.h"

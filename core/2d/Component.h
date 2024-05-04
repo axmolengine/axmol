@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 /// @cond DO_NOT_SHOW
 #include <string>
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/ScriptSupport.h"
 
 NS_AX_BEGIN
@@ -44,7 +44,7 @@ enum
     kComponentOnUpdate
 };
 
-class AX_DLL Component : public Ref
+class AX_DLL Component : public Object
 {
 public:
     static Component* create();

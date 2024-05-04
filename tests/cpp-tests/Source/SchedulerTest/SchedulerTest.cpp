@@ -598,7 +598,7 @@ void SchedulerUpdate::removeUpdates(float /*dt*/)
 
     for (auto&& c : children)
     {
-        auto obj  = static_cast<Ref*>(c);
+        auto obj  = static_cast<Object*>(c);
         auto node = static_cast<Node*>(obj);
 
         if (!node)
@@ -777,7 +777,7 @@ ControlSlider* SchedulerTimeScale::sliderCtl()
     return slider;
 }
 
-void SchedulerTimeScale::sliderAction(Ref* sender, Control::EventType /*controlEvent*/)
+void SchedulerTimeScale::sliderAction(Object* sender, Control::EventType /*controlEvent*/)
 {
     ControlSlider* pSliderCtl = static_cast<ControlSlider*>(sender);
     float scale;
@@ -871,7 +871,7 @@ ControlSlider* TwoSchedulers::sliderCtl()
     return slider;
 }
 
-void TwoSchedulers::sliderAction(Ref* sender, Control::EventType /*controlEvent*/)
+void TwoSchedulers::sliderAction(Object* sender, Control::EventType /*controlEvent*/)
 {
     float scale;
 

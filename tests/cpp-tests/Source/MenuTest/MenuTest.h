@@ -57,14 +57,14 @@ public:
     void touchMoved(ax::Touch* touch, ax::Event* event);
 
     void allowTouches(float dt);
-    void menuCallback(ax::Ref* sender);
-    void menuCallbackConfig(ax::Ref* sender);
-    void menuCallbackDisabled(ax::Ref* sender);
-    void menuCallback2(ax::Ref* sender);
-    void menuCallbackPriorityTest(ax::Ref* sender);
-    void menuCallbackBugsTest(ax::Ref* pSender);
-    void onQuit(ax::Ref* sender);
-    void menuMovingCallback(ax::Ref* pSender);
+    void menuCallback(ax::Object* sender);
+    void menuCallbackConfig(ax::Object* sender);
+    void menuCallbackDisabled(ax::Object* sender);
+    void menuCallback2(ax::Object* sender);
+    void menuCallbackPriorityTest(ax::Object* sender);
+    void menuCallbackBugsTest(ax::Object* pSender);
+    void onQuit(ax::Object* sender);
+    void menuMovingCallback(ax::Object* pSender);
 
     // CREATE_NODE(MenuLayer1);
 };
@@ -82,9 +82,9 @@ public:
     MenuLayer2();
     ~MenuLayer2();
 
-    void menuCallback(ax::Ref* sender);
-    void menuCallbackOpacity(ax::Ref* sender);
-    void menuCallbackAlign(ax::Ref* sender);
+    void menuCallback(ax::Object* sender);
+    void menuCallbackOpacity(ax::Object* sender);
+    void menuCallbackAlign(ax::Object* sender);
 
     // CREATE_NODE(MenuLayer2);
 };
@@ -105,8 +105,8 @@ public:
     MenuLayer4();
     ~MenuLayer4();
 
-    void menuCallback(ax::Ref* sender);
-    void backCallback(ax::Ref* sender);
+    void menuCallback(ax::Object* sender);
+    void backCallback(ax::Object* sender);
 };
 
 class BugsTest : public ax::Layer
@@ -114,9 +114,9 @@ class BugsTest : public ax::Layer
 public:
     BugsTest();
 
-    void issue1410MenuCallback(ax::Ref* pSender);
-    void issue1410v2MenuCallback(ax::Ref* pSender);
-    void backMenuCallback(ax::Ref* pSender);
+    void issue1410MenuCallback(ax::Object* pSender);
+    void issue1410v2MenuCallback(ax::Object* pSender);
+    void backMenuCallback(ax::Object* pSender);
 };
 
 class RemoveMenuItemWhenMove : public ax::Layer
@@ -127,7 +127,7 @@ public:
     bool onTouchBegan(ax::Touch* touch, ax::Event* event);
     void onTouchMoved(ax::Touch* touch, ax::Event* event);
 
-    void goBack(ax::Ref* pSender);
+    void goBack(ax::Object* pSender);
 
 private:
     ax::MenuItemFont* item;

@@ -47,12 +47,12 @@ TOLUA_API void toluafix_open(lua_State* L);
  * If the userdata correspondings to the ptr exist,it would update the metatable information of the super.
  * In addition, this function would update some table in the Lua registry,such as toluafix_refid_ptr_mapping,
  * toluafix_refid_type_mapping,tolua_value_root,and so on. Meanwhile, Add a reference about the userdata corresponding
- * to the ptr in the tolua_ubox table. The ptr should be point to a Ref object.
+ * to the ptr in the tolua_ubox table. The ptr should be point to a Object object.
  *
  * @param L the current lua_State.
  * @param uid the object id of the ptr.
  * @param p_refid the pointer points to the Lua reference id of the ptr.
- * @param ptr the pointer points to the Ref object.
+ * @param ptr the pointer points to the Object object.
  * @param type the type name of the ptr.
  * @return -1 if the p_refid equal to nullptr or ptr equal to nullptr, otherwise return 0.
  * @lua NA
@@ -61,17 +61,17 @@ TOLUA_API void toluafix_open(lua_State* L);
 TOLUA_API int toluafix_pushusertype_ccobject(lua_State* L, int uid, int* p_refid, void* ptr, const char* type);
 
 /**
- * Find the value of Ref object pointer in the Lua registry by the refid.
+ * Find the value of Object object pointer in the Lua registry by the refid.
  * Then, remove the corresponding reference in some table in the Lua registry by refid, such as
  * toluafix_refid_type_mapping, toluafix_refid_ptr_mapping,tolua_value_root,and so on. Set the value of userdata nullptr
- * and remove the reference of userdata in the tolua_ubox table. This function is called in the destructor of the Ref
+ * and remove the reference of userdata in the tolua_ubox table. This function is called in the destructor of the Object
  * automatically.
  *
  * @param L the current lua_State.
- * @param refid the value of the _luaID of a Ref object.
+ * @param refid the value of the _luaID of a Object object.
  * @return -1,if refid equals to 0 , type name found by refid equals to nil or corresponding userdata pointer equal to
- * nullptr; return -2, if the Ref object pointer found by refid is nullptr; return 3, if the value corresponding to the
- * Ref object pointer in the tolua_ubox is nil; otherwise return 0.
+ * nullptr; return -2, if the Object object pointer found by refid is nullptr; return 3, if the value corresponding to the
+ * Object object pointer in the tolua_ubox is nil; otherwise return 0.
  * @lua NA
  * @js NA
  */

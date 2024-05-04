@@ -42,9 +42,9 @@ public:
     virtual void onEnterTransitionDidFinish() override;
 
     void testDealloc(float dt);
-    void onPushScene(ax::Ref* sender);
-    void onPushSceneTran(ax::Ref* sender);
-    void onQuit(ax::Ref* sender);
+    void onPushScene(ax::Object* sender);
+    void onPushSceneTran(ax::Object* sender);
+    void onQuit(ax::Object* sender);
 };
 
 class SceneTestLayer2 : public ax::Layer
@@ -57,9 +57,9 @@ public:
     SceneTestLayer2();
 
     void testDealloc(float dt);
-    void onGoBack(ax::Ref* sender);
-    void onReplaceScene(ax::Ref* sender);
-    void onReplaceSceneTran(ax::Ref* sender);
+    void onGoBack(ax::Object* sender);
+    void onReplaceScene(ax::Object* sender);
+    void onReplaceSceneTran(ax::Object* sender);
 };
 
 class SceneTestLayer3 : public ax::LayerColor
@@ -71,10 +71,10 @@ public:
 
     virtual bool init() override;
     virtual void testDealloc(float dt);
-    void item0Clicked(ax::Ref* sender);
-    void item1Clicked(ax::Ref* sender);
-    void item2Clicked(ax::Ref* sender);
-    void item3Clicked(ax::Ref* sender);
+    void item0Clicked(ax::Object* sender);
+    void item1Clicked(ax::Object* sender);
+    void item2Clicked(ax::Object* sender);
+    void item3Clicked(ax::Object* sender);
 };
 
 class SceneTestScene : public TestCase

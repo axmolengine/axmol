@@ -122,7 +122,7 @@ TimerTargetSelector::TimerTargetSelector() : _target(nullptr), _selector(nullptr
 
 bool TimerTargetSelector::initWithSelector(Scheduler* scheduler,
                                            SEL_SCHEDULE selector,
-                                           Ref* target,
+                                           Object* target,
                                            float seconds,
                                            unsigned int repeat,
                                            float delay)
@@ -868,7 +868,7 @@ void Scheduler::update(float dt)
 }
 
 void Scheduler::schedule(SEL_SCHEDULE selector,
-                         Ref* target,
+                         Object* target,
                          float interval,
                          unsigned int repeat,
                          float delay,
@@ -916,17 +916,17 @@ void Scheduler::schedule(SEL_SCHEDULE selector,
     timer->release();
 }
 
-void Scheduler::schedule(SEL_SCHEDULE selector, Ref* target, float interval, bool paused)
+void Scheduler::schedule(SEL_SCHEDULE selector, Object* target, float interval, bool paused)
 {
     this->schedule(selector, target, interval, AX_REPEAT_FOREVER, 0.0f, paused);
 }
 
-bool Scheduler::isScheduled(SEL_SCHEDULE selector, const Ref* target) const
+bool Scheduler::isScheduled(SEL_SCHEDULE selector, const Object* target) const
 {
     AXASSERT(selector, "Argument selector must be non-nullptr");
     AXASSERT(target, "Argument target must be non-nullptr");
 
-    auto timerIt = _timersMap.find(const_cast<Ref*>(target));
+    auto timerIt = _timersMap.find(const_cast<Object*>(target));
     if (timerIt == _timersMap.end())
     {
         return false;
@@ -942,7 +942,7 @@ bool Scheduler::isScheduled(SEL_SCHEDULE selector, const Ref* target) const
     return found;
 }
 
-void Scheduler::unschedule(SEL_SCHEDULE selector, Ref* target)
+void Scheduler::unschedule(SEL_SCHEDULE selector, Object* target)
 {
     // explicit handle nil arguments when removing an object
     if (target == nullptr || selector == nullptr)

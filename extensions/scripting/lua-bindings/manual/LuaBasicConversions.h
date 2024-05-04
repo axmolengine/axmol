@@ -496,7 +496,7 @@ AX_DEPRECATED_ATTRIBUTE static inline bool luaval_to_array_of_Point(lua_State* L
  * @param L the current lua_State.
  * @param argc the numbers of Lua values in the stack.
  * @param ret a ax::Vector of type T objects.
- * @return Return false if argc equal to 0 , L equal to nullptr or the Lua userdata at the index isn't `ax.Ref` type,
+ * @return Return false if argc equal to 0 , L equal to nullptr or the Lua userdata at the index isn't `ax.Object` type,
  * otherwise return true.
  */
 template <class T>
@@ -513,7 +513,7 @@ bool luavals_variadic_to_ccvector(lua_State* L, int argc, ax::Vector<T>* ret)
         {
             tolua_Error err;
 
-            if (!tolua_isusertype(L, i + 2, "ax.Ref", 0, &err))
+            if (!tolua_isusertype(L, i + 2, "ax.Object", 0, &err))
             {
                 ok = false;
                 break;
@@ -1090,7 +1090,7 @@ const char* getLuaTypeName(T* ret, const char* defaultTypeName)
 /**
  * Push a table converted from a ax::Vector object into the Lua stack.
  * The format of table as follows: {userdata1, userdata2, ..., userdataVectorSize}
- * The object in the ax::Vector which would be pushed into the table should be Ref type.
+ * The object in the ax::Vector which would be pushed into the table should be Object type.
  *
  * @param L the current lua_State.
  * @param inValue a ax::Vector object.
@@ -1109,7 +1109,7 @@ void ccvector_to_luaval(lua_State* L, const ax::Vector<T>& inValue)
         if (nullptr == obj)
             continue;
 
-        if (nullptr != dynamic_cast<ax::Ref*>(obj))
+        if (nullptr != dynamic_cast<ax::Object*>(obj))
         {
             auto luaTypeName = getLuaTypeName(obj, nullptr);
             if (luaTypeName)
@@ -1128,7 +1128,7 @@ void ccvector_to_luaval(lua_State* L, const ax::Vector<T>& inValue)
 /**
  * Push a table converted from a ax::Map object into the Lua stack.
  * The format of table as follows: {name1=userdata1, name2=userdata2, ..., nameMapSize=userdataMapSize}
- * The object in the ax::Map which would be pushed into the table should be Ref type.
+ * The object in the ax::Map which would be pushed into the table should be Object type.
  *
  * @param L the current lua_State.
  * @param v a ax::Map object.
@@ -1145,7 +1145,7 @@ void ccmap_string_key_to_luaval(lua_State* L, const ax::StringMap<T>& v)
     {
         auto& key = iter->first;
         T obj     = iter->second;
-        if (nullptr != dynamic_cast<ax::Ref*>(obj))
+        if (nullptr != dynamic_cast<ax::Object*>(obj))
         {
             auto name     = reinterpret_cast<uintptr_t>(typeid(*obj).name());
             auto typeIter = g_luaType.find(name);
@@ -1220,10 +1220,10 @@ void object_to_luaval(lua_State* L, const char* type, T* ret)
 {
     if (nullptr != ret)
     {
-        if (std::is_base_of<ax::Ref, T>::value)
+        if (std::is_base_of<ax::Object, T>::value)
         {
             // use c style cast, T may not polymorphic
-            ax::Ref* dynObject = (ax::Ref*)(ret);
+            ax::Object* dynObject = (ax::Object*)(ret);
             int ID             = (int)(dynObject->_ID);
             int* luaID         = &(dynObject->_luaID);
             toluafix_pushusertype_ccobject(L, ID, luaID, (void*)ret, type);

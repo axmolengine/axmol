@@ -47,7 +47,7 @@ NS_AX_BEGIN
  * @lua NA
  * @js NA
  */
-class LuaStack : public Ref
+class LuaStack : public Object
 {
 public:
     /**
@@ -94,17 +94,17 @@ public:
     virtual int reload(const char* moduleFileName);
 
     /**
-     * Remove the related reference about the Ref object stored in the Lua table by set the value of corresponding key
+     * Remove the related reference about the Object object stored in the Lua table by set the value of corresponding key
      * nil: The related Lua tables are toluafix_refid_ptr_mapping,toluafix_refid_type_mapping,tolua_value_root and
      * object_Metatable["tolua_ubox"] or tolua_ubox. Meanwhile set the corresponding userdata nullptr and remove the all
      * the lua function reference corresponding to this object.
      *
-     * In current mechanism, this function is called in the destructor of Ref object, developer don't call this
+     * In current mechanism, this function is called in the destructor of Object object, developer don't call this
      * functions.
      *
      * @param object the key object to remove script object.
      */
-    virtual void removeScriptObjectByObject(Ref* object);
+    virtual void removeScriptObjectByObject(Object* object);
 
     /**
      * Remove Lua function reference by nHandler by setting toluafix_refid_function_mapping[nHandle] nil.
@@ -200,11 +200,11 @@ public:
     virtual void pushNil();
 
     /**
-     * Pushes a Ref object onto the stack.
+     * Pushes a Object object onto the stack.
      *
      * @see toluafix_pushusertype_ccobject.
      */
-    virtual void pushObject(Ref* objectValue, const char* typeName);
+    virtual void pushObject(Object* objectValue, const char* typeName);
 
     /**
      * According to the type of LuaValue, it would called the other push function in the internal.

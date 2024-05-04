@@ -27,7 +27,7 @@
 #define __CCMESHSKIN_H__
 
 #include "3d/Bundle3DData.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Vector.h"
 #include "math/Math.h"
 #include <vector>
@@ -48,7 +48,7 @@ class Skeleton3D;
  * @js NA
  * @lua NA
  */
-class AX_DLL MeshSkin : public Ref
+class AX_DLL MeshSkin : public Object
 {
     friend class Mesh;
 

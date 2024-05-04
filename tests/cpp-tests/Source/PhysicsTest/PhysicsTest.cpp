@@ -123,7 +123,7 @@ Sprite* PhysicsDemo::addGrossiniAtPosition(Vec2 p, float scale /* = 1.0*/)
     return sp;
 }
 
-void PhysicsDemo::toggleDebugCallback(Ref* /*sender*/)
+void PhysicsDemo::toggleDebugCallback(Object* /*sender*/)
 {
     toggleDebug();
 }
@@ -500,7 +500,7 @@ void PhysicsDemoRayCast::onEnter()
     scheduleUpdate();
 }
 
-void PhysicsDemoRayCast::changeModeCallback(Ref* sender)
+void PhysicsDemoRayCast::changeModeCallback(Object* sender)
 {
     _mode = (_mode + 1) % 3;
 
@@ -1373,7 +1373,7 @@ void PhysicsContactTest::onEnter()
     resetTest();
 }
 
-void PhysicsContactTest::onDecrease(Ref* sender)
+void PhysicsContactTest::onDecrease(Object* sender)
 {
     switch (dynamic_cast<Node*>(sender)->getTag())
     {
@@ -1401,7 +1401,7 @@ void PhysicsContactTest::onDecrease(Ref* sender)
     resetTest();
 }
 
-void PhysicsContactTest::onIncrease(Ref* sender)
+void PhysicsContactTest::onIncrease(Object* sender)
 {
     switch (dynamic_cast<Node*>(sender)->getTag())
     {
@@ -1735,7 +1735,7 @@ void PhysicsDemoBug5482::onExit()
     _body->release();
 }
 
-void PhysicsDemoBug5482::changeBodyCallback(Ref* /*sender*/)
+void PhysicsDemoBug5482::changeBodyCallback(Object* /*sender*/)
 {
     Sprite* node = _bodyInA ? _nodeB : _nodeA;
     if (_bodyInA)

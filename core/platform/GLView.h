@@ -106,7 +106,7 @@ class Director;
 /**
  * @brief By GLView you can operate the frame information of EGL view through some function.
  */
-class AX_DLL GLView : public Ref
+class AX_DLL GLView : public Object
 {
     friend class Director;
 public:

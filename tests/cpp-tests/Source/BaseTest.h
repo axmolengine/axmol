@@ -76,10 +76,10 @@ public:
     virtual std::string getActualOutput() const { return ""; }
 
     /** Callback functions.*/
-    virtual void restartTestCallback(ax::Ref* sender);
-    virtual void nextTestCallback(ax::Ref* sender);
-    virtual void priorTestCallback(ax::Ref* sender);
-    virtual void onBackCallback(ax::Ref* sender);
+    virtual void restartTestCallback(ax::Object* sender);
+    virtual void nextTestCallback(ax::Object* sender);
+    virtual void priorTestCallback(ax::Object* sender);
+    virtual void onBackCallback(ax::Object* sender);
 
     /**
      * You should NEVER call this method, unless you know what you are doing.
@@ -125,7 +125,7 @@ private:
  *
  * @note You should not inherit from TestBase directly.
  */
-class TestBase : public ax::Ref
+class TestBase : public ax::Object
 {
 public:
     virtual ~TestBase();
@@ -248,9 +248,9 @@ public:
     virtual std::string title() const { return ""; }
     virtual std::string subtitle() const { return ""; }
 
-    virtual void restartCallback(ax::Ref* sender) {}
-    virtual void nextCallback(ax::Ref* sender) {}
-    virtual void backCallback(ax::Ref* sender) {}
+    virtual void restartCallback(ax::Object* sender) {}
+    virtual void nextCallback(ax::Object* sender) {}
+    virtual void backCallback(ax::Object* sender) {}
 
     virtual void onEnter() override {}
     virtual void onExit() override {}

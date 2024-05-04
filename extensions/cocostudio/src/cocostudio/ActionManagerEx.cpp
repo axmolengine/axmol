@@ -57,7 +57,7 @@ ActionManagerEx::~ActionManagerEx()
     _actionDic.clear();
 }
 
-void ActionManagerEx::initWithDictionary(const char* jsonName, const rapidjson::Value& dic, Ref* root, int version)
+void ActionManagerEx::initWithDictionary(const char* jsonName, const rapidjson::Value& dic, Object* root, int version)
 {
     std::string path           = jsonName;
     this->_studioVersionNumber = version;
@@ -77,7 +77,7 @@ void ActionManagerEx::initWithDictionary(const char* jsonName, const rapidjson::
 }
 
 void ActionManagerEx::initWithBinary(const char* file,
-                                     ax::Ref* root,
+                                     ax::Object* root,
                                      CocoLoader* cocoLoader,
                                      stExpCocoNode* pCocoNode)
 {

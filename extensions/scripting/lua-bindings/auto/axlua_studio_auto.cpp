@@ -548,7 +548,7 @@ static int lua_ax_studio_ActionFrame_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ActionFrame(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ActionFrame");
-    tolua_cclass(tolua_S,"ActionFrame","ccs.ActionFrame","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ActionFrame","ccs.ActionFrame","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ActionFrame");
         tolua_function(tolua_S,"new",lua_ax_studio_ActionFrame_constructor);
@@ -2585,7 +2585,7 @@ static int lua_ax_studio_ActionObject_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ActionObject(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ActionObject");
-    tolua_cclass(tolua_S,"ActionObject","ccs.ActionObject","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ActionObject","ccs.ActionObject","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ActionObject");
         tolua_function(tolua_S,"new",lua_ax_studio_ActionObject_constructor);
@@ -2957,7 +2957,7 @@ static int lua_ax_studio_ActionManagerEx_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ActionManagerEx(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ActionManagerEx");
-    tolua_cclass(tolua_S,"ActionManagerEx","ccs.ActionManagerEx","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ActionManagerEx","ccs.ActionManagerEx","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ActionManagerEx");
         tolua_function(tolua_S,"getActionByName",lua_ax_studio_ActionManagerEx_getActionByName);
@@ -3151,7 +3151,7 @@ static int lua_ax_studio_BaseData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_BaseData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.BaseData");
-    tolua_cclass(tolua_S,"BaseData","ccs.BaseData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"BaseData","ccs.BaseData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"BaseData");
         tolua_function(tolua_S,"new",lua_ax_studio_BaseData_constructor);
@@ -3331,7 +3331,7 @@ static int lua_ax_studio_DisplayData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_DisplayData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.DisplayData");
-    tolua_cclass(tolua_S,"DisplayData","ccs.DisplayData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"DisplayData","ccs.DisplayData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"DisplayData");
         tolua_function(tolua_S,"new",lua_ax_studio_DisplayData_constructor);
@@ -4141,7 +4141,7 @@ static int lua_ax_studio_ArmatureData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ArmatureData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ArmatureData");
-    tolua_cclass(tolua_S,"ArmatureData","ccs.ArmatureData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ArmatureData","ccs.ArmatureData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ArmatureData");
         tolua_function(tolua_S,"new",lua_ax_studio_ArmatureData_constructor);
@@ -4526,7 +4526,7 @@ static int lua_ax_studio_MovementBoneData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_MovementBoneData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.MovementBoneData");
-    tolua_cclass(tolua_S,"MovementBoneData","ccs.MovementBoneData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"MovementBoneData","ccs.MovementBoneData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"MovementBoneData");
         tolua_function(tolua_S,"new",lua_ax_studio_MovementBoneData_constructor);
@@ -4721,7 +4721,7 @@ static int lua_ax_studio_MovementData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_MovementData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.MovementData");
-    tolua_cclass(tolua_S,"MovementData","ccs.MovementData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"MovementData","ccs.MovementData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"MovementData");
         tolua_function(tolua_S,"new",lua_ax_studio_MovementData_constructor);
@@ -4962,7 +4962,7 @@ static int lua_ax_studio_AnimationData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_AnimationData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.AnimationData");
-    tolua_cclass(tolua_S,"AnimationData","ccs.AnimationData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"AnimationData","ccs.AnimationData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"AnimationData");
         tolua_function(tolua_S,"new",lua_ax_studio_AnimationData_constructor);
@@ -5154,7 +5154,7 @@ static int lua_ax_studio_ContourData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ContourData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ContourData");
-    tolua_cclass(tolua_S,"ContourData","ccs.ContourData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ContourData","ccs.ContourData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ContourData");
         tolua_function(tolua_S,"new",lua_ax_studio_ContourData_constructor);
@@ -5395,7 +5395,7 @@ static int lua_ax_studio_TextureData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_TextureData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.TextureData");
-    tolua_cclass(tolua_S,"TextureData","ccs.TextureData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"TextureData","ccs.TextureData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"TextureData");
         tolua_function(tolua_S,"new",lua_ax_studio_TextureData_constructor);
@@ -6799,7 +6799,7 @@ static int lua_ax_studio_DisplayManager_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_DisplayManager(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.DisplayManager");
-    tolua_cclass(tolua_S,"DisplayManager","ccs.DisplayManager","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"DisplayManager","ccs.DisplayManager","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"DisplayManager");
         tolua_function(tolua_S,"new",lua_ax_studio_DisplayManager_constructor);
@@ -10698,7 +10698,7 @@ static int lua_ax_studio_ArmatureDataManager_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ArmatureDataManager(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ArmatureDataManager");
-    tolua_cclass(tolua_S,"ArmatureDataManager","ccs.ArmatureDataManager","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ArmatureDataManager","ccs.ArmatureDataManager","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ArmatureDataManager");
         tolua_function(tolua_S,"init",lua_ax_studio_ArmatureDataManager_init);
@@ -12897,7 +12897,7 @@ int lua_ax_studio_ComAttribute_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cocostudio::ComAttribute::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComAttribute:createInstance",argc, 0);
@@ -14385,7 +14385,7 @@ int lua_ax_studio_ComAudio_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cocostudio::ComAudio::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComAudio:createInstance",argc, 0);
@@ -14502,7 +14502,7 @@ int lua_ax_studio_ComController_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cocostudio::ComController::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComController:createInstance",argc, 0);
@@ -14726,7 +14726,7 @@ int lua_ax_studio_ComRender_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cocostudio::ComRender::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComRender:createInstance",argc, 0);
@@ -15132,7 +15132,7 @@ static int lua_ax_studio_GUIReader_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_GUIReader(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.GUIReader");
-    tolua_cclass(tolua_S,"GUIReader","ccs.GUIReader","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"GUIReader","ccs.GUIReader","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"GUIReader");
         tolua_function(tolua_S,"widgetFromJsonFile",lua_ax_studio_GUIReader_widgetFromJsonFile);
@@ -15244,7 +15244,7 @@ int lua_ax_studio_SceneReader_setTarget(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (ax::Ref *, void *)> arg0;
+        std::function<void (ax::Object *, void *)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -16831,7 +16831,7 @@ static int lua_ax_studio_Frame_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_Frame(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.Frame");
-    tolua_cclass(tolua_S,"Frame","ccs.Frame","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Frame","ccs.Frame","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Frame");
         tolua_function(tolua_S,"setFrameIndex",lua_ax_studio_Frame_setFrameIndex);
@@ -21234,7 +21234,7 @@ static int lua_ax_studio_Timeline_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_Timeline(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.Timeline");
-    tolua_cclass(tolua_S,"Timeline","ccs.Timeline","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Timeline","ccs.Timeline","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Timeline");
         tolua_function(tolua_S,"new",lua_ax_studio_Timeline_constructor);
@@ -21488,7 +21488,7 @@ static int lua_ax_studio_ActionTimelineData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ActionTimelineData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ActionTimelineData");
-    tolua_cclass(tolua_S,"ActionTimelineData","ccs.ActionTimelineData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ActionTimelineData","ccs.ActionTimelineData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ActionTimelineData");
         tolua_function(tolua_S,"new",lua_ax_studio_ActionTimelineData_constructor);
@@ -25146,7 +25146,7 @@ int lua_ax_studio_ComExtensionData_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cocostudio::ComExtensionData::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComExtensionData:createInstance",argc, 0);

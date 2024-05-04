@@ -127,7 +127,7 @@ bool Material::initWithProgramState(backend::ProgramState* state)
 
 bool Material::initWithFile(std::string_view validfilename)
 {
-    // Warning: properties is not a "Ref" object, must be manually deleted
+    // Warning: properties is not a "Object" object, must be manually deleted
     Properties* properties = Properties::createNonRefCounted(validfilename);
 
     // get the first material

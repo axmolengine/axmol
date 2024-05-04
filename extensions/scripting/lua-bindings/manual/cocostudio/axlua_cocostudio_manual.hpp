@@ -33,7 +33,7 @@ extern "C" {
 }
 #endif
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include <string>
 
 TOLUA_API int  register_all_ax_coco_studio_manual(lua_State* L);
@@ -74,23 +74,23 @@ struct LuaArmatureWrapperEventData
 
 struct LuaArmatureMovementEventData
 {
-    ax::Ref* objTarget;
+    ax::Object* objTarget;
     int movementType;
     std::string movementID;
     
-    LuaArmatureMovementEventData(ax::Ref* _objTarget, int _movementType,std::string_view _movementID):objTarget(_objTarget),movementType(_movementType),movementID(_movementID)
+    LuaArmatureMovementEventData(ax::Object* _objTarget, int _movementType,std::string_view _movementID):objTarget(_objTarget),movementType(_movementType),movementID(_movementID)
     {
     }
 };
 
 struct LuaArmatureFrameEventData
 {
-    ax::Ref* objTarget;
+    ax::Object* objTarget;
     std::string  frameEventName;
     int originFrameIndex;
     int currentFrameIndex;
     
-    LuaArmatureFrameEventData( ax::Ref* _objTarget, std::string_view _frameEventName, int _originFrameIndex, int _currentFrameIndex):objTarget(_objTarget), frameEventName(_frameEventName),originFrameIndex(_originFrameIndex), currentFrameIndex(_currentFrameIndex)
+    LuaArmatureFrameEventData( ax::Object* _objTarget, std::string_view _frameEventName, int _originFrameIndex, int _currentFrameIndex):objTarget(_objTarget), frameEventName(_frameEventName),originFrameIndex(_originFrameIndex), currentFrameIndex(_currentFrameIndex)
     {
     }
 };

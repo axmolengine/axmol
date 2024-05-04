@@ -69,7 +69,7 @@ public:
 
     CREATE_FUNC(UILayoutTest_BackGroundImage);
 
-    void printWidgetResources(ax::Ref* sender);
+    void printWidgetResources(ax::Object* sender);
 
 protected:
     ax::ui::Layout* _layout;
@@ -162,7 +162,7 @@ public:
     CREATE_FUNC(UILayoutComponentTest);
 
     virtual bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Object* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
     ax::LayerColor* _baseLayer;

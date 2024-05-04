@@ -31,7 +31,7 @@
 #include "3d/AABB.h"
 #include "3d/3DProgramInfo.h"
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Vector.h"
 #include "math/Math.h"
 #include "renderer/MeshCommand.h"
@@ -51,7 +51,7 @@ class MeshVertexData;
  * @js NA
  * @lua NA
  */
-class AX_DLL MeshIndexData : public Ref
+class AX_DLL MeshIndexData : public Object
 {
 public:
     /** create  */
@@ -105,7 +105,7 @@ protected:
  * the MeshVertexData class.
  * @brief the MeshVertexData contain all of the vertices data which mesh need.
  */
-class AX_DLL MeshVertexData : public Ref
+class AX_DLL MeshVertexData : public Object
 {
     friend class MeshRenderer;
     friend class Mesh;

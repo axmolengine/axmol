@@ -37,7 +37,7 @@ THE SOFTWARE.
 #include <string>
 #include "2d/SpriteFrame.h"
 #include "2d/SpriteSheetLoader.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Value.h"
 #include "base/Map.h"
 #include "base/Data.h"

@@ -88,7 +88,7 @@ public:
     /**
      * A callback which would be called when a ScrollView is scrolling.
      */
-    typedef std::function<void(Ref*, EventType)> ccScrollViewCallback;
+    typedef std::function<void(Object*, EventType)> ccScrollViewCallback;
 
     /**
      * Default constructor
@@ -713,7 +713,7 @@ protected:
     ScrollViewBar* _verticalScrollBar;
     ScrollViewBar* _horizontalScrollBar;
 
-    Ref* _scrollViewEventListener;
+    Object* _scrollViewEventListener;
     ccScrollViewCallback _eventCallback;
 
     float _scrollTime;

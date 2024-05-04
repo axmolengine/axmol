@@ -111,17 +111,17 @@ public:
     virtual int reload(const char* moduleFileName);
 
     /**
-     * Remove the related reference about the Ref object stored in the Lua table by set the value of corresponding key
+     * Remove the related reference about the Object object stored in the Lua table by set the value of corresponding key
      * nil: The related Lua tables are toluafix_refid_ptr_mapping,toluafix_refid_type_mapping,tolua_value_root and
      * object_Metatable["tolua_ubox"] or tolua_ubox. Meanwhile set the corresponding userdata nullptr and remove the all
      * the lua function reference corresponding to this object.
      *
-     * In current mechanism, this function is called in the destructor of Ref object, developer don't call this
+     * In current mechanism, this function is called in the destructor of Object object, developer don't call this
      * functions.
      *
      * @param object the key object to remove script object.
      */
-    virtual void removeScriptObjectByObject(Ref* object) override;
+    virtual void removeScriptObjectByObject(Object* object) override;
 
     /**
      * Remove Lua function reference by nHandler by setting toluafix_refid_function_mapping[nHandle] nil.
@@ -164,14 +164,14 @@ public:
     virtual int executeGlobalFunction(const char* functionName) override;
     virtual int executeNodeEvent(Node* pNode, int nAction);
     virtual int executeMenuItemEvent(MenuItem* pMenuItem);
-    virtual int executeCallFuncActionEvent(CallFunc* pAction, Ref* pTarget = NULL);
+    virtual int executeCallFuncActionEvent(CallFunc* pAction, Object* pTarget = NULL);
     virtual int executeSchedule(int nHandler, float dt, Node* pNode = NULL);
     virtual int executeLayerTouchEvent(Layer* pLayer, int eventType, Touch* pTouch);
     virtual int executeLayerKeypadEvent(Layer* pLayer, int eventType);
     virtual int executeAccelerometerEvent(Layer* pLayer, Acceleration* pAccelerationValue);
     virtual int executeEvent(int nHandler,
                              const char* pEventName,
-                             Ref* pEventSource                 = NULL,
+                             Object* pEventSource                 = NULL,
                              const char* pEventSourceClassName = NULL);
     /**
      * Handle the assert message.

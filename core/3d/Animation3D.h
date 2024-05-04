@@ -31,7 +31,7 @@
 #include "3d/AnimationCurve.h"
 
 #include "base/Macros.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "3d/Bundle3DData.h"
 
 NS_AX_BEGIN
@@ -43,7 +43,7 @@ NS_AX_BEGIN
 /**
  * @brief static animation data, shared
  */
-class AX_DLL Animation3D : public Ref
+class AX_DLL Animation3D : public Object
 {
     friend class Bundle3D;
 

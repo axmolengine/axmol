@@ -44,17 +44,17 @@ GTweener* GTween::shake(const ax::Vec2& startValue, float amplitude, float durat
     return TweenManager::createTween()->_shake(startValue, amplitude, duration);
 }
 
-bool GTween::isTweening(ax::Ref* target, TweenPropType propType/* = TweenPropType::None*/)
+bool GTween::isTweening(ax::Object* target, TweenPropType propType/* = TweenPropType::None*/)
 {
     return TweenManager::isTweening(target, propType);
 }
 
-void GTween::kill(ax::Ref* target, TweenPropType propType/* = TweenPropType::None*/, bool complete/* = false*/)
+void GTween::kill(ax::Object* target, TweenPropType propType/* = TweenPropType::None*/, bool complete/* = false*/)
 {
     TweenManager::killTweens(target, propType, complete);
 }
 
-GTweener* GTween::getTween(ax::Ref* target, TweenPropType propType/* = TweenPropType::None*/)
+GTweener* GTween::getTween(ax::Object* target, TweenPropType propType/* = TweenPropType::None*/)
 {
     return TweenManager::getTween(target, propType);
 }

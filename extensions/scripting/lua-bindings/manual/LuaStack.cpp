@@ -223,7 +223,7 @@ void LuaStack::addLuaLoader(lua_CFunction func)
     lua_pop(_state, 1);
 }
 
-void LuaStack::removeScriptObjectByObject(Ref* pObj)
+void LuaStack::removeScriptObjectByObject(Object* pObj)
 {
     toluafix_remove_ccobject_by_refid(_state, pObj->_luaID);
 }
@@ -309,7 +309,7 @@ void LuaStack::pushNil()
     lua_pushnil(_state);
 }
 
-void LuaStack::pushObject(Ref* objectValue, const char* typeName)
+void LuaStack::pushObject(Object* objectValue, const char* typeName)
 {
     toluafix_pushusertype_ccobject(_state, objectValue->_ID, &objectValue->_luaID, objectValue, typeName);
 }

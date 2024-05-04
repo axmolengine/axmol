@@ -536,7 +536,7 @@ static int lua_ax_physics3d_Physics3DShape_finalize(lua_State* tolua_S)
 int lua_register_ax_physics3d_Physics3DShape(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Physics3DShape");
-    tolua_cclass(tolua_S,"Physics3DShape","ax.Physics3DShape","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Physics3DShape","ax.Physics3DShape","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Physics3DShape");
         tolua_function(tolua_S,"new",lua_ax_physics3d_Physics3DShape_constructor);
@@ -1047,7 +1047,7 @@ static int lua_ax_physics3d_Physics3DObject_finalize(lua_State* tolua_S)
 int lua_register_ax_physics3d_Physics3DObject(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Physics3DObject");
-    tolua_cclass(tolua_S,"Physics3DObject","ax.Physics3DObject","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Physics3DObject","ax.Physics3DObject","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Physics3DObject");
         tolua_function(tolua_S,"getObjType",lua_ax_physics3d_Physics3DObject_getObjType);
@@ -5016,7 +5016,7 @@ static int lua_ax_physics3d_Physics3DWorld_finalize(lua_State* tolua_S)
 int lua_register_ax_physics3d_Physics3DWorld(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Physics3DWorld");
-    tolua_cclass(tolua_S,"Physics3DWorld","ax.Physics3DWorld","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Physics3DWorld","ax.Physics3DWorld","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Physics3DWorld");
         tolua_function(tolua_S,"new",lua_ax_physics3d_Physics3DWorld_constructor);
@@ -5628,7 +5628,7 @@ static int lua_ax_physics3d_Physics3DConstraint_finalize(lua_State* tolua_S)
 int lua_register_ax_physics3d_Physics3DConstraint(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Physics3DConstraint");
-    tolua_cclass(tolua_S,"Physics3DConstraint","ax.Physics3DConstraint","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Physics3DConstraint","ax.Physics3DConstraint","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Physics3DConstraint");
         tolua_function(tolua_S,"getBreakingImpulse",lua_ax_physics3d_Physics3DConstraint_getBreakingImpulse);

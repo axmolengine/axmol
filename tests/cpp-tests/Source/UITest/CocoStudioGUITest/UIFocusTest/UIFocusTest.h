@@ -51,7 +51,7 @@ public:
     virtual void onDownKeyPressed();
     virtual void onFocusChanged(ax::ui::Widget* widgetLostFocus, ax::ui::Widget* widgetGetFocus);
 
-    void onImageViewClicked(ax::Ref* ref, ax::ui::Widget::TouchEventType touchType);
+    void onImageViewClicked(ax::Object* ref, ax::ui::Widget::TouchEventType touchType);
 
 protected:
     ax::Menu* _dpadMenu;
@@ -70,7 +70,7 @@ public:
 
     virtual bool init() override;
 
-    void toggleFocusLoop(ax::Ref*, ax::ui::Widget::TouchEventType);
+    void toggleFocusLoop(ax::Object*, ax::ui::Widget::TouchEventType);
 
 protected:
     ax::ui::Layout* _horizontalLayout;
@@ -87,7 +87,7 @@ public:
 
     virtual bool init() override;
 
-    void toggleFocusLoop(ax::Ref*, ax::ui::Widget::TouchEventType);
+    void toggleFocusLoop(ax::Object*, ax::ui::Widget::TouchEventType);
 
 protected:
     ax::ui::Layout* _verticalLayout;
@@ -104,7 +104,7 @@ public:
 
     virtual bool init() override;
 
-    void toggleFocusLoop(ax::Ref*, ax::ui::Widget::TouchEventType);
+    void toggleFocusLoop(ax::Object*, ax::ui::Widget::TouchEventType);
 
 protected:
     ax::ui::Layout* _verticalLayout;
@@ -121,7 +121,7 @@ public:
 
     virtual bool init() override;
 
-    void toggleFocusLoop(ax::Ref*, ax::ui::Widget::TouchEventType);
+    void toggleFocusLoop(ax::Object*, ax::ui::Widget::TouchEventType);
 
 protected:
     ax::ui::Layout* _horizontalLayout;
@@ -138,7 +138,7 @@ public:
 
     virtual bool init() override;
 
-    void toggleFocusLoop(ax::Ref*, ax::ui::Widget::TouchEventType);
+    void toggleFocusLoop(ax::Object*, ax::ui::Widget::TouchEventType);
 
 protected:
     ax::ui::Layout* _verticalLayout;

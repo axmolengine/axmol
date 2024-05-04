@@ -31,7 +31,7 @@
 #include "3d/AABB.h"
 #include "3d/3DProgramInfo.h"
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "renderer/MeshCommand.h"
 #include "renderer/CustomCommand.h"
@@ -60,7 +60,7 @@ class Buffer;
 /**
  * @brief Mesh: contains ref to index buffer, GLProgramState, texture, skin, blend function, aabb and so on
  */
-class AX_DLL Mesh : public Ref
+class AX_DLL Mesh : public Object
 {
     friend class MeshRenderer;
 

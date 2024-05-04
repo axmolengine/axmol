@@ -85,9 +85,9 @@ void ObjectFactory::destroyInstance()
     AX_SAFE_DELETE(_sharedFactory);
 }
 
-Ref* ObjectFactory::createObject(std::string_view name)
+Object* ObjectFactory::createObject(std::string_view name)
 {
-    Ref* o = nullptr;
+    Object* o = nullptr;
     do
     {
         // const TInfo t = _typeMap[name.data];

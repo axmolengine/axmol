@@ -30,7 +30,7 @@
 
 #include "renderer/Texture2D.h"
 #include "platform/PlatformMacros.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Types.h"
 #include "base/Vector.h"
 

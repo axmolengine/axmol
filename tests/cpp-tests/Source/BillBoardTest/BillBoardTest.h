@@ -57,11 +57,11 @@ public:
     virtual void update(float dt) override;
     void addNewBillBoardWithCoords(ax::Vec3 p);
     void addNewAniBillBoardWithCoords(ax::Vec3 p);
-    void rotateCameraCallback(ax::Ref* sender, float value);
+    void rotateCameraCallback(ax::Object* sender, float value);
     void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    void menuCallback_orientedPoint(ax::Ref* sender);
-    void menuCallback_orientedPlane(ax::Ref* sender);
+    void menuCallback_orientedPoint(ax::Object* sender);
+    void menuCallback_orientedPlane(ax::Object* sender);
 
 protected:
     ax::Camera* _camera;

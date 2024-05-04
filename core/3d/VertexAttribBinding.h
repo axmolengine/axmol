@@ -24,7 +24,7 @@
 
 #include <unordered_map>
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/Types.h"
 #include "renderer/Pass.h"
@@ -54,7 +54,7 @@ class VertexAttribValue;
  * arrays, since it is slower than the server-side VAOs used by OpenGL
  * (when creating a VertexAttribBinding between a Mesh and Effect).
  */
-class AX_DLL VertexAttribBinding : public Ref
+class AX_DLL VertexAttribBinding : public Object
 {
 public:
     /**

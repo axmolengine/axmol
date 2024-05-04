@@ -93,7 +93,7 @@ public:
     /**
      * ListView item click callback.
      */
-    typedef std::function<void(Ref*, EventType)> ccListViewCallback;
+    typedef std::function<void(Object*, EventType)> ccListViewCallback;
 
     /**
      * Default constructor

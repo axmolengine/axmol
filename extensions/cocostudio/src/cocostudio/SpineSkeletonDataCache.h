@@ -10,7 +10,7 @@
 class CCS_DLL SpineSkeletonDataCache
 {
 public:
-    class SkeletonData : public ax::Ref
+    class SkeletonData : public ax::Object
     {
     public:
         SkeletonData(spine::SkeletonData* d, spine::AttachmentLoader* loader) : data(d), attachmentLoader(loader) {}
@@ -47,7 +47,7 @@ public:
 class SpineSkeletonDataCache
 {
 public:
-    class SkeletonData : public ax::Ref
+    class SkeletonData : public ax::Object
     {
     public:
         SkeletonData(spSkeletonData* d, spAttachmentLoader* loader) : data(d), attachmentLoader(loader) {}

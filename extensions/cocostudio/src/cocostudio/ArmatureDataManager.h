@@ -43,7 +43,7 @@ struct RelativeData
 /**
  *    @brief    format and manage armature configuration and armature animation
  */
-class CCS_DLL ArmatureDataManager : public ax::Ref
+class CCS_DLL ArmatureDataManager : public ax::Object
 {
 public:
     /** @deprecated Use getInstance() instead */
@@ -145,7 +145,7 @@ public:
      *            It will load data in a new thread
      */
     void addArmatureFileInfoAsync(std::string_view configFilePath,
-                                  ax::Ref* target,
+                                  ax::Object* target,
                                   ax::SEL_SCHEDULE selector);
 
     /**
@@ -160,7 +160,7 @@ public:
     void addArmatureFileInfoAsync(std::string_view imagePath,
                                   std::string_view plistPath,
                                   std::string_view configFilePath,
-                                  ax::Ref* target,
+                                  ax::Object* target,
                                   ax::SEL_SCHEDULE selector);
 
     /**

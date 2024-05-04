@@ -318,7 +318,7 @@ void DataReaderHelper::addDataFromFile(std::string_view filePath)
 void DataReaderHelper::addDataFromFileAsync(std::string_view imagePath,
                                             std::string_view plistPath,
                                             std::string_view filePath,
-                                            Ref* target,
+                                            Object* target,
                                             SEL_SCHEDULE selector)
 {
     /*
@@ -459,7 +459,7 @@ void DataReaderHelper::addDataAsyncCallBack(float /*dt*/)
             pDataInfo->configFileQueue.pop();
         }
 
-        Ref* target           = pAsyncStruct->target;
+        Object* target           = pAsyncStruct->target;
         SEL_SCHEDULE selector = pAsyncStruct->selector;
 
         --_asyncRefCount;

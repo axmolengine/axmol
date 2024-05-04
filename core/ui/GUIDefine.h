@@ -37,10 +37,10 @@
 #define DECLARE_CLASS_GUI_INFO                   \
 public:                                          \
     static ax::ObjectFactory::TInfo __Type; \
-    static ax::Ref* createInstance();
+    static ax::Object* createInstance();
 
 #define IMPLEMENT_CLASS_GUI_INFO(className)                                   \
-    ax::Ref* className::createInstance() { return className::create(); } \
+    ax::Object* className::createInstance() { return className::create(); } \
     ax::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
 
 #define CREATE_CLASS_GUI_INFO(className) ax::ObjectFactory::TInfo(#className, &className::createInstance)
@@ -52,10 +52,10 @@ public:                                          \
 #define DECLARE_CLASS_WIDGET_READER_INFO         \
 public:                                          \
     static ax::ObjectFactory::TInfo __Type; \
-    static ax::Ref* createInstance();
+    static ax::Object* createInstance();
 
 #define IMPLEMENT_CLASS_WIDGET_READER_INFO(className)                              \
-    ax::Ref* className::createInstance() { return className::getInstance(); } \
+    ax::Object* className::createInstance() { return className::getInstance(); } \
     ax::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
 
 #define CREATE_CLASS_WIDGET_READER_INFO(className) ax::ObjectFactory::TInfo(#className, &className::createInstance)

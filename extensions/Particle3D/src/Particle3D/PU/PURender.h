@@ -28,7 +28,7 @@
 
 #include <vector>
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "Particle3D/Particle3DRender.h"
 #include "renderer/RenderState.h"

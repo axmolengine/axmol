@@ -572,7 +572,7 @@ std::string MeshRendererFakeShadowTest::subtitle() const
     return "touch the screen to move around";
 }
 
-void MeshRendererFakeShadowTest::Move(ax::Ref* sender, int value)
+void MeshRendererFakeShadowTest::Move(ax::Object* sender, int value)
 {
     _orc->setPositionX(_orc->getPositionX() + value);
 }
@@ -1024,7 +1024,7 @@ std::string AsyncLoadMeshRendererTest::subtitle() const
     return "";
 }
 
-void AsyncLoadMeshRendererTest::menuCallback_asyncLoadMesh(Ref* sender)
+void AsyncLoadMeshRendererTest::menuCallback_asyncLoadMesh(Object* sender)
 {
     // Note that you must stop the tasks before leaving the scene.
     AsyncTaskPool::getInstance()->stopTasks(AsyncTaskPool::TaskType::TASK_IO);
@@ -1132,7 +1132,7 @@ std::string MeshRendererWithSkinTest::getAnimationQualityMessage() const
     return "";
 }
 
-void MeshRendererWithSkinTest::switchAnimationQualityCallback(Ref* sender)
+void MeshRendererWithSkinTest::switchAnimationQualityCallback(Object* sender)
 {
     ++_animateQuality;
     if (_animateQuality > (int)Animate3DQuality::QUALITY_HIGH)
@@ -1465,7 +1465,7 @@ MeshRendererReskinTest::MeshRendererReskinTest() : _mesh(nullptr)
     pMenu1->setPosition(Vec2(0.0f, 0.0f));
     this->addChild(pMenu1, 10);
 }
-void MeshRendererReskinTest::menuCallback_reSkin(Ref* sender)
+void MeshRendererReskinTest::menuCallback_reSkin(Object* sender)
 {
     auto index = static_cast<int>((uintptr_t)(((MenuItemLabel*)sender)->getUserData()));
     if (index < (int)SkinType::MAX_TYPE)
@@ -1728,7 +1728,7 @@ void MeshRendererWithOBBPerformanceTest::reachEndCallBack()
     _mesh->runAction(seq);
 }
 
-void MeshRendererWithOBBPerformanceTest::addOBBCallback(Ref* sender)
+void MeshRendererWithOBBPerformanceTest::addOBBCallback(Object* sender)
 {
     addOBBWithCount(10);
 }
@@ -1747,7 +1747,7 @@ void MeshRendererWithOBBPerformanceTest::addOBBWithCount(float value)
     }
 }
 
-void MeshRendererWithOBBPerformanceTest::delOBBCallback(Ref* sender)
+void MeshRendererWithOBBPerformanceTest::delOBBCallback(Object* sender)
 {
     delOBBWithCount(10);
 }
@@ -1921,14 +1921,14 @@ UseCaseMeshRenderer::UseCaseMeshRenderer() : _caseIdx(0)
     _useCaseTitles[0] = "transparent 3d mesh and 2d mesh";
     _useCaseTitles[1] = "ui - 3d - ui";
 
-    auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Ref* sender) {
+    auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Object* sender) {
         _caseIdx--;
         if (_caseIdx < 0)
             _caseIdx = (int)USECASE::MAX_CASE_NUM - 1;
         this->switchCase();
     });
 
-    auto itemNext = MenuItemImage::create("Images/f1.png", "Images/f2.png", [&](Ref* sender) {
+    auto itemNext = MenuItemImage::create("Images/f1.png", "Images/f2.png", [&](Object* sender) {
         _caseIdx++;
         if (_caseIdx >= (int)USECASE::MAX_CASE_NUM)
             _caseIdx = 0;
@@ -2049,7 +2049,7 @@ void UseCaseMeshRenderer::switchCase()
     }
 }
 
-void UseCaseMeshRenderer::menuCallback_Message(Ref* sender)
+void UseCaseMeshRenderer::menuCallback_Message(Object* sender)
 {
     auto layer   = getChildByTag(101);
     auto message = layer->getChildByTag(102);  // message layer
@@ -2098,7 +2098,7 @@ NodeAnimationTest::NodeAnimationTest() : _vectorIndex(0)
 {
     auto s = Director::getInstance()->getWinSize();
 
-    auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Ref* sender) {
+    auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Object* sender) {
         _meshes[_vectorIndex]->setVisible(false);
 
         int tIndex = _vectorIndex - 1;
@@ -2110,7 +2110,7 @@ NodeAnimationTest::NodeAnimationTest() : _vectorIndex(0)
         _meshes[_vectorIndex]->setVisible(true);
     });
 
-    auto itemNext = MenuItemImage::create("Images/f1.png", "Images/f2.png", [&](Ref* sender) {
+    auto itemNext = MenuItemImage::create("Images/f1.png", "Images/f2.png", [&](Object* sender) {
         _meshes[_vectorIndex]->setVisible(false);
 
         int tIndex = _vectorIndex + 1;
@@ -2339,7 +2339,7 @@ Issue9767::Issue9767()
 
 Issue9767::~Issue9767() {}
 
-void Issue9767::menuCallback_SwitchShader(ax::Ref* sender)
+void Issue9767::menuCallback_SwitchShader(ax::Object* sender)
 {
     AX_SAFE_RELEASE_NULL(_programState);
     if (_shaderType == Issue9767::ShaderType::SHADER_TEX)
@@ -2539,7 +2539,7 @@ CameraBackgroundClearTest::CameraBackgroundClearTest()
     _label->setPosition(s.width / 2.f, VisibleRect::top().y * 0.8f);
 }
 
-void CameraBackgroundClearTest::switch_CameraClearMode(ax::Ref* sender)
+void CameraBackgroundClearTest::switch_CameraClearMode(ax::Object* sender)
 {
     auto brush                            = _camera->getBackgroundBrush();
     CameraBackgroundBrush::BrushType type = CameraBackgroundBrush::BrushType::NONE;
@@ -2759,7 +2759,7 @@ std::string MeshRendererPropertyTest::subtitle() const
 }
 
 void MeshRendererPropertyTest::update(float delta) {}
-void MeshRendererPropertyTest::printMeshName(ax::Ref* sender)
+void MeshRendererPropertyTest::printMeshName(ax::Object* sender)
 {
     AXLOG("MeshName Begin");
     Vector<Mesh*> meshes = _mesh->getMeshes();
@@ -2769,7 +2769,7 @@ void MeshRendererPropertyTest::printMeshName(ax::Ref* sender)
     }
     AXLOG("MeshName End");
 }
-void MeshRendererPropertyTest::removeUsedTexture(ax::Ref* sender)
+void MeshRendererPropertyTest::removeUsedTexture(ax::Object* sender)
 {
     if (_meshTex != nullptr)
     {
@@ -2778,7 +2778,7 @@ void MeshRendererPropertyTest::removeUsedTexture(ax::Ref* sender)
     }
 }
 
-void MeshRendererPropertyTest::resetTexture(ax::Ref* sender)
+void MeshRendererPropertyTest::resetTexture(ax::Object* sender)
 {
     if (_meshTex != nullptr)
     {
@@ -2819,7 +2819,7 @@ Issue16155Test::Issue16155Test()
     addChild(mesh);
     removeChild(mesh);
 
-    ax::print("Issue 16155: Ref count:%d. Run this test again. RC should be the same", rcBefore);
+    ax::print("Issue 16155: Object count:%d. Run this test again. RC should be the same", rcBefore);
 }
 
 std::string Issue16155Test::title() const
