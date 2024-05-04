@@ -1812,7 +1812,7 @@ int lua_ax_backend_ProgramState_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"axb.ProgramState");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"axb.ProgramState");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ProgramState:ProgramState",argc, 1);

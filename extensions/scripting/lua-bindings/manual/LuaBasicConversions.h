@@ -1117,7 +1117,7 @@ void ccvector_to_luaval(lua_State* L, const ax::Vector<T>& inValue)
                 lua_pushnumber(L, (lua_Number)indexTable);
                 int ID     = (obj) ? (int)obj->_ID : -1;
                 int* luaID = (obj) ? &obj->_luaID : NULL;
-                toluafix_pushusertype_ccobject(L, ID, luaID, (void*)obj, luaTypeName);
+                toluafix_pushusertype_object(L, ID, luaID, (void*)obj, luaTypeName);
                 lua_rawset(L, -3);
                 ++indexTable;
             }
@@ -1156,7 +1156,7 @@ void ccmap_string_key_to_luaval(lua_State* L, const ax::StringMap<T>& v)
                 lua_pushstring(L, key.c_str());
                 int ID     = (obj) ? (int)obj->_ID : -1;
                 int* luaID = (obj) ? &obj->_luaID : NULL;
-                toluafix_pushusertype_ccobject(L, ID, luaID, (void*)obj, luaTypeName);
+                toluafix_pushusertype_object(L, ID, luaID, (void*)obj, luaTypeName);
                 lua_rawset(L, -3);
             }
         }
@@ -1226,7 +1226,7 @@ void object_to_luaval(lua_State* L, const char* type, T* ret)
             ax::Object* dynObject = (ax::Object*)(ret);
             int ID             = (int)(dynObject->_ID);
             int* luaID         = &(dynObject->_luaID);
-            toluafix_pushusertype_ccobject(L, ID, luaID, (void*)ret, type);
+            toluafix_pushusertype_object(L, ID, luaID, (void*)ret, type);
         }
         else
         {

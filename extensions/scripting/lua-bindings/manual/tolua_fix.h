@@ -58,7 +58,7 @@ TOLUA_API void toluafix_open(lua_State* L);
  * @lua NA
  * @js NA
  */
-TOLUA_API int toluafix_pushusertype_ccobject(lua_State* L, int uid, int* p_refid, void* ptr, const char* type);
+TOLUA_API int toluafix_pushusertype_object(lua_State* L, int uid, int* p_refid, void* ptr, const char* type);
 
 /**
  * Find the value of Object object pointer in the Lua registry by the refid.

@@ -202,7 +202,7 @@ public:
     /**
      * Pushes a Object object onto the stack.
      *
-     * @see toluafix_pushusertype_ccobject.
+     * @see toluafix_pushusertype_object.
      */
     virtual void pushObject(Object* objectValue, const char* typeName);
 

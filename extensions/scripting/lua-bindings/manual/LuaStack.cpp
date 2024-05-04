@@ -311,7 +311,7 @@ void LuaStack::pushNil()
 
 void LuaStack::pushObject(Object* objectValue, const char* typeName)
 {
-    toluafix_pushusertype_ccobject(_state, objectValue->_ID, &objectValue->_luaID, objectValue, typeName);
+    toluafix_pushusertype_object(_state, objectValue->_ID, &objectValue->_luaID, objectValue, typeName);
 }
 
 void LuaStack::pushLuaValue(const LuaValue& value)

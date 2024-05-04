@@ -232,14 +232,14 @@ static int axlua_Extension_EventListenerAssetsManagerEx_create(lua_State* L)
                 auto stack = LuaEngine::getInstance()->getLuaStack();
                 int id     = event ? (int)event->_ID : -1;
                 int* luaID = event ? &event->_luaID : nullptr;
-                toluafix_pushusertype_ccobject(stack->getLuaState(), id, luaID, (void*)event,
+                toluafix_pushusertype_object(stack->getLuaState(), id, luaID, (void*)event,
                                                "ax.EventAssetsManagerEx");
                 stack->executeFunctionByHandler(handler, 1);
             });
 
         int id     = (ret) ? (int)ret->_ID : -1;
         int* luaID = (ret) ? &ret->_luaID : nullptr;
-        toluafix_pushusertype_ccobject(L, id, luaID, (void*)ret, "ax.EventListenerAssetsManagerEx");
+        toluafix_pushusertype_object(L, id, luaID, (void*)ret, "ax.EventListenerAssetsManagerEx");
         return 1;
     }
 
@@ -950,7 +950,7 @@ static int axlua_extension_TableView_create(lua_State* L)
        
         int  nID = (int)ret->_ID;
         int* pLuaID =  &ret->_luaID;
-        toluafix_pushusertype_ccobject(L, nID, pLuaID, (void*)ret,"ax.TableView");
+        toluafix_pushusertype_object(L, nID, pLuaID, (void*)ret,"ax.TableView");
         
         return 1;
     }

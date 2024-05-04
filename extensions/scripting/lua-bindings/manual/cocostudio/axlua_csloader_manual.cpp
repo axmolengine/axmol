@@ -106,7 +106,7 @@ int axlua_csloader_CSLoader_createNode(lua_State* tolua_S)
                 if (nullptr == ref)
                     return;
                 auto stack = LuaEngine::getInstance()->getLuaStack();
-                toluafix_pushusertype_ccobject(stack->getLuaState(), ref->_ID, &(ref->_luaID), (void*)ref, "ax.Object");
+                toluafix_pushusertype_object(stack->getLuaState(), ref->_ID, &(ref->_luaID), (void*)ref, "ax.Object");
                 stack->executeFunctionByHandler(handler, 1);
             };
 

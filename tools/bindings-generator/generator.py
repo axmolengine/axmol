@@ -1026,7 +1026,7 @@ class NativeClass(object):
         # the cursor to the implementation
         self.cursor = cursor
         self.class_name = cursor.displayname
-        self.is_ref_class = self.class_name == "Ref"
+        self.is_ref_class = self.class_name == "Object"
         self.namespaced_class_name = self.class_name
         self.parents = []
         self.fields = []
@@ -1170,7 +1170,7 @@ class NativeClass(object):
 
     def _is_ref_class(self, depth = 0):
         """
-        Mark the class as 'ax::Ref' or its subclass.
+        Mark the class as 'ax::Object' or its subclass.
         """
         # print ">" * (depth + 1) + " " + self.class_name
 
@@ -1205,7 +1205,7 @@ class NativeClass(object):
 
                     self.parents.append(parent)
 
-            if parent_name == "Ref":
+            if parent_name == "Object":
                 self.is_ref_class = True
 
         elif cursor.kind == cindex.CursorKind.FIELD_DECL:
