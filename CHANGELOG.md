@@ -91,7 +91,7 @@
 
 ### sdks updates
 
-- emsdk: 3.1.53 ==> 3.1.57
+- emsdk: 3.1.53 ==> 3.1.59
 - AGP: 8.2.1 ==> 8.2.2
 - androidx.media3: 1.0.2 ==> 1.2.1
 

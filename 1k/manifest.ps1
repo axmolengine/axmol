@@ -16,7 +16,7 @@ if ($Global:is_axmol_app -or $Global:is_axmol_engine) {
     }
 }
 
-$manifest['emsdk'] = '3.1.57'
+$manifest['emsdk'] = '3.1.59'
 
 # android sdk tools
 $android_sdk_tools['build-tools'] = '34.0.0' # match with AGP, current 8.2.1 android studio 2023.1.1
