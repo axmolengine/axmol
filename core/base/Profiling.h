@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include <string>
 #include <chrono>
 #include "base/Config.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Map.h"
 
 NS_AX_BEGIN
@@ -96,7 +96,7 @@ public:
     Map<std::string, ProfilingTimer*> _activeTimers;
 };
 
-class ProfilingTimer : public Ref
+class ProfilingTimer : public Object
 {
 public:
     /**

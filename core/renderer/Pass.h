@@ -51,7 +51,7 @@ class ProgramState;
 class Buffer;
 }  // namespace backend
 
-class AX_DLL Pass : public Ref
+class AX_DLL Pass : public Object
 {
     friend class Material;
     friend class Technique;

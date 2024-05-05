@@ -25,7 +25,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "platform/GLView.h"
 

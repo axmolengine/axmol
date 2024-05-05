@@ -26,7 +26,7 @@
 
 #include <cstdint>
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Data.h"
 
 #include "Macros.h"
@@ -63,7 +63,7 @@ struct DepthStencilDescriptor;
  * @brief Store encoded commands for the GPU to execute.
  * A command buffer stores encoded commands until the buffer is committed for execution by the GPU
  */
-class CommandBuffer : public ax::Ref
+class CommandBuffer : public ax::Object
 {
 public:
     /**

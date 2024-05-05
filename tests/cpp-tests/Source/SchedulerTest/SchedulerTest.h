@@ -273,7 +273,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     ax::extension::ControlSlider* sliderCtl();
-    void sliderAction(ax::Ref* sender, ax::extension::Control::EventType controlEvent);
+    void sliderAction(ax::Object* sender, ax::extension::Control::EventType controlEvent);
     ax::extension::ControlSlider* _sliderCtl;
 };
 
@@ -287,7 +287,7 @@ public:
     virtual std::string subtitle() const override;
     void onEnter() override;
     ax::extension::ControlSlider* sliderCtl();
-    void sliderAction(ax::Ref* sender, ax::extension::Control::EventType controlEvent);
+    void sliderAction(ax::Object* sender, ax::extension::Control::EventType controlEvent);
     ax::Scheduler* sched1;
     ax::Scheduler* sched2;
     ax::ActionManager* actionManager1;

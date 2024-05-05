@@ -7,7 +7,7 @@
 
 NS_TIMELINE_BEGIN
 
-class CCS_DLL ActionTimelineData : public ax::Ref
+class CCS_DLL ActionTimelineData : public ax::Object
 {
 public:
     static ActionTimelineData* create(int actionTag);

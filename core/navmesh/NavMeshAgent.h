@@ -31,7 +31,7 @@
 #if defined(AX_ENABLE_NAVMESH)
 #    include "2d/Component.h"
 
-#    include "base/Ref.h"
+#    include "base/Object.h"
 #    include "math/Vec3.h"
 #    include "recast/DetourCrowd.h"
 

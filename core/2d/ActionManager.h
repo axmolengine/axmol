@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 #include "2d/Action.h"
 #include "base/Vector.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 
 NS_AX_BEGIN
 
@@ -61,7 +61,7 @@ struct ActionHandle
 
  @since v0.8
  */
-class AX_DLL ActionManager : public Ref
+class AX_DLL ActionManager : public Object
 {
 public:
     /**

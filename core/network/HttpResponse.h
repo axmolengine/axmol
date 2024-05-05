@@ -51,7 +51,7 @@ class HttpClient;
  * @since v2.0.2.
  * @lua NA
  */
-class AX_DLL HttpResponse : public ax::Ref
+class AX_DLL HttpResponse : public ax::Object
 {
     friend class HttpClient;
 
@@ -85,9 +85,9 @@ public:
     /**
      * Override autorelease method to prevent developers from calling it.
      * If this method is called , it would trigger AXASSERT.
-     * @return ax::Ref* always return nullptr.
+     * @return ax::Object* always return nullptr.
      */
-    ax::Ref* autorelease()
+    ax::Object* autorelease()
     {
         AXASSERT(false,
                  "HttpResponse is used between network thread and ui thread \

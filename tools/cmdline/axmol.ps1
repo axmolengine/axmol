@@ -1,5 +1,6 @@
 param(
-    [switch]$help
+    [switch]$help,
+    [switch]$wait
 )
 # pwsh function alias
 function println($message) { Write-Host "axmol: $message" }
@@ -173,14 +174,42 @@ function axmol_deploy() {
     }
 }
 
+function is_console_app($path) {
+    # $peFile = [System.IO.FileStream]::new($path, 'Open', 'Read')
+    # $peReader = New-Object System.Reflection.PortableExecutable.PEReader -ArgumentList $peFile
+    # $isConsole = $peReader.PEHeaders.PEHeader.Subsystem -eq 3
+    # $peFile.Close()
+    # return $isConsole
+    $buffer = New-Object Byte[] 248
+    $fileStream = [System.IO.FileStream]::new($path, [IO.FileMode]::Open, [IO.FileAccess]::Read)
+    $fileStream.Seek(0x3C, [System.IO.SeekOrigin]::Begin) | Out-Null
+    $fileStream.Read($buffer, 0, 4) | Out-Null
+    $peHeaderOffset = [BitConverter]::ToInt32($buffer, 0)
+    $fileStream.Seek($peHeaderOffset, [System.IO.SeekOrigin]::Begin) | Out-Null
+    $fileStream.Read($buffer, 0, 248) | Out-Null
+    $fileStream.Seek($peHeaderOffset + 0x5C, [System.IO.SeekOrigin]::Begin) | Out-Null
+    $fileStream.Read($buffer, 0, 2) | Out-Null
+    $buffer[2] = 0
+    $fileStream.Close()
+    $subsystem = [BitConverter]::ToInt16($buffer, 0)
+    return $subsystem -eq 3
+}
+
 function axmol_run() {
     $sub_args = $args
     . axmol_deploy @sub_args
+    if($is_host_target -and $TARGET_CPU -ne $HOST_CPU) {
+        println "Skip launch $cmake_target, due to $TARGET_OS-$TARGET_CPU apps can't runs on $HOST_OS_NAME-$HOST_CPU"
+        return
+    }
     if ($TARGET_OS -eq 'winrt') {
         explorer.exe shell:AppsFolder\$appxPkgName!App
     }
     elseif ($TARGET_OS -eq 'win32') {
-        Start-Process -FilePath $win32exePath -WorkingDirectory $(Split-Path $win32exePath -Parent)
+        $workdir = $(Split-Path $win32exePath -Parent)
+        $additional_args = @{}
+        if ($wait -or (is_console_app $win32exePath)) { $additional_args = @{NoNewWindow = $true; Wait = $true } }
+        Start-Process -FilePath $win32exePath -WorkingDirectory $workdir @additional_args
     }
     elseif ($TARGET_OS -eq 'android') {
         adb shell am start -n "$androidAppId/$androidActivity"
@@ -198,7 +227,9 @@ function axmol_run() {
     elseif ($TARGET_OS -eq 'linux') {
         $launch_linuxapp = Join-Path $BUILD_DIR "bin/$cmake_target/$cmake_target"
         println "Launching $launch_linuxapp ..."
-        Start-Process -FilePath $launch_linuxapp -WorkingDirectory $(Split-Path $launch_linuxapp -Parent)
+        $additional_args = @()
+        if ($wait) { $additional_args = @{NoNewWindow = $true; Wait = $true } }
+        Start-Process -FilePath $launch_linuxapp -WorkingDirectory $(Split-Path $launch_linuxapp -Parent) @additional_args
     }
     elseif ($TARGET_OS.startsWith('wasm')) {
         $launch_wasmapp = Join-Path $BUILD_DIR "bin/$cmake_target/$cmake_target.html"
@@ -329,7 +360,7 @@ if ($plugin) {
         $sub_args = $args[1..($args.Count - 1)] 
     } 
     else {
-        $sub_args = $null
+        $sub_args = @()
     }
 }
 else {

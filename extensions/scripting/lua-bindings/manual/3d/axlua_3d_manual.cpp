@@ -113,7 +113,7 @@ int axlua_3d_MeshRenderer_createAsync(lua_State* L)
                     auto stack = LuaEngine::getInstance()->getLuaStack();
                     int id     = (mesh) ? (int)mesh->_ID : -1;
                     int* luaID = (mesh) ? &mesh->_luaID : nullptr;
-                    toluafix_pushusertype_ccobject(stack->getLuaState(), id, luaID, (void*)mesh, "ax.MeshRenderer");
+                    toluafix_pushusertype_object(stack->getLuaState(), id, luaID, (void*)mesh, "ax.MeshRenderer");
                     stack->executeFunctionByHandler(handler, 1);
                 },
                 nullptr);
@@ -146,7 +146,7 @@ int axlua_3d_MeshRenderer_createAsync(lua_State* L)
                     auto stack = LuaEngine::getInstance()->getLuaStack();
                     int id     = (mesh) ? (int)mesh->_ID : -1;
                     int* luaID = (mesh) ? &mesh->_luaID : nullptr;
-                    toluafix_pushusertype_ccobject(stack->getLuaState(), id, luaID, (void*)mesh, "ax.MeshRenderer");
+                    toluafix_pushusertype_object(stack->getLuaState(), id, luaID, (void*)mesh, "ax.MeshRenderer");
                     stack->executeFunctionByHandler(handler, 1);
                 },
                 nullptr);

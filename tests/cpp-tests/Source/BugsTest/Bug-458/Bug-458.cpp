@@ -66,7 +66,7 @@ bool Bug458Layer::init()
     return false;
 }
 
-void Bug458Layer::selectAnswer(Ref* sender)
+void Bug458Layer::selectAnswer(Object* sender)
 {
     ax::print("Selected");
 }

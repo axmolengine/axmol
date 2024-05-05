@@ -27,8 +27,8 @@ public:
     virtual void onExit() override;
 
     // a selector callback
-    void menuCloseCallback(ax::Ref* pSender);
-    void menuChangeCallback(ax::Ref* pSender);
+    void menuCloseCallback(ax::Object* pSender);
+    void menuChangeCallback(ax::Object* pSender);
 
     // implement the "static create()" method manually
     CREATE_FUNC(SampleScene);

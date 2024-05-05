@@ -44,11 +44,11 @@ public:
     void onEnter() override;
     void initPhysics();
     void createResetButton();
-    void reset(ax::Ref* sender);
+    void reset(ax::Object* sender);
 
     void addNewSpriteAtPosition(ax::Vec2 p);
     void update(float dt) override;
-    void toggleDebugCallback(ax::Ref* sender);
+    void toggleDebugCallback(ax::Object* sender);
     void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     virtual void onAcceleration(ax::Acceleration* acc, ax::Event* event);
 

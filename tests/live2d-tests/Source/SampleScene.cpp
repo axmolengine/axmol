@@ -185,7 +185,7 @@ void SampleScene::onExit()
     LAppLive2DManager::GetInstance()->ReleaseAllModel();
 }
 
-void SampleScene::menuCloseCallback(Ref* pSender)
+void SampleScene::menuCloseCallback(Object* pSender)
 {
     LAppLive2DManager::ReleaseInstance();
 
@@ -196,7 +196,7 @@ void SampleScene::menuCloseCallback(Ref* pSender)
 #endif
 }
 
-void SampleScene::menuChangeCallback(Ref* pSender)
+void SampleScene::menuChangeCallback(Object* pSender)
 {
     LAppLive2DManager::GetInstance()->NextScene();
 }

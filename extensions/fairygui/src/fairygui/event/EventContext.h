@@ -17,7 +17,7 @@ public:
     ~EventContext();
 
     int getType() const { return _type; }
-    ax::Ref* getSender() const { return _sender; }
+    ax::Object* getSender() const { return _sender; }
     InputEvent* getInput() const { return _inputEvent; }
     void stopPropagation() { _isStopped = true; }
     void preventDefault() { _defaultPrevented = true; }
@@ -29,7 +29,7 @@ public:
     void* getData() const { return _data; }
 
 private:
-    ax::Ref* _sender;
+    ax::Object* _sender;
     InputEvent* _inputEvent;
     ax::Value _dataValue;
     void* _data;

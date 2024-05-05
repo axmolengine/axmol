@@ -164,7 +164,7 @@ int lua_ax_fairygui_GObject_getData(lua_State* tolua_S)
             return 0;
         }
         void* ret = cobj->getData();
-        object_to_luaval<cocos2d::Ref>(tolua_S, /*"cc."*/"ax.Ref", (cocos2d::Ref*)ret);
+        object_to_luaval<cocos2d::Object>(tolua_S, /*"cc."*/"ax.Object", (cocos2d::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GObject:getData", argc, 0);
@@ -504,9 +504,9 @@ static int lua_ax_fairygui_UIObjectFactory_setPackageItemExtension(lua_State* to
             stack->executeFunctionByHandler(handler,1);
             return ret;
         });
-        cocos2d::Ref* self = nullptr;
+        cocos2d::Object* self = nullptr;
         if (argc == 4) {
-            self = (cocos2d::Ref*)tolua_tousertype(tolua_S, 5, 0);
+            self = (cocos2d::Object*)tolua_tousertype(tolua_S, 5, 0);
         }
         if (self)
         {
@@ -639,7 +639,7 @@ int lua_ax_fairygui_EventContext_getData(lua_State* tolua_S)
             return 0;
         }
         void* ret = cobj->getData();
-        object_to_luaval<cocos2d::Ref>(tolua_S, /*"cc."*/"ax.Ref", (cocos2d::Ref*)ret);
+        object_to_luaval<cocos2d::Object>(tolua_S, /*"cc."*/"ax.Object", (cocos2d::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.EventContext:getData", argc, 0);

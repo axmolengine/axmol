@@ -820,7 +820,7 @@ std::string ClippingToRenderTextureTest::subtitle() const
 
 void ClippingToRenderTextureTest::setup()
 {
-    auto button = MenuItemFont::create("Reproduce bug", [&](Ref* sender) {
+    auto button = MenuItemFont::create("Reproduce bug", [&](Object* sender) {
         std::vector<Node*> nodes;
         enumerateChildren("remove me [0-9]", [&](Node* node) {
             nodes.emplace_back(node);
@@ -1010,7 +1010,7 @@ void ClippingNodePerformanceTest::setup()
     
     MenuItemFont::setFontName("fonts/arial.ttf");
     MenuItemFont::setFontSize(65);
-    auto increase = MenuItemFont::create(" + ", [=] (Ref*) -> void {
+    auto increase = MenuItemFont::create(" + ", [=] (Object*) -> void {
         addClippingNode(10);
     });
     increase->setColor(Color3B(0, 200, 20));

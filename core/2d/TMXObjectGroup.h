@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "math/Math.h"
 #include "base/Value.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 
 NS_AX_BEGIN
 
@@ -43,7 +43,7 @@ NS_AX_BEGIN
 /** @brief TMXObjectGroup represents the TMX object group.
  * @since v0.99.0
  */
-class AX_DLL TMXObjectGroup : public Ref
+class AX_DLL TMXObjectGroup : public Object
 {
 public:
     /**

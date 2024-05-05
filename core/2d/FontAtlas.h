@@ -34,7 +34,7 @@
 #include <unordered_map>
 
 #include "platform/PlatformMacros.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "platform/StdC.h"  // ssize_t on windows
 #include "renderer/Texture2D.h"
 
@@ -62,7 +62,7 @@ struct FontLetterDefinition
     bool rotated;
 };
 
-class AX_DLL FontAtlas : public Ref
+class AX_DLL FontAtlas : public Object
 {
 public:
     static const int CacheTextureWidth;

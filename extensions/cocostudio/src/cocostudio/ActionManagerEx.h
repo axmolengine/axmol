@@ -35,7 +35,7 @@ namespace cocostudio
 class CocoLoader;
 struct stExpCocoNode;
 
-class CCS_DLL ActionManagerEx : public ax::Ref
+class CCS_DLL ActionManagerEx : public ax::Object
 {
 public:
     /**
@@ -110,8 +110,8 @@ public:
     ActionObject* stopActionByName(const char* jsonName, const char* actionName);
 
     /*init properties with json dictionary*/
-    void initWithDictionary(const char* jsonName, const rapidjson::Value& dic, Ref* root, int version = 1600);
-    void initWithBinary(const char* file, Ref* root, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode);
+    void initWithDictionary(const char* jsonName, const rapidjson::Value& dic, Object* root, int version = 1600);
+    void initWithBinary(const char* file, Object* root, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode);
 
     /**
      * Release all actions.

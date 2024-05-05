@@ -76,7 +76,7 @@ ActionNode::~ActionNode()
     _frameArray.clear();
 }
 
-void ActionNode::initWithDictionary(const rapidjson::Value& dic, Ref* root)
+void ActionNode::initWithDictionary(const rapidjson::Value& dic, Object* root)
 {
     Widget* rw = dynamic_cast<Widget*>(root);
     if (nullptr == rw)
@@ -209,7 +209,7 @@ float ActionNode::valueToFloat(std::string_view value)
     return utils::atof(value.data());
 }
 
-void ActionNode::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, ax::Ref* root)
+void ActionNode::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, ax::Object* root)
 {
 
     stExpCocoNode* stChildNode = cocoNode;
@@ -359,7 +359,7 @@ void ActionNode::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode,
     initActionNodeFromRoot(root);
 }
 
-void ActionNode::initActionNodeFromRoot(Ref* root)
+void ActionNode::initActionNodeFromRoot(Object* root)
 {
     Widget* rootWidget = dynamic_cast<Widget*>(root);
     if (rootWidget != nullptr)
@@ -393,14 +393,14 @@ int ActionNode::getActionTag()
     return _actionTag;
 }
 
-void ActionNode::setObject(Ref* node)
+void ActionNode::setObject(Object* node)
 {
     AX_SAFE_RELEASE(_object);
     _object = node;
     AX_SAFE_RETAIN(_object);
 }
 
-Ref* ActionNode::getObject()
+Object* ActionNode::getObject()
 {
     return _object;
 }

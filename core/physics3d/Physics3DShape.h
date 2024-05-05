@@ -27,7 +27,7 @@
 #ifndef __PHYSICS_3D_SHAPE_H__
 #define __PHYSICS_3D_SHAPE_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Config.h"
 #include "math/Math.h"
 
@@ -46,7 +46,7 @@ NS_AX_BEGIN
 /**
  * @brief Create a physical shape(box, sphere, cylinder, capsule, convexhull, mesh and heightfield)
  */
-class AX_DLL Physics3DShape : public Ref
+class AX_DLL Physics3DShape : public Object
 {
 public:
     enum class ShapeType

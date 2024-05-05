@@ -44,7 +44,7 @@ NS_AX_BEGIN
  TextureCube is a collection of six separate square textures that are put
  onto the faces of an imaginary cube.
 */
-class AX_DLL TextureCube : public Ref
+class AX_DLL TextureCube : public Object
 {
 public:
     /** create cube texture from 6 textures.

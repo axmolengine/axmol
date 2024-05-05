@@ -37,7 +37,7 @@ public:
 
     AssetsManagerExLoaderScene(int testIndex);
 
-    void startDownloadCallback(ax::Ref* sender);
+    void startDownloadCallback(ax::Object* sender);
 
     virtual std::string title() const override;
 

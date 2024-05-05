@@ -213,7 +213,7 @@ std::string AudioEngineTestDemo::title() const
     return "New Audio Engine Test";
 }
 
-void AudioEngineTestDemo::onBackCallback(ax::Ref* sender)
+void AudioEngineTestDemo::onBackCallback(ax::Object* sender)
 {
     AudioEngine::end();
     TestCase::onBackCallback(sender);
@@ -323,7 +323,7 @@ bool AudioControlTest::init()
 
     auto volumeSlider = SliderEx::create();
     volumeSlider->setPercent(100);
-    volumeSlider->addEventListener([&](Ref* sender, Slider::EventType event) {
+    volumeSlider->addEventListener([&](Object* sender, Slider::EventType event) {
         SliderEx* slider = dynamic_cast<SliderEx*>(sender);
         _volume          = slider->getRatio();
         if (_audioID != AudioEngine::INVALID_AUDIO_ID)
@@ -335,7 +335,7 @@ bool AudioControlTest::init()
     addChild(volumeSlider);
 
     auto timeSlider = SliderEx::create();
-    timeSlider->addEventListener([&](Ref* sender, Slider::EventType event) {
+    timeSlider->addEventListener([&](Object* sender, Slider::EventType event) {
         SliderEx* slider = dynamic_cast<SliderEx*>(sender);
         switch (event)
         {
@@ -1161,7 +1161,7 @@ void AudioPlayInFinishedCB::onEnter()
 {
     AudioEngineTestDemo::onEnter();
 
-    auto item = MenuItemFont::create("Play 3 files one by one", [this](Ref* sender) {
+    auto item = MenuItemFont::create("Play 3 files one by one", [this](Object* sender) {
         playMusic("background.mp3");
         playMusic("background.mp3");
         playMusic("background.mp3");

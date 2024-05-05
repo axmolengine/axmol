@@ -1033,7 +1033,7 @@ static int lua_ax_backend_Program_finalize(lua_State* tolua_S)
 int lua_register_ax_backend_Program(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"axb.Program");
-    tolua_cclass(tolua_S,"Program","axb.Program","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Program","axb.Program","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Program");
         tolua_function(tolua_S,"getUniformLocation",lua_ax_backend_Program_getUniformLocation);
@@ -1812,7 +1812,7 @@ int lua_ax_backend_ProgramState_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"axb.ProgramState");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"axb.ProgramState");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ProgramState:ProgramState",argc, 1);
@@ -1834,7 +1834,7 @@ static int lua_ax_backend_ProgramState_finalize(lua_State* tolua_S)
 int lua_register_ax_backend_ProgramState(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"axb.ProgramState");
-    tolua_cclass(tolua_S,"ProgramState","axb.ProgramState","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ProgramState","axb.ProgramState","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ProgramState");
         tolua_function(tolua_S,"new",lua_ax_backend_ProgramState_constructor);
@@ -2420,7 +2420,7 @@ static int lua_ax_backend_TextureBackend_finalize(lua_State* tolua_S)
 int lua_register_ax_backend_TextureBackend(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"axb.TextureBackend");
-    tolua_cclass(tolua_S,"TextureBackend","axb.TextureBackend","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"TextureBackend","axb.TextureBackend","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"TextureBackend");
         tolua_function(tolua_S,"updateSamplerDescriptor",lua_ax_backend_TextureBackend_updateSamplerDescriptor);

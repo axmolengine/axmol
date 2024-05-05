@@ -118,16 +118,16 @@ public:
     /**
      * Widget touch event callback.
      */
-    typedef std::function<void(Ref*, Widget::TouchEventType)> ccWidgetTouchCallback;
+    typedef std::function<void(Object*, Widget::TouchEventType)> ccWidgetTouchCallback;
     /**
      * Widget click event callback.
      */
-    typedef std::function<void(Ref*)> ccWidgetClickCallback;
+    typedef std::function<void(Object*)> ccWidgetClickCallback;
     /**
      * Widget custom event callback.
      * It is mainly used together with Cocos Studio.
      */
-    typedef std::function<void(Ref*, int)> ccWidgetEventCallback;
+    typedef std::function<void(Object*, int)> ccWidgetEventCallback;
     /**
      * Default constructor
      * @js ctor
@@ -825,7 +825,7 @@ protected:
      */
     static Widget* _focusedWidget;  // both layout & widget will be stored in this variable
 
-    Ref* _touchEventListener;
+    Object* _touchEventListener;
     ccWidgetTouchCallback _touchEventCallback;
     ccWidgetClickCallback _clickEventListener;
     ccWidgetEventCallback _ccEventCallback;

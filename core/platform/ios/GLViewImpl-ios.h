@@ -25,7 +25,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "platform/Common.h"
 #include "platform/GLView.h"
 

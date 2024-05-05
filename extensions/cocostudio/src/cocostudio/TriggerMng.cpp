@@ -403,7 +403,7 @@ void TriggerMng::buildJson(rapidjson::Document& document,
     }
 }
 
-void TriggerMng::addArmatureMovementCallBack(Armature* pAr, Ref* pTarget, SEL_MovementEventCallFunc mecf)
+void TriggerMng::addArmatureMovementCallBack(Armature* pAr, Object* pTarget, SEL_MovementEventCallFunc mecf)
 {
     if (pAr == nullptr || _movementDispatches == nullptr || pTarget == nullptr || mecf == nullptr)
     {
@@ -428,7 +428,7 @@ void TriggerMng::addArmatureMovementCallBack(Armature* pAr, Ref* pTarget, SEL_Mo
     }
 }
 
-void TriggerMng::removeArmatureMovementCallBack(Armature* pAr, Ref* pTarget, SEL_MovementEventCallFunc mecf)
+void TriggerMng::removeArmatureMovementCallBack(Armature* pAr, Object* pTarget, SEL_MovementEventCallFunc mecf)
 {
     if (pAr == nullptr || _movementDispatches == nullptr || pTarget == nullptr || mecf == nullptr)
     {
@@ -494,7 +494,7 @@ void TriggerMng::addEventListenerWithFixedPriority(ax::EventListener* listener, 
 
 ArmatureMovementDispatcher::ArmatureMovementDispatcher(void) : _mapEventAnimation(nullptr)
 {
-    _mapEventAnimation = new std::unordered_map<Ref*, SEL_MovementEventCallFunc>;
+    _mapEventAnimation = new std::unordered_map<Object*, SEL_MovementEventCallFunc>;
 }
 
 ArmatureMovementDispatcher::~ArmatureMovementDispatcher(void)
@@ -513,12 +513,12 @@ void ArmatureMovementDispatcher::animationEvent(Armature* armature,
     }
 }
 
-void ArmatureMovementDispatcher::addAnimationEventCallBack(Ref* pTarget, SEL_MovementEventCallFunc mecf)
+void ArmatureMovementDispatcher::addAnimationEventCallBack(Object* pTarget, SEL_MovementEventCallFunc mecf)
 {
     _mapEventAnimation->emplace(pTarget, mecf);
 }
 
-void ArmatureMovementDispatcher::removeAnnimationEventCallBack(Ref* pTarget, SEL_MovementEventCallFunc /*mecf*/)
+void ArmatureMovementDispatcher::removeAnnimationEventCallBack(Object* pTarget, SEL_MovementEventCallFunc /*mecf*/)
 {
     _mapEventAnimation->erase(pTarget);
 }

@@ -30,7 +30,7 @@
 
 namespace cocostudio
 {
-class CCS_DLL TextFieldExReader : public ax::Ref, public NodeReaderProtocol
+class CCS_DLL TextFieldExReader : public ax::Object, public NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 

@@ -48,7 +48,9 @@ class AX_DLL FileUtilsApple : public FileUtils
 public:
     FileUtilsApple();
     virtual ~FileUtilsApple();
-    /* override functions */
+
+    virtual bool init() override;
+
     virtual std::string getWritablePath() const override;
     virtual std::string getNativeWritableAbsolutePath() const override;
     virtual std::string getFullPathForFilenameWithinDirectory(std::string_view directory,

@@ -1,0 +1,18 @@
+{
+  "images" : [
+    {
+      "size" : "400x240",
+      "idiom" : "tv",
+      "filename" : "icon-400.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "400x240",
+      "idiom" : "tv",
+      "filename" : "icon-800.png",
+      "scale" : "2x"
+    }
+  ],
+  "author" : "Store Assets Generator",
+  "version" : "0.4.0"
+}

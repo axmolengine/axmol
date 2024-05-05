@@ -36,7 +36,7 @@ public:
     CREATE_FUNC(UITextBMFontTest)
 
     virtual bool init() override;
-    void printWidgetResources(ax::Ref* sender);
+    void printWidgetResources(ax::Object* sender);
 
 protected:
     ax::ui::TextBMFont* _textBMFont;

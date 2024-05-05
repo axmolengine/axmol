@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include <vector>
 #include <string>
-#include "base/Ref.h"
+#include "base/Object.h"
 
 /**
  * @addtogroup base
@@ -70,14 +70,14 @@ public:
      * Add a given object to this autorelease pool.
      *
      * The same object may be added several times to an autorelease pool. When the
-     * pool is destructed, the object's `Ref::release()` method will be called
+     * pool is destructed, the object's `Object::release()` method will be called
      * the same times as it was added.
      *
      * @param object    The object to be added into the autorelease pool.
      * @js NA
      * @lua NA
      */
-    void addObject(Ref* object);
+    void addObject(Object* object);
 
     /**
      * Clear the autorelease pool.
@@ -109,7 +109,7 @@ public:
      * @js NA
      * @lua NA
      */
-    bool contains(Ref* object) const;
+    bool contains(Object* object) const;
 
     /**
      * Dump the objects that are put into the autorelease pool. It is used for debugging.
@@ -127,12 +127,12 @@ private:
      * The underlying array of object managed by the pool.
      *
      * Although Array retains the object once when an object is added, proper
-     * Ref::release() is called outside the array to make sure that the pool
+     * Object::release() is called outside the array to make sure that the pool
      * does not affect the managed object's reference count. So an object can
-     * be destructed properly by calling Ref::release() even if the object
+     * be destructed properly by calling Object::release() even if the object
      * is in the pool.
      */
-    std::vector<Ref*> _managedObjectArray;
+    std::vector<Object*> _managedObjectArray;
     std::string _name;
 
 #if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
@@ -161,7 +161,7 @@ public:
      */
     AutoreleasePool* getCurrentPool() const;
 
-    bool isObjectInPools(Ref* obj) const;
+    bool isObjectInPools(Object* obj) const;
 
     friend class AutoreleasePool;
 

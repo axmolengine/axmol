@@ -447,7 +447,7 @@ void Scene3DTestScene::createUI()
 
     // first, add menu to ui
     // create player button
-    auto showPlayerDlgItem = MenuItemImage::create("Images/Pea.png", "Images/Pea.png", [this](Ref* sender) {
+    auto showPlayerDlgItem = MenuItemImage::create("Images/Pea.png", "Images/Pea.png", [this](Object* sender) {
         this->_playerDlg->setVisible(!this->_playerDlg->isVisible());
     });
     showPlayerDlgItem->setName("showPlayerDlgItem");
@@ -455,7 +455,7 @@ void Scene3DTestScene::createUI()
 
     // create description button
     TTFConfig ttfConfig("fonts/arial.ttf", 20);
-    auto descItem = MenuItemLabel::create(Label::createWithTTF(ttfConfig, "Description"), [this](Ref* sender) {
+    auto descItem = MenuItemLabel::create(Label::createWithTTF(ttfConfig, "Description"), [this](Object* sender) {
         if (this->_descDlg->isVisible())
         {
             // hide descDlg
@@ -487,7 +487,7 @@ void Scene3DTestScene::createUI()
             cb->setName(text);
         cb->setAnchorPoint(Vec2(0, 0.5));
         cb->setScale(0.8f);
-        cb->addClickEventListener([this](Ref* sender) {
+        cb->addClickEventListener([this](Object* sender) {
             auto index  = static_cast<Node*>(sender)->getTag();
             auto camera = this->_gameCameras[index];
             camera->setVisible(!camera->isVisible());
@@ -571,7 +571,7 @@ void Scene3DTestScene::createPlayerDlg()
     item->setScale(1.5);
     item->setAnchorPoint(itemAnchor);
     item->setPosition(itemPos);
-    item->addClickEventListener([this](Ref* sender) { this->_detailDlg->setVisible(!this->_detailDlg->isVisible()); });
+    item->addClickEventListener([this](Object* sender) { this->_detailDlg->setVisible(!this->_detailDlg->isVisible()); });
     _playerDlg->addChild(item);
 
     // second, add 3d actor, which on dialog layer
@@ -587,7 +587,7 @@ void Scene3DTestScene::createPlayerDlg()
     zoomIn->setScale(0.5);
     zoomIn->setAnchorPoint(Vec2(1, 1));
     zoomIn->setPosition(Vec2(bgSize.width / 2 - margin / 2, bgSize.height - margin));
-    zoomIn->addClickEventListener([girl](Ref* sender) { girl->setScale(girl->getScale() * 2); });
+    zoomIn->addClickEventListener([girl](Object* sender) { girl->setScale(girl->getScale() * 2); });
     zoomIn->setTitleText("Zoom In");
     zoomIn->setName("Zoom In");
     zoomIn->setCameraMask(s_CM[LAYER_TOP]);
@@ -597,7 +597,7 @@ void Scene3DTestScene::createPlayerDlg()
     zoomOut->setScale(0.5);
     zoomOut->setAnchorPoint(Vec2(0, 1));
     zoomOut->setPosition(Vec2(bgSize.width / 2 + margin / 2, bgSize.height - margin));
-    zoomOut->addClickEventListener([girl](Ref* sender) { girl->setScale(girl->getScale() / 2); });
+    zoomOut->addClickEventListener([girl](Object* sender) { girl->setScale(girl->getScale() / 2); });
     zoomOut->setTitleText("Zoom Out");
     zoomOut->setName("Zoom Out");
     zoomOut->setCameraMask(s_CM[LAYER_TOP]);
@@ -608,7 +608,7 @@ void Scene3DTestScene::createPlayerDlg()
     slider->setScale9Enabled(true);
     slider->setPosition(Vec2(bgSize.width / 2, margin));
     slider->setContentSize(Size(bgSize.width - margin, slider->getContentSize().height));
-    slider->addEventListener([girl, slider](Ref* sender, ui::Slider::EventType type) {
+    slider->addEventListener([girl, slider](Object* sender, ui::Slider::EventType type) {
         girl->setRotation3D(Vec3(0, 360 * slider->getPercent() / 100, 0));
     });
     slider->setName("Slider");
@@ -644,7 +644,7 @@ void Scene3DTestScene::createDetailDlg()
     capture->setScale(0.5);
     capture->setAnchorPoint(Vec2(0.5, 0));
     capture->setPosition(Vec2(dlgSize.width / 3, margin));
-    capture->addClickEventListener([this](Ref* sender) {
+    capture->addClickEventListener([this](Object* sender) {
         Director::getInstance()->getTextureCache()->removeTextureForKey(_snapshotFile);
         _osdScene->removeChildByTag(SNAPSHOT_TAG);
         _snapshotFile = "CaptureScreenTest.png";
@@ -672,7 +672,7 @@ void Scene3DTestScene::createDetailDlg()
     remove->setScale(0.5);
     remove->setAnchorPoint(Vec2(0.5, 0));
     remove->setPosition(Vec2(dlgSize.width * 2 / 3, margin));
-    remove->addClickEventListener([this](Ref* sender) { _osdScene->removeChildByTag(SNAPSHOT_TAG); });
+    remove->addClickEventListener([this](Object* sender) { _osdScene->removeChildByTag(SNAPSHOT_TAG); });
     remove->setTitleText("Del Snapshot");
     remove->setName("Del Snapshot");
     _detailDlg->addChild(remove);
@@ -817,7 +817,7 @@ void Scene3DTestScene::createDescDlg()
         btn->setAnchorPoint(Vec2(1, 0));
         btn->setPosition(btnPos);
         btnPos.y += 20;
-        btn->addClickEventListener([this, applyCurSkin](Ref* sender) {
+        btn->addClickEventListener([this, applyCurSkin](Object* sender) {
             auto index = static_cast<Node*>(sender)->getTag();
             if (index < SkinType::MAX_TYPE)
             {

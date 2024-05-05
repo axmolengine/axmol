@@ -109,7 +109,7 @@ HttpClientTest::~HttpClientTest()
     HttpClient::destroyInstance();
 }
 
-void HttpClientTest::onMenuGetTestClicked(ax::Ref* sender)
+void HttpClientTest::onMenuGetTestClicked(ax::Object* sender)
 {
     // test 1
     {
@@ -165,7 +165,7 @@ void HttpClientTest::onMenuGetTestClicked(ax::Ref* sender)
     _labelStatusCode->setString("waiting...");
 }
 
-void HttpClientTest::onMenuPatchTestClicked(Ref* sender)
+void HttpClientTest::onMenuPatchTestClicked(Object* sender)
 {
     // test 1
     {
@@ -204,7 +204,7 @@ void HttpClientTest::onMenuPatchTestClicked(Ref* sender)
     _labelStatusCode->setString("waiting...");
 }
 
-void HttpClientTest::onMenuPostTestClicked(ax::Ref* sender)
+void HttpClientTest::onMenuPostTestClicked(ax::Object* sender)
 {
     // test 1
     {
@@ -242,7 +242,7 @@ void HttpClientTest::onMenuPostTestClicked(ax::Ref* sender)
     _labelStatusCode->setString("waiting...");
 }
 
-void HttpClientTest::onMenuPostBinaryTestClicked(ax::Ref* sender)
+void HttpClientTest::onMenuPostBinaryTestClicked(ax::Object* sender)
 {
     HttpRequest* request = new HttpRequest();
     request->setUrl("https://httpbin.org/post");
@@ -260,7 +260,7 @@ void HttpClientTest::onMenuPostBinaryTestClicked(ax::Ref* sender)
     _labelStatusCode->setString("waiting...");
 }
 
-void HttpClientTest::onMenuPutTestClicked(Ref* sender)
+void HttpClientTest::onMenuPutTestClicked(Object* sender)
 {
     // test 1
     {
@@ -299,7 +299,7 @@ void HttpClientTest::onMenuPutTestClicked(Ref* sender)
     _labelStatusCode->setString("waiting...");
 }
 
-void HttpClientTest::onMenuDeleteTestClicked(Ref* sender)
+void HttpClientTest::onMenuDeleteTestClicked(Object* sender)
 {
     // test 1
     {
@@ -411,7 +411,7 @@ HttpClientClearRequestsTest::~HttpClientClearRequestsTest()
     HttpClient::destroyInstance();
 }
 
-void HttpClientClearRequestsTest::onMenuCancelAllClicked(ax::Ref* sender)
+void HttpClientClearRequestsTest::onMenuCancelAllClicked(ax::Object* sender)
 {
     for (int i = 0; i < 10; i++)
     {
@@ -439,7 +439,7 @@ void HttpClientClearRequestsTest::onMenuCancelAllClicked(ax::Ref* sender)
     _labelStatusCode->setString("waiting...");
 }
 
-void HttpClientClearRequestsTest::onMenuCancelSomeClicked(ax::Ref* sender)
+void HttpClientClearRequestsTest::onMenuCancelSomeClicked(ax::Object* sender)
 {
     // test 1
     for (int i = 0; i < 10; i++)

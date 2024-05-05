@@ -26,7 +26,7 @@
 #ifndef __CCEVENT_H__
 #define __CCEVENT_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "platform/PlatformMacros.h"
 
 /**
@@ -41,7 +41,7 @@ class Node;
 /** @class Event
  * @brief Base class of all kinds of events.
  */
-class AX_DLL Event : public Ref
+class AX_DLL Event : public Object
 {
 public:
     /** Type Event type.*/

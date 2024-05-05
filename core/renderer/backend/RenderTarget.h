@@ -1,12 +1,12 @@
 #pragma once
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "Texture.h"
 #include <assert.h>
 
 NS_AX_BACKEND_BEGIN
 
-class RenderTarget : public ax::Ref
+class RenderTarget : public ax::Object
 {
 public:
     struct RenderBuffer

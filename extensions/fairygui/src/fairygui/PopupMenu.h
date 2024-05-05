@@ -12,7 +12,7 @@ class GComponent;
 class GButton;
 class GList;
 
-class PopupMenu : public ax::Ref
+class PopupMenu : public ax::Object
 {
 public:
     static PopupMenu* create(const std::string& resourceURL);

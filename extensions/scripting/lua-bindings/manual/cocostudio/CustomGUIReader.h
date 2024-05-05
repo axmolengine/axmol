@@ -31,7 +31,7 @@ USING_NS_AX;
 
 namespace cocostudio
 {
-class CustomGUIReader : public Ref
+class CustomGUIReader : public Object
 {
 public:
     CustomGUIReader();
@@ -41,9 +41,9 @@ public:
 
     void init(std::string& className, int createFunc, int setPropsFunc);
 
-    Ref* createInstance();
+    Object* createInstance();
 
-    void setCustomProps(std::string_view classType, ax::Ref* widget, const rapidjson::Value& customOptions);
+    void setCustomProps(std::string_view classType, ax::Object* widget, const rapidjson::Value& customOptions);
 
 private:
     std::string _className;

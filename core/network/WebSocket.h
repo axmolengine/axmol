@@ -111,7 +111,7 @@ public:
         CLOSED,     /** &lt; value 3 */
     };
 
-    class Event : public ax::Ref
+    class Event : public ax::Object
     {
     public:
         enum class Type

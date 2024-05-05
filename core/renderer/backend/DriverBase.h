@@ -32,7 +32,7 @@
 #include "DepthStencilState.h"
 #include "ShaderCache.h"
 
-#include "base/Ref.h"
+#include "base/Object.h"
 
 #include <string>
 

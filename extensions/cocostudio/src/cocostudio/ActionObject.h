@@ -40,7 +40,7 @@ struct stExpCocoNode;
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ActionObject : public ax::Ref
+class CCS_DLL ActionObject : public ax::Object
 {
 public:
     /**
@@ -163,9 +163,9 @@ public:
     void updateToFrameByTime(float fTime);
 
     /*init properties with a json dictionary*/
-    void initWithDictionary(const rapidjson::Value& dic, ax::Ref* root);
+    void initWithDictionary(const rapidjson::Value& dic, ax::Object* root);
 
-    void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode, ax::Ref* root);
+    void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode, ax::Object* root);
 
     /*scheduler update function*/
     void simulationActionUpdate(float dt);

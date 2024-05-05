@@ -526,7 +526,7 @@ int lua_ax_studio_ActionFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFrame:ActionFrame",argc, 0);
@@ -548,7 +548,7 @@ static int lua_ax_studio_ActionFrame_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ActionFrame(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ActionFrame");
-    tolua_cclass(tolua_S,"ActionFrame","ccs.ActionFrame","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ActionFrame","ccs.ActionFrame","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ActionFrame");
         tolua_function(tolua_S,"new",lua_ax_studio_ActionFrame_constructor);
@@ -740,7 +740,7 @@ int lua_ax_studio_ActionMoveFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionMoveFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionMoveFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionMoveFrame:ActionMoveFrame",argc, 0);
@@ -1044,7 +1044,7 @@ int lua_ax_studio_ActionScaleFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionScaleFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionScaleFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionScaleFrame:ActionScaleFrame",argc, 0);
@@ -1262,7 +1262,7 @@ int lua_ax_studio_ActionRotationFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionRotationFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionRotationFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionRotationFrame:ActionRotationFrame",argc, 0);
@@ -1469,7 +1469,7 @@ int lua_ax_studio_ActionFadeFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionFadeFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionFadeFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFadeFrame:ActionFadeFrame",argc, 0);
@@ -1676,7 +1676,7 @@ int lua_ax_studio_ActionTintFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionTintFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionTintFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTintFrame:ActionTintFrame",argc, 0);
@@ -2563,7 +2563,7 @@ int lua_ax_studio_ActionObject_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionObject");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionObject");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:ActionObject",argc, 0);
@@ -2585,7 +2585,7 @@ static int lua_ax_studio_ActionObject_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ActionObject(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ActionObject");
-    tolua_cclass(tolua_S,"ActionObject","ccs.ActionObject","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ActionObject","ccs.ActionObject","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ActionObject");
         tolua_function(tolua_S,"new",lua_ax_studio_ActionObject_constructor);
@@ -2957,7 +2957,7 @@ static int lua_ax_studio_ActionManagerEx_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ActionManagerEx(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ActionManagerEx");
-    tolua_cclass(tolua_S,"ActionManagerEx","ccs.ActionManagerEx","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ActionManagerEx","ccs.ActionManagerEx","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ActionManagerEx");
         tolua_function(tolua_S,"getActionByName",lua_ax_studio_ActionManagerEx_getActionByName);
@@ -3129,7 +3129,7 @@ int lua_ax_studio_BaseData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.BaseData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.BaseData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BaseData:BaseData",argc, 0);
@@ -3151,7 +3151,7 @@ static int lua_ax_studio_BaseData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_BaseData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.BaseData");
-    tolua_cclass(tolua_S,"BaseData","ccs.BaseData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"BaseData","ccs.BaseData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"BaseData");
         tolua_function(tolua_S,"new",lua_ax_studio_BaseData_constructor);
@@ -3309,7 +3309,7 @@ int lua_ax_studio_DisplayData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.DisplayData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.DisplayData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayData:DisplayData",argc, 0);
@@ -3331,7 +3331,7 @@ static int lua_ax_studio_DisplayData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_DisplayData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.DisplayData");
-    tolua_cclass(tolua_S,"DisplayData","ccs.DisplayData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"DisplayData","ccs.DisplayData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"DisplayData");
         tolua_function(tolua_S,"new",lua_ax_studio_DisplayData_constructor);
@@ -3453,7 +3453,7 @@ int lua_ax_studio_SpriteDisplayData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.SpriteDisplayData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.SpriteDisplayData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SpriteDisplayData:SpriteDisplayData",argc, 0);
@@ -3546,7 +3546,7 @@ int lua_ax_studio_ArmatureDisplayData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ArmatureDisplayData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ArmatureDisplayData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDisplayData:ArmatureDisplayData",argc, 0);
@@ -3638,7 +3638,7 @@ int lua_ax_studio_ParticleDisplayData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ParticleDisplayData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ParticleDisplayData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ParticleDisplayData:ParticleDisplayData",argc, 0);
@@ -3877,7 +3877,7 @@ int lua_ax_studio_BoneData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.BoneData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.BoneData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneData:BoneData",argc, 0);
@@ -4119,7 +4119,7 @@ int lua_ax_studio_ArmatureData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ArmatureData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ArmatureData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureData:ArmatureData",argc, 0);
@@ -4141,7 +4141,7 @@ static int lua_ax_studio_ArmatureData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ArmatureData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ArmatureData");
-    tolua_cclass(tolua_S,"ArmatureData","ccs.ArmatureData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ArmatureData","ccs.ArmatureData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ArmatureData");
         tolua_function(tolua_S,"new",lua_ax_studio_ArmatureData_constructor);
@@ -4264,7 +4264,7 @@ int lua_ax_studio_FrameData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.FrameData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.FrameData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.FrameData:FrameData",argc, 0);
@@ -4504,7 +4504,7 @@ int lua_ax_studio_MovementBoneData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.MovementBoneData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.MovementBoneData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.MovementBoneData:MovementBoneData",argc, 0);
@@ -4526,7 +4526,7 @@ static int lua_ax_studio_MovementBoneData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_MovementBoneData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.MovementBoneData");
-    tolua_cclass(tolua_S,"MovementBoneData","ccs.MovementBoneData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"MovementBoneData","ccs.MovementBoneData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"MovementBoneData");
         tolua_function(tolua_S,"new",lua_ax_studio_MovementBoneData_constructor);
@@ -4699,7 +4699,7 @@ int lua_ax_studio_MovementData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.MovementData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.MovementData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.MovementData:MovementData",argc, 0);
@@ -4721,7 +4721,7 @@ static int lua_ax_studio_MovementData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_MovementData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.MovementData");
-    tolua_cclass(tolua_S,"MovementData","ccs.MovementData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"MovementData","ccs.MovementData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"MovementData");
         tolua_function(tolua_S,"new",lua_ax_studio_MovementData_constructor);
@@ -4940,7 +4940,7 @@ int lua_ax_studio_AnimationData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.AnimationData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.AnimationData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AnimationData:AnimationData",argc, 0);
@@ -4962,7 +4962,7 @@ static int lua_ax_studio_AnimationData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_AnimationData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.AnimationData");
-    tolua_cclass(tolua_S,"AnimationData","ccs.AnimationData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"AnimationData","ccs.AnimationData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"AnimationData");
         tolua_function(tolua_S,"new",lua_ax_studio_AnimationData_constructor);
@@ -5132,7 +5132,7 @@ int lua_ax_studio_ContourData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ContourData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ContourData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ContourData:ContourData",argc, 0);
@@ -5154,7 +5154,7 @@ static int lua_ax_studio_ContourData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ContourData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ContourData");
-    tolua_cclass(tolua_S,"ContourData","ccs.ContourData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ContourData","ccs.ContourData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ContourData");
         tolua_function(tolua_S,"new",lua_ax_studio_ContourData_constructor);
@@ -5373,7 +5373,7 @@ int lua_ax_studio_TextureData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.TextureData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.TextureData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.TextureData:TextureData",argc, 0);
@@ -5395,7 +5395,7 @@ static int lua_ax_studio_TextureData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_TextureData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.TextureData");
-    tolua_cclass(tolua_S,"TextureData","ccs.TextureData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"TextureData","ccs.TextureData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"TextureData");
         tolua_function(tolua_S,"new",lua_ax_studio_TextureData_constructor);
@@ -5779,7 +5779,7 @@ int lua_ax_studio_Tween_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.Tween");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.Tween");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Tween:Tween",argc, 0);
@@ -6777,7 +6777,7 @@ int lua_ax_studio_DisplayManager_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.DisplayManager");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.DisplayManager");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:DisplayManager",argc, 0);
@@ -6799,7 +6799,7 @@ static int lua_ax_studio_DisplayManager_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_DisplayManager(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.DisplayManager");
-    tolua_cclass(tolua_S,"DisplayManager","ccs.DisplayManager","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"DisplayManager","ccs.DisplayManager","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"DisplayManager");
         tolua_function(tolua_S,"new",lua_ax_studio_DisplayManager_constructor);
@@ -8566,7 +8566,7 @@ int lua_ax_studio_Bone_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.Bone");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.Bone");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:Bone",argc, 0);
@@ -9534,7 +9534,7 @@ int lua_ax_studio_ArmatureAnimation_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ArmatureAnimation");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ArmatureAnimation");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:ArmatureAnimation",argc, 0);
@@ -10698,7 +10698,7 @@ static int lua_ax_studio_ArmatureDataManager_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ArmatureDataManager(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ArmatureDataManager");
-    tolua_cclass(tolua_S,"ArmatureDataManager","ccs.ArmatureDataManager","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ArmatureDataManager","ccs.ArmatureDataManager","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ArmatureDataManager");
         tolua_function(tolua_S,"init",lua_ax_studio_ArmatureDataManager_init);
@@ -11905,7 +11905,7 @@ int lua_ax_studio_Armature_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.Armature");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.Armature");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:Armature",argc, 0);
@@ -12304,7 +12304,7 @@ int lua_ax_studio_Skin_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.Skin");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.Skin");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Skin:Skin",argc, 0);
@@ -12897,7 +12897,7 @@ int lua_ax_studio_ComAttribute_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cocostudio::ComAttribute::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComAttribute:createInstance",argc, 0);
@@ -14385,7 +14385,7 @@ int lua_ax_studio_ComAudio_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cocostudio::ComAudio::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComAudio:createInstance",argc, 0);
@@ -14502,7 +14502,7 @@ int lua_ax_studio_ComController_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cocostudio::ComController::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComController:createInstance",argc, 0);
@@ -14571,7 +14571,7 @@ int lua_ax_studio_ComController_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ComController");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ComController");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComController:ComController",argc, 0);
@@ -14726,7 +14726,7 @@ int lua_ax_studio_ComRender_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cocostudio::ComRender::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComRender:createInstance",argc, 0);
@@ -15132,7 +15132,7 @@ static int lua_ax_studio_GUIReader_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_GUIReader(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.GUIReader");
-    tolua_cclass(tolua_S,"GUIReader","ccs.GUIReader","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"GUIReader","ccs.GUIReader","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"GUIReader");
         tolua_function(tolua_S,"widgetFromJsonFile",lua_ax_studio_GUIReader_widgetFromJsonFile);
@@ -15244,7 +15244,7 @@ int lua_ax_studio_SceneReader_setTarget(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (ax::Ref *, void *)> arg0;
+        std::function<void (ax::Object *, void *)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -16831,7 +16831,7 @@ static int lua_ax_studio_Frame_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_Frame(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.Frame");
-    tolua_cclass(tolua_S,"Frame","ccs.Frame","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Frame","ccs.Frame","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Frame");
         tolua_function(tolua_S,"setFrameIndex",lua_ax_studio_Frame_setFrameIndex);
@@ -17011,7 +17011,7 @@ int lua_ax_studio_VisibleFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.VisibleFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.VisibleFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.VisibleFrame:VisibleFrame",argc, 0);
@@ -17202,7 +17202,7 @@ int lua_ax_studio_TextureFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.TextureFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.TextureFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.TextureFrame:TextureFrame",argc, 0);
@@ -17393,7 +17393,7 @@ int lua_ax_studio_RotationFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.RotationFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.RotationFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.RotationFrame:RotationFrame",argc, 0);
@@ -17681,7 +17681,7 @@ int lua_ax_studio_SkewFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.SkewFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.SkewFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SkewFrame:SkewFrame",argc, 0);
@@ -17777,7 +17777,7 @@ int lua_ax_studio_RotationSkewFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.RotationSkewFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.RotationSkewFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.RotationSkewFrame:RotationSkewFrame",argc, 0);
@@ -18160,7 +18160,7 @@ int lua_ax_studio_PositionFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.PositionFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.PositionFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.PositionFrame:PositionFrame",argc, 0);
@@ -18502,7 +18502,7 @@ int lua_ax_studio_ScaleFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ScaleFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ScaleFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ScaleFrame:ScaleFrame",argc, 0);
@@ -18696,7 +18696,7 @@ int lua_ax_studio_AnchorPointFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.AnchorPointFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.AnchorPointFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AnchorPointFrame:AnchorPointFrame",argc, 0);
@@ -19278,7 +19278,7 @@ int lua_ax_studio_InnerActionFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.InnerActionFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.InnerActionFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.InnerActionFrame:InnerActionFrame",argc, 0);
@@ -19477,7 +19477,7 @@ int lua_ax_studio_ColorFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ColorFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ColorFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ColorFrame:ColorFrame",argc, 0);
@@ -19668,7 +19668,7 @@ int lua_ax_studio_AlphaFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.AlphaFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.AlphaFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AlphaFrame:AlphaFrame",argc, 0);
@@ -19906,7 +19906,7 @@ int lua_ax_studio_EventFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.EventFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.EventFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.EventFrame:EventFrame",argc, 0);
@@ -20098,7 +20098,7 @@ int lua_ax_studio_ZOrderFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ZOrderFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ZOrderFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ZOrderFrame:ZOrderFrame",argc, 0);
@@ -20289,7 +20289,7 @@ int lua_ax_studio_BlendFuncFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.BlendFuncFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.BlendFuncFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BlendFuncFrame:BlendFuncFrame",argc, 0);
@@ -20480,7 +20480,7 @@ int lua_ax_studio_PlayableFrame_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.PlayableFrame");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.PlayableFrame");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.PlayableFrame:PlayableFrame",argc, 0);
@@ -21212,7 +21212,7 @@ int lua_ax_studio_Timeline_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.Timeline");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.Timeline");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:Timeline",argc, 0);
@@ -21234,7 +21234,7 @@ static int lua_ax_studio_Timeline_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_Timeline(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.Timeline");
-    tolua_cclass(tolua_S,"Timeline","ccs.Timeline","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Timeline","ccs.Timeline","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Timeline");
         tolua_function(tolua_S,"new",lua_ax_studio_Timeline_constructor);
@@ -21466,7 +21466,7 @@ int lua_ax_studio_ActionTimelineData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionTimelineData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionTimelineData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineData:ActionTimelineData",argc, 0);
@@ -21488,7 +21488,7 @@ static int lua_ax_studio_ActionTimelineData_finalize(lua_State* tolua_S)
 int lua_register_ax_studio_ActionTimelineData(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ccs.ActionTimelineData");
-    tolua_cclass(tolua_S,"ActionTimelineData","ccs.ActionTimelineData","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"ActionTimelineData","ccs.ActionTimelineData","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"ActionTimelineData");
         tolua_function(tolua_S,"new",lua_ax_studio_ActionTimelineData_constructor);
@@ -23149,7 +23149,7 @@ int lua_ax_studio_ActionTimeline_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionTimeline");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionTimeline");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:ActionTimeline",argc, 0);
@@ -23523,7 +23523,7 @@ int lua_ax_studio_ActionTimelineNode_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionTimelineNode");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ActionTimelineNode");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineNode:ActionTimelineNode",argc, 0);
@@ -24575,7 +24575,7 @@ int lua_ax_studio_BoneNode_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.BoneNode");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.BoneNode");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:BoneNode",argc, 0);
@@ -24891,7 +24891,7 @@ int lua_ax_studio_SkeletonNode_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.SkeletonNode");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.SkeletonNode");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SkeletonNode:SkeletonNode",argc, 0);
@@ -25146,7 +25146,7 @@ int lua_ax_studio_ComExtensionData_createInstance(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cocostudio::ComExtensionData::createInstance();
-        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComExtensionData:createInstance",argc, 0);
@@ -25215,7 +25215,7 @@ int lua_ax_studio_ComExtensionData_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ccs.ComExtensionData");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ccs.ComExtensionData");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComExtensionData:ComExtensionData",argc, 0);

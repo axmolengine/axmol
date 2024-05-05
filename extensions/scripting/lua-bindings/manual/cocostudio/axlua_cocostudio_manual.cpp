@@ -38,7 +38,7 @@
 
 using namespace cocostudio;
 
-class LuaArmatureWrapper : public Ref
+class LuaArmatureWrapper : public Object
 {
 public:
     LuaArmatureWrapper();
@@ -472,7 +472,7 @@ static int axlua_ActionTimeline_setFrameEventCallFunc(lua_State* L)
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
         self->setFrameEventCallFunc([=](cocostudio::timeline::Frame* frame) {
             auto stack = LuaEngine::getInstance()->getLuaStack();
-            toluafix_pushusertype_ccobject(stack->getLuaState(), frame->_ID, &frame->_luaID, (void*)frame,
+            toluafix_pushusertype_object(stack->getLuaState(), frame->_ID, &frame->_luaID, (void*)frame,
                                            getLuaTypeName(frame, "ccs.Frame"));
             stack->executeFunctionByHandler(handler, 1);
         });
@@ -575,7 +575,7 @@ int lua_register_axis_coco_studio_CustomGUIReader(lua_State* L)
     tolua_beginmodule(L, "ccs");
 
     tolua_usertype(L, "ccs.CustomGUIReader");
-    tolua_cclass(L, "CustomGUIReader", "ccs.CustomGUIReader", "ax.Ref", nullptr);
+    tolua_cclass(L, "CustomGUIReader", "ccs.CustomGUIReader", "ax.Object", nullptr);
 
     tolua_beginmodule(L, "CustomGUIReader");
     tolua_function(L, "create", axlua_CustomGUIReader_create);

@@ -48,7 +48,7 @@ typedef enum
     SLIDER_PERCENTCHANGED
 } SliderEventType;
 
-typedef void (Ref::*SEL_SlidPercentChangedEvent)(Ref*, SliderEventType);
+typedef void (Object::*SEL_SlidPercentChangedEvent)(Object*, SliderEventType);
 #define sliderpercentchangedselector(_SELECTOR) (SEL_SlidPercentChangedEvent)(&_SELECTOR)
 
 /**
@@ -70,7 +70,7 @@ public:
         ON_SLIDEBALL_UP,
         ON_SLIDEBALL_CANCEL
     };
-    typedef std::function<void(Ref*, EventType)> ccSliderCallback;
+    typedef std::function<void(Object*, EventType)> ccSliderCallback;
     /**
      * Default constructor.
      * @js ctor
@@ -336,7 +336,7 @@ protected:
     Rect _capInsetsBarRenderer;
     Rect _capInsetsProgressBarRenderer;
 
-    Ref* _sliderEventListener;
+    Object* _sliderEventListener;
 
     ccSliderCallback _eventCallback;
 

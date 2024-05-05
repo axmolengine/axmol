@@ -84,7 +84,7 @@ protected:
     void initSliders();
     virtual void initSprites(){};
     void makeSprites(const std::string* list, const int count, const float y);
-    void changeEpsilon(Ref* pSender, ax::ui::Slider::EventType type);
+    void changeEpsilon(Object* pSender, ax::ui::Slider::EventType type);
     void updateLabel(const ax::Sprite* sp, const ax::PolygonInfo& pinfo);
 };
 

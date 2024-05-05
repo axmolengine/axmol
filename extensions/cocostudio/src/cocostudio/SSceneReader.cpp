@@ -212,7 +212,7 @@ Node* SceneReader::nodeByTag(Node* parent, int tag)
 ax::Component* SceneReader::createComponent(std::string_view classname)
 {
     std::string name = this->getComponentClassName(classname);
-    Ref* object      = ObjectFactory::getInstance()->createObject(name);
+    Object* object      = ObjectFactory::getInstance()->createObject(name);
 
     return dynamic_cast<Component*>(object);
 }
@@ -455,7 +455,7 @@ ax::Node* SceneReader::createObject(CocoLoader* cocoLoader,
     return nullptr;
 }
 
-void SceneReader::setTarget(const std::function<void(ax::Ref* obj, void* doc)>& selector)
+void SceneReader::setTarget(const std::function<void(ax::Object* obj, void* doc)>& selector)
 {
     _fnSelector = selector;
 }

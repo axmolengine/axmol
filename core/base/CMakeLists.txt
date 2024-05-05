@@ -41,7 +41,7 @@ set(_AX_BASE_HEADER
     base/Enums.h
     base/AsyncTaskPool.h
     base/Random.h
-    base/Ref.h
+    base/Object.h
     base/Profiling.h
     base/ObjectFactory.h
     base/Properties.h
@@ -113,7 +113,7 @@ set(_AX_BASE_SRC
     base/NS.cpp
     base/Profiling.cpp
     base/Properties.cpp
-    base/Ref.cpp
+    base/Object.cpp
     base/Scheduler.cpp
     base/ScriptSupport.cpp
     base/Touch.cpp

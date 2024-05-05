@@ -1,0 +1,124 @@
+apply plugin: 'com.android.application'
+apply from: project(':libaxmol').projectDir.toString() + "/axutils.gradle"
+
+android {
+    namespace "org.axmol.unit_tests"
+    compileSdk PROP_COMPILE_SDK_VERSION.toInteger()
+
+    // Setup native build tools: ndk & cmake
+    def nbtInfo = axutils.findNativeBuildTools(project)
+    ndkVersion = nbtInfo[0]
+    if(nbtInfo[1]) {
+        ndkPath = nbtInfo[1]
+    }
+    def cmakeVer = nbtInfo[2]
+    def cmakeOptions = Eval.me(nbtInfo[3])
+
+    defaultConfig {
+        applicationId "org.axmol.unit_tests"
+        minSdkVersion PROP_MIN_SDK_VERSION
+        targetSdkVersion PROP_TARGET_SDK_VERSION
+        versionCode 1
+        versionName "1.0"
+
+        externalNativeBuild {
+            cmake {
+                targets 'unit-tests'
+                arguments = []
+                arguments.addAll(cmakeOptions)
+                cppFlags "-frtti -fexceptions -fsigned-char"
+            }
+        }
+
+        ndk {
+            abiFilters = __1K_ARCHS.split(':').collect{it as String}
+        }
+    }
+
+    sourceSets.main {
+        java.srcDir "src"
+        res.srcDir "res"
+        manifest.srcFile "AndroidManifest.xml"
+        assets.srcDir "build/assets"
+    }
+
+    externalNativeBuild {
+        cmake {
+            version "$cmakeVer"
+            path "../../CMakeLists.txt"
+        }
+    }
+
+    signingConfigs {
+       release {
+            if (project.hasProperty("KEY_STORE_FILE")) {
+                storeFile file(KEY_STORE_FILE)
+                storePassword KEY_STORE_PASSWORD
+                keyAlias KEY_ALIAS
+                keyPassword KEY_PASSWORD
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (project.hasProperty("KEY_STORE_FILE")) {
+                signingConfig signingConfigs.release
+            }
+        }
+
+        debug {
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+        }
+    }
+
+    aaptOptions {
+       noCompress 'mp3','ogg','wav','mp4','ttf','ttc'
+    }
+}
+
+android.applicationVariants.configureEach { variant ->
+    def variantName = variant.name.capitalize()
+    tasks.register("copy${variantName}ContentToAssets") {
+        doFirst {
+            delete "${projectDir}/build/assets"
+        }
+        doLast {
+            copy {
+                from "${projectDir}/../../Content"
+                into "${projectDir}/build/assets"
+                exclude "**/*.gz"
+            }
+            copy {
+                from "${projectDir}/build/runtime/axslc"
+                into "${projectDir}/build/assets/axslc"
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':libaxmol')
+}
+
+project.afterEvaluate {
+    android.applicationVariants.configureEach { variant ->
+        def variantName = variant.name.capitalize()
+        def externalNativeBuild = tasks.named("externalNativeBuild${variantName}")
+        if (externalNativeBuild) {
+            def copyContentToAssets = tasks.named("copy${variantName}ContentToAssets")
+            copyContentToAssets
+            copyContentToAssets.get().dependsOn externalNativeBuild
+            tasks.named("compile${variantName}JavaWithJavac").get().dependsOn copyContentToAssets
+        }
+    }
+}

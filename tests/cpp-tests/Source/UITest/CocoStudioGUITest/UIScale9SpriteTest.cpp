@@ -782,7 +782,7 @@ bool UIS9Flip::init()
         toggleFlipXButton->setTitleText("Toggle FlipX");
         toggleFlipXButton->setPosition(flipXSprite->getPosition() +
                                        Vec2(0.0f, -20 - flipXSprite->getContentSize().height / 2));
-        toggleFlipXButton->addClickEventListener([=](Ref*) {
+        toggleFlipXButton->addClickEventListener([=](Object*) {
             flipXSprite->setFlippedX(!flipXSprite->isFlippedX());
             if (flipXSprite->isFlippedX())
             {
@@ -799,7 +799,7 @@ bool UIS9Flip::init()
         toggleFlipYButton->setTitleText("Toggle FlipY");
         toggleFlipYButton->setPosition(flipYSprite->getPosition() +
                                        Vec2(0.0f, -20 - flipYSprite->getContentSize().height / 2));
-        toggleFlipYButton->addClickEventListener([=](Ref*) {
+        toggleFlipYButton->addClickEventListener([=](Object*) {
             flipYSprite->setFlippedY(!flipYSprite->isFlippedY());
             if (flipYSprite->isFlippedY())
             {
@@ -816,7 +816,7 @@ bool UIS9Flip::init()
         toggleScale9Button->setTitleText("Toggle Scale9");
         toggleScale9Button->setPosition(normalSprite->getPosition() +
                                         Vec2(0.0f, -20 - normalSprite->getContentSize().height / 2));
-        toggleScale9Button->addClickEventListener([=](Ref*) {
+        toggleScale9Button->addClickEventListener([=](Object*) {
             flipXSprite->setScale9Enabled(!flipXSprite->isScale9Enabled());
             flipYSprite->setScale9Enabled(!flipYSprite->isScale9Enabled());
             if (flipXSprite->isScale9Enabled())
@@ -885,7 +885,7 @@ bool UIS9ChangeAnchorPoint::init()
         button1->setPosition(Vec2(winSize.width / 2 - 100, winSize.height / 2 - 50));
         button1->setName("button2");
         button1->setTitleText("Vec(0,0)");
-        button1->addTouchEventListener([=](Ref*, Widget::TouchEventType type) {
+        button1->addTouchEventListener([=](Object*, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
                 normalSprite->setAnchorPoint(Vec2::ZERO);
@@ -903,7 +903,7 @@ bool UIS9ChangeAnchorPoint::init()
         button2->setPosition(Vec2(winSize.width / 2 + 100, winSize.height / 2 - 50));
         button2->setName("button2");
         button2->setTitleText("Vec(1,1)");
-        button2->addTouchEventListener([=](Ref*, Widget::TouchEventType type) {
+        button2->addTouchEventListener([=](Object*, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
                 normalSprite->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
@@ -990,7 +990,7 @@ bool UIS9BatchTest::init()
         addSpriteButton->setPosition(Vec2(winSize.width / 2 - 50, winSize.height - 100));
         addSpriteButton->setTitleText("Add Normal Sprite");
         std::srand((unsigned)time(nullptr));
-        addSpriteButton->addClickEventListener([=](Ref*) {
+        addSpriteButton->addClickEventListener([=](Object*) {
             auto spriteFrameName = spriteFrameNameArray[rand() % 2];
             auto sprite          = Sprite::createWithSpriteFrameName(spriteFrameName);
             sprite->setPosition(Vec2(rand() % (int)winSize.width + 50.0f, winSize.height / 2));
@@ -1002,7 +1002,7 @@ bool UIS9BatchTest::init()
             ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         addSliceSpriteButton->setPosition(Vec2(winSize.width / 2 + 50, winSize.height - 100));
         addSliceSpriteButton->setTitleText("Add Slice Sprite");
-        addSliceSpriteButton->addClickEventListener([=](Ref*) {
+        addSliceSpriteButton->addClickEventListener([=](Object*) {
             int random           = rand() % 2;
             auto spriteFrameName = spriteFrameNameArray[random];
             auto sprite          = ui::Scale9Sprite::createWithSpriteFrameName(spriteFrameName);
@@ -1048,7 +1048,7 @@ bool UIS9ToggleRenderingTypeTest::init()
             ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         addSliceSpriteButton->setPosition(Vec2(winSize.width / 2, winSize.height - 100));
         addSliceSpriteButton->setTitleText("Slice Rendering");
-        addSliceSpriteButton->addClickEventListener([=](Ref*) {
+        addSliceSpriteButton->addClickEventListener([=](Object*) {
             if (blocks->getRenderingType() == Scale9Sprite::RenderingType::SLICE)
             {
                 blocks->setRenderingType(Scale9Sprite::RenderingType::SIMPLE);
@@ -1182,7 +1182,7 @@ bool UIS9GrayStateOpacityTest::init()
     return false;
 }
 
-void UIS9GrayStateOpacityTest::sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type)
+void UIS9GrayStateOpacityTest::sliderEvent(ax::Object* sender, ax::ui::Slider::EventType type)
 {
     if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {

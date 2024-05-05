@@ -27,7 +27,7 @@
 #ifndef __AX_PU_PARTICLE_3D_OBSERVER_H__
 #define __AX_PU_PARTICLE_3D_OBSERVER_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include <vector>
@@ -46,7 +46,7 @@ enum PUComparisionOperator
     CO_GREATER_THAN
 };
 
-class AX_EX_DLL PUObserver : public Ref
+class AX_EX_DLL PUObserver : public Object
 {
     friend class PUParticleSystem3D;
 

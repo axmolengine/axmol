@@ -28,7 +28,7 @@ THE SOFTWARE.
 #define __CCVECTOR_H__
 
 #include "base/Macros.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include <vector>
 #include <functional>
 #include <algorithm>  // for std::find
@@ -41,8 +41,8 @@ NS_AX_BEGIN
 
 /*
  * Similar to std::vector, but it will manage reference count automatically internally.
- * Which means it will invoke Ref::retain() when adding an element, and invoke Ref::release() when removing an element.
- * @warn The element should be `Ref` or its sub-class.
+ * Which means it will invoke Object::retain() when adding an element, and invoke Object::release() when removing an element.
+ * @warn The element should be `Object` or its sub-class.
  * @lua NA
  */
 template <class T>
@@ -110,7 +110,7 @@ public:
     /** Constructor. */
     Vector() : _data()
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector!");
+        static_assert(std::is_convertible<T, Object*>::value, "Invalid Type for ax::Vector!");
     }
 
     /**
@@ -119,7 +119,7 @@ public:
      */
     explicit Vector(ssize_t capacity) : _data()
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector!");
+        static_assert(std::is_convertible<T, Object*>::value, "Invalid Type for ax::Vector!");
         AXLOGINFO("In the default constructor with capacity of Vector.");
         reserve(capacity);
     }
@@ -143,7 +143,7 @@ public:
     /** Copy constructor. */
     Vector(const Vector& other)
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector!");
+        static_assert(std::is_convertible<T, Object*>::value, "Invalid Type for ax::Vector!");
         AXLOGINFO("In the copy constructor!");
         _data = other._data;
         addRefForAllObjects();
@@ -152,7 +152,7 @@ public:
     /** Constructor with std::move semantic. */
     Vector(Vector&& other)
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector!");
+        static_assert(std::is_convertible<T, Object*>::value, "Invalid Type for ax::Vector!");
         AXLOGINFO("In the move constructor of Vector!");
         _data = std::move(other._data);
     }

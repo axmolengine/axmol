@@ -65,7 +65,7 @@ enum ccScriptType
  * unique id
  * @js NA
  */
-class ScriptHandlerEntry : public Ref
+class ScriptHandlerEntry : public Object
 {
 public:
     /**
@@ -486,7 +486,7 @@ struct KeypadScriptData
 /**
  * For Lua, the CommonScriptData is used to find the Lua function pointer by the handler, then call the Lua function by
  * push the eventName, eventSource(if it not nullptr), eventSourceClassName(if it is nullptr or "", and the eventSource
- * is not nullptr,would give the default string "cc.Ref") into the Lua stack as the parameter when the common event such
+ * is not nullptr,would give the default string "cc.Object") into the Lua stack as the parameter when the common event such
  * as is triggered.
  * @js NA
  */
@@ -512,7 +512,7 @@ struct CommonScriptData
      * @lua NA
      * @js NA
      */
-    Ref* eventSource;
+    Object* eventSource;
     /**
      * The class name of source object trigger the event, could be nullptr.
      *
@@ -527,7 +527,7 @@ struct CommonScriptData
      * @lua NA
      * @js NA
      */
-    CommonScriptData(int inHandler, const char* inName, Ref* inSource = nullptr, const char* inClassName = nullptr)
+    CommonScriptData(int inHandler, const char* inName, Object* inSource = nullptr, const char* inClassName = nullptr)
         : handler(inHandler), eventSource(inSource)
     {
         if (nullptr == inName)
@@ -619,22 +619,22 @@ public:
     /**
      * Reflect the retain relationship to script scope
      */
-    virtual void retainScriptObject(Ref* /*owner*/, Ref* /*target*/) {}
+    virtual void retainScriptObject(Object* /*owner*/, Object* /*target*/) {}
 
     /**
      * Add the script object to root object
      */
-    virtual void rootScriptObject(Ref* /*target*/) {}
+    virtual void rootScriptObject(Object* /*target*/) {}
 
     /**
      * Reflect the release relationship to script scope
      */
-    virtual void releaseScriptObject(Ref* /*owner*/, Ref* /*target*/) {}
+    virtual void releaseScriptObject(Object* /*owner*/, Object* /*target*/) {}
 
     /**
      * Remove the script object from root object
      */
-    virtual void unrootScriptObject(Ref* /*target*/) {}
+    virtual void unrootScriptObject(Object* /*target*/) {}
 
     /**
      * Release all children native refs for the given node in script scope
@@ -644,7 +644,7 @@ public:
     /**
      * Release all native refs for the given owner in script scope
      */
-    virtual void releaseAllNativeRefs(ax::Ref* /*owner*/) {}
+    virtual void releaseAllNativeRefs(ax::Object* /*owner*/) {}
 
     /**
      * Remove script object,The specific meaning should refer to the ScriptType.
@@ -653,7 +653,7 @@ public:
      * @lua NA
      * @js NA
      */
-    virtual void removeScriptObjectByObject(Ref* /*obj*/) {}
+    virtual void removeScriptObjectByObject(Object* /*obj*/) {}
 
     /**
      * Remove script function handler, only LuaEngine class need to implement this function.
@@ -761,16 +761,16 @@ public:
     /** Root a Reference.
      It tells the Garbage Collector that the associated Scripting object should not be collected
      */
-    virtual void rootObject(Ref* /*obj*/) {}
+    virtual void rootObject(Object* /*obj*/) {}
 
     /** Unroot a Reference.
      It tells the Garbage Collector that the associated Scripting object can be collected
      */
-    virtual void unrootObject(Ref* /*obj*/) {}
+    virtual void unrootObject(Object* /*obj*/) {}
 
     /** Remove proxy for a native object
      */
-    virtual void removeObjectProxy(Ref* obj) {}
+    virtual void removeObjectProxy(Object* obj) {}
 
     /** Triggers the garbage collector */
     virtual void garbageCollect() {}

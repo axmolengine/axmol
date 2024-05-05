@@ -257,7 +257,7 @@ void LightTest::update(float delta)
     TestCase::update(delta);
 }
 
-void LightTest::SwitchLight(Ref* sender, LightType lightType)
+void LightTest::SwitchLight(Object* sender, LightType lightType)
 {
     switch (lightType)
     {

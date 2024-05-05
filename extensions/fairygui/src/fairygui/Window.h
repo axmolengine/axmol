@@ -7,7 +7,7 @@
 
 NS_FGUI_BEGIN
 
-class IUISource : public ax::Ref
+class IUISource : public ax::Object
 {
 public:
     virtual const std::string& getFileName() = 0;

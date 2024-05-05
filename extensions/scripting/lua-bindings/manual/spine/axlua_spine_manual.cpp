@@ -66,7 +66,7 @@ static int axlua_CCSkeletonAnimation_createWithFile(lua_State* L)
 
         int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(L, nID, pLuaID, (void*)tolua_ret, "sp.SkeletonAnimation");
+        toluafix_pushusertype_object(L, nID, pLuaID, (void*)tolua_ret, "sp.SkeletonAnimation");
         return 1;
     }
     else if (3 == argc)
@@ -86,7 +86,7 @@ static int axlua_CCSkeletonAnimation_createWithFile(lua_State* L)
 
         int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(L, nID, pLuaID, (void*)tolua_ret, "sp.SkeletonAnimation");
+        toluafix_pushusertype_object(L, nID, pLuaID, (void*)tolua_ret, "sp.SkeletonAnimation");
         return 1;
     }
 

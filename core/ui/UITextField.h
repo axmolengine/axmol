@@ -242,7 +242,7 @@ public:
     /**
      * A callback which would be called when a TextField event happens.
      */
-    typedef std::function<void(Ref*, EventType)> ccTextFieldCallback;
+    typedef std::function<void(Object*, EventType)> ccTextFieldCallback;
 
     /**
      * @brief Default constructor.
@@ -627,7 +627,7 @@ protected:
     float _touchHeight;
     bool _useTouchArea;
 
-    Ref* _textFieldEventListener;
+    Object* _textFieldEventListener;
     ccTextFieldCallback _eventCallback;
 
     bool _textFieldRendererAdaptDirty;

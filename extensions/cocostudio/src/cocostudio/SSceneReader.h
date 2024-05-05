@@ -63,7 +63,7 @@ public:
     static const char* sceneReaderVersion();
     ax::Node* createNodeWithSceneFile(std::string_view fileName,
                                            AttachComponentType attachComponent = AttachComponentType::EMPTY_NODE);
-    void setTarget(const std::function<void(ax::Ref* obj, void* doc)>& selector);
+    void setTarget(const std::function<void(ax::Object* obj, void* doc)>& selector);
     ax::Node* getNodeByTag(int nTag);
     inline AttachComponentType getAttachComponentType() { return _attachComponent; }
     SceneReader();
@@ -90,7 +90,7 @@ private:
 
 private:
     static SceneReader* s_sharedReader;
-    std::function<void(ax::Ref* obj, void* doc)> _fnSelector;
+    std::function<void(ax::Object* obj, void* doc)> _fnSelector;
     ax::Node* _node;
     AttachComponentType _attachComponent;
 };

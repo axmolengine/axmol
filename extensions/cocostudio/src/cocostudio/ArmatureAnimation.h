@@ -43,8 +43,8 @@ enum MovementEventType
 class Armature;
 class Bone;
 
-typedef void (ax::Ref::*SEL_MovementEventCallFunc)(Armature*, MovementEventType, std::string_view);
-typedef void (ax::Ref::*SEL_FrameEventCallFunc)(Bone*, std::string_view, int, int);
+typedef void (ax::Object::*SEL_MovementEventCallFunc)(Armature*, MovementEventType, std::string_view);
+typedef void (ax::Object::*SEL_FrameEventCallFunc)(Bone*, std::string_view, int, int);
 
 #define movementEvent_selector(_SELECTOR) (cocostudio::SEL_MovementEventCallFunc)(&_SELECTOR)
 #define frameEvent_selector(_SELECTOR) (cocostudio::SEL_FrameEventCallFunc)(&_SELECTOR)
@@ -183,13 +183,13 @@ public:
      * Set armature's movement event callback function
      * To disconnect this event, just setMovementEventCallFunc(nullptr, nullptr);
      */
-    AX_DEPRECATED_ATTRIBUTE void setMovementEventCallFunc(ax::Ref* target, SEL_MovementEventCallFunc callFunc);
+    AX_DEPRECATED_ATTRIBUTE void setMovementEventCallFunc(ax::Object* target, SEL_MovementEventCallFunc callFunc);
 
     /**
      * Set armature's frame event callback function
      * To disconnect this event, just setFrameEventCallFunc(nullptr, nullptr);
      */
-    AX_DEPRECATED_ATTRIBUTE void setFrameEventCallFunc(ax::Ref* target, SEL_FrameEventCallFunc callFunc);
+    AX_DEPRECATED_ATTRIBUTE void setFrameEventCallFunc(ax::Object* target, SEL_FrameEventCallFunc callFunc);
 
     void setMovementEventCallFunc(
         std::function<void(Armature* armature, MovementEventType movementType, std::string_view movementID)> listener);
@@ -217,12 +217,12 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual Ref* getUserObject() { return _userObject; }
+    virtual Object* getUserObject() { return _userObject; }
     /**
      * @js NA
      * @lua NA
      */
-    virtual const Ref* getUserObject() const { return _userObject; }
+    virtual const Object* getUserObject() const { return _userObject; }
 
     /**
      * Returns a user assigned Object
@@ -234,7 +234,7 @@ public:
      *
      * @param userObject    A user assigned Object
      */
-    virtual void setUserObject(Ref* userObject);
+    virtual void setUserObject(Object* userObject);
 
 protected:
     /**
@@ -298,7 +298,7 @@ protected:
     unsigned int _movementIndex;
     int _movementListDurationTo;
 
-    ax::Ref* _userObject;
+    ax::Object* _userObject;
 
 protected:
     /**
@@ -318,8 +318,8 @@ protected:
      */
     SEL_FrameEventCallFunc _frameEventCallFunc;
 
-    ax::Ref* _movementEventTarget;
-    ax::Ref* _frameEventTarget;
+    ax::Object* _movementEventTarget;
+    ax::Object* _frameEventTarget;
 
     std::function<void(Armature* armature, MovementEventType movementType, std::string_view movementID)>
         _movementEventListener;

@@ -1,0 +1,20 @@
+import java.nio.file.Paths
+import java.nio.file.Files
+
+def ENGINE_ROOT=Paths.get("${System.env.AX_ROOT}")
+if(Files.exists(ENGINE_ROOT)) {
+    println("Determine ENGINE_JAVA_LIBPATH with system env var AX_ROOT")
+    ENGINE_ROOT = ENGINE_ROOT.toAbsolutePath().toString()
+}
+else {
+    println("Determine ENGINE_JAVA_LIBPATH with relative to settingsDir")
+    ENGINE_ROOT = settingsDir.getPath() + "/../../.."
+}
+
+def ENGINE_JAVA_LIBPATH = ENGINE_ROOT + '/core/platform/android/libaxmol';
+
+include ':libaxmol'
+project(':libaxmol').projectDir = new File(ENGINE_JAVA_LIBPATH)
+include ':UnitTests'
+project(':UnitTests').projectDir = new File(settingsDir, 'app')
+rootProject.name = "unit-tests"
