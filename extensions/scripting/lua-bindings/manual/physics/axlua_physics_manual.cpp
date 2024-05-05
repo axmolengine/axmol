@@ -144,7 +144,7 @@ int axlua_physics_PhysicsWorld_getScene(lua_State* tolua_S)
 
             int ID     = (int)(ret._ID);
             int* luaID = &(ret._luaID);
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)(&ret), className);
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)(&ret), className);
 
         } while (0);
         return 1;
@@ -265,7 +265,7 @@ int axlua_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
                
                 auto Ls    = stack->getLuaState();
                 tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "ax.PhysicsWorld"));
-                toluafix_pushusertype_ccobject(Ls, shape._ID, &shape._luaID, (void*)(&shape), "ax.PhysicsShape");
+                toluafix_pushusertype_object(Ls, shape._ID, &shape._luaID, (void*)(&shape), "ax.PhysicsShape");
                 return stack->executeFunctionByHandler(handler, 2);
             };
         } while (0);
@@ -329,7 +329,7 @@ int axlua_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
             arg0 = [handler,stack](ax::PhysicsWorld& world, ax::PhysicsShape& shape, void* data) -> bool {
                 auto Ls    = stack->getLuaState();
                 tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "ax.PhysicsWorld"));
-                toluafix_pushusertype_ccobject(Ls, shape._ID, &shape._luaID, (void*)(&shape), "ax.PhysicsShape");
+                toluafix_pushusertype_object(Ls, shape._ID, &shape._luaID, (void*)(&shape), "ax.PhysicsShape");
                 return stack->executeFunctionByHandler(handler, 2);
             };
             assert(false);
@@ -397,7 +397,7 @@ int axlua_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
             {
                 int ID     = ret->_ID;
                 int* luaID = &ret->_luaID;
-                toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
+                toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
             }
             else
             {
@@ -434,7 +434,7 @@ int axlua_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
             {
                 int ID     = ret->_ID;
                 int* luaID = &ret->_luaID;
-                toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
+                toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
             }
             else
             {
@@ -472,7 +472,7 @@ int axlua_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
             {
                 int ID     = ret->_ID;
                 int* luaID = &ret->_luaID;
-                toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
+                toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
             }
             else
             {
@@ -531,7 +531,7 @@ int axlua_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
             {
                 int ID     = ret->_ID;
                 int* luaID = &ret->_luaID;
-                toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
+                toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
             }
             else
             {
@@ -567,7 +567,7 @@ int axlua_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
             {
                 int ID     = ret->_ID;
                 int* luaID = &ret->_luaID;
-                toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
+                toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
             }
             else
             {
@@ -605,7 +605,7 @@ int axlua_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
             {
                 int ID     = ret->_ID;
                 int* luaID = &ret->_luaID;
-                toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
+                toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
             }
             else
             {
@@ -664,7 +664,7 @@ int axlua_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
             {
                 int ID     = ret->_ID;
                 int* luaID = &ret->_luaID;
-                toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
+                toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
             }
             else
             {
@@ -700,7 +700,7 @@ int axlua_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
             {
                 int ID     = ret->_ID;
                 int* luaID = &ret->_luaID;
-                toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
+                toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
             }
             else
             {
@@ -738,7 +738,7 @@ int axlua_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
             {
                 int ID     = ret->_ID;
                 int* luaID = &ret->_luaID;
-                toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
+                toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)ret, "ax.PhysicsBody");
             }
             else
             {

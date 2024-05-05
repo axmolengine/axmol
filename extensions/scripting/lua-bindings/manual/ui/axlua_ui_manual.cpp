@@ -1069,7 +1069,7 @@ static int toaxlua_EventListenerFocus_create(lua_State* L)
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(L, ID, luaID, (void*)tolua_ret, "ax.EventListenerFocus");
+        toluafix_pushusertype_object(L, ID, luaID, (void*)tolua_ret, "ax.EventListenerFocus");
 
         return 1;
     }
@@ -1103,10 +1103,10 @@ static void cloneFocusHandler(const EventListenerFocus* src, EventListenerFocus*
             lua_State* L = stack->getLuaState();
             int id       = (widgetLostFocus) ? (int)widgetLostFocus->_ID : -1;
             int* luaID   = (widgetLostFocus) ? &widgetLostFocus->_luaID : nullptr;
-            toluafix_pushusertype_ccobject(L, id, luaID, (void*)widgetLostFocus, "axui.Widget");
+            toluafix_pushusertype_object(L, id, luaID, (void*)widgetLostFocus, "axui.Widget");
             id    = (widgetGetFocus) ? (int)widgetGetFocus->_ID : -1;
             luaID = (widgetGetFocus) ? &widgetGetFocus->_luaID : nullptr;
-            toluafix_pushusertype_ccobject(L, id, luaID, (void*)widgetGetFocus, "axui.Widget");
+            toluafix_pushusertype_object(L, id, luaID, (void*)widgetGetFocus, "axui.Widget");
             stack->executeFunctionByHandler(handler, 2);
         };
     }
@@ -1146,7 +1146,7 @@ static int toaxlua_EventListenerFocus_clone(lua_State* L)
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(L, ID, luaID, (void*)tolua_ret, "ax.EventListenerFocus");
+        toluafix_pushusertype_object(L, ID, luaID, (void*)tolua_ret, "ax.EventListenerFocus");
 
         return 1;
     }
@@ -1203,10 +1203,10 @@ static int toaxlua_EventListenerFocus_registerScriptHandler(lua_State* L)
             auto Ls    = stack->getLuaState();
             int id     = (widgetLostFocus) ? (int)widgetLostFocus->_ID : -1;
             int* luaID = (widgetLostFocus) ? &widgetLostFocus->_luaID : nullptr;
-            toluafix_pushusertype_ccobject(Ls, id, luaID, (void*)widgetLostFocus, "axui.Widget");
+            toluafix_pushusertype_object(Ls, id, luaID, (void*)widgetLostFocus, "axui.Widget");
             id    = (widgetGetFocus) ? (int)widgetGetFocus->_ID : -1;
             luaID = (widgetGetFocus) ? &widgetGetFocus->_luaID : nullptr;
-            toluafix_pushusertype_ccobject(Ls, id, luaID, (void*)widgetGetFocus, "axui.Widget");
+            toluafix_pushusertype_object(Ls, id, luaID, (void*)widgetGetFocus, "axui.Widget");
             stack->executeFunctionByHandler(handler, 2);
         };
         return 0;

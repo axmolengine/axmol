@@ -74,7 +74,7 @@ int ${signature_name}(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}");
     #else
         tolua_pushusertype(tolua_S,(void*)cobj,"${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}");
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));

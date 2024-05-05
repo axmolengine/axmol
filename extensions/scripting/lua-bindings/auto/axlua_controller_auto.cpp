@@ -780,7 +780,7 @@ int lua_ax_controller_EventController_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventController");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.EventController");
             return 1;
         }
     }while(0);
@@ -803,7 +803,7 @@ int lua_ax_controller_EventController_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.EventController");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.EventController");
             return 1;
         }
     }while(0);

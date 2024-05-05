@@ -48,8 +48,6 @@ Object::Object()
     : _referenceCount(1)  // when the Object is created, the reference count of it is 1
 #if AX_ENABLE_SCRIPT_BINDING
     , _luaID(0)
-    , _scriptObject(nullptr)
-    , _rooted(false)
 #endif
 {
 #if AX_ENABLE_SCRIPT_BINDING

@@ -65,7 +65,7 @@ static int axlua_WebView_setOnShouldStartLoading(lua_State* L)
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
         std::function<bool(ui::WebView * sender, std::string_view url)> callback =
             [L, handler](ui::WebView* sender, std::string_view url) -> bool {
-            toluafix_pushusertype_ccobject(L, sender->_ID, &(sender->_luaID), (void*)sender, "axui.WebView");
+            toluafix_pushusertype_object(L, sender->_ID, &(sender->_luaID), (void*)sender, "axui.WebView");
             tolua_pushsv(L, url);
             return LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
         };
@@ -121,7 +121,7 @@ static int axlua_WebView_setOnDidFinishLoading(lua_State* L)
         LUA_FUNCTION handler                                                     = (toluafix_ref_function(L, 2, 0));
         std::function<void(ui::WebView * sender, std::string_view url)> callback = [L, handler](ui::WebView* sender,
                                                                                                 std::string_view url) {
-            toluafix_pushusertype_ccobject(L, sender->_ID, &(sender->_luaID), (void*)sender, "axui.WebView");
+            toluafix_pushusertype_object(L, sender->_ID, &(sender->_luaID), (void*)sender, "axui.WebView");
             tolua_pushsv(L, url);
             LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
         };
@@ -176,7 +176,7 @@ static int axlua_WebView_setOnDidFailLoading(lua_State* L)
         LUA_FUNCTION handler                                                     = (toluafix_ref_function(L, 2, 0));
         std::function<void(ui::WebView * sender, std::string_view url)> callback = [L, handler](ui::WebView* sender,
                                                                                                 std::string_view url) {
-            toluafix_pushusertype_ccobject(L, sender->_ID, &(sender->_luaID), (void*)sender, "axui.WebView");
+            toluafix_pushusertype_object(L, sender->_ID, &(sender->_luaID), (void*)sender, "axui.WebView");
             tolua_pushsv(L, url);
             LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
         };
