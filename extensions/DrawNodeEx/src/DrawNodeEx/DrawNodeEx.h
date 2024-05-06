@@ -593,9 +593,9 @@ public:
     virtual bool init() override;
 
 protected:
-    void ensureCapacityGLTriangle(int count);
-    void ensureCapacityGLPoint(int count);
-    void ensureCapacityGLLine(int count);
+    void ensureCapacityTriangle(int count);
+    void ensureCapacityPoint(int count);
+    void ensureCapacityLine(int count);
 
     void updateShader();
     void updateShaderInternal(ax::CustomCommand& cmd,

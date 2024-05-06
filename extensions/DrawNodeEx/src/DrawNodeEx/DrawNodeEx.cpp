@@ -174,7 +174,7 @@ DrawNodeEx* DrawNodeEx::create(float defaultLineWidth)
     return ret;
 }
 
-void DrawNodeEx::ensureCapacityGLTriangle(int count)
+void DrawNodeEx::ensureCapacityTriangle(int count)
 {
     AXASSERT(count >= 0, "capacity must be >= 0");
 
@@ -189,7 +189,7 @@ void DrawNodeEx::ensureCapacityGLTriangle(int count)
     }
 }
 
-void DrawNodeEx::ensureCapacityGLPoint(int count)
+void DrawNodeEx::ensureCapacityPoint(int count)
 {
     AXASSERT(count >= 0, "capacity must be >= 0");
 
@@ -204,7 +204,7 @@ void DrawNodeEx::ensureCapacityGLPoint(int count)
     }
 }
 
-void DrawNodeEx::ensureCapacityGLLine(int count)
+void DrawNodeEx::ensureCapacityLine(int count)
 {
     AXASSERT(count >= 0, "capacity must be >= 0");
 
@@ -223,9 +223,9 @@ bool DrawNodeEx::init()
 {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
     updateShader();
-    ensureCapacityGLTriangle(512);
-    ensureCapacityGLPoint(64);
-    ensureCapacityGLLine(256);
+    ensureCapacityTriangle(512);
+    ensureCapacityPoint(64);
+    ensureCapacityLine(256);
 
     _dirtyTriangle = true;
     _dirtyLine = true;
@@ -337,7 +337,7 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Color4B& color)
 {
-    ensureCapacityGLPoint(1);
+    ensureCapacityPoint(1);
 
     V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
     *point = { position, color, Tex2F(pointSize, 0) };
@@ -358,7 +358,7 @@ void DrawNodeEx::drawPoints(const Vec2* position,
     const float pointSize,
     const Color4B& color)
 {
-    ensureCapacityGLPoint(numberOfPoints);
+    ensureCapacityPoint(numberOfPoints);
 
     V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
     for (unsigned int i = 0; i < numberOfPoints; i++)
@@ -385,7 +385,7 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
         Vec2 line[2] = { origin, destination };
         Vec2* _vertices = transform(line, 2);
 
-        ensureCapacityGLLine(2);
+        ensureCapacityLine(2);
 
         V2F_C4B_T2F* point = _bufferLine + _bufferCountLine;
 
@@ -443,7 +443,7 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
         {
             vertex_count = 2 * (numberOfPoints - 1);
         }
-        ensureCapacityGLLine(vertex_count);
+        ensureCapacityLine(vertex_count);
 
         V2F_C4B_T2F* point = _bufferLine + _bufferCountLine;
         V2F_C4B_T2F* cursor = point;
@@ -666,7 +666,7 @@ void DrawNodeEx::drawCatmullRom(ax::PointArray* points, unsigned int segments, c
 void DrawNodeEx::drawDot(const Vec2& pos, float radius, const Color4B& color)
 {
     unsigned int vertex_count = 2 * 3;
-    ensureCapacityGLTriangle(vertex_count);
+    ensureCapacityTriangle(vertex_count);
 
     V2F_C4B_T2F a = { Vec2(pos.x - radius, pos.y - radius), color, Tex2F(-1.0f, -1.0f) };
     V2F_C4B_T2F b = { Vec2(pos.x - radius, pos.y + radius), color, Tex2F(-1.0f, 1.0f) };
@@ -730,7 +730,7 @@ void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, con
     int ii = 0;
     unsigned int vertex_count = 6 * 3;
 
-    ensureCapacityGLTriangle(vertex_count);
+    ensureCapacityTriangle(vertex_count);
     V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
 
     // 
@@ -1016,7 +1016,7 @@ void DrawNodeEx::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, co
     }
     Vec2* _vertices = transform(poli, vertex_count);
 
-    ensureCapacityGLTriangle(vertex_count);
+    ensureCapacityTriangle(vertex_count);
 
     V2F_C4B_T2F a = { _vertices[0], color, Tex2F::ZERO };
     V2F_C4B_T2F b = { _vertices[1], color, Tex2F::ZERO };
@@ -1093,7 +1093,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
 
     auto triangle_count = outline ? (3 * count - 2) : (count - 2);
     auto vertex_count = 3 * triangle_count;
-    ensureCapacityGLTriangle(vertex_count);
+    ensureCapacityTriangle(vertex_count);
 
     V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
     V2F_C4B_T2F_Triangle* cursor = triangles;
@@ -1115,7 +1115,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
 
         if ((tris.size() * 3) > vertex_count)
         {
-            ensureCapacityGLTriangle((tris.size() * 3));
+            ensureCapacityTriangle((tris.size() * 3));
             triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
             cursor = triangles;
         }
@@ -1243,7 +1243,7 @@ void DrawNodeEx::_drawPoly(const Vec2* poli,
         {
             vertex_count = 2 * (numberOfPoints - 1);
         }
-        ensureCapacityGLLine(vertex_count);
+        ensureCapacityLine(vertex_count);
 
         V2F_C4B_T2F* point = _bufferLine + _bufferCountLine;
         V2F_C4B_T2F* cursor = point;
