@@ -514,7 +514,7 @@ int lua_ax_physics3d_Physics3DShape_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DShape");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DShape");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DShape:Physics3DShape",argc, 0);
@@ -536,7 +536,7 @@ static int lua_ax_physics3d_Physics3DShape_finalize(lua_State* tolua_S)
 int lua_register_ax_physics3d_Physics3DShape(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Physics3DShape");
-    tolua_cclass(tolua_S,"Physics3DShape","ax.Physics3DShape","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Physics3DShape","ax.Physics3DShape","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Physics3DShape");
         tolua_function(tolua_S,"new",lua_ax_physics3d_Physics3DShape_constructor);
@@ -1047,7 +1047,7 @@ static int lua_ax_physics3d_Physics3DObject_finalize(lua_State* tolua_S)
 int lua_register_ax_physics3d_Physics3DObject(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Physics3DObject");
-    tolua_cclass(tolua_S,"Physics3DObject","ax.Physics3DObject","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Physics3DObject","ax.Physics3DObject","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Physics3DObject");
         tolua_function(tolua_S,"getObjType",lua_ax_physics3d_Physics3DObject_getObjType);
@@ -3501,7 +3501,7 @@ int lua_ax_physics3d_Physics3DRigidBody_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DRigidBody");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DRigidBody");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:Physics3DRigidBody",argc, 0);
@@ -3932,7 +3932,7 @@ int lua_ax_physics3d_Physics3DComponent_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DComponent");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DComponent");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DComponent:Physics3DComponent",argc, 0);
@@ -4187,7 +4187,7 @@ int lua_ax_physics3d_PhysicsMeshRenderer_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.PhysicsMeshRenderer");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.PhysicsMeshRenderer");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsMeshRenderer:PhysicsMeshRenderer",argc, 0);
@@ -4994,7 +4994,7 @@ int lua_ax_physics3d_Physics3DWorld_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DWorld");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DWorld");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:Physics3DWorld",argc, 0);
@@ -5016,7 +5016,7 @@ static int lua_ax_physics3d_Physics3DWorld_finalize(lua_State* tolua_S)
 int lua_register_ax_physics3d_Physics3DWorld(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Physics3DWorld");
-    tolua_cclass(tolua_S,"Physics3DWorld","ax.Physics3DWorld","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Physics3DWorld","ax.Physics3DWorld","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Physics3DWorld");
         tolua_function(tolua_S,"new",lua_ax_physics3d_Physics3DWorld_constructor);
@@ -5628,7 +5628,7 @@ static int lua_ax_physics3d_Physics3DConstraint_finalize(lua_State* tolua_S)
 int lua_register_ax_physics3d_Physics3DConstraint(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.Physics3DConstraint");
-    tolua_cclass(tolua_S,"Physics3DConstraint","ax.Physics3DConstraint","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"Physics3DConstraint","ax.Physics3DConstraint","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Physics3DConstraint");
         tolua_function(tolua_S,"getBreakingImpulse",lua_ax_physics3d_Physics3DConstraint_getBreakingImpulse);
@@ -5999,7 +5999,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_constructor(lua_State* tolu
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DPointToPointConstraint");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DPointToPointConstraint");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DPointToPointConstraint:Physics3DPointToPointConstraint",argc, 0);
@@ -7319,7 +7319,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DHingeConstraint");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DHingeConstraint");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:Physics3DHingeConstraint",argc, 0);
@@ -10542,7 +10542,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DSliderConstraint");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DSliderConstraint");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:Physics3DSliderConstraint",argc, 0);
@@ -11637,7 +11637,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_constructor(lua_State* tolua_S
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DConeTwistConstraint");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DConeTwistConstraint");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:Physics3DConeTwistConstraint",argc, 0);
@@ -12313,7 +12313,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_constructor(lua_State* tolua_S)
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3D6DofConstraint");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3D6DofConstraint");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:Physics3D6DofConstraint",argc, 0);

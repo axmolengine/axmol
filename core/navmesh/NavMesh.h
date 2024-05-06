@@ -30,7 +30,7 @@
 #include "base/Config.h"
 #if defined(AX_ENABLE_NAVMESH)
 
-#    include "base/Ref.h"
+#    include "base/Object.h"
 #    include "math/Vec3.h"
 #    include "recast/DetourNavMesh.h"
 #    include "recast/DetourNavMeshQuery.h"
@@ -52,7 +52,7 @@ NS_AX_BEGIN
  */
 class Renderer;
 /** @brief NavMesh: The NavMesh information container, include mesh, tileCache, and so on. */
-class AX_DLL NavMesh : public Ref
+class AX_DLL NavMesh : public Object
 {
 public:
     /**

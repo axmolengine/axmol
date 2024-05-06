@@ -65,7 +65,7 @@ class ActionTimelineNode;
 
 NS_AX_BEGIN
 
-typedef std::function<void(Ref*)> ccNodeLoadCallback;
+typedef std::function<void(Object*)> ccNodeLoadCallback;
 
 class CCS_DLL CSLoader
 {

@@ -33,7 +33,7 @@ NS_TIMELINE_BEGIN
 
 class ActionTimeline;
 
-class CCS_DLL Timeline : public ax::Ref
+class CCS_DLL Timeline : public ax::Object
 {
 public:
     static Timeline* create();

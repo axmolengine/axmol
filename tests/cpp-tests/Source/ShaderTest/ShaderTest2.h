@@ -41,7 +41,7 @@ public:
 //
 class EffectSprite;
 
-class Effect : public ax::Ref
+class Effect : public ax::Object
 {
 public:
     ax::backend::ProgramState* getProgramState() const { return _programState; }

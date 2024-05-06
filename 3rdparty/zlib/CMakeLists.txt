@@ -33,4 +33,4 @@ set_target_properties(${target_name} PROPERTIES
 # Export zlib as ZLIB::ZLIB to avoid cmake builtin FindPNG.cmake add target again
 add_library(ZLIB::ZLIB ALIAS ${target_name})
 set(ZLIB_INCLUDE_DIR "${zlib_INC_DIR}" CACHE STRING "zlib include dir" FORCE)
-set(ZLIB_LIBRARY "ZLIB::ZLIB" CACHE STRING "zlib library" FORCE)
+set(ZLIB_LIBRARY "zlib" CACHE INTERNAL "zlib library" FORCE)

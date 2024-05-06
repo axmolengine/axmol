@@ -71,7 +71,7 @@ bool UIRichTextTestBase::init()
     return true;
 }
 
-void UIRichTextTestBase::touchEvent(Ref* pSender, Widget::TouchEventType type)
+void UIRichTextTestBase::touchEvent(Object* pSender, Widget::TouchEventType type)
 {
     switch (type)
     {
@@ -94,7 +94,7 @@ void UIRichTextTestBase::touchEvent(Ref* pSender, Widget::TouchEventType type)
     }
 }
 
-void UIRichTextTestBase::switchWrapMode(Ref* pSender, Widget::TouchEventType type)
+void UIRichTextTestBase::switchWrapMode(Object* pSender, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {
@@ -104,7 +104,7 @@ void UIRichTextTestBase::switchWrapMode(Ref* pSender, Widget::TouchEventType typ
     }
 }
 
-void UIRichTextTestBase::switchHorizontalAlignment(Ref* sender, Widget::TouchEventType type)
+void UIRichTextTestBase::switchHorizontalAlignment(Object* sender, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {
@@ -115,7 +115,7 @@ void UIRichTextTestBase::switchHorizontalAlignment(Ref* sender, Widget::TouchEve
     }
 }
 
-void UIRichTextTestBase::switchVerticalAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type)
+void UIRichTextTestBase::switchVerticalAlignment(ax::Object* sender, ax::ui::Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {

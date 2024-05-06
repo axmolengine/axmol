@@ -29,7 +29,7 @@
 #include <functional>
 
 #include "platform/PlatformMacros.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 
 NS_AX_BEGIN
@@ -56,7 +56,7 @@ enum class EvaluateType
  * @lua NA
  */
 template <int componentSize>
-class AnimationCurve : public Ref
+class AnimationCurve : public Object
 {
 public:
     /**create animation curve*/

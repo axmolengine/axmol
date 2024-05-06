@@ -26,7 +26,7 @@
 #pragma once
 
 #include "base/Types.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/EventListenerCustom.h"
 #include "3d/Frustum.h"
 #include "renderer/QuadCommand.h"
@@ -54,7 +54,7 @@ class Buffer;
  * background with given color and depth, Skybox brush clear the background with a skybox. Camera uses depth brush by
  * default.
  */
-class AX_DLL CameraBackgroundBrush : public Ref
+class AX_DLL CameraBackgroundBrush : public Object
 {
 public:
     /**

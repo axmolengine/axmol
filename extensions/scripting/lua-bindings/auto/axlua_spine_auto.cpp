@@ -1685,7 +1685,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1704,7 +1704,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1727,7 +1727,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1754,7 +1754,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1765,7 +1765,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1780,7 +1780,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1799,7 +1799,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1818,7 +1818,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1841,7 +1841,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1860,7 +1860,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1883,7 +1883,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);

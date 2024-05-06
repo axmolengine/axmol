@@ -74,7 +74,7 @@ bool UIImageViewTest::init()
     return false;
 }
 
-void UIImageViewTest::printWidgetResources(ax::Ref* sender)
+void UIImageViewTest::printWidgetResources(ax::Object* sender)
 {
     ax::ResourceData textureFile = _image->getRenderFile();
     AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
@@ -136,7 +136,7 @@ bool UIImageViewTest_Scale9_State_Change::init()
         imageView->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
 
         imageView->setTouchEnabled(true);
-        imageView->addTouchEventListener([=](Ref* sender, Widget::TouchEventType type) {
+        imageView->addTouchEventListener([=](Object* sender, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
                 if (imageView->isScale9Enabled())
@@ -200,7 +200,7 @@ bool UIImageViewTest_ContentSize::init()
         imageView->addChild(imageViewChild);
 
         imageView->setTouchEnabled(true);
-        imageView->addTouchEventListener([=](Ref* sender, Widget::TouchEventType type) {
+        imageView->addTouchEventListener([=](Object* sender, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
                 float width  = AXRANDOM_0_1() * 200 + 50;
@@ -253,14 +253,14 @@ bool UIImageViewFlipTest::init()
         toggleButton->setPosition(imageView->getPosition() +
                                   Vec2(-50.0f, -imageView->getContentSize().height / 2 - 20));
         this->addChild(toggleButton);
-        toggleButton->addClickEventListener([=](Ref*) { imageView->setFlippedX(!imageView->isFlippedX()); });
+        toggleButton->addClickEventListener([=](Object*) { imageView->setFlippedX(!imageView->isFlippedX()); });
 
         auto toggleScale9 = Button::create();
         toggleScale9->setTitleText("Toggle Scale9");
         toggleScale9->setPosition(imageView->getPosition() +
                                   Vec2(+50.0f, -imageView->getContentSize().height / 2 - 20));
         this->addChild(toggleScale9);
-        toggleScale9->addClickEventListener([=](Ref*) {
+        toggleScale9->addClickEventListener([=](Object*) {
             imageView->setScale9Enabled(!imageView->isScale9Enabled());
             // after switching scale9, you must call setContentSize to keep the size not change
             imageView->setContentSize(Size(250, 115));

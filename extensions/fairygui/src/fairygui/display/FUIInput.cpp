@@ -94,7 +94,7 @@ void FUIInput::continueInit()
     this->addTouchEventListener(AX_CALLBACK_2(FUIInput::_touchDownAction, this));
 }
 
-void FUIInput::_touchDownAction(ax::Ref *sender, ax::ui::Widget::TouchEventType controlEvent)
+void FUIInput::_touchDownAction(ax::Object *sender, ax::ui::Widget::TouchEventType controlEvent)
 {
     //do nothing
 }

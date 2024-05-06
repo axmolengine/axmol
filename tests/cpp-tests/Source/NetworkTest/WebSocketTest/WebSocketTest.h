@@ -58,12 +58,12 @@ public:
     virtual void onError(ax::network::WebSocket* ws, const ax::network::WebSocket::ErrorCode& error)override;
     
     // Menu Callbacks
-    void onMenuSendTextClicked(ax::Ref *sender);
-    void onMenuSendMultipleTextClicked(ax::Ref *sender);
-    void onMenuSendBinaryClicked(ax::Ref *sender);
+    void onMenuSendTextClicked(ax::Object *sender);
+    void onMenuSendMultipleTextClicked(ax::Object *sender);
+    void onMenuSendBinaryClicked(ax::Object *sender);
 
     virtual std::string title() const override { return "WebSocket Test"; }
-    void startTestCallback(ax::Ref* sender);
+    void startTestCallback(ax::Object* sender);
 
 private:
     ax::network::WebSocket* _wsiSendText;
@@ -117,10 +117,10 @@ public:
     virtual void onError(ax::network::WebSocket* ws, const ax::network::WebSocket::ErrorCode& error)override;
     
     // Menu Callbacks
-    void onMenuSendTextClicked(ax::Ref *sender);
+    void onMenuSendTextClicked(ax::Object *sender);
 
     virtual std::string title() const override { return "WebSocket Delay Test"; }
-    void startTestCallback(ax::Ref* sender);
+    void startTestCallback(ax::Object* sender);
 
     int64_t getNowMircroSeconds()
     {

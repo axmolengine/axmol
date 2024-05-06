@@ -44,7 +44,7 @@ namespace ui
  *@brief Rich text element base class.
  * It defines the basic common properties for all rich text element.
  */
-class AX_GUI_DLL RichElement : public Ref
+class AX_GUI_DLL RichElement : public Object
 {
 public:
     /**

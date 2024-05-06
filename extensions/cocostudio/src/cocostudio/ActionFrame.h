@@ -94,7 +94,7 @@ enum class FrameEaseType
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ActionFrame : public ax::Ref
+class CCS_DLL ActionFrame : public ax::Object
 {
 
 public:

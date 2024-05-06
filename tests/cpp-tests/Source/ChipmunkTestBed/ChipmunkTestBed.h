@@ -43,7 +43,7 @@ public:
 
     void onEnter() override;
     void createResetButton();
-    void reset(ax::Ref* sender);
+    void reset(ax::Object* sender);
 
     void update(float dt) override;
     virtual void initPhysics();

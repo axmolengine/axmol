@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include <unordered_map>
 #include <functional>
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "renderer/Texture2D.h"
 #include "platform/Image.h"
 
@@ -61,7 +61,7 @@ NS_AX_BEGIN
  * Once the texture is loaded, the next time it will return.
  * A reference of the previously loaded texture reducing GPU & CPU memory.
  */
-class AX_DLL TextureCache : public Ref
+class AX_DLL TextureCache : public Object
 {
 public:
     // ETC1 ALPHA supports.

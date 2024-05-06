@@ -206,7 +206,7 @@ void TestList::runThisTest()
     else
     {
         // Add close and "Start AutoTest" button.
-        auto closeItem = MenuItemImage::create(s_pathClose, s_pathClose, [](Ref* sender) {
+        auto closeItem = MenuItemImage::create(s_pathClose, s_pathClose, [](Object* sender) {
             TestController::getInstance()->stopAutoTest();
             TestController::destroyInstance();
             Director::getInstance()->end();
@@ -215,7 +215,7 @@ void TestList::runThisTest()
 
         auto autoTestLabel = Label::createWithTTF("Start AutoTest", "fonts/arial.ttf", 16);
         auto autoTestItem =
-            MenuItemLabel::create(autoTestLabel, [&](Ref* sender) { TestController::getInstance()->startAutoTest(); });
+            MenuItemLabel::create(autoTestLabel, [&](Object* sender) { TestController::getInstance()->startAutoTest(); });
         autoTestItem->setPosition(Vec2(VisibleRect::left().x + 60, VisibleRect::bottom().y + 50));
 
         auto menu = Menu::create(closeItem, autoTestItem, nullptr);
@@ -494,7 +494,7 @@ void TestCase::onExit()
     Scene::onExit();
 }
 
-void TestCase::restartTestCallback(Ref* sender)
+void TestCase::restartTestCallback(Object* sender)
 {
     if (_testSuite)
     {
@@ -502,7 +502,7 @@ void TestCase::restartTestCallback(Ref* sender)
     }
 }
 
-void TestCase::nextTestCallback(Ref* sender)
+void TestCase::nextTestCallback(Object* sender)
 {
     if (_testSuite)
     {
@@ -510,7 +510,7 @@ void TestCase::nextTestCallback(Ref* sender)
     }
 }
 
-void TestCase::priorTestCallback(Ref* sender)
+void TestCase::priorTestCallback(Object* sender)
 {
     if (_testSuite)
     {
@@ -518,7 +518,7 @@ void TestCase::priorTestCallback(Ref* sender)
     }
 }
 
-void TestCase::onBackCallback(Ref* sender)
+void TestCase::onBackCallback(Object* sender)
 {
     if (_testSuite)
     {

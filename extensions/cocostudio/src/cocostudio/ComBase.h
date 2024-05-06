@@ -34,10 +34,10 @@ THE SOFTWARE.
 #define DECLARE_CLASS_COMPONENT_INFO           \
 public:                                        \
     static ax::ObjectFactory::TInfo Type; \
-    static ax::Ref* createInstance(void);
+    static ax::Object* createInstance(void);
 
 #define IMPLEMENT_CLASS_COMPONENT_INFO(className)                                 \
-    ax::Ref* className::createInstance(void) { return className::create(); } \
+    ax::Object* className::createInstance(void) { return className::create(); } \
     ax::ObjectFactory::TInfo className::Type(#className, &className::createInstance);
 
 #define CREATE_CLASS_COMPONENT_INFO(className) ax::ObjectFactory::TInfo(#className, &className::createInstance)

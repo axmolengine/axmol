@@ -39,9 +39,9 @@ public:
     ~UIButtonTest();
 
     virtual bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Object* sender, ax::ui::Widget::TouchEventType type);
 
-    void printWidgetResources(ax::Ref* sender);
+    void printWidgetResources(ax::Object* sender);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -57,7 +57,7 @@ public:
     ~UIButtonTest_Scale9();
 
     virtual bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Object* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -72,7 +72,7 @@ public:
     ~UIButtonTest_Scale9_State_Change();
 
     virtual bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Object* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -87,7 +87,7 @@ public:
     ~UIButtonTest_PressedAction();
 
     virtual bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Object* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -102,7 +102,7 @@ public:
     ~UIButtonTest_Title();
 
     virtual bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Object* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -117,7 +117,7 @@ public:
     ~UIButtonTestRemoveSelf();
 
     virtual bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Object* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -132,7 +132,7 @@ public:
     ~UIButtonTestSwitchScale9();
 
     virtual bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Object* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;
@@ -147,7 +147,7 @@ public:
     ~UIButtonTestZoomScale();
 
     virtual bool init() override;
-    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
+    void sliderEvent(ax::Object* sender, ax::ui::Slider::EventType type);
 
 protected:
     ax::ui::Text* _displayValueLabel;

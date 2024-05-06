@@ -1509,7 +1509,7 @@ static int lua_ax_physics_PhysicsShape_finalize(lua_State* tolua_S)
 int lua_register_ax_physics_PhysicsShape(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.PhysicsShape");
-    tolua_cclass(tolua_S,"PhysicsShape","ax.PhysicsShape","ax.Ref",nullptr);
+    tolua_cclass(tolua_S,"PhysicsShape","ax.PhysicsShape","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"PhysicsShape");
         tolua_function(tolua_S,"getBody",lua_ax_physics_PhysicsShape_getBody);

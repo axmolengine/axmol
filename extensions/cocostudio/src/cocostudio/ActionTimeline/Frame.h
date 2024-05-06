@@ -26,7 +26,7 @@ THE SOFTWARE.
 #define __CCFRAME_H__
 
 #include <string>
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Vector.h"
 #include "2d/Node.h"
 #include "2d/Sprite.h"
@@ -39,7 +39,7 @@ NS_TIMELINE_BEGIN
 class Timeline;
 class ActionTimeline;
 
-class CCS_DLL Frame : public ax::Ref
+class CCS_DLL Frame : public ax::Object
 {
 public:
     virtual void setFrameIndex(unsigned int frameIndex) { _frameIndex = frameIndex; }

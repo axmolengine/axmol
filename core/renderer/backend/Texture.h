@@ -26,7 +26,7 @@
 #pragma once
 
 #include "Types.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include <cassert>
 
 #include <functional>
@@ -54,7 +54,7 @@ struct TextureDescriptor
 /**
  * A base texture
  */
-class TextureBackend : public Ref
+class TextureBackend : public Object
 {
 public:
     /**

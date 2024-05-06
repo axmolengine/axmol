@@ -115,7 +115,7 @@ bool UIPageViewTest::init()
     return false;
 }
 
-void UIPageViewTest::pageViewEvent(Ref* pSender, PageView::EventType type)
+void UIPageViewTest::pageViewEvent(Object* pSender, PageView::EventType type)
 {
     switch (type)
     {
@@ -215,7 +215,7 @@ bool UIPageViewButtonTest::init()
     return false;
 }
 
-void UIPageViewButtonTest::onButtonClicked(Ref* sender, Widget::TouchEventType type)
+void UIPageViewButtonTest::onButtonClicked(Object* sender, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {
@@ -223,7 +223,7 @@ void UIPageViewButtonTest::onButtonClicked(Ref* sender, Widget::TouchEventType t
     }
 }
 
-void UIPageViewButtonTest::pageViewEvent(Ref* pSender, PageView::EventType type)
+void UIPageViewButtonTest::pageViewEvent(Object* pSender, PageView::EventType type)
 {
     switch (type)
     {
@@ -312,7 +312,7 @@ bool UIPageViewTouchPropagationTest::init()
         pageView->addEventListener(
             (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewTouchPropagationTest::pageViewEvent, this));
         pageView->setName("pageView");
-        pageView->addTouchEventListener([](Ref* sender, Widget::TouchEventType type) {
+        pageView->addTouchEventListener([](Object* sender, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::BEGAN)
             {
                 AXLOG("page view touch began");
@@ -376,7 +376,7 @@ bool UIPageViewTouchPropagationTest::init()
     return false;
 }
 
-void UIPageViewTouchPropagationTest::onButtonClicked(Ref* pSender, Widget::TouchEventType type)
+void UIPageViewTouchPropagationTest::onButtonClicked(Object* pSender, Widget::TouchEventType type)
 {
     Button* btn   = (Button*)pSender;
     CheckBox* ck1 = (CheckBox*)_uiLayer->getChildByName("propagation");
@@ -413,7 +413,7 @@ void UIPageViewTouchPropagationTest::onButtonClicked(Ref* pSender, Widget::Touch
     }
 }
 
-void UIPageViewTouchPropagationTest::pageViewEvent(Ref* pSender, PageView::EventType type)
+void UIPageViewTouchPropagationTest::pageViewEvent(Object* pSender, PageView::EventType type)
 {
     switch (type)
     {
@@ -513,7 +513,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);
         button->setTitleColor(Color3B::RED);
-        button->addClickEventListener([=](Ref* sender) {
+        button->addClickEventListener([=](Object* sender) {
             HBox* outerBox = HBox::create();
             outerBox->setContentSize(Size(240.0f, 130.0f));
 
@@ -547,7 +547,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button2->setZoomScale(0.3f);
         button2->setPressedActionEnabled(true);
         button2->setTitleColor(Color3B::RED);
-        button2->addClickEventListener([=](Ref* sender) {
+        button2->addClickEventListener([=](Object* sender) {
             if (pageView->getItems().size() > 0)
             {
                 pageView->removeItem(pageView->getItems().size() - 1);
@@ -568,7 +568,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button3->setZoomScale(0.3f);
         button3->setPressedActionEnabled(true);
         button3->setTitleColor(Color3B::RED);
-        button3->addClickEventListener([=](Ref* sender) {
+        button3->addClickEventListener([=](Object* sender) {
             pageView->removeAllItems();
             _displayValueLabel->setString(
                 StringUtils::format("page count = %d", static_cast<int32_t>(pageView->getItems().size())));
@@ -579,7 +579,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         auto button4 = (ui::Button*)button3->clone();
         button4->setTitleText("Scroll to Page4");
         button4->setPositionNormalized(Vec2(0.85f, 0.5f));
-        button4->addClickEventListener([=](Ref* sender) {
+        button4->addClickEventListener([=](Object* sender) {
             pageView->scrollToItem(3);
             AXLOG("current page index = %zd", pageView->getCurrentPageIndex());
         });
@@ -590,7 +590,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
     return false;
 }
 
-void UIPageViewDynamicAddAndRemoveTest::pageViewEvent(Ref* pSender, PageView::EventType type)
+void UIPageViewDynamicAddAndRemoveTest::pageViewEvent(Object* pSender, PageView::EventType type)
 {
     switch (type)
     {
@@ -675,26 +675,26 @@ bool UIPageViewJumpToPageTest::init()
         button1->setPositionNormalized(Vec2(0.1f, 0.75f));
         button1->setTitleText("Jump to Page1");
         AXLOG("button1 content Size = %f, %f", button1->getContentSize().width, button1->getContentSize().height);
-        button1->addClickEventListener([=](Ref*) { pageView->setCurrentPageIndex(0); });
+        button1->addClickEventListener([=](Object*) { pageView->setCurrentPageIndex(0); });
         _uiLayer->addChild(button1);
 
         auto button2 = static_cast<ui::Button*>(button1->clone());
         button2->setTitleText("Jump to Page2");
         button2->setPositionNormalized(Vec2(0.1f, 0.65f));
         AXLOG("button2 content Size = %f, %f", button2->getContentSize().width, button2->getContentSize().height);
-        button2->addClickEventListener([=](Ref*) { pageView->setCurrentPageIndex(1); });
+        button2->addClickEventListener([=](Object*) { pageView->setCurrentPageIndex(1); });
         _uiLayer->addChild(button2);
 
         auto button3 = static_cast<ui::Button*>(button2->clone());
         button3->setTitleText("Jump to Page3");
         button3->setPositionNormalized(Vec2(0.9f, 0.75f));
-        button3->addClickEventListener([=](Ref*) { pageView->setCurrentPageIndex(2); });
+        button3->addClickEventListener([=](Object*) { pageView->setCurrentPageIndex(2); });
         _uiLayer->addChild(button3);
 
         auto button4 = static_cast<ui::Button*>(button2->clone());
         button4->setTitleText("Jump to Page4");
         button4->setPositionNormalized(Vec2(0.9f, 0.65f));
-        button4->addClickEventListener([=](Ref*) { pageView->setCurrentPageIndex(3); });
+        button4->addClickEventListener([=](Object*) { pageView->setCurrentPageIndex(3); });
         _uiLayer->addChild(button4);
         _uiLayer->addChild(pageView);
 
@@ -771,7 +771,7 @@ bool UIPageViewVerticalTest::init()
     return false;
 }
 
-void UIPageViewVerticalTest::pageViewEvent(Ref* pSender, PageView::EventType type)
+void UIPageViewVerticalTest::pageViewEvent(Object* pSender, PageView::EventType type)
 {
     switch (type)
     {
@@ -920,7 +920,7 @@ bool UIPageViewChildSizeTest::init()
     return false;
 }
 
-void UIPageViewChildSizeTest::pageViewEvent(Ref* pSender, PageView::EventType type)
+void UIPageViewChildSizeTest::pageViewEvent(Object* pSender, PageView::EventType type)
 {
     switch (type)
     {

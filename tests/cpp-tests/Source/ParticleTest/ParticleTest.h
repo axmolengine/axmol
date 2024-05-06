@@ -44,7 +44,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void toggleCallback(ax::Ref* sender);
+    void toggleCallback(ax::Object* sender);
 
     void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
     void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);

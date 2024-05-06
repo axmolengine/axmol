@@ -741,7 +741,7 @@ bool UIScrollViewTestEvents::init()
         scrollView->jumpToBottomRight();
 
         auto getRandomColor = [] { return Color4B(random(0, 255), random(0, 255), random(0, 255), 255); };
-        scrollView->addEventListener([&](Ref*, ui::ScrollView::EventType e) {
+        scrollView->addEventListener([&](Object*, ui::ScrollView::EventType e) {
             switch (e)
             {
             case ui::ScrollView::EventType::SCROLLING_BEGAN:
@@ -816,7 +816,7 @@ bool UIScrollViewStopScrollingTest::init()
         _uiLayer->addChild(_scrollView);
 
         // Log some ScrollView events.
-        _scrollView->addEventListener([&](Ref*, ui::ScrollView::EventType e) {
+        _scrollView->addEventListener([&](Object*, ui::ScrollView::EventType e) {
             switch (e)
             {
             case ui::ScrollView::EventType::SCROLLING_BEGAN:
@@ -842,7 +842,7 @@ bool UIScrollViewStopScrollingTest::init()
         button_scale9->setScale9Enabled(true);
         button_scale9->setContentSize(Size(120.0f, button_scale9->getVirtualRendererSize().height));
         button_scale9->setPosition(Vec2(innerSize.width / 2.0f, innerSize.height / 2.0f));
-        button_scale9->addClickEventListener([this](Ref*) { this->_remainingTime = 3.0f; });
+        button_scale9->addClickEventListener([this](Object*) { this->_remainingTime = 3.0f; });
         _scrollView->addChild(button_scale9);
 
         // Schedule update for this scene.

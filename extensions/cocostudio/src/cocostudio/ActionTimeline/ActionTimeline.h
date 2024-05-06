@@ -51,7 +51,7 @@ typedef struct AnimationInfo
 } AnimationClip;
 
 #if 0
-class CCS_DLL ActionTimelineData : public ax::Ref
+class CCS_DLL ActionTimelineData : public ax::Object
 {
 public:
     static ActionTimelineData* create(int actionTag);

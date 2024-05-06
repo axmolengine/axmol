@@ -482,7 +482,7 @@ ssize_t SpriteBatchNode::rebuildIndexInOrder(Sprite* parent, ssize_t index)
     }
 
     // ignore self (batch node)
-    if (parent != static_cast<Ref*>(this))
+    if (parent != static_cast<Object*>(this))
     {
         parent->setAtlasIndex(static_cast<unsigned int>(index));
         index++;

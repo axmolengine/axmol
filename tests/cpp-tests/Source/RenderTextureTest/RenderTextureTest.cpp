@@ -85,17 +85,17 @@ std::string RenderTextureSave::subtitle() const
     return "Press 'Save Image' to create an snapshot of the render texture";
 }
 
-void RenderTextureSave::clearImage(ax::Ref* sender)
+void RenderTextureSave::clearImage(ax::Object* sender)
 {
     _target->clear(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1());
 }
 
-void RenderTextureSave::clearImageTransparent(ax::Ref* sender)
+void RenderTextureSave::clearImageTransparent(ax::Object* sender)
 {
     _target->clear(0, 0, 0, 0);
 }
 
-void RenderTextureSave::saveImageWithPremultipliedAlpha(ax::Ref* sender)
+void RenderTextureSave::saveImageWithPremultipliedAlpha(ax::Object* sender)
 {
     static int counter = 0;
 
@@ -120,7 +120,7 @@ void RenderTextureSave::saveImageWithPremultipliedAlpha(ax::Ref* sender)
     counter++;
 }
 
-void RenderTextureSave::saveImageWithNonPremultipliedAlpha(ax::Ref* sender)
+void RenderTextureSave::saveImageWithNonPremultipliedAlpha(ax::Object* sender)
 {
     static int counter = 0;
 
@@ -146,7 +146,7 @@ void RenderTextureSave::saveImageWithNonPremultipliedAlpha(ax::Ref* sender)
     counter++;
 }
 
-void RenderTextureSave::addImage(ax::Ref* sender)
+void RenderTextureSave::addImage(ax::Object* sender)
 {
     auto s = Director::getInstance()->getWinSize();
 
@@ -639,7 +639,7 @@ RenderTextureTargetNode::RenderTextureTargetNode()
     menu->setPosition(Vec2(s.width / 2, s.height / 2));
 }
 
-void RenderTextureTargetNode::touched(Ref* sender)
+void RenderTextureTargetNode::touched(Object* sender)
 {
     // TODO: minggo
     if (renderTexture->getClearFlags() == ClearFlag::NONE)
@@ -783,7 +783,7 @@ Issue16113Test::Issue16113Test()
 
     // Save Image menu
     MenuItemFont::setFontSize(16);
-    auto item1 = MenuItemFont::create("Save Image", [&](Ref* ref) {
+    auto item1 = MenuItemFont::create("Save Image", [&](Object* ref) {
         auto winSize = Director::getInstance()->getVisibleSize();
         auto text    = Label::createWithTTF("hello world", "fonts/Marker Felt.ttf", 40);
         text->setTextColor(Color4B::RED);

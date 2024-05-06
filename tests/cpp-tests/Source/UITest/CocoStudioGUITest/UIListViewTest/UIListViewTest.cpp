@@ -170,7 +170,7 @@ bool UIListViewTest_Vertical::init()
             _uiLayer->addChild(_indexLabels[2]);
 
             // Callback
-            _listView->ScrollView::addEventListener([this](Ref* ref, ScrollView::EventType eventType) {
+            _listView->ScrollView::addEventListener([this](Object* ref, ScrollView::EventType eventType) {
                 ListView* listView = dynamic_cast<ListView*>(ref);
                 if (listView == nullptr || eventType != ScrollView::EventType::CONTAINER_MOVED)
                 {
@@ -254,7 +254,7 @@ void UIListViewTest_Vertical::update(float dt)
     this->_lastContentPosY = this->_listView->getInnerContainer()->getPosition().y;
 }
 
-void UIListViewTest_Vertical::selectedItemEvent(Ref* pSender, ListView::EventType type)
+void UIListViewTest_Vertical::selectedItemEvent(Object* pSender, ListView::EventType type)
 {
     switch (type)
     {
@@ -277,7 +277,7 @@ void UIListViewTest_Vertical::selectedItemEvent(Ref* pSender, ListView::EventTyp
     }
 }
 
-void UIListViewTest_Vertical::selectedItemEventScrollView(Ref* pSender, ui::ScrollView::EventType type)
+void UIListViewTest_Vertical::selectedItemEventScrollView(Object* pSender, ui::ScrollView::EventType type)
 {
     switch (type)
     {
@@ -459,7 +459,7 @@ void UIListViewTest_Horizontal::update(float dt)
     this->_lastContentPosX = this->_listView->getInnerContainer()->getPosition().x;
 }
 
-void UIListViewTest_Horizontal::selectedItemEvent(Ref* pSender, ListView::EventType type)
+void UIListViewTest_Horizontal::selectedItemEvent(Object* pSender, ListView::EventType type)
 {
     switch (type)
     {
@@ -697,7 +697,7 @@ bool UIListViewTest_ScrollToItem::init()
     pButton->setScale(0.8f);
     pButton->setPosition(Vec2(layerSize / 2) + Vec2(120.0f, -60.0f));
     pButton->setTitleText(StringUtils::format("Go to '%d'", _nextIndex));
-    pButton->addClickEventListener([this, pButton](Ref*) {
+    pButton->addClickEventListener([this, pButton](Object*) {
         _listView->scrollToItem(_nextIndex, Vec2::ANCHOR_MIDDLE, Vec2::ANCHOR_MIDDLE);
         _nextIndex = (_nextIndex + (NUMBER_OF_ITEMS / 2)) % NUMBER_OF_ITEMS;
         pButton->setTitleText(StringUtils::format("Go to '%d'", _nextIndex));
@@ -779,7 +779,7 @@ bool UIListViewTest_Magnetic::init()
         _indexLabels[4]->setPosition(_uiLayer->getContentSize() / 2 + Size(deltaX, deltaY));  // center
 
         // Callback
-        _listView->ScrollView::addEventListener([this](Ref* ref, ScrollView::EventType eventType) {
+        _listView->ScrollView::addEventListener([this](Object* ref, ScrollView::EventType eventType) {
             ListView* listView = dynamic_cast<ListView*>(ref);
             if (listView == nullptr || eventType != ScrollView::EventType::CONTAINER_MOVED)
             {
@@ -809,7 +809,7 @@ bool UIListViewTest_Magnetic::init()
     pButton->setScale(0.8f);
     pButton->setPosition(Vec2(layerSize / 2) + Vec2(130.0f, -60.0f));
     pButton->setTitleText("Next Magnetic");
-    pButton->addClickEventListener([this](Ref*) {
+    pButton->addClickEventListener([this](Object*) {
         ListView::MagneticType eCurrentType = _listView->getMagneticType();
         ListView::MagneticType eNextType    = ListView::MagneticType::NONE;
         std::string sString;
@@ -986,7 +986,7 @@ bool UIListViewTest_Padding::init()
         _indexLabels[4]->setPosition(_uiLayer->getContentSize() / 2 + Size(deltaX, deltaY));  // center
 
         // Callback
-        _listView->ScrollView::addEventListener([this](Ref* ref, ScrollView::EventType eventType) {
+        _listView->ScrollView::addEventListener([this](Object* ref, ScrollView::EventType eventType) {
             ListView* listView = dynamic_cast<ListView*>(ref);
             if (listView == nullptr || eventType != ScrollView::EventType::CONTAINER_MOVED)
             {
@@ -1019,7 +1019,7 @@ bool UIListViewTest_Padding::init()
     return true;
 }
 
-void UIListViewTest_Padding::sliderEvent(Ref* pSender, Slider::EventType type)
+void UIListViewTest_Padding::sliderEvent(Object* pSender, Slider::EventType type)
 {
     if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {

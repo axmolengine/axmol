@@ -2,7 +2,7 @@
 # usage: pwsh build.ps1 -p <targetPlatform> -a <arch>
 # options
 #  -p: build target platform: win32,winuwp(winrt),linux,android,osx,ios,tvos,wasm
-#      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
+#      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first,
 #      if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
 #  -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
 #  -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
@@ -12,15 +12,15 @@
 #  -d: specify project dir to compile, i.e. -d /path/your/project/
 #  -f: force generate native project files. Useful if no changes are detected, such as with resource updates.
 # examples:
-#   - win32: 
+#   - win32:
 #     - pwsh build.ps1 -p win32
 #     - pwsh build.ps1 -p win32 -cc clang
 #   - winuwp: pwsh build.ps1 -p winuwp
 #   - linux: pwsh build.ps1 -p linux
-#   - android: 
+#   - android:
 #     - pwsh build.ps1 -p android -a arm64
 #     - pwsh build.ps1 -p android -a 'arm64;x64'
-#   - osx: 
+#   - osx:
 #     - pwsh build.ps1 -p osx -a x64
 #     - pwsh build.ps1 -p osx -a arm64
 #   - ios: pwsh build.ps1 -p ios -a x64
@@ -46,7 +46,7 @@ $options = @{p = $null; d = $null; xc = @(); xb = @(); }
 $optName = $null
 foreach ($arg in $args) {
     if (!$optName) {
-        if ($arg.StartsWith('-')) { 
+        if ($arg.StartsWith('-')) {
             $optName = $arg.SubString(1).TrimEnd(':')
         }
         if ($1k_switch_options.Contains("$optName")) {
@@ -118,6 +118,7 @@ if ($is_axmol_engine -and $is_android) {
             'cpp-tests'      = 'tests/cpp-tests'
             'fairygui-tests' = 'tests/fairygui-tests'
             'live2d-tests'   = 'tests/live2d-tests'
+            'unit-tests'     = 'tests/unit-tests'
         }
         if (!$builtin_targets.Contains($cmake_target)) {
             throw "specified target '$cmake_target' not present in engine"

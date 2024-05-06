@@ -340,7 +340,7 @@ static int lua_downloader_tostring(lua_State* L)
 
 static const struct luaL_Reg downloaderStaticFns[] = {{"new", lua_downloader_new},
                                                       /*
-                                                       * ax::Downloader is not a subclass of ax::Ref,
+                                                       * ax::Downloader is not a subclass of ax::Object,
                                                        * `create()` is not provided.
                                                        */
                                                       //{ "create", lua_downloader_new },

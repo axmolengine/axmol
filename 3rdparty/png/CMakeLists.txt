@@ -67,4 +67,4 @@ endif()
 # Export png as PNG::PNG to avoid cmake builtin FindPNG.cmake add target again
 add_library(PNG::PNG ALIAS ${target_name})
 set(PNG_PNG_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE STRING "png include dir" FORCE)
-set(PNG_LIBRARY "PNG::PNG" CACHE STRING "png include dir" FORCE)
+set(PNG_LIBRARY "png" CACHE INTERNAL "png include dir" FORCE)

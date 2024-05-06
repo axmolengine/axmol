@@ -69,13 +69,13 @@ public:
      *
      * @param parallaxArray An array of layers for the Parallax node.
      */
-    void setParallaxArray(Vector<Ref*> parallaxArray) { _parallaxArray = std::move(parallaxArray); }
+    void setParallaxArray(Vector<Object*> parallaxArray) { _parallaxArray = std::move(parallaxArray); }
     /** Returns the array of layers of the Parallax node.
      *
      * @return An array of layers for the Parallax node.
      */
-    Vector<Ref*>& getParallaxArray() { return _parallaxArray; }
-    const Vector<Ref*>& getParallaxArray() const { return _parallaxArray; }
+    Vector<Object*>& getParallaxArray() { return _parallaxArray; }
+    const Vector<Object*>& getParallaxArray() const { return _parallaxArray; }
 
     //
     // Overrides
@@ -102,7 +102,7 @@ protected:
     Vec2 absolutePosition();
 
     Vec2 _lastPosition;
-    Vector<Ref*> _parallaxArray;
+    Vector<Object*> _parallaxArray;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(ParallaxNode);

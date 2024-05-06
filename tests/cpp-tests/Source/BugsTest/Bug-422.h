@@ -37,7 +37,7 @@ public:
 
     void reset();
     void check(Node* target);
-    void menuCallback(ax::Ref* sender);
+    void menuCallback(ax::Object* sender);
 };
 
 #endif  // __BUG_422_H__

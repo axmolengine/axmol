@@ -31,7 +31,7 @@
 #include <cstdint>
 #include <functional>
 #include "platform/PlatformMacros.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/EventListenerCustom.h"
 #include "renderer/backend/Types.h"
 #include "renderer/backend/Program.h"
@@ -84,7 +84,7 @@ struct AX_DLL TextureInfo
  * A program state object can create or reuse a program.
  * Each program state object keep its own unifroms and textures data.
  */
-class AX_DLL ProgramState : public Ref
+class AX_DLL ProgramState : public Object
 {
 public:
     using UniformCallback = std::function<void(ProgramState*, const UniformLocation&)>;

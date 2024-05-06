@@ -25,7 +25,7 @@
 #ifndef __cocos2d_libs__ComAudioReader__
 #define __cocos2d_libs__ComAudioReader__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "2d/Component.h"
 #include "2d/Node.h"
 #include "cocostudio/CocosStudioExport.h"
@@ -33,7 +33,7 @@
 
 namespace cocostudio
 {
-class CCS_DLL ComAudioReader : public ax::Ref, public NodeReaderProtocol
+class CCS_DLL ComAudioReader : public ax::Object, public NodeReaderProtocol
 {
 
 public:

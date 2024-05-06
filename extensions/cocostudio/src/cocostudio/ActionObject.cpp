@@ -109,7 +109,7 @@ bool ActionObject::isPlaying()
     return _bPlaying;
 }
 
-void ActionObject::initWithDictionary(const rapidjson::Value& dic, Ref* root)
+void ActionObject::initWithDictionary(const rapidjson::Value& dic, Object* root)
 {
     setName(DICTOOL->getStringValue_json(dic, "name"));
     setLoop(DICTOOL->getBooleanValue_json(dic, "loop"));
@@ -132,7 +132,7 @@ void ActionObject::initWithDictionary(const rapidjson::Value& dic, Ref* root)
     _fTotalTime = maxLength * _fUnitTime;
 }
 
-void ActionObject::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, ax::Ref* root)
+void ActionObject::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, ax::Object* root)
 {
     stExpCocoNode* stChildNode    = cocoNode->GetChildArray(cocoLoader);
     stExpCocoNode* actionNodeList = nullptr;

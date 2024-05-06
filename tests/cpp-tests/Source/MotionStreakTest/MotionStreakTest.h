@@ -39,7 +39,7 @@ public:
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
 
-    void modeCallback(ax::Ref* sender);
+    void modeCallback(ax::Object* sender);
 
 protected:
     ax::MotionStreak* _streak;

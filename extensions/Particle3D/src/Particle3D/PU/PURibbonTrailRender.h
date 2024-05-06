@@ -27,7 +27,7 @@
 #ifndef __AX_PU_PARTICLE_3D_RIBBON_TRAIL_RENDER_H__
 #define __AX_PU_PARTICLE_3D_RIBBON_TRAIL_RENDER_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "Particle3D/Particle3DRender.h"
 #include "Particle3D/PU/PUListener.h"
@@ -38,7 +38,7 @@
 
 NS_AX_BEGIN
 
-class PURibbonTrailVisualData : public Ref
+class PURibbonTrailVisualData : public Object
 {
 public:
     // Constructor

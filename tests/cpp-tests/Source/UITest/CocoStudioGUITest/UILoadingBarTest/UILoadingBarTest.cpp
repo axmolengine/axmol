@@ -78,7 +78,7 @@ bool UILoadingBarTest_Left::init()
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f + 50));
         button->setTitleText("Click to change direction!");
 
-        button->addTouchEventListener([=](Ref*, Widget::TouchEventType type) {
+        button->addTouchEventListener([=](Object*, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
                 if (loadingBar->getDirection() == LoadingBar::Direction::LEFT)
@@ -126,7 +126,7 @@ void UILoadingBarTest_Left::update(float delta)
     loadingBarCopy->setPercent(_count);
 }
 
-void UILoadingBarTest_Left::printWidgetResources(ax::Ref* sender)
+void UILoadingBarTest_Left::printWidgetResources(ax::Object* sender)
 {
     ax::ResourceData textureFile = _loadingBar->getRenderFile();
     AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
@@ -317,7 +317,7 @@ bool UILoadingBarTest_Scale9_State_Change::init()
         loadingBar->setPercent(100);
 
         loadingBar->setTouchEnabled(true);
-        loadingBar->addTouchEventListener([=](Ref* sender, Widget::TouchEventType type) {
+        loadingBar->addTouchEventListener([=](Object* sender, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
                 if (loadingBar->isScale9Enabled())
@@ -375,14 +375,14 @@ bool UILoadingBarReloadTexture::init()
         auto buttonScale9 = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         buttonScale9->setTitleText("ToggleScale9");
         buttonScale9->addClickEventListener(
-            [=](Ref*) { loadingBar->setScale9Enabled(!loadingBar->isScale9Enabled()); });
+            [=](Object*) { loadingBar->setScale9Enabled(!loadingBar->isScale9Enabled()); });
         buttonScale9->setPosition(loadingBar->getPosition() + Vec2(-50, 50));
         _uiLayer->addChild(buttonScale9);
 
         auto buttonChangeTexture =
             Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         buttonChangeTexture->setTitleText("ChangeTexture");
-        buttonChangeTexture->addClickEventListener([=](Ref*) {
+        buttonChangeTexture->addClickEventListener([=](Object*) {
             auto name = loadingBar->getName();
             if (name == "texture0")
             {
@@ -459,7 +459,7 @@ bool UILoadingBarIssue12249::init()
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f + 50));
         button->setTitleText("Click to change direction!");
 
-        button->addTouchEventListener([=](Ref*, Widget::TouchEventType type) {
+        button->addTouchEventListener([=](Object*, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
                 if (loadingBar->getDirection() == LoadingBar::Direction::LEFT)
@@ -536,7 +536,7 @@ bool UILoadingBarTest_Direction::init()
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f + 50));
         button->setTitleText("Click to change direction!");
 
-        button->addTouchEventListener([=](Ref*, Widget::TouchEventType type) {
+        button->addTouchEventListener([=](Object*, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
                 if (loadingBar->getDirection() == LoadingBar::Direction::LEFT)

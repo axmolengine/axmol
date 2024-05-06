@@ -41,7 +41,7 @@ public:
 
     virtual void update(float delta) override;
 
-    void SwitchLight(ax::Ref* sender, ax::LightType lightType);
+    void SwitchLight(ax::Object* sender, ax::LightType lightType);
 
 private:
     void addSprite();

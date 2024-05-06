@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "lua-bindings/manual/tolua_fix.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 #include <stdlib.h>
 
@@ -46,7 +46,7 @@ TOLUA_API void toluafix_open(lua_State* L)
     lua_rawset(L, LUA_REGISTRYINDEX);
 }
 
-TOLUA_API int toluafix_pushusertype_ccobject(lua_State* L, int refid, int* p_refid, void* ptr, const char* type)
+TOLUA_API int toluafix_pushusertype_object(lua_State* L, int refid, int* p_refid, void* ptr, const char* type)
 {
     if (ptr == NULL || p_refid == NULL)
     {
@@ -54,7 +54,7 @@ TOLUA_API int toluafix_pushusertype_ccobject(lua_State* L, int refid, int* p_ref
         return -1;
     }
 
-    Ref* vPtr         = static_cast<Ref*>(ptr);
+    Object* vPtr         = static_cast<Object*>(ptr);
     const char* vType = getLuaTypeName(vPtr, type);
 
     if (*p_refid == 0)

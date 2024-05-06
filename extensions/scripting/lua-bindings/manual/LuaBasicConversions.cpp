@@ -2289,7 +2289,7 @@ void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
     {
         int ID     = (int)(shape->_ID);
         int* luaID = &(shape->_luaID);
-        toluafix_pushusertype_ccobject(L, ID, luaID, (void*)shape, "ax.PhysicsShape");
+        toluafix_pushusertype_object(L, ID, luaID, (void*)shape, "ax.PhysicsShape");
     }
     lua_rawset(L, -3); /* table[key] = value, L: table */
 

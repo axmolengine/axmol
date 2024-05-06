@@ -43,7 +43,7 @@ public:
     virtual void onEnter() override;
     virtual std::string title() const override;
 
-    void toggleDebugCallback(ax::Ref* sender);
+    void toggleDebugCallback(ax::Object* sender);
 
     ax::Sprite* addGrossiniAtPosition(ax::Vec2 p, float scale = 1.0);
     ax::Sprite* makeBall(ax::Vec2 point,
@@ -115,7 +115,7 @@ public:
     void update(float delta) override;
     void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    void changeModeCallback(ax::Ref* sender);
+    void changeModeCallback(ax::Object* sender);
 
     bool anyRay(ax::PhysicsWorld& world, const ax::PhysicsRayCastInfo& info, void* data);
 
@@ -212,8 +212,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onDecrease(ax::Ref* sender);
-    void onIncrease(ax::Ref* sender);
+    void onDecrease(ax::Object* sender);
+    void onIncrease(ax::Object* sender);
 
 private:
     int _yellowBoxNum;
@@ -252,7 +252,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void changeBodyCallback(ax::Ref* sender);
+    void changeBodyCallback(ax::Object* sender);
 
 private:
     ax::Sprite* _nodeA;

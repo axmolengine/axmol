@@ -32,7 +32,7 @@
 
 #    include "2d/Component.h"
 
-#    include "base/Ref.h"
+#    include "base/Object.h"
 #    include "math/Vec3.h"
 #    include "recast/DetourNavMesh.h"
 #    include "recast/DetourTileCache.h"

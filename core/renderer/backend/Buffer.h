@@ -26,7 +26,7 @@
 
 #include "Macros.h"
 #include "Types.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 
 NS_AX_BEGIN
 
@@ -44,7 +44,7 @@ NS_AX_BACKEND_BEGIN
 /**
  * @brief Used to store vertex and index data data.
  */
-class Buffer : public ax::Ref
+class Buffer : public ax::Object
 {
 public:
     /**

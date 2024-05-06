@@ -73,7 +73,7 @@ typedef struct _BMFontPadding
 /** @brief BMFontConfiguration has parsed configuration of the .fnt file
 @since v0.8
 */
-class AX_DLL BMFontConfiguration : public Ref
+class AX_DLL BMFontConfiguration : public Object
 {
     // FIXME: Creating a public interface so that the bitmapFontArray[] is accessible
 public:  //@public

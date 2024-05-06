@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include <chrono>
 
 #include "platform/PlatformMacros.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Vector.h"
 #include "2d/Scene.h"
 #include "math/Math.h"

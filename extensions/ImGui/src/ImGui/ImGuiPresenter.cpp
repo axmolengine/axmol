@@ -880,7 +880,7 @@ void ImGuiPresenter::mergeFontGlyphs(ImFont* dst, ImFont* src, ImWchar start, Im
     dst->BuildLookupTable();
 }
 
-int ImGuiPresenter::getCCRefId(Ref* p)
+int ImGuiPresenter::getCCRefId(Object* p)
 {
     int id        = 0;
     const auto it = usedCCRefIdMap.find(p);

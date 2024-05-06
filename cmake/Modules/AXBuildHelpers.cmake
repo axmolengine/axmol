@@ -118,7 +118,7 @@ function(ax_mark_multi_resources res_out)
     list(APPEND tmp_file_list ${opt_FILES})
 
     foreach(cc_folder ${opt_FOLDERS})
-        file(GLOB_RECURSE folder_files "${cc_folder}/*")
+        file(GLOB_RECURSE folder_files FOLLOW_SYMLINKS "${cc_folder}/*")
         list(APPEND tmp_file_list ${folder_files})
         ax_mark_resources(FILES ${folder_files} BASEDIR ${cc_folder} RESOURCEBASE ${opt_RES_TO})
     endforeach()

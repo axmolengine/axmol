@@ -36,19 +36,19 @@ namespace cocostudio
 
 class TriggerObj;
 
-class CCS_DLL ArmatureMovementDispatcher : public ax::Ref
+class CCS_DLL ArmatureMovementDispatcher : public ax::Object
 {
 public:
     ArmatureMovementDispatcher(void);
     ~ArmatureMovementDispatcher(void);
 
 public:
-    void addAnimationEventCallBack(ax::Ref* pTarget, SEL_MovementEventCallFunc mecf);
-    void removeAnnimationEventCallBack(ax::Ref* pTarget, SEL_MovementEventCallFunc mecf);
+    void addAnimationEventCallBack(ax::Object* pTarget, SEL_MovementEventCallFunc mecf);
+    void removeAnnimationEventCallBack(ax::Object* pTarget, SEL_MovementEventCallFunc mecf);
     void animationEvent(Armature* armature, MovementEventType movementType, std::string_view movementID);
 
 private:
-    std::unordered_map<ax::Ref*, SEL_MovementEventCallFunc>* _mapEventAnimation;
+    std::unordered_map<ax::Object*, SEL_MovementEventCallFunc>* _mapEventAnimation;
 };
 
 class CCS_DLL TriggerMng
@@ -72,8 +72,8 @@ public:
     bool removeTriggerObj(unsigned int id);
     bool isEmpty(void) const;
 
-    void addArmatureMovementCallBack(Armature* pAr, ax::Ref* pTarget, SEL_MovementEventCallFunc mecf);
-    void removeArmatureMovementCallBack(Armature* pAr, ax::Ref* pTarget, SEL_MovementEventCallFunc mecf);
+    void addArmatureMovementCallBack(Armature* pAr, ax::Object* pTarget, SEL_MovementEventCallFunc mecf);
+    void removeArmatureMovementCallBack(Armature* pAr, ax::Object* pTarget, SEL_MovementEventCallFunc mecf);
     void removeArmatureAllMovementCallBack(Armature* pAr);
     void removeAllArmatureMovementCallBack();
     void dispatchEvent(ax::EventCustom* tEvent);

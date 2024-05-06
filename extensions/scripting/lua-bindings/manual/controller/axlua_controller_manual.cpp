@@ -133,7 +133,7 @@ static int toaxlua_EventListenerController_clone(lua_State* tolua_S)
 
         int ID     = (int)tolua_ret->_ID;
         int* luaID = &tolua_ret->_luaID;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerController");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerController");
 
         return 1;
     }
@@ -199,7 +199,7 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
                 tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
-                toluafix_pushusertype_ccobject(Ls, ID, luaID, (void*)event, "ax.event");
+                toluafix_pushusertype_object(Ls, ID, luaID, (void*)event, "ax.event");
                 stack->executeFunctionByHandler(handler, 2);
             };
         }
@@ -212,7 +212,7 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
                 tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
-                toluafix_pushusertype_ccobject(Ls, ID, luaID, (void*)event, "ax.event");
+                toluafix_pushusertype_object(Ls, ID, luaID, (void*)event, "ax.event");
                 stack->executeFunctionByHandler(handler, 2);
             };
         }
@@ -227,7 +227,7 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
                 tolua_pushnumber(Ls, (lua_Number)keyCode);
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
-                toluafix_pushusertype_ccobject(Ls, ID, luaID, (void*)event, "ax.event");
+                toluafix_pushusertype_object(Ls, ID, luaID, (void*)event, "ax.event");
                 stack->executeFunctionByHandler(handler, 3);
             };
         }
@@ -241,7 +241,7 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
                 tolua_pushnumber(Ls, (lua_Number)keyCode);
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
-                toluafix_pushusertype_ccobject(Ls, ID, luaID, (void*)event, "ax.event");
+                toluafix_pushusertype_object(Ls, ID, luaID, (void*)event, "ax.event");
                 stack->executeFunctionByHandler(handler, 3);
             };
         }
@@ -255,7 +255,7 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
                 tolua_pushnumber(Ls, (lua_Number)keyCode);
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
-                toluafix_pushusertype_ccobject(Ls, ID, luaID, (void*)event, "ax.event");
+                toluafix_pushusertype_object(Ls, ID, luaID, (void*)event, "ax.event");
                 stack->executeFunctionByHandler(handler, 3);
             };
         }
@@ -269,7 +269,7 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
                 tolua_pushnumber(Ls, (lua_Number)keyCode);
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
-                toluafix_pushusertype_ccobject(Ls, ID, luaID, (void*)event, "ax.event");
+                toluafix_pushusertype_object(Ls, ID, luaID, (void*)event, "ax.event");
                 stack->executeFunctionByHandler(handler, 3);
             };
         }
