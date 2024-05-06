@@ -630,3 +630,32 @@ function string.formatnumberthousands(num)
     end
     return formatted
 end
+
+-- The axmol new logging stubs, since v2.1.3
+local LogLevel = {
+    Trace = 0,
+    Debug = 1,
+    Info = 2,
+    Warn = 3,
+    Error = 4
+}
+
+function AXLOGT(...)
+    AXLOG_WITH_LEVEL(LogLevel.Trace, ...)
+end
+    
+function AXLOGD(...)
+    AXLOG_WITH_LEVEL(LogLevel.Debug, ...)
+end
+    
+function AXLOGI(...)
+    AXLOG_WITH_LEVEL(LogLevel.Info, ...)
+end
+    
+function AXLOGW(...)
+    AXLOG_WITH_LEVEL(LogLevel.Warn, ...)
+end
+    
+function AXLOGE(...)
+    AXLOG_WITH_LEVEL(LogLevel.Error, ...)
+end

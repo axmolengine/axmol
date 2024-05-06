@@ -18,6 +18,7 @@
 - Add unit tests by @smilediver in https://github.com/axmolengine/axmol/pull/1862
   - https://github.com/axmolengine/axmol/pull/1870
   - https://github.com/axmolengine/axmol/pull/1871
+- Add AXLOGD,AXLOGI,... functions for lua
 
 ### Break Changes
 
