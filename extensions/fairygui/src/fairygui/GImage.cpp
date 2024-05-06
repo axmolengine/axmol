@@ -126,16 +126,28 @@ void GImage::setProp(ObjectPropID propId, const ax::Value& value)
 void GImage::constructFromResource()
 {
     PackageItem* contentItem = _packageItem->getBranch();
-    sourceSize.width = contentItem->width;
-    sourceSize.height = contentItem->height;
-    initSize = sourceSize;
+    sourceSize.width         = contentItem->width;
+    sourceSize.height        = contentItem->height;
+    initSize                 = sourceSize;
 
     contentItem = contentItem->getHighResolution();
     contentItem->load();
 
     _content->setSpriteFrame(contentItem->spriteFrame);
     if (contentItem->scale9Grid)
-        ((FUISprite*)_content)->setScale9Grid(contentItem->scale9Grid);
+    {
+        const auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
+
+        const auto leftInset = contentItem->scale9Grid->origin.x;
+        const auto topInset  = contentItem->scale9Grid->origin.y;
+        const auto bottomInset =
+            sourceSize.height - contentItem->scale9Grid->size.y - contentItem->scale9Grid->origin.y;
+        const auto rightInset = sourceSize.width - contentItem->scale9Grid->size.x - contentItem->scale9Grid->origin.x;
+
+        auto insets = Rect(leftInset, topInset, (sourceSize.width / contentScaleFactor) - rightInset - leftInset,
+                           (sourceSize.height / contentScaleFactor) - bottomInset - topInset);
+        ((FUISprite*)_content)->setScale9Grid(&insets);
+    }
     else if (contentItem->scaleByTile)
         ((FUISprite*)_content)->setScaleByTile(true);
 
