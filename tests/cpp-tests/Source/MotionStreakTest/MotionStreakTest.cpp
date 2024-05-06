@@ -265,7 +265,7 @@ void MotionStreakTest::onEnter()
     menuMode->setPosition(Vec2(s.width / 2, s.height / 4));
 }
 
-void MotionStreakTest::modeCallback(Ref* pSender)
+void MotionStreakTest::modeCallback(Object* pSender)
 {
     bool fastMode = _streak->isFastMode();
     _streak->setFastMode(!fastMode);

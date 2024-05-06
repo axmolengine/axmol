@@ -541,13 +541,13 @@ bool ShaderBlur::init()
     return false;
 }
 
-void ShaderBlur::onRadiusChanged(Ref* sender, Control::EventType)
+void ShaderBlur::onRadiusChanged(Object* sender, Control::EventType)
 {
     ControlSlider* slider = (ControlSlider*)sender;
     _blurSprite->setBlurRadius(slider->getValue());
 }
 
-void ShaderBlur::onSampleNumChanged(Ref* sender, Control::EventType)
+void ShaderBlur::onSampleNumChanged(Object* sender, Control::EventType)
 {
     ControlSlider* slider = (ControlSlider*)sender;
     _blurSprite->setBlurSampleNum(slider->getValue());
@@ -712,7 +712,7 @@ ui::Slider* ShaderMultiTexture::createSliderCtl()
     slider->setPosition(Vec2(screenSize.width / 2.0f, screenSize.height / 3.0f));
     addChild(slider);
 
-    slider->addEventListener([&](Ref* sender, ui::Slider::EventType type) {
+    slider->addEventListener([&](Object* sender, ui::Slider::EventType type) {
         if (type == ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
         {
             ui::Slider* slider = dynamic_cast<ui::Slider*>(sender);
@@ -769,7 +769,7 @@ bool ShaderMultiTexture::init()
     return false;
 }
 
-void ShaderMultiTexture::changeTexture(Ref*)
+void ShaderMultiTexture::changeTexture(Object*)
 {
     static const int textureFilesCount                       = 3;
     static const std::string textureFiles[textureFilesCount] = {"Images/grossini.png", "Images/grossinis_sister1.png",

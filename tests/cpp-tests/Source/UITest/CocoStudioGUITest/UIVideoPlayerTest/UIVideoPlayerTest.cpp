@@ -131,12 +131,12 @@ void VideoPlayerTest::onExit()
 }
 
 
-void VideoPlayerTest::menuCloseCallback(Ref* sender)
+void VideoPlayerTest::menuCloseCallback(Object* sender)
 {
     Director::getInstance()->end();
 }
 
-void VideoPlayerTest::menuFullScreenCallback(Ref* sender)
+void VideoPlayerTest::menuFullScreenCallback(Object* sender)
 {
     if (_videoPlayer)
     {
@@ -144,7 +144,7 @@ void VideoPlayerTest::menuFullScreenCallback(Ref* sender)
     }
 }
 
-void VideoPlayerTest::menuRatioCallback(Ref* sender)
+void VideoPlayerTest::menuRatioCallback(Object* sender)
 {
     if (_videoPlayer)
     {
@@ -152,7 +152,7 @@ void VideoPlayerTest::menuRatioCallback(Ref* sender)
     }
 }
 
-void VideoPlayerTest::menuLoopCallback(Ref* sender)
+void VideoPlayerTest::menuLoopCallback(Object* sender)
 {
     if (_videoPlayer)
     {
@@ -161,7 +161,7 @@ void VideoPlayerTest::menuLoopCallback(Ref* sender)
     }
 }
 
-void VideoPlayerTest::menuResourceVideoCallback(Ref* sender)
+void VideoPlayerTest::menuResourceVideoCallback(Object* sender)
 {
     if (_videoPlayer)
     {
@@ -174,7 +174,7 @@ void VideoPlayerTest::menuResourceVideoCallback(Ref* sender)
     }
 }
 
-void VideoPlayerTest::menuOnlineVideoCallback(Ref* sender)
+void VideoPlayerTest::menuOnlineVideoCallback(Object* sender)
 {
     if (_videoPlayer)
     {
@@ -183,7 +183,7 @@ void VideoPlayerTest::menuOnlineVideoCallback(Ref* sender)
     }
 }
 
-void VideoPlayerTest::menuPauseCallback(Ref* sender)
+void VideoPlayerTest::menuPauseCallback(Object* sender)
 {
     if (_videoPlayer)
     {
@@ -191,7 +191,7 @@ void VideoPlayerTest::menuPauseCallback(Ref* sender)
     }
 }
 
-void VideoPlayerTest::menuResumeCallback(Ref* sender)
+void VideoPlayerTest::menuResumeCallback(Object* sender)
 {
     if (_videoPlayer)
     {
@@ -199,7 +199,7 @@ void VideoPlayerTest::menuResumeCallback(Ref* sender)
     }
 }
 
-void VideoPlayerTest::menuStopCallback(Ref* sender)
+void VideoPlayerTest::menuStopCallback(Object* sender)
 {
     if (_videoPlayer)
     {
@@ -207,7 +207,7 @@ void VideoPlayerTest::menuStopCallback(Ref* sender)
     }
 }
 
-void VideoPlayerTest::menuHintCallback(Ref* sender)
+void VideoPlayerTest::menuHintCallback(Object* sender)
 {
     if (_videoPlayer)
     {
@@ -260,7 +260,7 @@ void VideoPlayerTest::createSlider()
     _uiLayer->addChild(vSlider, 0, 2);
 }
 
-void VideoPlayerTest::sliderCallback(Ref* sender, ui::Slider::EventType eventType)
+void VideoPlayerTest::sliderCallback(Object* sender, ui::Slider::EventType eventType)
 {
     if (eventType == Slider::EventType::ON_PERCENTAGE_CHANGED && _videoPlayer)
     {
@@ -274,7 +274,7 @@ void VideoPlayerTest::sliderCallback(Ref* sender, ui::Slider::EventType eventTyp
     }
 }
 
-void VideoPlayerTest::videoEventCallback(Ref* sender, VideoPlayer::EventType eventType)
+void VideoPlayerTest::videoEventCallback(Object* sender, VideoPlayer::EventType eventType)
 {
     switch (eventType)
     {
@@ -383,12 +383,12 @@ void SimpleVideoPlayerTest::onExit()
     UIScene::onExit();
 }
 
-void SimpleVideoPlayerTest::menuCloseCallback(Ref* sender)
+void SimpleVideoPlayerTest::menuCloseCallback(Object* sender)
 {
     Director::getInstance()->end();
 }
 
-void SimpleVideoPlayerTest::switchStyleCallback(Ref* sender)
+void SimpleVideoPlayerTest::switchStyleCallback(Object* sender)
 {
     switch (_style)
     {
@@ -412,7 +412,7 @@ void SimpleVideoPlayerTest::switchStyleCallback(Ref* sender)
     updateButtonsTexts();
 }
 
-void SimpleVideoPlayerTest::switchUserInputCallback(Ref* sender)
+void SimpleVideoPlayerTest::switchUserInputCallback(Object* sender)
 {
     _userInputEnabled = !_userInputEnabled;
     if (_videoPlayer)

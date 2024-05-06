@@ -27,7 +27,7 @@
 #ifndef __AX_PU_PARTICLE_3D_EMITTER_H__
 #define __AX_PU_PARTICLE_3D_EMITTER_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "Particle3D/Particle3DEmitter.h"
 #include "Particle3D/PU/PUDynamicAttribute.h"
@@ -192,7 +192,7 @@ public:
     void setEmitsName(std::string_view emitsName);
     PUParticle3D::ParticleType getEmitsType() const { return _emitsType; }
     void setEmitsType(PUParticle3D::ParticleType type) { _emitsType = type; };
-    Ref* getEmitsEntityPtr() const;
+    Object* getEmitsEntityPtr() const;
     bool isMarkedForEmission() const { return _isMarkedForEmission; };
     void setMarkedForEmission(bool isMarked) { _isMarkedForEmission = isMarked; };
 
@@ -571,7 +571,7 @@ protected:
     bool _originEnabledSet;
 
     PUParticle3D::ParticleType _emitsType;
-    Ref* _emitsEntity;
+    Object* _emitsEntity;
 
     bool _isMarkedForEmission;
 };

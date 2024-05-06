@@ -13,9 +13,9 @@ class TweenManager
 {
 public:
     static GTweener* createTween();
-    static bool isTweening(ax::Ref* target, TweenPropType propType);
-    static bool killTweens(ax::Ref* target, TweenPropType propType, bool completed);
-    static GTweener* getTween(ax::Ref* target, TweenPropType propType);
+    static bool isTweening(ax::Object* target, TweenPropType propType);
+    static bool killTweens(ax::Object* target, TweenPropType propType, bool completed);
+    static GTweener* getTween(ax::Object* target, TweenPropType propType);
     static void update(float dt);
     static void clean();
     static void init();

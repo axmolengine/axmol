@@ -85,10 +85,10 @@ struct AX_EX_DLL PUParticle3D : public Particle3D
         PEF_COLLIDED = 1 << 2
     };
 
-    Ref* particleEntityPtr;
+    Object* particleEntityPtr;
     PUEmitter* parentEmitter;
 
-    Ref* visualData;
+    Object* visualData;
 
     ParticleType particleType;
     // Values that are assigned as soon as the particle is emitted (non-transformed)

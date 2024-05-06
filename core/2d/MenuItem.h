@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-typedef std::function<void(Ref*)> ccMenuCallback;
+typedef std::function<void(Object*)> ccMenuCallback;
 
 class Label;
 class LabelAtlas;

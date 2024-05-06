@@ -35,7 +35,7 @@
 #include "renderer/RenderState.h"
 #include "renderer/Technique.h"
 #include "renderer/CustomCommand.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Vector.h"
 #include "math/Vec2.h"
 #include "math/Vec3.h"
@@ -58,7 +58,7 @@ class ProgramState;
 }
 
 /// Material
-class AX_DLL Material : public Ref
+class AX_DLL Material : public Object
 {
     friend class Node;
     friend class Technique;

@@ -2320,7 +2320,7 @@ void ParticleDemo::update(float dt)
     }
 }
 
-void ParticleDemo::toggleCallback(Ref* sender)
+void ParticleDemo::toggleCallback(Object* sender)
 {
     if (_emitter != nullptr)
     {
@@ -3160,11 +3160,11 @@ void ParticleResetTotalParticles::onEnter()
     this->addChild(p);
 
     auto add = MenuItemFont::create("add 10 particles",
-                                    [p](Ref*) -> void { p->setTotalParticles(p->getTotalParticles() + 10); });
+                                    [p](Object*) -> void { p->setTotalParticles(p->getTotalParticles() + 10); });
     add->setFontSizeObj(20);
     add->setPosition(Vec2(0, 25));
 
-    auto remove = MenuItemFont::create("remove 10 particles", [p](Ref*) -> void {
+    auto remove = MenuItemFont::create("remove 10 particles", [p](Object*) -> void {
         int count = p->getTotalParticles() - 10;
         if (count < 0)
         {

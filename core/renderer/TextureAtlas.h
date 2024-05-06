@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include <string>
 
 #include "base/Types.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Config.h"
 
 NS_AX_BEGIN
@@ -59,7 +59,7 @@ To render the quads using an interleaved vertex array list, you should modify th
 @warning If you want to use TextureAtlas, you'd better setup GL status before it's rendered.
          Otherwise, the effect of TextureAtlas will be affected by the GL status of other nodes.
 */
-class AX_DLL TextureAtlas : public Ref
+class AX_DLL TextureAtlas : public Object
 {
 public:
     /** Creates a TextureAtlas with an filename and with an initial capacity for Quads.

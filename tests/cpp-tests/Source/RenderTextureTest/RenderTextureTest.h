@@ -43,11 +43,11 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void clearImage(ax::Ref* pSender);
-    void clearImageTransparent(ax::Ref* sender);
-    void saveImageWithPremultipliedAlpha(ax::Ref* pSender);
-    void saveImageWithNonPremultipliedAlpha(ax::Ref* pSender);
-    void addImage(ax::Ref* sender);
+    void clearImage(ax::Object* pSender);
+    void clearImageTransparent(ax::Object* sender);
+    void saveImageWithPremultipliedAlpha(ax::Object* pSender);
+    void saveImageWithNonPremultipliedAlpha(ax::Object* pSender);
+    void addImage(ax::Object* sender);
 
 private:
     ax::RenderTexture* _target;
@@ -130,7 +130,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void touched(ax::Ref* sender);
+    void touched(ax::Object* sender);
 };
 
 class RenderTexturePartTest : public RenderTextureTest

@@ -78,7 +78,7 @@ bool SpritePolygonTestCase::init()
         {
             TTFConfig ttfConfig("fonts/arial.ttf", 10);
             auto label    = Label::createWithTTF(ttfConfig, "DebugDraw OFF");
-            auto menuItem = MenuItemLabel::create(label, [=](Ref* ref) {
+            auto menuItem = MenuItemLabel::create(label, [=](Object* ref) {
                 if (_isDebugDraw)
                 {
                     _isDebugDraw = false;
@@ -328,7 +328,7 @@ void SpritePolygonTestSlider::makeSprites(const std::string* list, const int cou
     }
 }
 
-void SpritePolygonTestSlider::changeEpsilon(ax::Ref* pSender, ax::ui::Slider::EventType type)
+void SpritePolygonTestSlider::changeEpsilon(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {

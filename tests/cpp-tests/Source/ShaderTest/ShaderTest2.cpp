@@ -475,14 +475,14 @@ bool EffectSpriteTest::init()
 
         auto s = Director::getInstance()->getWinSize();
 
-        auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Ref* sender) {
+        auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Object* sender) {
             _vectorIndex--;
             if (_vectorIndex < 0)
                 _vectorIndex = _effects.size() - 1;
             _sprite->setEffect(_effects.at(_vectorIndex));
         });
 
-        auto itemNext = MenuItemImage::create("Images/f1.png", "Images/f2.png", [&](Ref* sender) {
+        auto itemNext = MenuItemImage::create("Images/f1.png", "Images/f2.png", [&](Object* sender) {
             _vectorIndex++;
             if (_vectorIndex >= _effects.size())
                 _vectorIndex = 0;

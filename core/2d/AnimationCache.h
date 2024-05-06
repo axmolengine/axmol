@@ -29,7 +29,7 @@ THE SOFTWARE.
 #ifndef __AX_ANIMATION_CACHE_H__
 #define __AX_ANIMATION_CACHE_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Map.h"
 #include "base/Value.h"
 #include "2d/Animation.h"

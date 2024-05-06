@@ -51,7 +51,7 @@ class NodeGrid;
 @since v0.8.2
 @js NA
 */
-class AX_DLL TransitionEaseScene  // : public Ref
+class AX_DLL TransitionEaseScene  // : public Object
 {
 public:
     /** Constructor.

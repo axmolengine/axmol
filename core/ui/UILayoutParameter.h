@@ -27,7 +27,7 @@
 #define __LAYOUTPARMETER_H__
 
 #include <string>
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "ui/GUIExport.h"
 
 /**
@@ -113,7 +113,7 @@ public:
 /**
  *@brief Base class for various LayoutParameter.
  */
-class AX_GUI_DLL LayoutParameter : public Ref
+class AX_GUI_DLL LayoutParameter : public Object
 {
 public:
     /**

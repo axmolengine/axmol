@@ -314,7 +314,7 @@ class UIS9GrayStateOpacityTest : public UIScene
 {
 public:
     CREATE_FUNC(UIS9GrayStateOpacityTest);
-    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
+    void sliderEvent(ax::Object* sender, ax::ui::Slider::EventType type);
 
     virtual bool init() override;
 };

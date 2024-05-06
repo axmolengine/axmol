@@ -215,7 +215,7 @@ void ActionManager::removeAction(Action* action)
         return;
     }
 
-    Ref* target   = action->getOriginalTarget();
+    Object* target   = action->getOriginalTarget();
     auto actionIt = _targets.find(static_cast<Node*>(target));
     if (actionIt != _targets.end())
     {

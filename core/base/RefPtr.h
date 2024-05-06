@@ -28,7 +28,7 @@
 #define __AX_REF_PTR_H__
 /// @cond DO_NOT_SHOW
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Macros.h"
 #include <functional>
 #include <type_traits>
@@ -45,7 +45,7 @@ NS_AX_BEGIN
     {                                                                 \
         if (ptr)                                                      \
         {                                                             \
-            const_cast<Ref*>(static_cast<const Ref*>(ptr))->retain(); \
+            const_cast<Object*>(static_cast<const Object*>(ptr))->retain(); \
         }                                                             \
                                                                       \
     } while (0);
@@ -56,7 +56,7 @@ NS_AX_BEGIN
     {                                                                  \
         if (ptr)                                                       \
         {                                                              \
-            const_cast<Ref*>(static_cast<const Ref*>(ptr))->release(); \
+            const_cast<Object*>(static_cast<const Object*>(ptr))->release(); \
         }                                                              \
                                                                        \
     } while (0);
@@ -67,7 +67,7 @@ NS_AX_BEGIN
     {                                                                  \
         if (ptr)                                                       \
         {                                                              \
-            const_cast<Ref*>(static_cast<const Ref*>(ptr))->release(); \
+            const_cast<Object*>(static_cast<const Object*>(ptr))->release(); \
             ptr = nullptr;                                             \
         }                                                              \
                                                                        \
@@ -81,7 +81,7 @@ struct ReferencedObject
 };
 
 /**
- * Wrapper class which maintains a strong reference to a cocos2dx ax::Ref* type object.
+ * Wrapper class which maintains a strong reference to a cocos2dx ax::Object* type object.
  * Similar in concept to a boost smart pointer.
  *
  * Enables the use of the RAII idiom with Cocos2dx objects and helps automate some of the more
@@ -249,8 +249,8 @@ public:
 private:
     T* _ptr;
 
-    // NOTE: We can ensure T is derived from ax::Ref at compile time here.
-    static_assert(std::is_base_of<Ref, typename std::remove_const<T>::type>::value, "T must be derived from Ref");
+    // NOTE: We can ensure T is derived from ax::Object at compile time here.
+    static_assert(std::is_base_of<Object, typename std::remove_const<T>::type>::value, "T must be derived from Object");
 };
 
 template <class T>

@@ -90,7 +90,7 @@ bool UISliderTest::init()
     return false;
 }
 
-void UISliderTest::sliderEvent(Ref* pSender, Slider::EventType type)
+void UISliderTest::sliderEvent(Object* pSender, Slider::EventType type)
 {
     if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -100,7 +100,7 @@ void UISliderTest::sliderEvent(Ref* pSender, Slider::EventType type)
         _displayValueLabel->setString(StringUtils::format("Percent %f", 10000.0 * percent / maxPercent));
     }
 }
-void UISliderTest::printWidgetResources(ax::Ref* /*sender*/)
+void UISliderTest::printWidgetResources(ax::Object* /*sender*/)
 {
     ax::ResourceData textureFile = _slider->getBackFile();
     AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
@@ -161,7 +161,7 @@ bool UISliderTest_Scale9::init()
     return false;
 }
 
-void UISliderTest_Scale9::sliderEvent(Ref* pSender, Slider::EventType type)
+void UISliderTest_Scale9::sliderEvent(Object* pSender, Slider::EventType type)
 {
     if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -207,7 +207,7 @@ bool UISliderTest_Scale9_State_Change::init()
         slider->setContentSize(Size(200.0f, 60.0f));
         slider->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f /* + slider->getSize().height * 3.0f*/));
-        slider->addTouchEventListener([=](Ref* /*sender*/, Widget::TouchEventType type) {
+        slider->addTouchEventListener([=](Object* /*sender*/, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
                 if (slider->isScale9Enabled())
@@ -225,7 +225,7 @@ bool UISliderTest_Scale9_State_Change::init()
     return false;
 }
 
-void UISliderTest_Scale9_State_Change::sliderEvent(Ref* pSender, Slider::EventType type)
+void UISliderTest_Scale9_State_Change::sliderEvent(Object* pSender, Slider::EventType type)
 {
     if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -360,7 +360,7 @@ bool UISliderNewEventCallbackTest::init()
         slider->loadProgressBarTexture("cocosui/sliderProgress.png");
         slider->setMaxPercent(1000);
         slider->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f + 50));
-        slider->addEventListener([=](Ref* widget, Slider::EventType type) {
+        slider->addEventListener([=](Object* widget, Slider::EventType type) {
             Slider* slider = (Slider*)widget;
             AX_UNUSED_PARAM(slider);
             if (type == Slider::EventType::ON_SLIDEBALL_DOWN)
@@ -419,7 +419,7 @@ bool UISliderIssue12249Test::init()
     return false;
 }
 
-void UISliderIssue12249Test::sliderEvent(Ref* pSender, Slider::EventType type)
+void UISliderIssue12249Test::sliderEvent(Object* pSender, Slider::EventType type)
 {
     if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {

@@ -111,7 +111,7 @@ bool UIButtonTest::init()
     return false;
 }
 
-void UIButtonTest::touchEvent(Ref* pSender, Widget::TouchEventType type)
+void UIButtonTest::touchEvent(Object* pSender, Widget::TouchEventType type)
 {
     switch (type)
     {
@@ -147,7 +147,7 @@ void UIButtonTest::touchEvent(Ref* pSender, Widget::TouchEventType type)
     }
 }
 
-void UIButtonTest::printWidgetResources(ax::Ref* sender)
+void UIButtonTest::printWidgetResources(ax::Object* sender)
 {
     ax::ResourceData normalFileName = _button->getNormalFile();
     AXLOG("normalFileName  Name : %s, Type: %d", normalFileName.file.c_str(), normalFileName.type);
@@ -209,7 +209,7 @@ bool UIButtonTest_Scale9::init()
     return false;
 }
 
-void UIButtonTest_Scale9::touchEvent(Ref* pSender, Widget::TouchEventType type)
+void UIButtonTest_Scale9::touchEvent(Object* pSender, Widget::TouchEventType type)
 {
     switch (type)
     {
@@ -291,7 +291,7 @@ bool UIButtonTest_Scale9_State_Change::init()
     return false;
 }
 
-void UIButtonTest_Scale9_State_Change::touchEvent(Ref* pSender, Widget::TouchEventType type)
+void UIButtonTest_Scale9_State_Change::touchEvent(Object* pSender, Widget::TouchEventType type)
 {
     switch (type)
     {
@@ -371,7 +371,7 @@ bool UIButtonTest_PressedAction::init()
     return false;
 }
 
-void UIButtonTest_PressedAction::touchEvent(Ref* pSender, Widget::TouchEventType type)
+void UIButtonTest_PressedAction::touchEvent(Object* pSender, Widget::TouchEventType type)
 {
     switch (type)
     {
@@ -463,7 +463,7 @@ bool UIButtonTest_Title::init()
     return false;
 }
 
-void UIButtonTest_Title::touchEvent(Ref* pSender, Widget::TouchEventType type)
+void UIButtonTest_Title::touchEvent(Object* pSender, Widget::TouchEventType type)
 {
     switch (type)
     {
@@ -549,7 +549,7 @@ bool UIButtonTestRemoveSelf::init()
     return false;
 }
 
-void UIButtonTestRemoveSelf::touchEvent(Ref* pSender, Widget::TouchEventType type)
+void UIButtonTestRemoveSelf::touchEvent(Object* pSender, Widget::TouchEventType type)
 {
     switch (type)
     {
@@ -609,7 +609,7 @@ bool UIButtonTestSwitchScale9::init()
     return false;
 }
 
-void UIButtonTestSwitchScale9::touchEvent(Ref* pSender, Widget::TouchEventType type)
+void UIButtonTestSwitchScale9::touchEvent(Object* pSender, Widget::TouchEventType type)
 {
     switch (type)
     {
@@ -660,7 +660,7 @@ bool UIButtonTestZoomScale::init()
         Button* button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f + 20));
         button->setPressedActionEnabled(true);
-        button->addClickEventListener([=](Ref* sender) {
+        button->addClickEventListener([=](Object* sender) {
             AXLOG("Button clicked, position = (%f, %f)", button->getPosition().x, button->getPosition().y);
         });
         button->setName("button");
@@ -680,7 +680,7 @@ bool UIButtonTestZoomScale::init()
     return false;
 }
 
-void UIButtonTestZoomScale::sliderEvent(Ref* pSender, Slider::EventType type)
+void UIButtonTestZoomScale::sliderEvent(Object* pSender, Slider::EventType type)
 {
     if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -719,7 +719,7 @@ bool UIButtonTextOnly::init()
               button->getContentSize().height);
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);
-        button->addClickEventListener([](Ref* sender) { AXLOG("clicked!"); });
+        button->addClickEventListener([](Object* sender) { AXLOG("clicked!"); });
         _uiLayer->addChild(button);
 
         return true;
@@ -752,7 +752,7 @@ bool UIButtonIgnoreContentSizeTest::init()
         button->setTitleText("PLAY GAME");
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);
-        button->addClickEventListener([=](Ref* sender) {
+        button->addClickEventListener([=](Object* sender) {
             AXLOG("clicked!");
             button->setScale(1.2f);
         });
@@ -766,7 +766,7 @@ bool UIButtonIgnoreContentSizeTest::init()
         button2->setTitleText("PLAY GAME");
         button2->setZoomScale(0.3f);
         button2->setPressedActionEnabled(true);
-        button2->addClickEventListener([=](Ref* sender) {
+        button2->addClickEventListener([=](Object* sender) {
             button2->runAction(ScaleTo::create(1.0f, 1.2f));
             AXLOG("clicked!");
         });
@@ -945,7 +945,7 @@ bool UIButtonDisableDefaultTest::init()
         button->setBright(false);
         button->setScale9Enabled(true);
         button->setCapInsets(Rect(3, 3, 5, 5));
-        button->addClickEventListener([=](Ref*) { button->setBright(true); });
+        button->addClickEventListener([=](Object*) { button->setBright(true); });
         _uiLayer->addChild(button);
 
         // Create the button
@@ -1135,7 +1135,7 @@ bool UIButtonScale9ChangeSpriteFrame::init()
         button->setTitleText("Press me");
         addChild(button);
 
-        button->addClickEventListener([sprite](Ref* button) { sprite->loadTexture("Images/blocks9.png"); });
+        button->addClickEventListener([sprite](Object* button) { sprite->loadTexture("Images/blocks9.png"); });
 
         return true;
     }

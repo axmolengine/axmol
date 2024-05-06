@@ -160,7 +160,7 @@ struct AX_DLL TMXTileAnimFlag
 
 This information is obtained from the TMX file.
 */
-struct AX_DLL TMXTileAnimInfo : public Ref
+struct AX_DLL TMXTileAnimInfo : public Object
 {
     static TMXTileAnimInfo* create(uint32_t tileID);
     explicit TMXTileAnimInfo(uint32_t tileID);
@@ -178,7 +178,7 @@ struct AX_DLL TMXTileAnimInfo : public Ref
 
 This information is obtained from the TMX file.
 */
-class AX_DLL TMXLayerInfo : public Ref
+class AX_DLL TMXLayerInfo : public Object
 {
 public:
     /**
@@ -214,7 +214,7 @@ public:
 
 This information is obtained from the TMX file.
 */
-class AX_DLL TMXTilesetInfo : public Ref
+class AX_DLL TMXTilesetInfo : public Object
 {
 public:
     std::string _name;
@@ -257,7 +257,7 @@ And it also contains:
 This information is obtained from the TMX file.
 
 */
-class AX_DLL TMXMapInfo : public Ref, public SAXDelegator
+class AX_DLL TMXMapInfo : public Object, public SAXDelegator
 {
 public:
     /** creates a TMX Format with a tmx file */

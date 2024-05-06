@@ -113,7 +113,7 @@ static int tolua_Cocos2d_LuaNode_create00(lua_State* tolua_S)
         luaNode->autorelease();
         int nID     = (int)luaNode->_ID;
         int* pLuaID = &luaNode->_luaID;
-        toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)luaNode, "ax.LuaNode");
+        toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)luaNode, "ax.LuaNode");
     }
     return 1;
 #    ifndef TOLUA_RELEASE
@@ -226,7 +226,7 @@ static int tolua_cocos2d_MenuItemImage_create(lua_State* tolua_S)
             // Uncheck
             int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
             int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-            toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemImage");
+            toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemImage");
             return 1;
         }
     } while (0);
@@ -250,7 +250,7 @@ static int tolua_cocos2d_MenuItemImage_create(lua_State* tolua_S)
             MenuItemImage* tolua_ret = (MenuItemImage*)MenuItemImage::create(normalImage, selectedImage);
             int nID                  = (tolua_ret) ? (int)tolua_ret->_ID : -1;
             int* pLuaID              = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-            toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemImage");
+            toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemImage");
             return 1;
         }
     } while (0);
@@ -273,7 +273,7 @@ static int tolua_cocos2d_MenuItemImage_create(lua_State* tolua_S)
             MenuItemImage* tolua_ret = (MenuItemImage*)MenuItemImage::create(normalImage, selectedImage, disabledImage);
             int nID                  = (tolua_ret) ? (int)tolua_ret->_ID : -1;
             int* pLuaID              = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-            toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemImage");
+            toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemImage");
             return 1;
         }
     } while (0);
@@ -315,7 +315,7 @@ static int tolua_cocos2d_MenuItemLabel_create(lua_State* tolua_S)
         MenuItemLabel* tolua_ret = (MenuItemLabel*)MenuItemLabel::create(label);
         int nID                  = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID              = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemLabel");
+        toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemLabel");
         return 1;
     }
 
@@ -356,7 +356,7 @@ static int tolua_cocos2d_MenuItemFont_create(lua_State* tolua_S)
         MenuItemFont* tolua_ret = (MenuItemFont*)MenuItemFont::create(value);
         int nID                 = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID             = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemFont");
+        toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemFont");
         return 1;
     }
 
@@ -412,7 +412,7 @@ static int tolua_cocos2d_MenuItemSprite_create(lua_State* tolua_S)
             (MenuItemSprite*)MenuItemSprite::create(normalSprite, selectedSprite, disabledSprite);
         int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemSprite");
+        toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemSprite");
         return 1;
     }
 
@@ -463,7 +463,7 @@ static int tolua_cocos2d_Menu_create(lua_State* tolua_S)
         // UnCheck
         int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.Menu");
+        toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.Menu");
         return 1;
     }
     else if (argc == 0)
@@ -471,7 +471,7 @@ static int tolua_cocos2d_Menu_create(lua_State* tolua_S)
         ax::Menu* tolua_ret = ax::Menu::create();
         int nID                  = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID              = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.Menu");
+        toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.Menu");
         return 1;
     }
 
@@ -617,7 +617,7 @@ static int tolua_cocos2d_MenuItemToggle_create(lua_State* tolua_S)
 
         int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemToggle");
+        toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.MenuItemToggle");
         return 1;
     }
 
@@ -1791,7 +1791,7 @@ int tolua_cocos2d_Sequence_create(lua_State* tolua_S)
         // issue 2433 uncheck
         int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : nullptr;
-        toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.Sequence");
+        toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.Sequence");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.Sequence:create", argc, 1);
@@ -1884,7 +1884,7 @@ static int tolua_cocos2d_CallFunc_create(lua_State* tolua_S)
 
         int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.CallFunc");
+        toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.CallFunc");
         return 1;
     }
 
@@ -2300,7 +2300,7 @@ static int axlua_Node_enumerateChildren(lua_State* tolua_S)
             
             int id     = node ? (int)node->_ID : -1;
             int* luaID = node ? &node->_luaID : nullptr;
-            toluafix_pushusertype_ccobject(stack->getLuaState(), id, luaID, (void*)node, "ax.Node");
+            toluafix_pushusertype_object(stack->getLuaState(), id, luaID, (void*)node, "ax.Node");
             bool ret = stack->executeFunctionByHandler(handler, 1);
 
             return ret;
@@ -2639,7 +2639,7 @@ static int tolua_cocos2d_Spawn_create(lua_State* tolua_S)
         ax::Spawn* tolua_ret = ax::Spawn::create(array);
         int nID                   = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID               = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.Spawn");
+        toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.Spawn");
         return 1;
     }
 
@@ -2711,7 +2711,7 @@ int lua_cocos2d_CardinalSplineBy_create(lua_State* tolua_S)
             {
                 int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
                 int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-                toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.CardinalSplineBy");
+                toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.CardinalSplineBy");
                 return 1;
             }
         }
@@ -2778,7 +2778,7 @@ int tolua_cocos2d_CatmullRomBy_create(lua_State* tolua_S)
             {
                 int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
                 int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-                toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.CatmullRomBy");
+                toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.CatmullRomBy");
                 return 1;
             }
         }
@@ -2844,7 +2844,7 @@ int tolua_cocos2d_CatmullRomTo_create(lua_State* tolua_S)
             {
                 int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
                 int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-                toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.CatmullRomTo");
+                toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.CatmullRomTo");
                 return 1;
             }
         }
@@ -2906,7 +2906,7 @@ int tolua_cocos2d_BezierBy_create(lua_State* tolua_S)
         {
             int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
             int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-            toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.BezierBy");
+            toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.BezierBy");
             return 1;
         }
     }
@@ -2967,7 +2967,7 @@ int tolua_cocos2d_BezierTo_create(lua_State* tolua_S)
         {
             int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
             int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-            toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.BezierTo");
+            toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.BezierTo");
             return 1;
         }
     }
@@ -3496,7 +3496,7 @@ static int toaxlua_LayerMultiplex_create(lua_State* tolua_S)
             LayerMultiplex* tolua_ret = LayerMultiplex::createWithArray(arg0);
             int nID                   = (tolua_ret) ? (int)tolua_ret->_ID : -1;
             int* pLuaID               = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-            toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.LayerMultiplex");
+            toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.LayerMultiplex");
             return 1;
         }
         else
@@ -3769,7 +3769,7 @@ static int toaxlua_SpriteBatchNode_getDescendants(lua_State* tolua_S)
                 continue;
 
             lua_pushnumber(tolua_S, (lua_Number)indexTable);
-            toluafix_pushusertype_ccobject(tolua_S, (*iter)->_ID, &((*iter)->_luaID), (void*)(*iter), "ax.Sprite");
+            toluafix_pushusertype_object(tolua_S, (*iter)->_ID, &((*iter)->_luaID), (void*)(*iter), "ax.Sprite");
             lua_rawset(tolua_S, -3);
             (*iter)->retain();
             ++indexTable;
@@ -4593,7 +4593,7 @@ static int toaxlua_LuaEventListenerAcceleration_create(lua_State* tolua_S)
                                                           ScriptHandlerMgr::HandlerType::EVENT_ACC);
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerAcceleration");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerAcceleration");
 
         return 1;
     }
@@ -4640,7 +4640,7 @@ static int tolua_cocos2d_LuaEventListenerCustom_create(lua_State* tolua_S)
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerCustom");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerCustom");
 
         return 1;
     }
@@ -4700,7 +4700,7 @@ static int toaxlua_EventListenerKeyboard_create(lua_State* tolua_S)
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerKeyboard");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerKeyboard");
 
         return 1;
     }
@@ -4791,7 +4791,7 @@ static int toaxlua_EventListenerKeyboard_clone(lua_State* tolua_S)
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerKeyboard");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerKeyboard");
 
         return 1;
     }
@@ -4921,7 +4921,7 @@ static int toaxlua_EventListenerTouchOneByOne_create(lua_State* tolua_S)
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerTouchOneByOne");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerTouchOneByOne");
 
         return 1;
     }
@@ -5033,7 +5033,7 @@ static int toaxlua_EventListenerTouchOneByOne_clone(lua_State* tolua_S)
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerTouchOneByOne");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerTouchOneByOne");
 
         return 1;
     }
@@ -5186,7 +5186,7 @@ static int toaxlua_EventListenerTouchAllAtOnce_create(lua_State* tolua_S)
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerTouchAllAtOnce");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerTouchAllAtOnce");
 
         return 1;
     }
@@ -5298,7 +5298,7 @@ static int toaxlua_EventListenerTouchAllAtOnce_clone(lua_State* tolua_S)
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerTouchAllAtOnce");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerTouchAllAtOnce");
 
         return 1;
     }
@@ -5451,7 +5451,7 @@ static int toaxlua_EventListenerMouse_create(lua_State* tolua_S)
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerMouse");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerMouse");
 
         return 1;
     }
@@ -5562,7 +5562,7 @@ static int toaxlua_EventListenerMouse_clone(lua_State* tolua_S)
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerMouse");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerMouse");
 
         return 1;
     }
@@ -5722,7 +5722,7 @@ static int toaxlua_ActionCamera_reverse(lua_State* tolua_S)
     if (argc == 0)
     {
         ax::ActionCamera* reverse = cobj->reverse();
-        toluafix_pushusertype_ccobject(tolua_S, reverse->_ID, &(reverse->_luaID), (void*)(reverse), "ax.ActionCamera");
+        toluafix_pushusertype_object(tolua_S, reverse->_ID, &(reverse->_luaID), (void*)(reverse), "ax.ActionCamera");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ActionCamera:reverse", argc,
@@ -5777,7 +5777,7 @@ static int toaxlua_GridAction_reverse(lua_State* tolua_S)
     if (argc == 0)
     {
         ax::GridAction* reverse = cobj->reverse();
-        toluafix_pushusertype_ccobject(tolua_S, reverse->_ID, &(reverse->_luaID), (void*)(reverse), "ax.GridAction");
+        toluafix_pushusertype_object(tolua_S, reverse->_ID, &(reverse->_luaID), (void*)(reverse), "ax.GridAction");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GridAction:reverse", argc, 0);
@@ -5843,7 +5843,7 @@ static int axlua_Label_createWithTTF00(lua_State* L)
             ax::Label::createWithTTF(ttfConfig, text, static_cast<TextHAlignment>(alignment), lineSize);
         int ID     = ret ? (int)(ret->_ID) : -1;
         int* luaID = ret ? &(ret->_luaID) : nullptr;
-        toluafix_pushusertype_ccobject(L, ID, luaID, (void*)ret, "ax.Label");
+        toluafix_pushusertype_object(L, ID, luaID, (void*)ret, "ax.Label");
         return 1;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Label:createWithTTF", argc, 2);
@@ -5894,7 +5894,7 @@ static int axlua_Label_createWithTTF01(lua_State* L)
 
             int ID     = ret ? (int)(ret->_ID) : -1;
             int* luaID = ret ? &(ret->_luaID) : nullptr;
-            toluafix_pushusertype_ccobject(L, ID, luaID, (void*)ret, "ax.Label");
+            toluafix_pushusertype_object(L, ID, luaID, (void*)ret, "ax.Label");
             return 1;
         }
     }
@@ -6415,7 +6415,7 @@ static int axlua_TextureCache_addImageAsync(lua_State* tolua_S)
             auto stack = LuaEngine::getInstance()->getLuaStack();
             int ID     = (tex) ? (int)tex->_ID : -1;
             int* luaID = (tex) ? &tex->_luaID : nullptr;
-            toluafix_pushusertype_ccobject(stack->getLuaState(), ID, luaID, (void*)tex, "ax.Texture2D");
+            toluafix_pushusertype_object(stack->getLuaState(), ID, luaID, (void*)tex, "ax.Texture2D");
             stack->executeFunctionByHandler(handler, 1);
             stack->removeScriptHandler(handler);
         });
@@ -6489,7 +6489,7 @@ int axlua_GLView_getAllTouches(lua_State* tolua_S)
             lua_pushnumber(tolua_S, (lua_Number)index);
             int ID     = (obj) ? (int)obj->_ID : -1;
             int* luaID = (obj) ? &obj->_luaID : nullptr;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)obj, "ax.Touch");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj, "ax.Touch");
             lua_rawset(tolua_S, -3);
             ++index;
         }
@@ -7354,7 +7354,7 @@ static int tolua_cocos2d_utils_findChildren(lua_State* tolua_S)
             lua_pushnumber(tolua_S, (lua_Number)index);
             int ID     = (obj) ? (int)obj->_ID : -1;
             int* luaID = (obj) ? &obj->_luaID : NULL;
-            toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)obj, "ax.Node");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj, "ax.Node");
             lua_rawset(tolua_S, -3);
             ++index;
         }
@@ -7381,7 +7381,7 @@ static int tolua_cocos2d_utils_findChild(lua_State* tolua_S)
         auto obj            = ax::utils::findChild(node, name);
         int ID              = (obj) ? (int)obj->_ID : -1;
         int* luaID          = (obj) ? &obj->_luaID : NULL;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)obj, "ax.Node");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj, "ax.Node");
         return 1;
     }
 #if _AX_DEBUG >= 1

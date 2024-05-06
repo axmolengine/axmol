@@ -2544,7 +2544,7 @@ void* ImGuiStorage::GetVoidPtr(ImGuiID key) const
     return it->val_p;
 }
 
-// References are only valid until a new value is added to the storage. Calling a Set***() function or a Get***Ref() function invalidates the pointer.
+// References are only valid until a new value is added to the storage. Calling a Set***() function or a Get***Object() function invalidates the pointer.
 int* ImGuiStorage::GetIntRef(ImGuiID key, int default_val)
 {
     ImGuiStoragePair* it = LowerBound(Data, key);
@@ -11544,9 +11544,9 @@ void ImGui::ClosePopupsOverWindow(ImGuiWindow* ref_window, bool restore_focus_to
 
             // Trim the stack unless the popup is a direct parent of the reference window (the reference window is often the NavWindow)
             // - Clicking/Focusing Window2 won't close Popup1:
-            //     Window -> Popup1 -> Window2(Ref)
+            //     Window -> Popup1 -> Window2(Object)
             // - Clicking/focusing Popup1 will close Popup2 and Popup3:
-            //     Window -> Popup1(Ref) -> Popup2 -> Popup3
+            //     Window -> Popup1(Object) -> Popup2 -> Popup3
             // - Each popups may contain child windows, which is why we compare ->RootWindowDockTree!
             //     Window -> Popup1 -> Popup1_Child -> Popup2 -> Popup2_Child
             // We step through every popup from bottom to top to validate their position relative to reference window.
@@ -20667,7 +20667,7 @@ void ImGui::DebugNodeDockNode(ImGuiDockNode* node, const char* label)
     {
         IM_ASSERT(node->ChildNodes[0] == NULL || node->ChildNodes[0]->ParentNode == node);
         IM_ASSERT(node->ChildNodes[1] == NULL || node->ChildNodes[1]->ParentNode == node);
-        BulletText("Pos (%.0f,%.0f), Size (%.0f, %.0f) Ref (%.0f, %.0f)",
+        BulletText("Pos (%.0f,%.0f), Size (%.0f, %.0f) Object (%.0f, %.0f)",
             node->Pos.x, node->Pos.y, node->Size.x, node->Size.y, node->SizeRef.x, node->SizeRef.y);
         DebugNodeWindow(node->HostWindow, "HostWindow");
         DebugNodeWindow(node->VisibleWindow, "VisibleWindow");

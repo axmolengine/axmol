@@ -410,7 +410,7 @@ void ChipmunkTestBed::createResetButton()
     this->addChild(menu, -1);
 }
 
-void ChipmunkTestBed::reset(Ref* sender)
+void ChipmunkTestBed::reset(Object* sender)
 {
     ChipmunkDemoFreeSpaceChildren(_space);
     getTestSuite()->restartCurrTest();
@@ -785,12 +785,12 @@ void BenchDemo::onEnter()
 {
     ChipmunkTestBed::onEnter();
 
-    auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Ref* sender) {
+    auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Object* sender) {
         bench = (bench > 0) ? bench - 1 : (bench_count - 1);
         reset(sender);
     });
 
-    auto itemNext = MenuItemImage::create("Images/f1.png", "Images/f2.png", [&](Ref* sender) {
+    auto itemNext = MenuItemImage::create("Images/f1.png", "Images/f2.png", [&](Object* sender) {
         bench = (bench < (bench_count - 1)) ? bench + 1 : 0;
         reset(sender);
     });

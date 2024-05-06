@@ -29,7 +29,7 @@ THE SOFTWARE.
 #define __AX_ANIMATION_H__
 
 #include "platform/PlatformConfig.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Value.h"
 #include "base/Vector.h"
 #include "2d/SpriteFrame.h"
@@ -55,7 +55,7 @@ class SpriteFrame;
 
  @since v2.0
  */
-class AX_DLL AnimationFrame : public Ref, public Clonable
+class AX_DLL AnimationFrame : public Object, public Clonable
 {
 public:
     /** @struct DisplayedEventInfo
@@ -157,7 +157,7 @@ private:
  * sprite->runAction(Animate::create(animation));
  * @endcode
  */
-class AX_DLL Animation : public Ref, public Clonable
+class AX_DLL Animation : public Object, public Clonable
 {
 public:
     /** Creates an animation.

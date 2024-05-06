@@ -26,9 +26,9 @@ public:
     static GTweener* toDouble(double startValue, double endValue, float duration);
     static GTweener* delayedCall(float delay);
     static GTweener* shake(const ax::Vec2& startValue, float amplitude, float duration);
-    static bool isTweening(ax::Ref* target, TweenPropType propType = TweenPropType::None);
-    static void kill(ax::Ref* target, TweenPropType propType = TweenPropType::None, bool complete = false);
-    static GTweener* getTween(ax::Ref* target, TweenPropType propType = TweenPropType::None);
+    static bool isTweening(ax::Object* target, TweenPropType propType = TweenPropType::None);
+    static void kill(ax::Object* target, TweenPropType propType = TweenPropType::None, bool complete = false);
+    static GTweener* getTween(ax::Object* target, TweenPropType propType = TweenPropType::None);
     static void clean();
 };
 

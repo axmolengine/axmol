@@ -276,7 +276,7 @@ IndividualThicknessTest::IndividualThicknessTest()
     scheduleUpdate();
 }
 
-void IndividualThicknessTest::changeThickness(ax::Ref* pSender, ax::ui::Slider::EventType type)
+void IndividualThicknessTest::changeThickness(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -417,7 +417,7 @@ DrawPieTest::DrawPieTest()
     scheduleUpdate();
 }
 
-void DrawPieTest::changeEndAngle(ax::Ref* pSender, ax::ui::Slider::EventType type)
+void DrawPieTest::changeEndAngle(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -427,7 +427,7 @@ void DrawPieTest::changeEndAngle(ax::Ref* pSender, ax::ui::Slider::EventType typ
     }
 }
 
-void DrawPieTest::changeStartAngle(ax::Ref* pSender, ax::ui::Slider::EventType type)
+void DrawPieTest::changeStartAngle(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -437,7 +437,7 @@ void DrawPieTest::changeStartAngle(ax::Ref* pSender, ax::ui::Slider::EventType t
     }
 }
 
-void DrawPieTest::changeRotation(ax::Ref* pSender, ax::ui::Slider::EventType type)
+void DrawPieTest::changeRotation(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -447,7 +447,7 @@ void DrawPieTest::changeRotation(ax::Ref* pSender, ax::ui::Slider::EventType typ
     }
 }
 
-void DrawPieTest::changeThickness(ax::Ref* pSender, ax::ui::Slider::EventType type)
+void DrawPieTest::changeThickness(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -773,7 +773,7 @@ ax::ui::Slider* DrawNodePart1Test::createSlider()
     return slider;
 }
 
-void DrawNodePart1Test::listviewCallback(ax::Ref* sender, ax::ui::ListView::EventType type)
+void DrawNodePart1Test::listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type)
 {
     // clear all text to white
     auto listview = static_cast<ax::ui::ListView*>(sender);
@@ -786,7 +786,7 @@ void DrawNodePart1Test::listviewCallback(ax::Ref* sender, ax::ui::ListView::Even
     isDirty = true;
 }
 
-void DrawNodePart1Test::sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType type)
+void DrawNodePart1Test::sliderCallback(ax::Object* sender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -1099,7 +1099,7 @@ ax::ui::Slider* DrawNodePart2Test::createSlider()
     return slider;
 }
 
-void DrawNodePart2Test::listviewCallback(ax::Ref* sender, ax::ui::ListView::EventType type)
+void DrawNodePart2Test::listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type)
 {
     // clear all text to white
     auto listview = static_cast<ax::ui::ListView*>(sender);
@@ -1111,7 +1111,7 @@ void DrawNodePart2Test::listviewCallback(ax::Ref* sender, ax::ui::ListView::Even
     listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color3B::RED);
 }
 
-void DrawNodePart2Test::sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType type)
+void DrawNodePart2Test::sliderCallback(ax::Object* sender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {

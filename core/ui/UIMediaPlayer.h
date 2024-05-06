@@ -182,7 +182,7 @@ public:
     /**
      * A callback which will be called after specific MediaPlayer event happens.
      */
-    typedef std::function<void(Ref*, MediaPlayer::EventType)> ccVideoPlayerCallback;
+    typedef std::function<void(Object*, MediaPlayer::EventType)> ccVideoPlayerCallback;
 
     /**
      *Static create method for instancing a MediaPlayer.

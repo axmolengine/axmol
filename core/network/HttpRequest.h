@@ -32,7 +32,7 @@
 #include <vector>
 #include <memory>
 #include <future>
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Macros.h"
 
 #include "yasio/byte_buffer.hpp"
@@ -60,7 +60,7 @@ typedef std::function<void(HttpClient* client, HttpResponse* response)> ccHttpRe
  * @lua NA
  */
 
-class AX_DLL HttpRequest : public Ref
+class AX_DLL HttpRequest : public Object
 {
     friend class HttpClient;
 
@@ -96,9 +96,9 @@ public:
      * Override autorelease method to avoid developers to call it.
      * If this function was called, it would trigger assert in debug mode
      *
-     * @return Ref* always return nullptr.
+     * @return Object* always return nullptr.
      */
-    Ref* autorelease()
+    Object* autorelease()
     {
         AXASSERT(false,
                  "HttpResponse is used between network thread and ui thread \

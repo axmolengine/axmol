@@ -31,7 +31,7 @@
 #include <memory>
 
 #include "platform/PlatformMacros.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 
 /**
  * @addtogroup base
@@ -49,7 +49,7 @@ class Node;
  *  For instance, you could refer to EventListenerAcceleration, EventListenerKeyboard, EventListenerTouchOneByOne,
  * EventListenerCustom.
  */
-class AX_DLL EventListener : public Ref
+class AX_DLL EventListener : public Object
 {
 public:
     /** Type Event type.*/

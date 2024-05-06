@@ -641,7 +641,7 @@ void BasicMediaController::createControls()
 
     _playButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
         g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::Play]));
-    _playButton->addClickEventListener([this](Ref* ref) {
+    _playButton->addClickEventListener([this](Object* ref) {
         if (_controlPanel->getOpacity() <= 50)
             return;
         _playRate = 1.f;
@@ -657,7 +657,7 @@ void BasicMediaController::createControls()
 
     _stopButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
         g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::Stop]));
-    _stopButton->addClickEventListener([this](Ref* ref) {
+    _stopButton->addClickEventListener([this](Object* ref) {
         if (_controlPanel->getOpacity() <= 50)
             return;
         _playRate = 1.f;
@@ -673,7 +673,7 @@ void BasicMediaController::createControls()
 
     _pauseButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
         g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::Pause]));
-    _pauseButton->addClickEventListener([this](Ref* ref) {
+    _pauseButton->addClickEventListener([this](Object* ref) {
         if (_controlPanel->getOpacity() <= 50)
             return;
         _playRate = 1.f;
@@ -689,7 +689,7 @@ void BasicMediaController::createControls()
 
     _fullScreenEnterButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
         g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::EnterFullscreen]));
-    _fullScreenEnterButton->addClickEventListener([this](Ref* ref) {
+    _fullScreenEnterButton->addClickEventListener([this](Object* ref) {
         if (_controlPanel->getOpacity() <= 50)
             return;
         _mediaPlayer->setFullScreenEnabled(true);
@@ -705,7 +705,7 @@ void BasicMediaController::createControls()
 
     _fullScreenExitButton = MediaPlayerControl::create(SpriteFrame::createWithTexture(
         g_mediaControlsTexture, g_mediaControlTextureRegions[MediaControlButtonId::ExitFullscreen]));
-    _fullScreenExitButton->addClickEventListener([this](Ref* ref) {
+    _fullScreenExitButton->addClickEventListener([this](Object* ref) {
         if (_controlPanel->getOpacity() <= 50)
             return;
         _mediaPlayer->setFullScreenEnabled(false);

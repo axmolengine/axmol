@@ -27,7 +27,7 @@
 #ifndef __AX_PU_PARTICLE_3D_BEHAVIOUR_H__
 #define __AX_PU_PARTICLE_3D_BEHAVIOUR_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include <vector>
@@ -38,7 +38,7 @@ NS_AX_BEGIN
 struct PUParticle3D;
 class PUParticleSystem3D;
 
-class AX_EX_DLL PUBehaviour : public Ref
+class AX_EX_DLL PUBehaviour : public Object
 {
     friend class PUParticleSystem3D;
 

@@ -30,21 +30,21 @@
 
 NS_AX_EXT_BEGIN
 
-Invocation* Invocation::create(Ref* target, Control::Handler action, Control::EventType controlEvent)
+Invocation* Invocation::create(Object* target, Control::Handler action, Control::EventType controlEvent)
 {
     Invocation* pRet = new Invocation(target, action, controlEvent);
     pRet->autorelease();
     return pRet;
 }
 
-Invocation::Invocation(Ref* target, Control::Handler action, Control::EventType controlEvent)
+Invocation::Invocation(Object* target, Control::Handler action, Control::EventType controlEvent)
 {
     _target       = target;
     _action       = action;
     _controlEvent = controlEvent;
 }
 
-void Invocation::invoke(Ref* sender)
+void Invocation::invoke(Object* sender)
 {
     if (_target && _action)
     {

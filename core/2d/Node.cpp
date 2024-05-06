@@ -763,7 +763,7 @@ void Node::setUserData(void* userData)
     _userData = userData;
 }
 
-void Node::setUserObject(Ref* userObject)
+void Node::setUserObject(Object* userObject)
 {
 #if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();

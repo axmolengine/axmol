@@ -32,7 +32,7 @@
 #include "base/Config.h"
 #if defined(AX_ENABLE_PHYSICS)
 
-#    include "base/Ref.h"
+#    include "base/Object.h"
 #    include "math/Math.h"
 
 struct cpConstraint;

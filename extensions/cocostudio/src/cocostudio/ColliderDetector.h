@@ -87,7 +87,7 @@ protected:
 #endif
 };
 
-class CCS_DLL ColliderBody : public ax::Ref
+class CCS_DLL ColliderBody : public ax::Object
 {
 public:
     ColliderBody(ContourData* contourData);
@@ -131,7 +131,7 @@ private:
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ColliderDetector : public ax::Ref
+class CCS_DLL ColliderDetector : public ax::Object
 {
 public:
     static ColliderDetector* create();

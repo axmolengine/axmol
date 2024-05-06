@@ -29,7 +29,7 @@ THE SOFTWARE.
 #ifndef __ACTIONS_CCACTION_H__
 #define __ACTIONS_CCACTION_H__
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "base/ScriptSupport.h"
 
@@ -50,7 +50,7 @@ enum
 /**
  * @brief Base class for Action objects.
  */
-class AX_DLL Action : public Ref, public Clonable
+class AX_DLL Action : public Object, public Clonable
 {
 public:
     /** Default tag used for all the actions. */

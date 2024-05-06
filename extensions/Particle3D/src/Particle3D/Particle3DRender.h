@@ -32,7 +32,7 @@
 #include "renderer/MeshCommand.h"
 #include "renderer/CallbackCommand.h"
 #include "renderer/backend/Buffer.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "math/Math.h"
 #include "extensions/ExtensionExport.h"
 
@@ -50,7 +50,7 @@ class Texture2D;
 /**
  * 3d particle render
  */
-class AX_EX_DLL Particle3DRender : public Ref
+class AX_EX_DLL Particle3DRender : public Object
 {
     friend class ParticleSystem3D;
 

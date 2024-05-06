@@ -34,10 +34,10 @@ THE SOFTWARE.
 #define DECLARE_CLASS_INFO                     \
 public:                                        \
     static ax::ObjectFactory::TInfo Type; \
-    static ax::Ref* createInstance(void);
+    static ax::Object* createInstance(void);
 
 #define IMPLEMENT_CLASS_INFO(className)           \
-    ax::Ref* className::createInstance(void) \
+    ax::Object* className::createInstance(void) \
     {                                             \
         auto ret = new className;                 \
         ret->autorelease();                       \

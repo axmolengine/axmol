@@ -13,7 +13,7 @@ class BitmapFont;
 class PixelHitTestData;
 class ByteBuffer;
 
-class PackageItem : public ax::Ref
+class PackageItem : public ax::Object
 {
 public:
     PackageItem();

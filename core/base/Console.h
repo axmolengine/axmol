@@ -46,7 +46,7 @@ typedef SSIZE_T ssize_t;
 #include <stdarg.h>
 #include "yasio/io_watcher.hpp"
 
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "base/Macros.h"
 
 NS_AX_BEGIN
@@ -61,7 +61,7 @@ NS_AX_BEGIN
  ```
  */
 
-class AX_DLL Console : public Ref
+class AX_DLL Console : public Object
 {
 public:
     /** Console Utils */

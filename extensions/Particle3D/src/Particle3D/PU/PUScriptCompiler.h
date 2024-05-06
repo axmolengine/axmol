@@ -26,7 +26,7 @@
 
 #ifndef __AX_PU_SCRIPT_COMPILER_H__
 #define __AX_PU_SCRIPT_COMPILER_H__
-#include "base/Ref.h"
+#include "base/Object.h"
 #include "Particle3D/PU/PUScriptParser.h"
 
 #include <list>
@@ -55,7 +55,7 @@ public:
     unsigned int line;
     PUAbstractNodeType type;
     PUAbstractNode* parent;
-    Ref* context;
+    Object* context;
 
     // contextd//
     //    Any context; // A holder for translation context data

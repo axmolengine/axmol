@@ -32,7 +32,7 @@
 #    include <unordered_map>
 #    include <queue>
 
-#    include "base/Ref.h"
+#    include "base/Object.h"
 #    include "audio/AudioMacros.h"
 #    include "audio/AudioCache.h"
 #    include "audio/AudioPlayer.h"
@@ -41,7 +41,7 @@ NS_AX_BEGIN
 
 class Scheduler;
 
-class AX_DLL AudioEngineImpl : public ax::Ref
+class AX_DLL AudioEngineImpl : public ax::Object
 {
 public:
     AudioEngineImpl();

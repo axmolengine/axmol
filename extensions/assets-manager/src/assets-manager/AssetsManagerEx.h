@@ -48,7 +48,7 @@ NS_AX_EXT_BEGIN
 /**
  * @brief   This class is used to auto update resources, such as pictures or scripts.
  */
-class AX_EX_DLL AssetsManagerEx : public Ref
+class AX_EX_DLL AssetsManagerEx : public Object
 {
 public:
     //! Update states

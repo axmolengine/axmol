@@ -296,7 +296,7 @@ bool UILayoutTest_BackGroundImage::init()
     return false;
 }
 
-void UILayoutTest_BackGroundImage::printWidgetResources(ax::Ref* sender)
+void UILayoutTest_BackGroundImage::printWidgetResources(ax::Object* sender)
 {
     ax::ResourceData textureFile = _layout->getRenderFile();
     AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
@@ -898,7 +898,7 @@ bool UILayoutComponentTest::init()
     return false;
 }
 
-void UILayoutComponentTest::touchEvent(Ref* pSender, Widget::TouchEventType type)
+void UILayoutComponentTest::touchEvent(Object* pSender, Widget::TouchEventType type)
 {
     switch (type)
     {

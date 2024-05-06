@@ -261,7 +261,7 @@ void MainScene::update(float delta)
     } //switch
 }
 
-void MainScene::menuCloseCallback(Ref* sender)
+void MainScene::menuCloseCallback(ax::Object* sender)
 {
     // Close the axmol game scene and quit the application
     _director->end();

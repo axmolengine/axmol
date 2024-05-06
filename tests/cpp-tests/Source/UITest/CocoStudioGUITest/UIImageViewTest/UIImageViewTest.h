@@ -37,7 +37,7 @@ public:
 
     virtual bool init() override;
 
-    void printWidgetResources(ax::Ref* sender);
+    void printWidgetResources(ax::Object* sender);
 
 protected:
     ax::ui::ImageView* _image;

@@ -37,7 +37,7 @@ namespace cocostudio
 class CocoLoader;
 struct stExpCocoNode;
 
-class CCS_DLL WidgetReader : public ax::Ref, public WidgetReaderProtocol, public NodeReaderProtocol
+class CCS_DLL WidgetReader : public ax::Object, public WidgetReaderProtocol, public NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 

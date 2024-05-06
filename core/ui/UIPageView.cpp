@@ -295,7 +295,7 @@ void PageView::pageTurningEvent()
 void PageView::addEventListener(const ccPageViewCallback& callback)
 {
     _eventCallback                          = callback;
-    ccScrollViewCallback scrollViewCallback = [this](Ref* /*ref*/, ScrollView::EventType type) -> void {
+    ccScrollViewCallback scrollViewCallback = [this](Object* /*ref*/, ScrollView::EventType type) -> void {
         if (type == ScrollView::EventType::AUTOSCROLL_ENDED && _previousPageIndex != _currentPageIndex)
         {
             pageTurningEvent();

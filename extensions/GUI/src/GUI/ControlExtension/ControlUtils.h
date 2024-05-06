@@ -65,7 +65,7 @@ typedef struct
  */
 
 // helper class to store Color3B's in mutable arrays
-class AX_EX_DLL Color3bObject : public Ref
+class AX_EX_DLL Color3bObject : public Object
 {
 public:
     Color3B value;

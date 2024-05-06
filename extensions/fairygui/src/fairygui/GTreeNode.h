@@ -9,7 +9,7 @@ NS_FGUI_BEGIN
 class GTree;
 class GComponent;
 
-class GTreeNode : public ax::Ref
+class GTreeNode : public ax::Object
 {
 public:
     static GTreeNode* create(bool isFolder = false, const std::string& resURL = ax::STD_STRING_EMPTY);

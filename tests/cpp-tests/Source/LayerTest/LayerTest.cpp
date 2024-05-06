@@ -476,7 +476,7 @@ LayerGradientTest::LayerGradientTest()
     menu->setPosition(Vec2(s.width / 2, 100.0f));
 }
 
-void LayerGradientTest::toggleItem(Ref* sender)
+void LayerGradientTest::toggleItem(Object* sender)
 {
     auto gradient = static_cast<LayerGradient*>(getChildByTag(kTagLayer));
     gradient->setCompressedInterpolation(!gradient->isCompressedInterpolation());
@@ -562,7 +562,7 @@ void LayerIgnoreAnchorPointPos::onEnter()
     menu->setPosition(Vec2(s.width / 2, s.height / 2));
 }
 
-void LayerIgnoreAnchorPointPos::onToggle(Ref* pObject)
+void LayerIgnoreAnchorPointPos::onToggle(Object* pObject)
 {
     auto layer  = this->getChildByTag(kLayerIgnoreAnchorPoint);
     bool ignore = layer->isIgnoreAnchorPointForPosition();
@@ -610,7 +610,7 @@ void LayerIgnoreAnchorPointRot::onEnter()
     menu->setPosition(Vec2(s.width / 2, s.height / 2));
 }
 
-void LayerIgnoreAnchorPointRot::onToggle(Ref* pObject)
+void LayerIgnoreAnchorPointRot::onToggle(Object* pObject)
 {
     auto layer  = this->getChildByTag(kLayerIgnoreAnchorPoint);
     bool ignore = layer->isIgnoreAnchorPointForPosition();
@@ -661,7 +661,7 @@ void LayerIgnoreAnchorPointScale::onEnter()
     menu->setPosition(Vec2(s.width / 2, s.height / 2));
 }
 
-void LayerIgnoreAnchorPointScale::onToggle(Ref* pObject)
+void LayerIgnoreAnchorPointScale::onToggle(Object* pObject)
 {
     auto layer  = this->getChildByTag(kLayerIgnoreAnchorPoint);
     bool ignore = layer->isIgnoreAnchorPointForPosition();
@@ -870,7 +870,7 @@ ax::ui::Slider* LayerRadialGradientTest::createSlider()
     return slider;
 }
 
-void LayerRadialGradientTest::listviewCallback(ax::Ref* sender, ax::ui::ListView::EventType type)
+void LayerRadialGradientTest::listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type)
 {
     // clear all text to white
     auto listview = static_cast<ax::ui::ListView*>(sender);
@@ -910,7 +910,7 @@ void LayerRadialGradientTest::listviewCallback(ax::Ref* sender, ax::ui::ListView
     }
 }
 
-void LayerRadialGradientTest::sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType type)
+void LayerRadialGradientTest::sliderCallback(ax::Object* sender, ax::ui::Slider::EventType type)
 {
     auto slider   = static_cast<ax::ui::Slider*>(sender);
     float percent = slider->getPercent() / 100.f;

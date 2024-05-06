@@ -36,7 +36,7 @@ extern "C" {
 }
 
 #include "base/Types.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_BLACKBERRY
 using std::memcpy;
@@ -83,13 +83,13 @@ typedef union
     std::string* stringValue;
     LuaValueDict* dictValue;
     LuaValueArray* arrayValue;
-    Ref* ccobjectValue;
+    Object* ccobjectValue;
 } LuaValueField;
 /// @endcond
 
 /**
  * Wrap different general types of data into a same specific type named LuaValue.
- * The general types supported as follows:int,float,bool,std::string,const char*,LuaValueDict,LuaValueArray,Ref.
+ * The general types supported as follows:int,float,bool,std::string,const char*,LuaValueDict,LuaValueArray,Object.
  *
  * @lua NA
  * @js NA
@@ -154,22 +154,22 @@ public:
     static const LuaValue arrayValue(const LuaValueArray& arrayValue);
 
     /**
-     * Construct a LuaValue object by a Ref object.
+     * Construct a LuaValue object by a Object object.
      *
-     * @param ccobjectValue a Ref object.
+     * @param ccobjectValue a Object object.
      * @param objectTypename a string pointer point to the typename of object.
      * @return a LuaValue object.
      */
-    static const LuaValue ccobjectValue(Ref* ccobjectValue, const char* objectTypename);
+    static const LuaValue ccobjectValue(Object* ccobjectValue, const char* objectTypename);
 
     /**
-     * Construct a LuaValue object by a Ref object.
+     * Construct a LuaValue object by a Object object.
      *
-     * @param ccobjectValue a Ref object.
+     * @param ccobjectValue a Object object.
      * @param objectTypename a std::string object represent the typename of object.
      * @return a LuaValue object.
      */
-    static const LuaValue ccobjectValue(Ref* ccobjectValue, std::string_view objectTypename);
+    static const LuaValue ccobjectValue(Object* ccobjectValue, std::string_view objectTypename);
 
     /**
      * Default constructor of LuaValue.
@@ -200,7 +200,7 @@ public:
     LuaValueType getType() const { return _type; }
 
     /**
-     * Get the typename of the Ref object.
+     * Get the typename of the Object object.
      *
      * @return the reference of _ccobjectType.
      */
@@ -249,11 +249,11 @@ public:
     const LuaValueArray& arrayValue() const { return *_field.arrayValue; }
 
     /**
-     * Get the Ref object of LuaValue object.
+     * Get the Object object of LuaValue object.
      *
-     * @return the pointer point to a Ref object.
+     * @return the pointer point to a Object object.
      */
-    Ref* ccobjectValue() const { return _field.ccobjectValue; }
+    Object* ccobjectValue() const { return _field.ccobjectValue; }
 
 private:
     LuaValueField _field;

@@ -50,7 +50,7 @@ GTweener* TweenManager::createTween()
     return tweener;
 }
 
-bool TweenManager::isTweening(ax::Ref* target, TweenPropType propType)
+bool TweenManager::isTweening(ax::Object* target, TweenPropType propType)
 {
     if (target == nullptr)
         return false;
@@ -66,7 +66,7 @@ bool TweenManager::isTweening(ax::Ref* target, TweenPropType propType)
     return false;
 }
 
-bool TweenManager::killTweens(ax::Ref* target, TweenPropType propType, bool completed)
+bool TweenManager::killTweens(ax::Object* target, TweenPropType propType, bool completed)
 {
     if (target == nullptr)
         return false;
@@ -87,7 +87,7 @@ bool TweenManager::killTweens(ax::Ref* target, TweenPropType propType, bool comp
     return flag;
 }
 
-GTweener* TweenManager::getTween(ax::Ref* target, TweenPropType propType)
+GTweener* TweenManager::getTween(ax::Object* target, TweenPropType propType)
 {
     if (target == nullptr)
         return nullptr;

@@ -122,7 +122,7 @@ struct DownloaderTest : public TestCase
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_ui_plist);
 
         // add four download view in test case
-        Node* topRightView = createDownloadView(sNameList[0], [this](Ref*) {
+        Node* topRightView = createDownloadView(sNameList[0], [this](Object*) {
             auto view   = this->getChildByName(sNameList[0]);
             auto sprite = view->getChildByTag(TAG_SPRITE);
             if (sprite)
@@ -142,7 +142,7 @@ struct DownloaderTest : public TestCase
         topRightView->setPosition(VisibleRect::center());
         this->addChild(topRightView);
 
-        Node* topLeftView = createDownloadView(sNameList[1], [this](Ref*) {
+        Node* topLeftView = createDownloadView(sNameList[1], [this](Object*) {
             auto view   = this->getChildByName(sNameList[1]);
             auto sprite = view->getChildByTag(TAG_SPRITE);
             if (sprite)
@@ -163,7 +163,7 @@ struct DownloaderTest : public TestCase
         topLeftView->setPosition(VisibleRect::center());
         this->addChild(topLeftView);
 
-        Node* bottomLeftView = createDownloadView(sNameList[2], [this](Ref*) {
+        Node* bottomLeftView = createDownloadView(sNameList[2], [this](Object*) {
             auto view   = this->getChildByName(sNameList[2]);
             auto sprite = view->getChildByTag(TAG_SPRITE);
             if (sprite)
@@ -185,7 +185,7 @@ struct DownloaderTest : public TestCase
         bottomLeftView->setPosition(VisibleRect::center());
         this->addChild(bottomLeftView);
 
-        Node* bottomRightView = createDownloadView(sNameList[3], [this](Ref*) {
+        Node* bottomRightView = createDownloadView(sNameList[3], [this](Object*) {
             auto view = this->getChildByName(sNameList[3]);
             auto btn  = (ui::Button*)view->getChildByTag(TAG_BUTTON);
             btn->setEnabled(false);

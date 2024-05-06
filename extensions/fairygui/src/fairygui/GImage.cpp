@@ -1,3 +1,27 @@
+/****************************************************************************
+ Copyright (c) 2015 fairygui.com
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+The MIT License (MIT)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ ****************************************************************************/
+
 #include "GImage.h"
 #include "PackageItem.h"
 #include "display/FUISprite.h"
@@ -126,16 +150,25 @@ void GImage::setProp(ObjectPropID propId, const ax::Value& value)
 void GImage::constructFromResource()
 {
     PackageItem* contentItem = _packageItem->getBranch();
-    sourceSize.width = contentItem->width;
-    sourceSize.height = contentItem->height;
-    initSize = sourceSize;
+    sourceSize.width         = contentItem->width;
+    sourceSize.height        = contentItem->height;
+    initSize                 = sourceSize;
 
     contentItem = contentItem->getHighResolution();
     contentItem->load();
 
     _content->setSpriteFrame(contentItem->spriteFrame);
     if (contentItem->scale9Grid)
-        ((FUISprite*)_content)->setScale9Grid(contentItem->scale9Grid);
+    {
+        const auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
+
+        auto scaledInsets = *contentItem->scale9Grid;
+
+        scaledInsets.setRect(scaledInsets.origin.x / contentScaleFactor, scaledInsets.origin.y / contentScaleFactor,
+                             scaledInsets.size.x / contentScaleFactor, scaledInsets.size.y / contentScaleFactor);
+
+        ((FUISprite*)_content)->setScale9Grid(&scaledInsets);
+    }
     else if (contentItem->scaleByTile)
         ((FUISprite*)_content)->setScaleByTile(true);
 

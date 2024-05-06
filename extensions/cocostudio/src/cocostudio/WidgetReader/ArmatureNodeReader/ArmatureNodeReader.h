@@ -37,7 +37,7 @@ instance->registReaderObject("ArmatureNodeReader", (ObjectFactory::Instance)Cust
 *
 *
 *****************************************/
-class ArmatureNodeReader : public ax::Ref, public cocostudio::NodeReaderProtocol
+class ArmatureNodeReader : public ax::Object, public cocostudio::NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 

@@ -656,7 +656,7 @@ IMGUI_IMPL_API void ImGui_ImplAx_RenderDrawData(ImDrawData* draw_data)
 
                     auto bd = ImGui_ImplAndroid_GetBackendData();
 
-                    if (typeid(*((Ref*)pcmd->TextureId)) == typeid(Texture2D))
+                    if (typeid(*((Object*)pcmd->TextureId)) == typeid(Texture2D))
                     {
                         auto tex = AX_PTR_CAST(pcmd->TextureId, Texture2D*);
                         auto cmd = std::make_shared<CustomCommand>();

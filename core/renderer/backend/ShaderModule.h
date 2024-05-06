@@ -26,7 +26,7 @@
 
 #include "Macros.h"
 #include "Types.h"
-#include "base/Ref.h"
+#include "base/Object.h"
 
 #include <string>
 
@@ -67,7 +67,7 @@ enum Attribute : uint32_t
 /**
  * Create shader.
  */
-class AX_DLL ShaderModule : public ax::Ref
+class AX_DLL ShaderModule : public ax::Object
 {
 public:
     /**
