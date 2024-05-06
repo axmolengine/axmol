@@ -138,15 +138,12 @@ void GImage::constructFromResource()
     {
         const auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
 
-        const auto leftInset = contentItem->scale9Grid->origin.x;
-        const auto topInset  = contentItem->scale9Grid->origin.y;
-        const auto bottomInset =
-            sourceSize.height - contentItem->scale9Grid->size.y - contentItem->scale9Grid->origin.y;
-        const auto rightInset = sourceSize.width - contentItem->scale9Grid->size.x - contentItem->scale9Grid->origin.x;
+        auto scaledInsets = *contentItem->scale9Grid;
 
-        auto insets = Rect(leftInset, topInset, (sourceSize.width / contentScaleFactor) - rightInset - leftInset,
-                           (sourceSize.height / contentScaleFactor) - bottomInset - topInset);
-        ((FUISprite*)_content)->setScale9Grid(&insets);
+        scaledInsets.setRect(scaledInsets.origin.x / contentScaleFactor, scaledInsets.origin.y / contentScaleFactor,
+                             scaledInsets.size.x / contentScaleFactor, scaledInsets.size.y / contentScaleFactor);
+
+        ((FUISprite*)_content)->setScale9Grid(&scaledInsets);
     }
     else if (contentItem->scaleByTile)
         ((FUISprite*)_content)->setScaleByTile(true);
