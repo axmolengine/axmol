@@ -46,11 +46,6 @@
 
 NS_AX_EXT_BEGIN
 
-static inline Tex2F v2ToTex2F(const Vec2& v)
-{
-    return { v.x, v.y };
-}
-
 /** Is a polygon convex?
 * @param verts A pointer to point coordinates.
 * @param count The number of verts measured in points.
@@ -743,29 +738,29 @@ void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, con
 
     case DrawNodeEx::EndType::Square:
         triangles[ii++] = {
-            {v0, col, v2ToTex2F(Vec2::ZERO)},
-            {v1, col, v2ToTex2F(-n)},
-            {v2, col, v2ToTex2F(n)},
+            {v0, col, Tex2F::ZERO},
+            {v1, col, Tex2F(-n)},
+            {v2, col, Tex2F(n)},
         };
 
         triangles[ii++] = {
-            {v3, col, v2ToTex2F(n)},
-            {v1, col, v2ToTex2F(Vec2::ZERO)},
-            {v2, col, v2ToTex2F(-n)},
+            {v3, col, Tex2F(n)},
+            {v1, col, Tex2F::ZERO},
+            {v2, col, Tex2F(-n)},
         };
 
         break;
     case DrawNodeEx::EndType::Round:
         triangles[ii++] = {
-            {v0, col, v2ToTex2F(-(n + t))},
-            {v1, col, v2ToTex2F(n - t)},
-            {v2, col, v2ToTex2F(-n)},
+            {v0, col, Tex2F(-(n + t))},
+            {v1, col, Tex2F(n - t)},
+            {v2, col, Tex2F(-n)},
         };
 
         triangles[ii++] = {
-            {v3, col, v2ToTex2F(n)},
-            {v1, col, v2ToTex2F(n - t)},
-            {v2, col, v2ToTex2F(-n)},
+            {v3, col, Tex2F(n)},
+            {v1, col, Tex2F(n - t)},
+            {v2, col, Tex2F(-n)},
         };
         break;
 
@@ -775,15 +770,15 @@ void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, con
 
     // BODY
     triangles[ii++] = {
-        {v3, col, v2ToTex2F(n)},
-        {v4, col, v2ToTex2F(-n)},
-        {v2, col, v2ToTex2F(-n)},
+        {v3, col, Tex2F(n)},
+        {v4, col, Tex2F(-n)},
+        {v2, col, Tex2F(-n)},
     };
 
     triangles[ii++] = {
-        {v3, col, v2ToTex2F(n)},
-        {v4, col, v2ToTex2F(-n)},
-        {v5, col, v2ToTex2F(n)},
+        {v3, col, Tex2F(n)},
+        {v4, col, Tex2F(-n)},
+        {v5, col, Tex2F(n)},
     };
 
     // End
@@ -794,29 +789,29 @@ void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, con
 
     case DrawNodeEx::EndType::Square:
         triangles[ii++] = {
-            {v6, col, v2ToTex2F(Vec2::ZERO)},
-            {v4, col, v2ToTex2F(-n)},
-            {v5, col, v2ToTex2F(n)},
+            {v6, col, Tex2F::ZERO},
+            {v4, col, Tex2F(-n)},
+            {v5, col, Tex2F(n)},
         };
 
         triangles[ii++] = {
-            {v6, col, v2ToTex2F(-n)},
-            {v7, col, v2ToTex2F(Vec2::ZERO)},
-            {v5, col, v2ToTex2F(n)},
+            {v6, col, Tex2F(-n)},
+            {v7, col, Tex2F::ZERO},
+            {v5, col, Tex2F(n)},
         };
         break;
 
     case DrawNodeEx::EndType::Round:
         triangles[ii++] = {
-            {v6, col, v2ToTex2F(t - n)},
-            {v4, col, v2ToTex2F(-n)},
-            {v5, col, v2ToTex2F(n)},
+            {v6, col, Tex2F(t - n)},
+            {v4, col, Tex2F(-n)},
+            {v5, col, Tex2F(n)},
         };
 
         triangles[ii++] = {
-            {v6, col, v2ToTex2F(t - n)},
-            {v7, col, v2ToTex2F(t + n)},
-            {v5, col, v2ToTex2F(n)},
+            {v6, col, Tex2F(t - n)},
+            {v7, col, Tex2F(t + n)},
+            {v5, col, Tex2F(n)},
         };
         break;
 
@@ -1139,9 +1134,9 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
         for (int i = 0; i < count - 2; i++)
         {
             V2F_C4B_T2F_Triangle tmp = {
-                {_vertices[0], fillColor, v2ToTex2F(Vec2::ZERO)},
-                {_vertices[i + 1], fillColor, v2ToTex2F(Vec2::ZERO)},
-                {_vertices[i + 2], fillColor, v2ToTex2F(Vec2::ZERO)},
+                {_vertices[0], fillColor, Tex2F::ZERO},
+                {_vertices[i + 1], fillColor, Tex2F::ZERO},
+                {_vertices[i + 2], fillColor, Tex2F::ZERO},
             };
 
             *cursor++ = tmp;
@@ -1189,14 +1184,14 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
                 borderColor = Color4B::TRANSPARENT;
             }
 
-            V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColor, v2ToTex2F(-n0)},
-                {inner1, borderColor, v2ToTex2F(-n0)},
-                {outer1, borderColor, v2ToTex2F(n0)} };
+            V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColor, Tex2F(-n0)},
+                {inner1, borderColor, Tex2F(-n0)},
+                {outer1, borderColor, Tex2F(n0)} };
             *cursor++ = tmp1;
 
-            V2F_C4B_T2F_Triangle tmp2 = { {inner0, borderColor, v2ToTex2F(-n0)},
-                {outer0, borderColor, v2ToTex2F(n0)},
-                {outer1, borderColor, v2ToTex2F(n0)} };
+            V2F_C4B_T2F_Triangle tmp2 = { {inner0, borderColor, Tex2F(-n0)},
+                {outer0, borderColor, Tex2F(n0)},
+                {outer1, borderColor, Tex2F(n0)} };
             *cursor++ = tmp2;
         }
 
