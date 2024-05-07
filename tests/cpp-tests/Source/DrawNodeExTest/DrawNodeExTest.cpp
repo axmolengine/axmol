@@ -1071,6 +1071,13 @@ DrawNodePart2Test::DrawNodePart2Test()
     label->setPosition(Vec2(Vec2(center.x, 80.0f)));
     this->addChild(label, 1);
 
+    label1 = Label::createWithTTF("DrawNodeEx::Round", "fonts/Arial.ttf", 12);
+    addChild(label1, 1);
+    label2 = Label::createWithTTF("DrawNodeEx::Square", "fonts/Arial.ttf", 12);
+    addChild(label2, 1);
+    label3 = Label::createWithTTF("DrawNodeEx::Butt", "fonts/Arial.ttf", 12);
+    addChild(label3, 1);
+
     scheduleUpdate();
 }
 
@@ -1235,11 +1242,26 @@ void DrawNodePart2Test::update(float dt)
     case 4:
     {
         // Draw segment
-        draw->drawSegment(Vec2(20.0f, s.height), Vec2(20.0f, s.height / 2), 10,
-                          Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
-        draw->drawSegment(Vec2(10.0f, s.height / 2), Vec2(s.width / 2, s.height / 2), 40,
-                          Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
+        int yy1 = 0;
+        int yy = 50;
+        draw->drawSegment(Vec2(50.0f, yy), Vec2(400, yy-yy1), count/20,
+            Color4F::GREEN);  //default  DrawNodeEx::Round
+
+        label1->setPosition(Vec2(410.0f, yy+55));
+
+
+        yy += 110;
+        draw->drawSegment(Vec2(50.0f, yy), Vec2(400, yy-yy1), count/20,
+            Color4F::BLUE, DrawNodeEx::Square);
+        label2->setPosition(Vec2(410.0f,  yy));
+
+
+        yy += 110;
+        draw->drawSegment(Vec2(50.0f, yy), Vec2(400, yy-yy1), count/20,
+            Color4F::RED, DrawNodeEx::Butt);
+        label3->setPosition(Vec2(410.0f,  yy-55));
+			
         break;
     }
     case 5:

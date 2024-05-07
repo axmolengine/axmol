@@ -196,4 +196,7 @@ private:
     bool isDirty                 = false;
 
     ax::Label* label;
+    ax::Label* label1;
+    ax::Label* label2;
+    ax::Label* label3;
 };
