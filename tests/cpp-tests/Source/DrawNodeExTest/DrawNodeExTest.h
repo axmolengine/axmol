@@ -165,9 +165,13 @@ private:
 
     int _currentSeletedItemIndex = 0;
     float thickness              = 0.1f;
+    int count                    = 1;
     bool isDirty                 = false;
 
     ax::Label* label;
+    ax::Label* label1;
+    ax::Label* label2;
+    ax::Label* label3;
 };
 
 class DrawNodePart2Test : public DrawNodeExBaseTest
