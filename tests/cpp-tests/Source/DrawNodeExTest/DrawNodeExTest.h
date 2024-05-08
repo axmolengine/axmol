@@ -388,7 +388,7 @@ public:
     void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);
 
 private:
-    ax::DrawNode* drawNode;
+    ax::extension::DrawNodeEx* drawNode;
     ax::Label* _lineWidthLabel;
     float lineWidth = 0;
     ax::Label* _thresholdLabel;
@@ -435,7 +435,7 @@ public:
     void changeAngle(Object* pSender, ax::ui::Slider::EventType type);
 
 private:
-    ax::DrawNode* drawNode;
+    ax::extension::DrawNodeEx* drawNode;
     ax::Label* _StartAngleLabel;
     float startAngle = 0;
     ax::Label* _EndAngleLabel;
