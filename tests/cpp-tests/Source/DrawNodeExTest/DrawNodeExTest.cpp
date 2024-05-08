@@ -2090,7 +2090,7 @@ std::string ISSUE_1888_DrawNodeDrawsInWrongOrder::title() const
 }
 std::string ISSUE_1888_DrawNodeDrawsInWrongOrder::subtitle() const
 {
-    return "DrawNode draws in wrong order";
+    return "DrawNode draws in wrong order\nRed line should be behind the yellow square";
 }
 void ISSUE_1888_DrawNodeDrawsInWrongOrder::update(float dt)
 {
@@ -2137,6 +2137,14 @@ void ISSUE_1888_DrawNodeDrawsInWrongOrder::update(float dt)
 
 
     drawNodeEx->clear();
+
+    /*   DrawNode* _drawNode = DrawNode::create();
+    Director::getInstance()->getRunningScene()->addChild(_drawNode,100);*/
+    drawNodeEx->drawLine(Vec2(20,20),Vec2(200,200),Color4B::RED);
+    drawNodeEx->drawSolidRect(Vec2(50,50),Vec2(150,150),Color4B::YELLOW);
+
+
+
     drawNodeEx->setIsConvex(true);
     drawNodeEx->drawPolygon(heart, totalFrames, 1.0, Color4B::RED);
     drawNodeEx->setIsConvex(false);

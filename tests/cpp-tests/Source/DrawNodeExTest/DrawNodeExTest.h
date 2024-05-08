@@ -202,8 +202,8 @@ public:
     void update(float dt);
 
 private:
-   ax::extension::DrawNodeEx* drawNodeEx;
-   ax::Vec2 center;
+    ax::extension::DrawNodeEx* drawNodeEx;
+    ax::Vec2 center;
 };
 
 class DrawNode2FilledPolygonTest : public DrawNodeExBaseTest
@@ -270,9 +270,9 @@ private:
     ax::Vec2* verticess;
 
     int _currentSeletedItemIndex = 0;
-    float thickness              = 0.1f;
-    int count                    = 1;
-    bool isDirty                 = false;
+    float thickness = 0.1f;
+    int count = 1;
+    bool isDirty = false;
 
     ax::Label* label;
     ax::Label* label1;
@@ -302,8 +302,8 @@ private:
     ax::extension::DrawNodeEx* draw;
 
     int _currentSeletedItemIndex = 0;
-    int count                    = 1;
-    bool isDirty                 = false;
+    int count = 1;
+    bool isDirty = false;
 
     ax::Label* label;
     ax::Label* label1;
