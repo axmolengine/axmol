@@ -934,7 +934,7 @@ void DrawNodeThicknessTest::update(float dt)
 
 string DrawNodeThicknessTest::title() const
 {
-    return "Individual line width";
+    return "Thickness Test";
 }
 
 string DrawNodeThicknessTest::subtitle() const
