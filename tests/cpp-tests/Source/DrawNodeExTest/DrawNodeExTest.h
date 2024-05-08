@@ -39,12 +39,12 @@ public:
     void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
 };
 
-class DrawNodeExPictureTest : public DrawNodeExBaseTest
+class DrawNodePictureTest : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(DrawNodeExPictureTest);
+    CREATE_FUNC(DrawNodePictureTest);
 
-    DrawNodeExPictureTest();
+    DrawNodePictureTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -55,12 +55,12 @@ private:
     ax::any_buffer _abuf;
 };
 
-class DrawNodeExMorphTest : public DrawNodeExBaseTest
+class DrawNodeMorphTest : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(DrawNodeExMorphTest);
+    CREATE_FUNC(DrawNodeMorphTest);
 
-    DrawNodeExMorphTest();
+    DrawNodeMorphTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -78,7 +78,7 @@ private:
     bool state = false;
 };
 
-class DrawNodeExPerformanceTest : public DrawNodeExBaseTest
+class DrawNodeFireworkTest : public DrawNodeExBaseTest
 {
 public:
     struct fireObj
@@ -91,9 +91,9 @@ public:
         int life;
     };
 
-    CREATE_FUNC(DrawNodeExPerformanceTest);
+    CREATE_FUNC(DrawNodeFireworkTest);
 
-    DrawNodeExPerformanceTest();
+    DrawNodeFireworkTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -144,12 +144,12 @@ private:
     int a, n, x, y, emberCount, cmix, c1, c2, shape;
 };
 
-class DrawNode2Test : public DrawNodeExBaseTest
+class DrawNodeCocos2dxTest1 : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(DrawNode2Test);
+    CREATE_FUNC(DrawNodeCocos2dxTest1);
 
-    DrawNode2Test();
+    DrawNodeCocos2dxTest1();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -166,12 +166,12 @@ public:
 //    virtual std::string subtitle() const override;
 //};
 
-class IndividualThicknessTest : public DrawNodeExBaseTest
+class DrawNodeThicknessTest : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(IndividualThicknessTest);
+    CREATE_FUNC(DrawNodeThicknessTest);
 
-    IndividualThicknessTest();
+    DrawNodeThicknessTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -189,12 +189,12 @@ private:
     float thickness = 1.0f;
 };
 
-class DrawNode2PolygonTest : public DrawNodeExBaseTest
+class DrawNodeVersionsTest : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(DrawNode2PolygonTest);
+    CREATE_FUNC(DrawNodeVersionsTest);
 
-    DrawNode2PolygonTest();
+    DrawNodeVersionsTest();
     void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
 
     virtual std::string title() const override;
@@ -206,23 +206,23 @@ private:
     ax::Vec2 center;
 };
 
-class DrawNode2FilledPolygonTest : public DrawNodeExBaseTest
+class DrawNodeFilledPolygonTest : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(DrawNode2FilledPolygonTest);
+    CREATE_FUNC(DrawNodeFilledPolygonTest);
 
-    DrawNode2FilledPolygonTest();
+    DrawNodeFilledPolygonTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
 
-class DrawPieTest : public DrawNodeExBaseTest
+class DrawNodePieTest : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(DrawPieTest);
+    CREATE_FUNC(DrawNodePieTest);
 
-    DrawPieTest();
+    DrawNodePieTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -246,12 +246,12 @@ private:
     float thickness = 0;
 };
 
-class DrawNodePart1Test : public DrawNodeExBaseTest
+class DrawNodeMethodesTest : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(DrawNodePart1Test);
+    CREATE_FUNC(DrawNodeMethodesTest);
 
-    DrawNodePart1Test();
+    DrawNodeMethodesTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -280,12 +280,12 @@ private:
     ax::Label* label3;
 };
 
-class DrawNodePart2Test : public DrawNodeExBaseTest
+class DrawNodePerformaneTest : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(DrawNodePart2Test);
+    CREATE_FUNC(DrawNodePerformaneTest);
 
-    DrawNodePart2Test();
+    DrawNodePerformaneTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -311,12 +311,12 @@ private:
     ax::Label* label3;
 };
 
-class DrawNodeExHeartTest : public DrawNodeExBaseTest
+class DrawNodeHeartTest : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(DrawNodeExHeartTest);
+    CREATE_FUNC(DrawNodeHeartTest);
 
-    DrawNodeExHeartTest();
+    DrawNodeHeartTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -330,12 +330,12 @@ private:
 };
 
 
-class ISSUE_1888_DrawNodeDrawsInWrongOrder : public DrawNodeExBaseTest
+class DrawNodeDrawInWrongOrder_Issue1888 : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(ISSUE_1888_DrawNodeDrawsInWrongOrder);
+    CREATE_FUNC(DrawNodeDrawInWrongOrder_Issue1888);
 
-    ISSUE_1888_DrawNodeDrawsInWrongOrder();
+    DrawNodeDrawInWrongOrder_Issue1888();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -346,5 +346,101 @@ private:
     ax::Vec2* heart;
     const int totalFrames = 240;
     ax::any_buffer _abuf;
+};
+
+
+
+class DrawNodeCocos2dxTest : public DrawNodeExBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeCocos2dxTest);
+
+    DrawNodeCocos2dxTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class DrawNodeCocos2dxBackwardsAPITest : public DrawNodeExBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeCocos2dxBackwardsAPITest);
+
+    DrawNodeCocos2dxBackwardsAPITest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class DrawNodeCocos2dxBetterCircleRendering : public DrawNodeExBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeCocos2dxBetterCircleRendering);
+
+    DrawNodeCocos2dxBetterCircleRendering();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    void update(float dt);
+
+    void initSliders();
+    void changeThreshold(Object* pSender, ax::ui::Slider::EventType type);
+    void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);
+
+private:
+    ax::DrawNode* drawNode;
+    ax::Label* _lineWidthLabel;
+    float lineWidth = 0;
+    ax::Label* _thresholdLabel;
+    float threshold = 0;
+};
+
+class DrawNodeCocos2dx_Issue829 : public DrawNodeExBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeCocos2dx_Issue829);
+
+    DrawNodeCocos2dx_Issue829();
+    void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class DrawNodeCocos2dx_Issue1319 : public DrawNodeExBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeCocos2dx_Issue1319);
+
+    DrawNodeCocos2dx_Issue1319();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class DrawNodeCocos2dxNewFeature1Test : public DrawNodeExBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeCocos2dxNewFeature1Test);
+
+    DrawNodeCocos2dxNewFeature1Test();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    void update(float dt);
+
+    void initSliders();
+    void changeStartAngle(Object* pSender, ax::ui::Slider::EventType type);
+    void changeEndAngle(Object* pSender, ax::ui::Slider::EventType type);
+    void changeAngle(Object* pSender, ax::ui::Slider::EventType type);
+
+private:
+    ax::DrawNode* drawNode;
+    ax::Label* _StartAngleLabel;
+    float startAngle = 0;
+    ax::Label* _EndAngleLabel;
+    float endAngle = 0;
+    ax::Label* _AngleLabel;
+    float angle = 0;
 };
 
