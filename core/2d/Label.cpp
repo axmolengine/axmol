@@ -510,6 +510,8 @@ Label::Label(TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
 
 #if AX_LABEL_DEBUG_DRAW
     _debugDrawNode = DrawNode::create();
+    AX_SAFE_RETAIN(_debugDrawNode);
+    
     addChild(_debugDrawNode);
 #endif
 
@@ -567,6 +569,10 @@ Label::~Label()
 
     AX_SAFE_RELEASE_NULL(_textSprite);
     AX_SAFE_RELEASE_NULL(_shadowNode);
+    
+#if AX_LABEL_DEBUG_DRAW
+    AX_SAFE_RELEASE_NULL(_debugDrawNode);
+#endif
 }
 
 void Label::reset()
