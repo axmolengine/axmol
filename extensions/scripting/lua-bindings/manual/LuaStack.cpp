@@ -99,6 +99,71 @@ int lua_release_print(lua_State* L)
     return 0;
 }
 
+static std::string_view axlua_format_pos(char* buf, size_t buflen, int value)
+{
+    char* ptr = buf;
+    *ptr++    = '{';
+
+    if (value < 10)
+        *ptr++ = '0' + value;
+    else
+    {
+        *ptr++ = '0' + (value / 10);
+        *ptr++ = '0' + value % 10;
+    }
+
+    *ptr++ = '}';
+    *ptr   = '\0';
+    return std::string_view{buf, static_cast<size_t>(ptr - buf)};
+}
+
+static int axlua_replace_hint(std::string& string,
+                              const std::string_view& replaced_key,
+                              const std::string_view& replacing_key,
+                              bool once)
+{
+    if (replaced_key == replacing_key)
+        return 0;
+    int count                  = 0;
+    std::string::size_type pos = 0;
+    const size_t predicate     = !replaced_key.empty() ? 0 : 1;
+    while ((pos = string.find(replaced_key, pos)) != std::wstring::npos)
+    {
+        (void)string.replace(pos, replaced_key.length(), replacing_key);
+        pos += (replacing_key.length() + predicate);
+        ++count;
+        if (once)
+            break;
+    }
+    return count;
+}
+
+int axlua_log_with_level(lua_State* L)
+{
+    int argc                = lua_gettop(L);
+    const int max_fmt_count = 32;
+    if (argc >= 2)
+    {
+        luaL_checkinteger(L, 1);
+        int level = lua_tointeger(L, 1);
+        luaL_checkstring(L, 2);
+
+        auto formated_msg = axlua_tostr(L, 2);
+
+        char fmt_pos_buf[8];
+        const int fmtc     = (std::min)((argc - 2), max_fmt_count);
+        for (int fmti = 0; fmti < fmtc; ++fmti)
+        {
+            auto pos     = axlua_format_pos(fmt_pos_buf, sizeof(fmt_pos_buf), fmti);
+            auto cur_val = axlua_tosv(L, fmti + 3);
+            axlua_replace_hint(formated_msg, "{}"sv, cur_val, true);
+            axlua_replace_hint(formated_msg, pos, cur_val, false);
+        }
+        AXLOG_WITH_LEVEL(static_cast<ax::LogLevel>(level), "[LUA]{}", formated_msg);
+    }
+    return 0;
+}
+
 int lua_version(lua_State* L)
 {
     lua_pushinteger(L, LUA_VERSION_NUM);
@@ -139,8 +204,11 @@ bool LuaStack::init()
     toluafix_open(_state);
 
     // Register our version of the global "print" function
-    const luaL_Reg global_functions[] = {
-        {"print", lua_print}, {"release_print", lua_release_print}, {"version", lua_version}, {nullptr, nullptr}};
+    const luaL_Reg global_functions[] = {{"print", lua_print},
+                                         {"release_print", lua_release_print},
+                                         {"AXLOG_WITH_LEVEL", axlua_log_with_level},
+                                         {"version", lua_version},
+                                         {nullptr, nullptr}};
     luaL_register(_state, "_G", global_functions);
 
     g_luaType.clear();
