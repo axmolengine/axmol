@@ -100,6 +100,7 @@ DrawNodeExTests::DrawNodeExTests()
     ADD_TEST_CASE(DrawPieTest);
     //    ADD_TEST_CASE(DrawNode2PolygonTest);
     ADD_TEST_CASE(DrawNode2FilledPolygonTest);
+    ADD_TEST_CASE(ISSUE_1888_DrawNodeDrawsInWrongOrder);
 }
 
 string DrawNodeExBaseTest::title() const
@@ -312,7 +313,7 @@ void DrawNodeExPerformanceTest::update(float dt)
     Vec2 gear4 = { s.width - 200, s.height - 200 };
 
     drawNodeEx->drawLine(gear2, gear4, Color4F::RED, thickness);  // line
-  //  DrawNodeEx::DNObject* test1 = drawNodeEx->getDNObject();
+    //  DrawNodeEx::DNObject* test1 = drawNodeEx->getDNObject();
     drawNodeEx->setDNCenter(gear1);
     drawNodeEx->setDNRotation(rotation + 45);
     drawNodeEx->drawStar(Vec2(gear1), 30, 60, 8, Color4F::BLUE, 4.0);
@@ -333,7 +334,7 @@ void DrawNodeExPerformanceTest::update(float dt)
     drawNodeEx->drawStar(gear4, 40, 60, 60, Color4F::GREEN, 1.0);
     drawNodeEx->resetDNValues();
 
-  //  DrawNodeEx::DNObject* test = drawNodeEx->getDNObject();
+    //  DrawNodeEx::DNObject* test = drawNodeEx->getDNObject();
     drawNodeEx->setDNScale(Vec2(0.5f, 0.5f));
     drawNodeEx->setDNPosition(Vec2(100, 100));
     //drawNodeEx->drawPoly(test->_vertices, test->_size, true, Color4B::ORANGE);
@@ -1699,12 +1700,12 @@ void DrawNodePart1Test::drawAll()
         draw->drawLine(gear2, gear1, Color4F::RED, thickness);  // line
         draw->setDNCenter(gear4);
         draw->setDNRotation(rotation + 45);
-        draw->drawSolidStar(gear3, 30, 60, 18, Color4F::RED, Color4F::BLUE,1.0);
+        draw->drawSolidStar(gear3, 30, 60, 18, Color4F::RED, Color4F::BLUE, 1.0);
         draw->drawLine(gear3, gear4, Color4F::YELLOW, thickness);  // line
         draw->resetDNValues();
         draw->setDNRotation(rotation - 45);
         draw->setDNCenter(gear4);
-        draw->drawSolidStar(gear4, 40, 60, 60, Color4F::GREEN, Color4F::BLUE,1.0);
+        draw->drawSolidStar(gear4, 40, 60, 60, Color4F::GREEN, Color4F::BLUE, 1.0);
         // draw a solid star
         //for (int i = 0; i < count; i++)
         //{
@@ -2063,6 +2064,93 @@ void DrawNodeExHeartTest::update(float dt)
     drawNodeEx->drawStar({ s.width / 2, s.height / 2 }, 40, 20, 8, Color4B::BLUE);
     counter++;
 }
+
+ISSUE_1888_DrawNodeDrawsInWrongOrder::ISSUE_1888_DrawNodeDrawsInWrongOrder()
+{
+    auto s = Director::getInstance()->getWinSize();
+    //// https://virusinlinux.github.io/heartAnimation/
+
+    heart = new Vec2[totalFrames];
+
+    for (int i = 0; i < totalFrames; i++)
+    {
+        float a = AXRANDOM_0_1() * M_PI * 4;
+        float r = AXRANDOM_0_1() * sin(a);
+        heart[i] = { r * 100, r * 100 };
+        heart[i] = { s.width / 2,s.height / 2 };
+    }
+    drawNodeEx = DrawNodeEx::create();
+    addChild(drawNodeEx);
+    scheduleUpdate();
+}
+
+std::string ISSUE_1888_DrawNodeDrawsInWrongOrder::title() const
+{
+    return "Issue #1888";
+}
+std::string ISSUE_1888_DrawNodeDrawsInWrongOrder::subtitle() const
+{
+    return "DrawNode draws in wrong order";
+}
+void ISSUE_1888_DrawNodeDrawsInWrongOrder::update(float dt)
+{
+    auto s = Director::getInstance()->getWinSize();
+    static int counter = 0;
+    //function draw() {
+    //
+    //
+    float percent = float(counter % totalFrames) / totalFrames;
+    //    render(percent);
+
+    //}
+    //
+    //function render(percent) {
+    //    background(0);
+    //    translate(width / 2, height / 2);
+    //    stroke(255, 0, 100);
+    //    strokeWeight(4);
+    //    fill(255, 0, 100);
+    //
+    //    beginShape();
+    //   
+    //        
+    //       
+    //        
+    //
+    //    }
+    for (int i = 0; i < totalFrames; i++) // for (let v of heart) {
+    {
+        float a = percent * M_PI * 2;           // const a = map(percent, 0, 1, 0, TWO_PI * 2);
+        float r = AXRANDOM_0_1() * sin(a);      //  const r = map(sin(a), -1, 1, height / 80, height / 40);
+        //     Vec2 vertex = { r * v.x, r * v.y } ;    //  vertex(r * v.x, r * v.y);          //  heart[i] = { r * heart[i].x, r * heart[i].y };
+        // heart.splice(0, 1);             //   The splice() method of Array instances changes the contents of an array by removing or replacing existing elements and/or adding new elements in place.
+        if (percent < 0.5)  //  if (percent < 0.5) {
+        {
+            float a = percent * M_PI * 2;       // const a = map(percent, 0, 0.5, 0, TWO_PI);
+            float r = AXRANDOM_0_1() * sin(a);  // const x = 16 * pow(sin(a), 3);
+            float y = 1;                        // const y = -(13 * cos(a) - 5 * cos(2 * a) - 2 * cos(3 * a) - cos(4 * a));
+            // heart.push(createVector(x, y));
+        }
+        heart[i] = { r * heart[i].x, r * heart[i].y };
+    }
+
+
+
+    drawNodeEx->clear();
+    drawNodeEx->setIsConvex(true);
+    drawNodeEx->drawPolygon(heart, totalFrames, 1.0, Color4B::RED);
+    drawNodeEx->setIsConvex(false);
+    //    endShape();
+    //
+
+
+    drawNodeEx->drawStar({ s.width / 2, s.height / 2 }, 40, 20, 8, Color4B::BLUE);
+    counter++;
+}
+
+
+
+
 
 #if defined(_WIN32)
 #    pragma pop_macro("TRANSPARENT")

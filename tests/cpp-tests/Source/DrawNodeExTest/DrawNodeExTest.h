@@ -328,3 +328,23 @@ private:
     const int totalFrames = 240;
     ax::any_buffer _abuf;
 };
+
+
+class ISSUE_1888_DrawNodeDrawsInWrongOrder : public DrawNodeExBaseTest
+{
+public:
+    CREATE_FUNC(ISSUE_1888_DrawNodeDrawsInWrongOrder);
+
+    ISSUE_1888_DrawNodeDrawsInWrongOrder();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    void update(float dt);
+
+private:
+    ax::extension::DrawNodeEx* drawNodeEx;
+    ax::Vec2* heart;
+    const int totalFrames = 240;
+    ax::any_buffer _abuf;
+};
+
