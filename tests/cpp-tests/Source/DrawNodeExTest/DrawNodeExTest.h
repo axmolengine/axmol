@@ -36,6 +36,112 @@ class DrawNodeExBaseTest : public TestCase
 {
 public:
     virtual std::string title() const override;
+    void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
+};
+
+class DrawNodeExPictureTest : public DrawNodeExBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeExPictureTest);
+
+    DrawNodeExPictureTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    void update(float dt);
+
+private:
+    ax::extension::DrawNodeEx* drawNodeEx;
+    ax::any_buffer _abuf;
+};
+
+class DrawNodeExMorphTest : public DrawNodeExBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeExMorphTest);
+
+    DrawNodeExMorphTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    void update(float dt);
+
+private:
+    ax::extension::DrawNodeEx* drawNodeEx;
+    ax::any_buffer _abuf;
+    ax::Vec2* verticesObj1;
+    ax::Vec2* verticesObj2;
+    ax::Vec2* verticesObjMorph;
+    //   ax::Vec2* v;
+    int segments = 0;
+
+    bool state = false;
+};
+
+class DrawNodeExPerformanceTest : public DrawNodeExBaseTest
+{
+public:
+    struct fireObj
+    {
+        float x;
+        float y;
+        float vx;
+        float vy;
+        ax::Color4F color;
+        int life;
+    };
+
+    CREATE_FUNC(DrawNodeExPerformanceTest);
+
+    DrawNodeExPerformanceTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    void update(float dt);
+
+    fireObj* createFireObjs(int count);
+
+private:
+    ax::Vec2* canon;
+    ax::Vec2* projectile;
+    ax::Vec2* wall;
+    fireObj* ember;
+
+    ax::extension::DrawNodeEx* drawNodeEx;
+    ax::any_buffer _abuf;
+
+    int ScreenWidth = 400;
+    // DesktopWidth(0)
+    int ScreenHeight = 400;
+    // DesktopHeight(0)
+    // variable assignments
+    const int max = 750;
+    // This sets the size of the ember array
+    int fuse = 0;
+    // countdown timer until next burst
+    int old = 0;
+    //     index to oldest ember
+    int young = -1;
+    // index to youngest ember
+    int impulse = 20;
+    // determines average explosion force
+    float drag = 0.97;  // 0 < drag < 1;        smaller = more drag
+    float gravity = 0.02;
+
+    int burnTime = 150;
+    //   determines average ember lifetime
+    int fuseTime = 25;
+    // determines average fuse time
+    float tupi = 2 * M_PI, pow, alfa;
+    float midx = ScreenWidth / 2;
+    //      middle of screen
+    float devx = midx * 0.75;
+    //   maximum x burst deviation from center
+    float nomy = ScreenHeight * 0.45;
+    //  nominal y burst location
+    float devy = ScreenHeight * 0.25;
+    //  maximum y deviation from nomy
+    int a, n, x, y, emberCount, cmix, c1, c2, shape;
 };
 
 class DrawNode2Test : public DrawNodeExBaseTest
@@ -203,4 +309,22 @@ private:
     ax::Label* label1;
     ax::Label* label2;
     ax::Label* label3;
+};
+
+class DrawNodeExHeartTest : public DrawNodeExBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeExHeartTest);
+
+    DrawNodeExHeartTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    void update(float dt);
+
+private:
+    ax::extension::DrawNodeEx* drawNodeEx;
+    ax::Vec2* heart;
+    const int totalFrames = 240;
+    ax::any_buffer _abuf;
 };

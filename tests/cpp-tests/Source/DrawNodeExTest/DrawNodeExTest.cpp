@@ -35,7 +35,7 @@ USING_NS_AX_EXT;
 
 using namespace std;
 
-const int drawMethodsCounter = 16;
+const int drawMethodsCounter = 19;
 std::string drawMethods[drawMethodsCounter] = { "drawLine",
                                                 "drawRect",
                                                 "drawCircle",
@@ -46,12 +46,15 @@ std::string drawMethods[drawMethodsCounter] = { "drawLine",
                                                 "drawPoly",
                                                 "drawPolygon",
                                                 "drawDot",
+                                                "drawPoint",
                                                 "drawPoints",
                                                 "drawTriangle",
                                                 "drawSegment",
                                                 "drawSolidCircle",
                                                 "drawSolidPoly",
-                                                "drawSolidRect", };
+                                                "drawSolidRect",
+                                                "drawStar",
+                                                "drawSolidStar", };
 
 
 
@@ -80,8 +83,16 @@ Vec2 vertices2[] = {
     {362.750000f, 131.625000f}, {362.750000f, 106.875000f}, {306.500000f, 119.125000f}, {324.250000f, 85.1250000f},
     {227.500000f, 61.8750000} };
 
+
+// Original https :  // www.purebasic.fr/english/viewtopic.php?t=82915
+float verticesHead[] = { 107.f, 9.f, 0.3333333433f, 0.3411764801f, 0.3686274588f, 255.f, 81.f, 599.f, 116.f, 571.f, 180.f, 562.f, 255.f, 559.f, 213.f, 586.f, 199.f, 599.f, 0.f,  7.f, 0.3333333433f, 0.3411764801f, 0.3686274588f, 255.f, 765.f, 584.f, 782.f, 590.f, 794.f, 599.f, 772.f, 599.f, 0.f,  13.f, 0.4156862795f, 0.4313725531f, 0.4549019635f, 255.f, 278.f, 573.f, 287.f, 599.f, 199.f, 599.f, 217.f, 582.f, 256.f, 557.f, 313.f, 532.f, 352.f, 508.f, 366.f, 512.f, 368.f, 545.f, 285.f, 598.f, 0.f,  8.f, 0.4156862795f, 0.4313725531f, 0.4549019635f, 255.f, 760.f, 591.f, 754.f, 579.f, 766.f, 584.f, 773.f, 599.f, 751.f, 599.f, 0.f,  12.f, 0.400000006f, 0.4117647111f, 0.4196078479f, 255.f, 701.f, 563.f, 615.f, 599.f, 652.f, 558.f, 705.f, 507.f, 716.f, 534.f, 753.f, 577.f, 760.f, 591.f, 752.f, 599.f, 613.f, 599.f, 0.f,  10.f, 0.400000006f, 0.4117647111f, 0.4196078479f, 255.f, 704.f, 506.f, 701.f, 493.f, 686.f, 488.f, 688.f, 503.f, 692.f, 514.f, 691.f, 528.f, 708.f, 518.f, 0.f,  8.f, 0.4784313738f, 0.3647058904f, 0.2156862766f, 255.f, 285.f, 599.f, 309.f, 579.f, 365.f, 546.f, 375.f, 578.f, 378.f, 599.f, 0.f,  16.f, 0.4784313738f, 0.3647058904f, 0.2156862766f, 255.f, 471.f, 599.f, 377.f, 599.f, 365.f, 546.f, 360.f, 511.f, 394.f, 515.f, 428.f, 507.f, 492.f, 471.f, 553.f, 417.f, 568.f, 397.f, 562.f, 422.f, 552.f, 462.f, 547.f, 487.f, 524.f, 529.f, 0.f,  19.f, 0.5921568871f, 0.4980392158f, 0.3647058904f, 255.f, 614.f, 599.f, 683.f, 531.f, 690.f, 512.f, 686.f, 493.f, 684.f, 429.f, 656.f, 245.f, 654.f, 242.f, 644.f, 273.f, 628.f, 288.f, 621.f, 288.f, 592.f, 308.f, 571.f, 378.f, 554.f, 454.f, 543.f, 494.f, 514.f, 542.f, 469.f, 599.f, 0.f,  12.f, 0.5921568871f, 0.4980392158f, 0.3647058904f, 255.f, 598.f, 259.f, 602.f, 233.f, 619.f, 236.f, 624.f, 250.f, 630.f, 257.f, 629.f, 269.f, 623.f, 291.f, 603.f, 312.f, 589.f, 311.f, 0.f,  15.f, 0.4784313738f, 0.3647058904f, 0.2156862766f, 255.f, 642.f, 211.f, 606.f, 197.f, 609.f, 236.f, 621.f, 236.f, 621.f, 246.f, 630.f, 256.f, 627.f, 279.f, 626.f, 286.f, 636.f, 282.f, 641.f, 274.f, 649.f, 250.f, 656.f, 221.f, 0.f,  24.f, 0.4784313738f, 0.3647058904f, 0.2156862766f, 255.f, 309.f, 333.f, 334.f, 269.f, 346.f, 207.f, 347.f, 169.f, 323.f, 42.f, 265.f, 39.f, 256.f, 156.f, 272.f, 212.f, 276.f, 302.f, 292.f, 372.f, 323.f, 469.f, 334.f, 500.f, 350.f, 509.f, 365.f, 511.f, 358.f, 472.f, 370.f, 451.f, 382.f, 438.f, 382.f, 433.f, 389.f, 392.f, 382.f, 309.f, 315.f, 291.f, 0.f,  35.f, 0.5921568871f, 0.4980392158f, 0.3647058904f, 255.f, 439.f, 399.f, 384.f, 393.f, 354.f, 396.f, 349.f, 395.f, 348.f, 405.f, 349.f, 421.f, 352.f, 428.f, 363.f, 434.f, 383.f, 435.f, 364.f, 458.f, 358.f, 473.f, 360.f, 499.f, 364.f, 512.f, 382.f, 516.f, 407.f, 514.f, 437.f, 506.f, 476.f, 482.f, 534.f, 437.f, 562.f, 408.f, 571.f, 382.f, 581.f, 346.f, 598.f, 0.f, 333.f, 0.f, 345.f, 190.f, 336.f, 249.f, 379.f, 333.f, 373.f, 347.f, 347.f, 353.f, 347.f, 371.f, 354.f, 377.f, 387.f, 384.f, 389.f, 396.f, 0.f,  7.f, 0.5921568871f, 0.4980392158f, 0.3647058904f, 255.f, 370.f, 309.f, 322.f, 296.f, 333.f, 268.f, 339.f, 238.f, 0.f,  10.f, 0.5921568871f, 0.4980392158f, 0.3647058904f, 255.f, 341.f, 289.f, 323.f, 293.f, 314.f, 317.f, 324.f, 328.f, 352.f, 326.f, 390.f, 332.f, 388.f, 288.f, 0.f,  12.f, 0.4784313738f, 0.3647058904f, 0.2156862766f, 255.f, 440.f, 145.f, 520.f, 146.f, 464.f, 167.f, 429.f, 220.f, 422.f, 222.f, 400.f, 206.f, 392.f, 188.f, 390.f, 173.f, 393.f, 160.f, 0.f,  15.f, 0.7960784435f, 0.7490196228f, 0.6705882549f, 255.f, 460.f, 194.f, 489.f, 189.f, 500.f, 199.f, 499.f, 211.f, 489.f, 217.f, 467.f, 223.f, 445.f, 224.f, 431.f, 217.f, 422.f, 209.f, 420.f, 200.f, 436.f, 181.f, 491.f, 189.f, 0.f,  12.f, 0.7960784435f, 0.7490196228f, 0.6705882549f, 255.f, 342.f, 199.f, 343.f, 211.f, 337.f, 218.f, 322.f, 222.f, 306.f, 221.f, 292.f, 212.f, 288.f, 197.f, 297.f, 186.f, 332.f, 189.f, 0.f,  13.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 461.f, 182.f, 445.f, 184.f, 442.f, 196.f, 446.f, 210.f, 454.f, 218.f, 462.f, 219.f, 472.f, 217.f, 480.f, 207.f, 480.f, 196.f, 477.f, 185.f, 0.f,  11.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 309.f, 186.f, 306.f, 192.f, 307.f, 204.f, 313.f, 213.f, 325.f, 216.f, 334.f, 210.f, 336.f, 197.f, 332.f, 189.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 433.f, 186.f, 422.f, 199.f, 416.f, 199.f, 432.f, 179.f, 475.f, 183.f, 470.f, 185.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 470.f, 183.f, 491.f, 187.f, 497.f, 194.f, 482.f, 188.f, 433.f, 184.f, 436.f, 181.f, 0.f,  10.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 331.f, 190.f, 340.f, 199.f, 342.f, 197.f, 333.f, 188.f, 296.f, 184.f, 292.f, 186.f, 296.f, 186.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 299.f, 187.f, 291.f, 198.f, 287.f, 198.f, 296.f, 185.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 312.f, 176.f, 297.f, 178.f, 297.f, 181.f, 312.f, 177.f, 326.f, 181.f, 326.f, 179.f, 0.f,  11.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 439.f, 172.f, 470.f, 174.f, 488.f, 180.f, 457.f, 176.f, 432.f, 176.f, 423.f, 180.f, 423.f, 178.f, 431.f, 173.f, 0.f,  10.f, 0.7843137383f, 0.7254902124f, 0.6078431606f, 255.f, 467.f, 186.f, 464.f, 189.f, 464.f, 194.f, 467.f, 199.f, 473.f, 198.f, 477.f, 193.f, 477.f, 188.f, 0.f,  10.f, 0.7843137383f, 0.7254902124f, 0.6078431606f, 255.f, 332.f, 191.f, 334.f, 194.f, 332.f, 198.f, 327.f, 198.f, 323.f, 196.f, 322.f, 192.f, 324.f, 188.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 398.f, 195.f, 399.f, 204.f, 401.f, 208.f, 400.f, 198.f, 400.f, 194.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 365.f, 434.f, 350.f, 427.f, 350.f, 427.f, 356.f, 433.f, 372.f, 437.f, 382.f, 434.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 389.f, 393.f, 418.f, 401.f, 420.f, 403.f, 390.f, 396.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 391.f, 397.f, 355.f, 397.f, 356.f, 396.f, 388.f, 393.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 354.f, 397.f, 344.f, 393.f, 343.f, 390.f, 355.f, 396.f, 358.f, 396.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 343.f, 392.f, 335.f, 393.f, 337.f, 391.f, 344.f, 389.f, 346.f, 392.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 354.f, 379.f, 345.f, 372.f, 346.f, 370.f, 355.f, 377.f, 361.f, 373.f, 361.f, 377.f, 0.f,  11.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 368.f, 336.f, 375.f, 337.f, 373.f, 340.f, 367.f, 337.f, 360.f, 340.f, 356.f, 346.f, 356.f, 342.f, 363.f, 336.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 338.f, 337.f, 348.f, 351.f, 345.f, 351.f, 336.f, 339.f, 324.f, 327.f, 329.f, 328.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 367.f, 325.f, 326.f, 327.f, 330.f, 330.f, 367.f, 327.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 367.f, 326.f, 378.f, 331.f, 378.f, 328.f, 367.f, 325.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 325.f, 327.f, 316.f, 317.f, 315.f, 319.f, 322.f, 328.f, 329.f, 332.f, 329.f, 329.f, 0.f,  10.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 336.f, 256.f, 329.f, 284.f, 315.f, 312.f, 316.f, 312.f, 331.f, 267.f, 343.f, 213.f, 345.f, 214.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 654.f, 243.f, 644.f, 272.f, 635.f, 283.f, 647.f, 261.f, 651.f, 238.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 634.f, 282.f, 617.f, 290.f, 608.f, 301.f, 625.f, 287.f, 634.f, 286.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 605.f, 310.f, 609.f, 302.f, 616.f, 294.f, 610.f, 295.f, 605.f, 307.f, 0.f,  10.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 556.f, 578.f, 569.f, 550.f, 569.f, 544.f, 556.f, 576.f, 539.f, 599.f, 543.f, 599.f, 559.f, 576.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 572.f, 548.f, 582.f, 507.f, 582.f, 496.f, 583.f, 496.f, 577.f, 537.f, 575.f, 552.f, 0.f,  10.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 588.f, 497.f, 589.f, 474.f, 590.f, 468.f, 592.f, 467.f, 589.f, 499.f, 582.f, 527.f, 581.f, 521.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 572.f, 376.f, 574.f, 376.f, 563.f, 411.f, 560.f, 411.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 562.f, 406.f, 540.f, 432.f, 552.f, 422.f, 564.f, 409.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 547.f, 425.f, 504.f, 463.f, 501.f, 463.f, 530.f, 443.f, 551.f, 424.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 503.f, 462.f, 467.f, 488.f, 468.f, 489.f, 502.f, 465.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 464.f, 489.f, 438.f, 504.f, 438.f, 506.f, 452.f, 501.f, 470.f, 490.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 441.f, 503.f, 406.f, 513.f, 406.f, 515.f, 431.f, 509.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 409.f, 513.f, 377.f, 513.f, 377.f, 516.f, 397.f, 516.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 378.f, 514.f, 357.f, 510.f, 358.f, 513.f, 383.f, 517.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 622.f, 282.f, 623.f, 289.f, 625.f, 288.f, 625.f, 281.f, 632.f, 269.f, 631.f, 264.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 631.f, 267.f, 630.f, 257.f, 627.f, 247.f, 629.f, 266.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 628.f, 251.f, 621.f, 239.f, 618.f, 239.f, 624.f, 250.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 620.f, 241.f, 621.f, 231.f, 619.f, 229.f, 617.f, 241.f, 0.f,  10.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 620.f, 231.f, 627.f, 226.f, 633.f, 218.f, 633.f, 215.f, 624.f, 226.f, 619.f, 229.f, 617.f, 237.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 636.f, 274.f, 638.f, 260.f, 635.f, 252.f, 638.f, 267.f, 635.f, 275.f, 0.f,  11.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 631.f, 251.f, 636.f, 257.f, 636.f, 259.f, 639.f, 257.f, 634.f, 250.f, 625.f, 249.f, 628.f, 253.f, 634.f, 253.f, 0.f,  11.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 598.f, 339.f, 595.f, 334.f, 594.f, 328.f, 597.f, 328.f, 601.f, 337.f, 611.f, 339.f, 611.f, 341.f, 602.f, 342.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 341.f, 198.f, 339.f, 187.f, 337.f, 187.f, 338.f, 197.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 360.f, 512.f, 364.f, 546.f, 378.f, 599.f, 379.f, 599.f, 374.f, 572.f, 366.f, 547.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 373.f, 583.f, 370.f, 599.f, 378.f, 599.f, 374.f, 577.f, 0.f,  19.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 684.f, 453.f, 685.f, 478.f, 691.f, 473.f, 701.f, 460.f, 717.f, 414.f, 713.f, 382.f, 709.f, 374.f, 724.f, 312.f, 718.f, 299.f, 758.f, 118.f, 754.f, 83.f, 685.f, 48.f, 657.f, 247.f, 654.f, 281.f, 652.f, 289.f, 621.f, 328.f, 0.f,  10.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 710.f, 443.f, 708.f, 402.f, 718.f, 405.f, 713.f, 443.f, 708.f, 460.f, 706.f, 460.f, 710.f, 438.f, 0.f,  11.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 726.f, 378.f, 732.f, 402.f, 734.f, 419.f, 732.f, 420.f, 727.f, 392.f, 720.f, 381.f, 702.f, 371.f, 698.f, 344.f, 0.f,  14.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 722.f, 308.f, 730.f, 328.f, 728.f, 354.f, 725.f, 365.f, 726.f, 348.f, 722.f, 359.f, 721.f, 361.f, 717.f, 339.f, 716.f, 357.f, 712.f, 359.f, 706.f, 282.f, 0.f,  10.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 730.f, 292.f, 742.f, 281.f, 744.f, 275.f, 740.f, 278.f, 727.f, 287.f, 706.f, 292.f, 712.f, 301.f, 0.f,  11.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 719.f, 284.f, 729.f, 274.f, 748.f, 237.f, 758.f, 208.f, 761.f, 182.f, 761.f, 142.f, 757.f, 110.f, 691.f, 262.f, 0.f,  10.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 661.f, 433.f, 666.f, 445.f, 672.f, 456.f, 671.f, 453.f, 668.f, 433.f, 674.f, 424.f, 643.f, 349.f, 0.f,  10.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 646.f, 432.f, 662.f, 407.f, 655.f, 356.f, 649.f, 412.f, 642.f, 431.f, 634.f, 443.f, 636.f, 444.f, 0.f,  14.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 643.f, 413.f, 647.f, 404.f, 658.f, 389.f, 644.f, 314.f, 637.f, 328.f, 641.f, 402.f, 636.f, 422.f, 633.f, 427.f, 634.f, 428.f, 642.f, 417.f, 650.f, 401.f, 0.f,  8.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 642.f, 385.f, 634.f, 377.f, 619.f, 329.f, 627.f, 322.f, 652.f, 323.f, 0.f,  16.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 622.f, 373.f, 632.f, 383.f, 636.f, 385.f, 636.f, 382.f, 627.f, 374.f, 626.f, 367.f, 633.f, 364.f, 622.f, 326.f, 609.f, 340.f, 610.f, 348.f, 612.f, 359.f, 623.f, 376.f, 631.f, 382.f, 0.f,  21.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 682.f, 97.f, 660.f, 248.f, 652.f, 242.f, 648.f, 234.f, 647.f, 227.f, 641.f, 223.f, 633.f, 216.f, 624.f, 206.f, 580.f, 194.f, 579.f, 179.f, 565.f, 159.f, 558.f, 133.f, 560.f, 123.f, 539.f, 93.f, 529.f, 68.f, 521.f, 16.f, 529.f, 0.f, 698.f, 0.f, 0.f,  13.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 514.f, 48.f, 517.f, 92.f, 519.f, 106.f, 521.f, 106.f, 519.f, 81.f, 521.f, 59.f, 527.f, 39.f, 526.f, 7.f, 520.f, 16.f, 516.f, 32.f, 0.f,  8.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 449.f, 59.f, 464.f, 36.f, 471.f, 16.f, 472.f, 1.f, 466.f, 13.f, 0.f,  8.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 472.f, 0.f, 468.f, 21.f, 460.f, 31.f, 461.f, 6.f, 458.f, 0.f, 0.f,  20.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 458.f, 0.f, 451.f, 26.f, 441.f, 52.f, 428.f, 76.f, 414.f, 92.f, 399.f, 103.f, 387.f, 116.f, 389.f, 113.f, 411.f, 75.f, 418.f, 45.f, 399.f, 76.f, 319.f, 131.f, 315.f, 112.f, 309.f, 98.f, 316.f, 83.f, 323.f, 51.f, 246.f, 0.f, 0.f,  12.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 327.f, 149.f, 339.f, 172.f, 349.f, 189.f, 354.f, 194.f, 352.f, 188.f, 347.f, 167.f, 350.f, 123.f, 353.f, 114.f, 318.f, 128.f, 0.f,  8.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 396.f, 77.f, 377.f, 96.f, 348.f, 121.f, 321.f, 131.f, 318.f, 116.f, 0.f,  15.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 299.f, 59.f, 305.f, 88.f, 312.f, 105.f, 312.f, 84.f, 315.f, 62.f, 327.f, 44.f, 326.f, 23.f, 121.f, 0.f, 287.f, 56.f, 290.f, 78.f, 299.f, 101.f, 302.f, 107.f, 0.f,  14.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 207.f, 0.f, 286.f, 50.f, 270.f, 86.f, 257.f, 144.f, 256.f, 244.f, 237.f, 220.f, 227.f, 206.f, 211.f, 191.f, 197.f, 161.f, 128.f, 56.f, 142.f, 0.f, 0.f,  12.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 179.f, 168.f, 196.f, 198.f, 210.f, 221.f, 212.f, 219.f, 201.f, 200.f, 196.f, 174.f, 202.f, 148.f, 169.f, 96.f, 171.f, 141.f, 0.f,  16.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 152.f, 157.f, 158.f, 178.f, 168.f, 198.f, 172.f, 206.f, 172.f, 202.f, 165.f, 178.f, 164.f, 154.f, 173.f, 121.f, 129.f, 48.f, 126.f, 78.f, 130.f, 108.f, 133.f, 121.f, 144.f, 146.f, 0.f,  10.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 254.f, 155.f, 269.f, 202.f, 272.f, 221.f, 273.f, 258.f, 262.f, 243.f, 259.f, 248.f, 240.f, 222.f, 0.f,  14.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 112.f, 33.f, 121.f, 12.f, 124.f, 0.f, 145.f, 0.f, 134.f, 34.f, 127.f, 38.f, 118.f, 58.f, 112.f, 92.f, 108.f, 100.f, 107.f, 86.f, 106.f, 63.f, 0.f,  24.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 298.f, 146.f, 293.f, 134.f, 284.f, 132.f, 272.f, 136.f, 272.f, 138.f, 267.f, 140.f, 264.f, 149.f, 266.f, 158.f, 272.f, 157.f, 274.f, 159.f, 289.f, 154.f, 303.f, 157.f, 324.f, 171.f, 334.f, 176.f, 340.f, 181.f, 332.f, 171.f, 330.f, 162.f, 328.f, 153.f, 311.f, 146.f, 298.f, 136.f, 290.f, 133.f, 0.f,  22.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 485.f, 139.f, 487.f, 130.f, 509.f, 129.f, 532.f, 137.f, 544.f, 152.f, 549.f, 168.f, 543.f, 164.f, 543.f, 168.f, 522.f, 159.f, 496.f, 155.f, 470.f, 156.f, 435.f, 164.f, 407.f, 173.f, 391.f, 171.f, 384.f, 168.f, 379.f, 156.f, 413.f, 151.f, 414.f, 148.f, 489.f, 129.f, 0.f,  16.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 607.f, 191.f, 606.f, 241.f, 606.f, 275.f, 596.f, 314.f, 592.f, 314.f, 581.f, 350.f, 574.f, 364.f, 574.f, 364.f, 580.f, 328.f, 577.f, 326.f, 577.f, 312.f, 583.f, 247.f, 579.f, 164.f, 0.f,  13.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 756.f, 68.f, 754.f, 97.f, 749.f, 104.f, 734.f, 107.f, 715.f, 100.f, 701.f, 102.f, 696.f, 97.f, 682.f, 26.f, 661.f, 0.f, 736.f, 0.f, 0.f,  11.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 689.f, 76.f, 687.f, 88.f, 683.f, 99.f, 676.f, 99.f, 674.f, 78.f, 669.f, 39.f, 659.f, 0.f, 705.f, 0.f, 0.f,  9.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 652.f, 0.f, 651.f, 16.f, 646.f, 29.f, 642.f, 31.f, 638.f, 24.f, 631.f, 0.f, 0.f,  9.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 628.f, 0.f, 628.f, 20.f, 625.f, 27.f, 619.f, 29.f, 616.f, 19.f, 616.f, 0.f, 0.f,  12.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 415.f, 0.f, 403.f, 31.f, 392.f, 54.f, 376.f, 68.f, 364.f, 74.f, 362.f, 70.f, 365.f, 61.f, 390.f, 25.f, 400.f, 0.f, 0.f,  12.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 352.f, 42.f, 341.f, 66.f, 339.f, 82.f, 344.f, 81.f, 350.f, 70.f, 364.f, 44.f, 381.f, 21.f, 380.f, 16.f, 368.f, 19.f, 0.f,  11.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 344.f, 0.f, 365.f, 0.f, 353.f, 21.f, 341.f, 49.f, 332.f, 62.f, 329.f, 58.f, 329.f, 51.f, 344.f, 0.f, 0.f,  10.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 333.f, 2.f, 329.f, 17.f, 323.f, 23.f, 318.f, 18.f, 319.f, 6.f, 320.f, 0.f, 331.f, 0.f, 0.f,  11.f, 0.1764705926f, 0.1960784346f, 0.2666666806f, 255.f, 760.f, 0.f, 761.f, 39.f, 757.f, 80.f, 750.f, 86.f, 709.f, 69.f, 692.f, 47.f, 692.f, 26.f, 696.f, 0.f, 0.f,  7.f, 0.160784319f, 0.1764705926f, 0.1882352978f, 255.f, 278.f, 599.f, 324.f, 554.f, 322.f, 557.f, 283.f, 599.f, 0.f,  9.f, 0.160784319f, 0.1764705926f, 0.1882352978f, 255.f, 758.f, 589.f, 753.f, 577.f, 755.f, 577.f, 762.f, 591.f, 756.f, 599.f, 754.f, 599.f, 0.f,  7.f, 0.160784319f, 0.1764705926f, 0.1882352978f, 255.f, 773.f, 599.f, 765.f, 583.f, 763.f, 583.f, 770.f, 599.f, 0.f,  10.f, 0.160784319f, 0.1764705926f, 0.1882352978f, 255.f, 694.f, 507.f, 694.f, 498.f, 691.f, 498.f, 694.f, 509.f, 690.f, 519.f, 693.f, 521.f, 696.f, 507.f, 0.f,  9.f, 0.160784319f, 0.1764705926f, 0.1882352978f, 255.f, 215.f, 583.f, 256.f, 556.f, 253.f, 556.f, 216.f, 579.f, 198.f, 599.f, 200.f, 599.f, 0.f,  0.f };
+
 DrawNodeExTests::DrawNodeExTests()
 {
+    ADD_TEST_CASE(DrawNodeExHeartTest);
+    ADD_TEST_CASE(DrawNodeExMorphTest);
+    ADD_TEST_CASE(DrawNodeExPerformanceTest);
+    ADD_TEST_CASE(DrawNodeExPictureTest);
     ADD_TEST_CASE(DrawNodePart1Test);
     ADD_TEST_CASE(DrawNodePart2Test);
     ADD_TEST_CASE(DrawNode2Test);
@@ -94,6 +105,501 @@ DrawNodeExTests::DrawNodeExTests()
 string DrawNodeExBaseTest::title() const
 {
     return "No title";
+}
+
+// DrawNodeEx Tests
+DrawNodeExMorphTest::DrawNodeExMorphTest()
+{
+    auto s = Director::getInstance()->getWinSize();
+
+    drawNodeEx = DrawNodeEx::create();
+    addChild(drawNodeEx);
+
+    segments = 40;
+
+    verticesObj1 = new Vec2[segments];  //circle
+    verticesObj2 = new Vec2[segments];  //square
+    verticesObjMorph = new Vec2[segments];
+
+    int radius = 100;
+    const float coef = 2.0f * (float)M_PI / segments;
+    float scaleX = 1.0f;
+    float scaleY = 1.0f;
+    Vec2 center = { s.width / 2, s.height / 2 };
+    float angle = 9.0f;
+    for (unsigned int i = 0; i < segments; i++) //    //for (int angle = 0; angle < 360; angle += 9) 
+    {
+        float rads = i * coef;
+        verticesObj1[i].x = radius * cosf(rads + angle) * scaleX + center.x;
+        verticesObj1[i].y = radius * sinf(rads + angle) * scaleY + center.y;
+        verticesObjMorph[i] = verticesObj1[i];
+    }
+
+    // A verticesObj2 is a bunch of vertices along straight lines
+    // Top of verticesObj2
+    int n = 0;
+    float delta = segments / 4;
+    for (float x = -50; x < 50; x += delta) {
+        verticesObj2[n++] = Vec2(s.width / 2 + x, s.height / 2 - 50);
+    }
+    // Right side
+    for (float y = -50; y < 50; y += delta) {
+        verticesObj2[n++] = Vec2(s.width / 2 + 50, s.height / 2 + y);
+    }
+    // Bottom
+    for (float x = 50; x > -50; x -= delta) {
+        verticesObj2[n++] = Vec2(s.width / 2 + x, s.height / 2 + 50);
+    }
+    // Left side
+    for (float y = 50; y > -50; y -= delta) {
+        verticesObj2[n++] = Vec2(s.width / 2 - 50, s.height / 2 + y);
+    }
+
+    //   polyghon = verticesObj2;
+
+    float rad = 80.f;
+    for (unsigned int i = 0; i < segments; i++) //    //for (int angle = 0; angle < 360; angle += 9) 
+    {
+        float rads = i * coef;
+        verticesObj1[i].x = radius * cosf(rads + (angle + rad)) * scaleX + center.x;
+        verticesObj1[i].y = radius * sinf(rads + (angle + rad)) * scaleY + center.y;
+        verticesObjMorph[i] = verticesObj1[i];
+    }
+    scheduleUpdate();
+}
+void DrawNodeExMorphTest::update(float dt)
+{
+    auto s = Director::getInstance()->getWinSize();
+    static float  rot = 0.1f;
+    drawNodeEx->clear();
+    float totalDistance = 0;
+    rot += 0.0;//0.001;
+
+    Vec2 v1, v2;
+    for (int i = 0; i < segments; i++) {
+        if (state) {
+            v1 = verticesObj1[i];
+            v2 = verticesObj2[i];
+        }
+        else {
+            v2 = verticesObj1[i];
+            v1 = verticesObj2[i];
+        }
+        v2 = verticesObjMorph[i];
+        verticesObjMorph[i] = v2.lerp(v1, 0.05);
+        totalDistance += v1.distance(v2);
+    }
+    // If all the vertices are close, switch shape
+    if (totalDistance < 1.0) {
+        state = !state;
+    }
+    drawNodeEx->setDNRotation(rot);
+    drawNodeEx->setDNCenter(Vec2(s.width / 2, s.height / 2));
+    drawNodeEx->setIsConvex(false);
+    drawNodeEx->drawPolygon(verticesObjMorph, segments, 0.5f, Color4B::YELLOW);
+    drawNodeEx->setIsConvex(true);
+}
+
+string DrawNodeExMorphTest::title() const
+{
+    return "Morphing";
+}
+
+string DrawNodeExMorphTest::subtitle() const
+{
+    return "";
+}
+
+//string DrawNodeExBaseTest::title() const
+//{
+//    return "No title";
+//}
+
+void DrawNodeExBaseTest::drawDirection(const Vec2* vec, const int size, Vec2 offset)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        auto label = Label::createWithTTF(std::to_string(i).c_str(), "fonts/Marker Felt.ttf", 10);
+        addChild(label);
+        label->setPosition(vec[i] + offset);
+    }
+}
+
+string DrawNodeExPerformanceTest::title() const
+{
+    return "Endless FireWork";
+}
+
+string DrawNodeExPerformanceTest::subtitle() const
+{
+    return "Performance";
+}
+
+DrawNodeExPerformanceTest::DrawNodeExPerformanceTest()
+{
+    auto s = Director::getInstance()->getWinSize();
+
+    drawNodeEx = DrawNodeEx::create();
+    addChild(drawNodeEx);
+
+    projectile = new Vec2[20];
+
+    ember = createFireObjs(30);
+
+
+    // canon;
+    // projectile;
+    // wall;
+
+    scheduleUpdate();
+}
+
+
+DrawNodeExPerformanceTest::fireObj* DrawNodeExPerformanceTest::createFireObjs(int count)
+{
+    fireObj* fobj = new fireObj[count];
+
+    for (int n = 0; n < count; n++)
+    {
+        fobj[n].life = 20 + burnTime * AXRANDOM_0_1();
+        fobj[n].x = x + midx;
+        fobj[n].y = nomy - y;
+        alfa = tupi * AXRANDOM_0_1();
+        if (shape > 15)
+        {
+            fobj[n].vx = sin(alfa) * pow * sin(AXRANDOM_0_1() * tupi);
+            fobj[n].vy = cos(alfa) * pow * sin(AXRANDOM_0_1() * tupi);
+        }
+        else
+        {
+            fobj[n].vx = sin(alfa) * pow * sin(AXRANDOM_0_1() * tupi);
+            fobj[n].vy = cos(alfa) * pow * 0.25;
+        }
+        if (cmix > 75)
+        {
+            fobj[n].color = Color4F::WHITE;
+        }
+        else if (cmix > 65)
+        {
+            fobj[n].color = Color4F::RED;
+        }
+        else
+        {
+            fobj[n].color = Color4F::BLUE;
+        }
+    }
+
+    return fobj;
+}
+void DrawNodeExPerformanceTest::update(float dt)
+{
+    drawNodeEx->clear();
+
+    float thickness = 2.0f;
+    static float rotation = 0.1;
+    rotation += 0.1;
+    auto s = Director::getInstance()->getWinSize();
+
+    //  drawNodeEx->setRotation(rotation * 3);
+    drawNodeEx->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    drawNodeEx->setScale(0.3);
+    drawNodeEx->setPosition({ 200,80 });
+
+    // drawNodeEx->setPosition(0.1);
+    Vec2 gear1 = { 280.f, 320.f };
+    Vec2 gear2 = { 160.f, 320.f };
+    Vec2 gear3 = { 200.f, 200.f };
+    Vec2 gear4 = { s.width - 200, s.height - 200 };
+
+    drawNodeEx->drawLine(gear2, gear4, Color4F::RED, thickness);  // line
+  //  DrawNodeEx::DNObject* test1 = drawNodeEx->getDNObject();
+    drawNodeEx->setDNCenter(gear1);
+    drawNodeEx->setDNRotation(rotation + 45);
+    drawNodeEx->drawStar(Vec2(gear1), 30, 60, 8, Color4F::BLUE, 4.0);
+    drawNodeEx->setDNRotation(-rotation);
+    drawNodeEx->setDNCenter(gear2);
+    drawNodeEx->drawSolidStar(gear2, 30, 60, 8, Color4F::GREEN, Color4F::YELLOW, 4.0);
+    //   drawDirection(gear2, 30, gear2[0]->getPosition());
+
+    drawNodeEx->resetDNValues();
+    drawNodeEx->drawLine(gear2, gear1, Color4F::RED, thickness);  // line
+    drawNodeEx->setDNCenter(gear4);
+    drawNodeEx->setDNRotation(rotation + 45);
+    drawNodeEx->drawStar(gear3, 30, 60, 18, Color4F::RED, 1.0);
+    drawNodeEx->drawLine(gear3, gear4, Color4F::YELLOW, thickness);  // line
+    drawNodeEx->resetDNValues();
+    drawNodeEx->setDNRotation(rotation - 45);
+    drawNodeEx->setDNCenter(gear4);
+    drawNodeEx->drawStar(gear4, 40, 60, 60, Color4F::GREEN, 1.0);
+    drawNodeEx->resetDNValues();
+
+  //  DrawNodeEx::DNObject* test = drawNodeEx->getDNObject();
+    drawNodeEx->setDNScale(Vec2(0.5f, 0.5f));
+    drawNodeEx->setDNPosition(Vec2(100, 100));
+    //drawNodeEx->drawPoly(test->_vertices, test->_size, true, Color4B::ORANGE);
+    //drawNodeEx->drawPoly(test1->_vertices, test1->_size, true, Color4B::ORANGE);
+    drawNodeEx->resetDNValues();
+
+
+    // drawRect
+    drawNodeEx->drawRect(Vec2(23, 23), Vec2(7, 7), Color4F(1, 1, 0, 1), thickness);
+    drawNodeEx->drawRect(Vec2(15, 30), Vec2(30, 15), Vec2(15, 0), Vec2(0, 15),
+        Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1), thickness);
+    drawNodeEx->drawRect(Vec2(123, 123), Vec2(227, 227), Color4F(1, 1, 0, 1), thickness);
+    drawNodeEx->drawRect(Vec2(115, 130), Vec2(130, 115), Vec2(115, 100), Vec2(100, 115), Color4F::MAGENTA, thickness);
+
+    // drawCircle
+    drawNodeEx->drawCircle(VisibleRect::center() + Vec2(140, 0), 100, AX_DEGREES_TO_RADIANS(90), 50, true, 1.0f, 2.0f,
+        Color4F(1.0f, 0.0f, 0.0f, 0.5f), thickness);
+    drawNodeEx->drawCircle(VisibleRect::center() - Vec2(140, 0), 50, AX_DEGREES_TO_RADIANS(90), 30, true,
+        Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
+
+    // drawCubicBezier
+    drawNodeEx->drawQuadBezier(Vec2(s.width - 150, s.height - 150), Vec2(s.width - 70, s.height - 10),
+        Vec2(s.width - 10, s.height - 10), 10, Color4F::BLUE, thickness);
+    drawNodeEx->drawQuadBezier(Vec2(0.0f + 100, s.height - 100), Vec2(s.width / 2, s.height / 2),
+        Vec2(s.width - 100, s.height - 100), 50, Color4F::RED, thickness);
+
+    // drawCubicBezier
+    drawNodeEx->drawCubicBezier(VisibleRect::center(), Vec2(VisibleRect::center().x + 30, VisibleRect::center().y + 50),
+        Vec2(VisibleRect::center().x + 60, VisibleRect::center().y - 50), VisibleRect::right(),
+        100, Color4F::WHITE, thickness);
+    drawNodeEx->drawCubicBezier(Vec2(s.width - 250, 40.0f), Vec2(s.width - 70, 100.0f), Vec2(s.width - 30, 250.0f),
+        Vec2(s.width - 10, s.height - 50), 10, Color4F::GRAY, thickness);
+
+    // drawCardinalSpline
+    auto array = ax::PointArray::create(20);
+    array->addControlPoint(Vec2(0.0f, 0.0f));
+    array->addControlPoint(Vec2(80.0f, 80.0f));
+    array->addControlPoint(Vec2(s.width - 80, 80.0f));
+    array->addControlPoint(Vec2(s.width - 80, s.height - 80));
+    array->addControlPoint(Vec2(80.0f, s.height - 80));
+    array->addControlPoint(Vec2(80.0f, 80.0f));
+    array->addControlPoint(Vec2(s.width / 2, s.height / 2));
+    drawNodeEx->drawCardinalSpline(array, 0.5f, 50, Color4F::MAGENTA, thickness);
+
+    auto array2 = ax::PointArray::create(20);
+    array2->addControlPoint(Vec2(s.width / 2, 80.0f));
+    array2->addControlPoint(Vec2(s.width - 80, 80.0f));
+    array2->addControlPoint(Vec2(s.width - 80, s.height - 80));
+    array2->addControlPoint(Vec2(s.width / 2, s.height - 80));
+    array2->addControlPoint(Vec2(s.width / 2, 80.0f));
+    drawNodeEx->drawCardinalSpline(array2, 5.0f, 50, Color4F::ORANGE, thickness);
+
+    // drawCatmullRom
+    array2 = ax::PointArray::create(20);
+    array2->addControlPoint(Vec2(s.width / 2, 80.0f));
+    array2->addControlPoint(Vec2(s.width - 80, 80.0f));
+    array2->addControlPoint(Vec2(s.width - 80, s.height - 80));
+    array2->addControlPoint(Vec2(s.width / 2, s.height - 80));
+    array2->addControlPoint(Vec2(s.width / 2, 80.0f));
+    drawNodeEx->drawCatmullRom(array2, 50, Color4F::ORANGE, thickness);
+
+    array = ax::PointArray::create(20);
+    array->addControlPoint(Vec2(0.0f, 0.0f));
+    array->addControlPoint(Vec2(80.0f, 80.0f));
+    array->addControlPoint(Vec2(s.width - 80, 80.0f));
+    array->addControlPoint(Vec2(s.width - 80, s.height - 80));
+    array->addControlPoint(Vec2(80.0f, s.height - 80));
+    array->addControlPoint(Vec2(80.0f, 80.0f));
+    array->addControlPoint(Vec2(s.width / 2, s.height / 2));
+    drawNodeEx->drawCatmullRom(array, 50, Color4F::MAGENTA, thickness);
+
+    // drawPoly
+    // for (int n = 0; n < 10; n++)
+    bool isReal = false;
+
+    // drawNodeEx->drawPoly(verticess, sizeof(verticess) / sizeof(verticess[0]), true,
+    //                Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
+
+    Vec2 vertices[5] = { Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f),
+        Vec2(50.0f, 100.0f) };
+    drawNodeEx->drawPoly(vertices, 5, false, Color4B::BLUE, thickness);
+
+    Vec2 vertices2[3] = { Vec2(30.0f, 130.0f), Vec2(30.0f, 230.0f), Vec2(50.0f, 200.0f) };
+    drawNodeEx->drawPoly(vertices2, 3, true, Color4B::GREEN, thickness);
+
+    drawNodeEx->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color4B::RED, thickness);
+
+    // drawPolygon
+
+    drawNodeEx->setDNScale(Vec2(thickness, thickness));
+    drawNodeEx->setDNPosition(Vec2(0, 0));
+    drawNodeEx->setDNRotation(0);
+    drawNodeEx->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color4F::GREEN, thickness,
+        Color4F::YELLOW);
+    drawNodeEx->setDNPosition(Vec2(0, 0));
+    drawNodeEx->setDNRotation(thickness);
+    drawNodeEx->setDNScale(Vec2(thickness, thickness));
+    drawNodeEx->setDNCenter(vertices1[0]);
+    drawNodeEx->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color4F::GREEN, thickness,
+        Color4F::YELLOW);
+
+
+
+
+
+
+
+
+
+
+    //if (fuse > 0)
+    //{
+    //    drawNodeEx->drawLine(Vec2(ember[a].x, ember[a].y),
+    //        Vec2((ember[a].x - ember[a].vx), (ember[a].y - ember[a].vy)), Color4B::GREEN); //[a].color);
+    //    fuse--;
+    //    a = old - 1;
+    //    do
+    //    {
+    //        a++;
+    //        if (a > max)
+    //        {
+    //            a = 0;
+    //        }
+    //        ember[a].life--;
+    //        if (ember[a].life <= 0)
+    //        {
+    //            old++;
+    //            if (old > max)
+    //                old = 0;
+    //        }
+    //        else
+    //        {
+    //            AXLOG("%f %f", ember[a].x, ember[a].y);
+
+    //            ember[a].x += ember[a].vx;
+    //            ember[a].y += ember[a].vy;
+    //            ember[a].vx *= drag;
+    //            ember[a].vy *= drag + gravity;
+    //        }
+
+    //    } while (a != young);
+    //}
+    //else  // fuse has reached the end so create a new burst
+    //{
+    //    x = 300;
+    //    y = 300;
+    //    emberCount = 50 + 100 * AXRANDOM_0_1();
+    //    pow = emberCount / impulse;
+
+    //    cmix = 100 * AXRANDOM_0_1();
+    //    c1 = 5 * AXRANDOM_0_1();
+    //    c2 = 5 * AXRANDOM_0_1();
+    //    while (c1 == c2)
+    //    {
+    //        c2 = 5 * AXRANDOM_0_1();
+    //    };
+    //    shape = 100 * AXRANDOM_0_1();
+    //    a = young;
+    //    for (int n = 0; n < emberCount; n++)
+    //    {
+    //        ember[n].life = 20 + burnTime * AXRANDOM_0_1();
+    //        ember[n].x = x + midx;
+    //        ember[n].y = nomy - y;
+    //        alfa = tupi * AXRANDOM_0_1();
+    //        if (shape > 15)
+    //        {
+    //            ember[n].vx = sin(alfa) * pow * sin(AXRANDOM_0_1() * tupi);
+    //            ember[n].vy = cos(alfa) * pow * sin(AXRANDOM_0_1() * tupi);
+    //        }
+    //        else
+    //        {
+    //            ember[n].vx = sin(alfa) * pow * sin(AXRANDOM_0_1() * tupi);
+    //            ember[n].vy = cos(alfa) * pow * 0.25;
+    //        }
+    //        if (cmix > 75)
+    //        {
+    //            ember[n].color = Color4F::WHITE;
+    //        }
+    //        else if (cmix > 65)
+    //        {
+    //            ember[n].color = Color4F::RED;
+    //        }
+    //        else
+    //        {
+    //            ember[n].color = Color4F::BLUE;
+    //        }
+    //    }
+    //    young = a;
+    //    fuse = 25;    // AXRANDOM_0_1() * fuseTime + 25;
+    //} 
+}
+
+// DrawNodeEx Tests
+DrawNodeExPictureTest::DrawNodeExPictureTest()
+{
+    auto s = Director::getInstance()->getWinSize();
+
+    drawNodeEx = DrawNodeEx::create();
+    addChild(drawNodeEx);
+
+    scheduleUpdate();
+}
+void DrawNodeExPictureTest::update(float dt)
+{
+    static float rot = 0.1f;
+    static int count = 0;
+    static bool wait = false;
+
+    drawNodeEx->clear();
+
+    if (!wait)
+    {
+        rot += 0.05;
+        if (rot >= 6)
+        {
+            rot = count = 0;
+            wait = true;
+        }
+    }
+    else if (count++ > 30)
+        wait = false;
+
+    float sph_xx[2326];
+    float sph_yy[2326];
+    int n = 0;
+    for (int i = 0; i < 2326;)  // read data
+    {
+        sph_xx[n] = verticesHead[i++];
+        sph_yy[n] = verticesHead[i++];
+        n++;
+    }
+
+    float sph_cmb = sph_yy[0];
+    int sph_la = 0;
+    do
+    {
+        Color4F color = Color4F(sph_xx[sph_la + 1], sph_yy[sph_la + 1], sph_xx[sph_la + 2], sph_yy[sph_la + 2] * 255);
+        // color = Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1);
+        Vec2* vertices = new Vec2[sph_cmb - 3];
+        for (int n = 3; n < sph_cmb; n++)
+        {
+            vertices[n - 3] = Vec2(sph_xx[sph_la + n], sph_yy[sph_la + n]);
+        }
+        drawNodeEx->setPosition(Vec2(420, 280));
+        drawNodeEx->setScale(0.4);
+        drawNodeEx->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        drawNodeEx->setRotation(180);
+        drawNodeEx->setDNCenter(vertices[0]);
+        drawNodeEx->setDNRotation(rot);
+        drawNodeEx->setIsConvex(true);
+        drawNodeEx->drawPolygon(vertices, sph_cmb - 3, color, rot, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+        drawNodeEx->setIsConvex(false);
+
+        sph_la += sph_cmb;
+        sph_cmb = sph_yy[sph_la];
+    } while (sph_yy[sph_la] != 0);
+}
+
+string DrawNodeExPictureTest::title() const
+{
+    return "Picture";
+}
+
+string DrawNodeExPictureTest::subtitle() const
+{
+    return "Rotation, Filled Polygon, Individual Thickness ";
 }
 
 // DrawNodeTest
@@ -834,7 +1340,8 @@ ax::ui::ListView* DrawNodePart1Test::createListView()
     {
         auto ui = ax::ui::Text::create();
         ui->setString(drawMethods[i].c_str());
-        contentSize = ui->getContentSize();
+        contentSize.x = MAX(ui->getContentSize().x, contentSize.x);
+        contentSize.y = MAX(ui->getContentSize().y, contentSize.y);
         ui->setTouchEnabled(true);
         listview->pushBackCustomItem(ui);
     }
@@ -1138,6 +1645,75 @@ void DrawNodePart1Test::drawAll()
         }
         break;
     }
+    case 17:
+    {
+        // draw->setPosition(0.1);
+        Vec2 gear1 = { 280.f, 320.f };
+        Vec2 gear2 = { 160.f, 320.f };
+        Vec2 gear3 = { 200.f, 200.f };
+
+        Vec2 gear4 = { s.width - 200, s.height - 200 };
+        draw->drawStar(Vec2(gear1), 30, 60, 8, Color4F::BLUE, 4.0);
+        draw->setDNRotation(-rotation);
+        draw->setDNCenter(gear2);
+        draw->drawStar(gear2, 30, 60, 8, Color4F::GREEN, 4.0);
+
+        draw->resetDNValues();
+        draw->drawLine(gear2, gear1, Color4F::RED, thickness);  // line
+        draw->setDNCenter(gear4);
+        draw->setDNRotation(rotation + 45);
+        draw->drawStar(gear3, 30, 60, 18, Color4F::RED, 1.0);
+        draw->drawLine(gear3, gear4, Color4F::YELLOW, thickness);  // line
+        draw->resetDNValues();
+        draw->setDNRotation(rotation - 45);
+        draw->setDNCenter(gear4);
+        draw->drawStar(gear4, 40, 60, 60, Color4F::GREEN, 1.0);
+
+
+
+
+        // draw a star
+        //for (int i = 0; i < count; i++)
+        //{
+        //    Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y);
+        //    draw->drawSolidRect(pos, pos + Vec2(20.0f, 20.0f),
+        //        Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
+        //}
+        break;
+    }
+    case 18:
+    {
+
+        // draw->setPosition(0.1);
+        Vec2 gear1 = { 280.f, 320.f };
+        Vec2 gear2 = { 160.f, 320.f };
+        Vec2 gear3 = { 200.f, 200.f };
+
+        Vec2 gear4 = { s.width - 200, s.height - 200 };
+        draw->drawSolidStar(Vec2(gear1), 30, 60, 8, Color4F::BLUE, Color4F::BLUE, 4.0);
+        draw->setDNRotation(-rotation);
+        draw->setDNCenter(gear2);
+        draw->drawSolidStar(gear2, 30, 60, 8, Color4F::GREEN, Color4F::YELLOW, 4.0);
+
+        draw->resetDNValues();
+        draw->drawLine(gear2, gear1, Color4F::RED, thickness);  // line
+        draw->setDNCenter(gear4);
+        draw->setDNRotation(rotation + 45);
+        draw->drawSolidStar(gear3, 30, 60, 18, Color4F::RED, Color4F::BLUE,1.0);
+        draw->drawLine(gear3, gear4, Color4F::YELLOW, thickness);  // line
+        draw->resetDNValues();
+        draw->setDNRotation(rotation - 45);
+        draw->setDNCenter(gear4);
+        draw->drawSolidStar(gear4, 40, 60, 60, Color4F::GREEN, Color4F::BLUE,1.0);
+        // draw a solid star
+        //for (int i = 0; i < count; i++)
+        //{
+        //    Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y);
+        //    draw->drawSolidRect(pos, pos + Vec2(20.0f, 20.0f),
+        //        Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
+        //}
+        break;
+    }
 
     default:
         break;
@@ -1403,6 +1979,89 @@ void DrawNodePart2Test::update(float dt)
     default:
         break;
     }
+}
+
+DrawNodeExHeartTest::DrawNodeExHeartTest()
+{
+    auto s = Director::getInstance()->getWinSize();
+    //// https://virusinlinux.github.io/heartAnimation/
+
+    heart = new Vec2[totalFrames];
+
+    for (int i = 0; i < totalFrames; i++)
+    {
+        float a = AXRANDOM_0_1() * M_PI * 4;
+        float r = AXRANDOM_0_1() * sin(a);
+        heart[i] = { r * 100, r * 100 };
+        heart[i] = { s.width / 2,s.height / 2 };
+    }
+    drawNodeEx = DrawNodeEx::create();
+    addChild(drawNodeEx);
+    scheduleUpdate();
+}
+
+std::string DrawNodeExHeartTest::title() const
+{
+    return "Heart Animation";
+}
+std::string DrawNodeExHeartTest::subtitle() const
+{
+    return "";
+}
+void DrawNodeExHeartTest::update(float dt)
+{
+    auto s = Director::getInstance()->getWinSize();
+    static int counter = 0;
+    //function draw() {
+    //
+    //
+    float percent = float(counter % totalFrames) / totalFrames;
+    //    render(percent);
+
+    //}
+    //
+    //function render(percent) {
+    //    background(0);
+    //    translate(width / 2, height / 2);
+    //    stroke(255, 0, 100);
+    //    strokeWeight(4);
+    //    fill(255, 0, 100);
+    //
+    //    beginShape();
+    //   
+    //        
+    //       
+    //        
+    //
+    //    }
+    for (int i = 0; i < totalFrames; i++) // for (let v of heart) {
+    {
+        float a = percent * M_PI * 2;           // const a = map(percent, 0, 1, 0, TWO_PI * 2);
+        float r = AXRANDOM_0_1() * sin(a);      //  const r = map(sin(a), -1, 1, height / 80, height / 40);
+        //     Vec2 vertex = { r * v.x, r * v.y } ;    //  vertex(r * v.x, r * v.y);          //  heart[i] = { r * heart[i].x, r * heart[i].y };
+        // heart.splice(0, 1);             //   The splice() method of Array instances changes the contents of an array by removing or replacing existing elements and/or adding new elements in place.
+        if (percent < 0.5)  //  if (percent < 0.5) {
+        {
+            float a = percent * M_PI * 2;       // const a = map(percent, 0, 0.5, 0, TWO_PI);
+            float r = AXRANDOM_0_1() * sin(a);  // const x = 16 * pow(sin(a), 3);
+            float y = 1;                        // const y = -(13 * cos(a) - 5 * cos(2 * a) - 2 * cos(3 * a) - cos(4 * a));
+            // heart.push(createVector(x, y));
+        }
+        heart[i] = { r * heart[i].x, r * heart[i].y };
+    }
+
+
+
+    drawNodeEx->clear();
+    drawNodeEx->setIsConvex(true);
+    drawNodeEx->drawPolygon(heart, totalFrames, 1.0, Color4B::RED);
+    drawNodeEx->setIsConvex(false);
+    //    endShape();
+    //
+
+
+    drawNodeEx->drawStar({ s.width / 2, s.height / 2 }, 40, 20, 8, Color4B::BLUE);
+    counter++;
 }
 
 #if defined(_WIN32)
