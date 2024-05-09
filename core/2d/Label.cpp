@@ -512,8 +512,6 @@ Label::Label(TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
 #if AX_LABEL_DEBUG_DRAW
     _debugDrawNode = DrawNode::create();
     AX_SAFE_RETAIN(_debugDrawNode);
-    
-    addChild(_debugDrawNode);
 #endif
 
     _purgeTextureListener = EventListenerCustom::create(FontAtlas::CMD_PURGE_FONTATLAS, [this](EventCustom* event) {
@@ -2103,6 +2101,10 @@ void Label::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t pare
         this->drawSelf(visibleByCamera, renderer, flags);
     }
 
+#if AX_LABEL_DEBUG_DRAW
+    _debugDrawNode->visit(renderer, _modelViewTransform, parentFlags | FLAGS_TRANSFORM_DIRTY);
+#endif
+    
     _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
