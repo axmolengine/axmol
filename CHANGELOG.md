@@ -32,6 +32,11 @@
 - Remove unused API: ax::LuaLog
 - Change parameter 'sharedRT' of RenderTexture::create to false
 
+### Mark as deprecated
+
+- `2d/TextFieldTTF`
+- `ui/UITextField`, use `ui/TextFieldEx` instead
+
 ### BugFixes
 
 - Fix fullscreen incorrect in retina display by @halx99, reported by @TyelorD

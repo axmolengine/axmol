@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "base/IMEDelegate.h"
 #include "base/SimpleTimer.h"
 #include "2d/Label.h"
+#include "base/EventListenerKeyboard.h"
 
 NS_AX_BEGIN
 
@@ -36,7 +37,8 @@ namespace ui
 {
 
 /**
-@brief  A extension implementation of ui::TextField
+@brief  The ui::TextFieldEx, better design, better cursor support than ui::TextField
+will replace ui::TextField, currently, ui::TextField, 2d/TextFieldTTF were maked as deprecated
 */
 class AX_DLL TextFieldEx : public Widget, public IMEDelegate
 {
