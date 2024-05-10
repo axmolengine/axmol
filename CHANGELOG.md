@@ -98,7 +98,7 @@
 
 ### 3rdparty updates
 
-- simdjson: 3.7.0 ==> 3.9.1
+- simdjson: 3.7.0 ==> 3.9.2
 - flatbuffers: 2.0.8 ==> 24.3.25
 - curl: 8.6.0 ==> 8.7.1
 - glad: 2.0.5 ==> 2.0.6
