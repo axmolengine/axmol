@@ -1268,7 +1268,7 @@ DrawNodeMethodesTest::DrawNodeMethodesTest()
     draw->setPosition(center);
     addChild(draw);
 
-    draw1 = DrawNode::create();
+    draw1 = DrawNodeEx::create();
     draw1->setScale(0.5);
     draw1->setPosition(size / 4);
     addChild(draw1);
@@ -1389,6 +1389,7 @@ void DrawNodeMethodesTest::drawAll()
     {
     case 0:
     {
+        float nodeRotation = draw->getRotation();
         draw->setRotation(rotation * 3);
         draw->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
         draw->setScale(0.3);
@@ -1419,6 +1420,7 @@ void DrawNodeMethodesTest::drawAll()
         draw->drawStar(gear4, 40, 60, 60, Color4F::GREEN, 1.0);
         draw->resetDNValues();
         isDirty = true;
+        draw->setRotation(nodeRotation);
         break;
     }
     case 1:
@@ -2685,7 +2687,7 @@ DrawNodeCocos2dx_Issue829::DrawNodeCocos2dx_Issue829()
         {  // correct order
             Vec2 correctOrder[] = { Vec2(o + w * 2, o), Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2),
                 Vec2(o + w, o - h) };
-            auto drawNode2 = DrawNode::create();
+            auto drawNode2 = DrawNodeEx::create();
             addChild(drawNode2);
             drawNode2->setPosition({ -10, 20 });
             drawNode2->drawPolygon(correctOrder, sizeof(correctOrder) / sizeof(correctOrder[0]),

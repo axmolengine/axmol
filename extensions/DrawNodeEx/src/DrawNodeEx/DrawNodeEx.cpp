@@ -1163,7 +1163,41 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             extrude[i] = { offset, n2 };
         }
 
-        for (unsigned int i = 0; i < count; i++)
+        int i = 0;
+        int j = (i + 1) % count;
+        Vec2 v0 = _vertices[i];
+        Vec2 v1 = _vertices[j];
+
+        Vec2 n0 = extrude[i].n;
+
+        Vec2 offset0 = extrude[i].offset;
+        Vec2 offset1 = extrude[j].offset;
+
+        Vec2 inner0 = v0 - offset0 * borderWidth;
+        Vec2 inner1 = v1 - offset1 * borderWidth;
+        Vec2 outer0 = v0 + offset0 * borderWidth;
+        Vec2 outer1 = v1 + offset1 * borderWidth;
+        borderColor = borderColo;
+        if (i >= count - 1 && !closedPolygon)  // /-2  ??
+        {
+            borderColor = Color4B::TRANSPARENT;
+        }
+
+        borderColor = Color4B::BLUE;
+
+        V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColor, Tex2F(-n0)},
+            {inner1, borderColor, Tex2F(-n0)},
+            {outer1, borderColor, Tex2F(n0)} };
+        *cursor++ = tmp1;
+
+        V2F_C4B_T2F_Triangle tmp2 = { {inner0, borderColor, Tex2F(-n0)},
+            {outer0, borderColor, Tex2F(n0)},
+            {outer1, borderColor, Tex2F(n0)} };
+        *cursor++ = tmp2;
+
+
+
+        for (unsigned int i = 1; i < count-1; i++)
         {
             int j = (i + 1) % count;
             Vec2 v0 = _vertices[i];
@@ -1184,6 +1218,8 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
                 borderColor = Color4B::TRANSPARENT;
             }
 
+            borderColor = Color4B::GREEN;
+
             V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColor, Tex2F(-n0)},
                 {inner1, borderColor, Tex2F(-n0)},
                 {outer1, borderColor, Tex2F(n0)} };
@@ -1194,6 +1230,38 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
                 {outer1, borderColor, Tex2F(n0)} };
             *cursor++ = tmp2;
         }
+
+         i = count-1;
+         j = (i + 1) % count;
+         v0 = _vertices[i];
+         v1 = _vertices[j];
+
+         n0 = extrude[i].n;
+
+         offset0 = extrude[i].offset;
+         offset1 = extrude[j].offset;
+
+         inner0 = v0 - offset0 * borderWidth;
+         inner1 = v1 - offset1 * borderWidth;
+         outer0 = v0 + offset0 * borderWidth;
+         outer1 = v1 + offset1 * borderWidth;
+        borderColor = borderColo;
+        if (i >= count - 1 && !closedPolygon)  // /-2  ??
+        {
+            borderColor = Color4B::TRANSPARENT;
+        }
+
+        borderColor = Color4B::YELLOW;
+
+         tmp1 = { {inner0, borderColor, Tex2F(-n0)},
+            {inner1, borderColor, Tex2F(-n0)},
+            {outer1, borderColor, Tex2F(n0)} };
+        *cursor++ = tmp1;
+
+         tmp2 = { {inner0, borderColor, Tex2F(-n0)},
+            {outer0, borderColor, Tex2F(n0)},
+            {outer1, borderColor, Tex2F(n0)} };
+        *cursor++ = tmp2;
 
         free(extrude);
     }
