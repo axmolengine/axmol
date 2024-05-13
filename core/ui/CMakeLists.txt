@@ -144,6 +144,7 @@ set(_AX_UI_HEADER
     ui/UITextAtlas.h
     ui/UITextBMFont.h
     ui/UITextField.h
+    ui/UITextFieldEx.h
     ui/UIVBox.h
     ui/UIWidget.h
     )

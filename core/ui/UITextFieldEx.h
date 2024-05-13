@@ -1,12 +1,35 @@
-//
-// Copyright (c) 2014~2017 purelib - All Rights Reserved
-//
+/****************************************************************************
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+https://axmolengine.github.io/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+
 #ifndef _UITEXTFIELDEX_H_
 #define _UITEXTFIELDEX_H_
 
-#include "cocos2d.h"
-#include "base/Macros.h"
+#include "ui/UIWidget.h"
+#include "base/IMEDelegate.h"
 #include "base/SimpleTimer.h"
+#include "2d/Label.h"
+#include "base/EventListenerKeyboard.h"
 
 NS_AX_BEGIN
 
@@ -14,9 +37,10 @@ namespace ui
 {
 
 /**
-@brief  A extension implementation of ui::TextField
+@brief  The ui::TextFieldEx, better design, better cursor support than ui::TextField
+will replace ui::TextField, currently, ui::TextField, 2d/TextFieldTTF were maked as deprecated
 */
-class AX_DLL TextFieldEx : public ax::Node, public IMEDelegate
+class AX_DLL TextFieldEx : public Widget, public IMEDelegate
 {
 public:
     /**
@@ -46,7 +70,7 @@ public:
 
     Label* getRenderLabel();
 
-    inline int getCharCount() const { return static_cast<int>(charCount); };
+    inline int getCharCount() const { return static_cast<int>(_charCount); };
 
     virtual void setPlaceholderColor(const Color4B& color);
     virtual const Color4B& getPlaceholderColor() const;
@@ -77,18 +101,12 @@ public:
     virtual void setPasswordEnabled(bool value);
     virtual bool isPasswordEnabled() const;
 
-    /*virtual void         visit(Renderer *renderer, const kmMat4 &parentTransform, bool parentTransformUpdated)
-     * override;*/
+    bool empty(void) const { return _charCount == 0 || _inputText.empty(); }
 
-    bool empty(void) const { return this->charCount == 0 || this->inputText.empty(); }
+    void setEnabled(bool bEnabled) override;
 
-    virtual const Size& getContentSize() const override;
-
-    virtual void setEnabled(bool bEnabled);
-    virtual bool isEnabled(void) const;
-
-    void setEditable(bool bEditable) { editable = bEditable; }
-    bool isEditable(void) const { return editable; }
+    void setEditable(bool bEditable) { _editable = bEditable; }
+    bool isEditable(void) const { return _editable; }
 
     void setMaxLength(int maxLength) { setCharLimit(maxLength); }
 
@@ -100,9 +118,9 @@ public:
     void setTextFontName(std::string_view fontName);
     std::string_view getTextFontName() const;
 
-    AX_SYNTHESIZE(size_t, charLimit, CharLimit);
+    AX_SYNTHESIZE(size_t, _charLimit, CharLimit);
 
-    bool isSystemFont(void) const { return systemFontUsed; }
+    bool isSystemFont(void) const { return _systemFontUsed; }
 
 public:
     std::function<void(void)> onTextModify;
@@ -113,28 +131,28 @@ public:
     void openIME(void);
     void closeIME(void);
 
-    virtual void insertText(const char* text, size_t len) override;
+    void insertText(const char* text, size_t len) override;
 
 protected:
     //////////////////////////////////////////////////////////////////////////
 
-    virtual bool canAttachWithIME() override;
-    virtual bool canDetachWithIME() override;
+    bool canAttachWithIME() override;
+    bool canDetachWithIME() override;
 
-    virtual void deleteBackward() override;
-    virtual std::string_view getContentText() override;
+    void deleteBackward() override;
+    std::string_view getContentText() override;
 
     void handleDeleteKeyEvent();
 
     /**
     @brief    Open keyboard and receive input text.
     */
-    virtual bool attachWithIME() override;
+    bool attachWithIME() override;
 
     /**
     @brief    End text input and close keyboard.
     */
-    virtual bool detachWithIME() override;
+    bool detachWithIME() override;
 
     void keyboardDidShow(IMEKeyboardNotificationInfo& /*info*/) override;
     void keyboardDidHide(IMEKeyboardNotificationInfo& /*info*/) override;
@@ -151,37 +169,35 @@ protected:
     void __moveCursorTo(float x);
 
 protected:
-    bool systemFontUsed;
-    std::string fontName;
-    float fontSize;
+    bool _systemFontUsed;
+    std::string _fontName;
+    float _fontSize;
 
-    bool editable;
+    bool _editable;
 
-    Label* renderLabel;
+    Label* _renderLabel;
 
-    size_t charCount;
-    std::string inputText;
+    size_t _charCount;
+    std::string _inputText;
 
-    std::string placeHolder;
-    Color4B colorSpaceHolder;
-    Color4B colorText;
+    std::string _placeHolder;
+    Color4B _colorSpaceHolder;
+    Color4B _colorText;
 
-    bool secureTextEntry;
+    bool _secureTextEntry;
 
-    Sprite* cursor;
-    bool cursorVisible;
+    Sprite* _cursor;
+    bool _cursorVisible;
 
-    int insertPosUtf8;
-    int insertPos;  // The actual input content insertPos, step: bytes
-    int cursorPos;  // The cursor normalzed pos,
+    int _insertPosUtf8;
+    int _insertPos;  // The actual input content insertPos, step: bytes
+    int _cursorPos;  // The cursor normalzed pos,
 
-    bool enabled;
+    EventListenerTouchOneByOne* _touchListener;
+    EventListenerKeyboard* _kbdListener;
 
-    EventListenerTouchOneByOne* touchListener;
-    EventListenerKeyboard* kbdListener;
-
-    bool touchCursorControlEnabled;
-    float asteriskWidth;
+    bool _touchCursorControlEnabled;
+    float _asteriskWidth;
 
     int _fontType;
 
@@ -198,9 +214,5 @@ protected:
 };  // namespace ui
 
 NS_AX_END
-
-#ifdef _UITEXTFIELDEX_INLINE_
-#    include "UITextFieldEx.cpp"
-#endif
 
 #endif
