@@ -47,6 +47,7 @@ dependencies {
     //api "androidx.media3:media3-exoplayer-ima:$media3_version"
 
     implementation 'androidx.annotation:annotation:1.7.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 
     api ('com.google.guava:guava:31.0.1-android') {
         // Exclude dependencies that are only used by Guava at compile time

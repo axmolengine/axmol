@@ -1,36 +1,34 @@
 /****************************************************************************
-Copyright (c) 2010-2013 cocos2d-x.org
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2010-2013 cocos2d-x.org
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axmolengine.github.io/
+ https://axmolengine.github.io/
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
  ****************************************************************************/
 package org.axmol.lib;
 
-import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
@@ -45,14 +43,15 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.axmol.lib.AxmolEngine.AxmolEngineListener;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
-import javax.microedition.khronos.egl.EGLContext;
 
-public abstract class AxmolActivity extends Activity implements AxmolEngineListener {
+public abstract class AxmolActivity extends AppCompatActivity implements AxmolEngineListener {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -73,8 +72,8 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     private boolean showVirtualButton = false;
     private boolean paused = true;
 
-    public AxmolGLSurfaceView getGLSurfaceView(){
-        return  mGLSurfaceView;
+    public AxmolGLSurfaceView getGLSurfaceView() {
+        return mGLSurfaceView;
     }
 
     public static Context getContext() {
@@ -173,11 +172,11 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         this.mGLContextAttrs = getGLContextAttrs();
         this.init();
 
-        if(mWebViewHelper == null){
+        if (mWebViewHelper == null) {
             mWebViewHelper = new WebViewHelper(mFrameLayout);
         }
 
-        if(mEditBoxHelper == null){
+        if (mEditBoxHelper == null) {
             mEditBoxHelper = new EditBoxHelper(mFrameLayout);
         }
 
@@ -201,17 +200,17 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
     @Override
     protected void onResume() {
-    	Log.d(TAG, "onResume()");
+        Log.d(TAG, "onResume()");
         paused = false;
         super.onResume();
-       	if (this.hasFocus) {
+        if (this.hasFocus) {
             resume();
         }
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-    	Log.d(TAG, "onWindowFocusChanged() hasFocus=" + hasFocus);
+        Log.d(TAG, "onWindowFocusChanged() hasFocus=" + hasFocus);
         super.onWindowFocusChanged(hasFocus);
 
         this.hasFocus = hasFocus;
@@ -231,14 +230,14 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         //even though it is locked or asleep
         boolean readyToPlay = !isDeviceLocked() && !isDeviceAsleep();
 
-        if(hasFocus && readyToPlay) {
+        if (hasFocus && readyToPlay) {
             resume();
         }
     }
 
     @Override
     protected void onPause() {
-    	Log.d(TAG, "onPause()");
+        Log.d(TAG, "onPause()");
         paused = true;
         super.onPause();
         AxmolEngine.onPause();
@@ -264,8 +263,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         for (OnActivityResultListener listener : AxmolEngine.getOnActivityResultListeners()) {
             listener.onActivityResult(requestCode, resultCode, data);
         }
@@ -275,6 +273,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
 
     protected ResizeLayout mFrameLayout = null;
+
     // ===========================================================
     // Methods
     // ===========================================================
@@ -283,7 +282,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         // FrameLayout
         ViewGroup.LayoutParams framelayout_params =
             new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                                       ViewGroup.LayoutParams.MATCH_PARENT);
+                ViewGroup.LayoutParams.MATCH_PARENT);
 
         mFrameLayout = new ResizeLayout(this);
 
@@ -292,7 +291,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         // AxmolEditBox layout
         ViewGroup.LayoutParams edittext_layout_params =
             new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                                       ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams.WRAP_CONTENT);
         AxmolEditBox edittext = new AxmolEditBox(this);
         edittext.setLayoutParams(edittext_layout_params);
         edittext.setVisibility(View.GONE);
@@ -352,43 +351,43 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
                 // getWindow().getDecorView().setSystemUiVisibility();
                 final Object[] parameters = new Object[]{SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                        | SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                        | SYSTEM_UI_FLAG_IMMERSIVE_STICKY};
+                    | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                    | SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                    | SYSTEM_UI_FLAG_IMMERSIVE_STICKY};
                 ReflectionHelper.<Void>invokeInstanceMethod(getWindow().getDecorView(),
-                        "setSystemUiVisibility",
-                        new Class[]{Integer.TYPE},
-                        parameters);
+                    "setSystemUiVisibility",
+                    new Class[]{Integer.TYPE},
+                    parameters);
             } catch (NullPointerException e) {
                 Log.e(TAG, "hideVirtualButton", e);
             }
         }
     }
 
-   private static boolean isAndroidEmulator() {
-      String model = Build.MODEL;
-      Log.d(TAG, "model=" + model);
-      String product = Build.PRODUCT;
-      Log.d(TAG, "product=" + product);
-      boolean isEmulator = false;
-      if (product != null) {
-         isEmulator = product.equals("sdk") || product.contains("_sdk") || product.contains("sdk_");
-      }
-      Log.d(TAG, "isEmulator=" + isEmulator);
-      return isEmulator;
-   }
+    private static boolean isAndroidEmulator() {
+        String model = Build.MODEL;
+        Log.d(TAG, "model=" + model);
+        String product = Build.PRODUCT;
+        Log.d(TAG, "product=" + product);
+        boolean isEmulator = false;
+        if (product != null) {
+            isEmulator = product.equals("sdk") || product.contains("_sdk") || product.contains("sdk_");
+        }
+        Log.d(TAG, "isEmulator=" + isEmulator);
+        return isEmulator;
+    }
 
     private static boolean isDeviceLocked() {
-        KeyguardManager keyguardManager = (KeyguardManager)getContext().getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager keyguardManager = (KeyguardManager) getContext().getSystemService(Context.KEYGUARD_SERVICE);
         boolean locked = keyguardManager.inKeyguardRestrictedInputMode();
         return locked;
     }
 
     private static boolean isDeviceAsleep() {
-        PowerManager powerManager = (PowerManager)getContext().getSystemService(Context.POWER_SERVICE);
-        if(powerManager == null) {
+        PowerManager powerManager = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+        if (powerManager == null) {
             return false;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
@@ -402,23 +401,21 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     // Inner and Anonymous Classes
     // ===========================================================
 
-    private class AxmolEGLConfigChooser implements GLSurfaceView.EGLConfigChooser
-    {
+    private class AxmolEGLConfigChooser implements GLSurfaceView.EGLConfigChooser {
         private int[] mConfigAttributes;
-        private  final int EGL_OPENGL_ES2_BIT = 0x04;
-        private  final int EGL_OPENGL_ES3_BIT = 0x40;
-        public AxmolEGLConfigChooser(int redSize, int greenSize, int blueSize, int alphaSize, int depthSize, int stencilSize, int multisamplingCount)
-        {
-            mConfigAttributes = new int[] {redSize, greenSize, blueSize, alphaSize, depthSize, stencilSize, multisamplingCount};
+        private final int EGL_OPENGL_ES2_BIT = 0x04;
+        private final int EGL_OPENGL_ES3_BIT = 0x40;
+
+        public AxmolEGLConfigChooser(int redSize, int greenSize, int blueSize, int alphaSize, int depthSize, int stencilSize, int multisamplingCount) {
+            mConfigAttributes = new int[]{redSize, greenSize, blueSize, alphaSize, depthSize, stencilSize, multisamplingCount};
         }
-        public AxmolEGLConfigChooser(int[] attributes)
-        {
+
+        public AxmolEGLConfigChooser(int[] attributes) {
             mConfigAttributes = attributes;
         }
 
         @Override
-        public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display)
-        {
+        public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
             int[][] EGLAttributes = {
                 {
                     // GL ES 2 with user set
@@ -434,30 +431,30 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
                     EGL10.EGL_NONE
                 },
                 {
-                     // GL ES 2 with user set 16 bit depth buffer
-                     EGL10.EGL_RED_SIZE, mConfigAttributes[0],
-                     EGL10.EGL_GREEN_SIZE, mConfigAttributes[1],
-                     EGL10.EGL_BLUE_SIZE, mConfigAttributes[2],
-                     EGL10.EGL_ALPHA_SIZE, mConfigAttributes[3],
-                     EGL10.EGL_DEPTH_SIZE, mConfigAttributes[4] >= 24 ? 16 : mConfigAttributes[4],
-                     EGL10.EGL_STENCIL_SIZE, mConfigAttributes[5],
-                     EGL10.EGL_SAMPLE_BUFFERS, (mConfigAttributes[6] > 0) ? 1 : 0,
-                     EGL10.EGL_SAMPLES, mConfigAttributes[6],
-                     EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-                     EGL10.EGL_NONE
+                    // GL ES 2 with user set 16 bit depth buffer
+                    EGL10.EGL_RED_SIZE, mConfigAttributes[0],
+                    EGL10.EGL_GREEN_SIZE, mConfigAttributes[1],
+                    EGL10.EGL_BLUE_SIZE, mConfigAttributes[2],
+                    EGL10.EGL_ALPHA_SIZE, mConfigAttributes[3],
+                    EGL10.EGL_DEPTH_SIZE, mConfigAttributes[4] >= 24 ? 16 : mConfigAttributes[4],
+                    EGL10.EGL_STENCIL_SIZE, mConfigAttributes[5],
+                    EGL10.EGL_SAMPLE_BUFFERS, (mConfigAttributes[6] > 0) ? 1 : 0,
+                    EGL10.EGL_SAMPLES, mConfigAttributes[6],
+                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+                    EGL10.EGL_NONE
                 },
                 {
-                     // GL ES 2 with user set 16 bit depth buffer without multisampling
-                     EGL10.EGL_RED_SIZE, mConfigAttributes[0],
-                     EGL10.EGL_GREEN_SIZE, mConfigAttributes[1],
-                     EGL10.EGL_BLUE_SIZE, mConfigAttributes[2],
-                     EGL10.EGL_ALPHA_SIZE, mConfigAttributes[3],
-                     EGL10.EGL_DEPTH_SIZE, mConfigAttributes[4] >= 24 ? 16 : mConfigAttributes[4],
-                     EGL10.EGL_STENCIL_SIZE, mConfigAttributes[5],
-                     EGL10.EGL_SAMPLE_BUFFERS, 0,
-                     EGL10.EGL_SAMPLES, 0,
-                     EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-                     EGL10.EGL_NONE
+                    // GL ES 2 with user set 16 bit depth buffer without multisampling
+                    EGL10.EGL_RED_SIZE, mConfigAttributes[0],
+                    EGL10.EGL_GREEN_SIZE, mConfigAttributes[1],
+                    EGL10.EGL_BLUE_SIZE, mConfigAttributes[2],
+                    EGL10.EGL_ALPHA_SIZE, mConfigAttributes[3],
+                    EGL10.EGL_DEPTH_SIZE, mConfigAttributes[4] >= 24 ? 16 : mConfigAttributes[4],
+                    EGL10.EGL_STENCIL_SIZE, mConfigAttributes[5],
+                    EGL10.EGL_SAMPLE_BUFFERS, 0,
+                    EGL10.EGL_SAMPLES, 0,
+                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+                    EGL10.EGL_NONE
                 },
                 {
                     // GL ES 2 by default
