@@ -32,6 +32,11 @@
 - Remove unused API: ax::LuaLog
 - Change parameter 'sharedRT' of RenderTexture::create to false
 
+### Mark as deprecated
+
+- `2d/TextFieldTTF`
+- `ui/UITextField`, use `ui/TextFieldEx` instead
+
 ### BugFixes
 
 - Fix fullscreen incorrect in retina display by @halx99, reported by @TyelorD
@@ -98,12 +103,14 @@
 
 ### 3rdparty updates
 
-- simdjson: 3.7.0 ==> 3.9.1
+- simdjson: 3.7.0 ==> 3.9.2
 - flatbuffers: 2.0.8 ==> 24.3.25
 - curl: 8.6.0 ==> 8.7.1
 - glad: 2.0.5 ==> 2.0.6
 - yasio: 4.2.1 ==> 4.2.2
 - llhttp: 9.2.0 ==> 9.2.1
+- libwebp: 1.3.2 ==> 1.4.0
+- astcenc: 4.7.0 ==> 4.8.0
 - stb_image: 2.28 ==> 2.29
 - luajit: 2.1-9cc2e42 ==> 2.1-d06beb0
 - c-ares: 1.25.0 ==> 1.28.1
