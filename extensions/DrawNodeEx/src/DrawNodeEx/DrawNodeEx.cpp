@@ -447,6 +447,13 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
     }
     else
     {
+        if (_drawOrder == true)
+        {
+            _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness/3, color, closePolygon);
+            return;
+        }
+
+
         Vec2* _vertices = transform(poli, numberOfPoints);
 
         unsigned int vertex_count;
@@ -1315,6 +1322,11 @@ void DrawNodeEx::_drawPoly(const Vec2* poli,
     }
     else
     {
+        if (_drawOrder == true)
+        {
+            _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness/3, color, false);
+            return;
+        }
         Vec2* _vertices = transform(poli, numberOfPoints);
 
         unsigned int vertex_count;
