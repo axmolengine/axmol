@@ -363,7 +363,6 @@ void DrawNodeEx::drawPoints(const Vec2* position,
     {
         for (unsigned int i = 0; i < numberOfPoints; i++)
         {
-        //    *(point + i) = { position[i], color, Tex2F(pointSize, 0) };
             drawSolidCircle(position[i], pointSize, 0.f, 12, 1.f, 1.f,color, 0.f,color);
         }
         return;
