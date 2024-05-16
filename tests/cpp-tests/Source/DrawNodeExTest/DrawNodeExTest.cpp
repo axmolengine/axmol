@@ -2150,8 +2150,9 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
 
     /*   DrawNode* _drawNode = DrawNode::create();
     Director::getInstance()->getRunningScene()->addChild(_drawNode,100);*/
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     drawNodeEx->_drawOrder = false;
-
+#endif
 
     for (int i = 0; i < 100; i++)
     {
@@ -2173,7 +2174,9 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
 
     /*   DrawNode* _drawNode = DrawNode::create();
     Director::getInstance()->getRunningScene()->addChild(_drawNode,100);*/
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     drawNodeEx->_drawOrder = true;
+#endif
     for (int i = 0; i < 100; i++)
     {
         drawNodeEx->drawPoint(Vec2(i * 7.0f, 150.0f), (float)i / 5 + 1,
@@ -2193,11 +2196,10 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
 
 
 
-
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     drawNodeEx->_drawOrder = false;
+#endif
 
-
-    //drawNodeEx->setIsConvex(true);
     //drawNodeEx->drawPolygon(heart, totalFrames, 1.0, Color4B::RED);
     //drawNodeEx->setIsConvex(false);
     //    endShape();

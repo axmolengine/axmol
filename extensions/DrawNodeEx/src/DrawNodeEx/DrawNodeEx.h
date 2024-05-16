@@ -45,7 +45,7 @@
 
 NS_AX_EXT_BEGIN
 
-//#define DRAWNODE_TRIANGLE_ONLY 0
+//#define DRAWNODE_DRAW_LINE_POINT
 
 static const int DEFAULT_LINEWIDTH = 2;
 
@@ -104,7 +104,10 @@ public:
     ax::Vec2 _dnPositionTmp = _dnPosition;
     float _dnLineWidthTmp = _dnLineWidth;
     bool  _dnTransform = false;
+
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     bool _drawOrder = true;
+#endif
 
     bool swapIsConvex(bool isConvex) {
         _isConvexTmp = _isConvex; _isConvex = isConvex; return _isConvexTmp;
@@ -597,7 +600,7 @@ public:
 
 protected:
     void ensureCapacityTriangle(int count);
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     void ensureCapacityPoint(int count);
     void ensureCapacityLine(int count);
 #endif
@@ -620,7 +623,7 @@ protected:
     ax::CustomCommand _customCommandTriangle;
     bool _dirtyTriangle = false;
 
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     int _bufferCapacityPoint = 0;
     int _bufferCountPoint = 0;
     ax::V2F_C4B_T2F* _bufferPoint = nullptr;

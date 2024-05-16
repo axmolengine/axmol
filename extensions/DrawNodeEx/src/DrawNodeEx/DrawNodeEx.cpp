@@ -149,13 +149,13 @@ DrawNodeEx::~DrawNodeEx()
 {
     AX_SAFE_FREE(_bufferTriangle);
 
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     AX_SAFE_FREE(_bufferPoint);
     AX_SAFE_FREE(_bufferLine);
 #endif
 
     freeShaderInternal(_customCommandTriangle);
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     freeShaderInternal(_customCommandPoint);
     freeShaderInternal(_customCommandLine);
 #endif
@@ -191,7 +191,7 @@ void DrawNodeEx::ensureCapacityTriangle(int count)
     }
 }
 
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#if defined(DRAWNODE_DRAW_LINE_POINT)
 void DrawNodeEx::ensureCapacityPoint(int count)
 {
     AXASSERT(count >= 0, "capacity must be >= 0");
@@ -230,7 +230,7 @@ bool DrawNodeEx::init()
     ensureCapacityTriangle(512);
     _dirtyTriangle = true;
 
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     ensureCapacityPoint(64);
     ensureCapacityLine(256);
     _dirtyLine = true;
@@ -244,7 +244,7 @@ void DrawNodeEx::updateShader()
 {
     updateShaderInternal(_customCommandTriangle, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::TRIANGLE);
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     updateShaderInternal(_customCommandPoint, backend::ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::POINT);
 
@@ -324,7 +324,7 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         _customCommandTriangle.init(_globalZOrder);
         renderer->addCommand(&_customCommandTriangle);
     }
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     if (_bufferCountPoint)
     {
         updateBlendState(_customCommandPoint);
@@ -345,12 +345,16 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Color4B& color)
 {
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     if (_drawOrder == true)
     {
+#endif
         drawSolidCircle(position, pointSize, 0.f, 12, 1.f, 1.f, color, 0.f, color);
+#if defined(DRAWNODE_DRAW_LINE_POINT)
         return;
     }
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#endif
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     ensureCapacityPoint(1);
 
     V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
@@ -373,15 +377,19 @@ void DrawNodeEx::drawPoints(const Vec2* position,
     const float pointSize,
     const Color4B& color)
 {
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     if (_drawOrder == true)
     {
+#endif
         for (unsigned int i = 0; i < numberOfPoints; i++)
         {
             drawSolidCircle(position[i], pointSize, 0.f, 12, 1.f, 1.f, color, 0.f, color);
         }
+#if defined(DRAWNODE_DRAW_LINE_POINT)
         return;
     }
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#endif
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     ensureCapacityPoint(numberOfPoints);
 
     V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
@@ -407,12 +415,16 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
     }
     else
     {
+#if defined(DRAWNODE_DRAW_LINE_POINT)
         if (_drawOrder == true)
         {
+#endif
             drawSegment(origin, destination, thickness / 3, color);
+#if defined(DRAWNODE_DRAW_LINE_POINT)
             return;
         }
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#endif
+#if defined(DRAWNODE_DRAW_LINE_POINT)
         Vec2 line[2] = { origin, destination };
         Vec2* _vertices = transform(line, 2);
 
@@ -464,13 +476,16 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
     }
     else
     {
+#if defined(DRAWNODE_DRAW_LINE_POINT)
         if (_drawOrder == true)
         {
+#endif
             _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness / 3, color, closePolygon);
+#if defined(DRAWNODE_DRAW_LINE_POINT)
             return;
         }
-
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#endif
+#if defined(DRAWNODE_DRAW_LINE_POINT)
         Vec2* _vertices = transform(poli, numberOfPoints);
 
         unsigned int vertex_count;
@@ -1076,7 +1091,7 @@ void DrawNodeEx::clear()
 {
     _bufferCountTriangle = 0;
     _dirtyTriangle = true;
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     _bufferCountLine = 0;
     _dirtyLine = true;
     _bufferCountPoint = 0;
@@ -1342,12 +1357,16 @@ void DrawNodeEx::_drawPoly(const Vec2* poli,
     }
     else
     {
+#if defined(DRAWNODE_DRAW_LINE_POINT)
         if (_drawOrder == true)
         {
+#endif
             _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness / 3, color, false);
+#if defined(DRAWNODE_DRAW_LINE_POINT)
             return;
         }
-#if defined(DRAWNODE_TRIANGLE_ONLY)
+#endif
+#if defined(DRAWNODE_DRAW_LINE_POINT)
         Vec2* _vertices = transform(poli, numberOfPoints);
 
         unsigned int vertex_count;
