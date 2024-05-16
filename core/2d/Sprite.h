@@ -625,6 +625,14 @@ public:
 
     void setAutoUpdatePS(bool bVal) { _autoUpdatePS = bVal; }
 
+    /**
+     * Indicate if the sprite content size can change if new textures are applied to
+     * the sprite.
+     *
+     * @param enabled True if the sprite can change size on new frames/textures
+     */
+    void setAutoSize(bool enabled) { _autoSizeEnabled = enabled; }
+
 protected:
     virtual void updateColor() override;
     virtual void setTextureCoords(const Rect& rect);
@@ -702,6 +710,8 @@ protected:
 
     bool _stretchEnabled = true;
     bool _autoUpdatePS   = true;
+
+    bool _autoSizeEnabled = true;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Sprite);

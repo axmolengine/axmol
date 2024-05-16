@@ -2,6 +2,7 @@
  Copyright (c) 2013      Zynga Inc.
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -510,7 +511,7 @@ Label::Label(TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
 
 #if AX_LABEL_DEBUG_DRAW
     _debugDrawNode = DrawNode::create();
-    addChild(_debugDrawNode);
+    AX_SAFE_RETAIN(_debugDrawNode);
 #endif
 
     _purgeTextureListener = EventListenerCustom::create(FontAtlas::CMD_PURGE_FONTATLAS, [this](EventCustom* event) {
@@ -567,6 +568,10 @@ Label::~Label()
 
     AX_SAFE_RELEASE_NULL(_textSprite);
     AX_SAFE_RELEASE_NULL(_shadowNode);
+    
+#if AX_LABEL_DEBUG_DRAW
+    AX_SAFE_RELEASE_NULL(_debugDrawNode);
+#endif
 }
 
 void Label::reset()
@@ -2096,6 +2101,10 @@ void Label::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t pare
         this->drawSelf(visibleByCamera, renderer, flags);
     }
 
+#if AX_LABEL_DEBUG_DRAW
+    _debugDrawNode->visit(renderer, _modelViewTransform, parentFlags | FLAGS_TRANSFORM_DIRTY);
+#endif
+    
     _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
