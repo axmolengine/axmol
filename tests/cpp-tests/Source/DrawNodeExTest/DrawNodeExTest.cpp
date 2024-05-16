@@ -592,7 +592,7 @@ void DrawNodePictureTest::update(float dt)
         drawNodeEx->setDNCenter(vertices[0]);
         drawNodeEx->setDNRotation(rot);
         drawNodeEx->setIsConvex(true);
-        drawNodeEx->drawPolygon(vertices, sph_cmb - 3, color, rot, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+        drawNodeEx->drawPolygon(vertices, sph_cmb - 3, color, /*rot*/0.f, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
         drawNodeEx->setIsConvex(false);
 
         sph_la += sph_cmb;
@@ -1294,7 +1294,7 @@ DrawNodeMethodesTest::DrawNodeMethodesTest()
 
 std::string DrawNodeMethodesTest::title() const
 {
-    return "Scale/Rotation/LineWidth/Position";
+    return "Draw Methods";
 }
 
 string DrawNodeMethodesTest::subtitle() const
@@ -2149,19 +2149,29 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
 
     /*   DrawNode* _drawNode = DrawNode::create();
     Director::getInstance()->getRunningScene()->addChild(_drawNode,100);*/
+    drawNodeEx->_drawOrder = false;
     drawNodeEx->drawLine(Vec2(20, 20), Vec2(200, 200), Color4B::RED);
     drawNodeEx->drawSolidRect(Vec2(50, 50), Vec2(150, 150), Color4B::YELLOW);
+    drawNodeEx->drawLine(Vec2(30, 20), Vec2(210, 200), Color4B::BLUE);
+
+    /*   DrawNode* _drawNode = DrawNode::create();
+    Director::getInstance()->getRunningScene()->addChild(_drawNode,100);*/
+
+    drawNodeEx->_drawOrder = true;
+    drawNodeEx->drawLine(Vec2(220, 20), Vec2(400, 200), Color4B::RED);
+    drawNodeEx->drawSolidRect(Vec2(250, 50), Vec2(350, 150), Color4B::YELLOW);
+    drawNodeEx->drawLine(Vec2(230, 20), Vec2(410, 200), Color4B::BLUE);
+    drawNodeEx->_drawOrder = false;
 
 
-
-    drawNodeEx->setIsConvex(true);
-    drawNodeEx->drawPolygon(heart, totalFrames, 1.0, Color4B::RED);
-    drawNodeEx->setIsConvex(false);
+    //drawNodeEx->setIsConvex(true);
+    //drawNodeEx->drawPolygon(heart, totalFrames, 1.0, Color4B::RED);
+    //drawNodeEx->setIsConvex(false);
     //    endShape();
     //
 
 
-    drawNodeEx->drawStar({ s.width / 2, s.height / 2 }, 40, 20, 8, Color4B::BLUE);
+  //  drawNodeEx->drawStar({ s.width / 2, s.height / 2 }, 40, 20, 8, Color4B::BLUE);
     counter++;
 }
 

@@ -102,6 +102,7 @@ public:
     ax::Vec2 _dnPositionTmp = _dnPosition;
     float _dnLineWidthTmp = _dnLineWidth;
     bool  _dnTransform = false;
+    bool _drawOrder = false;
 
     bool swapIsConvex(bool isConvex) {
         _isConvexTmp = _isConvex; _isConvex = isConvex; return _isConvexTmp;

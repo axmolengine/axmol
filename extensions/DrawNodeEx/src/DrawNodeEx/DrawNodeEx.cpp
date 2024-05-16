@@ -377,6 +377,11 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
     }
     else
     {
+        if (_drawOrder == true)
+        {
+            drawSegment(origin, destination, thickness/3, color);
+            return;
+        }
         Vec2 line[2] = { origin, destination };
         Vec2* _vertices = transform(line, 2);
 
