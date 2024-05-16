@@ -33,6 +33,8 @@
 USING_NS_AX;
 USING_NS_AX_EXT;
 
+#define DRAWNODE_DRAW_LINE_POINT
+
 using namespace std;
 
 const int drawMethodsCounter = 19;
@@ -2151,7 +2153,7 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
     /*   DrawNode* _drawNode = DrawNode::create();
     Director::getInstance()->getRunningScene()->addChild(_drawNode,100);*/
 #if defined(DRAWNODE_DRAW_LINE_POINT)
-    drawNodeEx->_drawOrder = false;
+    drawNodeEx->_drawOrder = true;
 #endif
 
     for (int i = 0; i < 100; i++)
@@ -2197,7 +2199,7 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
 
 
 #if defined(DRAWNODE_DRAW_LINE_POINT)
-    drawNodeEx->_drawOrder = false;
+    drawNodeEx->_drawOrder = true;
 #endif
 
     //drawNodeEx->drawPolygon(heart, totalFrames, 1.0, Color4B::RED);

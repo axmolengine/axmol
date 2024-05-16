@@ -45,7 +45,7 @@
 
 NS_AX_EXT_BEGIN
 
-//#define DRAWNODE_DRAW_LINE_POINT
+#define DRAWNODE_DRAW_LINE_POINT
 
 static const int DEFAULT_LINEWIDTH = 2;
 
