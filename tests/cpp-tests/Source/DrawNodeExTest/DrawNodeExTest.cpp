@@ -1562,6 +1562,7 @@ void DrawNodeMethodesTest::drawAll()
     }
     case 10:
     {
+        // drawPoint
         for (int i = 0; i < 100; i++)
         {
             draw->drawPoint(Vec2(i * 7.0f, 50.0f), (float)i / 5 + 1,
@@ -2150,17 +2151,49 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
     /*   DrawNode* _drawNode = DrawNode::create();
     Director::getInstance()->getRunningScene()->addChild(_drawNode,100);*/
     drawNodeEx->_drawOrder = false;
+
+
+    for (int i = 0; i < 100; i++)
+    {
+        drawNodeEx->drawPoint(Vec2(i * 7.0f, 50.0f), (float)i / 5 + 1,
+            Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+    }
+    Vec2 position[] = {
+        {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
+        {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
+        {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
+        {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y} };
+    drawNodeEx->drawPoints(position, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+
     drawNodeEx->drawLine(Vec2(20, 20), Vec2(200, 200), Color4B::RED);
     drawNodeEx->drawSolidRect(Vec2(50, 50), Vec2(150, 150), Color4B::YELLOW);
     drawNodeEx->drawLine(Vec2(30, 20), Vec2(210, 200), Color4B::BLUE);
 
+
+
     /*   DrawNode* _drawNode = DrawNode::create();
     Director::getInstance()->getRunningScene()->addChild(_drawNode,100);*/
-
     drawNodeEx->_drawOrder = true;
+    for (int i = 0; i < 100; i++)
+    {
+        drawNodeEx->drawPoint(Vec2(i * 7.0f, 150.0f), (float)i / 5 + 1,
+            Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+    }
+    Vec2 position1[] = {
+        {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
+        {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
+        {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
+        {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y} };
+    drawNodeEx->drawPoints(position1, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+
+
     drawNodeEx->drawLine(Vec2(220, 20), Vec2(400, 200), Color4B::RED);
     drawNodeEx->drawSolidRect(Vec2(250, 50), Vec2(350, 150), Color4B::YELLOW);
     drawNodeEx->drawLine(Vec2(230, 20), Vec2(410, 200), Color4B::BLUE);
+
+
+
+
     drawNodeEx->_drawOrder = false;
 
 

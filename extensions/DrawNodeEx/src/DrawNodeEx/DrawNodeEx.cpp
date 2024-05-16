@@ -332,6 +332,12 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Color4B& color)
 {
+    if (_drawOrder == true)
+    {
+        drawSolidCircle(position, pointSize, 0.f, 12, 1.f, 1.f,color, 0.f,color);
+        return;
+    }
+
     ensureCapacityPoint(1);
 
     V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
@@ -353,6 +359,16 @@ void DrawNodeEx::drawPoints(const Vec2* position,
     const float pointSize,
     const Color4B& color)
 {
+    if (_drawOrder == true)
+    {
+        for (unsigned int i = 0; i < numberOfPoints; i++)
+        {
+        //    *(point + i) = { position[i], color, Tex2F(pointSize, 0) };
+            drawSolidCircle(position[i], pointSize, 0.f, 12, 1.f, 1.f,color, 0.f,color);
+        }
+        return;
+    }
+
     ensureCapacityPoint(numberOfPoints);
 
     V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
