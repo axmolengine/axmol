@@ -45,6 +45,8 @@
 
 NS_AX_EXT_BEGIN
 
+//#define DRAWNODE_TRIANGLE_ONLY 0
+
 static const int DEFAULT_LINEWIDTH = 2;
 
 
@@ -595,8 +597,10 @@ public:
 
 protected:
     void ensureCapacityTriangle(int count);
+#if defined(DRAWNODE_TRIANGLE_ONLY)
     void ensureCapacityPoint(int count);
     void ensureCapacityLine(int count);
+#endif
 
     void updateShader();
     void updateShaderInternal(ax::CustomCommand& cmd,
@@ -613,7 +617,10 @@ protected:
     int _bufferCapacityTriangle = 0;
     int _bufferCountTriangle = 0;
     ax::V2F_C4B_T2F* _bufferTriangle = nullptr;
+    ax::CustomCommand _customCommandTriangle;
+    bool _dirtyTriangle = false;
 
+#if defined(DRAWNODE_TRIANGLE_ONLY)
     int _bufferCapacityPoint = 0;
     int _bufferCountPoint = 0;
     ax::V2F_C4B_T2F* _bufferPoint = nullptr;
@@ -624,15 +631,15 @@ protected:
     int _bufferCountLine = 0;
     ax::V2F_C4B_T2F* _bufferLine = nullptr;
 
-    ax::BlendFunc _blendFunc;
 
-    ax::CustomCommand _customCommandTriangle;
     ax::CustomCommand _customCommandPoint;
     ax::CustomCommand _customCommandLine;
-
-    bool _dirtyTriangle = false;
     bool _dirtyPoint = false;
     bool _dirtyLine = false;
+#endif
+
+    ax::BlendFunc _blendFunc;
+
     bool _isolated = false;
     float _lineWidth = 0.0f;
     float _defaultLineWidth = 0.0f;
