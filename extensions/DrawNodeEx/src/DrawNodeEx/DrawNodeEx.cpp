@@ -46,6 +46,8 @@
 
 NS_AX_EXT_BEGIN
 
+//#define LINE_POINT 0
+
 /** Is a polygon convex?
 * @param verts A pointer to point coordinates.
 * @param count The number of verts measured in points.
@@ -146,12 +148,17 @@ DrawNodeEx::DrawNodeEx(float lineWidth)
 DrawNodeEx::~DrawNodeEx()
 {
     AX_SAFE_FREE(_bufferTriangle);
+
+#if defined(LINE_POINT)
     AX_SAFE_FREE(_bufferPoint);
     AX_SAFE_FREE(_bufferLine);
+#endif
 
     freeShaderInternal(_customCommandTriangle);
+#if defined(LINE_POINT)
     freeShaderInternal(_customCommandPoint);
     freeShaderInternal(_customCommandLine);
+#endif
 }
 
 DrawNodeEx* DrawNodeEx::create(float defaultLineWidth)
@@ -219,9 +226,10 @@ bool DrawNodeEx::init()
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
     updateShader();
     ensureCapacityTriangle(512);
+#if defined(LINE_POINT)
     ensureCapacityPoint(64);
     ensureCapacityLine(256);
-
+#endif
     _dirtyTriangle = true;
     _dirtyLine = true;
     _dirtyPoint = true;
@@ -233,12 +241,13 @@ void DrawNodeEx::updateShader()
 {
     updateShaderInternal(_customCommandTriangle, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::TRIANGLE);
-
+#if defined(LINE_POINT)
     updateShaderInternal(_customCommandPoint, backend::ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::POINT);
 
     updateShaderInternal(_customCommandLine, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::LINE);
+#endif
 }
 
 void DrawNodeEx::updateShaderInternal(CustomCommand& cmd,
@@ -312,7 +321,7 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         _customCommandTriangle.init(_globalZOrder);
         renderer->addCommand(&_customCommandTriangle);
     }
-
+#if defined(LINE_POINT)
     if (_bufferCountPoint)
     {
         updateBlendState(_customCommandPoint);
@@ -328,16 +337,17 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         _customCommandLine.init(_globalZOrder);
         renderer->addCommand(&_customCommandLine);
     }
+#endif
 }
 
 void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Color4B& color)
 {
     if (_drawOrder == true)
     {
-        drawSolidCircle(position, pointSize, 0.f, 12, 1.f, 1.f,color, 0.f,color);
+        drawSolidCircle(position, pointSize, 0.f, 12, 1.f, 1.f, color, 0.f, color);
         return;
     }
-
+#if defined(LINE_POINT)
     ensureCapacityPoint(1);
 
     V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
@@ -347,6 +357,7 @@ void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Co
     _bufferCountPoint += 1;
     _dirtyPoint = true;
     _customCommandPoint.setVertexDrawInfo(0, _bufferCountPoint);
+#endif
 }
 
 void DrawNodeEx::drawPoints(const Vec2* position, unsigned int numberOfPoints, const Color4B& color)
@@ -363,11 +374,11 @@ void DrawNodeEx::drawPoints(const Vec2* position,
     {
         for (unsigned int i = 0; i < numberOfPoints; i++)
         {
-            drawSolidCircle(position[i], pointSize, 0.f, 12, 1.f, 1.f,color, 0.f,color);
+            drawSolidCircle(position[i], pointSize, 0.f, 12, 1.f, 1.f, color, 0.f, color);
         }
         return;
     }
-
+#if defined(LINE_POINT)
     ensureCapacityPoint(numberOfPoints);
 
     V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
@@ -381,6 +392,7 @@ void DrawNodeEx::drawPoints(const Vec2* position,
     _bufferCountPoint += numberOfPoints;
     _dirtyPoint = true;
     _customCommandPoint.setVertexDrawInfo(0, _bufferCountPoint);
+#endif
 }
 
 void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness)
@@ -394,9 +406,10 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
     {
         if (_drawOrder == true)
         {
-            drawSegment(origin, destination, thickness/3, color);
+            drawSegment(origin, destination, thickness / 3, color);
             return;
         }
+#if defined(LINE_POINT)
         Vec2 line[2] = { origin, destination };
         Vec2* _vertices = transform(line, 2);
 
@@ -411,6 +424,7 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
         _bufferCountLine += 2;
         _dirtyLine = true;
         _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
+#endif
     }
 }
 
@@ -449,11 +463,11 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
     {
         if (_drawOrder == true)
         {
-            _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness/3, color, closePolygon);
+            _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness / 3, color, closePolygon);
             return;
         }
 
-
+#if defined(LINE_POINT)
         Vec2* _vertices = transform(poli, numberOfPoints);
 
         unsigned int vertex_count;
@@ -487,6 +501,7 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
             vertex_count * sizeof(V2F_C4B_T2F));
         _bufferCountLine += vertex_count;
         _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
+#endif
     }
 }
 
@@ -1224,7 +1239,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
 
 
 
-        for (unsigned int i = 1; i < count-1; i++)
+        for (unsigned int i = 1; i < count - 1; i++)
         {
             int j = (i + 1) % count;
             Vec2 v0 = _vertices[i];
@@ -1258,20 +1273,20 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             *cursor++ = tmp2;
         }
 
-         i = count-1;
-         j = (i + 1) % count;
-         v0 = _vertices[i];
-         v1 = _vertices[j];
+        i = count - 1;
+        j = (i + 1) % count;
+        v0 = _vertices[i];
+        v1 = _vertices[j];
 
-         n0 = extrude[i].n;
+        n0 = extrude[i].n;
 
-         offset0 = extrude[i].offset;
-         offset1 = extrude[j].offset;
+        offset0 = extrude[i].offset;
+        offset1 = extrude[j].offset;
 
-         inner0 = v0 - offset0 * borderWidth;
-         inner1 = v1 - offset1 * borderWidth;
-         outer0 = v0 + offset0 * borderWidth;
-         outer1 = v1 + offset1 * borderWidth;
+        inner0 = v0 - offset0 * borderWidth;
+        inner1 = v1 - offset1 * borderWidth;
+        outer0 = v0 + offset0 * borderWidth;
+        outer1 = v1 + offset1 * borderWidth;
         borderColor = borderColo;
         if (i >= count - 1 && !closedPolygon)  // /-2  ??
         {
@@ -1280,14 +1295,14 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
 
         borderColor = Color4B::YELLOW;
 
-         tmp1 = { {inner0, borderColor, Tex2F(-n0)},
-            {inner1, borderColor, Tex2F(-n0)},
-            {outer1, borderColor, Tex2F(n0)} };
+        tmp1 = { {inner0, borderColor, Tex2F(-n0)},
+           {inner1, borderColor, Tex2F(-n0)},
+           {outer1, borderColor, Tex2F(n0)} };
         *cursor++ = tmp1;
 
-         tmp2 = { {inner0, borderColor, Tex2F(-n0)},
-            {outer0, borderColor, Tex2F(n0)},
-            {outer1, borderColor, Tex2F(n0)} };
+        tmp2 = { {inner0, borderColor, Tex2F(-n0)},
+           {outer0, borderColor, Tex2F(n0)},
+           {outer1, borderColor, Tex2F(n0)} };
         *cursor++ = tmp2;
 
         free(extrude);
@@ -1324,9 +1339,10 @@ void DrawNodeEx::_drawPoly(const Vec2* poli,
     {
         if (_drawOrder == true)
         {
-            _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness/3, color, false);
+            _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness / 3, color, false);
             return;
         }
+#if defined(LINE_POINT)
         Vec2* _vertices = transform(poli, numberOfPoints);
 
         unsigned int vertex_count;
@@ -1360,6 +1376,7 @@ void DrawNodeEx::_drawPoly(const Vec2* poli,
             vertex_count * sizeof(V2F_C4B_T2F));
         _bufferCountLine += vertex_count;
         _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
+#endif
     }
 }
 NS_AX_EXT_END
