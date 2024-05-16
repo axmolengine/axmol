@@ -146,9 +146,13 @@ DrawNodeMorphTest::DrawNodeMorphTest()
     }
 
     // A verticesObj2 is a bunch of vertices along straight lines
-    // Top of verticesObj2
     int n = 0;
     float delta = segments / 4;
+    // Left side of verticesObj2
+    for (float y = 50; y > -50; y -= delta) {
+        verticesObj2[n++] = Vec2(s.width / 2 - 50, s.height / 2 + y);
+    }
+    //top
     for (float x = -50; x < 50; x += delta) {
         verticesObj2[n++] = Vec2(s.width / 2 + x, s.height / 2 - 50);
     }
@@ -160,12 +164,6 @@ DrawNodeMorphTest::DrawNodeMorphTest()
     for (float x = 50; x > -50; x -= delta) {
         verticesObj2[n++] = Vec2(s.width / 2 + x, s.height / 2 + 50);
     }
-    // Left side
-    for (float y = 50; y > -50; y -= delta) {
-        verticesObj2[n++] = Vec2(s.width / 2 - 50, s.height / 2 + y);
-    }
-
-    //   polyghon = verticesObj2;
 
     float rad = 80.f;
     for (unsigned int i = 0; i < segments; i++) //    //for (int angle = 0; angle < 360; angle += 9) 
@@ -181,9 +179,17 @@ void DrawNodeMorphTest::update(float dt)
 {
     auto s = Director::getInstance()->getWinSize();
     static float  rot = 0.1f;
+    static float thickness = 0.5f;
+    static float deltaThickness = 0.2f;
+
     drawNodeEx->clear();
     float totalDistance = 0;
-    rot += 0.0;//0.001;
+    rot += 0;//0.01f;
+    thickness += deltaThickness;
+    if (thickness > 40 || thickness < 0.5)
+    {
+        deltaThickness *= -1;
+    }
 
     Vec2 v1, v2;
     for (int i = 0; i < segments; i++) {
@@ -196,17 +202,17 @@ void DrawNodeMorphTest::update(float dt)
             v1 = verticesObj2[i];
         }
         v2 = verticesObjMorph[i];
-        verticesObjMorph[i] = v2.lerp(v1, 0.05);
+        verticesObjMorph[i] = v2.lerp(v1, 0.05f);
         totalDistance += v1.distance(v2);
     }
     // If all the vertices are close, switch shape
-    if (totalDistance < 1.0) {
+    if (totalDistance < 500.0) {
         state = !state;
     }
     drawNodeEx->setDNRotation(rot);
     drawNodeEx->setDNCenter(Vec2(s.width / 2, s.height / 2));
-    drawNodeEx->setIsConvex(false);
-    drawNodeEx->drawPolygon(verticesObjMorph, segments, 0.5f, Color4B::YELLOW);
+    drawNodeEx->setIsConvex(true);
+    drawNodeEx->drawPolygon(verticesObjMorph, segments, thickness,Color4B::YELLOW);
     drawNodeEx->setIsConvex(true);
 }
 
@@ -2153,7 +2159,7 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
     /*   DrawNode* _drawNode = DrawNode::create();
     Director::getInstance()->getRunningScene()->addChild(_drawNode,100);*/
 #if defined(DRAWNODE_DRAW_LINE_POINT)
-    drawNodeEx->_drawOrder = true;
+    drawNodeEx->_drawOrder = false;
 #endif
 
     for (int i = 0; i < 100; i++)
@@ -2161,18 +2167,18 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
         drawNodeEx->drawPoint(Vec2(i * 7.0f, 50.0f), (float)i / 5 + 1,
             Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
     }
+
+
+    drawNodeEx->drawLine(Vec2(20, 20), Vec2(200, 200), Color4B::RED);
+    drawNodeEx->drawSolidRect(Vec2(50, 50), Vec2(150, 150), Color4B::YELLOW);
+    drawNodeEx->drawLine(Vec2(30, 20), Vec2(210, 200), Color4B::BLUE);
+
     Vec2 position[] = {
         {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
         {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
         {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
         {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y} };
     drawNodeEx->drawPoints(position, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
-
-    drawNodeEx->drawLine(Vec2(20, 20), Vec2(200, 200), Color4B::RED);
-    drawNodeEx->drawSolidRect(Vec2(50, 50), Vec2(150, 150), Color4B::YELLOW);
-    drawNodeEx->drawLine(Vec2(30, 20), Vec2(210, 200), Color4B::BLUE);
-
-
 
     /*   DrawNode* _drawNode = DrawNode::create();
     Director::getInstance()->getRunningScene()->addChild(_drawNode,100);*/
@@ -2184,19 +2190,19 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
         drawNodeEx->drawPoint(Vec2(i * 7.0f, 150.0f), (float)i / 5 + 1,
             Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
     }
-    Vec2 position1[] = {
-        {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
-        {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
-        {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
-        {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y} };
-    drawNodeEx->drawPoints(position1, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+
 
 
     drawNodeEx->drawLine(Vec2(220, 20), Vec2(400, 200), Color4B::RED);
     drawNodeEx->drawSolidRect(Vec2(250, 50), Vec2(350, 150), Color4B::YELLOW);
     drawNodeEx->drawLine(Vec2(230, 20), Vec2(410, 200), Color4B::BLUE);
 
-
+    Vec2 position1[] = {
+        {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
+        {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
+        {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
+        {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y} };
+    drawNodeEx->drawPoints(position1, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 
 #if defined(DRAWNODE_DRAW_LINE_POINT)
     drawNodeEx->_drawOrder = true;
