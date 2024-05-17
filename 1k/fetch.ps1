@@ -5,7 +5,8 @@ param(
     $manifest_file = $null,
     $name = $null,
     $version = $null, # version hint
-    $revision = $null # revision hint
+    $revision = $null, # revision hint
+    [switch]$pull_branch
 )
 
 # content of _1kiss with yaml format
@@ -62,7 +63,8 @@ function fetch_repo($url, $name, $dest, $ext) {
             $original_lib_src = Join-Path $prefix $Script:url_pkg_name
             if (Test-Path $original_lib_src -PathType Container) {
                 Rename-Item $original_lib_src $dest 
-            } else {
+            }
+            else {
                 throw "fetch.ps1: the package name mismatch for $out"
             }
         }
@@ -150,7 +152,7 @@ Set-Variable -Name "${name}_src" -Value $lib_src -Scope global
 
 $sentry = Join-Path $lib_src '_1kiss'
 
-$is_rev_modified = $false
+$need_update = $false
 # if sentry file missing, re-clone
 if (!(Test-Path $sentry -PathType Leaf)) {
     if (Test-Path $lib_src -PathType Container) {
@@ -161,7 +163,7 @@ if (!(Test-Path $sentry -PathType Leaf)) {
     
     if (Test-Path $lib_src -PathType Container) {
         New-Item $sentry -ItemType File 1>$null
-        $is_rev_modified = $true
+        $need_update = $true
     }
     else {
         throw "fetch.ps1: fetch content from $url failed"
@@ -178,6 +180,8 @@ if (!$revision) {
     $revision = $ver_pair[$use_hash].Trim()
     $version = $ver_pair[0]
 }
+
+$branch_name = $null
 if ($is_git_repo) {
     $old_rev_hash = $(git -C $lib_src rev-parse HEAD)
     
@@ -195,23 +199,28 @@ if ($is_git_repo) {
         $new_rev_hash = $(git -C $lib_src rev-parse HEAD)
         println "fetch.ps1: Checked out to $revision@$new_rev_hash"
         
-        if (!$is_rev_modified) {
-            $is_rev_modified = $old_rev_hash -ne $new_rev_hash
+        if (!$need_update) {
+            $need_update = $old_rev_hash -ne $new_rev_hash
         }
 
-        if((Test-Path (Join-Path $lib_src '.gitmodules') -PathType Leaf)) {
+        if ((Test-Path (Join-Path $lib_src '.gitmodules') -PathType Leaf)) {
             git -C $lib_src submodule update --recursive --init
         }
     }
-    else {
+
+    if (!$need_update) { 
+        $branch_name = $(git -C $lib_src branch --show-current)
+        $need_update = ($branch_name -eq $revision) -and $pull_branch
+    }
+
+    if(!$need_update) {
         println "fetch.ps1: HEAD is now at $revision@$cur_rev_hash"
     }
 }
 
-if ($is_rev_modified) {
+if ($need_update) {
     $sentry_content = "ver: $version"
     if ($is_git_repo) {
-        $branch_name = $(git -C $lib_src branch --show-current)
         if ($branch_name) {
             # track branch
             git -C $lib_src pull
@@ -220,6 +229,7 @@ if ($is_rev_modified) {
             $sentry_content += "`ncommits: $commits"
             $revision = $(git -C $lib_src rev-parse --short=7 HEAD)
             $sentry_content += "`nrev: $revision"
+            println "fetch.ps1: HEAD is now at $branch_name@$revision"
         }
     }
 

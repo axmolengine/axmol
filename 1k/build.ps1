@@ -1631,7 +1631,7 @@ if (!$setupOnly) {
         }
 
         if ($options.u) {
-            $CONFIG_ALL_OPTIONS += '-D_1KFETCH_DIST_UPGRADE=TRUE'
+            $CONFIG_ALL_OPTIONS += '-D_1KFETCH_UPGRADE=TRUE'
         }
 
         # determine generator, build_dir, inst_dir for non gradlew projects
