@@ -2104,120 +2104,49 @@ DrawNodeDrawInWrongOrder_Issue1888::DrawNodeDrawInWrongOrder_Issue1888()
 
 std::string DrawNodeDrawInWrongOrder_Issue1888::title() const
 {
-    return "Issue #1888";
+    return "Issue #1888: Drawing order";
 }
+
 std::string DrawNodeDrawInWrongOrder_Issue1888::subtitle() const
 {
-    return "DrawNode draws in wrong order\nRed line should be behind the yellow square";
+    return "Red behind all. Green behind the blue.\nRandom Points behind the square. Blue is top.";
 }
+
 void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
 {
-    auto s = Director::getInstance()->getWinSize();
-    static int counter = 0;
-    //function draw() {
-    //
-    //
-    float percent = float(counter % totalFrames) / totalFrames;
-    //    render(percent);
-
-    //}
-    //
-    //function render(percent) {
-    //    background(0);
-    //    translate(width / 2, height / 2);
-    //    stroke(255, 0, 100);
-    //    strokeWeight(4);
-    //    fill(255, 0, 100);
-    //
-    //    beginShape();
-    //   
-    //        
-    //       
-    //        
-    //
-    //    }
-    for (int i = 0; i < totalFrames; i++) // for (let v of heart) {
-    {
-        float a = percent * M_PI * 2;           // const a = map(percent, 0, 1, 0, TWO_PI * 2);
-        float r = AXRANDOM_0_1() * sin(a);      //  const r = map(sin(a), -1, 1, height / 80, height / 40);
-        //     Vec2 vertex = { r * v.x, r * v.y } ;    //  vertex(r * v.x, r * v.y);          //  heart[i] = { r * heart[i].x, r * heart[i].y };
-        // heart.splice(0, 1);             //   The splice() method of Array instances changes the contents of an array by removing or replacing existing elements and/or adding new elements in place.
-        if (percent < 0.5)  //  if (percent < 0.5) {
-        {
-            float a = percent * M_PI * 2;       // const a = map(percent, 0, 0.5, 0, TWO_PI);
-            float r = AXRANDOM_0_1() * sin(a);  // const x = 16 * pow(sin(a), 3);
-            float y = 1;                        // const y = -(13 * cos(a) - 5 * cos(2 * a) - 2 * cos(3 * a) - cos(4 * a));
-            // heart.push(createVector(x, y));
-        }
-        heart[i] = { r * heart[i].x, r * heart[i].y };
-    }
-
-
-
     drawNodeEx->clear();
 
-    /*   DrawNode* _drawNode = DrawNode::create();
-    Director::getInstance()->getRunningScene()->addChild(_drawNode,100);*/
-#if defined(DRAWNODE_DRAW_LINE_POINT)
-    drawNodeEx->_drawOrder = false;
-#endif
-
-    for (int i = 0; i < 100; i++)
-    {
-        drawNodeEx->drawPoint(Vec2(i * 7.0f, 50.0f), (float)i / 5 + 1,
-            Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
-    }
-
-
-    drawNodeEx->drawLine(Vec2(20, 20), Vec2(200, 200), Color4B::RED);
-    drawNodeEx->drawSolidRect(Vec2(50, 50), Vec2(150, 150), Color4B::YELLOW);
-    drawNodeEx->drawLine(Vec2(30, 20), Vec2(210, 200), Color4B::BLUE);
-
-    Vec2 position[] = {
-        {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
-        {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
-        {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
-        {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y} };
-    drawNodeEx->drawPoints(position, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
-
-    /*   DrawNode* _drawNode = DrawNode::create();
-    Director::getInstance()->getRunningScene()->addChild(_drawNode,100);*/
 #if defined(DRAWNODE_DRAW_LINE_POINT)
     drawNodeEx->_drawOrder = true;
 #endif
-    for (int i = 0; i < 100; i++)
-    {
-        drawNodeEx->drawPoint(Vec2(i * 7.0f, 150.0f), (float)i / 5 + 1,
-            Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
-    }
 
 
-
-    drawNodeEx->drawLine(Vec2(220, 20), Vec2(400, 200), Color4B::RED);
-    drawNodeEx->drawSolidRect(Vec2(250, 50), Vec2(350, 150), Color4B::YELLOW);
-    drawNodeEx->drawLine(Vec2(230, 20), Vec2(410, 200), Color4B::BLUE);
+    drawNodeEx->drawLine(Vec2(20, 140), Vec2(450, 110), Color4B::RED, 20.0f);
 
     Vec2 position1[] = {
         {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
         {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
         {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
         {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y} };
-    drawNodeEx->drawPoints(position1, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+    drawNodeEx->drawPoints(position1, 4, 10, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+
+    drawNodeEx->drawSolidRect(Vec2(250, 80), Vec2(400, 220), Color4B::YELLOW);
+    drawNodeEx->drawLine(Vec2(20, 100), Vec2(450, 220), Color4B::GREEN, 8.0f);
+
+
+    for (int i = 0; i < 100; i++)
+    {
+        drawNodeEx->drawPoint(Vec2(i * 7.0f, 120.0f), (float)i / 5 + 1,
+            Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+    }
+
+    drawNodeEx->drawLine(Vec2(200, 100), Vec2(450, 250), Color4B::BLUE,6.0f);
+
 
 #if defined(DRAWNODE_DRAW_LINE_POINT)
     drawNodeEx->_drawOrder = true;
 #endif
-
-    //drawNodeEx->drawPolygon(heart, totalFrames, 1.0, Color4B::RED);
-    //drawNodeEx->setIsConvex(false);
-    //    endShape();
-    //
-
-
-  //  drawNodeEx->drawStar({ s.width / 2, s.height / 2 }, 40, 20, 8, Color4B::BLUE);
-    counter++;
 }
-
 
 
 // DrawNodeCocos2dxTest
