@@ -2677,21 +2677,18 @@ int lua_ax_backend_DriverBase_newDefaultRenderTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 0) 
     {
-        ax::backend::TargetBufferFlags arg0;
-
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.DriverBase:newDefaultRenderTarget");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newDefaultRenderTarget'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->newDefaultRenderTarget(arg0);
+        auto&& ret = cobj->newDefaultRenderTarget();
         object_to_luaval<ax::backend::RenderTarget>(tolua_S, "axb.RenderTarget",(ax::backend::RenderTarget*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:newDefaultRenderTarget",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:newDefaultRenderTarget",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2727,11 +2724,22 @@ int lua_ax_backend_DriverBase_newRenderTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->newRenderTarget();
+        object_to_luaval<ax::backend::RenderTarget>(tolua_S, "axb.RenderTarget",(ax::backend::RenderTarget*)ret);
+        return 1;
+    }
     if (argc == 1) 
     {
-        ax::backend::TargetBufferFlags arg0;
+        ax::backend::TextureBackend* arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.DriverBase:newRenderTarget");
+        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 2, "axb.TextureBackend",&arg0, "axb.DriverBase:newRenderTarget");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
@@ -2743,10 +2751,10 @@ int lua_ax_backend_DriverBase_newRenderTarget(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        ax::backend::TargetBufferFlags arg0;
+        ax::backend::TextureBackend* arg0;
         ax::backend::TextureBackend* arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.DriverBase:newRenderTarget");
+        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 2, "axb.TextureBackend",&arg0, "axb.DriverBase:newRenderTarget");
 
         ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 3, "axb.TextureBackend",&arg1, "axb.DriverBase:newRenderTarget");
         if(!ok)
@@ -2760,11 +2768,11 @@ int lua_ax_backend_DriverBase_newRenderTarget(lua_State* tolua_S)
     }
     if (argc == 3) 
     {
-        ax::backend::TargetBufferFlags arg0;
+        ax::backend::TextureBackend* arg0;
         ax::backend::TextureBackend* arg1;
         ax::backend::TextureBackend* arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.DriverBase:newRenderTarget");
+        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 2, "axb.TextureBackend",&arg0, "axb.DriverBase:newRenderTarget");
 
         ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 3, "axb.TextureBackend",&arg1, "axb.DriverBase:newRenderTarget");
 
@@ -2778,30 +2786,7 @@ int lua_ax_backend_DriverBase_newRenderTarget(lua_State* tolua_S)
         object_to_luaval<ax::backend::RenderTarget>(tolua_S, "axb.RenderTarget",(ax::backend::RenderTarget*)ret);
         return 1;
     }
-    if (argc == 4) 
-    {
-        ax::backend::TargetBufferFlags arg0;
-        ax::backend::TextureBackend* arg1;
-        ax::backend::TextureBackend* arg2;
-        ax::backend::TextureBackend* arg3;
-
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.DriverBase:newRenderTarget");
-
-        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 3, "axb.TextureBackend",&arg1, "axb.DriverBase:newRenderTarget");
-
-        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 4, "axb.TextureBackend",&arg2, "axb.DriverBase:newRenderTarget");
-
-        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 5, "axb.TextureBackend",&arg3, "axb.DriverBase:newRenderTarget");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->newRenderTarget(arg0, arg1, arg2, arg3);
-        object_to_luaval<ax::backend::RenderTarget>(tolua_S, "axb.RenderTarget",(ax::backend::RenderTarget*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:newRenderTarget",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.DriverBase:newRenderTarget",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
