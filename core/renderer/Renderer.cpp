@@ -204,9 +204,8 @@ void Renderer::init()
 
     auto driver    = backend::DriverBase::getInstance();
     _commandBuffer = driver->newCommandBuffer();
-    // @MTL: the depth stencil flags must same render target and _dsDesc
     _dsDesc.flags = DepthStencilFlags::ALL;
-    _defaultRT    = driver->newDefaultRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL);
+    _defaultRT    = driver->newDefaultRenderTarget();
 
     _currentRT      = _defaultRT;
     _renderPipeline = driver->newRenderPipeline();
@@ -218,7 +217,7 @@ void Renderer::init()
 
 backend::RenderTarget* Renderer::getOffscreenRenderTarget() {
     if (_offscreenRT != nullptr) return _offscreenRT;
-    return (_offscreenRT = backend::DriverBase::getInstance()->newRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL));
+    return (_offscreenRT = backend::DriverBase::getInstance()->newRenderTarget());
 }
 
 void Renderer::addCallbackCommand(std::function<void()> func, float globalZOrder)
@@ -455,29 +454,17 @@ void Renderer::clean()
 void Renderer::setDepthTest(bool value)
 {
     if (value)
-    {
-        _currentRT->addFlag(TargetBufferFlags::DEPTH);
         _dsDesc.addFlag(DepthStencilFlags::DEPTH_TEST);
-    }
     else
-    {
-        _currentRT->removeFlag(TargetBufferFlags::DEPTH);
         _dsDesc.removeFlag(DepthStencilFlags::DEPTH_TEST);
-    }
 }
 
 void Renderer::setStencilTest(bool value)
 {
     if (value)
-    {
-        _currentRT->addFlag(TargetBufferFlags::STENCIL);
         _dsDesc.addFlag(DepthStencilFlags::STENCIL_TEST);
-    }
     else
-    {
-        _currentRT->removeFlag(TargetBufferFlags::STENCIL);
         _dsDesc.removeFlag(DepthStencilFlags::STENCIL_TEST);
-    }
 }
 
 void Renderer::setDepthWrite(bool value)
@@ -849,7 +836,18 @@ void Renderer::readPixels(backend::RenderTarget* rt,
 void Renderer::beginRenderPass()
 {
     _commandBuffer->beginRenderPass(_currentRT, _renderPassDesc);
-    _commandBuffer->updateDepthStencilState(_dsDesc);
+
+    // Disable depth/stencil access if render target has no relevant attachments.
+    auto depthStencil = _dsDesc;
+    if (!_currentRT->isDefaultRenderTarget())
+    {
+        if (!_currentRT->_depth)
+            depthStencil.removeFlag(DepthStencilFlags::DEPTH_TEST | DepthStencilFlags::DEPTH_WRITE);
+        if (!_currentRT->_stencil)
+            depthStencil.removeFlag(DepthStencilFlags::STENCIL_TEST);
+    }
+
+    _commandBuffer->updateDepthStencilState(depthStencil);
     _commandBuffer->setStencilReferenceValue(_stencilRef);
 
     _commandBuffer->setViewport(_viewport.x, _viewport.y, _viewport.width, _viewport.height);
@@ -927,11 +925,6 @@ unsigned int Renderer::getClearStencil() const
 ClearFlag Renderer::getClearFlag() const
 {
     return _clearFlag;
-}
-
-RenderTargetFlag Renderer::getRenderTargetFlag() const
-{
-    return _currentRT->getTargetFlags();
 }
 
 void Renderer::setScissorTest(bool enabled)

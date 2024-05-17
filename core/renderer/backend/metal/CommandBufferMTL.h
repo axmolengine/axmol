@@ -255,7 +255,6 @@ private:
     dispatch_semaphore_t _frameBoundarySemaphore;
     const RenderTarget* _currentRenderTarget = nil;  // weak ref
     RenderPassDescriptor _currentRenderPassDesc;
-    TargetBufferFlags _currentRenderTargetFlags = TargetBufferFlags::NONE;
     NSAutoreleasePool* _autoReleasePool         = nil;
 
     std::vector<std::pair<TextureBackend*, std::function<void(const PixelBufferDescriptor&)>>> _captureCallbacks;

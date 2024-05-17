@@ -28,18 +28,6 @@ public:
 
     bool isDefaultRenderTarget() const { return _defaultRenderTarget; }
 
-    void addFlag(TargetBufferFlags flag) {
-        setTargetFlags(_flags |= flag);
-    }
-    void removeFlag(TargetBufferFlags flag) { 
-        setTargetFlags(_flags & ~flag);
-    }
-
-    TargetBufferFlags getTargetFlags() const { return _flags; }
-    void setTargetFlags(TargetBufferFlags flags) { 
-        _flags = flags; 
-    }
-
     void setColorAttachment(ColorAttachment attachment)
     {
         for (auto colorItem : _color)
@@ -83,12 +71,10 @@ public:
     ColorAttachment _color{};
     RenderBuffer _depth{};
     RenderBuffer _stencil{};
-    TargetBufferFlags _flags{};
 
 protected:
     bool _defaultRenderTarget = false;
     mutable bool _dirty = false;
-    // uint8_t samples = 1;
 };
 
 NS_AX_BACKEND_END

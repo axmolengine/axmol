@@ -149,9 +149,8 @@ public:
      */
     TextureBackend* newTexture(const TextureDescriptor& descriptor) override;
 
-    RenderTarget* newDefaultRenderTarget(TargetBufferFlags rtf) override;
-    RenderTarget* newRenderTarget(TargetBufferFlags rtf,
-                                  TextureBackend* colorAttachment,
+    RenderTarget* newDefaultRenderTarget() override;
+    RenderTarget* newRenderTarget(TextureBackend* colorAttachment,
                                   TextureBackend* depthAttachment,
                                   TextureBackend* stencilAttachhment) override;
 
