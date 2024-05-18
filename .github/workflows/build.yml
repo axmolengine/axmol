@@ -59,7 +59,7 @@ jobs:
             uwp: true
         - name: Build
           shell: pwsh
-          run: .\tools\cmdline\axmol -p winuwp -a x64 -xb '--config','Debug'
+          run: .\tools\cmdline\axmol -p winuwp -a x64 -O0
         - uses: actions/upload-artifact@v3
           with:
             name: x64
@@ -165,3 +165,13 @@ jobs:
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'x64'
+  wasm:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+    - name: Build
+      shell: pwsh
+      run: |
+        ./tools/cmdline/axmol -p wasm -j2
