@@ -316,14 +316,14 @@ if ($IsLinux) {
     }
 }
 
-$build1kPath = Join-Path $myRoot '1k/build.ps1'
+$1k_script = Join-Path $myRoot '1k/1kiss.ps1'
 $prefix = Join-Path $myRoot 'tools/external'
 if (!(Test-Path $prefix -PathType Container)) {
     mkdirs $prefix
 }
 
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
-. $build1kPath -setupOnly -prefix $prefix @args
+. $1k_script -setupOnly -prefix $prefix @args
 
 if ($setupCMake) {
     setup_cmake -scope 'global'
@@ -380,7 +380,7 @@ if ($IsLinux -and (Test-Path '/etc/wsl.conf' -PathType Leaf)) {
     }
 }
 
-$b1k.pause("setup successfully, please restart the terminal to make added system variables take effect")
+$1k.pause("setup successfully, please restart the terminal to make added system variables take effect")
 
 # Powershell End -------------------------------------------------------
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

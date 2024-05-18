@@ -32,7 +32,7 @@ if (($stage -band 1)) {
     $llvm_out = Join-Path $prefix "llvmorg-$llvm_ver.zip"
 
     ## download win64 libclang.dll 
-    $b1k.mkdirs($prefix)
+    $1k.mkdirs($prefix)
     download_and_expand -url "https://github.com/simdsoft/1kiss/releases/download/llvmorg-$llvm_ver/llvmorg-$llvm_ver.zip" -out "$llvm_out" -dest $prefix
     Copy-Item "$prefix/llvmorg-$llvm_ver/llvm/prebuilt/windows/x64/libclang.dll" -Destination "$AX_ROOT/tools/bindings-generator/libclang"
 

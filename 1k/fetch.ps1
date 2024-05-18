@@ -208,7 +208,7 @@ if ($is_git_repo) {
         }
     }
 
-    if (!$need_update) { 
+    if (!$need_update) {
         $branch_name = $(git -C $lib_src branch --show-current)
         $need_update = ($branch_name -eq $revision) -and $pull_branch
     }
