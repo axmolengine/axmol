@@ -39,8 +39,6 @@ param(
 
 $unhandled_args = @()
 
-$1k_switch_options = @{ 'dll' = $true; 'u' = $true; 'dm' = $true }
-
 $options = @{p = $null; d = $null; xc = @(); xb = @(); }
 
 $optName = $null
@@ -49,7 +47,7 @@ foreach ($arg in $args) {
         if ($arg.StartsWith('-')) {
             $optName = $arg.SubString(1).TrimEnd(':')
         }
-        if ($1k_switch_options.Contains("$optName")) {
+        if (!$options.Contains("$optName")) {
             $unhandled_args += $arg
             $optName = $null
             continue
@@ -68,16 +66,16 @@ foreach ($arg in $args) {
 }
 
 function translate_array_opt($opt) {
-    if ($opt -and $opt.GetType().BaseType -ne [array]) {
+    if ($opt -and $opt -isnot [array]) {
         $opt = "$opt".Split(',')
     }
     return $opt
 }
 
-if ($options.xb.Count -ne 0) {
+if ($options.xb -isnot [array]) {
     [array]$options.xb = (translate_array_opt $options.xb)
 }
-if ($options.xc.Count -ne 0) {
+if ($options.xc -isnot [array]) {
     [array]$options.xc = (translate_array_opt $options.xc)
 }
 
