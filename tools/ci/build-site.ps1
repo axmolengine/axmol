@@ -1,5 +1,6 @@
 
 # Can runs on Windows,Linux
+$wasm_artifact_dir = (Resolve-Path $args[0]).Path
 $myRoot = $PSScriptRoot
 
 $isWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
@@ -124,8 +125,6 @@ function copy_tree_if($source, $dest) {
         Copy-Item $source $dest -Container -Recurse
     }
 }
-
-$wasm_artifact_dir = (Resolve-Path $args[0]).Path
 
 $cpp_tests_dir = $(Join-Path $wasm_artifact_dir 'cpp-tests')
 if (!(Test-Path $cpp_tests_dir -PathType Container)) {
