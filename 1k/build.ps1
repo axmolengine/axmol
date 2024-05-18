@@ -230,6 +230,7 @@ $options = @{
     xc     = @()
     xb     = @()
     j      = -1
+    O      = -1
     sdk    = ''
     minsdk = $null
     dll    = $false
@@ -245,11 +246,12 @@ foreach ($arg in $args) {
             if ($optName.EndsWith(':')) {
                 $optName = $optName.TrimEnd(':')
             }
-            if ($optName.startsWith('j')) {
-                $job_count = $null
-                if ([int]::TryParse($optName.substring(1), [ref] $job_count)) {
+            $flag_tag = [string]$optName[0]
+            if ($flag_tag -in 'j','O') {
+                $flag_val = $null
+                if ([int]::TryParse($optName.substring(1), [ref] $flag_val)) {
                     $optName = $null
-                    $options.j = $job_count
+                    $options.$flag_tag = $flag_val
                     continue
                 }
             }
@@ -899,7 +901,7 @@ function setup_nasm() {
         }
         elseif ($IsLinux) {
             if ($(which dpkg)) {
-                sudo apt-get install nasm
+                sudo apt install nasm
             }
         }
         elseif ($IsMacOS) {
@@ -1588,6 +1590,9 @@ if (!$setupOnly) {
     $buildOptions = [array]$options.xb
     $nopts = $buildOptions.Count
     $optimize_flag = $null
+    if ($options.O -ne -1) {
+        $optimize_flag = @('Debug', 'MinSizeRel', 'RelWithDebInfo', 'Release')[$options.O]
+    }
     for ($i = 0; $i -lt $nopts; ++$i) {
         $optv = $buildOptions[$i]
         switch ($optv) {
@@ -1610,6 +1615,8 @@ if (!$setupOnly) {
             if (!$optimize_flag) {
                 $optimize_flag = 'Release'
             }
+        }
+        if($optimize_flag) {
             $BUILD_ALL_OPTIONS += '--config', $optimize_flag
         }
 
@@ -1624,7 +1631,7 @@ if (!$setupOnly) {
         }
 
         if ($options.u) {
-            $CONFIG_ALL_OPTIONS += '-D_1KFETCH_DIST_UPGRADE=TRUE'
+            $CONFIG_ALL_OPTIONS += '-D_1KFETCH_UPGRADE=TRUE'
         }
 
         # determine generator, build_dir, inst_dir for non gradlew projects

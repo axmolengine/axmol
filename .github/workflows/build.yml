@@ -30,8 +30,8 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        .\tools\cmdline\axmol.ps1 -p win32 -a x64
-        .\tools\cmdline\axmol.ps1 run -p win32 -a x64 -xb '--target,unit-tests'
+        .\tools\cmdline\axmol -p win32 -a x64
+        .\tools\cmdline\axmol run -p win32 -a x64 -xb '--target,unit-tests'
   win32-dll:
         runs-on: windows-latest
         steps:
@@ -44,7 +44,7 @@ jobs:
             arch: 'x64'
         - name: Build
           shell: pwsh
-          run: .\tools\cmdline\build.ps1 -p win32 -a x64 -dll
+          run: .\tools\cmdline\axmol -p win32 -a x64 -dll
   winuwp:
         # build uwp debug avoid github CI fail with memory issue
         runs-on: windows-latest
@@ -59,12 +59,7 @@ jobs:
             uwp: true
         - name: Build
           shell: pwsh
-          run: .\tools\cmdline\build.ps1 -p winuwp -a x64 -xb '--config','Debug'
-        - uses: actions/upload-artifact@v3
-          with:
-            name: x64
-            path: |
-              build_*/tests/**/AppPackages/**/*.msix
+          run: .\tools\cmdline\axmol -p winuwp -a x64 -O0
   win32-clang:
         runs-on: windows-latest
         env:
@@ -82,7 +77,7 @@ jobs:
 
         - name: Build
           shell: pwsh
-          run: .\tools\cmdline\build.ps1 -p win32 -a 'x64' -cc clang -sdk $env:WINSDK_VER
+          run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -sdk $env:WINSDK_VER
   linux:
     runs-on: ubuntu-latest
     steps:
@@ -98,9 +93,9 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        ./tools/cmdline/build.ps1 -p linux -a x64
-        ./tools/cmdline/build.ps1 -p linux -a x64 -xb '--target,lua-tests'
-        ./tools/cmdline/axmol.ps1 run -p linux -a x64 -xb '--target,unit-tests' -wait
+        ./tools/cmdline/axmol -p linux -a x64
+        ./tools/cmdline/axmol -p linux -a x64 -xb '--target,lua-tests'
+        ./tools/cmdline/axmol run -p linux -a x64 -xb '--target,unit-tests' -wait
   osx-arm64:
     runs-on: macos-latest
     steps:
@@ -110,8 +105,8 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        ./tools/cmdline/build.ps1 -p osx
-        ./tools/cmdline/axmol.ps1 run -p osx -xb '--target,unit-tests'
+        ./tools/cmdline/axmol -p osx
+        ./tools/cmdline/axmol run -p osx -xb '--target,unit-tests'
   osx-x64:
     runs-on: macos-13
     steps:
@@ -121,8 +116,8 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        ./tools/cmdline/build.ps1 -p osx
-        ./tools/cmdline/axmol.ps1 run -p osx -xb '--target,unit-tests'
+        ./tools/cmdline/axmol -p osx
+        ./tools/cmdline/axmol run -p osx -xb '--target,unit-tests'
   android:
     runs-on: ubuntu-latest
     strategy:
@@ -142,10 +137,10 @@ jobs:
       shell: pwsh
       run: |
         $AX_ROOT = $(Get-Location).Path
-        ./tools/cmdline/build.ps1 -p android -a $env:BUILD_ARCH
-    - uses: actions/upload-artifact@v3
+        ./tools/cmdline/axmol -p android -a $env:BUILD_ARCH
+    - uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.arch }}
+        name: android_${{ matrix.arch }}
         path: |
           templates/**/*.apk
           tests/**/*.apk
@@ -164,4 +159,20 @@ jobs:
         submodules: 'recursive'
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/build.ps1 -p $env:TARGET_OS -a 'x64'
+      run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'x64'
+  wasm:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+    - name: Build
+      shell: pwsh
+      run: |
+        ./tools/cmdline/axmol -p wasm -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8' -j2 
+        ./tools/cmdline/axmol -p wasm -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8' -j2 -xb '--target,fairygui-tests'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: wasm
+        path: build_wasm/bin/**/*
+        if-no-files-found: error

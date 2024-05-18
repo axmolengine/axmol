@@ -2,7 +2,6 @@
 
 ### Significant changes relative to 2.1.2:
 
-
 - Implement cross-platform media controller for video playback by @rh101 in https://github.com/axmolengine/axmol/pull/1845
   - Adjust media control positioning if video aspect ratio is maintained by @rh101 in https://github.com/axmolengine/axmol/pull/1851
 - Allow certain code modules to be removed from build process by @rh101 in https://github.com/axmolengine/axmol/pull/1769, i.e. remove 3d features by `-DAX_ENABLE_3D=OFF`
@@ -19,6 +18,7 @@
   - https://github.com/axmolengine/axmol/pull/1870
   - https://github.com/axmolengine/axmol/pull/1871
 - Add AXLOGD,AXLOGI,... functions for lua
+- Add axmol cmdline build option to specify build optimize flag: `-O0`(Debug), `-O1`(MinSizeRel), `-O2`(RelWithDebInfo), `-O3`(Release)
 
 ### Break Changes
 
@@ -31,6 +31,11 @@
 - Move ax::ccNextPOT to ax::utils::nextPOT
 - Remove unused API: ax::LuaLog
 - Change parameter 'sharedRT' of RenderTexture::create to false
+
+### Mark as deprecated
+
+- `2d/TextFieldTTF`
+- `ui/UITextField`, use `ui/TextFieldEx` instead
 
 ### BugFixes
 
@@ -59,6 +64,7 @@
 - Fix 1k/fetch.cmake not working on powershell 5.1
 - Fix spine two color tint data not being copied across to backend buffer on first frame by @rh101 in https://github.com/axmolengine/axmol/pull/1875
 - Fix FileUtils issues on macOS by @smilediver in https://github.com/axmolengine/axmol/pull/1863
+- Fix memory corruption bug and resulting crash in the TextFieldTTF by @TyelorD in https://github.com/axmolengine/axmol/pull/1890
 
 ### Improvements
 
@@ -89,6 +95,7 @@
 - Remove Info.plist from mac Resources by @martinking71 https://github.com/axmolengine/axmol/pull/1849
 - Add libvlc prebuilt entry CMakeLists.txt
 - Add ability to create console apps by @smilediver in https://github.com/axmolengine/axmol/pull/1859
+- Add support for ensuring sprite content size does not change on new texture by @rh101 in https://github.com/axmolengine/axmol/pull/1897
 
 ### sdks updates
 
@@ -98,12 +105,14 @@
 
 ### 3rdparty updates
 
-- simdjson: 3.7.0 ==> 3.9.1
+- simdjson: 3.7.0 ==> 3.9.2
 - flatbuffers: 2.0.8 ==> 24.3.25
 - curl: 8.6.0 ==> 8.7.1
 - glad: 2.0.5 ==> 2.0.6
 - yasio: 4.2.1 ==> 4.2.2
 - llhttp: 9.2.0 ==> 9.2.1
+- libwebp: 1.3.2 ==> 1.4.0
+- astcenc: 4.7.0 ==> 4.8.0
 - stb_image: 2.28 ==> 2.29
 - luajit: 2.1-9cc2e42 ==> 2.1-d06beb0
 - c-ares: 1.25.0 ==> 1.28.1

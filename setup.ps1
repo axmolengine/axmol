@@ -10,7 +10,7 @@ param( [string]$gradlewVersion,                       #\
 #vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 # Bash Start ------------------------------------------------------------
 scriptdir="`dirname "${BASH_SOURCE[0]}"`"
-if ! which dpkg > /dev/null; then
+if ! which pwsh > /dev/null; then
     $scriptdir/1k/install-pwsh.sh
 fi
 pwsh $scriptdir/setup.ps1 "$@"
