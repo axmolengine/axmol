@@ -26,7 +26,7 @@
 # SOFTWARE.
 #
 #
-# The 1k/build.ps1, the core script of project 1kiss(1k)
+# The 1k/1kiss.ps1, the core script of project 1kiss(1k)
 # options
 #  -p: build target platform: win32,winrt(winuwp),linux,android,osx(mac),ios,tvos,watchos,wasm
 #      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first,
@@ -86,7 +86,7 @@ else {
         $HOST_OS = $HOST_MAC
     }
     else {
-        throw "Unsupported host OS to run 1k/build.ps1"
+        throw "Unsupported host OS to run 1k/1kiss.ps1"
     }
 }
 
@@ -441,12 +441,14 @@ if ($1k.isfile($manifest_file)) {
 # choose mirror for 1kiss/devtools
 $sentry_file = Join-Path $myRoot '.gitee'
 $mirror = if ($1k.isfile($sentry_file)) { 'gitee' } else { 'github' }
-$devtools_url_base = @{'github' = 'https://github.com/'; 'gitee' = 'https://gitee.com/' }[$mirror]
+$mirror_url_base = @{'github' = 'https://github.com/'; 'gitee' = 'https://gitee.com/' }[$mirror]
+$devtools_url_base = $mirror_url_base
 $mirror_conf_file = $1k.realpath("$myRoot/../manifest.json")
-$mirror_conf = $null
+$mirror_current = $null
 if ($1k.isfile($mirror_conf_file)) {
     $mirror_conf = ConvertFrom-Json (Get-Content $mirror_conf_file -raw)
-    $devtools_url_base += $mirror_conf.mirrors.$mirror.'1kdist'
+    $mirror_current = $mirror_conf.mirrors.$mirror
+    $devtools_url_base += $mirror_current.'1kdist'
     $devtools_url_base += '/devtools'
 }
 
@@ -723,12 +725,21 @@ function setup_glslcc() {
         return $glslcc_prog
     }
 
-    $suffix = $('win64.zip', 'linux.tar.gz', 'osx.tar.gz').Get($HOST_OS)
+    $suffix = $('win64.zip', 'linux.tar.gz', 'osx{0}.tar.gz').Get($HOST_OS)
+    if($IsMacOS) {
+        if([System.VersionEx]$glslcc_ver -ge [System.VersionEx]'1.9.4.1') {
+            $suffix = $suffix -f "-$HOST_CPU"
+        } else {
+            $suffix = $suffix -f ''
+        }
+    }
+
     $1k.rmdirs($glslcc_bin)
     $glslcc_pkg = Join-Path $external_prefix "glslcc-$suffix"
     $1k.del($glslcc_pkg)
 
-    $glscc_url = devtool_url glslcc-$glslcc_ver-$suffix
+    $glscc_base_url = $mirror_current.glslcc
+    $glscc_url = "$mirror_url_base$glscc_base_url/v$glslcc_ver/glslcc-$glslcc_ver-$suffix"
 
     download_and_expand $glscc_url "$glslcc_pkg" $glslcc_bin
 
