@@ -39,7 +39,7 @@ param(
 
 $unhandled_args = @()
 
-$options = @{p = $null; d = $null; xc = $null; xb = $null; }
+$options = @{p = $null; d = $null; xc = @(); xb = @(); }
 
 $optName = $null
 foreach ($arg in $args) {
