@@ -901,7 +901,7 @@ function setup_nasm() {
         }
         elseif ($IsLinux) {
             if ($(which dpkg)) {
-                sudo apt-get install nasm
+                sudo apt install nasm
             }
         }
         elseif ($IsMacOS) {

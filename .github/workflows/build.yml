@@ -60,7 +60,7 @@ jobs:
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p winuwp -a x64 -O0
-        - uses: actions/upload-artifact@v3
+        - uses: actions/upload-artifact@v4
           with:
             name: x64
             path: |
@@ -143,7 +143,7 @@ jobs:
       run: |
         $AX_ROOT = $(Get-Location).Path
         ./tools/cmdline/axmol -p android -a $env:BUILD_ARCH
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.arch }}
         path: |
@@ -174,4 +174,10 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        ./tools/cmdline/axmol -p wasm -j2
+        ./tools/cmdline/axmol -p wasm -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON','-DAX_WASM_THREADS=8' -j2 
+        ./tools/cmdline/axmol -p wasm -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON','-DAX_WASM_THREADS=8' -j2 -xb '--target,fairygui-tests'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: build_wasm
+        path: build_wasm/bin/**/*
+        if-no-files-found: error
