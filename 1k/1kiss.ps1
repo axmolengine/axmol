@@ -1572,6 +1572,7 @@ $is_host_target = $Global:is_win32 -or $Global:is_linux -or $Global:is_mac
 
 if (!$setupOnly) {
     $BUILD_DIR = $null
+    $SOURCE_DIR = $null
 
     function resolve_out_dir($prefix, $sub_prefix) {
         if (!$prefix) {
@@ -1690,13 +1691,17 @@ if (!$setupOnly) {
             }
 
             $INST_DIR = $null
-            $xopts_hints = 2
+            $xopts_hints = 3
             $xopt_presets = 0
             $xprefix_optname = '-DCMAKE_INSTALL_PREFIX='
             $xopts = [array]$options.xc
             foreach ($opt in $xopts) {
                 if ($opt.StartsWith('-B')) {
                     $BUILD_DIR = $opt.Substring(2).Trim()
+                    ++$xopt_presets
+                }
+                elseif($opts.StartsWith('-S')) {
+                    $SOURCE_DIR = $opt.Substring(2).Trim()
                     ++$xopt_presets
                 }
                 elseif ($opt.StartsWith($xprefix_optname)) {
@@ -1768,7 +1773,8 @@ if (!$setupOnly) {
         else {
             # step3. configure
             $workDir = $(Get-Location).Path
-            $mainDep = Join-Path $workDir 'CMakeLists.txt'
+            $cmakeEntryFile = 'CMakeLists.txt'
+            $mainDep = if (!$SOURCE_DIR) { Join-Path $workDir $cmakeEntryFile } else { realpath (Join-Path $SOURCE_DIR $cmakeEntryFile) }
             if ($1k.isfile($mainDep)) {
                 $mainDepChanged = $false
                 # A Windows file time is a 64-bit value that represents the number of 100-nanosecond
@@ -1825,7 +1831,7 @@ if (!$setupOnly) {
                 }
             }
             else {
-                $1k.println("Missing CMakeLists.txt in $workDir")
+                $1k.println("Missing file: $cmakeEntryFile")
             }
         }
 
