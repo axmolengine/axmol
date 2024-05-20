@@ -1700,7 +1700,7 @@ if (!$setupOnly) {
                     $BUILD_DIR = $opt.Substring(2).Trim()
                     ++$xopt_presets
                 }
-                elseif($opts.StartsWith('-S')) {
+                elseif($opt.StartsWith('-S')) {
                     $SOURCE_DIR = $opt.Substring(2).Trim()
                     ++$xopt_presets
                 }
