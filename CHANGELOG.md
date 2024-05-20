@@ -68,6 +68,7 @@
 
 ### Improvements
 
+- Update prebuilt tool `glslcc` to 1.9.5, macos-arm64 support and built for macos-10.15+
 - Improve MediaPlayer: handle video rotation properly
 - Disable c++20 char8_t
 - Improve build system, set rpath properly for platforms: linux, apple
@@ -116,7 +117,7 @@
 - stb_image: 2.28 ==> 2.29
 - luajit: 2.1-9cc2e42 ==> 2.1-d06beb0
 - c-ares: 1.25.0 ==> 1.28.1
-- imgui: 1.90.4 ==> 1.90.5
+- imgui: 1.90.4 ==> 1.90.6
 
 ## axmol-2.1.2 Feb.25 2024
 

@@ -1,4 +1,4 @@
-# This script easy to build win32, linux, winuwp(winrt), ios, tvos, osx, android depends on $AX_ROOT/1k/build.ps1
+# This script easy to build win32, linux, winuwp(winrt), ios, tvos, osx, android depends on $AX_ROOT/1k/1kiss.ps1
 # usage: pwsh build.ps1 -p <targetPlatform> -a <arch>
 # options
 #  -p: build target platform: win32,winuwp(winrt),linux,android,osx,ios,tvos,wasm
@@ -88,10 +88,10 @@ else {
     throw "The axmol engine incompleted"
 }
 
-# 1k/build.ps1
-$b1k_script = Join-Path $AX_ROOT '1k/build.ps1'
-if (!(Test-Path $b1k_script -PathType Leaf)) {
-    throw "The 1k/build.ps1 not found"
+# 1k/1kiss.ps1
+$1k_script = Join-Path $AX_ROOT '1k/1kiss.ps1'
+if (!(Test-Path $1k_script -PathType Leaf)) {
+    throw "The 1k/1kiss.ps1 not found"
 }
 
 $source_proj_dir = if ($options.d) { $options.d } else { $workDir }
@@ -100,7 +100,7 @@ $Global:is_axmol_app = (Test-Path (Join-Path $source_proj_dir '.axproj.json') -P
 $is_android = $options.p -eq 'android'
 
 # start construct full cmd line
-$b1k_args = @()
+$1k_args = @()
 
 $cm_target_index = $options.xb.IndexOf('--target')
 if ($cm_target_index -ne -1) {
@@ -143,7 +143,7 @@ $proj_name = (Get-Item $proj_dir).BaseName
 
 $use_gradle = $is_android -and (Test-Path $(Join-Path $proj_dir 'proj.android/gradlew') -PathType Leaf)
 if ($use_gradle) {
-    $b1k_args += '-xt', 'proj.android/gradlew'
+    $1k_args += '-xt', 'proj.android/gradlew'
 }
 
 if (!$use_gradle) {
@@ -172,18 +172,18 @@ else {
 }
 
 if ($proj_dir) {
-    $b1k_args += '-d', "$proj_dir"
+    $1k_args += '-d', "$proj_dir"
 }
 $prefix = Join-Path $AX_ROOT 'tools/external'
-$b1k_args += '-prefix', "$prefix"
+$1k_args += '-prefix', "$prefix"
 
 # remove arg we don't want forward to
 $options.Remove('d')
-$b1k_args = [System.Collections.ArrayList]$b1k_args
+$1k_args = [System.Collections.ArrayList]$1k_args
 foreach ($option in $options.GetEnumerator()) {
     if ($option.Value) {
-        $null = $b1k_args.Add("-$($option.Key)")
-        $null = $b1k_args.Add($option.Value)
+        $null = $1k_args.Add("-$($option.Key)")
+        $null = $1k_args.Add($option.Value)
     }
 }
 
@@ -195,11 +195,11 @@ if ($forceConfig) {
     $forward_args['forceConfig'] = $true
 }
 
-. $b1k_script @b1k_args @forward_args @unhandled_args
+. $1k_script @1k_args @forward_args @unhandled_args
 
 if (!$configOnly) {
-    $b1k.pause('Build done')
+    $1k.pause('Build done')
 }
 else {
-    $b1k.pause('Generate done')
+    $1k.pause('Generate done')
 }

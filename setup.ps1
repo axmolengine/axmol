@@ -162,7 +162,7 @@ if ($IsWin) {
     }
     
     if (!$isMeInPath -or $oldCmdRoot) {
-        # Add console bin to User PATH
+        # Add cmdline bin to User PATH
         $strPathList = [Environment]::GetEnvironmentVariable('PATH', 'User')
         $strPathList = RefreshPath $strPathList 
         [Environment]::SetEnvironmentVariable('PATH', $strPathList, 'User')
@@ -201,12 +201,17 @@ else {
         $profileContent = [Regex]::Replace($profileContent, "env\:AX_ROOT\s+\=\s+.*", "env:AX_ROOT = '$AX_ROOT'")
         ++$profileMods
     }
+    if ($profileMods) { $env:AX_ROOT = $AX_ROOT }
 
-    if (!$profileContent.Contains('$env:PATH = ') -or !($axmolCmdInfo = (Get-Command axmol -ErrorAction SilentlyContinue)) -or $axmolCmdInfo.Source -ne "$AX_CLI_ROOT/axmol") {
-        $profileContent += "# Add axmol console tool to PATH`n"
-        $profileContent += '$env:PATH = "${env:AX_ROOT}/tools/cmdline:${env:PATH}"'
-        $profileContent += "`n"
-        ++$profileMods
+    if (!($axmolCmdInfo = (Get-Command axmol -ErrorAction SilentlyContinue)) -or $axmolCmdInfo.Source -ne "$AX_CLI_ROOT/axmol") {
+        $stmt_export = '$env:PATH = "${env:AX_ROOT}/tools/cmdline:${env:PATH}"'
+        if(!$profileContent.Contains($stmt_export)) {
+            $profileContent += "# Add axmol cmdline tool to PATH`n"
+            $profileContent += '$env:PATH = "${env:AX_ROOT}/tools/cmdline:${env:PATH}"'
+            $profileContent += "`n"
+            ++$profileMods
+        }
+        $env:PATH = "${env:AX_ROOT}/tools/cmdline:${env:PATH}"
     }
 
     $profileDir = Split-Path $PROFILE -Parent
@@ -237,7 +242,7 @@ else {
         }
 
         if (!$profileContent.Contains('export PATH=$AX_ROOT/tools/cmdline:')) {
-            $profileContent += "# Add axmol console tool to PATH`n"
+            $profileContent += "# Add axmol cmdline tool to PATH`n"
             $profileContent += 'export PATH=$AX_ROOT/tools/cmdline:$PATH' -f "`n"
             ++$profileMods
         }
@@ -316,14 +321,14 @@ if ($IsLinux) {
     }
 }
 
-$build1kPath = Join-Path $myRoot '1k/build.ps1'
+$1k_script = Join-Path $myRoot '1k/1kiss.ps1'
 $prefix = Join-Path $myRoot 'tools/external'
 if (!(Test-Path $prefix -PathType Container)) {
     mkdirs $prefix
 }
 
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
-. $build1kPath -setupOnly -prefix $prefix @args
+. $1k_script -setupOnly -prefix $prefix @args
 
 if ($setupCMake) {
     setup_cmake -scope 'global'
@@ -380,7 +385,7 @@ if ($IsLinux -and (Test-Path '/etc/wsl.conf' -PathType Leaf)) {
     }
 }
 
-$b1k.pause("setup successfully, please restart the terminal to make added system variables take effect")
+$1k.pause("setup successfully, please restart the terminal to make added system variables take effect")
 
 # Powershell End -------------------------------------------------------
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

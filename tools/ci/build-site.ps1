@@ -1,5 +1,6 @@
 
 # Can runs on Windows,Linux
+$wasm_artifact_dir = (Resolve-Path $args[0]).Path
 $myRoot = $PSScriptRoot
 
 $isWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
@@ -125,19 +126,13 @@ function copy_tree_if($source, $dest) {
     }
 }
 
-$store_path = $(Join-Path $AX_ROOT 'tmp/build_wasm.zip')
-download_zip_expand 'https://ci.appveyor.com/api/projects/halx99/axmol/artifacts/build_wasm.zip?branch=dev&pr=false' $store_path
-
-$cpp_tests_dir = $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp-tests')
+$cpp_tests_dir = $(Join-Path $wasm_artifact_dir 'cpp-tests')
 if (!(Test-Path $cpp_tests_dir -PathType Container)) {
-    if (Test-Path $store_path -PathType Leaf) {
-        Remove-Item $store_path -Force
-    }
     throw "Missing wasm cpp-tests, caused by last wasm ci build fail."
 }
 copy_tree_if $cpp_tests_dir $wasm_dist2
-copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/fairygui-tests') $wasm_dist2
-copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/HelloLua') $wasm_dist2
+copy_tree_if $(Join-Path $wasm_artifact_dir 'fairygui-tests') $wasm_dist2
+copy_tree_if $(Join-Path $wasm_artifact_dir 'HelloLua') $wasm_dist2
 
 # build manuals
 

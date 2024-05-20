@@ -98,6 +98,10 @@ function(_1kfetch uri)
         list(APPEND _fetch_args -rev ${opt_REV})
     endif()
 
+    if(_1KFETCH_UPGRADE)
+        list(APPEND _fetch_args -pull_branch)
+    endif()
+
     execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
         ${_fetch_args}
         RESULT_VARIABLE _errorcode
