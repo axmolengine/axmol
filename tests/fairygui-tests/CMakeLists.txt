@@ -27,6 +27,12 @@ cmake_minimum_required(VERSION 3.20)
 
 set(APP_NAME fairygui-tests)
 
+if(APPLE)
+    enable_language(C CXX OBJC OBJCXX)
+else()
+    enable_language(C CXX)
+endif()
+
 project(${APP_NAME})
 
 if(NOT DEFINED BUILD_ENGINE_DONE)
