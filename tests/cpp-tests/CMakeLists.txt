@@ -11,12 +11,6 @@ if (MSVC)
     string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
 endif()
 
-if(APPLE)
-    enable_language(C CXX OBJC OBJCXX)
-else()
-    enable_language(C CXX)
-endif()
-
 project(${APP_NAME})
 
 if(NOT DEFINED BUILD_ENGINE_DONE)

@@ -29,12 +29,6 @@
 
 cmake_minimum_required(VERSION 3.22)
 
-if(APPLE)
-    enable_language(C CXX OBJC OBJCXX)
-else()
-    enable_language(C CXX)
-endif()
-
 project(axmol)
 
 if(XCODE)
