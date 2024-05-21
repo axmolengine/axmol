@@ -209,6 +209,18 @@ $manifest = @{
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
+# the default generator of unix targets: linux, osx, ios, android, wasm
+$cmake_generators = @{
+    'linux'   = 'Unix Makefiles'
+    'android' = 'Ninja'
+    'wasm'    = 'Ninja'
+    'wasm64'  = 'Ninja'
+    'osx'     = 'Xcode'
+    'ios'     = 'Xcode'
+    'tvos'    = 'Xcode'
+    'watchos' = 'Xcode'
+}
+
 $channels = @{}
 
 # refer to: https://developer.android.com/studio#command-line-tools-only
@@ -348,6 +360,7 @@ $Global:is_android = $TARGET_OS -eq 'android'
 $Global:is_ios = $TARGET_OS -eq 'ios'
 $Global:is_tvos = $TARGET_OS -eq 'tvos'
 $Global:is_watchos = $TARGET_OS -eq 'watchos'
+$Global:is_ios_sim = $false
 $Global:is_win_family = $Global:is_winrt -or $Global:is_win32
 $Global:is_darwin_embed_family = $Global:is_ios -or $Global:is_tvos -or $Global:is_watchos
 $Global:is_darwin_family = $Global:is_mac -or $Global:is_darwin_embed_family
@@ -1585,10 +1598,7 @@ if (!$setupOnly) {
     $BUILD_DIR = $null
     $SOURCE_DIR = $null
 
-    function resolve_out_dir($prefix, $sub_prefix) {
-        if (!$prefix) {
-            $prefix = $sub_prefix
-        }
+    function resolve_out_dir($prefix) {
         if ($is_host_target) {
             $out_dir = "${prefix}${TARGET_CPU}"
         }
@@ -1632,12 +1642,7 @@ if (!$setupOnly) {
         $BUILD_ALL_OPTIONS = @()
         $BUILD_ALL_OPTIONS += $buildOptions
         if (!$optimize_flag) {
-            if ($cmake_optimize_flags) {
-                $optimize_flag = $cmake_optimize_flags[$TARGET_OS]
-            }
-            if (!$optimize_flag) {
-                $optimize_flag = 'Release'
-            }
+            $optimize_flag = 'Release'
         }
         if ($optimize_flag) {
             $BUILD_ALL_OPTIONS += '--config', $optimize_flag
@@ -1663,19 +1668,6 @@ if (!$setupOnly) {
         # determine generator, build_dir, inst_dir for non gradlew projects
         if (!$is_gradlew) {
             if (!$cmake_generator -and !$TARGET_OS.StartsWith('win')) {
-                # the default generator of unix targets: linux, osx, ios, android, wasm
-                if (!$cmake_generators) {
-                    $cmake_generators = @{
-                        'linux'   = 'Unix Makefiles'
-                        'android' = 'Ninja'
-                        'wasm'    = 'Ninja'
-                        'wasm64'  = 'Ninja'
-                        'osx'     = 'Xcode'
-                        'ios'     = 'Xcode'
-                        'tvos'    = 'Xcode'
-                        'watchos' = 'Xcode'
-                    }
-                }
                 $cmake_generator = $cmake_generators[$TARGET_OS]
                 if ($null -eq $cmake_generator) {
                     $cmake_generator = if (!$IsWin) { 'Unix Makefiles' } else { 'Ninja' }
@@ -1737,10 +1729,10 @@ if (!$setupOnly) {
             }
 
             if (!$BUILD_DIR) {
-                $BUILD_DIR = resolve_out_dir $cmake_build_prefix 'build_'
+                $BUILD_DIR = resolve_out_dir 'build_'
             }
             if (!$INST_DIR) {
-                $INST_DIR = resolve_out_dir $cmake_install_prefix 'install_'
+                $INST_DIR = resolve_out_dir 'install_'
             }
 
             if ($rebuild) {
