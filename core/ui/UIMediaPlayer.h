@@ -54,14 +54,25 @@ class MediaPlayer;
 class AX_GUI_DLL MediaController : public ax::ui::Widget
 {
 public:
+    enum class Orientation
+    {
+        Default,
+        RotatedLeft,
+        RotatedRight,
+    };
+
     explicit MediaController(MediaPlayer* player) : _mediaPlayer(player) {}
     ~MediaController() override = 0;
 
     virtual void updateControllerState() = 0;
     virtual void setTimelineBarHeight(float height) = 0;
 
+    void setOrientation(Orientation orientation);
+    Orientation getOrientation() const { return _orientation; }
+
 protected:
     MediaPlayer* _mediaPlayer = nullptr;
+    Orientation _orientation  = Orientation::Default;
 };
 inline MediaController::~MediaController() = default;  // Required since the destructor is pure virtual
 

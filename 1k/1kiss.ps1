@@ -236,6 +236,7 @@ $options = @{
     dll    = $false
     u      = $false # whether delete 1kdist cross-platform prebuilt folder: path/to/_x
     dm     = $false # dump compiler preprocessors
+    i      = $false # perform install
 }
 
 $optName = $null
@@ -247,7 +248,7 @@ foreach ($arg in $args) {
                 $optName = $optName.TrimEnd(':')
             }
             $flag_tag = [string]$optName[0]
-            if ($flag_tag -in 'j','O') {
+            if ($flag_tag -in 'j', 'O') {
                 $flag_val = $null
                 if ([int]::TryParse($optName.substring(1), [ref] $flag_val)) {
                     $optName = $null
@@ -255,7 +256,7 @@ foreach ($arg in $args) {
                     continue
                 }
             }
-            if($options[$optName] -is [bool]) {
+            if ($options[$optName] -is [bool]) {
                 $options[$optName] = $true
                 $optName = $null
             }
@@ -438,18 +439,26 @@ if ($1k.isfile($manifest_file)) {
     . $manifest_file
 }
 
-# choose mirror for 1kiss/devtools
+# 1kdist
 $sentry_file = Join-Path $myRoot '.gitee'
 $mirror = if ($1k.isfile($sentry_file)) { 'gitee' } else { 'github' }
 $mirror_url_base = @{'github' = 'https://github.com/'; 'gitee' = 'https://gitee.com/' }[$mirror]
-$devtools_url_base = $mirror_url_base
+$1kdist_url_base = $mirror_url_base
 $mirror_conf_file = $1k.realpath("$myRoot/../manifest.json")
 $mirror_current = $null
+$devtools_url_base = $null
+$1kdist_ver = $null
 if ($1k.isfile($mirror_conf_file)) {
     $mirror_conf = ConvertFrom-Json (Get-Content $mirror_conf_file -raw)
     $mirror_current = $mirror_conf.mirrors.$mirror
-    $devtools_url_base += $mirror_current.'1kdist'
-    $devtools_url_base += '/devtools'
+    $1kdist_url_base += $mirror_current.'1kdist'
+    $devtools_url_base += "$1kdist_url_base/devtools"
+    $1kdist_ver = $mirror_conf.versions.'1kdist'
+    $1kdist_url_base += "/$1kdist_ver"
+}
+
+function 1kdist_url($filename) {
+    return "$1kdist_url_base/$filename"
 }
 
 function devtool_url($filename) {
@@ -726,10 +735,11 @@ function setup_glslcc() {
     }
 
     $suffix = $('win64.zip', 'linux.tar.gz', 'osx{0}.tar.gz').Get($HOST_OS)
-    if($IsMacOS) {
-        if([System.VersionEx]$glslcc_ver -ge [System.VersionEx]'1.9.4.1') {
+    if ($IsMacOS) {
+        if ([System.VersionEx]$glslcc_ver -ge [System.VersionEx]'1.9.4.1') {
             $suffix = $suffix -f "-$HOST_CPU"
-        } else {
+        }
+        else {
             $suffix = $suffix -f ''
         }
     }
@@ -833,10 +843,11 @@ function setup_cmake($skipOS = $false, $scope = 'local') {
             }
         }
         elseif ($IsLinux) {
-            if($scope -ne 'global') {
+            if ($scope -ne 'global') {
                 $1k.mkdirs($cmake_root)
                 & "$cmake_pkg_path" '--skip-license' '--exclude-subdir' "--prefix=$cmake_root" 1>$null 2>$null
-            } else {
+            }
+            else {
                 & "$cmake_pkg_path" '--skip-license' '--prefix=/usr/local' 1>$null 2>$null
             }
         }
@@ -1628,7 +1639,7 @@ if (!$setupOnly) {
                 $optimize_flag = 'Release'
             }
         }
-        if($optimize_flag) {
+        if ($optimize_flag) {
             $BUILD_ALL_OPTIONS += '--config', $optimize_flag
         }
 
@@ -1644,7 +1655,8 @@ if (!$setupOnly) {
 
         if ($options.u) {
             $CONFIG_ALL_OPTIONS += '-D_1KFETCH_UPGRADE=TRUE'
-        } else {
+        }
+        else {
             $CONFIG_ALL_OPTIONS += '-D_1KFETCH_UPGRADE=FALSE'
         }
 
@@ -1685,31 +1697,42 @@ if (!$setupOnly) {
                     $CONFIG_ALL_OPTIONS += "-DCMAKE_MAKE_PROGRAM=$ninja_prog"
                 }
 
-                if($cmake_generator -eq 'Xcode') {
+                if ($cmake_generator -eq 'Xcode') {
                     setup_xcode
                 }
             }
 
             $INST_DIR = $null
-            $xopts_hints = 3
             $xopt_presets = 0
             $xprefix_optname = '-DCMAKE_INSTALL_PREFIX='
             $xopts = [array]$options.xc
-            foreach ($opt in $xopts) {
+            $evaluated_xopts = @()
+            for ($opti = 0; $opti -lt $xopts.Count; ++$opti) {
+                $opt = $xopts[$opti]
                 if ($opt.StartsWith('-B')) {
-                    $BUILD_DIR = $opt.Substring(2).Trim()
+                    if ($opt.Length -gt 2) {
+                        $BUILD_DIR = $opt.Substring(2).Trim()
+                    }
+                    elseif (++$opti -lt $xopts.Count) {
+                        $BUILD_DIR = $xopts[$opti]
+                    }
                     ++$xopt_presets
                 }
-                elseif($opt.StartsWith('-S')) {
-                    $SOURCE_DIR = $opt.Substring(2).Trim()
+                elseif ($opt.StartsWith('-S')) {
+                    if ($opt.Length -gt 2) {
+                        $SOURCE_DIR = $opt.Substring(2).Trim()
+                    }
+                    elseif (++$opti -lt $xopts.Count) {
+                        $SOURCE_DIR = $xopts[$opti]
+                    }
                     ++$xopt_presets
                 }
                 elseif ($opt.StartsWith($xprefix_optname)) {
                     ++$xopt_presets
                     $INST_DIR = $opt.SubString($xprefix_optname.Length)
                 }
-                if ($xopt_presets -eq $xopts_hints) {
-                    break
+                else {
+                    $evaluated_xopts += $opt
                 }
             }
 
@@ -1718,7 +1741,6 @@ if (!$setupOnly) {
             }
             if (!$INST_DIR) {
                 $INST_DIR = resolve_out_dir $cmake_install_prefix 'install_'
-                $CONFIG_ALL_OPTIONS += "-DCMAKE_INSTALL_PREFIX=$INST_DIR"
             }
 
             if ($rebuild) {
@@ -1729,21 +1751,21 @@ if (!$setupOnly) {
         else {
             # android gradle
             # replace all cmake config options -DXXX to -P_1K_XXX
-            $xopts = @()
+            $evaluated_xopts = @()
             foreach ($opt in $options.xc) {
                 if ($opt.startsWith('-D')) {
-                    $xopts += "-P_1K_$($opt.substring(2))"
+                    $evaluated_xopts += "-P_1K_$($opt.substring(2))"
                 }
                 elseif ($opt.startsWith('-P')) {
-                    $xopts += $opt
+                    $evaluated_xopts += $opt
                 } # ignore unknown option type
             }
         }
 
         # step2. apply additional cross make options
-        if ($xopts.Count -gt 0) {
-            $1k.println("Apply additional cross make options: $($xopts), Count={0}" -f $xopts.Count)
-            $CONFIG_ALL_OPTIONS += $xopts
+        if ($evaluated_xopts.Count -gt 0) {
+            $1k.println("Apply additional cross make options: $($evaluated_xopts), Count={0}" -f $evaluated_xopts.Count)
+            $CONFIG_ALL_OPTIONS += $evaluated_xopts
         }
 
         $1k.println("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
@@ -1774,7 +1796,7 @@ if (!$setupOnly) {
             # step3. configure
             $workDir = $(Get-Location).Path
             $cmakeEntryFile = 'CMakeLists.txt'
-            $mainDep = if (!$SOURCE_DIR) { Join-Path $workDir $cmakeEntryFile } else { realpath (Join-Path $SOURCE_DIR $cmakeEntryFile) }
+            $mainDep = if (!$SOURCE_DIR) { Join-Path $workDir $cmakeEntryFile } else { $(Join-Path $SOURCE_DIR $cmakeEntryFile) }
             if ($1k.isfile($mainDep)) {
                 $mainDepChanged = $false
                 # A Windows file time is a 64-bit value that represents the number of 100-nanosecond
@@ -1791,8 +1813,8 @@ if (!$setupOnly) {
                 $cmakeCachePath = $1k.realpath("$BUILD_DIR/CMakeCache.txt")
 
                 if ($mainDepChanged -or !$1k.isfile($cmakeCachePath) -or $forceConfig) {
-                    $config_cmd = if(!$is_wasm) { 'cmake' } else { 'emcmake' }
-                    if($is_wasm) {
+                    $config_cmd = if (!$is_wasm) { 'cmake' } else { 'emcmake' }
+                    if ($is_wasm) {
                         $CONFIG_ALL_OPTIONS = @('cmake') + $CONFIG_ALL_OPTIONS
                     }
 
@@ -1803,7 +1825,9 @@ if (!$setupOnly) {
                         &$config_cmd $CONFIG_ALL_OPTIONS -S $dm_dir -B $dm_build_dir | Out-Host ; Remove-Item $dm_build_dir -Recurse -Force
                         $1k.println("Finish dump compiler preprocessors")
                     }
-                    $1k.println("Build Command: $config_cmd $CONFIG_ALL_OPTIONS -B $BUILD_DIR")
+                    $CONFIG_ALL_OPTIONS += "-DCMAKE_INSTALL_PREFIX=$INST_DIR", '-B', $BUILD_DIR 
+                    if ($SOURCE_DIR) { $CONFIG_ALL_OPTIONS += '-S', $SOURCE_DIR }
+                    $1k.println("CMake config command: $config_cmd $CONFIG_ALL_OPTIONS -B $BUILD_DIR")
                     &$config_cmd $CONFIG_ALL_OPTIONS -B $BUILD_DIR | Out-Host
                     Set-Content $tempFile $hashValue -NoNewline
                 }
@@ -1818,16 +1842,23 @@ if (!$setupOnly) {
 
                     # step4. build
                     # apply additional build options
-                    $BUILD_ALL_OPTIONS += "--parallel"
-                    $BUILD_ALL_OPTIONS += "$($options.j)"
+                    $BUILD_ALL_OPTIONS += "--parallel", "$($options.j)"
 
+                    if (!$cmake_target) { $cmake_target = $options.t }
+                    if ($cmake_target) { $BUILD_ALL_OPTIONS += '--target', $cmake_target }
+                    $1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
+
+                    # forward non-cmake args to underlaying build toolchain, must at last
                     if (($cmake_generator -eq 'Xcode') -and !$BUILD_ALL_OPTIONS.Contains('--verbose')) {
                         $BUILD_ALL_OPTIONS += '--', '-quiet'
                     }
-                    $1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
-
                     $1k.println("cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS")
                     cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS | Out-Host
+
+                    if ($options.i) {
+                        $install_args = @($BUILD_DIR, '--config', $optimize_flag)
+                        cmake --install $install_args | Out-Host
+                    }
                 }
             }
             else {
