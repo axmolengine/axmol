@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var url_re =  /(axmol\.org\/manual\/)(latest|(\d\.\d+|\d\.\d+\.\d+)(-beta\d)?)\//;
+  var url_re =  /(axmol\.dev\/manual\/)(latest|(\d\.\d+|\d\.\d+\.\d+)(-beta\d)?)\//;
   var url_local =  /docs\/dist\/manual\/(latest|(\d\.\d+|\d\.\d+\.\d+)(-beta\d)?)\//;
   var current_version_local = '@VERSION@'
   var all_versions = [

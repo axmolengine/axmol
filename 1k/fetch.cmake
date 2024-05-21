@@ -41,7 +41,7 @@ endfunction()
 # param package_name
 function(_1kfetch_dist package_name)
     set(_prebuilt_root ${CMAKE_CURRENT_LIST_DIR}/_x)
-    if(_1KFETCH_DIST_UPGRADE AND IS_DIRECTORY ${_prebuilt_root})
+    if(_1KFETCH_UPGRADE AND IS_DIRECTORY ${_prebuilt_root})
         file(REMOVE_RECURSE ${_prebuilt_root})
     endif()
     if(NOT IS_DIRECTORY ${_prebuilt_root})
@@ -96,6 +96,10 @@ function(_1kfetch uri)
     # rev: the explicit rev to checkout, i.e. git release tag name
     if(opt_REV)
         list(APPEND _fetch_args -rev ${opt_REV})
+    endif()
+
+    if(_1KFETCH_UPGRADE)
+        list(APPEND _fetch_args -pull_branch)
     endif()
 
     execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
