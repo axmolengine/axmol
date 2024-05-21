@@ -81,14 +81,14 @@ public:
 
     enum class Version
     {
-        v1,  // DrawNodeExt cocos2dx/axmol 1.0
-        v2,  // DrawNodeExt 2.0
+        v1,  // DrawNode cocos2dx/axmol 1.0
+        v2,  // DrawNode 2.0
         v3,
         v4,
     };
 
     // DrawNodeExt stuff
-    Version _dnVersion = Version::v1;
+    Version _dnVersion = Version::v2;
     ax::Vec2 _dnScale;
     ax::Vec2 _dnCenter;
     float _dnRotation = 0.0f;

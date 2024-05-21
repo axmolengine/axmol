@@ -2131,15 +2131,12 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
     drawNodeEx->drawPoints(position1, 4, 10, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 
     drawNodeEx->drawSolidRect(Vec2(250, 80), Vec2(400, 220), Color4B::YELLOW);
-    drawNodeEx->drawLine(Vec2(20, 100), Vec2(450, 220), Color4B::GREEN, 8.0f);
-
-
     for (int i = 0; i < 100; i++)
     {
         drawNodeEx->drawPoint(Vec2(i * 7.0f, 120.0f), (float)i / 5 + 1,
             Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
     }
-
+    drawNodeEx->drawLine(Vec2(20, 100), Vec2(450, 220), Color4B::GREEN, 8.0f);
     drawNodeEx->drawLine(Vec2(200, 100), Vec2(450, 250), Color4B::BLUE,6.0f);
 
 
