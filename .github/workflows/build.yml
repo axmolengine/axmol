@@ -177,8 +177,8 @@ jobs:
         path: build_wasm/bin/**/*
         if-no-files-found: error
     - name: Repository Dispatch
-      if: ${{ github.repository == 'axmolengine/axmol' }}
-      uses: peter-evans/repository-dispatch@v2
+      if: ${{ github.repository == 'axmolengine/axmol' && github.event_name != 'pull_request' }}
+      uses: peter-evans/repository-dispatch@v3
       with:
         token: ${{ secrets.AX_TRIGGER_SITE_TOKEN }}
         repository: axmolengine/axmolengine.github.io
