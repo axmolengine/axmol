@@ -1599,7 +1599,7 @@ void Label::createSpriteForSystemFont(const FontDefinition& fontDef)
     _textSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     auto& s = _textSprite->getContentSize();
     _textSprite->setPosition(Vec2((int)s.x % 2 == 0 ? 0 : 0.5, (int)s.y % 2 == 0 ? 0 : 0.5));
-    this->setContentSize(_textSprite->getContentSize());
+    this->setContentSize(s);
     texture->release();
     if (_blendFuncDirty)
     {
