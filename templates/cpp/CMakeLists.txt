@@ -23,7 +23,7 @@
 # THE SOFTWARE.
 # ****************************************************************************/
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 
 set(APP_NAME Dummy)
 
@@ -176,6 +176,10 @@ else()
     config_android_shared_libs("org.axmol.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
+if (NOT _AX_USE_PREBUILT)
+    target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
+endif()
+
 # The optional thirdparties(not dependent by engine)
 if (AX_WITH_YAML_CPP)
     list(APPEND GAME_INC_DIRS "${_AX_ROOT}/3rdparty/yaml-cpp/include")
@@ -186,9 +190,6 @@ target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 
 # mark app resources, resource will be copy auto after mark
 ax_setup_app_config(${APP_NAME})
-if (NOT _AX_USE_PREBUILT)
-    target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
-endif()
 
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")

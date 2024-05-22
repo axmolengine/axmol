@@ -1,4 +1,4 @@
 libclang in LLVM 15.0.7
 
 Please download from: 
-https://github.com/simdsoft/1kiss/releases/tag/llvmorg-15.0.7
+https://github.com/simdsoft/1kiss/releases/tag/devtools/llvm-15.0.7.zip

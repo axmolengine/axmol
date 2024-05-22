@@ -208,6 +208,12 @@ endif()
 # apply axmol spec compile options
 add_compile_options(${_ax_compile_options})
 
+if(APPLE)
+    enable_language(C CXX OBJC OBJCXX)
+else()
+    enable_language(C CXX)
+endif()
+
 # Try enable asm & nasm compiler support
 set(can_use_assembler TRUE)
 enable_language(ASM)
