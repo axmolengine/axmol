@@ -690,6 +690,9 @@ function download_and_expand($url, $out, $dest) {
         }
         tar xf "$out" -C $dest
     }
+    elseif ($out.EndsWith('.7z')) {
+        7z x "$out" "-o$dest" -y | Out-Host
+    }
     elseif ($out.EndsWith('.sh')) {
         chmod 'u+x' "$out"
         $1k.mkdirs($dest)
@@ -992,7 +995,38 @@ function setup_jdk() {
     return $javac_prog
 }
 
-# setup llvm for windows only
+function setup_7z() {
+    # ensure 7z_prog
+    $7z_cmd_info = Get-Command '7z' -ErrorAction SilentlyContinue
+    if (!$7z_cmd_info) {
+        if ($IsWin) {
+            $7z_prog = Join-Path $external_prefix '7z2301-x64\7z.exe'
+            $7z_pkg_out = Join-Path $external_prefix '7z2301-x64.zip'
+            if (!$1k.isfile($7z_prog)) {
+                # https://www.7-zip.org/download.html
+                $7z_url = devtool_url '7z2301-x64.zip'
+                download_and_expand -url $7z_url -out $7z_pkg_out $external_prefix
+            }
+
+            $7z_bin = Split-Path  $7z_prog -Parent
+            if (!$env:PATH.Contains($7z_bin)) {
+                $env:PATH = "$7z_bin$ENV_PATH_SEP$env:PATH"
+            }
+        }
+        elseif ($IsLinux) {
+            if ($(which dpkg)) { sudo apt install p7zip-full }
+        }
+        elseif ($IsMacOS) {
+            brew install p7zip
+        }
+
+        $7z_cmd_info = Get-Command '7z' -ErrorAction SilentlyContinue
+        if (!$7z_cmd_info) {
+            throw "setup 7z fail"
+        }
+    }
+}
+
 function setup_llvm() {
     if (!$manifest.Contains('llvm')) { return $null }
     $clang_prog, $clang_ver = find_prog -name 'llvm' -cmd "clang"
@@ -1001,29 +1035,13 @@ function setup_llvm() {
         $llvm_bin = Join-Path $llvm_root 'bin'
         $clang_prog, $clang_ver = find_prog -name 'llvm' -cmd "clang" -path $llvm_bin -silent $true
         if (!$clang_prog) {
-            # ensure 7z_prog
-            $7z_cmd_info = Get-Command '7z' -ErrorAction SilentlyContinue
-            if ($7z_cmd_info) {
-                $7z_prog = $7z_cmd_info.Path
-            }
-            else {
-                $7z_prog = Join-Path $external_prefix '7z2301-x64\7z.exe'
-                $7z_pkg_out = Join-Path $external_prefix '7z2301-x64.zip'
-                if (!$1k.isfile($7z_prog)) {
-                    # https://www.7-zip.org/download.html
-                    $7z_url = devtool_url '7z2301-x64.zip'
-                    download_and_expand -url $7z_url -out $7z_pkg_out $external_prefix/
-                }
-            }
-
-            if (!$1k.isfile($7z_prog)) {
-                throw "setup 7z fail which is required for setup llvm clang!"
-            }
-
             # download llvm clang and install extract it at prefix
             download_file "https://github.com/llvm/llvm-project/releases/download/llvmorg-${clang_ver}/LLVM-${clang_ver}-win64.exe" "$external_prefix\LLVM-${clang_ver}-win64.exe"
             $1k.mkdirs($llvm_root)
-            & $7z_prog x "$external_prefix\LLVM-${clang_ver}-win64.exe" "-o$llvm_root" -y | Out-Host
+
+            # ensure 7z_prog
+            setup_7z
+            7z x "$external_prefix\LLVM-${clang_ver}-win64.exe" "-o$llvm_root" -y | Out-Host
 
             $clang_prog, $clang_ver = find_prog -name 'llvm' -cmd "clang" -path $llvm_bin -silent $true
             if (!$clang_prog) {

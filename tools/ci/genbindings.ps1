@@ -29,8 +29,9 @@ if (($stage -band 1)) {
     $lib_name = @('libclang.dll', 'libclang.dylib', 'libclang.so')[$HOST_OS]
     $lib_path = Join-Path $AX_ROOT "tools/bindings-generator/libclang/$lib_name"
     if (!(Test-Path $lib_path -PathType Leaf)) {
+        setup_7z
         $llvm_ver = '15.0.7'
-        $llvm_pkg = "llvm-$llvm_ver.zip"
+        $llvm_pkg = "llvm-$llvm_ver.7z"
 
         $prefix = Join-Path $AX_ROOT "cache/devtools"
         $llvm_url = devtool_url $llvm_pkg
