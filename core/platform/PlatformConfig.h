@@ -155,11 +155,11 @@ Linux: Desktop GL/Vulkan
 
 #if defined(__APPLE__)
 #    if !defined(AX_USE_GL)
-#        define AX_USE_METAL
+#        define AX_USE_METAL 1
 #    endif
 #else  // win32,linux,winuwp,android
 #    if !defined(AX_USE_GL)
-#        define AX_USE_GL
+#        define AX_USE_GL 1
 #    endif
 #endif
 
