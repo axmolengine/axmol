@@ -81,14 +81,15 @@ public:
 
     enum class Version
     {
-        v1,  // DrawNode cocos2dx/axmol 1.0
-        v2,  // DrawNode 2.0
+        v0,  // DrawNode cocos2dx/axmol 1.0
+        v1,  // DrawNode 1.0
+        v2,  
         v3,
         v4,
     };
 
     // DrawNodeExt stuff
-    Version _dnVersion = Version::v2;
+    Version _dnVersion = Version::v1;
     ax::Vec2 _dnScale;
     ax::Vec2 _dnCenter;
     float _dnRotation = 0.0f;
@@ -113,8 +114,8 @@ public:
         _isConvexTmp = _isConvex; _isConvex = isConvex; return _isConvexTmp;
     };
 
-    void setDNVersion(ax::extension::DrawNodeEx::Version dnV) {
-        _dnVersion = dnV;
+    ax::extension::DrawNodeEx::Version getDNVersion() {
+        return _dnVersion;
     };
     void setDNScale(ax::Vec2 scale) {
         _dnScale = scale;

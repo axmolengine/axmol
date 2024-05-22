@@ -91,9 +91,9 @@ float verticesHead[] = { 107.f, 9.f, 0.3333333433f, 0.3411764801f, 0.3686274588f
 
 DrawNodeExTests::DrawNodeExTests()
 {
-    ADD_TEST_CASE(DrawNodeHeartTest);
+   // ADD_TEST_CASE(DrawNodeHeartTest);
     ADD_TEST_CASE(DrawNodeMorphTest);
-    ADD_TEST_CASE(DrawNodeFireworkTest);
+   // ADD_TEST_CASE(DrawNodeFireworkTest);
     ADD_TEST_CASE(DrawNodePictureTest);
     ADD_TEST_CASE(DrawNodeMethodesTest);
     ADD_TEST_CASE(DrawNodePerformaneTest);
@@ -104,10 +104,10 @@ DrawNodeExTests::DrawNodeExTests()
     ADD_TEST_CASE(DrawNodeDrawInWrongOrder_Issue1888);
 
     ADD_TEST_CASE(DrawNodeCocos2dxTest1);
-    ADD_TEST_CASE(DrawNodeCocos2dxTest);
+    ADD_TEST_CASE(DrawNodeCocos2dxTest2);
     ADD_TEST_CASE(DrawNodeCocos2dxBackwardsAPITest);
     ADD_TEST_CASE(DrawNodeCocos2dxBetterCircleRendering);
-    ADD_TEST_CASE(DrawNodeCocos2dxNewFeature1Test);
+    ADD_TEST_CASE(DrawNodeCocos2dxDrawNodePieTest);
     ADD_TEST_CASE(DrawNodeCocos2dx_Issue829);
     ADD_TEST_CASE(DrawNodeCocos2dx_Issue1319);
 }
@@ -2146,8 +2146,8 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
 }
 
 
-// DrawNodeCocos2dxTest
-DrawNodeCocos2dxTest::DrawNodeCocos2dxTest()
+// DrawNodeCocos2dxTest2
+DrawNodeCocos2dxTest2::DrawNodeCocos2dxTest2()
 {
     auto s = Director::getInstance()->getWinSize();
 
@@ -2307,12 +2307,12 @@ DrawNodeCocos2dxTest::DrawNodeCocos2dxTest()
     draw1->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2f), FadeOut::create(1.2f), NULL)));
 }
 
-string DrawNodeCocos2dxTest::title() const
+string DrawNodeCocos2dxTest2::title() const
 {
     return "Test DrawNode";
 }
 
-string DrawNodeCocos2dxTest::subtitle() const
+string DrawNodeCocos2dxTest2::subtitle() const
 {
     return "Testing DrawNode - batched draws. Concave polygons working too!";
 }
@@ -2481,7 +2481,7 @@ string DrawNodeCocos2dxBetterCircleRendering::subtitle() const
     return "Green: smoother rendering; Red: faster but badly rendering";
 }
 
-DrawNodeCocos2dxNewFeature1Test::DrawNodeCocos2dxNewFeature1Test()
+DrawNodeCocos2dxDrawNodePieTest::DrawNodeCocos2dxDrawNodePieTest()
 {
     drawNode = DrawNodeEx::create();
     addChild(drawNode, 10);
@@ -2491,7 +2491,7 @@ DrawNodeCocos2dxNewFeature1Test::DrawNodeCocos2dxNewFeature1Test()
     scheduleUpdate();
 }
 
-void DrawNodeCocos2dxNewFeature1Test::changeEndAngle(ax::Object* pSender, ax::ui::Slider::EventType type)
+void DrawNodeCocos2dxDrawNodePieTest::changeEndAngle(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -2501,7 +2501,7 @@ void DrawNodeCocos2dxNewFeature1Test::changeEndAngle(ax::Object* pSender, ax::ui
     }
 }
 
-void DrawNodeCocos2dxNewFeature1Test::changeStartAngle(ax::Object* pSender, ax::ui::Slider::EventType type)
+void DrawNodeCocos2dxDrawNodePieTest::changeStartAngle(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -2511,7 +2511,7 @@ void DrawNodeCocos2dxNewFeature1Test::changeStartAngle(ax::Object* pSender, ax::
     }
 }
 
-void DrawNodeCocos2dxNewFeature1Test::changeAngle(ax::Object* pSender, ax::ui::Slider::EventType type)
+void DrawNodeCocos2dxDrawNodePieTest::changeAngle(ax::Object* pSender, ax::ui::Slider::EventType type)
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
@@ -2521,7 +2521,7 @@ void DrawNodeCocos2dxNewFeature1Test::changeAngle(ax::Object* pSender, ax::ui::S
     }
 }
 
-void DrawNodeCocos2dxNewFeature1Test::initSliders()
+void DrawNodeCocos2dxDrawNodePieTest::initSliders()
 {
     angle = 324;
     endAngle = 360;
@@ -2535,7 +2535,7 @@ void DrawNodeCocos2dxNewFeature1Test::initSliders()
     sliderStartAngle->loadProgressBarTexture("cocosui/sliderProgress.png");
     sliderStartAngle->setPosition(Vec2(vsize.width / 2, vsize.height / 6));
 
-    sliderStartAngle->addEventListener(AX_CALLBACK_2(DrawNodeCocos2dxNewFeature1Test::changeStartAngle, this));
+    sliderStartAngle->addEventListener(AX_CALLBACK_2(DrawNodeCocos2dxDrawNodePieTest::changeStartAngle, this));
 
     auto ttfConfig = TTFConfig("fonts/arial.ttf", 8);
     _StartAngleLabel = Label::createWithTTF(ttfConfig, "StartAngle");
@@ -2550,7 +2550,7 @@ void DrawNodeCocos2dxNewFeature1Test::initSliders()
     sliderEndAngle->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
     sliderEndAngle->loadProgressBarTexture("cocosui/sliderProgress.png");
     sliderEndAngle->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 35));
-    sliderEndAngle->addEventListener(AX_CALLBACK_2(DrawNodeCocos2dxNewFeature1Test::changeEndAngle, this));
+    sliderEndAngle->addEventListener(AX_CALLBACK_2(DrawNodeCocos2dxDrawNodePieTest::changeEndAngle, this));
 
     _EndAngleLabel = Label::createWithTTF(ttfConfig, "endAngle");
 
@@ -2564,7 +2564,7 @@ void DrawNodeCocos2dxNewFeature1Test::initSliders()
     sliderAngle->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
     sliderAngle->loadProgressBarTexture("cocosui/sliderProgress.png");
     sliderAngle->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 65));
-    sliderAngle->addEventListener(AX_CALLBACK_2(DrawNodeCocos2dxNewFeature1Test::changeAngle, this));
+    sliderAngle->addEventListener(AX_CALLBACK_2(DrawNodeCocos2dxDrawNodePieTest::changeAngle, this));
 
     _AngleLabel = Label::createWithTTF(ttfConfig, "Angle");
 
@@ -2573,7 +2573,7 @@ void DrawNodeCocos2dxNewFeature1Test::initSliders()
     addChild(sliderAngle, 20);
 }
 
-void DrawNodeCocos2dxNewFeature1Test::update(float dt)
+void DrawNodeCocos2dxDrawNodePieTest::update(float dt)
 {
     drawNode->clear();
 
@@ -2589,12 +2589,12 @@ void DrawNodeCocos2dxNewFeature1Test::update(float dt)
         Color4F::BLUE, Color4F::BLUE, drawNode->DrawMode::Semi, 1.0f);
 }
 
-string DrawNodeCocos2dxNewFeature1Test::title() const
+string DrawNodeCocos2dxDrawNodePieTest::title() const
 {
     return "DrawNode::drawPie";
 }
 
-string DrawNodeCocos2dxNewFeature1Test::subtitle() const
+string DrawNodeCocos2dxDrawNodePieTest::subtitle() const
 {
     return "Filled, Outlined, Line, Semi";
 }

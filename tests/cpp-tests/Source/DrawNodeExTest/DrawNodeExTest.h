@@ -350,12 +350,12 @@ private:
 
 
 
-class DrawNodeCocos2dxTest : public DrawNodeExBaseTest
+class DrawNodeCocos2dxTest2 : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(DrawNodeCocos2dxTest);
+    CREATE_FUNC(DrawNodeCocos2dxTest2);
 
-    DrawNodeCocos2dxTest();
+    DrawNodeCocos2dxTest2();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -418,12 +418,12 @@ public:
     virtual std::string subtitle() const override;
 };
 
-class DrawNodeCocos2dxNewFeature1Test : public DrawNodeExBaseTest
+class DrawNodeCocos2dxDrawNodePieTest : public DrawNodeExBaseTest
 {
 public:
-    CREATE_FUNC(DrawNodeCocos2dxNewFeature1Test);
+    CREATE_FUNC(DrawNodeCocos2dxDrawNodePieTest);
 
-    DrawNodeCocos2dxNewFeature1Test();
+    DrawNodeCocos2dxDrawNodePieTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;

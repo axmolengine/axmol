@@ -1245,8 +1245,6 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             borderColor = Color4B::TRANSPARENT;
         }
 
-        borderColor = Color4B::BLUE;
-
         V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColor, Tex2F(-n0)},
             {inner1, borderColor, Tex2F(-n0)},
             {outer1, borderColor, Tex2F(n0)} };
@@ -1280,8 +1278,6 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
                 borderColor = Color4B::TRANSPARENT;
             }
 
-            borderColor = Color4B::GREEN;
-
             V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColor, Tex2F(-n0)},
                 {inner1, borderColor, Tex2F(-n0)},
                 {outer1, borderColor, Tex2F(n0)} };
@@ -1312,8 +1308,6 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
         {
             borderColor = Color4B::TRANSPARENT;
         }
-
-        borderColor = Color4B::YELLOW;
 
         tmp1 = { {inner0, borderColor, Tex2F(-n0)},
            {inner1, borderColor, Tex2F(-n0)},
