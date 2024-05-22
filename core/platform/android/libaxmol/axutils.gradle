@@ -97,7 +97,7 @@ class axutils {
 //    }
 
     @SuppressWarnings('unused')
-    static String[] findNativeBuildTools(project, cmakeVer = "3.22.1+", ndkVer = "23.2.8568313") {
+    static String[] findNativeBuildTools(project, cmakeVer = "3.23.0+", ndkVer = "23.2.8568313") {
         // cmakeVer should overwrite by command line
         if (project.properties.__1K_CMAKE_VERSION != null)
             cmakeVer = project.properties.__1K_CMAKE_VERSION
