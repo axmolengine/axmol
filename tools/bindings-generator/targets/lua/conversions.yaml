@@ -81,7 +81,7 @@ conversions:
     "NavMeshAgentParam": "ok &= luaval_to_navmeshagentparam(tolua_S, ${arg_idx}, &${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
     "OffMeshLinkData": "ok &= luaval_to_offmeshlinkdata(tolua_S, ${arg_idx}, &${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
     "ListenerID": "ok &= luaval_to_std_string(tolua_S, ${arg_idx},&${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
-    "VertexLayout": "ok &= luaval_to_vertexLayout(tolua_S, ${arg_idx}, ${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
+    # "VertexLayout": "ok &= luaval_to_vertexLayout(tolua_S, ${arg_idx}, ${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
     "SamplerDescriptor": "ok &= luaval_to_samplerDescriptor(tolua_S, ${arg_idx}, ${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
     "UniformLocation": "ok &= luaval_to_uniformLocation(tolua_S, ${arg_idx}, ${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
     "ValueMap*": "ok &= luaval_to_ccvaluemap(tolua_S, ${arg_idx}, ${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"

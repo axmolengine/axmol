@@ -2,6 +2,9 @@ param(
     [switch]$help,
     [switch]$wait
 )
+
+# Set-StrictMode -Version Latest
+
 # pwsh function alias
 function println($message) { Write-Host "axmol: $message" }
 
@@ -56,10 +59,6 @@ Example:
 '@ -f $axmolVersion, $pwsh_ver
 
 $cmdName = $args[0]
-# if (!$cmdName) {
-#     println $tool_usage
-#     return
-# }
 
 if ($IsMacOS) {
     function find_simulator_id($plat, $deviceName = '') {
@@ -399,3 +398,5 @@ if ($args[0] -eq 'new') {
 }
 
 . $plugin.proc @sub_args @sub_opts
+
+exit $LASTEXITCODE
