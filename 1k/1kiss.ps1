@@ -1644,9 +1644,7 @@ if (!$setupOnly) {
         if (!$optimize_flag) {
             $optimize_flag = 'Release'
         }
-        if ($optimize_flag) {
-            $BUILD_ALL_OPTIONS += '--config', $optimize_flag
-        }
+        $BUILD_ALL_OPTIONS += '--config', $optimize_flag
 
         # enter building steps
         $1k.println("Building target $TARGET_OS on $HOST_OS_NAME with toolchain $TOOLCHAIN ...")
