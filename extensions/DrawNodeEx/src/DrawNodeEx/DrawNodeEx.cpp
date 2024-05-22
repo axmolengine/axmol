@@ -1240,7 +1240,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
         Vec2 outer0 = v0 + offset0 * borderWidth;
         Vec2 outer1 = v1 + offset1 * borderWidth;
         borderColor = borderColo;
-        if (i >= count - 1 && !closedPolygon)  // /-2  ??
+        if (i >= (count - 1) && !closedPolygon)  // /-2  ??
         {
             borderColor = Color4B::TRANSPARENT;
         }
@@ -1273,7 +1273,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             Vec2 outer0 = v0 + offset0 * borderWidth;
             Vec2 outer1 = v1 + offset1 * borderWidth;
             borderColor = borderColo;
-            if (i >= count - 1 && !closedPolygon)  // /-2  ??
+            if (i >= (count - 1) && !closedPolygon)  // /-2  ??
             {
                 borderColor = Color4B::TRANSPARENT;
             }
@@ -1304,7 +1304,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
         outer0 = v0 + offset0 * borderWidth;
         outer1 = v1 + offset1 * borderWidth;
         borderColor = borderColo;
-        if (i >= count - 1 && !closedPolygon)  // /-2  ??
+        if (i >= (count - 1) && !closedPolygon)  // /-2  ??
         {
             borderColor = Color4B::TRANSPARENT;
         }
