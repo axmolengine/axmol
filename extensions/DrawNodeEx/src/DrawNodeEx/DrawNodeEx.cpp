@@ -1240,10 +1240,10 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
         Vec2 outer0 = v0 + offset0 * borderWidth;
         Vec2 outer1 = v1 + offset1 * borderWidth;
         borderColor = borderColo;
-        if (i >= (count - 1) && !closedPolygon)  // /-2  ??
-        {
-            borderColor = Color4B::TRANSPARENT;
-        }
+        //if (i >= (count - 1) && !closedPolygon)  // /-2  ??
+        //{
+        //    borderColor = Color4B::TRANSPARENT;
+        //}
 
         V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColor, Tex2F(-n0)},
             {inner1, borderColor, Tex2F(-n0)},
@@ -1257,7 +1257,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
 
 
 
-        for (unsigned int i = 1; i < count - 1; i++)
+        for (unsigned int i = 1; i < (count - 1); i++)
         {
             int j = (i + 1) % count;
             Vec2 v0 = _vertices[i];
@@ -1273,10 +1273,10 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             Vec2 outer0 = v0 + offset0 * borderWidth;
             Vec2 outer1 = v1 + offset1 * borderWidth;
             borderColor = borderColo;
-            if (i >= (count - 1) && !closedPolygon)  // /-2  ??
-            {
-                borderColor = Color4B::TRANSPARENT;
-            }
+            //if (i >= (count - 1) && !closedPolygon)  // /-2  ??
+            //{
+            //    borderColor = Color4B::TRANSPARENT;
+            //}
 
             V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColor, Tex2F(-n0)},
                 {inner1, borderColor, Tex2F(-n0)},
