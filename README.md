@@ -75,9 +75,8 @@ Axmol Engine has iterated and improved over the Cocos2d-x v4.0 base. Now is fast
 * UWP (x64, arm64)
 * Wasm32
 
-**Supported 2D physics engines** ([more info here](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-informations)):
+**Supported 2D physics engines** ([more info here](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-Information)):
 * Box2D
-* Box2D-optimized
 * Chipmunk2D
 
 **Supported 3D physics engines**:

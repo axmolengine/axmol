@@ -1,7 +1,6 @@
 
 project(3rdparty)
 
-option(OPT_BOX2D_OPTIMIZED "" OFF)
 option(AX_WITH_JPEG "Build with internal jpeg support" ON)
 option(AX_WITH_WEBP "Build with internal webp support" ON)
 option(AX_WITH_CLIPPER2 "Build with internal Clipper2 support" ON)
@@ -253,12 +252,7 @@ ax_add_3rd(png)
 
 if(AX_ENABLE_PHYSICS)
     set(box2d_opts "BOX2D_BUILD_UNIT_TESTS OFF" "BOX2D_BUILD_TESTBED OFF")
-    if(OPT_BOX2D_OPTIMIZED)
-        _1kfetch(box2d-optimized)
-        ax_add_3rd(${box2d-optimized_SOURCE_DIR} TARGETS box2d-optimized OPTIONS ${box2d_opts})
-    else()
-        ax_add_3rd(box2d OPTIONS ${box2d_opts})
-    endif()
+    ax_add_3rd(box2d OPTIONS ${box2d_opts})
 endif()
 
 if(AX_ENABLE_PHYSICS)
