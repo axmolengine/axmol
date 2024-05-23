@@ -204,7 +204,7 @@ $manifest = @{
     ninja        = '1.10.0+';
     python       = '3.8.0+';
     jdk          = '11.0.23+';
-    emsdk        = '3.1.53';
+    emsdk        = '3.1.53+';
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
@@ -1199,10 +1199,9 @@ function setup_emsdk() {
 
         $emcmake = (Get-Command emcmake -ErrorAction SilentlyContinue)
         if (!$emcmake) {
-            $emsdk_ver = $manifest['emsdk']
             Push-Location $emsdk_root
-            ./emsdk install $emsdk_ver
-            ./emsdk activate $emsdk_ver
+            ./emsdk install $emcc_ver
+            ./emsdk activate $emcc_ver
             . ./emsdk_env.ps1
             Pop-Location
         }
