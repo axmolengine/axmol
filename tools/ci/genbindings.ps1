@@ -1,9 +1,7 @@
 param(
-  $stage = 3
+    $stage = 3
 )
 $myRoot = $PSScriptRoot
-
-$llvm_ver = '15.0.7'
 
 $AX_ROOT = (Resolve-Path $myRoot/../..).Path
 
@@ -15,26 +13,35 @@ if (($stage -band 1)) {
     axmol -c
     Pop-Location
 
-    (Get-Command python.exe).Path
+    $pip_cmd = @('pip3', 'pip')[$IsWin]
+    $python_cmd = @('python3', 'python')[$IsWin]
 
-    pip install PyYAML Cheetah3
-
+    &$pip_cmd install PyYAML Cheetah3
     ## setup ndk
     $setup_script = (Resolve-Path $AX_ROOT/setup.ps1).Path
 
-    echo "before setup py_ver: $(python -V), PATH=$env:PATH"
     . $setup_script -p android
-    echo "after setup py_ver: $(python -V), PATH=$env:PATH"
+    echo "after setup py_ver: $(&$python_cmd -V), PATH=$env:PATH"
 
     echo "$ndk_root=$ndk_root"
 
-    $prefix = Join-Path $AX_ROOT 'cache'
-    $llvm_out = Join-Path $prefix "llvmorg-$llvm_ver.zip"
+    ## download win64 libclang.dll
+    $lib_name = @('libclang.dll', 'libclang.dylib', 'libclang.so')[$HOST_OS]
+    $lib_path = Join-Path $AX_ROOT "tools/bindings-generator/libclang/$lib_name"
+    if (!(Test-Path $lib_path -PathType Leaf)) {
+        setup_7z
+        $llvm_ver = '15.0.7'
+        $llvm_pkg = "llvm-$llvm_ver.7z"
 
-    ## download win64 libclang.dll 
-    $1k.mkdirs($prefix)
-    download_and_expand -url "https://github.com/simdsoft/1kiss/releases/download/llvmorg-$llvm_ver/llvmorg-$llvm_ver.zip" -out "$llvm_out" -dest $prefix
-    Copy-Item "$prefix/llvmorg-$llvm_ver/llvm/prebuilt/windows/x64/libclang.dll" -Destination "$AX_ROOT/tools/bindings-generator/libclang"
+        $prefix = Join-Path $AX_ROOT "cache/devtools"
+        $llvm_url = devtool_url $llvm_pkg
+        $llvm_out = Join-Path $prefix $llvm_pkg
+
+        $1k.mkdirs($prefix)
+        download_and_expand -url $llvm_url -out $llvm_out -dest $prefix
+        $suffix = @('win32/x64/libclang.dll', 'mac/libclang.dylib', 'linux/libclang.so')[$HOST_OS]
+        Copy-Item "$prefix/llvm-$llvm_ver/lib/$suffix" -Destination $lib_path
+    }
 
     ## ensure $env:AX_ROOT/core/axmolver.h exists
     echo "AX_ROOT=$AX_ROOT"
@@ -47,7 +54,7 @@ if (($stage -band 1)) {
     ## run genbindings.py
     Push-Location $AX_ROOT/tools/tolua
 
-    python genbindings.py --ndk_root "$ndk_root"
+    &$python_cmd genbindings.py --ndk_root "$ndk_root"
     $succeed = $?
 
     Pop-Location
@@ -61,19 +68,20 @@ if ($stage -band 2) {
     $autogen_dir = Join-Path $AX_ROOT 'extensions/scripting/lua-bindings/auto/*.hpp'
     $header_files = Get-ChildItem $autogen_dir
     
-    foreach($file in $header_files) {
+    foreach ($file in $header_files) {
         $file_path = "$file"
-        $code_lines =  Get-Content $file_path
+        $code_lines = Get-Content $file_path
         $fs = [System.IO.File]::Open($file_path, [System.IO.FileMode]::Truncate)
         $empty_lines = 0
         $write_lines = 0
-        foreach($line in $code_lines) {
+        foreach ($line in $code_lines) {
             if ($line) {
                 ++$write_lines
                 $buf = $UTF8Encoding.GetBytes($line)
                 $fs.Write($buf, 0, $buf.Length)
                 $fs.Write($eol, 0, $eol.Length)
-            } else {
+            }
+            else {
                 ++$empty_lines
             }
         }
@@ -92,12 +100,13 @@ if ($succeed -and $env:GITHUB_ACTIONS -eq 'true') {
     $no_changes = $git_status.IndexOf('modified:') -eq -1 # -and $git_status.IndexOf('deleted:') -eq -1 -and $git_status.IndexOf('Untracked', [StringComparison]::OrdinalIgnoreCase) -eq -1
     if ($no_changes) {
         echo "BINDING_NO_CHANGES=true" >> ${env:GITHUB_ENV}
-    } else {
+    }
+    else {
         echo "LAST_COMMIT_HASH=$(git rev-parse --short=7 HEAD)" >> ${env:GITHUB_ENV}
     }
 }
 Pop-Location
 
-if(!$succeed) {
+if (!$succeed) {
     throw "Generating lua bindings fails"
 }

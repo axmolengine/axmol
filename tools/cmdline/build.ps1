@@ -102,6 +102,7 @@ $is_android = $options.p -eq 'android'
 # start construct full cmd line
 $1k_args = @()
 
+$cmake_target = $null
 $cm_target_index = $options.xb.IndexOf('--target')
 if ($cm_target_index -ne -1) {
     $cmake_target = $options.xb[$cm_target_index + 1]

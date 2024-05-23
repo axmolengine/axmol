@@ -80,11 +80,13 @@ endfunction()
 # Use global variable to control shader file extension:
 #   - GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS: default is .frag;.fsh
 #   - GLSLCC_VERT_SOURCE_FILE_EXTENSIONS: default is .vert;.vsh
-# 
+#
 function (ax_target_compile_shaders target_name)
     set(options RUNTIME CVAR CUSTOM)
     set(multiValueArgs FILES)
     cmake_parse_arguments(opt "${options}" "" "${multiValueArgs}" ${ARGN})
+
+    set(compiled_shaders)
 
     foreach(SC_FILE ${opt_FILES})
         get_filename_component(FILE_EXT ${SC_FILE} LAST_EXT)
@@ -95,7 +97,7 @@ function (ax_target_compile_shaders target_name)
 
         # silent when compile shader success
         set(SC_FLAGS "--silent" "--err-format=msvc")
-        
+
         # shader lang
         set(SC_PROFILE "")
         if(AX_GLES_PROFILE)
@@ -115,7 +117,7 @@ function (ax_target_compile_shaders target_name)
             set(OUT_LANG "GLSL")
             set(SC_PROFILE "330")
             list(APPEND SC_FLAGS  "--lang=glsl" "--profile=${SC_PROFILE}")
-        elseif (AX_USE_METAL) 
+        elseif (AX_USE_METAL)
             set(OUT_LANG "MSL")
             list(APPEND SC_FLAGS  "--lang=msl")
             set(SC_DEFINES "METAL")
@@ -150,7 +152,7 @@ function (ax_target_compile_shaders target_name)
         if (AX_USE_METAL)
             list(APPEND SC_FLAGS "--sgs" "--reflect")
         endif()
-    
+
         # input
         if (${FILE_EXT} IN_LIST GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS)
             list(APPEND SC_FLAGS "--frag=${SC_FILE}")
@@ -170,11 +172,11 @@ function (ax_target_compile_shaders target_name)
         if (NOT (IS_DIRECTORY ${OUT_DIR}))
             file(MAKE_DIRECTORY ${OUT_DIR})
         endif()
-        
+
         set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}")
 
         set(SC_COMMENT "Compiling shader ${SC_FILE} for ${OUT_LANG}${SC_PROFILE} ...")
-    
+
         get_source_file_property(SOURCE_SC_OUTPUT1 ${SC_FILE} GLSLCC_OUTPUT1)
 
         string(REPLACE ";" " " FULL_COMMAND_LINE "${GLSLCC_EXE};${SC_FLAGS} ...")
@@ -185,6 +187,7 @@ function (ax_target_compile_shaders target_name)
                     MAIN_DEPENDENCY ${SC_FILE} OUTPUT ${SC_OUTPUT} COMMAND ${GLSLCC_EXE} ${SC_FLAGS}
                     COMMENT "${SC_COMMENT}"
                 )
+            list(APPEND compiled_shaders ${SC_OUTPUT})
         else() # dual outputs
             set(SC_DEFINES1 "${SC_DEFINES},${SOURCE_SC_OUTPUT1}")
 
@@ -199,16 +202,26 @@ function (ax_target_compile_shaders target_name)
             string(REPLACE ";" " " FULL_COMMAND_LINE1 "${GLSLCC_EXE};${SC_FLAGS1} ...")
             set_source_files_properties(${SC_FILE} DIRECTORY ${CMAKE_BINARY_DIR} PROPERTIES GLSLCC_OUTPUT "${SC_OUTPUT};${SC_OUTPUT1}")
             add_custom_command(
-                    MAIN_DEPENDENCY ${SC_FILE} 
+                    MAIN_DEPENDENCY ${SC_FILE}
                     OUTPUT ${SC_OUTPUT} ${SC_OUTPUT1}
                     COMMAND ${GLSLCC_EXE} ${SC_FLAGS}
                     COMMAND ${GLSLCC_EXE} ${SC_FLAGS1}
                     COMMENT "${SC_COMMENT}"
                 )
+            list(APPEND compiled_shaders ${SC_OUTPUT} ${SC_OUTPUT1})
         endif()
-
     endforeach()
+
     target_sources(${target_name} PRIVATE ${opt_FILES})
+
+    # Set `AX_COMPILED_SHADERS` property on the target to store the list of compiled
+    # shaders for this target. This is later used for setting up app's resource copying.
+    get_target_property(target_compiled_shaders ${target_name} AX_COMPILED_SHADERS)
+    if(NOT target_compiled_shaders)
+        set(target_compiled_shaders "")
+    endif()
+    list(APPEND target_compiled_shaders ${compiled_shaders})
+    set_property(TARGET ${target_name} PROPERTY AX_COMPILED_SHADERS ${target_compiled_shaders})
 endfunction()
 
 function(ax_target_embed_compiled_shaders target_name rc_output)

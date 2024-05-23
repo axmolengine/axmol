@@ -45,6 +45,8 @@
 
 NS_AX_EXT_BEGIN
 
+#define DRAWNODE_DRAW_LINE_POINT
+
 static const int DEFAULT_LINEWIDTH = 2;
 
 
@@ -79,8 +81,9 @@ public:
 
     enum class Version
     {
-        v1,  // DrawNodeExt cocos2dx/axmol 1.0
-        v2,  // DrawNodeExt 2.0
+        v0,  // DrawNode cocos2dx/axmol 1.0
+        v1,  // DrawNode 1.0
+        v2,  
         v3,
         v4,
     };
@@ -103,12 +106,16 @@ public:
     float _dnLineWidthTmp = _dnLineWidth;
     bool  _dnTransform = false;
 
+#if defined(DRAWNODE_DRAW_LINE_POINT)
+    bool _drawOrder = true;
+#endif
+
     bool swapIsConvex(bool isConvex) {
         _isConvexTmp = _isConvex; _isConvex = isConvex; return _isConvexTmp;
     };
 
-    void setDNVersion(ax::extension::DrawNodeEx::Version dnV) {
-        _dnVersion = dnV;
+    ax::extension::DrawNodeEx::Version getDNVersion() {
+        return _dnVersion;
     };
     void setDNScale(ax::Vec2 scale) {
         _dnScale = scale;
@@ -594,8 +601,10 @@ public:
 
 protected:
     void ensureCapacityTriangle(int count);
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     void ensureCapacityPoint(int count);
     void ensureCapacityLine(int count);
+#endif
 
     void updateShader();
     void updateShaderInternal(ax::CustomCommand& cmd,
@@ -612,7 +621,10 @@ protected:
     int _bufferCapacityTriangle = 0;
     int _bufferCountTriangle = 0;
     ax::V2F_C4B_T2F* _bufferTriangle = nullptr;
+    ax::CustomCommand _customCommandTriangle;
+    bool _dirtyTriangle = false;
 
+#if defined(DRAWNODE_DRAW_LINE_POINT)
     int _bufferCapacityPoint = 0;
     int _bufferCountPoint = 0;
     ax::V2F_C4B_T2F* _bufferPoint = nullptr;
@@ -623,15 +635,15 @@ protected:
     int _bufferCountLine = 0;
     ax::V2F_C4B_T2F* _bufferLine = nullptr;
 
-    ax::BlendFunc _blendFunc;
 
-    ax::CustomCommand _customCommandTriangle;
     ax::CustomCommand _customCommandPoint;
     ax::CustomCommand _customCommandLine;
-
-    bool _dirtyTriangle = false;
     bool _dirtyPoint = false;
     bool _dirtyLine = false;
+#endif
+
+    ax::BlendFunc _blendFunc;
+
     bool _isolated = false;
     float _lineWidth = 0.0f;
     float _defaultLineWidth = 0.0f;
