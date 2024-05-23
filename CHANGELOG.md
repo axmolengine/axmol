@@ -68,6 +68,7 @@
 - Fix memory corruption bug and resulting crash in the TextFieldTTF by @TyelorD in https://github.com/axmolengine/axmol/pull/1890
 - Fix shaders not copying to final build on macOS for non Xcode builds by @smilediver in https://github.com/axmolengine/axmol/pull/1908
 - Fix system font blurring by in @DelinWorks in https://github.com/axmolengine/axmol/pull/1907
+- Fix android ImGui crash due to invalid pointer by @rh101 in https://github.com/axmolengine/axmol/pull/1920
 
 ### Improvements
 
@@ -104,6 +105,9 @@
 - Add macOS, Linux support for `tools/ci/genbindings.ps1`
 - Fix `axmol` cmdline not raise error when cmake build fail
 - Migrate wasm ci from appveyor to github actions
+- Set AX_USE_METAL and AX_USE_GL to 1 if defined by @smilediver in https://github.com/axmolengine/axmol/pull/1916
+- Update the CMake minimum version requirement to 3.23.0+ by @rh101 in https://github.com/axmolengine/axmol/pull/1918
+- Add x86_64 to example list of possible target architectures for android by @rh101 in https://github.com/axmolengine/axmol/pull/1919
 
 
 ### sdks & tools updates
