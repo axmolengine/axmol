@@ -282,13 +282,7 @@ void Renderer::processGroupCommand(GroupCommand* command)
 
     int renderQueueID = ((GroupCommand*)command)->getRenderQueueID();
 
-    pushStateBlock();
-    // apply default state for all render queues
-    setDepthTest(false);
-    setDepthWrite(false);
-    setCullMode(backend::CullMode::NONE);
     visitRenderQueue(_renderGroups[renderQueueID]);
-    popStateBlock();
 }
 
 void Renderer::processRenderCommand(RenderCommand* command)
@@ -357,6 +351,13 @@ void Renderer::processRenderCommand(RenderCommand* command)
 
 void Renderer::visitRenderQueue(RenderQueue& queue)
 {
+    pushStateBlock();
+
+    // Apply default state for all render queues
+    setDepthTest(false);
+    setDepthWrite(false);
+    setCullMode(backend::CullMode::NONE);
+
     //
     // Process Global-Z < 0 Objects
     //
@@ -387,6 +388,8 @@ void Renderer::visitRenderQueue(RenderQueue& queue)
     // Process Global-Z > 0 Queue
     //
     doVisitRenderQueue(queue.getSubQueue(RenderQueue::QUEUE_GROUP::GLOBALZ_POS));
+
+    popStateBlock();
 }
 
 void Renderer::doVisitRenderQueue(const std::vector<RenderCommand*>& renderCommands)
