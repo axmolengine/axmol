@@ -245,6 +245,7 @@ void ImGui_ImplAndroid_Shutdown()
 
     io.BackendPlatformName = NULL;
     io.BackendPlatformUserData = NULL;
+    io.BackendRendererUserData = NULL;
 
     IM_DELETE(bd);
 }

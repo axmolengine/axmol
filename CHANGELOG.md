@@ -4,6 +4,7 @@
 
 - Implement cross-platform media controller for video playback by @rh101 in https://github.com/axmolengine/axmol/pull/1845
   - Adjust media control positioning if video aspect ratio is maintained by @rh101 in https://github.com/axmolengine/axmol/pull/1851
+  - Allow media controls to be rotated left or right by 90 degrees by @rh101 in https://github.com/axmolengine/axmol/pull/1910
 - Allow certain code modules to be removed from build process by @rh101 in https://github.com/axmolengine/axmol/pull/1769, i.e. remove 3d features by `-DAX_ENABLE_3D=OFF`
 - New logging system with general log level and colored support
   - Implement new axmol log system based on fmtlib by @halx99 in https://github.com/axmolengine/axmol/pull/1732
@@ -20,7 +21,7 @@
 - Add AXLOGD,AXLOGI,... functions for lua
 - Add axmol cmdline build option to specify build optimize flag: `-O0`(Debug), `-O1`(MinSizeRel), `-O2`(RelWithDebInfo), `-O3`(Release)
 
-### Break Changes
+### Breaking Changes
 
 - Rename `ax::Ref` ==> `ax::Object`
 - Remove `ax::log`, use `AXLOGD` instead
@@ -65,6 +66,8 @@
 - Fix spine two color tint data not being copied across to backend buffer on first frame by @rh101 in https://github.com/axmolengine/axmol/pull/1875
 - Fix FileUtils issues on macOS by @smilediver in https://github.com/axmolengine/axmol/pull/1863
 - Fix memory corruption bug and resulting crash in the TextFieldTTF by @TyelorD in https://github.com/axmolengine/axmol/pull/1890
+- Fix shaders not copying to final build on macOS for non Xcode builds by @smilediver in https://github.com/axmolengine/axmol/pull/1908
+- Fix system font blurring by in @DelinWorks in https://github.com/axmolengine/axmol/pull/1907
 
 ### Improvements
 
@@ -97,12 +100,18 @@
 - Add libvlc prebuilt entry CMakeLists.txt
 - Add ability to create console apps by @smilediver in https://github.com/axmolengine/axmol/pull/1859
 - Add support for ensuring sprite content size does not change on new texture by @rh101 in https://github.com/axmolengine/axmol/pull/1897
+- Remove obsolete `box2d-optimized` support by @aismann in https://github.com/axmolengine/axmol/pull/1913
+- Add macOS, Linux support for `tools/ci/genbindings.ps1`
+- Fix `axmol` cmdline not raise error when cmake build fail
+- Migrate wasm ci from appveyor to github actions
 
-### sdks updates
+
+### sdks & tools updates
 
 - emsdk: 3.1.53 ==> 3.1.59
 - AGP: 8.2.1 ==> 8.2.2
 - androidx.media3: 1.0.2 ==> 1.2.1
+- glslcc: 1.9.4 ==> 1.9.5
 
 ### 3rdparty updates
 
@@ -196,7 +205,7 @@
 - Fix build win32 with clang error
 - Fix ci build-site download unexpected artifacts from appveyor
 
-### Break changes
+### Breaking changes
 
 - Rename android entrypoint: `cocos_android_app_init` ==> `axmol_android_app_init`
 
@@ -344,7 +353,7 @@
   - RELEASE_KEY_PASSWORD ==> KEY_PASSWORD
 - Enable template projects' `aidl` by default for In-app purchases by @armanhossiny
 
-### Break changes
+### Breaking changes
 
 - Rename glview to correct representative name: `OpenGLView` ==> `GLView` by @paulocoutinhox
 

@@ -82,7 +82,6 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 **支持2D物理引擎** ([更多相关信息](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-informations)):
 
 * Box2D
-* Box2D-optimized
 * Chipmunk2D
 
 **支持3D物理引擎**:
