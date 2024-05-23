@@ -108,7 +108,7 @@
 
 ### sdks & tools updates
 
-- emsdk: 3.1.53 ==> 3.1.59
+- emsdk: 3.1.53 ==> 3.1.60
 - AGP: 8.2.1 ==> 8.2.2
 - androidx.media3: 1.0.2 ==> 1.2.1
 - glslcc: 1.9.4 ==> 1.9.5
