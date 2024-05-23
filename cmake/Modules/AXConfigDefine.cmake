@@ -199,7 +199,7 @@ if(EMSCRIPTEN)
 
     # Tell emcc build port libs in cache with compiler flag `-pthread` xxx.c.o
     # must via CMAKE_C_FLAGS and CMAKE_CXX_FLAGS?
-    set(_AX_EMCC_FLAGS "-sUSE_LIBJPEG=1 -sUSE_ZLIB=1")
+    set(_AX_EMCC_FLAGS "-sUSE_LIBJPEG=1")
 
     set(CMAKE_C_FLAGS  "${_AX_EMCC_FLAGS} ${CMAKE_C_FLAGS}")
     set(CMAKE_CXX_FLAGS  "${_AX_EMCC_FLAGS} ${CMAKE_CXX_FLAGS}")

@@ -943,7 +943,7 @@ function setup_nasm() {
             if (!$1k.isdir($nasm_bin)) {
                 fetch_pkg "https://www.nasm.us/pub/nasm/releasebuilds/$nasm_ver/win64/nasm-$nasm_ver-win64.zip"
             }
-            $1k.addpath($nsis_bin)
+            $1k.addpath($nasm_bin)
         }
         elseif ($IsLinux) {
             if ($(which dpkg)) {
