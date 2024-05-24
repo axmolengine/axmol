@@ -10,13 +10,12 @@
 
 ***
 
+[![Build Status](https://github.com/axmolengine/axmol/workflows/build/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Abuild)
+
 [![Latest Release](https://img.shields.io/github/v/release/axmolengine/axmol?label=release)](https://github.com/axmolengine/axmol/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axmolengine/axmol/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axmolengine/axmol&amp;utm_campaign=Badge_Grade)
 [![cxxstd](https://img.shields.io/badge/cxxstd-c++20-8A2BE2.svg)](https://github.com/axmolengine/axmol)  
-
-[![Build Status](https://github.com/axmolengine/axmol/workflows/build/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Abuild)
-[![WASM Build Status](https://ci.appveyor.com/api/projects/status/4slq965fwhbaidnc?svg=true&passingText=wasm%20-%20passing)](https://ci.appveyor.com/project/halx99/axmol)
 
 ![issues](https://img.shields.io/github/issues/axmolengine/axmol?style=plastic)
 ![forks](https://img.shields.io/github/forks/axmolengine/axmol?style=plastic)
@@ -24,13 +23,15 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/axmolengine/axmol?style=plastic)  
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axmolengine/axmol/pulls)
-[![Discord](https://img.shields.io/discord/1099599084895088670?label=discord)](https://discord.gg/QjaQBhFVay)
+[![QQ Group](https://pub.idqqimg.com/wpa/images/group.png)](https://jq.qq.com/?_wv=1027&k=nvNmzOIY)
+[![awesome-cpp](https://badgen.net/badge/icon/awesome-cpp/pink?icon=awesome&label&color)](https://github.com/fffaraz/awesome-cpp)
+[![ossinsight](https://badgen.net/badge/icon/ossinsight/pink?icon=awesome&label&color)](https://ossinsight.io/collections/game-engine/)
 
 [英文版本 / English](README.md)
 
 ***
 
-## 构建
+## ⚡️构建
 
 * [下载最新版本](https://github.com/axmolengine/axmol/releases) / [镜像仓库](https://gitee.com/simdsoft/axmol)
 * [如何安装](docs/DevSetup.md)

@@ -65,32 +65,22 @@ param(
 
 $myRoot = $PSScriptRoot
 
-# ----------------- utils functions -----------------
-
 $HOST_WIN = 0 # targets: win,uwp,android
 $HOST_LINUX = 1 # targets: linux,android
 $HOST_MAC = 2 # targets: android,ios,osx(macos),tvos,watchos
 
 # 0: windows, 1: linux, 2: macos
 $Global:IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
-if ($Global:IsWin) {
-    $HOST_OS = $HOST_WIN
-    $ENV_PATH_SEP = ';'
-}
+if ($Global:IsWin) { $HOST_OS = $HOST_WIN }
 else {
-    $ENV_PATH_SEP = ':'
-    if ($IsLinux) {
-        $HOST_OS = $HOST_LINUX
-    }
-    elseif ($IsMacOS) {
-        $HOST_OS = $HOST_MAC
-    }
+    if ($IsLinux) { $HOST_OS = $HOST_LINUX }
+    elseif ($IsMacOS) { $HOST_OS = $HOST_MAC }
     else {
         throw "Unsupported host OS to run 1k/1kiss.ps1"
     }
 }
-
-$exeSuffix = if ($HOST_OS -eq 0) { '.exe' } else { '' }
+$Global:ENV_PATH_SEP = @(':', ';')[$IsWin]
+$Global:EXE_SUFFIX = @('', '.exe')[$IsWin]
 
 $Script:cmake_generator = $null
 
@@ -139,6 +129,12 @@ class _1kiss {
             Move-Item $path $dest
         }
     }
+    [void] addpath([string]$path) { $this.addpath($path, $false) }
+    [void] addpath([string]$path, [bool]$append) { 
+        if (!$path -or $env:PATH.Contains($path)) { return }
+        if (!$append) { $env:PATH = "$path$Global:ENV_PATH_SEP$env:PATH" } 
+        else { $env:PATH = "$env:PATH$Global:ENV_PATH_SEP$path" } 
+    }
 
     [void] pause($msg) {
         $shoud_pause = $false
@@ -171,6 +167,10 @@ class _1kiss {
         }
     }
 
+    [bool] isabspath($path) {
+        return [IO.Path]::IsPathRooted($path)
+    }
+
     # Get full path without exist check
     [string] realpath($path) {
         return $Global:ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($path)
@@ -194,18 +194,17 @@ $1k = [_1kiss]::new()
 # *              : any
 # x.y.z~x2.y2.z2 : range
 $manifest = @{
-    # C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.36.32532\vc_redist.x64.exe
     msvc         = '14.39+'; # cl.exe @link.exe 14.39 VS2022 17.9.x
     ndk          = 'r23c';
     xcode        = '13.0.0+'; # range
     # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang 16.0.0 or newer.");
     llvm         = '16.0.6+'; # clang-cl msvc14.37 require 16.0.0+
     gcc          = '9.0.0+';
-    cmake        = '3.29.2+';
-    ninja        = '1.11.1+';
+    cmake        = '3.23.0+';
+    ninja        = '1.10.0+';
     python       = '3.8.0+';
-    jdk          = '17.0.10+';
-    emsdk        = '3.1.57';
+    jdk          = '11.0.23+';
+    emsdk        = '3.1.53+';
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
@@ -231,6 +230,7 @@ $android_sdk_tools = @{
     'platforms'   = 'android-34'
 }
 
+# eva: evaluted_args
 $options = @{
     p      = $null
     a      = $null
@@ -651,7 +651,6 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
     if ($storedPATH) {
         $env:PATH = $storedPATH
     }
-
     return $found_rets
 }
 
@@ -674,29 +673,69 @@ function download_file($url, $out) {
 }
 
 function download_and_expand($url, $out, $dest) {
+
     download_file $url $out
-    if ($out.EndsWith('.zip')) {
-        try {
+    try {
+        $1k.mkdirs($dest)
+        if ($out.EndsWith('.zip')) {
             Expand-Archive -Path $out -DestinationPath $dest
         }
-        catch {
-            Remove-Item $out -Force
-            throw "1kiss: Expand archive $out fail, please try again"
+        elseif ($out.EndsWith('.tar.gz')) {
+            tar xf "$out" -C $dest
+        }
+        elseif ($out.EndsWith('.7z') -or $out.EndsWith('.exe')) {
+            7z x "$out" "-o$dest" -bsp1 -y | Out-Host
+        }
+        elseif ($out.EndsWith('.sh')) {
+            chmod 'u+x' "$out"
+        }
+        if (!$?) { throw "1kiss: Expand fail" }
+    }
+    catch {
+        Remove-Item $out -Force
+        throw "1kiss: Expand archive $out fail, please try again"
+    }
+}
+
+function resolve_path ($path) { if ($1k.isabspath($path)) { $path } else { Join-Path $external_prefix $path } }      
+function fetch_pkg($url, $exrep = $null) {
+    $name = Split-Path $url -Leaf
+    $out = Join-Path $external_prefix $name
+    $dest = $external_prefix
+
+    $pfn_rename = $null
+    
+    if ($exrep) {
+        $exrep = $exrep.Split('=')
+        if ($exrep.Count -eq 1) {
+            $dest = resolve_path $exrep[0]
+            $inst_loc = $dest
+        }
+        else {
+            # >=2
+            $dest = $external_prefix
+            $inst_loc = resolve_path $exrep[1]
+            $pfn_rename = {
+                # move to plain folder name
+                $full_path = (Get-ChildItem -Path $external_prefix -Filter $exrep[0]).FullName
+                if ($full_path) {
+                    $1k.mv($full_path, $inst_loc)
+                }
+                else {
+                    throw "1kiss: rename $($exrep[0]) to $inst_loc fail"
+                }
+            }
         }
     }
-    elseif ($out.EndsWith('.tar.gz')) {
-        if (!$dest.EndsWith('/')) {
-            $1k.mkdirs($dest)
-        }
-        tar xf "$out" -C $dest
+    else {
+        $dest = $external_prefix
+        $inst_loc = Join-Path $external_prefix $name
     }
-    elseif ($out.EndsWith('.7z')) {
-        7z x "$out" "-o$dest" -y | Out-Host
-    }
-    elseif ($out.EndsWith('.sh')) {
-        chmod 'u+x' "$out"
-        $1k.mkdirs($dest)
-    }
+    
+    if ($1k.isdir($inst_loc)) { $1k.rmdirs($inst_loc) }
+    download_and_expand $url $out $dest
+
+    if ($pfn_rename) { &$pfn_rename }
 }
 
 # setup nuget, not add to path
@@ -714,10 +753,7 @@ function setup_nuget() {
             throw "Install nuget fail"
         }
     }
-
-    if (!$env:PATH.Contains($nuget_bin)) {
-        $env:PATH = "$nuget_bin$ENV_PATH_SEP$env:PATH"
-    }
+    $1k.addpath($nuget_bin)
     $1k.println("Using nuget: $nuget_prog, version: $nuget_ver")
     return $nuget_prog
 }
@@ -760,16 +796,10 @@ function setup_glslcc() {
         }
     }
 
-    $1k.rmdirs($glslcc_bin)
-    $glslcc_pkg = Join-Path $external_prefix "glslcc-$suffix"
-    $1k.del($glslcc_pkg)
-
     $glscc_base_url = $mirror_current.glslcc
-    $glscc_url = "$mirror_url_base$glscc_base_url/v$glslcc_ver/glslcc-$glslcc_ver-$suffix"
+    fetch_pkg "$mirror_url_base$glscc_base_url/v$glslcc_ver/glslcc-$glslcc_ver-$suffix" $glslcc_bin
 
-    download_and_expand $glscc_url "$glslcc_pkg" $glslcc_bin
-
-    $glslcc_prog = (Join-Path $glslcc_bin "glslcc$exeSuffix")
+    $glslcc_prog = (Join-Path $glslcc_bin "glslcc$EXE_SUFFIX")
     if ($1k.isfile($glslcc_prog)) {
         $1k.println("Using glslcc: $glslcc_prog, version: $glslcc_ver")
         return $glslcc_prog
@@ -789,16 +819,10 @@ function setup_ninja() {
 
     $ninja_prog, $ninja_ver = find_prog -name 'ninja' -path $ninja_bin -silent $true
     if (!$ninja_prog) {
-        $ninja_pkg = "$external_prefix/ninja-$suffix.zip"
-        $1k.rmdirs($ninja_bin)
-        $1k.del($ninja_pkg)
-
-        download_and_expand "https://github.com/ninja-build/ninja/releases/download/v$ninja_ver/ninja-$suffix.zip" $ninja_pkg "$external_prefix/ninja/"
+        fetch_pkg "https://github.com/ninja-build/ninja/releases/download/v$ninja_ver/ninja-$suffix.zip" $ninja_bin
     }
-    if (!$env:PATH.Contains($ninja_bin)) {
-        $env:PATH = "$ninja_bin$ENV_PATH_SEP$env:PATH"
-    }
-    $ninja_prog = (Join-Path $ninja_bin "ninja$exeSuffix")
+    $1k.addpath($ninja_bin)
+    $ninja_prog = (Join-Path $ninja_bin "ninja$EXE_SUFFIX")
 
     $1k.println("Using ninja: $ninja_prog, version: $ninja_ver")
     return $ninja_prog
@@ -840,7 +864,7 @@ function setup_cmake($skipOS = $false, $scope = 'local') {
             $cmake_app_contents = Join-Path $cmake_dir 'CMake.app/Contents'
         }
         if (!$1k.isdir($cmake_dir)) {
-            download_and_expand "$cmake_url" "$cmake_pkg_path" $external_prefix/
+            fetch_pkg $cmake_url
         }
 
         if ($1k.isdir($cmake_dir)) {
@@ -875,10 +899,7 @@ function setup_cmake($skipOS = $false, $scope = 'local') {
 
         $1k.println("Using cmake: $cmake_prog, version: $cmake_ver")
     }
-
-    if (($null -ne $cmake_bin) -and (!$env:PATH.Contains($cmake_bin))) {
-        $env:PATH = "$cmake_bin$ENV_PATH_SEP$env:PATH"
-    }
+    $1k.addpath($cmake_bin)
     return $cmake_prog, $cmake_ver
 }
 
@@ -904,20 +925,10 @@ function setup_nsis() {
 
     $nsis_prog, $nsis_ver = find_prog -name 'nsis' -cmd 'makensis' -params '/VERSION' -path $nsis_bin -silent $true
     if (!$nsis_prog) {
-        $1k.rmdirs($nsis_bin)
-
-        download_and_expand "https://nchc.dl.sourceforge.net/project/nsis/NSIS%203/$nsis_ver/nsis-$nsis_ver.zip" "$external_prefix/nsis-$nsis_ver.zip" "$external_prefix"
-        $nsis_dir = "$nsis_bin-$nsis_ver"
-        if ($1k.isdir($nsis_dir)) {
-            $1k.mv($nsis_dir, $nsis_bin)
-        }
+        fetch_pkg "https://nchc.dl.sourceforge.net/project/nsis/NSIS%203/$nsis_ver/nsis-$nsis_ver.zip" "$nsis_bin-$nsis_ver=$nsis_bin"
     }
-
-    if (!$env:PATH.Contains($nsis_bin)) {
-        $env:PATH = "$nsis_bin$ENV_PATH_SEP$env:PATH"
-    }
-    $nsis_prog = (Join-Path $nsis_bin "makensis$exeSuffix")
-
+    $1k.addpath($nsis_bin)
+    $nsis_prog = (Join-Path $nsis_bin "makensis$EXE_SUFFIX")
     $1k.println("Using nsis: $nsis_prog, version: $nsis_ver")
     return $nsis_prog
 }
@@ -929,13 +940,10 @@ function setup_nasm() {
     if (!$nasm_prog) {
         if ($IsWin) {
             $nasm_bin = Join-Path $external_prefix "nasm-$nasm_ver"
-
             if (!$1k.isdir($nasm_bin)) {
-                download_and_expand "https://www.nasm.us/pub/nasm/releasebuilds/$nasm_ver/win64/nasm-$nasm_ver-win64.zip" "$external_prefix/nasm-$nasm_ver-win64.zip" "$external_prefix"
+                fetch_pkg "https://www.nasm.us/pub/nasm/releasebuilds/$nasm_ver/win64/nasm-$nasm_ver-win64.zip"
             }
-            if (!$env:PATH.Contains($nsis_bin)) {
-                $env:PATH = "$nasm_bin$ENV_PATH_SEP$env:PATH"
-            }
+            $1k.addpath($nasm_bin)
         }
         elseif ($IsLinux) {
             if ($(which dpkg)) {
@@ -968,23 +976,12 @@ function setup_jdk() {
 
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac' -path $jdk_bin -silent $true
     if (!$javac_prog) {
-        $1k.rmdirs($jdk_root)
-
-        # refer to https://learn.microsoft.com/en-us/java/openjdk/download
-        download_and_expand "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix" "$external_prefix/microsoft-jdk-$jdk_ver-$suffix" "$external_prefix/"
-
-        # move to plain folder name
-        $folderName = (Get-ChildItem -Path $external_prefix -Filter "jdk-$jdk_ver+*").Name
-        if ($folderName) {
-            $1k.mv("$external_prefix/$folderName", $jdk_root)
-        }
+        fetch_pkg "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix" "jdk-$jdk_ver+*=jdk"
     }
 
     $env:JAVA_HOME = $java_home
     $env:CLASSPATH = ".;$java_home\lib\dt.jar;$java_home\lib\tools.jar"
-    if (!$env:PATH.Contains($jdk_bin)) {
-        $env:PATH = "$jdk_bin$ENV_PATH_SEP$env:PATH"
-    }
+    $1k.addpath($jdk_bin)
     $javac_prog = find_prog -name 'jdk' -cmd 'javac' -path $jdk_bin -mode 'ONLY' -silent $true
     if (!$javac_prog) {
         throw "Install jdk $jdk_ver fail"
@@ -1000,18 +997,13 @@ function setup_7z() {
     $7z_cmd_info = Get-Command '7z' -ErrorAction SilentlyContinue
     if (!$7z_cmd_info) {
         if ($IsWin) {
-            $7z_prog = Join-Path $external_prefix '7z2301-x64\7z.exe'
-            $7z_pkg_out = Join-Path $external_prefix '7z2301-x64.zip'
+            $7z_prog = Join-Path $external_prefix '7z2301-x64/7z.exe'
             if (!$1k.isfile($7z_prog)) {
-                # https://www.7-zip.org/download.html
-                $7z_url = devtool_url '7z2301-x64.zip'
-                download_and_expand -url $7z_url -out $7z_pkg_out $external_prefix
+                fetch_pkg $(devtool_url '7z2301-x64.zip')
             }
 
-            $7z_bin = Split-Path  $7z_prog -Parent
-            if (!$env:PATH.Contains($7z_bin)) {
-                $env:PATH = "$7z_bin$ENV_PATH_SEP$env:PATH"
-            }
+            $7z_bin = Split-Path $7z_prog -Parent
+            $1k.addpath($7z_bin)
         }
         elseif ($IsLinux) {
             if ($(which dpkg)) { sudo apt install p7zip-full }
@@ -1035,32 +1027,21 @@ function setup_llvm() {
         $llvm_bin = Join-Path $llvm_root 'bin'
         $clang_prog, $clang_ver = find_prog -name 'llvm' -cmd "clang" -path $llvm_bin -silent $true
         if (!$clang_prog) {
-            # download llvm clang and install extract it at prefix
-            download_file "https://github.com/llvm/llvm-project/releases/download/llvmorg-${clang_ver}/LLVM-${clang_ver}-win64.exe" "$external_prefix\LLVM-${clang_ver}-win64.exe"
-            $1k.mkdirs($llvm_root)
-
-            # ensure 7z_prog
             setup_7z
-            7z x "$external_prefix\LLVM-${clang_ver}-win64.exe" "-o$llvm_root" -y | Out-Host
+            fetch_pkg "https://github.com/llvm/llvm-project/releases/download/llvmorg-${clang_ver}/LLVM-${clang_ver}-win64.exe" 'LLVM'
 
             $clang_prog, $clang_ver = find_prog -name 'llvm' -cmd "clang" -path $llvm_bin -silent $true
             if (!$clang_prog) {
                 throw "setup $clang_ver fail"
             }
         }
-
+        $1k.addpath($llvm_bin)
         $1k.println("Using llvm: $clang_prog, version: $clang_ver")
-
-        # add our llvm root to PATH temporary
-        if (!$env:PATH.Contains($llvm_bin)) {
-            $env:PATH = "$llvm_bin$ENV_PATH_SEP$env:PATH"
-        }
     }
 }
 
 function setup_android_sdk() {
     if (!$manifest['ndk']) { return $null }
-    # setup ndk
     $ndk_ver = $TOOLCHAIN_VER
     if (!$ndk_ver) {
         $ndk_ver = $manifest['ndk']
@@ -1218,10 +1199,9 @@ function setup_emsdk() {
 
         $emcmake = (Get-Command emcmake -ErrorAction SilentlyContinue)
         if (!$emcmake) {
-            $emsdk_ver = $manifest['emsdk']
             Push-Location $emsdk_root
-            ./emsdk install $emsdk_ver
-            ./emsdk activate $emsdk_ver
+            ./emsdk install $emcc_ver
+            ./emsdk activate $emcc_ver
             . ./emsdk_env.ps1
             Pop-Location
         }
@@ -1230,7 +1210,6 @@ function setup_emsdk() {
         $1k.println("Using emcc: $emcc_prog, version: $emcc_ver")
     }
 }
-
 
 function setup_msvc() {
     $cl_prog, $cl_ver = find_prog -name 'msvc' -cmd 'cl' -silent $true -usefv $true
@@ -1295,10 +1274,7 @@ function setup_gclient() {
         }
 
     }
-
-    if (!$env:PATH.Contains($gclient_dir)) {
-        $env:PATH = "${env:PATH}$ENV_PATH_SEP${gclient_dir}"
-    }
+    $1k.addpath($gclient_dir, $true)
     $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
 }
 
@@ -1599,9 +1575,7 @@ elseif ($Global:is_android) {
     $ndk_host = @('windows', 'linux', 'darwin').Get($HOST_OS)
     $env:ANDROID_NDK_BIN = Join-Path $ndk_root "toolchains/llvm/prebuilt/$ndk_host-x86_64/bin"
     function active_ndk_toolchain() {
-        if (!$env:PATH.Contains($env:ANDROID_NDK_BIN)) {
-            $env:PATH = "$env:ANDROID_NDK_BIN$ENV_PATH_SEP$env:PATH"
-        }
+        $1k.addpath($env:ANDROID_NDK_BIN)
         $clang_prog, $clang_ver = find_prog -name 'clang'
     }
 }
@@ -1965,7 +1939,6 @@ if (!$setupOnly) {
     }
 
     $Global:BUILD_DIR = $BUILD_DIR
-
     $env:buildResult = ConvertTo-Json @{
         buildDir     = $BUILD_DIR
         targetOS     = $TARGET_OS

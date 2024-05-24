@@ -52,7 +52,8 @@ add_library(${target_name} STATIC
   ${libpng_intel_sources}
 )
 
-target_include_directories(${target_name} PUBLIC "${CMAKE_CURRENT_LIST_DIR}")
+set(PNG_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE STRING "png include dir" FORCE)
+target_include_directories(${target_name} PUBLIC "${PNG_INCLUDE_DIR}")
 
 if(_PNG_ISA_SIMD)
     target_compile_definitions(${target_name} PUBLIC ${libpng_optimize_flag})
@@ -66,5 +67,5 @@ endif()
 
 # Export png as PNG::PNG to avoid cmake builtin FindPNG.cmake add target again
 add_library(PNG::PNG ALIAS ${target_name})
-set(PNG_PNG_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE STRING "png include dir" FORCE)
+
 set(PNG_LIBRARY "png" CACHE INTERNAL "png include dir" FORCE)

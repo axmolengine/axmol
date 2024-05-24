@@ -149,7 +149,7 @@ public:
   using implementation_type = _Cont;
   using size_type = typename _Cont::size_type;
   implementation_type& get_implementation() { return *this->outs_; }
-  const implementation_type& get_implementation() const { return *this->impl_; }
+  const implementation_type& get_implementation() const { return *this->outs_; }
 
   dynamic_buffer_span(_Cont* outs) : outs_(outs) {}
 
