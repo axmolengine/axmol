@@ -1,4 +1,4 @@
-## axmol-2.1.3 ?? 2024
+## axmol-2.1.3 May.25 2024
 
 ### Significant changes relative to 2.1.2:
 
@@ -86,7 +86,7 @@
 - Update TLD axmol.org -> axmol.dev
 - Rename folder thirdparty ==> 3rdparty
 - Update spine to 4.1-54fac9d
-- Set cmake minmal require to 3.29.0+ for supress xcode 15 duplicated linking warnings
+- Update axmol cmdline preferred cmake to 3.29.3+ for supress xcode 15 duplicated linking warnings
 - Remove unnecessary cmake option: `AX_VS_DEPLOYMENT_TARGET`
 - Make FileStream open file for write share flags same with cstd
 - Fix some compile warnings
