@@ -362,6 +362,15 @@ target_precompile_headers(${_AX_CORE_LIB} PRIVATE
   "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
 )
 
+if(ANDROID)
+    get_target_property(_axbin_dir ${_AX_CORE_LIB} BINARY_DIR)
+    set(_axpch_path "${_axbin_dir}/CMakeFiles/axmol.dir/cmake_pch.hxx.pch")
+    if(NOT EXISTS "${_axpch_path}")
+        message(AUTHOR_WARNING "Touching ${_axpch_path} ...")
+        file(TOUCH ${_axpch_path})
+    endif()
+endif()
+
 if(WINDOWS)
     # cppwinrt or webview2 require nuget
     if(WINDOWS_STORE OR AX_ENABLE_MSEDGE_WEBVIEW2)

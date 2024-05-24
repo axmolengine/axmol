@@ -108,6 +108,7 @@
 - Set AX_USE_METAL and AX_USE_GL to 1 if defined by @smilediver in https://github.com/axmolengine/axmol/pull/1916
 - Update the CMake minimum version requirement to 3.23.0+ by @rh101 in https://github.com/axmolengine/axmol/pull/1918
 - Add x86_64 to example list of possible target architectures for android by @rh101 in https://github.com/axmolengine/axmol/pull/1919
+- Enable lua `bit` module for all lua versions supported by axmol
 
 
 ### sdks & tools updates
