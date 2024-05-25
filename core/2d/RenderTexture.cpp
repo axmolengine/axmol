@@ -472,21 +472,28 @@ void RenderTexture::onSaveToFile(std::string filename, bool isRGBA, bool forceNo
     auto callbackFunc = [this, _filename = std::move(filename), isRGBA, forceNonPMA](RefPtr<Image> image) {
         if (image)
         {
-            std::thread([this, image, _filename, isRGBA, forceNonPMA]() {
-                if (forceNonPMA && image->hasPremultipliedAlpha())
-                {
+            if (forceNonPMA && image->hasPremultipliedAlpha())
+            {
+                std::thread([this, image, _filename, isRGBA, forceNonPMA]() {
                     image->reversePremultipliedAlpha();
-                }
 
+                    Director::getInstance()->getScheduler()->runOnAxmolThread([this, image, _filename, isRGBA] {
+                        image->saveToFile(_filename, !isRGBA);
+                        if (_saveFileCallback)
+                        {
+                            _saveFileCallback(this, _filename);
+                        }
+                    });
+                }).detach();
+            }
+            else
+            {
                 image->saveToFile(_filename, !isRGBA);
-
-                Director::getInstance()->getScheduler()->runOnAxmolThread([this, _filename] {
-                    if (_saveFileCallback)
-                    {
-                        _saveFileCallback(this, _filename);
-                    }
-                });
-            }).detach();
+                if (_saveFileCallback)
+                {
+                    _saveFileCallback(this, _filename);
+                }
+            }
         }
         else
         {
