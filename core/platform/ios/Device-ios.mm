@@ -463,7 +463,7 @@ static bool _initWithString(std::string_view text,
 
         AX_BREAK_IF(!font);
 
-        NSString* str = [NSString stringWithUTF8String:text.data()];
+        NSString* str = [[NSString alloc] initWithBytes:text.data() length:text.size() encoding:NSUTF8StringEncoding];
         AX_BREAK_IF(!str);
 
         CGSize dimensions;
