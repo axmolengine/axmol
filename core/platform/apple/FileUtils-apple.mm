@@ -159,7 +159,7 @@ bool FileUtilsApple::isFileExistInternal(std::string_view filePath) const
     {
         // Search path is an absolute path.
         BOOL isDir = NO;
-        if ([s_fileManager fileExistsAtPath:[NSString stringWithUTF8String:filePath.data()] isDirectory:&isDir] && !isDir)
+        if ([s_fileManager fileExistsAtPath:[[NSString alloc] initWithBytes:filePath.data() length:filePath.size() encoding:NSUTF8StringEncoding] isDirectory:&isDir] && !isDir)
         {
             ret = true;
         }
@@ -207,7 +207,7 @@ std::string FileUtilsApple::getPathForDirectory(std::string_view dir,
     if (path[0] == '/')
     {
         BOOL isDir = NO;
-        if ([s_fileManager fileExistsAtPath:[NSString stringWithUTF8String:path.data()] isDirectory:&isDir])
+        if ([s_fileManager fileExistsAtPath:[[NSString alloc] initWithBytes:path.data() length:path.size() encoding:NSUTF8StringEncoding] isDirectory:&isDir])
         {
             return appendTrailingSlashToDir(isDir ? path : "");
         }
@@ -232,9 +232,9 @@ std::string FileUtilsApple::getFullPathForFilenameWithinDirectory(std::string_vi
     // Build full path for the file
     if (directory[0] != '/')
     {
-        NSString* path = [pimpl_->getBundle() pathForResource:[NSString stringWithUTF8String:filename.data()]
+        NSString* path = [pimpl_->getBundle() pathForResource:[[NSString alloc] initWithBytes:filename.data() length:filename.size() encoding:NSUTF8StringEncoding]
                                                        ofType:nil
-                                                  inDirectory:[NSString stringWithUTF8String:directory.data()]];
+                                                  inDirectory:[[NSString alloc] initWithBytes:directory.data() length:directory.size() encoding:NSUTF8StringEncoding]];
         if (path != nil)
         {
             fullPath = [path UTF8String];
@@ -265,14 +265,14 @@ bool FileUtilsApple::createDirectory(std::string_view path) const
 
     NSError* error;
 
-    bool result = [s_fileManager createDirectoryAtPath:[NSString stringWithUTF8String:path.data()]
+    bool result = [s_fileManager createDirectoryAtPath:[[NSString alloc] initWithBytes:path.data() length:path.size() encoding:NSUTF8StringEncoding]
                            withIntermediateDirectories:YES
                                             attributes:nil
                                                  error:&error];
 
     if (!result && error != nil)
     {
-        AXLOGERROR("Fail to create directory \"%s\": %s", path.data(), [error.localizedDescription UTF8String]);
+        AXLOGERROR("Fail to create directory \"%s\": %s", std::string(path).c_str(), [error.localizedDescription UTF8String]);
     }
 
     return result;

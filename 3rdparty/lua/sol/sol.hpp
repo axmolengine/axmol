@@ -853,7 +853,7 @@
 		#define _MOVE(...) static_cast<__typeof( __VA_ARGS__ )&&>( __VA_ARGS__ )
 	#else
 		#include <type_traits>
-		
+
 		#define _MOVE(...) static_cast<::std::remove_reference_t<( __VA_ARGS__ )>&&>( __VA_OPT__(,) )
 	#endif
 #endif
@@ -1005,7 +1005,7 @@
 #if defined(SOL_FUNC_DECL)
 	#define SOL_FUNC_DECL_I_ SOL_FUNC_DECL
 #elif SOL_IS_ON(SOL_HEADER_ONLY)
-	#define SOL_FUNC_DECL_I_ 
+	#define SOL_FUNC_DECL_I_
 #elif SOL_IS_ON(SOL_DLL)
 	#if SOL_IS_ON(SOL_COMPILER_VCXX)
 		#if SOL_IS_ON(SOL_BUILD)
@@ -1041,7 +1041,7 @@
 #if defined(SOL_HIDDEN_FUNC_DECL)
 	#define SOL_HIDDEN_FUNC_DECL_I_ SOL_HIDDEN_FUNC_DECL
 #elif SOL_IS_ON(SOL_HEADER_ONLY)
-	#define SOL_HIDDEN_FUNC_DECL_I_ 
+	#define SOL_HIDDEN_FUNC_DECL_I_
 #elif SOL_IS_ON(SOL_DLL)
 	#if SOL_IS_ON(SOL_COMPILER_VCXX)
 		#if SOL_IS_ON(SOL_BUILD)
@@ -1063,9 +1063,9 @@
 #elif SOL_IS_ON(SOL_DLL)
 	#if SOL_IS_ON(SOL_COMPILER_VCXX)
 		#if SOL_IS_ON(SOL_BUILD)
-			#define SOL_HIDDEN_FUNC_DEFN_I_ 
+			#define SOL_HIDDEN_FUNC_DEFN_I_
 		#else
-			#define SOL_HIDDEN_FUNC_DEFN_I_ 
+			#define SOL_HIDDEN_FUNC_DEFN_I_
 		#endif
 	#elif SOL_IS_ON(SOL_COMPILER_GCC) || SOL_IS_ON(SOL_COMPILER_CLANG)
 		#define SOL_HIDDEN_FUNC_DEFN_I_ __attribute__((visibility("hidden")))
@@ -3170,9 +3170,9 @@ extern "C" {
 #ifndef COMPAT53_API
 #  if defined(COMPAT53_INCLUDE_SOURCE) && COMPAT53_INCLUDE_SOURCE
 #    if defined(__GNUC__) || defined(__clang__)
-#      define COMPAT53_API __attribute__((__unused__)) static inline 
+#      define COMPAT53_API __attribute__((__unused__)) static inline
 #    else
-#      define COMPAT53_API static inline 
+#      define COMPAT53_API static inline
 #    endif /* Clang/GCC */
 #  else /* COMPAT53_INCLUDE_SOURCE */
 /* we are not including source, so everything is extern */
@@ -6747,13 +6747,14 @@ namespace sol {
 		/// one.
 		///
 		/// \group emplace
-		template <class... Args>
-		T& emplace(Args&&... args) noexcept {
-			static_assert(std::is_constructible<T, Args&&...>::value, "T must be constructible with Args");
+        template <class... Args>
+        T& emplace(Args&&... args) noexcept {
+            static_assert(std::is_constructible<T, Args&&...>::value, "T must be constructible with Args");
 
-			*this = nullopt;
-			this->construct(std::forward<Args>(args)...);
-		}
+            *this = nullopt;
+            new (static_cast<void*>(this)) optional(std::in_place, std::forward<Args>(args)...);
+            return **this;
+        }
 
 		/// Swaps this optional with the other.
 		///
@@ -23158,7 +23159,7 @@ namespace sol {
 						{ "erase", &meta_usertype_container::erase_call },
 						std::is_pointer<T>::value ? luaL_Reg{ nullptr, nullptr } : luaL_Reg{ "__gc", &detail::usertype_alloc_destroy<T> },
 						{ nullptr, nullptr }
-						// clang-format on 
+						// clang-format on
 					} };
 
 					if (luaL_newmetatable(L, metakey) == 1) {

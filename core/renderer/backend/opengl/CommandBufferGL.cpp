@@ -71,21 +71,21 @@ bool CommandBufferGL::beginFrame()
     return true;
 }
 
-void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDescriptor& descirptor)
+void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDescriptor& descriptor)
 {
     auto rtGL = static_cast<const RenderTargetGL*>(rt);
 
     rtGL->bindFrameBuffer();
     rtGL->update();
 
-    auto clearFlags = descirptor.flags.clear;
+    auto clearFlags = descriptor.flags.clear;
 
     // set clear color, depth and stencil
     GLbitfield mask = 0;
     if (bitmask::any(clearFlags, TargetBufferFlags::COLOR))
     {
         mask |= GL_COLOR_BUFFER_BIT;
-        const auto& clearColor = descirptor.clearColorValue;
+        const auto& clearColor = descriptor.clearColorValue;
         glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
     }
 
@@ -103,7 +103,7 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
         glGetIntegerv(GL_DEPTH_FUNC, &oldDepthFunc);
 
         mask |= GL_DEPTH_BUFFER_BIT;
-        glClearDepth(descirptor.clearDepthValue);
+        glClearDepth(descriptor.clearDepthValue);
         __gl->enableDepthTest();
 
         __gl->depthMask(GL_TRUE);
@@ -115,7 +115,7 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
     if (bitmask::any(clearFlags, TargetBufferFlags::STENCIL))
     {
         mask |= GL_STENCIL_BUFFER_BIT;
-        glClearStencil(descirptor.clearStencilValue);
+        glClearStencil(descriptor.clearStencilValue);
     }
 
     if (mask)
