@@ -382,20 +382,20 @@ bool RenderTexture::saveToFileAsNonPMA(std::string_view filename, bool isRGBA, S
 
     if (basename.find(".png") != std::string::npos)
     {
-        return saveToFileAsNonPMA(filename, Image::Format::PNG, isRGBA, callback);
+        return saveToFileAsNonPMA(filename, Image::Format::PNG, isRGBA, std::move(callback));
     }
     else if (basename.find(".jpg") != std::string::npos)
     {
         if (isRGBA)
             AXLOG("RGBA is not supported for JPG format.");
-        return saveToFileAsNonPMA(filename, Image::Format::JPG, false, callback);
+        return saveToFileAsNonPMA(filename, Image::Format::JPG, false, std::move(callback));
     }
     else
     {
         AXLOG("Only PNG and JPG format are supported now!");
     }
 
-    return saveToFileAsNonPMA(filename, Image::Format::JPG, false, callback);
+    return saveToFileAsNonPMA(filename, Image::Format::JPG, false, std::move(callback));
 }
 
 bool RenderTexture::saveToFile(std::string_view filename, bool isRGBA, SaveFileCallbackType callback)
@@ -405,20 +405,20 @@ bool RenderTexture::saveToFile(std::string_view filename, bool isRGBA, SaveFileC
 
     if (basename.find(".png") != std::string::npos)
     {
-        return saveToFile(filename, Image::Format::PNG, isRGBA, callback);
+        return saveToFile(filename, Image::Format::PNG, isRGBA, std::move(callback));
     }
     else if (basename.find(".jpg") != std::string::npos)
     {
         if (isRGBA)
             AXLOG("RGBA is not supported for JPG format.");
-        return saveToFile(filename, Image::Format::JPG, false, callback);
+        return saveToFile(filename, Image::Format::JPG, false, std::move(callback));
     }
     else
     {
         AXLOG("Only PNG and JPG format are supported now!");
     }
 
-    return saveToFile(filename, Image::Format::JPG, false, callback);
+    return saveToFile(filename, Image::Format::JPG, false, std::move(callback));
 }
 
 bool RenderTexture::saveToFileAsNonPMA(std::string_view fileName,
@@ -431,7 +431,7 @@ bool RenderTexture::saveToFileAsNonPMA(std::string_view fileName,
     if (isRGBA && format == Image::Format::JPG)
         AXLOG("RGBA is not supported for JPG format");
 
-    _saveFileCallback = callback;
+    _saveFileCallback = std::move(callback);
 
     std::string fullpath = FileUtils::getInstance()->getWritablePath().append(fileName);
 
@@ -454,7 +454,7 @@ bool RenderTexture::saveToFile(std::string_view fileName,
     if (isRGBA && format == Image::Format::JPG)
         AXLOG("RGBA is not supported for JPG format");
 
-    _saveFileCallback = callback;
+    _saveFileCallback = std::move(callback);
 
     std::string fullpath = FileUtils::getInstance()->getWritablePath().append(fileName);
 
@@ -472,15 +472,28 @@ void RenderTexture::onSaveToFile(std::string filename, bool isRGBA, bool forceNo
     auto callbackFunc = [this, _filename = std::move(filename), isRGBA, forceNonPMA](RefPtr<Image> image) {
         if (image)
         {
-            if (forceNonPMA && image->hasPremultipliedAlpha())
-            {
-                image->reversePremultipliedAlpha();
-            }
-            image->saveToFile(_filename, !isRGBA);
+            std::thread([this, image, _filename, isRGBA, forceNonPMA]() {
+                if (forceNonPMA && image->hasPremultipliedAlpha())
+                {
+                    image->reversePremultipliedAlpha();
+                }
+
+                image->saveToFile(_filename, !isRGBA);
+
+                Director::getInstance()->getScheduler()->runOnAxmolThread([this, _filename] {
+                    if (_saveFileCallback)
+                    {
+                        _saveFileCallback(this, _filename);
+                    }
+                });
+            }).detach();
         }
-        if (_saveFileCallback)
+        else
         {
-            _saveFileCallback(this, _filename);
+            if (_saveFileCallback)
+            {
+                _saveFileCallback(this, _filename);
+            }          
         }
     };
     newImage(callbackFunc);
