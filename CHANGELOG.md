@@ -109,6 +109,9 @@
 - Update the CMake minimum version requirement to 3.23.0+ by @rh101 in https://github.com/axmolengine/axmol/pull/1918
 - Add x86_64 to example list of possible target architectures for android by @rh101 in https://github.com/axmolengine/axmol/pull/1919
 - Enable lua `bit` module for all lua versions supported by axmol
+- Fix passing non null terminated strings for null terminated params by @smilediver in https://github.com/axmolengine/axmol/pull/1924
+- Fix sol problem in emplace method by @paulocoutinhox in https://github.com/axmolengine/axmol/pull/1927
+- Fix descriptor typo by @paulocoutinhox in https://github.com/axmolengine/axmol/pull/1928
 
 
 ### sdks & tools updates
