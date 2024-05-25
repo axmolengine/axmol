@@ -98,7 +98,7 @@ class Texture2DGL : public backend::Texture2DBackend
 {
 public:
     /**
-     * @param descirptor Specifies the texture description.
+     * @param descriptor Specifies the texture description.
      */
     Texture2DGL(const TextureDescriptor& descriptor);
     ~Texture2DGL();
@@ -216,7 +216,7 @@ class TextureCubeGL : public backend::TextureCubemapBackend
 {
 public:
     /**
-     * @param descirptor Specifies the texture description.
+     * @param descriptor Specifies the texture description.
      */
     TextureCubeGL(const TextureDescriptor& descriptor);
     ~TextureCubeGL();

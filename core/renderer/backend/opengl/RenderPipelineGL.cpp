@@ -35,16 +35,16 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 NS_AX_BACKEND_BEGIN
 
-void RenderPipelineGL::update(const RenderTarget*, const PipelineDescriptor& pipelineDescirptor)
+void RenderPipelineGL::update(const RenderTarget*, const PipelineDescriptor& pipelineDescriptor)
 {
-    if (_programGL != pipelineDescirptor.programState->getProgram())
+    if (_programGL != pipelineDescriptor.programState->getProgram())
     {
         AX_SAFE_RELEASE(_programGL);
-        _programGL = static_cast<ProgramGL*>(pipelineDescirptor.programState->getProgram());
+        _programGL = static_cast<ProgramGL*>(pipelineDescriptor.programState->getProgram());
         AX_SAFE_RETAIN(_programGL);
     }
 
-    updateBlendState(pipelineDescirptor.blendDescriptor);
+    updateBlendState(pipelineDescriptor.blendDescriptor);
 }
 
 void RenderPipelineGL::updateBlendState(const BlendDescriptor& descriptor)

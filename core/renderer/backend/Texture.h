@@ -105,7 +105,7 @@ public:
 
 protected:
     /**
-     * @param descriptor Specifies the texture descirptor.
+     * @param descriptor Specifies the texture descriptor.
      */
     TextureBackend() {}
     virtual ~TextureBackend();
