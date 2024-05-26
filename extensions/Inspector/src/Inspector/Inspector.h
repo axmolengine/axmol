@@ -86,7 +86,7 @@ class Inspector
 
     bool _autoAddToScenes = false;
     std::string _fontPath;
-    float _fontSize;
+    float _fontSize = 13; // ImGuiPresenter.h
 };
 
 NS_AX_EXT_END
