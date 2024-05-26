@@ -399,7 +399,7 @@ void Inspector::openForScene(Scene* target)
     }
 
     auto* presenter = ImGuiPresenter::getInstance();
-    presenter->addFont(FileUtils::getInstance()->fullPathForFilename(getFontPath()), getFontSize());
+    presenter->addFont(FileUtils::getInstance()->fullPathForFilename(_fontPath), _fontSize);
     presenter->enableDPIScale();
     presenter->addRenderLoop("#insp", AX_CALLBACK_0(Inspector::mainLoop , this), target);
 }
