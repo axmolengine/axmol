@@ -176,7 +176,7 @@ if ($IsWin) {
         println "Setting system installed powershell execution policy '$execPolicy'==>'Bypass', please click 'YES' on UAC dialog"
         Start-Process powershell -ArgumentList '-Command "Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force"' -WindowStyle Hidden -Wait -Verb runas
     } else {
-        println "Great, the system installed powershell execution policy is '$execPolicy'"
+        println "Nice, the system installed powershell execution policy is '$execPolicy'"
     }
 }
 else {

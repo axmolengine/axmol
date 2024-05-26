@@ -295,7 +295,7 @@ static bool _initWithString(std::string_view text,
 
     do
     {
-        NSString* string = [NSString stringWithUTF8String:text.data()];
+        NSString* string = [[NSString alloc] initWithBytes:text.data() length:text.size() encoding:NSUTF8StringEncoding];
         AX_BREAK_IF(!string);
 
         id font = _createSystemFont(fontName, size);

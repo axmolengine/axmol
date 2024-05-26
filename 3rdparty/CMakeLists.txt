@@ -239,8 +239,9 @@ if(ANDROID)
     add_subdirectory(android-specific/cpufeatures)
 endif()
 
+ax_add_3rd(zlib)
+
 if(NOT EMSCRIPTEN)
-    ax_add_3rd(zlib)
     option(AX_WITH_WEBSOCKET_PARSER "Build with websocket parser" ON)
     if (AX_WITH_WEBSOCKET_PARSER)
         ax_add_3rd(websocket-parser)
@@ -278,6 +279,7 @@ ax_add_3rd(freetype OPTIONS
     "FT_DISABLE_BROTLI TRUE"
     "FT_DISABLE_BZIP2 TRUE"
 )
+target_include_directories(freetype PRIVATE "${PNG_INCLUDE_DIR}")
 if (WINRT)
     target_compile_definitions(freetype PUBLIC "generic=GenericFromFreeTypeLibrary")
 endif()
