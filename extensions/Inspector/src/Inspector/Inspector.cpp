@@ -167,9 +167,13 @@ void Inspector::destroyInstance()
     }
 }
 
-void Inspector::setFont(std::string_view fontPath, float fontSize)
+void Inspector::setFontPath(std::string_view fontPath)
 {
     _fontPath = std::string(fontPath);
+}
+
+void Inspector::setFontSize(float fontSize)
+{
     _fontSize = fontSize;
 }
 
@@ -395,7 +399,7 @@ void Inspector::openForScene(Scene* target)
     }
 
     auto* presenter = ImGuiPresenter::getInstance();
-    presenter->addFont(FileUtils::getInstance()->fullPathForFilename(getFontPath()));
+    presenter->addFont(FileUtils::getInstance()->fullPathForFilename(getFontPath()), getFontSize());
     presenter->enableDPIScale();
     presenter->addRenderLoop("#insp", AX_CALLBACK_0(Inspector::mainLoop , this), target);
 }
