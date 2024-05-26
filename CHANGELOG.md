@@ -1,4 +1,4 @@
-## axmol-2.1.3 ?? 2024
+## axmol-2.1.3 May.26 2024
 
 ### Significant changes relative to 2.1.2:
 
@@ -86,7 +86,7 @@
 - Update TLD axmol.org -> axmol.dev
 - Rename folder thirdparty ==> 3rdparty
 - Update spine to 4.1-54fac9d
-- Set cmake minmal require to 3.29.0+ for supress xcode 15 duplicated linking warnings
+- Update axmol cmdline preferred cmake to 3.29.3+ for supress xcode 15 duplicated linking warnings
 - Remove unnecessary cmake option: `AX_VS_DEPLOYMENT_TARGET`
 - Make FileStream open file for write share flags same with cstd
 - Fix some compile warnings
@@ -108,6 +108,11 @@
 - Set AX_USE_METAL and AX_USE_GL to 1 if defined by @smilediver in https://github.com/axmolengine/axmol/pull/1916
 - Update the CMake minimum version requirement to 3.23.0+ by @rh101 in https://github.com/axmolengine/axmol/pull/1918
 - Add x86_64 to example list of possible target architectures for android by @rh101 in https://github.com/axmolengine/axmol/pull/1919
+- Enable lua `bit` module for all lua versions supported by axmol
+- Fix passing non null terminated strings for null terminated params by @smilediver in https://github.com/axmolengine/axmol/pull/1924
+- Fix sol problem in emplace method by @paulocoutinhox in https://github.com/axmolengine/axmol/pull/1927
+- Fix descriptor typo by @paulocoutinhox in https://github.com/axmolengine/axmol/pull/1928
+- Do image processing to reverse premultiplied alpha in separate thread by @rh101 in https://github.com/axmolengine/axmol/pull/1929
 
 
 ### sdks & tools updates
@@ -129,7 +134,7 @@
 - astcenc: 4.7.0 ==> 4.8.0
 - stb_image: 2.28 ==> 2.29
 - luajit: 2.1-9cc2e42 ==> 2.1-d06beb0
-- c-ares: 1.25.0 ==> 1.28.1
+- c-ares: 1.25.0 ==> 1.29.0
 - imgui: 1.90.4 ==> 1.90.6
 
 ## axmol-2.1.2 Feb.25 2024

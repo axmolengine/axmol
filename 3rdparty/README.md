@@ -22,7 +22,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.28.1
+- Version: 1.29.0
 - License: MIT
 
 ## Chipmunk2D

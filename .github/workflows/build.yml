@@ -171,6 +171,7 @@ jobs:
       run: |
         ./tools/cmdline/axmol -p wasm -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8' -j2 
         ./tools/cmdline/axmol -p wasm -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8' -j2 -xb '--target,fairygui-tests'
+        ./tools/cmdline/axmol -p wasm -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8' -j2 -xb '--target,lua-tests'
     - uses: actions/upload-artifact@v4
       with:
         name: wasm
