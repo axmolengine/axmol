@@ -167,9 +167,10 @@ void Inspector::destroyInstance()
     }
 }
 
-void Inspector::setFontPath(std::string_view fontPath)
+void Inspector::setFont(std::string_view fontPath, float fontSize)
 {
     _fontPath = std::string(fontPath);
+    _fontSize = fontSize;
 }
 
 void Inspector::init()
