@@ -1,4 +1,4 @@
-## axmol-2.1.3 May.25 2024
+## axmol-2.1.3 May.26 2024
 
 ### Significant changes relative to 2.1.2:
 
@@ -112,6 +112,7 @@
 - Fix passing non null terminated strings for null terminated params by @smilediver in https://github.com/axmolengine/axmol/pull/1924
 - Fix sol problem in emplace method by @paulocoutinhox in https://github.com/axmolengine/axmol/pull/1927
 - Fix descriptor typo by @paulocoutinhox in https://github.com/axmolengine/axmol/pull/1928
+- Do image processing to reverse premultiplied alpha in separate thread by @rh101 in https://github.com/axmolengine/axmol/pull/1929
 
 
 ### sdks & tools updates
