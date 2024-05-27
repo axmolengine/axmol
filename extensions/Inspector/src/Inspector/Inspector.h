@@ -66,7 +66,9 @@ class Inspector
     void setAutoAddToScenes(bool autoAdd);
 
     std::string_view getFontPath() { return _fontPath; }
+    float getFontSize() { return _fontSize; }
     void setFontPath(std::string_view fontPath);
+    void setFontSize(float fontSize);
 
   private:
     void init();
@@ -84,6 +86,7 @@ class Inspector
 
     bool _autoAddToScenes = false;
     std::string _fontPath;
+    float _fontSize = 13; // ImGuiPresenter.h
 };
 
 NS_AX_EXT_END
