@@ -176,7 +176,7 @@ public:
      * @param callback When the file is save finished,it will callback this function.
      * @return Returns true if the operation is successful.
      */
-    bool saveToFileAsNonPMA(std::string_view filename, bool isRGBA = true, SaveFileCallbackType = nullptr);
+    bool saveToFileAsNonPMA(std::string_view filename, bool isRGBA = true, SaveFileCallbackType callback = nullptr);
 
     /** Saves the texture into a file using JPEG format. The file will be saved in the Documents folder.
      * Returns true if the operation is successful.
@@ -186,7 +186,7 @@ public:
      * @param callback When the file is save finished,it will callback this function.
      * @return Returns true if the operation is successful.
      */
-    bool saveToFile(std::string_view filename, bool isRGBA = true, SaveFileCallbackType = nullptr);
+    bool saveToFile(std::string_view filename, bool isRGBA = true, SaveFileCallbackType callback = nullptr);
 
     /** saves the texture into a file in non-PMA. The format could be JPG or PNG. The file will be saved in the
       Documents folder. Returns true if the operation is successful.

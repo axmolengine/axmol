@@ -162,7 +162,7 @@ MTLBlendOperation toMTLBlendOperation(BlendOperation operation)
 
 RenderPipelineMTL::RenderPipelineMTL(id<MTLDevice> mtlDevice) : _mtlDevice(mtlDevice) {}
 
-void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineDescriptor& pipelineDescirptor)
+void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineDescriptor& pipelineDescriptor)
 {
     struct
     {
@@ -183,9 +183,9 @@ void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineD
     } hashMe;
 
     memset(&hashMe, 0, sizeof(hashMe));
-    const auto& blendDescriptor = pipelineDescirptor.blendDescriptor;
+    const auto& blendDescriptor = pipelineDescriptor.blendDescriptor;
     chooseAttachmentFormat(renderTarget, _colorAttachmentsFormat, _depthAttachmentFormat, _stencilAttachmentFormat);
-    auto program              = static_cast<ProgramMTL*>(pipelineDescirptor.programState->getProgram());
+    auto program              = static_cast<ProgramMTL*>(pipelineDescriptor.programState->getProgram());
     hashMe.vertexShaderHash   = program->getVertexShader()->getHashValue();
     hashMe.fragmentShaderHash = program->getFragmentShader()->getHashValue();
     memcpy(&hashMe.colorAttachment, &_colorAttachmentsFormat, sizeof(_colorAttachmentsFormat));
@@ -200,7 +200,7 @@ void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineD
     hashMe.sourceAlphaBlendFactor      = (unsigned int)blendDescriptor.sourceAlphaBlendFactor;
     hashMe.destinationAlphaBlendFactor = (unsigned int)blendDescriptor.destinationAlphaBlendFactor;
     int index                          = 0;
-    auto vertexLayout                  = pipelineDescirptor.programState->getVertexLayout();
+    auto vertexLayout                  = pipelineDescriptor.programState->getVertexLayout();
     const auto& attributes             = vertexLayout->getAttributes();
     for (const auto& it : attributes)
     {
@@ -225,10 +225,10 @@ void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineD
 
     _mtlRenderPipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
 
-    setShaderModules(pipelineDescirptor);
-    setVertexLayout(_mtlRenderPipelineDescriptor, pipelineDescirptor);
+    setShaderModules(pipelineDescriptor);
+    setVertexLayout(_mtlRenderPipelineDescriptor, pipelineDescriptor);
 
-    setBlendStateAndFormat(pipelineDescirptor.blendDescriptor);
+    setBlendStateAndFormat(pipelineDescriptor.blendDescriptor);
 
     NSError* error          = nil;
     _mtlRenderPipelineState = [_mtlDevice newRenderPipelineStateWithDescriptor:_mtlRenderPipelineDescriptor
@@ -261,18 +261,18 @@ void RenderPipelineMTL::setVertexLayout(MTLRenderPipelineDescriptor* mtlDescript
         toMTLVertexStepFunction(vertexLayout->getVertexStepMode());
 
     const auto& attributes = vertexLayout->getAttributes();
-    
-    
+
+
     for (const auto& it : attributes)
     {
         auto attribute = it.second;
-        
+
         vertexDesc.attributes[attribute.index].format =
             toMTLVertexFormat(attribute.format, attribute.needToBeNormallized);
         vertexDesc.attributes[attribute.index].offset = attribute.offset;
         // Buffer index will always be 0;
         vertexDesc.attributes[attribute.index].bufferIndex = DriverMTL::DEFAULT_ATTRIBS_BINDING_INDEX;
-        
+
     }
 }
 

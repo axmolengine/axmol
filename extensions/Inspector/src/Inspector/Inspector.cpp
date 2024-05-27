@@ -172,6 +172,11 @@ void Inspector::setFontPath(std::string_view fontPath)
     _fontPath = std::string(fontPath);
 }
 
+void Inspector::setFontSize(float fontSize)
+{
+    _fontSize = fontSize;
+}
+
 void Inspector::init()
 {
     _fontPath = "fonts/arial.ttf";
@@ -394,7 +399,7 @@ void Inspector::openForScene(Scene* target)
     }
 
     auto* presenter = ImGuiPresenter::getInstance();
-    presenter->addFont(FileUtils::getInstance()->fullPathForFilename(getFontPath()));
+    presenter->addFont(FileUtils::getInstance()->fullPathForFilename(_fontPath), _fontSize);
     presenter->enableDPIScale();
     presenter->addRenderLoop("#insp", AX_CALLBACK_0(Inspector::mainLoop , this), target);
 }

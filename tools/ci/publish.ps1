@@ -31,6 +31,10 @@ if (!$version -or ($version -eq 'auto')) {
         return $axver
     }
     $version = get_full_version
+} 
+elseif($version -match '.*-(beta.*|rc.*)')
+{
+    $prerelease = 'true'
 }
 
 Push-Location $AX_ROOT

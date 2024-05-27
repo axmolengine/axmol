@@ -194,14 +194,14 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
         // Media Framework doesn't percent encode the URL, so the path portion is just a native file path.
         // Extract it and then use it create a proper URL.
         Path             = sourceUri.substr(7);
-        NSString* nsPath = [NSString stringWithUTF8String:Path.data()];
+        NSString* nsPath = [[NSString alloc] initWithBytes:Path.data() length:Path.size() encoding:NSUTF8StringEncoding];
         nsMediaUrl       = [NSURL fileURLWithPath:nsPath isDirectory:NO];
     }
     else
     {
         // Assume that this has been percent encoded for now - when we support HTTP Live Streaming we will need to check
         // for that.
-        NSString* nsUri = [NSString stringWithUTF8String:sourceUri.data()];
+        NSString* nsUri = [[NSString alloc] initWithBytes:sourceUri.data() length:sourceUri.size() encoding:NSUTF8StringEncoding];
         nsMediaUrl      = [NSURL URLWithString:nsUri];
     }
 
