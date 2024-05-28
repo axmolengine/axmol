@@ -20,15 +20,15 @@ class ImGuiPresenter
     void cleanup();
 
 public:
-    inline static const std::string_view DEFAULT_GLYPH_RANGES_ID         = "__DEFAULT_GLYPH__";
-    inline static const std::string_view GREEK_GLYPH_RANGES_ID           = "__GREEK_GLYPH__";
-    inline static const std::string_view KOREAN_GLYPH_RANGES_ID          = "__KOREAN_GLYPH__";
-    inline static const std::string_view CHINESE_GENERAL_GLYPH_RANGES_ID = "__CHINESE_SIMPLIFIED_COMMON_GLYPH__";
-    inline static const std::string_view CHINESE_FULL_GLYPH_RANGES_ID    = "__CHINESE_FULL_GLYPH__";
-    inline static const std::string_view JAPANESE_GLYPH_RANGES_ID        = "__JAPANESE_GLYPH__";
-    inline static const std::string_view CYRILLIC_GLYPH_RANGES_ID        = "__CYRILLIC_GLYPH__";
-    inline static const std::string_view THAI_GLYPH_RANGES_ID            = "__THAI_GLYPH__";
-    inline static const std::string_view VIETNAMESE_GLYPH_RANGES_ID      = "__VIETNAMESE_GLYPH__";
+    inline static const std::string_view GLYPH_RANGES_DEFAULT_ID         = "__DEFAULT_GLYPH__";
+    inline static const std::string_view GLYPH_RANGES_GREEK_ID           = "__GREEK_GLYPH__";
+    inline static const std::string_view GLYPH_RANGES_KOREAN_ID          = "__KOREAN_GLYPH__";
+    inline static const std::string_view GLYPH_RANGES_CHINESE_GENERAL_ID = "__CHINESE_SIMPLIFIED_COMMON_GLYPH__";
+    inline static const std::string_view GLYPH_RANGES_CHINESE_FULL_ID    = "__CHINESE_FULL_GLYPH__";
+    inline static const std::string_view GLYPH_RANGES_JAPANESE_ID        = "__JAPANESE_GLYPH__";
+    inline static const std::string_view GLYPH_RANGES_CYRILLIC_ID        = "__CYRILLIC_GLYPH__";
+    inline static const std::string_view GLYPH_RANGES_THAI_ID            = "__THAI_GLYPH__";
+    inline static const std::string_view GLYPH_RANGES_VIETNAMESE_ID      = "__VIETNAMESE_GLYPH__";
 
     // predefined glyph ranges by imgui
     enum class GLYPH_RANGES

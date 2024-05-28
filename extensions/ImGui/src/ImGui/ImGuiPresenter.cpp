@@ -911,45 +911,35 @@ ImWchar* ImGuiPresenter::addGlyphRanges(GLYPH_RANGES glyphRange)
     static std::unordered_map<GLYPH_RANGES, size_t> _glyph_ranges_size;
     auto imFonts = ImGui::GetIO().Fonts;
     const ImWchar* imChars;
-    std::string glyphId;
 
     switch (glyphRange)
     {
     case GLYPH_RANGES::DEFAULT:
         imChars = imFonts->GetGlyphRangesDefault();
-        glyphId = DEFAULT_GLYPH_RANGES_ID;
         break;
     case GLYPH_RANGES::GREEK:
         imChars = imFonts->GetGlyphRangesGreek();
-        glyphId = GREEK_GLYPH_RANGES_ID;
         break;
     case GLYPH_RANGES::KOREAN:
         imChars = imFonts->GetGlyphRangesKorean();
-        glyphId = KOREAN_GLYPH_RANGES_ID;
         break;
     case GLYPH_RANGES::CHINESE_GENERAL:
         imChars = imFonts->GetGlyphRangesChineseSimplifiedCommon();
-        glyphId = CHINESE_GENERAL_GLYPH_RANGES_ID;
         break;
     case GLYPH_RANGES::CHINESE_FULL:
         imChars = imFonts->GetGlyphRangesChineseFull();
-        glyphId = CHINESE_FULL_GLYPH_RANGES_ID;
         break;
     case GLYPH_RANGES::JAPANESE:
         imChars = imFonts->GetGlyphRangesJapanese();
-        glyphId = JAPANESE_GLYPH_RANGES_ID;
         break;
     case GLYPH_RANGES::CYRILLIC:
         imChars = imFonts->GetGlyphRangesCyrillic();
-        glyphId = CYRILLIC_GLYPH_RANGES_ID;
         break;
     case GLYPH_RANGES::THAI:
         imChars = imFonts->GetGlyphRangesThai();
-        glyphId = THAI_GLYPH_RANGES_ID;
         break;
     case GLYPH_RANGES::VIETNAMESE:
         imChars = imFonts->GetGlyphRangesVietnamese();
-        glyphId = VIETNAMESE_GLYPH_RANGES_ID;
         break;
     default:
         return nullptr;
@@ -966,6 +956,7 @@ ImWchar* ImGuiPresenter::addGlyphRanges(GLYPH_RANGES glyphRange)
         imCharsSize += 1;
         _glyph_ranges_size[glyphRange] = imCharsSize;
     }
+    auto glyphId = getGlyphRangesId(glyphRange);
 
     return addGlyphRanges(glyphId, std::vector<ImWchar>(imChars, imChars + imCharsSize));
 }
@@ -1060,23 +1051,23 @@ std::string_view ImGuiPresenter::getGlyphRangesId(GLYPH_RANGES glyphRanges)
     switch (glyphRanges)
     {
     case GLYPH_RANGES::DEFAULT:
-        return DEFAULT_GLYPH_RANGES_ID;
+        return GLYPH_RANGES_DEFAULT_ID;
     case GLYPH_RANGES::GREEK:
-        return GREEK_GLYPH_RANGES_ID;
+        return GLYPH_RANGES_GREEK_ID;
     case GLYPH_RANGES::KOREAN:
-        return KOREAN_GLYPH_RANGES_ID;
+        return GLYPH_RANGES_KOREAN_ID;
     case GLYPH_RANGES::CHINESE_GENERAL:
-        return CHINESE_GENERAL_GLYPH_RANGES_ID;
+        return GLYPH_RANGES_CHINESE_GENERAL_ID;
     case GLYPH_RANGES::CHINESE_FULL:
-        return CHINESE_FULL_GLYPH_RANGES_ID;
+        return GLYPH_RANGES_CHINESE_FULL_ID;
     case GLYPH_RANGES::JAPANESE:
-        return JAPANESE_GLYPH_RANGES_ID;
+        return GLYPH_RANGES_JAPANESE_ID;
     case GLYPH_RANGES::CYRILLIC:
-        return CYRILLIC_GLYPH_RANGES_ID;
+        return GLYPH_RANGES_CYRILLIC_ID;
     case GLYPH_RANGES::THAI:
-        return THAI_GLYPH_RANGES_ID;
+        return GLYPH_RANGES_THAI_ID;
     case GLYPH_RANGES::VIETNAMESE:
-        return VIETNAMESE_GLYPH_RANGES_ID;
+        return GLYPH_RANGES_VIETNAMESE_ID;
     default:
         return "";
     }
