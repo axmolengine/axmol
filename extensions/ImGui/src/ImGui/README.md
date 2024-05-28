@@ -10,7 +10,8 @@ Sync from https://github.com/Xrysnow/cocos2d-x-imgui and do a little changes
 * Add dpi scale support, use ```ImGuiPresenter::getInstance()->enableDPIScale();```
 * Easy font manager, stable API ```addFont,removeFont,clearFonts``` to manage ImGui fonts, with ImGui API, very hard to do correctly.
 * Easy to add/use custom or imgui pre-defined glyph ranges ```ImGuiPresenter::GLYPH_RANGES,addGlyphRanges,removeGlyphRanges```
-and then specify the glyph ranges id while calling `addFont` to use those with specific font.
+and then specify the glyph ranges id while calling `addFont`
+to use those with specific font.
 
 ## How to use
 ```cpp
