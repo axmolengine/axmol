@@ -456,7 +456,6 @@ void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, const st
     addFont(fontFile, fontSize, fontFile, glyphRanges);
 }
 
-
 void ImGuiPresenter::addFont(std::string_view fontFile,
                              float fontSize,
                              std::string_view glyphRangesId,
