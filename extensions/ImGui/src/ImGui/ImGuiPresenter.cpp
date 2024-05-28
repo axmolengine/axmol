@@ -430,22 +430,6 @@ void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, GLYPH_RA
     addFont(fontFile, fontSize, glyphId);
 }
 
-void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, const std::vector<ImWchar>& glyphRange)
-{
-    if (FileUtils::getInstance()->isFileExistInternal(fontFile))
-    {
-        ImWchar* imChars = nullptr;
-        if (!glyphRange.empty())
-            imChars = addGlyphRanges(fontFile, glyphRange);
-
-        bool isDirty = _fontsInfoMap.emplace(fontFile, FontInfo{fontSize, imChars, std::string(fontFile)}).second;
-        isDirty |= imChars && (_usedGlyphRanges.emplace((uintptr_t)imChars).second ||
-                               _fontsInfoMap.at(fontFile).glyphRanges != imChars);
-        if (isDirty)
-            ImGui_ImplAx_SetDeviceObjectsDirty();
-    }
-}
-
 void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, std::string_view glyphRangeId)
 {
     auto it = _glyphRanges.find(glyphRangeId);
@@ -467,6 +451,12 @@ void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, std::str
     }
 }
 
+void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, const std::vector<ImWchar>& glyphRanges)
+{
+    addFont(fontFile, fontSize, fontFile, glyphRanges);
+}
+
+
 void ImGuiPresenter::addFont(std::string_view fontFile,
                              float fontSize,
                              std::string_view glyphRangesId,
@@ -479,8 +469,8 @@ void ImGuiPresenter::addFont(std::string_view fontFile,
             imChars = addGlyphRanges(glyphRangesId, glyphRanges);
 
         bool isDirty = _fontsInfoMap.emplace(fontFile, FontInfo{fontSize, imChars, std::string(glyphRangesId)}).second;
-        isDirty |=
-            _usedGlyphRanges.emplace((uintptr_t)imChars).second || _fontsInfoMap.at(fontFile).glyphRanges != imChars;
+        isDirty |= imChars && (_usedGlyphRanges.emplace((uintptr_t)imChars).second ||
+                               _fontsInfoMap.at(fontFile).glyphRanges != imChars);
         if (isDirty)
             ImGui_ImplAx_SetDeviceObjectsDirty();
     }
