@@ -52,8 +52,10 @@ import android.view.Display;
 import android.view.DisplayCutout;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 
 import com.android.vending.expansion.zipfile.APKExpansionSupport;
@@ -634,6 +636,46 @@ public class AxmolEngine {
         }
 
         return safeInsets;
+    }
+
+    /**
+     * Returns rounded corner radius array.
+     *
+     * @return array of int with rounded corner radius values
+     */
+    @SuppressLint("NewApi")
+    public static int[] getDeviceCornerRadii() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            final int[] radii = new int[]{0, 0, 0, 0};
+            Window cocosWindow = sActivity.getWindow();
+            View view = cocosWindow.getDecorView();
+            WindowInsets insets = view.getRootWindowInsets();
+            android.view.RoundedCorner topLeft = insets.getRoundedCorner(android.view.RoundedCorner.POSITION_TOP_LEFT);
+            android.view.RoundedCorner topRight = insets.getRoundedCorner(android.view.RoundedCorner.POSITION_TOP_RIGHT);
+            android.view.RoundedCorner bottomLeft = insets.getRoundedCorner(android.view.RoundedCorner.POSITION_BOTTOM_LEFT);
+            android.view.RoundedCorner bottomRight = insets.getRoundedCorner(android.view.RoundedCorner.POSITION_BOTTOM_RIGHT);
+            int radiusTopLeft = 0;
+            int radiusTopRight = 0;
+            int radiusBottomLeft = 0;
+            int radiusBottomRight = 0;
+            if (topLeft != null) radiusTopLeft = topLeft.getRadius();
+            if (topRight != null) radiusTopRight = topRight.getRadius();
+            if (bottomLeft != null) radiusBottomLeft = bottomLeft.getRadius();
+            if (bottomRight != null) radiusBottomRight = bottomRight.getRadius();
+
+            int leftRadius = Math.max(radiusTopLeft, radiusBottomLeft);
+            int topRadius = Math.max(radiusTopLeft, radiusTopRight);
+            int rightRadius = Math.max(radiusTopRight, radiusBottomRight);
+            int bottomRadius = Math.max(radiusBottomLeft, radiusBottomRight);
+
+            radii[0] = bottomRadius;
+            radii[1] = leftRadius;
+            radii[2] = rightRadius;
+            radii[3] = topRadius;
+            return radii;
+        }
+
+        return null;
     }
 
     /**
