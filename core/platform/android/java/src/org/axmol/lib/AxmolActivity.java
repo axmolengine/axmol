@@ -301,7 +301,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
         // AxmolGLSurfaceView
         this.mGLSurfaceView = this.onCreateView();
-        this.mGLSurfaceView.setPreserveEGLContextOnPause(true);
+        this.mGLSurfaceView.setPreserveEGLContextOnPause(false);
 
         // ...add to FrameLayout
         mFrameLayout.addView(this.mGLSurfaceView);

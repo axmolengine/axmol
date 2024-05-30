@@ -169,15 +169,17 @@ public:
      *  event dispatcher list.
      *
      * @param event The event needs to be dispatched.
+     * @param forced If the event should be sent out regardless of enabled state
      */
-    void dispatchEvent(Event* event);
+    void dispatchEvent(Event* event, bool forced = false);
 
     /** Dispatches a Custom Event with a event name an optional user data.
      *
      * @param eventName The name of the event which needs to be dispatched.
      * @param optionalUserData The optional user data, it's a void*, the default value is nullptr.
+     * @param forced If the event should be sent out regardless of enabled state
      */
-    void dispatchCustomEvent(std::string_view eventName, void* optionalUserData = nullptr);
+    void dispatchCustomEvent(std::string_view eventName, void* optionalUserData = nullptr, bool forced = false);
 
     /** Query whether the specified event listener id has been added.
      *

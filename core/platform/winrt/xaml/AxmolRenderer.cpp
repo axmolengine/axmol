@@ -71,7 +71,7 @@ void AxmolRenderer::Resume()
     {
         Application::getInstance()->applicationWillEnterForeground();
         ax::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);
-        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent);
+        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent, true);
     }
 }
 
@@ -81,7 +81,7 @@ void AxmolRenderer::Pause()
     {
         Application::getInstance()->applicationDidEnterBackground();
         ax::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);
-        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&backgroundEvent);
+        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&backgroundEvent, true);
     }
 }
 
@@ -104,12 +104,12 @@ void AxmolRenderer::DeviceLost()
         // ax::VolatileTextureMgr::reloadAllTextures();
 
         ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
-        director->getEventDispatcher()->dispatchEvent(&recreatedEvent);
+        director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
         director->setGLDefaultValues();
 
         Application::getInstance()->applicationWillEnterForeground();
         ax::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);
-        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent);
+        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent, true);
     }
 }
 
