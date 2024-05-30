@@ -95,9 +95,13 @@ public:
      */
     static TransitionScene* create(float t, Scene* scene);
 
-    /** Called after the transition finishes.
+    /** Called after one transition finishes. Will call allFinish when in and out Scene actions are done.
      */
-    void finish();
+    void addFinish();
+    
+    /** Called after all transitions finish.
+     */
+    void allFinish();
 
     /** Used by some transitions to hide the outer scene.
      */
@@ -128,7 +132,9 @@ protected:
     float _duration;
     bool _isInSceneOnTop;
     bool _isSendCleanupToScene;
-
+    int _finishedRunActionCount;
+    
+    
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(TransitionScene);
 };
