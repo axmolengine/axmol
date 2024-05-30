@@ -1447,7 +1447,7 @@ Issue4129::Issue4129() : _bugFixed(false)
         this->addChild(menu2);
 
         // Simulate to dispatch 'come to background' event
-        _eventDispatcher->dispatchCustomEvent(EVENT_COME_TO_BACKGROUND);
+        _eventDispatcher->dispatchCustomEvent(EVENT_COME_TO_BACKGROUND, nullptr, true);
     });
 
     removeAllTouchItem->setFontSizeObj(16);
