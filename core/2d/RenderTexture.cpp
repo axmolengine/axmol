@@ -64,7 +64,6 @@ RenderTexture::~RenderTexture()
     AX_SAFE_RELEASE(_renderTarget);
     AX_SAFE_RELEASE(_sprite);
     AX_SAFE_RELEASE(_depthStencilTexture);
-    AX_SAFE_RELEASE(_UITextureImage);
 }
 
 void RenderTexture::listenToBackground(EventCustom* /*event*/)
@@ -73,12 +72,10 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
     // So we disable this pair of message handler at present.
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     // to get the rendered texture data
-    auto func = [&](Image* uiTextureImage) {
+    auto func = [&](RefPtr<Image> uiTextureImage) {
         if (uiTextureImage)
         {
-            AX_SAFE_RELEASE(_UITextureImage);
             _UITextureImage = uiTextureImage;
-            AX_SAFE_RETAIN(_UITextureImage);
             const Vec2& s = _texture2D->getContentSizeInPixels();
             VolatileTextureMgr::addDataTexture(_texture2D, uiTextureImage->getData(), s.width * s.height * 4,
                                                backend::PixelFormat::RGBA8, s);
@@ -87,7 +84,6 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
         {
             AXLOG("Cache rendertexture failed!");
         }
-        AX_SAFE_RELEASE(uiTextureImage);
     };
     auto callback = std::bind(func, std::placeholders::_1);
     newImage(callback, false);
