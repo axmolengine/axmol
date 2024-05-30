@@ -47,6 +47,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     private int mScreenWidth;
     private int mScreenHeight;
     private boolean mNativeInitCompleted = false;
+    private boolean mIsPaused = false;
 
     // ===========================================================
     // Constructors
@@ -97,7 +98,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
         } else {
             final long now = System.nanoTime();
             final long interval = now - this.mLastTickInNanoSeconds;
-            
+
             /*
              * Render time MUST be counted in, or the FPS will slower than appointed.
             */
@@ -164,10 +165,14 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
             return;
 
         AxmolRenderer.nativeOnPause();
+        mIsPaused = true;
     }
 
     public void handleOnResume() {
-        AxmolRenderer.nativeOnResume();
+        if (mIsPaused) {
+            AxmolRenderer.nativeOnResume();
+            mIsPaused = false;
+        }
     }
 
     private static native void nativeInsertText(final String text);
