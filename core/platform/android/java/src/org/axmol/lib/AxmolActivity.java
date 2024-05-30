@@ -72,6 +72,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     private boolean hasFocus = false;
     private boolean showVirtualButton = false;
     private boolean paused = true;
+    private boolean rendererPaused = true;
 
     public AxmolGLSurfaceView getGLSurfaceView(){
         return  mGLSurfaceView;
@@ -223,7 +224,11 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     private void resume() {
         this.hideVirtualButton();
         AxmolEngine.onResume();
-        mGLSurfaceView.onResume();
+        if (rendererPaused) {
+            mGLSurfaceView.onResume();
+            rendererPaused = false;
+        }
+        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     private void resumeIfHasFocus() {
@@ -242,6 +247,13 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         paused = true;
         super.onPause();
         AxmolEngine.onPause();
+        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        rendererPaused = true;
         mGLSurfaceView.onPause();
     }
 
