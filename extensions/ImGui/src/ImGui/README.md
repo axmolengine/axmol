@@ -9,6 +9,9 @@ Sync from https://github.com/Xrysnow/cocos2d-x-imgui and do a little changes
 * Use ```FOURCC``` for key of ImGui render loop
 * Add dpi scale support, use ```ImGuiPresenter::getInstance()->enableDPIScale();```
 * Easy font manager, stable API ```addFont,removeFont,clearFonts``` to manage ImGui fonts, with ImGui API, very hard to do correctly.
+* Easy to add/use custom or imgui pre-defined glyph ranges ```ImGuiPresenter::GLYPH_RANGES,addGlyphRanges,removeGlyphRanges```
+and then specify the glyph ranges id while calling `addFont`
+to use those with specific font.
 
 ## How to use
 ```cpp
@@ -24,7 +27,7 @@ public:
         ImGuiPresenter::getInstance()->addFont(R"(C:\Windows\Fonts\msyh.ttc)");
         /* For Simplified Chinese support, please use:
         ImGuiPresenter::getInstance()->addFont(R"(C:\Windows\Fonts\msyh.ttc)", ImGuiPresenter::DEFAULT_FONT_SIZE,
-                                           ImGuiPresenter::CHS_GLYPH_RANGE::GENERAL);
+                                           ImGuiPresenter::GLYPH_RANGES::CHINESE_GENERAL);
         */
         ImGuiPresenter::getInstance()->enableDPIScale(); // enable dpi scale for 4K display support, depends at least one valid ttf/ttc font was added.
         ImGuiPresenter::getInstance()->addRenderLoop("#im01", AX_CALLBACK_0(GameScene::onImGuiDraw, this), this);

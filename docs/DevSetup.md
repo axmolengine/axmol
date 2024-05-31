@@ -201,8 +201,10 @@ Note: if you use non-SDK provided CMake, you will need to download `ninja` from 
   5. Generate the relevant XCode project using one of the following commands:
      - for iOS arm64:  
      ```axmol build -p ios -a arm64 -c```
+     - for iOS simulator arm64:  
+     ```axmol build -p ios -a arm64 -sdk simulator -c```
      - for iOS simulator x86_64:  
-     ```axmol build -p ios -a x64 -c```
+     ```axmol build -p ios -a x64 -sdk simulator -c```
      - for tvOS arm64:  
      ```axmol build -p tvos -a arm64 -c```
      - for tvOS simulator x86_64:  

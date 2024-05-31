@@ -177,9 +177,15 @@ void Inspector::setFontSize(float fontSize)
     _fontSize = fontSize;
 }
 
+void Inspector::setFontGlyphId(std::string_view glyphId)
+{
+    _fontGlyphId = std::string(glyphId);
+}
+
 void Inspector::init()
 {
     _fontPath = "fonts/arial.ttf";
+    _fontSize = ImGuiPresenter::DEFAULT_FONT_SIZE;
 
     addPropertyHandler("__NODE__", std::make_unique<InspectorNodePropertyHandler>());
     addPropertyHandler("__SPRITE__", std::make_unique<InspectorSpritePropertyHandler>());
@@ -399,7 +405,7 @@ void Inspector::openForScene(Scene* target)
     }
 
     auto* presenter = ImGuiPresenter::getInstance();
-    presenter->addFont(FileUtils::getInstance()->fullPathForFilename(_fontPath), _fontSize);
+    presenter->addFont(FileUtils::getInstance()->fullPathForFilename(_fontPath), _fontSize, _fontGlyphId);
     presenter->enableDPIScale();
     presenter->addRenderLoop("#insp", AX_CALLBACK_0(Inspector::mainLoop , this), target);
 }

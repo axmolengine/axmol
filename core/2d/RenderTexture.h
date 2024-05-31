@@ -398,7 +398,7 @@ protected:
     backend::RenderTarget* _oldRenderTarget = nullptr;
     RenderTargetFlag _renderTargetFlags{};
 
-    Image* _UITextureImage            = nullptr;
+    RefPtr<Image> _UITextureImage            = nullptr;
     backend::PixelFormat _pixelFormat = backend::PixelFormat::RGBA8;
 
     Color4F _clearColor;

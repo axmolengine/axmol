@@ -49,7 +49,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeOnPause(JNIEnv*, j
     {
         Application::getInstance()->applicationDidEnterBackground();
         ax::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);
-        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&backgroundEvent);
+        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&backgroundEvent, true);
     }
 }
 
@@ -64,7 +64,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeOnResume(JNIEnv*, 
             Application::getInstance()->applicationWillEnterForeground();
 
         ax::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);
-        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent);
+        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent, true);
 
         firstTime = false;
     }
