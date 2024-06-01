@@ -183,55 +183,54 @@ if (!$revision) {
 }
 
 $branch_name = $null
-$tracking_branch = $false
 if ($is_git_repo) {
     $old_rev_hash = $(git -C $lib_src rev-parse HEAD)
 
-    $branch_name = $(git -C $lib_src branch --show-current)
-    $tracking_branch = $revision -eq $branch_name
-
-    if (!$tracking_branch) {
+    # The 'revision' can be branch name, tag or a commit id
+    $new_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
+    if (!$new_rev_hash) {
+        git -C $lib_src fetch
         $new_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
         if (!$new_rev_hash) {
-            git -C $lib_src fetch
-            $new_rev_hash = $(git -C $lib_src rev-parse --verify --quiet "$revision^{}")
-            if (!$new_rev_hash) {
-                throw "fetch.ps1: Could not found commit hash of $revision"
-            }
-        }
-
-        if ($old_rev_hash -ne $new_rev_hash) {
-            git -C $lib_src checkout $revision 1>$null 2>$null
-            $cur_rev_hash = $(git -C $lib_src rev-parse HEAD)
-            if ($cur_rev_hash -ne $new_rev_hash) {
-                println "fetch.ps1: warning: cur_rev_hash($cur_rev_hash) != new_rev_hash($new_rev_hash)"
-            }
-            
-            if ((Test-Path (Join-Path $lib_src '.gitmodules') -PathType Leaf)) {
-                git -C $lib_src submodule update --recursive --init
-            }
-
-            $is_rev_mod = $true
+            throw "fetch.ps1: Could not found commit hash of $revision"
         }
     }
-    elseif ($pull_branch -and !$is_rev_mod) {
-        git -C $lib_src pull
+
+    if ($old_rev_hash -ne $new_rev_hash) {
+        git -C $lib_src checkout $revision 1>$null 2>$null
         $cur_rev_hash = $(git -C $lib_src rev-parse HEAD)
-        $is_rev_mod = $old_rev_hash -ne $cur_rev_hash
+        if ($cur_rev_hash -ne $new_rev_hash) {
+            println "fetch.ps1: warning: cur_rev_hash($cur_rev_hash) != new_rev_hash($new_rev_hash)"
+        }
+
+        $is_rev_mod = $true
+    }
+
+    $branch_name = $(git -C $lib_src branch --show-current)
+    if ($branch_name -and $pull_branch) {
+        git -C $lib_src pull
+        $new_rev_hash = $(git -C $lib_src rev-parse HEAD)
+        if ($cur_rev_hash -ne $new_rev_hash) {
+            $cur_rev_hash = $new_rev_hash
+            $is_rev_mod = $true
+        }
     }
 }
 
 if ($is_rev_mod) {
     $sentry_content = "ver: $version"
     if ($is_git_repo) {
-        if ($tracking_branch) {
+        if ((Test-Path (Join-Path $lib_src '.gitmodules') -PathType Leaf)) {
+            git -C $lib_src submodule update --recursive --init
+        }
+        if ($branch_name) {
             # tracking branch
             $commits = $(git -C $lib_src rev-list --count HEAD)
             $sentry_content += "`nbranch: $branch_name"
             $sentry_content += "`ncommits: $commits"
-            $revision = $(git -C $lib_src rev-parse --short=7 HEAD)
-            $sentry_content += "`nrev: $revision"
-            println "fetch.ps1: HEAD is now at $branch_name@$revision"
+            $commit_id = $(git -C $lib_src rev-parse --short=7 HEAD)
+            $sentry_content += "`nrev: $commit_id"
+            println "fetch.ps1: HEAD is now at $branch_name@$commit_id"
         }
         else {
             println "fetch.ps1: HEAD is now at $revision@$cur_rev_hash"
