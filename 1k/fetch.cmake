@@ -87,28 +87,34 @@ function(_1kfetch uri)
 
     set(_pkg_store "${_1kfetch_cache_dir}/${_pkg_name}")
 
-    set(_fetch_args 
-        -uri "${uri}"
-        -prefix "${_1kfetch_cache_dir}"
-        -manifest "${_1kfetch_manifest}"
-        -name "${_pkg_name}"
-    )
-    # rev: the explicit rev to checkout, i.e. git release tag name
-    if(opt_REV)
-        list(APPEND _fetch_args -rev ${opt_REV})
-    endif()
-
-    if(_1KFETCH_UPGRADE)
-        list(APPEND _fetch_args -pull_branch)
-    endif()
-
-    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
-        ${_fetch_args}
-        RESULT_VARIABLE _errorcode
+    get_property(_fetched GLOBAL PROPERTY "${_pkg_name}_fetched")
+    if (NOT _fetched)
+        set(_fetch_args 
+            -uri "${uri}"
+            -prefix "${_1kfetch_cache_dir}"
+            -manifest "${_1kfetch_manifest}"
+            -name "${_pkg_name}"
         )
-    if (_errorcode)
-        message(FATAL_ERROR "fetch content ${uri} failed")
+        # rev: the explicit rev to checkout, i.e. git release tag name
+        if(opt_REV)
+            list(APPEND _fetch_args -rev ${opt_REV})
+        endif()
+
+        if(_1KFETCH_UPGRADE)
+            list(APPEND _fetch_args -pull_branch)
+        endif()
+
+        execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
+            ${_fetch_args}
+            RESULT_VARIABLE _errorcode
+            )
+        if (_errorcode)
+            message(FATAL_ERROR "fetch content ${uri} failed")
+        endif()
+
+        set_property(GLOBAL PROPERTY "${_pkg_name}_fetched" TRUE)
     endif()
+
     set(${_pkg_name}_SOURCE_DIR ${_pkg_store} PARENT_SCOPE)
     set(source_dir ${_pkg_store} PARENT_SCOPE)
 endfunction()

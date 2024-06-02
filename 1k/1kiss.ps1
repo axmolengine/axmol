@@ -1836,6 +1836,10 @@ if (!$setupOnly) {
                     }
                     $1k.println("cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS")
                     cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS | Out-Host
+                    if (!$?) {
+                        Set-Location $stored_cwd
+                        exit $LASTEXITCODE
+                    }
 
                     if ($options.i) {
                         $install_args = @($BUILD_DIR, '--config', $optimize_flag)
@@ -1895,7 +1899,7 @@ if (!$setupOnly) {
 
         Write-Output ("gn_buildargs_overrides=$gn_buildargs_overrides, Count={0}" -f $gn_buildargs_overrides.Count)
 
-        $BUILD_DIR = resolve_out_dir $null 'out/'
+        $BUILD_DIR = resolve_out_dir 'out/'
 
         if ($rebuild) {
             $1k.rmdirs($BUILD_DIR)
@@ -1948,3 +1952,5 @@ if (!$setupOnly) {
         compilerID   = $TOOLCHAIN_NAME
     }
 }
+
+exit $LASTEXITCODE
