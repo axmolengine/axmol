@@ -1104,7 +1104,7 @@ void UniqueChildStencilTest::addChildStencils()
     sprite->setPosition(Vec2(50, contentSize.height - 50));
     _parentStencil->addChild(sprite);
 
-    // Child stencil 3
+    // Child stencil 4
     sprite = Sprite::create("Images/elephant1_Diffuse.png");
     sprite->setStretchEnabled(true);
     sprite->setContentSize(spriteSize);
