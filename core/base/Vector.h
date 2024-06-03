@@ -171,7 +171,7 @@ public:
     }
 
     /** Copy assignment operator with std::move semantic. */
-    Vector& operator=(Vector&& other)
+    Vector& operator=(Vector&& other) noexcept
     {
         if (this != &other)
         {

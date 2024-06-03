@@ -84,7 +84,7 @@ struct AX_DLL ResourceData
         file  = rv.file;
         plist = rv.plist;
     }
-    ResourceData(ResourceData&& rv)
+    ResourceData(ResourceData&& rv) noexcept
     {
         type  = rv.type;
         file  = std::move(rv.file);
@@ -104,7 +104,7 @@ struct AX_DLL ResourceData
         plist = rv.plist;
         return *this;
     }
-    ResourceData& operator=(ResourceData&& rv)
+    ResourceData& operator=(ResourceData&& rv) noexcept
     {
         type  = rv.type;
         file  = std::move(rv.file);
