@@ -45,7 +45,7 @@ namespace ui
 {
 
 bool EditBoxImplWin::s_isInitialized       = false;
-int EditBoxImplWin::s_editboxChildID       = 100;
+HMENU EditBoxImplWin::s_editboxChildID     = (HMENU)100;
 HWND EditBoxImplWin::s_previousFocusWnd    = 0;
 WNDPROC EditBoxImplWin::s_prevCocosWndProc = 0;
 HINSTANCE EditBoxImplWin::s_hInstance      = 0;
@@ -119,7 +119,7 @@ void EditBoxImplWin::createEditCtrl(bool singleLine)
                                       0, 0, 0,
                                       0,                        // set size in WM_SIZE message
                                       s_hwndCocos,              // parent window
-                                      (HMENU)s_editboxChildID,  // edit control ID
+                                      s_editboxChildID,         // edit control ID
                                       s_hInstance,
                                       this);  // pointer not needed
 
