@@ -113,7 +113,7 @@ public:
         Command(const Command& o);
 
         /** Move constructor */
-        Command(Command&& o);
+        Command(Command&& o) noexcept;
 
         /** Destructor */
         ~Command();
@@ -122,7 +122,7 @@ public:
         Command& operator=(const Command& o);
 
         /** Move operator */
-        Command& operator=(Command&& o);
+        Command& operator=(Command&& o) noexcept;
 
         /** add callback */
         void addCallback(const Callback& callback);

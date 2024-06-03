@@ -197,7 +197,7 @@ Console::Command::Command(const Command& o)
     *this = o;
 }
 
-Console::Command::Command(Command&& o)
+Console::Command::Command(Command&& o) noexcept
 {
     *this = std::move(o);
 }
@@ -233,7 +233,7 @@ Console::Command& Console::Command::operator=(const Command& o)
     return *this;
 }
 
-Console::Command& Console::Command::operator=(Command&& o)
+Console::Command& Console::Command::operator=(Command&& o) noexcept
 {
     if (this != &o)
     {
