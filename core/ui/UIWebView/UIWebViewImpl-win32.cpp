@@ -200,22 +200,6 @@ inline std::string jsonParse(std::string_view s, std::string_view key, const int
     return "";
 }
 
-static LPWSTR to_lpwstr(std::string_view s)
-{
-    const int n = MultiByteToWideChar(CP_UTF8, 0, s.data(), -1, NULL, 0);
-    auto* ws    = new wchar_t[n];
-    MultiByteToWideChar(CP_UTF8, 0, s.data(), -1, ws, n);
-    return ws;
-}
-
-static std::string to_str(LPWSTR ws)
-{
-    int len = WideCharToMultiByte(CP_UTF8, 0, ws, -1, NULL, 0, 0, 0);
-    std::string str(len, 0);
-    WideCharToMultiByte(CP_UTF8, 0, ws, -1, str.data(), len, 0, 0);
-    return str;
-}
-
 template <class ArgType>
 static std::string getUriStringFromArgs(ArgType* args)
 {
@@ -224,7 +208,7 @@ static std::string getUriStringFromArgs(ArgType* args)
         LPWSTR uri;
         args->get_Uri(&uri);
 
-        return to_str(uri);
+        return ntcvt::from_chars(uri);
     }
 
     return {};
@@ -361,14 +345,14 @@ private:
                 [this]() {
                     LPWSTR uri;
                     this->m_webview->get_Source(&uri);
-                    std::string result = to_str(uri);
+                    std::string result = ntcvt::from_chars(uri);
                     if (_didFinishLoading)
                         _didFinishLoading(result);
                 },
                 [this]() {
                     LPWSTR uri;
                     this->m_webview->get_Source(&uri);
-                    std::string result = to_str(uri);
+                    std::string result = ntcvt::from_chars(uri);
                     if (_didFailLoading)
                         _didFailLoading(result);
                 },
@@ -406,23 +390,20 @@ private:
 
     void navigate(std::string_view url)
     {
-        auto wurl = to_lpwstr(url);
-        m_webview->Navigate(wurl);
-        delete[] wurl;
+        auto wurl = ntcvt::from_chars(url.data());
+        m_webview->Navigate(wurl.c_str());
     }
 
     void init(std::string_view js)
     {
-        LPCWSTR wjs = to_lpwstr(js);
-        m_webview->AddScriptToExecuteOnDocumentCreated(wjs, nullptr);
-        delete[] wjs;
+        auto wjs = ntcvt::from_chars(js);
+        m_webview->AddScriptToExecuteOnDocumentCreated(wjs.c_str(), nullptr);
     }
 
     void eval(std::string_view js)
     {
-        LPCWSTR wjs = to_lpwstr(js);
-        m_webview->ExecuteScript(wjs, nullptr);
-        delete[] wjs;
+        auto wjs = ntcvt::from_chars(js);
+        m_webview->ExecuteScript(wjs.c_str(), nullptr);
     }
 
     void on_message(std::string_view msg)
@@ -987,9 +968,8 @@ void Win32WebControl::loadHTMLString(std::string_view html, std::string_view bas
 {
     if (!html.empty())
     {
-        const auto whtml = to_lpwstr(html);
-        m_webview->NavigateToString(whtml);
-        delete[] whtml;
+        const auto whtml = ntcvt::from_chars(html);
+        m_webview->NavigateToString(whtml.c_str());
     }
 }
 

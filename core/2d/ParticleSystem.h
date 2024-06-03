@@ -1185,7 +1185,7 @@ public:
     void setAnimationDescriptor(unsigned short indexOfDescriptor,
                                 float time,
                                 float timeVariance,
-                                const std::vector<unsigned short>& indices,
+                                std::vector<unsigned short>& indices,
                                 bool reverse = false);
 
     /** Add a particle animation descriptor with the index 0.
@@ -1193,7 +1193,7 @@ public:
      * @param indices An array of the indicies
      * @param reverse Should the animation indicies be played backwards? (default: false)
      */
-    void setAnimationDescriptor(const std::vector<unsigned short>& indices, bool reverse = false)
+    void setAnimationDescriptor(std::vector<unsigned short>& indices, bool reverse = false)
     {
         setAnimationDescriptor(0, 0, 0, indices, reverse);
     };
