@@ -200,6 +200,22 @@ inline std::string jsonParse(std::string_view s, std::string_view key, const int
     return "";
 }
 
+static LPWSTR to_lpwstr(std::string_view s)
+{
+    const int n = MultiByteToWideChar(CP_UTF8, 0, s.data(), -1, NULL, 0);
+    auto* ws    = new wchar_t[n];
+    MultiByteToWideChar(CP_UTF8, 0, s.data(), -1, ws, n);
+    return ws;
+}
+
+static std::string to_str(LPWSTR ws)
+{
+    int len = WideCharToMultiByte(CP_UTF8, 0, ws, -1, NULL, 0, 0, 0);
+    std::string str(len, 0);
+    WideCharToMultiByte(CP_UTF8, 0, ws, -1, str.data(), len, 0, 0);
+    return str;
+}
+
 template <class ArgType>
 static std::string getUriStringFromArgs(ArgType* args)
 {
@@ -207,10 +223,8 @@ static std::string getUriStringFromArgs(ArgType* args)
     {
         LPWSTR uri;
         args->get_Uri(&uri);
-        std::wstring ws(uri);
-        std::string result = std::string(ws.begin(), ws.end());
 
-        return result;
+        return to_str(uri);
     }
 
     return {};
@@ -294,14 +308,6 @@ private:
     static bool s_isInitialized;
     static void lazyInit();
 
-    static LPWSTR to_lpwstr(std::string_view s)
-    {
-        const int n = MultiByteToWideChar(CP_UTF8, 0, s.data(), -1, NULL, 0);
-        auto* ws    = new wchar_t[n];
-        MultiByteToWideChar(CP_UTF8, 0, s.data(), -1, ws, n);
-        return ws;
-    }
-
     bool embed(HWND wnd, bool debug, msg_cb_t cb)
     {
         std::atomic_flag flag = ATOMIC_FLAG_INIT;
@@ -355,16 +361,14 @@ private:
                 [this]() {
                     LPWSTR uri;
                     this->m_webview->get_Source(&uri);
-                    std::wstring ws(uri);
-                    const auto result = std::string(ws.begin(), ws.end());
+                    std::string result = to_str(uri);
                     if (_didFinishLoading)
                         _didFinishLoading(result);
                 },
                 [this]() {
                     LPWSTR uri;
                     this->m_webview->get_Source(&uri);
-                    std::wstring ws(uri);
-                    const auto result = std::string(ws.begin(), ws.end());
+                    std::string result = to_str(uri);
                     if (_didFailLoading)
                         _didFailLoading(result);
                 },
