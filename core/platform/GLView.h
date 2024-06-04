@@ -424,6 +424,13 @@ public:
     virtual void* getNSGLContext() = 0;  // stevetranby: added
 #endif                                /* (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) */
 
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+    virtual void* getX11Window() = 0;
+    virtual void* getX11Display() = 0;
+    virtual void* getWaylandWindow() = 0;
+    virtual void* getWaylandDisplay() = 0;
+#endif // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+
     /**
      * Renders a Scene with a Renderer
      * This method is called directly by the Director
