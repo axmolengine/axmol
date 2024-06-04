@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 
@@ -65,6 +66,7 @@ ClippingNodeTests::ClippingNodeTests()
     ADD_TEST_CASE(ClippingToRenderTextureTest);
     ADD_TEST_CASE(ClippingRectangleNodeTest);
     ADD_TEST_CASE(ClippingNodePerformanceTest);
+    ADD_TEST_CASE(UniqueChildStencilTest);
 }
 
 //// Demo examples start here
@@ -1017,4 +1019,97 @@ void ClippingNodePerformanceTest::setup()
     auto menu = Menu::create(increase, nullptr);
     menu->setPosition(Vec2(s.width / 2, s.height - 80));
     addChild(menu, 1);
+}
+
+// UniqueChildStencilTest
+
+UniqueChildStencilTest::~UniqueChildStencilTest()
+{
+    AX_SAFE_RELEASE(_outerClipper);
+    AX_SAFE_RELEASE(_parentStencil);
+}
+
+std::string UniqueChildStencilTest::title() const
+{
+    return "Unique Child Stencil Demo";
+}
+
+std::string UniqueChildStencilTest::subtitle() const
+{
+    return "";
+}
+
+void UniqueChildStencilTest::setup()
+{
+    auto target = Sprite::create(s_pathBlock);
+    target->setAnchorPoint(Vec2::ZERO);
+    target->setStretchEnabled(true);
+    target->setContentSize(target->getContentSize() * 3);
+
+    _outerClipper = ClippingNode::create();
+    _outerClipper->retain();
+    AffineTransform transform = AffineTransform::IDENTITY;
+    transform                 = AffineTransformScale(transform, target->getScale(), target->getScale());
+
+    _outerClipper->setContentSize(SizeApplyAffineTransform(target->getContentSize(), transform));
+    _outerClipper->setAnchorPoint(Vec2(0.5f, 0.5f));
+    _outerClipper->setPosition(Vec2(this->getContentSize()) * 0.5f);
+    _outerClipper->runAction(RepeatForever::create(RotateBy::create(1, 45)));
+
+    _outerClipper->setStencil(target);
+
+    auto clipper = ClippingNode::create();
+    clipper->setInverted(true);
+    clipper->setAlphaThreshold(0.05f);
+
+    clipper->addChild(target);
+
+    _parentStencil = Node::create();
+    _parentStencil->setContentSize(target->getContentSize());
+    _parentStencil->retain();
+
+    clipper->setStencil(_parentStencil, true);
+
+    _outerClipper->addChild(clipper);
+
+    this->addChild(_outerClipper);
+
+    addChildStencils();
+}
+
+void UniqueChildStencilTest::addChildStencils()
+{
+    auto&& contentSize = _parentStencil->getContentSize();
+
+    // Child stencil 1
+    constexpr auto radius = 30.f;
+    auto* drawNode        = DrawNode::create(2);
+    drawNode->drawSolidCircle(Vec2(50, 50), radius, 360, 180, 1, 1, Color4B::MAGENTA);
+
+    _parentStencil->addChild(drawNode);
+
+    // Child stencil 2
+    drawNode = DrawNode::create(2);
+    drawNode->drawSolidRect(Vec2(contentSize.width - 75, contentSize.height - 75),
+                            Vec2(contentSize.width - 25, contentSize.height - 25), Color4B::MAGENTA);
+    _parentStencil->addChild(drawNode);
+
+    // Child stencil 3
+    auto spriteSize = Vec2(80, 80);
+    auto sprite     = Sprite::create("Images/grossini.png");
+    sprite->setStretchEnabled(true);
+    sprite->setContentSize(spriteSize);
+    sprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    // position the sprite on the center of the screen
+    sprite->setPosition(Vec2(50, contentSize.height - 50));
+    _parentStencil->addChild(sprite);
+
+    // Child stencil 4
+    sprite = Sprite::create("Images/elephant1_Diffuse.png");
+    sprite->setStretchEnabled(true);
+    sprite->setContentSize(spriteSize);
+    sprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    // position the sprite on the center of the screen
+    sprite->setPosition(Vec2(contentSize.width - 50, 50));
+    _parentStencil->addChild(sprite);
 }

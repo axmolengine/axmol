@@ -51412,6 +51412,23 @@ int lua_ax_base_ClippingNode_setStencil(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
+    if (argc == 2) 
+    {
+        ax::Node* arg0;
+        bool arg1;
+
+        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ClippingNode:setStencil");
+
+        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.ClippingNode:setStencil");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ClippingNode_setStencil'", nullptr);
+            return 0;
+        }
+        cobj->setStencil(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ClippingNode:setStencil",argc, 1);
     return 0;
 
