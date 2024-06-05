@@ -288,6 +288,7 @@ if ($IsLinux) {
             $DEPENDS += 'libxi-dev'
             $DEPENDS += 'libfontconfig1-dev'
             $DEPENDS += 'libgtk-3-dev'
+            $DEPENDS += 'libwebkit2gtk-4.0-dev'
             $DEPENDS += 'binutils'
             $DEPENDS += 'g++'
             $DEPENDS += 'libasound2-dev'
