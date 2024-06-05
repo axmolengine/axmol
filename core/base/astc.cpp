@@ -22,47 +22,50 @@
 #include "astcenc/astcenc_internal_entry.h"
 #include "yasio/utils.hpp"
 
+#include "base/Director.h"
+
 #if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
 
-#define ASTCDEC_NO_CONTEXT 1
-#define ASTCDEC_PRINT_BENCHMARK 0
+#    define ASTCDEC_NO_CONTEXT      1
+#    define ASTCDEC_PRINT_BENCHMARK 0
+#    define ASTCDEC_MAX_PARALLELS   8u
 
 typedef std::mutex astc_decompress_mutex_t;
 
 struct astc_decompress_task
 {
-    astc_decompress_task() {}
-    ~astc_decompress_task()
+    astc_decompress_task() noexcept {}
+    ~astc_decompress_task() noexcept
     {
-#if ASTCDEC_NO_CONTEXT
+#    if ASTCDEC_NO_CONTEXT
         if (_bsd)
             aligned_free<block_size_descriptor>(_bsd);
-#else
+#    else
         if (_context)
             astcenc_context_free(this->_context);
-#endif
+#    endif
     }
 
     void wait_done()
     {
-#if ASTCDEC_NO_CONTEXT
+#    if ASTCDEC_NO_CONTEXT
         _decompress_pm.wait();
-#else
+#    else
         _context->manage_decompress.wait();
-#endif
+#    endif
     }
 
-    const uint8_t* _in_texels = nullptr;
+    const uint8_t* _in_texels{nullptr};
     void* _out_texels[1]{};
-    unsigned int _xblocks, _yblocks;
-#if ASTCDEC_NO_CONTEXT
-    unsigned int _block_x, _block_y;
+    unsigned int _xblocks{0}, _yblocks{0};
+#    if ASTCDEC_NO_CONTEXT
+    unsigned int _block_x{0}, _block_y{0};
     ParallelManager _decompress_pm{};
-    block_size_descriptor* _bsd = nullptr;
-#else
+    block_size_descriptor* _bsd{nullptr};
+#    else
     astcenc_config _config{};
-    astcenc_context* _context = nullptr;
-#endif
+    astcenc_context* _context{nullptr};
+#    endif
     astcenc_image _image_out{};
 };
 
@@ -74,35 +77,9 @@ public:
         static astc_decompress_job_manager s_instance;
         return &s_instance;
     }
-    astc_decompress_job_manager()
-    {
-#if !defined(__EMSCRIPTEN_PTHREADS__)
-        int thread_count = std::thread::hardware_concurrency();
-#else
-        constexpr int thread_count = 2;
-#endif
-        for (int i = 0; i < thread_count; ++i)
-        {
-            _threads.emplace_back(std::thread{&astc_decompress_job_manager::run, this});
-        }
-    }
+    astc_decompress_job_manager() {}
 
-    ~astc_decompress_job_manager()
-    {
-        _stopped = true;
-
-        _task_queue_mtx.lock();
-        _task_queue.clear();
-        _task_queue_cv.notify_all();
-        _task_queue_mtx.unlock();
-
-        for (auto&& t : _threads)
-        {
-            if (t.joinable())
-                t.join();
-        }
-        _threads.clear();
-    }
+    ~astc_decompress_job_manager() {}
 
     int decompress_parallel_sync(const uint8_t* in,
                                  uint32_t inlen,
@@ -117,21 +94,75 @@ public:
         if (!task)
             return ASTCENC_ERR_OUT_OF_MEM;
 
-        _task_queue_mtx.lock();
-        _task_queue.emplace_back(task);
-        _task_queue_mtx.unlock();
-        _task_queue_cv.notify_all();  // notify all thread to process the single decompress task parallel
+        auto jobSystem = ax::Director::getInstance()->getJobSystem();
+
+        const int PARALLELS = std::clamp(std::thread::hardware_concurrency(), 2u, ASTCDEC_MAX_PARALLELS);
+        for (int i = 0; i < PARALLELS; ++i)
+            jobSystem->enqueue([task] { execute(task); });
 
         task->wait_done();
 
-        _task_queue_mtx.lock();
-        assert(!_task_queue.empty());
-        auto t = _task_queue.front();
-        assert(t.get() == task.get());
-        _task_queue.pop_front();
-        _task_queue_mtx.unlock();
-
         return ASTCENC_SUCCESS;
+    }
+
+    static void execute(std::shared_ptr<astc_decompress_task> task)
+    {
+        constexpr astcenc_swizzle swz_decode{ASTCENC_SWZ_R, ASTCENC_SWZ_G, ASTCENC_SWZ_B, ASTCENC_SWZ_A};
+
+        auto& image_out = task->_image_out;
+
+#    if ASTCDEC_NO_CONTEXT
+        unsigned int block_x = task->_block_x;
+        unsigned int block_y = task->_block_y;
+        unsigned int block_z = 1;  // task->block_z;
+        auto& bsd            = *task->_bsd;
+        auto& decompress_pm  = task->_decompress_pm;
+#    else
+        unsigned int block_x = task->_config.block_x;
+        unsigned int block_y = task->_config.block_y;
+        unsigned int block_z = 1;  // task->_config.block_z;
+        auto& bsd            = *task->_context->context.bsd;
+        auto& decompress_pm  = task->_context->manage_decompress;
+#    endif
+        unsigned int xblocks = task->_xblocks;
+        unsigned int yblocks = task->_yblocks;
+        unsigned int zblocks = 1;  // (image_out.dim_z + block_z - 1) / block_z;
+
+        int row_blocks   = xblocks;
+        int plane_blocks = xblocks * yblocks;
+
+        image_block blk;
+        auto data = task->_in_texels;
+        for (;;)
+        {  // process the task
+            unsigned int count = 0;
+            unsigned int base  = decompress_pm.get_task_assignment(128, count);
+
+            bool no_task_count = !count;
+            if (no_task_count)
+            {  // this thread will going to suspend until new task added
+                break;
+            }
+
+            for (unsigned int i = base; i < base + count; i++)
+            {
+                // Decode i into x, y, z block indices
+                int z            = i / plane_blocks;
+                unsigned int rem = i - (z * plane_blocks);
+                int y            = rem / row_blocks;
+                int x            = rem - (y * row_blocks);
+
+                unsigned int offset = (((z * yblocks + y) * xblocks) + x) * 16;
+                symbolic_compressed_block scb;
+                physical_to_symbolic(bsd, data + offset, scb);
+
+                decompress_symbolic_block(ASTCENC_PRF_LDR, bsd, x * block_x, y * block_y, z * block_z, scb, blk);
+
+                store_image_block(image_out, blk, bsd, x * block_x, y * block_y, z * block_z, swz_decode);
+            }
+
+            decompress_pm.complete_task_assignment(count);
+        }
     }
 
 private:
@@ -160,7 +191,7 @@ private:
 
         task->_xblocks = xblocks;
         task->_yblocks = yblocks;
-#if ASTCDEC_NO_CONTEXT
+#    if ASTCDEC_NO_CONTEXT
         // since astcenc-3.3, doesn't required
         // static std::once_flag once_flag;
         // std::call_once(once_flag, init_quant_mode_table);
@@ -171,99 +202,27 @@ private:
         init_block_size_descriptor(block_x, block_y, 1, false, 0 /*unused for decompress*/, 0, *task->_bsd);
         // since astcenc-4.7.0, add second argument=nullptr
         task->_decompress_pm.init(total_blocks, nullptr);
-#else
+#    else
         (void)astcenc_config_init(ASTCENC_PRF_LDR, block_x, block_y, 1, 0, ASTCENC_FLG_DECOMPRESS_ONLY, &task->_config);
         (void)astcenc_context_alloc(&task->_config, (unsigned int)_threads.size(), &task->_context);
         task->_context->manage_decompress.init(total_blocks);
-#endif
+#    endif
         return task;
     }
-    void run()
-    {
-        const astcenc_swizzle swz_decode{ASTCENC_SWZ_R, ASTCENC_SWZ_G, ASTCENC_SWZ_B, ASTCENC_SWZ_A};
-
-        bool no_task_count = false;
-
-        for (;;)
-        {
-            std::unique_lock<astc_decompress_mutex_t> lck(_task_queue_mtx);
-            if (!_stopped && (_task_queue.empty() || no_task_count))
-                _task_queue_cv.wait(lck);
-
-            if (_stopped)
-                break;
-
-            if (_task_queue.empty())
-                continue;
-            auto task = _task_queue.front();
-            lck.unlock();  // unlock make sure other thread can work for the task
-
-            auto& image_out = task->_image_out;
-
-#if ASTCDEC_NO_CONTEXT
-            unsigned int block_x = task->_block_x;
-            unsigned int block_y = task->_block_y;
-            unsigned int block_z = 1;  // task->block_z;
-            auto& bsd            = *task->_bsd;
-            auto& decompress_pm  = task->_decompress_pm;
-#else
-            unsigned int block_x = task->_config.block_x;
-            unsigned int block_y = task->_config.block_y;
-            unsigned int block_z = 1;  // task->_config.block_z;
-            auto& bsd = *task->_context->context.bsd;
-            auto& decompress_pm = task->_context->manage_decompress;
-#endif
-            unsigned int xblocks = task->_xblocks;
-            unsigned int yblocks = task->_yblocks;
-            unsigned int zblocks = 1;  // (image_out.dim_z + block_z - 1) / block_z;
-
-            int row_blocks   = xblocks;
-            int plane_blocks = xblocks * yblocks;
-
-            image_block blk;
-            auto data = task->_in_texels;
-            for (;;)
-            {  // process the task
-                unsigned int count = 0;
-                unsigned int base  = decompress_pm.get_task_assignment(128, count);
-
-                no_task_count = !count;
-                if (no_task_count)
-                {  // this thread will going to suspend until new task added
-                    break;
-                }
-
-                for (unsigned int i = base; i < base + count; i++)
-                {
-                    // Decode i into x, y, z block indices
-                    int z            = i / plane_blocks;
-                    unsigned int rem = i - (z * plane_blocks);
-                    int y            = rem / row_blocks;
-                    int x            = rem - (y * row_blocks);
-
-                    unsigned int offset           = (((z * yblocks + y) * xblocks) + x) * 16;
-                    symbolic_compressed_block scb;
-                    physical_to_symbolic(bsd, data + offset, scb);
-
-                    decompress_symbolic_block(ASTCENC_PRF_LDR, bsd, x * block_x, y * block_y, z * block_z, scb, blk);
-
-                    store_image_block(image_out, blk, bsd, x * block_x, y * block_y, z * block_z, swz_decode);
-                }
-
-                decompress_pm.complete_task_assignment(count);
-            }
-        }
-    }
-
-    std::vector<std::thread> _threads;
-
-    std::deque<std::shared_ptr<astc_decompress_task>> _task_queue;
-    astc_decompress_mutex_t _task_queue_mtx;
-    std::condition_variable_any _task_queue_cv;
-
-    bool _stopped = false;
 };
 
+template <typename _FMT>
+struct benchmark_printer
+{
+    benchmark_printer(_FMT&& fmt, int w, int h, float den)
+        : _fmt(fmt), _w(w), _h(h), _den(den), _start(yasio::highp_clock())
+    {}
+    ~benchmark_printer() { AXLOGI("{}", fmt::format(_fmt, _w, _h, (yasio::highp_clock() - _start) / _den)); }
+    _FMT _fmt;
+    int _w, _h;
+    float _den;
+    yasio::highp_time_t _start;
+};
 int astc_decompress_image(const uint8_t* in,
                           uint32_t inlen,
                           uint8_t* out,
@@ -272,20 +231,10 @@ int astc_decompress_image(const uint8_t* in,
                           uint32_t block_x,
                           uint32_t block_y)
 {
-#if ASTCDEC_PRINT_BENCHMARK
-    struct benchmark_printer
-    {
-        benchmark_printer(const char* fmt, int w, int h, float den)
-            : _fmt(fmt), _w(w), _h(h), _den(den), _start(yasio::highp_clock())
-        {}
-        ~benchmark_printer() { AXLOGI(_fmt, _w, _h, (yasio::highp_clock() - _start) / _den); }
-        const char* _fmt;
-        int _w, _h;
-        float _den;
-        yasio::highp_time_t _start;
-    };
-    benchmark_printer __printer("decompress astc image ({}x{}) cost: {}(ms)", dim_x, dim_y, (float)std::milli::den);
-#endif
+#    if ASTCDEC_PRINT_BENCHMARK
+    benchmark_printer __printer(FMT_COMPILE("decompress astc image ({}x{}) cost: {}(ms)"), dim_x, dim_y,
+                                (float)std::milli::den);
+#    endif
     return astc_decompress_job_manager::get_instance()->decompress_parallel_sync(in, inlen, out, dim_x, dim_y, block_x,
                                                                                  block_y);
 }
@@ -310,7 +259,8 @@ int astc_decompress_image(const uint8_t* in,
 
     // Check we have enough output space (16 bytes per block)
     size_t size_needed = xblocks * yblocks * zblocks * 16;
-    if (inlen < size_needed) {
+    if (inlen < size_needed)
+    {
         return ASTCENC_ERR_OUT_OF_MEM;
     }
 
@@ -322,14 +272,15 @@ int astc_decompress_image(const uint8_t* in,
     astcenc_image image_out{dim_x, dim_y, 1, ASTCENC_TYPE_U8, data};
     const auto total_blocks = zblocks * yblocks * xblocks;
     const astcenc_swizzle swz_decode{ASTCENC_SWZ_R, ASTCENC_SWZ_G, ASTCENC_SWZ_B, ASTCENC_SWZ_A};
-    for (unsigned int i = 0; i < total_blocks; ++i) {
+    for (unsigned int i = 0; i < total_blocks; ++i)
+    {
         // Decode i into x, y, z block indices
         int z            = i / plane_blocks;
         unsigned int rem = i - (z * plane_blocks);
         int y            = rem / row_blocks;
         int x            = rem - (y * row_blocks);
 
-        unsigned int offset           = (((z * yblocks + y) * xblocks) + x) * 16;
+        unsigned int offset = (((z * yblocks + y) * xblocks) + x) * 16;
         symbolic_compressed_block scb;
         physical_to_symbolic(*bsd, in + offset, scb);
 

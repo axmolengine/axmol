@@ -54,10 +54,6 @@ AudioEngine::ProfileHelper* AudioEngine::_defaultProfileHelper = nullptr;
 std::unordered_map<AUDIO_ID, AudioEngine::AudioInfo> AudioEngine::_audioIDInfoMap;
 AudioEngineImpl* AudioEngine::_audioEngineImpl = nullptr;
 
-#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
-AudioEngine::AudioEngineThreadPool* AudioEngine::s_threadPool = nullptr;
-#endif
-
 bool AudioEngine::_isEnabled                                  = true;
 
 AudioEngine::AudioInfo::AudioInfo()
@@ -66,89 +62,11 @@ AudioEngine::AudioInfo::AudioInfo()
 
 AudioEngine::AudioInfo::~AudioInfo() {}
 
-#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
-class AudioEngine::AudioEngineThreadPool
-{
-public:
-    AudioEngineThreadPool(int threads = 4) : _stop(false)
-    {
-        for (int index = 0; index < threads; ++index)
-        {
-            _workers.emplace_back(std::thread(std::bind(&AudioEngineThreadPool::threadFunc, this)));
-        }
-    }
-
-    void addTask(const std::function<void()>& task)
-    {
-        std::unique_lock<std::mutex> lk(_queueMutex);
-        _taskQueue.emplace(task);
-        _taskCondition.notify_one();
-    }
-
-    ~AudioEngineThreadPool()
-    {
-        {
-            std::unique_lock<std::mutex> lk(_queueMutex);
-            _stop = true;
-            _taskCondition.notify_all();
-        }
-
-        for (auto&& worker : _workers)
-        {
-            worker.join();
-        }
-    }
-
-private:
-    void threadFunc()
-    {
-        while (true)
-        {
-            std::function<void()> task = nullptr;
-            {
-                std::unique_lock<std::mutex> lk(_queueMutex);
-                if (_stop)
-                {
-                    break;
-                }
-                if (!_taskQueue.empty())
-                {
-                    task = std::move(_taskQueue.front());
-                    _taskQueue.pop();
-                }
-                else
-                {
-                    _taskCondition.wait(lk);
-                    continue;
-                }
-            }
-
-            task();
-        }
-    }
-
-    std::vector<std::thread> _workers;
-    std::queue<std::function<void()>> _taskQueue;
-
-    std::mutex _queueMutex;
-    std::condition_variable _taskCondition;
-    bool _stop;
-};
-#endif
-
 void AudioEngine::end()
 {
     // make sure everythings cleanup before delete audio engine
     // fix #127
     uncacheAll();
-
-#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
-    if (s_threadPool)
-    {
-        delete s_threadPool;
-        s_threadPool = nullptr;
-    }
-#endif
 
     delete _audioEngineImpl;
     _audioEngineImpl = nullptr;
@@ -169,13 +87,6 @@ bool AudioEngine::lazyInit()
             return false;
         }
     }
-
-#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
-    if (s_threadPool == nullptr)
-    {
-        s_threadPool = new AudioEngineThreadPool();
-    }
-#endif
 
     return true;
 }
@@ -594,13 +505,7 @@ void AudioEngine::preload(std::string_view filePath, std::function<void(bool isS
 void AudioEngine::addTask(const std::function<void()>& task)
 {
     lazyInit();
-
-#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
-    if (_audioEngineImpl && s_threadPool)
-    {
-        s_threadPool->addTask(task);
-    }
-#endif
+    Director::getInstance()->getJobSystem()->enqueue(task);
 }
 
 int AudioEngine::getPlayingAudioCount()

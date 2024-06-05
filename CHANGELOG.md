@@ -1,3 +1,13 @@
+## axmol-2.1.4 ?? 2024
+
+### Significant changes relative to 2.1.2:
+
+- Add JobSystem support
+
+### Mark as deprecated
+
+- `AsyncTaskPool`, use `JobSystem` instead.
+
 ## axmol-2.1.3 May.26 2024
 
 ### Significant changes relative to 2.1.2:
