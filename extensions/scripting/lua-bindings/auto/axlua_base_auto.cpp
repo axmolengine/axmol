@@ -35387,6 +35387,23 @@ int lua_ax_base_EventDispatcher_dispatchEvent(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
+    if (argc == 2) 
+    {
+        ax::Event* arg0;
+        bool arg1;
+
+        ok &= luaval_to_object<ax::Event>(tolua_S, 2, "ax.Event",&arg0, "ax.EventDispatcher:dispatchEvent");
+
+        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventDispatcher:dispatchEvent");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventDispatcher_dispatchEvent'", nullptr);
+            return 0;
+        }
+        cobj->dispatchEvent(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventDispatcher:dispatchEvent",argc, 1);
     return 0;
 
@@ -35452,6 +35469,27 @@ int lua_ax_base_EventDispatcher_dispatchCustomEvent(lua_State* tolua_S)
             return 0;
         }
         cobj->dispatchCustomEvent(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 3) 
+    {
+        std::string_view arg0;
+        void* arg1;
+        bool arg2;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventDispatcher:dispatchCustomEvent");
+
+        #pragma warning NO CONVERSION TO NATIVE FOR void*
+		ok = false;
+
+        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.EventDispatcher:dispatchCustomEvent");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventDispatcher_dispatchCustomEvent'", nullptr);
+            return 0;
+        }
+        cobj->dispatchCustomEvent(arg0, arg1, arg2);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -51371,6 +51409,23 @@ int lua_ax_base_ClippingNode_setStencil(lua_State* tolua_S)
             return 0;
         }
         cobj->setStencil(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 2) 
+    {
+        ax::Node* arg0;
+        bool arg1;
+
+        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ClippingNode:setStencil");
+
+        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.ClippingNode:setStencil");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ClippingNode_setStencil'", nullptr);
+            return 0;
+        }
+        cobj->setStencil(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }

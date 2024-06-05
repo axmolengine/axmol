@@ -71,8 +71,11 @@ public:
     /** Set the Node to use as a stencil to do the clipping.
      *
      * @param stencil The Node to use as a stencil to do the clipping.
+     * @param uniqueChildStencils Set a different ProgramState per child stencil if enabled. Only
+     *                            set to true if the child stencils are different in some way, as in
+     *                            different shapes, images etc..
      */
-    void setStencil(Node* stencil);
+    void setStencil(Node* stencil, bool uniqueChildStencils = false);
 
     /** If stencil has no children it will not be drawn.
      * If you have custom stencil-based node with stencil drawing mechanics other then children-based,
@@ -159,6 +162,7 @@ protected:
     void setProgramStateRecursively(Node* node, backend::ProgramState* programState);
     void restoreAllProgramStates();
 
+    bool _uniqueChildStencils                 = false;
     Node* _stencil                            = nullptr;
     StencilStateManager* _stencilStateManager = nullptr;
 

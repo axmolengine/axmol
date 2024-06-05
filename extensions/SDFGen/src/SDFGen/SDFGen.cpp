@@ -221,7 +221,7 @@ void SDFGen::open(ax::Scene* scene)
     ImGuiPresenter::getInstance()->addFont(defaultFontFile);
     /* For Simplified Chinese support, please use:
     ImGuiPresenter::getInstance()->addFont(R"(C:\Windows\Fonts\msyh.ttc)", ImGuiPresenter::DEFAULT_FONT_SIZE,
-                                       ImGuiPresenter::CHS_GLYPH_RANGE::GENERAL);
+                                       ImGuiPresenter::GLYPH_RANGES::CHINESE_GENERAL);
     */
     ImGuiPresenter::getInstance()->enableDPIScale();  // enable dpi scale for 4K display support, depends at least one
                                                       // valid ttf/ttc font was added.

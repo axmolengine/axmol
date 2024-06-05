@@ -10,7 +10,7 @@ struct PixelBufferDescriptor
 {
     PixelBufferDescriptor()                             = default;
     PixelBufferDescriptor(const PixelBufferDescriptor&) = default;
-    PixelBufferDescriptor(PixelBufferDescriptor&& rhs)
+    PixelBufferDescriptor(PixelBufferDescriptor&& rhs) noexcept
         : _data(std::move(rhs._data)), _width(rhs._width), _height(rhs._height)
     {}
 

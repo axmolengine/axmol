@@ -197,7 +197,7 @@ Console::Command::Command(const Command& o)
     *this = o;
 }
 
-Console::Command::Command(Command&& o)
+Console::Command::Command(Command&& o) noexcept
 {
     *this = std::move(o);
 }
@@ -233,7 +233,7 @@ Console::Command& Console::Command::operator=(const Command& o)
     return *this;
 }
 
-Console::Command& Console::Command::operator=(Command&& o)
+Console::Command& Console::Command::operator=(Command&& o) noexcept
 {
     if (this != &o)
     {
@@ -566,7 +566,7 @@ void Console::loop()
             }
 
             /* data from client */
-            std::vector<int> to_remove;
+            std::vector<socket_native_type> to_remove;
             for (const auto& fd : _fds)
             {
                 if (_watcher.is_ready(fd, yasio::socket_event::read))
@@ -605,7 +605,7 @@ void Console::loop()
             }
 
             /* remove closed connections */
-            for (int fd : to_remove)
+            for (socket_native_type fd : to_remove)
             {
                 _watcher.mod_event(fd, 0, yasio::socket_event::read);
                 _fds.erase(std::remove(_fds.begin(), _fds.end(), fd), _fds.end());

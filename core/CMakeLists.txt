@@ -138,7 +138,7 @@ cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ${AX_EXT_HI
 
 option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ${AX_EXT_HINT})
 
-option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" OFF)
+option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" ${AX_EXT_HINT})
 
 set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "" )
 

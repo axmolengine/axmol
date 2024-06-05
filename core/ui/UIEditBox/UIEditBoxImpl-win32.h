@@ -84,7 +84,7 @@ private:
     static HWND s_hwndCocos;
     static HWND s_previousFocusWnd;
     static bool s_isInitialized;
-    static int s_editboxChildID;
+    static HMENU s_editboxChildID;
     static void lazyInit();
 };
 

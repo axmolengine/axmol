@@ -909,7 +909,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
         }
 
         if (_isEmitterAnimated || _isLoopAnimated)
-            std::fill_n(_particleData.animTimeDelta + start, _particleCount - start, 0);
+            std::fill_n(_particleData.animTimeDelta + start, _particleCount - start, 0.f);
     }
 
     // color
@@ -1698,7 +1698,7 @@ void ParticleSystem::update(float dt)
                 }
             }
             if (_isLoopAnimated && _animations.empty())
-                std::fill_n(_particleData.animTimeDelta, _particleCount, 0);
+                std::fill_n(_particleData.animTimeDelta, _particleCount, 0.f);
         }
 
         for (int i = 0; i < _particleCount; ++i)
