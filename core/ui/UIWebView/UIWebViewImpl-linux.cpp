@@ -268,6 +268,7 @@ public:
         init_gtk_platform(m_X11Display);
 
         m_Window = gtk_window_new(GTK_WINDOW_POPUP);
+        gtk_window_set_resizable(GTK_WINDOW(m_Window), true);
         g_signal_connect(G_OBJECT(m_Window), "destroy", G_CALLBACK(+[](GtkWidget*, gpointer arg) {
                              auto* w = static_cast<GTKWebKit*>(arg);
                              // Widget destroyed along with window.
@@ -388,7 +389,6 @@ public:
 
         webkit_settings_set_javascript_can_access_clipboard(settings, true);
 
-        gtk_window_set_resizable(GTK_WINDOW(m_Window), true);
         gtk_widget_grab_focus(GTK_WIDGET(m_WebView));
         gtk_widget_show_all(m_Window);
         return embed();
@@ -398,21 +398,15 @@ public:
     {
         AXLOGI("Pos: {}, {}, Size: w:{}, h:{}", x, y, width, height);
 
-        gtk_window_set_resizable(GTK_WINDOW(m_Window), true);
+        gtk_window_resize(GTK_WINDOW(m_Window), width, height);
+        gtk_window_move(GTK_WINDOW(m_Window), x, y);
 
-        GdkGeometry geometry{};
-        geometry.min_width = geometry.max_width = width;
-        geometry.min_height = geometry.max_height = height;
-        GdkWindowHints hints                      = GDK_HINT_MIN_SIZE;
-        gtk_window_set_geometry_hints(GTK_WINDOW(m_Window), nullptr, &geometry, hints);
-
+        // XWayland doesn't seem to respond to Window size hint
+        // change fast enough, so forcing it..
         XUnmapWindow(m_X11Display, m_ChildX11Window);
         XSync(m_X11Display, false);
 
-        XReparentWindow(m_X11Display, m_ChildX11Window, m_ParentX11Window, x, y);
-
         XMapWindow(m_X11Display, m_ChildX11Window);
-
         gtk_widget_realize(m_Window);
 
         usleep(1e3);  // 1ms
