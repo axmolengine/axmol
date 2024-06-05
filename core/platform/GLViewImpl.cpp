@@ -400,6 +400,7 @@ void* GLViewImpl::getX11Display()
 {
     return (void*)glfwGetX11Display();
 }
+/* TODO: Implement AX_PLATFORM_LINUX_WAYLAND
 void* GLViewImpl::getWaylandWindow()
 {
     return (void*)glfwGetWaylandWindow(_mainWindow);
@@ -408,6 +409,7 @@ void* GLViewImpl::getWaylandDisplay()
 {
     return (void*)glfwGetWaylandDisplay();
 }
+*/
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 GLViewImpl* GLViewImpl::create(std::string_view viewName)

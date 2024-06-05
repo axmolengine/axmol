@@ -45,6 +45,8 @@ class WebView;
 
 NS_AX_END  // namespace ax
 
+class GTKWebKit;
+
 NS_AX_BEGIN
 
 namespace ui
@@ -80,6 +82,7 @@ public:
 
 private:
     bool _createSucceeded;
+    GTKWebKit* _gtkWebKit;
     WebView* _webView;
 };
 }  // namespace ui
