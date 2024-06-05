@@ -312,6 +312,7 @@ if ($IsLinux) {
                 'libxi',
                 'fontconfig',
                 'gtk3',
+                'webkit2gtk4.0',
                 'vlc'
             )
             sudo pacman -S --needed --noconfirm @DEPENDS
