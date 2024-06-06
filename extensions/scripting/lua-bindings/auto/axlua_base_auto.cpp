@@ -16759,6 +16759,53 @@ int lua_ax_base_Director_getContentScaleFactor(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Director_getJobSystem(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Director* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getJobSystem'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getJobSystem'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getJobSystem();
+        object_to_luaval<ax::JobSystem>(tolua_S, "ax.JobSystem",(ax::JobSystem*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getJobSystem",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getJobSystem'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Director_getScheduler(lua_State* tolua_S)
 {
     int argc = 0;
@@ -17864,6 +17911,7 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"mainLoop",lua_ax_base_Director_mainLoop);
         tolua_function(tolua_S,"setContentScaleFactor",lua_ax_base_Director_setContentScaleFactor);
         tolua_function(tolua_S,"getContentScaleFactor",lua_ax_base_Director_getContentScaleFactor);
+        tolua_function(tolua_S,"getJobSystem",lua_ax_base_Director_getJobSystem);
         tolua_function(tolua_S,"getScheduler",lua_ax_base_Director_getScheduler);
         tolua_function(tolua_S,"setScheduler",lua_ax_base_Director_setScheduler);
         tolua_function(tolua_S,"getActionManager",lua_ax_base_Director_getActionManager);
@@ -60043,6 +60091,59 @@ int lua_ax_base_Sprite_initWithFile(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Sprite_initWithImageData(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Sprite* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Sprite",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_initWithImageData'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        ax::Data arg0;
+        std::string_view arg1;
+
+        ok &= luaval_to_object<ax::Data>(tolua_S, 2, "ax.Data",&arg0, "ax.Sprite:initWithImageData");
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Sprite:initWithImageData");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_initWithImageData'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->initWithImageData(arg0, arg1);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Sprite:initWithImageData",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Sprite_initWithImageData'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Sprite_setVertexLayout(lua_State* tolua_S)
 {
     int argc = 0;
@@ -60420,6 +60521,7 @@ int lua_register_ax_base_Sprite(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSpriteFrame",lua_ax_base_Sprite_initWithSpriteFrame);
         tolua_function(tolua_S,"initWithSpriteFrameName",lua_ax_base_Sprite_initWithSpriteFrameName);
         tolua_function(tolua_S,"initWithFile",lua_ax_base_Sprite_initWithFile);
+        tolua_function(tolua_S,"initWithImageData",lua_ax_base_Sprite_initWithImageData);
         tolua_function(tolua_S,"setVertexLayout",lua_ax_base_Sprite_setVertexLayout);
         tolua_function(tolua_S,"setAutoUpdatePS",lua_ax_base_Sprite_setAutoUpdatePS);
         tolua_function(tolua_S,"setAutoSize",lua_ax_base_Sprite_setAutoSize);
@@ -101564,7 +101666,23 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.TextureCache:addImage",argc, 3);
+    do{
+        if (argc == 2) {
+            ax::Data arg0;
+            ok &= luaval_to_object<ax::Data>(tolua_S, 2, "ax.Data",&arg0, "ax.TextureCache:addImage");
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.TextureCache:addImage");
+
+            if (!ok) { break; }
+            ax::Texture2D* ret = cobj->addImage(arg0, arg1);
+            object_to_luaval<ax::Texture2D>(tolua_S, "ax.Texture2D",(ax::Texture2D*)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.TextureCache:addImage",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
