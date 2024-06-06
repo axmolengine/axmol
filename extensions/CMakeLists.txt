@@ -131,6 +131,4 @@ if(AX_ENABLE_EXT_DRAWNODEEX)
   add_subdirectory(DrawNodeEx)
 endif()
 
-include(x-studio.cmake)
-
 message(STATUS "Enabled ${_AX_CORE_LIB} extensions:${_AX_EXTENSION_LIBS}")
