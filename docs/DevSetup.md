@@ -62,7 +62,7 @@ The `axmol build` command will auto-setup the general toolsets, so you'll be abl
 - Linux: `axmol build`
 - OSX:
   - for Intel (x64): `axmol build -p osx -a x64 -c` (generate a xcodeproj, open with XCode to setup the code sign cert and build)
-  - for Apple Silicon (arm64): `axmol build -p ios -a arm64 -c` (generate a xcodeproj, open with XCode to setup the code sign cert and build)
+  - for Apple Silicon (arm64): `axmol build -p osx -a arm64 -c` (generate a xcodeproj, open with XCode to setup the code sign cert and build)
 - Android: `axmol build -p android -a arm64` (can run on Windows, Linux and macOS, and script will auto setup Android SDK)
 - iOS:
   - for devices: `axmol build -p ios -a arm64 -c` (generate a xcodeproj, open with XCode to setup the code sign cert and build)
