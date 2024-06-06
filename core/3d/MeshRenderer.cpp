@@ -120,7 +120,7 @@ void MeshRenderer::createAsync(std::string_view modelPath,
         loadParam.result = meshRenderer->loadFromFile(loadParam.modelFullPath, loadParam.nodeDatas, loadParam.meshdatas,
                                                       loadParam.materialdatas);
     },
-        [meshRenderer] { meshRenderer->afterAsyncLoad((void*)(&meshRenderer->_asyncLoadParam)); });
+        [meshRenderer] { meshRenderer->afterAsyncLoad(&meshRenderer->_asyncLoadParam); });
 }
 
 void MeshRenderer::afterAsyncLoad(void* param)

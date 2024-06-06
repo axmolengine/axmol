@@ -16,7 +16,7 @@ NS_AX_BEGIN
 class JobExecutor
 {
 public:
-    JobExecutor(std::span<std::shared_ptr<JobThreadData>> tdds) : stop(false)
+    explicit JobExecutor(std::span<std::shared_ptr<JobThreadData>> tdds) : stop(false)
     {
         for (auto thread_data : tdds)
             workers.emplace_back([this, thread_data] {
