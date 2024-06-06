@@ -946,4 +946,31 @@ protected:
     ax::Sprite* _s4;
 };
 
+class SpriteWithImageDataTest1 : public SpriteTestDemo
+{
+public:
+    CREATE_FUNC(SpriteWithImageDataTest1);
+    SpriteWithImageDataTest1();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class SpriteWithImageDataTest2 : public SpriteTestDemo
+{
+public:
+    CREATE_FUNC(SpriteWithImageDataTest2);
+    SpriteWithImageDataTest2();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class SpriteWithImageDataTest3 : public SpriteTestDemo
+{
+public:
+    CREATE_FUNC(SpriteWithImageDataTest3);
+    SpriteWithImageDataTest3();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
 #endif
