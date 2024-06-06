@@ -470,7 +470,7 @@ void RenderTexture::onSaveToFile(std::string filename, bool isRGBA, bool forceNo
         {
             if (forceNonPMA && image->hasPremultipliedAlpha())
             {
-                std::thread([this, image, _filename, isRGBA, forceNonPMA]() {
+                _director->getJobSystem()->enqueue([this, image, _filename, isRGBA, forceNonPMA]() {
                     image->reversePremultipliedAlpha();
 
                     Director::getInstance()->getScheduler()->runOnAxmolThread([this, image, _filename, isRGBA] {
@@ -480,7 +480,7 @@ void RenderTexture::onSaveToFile(std::string filename, bool isRGBA, bool forceNo
                             _saveFileCallback(this, _filename);
                         }
                     });
-                }).detach();
+                });
             }
             else
             {

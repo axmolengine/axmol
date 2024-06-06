@@ -39,7 +39,6 @@ THE SOFTWARE.
 #include "openssl/evp.h"
 
 #include "base/Director.h"
-#include "base/AsyncTaskPool.h"
 #include "base/EventDispatcher.h"
 #include "base/Constants.h"
 #include "base/UTF8.h"
@@ -111,20 +110,20 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     s_captureScreenListener =
         eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW, [=](EventCustom* /*event*/) {
 #endif
-            eventDispatcher->removeEventListener(s_captureScreenListener);
-            s_captureScreenListener = nullptr;
-            // !!!GL: AFTER_DRAW and BEFORE_END_FRAME
-            renderer->readPixels(renderer->getDefaultRenderTarget(), [=](const backend::PixelBufferDescriptor& pbd) {
-                if (pbd)
-                {
-                    auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(),
-                                                            pbd._data.getSize(), pbd._width, pbd._height, 8, false);
-                    imageCallback(image);
-                }
-                else
-                    imageCallback(nullptr);
-            });
+        eventDispatcher->removeEventListener(s_captureScreenListener);
+        s_captureScreenListener = nullptr;
+        // !!!GL: AFTER_DRAW and BEFORE_END_FRAME
+        renderer->readPixels(renderer->getDefaultRenderTarget(), [=](const backend::PixelBufferDescriptor& pbd) {
+            if (pbd)
+            {
+                auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(),
+                                                        pbd._data.getSize(), pbd._width, pbd._height, 8, false);
+                imageCallback(image);
+            }
+            else
+                imageCallback(nullptr);
         });
+    });
 }
 
 static std::unordered_map<Node*, EventListenerCustom*> s_captureNodeListener;
@@ -201,13 +200,12 @@ void captureScreen(std::function<void(bool, std::string_view)> afterCap, std::st
         outfile = FileUtils::getInstance()->getWritablePath().append(filename);
 
     captureScreen([_afterCap = std::move(afterCap), _outfile = std::move(outfile)](RefPtr<Image> image) mutable {
-        AsyncTaskPool::getInstance()->enqueue(
-            AsyncTaskPool::TaskType::TASK_IO,
+        Director::getInstance()->getJobSystem()->enqueue(
             [_afterCap = std::move(_afterCap), image = std::move(image), _outfile = std::move(_outfile)]() mutable {
             bool ok = image->saveToFile(_outfile);
             Director::getInstance()->getScheduler()->runOnAxmolThread(
                 [ok, _afterCap = std::move(_afterCap), _outfile = std::move(_outfile)] { _afterCap(ok, _outfile); });
-            });
+        });
     });
 }
 
@@ -408,8 +406,8 @@ std::string getFileMD5Hash(std::string_view filename, uint32_t bufferSize)
 
 std::string getDataMD5Hash(const Data& data)
 {
-    //if (data.isNull())
-   //     return std::string{};
+    // if (data.isNull())
+    //     return std::string{};
 
     return computeDigest(std::string_view{(const char*)data.getBytes(), (size_t)data.getSize()}, "md5"sv);
 }

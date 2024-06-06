@@ -39,7 +39,6 @@ THE SOFTWARE.
 #include "base/Types.h"
 #include "base/Value.h"
 #include "base/Data.h"
-#include "base/AsyncTaskPool.h"
 #include "base/Scheduler.h"
 #include "base/Director.h"
 
@@ -899,8 +898,7 @@ protected:
             },
             std::forward<T>(action), std::forward<R>(callback), std::forward<ARGS>(args)...);
 
-        AsyncTaskPool::getInstance()->enqueue(
-            AsyncTaskPool::TaskType::TASK_IO, [](void*) {}, nullptr, std::move(lambda));
+        Director::getInstance()->getJobSystem()->enqueue(std::move(lambda));
     }
 };
 

@@ -45,6 +45,8 @@ THE SOFTWARE.
 #include "base/Console.h"
 #endif
 
+#include "base/JobSystem.h"
+
 NS_AX_BEGIN
 
 /**
@@ -397,6 +399,12 @@ public:
      */
     float getContentScaleFactor() const { return _contentScaleFactor; }
 
+
+    /** Gets the JobSystem associated with this director.
+     * @since axmol-2.1.4
+     */
+    JobSystem* getJobSystem() const { return _jobSystem; }
+
     /** Gets the Scheduler associated with this director.
      * @since v2.0
      */
@@ -594,6 +602,8 @@ protected:
     /* The _glView, where everything is rendered, GLView is a abstract class,cocos2d-x provide GLViewImpl
      which inherit from it as default renderer context,you can have your own by inherit from it*/
     GLView* _glView = nullptr;
+
+    JobSystem* _jobSystem = nullptr;
 
     // texture cache belongs to this director
     TextureCache* _textureCache = nullptr;

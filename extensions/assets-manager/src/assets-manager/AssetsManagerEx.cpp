@@ -35,21 +35,20 @@
 #    include "unzip.h"
 #endif
 #include <ioapi.h>
-#include "base/AsyncTaskPool.h"
 
 NS_AX_EXT_BEGIN
 
-#define TEMP_FOLDERNAME "_temp"
-#define VERSION_FILENAME "version.manifest"
-#define TEMP_MANIFEST_FILENAME "project.manifest.temp"
-#define MANIFEST_FILENAME "project.manifest"
+#define TEMP_FOLDERNAME            "_temp"
+#define VERSION_FILENAME           "version.manifest"
+#define TEMP_MANIFEST_FILENAME     "project.manifest.temp"
+#define MANIFEST_FILENAME          "project.manifest"
 
-#define BUFFER_SIZE 8192
-#define MAX_FILENAME 512
+#define BUFFER_SIZE                8192
+#define MAX_FILENAME               512
 
 #define DEFAULT_CONNECTION_TIMEOUT 45
 
-#define SAVE_POINT_INTERVAL 0.1
+#define SAVE_POINT_INTERVAL        0.1
 
 const std::string AssetsManagerEx::VERSION_ID  = "@version";
 const std::string AssetsManagerEx::MANIFEST_ID = "@manifest";
@@ -561,15 +560,17 @@ void AssetsManagerEx::decompressDownloadedZip(std::string_view customId, std::st
         }
         delete dataInner;
     };
-    AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_OTHER, std::move(decompressFinished),
-                                          (void*)asyncData, [this, asyncData]() {
-                                              // Decompress all compressed files
-                                              if (decompress(asyncData->zipFile))
-                                              {
-                                                  asyncData->succeed = true;
-                                              }
-                                              _fileUtils->removeFile(asyncData->zipFile);
-                                          });
+
+    Director::getInstance()->getJobSystem()->enqueue(
+        [this, asyncData]() {
+        // Decompress all compressed files
+        if (decompress(asyncData->zipFile))
+        {
+            asyncData->succeed = true;
+        }
+        _fileUtils->removeFile(asyncData->zipFile);
+    },
+        [decompressFinished, asyncData]() { decompressFinished(asyncData); });
 }
 
 void AssetsManagerEx::dispatchUpdateEvent(EventAssetsManagerEx::EventCode code,
