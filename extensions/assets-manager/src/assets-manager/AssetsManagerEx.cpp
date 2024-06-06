@@ -35,7 +35,6 @@
 #    include "unzip.h"
 #endif
 #include <ioapi.h>
-#include "base/AsyncTaskPool.h"
 
 NS_AX_EXT_BEGIN
 
