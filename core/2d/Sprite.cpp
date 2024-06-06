@@ -318,7 +318,7 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect, bool rotated)
 
 bool Sprite::initWithImageData(const Data& imageData, std::string_view key)
 {
-    if (imageData.getSize() <= 0 || key.empty())
+    if (imageData.isNull() || key.empty())
     {
         AXLOG("Call Sprite::initWithImageData empty data or blank key.");
         return false;

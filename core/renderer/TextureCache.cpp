@@ -557,7 +557,7 @@ Texture2D* TextureCache::addImage(Image* image, std::string_view key, PixelForma
 
 Texture2D* TextureCache::addImage(const Data& imageData, std::string_view key)
 {
-    AXASSERT(imageData.getSize() > 0 && key.empty() == false, "TextureCache: imageData MUST not be empty and key not empty");
+    AXASSERT(!imageData.isNull() && !key.empty(), "TextureCache: imageData MUST not be empty and key not empty");
 
     Texture2D * texture = nullptr;
 
