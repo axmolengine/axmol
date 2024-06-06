@@ -238,10 +238,16 @@ static void init_gtk_platform(Display* x11Display)
     {
         return;
     }
+    webkit_dmabuf::apply_webkit_dmabuf_workaround();
+
 #    if !defined(AX_PLATFORM_LINUX_WAYLAND)
     // this will instruct gdk to use XWayland layer on Wayland platforms
     if (webkit_dmabuf::is_wayland_display())
+    {
         gdk_set_allowed_backends("x11");
+        // always use LibGL software rendering
+        // webkit_dmabuf::set_env("LIBGL_ALWAYS_SOFTWARE", "1");
+    }
 #    endif
     gtk_init(nullptr, nullptr);
 
@@ -258,10 +264,8 @@ static void init_gtk_platform(Display* x11Display)
 class GTKWebKit
 {
 public:
-    GTKWebKit()
+    GTKWebKit() : isXwayland(webkit_dmabuf::is_wayland_display())
     {
-        webkit_dmabuf::apply_webkit_dmabuf_workaround();
-
         m_X11Display      = (Display*)ax::Director::getInstance()->getGLView()->getX11Display();
         m_ParentX11Window = (Window)ax::Director::getInstance()->getGLView()->getX11Window();
 
@@ -276,6 +280,7 @@ public:
                              w->m_Window  = nullptr;
                          }),
                          this);
+
 #    if defined(AX_PLATFORM_LINUX_WAYLAND)
         AX_ASSERT(0 && "TODO: Implement for wayland..");
 /*
@@ -305,6 +310,10 @@ public:
  * to draw the WebkitGtk surface. Some usage of subcompositor concept can be found:
  * https://github.com/ehmry/snes9x/
  *
+ * 1.5: Or we may be can use some other GLFW like framework for Linux, which has
+ * custom wayland compositor implemented and allows foreign parenting/reparenting.
+ * Something like this: https://github.com/fltk/fltk, Not sure if they allow it.
+ *
  * - Why this approach is kind of better? Well will be using direct Wayland
  * so some hdpi scaling(if not by fraction) would be kind of better than
  * XWayland and some other stuff probably won't be much noticable, but
@@ -319,7 +328,7 @@ public:
  * WebView using XWayland abstraction layer and place the window position
  * according to the main window's location. We're not doing exactly the same
  * for x11 case, X11 has something to make a window, a child window of another
- * window so the relative positon gets set automatically by the WM.
+ * window so the relative positon gets handled automatically by the WM.
  *
  * Why not use CEF or some other WebView implementations? It would be same
  * we would still need to move those around, which Wayland doesn't allow
@@ -350,7 +359,7 @@ public:
             m_InitScript = nullptr;
         }
 
-        deplete_run_loop_event_queue();
+        depleteRunLoopEventQueue();
     }
 
     bool createWebView()
@@ -358,7 +367,6 @@ public:
         if (m_Window == nullptr)
             return false;
 
-        gtk_widget_realize(m_Window);
         m_WebView = webkit_web_view_new();
         if (m_WebView == nullptr)
             return false;
@@ -391,7 +399,27 @@ public:
 
         gtk_widget_grab_focus(GTK_WIDGET(m_WebView));
         gtk_widget_show_all(m_Window);
+
         return embed();
+    }
+
+    void update()
+    {
+        auto director = ax::Director::getInstance();
+        if (!director->isValid())
+            return;
+
+        while (gtk_events_pending())
+        {
+            gtk_main_iteration();
+        }
+
+        // Xwayland repaint issues... another reason to support direct wayland.
+        // Related issues:
+        // https://bugzilla.redhat.com/show_bug.cgi?id=1896119
+        // https://gitlab.gnome.org/GNOME/mutter/-/issues/1577
+        if (isXwayland)
+            XReparentWindow(m_X11Display, m_ChildX11Window, m_ParentX11Window, (int)m_LastPos.x, (int)m_LastPos.y);
     }
 
     void setWebViewRect(int x, int y, int width, int height)
@@ -401,18 +429,7 @@ public:
         gtk_window_resize(GTK_WINDOW(m_Window), width, height);
         gtk_window_move(GTK_WINDOW(m_Window), x, y);
 
-        // XWayland doesn't seem to respond to Window size hint
-        // change fast enough, so forcing it..
-        XUnmapWindow(m_X11Display, m_ChildX11Window);
-        XSync(m_X11Display, false);
-
-        XMapWindow(m_X11Display, m_ChildX11Window);
-        gtk_widget_realize(m_Window);
-
-        usleep(1e3);  // 1ms
-
-        XSync(m_X11Display, false);
-        XFlush(m_X11Display);
+        m_LastPos = ax::Vec2((float)x, (float)y);
     }
 
     void loadURL(std::string_view url, bool cleanCachedData)
@@ -436,14 +453,12 @@ private:
 
     bool embed()
     {
+        gtk_widget_realize(m_Window);
+
         m_ChildX11Window = gdk_x11_window_get_xid(gtk_widget_get_window(m_Window));
         if (m_ChildX11Window == None)
             return false;
         XReparentWindow(m_X11Display, m_ChildX11Window, m_ParentX11Window, 0, 0);
-
-        gtk_widget_realize(m_Window);
-        XSync(m_X11Display, false);
-        XFlush(m_X11Display);
 
         while (gtk_events_pending())
         {
@@ -462,7 +477,7 @@ private:
                         new std::function<void()>(f), [](void* f) { delete static_cast<dispatch_fn_t*>(f); });
     }
 
-    void deplete_run_loop_event_queue()
+    void depleteRunLoopEventQueue()
     {
         bool done = false;
         dispatch_in_gtk([&] { done = true; });
@@ -473,6 +488,8 @@ private:
     }
 
 private:
+    const bool isXwayland;
+
     Display* m_X11Display;
     Window m_ParentX11Window;
     Window m_ChildX11Window;
@@ -480,6 +497,8 @@ private:
     GtkWidget* m_WebView;
     WebKitUserScript* m_InitScript;
     WebKitUserContentManager* m_UserContentManager;
+
+    ax::Vec2 m_LastPos;
 };
 
 NS_AX_BEGIN
@@ -638,9 +657,10 @@ void WebViewImpl::draw(Renderer* renderer, Mat4 const& transform, uint32_t flags
         const auto uiRect = ax::ui::Helper::convertBoundingBoxToScreen(_webView);
         _gtkWebKit->setWebViewRect(static_cast<int>(uiRect.origin.x), static_cast<int>(uiRect.origin.y),
                                    static_cast<int>(uiRect.size.width), static_cast<int>(uiRect.size.height));
+        AXLOGI("Redrawing!");
     }
 
-    gtk_main_iteration_do(false);
+    _gtkWebKit->update();
 }
 
 void WebViewImpl::setVisible(bool visible)
