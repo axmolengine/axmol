@@ -139,6 +139,9 @@ SpriteTests::SpriteTests()
     ADD_TEST_CASE(SpriteSlice9Test9);
     ADD_TEST_CASE(SpriteSlice9Test10);
     ADD_TEST_CASE(Issue17119);
+    ADD_TEST_CASE(SpriteWithImageDataTest1);
+    ADD_TEST_CASE(SpriteWithImageDataTest2);
+    ADD_TEST_CASE(SpriteWithImageDataTest3);
 };
 
 //------------------------------------------------------------------
@@ -5890,4 +5893,85 @@ void Issue17119::update(float dt)
         _s3->setFlippedX(!flipped);
         _s4->setFlippedX(!flipped);
     }
+}
+
+//------------------------------------------------------------------
+//
+// SpriteWithImageDataTest1
+//
+//------------------------------------------------------------------
+
+SpriteWithImageDataTest1::SpriteWithImageDataTest1()
+{
+    Size s = Director::getInstance()->getVisibleSize();
+    
+    ax::Data imageData = FileUtils::getInstance()->getDataFromFile("Images/grossini.png");
+
+    Sprite* sprite = Sprite::create(imageData, "sprite_image_key_test_1");
+    AXASSERT(sprite != nullptr, "Sprite with image data and key failed");
+    addChild(sprite);
+    sprite->setPosition(s.width / 2 - s.width / 3, s.height / 2);
+
+    Sprite* sprite2 = Sprite::create(imageData, "sprite_image_key_test_1");
+    AXASSERT(sprite2->getTexture() == sprite->getTexture(), "Sprite with image data same key failed");
+    addChild(sprite2);
+    sprite2->setPosition(s.width / 2 + s.width / 3, s.height / 2);
+}
+
+std::string SpriteWithImageDataTest1::title() const
+{
+    return "Sprite with Image Data 1";
+}
+
+std::string SpriteWithImageDataTest1::subtitle() const
+{
+    return "data given";
+}
+
+//------------------------------------------------------------------
+//
+// SpriteWithImageDataTest2
+//
+//------------------------------------------------------------------
+
+SpriteWithImageDataTest2::SpriteWithImageDataTest2()
+{
+    ax::Data emptyImageData;
+
+    Sprite* sprite = Sprite::create(emptyImageData, "sprite_image_key_test_2");
+    AXASSERT(sprite == nullptr, "Sprite with empty image data failed");
+}
+
+std::string SpriteWithImageDataTest2::title() const
+{
+    return "Sprite with Image Data 2";
+}
+
+std::string SpriteWithImageDataTest2::subtitle() const
+{
+    return "no sprite due to data empty";
+}
+
+//------------------------------------------------------------------
+//
+// SpriteWithImageDataTest3
+//
+//------------------------------------------------------------------
+
+SpriteWithImageDataTest3::SpriteWithImageDataTest3()
+{
+    ax::Data imageData = FileUtils::getInstance()->getDataFromFile("Images/grossini.png");
+
+    Sprite* sprite = Sprite::create(imageData, "");
+    AXASSERT(sprite == nullptr, "Sprite with empty image key failed");
+}
+
+std::string SpriteWithImageDataTest3::title() const
+{
+    return "Sprite with Image Data 3";
+}
+
+std::string SpriteWithImageDataTest3::subtitle() const
+{
+    return "no sprite due to empty key";
 }
