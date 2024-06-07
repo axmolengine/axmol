@@ -59812,7 +59812,7 @@ int lua_ax_base_Sprite_initWithImageData(lua_State* tolua_S)
         ax::Data arg0;
         std::string_view arg1;
 
-        ok &= luaval_to_object<ax::Data>(tolua_S, 2, "ax.Data",&arg0, "ax.Sprite:initWithImageData");
+        luaL_error(tolua_S, "ax::Data unsupported");;
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Sprite:initWithImageData");
         if(!ok)
@@ -101359,7 +101359,7 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
     do{
         if (argc == 2) {
             ax::Data arg0;
-            ok &= luaval_to_object<ax::Data>(tolua_S, 2, "ax.Data",&arg0, "ax.TextureCache:addImage");
+            luaL_error(tolua_S, "ax::Data unsupported");;
 
             if (!ok) { break; }
             std::string_view arg1;
