@@ -117,7 +117,7 @@ bool Director::init()
     _lastUpdate = std::chrono::steady_clock::now();
 
     auto concurrency = Configuration::getInstance()->getValue("axmol.concurrency", Value{-1}).asInt();
-    _jobSystem = JobSystem::create(concurrency);
+    _jobSystem = new JobSystem(concurrency);
 
 #ifdef AX_ENABLE_CONSOLE
     _console = new Console();
