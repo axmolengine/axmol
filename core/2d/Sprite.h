@@ -154,6 +154,15 @@ public:
     static Sprite* create(std::string_view filename, const Rect& rect);
 
     /**
+     * Creates a sprite with an image data and an image key.
+     *
+     * @param   imageData A Data of the image fil.
+     * @param   key       The unique key for the image in the cache.
+     * @return  An autoreleased sprite object.
+     */
+    static Sprite* create(const ax::Data& imageData, std::string_view key);
+    
+    /**
      * Creates a sprite with a Texture2D object.
      *
      * After creation, the rect will be the size of the texture, and the offset will be (0,0).
@@ -618,6 +627,20 @@ public:
      * @lua     init
      */
     virtual bool initWithFile(std::string_view filename, const Rect& rect);
+    
+    /**
+     * Initializes a sprite with an image data, and a key for the cache.
+     *
+     * This method will load the image data to Texture2D,
+     * then use Texture2D to create a sprite.
+     * After initialization, the offset will be (0,0).
+     *
+     * @param   imageData The image data
+     * @param   key       The key for cache.
+     * @return  True if the sprite is initialized properly, false otherwise.
+     * @lua     init
+     */
+    virtual bool initWithImageData(const ax::Data& imageData, std::string_view key);
 
     virtual void setVertexLayout();
 

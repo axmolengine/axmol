@@ -113,6 +113,18 @@ Sprite* Sprite::create(std::string_view filename, const Rect& rect)
     return nullptr;
 }
 
+Sprite* Sprite::create(const Data& imageData, std::string_view key)
+{
+    Sprite *sprite = new Sprite();
+    if (sprite->initWithImageData(imageData, key))
+    {
+        sprite->autorelease();
+        return sprite;
+    }
+    AX_SAFE_DELETE(sprite);
+    return nullptr;
+}
+
 Sprite* Sprite::createWithSpriteFrame(SpriteFrame* spriteFrame)
 {
     Sprite* sprite = new Sprite();
@@ -302,6 +314,31 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect, bool rotated)
     setDirty(true);
 
     return result;
+}
+
+bool Sprite::initWithImageData(const Data& imageData, std::string_view key)
+{
+    if (imageData.isNull() || key.empty())
+    {
+        AXLOG("Call Sprite::initWithImageData empty data or blank key.");
+        return false;
+    }
+
+    //_fileName = filename;
+
+    Texture2D *texture = _director->getTextureCache()->addImage(imageData, key);
+    
+    if (texture)
+    {
+        Rect rect = Rect::ZERO;
+        rect.size = texture->getContentSize();
+        return initWithTexture(texture, rect);
+    }
+
+    // don't release here.
+    // when load texture failed, it's better to get a "transparent" sprite then a crashed program
+    // this->release();
+    return false;
 }
 
 Sprite::Sprite()

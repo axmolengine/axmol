@@ -382,11 +382,6 @@ protected:
 
     static AudioEngineImpl* _audioEngineImpl;
 
-#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
-    class AudioEngineThreadPool;
-    static AudioEngineThreadPool* s_threadPool;
-#endif
-
     static bool _isEnabled;
 
     friend class AudioEngineImpl;

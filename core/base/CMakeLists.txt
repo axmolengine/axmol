@@ -81,10 +81,12 @@ set(_AX_BASE_HEADER
     base/IMEDispatcher.h
     base/PaddedString.h
     base/JsonWriter.h
+    base/JobSystem.h
     )
 
 set(_AX_BASE_SRC
     base/AsyncTaskPool.cpp
+    base/JobSystem.cpp
     base/AutoreleasePool.cpp
     base/Configuration.cpp
     base/Logging.cpp

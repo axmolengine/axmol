@@ -145,6 +145,15 @@ public:
     Texture2D* addImage(Image* image, std::string_view key);
     Texture2D* addImage(Image* image, std::string_view key, PixelFormat format);
 
+    /** Returns a Texture2D object given an Image.
+     * If the image was not previously loaded, it will create a new Texture2D object and it will return it.
+     * Otherwise it will return a reference of a previously loaded image.
+     * @param imageData The Data of the image to use
+     * @param key The "key" parameter will be used as the "key" for the cache.
+     * If "key" is nil, then a new texture will be created each time.
+     */
+    Texture2D* addImage(const Data& imageData, std::string_view key);
+
     /** Returns an already created texture. Returns nil if the texture doesn't exist.
     @param key It's the related/absolute path of the file image.
     @since v0.99.5
