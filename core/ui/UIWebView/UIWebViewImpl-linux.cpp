@@ -28,23 +28,25 @@
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
-#    include <cstdlib>
-#    include <gtk/gtk.h>
-#    include <webkit2/webkit2.h>
 #    include <fcntl.h>
 #    include <sys/stat.h>
-#    include <iostream>
-
-#    if !defined(AX_PLATFORM_LINUX_WAYLAND)
-#        include <X11/Xlib.h>
-#        include <gdk/gdkx.h>
-#    endif
+#    include <gtk/gtk.h>
+#    include <webkit2/webkit2.h>
 
 #    include "UIWebView.h"
 #    include "base/Director.h"
 #    include "platform/FileUtils.h"
 #    include "platform/GLView.h"
 #    include "ui/UIHelper.h"
+#    include "UIWebViewCommon.h"
+
+#    if !defined(AX_PLATFORM_LINUX_WAYLAND)
+#        include <X11/Xlib.h>
+#        include <X11/Xatom.h>
+#        include <gdk/gdkx.h>
+#    endif
+
+using namespace webview_common;
 
 namespace webkit_dmabuf
 {
@@ -159,6 +161,20 @@ static inline void apply_webkit_dmabuf_workaround()
 }
 }  // namespace webkit_dmabuf
 
+static double getDeviceScaleFactor(GdkMonitor* monitor)
+{
+    static double scale_factor      = 1.0;
+    static GdkMonitor* last_monitor = nullptr;
+
+    if (last_monitor != monitor)
+    {
+        last_monitor = monitor;
+        return (double)gdk_monitor_get_scale_factor(last_monitor);
+    }
+
+    return scale_factor;
+}
+
 static inline std::string create_init_script(const std::string& post_fn)
 {
     auto js = std::string{} +
@@ -231,7 +247,7 @@ static inline std::string create_init_script(const std::string& post_fn)
     return js;
 }
 
-static void init_gtk_platform(Display* x11Display)
+static void init_gtk_platform_with_display(Display* x11Display)
 {
     static bool has_initiated = false;
     if (has_initiated)
@@ -251,6 +267,7 @@ static void init_gtk_platform(Display* x11Display)
 #    endif
     gtk_init(nullptr, nullptr);
 
+    // instructing gdk display manager to use specified x11 display as default
     const char* display_string = DisplayString(x11Display);
     GdkDisplay* x11_gdk_display =
         display_string != nullptr ? gdk_display_open(display_string) : gdk_display_get_default();
@@ -261,6 +278,8 @@ static void init_gtk_platform(Display* x11Display)
     has_initiated = true;
 }
 
+using ContinueUrlCallback_t = std::function<bool(std::string_view)>;
+using GeneralUrlCallback_t  = std::function<void(std::string_view)>;
 class GTKWebKit
 {
 public:
@@ -269,7 +288,7 @@ public:
         m_X11Display      = (Display*)ax::Director::getInstance()->getGLView()->getX11Display();
         m_ParentX11Window = (Window)ax::Director::getInstance()->getGLView()->getX11Window();
 
-        init_gtk_platform(m_X11Display);
+        init_gtk_platform_with_display(m_X11Display);
 
         m_Window = gtk_window_new(GTK_WINDOW_POPUP);
         gtk_window_set_resizable(GTK_WINDOW(m_Window), true);
@@ -362,7 +381,10 @@ public:
         depleteRunLoopEventQueue();
     }
 
-    bool createWebView()
+    bool createWebView(const ContinueUrlCallback_t& shouldStartLoading,
+                       const GeneralUrlCallback_t& didFinishLoading,
+                       const GeneralUrlCallback_t didFailLoading,
+                       const GeneralUrlCallback_t& onJsCallback)
     {
         if (m_Window == nullptr)
             return false;
@@ -379,15 +401,60 @@ public:
         g_signal_connect(manager, "script-message-received::__webview__",
                          G_CALLBACK(+[](WebKitUserContentManager*, WebKitJavascriptResult* r, gpointer arg) {
                              auto* w = static_cast<GTKWebKit*>(arg);
+                             // webkit2 2.22+
+                             JSCValue* value = webkit_javascript_result_get_js_value(r);
+                             char* s         = jsc_value_to_string(value);
+                             w->onMessage(s);
+                             g_free(s);
                              /*char *s = get_string_from_js_result(r);
                              w->on_message(s);
                              g_free(s);*/
                          }),
                          this);
         webkit_user_content_manager_register_script_message_handler(manager, "__webview__");
-
         initScript("function(message){return window.webkit.messageHandlers.__webview__.postMessage(message);}");
 
+        m_ShouldStartLoading = shouldStartLoading;
+        m_DidFinishLoading   = didFinishLoading;
+        m_DidFailLoading     = didFailLoading;
+        m_OnJsCallback       = onJsCallback;
+        g_signal_connect(m_WebView, "load-changed",
+                         G_CALLBACK(+[](WebKitWebView* webView, WebKitLoadEvent loadEvent, gpointer userData) {
+                             auto thiz = static_cast<GTKWebKit*>(userData);
+                             switch (loadEvent)
+                             {
+                             case WEBKIT_LOAD_COMMITTED:
+                             {
+                                 std::string_view uri = webkit_web_view_get_uri(webView);
+                                 const auto scheme    = uri.substr(0, uri.find_first_of(':'));
+
+                                 if (scheme == thiz->m_JsScheme)
+                                 {
+                                     thiz->m_OnJsCallback(uri);
+                                     return;
+                                 }
+
+                                 if (!thiz->m_ShouldStartLoading(uri))
+                                     webkit_web_view_stop_loading(webView);
+                                 break;
+                             }
+                             case WEBKIT_LOAD_FINISHED:
+                             {
+                                 std::string_view uri = webkit_web_view_get_uri(webView);
+                                 thiz->m_DidFinishLoading(uri);
+                                 break;
+                             }
+                             }
+                         }),
+                         this);
+
+        g_signal_connect(m_WebView, "load-failed",
+                         G_CALLBACK(+[](WebKitWebView* webView, WebKitLoadEvent /* loadEvent */, gchar* failingUri,
+                                        gpointer /* error */, gpointer userData) {
+                             auto thiz = static_cast<GTKWebKit*>(userData);
+                             thiz->m_DidFailLoading(failingUri);
+                         }),
+                         this);
         gtk_container_add(GTK_CONTAINER(m_Window), GTK_WIDGET(m_WebView));
         gtk_widget_show(GTK_WIDGET(m_WebView));
 
@@ -406,20 +473,24 @@ public:
     void update()
     {
         auto director = ax::Director::getInstance();
-        if (!director->isValid())
+        if (!director->isValid() || m_WebViewHidden)
             return;
 
-        while (gtk_events_pending())
-        {
-            gtk_main_iteration();
-        }
-
-        // Xwayland repaint issues... another reason to support direct wayland.
+        // Xwayland child repaint issue...
+        // Another reason to support direct wayland.
         // Related issues:
         // https://bugzilla.redhat.com/show_bug.cgi?id=1896119
         // https://gitlab.gnome.org/GNOME/mutter/-/issues/1577
         if (isXwayland)
+        {
             XReparentWindow(m_X11Display, m_ChildX11Window, m_ParentX11Window, (int)m_LastPos.x, (int)m_LastPos.y);
+        }
+
+        // Can be removed if axmol ever integrates with gtk/gdk for linux
+        while (gtk_events_pending())
+        {
+            gtk_main_iteration();
+        }
     }
 
     void setWebViewRect(int x, int y, int width, int height)
@@ -429,7 +500,32 @@ public:
         gtk_window_resize(GTK_WINDOW(m_Window), width, height);
         gtk_window_move(GTK_WINDOW(m_Window), x, y);
 
-        m_LastPos = ax::Vec2((float)x, (float)y);
+        setScalesPageToFit(m_ScalesPageToFit);
+
+        m_LastPos  = ax::Vec2((float)x, (float)y);
+        m_LastSize = ax::Vec2((float)width, (float)height);
+    }
+
+    void loadHTMLString(std::string_view html, std::string_view baseURL)
+    {
+        webkit_web_view_load_html(WEBKIT_WEB_VIEW(m_WebView), html.data(), baseURL.data());
+    }
+
+    void loadFile(std::string_view filePath)
+    {
+        auto fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
+        if (fullPath.find("file:///") != 0)
+        {
+            if (fullPath[0] == '/')
+            {
+                fullPath = "file://" + fullPath;
+            }
+            else
+            {
+                fullPath = "file:///" + fullPath;
+            }
+        }
+        loadURL(fullPath, false);
     }
 
     void loadURL(std::string_view url, bool cleanCachedData)
@@ -441,10 +537,108 @@ public:
         webkit_web_view_load_uri(WEBKIT_WEB_VIEW(m_WebView), url.data());
     }
 
+    void stopLoading()
+    {
+        webkit_web_view_stop_loading(WEBKIT_WEB_VIEW(m_WebView));
+    }
+
+    void reload()
+    {
+        // Note: there is also `webkit_web_view_reload` which uses cached data
+        webkit_web_view_reload_bypass_cache(WEBKIT_WEB_VIEW(m_WebView));
+    }
+
+    bool canGoBack()
+    {
+        return webkit_web_view_can_go_back(WEBKIT_WEB_VIEW(m_WebView));
+    }
+
+    bool canGoForward()
+    {
+        return webkit_web_view_can_go_forward(WEBKIT_WEB_VIEW(m_WebView));
+    }
+
+    void goBack()
+    {
+        webkit_web_view_go_back(WEBKIT_WEB_VIEW(m_WebView));
+    }
+
+    void goForward()
+    {
+        webkit_web_view_go_forward(WEBKIT_WEB_VIEW(m_WebView));
+    }
+
+    void setJavascriptInterfaceScheme(std::string_view scheme)
+    {
+        m_JsScheme = scheme;
+    }
+
+    void evaluateJS(std::string_view js)
+    {
+        if (webkit_web_view_get_uri(WEBKIT_WEB_VIEW(m_WebView)) == nullptr)
+            return;
+
+        // webkit2 2.40+
+        webkit_web_view_evaluate_javascript(WEBKIT_WEB_VIEW(m_WebView), js.data(), static_cast<gssize>(js.size()),
+                                            nullptr, nullptr, nullptr, nullptr, nullptr);
+    }
+
+    void setScalesPageToFit(bool scalesPageToFit)
+    {
+        m_ScalesPageToFit = scalesPageToFit;
+
+        // get current monitor
+        auto* manager = gdk_display_manager_get();
+        auto* display = gdk_display_manager_get_default_display(manager);
+        m_Monitor     = gdk_display_get_monitor_at_window(display, gtk_widget_get_window(m_Window));
+
+        webkit_web_view_set_zoom_level(WEBKIT_WEB_VIEW(m_WebView),
+                                       m_ScalesPageToFit ? getDeviceScaleFactor(m_Monitor) : 1.0);
+    }
+
+    void setWebViewVisible(bool visible)
+    {
+        if (visible && m_WebViewHidden)
+        {
+            XMapWindow(m_X11Display, m_ChildX11Window);
+            XReparentWindow(m_X11Display, m_ChildX11Window, m_ParentX11Window, (int)m_LastPos.x, (int)m_LastPos.y);
+
+            usleep(1e3);
+
+            XSync(m_X11Display, false);
+            XFlush(m_X11Display);
+        }
+        else if (!m_WebViewHidden && !visible)
+        {
+            XUnmapWindow(m_X11Display, m_ChildX11Window);
+
+            usleep(1e3);
+
+            XSync(m_X11Display, false);
+            XFlush(m_X11Display);
+        }
+
+        m_WebViewHidden = !visible;
+    }
+
+    void setBounces(bool) {}
+
+    void setOpacityWebView(double opacity)
+    {
+        gtk_widget_set_opacity(GTK_WIDGET(m_WebView), opacity);
+        gtk_widget_set_opacity(GTK_WIDGET(m_Window), opacity);
+    }
+
+    double getOpacityWebView()
+    {
+        return gtk_widget_get_opacity(GTK_WIDGET(m_WebView));
+    }
+
+    void setBackgroundTransparent() {}
+
 private:
     void initScript(const std::string& js)
     {
-        // Note: Should be called once by createWebView.
         m_InitScript = webkit_user_script_new(js.c_str(), WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
                                               WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_START, nullptr, nullptr);
 
@@ -458,13 +652,41 @@ private:
         m_ChildX11Window = gdk_x11_window_get_xid(gtk_widget_get_window(m_Window));
         if (m_ChildX11Window == None)
             return false;
+
         XReparentWindow(m_X11Display, m_ChildX11Window, m_ParentX11Window, 0, 0);
+
+        XMapWindow(m_X11Display, m_ChildX11Window);
+        XFlush(m_X11Display);
+        XSync(m_X11Display, false);
 
         while (gtk_events_pending())
         {
             gtk_main_iteration();
         }
+
         return true;
+    }
+
+    void setXWaylandCommits(bool allow)
+    {
+        if (!isXwayland)
+        {
+            return;
+        }
+
+        Atom commitProtocol = XInternAtom(m_X11Display, "_XWAYLAND_ALLOW_COMMITS", False);
+        if (commitProtocol != None)
+        {
+            uint32_t value = allow ? 1 : 0;
+            XChangeProperty(m_X11Display, m_ChildX11Window, commitProtocol, XA_CARDINAL, 32, PropModeReplace,
+                            (unsigned char*)&value, 1);
+            XChangeProperty(m_X11Display, m_ParentX11Window, commitProtocol, XA_CARDINAL, 32, PropModeReplace,
+                            (unsigned char*)&value, 1);
+        }
+        else
+        {
+            AXLOGW("Couldn't set XWAYLAND COMMIT PROTOCOL");
+        }
     }
 
     using dispatch_fn_t = std::function<void()>;
@@ -475,6 +697,12 @@ private:
                             return G_SOURCE_REMOVE;
                         }),
                         new std::function<void()>(f), [](void* f) { delete static_cast<dispatch_fn_t*>(f); });
+    }
+
+    void onMessage(std::string_view message)
+    {
+        // if axmol UIWebView ever support bindings for different callbacks from
+        // javascript land...
     }
 
     void depleteRunLoopEventQueue()
@@ -495,10 +723,21 @@ private:
     Window m_ChildX11Window;
     GtkWidget* m_Window;
     GtkWidget* m_WebView;
+    GdkMonitor* m_Monitor;
     WebKitUserScript* m_InitScript;
     WebKitUserContentManager* m_UserContentManager;
 
+    std::string m_JsScheme;
+    bool m_ScalesPageToFit;
+    bool m_WebViewHidden;
+
+    ContinueUrlCallback_t m_ShouldStartLoading;
+    GeneralUrlCallback_t m_DidFinishLoading;
+    GeneralUrlCallback_t m_DidFailLoading;
+    GeneralUrlCallback_t m_OnJsCallback;
+
     ax::Vec2 m_LastPos;
+    ax::Vec2 m_LastSize;
 };
 
 NS_AX_BEGIN
@@ -509,7 +748,36 @@ namespace ui
 WebViewImpl::WebViewImpl(WebView* webView) : _createSucceeded(false), _gtkWebKit(nullptr), _webView(webView)
 {
     _gtkWebKit       = new GTKWebKit();
-    _createSucceeded = _gtkWebKit->createWebView();
+    _createSucceeded = _gtkWebKit->createWebView(
+        [this](std::string_view url) -> bool {
+            const auto shouldStartLoading = _webView->getOnShouldStartLoading();
+            if (shouldStartLoading != nullptr)
+            {
+                return shouldStartLoading(_webView, url);
+            }
+            return true;
+        },
+        [this](std::string_view url) {
+        WebView::ccWebViewCallback didFinishLoading = _webView->getOnDidFinishLoading();
+        if (didFinishLoading != nullptr)
+        {
+            didFinishLoading(_webView, url);
+        }
+        },
+        [this](std::string_view url) {
+        WebView::ccWebViewCallback didFailLoading = _webView->getOnDidFailLoading();
+        if (didFailLoading != nullptr)
+        {
+            didFailLoading(_webView, url);
+        }
+    },
+    [this](std::string_view url) {
+        WebView::ccWebViewCallback onJsCallback = _webView->getOnJSCallback();
+        if (onJsCallback != nullptr)
+        {
+            onJsCallback(_webView, url);
+        }
+    });
 }
 
 WebViewImpl::~WebViewImpl()
@@ -528,8 +796,8 @@ void WebViewImpl::loadData(const Data& data,
 {
     if (_createSucceeded)
     {
-        // const auto url = getDataURI(data, MIMEType);
-        //_systemWebControl->loadURL(url, false);
+        const auto url = getDataURI(data, MIMEType);
+        _gtkWebKit->loadURL(url, false);
     }
 }
 
@@ -539,19 +807,19 @@ void WebViewImpl::loadHTMLString(std::string_view string, std::string_view baseU
     {
         if (string.empty())
         {
-            //_systemWebControl->loadHTMLString("data:text/html," + utils::urlEncode("<html></html>"), baseURL);
+            _gtkWebKit->loadHTMLString("data:text/html," + utils::urlEncode("<html></html>"), baseURL);
             return;
         }
 
-        /*const auto html = htmlFromUri(string);
+        const auto html = htmlFromUri(string);
         if (!html.empty())
         {
-            //_systemWebControl->loadHTMLString("data:text/html," + utils::urlEncode(html), baseURL);
+            _gtkWebKit->loadHTMLString("data:text/html," + utils::urlEncode(html), baseURL);
         }
         else
         {
-            //_systemWebControl->loadHTMLString(string, baseURL);
-        }*/
+            _gtkWebKit->loadHTMLString(string, baseURL);
+        }
     }
 }
 
@@ -568,7 +836,7 @@ void WebViewImpl::loadFile(std::string_view fileName)
     if (_createSucceeded)
     {
         const auto fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
-        //_systemWebControl->loadFile(fullPath);
+        _gtkWebKit->loadFile(fullPath);
     }
 }
 
@@ -576,7 +844,7 @@ void WebViewImpl::stopLoading()
 {
     if (_createSucceeded)
     {
-        //_systemWebControl->stopLoading();
+        _gtkWebKit->stopLoading();
     }
 }
 
@@ -584,7 +852,7 @@ void WebViewImpl::reload()
 {
     if (_createSucceeded)
     {
-        //_systemWebControl->reload();
+        _gtkWebKit->reload();
     }
 }
 
@@ -592,7 +860,7 @@ bool WebViewImpl::canGoBack()
 {
     if (_createSucceeded)
     {
-        // return _systemWebControl->canGoBack();
+        return _gtkWebKit->canGoBack();
     }
     return false;
 }
@@ -601,7 +869,7 @@ bool WebViewImpl::canGoForward()
 {
     if (_createSucceeded)
     {
-        // return _systemWebControl->canGoForward();
+        return _gtkWebKit->canGoForward();
     }
     return false;
 }
@@ -610,7 +878,7 @@ void WebViewImpl::goBack()
 {
     if (_createSucceeded)
     {
-        //_systemWebControl->goBack();
+        _gtkWebKit->goBack();
     }
 }
 
@@ -618,7 +886,7 @@ void WebViewImpl::goForward()
 {
     if (_createSucceeded)
     {
-        //_systemWebControl->goForward();
+        _gtkWebKit->goForward();
     }
 }
 
@@ -626,7 +894,7 @@ void WebViewImpl::setJavascriptInterfaceScheme(std::string_view scheme)
 {
     if (_createSucceeded)
     {
-        //_systemWebControl->setJavascriptInterfaceScheme(scheme);
+        _gtkWebKit->setJavascriptInterfaceScheme(scheme);
     }
 }
 
@@ -634,7 +902,7 @@ void WebViewImpl::evaluateJS(std::string_view js)
 {
     if (_createSucceeded)
     {
-        //_systemWebControl->evaluateJS(js);
+        _gtkWebKit->evaluateJS(js);
     }
 }
 
@@ -642,7 +910,7 @@ void WebViewImpl::setScalesPageToFit(const bool scalesPageToFit)
 {
     if (_createSucceeded)
     {
-        //_systemWebControl->setScalesPageToFit(scalesPageToFit);
+        _gtkWebKit->setScalesPageToFit(scalesPageToFit);
     }
 }
 
@@ -657,7 +925,6 @@ void WebViewImpl::draw(Renderer* renderer, Mat4 const& transform, uint32_t flags
         const auto uiRect = ax::ui::Helper::convertBoundingBoxToScreen(_webView);
         _gtkWebKit->setWebViewRect(static_cast<int>(uiRect.origin.x), static_cast<int>(uiRect.origin.y),
                                    static_cast<int>(uiRect.size.width), static_cast<int>(uiRect.size.height));
-        AXLOGI("Redrawing!");
     }
 
     _gtkWebKit->update();
@@ -667,29 +934,28 @@ void WebViewImpl::setVisible(bool visible)
 {
     if (_createSucceeded)
     {
-        //_systemWebControl->setWebViewVisible(visible);
+        _gtkWebKit->setWebViewVisible(visible);
     }
 }
 
 void WebViewImpl::setBounces(bool bounces)
 {
-    //_systemWebControl->setBounces(bounces);
+    _gtkWebKit->setBounces(bounces);
 }
 
 void WebViewImpl::setOpacityWebView(float opacity)
 {
-    //_systemWebControl->setOpacityWebView(opacity);
+    _gtkWebKit->setOpacityWebView((double)opacity);
 }
 
 float WebViewImpl::getOpacityWebView() const
 {
-    // return _systemWebControl->getOpacityWebView();
-    return false;
+    return (float)_gtkWebKit->getOpacityWebView();
 }
 
 void WebViewImpl::setBackgroundTransparent()
 {
-    //_systemWebControl->setBackgroundTransparent();
+    _gtkWebKit->setBackgroundTransparent();
 }
 
 }  // namespace ui
