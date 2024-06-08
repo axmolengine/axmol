@@ -95,7 +95,7 @@ public:
      */
     static TransitionScene* create(float t, Scene* scene);
 
-    /** Called after the transition finishes.
+    /** Called after a transition finishes.
      */
     void finish();
 
@@ -122,15 +122,22 @@ public:
 protected:
     virtual void sceneOrder();
     void setNewScene(float dt);
+    
+    /**  Set the number of actions to be done to finish
+     */
+    void setWaitForFinishCount(int count);
 
     Scene* _inScene;
     Scene* _outScene;
     float _duration;
     bool _isInSceneOnTop;
     bool _isSendCleanupToScene;
-
+    
+    
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(TransitionScene);
+    
+    int _waitForFinishCount = 1;
 };
 
 /** @class TransitionSceneOriented
