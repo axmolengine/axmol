@@ -197,8 +197,10 @@ $manifest = @{
     msvc         = '14.39+'; # cl.exe @link.exe 14.39 VS2022 17.9.x
     ndk          = 'r23c';
     xcode        = '13.0.0+'; # range
-    # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang 16.0.0 or newer.");
-    llvm         = '16.0.6+'; # clang-cl msvc14.37 require 16.0.0+
+    # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang xx.x.x or newer.");
+    # clang-cl msvc14.37 require 16.0.0+
+    # clang-cl msvc14.40 require 17.0.0+
+    llvm         = '17.0.6+'; 
     gcc          = '9.0.0+';
     cmake        = '3.23.0+';
     ninja        = '1.10.0+';

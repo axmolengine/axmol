@@ -13,7 +13,6 @@ if ($Global:is_axmol_app -or $Global:is_axmol_engine) {
     $manifest['glslcc'] = '1.9.5+'
     $manifest['cmake'] = '3.29.3+'
     $manifest['emsdk'] = '3.1.60+'
-    $manifest['llvm'] = '17.0.6+'
     $manifest['jdk'] = '17.0.10+'
 }
 
