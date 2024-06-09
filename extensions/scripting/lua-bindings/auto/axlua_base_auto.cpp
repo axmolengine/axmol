@@ -1,7 +1,6 @@
 #include "lua-bindings/auto/axlua_base_auto.hpp"
-#include "cocos2d.h"
+#include "axmol.h"
 #include "2d/ProtectedNode.h"
-#include "base/AsyncTaskPool.h"
 #include "lua-bindings/manual/ComponentLua.h"
 #include "renderer/Renderer.h"
 #include "renderer/PipelineDescriptor.h"
@@ -18519,267 +18518,6 @@ int lua_register_ax_base_Scheduler(lua_State* tolua_S)
     auto typeName = typeid(ax::Scheduler).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Scheduler";
     g_typeCast[typeName] = "ax.Scheduler";
-    return 1;
-}
-
-int lua_ax_base_AsyncTaskPool_stopTasks(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::AsyncTaskPool* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AsyncTaskPool",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::AsyncTaskPool*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AsyncTaskPool_stopTasks'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        ax::AsyncTaskPool::TaskType arg0;
-
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AsyncTaskPool:stopTasks");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AsyncTaskPool_stopTasks'", nullptr);
-            return 0;
-        }
-        cobj->stopTasks(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AsyncTaskPool:stopTasks",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_AsyncTaskPool_stopTasks'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_AsyncTaskPool_enqueue(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::AsyncTaskPool* cobj = nullptr;
-    bool ok  = true;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AsyncTaskPool",0,&tolua_err)) goto tolua_lerror;
-#endif
-    cobj = (ax::AsyncTaskPool*)tolua_tousertype(tolua_S,1,0);
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AsyncTaskPool_enqueue'", nullptr);
-        return 0;
-    }
-#endif
-    argc = lua_gettop(tolua_S)-1;
-    do{
-        if (argc == 2) {
-            ax::AsyncTaskPool::TaskType arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AsyncTaskPool:enqueue");
-
-            if (!ok) { break; }
-            std::function<void ()> arg1;
-            do {
-			// Lambda binding for lua is not supported.
-			assert(false);
-		} while(0)
-		;
-
-            if (!ok) { break; }
-            cobj->enqueue(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 4) {
-            ax::AsyncTaskPool::TaskType arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AsyncTaskPool:enqueue");
-
-            if (!ok) { break; }
-            std::function<void (void *)> arg1;
-            do {
-			// Lambda binding for lua is not supported.
-			assert(false);
-		} while(0)
-		;
-
-            if (!ok) { break; }
-            void* arg2;
-            #pragma warning NO CONVERSION TO NATIVE FOR void*
-		ok = false;
-
-            if (!ok) { break; }
-            std::function<void ()> arg3;
-            do {
-			// Lambda binding for lua is not supported.
-			assert(false);
-		} while(0)
-		;
-
-            if (!ok) { break; }
-            cobj->enqueue(arg0, arg1, arg2, arg3);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.AsyncTaskPool:enqueue",argc, 4);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_AsyncTaskPool_enqueue'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_AsyncTaskPool_getInstance(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.AsyncTaskPool",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AsyncTaskPool_getInstance'", nullptr);
-            return 0;
-        }
-        auto&& ret = ax::AsyncTaskPool::getInstance();
-        object_to_luaval<ax::AsyncTaskPool>(tolua_S, "ax.AsyncTaskPool",(ax::AsyncTaskPool*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AsyncTaskPool:getInstance",argc, 0);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_AsyncTaskPool_getInstance'.",&tolua_err);
-#endif
-    return 0;
-}
-int lua_ax_base_AsyncTaskPool_destroyInstance(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.AsyncTaskPool",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AsyncTaskPool_destroyInstance'", nullptr);
-            return 0;
-        }
-        ax::AsyncTaskPool::destroyInstance();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AsyncTaskPool:destroyInstance",argc, 0);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_AsyncTaskPool_destroyInstance'.",&tolua_err);
-#endif
-    return 0;
-}
-int lua_ax_base_AsyncTaskPool_constructor(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::AsyncTaskPool* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AsyncTaskPool_constructor'", nullptr);
-            return 0;
-        }
-        cobj = new ax::AsyncTaskPool();
-        tolua_pushusertype(tolua_S,(void*)cobj,"ax.AsyncTaskPool");
-        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AsyncTaskPool:AsyncTaskPool",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_AsyncTaskPool_constructor'.",&tolua_err);
-#endif
-
-    return 0;
-}
-
-static int lua_ax_base_AsyncTaskPool_finalize(lua_State* tolua_S)
-{
-    printf("luabindings: finalizing LUA object (AsyncTaskPool)");
-    return 0;
-}
-
-int lua_register_ax_base_AsyncTaskPool(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"ax.AsyncTaskPool");
-    tolua_cclass(tolua_S,"AsyncTaskPool","ax.AsyncTaskPool","",nullptr);
-
-    tolua_beginmodule(tolua_S,"AsyncTaskPool");
-        tolua_function(tolua_S,"new",lua_ax_base_AsyncTaskPool_constructor);
-        tolua_function(tolua_S,"stopTasks",lua_ax_base_AsyncTaskPool_stopTasks);
-        tolua_function(tolua_S,"enqueue",lua_ax_base_AsyncTaskPool_enqueue);
-        tolua_function(tolua_S,"getInstance", lua_ax_base_AsyncTaskPool_getInstance);
-        tolua_function(tolua_S,"destroyInstance", lua_ax_base_AsyncTaskPool_destroyInstance);
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::AsyncTaskPool).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AsyncTaskPool";
-    g_typeCast[typeName] = "ax.AsyncTaskPool";
     return 1;
 }
 
@@ -60043,6 +59781,59 @@ int lua_ax_base_Sprite_initWithFile(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Sprite_initWithImageData(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Sprite* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Sprite",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_initWithImageData'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        ax::Data arg0;
+        std::string_view arg1;
+
+        luaL_error(tolua_S, "ax::Data unsupported");;
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Sprite:initWithImageData");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_initWithImageData'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->initWithImageData(arg0, arg1);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Sprite:initWithImageData",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Sprite_initWithImageData'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Sprite_setVertexLayout(lua_State* tolua_S)
 {
     int argc = 0;
@@ -60420,6 +60211,7 @@ int lua_register_ax_base_Sprite(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSpriteFrame",lua_ax_base_Sprite_initWithSpriteFrame);
         tolua_function(tolua_S,"initWithSpriteFrameName",lua_ax_base_Sprite_initWithSpriteFrameName);
         tolua_function(tolua_S,"initWithFile",lua_ax_base_Sprite_initWithFile);
+        tolua_function(tolua_S,"initWithImageData",lua_ax_base_Sprite_initWithImageData);
         tolua_function(tolua_S,"setVertexLayout",lua_ax_base_Sprite_setVertexLayout);
         tolua_function(tolua_S,"setAutoUpdatePS",lua_ax_base_Sprite_setAutoUpdatePS);
         tolua_function(tolua_S,"setAutoSize",lua_ax_base_Sprite_setAutoSize);
@@ -101564,7 +101356,23 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.TextureCache:addImage",argc, 3);
+    do{
+        if (argc == 2) {
+            ax::Data arg0;
+            luaL_error(tolua_S, "ax::Data unsupported");;
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.TextureCache:addImage");
+
+            if (!ok) { break; }
+            ax::Texture2D* ret = cobj->addImage(arg0, arg1);
+            object_to_luaval<ax::Texture2D>(tolua_S, "ax.Texture2D",(ax::Texture2D*)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.TextureCache:addImage",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -112460,7 +112268,6 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
 	lua_register_ax_base_Director(tolua_S);
 	lua_register_ax_base_Timer(tolua_S);
 	lua_register_ax_base_Scheduler(tolua_S);
-	lua_register_ax_base_AsyncTaskPool(tolua_S);
 	lua_register_ax_base_Action(tolua_S);
 	lua_register_ax_base_FiniteTimeAction(tolua_S);
 	lua_register_ax_base_Speed(tolua_S);

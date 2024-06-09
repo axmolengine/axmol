@@ -1,3 +1,13 @@
+## axmol-2.1.4 ?? 2024
+
+### Significant changes relative to 2.1.2:
+
+- Add JobSystem support
+
+### Mark as deprecated
+
+- `AsyncTaskPool`, use `JobSystem` instead.
+
 ## axmol-2.1.3 May.26 2024
 
 ### Significant changes relative to 2.1.2:
@@ -126,7 +136,7 @@
 
 - simdjson: 3.7.0 ==> 3.9.2
 - flatbuffers: 2.0.8 ==> 24.3.25
-- curl: 8.6.0 ==> 8.7.1
+- curl: 8.6.0 ==> 8.8.0
 - glad: 2.0.5 ==> 2.0.6
 - yasio: 4.2.1 ==> 4.2.2
 - llhttp: 9.2.0 ==> 9.2.1

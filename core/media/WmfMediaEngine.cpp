@@ -361,7 +361,8 @@ bool WmfMediaEngine::open(std::string_view sourceUri)
     this->QueryInterface(IID_IUnknown, &sharedFromThis);
 
     m_bOpenPending = true;
-    std::thread t([this, sharedFromThis, wsourceUri = ntcvt::from_chars(sourceUri)] {
+
+    Director::getInstance()->getJobSystem()->enqueue([this, sharedFromThis, wsourceUri = ntcvt::from_chars(sourceUri)] {
         TComPtr<IMFTopology> pTopology;
         TComPtr<IMFClock> pClock;
 
@@ -415,7 +416,6 @@ bool WmfMediaEngine::open(std::string_view sourceUri)
         m_bOpenPending = false;
         SetEvent(m_hOpenEvent);
     });
-    t.detach();
 
     return true;
 }

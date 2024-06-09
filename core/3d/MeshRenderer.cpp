@@ -33,7 +33,6 @@
 #include "3d/Mesh.h"
 
 #include "base/Director.h"
-#include "base/AsyncTaskPool.h"
 #include "base/UTF8.h"
 #include "base/Utils.h"
 #include "2d/Light.h"
@@ -85,16 +84,16 @@ MeshRenderer* MeshRenderer::create(std::string_view modelPath, std::string_view 
 }
 
 void MeshRenderer::createAsync(std::string_view modelPath,
-                           const std::function<void(MeshRenderer*, void*)>& callback,
-                           void* callbackparam)
+                               const std::function<void(MeshRenderer*, void*)>& callback,
+                               void* callbackparam)
 {
     createAsync(modelPath, "", callback, callbackparam);
 }
 
 void MeshRenderer::createAsync(std::string_view modelPath,
-                           std::string_view texturePath,
-                           const std::function<void(MeshRenderer*, void*)>& callback,
-                           void* callbackparam)
+                               std::string_view texturePath,
+                               const std::function<void(MeshRenderer*, void*)>& callback,
+                               void* callbackparam)
 {
     MeshRenderer* meshRenderer = new MeshRenderer();
     if (meshRenderer->loadFromCache(modelPath))
@@ -106,20 +105,22 @@ void MeshRenderer::createAsync(std::string_view modelPath,
     }
 
     meshRenderer->_asyncLoadParam.afterLoadCallback = callback;
-    meshRenderer->_asyncLoadParam.texPath             = texturePath;
-    meshRenderer->_asyncLoadParam.modelPath           = modelPath;
-    meshRenderer->_asyncLoadParam.modelFullPath       = FileUtils::getInstance()->fullPathForFilename(modelPath);
-    meshRenderer->_asyncLoadParam.callbackParam       = callbackparam;
-    meshRenderer->_asyncLoadParam.materialdatas       = new MaterialDatas();
-    meshRenderer->_asyncLoadParam.meshdatas           = new MeshDatas();
-    meshRenderer->_asyncLoadParam.nodeDatas           = new NodeDatas();
-    AsyncTaskPool::getInstance()->enqueue(
-        AsyncTaskPool::TaskType::TASK_IO, AX_CALLBACK_1(MeshRenderer::afterAsyncLoad, meshRenderer),
-        (void*)(&meshRenderer->_asyncLoadParam), [meshRenderer]() {
-            auto& loadParam                      = meshRenderer->_asyncLoadParam;
-            loadParam.result = meshRenderer->loadFromFile(loadParam.modelFullPath, loadParam.nodeDatas,
-                                                          loadParam.meshdatas, loadParam.materialdatas);
-        });
+    meshRenderer->_asyncLoadParam.texPath           = texturePath;
+    meshRenderer->_asyncLoadParam.modelPath         = modelPath;
+    meshRenderer->_asyncLoadParam.modelFullPath     = FileUtils::getInstance()->fullPathForFilename(modelPath);
+    meshRenderer->_asyncLoadParam.callbackParam     = callbackparam;
+    meshRenderer->_asyncLoadParam.materialdatas     = new MaterialDatas();
+    meshRenderer->_asyncLoadParam.meshdatas         = new MeshDatas();
+    meshRenderer->_asyncLoadParam.nodeDatas         = new NodeDatas();
+
+    auto director = Director::getInstance();
+    director->getJobSystem()->enqueue(
+        [director, meshRenderer] {
+        auto& loadParam  = meshRenderer->_asyncLoadParam;
+        loadParam.result = meshRenderer->loadFromFile(loadParam.modelFullPath, loadParam.nodeDatas, loadParam.meshdatas,
+                                                      loadParam.materialdatas);
+    },
+        [meshRenderer] { meshRenderer->afterAsyncLoad(&meshRenderer->_asyncLoadParam); });
 }
 
 void MeshRenderer::afterAsyncLoad(void* param)
@@ -232,9 +233,9 @@ bool MeshRenderer::loadFromCache(std::string_view path)
 }
 
 bool MeshRenderer::loadFromFile(std::string_view path,
-                            NodeDatas* nodedatas,
-                            MeshDatas* meshdatas,
-                            MaterialDatas* materialdatas)
+                                NodeDatas* nodedatas,
+                                MeshDatas* meshdatas,
+                                MaterialDatas* materialdatas)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(path);
 
@@ -368,7 +369,9 @@ bool MeshRenderer::initFrom(const NodeDatas& nodeDatas, const MeshDatas& meshdat
     return true;
 }
 
-MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas)
+MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata,
+                                                   ModelData* modeldata,
+                                                   const MaterialDatas& materialdatas)
 {
     auto meshRenderer = new MeshRenderer();
 
@@ -404,7 +407,8 @@ MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata, ModelData
                     texParams.sAddressMode = textureData->wrapS;
                     texParams.tAddressMode = textureData->wrapT;
                     tex->setTexParameters(texParams);
-                    _transparentMaterialHint = materialData->getTextureData(NTextureData::Usage::Transparency) != nullptr;
+                    _transparentMaterialHint =
+                        materialData->getTextureData(NTextureData::Usage::Transparency) != nullptr;
                 }
             }
             textureData = materialData->getTextureData(NTextureData::Usage::Normal);
@@ -570,7 +574,8 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
                                     texParams.sAddressMode = textureData->wrapS;
                                     texParams.tAddressMode = textureData->wrapT;
                                     tex->setTexParameters(texParams);
-                                    _transparentMaterialHint = materialData->getTextureData(NTextureData::Usage::Transparency) != nullptr;
+                                    _transparentMaterialHint =
+                                        materialData->getTextureData(NTextureData::Usage::Transparency) != nullptr;
                                 }
                             }
                             textureData = materialData->getTextureData(NTextureData::Usage::Normal);
@@ -676,7 +681,8 @@ Texture2D* MeshRenderer::setMeshTexture(Mesh* mesh, std::string_view texPath, NT
     return tex;
 }
 
-void MeshRenderer::setModelTexture(std::string_view modelPath, std::string_view texturePath) {
+void MeshRenderer::setModelTexture(std::string_view modelPath, std::string_view texturePath)
+{
     if (!texturePath.empty())
         setTexture(texturePath);
     else if (!_meshTextureHint)
@@ -892,7 +898,7 @@ void MeshRenderer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
     }
 }
 
-bool MeshRenderer::setProgramState(backend::ProgramState* programState, bool ownPS/* = false*/)
+bool MeshRenderer::setProgramState(backend::ProgramState* programState, bool ownPS /* = false*/)
 {
     if (Node::setProgramState(programState, ownPS))
     {
@@ -1097,13 +1103,12 @@ static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVerte
     {
         if (hasTangentSpace)
         {
-            type = hasNormal && usesLight ? MeshMaterial::MaterialType::BUMPED_DIFFUSE
-                                          : MeshMaterial::MaterialType::UNLIT;
+            type =
+                hasNormal && usesLight ? MeshMaterial::MaterialType::BUMPED_DIFFUSE : MeshMaterial::MaterialType::UNLIT;
         }
         else
         {
-            type = hasNormal && usesLight ? MeshMaterial::MaterialType::DIFFUSE
-                                          : MeshMaterial::MaterialType::UNLIT;
+            type = hasNormal && usesLight ? MeshMaterial::MaterialType::DIFFUSE : MeshMaterial::MaterialType::UNLIT;
         }
     }
     else

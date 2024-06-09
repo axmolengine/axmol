@@ -86,6 +86,7 @@ conversions:
     "UniformLocation": "ok &= luaval_to_uniformLocation(tolua_S, ${arg_idx}, ${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
     "ValueMap*": "ok &= luaval_to_ccvaluemap(tolua_S, ${arg_idx}, ${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
     "Margin": "ok &= luaval_to_margin(tolua_S, ${arg_idx}, &${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
+    "Data": "luaL_error(tolua_S, \"ax::Data unsupported\");"
 
     object: "ok &= luaval_to_object<${arg.to_string($generator).replace(\"*\", \"\")}>(tolua_S, ${arg_idx}, \"${scriptname}\",&${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
   from_native:

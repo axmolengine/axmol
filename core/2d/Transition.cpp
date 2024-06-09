@@ -127,23 +127,33 @@ void TransitionScene::draw(Renderer* renderer, const Mat4& transform, uint32_t f
     }
 }
 
+void TransitionScene::setWaitForFinishCount(int count)
+{
+    _waitForFinishCount = count;
+}
+
 void TransitionScene::finish()
 {
-    // clean up
-    _inScene->setVisible(true);
-    _inScene->setPosition(0, 0);
-    _inScene->setScale(1.0f);
-    _inScene->setRotation(0.0f);
-    _inScene->setAdditionalTransform(nullptr);
-
-    _outScene->setVisible(false);
-    _outScene->setPosition(0, 0);
-    _outScene->setScale(1.0f);
-    _outScene->setRotation(0.0f);
-    _outScene->setAdditionalTransform(nullptr);
-
-    //[self schedule:@selector(setNewScene:) interval:0];
-    this->schedule(AX_SCHEDULE_SELECTOR(TransitionScene::setNewScene), 0);
+    _waitForFinishCount--;
+    
+    if(_waitForFinishCount == 0)
+    {
+        // clean up
+        _inScene->setVisible(true);
+        _inScene->setPosition(0, 0);
+        _inScene->setScale(1.0f);
+        _inScene->setRotation(0.0f);
+        _inScene->setAdditionalTransform(nullptr);
+        
+        _outScene->setVisible(false);
+        _outScene->setPosition(0, 0);
+        _outScene->setScale(1.0f);
+        _outScene->setRotation(0.0f);
+        _outScene->setAdditionalTransform(nullptr);
+        
+        //[self schedule:@selector(setNewScene:) interval:0];
+        this->schedule(AX_SCHEDULE_SELECTOR(TransitionScene::setNewScene), 0);
+    }
 }
 
 void TransitionScene::setNewScene(float /*dt*/)
@@ -176,7 +186,7 @@ void TransitionScene::hideOutShowIn()
 void TransitionScene::onEnter()
 {
     Scene::onEnter();
-
+    
     // disable events while transitions
     _eventDispatcher->setEnabled(false);
 
@@ -268,12 +278,15 @@ void TransitionRotoZoom::onEnter()
 
     _inScene->setAnchorPoint(Vec2(0.5f, 0.5f));
     _outScene->setAnchorPoint(Vec2(0.5f, 0.5f));
-
+    
+    setWaitForFinishCount(2);
+    
     auto rotozoom = Sequence::create(
         Spawn::create(ScaleBy::create(_duration / 2, 0.001f), RotateBy::create(_duration / 2, 360 * 2), nullptr),
         DelayTime::create(_duration / 2), nullptr);
 
-    _outScene->runAction(rotozoom);
+    _outScene->runAction(
+        Sequence::create(rotozoom, CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr));
     _inScene->runAction(
         Sequence::create(rotozoom->reverse(), CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr));
 }
@@ -306,6 +319,8 @@ void TransitionJumpZoom::onEnter()
     _inScene->setAnchorPoint(Vec2(0.5f, 0.5f));
     _outScene->setAnchorPoint(Vec2(0.5f, 0.5f));
 
+    setWaitForFinishCount(2);
+    
     ActionInterval* jump     = JumpBy::create(_duration / 4, Vec2(-s.width, 0.0f), s.width / 4, 2);
     ActionInterval* scaleIn  = ScaleTo::create(_duration / 4, 1.0f);
     ActionInterval* scaleOut = ScaleTo::create(_duration / 4, 0.5f);
@@ -314,8 +329,9 @@ void TransitionJumpZoom::onEnter()
     auto jumpZoomIn  = Sequence::create(jump, scaleIn, nullptr);
 
     ActionInterval* delay = DelayTime::create(_duration / 2);
-
-    _outScene->runAction(jumpZoomOut);
+    
+    _outScene->runAction(
+        Sequence::create(jumpZoomOut, CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr));
     _inScene->runAction(
         Sequence::create(delay, jumpZoomIn, CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr));
 }
@@ -457,12 +473,16 @@ void TransitionSlideInL::onEnter()
     TransitionScene::onEnter();
     this->initScenes();
 
+    setWaitForFinishCount(2);
+    
     ActionInterval* in  = this->action();
     ActionInterval* out = this->action();
+    
+    ActionInterval* inAction = Sequence::create(easeActionWithAction(in), CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
 
-    ActionInterval* inAction  = easeActionWithAction(in);
     ActionInterval* outAction = Sequence::create(
         easeActionWithAction(out), CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
+    
     _inScene->runAction(inAction);
     _outScene->runAction(outAction);
 }
@@ -634,10 +654,13 @@ void TransitionShrinkGrow::onEnter()
     _inScene->setAnchorPoint(Vec2(2 / 3.0f, 0.5f));
     _outScene->setAnchorPoint(Vec2(1 / 3.0f, 0.5f));
 
+    setWaitForFinishCount(2);
+    
     ActionInterval* scaleOut = ScaleTo::create(_duration, 0.01f);
     ActionInterval* scaleIn  = ScaleTo::create(_duration, 1.0f);
-
-    _inScene->runAction(this->easeActionWithAction(scaleIn));
+    
+    _inScene->runAction(Sequence::create(this->easeActionWithAction(scaleIn),
+                                         CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr));
     _outScene->runAction(Sequence::create(this->easeActionWithAction(scaleOut),
                                           CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr));
 }
@@ -659,6 +682,8 @@ void TransitionFlipX::onEnter()
 
     _inScene->setVisible(false);
 
+    setWaitForFinishCount(2);
+    
     float inDeltaZ, inAngleZ;
     float outDeltaZ, outAngleZ;
 
@@ -676,13 +701,14 @@ void TransitionFlipX::onEnter()
         outDeltaZ = -90;
         outAngleZ = 0;
     }
-
+    
     auto inA = Sequence::create(DelayTime::create(_duration / 2), Show::create(),
                                 OrbitCamera::create(_duration / 2, 1, 0, inAngleZ, inDeltaZ, 0, 0),
                                 CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
 
     auto outA = Sequence::create(OrbitCamera::create(_duration / 2, 1, 0, outAngleZ, outDeltaZ, 0, 0), Hide::create(),
-                                 DelayTime::create(_duration / 2), nullptr);
+                                 DelayTime::create(_duration / 2),
+                                 CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
 
     _inScene->runAction(inA);
     _outScene->runAction(outA);
@@ -714,6 +740,8 @@ void TransitionFlipY::onEnter()
 
     _inScene->setVisible(false);
 
+    setWaitForFinishCount(2);
+    
     float inDeltaZ, inAngleZ;
     float outDeltaZ, outAngleZ;
 
@@ -736,7 +764,8 @@ void TransitionFlipY::onEnter()
                                  OrbitCamera::create(_duration / 2, 1, 0, inAngleZ, inDeltaZ, 90, 0),
                                  CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
     auto outA = Sequence::create(OrbitCamera::create(_duration / 2, 1, 0, outAngleZ, outDeltaZ, 90, 0), Hide::create(),
-                                 DelayTime::create(_duration / 2), nullptr);
+                                 DelayTime::create(_duration / 2),
+                                 CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
 
     _inScene->runAction(inA);
     _outScene->runAction(outA);
@@ -769,6 +798,8 @@ void TransitionFlipAngular::onEnter()
 
     _inScene->setVisible(false);
 
+    setWaitForFinishCount(2);
+    
     float inDeltaZ, inAngleZ;
     float outDeltaZ, outAngleZ;
 
@@ -791,7 +822,8 @@ void TransitionFlipAngular::onEnter()
                                  OrbitCamera::create(_duration / 2, 1, 0, inAngleZ, inDeltaZ, -45, 0),
                                  CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
     auto outA = Sequence::create(OrbitCamera::create(_duration / 2, 1, 0, outAngleZ, outDeltaZ, 45, 0), Hide::create(),
-                                 DelayTime::create(_duration / 2), nullptr);
+                                 DelayTime::create(_duration / 2),
+                                 CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
 
     _inScene->runAction(inA);
     _outScene->runAction(outA);
@@ -823,6 +855,8 @@ void TransitionZoomFlipX::onEnter()
 
     _inScene->setVisible(false);
 
+    setWaitForFinishCount(2);
+    
     float inDeltaZ, inAngleZ;
     float outDeltaZ, outAngleZ;
 
@@ -846,7 +880,8 @@ void TransitionZoomFlipX::onEnter()
                                  CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
     auto outA = Sequence::create(Spawn::create(OrbitCamera::create(_duration / 2, 1, 0, outAngleZ, outDeltaZ, 0, 0),
                                                ScaleTo::create(_duration / 2, 0.5f), nullptr),
-                                 Hide::create(), DelayTime::create(_duration / 2), nullptr);
+                                 Hide::create(), DelayTime::create(_duration / 2),
+                                 CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
 
     _inScene->setScale(0.5f);
     _inScene->runAction(inA);
@@ -880,6 +915,8 @@ void TransitionZoomFlipY::onEnter()
 
     _inScene->setVisible(false);
 
+    setWaitForFinishCount(2);
+    
     float inDeltaZ, inAngleZ;
     float outDeltaZ, outAngleZ;
 
@@ -905,7 +942,8 @@ void TransitionZoomFlipY::onEnter()
 
     auto outA = Sequence::create(Spawn::create(OrbitCamera::create(_duration / 2, 1, 0, outAngleZ, outDeltaZ, 90, 0),
                                                ScaleTo::create(_duration / 2, 0.5f), nullptr),
-                                 Hide::create(), DelayTime::create(_duration / 2), nullptr);
+                                 Hide::create(), DelayTime::create(_duration / 2),
+                                 CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
 
     _inScene->setScale(0.5f);
     _inScene->runAction(inA);
@@ -938,6 +976,8 @@ void TransitionZoomFlipAngular::onEnter()
 
     _inScene->setVisible(false);
 
+    setWaitForFinishCount(2);
+    
     float inDeltaZ, inAngleZ;
     float outDeltaZ, outAngleZ;
 
@@ -963,7 +1003,8 @@ void TransitionZoomFlipAngular::onEnter()
                          Show::create(), CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
     auto outA = Sequence::create(Spawn::create(OrbitCamera::create(_duration / 2, 1, 0, outAngleZ, outDeltaZ, 45, 0),
                                                ScaleTo::create(_duration / 2, 0.5f), nullptr),
-                                 Hide::create(), DelayTime::create(_duration / 2), nullptr);
+                                 Hide::create(), DelayTime::create(_duration / 2),
+                                 CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
 
     _inScene->setScale(0.5f);
     _inScene->runAction(inA);

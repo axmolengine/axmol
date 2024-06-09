@@ -230,7 +230,7 @@ $android_sdk_tools = @{
     'platforms'   = 'android-34'
 }
 
-# eva: evaluted_args
+# eva: evaluated_args
 $options = @{
     p      = $null
     a      = $null
@@ -1618,6 +1618,7 @@ if (!$setupOnly) {
     if ($options.O -ne -1) {
         $optimize_flag = @('Debug', 'MinSizeRel', 'RelWithDebInfo', 'Release')[$options.O]
     }
+    $evaluated_build_args = @()
     for ($i = 0; $i -lt $nopts; ++$i) {
         $optv = $buildOptions[$i]
         switch ($optv) {
@@ -1627,12 +1628,14 @@ if (!$setupOnly) {
             '--target' {
                 $cmake_target = $buildOptions[$i++ + 1]
             }
+            default {
+                $evaluated_build_args += $optv
+            }
         }
     }
 
     if ($options.xt -ne 'gn') {
-        $BUILD_ALL_OPTIONS = @()
-        $BUILD_ALL_OPTIONS += $buildOptions
+        $BUILD_ALL_OPTIONS = $evaluated_build_args
         if (!$optimize_flag) {
             $optimize_flag = 'Release'
         }
@@ -1807,10 +1810,10 @@ if (!$setupOnly) {
                         &$config_cmd $CONFIG_ALL_OPTIONS -S $dm_dir -B $dm_build_dir | Out-Host ; Remove-Item $dm_build_dir -Recurse -Force
                         $1k.println("Finish dump compiler preprocessors")
                     }
-                    $CONFIG_ALL_OPTIONS += "-DCMAKE_INSTALL_PREFIX=$INST_DIR", '-B', $BUILD_DIR 
+                    $CONFIG_ALL_OPTIONS += '-B', $BUILD_DIR, "-DCMAKE_INSTALL_PREFIX=$INST_DIR"
                     if ($SOURCE_DIR) { $CONFIG_ALL_OPTIONS += '-S', $SOURCE_DIR }
-                    $1k.println("CMake config command: $config_cmd $CONFIG_ALL_OPTIONS -B $BUILD_DIR")
-                    &$config_cmd $CONFIG_ALL_OPTIONS -B $BUILD_DIR | Out-Host
+                    $1k.println("CMake config command: $config_cmd $CONFIG_ALL_OPTIONS")
+                    &$config_cmd $CONFIG_ALL_OPTIONS | Out-Host
                     Set-Content $tempFile $hashValue -NoNewline
                 }
 
@@ -1826,7 +1829,7 @@ if (!$setupOnly) {
                     # apply additional build options
                     $BUILD_ALL_OPTIONS += "--parallel", "$($options.j)"
 
-                    if (!$cmake_target) { $cmake_target = $options.t }
+                    if ($options.t) { $cmake_target = $options.t }
                     if ($cmake_target) { $BUILD_ALL_OPTIONS += '--target', $cmake_target }
                     $1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
 

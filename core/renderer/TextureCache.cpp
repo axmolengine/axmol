@@ -555,6 +555,58 @@ Texture2D* TextureCache::addImage(Image* image, std::string_view key, PixelForma
     return texture;
 }
 
+Texture2D* TextureCache::addImage(const Data& imageData, std::string_view key)
+{
+    AXASSERT(!imageData.isNull() && !key.empty(), "TextureCache: imageData MUST not be empty and key not empty");
+
+    Texture2D * texture = nullptr;
+
+    do
+    {
+        auto it = _textures.find(key);
+        if (it != _textures.end()) {
+            texture = it->second;
+            break;
+        }
+
+        Image* image = new Image();
+        AX_BREAK_IF(nullptr == image);
+
+        bool bRet = image->initWithImageData(imageData.getBytes(), imageData.getSize());
+        AX_BREAK_IF(!bRet);
+
+        texture = new Texture2D();
+
+        if (texture)
+        {
+            if (texture->initWithImage(image))
+            {
+                
+#if CC_ENABLE_CACHE_TEXTURE_DATA
+                VolatileTextureMgr::addImage(texture, image);
+#endif
+                _textures.emplace(key, texture);
+            }
+            else
+            {
+                AX_SAFE_RELEASE(texture);
+                texture = nullptr;
+                AXLOG("axmol: initWithImage failed!");
+            }
+        }
+        else
+        {
+            AXLOG("axmol: Allocating memory for Texture2D failed!");
+        }
+        
+        AX_SAFE_RELEASE(image);
+
+    } while (0);
+
+
+    return texture;
+}
+
 bool TextureCache::reloadTexture(std::string_view fileName)
 {
     Texture2D* texture = nullptr;

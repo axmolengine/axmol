@@ -33,6 +33,8 @@
 #include "audio/AudioDecoder.h"
 #include "audio/AudioDecoderManager.h"
 
+#include "yasio/thread_name.hpp"
+
 #ifdef VERY_VERY_VERBOSE_LOGGING
 #    define ALOGVV ALOGV
 #else
@@ -284,9 +286,7 @@ bool AudioPlayer::play2d()
 // rotateBufferThread is used to rotate alBufferData for _alSource when playing big audio file
 void AudioPlayer::rotateBufferThread(int offsetFrame)
 {
-#if defined(__APPLE__)
-    pthread_setname_np("ALStreaming");
-#endif
+    yasio::set_thread_name("axmol-audio");
 
     char* tmpBuffer           = nullptr;
     auto& fullPath            = _audioCache->_fileFullPath;

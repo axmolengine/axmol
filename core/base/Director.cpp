@@ -61,7 +61,7 @@ THE SOFTWARE.
 #include "base/ObjectFactory.h"
 #include "platform/Application.h"
 #if defined(AX_ENABLE_AUDIO)
-    #include "audio/AudioEngine.h"
+#    include "audio/AudioEngine.h"
 #endif
 
 #if AX_ENABLE_SCRIPT_BINDING
@@ -115,8 +115,12 @@ bool Director::init()
 
     // FPS
     _lastUpdate = std::chrono::steady_clock::now();
+
+    auto concurrency = Configuration::getInstance()->getValue("axmol.concurrency", Value{-1}).asInt();
+    _jobSystem = new JobSystem(concurrency);
+
 #ifdef AX_ENABLE_CONSOLE
-    _console = new Console;
+    _console = new Console();
 #endif
     // scheduler
     _scheduler = new Scheduler();
@@ -151,10 +155,9 @@ bool Director::init()
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     // listen the event that renderer was recreated on Android/WP8
-    _rendererRecreatedListener = EventListenerCustom::create(
-        EVENT_RENDERER_RECREATED, [this](EventCustom*) {
-            _isStatusLabelUpdated = true; // Force recreation of textures
-        });
+    _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
+        _isStatusLabelUpdated = true;  // Force recreation of textures
+    });
 
     _eventDispatcher->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
 #endif
@@ -198,6 +201,8 @@ Director::~Director()
 
     /** clean auto release pool. */
     PoolManager::destroyInstance();
+
+    AX_SAFE_DELETE(_jobSystem);
 
     s_SharedDirector = nullptr;
 }
@@ -247,7 +252,8 @@ void Director::setDefaultValues()
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ASTC, astc_alpha_premultiplied);
 
     // ETC2 has alpha premultiplied ?
-    // Note: no suitable tools(etc2comp, Mali Texture Compression Tool, PVRTexTool) support do PMA currently, so set etc2 PMA default to `false`
+    // Note: no suitable tools(etc2comp, Mali Texture Compression Tool, PVRTexTool) support do PMA currently, so set
+    // etc2 PMA default to `false`
     bool etc2_alpha_premultiplied = conf->getValue("axmol.texture.etc2_has_pma", Value{false}).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ETC2, etc2_alpha_premultiplied);
 }
@@ -299,7 +305,8 @@ void Director::drawScene()
 
     if (_runningScene)
     {
-#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || defined(AX_ENABLE_NAVMESH))
+#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || \
+     defined(AX_ENABLE_NAVMESH))
         _runningScene->stepPhysicsAndNavigation(_deltaTime);
 #endif
         // clear draw stats
@@ -827,7 +834,7 @@ void Director::replaceScene(Scene* scene)
         {
             _nextScene->onExit();
         }
-        if(_nextScene)
+        if (_nextScene)
         {
             _nextScene->cleanup();
         }
@@ -864,7 +871,7 @@ void Director::pushScene(Scene* scene)
     }
 #endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     _scenesStack.pushBack(scene);
-    _nextScene    = scene;
+    _nextScene = scene;
 }
 
 void Director::popScene()
@@ -1113,10 +1120,9 @@ void Director::restartDirector()
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     // listen the event that renderer was recreated on Android/WP8
-    _rendererRecreatedListener = EventListenerCustom::create(
-            EVENT_RENDERER_RECREATED, [this](EventCustom*) {
-                _isStatusLabelUpdated = true; // Force recreation of textures
-            });
+    _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
+        _isStatusLabelUpdated = true;  // Force recreation of textures
+    });
 
     _eventDispatcher->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
 #endif
@@ -1151,7 +1157,7 @@ void Director::setNextScene()
         _runningScene->release();
     }
     _runningScene = _nextScene;
-    if(_nextScene)
+    if (_nextScene)
     {
         _nextScene->retain();
     }
@@ -1359,9 +1365,9 @@ void Director::setStatsAnchor(AnchorPreset anchor)
         showStats();
 
     {
-        static Vec2 _fpsPosition          = {0, 0};
-        auto safeOrigin        = getSafeAreaRect().origin;
-        auto safeSize          = getSafeAreaRect().size;
+        static Vec2 _fpsPosition = {0, 0};
+        auto safeOrigin          = getSafeAreaRect().origin;
+        auto safeSize            = getSafeAreaRect().size;
         const int height_spacing = (int)(22 / AX_CONTENT_SCALE_FACTOR());
 
         switch (anchor)
