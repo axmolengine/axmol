@@ -2,7 +2,7 @@
 //Copyright (c) 2014 cocos2d-x.org
 //Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 //
-//https://axmolengine.github.io/
+//https://axmol.dev/
 //
 //* Portions Copyright (c) Microsoft Open Technologies, Inc.
 //* All Rights Reserved
