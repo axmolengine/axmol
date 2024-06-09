@@ -16,7 +16,7 @@
 //  b. https://docs.microsoft.com/en-us/windows/win32/medfound/seeking--fast-forward--and-reverse-play
 //
 // Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
-// https://axmolengine.github.io/
+// https://axmol.dev/
 //////////////////////////////////////////////////////////////////////////
 
 #if defined(_WIN32)

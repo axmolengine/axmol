@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2014 GamePlay3D team
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
 
  Licensed under the Apache License, Version 2.0 (the "License");

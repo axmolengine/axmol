@@ -1,5 +1,5 @@
 /*
-* cocos2d-x   https://axmolengine.github.io/
+* cocos2d-x   https://axmol.dev/
 *
 * Copyright (c) 2010-2014 - cocos2d-x community
 * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
