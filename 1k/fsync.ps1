@@ -57,7 +57,7 @@ if (!(Test-Path $destLoc -PathType Container)) {
 }
 
 if ($linkOnly) {
-    Write-Host "fsync.ps1: Linking $srcPath to $destPath ..."
+    Write-Host "fsync.ps1: Symlink $srcPath to $destPath ..."
     if ($IsWin -and (Test-Path $srcPath -PathType Container)) {
         cmd.exe /c mklink /J $destPath $srcPath
     }
