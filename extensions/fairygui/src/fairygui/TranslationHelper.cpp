@@ -128,7 +128,7 @@ void TranslationHelper::translateComponent(PackageItem* item)
                     const string& page = buffer->readS();
                     if (!page.empty())
                     {
-                        if ((it = sstrings.find(fmt::format_to(fmtbuf, "{}-texts_{}", elementId, k))) != sstrings.end())
+                        if ((it = sstrings.find(std::format_to(fmtbuf, "{}-texts_{}", elementId, k))) != sstrings.end())
                             buffer->writeS(it->second);
                         else
                             buffer->skip(2);
@@ -195,13 +195,13 @@ void TranslationHelper::translateComponent(PackageItem* item)
                 if (type == ObjectType::TREE)
                     buffer->skip(2);
                 //title
-                if ((it = sstrings.find(fmt::format_to(fmtbuf, "{}-{}", elementId, j))) != sstrings.end())
+                if ((it = sstrings.find(std::format_to(fmtbuf, "{}-{}", elementId, j))) != sstrings.end())
                     buffer->writeS(it->second);
                 else
                     buffer->skip(2);
 
                 //selected title
-                if ((it = sstrings.find(fmt::format_to(fmtbuf, "{}-{}-0", elementId, j))) != sstrings.end())
+                if ((it = sstrings.find(std::format_to(fmtbuf, "{}-{}-0", elementId, j))) != sstrings.end())
                     buffer->writeS(it->second);
                 else
                     buffer->skip(2);
@@ -216,7 +216,7 @@ void TranslationHelper::translateComponent(PackageItem* item)
                     {
                         std::string target = buffer->readS();
                         int propertyId = buffer->readShort();
-                        if (propertyId == 0 && (it = sstrings.find(fmt::format_to(fmtbuf, "{}-{}-{}", elementId, j,
+                        if (propertyId == 0 && (it = sstrings.find(std::format_to(fmtbuf, "{}-{}-{}", elementId, j,
                                                                                   target))) != sstrings.end())
                             buffer->writeS(it->second);
                         else
@@ -272,7 +272,7 @@ void TranslationHelper::translateComponent(PackageItem* item)
                     int nextPos = buffer->readUshort();
                     nextPos += buffer->getPos();
 
-                    if ((it = sstrings.find(fmt::format_to(fmtbuf, "{}-{}", elementId, j))) != sstrings.end())
+                    if ((it = sstrings.find(std::format_to(fmtbuf, "{}-{}", elementId, j))) != sstrings.end())
                         buffer->writeS(it->second);
 
                     buffer->setPos(nextPos);

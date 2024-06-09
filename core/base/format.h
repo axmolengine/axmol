@@ -22,7 +22,7 @@
 #ifndef _AX_FORMAT_H_
 #define _AX_FORMAT_H_
 
-#include "fmt/format.h"
+#include <format>
 
 namespace fmt
 {
@@ -30,7 +30,7 @@ template <typename... T>
 inline std::string& format_to(std::string& out, format_string<T...> fmt, T&&... args)
 {
     out.clear();
-    vformat_to(std::back_inserter(out), fmt, fmt::make_format_args(args...));
+    vformat_to(std::back_inserter(out), fmt, std::make_format_args(args...));
     return out;
 }
 }  // namespace fmt

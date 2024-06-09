@@ -41,11 +41,11 @@ namespace ax { namespace network {
             ,bytesReceived(0)
             ,fetch(NULL)
             {
-                AXLOGD("Construct DownloadTaskEmscripten: {}", fmt::ptr(this));
+                AXLOGD("Construct DownloadTaskEmscripten: {}", std::ptr(this));
             }
             virtual  ~DownloadTaskEmscripten()
             {
-                AXLOGD("Destruct DownloadTaskEmscripten: {}", fmt::ptr(this));
+                AXLOGD("Destruct DownloadTaskEmscripten: {}", std::ptr(this));
             }
 
             int bytesReceived;
@@ -58,12 +58,12 @@ namespace ax { namespace network {
         : _id(++sDownloaderCounter)
         , hints(hints)
         {
-            AXLOGD("Construct DownloaderEmscripten: {}", fmt::ptr(this));
+            AXLOGD("Construct DownloaderEmscripten: {}", std::ptr(this));
         }
 
         DownloaderEmscripten::~DownloaderEmscripten()
         {
-            AXLOGD("Destruct DownloaderEmscripten: {}", fmt::ptr(this));
+            AXLOGD("Destruct DownloaderEmscripten: {}", std::ptr(this));
             for (auto iter = _taskMap.begin(); iter != _taskMap.end(); ++iter)
             {
                 if(iter->second->fetch != NULL) {

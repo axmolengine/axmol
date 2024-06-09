@@ -129,8 +129,8 @@ void Speed::startWithTarget(Node* target)
         _innerAction->startWithTarget(target);
     }
     else
-        AXLOGE("Speed::startWithTarget error: target({}) or _innerAction({}) is nullptr!", fmt::ptr(target),
-               fmt::ptr(_innerAction));
+        AXLOGE("Speed::startWithTarget error: target({}) or _innerAction({}) is nullptr!", std::ptr(target),
+               std::ptr(_innerAction));
 }
 
 void Speed::stop()

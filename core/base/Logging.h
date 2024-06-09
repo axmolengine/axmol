@@ -27,7 +27,7 @@
 #include "base/bitmask.h"
 #include "platform/PlatformMacros.h"
 
-#include "fmt/compile.h"
+#include <format>
 
 NS_AX_BEGIN
 
@@ -78,7 +78,7 @@ public:
     inline static LogItem& vformat(_FmtType&& fmt, LogItem& item, _Types&&... args)
     {
         item.qualified_message_ =
-            fmt::format(std::forward<_FmtType>(fmt), std::string_view{item.prefix_buffer_, item.prefix_size_},
+            std::format(std::forward<_FmtType>(fmt), std::string_view{item.prefix_buffer_, item.prefix_size_},
                         std::forward<_Types>(args)...);
 
         item.qualifier_size_ = item.prefix_size_;

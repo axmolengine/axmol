@@ -71,8 +71,8 @@ FontAtlas* FontAtlasCache::getFontAtlasTTF(_ttfConfig* config)
 
     std::string atlasName =
         config->distanceFieldEnabled
-                                ? fmt::format("df {} {}", scaledFaceSize, realFontFilename)
-                                : fmt::format("{} {} {}", scaledFaceSize, outlineSize, realFontFilename);
+                                ? std::format("df {} {}", scaledFaceSize, realFontFilename)
+                                : std::format("{} {} {}", scaledFaceSize, outlineSize, realFontFilename);
     auto it = _atlasMap.find(atlasName);
 
     if (it == _atlasMap.end())
@@ -100,7 +100,7 @@ FontAtlas* FontAtlasCache::getFontAtlasFNT(std::string_view fontFileName)
 FontAtlas* FontAtlasCache::getFontAtlasFNT(std::string_view fontFileName, std::string_view subTextureKey)
 {
     const auto& realFontFilename = fontFileName;
-    auto atlasName               = fmt::format("{} {}", subTextureKey, realFontFilename);
+    auto atlasName               = std::format("{} {}", subTextureKey, realFontFilename);
     const auto it                = _atlasMap.find(atlasName);
     if (it == _atlasMap.end())
     {
@@ -124,7 +124,7 @@ FontAtlas* FontAtlasCache::getFontAtlasFNT(std::string_view fontFileName, const 
     // resolves real file path, to prevent storing multiple atlases for the same file.
     const auto& realFontFilename = fontFileName;
 
-    auto atlasName = fmt::format("{:.2f} {:.2f} {}", imageRect.origin.x, imageRect.origin.y, realFontFilename);
+    auto atlasName = std::format("{:.2f} {:.2f} {}", imageRect.origin.x, imageRect.origin.y, realFontFilename);
 
     const auto it = _atlasMap.find(atlasName);
     if (it == _atlasMap.end())
@@ -173,7 +173,7 @@ FontAtlas* FontAtlasCache::getFontAtlasCharMap(std::string_view plistFile)
 
 FontAtlas* FontAtlasCache::getFontAtlasCharMap(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap)
 {
-    auto atlasName = fmt::format("name:{}_{}_{}_{}", reinterpret_cast<uintptr_t>(texture->getBackendTexture()), itemWidth, itemHeight, startCharMap);
+    auto atlasName = std::format("name:{}_{}_{}_{}", reinterpret_cast<uintptr_t>(texture->getBackendTexture()), itemWidth, itemHeight, startCharMap);
 
     auto it = _atlasMap.find(atlasName);
     if (it == _atlasMap.end())
@@ -198,7 +198,7 @@ FontAtlas* FontAtlasCache::getFontAtlasCharMap(std::string_view charMapFile,
                                                int itemHeight,
                                                int startCharMap)
 {
-    auto atlasName = fmt::format("{} {} {} {}", itemWidth, itemHeight, startCharMap, charMapFile);
+    auto atlasName = std::format("{} {} {} {}", itemWidth, itemHeight, startCharMap, charMapFile);
 
     auto it = _atlasMap.find(atlasName);
     if (it == _atlasMap.end())
@@ -242,7 +242,7 @@ bool FontAtlasCache::releaseFontAtlas(FontAtlas* atlas)
 
 void FontAtlasCache::reloadFontAtlasFNT(std::string_view fontFileName, const Rect& imageRect, bool imageRotated)
 {
-    auto atlasName = fmt::format("{:.2f} {:.2f} {}", imageRect.origin.x, imageRect.origin.y, fontFileName);
+    auto atlasName = std::format("{:.2f} {:.2f} {}", imageRect.origin.x, imageRect.origin.y, fontFileName);
 
     auto it = _atlasMap.find(atlasName);
     if (it != _atlasMap.end())

@@ -114,7 +114,7 @@ public:
         for (auto& letterInfo : getLetterDefinitions())
         {
             charCode.clear();
-            fmt::format_to(charCode, "{}", (int32_t)letterInfo.first);
+            std::format_to(charCode, "{}", (int32_t)letterInfo.first);
 
             xasset.writeStartObject(charCode);
             xasset.writeNumber("U", letterInfo.second.U);
@@ -172,7 +172,7 @@ protected:
         _params = params;
 
         // match with runtime
-        _atlasName = fmt::format("df {} {}", params->faceSize, params->sourceFont);
+        _atlasName = std::format("df {} {}", params->faceSize, params->sourceFont);
 
         std::u32string utf32;
         if (StringUtils::UTF8ToUTF32(_fontFreeType->getGlyphCollection(), utf32))
@@ -269,7 +269,7 @@ void SDFGen::onImGuiDraw()
     ImGui::SetNextWindowSize(ImVec2{550, 660}, ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowContentSize(ImVec2{0, 0});
 
-    static std::string title = fmt::format("Axmol SDF Font Creator {}", AX_VERSION_STR_FULL);
+    static std::string title = std::format("Axmol SDF Font Creator {}", AX_VERSION_STR_FULL);
     if (ImGui::Begin(title.c_str(), nullptr, ImGuiWindowFlags_HorizontalScrollbar))
     {
         if (ImGui::BeginCombo("Source Font File", _atlasParams->sourceFont.c_str()))

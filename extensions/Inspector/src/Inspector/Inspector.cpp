@@ -7,7 +7,7 @@
 #    include <cxxabi.h>
 #endif
 
-#include "fmt/format.h"
+#include <format>
 #include <memory>
 #include <imgui/misc/cpp/imgui_stdlib.h>
 
@@ -254,23 +254,23 @@ std::string Inspector::getNodeTypeName(Node* node)
 
 void Inspector::drawTreeRecursive(Node* node, int index)
 {
-    std::string str = fmt::format("[{}] {}", index, getNodeTypeName(node));
+    std::string str = std::format("[{}] {}", index, getNodeTypeName(node));
 
     if (node->getTag() != -1)
     {
-        fmt::format_to(std::back_inserter(str), " ({})", node->getTag());
+        std::format_to(std::back_inserter(str), " ({})", node->getTag());
     }
 
     const auto nodeName = node->getName();
     if (!nodeName.empty())
     {
-        fmt::format_to(std::back_inserter(str), " \"{}\"", nodeName);
+        std::format_to(std::back_inserter(str), " \"{}\"", nodeName);
     }
 
     const auto childrenCount = node->getChildrenCount();
     if (childrenCount != 0)
     {
-        fmt::format_to(std::back_inserter(str), " {{{}}}", childrenCount);
+        std::format_to(std::back_inserter(str), " {{{}}}", childrenCount);
     }
 
     auto flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_SpanFullWidth;

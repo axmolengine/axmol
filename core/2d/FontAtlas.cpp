@@ -40,7 +40,7 @@
 
 #include "simdjson/simdjson.h"
 #include "zlib.h"
-#include "fmt/format.h"
+#include <format>
 #include "base/ZipUtils.h"
 
 #include "base/PaddedString.h"

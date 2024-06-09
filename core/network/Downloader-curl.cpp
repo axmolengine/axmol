@@ -83,7 +83,7 @@ public:
 
     {
         _initInternal();
-        AXLOGD("Construct DownloadTaskCURL {}", fmt::ptr(this));
+        AXLOGD("Construct DownloadTaskCURL {}", std::ptr(this));
     }
 
     virtual ~DownloadTaskCURL()
@@ -104,7 +104,7 @@ public:
         if (_requestHeaders)
             curl_slist_free_all(_requestHeaders);
 
-        AXLOGD("Destruct DownloadTaskCURL {}", fmt::ptr(this));
+        AXLOGD("Destruct DownloadTaskCURL {}", std::ptr(this));
     }
 
     bool init(std::string_view filename, std::string_view tempSuffix)
@@ -369,10 +369,10 @@ public:
     Impl()
     //        : _thread(nullptr)
     {
-        AXLOGD("Construct DownloaderCURL::Impl {}", fmt::ptr(this));
+        AXLOGD("Construct DownloaderCURL::Impl {}", std::ptr(this));
     }
 
-    ~Impl() { AXLOGD("Destruct DownloaderCURL::Impl {}", fmt::ptr(this)); }
+    ~Impl() { AXLOGD("Destruct DownloaderCURL::Impl {}", std::ptr(this)); }
 
     void addTask(std::shared_ptr<DownloadTask> task, DownloadTaskCURL* coTask)
     {
@@ -646,7 +646,7 @@ private:
 
     void _threadProc()
     {
-        AXLOGD("++++DownloaderCURL::Impl::_threadProc begin {}", fmt::ptr(this));
+        AXLOGD("++++DownloaderCURL::Impl::_threadProc begin {}", std::ptr(this));
         // the holder prevent DownloaderCURL::Impl class instance be destruct in main thread
         auto holder                        = this->shared_from_this();
         auto thisThreadId                  = std::this_thread::get_id();
@@ -806,7 +806,7 @@ private:
                             continue;
                         }
                         curl_easy_cleanup(curlHandle);
-                        AXLOGD("    _threadProc task clean cur handle :{} with errCode:{}", fmt::ptr(curlHandle), static_cast<int>(errCode));
+                        AXLOGD("    _threadProc task clean cur handle :{} with errCode:{}", std::ptr(curlHandle), static_cast<int>(errCode));
 
                         // remove from coTaskMap
                         coTaskMap.erase(curlHandle);
@@ -877,7 +877,7 @@ private:
                     continue;
                 }
 
-                AXLOGD("    _threadProc task create curl handle:{}", fmt::ptr(curlHandle));
+                AXLOGD("    _threadProc task create curl handle:{}", std::ptr(curlHandle));
                 coTaskMap[curlHandle] = task;
                 std::lock_guard<std::mutex> lock(_processMutex);
                 _processSet.insert(task);
@@ -909,7 +909,7 @@ public:
 //  Implementation DownloaderCURL
 DownloaderCURL::DownloaderCURL(const DownloaderHints& hints) : _impl(std::make_shared<Impl>()), _currTask(nullptr)
 {
-    AXLOGD("Construct DownloaderCURL {}", fmt::ptr(this));
+    AXLOGD("Construct DownloaderCURL {}", std::ptr(this));
     _impl->hints  = hints;
     _impl->_owner = this;
 
@@ -935,7 +935,7 @@ DownloaderCURL::~DownloaderCURL()
         _scheduler->release();
     }
     _impl->stop();
-    AXLOGD("Destruct DownloaderCURL {}", fmt::ptr(this));
+    AXLOGD("Destruct DownloaderCURL {}", std::ptr(this));
 }
 
 void DownloaderCURL::startTask(std::shared_ptr<DownloadTask>& task)

@@ -29,8 +29,8 @@
 
 #include "WebSocketTest.h"
 
-#include "fmt/format.h"
-#include "fmt/compile.h"
+#include <format>
+
 
 /* "ws://echo.websocket.org no longer avaiable: https://www.lob.com/blog/websocket-org-is-down-here-is-an-alternative
  list of public test servers:
@@ -211,7 +211,7 @@ void WebSocketTest::onMessage(network::WebSocket* ws, const network::WebSocket::
     if (!data.isBinary)
     {
         _sendTextTimes++;
-        std::string textStr = fmt::format(FMT_COMPILE("#{} response text msg: {}"), _sendTextTimes,
+        std::string textStr = std::format(FMT_COMPILE("#{} response text msg: {}"), _sendTextTimes,
                                           std::string_view{data.bytes, static_cast<size_t>(data.len)});
         ax::print("%s", textStr.c_str());
 

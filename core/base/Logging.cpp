@@ -26,7 +26,7 @@
 #include "base/Logging.h"
 
 #include "yasio/utils.hpp"
-#include "fmt/color.h"
+#include <format>
 
 #if defined(_WIN32)
 #    include "ntcvt/ntcvt.hpp"
@@ -143,7 +143,7 @@ AX_API LogItem& preprocessLog(LogItem&& item)
             auto tv_msec = yasio::clock<yasio::system_clock_t>();
             auto tv_sec  = static_cast<time_t>(tv_msec / std::milli::den);
             localtime_r(&tv_sec, &ts);
-            prefix_size += fmt::format_to_n(wptr + prefix_size, buffer_size - prefix_size,
+            prefix_size += std::format_to_n(wptr + prefix_size, buffer_size - prefix_size,
                                             "[{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}.{:03d}]", ts.tm_year + 1900,
                                             ts.tm_mon + 1, ts.tm_mday, ts.tm_hour, ts.tm_min, ts.tm_sec,
                                             static_cast<int>(tv_msec % std::milli::den))
@@ -151,10 +151,10 @@ AX_API LogItem& preprocessLog(LogItem&& item)
         }
         if (bitmask::any(s_logFmtFlags, LogFmtFlag::ProcessId))
             prefix_size +=
-                fmt::format_to_n(wptr + prefix_size, buffer_size - prefix_size, "[PID:{:x}]", xmol_getpid()).size;
+                std::format_to_n(wptr + prefix_size, buffer_size - prefix_size, "[PID:{:x}]", xmol_getpid()).size;
         if (bitmask::any(s_logFmtFlags, LogFmtFlag::ThreadId))
             prefix_size +=
-                fmt::format_to_n(wptr + prefix_size, buffer_size - prefix_size, "[TID:{:x}]", xmol_gettid()).size;
+                std::format_to_n(wptr + prefix_size, buffer_size - prefix_size, "[TID:{:x}]", xmol_gettid()).size;
     }
     return item;
 }

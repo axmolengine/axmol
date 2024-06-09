@@ -230,8 +230,6 @@ if (ANDROID)
     )
 endif()
 
-ax_add_3rd(fmt)
-
 # bellow are non header only libs
 
 # cpufeatures

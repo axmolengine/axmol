@@ -70,7 +70,7 @@ float TweenValue::operator[](int index) const
     case 3:
         return w;
     default:
-        throw fmt::format("Index out of bounds: {}", index);
+        throw std::format("Index out of bounds: {}", index);
     }
 }
 
@@ -87,7 +87,7 @@ float & TweenValue::operator[](int index)
     case 3:
         return w;
     default:
-        throw fmt::format("Index out of bounds: {}", index);
+        throw std::format("Index out of bounds: {}", index);
     }
 }
 

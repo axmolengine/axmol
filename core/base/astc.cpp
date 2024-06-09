@@ -217,7 +217,7 @@ struct benchmark_printer
     benchmark_printer(_FMT&& fmt, int w, int h, float den)
         : _fmt(fmt), _w(w), _h(h), _den(den), _start(yasio::highp_clock())
     {}
-    ~benchmark_printer() { AXLOGI("{}", fmt::format(_fmt, _w, _h, (yasio::highp_clock() - _start) / _den)); }
+    ~benchmark_printer() { AXLOGI("{}", std::format(_fmt, _w, _h, (yasio::highp_clock() - _start) / _den)); }
     _FMT _fmt;
     int _w, _h;
     float _den;

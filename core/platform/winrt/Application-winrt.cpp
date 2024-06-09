@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "platform/Application.h"
 
 #include "pugixml/pugixml.hpp"
-#include "fmt/format.h"
+#include <format>
 
 #include <winrt/Windows.ApplicationModel.h>
 #include <winrt/Windows.System.UserProfile.h>
@@ -157,7 +157,7 @@ std::string Application::getVersion()
     auto packageId = package.Id();
     auto version   = packageId.Version();
 
-    return fmt::format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+    return std::format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
 }
 
 bool Application::openURL(std::string_view url)

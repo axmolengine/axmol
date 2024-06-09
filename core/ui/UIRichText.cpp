@@ -41,7 +41,7 @@
 #include "base/UTF8.h"
 #include "ui/UIHelper.h"
 
-#include "fmt/compile.h"
+#include <format>
 
 #include "platform/SAXParser.h"
 
@@ -1320,7 +1320,7 @@ bool RichText::setString(std::string_view text)
         //  - creates defaults values
         //  - makes sure that the xml well formed and starts with an element
         _xmlText.clear();
-        fmt::format_to(std::back_inserter(_xmlText), FMT_COMPILE(R"(<font face="{}" size="{}" color="{}">{}</font>)"),
+        std::format_to(std::back_inserter(_xmlText), FMT_COMPILE(R"(<font face="{}" size="{}" color="{}">{}</font>)"),
                        this->getFontFace(), this->getFontSize(), this->getFontColor(), _text);
 
         MyXMLVisitor visitor(this);
