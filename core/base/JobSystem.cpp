@@ -105,89 +105,79 @@ private:
 
 #pragma region JobSystem
 
-JobSystem* JobSystem::create(int nthread)
+static int clampThreads(int nThreads)
 {
-    auto inst = new JobSystem();
-    inst->start(nthread);
-    return inst;
-}
-
-void JobSystem::destroy(JobSystem* inst)
-{
-    if (inst)
+    if (nThreads <= 0)
     {
-        inst->stop();
-        delete inst;
-    }
-}
-
-JobSystem* JobSystem::create(std::span<std::shared_ptr<JobThreadData>> tdds)
-{
-    if (!tdds.empty())
-    {
-        auto inst = new JobSystem();
-        inst->start(tdds);
-        return inst;
-    }
-    return nullptr;
-}
-
-JobSystem::~JobSystem()
-{
-    stop();
-}
-
-// Call at task collect thread
-void JobSystem::start(int nThreads)
-{
-    if (_executor)
-        return;
-
-    if (nThreads < 0)
-    {
-#if !defined(__EMSCRIPTEN_PTHREADS__)
-        nThreads = (std::max)(static_cast<int>(std::thread::hardware_concurrency() * 3 / 2), 1);
+#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
+#    if !defined(__EMSCRIPTEN__)
+        nThreads = (std::max)(static_cast<int>(std::thread::hardware_concurrency() * 3 / 2), 2);
+#    else
+        nThreads = (std::clamp)(static_cast<int>(std::thread::hardware_concurrency()), 2, 8);
+#    endif
 #else
-        nThreads = 4;
+        AXLOGW("The emscripten pthread not enabled, JobSystem not working");
+        nThreads = 0;
 #endif
     }
+
+    return nThreads;
+}
+
+class MainThreadData : public JobThreadData
+{
+public:
+    const char* name() override { return "axmol-main"; }
+};
+
+JobSystem::JobSystem(int nThreads)
+{
+    nThreads = clampThreads(nThreads);
     std::vector<std::shared_ptr<JobThreadData>> tdds;
     for (auto i = 0; i < nThreads; ++i)
         tdds.emplace_back(std::make_shared<JobThreadData>());
 
-    _executor = new JobExecutor(tdds);
+    init(tdds);
 }
 
-void JobSystem::start(std::span<std::shared_ptr<JobThreadData>> tdds)
+JobSystem::JobSystem(std::span<std::shared_ptr<JobThreadData>> tdds)
+{
+    init(tdds);
+}
+
+void JobSystem::init(const std::span<std::shared_ptr<JobThreadData>>& tdds)
+{
+    _mainThreadData = new MainThreadData();
+    if (!tdds.empty())
+        _executor = new JobExecutor(tdds);
+}
+
+JobSystem::~JobSystem()
 {
     if (_executor)
-        return;
-
-    _executor = new JobExecutor(tdds);
-}
-
-// Call at task collect thread
-void JobSystem::stop()
-{
-    if (_executor != nullptr)
-    {
         delete _executor;
-    }
+    delete _mainThreadData;
 }
 
 void JobSystem::enqueue_v(std::function<void(JobThreadData*)> task)
 {
-    _executor->enqueue_v(std::move(task));
+    if (_executor)
+        _executor->enqueue_v(std::move(task));
+    else
+        task(_mainThreadData);
 }
 
 void JobSystem::enqueue(std::function<void()> task)
 {
-    _executor->enqueue_v([task_ = std::move(task)](JobThreadData*) { task_(); });
+    if (_executor)
+        this->enqueue(task, nullptr);
+    else
+        task();
 }
 
 void JobSystem::enqueue(std::shared_ptr<JobThreadTask> task)
 {
-    _executor->enqueue_v([task](JobThreadData* thread_data) {
+    auto taskw = [task](JobThreadData* thread_data) {
         if (!task->isRequestCancel())
         {
             task->setThreadData(thread_data);
@@ -195,15 +185,26 @@ void JobSystem::enqueue(std::shared_ptr<JobThreadTask> task)
             task->execute();
             task->setState(JobThreadTask::State::Idle);
         }
-    });
+    };
+    if (_executor)
+        _executor->enqueue_v(std::move(taskw));
+    else
+        taskw(_mainThreadData);
 }
 
 void JobSystem::enqueue(std::function<void()> task, std::function<void()> done)
 {
-    _executor->enqueue_v([task_ = std::move(task), done_ = std::move(done)](JobThreadData*) {
+    if (!task)
+        return;
+    auto taskw = [task_ = std::move(task), done_ = std::move(done)](JobThreadData*) {
         task_();
-        Director::getInstance()->getScheduler()->runOnAxmolThread(done_);
-    });
+        if (done_)
+            Director::getInstance()->getScheduler()->runOnAxmolThread(done_);
+    };
+    if (_executor)
+        _executor->enqueue_v(taskw);
+    else
+        taskw(_mainThreadData);
 }
 
 #pragma endregion

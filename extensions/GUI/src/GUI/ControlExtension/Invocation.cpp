@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2012 cocos2d-x.org
- * https://axmolengine.github.io/
+ * https://axmol.dev/
  *
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  *

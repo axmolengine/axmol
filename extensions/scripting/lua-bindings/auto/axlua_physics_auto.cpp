@@ -1,6 +1,6 @@
 #include "lua-bindings/auto/axlua_physics_auto.hpp"
 #if defined(AX_ENABLE_PHYSICS)
-#include "cocos2d.h"
+#include "axmol.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 

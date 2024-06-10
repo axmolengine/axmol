@@ -5,7 +5,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axmolengine.github.io/
+https://axmol.dev/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -95,7 +95,7 @@ public:
      */
     static TransitionScene* create(float t, Scene* scene);
 
-    /** Called after the transition finishes.
+    /** Called after a transition finishes.
      */
     void finish();
 
@@ -122,15 +122,22 @@ public:
 protected:
     virtual void sceneOrder();
     void setNewScene(float dt);
+    
+    /**  Set the number of actions to be done to finish
+     */
+    void setWaitForFinishCount(int count);
 
     Scene* _inScene;
     Scene* _outScene;
     float _duration;
     bool _isInSceneOnTop;
     bool _isSendCleanupToScene;
-
+    
+    
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(TransitionScene);
+    
+    int _waitForFinishCount = 1;
 };
 
 /** @class TransitionSceneOriented

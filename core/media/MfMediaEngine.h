@@ -7,7 +7,7 @@
 // Licensed under the MIT License.
 // Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 // 
-// https://axmolengine.github.io/
+// https://axmol.dev/
 //-------------------------------------------------------------------------------------
 
 #pragma once

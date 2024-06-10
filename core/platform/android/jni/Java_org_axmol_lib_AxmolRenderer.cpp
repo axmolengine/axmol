@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -55,18 +56,11 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeOnPause(JNIEnv*, j
 
 JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeOnResume(JNIEnv*, jclass)
 {
-    static bool firstTime = true;
     if (Director::getInstance()->getGLView())
     {
-        // don't invoke at first to keep the same logic as iOS
-        // can refer to https://github.com/cocos2d/cocos2d-x/issues/14206
-        if (!firstTime)
-            Application::getInstance()->applicationWillEnterForeground();
-
+        Application::getInstance()->applicationWillEnterForeground();
         ax::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);
         ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent, true);
-
-        firstTime = false;
     }
 }
 

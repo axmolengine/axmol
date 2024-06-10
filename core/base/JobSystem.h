@@ -3,7 +3,7 @@
  Copyright (c) 2019-present Axmol Engine
  * contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to
  * any person obtaining a copy
@@ -96,12 +96,9 @@ public:
     static JobSystem* create(std::span<std::shared_ptr<JobThreadData>> tdds);
     static void destroy(JobSystem* system);
 
+    JobSystem(int nThreads = -1);
+    JobSystem(std::span<std::shared_ptr<JobThreadData>> tdds);
     ~JobSystem();
-
-    void start(int nThreads = -1);
-    void start(std::span<std::shared_ptr<JobThreadData>> tdds);
-
-    void stop();
 
     void enqueue_v(std::function<void(JobThreadData*)> task);
 
@@ -109,8 +106,12 @@ public:
     void enqueue(std::function<void()> task, std::function<void()> done);
     void enqueue(std::shared_ptr<JobThreadTask> task);
 
+ protected:
+    void init(const std::span<std::shared_ptr<JobThreadData>>& tdds);
+
 private:
     JobExecutor* _executor{nullptr};
+    JobThreadData* _mainThreadData{nullptr};
 };
 
 NS_AX_END

@@ -1,6 +1,6 @@
 #include "lua-bindings/auto/axlua_3d_auto.hpp"
 #if defined(AX_ENABLE_3D)
-#include "cocos2d.h"
+#include "axmol.h"
 #include "3d/Bundle3D.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
