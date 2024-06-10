@@ -34,4 +34,9 @@
 #    include "ui/UIWebView/UIWebViewImpl-win32.h"
 #    include "ui/UIWebView/UIWebView-inl.h"
 
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+
+#    include "ui/UIWebView/UIWebViewImpl-linux.h"
+#    include "ui/UIWebView/UIWebView-inl.h"
+
 #endif

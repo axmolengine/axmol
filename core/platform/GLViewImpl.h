@@ -141,6 +141,15 @@ public:
     void* getNSGLContext() override;  // stevetranby: added
 #endif                                // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+    void* getX11Window() override;
+    void* getX11Display() override;
+    /* TODO: Implement AX_PLATFORM_LINUX_WAYLAND
+    void* getWaylandWindow() override;
+    void* getWaylandDisplay() override;
+    */
+#endif // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+
 protected:
     GLViewImpl(bool initglfw = true);
     virtual ~GLViewImpl();
