@@ -405,9 +405,6 @@ public:
                              char* s         = jsc_value_to_string(value);
                              w->onMessage(s);
                              g_free(s);
-                             /*char *s = get_string_from_js_result(r);
-                             w->on_message(s);
-                             g_free(s);*/
                          }),
                          this);
         webkit_user_content_manager_register_script_message_handler(manager, "__webview__");
