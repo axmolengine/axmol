@@ -28,8 +28,9 @@
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
-#    include <fcntl.h>
 #    include <sys/stat.h>
+#    include <chrono>  // chrono_literals
+#    include <thread>  // this_thread::sleep_for
 #    include <gtk/gtk.h>
 #    include <webkit2/webkit2.h>
 
@@ -283,8 +284,8 @@ class GTKWebKit
 public:
     GTKWebKit() : isXwayland(webkit_dmabuf::is_wayland_display())
     {
-        m_X11Display      = (Display*)ax::Director::getInstance()->getGLView()->getX11Display();
-        m_ParentX11Window = (Window)ax::Director::getInstance()->getGLView()->getX11Window();
+        m_X11Display      = static_cast<Display*>(ax::Director::getInstance()->getGLView()->getX11Display());
+        m_ParentX11Window = reinterpret_cast<Window>(ax::Director::getInstance()->getGLView()->getX11Window());
 
         init_gtk_platform_with_display(m_X11Display);
 
@@ -535,10 +536,7 @@ public:
         webkit_web_view_load_uri(WEBKIT_WEB_VIEW(m_WebView), url.data());
     }
 
-    void stopLoading()
-    {
-        webkit_web_view_stop_loading(WEBKIT_WEB_VIEW(m_WebView));
-    }
+    void stopLoading() { webkit_web_view_stop_loading(WEBKIT_WEB_VIEW(m_WebView)); }
 
     void reload()
     {
@@ -546,30 +544,15 @@ public:
         webkit_web_view_reload_bypass_cache(WEBKIT_WEB_VIEW(m_WebView));
     }
 
-    bool canGoBack()
-    {
-        return webkit_web_view_can_go_back(WEBKIT_WEB_VIEW(m_WebView));
-    }
+    bool canGoBack() { return webkit_web_view_can_go_back(WEBKIT_WEB_VIEW(m_WebView)); }
 
-    bool canGoForward()
-    {
-        return webkit_web_view_can_go_forward(WEBKIT_WEB_VIEW(m_WebView));
-    }
+    bool canGoForward() { return webkit_web_view_can_go_forward(WEBKIT_WEB_VIEW(m_WebView)); }
 
-    void goBack()
-    {
-        webkit_web_view_go_back(WEBKIT_WEB_VIEW(m_WebView));
-    }
+    void goBack() { webkit_web_view_go_back(WEBKIT_WEB_VIEW(m_WebView)); }
 
-    void goForward()
-    {
-        webkit_web_view_go_forward(WEBKIT_WEB_VIEW(m_WebView));
-    }
+    void goForward() { webkit_web_view_go_forward(WEBKIT_WEB_VIEW(m_WebView)); }
 
-    void setJavascriptInterfaceScheme(std::string_view scheme)
-    {
-        m_JsScheme = scheme;
-    }
+    void setJavascriptInterfaceScheme(std::string_view scheme) { m_JsScheme = scheme; }
 
     void evaluateJS(std::string_view js)
     {
@@ -596,12 +579,13 @@ public:
 
     void setWebViewVisible(bool visible)
     {
+        using namespace std::chrono_literals;
         if (visible && m_WebViewHidden)
         {
             XMapWindow(m_X11Display, m_ChildX11Window);
             XReparentWindow(m_X11Display, m_ChildX11Window, m_ParentX11Window, (int)m_LastPos.x, (int)m_LastPos.y);
 
-            usleep(1e3);
+            std::this_thread::sleep_for(1000ms);
 
             XSync(m_X11Display, false);
             XFlush(m_X11Display);
@@ -610,7 +594,7 @@ public:
         {
             XUnmapWindow(m_X11Display, m_ChildX11Window);
 
-            usleep(1e3);
+            std::this_thread::sleep_for(1000ms);
 
             XSync(m_X11Display, false);
             XFlush(m_X11Display);
@@ -627,10 +611,7 @@ public:
         gtk_widget_set_opacity(GTK_WIDGET(m_Window), opacity);
     }
 
-    double getOpacityWebView()
-    {
-        return gtk_widget_get_opacity(GTK_WIDGET(m_WebView));
-    }
+    double getOpacityWebView() { return gtk_widget_get_opacity(GTK_WIDGET(m_WebView)); }
 
     void setBackgroundTransparent() {}
 
@@ -663,28 +644,6 @@ private:
         }
 
         return true;
-    }
-
-    void setXWaylandCommits(bool allow)
-    {
-        if (!isXwayland)
-        {
-            return;
-        }
-
-        Atom commitProtocol = XInternAtom(m_X11Display, "_XWAYLAND_ALLOW_COMMITS", False);
-        if (commitProtocol != None)
-        {
-            uint32_t value = allow ? 1 : 0;
-            XChangeProperty(m_X11Display, m_ChildX11Window, commitProtocol, XA_CARDINAL, 32, PropModeReplace,
-                            (unsigned char*)&value, 1);
-            XChangeProperty(m_X11Display, m_ParentX11Window, commitProtocol, XA_CARDINAL, 32, PropModeReplace,
-                            (unsigned char*)&value, 1);
-        }
-        else
-        {
-            AXLOGW("Couldn't set XWAYLAND COMMIT PROTOCOL");
-        }
     }
 
     using dispatch_fn_t = std::function<void()>;
