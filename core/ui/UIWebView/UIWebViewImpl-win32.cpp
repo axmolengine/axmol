@@ -178,10 +178,10 @@ private:
             new webview2_com_handler(
                 wnd, cb,
                 [&](ICoreWebView2Controller* controller) {
-            m_controller = controller;
-            m_controller->get_CoreWebView2(&m_webview);
-            m_webview->AddRef();
-            flag.clear();
+                    m_controller = controller;
+                    m_controller->get_CoreWebView2(&m_webview);
+                    m_webview->AddRef();
+                    flag.clear();
                 },
                 [this](std::string_view url) -> bool {
                     const auto scheme = url.substr(0, url.find_first_of(':'));
@@ -201,20 +201,20 @@ private:
                     return true;
                 },
                 [this]() {
-            LPWSTR uri;
-            this->m_webview->get_Source(&uri);
-            std::string result = ntcvt::from_chars(uri);
-            if (_didFinishLoading)
-                _didFinishLoading(result);
-            },
-            [this]() {
-            LPWSTR uri;
-            this->m_webview->get_Source(&uri);
-            std::string result = ntcvt::from_chars(uri);
-            if (_didFailLoading)
-                _didFailLoading(result);
-            },
-            [this](std::string_view url) { loadURL(url, false); }));
+                    LPWSTR uri;
+                    this->m_webview->get_Source(&uri);
+                    std::string result = ntcvt::from_chars(uri);
+                    if (_didFinishLoading)
+                        _didFinishLoading(result);
+                },
+                [this]() {
+                    LPWSTR uri;
+                    this->m_webview->get_Source(&uri);
+                    std::string result = ntcvt::from_chars(uri);
+                    if (_didFailLoading)
+                        _didFailLoading(result);
+                },
+                [this](std::string_view url) { loadURL(url, false); }));
 
         if (res != S_OK)
         {
@@ -670,10 +670,10 @@ void WebViewImpl::setBackgroundTransparent()
 }  // namespace ui
 NS_AX_END  // namespace ax
 
-    //
-    // Implement Win32WebControl
-    //
-    bool Win32WebControl::s_isInitialized = false;
+//
+// Implement Win32WebControl
+//
+bool Win32WebControl::s_isInitialized = false;
 
 void Win32WebControl::lazyInit()
 {
