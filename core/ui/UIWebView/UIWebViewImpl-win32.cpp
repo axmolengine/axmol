@@ -473,26 +473,26 @@ WebViewImpl::WebViewImpl(WebView* webView) : _createSucceeded(false), _systemWeb
             return true;
         },
         [this](std::string_view url) {
-        WebView::ccWebViewCallback didFinishLoading = _webView->getOnDidFinishLoading();
-        if (didFinishLoading != nullptr)
-        {
-            didFinishLoading(_webView, url);
-        }
+            WebView::ccWebViewCallback didFinishLoading = _webView->getOnDidFinishLoading();
+            if (didFinishLoading != nullptr)
+            {
+                didFinishLoading(_webView, url);
+            }
         },
         [this](std::string_view url) {
-        WebView::ccWebViewCallback didFailLoading = _webView->getOnDidFailLoading();
-        if (didFailLoading != nullptr)
-        {
-            didFailLoading(_webView, url);
-        }
-    },
-    [this](std::string_view url) {
-        WebView::ccWebViewCallback onJsCallback = _webView->getOnJSCallback();
-        if (onJsCallback != nullptr)
-        {
-            onJsCallback(_webView, url);
-        }
-    });
+            WebView::ccWebViewCallback didFailLoading = _webView->getOnDidFailLoading();
+            if (didFailLoading != nullptr)
+            {
+                didFailLoading(_webView, url);
+            }
+        },
+        [this](std::string_view url) {
+            WebView::ccWebViewCallback onJsCallback = _webView->getOnJSCallback();
+            if (onJsCallback != nullptr)
+            {
+                onJsCallback(_webView, url);
+            }
+        });
 }
 
 WebViewImpl::~WebViewImpl()
