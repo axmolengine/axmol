@@ -261,8 +261,6 @@ static void init_gtk_platform_with_display(Display* x11Display)
     if (webkit_dmabuf::is_wayland_display())
     {
         gdk_set_allowed_backends("x11");
-        // always use LibGL software rendering
-        // webkit_dmabuf::set_env("LIBGL_ALWAYS_SOFTWARE", "1");
     }
 #    endif
     gtk_init(nullptr, nullptr);
