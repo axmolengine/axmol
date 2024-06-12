@@ -92,10 +92,6 @@ protected:
 class AX_API JobSystem
 {
 public:
-    static JobSystem* create(int nthread = -1);
-    static JobSystem* create(std::span<std::shared_ptr<JobThreadData>> tdds);
-    static void destroy(JobSystem* system);
-
     JobSystem(int nThreads = -1);
     JobSystem(std::span<std::shared_ptr<JobThreadData>> tdds);
     ~JobSystem();
