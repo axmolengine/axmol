@@ -75,6 +75,15 @@ THE SOFTWARE.
 #    endif
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#    ifndef GLFW_EXPOSE_NATIVE_X11
+#        define GLFW_EXPOSE_NATIVE_X11
+#    endif
+#    ifndef GLFW_EXPOSE_NATIVE_WAYLAND
+#        define GLFW_EXPOSE_NATIVE_WAYLAND
+#    endif
+#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_WASM)
 #    include <GLFW/glfw3native.h>
 #endif
@@ -382,6 +391,27 @@ void* GLViewImpl::getNSGLContext()
 }  // stevetranby: added
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+void* GLViewImpl::getX11Window()
+{
+    return (void*)glfwGetX11Window(_mainWindow);
+}
+void* GLViewImpl::getX11Display()
+{
+    return (void*)glfwGetX11Display();
+}
+/* TODO: Implement AX_PLATFORM_LINUX_WAYLAND
+void* GLViewImpl::getWaylandWindow()
+{
+    return (void*)glfwGetWaylandWindow(_mainWindow);
+}
+void* GLViewImpl::getWaylandDisplay()
+{
+    return (void*)glfwGetWaylandDisplay();
+}
+*/
+#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+
 GLViewImpl* GLViewImpl::create(std::string_view viewName)
 {
     return GLViewImpl::create(viewName, false);
@@ -557,8 +587,8 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     glfwSetCursorPosCallback(_mainWindow, GLFWEventHandler::onGLFWMouseMoveCallBack);
 #if defined(__EMSCRIPTEN__)
     // clang-format off
-    _isTouchDevice = !!EM_ASM_INT(return (('ontouchstart' in window) || 
-        (navigator.maxTouchPoints > 0) || 
+    _isTouchDevice = !!EM_ASM_INT(return (('ontouchstart' in window) ||
+        (navigator.maxTouchPoints > 0) ||
         (navigator.msMaxTouchPoints > 0)) ? 1 : 0;
     );
     if (_isTouchDevice)
