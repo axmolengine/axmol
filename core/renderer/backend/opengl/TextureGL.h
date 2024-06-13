@@ -207,6 +207,10 @@ private:
 
     TextureInfoGL _textureInfo;
     EventListener* _rendererRecreatedListener = nullptr;
+
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+    bool _generateMipmaps = false;
+#endif
 };
 
 /**
