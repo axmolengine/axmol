@@ -161,6 +161,12 @@ AX_API LogItem& preprocessLog(LogItem&& item)
 
 AX_DLL void outputLog(LogItem& item, const char* tag)
 {
+    if (!s_logOutput) writeLog(item, tag);
+    else s_logOutput->write(item, tag);
+}
+
+AX_DLL void writeLog(LogItem& item, const char* tag)
+{
 #if defined(__ANDROID__)
     int prio;
     switch (item.level_)
@@ -222,8 +228,6 @@ AX_DLL void outputLog(LogItem& item, const char* tag)
     ::write(outfd, item.qualified_message_.c_str(), item.qualified_message_.size());
 #    endif
 #endif
-    if (s_logOutput)
-        s_logOutput->write(item.message(), item.level_);
 }
 
 AX_API void print(const char* format, ...)

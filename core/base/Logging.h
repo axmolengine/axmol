@@ -108,7 +108,7 @@ class ILogOutput
 {
 public:
     virtual ~ILogOutput() {}
-    virtual void write(std::string_view message, LogLevel) = 0;
+    virtual void write(LogItem& item, const char* tag) = 0;
 };
 
 /* @brief control log level */
@@ -126,6 +126,7 @@ AX_API LogItem& preprocessLog(LogItem&& logItem);
 
 /* @brief internal use */
 AX_API void outputLog(LogItem& item, const char* tag);
+AX_API void writeLog(LogItem& item, const char* tag);
 
 template <typename _FmtType, typename... _Types>
 inline void printLogT(_FmtType&& fmt, LogItem& item, _Types&&... args)
