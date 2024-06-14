@@ -110,10 +110,9 @@ public:
      */
     virtual TextureBackend* newTexture(const TextureDescriptor& descriptor) = 0;
 
-    virtual RenderTarget* newDefaultRenderTarget(TargetBufferFlags rtf) = 0;
+    virtual RenderTarget* newDefaultRenderTarget() = 0;
 
-    virtual RenderTarget* newRenderTarget(TargetBufferFlags rtf,
-                                          TextureBackend* colorAttachment    = nullptr,
+    virtual RenderTarget* newRenderTarget(TextureBackend* colorAttachment    = nullptr,
                                           TextureBackend* depthAttachment    = nullptr,
                                           TextureBackend* stencilAttachhment = nullptr) = 0;
 

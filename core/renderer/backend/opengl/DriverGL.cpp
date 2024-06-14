@@ -221,20 +221,17 @@ TextureBackend* DriverGL::newTexture(const TextureDescriptor& descriptor)
     }
 }
 
-RenderTarget* DriverGL::newDefaultRenderTarget(TargetBufferFlags rtf)
+RenderTarget* DriverGL::newDefaultRenderTarget()
 {
     auto rtGL = new RenderTargetGL(true, this);
-    rtGL->setTargetFlags(rtf);
     return rtGL;
 }
 
-RenderTarget* DriverGL::newRenderTarget(TargetBufferFlags rtf,
-                                        TextureBackend* colorAttachment,
+RenderTarget* DriverGL::newRenderTarget(TextureBackend* colorAttachment,
                                         TextureBackend* depthAttachment,
                                         TextureBackend* stencilAttachhment)
 {
     auto rtGL = new RenderTargetGL(false, this);
-    rtGL->setTargetFlags(rtf);
     rtGL->bindFrameBuffer();
     RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
     rtGL->setColorAttachment(colors);

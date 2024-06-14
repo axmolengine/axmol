@@ -187,11 +187,9 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         descriptor.textureFormat = PixelFormat::RGBA8;
         _texture2D               = new Texture2D();
         _texture2D->updateTextureDescriptor(descriptor, !!AX_ENABLE_PREMULTIPLIED_ALPHA);
-        _renderTargetFlags = RenderTargetFlag::COLOR;
 
         if (PixelFormat::D24S8 == depthStencilFormat || sharedRenderTarget)
         {
-            _renderTargetFlags       = RenderTargetFlag::ALL;
             descriptor.textureFormat = PixelFormat::D24S8;
 
             AX_SAFE_RELEASE(_depthStencilTexture);
@@ -210,7 +208,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         else
         {
              _renderTarget = backend::DriverBase::getInstance()->newRenderTarget(
-                 _renderTargetFlags, _texture2D ? _texture2D->getBackendTexture() : nullptr,
+                 _texture2D ? _texture2D->getBackendTexture() : nullptr,
                  _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr,
                  _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);	        
         }
