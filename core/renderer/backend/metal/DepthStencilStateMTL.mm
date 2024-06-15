@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -108,13 +107,7 @@ void setMTLStencilDescriptor(MTLStencilDescriptor* stencilDescriptor, const Sten
 }
 }
 
-DepthStencilStateMTL::DepthStencilStateMTL(id<MTLDevice> mtlDevice) : _mtlDevice(mtlDevice)
-{
-    // By default MTLDepthStencilDescriptor disables depth and stencil access
-    MTLDepthStencilDescriptor* mtlDescriptor = [MTLDepthStencilDescriptor new];
-    _mtlDepthStencilDisabledState = [mtlDevice newDepthStencilStateWithDescriptor:mtlDescriptor];
-    [mtlDescriptor release];
-}
+DepthStencilStateMTL::DepthStencilStateMTL(id<MTLDevice> mtlDevice) : _mtlDevice(mtlDevice) {}
 
 void DepthStencilStateMTL::update(const DepthStencilDescriptor& dsDesc)
 {
@@ -122,7 +115,7 @@ void DepthStencilStateMTL::update(const DepthStencilDescriptor& dsDesc)
 
     if (!isEnabled())
     {
-        _mtlDepthStencilState = _mtlDepthStencilDisabledState;
+        _mtlDepthStencilState = nil;
         return;
     }
 
@@ -166,7 +159,6 @@ void DepthStencilStateMTL::update(const DepthStencilDescriptor& dsDesc)
 DepthStencilStateMTL::~DepthStencilStateMTL()
 {
     _mtlDepthStencilState = nullptr;
-    [_mtlDepthStencilDisabledState release];
     for (auto& stateItem : _mtlStateCache)
         [stateItem.second release];
     _mtlStateCache.clear();

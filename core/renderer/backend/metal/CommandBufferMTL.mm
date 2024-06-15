@@ -204,6 +204,7 @@ void CommandBufferMTL::updateRenderCommandEncoder(const RenderTarget* renderTarg
                                                   const RenderPassDescriptor& renderPassDesc)
 {
     if (_mtlRenderEncoder != nil && _currentRenderPassDesc == renderPassDesc && _currentRenderTarget == renderTarget &&
+        _currentRenderTargetFlags == renderTarget->getTargetFlags() &&
         !renderTarget->isDirty())
     {
         return;
@@ -211,6 +212,7 @@ void CommandBufferMTL::updateRenderCommandEncoder(const RenderTarget* renderTarg
 
     _currentRenderTarget      = renderTarget;
     _currentRenderPassDesc    = renderPassDesc;
+    _currentRenderTargetFlags = renderTarget->getTargetFlags();
 
     if (_mtlRenderEncoder != nil)
     {

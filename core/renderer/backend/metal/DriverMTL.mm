@@ -482,17 +482,20 @@ TextureBackend* DriverMTL::newTexture(const TextureDescriptor& descriptor)
     }
 }
 
-RenderTarget* DriverMTL::newDefaultRenderTarget()
+RenderTarget* DriverMTL::newDefaultRenderTarget(TargetBufferFlags rtf)
 {
     auto rtGL = new RenderTargetMTL(true);
+    rtGL->setTargetFlags(rtf);
     return rtGL;
 }
 
-RenderTarget* DriverMTL::newRenderTarget(TextureBackend* colorAttachment,
+RenderTarget* DriverMTL::newRenderTarget(TargetBufferFlags rtf,
+                                         TextureBackend* colorAttachment,
                                          TextureBackend* depthAttachment,
                                          TextureBackend* stencilAttachhment)
 {
     auto rtMTL = new RenderTargetMTL(false);
+    rtMTL->setTargetFlags(rtf);
     RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
     rtMTL->setColorAttachment(colors);
     rtMTL->setDepthAttachment(depthAttachment);
