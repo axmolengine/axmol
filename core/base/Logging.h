@@ -56,7 +56,7 @@ AX_ENABLE_BITMASK_OPS(LogFmtFlag);
 class LogItem
 {
     friend AX_API LogItem& preprocessLog(LogItem&& logItem);
-    friend AX_API void outputLog(LogItem& item, const char* tag);
+    friend AX_API void writeLog(LogItem& item, const char* tag);
 
 public:
     static constexpr auto COLOR_PREFIX_SIZE    = 5;                      // \x1b[00m
