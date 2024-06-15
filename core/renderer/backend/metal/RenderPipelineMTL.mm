@@ -308,11 +308,22 @@ void RenderPipelineMTL::chooseAttachmentFormat(const RenderTarget* renderTarget,
 {
     // Choose color attachment format
     auto rtMTL   = static_cast<const RenderTargetMTL*>(renderTarget);
+    auto rtflags = rtMTL->getTargetFlags();
     for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
-        colorAttachmentsFormat[i] = rtMTL->getColorAttachmentPixelFormat(i);
+    {
+        colorAttachmentsFormat[i] =
+            bitmask::any(rtflags, getMRTColorFlag(i)) ? rtMTL->getColorAttachmentPixelFormat(i) : PixelFormat::NONE;
+    }
 
-    depthFormat   = rtMTL->getDepthAttachmentPixelFormat();
-    stencilFormat = rtMTL->getStencilAttachmentPixelFormat();
+    if (bitmask::any(rtflags, RenderTargetFlag::DEPTH_AND_STENCIL))
+    {
+        depthFormat   = rtMTL->getDepthAttachmentPixelFormat();
+        stencilFormat = rtMTL->getStencilAttachmentPixelFormat();
+    }
+    else
+    {
+        depthFormat = stencilFormat = PixelFormat::NONE;
+    }
 }
 
 void RenderPipelineMTL::setBlendStateAndFormat(const BlendDescriptor& blendDescriptor)

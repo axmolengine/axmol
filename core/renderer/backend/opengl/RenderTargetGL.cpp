@@ -46,11 +46,12 @@ void RenderTargetGL::unbindFrameBuffer() const
 void RenderTargetGL::update() const {
     if (!_dirty) return;
     if(!_defaultRenderTarget) {
+        if(bitmask::any(_flags, TargetBufferFlags::COLOR_ALL))
         { // color attachments
             GLenum bufs[MAX_COLOR_ATTCHMENT] = {GL_NONE};
             for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
             {
-                if (_color[i])
+                if (bitmask::any(_flags, getMRTColorFlag(i)))
                 {
                     auto textureInfo    = _color[i];
                     auto textureHandler = static_cast<GLuint>(textureInfo.texture != nullptr ? textureInfo.texture->getHandler() : 0);
@@ -73,7 +74,7 @@ void RenderTargetGL::update() const {
         // stencil attachment
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D,
                                _stencil.texture != nullptr ? _stencil.texture->getHandler() : 0, _stencil.level);
-        CHECK_GL_ERROR_DEBUG();
+        CHECK_GL_ERROR_DEBUG();        
     }
 
     _dirty = false;
