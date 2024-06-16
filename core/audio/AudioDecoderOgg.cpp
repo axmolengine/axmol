@@ -74,7 +74,7 @@ bool AudioDecoderOgg::open(std::string_view fullPath)
     auto fs = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ).release();
     if (!fs)
     {
-        ALOGE("Trouble with ogg(1): %s\n", strerror(errno));
+        ALOGE("Trouble with ogg(1): {}\n", strerror(errno));
         return false;
     }
 
