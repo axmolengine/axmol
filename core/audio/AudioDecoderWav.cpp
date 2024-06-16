@@ -154,7 +154,7 @@ static bool wav_open(std::string_view fullPath, WAV_FILE* wavf)
         }
         break;
     default:
-        ALOGW("The wav format %d doesn't supported currently!", (int)fmtInfo.AudioFormat);
+        ALOGW("The wav format {} doesn't supported currently!", (int)fmtInfo.AudioFormat);
         fileStream.reset();
         assert(false);
         return false;
