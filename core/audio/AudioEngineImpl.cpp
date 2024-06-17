@@ -54,7 +54,7 @@ static ax::AudioEngineImpl* s_instance = nullptr;
 
 static void ccALPauseDevice()
 {
-    ALOGD("%s", "===> ccALPauseDevice");
+    ALOGD("{}", "===> ccALPauseDevice");
 #if AX_USE_ALSOFT
     alcDevicePauseSOFT(s_ALDevice);
 #else
@@ -65,7 +65,7 @@ static void ccALPauseDevice()
 
 static void ccALResumeDevice()
 {
-    ALOGD("%s", "===> ccALResumeDevice");
+    ALOGD("{}", "===> ccALResumeDevice");
 #if AX_USE_ALSOFT
     alcDeviceResumeSOFT(s_ALDevice);
 #else
@@ -99,7 +99,7 @@ static void ccALResumeDevice()
     if (self = [super init])
     {
         int deviceVer = [[[UIDevice currentDevice] systemVersion] intValue];
-        ALOGD("===> The device version: %d", deviceVer);
+        ALOGD("===> The device version: {}", deviceVer);
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(handleInterruption:)
                                                      name:AVAudioSessionInterruptionNotification
@@ -381,7 +381,7 @@ bool AudioEngineImpl::init()
             auto alError = alGetError();
             if (alError != AL_NO_ERROR)
             {
-                ALOGE("%s:generating sources failed! error = %x\n", __FUNCTION__, alError);
+                ALOGE("{}:generating sources failed! error = {:#x}\n", __FUNCTION__, alError);
                 break;
             }
 
@@ -487,7 +487,7 @@ bool AudioEngineImpl::init()
             alDisable(AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
 #endif
 
-            ALOGI("OpenAL was initialized successfully, vender:%s, version:%s", vender, version);
+            ALOGI("OpenAL was initialized successfully, vender:{}, version:{}", vender, version);
         }
     } while (false);
 
@@ -509,7 +509,7 @@ AudioCache* AudioEngineImpl::preload(std::string_view filePath, std::function<vo
         AudioEngine::addTask([audioCache, cacheId, isCacheDestroyed]() {
             if (*isCacheDestroyed)
             {
-                ALOGV("AudioCache (id=%u) was destroyed, no need to launch readDataTask.", cacheId);
+                ALOGV("AudioCache (id={}) was destroyed, no need to launch readDataTask.", cacheId);
                 audioCache->setSkipReadDataTask(true);
                 return;
             }
@@ -638,7 +638,7 @@ void AudioEngineImpl::setVolume(AUDIO_ID audioID, float volume)
         auto error = alGetError();
         if (error != AL_NO_ERROR)
         {
-            ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x", __FUNCTION__, audioID, error);
+            ALOGE("{}: audio id = {}, error = {:#x}", __FUNCTION__, audioID, error);
         }
     }
 }
@@ -674,7 +674,7 @@ void AudioEngineImpl::setLoop(AUDIO_ID audioID, bool loop)
             auto error = alGetError();
             if (error != AL_NO_ERROR)
             {
-                ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x", __FUNCTION__, audioID, error);
+                ALOGE("{}: audio id = {}, error = {:#x}", __FUNCTION__, audioID, error);
             }
         }
     }
@@ -702,7 +702,7 @@ bool AudioEngineImpl::pause(AUDIO_ID audioID)
     if (error != AL_NO_ERROR)
     {
         ret = false;
-        ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x\n", __FUNCTION__, audioID, error);
+        ALOGE("{}: audio id = {}, error = {:#x}\n", __FUNCTION__, audioID, error);
     }
 
     return ret;
@@ -725,7 +725,7 @@ bool AudioEngineImpl::resume(AUDIO_ID audioID)
     if (error != AL_NO_ERROR)
     {
         ret = false;
-        ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x\n", __FUNCTION__, audioID, error);
+        ALOGE("{}: audio id = {}, error = {:#x}\n", __FUNCTION__, audioID, error);
     }
 
     return ret;
@@ -801,7 +801,7 @@ float AudioEngineImpl::getCurrentTime(AUDIO_ID audioID)
             auto error = alGetError();
             if (error != AL_NO_ERROR)
             {
-                ALOGE("%s, audio id:" AUDIO_ID_PRID ",error code:%x", __FUNCTION__, audioID, error);
+                ALOGE("{}, audio id:{},error code:{:#x}", __FUNCTION__, audioID, error);
             }
         }
     }
@@ -836,7 +836,7 @@ bool AudioEngineImpl::setCurrentTime(AUDIO_ID audioID, float time)
             if (player->_audioCache->_framesRead != player->_audioCache->_totalFrames &&
                 (time * player->_audioCache->_sampleRate) > player->_audioCache->_framesRead)
             {
-                ALOGE("%s: audio id = " AUDIO_ID_PRID, __FUNCTION__, audioID);
+                ALOGE("{}: audio id = {}", __FUNCTION__, audioID);
                 break;
             }
 
@@ -845,7 +845,7 @@ bool AudioEngineImpl::setCurrentTime(AUDIO_ID audioID, float time)
             auto error = alGetError();
             if (error != AL_NO_ERROR)
             {
-                ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x", __FUNCTION__, audioID, error);
+                ALOGE("{}: audio id = {}, error = {:#x}", __FUNCTION__, audioID, error);
             }
             ret = true;
         }
@@ -880,7 +880,7 @@ void AudioEngineImpl::_updatePlayers(bool forStop)
     AudioPlayer* player;
     ALuint alSource;
 
-    //    ALOGV("AudioPlayer count: %d", (int)_audioPlayers.size());
+    //    ALOGV("AudioPlayer count: {}", (int)_audioPlayers.size());
     for (auto it = _audioPlayers.begin(); it != _audioPlayers.end();)
     {
         audioID  = it->first;
