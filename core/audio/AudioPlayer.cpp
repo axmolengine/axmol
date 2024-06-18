@@ -63,7 +63,7 @@ AudioPlayer::AudioPlayer()
 
 AudioPlayer::~AudioPlayer()
 {
-    ALOGV("~AudioPlayer() ({}), id={}", fmt::ptr(this), _id);
+    AXLOGV("~AudioPlayer() ({}), id={}", fmt::ptr(this), _id);
     destroy();
 
     if (_streamingSource)
@@ -78,7 +78,7 @@ void AudioPlayer::destroy()
     if (_isDestroyed)
         return;
 
-    ALOGV("AudioPlayer::destroy begin, id={}", _id);
+    AXLOGV("AudioPlayer::destroy begin, id={}", _id);
 
     _isDestroyed = true;
 
@@ -88,7 +88,7 @@ void AudioPlayer::destroy()
         {
             if (_audioCache->_state == AudioCache::State::INITIAL)
             {
-                ALOGV("AudioPlayer::destroy, id={}, cache isn't ready!", _id);
+                AXLOGV("AudioPlayer::destroy, id={}, cache isn't ready!", _id);
                 break;
             }
 
@@ -115,7 +115,7 @@ void AudioPlayer::destroy()
 
                 delete _rotateBufferThread;
                 _rotateBufferThread = nullptr;
-                ALOGV("{}", "rotateBufferThread exited!");
+                AXLOGV("{}", "rotateBufferThread exited!");
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
                 // some specific OpenAL implement defects existed on iOS platform
@@ -134,23 +134,23 @@ void AudioPlayer::destroy()
                     alSourceUnqueueBuffers(_alSource, QUEUEBUFFER_NUM, _bufferIds);
                     CHECK_AL_ERROR_DEBUG();
                 }
-                ALOGV("{}", "UnqueueBuffers Before alSourceStop");
+                AXLOGV("{}", "UnqueueBuffers Before alSourceStop");
 #endif
             }
         }
     } while (false);
 
-    ALOGV("{}", "Before alSourceStop");
+    AXLOGV("{}", "Before alSourceStop");
     alSourceStop(_alSource);
     CHECK_AL_ERROR_DEBUG();
-    ALOGV("{}", "Before alSourcei");
+    AXLOGV("{}", "Before alSourcei");
     alSourcei(_alSource, AL_BUFFER, 0);
     CHECK_AL_ERROR_DEBUG();
 
     _removeByAudioEngine = true;
 
     _ready = false;
-    ALOGV("AudioPlayer::destroy end, id={}", _id);
+    AXLOGV("AudioPlayer::destroy end, id={}", _id);
 }
 
 void AudioPlayer::setCache(AudioCache* cache)
@@ -161,7 +161,7 @@ void AudioPlayer::setCache(AudioCache* cache)
 bool AudioPlayer::play2d()
 {
     std::unique_lock<std::mutex> lck(_play2dMutex);
-    ALOGV("AudioPlayer::play2d, _alSource: {}, player id={}", _alSource, _id);
+    AXLOGV("AudioPlayer::play2d, _alSource: {}, player id={}", _alSource, _id);
 
     if (_isDestroyed)
         return false;
@@ -174,7 +174,7 @@ bool AudioPlayer::play2d()
     {
         if (_audioCache->_state != AudioCache::State::READY)
         {
-            ALOGE("{}", "alBuffer isn't ready for play!");
+            AXLOGE("{}", "alBuffer isn't ready for play!");
             break;
         }
 
@@ -211,7 +211,7 @@ bool AudioPlayer::play2d()
             }
             else
             {
-                ALOGE("{}:alGenBuffers error code: {:#x}", __FUNCTION__, alError);
+                AXLOGE("{}:alGenBuffers error code: {:#x}", __FUNCTION__, alError);
                 break;
             }
             _streamingSource = true;
@@ -242,14 +242,14 @@ bool AudioPlayer::play2d()
         auto alError = alGetError();
         if (alError != AL_NO_ERROR)
         {
-            ALOGE("{}:alSourcePlay error code:{:#x}", __FUNCTION__, (int)alError);
+            AXLOGE("{}:alSourcePlay error code:{:#x}", __FUNCTION__, (int)alError);
             break;
         }
 
         ALint state;
         alGetSourcei(_alSource, AL_SOURCE_STATE, &state);
         if (state != AL_PLAYING)
-             ALOGE("state isn't playing, {}, {}, cache id={}, player id={}", state, _audioCache->_fileFullPath,
+             AXLOGE("state isn't playing, {}, {}, cache id={}, player id={}", state, _audioCache->_fileFullPath,
                   _audioCache->_id, _id);
 
         // OpenAL framework: sometime when switch audio too fast, the result state will error, but there is no any
@@ -384,7 +384,7 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
                     alSourcePlay(_alSource);
                     if (alGetError() != AL_NO_ERROR)
                     {
-                        ALOGE("{}", "Error restarting playback!");
+                        AXLOGE("{}", "Error restarting playback!");
                         needToExitThread = true;
                     }
                 }
@@ -409,7 +409,7 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
 
     } while (false);
 
-    ALOGV("{}", "Exit rotate buffer thread ...");
+    AXLOGV("{}", "Exit rotate buffer thread ...");
     AudioDecoderManager::destroyDecoder(decoder);
     free(tmpBuffer);
     _isRotateThreadExited = true;

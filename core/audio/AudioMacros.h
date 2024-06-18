@@ -36,12 +36,6 @@
 #define QUOTEME_(x) #x
 #define QUOTEME(x) QUOTEME_(x)
 
-#define ALOGV(fmt, ...) AXLOGV(LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
-#define ALOGD(fmt, ...) AXLOGD(LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
-#define ALOGI(fmt, ...) AXLOGI(LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
-#define ALOGW(fmt, ...) AXLOGW(LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
-#define ALOGE(fmt, ...) AXLOGE(LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
-
 #if defined(_AX_DEBUG) && _AX_DEBUG > 0
 #    define CHECK_AL_ERROR_DEBUG()                                                                     \
         do                                                                                             \
@@ -49,7 +43,7 @@
             ALenum __error = alGetError();                                                             \
             if (__error)                                                                               \
             {                                                                                          \
-                ALOGE("OpenAL error 0x{:04X} in {} {} {}\n", __error, __FILE__, __FUNCTION__, __LINE__); \
+                AXLOGE("OpenAL error 0x{:04X} in {} {} {}\n", __error, __FILE__, __FUNCTION__, __LINE__); \
             }                                                                                          \
         } while (false)
 #else
@@ -65,7 +59,7 @@
 #define BREAK_IF_ERR_LOG(condition, fmt, ...)                                   \
     if (!!(condition))                                                          \
     {                                                                           \
-        ALOGE("(" QUOTEME(condition) ") failed, message: " fmt, ##__VA_ARGS__); \
+        AXLOGE("(" QUOTEME(condition) ") failed, message: " fmt, ##__VA_ARGS__); \
         break;                                                                  \
     }
 

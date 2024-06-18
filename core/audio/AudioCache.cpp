@@ -59,7 +59,7 @@ AudioCache::AudioCache()
     , _isLoadingFinished(false)
     , _isSkipReadDataTask(false)
 {
-    ALOGV("AudioCache() {}, id={}", fmt::ptr(this), _id);
+    AXLOGV("AudioCache() {}, id={}", fmt::ptr(this), _id);
     for (int i = 0; i < QUEUEBUFFER_NUM; ++i)
     {
         _queBuffers[i]    = nullptr;
@@ -69,16 +69,16 @@ AudioCache::AudioCache()
 
 AudioCache::~AudioCache()
 {
-    ALOGV("~AudioCache() {}, id={}, begin", fmt::ptr(this), _id);
+    AXLOGV("~AudioCache() {}, id={}, begin", fmt::ptr(this), _id);
     *_isDestroyed = true;
     while (!_isLoadingFinished)
     {
         if (_isSkipReadDataTask)
         {
-            ALOGV("id={}, Skip read data task, don't continue to wait!", _id);
+            AXLOGV("id={}, Skip read data task, don't continue to wait!", _id);
             break;
         }
-        ALOGV("id={}, waiting readData thread to finish ...", _id);
+        AXLOGV("id={}, waiting readData thread to finish ...", _id);
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
     // wait for the 'readDataTask' task to exit
@@ -88,14 +88,14 @@ AudioCache::~AudioCache()
     {
         if (_alBufferId != INVALID_AL_BUFFER_ID && alIsBuffer(_alBufferId))
         {
-            ALOGV("~AudioCache(id={}), delete buffer: {}", _id, _alBufferId);
+            AXLOGV("~AudioCache(id={}), delete buffer: {}", _id, _alBufferId);
             alDeleteBuffers(1, &_alBufferId);
             _alBufferId = INVALID_AL_BUFFER_ID;
         }
     }
     else
     {
-        ALOGW("AudioCache ({}), id={}, buffer isn't ready, state={}", fmt::ptr(this), _id, (int)_state);
+        AXLOGW("AudioCache ({}), id={}, buffer isn't ready, state={}", fmt::ptr(this), _id, (int)_state);
     }
 
     if (_queBufferFrames > 0)
@@ -105,14 +105,14 @@ AudioCache::~AudioCache()
             free(_queBuffers[index]);
         }
     }
-    ALOGV("~AudioCache() {}, id={}, end", fmt::ptr(this), _id);
+    AXLOGV("~AudioCache() {}, id={}, end", fmt::ptr(this), _id);
     _readDataTaskMutex.unlock();
 }
 
 void AudioCache::readDataTask(unsigned int selfId)
 {
     // Note: It's in sub thread
-    ALOGV("readDataTask begin, cache id={}", selfId);
+    AXLOGV("readDataTask begin, cache id={}", selfId);
 
     _readDataTaskMutex.lock();
     _state = State::LOADING;
@@ -178,7 +178,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             auto alError = alGetError();
             if (alError != AL_NO_ERROR)
             {
-                ALOGE("{}: attaching audio to buffer fail: {:#x}", __FUNCTION__, alError);
+                AXLOGE("{}: attaching audio to buffer fail: {:#x}", __FUNCTION__, alError);
                 break;
             }
 
@@ -221,7 +221,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             }
 
 #if AX_USE_ALSOFT
-            ALOGV("pcm buffer was loaded successfully, total frames: {}, total read frames: {}, remainingFrames: {}",
+            AXLOGV("pcm buffer was loaded successfully, total frames: {}, total read frames: {}, remainingFrames: {}",
                   totalFrames, _framesRead, remainingFrames);
             if (sourceFormat == AUDIO_SOURCE_FORMAT::ADPCM || sourceFormat == AUDIO_SOURCE_FORMAT::IMA_ADPCM)
                 alBufferi(_alBufferId, AL_UNPACK_BLOCK_ALIGNMENT_SOFT, decoder->getSamplesPerBlock());
@@ -252,7 +252,7 @@ void AudioCache::readDataTask(unsigned int selfId)
 
             if (adjustFrames > 0)
             {
-                ALOGV("Orignal total frames: {}, adjust frames: {}, current total frames: {}", totalFrames,
+                AXLOGV("Orignal total frames: {}, adjust frames: {}, current total frames: {}", totalFrames,
                       adjustFrames, totalFrames + adjustFrames);
                 totalFrames += adjustFrames;
                 _totalFrames = remainingFrames = totalFrames;
@@ -270,7 +270,7 @@ void AudioCache::readDataTask(unsigned int selfId)
                 dataSize = static_cast<uint32_t>(pcmBuffer.size());
             }
 #    endif /* Adjust frames, may not needed */
-            ALOGV(
+            AXLOGV(
                 "pcm buffer was loaded successfully, total frames: {}, total read frames: {}, adjust frames: {}, "
                 "remainingFrames: {}",
                 totalFrames, _framesRead, adjustFrames, remainingFrames);
@@ -280,7 +280,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             alError = alGetError();
             if (alError != AL_NO_ERROR)
             {
-                ALOGE("{}:alBufferData error code:{:#x}", __FUNCTION__, alError);
+                AXLOGE("{}:alBufferData error code:{:#x}", __FUNCTION__, alError);
                 break;
             }
 
@@ -313,7 +313,7 @@ void AudioCache::readDataTask(unsigned int selfId)
         _state = State::FAILED;
         if (_alBufferId != INVALID_AL_BUFFER_ID && alIsBuffer(_alBufferId))
         {
-            ALOGV("readDataTask failed, delete buffer: {}", _alBufferId);
+            AXLOGV("readDataTask failed, delete buffer: {}", _alBufferId);
             alDeleteBuffers(1, &_alBufferId);
             _alBufferId = INVALID_AL_BUFFER_ID;
         }
@@ -327,7 +327,7 @@ void AudioCache::readDataTask(unsigned int selfId)
     invokingLoadCallbacks();
 
     _readDataTaskMutex.unlock();
-    ALOGV("readDataTask end, cache id={}", selfId);
+    AXLOGV("readDataTask end, cache id={}", selfId);
 }
 
 void AudioCache::addPlayCallback(const std::function<void()>& callback)
@@ -348,7 +348,7 @@ void AudioCache::addPlayCallback(const std::function<void()>& callback)
         break;
 
     default:
-        ALOGE("Invalid state: {}", (int)_state);
+        AXLOGE("Invalid state: {}", (int)_state);
         break;
     }
 }
@@ -382,7 +382,7 @@ void AudioCache::addLoadCallback(const std::function<void(bool)>& callback)
         break;
 
     default:
-        ALOGE("Invalid state: {}", (int)_state);
+        AXLOGE("Invalid state: {}", (int)_state);
         break;
     }
 }
@@ -391,7 +391,7 @@ void AudioCache::invokingLoadCallbacks()
 {
     if (*_isDestroyed)
     {
-        ALOGV("AudioCache ({}) was destroyed, don't invoke preload callback ...", fmt::ptr(this));
+        AXLOGV("AudioCache ({}) was destroyed, don't invoke preload callback ...", fmt::ptr(this));
         return;
     }
 
@@ -400,7 +400,7 @@ void AudioCache::invokingLoadCallbacks()
     scheduler->runOnAxmolThread([&, isDestroyed]() {
         if (*isDestroyed)
         {
-            ALOGV("invokingLoadCallbacks perform in cocos thread, AudioCache ({}) was destroyed!", fmt::ptr(this));
+            AXLOGV("invokingLoadCallbacks perform in cocos thread, AudioCache ({}) was destroyed!", fmt::ptr(this));
             return;
         }
 
