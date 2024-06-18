@@ -50,14 +50,15 @@ void RenderTargetGL::update() const {
             GLenum bufs[MAX_COLOR_ATTCHMENT] = {GL_NONE};
             for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
             {
+                GLuint texture = 0;
+                GLint level = 0;
                 if (_color[i])
                 {
-                    auto textureInfo    = _color[i];
-                    auto textureHandler = static_cast<GLuint>(textureInfo.texture != nullptr ? textureInfo.texture->getHandler() : 0);
-                    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, textureHandler,
-                                        textureInfo.level);
+                    texture = static_cast<GLuint>(_color[i].texture->getHandler());
+                    level = _color[i].level;
                     bufs[i] = GL_COLOR_ATTACHMENT0 + i;
                 }
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture, level);
             }
     #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
             glDrawBuffers(MAX_COLOR_ATTCHMENT, bufs);
