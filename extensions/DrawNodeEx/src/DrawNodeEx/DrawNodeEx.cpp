@@ -1144,10 +1144,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
     AXASSERT(count >= 0, "invalid count value");
 
     Vec2* _vertices = transform(verts, count);
-
     bool outline = (borderColor.a > 0.0f && borderWidth > 0.0f);
-
- //   Color4B borderColorTemp = borderColor;
 
     auto triangle_count = outline ? (3 * count - 2) : (count - 2);
     auto vertex_count = 3 * triangle_count;
@@ -1269,18 +1266,15 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             Vec2 inner1 = v1 - offset1 * borderWidth;
             Vec2 outer0 = v0 + offset0 * borderWidth;
             Vec2 outer1 = v1 + offset1 * borderWidth;
-            Color4B borderColorTemp = borderColor;
-            if (!closedPolygon)
-            {
-                borderColorTemp = Color4B::TRANSPARENT;
-            }
 
-            V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColor, Tex2F(-n0)},
+            Color4B borderColorTemp = (!closedPolygon) ?  Color4B::TRANSPARENT : borderColor;
+
+            V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColorTemp, Tex2F(-n0)},
                 {inner1, borderColorTemp, Tex2F(-n0)},
                 {outer1, borderColorTemp, Tex2F(n0)} };
             *cursor++ = tmp1;
 
-            V2F_C4B_T2F_Triangle tmp2 = { {inner0, borderColor, Tex2F(-n0)},
+            V2F_C4B_T2F_Triangle tmp2 = { {inner0, borderColorTemp, Tex2F(-n0)},
                 {outer0, borderColorTemp, Tex2F(n0)},
                 {outer1, borderColorTemp, Tex2F(n0)} };
             *cursor++ = tmp2;
