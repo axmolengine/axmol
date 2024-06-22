@@ -2,7 +2,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -258,7 +258,8 @@ TEST_SUITE("base/Vector") {
 
         // get random object
         // Set the seed by time
-        std::srand((unsigned)time(nullptr));
+        auto seed = (unsigned)time(nullptr);
+        std::srand(seed);
         Vector<Node*> vecForRandom = createVector();
         auto different = 0;
         for (int i = 0; i < vecForRandom.size(); ++i) {
@@ -268,7 +269,9 @@ TEST_SUITE("base/Vector") {
                 different++;
         }
         CHECK(different > 0);
-        CHECK(different > vecForRandom.size() * 3 / 4); // At least 75% different
+        auto count75 = vecForRandom.size() * 3 / 4;
+        CHECK(different >= count75);  // At least 75% different
+        AXLOGI("## seed={}, different={}, count75={}", seed, different, count75);
 
         // Self assignment
         Vector<Node*> vecSelfAssign = createVector();

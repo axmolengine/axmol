@@ -2,7 +2,7 @@
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -200,8 +200,8 @@ void Texture2DGL::updateData(uint8_t* data, std::size_t width, std::size_t heigh
         return;
 
     // Set the row align only when mipmapsNum == 1 and the data is uncompressed
-    auto mipmapEnalbed = isMipmapEnabled(_textureInfo.minFilterGL) || isMipmapEnabled(_textureInfo.magFilterGL);
-    if (!mipmapEnalbed)
+    auto mipmapEnabled = isMipmapEnabled(_textureInfo.minFilterGL) || isMipmapEnabled(_textureInfo.magFilterGL);
+    if (!mipmapEnabled)
     {
         unsigned int bytesPerRow = width * _bitsPerPixel / 8;
 
@@ -232,6 +232,14 @@ void Texture2DGL::updateData(uint8_t* data, std::size_t width, std::size_t heigh
                  _textureInfo.format, _textureInfo.type, data);
 
     CHECK_GL_ERROR_DEBUG();
+
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+    if (_generateMipmaps)
+    {
+        _hasMipmaps = false;
+        generateMipmaps();
+    }
+#endif
 
     if (!_hasMipmaps && level > 0)
         _hasMipmaps = true;
@@ -304,6 +312,9 @@ void Texture2DGL::generateMipmaps()
 
     if (!_hasMipmaps)
     {
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+        _generateMipmaps = true;
+#endif
         _hasMipmaps = true;
         __gl->bindTexture(GL_TEXTURE_2D, (GLuint)this->getHandler());
         glGenerateMipmap(GL_TEXTURE_2D);

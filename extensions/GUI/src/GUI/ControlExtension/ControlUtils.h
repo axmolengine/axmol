@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2012 cocos2d-x.org
- * https://axmolengine.github.io/
+ * https://axmol.dev/
  *
  *
  * Copyright 2012 Stewart Hamilton-Arrandale.

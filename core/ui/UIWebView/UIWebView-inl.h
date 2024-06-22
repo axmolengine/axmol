@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,9 @@
 
 /// @cond DO_NOT_SHOW
 
-#if (defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#if (defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                             \
+    (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
+     AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 #include "ui/UIWebView/UIWebView.h"
 #include "platform/GLView.h"

@@ -403,7 +403,7 @@ Notes:
 -  Add *experimental* WebAssembly build support(WebGL 2.0) by [@nowasm](https://github.com/nowasm)
     - List of known issues maybe *help wanted*
         - WebGL context lost not handled yet
-     - A demo avaiable on axmol gh-pages: [`cpp-tests.html`](https://axmolengine.github.io/axmol/wasm/cpp_tests/cpp_tests.html), build from branch `dev`
+     - A demo avaiable on axmol gh-pages: [`cpp-tests.html`](https://axmol.dev/axmol/wasm/cpp_tests/cpp_tests.html), build from branch `dev`
      - Note:  Follow functionals require wasm pthread support, and needs server enable https://web.dev/coop-coep/ response with specified header, and by default thread support was enabled by axmol client build commands
          - AudioEngine
          - ASTC multi-thread software decoder
@@ -437,7 +437,7 @@ Notes:
     - xxHash: 0.8.1 ==> 0.8.2
     - zlib: 1.2.13 ==> 1.3
 - API changes:
-    - CHANGED: The prototype of [`ProgramManager::registerCustomProgram`](https://axmolengine.github.io/axmol/manual/latest/d1/db2/classax_1_1backend_1_1_program_manager.html#ab0c9fa9f0ebef5f20a868e2ea6cdc631) was changed
+    - CHANGED: The prototype of [`ProgramManager::registerCustomProgram`](https://axmol.dev/manual/latest/d1/db2/classax_1_1backend_1_1_program_manager.html#ab0c9fa9f0ebef5f20a868e2ea6cdc631) was changed
     - ADDED: `ProgramManager::loadProgram`
     - REMOVED: `ProgramManager::getCustomProgram`
     - REMOVED: `CommandBuffer::setLineWidth`

@@ -3,7 +3,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ USING_NS_AX;
 static const char* sURLList[] = {
     "https://www.cocos2d-x.org/attachments/802/cocos2dx_landscape.png", "https://cocos2d-x.org/images/logo.png",
     "https://www.cocos2d-x.org/attachments/1503/no_exist.txt",  // try to download no exist file
-    "https://www.openssl.org/source/openssl-3.0.10.tar.gz"
+    "https://ash-speed.hetzner.com/1GB.bin"
 };
 const static int sListSize              = (sizeof(sURLList) / sizeof(sURLList[0]));
 static const char* sNameList[sListSize] = {
@@ -112,6 +112,19 @@ struct DownloaderTest : public TestCase
         bg->addChild(label, 20);
 
         return bg;
+    }
+
+    static void sbtoa(double speedInBytes, char* buf, size_t buf_len)
+    {
+        double speedInBits = speedInBytes;
+        if (speedInBits < 1024)
+            snprintf(buf, buf_len, "%gB", speedInBits);
+        else if (speedInBits < 1024 * 1024)
+            snprintf(buf, buf_len, "%.1lfKB", speedInBits / 1024);
+        else if (speedInBits < 1024 * 1024 * 1024)
+            snprintf(buf, buf_len, "%.1lfMB", speedInBits / 1024 / 1024);
+        else
+            snprintf(buf, buf_len, "%.1lfGB", speedInBits / 1024 / 1024 / 1024);
     }
 
     virtual void onEnter() override
@@ -195,8 +208,7 @@ struct DownloaderTest : public TestCase
             bar->setVisible(true);
             bar->setEnabled(true);
             auto path = FileUtils::getInstance()->getWritablePath() + "CppTests/DownloaderTest/" + sNameList[3];
-            auto task = this->downloader->createDownloadFileTask(sURLList[3], path, sNameList[3],
-                                                                 "5d689e1534373e0b0540b5c087b5d99a", false);
+            auto task = this->downloader->createDownloadFileTask(sURLList[3], path, sNameList[3], "5fa2035a209e73f5727a72aafd332916", false);
             task->progressInfo.totalBytesExpected = 89945032;
         });
         bottomRightView->setName(sNameList[3]);
@@ -212,8 +224,12 @@ struct DownloaderTest : public TestCase
             bar->setPercent(percent);
             char buf[128];
             sprintf(buf, "%.1f%%[total %d KB]", percent, int(task.progressInfo.totalBytesExpected / 1024));
+
             auto status = (Label*)view->getChildByTag(TAG_STATUS);
             status->setString(buf);
+
+            sbtoa(task.progressInfo.speedInBytes, buf, 128);
+            AXLOGI("[{}%] speed: {}/s", percent, buf);
         };
 
         // define success callback

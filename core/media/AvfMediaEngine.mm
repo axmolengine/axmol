@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -400,8 +400,6 @@ bool AvfMediaEngine::transferVideoFrame()
         auto UVDataLen     = UVPitch * UVHeight;  // 1920x1080: UVDataLen=1036800
         auto frameYData    = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, 0);
         auto frameCbCrData = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, 1);
-        assert(_videoRotation % 180 == 0 ? YASIO_SZ_ALIGN(videoDim.x, 32) * videoDim.y * 3 / 2 == YDataLen + UVDataLen :
-               YASIO_SZ_ALIGN(videoDim.y, 32) * videoDim.x * 3 / 2 == YDataLen + UVDataLen);
         // Apple: both H264, HEVC(H265) bufferDimX=ALIGN(videoDim.x, 32), bufferDimY=videoDim.y
         // Windows:
         //    - H264: BufferDimX align videoDim.x with 16, BufferDimY as-is

@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Purpose: Make bitmask operators could be use at different namespace,
           the other implementation CCEnumClass.h can't handle.

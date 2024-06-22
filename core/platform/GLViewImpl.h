@@ -4,7 +4,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
-https://axmolengine.github.io/
+https://axmol.dev/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -140,6 +140,15 @@ public:
     void* getCocoaWindow() override;
     void* getNSGLContext() override;  // stevetranby: added
 #endif                                // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+    void* getX11Window() override;
+    void* getX11Display() override;
+    /* TODO: Implement AX_PLATFORM_LINUX_WAYLAND
+    void* getWaylandWindow() override;
+    void* getWaylandDisplay() override;
+    */
+#endif // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 protected:
     GLViewImpl(bool initglfw = true);

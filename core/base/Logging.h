@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,8 @@ NS_AX_BEGIN
 
 enum class LogLevel
 {
-    Trace,
+    Verbose,
+    Trace = Verbose,
     Debug,
     Info,
     Warn,
@@ -56,7 +57,7 @@ AX_ENABLE_BITMASK_OPS(LogFmtFlag);
 class LogItem
 {
     friend AX_API LogItem& preprocessLog(LogItem&& logItem);
-    friend AX_API void outputLog(LogItem& item, const char* tag);
+    friend AX_API void writeLog(LogItem& item, const char* tag);
 
 public:
     static constexpr auto COLOR_PREFIX_SIZE    = 5;                      // \x1b[00m
@@ -108,7 +109,7 @@ class ILogOutput
 {
 public:
     virtual ~ILogOutput() {}
-    virtual void write(std::string_view message, LogLevel) = 0;
+    virtual void write(LogItem& item, const char* tag) = 0;
 };
 
 /* @brief control log level */
@@ -126,6 +127,7 @@ AX_API LogItem& preprocessLog(LogItem&& logItem);
 
 /* @brief internal use */
 AX_API void outputLog(LogItem& item, const char* tag);
+AX_API void writeLog(LogItem& item, const char* tag);
 
 template <typename _FmtType, typename... _Types>
 inline void printLogT(_FmtType&& fmt, LogItem& item, _Types&&... args)
@@ -137,11 +139,13 @@ inline void printLogT(_FmtType&& fmt, LogItem& item, _Types&&... args)
 #define AXLOG_WITH_LEVEL(level, fmtOrMsg, ...) \
     ax::printLogT(FMT_COMPILE("{}" fmtOrMsg "\n"), ax::preprocessLog(ax::LogItem{level}), ##__VA_ARGS__)
 
-#define AXLOGT(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Trace, fmtOrMsg, ##__VA_ARGS__)
+#define AXLOGV(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Verbose, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGD(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Debug, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGI(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Info, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGW(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Warn, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGE(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Error, fmtOrMsg, ##__VA_ARGS__)
+
+#define AXLOGT AXLOGV
 
 /**
  @brief Output Debug message.

@@ -4,7 +4,7 @@
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
 # Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 # 
-# https://axmolengine.github.io/
+# https://axmol.dev/
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -415,6 +415,21 @@ endif()
 
 if(ANDROID)
     add_subdirectory(${_AX_ROOT}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
+endif()
+
+if(LINUX)
+    find_package(X11 REQUIRED)
+    target_include_directories(${_AX_CORE_LIB} PUBLIC "${X11_X11_INCLUDE_PATH}")
+    # X11 gets linked by cmake/Modules/AXLinkHelpers.cmake
+
+    # including GTK3.0 and WebKit2Gtk4.0
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GKT3 REQUIRED gtk+-3.0)
+    pkg_check_modules(WEBKIT2GTK webkit2gtk-4.0)
+
+    target_include_directories(${_AX_CORE_LIB} PUBLIC ${GTK3_INCLUDE_DIRS} ${WEBKIT2GTK_INCLUDE_DIRS})
+    target_link_directories(${_AX_CORE_LIB} PRIVATE ${GTK3_LIBRARY_DIRS} ${WEBKIT2GTK_LIBRARY_DIRS})
+    target_link_libraries(${_AX_CORE_LIB} ${GTK3_LIBRARIES} ${WEBKIT2GTK_LIBRARIES})
 endif()
 
 #if(XCODE)

@@ -2,7 +2,7 @@
 
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -154,7 +154,7 @@ static bool wav_open(std::string_view fullPath, WAV_FILE* wavf)
         }
         break;
     default:
-        ALOGW("The wav format %d doesn't supported currently!", (int)fmtInfo.AudioFormat);
+        AXLOGW("The wav format {} doesn't supported currently!", (int)fmtInfo.AudioFormat);
         fileStream.reset();
         assert(false);
         return false;

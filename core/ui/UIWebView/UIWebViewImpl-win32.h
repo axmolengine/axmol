@@ -2,7 +2,7 @@
  Copyright (c) 2014 cocos2d-x.org
  Author: Jeff Wang <wohaaitinciu@gmail.com>
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal

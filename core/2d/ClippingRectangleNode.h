@@ -1,6 +1,6 @@
 /*
  * cocos2d for iPhone: http://www.cocos2d-iphone.org
- * cocos2d-x: https://axmolengine.github.io/
+ * cocos2d-x: https://axmol.dev/
  *
  * Copyright (c) 2012 Pierre-David Bélanger
  * Copyright (c) 2012 cocos2d-x.org

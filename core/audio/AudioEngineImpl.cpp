@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,7 @@ static ax::AudioEngineImpl* s_instance = nullptr;
 
 static void ccALPauseDevice()
 {
-    ALOGD("%s", "===> ccALPauseDevice");
+    AXLOGD("{}", "===> ccALPauseDevice");
 #if AX_USE_ALSOFT
     alcDevicePauseSOFT(s_ALDevice);
 #else
@@ -65,7 +65,7 @@ static void ccALPauseDevice()
 
 static void ccALResumeDevice()
 {
-    ALOGD("%s", "===> ccALResumeDevice");
+    AXLOGD("{}", "===> ccALResumeDevice");
 #if AX_USE_ALSOFT
     alcDeviceResumeSOFT(s_ALDevice);
 #else
@@ -99,7 +99,7 @@ static void ccALResumeDevice()
     if (self = [super init])
     {
         int deviceVer = [[[UIDevice currentDevice] systemVersion] intValue];
-        ALOGD("===> The device version: %d", deviceVer);
+        AXLOGD("===> The device version: {}", deviceVer);
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(handleInterruption:)
                                                      name:AVAudioSessionInterruptionNotification
@@ -120,7 +120,7 @@ static void ccALResumeDevice()
 
         BOOL success = [[AVAudioSession sharedInstance] setCategory:AVAUDIOSESSION_DEFAULT_CATEGORY error:nil];
         if (!success)
-            ALOGE("Fail to set audio session.");
+            AXLOGE("Fail to set audio session.");
     }
     return self;
 }
@@ -140,13 +140,13 @@ static void ccALResumeDevice()
 
             if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive)
             {
-                ALOGD(
+                AXLOGD(
                     "AVAudioSessionInterruptionTypeBegan, application != UIApplicationStateActive, "
                     "alcMakeContextCurrent(nullptr)");
             }
             else
             {
-                ALOGD(
+                AXLOGD(
                     "AVAudioSessionInterruptionTypeBegan, application == UIApplicationStateActive, "
                     "pauseOnResignActive = true");
             }
@@ -160,7 +160,7 @@ static void ccALResumeDevice()
 
             if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive)
             {
-                ALOGD(
+                AXLOGD(
                     "AVAudioSessionInterruptionTypeEnded, application == UIApplicationStateActive, "
                     "alcMakeContextCurrent(s_ALContext)");
                 NSError* error = nil;
@@ -168,13 +168,13 @@ static void ccALResumeDevice()
                 ccALResumeDevice();
                 if (ax::Director::getInstance()->isPaused())
                 {
-                    ALOGD("AVAudioSessionInterruptionTypeEnded, director was paused, try to resume it.");
+                    AXLOGD("AVAudioSessionInterruptionTypeEnded, director was paused, try to resume it.");
                     ax::Director::getInstance()->resume();
                 }
             }
             else
             {
-                ALOGD(
+                AXLOGD(
                     "AVAudioSessionInterruptionTypeEnded, application != UIApplicationStateActive, "
                     "resumeOnBecomingActive = true");
                 resumeOnBecomingActive = true;
@@ -183,26 +183,26 @@ static void ccALResumeDevice()
     }
     else if ([notification.name isEqualToString:UIApplicationWillResignActiveNotification])
     {
-        ALOGD("UIApplicationWillResignActiveNotification");
+        AXLOGD("UIApplicationWillResignActiveNotification");
         if (pauseOnResignActive)
         {
             pauseOnResignActive = false;
-            ALOGD("UIApplicationWillResignActiveNotification, alcMakeContextCurrent(nullptr)");
+            AXLOGD("UIApplicationWillResignActiveNotification, alcMakeContextCurrent(nullptr)");
             ccALPauseDevice();
         }
     }
     else if ([notification.name isEqualToString:UIApplicationDidBecomeActiveNotification])
     {
-        ALOGD("UIApplicationDidBecomeActiveNotification");
+        AXLOGD("UIApplicationDidBecomeActiveNotification");
         if (resumeOnBecomingActive)
         {
             resumeOnBecomingActive = false;
-            ALOGD("UIApplicationDidBecomeActiveNotification, alcMakeContextCurrent(s_ALContext)");
+            AXLOGD("UIApplicationDidBecomeActiveNotification, alcMakeContextCurrent(s_ALContext)");
             NSError* error = nil;
             BOOL success   = [[AVAudioSession sharedInstance] setCategory:AVAUDIOSESSION_DEFAULT_CATEGORY error:&error];
             if (!success)
             {
-                ALOGE("Fail to set audio session.");
+                AXLOGE("Fail to set audio session.");
                 return;
             }
             [[AVAudioSession sharedInstance] setActive:YES error:&error];
@@ -211,7 +211,7 @@ static void ccALResumeDevice()
         }
         else if (isAudioSessionInterrupted)
         {
-            ALOGD("Audio session is still interrupted!");
+            AXLOGD("Audio session is still interrupted!");
         }
     }
     else if ([notification.name isEqualToString:AVAudioSessionRouteChangeNotification])
@@ -381,7 +381,7 @@ bool AudioEngineImpl::init()
             auto alError = alGetError();
             if (alError != AL_NO_ERROR)
             {
-                ALOGE("%s:generating sources failed! error = %x\n", __FUNCTION__, alError);
+                AXLOGE("{}:generating sources failed! error = {:#x}\n", __FUNCTION__, alError);
                 break;
             }
 
@@ -487,7 +487,7 @@ bool AudioEngineImpl::init()
             alDisable(AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
 #endif
 
-            ALOGI("OpenAL was initialized successfully, vender:%s, version:%s", vender, version);
+            AXLOGI("OpenAL was initialized successfully, vender:{}, version:{}", vender, version);
         }
     } while (false);
 
@@ -509,7 +509,7 @@ AudioCache* AudioEngineImpl::preload(std::string_view filePath, std::function<vo
         AudioEngine::addTask([audioCache, cacheId, isCacheDestroyed]() {
             if (*isCacheDestroyed)
             {
-                ALOGV("AudioCache (id=%u) was destroyed, no need to launch readDataTask.", cacheId);
+                AXLOGV("AudioCache (id={}) was destroyed, no need to launch readDataTask.", cacheId);
                 audioCache->setSkipReadDataTask(true);
                 return;
             }
@@ -602,7 +602,7 @@ void AudioEngineImpl::_play2d(AudioCache* cache, AUDIO_ID audioID)
     }
     else
     {
-        ALOGD("AudioEngineImpl::_play2d, cache was destroyed or not ready!");
+        AXLOGD("AudioEngineImpl::_play2d, cache was destroyed or not ready!");
         player->_removeByAudioEngine = true;
     }
 }
@@ -638,7 +638,7 @@ void AudioEngineImpl::setVolume(AUDIO_ID audioID, float volume)
         auto error = alGetError();
         if (error != AL_NO_ERROR)
         {
-            ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x", __FUNCTION__, audioID, error);
+            AXLOGE("{}: audio id = {}, error = {:#x}", __FUNCTION__, audioID, error);
         }
     }
 }
@@ -674,7 +674,7 @@ void AudioEngineImpl::setLoop(AUDIO_ID audioID, bool loop)
             auto error = alGetError();
             if (error != AL_NO_ERROR)
             {
-                ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x", __FUNCTION__, audioID, error);
+                AXLOGE("{}: audio id = {}, error = {:#x}", __FUNCTION__, audioID, error);
             }
         }
     }
@@ -702,7 +702,7 @@ bool AudioEngineImpl::pause(AUDIO_ID audioID)
     if (error != AL_NO_ERROR)
     {
         ret = false;
-        ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x\n", __FUNCTION__, audioID, error);
+        AXLOGE("{}: audio id = {}, error = {:#x}\n", __FUNCTION__, audioID, error);
     }
 
     return ret;
@@ -725,7 +725,7 @@ bool AudioEngineImpl::resume(AUDIO_ID audioID)
     if (error != AL_NO_ERROR)
     {
         ret = false;
-        ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x\n", __FUNCTION__, audioID, error);
+        AXLOGE("{}: audio id = {}, error = {:#x}\n", __FUNCTION__, audioID, error);
     }
 
     return ret;
@@ -801,7 +801,7 @@ float AudioEngineImpl::getCurrentTime(AUDIO_ID audioID)
             auto error = alGetError();
             if (error != AL_NO_ERROR)
             {
-                ALOGE("%s, audio id:" AUDIO_ID_PRID ",error code:%x", __FUNCTION__, audioID, error);
+                AXLOGE("{}, audio id:{},error code:{:#x}", __FUNCTION__, audioID, error);
             }
         }
     }
@@ -836,7 +836,7 @@ bool AudioEngineImpl::setCurrentTime(AUDIO_ID audioID, float time)
             if (player->_audioCache->_framesRead != player->_audioCache->_totalFrames &&
                 (time * player->_audioCache->_sampleRate) > player->_audioCache->_framesRead)
             {
-                ALOGE("%s: audio id = " AUDIO_ID_PRID, __FUNCTION__, audioID);
+                AXLOGE("{}: audio id = {}", __FUNCTION__, audioID);
                 break;
             }
 
@@ -845,7 +845,7 @@ bool AudioEngineImpl::setCurrentTime(AUDIO_ID audioID, float time)
             auto error = alGetError();
             if (error != AL_NO_ERROR)
             {
-                ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x", __FUNCTION__, audioID, error);
+                AXLOGE("{}: audio id = {}, error = {:#x}", __FUNCTION__, audioID, error);
             }
             ret = true;
         }
@@ -880,7 +880,7 @@ void AudioEngineImpl::_updatePlayers(bool forStop)
     AudioPlayer* player;
     ALuint alSource;
 
-    //    ALOGV("AudioPlayer count: %d", (int)_audioPlayers.size());
+    //    AXLOGV("AudioPlayer count: {}", (int)_audioPlayers.size());
     for (auto it = _audioPlayers.begin(); it != _audioPlayers.end();)
     {
         audioID  = it->first;

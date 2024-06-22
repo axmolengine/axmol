@@ -76,8 +76,10 @@ struct yasio_kcp_options {
     auto __msg           = ::yasio::strfmt(127, "[yasio][%lld]" format "\n", ::yasio::clock<system_clock_t>(), ##__VA_ARGS__); \
     if (__cprint)                                                                                                              \
       __cprint(level, __msg.c_str());                                                                                          \
-    else                                                                                                                       \
+    else {                                                                                                                     \
+      __msg.back() = '\0';                                                                                                    \
       YASIO_LOG_TAG("", "%s", __msg.c_str());                                                                                  \
+    }                                                                                                                          \
   } while (false)
 // clang-format on
 

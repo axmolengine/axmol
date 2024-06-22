@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -74,7 +74,7 @@ bool AudioDecoderOgg::open(std::string_view fullPath)
     auto fs = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ).release();
     if (!fs)
     {
-        ALOGE("Trouble with ogg(1): %s\n", strerror(errno));
+        AXLOGE("Trouble with ogg(1): {}\n", strerror(errno));
         return false;
     }
 

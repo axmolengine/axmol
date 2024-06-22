@@ -6,7 +6,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
-https://axmolengine.github.io/
+https://axmol.dev/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -581,7 +581,7 @@ Texture2D* TextureCache::addImage(const Data& imageData, std::string_view key)
         {
             if (texture->initWithImage(image))
             {
-                
+
 #if CC_ENABLE_CACHE_TEXTURE_DATA
                 VolatileTextureMgr::addImage(texture, image);
 #endif
@@ -598,7 +598,7 @@ Texture2D* TextureCache::addImage(const Data& imageData, std::string_view key)
         {
             AXLOG("axmol: Allocating memory for Texture2D failed!");
         }
-        
+
         AX_SAFE_RELEASE(image);
 
     } while (0);
@@ -978,13 +978,10 @@ void VolatileTextureMgr::reloadTexture(Texture2D* texture, std::string_view file
     if (!texture)
         return;
 
-    Image* image = new Image();
-    Data data    = FileUtils::getInstance()->getDataFromFile(filename);
+    Image image;
 
-    if (image->initWithImageData(data.getBytes(), data.getSize()))
-        texture->initWithImage(image, pixelFormat);
-
-    AX_SAFE_DELETE(image);
+    if (image.initWithImageFile(filename))
+        texture->initWithImage(&image, pixelFormat);
 }
 
 #endif  // AX_ENABLE_CACHE_TEXTURE_DATA

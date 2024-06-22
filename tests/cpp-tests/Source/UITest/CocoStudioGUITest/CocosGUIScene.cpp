@@ -2,7 +2,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -57,7 +57,8 @@
     defined(__linux__)
 #    include "UIEditBoxTest.h"
 #endif
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if ((AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) || \
+    (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 #    include "UIWebViewTest/UIWebViewTest.h"
 #endif
 
@@ -68,7 +69,8 @@ GUIDynamicCreateTests::GUIDynamicCreateTests()
 #endif
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && \
         !defined(AX_TARGET_OS_TVOS) ||                                                      \
-    (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+    (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||      \
+    (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
     addTest("WebView Test", []() { return new WebViewTests; });
 #endif
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) ||                 \

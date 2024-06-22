@@ -197,8 +197,10 @@ $manifest = @{
     msvc         = '14.39+'; # cl.exe @link.exe 14.39 VS2022 17.9.x
     ndk          = 'r23c';
     xcode        = '13.0.0+'; # range
-    # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang 16.0.0 or newer.");
-    llvm         = '16.0.6+'; # clang-cl msvc14.37 require 16.0.0+
+    # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang xx.x.x or newer.");
+    # clang-cl msvc14.37 require 16.0.0+
+    # clang-cl msvc14.40 require 17.0.0+
+    llvm         = '17.0.6+'; 
     gcc          = '9.0.0+';
     cmake        = '3.23.0+';
     ninja        = '1.10.0+';
@@ -1660,33 +1662,6 @@ if (!$setupOnly) {
 
         # determine generator, build_dir, inst_dir for non gradlew projects
         if (!$is_gradlew) {
-            if (!$cmake_generator -and !$TARGET_OS.StartsWith('win')) {
-                $cmake_generator = $cmake_generators[$TARGET_OS]
-                if ($null -eq $cmake_generator) {
-                    $cmake_generator = if (!$IsWin) { 'Unix Makefiles' } else { 'Ninja' }
-                }
-            }
-
-            if ($cmake_generator) {
-                $using_ninja = $cmake_generator.StartsWith('Ninja')
-
-                if (!$is_wasm) {
-                    $CONFIG_ALL_OPTIONS += '-G', $cmake_generator
-                }
-
-                if ($cmake_generator -eq 'Unix Makefiles' -or $using_ninja) {
-                    $CONFIG_ALL_OPTIONS += "-DCMAKE_BUILD_TYPE=$optimize_flag"
-                }
-
-                if ($using_ninja -and $Global:is_android) {
-                    $CONFIG_ALL_OPTIONS += "-DCMAKE_MAKE_PROGRAM=$ninja_prog"
-                }
-
-                if ($cmake_generator -eq 'Xcode') {
-                    setup_xcode
-                }
-            }
-
             $INST_DIR = $null
             $xopt_presets = 0
             $xprefix_optname = '-DCMAKE_INSTALL_PREFIX='
@@ -1712,12 +1687,48 @@ if (!$setupOnly) {
                     }
                     ++$xopt_presets
                 }
+                elseif ($opt.startsWith('-G')) {
+                    if ($opt.Length -gt 2) {
+                        $cmake_generator = $opt.Substring(2).Trim()
+                    }
+                    elseif (++$opti -lt $xopts.Count) {
+                        $cmake_generator = $xopts[$opti]
+                    }
+                    ++$xopt_presets
+                }
                 elseif ($opt.StartsWith($xprefix_optname)) {
                     ++$xopt_presets
                     $INST_DIR = $opt.SubString($xprefix_optname.Length)
                 }
                 else {
                     $evaluated_xopts += $opt
+                }
+            }
+
+            if (!$cmake_generator -and !$TARGET_OS.StartsWith('win')) {
+                $cmake_generator = $cmake_generators[$TARGET_OS]
+                if ($null -eq $cmake_generator) {
+                    $cmake_generator = if (!$IsWin) { 'Unix Makefiles' } else { 'Ninja' }
+                }
+            }
+
+            if ($cmake_generator) {
+                $using_ninja = $cmake_generator.StartsWith('Ninja')
+
+                if (!$is_wasm) {
+                    $CONFIG_ALL_OPTIONS += '-G', $cmake_generator
+                }
+
+                if ($cmake_generator -eq 'Unix Makefiles' -or $using_ninja) {
+                    $CONFIG_ALL_OPTIONS += "-DCMAKE_BUILD_TYPE=$optimize_flag"
+                }
+
+                if ($using_ninja -and $Global:is_android) {
+                    $CONFIG_ALL_OPTIONS += "-DCMAKE_MAKE_PROGRAM=$ninja_prog"
+                }
+
+                if ($cmake_generator -eq 'Xcode') {
+                    setup_xcode
                 }
             }
 

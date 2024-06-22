@@ -104,7 +104,7 @@ set(_ax_compile_options)
 
 if (FUZZ_MSVC)
     list(APPEND _ax_compile_options /GF)
-    set(CMAKE_CXX_FLAGS "/Zc:char8_t ${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "/Zc:char8_t- ${CMAKE_CXX_FLAGS}")
 else() # others
     set(CMAKE_CXX_FLAGS "-fno-char8_t ${CMAKE_CXX_FLAGS}")
 endif()
@@ -196,6 +196,9 @@ if(EMSCRIPTEN)
         list(APPEND _ax_compile_options -pthread)
         add_link_options(-pthread -sPTHREAD_POOL_SIZE=${_AX_WASM_THREADS_INT})
     endif()
+
+    set(AX_WASM_INITIAL_MEMORY "1024MB" CACHE STRING "")
+    add_link_options(-sINITIAL_MEMORY=${AX_WASM_INITIAL_MEMORY})
 
     # Tell emcc build port libs in cache with compiler flag `-pthread` xxx.c.o
     # must via CMAKE_C_FLAGS and CMAKE_CXX_FLAGS?

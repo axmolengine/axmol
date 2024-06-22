@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,22 +25,23 @@
  ****************************************************************************/
 
 #if !defined(__EMSCRIPTEN__)
-#include "network/Downloader-curl.h"
+#    include "network/Downloader-curl.h"
 
-#include <cinttypes>
-#include <set>
+#    include <cinttypes>
+#    include <set>
 
-#include <curl/curl.h>
-#include <thread>
-#include "base/Utils.h"
-#include "base/UTF8.h"
-#include "base/Director.h"
-#include "base/Scheduler.h"
-#include "platform/FileUtils.h"
-#include "network/Downloader.h"
-#include "platform/FileStream.h"
-#include "openssl/md5.h"
-#include "yasio/xxsocket.hpp"
+#    include <curl/curl.h>
+#    include <thread>
+#    include "base/Utils.h"
+#    include "base/UTF8.h"
+#    include "base/Director.h"
+#    include "base/Scheduler.h"
+#    include "platform/FileUtils.h"
+#    include "network/Downloader.h"
+#    include "platform/FileStream.h"
+#    include "openssl/md5.h"
+#    include "yasio/xxsocket.hpp"
+#    include "yasio/thread_name.hpp"
 
 // **NOTE**
 // In the file:
@@ -51,7 +52,7 @@
 //   https://curl.se/libcurl/c/curl_easy_getinfo.html
 //   https://curl.se/libcurl/c/curl_easy_setopt.html
 
-#define AX_CURL_POLL_TIMEOUT_MS 50  // wait until DNS query done
+#    define AX_CURL_POLL_TIMEOUT_MS 1000  // wait until DNS query done
 
 enum
 {
@@ -169,19 +170,21 @@ public:
                 _errDescription.append(_tempFileName);
                 break;
             }
+            _totalBytesReceived = _transferOffset = std::max<int64_t>(_fs->size(), 0);
 
             // init md5 state
-            _checksumFileName = _tempFileName + ".chksum";
+            _checksumFileName = _tempFileName + ".digest";
 
             _fsMd5 = FileUtils::getInstance()->openFileStream(_checksumFileName, IFileStream::Mode::OVERLAPPED);
-            if(!_fsMd5) {
+            if (!_fsMd5)
+            {
                 _errCode         = DownloadTask::ERROR_OPEN_FILE_FAILED;
                 _errCodeInternal = 0;
                 _errDescription  = "Can't open checksum file:";
                 _errDescription.append(_checksumFileName);
                 break;
             }
-            
+
             _fsMd5->seek(0, SEEK_END);
             if (_fsMd5->tell() != sizeof(_md5State))
             {
@@ -207,7 +210,8 @@ public:
             _cancelled = true;
             if (this->_sockfd != -1)
             {
-                if(::shutdown(this->_sockfd, SD_BOTH) == -1) // may cause curl CURLE_SEND_ERROR(55) or CURLE_RECV_ERROR(56)
+                // may cause curl CURLE_SEND_ERROR(55) or CURLE_RECV_ERROR(56)
+                if (::shutdown(this->_sockfd, SD_BOTH) == -1)
                     ::closesocket(this->_sockfd);
                 this->_sockfd = -1;
             }
@@ -229,7 +233,7 @@ public:
     /*
     retval: 0. don't check, 1. check succeed, 2. check failed
     */
-    int checkFileMd5(std::string_view requiredsum, std::string* outsum = nullptr)
+    int verifyFileIntegrity(std::string_view requiredsum, std::string* outsum = nullptr)
     {
         int status = 0;
         if (!requiredsum.empty())
@@ -244,12 +248,6 @@ public:
                 *outsum = std::move(checksum);
         }
         return status;
-    }
-
-    void initProc()
-    {
-        std::lock_guard<std::recursive_mutex> lock(_mutex);
-        _initInternal();
     }
 
     void setErrorProc(int code, int codeInternal, const char* desc)
@@ -269,7 +267,7 @@ public:
 
         if (_fs)
         {
-            ret = _fs->write(buffer, static_cast<unsigned int>(bytes_transferred));  // fwrite(buffer, size, count, _fp);
+            ret = _fs->write(buffer, static_cast<unsigned int>(bytes_transferred));
         }
         else
         {
@@ -308,7 +306,6 @@ private:
 
     // header info
     bool _acceptRanges;
-    bool _headerAchieved;
     int64_t _totalBytesExpected;
 
     double _speed;
@@ -316,11 +313,10 @@ private:
     curl_socket_t _sockfd = -1;  // store the sockfd to support cancel download manually
     bool _cancelled       = false;
 
-    std::string _header;  // temp buffer for receive header string, only used in thread proc
-
     curl_slist* _requestHeaders;
 
     // progress
+    int64_t _transferOffset;
     int64_t _bytesReceived;
     int64_t _totalBytesReceived;
 
@@ -342,17 +338,13 @@ private:
 
     void _initInternal()
     {
-        _acceptRanges       = (false);
-        _headerAchieved     = (false);
         _bytesReceived      = (0);
         _totalBytesReceived = (0);
-        _totalBytesExpected = (0);
+        _totalBytesExpected = (-1);  // some server may not replay data size, so set it to -1
         _speed              = 0;
         _curl               = nullptr;
         _errCode            = (DownloadTask::ERROR_NO_ERROR);
         _errCodeInternal    = (CURLE_OK);
-        _header.resize(0);
-        _header.reserve(384);  // pre alloc header string buffer
     }
 };
 int DownloadTaskCURL::_sSerialId;
@@ -376,7 +368,7 @@ public:
 
     void addTask(std::shared_ptr<DownloadTask> task, DownloadTaskCURL* coTask)
     {
-        int status = coTask->checkFileMd5(task->checksum);
+        int status = coTask->verifyFileIntegrity(task->checksum);
 
         if (status & kCheckSumStateSucceed || DownloadTask::ERROR_NO_ERROR != coTask->_errCode)
         {
@@ -451,41 +443,34 @@ public:
     }
 
 private:
-    static size_t _outputHeaderCallbackProc(void* buffer, size_t size, size_t count, void* userdata)
-    {
-        int strLen = int(size * count);
-        AXLOGD("    _outputHeaderCallbackProc: {} {}", strLen, buffer);
-        DownloadTaskCURL& coTask = *((DownloadTaskCURL*)(userdata));
-        coTask._header.append((const char*)buffer, strLen);
-        return strLen;
-    }
-
-    static size_t _outputDataCallbackProc(void* buffer, size_t size, size_t count, void* userdata)
+    static size_t _outputDataCallbackProc(void* buffer, size_t size, size_t count, DownloadTaskCURL* coTask)
     {
         // AXLOGD("    _outputDataCallbackProc: size({}), count({})", size, count);
-        DownloadTaskCURL* coTask = (DownloadTaskCURL*)userdata;
-
         // If your callback function returns CURL_WRITEFUNC_PAUSE it will cause this transfer to become paused.
         return coTask->writeDataProc((unsigned char*)buffer, size, count);
     }
 
-    static int _progressCallbackProc(void* ptr,
-                                     double totalToDownload,
-                                     double nowDownloaded,
-                                     double totalToUpLoad,
-                                     double nowUpLoaded)
+    static int _progressCallbackProc(DownloadTask* task,
+                                     curl_off_t dltotal,
+                                     curl_off_t dlnow,
+                                     curl_off_t /*ultotal*/,
+                                     curl_off_t /*ulnow*/)
     {
-        auto task = (DownloadTask*)ptr;
-        if (!task || !task->background)
-            return 0;
-        auto& coTask = task->_coTask;
-        if (coTask)
+        if (!task)
+            return -1;
+        auto coTask = static_cast<DownloadTaskCURL*>(task->_coTask.get());
+        if (!coTask)
+            return -1;
+        if (coTask->_cancelled)
+            return 1;
+        if (coTask->_totalBytesExpected < 0 && dltotal > 0)
+            coTask->_totalBytesExpected = dltotal + coTask->_transferOffset;
+        if (dlnow > 0 && task->background)
         {
-            auto& downloaderImpl = static_cast<DownloadTaskCURL*>(coTask.get())->owner;
+            auto& downloaderImpl = coTask->owner;
             downloaderImpl._updateTaskProgressInfo(*task);
             downloaderImpl.onTaskProgress(*task, downloaderImpl._transferDataToBuffer);
         }
-
         return 0;
     }
 
@@ -497,7 +482,7 @@ private:
     // this function designed call in work thread
     // the curl handle destroyed in _threadProc
     // handle inited for get header
-    CURLcode _initCurlHandleProc(CURL* handle, std::shared_ptr<DownloadTask>& task, bool forContent = false)
+    CURLcode _initCurlHandleProc(CURL* handle, std::shared_ptr<DownloadTask>& task)
     {
         DownloadTaskCURL* coTask = static_cast<DownloadTaskCURL*>(task->_coTask.get());
 
@@ -508,55 +493,31 @@ private:
         // set url
         curl_easy_setopt(handle, CURLOPT_URL, internalURL.c_str());
 
+        // set xferinfo progress func
+        curl_easy_setopt(handle, CURLOPT_NOPROGRESS, 0L);
+        curl_easy_setopt(handle, CURLOPT_XFERINFOFUNCTION, _progressCallbackProc);
+        curl_easy_setopt(handle, CURLOPT_XFERINFODATA, task.get());
+
         // set write func
-        if (forContent)
-        {
-            curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, _outputDataCallbackProc);
-        }
-        else
-        {
-            curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, _outputHeaderCallbackProc);
-        }
+        curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, _outputDataCallbackProc);
         curl_easy_setopt(handle, CURLOPT_WRITEDATA, coTask);
 
-        if (task->background)
-        {
-            curl_easy_setopt(handle, CURLOPT_NOPROGRESS, 0L);
-            curl_easy_setopt(handle, CURLOPT_PROGRESSDATA, task.get());
-            curl_easy_setopt(handle, CURLOPT_PROGRESSFUNCTION, _progressCallbackProc);
-        }
-        else
-        {
-            curl_easy_setopt(handle, CURLOPT_NOPROGRESS, 1L);
-        }
         curl_easy_setopt(handle, CURLOPT_FAILONERROR, 1L);
         curl_easy_setopt(handle, CURLOPT_NOSIGNAL, 1L);
 
         curl_easy_setopt(handle, CURLOPT_OPENSOCKETFUNCTION, _openSocketCallback);
         curl_easy_setopt(handle, CURLOPT_OPENSOCKETDATA, coTask);
+        curl_easy_setopt(handle, CURLOPT_HEADER, 0L);
 
-        if (forContent)
+        /** if server acceptRanges and local has part of file, we continue to download **/
+        if (coTask->_totalBytesReceived > 0)
         {
-            /** if server acceptRanges and local has part of file, we continue to download **/
-            if (coTask->_acceptRanges && coTask->_totalBytesReceived > 0)
-            {
-                char buf[128];
-                snprintf(buf, sizeof(buf), "%" PRId64 "-", coTask->_totalBytesReceived);
-                curl_easy_setopt(handle, CURLOPT_RANGE, buf);
-                curl_easy_setopt(handle, CURLOPT_RESUME_FROM_LARGE, (curl_off_t)coTask->_totalBytesReceived);
-            }
-        }
-        else
-        {
-            // get header options
-            curl_easy_setopt(handle, CURLOPT_HEADER, 1L);
-            curl_easy_setopt(handle, CURLOPT_NOBODY, 1L);
+            char buf[128];
+            snprintf(buf, sizeof(buf), "%" PRId64 "-", coTask->_totalBytesReceived);
+            curl_easy_setopt(handle, CURLOPT_RANGE, buf);
+            curl_easy_setopt(handle, CURLOPT_RESUME_FROM_LARGE, (curl_off_t)coTask->_totalBytesReceived);
         }
 
-        //            if (!sProxy.empty())
-        //            {
-        //                curl_easy_setopt(curl, CURLOPT_PROXY, sProxy.c_str());
-        //            }
         if (hints.timeoutInSeconds)
         {
             curl_easy_setopt(handle, CURLOPT_CONNECTTIMEOUT, hints.timeoutInSeconds);
@@ -564,13 +525,14 @@ private:
 
         curl_easy_setopt(handle, CURLOPT_LOW_SPEED_LIMIT, 1L);
         curl_easy_setopt(handle, CURLOPT_LOW_SPEED_TIME, 10L);
-        
-        if(task->cacertPath.empty())
+
+        if (task->cacertPath.empty())
         {
             curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0L);
             curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0L);
         }
-        else {
+        else
+        {
             curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 1L);
             curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 2L);
             curl_easy_setopt(handle, CURLOPT_CAINFO, task->cacertPath.c_str());
@@ -584,68 +546,10 @@ private:
         return CURLE_OK;
     }
 
-    // get header info, if success set handle to content download state
-    bool _getHeaderInfoProc(CURL* handle, DownloadTaskCURL* coTask)
-    {
-        CURLcode rc = CURLE_OK;
-        do
-        {
-            long httpResponseCode = 0;
-            rc                    = curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &httpResponseCode);
-            if (CURLE_OK != rc)
-            {
-                break;
-            }
-            // Comment follow code to support ftp
-            /*if (200 != httpResponseCode)
-            {
-                char buf[256] = {0};
-                sprintf(buf
-                        , "When request url(%s) header info, return unexcept http response code(%ld)"
-                        , wrapper.first->requestURL.c_str()
-                        , httpResponseCode);
-                coTask.setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, CURLE_OK, buf);
-            }*/
-
-            //                curl_easy_getinfo(handle, CURLINFO_EFFECTIVE_URL, &effectiveUrl);
-            //                curl_easy_getinfo(handle, CURLINFO_CONTENT_TYPE, &contentType);
-            double contentLen = 0;
-            rc                = curl_easy_getinfo(handle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &contentLen);
-            if (CURLE_OK != rc)
-            {
-                break;
-            }
-
-            // std::transform(coTask._header.begin(), coTask._header.end(), coTask._header.begin(), ::toupper);
-            bool acceptRanges = true;  // (string::npos != coTask._header.find("ACCEPT-RANGES")) ? true : false;
-
-            // get current file size
-            int64_t fileSize = 0;
-            if (acceptRanges && coTask->_tempFileName.length())
-            {
-                fileSize = FileUtils::getInstance()->getFileSize(coTask->_tempFileName);
-            }
-
-            // set header info to coTask
-            std::lock_guard<std::recursive_mutex> lock(coTask->_mutex);
-            coTask->_totalBytesExpected = static_cast<int64_t>(contentLen);
-            coTask->_acceptRanges       = acceptRanges;
-            if (acceptRanges && fileSize > 0)
-            {
-                coTask->_totalBytesReceived = fileSize;
-            }
-            coTask->_headerAchieved = true;
-        } while (0);
-
-        if (CURLE_OK != rc)
-        {
-            coTask->setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, rc, curl_easy_strerror(rc));
-        }
-        return coTask->_headerAchieved;
-    }
-
     void _threadProc()
     {
+        yasio::set_thread_name("axmol-dl");
+
         AXLOGD("++++DownloaderCURL::Impl::_threadProc begin {}", fmt::ptr(this));
         // the holder prevent DownloaderCURL::Impl class instance be destruct in main thread
         auto holder                        = this->shared_from_this();
@@ -673,47 +577,8 @@ private:
 
             if (runningHandles)
             {
-                // get timeout setting from multi-handle
-                long timeoutMS = -1;
-                curl_multi_timeout(curlmHandle, &timeoutMS);
-
-                if (timeoutMS < 0)
-                {
-                    timeoutMS = 1000;
-                }
-
-                /* get file descriptors from the transfers */
-                fd_set fdread;
-                fd_set fdwrite;
-                fd_set fdexcep;
-                int maxfd = -1;
-
-                FD_ZERO(&fdread);
-                FD_ZERO(&fdwrite);
-                FD_ZERO(&fdexcep);
-
-                mcode = curl_multi_fdset(curlmHandle, &fdread, &fdwrite, &fdexcep, &maxfd);
-                if (CURLM_OK != mcode)
-                {
-                    break;
-                }
-
-                // do wait action
-                if (maxfd == -1)
-                {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(AX_CURL_POLL_TIMEOUT_MS));
-                    rc = 0;
-                }
-                else
-                {
-                    struct timeval timeout;
-
-                    timeout.tv_sec  = timeoutMS / 1000;
-                    timeout.tv_usec = (timeoutMS % 1000) * 1000;
-
-                    rc = select(maxfd + 1, &fdread, &fdwrite, &fdexcep, &timeout);
-                }
-
+                int nret = 0;
+                rc       = curl_multi_poll(curlmHandle, nullptr, 0, AX_CURL_POLL_TIMEOUT_MS, &nret);
                 if (rc < 0)
                 {
                     AXLOGD("    _threadProc: select return unexpect code: {}", rc);
@@ -757,20 +622,6 @@ private:
                                 break;
                             }
 
-                            // if the task is content download task, cleanup the handle
-                            if (coTask->_headerAchieved)
-                            {
-                                break;
-                            }
-
-                            // the task is get header task
-                            // first, we get info from response
-                            if (!_getHeaderInfoProc(curlHandle, coTask))
-                            {
-                                // the error info has been set in _getHeaderInfoProc
-                                break;
-                            }
-
                             // after get header info success
                             // wrapper.second->_totalBytesReceived inited by local file size
                             // if the local file size equal with the content size from header, the file has
@@ -782,31 +633,11 @@ private:
                                 // break to move this task to finish queue
                                 break;
                             }
-                            // reinit curl handle for download content
-                            curl_easy_reset(curlHandle);
-                            auto error = _initCurlHandleProc(curlHandle, task, true);
-                            if (error != CURLE_OK)
-                            {
-                                coTask->setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, error,
-                                                     curl_easy_strerror(error));
-                                break;
-                            }
-                            mcode = curl_multi_add_handle(curlmHandle, curlHandle);
-                            if (CURLM_OK != mcode)
-                            {
-                                coTask->setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, mcode,
-                                                     curl_multi_strerror(mcode));
-                                break;
-                            }
-                            reinited = true;
                         } while (0);
 
-                        if (reinited)
-                        {
-                            continue;
-                        }
                         curl_easy_cleanup(curlHandle);
-                        AXLOGD("    _threadProc task clean cur handle :{} with errCode:{}", fmt::ptr(curlHandle), static_cast<int>(errCode));
+                        AXLOGD("    _threadProc task clean cur handle :{} with errCode:{}", fmt::ptr(curlHandle),
+                               static_cast<int>(errCode));
 
                         // remove from coTaskMap
                         coTaskMap.erase(curlHandle);
@@ -853,8 +684,6 @@ private:
                 }
 
                 auto coTask = static_cast<DownloadTaskCURL*>(task->_coTask.get());
-                coTask->initProc();
-
                 // create curl handle from task and add into curl multi handle
                 CURL* curlHandle = curl_easy_init();
 
@@ -957,8 +786,7 @@ void DownloaderCURL::startTask(std::shared_ptr<DownloadTask>& task)
     }
     else
     {
-        AXLOGE("DownloaderCURL createTask fail, error: {}, detail: {}", coTask->_errCode,
-                     coTask->_errDescription);
+        AXLOGE("DownloaderCURL createTask fail, error: {}, detail: {}", coTask->_errCode, coTask->_errDescription);
         task.reset();
     }
 }
@@ -1101,7 +929,7 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task, int checkState)
 
             // Try check sum with md5 digest
             std::string realMd5;
-            if (coTask.checkFileMd5(task.checksum, &realMd5) & kCheckSumStateFailed)
+            if (coTask.verifyFileIntegrity(task.checksum, &realMd5) & kCheckSumStateFailed)
             {
                 coTask._errCode         = DownloadTask::ERROR_CHECK_SUM_FAILED;
                 coTask._errCodeInternal = 0;

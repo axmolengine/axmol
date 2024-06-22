@@ -2,7 +2,7 @@
 /****************************************************************************
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmolengine.github.io/
+ https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -88,7 +88,7 @@ AX_API LogItem& preprocessLog(LogItem&& item)
             switch (item.level_)
             {
             case LogLevel::Trace:
-                levelName = "T/"sv;
+                levelName = "V/"sv;
                 break;
             case LogLevel::Debug:
                 levelName = "D/"sv;
@@ -112,7 +112,7 @@ AX_API LogItem& preprocessLog(LogItem&& item)
                 constexpr auto colorCodeOfLevel = [](LogLevel level) -> std::string_view {
                     switch (level)
                     {
-                    case LogLevel::Trace:
+                    case LogLevel::Verbose:
                         return "\x1b[37m"sv;
                     case LogLevel::Debug:
                         return "\x1b[36m"sv;
@@ -160,6 +160,12 @@ AX_API LogItem& preprocessLog(LogItem&& item)
 }
 
 AX_DLL void outputLog(LogItem& item, const char* tag)
+{
+    if (!s_logOutput) writeLog(item, tag);
+    else s_logOutput->write(item, tag);
+}
+
+AX_DLL void writeLog(LogItem& item, const char* tag)
 {
 #if defined(__ANDROID__)
     int prio;
@@ -222,8 +228,6 @@ AX_DLL void outputLog(LogItem& item, const char* tag)
     ::write(outfd, item.qualified_message_.c_str(), item.qualified_message_.size());
 #    endif
 #endif
-    if (s_logOutput)
-        s_logOutput->write(item.message(), item.level_);
 }
 
 AX_API void print(const char* format, ...)
