@@ -45,7 +45,7 @@
 
 NS_AX_EXT_BEGIN
 
-#define DRAWNODE_DRAW_LINE_POINT
+//#define AX_ENABLE_DRAWNODE_DRAW_LINE_POINT
 
 static const int DEFAULT_LINEWIDTH = 2;
 
@@ -106,7 +106,7 @@ public:
     float _dnLineWidthTmp = _dnLineWidth;
     bool  _dnTransform = false;
 
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     bool _drawOrder = true;
 #endif
 
@@ -601,7 +601,7 @@ public:
 
 protected:
     void ensureCapacityTriangle(int count);
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     void ensureCapacityPoint(int count);
     void ensureCapacityLine(int count);
 #endif
@@ -624,7 +624,7 @@ protected:
     ax::CustomCommand _customCommandTriangle;
     bool _dirtyTriangle = false;
 
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     int _bufferCapacityPoint = 0;
     int _bufferCountPoint = 0;
     ax::V2F_C4B_T2F* _bufferPoint = nullptr;

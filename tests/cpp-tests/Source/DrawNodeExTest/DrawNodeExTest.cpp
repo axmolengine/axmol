@@ -33,7 +33,7 @@
 USING_NS_AX;
 USING_NS_AX_EXT;
 
-#define DRAWNODE_DRAW_LINE_POINT
+//#define DRAWNODE_DRAW_LINE_POINT
 
 using namespace std;
 
