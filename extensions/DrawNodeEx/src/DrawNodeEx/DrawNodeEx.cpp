@@ -149,16 +149,16 @@ DrawNodeEx::~DrawNodeEx()
 {
     AX_SAFE_FREE(_bufferTriangle);
 
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     AX_SAFE_FREE(_bufferPoint);
     AX_SAFE_FREE(_bufferLine);
-#endif
+//#endif
 
     freeShaderInternal(_customCommandTriangle);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     freeShaderInternal(_customCommandPoint);
     freeShaderInternal(_customCommandLine);
-#endif
+//#endif
 }
 
 DrawNodeEx* DrawNodeEx::create(float defaultLineWidth)
@@ -191,7 +191,7 @@ void DrawNodeEx::ensureCapacityTriangle(int count)
     }
 }
 
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
 void DrawNodeEx::ensureCapacityPoint(int count)
 {
     AXASSERT(count >= 0, "capacity must be >= 0");
@@ -221,7 +221,7 @@ void DrawNodeEx::ensureCapacityLine(int count)
         _customCommandLine.updateVertexBuffer(_bufferLine, _bufferCapacityLine * sizeof(V2F_C4B_T2F));
     }
 }
-#endif
+//#endif
 
 bool DrawNodeEx::init()
 {
@@ -230,12 +230,12 @@ bool DrawNodeEx::init()
     ensureCapacityTriangle(512);
     _dirtyTriangle = true;
 
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     ensureCapacityPoint(64);
     ensureCapacityLine(256);
     _dirtyLine = true;
     _dirtyPoint = true;
-#endif
+//#endif
 
     return true;
 }
@@ -244,13 +244,13 @@ void DrawNodeEx::updateShader()
 {
     updateShaderInternal(_customCommandTriangle, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::TRIANGLE);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     updateShaderInternal(_customCommandPoint, backend::ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::POINT);
 
     updateShaderInternal(_customCommandLine, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::LINE);
-#endif
+//#endif
 }
 
 void DrawNodeEx::updateShaderInternal(CustomCommand& cmd,
@@ -324,7 +324,7 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         _customCommandTriangle.init(_globalZOrder);
         renderer->addCommand(&_customCommandTriangle);
     }
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     if (_bufferCountPoint)
     {
         updateBlendState(_customCommandPoint);
@@ -340,7 +340,7 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         _customCommandLine.init(_globalZOrder);
         renderer->addCommand(&_customCommandLine);
     }
-#endif
+//#endif
 }
 
 void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Color4B& color)
@@ -415,16 +415,16 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
     }
     else
     {
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         if (_drawOrder == true)
         {
-#endif
+//#endif
             drawSegment(origin, destination, thickness / 3, color);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
             return;
         }
-#endif
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#endif
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         Vec2 line[2] = { origin, destination };
         Vec2* _vertices = transform(line, 2);
 
@@ -439,7 +439,7 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
         _bufferCountLine += 2;
         _dirtyLine = true;
         _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
-#endif
+//#endif
     }
 }
 
@@ -476,16 +476,16 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
     }
     else
     {
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         if (_drawOrder == true)
         {
-#endif
+//#endif
             _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness / 3, color, closePolygon);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
             return;
         }
-#endif
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#endif
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         Vec2* _vertices = transform(poli, numberOfPoints);
 
         unsigned int vertex_count;
@@ -519,7 +519,7 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
             vertex_count * sizeof(V2F_C4B_T2F));
         _bufferCountLine += vertex_count;
         _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
-#endif
+//#endif
     }
 }
 
@@ -1103,12 +1103,12 @@ void DrawNodeEx::clear()
 {
     _bufferCountTriangle = 0;
     _dirtyTriangle = true;
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     _bufferCountLine = 0;
     _dirtyLine = true;
     _bufferCountPoint = 0;
     _dirtyPoint = true;
-#endif
+//#endif
     _lineWidth = _defaultLineWidth;
 }
 
@@ -1323,16 +1323,16 @@ void DrawNodeEx::_drawPoly(const Vec2* poli,
     }
     else
     {
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         if (_drawOrder == true)
         {
-#endif
+//#endif
             _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness / 3, color, false);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
             return;
         }
-#endif
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+//#endif
+//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         Vec2* _vertices = transform(poli, numberOfPoints);
 
         unsigned int vertex_count;
@@ -1366,7 +1366,7 @@ void DrawNodeEx::_drawPoly(const Vec2* poli,
             vertex_count * sizeof(V2F_C4B_T2F));
         _bufferCountLine += vertex_count;
         _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
-#endif
+//#endif
     }
 }
 NS_AX_EXT_END
