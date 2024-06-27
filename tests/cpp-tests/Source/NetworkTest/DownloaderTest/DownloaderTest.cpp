@@ -37,7 +37,7 @@ USING_NS_AX;
 static const char* sURLList[] = {
     "https://www.cocos2d-x.org/attachments/802/cocos2dx_landscape.png", "https://cocos2d-x.org/images/logo.png",
     "https://www.cocos2d-x.org/attachments/1503/no_exist.txt",  // try to download no exist file
-    "https://ash-speed.hetzner.com/1GB.bin"
+    "https://github.com/axmolengine/axmol/releases/download/v2.1.3/axmol-2.1.3.zip"
 };
 const static int sListSize              = (sizeof(sURLList) / sizeof(sURLList[0]));
 static const char* sNameList[sListSize] = {
@@ -208,8 +208,7 @@ struct DownloaderTest : public TestCase
             bar->setVisible(true);
             bar->setEnabled(true);
             auto path = FileUtils::getInstance()->getWritablePath() + "CppTests/DownloaderTest/" + sNameList[3];
-            auto task = this->downloader->createDownloadFileTask(sURLList[3], path, sNameList[3], "5fa2035a209e73f5727a72aafd332916", false);
-            task->progressInfo.totalBytesExpected = 89945032;
+            auto task = this->downloader->createDownloadFileTask(sURLList[3], path, sNameList[3], "1CF78E3F23A2B1A6806D8719A5771D34", false);
         });
         bottomRightView->setName(sNameList[3]);
         bottomRightView->setAnchorPoint(Vec2(0, 1));
