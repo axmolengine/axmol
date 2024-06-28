@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -62,6 +63,8 @@ private:
 
     // the current depth stencil state
     id<MTLDepthStencilState> _mtlDepthStencilState = nil;
+    // static state for disabled depth and stencil
+    id<MTLDepthStencilState> _mtlDepthStencilDisabledState = nil;
 
     tsl::robin_map<uint32_t, id<MTLDepthStencilState>> _mtlStateCache;
 };

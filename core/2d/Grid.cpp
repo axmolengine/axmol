@@ -219,7 +219,7 @@ void GridBase::beforeDraw()
         _oldRenderTarget = renderer->getRenderTarget();
         AX_SAFE_RELEASE(_renderTarget);
         _renderTarget =
-            backend::DriverBase::getInstance()->newRenderTarget(TargetBufferFlags::COLOR, _texture->getBackendTexture());
+            backend::DriverBase::getInstance()->newRenderTarget(_texture->getBackendTexture());
         renderer->setRenderTarget(_renderTarget);
     };
     renderer->addCallbackCommand(beforeDrawCommandFunc);

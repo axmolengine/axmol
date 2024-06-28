@@ -45,7 +45,6 @@ inline TargetBufferFlags getMRTColorFlag(size_t index) noexcept
 }
 
 typedef TargetBufferFlags ClearFlag;
-typedef TargetBufferFlags RenderTargetFlag;
 
 struct SamplerDescriptor
 {
