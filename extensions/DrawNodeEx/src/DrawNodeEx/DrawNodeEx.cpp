@@ -1001,7 +1001,7 @@ void DrawNodeEx::drawPie(const Vec2& center,
         _drawPolygon(vertices, n, Color4B::TRANSPARENT, thickness, borderColor, false);
         break;
     case DrawMode::Semi:
-        _drawPolygon(vertices, n, fillColor, thickness, borderColor, true);
+        _drawPolygon(vertices, n-1, fillColor, thickness, borderColor, true);
         break;
 
     default:
