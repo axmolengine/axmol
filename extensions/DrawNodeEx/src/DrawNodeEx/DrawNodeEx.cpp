@@ -148,16 +148,16 @@ DrawNodeEx::~DrawNodeEx()
 {
     AX_SAFE_FREE(_bufferTriangle);
 
-//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     AX_SAFE_FREE(_bufferPoint);
     AX_SAFE_FREE(_bufferLine);
-//#endif
+#endif
 
     freeShaderInternal(_customCommandTriangle);
-//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     freeShaderInternal(_customCommandPoint);
     freeShaderInternal(_customCommandLine);
-//#endif
+#endif
 }
 
 DrawNodeEx* DrawNodeEx::create(float defaultLineWidth)
@@ -190,7 +190,7 @@ void DrawNodeEx::ensureCapacityTriangle(int count)
     }
 }
 
-//#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
 void DrawNodeEx::ensureCapacityPoint(int count)
 {
     AXASSERT(count >= 0, "capacity must be >= 0");
@@ -220,7 +220,7 @@ void DrawNodeEx::ensureCapacityLine(int count)
         _customCommandLine.updateVertexBuffer(_bufferLine, _bufferCapacityLine * sizeof(V2F_C4B_T2F));
     }
 }
-//#endif
+#endif
 
 bool DrawNodeEx::init()
 {
@@ -940,7 +940,7 @@ void DrawNodeEx::drawPie(const Vec2& center,
 #define DEGREES 360
     bool _circle = false;
 
-    // not a real line!
+    // Not a real line!
     if (startAngle == endAngle)
         return;
 
@@ -949,7 +949,6 @@ void DrawNodeEx::drawPie(const Vec2& center,
     {
         _circle = true;
     }
-
 
     const float coef = 2.0f * (float)M_PI / DEGREES;
     Vec2* vertices = _abuf.get<Vec2>(DEGREES + 2);
@@ -960,10 +959,7 @@ void DrawNodeEx::drawPie(const Vec2& center,
 
     if (startAngle > endAngle)
     {
-      //  std::swap(endAngle, startAngle);
-        int tmp = endAngle;
-        endAngle = startAngle;
-        startAngle = tmp;
+        std::swap(endAngle, startAngle);
     }
 
     for (int i = 0; i <= DEGREES; i++)
@@ -995,7 +991,7 @@ void DrawNodeEx::drawPie(const Vec2& center,
         vertices[n++] = center;
         if (_circle)
         {
-            this->drawCircle(center, radius, 0, 36, false, scaleX, scaleY, fillColor, thickness);
+            this->drawCircle(center, radius, 0, 36, false, scaleX, scaleY, borderColor, thickness);
             break;
         }
         _drawPolygon(vertices, n, Color4B::TRANSPARENT, thickness, borderColor, true);
