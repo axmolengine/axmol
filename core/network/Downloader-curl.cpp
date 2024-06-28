@@ -250,12 +250,12 @@ public:
         return status;
     }
 
-    void setErrorProc(int code, int codeInternal, const char* desc)
+    void setErrorDesc(int code, int codeInternal, std::string&& desc)
     {
         std::lock_guard<std::recursive_mutex> lock(_mutex);
         _errCode         = code;
         _errCodeInternal = codeInternal;
-        _errDescription  = desc;
+        _errDescription  = std::move(desc);
     }
 
     size_t writeDataProc(unsigned char* buffer, size_t size, size_t count)
@@ -617,8 +617,14 @@ private:
                             auto coTask = static_cast<DownloadTaskCURL*>(task->_coTask.get());
                             if (CURLE_OK != errCode)
                             {
-                                coTask->setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, errCode,
-                                                     curl_easy_strerror(errCode));
+                                std::string errorMsg = curl_easy_strerror(errCode);
+                                if (errCode == CURLE_HTTP_RETURNED_ERROR) {
+                                    long responeCode = 0;
+                                    curl_easy_getinfo(curlHandle, CURLINFO_RESPONSE_CODE, &responeCode);
+                                    fmt::format_to(std::back_inserter(errorMsg), FMT_COMPILE(": {}"), responeCode);
+                                }
+                                
+                                coTask->setErrorDesc(DownloadTask::ERROR_IMPL_INTERNAL, errCode, std::move(errorMsg));
                                 break;
                             }
 
@@ -689,7 +695,7 @@ private:
 
                 if (nullptr == curlHandle)
                 {
-                    coTask->setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, 0, "Alloc curl handle failed.");
+                    coTask->setErrorDesc(DownloadTask::ERROR_IMPL_INTERNAL, 0, "Alloc curl handle failed.");
                     _owner->_onDownloadFinished(*task);
                     continue;
                 }
@@ -701,7 +707,7 @@ private:
                 mcode = curl_multi_add_handle(curlmHandle, curlHandle);
                 if (CURLM_OK != mcode)
                 {
-                    coTask->setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, mcode, curl_multi_strerror(mcode));
+                    coTask->setErrorDesc(DownloadTask::ERROR_IMPL_INTERNAL, mcode, curl_multi_strerror(mcode));
                     _owner->_onDownloadFinished(*task);
                     continue;
                 }
@@ -903,7 +909,7 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task, int checkState)
                 break;
             }
 
-            if (coTask._fileName.empty() || DownloadTask::ERROR_NO_ERROR != coTask._errCode)
+            if (coTask._fileName.empty() || coTask._errCode != DownloadTask::ERROR_NO_ERROR)
             {
                 if (coTask._errCodeInternal == CURLE_RANGE_ERROR)
                 {

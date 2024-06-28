@@ -27,12 +27,15 @@
 #include "network/Downloader.h"
 
 #if EMSCRIPTEN
-#include "network/Downloader-wasm.h"
-#define DownloaderImpl  DownloaderEmscripten
+#    include "network/Downloader-wasm.h"
+#    define DownloaderImpl DownloaderEmscripten
 #else
-#include "network/Downloader-curl.h"
-#define DownloaderImpl DownloaderCURL
+#    include "network/Downloader-curl.h"
+#    define DownloaderImpl DownloaderCURL
 #endif
+
+#include <ctype.h>
+#include <algorithm>
 
 NS_AX_BEGIN
 
@@ -63,7 +66,9 @@ DownloadTask::DownloadTask(std::string_view srcUrl,
     this->checksum    = checksum;
     this->identifier  = identifier;
     this->background  = background;
-    this->cacertPath = cacertPath;
+    this->cacertPath  = cacertPath;
+    if (!this->checksum.empty())
+        std::transform(this->checksum.begin(), this->checksum.end(), this->checksum.begin(), ::tolower);
 }
 
 DownloadTask::~DownloadTask()
