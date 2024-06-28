@@ -33,8 +33,6 @@
 USING_NS_AX;
 USING_NS_AX_EXT;
 
-#define DRAWNODE_DRAW_LINE_POINT
-
 using namespace std;
 
 const int drawMethodsCounter = 19;
@@ -57,7 +55,6 @@ std::string drawMethods[drawMethodsCounter] = { "drawLine",
                                                 "drawSolidRect",
                                                 "drawStar",
                                                 "drawSolidStar", };
-
 
 
 
@@ -104,7 +101,7 @@ DrawNodeExTests::DrawNodeExTests()
     ADD_TEST_CASE(DrawNodeDrawInWrongOrder_Issue1888);
 
     ADD_TEST_CASE(DrawNodeCocos2dxTest1);
-    ADD_TEST_CASE(DrawNodeCocos2dxTest2);
+    ADD_TEST_CASE(DrawNodeAxmolTest2);
     ADD_TEST_CASE(DrawNodeCocos2dxBackwardsAPITest);
     ADD_TEST_CASE(DrawNodeCocos2dxBetterCircleRendering);
     ADD_TEST_CASE(DrawNodeCocos2dxDrawNodePieTest);
@@ -1397,9 +1394,10 @@ void DrawNodeMethodesTest::drawAll()
     {
     case 0:
     {
-        float nodeRotation = draw->getRotation();
-        draw->setRotation(rotation * 3);
-        draw->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        // drawLine
+        //float nodeRotation = draw->getRotation();
+        //draw->setRotation(rotation * 3);
+      //  draw->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
         draw->setScale(0.3);
 
         // draw->setPosition(0.1);
@@ -1408,27 +1406,27 @@ void DrawNodeMethodesTest::drawAll()
         Vec2 gear3 = { 200.f, 200.f };
         Vec2 gear4 = { s.width - 200, s.height - 200 };
 
-        draw->drawLine(gear2, gear4, Color4F::RED, thickness);  // line
-        draw->setDNCenter(gear1);
-        draw->setDNRotation(rotation + 45);
-        draw->drawStar(Vec2(gear1), 30, 60, 8, Color4F::BLUE, 4.0);
-        draw->setDNRotation(-rotation);
-        draw->setDNCenter(gear2);
-        draw->drawSolidStar(gear2, 30, 60, 8, Color4F::GREEN, Color4F::YELLOW, 4.0);
+        draw->drawLine(gear2, gear4, Color4F::BLUE, thickness);  // line
+        //draw->setDNCenter(gear1);
+        //draw->setDNRotation(rotation + 45);
+        //draw->drawStar(Vec2(gear1), 30, 60, 8, Color4F::BLUE, 4.0);
+        //draw->setDNRotation(-rotation);
+        //draw->setDNCenter(gear2);
+        //draw->drawSolidStar(gear2, 30, 60, 8, Color4F::GREEN, Color4F::YELLOW, 4.0);
 
-        draw->resetDNValues();
+        //draw->resetDNValues();
         draw->drawLine(gear2, gear1, Color4F::RED, thickness);  // line
-        draw->setDNCenter(gear4);
+ /*       draw->setDNCenter(gear4);
         draw->setDNRotation(rotation + 45);
-        draw->drawStar(gear3, 30, 60, 18, Color4F::RED, 1.0);
+        draw->drawStar(gear3, 30, 60, 18, Color4F::RED, 1.0);*/
         draw->drawLine(gear3, gear4, Color4F::YELLOW, thickness);  // line
-        draw->resetDNValues();
-        draw->setDNRotation(rotation - 45);
-        draw->setDNCenter(gear4);
-        draw->drawStar(gear4, 40, 60, 60, Color4F::GREEN, 1.0);
-        draw->resetDNValues();
-        isDirty = true;
-        draw->setRotation(nodeRotation);
+        //draw->resetDNValues();
+        //draw->setDNRotation(rotation - 45);
+        //draw->setDNCenter(gear4);
+        //draw->drawStar(gear4, 40, 60, 60, Color4F::GREEN, 1.0);
+        //draw->resetDNValues();
+  //      isDirty = true;
+ //       draw->setRotation(nodeRotation);
         break;
     }
     case 1:
@@ -1611,21 +1609,21 @@ void DrawNodeMethodesTest::drawAll()
         int yy1 = 0;
         int yy = 50;
         draw->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20,
-            Color4F::GREEN);  //default  DrawNodeEx::Round
+            Color4F::GREEN, DrawNodeEx::Square, DrawNodeEx::Round);  //default  DrawNodeEx::Round
 
-        label1->setPosition(Vec2(410.0f, yy + 55));
-
-
-        yy += 110;
-        draw->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20,
-            Color4F::BLUE, DrawNodeEx::Square);
-        label2->setPosition(Vec2(410.0f, yy));
+   //     label1->setPosition(Vec2(410.0f, yy + 55));
 
 
         yy += 110;
         draw->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20,
-            Color4F::RED, DrawNodeEx::Butt);
-        label3->setPosition(Vec2(410.0f, yy - 55));
+            Color4F::BLUE, DrawNodeEx::Butt, DrawNodeEx::Square);
+   //     label2->setPosition(Vec2(410.0f, yy));
+
+
+        yy += 110;
+        draw->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20,
+            Color4F::RED, DrawNodeEx::Round, DrawNodeEx::Butt);
+     //   label3->setPosition(Vec2(410.0f, yy - 55));
 
         break;
     }
@@ -1886,6 +1884,13 @@ void DrawNodePerformaneTest::update(float dt)
 
     draw->clear();
 
+    label1->setVisible(false);
+    label2->setVisible(false);
+    label3->setVisible(false);
+
+
+
+
     label->setString("Count: (" + Value(count).asString() + ")");
     switch (_currentSeletedItemIndex)
     {
@@ -1938,24 +1943,27 @@ void DrawNodePerformaneTest::update(float dt)
     case 4:
     {
         // Draw segment
+        label1->setVisible(true);
+        label2->setVisible(true);
+        label3->setVisible(true);
 
         int yy1 = 0;
         int yy = 50;
         draw->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20,
-            Color4F::GREEN);  //default  DrawNodeEx::Round
+            Color4F::GREEN, DrawNodeEx::Round, DrawNodeEx::Round); 
 
         label1->setPosition(Vec2(410.0f, yy + 55));
 
 
         yy += 110;
         draw->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20,
-            Color4F::BLUE, DrawNodeEx::Square);
+            Color4F::BLUE, DrawNodeEx::Round, DrawNodeEx::Square);
         label2->setPosition(Vec2(410.0f, yy));
 
 
         yy += 110;
         draw->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20,
-            Color4F::RED, DrawNodeEx::Butt);
+            Color4F::RED, DrawNodeEx::Round, DrawNodeEx::Butt);
         label3->setPosition(Vec2(410.0f, yy - 55));
 
         break;
@@ -2146,8 +2154,8 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
 }
 
 
-// DrawNodeCocos2dxTest2
-DrawNodeCocos2dxTest2::DrawNodeCocos2dxTest2()
+// DrawNodeAxmolTest2
+DrawNodeAxmolTest2::DrawNodeAxmolTest2()
 {
     auto s = Director::getInstance()->getWinSize();
 
@@ -2307,14 +2315,14 @@ DrawNodeCocos2dxTest2::DrawNodeCocos2dxTest2()
     draw1->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2f), FadeOut::create(1.2f), NULL)));
 }
 
-string DrawNodeCocos2dxTest2::title() const
+string DrawNodeAxmolTest2::title() const
 {
-    return "Test DrawNode";
+    return "Axmol DrawNode v2 test";
 }
 
-string DrawNodeCocos2dxTest2::subtitle() const
+string DrawNodeAxmolTest2::subtitle() const
 {
-    return "Testing DrawNode - batched draws. Concave polygons working too!";
+    return "";
 }
 
 //
