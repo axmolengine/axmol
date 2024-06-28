@@ -45,7 +45,8 @@
 
 NS_AX_EXT_BEGIN
 
-#define DRAWNODE_DRAW_LINE_POINT
+// AX_ENABLE_DRAWNODE_DRAW_LINE_POINT an option for future versions of DrawNode (currently: defined)
+#define AX_ENABLE_DRAWNODE_DRAW_LINE_POINT
 
 static const int DEFAULT_LINEWIDTH = 2;
 
@@ -106,7 +107,7 @@ public:
     float _dnLineWidthTmp = _dnLineWidth;
     bool  _dnTransform = false;
 
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     bool _drawOrder = true;
 #endif
 
@@ -503,9 +504,10 @@ public:
     * @param to The segment destination.
     * @param radius The segment radius.
     * @param color The segment color.
-    * @param endType The segment DrawNodeEx::EndType.
+    * @param etStart The segment first DrawNodeEx::EndType.
+    * @param etEnd The segment last DrawNodeEx::EndType.
     */
-    void drawSegment(const ax::Vec2& from, const ax::Vec2& to, float radius, const ax::Color4B& color, DrawNodeEx::EndType endType = DrawNodeEx::EndType::Round);
+    void drawSegment(const ax::Vec2& from, const ax::Vec2& to, float radius, const ax::Color4B& color, DrawNodeEx::EndType etStart = DrawNodeEx::EndType::Round, DrawNodeEx::EndType etEnd = DrawNodeEx::EndType::Round);
 
     /** draw a polygon with a fill color and line color
     * @code
@@ -548,7 +550,6 @@ public:
     * @param color The triangle color.
     * @js NA
     */
-
     void drawTriangle(const ax::Vec2& p1,
         const ax::Vec2& p2,
         const ax::Vec2& p3,
@@ -601,7 +602,7 @@ public:
 
 protected:
     void ensureCapacityTriangle(int count);
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     void ensureCapacityPoint(int count);
     void ensureCapacityLine(int count);
 #endif
@@ -624,7 +625,7 @@ protected:
     ax::CustomCommand _customCommandTriangle;
     bool _dirtyTriangle = false;
 
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     int _bufferCapacityPoint = 0;
     int _bufferCountPoint = 0;
     ax::V2F_C4B_T2F* _bufferPoint = nullptr;
