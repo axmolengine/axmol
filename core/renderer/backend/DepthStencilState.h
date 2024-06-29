@@ -62,7 +62,6 @@ struct DepthStencilDescriptor
     StencilDescriptor frontFaceStencil;
     void addFlag(DepthStencilFlags flag) { this->flags |= flag; }
     void removeFlag(DepthStencilFlags flag) { this->flags &= ~flag; }
-    // must match current render target
     DepthStencilFlags flags = DepthStencilFlags::ALL;
 };
 

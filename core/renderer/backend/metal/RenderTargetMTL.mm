@@ -77,7 +77,6 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
     }
 
     // Sets descriptor depth and stencil params, should match RenderTargetMTL::chooseAttachmentFormat
-    if (bitmask::any(this->_flags, RenderTargetFlag::DEPTH_AND_STENCIL))
     {
         auto depthAttachment = getDepthAttachment();
         if (depthAttachment)
@@ -123,7 +122,7 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
     }
 #endif
     
-    _dirty = false;
+    _dirtyFlags = TargetBufferFlags::NONE;
 }
 
 RenderTargetMTL::Attachment RenderTargetMTL::getColorAttachment(int index) const
@@ -163,23 +162,19 @@ PixelFormat RenderTargetMTL::getColorAttachmentPixelFormat(int index) const
 
 PixelFormat RenderTargetMTL::getDepthAttachmentPixelFormat() const
 {  // FIXME: axmol only support D24S8
-    if (bitmask::any(_flags, TargetBufferFlags::DEPTH_AND_STENCIL))
-    {
-        if (isDefaultRenderTarget() || !_depth)
-            return PixelFormat::D24S8;
+    if (isDefaultRenderTarget())
+        return PixelFormat::D24S8;
+    if (_depth)
         return _depth.texture->getTextureFormat();
-    }
     return PixelFormat::NONE;
 }
 
 PixelFormat RenderTargetMTL::getStencilAttachmentPixelFormat() const
 {  // FIXME: axmol only support D24S8
-    if (bitmask::any(_flags, TargetBufferFlags::DEPTH_AND_STENCIL))
-    {
-        if (isDefaultRenderTarget() || !_stencil)
-            return PixelFormat::D24S8;
+    if (isDefaultRenderTarget())
+        return PixelFormat::D24S8;
+    if (_stencil)
         return _stencil.texture->getTextureFormat();
-    }
     return PixelFormat::NONE;
 }
 
