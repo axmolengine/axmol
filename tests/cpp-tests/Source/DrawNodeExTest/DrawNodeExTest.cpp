@@ -585,7 +585,7 @@ void DrawNodePictureTest::update(float dt)
     {
         Color4F color = Color4F(sph_xx[sph_la + 1], sph_yy[sph_la + 1], sph_xx[sph_la + 2], sph_yy[sph_la + 2] * 255);
         // color = Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1);
-        Vec2* vertices = new Vec2[sph_cmb - 3];
+        Vec2* vertices = new Vec2[(int)(sph_cmb - 3)];
         for (int n = 3; n < sph_cmb; n++)
         {
             vertices[n - 3] = Vec2(sph_xx[sph_la + n], sph_yy[sph_la + n]);
