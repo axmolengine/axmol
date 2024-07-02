@@ -1,7 +1,7 @@
 {
   "versions": {
     "1kdist": "v86",
-    "oboe": "1.8.1",
+    "oboe": "1.9.0",
     "kcp": "v1.7-f2aa30e",
     "lz4": "v1.9.4",
     "yaml-cpp": "0.8.0",
@@ -15,7 +15,6 @@
       "kcp": "skywind3000/kcp.git",
       "lz4": "lz4/lz4.git",
       "yaml-cpp": "jbeder/yaml-cpp.git",
-      "box2d-optimized": "mtsamis/box2d-optimized.git",
       "sample-assets": "axmolengine/axmol-sample-assets.git",
       "glslcc": "axmolengine/glslcc/releases/download"
     },
@@ -26,7 +25,6 @@
       "kcp": "simdsoft/kcp.git",
       "lz4": "simdsoft/lz4.git",
       "yaml-cpp": "mirrors/yaml-cpp.git",
-      "box2d-optimized": "simdsoft/box2d-optimized.git",
       "sample-assets": "simdsoft/axmol-sample-assets.git",
       "glslcc": "simdsoft/glslcc/releases/download"
     }

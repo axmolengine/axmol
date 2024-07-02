@@ -1,6 +1,6 @@
 ## axmol-2.1.4 ?? 2024
 
-### Significant changes relative to 2.1.2:
+### Significant changes relative to 2.1.3:
 
 - Add JobSystem support by @halx99
 - Add cmake option AX_WASM_INITIAL_MEMORY
@@ -60,6 +60,7 @@
 - simdjson: 3.9.2 ==> 3.9.4
 - fmtlib: 10.2.1 ==> 11.0.0
 - yasio: 4.2.2 ==> 4.2.3
+- oboe: 1.8.1 ==> 1.9.0
 
 ## axmol-2.1.3 May.26 2024
 
