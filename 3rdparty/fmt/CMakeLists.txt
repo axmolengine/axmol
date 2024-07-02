@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8...3.26)
+cmake_minimum_required(VERSION 3.8...3.28)
 
 # Fallback for using newer policies on CMake <3.12.
 if (${CMAKE_VERSION} VERSION_LESS 3.12)
@@ -36,6 +36,12 @@ function(enable_module target)
   endif ()
 endfunction()
 
+set(FMT_USE_CMAKE_MODULES FALSE)
+if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.28 AND
+    CMAKE_GENERATOR STREQUAL "Ninja")
+  set(FMT_USE_CMAKE_MODULES TRUE)
+endif ()
+
 # Adds a library compiled with C++20 module support.
 # `enabled` is a CMake variables that specifies if modules are enabled.
 # If modules are disabled `add_module_library` falls back to creating a
@@ -53,6 +59,7 @@ function(add_module_library name)
   if (NOT ${${AML_IF}})
     # Create a non-modular library.
     target_sources(${name} PRIVATE ${AML_FALLBACK})
+    set_target_properties(${name} PROPERTIES CXX_SCAN_FOR_MODULES OFF)
     return()
   endif ()
 
@@ -62,48 +69,55 @@ function(add_module_library name)
     target_compile_options(${name} PUBLIC -fmodules-ts)
   endif ()
 
-  # `std` is affected by CMake options and may be higher than C++20.
-  get_target_property(std ${name} CXX_STANDARD)
+  target_compile_definitions(${name} PRIVATE FMT_MODULE)
 
-  if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(pcms)
-    foreach (src ${sources})
-      get_filename_component(pcm ${src} NAME_WE)
-      set(pcm ${pcm}.pcm)
+  if (FMT_USE_CMAKE_MODULES)
+    target_sources(${name} PUBLIC FILE_SET fmt TYPE CXX_MODULES
+                   FILES ${sources})
+  else()
+    # `std` is affected by CMake options and may be higher than C++20.
+    get_target_property(std ${name} CXX_STANDARD)
 
-      # Propagate -fmodule-file=*.pcm to targets that link with this library.
-      target_compile_options(
-        ${name} PUBLIC -fmodule-file=${CMAKE_CURRENT_BINARY_DIR}/${pcm})
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+      set(pcms)
+      foreach (src ${sources})
+        get_filename_component(pcm ${src} NAME_WE)
+        set(pcm ${pcm}.pcm)
 
-      # Use an absolute path to prevent target_link_libraries prepending -l
-      # to it.
-      set(pcms ${pcms} ${CMAKE_CURRENT_BINARY_DIR}/${pcm})
-      add_custom_command(
-        OUTPUT ${pcm}
-        COMMAND ${CMAKE_CXX_COMPILER}
-                -std=c++${std} -x c++-module --precompile -c
-                -o ${pcm} ${CMAKE_CURRENT_SOURCE_DIR}/${src}
-                "-I$<JOIN:$<TARGET_PROPERTY:${name},INCLUDE_DIRECTORIES>,;-I>"
-        # Required by the -I generator expression above.
-        COMMAND_EXPAND_LISTS
-        DEPENDS ${src})
-    endforeach ()
+        # Propagate -fmodule-file=*.pcm to targets that link with this library.
+        target_compile_options(
+          ${name} PUBLIC -fmodule-file=${CMAKE_CURRENT_BINARY_DIR}/${pcm})
 
-    # Add .pcm files as sources to make sure they are built before the library.
-    set(sources)
-    foreach (pcm ${pcms})
-      get_filename_component(pcm_we ${pcm} NAME_WE)
-      set(obj ${pcm_we}.o)
-      # Use an absolute path to prevent target_link_libraries prepending -l.
-      set(sources ${sources} ${pcm} ${CMAKE_CURRENT_BINARY_DIR}/${obj})
-      add_custom_command(
-        OUTPUT ${obj}
-        COMMAND ${CMAKE_CXX_COMPILER} $<TARGET_PROPERTY:${name},COMPILE_OPTIONS>
-                -c -o ${obj} ${pcm}
-        DEPENDS ${pcm})
-    endforeach ()
-  endif ()
-  target_sources(${name} PRIVATE ${sources})
+        # Use an absolute path to prevent target_link_libraries prepending -l
+        # to it.
+        set(pcms ${pcms} ${CMAKE_CURRENT_BINARY_DIR}/${pcm})
+        add_custom_command(
+          OUTPUT ${pcm}
+          COMMAND ${CMAKE_CXX_COMPILER}
+                  -std=c++${std} -x c++-module --precompile -c
+                  -o ${pcm} ${CMAKE_CURRENT_SOURCE_DIR}/${src}
+                  "-I$<JOIN:$<TARGET_PROPERTY:${name},INCLUDE_DIRECTORIES>,;-I>"
+          # Required by the -I generator expression above.
+          COMMAND_EXPAND_LISTS
+          DEPENDS ${src})
+      endforeach ()
+
+      # Add .pcm files as sources to make sure they are built before the library.
+      set(sources)
+      foreach (pcm ${pcms})
+        get_filename_component(pcm_we ${pcm} NAME_WE)
+        set(obj ${pcm_we}.o)
+        # Use an absolute path to prevent target_link_libraries prepending -l.
+        set(sources ${sources} ${pcm} ${CMAKE_CURRENT_BINARY_DIR}/${obj})
+        add_custom_command(
+          OUTPUT ${obj}
+          COMMAND ${CMAKE_CXX_COMPILER} $<TARGET_PROPERTY:${name},COMPILE_OPTIONS>
+                  -c -o ${obj} ${pcm}
+          DEPENDS ${pcm})
+      endforeach ()
+    endif ()
+    target_sources(${name} PRIVATE ${sources})
+  endif()
 endfunction()
 
 include(CMakeParseArguments)
@@ -150,9 +164,10 @@ option(FMT_INSTALL "Generate the install target." ON)
 option(FMT_TEST "Generate the test target." ${FMT_MASTER_PROJECT})
 option(FMT_FUZZ "Generate the fuzz target." OFF)
 option(FMT_CUDA_TEST "Generate the cuda-test target." OFF)
-option(FMT_OS "Include core requiring OS (Windows/Posix) " ON)
+option(FMT_OS "Include OS-specific APIs." ON)
 option(FMT_MODULE "Build a module instead of a traditional library." OFF)
 option(FMT_SYSTEM_HEADERS "Expose headers with marking them as system." OFF)
+option(FMT_UNICODE "Enable Unicode support." ON)
 
 if (FMT_TEST AND FMT_MODULE)
   # The tests require {fmt} to be compiled as traditional library
@@ -167,10 +182,10 @@ if (CMAKE_SYSTEM_NAME STREQUAL "MSDOS")
   message(STATUS "MSDOS is incompatible with gtest")
 endif ()
 
-# Get version from core.h
-file(READ include/fmt/core.h core_h)
-if (NOT core_h MATCHES "FMT_VERSION ([0-9]+)([0-9][0-9])([0-9][0-9])")
-  message(FATAL_ERROR "Cannot get FMT_VERSION from core.h.")
+# Get version from base.h
+file(READ include/fmt/base.h base_h)
+if (NOT base_h MATCHES "FMT_VERSION ([0-9]+)([0-9][0-9])([0-9][0-9])")
+  message(FATAL_ERROR "Cannot get FMT_VERSION from base.h.")
 endif ()
 # Use math to skip leading zeros if any.
 math(EXPR CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_MATCH_1})
@@ -178,7 +193,7 @@ math(EXPR CPACK_PACKAGE_VERSION_MINOR ${CMAKE_MATCH_2})
 math(EXPR CPACK_PACKAGE_VERSION_PATCH ${CMAKE_MATCH_3})
 join(FMT_VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.
                  ${CPACK_PACKAGE_VERSION_PATCH})
-message(STATUS "Version: ${FMT_VERSION}")
+message(STATUS "{fmt} version: ${FMT_VERSION}")
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
@@ -274,13 +289,10 @@ function(add_headers VAR)
 endfunction()
 
 # Define the fmt library, its includes and the needed defines.
-add_headers(FMT_HEADERS args.h chrono.h color.h compile.h core.h format.h
+add_headers(FMT_HEADERS args.h base.h chrono.h color.h compile.h core.h format.h
                         format-inl.h os.h ostream.h printf.h ranges.h std.h
                         xchar.h)
 set(FMT_SOURCES src/format.cc)
-if (FMT_OS)
-  set(FMT_SOURCES ${FMT_SOURCES} src/os.cc)
-endif ()
 
 add_module_library(fmt src/fmt.cc FALLBACK
                    ${FMT_SOURCES} ${FMT_HEADERS} README.md ChangeLog.md
@@ -288,6 +300,10 @@ add_module_library(fmt src/fmt.cc FALLBACK
 add_library(fmt::fmt ALIAS fmt)
 if (FMT_MODULE)
   enable_module(fmt)
+elseif (FMT_OS)
+  target_sources(fmt PRIVATE src/os.cc)
+else()
+  target_compile_definitions(fmt PRIVATE FMT_OS=0)
 endif ()
 
 if (FMT_WERROR)
@@ -339,6 +355,12 @@ endif ()
 add_library(fmt-header-only INTERFACE)
 add_library(fmt::fmt-header-only ALIAS fmt-header-only)
 
+if (MSVC AND FMT_UNICODE)
+  # Unicode support requires compiling with /utf-8.
+  target_compile_options(fmt PUBLIC $<$<COMPILE_LANGUAGE:CXX>:/utf-8>)
+  target_compile_options(fmt-header-only INTERFACE $<$<COMPILE_LANGUAGE:CXX>:/utf-8>)
+endif ()
+
 target_compile_definitions(fmt-header-only INTERFACE FMT_HEADER_ONLY=1)
 target_compile_features(fmt-header-only INTERFACE cxx_std_11)
 
@@ -388,12 +410,18 @@ if (FMT_INSTALL)
 
   set(INSTALL_TARGETS fmt fmt-header-only)
 
+  set(INSTALL_FILE_SET)
+  if (FMT_USE_CMAKE_MODULES)
+    set(INSTALL_FILE_SET FILE_SET fmt DESTINATION "${FMT_INC_DIR}/fmt")
+  endif()
+
   # Install the library and headers.
   install(TARGETS ${INSTALL_TARGETS} EXPORT ${targets_export_name}
           LIBRARY DESTINATION ${FMT_LIB_DIR}
           ARCHIVE DESTINATION ${FMT_LIB_DIR}
           PUBLIC_HEADER DESTINATION "${FMT_INC_DIR}/fmt"
-          RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+          RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+          ${INSTALL_FILE_SET})
 
   # Use a namespace because CMake provides better diagnostics for namespaced
   # imported targets.
@@ -410,8 +438,44 @@ if (FMT_INSTALL)
   install(FILES "${pkgconfig}" DESTINATION "${FMT_PKGCONFIG_DIR}")
 endif ()
 
+function(add_doc_target)
+  find_program(DOXYGEN doxygen
+    PATHS "$ENV{ProgramFiles}/doxygen/bin"
+          "$ENV{ProgramFiles\(x86\)}/doxygen/bin")
+  if (NOT DOXYGEN)
+    message(STATUS "Target 'doc' disabled because doxygen not found")
+    return ()
+  endif ()
+
+  find_program(MKDOCS mkdocs)
+  if (NOT MKDOCS)
+    message(STATUS "Target 'doc' disabled because mkdocs not found")
+    return ()
+  endif ()
+
+  set(sources )
+  foreach (source api.md index.md syntax.md get-started.md fmt.css fmt.js)
+    set(sources ${sources} doc/${source})
+  endforeach()
+
+  add_custom_target(
+    doc
+    COMMAND
+      ${CMAKE_COMMAND}
+        -E env PYTHONPATH=${CMAKE_CURRENT_SOURCE_DIR}/support/python
+        ${MKDOCS} build -f ${CMAKE_CURRENT_SOURCE_DIR}/support/mkdocs.yml
+        # MkDocs requires the site dir to be outside of the doc dir.
+                        --site-dir ${CMAKE_CURRENT_BINARY_DIR}/doc-html
+                        --no-directory-urls
+    SOURCES ${sources})
+
+  include(GNUInstallDirs)
+  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc-html/
+          DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/doc/fmt OPTIONAL)
+endfunction()
+
 if (FMT_DOC)
-  add_subdirectory(doc)
+  add_doc_target()
 endif ()
 
 if (FMT_TEST)
@@ -441,8 +505,7 @@ if (FMT_MASTER_PROJECT AND EXISTS ${gitignore})
     string(REPLACE "*" ".*" line "${line}")
     set(ignored_files ${ignored_files} "${line}$" "${line}/")
   endforeach ()
-  set(ignored_files ${ignored_files}
-    /.git /breathe /format-benchmark sphinx/ .buildinfo .doctrees)
+  set(ignored_files ${ignored_files} /.git /build/doxyxml .vagrant)
 
   set(CPACK_SOURCE_GENERATOR ZIP)
   set(CPACK_SOURCE_IGNORE_FILES ${ignored_files})
