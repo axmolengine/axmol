@@ -53,7 +53,7 @@ void ShaderCache::purge()
     {
         AX_SAFE_RELEASE(shaderModule);
     }
-    AXLOGINFO("purging ShaderCache");
+    AXLOGV("purging ShaderCache");
 }
 
 backend::ShaderModule* ShaderCache::newVertexShaderModule(std::string_view shaderSource)
@@ -89,7 +89,7 @@ void ShaderCache::removeUnusedShader()
         auto shaderModule = iter->second;
         if (shaderModule->getReferenceCount() == 1)
         {
-            //            AXLOG("axmol: TextureCache: removing unused program");
+            //            AXLOGD("TextureCache: removing unused program");
             shaderModule->release();
             iter = _cachedShaders.erase(iter);
         }

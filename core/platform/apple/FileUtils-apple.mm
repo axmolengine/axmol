@@ -91,7 +91,7 @@ FileUtils* FileUtils::getInstance()
         {
             delete s_sharedFileUtils;
             s_sharedFileUtils = nullptr;
-            AXLOG("ERROR: Could not init CCFileUtilsApple");
+            AXLOGE("ERROR: Could not init FileUtilsApple");
         }
     }
     return s_sharedFileUtils;
@@ -183,7 +183,7 @@ bool FileUtilsApple::removeDirectory(std::string_view path) const
 {
     if (path.empty())
     {
-        AXLOGERROR("Fail to remove directory, path is empty!");
+        AXLOGE("Fail to remove directory, path is empty!");
         return false;
     }
 
@@ -272,7 +272,7 @@ bool FileUtilsApple::createDirectory(std::string_view path) const
 
     if (!result && error != nil)
     {
-        AXLOGERROR("Fail to create directory \"%s\": %s", std::string(path).c_str(), [error.localizedDescription UTF8String]);
+        AXLOGE("Fail to create directory \"{}\": {}", path, [error.localizedDescription UTF8String]);
     }
 
     return result;

@@ -44,7 +44,7 @@ EventListenerTouchOneByOne::EventListenerTouchOneByOne()
 
 EventListenerTouchOneByOne::~EventListenerTouchOneByOne()
 {
-    AXLOGINFO("In the destructor of EventListenerTouchOneByOne, %p", this);
+    AXLOGV("In the destructor of EventListenerTouchOneByOne, {}", fmt::ptr(this));
 }
 
 bool EventListenerTouchOneByOne::init()
@@ -126,7 +126,7 @@ EventListenerTouchAllAtOnce::EventListenerTouchAllAtOnce()
 
 EventListenerTouchAllAtOnce::~EventListenerTouchAllAtOnce()
 {
-    AXLOGINFO("In the destructor of EventListenerTouchAllAtOnce, %p", this);
+    AXLOGV("In the destructor of EventListenerTouchAllAtOnce, {}", fmt::ptr(this));
 }
 
 bool EventListenerTouchAllAtOnce::init()

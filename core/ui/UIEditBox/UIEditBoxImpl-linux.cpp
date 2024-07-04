@@ -282,7 +282,7 @@ static bool LinuxInputBox(std::string& entryLine)
         didChange = true;
         break;
     default:
-        // AXLOG("Undefined. Perhaps dialog was closed");
+        // AXLOGD("Undefined. Perhaps dialog was closed");
         break;
     }
 

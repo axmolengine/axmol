@@ -395,7 +395,7 @@ void Scale9Sprite::setScale9Enabled(bool enabled)
 {
     if (_renderMode == RenderMode::POLYGON)
     {
-        AXLOGWARN("Scale9Sprite::setScale9Enabled() can't be called when using POLYGON render modes");
+        AXLOGW("Scale9Sprite::setScale9Enabled() can't be called when using POLYGON render modes");
         return;
     }
 
@@ -474,7 +474,7 @@ void Scale9Sprite::setRenderingType(Scale9Sprite::RenderingType type)
 {
     if (_renderMode == RenderMode::POLYGON)
     {
-        AXLOGWARN("Scale9Sprite::setRenderingType() can't be called when using POLYGON render modes");
+        AXLOGW("Scale9Sprite::setRenderingType() can't be called when using POLYGON render modes");
         return;
     }
     if (_renderingType != type)

@@ -659,7 +659,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                 _yCoordFlipped = optValue(dictionary, "yCoordFlipped").asInt(1);
 
                 if (!this->_texture)
-                    AXLOGWARN("axmol: Warning: ParticleSystemQuad system without a texture");
+                    AXLOGW("axmol: Warning: ParticleSystemQuad system without a texture");
             }
             ret = true;
         }
@@ -675,7 +675,7 @@ bool ParticleSystem::initWithTotalParticles(int numberOfParticles)
 
     if (!_particleData.init(_totalParticles))
     {
-        AXLOG("Particle system: not enough memory");
+        AXLOGW("Particle system: not enough memory");
         this->release();
         return false;
     }
@@ -2337,7 +2337,7 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
 
     iter->second = desc;
 
-    AXLOG("Particle emission mask '%u' baked (%dx%d), %zu samples generated taking %.2fmb of memory.",
+    AXLOGD("Particle emission mask '{}' baked ({}x{}), {} samples generated taking {:.2f}mb of memory.",
           (unsigned int)htonl(fourccId), w, h, desc.points.size(), desc.points.size() * 8 / 1e+6);
 }
 

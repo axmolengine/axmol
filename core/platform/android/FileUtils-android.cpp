@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 #include "yasio/string_view.hpp"
 
-#define LOG_TAG "CCFileUtils-android.cpp"
+#define LOG_TAG "FileUtils-android.cpp"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 #define ASSETS_FOLDER_NAME "assets/"
@@ -73,7 +73,7 @@ FileUtils* FileUtils::getInstance()
         {
             delete s_sharedFileUtils;
             s_sharedFileUtils = nullptr;
-            AXLOG("ERROR: Could not init CCFileUtilsAndroid");
+            AXLOGE("ERROR: Could not init FileUtilsAndroid");
         }
     }
     return s_sharedFileUtils;
@@ -140,7 +140,7 @@ bool FileUtilsAndroid::isFileExistInternal(std::string_view strFilePath) const
             }
             else
             {
-                // AXLOG("[AssetManager] ... in APK %s, found = false!", strFilePath.c_str());
+                // AXLOGD("[AssetManager] ... in APK {}, found = false!", strFilePath);
             }
         }
     }
@@ -175,7 +175,7 @@ bool FileUtilsAndroid::isDirectoryExistInternal(std::string_view dirPath) const
     // find absolute path in flash memory
     if (s[0] == '/')
     {
-        AXLOG("find in flash memory dirPath(%s)", s);
+        AXLOGD("find in flash memory dirPath({})", s);
         struct stat st;
         if (stat(s, &st) == 0)
         {
@@ -187,7 +187,7 @@ bool FileUtilsAndroid::isDirectoryExistInternal(std::string_view dirPath) const
 
         // find it in apk's assets dir
         // Found "assets/" at the beginning of the path and we don't want it
-        AXLOG("find in apk dirPath(%s)", s);
+        AXLOGD("find in apk dirPath({})", s);
         if (dirPath.find(ASSETS_FOLDER_NAME) == 0)
         {
             s += ASSETS_FOLDER_NAME_LENGTH;

@@ -117,7 +117,7 @@ BMFontConfiguration::BMFontConfiguration() : _commonHeight(0), _characterSet(nul
 
 BMFontConfiguration::~BMFontConfiguration()
 {
-    AXLOGINFO("deallocing BMFontConfiguration: %p", this);
+    AXLOGV("deallocing BMFontConfiguration: {}", fmt::ptr(this));
     this->purgeFontDefDictionary();
     this->purgeKerningDictionary();
     _atlasName.clear();
@@ -156,7 +156,7 @@ std::set<unsigned int>* BMFontConfiguration::parseConfigFile(std::string_view co
     }
     if (data[0] == 0)
     {
-        AXLOG("axmol: Error parsing FNTfile %s", controlFile.data());
+        AXLOGW("axmol: Error parsing FNTfile {}", controlFile);
         return nullptr;
     }
     auto contents = data.c_str();
@@ -429,7 +429,7 @@ void BMFontConfiguration::parseInfoArguments(const char* line)
     // padding
     sscanf(strstr(line, "padding=") + 8, "%d,%d,%d,%d", &_padding.top, &_padding.right, &_padding.bottom,
            &_padding.left);
-    // AXLOG("axmol: padding: %d,%d,%d,%d", _padding.left, _padding.top, _padding.right, _padding.bottom);
+    // AXLOGD("axmol: padding: {},{},{},{}", _padding.left, _padding.top, _padding.right, _padding.bottom);
 }
 
 void BMFontConfiguration::parseCommonArguments(const char* line)
@@ -738,7 +738,7 @@ FontAtlas* FontFNT::newFontAtlas()
         // add the new definition
         if (65535 < fontDef.charID)
         {
-            AXLOGWARN("Warning: 65535 < fontDef.charID (%u), ignored", fontDef.charID);
+            AXLOGW("Warning: 65535 < fontDef.charID ({}), ignored", fontDef.charID);
         }
         else
         {

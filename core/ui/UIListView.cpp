@@ -83,7 +83,7 @@ void ListView::setItemModel(Widget* model)
 {
     if (nullptr == model)
     {
-        AXLOG("Can't set a nullptr to item model!");
+        AXLOGD("Can't set a nullptr to item model!");
         return;
     }
     AX_SAFE_RELEASE_NULL(_model);

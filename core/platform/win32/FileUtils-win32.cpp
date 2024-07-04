@@ -87,7 +87,7 @@ FileUtils* FileUtils::getInstance()
         {
             delete s_sharedFileUtils;
             s_sharedFileUtils = nullptr;
-            AXLOG("ERROR: Could not init CCFileUtilsWin32");
+            AXLOGE("ERROR: Could not init FileUtilsWin32");
         }
     }
     return s_sharedFileUtils;
@@ -234,7 +234,7 @@ bool FileUtilsWin32::renameFile(std::string_view oldfullpath, std::string_view n
     {
         if (!DeleteFile(_wNew.c_str()))
         {
-            AXLOGERROR("Fail to delete file %s !Error code is 0x%x", newfullpath.data(), GetLastError());
+            AXLOGE("Fail to delete file {} !Error code is 0x{:x}", newfullpath, GetLastError());
         }
     }
 
@@ -244,7 +244,7 @@ bool FileUtilsWin32::renameFile(std::string_view oldfullpath, std::string_view n
     }
     else
     {
-        AXLOGERROR("Fail to rename file %s to %s !Error code is 0x%x", oldfullpath.data(), newfullpath.data(),
+        AXLOGE("Fail to rename file {} to {} !Error code is 0x{:x}", oldfullpath, newfullpath,
                    GetLastError());
         return false;
     }
@@ -313,7 +313,7 @@ bool FileUtilsWin32::createDirectory(std::string_view dirPath) const
                 BOOL ret = CreateDirectoryW(subpath.c_str(), NULL);
                 if (!ret && ERROR_ALREADY_EXISTS != GetLastError())
                 {
-                    AXLOGERROR("Fail create directory %s !Error code is 0x%x", utf8Path.c_str(), GetLastError());
+                    AXLOGE("Fail create directory {} !Error code is 0x{:x}", utf8Path, GetLastError());
                     return false;
                 }
             }
@@ -332,7 +332,7 @@ bool FileUtilsWin32::removeFile(std::string_view filepath) const
     }
     else
     {
-        AXLOGERROR("Fail remove file %s !Error code is 0x%x", filepath.data(), GetLastError());
+        AXLOGE("Fail remove file {} !Error code is 0x{:x}", filepath, GetLastError());
         return false;
     }
 }

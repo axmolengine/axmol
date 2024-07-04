@@ -58,7 +58,7 @@ bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view 
 {
     if (url.empty())
     {
-        AXLOG("ws open fail, url is empty!");
+        AXLOGW("ws open fail, url is empty!");
         return false;
     }
 
@@ -70,7 +70,7 @@ bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view 
     EmscriptenWebSocketCreateAttributes ws_attrs = {_url.c_str(),
                                                     _subProtocols.empty() ? nullptr : _subProtocols.c_str(), EM_TRUE};
 
-    AXLOG("ws open url: %s, protocols: %s", ws_attrs.url, ws_attrs.protocols);
+    AXLOGD("ws open url: {}, protocols: {}", ws_attrs.url, ws_attrs.protocols);
 
     _state = WebSocket::State::CONNECTING;
     _wsfd = emscripten_websocket_new(&ws_attrs);
@@ -95,7 +95,7 @@ void WebSocket::send(std::string_view message)
 {
     auto error = emscripten_websocket_send_utf8_text(_wsfd, message.data());
     if (error)
-        AXLOG("Failed to emscripten_websocket_send_binary(): %d", error);
+        AXLOGW("Failed to emscripten_websocket_send_binary(): {}", error);
 }
 
 /**
@@ -109,7 +109,7 @@ void WebSocket::send(const void* data, unsigned int len)
 {
     auto error = emscripten_websocket_send_binary(_wsfd, const_cast<void*>(data), len);
     if (error)
-        AXLOG("Failed to emscripten_websocket_send_binary(): %d", error);
+        AXLOGW("Failed to emscripten_websocket_send_binary(): {}", error);
 }
 
 /**
@@ -136,7 +136,7 @@ void WebSocket::closeAsync()
     if (!error)
         _state = WebSocket::State::CLOSING;
     else
-        AXLOG("Failed to emscripten_websocket_close(): %d", error);
+        AXLOGW("Failed to emscripten_websocket_close(): {}", error);
 }
 
 }  // namespace network

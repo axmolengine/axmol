@@ -42,7 +42,7 @@ public:
     {
         //        if( 0 != _usedPool.size())
         //        {
-        //            AXLOG("All RenderCommand should not be used when Pool is released!");
+        //            AXLOGD("All RenderCommand should not be used when Pool is released!");
         //        }
         _freePool.clear();
         for (auto&& allocatedPoolBlock : _allocatedPoolBlocks)
@@ -70,7 +70,7 @@ public:
     {
         //        if(_usedPool.find(ptr) == _usedPool.end())
         //        {
-        //            AXLOG("push Back Wrong command!");
+        //            AXLOGD("push Back Wrong command!");
         //            return;
         //        }
 

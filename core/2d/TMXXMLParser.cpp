@@ -46,7 +46,7 @@ TMXLayerInfo::TMXLayerInfo() : _name(""), _tiles(nullptr), _ownTiles(true) {}
 
 TMXLayerInfo::~TMXLayerInfo()
 {
-    AXLOGINFO("deallocing TMXLayerInfo: %p", this);
+    AXLOGV("deallocing TMXLayerInfo: {}", fmt::ptr(this));
     if (_ownTiles && _tiles)
     {
         free(_tiles);
@@ -70,7 +70,7 @@ TMXTilesetInfo::TMXTilesetInfo() : _firstGid(0), _tileSize(Vec2::ZERO), _spacing
 
 TMXTilesetInfo::~TMXTilesetInfo()
 {
-    AXLOGINFO("deallocing TMXTilesetInfo: %p", this);
+    AXLOGV("deallocing TMXTilesetInfo: {}", fmt::ptr(this));
 }
 
 Rect TMXTilesetInfo::getRectForGID(uint32_t gid)
@@ -169,7 +169,7 @@ TMXMapInfo::TMXMapInfo()
 
 TMXMapInfo::~TMXMapInfo()
 {
-    AXLOGINFO("deallocing TMXMapInfo: %p", this);
+    AXLOGV("deallocing TMXMapInfo: {}", fmt::ptr(this));
 }
 
 bool TMXMapInfo::parseXMLString(std::string_view xmlString)
@@ -222,7 +222,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
     if (elementName == "map")
     {
         std::string version = attributeDict["version"].asString();
-        AXLOG("axmol: TMXFormat: TMX version: %s", version.c_str());
+        AXLOGD("TMXFormat: TMX version: {}", version);
 
         std::string orientationStr = attributeDict["orientation"].asString();
         if (orientationStr == "orthogonal")
@@ -243,7 +243,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         }
         else
         {
-            AXLOG("axmol: TMXFomat: Unsupported orientation: %d", tmxMapInfo->getOrientation());
+            AXLOGD("TMXFomat: Unsupported orientation: {}", tmxMapInfo->getOrientation());
         }
 
         std::string staggerAxisStr = attributeDict["staggeraxis"].asString();
@@ -525,8 +525,8 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         tmxMapInfo->setStoringCharacters(true);
         if (tmxMapInfo->getParentElement() == TMXPropertyNone)
         {
-            AXLOG("TMX tile map: Parent element is unsupported. Cannot add property named '%s' with value '%s'",
-                  attributeDict["name"].asString().c_str(), attributeDict["value"].asString().c_str());
+            AXLOGD("TMX tile map: Parent element is unsupported. Cannot add property named '{}' with value '{}'",
+                  attributeDict["name"].asString(), attributeDict["value"].asString());
             tmxMapInfo->setStoringCharacters(false);
         }
         else if (tmxMapInfo->getParentElement() == TMXPropertyMap)
@@ -698,7 +698,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             auto buffer = utils::base64Decode(currentString);
             if (buffer.empty())
             {
-                AXLOG("axmol: TiledMap: decode data error");
+                AXLOGW("TiledMap: decode data error");
                 return;
             }
 
@@ -713,7 +713,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
 
                 if (buffer.empty())
                 {
-                    AXLOG("axmol: TiledMap: inflate data error");
+                    AXLOGW("TiledMap: inflate data error");
                     return;
                 }
 

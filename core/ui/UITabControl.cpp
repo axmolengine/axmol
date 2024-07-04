@@ -63,7 +63,7 @@ void TabControl::insertTab(int index, TabHeader* header, Layout* container)
     int cellSize = (int)_tabItems.size();
     if (index > cellSize)
     {
-        AXLOG("%s", "insert index error");
+        AXLOGW("{}", "insert index error");
         return;
     }
 
@@ -123,7 +123,7 @@ void TabControl::removeTab(int index)
     int cellSize = (int)_tabItems.size();
     if (cellSize == 0 || index >= cellSize)
     {
-        AXLOG("%s", "no tab or remove index error");
+        AXLOGW("{}", "no tab or remove index error");
         return;
     }
 

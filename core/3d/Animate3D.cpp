@@ -224,7 +224,7 @@ void Animate3D::startWithTarget(Node* target)
 
         if (!hasCurve)
         {
-            AXLOG("warning: no animation found for the skeleton");
+            AXLOGW("warning: no animation found for the skeleton");
         }
     }
 
