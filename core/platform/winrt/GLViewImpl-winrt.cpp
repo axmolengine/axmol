@@ -222,15 +222,15 @@ void GLViewImpl::BackButtonListener(EventKeyboard::KeyCode keyCode, Event* event
         AXLOGD("getEventDispatcher()->addEventListenerWithFixedPriority(listener, 1);");
         AXLOGD("");
         AXLOGD("void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)");
-        AXLOGD("{");
+        AXLOGD("{{");
         AXLOGD("     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE)");
-        AXLOGD("     {");
+        AXLOGD("     {{");
         AXLOGD("         if (myAppShouldNotQuit) // or whatever logic you want...");
-        AXLOGD("         {");
+        AXLOGD("         {{");
         AXLOGD("             event->stopPropagation();");
-        AXLOGD("         }");
-        AXLOGD("     }");
-        AXLOGD("}");
+        AXLOGD("         }}");
+        AXLOGD("     }}");
+        AXLOGD("}}");
         AXLOGD("");
         AXLOGD("You MUST call event->stopPropagation() if you don't want your app to quit!");
         AXLOGD("*********************************************************************");
@@ -418,7 +418,7 @@ void ax::GLViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs con
     // Because OpenGL and axmol uses different Y axis, we need to convert the coordinate here
     float cursorX = (mousePosition.x - _viewPortRect.origin.x) / _scaleX;
     float cursorY = (_viewPortRect.origin.y + _viewPortRect.size.height - mousePosition.y) / _scaleY;
-    float delta   = args.CurrentPoint().Properties().MouseWheelDelta();
+    float delta   = static_cast<float>(args.CurrentPoint().Properties().MouseWheelDelta());
     if (args.CurrentPoint().Properties().IsHorizontalMouseWheel())
     {
         event.setScrollData(delta / WHEEL_DELTA, 0.0f);
