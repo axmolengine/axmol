@@ -170,7 +170,7 @@ void MeshRenderer::afterAsyncLoad(void* param)
         }
         else
         {
-            AXLOG("file load failed: %s\n", asyncParam->modelPath.c_str());
+            AXLOGW("file load failed: {}\n", asyncParam->modelPath);
         }
         asyncParam->afterLoadCallback(this, asyncParam->callbackParam);
     }

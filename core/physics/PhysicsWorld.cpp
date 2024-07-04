@@ -635,7 +635,7 @@ void PhysicsWorld::removeBody(PhysicsBody* body)
 {
     if (body->getWorld() != this)
     {
-        AXLOG("Physics Warning: this body doesn't belong to this world");
+        AXLOGD("Physics Warning: this body doesn't belong to this world");
         return;
     }
 
@@ -679,7 +679,7 @@ void PhysicsWorld::removeJoint(PhysicsJoint* joint, bool destroy)
     {
         if (joint->getWorld() != this && destroy)
         {
-            AXLOG(
+            AXLOGD(
                 "physics warning: the joint is not in this world, it won't be destroyed until the body it connects is "
                 "destroyed");
             return;
@@ -909,7 +909,7 @@ void PhysicsWorld::step(float delta)
 {
     if (_autoStep)
     {
-        AXLOG("Physics Warning: You need to close auto step( setAutoStep(false) ) first");
+        AXLOGD("Physics Warning: You need to close auto step( setAutoStep(false) ) first");
     }
     else
     {

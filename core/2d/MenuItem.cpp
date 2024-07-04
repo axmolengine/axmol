@@ -347,7 +347,7 @@ MenuItemFont::MenuItemFont() : _fontSize(0), _fontName("") {}
 
 MenuItemFont::~MenuItemFont()
 {
-    AXLOGINFO("In the destructor of MenuItemFont (%p).", this);
+    AXLOGV("In the destructor of MenuItemFont ({}).", fmt::ptr(this));
 }
 
 bool MenuItemFont::initWithString(std::string_view value, const ccMenuCallback& callback)

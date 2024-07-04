@@ -603,7 +603,7 @@ void PhysicsBody::setVelocity(const Vec2& velocity)
 {
     if (cpBodyGetType(_cpBody) == CP_BODY_TYPE_STATIC)
     {
-        AXLOG("physics warning: you can't set velocity for a static body.");
+        AXLOGD("physics warning: you can't set velocity for a static body.");
         return;
     }
 
@@ -629,7 +629,7 @@ void PhysicsBody::setAngularVelocity(float velocity)
 {
     if (cpBodyGetType(_cpBody) == CP_BODY_TYPE_STATIC)
     {
-        AXLOG("physics warning: you can't set angular velocity for a static body.");
+        AXLOGD("physics warning: you can't set angular velocity for a static body.");
         return;
     }
 

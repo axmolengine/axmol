@@ -19,7 +19,7 @@ CommandBufferGLES2::CommandBufferGLES2()
         glVertexAttribDivisor = glVertexAttribDivisorANGLE;
 
     if (!glDrawElementsInstanced)
-        AXLOG("%s", "Device not support instancing draw");
+        AXLOGD("{}", "Device not support instancing draw");
 }
 
 void CommandBufferGLES2::drawElementsInstanced(PrimitiveType primitiveType,

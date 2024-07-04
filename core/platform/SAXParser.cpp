@@ -150,7 +150,7 @@ bool SAXParser::parseIntrusive(char* xmlData, size_t dataLength, ParseOption opt
     }
     catch (xsxml::parse_error& e)
     {
-        AXLOG("axmol: SAXParser: Error parsing xml: %s at %s", e.what(), e.where<char>());
+        AXLOGE("SAXParser: Error parsing xml: {} at {}", e.what(), e.where<char>());
         return false;
     }
 

@@ -701,7 +701,7 @@ bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
             }
             else
             {
-                AXLOG("axmol: unsupported image format!");
+                AXLOGW("unsupported image format!");
             }
 
             free(tgaData);
@@ -1054,7 +1054,7 @@ myErrorExit(j_common_ptr cinfo)
     //(*cinfo->err->output_message) (cinfo);
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
-    AXLOG("jpeg error: %s", buffer);
+    AXLOGW("jpeg error: {}", buffer);
 
     /* Return control to the setjmp point */
     longjmp(myerr->setjmp_buffer, 1);
@@ -1153,7 +1153,7 @@ bool Image::initWithJpgData(uint8_t* data, ssize_t dataLen)
 
     return ret;
 #else
-    AXLOG("jpeg is not enabled, please enable it in ccConfig.h");
+    AXLOGW("jpeg is not enabled, please enable it in Config.h");
     return false;
 #endif  // AX_USE_JPEG
 }
@@ -1206,7 +1206,7 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
         png_byte bit_depth     = png_get_bit_depth(png_ptr, info_ptr);
         png_uint_32 color_type = png_get_color_type(png_ptr, info_ptr);
 
-        // AXLOG("color type %u", color_type);
+        // AXLOGD("color type {}", color_type);
 
         // force palette images to be expanded to 24-bit RGB
         // it may include alpha channel
@@ -1312,7 +1312,7 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
     }
     return ret;
 #else
-    AXLOG("png is not enabled, please enable it in ccConfig.h");
+    AXLOGW("png is not enabled, please enable it in Config.h");
     return false;
 #endif  // AX_USE_PNG
 }
@@ -1373,7 +1373,7 @@ bool Image::initWithWebpData(uint8_t* data, ssize_t dataLen)
     } while (0);
     return ret;
 #else
-    AXLOG("webp is not enabled, please enable it in ccConfig.h");
+    AXLOGW("webp is not enabled, please enable it in Config.h");
     return false;
 #endif  // AX_USE_WEBP
 }
@@ -1405,7 +1405,7 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
             }
             else
             {
-                AXLOG("Image WARNING: unsupported true color tga data pixel format. FILE: %s", _filePath.c_str());
+                AXLOGW("Image WARNING: unsupported true color tga data pixel format. FILE: {}", _filePath);
                 break;
             }
         }
@@ -1419,7 +1419,7 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
             else
             {
                 // actually this won't happen, if it happens, maybe the image file is not a tga
-                AXLOG("Image WARNING: unsupported gray tga data pixel format. FILE: %s", _filePath.c_str());
+                AXLOGW("Image WARNING: unsupported gray tga data pixel format. FILE: {}", _filePath);
                 break;
             }
         }
@@ -1438,8 +1438,8 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
     {
         if (FileUtils::getInstance()->getFileExtension(_filePath) != ".tga")
         {
-            AXLOG("Image WARNING: the image file suffix is not tga, but parsed as a tga image file. FILE: %s",
-                  _filePath.c_str());
+            AXLOGW("Image WARNING: the image file suffix is not tga, but parsed as a tga image file. FILE: {}",
+                  _filePath);
         }
     }
     else
@@ -1478,27 +1478,27 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     bool flipped                       = (flags & (unsigned int)PVR2TextureFlag::VerticalFlip) ? true : false;
     if (flipped)
     {
-        AXLOG("axmol: WARNING: Image is flipped. Regenerate it using PVRTexTool");
+        AXLOGD("WARNING: Image is flipped. Regenerate it using PVRTexTool");
     }
 
     if (!configuration->supportsNPOT() && (static_cast<int>(header->width) != utils::nextPOT(header->width) ||
                                            static_cast<int>(header->height) != utils::nextPOT(header->height)))
     {
-        AXLOG("axmol: ERROR: Loading an NPOT texture (%dx%d) but is not supported on this device", header->width,
+        AXLOGD("ERROR: Loading an NPOT texture ({}x{}) but is not supported on this device", header->width,
               header->height);
         return false;
     }
 
     if (!testFormatForPvr2TCSupport(formatFlags))
     {
-        AXLOG("axmol: WARNING: Unsupported PVR Pixel Format: 0x%02X. Re-encode it with a OpenGL pixel format variant",
+        AXLOGD("WARNING: Unsupported PVR Pixel Format: {:02X}. Re-encode it with a OpenGL pixel format variant",
               (int)formatFlags);
         return false;
     }
 
     if (v2_pixel_formathash.find(formatFlags) == v2_pixel_formathash.end())
     {
-        AXLOG("axmol: WARNING: Unsupported PVR Pixel Format: 0x%02X. Re-encode it with a OpenGL pixel format variant",
+        AXLOGD("WARNING: Unsupported PVR Pixel Format: {:02X}. Re-encode it with a OpenGL pixel format variant",
               (int)formatFlags);
         return false;
     }
@@ -1508,7 +1508,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     int bpp          = info.bpp;
     if (!bpp)
     {
-        AXLOG("axmol: WARNING: Unsupported PVR Pixel Format: 0x%02X. Re-encode it with a OpenGL pixel format variant",
+        AXLOGD("WARNING: Unsupported PVR Pixel Format: {:02X}. Re-encode it with a OpenGL pixel format variant",
               (int)formatFlags);
         return false;
     }
@@ -1538,7 +1538,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR2TexturePixelFormat::PVRTC2BPP_RGBA:
             if (!Configuration::getInstance()->supportsPVRTC())
             {
-                AXLOG("axmol: Hardware PVR decoder not present. Using software decoder");
+                AXLOGD("Hardware PVR decoder not present. Using software decoder");
                 _unpack                            = true;
                 _mipmaps[_numberOfMipmaps].len     = width * height * 4;
                 _mipmaps[_numberOfMipmaps].address = (uint8_t*)malloc(width * height * 4);
@@ -1552,7 +1552,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR2TexturePixelFormat::PVRTC4BPP_RGBA:
             if (!Configuration::getInstance()->supportsPVRTC())
             {
-                AXLOG("axmol: Hardware PVR decoder not present. Using software decoder");
+                AXLOGD("Hardware PVR decoder not present. Using software decoder");
                 _unpack                            = true;
                 _mipmaps[_numberOfMipmaps].len     = width * height * 4;
                 _mipmaps[_numberOfMipmaps].address = (uint8_t*)malloc(width * height * 4);
@@ -1566,7 +1566,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR2TexturePixelFormat::BGRA8888:
             if (!Configuration::getInstance()->supportsBGRA8888())
             {
-                AXLOG("axmol: Image. BGRA8888 not supported on this device");
+                AXLOGD("Image. BGRA8888 not supported on this device");
                 return false;
             }
         default:
@@ -1630,7 +1630,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     // validate version
     if (AX_SWAP_INT32_BIG_TO_HOST(header->version) != 0x50565203)
     {
-        AXLOG("axmol: WARNING: pvr file version mismatch");
+        AXLOGW("axmol: WARNING: pvr file version mismatch");
         return false;
     }
 
@@ -1639,8 +1639,8 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
 
     if (!testFormatForPvr3TCSupport(pixelFormat))
     {
-        AXLOG(
-            "axmol:WARNING: Unsupported PVR Pixel Format: 0x%016llX. Re-encode it with a OpenGL pixel format "
+        AXLOGW(
+            "axmol:WARNING: Unsupported PVR Pixel Format: 0x{:016X}. Re-encode it with a OpenGL pixel format "
             "variant",
             static_cast<unsigned long long>(pixelFormat));
         return false;
@@ -1648,8 +1648,8 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
 
     if (v3_pixel_formathash.find(pixelFormat) == v3_pixel_formathash.end())
     {
-        AXLOG(
-            "axmol:WARNING: Unsupported PVR Pixel Format: 0x%016llX. Re-encode it with a OpenGL pixel format "
+        AXLOGW(
+            "axmol:WARNING: Unsupported PVR Pixel Format: 0x{:016X}. Re-encode it with a OpenGL pixel format "
             "variant",
             static_cast<unsigned long long>(pixelFormat));
         return false;
@@ -1660,8 +1660,8 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     int bpp               = info.bpp;
     if (!info.bpp)
     {
-        AXLOG(
-            "axmol:WARNING: Unsupported PVR Pixel Format: 0x%016llX. Re-encode it with a OpenGL pixel format "
+        AXLOGW(
+            "axmol:WARNING: Unsupported PVR Pixel Format: 0x{:016X}. Re-encode it with a OpenGL pixel format "
             "variant",
             static_cast<unsigned long long>(pixelFormat));
         return false;
@@ -1703,7 +1703,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR3TexturePixelFormat::PVRTC2BPP_RGBA:
             if (!Configuration::getInstance()->supportsPVRTC())
             {
-                AXLOG("axmol: Hardware PVR decoder not present. Using software decoder");
+                AXLOGW("Hardware PVR decoder not present. Using software decoder");
                 _unpack             = true;
                 _mipmaps[i].len     = width * height * 4;
                 _mipmaps[i].address = (uint8_t*)malloc(width * height * 4);
@@ -1718,7 +1718,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR3TexturePixelFormat::PVRTC4BPP_RGBA:
             if (!Configuration::getInstance()->supportsPVRTC())
             {
-                AXLOG("axmol: Hardware PVR decoder not present. Using software decoder");
+                AXLOGW("Hardware PVR decoder not present. Using software decoder");
                 _unpack             = true;
                 _mipmaps[i].len     = width * height * 4;
                 _mipmaps[i].address = (uint8_t*)malloc(width * height * 4);
@@ -1732,7 +1732,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR3TexturePixelFormat::ETC1:
             if (!Configuration::getInstance()->supportsETC1())
             {
-                AXLOG("axmol: Hardware ETC1 decoder not present. Using software decoder");
+                AXLOGW("Hardware ETC1 decoder not present. Using software decoder");
                 const int bytePerPixel = 4;
                 _unpack                = true;
                 _mipmaps[i].len        = width * height * bytePerPixel;
@@ -1750,7 +1750,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR3TexturePixelFormat::BGRA8888:
             if (!Configuration::getInstance()->supportsBGRA8888())
             {
-                AXLOG("axmol: Image. BGRA8888 not supported on this device");
+                AXLOGW("Image. BGRA8888 not supported on this device");
                 return false;
             }
         default:
@@ -1843,7 +1843,7 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
     }
     else
     {
-        AXLOG("axmol: Hardware ETC1 decoder not present. Using software decoder");
+        AXLOGW("Hardware ETC1 decoder not present. Using software decoder");
 
         _dataLen = _width * _height * 4;
         _data    = static_cast<uint8_t*>(malloc(_dataLen));
@@ -1908,7 +1908,7 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         }
         else
         {
-            AXLOG("axmol: Hardware ETC2 decoder not present. Using software decoder");
+            AXLOGW("Hardware ETC2 decoder not present. Using software decoder");
 
             // if device do not support ETC2, decode texture by software
             // etc2_decode_image always decode to RGBA8888
@@ -1956,7 +1956,7 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
         if (block_x < 4 || block_y < 4)
         {
-            AXLOG("axmol: The ASTC block with and height should be >= 4");
+            AXLOGW("The ASTC block with and height should be >= 4");
             break;
         }
 
@@ -1995,7 +1995,7 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
         }
         else
         {
-            AXLOG("axmol: Hardware ASTC decoder not present. Using software decoder");
+            AXLOGW("Hardware ASTC decoder not present. Using software decoder");
 
             _dataLen = _width * _height * 4;
             _data    = static_cast<uint8_t*>(malloc(_dataLen));
@@ -2106,7 +2106,7 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
         else
         {  // if it is not gles or device do not support S3TC, decode texture by software
 
-            AXLOG("axmol: Hardware S3TC decoder not present. Using software decoder");
+            AXLOGW("Hardware S3TC decoder not present. Using software decoder");
 
             int bytePerPixel    = 4;
             unsigned int stride = width * bytePerPixel;
@@ -2181,7 +2181,7 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
     bool hardware = Configuration::getInstance()->supportsATITC();
     if (hardware)  // compressed data length
     {
-        AXLOG("this is atitc H decode");
+        AXLOGD("this is atitc H decode");
 
         switch (header->glInternalFormat)
         {
@@ -2201,7 +2201,7 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
     else  // decompressed data length
     {     /* if it is not gles or device do not support ATITC, decode texture by software */
 
-        AXLOG("axmol: Hardware ATITC decoder not present. Using software decoder");
+        AXLOGW("Hardware ATITC decoder not present. Using software decoder");
 
         _pixelFormat = backend::PixelFormat::RGBA8;
 
@@ -2311,8 +2311,8 @@ bool Image::saveToFile(std::string_view filename, bool isToRGB)
     // only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data
     if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB8 && _pixelFormat != backend::PixelFormat::RGBA8))
     {
-        AXLOG(
-            "axmol:Image: saveToFile is only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 "
+        AXLOGW(
+            "Image: saveToFile is only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 "
             "uncompressed data for now");
         return false;
     }
@@ -2329,7 +2329,7 @@ bool Image::saveToFile(std::string_view filename, bool isToRGB)
     }
     else
     {
-        AXLOG("axmol: Image: saveToFile no support file extension(only .png or .jpg) for file: %s", filename.data());
+        AXLOGW("Image: saveToFile no support file extension(only .png or .jpg) for file: {}", filename);
         return false;
     }
 }
@@ -2475,7 +2475,7 @@ bool Image::saveImageToPNG(std::string_view filePath, bool isToRGB)
     } while (0);
     return ret;
 #else
-    AXLOG("png is not enabled, please enable it in ccConfig.h");
+    AXLOGW("png is not enabled, please enable it in Config.h");
     return false;
 #endif  // AX_USE_PNG
 }
@@ -2579,7 +2579,7 @@ bool Image::saveImageToJPG(std::string_view filePath)
     } while (0);
     return ret;
 #else
-    AXLOG("jpeg is not enabled, please enable it in ccConfig.h");
+    AXLOGW("jpeg is not enabled, please enable it in Config.h");
     return false;
 #endif  // AX_USE_JPEG
 }

@@ -79,7 +79,7 @@ PointArray* PointArray::clone() const
 
 PointArray::~PointArray()
 {
-    AXLOGINFO("deallocing PointArray: %p", this);
+    AXLOGV("deallocing PointArray: {}", fmt::ptr(this));
 }
 
 PointArray::PointArray() {}

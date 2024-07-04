@@ -61,7 +61,7 @@ AnimationCache::AnimationCache() {}
 
 AnimationCache::~AnimationCache()
 {
-    AXLOGINFO("deallocing AnimationCache: %p", this);
+    AXLOGV("deallocing AnimationCache: {}", fmt::ptr(this));
 }
 
 void AnimationCache::addAnimation(Animation* animation, std::string_view name)
@@ -95,10 +95,10 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
 
         if (frameNames.empty())
         {
-            AXLOG(
-                "axmol: AnimationCache: Animation '%s' found in dictionary without any frames - cannot add to "
+            AXLOGW(
+                "axmol: AnimationCache: Animation '{}' found in dictionary without any frames - cannot add to "
                 "animation cache.",
-                anim.first.c_str());
+                anim.first);
             continue;
         }
 
@@ -111,10 +111,10 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
 
             if (!spriteFrame)
             {
-                AXLOG(
-                    "axmol:AnimationCache: Animation '%s' refers to frame '%s' which is not currently in the "
+                AXLOGW(
+                    "axmol:AnimationCache: Animation '{}' refers to frame '{}' which is not currently in the "
                     "SpriteFrameCache. This frame will not be added to the animation.",
-                    anim.first.c_str(), frameName.asString().c_str());
+                    anim.first, frameName.asString());
 
                 continue;
             }
@@ -125,18 +125,18 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
 
         if (frames.empty())
         {
-            AXLOG(
-                "axmol:AnimationCache: None of the frames for animation '%s' were found in the SpriteFrameCache. "
+            AXLOGW(
+                "axmol:AnimationCache: None of the frames for animation '{}' were found in the SpriteFrameCache. "
                 "Animation is not being added to the Animation Cache.",
-                anim.first.c_str());
+                anim.first);
             continue;
         }
         else if (frames.size() != frameNameSize)
         {
-            AXLOG(
+            AXLOGW(
                 "axmol:AnimationCache: An animation in your dictionary refers to a frame which is not in the "
-                "SpriteFrameCache. Some or all of the frames for the animation '%s' may be missing.",
-                anim.first.c_str());
+                "SpriteFrameCache. Some or all of the frames for the animation '{}' may be missing.",
+                anim.first);
         }
 
         animation = Animation::create(frames, delay, 1);
@@ -161,10 +161,10 @@ void AnimationCache::parseVersion2(const ValueMap& animations)
 
         if (frameArray.empty())
         {
-            AXLOG(
-                "axmol:AnimationCache: Animation '%s' found in dictionary without any frames - cannot add to "
+            AXLOGW(
+                "axmol:AnimationCache: Animation '{}' found in dictionary without any frames - cannot add to "
                 "animation cache.",
-                name.c_str());
+                name);
             continue;
         }
 
@@ -179,10 +179,10 @@ void AnimationCache::parseVersion2(const ValueMap& animations)
 
             if (!spriteFrame)
             {
-                AXLOG(
-                    "axmol:AnimationCache: Animation '%s' refers to frame '%s' which is not currently in the "
+                AXLOGW(
+                    "axmol:AnimationCache: Animation '{}' refers to frame '{}' which is not currently in the "
                     "SpriteFrameCache. This frame will not be added to the animation.",
-                    name.c_str(), spriteFrameName.c_str());
+                    name, spriteFrameName);
 
                 continue;
             }
@@ -211,7 +211,7 @@ void AnimationCache::addAnimationsWithDictionary(const ValueMap& dictionary, std
     auto anisItr = dictionary.find("animations");
     if (anisItr == dictionary.end())
     {
-        AXLOG("axmol: AnimationCache: No animations were found in provided dictionary.");
+        AXLOGW("axmol: AnimationCache: No animations were found in provided dictionary.");
         return;
     }
 

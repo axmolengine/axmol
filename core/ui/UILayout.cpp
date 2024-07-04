@@ -1064,7 +1064,7 @@ Vec2 Layout::getWorldCenterPoint(Widget* widget) const
     Layout* layout = dynamic_cast<Layout*>(widget);
     // FIXEDME: we don't need to calculate the content size of layout anymore
     Vec2 widgetSize = layout ? layout->getLayoutAccumulatedSize() : widget->getContentSize();
-    //    AXLOG("content size : width = %f, height = %f", widgetSize.width, widgetSize.height);
+    //    AXLOGD("content size : width = {}, height = {}", widgetSize.width, widgetSize.height);
     return widget->convertToWorldSpace(Vec2(widgetSize.width / 2, widgetSize.height / 2));
 }
 

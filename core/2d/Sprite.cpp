@@ -193,7 +193,7 @@ bool Sprite::initWithFile(std::string_view filename, PixelFormat format)
 {
     if (filename.empty())
     {
-        AXLOG("Call Sprite::initWithFile with blank resource filename.");
+        AXLOGD("Call Sprite::initWithFile with blank resource filename.");
         return false;
     }
 
@@ -320,7 +320,7 @@ bool Sprite::initWithImageData(const Data& imageData, std::string_view key)
 {
     if (imageData.isNull() || key.empty())
     {
-        AXLOG("Call Sprite::initWithImageData empty data or blank key.");
+        AXLOGD("Call Sprite::initWithImageData empty data or blank key.");
         return false;
     }
 
@@ -706,7 +706,7 @@ void Sprite::setCenterRectNormalized(const ax::Rect& rectTopLeft)
 {
     if (_renderMode != RenderMode::QUAD && _renderMode != RenderMode::SLICE9)
     {
-        AXLOGWARN("Warning: Sprite::setCenterRectNormalized() only works with QUAD and SLICE9 render modes");
+        AXLOGW("Warning: Sprite::setCenterRectNormalized() only works with QUAD and SLICE9 render modes");
         return;
     }
 
@@ -762,7 +762,7 @@ void Sprite::setCenterRect(const ax::Rect& rectInPoints)
 {
     if (_renderMode != RenderMode::QUAD && _renderMode != RenderMode::SLICE9)
     {
-        AXLOGWARN("Warning: Sprite::setCenterRect() only works with QUAD and SLICE9 render modes");
+        AXLOGW("Warning: Sprite::setCenterRect() only works with QUAD and SLICE9 render modes");
         return;
     }
 
@@ -1360,7 +1360,7 @@ void Sprite::setVisible(bool bVisible)
 void Sprite::setContentSize(const Vec2& size)
 {
     if (_renderMode == RenderMode::QUAD_BATCHNODE || _renderMode == RenderMode::POLYGON)
-        AXLOGWARN(
+        AXLOGW(
             "Sprite::setContentSize() doesn't stretch the sprite when using QUAD_BATCHNODE or POLYGON render modes");
 
     Node::setContentSize(size);

@@ -83,7 +83,7 @@ THE SOFTWARE.
 
 - (void)setSelectedTextRange:(UITextRange*)aSelectedTextRange
 {
-    AXLOG("UITextRange:setSelectedTextRange");
+    AXLOGD("UITextRange:setSelectedTextRange");
 }
 
 - (UITextRange*)selectedTextRange
@@ -115,56 +115,56 @@ THE SOFTWARE.
 - (NSWritingDirection)baseWritingDirectionForPosition:(nonnull UITextPosition*)position
                                           inDirection:(UITextStorageDirection)direction
 {
-    AXLOG("baseWritingDirectionForPosition");
+    AXLOGD("baseWritingDirectionForPosition");
     return NSWritingDirectionLeftToRight;
 }
 
 - (CGRect)caretRectForPosition:(nonnull UITextPosition*)position
 {
-    AXLOG("caretRectForPosition");
+    AXLOGD("caretRectForPosition");
     return CGRectZero;
 }
 
 - (nullable UITextRange*)characterRangeAtPoint:(CGPoint)point
 {
-    AXLOG("characterRangeAtPoint");
+    AXLOGD("characterRangeAtPoint");
     return nil;
 }
 
 - (nullable UITextRange*)characterRangeByExtendingPosition:(nonnull UITextPosition*)position
                                                inDirection:(UITextLayoutDirection)direction
 {
-    AXLOG("characterRangeByExtendingPosition");
+    AXLOGD("characterRangeByExtendingPosition");
     return nil;
 }
 
 - (nullable UITextPosition*)closestPositionToPoint:(CGPoint)point
 {
-    AXLOG("closestPositionToPoint");
+    AXLOGD("closestPositionToPoint");
     return nil;
 }
 
 - (nullable UITextPosition*)closestPositionToPoint:(CGPoint)point withinRange:(nonnull UITextRange*)range
 {
-    AXLOG("closestPositionToPoint");
+    AXLOGD("closestPositionToPoint");
     return nil;
 }
 
 - (NSComparisonResult)comparePosition:(nonnull UITextPosition*)position toPosition:(nonnull UITextPosition*)other
 {
-    AXLOG("comparePosition");
+    AXLOGD("comparePosition");
     return (NSComparisonResult)0;
 }
 
 - (CGRect)firstRectForRange:(nonnull UITextRange*)range
 {
-    AXLOG("firstRectForRange");
+    AXLOGD("firstRectForRange");
     return CGRectNull;
 }
 
 - (NSInteger)offsetFromPosition:(nonnull UITextPosition*)from toPosition:(nonnull UITextPosition*)toPosition
 {
-    AXLOG("offsetFromPosition");
+    AXLOGD("offsetFromPosition");
     return 0;
 }
 
@@ -172,20 +172,20 @@ THE SOFTWARE.
                                      inDirection:(UITextLayoutDirection)direction
                                           offset:(NSInteger)offset
 {
-    AXLOG("positionFromPosition");
+    AXLOGD("positionFromPosition");
     return nil;
 }
 
 - (nullable UITextPosition*)positionFromPosition:(nonnull UITextPosition*)position offset:(NSInteger)offset
 {
-    AXLOG("positionFromPosition");
+    AXLOGD("positionFromPosition");
     return nil;
 }
 
 - (nullable UITextPosition*)positionWithinRange:(nonnull UITextRange*)range
                             farthestInDirection:(UITextLayoutDirection)direction
 {
-    AXLOG("positionWithinRange");
+    AXLOGD("positionWithinRange");
     return nil;
 }
 
@@ -194,7 +194,7 @@ THE SOFTWARE.
 
 - (nonnull NSArray<UITextSelectionRect*>*)selectionRectsForRange:(nonnull UITextRange*)range
 {
-    AXLOG("selectionRectsForRange");
+    AXLOGD("selectionRectsForRange");
     return nil;
 }
 
@@ -203,7 +203,7 @@ THE SOFTWARE.
 
 - (void)setMarkedText:(nullable NSString*)markedText selectedRange:(NSRange)selectedRange
 {
-    AXLOG("setMarkedText");
+    AXLOGD("setMarkedText");
     if (markedText == self.myMarkedText)
     {
         return;
@@ -218,7 +218,7 @@ THE SOFTWARE.
 
 - (UITextRange*)markedTextRange
 {
-    AXLOG("markedTextRange");
+    AXLOGD("markedTextRange");
     if (nil != self.myMarkedText)
     {
         return [[[UITextRange alloc] init] autorelease];
@@ -228,7 +228,7 @@ THE SOFTWARE.
 
 - (nullable NSString*)textInRange:(nonnull UITextRange*)range
 {
-    AXLOG("textInRange");
+    AXLOGD("textInRange");
     if (nil != self.myMarkedText)
     {
         return self.myMarkedText;
@@ -239,13 +239,13 @@ THE SOFTWARE.
 - (nullable UITextRange*)textRangeFromPosition:(nonnull UITextPosition*)fromPosition
                                     toPosition:(nonnull UITextPosition*)toPosition
 {
-    AXLOG("textRangeFromPosition");
+    AXLOGD("textRangeFromPosition");
     return nil;
 }
 
 - (void)unmarkText
 {
-    AXLOG("unmarkText");
+    AXLOGD("unmarkText");
     if (nil == self.myMarkedText)
     {
         return;

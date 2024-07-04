@@ -496,12 +496,12 @@ void Device::setAccelerometerInterval(float interval)
         }
         catch (winrt::hresult_error const& /*ex*/)
         {
-            AXLOG("Device::setAccelerometerInterval not supported on this device");
+            AXLOGW("Device::setAccelerometerInterval not supported on this device");
         }
     }
     else
     {
-        AXLOG("Device::setAccelerometerInterval: accelerometer not enabled.");
+        AXLOGW("Device::setAccelerometerInterval: accelerometer not enabled.");
     }
 }
 

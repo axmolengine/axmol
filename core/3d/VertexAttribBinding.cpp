@@ -145,13 +145,13 @@ void VertexAttribBinding::setVertexAttribPointer(VertexLayout* vertexLayout,
     auto v = getVertexAttribValue(name);
     if (v)
     {
-        // AXLOG("axmol: set attribute '%s' location: %d, offset: %d", name.c_str(), v->location, offset);
+        // AXLOGD("set attribute '{}' location: {}, offset: {}", name, v->location, offset);
         vertexLayout->setAttrib(name, v->location, type, offset, normalized);
         _vertexAttribsFlags |= flag;
     }
     else
     {
-        // AXLOG("axmol: warning: Attribute not found: %s", name.c_str());
+        // AXLOGD("warning: Attribute not found: {}", name);
     }
 }
 

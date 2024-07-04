@@ -50,7 +50,7 @@ AutoreleasePool::AutoreleasePool(std::string_view name)
 
 AutoreleasePool::~AutoreleasePool()
 {
-    AXLOGINFO("deallocing AutoreleasePool: %p", this);
+    AXLOGV("deallocing AutoreleasePool: {}", fmt::ptr(this));
     clear();
 
     PoolManager::getInstance()->pop();
@@ -89,12 +89,12 @@ bool AutoreleasePool::contains(Object* object) const
 
 void AutoreleasePool::dump()
 {
-    AXLOG("autorelease pool: %s, number of managed object %d\n", _name.c_str(),
+    AXLOGD("autorelease pool: {}, number of managed object {}\n", _name,
           static_cast<int>(_managedObjectArray.size()));
-    AXLOG("%20s%20s%20s", "Object pointer", "Object id", "reference count");
+    AXLOGD("{}\t{}\t{}", "Object pointer", "Object id", "reference count");
     for (const auto& obj : _managedObjectArray)
     {
-        AXLOG("%20p%20u\n", obj, obj->getReferenceCount());
+        AXLOGD("{}\t{}\n", fmt::ptr(obj), obj->getReferenceCount());
     }
 }
 
@@ -130,7 +130,7 @@ PoolManager::PoolManager()
 
 PoolManager::~PoolManager()
 {
-    AXLOGINFO("deallocing PoolManager: %p", this);
+    AXLOGI("deallocing PoolManager: {}", fmt::ptr(this));
 
     while (!_releasePoolStack.empty())
     {

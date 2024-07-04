@@ -100,7 +100,7 @@ void TextAtlas::setProperty(std::string_view stringValue,
 
     updateContentSizeWithTextureSize(_labelAtlasRenderer->getContentSize());
     _labelAtlasRendererAdaptDirty = true;
-    //    AXLOG("cs w %f, h %f", _contentSize.width, _contentSize.height);
+    //    AXLOGD("cs w {}, h {}", _contentSize.width, _contentSize.height);
 }
 
 void TextAtlas::setString(std::string_view value)
@@ -113,7 +113,7 @@ void TextAtlas::setString(std::string_view value)
     _labelAtlasRenderer->setString(value);
     updateContentSizeWithTextureSize(_labelAtlasRenderer->getContentSize());
     _labelAtlasRendererAdaptDirty = true;
-    //    AXLOG("cssss w %f, h %f", _contentSize.width, _contentSize.height);
+    //    AXLOGD("cssss w {}, h {}", _contentSize.width, _contentSize.height);
 }
 
 std::string_view TextAtlas::getString() const

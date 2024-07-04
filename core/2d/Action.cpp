@@ -42,7 +42,7 @@ Action::Action() : _originalTarget(nullptr), _target(nullptr), _tag(Action::INVA
 
 Action::~Action()
 {
-    AXLOGINFO("deallocing Action: %p - tag: %i", this, _tag);
+    AXLOGV("deallocing Action: {} - tag: {}", fmt::ptr(this), _tag);
 }
 
 std::string Action::description() const
@@ -67,12 +67,12 @@ bool Action::isDone() const
 
 void Action::step(float /*dt*/)
 {
-    AXLOG("[Action step]. override me");
+    AXLOGD("[Action step]. override me");
 }
 
 void Action::update(float /*time*/)
 {
-    AXLOG("[Action update]. override me");
+    AXLOGD("[Action update]. override me");
 }
 
 //

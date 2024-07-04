@@ -50,7 +50,7 @@ FileUtils* FileUtils::getInstance()
         {
           delete s_sharedFileUtils;
           s_sharedFileUtils = nullptr;
-          AXLOG("ERROR: Could not init CCFileUtilsEmscripten");
+          AXLOGE("ERROR: Could not init FileUtilsEmscripten");
         }
     }
     return s_sharedFileUtils;

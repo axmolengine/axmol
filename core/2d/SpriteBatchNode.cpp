@@ -443,13 +443,13 @@ void SpriteBatchNode::increaseAtlasCapacity()
     // this is likely computationally expensive
     ssize_t quantity = (_textureAtlas->getCapacity() + 1) * 4 / 3;
 
-    AXLOG("axmol: SpriteBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
+    AXLOGD("SpriteBatchNode: resizing TextureAtlas capacity from [{}] to [{}].",
           static_cast<int>(_textureAtlas->getCapacity()), static_cast<int>(quantity));
 
     if (!_textureAtlas->resizeCapacity(quantity))
     {
         // serious problems
-        AXLOGWARN("axmol: WARNING: Not enough memory to resize the atlas");
+        AXLOGW("WARNING: Not enough memory to resize the atlas");
         AXASSERT(false, "Not enough memory to resize the atlas");
     }
 }
@@ -462,7 +462,7 @@ void SpriteBatchNode::reserveCapacity(ssize_t newCapacity)
     if (!_textureAtlas->resizeCapacity(newCapacity))
     {
         // serious problems
-        AXLOGWARN("axmol: WARNING: Not enough memory to resize the atlas");
+        AXLOGW("WARNING: Not enough memory to resize the atlas");
         AXASSERT(false, "Not enough memory to resize the atlas");
     }
 }

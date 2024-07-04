@@ -37,7 +37,7 @@ TMXObjectGroup::TMXObjectGroup() : _groupName("") {}
 
 TMXObjectGroup::~TMXObjectGroup()
 {
-    AXLOGINFO("deallocing TMXObjectGroup: %p", this);
+    AXLOGV("deallocing TMXObjectGroup: {}", fmt::ptr(this));
 }
 
 ValueMap TMXObjectGroup::getObject(std::string_view objectName) const
