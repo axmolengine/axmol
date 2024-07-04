@@ -208,7 +208,7 @@ void WebViewImpl::loadData(const Data& data,
                            std::string_view baseURL)
 {
     std::string dataString(reinterpret_cast<char*>(data.getBytes()), static_cast<unsigned int>(data.getSize()));
-    JniHelper::callStaticVoidMethod(className, "setJavascriptInterfaceScheme", _viewTag, dataString, MIMEType, encoding,
+    JniHelper::callStaticVoidMethod(className, "loadData", _viewTag, dataString, MIMEType, encoding,
                                     baseURL);
 }
 
