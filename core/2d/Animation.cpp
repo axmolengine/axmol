@@ -59,7 +59,7 @@ bool AnimationFrame::initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUn
 
 AnimationFrame::~AnimationFrame()
 {
-    AXLOGD("deallocing AnimationFrame: {}", fmt::ptr(this));
+    AXLOGV("deallocing AnimationFrame: {}", fmt::ptr(this));
 
     AX_SAFE_RELEASE(_spriteFrame);
 }
