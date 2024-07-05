@@ -77,7 +77,6 @@ void RenderTargetGL::update() const
             CHECK_GL_ERROR_DEBUG();
         }
 
-
         if (bitmask::any(_dirtyFlags, TargetBufferFlags::STENCIL))
         {
             // stencil attachment
