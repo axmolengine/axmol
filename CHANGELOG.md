@@ -15,7 +15,7 @@
 ### Mark as deprecated
 
 - `AsyncTaskPool`, use `JobSystem` instead.
-- `AXLOG`, `AXLOGINFO`, `AXLOGWARN`, `AXLOGERROR`, use `AXLOGD`, `AXLOGI`, `AXLOGE` instead.
+- `AXLOG`, `AXLOGINFO`, `AXLOGWARN`, `AXLOGERROR`, use instead: `AXLOGV`(Verbose), `AXLOGD`(Debug), `AXLOGI`, `AXLOGW`, `AXLOGE`.
 
 ### Bug Fixes
 
