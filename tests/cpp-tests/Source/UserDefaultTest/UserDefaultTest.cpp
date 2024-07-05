@@ -69,7 +69,7 @@ UserDefaultTest::UserDefaultTest()
 //         ss << buffer[i] << " ";
 //     }
 //
-//     AXLOG("%s is %s", key, ss.str().c_str());
+//     AXLOGD("%s is %s", key, ss.str().c_str());
 // }
 
 // template<typename T>

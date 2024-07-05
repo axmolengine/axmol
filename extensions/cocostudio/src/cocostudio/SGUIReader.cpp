@@ -134,7 +134,7 @@ int GUIReader::getVersionInteger(const char* str)
     int is  = atoi(s.c_str());
 
     int iVersion = it * 1000 + ih * 100 + ite * 10 + is;
-    //    AXLOG("iversion %d",iVersion);
+    //    AXLOGD("iversion %d",iVersion);
     return iVersion;
     /************************/
 }
@@ -214,7 +214,7 @@ Widget* GUIReader::widgetFromJsonFile(const char* fileName)
     jsonDict.Parse<0>(contentStr.c_str());
     if (jsonDict.HasParseError())
     {
-        AXLOG("GetParseError %d\n", jsonDict.GetParseError());
+        AXLOGD("GetParseError %d\n", jsonDict.GetParseError());
     }
     Widget* widget                  = nullptr;
     const char* fileVersion         = DICTOOL->getStringValue_json(jsonDict, "version");
@@ -534,7 +534,7 @@ Widget* WidgetPropertiesReader0250::createWidget(const rapidjson::Value& data,
     /* *********temp********* */
     //    ActionManager::getInstance()->releaseActions();
     /* ********************** */
-    //    AXLOG("file name == [%s]",fileName);
+    //    AXLOGD("file name == [%s]",fileName);
     Object* rootWidget = (Object*)widget;
     ActionManagerEx::getInstance()->initWithDictionary(fileName, actions, rootWidget);
     return widget;
@@ -1311,7 +1311,7 @@ Widget* WidgetPropertiesReader0300::createWidget(const rapidjson::Value& data,
     /* *********temp********* */
     //    ActionManager::getInstance()->releaseActions();
     /* ********************** */
-    //    AXLOG("file name == [%s]",fileName);
+    //    AXLOGD("file name == [%s]",fileName);
     Object* rootWidget = (Object*)widget;
     ActionManagerEx::getInstance()->initWithDictionary(fileName, actions, rootWidget);
     return widget;
@@ -1421,7 +1421,7 @@ Widget* WidgetPropertiesReader0300::widgetFromBinary(CocoLoader* cocoLoader, stE
             }
             else
             {
-                AXLOG("Warning!!! classname not found!");
+                AXLOGD("Warning!!! classname not found!");
             }
         }
         else if (key == "children")
@@ -1470,13 +1470,13 @@ Widget* WidgetPropertiesReader0300::widgetFromBinary(CocoLoader* cocoLoader, stE
             customJsonDict.Parse<0>(customProperty);
             if (customJsonDict.HasParseError())
             {
-                AXLOG("GetParseError %d\n", customJsonDict.GetParseError());
+                AXLOGD("GetParseError %d\n", customJsonDict.GetParseError());
             }
             setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
         }
         else
         {
-            AXLOG("Widget or WidgetReader doesn't exists!!!  Please check your csb file.");
+            AXLOGD("Widget or WidgetReader doesn't exists!!!  Please check your csb file.");
         }
     }
 
@@ -1559,7 +1559,7 @@ Widget* WidgetPropertiesReader0300::widgetFromJsonDictionary(const rapidjson::Va
     const char* classname             = DICTOOL->getStringValue_json(data, "classname");
     const rapidjson::Value& uiOptions = DICTOOL->getSubDictionary_json(data, "options");
     Widget* widget                    = this->createGUI(classname);
-    //    AXLOG("classname = %s", classname);
+    //    AXLOGD("classname = %s", classname);
     std::string readerName = this->getWidgetReaderClassName(classname);
 
     WidgetReaderProtocol* reader = this->createWidgetReaderProtocol(readerName);
@@ -1585,13 +1585,13 @@ Widget* WidgetPropertiesReader0300::widgetFromJsonDictionary(const rapidjson::Va
             customJsonDict.Parse<0>(customProperty);
             if (customJsonDict.HasParseError())
             {
-                AXLOG("GetParseError %d\n", customJsonDict.GetParseError());
+                AXLOGD("GetParseError %d\n", customJsonDict.GetParseError());
             }
             setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
         }
         else
         {
-            AXLOG("Widget or WidgetReader doesn't exists!!!  Please check your json file.");
+            AXLOGD("Widget or WidgetReader doesn't exists!!!  Please check your json file.");
         }
     }
 

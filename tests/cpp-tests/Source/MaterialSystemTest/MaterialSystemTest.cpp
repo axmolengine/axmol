@@ -417,7 +417,7 @@ void Material_parsePerformance::onEnter()
             ui::Slider* slider = dynamic_cast<ui::Slider*>(sender);
             float p            = slider->getPercent() / 100.0f;
             slider->setTouchEnabled(false);
-            AXLOG("Will parsing material %d times", (int)(p * _maxParsingCoumt));
+            AXLOGD("Will parsing material %d times", (int)(p * _maxParsingCoumt));
             Label* label = dynamic_cast<Label*>(this->getChildByTag(SHOW_LEBAL_TAG));
             if (label)
             {
@@ -467,7 +467,7 @@ void Material_parsePerformance::parsingTesting(unsigned int count)
                                               elapsed_secs, count);
         label->setString(str);
 
-        AXLOG("Took: %.3f seconds for parsing material %d times.", elapsed_secs, count);
+        AXLOGD("Took: %.3f seconds for parsing material %d times.", elapsed_secs, count);
     }
 }
 

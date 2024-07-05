@@ -182,7 +182,7 @@ void BoneNode::addToBoneList(BoneNode* bone)
                     _rootSkeleton->_subBonesOrderDirty = true;
                 }
                 else
-                    AXLOG("already has a bone named %s in skeleton %s", bonename.data(),
+                    AXLOGD("already has a bone named %s in skeleton %s", bonename.data(),
                           _rootSkeleton->getName().data());
             }
         }

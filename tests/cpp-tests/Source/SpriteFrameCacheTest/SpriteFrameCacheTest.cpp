@@ -156,7 +156,7 @@ public:
         if (fullPath.empty())
         {
             // return if plist file doesn't exist
-            AXLOG("GenericJsonArraySpriteSheetLoader: can not find %s", filePath.data());
+            AXLOGD("GenericJsonArraySpriteSheetLoader: can not find %s", filePath.data());
             return;
         }
 
@@ -193,7 +193,7 @@ public:
             // append .png
             texturePath = texturePath.append(".png");
 
-            AXLOG("GenericJsonArraySpriteSheetLoader::load: Trying to use file %s as texture", texturePath.c_str());
+            AXLOGD("GenericJsonArraySpriteSheetLoader::load: Trying to use file %s as texture", texturePath.c_str());
         }
 
         addSpriteFramesWithJson(jDoc, texturePath, filePath, cache);
@@ -280,7 +280,7 @@ public:
         }
         else
         {
-            AXLOG("GenericJsonArraySpriteSheetLoader::reload: Couldn't load texture");
+            AXLOGD("GenericJsonArraySpriteSheetLoader::reload: Couldn't load texture");
         }
     }
 
@@ -330,7 +330,7 @@ protected:
         }
         else
         {
-            AXLOG("GenericJsonArraySpriteSheetLoader::addSpriteFramesWithJson: Couldn't load texture");
+            AXLOGD("GenericJsonArraySpriteSheetLoader::addSpriteFramesWithJson: Couldn't load texture");
         }
     }
 

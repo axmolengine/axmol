@@ -1445,7 +1445,7 @@ void GList::handleScroll(bool forceUpdate)
             forceUpdate = false;
             if (enterCounter > 20)
             {
-                AXLOG("FairyGUI: list will never be filled as the item renderer function always returns a different size.");
+                AXLOGD("FairyGUI: list will never be filled as the item renderer function always returns a different size.");
                 break;
             }
         }
@@ -1460,7 +1460,7 @@ void GList::handleScroll(bool forceUpdate)
             forceUpdate = false;
             if (enterCounter > 20)
             {
-                AXLOG("FairyGUI: list will never be filled as the item renderer function always returns a different size.");
+                AXLOGD("FairyGUI: list will never be filled as the item renderer function always returns a different size.");
                 break;
             }
         }

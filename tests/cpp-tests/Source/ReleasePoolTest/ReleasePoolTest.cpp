@@ -36,12 +36,12 @@ class TestObject : public Object
 public:
     TestObject() : _name("") {}
 
-    TestObject(std::string name) : _name(name) { AXLOG("TestObject:%s is created", _name.c_str()); }
+    TestObject(std::string name) : _name(name) { AXLOGD("TestObject:%s is created", _name.c_str()); }
 
     ~TestObject()
     {
         if (_name.size() > 0)
-            AXLOG("TestObject:%s is destroyed", _name.c_str());
+            AXLOGD("TestObject:%s is destroyed", _name.c_str());
     }
 
 private:

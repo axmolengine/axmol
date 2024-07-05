@@ -46,19 +46,19 @@ void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const
         {
             int narg = err->index;
             if (err->array)
-                AXLOG("%s\n     %s argument #%d is array of '%s'; array of '%s' expected.\n", msg + 2, funcName, narg,
+                AXLOGD("%s\n     %s argument #%d is array of '%s'; array of '%s' expected.\n", msg + 2, funcName, narg,
                       provided, expected);
             else
-                AXLOG("%s\n     %s argument #%d is '%s'; '%s' expected.\n", msg + 2, funcName, narg, provided,
+                AXLOGD("%s\n     %s argument #%d is '%s'; '%s' expected.\n", msg + 2, funcName, narg, provided,
                       expected);
         }
         else if (msg[1] == 'v')
         {
             if (err->array)
-                AXLOG("%s\n     %s value is array of '%s'; array of '%s' expected.\n", funcName, msg + 2, provided,
+                AXLOGD("%s\n     %s value is array of '%s'; array of '%s' expected.\n", funcName, msg + 2, provided,
                       expected);
             else
-                AXLOG("%s\n     %s value is '%s'; '%s' expected.\n", msg + 2, funcName, provided, expected);
+                AXLOGD("%s\n     %s value is '%s'; '%s' expected.\n", msg + 2, funcName, provided, expected);
         }
     }
 }

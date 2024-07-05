@@ -159,7 +159,7 @@ void ConsoleUploadFile::uploadFile()
     s = getaddrinfo(nodeName.c_str(), "5678", &hints, &result);
     if (s != 0)
     {
-        AXLOG("ConsoleUploadFile: getaddrinfo error");
+        AXLOGD("ConsoleUploadFile: getaddrinfo error");
         return;
     }
 
@@ -186,7 +186,7 @@ void ConsoleUploadFile::uploadFile()
 
     if (rp == nullptr)
     { /* No address succeeded */
-        AXLOG("ConsoleUploadFile: could not connect!");
+        AXLOGD("ConsoleUploadFile: could not connect!");
         return;
     }
 

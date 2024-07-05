@@ -103,7 +103,7 @@ void PhysicsDemo::onEnter()
 
 Sprite* PhysicsDemo::addGrossiniAtPosition(Vec2 p, float scale /* = 1.0*/)
 {
-    AXLOG("Add sprite %0.2f x %02.f", p.x, p.y);
+    AXLOGD("Add sprite %0.2f x %02.f", p.x, p.y);
 
     int posx, posy;
 

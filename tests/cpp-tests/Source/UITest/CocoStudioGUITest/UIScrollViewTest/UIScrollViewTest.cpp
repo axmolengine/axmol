@@ -820,13 +820,13 @@ bool UIScrollViewStopScrollingTest::init()
             switch (e)
             {
             case ui::ScrollView::EventType::SCROLLING_BEGAN:
-                AXLOG("scrolling began!");
+                AXLOGD("scrolling began!");
                 break;
             case ui::ScrollView::EventType::SCROLLING_ENDED:
-                AXLOG("scrolling ended!");
+                AXLOGD("scrolling ended!");
                 break;
             case ui::ScrollView::EventType::AUTOSCROLL_ENDED:
-                AXLOG("auto-scrolling ended!");
+                AXLOGD("auto-scrolling ended!");
                 break;
             default:
                 break;
