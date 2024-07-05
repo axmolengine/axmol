@@ -322,7 +322,7 @@ void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
             touch->setTouchInfo(unusedIndex, (x - _viewPortRect.origin.x) / _scaleX,
                                 (y - _viewPortRect.origin.y) / _scaleY);
 
-            AXLOGI("x = {} y = {}", touch->getLocationInView().x, touch->getLocationInView().y);
+            AXLOGV("x = {} y = {}", touch->getLocationInView().x, touch->getLocationInView().y);
 
             g_touchIdReorderMap.emplace(id, unusedIndex);
             touchEvent._touches.emplace_back(touch);
@@ -369,7 +369,7 @@ void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], 
             continue;
         }
 
-        AXLOGI("Moving touches with id: {}, x={}, y={}, force={}, maxFource={}", (int)id, x, y, force, maxForce);
+        AXLOGV("Moving touches with id: {}, x={}, y={}, force={}, maxFource={}", (int)id, x, y, force, maxForce);
         Touch* touch = g_touches[iter->second];
         if (touch)
         {
@@ -425,7 +425,7 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
         Touch* touch = g_touches[iter->second];
         if (touch)
         {
-            AXLOGI("Ending touches with id: {}, x={}, y={}", (int)id, x, y);
+            AXLOGV("Ending touches with id: {}, x={}, y={}", (int)id, x, y);
             touch->setTouchInfo(iter->second, (x - _viewPortRect.origin.x) / _scaleX,
                                 (y - _viewPortRect.origin.y) / _scaleY);
 
