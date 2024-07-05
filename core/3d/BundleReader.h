@@ -188,7 +188,7 @@ inline bool BundleReader::read<char>(char* ptr)
 template <>
 inline bool BundleReader::read<std::string>(std::string* /*ptr*/)
 {
-    AXLOG("can not read std::string, use readString() instead");
+    AXLOGW("can not read std::string, use readString() instead");
     return false;
 }
 

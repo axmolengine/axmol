@@ -371,7 +371,7 @@
 
 - (BOOL)textViewShouldBeginEditing:(UITextView*)textView
 {
-    AXLOG("textFieldShouldBeginEditing...");
+    AXLOGD("textFieldShouldBeginEditing...");
     _editState     = YES;
     _returnPressed = NO;
 
@@ -389,7 +389,7 @@
 
 - (BOOL)textViewShouldEndEditing:(UITextView*)textView
 {
-    AXLOG("textFieldShouldEndEditing...");
+    AXLOGD("textFieldShouldEndEditing...");
     _editState = NO;
     getEditBoxImplIOS()->refreshInactiveText();
 
@@ -464,7 +464,7 @@
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField*)sender  // return NO to disallow editing.
 {
-    AXLOG("textFieldShouldBeginEditing...");
+    AXLOGD("textFieldShouldBeginEditing...");
     _editState     = YES;
     _returnPressed = NO;
 
@@ -482,7 +482,7 @@
 
 - (BOOL)textFieldShouldEndEditing:(UITextField*)sender
 {
-    AXLOG("textFieldShouldEndEditing...");
+    AXLOGD("textFieldShouldEndEditing...");
     _editState            = NO;
     const char* inputText = [sender.text UTF8String];
 

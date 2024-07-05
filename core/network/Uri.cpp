@@ -19,7 +19,7 @@
  */
 
 #include "network/Uri.h"
-#include "base/Logging.h"  // For AXLOGERROR macro
+#include "base/Logging.h"
 
 #include <regex>
 #include <sstream>
@@ -169,7 +169,7 @@ bool Uri::doParse(std::string_view str)
 
     if (str.empty())
     {
-        AXLOGERROR("%s", "Empty URI is invalid!");
+        AXLOGE("{}", "Empty URI is invalid!");
         return false;
     }
 
@@ -185,7 +185,7 @@ bool Uri::doParse(std::string_view str)
     std::smatch match;
     if (UNLIKELY(!std::regex_match(copied.cbegin(), copied.cend(), match, uriRegex)))
     {
-        AXLOGERROR("Invalid URI: %s", str.data());
+        AXLOGE("Invalid URI: {}", str);
         return false;
     }
 
@@ -211,7 +211,7 @@ bool Uri::doParse(std::string_view str)
         if (!std::regex_match(authority.first, authority.second, authorityMatch, authorityRegex))
         {
             std::string invalidAuthority(authority.first, authority.second);
-            AXLOGERROR("Invalid URI authority: %s", invalidAuthority.c_str());
+            AXLOGE("Invalid URI authority: {}", invalidAuthority);
             return false;
         }
 

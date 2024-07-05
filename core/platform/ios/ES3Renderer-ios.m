@@ -212,7 +212,7 @@
 
 - (void)dealloc
 {
-//    AXLOGINFO("deallocing ES3Renderer: %p", self);
+//    AXLOGV("deallocing ES3Renderer: {}", fmt::ptr(self));
 
     // Tear down GL
     if (defaultFramebuffer_) {

@@ -478,7 +478,7 @@ void StringUTF8::replace(std::string_view newStr)
 
         if (lengthString == 0)
         {
-            AXLOG("Bad utf-8 set string: %s", newStr.data());
+            AXLOGD("Bad utf-8 set string: {}", newStr);
             return;
         }
 

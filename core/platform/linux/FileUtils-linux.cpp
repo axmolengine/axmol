@@ -62,7 +62,7 @@ FileUtils* FileUtils::getInstance()
         {
             delete s_sharedFileUtils;
             s_sharedFileUtils = nullptr;
-            AXLOG("ERROR: Could not init CCFileUtilsLinux");
+            AXLOGE("ERROR: Could not init FileUtilsLinux");
         }
     }
     return s_sharedFileUtils;

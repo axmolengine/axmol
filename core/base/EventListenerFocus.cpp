@@ -36,7 +36,7 @@ EventListenerFocus::EventListenerFocus() : onFocusChanged(nullptr) {}
 
 EventListenerFocus::~EventListenerFocus()
 {
-    AXLOGINFO("In the destructor of EventListenerFocus, %p", this);
+    AXLOGV("In the destructor of EventListenerFocus, {}", fmt::ptr(this));
 }
 
 EventListenerFocus* EventListenerFocus::create()

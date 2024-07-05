@@ -694,7 +694,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
         _particleData.release();
         if (!_particleData.init(tp))
         {
-            AXLOG("Particle system: not enough memory");
+            AXLOGW("Particle system: not enough memory");
             return;
         }
         V3F_C4B_T2F_Quad* quadsNew = (V3F_C4B_T2F_Quad*)realloc(_quads, quadsSize);
@@ -720,7 +720,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
             if (indicesNew)
                 _indices = indicesNew;
 
-            AXLOG("Particle system: out of memory");
+            AXLOGW("Particle system: out of memory");
             return;
         }
 
@@ -782,7 +782,7 @@ bool ParticleSystemQuad::allocMemory()
 
     if (!_quads || !_indices)
     {
-        AXLOG("axmol: Particle system: not enough memory");
+        AXLOGW("axmol: Particle system: not enough memory");
         AX_SAFE_FREE(_quads);
         AX_SAFE_FREE(_indices);
 

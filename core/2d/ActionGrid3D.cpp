@@ -74,7 +74,7 @@ void Waves3D::update(float time)
             Vec2 pos((float)i, (float)j);
             Vec3 v = getOriginalVertex(pos);
             v.z += (sinf((float)M_PI * time * _waves * 2 + (v.y + v.x) * 0.01f) * _amplitude * _amplitudeRate);
-            // AXLOG("v.z offset is %f\n", (sinf((float)M_PI * time * _waves * 2 + (v.y+v.x) * .01f) * _amplitude *
+            // AXLOGD("v.z offset is {}\n", (sinf((float)M_PI * time * _waves * 2 + (v.y+v.x) * .01f) * _amplitude *
             // _amplitudeRate));
             setVertex(pos, v);
         }

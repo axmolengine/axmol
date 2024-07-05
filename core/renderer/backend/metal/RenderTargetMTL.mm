@@ -122,7 +122,7 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
     }
 #endif
     
-    _dirty = false;
+    _dirtyFlags = TargetBufferFlags::NONE;
 }
 
 RenderTargetMTL::Attachment RenderTargetMTL::getColorAttachment(int index) const

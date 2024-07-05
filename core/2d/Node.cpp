@@ -156,7 +156,7 @@ Node* Node::create()
 
 Node::~Node()
 {
-    AXLOGINFO("deallocing Node: %p - tag: %i", this, _tag);
+    AXLOGV("deallocing Node: {} - tag: {}", fmt::ptr(this), _tag);
 
     AX_SAFE_DELETE(_childrenIndexer);
 
@@ -1096,7 +1096,7 @@ void Node::removeChildByTag(int tag, bool cleanup /* = true */)
 
     if (child == nullptr)
     {
-        AXLOG("axmol: removeChildByTag(tag = %d): child not found!", tag);
+        AXLOGD("axmol: removeChildByTag(tag = {}): child not found!", tag);
     }
     else
     {
@@ -1112,7 +1112,7 @@ void Node::removeChildByName(std::string_view name, bool cleanup)
 
     if (child == nullptr)
     {
-        AXLOG("axmol: removeChildByName(name = %s): child not found!", name.data());
+        AXLOGD("axmol: removeChildByName(name = {}): child not found!", name);
     }
     else
     {

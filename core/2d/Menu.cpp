@@ -50,7 +50,7 @@ enum
 
 Menu::~Menu()
 {
-    AXLOGINFO("In the destructor of Menu. %p", this);
+    AXLOGV("In the destructor of Menu. {}", fmt::ptr(this));
 }
 
 Menu* Menu::create()

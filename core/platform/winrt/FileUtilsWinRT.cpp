@@ -73,7 +73,7 @@ FileUtils* FileUtils::getInstance()
         {
           delete s_sharedFileUtils;
           s_sharedFileUtils = nullptr;
-          AXLOG("ERROR: Could not init FileUtilsWinRT");
+          AXLOGE("ERROR: Could not init FileUtilsWinRT");
         }
     }
     return s_sharedFileUtils;
@@ -262,7 +262,7 @@ bool FileUtilsWinRT::removeFile(std::string_view path) const
     }
     else
     {
-        AXLOG("Remove file failed with error: %d", GetLastError());
+        AXLOGW("Remove file failed with error: {}", GetLastError());
         return false;
     }
 }
@@ -284,7 +284,7 @@ bool FileUtilsWinRT::renameFile(std::string_view oldfullpath, std::string_view n
     {
         if (!DeleteFile(_wNewfullpath.c_str()))
         {
-            AXLOGERROR("Fail to delete file %s !Error code is 0x%x", newfullpath.data(), GetLastError());
+            AXLOGE("Fail to delete file {} !Error code is 0x{:x}", newfullpath, GetLastError());
         }
     }
 
@@ -295,7 +295,7 @@ bool FileUtilsWinRT::renameFile(std::string_view oldfullpath, std::string_view n
     }
     else
     {
-        AXLOGERROR("Fail to rename file %s to %s !Error code is 0x%x", oldfullpath.data(), newfullpath.data(), GetLastError());
+        AXLOGE("Fail to rename file {} to {} !Error code is 0x{:x}", oldfullpath, newfullpath, GetLastError());
         return false;
     }
 }

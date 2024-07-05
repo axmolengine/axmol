@@ -38,7 +38,7 @@ ProtectedNode::ProtectedNode() : _reorderProtectedChildDirty(false) {}
 
 ProtectedNode::~ProtectedNode()
 {
-    AXLOGINFO("deallocing ProtectedNode: %p - tag: %i", this, _tag);
+    AXLOGV("deallocing ProtectedNode: {} - tag: {}", fmt::ptr(this), _tag);
     removeAllProtectedChildren();
 }
 
@@ -230,7 +230,7 @@ void ProtectedNode::removeProtectedChildByTag(int tag, bool cleanup)
 
     if (child == nullptr)
     {
-        AXLOG("axmol: removeChildByTag(tag = %d): child not found!", tag);
+        AXLOGD("axmol: removeChildByTag(tag = {}): child not found!", tag);
     }
     else
     {

@@ -193,7 +193,7 @@ public:
     */
     void removeTextureForKey(std::string_view key);
 
-    /** Output to AXLOG the current contents of this TextureCache.
+    /** Output to AXLOGD the current contents of this TextureCache.
      * This will attempt to calculate the size of each texture, and the total texture memory in use.
      *
      * @since v1.0

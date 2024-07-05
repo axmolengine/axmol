@@ -103,7 +103,7 @@ void ClippingNode::onEnter()
     }
     else
     {
-        AXLOG("ClippingNode warning: _stencil is nil.");
+        AXLOGW("ClippingNode warning: _stencil is nil.");
     }
 }
 

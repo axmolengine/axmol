@@ -51,7 +51,7 @@ TextureAtlas::TextureAtlas() {}
 
 TextureAtlas::~TextureAtlas()
 {
-    AXLOGINFO("deallocing TextureAtlas: %p", this);
+    AXLOGV("deallocing TextureAtlas: {}", fmt::ptr(this));
 
     AX_SAFE_FREE(_quads);
     AX_SAFE_FREE(_indices);
@@ -134,7 +134,7 @@ bool TextureAtlas::initWithFile(std::string_view file, ssize_t capacity)
     }
     else
     {
-        AXLOG("axmol: Could not open file: %s", file.data());
+        AXLOGD("Could not open file: {}", file);
         return false;
     }
 }
@@ -159,7 +159,7 @@ bool TextureAtlas::initWithTexture(Texture2D* texture, ssize_t capacity)
 
     if (!(_quads && _indices) && _capacity > 0)
     {
-        // AXLOG("axmol: TextureAtlas: not enough memory");
+        // AXLOGD("TextureAtlas: not enough memory");
         AX_SAFE_FREE(_quads);
         AX_SAFE_FREE(_indices);
 
@@ -398,7 +398,7 @@ bool TextureAtlas::resizeCapacity(ssize_t newCapacity)
 
     if (!(tmpQuads && tmpIndices))
     {
-        AXLOG("axmol: TextureAtlas: not enough memory");
+        AXLOGD("TextureAtlas: not enough memory");
         AX_SAFE_FREE(tmpQuads);
         AX_SAFE_FREE(tmpIndices);
         AX_SAFE_FREE(_quads);

@@ -98,13 +98,13 @@ std::string Configuration::getInfo() const
 {
     // And Dump some warnings as well
 #if AX_ENABLE_PROFILERS
-    AXLOG(
+    AXLOGD(
         "axmol: **** WARNING **** AX_ENABLE_PROFILERS is defined. Disable it when you finish profiling (from "
         "ccConfig.h)\n");
 #endif
 
 #if AX_ENABLE_GL_STATE_CACHE == 0
-    AXLOG(
+    AXLOGD(
         "axmol: **** WARNING **** AX_ENABLE_GL_STATE_CACHE is disabled. To improve performance, enable it (from "
         "ccConfig.h)\n");
 #endif
@@ -351,14 +351,14 @@ void Configuration::loadConfigFile(std::string_view filename)
 
     if (!validMetadata)
     {
-        AXLOG("Invalid config format for file: %s", filename.data());
+        AXLOGW("Invalid config format for file: {}", filename);
         return;
     }
 
     auto dataIter = dict.find("data");
     if (dataIter == dict.cend() || dataIter->second.getType() != Value::Type::MAP)
     {
-        AXLOG("Expected 'data' dict, but not found. Config file: %s", filename.data());
+        AXLOGW("Expected 'data' dict, but not found. Config file: {}", filename);
         return;
     }
 
@@ -370,7 +370,7 @@ void Configuration::loadConfigFile(std::string_view filename)
         if (_valueDict.find(dataMapIter.first) == _valueDict.cend())
             _valueDict[dataMapIter.first] = dataMapIter.second;
         else
-            AXLOG("Key already present. Ignoring '%s'", dataMapIter.first.c_str());
+            AXLOGD("Key already present. Ignoring '{}'", dataMapIter.first);
     }
 
     // light info

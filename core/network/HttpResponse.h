@@ -162,7 +162,7 @@ private:
                 auto redirectUrl = iter->second;
                 if (_responseCode == 302)
                     getHttpRequest()->setRequestType(HttpRequest::Type::GET);
-                AXLOG("Process url redirect (%d): %s", _responseCode, redirectUrl.c_str());
+                AXLOGD("Process url redirect ({}): {}", _responseCode, redirectUrl);
                 return setLocation(redirectUrl, true);
             }
         }

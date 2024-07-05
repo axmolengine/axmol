@@ -132,14 +132,14 @@ namespace ui {
     virtual void createNativeControl(const Rect& frame) override {  }
     virtual void setNativeFont(const char* pFontName, int fontSize) override;
     virtual void setNativeFontColor(const Color4B& color) override;
-    virtual void setNativePlaceholderFont(const char* pFontName, int fontSize) override { AXLOG("Warning! You can't change WinRT placeholder font"); }
-    virtual void setNativePlaceholderFontColor(const Color4B& color) override { AXLOG("Warning! You can't change WinRT placeholder font color"); }
+    virtual void setNativePlaceholderFont(const char* pFontName, int fontSize) override { AXLOGD("Warning! You can't change WinRT placeholder font"); }
+    virtual void setNativePlaceholderFontColor(const Color4B& color) override { AXLOGD("Warning! You can't change WinRT placeholder font color"); }
     virtual void setNativeInputMode(EditBox::InputMode inputMode) override;
     virtual void setNativeInputFlag(EditBox::InputFlag inputFlag) override;
-    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType) override { AXLOG("Warning! You can't change WinRT return type"); }
+    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType) override { AXLOGD("Warning! You can't change WinRT return type"); }
     virtual void setNativeTextHorizontalAlignment(ax::TextHAlignment alignment);
     virtual void setNativeText(const char* pText) override;
-    virtual void setNativePlaceHolder(const char* pText) override { AXLOG("Warning! You can't change WinRT placeholder text"); }
+    virtual void setNativePlaceHolder(const char* pText) override { AXLOGD("Warning! You can't change WinRT placeholder text"); }
     virtual void setNativeVisible(bool visible) override;
     virtual void updateNativeFrame(const Rect& rect) override; // TODO
     virtual const char* getNativeDefaultFontName() override { return "Segoe UI"; }
@@ -149,7 +149,7 @@ namespace ui {
 
   private:
     ax::Vec2 convertDesignCoordToXamlCoord(const ax::Vec2& designCoord);
-    virtual void doAnimationWhenKeyboardMove(float duration, float distance) override { AXLOG("Warning! doAnimationWhenKeyboardMove not supported on WinRT"); }
+    virtual void doAnimationWhenKeyboardMove(float duration, float distance) override { AXLOGD("Warning! doAnimationWhenKeyboardMove not supported on WinRT"); }
 
     winrt::agile_ref<Windows::Foundation::IInspectable> _system_control_agile;
     winrt::com_ptr<EditBoxWinRT> _system_control{};

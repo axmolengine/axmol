@@ -307,7 +307,7 @@ Vec2 Camera::projectGL(const Vec3& src) const
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
     if (clipPos.w == 0.0f)
-        AXLOG("WARNING: Camera's clip position w is 0.0! a black screen should be expected.");
+        AXLOGW("WARNING: Camera's clip position w is 0.0! a black screen should be expected.");
 
     float ndcX = clipPos.x / clipPos.w;
     float ndcY = clipPos.y / clipPos.w;

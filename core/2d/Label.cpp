@@ -2258,7 +2258,7 @@ void Label::setAdditionalKerning(float space)
         }
     }
     else
-        AXLOG("Label::setAdditionalKerning not supported on LabelType::STRING_TEXTURE");
+        AXLOGW("Label::setAdditionalKerning not supported on LabelType::STRING_TEXTURE");
 }
 
 float Label::getAdditionalKerning() const
@@ -2525,7 +2525,7 @@ FontDefinition Label::_getFontDefinition() const
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
     if (systemFontDef._stroke._strokeEnabled)
     {
-        AXLOGERROR("Stroke Currently only supported on iOS and Android!");
+        AXLOGE("Stroke Currently only supported on iOS and Android!");
     }
     systemFontDef._stroke._strokeEnabled = false;
 #endif
@@ -2835,8 +2835,8 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
             if (!getFontLetterDef(character, letterDef))
             {
                 recordPlaceholderInfo(letterIndex, character);
-                AXLOG("LabelTextFormatter error: can't find letter definition in font file for letter: 0x%x",
-                      character);
+                AXLOGW("LabelTextFormatter error: can't find letter definition in font file for letter: 0x{:x}",
+                      static_cast<uint32_t>(character));
                 continue;
             }
 

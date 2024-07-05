@@ -170,7 +170,7 @@ void ImageView::setTextureRect(const Rect& rect)
         }
         else
         {
-            AXLOG("Warning!! you should load texture before set the texture's rect!");
+            AXLOGD("Warning!! you should load texture before set the texture's rect!");
         }
     }
 }

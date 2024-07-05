@@ -295,7 +295,7 @@ void EditBoxWinRT::setInputFlag(int inputFlags)
         _password = true;
         break;
     default:
-        AXLOG("Warning: cannot set INITIAL_CAPS_* input flags for WinRT edit boxes");
+        AXLOGD("Warning: cannot set INITIAL_CAPS_* input flags for WinRT edit boxes");
     }
 }
 

@@ -4222,7 +4222,7 @@ public:
             if (deviceName.compare(it.first) == 0)
             {
                 // Found controller profile. Attach it to the controller:
-                AXLOG("ControllerImpl: Found input profile for controller: %s", deviceName.data());
+                AXLOGD("ControllerImpl: Found input profile for controller: {}", deviceName);
                 controller->_buttonInputMap = it.second.first;
                 controller->_axisInputMap   = it.second.second;
 
@@ -4238,10 +4238,10 @@ public:
                     const auto& it = controller->_buttonInputMap.find(i);
                     if (it == controller->_buttonInputMap.end())
                     {
-                        AXLOG(
-                            "ControllerImpl: Could not find a button input mapping for controller \"%s\", and keyCode "
-                            "\"%d\". This keyCode will not match any from Controller::Key",
-                            controller->getDeviceName().data(), i);
+                        AXLOGD(
+                            "ControllerImpl: Could not find a button input mapping for controller \"{}\", and keyCode "
+                            "\"{}\". This keyCode will not match any from Controller::Key",
+                            controller->getDeviceName(), i);
                     }
                 }
 
@@ -4252,10 +4252,10 @@ public:
                     const auto& it = controller->_axisInputMap.find(i);
                     if (it == controller->_axisInputMap.end())
                     {
-                        AXLOG(
-                            "ControllerImpl: Could not find an axis input mapping for controller \"%s\", and keyCode "
-                            "\"%d\". This keyCode will not match any from Controller::Key",
-                            controller->getDeviceName().data(), i);
+                        AXLOGD(
+                            "ControllerImpl: Could not find an axis input mapping for controller \"{}\", and keyCode "
+                            "\"{}\". This keyCode will not match any from Controller::Key",
+                            controller->getDeviceName(), i);
                     }
                 }
 #    endif
@@ -4268,12 +4268,12 @@ public:
 #    ifdef _AX_DEBUG
         if (controller->_buttonInputMap.empty())
         {
-            AXLOG("ControllerImpl: Could not find a button input map for controller: %s", deviceName.data());
+            AXLOGD("ControllerImpl: Could not find a button input map for controller: {}", deviceName);
         }
 
         if (controller->_axisInputMap.empty())
         {
-            AXLOG("ControllerImpl: Could not find an axis input map for controller: %s", deviceName.data());
+            AXLOGD("ControllerImpl: Could not find an axis input map for controller: {}", deviceName);
         }
 #    endif
 
@@ -4286,7 +4286,7 @@ public:
         auto iter = findController(deviceId);
         if (iter == Controller::s_allController.end())
         {
-            AXLOGERROR("ControllerImpl Error: Could not find the controller!");
+            AXLOGE("ControllerImpl Error: Could not find the controller!");
             return;
         }
 
@@ -4299,7 +4299,7 @@ public:
         auto iter = findController(deviceId);
         if (iter == Controller::s_allController.end())
         {
-            AXLOG("ControllerImpl::onButtonEvent: new controller detected. Registering...");
+            AXLOGD("ControllerImpl::onButtonEvent: new controller detected. Registering...");
             onConnected(glfwGetJoystickName(deviceId), deviceId);
             iter = findController(deviceId);
         }
@@ -4312,7 +4312,7 @@ public:
         auto iter = findController(deviceId);
         if (iter == Controller::s_allController.end())
         {
-            AXLOG("ControllerImpl::onAxisEvent: new controller detected. Registering...");
+            AXLOGD("ControllerImpl::onAxisEvent: new controller detected. Registering...");
             onConnected(glfwGetJoystickName(deviceId), deviceId);
             iter = findController(deviceId);
         }
@@ -4335,7 +4335,7 @@ public:
 #    ifdef _AX_DEBUG
         else
         {
-            AXLOG("ControllerImpl: Unhandled GLFW joystick event: %d", event);
+            AXLOGD("ControllerImpl: Unhandled GLFW joystick event: {}", event);
         }
 #    endif
     }

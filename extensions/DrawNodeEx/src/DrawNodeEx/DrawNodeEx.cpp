@@ -47,7 +47,6 @@
 NS_AX_EXT_BEGIN
 
 
-
 /** Is a polygon convex?
 * @param verts A pointer to point coordinates.
 * @param count The number of verts measured in points.
@@ -149,13 +148,13 @@ DrawNodeEx::~DrawNodeEx()
 {
     AX_SAFE_FREE(_bufferTriangle);
 
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     AX_SAFE_FREE(_bufferPoint);
     AX_SAFE_FREE(_bufferLine);
 #endif
 
     freeShaderInternal(_customCommandTriangle);
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     freeShaderInternal(_customCommandPoint);
     freeShaderInternal(_customCommandLine);
 #endif
@@ -191,7 +190,7 @@ void DrawNodeEx::ensureCapacityTriangle(int count)
     }
 }
 
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
 void DrawNodeEx::ensureCapacityPoint(int count)
 {
     AXASSERT(count >= 0, "capacity must be >= 0");
@@ -230,7 +229,7 @@ bool DrawNodeEx::init()
     ensureCapacityTriangle(512);
     _dirtyTriangle = true;
 
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     ensureCapacityPoint(64);
     ensureCapacityLine(256);
     _dirtyLine = true;
@@ -244,7 +243,7 @@ void DrawNodeEx::updateShader()
 {
     updateShaderInternal(_customCommandTriangle, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::TRIANGLE);
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     updateShaderInternal(_customCommandPoint, backend::ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::POINT);
 
@@ -324,7 +323,7 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         _customCommandTriangle.init(_globalZOrder);
         renderer->addCommand(&_customCommandTriangle);
     }
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     if (_bufferCountPoint)
     {
         updateBlendState(_customCommandPoint);
@@ -345,16 +344,16 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Color4B& color)
 {
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     if (_drawOrder == true)
     {
 #endif
         drawSolidCircle(position, pointSize, 0.f, 12, 1.f, 1.f, color, 0.f, color);
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         return;
     }
 #endif
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     ensureCapacityPoint(1);
 
     V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
@@ -377,7 +376,7 @@ void DrawNodeEx::drawPoints(const Vec2* position,
     const float pointSize,
     const Color4B& color)
 {
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     if (_drawOrder == true)
     {
 #endif
@@ -385,11 +384,11 @@ void DrawNodeEx::drawPoints(const Vec2* position,
         {
             drawSolidCircle(position[i], pointSize, 0.f, 12, 1.f, 1.f, color, 0.f, color);
         }
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         return;
     }
 #endif
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     ensureCapacityPoint(numberOfPoints);
 
     V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
@@ -415,16 +414,16 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
     }
     else
     {
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         if (_drawOrder == true)
         {
 #endif
             drawSegment(origin, destination, thickness / 3, color);
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
             return;
         }
 #endif
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         Vec2 line[2] = { origin, destination };
         Vec2* _vertices = transform(line, 2);
 
@@ -476,16 +475,16 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
     }
     else
     {
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         if (_drawOrder == true)
         {
 #endif
             _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness / 3, color, closePolygon);
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
             return;
         }
 #endif
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         Vec2* _vertices = transform(poli, numberOfPoints);
 
         unsigned int vertex_count;
@@ -762,7 +761,7 @@ void DrawNodeEx::drawRect(const Vec2& p1,
     }
 }
 
-void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, const Color4B& color, DrawNodeEx::EndType endType)
+void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, const Color4B& color, DrawNodeEx::EndType etStart, DrawNodeEx::EndType etEnd)
 {
     Vec2 line[2] = { from, to };
     Vec2* _vertices = transform(line, 2);
@@ -790,9 +789,9 @@ void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, con
 
     // 
     Color4B col = color;
-    switch (endType)
+    // End
+    switch (etEnd)
     {
-
     case DrawNodeEx::EndType::Butt:
         break;
 
@@ -841,8 +840,8 @@ void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, con
         {v5, col, Tex2F(n)},
     };
 
-    // End
-    switch (endType)
+    // Start
+    switch (etStart)
     {
     case DrawNodeEx::EndType::Butt:
         break;
@@ -938,11 +937,18 @@ void DrawNodeEx::drawPie(const Vec2& center,
     DrawMode drawMode,
     float thickness)
 {
-    // not a real line!
+#define DEGREES 360
+    bool _circle = false;
+
+    // Not a real line!
     if (startAngle == endAngle)
         return;
 
-#define DEGREES 360
+    // Its a circle?
+    if (MAX((startAngle - endAngle), (endAngle-startAngle)) == DEGREES)
+    {
+        _circle = true;
+    }
 
     const float coef = 2.0f * (float)M_PI / DEGREES;
     Vec2* vertices = _abuf.get<Vec2>(DEGREES + 2);
@@ -953,9 +959,7 @@ void DrawNodeEx::drawPie(const Vec2& center,
 
     if (startAngle > endAngle)
     {
-        int tmp = endAngle;
-        endAngle = startAngle;
-        startAngle = tmp;
+        std::swap(endAngle, startAngle);
     }
 
     for (int i = 0; i <= DEGREES; i++)
@@ -976,17 +980,28 @@ void DrawNodeEx::drawPie(const Vec2& center,
     {
     case DrawMode::Fill:
         vertices[n++] = center;
+        if (_circle)
+        {
+            this->drawSolidCircle(center, radius, 0, 36, scaleX, scaleY, fillColor, thickness, borderColor);
+            break;
+        }
         _drawPolygon(vertices, n, fillColor, thickness, borderColor, true);
         break;
     case DrawMode::Outline:
         vertices[n++] = center;
+        if (_circle)
+        {
+            this->drawCircle(center, radius, 0, 36, false, scaleX, scaleY, borderColor, thickness);
+            break;
+        }
         _drawPolygon(vertices, n, Color4B::TRANSPARENT, thickness, borderColor, true);
         break;
     case DrawMode::Line:
+        vertices[n++] = center;
         _drawPolygon(vertices, n, Color4B::TRANSPARENT, thickness, borderColor, false);
         break;
     case DrawMode::Semi:
-        _drawPolygon(vertices, n, fillColor, thickness, borderColor, true);
+        _drawPolygon(vertices, n-1, fillColor, thickness, borderColor, true);
         break;
 
     default:
@@ -1091,7 +1106,7 @@ void DrawNodeEx::clear()
 {
     _bufferCountTriangle = 0;
     _dirtyTriangle = true;
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     _bufferCountLine = 0;
     _dirtyLine = true;
     _bufferCountPoint = 0;
@@ -1137,16 +1152,13 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
     unsigned int count,
     const Color4B& fillColor,
     float borderWidth,
-    const Color4B& borderColo,
+    const Color4B& borderColor,
     bool closedPolygon)
 {
     AXASSERT(count >= 0, "invalid count value");
 
     Vec2* _vertices = transform(verts, count);
-
-    bool outline = (borderColo.a > 0.0f && borderWidth > 0.0f);
-
-    Color4B borderColor = borderColo;
+    bool outline = (borderColor.a > 0.0f && borderWidth > 0.0f);
 
     auto triangle_count = outline ? (3 * count - 2) : (count - 2);
     auto vertex_count = 3 * triangle_count;
@@ -1225,39 +1237,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             extrude[i] = { offset, n2 };
         }
 
-        int i = 0;
-        int j = (i + 1) % count;
-        Vec2 v0 = _vertices[i];
-        Vec2 v1 = _vertices[j];
-
-        Vec2 n0 = extrude[i].n;
-
-        Vec2 offset0 = extrude[i].offset;
-        Vec2 offset1 = extrude[j].offset;
-
-        Vec2 inner0 = v0 - offset0 * borderWidth;
-        Vec2 inner1 = v1 - offset1 * borderWidth;
-        Vec2 outer0 = v0 + offset0 * borderWidth;
-        Vec2 outer1 = v1 + offset1 * borderWidth;
-        borderColor = borderColo;
-        //if (i >= (count - 1) && !closedPolygon)  // /-2  ??
-        //{
-        //    borderColor = Color4B::TRANSPARENT;
-        //}
-
-        V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColor, Tex2F(-n0)},
-            {inner1, borderColor, Tex2F(-n0)},
-            {outer1, borderColor, Tex2F(n0)} };
-        *cursor++ = tmp1;
-
-        V2F_C4B_T2F_Triangle tmp2 = { {inner0, borderColor, Tex2F(-n0)},
-            {outer0, borderColor, Tex2F(n0)},
-            {outer1, borderColor, Tex2F(n0)} };
-        *cursor++ = tmp2;
-
-
-
-        for (unsigned int i = 1; i < (count - 1); i++)
+        for (unsigned int i = 0; i < (count - 2); i++)
         {
             int j = (i + 1) % count;
             Vec2 v0 = _vertices[i];
@@ -1272,11 +1252,6 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             Vec2 inner1 = v1 - offset1 * borderWidth;
             Vec2 outer0 = v0 + offset0 * borderWidth;
             Vec2 outer1 = v1 + offset1 * borderWidth;
-            borderColor = borderColo;
-            //if (i >= (count - 1) && !closedPolygon)  // /-2  ??
-            //{
-            //    borderColor = Color4B::TRANSPARENT;
-            //}
 
             V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColor, Tex2F(-n0)},
                 {inner1, borderColor, Tex2F(-n0)},
@@ -1289,35 +1264,35 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             *cursor++ = tmp2;
         }
 
-        i = count - 1;
-        j = (i + 1) % count;
-        v0 = _vertices[i];
-        v1 = _vertices[j];
+        // drawPie stuff
+        for (unsigned int i =  count - 2; i <= (count - 1); i++)
+        {
+            int j = (i + 1) % count;
+            Vec2 v0 = _vertices[i];
+            Vec2 v1 = _vertices[j];
 
-        n0 = extrude[i].n;
+            Vec2 n0 = extrude[i].n;
 
-        offset0 = extrude[i].offset;
-        offset1 = extrude[j].offset;
+            Vec2 offset0 = extrude[i].offset;
+            Vec2 offset1 = extrude[j].offset;
 
-        inner0 = v0 - offset0 * borderWidth;
-        inner1 = v1 - offset1 * borderWidth;
-        outer0 = v0 + offset0 * borderWidth;
-        outer1 = v1 + offset1 * borderWidth;
-        borderColor = borderColo;
-        //if (i >= (count - 1) && !closedPolygon)  // /-2  ??
-        //{
-        //    borderColor = Color4B::TRANSPARENT;
-        //}
+            Vec2 inner0 = v0 - offset0 * borderWidth;
+            Vec2 inner1 = v1 - offset1 * borderWidth;
+            Vec2 outer0 = v0 + offset0 * borderWidth;
+            Vec2 outer1 = v1 + offset1 * borderWidth;
 
-        tmp1 = { {inner0, borderColor, Tex2F(-n0)},
-           {inner1, borderColor, Tex2F(-n0)},
-           {outer1, borderColor, Tex2F(n0)} };
-        *cursor++ = tmp1;
+            Color4B borderColorTemp = (!closedPolygon) ?  Color4B::TRANSPARENT : borderColor;
 
-        tmp2 = { {inner0, borderColor, Tex2F(-n0)},
-           {outer0, borderColor, Tex2F(n0)},
-           {outer1, borderColor, Tex2F(n0)} };
-        *cursor++ = tmp2;
+            V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColorTemp, Tex2F(-n0)},
+                {inner1, borderColorTemp, Tex2F(-n0)},
+                {outer1, borderColorTemp, Tex2F(n0)} };
+            *cursor++ = tmp1;
+
+            V2F_C4B_T2F_Triangle tmp2 = { {inner0, borderColorTemp, Tex2F(-n0)},
+                {outer0, borderColorTemp, Tex2F(n0)},
+                {outer1, borderColorTemp, Tex2F(n0)} };
+            *cursor++ = tmp2;
+        }
 
         free(extrude);
     }
@@ -1351,16 +1326,16 @@ void DrawNodeEx::_drawPoly(const Vec2* poli,
     }
     else
     {
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         if (_drawOrder == true)
         {
 #endif
             _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness / 3, color, false);
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
             return;
         }
 #endif
-#if defined(DRAWNODE_DRAW_LINE_POINT)
+#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         Vec2* _vertices = transform(poli, numberOfPoints);
 
         unsigned int vertex_count;

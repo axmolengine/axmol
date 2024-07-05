@@ -150,7 +150,7 @@ void GridBase::updateBlendState()
 
 GridBase::~GridBase()
 {
-    AXLOGINFO("deallocing GridBase: %p", this);
+    AXLOGV("deallocing GridBase: {}", fmt::ptr(this));
 
     AX_SAFE_RELEASE(_renderTarget);
 

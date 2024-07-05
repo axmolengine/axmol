@@ -71,7 +71,7 @@ static bool _containsTouchPoint(ax::Node* target, ax::Touch* touch)
 
     bool contains = (rc.containsPoint(pt));
 
-    // AXLOG("check %#x coordinate:(%f, %f), contains:%d", target, pt.x, pt.y, contains);
+    // AXLOGD("check {:#x} coordinate:({}, {}), contains:%d", target, pt.x, pt.y, contains);
     return contains;
 }
 
@@ -85,7 +85,7 @@ static bool engine_inj_containsPoint(ax::Node* target, const ax::Vec2& worldPoin
 
     bool contains = (rc.containsPoint(pt));
 
-    // AXLOG("check %#x coordinate:(%f, %f), contains:%d", target, pt.x, pt.y, contains);
+    // AXLOGD("check {:#x} coordinate:({}, {}), contains:%d", target, pt.x, pt.y, contains);
     return contains;
 }
 
@@ -522,7 +522,7 @@ void TextFieldEx::keyboardDidHide(IMEKeyboardNotificationInfo& /*info*/)
 
 void TextFieldEx::openIME(void)
 {
-    AXLOG("TextFieldEx:: openIME");
+    AXLOGD("TextFieldEx:: openIME");
     this->attachWithIME();
     __updateCursorPosition();
     __showCursor();
@@ -533,7 +533,7 @@ void TextFieldEx::openIME(void)
 
 void TextFieldEx::closeIME(void)
 {
-    AXLOG("TextFieldEx:: closeIME");
+    AXLOGD("TextFieldEx:: closeIME");
     __hideCursor();
     this->detachWithIME();
 

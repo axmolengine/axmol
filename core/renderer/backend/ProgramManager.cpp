@@ -68,7 +68,7 @@ ProgramManager::~ProgramManager()
     {
         AX_SAFE_RELEASE(program.second);
     }
-    AXLOGINFO("deallocing ProgramManager: %p", this);
+    AXLOGI("deallocing ProgramManager: {}", fmt::ptr(this));
     backend::ShaderCache::destroyInstance();
 }
 
@@ -284,7 +284,7 @@ void ProgramManager::unloadUnusedPrograms()
         auto program = iter->second;
         if (program->getReferenceCount() == 1)
         {
-            //            AXLOG("axmol: TextureCache: removing unused program");
+            // AXLOGD("TextureCache: removing unused program");
             program->release();
             iter = _cachedPrograms.erase(iter);
         }

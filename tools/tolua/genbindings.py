@@ -191,6 +191,7 @@ def main():
     cxx_generator_root = os.path.abspath(os.path.join(project_root, 'tools/bindings-generator'))
 
     extraFlags = _defaultIncludePath()
+    extraFlags += " -DFMT_USE_CONCEPTS=0"
     
     # save config to file
     if(sys.version_info.major >= 3):

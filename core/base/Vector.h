@@ -120,7 +120,7 @@ public:
     explicit Vector(ssize_t capacity) : _data()
     {
         static_assert(std::is_convertible<T, Object*>::value, "Invalid Type for ax::Vector!");
-        AXLOGINFO("In the default constructor with capacity of Vector.");
+        AXLOGV("In the default constructor with capacity of Vector.");
         reserve(capacity);
     }
 
@@ -136,7 +136,7 @@ public:
     /** Destructor. */
     ~Vector()
     {
-        AXLOGINFO("In the destructor of Vector.");
+        AXLOGV("In the destructor of Vector.");
         clear();
     }
 
@@ -144,7 +144,7 @@ public:
     Vector(const Vector& other)
     {
         static_assert(std::is_convertible<T, Object*>::value, "Invalid Type for ax::Vector!");
-        AXLOGINFO("In the copy constructor!");
+        AXLOGV("In the copy constructor!");
         _data = other._data;
         addRefForAllObjects();
     }
@@ -153,7 +153,7 @@ public:
     Vector(Vector&& other)
     {
         static_assert(std::is_convertible<T, Object*>::value, "Invalid Type for ax::Vector!");
-        AXLOGINFO("In the move constructor of Vector!");
+        AXLOGV("In the move constructor of Vector!");
         _data = std::move(other._data);
     }
 
@@ -162,7 +162,7 @@ public:
     {
         if (this != &other)
         {
-            AXLOGINFO("In the copy assignment operator!");
+            AXLOGV("In the copy assignment operator!");
             clear();
             _data = other._data;
             addRefForAllObjects();
@@ -175,7 +175,7 @@ public:
     {
         if (this != &other)
         {
-            AXLOGINFO("In the move assignment operator!");
+            AXLOGV("In the move assignment operator!");
             clear();
             _data = std::move(other._data);
         }

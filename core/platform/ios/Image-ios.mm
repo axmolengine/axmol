@@ -40,7 +40,7 @@ bool ax::Image::saveToFile(std::string_view filename, bool isToRGB)
     // only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data
     if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB8 && _pixelFormat != backend::PixelFormat::RGBA8))
     {
-        AXLOG("cocos2d: Image: saveToFile is only support for backend::PixelFormat::RGB8 or "
+        AXLOGW("Image: saveToFile is only support for backend::PixelFormat::RGB8 or "
               "backend::PixelFormat::RGBA8 uncompressed data for now");
         return false;
     }

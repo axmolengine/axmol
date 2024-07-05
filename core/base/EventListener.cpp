@@ -32,7 +32,7 @@ EventListener::EventListener() {}
 
 EventListener::~EventListener()
 {
-    AXLOGINFO("In the destructor of EventListener. %p", this);
+    AXLOGV("In the destructor of EventListener. {}", fmt::ptr(this));
 }
 
 bool EventListener::init(Type t, std::string_view listenerID, const std::function<void(Event*)>& callback)

@@ -117,7 +117,7 @@ void EditBoxImplMac::setNativePlaceholderFont(const char* pFontName, int fontSiz
 
     if (!textFont)
     {
-        AXLOGWARN("Font not found: %s", pFontName);
+        AXLOGW("Font not found: {}", pFontName);
         return;
     }
     [_sysEdit setPlaceholderFont:textFont];

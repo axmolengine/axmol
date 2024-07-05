@@ -159,7 +159,7 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
         {
             toRemoveFrames.emplace_back(iter.first);
             spriteFrame->getTexture()->removeSpriteFrameCapInset(spriteFrame);
-            AXLOG("axmol: SpriteFrameCache: removing unused frame: %s", iter.first.c_str());
+            AXLOGD("SpriteFrameCache: removing unused frame: {}", iter.first);
             removed = true;
         }
     }
@@ -192,7 +192,7 @@ void SpriteFrameCache::removeUnusedSpriteSheets()
 
     for (auto& spriteSheetFileName : willRemoveSpriteSheetFileNames)
     {
-        AXLOG("axmol: SpriteFrameCache: removing unused sprite sheet file : %s", spriteSheetFileName.data());
+        AXLOGD("SpriteFrameCache: removing unused sprite sheet file : {}", spriteSheetFileName);
         removeSpriteSheet(spriteSheetFileName);
     }
 }
@@ -212,7 +212,7 @@ void SpriteFrameCache::removeSpriteFramesFromFile(std::string_view atlasPath)
     // auto dict = FileUtils::getInstance()->getValueMapFromFile(fullPath);
     // if (dict.empty())
     //{
-    //     AXLOG("axmol:SpriteFrameCache:removeSpriteFramesFromFile: create dict by %s fail.",plist.c_str());
+    //     AXLOGD("axmol:SpriteFrameCache:removeSpriteFramesFromFile: create dict by {} fail.",plist);
     //     return;
     // }
     // removeSpriteFramesFromDictionary(dict);
@@ -227,7 +227,7 @@ void SpriteFrameCache::removeSpriteFramesFromFileContent(std::string_view plist_
         FileUtils::getInstance()->getValueMapFromData(plist_content.data(), static_cast<int>(plist_content.size()));
     if (dict.empty())
     {
-        AXLOG("axmol:SpriteFrameCache:removeSpriteFramesFromFileContent: create dict by fail.");
+        AXLOGD("SpriteFrameCache:removeSpriteFramesFromFileContent: create dict by fail.");
         return;
     }
     removeSpriteFramesFromDictionary(dict);
@@ -274,7 +274,7 @@ SpriteFrame* SpriteFrameCache::getSpriteFrameByName(std::string_view name)
     auto* frame = findFrame(name);
     if (!frame)
     {
-        AXLOG("axmol: SpriteFrameCache: Frame '%s' isn't found", name.data());
+        AXLOGD("axmol: SpriteFrameCache: Frame '{}' isn't found", name);
     }
     return frame;
 }
