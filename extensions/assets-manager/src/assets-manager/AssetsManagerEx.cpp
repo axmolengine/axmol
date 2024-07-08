@@ -1032,7 +1032,7 @@ const DownloadUnits& AssetsManagerEx::getFailedAssets() const
 
 void AssetsManagerEx::downloadFailedAssets()
 {
-    AXLOGD("AssetsManagerEx : Start update %lu failed assets.\n", static_cast<unsigned long>(_failedUnits.size()));
+    AXLOGD("AssetsManagerEx : Start update {} failed assets.\n", static_cast<unsigned long>(_failedUnits.size()));
     updateAssets(_failedUnits);
 }
 
