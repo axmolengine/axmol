@@ -939,14 +939,14 @@ bool UIS9NinePatchTest::init()
         playerSprite->setPosition(x, y);
         playerSprite->setContentSize(preferedSize);
         auto capInsets = playerSprite->getCapInsets();
-        AXLOGD("player sprite capInset = %g, %g %g, %g", capInsets.origin.x, capInsets.origin.y, capInsets.size.width,
+        AXLOGD("player sprite capInset = %g, %g %g, {}", capInsets.origin.x, capInsets.origin.y, capInsets.size.width,
               capInsets.size.height);
         this->addChild(playerSprite);
 
         auto animationBtnSprite = ui::Scale9Sprite::createWithSpriteFrameName("animationbuttonpressed.png");
         animationBtnSprite->setPosition(x - 100, y - 100);
         capInsets = animationBtnSprite->getCapInsets();
-        AXLOGD("animationBtnSprite capInset = %g, %g %g, %g", capInsets.origin.x, capInsets.origin.y,
+        AXLOGD("animationBtnSprite capInset = %g, %g %g, {}", capInsets.origin.x, capInsets.origin.y,
               capInsets.size.width, capInsets.size.height);
         this->addChild(animationBtnSprite);
 
@@ -954,7 +954,7 @@ bool UIS9NinePatchTest::init()
         monsterSprite->setPosition(x + 100, y - 100);
         capInsets = monsterSprite->getCapInsets();
         monsterSprite->setContentSize(preferedSize);
-        AXLOGD("monsterSprite capInset = %g, %g %g, %g", capInsets.origin.x, capInsets.origin.y, capInsets.size.width,
+        AXLOGD("monsterSprite capInset = %g, %g %g, {}", capInsets.origin.x, capInsets.origin.y, capInsets.size.width,
               capInsets.size.height);
         this->addChild(monsterSprite);
 

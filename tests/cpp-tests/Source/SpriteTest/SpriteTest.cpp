@@ -1492,10 +1492,10 @@ void SpriteFlip::flipSprites(float dt)
     bool x = sprite1->isFlippedX();
     bool y = sprite2->isFlippedY();
 
-    AXLOGD("Pre: %g", sprite1->getContentSize().height);
+    AXLOGD("Pre: {}", sprite1->getContentSize().height);
     sprite1->setFlippedX(!x);
     sprite2->setFlippedY(!y);
-    AXLOGD("Post: %g", sprite1->getContentSize().height);
+    AXLOGD("Post: {}", sprite1->getContentSize().height);
 }
 
 std::string SpriteFlip::title() const
@@ -1540,10 +1540,10 @@ void SpriteBatchNodeFlip::flipSprites(float dt)
     bool x = sprite1->isFlippedX();
     bool y = sprite2->isFlippedY();
 
-    AXLOGD("Pre: %g", sprite1->getContentSize().height);
+    AXLOGD("Pre: {}", sprite1->getContentSize().height);
     sprite1->setFlippedX(!x);
     sprite2->setFlippedY(!y);
-    AXLOGD("Post: %g", sprite1->getContentSize().height);
+    AXLOGD("Post: {}", sprite1->getContentSize().height);
 }
 
 std::string SpriteBatchNodeFlip::title() const
