@@ -121,6 +121,7 @@ option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 
 option(AX_EXT_HINT "The default extensions hint" ON)
 
+option(AX_ENABLE_EXT_LUA "Build lua libraries" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_GUI "Build extension GUI" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_ASSETMANAGER "Build extension asset-manager" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_SPINE "Build extension spine" ${AX_EXT_HINT})

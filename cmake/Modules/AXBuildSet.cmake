@@ -20,9 +20,6 @@ if(CMAKE_TOOLCHAIN_FILE)
     message(STATUS "Using toolchain file:" ${CMAKE_TOOLCHAIN_FILE})
 endif()
 
-# the default behavior of build module
-option(AX_ENABLE_EXT_LUA "Build lua libraries" ON)
-
 # hold the extensions list to auto link to app
 set(_AX_EXTENSION_LIBS "" CACHE INTERNAL "extensions for auto link to target application")
 
