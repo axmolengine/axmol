@@ -537,7 +537,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
             pageView->pushBackCustomItem(outerBox);
             _displayValueLabel->setString(
                 StringUtils::format("page count = %d", static_cast<int32_t>(pageView->getItems().size())));
-            AXLOGD("current page index = %zd", pageView->getCurrentPageIndex());
+            AXLOGD("current page index = {}", pageView->getCurrentPageIndex());
         });
         _uiLayer->addChild(button);
 
@@ -558,7 +558,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
             }
             _displayValueLabel->setString(
                 StringUtils::format("page count = %d", static_cast<int32_t>(pageView->getItems().size())));
-            AXLOGD("current page index = %zd", pageView->getCurrentPageIndex());
+            AXLOGD("current page index = {}", pageView->getCurrentPageIndex());
         });
         _uiLayer->addChild(button2);
 
@@ -572,7 +572,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
             pageView->removeAllItems();
             _displayValueLabel->setString(
                 StringUtils::format("page count = %d", static_cast<int32_t>(pageView->getItems().size())));
-            AXLOGD("current page index = %zd", pageView->getCurrentPageIndex());
+            AXLOGD("current page index = {}", pageView->getCurrentPageIndex());
         });
         _uiLayer->addChild(button3);
 
@@ -581,7 +581,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button4->setPositionNormalized(Vec2(0.85f, 0.5f));
         button4->addClickEventListener([=](Object* sender) {
             pageView->scrollToItem(3);
-            AXLOGD("current page index = %zd", pageView->getCurrentPageIndex());
+            AXLOGD("current page index = {}", pageView->getCurrentPageIndex());
         });
         _uiLayer->addChild(button4);
 
