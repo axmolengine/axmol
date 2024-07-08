@@ -341,7 +341,7 @@ void AssetsManager::downloadAndUncompress()
                 string zipfileName = this->_storagePath + TEMP_PACKAGE_FILE_NAME;
                 if (remove(zipfileName.c_str()) != 0)
                 {
-                    AXLOGD("can not remove downloaded zip file {}", zipfileName.c_str());
+                    AXLOGD("can not remove downloaded zip file {}", zipfileName);
                 }
 
                 if (this->_delegate)
@@ -377,7 +377,7 @@ bool AssetsManager::uncompress()
     unzFile zipfile = unzOpen2(outFileName.c_str(), &zipFunctionOverrides);
     if (!zipfile)
     {
-        AXLOGD("can not open downloaded zip file {}", outFileName.c_str());
+        AXLOGD("can not open downloaded zip file {}", outFileName);
         return false;
     }
 
@@ -385,7 +385,7 @@ bool AssetsManager::uncompress()
     unz_global_info global_info;
     if (unzGetGlobalInfo(zipfile, &global_info) != UNZ_OK)
     {
-        AXLOGD("can not read file global info of {}", outFileName.c_str());
+        AXLOGD("can not read file global info of {}", outFileName);
         unzClose(zipfile);
         return false;
     }
@@ -419,7 +419,7 @@ bool AssetsManager::uncompress()
             // If the directory exists, it will failed silently.
             if (!FileUtils::getInstance()->createDirectory(fullPath))
             {
-                AXLOGD("can not create directory {}", fullPath.c_str());
+                AXLOGD("can not create directory {}", fullPath);
                 unzClose(zipfile);
                 return false;
             }
@@ -444,13 +444,13 @@ bool AssetsManager::uncompress()
                 {
                     if (!FileUtils::getInstance()->createDirectory(dir))
                     {
-                        AXLOGD("can not create directory {}", dir.c_str());
+                        AXLOGD("can not create directory {}", dir);
                         unzClose(zipfile);
                         return false;
                     }
                     else
                     {
-                        AXLOGD("create directory {}", dir.c_str());
+                        AXLOGD("create directory {}", dir);
                     }
                 }
                 else
@@ -477,7 +477,7 @@ bool AssetsManager::uncompress()
             auto fsOut = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::WRITE);
             if (!fsOut)
             {
-                AXLOGD("can not open destination file {}", fullPath.c_str());
+                AXLOGD("can not open destination file {}", fullPath);
                 unzCloseCurrentFile(zipfile);
                 unzClose(zipfile);
                 return false;

@@ -212,7 +212,7 @@ void LuaMinXmlHttpRequest::_sendRequest()
             auto tag = response->getHttpRequest()->getTag();
             if (!tag.empty())
             {
-                AXLOGD("{} completed", tag.data());
+                AXLOGD("{} completed", tag);
             }
 
             int statusCode = response->getResponseCode();

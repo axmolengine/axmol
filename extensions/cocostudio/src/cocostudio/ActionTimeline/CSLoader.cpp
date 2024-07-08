@@ -569,7 +569,7 @@ Node* CSLoader::loadNode(const rapidjson::Value& json)
     }
     else
     {
-        AXLOGD("Not supported NodeType: {}", nodeType.c_str());
+        AXLOGD("Not supported NodeType: {}", nodeType);
     }
 
     return node;
@@ -996,7 +996,7 @@ inline void CSLoader::reconstructNestNode(ax::Node* node)
         else
         {
             _rootNode = _callbackHandlers.back();
-            AXLOGD("after pop back _rootNode name = {}", _rootNode->getName().data());
+            AXLOGD("after pop back _rootNode name = {}", _rootNode->getName());
         }
     }
 }
@@ -1016,7 +1016,7 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
 
     if (buf.isNull())
     {
-        AXLOGD("CSLoader::nodeWithFlatBuffersFile - failed read file: {}", fileName.data());
+        AXLOGD("CSLoader::nodeWithFlatBuffersFile - failed read file: {}", fileName);
         AX_ASSERT(false);
         return nullptr;
     }
@@ -1296,7 +1296,7 @@ bool CSLoader::bindCallback(std::string_view callbackName,
         }
     }
 
-    AXLOGD("callBackName {} cannot be found", callbackName.data());
+    AXLOGD("callBackName {} cannot be found", callbackName);
 
     return false;
 }

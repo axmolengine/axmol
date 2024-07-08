@@ -505,7 +505,7 @@ void InnerActionFrame::onEnter(Frame* /*nextFrame*/, int /*currentFrameIndex*/)
         }
         else
         {
-            AXLOGD("Animation {} not exists!", _animationName.c_str());
+            AXLOGD("Animation {} not exists!", _animationName);
         }
     }
 

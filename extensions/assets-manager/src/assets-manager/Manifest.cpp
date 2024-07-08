@@ -97,7 +97,7 @@ void Manifest::loadJson(std::string_view url)
 
         if (content.empty())
         {
-            AXLOGD("Fail to retrieve local file content: {}\n", url.data());
+            AXLOGD("Fail to retrieve local file content: {}\n", url);
         }
         else
         {
@@ -110,7 +110,7 @@ void Manifest::loadJson(std::string_view url)
                 if (offset > 0)
                     offset--;
                 std::string errorSnippet = content.substr(offset, 10);
-                AXLOGD("File parse error {} at <{}>\n", _json.GetParseError(), errorSnippet.c_str());
+                AXLOGD("File parse error {} at <{}>\n", _json.GetParseError(), errorSnippet);
             }
         }
     }

@@ -94,7 +94,7 @@ bool Skin::initWithSpriteFrameName(std::string_view spriteFrameName)
     }
     else
     {
-        AXLOGD("Can't find CCSpriteFrame with {}. Please check your .plist file", spriteFrameName.data());
+        AXLOGD("Can't find CCSpriteFrame with {}. Please check your .plist file", spriteFrameName);
         ret = false;
     }
 

@@ -656,7 +656,7 @@ TMXOrthoObjectsTestNew::TMXOrthoObjectsTestNew()
     auto& objects = group->getObjects();
 
     Value objectsVal = Value(objects);
-    AXLOGD("{}", objectsVal.getDescription().c_str());
+    AXLOGD("{}", objectsVal.getDescription());
 
     auto drawNode = DrawNode::create();
     Color4F color(1.0, 1.0, 1.0, 1.0);
@@ -706,7 +706,7 @@ TMXIsoObjectsTestNew::TMXIsoObjectsTestNew()
     auto& objects = group->getObjects();
 
     Value objectsVal = Value(objects);
-    AXLOGD("{}", objectsVal.getDescription().c_str());
+    AXLOGD("{}", objectsVal.getDescription());
 
     auto drawNode = DrawNode::create();
     Color4F color(1.0, 1.0, 1.0, 1.0);

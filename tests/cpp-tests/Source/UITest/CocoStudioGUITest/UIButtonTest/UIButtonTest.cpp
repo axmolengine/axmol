@@ -150,11 +150,11 @@ void UIButtonTest::touchEvent(Object* pSender, Widget::TouchEventType type)
 void UIButtonTest::printWidgetResources(ax::Object* sender)
 {
     ax::ResourceData normalFileName = _button->getNormalFile();
-    AXLOGD("normalFileName  Name : {}, Type: {}", normalFileName.file.c_str(), normalFileName.type);
+    AXLOGD("normalFileName  Name : {}, Type: {}", normalFileName.file, normalFileName.type);
     ax::ResourceData clickedFileName = _button->getPressedFile();
-    AXLOGD("clickedFileName  Name : {}, Type: {}", clickedFileName.file.c_str(), clickedFileName.type);
+    AXLOGD("clickedFileName  Name : {}, Type: {}", clickedFileName.file, clickedFileName.type);
     ax::ResourceData disabledFileName = _button->getDisabledFile();
-    AXLOGD("disabledFileName  Name : {}, Type: {}", disabledFileName.file.c_str(), disabledFileName.type);
+    AXLOGD("disabledFileName  Name : {}, Type: {}", disabledFileName.file, disabledFileName.type);
 }
 
 // UIButtonTest_Scale9

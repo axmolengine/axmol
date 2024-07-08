@@ -299,7 +299,7 @@ bool UILayoutTest_BackGroundImage::init()
 void UILayoutTest_BackGroundImage::printWidgetResources(ax::Object* sender)
 {
     ax::ResourceData textureFile = _layout->getRenderFile();
-    AXLOGD("textureFile  Name : {}, Type: {}", textureFile.file.c_str(), textureFile.type);
+    AXLOGD("textureFile  Name : {}, Type: {}", textureFile.file, textureFile.type);
 }
 
 // UILayoutTest_BackGroundImage_Scale9

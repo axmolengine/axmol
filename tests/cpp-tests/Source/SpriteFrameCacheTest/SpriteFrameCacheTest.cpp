@@ -156,7 +156,7 @@ public:
         if (fullPath.empty())
         {
             // return if plist file doesn't exist
-            AXLOGD("GenericJsonArraySpriteSheetLoader: can not find {}", filePath.data());
+            AXLOGD("GenericJsonArraySpriteSheetLoader: can not find {}", filePath);
             return;
         }
 
@@ -193,7 +193,7 @@ public:
             // append .png
             texturePath = texturePath.append(".png");
 
-            AXLOGD("GenericJsonArraySpriteSheetLoader::load: Trying to use file {} as texture", texturePath.c_str());
+            AXLOGD("GenericJsonArraySpriteSheetLoader::load: Trying to use file {} as texture", texturePath);
         }
 
         addSpriteFramesWithJson(jDoc, texturePath, filePath, cache);

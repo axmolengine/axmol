@@ -393,7 +393,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
     size_t pos = zip.find_last_of("/\\");
     if (pos == std::string::npos)
     {
-        AXLOGD("AssetsManagerEx : no root path specified for zip file {}\n", zip.data());
+        AXLOGD("AssetsManagerEx : no root path specified for zip file {}\n", zip);
         return false;
     }
     const std::string_view rootPath = zip.substr(0, pos + 1);
@@ -410,7 +410,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
     unzFile zipfile = unzOpen2(zip.data(), &zipFunctionOverrides);
     if (!zipfile)
     {
-        AXLOGD("AssetsManagerEx : can not open downloaded zip file {}\n", zip.data());
+        AXLOGD("AssetsManagerEx : can not open downloaded zip file {}\n", zip);
         return false;
     }
 
@@ -418,7 +418,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
     unz_global_info global_info;
     if (unzGetGlobalInfo(zipfile, &global_info) != UNZ_OK)
     {
-        AXLOGD("AssetsManagerEx : can not read file global info of {}\n", zip.data());
+        AXLOGD("AssetsManagerEx : can not read file global info of {}\n", zip);
         unzClose(zipfile);
         return false;
     }
@@ -450,7 +450,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
             if (!_fileUtils->createDirectory(basename(fullPath)))
             {
                 // Failed to create directory
-                AXLOGD("AssetsManagerEx : can not create directory {}\n", fullPath.c_str());
+                AXLOGD("AssetsManagerEx : can not create directory {}\n", fullPath);
                 unzClose(zipfile);
                 return false;
             }
@@ -464,7 +464,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
                 if (!_fileUtils->createDirectory(dir))
                 {
                     // Failed to create directory
-                    AXLOGD("AssetsManagerEx : can not create directory {}\n", fullPath.c_str());
+                    AXLOGD("AssetsManagerEx : can not create directory {}\n", fullPath);
                     unzClose(zipfile);
                     return false;
                 }
@@ -482,7 +482,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
             auto fsOut = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::WRITE);
             if (!fsOut)
             {
-                AXLOGD("AssetsManagerEx : can not create decompress destination file {} (errno: {})\n", fullPath.c_str(),
+                AXLOGD("AssetsManagerEx : can not create decompress destination file {} (errno: {})\n", fullPath,
                       errno);
                 unzCloseCurrentFile(zipfile);
                 unzClose(zipfile);
@@ -717,7 +717,7 @@ void AssetsManagerEx::parseManifest()
 
     if (!_remoteManifest->isLoaded())
     {
-        AXLOGD("AssetsManagerEx : Error parsing manifest file, {}", _tempManifestPath.c_str());
+        AXLOGD("AssetsManagerEx : Error parsing manifest file, {}", _tempManifestPath);
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_PARSE_MANIFEST);
         _updateState = State::UNCHECKED;
     }

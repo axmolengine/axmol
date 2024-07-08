@@ -83,7 +83,7 @@ MenuLayerMainMenu::MenuLayerMainMenu()
     auto item3      = MenuItemLabel::create(labelAtlas, AX_CALLBACK_1(MenuLayerMainMenu::menuCallbackDisabled, this));
     item3->setDisabledColor(Color3B(32, 32, 64));
     item3->setColor(Color3B(200, 200, 255));
-    AXLOGD("test MenuItem Label getString: {}", item3->getString().data());
+    AXLOGD("test MenuItem Label getString: {}", item3->getString());
     // Font Item
     auto item4 = MenuItemFont::create("I toggle enable items",
                                       [&](Object* sender) { _disabledItem->setEnabled(!_disabledItem->isEnabled()); });

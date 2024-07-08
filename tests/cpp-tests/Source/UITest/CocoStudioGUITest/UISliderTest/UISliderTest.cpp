@@ -103,18 +103,18 @@ void UISliderTest::sliderEvent(Object* pSender, Slider::EventType type)
 void UISliderTest::printWidgetResources(ax::Object* /*sender*/)
 {
     ax::ResourceData textureFile = _slider->getBackFile();
-    AXLOGD("textureFile  Name : {}, Type: {}", textureFile.file.c_str(), textureFile.type);
+    AXLOGD("textureFile  Name : {}, Type: {}", textureFile.file, textureFile.type);
     ax::ResourceData progressBarTextureFile = _slider->getProgressBarFile();
-    AXLOGD("progressBarTextureFile  Name : {}, Type: {}", progressBarTextureFile.file.c_str(),
+    AXLOGD("progressBarTextureFile  Name : {}, Type: {}", progressBarTextureFile.file,
           progressBarTextureFile.type);
     ax::ResourceData slidBallNormalTextureFile = _slider->getBallNormalFile();
-    AXLOGD("slidBallNormalTextureFile  Name : {}, Type: {}", slidBallNormalTextureFile.file.c_str(),
+    AXLOGD("slidBallNormalTextureFile  Name : {}, Type: {}", slidBallNormalTextureFile.file,
           slidBallNormalTextureFile.type);
     ax::ResourceData slidBallPressedTextureFile = _slider->getBallPressedFile();
-    AXLOGD("slidBallPressedTextureFile  Name : {}, Type: {}", slidBallPressedTextureFile.file.c_str(),
+    AXLOGD("slidBallPressedTextureFile  Name : {}, Type: {}", slidBallPressedTextureFile.file,
           slidBallPressedTextureFile.type);
     ax::ResourceData slidBallDisabledTextureFile = _slider->getBallDisabledFile();
-    AXLOGD("slidBallDisabledTextureFile  Name : {}, Type: {}", slidBallDisabledTextureFile.file.c_str(),
+    AXLOGD("slidBallDisabledTextureFile  Name : {}, Type: {}", slidBallDisabledTextureFile.file,
           slidBallDisabledTextureFile.type);
 }
 
