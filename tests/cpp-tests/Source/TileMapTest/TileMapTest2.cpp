@@ -422,7 +422,7 @@ TMXReadWriteTestNew::TMXReadWriteTestNew()
 
 void TMXReadWriteTestNew::removeSprite(Node* sender)
 {
-    ////----AXLOGD("removing tile: %x", sender);
+    ////----AXLOGD("removing tile: {:#x}", sender);
     auto p = ((Node*)sender)->getParent();
 
     if (p)

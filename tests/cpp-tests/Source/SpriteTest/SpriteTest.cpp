@@ -737,7 +737,7 @@ SpriteBatchNodeReorder::SpriteBatchNodeReorder()
 
         ssize_t currentIndex = child->getAtlasIndex();
         AXASSERT(prev == currentIndex - 1, "Child order failed");
-        ////----AXLOGD("children %x - atlasIndex:{}", child, currentIndex);
+        ////----AXLOGD("children {:#x} - atlasIndex:{}", child, currentIndex);
         prev = currentIndex;
     }
 
@@ -747,7 +747,7 @@ SpriteBatchNodeReorder::SpriteBatchNodeReorder()
     {
         ssize_t currentIndex = sprite->getAtlasIndex();
         AXASSERT(prev == currentIndex - 1, "Child order failed");
-        ////----AXLOGD("descendant %x - atlasIndex:{}", child, currentIndex);
+        ////----AXLOGD("descendant {:#x} - atlasIndex:{}", child, currentIndex);
         prev = currentIndex;
     }
 }
@@ -2603,7 +2603,7 @@ void SpriteHybrid::reparentSprite(float dt)
     if (_usingSpriteBatchNode)
         std::swap(p1, p2);
 
-    ////----AXLOGD("New parent is: %x", p2);
+    ////----AXLOGD("New parent is: {:#x}", p2);
 
     auto& p1Children = p1->getChildren();
     for (const auto& node : p1Children)

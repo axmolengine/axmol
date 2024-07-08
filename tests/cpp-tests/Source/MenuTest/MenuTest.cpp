@@ -445,7 +445,7 @@ MenuLayer4::~MenuLayer4() {}
 
 void MenuLayer4::menuCallback(Object* sender)
 {
-    // AXLOGD("selected item: %x index:{}", dynamic_cast<MenuItemToggle*>(sender)->selectedItem(),
+    // AXLOGD("selected item: {:#x} index:{}", dynamic_cast<MenuItemToggle*>(sender)->selectedItem(),
     // dynamic_cast<MenuItemToggle*>(sender)->selectedIndex() );
 }
 
