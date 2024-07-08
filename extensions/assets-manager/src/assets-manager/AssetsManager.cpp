@@ -210,7 +210,7 @@ AssetsManager::AssetsManager(const char* packageUrl /* =nullptr */,
                           ? int(task.progressInfo.totalBytesReceived * 100 / task.progressInfo.totalBytesExpected)
                           : 0;
         _delegate->onProgress(percent);
-        AXLOGD("downloading... {}%%", percent);
+        AXLOGD("downloading... {}%", percent);
     };
 
     // get version from version file when get data success
