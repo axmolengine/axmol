@@ -81,7 +81,7 @@ void SchedulerAutoremove::onEnter()
 void SchedulerAutoremove::autoremove(float dt)
 {
     accum += dt;
-    AXLOGD("autoremove scheduler: Time: %f", accum);
+    AXLOGD("autoremove scheduler: Time: {}", accum);
 
     if (accum > 3)
     {
@@ -635,12 +635,12 @@ void SchedulerUpdateAndCustom::onEnter()
 
 void SchedulerUpdateAndCustom::update(float dt)
 {
-    AXLOGD("update called:%f", dt);
+    AXLOGD("update called:{}", dt);
 }
 
 void SchedulerUpdateAndCustom::tick(float dt)
 {
-    AXLOGD("custom selector called:%f", dt);
+    AXLOGD("custom selector called:{}", dt);
 }
 
 void SchedulerUpdateAndCustom::stopSelectors(float /*dt*/)
@@ -673,7 +673,7 @@ void SchedulerUpdateFromCustom::onEnter()
 
 void SchedulerUpdateFromCustom::update(float dt)
 {
-    AXLOGD("update called:%f", dt);
+    AXLOGD("update called:{}", dt);
 }
 
 void SchedulerUpdateFromCustom::schedUpdate(float /*dt*/)
@@ -1167,7 +1167,7 @@ std::string ScheduleUpdatePriority::subtitle() const
 bool ScheduleUpdatePriority::onTouchBegan(Touch* /*touch*/, Event* /*event*/)
 {
     int priority = static_cast<int>(AXRANDOM_0_1() * 11) - 5;  // -5 ~ 5
-    AXLOGD("change update priority to %d", priority);
+    AXLOGD("change update priority to {}", priority);
     scheduleUpdateWithPriority(priority);
     return true;
 }
@@ -1313,12 +1313,12 @@ void SchedulerIssue17149::onEnter()
 void SchedulerIssue17149::update(float dt)
 {
     auto classa = new (_memoryPool) ClassA();
-    AXLOGD("Address one: %p", classa);
+    AXLOGD("Address one: {}", classa);
     Director::getInstance()->getScheduler()->scheduleUpdate(classa, 1, false);
     Director::getInstance()->getScheduler()->unscheduleUpdate(classa);
 
     auto classb = new (_memoryPool) ClassB();
-    AXLOGD("Address one: %p", classb);
+    AXLOGD("Address one: {}", classb);
     Director::getInstance()->getScheduler()->scheduleUpdate(classb, 1, false);
 
     unscheduleUpdate();
@@ -1328,14 +1328,14 @@ SchedulerIssue17149::ClassA::ClassA() : _member1(1), _member2(2), _member3(3) {}
 
 void SchedulerIssue17149::ClassA::update(float dt)
 {
-    AXLOGD("i'm ClassA: %d%d%d", _member1, _member2, _member3);
+    AXLOGD("i'm ClassA: {}{}{}", _member1, _member2, _member3);
 }
 
 SchedulerIssue17149::ClassB::ClassB() : _member1(4), _member2(5), _member3(6) {}
 
 void SchedulerIssue17149::ClassB::update(float dt)
 {
-    AXLOGD("i'm ClassB: %d%d%d", _member1, _member2, _member3);
+    AXLOGD("i'm ClassB: {}{}{}", _member1, _member2, _member3);
 
     Director::getInstance()->getScheduler()->unscheduleUpdate(this);
 }

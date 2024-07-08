@@ -70,7 +70,7 @@ bool TableViewTest::init()
 
 void TableViewTest::tableCellTouched(TableView* table, TableViewCell* cell)
 {
-    AXLOGD("cell touched at index: %d", static_cast<int32_t>(cell->getIdx()));
+    AXLOGD("cell touched at index: {}", static_cast<int32_t>(cell->getIdx()));
 }
 
 Size TableViewTest::tableCellSizeForIndex(TableView* table, ssize_t idx)

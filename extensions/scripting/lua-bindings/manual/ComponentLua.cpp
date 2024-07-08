@@ -154,7 +154,7 @@ bool ComponentLua::getLuaFunction(std::string_view functionName)
     int type = lua_type(l, -1);
     //    if (type != LUA_TFUNCTION)
     //    {
-    //        AXLOGD("can not get %s function from %s", functionName.c_str(), _scriptFileName.c_str());
+    //        AXLOGD("can not get {} function from {}", functionName.c_str(), _scriptFileName.c_str());
     //    }
 
     return type == LUA_TFUNCTION;
@@ -176,7 +176,7 @@ bool ComponentLua::loadAndExecuteScript()
                                                      fullPathOfScript.c_str());
     if (error)
     {
-        AXLOGD("ComponentLua::loadAndExecuteScript: %s", lua_tostring(l, -1));
+        AXLOGD("ComponentLua::loadAndExecuteScript: {}", lua_tostring(l, -1));
         lua_pop(l, 1);
         return false;
     }
@@ -185,7 +185,7 @@ bool ComponentLua::loadAndExecuteScript()
     error = lua_pcall(l, 0, 1, 0);
     if (error)
     {
-        AXLOGD("ComponentLua::loadAndExecuteScript: %s", lua_tostring(l, -1));
+        AXLOGD("ComponentLua::loadAndExecuteScript: {}", lua_tostring(l, -1));
         lua_pop(l, 1);
         return false;
     }
@@ -194,7 +194,7 @@ bool ComponentLua::loadAndExecuteScript()
     int type = lua_type(l, -1);
     if (type != LUA_TTABLE)
     {
-        AXLOGD("%s should return a table, or the script component can not work currectly", _scriptFileName.c_str());
+        AXLOGD("{} should return a table, or the script component can not work currectly", _scriptFileName.c_str());
         return false;
     }
 

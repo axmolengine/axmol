@@ -95,7 +95,7 @@ void ActionTimeline::play(std::string name, bool loop)
 {
     if (_animationInfos.find(name) == _animationInfos.end())
     {
-        AXLOGD("Can't find animation info for %s", name.c_str());
+        AXLOGD("Can't find animation info for {}", name.c_str());
         return;
     }
 
@@ -298,7 +298,7 @@ void ActionTimeline::addAnimationInfo(const AnimationInfo& animationInfo)
 {
     if (_animationInfos.find(animationInfo.name) != _animationInfos.end())
     {
-        AXLOGD("Animation (%s) already exists.", animationInfo.name.c_str());
+        AXLOGD("Animation ({}) already exists.", animationInfo.name.c_str());
         return;
     }
 
@@ -311,7 +311,7 @@ void ActionTimeline::removeAnimationInfo(std::string animationName)
     auto clipIter = _animationInfos.find(animationName);
     if (clipIter == _animationInfos.end())
     {
-        AXLOGD("AnimationInfo (%s) not exists.", animationName.c_str());
+        AXLOGD("AnimationInfo ({}) not exists.", animationName.c_str());
         return;
     }
 
@@ -334,7 +334,7 @@ void ActionTimeline::setAnimationEndCallFunc(const std::string animationName, st
     auto clipIter = _animationInfos.find(animationName);
     if (clipIter == _animationInfos.end())
     {
-        AXLOGD("AnimationInfo (%s) not exists.", animationName.c_str());
+        AXLOGD("AnimationInfo ({}) not exists.", animationName.c_str());
         return;
     }
     clipIter->second.clipEndCallBack = func;

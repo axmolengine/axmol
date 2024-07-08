@@ -129,7 +129,7 @@ void UILoadingBarTest_Left::update(float delta)
 void UILoadingBarTest_Left::printWidgetResources(ax::Object* sender)
 {
     ax::ResourceData textureFile = _loadingBar->getRenderFile();
-    AXLOGD("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
+    AXLOGD("textureFile  Name : {}, Type: {}", textureFile.file.c_str(), textureFile.type);
 }
 
 // UILoadingBarTest_Right

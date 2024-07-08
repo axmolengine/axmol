@@ -2525,7 +2525,7 @@ void LabelLayoutBaseTest::valueChanged(ax::Object* sender, ax::extension::Contro
     //    letterSprite->stopAllActions();
     //    letterSprite->runAction(Sequence::create(moveBy, moveBy->clone()->reverse(), nullptr ));
     //
-    //    AXLOGD("label line height = %f", _label->getLineHeight());
+    //    AXLOGD("label line height = {}", _label->getLineHeight());
 }
 
 void LabelLayoutBaseTest::updateDrawNodeSize(const ax::Size& drawNodeSize)

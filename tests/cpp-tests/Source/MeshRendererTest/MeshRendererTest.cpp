@@ -2557,7 +2557,7 @@ void CameraBackgroundClearTest::switch_CameraClearMode(ax::Object* sender)
         _camera->setBackgroundBrush(CameraBackgroundBrush::createDepthBrush(1.f));
         _label->setString("Depth Clear Brush");
         // Test brush valid when set by user scene setting
-        AXLOGD("Background brush valid status is : %s", _camera->isBrushValid() ? "true" : "false");
+        AXLOGD("Background brush valid status is : {}", _camera->isBrushValid() ? "true" : "false");
     }
     else if (type == CameraBackgroundBrush::BrushType::DEPTH)
     {

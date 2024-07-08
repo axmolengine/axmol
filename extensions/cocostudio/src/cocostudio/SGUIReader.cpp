@@ -134,7 +134,7 @@ int GUIReader::getVersionInteger(const char* str)
     int is  = atoi(s.c_str());
 
     int iVersion = it * 1000 + ih * 100 + ite * 10 + is;
-    //    AXLOGD("iversion %d",iVersion);
+    //    AXLOGD("iversion {}",iVersion);
     return iVersion;
     /************************/
 }
@@ -214,7 +214,7 @@ Widget* GUIReader::widgetFromJsonFile(const char* fileName)
     jsonDict.Parse<0>(contentStr.c_str());
     if (jsonDict.HasParseError())
     {
-        AXLOGD("GetParseError %d\n", jsonDict.GetParseError());
+        AXLOGD("GetParseError {}\n", jsonDict.GetParseError());
     }
     Widget* widget                  = nullptr;
     const char* fileVersion         = DICTOOL->getStringValue_json(jsonDict, "version");
@@ -534,7 +534,7 @@ Widget* WidgetPropertiesReader0250::createWidget(const rapidjson::Value& data,
     /* *********temp********* */
     //    ActionManager::getInstance()->releaseActions();
     /* ********************** */
-    //    AXLOGD("file name == [%s]",fileName);
+    //    AXLOGD("file name == [{}]",fileName);
     Object* rootWidget = (Object*)widget;
     ActionManagerEx::getInstance()->initWithDictionary(fileName, actions, rootWidget);
     return widget;
@@ -1311,7 +1311,7 @@ Widget* WidgetPropertiesReader0300::createWidget(const rapidjson::Value& data,
     /* *********temp********* */
     //    ActionManager::getInstance()->releaseActions();
     /* ********************** */
-    //    AXLOGD("file name == [%s]",fileName);
+    //    AXLOGD("file name == [{}]",fileName);
     Object* rootWidget = (Object*)widget;
     ActionManagerEx::getInstance()->initWithDictionary(fileName, actions, rootWidget);
     return widget;
@@ -1470,7 +1470,7 @@ Widget* WidgetPropertiesReader0300::widgetFromBinary(CocoLoader* cocoLoader, stE
             customJsonDict.Parse<0>(customProperty);
             if (customJsonDict.HasParseError())
             {
-                AXLOGD("GetParseError %d\n", customJsonDict.GetParseError());
+                AXLOGD("GetParseError {}\n", customJsonDict.GetParseError());
             }
             setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
         }
@@ -1559,7 +1559,7 @@ Widget* WidgetPropertiesReader0300::widgetFromJsonDictionary(const rapidjson::Va
     const char* classname             = DICTOOL->getStringValue_json(data, "classname");
     const rapidjson::Value& uiOptions = DICTOOL->getSubDictionary_json(data, "options");
     Widget* widget                    = this->createGUI(classname);
-    //    AXLOGD("classname = %s", classname);
+    //    AXLOGD("classname = {}", classname);
     std::string readerName = this->getWidgetReaderClassName(classname);
 
     WidgetReaderProtocol* reader = this->createWidgetReaderProtocol(readerName);
@@ -1585,7 +1585,7 @@ Widget* WidgetPropertiesReader0300::widgetFromJsonDictionary(const rapidjson::Va
             customJsonDict.Parse<0>(customProperty);
             if (customJsonDict.HasParseError())
             {
-                AXLOGD("GetParseError %d\n", customJsonDict.GetParseError());
+                AXLOGD("GetParseError {}\n", customJsonDict.GetParseError());
             }
             setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
         }

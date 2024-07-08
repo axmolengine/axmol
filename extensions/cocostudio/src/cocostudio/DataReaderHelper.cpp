@@ -1131,7 +1131,7 @@ void DataReaderHelper::addDataFromJsonCache(std::string_view fileContent, DataIn
     json.ParseStream<0>(stream);
     if (json.HasParseError())
     {
-        AXLOGD("GetParseError %d\n", json.GetParseError());
+        AXLOGD("GetParseError {}\n", json.GetParseError());
     }
 
     dataInfo->contentScale = DICTOOL->getFloatValue_json(json, CONTENT_SCALE, 1.0f);

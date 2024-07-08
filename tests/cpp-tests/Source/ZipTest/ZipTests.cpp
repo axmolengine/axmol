@@ -63,11 +63,11 @@ static void unzipTest(Label* label,
 
     if (fu->isFileExist(newLocal))
     {
-        AXLOGD("Remove file %s", newLocal.c_str());
+        AXLOGD("Remove file {}", newLocal.c_str());
         fu->removeFile(newLocal);
     }
 
-    AXLOGD("Copy %s to %s", zipFile.data(), newLocal.c_str());
+    AXLOGD("Copy {} to {}", zipFile.data(), newLocal.c_str());
     auto writeSuccess = fu->writeDataToFile(fu->getDataFromFile(zipFile), newLocal);
     if (!writeSuccess)
     {
@@ -78,7 +78,7 @@ static void unzipTest(Label* label,
     unzFile fp = unzOpen(newLocal.c_str());
     if (!fp)
     {
-        AXLOGD("Failed to open zip file %s", newLocal.c_str());
+        AXLOGD("Failed to open zip file {}", newLocal.c_str());
         label->setString("Failed to open zip file");
         return;
     }

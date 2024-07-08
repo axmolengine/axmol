@@ -84,7 +84,7 @@ bool Paddle::containsTouchLocation(Touch* touch)
 
 bool Paddle::onTouchBegan(Touch* touch, Event* event)
 {
-    AXLOGD("Paddle::onTouchBegan id = %d, x = %f, y = %f", touch->getID(), touch->getLocation().x,
+    AXLOGD("Paddle::onTouchBegan id = {}, x = {}, y = {}", touch->getID(), touch->getLocation().x,
           touch->getLocation().y);
 
     if (_state != kPaddleStateUngrabbed)
@@ -106,7 +106,7 @@ void Paddle::onTouchMoved(Touch* touch, Event* event)
     // you get Sets instead of 1 UITouch, so you'd need to loop through the set
     // in each touchXXX method.
 
-    AXLOGD("Paddle::onTouchMoved id = %d, x = %f, y = %f", touch->getID(), touch->getLocation().x,
+    AXLOGD("Paddle::onTouchMoved id = {}, x = {}, y = {}", touch->getID(), touch->getLocation().x,
           touch->getLocation().y);
 
     AXASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");

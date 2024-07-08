@@ -386,17 +386,17 @@ std::string StressTest2::subtitle() const
 SchedulerTest1::SchedulerTest1()
 {
     auto layer = Layer::create();
-    // AXLOGD("retain count after init is %d", layer->getReferenceCount());                // 1
+    // AXLOGD("retain count after init is {}", layer->getReferenceCount());                // 1
 
     addChild(layer, 0);
-    // AXLOGD("retain count after addChild is %d", layer->getReferenceCount());      // 2
+    // AXLOGD("retain count after addChild is {}", layer->getReferenceCount());      // 2
 
     layer->schedule(AX_CALLBACK_1(SchedulerTest1::doSomething, this), "do_something_key");
-    // AXLOGD("retain count after schedule is %d", layer->getReferenceCount());      // 3 : (objective-c version), but
+    // AXLOGD("retain count after schedule is {}", layer->getReferenceCount());      // 3 : (objective-c version), but
     // win32 version is still 2, because Timer class don't save target.
 
     layer->unschedule("do_something_key");
-    // AXLOGD("retain count after unschedule is %d", layer->getReferenceCount());        // STILL 3!  (win32 is '2')
+    // AXLOGD("retain count after unschedule is {}", layer->getReferenceCount());        // STILL 3!  (win32 is '2')
 }
 
 void SchedulerTest1::doSomething(float dt) {}
@@ -1171,7 +1171,7 @@ void NodeNormalizedPositionTest2::update(float dt)
 
     Size s = Size(_copyContentSize.width * norm, _copyContentSize.height * norm);
     setContentSize(s);
-    AXLOGD("s: %f,%f", s.width, s.height);
+    AXLOGD("s: {},{}", s.width, s.height);
 }
 
 //------------------------------------------------------------------

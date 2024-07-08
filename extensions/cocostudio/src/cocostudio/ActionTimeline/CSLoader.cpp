@@ -451,7 +451,7 @@ Node* CSLoader::loadNodeWithContent(std::string_view content)
     doc.Parse<0>(content.data(), content.length());
     if (doc.HasParseError())
     {
-        AXLOGD("GetParseError %d\n", doc.GetParseError());
+        AXLOGD("GetParseError {}\n", doc.GetParseError());
     }
 
     // cocos2dx version mono editor is based on
@@ -569,7 +569,7 @@ Node* CSLoader::loadNode(const rapidjson::Value& json)
     }
     else
     {
-        AXLOGD("Not supported NodeType: %s", nodeType.c_str());
+        AXLOGD("Not supported NodeType: {}", nodeType.c_str());
     }
 
     return node;
@@ -801,7 +801,7 @@ Node* CSLoader::loadWidget(const rapidjson::Value& json)
             customJsonDict.Parse<0>(customProperty);
             if (customJsonDict.HasParseError())
             {
-                AXLOGD("GetParseError %d\n", customJsonDict.GetParseError());
+                AXLOGD("GetParseError {}\n", customJsonDict.GetParseError());
             }
 
             widgetPropertiesReader.setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
@@ -949,7 +949,7 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
         // decode plist
         auto textures   = csparsebinary->textures();
         int textureSize = csparsebinary->textures()->size();
-        AXLOGD("textureSize = %d", textureSize);
+        AXLOGD("textureSize = {}", textureSize);
         for (int i = 0; i < textureSize; ++i)
         {
             std::string_view plist = textures->Get(i)->c_str();
@@ -996,7 +996,7 @@ inline void CSLoader::reconstructNestNode(ax::Node* node)
         else
         {
             _rootNode = _callbackHandlers.back();
-            AXLOGD("after pop back _rootNode name = %s", _rootNode->getName().data());
+            AXLOGD("after pop back _rootNode name = {}", _rootNode->getName().data());
         }
     }
 }
@@ -1016,7 +1016,7 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
 
     if (buf.isNull())
     {
-        AXLOGD("CSLoader::nodeWithFlatBuffersFile - failed read file: %s", fileName.data());
+        AXLOGD("CSLoader::nodeWithFlatBuffersFile - failed read file: {}", fileName.data());
         AX_ASSERT(false);
         return nullptr;
     }
@@ -1296,7 +1296,7 @@ bool CSLoader::bindCallback(std::string_view callbackName,
         }
     }
 
-    AXLOGD("callBackName %s cannot be found", callbackName.data());
+    AXLOGD("callBackName {} cannot be found", callbackName.data());
 
     return false;
 }
@@ -1444,7 +1444,7 @@ Node* CSLoader::createNodeWithFlatBuffersForSimulator(std::string_view filename)
     // decode plist
     auto textures   = csparsebinary->textures();
     int textureSize = csparsebinary->textures()->size();
-    //    AXLOGD("textureSize = %d", textureSize);
+    //    AXLOGD("textureSize = {}", textureSize);
     for (int i = 0; i < textureSize; ++i)
     {
         std::string_view plist = textures->Get(i)->c_str();

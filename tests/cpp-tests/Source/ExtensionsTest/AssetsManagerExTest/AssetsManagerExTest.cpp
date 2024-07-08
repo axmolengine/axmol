@@ -97,7 +97,7 @@ bool AssetsManagerExLoaderScene::init()
 
     std::string manifestPath = sceneManifests[_testIndex],
                 storagePath  = FileUtils::getInstance()->getWritablePath() + storagePaths[_testIndex];
-    AXLOGD("Storage path for this test : %s", storagePath.c_str());
+    AXLOGD("Storage path for this test : {}", storagePath.c_str());
     _am = AssetsManagerEx::create(manifestPath, storagePath);
     _am->retain();
 
@@ -169,13 +169,13 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Object* sender)
                 case EventAssetsManagerEx::EventCode::ALREADY_UP_TO_DATE:
                 case EventAssetsManagerEx::EventCode::UPDATE_FINISHED:
                 {
-                    AXLOGD("Update finished. %s", event->getMessage().c_str());
+                    AXLOGD("Update finished. {}", event->getMessage().c_str());
                     this->onLoadEnd();
                 }
                 break;
                 case EventAssetsManagerEx::EventCode::UPDATE_FAILED:
                 {
-                    AXLOGD("Update failed. %s", event->getMessage().c_str());
+                    AXLOGD("Update failed. {}", event->getMessage().c_str());
 
                     failCount++;
                     if (failCount < 5)
@@ -192,12 +192,12 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Object* sender)
                 break;
                 case EventAssetsManagerEx::EventCode::ERROR_UPDATING:
                 {
-                    AXLOGD("Asset %s : %s", event->getAssetId().c_str(), event->getMessage().c_str());
+                    AXLOGD("Asset {} : {}", event->getAssetId().c_str(), event->getMessage().c_str());
                 }
                 break;
                 case EventAssetsManagerEx::EventCode::ERROR_DECOMPRESS:
                 {
-                    AXLOGD("%s", event->getMessage().c_str());
+                    AXLOGD("{}", event->getMessage().c_str());
                 }
                 break;
                 default:

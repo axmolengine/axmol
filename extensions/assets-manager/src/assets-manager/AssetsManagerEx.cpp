@@ -393,7 +393,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
     size_t pos = zip.find_last_of("/\\");
     if (pos == std::string::npos)
     {
-        AXLOGD("AssetsManagerEx : no root path specified for zip file %s\n", zip.data());
+        AXLOGD("AssetsManagerEx : no root path specified for zip file {}\n", zip.data());
         return false;
     }
     const std::string_view rootPath = zip.substr(0, pos + 1);
@@ -410,7 +410,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
     unzFile zipfile = unzOpen2(zip.data(), &zipFunctionOverrides);
     if (!zipfile)
     {
-        AXLOGD("AssetsManagerEx : can not open downloaded zip file %s\n", zip.data());
+        AXLOGD("AssetsManagerEx : can not open downloaded zip file {}\n", zip.data());
         return false;
     }
 
@@ -418,7 +418,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
     unz_global_info global_info;
     if (unzGetGlobalInfo(zipfile, &global_info) != UNZ_OK)
     {
-        AXLOGD("AssetsManagerEx : can not read file global info of %s\n", zip.data());
+        AXLOGD("AssetsManagerEx : can not read file global info of {}\n", zip.data());
         unzClose(zipfile);
         return false;
     }
@@ -450,7 +450,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
             if (!_fileUtils->createDirectory(basename(fullPath)))
             {
                 // Failed to create directory
-                AXLOGD("AssetsManagerEx : can not create directory %s\n", fullPath.c_str());
+                AXLOGD("AssetsManagerEx : can not create directory {}\n", fullPath.c_str());
                 unzClose(zipfile);
                 return false;
             }
@@ -464,7 +464,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
                 if (!_fileUtils->createDirectory(dir))
                 {
                     // Failed to create directory
-                    AXLOGD("AssetsManagerEx : can not create directory %s\n", fullPath.c_str());
+                    AXLOGD("AssetsManagerEx : can not create directory {}\n", fullPath.c_str());
                     unzClose(zipfile);
                     return false;
                 }
@@ -473,7 +473,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
             // Open current file.
             if (unzOpenCurrentFile(zipfile) != UNZ_OK)
             {
-                AXLOGD("AssetsManagerEx : can not extract file %s\n", fileName);
+                AXLOGD("AssetsManagerEx : can not extract file {}\n", fileName);
                 unzClose(zipfile);
                 return false;
             }
@@ -482,7 +482,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
             auto fsOut = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::WRITE);
             if (!fsOut)
             {
-                AXLOGD("AssetsManagerEx : can not create decompress destination file %s (errno: %d)\n", fullPath.c_str(),
+                AXLOGD("AssetsManagerEx : can not create decompress destination file {} (errno: {})\n", fullPath.c_str(),
                       errno);
                 unzCloseCurrentFile(zipfile);
                 unzClose(zipfile);
@@ -496,7 +496,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
                 error = unzReadCurrentFile(zipfile, readBuffer, BUFFER_SIZE);
                 if (error < 0)
                 {
-                    AXLOGD("AssetsManagerEx : can not read zip file %s, error code is %d\n", fileName, error);
+                    AXLOGD("AssetsManagerEx : can not read zip file {}, error code is {}\n", fileName, error);
                     fsOut.reset();
                     unzCloseCurrentFile(zipfile);
                     unzClose(zipfile);
@@ -717,7 +717,7 @@ void AssetsManagerEx::parseManifest()
 
     if (!_remoteManifest->isLoaded())
     {
-        AXLOGD("AssetsManagerEx : Error parsing manifest file, %s", _tempManifestPath.c_str());
+        AXLOGD("AssetsManagerEx : Error parsing manifest file, {}", _tempManifestPath.c_str());
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_PARSE_MANIFEST);
         _updateState = State::UNCHECKED;
     }

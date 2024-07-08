@@ -737,7 +737,7 @@ SpriteBatchNodeReorder::SpriteBatchNodeReorder()
 
         ssize_t currentIndex = child->getAtlasIndex();
         AXASSERT(prev == currentIndex - 1, "Child order failed");
-        ////----AXLOGD("children %x - atlasIndex:%d", child, currentIndex);
+        ////----AXLOGD("children %x - atlasIndex:{}", child, currentIndex);
         prev = currentIndex;
     }
 
@@ -747,7 +747,7 @@ SpriteBatchNodeReorder::SpriteBatchNodeReorder()
     {
         ssize_t currentIndex = sprite->getAtlasIndex();
         AXASSERT(prev == currentIndex - 1, "Child order failed");
-        ////----AXLOGD("descendant %x - atlasIndex:%d", child, currentIndex);
+        ////----AXLOGD("descendant %x - atlasIndex:{}", child, currentIndex);
         prev = currentIndex;
     }
 }

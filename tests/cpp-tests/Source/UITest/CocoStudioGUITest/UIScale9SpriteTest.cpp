@@ -828,8 +828,8 @@ bool UIS9Flip::init()
                 statusLabel->setString("Scale9Disabled");
             }
 
-            AXLOGD("scaleX = %f", flipXSprite->getScaleX());
-            AXLOGD("scaleY = %f", flipYSprite->getScale());
+            AXLOGD("scaleX = {}", flipXSprite->getScaleX());
+            AXLOGD("scaleY = {}", flipYSprite->getScale());
             if (flipXSprite->isFlippedX())
             {
                 AXLOGD("xxxxxxx");
@@ -890,10 +890,10 @@ bool UIS9ChangeAnchorPoint::init()
             {
                 normalSprite->setAnchorPoint(Vec2::ZERO);
                 normalSprite->setScale9Enabled(true);
-                AXLOGD("position = %f, %f,  anchor point = %f, %f", normalSprite->getPosition().x,
+                AXLOGD("position = {}, {},  anchor point = {}, {}", normalSprite->getPosition().x,
                       normalSprite->getPosition().y, normalSprite->getAnchorPoint().x,
                       normalSprite->getAnchorPoint().y);
-                AXLOGD("tests:content size : width = %f, height = %f", normalSprite->getContentSize().width,
+                AXLOGD("tests:content size : width = {}, height = {}", normalSprite->getContentSize().width,
                       normalSprite->getContentSize().height);
             }
         });
@@ -908,10 +908,10 @@ bool UIS9ChangeAnchorPoint::init()
             {
                 normalSprite->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
                 normalSprite->setScale9Enabled(false);
-                AXLOGD("position = %f, %f,  anchor point = %f, %f", normalSprite->getPosition().x,
+                AXLOGD("position = {}, {},  anchor point = {}, {}", normalSprite->getPosition().x,
                       normalSprite->getPosition().y, normalSprite->getAnchorPoint().x,
                       normalSprite->getAnchorPoint().y);
-                AXLOGD("tests:content size : width = %f, height = %f", normalSprite->getContentSize().width,
+                AXLOGD("tests:content size : width = {}, height = {}", normalSprite->getContentSize().width,
                       normalSprite->getContentSize().height);
             }
         });

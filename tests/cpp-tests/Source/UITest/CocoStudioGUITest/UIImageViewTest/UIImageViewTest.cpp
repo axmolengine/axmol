@@ -77,7 +77,7 @@ bool UIImageViewTest::init()
 void UIImageViewTest::printWidgetResources(ax::Object* sender)
 {
     ax::ResourceData textureFile = _image->getRenderFile();
-    AXLOGD("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
+    AXLOGD("textureFile  Name : {}, Type: {}", textureFile.file.c_str(), textureFile.type);
 }
 
 // UIImageViewTest_Scale9

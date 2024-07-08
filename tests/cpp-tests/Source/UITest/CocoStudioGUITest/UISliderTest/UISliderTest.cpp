@@ -103,18 +103,18 @@ void UISliderTest::sliderEvent(Object* pSender, Slider::EventType type)
 void UISliderTest::printWidgetResources(ax::Object* /*sender*/)
 {
     ax::ResourceData textureFile = _slider->getBackFile();
-    AXLOGD("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
+    AXLOGD("textureFile  Name : {}, Type: {}", textureFile.file.c_str(), textureFile.type);
     ax::ResourceData progressBarTextureFile = _slider->getProgressBarFile();
-    AXLOGD("progressBarTextureFile  Name : %s, Type: %d", progressBarTextureFile.file.c_str(),
+    AXLOGD("progressBarTextureFile  Name : {}, Type: {}", progressBarTextureFile.file.c_str(),
           progressBarTextureFile.type);
     ax::ResourceData slidBallNormalTextureFile = _slider->getBallNormalFile();
-    AXLOGD("slidBallNormalTextureFile  Name : %s, Type: %d", slidBallNormalTextureFile.file.c_str(),
+    AXLOGD("slidBallNormalTextureFile  Name : {}, Type: {}", slidBallNormalTextureFile.file.c_str(),
           slidBallNormalTextureFile.type);
     ax::ResourceData slidBallPressedTextureFile = _slider->getBallPressedFile();
-    AXLOGD("slidBallPressedTextureFile  Name : %s, Type: %d", slidBallPressedTextureFile.file.c_str(),
+    AXLOGD("slidBallPressedTextureFile  Name : {}, Type: {}", slidBallPressedTextureFile.file.c_str(),
           slidBallPressedTextureFile.type);
     ax::ResourceData slidBallDisabledTextureFile = _slider->getBallDisabledFile();
-    AXLOGD("slidBallDisabledTextureFile  Name : %s, Type: %d", slidBallDisabledTextureFile.file.c_str(),
+    AXLOGD("slidBallDisabledTextureFile  Name : {}, Type: {}", slidBallDisabledTextureFile.file.c_str(),
           slidBallDisabledTextureFile.type);
 }
 
@@ -369,7 +369,7 @@ bool UISliderNewEventCallbackTest::init()
             }
             else if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
             {
-                AXLOGD("slider is moving! percent = %f", 100.0f * slider->getPercent() / slider->getMaxPercent());
+                AXLOGD("slider is moving! percent = {}", 100.0f * slider->getPercent() / slider->getMaxPercent());
             }
             else if (type == Slider::EventType::ON_SLIDEBALL_UP)
             {

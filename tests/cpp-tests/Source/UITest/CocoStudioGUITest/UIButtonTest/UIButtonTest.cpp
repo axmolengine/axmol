@@ -78,7 +78,7 @@ bool UIButtonTest::init()
 
         // Create the button
         Button* button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
-        AXLOGD("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
+        AXLOGD("content size should be greater than 0:  width = {}, height = {}", button->getContentSize().width,
               button->getContentSize().height);
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest::touchEvent, this));
@@ -150,11 +150,11 @@ void UIButtonTest::touchEvent(Object* pSender, Widget::TouchEventType type)
 void UIButtonTest::printWidgetResources(ax::Object* sender)
 {
     ax::ResourceData normalFileName = _button->getNormalFile();
-    AXLOGD("normalFileName  Name : %s, Type: %d", normalFileName.file.c_str(), normalFileName.type);
+    AXLOGD("normalFileName  Name : {}, Type: {}", normalFileName.file.c_str(), normalFileName.type);
     ax::ResourceData clickedFileName = _button->getPressedFile();
-    AXLOGD("clickedFileName  Name : %s, Type: %d", clickedFileName.file.c_str(), clickedFileName.type);
+    AXLOGD("clickedFileName  Name : {}, Type: {}", clickedFileName.file.c_str(), clickedFileName.type);
     ax::ResourceData disabledFileName = _button->getDisabledFile();
-    AXLOGD("disabledFileName  Name : %s, Type: %d", disabledFileName.file.c_str(), disabledFileName.type);
+    AXLOGD("disabledFileName  Name : {}, Type: {}", disabledFileName.file.c_str(), disabledFileName.type);
 }
 
 // UIButtonTest_Scale9
@@ -661,7 +661,7 @@ bool UIButtonTestZoomScale::init()
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f + 20));
         button->setPressedActionEnabled(true);
         button->addClickEventListener([=](Object* sender) {
-            AXLOGD("Button clicked, position = (%f, %f)", button->getPosition().x, button->getPosition().y);
+            AXLOGD("Button clicked, position = ({}, {})", button->getPosition().x, button->getPosition().y);
         });
         button->setName("button");
         _uiLayer->addChild(button);
@@ -715,7 +715,7 @@ bool UIButtonTextOnly::init()
         button->setPositionNormalized(Vec2(0.5f, 0.5f));
 
         button->setTitleText("PLAY GAME");
-        AXLOGD("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
+        AXLOGD("content size should be greater than 0:  width = {}, height = {}", button->getContentSize().width,
               button->getContentSize().height);
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);

@@ -674,14 +674,14 @@ bool UIPageViewJumpToPageTest::init()
         auto button1 = ui::Button::create();
         button1->setPositionNormalized(Vec2(0.1f, 0.75f));
         button1->setTitleText("Jump to Page1");
-        AXLOGD("button1 content Size = %f, %f", button1->getContentSize().width, button1->getContentSize().height);
+        AXLOGD("button1 content Size = {}, {}", button1->getContentSize().width, button1->getContentSize().height);
         button1->addClickEventListener([=](Object*) { pageView->setCurrentPageIndex(0); });
         _uiLayer->addChild(button1);
 
         auto button2 = static_cast<ui::Button*>(button1->clone());
         button2->setTitleText("Jump to Page2");
         button2->setPositionNormalized(Vec2(0.1f, 0.65f));
-        AXLOGD("button2 content Size = %f, %f", button2->getContentSize().width, button2->getContentSize().height);
+        AXLOGD("button2 content Size = {}, {}", button2->getContentSize().width, button2->getContentSize().height);
         button2->addClickEventListener([=](Object*) { pageView->setCurrentPageIndex(1); });
         _uiLayer->addChild(button2);
 
