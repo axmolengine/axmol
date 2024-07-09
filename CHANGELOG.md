@@ -25,6 +25,8 @@
 - Fix Renderer recreated by @smilediver in https://github.com/axmolengine/axmol/pull/1988
 - Fix AvfMediaEngine assetion when play some HLS video files by @halx99 in https://github.com/axmolengine/axmol/issues/1984
 - Fix compiling errors when on linux ubuntu2204 by @bwaiox in https://github.com/axmolengine/axmol/pull/2012
+- Fix prebuilt, add ax_link_ext macro by @iAndyHD3 in https://github.com/axmolengine/axmol/pull/2022
+- Fix #1943, Make extension luabinding can be controlled by AX_EXT_HINT by @halx99, reported by @iAndyHD3
 
 ### Improvements
 
@@ -59,8 +61,8 @@
 
 ### 3rdparty Updates
 
-- simdjson: 3.9.2 ==> 3.9.4
-- fmtlib: 10.2.1 ==> 11.0.0
+- simdjson: 3.9.2 ==> 3.9.5
+- fmtlib: 10.2.1 ==> 11.0.1
 - yasio: 4.2.2 ==> 4.2.3
 - oboe: 1.8.1 ==> 1.9.0
 
