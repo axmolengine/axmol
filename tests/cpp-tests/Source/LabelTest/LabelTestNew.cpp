@@ -445,14 +445,14 @@ LabelFNTMultiLine::LabelFNTMultiLine()
     addChild(label1, 0, kTagBitmapAtlas1);
 
     s = label1->getContentSize();
-    AXLOGD("content size: %.2fx%.2f", s.width, s.height);
+    AXLOGD("content size: {:.2}x{:.2}", s.width, s.height);
 
     // Center
     auto label2 = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "Multi line\nCenter");
     addChild(label2, 0, kTagBitmapAtlas2);
 
     s = label2->getContentSize();
-    AXLOGD("content size: %.2fx%.2f", s.width, s.height);
+    AXLOGD("content size:  {:.2}x{:.2}", s.width, s.height);
 
     // right
     auto label3 = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "Multi line\nRight\nThree lines Three");
@@ -460,7 +460,7 @@ LabelFNTMultiLine::LabelFNTMultiLine()
     addChild(label3, 0, kTagBitmapAtlas3);
 
     s = label3->getContentSize();
-    AXLOGD("content size: %.2fx%.2f", s.width, s.height);
+    AXLOGD("content size:  {:.2}x{:.2}", s.width, s.height);
 
     label1->setPosition(VisibleRect::leftBottom());
     label2->setPosition(VisibleRect::center());

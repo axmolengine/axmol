@@ -777,10 +777,10 @@ bool Physics3DCollisionCallbackDemo::init()
                 // AXLOGD("------------BoxB Collision Info------------");
                 // AXLOGD("Collision Point Num: {}", ci.collisionPointList.size());
                 // for (auto&& iter : ci.collisionPointList){
-                //	AXLOGD("Collision Position On A: (%.2f, %.2f, %.2f)", iter.worldPositionOnA.x, iter.worldPositionOnA.y,
-                // iter.worldPositionOnA.z); 	AXLOGD("Collision Position On B: (%.2f, %.2f, %.2f)",
+                //	AXLOGD("Collision Position On A: ({:.2},{:.2}, {:.2})", iter.worldPositionOnA.x, iter.worldPositionOnA.y,
+                // iter.worldPositionOnA.z); 	AXLOGD("Collision Position On B: ({:.2}, {:.2}, {:.2})",
                 // iter.worldPositionOnB.x, iter.worldPositionOnB.y, iter.worldPositionOnB.z); 	AXLOGD("Collision Normal
-                // On B: (%.2f, %.2f, %.2f)", iter.worldNormalOnB.x, iter.worldNormalOnB.y, iter.worldNormalOnB.z);
+                // On B: ({:.2}, {:.2}, {:.2})", iter.worldNormalOnB.x, iter.worldNormalOnB.y, iter.worldNormalOnB.z);
                 // }
                 // AXLOGD("------------BoxB Collision Info------------");
             });

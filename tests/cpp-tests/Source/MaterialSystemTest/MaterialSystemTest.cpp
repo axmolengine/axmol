@@ -467,7 +467,7 @@ void Material_parsePerformance::parsingTesting(unsigned int count)
                                               elapsed_secs, count);
         label->setString(str);
 
-        AXLOGD("Took: %.3f seconds for parsing material {} times.", elapsed_secs, count);
+        AXLOGD("Took: {:.3} seconds for parsing material {} times.", elapsed_secs, count);
     }
 }
 

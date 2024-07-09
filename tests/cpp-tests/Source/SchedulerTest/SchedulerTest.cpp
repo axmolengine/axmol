@@ -727,7 +727,7 @@ void RescheduleSelector::schedUpdate(float dt)
 {
     _ticks++;
 
-    AXLOGD("schedUpdate: %.4f", dt);
+    AXLOGD("schedUpdate: {:.4}", dt);
     if (_ticks > 3)
     {
         _interval += 1.0f;

@@ -153,7 +153,7 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Object* sender)
                     else
                     {
                         str = StringUtils::format("%.2f", percent) + "%";
-                        AXLOGD("%.2f Percent", percent);
+                        AXLOGD("{:.2} Percent", percent);
                     }
                     if (this->_progress != nullptr)
                         this->_progress->setString(str);

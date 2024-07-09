@@ -815,7 +815,7 @@ void ConvertToNode::onTouchesEnded(const std::vector<Touch*>& touches, Event* ev
             p1 = node->convertToNodeSpaceAR(location);
             p2 = node->convertToNodeSpace(location);
 
-            AXLOGD("AR: x=%.2f, y=%.2f -- Not AR: x=%.2f, y=%.2f", p1.x, p1.y, p2.x, p2.y);
+            AXLOGD("AR: x={:.2}, y={:.2} -- Not AR: x={:.2}, y={:.2}", p1.x, p1.y, p2.x, p2.y);
         }
     }
 }
