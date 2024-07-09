@@ -1,12 +1,68 @@
 ## axmol-2.1.4 ?? 2024
 
-### Significant changes relative to 2.1.2:
+### Significant changes relative to 2.1.3:
 
-- Add JobSystem support
+- Add JobSystem support by @halx99
+- Add cmake option AX_WASM_INITIAL_MEMORY
+- Add Linux WebView implementation by @IamSanjid in https://github.com/axmolengine/axmol/pull/1985
+- Improve curl download implementation by @halx99 in https://github.com/axmolengine/axmol/pull/1999
+  - Use `curl_multi_poll` instead select
+  - Use `curl_xferinfo_callback` instead deprecated `curl_progress_callback`
+  - Don't use CURL_HEADER to get content length, get it in xferinfo_callback
+- Improve RenderTarget by @smilediver in https://github.com/axmolengine/axmol/pull/1996
+- Make apple controller to support four players by @paulocoutinhox in https://github.com/axmolengine/axmol/pull/2009
 
 ### Mark as deprecated
 
 - `AsyncTaskPool`, use `JobSystem` instead.
+- `AXLOG`, `AXLOGINFO`, `AXLOGWARN`, `AXLOGERROR`, use `AXLOGD`, `AXLOGI`, `AXLOGE` instead.
+
+### Bug Fixes
+
+- Fix call to incorrect java method by @rh101 in https://github.com/axmolengine/axmol/pull/2015
+- Fix Callback and store Renderer Image type by @AlexandreK38 in https://github.com/axmolengine/axmol/pull/1945
+- Fix char8_t not disable on msvc by @halx99
+- Fix Renderer recreated by @smilediver in https://github.com/axmolengine/axmol/pull/1988
+- Fix AvfMediaEngine assetion when play some HLS video files by @halx99 in https://github.com/axmolengine/axmol/issues/1984
+- Fix compiling errors when on linux ubuntu2204 by @bwaiox in https://github.com/axmolengine/axmol/pull/2012
+
+### Improvements
+
+- Add ability to change Inspector's font size by @IamSanjid in https://github.com/axmolengine/axmol/pull/1932
+- Calculate safe area inset values for android devices with rounded corners by @rh101 in https://github.com/axmolengine/axmol/pull/1934
+- Update documentation for axmol build commands when targetting the iOS simulator by @rh101 in https://github.com/axmolengine/axmol/pull/1938
+- Added glyph ranges manager for ImGuiPresenter, added ability to use glyph ranges for Inspector's font by @IamSanjid in https://github.com/axmolengine/axmol/pull/1936
+- Add support for necessary events to be sent regardless of event dispatcher enabled state by @rh101 in https://github.com/axmolengine/axmol/pull/1940
+- Enable DrawNodeEx by default by @aismann in https://github.com/axmolengine/axmol/pull/1950
+- Apply child stencils correctly to the clipping node by @rh101 in https://github.com/axmolengine/axmol/pull/1957
+- Fix some compiler warnings on windows by @IamSanjid in https://github.com/axmolengine/axmol/pull/1954
+- Update DevSetup.md by @caryyu in https://github.com/axmolengine/axmol/pull/1965
+- Sprite and TextureCache from ax::Data by @AlexandreK38 in https://github.com/axmolengine/axmol/pull/1967
+- Remove duplicate cmake options by @halx99
+- Count run action finish to call final finish when two run actions are performed by @AlexandreK38 in https://github.com/axmolengine/axmol/pull/1946
+- Only pause GLSurfaceView if activity is moved to the background, and not if it just loses focus by @rh101 in https://github.com/axmolengine/axmol/pull/1942
+- Update spine README.md by @rh101 in https://github.com/axmolengine/axmol/pull/1975
+- Update llvm setup
+  - Remove llvm setup from gh action yml config, since 1kiss will setup it
+  - Update 1kiss.ps1 llvm min requirement to 17.0.6 for msvc14.40 support
+  - Remove llvm version config from 1k/manifest.ps1 since 1kiss.ps1 already set properly for msvc14.40 support
+- Update TLD to `axmol.dev` in sources by @halx99
+- Don't output log when custom ILogOutput was set by @halx99
+- Use new logging system for audio by @halx99
+- Update DrawNodeV2 0.94 by @aismann in https://github.com/axmolengine/axmol/pull/2008
+
+### sdks & tools updates
+
+- gradle: 8.7 ==> 8.8
+- AGP: 8.2.2 ==> 8.4.0
+- emsdk: 3.1.59 ==> 3.1.61
+
+### 3rdparty Updates
+
+- simdjson: 3.9.2 ==> 3.9.4
+- fmtlib: 10.2.1 ==> 11.0.0
+- yasio: 4.2.2 ==> 4.2.3
+- oboe: 1.8.1 ==> 1.9.0
 
 ## axmol-2.1.3 May.26 2024
 

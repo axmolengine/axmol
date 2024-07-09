@@ -101,7 +101,7 @@ Properties* Properties::createNonRefCounted(std::string_view url)
 {
     if (url.empty())
     {
-        AXLOGERROR("Attempting to create a Properties object from an empty URL!");
+        AXLOGE("Attempting to create a Properties object from an empty URL!");
         return nullptr;
     }
 
@@ -122,7 +122,7 @@ Properties* Properties::createNonRefCounted(std::string_view url)
     Properties* p = getPropertiesFromNamespacePath(properties, namespacePath);
     if (!p)
     {
-        AXLOGWARN("Failed to load properties from url '%s'.", url.data());
+        AXLOGW("Failed to load properties from url '{}'.", url);
         AX_SAFE_DELETE(properties);
         return nullptr;
     }
@@ -185,7 +185,7 @@ void Properties::readProperties()
         rc = readLine(line, 2048);
         if (rc == NULL)
         {
-            AXLOGERROR("Error reading line from file.");
+            AXLOGE("Error reading line from file.");
             return;
         }
 
@@ -219,7 +219,7 @@ void Properties::readProperties()
                 name = strtok(line, "=");
                 if (name == NULL)
                 {
-                    AXLOGERROR("Error parsing properties file: attribute without name.");
+                    AXLOGE("Error parsing properties file: attribute without name.");
                     return;
                 }
 
@@ -230,7 +230,7 @@ void Properties::readProperties()
                 value = strtok(NULL, "");
                 if (value == NULL)
                 {
-                    AXLOGERROR("Error parsing properties file: attribute with name ('%s') but no value.", name);
+                    AXLOGE("Error parsing properties file: attribute with name ('{}') but no value.", name);
                     return;
                 }
 
@@ -272,7 +272,7 @@ void Properties::readProperties()
                 name = trimWhiteSpace(name);
                 if (name == NULL)
                 {
-                    AXLOGERROR("Error parsing properties file: failed to determine a valid token for line '%s'.", line);
+                    AXLOGE("Error parsing properties file: failed to determine a valid token for line '{}'.", line);
                     return;
                 }
                 else if (name[0] == '}')
@@ -299,20 +299,20 @@ void Properties::readProperties()
                     {
                         if (seekFromCurrent(-1) == false)
                         {
-                            AXLOGERROR("Failed to seek back to before a '}' character in properties file.");
+                            AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                             return;
                         }
                         while (readChar() != '}')
                         {
                             if (seekFromCurrent(-2) == false)
                             {
-                                AXLOGERROR("Failed to seek back to before a '}' character in properties file.");
+                                AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                                 return;
                             }
                         }
                         if (seekFromCurrent(-1) == false)
                         {
-                            AXLOGERROR("Failed to seek back to before a '}' character in properties file.");
+                            AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                             return;
                         }
                     }
@@ -326,7 +326,7 @@ void Properties::readProperties()
                     {
                         if (seekFromCurrent(1) == false)
                         {
-                            AXLOGERROR("Failed to seek to immediately after a '}' character in properties file.");
+                            AXLOGE("Failed to seek to immediately after a '}}' character in properties file.");
                             return;
                         }
                     }
@@ -341,20 +341,20 @@ void Properties::readProperties()
                         {
                             if (seekFromCurrent(-1) == false)
                             {
-                                AXLOGERROR("Failed to seek back to before a '}' character in properties file.");
+                                AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                                 return;
                             }
                             while (readChar() != '}')
                             {
                                 if (seekFromCurrent(-2) == false)
                                 {
-                                    AXLOGERROR("Failed to seek back to before a '}' character in properties file.");
+                                    AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                                     return;
                                 }
                             }
                             if (seekFromCurrent(-1) == false)
                             {
-                                AXLOGERROR("Failed to seek back to before a '}' character in properties file.");
+                                AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                                 return;
                             }
                         }
@@ -368,7 +368,7 @@ void Properties::readProperties()
                         {
                             if (seekFromCurrent(1) == false)
                             {
-                                AXLOGERROR("Failed to seek to immediately after a '}' character in properties file.");
+                                AXLOGE("Failed to seek to immediately after a '}}' character in properties file.");
                                 return;
                             }
                         }
@@ -388,9 +388,9 @@ void Properties::readProperties()
                         {
                             // Back up from fgetc()
                             if (seekFromCurrent(-1) == false)
-                                AXLOGERROR(
+                                AXLOGE(
                                     "Failed to seek backwards a single character after testing if the next line starts "
-                                    "with '{'.");
+                                    "with '{{'.");
 
                             // Store "name value" as a name/value pair, or even just "name".
                             if (value != NULL)
@@ -481,7 +481,7 @@ void Properties::skipWhiteSpace()
     {
         if (seekFromCurrent(-1) == false)
         {
-            AXLOGERROR("Failed to seek backwards one character after skipping whitespace.");
+            AXLOGE("Failed to seek backwards one character after skipping whitespace.");
         }
     }
 }
@@ -879,7 +879,7 @@ int Properties::getInt(const char* name) const
         scanned = sscanf(valueString, "%d", &value);
         if (scanned != 1)
         {
-            AXLOGERROR("Error attempting to parse property '%s' as an integer.", name);
+            AXLOGE("Error attempting to parse property '{}' as an integer.", name);
             return 0;
         }
         return value;
@@ -898,7 +898,7 @@ float Properties::getFloat(const char* name) const
         scanned = sscanf(valueString, "%f", &value);
         if (scanned != 1)
         {
-            AXLOGERROR("Error attempting to parse property '%s' as a float.", name);
+            AXLOGE("Error attempting to parse property '{}' as a float.", name);
             return 0.0f;
         }
         return value;
@@ -921,7 +921,7 @@ bool Properties::getMat4(const char* name, Mat4* out) const
 
         if (scanned != 16)
         {
-            AXLOGERROR("Error attempting to parse property '%s' as a matrix.", name);
+            AXLOGE("Error attempting to parse property '{}' as a matrix.", name);
             out->setIdentity();
             return false;
         }
@@ -1144,7 +1144,7 @@ Properties* getPropertiesFromNamespacePath(Properties* properties, const std::ve
             {
                 if (iter == NULL)
                 {
-                    AXLOGWARN("Failed to load properties object from url.");
+                    AXLOGW("Failed to load properties object from url.");
                     return nullptr;
                 }
 
@@ -1185,7 +1185,7 @@ bool Properties::parseVec2(const char* str, Vec2* out)
         }
         else
         {
-            AXLOGWARN("Error attempting to parse property as a two-dimensional vector: %s", str);
+            AXLOGW("Error attempting to parse property as a two-dimensional vector: {}", str);
         }
     }
 
@@ -1207,7 +1207,7 @@ bool Properties::parseVec3(const char* str, Vec3* out)
         }
         else
         {
-            AXLOGWARN("Error attempting to parse property as a three-dimensional vector: %s", str);
+            AXLOGW("Error attempting to parse property as a three-dimensional vector: {}", str);
         }
     }
 
@@ -1229,7 +1229,7 @@ bool Properties::parseVec4(const char* str, Vec4* out)
         }
         else
         {
-            AXLOGWARN("Error attempting to parse property as a four-dimensional vector: %s", str);
+            AXLOGW("Error attempting to parse property as a four-dimensional vector: {}", str);
         }
     }
 
@@ -1251,7 +1251,7 @@ bool Properties::parseAxisAngle(const char* str, Quaternion* out)
         }
         else
         {
-            AXLOGWARN("Error attempting to parse property as an axis-angle rotation: %s", str);
+            AXLOGW("Error attempting to parse property as an axis-angle rotation: {}", str);
         }
     }
 
@@ -1277,13 +1277,13 @@ bool Properties::parseColor(const char* str, Vec3* out)
             else
             {
                 // Invalid format
-                AXLOGWARN("Error attempting to parse property as an RGB color: %s", str);
+                AXLOGW("Error attempting to parse property as an RGB color: {}", str);
             }
         }
         else
         {
             // Not a color string.
-            AXLOGWARN("Error attempting to parse property as an RGB color (not specified as a color string): %s", str);
+            AXLOGW("Error attempting to parse property as an RGB color (not specified as a color string): {}", str);
         }
     }
 
@@ -1309,13 +1309,13 @@ bool Properties::parseColor(const char* str, Vec4* out)
             else
             {
                 // Invalid format
-                AXLOGWARN("Error attempting to parse property as an RGBA color: %s", str);
+                AXLOGW("Error attempting to parse property as an RGBA color: {}", str);
             }
         }
         else
         {
             // Not a color string.
-            AXLOGWARN("Error attempting to parse property as an RGBA color (not specified as a color string): %s", str);
+            AXLOGW("Error attempting to parse property as an RGBA color (not specified as a color string): {}", str);
         }
     }
 

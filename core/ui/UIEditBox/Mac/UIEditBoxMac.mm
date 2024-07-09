@@ -248,19 +248,19 @@
         self.dataInputMode = inputFlag;
         break;
     case ax::ui::EditBox::InputFlag::INITIAL_CAPS_WORD:
-        AXLOG("INITIAL_CAPS_WORD not implemented");
+        AXLOGD("INITIAL_CAPS_WORD not implemented");
         break;
     case ax::ui::EditBox::InputFlag::INITIAL_CAPS_SENTENCE:
-        AXLOG("INITIAL_CAPS_SENTENCE not implemented");
+        AXLOGD("INITIAL_CAPS_SENTENCE not implemented");
         break;
     case ax::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS:
-        AXLOG("INITIAL_CAPS_ALL_CHARACTERS not implemented");
+        AXLOGD("INITIAL_CAPS_ALL_CHARACTERS not implemented");
         break;
     case ax::ui::EditBox::InputFlag::SENSITIVE:
-        AXLOG("SENSITIVE not implemented");
+        AXLOGD("SENSITIVE not implemented");
         break;
     case ax::ui::EditBox::InputFlag::LOWERCASE_ALL_CHARACTERS:
-        AXLOG("LOWERCASE_ALL_CHARACTERS not implemented");
+        AXLOGD("LOWERCASE_ALL_CHARACTERS not implemented");
         break;
     default:
         break;
@@ -269,7 +269,7 @@
 
 - (void)setReturnType:(ax::ui::EditBox::KeyboardReturnType)returnType
 {
-    AXLOG("setReturnType not implemented");
+    AXLOGD("setReturnType not implemented");
 }
 
 - (void)setTextHorizontalAlignment:(ax::TextHAlignment)alignment

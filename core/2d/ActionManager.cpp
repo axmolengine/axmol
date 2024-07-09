@@ -42,7 +42,7 @@ ActionManager::ActionManager() : _currentTarget(nullptr), _currentTargetSalvaged
 
 ActionManager::~ActionManager()
 {
-    AXLOGINFO("deallocing ActionManager: %p", this);
+    AXLOGV("deallocing ActionManager: {}", fmt::ptr(this));
 
     removeAllActions();
 }

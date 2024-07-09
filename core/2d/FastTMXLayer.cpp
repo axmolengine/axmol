@@ -324,7 +324,7 @@ void FastTMXLayer::setupTiles()
         break;
     case FAST_TMX_ORIENTATION_HEX:
     default:
-        AXLOGERROR("FastTMX does not support type %d", _layerOrientation);
+        AXLOGE("FastTMX does not support type {}", _layerOrientation);
         break;
     }
 

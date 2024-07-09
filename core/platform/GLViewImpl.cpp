@@ -546,7 +546,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     id<MTLDevice> device = MTLCreateSystemDefaultDevice();
     if (!device)
     {
-        AXLOG("Doesn't support metal.");
+        AXLOGD("Doesn't support metal.");
         return false;
     }
 

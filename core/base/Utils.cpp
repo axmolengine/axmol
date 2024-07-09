@@ -94,7 +94,7 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
 {
     if (s_captureScreenListener)
     {
-        AXLOG("Warning: CaptureScreen has been called already, don't call more than once in one frame.");
+        AXLOGW("Warning: CaptureScreen has been called already, don't call more than once in one frame.");
         return;
     }
 
@@ -131,7 +131,7 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
 {
     if (s_captureNodeListener.find(startNode) != s_captureNodeListener.end())
     {
-        AXLOG("Warning: current node has been captured already");
+        AXLOGW("Warning: current node has been captured already");
         return;
     }
 
@@ -718,7 +718,7 @@ std::vector<int> parseIntegerList(std::string_view intsString)
             if (errno == ERANGE)
             {
                 errno = 0;
-                AXLOGWARN("%s contains out of range integers", intsString.data());
+                AXLOGW("{} contains out of range integers", intsString);
             }
             result.emplace_back(static_cast<int>(i));
             cStr = endptr;

@@ -49,7 +49,7 @@ void TrianglesCommand::init(float globalOrder,
     {
         unsigned int count    = _triangles.indexCount;
         _triangles.indexCount = count / 3 * 3;
-        AXLOGERROR("Resize indexCount from %d to %d, size must be multiple times of 3", count, _triangles.indexCount);
+        AXLOGE("Resize indexCount from {} to {}, size must be multiple times of 3", count, _triangles.indexCount);
     }
     _mv = mv;
 

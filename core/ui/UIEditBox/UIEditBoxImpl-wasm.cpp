@@ -41,7 +41,7 @@ extern "C" {
 EMSCRIPTEN_KEEPALIVE
 void getInputOver(unsigned char* dataPtr, int dataLength)
 {
-    AXLOG("text {} ", dataPtr);
+    AXLOGD("text {} ", dataPtr);
     if (_activeEditBox)
     {
         if (_activeEditBox->isEditingMode())
@@ -56,7 +56,7 @@ EMSCRIPTEN_KEEPALIVE
 
 void getInputChange(unsigned char* dataPtr, int dataLength)
 {
-    AXLOG("text {} ", dataPtr);
+    AXLOGD("text {} ", dataPtr);
     if (_activeEditBox && _activeEditBox->isEditingMode())
     {
         _activeEditBox->editBoxEditingChanged(std::string_view{(char*)dataPtr});

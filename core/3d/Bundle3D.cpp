@@ -193,7 +193,7 @@ bool Bundle3D::load(std::string_view path)
     }
     else
     {
-        AXLOG("warning: %s is invalid file formate", path.data());
+        AXLOGW("warning: {} is invalid file format", path.data());
     }
 
     ret ? (_path = path) : (_path = "");
@@ -329,7 +329,7 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
 
         return true;
     }
-    AXLOG("warning: load %s file error: %s", fullPath.data(), ret.c_str());
+    AXLOGW("warning: load {} file error: {}", fullPath, ret);
     return false;
 }
 
@@ -396,7 +396,7 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
     unsigned int meshSize = 0;
     if (_binaryReader.read(&meshSize, 4, 1) != 1)
     {
-        AXLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
         return false;
     }
     MeshData* meshData = nullptr;
@@ -406,7 +406,7 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
         // read mesh data
         if (_binaryReader.read(&attribSize, 4, 1) != 1 || attribSize < 1)
         {
-            AXLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
             goto FAILED;
         }
         meshData              = new MeshData();
@@ -418,7 +418,7 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
             unsigned int vSize;
             if (_binaryReader.read(&vSize, 4, 1) != 1)
             {
-                AXLOG("warning: Failed to read meshdata: usage or size '%s'.", _path.c_str());
+                AXLOGW("warning: Failed to read meshdata: usage or size '{}'.", _path);
                 goto FAILED;
             }
             std::string type                  = _binaryReader.readString();
@@ -430,14 +430,14 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
         // Read vertex data
         if (_binaryReader.read(&vertexSizeInFloat, 4, 1) != 1 || vertexSizeInFloat == 0)
         {
-            AXLOG("warning: Failed to read meshdata: vertexSizeInFloat '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read meshdata: vertexSizeInFloat '{}'.", _path);
             goto FAILED;
         }
 
         meshData->vertex.resize(vertexSizeInFloat);
         if (_binaryReader.read(&meshData->vertex[0], 4, vertexSizeInFloat) != vertexSizeInFloat)
         {
-            AXLOG("warning: Failed to read meshdata: vertex element '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read meshdata: vertex element '{}'.", _path);
             goto FAILED;
         }
 
@@ -453,13 +453,13 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
             unsigned int nIndexCount;
             if (_binaryReader.read(&nIndexCount, 4, 1) != 1)
             {
-                AXLOG("warning: Failed to read meshdata: nIndexCount '%s'.", _path.c_str());
+                AXLOGW("warning: Failed to read meshdata: nIndexCount '{}'.", _path);
                 goto FAILED;
             }
             indexArray.resize(nIndexCount);
             if (_binaryReader.read(indexArray.data(), 2, nIndexCount) != nIndexCount)
             {
-                AXLOG("warning: Failed to read meshdata: indices '%s'.", _path.c_str());
+                AXLOGW("warning: Failed to read meshdata: indices '{}'.", _path);
                 goto FAILED;
             }
             auto& storedIndices = meshData->subMeshIndices.emplace_back(std::move(indexArray));
@@ -472,7 +472,7 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
                 float aabb[6];
                 if (_binaryReader.read(aabb, 4, 6) != 6)
                 {
-                    AXLOG("warning: Failed to read meshdata: aabb '%s'.", _path.c_str());
+                    AXLOGW("warning: Failed to read meshdata: aabb '{}'.", _path);
                     goto FAILED;
                 } 
                 meshData->subMeshAABB.emplace_back(AABB(Vec3(aabb[0], aabb[1], aabb[2]), Vec3(aabb[3], aabb[4], aabb[5])));
@@ -511,7 +511,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
     unsigned int attribSize = 0;
     if (_binaryReader.read(&attribSize, 4, 1) != 1 || attribSize < 1)
     {
-        AXLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
         AX_SAFE_DELETE(meshdata);
         return false;
     }
@@ -535,7 +535,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
         shaderinfos::VertexKey usage;
         if (_binaryReader.read(&vUsage, 4, 1) != 1 || _binaryReader.read(&vSize, 4, 1) != 1)
         {
-            AXLOG("warning: Failed to read meshdata: usage or size '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read meshdata: usage or size '{}'.", _path);
             AX_SAFE_DELETE(meshdata);
             return false;
         }
@@ -574,7 +574,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
     // Read vertex data
     if (_binaryReader.read(&meshdata->vertexSizeInFloat, 4, 1) != 1 || meshdata->vertexSizeInFloat == 0)
     {
-        AXLOG("warning: Failed to read meshdata: vertexSizeInFloat '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read meshdata: vertexSizeInFloat '{}'.", _path);
         AX_SAFE_DELETE(meshdata);
         return false;
     }
@@ -582,7 +582,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
     meshdata->vertex.resize(meshdata->vertexSizeInFloat);
     if (_binaryReader.read(&meshdata->vertex[0], 4, meshdata->vertexSizeInFloat) != meshdata->vertexSizeInFloat)
     {
-        AXLOG("warning: Failed to read meshdata: vertex element '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read meshdata: vertex element '{}'.", _path);
         AX_SAFE_DELETE(meshdata);
         return false;
     }
@@ -594,7 +594,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
         unsigned int nIndexCount;
         if (_binaryReader.read(&nIndexCount, 4, 1) != 1)
         {
-            AXLOG("warning: Failed to read meshdata: nIndexCount '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read meshdata: nIndexCount '{}'.", _path);
             AX_SAFE_DELETE(meshdata);
             return false;
         }
@@ -603,7 +603,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
         indices.resize(nIndexCount);
         if (_binaryReader.read(indices.data(), 2, nIndexCount) != nIndexCount)
         {
-            AXLOG("warning: Failed to read meshdata: indices '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read meshdata: indices '{}'.", _path);
             AX_SAFE_DELETE(meshdata);
             return false;
         }
@@ -629,7 +629,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
     unsigned int attribSize = 0;
     if (_binaryReader.read(&attribSize, 4, 1) != 1 || attribSize < 1)
     {
-        AXLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
         AX_SAFE_DELETE(meshdata);
         return false;
     }
@@ -653,7 +653,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
         shaderinfos::VertexKey usage = shaderinfos::VertexKey::VERTEX_ATTRIB_ERROR;
         if (_binaryReader.read(&vUsage, 4, 1) != 1 || _binaryReader.read(&vSize, 4, 1) != 1)
         {
-            AXLOG("warning: Failed to read meshdata: usage or size '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read meshdata: usage or size '{}'.", _path);
             AX_SAFE_DELETE(meshdata);
             return false;
         }
@@ -688,7 +688,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
     // Read vertex data
     if (_binaryReader.read(&meshdata->vertexSizeInFloat, 4, 1) != 1 || meshdata->vertexSizeInFloat == 0)
     {
-        AXLOG("warning: Failed to read meshdata: vertexSizeInFloat '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read meshdata: vertexSizeInFloat '{}'.", _path);
         AX_SAFE_DELETE(meshdata);
         return false;
     }
@@ -696,7 +696,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
     meshdata->vertex.resize(meshdata->vertexSizeInFloat);
     if (_binaryReader.read(&meshdata->vertex[0], 4, meshdata->vertexSizeInFloat) != meshdata->vertexSizeInFloat)
     {
-        AXLOG("warning: Failed to read meshdata: vertex element '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read meshdata: vertex element '{}'.", _path);
         AX_SAFE_DELETE(meshdata);
         return false;
     }
@@ -705,7 +705,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
     unsigned int submeshCount;
     if (_binaryReader.read(&submeshCount, 4, 1) != 1)
     {
-        AXLOG("warning: Failed to read meshdata: submeshCount '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read meshdata: submeshCount '{}'.", _path);
         AX_SAFE_DELETE(meshdata);
         return false;
     }
@@ -715,7 +715,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
         unsigned int nIndexCount;
         if (_binaryReader.read(&nIndexCount, 4, 1) != 1)
         {
-            AXLOG("warning: Failed to read meshdata: nIndexCount '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read meshdata: nIndexCount '{}'.", _path);
             AX_SAFE_DELETE(meshdata);
             return false;
         }
@@ -724,7 +724,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
         indices.resize(nIndexCount);
         if (_binaryReader.read(indices.data(), 2, nIndexCount) != nIndexCount)
         {
-            AXLOG("warning: Failed to read meshdata: indices '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read meshdata: indices '{}'.", _path);
             AX_SAFE_DELETE(meshdata);
             return false;
         }
@@ -943,13 +943,13 @@ bool Bundle3D::loadMaterialsBinary(MaterialDatas& materialdatas)
             textureData.id = _binaryReader.readString();
             if (textureData.id.empty())
             {
-                AXLOG("warning: Failed to read Materialdata: texturePath is empty '%s'.", textureData.id.c_str());
+                AXLOGW("warning: Failed to read Materialdata: texturePath is empty '{}'.", textureData.id);
                 return false;
             }
             std::string texturePath = _binaryReader.readString();
             if (texturePath.empty())
             {
-                AXLOG("warning: Failed to read Materialdata: texturePath is empty '%s'.", _path.c_str());
+                AXLOGW("warning: Failed to read Materialdata: texturePath is empty '{}'.", _path);
                 return false;
             }
 
@@ -975,7 +975,7 @@ bool Bundle3D::loadMaterialsBinary_0_1(MaterialDatas& materialdatas)
     std::string texturePath = _binaryReader.readString();
     if (texturePath.empty())
     {
-        AXLOG("warning: Failed to read Materialdata: texturePath is empty '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read Materialdata: texturePath is empty '{}'.", _path);
         return false;
     }
 
@@ -1003,7 +1003,7 @@ bool Bundle3D::loadMaterialsBinary_0_2(MaterialDatas& materialdatas)
         std::string texturePath = _binaryReader.readString();
         if (texturePath.empty())
         {
-            AXLOG("warning: Failed to read Materialdata: texturePath is empty '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read Materialdata: texturePath is empty '{}'.", _path);
             return true;
         }
 
@@ -1070,7 +1070,7 @@ bool Bundle3D::loadJson(std::string_view path)
     if (_jsonReader.ParseInsitu<0>((char*)_jsonBuffer.c_str()).HasParseError())
     {
         clear();
-        AXLOG("Parse json failed in Bundle3D::loadJson function");
+        AXLOGW("Parse json failed in Bundle3D::loadJson function");
         return false;
     }
 
@@ -1093,7 +1093,7 @@ bool Bundle3D::loadBinary(std::string_view path)
     if (_binaryBuffer.isNull())
     {
         clear();
-        AXLOG("warning: Failed to read file: %s", path.data());
+        AXLOGW("warning: Failed to read file: {}", path);
         return false;
     }
 
@@ -1106,7 +1106,7 @@ bool Bundle3D::loadBinary(std::string_view path)
     if (_binaryReader.read(sig, 1, 4) != 4 || memcmp(sig, identifier, 4) != 0)
     {
         clear();
-        AXLOG("warning: Invalid identifier: %s", path.data());
+        AXLOGW("warning: Invalid identifier: {}", path);
         return false;
     }
 
@@ -1114,7 +1114,7 @@ bool Bundle3D::loadBinary(std::string_view path)
     unsigned char ver[2];
     if (_binaryReader.read(ver, 1, 2) != 2)
     {
-        AXLOG("warning: Failed to read version:");
+        AXLOGW("warning: Failed to read version:");
         return false;
     }
 
@@ -1126,7 +1126,7 @@ bool Bundle3D::loadBinary(std::string_view path)
     if (_binaryReader.read(&_referenceCount, 4, 1) != 1)
     {
         clear();
-        AXLOG("warning: Failed to read ref table size '%s'.", path.data());
+        AXLOGW("warning: Failed to read ref table size '{}'.", path);
         return false;
     }
 
@@ -1140,7 +1140,7 @@ bool Bundle3D::loadBinary(std::string_view path)
             _binaryReader.read(&_references[i].offset, 4, 1) != 1)
         {
             clear();
-            AXLOG("warning: Failed to read ref number %u for bundle '%s'.", i, path.data());
+            AXLOGW("warning: Failed to read ref number {} for bundle '{}'.", i, path);
             AX_SAFE_DELETE_ARRAY(_references);
             return false;
         }
@@ -1301,7 +1301,7 @@ bool Bundle3D::loadSkinDataBinary(SkinData* skindata)
     float bindShape[16];
     if (!_binaryReader.readMatrix(bindShape))
     {
-        AXLOG("warning: Failed to read SkinData: bindShape matrix  '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read SkinData: bindShape matrix  '{}'.", _path);
         return false;
     }
 
@@ -1309,7 +1309,7 @@ bool Bundle3D::loadSkinDataBinary(SkinData* skindata)
     unsigned int boneNum;
     if (!_binaryReader.read(&boneNum))
     {
-        AXLOG("warning: Failed to read SkinData: boneNum  '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read SkinData: boneNum  '{}'.", _path);
         return false;
     }
 
@@ -1325,7 +1325,7 @@ bool Bundle3D::loadSkinDataBinary(SkinData* skindata)
         skindata->skinBoneNames.emplace_back(skinBoneName);
         if (!_binaryReader.readMatrix(bindpos))
         {
-            AXLOG("warning: Failed to load SkinData: bindpos '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to load SkinData: bindpos '{}'.", _path);
             return false;
         }
         skindata->inverseBindPoseMatrices.emplace_back(bindpos);
@@ -1365,7 +1365,7 @@ bool Bundle3D::loadSkinDataBinary(SkinData* skindata)
 
         if (!_binaryReader.readMatrix(transform))
         {
-            AXLOG("warning: Failed to load SkinData: transform '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to load SkinData: transform '{}'.", _path);
             return false;
         }
 
@@ -1572,7 +1572,7 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
     {
         if (!_binaryReader.read(&animNum))
         {
-            AXLOG("warning: Failed to read AnimationData: animNum '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read AnimationData: animNum '{}'.", _path);
             return false;
         }
     }
@@ -1585,14 +1585,14 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
 
         if (!_binaryReader.read(&animationdata->_totalTime))
         {
-            AXLOG("warning: Failed to read AnimationData: totalTime '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read AnimationData: totalTime '{}'.", _path);
             return false;
         }
 
         unsigned int nodeAnimationNum;
         if (!_binaryReader.read(&nodeAnimationNum))
         {
-            AXLOG("warning: Failed to read AnimationData: animNum '%s'.", _path.c_str());
+            AXLOGW("warning: Failed to read AnimationData: animNum '{}'.", _path);
             return false;
         }
         for (unsigned int i = 0; i < nodeAnimationNum; ++i)
@@ -1601,7 +1601,7 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
             unsigned int keyframeNum;
             if (!_binaryReader.read(&keyframeNum))
             {
-                AXLOG("warning: Failed to read AnimationData: keyframeNum '%s'.", _path.c_str());
+                AXLOGW("warning: Failed to read AnimationData: keyframeNum '{}'.", _path);
                 return false;
             }
 
@@ -1614,7 +1614,7 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
                 float keytime;
                 if (!_binaryReader.read(&keytime))
                 {
-                    AXLOG("warning: Failed to read AnimationData: keytime '%s'.", _path.c_str());
+                    AXLOGW("warning: Failed to read AnimationData: keytime '{}'.", _path);
                     return false;
                 }
 
@@ -1624,7 +1624,7 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
                 {
                     if (!_binaryReader.read(&transformFlag))
                     {
-                        AXLOG("warning: Failed to read AnimationData: transformFlag '%s'.", _path.c_str());
+                        AXLOGW("warning: Failed to read AnimationData: transformFlag '{}'.", _path);
                         return false;
                     }
                 }
@@ -1639,7 +1639,7 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
                     Quaternion rotate;
                     if (_binaryReader.read(&rotate, 4, 4) != 4)
                     {
-                        AXLOG("warning: Failed to read AnimationData: rotate '%s'.", _path.c_str());
+                        AXLOGW("warning: Failed to read AnimationData: rotate '{}'.", _path);
                         return false;
                     }
                     animationdata->_rotationKeys[boneName].emplace_back(Animation3DData::QuatKey(keytime, rotate));
@@ -1655,7 +1655,7 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
                     Vec3 scale;
                     if (_binaryReader.read(&scale, 4, 3) != 3)
                     {
-                        AXLOG("warning: Failed to read AnimationData: scale '%s'.", _path.c_str());
+                        AXLOGW("warning: Failed to read AnimationData: scale '{}'.", _path);
                         return false;
                     }
                     animationdata->_scaleKeys[boneName].emplace_back(Animation3DData::Vec3Key(keytime, scale));
@@ -1671,7 +1671,7 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
                     Vec3 position;
                     if (_binaryReader.read(&position, 4, 3) != 3)
                     {
-                        AXLOG("warning: Failed to read AnimationData: position '%s'.", _path.c_str());
+                        AXLOGW("warning: Failed to read AnimationData: position '{}'.", _path);
                         return false;
                     }
                     animationdata->_translationKeys[boneName].emplace_back(Animation3DData::Vec3Key(keytime, position));
@@ -1748,7 +1748,7 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bo
 
             if (modelnodedata->subMeshId == "" || modelnodedata->materialId == "")
             {
-                AXLOG("warning: Node %s part is missing meshPartId or materialId", nodedata->id.c_str());
+                AXLOGW("warning: Node {} part is missing meshPartId or materialId", nodedata->id);
                 AX_SAFE_DELETE(modelnodedata);
                 AX_SAFE_DELETE(nodedata);
                 return nullptr;
@@ -1765,7 +1765,7 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bo
                     // node
                     if (!bone.HasMember(NODE))
                     {
-                        AXLOG("warning: Bone node ID missing");
+                        AXLOGW("warning: Bone node ID missing");
                         AX_SAFE_DELETE(modelnodedata);
                         AX_SAFE_DELETE(nodedata);
                         return nullptr;
@@ -1832,7 +1832,7 @@ bool Bundle3D::loadNodesBinary(NodeDatas& nodedatas)
     unsigned int nodeSize = 0;
     if (_binaryReader.read(&nodeSize, 4, 1) != 1)
     {
-        AXLOG("warning: Failed to read nodes");
+        AXLOGW("warning: Failed to read nodes");
         return false;
     }
 
@@ -1857,7 +1857,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
     bool skeleton_;
     if (_binaryReader.read(&skeleton_, 1, 1) != 1)
     {
-        AXLOG("warning: Failed to read is skeleton");
+        AXLOGW("warning: Failed to read is skeleton");
         return nullptr;
     }
     if (skeleton_)
@@ -1867,14 +1867,14 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
     Mat4 transform;
     if (!_binaryReader.readMatrix(transform.m))
     {
-        AXLOG("warning: Failed to read transform matrix");
+        AXLOGW("warning: Failed to read transform matrix");
         return nullptr;
     }
     // parts
     unsigned int partsSize = 0;
     if (_binaryReader.read(&partsSize, 4, 1) != 1)
     {
-        AXLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
         return nullptr;
     }
 
@@ -1893,7 +1893,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
 
             if (modelnodedata->subMeshId.empty() || modelnodedata->materialId.empty())
             {
-                AXLOG("Node %s part is missing meshPartId or materialId", nodedata->id.c_str());
+                AXLOGW("Node {} part is missing meshPartId or materialId", nodedata->id);
                 AX_SAFE_DELETE(modelnodedata);
                 AX_SAFE_DELETE(nodedata);
                 return nullptr;
@@ -1903,7 +1903,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
             unsigned int bonesSize = 0;
             if (_binaryReader.read(&bonesSize, 4, 1) != 1)
             {
-                AXLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
+                AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
                 AX_SAFE_DELETE(modelnodedata);
                 AX_SAFE_DELETE(nodedata);
                 return nullptr;
@@ -1931,7 +1931,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
             unsigned int uvMapping = 0;
             if (_binaryReader.read(&uvMapping, 4, 1) != 1)
             {
-                AXLOG("warning: Failed to read nodedata: uvMapping '%s'.", _path.c_str());
+                AXLOGW("warning: Failed to read nodedata: uvMapping '{}'.", _path);
                 AX_SAFE_DELETE(modelnodedata);
                 AX_SAFE_DELETE(nodedata);
                 return nullptr;
@@ -1941,7 +1941,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
                 unsigned int textureIndexSize = 0;
                 if (_binaryReader.read(&textureIndexSize, 4, 1) != 1)
                 {
-                    AXLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
+                    AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
                     AX_SAFE_DELETE(modelnodedata);
                     AX_SAFE_DELETE(nodedata);
                     return nullptr;
@@ -1982,7 +1982,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
     unsigned int childrenSize = 0;
     if (_binaryReader.read(&childrenSize, 4, 1) != 1)
     {
-        AXLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
+        AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
         AX_SAFE_DELETE(nodedata);
         return nullptr;
     }
@@ -2007,7 +2007,7 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         case 4:
             return backend::VertexFormat::UBYTE4;
         default:
-            AXLOGERROR("parseVertexType GL_BYTE x %d error", size);
+            AXLOGE("parseVertexType GL_BYTE x {} error", size);
         }
     }
     else if (str == "GL_UNSIGNED_BYTE")
@@ -2017,7 +2017,7 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         case 4:
             return backend::VertexFormat::UBYTE4;
         default:
-            AXLOGERROR("parseVertexType GL_UNSIGNED_BYTE x %d error", size);
+            AXLOGE("parseVertexType GL_UNSIGNED_BYTE x {} error", size);
         }
     }
     else if (str == "GL_SHORT")
@@ -2029,7 +2029,7 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         case 4:
             return backend::VertexFormat::USHORT4;
         default:
-            AXLOGERROR("parseVertexType GL_SHORT x %d error", size);
+            AXLOGE("parseVertexType GL_SHORT x {} error", size);
         }
     }
     else if (str == "GL_UNSIGNED_SHORT")
@@ -2041,7 +2041,7 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         case 4:
             return backend::VertexFormat::USHORT4;
         default:
-            AXLOGERROR("parseVertexType GL_UNSIGNED_SHORT x %d error", size);
+            AXLOGE("parseVertexType GL_UNSIGNED_SHORT x {} error", size);
         }
     }
     else if (str == "GL_INT")
@@ -2057,7 +2057,7 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         case 4:
             return backend::VertexFormat::INT4;
         default:
-            AXLOGERROR("parseVertexType GL_INT x %d error", size);
+            AXLOGE("parseVertexType GL_INT x {} error", size);
         }
     }
     else if (str == "GL_UNSIGNED_INT")
@@ -2073,7 +2073,7 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         case 4:
             return backend::VertexFormat::INT4;
         default:
-            AXLOGERROR("parseVertexType GL_UNSIGNED_INT x %d error", size);
+            AXLOGE("parseVertexType GL_UNSIGNED_INT x {} error", size);
         }
     }
     else if (str == "GL_FLOAT")
@@ -2089,7 +2089,7 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         case 4:
             return backend::VertexFormat::FLOAT4;
         default:
-            AXLOGERROR("parseVertexType GL_UNSIGNED_INT x %d error", size);
+            AXLOGE("parseVertexType GL_UNSIGNED_INT x {} error", size);
         }
     }
     AXASSERT(false, "parseVertexType failed!");
@@ -2256,7 +2256,7 @@ Reference* Bundle3D::seekToFirstType(unsigned int type, std::string_view id)
             // Found a match
             if (_binaryReader.seek(ref->offset, SEEK_SET) == false)
             {
-                AXLOG("warning: Failed to seek to object '%s' in bundle '%s'.", ref->id.c_str(), _path.c_str());
+                AXLOGW("warning: Failed to seek to object '{}' in bundle '{}'.", ref->id, _path);
                 return nullptr;
             }
             return ref;

@@ -208,32 +208,32 @@ void GLViewImpl::BackButtonListener(EventKeyboard::KeyCode keyCode, Event* event
 {
     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE)
     {
-        AXLOG("*********************************************************************");
-        AXLOG("GLViewImpl::BackButtonListener: Exiting application!");
-        AXLOG("");
-        AXLOG("If you want to listen for Windows Phone back button events,");
-        AXLOG("add a listener for EventKeyboard::KeyCode::KEY_ESCAPE");
-        AXLOG("Make sure you call stopPropagation() on the Event if you don't");
-        AXLOG("want your app to exit when the back button is pressed.");
-        AXLOG("");
-        AXLOG("For example, add the following to your scene...");
-        AXLOG("auto listener = EventListenerKeyboard::create();");
-        AXLOG("listener->onKeyReleased = AX_CALLBACK_2(HelloWorld::onKeyReleased, this);");
-        AXLOG("getEventDispatcher()->addEventListenerWithFixedPriority(listener, 1);");
-        AXLOG("");
-        AXLOG("void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)");
-        AXLOG("{");
-        AXLOG("     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE)");
-        AXLOG("     {");
-        AXLOG("         if (myAppShouldNotQuit) // or whatever logic you want...");
-        AXLOG("         {");
-        AXLOG("             event->stopPropagation();");
-        AXLOG("         }");
-        AXLOG("     }");
-        AXLOG("}");
-        AXLOG("");
-        AXLOG("You MUST call event->stopPropagation() if you don't want your app to quit!");
-        AXLOG("*********************************************************************");
+        AXLOGD("*********************************************************************");
+        AXLOGD("GLViewImpl::BackButtonListener: Exiting application!");
+        AXLOGD("");
+        AXLOGD("If you want to listen for Windows Phone back button events,");
+        AXLOGD("add a listener for EventKeyboard::KeyCode::KEY_ESCAPE");
+        AXLOGD("Make sure you call stopPropagation() on the Event if you don't");
+        AXLOGD("want your app to exit when the back button is pressed.");
+        AXLOGD("");
+        AXLOGD("For example, add the following to your scene...");
+        AXLOGD("auto listener = EventListenerKeyboard::create();");
+        AXLOGD("listener->onKeyReleased = AX_CALLBACK_2(HelloWorld::onKeyReleased, this);");
+        AXLOGD("getEventDispatcher()->addEventListenerWithFixedPriority(listener, 1);");
+        AXLOGD("");
+        AXLOGD("void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)");
+        AXLOGD("{{");
+        AXLOGD("     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE)");
+        AXLOGD("     {{");
+        AXLOGD("         if (myAppShouldNotQuit) // or whatever logic you want...");
+        AXLOGD("         {{");
+        AXLOGD("             event->stopPropagation();");
+        AXLOGD("         }}");
+        AXLOGD("     }}");
+        AXLOGD("}}");
+        AXLOGD("");
+        AXLOGD("You MUST call event->stopPropagation() if you don't want your app to quit!");
+        AXLOGD("*********************************************************************");
 
         Director::getInstance()->end();
     }
@@ -418,7 +418,7 @@ void ax::GLViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs con
     // Because OpenGL and axmol uses different Y axis, we need to convert the coordinate here
     float cursorX = (mousePosition.x - _viewPortRect.origin.x) / _scaleX;
     float cursorY = (_viewPortRect.origin.y + _viewPortRect.size.height - mousePosition.y) / _scaleY;
-    float delta   = args.CurrentPoint().Properties().MouseWheelDelta();
+    float delta   = static_cast<float>(args.CurrentPoint().Properties().MouseWheelDelta());
     if (args.CurrentPoint().Properties().IsHorizontalMouseWheel())
     {
         event.setScrollData(delta / WHEEL_DELTA, 0.0f);
@@ -538,7 +538,7 @@ ax::Vec2 GLViewImpl::TransformToOrientation(Windows::Foundation::Point const& p)
         returnValue.y /= zoomFactor;
     }
 
-    // AXLOG("%.2f %.2f : %.2f %.2f", p.X, p.Y,returnValue.x, returnValue.y);
+    // AXLOGD("{:.2f} {:.2f} : {:.2f} {:.2f}", p.X, p.Y,returnValue.x, returnValue.y);
 
     return returnValue;
 }

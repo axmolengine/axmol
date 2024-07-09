@@ -194,7 +194,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         id<MTLDevice> device = MTLCreateSystemDefaultDevice();
         if (!device)
         {
-            AXLOG("Doesn't support metal.");
+            AXLOGE("Doesn't support metal.");
             return nil;
         }
         CAMetalLayer* metalLayer   = (CAMetalLayer*)[self layer];
@@ -385,7 +385,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
     if (![context_ presentRenderbuffer:GL_RENDERBUFFER])
     {
-        //         AXLOG(@"cocos2d: Failed to swap renderbuffer in %s\n", __FUNCTION__);
+        //         AXLOGD(@"Failed to swap renderbuffer in {}\n", __FUNCTION__);
     }
 
 #    if _AX_DEBUG
@@ -454,7 +454,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     {
         if (i >= IOS_MAX_TOUCHES_COUNT)
         {
-            AXLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
+            AXLOGW("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
             break;
         }
 
@@ -481,7 +481,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     {
         if (i >= IOS_MAX_TOUCHES_COUNT)
         {
-            AXLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
+            AXLOGW("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
             break;
         }
 
@@ -514,7 +514,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     {
         if (i >= IOS_MAX_TOUCHES_COUNT)
         {
-            AXLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
+            AXLOGW("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
             break;
         }
 
@@ -539,7 +539,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     {
         if (i >= IOS_MAX_TOUCHES_COUNT)
         {
-            AXLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
+            AXLOGW("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
             break;
         }
 

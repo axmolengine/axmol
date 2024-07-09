@@ -377,7 +377,7 @@ if(AX_ENABLE_MEDIA)
              Source/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.cpp)
 endif()
 
-if(ANDROID OR IOS OR (WINDOWS AND AX_ENABLE_MSEDGE_WEBVIEW2))
+if(ANDROID OR IOS OR LINUX OR (WINDOWS AND AX_ENABLE_MSEDGE_WEBVIEW2))
     list(APPEND GAME_HEADER
          Source/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.h
          )

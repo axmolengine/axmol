@@ -27,7 +27,7 @@
 #if !defined(AXME_NO_AXMOL)
 #    include "base/Logging.h"
 #    include "platform/PlatformMacros.h"
-#    define AXME_TRACE AXLOG
+#    define AXME_TRACE AXLOGD
 #else
 #    define AXME_TRACE printf
 #    define NS_AX_BEGIN \

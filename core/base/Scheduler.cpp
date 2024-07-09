@@ -279,7 +279,7 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
         });
         if (timerIt != timers.end())
         {
-            AXLOG("Scheduler#schedule. Reiniting timer with interval %.4f, repeat %u, delay %.4f", interval, repeat,
+            AXLOGD("Scheduler#schedule. Reiniting timer with interval {:.4f}, repeat {}, delay {:.4f}", interval, repeat,
                   delay);
             (*timerIt)->setupTimerWithInterval(interval, repeat, delay);
             return;
@@ -903,7 +903,7 @@ void Scheduler::schedule(SEL_SCHEDULE selector,
         });
         if (timerIt != timers.end())
         {
-            AXLOG("Scheduler#schedule. Reiniting timer with interval %.4f, repeat %u, delay %.4f", interval, repeat,
+            AXLOGD("Scheduler#schedule. Reiniting timer with interval {:.4}, repeat {}, delay {:.4f}", interval, repeat,
                   delay);
             (*timerIt)->setupTimerWithInterval(interval, repeat, delay);
             return;

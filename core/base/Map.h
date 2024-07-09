@@ -90,14 +90,14 @@ public:
     Map() : _data()
     {
         static_assert(std::is_convertible<V, Object*>::value, "Invalid Type for ax::Map<K, V>!");
-        AXLOGINFO("In the default constructor of Map!");
+        AXLOGV("In the default constructor of Map!");
     }
 
     /** Constructor with capacity. */
     explicit Map(ssize_t capacity) : _data()
     {
         static_assert(std::is_convertible<V, Object*>::value, "Invalid Type for ax::Map<K, V>!");
-        AXLOGINFO("In the constructor with capacity of Map!");
+        AXLOGV("In the constructor with capacity of Map!");
         _data.reserve(capacity);
     }
 
@@ -105,7 +105,7 @@ public:
     Map(const Map& other)
     {
         static_assert(std::is_convertible<V, Object*>::value, "Invalid Type for ax::Map<K, V>!");
-        AXLOGINFO("In the copy constructor of Map!");
+        AXLOGV("In the copy constructor of Map!");
         _data = other._data;
         addRefForAllObjects();
     }
@@ -114,7 +114,7 @@ public:
     Map(Map&& other)
     {
         static_assert(std::is_convertible<V, Object*>::value, "Invalid Type for ax::Map<K, V>!");
-        AXLOGINFO("In the move constructor of Map!");
+        AXLOGV("In the move constructor of Map!");
         _data = std::move(other._data);
     }
 
@@ -124,7 +124,7 @@ public:
      */
     ~Map()
     {
-        AXLOGINFO("In the destructor of Map!");
+        AXLOGV("In the destructor of Map!");
         clear();
     }
 
@@ -379,25 +379,25 @@ public:
     // Don't uses operator since we could not decide whether it needs 'retain'/'release'.
     //    V& operator[] ( const K& key )
     //    {
-    //        AXLOG("copy: [] ref");
+    //        AXLOGD("copy: [] ref");
     //        return _data[key];
     //    }
     //
     //    V& operator[] ( K&& key )
     //    {
-    //        AXLOG("move [] ref");
+    //        AXLOGD("move [] ref");
     //        return _data[key];
     //    }
 
     //    const V& operator[] ( const K& key ) const
     //    {
-    //        AXLOG("const copy []");
+    //        AXLOGD("const copy []");
     //        return _data.at(key);
     //    }
     //
     //    const V& operator[] ( K&& key ) const
     //    {
-    //        AXLOG("const move []");
+    //        AXLOGD("const move []");
     //        return _data.at(key);
     //    }
 
@@ -406,7 +406,7 @@ public:
     {
         if (this != &other)
         {
-            AXLOGINFO("In the copy assignment operator of Map!");
+            AXLOGV("In the copy assignment operator of Map!");
             clear();
             _data = other._data;
             addRefForAllObjects();
@@ -419,7 +419,7 @@ public:
     {
         if (this != &other)
         {
-            AXLOGINFO("In the move assignment operator of Map!");
+            AXLOGV("In the move assignment operator of Map!");
             clear();
             _data = std::move(other._data);
         }

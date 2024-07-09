@@ -704,7 +704,7 @@ std::string FileUtils::fullPathForFilename(std::string_view filename) const
 
     if (isPopupNotify())
     {
-        AXLOG("axmol: fullPathForFilename: No file found at %s. Possible missing file.", filename.data());
+        AXLOGD("fullPathForFilename: No file found at {}. Possible missing file.", filename);
     }
 
     // The file wasn't found, return empty string.
@@ -756,7 +756,7 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
 
             if (result.empty() && isPopupNotify())
             {
-                AXLOG("axmol: fullPathForDirectory: No directory found at %s. Possible missing directory.", dir.data());
+                AXLOGD("fullPathForDirectory: No directory found at {}. Possible missing directory.", dir);
             }
         }
     }
@@ -849,7 +849,7 @@ void FileUtils::setSearchPaths(const std::vector<std::string>& searchPaths)
 
     if (!existDefaultRootPath)
     {
-        // AXLOG("Default root path doesn't exist, adding it.");
+        // AXLOGD("Default root path doesn't exist, adding it.");
         _searchPathArray.emplace_back(_defaultResRootPath);
     }
 }
@@ -1313,7 +1313,7 @@ bool FileUtils::renameFile(std::string_view oldfullpath, std::string_view newful
 
     if (0 != errorCode)
     {
-        AXLOGERROR("Fail to rename file %s to %s !Error code is %d", oldfullpath.data(), newfullpath.data(), errorCode);
+        AXLOGE("Fail to rename file {} to {} !Error code is {}", oldfullpath, newfullpath, errorCode);
         return false;
     }
     return true;

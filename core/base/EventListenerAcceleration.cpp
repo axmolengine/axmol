@@ -35,7 +35,7 @@ EventListenerAcceleration::EventListenerAcceleration() {}
 
 EventListenerAcceleration::~EventListenerAcceleration()
 {
-    AXLOGINFO("In the destructor of AccelerationEventListener. %p", this);
+    AXLOGV("In the destructor of AccelerationEventListener. {}", fmt::ptr(this));
 }
 
 EventListenerAcceleration* EventListenerAcceleration::create(const std::function<void(Acceleration*, Event*)>& callback)

@@ -66,7 +66,7 @@ TextureCache::TextureCache() : _loadingThread(nullptr), _needQuit(false), _async
 
 TextureCache::~TextureCache()
 {
-    AXLOGINFO("deallocing TextureCache: %p", this);
+    AXLOGI("deallocing TextureCache: {}", fmt::ptr(this));
 
     for (auto&& texture : _textures)
         texture.second->release();
@@ -361,7 +361,7 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
             else
             {
                 texture = nullptr;
-                AXLOG("axmol: failed to call TextureCache::addImageAsync(%s)", asyncStruct->filename.c_str());
+                AXLOGW("axmol: failed to call TextureCache::addImageAsync({})", asyncStruct->filename);
             }
         }
 
@@ -491,7 +491,7 @@ Texture2D* TextureCache::addImage(std::string_view path, PixelFormat format)
             }
             else
             {
-                AXLOG("axmol: Couldn't create texture for file:%s in TextureCache", path.data());
+                AXLOGW("Couldn't create texture for file:{} in TextureCache", path);
                 AX_SAFE_RELEASE(texture);
                 texture = nullptr;
             }
@@ -543,7 +543,7 @@ Texture2D* TextureCache::addImage(Image* image, std::string_view key, PixelForma
         {
             AX_SAFE_RELEASE(texture);
             texture = nullptr;
-            AXLOG("axmol: initWithImage failed!");
+            AXLOGD("initWithImage failed!");
         }
 
     } while (0);
@@ -591,12 +591,12 @@ Texture2D* TextureCache::addImage(const Data& imageData, std::string_view key)
             {
                 AX_SAFE_RELEASE(texture);
                 texture = nullptr;
-                AXLOG("axmol: initWithImage failed!");
+                AXLOGW("initWithImage failed!");
             }
         }
         else
         {
-            AXLOG("axmol: Allocating memory for Texture2D failed!");
+            AXLOGW("Allocating memory for Texture2D failed!");
         }
 
         AX_SAFE_RELEASE(image);
@@ -663,7 +663,7 @@ void TextureCache::removeUnusedTextures()
         Texture2D* tex = it->second;
         if (tex->getReferenceCount() == 1)
         {
-            AXLOG("axmol: TextureCache: removing unused texture: %s", it->first.c_str());
+            AXLOGD("TextureCache: removing unused texture: {}", it->first);
 
             tex->release();
             it = _textures.erase(it);
@@ -929,7 +929,7 @@ void VolatileTextureMgr::removeTexture(Texture2D* t)
 void VolatileTextureMgr::reloadAllTextures()
 {
     _isReloading = true;
-    AXLOG("reload all texture");
+    AXLOGD("reload all texture");
 
     for (auto&& texture : _textures)
     {

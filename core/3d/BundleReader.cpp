@@ -50,7 +50,7 @@ ssize_t BundleReader::read(void* ptr, ssize_t size, ssize_t count)
 {
     if (!_buffer || eof())
     {
-        AXLOG("warning: bundle reader out of range");
+        AXLOGW("warning: bundle reader out of range");
         return 0;
     }
 
@@ -72,7 +72,7 @@ ssize_t BundleReader::read(void* ptr, ssize_t size, ssize_t count)
             _position += readLength;
             validCount += 1;
         }
-        AXLOG("warning: bundle reader out of range");
+        AXLOGW("warning: bundle reader out of range");
     }
     else
     {

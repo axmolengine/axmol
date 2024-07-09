@@ -185,7 +185,7 @@ void VlcMediaEngine::libvlc_handle_event(const libvlc_event_t* event, void* user
 
 VlcMediaEngine::VlcMediaEngine()
 {
-    AXLOG("libvlc-version: %s", libvlc_get_version());
+    AXLOGD("libvlc-version: {}", libvlc_get_version());
 
     // too late set vlc plugins path at hete, vlc maybe read it at DllMain
     //_putenv_s("VLC_PLUGIN_PATH", R"(D:\dev\axmol\3rdparty\vlc\win\lib)");

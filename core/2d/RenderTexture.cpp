@@ -82,7 +82,7 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
         }
         else
         {
-            AXLOG("Cache rendertexture failed!");
+            AXLOGW("Cache rendertexture failed!");
         }
     };
     auto callback = std::bind(func, std::placeholders::_1);
@@ -381,12 +381,12 @@ bool RenderTexture::saveToFileAsNonPMA(std::string_view filename, bool isRGBA, S
     else if (basename.find(".jpg") != std::string::npos)
     {
         if (isRGBA)
-            AXLOG("RGBA is not supported for JPG format.");
+            AXLOGD("RGBA is not supported for JPG format.");
         return saveToFileAsNonPMA(filename, Image::Format::JPG, false, std::move(callback));
     }
     else
     {
-        AXLOG("Only PNG and JPG format are supported now!");
+        AXLOGD("Only PNG and JPG format are supported now!");
     }
 
     return saveToFileAsNonPMA(filename, Image::Format::JPG, false, std::move(callback));
@@ -404,12 +404,12 @@ bool RenderTexture::saveToFile(std::string_view filename, bool isRGBA, SaveFileC
     else if (basename.find(".jpg") != std::string::npos)
     {
         if (isRGBA)
-            AXLOG("RGBA is not supported for JPG format.");
+            AXLOGD("RGBA is not supported for JPG format.");
         return saveToFile(filename, Image::Format::JPG, false, std::move(callback));
     }
     else
     {
-        AXLOG("Only PNG and JPG format are supported now!");
+        AXLOGD("Only PNG and JPG format are supported now!");
     }
 
     return saveToFile(filename, Image::Format::JPG, false, std::move(callback));
@@ -423,7 +423,7 @@ bool RenderTexture::saveToFileAsNonPMA(std::string_view fileName,
     AXASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
              "the image can only be saved as JPG or PNG format");
     if (isRGBA && format == Image::Format::JPG)
-        AXLOG("RGBA is not supported for JPG format");
+        AXLOGD("RGBA is not supported for JPG format");
 
     _saveFileCallback = std::move(callback);
 
@@ -446,7 +446,7 @@ bool RenderTexture::saveToFile(std::string_view fileName,
     AXASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
              "the image can only be saved as JPG or PNG format");
     if (isRGBA && format == Image::Format::JPG)
-        AXLOG("RGBA is not supported for JPG format");
+        AXLOGD("RGBA is not supported for JPG format");
 
     _saveFileCallback = std::move(callback);
 

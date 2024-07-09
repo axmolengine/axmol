@@ -314,7 +314,7 @@ void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
             // The touches is more than MAX_TOUCHES ?
             if (unusedIndex == -1)
             {
-                AXLOG("The touches is more than MAX_TOUCHES, unusedIndex = %d", unusedIndex);
+                AXLOGD("The touches is more than MAX_TOUCHES, unusedIndex = {}", unusedIndex);
                 continue;
             }
 
@@ -322,7 +322,7 @@ void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
             touch->setTouchInfo(unusedIndex, (x - _viewPortRect.origin.x) / _scaleX,
                                 (y - _viewPortRect.origin.y) / _scaleY);
 
-            AXLOGINFO("x = %f y = %f", touch->getLocationInView().x, touch->getLocationInView().y);
+            AXLOGV("x = {} y = {}", touch->getLocationInView().x, touch->getLocationInView().y);
 
             g_touchIdReorderMap.emplace(id, unusedIndex);
             touchEvent._touches.emplace_back(touch);
@@ -331,7 +331,7 @@ void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
 
     if (touchEvent._touches.empty())
     {
-        AXLOG("touchesBegan: size = 0");
+        AXLOGD("touchesBegan: size = 0");
         return;
     }
 
@@ -365,11 +365,11 @@ void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], 
         auto iter = g_touchIdReorderMap.find(id);
         if (iter == g_touchIdReorderMap.end())
         {
-            AXLOG("if the index doesn't exist, it is an error");
+            AXLOGD("if the index doesn't exist, it is an error");
             continue;
         }
 
-        AXLOGINFO("Moving touches with id: %d, x=%f, y=%f, force=%f, maxFource=%f", (int)id, x, y, force, maxForce);
+        AXLOGV("Moving touches with id: {}, x={}, y={}, force={}, maxFource={}", (int)id, x, y, force, maxForce);
         Touch* touch = g_touches[iter->second];
         if (touch)
         {
@@ -381,14 +381,14 @@ void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], 
         else
         {
             // It is error, should return.
-            AXLOG("Moving touches with id: %d error", static_cast<int32_t>(id));
+            AXLOGD("Moving touches with id: {} error", static_cast<int32_t>(id));
             return;
         }
     }
 
     if (touchEvent._touches.empty())
     {
-        AXLOG("touchesMoved: size = 0");
+        AXLOGD("touchesMoved: size = 0");
         return;
     }
 
@@ -417,7 +417,7 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
         auto iter = g_touchIdReorderMap.find(id);
         if (iter == g_touchIdReorderMap.end())
         {
-            AXLOG("if the index doesn't exist, it is an error");
+            AXLOGD("if the index doesn't exist, it is an error");
             continue;
         }
 
@@ -425,7 +425,7 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
         Touch* touch = g_touches[iter->second];
         if (touch)
         {
-            AXLOGINFO("Ending touches with id: %d, x=%f, y=%f", (int)id, x, y);
+            AXLOGV("Ending touches with id: {}, x={}, y={}", (int)id, x, y);
             touch->setTouchInfo(iter->second, (x - _viewPortRect.origin.x) / _scaleX,
                                 (y - _viewPortRect.origin.y) / _scaleY);
 
@@ -438,14 +438,14 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
         }
         else
         {
-            AXLOG("Ending touches with id: %d error", static_cast<int32_t>(id));
+            AXLOGD("Ending touches with id: {} error", static_cast<int32_t>(id));
             return;
         }
     }
 
     if (touchEvent._touches.empty())
     {
-        AXLOG("touchesEnded or touchesCancel: size = 0");
+        AXLOGD("touchesEnded or touchesCancel: size = 0");
         return;
     }
 

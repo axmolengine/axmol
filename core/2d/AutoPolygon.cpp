@@ -388,7 +388,7 @@ std::vector<ax::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& sta
             }
             break;
         default:
-            AXLOG("this shouldn't happen.");
+            AXLOGD("this shouldn't happen.");
         }
         // little optimization
         //  if previous direction is same as current direction,
@@ -577,7 +577,7 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
         }
         else
         {
-            AXLOG("Clipper2 detect a hole!");
+            AXLOGW("Clipper2 detect a hole!");
         }
     }
 

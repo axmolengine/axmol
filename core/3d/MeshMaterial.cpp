@@ -391,7 +391,7 @@ void MeshMaterialCache::removeUnusedMeshMaterial()
         auto value = it->second;
         if (value->getReferenceCount() == 1)
         {
-            AXLOG("axmol: MeshMaterialCache: removing unused mesh renderer materials.");
+            AXLOGD("MeshMaterialCache: removing unused mesh renderer materials.");
 
             value->release();
             it = _materials.erase(it);

@@ -20,7 +20,7 @@ that help victims of the war in Ukraine: <https://www.stopputin.net/>.
 Q&A: ask questions on [StackOverflow with the tag
 fmt](https://stackoverflow.com/questions/tagged/fmt).
 
-Try {fmt} in [Compiler Explorer](https://godbolt.org/z/Eq5763).
+Try {fmt} in [Compiler Explorer](https://godbolt.org/z/8Mx1EW73v).
 
 # Features
 
@@ -203,43 +203,38 @@ and [ryu](https://github.com/ulfjack/ryu):
 
 ## Compile time and code bloat
 
-The script
-[bloat-test.py](https://github.com/fmtlib/format-benchmark/blob/master/bloat-test.py)
-from [format-benchmark](https://github.com/fmtlib/format-benchmark)
-tests compile time and code bloat for nontrivial projects. It generates
-100 translation units and uses `printf()` or its alternative five times
-in each to simulate a medium-sized project. The resulting executable
-size and compile time (Apple LLVM version 8.1.0 (clang-802.0.42), macOS
-Sierra, best of three) is shown in the following tables.
+The script [bloat-test.py][test] from [format-benchmark][bench] tests compile
+time and code bloat for nontrivial projects. It generates 100 translation units
+and uses `printf()` or its alternative five times in each to simulate a
+medium-sized project. The resulting executable size and compile time (Apple
+clang version 15.0.0 (clang-1500.1.0.2.5), macOS Sonoma, best of three) is shown
+in the following tables.
+
+[test]: https://github.com/fmtlib/format-benchmark/blob/master/bloat-test.py
+[bench]: https://github.com/fmtlib/format-benchmark
 
 **Optimized build (-O3)**
 
 | Method        | Compile Time, s | Executable size, KiB | Stripped size, KiB |
 |---------------|-----------------|----------------------|--------------------|
-| printf        |   2.6           |   29                 |   26               |
-| printf+string |   16.4          |   29                 |   26               |
-| iostreams     |   31.1          |   59                 |   55               |
-| {fmt}         |   19.0          |   37                 |   34               |
-| Boost Format  |   91.9          |   226                |   203              |
-| Folly Format  |   115.7         |   101                |   88               |
+| printf        |             1.6 |                   54 |                 50 |
+| IOStreams     |            25.9 |                   98 |                 84 |
+| fmt 83652df   |             4.8 |                   54 |                 50 |
+| tinyformat    |            29.1 |                  161 |                136 |
+| Boost Format  |            55.0 |                  530 |                317 |
 
-As you can see, {fmt} has 60% less overhead in terms of resulting binary
-code size compared to iostreams and comes pretty close to `printf`.
-Boost Format and Folly Format have the largest overheads.
-
-`printf+string` is the same as `printf` but with an extra `<string>`
-include to measure the overhead of the latter.
+{fmt} is fast to compile and is comparable to `printf` in terms of per-call
+binary size (within a rounding error on this system).
 
 **Non-optimized build**
 
 | Method        | Compile Time, s | Executable size, KiB | Stripped size, KiB |
 |---------------|-----------------|----------------------|--------------------|
-| printf        |   2.2           |   33                 |   30               |
-| printf+string |   16.0          |   33                 |   30               |
-| iostreams     |   28.3          |   56                 |   52               |
-| {fmt}         |   18.2          |   59                 |   50               |
-| Boost Format  |   54.1          |   365                |   303              |
-| Folly Format  |   79.9          |   445                |   430              |
+| printf        |             1.4 |                   54 |                 50 |
+| IOStreams     |            23.4 |                   92 |                 68 |
+| {fmt} 83652df |             4.4 |                   89 |                 85 |
+| tinyformat    |            24.5 |                  204 |                161 |
+| Boost Format  |            36.4 |                  831 |                462 |
 
 `libc`, `lib(std)c++`, and `libfmt` are all linked as shared libraries
 to compare formatting function overhead only. Boost Format is a
@@ -270,8 +265,7 @@ or the bloat test:
 
 # Migrating code
 
-[clang-tidy](https://clang.llvm.org/extra/clang-tidy/) v17 (not yet
-released) provides the
+[clang-tidy](https://clang.llvm.org/extra/clang-tidy/) v18 provides the
 [modernize-use-std-print](https://clang.llvm.org/extra/clang-tidy/checks/modernize/use-std-print.html)
 check that is capable of converting occurrences of `printf` and
 `fprintf` to `fmt::print` if configured to do so. (By default it
@@ -343,7 +337,7 @@ converts to `std::print`.)
 - [Quill](https://github.com/odygrd/quill): asynchronous low-latency
   logging library
 - [QKW](https://github.com/ravijanjam/qkw): generalizing aliasing to
-  simplify navigation, and executing complex multi-line terminal
+  simplify navigation, and execute complex multi-line terminal
   command sequences
 - [redis-cerberus](https://github.com/HunanTV/redis-cerberus): a Redis
   cluster proxy
@@ -432,7 +426,7 @@ code bloat issues (see [Benchmarks](#benchmarks)).
 
 ## FastFormat
 
-This is an interesting library that is fast, safe, and has positional
+This is an interesting library that is fast, safe and has positional
 arguments. However, it has significant limitations, citing its author:
 
 > Three features that have no hope of being accommodated within the
@@ -442,8 +436,8 @@ arguments. However, it has significant limitations, citing its author:
 > - Octal/hexadecimal encoding
 > - Runtime width/alignment specification
 
-It is also quite big and has a heavy dependency, STLSoft, which might be
-too restrictive for using it in some projects.
+It is also quite big and has a heavy dependency, on STLSoft, which might be
+too restrictive for use in some projects.
 
 ## Boost Spirit.Karma
 
@@ -486,5 +480,5 @@ To report a security issue, please disclose it at [security
 advisory](https://github.com/fmtlib/fmt/security/advisories/new).
 
 This project is maintained by a team of volunteers on a
-reasonable-effort basis. As such, please give us at least 90 days to
+reasonable-effort basis. As such, please give us at least *90* days to
 work on a fix before public exposure.

@@ -62,7 +62,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 10.2.1
+- Version: 11.0.0
 - License: MIT
 
 ## FreeType
@@ -153,7 +153,7 @@
 
 ## oboe (Adnroid only)
 - [![Upstream](https://img.shields.io/github/v/tag/google/oboe?label=Upstream)](https://github.com/google/oboe)
-- Version: 1.8.1
+- Version: 1.9.0
 - License: Apache-2.0
 
 ## ogg & vorbis
@@ -218,7 +218,7 @@
 
 ## stb (stb_image)
 - Upstream: https://github.com/nothings/stb
-- Version: 2.29
+- Version: 2.30
 - License: MIT
 
 ## unzip (minizip-1.2)
