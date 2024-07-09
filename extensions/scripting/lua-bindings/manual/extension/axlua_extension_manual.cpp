@@ -48,7 +48,7 @@ public:
 
     ~LuaRefMap()
     {
-        AXLOGI("deallocing LuaRefMap: {}", this);
+        AXLOGINFO("deallocing LuaRefMap: %p", this);
         __map.clear();
     }
     void setObject(Object* pObject, const std::string& key) {
