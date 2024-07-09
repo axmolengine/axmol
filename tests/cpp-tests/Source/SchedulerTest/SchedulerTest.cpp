@@ -1313,12 +1313,12 @@ void SchedulerIssue17149::onEnter()
 void SchedulerIssue17149::update(float dt)
 {
     auto classa = new (_memoryPool) ClassA();
-    AXLOGD("Address one: {}", static_cast<void*>(classa));
+    AXLOGD("Address one: {}", fmt::ptr(classa));
     Director::getInstance()->getScheduler()->scheduleUpdate(classa, 1, false);
     Director::getInstance()->getScheduler()->unscheduleUpdate(classa);
 
     auto classb = new (_memoryPool) ClassB();
-    AXLOGD("Address one: {}", static_cast<void*>(classb));
+    AXLOGD("Address one: {}", fmt::ptr(classb));
     Director::getInstance()->getScheduler()->scheduleUpdate(classb, 1, false);
 
     unscheduleUpdate();

@@ -930,7 +930,7 @@ void ActionCallFunction::callback2(Node* sender)
 
     addChild(label);
 
-    AXLOGD("sender is: {}", static_cast<void*>(sender));
+    AXLOGD("sender is: {}", fmt::ptr(sender));
 }
 
 void ActionCallFunction::callback3(Node* sender, int32_t data)
@@ -940,7 +940,7 @@ void ActionCallFunction::callback3(Node* sender, int32_t data)
     label->setPosition(s.width / 4 * 3, s.height / 2);
     addChild(label);
 
-    AXLOGD("target is: {}, data is: %d", static_cast<void*>(sender), data);
+    AXLOGD("target is: {}, data is: {}", fmt::ptr(sender), data);
 }
 
 std::string ActionCallFunction::subtitle() const
