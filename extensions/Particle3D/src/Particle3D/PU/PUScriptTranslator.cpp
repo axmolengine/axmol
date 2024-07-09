@@ -739,7 +739,7 @@ bool PUScriptTranslator::passValidatePropertyValidQuaternion(PUScriptCompiler* /
 //-------------------------------------------------------------------------
 void PUScriptTranslator::errorUnexpectedToken(PUScriptCompiler* /*compiler*/, PUAbstractNode* /*token2*/)
 {
-    //    AXLOGERROR("PU Compiler: token2 is not recognized tokenFile:%s tokenLine:%s",)
+    //    AXLOGE("PU Compiler: token2 is not recognized tokenFile:%s tokenLine:%s",)
     //    printf()
     //    compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, token.getPointer()->file, token.getPointer()->line,
     //                       );

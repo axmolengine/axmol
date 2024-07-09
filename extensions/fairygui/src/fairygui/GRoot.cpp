@@ -418,7 +418,7 @@ void GRoot::showTooltips(const std::string& msg)
         const std::string& resourceURL = UIConfig::tooltipsWin;
         if (resourceURL.empty())
         {
-            AXLOGWARN("FairyGUI: UIConfig.tooltipsWin not defined");
+            AXLOGW("FairyGUI: UIConfig.tooltipsWin not defined");
             return;
         }
 

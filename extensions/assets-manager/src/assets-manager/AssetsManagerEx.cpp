@@ -878,7 +878,7 @@ void AssetsManagerEx::checkUpdate()
 {
     if (_updateEntry != UpdateEntry::NONE)
     {
-        AXLOGERROR("AssetsManagerEx::checkUpdate, updateEntry isn't NONE");
+        AXLOGE("AssetsManagerEx::checkUpdate, updateEntry isn't NONE");
         return;
     }
 
@@ -925,7 +925,7 @@ void AssetsManagerEx::update()
 {
     if (_updateEntry != UpdateEntry::NONE)
     {
-        AXLOGERROR("AssetsManagerEx::update, updateEntry isn't NONE");
+        AXLOGE("AssetsManagerEx::update, updateEntry isn't NONE");
         return;
     }
 
