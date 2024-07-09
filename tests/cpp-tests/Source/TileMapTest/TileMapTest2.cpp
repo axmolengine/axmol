@@ -990,7 +990,7 @@ TMXOrthoVertexZNew::TMXOrthoVertexZNew()
     // can use any Sprite and it will work OK.
     auto layer = map->getLayer("trees");
     _tamara    = layer->getTileAt(Vec2(0, 11));
-    AXLOGD("{} vertexZ: {}", _tamara, _tamara->getPositionZ());
+    AXLOGD("{} vertexZ: {}", static_cast<void*>(_tamara), _tamara->getPositionZ());
     _tamara->retain();
 
     auto move = MoveBy::create(10, Vec2(400, 450) * (1 / AX_CONTENT_SCALE_FACTOR()));
