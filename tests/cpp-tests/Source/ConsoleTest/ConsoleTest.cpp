@@ -128,7 +128,7 @@ void ConsoleUploadFile::uploadFile()
     Data srcFileData = FileUtils::getInstance()->getDataFromFile(s_pathGrossini);
     if (srcFileData.isNull())
     {
-        AXLOGERROR("ConsoleUploadFile: could not open file %s", s_pathGrossini);
+        AXLOGE("ConsoleUploadFile: could not open file {}", s_pathGrossini);
     }
 
     std::string targetFileName = _targetFileName;
