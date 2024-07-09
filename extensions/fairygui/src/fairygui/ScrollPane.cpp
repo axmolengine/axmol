@@ -162,7 +162,7 @@ void ScrollPane::setup(ByteBuffer* buffer)
             {
                 _vtScrollBar = dynamic_cast<GScrollBar*>(UIPackage::createObjectFromURL(res));
                 if (_vtScrollBar == nullptr)
-                    AXLOGW("FairyGUI: cannot create scrollbar from {}, res);
+                    AXLOGW("FairyGUI: cannot create scrollbar from {}", res);
                 else
                 {
                     _vtScrollBar->retain();
