@@ -110,7 +110,7 @@ void Manifest::loadJson(std::string_view url)
                 if (offset > 0)
                     offset--;
                 std::string errorSnippet = content.substr(offset, 10);
-                AXLOGD("File parse error {} at <{}>\n", _json.GetParseError(), errorSnippet);
+                AXLOGD("File parse error {} at <{}>\n",  static_cast<int>(_json.GetParseError()), errorSnippet);
             }
         }
     }
