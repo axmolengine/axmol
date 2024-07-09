@@ -614,7 +614,7 @@ void UIPackage::loadAtlas(PackageItem* item)
 #if COCOS2D_VERSION < 0x00031702
         Image::setPNGPremultipliedAlphaEnabled(true);
 #endif
-        AXLOGWARN("FairyGUI: texture '%s' not found in %s", item->file.c_str(), _name.c_str());
+        AXLOGW("FairyGUI: texture '{}' not found in {}", item->file, _name);
         return;
     }
 #if COCOS2D_VERSION < 0x00031702

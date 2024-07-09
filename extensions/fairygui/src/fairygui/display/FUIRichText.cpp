@@ -91,11 +91,11 @@ static std::string getSubStringOfUTF8String(const std::string& str, std::string:
 {
     std::u32string utf32;
     if (!StringUtils::UTF8ToUTF32(str, utf32)) {
-        AXLOGE("Can't convert string to UTF-32: {%s}}", str);
+        AXLOGE("Can't convert string to UTF-32: {}", str);
         return "";
     }
     if (utf32.size() < start) {
-        AXLOGE("'start' is out of range: %ld, {}", static_cast<long>(start), str);
+        AXLOGE("'start' is out of range: {}, {}", static_cast<long>(start), str);
         return "";
     }
     std::string result;
