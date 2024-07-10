@@ -51,7 +51,7 @@ void RenderCommand::init(float globalZOrder, const ax::Mat4& transform, unsigned
 
 void RenderCommand::printID()
 {
-    printf("Command Depth: %f\n", _globalOrder);
+    AXLOGI("Command Depth: {}\n", _globalOrder);
 }
 
 NS_AX_END
