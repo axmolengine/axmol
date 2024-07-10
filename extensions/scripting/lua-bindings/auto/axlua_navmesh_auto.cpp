@@ -1511,7 +1511,7 @@ int lua_ax_navmesh_NavMeshAgent_constructor(lua_State* tolua_S)
 
 static int lua_ax_navmesh_NavMeshAgent_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (NavMeshAgent)");
+    AXLOGD("luabindings: finalizing LUA object (NavMeshAgent)");
     return 0;
 }
 
@@ -2009,7 +2009,7 @@ int lua_ax_navmesh_NavMeshObstacle_constructor(lua_State* tolua_S)
 
 static int lua_ax_navmesh_NavMeshObstacle_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (NavMeshObstacle)");
+    AXLOGD("luabindings: finalizing LUA object (NavMeshObstacle)");
     return 0;
 }
 
@@ -2510,7 +2510,7 @@ int lua_ax_navmesh_NavMesh_constructor(lua_State* tolua_S)
 
 static int lua_ax_navmesh_NavMesh_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (NavMesh)");
+    AXLOGD("luabindings: finalizing LUA object (NavMesh)");
     return 0;
 }
 
