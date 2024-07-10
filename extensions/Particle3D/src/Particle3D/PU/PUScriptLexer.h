@@ -31,7 +31,7 @@
 #include "base/Object.h"
 #include <vector>
 #include <string>
-#include "axmol.h"
+#include "base/Logging.h"
 #include "extensions/ExtensionExport.h"
 
 NS_AX_BEGIN

@@ -183,7 +183,7 @@ void BoneNode::addToBoneList(BoneNode* bone)
                 }
                 else
                     AXLOGD("already has a bone named {} in skeleton {}", bonename,
-                          _rootSkeleton->getName().data());
+                          _rootSkeleton->getName());
             }
         }
         else

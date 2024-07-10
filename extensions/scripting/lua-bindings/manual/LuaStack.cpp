@@ -685,7 +685,7 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
         auto zip = ZipFile::createFromFile(zipFilePath);
         if (zip)
         {
-            AXLOGD("lua_loadChunksFromZIP() - load zip file: {}", zipFilePath.c_str());
+            AXLOGD("lua_loadChunksFromZIP() - load zip file: {}", zipFilePath);
             lua_getglobal(L, "package");
             lua_getfield(L, -1, "preload");
 
@@ -716,7 +716,7 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
                             character = '.';
                         }
                     }
-                    AXLOGD("[luaLoadChunksFromZIP] add {} to preload", filename.c_str());
+                    AXLOGD("[luaLoadChunksFromZIP] add {} to preload", filename);
                     if (stack->luaLoadBuffer(L, code.data(), static_cast<int>(code.size()), filename.c_str()) == 0)
                     {
                         lua_setfield(L, -2, filename.c_str());
@@ -733,7 +733,7 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
         }
         else
         {
-            AXLOGD("lua_loadChunksFromZIP() - not found or invalid zip file: {}", zipFilePath.c_str());
+            AXLOGD("lua_loadChunksFromZIP() - not found or invalid zip file: {}", zipFilePath);
             lua_pushboolean(L, 0);
         }
 

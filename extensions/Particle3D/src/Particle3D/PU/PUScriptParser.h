@@ -33,7 +33,7 @@
 #include <list>
 #include <map>
 
-#include "axmol.h"
+#include "base/Logging.h"
 #include "base/Object.h"
 #include "Particle3D/PU/PUScriptLexer.h"
 
