@@ -95,8 +95,8 @@ public:
      */
     void setTestCaseName(std::string_view name) { _testCaseName = name; }
     std::string getTestCaseName() const { return _testCaseName; }
-
-    const ax::Label* getSubtitleLable() const { return _subtitleLabel; }
+    const ax::Label* getSubtitleLabel() const { return _subtitleLabel; }
+    void setSubtitleLabel(std::string_view title) { _subtitleLabel->setString(title); }
     const ax::MenuItemImage* getRestartTestItem() const { return _restartTestItem; }
 
     virtual void onEnter() override;

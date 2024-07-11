@@ -1311,8 +1311,8 @@ void PhysicsContactTest::onEnter()
     decrease1->setTag(1);
     increase1->setTag(1);
 
-    float prevMenuPos = getSubtitleLable()->getPosition().y - getSubtitleLable()->getContentSize().height;
-    float menuStep    = (getSubtitleLable()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
+    float prevMenuPos = getSubtitleLabel()->getPosition().y - getSubtitleLabel()->getContentSize().height;
+    float menuStep    = (getSubtitleLabel()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
     auto menu1        = Menu::create(decrease1, increase1, nullptr);
     menu1->alignItemsHorizontally();
     menu1->setPosition(Vec2(s.width / 2, prevMenuPos));
@@ -1433,8 +1433,8 @@ void PhysicsContactTest::resetTest()
     this->addChild(root);
 
     auto s            = VisibleRect::getVisibleRect().size;
-    float prevMenuPos = getSubtitleLable()->getPosition().y - getSubtitleLable()->getContentSize().height;
-    float menuStep    = (getSubtitleLable()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
+    float prevMenuPos = getSubtitleLabel()->getPosition().y - getSubtitleLabel()->getContentSize().height;
+    float menuStep    = (getSubtitleLabel()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
     std::string strNum;
     char buffer[10];
 
