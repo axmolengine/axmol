@@ -1,6 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
-
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ 
 https://axmol.dev/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
