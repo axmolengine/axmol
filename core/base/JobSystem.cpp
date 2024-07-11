@@ -110,10 +110,10 @@ static int clampThreads(int nThreads)
     if (nThreads <= 0)
     {
 #if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
-#    if !defined(__EMSCRIPTEN__)
+#    if defined(AX_PLATFORM_PC)
         nThreads = (std::max)(static_cast<int>(std::thread::hardware_concurrency() * 3 / 2), 2);
 #    else
-        nThreads = (std::clamp)(static_cast<int>(std::thread::hardware_concurrency()), 2, 8);
+        nThreads = (std::clamp)(static_cast<int>(std::thread::hardware_concurrency()) - 2, 2, 8);
 #    endif
 #else
         AXLOGW("The emscripten pthread not enabled, JobSystem not working");
