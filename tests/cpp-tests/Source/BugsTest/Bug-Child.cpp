@@ -73,13 +73,13 @@ void BugChild::switchChild(Object* sender)
     {
         parent1->removeChild(child, false);
         parent2->addChild(child);
-        AXLOG("Child attached to parent2");
+        AXLOGD("Child attached to parent2");
     }
     else
     {
         parent2->removeChild(child, false);
         parent1->addChild(child);
-        AXLOG("Child attached to parent1");
+        AXLOGD("Child attached to parent1");
     }
 }
 

@@ -157,7 +157,7 @@ void TriggerObj::serialize(const rapidjson::Value& val)
             dynamic_cast<BaseTriggerCondition*>(ObjectFactory::getInstance()->createObject(classname));
         if (con == nullptr)
         {
-            AXLOG("class %s can not be implemented!", classname);
+            AXLOGD("class {} can not be implemented!", classname);
             AXASSERT(con != nullptr, "con can't be nullptr!");
         }
 
@@ -180,7 +180,7 @@ void TriggerObj::serialize(const rapidjson::Value& val)
             dynamic_cast<BaseTriggerAction*>(ObjectFactory::getInstance()->createObject(classname));
         if (act == nullptr)
         {
-            AXLOG("class %s can not be implemented!", classname);
+            AXLOGD("class {} can not be implemented!", classname);
             AXASSERT(act != nullptr, "act can't be nullptr!");
         }
         act->serialize(subDict);

@@ -133,7 +133,7 @@ void BasicsScene::playPopup()
 void BasicsScene::onClickMenu(EventContext* context)
 {
     GObject* itemObject = (GObject*)context->getData();
-    AXLOG("click %s", itemObject->getText().c_str());
+    AXLOGD("click {}", itemObject->getText());
 }
 
 void BasicsScene::playWindow()

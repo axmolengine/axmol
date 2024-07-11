@@ -71,7 +71,7 @@ static bool _containsTouchPoint(ax::Node* target, ax::Touch* touch)
 
     bool contains = (rc.containsPoint(pt));
 
-    // AXLOGD("check {:#x} coordinate:({}, {}), contains:%d", target, pt.x, pt.y, contains);
+    // AXLOGD("check {:#x} coordinate:({}, {}), contains:{}", target, pt.x, pt.y, contains);
     return contains;
 }
 
@@ -85,7 +85,7 @@ static bool engine_inj_containsPoint(ax::Node* target, const ax::Vec2& worldPoin
 
     bool contains = (rc.containsPoint(pt));
 
-    // AXLOGD("check {:#x} coordinate:({}, {}), contains:%d", target, pt.x, pt.y, contains);
+    // AXLOGD("check {:#x} coordinate:({}, {}), contains:{}", target, pt.x, pt.y, contains);
     return contains;
 }
 

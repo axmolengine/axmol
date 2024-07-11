@@ -1131,7 +1131,7 @@ void DataReaderHelper::addDataFromJsonCache(std::string_view fileContent, DataIn
     json.ParseStream<0>(stream);
     if (json.HasParseError())
     {
-        AXLOG("GetParseError %d\n", json.GetParseError());
+        AXLOGD("GetParseError {}\n",  static_cast<int>(json.GetParseError()));
     }
 
     dataInfo->contentScale = DICTOOL->getFloatValue_json(json, CONTENT_SCALE, 1.0f);
@@ -1208,7 +1208,7 @@ void DataReaderHelper::addDataFromJsonCache(std::string_view fileContent, DataIn
                 i);  // json[CONFIG_FILE_PATH][i].IsNull() ? nullptr : json[CONFIG_FILE_PATH][i].GetString();
             if (path == nullptr)
             {
-                AXLOG("load CONFIG_FILE_PATH error.");
+                AXLOGD("load CONFIG_FILE_PATH error.");
                 return;
             }
 
@@ -1753,7 +1753,7 @@ void DataReaderHelper::addDataFromBinaryCache(const char* fileContent, DataInfo*
                         const char* path = pConfigFilePath[ii].GetValue(&tCocoLoader);
                         if (path == nullptr)
                         {
-                            AXLOG("load CONFIG_FILE_PATH error.");
+                            AXLOGD("load CONFIG_FILE_PATH error.");
                             return;
                         }
 

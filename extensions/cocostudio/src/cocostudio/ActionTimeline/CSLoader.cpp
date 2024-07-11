@@ -451,7 +451,7 @@ Node* CSLoader::loadNodeWithContent(std::string_view content)
     doc.Parse<0>(content.data(), content.length());
     if (doc.HasParseError())
     {
-        AXLOG("GetParseError %d\n", doc.GetParseError());
+        AXLOGD("GetParseError {}\n",  static_cast<int>(doc.GetParseError()));
     }
 
     // cocos2dx version mono editor is based on
@@ -569,7 +569,7 @@ Node* CSLoader::loadNode(const rapidjson::Value& json)
     }
     else
     {
-        AXLOG("Not supported NodeType: %s", nodeType.c_str());
+        AXLOGD("Not supported NodeType: {}", nodeType);
     }
 
     return node;
@@ -691,7 +691,7 @@ Node* CSLoader::loadSprite(const rapidjson::Value& json)
         if (!sprite)
         {
             sprite = Sprite::create();
-            AXLOG("filePath is empty. Create a sprite with no texture");
+            AXLOGD("filePath is empty. Create a sprite with no texture");
         }
     }
     else
@@ -801,14 +801,14 @@ Node* CSLoader::loadWidget(const rapidjson::Value& json)
             customJsonDict.Parse<0>(customProperty);
             if (customJsonDict.HasParseError())
             {
-                AXLOG("GetParseError %d\n", customJsonDict.GetParseError());
+                AXLOGD("GetParseError {}\n",  static_cast<int>(customJsonDict.GetParseError()));
             }
 
             widgetPropertiesReader.setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
         }
         else
         {
-            AXLOG("Widget or WidgetReader doesn't exists!!!  Please check your protocol buffers file.");
+            AXLOGD("Widget or WidgetReader doesn't exists!!!  Please check your protocol buffers file.");
         }
     }
 
@@ -949,7 +949,7 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
         // decode plist
         auto textures   = csparsebinary->textures();
         int textureSize = csparsebinary->textures()->size();
-        AXLOG("textureSize = %d", textureSize);
+        AXLOGD("textureSize = {}", textureSize);
         for (int i = 0; i < textureSize; ++i)
         {
             std::string_view plist = textures->Get(i)->c_str();
@@ -991,12 +991,12 @@ inline void CSLoader::reconstructNestNode(ax::Node* node)
         if (_callbackHandlers.empty())
         {
             _rootNode = nullptr;
-            AXLOG("Call back handler container has been clear.");
+            AXLOGD("Call back handler container has been clear.");
         }
         else
         {
             _rootNode = _callbackHandlers.back();
-            AXLOG("after pop back _rootNode name = %s", _rootNode->getName().data());
+            AXLOGD("after pop back _rootNode name = {}", _rootNode->getName());
         }
     }
 }
@@ -1016,7 +1016,7 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
 
     if (buf.isNull())
     {
-        AXLOG("CSLoader::nodeWithFlatBuffersFile - failed read file: %s", fileName.data());
+        AXLOGD("CSLoader::nodeWithFlatBuffersFile - failed read file: {}", fileName);
         AX_ASSERT(false);
         return nullptr;
     }
@@ -1296,7 +1296,7 @@ bool CSLoader::bindCallback(std::string_view callbackName,
         }
     }
 
-    AXLOG("callBackName %s cannot be found", callbackName.data());
+    AXLOGD("callBackName {} cannot be found", callbackName);
 
     return false;
 }
@@ -1444,7 +1444,7 @@ Node* CSLoader::createNodeWithFlatBuffersForSimulator(std::string_view filename)
     // decode plist
     auto textures   = csparsebinary->textures();
     int textureSize = csparsebinary->textures()->size();
-    //    AXLOG("textureSize = %d", textureSize);
+    //    AXLOGD("textureSize = {}", textureSize);
     for (int i = 0; i < textureSize; ++i)
     {
         std::string_view plist = textures->Get(i)->c_str();

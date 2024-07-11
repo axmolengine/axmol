@@ -727,7 +727,7 @@ bool luaval_to_object(lua_State* L, int lo, const char* type, T** ret, const cha
     *ret = static_cast<T*>(tolua_tousertype(L, lo, 0));
 
     if (nullptr == *ret)
-        AXLOG("Warning: %s argument %d is invalid native object(nullptr)", funcName, lo);
+        AXLOGD("Warning: {} argument {} is invalid native object(nullptr)", funcName, lo);
 
     return true;
 }

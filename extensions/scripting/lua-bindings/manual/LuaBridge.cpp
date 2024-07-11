@@ -93,7 +93,7 @@ int LuaBridge::retainLuaFunctionById(int functionId)
     lua_rawset(L, -3);               /* id_r[id] = r, L: id_r */
     lua_pop(L, 1);
 
-    AXLOG("CCLuaBridge::retainLuaFunctionById(%d) - retain count = %d", functionId, retainCount);
+    AXLOGD("CCLuaBridge::retainLuaFunctionById({}) - retain count = {}", functionId, retainCount);
 
     return retainCount;
 }
@@ -107,7 +107,7 @@ int LuaBridge::releaseLuaFunctionById(int functionId)
     if (!lua_istable(L, -1))
     {
         lua_pop(L, 1);
-        AXLOG("CCLuaBridge::releaseLuaFunctionById() - LUA_BRIDGE_REGISTRY_FUNCTION not exists");
+        AXLOGD("CCLuaBridge::releaseLuaFunctionById() - LUA_BRIDGE_REGISTRY_FUNCTION not exists");
         return 0;
     }
 
@@ -116,7 +116,7 @@ int LuaBridge::releaseLuaFunctionById(int functionId)
     if (!lua_istable(L, -1))
     {
         lua_pop(L, 2);
-        AXLOG("CCLuaBridge::releaseLuaFunctionById() - LUA_BRIDGE_REGISTRY_RETAIN not exists");
+        AXLOGD("CCLuaBridge::releaseLuaFunctionById() - LUA_BRIDGE_REGISTRY_RETAIN not exists");
         return 0;
     }
 
@@ -125,7 +125,7 @@ int LuaBridge::releaseLuaFunctionById(int functionId)
     if (lua_type(L, -1) != LUA_TNUMBER)
     {
         lua_pop(L, 3);
-        AXLOG("CCLuaBridge::releaseLuaFunctionById() - function id %d not found", functionId);
+        AXLOGD("CCLuaBridge::releaseLuaFunctionById() - function id {} not found", functionId);
         return 0;
     }
 
@@ -140,7 +140,7 @@ int LuaBridge::releaseLuaFunctionById(int functionId)
         lua_pushinteger(L, retainCount); /* L: f_id id_r id r */
         lua_rawset(L, -3);               /* id_r[id] = r, L: f_id id_r */
         lua_pop(L, 2);
-        AXLOG("CCLuaBridge::releaseLuaFunctionById() - function id %d retain count = %d", functionId, retainCount);
+        AXLOGD("CCLuaBridge::releaseLuaFunctionById() - function id {} retain count = {}", functionId, retainCount);
         return retainCount;
     }
 
@@ -165,7 +165,7 @@ int LuaBridge::releaseLuaFunctionById(int functionId)
     } /* L: f_id */
 
     lua_pop(L, 1);
-    AXLOG("CCLuaBridge::releaseLuaFunctionById() - function id %d released", functionId);
+    AXLOGD("CCLuaBridge::releaseLuaFunctionById() - function id {} released", functionId);
     return 0;
 }
 

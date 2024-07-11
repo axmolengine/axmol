@@ -67,7 +67,7 @@ static int lua_cocos2dx_createDownloadDir(lua_State* L)
         return 1;
     }
 
-    AXLOG("'createDownloadDir' function wrong number of arguments: %d, was expecting %d\n", argc, 0);
+    AXLOGD("'createDownloadDir' function wrong number of arguments: {}, was expecting {}\n", argc, 0);
     return 0;
 }
 
@@ -92,7 +92,7 @@ static int lua_cocos2dx_deleteDownloadDir(lua_State* L)
 
 #if AX_TARGET_OS_TVOS
         // Not implemented. "system" is not present on tvOS
-        AXLOG("'lua_axmol_deleteDownloadDir' not implemented on tvOS");
+        AXLOGD("'lua_axmol_deleteDownloadDir' not implemented on tvOS");
         return 0;
 #endif
 
@@ -100,7 +100,7 @@ static int lua_cocos2dx_deleteDownloadDir(lua_State* L)
         return 0;
     }
 
-    AXLOG("'resetDownloadDir' function wrong number of arguments: %d, was expecting %d\n", argc, 1);
+    AXLOGD("'resetDownloadDir' function wrong number of arguments: {}, was expecting {}\n", argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -132,7 +132,7 @@ static int lua_cocos2dx_addSearchPath(lua_State* L)
         FileUtils::getInstance()->addSearchPath(pathToSave, before);
         return 0;
     }
-    AXLOG("'addSearchPath' function wrong number of arguments: %d, was expecting %d\n", argc, 2);
+    AXLOGD("'addSearchPath' function wrong number of arguments: {}, was expecting {}\n", argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1

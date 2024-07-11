@@ -115,7 +115,7 @@ void RenderTextureSave::saveImageWithPremultipliedAlpha(ax::Object* sender)
     _target->saveToFile(png, Image::Format::PNG, true, callback);
     // Add this function to avoid crash if we switch to a new scene.
     Director::getInstance()->getRenderer()->render();
-    AXLOG("Image saved %s", png);
+    AXLOGD("Image saved {}", png);
 
     counter++;
 }
@@ -141,7 +141,7 @@ void RenderTextureSave::saveImageWithNonPremultipliedAlpha(ax::Object* sender)
 
     // Add this function to avoid crash if we switch to a new scene.
     Director::getInstance()->getRenderer()->render();
-    AXLOG("Image saved %s", png);
+    AXLOGD("Image saved {}", png);
 
     counter++;
 }

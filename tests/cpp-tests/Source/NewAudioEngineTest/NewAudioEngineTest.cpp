@@ -422,7 +422,7 @@ bool AudioLoadTest::init()
             AudioEngine::preload("audio/SoundEffectsFX009/FX082.mp3", [isDestroyed, stateLabel](bool isSuccess) {
                 if (*isDestroyed)
                 {
-                    AXLOG("AudioLoadTest scene was destroyed, no need to set the label text.");
+                    AXLOGD("AudioLoadTest scene was destroyed, no need to set the label text.");
                     return;
                 }
 
@@ -738,7 +738,7 @@ bool AudioIssue18597Test::init()
         // test case for https://github.com/cocos2d/cocos2d-x/issues/18597
         this->schedule(
             [=](float dt) {
-                AXLOG("issues 18597 audio crash test");
+                AXLOGD("issues 18597 audio crash test");
                 for (int i = 0; i < 2; ++i)
                 {
                     auto id = AudioEngine::play2d("audio/MUS_BGM_Battle_Round1_v1.caf", true, 1.0f);

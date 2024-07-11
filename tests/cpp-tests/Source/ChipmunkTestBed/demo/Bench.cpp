@@ -496,7 +496,7 @@ static cpFloat pentagon_moment = 0.0f;
 static cpBool NoCollide_begin(cpArbiter* arb, cpSpace* space, void* data)
 {
 
-    // AXLOG("NoCollide_begin");
+    // AXLOGD("NoCollide_begin");
 
     return cpTrue;
 }

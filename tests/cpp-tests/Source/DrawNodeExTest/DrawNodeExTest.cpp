@@ -479,7 +479,7 @@ void DrawNodeFireworkTest::update(float dt)
     //        }
     //        else
     //        {
-    //            AXLOG("%f %f", ember[a].x, ember[a].y);
+    //            AXLOGD("{} {}", ember[a].x, ember[a].y);
 
     //            ember[a].x += ember[a].vx;
     //            ember[a].y += ember[a].vy;

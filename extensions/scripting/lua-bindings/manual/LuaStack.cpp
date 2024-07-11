@@ -330,7 +330,7 @@ int LuaStack::executeGlobalFunction(const char* functionName)
     lua_getglobal(_state, functionName); /* query function by name, stack: function */
     if (!lua_isfunction(_state, -1))
     {
-        AXLOG("[LUA ERROR] name '%s' does not represent a Lua function", functionName);
+        AXLOGD("[LUA ERROR] name '{}' does not represent a Lua function", functionName);
         lua_pop(_state, 1);
         return 0;
     }
@@ -443,7 +443,7 @@ bool LuaStack::pushFunctionByHandler(int nHandler)
     toluafix_get_function_by_refid(_state, nHandler); /* L: ... func */
     if (!lua_isfunction(_state, -1))
     {
-        AXLOG("[LUA ERROR] function refid '%d' does not reference a Lua function", nHandler);
+        AXLOGD("[LUA ERROR] function refid '{}' does not reference a Lua function", nHandler);
         lua_pop(_state, 1);
         return false;
     }
@@ -455,7 +455,7 @@ int LuaStack::executeFunction(int numArgs)
     int functionIndex = -(numArgs + 1);
     if (!lua_isfunction(_state, functionIndex))
     {
-        AXLOG("value at stack [%d] is not function", functionIndex);
+        AXLOGD("value at stack [{}] is not function", functionIndex);
         lua_pop(_state, numArgs + 1);  // remove function and arguments
         return 0;
     }
@@ -480,7 +480,7 @@ int LuaStack::executeFunction(int numArgs)
     {
         if (traceback == 0)
         {
-            AXLOG("[LUA ERROR] %s", lua_tostring(_state, -1)); /* L: ... error */
+            AXLOGD("[LUA ERROR] {}", lua_tostring(_state, -1)); /* L: ... error */
             lua_pop(_state, 1);                                // remove error message from stack
         }
         else /* L: ... G error */
@@ -548,7 +548,7 @@ int LuaStack::reallocateScriptHandler(int nHandler)
         toluafix_get_function_by_refid(_state,nNewHandle);
         if (!lua_isfunction(_state, -1))
         {
-            AXLOG("Error!");
+            AXLOGD("Error!");
         }
         lua_settop(_state, 0);
     */
@@ -571,7 +571,7 @@ int LuaStack::executeFunction(int handler,
 
         if (!lua_isfunction(_state, functionIndex))
         {
-            AXLOG("value at stack [%d] is not function", functionIndex);
+            AXLOGD("value at stack [{}] is not function", functionIndex);
             lua_pop(_state, numArgs + 1);  // remove function and arguments
             return 0;
         }
@@ -597,7 +597,7 @@ int LuaStack::executeFunction(int handler,
         {
             if (traceCallback == 0)
             {
-                AXLOG("[LUA ERROR] %s", lua_tostring(_state, -1)); /* L: ... error */
+                AXLOGD("[LUA ERROR] {}", lua_tostring(_state, -1)); /* L: ... error */
                 lua_pop(_state, 1);                                // remove error message from stack
             }
             else /* L: ... G error */
@@ -631,7 +631,7 @@ int LuaStack::reload(const char* moduleFileName)
 {
     if (nullptr == moduleFileName || strlen(moduleFileName) == 0)
     {
-        AXLOG("moudulFileName is null");
+        AXLOGD("moudulFileName is null");
         return 1;
     }
 
@@ -665,7 +665,7 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
 {
     if (lua_gettop(L) < 1)
     {
-        AXLOG("luaLoadChunksFromZIP() - invalid arguments");
+        AXLOGD("luaLoadChunksFromZIP() - invalid arguments");
         return 0;
     }
 
@@ -685,7 +685,7 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
         auto zip = ZipFile::createFromFile(zipFilePath);
         if (zip)
         {
-            AXLOG("lua_loadChunksFromZIP() - load zip file: %s", zipFilePath.c_str());
+            AXLOGD("lua_loadChunksFromZIP() - load zip file: {}", zipFilePath);
             lua_getglobal(L, "package");
             lua_getfield(L, -1, "preload");
 
@@ -716,7 +716,7 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
                             character = '.';
                         }
                     }
-                    AXLOG("[luaLoadChunksFromZIP] add %s to preload", filename.c_str());
+                    AXLOGD("[luaLoadChunksFromZIP] add {} to preload", filename);
                     if (stack->luaLoadBuffer(L, code.data(), static_cast<int>(code.size()), filename.c_str()) == 0)
                     {
                         lua_setfield(L, -2, filename.c_str());
@@ -725,7 +725,7 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
                 }
                 filename = zip->getNextFilename();
             }
-            AXLOG("lua_loadChunksFromZIP() - loaded chunks count: %d", count);
+            AXLOGD("lua_loadChunksFromZIP() - loaded chunks count: {}", count);
             lua_pop(L, 2);
             lua_pushboolean(L, 1);
 
@@ -733,7 +733,7 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
         }
         else
         {
-            AXLOG("lua_loadChunksFromZIP() - not found or invalid zip file: %s", zipFilePath.c_str());
+            AXLOGD("lua_loadChunksFromZIP() - not found or invalid zip file: {}", zipFilePath);
             lua_pushboolean(L, 0);
         }
 
@@ -771,19 +771,19 @@ int LuaStack::luaLoadBuffer(lua_State* L, const char* chunk, int chunkSize, cons
         switch (r)
         {
         case LUA_ERRSYNTAX:
-            AXLOG("[LUA ERROR] load \"%s\", error: syntax error during pre-compilation.", chunkName);
+            AXLOGD("[LUA ERROR] load \"{}\", error: syntax error during pre-compilation.", chunkName);
             break;
 
         case LUA_ERRMEM:
-            AXLOG("[LUA ERROR] load \"%s\", error: memory allocation error.", chunkName);
+            AXLOGD("[LUA ERROR] load \"{}\", error: memory allocation error.", chunkName);
             break;
 
         case LUA_ERRFILE:
-            AXLOG("[LUA ERROR] load \"%s\", error: cannot open/read file.", chunkName);
+            AXLOGD("[LUA ERROR] load \"{}\", error: cannot open/read file.", chunkName);
             break;
 
         default:
-            AXLOG("[LUA ERROR] load \"%s\", error: unknown.", chunkName);
+            AXLOGD("[LUA ERROR] load \"{}\", error: unknown.", chunkName);
         }
     }
 #endif

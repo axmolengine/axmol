@@ -314,7 +314,7 @@ int ZipUtils::inflateGZipFile(const char* path, unsigned char** out)
     gzFile inFile = gzopen(path, "rb");
     if (inFile == nullptr)
     {
-        AXLOGW("ZipUtils: error open gzip file: %s", path);
+        AXLOGW("ZipUtils: error open gzip file: {}", path);
         return -1;
     }
 

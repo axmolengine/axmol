@@ -1710,7 +1710,7 @@ Issue8194::Issue8194()
         getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_UPDATE, [this](ax::EventCustom* event) {
             if (nodesAdded)
             {
-                // AXLOG("Fire Issue8194 Event");
+                // AXLOGD("Fire Issue8194 Event");
                 getEventDispatcher()->dispatchCustomEvent("Issue8194");
 
                 // clear test nodes and listeners

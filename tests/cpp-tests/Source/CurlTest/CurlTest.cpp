@@ -70,7 +70,7 @@ static size_t WriteMemoryCallback(void* contents, size_t size, size_t nmemb, voi
     if (mem->memory == NULL)
     {
         /* out of memory! */
-        printf("not enough memory (realloc returned NULL)\n");
+        AXLOGE("not enough memory (realloc returned NULL)\n");
         return 0;
     }
 

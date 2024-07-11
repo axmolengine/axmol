@@ -1502,7 +1502,7 @@ int lua_ax_physics_PhysicsShape_getGroup(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsShape_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsShape)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsShape)");
     return 0;
 }
 
@@ -1758,7 +1758,7 @@ int lua_ax_physics_PhysicsShapeCircle_calculateMoment(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsShapeCircle_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsShapeCircle)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsShapeCircle)");
     return 0;
 }
 
@@ -1878,7 +1878,7 @@ int lua_ax_physics_PhysicsShapePolygon_getPointsCount(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsShapePolygon_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsShapePolygon)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsShapePolygon)");
     return 0;
 }
 
@@ -2033,7 +2033,7 @@ int lua_ax_physics_PhysicsShapeBox_create(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsShapeBox_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsShapeBox)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsShapeBox)");
     return 0;
 }
 
@@ -2222,7 +2222,7 @@ int lua_ax_physics_PhysicsShapeEdgeSegment_create(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsShapeEdgeSegment_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsShapeEdgeSegment)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsShapeEdgeSegment)");
     return 0;
 }
 
@@ -2291,7 +2291,7 @@ int lua_ax_physics_PhysicsShapeEdgePolygon_getPointsCount(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsShapeEdgePolygon_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsShapeEdgePolygon)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsShapeEdgePolygon)");
     return 0;
 }
 
@@ -2398,7 +2398,7 @@ int lua_ax_physics_PhysicsShapeEdgeBox_create(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsShapeEdgeBox_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsShapeEdgeBox)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsShapeEdgeBox)");
     return 0;
 }
 
@@ -2465,7 +2465,7 @@ int lua_ax_physics_PhysicsShapeEdgeChain_getPointsCount(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsShapeEdgeChain_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsShapeEdgeChain)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsShapeEdgeChain)");
     return 0;
 }
 
@@ -5908,7 +5908,7 @@ int lua_ax_physics_PhysicsBody_createEdgeBox(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsBody_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsBody)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsBody)");
     return 0;
 }
 
@@ -6228,7 +6228,7 @@ int lua_ax_physics_PhysicsContact_getEventCode(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsContact_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsContact)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsContact)");
     return 0;
 }
 
@@ -6590,7 +6590,7 @@ int lua_ax_physics_PhysicsContactPreSolve_ignore(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsContactPreSolve_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsContactPreSolve)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsContactPreSolve)");
     return 0;
 }
 
@@ -6757,7 +6757,7 @@ int lua_ax_physics_PhysicsContactPostSolve_getSurfaceVelocity(lua_State* tolua_S
 }
 static int lua_ax_physics_PhysicsContactPostSolve_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsContactPostSolve)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsContactPostSolve)");
     return 0;
 }
 
@@ -6813,7 +6813,7 @@ int lua_ax_physics_EventListenerPhysicsContact_create(lua_State* tolua_S)
 }
 static int lua_ax_physics_EventListenerPhysicsContact_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerPhysicsContact)");
+    AXLOGD("luabindings: finalizing LUA object (EventListenerPhysicsContact)");
     return 0;
 }
 
@@ -6924,7 +6924,7 @@ int lua_ax_physics_EventListenerPhysicsContactWithBodies_create(lua_State* tolua
 }
 static int lua_ax_physics_EventListenerPhysicsContactWithBodies_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerPhysicsContactWithBodies)");
+    AXLOGD("luabindings: finalizing LUA object (EventListenerPhysicsContactWithBodies)");
     return 0;
 }
 
@@ -7036,7 +7036,7 @@ int lua_ax_physics_EventListenerPhysicsContactWithShapes_create(lua_State* tolua
 }
 static int lua_ax_physics_EventListenerPhysicsContactWithShapes_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerPhysicsContactWithShapes)");
+    AXLOGD("luabindings: finalizing LUA object (EventListenerPhysicsContactWithShapes)");
     return 0;
 }
 
@@ -7146,7 +7146,7 @@ int lua_ax_physics_EventListenerPhysicsContactWithGroup_create(lua_State* tolua_
 }
 static int lua_ax_physics_EventListenerPhysicsContactWithGroup_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerPhysicsContactWithGroup)");
+    AXLOGD("luabindings: finalizing LUA object (EventListenerPhysicsContactWithGroup)");
     return 0;
 }
 
@@ -7743,7 +7743,7 @@ int lua_ax_physics_PhysicsJoint_getMaxForce(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsJoint_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsJoint)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsJoint)");
     return 0;
 }
 
@@ -7861,7 +7861,7 @@ int lua_ax_physics_PhysicsJointFixed_construct(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsJointFixed_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsJointFixed)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsJointFixed)");
     return 0;
 }
 
@@ -8389,7 +8389,7 @@ int lua_ax_physics_PhysicsJointLimit_construct(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsJointLimit_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsJointLimit)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsJointLimit)");
     return 0;
 }
 
@@ -8528,7 +8528,7 @@ int lua_ax_physics_PhysicsJointPin_construct(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsJointPin_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsJointPin)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsJointPin)");
     return 0;
 }
 
@@ -8735,7 +8735,7 @@ int lua_ax_physics_PhysicsJointDistance_construct(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsJointDistance_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsJointDistance)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsJointDistance)");
     return 0;
 }
 
@@ -9336,7 +9336,7 @@ int lua_ax_physics_PhysicsJointSpring_construct(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsJointSpring_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsJointSpring)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsJointSpring)");
     return 0;
 }
 
@@ -9749,7 +9749,7 @@ int lua_ax_physics_PhysicsJointGroove_construct(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsJointGroove_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsJointGroove)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsJointGroove)");
     return 0;
 }
 
@@ -10156,7 +10156,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_construct(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsJointRotarySpring_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsJointRotarySpring)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsJointRotarySpring)");
     return 0;
 }
 
@@ -10484,7 +10484,7 @@ int lua_ax_physics_PhysicsJointRotaryLimit_construct(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsJointRotaryLimit_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsJointRotaryLimit)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsJointRotaryLimit)");
     return 0;
 }
 
@@ -10889,7 +10889,7 @@ int lua_ax_physics_PhysicsJointRatchet_construct(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsJointRatchet_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsJointRatchet)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsJointRatchet)");
     return 0;
 }
 
@@ -11199,7 +11199,7 @@ int lua_ax_physics_PhysicsJointGear_construct(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsJointGear_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsJointGear)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsJointGear)");
     return 0;
 }
 
@@ -11408,7 +11408,7 @@ int lua_ax_physics_PhysicsJointMotor_construct(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsJointMotor_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsJointMotor)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsJointMotor)");
     return 0;
 }
 
@@ -12798,7 +12798,7 @@ int lua_ax_physics_PhysicsWorld_step(lua_State* tolua_S)
 }
 static int lua_ax_physics_PhysicsWorld_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsWorld)");
+    AXLOGD("luabindings: finalizing LUA object (PhysicsWorld)");
     return 0;
 }
 

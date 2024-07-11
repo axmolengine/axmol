@@ -793,7 +793,7 @@ void ScrollView::onTouchMoved(Touch* touch, Event* /*event*/)
 
             if (!_touchMoved && fabs(convertDistanceFromPointToInch(dis)) < MOVE_INCH)
             {
-                // AXLOG("Invalid movement, distance = [%f, %f], disInch = %f", moveDistance.x, moveDistance.y);
+                // AXLOGD("Invalid movement, distance = [{}, {}], disInch = {}", moveDistance.x, moveDistance.y);
                 return;
             }
 

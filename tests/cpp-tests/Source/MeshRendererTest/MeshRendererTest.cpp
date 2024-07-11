@@ -2545,7 +2545,7 @@ void CameraBackgroundClearTest::switch_CameraClearMode(ax::Object* sender)
     CameraBackgroundBrush::BrushType type = CameraBackgroundBrush::BrushType::NONE;
     if (!brush)
     {
-        AXLOG("No brash found!");
+        AXLOGD("No brash found!");
     }
     else
     {
@@ -2557,7 +2557,7 @@ void CameraBackgroundClearTest::switch_CameraClearMode(ax::Object* sender)
         _camera->setBackgroundBrush(CameraBackgroundBrush::createDepthBrush(1.f));
         _label->setString("Depth Clear Brush");
         // Test brush valid when set by user scene setting
-        AXLOG("Background brush valid status is : %s", _camera->isBrushValid() ? "true" : "false");
+        AXLOGD("Background brush valid status is : {}", _camera->isBrushValid() ? "true" : "false");
     }
     else if (type == CameraBackgroundBrush::BrushType::DEPTH)
     {
@@ -2761,13 +2761,13 @@ std::string MeshRendererPropertyTest::subtitle() const
 void MeshRendererPropertyTest::update(float delta) {}
 void MeshRendererPropertyTest::printMeshName(ax::Object* sender)
 {
-    AXLOG("MeshName Begin");
+    AXLOGD("MeshName Begin");
     Vector<Mesh*> meshes = _mesh->getMeshes();
     for (Mesh* mesh : meshes)
     {
         ax::print("MeshName: %s ", mesh->getName().data());
     }
-    AXLOG("MeshName End");
+    AXLOGD("MeshName End");
 }
 void MeshRendererPropertyTest::removeUsedTexture(ax::Object* sender)
 {

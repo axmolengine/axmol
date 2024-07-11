@@ -216,7 +216,7 @@ bool ControlSwitchSprite::initWithMaskSprite(Sprite* maskSprite,
 
 void ControlSwitchSprite::updateTweenAction(float value, std::string_view key)
 {
-    AXLOGINFO("key = %s, value = %f", key.c_str(), value);
+    AXLOGI("key = {}, value = {}", key, value);
     setSliderXPosition(value);
 }
 
