@@ -1,4 +1,4 @@
-/* auto-generated on 2024-06-11 14:08:20 -0400. Do not edit! */
+/* auto-generated on 2024-07-04 16:26:22 -0400. Do not edit! */
 /* including simdjson.cpp:  */
 /* begin file simdjson.cpp */
 #define SIMDJSON_SRC_SIMDJSON_CPP
@@ -224,6 +224,11 @@ using std::size_t;
 #define SIMDJSON_NO_SANITIZE_UNDEFINED
 #endif
 
+#if defined(__clang__) || defined(__GNUC__)
+#define simdjson_pure [[gnu::pure]]
+#else
+#define simdjson_pure
+#endif
 
 #if defined(__clang__) || defined(__GNUC__)
 #if defined(__has_feature)
@@ -6020,14 +6025,14 @@ public:
    *
    * @return Current capacity, in bytes.
    */
-  simdjson_inline size_t capacity() const noexcept;
+  simdjson_pure simdjson_inline size_t capacity() const noexcept;
 
   /**
    * The maximum level of nested object and arrays supported by this parser.
    *
    * @return Maximum depth, in bytes.
    */
-  simdjson_inline size_t max_depth() const noexcept;
+  simdjson_pure simdjson_inline size_t max_depth() const noexcept;
 
   /**
    * Ensure this parser has enough memory to process JSON documents up to `capacity` bytes in length
@@ -6068,11 +6073,11 @@ simdjson_inline dom_parser_implementation::dom_parser_implementation() noexcept 
 simdjson_inline dom_parser_implementation::dom_parser_implementation(dom_parser_implementation &&other) noexcept = default;
 simdjson_inline dom_parser_implementation &dom_parser_implementation::operator=(dom_parser_implementation &&other) noexcept = default;
 
-simdjson_inline size_t dom_parser_implementation::capacity() const noexcept {
+simdjson_pure simdjson_inline size_t dom_parser_implementation::capacity() const noexcept {
   return _capacity;
 }
 
-simdjson_inline size_t dom_parser_implementation::max_depth() const noexcept {
+simdjson_pure simdjson_inline size_t dom_parser_implementation::max_depth() const noexcept {
   return _max_depth;
 }
 
