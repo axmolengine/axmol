@@ -68,7 +68,7 @@ ProgramManager::~ProgramManager()
     {
         AX_SAFE_RELEASE(program.second);
     }
-    AXLOGI("deallocing ProgramManager: {}", fmt::ptr(this));
+    AXLOGD("deallocing ProgramManager: {}", fmt::ptr(this));
     backend::ShaderCache::destroyInstance();
 }
 

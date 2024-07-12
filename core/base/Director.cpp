@@ -167,7 +167,7 @@ bool Director::init()
 
 Director::~Director()
 {
-    AXLOGI("deallocing Director: {}", fmt::ptr(this));
+    AXLOGD("deallocing Director: {}", fmt::ptr(this));
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     _eventDispatcher->removeEventListener(_rendererRecreatedListener);
@@ -680,7 +680,7 @@ void Director::purgeCachedData()
 
         // Note: some tests such as ActionsTest are leaking refcounted textures
         // There should be no test textures left in the cache
-        AXLOGI("{}\n", _textureCache->getCachedTextureInfo());
+        AXLOGD("{}\n", _textureCache->getCachedTextureInfo());
     }
     FileUtils::getInstance()->purgeCachedEntries();
 }
