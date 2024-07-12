@@ -131,7 +131,7 @@ PoolManager::PoolManager()
 
 PoolManager::~PoolManager()
 {
-    AXLOGI("deallocing PoolManager: {}", fmt::ptr(this));
+    AXLOGD("deallocing PoolManager: {}", fmt::ptr(this));
 
     while (!_releasePoolStack.empty())
     {
