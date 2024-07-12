@@ -16,6 +16,10 @@
 
 - `AsyncTaskPool`, use `JobSystem` instead.
 - `AXLOG`, `AXLOGINFO`, `AXLOGWARN`, `AXLOGERROR`, use `AXLOGD`, `AXLOGI`, `AXLOGE` instead.
+  - Mark AXLOG, AXLOGINFO, AXLOGWARN, AXLOGERROR deprecated in https://github.com/axmolengine/axmol/pull/2017
+  - Rename all AXLOG/printf to AXLOGD (without .\core, .\3rdparty) by @aismann in https://github.com/axmolengine/axmol/pull/2020
+  - Set several log messages to verbose level by @rh101 in https://github.com/axmolengine/axmol/pull/2021
+  - Change AXLOGI to more appropriate AXLOGD for several log calls by @rh101 in https://github.com/axmolengine/axmol/pull/2028
 
 ### Bug Fixes
 
@@ -52,6 +56,8 @@
 - Don't output log when custom ILogOutput was set by @halx99
 - Use new logging system for audio by @halx99
 - Update DrawNodeV2 0.94 by @aismann in https://github.com/axmolengine/axmol/pull/2008
+- Ensure the RenderTexture reference is valid on threaded saveToFile task completion by @rh101 in https://github.com/axmolengine/axmol/pull/2024
+
 
 ### sdks & tools updates
 
@@ -65,6 +71,7 @@
 - fmtlib: 10.2.1 ==> 11.0.1
 - yasio: 4.2.2 ==> 4.2.3
 - oboe: 1.8.1 ==> 1.9.0
+- plainlua: 5.4.6 ==> 5.4.7
 
 ## axmol-2.1.3 May.26 2024
 
