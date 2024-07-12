@@ -368,7 +368,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
 
 GLViewImpl::~GLViewImpl()
 {
-    AXLOGI("deallocing GLViewImpl: {}", fmt::ptr(this));
+    AXLOGD("deallocing GLViewImpl: {}", fmt::ptr(this));
     GLFWEventHandler::setGLViewImpl(nullptr);
     glfwTerminate();
 }
