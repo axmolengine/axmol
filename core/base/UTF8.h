@@ -25,8 +25,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AXMOL__ccUTF8__
-#define __AXMOL__ccUTF8__
+#ifndef AXMOL__UTF8_H
+#define AXMOL__UTF8_H
 
 #include "platform/PlatformMacros.h"
 #include <vector>
