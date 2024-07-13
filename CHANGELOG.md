@@ -67,6 +67,7 @@
 
 ### 3rdparty Updates
 
+- Clipper2: 1.3.0 ==> 1.4.0
 - simdjson: 3.9.2 ==> 3.9.5
 - fmtlib: 10.2.1 ==> 11.0.1
 - yasio: 4.2.2 ==> 4.2.3
