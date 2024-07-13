@@ -59,6 +59,12 @@ const char NextCharNoChangeX = '\b';
 const char Space             = ' ';
 }  // namespace AsciiCharacters
 
+template <typename T>
+inline std::string toString(T arg)
+{
+    return fmt::to_string(arg);
+}
+
 // DEPRECATED since axmol-2.1.4, use fmt::format instead
 std::string AX_DLL format(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
 std::string AX_DLL vformat(const char* format, va_list ap);
