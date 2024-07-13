@@ -1996,7 +1996,7 @@ void PhysicsDemoPyramidStackFixedUpdate::onEnter()
             auto sp = addGrossiniAtPosition(VisibleRect::bottom() + Vec2((i / 2 - j) * 11, (14 - i) * 23 + 100), 0.2f);
             sp->getPhysicsBody()->setTag(DRAG_BODYS_TAG);
 
-            auto label = Label::createWithTTF(StringUtils::format("%d", count++), "fonts/arial.ttf", 24);
+            auto label = Label::createWithTTF(fmt::format("{}", count++), "fonts/arial.ttf", 24);
             label->setPosition(sp->getContentSize().width * 0.5f, sp->getContentSize().height * 0.5f);
             sp->addChild(label, 1);
         }

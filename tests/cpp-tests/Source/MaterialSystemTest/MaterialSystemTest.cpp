@@ -463,7 +463,7 @@ void Material_parsePerformance::parsingTesting(unsigned int count)
     Label* label        = dynamic_cast<Label*>(this->getChildByTag(SHOW_LEBAL_TAG));
     if (label)
     {
-        std::string str = StringUtils::format("Testing completed! Took: %.3f seconds for parsing material %d times.",
+        std::string str = fmt::format("Testing completed! Took: {:.3} seconds for parsing material {} times.",
                                               elapsed_secs, count);
         label->setString(str);
 

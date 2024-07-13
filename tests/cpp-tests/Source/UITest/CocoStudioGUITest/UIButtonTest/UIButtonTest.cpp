@@ -689,7 +689,7 @@ void UIButtonTestZoomScale::sliderEvent(Object* pSender, Slider::EventType type)
         Button* btn     = (Button*)_uiLayer->getChildByName("button");
         float zoomScale = percent * 0.01;
         btn->setZoomScale(zoomScale);
-        _displayValueLabel->setString(StringUtils::format("Zoom Scale: %f", zoomScale));
+        _displayValueLabel->setString(fmt::format("Zoom Scale: {}", zoomScale));
     }
 }
 

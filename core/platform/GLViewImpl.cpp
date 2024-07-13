@@ -1041,11 +1041,11 @@ void GLViewImpl::onGLFWError(int errorID, const char* errorDesc)
 {
     if (_mainWindow)
     {
-        _glfwError = StringUtils::format("GLFWError #%d Happen, %s", errorID, errorDesc);
+        _glfwError = fmt::format("GLFWError #{} Happen, {}", errorID, errorDesc);
     }
     else
     {
-        _glfwError.append(StringUtils::format("GLFWError #%d Happen, %s\n", errorID, errorDesc));
+        _glfwError.append(fmt::format("GLFWError #{} Happen, {}\n", errorID, errorDesc));
     }
     AXLOGE("{}", _glfwError);
 }

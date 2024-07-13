@@ -97,7 +97,7 @@ void UISliderTest::sliderEvent(Object* pSender, Slider::EventType type)
         Slider* slider = dynamic_cast<Slider*>(pSender);
         int percent    = slider->getPercent();
         int maxPercent = slider->getMaxPercent();
-        _displayValueLabel->setString(StringUtils::format("Percent %f", 10000.0 * percent / maxPercent));
+        _displayValueLabel->setString(fmt::format("Percent {}", 10000.0 * percent / maxPercent));
     }
 }
 void UISliderTest::printWidgetResources(ax::Object* /*sender*/)
@@ -167,7 +167,7 @@ void UISliderTest_Scale9::sliderEvent(Object* pSender, Slider::EventType type)
     {
         Slider* slider = dynamic_cast<Slider*>(pSender);
         int percent    = slider->getPercent();
-        _displayValueLabel->setString(StringUtils::format("Percent %d", percent));
+        _displayValueLabel->setString(fmt::format("Percent {}", percent));
     }
 }
 
@@ -231,7 +231,7 @@ void UISliderTest_Scale9_State_Change::sliderEvent(Object* pSender, Slider::Even
     {
         Slider* slider = dynamic_cast<Slider*>(pSender);
         int percent    = slider->getPercent();
-        _displayValueLabel->setString(StringUtils::format("Percent %d", percent));
+        _displayValueLabel->setString(fmt::format("Percent {}", percent));
     }
 }
 
@@ -426,6 +426,6 @@ void UISliderIssue12249Test::sliderEvent(Object* pSender, Slider::EventType type
         Slider* slider = dynamic_cast<Slider*>(pSender);
         int percent    = slider->getPercent();
         int maxPercent = slider->getMaxPercent();
-        _displayValueLabel->setString(StringUtils::format("Percent %f", 10000.0 * percent / maxPercent));
+        _displayValueLabel->setString(fmt::format("Percent {}", 10000.0 * percent / maxPercent));
     }
 }

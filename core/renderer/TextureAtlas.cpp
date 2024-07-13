@@ -182,7 +182,7 @@ bool TextureAtlas::initWithTexture(Texture2D* texture, ssize_t capacity)
 
 std::string TextureAtlas::getDescription() const
 {
-    return StringUtils::format("<TextureAtlas | totalQuads = %d>", static_cast<int>(_totalQuads));
+    return fmt::format("<TextureAtlas | totalQuads = {}>", static_cast<int>(_totalQuads));
 }
 
 void TextureAtlas::setupIndices()

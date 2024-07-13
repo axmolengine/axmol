@@ -49,7 +49,7 @@ TIMER_ID loop(unsigned int n, float interval, vcallback_t callback, bool bNative
 
         auto timerId = reinterpret_cast<TIMER_ID>(++TimerObject::s_timerId);
 
-        std::string key = StringUtils::format("STMR#%p", timerId);
+        std::string key = fmt::format("STMR#{}", fmt::ptr(timerId));
 
         Director::getInstance()->getScheduler()->schedule(
             [timerObj](float /*dt*/) {  // lambda expression hold the reference of timerObj automatically.
@@ -69,7 +69,7 @@ TIMER_ID delay(float delay, vcallback_t callback, bool bNative)
         yasio::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
         auto timerId = reinterpret_cast<TIMER_ID>(++TimerObject::s_timerId);
 
-        std::string key = StringUtils::format("STMR#%p", timerId);
+        std::string key = fmt::format("STMR#{}", fmt::ptr(timerId));
         Director::getInstance()->getScheduler()->schedule(
             [timerObj](float /*dt*/) {  // lambda expression hold the reference of timerObj automatically.
                 timerObj->callback_();
@@ -83,7 +83,7 @@ TIMER_ID delay(float delay, vcallback_t callback, bool bNative)
 
 void kill(TIMER_ID timerId, bool bNative)
 {
-    std::string key = StringUtils::format("STMR#%p", timerId);
+    std::string key = fmt::format("STMR#{}", fmt::ptr(timerId));
     Director::getInstance()->getScheduler()->unschedule(key, STIMER_TARGET(bNative));
 }
 

@@ -291,7 +291,7 @@ bool VibrateControlTest::init()
     vibrateItem->setPosition(layerSize.width * 0.5f, layerSize.height * 0.7f);
     addChild(vibrateItem);
 
-    auto durationLabelValue = StringUtils::format("duration: %.3fs", _duration);
+    auto durationLabelValue = fmt::format("duration: {:.3}s", _duration);
 
     auto durationLabel = Label::createWithTTF(durationLabelValue, fontFilePath, 20);
     durationLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -303,7 +303,7 @@ bool VibrateControlTest::init()
     durationSlider->setPercent(0);
     durationSlider->setCallBack([&](SliderEx* sender, float ratio, SliderEx::TouchEvent event) {
         _duration               = ratio * 1.9f + 0.1f;  // From 0.1s to 2s
-        auto durationLabelValue = StringUtils::format("duration: %.3fs", _duration);
+        auto durationLabelValue = fmt::format("duration: {:.3}s", _duration);
         (static_cast<Label*>(_durationLabel))->setString(durationLabelValue);
     });
     durationSlider->setPosition(Vec2(layerSize.width * 0.5f, layerSize.height * 0.35f));

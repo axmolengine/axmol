@@ -239,7 +239,7 @@ void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup1(RadioButton* radioBu
                                                             ax::ui::RadioButtonGroup::EventType type)
 {
     AXASSERT(index == _radioButtonGroups[0]->getSelectedButtonIndex(), "The two indexes must match!");
-    auto text = StringUtils::format("RadioButtonGroup1 : %d", index);
+    auto text = fmt::format("RadioButtonGroup1 : {}", index);
     _groupEventLabel->setString(text);
     addLog(text);
 }
@@ -249,7 +249,7 @@ void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup2(RadioButton* radioBu
                                                             ax::ui::RadioButtonGroup::EventType type)
 {
     AXASSERT(index == _radioButtonGroups[1]->getSelectedButtonIndex(), "The two indexes must match!");
-    auto text = StringUtils::format("RadioButtonGroup2 : %d", index);
+    auto text = fmt::format("RadioButtonGroup2 : {}", index);
     _groupEventLabel->setString(text);
     addLog(text);
 }
@@ -260,7 +260,7 @@ void UIRadioButtonTwoGroupsTest::onChangedRadioButtonSelect(RadioButton* radioBu
     {
         return;
     }
-    auto text = StringUtils::format("RadioButton %d : ", radioButton->getTag());
+    auto text = fmt::format("RadioButton {} : ", radioButton->getTag());
     switch (type)
     {
     case RadioButton::EventType::SELECTED:
@@ -337,8 +337,8 @@ bool UIRadioButtonTabTest::init()
         float startPosX                    = widgetSize.width / 2.0f - ((NUMBER_OF_BUTTONS - 1) / 2.0f) * buttonWidth;
         for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
         {
-            auto filePathNormal      = StringUtils::format("cocosui/btn_exercise%02d_n.png", i + 1);
-            auto filePathSelected    = StringUtils::format("cocosui/btn_exercise%02d_p.png", i + 1);
+            auto filePathNormal      = fmt::format("cocosui/btn_exercise{:02}_n.png", i + 1);
+            auto filePathSelected    = fmt::format("cocosui/btn_exercise{:02}_p.png", i + 1);
             RadioButton* radioButton = RadioButton::create(filePathNormal, filePathSelected);
             float posX               = startPosX + buttonWidth * i;
             radioButton->setPosition(Vec2(posX, widgetSize.height / 2.0f));

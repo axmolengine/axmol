@@ -76,7 +76,7 @@ TextureCache::~TextureCache()
 
 std::string TextureCache::getDescription() const
 {
-    return StringUtils::format("<TextureCache | Number of textures = %d>", static_cast<int>(_textures.size()));
+    return fmt::format("<TextureCache | Number of textures = {}>", static_cast<int>(_textures.size()));
 }
 
 struct TextureCache::AsyncStruct

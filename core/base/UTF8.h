@@ -25,8 +25,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2dx__ccUTF8__
-#define __cocos2dx__ccUTF8__
+#ifndef AXMOL__UTF8_H
+#define AXMOL__UTF8_H
 
 #include "platform/PlatformMacros.h"
 #include <vector>
@@ -60,13 +60,12 @@ const char Space             = ' ';
 }  // namespace AsciiCharacters
 
 template <typename T>
-std::string toString(T arg)
+inline std::string toString(T arg)
 {
-    std::stringstream ss;
-    ss << arg;
-    return ss.str();
+    return fmt::to_string(arg);
 }
 
+// DEPRECATED since axmol-2.1.4, use fmt::format instead
 std::string AX_DLL format(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
 std::string AX_DLL vformat(const char* format, va_list ap);
 

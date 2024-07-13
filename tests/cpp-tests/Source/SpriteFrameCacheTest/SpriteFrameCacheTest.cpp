@@ -85,7 +85,7 @@ void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file,
     const double memorySize  = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
 
-    const std::string textureInfo = StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(),
+    const std::string textureInfo = fmt::format("{}{}: {:.2} KB\r\n", infoLabel->getString(),
                                                         texture->getStringForFormat(), memorySize);
     infoLabel->setString(textureInfo);
 
@@ -493,7 +493,7 @@ void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file,
     const ssize_t bitsPerKB = 8 * 1024;
     const double memorySize = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
-    const std::string textureInfo = StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(),
+    const std::string textureInfo = fmt::format("{}{}: {:.2} KB\r\n", infoLabel->getString(),
                                                         texture->getStringForFormat(), memorySize);
     infoLabel->setString(textureInfo);
 

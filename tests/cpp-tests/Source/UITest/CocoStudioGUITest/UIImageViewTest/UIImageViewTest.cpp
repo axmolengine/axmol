@@ -208,7 +208,7 @@ bool UIImageViewTest_ContentSize::init()
                 imageView->setContentSize(Size(width, height));
 
                 imageViewChild->setPositionPercent(Vec2(AXRANDOM_0_1(), AXRANDOM_0_1()));
-                status->setString(StringUtils::format("child ImageView position percent: %f, %f",
+                status->setString(fmt::format("child ImageView position percent: {}, {}",
                                                       imageViewChild->getPositionPercent().x,
                                                       imageViewChild->getPositionPercent().y));
             }

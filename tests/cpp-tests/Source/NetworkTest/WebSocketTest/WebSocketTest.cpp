@@ -320,7 +320,7 @@ void WebSocketTest::onMenuSendMultipleTextClicked(ax::Object* sender)
         _sendTextStatus->setString("Send Multiple Text WS is waiting...");
         for (int index = 0; index < 15; ++index)
         {
-            _wsiSendText->send(StringUtils::format("Hello WebSocket, text message index:%d", index));
+            _wsiSendText->send(fmt::format("Hello WebSocket, text message index:{}", index));
         }
     }
     else
