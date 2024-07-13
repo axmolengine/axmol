@@ -139,24 +139,24 @@ bool UIEditBoxTest::init()
 
 void UIEditBoxTest::editBoxEditingDidBegin(ax::ui::EditBox* editBox)
 {
-    ax::print("editBox %p DidBegin !", editBox);
+    AXLOGD("editBox {} DidBegin !", fmt::ptr(editBox));
 }
 
 void UIEditBoxTest::editBoxEditingDidEndWithAction(ax::ui::EditBox* editBox,
                                                    ax::ui::EditBoxDelegate::EditBoxEndAction action)
 {
-    ax::print("editBox %p DidEnd with action %d!", editBox, action);
+    AXLOGD("editBox {} DidEnd with action {}!", fmt::ptr(editBox), static_cast<int>(action));
 }
 
 void UIEditBoxTest::editBoxTextChanged(ax::ui::EditBox* editBox, std::string_view text)
 {
-    ax::print("editBox %p TextChanged, text: %s ", editBox, text.data());
+    AXLOGD("editBox {} TextChanged, text: {}", fmt::ptr(editBox), text);
     editBox->setText(text.data());
 }
 
 void UIEditBoxTest::editBoxReturn(ui::EditBox* editBox)
 {
-    ax::print("editBox %p was returned !", editBox);
+    AXLOGD("editBox {} was returned !", fmt::ptr(editBox));
 
     if (_editName == editBox)
     {
@@ -272,17 +272,17 @@ bool UIEditBoxTestToggleVisibility::init()
 
 void UIEditBoxTestToggleVisibility::editBoxEditingDidBegin(ax::ui::EditBox* editBox)
 {
-    ax::print("editBox %p DidBegin !", editBox);
+    AXLOGD("editBox {} DidBegin !", fmt::ptr(editBox));
 }
 
 void UIEditBoxTestToggleVisibility::editBoxTextChanged(ax::ui::EditBox* editBox, std::string_view text)
 {
-    ax::print("editBox %p TextChanged, text: %s ", editBox, text.data());
+    AXLOGD("editBox {} TextChanged, text: {} ", fmt::ptr(editBox), text);
 }
 
 void UIEditBoxTestToggleVisibility::editBoxReturn(ui::EditBox* editBox)
 {
-    ax::print("editBox %p was returned !", editBox);
+    AXLOGD("editBox {} was returned !", fmt::ptr(editBox));
 
     if (_editName == editBox)
     {

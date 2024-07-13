@@ -54,7 +54,7 @@ bool QuestionContainerSprite::init()
             label->setColor(Color3B::BLUE);
         else
         {
-            ax::print("Color changed");
+            AXLOGD("Color changed");
             label->setColor(Color3B::RED);
         }
         a++;

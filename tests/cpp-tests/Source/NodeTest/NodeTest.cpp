@@ -421,7 +421,7 @@ SchedulerCallbackTest::SchedulerCallbackTest()
     node->schedule(
         [&](float dt) {
             _total += dt;
-            ax::print("hello world: %f - total: %f", dt, _total);
+            AXLOGD("hello world: {} - total: {}", dt, _total);
         },
         0.5, "some_key");
 
@@ -437,7 +437,7 @@ SchedulerCallbackTest::SchedulerCallbackTest()
 void SchedulerCallbackTest::onEnter()
 {
     TestCocosNodeDemo::onEnter();
-    ax::print("--onEnter-- Must be called before the scheduled lambdas");
+    AXLOGD("--onEnter-- Must be called before the scheduled lambdas");
 }
 
 std::string SchedulerCallbackTest::subtitle() const
@@ -1251,7 +1251,7 @@ void NodeNameTest::test(float dt)
     {
         sprintf(name, "node%d", i);
         auto node = parent->getChildByName(name);
-        ax::print("find child: %s", node->getName().data());
+        AXLOGD("find child: {}", node->getName());
     }
 
     // enumerateChildren()

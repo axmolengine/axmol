@@ -49,7 +49,7 @@ int check_for_error(Vec2 p1, Vec2 p2, Vec2 p3, Vec2 p4, float s, float t)
     // Since float has rounding errors, only check if diff is < 0.05
     if ((fabs(hitPoint1.x - hitPoint2.x) > 0.1f) || (fabs(hitPoint1.y - hitPoint2.y) > 0.1f))
     {
-        ax::print("ERROR: (%f,%f) != (%f,%f)", hitPoint1.x, hitPoint1.y, hitPoint2.x, hitPoint2.y);
+        AXLOGE("ERROR: ({},{}) != ({},{})", hitPoint1.x, hitPoint1.y, hitPoint2.x, hitPoint2.y);
         return 1;
     }
 
@@ -72,7 +72,7 @@ bool Bug1174Layer::init()
         //
         // Test 1.
         //
-        ax::print("Test1 - Start");
+        AXLOGD("Test1 - Start");
         for (int i = 0; i < 10000; i++)
         {
             // A | b
@@ -111,12 +111,12 @@ bool Bug1174Layer::init()
                     ok++;
             }
         }
-        ax::print("Test1 - End. OK=%i, Err=%i", ok, err);
+        AXLOGI("Test1 - End. OK={}, Err={}", ok, err);
 
         //
         // Test 2.
         //
-        ax::print("Test2 - Start");
+       AXLOGI("Test2 - Start");
 
         p1 = Vec2(220, 480);
         p2 = Vec2(304, 325);
@@ -127,12 +127,12 @@ bool Bug1174Layer::init()
         if (Vec2::isLineIntersect(p1, p2, p3, p4, &s, &t))
             check_for_error(p1, p2, p3, p4, s, t);
 
-        ax::print("Test2 - End");
+        AXLOGI("Test2 - End");
 
         //
         // Test 3
         //
-        ax::print("Test3 - Start");
+        AXLOGI("Test3 - Start");
 
         ok  = 0;
         err = 0;
@@ -179,7 +179,7 @@ bool Bug1174Layer::init()
             }
         }
 
-        ax::print("Test3 - End. OK=%i, err=%i", ok, err);
+        AXLOGI("Test3 - End. OK={}, err={}", ok, err);
         return true;
     }
 

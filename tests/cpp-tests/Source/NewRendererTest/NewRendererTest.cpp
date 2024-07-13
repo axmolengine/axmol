@@ -672,7 +672,7 @@ void CaptureScreenTest::afterCaptured(bool succeed, std::string_view outputFile)
     }
     else
     {
-        ax::print("Capture screen failed.");
+        AXLOGW("Capture screen failed.");
     }
 
     // release it since it is retained in `CaptureScreenTest::onCaptured()`

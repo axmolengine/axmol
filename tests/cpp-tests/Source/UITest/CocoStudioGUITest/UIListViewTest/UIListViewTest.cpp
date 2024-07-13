@@ -467,14 +467,14 @@ void UIListViewTest_Horizontal::selectedItemEvent(Object* pSender, ListView::Eve
     {
         ListView* listView = static_cast<ListView*>(pSender);
         auto item          = listView->getItem(listView->getCurSelectedIndex());
-        ax::print("select child start index = %d", item->getTag());
+        AXLOGD("select child start index = {}", item->getTag());
         break;
     }
     case ax::ui::ListView::EventType::ON_SELECTED_ITEM_END:
     {
         ListView* listView = static_cast<ListView*>(pSender);
         auto item          = listView->getItem(listView->getCurSelectedIndex());
-        ax::print("select child end index = %d", item->getTag());
+        AXLOGD("select child end index = {}", item->getTag());
         break;
     }
     default:
