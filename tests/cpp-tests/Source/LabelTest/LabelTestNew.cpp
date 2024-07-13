@@ -1266,7 +1266,7 @@ LabelTTFFontsTestNew::LabelTTFFontsTestNew()
         }
         else
         {
-            ax::print("ERROR: Cannot load: %s", ttfpaths[i]);
+            AXLOGE("ERROR: Cannot load: {}", ttfpaths[i]);
         }
     }
 }

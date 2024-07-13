@@ -489,7 +489,7 @@ static void printProperties(Properties* properties, int indent)
         chindent[i] = ' ';
     chindent[i] = '\0';
 
-    ax::print("%sNamespace: %s  ID: %s\n%s{", chindent, spacename, id, chindent);
+    AXLOGD("{}Namespace: {}  ID: {}\n{}{{", chindent, spacename, id, chindent);
 
     // Print all properties in this namespace.
     const char* name  = properties->getNextProperty();
@@ -497,7 +497,7 @@ static void printProperties(Properties* properties, int indent)
     while (name != NULL)
     {
         value = properties->getString(name);
-        ax::print("%s%s = %s", chindent, name, value);
+        AXLOGD("{}{} = {}", chindent, name, value);
         name = properties->getNextProperty();
     }
 
@@ -508,5 +508,5 @@ static void printProperties(Properties* properties, int indent)
         space = properties->getNextNamespace();
     }
 
-    ax::print("%s}\n", chindent);
+    AXLOGD("{}}}\n", chindent);
 }

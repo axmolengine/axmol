@@ -40,7 +40,7 @@ void LAppPal::PrintLog(const csmChar* format, ...)
     csmChar buf[256];
     va_start(args, format);
     vsnprintf(buf, sizeof(buf), format, args); // 標準出力でレンダリング
-    ax::print("%s", buf); // cocos2dのログ関数で出力
+    AXLOGD("{}", buf); // Axmolのログ関数で出力
     va_end(args);
 }
 

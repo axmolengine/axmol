@@ -127,14 +127,14 @@ void TextureDemo::onEnter()
     addChild(col, -10);
 
     auto textureCache = Director::getInstance()->getTextureCache();
-    ax::print("%s\n", textureCache->getCachedTextureInfo().c_str());
+    AXLOGD("{}\n", textureCache->getCachedTextureInfo());
 }
 
 TextureDemo::~TextureDemo()
 {
     auto textureCache = Director::getInstance()->getTextureCache();
     textureCache->removeUnusedTextures();
-    ax::print("%s\n", textureCache->getCachedTextureInfo().c_str());
+    AXLOGD("{}\n", textureCache->getCachedTextureInfo());
 }
 
 //------------------------------------------------------------------
@@ -170,7 +170,7 @@ void TextureASTC::onEnter()
     /*auto img = Sprite::create("Images/astc/astc_6x6.astc");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     this->addChild(img);*/
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TextureASTC::title() const
@@ -402,7 +402,7 @@ void TextureTGA::onEnter()
     auto img = Sprite::create("TileMaps/levelmap.tga");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     this->addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TextureTGA::title() const
@@ -424,7 +424,7 @@ void TexturePNG::onEnter()
     auto img = Sprite::create("Images/test_image.png");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 
     // Test PNG files with different pixel formats
     // grayscale without alpha
@@ -471,7 +471,7 @@ void TextureJPEG::onEnter()
     auto img = Sprite::create("Images/test_image.jpeg");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TextureJPEG::title() const
@@ -492,9 +492,9 @@ void TextureWEBP::onEnter()
     auto img = Sprite::create("Images/test_image.webp");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
     Texture2D* texture = Director::getInstance()->getTextureCache()->getTextureForKey("Images/test_image.webp");
-    ax::print("pixel format:%d, premultiplied alpha:%d\n", static_cast<int>(texture->getPixelFormat()),
+    AXLOGD("pixel format:{}, premultiplied alpha:{}\n", static_cast<int>(texture->getPixelFormat()),
         texture->hasPremultipliedAlpha());
 }
 
@@ -516,10 +516,10 @@ void TextureWEBPNoAlpha::onEnter()
     auto img = Sprite::create("Images/test_image_no_alpha.webp");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
     Texture2D* texture =
         Director::getInstance()->getTextureCache()->getTextureForKey("Images/test_image_no_alpha.webp");
-    ax::print("pixel format:%d, premultiplied alpha:%d\n", static_cast<int>(texture->getPixelFormat()),
+    AXLOGD("pixel format:{}, premultiplied alpha:{}\n", static_cast<int>(texture->getPixelFormat()),
         texture->hasPremultipliedAlpha());
 }
 
@@ -565,7 +565,7 @@ void TextureMipMap::onEnter()
 
     img0->runAction(RepeatForever::create(Sequence::create(scale1, sc_back, nullptr)));
     img1->runAction(RepeatForever::create(Sequence::create(scale2, sc_back2, nullptr)));
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TextureMipMap::title() const
@@ -618,7 +618,7 @@ void TexturePVRMipMap::onEnter()
         imgMipMap->runAction(RepeatForever::create(Sequence::create(scale1, sc_back, nullptr)));
         img->runAction(RepeatForever::create(Sequence::create(scale2, sc_back2, nullptr)));
     }
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRMipMap::title() const
@@ -662,7 +662,7 @@ void TexturePVRMipMap2::onEnter()
 
     imgMipMap->runAction(RepeatForever::create(Sequence::create(scale1, sc_back, nullptr)));
     img->runAction(RepeatForever::create(Sequence::create(scale2, sc_back2, nullptr)));
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRMipMap2::title() const
@@ -694,7 +694,7 @@ void TexturePVR2BPP::onEnter()
         img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
         addChild(img);
     }
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVR2BPP::title() const
@@ -723,9 +723,9 @@ void TexturePVRTest::onEnter()
     }
     else
     {
-        ax::print("This test is not supported.");
+        AXLOGD("This test is not supported.");
     }
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRTest::title() const
@@ -754,9 +754,9 @@ void TexturePVR4BPP::onEnter()
     }
     else
     {
-        ax::print("This test is not supported in cocos2d-mac");
+        AXLOGD("This test is not supported in axmol-mac");
     }
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVR4BPP::title() const
@@ -779,7 +779,7 @@ void TexturePVRRGBA8888::onEnter()
     auto img = Sprite::create("Images/test_image_rgba8888.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRRGBA8888::title() const
@@ -807,9 +807,9 @@ void TexturePVRBGRA8888::onEnter()
     }
     else
     {
-        ax::print("BGRA8888 images are not supported");
+        AXLOGD("BGRA8888 images are not supported");
     }
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRBGRA8888::title() const
@@ -831,7 +831,7 @@ void TexturePVRRGBA5551::onEnter()
     auto img = Sprite::create("Images/test_image_rgba5551.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRRGBA5551::title() const
@@ -854,7 +854,7 @@ void TexturePVRRGBA4444::onEnter()
     auto img = Sprite::create("Images/test_image_rgba4444.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRRGBA4444::title() const
@@ -882,7 +882,7 @@ void TexturePVRRGBA4444GZ::onEnter()
 #endif
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRRGBA4444GZ::title() const
@@ -910,7 +910,7 @@ void TexturePVRRGBA4444CCZ::onEnter()
     auto img = Sprite::create("Images/test_image_rgba4444.pvr.ccz");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRRGBA4444CCZ::title() const
@@ -938,7 +938,7 @@ void TexturePVRRGB565::onEnter()
     auto img = Sprite::create("Images/test_image_rgb565.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRRGB565::title() const
@@ -961,7 +961,7 @@ void TexturePVRRGB888::onEnter()
         addChild(img);
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 std::string TexturePVRRGB888::title() const
 {
@@ -983,7 +983,7 @@ void TexturePVRA8::onEnter()
     auto img = Sprite::create("Images/test_image_a8.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRA8::title() const
@@ -1006,7 +1006,7 @@ void TexturePVRI8::onEnter()
     auto img = Sprite::create("Images/test_image_i8.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRI8::title() const
@@ -1029,7 +1029,7 @@ void TexturePVRAI88::onEnter()
     auto img = Sprite::create("Images/test_image_ai88.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRAI88::title() const
@@ -1051,7 +1051,7 @@ void TexturePVR2BPPv3::onEnter()
         addChild(img);
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVR2BPPv3::title() const
@@ -1078,7 +1078,7 @@ void TexturePVRII2BPPv3::onEnter()
         addChild(img);
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRII2BPPv3::title() const
@@ -1106,10 +1106,10 @@ void TexturePVR4BPPv3::onEnter()
     }
     else
     {
-        ax::print("This test is not supported");
+        AXLOGD("This test is not supported");
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGD("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVR4BPPv3::title() const
@@ -1141,10 +1141,10 @@ void TexturePVRII4BPPv3::onEnter()
     }
     else
     {
-        ax::print("This test is not supported");
+        AXLOGD("This test is not supported");
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRII4BPPv3::title() const
@@ -1171,7 +1171,7 @@ void TexturePVRRGBA8888v3::onEnter()
         addChild(img);
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRRGBA8888v3::title() const
@@ -1199,10 +1199,10 @@ void TexturePVRBGRA8888v3::onEnter()
     }
     else
     {
-        ax::print("BGRA images are not supported");
+        AXLOGD("BGRA images are not supported");
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRBGRA8888v3::title() const
@@ -1229,7 +1229,7 @@ void TexturePVRRGBA5551v3::onEnter()
         addChild(img);
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRRGBA5551v3::title() const
@@ -1256,7 +1256,7 @@ void TexturePVRRGBA4444v3::onEnter()
         addChild(img);
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRRGBA4444v3::title() const
@@ -1283,7 +1283,7 @@ void TexturePVRRGB565v3::onEnter()
         addChild(img);
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRRGB565v3::title() const
@@ -1310,7 +1310,7 @@ void TexturePVRRGB888v3::onEnter()
         addChild(img);
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRRGB888v3::title() const
@@ -1337,7 +1337,7 @@ void TexturePVRA8v3::onEnter()
         addChild(img);
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRA8v3::title() const
@@ -1364,7 +1364,7 @@ void TexturePVRI8v3::onEnter()
         addChild(img);
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRI8v3::title() const
@@ -1391,7 +1391,7 @@ void TexturePVRAI88v3::onEnter()
         addChild(img);
     }
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRAI88v3::title() const
@@ -1447,7 +1447,7 @@ void TexturePVRNonSquare::onEnter()
     auto img = Sprite::create("Images/grossini_128x256_mipmap.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRNonSquare::title() const
@@ -1476,7 +1476,7 @@ void TexturePVRNPOT4444::onEnter()
         img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
         addChild(img);
     }
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRNPOT4444::title() const
@@ -1505,7 +1505,7 @@ void TexturePVRNPOT8888::onEnter()
         img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
         addChild(img);
     }
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePVRNPOT8888::title() const
@@ -1559,7 +1559,7 @@ void TextureAlias::onEnter()
 
     sprite2->runAction(scaleforever);
     sprite->runAction(scaleToo);
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TextureAlias::title() const
@@ -1656,7 +1656,7 @@ void TexturePixelFormat::onEnter()
     sprite4->runAction(seq_4ever4);
     sprite5->runAction(seq_4ever5);
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TexturePixelFormat::title() const
@@ -1788,7 +1788,7 @@ void TextureAsync::imageLoaded(Texture2D* texture)
 
     _imageOffset++;
 
-    ax::print("Image loaded: %p", texture);
+    AXLOGD("Image loaded: {}", fmt::ptr(texture));
 }
 
 std::string TextureAsync::title() const
@@ -1887,33 +1887,33 @@ void TextureSizeTest::onEnter()
     TextureDemo::onEnter();
     Sprite* sprite = nullptr;
 
-    ax::print("Loading 512x512 image...");
+    AXLOGD("Loading 512x512 image...");
     sprite = Sprite::create("Images/texture512x512.png");
     if (sprite)
-        ax::print("OK");
+        AXLOGD("OK");
     else
-        ax::print("Error");
+        AXLOGD("Error");
 
-    ax::print("Loading 1024x1024 image...");
+    AXLOGD("Loading 1024x1024 image...");
     sprite = Sprite::create("Images/texture1024x1024.png");
     if (sprite)
-        ax::print("OK");
+        AXLOGD("OK");
     else
-        ax::print("Error");
+        AXLOGD("Error");
     //     @todo
-    //     ax::print("Loading 2048x2048 image...");
+    //     AXLOGD("Loading 2048x2048 image...");
     //     sprite = Sprite::create("Images/texture2048x2048.png");
     //     if( sprite )
-    //         ax::print("OK");
+    //         AXLOGD("OK");
     //     else
-    //         ax::print("Error");
+    //         AXLOGD("Error");
     //
-    //     ax::print("Loading 4096x4096 image...");
+    //     AXLOGD("Loading 4096x4096 image...");
     //     sprite = Sprite::create("Images/texture4096x4096.png");
     //     if( sprite )
-    //         ax::print("OK");
+    //         AXLOGD("OK");
     //     else
-    //         ax::print("Error");
+    //         AXLOGD("Error");
 }
 
 std::string TextureSizeTest::title() const
@@ -2387,7 +2387,7 @@ void TextureConvertRGB888::onEnter()
     addImageToDemo(*this, 6 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 7 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGD("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TextureConvertRGB888::title() const
@@ -2418,7 +2418,7 @@ void TextureConvertRGBA8888::onEnter()
     addImageToDemo(*this, 6 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 7 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGD("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TextureConvertRGBA8888::title() const
@@ -2449,7 +2449,7 @@ void TextureConvertL8::onEnter()
     addImageToDemo(*this, 6 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 7 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGD("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TextureConvertL8::title() const
@@ -2480,7 +2480,7 @@ void TextureConvertLA8::onEnter()
     addImageToDemo(*this, 6 * s.width / 8, s.height / 2 + 32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 7 * s.width / 8, s.height / 2 - 32, img, backend::PixelFormat::RGB5A1);
 
-    ax::print("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+    AXLOGD("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
 }
 
 std::string TextureConvertLA8::title() const

@@ -1109,7 +1109,7 @@ TMXTilePropertyTestNew::TMXTilePropertyTestNew()
     {
         for (const auto& value : map->getPropertiesForGID(i).asValueMap())
         {
-            ax::print("GID:%i, Properties:%s, %s", i, value.first.c_str(), value.second.asString().c_str());
+            AXLOGI("GID:{}, Properties:{}, {}", i, value.first.c_str(), value.second.asString().c_str());
         }
     }
 }
@@ -1136,7 +1136,7 @@ TMXOrthoFlipTestNew::TMXOrthoFlipTestNew()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    ax::print("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     auto action = ScaleBy::create(2, 0.5f);
     map->runAction(action);
@@ -1159,7 +1159,7 @@ TMXOrthoFlipRunTimeTestNew::TMXOrthoFlipRunTimeTestNew()
     addChild(map, 0, kTagTileMap);
 
     auto s = map->getContentSize();
-    ax::print("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     auto action = ScaleBy::create(2, 0.5f);
     map->runAction(action);
@@ -1229,7 +1229,7 @@ TMXOrthoFromXMLTestNew::TMXOrthoFromXMLTestNew()
     addChild(map, 0, kTagTileMap);
 
     auto s = map->getContentSize();
-    ax::print("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     auto action = ScaleBy::create(2, 0.5f);
     map->runAction(action);
@@ -1255,11 +1255,11 @@ TMXOrthoXMLFormatTestNew::TMXOrthoXMLFormatTestNew()
     addChild(map, 0, kTagTileMap);
 
     auto s = map->getContentSize();
-    ax::print("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     for (int i = 24; i <= 26; i++)
     {
-        ax::print("GID:%i, Properties:%s", i, map->getPropertiesForGID(i).asValueMap()["name"].asString().c_str());
+        AXLOGD("GID:{}, Properties:{}", i, map->getPropertiesForGID(i).asValueMap()["name"].asString());
     }
 
     auto action = ScaleBy::create(2, 0.5f);
