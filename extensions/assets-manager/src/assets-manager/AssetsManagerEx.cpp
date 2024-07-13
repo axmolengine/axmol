@@ -171,7 +171,7 @@ AssetsManagerEx::AssetsManagerEx(std::string_view manifestUrl, std::string_view 
 {
     // Init variables
     _eventDispatcher    = Director::getInstance()->getEventDispatcher();
-    std::string pointer = StringUtils::format("%p", this);
+    std::string pointer = fmt::format("{}", fmt::ptr(this));
     _eventName          = EventListenerAssetsManagerEx::LISTENER_ID + pointer;
     _fileUtils          = FileUtils::getInstance();
 
@@ -765,8 +765,8 @@ void AssetsManagerEx::startUpdate()
         _totalWaitToDownload = _totalToDownload = (int)_downloadUnits.size();
         this->batchDownload();
 
-        std::string msg = StringUtils::format(
-            "Resuming from previous unfinished update, %d files remains to be finished.", _totalToDownload);
+        std::string msg = fmt::format(
+            "Resuming from previous unfinished update, {} files remains to be finished.", _totalToDownload);
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION, "", msg);
     }
     else
@@ -818,7 +818,7 @@ void AssetsManagerEx::startUpdate()
             _totalWaitToDownload = _totalToDownload = (int)_downloadUnits.size();
             this->batchDownload();
 
-            std::string msg = StringUtils::format("Start to update %d files from remote package.", _totalToDownload);
+            std::string msg = fmt::format("Start to update {} files from remote package.", _totalToDownload);
             dispatchUpdateEvent(EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION, "", msg);
         }
     }

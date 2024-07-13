@@ -125,7 +125,7 @@ void MenuItem::setCallback(const ccMenuCallback& callback)
 
 std::string MenuItem::getDescription() const
 {
-    return StringUtils::format("<MenuItem | tag = %d>", _tag);
+    return fmt::format("<MenuItem | tag = {}>", _tag);
 }
 
 //

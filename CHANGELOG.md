@@ -20,6 +20,7 @@
   - Rename all AXLOG/printf to AXLOGD (without .\core, .\3rdparty) by @aismann in https://github.com/axmolengine/axmol/pull/2020
   - Set several log messages to verbose level by @rh101 in https://github.com/axmolengine/axmol/pull/2021
   - Change AXLOGI to more appropriate AXLOGD for several log calls by @rh101 in https://github.com/axmolengine/axmol/pull/2028
+- `StringUtils::format`, use `fmt::format` instead.
 
 ### Bug Fixes
 

@@ -288,7 +288,7 @@ struct DownloaderTest : public TestCase
                 else
                 {
                     // download big file success
-                    auto msg    = StringUtils::format("Download [%s] success.", task.identifier.c_str());
+                    auto msg    = fmt::format("Download [{}] success.", task.identifier);
                     auto status = (Label*)view->getChildByTag(TAG_STATUS);
                     status->setString(msg);
                 }

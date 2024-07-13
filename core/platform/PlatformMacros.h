@@ -297,7 +297,7 @@ public:                                                             \
 #define __AXLOGWITHFUNCTION(s, ...) \
     ax::print("%s : %s", __FUNCTION__, ax::StringUtils::format(s, ##__VA_ARGS__).c_str())
 
-/// @name Cocos2d debug, deprecated since axmol 2.1.4, use AXLOGD, AXLOGI, AXLOGW, ... instead
+/// @name legacy log macros, deprecated since axmol 2.1.4, use AXLOGD, AXLOGI, AXLOGW, ... instead
 /// @{
 #if !defined(_AX_DEBUG) || _AX_DEBUG == 0
 #    define AXLOG(...) \

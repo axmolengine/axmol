@@ -109,7 +109,7 @@ void CurlTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
         curl_easy_cleanup(curl);
         if (res == 0)
         {
-            _label->setString(StringUtils::format("Connect successfully!\n%s", chunk.memory));
+            _label->setString(fmt::format("Connect successfully!\n{}", chunk.memory));
         }
         else
         {

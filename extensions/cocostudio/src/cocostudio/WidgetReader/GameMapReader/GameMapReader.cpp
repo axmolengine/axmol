@@ -218,7 +218,7 @@ Node* GameMapReader::createNodeWithFlatBuffers(const flatbuffers::Table* gameMap
             Node* node = Node::create();
             setPropsWithFlatBuffers(node, (Table*)gameMapOptions);
             auto label = Label::create();
-            label->setString(StringUtils::format("Some error of gid are in TMX Layer '%s'", layerName.c_str()));
+            label->setString(fmt::format("Some error of gid are in TMX Layer '{}'", layerName));
             node->setScale(1.0f);
             node->addChild(label);
             return node;

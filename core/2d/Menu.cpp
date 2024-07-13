@@ -555,7 +555,7 @@ bool Menu::isOpacityModifyRGB() const
 
 std::string Menu::getDescription() const
 {
-    return StringUtils::format("<Menu | Tag = %d>", _tag);
+    return fmt::format("<Menu | Tag = {}>", _tag);
 }
 
 NS_AX_END
