@@ -115,11 +115,11 @@ public:
             _view->onGLFWMouseMoveCallBack(window, x, y);
     }
 #if defined(__EMSCRIPTEN__)
-    static int onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent, void* /*userData*/)
+    static EM_BOOL onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent, void* /*userData*/)
     {
         if (_view)
             _view->onWebTouchCallback(eventType, touchEvent);
-        return 0;
+        return EM_FALSE;
     }
 #endif
 
