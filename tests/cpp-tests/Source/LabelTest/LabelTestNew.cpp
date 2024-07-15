@@ -1266,7 +1266,7 @@ LabelTTFFontsTestNew::LabelTTFFontsTestNew()
         }
         else
         {
-            ax::print("ERROR: Cannot load: %s", ttfpaths[i]);
+            AXLOGE("ERROR: Cannot load: {}", ttfpaths[i]);
         }
     }
 }
@@ -2501,7 +2501,7 @@ void LabelLayoutBaseTest::valueChanged(ax::Object* sender, ax::extension::Contro
     // Change value of label.
     auto fontSizeLabel = (Label*)this->getChildByName("fontSize");
     float fontSize     = (float)pControl->getValue();
-    fontSizeLabel->setString(StringUtils::format("font size:%d", (int)fontSize));
+    fontSizeLabel->setString(fmt::format("font size:{}", (int)fontSize));
 
     if (_labelType == 0)
     {
@@ -2590,8 +2590,8 @@ LabelWrapNoBreakSpaceTest::LabelWrapNoBreakSpaceTest()
 {
     _label->setLineBreakWithoutSpace(false);
     const char* no_break_space_utf8 = "\xC2\xA0";  // 0xA0 - no-break space
-    auto str                        = StringUtils::format(
-        "The price is $%s1.25. \n\nthe space between \"$\" and \"1.25\" is a no break space.", no_break_space_utf8);
+    auto str                        = fmt::format(
+        "The price is ${}1.25. \n\nthe space between \"$\" and \"1.25\" is a no break space.", no_break_space_utf8);
     _label->setString(str);
     _label->setVerticalAlignment(TextVAlignment::TOP);
     _label->setOverflow(Label::Overflow::CLAMP);

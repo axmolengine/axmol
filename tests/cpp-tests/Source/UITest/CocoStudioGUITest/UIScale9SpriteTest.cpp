@@ -214,7 +214,7 @@ bool UIScale9SpriteTouchTest::init()
 
             if (rect.containsPoint(locationInNode))
             {
-                ax::print("sprite began... x = %f, y = %f", locationInNode.x, locationInNode.y);
+                AXLOGD("sprite began... x = {}, y = {}", locationInNode.x, locationInNode.y);
                 target->setOpacity(180);
                 return true;
             }
@@ -228,7 +228,7 @@ bool UIScale9SpriteTouchTest::init()
 
         listener1->onTouchEnded = [=](Touch* touch, Event* event) {
             auto target = static_cast<ui::Scale9Sprite*>(event->getCurrentTarget());
-            ax::print("sprite onTouchesEnded.. ");
+            AXLOGD("sprite onTouchesEnded.. ");
             target->setOpacity(255);
             if (target == sprite2)
             {

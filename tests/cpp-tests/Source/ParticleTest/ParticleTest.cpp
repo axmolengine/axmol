@@ -2377,7 +2377,7 @@ void ParticleBatchHybrid::switchRender(float dt)
     auto newParent = (usingBatch ? _parent2 : _parent1);
     newParent->addChild(_emitter);
 
-    ax::print("Particle: Using new parent: %s", usingBatch ? "CCNode" : "CCParticleBatchNode");
+    AXLOGD("Particle: Using new parent: {}", usingBatch ? "Node" : "ParticleBatchNode");
 }
 
 std::string ParticleBatchHybrid::title() const

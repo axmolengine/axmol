@@ -873,7 +873,7 @@ MeshRendererHitTest::MeshRendererHitTest()
         Rect rect = target->getBoundingBox();
         if (rect.containsPoint(touch->getLocation()))
         {
-            ax::print("mesh3d began... x = %f, y = %f", touch->getLocation().x, touch->getLocation().y);
+            AXLOGD("mesh3d began... x = {}, y = {}", touch->getLocation().x, touch->getLocation().y);
             target->setOpacity(100);
             return true;
         }
@@ -887,7 +887,7 @@ MeshRendererHitTest::MeshRendererHitTest()
 
     listener1->onTouchEnded = [=](Touch* touch, Event* event) {
         auto target = static_cast<MeshRenderer*>(event->getCurrentTarget());
-        ax::print("mesh3d onTouchesEnded.. ");
+        AXLOGD("mesh3d onTouchesEnded.. ");
         target->setOpacity(255);
     };
 
@@ -2445,7 +2445,7 @@ Animate3DCallbackTest::Animate3DCallbackTest()
                 ((PUParticleSystem3D*)node)->startParticleSystem();
             }
 
-            ax::print("frame %d", info->frame);
+            AXLOGD("frame {}", info->frame);
         });
         Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, -1);
     }
@@ -2765,7 +2765,7 @@ void MeshRendererPropertyTest::printMeshName(ax::Object* sender)
     Vector<Mesh*> meshes = _mesh->getMeshes();
     for (Mesh* mesh : meshes)
     {
-        ax::print("MeshName: %s ", mesh->getName().data());
+        AXLOGI("MeshName: {} ", mesh->getName());
     }
     AXLOGD("MeshName End");
 }
@@ -2819,7 +2819,7 @@ Issue16155Test::Issue16155Test()
     addChild(mesh);
     removeChild(mesh);
 
-    ax::print("Issue 16155: Object count:%d. Run this test again. RC should be the same", rcBefore);
+    AXLOGI("Issue 16155: Object count:{}. Run this test again. RC should be the same", rcBefore);
 }
 
 std::string Issue16155Test::title() const

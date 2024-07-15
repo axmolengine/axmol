@@ -336,7 +336,7 @@ void LayerGradient::setCompressedInterpolation(bool compress)
 
 std::string LayerGradient::getDescription() const
 {
-    return StringUtils::format("<LayerGradient | Tag = %d>", _tag);
+    return fmt::format("<LayerGradient | Tag = {}>", _tag);
 }
 
 /**
@@ -750,7 +750,7 @@ void LayerMultiplex::switchToAndReleaseMe(int n)
 
 std::string LayerMultiplex::getDescription() const
 {
-    return StringUtils::format("<LayerMultiplex | Tag = %d, Layers = %d", _tag, static_cast<int>(_children.size()));
+    return fmt::format("<LayerMultiplex | Tag = {}, Layers = {}", _tag, static_cast<int>(_children.size()));
 }
 
 NS_AX_END

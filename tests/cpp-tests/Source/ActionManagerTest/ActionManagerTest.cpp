@@ -361,8 +361,8 @@ std::string StopActionsByFlagsTest::subtitle() const
 class SpriteIssue14050 : public Sprite
 {
 public:
-    SpriteIssue14050() { ax::print("SpriteIssue14050::constructor"); }
-    virtual ~SpriteIssue14050() { ax::print("SpriteIssue14050::destructor"); }
+    SpriteIssue14050() { AXLOGD("SpriteIssue14050::constructor"); }
+    virtual ~SpriteIssue14050() { AXLOGD("SpriteIssue14050::destructor"); }
 };
 
 void Issue14050Test::onEnter()

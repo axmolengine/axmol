@@ -53,7 +53,7 @@ void ConfigurationLoadConfig::onEnter()
 
     Configuration::getInstance()->loadConfigFile("configs/config-test-ok.plist");
     std::string config = Configuration::getInstance()->getInfo();
-    ax::print("%s\n", config.c_str());
+    AXLOGD("{}\n", config);
 }
 
 std::string ConfigurationLoadConfig::subtitle() const
@@ -70,8 +70,8 @@ void ConfigurationQuery::onEnter()
 {
     ConfigurationBase::onEnter();
 
-    ax::print("cocos2d version: %s", Configuration::getInstance()->getValue("axmol.version").asString().c_str());
-    ax::print("OpenGL version: %s", Configuration::getInstance()->getValue("gl.version").asString().c_str());
+    AXLOGD("axmol version: %s", Configuration::getInstance()->getValue("axmol.version").asString());
+    AXLOGD("OpenGL version: %s", Configuration::getInstance()->getValue("gl.version").asString());
 }
 
 std::string ConfigurationQuery::subtitle() const
@@ -107,21 +107,21 @@ void ConfigurationDefault::onEnter()
 
     std::string c_value = Configuration::getInstance()->getValue("invalid.key", Value("no key")).asString();
     if (c_value != "no key")
-        ax::print("1. Test failed!");
+        AXLOGD("1. Test failed!");
     else
-        ax::print("1. Test OK!");
+        AXLOGD("1. Test OK!");
 
     bool b_value = Configuration::getInstance()->getValue("invalid.key", Value(true)).asBool();
     if (!b_value)
-        ax::print("2. Test failed!");
+        AXLOGD("2. Test failed!");
     else
-        ax::print("2. Test OK!");
+        AXLOGD("2. Test OK!");
 
     double d_value = Configuration::getInstance()->getValue("invalid.key", Value(42.42)).asDouble();
     if (d_value != 42.42)
-        ax::print("3. Test failed!");
+        AXLOGD("3. Test failed!");
     else
-        ax::print("3. Test OK!");
+        AXLOGD("3. Test OK!");
 }
 
 std::string ConfigurationDefault::subtitle() const
@@ -145,7 +145,7 @@ void ConfigurationSet::onEnter()
     conf->setValue("this.is.a.string.value", Value("hello world"));
 
     auto str = conf->getInfo();
-    ax::print("%s\n", str.c_str());
+    AXLOGD("{}\n", str);
 }
 
 std::string ConfigurationSet::subtitle() const

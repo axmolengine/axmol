@@ -288,7 +288,7 @@ struct DownloaderTest : public TestCase
                 else
                 {
                     // download big file success
-                    auto msg    = StringUtils::format("Download [%s] success.", task.identifier.c_str());
+                    auto msg    = fmt::format("Download [{}] success.", task.identifier);
                     auto status = (Label*)view->getChildByTag(TAG_STATUS);
                     status->setString(msg);
                 }
@@ -303,8 +303,8 @@ struct DownloaderTest : public TestCase
         // define failed callback
         downloader->onTaskError = [this](const ax::network::DownloadTask& task, int errorCode,
                                          int errorCodeInternal, std::string_view errorStr) {
-            ax::print("Failed to download : %s, identifier(%s) error code(%d), internal error code(%d) desc(%s)",
-                task.requestURL.c_str(), task.identifier.c_str(), errorCode, errorCodeInternal, errorStr.data());
+            AXLOGW("Failed to download : {}, identifier({}) error code({}), internal error code({}) desc({})",
+                task.requestURL, task.identifier, errorCode, errorCodeInternal, errorStr);
             auto view   = this->getChildByName(task.identifier);
             auto status = (Label*)view->getChildByTag(TAG_STATUS);
             status->setString(errorStr.length() ? errorStr : "Download failed.");
@@ -342,17 +342,17 @@ struct DownloaderMultiTask : public TestCase
         {
             sprintf(name, "%d_%s", i, sNameList[0]);
             sprintf(path, "%sCppTests/DownloaderTest/%s", FileUtils::getInstance()->getWritablePath().c_str(), name);
-            ax::print("downloader task create: %s", name);
+            AXLOGI("downloader task create: {}", name);
             this->downloader->createDownloadFileTask(sURLList[0], path, name);
         }
 
         downloader->onFileTaskSuccess =
-            ([](const network::DownloadTask& task) { ax::print("downloader task success: %s", task.identifier.c_str()); });
+            ([](const network::DownloadTask& task) { AXLOGI("downloader task success: {}", task.identifier); });
 
         downloader->onTaskError =
             ([](const network::DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorStr) {
-                ax::print("downloader task failed : %s, identifier(%s) error code(%d), internal error code(%d) desc(%s)",
-                    task.requestURL.c_str(), task.identifier.c_str(), errorCode, errorCodeInternal, errorStr.data());
+                AXLOGI("downloader task failed : {}, identifier({}) error code({}), internal error code({}) desc({})",
+                    task.requestURL, task.identifier, errorCode, errorCodeInternal, errorStr);
             });
     }
 };

@@ -962,7 +962,7 @@ void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid
 
 std::string FastTMXLayer::getDescription() const
 {
-    return StringUtils::format("<FastTMXLayer | tag = %d, size = %d,%d>", _tag, (int)_mapTileSize.width,
+    return fmt::format("<FastTMXLayer | tag = {}, size = {},{}>", _tag, (int)_mapTileSize.width,
                                (int)_mapTileSize.height);
 }
 

@@ -937,8 +937,8 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
                 }
             });
 #    if _AX_DEBUG > 0
-            auto prompt = StringUtils::format(
-                    "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
+            std::string prompt = fmt::format(
+                    "{}{}{}{}{}{}{}{}{}{}", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
                     ") and the reader build id in your axmol(", loader->_csBuildID.c_str(),
                     ") are not match.\n", "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
                     "https://github.com/axmolengine/axmol", " and replace it in your axmol");
@@ -1057,9 +1057,9 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
             }
         });
 #    if _AX_DEBUG > 0
-        auto prompt = StringUtils::format(
+        auto prompt = fmt::format(
                 "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
-                ") and the reader build id in your axmol(", _csBuildID.c_str(), ") are not match.\n",
+                ") and the reader build id in your axmol(", _csBuildID, ") are not match.\n",
                 "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
                 "https://github.com/axmolengine/axmol", " and replace it in your axmol");
         AXASSERT(readerVersion >= writterVersion, prompt.c_str());
@@ -1067,8 +1067,8 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
         if (readerVersion < writterVersion)
         {
             auto exceptionMsg =
-                StringUtils::format("error: The csloader version not match, require version is:%s, but %s provided!",
-                                    csBuildId->c_str(), _csBuildID.c_str());
+                fmt::format("error: The csloader version not match, require version is:{}, but {} provided!",
+                                    csBuildId->c_str(), _csBuildID);
             throw std::logic_error(exceptionMsg.c_str());
             return nullptr;
         }
@@ -1169,17 +1169,17 @@ Node* CSLoader::nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree, const
             }
             else
             {
-                auto exceptionMsg = StringUtils::format(
-                    R"(error: Missing custom reader class name:%s, please config at your project fiile xxx.xsxproj like follow:
+                auto exceptionMsg = fmt::format(
+                    R"(error: Missing custom reader class name:{}, please config at your project fiile xxx.xsxproj like follow:
     <Project>
       <publish-opts>
          <custom-readers>
-           <item>%s</item>
+           <item>{}</item>
          </custom-readers>
       </publish-opts>
     </Project>
 )",
-                    readername.c_str(), readername.c_str());
+                    readername, readername);
                 throw std::logic_error(exceptionMsg.c_str());
             }
 

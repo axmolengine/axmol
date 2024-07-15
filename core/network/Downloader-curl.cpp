@@ -940,8 +940,8 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task, int checkState)
                 coTask._errCode         = DownloadTask::ERROR_CHECK_SUM_FAILED;
                 coTask._errCodeInternal = 0;
                 coTask._errDescription =
-                    StringUtils::format("Check file: %s md5 failed, required:%s, real:%s", coTask._fileName.c_str(),
-                                        task.checksum.c_str(), realMd5.c_str());
+                    fmt::format("Check file: {} md5 failed, required:{}, real:{}", coTask._fileName,
+                                        task.checksum, realMd5);
 
                 pFileUtils->removeFile(coTask._checksumFileName);
                 pFileUtils->removeFile(coTask._tempFileName);

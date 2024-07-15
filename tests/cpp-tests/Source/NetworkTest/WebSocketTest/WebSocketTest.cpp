@@ -191,7 +191,7 @@ void WebSocketTest::onOpen(network::WebSocket* ws)
     char status[256] = {0};
     sprintf(status, "Opened, url: %s, protocol: %s", ws->getUrl().data(), ws->getProtocol().data());
 
-    ax::print("Websocket (%p) was opened, url: %s, protocol: %s", ws, ws->getUrl().data(), ws->getProtocol().data());
+    AXLOGI("Websocket ({}) was opened, url: {}, protocol: {}", fmt::ptr(ws), ws->getUrl(), ws->getProtocol());
     if (ws == _wsiSendText)
     {
         _sendTextStatus->setString(status);
@@ -213,9 +213,9 @@ void WebSocketTest::onMessage(network::WebSocket* ws, const network::WebSocket::
         _sendTextTimes++;
         std::string textStr = fmt::format(FMT_COMPILE("#{} response text msg: {}"), _sendTextTimes,
                                           std::string_view{data.bytes, static_cast<size_t>(data.len)});
-        ax::print("%s", textStr.c_str());
+        AXLOGI("{}", textStr);
 
-        _sendTextStatus->setString(textStr.c_str());
+        _sendTextStatus->setString(textStr);
     }
     else
     {
@@ -238,14 +238,14 @@ void WebSocketTest::onMessage(network::WebSocket* ws, const network::WebSocket::
         }
 
         binaryStr += std::string(", ") + times;
-        ax::print("%s", binaryStr.c_str());
+        AXLOGD("{}", binaryStr);
         _sendBinaryStatus->setString(binaryStr.c_str());
     }
 }
 
 void WebSocketTest::onClose(network::WebSocket* ws)
 {
-    ax::print("onClose: websocket instance (%p) closed.", ws);
+    AXLOGD("onClose: websocket instance ({}) closed.", fmt::ptr(ws));
     if (ws == _wsiSendText)
     {
         // _wsiSendText = nullptr;
@@ -263,15 +263,15 @@ void WebSocketTest::onClose(network::WebSocket* ws)
     }
     // Delete websocket instance.
     // AX_SAFE_DELETE(ws);
-    ax::print("WebSocketTest ref: %u", _referenceCount);
+    AXLOGD("WebSocketTest ref: {}", _referenceCount);
     release();
 }
 
 void WebSocketTest::onError(network::WebSocket* ws, const network::WebSocket::ErrorCode& error)
 {
-    ax::print("Error was fired, error code: %d", static_cast<int>(error));
+    AXLOGD("Error was fired, error code: {}", static_cast<int>(error));
     char buf[100] = {0};
-    sprintf(buf, "An error was fired, code: %d", static_cast<int>(error));
+    sprintf(buf, "An error was fired, code: {}", static_cast<int>(error));
 
     if (ws == _wsiSendText)
     {
@@ -303,7 +303,7 @@ void WebSocketTest::onMenuSendTextClicked(ax::Object* sender)
     else
     {
         std::string warningStr = "send text websocket instance wasn't ready...";
-        ax::print("%s", warningStr.c_str());
+        AXLOGD("{}", warningStr);
         _sendTextStatus->setString(warningStr.c_str());
     }
 }
@@ -320,13 +320,13 @@ void WebSocketTest::onMenuSendMultipleTextClicked(ax::Object* sender)
         _sendTextStatus->setString("Send Multiple Text WS is waiting...");
         for (int index = 0; index < 15; ++index)
         {
-            _wsiSendText->send(StringUtils::format("Hello WebSocket, text message index:%d", index));
+            _wsiSendText->send(fmt::format("Hello WebSocket, text message index:{}", index));
         }
     }
     else
     {
         std::string warningStr = "send text websocket instance wasn't ready...";
-        ax::print("%s", warningStr.c_str());
+        AXLOGD("{}", warningStr);
         _sendTextStatus->setString(warningStr.c_str());
     }
 }
@@ -347,8 +347,8 @@ void WebSocketTest::onMenuSendBinaryClicked(ax::Object* sender)
     else
     {
         std::string warningStr = "send binary websocket instance wasn't ready...";
-        ax::print("%s", warningStr.c_str());
-        _sendBinaryStatus->setString(warningStr.c_str());
+        AXLOGD("{}", warningStr);
+        _sendBinaryStatus->setString(warningStr);
     }
 }
 
@@ -394,17 +394,17 @@ WebSocketCloseTest::~WebSocketCloseTest()
 // Delegate methods
 void WebSocketCloseTest::onOpen(network::WebSocket* ws)
 {
-    ax::print("Websocket (%p) opened", ws);
+    AXLOGD("Websocket ({}) opened", fmt::ptr(ws));
 }
 
 void WebSocketCloseTest::onMessage(network::WebSocket* ws, const network::WebSocket::Data& data)
 {
-    ax::print("Websocket get message from %p", ws);
+    AXLOGD("Websocket get message from {}", fmt::ptr(ws));
 }
 
 void WebSocketCloseTest::onClose(network::WebSocket* ws)
 {
-    ax::print("websocket (%p) closed.", ws);
+    AXLOGD("websocket ({}) closed.", fmt::ptr(ws));
     // if (ws == _wsiTest) {
     //     _wsiTest = nullptr;
     // }
@@ -413,7 +413,7 @@ void WebSocketCloseTest::onClose(network::WebSocket* ws)
 
 void WebSocketCloseTest::onError(network::WebSocket* ws, const network::WebSocket::ErrorCode& error)
 {
-    ax::print("Error was fired, error code: %d", static_cast<int>(error));
+    AXLOGD("Error was fired, error code: {}", static_cast<int>(error));
 }
 
 #define SEND_TEXT_TIMES 100
@@ -521,9 +521,9 @@ void WebSocketDelayTest::doReceiveText()
 void WebSocketDelayTest::onOpen(network::WebSocket* ws)
 {
     char status[256] = {0};
-    sprintf(status, "Opened, url: %s, protocol: %s", ws->getUrl().data(), ws->getProtocol().data());
+    sprintf(status, "Opened, url: {}, protocol: {}", ws->getUrl(), ws->getProtocol());
 
-    ax::print("Websocket (%p) was opened, url: %s, protocol: %s", ws, ws->getUrl().data(), ws->getProtocol().data());
+    AXLOGD("Websocket ({}) was opened, url: {}, protocol: {}", fmt::ptr(ws), ws->getUrl(), ws->getProtocol());
     if (ws == _wsiSendText)
     {
         _sendTextStatus->setString(status);
@@ -538,7 +538,7 @@ void WebSocketDelayTest::onMessage(network::WebSocket* ws, const network::WebSoc
         char times[100] = {0};
         sprintf(times, "%d", _receiveTextTimes);
         std::string textStr = std::string("response text msg: ") + data.bytes + ", " + times;
-        ax::print("%s", textStr.c_str());
+        AXLOGD("{}", textStr);
         doReceiveText();
         memset(times, 0, 100);
         snprintf(times, 100, "total delay %f seconds", (float)(_totalDelayMircoSec / 1000000.0));
@@ -548,20 +548,20 @@ void WebSocketDelayTest::onMessage(network::WebSocket* ws, const network::WebSoc
 
 void WebSocketDelayTest::onClose(network::WebSocket* ws)
 {
-    ax::print("onClose: websocket instance (%p) closed.", ws);
+    AXLOGD("onClose: websocket instance ({}) closed.", fmt::ptr(ws));
     if (ws == _wsiSendText)
     {
         // delete _wsiSendText;
         // _wsiSendText = nullptr;
         _sendTextStatus->setString("Send Text WS was closed");
     }
-    ax::print("WebSocketDelayTest ref: %u", _referenceCount);
+    AXLOGD("WebSocketDelayTest ref: {}", _referenceCount);
     release();
 }
 
 void WebSocketDelayTest::onError(network::WebSocket* ws, const network::WebSocket::ErrorCode& error)
 {
-    ax::print("Error was fired, error code: %d", static_cast<int>(error));
+    AXLOGD("Error was fired, error code: {}", static_cast<int>(error));
     char buf[100] = {0};
     sprintf(buf, "An error was fired, code: %d", static_cast<int>(error));
 
@@ -591,7 +591,7 @@ void WebSocketDelayTest::onMenuSendTextClicked(ax::Object* sender)
     else
     {
         std::string warningStr = "send text websocket instance wasn't ready...";
-        ax::print("%s", warningStr.c_str());
-        _sendTextStatus->setString(warningStr.c_str());
+        AXLOGD("{}", warningStr);
+        _sendTextStatus->setString(warningStr);
     }
 }

@@ -144,15 +144,15 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Object* sender)
                     std::string str;
                     if (assetId == AssetsManagerEx::VERSION_ID)
                     {
-                        str = StringUtils::format("Version file: %.2f", percent) + "%";
+                        str = fmt::format("Version file: {:.2}%", percent);
                     }
                     else if (assetId == AssetsManagerEx::MANIFEST_ID)
                     {
-                        str = StringUtils::format("Manifest file: %.2f", percent) + "%";
+                        str = fmt::format("Manifest file: {:.2}%", percent);
                     }
                     else
                     {
-                        str = StringUtils::format("%.2f", percent) + "%";
+                        str = fmt::format("{:.2}%", percent);
                         AXLOGD("{:.2} Percent", percent);
                     }
                     if (this->_progress != nullptr)

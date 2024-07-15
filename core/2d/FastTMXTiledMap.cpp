@@ -260,7 +260,7 @@ Value FastTMXTiledMap::getPropertiesForGID(int GID) const
 
 std::string FastTMXTiledMap::getDescription() const
 {
-    return StringUtils::format("<FastTMXTiledMap | Tag = %d, Layers = %d", _tag, static_cast<int>(_children.size()));
+    return fmt::format("<FastTMXTiledMap | Tag = {}, Layers = {}", _tag, static_cast<int>(_children.size()));
 }
 
 void FastTMXTiledMap::setTileAnimEnabled(bool enabled)

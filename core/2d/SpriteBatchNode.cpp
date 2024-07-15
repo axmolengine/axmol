@@ -784,7 +784,7 @@ SpriteBatchNode* SpriteBatchNode::addSpriteWithoutQuad(Sprite* child, int z, int
 
 std::string SpriteBatchNode::getDescription() const
 {
-    return StringUtils::format("<SpriteBatchNode | tag = %d>", _tag);
+    return fmt::format("<SpriteBatchNode | tag = {}>", _tag);
 }
 
 NS_AX_END
