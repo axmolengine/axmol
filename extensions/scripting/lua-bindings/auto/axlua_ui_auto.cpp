@@ -267,7 +267,7 @@ int lua_ax_ui_LayoutParameter_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_LayoutParameter_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (LayoutParameter)");
+    AXLOGV("luabindings: finalizing LUA object (LayoutParameter)");
     return 0;
 }
 
@@ -460,7 +460,7 @@ int lua_ax_ui_LinearLayoutParameter_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_LinearLayoutParameter_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (LinearLayoutParameter)");
+    AXLOGV("luabindings: finalizing LUA object (LinearLayoutParameter)");
     return 0;
 }
 
@@ -845,7 +845,7 @@ int lua_ax_ui_RelativeLayoutParameter_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_RelativeLayoutParameter_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RelativeLayoutParameter)");
+    AXLOGV("luabindings: finalizing LUA object (RelativeLayoutParameter)");
     return 0;
 }
 
@@ -4139,7 +4139,7 @@ int lua_ax_ui_Widget_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_Widget_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Widget)");
+    AXLOGV("luabindings: finalizing LUA object (Widget)");
     return 0;
 }
 
@@ -5997,7 +5997,7 @@ int lua_ax_ui_Layout_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_Layout_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Layout)");
+    AXLOGV("luabindings: finalizing LUA object (Layout)");
     return 0;
 }
 
@@ -8279,7 +8279,7 @@ int lua_ax_ui_Button_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_Button_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Button)");
+    AXLOGV("luabindings: finalizing LUA object (Button)");
     return 0;
 }
 
@@ -9521,7 +9521,7 @@ int lua_ax_ui_AbstractCheckButton_init(lua_State* tolua_S)
 }
 static int lua_ax_ui_AbstractCheckButton_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (AbstractCheckButton)");
+    AXLOGV("luabindings: finalizing LUA object (AbstractCheckButton)");
     return 0;
 }
 
@@ -9806,7 +9806,7 @@ int lua_ax_ui_CheckBox_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_CheckBox_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (CheckBox)");
+    AXLOGV("luabindings: finalizing LUA object (CheckBox)");
     return 0;
 }
 
@@ -10074,7 +10074,7 @@ int lua_ax_ui_RadioButton_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_RadioButton_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RadioButton)");
+    AXLOGV("luabindings: finalizing LUA object (RadioButton)");
     return 0;
 }
 
@@ -10720,7 +10720,7 @@ int lua_ax_ui_RadioButtonGroup_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_RadioButtonGroup_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RadioButtonGroup)");
+    AXLOGV("luabindings: finalizing LUA object (RadioButtonGroup)");
     return 0;
 }
 
@@ -11406,7 +11406,7 @@ int lua_ax_ui_ImageView_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_ImageView_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ImageView)");
+    AXLOGV("luabindings: finalizing LUA object (ImageView)");
     return 0;
 }
 
@@ -13275,7 +13275,7 @@ int lua_ax_ui_Text_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_Text_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Text)");
+    AXLOGV("luabindings: finalizing LUA object (Text)");
     return 0;
 }
 
@@ -13759,7 +13759,7 @@ int lua_ax_ui_TextAtlas_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_TextAtlas_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TextAtlas)");
+    AXLOGV("luabindings: finalizing LUA object (TextAtlas)");
     return 0;
 }
 
@@ -14456,7 +14456,7 @@ int lua_ax_ui_LoadingBar_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_LoadingBar_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (LoadingBar)");
+    AXLOGV("luabindings: finalizing LUA object (LoadingBar)");
     return 0;
 }
 
@@ -17806,7 +17806,7 @@ int lua_ax_ui_ScrollView_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_ScrollView_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ScrollView)");
+    AXLOGV("luabindings: finalizing LUA object (ScrollView)");
     return 0;
 }
 
@@ -19997,7 +19997,7 @@ int lua_ax_ui_ListView_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_ListView_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ListView)");
+    AXLOGV("luabindings: finalizing LUA object (ListView)");
     return 0;
 }
 
@@ -21798,7 +21798,7 @@ int lua_ax_ui_Slider_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_Slider_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Slider)");
+    AXLOGV("luabindings: finalizing LUA object (Slider)");
     return 0;
 }
 
@@ -24168,7 +24168,7 @@ int lua_ax_ui_TextField_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_TextField_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TextField)");
+    AXLOGV("luabindings: finalizing LUA object (TextField)");
     return 0;
 }
 
@@ -24642,7 +24642,7 @@ int lua_ax_ui_TextBMFont_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_TextBMFont_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TextBMFont)");
+    AXLOGV("luabindings: finalizing LUA object (TextBMFont)");
     return 0;
 }
 
@@ -26284,7 +26284,7 @@ int lua_ax_ui_PageView_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_PageView_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PageView)");
+    AXLOGV("luabindings: finalizing LUA object (PageView)");
     return 0;
 }
 
@@ -26636,7 +26636,7 @@ int lua_ax_ui_Helper_convertBoundingBoxToScreen(lua_State* tolua_S)
 }
 static int lua_ax_ui_Helper_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Helper)");
+    AXLOGV("luabindings: finalizing LUA object (Helper)");
     return 0;
 }
 
@@ -26819,7 +26819,7 @@ int lua_ax_ui_RichElement_setColor(lua_State* tolua_S)
 }
 static int lua_ax_ui_RichElement_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RichElement)");
+    AXLOGV("luabindings: finalizing LUA object (RichElement)");
     return 0;
 }
 
@@ -27621,7 +27621,7 @@ int lua_ax_ui_RichElementText_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_RichElementText_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RichElementText)");
+    AXLOGV("luabindings: finalizing LUA object (RichElementText)");
     return 0;
 }
 
@@ -28287,7 +28287,7 @@ int lua_ax_ui_RichElementImage_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_RichElementImage_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RichElementImage)");
+    AXLOGV("luabindings: finalizing LUA object (RichElementImage)");
     return 0;
 }
 
@@ -28501,7 +28501,7 @@ int lua_ax_ui_RichElementCustomNode_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_RichElementCustomNode_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RichElementCustomNode)");
+    AXLOGV("luabindings: finalizing LUA object (RichElementCustomNode)");
     return 0;
 }
 
@@ -28640,7 +28640,7 @@ int lua_ax_ui_RichElementNewLine_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_RichElementNewLine_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RichElementNewLine)");
+    AXLOGV("luabindings: finalizing LUA object (RichElementNewLine)");
     return 0;
 }
 
@@ -31332,7 +31332,7 @@ int lua_ax_ui_RichText_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_RichText_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RichText)");
+    AXLOGV("luabindings: finalizing LUA object (RichText)");
     return 0;
 }
 
@@ -31535,7 +31535,7 @@ int lua_ax_ui_HBox_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_HBox_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (HBox)");
+    AXLOGV("luabindings: finalizing LUA object (HBox)");
     return 0;
 }
 
@@ -31689,7 +31689,7 @@ int lua_ax_ui_VBox_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_VBox_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (VBox)");
+    AXLOGV("luabindings: finalizing LUA object (VBox)");
     return 0;
 }
 
@@ -31843,7 +31843,7 @@ int lua_ax_ui_RelativeBox_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_RelativeBox_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RelativeBox)");
+    AXLOGV("luabindings: finalizing LUA object (RelativeBox)");
     return 0;
 }
 
@@ -33634,7 +33634,7 @@ int lua_ax_ui_Scale9Sprite_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_Scale9Sprite_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Scale9Sprite)");
+    AXLOGV("luabindings: finalizing LUA object (Scale9Sprite)");
     return 0;
 }
 
@@ -36589,7 +36589,7 @@ int lua_ax_ui_EditBox_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_EditBox_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EditBox)");
+    AXLOGV("luabindings: finalizing LUA object (EditBox)");
     return 0;
 }
 
@@ -39145,7 +39145,7 @@ int lua_ax_ui_LayoutComponent_constructor(lua_State* tolua_S)
 
 static int lua_ax_ui_LayoutComponent_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (LayoutComponent)");
+    AXLOGV("luabindings: finalizing LUA object (LayoutComponent)");
     return 0;
 }
 
@@ -39830,7 +39830,7 @@ int lua_ax_ui_TabHeader_create(lua_State* tolua_S)
 }
 static int lua_ax_ui_TabHeader_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TabHeader)");
+    AXLOGV("luabindings: finalizing LUA object (TabHeader)");
     return 0;
 }
 
@@ -40838,7 +40838,7 @@ int lua_ax_ui_TabControl_create(lua_State* tolua_S)
 }
 static int lua_ax_ui_TabControl_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TabControl)");
+    AXLOGV("luabindings: finalizing LUA object (TabControl)");
     return 0;
 }
 

@@ -2377,7 +2377,7 @@ void ParticleBatchHybrid::switchRender(float dt)
     auto newParent = (usingBatch ? _parent2 : _parent1);
     newParent->addChild(_emitter);
 
-    ax::print("Particle: Using new parent: %s", usingBatch ? "CCNode" : "CCParticleBatchNode");
+    AXLOGD("Particle: Using new parent: {}", usingBatch ? "Node" : "ParticleBatchNode");
 }
 
 std::string ParticleBatchHybrid::title() const
@@ -2789,7 +2789,7 @@ void AddAndDeleteParticleSystems::removeSystem(float dt)
     ssize_t nChildrenCount = _batchNode->getChildren().size();
     if (nChildrenCount > 0)
     {
-        AXLOG("remove random system");
+        AXLOGD("remove random system");
         unsigned int uRand = rand() % (nChildrenCount - 1);
         _batchNode->removeChild(_batchNode->getChildren().at(uRand), true);
 
@@ -2801,7 +2801,7 @@ void AddAndDeleteParticleSystems::removeSystem(float dt)
 
         particleSystem->setPosition(Vec2(rand() % 300, rand() % 400));
 
-        AXLOG("add a new system");
+        AXLOGD("add a new system");
         unsigned int randZ = rand() % 100;
         _batchNode->addChild(particleSystem, randZ, -1);
     }

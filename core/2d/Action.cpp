@@ -47,7 +47,7 @@ Action::~Action()
 
 std::string Action::description() const
 {
-    return StringUtils::format("<Action | Tag = %d", _tag);
+    return fmt::format("<Action | Tag = {}", _tag);
 }
 
 void Action::startWithTarget(Node* aTarget)

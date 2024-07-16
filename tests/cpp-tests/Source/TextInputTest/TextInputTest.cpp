@@ -67,7 +67,7 @@ KeyboardNotificationLayer::KeyboardNotificationLayer() : _trackNode(0)
 
 void KeyboardNotificationLayer::keyboardWillShow(IMEKeyboardNotificationInfo& info)
 {
-    AXLOG("TextInputTest:keyboardWillShowAt(origin:%f,%f, size:%f,%f)", info.end.origin.x, info.end.origin.y,
+    AXLOGD("TextInputTest:keyboardWillShowAt(origin:{},{}, size:{},{})", info.end.origin.x, info.end.origin.y,
           info.end.size.width, info.end.size.height);
 
     if (!_trackNode)
@@ -76,7 +76,7 @@ void KeyboardNotificationLayer::keyboardWillShow(IMEKeyboardNotificationInfo& in
     }
 
     auto rectTracked = getRect(_trackNode);
-    AXLOG("TextInputTest:trackingNodeAt(origin:%f,%f, size:%f,%f)", rectTracked.origin.x, rectTracked.origin.y,
+    AXLOGD("TextInputTest:trackingNodeAt(origin:{},{}, size:{},{})", rectTracked.origin.x, rectTracked.origin.y,
           rectTracked.size.width, rectTracked.size.height);
 
     // if the keyboard area doesn't intersect with the tracking node area, nothing need to do.
@@ -87,7 +87,7 @@ void KeyboardNotificationLayer::keyboardWillShow(IMEKeyboardNotificationInfo& in
 
     // assume keyboard at the bottom of screen, calculate the vertical adjustment.
     float adjustVert = info.end.getMaxY() - rectTracked.getMinY();
-    AXLOG("TextInputTest:needAdjustVerticalPosition(%f)", adjustVert);
+    AXLOGD("TextInputTest:needAdjustVerticalPosition({})", adjustVert);
 
     // move all the children node of KeyboardNotificationLayer
     auto& children = getChildren();
@@ -107,7 +107,7 @@ void KeyboardNotificationLayer::keyboardWillShow(IMEKeyboardNotificationInfo& in
 
 bool KeyboardNotificationLayer::onTouchBegan(Touch* touch, Event* event)
 {
-    AXLOG("++++++++++++++++++++++++++++++++++++++++++++");
+    AXLOGD("++++++++++++++++++++++++++++++++++++++++++++");
     _beginPos = touch->getLocation();
     return true;
 }
@@ -135,7 +135,7 @@ void KeyboardNotificationLayer::onTouchEnded(Touch* touch, Event* event)
     auto clicked =
         isScreenPointInRect(endPos, Camera::getVisitingCamera(), _trackNode->getWorldToNodeTransform(), rect, nullptr);
     this->onClickTrackNode(clicked, endPos);
-    AXLOG("----------------------------------");
+    AXLOGD("----------------------------------");
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -153,13 +153,13 @@ void TextFieldTTFDefaultTest::onClickTrackNode(bool bClicked, const Vec2& touchP
     if (bClicked)
     {
         // TextFieldTTFTest be clicked
-        AXLOG("TextFieldTTFDefaultTest:TextFieldTTF attachWithIME");
+        AXLOGD("TextFieldTTFDefaultTest:TextFieldTTF attachWithIME");
         pTextField->attachWithIME();
     }
     else
     {
         // TextFieldTTFTest not be clicked
-        AXLOG("TextFieldTTFDefaultTest:TextFieldTTF detachWithIME");
+        AXLOGD("TextFieldTTFDefaultTest:TextFieldTTF detachWithIME");
         pTextField->detachWithIME();
     }
 }
@@ -200,13 +200,13 @@ void TextFieldTTFActionTest::onClickTrackNode(bool bClicked, const Vec2& touchPo
     if (bClicked)
     {
         // TextFieldTTFTest be clicked
-        AXLOG("TextFieldTTFActionTest:TextFieldTTF attachWithIME");
+        AXLOGD("TextFieldTTFActionTest:TextFieldTTF attachWithIME");
         pTextField->attachWithIME();
     }
     else
     {
         // TextFieldTTFTest not be clicked
-        AXLOG("TextFieldTTFActionTest:TextFieldTTF detachWithIME");
+        AXLOGD("TextFieldTTFActionTest:TextFieldTTF detachWithIME");
         pTextField->detachWithIME();
     }
 }
@@ -394,7 +394,7 @@ void TextFieldTTSetCursorFromPoint::onClickTrackNode(bool bClicked, const Vec2& 
     if (bClicked)
     {
         // TextFieldTTFTest be clicked
-        AXLOG("TextFieldTTSetCursorFromPoint:TextFieldTTF attachWithIME");
+        AXLOGD("TextFieldTTSetCursorFromPoint:TextFieldTTF attachWithIME");
         pTextField->attachWithIME();
 
         // Set new position cursor
@@ -403,7 +403,7 @@ void TextFieldTTSetCursorFromPoint::onClickTrackNode(bool bClicked, const Vec2& 
     else
     {
         // TextFieldTTFTest not be clicked
-        AXLOG("TextFieldTTSetCursorFromPoint:TextFieldTTF detachWithIME");
+        AXLOGD("TextFieldTTSetCursorFromPoint:TextFieldTTF detachWithIME");
         pTextField->detachWithIME();
     }
 }

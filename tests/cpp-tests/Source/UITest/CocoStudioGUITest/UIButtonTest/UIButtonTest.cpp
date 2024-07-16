@@ -78,7 +78,7 @@ bool UIButtonTest::init()
 
         // Create the button
         Button* button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
-        AXLOG("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
+        AXLOGD("content size should be greater than 0:  width = {}, height = {}", button->getContentSize().width,
               button->getContentSize().height);
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest::touchEvent, this));
@@ -150,11 +150,11 @@ void UIButtonTest::touchEvent(Object* pSender, Widget::TouchEventType type)
 void UIButtonTest::printWidgetResources(ax::Object* sender)
 {
     ax::ResourceData normalFileName = _button->getNormalFile();
-    AXLOG("normalFileName  Name : %s, Type: %d", normalFileName.file.c_str(), normalFileName.type);
+    AXLOGD("normalFileName  Name : {}, Type: {}", normalFileName.file, normalFileName.type);
     ax::ResourceData clickedFileName = _button->getPressedFile();
-    AXLOG("clickedFileName  Name : %s, Type: %d", clickedFileName.file.c_str(), clickedFileName.type);
+    AXLOGD("clickedFileName  Name : {}, Type: {}", clickedFileName.file, clickedFileName.type);
     ax::ResourceData disabledFileName = _button->getDisabledFile();
-    AXLOG("disabledFileName  Name : %s, Type: %d", disabledFileName.file.c_str(), disabledFileName.type);
+    AXLOGD("disabledFileName  Name : {}, Type: {}", disabledFileName.file, disabledFileName.type);
 }
 
 // UIButtonTest_Scale9
@@ -661,7 +661,7 @@ bool UIButtonTestZoomScale::init()
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f + 20));
         button->setPressedActionEnabled(true);
         button->addClickEventListener([=](Object* sender) {
-            AXLOG("Button clicked, position = (%f, %f)", button->getPosition().x, button->getPosition().y);
+            AXLOGD("Button clicked, position = ({}, {})", button->getPosition().x, button->getPosition().y);
         });
         button->setName("button");
         _uiLayer->addChild(button);
@@ -689,7 +689,7 @@ void UIButtonTestZoomScale::sliderEvent(Object* pSender, Slider::EventType type)
         Button* btn     = (Button*)_uiLayer->getChildByName("button");
         float zoomScale = percent * 0.01;
         btn->setZoomScale(zoomScale);
-        _displayValueLabel->setString(StringUtils::format("Zoom Scale: %f", zoomScale));
+        _displayValueLabel->setString(fmt::format("Zoom Scale: {}", zoomScale));
     }
 }
 
@@ -715,11 +715,11 @@ bool UIButtonTextOnly::init()
         button->setPositionNormalized(Vec2(0.5f, 0.5f));
 
         button->setTitleText("PLAY GAME");
-        AXLOG("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
+        AXLOGD("content size should be greater than 0:  width = {}, height = {}", button->getContentSize().width,
               button->getContentSize().height);
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);
-        button->addClickEventListener([](Object* sender) { AXLOG("clicked!"); });
+        button->addClickEventListener([](Object* sender) { AXLOGD("clicked!"); });
         _uiLayer->addChild(button);
 
         return true;
@@ -753,7 +753,7 @@ bool UIButtonIgnoreContentSizeTest::init()
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);
         button->addClickEventListener([=](Object* sender) {
-            AXLOG("clicked!");
+            AXLOGD("clicked!");
             button->setScale(1.2f);
         });
         _uiLayer->addChild(button);
@@ -768,7 +768,7 @@ bool UIButtonIgnoreContentSizeTest::init()
         button2->setPressedActionEnabled(true);
         button2->addClickEventListener([=](Object* sender) {
             button2->runAction(ScaleTo::create(1.0f, 1.2f));
-            AXLOG("clicked!");
+            AXLOGD("clicked!");
         });
         _uiLayer->addChild(button2);
 

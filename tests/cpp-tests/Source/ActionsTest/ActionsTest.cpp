@@ -673,7 +673,7 @@ void ActionAnimate::onEnter()
     _frameDisplayedListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [](EventCustom* event) {
         auto userData = static_cast<AnimationFrame::DisplayedEventInfo*>(event->getUserData());
 
-        ax::print("target %p with data %s", userData->target, Value(userData->userInfo).getDescription().c_str());
+        AXLOGD("target {} with data {}", fmt::ptr(userData->target), Value(userData->userInfo).getDescription());
     });
 
     _eventDispatcher->addEventListenerWithFixedPriority(_frameDisplayedListener, -1);
@@ -930,7 +930,7 @@ void ActionCallFunction::callback2(Node* sender)
 
     addChild(label);
 
-    AXLOG("sender is: %p", sender);
+    AXLOGD("sender is: {}", fmt::ptr(sender));
 }
 
 void ActionCallFunction::callback3(Node* sender, int32_t data)
@@ -940,7 +940,7 @@ void ActionCallFunction::callback3(Node* sender, int32_t data)
     label->setPosition(s.width / 4 * 3, s.height / 2);
     addChild(label);
 
-    AXLOG("target is: %p, data is: %d", sender, data);
+    AXLOGD("target is: {}, data is: {}", fmt::ptr(sender), data);
 }
 
 std::string ActionCallFunction::subtitle() const
@@ -1664,7 +1664,7 @@ void Issue1305::onEnter()
 
 void Issue1305::print(Node* sender)
 {
-    ax::print("This message SHALL ONLY appear when the sprite is added to the scene, NOT BEFORE");
+    AXLOGI("This message SHALL ONLY appear when the sprite is added to the scene, NOT BEFORE");
 }
 
 void Issue1305::onExit()
@@ -1728,22 +1728,22 @@ void Issue1305_2::onEnter()
 
 void Issue1305_2::printLog1()
 {
-    ax::print("1st block");
+    AXLOGD("1st block");
 }
 
 void Issue1305_2::printLog2()
 {
-    ax::print("2nd block");
+    AXLOGD("2nd block");
 }
 
 void Issue1305_2::printLog3()
 {
-    ax::print("3rd block");
+    AXLOGD("3rd block");
 }
 
 void Issue1305_2::printLog4()
 {
-    ax::print("4th block");
+    AXLOGD("4th block");
 }
 
 std::string Issue1305_2::title() const
@@ -1841,14 +1841,14 @@ std::string Issue1327::subtitle() const
 
 void Issue1327::logSprRotation(Sprite* sender)
 {
-    ax::print("%f", sender->getRotation());
+    AXLOGD("{}", sender->getRotation());
 }
 
 // Issue1398
 void Issue1398::incrementInteger()
 {
     _testInteger++;
-    ax::print("incremented to %d", _testInteger);
+    AXLOGD("incremented to {}", _testInteger);
 }
 
 void Issue1398::onEnter()
@@ -1857,7 +1857,7 @@ void Issue1398::onEnter()
     this->centerSprites(0);
 
     _testInteger = 0;
-    ax::print("testInt = %d", _testInteger);
+    AXLOGD("testInt = {}", _testInteger);
 
     this->runAction(
         Sequence::create(CallFunc::create(std::bind(&Issue1398::incrementIntegerCallback, this, (void*)"1")),
@@ -1873,7 +1873,7 @@ void Issue1398::onEnter()
 void Issue1398::incrementIntegerCallback(void* data)
 {
     this->incrementInteger();
-    ax::print("%s", (char*)data);
+    AXLOGD("{}", (char*)data);
 }
 
 std::string Issue1398::subtitle() const
@@ -1892,14 +1892,14 @@ void Issue2599::onEnter()
     this->centerSprites(0);
 
     _count = 0;
-    ax::print("before: count = %d", _count);
+    AXLOGD("before: count = {}", _count);
 
-    ax::print("start count up 50 times using Repeat action");
+    AXLOGD("start count up 50 times using Repeat action");
     auto delay        = 1.0f / 50;
     auto repeatAction = Repeat::create(
         Sequence::createWithTwoActions(CallFunc::create([&]() { this->_count++; }), DelayTime::create(delay)), 50);
     this->runAction(Sequence::createWithTwoActions(
-        repeatAction, CallFunc::create([&]() { ax::print("after: count = %d", this->_count); })));
+        repeatAction, CallFunc::create([&]() { AXLOGD("after: count = {}", this->_count); })));
 }
 
 std::string Issue2599::subtitle() const
@@ -2080,7 +2080,7 @@ void PauseResumeActions::onEnter()
 
     this->schedule(
         [&](float dt) {
-        ax::print("Pausing");
+        AXLOGD("Pausing");
         auto director = Director::getInstance();
 
         _pausedTargets = director->getActionManager()->pauseAllRunningActions();
@@ -2089,7 +2089,7 @@ void PauseResumeActions::onEnter()
 
     this->schedule(
         [&](float dt) {
-        ax::print("Resuming");
+        AXLOGD("Resuming");
         auto director = Director::getInstance();
         director->getActionManager()->resumeTargets(_pausedTargets);
         _pausedTargets.clear();
@@ -2313,7 +2313,7 @@ void SequenceWithFinalInstant::onEnter()
 
     bool called(false);
     const auto f([&called]() -> void {
-        ax::print("Callback called.");
+        AXLOGD("Callback called.");
         called = true;
     });
 
@@ -2433,7 +2433,7 @@ void ActionCoroutineTest::onEnter()
 
     auto s = Director::getInstance()->getWinSize();
     _label =
-        Label::createWithTTF(StringUtils::format("frame count : %" PRIu64 ")", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+        Label::createWithTTF(fmt::format("frame count : {}", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     _label->setPosition(s.width / 2, s.height / 2 + 100);
     addChild(_label, 1, 1);
 
@@ -2443,7 +2443,7 @@ void ActionCoroutineTest::onEnter()
 void ActionCoroutineTest::update(float delta)
 {
     _frameCount++;
-    _label->setString(StringUtils::format("frame count : %" PRIu64 "", _frameCount));
+    _label->setString(fmt::format("frame count : {}", _frameCount));
 }
 
 std::string ActionCoroutineTest::title() const
@@ -2461,19 +2461,19 @@ Coroutine ActionCoroutineTest::coroutineCallback()
     auto s = Director::getInstance()->getWinSize();
 
     auto label1 =
-        Label::createWithTTF(StringUtils::format("First (%" PRIu64 ")", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+        Label::createWithTTF(fmt::format("First ({})", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     label1->setPosition(s.width / 4 * 1, s.height / 2);
     addChild(label1);
     co_yield DelayTime::create(3.0f);  // delay 3s
 
     auto label2 =
-        Label::createWithTTF(StringUtils::format("after 3sec (%" PRIu64 ")", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+        Label::createWithTTF(fmt::format("after 3sec ({})", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     label2->setPosition(s.width / 4 * 2, s.height / 2);
     addChild(label2);
     co_yield nullptr;  // next frame
 
     auto label3 =
-        Label::createWithTTF(StringUtils::format("next frame (%" PRIu64 ")", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+        Label::createWithTTF(fmt::format("next frame ({})", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     label3->setPosition(s.width / 4 * 3, s.height / 2);
     addChild(label3);
 

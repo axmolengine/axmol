@@ -108,7 +108,7 @@ UIPackage* UIPackage::addPackage(const string& assetPath)
 
     if (FileUtils::getInstance()->getContents(assetPath + ".fui", &data) != FileUtils::Status::OK)
     {
-        AXLOGERROR("FairyGUI: cannot load package from '%s'", assetPath.c_str());
+        AXLOGE("FairyGUI: cannot load package from '{}'", assetPath);
         return nullptr;
     }
 
@@ -151,7 +151,7 @@ void UIPackage::removePackage(const string& packageIdOrName)
         pkg->release();
     }
     else
-        AXLOGERROR("FairyGUI: invalid package name or id: %s", packageIdOrName.c_str());
+        AXLOGE("FairyGUI: invalid package name or id: {}", packageIdOrName);
 }
 
 void UIPackage::removeAllPackages()
@@ -171,7 +171,7 @@ GObject* UIPackage::createObject(const string& pkgName, const string& resName)
         return pkg->createObject(resName);
     else
     {
-        AXLOGERROR("FairyGUI: package not found - %s", pkgName.c_str());
+        AXLOGE("FairyGUI: package not found - {}", pkgName);
         return nullptr;
     }
 }
@@ -183,7 +183,7 @@ GObject* UIPackage::createObjectFromURL(const string& url)
         return pi->owner->createObject(pi);
     else
     {
-        AXLOGERROR("FairyGUI: resource not found - %s", url.c_str());
+        AXLOGE("FairyGUI: resource not found - {}", url);
         return nullptr;
     }
 }
@@ -310,8 +310,8 @@ GObject* UIPackage::createObject(const string& resName)
 {
     PackageItem* pi = getItemByName(resName);
 #    if _AX_DEBUG > 0
-    auto msg =  StringUtils::format("FairyGUI: resource not found - %s in  %s",
-                                    resName.c_str(), _name.c_str());
+    auto msg =  fmt::format("FairyGUI: resource not found - {} in  {}",
+                                    resName, _name);
     AXASSERT(pi, msg.c_str());
 #    endif
     return createObject(pi);
@@ -333,7 +333,7 @@ bool UIPackage::loadPackage(ByteBuffer* buffer)
 {
     if (buffer->readUint() != 0x46475549)
     {
-        AXLOGERROR("FairyGUI: old package format found in '%s'", _assetPath.c_str());
+        AXLOGE("FairyGUI: old package format found in '{}'", _assetPath);
         return false;
     }
 
@@ -614,7 +614,7 @@ void UIPackage::loadAtlas(PackageItem* item)
 #if COCOS2D_VERSION < 0x00031702
         Image::setPNGPremultipliedAlphaEnabled(true);
 #endif
-        AXLOGWARN("FairyGUI: texture '%s' not found in %s", item->file.c_str(), _name.c_str());
+        AXLOGW("FairyGUI: texture '{}' not found in {}", item->file, _name);
         return;
     }
 #if COCOS2D_VERSION < 0x00031702

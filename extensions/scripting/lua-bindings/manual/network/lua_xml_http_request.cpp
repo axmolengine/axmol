@@ -212,14 +212,14 @@ void LuaMinXmlHttpRequest::_sendRequest()
             auto tag = response->getHttpRequest()->getTag();
             if (!tag.empty())
             {
-                AXLOG("%s completed", tag.data());
+                AXLOGD("{} completed", tag);
             }
 
             int statusCode = response->getResponseCode();
 
             if (!response->isSucceed())
             {
-                AXLOG("Response failed, statusCode: %d", statusCode);
+                AXLOGD("Response failed, statusCode: {}", statusCode);
                 if (statusCode == 0)
                 {
                     _errorFlag = true;
@@ -232,7 +232,7 @@ void LuaMinXmlHttpRequest::_sendRequest()
 
                 if (0 != handler)
                 {
-                    AXLOG("come in handler, handler is %d", handler);
+                    AXLOGD("come in handler, handler is {}", handler);
                     ax::CommonScriptData data(handler, "");
                     ax::ScriptEvent event(ax::ScriptEventType::kCommonEvent, (void*)&data);
                     ax::ScriptEngineManager::sendEventToLua(event);

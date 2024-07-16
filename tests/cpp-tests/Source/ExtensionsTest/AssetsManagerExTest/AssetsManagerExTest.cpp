@@ -97,7 +97,7 @@ bool AssetsManagerExLoaderScene::init()
 
     std::string manifestPath = sceneManifests[_testIndex],
                 storagePath  = FileUtils::getInstance()->getWritablePath() + storagePaths[_testIndex];
-    AXLOG("Storage path for this test : %s", storagePath.c_str());
+    AXLOGD("Storage path for this test : {}", storagePath);
     _am = AssetsManagerEx::create(manifestPath, storagePath);
     _am->retain();
 
@@ -121,7 +121,7 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Object* sender)
 
     if (!_am->getLocalManifest()->isLoaded())
     {
-        AXLOG("Fail to update assets, step skipped.");
+        AXLOGD("Fail to update assets, step skipped.");
         onLoadEnd();
     }
     else
@@ -133,7 +133,7 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Object* sender)
                 {
                 case EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST:
                 {
-                    AXLOG("No local manifest file found, skip assets update.");
+                    AXLOGD("No local manifest file found, skip assets update.");
                     this->onLoadEnd();
                 }
                 break;
@@ -144,16 +144,16 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Object* sender)
                     std::string str;
                     if (assetId == AssetsManagerEx::VERSION_ID)
                     {
-                        str = StringUtils::format("Version file: %.2f", percent) + "%";
+                        str = fmt::format("Version file: {:.2}%", percent);
                     }
                     else if (assetId == AssetsManagerEx::MANIFEST_ID)
                     {
-                        str = StringUtils::format("Manifest file: %.2f", percent) + "%";
+                        str = fmt::format("Manifest file: {:.2}%", percent);
                     }
                     else
                     {
-                        str = StringUtils::format("%.2f", percent) + "%";
-                        AXLOG("%.2f Percent", percent);
+                        str = fmt::format("{:.2}%", percent);
+                        AXLOGD("{:.2} Percent", percent);
                     }
                     if (this->_progress != nullptr)
                         this->_progress->setString(str);
@@ -162,20 +162,20 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Object* sender)
                 case EventAssetsManagerEx::EventCode::ERROR_DOWNLOAD_MANIFEST:
                 case EventAssetsManagerEx::EventCode::ERROR_PARSE_MANIFEST:
                 {
-                    AXLOG("Fail to download manifest file, update skipped.");
+                    AXLOGD("Fail to download manifest file, update skipped.");
                     this->onLoadEnd();
                 }
                 break;
                 case EventAssetsManagerEx::EventCode::ALREADY_UP_TO_DATE:
                 case EventAssetsManagerEx::EventCode::UPDATE_FINISHED:
                 {
-                    AXLOG("Update finished. %s", event->getMessage().c_str());
+                    AXLOGD("Update finished. {}", event->getMessage());
                     this->onLoadEnd();
                 }
                 break;
                 case EventAssetsManagerEx::EventCode::UPDATE_FAILED:
                 {
-                    AXLOG("Update failed. %s", event->getMessage().c_str());
+                    AXLOGD("Update failed. {}", event->getMessage());
 
                     failCount++;
                     if (failCount < 5)
@@ -184,7 +184,7 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Object* sender)
                     }
                     else
                     {
-                        AXLOG("Reach maximum fail count, exit update process");
+                        AXLOGD("Reach maximum fail count, exit update process");
                         failCount = 0;
                         this->onLoadEnd();
                     }
@@ -192,12 +192,12 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Object* sender)
                 break;
                 case EventAssetsManagerEx::EventCode::ERROR_UPDATING:
                 {
-                    AXLOG("Asset %s : %s", event->getAssetId().c_str(), event->getMessage().c_str());
+                    AXLOGD("Asset {} : {}", event->getAssetId().c_str(), event->getMessage());
                 }
                 break;
                 case EventAssetsManagerEx::EventCode::ERROR_DECOMPRESS:
                 {
-                    AXLOG("%s", event->getMessage().c_str());
+                    AXLOGD("{}", event->getMessage());
                 }
                 break;
                 default:

@@ -111,7 +111,7 @@ void PUMaterialCache::addMaterial(PUMaterial* material)
     {
         if (iter->name == material->name)
         {
-            AXLOG("warning: Material has existed (FilePath: %s,  MaterialName: %s)", material->fileName.c_str(),
+            AXLOGD("warning: Material has existed (FilePath: {},  MaterialName: {})", material->fileName,
                   material->name.c_str());
             return;
         }
@@ -187,7 +187,7 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
 
     if (!(d = opendir(fileFolder.data())))
     {
-        AXLOG("error opendir %s!!!\n", fileFolder.data());
+        AXLOGD("error opendir {}!!!\n", fileFolder);
         return false;
     }
     while ((file = readdir(d)) != NULL)
@@ -201,7 +201,7 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
         {
             std::string fullpath{fileFolder};
             fullpath.append("/"sv).append(file->d_name);
-            AXLOG("%s", fullpath.c_str());
+            AXLOGD("{}", fullpath);
             loadMaterials(fullpath);
             state = true;
         }

@@ -66,7 +66,7 @@ TextureCache::TextureCache() : _loadingThread(nullptr), _needQuit(false), _async
 
 TextureCache::~TextureCache()
 {
-    AXLOGI("deallocing TextureCache: {}", fmt::ptr(this));
+    AXLOGD("deallocing TextureCache: {}", fmt::ptr(this));
 
     for (auto&& texture : _textures)
         texture.second->release();
@@ -76,7 +76,7 @@ TextureCache::~TextureCache()
 
 std::string TextureCache::getDescription() const
 {
-    return StringUtils::format("<TextureCache | Number of textures = %d>", static_cast<int>(_textures.size()));
+    return fmt::format("<TextureCache | Number of textures = {}>", static_cast<int>(_textures.size()));
 }
 
 struct TextureCache::AsyncStruct

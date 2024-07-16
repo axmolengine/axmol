@@ -246,7 +246,7 @@ int lua_ax_3d_Animation3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_3d_Animation3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Animation3D)");
+    AXLOGV("luabindings: finalizing LUA object (Animation3D)");
     return 0;
 }
 
@@ -1100,7 +1100,7 @@ int lua_ax_3d_Animate3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_3d_Animate3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Animate3D)");
+    AXLOGV("luabindings: finalizing LUA object (Animate3D)");
     return 0;
 }
 
@@ -1410,7 +1410,7 @@ int lua_ax_3d_TextureCube_constructor(lua_State* tolua_S)
 
 static int lua_ax_3d_TextureCube_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TextureCube)");
+    AXLOGV("luabindings: finalizing LUA object (TextureCube)");
     return 0;
 }
 
@@ -1508,7 +1508,7 @@ int lua_ax_3d_AttachNode_constructor(lua_State* tolua_S)
 
 static int lua_ax_3d_AttachNode_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (AttachNode)");
+    AXLOGV("luabindings: finalizing LUA object (AttachNode)");
     return 0;
 }
 
@@ -1823,7 +1823,7 @@ int lua_ax_3d_BillBoard_constructor(lua_State* tolua_S)
 
 static int lua_ax_3d_BillBoard_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (BillBoard)");
+    AXLOGV("luabindings: finalizing LUA object (BillBoard)");
     return 0;
 }
 
@@ -3103,7 +3103,7 @@ int lua_ax_3d_Mesh_constructor(lua_State* tolua_S)
 
 static int lua_ax_3d_Mesh_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Mesh)");
+    AXLOGV("luabindings: finalizing LUA object (Mesh)");
     return 0;
 }
 
@@ -3622,7 +3622,7 @@ int lua_ax_3d_Skeleton3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_3d_Skeleton3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Skeleton3D)");
+    AXLOGV("luabindings: finalizing LUA object (Skeleton3D)");
     return 0;
 }
 
@@ -3910,7 +3910,7 @@ int lua_ax_3d_Skybox_constructor(lua_State* tolua_S)
 
 static int lua_ax_3d_Skybox_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Skybox)");
+    AXLOGV("luabindings: finalizing LUA object (Skybox)");
     return 0;
 }
 
@@ -4169,7 +4169,7 @@ int lua_ax_3d_MeshMaterial_releaseCachedMaterial(lua_State* tolua_S)
 }
 static int lua_ax_3d_MeshMaterial_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MeshMaterial)");
+    AXLOGV("luabindings: finalizing LUA object (MeshMaterial)");
     return 0;
 }
 
@@ -5759,7 +5759,7 @@ int lua_ax_3d_MeshRenderer_create(lua_State* tolua_S)
 }
 static int lua_ax_3d_MeshRenderer_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MeshRenderer)");
+    AXLOGV("luabindings: finalizing LUA object (MeshRenderer)");
     return 0;
 }
 
@@ -6008,7 +6008,7 @@ int lua_ax_3d_MeshRendererCache_constructor(lua_State* tolua_S)
 
 static int lua_ax_3d_MeshRendererCache_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MeshRendererCache)");
+    AXLOGV("luabindings: finalizing LUA object (MeshRendererCache)");
     return 0;
 }
 
@@ -7168,7 +7168,7 @@ int lua_ax_3d_Terrain_constructor(lua_State* tolua_S)
 
 static int lua_ax_3d_Terrain_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Terrain)");
+    AXLOGV("luabindings: finalizing LUA object (Terrain)");
     return 0;
 }
 
@@ -7696,7 +7696,7 @@ int lua_ax_3d_Bundle3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_3d_Bundle3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Bundle3D)");
+    AXLOGV("luabindings: finalizing LUA object (Bundle3D)");
     return 0;
 }
 

@@ -186,7 +186,7 @@ void TouchableSpriteTest::onEnter()
 
         if (rect.containsPoint(locationInNode))
         {
-            ax::print("sprite began... x = %f, y = %f", locationInNode.x, locationInNode.y);
+            AXLOGD("sprite began... x = {}, y = {}", locationInNode.x, locationInNode.y);
             target->setOpacity(180);
             return true;
         }
@@ -200,7 +200,7 @@ void TouchableSpriteTest::onEnter()
 
     listener1->onTouchEnded = [=](Touch* touch, Event* event) {
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        ax::print("sprite onTouchesEnded.. ");
+        AXLOGD("sprite onTouchesEnded.. ");
         target->setOpacity(255);
         if (target == sprite2)
         {
@@ -289,7 +289,7 @@ protected:
 
             if (rect.containsPoint(locationInNode))
             {
-                ax::print("TouchableSprite: onTouchBegan ...");
+                AXLOGD("TouchableSprite: onTouchBegan ...");
                 this->setColor(Color3B::RED);
                 return true;
             }
@@ -297,7 +297,7 @@ protected:
         };
 
         listener->onTouchEnded = [this](Touch* touch, Event* event) {
-            ax::print("TouchableSprite: onTouchEnded ...");
+            AXLOGD("TouchableSprite: onTouchEnded ...");
             this->setColor(Color3B::WHITE);
 
             if (_removeListenerOnTouchEnded)
@@ -664,7 +664,7 @@ void SpriteAccelerationEventTest::onEnter()
 
         auto ptNow = sprite->getPosition();
 
-        ax::print("acc: x = %lf, y = %lf", acc->x, acc->y);
+        AXLOGD("acc: x = {}, y = {}", acc->x, acc->y);
 
         ptNow.x += acc->x * 9.81f;
         ptNow.y += acc->y * 9.81f;
@@ -722,7 +722,7 @@ void RemoveAndRetainNodeTest::onEnter()
 
         if (rect.containsPoint(locationInNode))
         {
-            ax::print("sprite began... x = %f, y = %f", locationInNode.x, locationInNode.y);
+            AXLOGD("sprite began... x = {}, y = {}", locationInNode.x, locationInNode.y);
             target->setOpacity(180);
             return true;
         }
@@ -736,7 +736,7 @@ void RemoveAndRetainNodeTest::onEnter()
 
     listener1->onTouchEnded = [=](Touch* touch, Event* event) {
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        ax::print("sprite onTouchesEnded.. ");
+        AXLOGD("sprite onTouchesEnded.. ");
         target->setOpacity(255);
     };
 
@@ -985,7 +985,7 @@ GlobalZTouchTest::GlobalZTouchTest() : _sprite(nullptr), _accum(0)
 
         if (rect.containsPoint(locationInNode))
         {
-            ax::print("sprite began... x = %f, y = %f", locationInNode.x, locationInNode.y);
+            AXLOGD("sprite began... x = {}, y = {}", locationInNode.x, locationInNode.y);
             target->setOpacity(180);
             return true;
         }
@@ -999,7 +999,7 @@ GlobalZTouchTest::GlobalZTouchTest() : _sprite(nullptr), _accum(0)
 
     listener->onTouchEnded = [=](Touch* touch, Event* event) {
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        ax::print("sprite onTouchesEnded.. ");
+        AXLOGD("sprite onTouchesEnded.. ");
         target->setOpacity(255);
     };
 
@@ -1373,7 +1373,7 @@ PauseResumeTargetTest3::PauseResumeTargetTest3()
 
             if (rect.containsPoint(locationInNode))
             {
-                ax::print("TouchableSprite: onTouchBegan ...");
+                AXLOGD("TouchableSprite: onTouchBegan ...");
                 _touchableSprite->setColor(Color3B::RED);
                 return true;
             }
@@ -1381,7 +1381,7 @@ PauseResumeTargetTest3::PauseResumeTargetTest3()
         };
 
         listener->onTouchEnded = [this](Touch* touch, Event* event) {
-            ax::print("TouchableSprite: onTouchEnded ...");
+            AXLOGD("TouchableSprite: onTouchEnded ...");
             _touchableSprite->setColor(Color3B::WHITE);
         };
 
@@ -1673,12 +1673,12 @@ WindowEventsTest::WindowEventsTest()
     auto dispatcher = Director::getInstance()->getEventDispatcher();
     dispatcher->addCustomEventListener(GLViewImpl::EVENT_WINDOW_RESIZED, [](EventCustom* event) {
         // TODO: need to create resizeable window
-        ax::print("<<< WINDOW RESIZED! >>> ");
+        AXLOGD("<<< WINDOW RESIZED! >>> ");
     });
     dispatcher->addCustomEventListener(GLViewImpl::EVENT_WINDOW_FOCUSED,
-                                       [](EventCustom* event) { ax::print("<<< WINDOW FOCUSED! >>> "); });
+                                       [](EventCustom* event) { AXLOGD("<<< WINDOW FOCUSED! >>> "); });
     dispatcher->addCustomEventListener(GLViewImpl::EVENT_WINDOW_UNFOCUSED,
-                                       [](EventCustom* event) { ax::print("<<< WINDOW BLURRED! >>> "); });
+                                       [](EventCustom* event) { AXLOGD("<<< WINDOW BLURRED! >>> "); });
 #endif
 }
 
@@ -1710,7 +1710,7 @@ Issue8194::Issue8194()
         getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_UPDATE, [this](ax::EventCustom* event) {
             if (nodesAdded)
             {
-                // AXLOG("Fire Issue8194 Event");
+                // AXLOGD("Fire Issue8194 Event");
                 getEventDispatcher()->dispatchCustomEvent("Issue8194");
 
                 // clear test nodes and listeners

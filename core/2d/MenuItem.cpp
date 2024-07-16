@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -124,7 +125,7 @@ void MenuItem::setCallback(const ccMenuCallback& callback)
 
 std::string MenuItem::getDescription() const
 {
-    return StringUtils::format("<MenuItem | tag = %d>", _tag);
+    return fmt::format("<MenuItem | tag = {}>", _tag);
 }
 
 //

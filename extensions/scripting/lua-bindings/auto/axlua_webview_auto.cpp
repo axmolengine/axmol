@@ -925,7 +925,7 @@ int lua_ax_webview_WebView_constructor(lua_State* tolua_S)
 
 static int lua_ax_webview_WebView_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (WebView)");
+    AXLOGV("luabindings: finalizing LUA object (WebView)");
     return 0;
 }
 

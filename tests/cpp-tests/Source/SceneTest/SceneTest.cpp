@@ -72,18 +72,18 @@ SceneTestLayer1::SceneTestLayer1()
 
 void SceneTestLayer1::testDealloc(float dt)
 {
-    // AXLOG("SceneTestLayer1:testDealloc");
+    // AXLOGD("SceneTestLayer1:testDealloc");
 }
 
 void SceneTestLayer1::onEnter()
 {
-    AXLOG("SceneTestLayer1#onEnter");
+    AXLOGD("SceneTestLayer1#onEnter");
     Layer::onEnter();
 }
 
 void SceneTestLayer1::onEnterTransitionDidFinish()
 {
-    AXLOG("SceneTestLayer1#onEnterTransitionDidFinish");
+    AXLOGD("SceneTestLayer1#onEnterTransitionDidFinish");
     Layer::onEnterTransitionDidFinish();
 }
 
@@ -211,7 +211,7 @@ bool SceneTestLayer3::init()
 
 void SceneTestLayer3::testDealloc(float dt)
 {
-    ax::print("Layer3:testDealloc");
+    AXLOGI("Layer3:testDealloc");
 }
 
 void SceneTestLayer3::item0Clicked(Object* sender)

@@ -652,7 +652,7 @@ void Scene3DTestScene::createDetailDlg()
             [this](bool succeed, std::string_view outputFile) {
                 if (!succeed)
                 {
-                    ax::print("Capture screen failed.");
+                    AXLOGW("Capture screen failed.");
                     return;
                 }
                 auto sp = Sprite::create(outputFile);

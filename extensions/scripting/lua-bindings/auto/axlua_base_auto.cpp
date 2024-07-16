@@ -151,7 +151,7 @@ int lua_ax_base_Object_getReferenceCount(lua_State* tolua_S)
 }
 static int lua_ax_base_Object_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Object)");
+    AXLOGV("luabindings: finalizing LUA object (Object)");
     return 0;
 }
 
@@ -364,7 +364,7 @@ int lua_ax_base_EventListener_isEnabled(lua_State* tolua_S)
 }
 static int lua_ax_base_EventListener_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListener)");
+    AXLOGV("luabindings: finalizing LUA object (EventListener)");
     return 0;
 }
 
@@ -424,7 +424,7 @@ int lua_ax_base_EventListenerCustom_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventListenerCustom_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerCustom)");
+    AXLOGV("luabindings: finalizing LUA object (EventListenerCustom)");
     return 0;
 }
 
@@ -706,7 +706,7 @@ int lua_ax_base_ShaderCache_destroyInstance(lua_State* tolua_S)
 }
 static int lua_ax_base_ShaderCache_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ShaderCache)");
+    AXLOGV("luabindings: finalizing LUA object (ShaderCache)");
     return 0;
 }
 
@@ -2650,7 +2650,7 @@ int lua_ax_base_Texture2D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Texture2D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Texture2D)");
+    AXLOGV("luabindings: finalizing LUA object (Texture2D)");
     return 0;
 }
 
@@ -3288,7 +3288,7 @@ int lua_ax_base_Touch_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Touch_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Touch)");
+    AXLOGV("luabindings: finalizing LUA object (Touch)");
     return 0;
 }
 
@@ -3547,7 +3547,7 @@ int lua_ax_base_Event_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Event_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Event)");
+    AXLOGV("luabindings: finalizing LUA object (Event)");
     return 0;
 }
 
@@ -3705,7 +3705,7 @@ int lua_ax_base_EventTouch_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventTouch_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventTouch)");
+    AXLOGV("luabindings: finalizing LUA object (EventTouch)");
     return 0;
 }
 
@@ -3770,7 +3770,7 @@ int lua_ax_base_EventKeyboard_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventKeyboard_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventKeyboard)");
+    AXLOGV("luabindings: finalizing LUA object (EventKeyboard)");
     return 0;
 }
 
@@ -4306,7 +4306,7 @@ int lua_ax_base_Component_create(lua_State* tolua_S)
 }
 static int lua_ax_base_Component_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Component)");
+    AXLOGV("luabindings: finalizing LUA object (Component)");
     return 0;
 }
 
@@ -11755,7 +11755,7 @@ int lua_ax_base_Node_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Node_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Node)");
+    AXLOGV("luabindings: finalizing LUA object (Node)");
     return 0;
 }
 
@@ -12572,7 +12572,7 @@ int lua_ax_base_Scene_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Scene_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Scene)");
+    AXLOGV("luabindings: finalizing LUA object (Scene)");
     return 0;
 }
 
@@ -14342,7 +14342,7 @@ int lua_ax_base_GLView_getGLContextAttrs(lua_State* tolua_S)
 }
 static int lua_ax_base_GLView_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GLView)");
+    AXLOGV("luabindings: finalizing LUA object (GLView)");
     return 0;
 }
 
@@ -17804,7 +17804,7 @@ int lua_ax_base_Director_destroyInstance(lua_State* tolua_S)
 }
 static int lua_ax_base_Director_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Director)");
+    AXLOGV("luabindings: finalizing LUA object (Director)");
     return 0;
 }
 
@@ -18238,7 +18238,7 @@ int lua_ax_base_Timer_update(lua_State* tolua_S)
 }
 static int lua_ax_base_Timer_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Timer)");
+    AXLOGV("luabindings: finalizing LUA object (Timer)");
     return 0;
 }
 
@@ -18499,7 +18499,7 @@ int lua_ax_base_Scheduler_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Scheduler_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Scheduler)");
+    AXLOGV("luabindings: finalizing LUA object (Scheduler)");
     return 0;
 }
 
@@ -19249,7 +19249,7 @@ int lua_ax_base_Action_setFlags(lua_State* tolua_S)
 }
 static int lua_ax_base_Action_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Action)");
+    AXLOGV("luabindings: finalizing LUA object (Action)");
     return 0;
 }
 
@@ -19380,7 +19380,7 @@ int lua_ax_base_FiniteTimeAction_setDuration(lua_State* tolua_S)
 }
 static int lua_ax_base_FiniteTimeAction_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FiniteTimeAction)");
+    AXLOGV("luabindings: finalizing LUA object (FiniteTimeAction)");
     return 0;
 }
 
@@ -19723,7 +19723,7 @@ int lua_ax_base_Speed_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Speed_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Speed)");
+    AXLOGV("luabindings: finalizing LUA object (Speed)");
     return 0;
 }
 
@@ -20139,7 +20139,7 @@ int lua_ax_base_Follow_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Follow_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Follow)");
+    AXLOGV("luabindings: finalizing LUA object (Follow)");
     return 0;
 }
 
@@ -20993,7 +20993,7 @@ int lua_ax_base_Image_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Image_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Image)");
+    AXLOGV("luabindings: finalizing LUA object (Image)");
     return 0;
 }
 
@@ -21556,7 +21556,7 @@ int lua_ax_base_PolygonInfo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_PolygonInfo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PolygonInfo)");
+    AXLOGV("luabindings: finalizing LUA object (PolygonInfo)");
     return 0;
 }
 
@@ -21624,7 +21624,7 @@ int lua_ax_base_AutoPolygon_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_AutoPolygon_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (AutoPolygon)");
+    AXLOGV("luabindings: finalizing LUA object (AutoPolygon)");
     return 0;
 }
 
@@ -23068,7 +23068,7 @@ int lua_ax_base_SpriteFrame_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_SpriteFrame_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (SpriteFrame)");
+    AXLOGV("luabindings: finalizing LUA object (SpriteFrame)");
     return 0;
 }
 
@@ -23586,7 +23586,7 @@ int lua_ax_base_AnimationFrame_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_AnimationFrame_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (AnimationFrame)");
+    AXLOGV("luabindings: finalizing LUA object (AnimationFrame)");
     return 0;
 }
 
@@ -24659,7 +24659,7 @@ int lua_ax_base_Animation_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Animation_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Animation)");
+    AXLOGV("luabindings: finalizing LUA object (Animation)");
     return 0;
 }
 
@@ -24892,7 +24892,7 @@ int lua_ax_base_ActionInterval_initWithDuration(lua_State* tolua_S)
 }
 static int lua_ax_base_ActionInterval_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ActionInterval)");
+    AXLOGV("luabindings: finalizing LUA object (ActionInterval)");
     return 0;
 }
 
@@ -25055,7 +25055,7 @@ int lua_ax_base_Sequence_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Sequence_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Sequence)");
+    AXLOGV("luabindings: finalizing LUA object (Sequence)");
     return 0;
 }
 
@@ -25302,7 +25302,7 @@ int lua_ax_base_Repeat_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Repeat_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Repeat)");
+    AXLOGV("luabindings: finalizing LUA object (Repeat)");
     return 0;
 }
 
@@ -25546,7 +25546,7 @@ int lua_ax_base_RepeatForever_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_RepeatForever_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RepeatForever)");
+    AXLOGV("luabindings: finalizing LUA object (RepeatForever)");
     return 0;
 }
 
@@ -25710,7 +25710,7 @@ int lua_ax_base_Spawn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Spawn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Spawn)");
+    AXLOGV("luabindings: finalizing LUA object (Spawn)");
     return 0;
 }
 
@@ -25909,7 +25909,7 @@ int lua_ax_base_RotateTo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_RotateTo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RotateTo)");
+    AXLOGV("luabindings: finalizing LUA object (RotateTo)");
     return 0;
 }
 
@@ -26124,7 +26124,7 @@ int lua_ax_base_RotateBy_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_RotateBy_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RotateBy)");
+    AXLOGV("luabindings: finalizing LUA object (RotateBy)");
     return 0;
 }
 
@@ -26300,7 +26300,7 @@ int lua_ax_base_MoveBy_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_MoveBy_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MoveBy)");
+    AXLOGV("luabindings: finalizing LUA object (MoveBy)");
     return 0;
 }
 
@@ -26476,7 +26476,7 @@ int lua_ax_base_MoveTo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_MoveTo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MoveTo)");
+    AXLOGV("luabindings: finalizing LUA object (MoveTo)");
     return 0;
 }
 
@@ -26631,7 +26631,7 @@ int lua_ax_base_SkewTo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_SkewTo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (SkewTo)");
+    AXLOGV("luabindings: finalizing LUA object (SkewTo)");
     return 0;
 }
 
@@ -26786,7 +26786,7 @@ int lua_ax_base_SkewBy_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_SkewBy_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (SkewBy)");
+    AXLOGV("luabindings: finalizing LUA object (SkewBy)");
     return 0;
 }
 
@@ -26946,7 +26946,7 @@ int lua_ax_base_JumpBy_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_JumpBy_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (JumpBy)");
+    AXLOGV("luabindings: finalizing LUA object (JumpBy)");
     return 0;
 }
 
@@ -27106,7 +27106,7 @@ int lua_ax_base_JumpTo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_JumpTo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (JumpTo)");
+    AXLOGV("luabindings: finalizing LUA object (JumpTo)");
     return 0;
 }
 
@@ -27219,7 +27219,7 @@ int lua_ax_base_BezierBy_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_BezierBy_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (BezierBy)");
+    AXLOGV("luabindings: finalizing LUA object (BezierBy)");
     return 0;
 }
 
@@ -27331,7 +27331,7 @@ int lua_ax_base_BezierTo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_BezierTo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (BezierTo)");
+    AXLOGV("luabindings: finalizing LUA object (BezierTo)");
     return 0;
 }
 
@@ -27559,7 +27559,7 @@ int lua_ax_base_ScaleTo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ScaleTo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ScaleTo)");
+    AXLOGV("luabindings: finalizing LUA object (ScaleTo)");
     return 0;
 }
 
@@ -27697,7 +27697,7 @@ int lua_ax_base_ScaleBy_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ScaleBy_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ScaleBy)");
+    AXLOGV("luabindings: finalizing LUA object (ScaleBy)");
     return 0;
 }
 
@@ -27846,7 +27846,7 @@ int lua_ax_base_Blink_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Blink_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Blink)");
+    AXLOGV("luabindings: finalizing LUA object (Blink)");
     return 0;
 }
 
@@ -27996,7 +27996,7 @@ int lua_ax_base_FadeTo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FadeTo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FadeTo)");
+    AXLOGV("luabindings: finalizing LUA object (FadeTo)");
     return 0;
 }
 
@@ -28141,7 +28141,7 @@ int lua_ax_base_FadeIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FadeIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FadeIn)");
+    AXLOGV("luabindings: finalizing LUA object (FadeIn)");
     return 0;
 }
 
@@ -28286,7 +28286,7 @@ int lua_ax_base_FadeOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FadeOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FadeOut)");
+    AXLOGV("luabindings: finalizing LUA object (FadeOut)");
     return 0;
 }
 
@@ -28464,7 +28464,7 @@ int lua_ax_base_TintTo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TintTo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TintTo)");
+    AXLOGV("luabindings: finalizing LUA object (TintTo)");
     return 0;
 }
 
@@ -28624,7 +28624,7 @@ int lua_ax_base_TintBy_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TintBy_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TintBy)");
+    AXLOGV("luabindings: finalizing LUA object (TintBy)");
     return 0;
 }
 
@@ -28719,7 +28719,7 @@ int lua_ax_base_DelayTime_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_DelayTime_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (DelayTime)");
+    AXLOGV("luabindings: finalizing LUA object (DelayTime)");
     return 0;
 }
 
@@ -29007,7 +29007,7 @@ int lua_ax_base_Animate_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Animate_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Animate)");
+    AXLOGV("luabindings: finalizing LUA object (Animate)");
     return 0;
 }
 
@@ -29257,7 +29257,7 @@ int lua_ax_base_TargetedAction_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TargetedAction_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TargetedAction)");
+    AXLOGV("luabindings: finalizing LUA object (TargetedAction)");
     return 0;
 }
 
@@ -29427,7 +29427,7 @@ int lua_ax_base_ActionFloat_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ActionFloat_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ActionFloat)");
+    AXLOGV("luabindings: finalizing LUA object (ActionFloat)");
     return 0;
 }
 
@@ -30874,7 +30874,7 @@ int lua_ax_base_Properties_parseColor(lua_State* tolua_S)
 }
 static int lua_ax_base_Properties_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Properties)");
+    AXLOGV("luabindings: finalizing LUA object (Properties)");
     return 0;
 }
 
@@ -31825,7 +31825,7 @@ int lua_ax_base_UserDefault_setFileName(lua_State* tolua_S)
 }
 static int lua_ax_base_UserDefault_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (UserDefault)");
+    AXLOGV("luabindings: finalizing LUA object (UserDefault)");
     return 0;
 }
 
@@ -34187,7 +34187,7 @@ int lua_ax_base_FileUtils_isAbsolutePathInternal(lua_State* tolua_S)
 }
 static int lua_ax_base_FileUtils_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FileUtils)");
+    AXLOGV("luabindings: finalizing LUA object (FileUtils)");
     return 0;
 }
 
@@ -34249,7 +34249,7 @@ int lua_register_ax_base_FileUtils(lua_State* tolua_S)
 
 static int lua_ax_base_EventAcceleration_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventAcceleration)");
+    AXLOGV("luabindings: finalizing LUA object (EventAcceleration)");
     return 0;
 }
 
@@ -34355,7 +34355,7 @@ int lua_ax_base_EventCustom_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventCustom_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventCustom)");
+    AXLOGV("luabindings: finalizing LUA object (EventCustom)");
     return 0;
 }
 
@@ -35330,7 +35330,7 @@ int lua_ax_base_EventDispatcher_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventDispatcher_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventDispatcher)");
+    AXLOGV("luabindings: finalizing LUA object (EventDispatcher)");
     return 0;
 }
 
@@ -35409,7 +35409,7 @@ int lua_ax_base_EventFocus_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventFocus_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventFocus)");
+    AXLOGV("luabindings: finalizing LUA object (EventFocus)");
     return 0;
 }
 
@@ -35520,7 +35520,7 @@ int lua_ax_base_EventListenerAcceleration_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventListenerAcceleration_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerAcceleration)");
+    AXLOGV("luabindings: finalizing LUA object (EventListenerAcceleration)");
     return 0;
 }
 
@@ -35625,7 +35625,7 @@ int lua_ax_base_EventListenerFocus_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventListenerFocus_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerFocus)");
+    AXLOGV("luabindings: finalizing LUA object (EventListenerFocus)");
     return 0;
 }
 
@@ -35730,7 +35730,7 @@ int lua_ax_base_EventListenerKeyboard_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventListenerKeyboard_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerKeyboard)");
+    AXLOGV("luabindings: finalizing LUA object (EventListenerKeyboard)");
     return 0;
 }
 
@@ -36511,7 +36511,7 @@ int lua_ax_base_EventMouse_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventMouse_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventMouse)");
+    AXLOGV("luabindings: finalizing LUA object (EventMouse)");
     return 0;
 }
 
@@ -36630,7 +36630,7 @@ int lua_ax_base_EventListenerMouse_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventListenerMouse_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerMouse)");
+    AXLOGV("luabindings: finalizing LUA object (EventListenerMouse)");
     return 0;
 }
 
@@ -36651,7 +36651,7 @@ int lua_register_ax_base_EventListenerMouse(lua_State* tolua_S)
 
 static int lua_ax_base_EventListenerController_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerController)");
+    AXLOGV("luabindings: finalizing LUA object (EventListenerController)");
     return 0;
 }
 
@@ -36851,7 +36851,7 @@ int lua_ax_base_EventListenerTouchOneByOne_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventListenerTouchOneByOne_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerTouchOneByOne)");
+    AXLOGV("luabindings: finalizing LUA object (EventListenerTouchOneByOne)");
     return 0;
 }
 
@@ -36958,7 +36958,7 @@ int lua_ax_base_EventListenerTouchAllAtOnce_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventListenerTouchAllAtOnce_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerTouchAllAtOnce)");
+    AXLOGV("luabindings: finalizing LUA object (EventListenerTouchAllAtOnce)");
     return 0;
 }
 
@@ -37333,7 +37333,7 @@ int lua_ax_base_EventController_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EventController_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventController)");
+    AXLOGV("luabindings: finalizing LUA object (EventController)");
     return 0;
 }
 
@@ -37700,7 +37700,7 @@ int lua_ax_base_ActionCamera_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ActionCamera_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ActionCamera)");
+    AXLOGV("luabindings: finalizing LUA object (ActionCamera)");
     return 0;
 }
 
@@ -37879,7 +37879,7 @@ int lua_ax_base_OrbitCamera_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_OrbitCamera_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (OrbitCamera)");
+    AXLOGV("luabindings: finalizing LUA object (OrbitCamera)");
     return 0;
 }
 
@@ -38091,7 +38091,7 @@ int lua_ax_base_CardinalSplineTo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_CardinalSplineTo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (CardinalSplineTo)");
+    AXLOGV("luabindings: finalizing LUA object (CardinalSplineTo)");
     return 0;
 }
 
@@ -38151,7 +38151,7 @@ int lua_ax_base_CardinalSplineBy_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_CardinalSplineBy_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (CardinalSplineBy)");
+    AXLOGV("luabindings: finalizing LUA object (CardinalSplineBy)");
     return 0;
 }
 
@@ -38224,7 +38224,7 @@ int lua_ax_base_CatmullRomTo_initWithDuration(lua_State* tolua_S)
 }
 static int lua_ax_base_CatmullRomTo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (CatmullRomTo)");
+    AXLOGV("luabindings: finalizing LUA object (CatmullRomTo)");
     return 0;
 }
 
@@ -38297,7 +38297,7 @@ int lua_ax_base_CatmullRomBy_initWithDuration(lua_State* tolua_S)
 }
 static int lua_ax_base_CatmullRomBy_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (CatmullRomBy)");
+    AXLOGV("luabindings: finalizing LUA object (CatmullRomBy)");
     return 0;
 }
 
@@ -38414,7 +38414,7 @@ int lua_ax_base_ActionEase_initWithAction(lua_State* tolua_S)
 }
 static int lua_ax_base_ActionEase_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ActionEase)");
+    AXLOGV("luabindings: finalizing LUA object (ActionEase)");
     return 0;
 }
 
@@ -38623,7 +38623,7 @@ int lua_ax_base_EaseRateAction_create(lua_State* tolua_S)
 }
 static int lua_ax_base_EaseRateAction_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseRateAction)");
+    AXLOGV("luabindings: finalizing LUA object (EaseRateAction)");
     return 0;
 }
 
@@ -38719,7 +38719,7 @@ int lua_ax_base_EaseExponentialIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseExponentialIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseExponentialIn)");
+    AXLOGV("luabindings: finalizing LUA object (EaseExponentialIn)");
     return 0;
 }
 
@@ -38813,7 +38813,7 @@ int lua_ax_base_EaseExponentialOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseExponentialOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseExponentialOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseExponentialOut)");
     return 0;
 }
 
@@ -38907,7 +38907,7 @@ int lua_ax_base_EaseExponentialInOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseExponentialInOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseExponentialInOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseExponentialInOut)");
     return 0;
 }
 
@@ -39001,7 +39001,7 @@ int lua_ax_base_EaseSineIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseSineIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseSineIn)");
+    AXLOGV("luabindings: finalizing LUA object (EaseSineIn)");
     return 0;
 }
 
@@ -39095,7 +39095,7 @@ int lua_ax_base_EaseSineOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseSineOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseSineOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseSineOut)");
     return 0;
 }
 
@@ -39189,7 +39189,7 @@ int lua_ax_base_EaseSineInOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseSineInOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseSineInOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseSineInOut)");
     return 0;
 }
 
@@ -39210,7 +39210,7 @@ int lua_register_ax_base_EaseSineInOut(lua_State* tolua_S)
 
 static int lua_ax_base_EaseBounce_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseBounce)");
+    AXLOGV("luabindings: finalizing LUA object (EaseBounce)");
     return 0;
 }
 
@@ -39302,7 +39302,7 @@ int lua_ax_base_EaseBounceIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseBounceIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseBounceIn)");
+    AXLOGV("luabindings: finalizing LUA object (EaseBounceIn)");
     return 0;
 }
 
@@ -39396,7 +39396,7 @@ int lua_ax_base_EaseBounceOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseBounceOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseBounceOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseBounceOut)");
     return 0;
 }
 
@@ -39490,7 +39490,7 @@ int lua_ax_base_EaseBounceInOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseBounceInOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseBounceInOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseBounceInOut)");
     return 0;
 }
 
@@ -39584,7 +39584,7 @@ int lua_ax_base_EaseBackIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseBackIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseBackIn)");
+    AXLOGV("luabindings: finalizing LUA object (EaseBackIn)");
     return 0;
 }
 
@@ -39678,7 +39678,7 @@ int lua_ax_base_EaseBackOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseBackOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseBackOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseBackOut)");
     return 0;
 }
 
@@ -39772,7 +39772,7 @@ int lua_ax_base_EaseBackInOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseBackInOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseBackInOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseBackInOut)");
     return 0;
 }
 
@@ -39866,7 +39866,7 @@ int lua_ax_base_EaseQuadraticActionIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseQuadraticActionIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseQuadraticActionIn)");
+    AXLOGV("luabindings: finalizing LUA object (EaseQuadraticActionIn)");
     return 0;
 }
 
@@ -39960,7 +39960,7 @@ int lua_ax_base_EaseQuadraticActionOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseQuadraticActionOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseQuadraticActionOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseQuadraticActionOut)");
     return 0;
 }
 
@@ -40054,7 +40054,7 @@ int lua_ax_base_EaseQuadraticActionInOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseQuadraticActionInOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseQuadraticActionInOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseQuadraticActionInOut)");
     return 0;
 }
 
@@ -40148,7 +40148,7 @@ int lua_ax_base_EaseQuarticActionIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseQuarticActionIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseQuarticActionIn)");
+    AXLOGV("luabindings: finalizing LUA object (EaseQuarticActionIn)");
     return 0;
 }
 
@@ -40242,7 +40242,7 @@ int lua_ax_base_EaseQuarticActionOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseQuarticActionOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseQuarticActionOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseQuarticActionOut)");
     return 0;
 }
 
@@ -40336,7 +40336,7 @@ int lua_ax_base_EaseQuarticActionInOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseQuarticActionInOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseQuarticActionInOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseQuarticActionInOut)");
     return 0;
 }
 
@@ -40430,7 +40430,7 @@ int lua_ax_base_EaseQuinticActionIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseQuinticActionIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseQuinticActionIn)");
+    AXLOGV("luabindings: finalizing LUA object (EaseQuinticActionIn)");
     return 0;
 }
 
@@ -40524,7 +40524,7 @@ int lua_ax_base_EaseQuinticActionOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseQuinticActionOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseQuinticActionOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseQuinticActionOut)");
     return 0;
 }
 
@@ -40618,7 +40618,7 @@ int lua_ax_base_EaseQuinticActionInOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseQuinticActionInOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseQuinticActionInOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseQuinticActionInOut)");
     return 0;
 }
 
@@ -40712,7 +40712,7 @@ int lua_ax_base_EaseCircleActionIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseCircleActionIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseCircleActionIn)");
+    AXLOGV("luabindings: finalizing LUA object (EaseCircleActionIn)");
     return 0;
 }
 
@@ -40806,7 +40806,7 @@ int lua_ax_base_EaseCircleActionOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseCircleActionOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseCircleActionOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseCircleActionOut)");
     return 0;
 }
 
@@ -40900,7 +40900,7 @@ int lua_ax_base_EaseCircleActionInOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseCircleActionInOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseCircleActionInOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseCircleActionInOut)");
     return 0;
 }
 
@@ -40994,7 +40994,7 @@ int lua_ax_base_EaseCubicActionIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseCubicActionIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseCubicActionIn)");
+    AXLOGV("luabindings: finalizing LUA object (EaseCubicActionIn)");
     return 0;
 }
 
@@ -41088,7 +41088,7 @@ int lua_ax_base_EaseCubicActionOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseCubicActionOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseCubicActionOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseCubicActionOut)");
     return 0;
 }
 
@@ -41182,7 +41182,7 @@ int lua_ax_base_EaseCubicActionInOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseCubicActionInOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseCubicActionInOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseCubicActionInOut)");
     return 0;
 }
 
@@ -41278,7 +41278,7 @@ int lua_ax_base_EaseIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseIn)");
+    AXLOGV("luabindings: finalizing LUA object (EaseIn)");
     return 0;
 }
 
@@ -41374,7 +41374,7 @@ int lua_ax_base_EaseOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseOut)");
     return 0;
 }
 
@@ -41470,7 +41470,7 @@ int lua_ax_base_EaseInOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseInOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseInOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseInOut)");
     return 0;
 }
 
@@ -41655,7 +41655,7 @@ int lua_ax_base_EaseElastic_initWithAction(lua_State* tolua_S)
 }
 static int lua_ax_base_EaseElastic_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseElastic)");
+    AXLOGV("luabindings: finalizing LUA object (EaseElastic)");
     return 0;
 }
 
@@ -41765,7 +41765,7 @@ int lua_ax_base_EaseElasticIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseElasticIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseElasticIn)");
+    AXLOGV("luabindings: finalizing LUA object (EaseElasticIn)");
     return 0;
 }
 
@@ -41874,7 +41874,7 @@ int lua_ax_base_EaseElasticOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseElasticOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseElasticOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseElasticOut)");
     return 0;
 }
 
@@ -41983,7 +41983,7 @@ int lua_ax_base_EaseElasticInOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseElasticInOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseElasticInOut)");
+    AXLOGV("luabindings: finalizing LUA object (EaseElasticInOut)");
     return 0;
 }
 
@@ -42136,7 +42136,7 @@ int lua_ax_base_EaseBezierAction_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_EaseBezierAction_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EaseBezierAction)");
+    AXLOGV("luabindings: finalizing LUA object (EaseBezierAction)");
     return 0;
 }
 
@@ -42158,7 +42158,7 @@ int lua_register_ax_base_EaseBezierAction(lua_State* tolua_S)
 
 static int lua_ax_base_ActionInstant_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ActionInstant)");
+    AXLOGV("luabindings: finalizing LUA object (ActionInstant)");
     return 0;
 }
 
@@ -42248,7 +42248,7 @@ int lua_ax_base_Show_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Show_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Show)");
+    AXLOGV("luabindings: finalizing LUA object (Show)");
     return 0;
 }
 
@@ -42340,7 +42340,7 @@ int lua_ax_base_Hide_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Hide_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Hide)");
+    AXLOGV("luabindings: finalizing LUA object (Hide)");
     return 0;
 }
 
@@ -42432,7 +42432,7 @@ int lua_ax_base_ToggleVisibility_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ToggleVisibility_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ToggleVisibility)");
+    AXLOGV("luabindings: finalizing LUA object (ToggleVisibility)");
     return 0;
 }
 
@@ -42587,7 +42587,7 @@ int lua_ax_base_RemoveSelf_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_RemoveSelf_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RemoveSelf)");
+    AXLOGV("luabindings: finalizing LUA object (RemoveSelf)");
     return 0;
 }
 
@@ -42732,7 +42732,7 @@ int lua_ax_base_FlipX_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FlipX_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FlipX)");
+    AXLOGV("luabindings: finalizing LUA object (FlipX)");
     return 0;
 }
 
@@ -42877,7 +42877,7 @@ int lua_ax_base_FlipY_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FlipY_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FlipY)");
+    AXLOGV("luabindings: finalizing LUA object (FlipY)");
     return 0;
 }
 
@@ -43022,7 +43022,7 @@ int lua_ax_base_Place_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Place_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Place)");
+    AXLOGV("luabindings: finalizing LUA object (Place)");
     return 0;
 }
 
@@ -43128,7 +43128,7 @@ int lua_ax_base_CallFunc_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_CallFunc_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (CallFunc)");
+    AXLOGV("luabindings: finalizing LUA object (CallFunc)");
     return 0;
 }
 
@@ -43249,7 +43249,7 @@ int lua_ax_base_GridAction_initWithDuration(lua_State* tolua_S)
 }
 static int lua_ax_base_GridAction_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GridAction)");
+    AXLOGV("luabindings: finalizing LUA object (GridAction)");
     return 0;
 }
 
@@ -43317,7 +43317,7 @@ int lua_ax_base_Grid3DAction_getGridRect(lua_State* tolua_S)
 }
 static int lua_ax_base_Grid3DAction_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Grid3DAction)");
+    AXLOGV("luabindings: finalizing LUA object (Grid3DAction)");
     return 0;
 }
 
@@ -43337,7 +43337,7 @@ int lua_register_ax_base_Grid3DAction(lua_State* tolua_S)
 
 static int lua_ax_base_TiledGrid3DAction_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TiledGrid3DAction)");
+    AXLOGV("luabindings: finalizing LUA object (TiledGrid3DAction)");
     return 0;
 }
 
@@ -43427,7 +43427,7 @@ int lua_ax_base_StopGrid_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_StopGrid_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (StopGrid)");
+    AXLOGV("luabindings: finalizing LUA object (StopGrid)");
     return 0;
 }
 
@@ -43571,7 +43571,7 @@ int lua_ax_base_ReuseGrid_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ReuseGrid_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ReuseGrid)");
+    AXLOGV("luabindings: finalizing LUA object (ReuseGrid)");
     return 0;
 }
 
@@ -43925,7 +43925,7 @@ int lua_ax_base_Waves3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Waves3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Waves3D)");
+    AXLOGV("luabindings: finalizing LUA object (Waves3D)");
     return 0;
 }
 
@@ -44127,7 +44127,7 @@ int lua_ax_base_FlipX3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FlipX3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FlipX3D)");
+    AXLOGV("luabindings: finalizing LUA object (FlipX3D)");
     return 0;
 }
 
@@ -44223,7 +44223,7 @@ int lua_ax_base_FlipY3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FlipY3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FlipY3D)");
+    AXLOGV("luabindings: finalizing LUA object (FlipY3D)");
     return 0;
 }
 
@@ -44626,7 +44626,7 @@ int lua_ax_base_Lens3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Lens3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Lens3D)");
+    AXLOGV("luabindings: finalizing LUA object (Lens3D)");
     return 0;
 }
 
@@ -45092,7 +45092,7 @@ int lua_ax_base_Ripple3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Ripple3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Ripple3D)");
+    AXLOGV("luabindings: finalizing LUA object (Ripple3D)");
     return 0;
 }
 
@@ -45258,7 +45258,7 @@ int lua_ax_base_Shaky3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Shaky3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Shaky3D)");
+    AXLOGV("luabindings: finalizing LUA object (Shaky3D)");
     return 0;
 }
 
@@ -45612,7 +45612,7 @@ int lua_ax_base_Liquid_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Liquid_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Liquid)");
+    AXLOGV("luabindings: finalizing LUA object (Liquid)");
     return 0;
 }
 
@@ -45980,7 +45980,7 @@ int lua_ax_base_Waves_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Waves_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Waves)");
+    AXLOGV("luabindings: finalizing LUA object (Waves)");
     return 0;
 }
 
@@ -46440,7 +46440,7 @@ int lua_ax_base_Twirl_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Twirl_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Twirl)");
+    AXLOGV("luabindings: finalizing LUA object (Twirl)");
     return 0;
 }
 
@@ -47317,7 +47317,7 @@ int lua_ax_base_ActionManager_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ActionManager_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ActionManager)");
+    AXLOGV("luabindings: finalizing LUA object (ActionManager)");
     return 0;
 }
 
@@ -47391,7 +47391,7 @@ int lua_ax_base_PageTurn3D_create(lua_State* tolua_S)
 }
 static int lua_ax_base_PageTurn3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PageTurn3D)");
+    AXLOGV("luabindings: finalizing LUA object (PageTurn3D)");
     return 0;
 }
 
@@ -47539,7 +47539,7 @@ int lua_ax_base_ProgressTo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ProgressTo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ProgressTo)");
+    AXLOGV("luabindings: finalizing LUA object (ProgressTo)");
     return 0;
 }
 
@@ -47694,7 +47694,7 @@ int lua_ax_base_ProgressFromTo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ProgressFromTo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ProgressFromTo)");
+    AXLOGV("luabindings: finalizing LUA object (ProgressFromTo)");
     return 0;
 }
 
@@ -47854,7 +47854,7 @@ int lua_ax_base_ShakyTiles3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ShakyTiles3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ShakyTiles3D)");
+    AXLOGV("luabindings: finalizing LUA object (ShakyTiles3D)");
     return 0;
 }
 
@@ -48014,7 +48014,7 @@ int lua_ax_base_ShatteredTiles3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ShatteredTiles3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ShatteredTiles3D)");
+    AXLOGV("luabindings: finalizing LUA object (ShatteredTiles3D)");
     return 0;
 }
 
@@ -48219,7 +48219,7 @@ int lua_ax_base_ShuffleTiles_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ShuffleTiles_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ShuffleTiles)");
+    AXLOGV("luabindings: finalizing LUA object (ShuffleTiles)");
     return 0;
 }
 
@@ -48523,7 +48523,7 @@ int lua_ax_base_FadeOutTRTiles_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FadeOutTRTiles_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FadeOutTRTiles)");
+    AXLOGV("luabindings: finalizing LUA object (FadeOutTRTiles)");
     return 0;
 }
 
@@ -48623,7 +48623,7 @@ int lua_ax_base_FadeOutBLTiles_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FadeOutBLTiles_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FadeOutBLTiles)");
+    AXLOGV("luabindings: finalizing LUA object (FadeOutBLTiles)");
     return 0;
 }
 
@@ -48719,7 +48719,7 @@ int lua_ax_base_FadeOutUpTiles_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FadeOutUpTiles_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FadeOutUpTiles)");
+    AXLOGV("luabindings: finalizing LUA object (FadeOutUpTiles)");
     return 0;
 }
 
@@ -48815,7 +48815,7 @@ int lua_ax_base_FadeOutDownTiles_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FadeOutDownTiles_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FadeOutDownTiles)");
+    AXLOGV("luabindings: finalizing LUA object (FadeOutDownTiles)");
     return 0;
 }
 
@@ -49086,7 +49086,7 @@ int lua_ax_base_TurnOffTiles_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TurnOffTiles_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TurnOffTiles)");
+    AXLOGV("luabindings: finalizing LUA object (TurnOffTiles)");
     return 0;
 }
 
@@ -49442,7 +49442,7 @@ int lua_ax_base_WavesTiles3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_WavesTiles3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (WavesTiles3D)");
+    AXLOGV("luabindings: finalizing LUA object (WavesTiles3D)");
     return 0;
 }
 
@@ -49800,7 +49800,7 @@ int lua_ax_base_JumpTiles3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_JumpTiles3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (JumpTiles3D)");
+    AXLOGV("luabindings: finalizing LUA object (JumpTiles3D)");
     return 0;
 }
 
@@ -49954,7 +49954,7 @@ int lua_ax_base_SplitRows_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_SplitRows_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (SplitRows)");
+    AXLOGV("luabindings: finalizing LUA object (SplitRows)");
     return 0;
 }
 
@@ -50104,7 +50104,7 @@ int lua_ax_base_SplitCols_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_SplitCols_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (SplitCols)");
+    AXLOGV("luabindings: finalizing LUA object (SplitCols)");
     return 0;
 }
 
@@ -50227,7 +50227,7 @@ int lua_ax_base_ActionTween_create(lua_State* tolua_S)
 }
 static int lua_ax_base_ActionTween_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ActionTween)");
+    AXLOGV("luabindings: finalizing LUA object (ActionTween)");
     return 0;
 }
 
@@ -50379,7 +50379,7 @@ int lua_ax_base_ActionCoroutine_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ActionCoroutine_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ActionCoroutine)");
+    AXLOGV("luabindings: finalizing LUA object (ActionCoroutine)");
     return 0;
 }
 
@@ -51033,7 +51033,7 @@ int lua_ax_base_AtlasNode_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_AtlasNode_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (AtlasNode)");
+    AXLOGV("luabindings: finalizing LUA object (AtlasNode)");
     return 0;
 }
 
@@ -51515,7 +51515,7 @@ int lua_ax_base_ClippingNode_create(lua_State* tolua_S)
 }
 static int lua_ax_base_ClippingNode_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ClippingNode)");
+    AXLOGV("luabindings: finalizing LUA object (ClippingNode)");
     return 0;
 }
 
@@ -51782,7 +51782,7 @@ int lua_ax_base_ClippingRectangleNode_create(lua_State* tolua_S)
 }
 static int lua_ax_base_ClippingRectangleNode_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ClippingRectangleNode)");
+    AXLOGV("luabindings: finalizing LUA object (ClippingRectangleNode)");
     return 0;
 }
 
@@ -53239,7 +53239,7 @@ int lua_ax_base_DrawNode_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_DrawNode_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (DrawNode)");
+    AXLOGV("luabindings: finalizing LUA object (DrawNode)");
     return 0;
 }
 
@@ -57411,7 +57411,7 @@ int lua_ax_base_Label_createWithCharMap(lua_State* tolua_S)
 }
 static int lua_ax_base_Label_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Label)");
+    AXLOGV("luabindings: finalizing LUA object (Label)");
     return 0;
 }
 
@@ -57830,7 +57830,7 @@ int lua_ax_base_LabelAtlas_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_LabelAtlas_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (LabelAtlas)");
+    AXLOGV("luabindings: finalizing LUA object (LabelAtlas)");
     return 0;
 }
 
@@ -60162,7 +60162,7 @@ int lua_ax_base_Sprite_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Sprite_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Sprite)");
+    AXLOGV("luabindings: finalizing LUA object (Sprite)");
     return 0;
 }
 
@@ -60261,7 +60261,7 @@ int lua_ax_base_Layer_create(lua_State* tolua_S)
 }
 static int lua_ax_base_Layer_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Layer)");
+    AXLOGV("luabindings: finalizing LUA object (Layer)");
     return 0;
 }
 
@@ -60598,7 +60598,7 @@ int lua_ax_base_LayerColor_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_LayerColor_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (LayerColor)");
+    AXLOGV("luabindings: finalizing LUA object (LayerColor)");
     return 0;
 }
 
@@ -61376,7 +61376,7 @@ int lua_ax_base_LayerGradient_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_LayerGradient_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (LayerGradient)");
+    AXLOGV("luabindings: finalizing LUA object (LayerGradient)");
     return 0;
 }
 
@@ -62446,7 +62446,7 @@ int lua_ax_base_LayerRadialGradient_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_LayerRadialGradient_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (LayerRadialGradient)");
+    AXLOGV("luabindings: finalizing LUA object (LayerRadialGradient)");
     return 0;
 }
 
@@ -62732,7 +62732,7 @@ int lua_ax_base_LayerMultiplex_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_LayerMultiplex_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (LayerMultiplex)");
+    AXLOGV("luabindings: finalizing LUA object (LayerMultiplex)");
     return 0;
 }
 
@@ -63125,7 +63125,7 @@ int lua_ax_base_MenuItem_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_MenuItem_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MenuItem)");
+    AXLOGV("luabindings: finalizing LUA object (MenuItem)");
     return 0;
 }
 
@@ -63537,7 +63537,7 @@ int lua_ax_base_MenuItemLabel_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_MenuItemLabel_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MenuItemLabel)");
+    AXLOGV("luabindings: finalizing LUA object (MenuItemLabel)");
     return 0;
 }
 
@@ -63670,7 +63670,7 @@ int lua_ax_base_MenuItemAtlasFont_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_MenuItemAtlasFont_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MenuItemAtlasFont)");
+    AXLOGV("luabindings: finalizing LUA object (MenuItemAtlasFont)");
     return 0;
 }
 
@@ -64119,7 +64119,7 @@ int lua_ax_base_MenuItemFont_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_MenuItemFont_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MenuItemFont)");
+    AXLOGV("luabindings: finalizing LUA object (MenuItemFont)");
     return 0;
 }
 
@@ -64683,7 +64683,7 @@ int lua_ax_base_MenuItemSprite_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_MenuItemSprite_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MenuItemSprite)");
+    AXLOGV("luabindings: finalizing LUA object (MenuItemSprite)");
     return 0;
 }
 
@@ -65010,7 +65010,7 @@ int lua_ax_base_MenuItemImage_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_MenuItemImage_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MenuItemImage)");
+    AXLOGV("luabindings: finalizing LUA object (MenuItemImage)");
     return 0;
 }
 
@@ -65366,7 +65366,7 @@ int lua_ax_base_MenuItemToggle_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_MenuItemToggle_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MenuItemToggle)");
+    AXLOGV("luabindings: finalizing LUA object (MenuItemToggle)");
     return 0;
 }
 
@@ -65770,7 +65770,7 @@ int lua_ax_base_Menu_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Menu_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Menu)");
+    AXLOGV("luabindings: finalizing LUA object (Menu)");
     return 0;
 }
 
@@ -66575,7 +66575,7 @@ int lua_ax_base_MotionStreak_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_MotionStreak_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MotionStreak)");
+    AXLOGV("luabindings: finalizing LUA object (MotionStreak)");
     return 0;
 }
 
@@ -66935,7 +66935,7 @@ int lua_ax_base_NodeGrid_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_NodeGrid_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (NodeGrid)");
+    AXLOGV("luabindings: finalizing LUA object (NodeGrid)");
     return 0;
 }
 
@@ -67703,7 +67703,7 @@ int lua_ax_base_ParticleBatchNode_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleBatchNode_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleBatchNode)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleBatchNode)");
     return 0;
 }
 
@@ -67737,7 +67737,7 @@ int lua_register_ax_base_ParticleBatchNode(lua_State* tolua_S)
 
 static int lua_ax_base_SpriteSheet_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (SpriteSheet)");
+    AXLOGV("luabindings: finalizing LUA object (SpriteSheet)");
     return 0;
 }
 
@@ -68852,7 +68852,7 @@ int lua_ax_base_SpriteFrameCache_destroyInstance(lua_State* tolua_S)
 }
 static int lua_ax_base_SpriteFrameCache_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (SpriteFrameCache)");
+    AXLOGV("luabindings: finalizing LUA object (SpriteFrameCache)");
     return 0;
 }
 
@@ -69124,7 +69124,7 @@ int lua_ax_base_ParticleData_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleData_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleData)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleData)");
     return 0;
 }
 
@@ -69541,7 +69541,7 @@ int lua_ax_base_ParticleEmissionMaskCache_getInstance(lua_State* tolua_S)
 }
 static int lua_ax_base_ParticleEmissionMaskCache_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleEmissionMaskCache)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleEmissionMaskCache)");
     return 0;
 }
 
@@ -78110,7 +78110,7 @@ int lua_ax_base_ParticleSystem_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleSystem_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleSystem)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleSystem)");
     return 0;
 }
 
@@ -78583,7 +78583,7 @@ int lua_ax_base_ParticleSystemQuad_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleSystemQuad_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleSystemQuad)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleSystemQuad)");
     return 0;
 }
 
@@ -78715,7 +78715,7 @@ int lua_ax_base_ParticleFire_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleFire_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleFire)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleFire)");
     return 0;
 }
 
@@ -78941,7 +78941,7 @@ int lua_ax_base_ParticleFireworks_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleFireworks_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleFireworks)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleFireworks)");
     return 0;
 }
 
@@ -79169,7 +79169,7 @@ int lua_ax_base_ParticleSun_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleSun_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleSun)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleSun)");
     return 0;
 }
 
@@ -79397,7 +79397,7 @@ int lua_ax_base_ParticleGalaxy_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleGalaxy_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleGalaxy)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleGalaxy)");
     return 0;
 }
 
@@ -79625,7 +79625,7 @@ int lua_ax_base_ParticleFlower_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleFlower_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleFlower)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleFlower)");
     return 0;
 }
 
@@ -79853,7 +79853,7 @@ int lua_ax_base_ParticleMeteor_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleMeteor_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleMeteor)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleMeteor)");
     return 0;
 }
 
@@ -80081,7 +80081,7 @@ int lua_ax_base_ParticleSpiral_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleSpiral_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleSpiral)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleSpiral)");
     return 0;
 }
 
@@ -80309,7 +80309,7 @@ int lua_ax_base_ParticleExplosion_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleExplosion_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleExplosion)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleExplosion)");
     return 0;
 }
 
@@ -80537,7 +80537,7 @@ int lua_ax_base_ParticleSmoke_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleSmoke_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleSmoke)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleSmoke)");
     return 0;
 }
 
@@ -80765,7 +80765,7 @@ int lua_ax_base_ParticleSnow_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleSnow_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleSnow)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleSnow)");
     return 0;
 }
 
@@ -80993,7 +80993,7 @@ int lua_ax_base_ParticleRain_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParticleRain_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleRain)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleRain)");
     return 0;
 }
 
@@ -81722,7 +81722,7 @@ int lua_ax_base_ProgressTimer_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ProgressTimer_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ProgressTimer)");
+    AXLOGV("luabindings: finalizing LUA object (ProgressTimer)");
     return 0;
 }
 
@@ -82478,7 +82478,7 @@ int lua_ax_base_ProtectedNode_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ProtectedNode_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ProtectedNode)");
+    AXLOGV("luabindings: finalizing LUA object (ProtectedNode)");
     return 0;
 }
 
@@ -84228,7 +84228,7 @@ int lua_ax_base_RenderTexture_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_RenderTexture_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RenderTexture)");
+    AXLOGV("luabindings: finalizing LUA object (RenderTexture)");
     return 0;
 }
 
@@ -84324,7 +84324,7 @@ int lua_ax_base_TransitionEaseScene_easeActionWithAction(lua_State* tolua_S)
 }
 static int lua_ax_base_TransitionEaseScene_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionEaseScene)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionEaseScene)");
     return 0;
 }
 
@@ -84660,7 +84660,7 @@ int lua_ax_base_TransitionScene_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionScene_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionScene)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionScene)");
     return 0;
 }
 
@@ -84819,7 +84819,7 @@ int lua_ax_base_TransitionSceneOriented_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionSceneOriented_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionSceneOriented)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionSceneOriented)");
     return 0;
 }
 
@@ -84916,7 +84916,7 @@ int lua_ax_base_TransitionRotoZoom_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionRotoZoom_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionRotoZoom)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionRotoZoom)");
     return 0;
 }
 
@@ -85012,7 +85012,7 @@ int lua_ax_base_TransitionJumpZoom_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionJumpZoom_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionJumpZoom)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionJumpZoom)");
     return 0;
 }
 
@@ -85205,7 +85205,7 @@ int lua_ax_base_TransitionMoveInL_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionMoveInL_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionMoveInL)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionMoveInL)");
     return 0;
 }
 
@@ -85303,7 +85303,7 @@ int lua_ax_base_TransitionMoveInR_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionMoveInR_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionMoveInR)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionMoveInR)");
     return 0;
 }
 
@@ -85399,7 +85399,7 @@ int lua_ax_base_TransitionMoveInT_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionMoveInT_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionMoveInT)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionMoveInT)");
     return 0;
 }
 
@@ -85495,7 +85495,7 @@ int lua_ax_base_TransitionMoveInB_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionMoveInB_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionMoveInB)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionMoveInB)");
     return 0;
 }
 
@@ -85688,7 +85688,7 @@ int lua_ax_base_TransitionSlideInL_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionSlideInL_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionSlideInL)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionSlideInL)");
     return 0;
 }
 
@@ -85786,7 +85786,7 @@ int lua_ax_base_TransitionSlideInR_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionSlideInR_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionSlideInR)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionSlideInR)");
     return 0;
 }
 
@@ -85882,7 +85882,7 @@ int lua_ax_base_TransitionSlideInB_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionSlideInB_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionSlideInB)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionSlideInB)");
     return 0;
 }
 
@@ -85978,7 +85978,7 @@ int lua_ax_base_TransitionSlideInT_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionSlideInT_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionSlideInT)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionSlideInT)");
     return 0;
 }
 
@@ -86124,7 +86124,7 @@ int lua_ax_base_TransitionShrinkGrow_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionShrinkGrow_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionShrinkGrow)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionShrinkGrow)");
     return 0;
 }
 
@@ -86240,7 +86240,7 @@ int lua_ax_base_TransitionFlipX_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionFlipX_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionFlipX)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionFlipX)");
     return 0;
 }
 
@@ -86355,7 +86355,7 @@ int lua_ax_base_TransitionFlipY_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionFlipY_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionFlipY)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionFlipY)");
     return 0;
 }
 
@@ -86470,7 +86470,7 @@ int lua_ax_base_TransitionFlipAngular_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionFlipAngular_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionFlipAngular)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionFlipAngular)");
     return 0;
 }
 
@@ -86585,7 +86585,7 @@ int lua_ax_base_TransitionZoomFlipX_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionZoomFlipX_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionZoomFlipX)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionZoomFlipX)");
     return 0;
 }
 
@@ -86700,7 +86700,7 @@ int lua_ax_base_TransitionZoomFlipY_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionZoomFlipY_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionZoomFlipY)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionZoomFlipY)");
     return 0;
 }
 
@@ -86815,7 +86815,7 @@ int lua_ax_base_TransitionZoomFlipAngular_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionZoomFlipAngular_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionZoomFlipAngular)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionZoomFlipAngular)");
     return 0;
 }
 
@@ -86997,7 +86997,7 @@ int lua_ax_base_TransitionFade_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionFade_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionFade)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionFade)");
     return 0;
 }
 
@@ -87094,7 +87094,7 @@ int lua_ax_base_TransitionCrossFade_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionCrossFade_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionCrossFade)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionCrossFade)");
     return 0;
 }
 
@@ -87240,7 +87240,7 @@ int lua_ax_base_TransitionTurnOffTiles_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionTurnOffTiles_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionTurnOffTiles)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionTurnOffTiles)");
     return 0;
 }
 
@@ -87434,7 +87434,7 @@ int lua_ax_base_TransitionSplitCols_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionSplitCols_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionSplitCols)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionSplitCols)");
     return 0;
 }
 
@@ -87532,7 +87532,7 @@ int lua_ax_base_TransitionSplitRows_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionSplitRows_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionSplitRows)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionSplitRows)");
     return 0;
 }
 
@@ -87728,7 +87728,7 @@ int lua_ax_base_TransitionFadeTR_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionFadeTR_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionFadeTR)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionFadeTR)");
     return 0;
 }
 
@@ -87826,7 +87826,7 @@ int lua_ax_base_TransitionFadeBL_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionFadeBL_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionFadeBL)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionFadeBL)");
     return 0;
 }
 
@@ -87922,7 +87922,7 @@ int lua_ax_base_TransitionFadeUp_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionFadeUp_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionFadeUp)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionFadeUp)");
     return 0;
 }
 
@@ -88018,7 +88018,7 @@ int lua_ax_base_TransitionFadeDown_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionFadeDown_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionFadeDown)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionFadeDown)");
     return 0;
 }
 
@@ -88222,7 +88222,7 @@ int lua_ax_base_TransitionPageTurn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionPageTurn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionPageTurn)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionPageTurn)");
     return 0;
 }
 
@@ -88320,7 +88320,7 @@ int lua_ax_base_TransitionProgress_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionProgress_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionProgress)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionProgress)");
     return 0;
 }
 
@@ -88416,7 +88416,7 @@ int lua_ax_base_TransitionProgressRadialCCW_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionProgressRadialCCW_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionProgressRadialCCW)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionProgressRadialCCW)");
     return 0;
 }
 
@@ -88512,7 +88512,7 @@ int lua_ax_base_TransitionProgressRadialCW_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionProgressRadialCW_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionProgressRadialCW)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionProgressRadialCW)");
     return 0;
 }
 
@@ -88608,7 +88608,7 @@ int lua_ax_base_TransitionProgressHorizontal_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionProgressHorizontal_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionProgressHorizontal)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionProgressHorizontal)");
     return 0;
 }
 
@@ -88704,7 +88704,7 @@ int lua_ax_base_TransitionProgressVertical_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionProgressVertical_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionProgressVertical)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionProgressVertical)");
     return 0;
 }
 
@@ -88800,7 +88800,7 @@ int lua_ax_base_TransitionProgressInOut_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionProgressInOut_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionProgressInOut)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionProgressInOut)");
     return 0;
 }
 
@@ -88896,7 +88896,7 @@ int lua_ax_base_TransitionProgressOutIn_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TransitionProgressOutIn_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TransitionProgressOutIn)");
+    AXLOGV("luabindings: finalizing LUA object (TransitionProgressOutIn)");
     return 0;
 }
 
@@ -90892,7 +90892,7 @@ int lua_ax_base_Camera_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Camera_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Camera)");
+    AXLOGV("luabindings: finalizing LUA object (Camera)");
     return 0;
 }
 
@@ -91346,7 +91346,7 @@ int lua_ax_base_CameraBackgroundBrush_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_CameraBackgroundBrush_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (CameraBackgroundBrush)");
+    AXLOGV("luabindings: finalizing LUA object (CameraBackgroundBrush)");
     return 0;
 }
 
@@ -91497,7 +91497,7 @@ int lua_ax_base_CameraBackgroundDepthBrush_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_CameraBackgroundDepthBrush_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (CameraBackgroundDepthBrush)");
+    AXLOGV("luabindings: finalizing LUA object (CameraBackgroundDepthBrush)");
     return 0;
 }
 
@@ -91644,7 +91644,7 @@ int lua_ax_base_CameraBackgroundColorBrush_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_CameraBackgroundColorBrush_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (CameraBackgroundColorBrush)");
+    AXLOGV("luabindings: finalizing LUA object (CameraBackgroundColorBrush)");
     return 0;
 }
 
@@ -92007,7 +92007,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_CameraBackgroundSkyBoxBrush_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (CameraBackgroundSkyBoxBrush)");
+    AXLOGV("luabindings: finalizing LUA object (CameraBackgroundSkyBoxBrush)");
     return 0;
 }
 
@@ -93097,7 +93097,7 @@ int lua_ax_base_GridBase_getGridRect(lua_State* tolua_S)
 }
 static int lua_ax_base_GridBase_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GridBase)");
+    AXLOGV("luabindings: finalizing LUA object (GridBase)");
     return 0;
 }
 
@@ -93363,7 +93363,7 @@ int lua_ax_base_Grid3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Grid3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Grid3D)");
+    AXLOGV("luabindings: finalizing LUA object (Grid3D)");
     return 0;
 }
 
@@ -93478,7 +93478,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
 }
 static int lua_ax_base_TiledGrid3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TiledGrid3D)");
+    AXLOGV("luabindings: finalizing LUA object (TiledGrid3D)");
     return 0;
 }
 
@@ -93836,7 +93836,7 @@ int lua_ax_base_BaseLight_isEnabled(lua_State* tolua_S)
 }
 static int lua_ax_base_BaseLight_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (BaseLight)");
+    AXLOGV("luabindings: finalizing LUA object (BaseLight)");
     return 0;
 }
 
@@ -94081,7 +94081,7 @@ int lua_ax_base_DirectionLight_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_DirectionLight_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (DirectionLight)");
+    AXLOGV("luabindings: finalizing LUA object (DirectionLight)");
     return 0;
 }
 
@@ -94279,7 +94279,7 @@ int lua_ax_base_PointLight_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_PointLight_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PointLight)");
+    AXLOGV("luabindings: finalizing LUA object (PointLight)");
     return 0;
 }
 
@@ -94914,7 +94914,7 @@ int lua_ax_base_SpotLight_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_SpotLight_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (SpotLight)");
+    AXLOGV("luabindings: finalizing LUA object (SpotLight)");
     return 0;
 }
 
@@ -95019,7 +95019,7 @@ int lua_ax_base_AmbientLight_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_AmbientLight_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (AmbientLight)");
+    AXLOGV("luabindings: finalizing LUA object (AmbientLight)");
     return 0;
 }
 
@@ -95140,7 +95140,7 @@ int lua_ax_base_RenderState_bindPass(lua_State* tolua_S)
 }
 static int lua_ax_base_RenderState_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (RenderState)");
+    AXLOGV("luabindings: finalizing LUA object (RenderState)");
     return 0;
 }
 
@@ -95573,7 +95573,7 @@ int lua_ax_base_Technique_create(lua_State* tolua_S)
 }
 static int lua_ax_base_Technique_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Technique)");
+    AXLOGV("luabindings: finalizing LUA object (Technique)");
     return 0;
 }
 
@@ -96603,7 +96603,7 @@ int lua_ax_base_Material_createWithProperties(lua_State* tolua_S)
 }
 static int lua_ax_base_Material_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Material)");
+    AXLOGV("luabindings: finalizing LUA object (Material)");
     return 0;
 }
 
@@ -98038,7 +98038,7 @@ int lua_ax_base_Pass_create(lua_State* tolua_S)
 }
 static int lua_ax_base_Pass_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Pass)");
+    AXLOGV("luabindings: finalizing LUA object (Pass)");
     return 0;
 }
 
@@ -100998,7 +100998,7 @@ int lua_ax_base_Renderer_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_Renderer_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Renderer)");
+    AXLOGV("luabindings: finalizing LUA object (Renderer)");
     return 0;
 }
 
@@ -102031,7 +102031,7 @@ int lua_ax_base_TextureCache_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TextureCache_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TextureCache)");
+    AXLOGV("luabindings: finalizing LUA object (TextureCache)");
     return 0;
 }
 
@@ -102491,7 +102491,7 @@ int lua_ax_base_Device_selectionChanged(lua_State* tolua_S)
 }
 static int lua_ax_base_Device_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Device)");
+    AXLOGV("luabindings: finalizing LUA object (Device)");
     return 0;
 }
 
@@ -102844,7 +102844,7 @@ int lua_ax_base_Application_getInstance(lua_State* tolua_S)
 }
 static int lua_ax_base_Application_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Application)");
+    AXLOGV("luabindings: finalizing LUA object (Application)");
     return 0;
 }
 
@@ -103016,7 +103016,7 @@ int lua_ax_base_GLViewImpl_createWithFullScreen(lua_State* tolua_S)
 }
 static int lua_ax_base_GLViewImpl_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GLViewImpl)");
+    AXLOGV("luabindings: finalizing LUA object (GLViewImpl)");
     return 0;
 }
 
@@ -103444,7 +103444,7 @@ int lua_ax_base_AnimationCache_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_AnimationCache_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (AnimationCache)");
+    AXLOGV("luabindings: finalizing LUA object (AnimationCache)");
     return 0;
 }
 
@@ -104701,7 +104701,7 @@ int lua_ax_base_SpriteBatchNode_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_SpriteBatchNode_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (SpriteBatchNode)");
+    AXLOGV("luabindings: finalizing LUA object (SpriteBatchNode)");
     return 0;
 }
 
@@ -104924,7 +104924,7 @@ int lua_ax_base_ParallaxNode_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ParallaxNode_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParallaxNode)");
+    AXLOGV("luabindings: finalizing LUA object (ParallaxNode)");
     return 0;
 }
 
@@ -105472,7 +105472,7 @@ int lua_ax_base_TMXObjectGroup_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TMXObjectGroup_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TMXObjectGroup)");
+    AXLOGV("luabindings: finalizing LUA object (TMXObjectGroup)");
     return 0;
 }
 
@@ -105636,7 +105636,7 @@ int lua_ax_base_TMXLayerInfo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TMXLayerInfo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TMXLayerInfo)");
+    AXLOGV("luabindings: finalizing LUA object (TMXLayerInfo)");
     return 0;
 }
 
@@ -105745,7 +105745,7 @@ int lua_ax_base_TMXTilesetInfo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TMXTilesetInfo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TMXTilesetInfo)");
+    AXLOGV("luabindings: finalizing LUA object (TMXTilesetInfo)");
     return 0;
 }
 
@@ -107776,7 +107776,7 @@ int lua_ax_base_TMXMapInfo_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TMXMapInfo_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TMXMapInfo)");
+    AXLOGV("luabindings: finalizing LUA object (TMXMapInfo)");
     return 0;
 }
 
@@ -108125,7 +108125,7 @@ int lua_ax_base_TileMapAtlas_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TileMapAtlas_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TileMapAtlas)");
+    AXLOGV("luabindings: finalizing LUA object (TileMapAtlas)");
     return 0;
 }
 
@@ -109376,7 +109376,7 @@ int lua_ax_base_FastTMXLayer_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FastTMXLayer_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FastTMXLayer)");
+    AXLOGV("luabindings: finalizing LUA object (FastTMXLayer)");
     return 0;
 }
 
@@ -109696,7 +109696,7 @@ int lua_ax_base_TMXTileAnimTask_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TMXTileAnimTask_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TMXTileAnimTask)");
+    AXLOGV("luabindings: finalizing LUA object (TMXTileAnimTask)");
     return 0;
 }
 
@@ -109937,7 +109937,7 @@ int lua_ax_base_TMXTileAnimManager_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_TMXTileAnimManager_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TMXTileAnimManager)");
+    AXLOGV("luabindings: finalizing LUA object (TMXTileAnimManager)");
     return 0;
 }
 
@@ -111148,7 +111148,7 @@ int lua_ax_base_FastTMXTiledMap_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_FastTMXTiledMap_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (FastTMXTiledMap)");
+    AXLOGV("luabindings: finalizing LUA object (FastTMXTiledMap)");
     return 0;
 }
 
@@ -111970,7 +111970,7 @@ int lua_ax_base_MotionStreak3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_MotionStreak3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MotionStreak3D)");
+    AXLOGV("luabindings: finalizing LUA object (MotionStreak3D)");
     return 0;
 }
 
@@ -112177,7 +112177,7 @@ int lua_ax_base_ComponentLua_constructor(lua_State* tolua_S)
 
 static int lua_ax_base_ComponentLua_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ComponentLua)");
+    AXLOGV("luabindings: finalizing LUA object (ComponentLua)");
     return 0;
 }
 

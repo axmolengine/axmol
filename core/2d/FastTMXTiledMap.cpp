@@ -4,7 +4,8 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ 
 https://axmol.dev/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -259,7 +260,7 @@ Value FastTMXTiledMap::getPropertiesForGID(int GID) const
 
 std::string FastTMXTiledMap::getDescription() const
 {
-    return StringUtils::format("<FastTMXTiledMap | Tag = %d, Layers = %d", _tag, static_cast<int>(_children.size()));
+    return fmt::format("<FastTMXTiledMap | Tag = {}, Layers = {}", _tag, static_cast<int>(_children.size()));
 }
 
 void FastTMXTiledMap::setTileAnimEnabled(bool enabled)

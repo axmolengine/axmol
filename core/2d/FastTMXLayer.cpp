@@ -2,10 +2,11 @@
 Copyright (c) 2008-2010 Ricardo Quesada
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
+Copyright (c) 2011 HKASoftware
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
-Copyright (c) 2011 HKASoftware
 
 https://axmol.dev/
 
@@ -961,7 +962,7 @@ void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid
 
 std::string FastTMXLayer::getDescription() const
 {
-    return StringUtils::format("<FastTMXLayer | tag = %d, size = %d,%d>", _tag, (int)_mapTileSize.width,
+    return fmt::format("<FastTMXLayer | tag = {}, size = {},{}>", _tag, (int)_mapTileSize.width,
                                (int)_mapTileSize.height);
 }
 

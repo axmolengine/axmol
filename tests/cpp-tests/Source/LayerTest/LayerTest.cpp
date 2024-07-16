@@ -919,27 +919,27 @@ void LayerRadialGradientTest::sliderCallback(ax::Object* sender, ax::ui::Slider:
     case 0:
         // scale
         _layer->setScale(percent * 2);
-        AXLOG("scale is %f", percent * 2);
+        AXLOGD("scale is {}", percent * 2);
         break;
     case 1:
         // skewx
         _layer->setSkewX(90 * percent);
-        AXLOG("SkewX is %f", 90 * percent);
+        AXLOGD("SkewX is {}", 90 * percent);
         break;
     case 2:
         // skewy
         _layer->setSkewY(90 * percent);
-        AXLOG("SkewY is %f", 90 * percent);
+        AXLOGD("SkewY is {}", 90 * percent);
         break;
     case 3:
         // expand
         _layer->setExpand(percent);
-        AXLOG("expand is %f", percent);
+        AXLOGD("expand is {}", percent);
         break;
     case 4:
         // radius
         _layer->setRadius(300 * percent);
-        AXLOG("radius is %f", 300 * percent);
+        AXLOGD("radius is {}", 300 * percent);
         break;
     default:
         break;

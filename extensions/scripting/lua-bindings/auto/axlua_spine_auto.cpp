@@ -1900,7 +1900,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
 
 static int lua_ax_spine_SkeletonRenderer_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (SkeletonRenderer)");
+    AXLOGV("luabindings: finalizing LUA object (SkeletonRenderer)");
     return 0;
 }
 
@@ -3347,7 +3347,7 @@ int lua_ax_spine_SkeletonAnimation_createWithBinaryFile(lua_State* tolua_S)
 }
 static int lua_ax_spine_SkeletonAnimation_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (SkeletonAnimation)");
+    AXLOGV("luabindings: finalizing LUA object (SkeletonAnimation)");
     return 0;
 }
 

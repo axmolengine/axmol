@@ -437,7 +437,7 @@ int lua_ax_controller_Controller_stopDiscoveryController(lua_State* tolua_S)
 }
 static int lua_ax_controller_Controller_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Controller)");
+    AXLOGV("luabindings: finalizing LUA object (Controller)");
     return 0;
 }
 
@@ -820,7 +820,7 @@ int lua_ax_controller_EventController_constructor(lua_State* tolua_S)
 
 static int lua_ax_controller_EventController_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventController)");
+    AXLOGV("luabindings: finalizing LUA object (EventController)");
     return 0;
 }
 
@@ -880,7 +880,7 @@ int lua_ax_controller_EventListenerController_create(lua_State* tolua_S)
 }
 static int lua_ax_controller_EventListenerController_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerController)");
+    AXLOGV("luabindings: finalizing LUA object (EventListenerController)");
     return 0;
 }
 

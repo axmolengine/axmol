@@ -32,7 +32,7 @@
 
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
-- Version: 1.3.0
+- Version: 1.4.0
 - License: BSL-1.0
 
 ## ConcurrentQueue
@@ -108,7 +108,7 @@
 ## lua
 - plainlua
   - [![Upstream](https://img.shields.io/github/v/release/lua/lua?label=Upstream)](https://github.com/lua/lua) http://www.lua.org/
-  - Version: 5.4.6
+  - Version: 5.4.7
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2

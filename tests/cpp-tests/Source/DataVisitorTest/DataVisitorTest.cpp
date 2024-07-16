@@ -88,8 +88,8 @@ void PrettyPrinterDemo::onEnter()
     //    // print dictionary
     //    auto dict = __Dictionary::createWithContentsOfFile("animations/animations.plist");
     //    dict->acceptVisitor(visitor);
-    //    ax::print("%s", visitor.getResult().c_str());
-    //    ax::print("-------------------------------");
+    //    AXLOGD("{}", visitor.getResult());
+    //    AXLOGD("-------------------------------");
     //
     //    __Set myset;
     //    for (int i = 0; i < 30; ++i) {
@@ -97,12 +97,12 @@ void PrettyPrinterDemo::onEnter()
     //    }
     //    visitor.clear();
     //    myset.acceptVisitor(visitor);
-    //    ax::print("%s", visitor.getResult().c_str());
-    //    ax::print("-------------------------------");
+    //    AXLOGD("{}", visitor.getResult());
+    //    AXLOGD("-------------------------------");
     //
     //    visitor.clear();
     addSprite();
     //    dict = Director::getInstance()->getTextureCache()->snapshotTextures();
     //    dict->acceptVisitor(visitor);
-    //    ax::print("%s", visitor.getResult().c_str());
+    //    AXLOGD("{}", visitor.getResult());
 }

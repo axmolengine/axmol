@@ -160,7 +160,7 @@ void ArmatureAnimation::play(std::string_view animationName, int durationTo, int
 {
     if (animationName.empty())
     {
-        AXLOG("_animationData can not be null");
+        AXLOGD("_animationData can not be null");
         return;
     }
     //    AXASSERT(_animationData, "_animationData can not be null");
@@ -168,7 +168,7 @@ void ArmatureAnimation::play(std::string_view animationName, int durationTo, int
     _movementData = _animationData->getMovement(animationName);
     if (nullptr == _movementData)
     {
-        AXLOG("_movementData can not be null");
+        AXLOGD("_movementData can not be null");
         return;
     }
     //    AXASSERT(_movementData, "_movementData can not be null");
@@ -296,7 +296,7 @@ void ArmatureAnimation::gotoAndPlay(int frameIndex)
 {
     if (!_movementData || frameIndex < 0 || frameIndex >= _movementData->duration)
     {
-        AXLOG("Please ensure you have played a movement, and the frameIndex is in the range.");
+        AXLOGD("Please ensure you have played a movement, and the frameIndex is in the range.");
         return;
     }
 

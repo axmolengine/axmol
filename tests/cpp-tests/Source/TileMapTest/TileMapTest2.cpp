@@ -124,7 +124,7 @@ TileMapTestNew::TileMapTestNew()
     map->getTexture()->setAntiAliasTexParameters();
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     // If you are not going to use the Map, you can free it now
     // NEW since v0.7
@@ -159,7 +159,7 @@ TileMapEditTestNew::TileMapEditTestNew()
     map->getTexture()->setAliasTexParameters();
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     // If you are not going to use the Map, you can free it now
     // [tilemap releaseMap);
@@ -188,7 +188,7 @@ void TileMapEditTestNew::updateMap(float dt)
     //        for(int y=0; y < tilemap.tgaInfo->height; y++) {
     //            Color3B c =[tilemap tileAt:Size(x,y));
     //            if( c.r != 0 ) {
-    //                ////----AXLOG("%d,%d = %d", x,y,c.r);
+    //                ////----AXLOGD("{},{} = {}", x,y,c.r);
     //            }
     //        }
     //    }
@@ -229,7 +229,7 @@ TMXOrthoTestNew::TMXOrthoTestNew()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     auto scale  = ScaleBy::create(10, 0.1f);
     auto back   = scale->reverse();
@@ -271,7 +271,7 @@ TMXOrthoTest2New::TMXOrthoTest2New()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     map->runAction(ScaleBy::create(2, 0.5f));
 }
@@ -292,7 +292,7 @@ TMXOrthoTest3New::TMXOrthoTest3New()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     map->setScale(0.2f);
     map->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -314,7 +314,7 @@ TMXOrthoTest4New::TMXOrthoTest4New()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s1 = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s1.width, s1.height);
+    AXLOGD("ContentSize: {}, {}", s1.width, s1.height);
 
     map->setAnchorPoint(Vec2(0.0f, 0.0f));
 
@@ -375,7 +375,7 @@ TMXReadWriteTestNew::TMXReadWriteTestNew()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     auto layer = map->getLayer("Layer 0");
 
@@ -408,21 +408,21 @@ TMXReadWriteTestNew::TMXReadWriteTestNew()
     tile3->runAction(seq3);
 
     _gid = layer->getTileGIDAt(Vec2(0, 63));
-    ////----AXLOG("Tile GID at:(0,63) is: %d", _gid);
+    ////----AXLOGD("Tile GID at:(0,63) is: {}", _gid);
 
     schedule(AX_SCHEDULE_SELECTOR(TMXReadWriteTestNew::updateCol), 2.0f);
     schedule(AX_SCHEDULE_SELECTOR(TMXReadWriteTestNew::repaintWithGID), 2.05f);
     schedule(AX_SCHEDULE_SELECTOR(TMXReadWriteTestNew::removeTiles), 1.0f);
 
-    ////----AXLOG("++++atlas quantity: %d", layer->textureAtlas()->getTotalQuads());
-    ////----AXLOG("++++children: %d", layer->getChildren()->count() );
+    ////----AXLOGD("++++atlas quantity: {}", layer->textureAtlas()->getTotalQuads());
+    ////----AXLOGD("++++children: {}", layer->getChildren()->count() );
 
     _gid2 = 0;
 }
 
 void TMXReadWriteTestNew::removeSprite(Node* sender)
 {
-    ////----AXLOG("removing tile: %x", sender);
+    ////----AXLOGD("removing tile: {:#x}", sender);
     auto p = ((Node*)sender)->getParent();
 
     if (p)
@@ -430,7 +430,7 @@ void TMXReadWriteTestNew::removeSprite(Node* sender)
         p->removeChild((Node*)sender, true);
     }
 
-    //////----AXLOG("atlas quantity: %d", p->textureAtlas()->totalQuads());
+    //////----AXLOGD("atlas quantity: {}", p->textureAtlas()->totalQuads());
 }
 
 void TMXReadWriteTestNew::updateCol(float dt)
@@ -438,8 +438,8 @@ void TMXReadWriteTestNew::updateCol(float dt)
     auto map   = (ax::FastTMXTiledMap*)getChildByTag(kTagTileMap);
     auto layer = (ax::FastTMXLayer*)map->getChildByTag(0);
 
-    ////----AXLOG("++++atlas quantity: %d", layer->textureAtlas()->getTotalQuads());
-    ////----AXLOG("++++children: %d", layer->getChildren()->count() );
+    ////----AXLOGD("++++atlas quantity: {}", layer->textureAtlas()->getTotalQuads());
+    ////----AXLOGD("++++children: {}", layer->getChildren()->count() );
 
     auto s = layer->getLayerSize();
 
@@ -500,7 +500,7 @@ TMXHexTestNew::TMXHexTestNew()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 }
 
 std::string TMXHexTestNew::title() const
@@ -546,7 +546,7 @@ TMXIsoTest1New::TMXIsoTest1New()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     map->setAnchorPoint(Vec2(0.5f, 0.5f));
 }
@@ -570,7 +570,7 @@ TMXIsoTest2New::TMXIsoTest2New()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     // move map to the center of the screen
     auto ms = map->getMapSize();
@@ -597,7 +597,7 @@ TMXUncompressedTestNew::TMXUncompressedTestNew()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     // move map to the center of the screen
     auto ms = map->getMapSize();
@@ -631,7 +631,7 @@ TMXTilesetTestNew::TMXTilesetTestNew()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 }
 
 std::string TMXTilesetTestNew::title() const
@@ -650,13 +650,13 @@ TMXOrthoObjectsTestNew::TMXOrthoObjectsTestNew()
     addChild(map, -1, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     auto group    = map->getObjectGroup("Object Group 1");
     auto& objects = group->getObjects();
 
     Value objectsVal = Value(objects);
-    AXLOG("%s", objectsVal.getDescription().c_str());
+    AXLOGD("{}", objectsVal.getDescription());
 
     auto drawNode = DrawNode::create();
     Color4F color(1.0, 1.0, 1.0, 1.0);
@@ -699,14 +699,14 @@ TMXIsoObjectsTestNew::TMXIsoObjectsTestNew()
     addChild(map, -1, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     auto group = map->getObjectGroup("Object Group 1");
 
     auto& objects = group->getObjects();
 
     Value objectsVal = Value(objects);
-    AXLOG("%s", objectsVal.getDescription().c_str());
+    AXLOGD("{}", objectsVal.getDescription());
 
     auto drawNode = DrawNode::create();
     Color4F color(1.0, 1.0, 1.0, 1.0);
@@ -749,7 +749,7 @@ TMXResizeTestNew::TMXResizeTestNew()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     ax::FastTMXLayer* layer;
     layer = map->getLayer("Layer 0");
@@ -786,7 +786,7 @@ TMXIsoZorderNew::TMXIsoZorderNew()
     addChild(map, 0, kTagTileMap);
 
     auto s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
     map->setPosition(Vec2(-s.width / 2, 0.0f));
 
     _tamara = Sprite::create(s_pathSister1);
@@ -853,7 +853,7 @@ TMXOrthoZorderNew::TMXOrthoZorderNew()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     _tamara = Sprite::create(s_pathSister1);
     map->addChild(_tamara, (int)map->getChildren().size());
@@ -913,7 +913,7 @@ TMXIsoVertexZNew::TMXIsoVertexZNew()
 
     auto s = map->getContentSize();
     map->setPosition(Vec2(-s.width / 2, 0.0f));
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     // because I'm lazy, I'm reusing a tile as an sprite, but since this method uses vertexZ, you
     // can use any Sprite and it will work OK.
@@ -984,13 +984,13 @@ TMXOrthoVertexZNew::TMXOrthoVertexZNew()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     // because I'm lazy, I'm reusing a tile as an sprite, but since this method uses vertexZ, you
     // can use any Sprite and it will work OK.
     auto layer = map->getLayer("trees");
     _tamara    = layer->getTileAt(Vec2(0, 11));
-    AXLOG("%p vertexZ: %f", _tamara, _tamara->getPositionZ());
+    AXLOGD("{} vertexZ: {}", fmt::ptr(_tamara), _tamara->getPositionZ());
     _tamara->retain();
 
     auto move = MoveBy::create(10, Vec2(400, 450) * (1 / AX_CONTENT_SCALE_FACTOR()));
@@ -1057,7 +1057,7 @@ TMXIsoMoveLayerNew::TMXIsoMoveLayerNew()
     map->setPosition(Vec2(-700.0f, -50.0f));
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 }
 
 std::string TMXIsoMoveLayerNew::title() const
@@ -1081,7 +1081,7 @@ TMXOrthoMoveLayerNew::TMXOrthoMoveLayerNew()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 }
 
 std::string TMXOrthoMoveLayerNew::title() const
@@ -1109,7 +1109,7 @@ TMXTilePropertyTestNew::TMXTilePropertyTestNew()
     {
         for (const auto& value : map->getPropertiesForGID(i).asValueMap())
         {
-            ax::print("GID:%i, Properties:%s, %s", i, value.first.c_str(), value.second.asString().c_str());
+            AXLOGI("GID:{}, Properties:{}, {}", i, value.first.c_str(), value.second.asString().c_str());
         }
     }
 }
@@ -1136,7 +1136,7 @@ TMXOrthoFlipTestNew::TMXOrthoFlipTestNew()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    ax::print("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     auto action = ScaleBy::create(2, 0.5f);
     map->runAction(action);
@@ -1159,7 +1159,7 @@ TMXOrthoFlipRunTimeTestNew::TMXOrthoFlipRunTimeTestNew()
     addChild(map, 0, kTagTileMap);
 
     auto s = map->getContentSize();
-    ax::print("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     auto action = ScaleBy::create(2, 0.5f);
     map->runAction(action);
@@ -1229,7 +1229,7 @@ TMXOrthoFromXMLTestNew::TMXOrthoFromXMLTestNew()
     addChild(map, 0, kTagTileMap);
 
     auto s = map->getContentSize();
-    ax::print("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     auto action = ScaleBy::create(2, 0.5f);
     map->runAction(action);
@@ -1255,11 +1255,11 @@ TMXOrthoXMLFormatTestNew::TMXOrthoXMLFormatTestNew()
     addChild(map, 0, kTagTileMap);
 
     auto s = map->getContentSize();
-    ax::print("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     for (int i = 24; i <= 26; i++)
     {
-        ax::print("GID:%i, Properties:%s", i, map->getPropertiesForGID(i).asValueMap()["name"].asString().c_str());
+        AXLOGD("GID:{}, Properties:{}", i, map->getPropertiesForGID(i).asValueMap()["name"].asString());
     }
 
     auto action = ScaleBy::create(2, 0.5f);
@@ -1282,7 +1282,7 @@ TMXBug987New::TMXBug987New()
     addChild(map, 0, kTagTileMap);
 
     Size AX_UNUSED s1 = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s1.width, s1.height);
+    AXLOGD("ContentSize: {}, {}", s1.width, s1.height);
 
     map->setAnchorPoint(Vec2(0.0f, 0.0f));
     auto layer = map->getLayer("Tile Layer 1");
@@ -1333,9 +1333,9 @@ TMXGIDObjectsTestNew::TMXGIDObjectsTestNew()
     addChild(map, -1, kTagTileMap);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("Contentsize: %f, %f", s.width, s.height);
+    AXLOGD("Contentsize: {}, {}", s.width, s.height);
 
-    AXLOG("----> Iterating over all the group objects");
+    AXLOGD("----> Iterating over all the group objects");
 
     auto drawNode = DrawNode::create();
     Color4F color(1.0, 1.0, 1.0, 1.0);
@@ -1384,7 +1384,7 @@ TileAnimTestNew::TileAnimTestNew()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     map->setTileAnimEnabled(_animStarted);
 }
@@ -1416,7 +1416,7 @@ TileAnimTestNew2::TileAnimTestNew2()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     Size AX_UNUSED s = map->getContentSize();
-    AXLOG("ContentSize: %f, %f", s.width, s.height);
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
 
     map->setTileAnimEnabled(_animStarted);
 }

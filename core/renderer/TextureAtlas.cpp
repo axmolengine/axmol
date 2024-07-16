@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -181,7 +182,7 @@ bool TextureAtlas::initWithTexture(Texture2D* texture, ssize_t capacity)
 
 std::string TextureAtlas::getDescription() const
 {
-    return StringUtils::format("<TextureAtlas | totalQuads = %d>", static_cast<int>(_totalQuads));
+    return fmt::format("<TextureAtlas | totalQuads = {}>", static_cast<int>(_totalQuads));
 }
 
 void TextureAtlas::setupIndices()

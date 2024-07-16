@@ -317,12 +317,12 @@ ValueTypeJudgeInTable* ValueTypeJudgeInTable::create(ValueMap valueMap)
         Value::Type type = iter.second.getTypeFamily();
         if (type == Value::Type::STRING)
         {
-            AXLOG("The type of index %d is string", index);
+            AXLOGD("The type of index {} is string", index);
         }
 
         if (type == Value::Type::INTEGER || type == Value::Type::DOUBLE || type == Value::Type::FLOAT)
         {
-            AXLOG("The type of index %d is number", index);
+            AXLOGD("The type of index {} is number", index);
         }
 
         ++index;
@@ -366,7 +366,7 @@ int lua_cocos2dx_DrawNode3D_getBlendFunc(lua_State* L)
         blendfunc_to_luaval(L, ret);
         return 1;
     }
-    AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:getBlendFunc", argc, 0);
+    AXLOGD("{} has wrong number of arguments: {}, was expecting {} \n", "ax.DrawNode3D:getBlendFunc", argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -417,7 +417,7 @@ int lua_cocos2dx_DrawNode3D_setBlendFunc(lua_State* L)
         return 0;
     }
 
-    AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:setBlendFunc", argc, 1);
+    AXLOGD("{} has wrong number of arguments: {}, was expecting {} \n", "ax.DrawNode3D:setBlendFunc", argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -470,7 +470,7 @@ int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
         cobj->drawLine(arg0, arg1, arg2);
         return 0;
     }
-    AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:drawLine", argc, 3);
+    AXLOGD("{} has wrong number of arguments: {}, was expecting {} \n", "ax.DrawNode3D:drawLine", argc, 3);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -514,7 +514,7 @@ int lua_cocos2dx_DrawNode3D_clear(lua_State* L)
         cobj->clear();
         return 0;
     }
-    AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:clear", argc, 0);
+    AXLOGD("{} has wrong number of arguments: {}, was expecting {} \n", "ax.DrawNode3D:clear", argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -592,7 +592,7 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
         cobj->drawCube(&arg0[0], arg1);
         return 0;
     }
-    AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:drawCube", argc, 2);
+    AXLOGD("{} has wrong number of arguments: {}, was expecting {} \n", "ax.DrawNode3D:drawCube", argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -627,7 +627,7 @@ int lua_cocos2dx_DrawNode3D_create(lua_State* L)
         object_to_luaval<ax::DrawNode3D>(L, "ax.DrawNode3D", (ax::DrawNode3D*)ret);
         return 1;
     }
-    AXLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "ax.DrawNode3D:create", argc, 0);
+    AXLOGD("{} has wrong number of arguments: {}, was expecting {}\n ", "ax.DrawNode3D:create", argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
 tolua_lerror:
@@ -681,7 +681,7 @@ int lua_cocos2dx_ValueTypeJudgeInTable_create(lua_State* L)
                                                          (ax::ValueTypeJudgeInTable*)ret);
         return 1;
     }
-    AXLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "ax.ValueTypeJudgeInTable:create", argc, 1);
+    AXLOGD("{} has wrong number of arguments: {}, was expecting {}\n ", "ax.ValueTypeJudgeInTable:create", argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
 tolua_lerror:

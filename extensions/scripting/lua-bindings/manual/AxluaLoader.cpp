@@ -93,7 +93,7 @@ int axlua_loader(lua_State* L)
                              resolvedPath.c_str());
     }
     else
-        AXLOG("can not get file data of %s", resolvedPath.c_str());
+        AXLOGD("can not get file data of {}", resolvedPath);
     return nret;
 }
 }

@@ -251,7 +251,7 @@ bool AudioControlTest::init()
 
                 button->setEnabled(false);
                 AudioEngine::setFinishCallback(_audioID, [&](int id, std::string_view filePath) {
-                    ax::print("_audioID(%d), _isStopped:(%d), played over!!!", _audioID, _isStopped);
+                    AXLOGD("_audioID({}), _isStopped:({}), played over!!!", _audioID, _isStopped);
 
                     _playOverLabel->setVisible(true);
 
@@ -422,7 +422,7 @@ bool AudioLoadTest::init()
             AudioEngine::preload("audio/SoundEffectsFX009/FX082.mp3", [isDestroyed, stateLabel](bool isSuccess) {
                 if (*isDestroyed)
                 {
-                    AXLOG("AudioLoadTest scene was destroyed, no need to set the label text.");
+                    AXLOGD("AudioLoadTest scene was destroyed, no need to set the label text.");
                     return;
                 }
 
@@ -483,8 +483,8 @@ bool AudioWavTest::init()
             {
                 AudioEngine::stop(_audioID);
                 _audioID = AudioEngine::play2d(_wavFiles[--_curIndex]);
-                _stateLabel->setString(StringUtils::format("[index: %d] %s", _curIndex,
-                                                           FileUtils::getFileShortName(_wavFiles[_curIndex]).c_str()));
+                _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex,
+                                                           FileUtils::getFileShortName(_wavFiles[_curIndex])));
             }
         });
         playPrev->setPosition(layerSize.width * 0.35f, layerSize.height * 0.5f);
@@ -495,8 +495,8 @@ bool AudioWavTest::init()
             {
                 AudioEngine::stop(_audioID);
                 _audioID = AudioEngine::play2d(_wavFiles[++_curIndex]);
-                _stateLabel->setString(StringUtils::format("[index: %d] %s", _curIndex,
-                                                           FileUtils::getFileShortName(_wavFiles[_curIndex]).c_str()));
+                _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex,
+                                                           FileUtils::getFileShortName(_wavFiles[_curIndex])));
             }
         });
         playNext->setPosition(layerSize.width * 0.65f, layerSize.height * 0.5f);
@@ -516,8 +516,8 @@ void AudioWavTest::onEnter()
     {
         _curIndex = 0;
         _audioID  = AudioEngine::play2d(_wavFiles[_curIndex]);
-        _stateLabel->setString(StringUtils::format("[index: %d] %s", _curIndex,
-                                                   FileUtils::getFileShortName(_wavFiles[_curIndex]).c_str()));
+        _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex,
+                                                   FileUtils::getFileShortName(_wavFiles[_curIndex])));
     }
 }
 
@@ -557,10 +557,10 @@ bool PlaySimultaneouslyTest::init()
             }
             else
             {
-                ax::print("%s,%d,Fail to play file:%s", __FILE__, __LINE__, _files[index].c_str());
+                AXLOGD("{},{},Fail to play file:{}", __FILE__, __LINE__, _files[index]);
             }
         }
-        ax::print("diff time:%lf", utils::gettime() - startTime);
+        AXLOGD("diff time:{}", utils::gettime() - startTime);
     });
     playItem->setPositionNormalized(Vec2(0.5f, 0.5f));
     this->addChild(playItem);
@@ -738,7 +738,7 @@ bool AudioIssue18597Test::init()
         // test case for https://github.com/cocos2d/cocos2d-x/issues/18597
         this->schedule(
             [=](float dt) {
-                AXLOG("issues 18597 audio crash test");
+                AXLOGD("issues 18597 audio crash test");
                 for (int i = 0; i < 2; ++i)
                 {
                     auto id = AudioEngine::play2d("audio/MUS_BGM_Battle_Round1_v1.caf", true, 1.0f);
@@ -1092,11 +1092,11 @@ void AudioPreloadSameFileMultipleTimes::onEnter()
     for (int i = 0; i < 10; ++i)
     {
         AudioEngine::preload("audio/SoundEffectsFX009/FX082.mp3", [i](bool isSucceed) {
-            ax::print("111: %d preload %s", i, isSucceed ? "succeed" : "failed");
+            AXLOGD("111: {} preload {}", i, isSucceed ? "succeed" : "failed");
             AudioEngine::preload("audio/SoundEffectsFX009/FX082.mp3", [i](bool isSucceed) {
-                ax::print("222: %d preload %s", i, isSucceed ? "succeed" : "failed");
+                AXLOGD("222: {} preload {}", i, isSucceed ? "succeed" : "failed");
                 AudioEngine::preload("audio/SoundEffectsFX009/FX082.mp3", [i](bool isSucceed) {
-                    ax::print("333: %d preload %s", i, isSucceed ? "succeed" : "failed");
+                    AXLOGD("333: {} preload {}", i, isSucceed ? "succeed" : "failed");
                 });
             });
         });
@@ -1194,7 +1194,7 @@ void AudioPlayInFinishedCB::doPlay(std::string_view filename)
     int playID = AudioEngine::play2d(filename, false, 1);
     AudioEngine::setFinishCallback(playID, [this](int finishID, std::string_view file) {
         _playList.pop_front();
-        ax::print("finish music %s", file.data());
+        AXLOGD("finish music {}", file);
         if (!_playList.empty())
         {
             std::string_view name = _playList.front();

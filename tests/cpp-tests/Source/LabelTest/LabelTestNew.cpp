@@ -445,14 +445,14 @@ LabelFNTMultiLine::LabelFNTMultiLine()
     addChild(label1, 0, kTagBitmapAtlas1);
 
     s = label1->getContentSize();
-    AXLOG("content size: %.2fx%.2f", s.width, s.height);
+    AXLOGD("content size: {:.2}x{:.2}", s.width, s.height);
 
     // Center
     auto label2 = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "Multi line\nCenter");
     addChild(label2, 0, kTagBitmapAtlas2);
 
     s = label2->getContentSize();
-    AXLOG("content size: %.2fx%.2f", s.width, s.height);
+    AXLOGD("content size:  {:.2}x{:.2}", s.width, s.height);
 
     // right
     auto label3 = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "Multi line\nRight\nThree lines Three");
@@ -460,7 +460,7 @@ LabelFNTMultiLine::LabelFNTMultiLine()
     addChild(label3, 0, kTagBitmapAtlas3);
 
     s = label3->getContentSize();
-    AXLOG("content size: %.2fx%.2f", s.width, s.height);
+    AXLOGD("content size:  {:.2}x{:.2}", s.width, s.height);
 
     label1->setPosition(VisibleRect::leftBottom());
     label2->setPosition(VisibleRect::center());
@@ -1266,7 +1266,7 @@ LabelTTFFontsTestNew::LabelTTFFontsTestNew()
         }
         else
         {
-            ax::print("ERROR: Cannot load: %s", ttfpaths[i]);
+            AXLOGE("ERROR: Cannot load: {}", ttfpaths[i]);
         }
     }
 }
@@ -1552,7 +1552,7 @@ LabelCharMapColorTest::LabelCharMapColorTest()
 
 void LabelCharMapColorTest::actionFinishCallback()
 {
-    AXLOG("Action finished");
+    AXLOGD("Action finished");
 }
 
 void LabelCharMapColorTest::step(float dt)
@@ -2501,7 +2501,7 @@ void LabelLayoutBaseTest::valueChanged(ax::Object* sender, ax::extension::Contro
     // Change value of label.
     auto fontSizeLabel = (Label*)this->getChildByName("fontSize");
     float fontSize     = (float)pControl->getValue();
-    fontSizeLabel->setString(StringUtils::format("font size:%d", (int)fontSize));
+    fontSizeLabel->setString(fmt::format("font size:{}", (int)fontSize));
 
     if (_labelType == 0)
     {
@@ -2525,7 +2525,7 @@ void LabelLayoutBaseTest::valueChanged(ax::Object* sender, ax::extension::Contro
     //    letterSprite->stopAllActions();
     //    letterSprite->runAction(Sequence::create(moveBy, moveBy->clone()->reverse(), nullptr ));
     //
-    //    AXLOG("label line height = %f", _label->getLineHeight());
+    //    AXLOGD("label line height = {}", _label->getLineHeight());
 }
 
 void LabelLayoutBaseTest::updateDrawNodeSize(const ax::Size& drawNodeSize)
@@ -2590,8 +2590,8 @@ LabelWrapNoBreakSpaceTest::LabelWrapNoBreakSpaceTest()
 {
     _label->setLineBreakWithoutSpace(false);
     const char* no_break_space_utf8 = "\xC2\xA0";  // 0xA0 - no-break space
-    auto str                        = StringUtils::format(
-        "The price is $%s1.25. \n\nthe space between \"$\" and \"1.25\" is a no break space.", no_break_space_utf8);
+    auto str                        = fmt::format(
+        "The price is ${}1.25. \n\nthe space between \"$\" and \"1.25\" is a no break space.", no_break_space_utf8);
     _label->setString(str);
     _label->setVerticalAlignment(TextVAlignment::TOP);
     _label->setOverflow(Label::Overflow::CLAMP);

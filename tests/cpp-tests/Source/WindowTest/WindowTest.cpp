@@ -120,11 +120,11 @@ void WindowTestResizedAndPositioned::onEnter()
     glView->getWindowPosition(&x, &y);
     glView->getWindowSize(&width, &height);
 
-    label1 = Label::createWithTTF(StringUtils::format("pos : %d, %d", x, y), "fonts/Marker Felt.ttf", 16.0f);
+    label1 = Label::createWithTTF(fmt::format("pos : {}, {}", x, y), "fonts/Marker Felt.ttf", 16.0f);
     label1->setPosition(s.width / 3 * 1, s.height / 2);
     addChild(label1);
 
-    label2 = Label::createWithTTF(StringUtils::format("size : %d, %d", width, height), "fonts/Marker Felt.ttf", 16.0f);
+    label2 = Label::createWithTTF(fmt::format("size : {}, {}", width, height), "fonts/Marker Felt.ttf", 16.0f);
     label2->setPosition(s.width / 3 * 2, s.height / 2);
     addChild(label2);
 
@@ -154,7 +154,7 @@ void WindowTestResizedAndPositioned::onWindowPositioned(EventCustom* e)
     if (pos == nullptr)
         return;
 
-    label1->setString(StringUtils::format("pos : %d, %d", (int)pos->x, (int)pos->y));
+    label1->setString(fmt::format("pos : {}, {}", (int)pos->x, (int)pos->y));
 }
 
 void WindowTestResizedAndPositioned::onWindowResized(EventCustom* e)
@@ -163,7 +163,7 @@ void WindowTestResizedAndPositioned::onWindowResized(EventCustom* e)
     if (size == nullptr)
         return;
 
-    label2->setString(StringUtils::format("size : %d, %d", (int)size->width, (int)size->height));
+    label2->setString(fmt::format("size : {}, {}", (int)size->width, (int)size->height));
 }
 
 void WindowTestClose::onEnter()

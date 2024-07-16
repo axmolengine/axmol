@@ -51,10 +51,6 @@
 #    define GL_COMPRESSED_RGBA_ASTC_4x4 0x93B0
 #endif
 
-namespace ax {
-extern const char* axmolVersion();
-}
-
 NS_AX_BACKEND_BEGIN
 
 static inline uint32_t hashString(std::string_view str)
@@ -141,9 +137,6 @@ DriverGL::DriverGL()
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return;
     }
-
-    if (_version)
-        AXLOGI("[{}] Ready for GLSL by {}", _version, axmolVersion());
 
     // caps
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_maxAttributes);

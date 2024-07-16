@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -76,7 +77,7 @@ TOLUA_API int toluafix_pushusertype_object(lua_State* L, int refid, int* p_refid
         lua_rawset(L, -3);                /* refid_type[refid] = type, stack: refid_type */
         lua_pop(L, 1);                    /* stack: - */
 
-        // printf("[LUA] push CCObject OK - refid: %d, ptr: %x, type: %s\n", *p_refid, (int)ptr, type);
+        // AXLOGD("[LUA] push CCObject OK - refid: {}, ptr: {}, type: {}\n", *p_refid, (int)ptr, type);
     }
 
     tolua_pushusertype_and_addtoroot(L, vPtr, vType);
@@ -121,7 +122,7 @@ TOLUA_API int toluafix_remove_ccobject_by_refid(lua_State* L, int refid)
     if (lua_isnil(L, -1))
     {
         lua_pop(L, 2);
-        printf("[LUA ERROR] remove CCObject with NULL type, refid: %d, ptr: %p\n", refid, ptr);
+        AXLOGD("[LUA ERROR] remove CCObject with NULL type, refid: {}, ptr: {}\n", refid, fmt::ptr(ptr));
         return -1;
     }
 
@@ -167,7 +168,7 @@ TOLUA_API int toluafix_remove_ccobject_by_refid(lua_State* L, int refid)
     lua_pop(L, 1); /* stack: mt ubox */
     if (ud == NULL)
     {
-        printf("[LUA ERROR] remove CCObject with NULL userdata, refid: %d, ptr: %p, type: %s\n", refid, ptr, type);
+        AXLOGD("[LUA ERROR] remove CCObject with NULL userdata, refid: {}, ptr: {}, type: {}n", refid, fmt::ptr(ptr), type);
         lua_pop(L, 2);
         return -1;
     }
@@ -254,24 +255,24 @@ TOLUA_API void toluafix_stack_dump(lua_State* L, const char* label)
 {
     int i;
     int top = lua_gettop(L);
-    printf("Total [%d] in lua stack: %s\n", top, label != 0 ? label : "");
+    AXLOGD("Total [{}] in lua stack: {}\n", top, label != 0 ? label : "");
     for (i = -1; i >= -top; i--)
     {
         int t = lua_type(L, i);
         switch (t)
         {
         case LUA_TSTRING:
-            printf("  [%02d] string %s\n", i, lua_tostring(L, i));
+            AXLOGD("  [{:2}] string {}\n", i, lua_tostring(L, i));
             break;
         case LUA_TBOOLEAN:
-            printf("  [%02d] boolean %s\n", i, lua_toboolean(L, i) ? "true" : "false");
+            AXLOGD("  [{:2}] boolean {}\n", i, lua_toboolean(L, i) ? "true" : "false");
             break;
         case LUA_TNUMBER:
-            printf("  [%02d] number %g\n", i, lua_tonumber(L, i));
+            AXLOGD("  [{:2}] number {}\n", i, lua_tonumber(L, i));
             break;
         default:
-            printf("  [%02d] %s\n", i, lua_typename(L, t));
+            AXLOGD("  [{:2}] {}n", i, lua_typename(L, t));
         }
     }
-    printf("\n");
+    AXLOGD("\n");
 }

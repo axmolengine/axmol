@@ -1972,7 +1972,7 @@ int lua_ax_extension_ScrollView_constructor(lua_State* tolua_S)
 
 static int lua_ax_extension_ScrollView_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ScrollView)");
+    AXLOGV("luabindings: finalizing LUA object (ScrollView)");
     return 0;
 }
 
@@ -2245,7 +2245,7 @@ int lua_ax_extension_TableViewCell_constructor(lua_State* tolua_S)
 
 static int lua_ax_extension_TableViewCell_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TableViewCell)");
+    AXLOGV("luabindings: finalizing LUA object (TableViewCell)");
     return 0;
 }
 
@@ -2911,7 +2911,7 @@ int lua_ax_extension_TableView_constructor(lua_State* tolua_S)
 
 static int lua_ax_extension_TableView_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TableView)");
+    AXLOGV("luabindings: finalizing LUA object (TableView)");
     return 0;
 }
 
@@ -3674,7 +3674,7 @@ int lua_ax_extension_AssetsManager_constructor(lua_State* tolua_S)
 
 static int lua_ax_extension_AssetsManager_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (AssetsManager)");
+    AXLOGV("luabindings: finalizing LUA object (AssetsManager)");
     return 0;
 }
 
@@ -4330,7 +4330,7 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
 static int lua_ax_extension_EventAssetsManagerEx_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventAssetsManagerEx)");
+    AXLOGV("luabindings: finalizing LUA object (EventAssetsManagerEx)");
     return 0;
 }
 
@@ -4687,7 +4687,7 @@ int lua_ax_extension_Manifest_getSearchPaths(lua_State* tolua_S)
 }
 static int lua_ax_extension_Manifest_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Manifest)");
+    AXLOGV("luabindings: finalizing LUA object (Manifest)");
     return 0;
 }
 
@@ -5328,7 +5328,7 @@ int lua_ax_extension_AssetsManagerEx_constructor(lua_State* tolua_S)
 
 static int lua_ax_extension_AssetsManagerEx_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (AssetsManagerEx)");
+    AXLOGV("luabindings: finalizing LUA object (AssetsManagerEx)");
     return 0;
 }
 
@@ -5454,7 +5454,7 @@ int lua_ax_extension_EventListenerAssetsManagerEx_constructor(lua_State* tolua_S
 
 static int lua_ax_extension_EventListenerAssetsManagerEx_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventListenerAssetsManagerEx)");
+    AXLOGV("luabindings: finalizing LUA object (EventListenerAssetsManagerEx)");
     return 0;
 }
 
@@ -6476,7 +6476,7 @@ int lua_ax_extension_ParticleSystem3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_extension_ParticleSystem3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ParticleSystem3D)");
+    AXLOGV("luabindings: finalizing LUA object (ParticleSystem3D)");
     return 0;
 }
 
@@ -8661,7 +8661,7 @@ int lua_ax_extension_PUParticleSystem3D_constructor(lua_State* tolua_S)
 
 static int lua_ax_extension_PUParticleSystem3D_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PUParticleSystem3D)");
+    AXLOGV("luabindings: finalizing LUA object (PUParticleSystem3D)");
     return 0;
 }
 

@@ -713,7 +713,7 @@ int lua_ax_csloader_CSLoader_constructor(lua_State* tolua_S)
 
 static int lua_ax_csloader_CSLoader_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (CSLoader)");
+    AXLOGV("luabindings: finalizing LUA object (CSLoader)");
     return 0;
 }
 

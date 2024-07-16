@@ -529,7 +529,7 @@ int lua_ax_physics3d_Physics3DShape_constructor(lua_State* tolua_S)
 
 static int lua_ax_physics3d_Physics3DShape_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Physics3DShape)");
+    AXLOGV("luabindings: finalizing LUA object (Physics3DShape)");
     return 0;
 }
 
@@ -1040,7 +1040,7 @@ int lua_ax_physics3d_Physics3DObject_getMask(lua_State* tolua_S)
 }
 static int lua_ax_physics3d_Physics3DObject_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Physics3DObject)");
+    AXLOGV("luabindings: finalizing LUA object (Physics3DObject)");
     return 0;
 }
 
@@ -3516,7 +3516,7 @@ int lua_ax_physics3d_Physics3DRigidBody_constructor(lua_State* tolua_S)
 
 static int lua_ax_physics3d_Physics3DRigidBody_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Physics3DRigidBody)");
+    AXLOGV("luabindings: finalizing LUA object (Physics3DRigidBody)");
     return 0;
 }
 
@@ -3947,7 +3947,7 @@ int lua_ax_physics3d_Physics3DComponent_constructor(lua_State* tolua_S)
 
 static int lua_ax_physics3d_Physics3DComponent_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Physics3DComponent)");
+    AXLOGV("luabindings: finalizing LUA object (Physics3DComponent)");
     return 0;
 }
 
@@ -4202,7 +4202,7 @@ int lua_ax_physics3d_PhysicsMeshRenderer_constructor(lua_State* tolua_S)
 
 static int lua_ax_physics3d_PhysicsMeshRenderer_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsMeshRenderer)");
+    AXLOGV("luabindings: finalizing LUA object (PhysicsMeshRenderer)");
     return 0;
 }
 
@@ -5009,7 +5009,7 @@ int lua_ax_physics3d_Physics3DWorld_constructor(lua_State* tolua_S)
 
 static int lua_ax_physics3d_Physics3DWorld_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Physics3DWorld)");
+    AXLOGV("luabindings: finalizing LUA object (Physics3DWorld)");
     return 0;
 }
 
@@ -5621,7 +5621,7 @@ int lua_ax_physics3d_Physics3DConstraint_getbtContraint(lua_State* tolua_S)
 }
 static int lua_ax_physics3d_Physics3DConstraint_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Physics3DConstraint)");
+    AXLOGV("luabindings: finalizing LUA object (Physics3DConstraint)");
     return 0;
 }
 
@@ -6014,7 +6014,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_constructor(lua_State* tolu
 
 static int lua_ax_physics3d_Physics3DPointToPointConstraint_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Physics3DPointToPointConstraint)");
+    AXLOGV("luabindings: finalizing LUA object (Physics3DPointToPointConstraint)");
     return 0;
 }
 
@@ -7334,7 +7334,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_constructor(lua_State* tolua_S)
 
 static int lua_ax_physics3d_Physics3DHingeConstraint_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Physics3DHingeConstraint)");
+    AXLOGV("luabindings: finalizing LUA object (Physics3DHingeConstraint)");
     return 0;
 }
 
@@ -10557,7 +10557,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_constructor(lua_State* tolua_S)
 
 static int lua_ax_physics3d_Physics3DSliderConstraint_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Physics3DSliderConstraint)");
+    AXLOGV("luabindings: finalizing LUA object (Physics3DSliderConstraint)");
     return 0;
 }
 
@@ -11652,7 +11652,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_constructor(lua_State* tolua_S
 
 static int lua_ax_physics3d_Physics3DConeTwistConstraint_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Physics3DConeTwistConstraint)");
+    AXLOGV("luabindings: finalizing LUA object (Physics3DConeTwistConstraint)");
     return 0;
 }
 
@@ -12328,7 +12328,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_constructor(lua_State* tolua_S)
 
 static int lua_ax_physics3d_Physics3D6DofConstraint_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Physics3D6DofConstraint)");
+    AXLOGV("luabindings: finalizing LUA object (Physics3D6DofConstraint)");
     return 0;
 }
 

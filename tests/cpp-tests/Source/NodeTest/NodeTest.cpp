@@ -386,17 +386,17 @@ std::string StressTest2::subtitle() const
 SchedulerTest1::SchedulerTest1()
 {
     auto layer = Layer::create();
-    // AXLOG("retain count after init is %d", layer->getReferenceCount());                // 1
+    // AXLOGD("retain count after init is {}", layer->getReferenceCount());                // 1
 
     addChild(layer, 0);
-    // AXLOG("retain count after addChild is %d", layer->getReferenceCount());      // 2
+    // AXLOGD("retain count after addChild is {}", layer->getReferenceCount());      // 2
 
     layer->schedule(AX_CALLBACK_1(SchedulerTest1::doSomething, this), "do_something_key");
-    // AXLOG("retain count after schedule is %d", layer->getReferenceCount());      // 3 : (objective-c version), but
+    // AXLOGD("retain count after schedule is {}", layer->getReferenceCount());      // 3 : (objective-c version), but
     // win32 version is still 2, because Timer class don't save target.
 
     layer->unschedule("do_something_key");
-    // AXLOG("retain count after unschedule is %d", layer->getReferenceCount());        // STILL 3!  (win32 is '2')
+    // AXLOGD("retain count after unschedule is {}", layer->getReferenceCount());        // STILL 3!  (win32 is '2')
 }
 
 void SchedulerTest1::doSomething(float dt) {}
@@ -421,7 +421,7 @@ SchedulerCallbackTest::SchedulerCallbackTest()
     node->schedule(
         [&](float dt) {
             _total += dt;
-            ax::print("hello world: %f - total: %f", dt, _total);
+            AXLOGD("hello world: {} - total: {}", dt, _total);
         },
         0.5, "some_key");
 
@@ -437,7 +437,7 @@ SchedulerCallbackTest::SchedulerCallbackTest()
 void SchedulerCallbackTest::onEnter()
 {
     TestCocosNodeDemo::onEnter();
-    ax::print("--onEnter-- Must be called before the scheduled lambdas");
+    AXLOGD("--onEnter-- Must be called before the scheduled lambdas");
 }
 
 std::string SchedulerCallbackTest::subtitle() const
@@ -815,7 +815,7 @@ void ConvertToNode::onTouchesEnded(const std::vector<Touch*>& touches, Event* ev
             p1 = node->convertToNodeSpaceAR(location);
             p2 = node->convertToNodeSpace(location);
 
-            AXLOG("AR: x=%.2f, y=%.2f -- Not AR: x=%.2f, y=%.2f", p1.x, p1.y, p2.x, p2.y);
+            AXLOGD("AR: x={:.2}, y={:.2} -- Not AR: x={:.2}, y={:.2}", p1.x, p1.y, p2.x, p2.y);
         }
     }
 }
@@ -1171,7 +1171,7 @@ void NodeNormalizedPositionTest2::update(float dt)
 
     Size s = Size(_copyContentSize.width * norm, _copyContentSize.height * norm);
     setContentSize(s);
-    AXLOG("s: %f,%f", s.width, s.height);
+    AXLOGD("s: {},{}", s.width, s.height);
 }
 
 //------------------------------------------------------------------
@@ -1251,7 +1251,7 @@ void NodeNameTest::test(float dt)
     {
         sprintf(name, "node%d", i);
         auto node = parent->getChildByName(name);
-        ax::print("find child: %s", node->getName().data());
+        AXLOGD("find child: {}", node->getName());
     }
 
     // enumerateChildren()

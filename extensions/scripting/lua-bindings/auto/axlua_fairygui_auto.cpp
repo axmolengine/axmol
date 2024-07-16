@@ -701,7 +701,7 @@ int lua_ax_fairygui_InputEvent_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_InputEvent_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (InputEvent)");
+    AXLOGV("luabindings: finalizing LUA object (InputEvent)");
     return 0;
 }
 
@@ -1146,7 +1146,7 @@ int lua_ax_fairygui_EventContext_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_EventContext_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (EventContext)");
+    AXLOGV("luabindings: finalizing LUA object (EventContext)");
     return 0;
 }
 
@@ -1486,7 +1486,7 @@ int lua_ax_fairygui_UIEventDispatcher_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_UIEventDispatcher_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (UIEventDispatcher)");
+    AXLOGV("luabindings: finalizing LUA object (UIEventDispatcher)");
     return 0;
 }
 
@@ -2471,7 +2471,7 @@ int lua_ax_fairygui_GController_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GController_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GController)");
+    AXLOGV("luabindings: finalizing LUA object (GController)");
     return 0;
 }
 
@@ -6858,7 +6858,7 @@ int lua_ax_fairygui_GObject_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GObject_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GObject)");
+    AXLOGV("luabindings: finalizing LUA object (GObject)");
     return 0;
 }
 
@@ -7736,7 +7736,7 @@ int lua_ax_fairygui_UIPackage_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_UIPackage_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (UIPackage)");
+    AXLOGV("luabindings: finalizing LUA object (UIPackage)");
     return 0;
 }
 
@@ -8428,7 +8428,7 @@ int lua_ax_fairygui_GImage_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GImage_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GImage)");
+    AXLOGV("luabindings: finalizing LUA object (GImage)");
     return 0;
 }
 
@@ -9067,7 +9067,7 @@ int lua_ax_fairygui_GMovieClip_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GMovieClip_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GMovieClip)");
+    AXLOGV("luabindings: finalizing LUA object (GMovieClip)");
     return 0;
 }
 
@@ -10019,7 +10019,7 @@ int lua_ax_fairygui_GTextField_flushVars(lua_State* tolua_S)
 }
 static int lua_ax_fairygui_GTextField_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GTextField)");
+    AXLOGV("luabindings: finalizing LUA object (GTextField)");
     return 0;
 }
 
@@ -10128,7 +10128,7 @@ int lua_ax_fairygui_GBasicTextField_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GBasicTextField_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GBasicTextField)");
+    AXLOGV("luabindings: finalizing LUA object (GBasicTextField)");
     return 0;
 }
 
@@ -10270,7 +10270,7 @@ int lua_ax_fairygui_GRichTextField_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GRichTextField_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GRichTextField)");
+    AXLOGV("luabindings: finalizing LUA object (GRichTextField)");
     return 0;
 }
 
@@ -10613,7 +10613,7 @@ int lua_ax_fairygui_GTextInput_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GTextInput_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GTextInput)");
+    AXLOGV("luabindings: finalizing LUA object (GTextInput)");
     return 0;
 }
 
@@ -11188,7 +11188,7 @@ int lua_ax_fairygui_GGraph_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GGraph_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GGraph)");
+    AXLOGV("luabindings: finalizing LUA object (GGraph)");
     return 0;
 }
 
@@ -12642,7 +12642,7 @@ int lua_ax_fairygui_GLoader_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GLoader_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GLoader)");
+    AXLOGV("luabindings: finalizing LUA object (GLoader)");
     return 0;
 }
 
@@ -13608,7 +13608,7 @@ int lua_ax_fairygui_GGroup_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GGroup_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GGroup)");
+    AXLOGV("luabindings: finalizing LUA object (GGroup)");
     return 0;
 }
 
@@ -16602,7 +16602,7 @@ int lua_ax_fairygui_ScrollPane_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_ScrollPane_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ScrollPane)");
+    AXLOGV("luabindings: finalizing LUA object (ScrollPane)");
     return 0;
 }
 
@@ -17676,7 +17676,7 @@ int lua_ax_fairygui_Transition_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_Transition_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Transition)");
+    AXLOGV("luabindings: finalizing LUA object (Transition)");
     return 0;
 }
 
@@ -20433,7 +20433,7 @@ int lua_ax_fairygui_GComponent_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GComponent_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GComponent)");
+    AXLOGV("luabindings: finalizing LUA object (GComponent)");
     return 0;
 }
 
@@ -21401,7 +21401,7 @@ int lua_ax_fairygui_GButton_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GButton_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GButton)");
+    AXLOGV("luabindings: finalizing LUA object (GButton)");
     return 0;
 }
 
@@ -21574,7 +21574,7 @@ int lua_ax_fairygui_GObjectPool_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GObjectPool_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GObjectPool)");
+    AXLOGV("luabindings: finalizing LUA object (GObjectPool)");
     return 0;
 }
 
@@ -24060,7 +24060,7 @@ int lua_ax_fairygui_GList_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GList_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GList)");
+    AXLOGV("luabindings: finalizing LUA object (GList)");
     return 0;
 }
 
@@ -25064,7 +25064,7 @@ int lua_ax_fairygui_GComboBox_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GComboBox_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GComboBox)");
+    AXLOGV("luabindings: finalizing LUA object (GComboBox)");
     return 0;
 }
 
@@ -25665,7 +25665,7 @@ int lua_ax_fairygui_GProgressBar_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GProgressBar_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GProgressBar)");
+    AXLOGV("luabindings: finalizing LUA object (GProgressBar)");
     return 0;
 }
 
@@ -26252,7 +26252,7 @@ int lua_ax_fairygui_GSlider_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GSlider_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GSlider)");
+    AXLOGV("luabindings: finalizing LUA object (GSlider)");
     return 0;
 }
 
@@ -26554,7 +26554,7 @@ int lua_ax_fairygui_GScrollBar_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GScrollBar_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GScrollBar)");
+    AXLOGV("luabindings: finalizing LUA object (GScrollBar)");
     return 0;
 }
 
@@ -27854,7 +27854,7 @@ int lua_ax_fairygui_Window_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_Window_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Window)");
+    AXLOGV("luabindings: finalizing LUA object (Window)");
     return 0;
 }
 
@@ -29577,7 +29577,7 @@ int lua_ax_fairygui_GRoot_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GRoot_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GRoot)");
+    AXLOGV("luabindings: finalizing LUA object (GRoot)");
     return 0;
 }
 
@@ -30534,7 +30534,7 @@ int lua_ax_fairygui_PopupMenu_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_PopupMenu_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PopupMenu)");
+    AXLOGV("luabindings: finalizing LUA object (PopupMenu)");
     return 0;
 }
 
@@ -30659,7 +30659,7 @@ int lua_ax_fairygui_UIObjectFactory_setLoaderExtension(lua_State* tolua_S)
 }
 static int lua_ax_fairygui_UIObjectFactory_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (UIObjectFactory)");
+    AXLOGV("luabindings: finalizing LUA object (UIObjectFactory)");
     return 0;
 }
 
@@ -30977,7 +30977,7 @@ int lua_ax_fairygui_DragDropManager_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_DragDropManager_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (DragDropManager)");
+    AXLOGV("luabindings: finalizing LUA object (DragDropManager)");
     return 0;
 }
 
@@ -32261,7 +32261,7 @@ int lua_ax_fairygui_GTweener_constructor(lua_State* tolua_S)
 
 static int lua_ax_fairygui_GTweener_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GTweener)");
+    AXLOGV("luabindings: finalizing LUA object (GTweener)");
     return 0;
 }
 
@@ -32825,7 +32825,7 @@ int lua_ax_fairygui_GTween_clean(lua_State* tolua_S)
 }
 static int lua_ax_fairygui_GTween_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (GTween)");
+    AXLOGV("luabindings: finalizing LUA object (GTween)");
     return 0;
 }
 

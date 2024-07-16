@@ -85,7 +85,7 @@ void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file,
     const double memorySize  = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
 
-    const std::string textureInfo = StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(),
+    const std::string textureInfo = fmt::format("{}{}: {:.2} KB\r\n", infoLabel->getString(),
                                                         texture->getStringForFormat(), memorySize);
     infoLabel->setString(textureInfo);
 
@@ -156,7 +156,7 @@ public:
         if (fullPath.empty())
         {
             // return if plist file doesn't exist
-            AXLOG("GenericJsonArraySpriteSheetLoader: can not find %s", filePath.data());
+            AXLOGD("GenericJsonArraySpriteSheetLoader: can not find {}", filePath);
             return;
         }
 
@@ -193,7 +193,7 @@ public:
             // append .png
             texturePath = texturePath.append(".png");
 
-            AXLOG("GenericJsonArraySpriteSheetLoader::load: Trying to use file %s as texture", texturePath.c_str());
+            AXLOGD("GenericJsonArraySpriteSheetLoader::load: Trying to use file {} as texture", texturePath);
         }
 
         addSpriteFramesWithJson(jDoc, texturePath, filePath, cache);
@@ -280,7 +280,7 @@ public:
         }
         else
         {
-            AXLOG("GenericJsonArraySpriteSheetLoader::reload: Couldn't load texture");
+            AXLOGD("GenericJsonArraySpriteSheetLoader::reload: Couldn't load texture");
         }
     }
 
@@ -330,7 +330,7 @@ protected:
         }
         else
         {
-            AXLOG("GenericJsonArraySpriteSheetLoader::addSpriteFramesWithJson: Couldn't load texture");
+            AXLOGD("GenericJsonArraySpriteSheetLoader::addSpriteFramesWithJson: Couldn't load texture");
         }
     }
 
@@ -493,7 +493,7 @@ void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file,
     const ssize_t bitsPerKB = 8 * 1024;
     const double memorySize = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
-    const std::string textureInfo = StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(),
+    const std::string textureInfo = fmt::format("{}{}: {:.2} KB\r\n", infoLabel->getString(),
                                                         texture->getStringForFormat(), memorySize);
     infoLabel->setString(textureInfo);
 

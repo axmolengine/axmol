@@ -214,7 +214,7 @@ bool UIScale9SpriteTouchTest::init()
 
             if (rect.containsPoint(locationInNode))
             {
-                ax::print("sprite began... x = %f, y = %f", locationInNode.x, locationInNode.y);
+                AXLOGD("sprite began... x = {}, y = {}", locationInNode.x, locationInNode.y);
                 target->setOpacity(180);
                 return true;
             }
@@ -228,7 +228,7 @@ bool UIScale9SpriteTouchTest::init()
 
         listener1->onTouchEnded = [=](Touch* touch, Event* event) {
             auto target = static_cast<ui::Scale9Sprite*>(event->getCurrentTarget());
-            ax::print("sprite onTouchesEnded.. ");
+            AXLOGD("sprite onTouchesEnded.. ");
             target->setOpacity(255);
             if (target == sprite2)
             {
@@ -828,15 +828,15 @@ bool UIS9Flip::init()
                 statusLabel->setString("Scale9Disabled");
             }
 
-            AXLOG("scaleX = %f", flipXSprite->getScaleX());
-            AXLOG("scaleY = %f", flipYSprite->getScale());
+            AXLOGD("scaleX = {}", flipXSprite->getScaleX());
+            AXLOGD("scaleY = {}", flipYSprite->getScale());
             if (flipXSprite->isFlippedX())
             {
-                AXLOG("xxxxxxx");
+                AXLOGD("xxxxxxx");
             }
             if (flipYSprite->isFlippedY())
             {
-                AXLOG("YYYYYY");
+                AXLOGD("YYYYYY");
             }
 
             if (flipXSprite->isFlippedX())
@@ -890,10 +890,10 @@ bool UIS9ChangeAnchorPoint::init()
             {
                 normalSprite->setAnchorPoint(Vec2::ZERO);
                 normalSprite->setScale9Enabled(true);
-                AXLOG("position = %f, %f,  anchor point = %f, %f", normalSprite->getPosition().x,
+                AXLOGD("position = {}, {},  anchor point = {}, {}", normalSprite->getPosition().x,
                       normalSprite->getPosition().y, normalSprite->getAnchorPoint().x,
                       normalSprite->getAnchorPoint().y);
-                AXLOG("tests:content size : width = %f, height = %f", normalSprite->getContentSize().width,
+                AXLOGD("tests:content size : width = {}, height = {}", normalSprite->getContentSize().width,
                       normalSprite->getContentSize().height);
             }
         });
@@ -908,10 +908,10 @@ bool UIS9ChangeAnchorPoint::init()
             {
                 normalSprite->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
                 normalSprite->setScale9Enabled(false);
-                AXLOG("position = %f, %f,  anchor point = %f, %f", normalSprite->getPosition().x,
+                AXLOGD("position = {}, {},  anchor point = {}, {}", normalSprite->getPosition().x,
                       normalSprite->getPosition().y, normalSprite->getAnchorPoint().x,
                       normalSprite->getAnchorPoint().y);
-                AXLOG("tests:content size : width = %f, height = %f", normalSprite->getContentSize().width,
+                AXLOGD("tests:content size : width = {}, height = {}", normalSprite->getContentSize().width,
                       normalSprite->getContentSize().height);
             }
         });
@@ -939,14 +939,14 @@ bool UIS9NinePatchTest::init()
         playerSprite->setPosition(x, y);
         playerSprite->setContentSize(preferedSize);
         auto capInsets = playerSprite->getCapInsets();
-        AXLOG("player sprite capInset = %g, %g %g, %g", capInsets.origin.x, capInsets.origin.y, capInsets.size.width,
+        AXLOGD("player sprite capInset = {}, {} {}, {}", capInsets.origin.x, capInsets.origin.y, capInsets.size.width,
               capInsets.size.height);
         this->addChild(playerSprite);
 
         auto animationBtnSprite = ui::Scale9Sprite::createWithSpriteFrameName("animationbuttonpressed.png");
         animationBtnSprite->setPosition(x - 100, y - 100);
         capInsets = animationBtnSprite->getCapInsets();
-        AXLOG("animationBtnSprite capInset = %g, %g %g, %g", capInsets.origin.x, capInsets.origin.y,
+        AXLOGD("animationBtnSprite capInset = {}, {} {}, {}", capInsets.origin.x, capInsets.origin.y,
               capInsets.size.width, capInsets.size.height);
         this->addChild(animationBtnSprite);
 
@@ -954,7 +954,7 @@ bool UIS9NinePatchTest::init()
         monsterSprite->setPosition(x + 100, y - 100);
         capInsets = monsterSprite->getCapInsets();
         monsterSprite->setContentSize(preferedSize);
-        AXLOG("monsterSprite capInset = %g, %g %g, %g", capInsets.origin.x, capInsets.origin.y, capInsets.size.width,
+        AXLOGD("monsterSprite capInset = {}, {} {}, {}", capInsets.origin.x, capInsets.origin.y, capInsets.size.width,
               capInsets.size.height);
         this->addChild(monsterSprite);
 

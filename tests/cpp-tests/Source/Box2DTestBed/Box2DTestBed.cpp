@@ -177,13 +177,13 @@ void Box2DTestBed::onTouchEnded(Touch* touch, Event* event)
 
 void Box2DTestBed::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
 {
-    AXLOG("onKeyPressed, keycode: %d", static_cast<int>(code));
+    AXLOGD("onKeyPressed, keycode: {}", static_cast<int>(code));
     m_test->Keyboard((static_cast<int>(code) - 59));  // its a bad hack!
 }
 
 void Box2DTestBed::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
 {
-    AXLOG("onKeyPressed, keycode: %d", static_cast<int>(code));
+    AXLOGD("onKeyPressed, keycode: {}", static_cast<int>(code));
     m_test->KeyboardUp((static_cast<int>(code) - 59));  // its a bad hack!
 }
 

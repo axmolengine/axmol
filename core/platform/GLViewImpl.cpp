@@ -115,11 +115,11 @@ public:
             _view->onGLFWMouseMoveCallBack(window, x, y);
     }
 #if defined(__EMSCRIPTEN__)
-    static int onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent, void* /*userData*/)
+    static EM_BOOL onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent, void* /*userData*/)
     {
         if (_view)
             _view->onWebTouchCallback(eventType, touchEvent);
-        return 0;
+        return EM_FALSE;
     }
 #endif
 
@@ -368,7 +368,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
 
 GLViewImpl::~GLViewImpl()
 {
-    AXLOGI("deallocing GLViewImpl: {}", fmt::ptr(this));
+    AXLOGD("deallocing GLViewImpl: {}", fmt::ptr(this));
     GLFWEventHandler::setGLViewImpl(nullptr);
     glfwTerminate();
 }
@@ -1041,11 +1041,11 @@ void GLViewImpl::onGLFWError(int errorID, const char* errorDesc)
 {
     if (_mainWindow)
     {
-        _glfwError = StringUtils::format("GLFWError #%d Happen, %s", errorID, errorDesc);
+        _glfwError = fmt::format("GLFWError #{} Happen, {}", errorID, errorDesc);
     }
     else
     {
-        _glfwError.append(StringUtils::format("GLFWError #%d Happen, %s\n", errorID, errorDesc));
+        _glfwError.append(fmt::format("GLFWError #{} Happen, {}\n", errorID, errorDesc));
     }
     AXLOGE("{}", _glfwError);
 }

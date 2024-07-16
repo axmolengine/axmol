@@ -210,7 +210,7 @@ AssetsManager::AssetsManager(const char* packageUrl /* =nullptr */,
                           ? int(task.progressInfo.totalBytesReceived * 100 / task.progressInfo.totalBytesExpected)
                           : 0;
         _delegate->onProgress(percent);
-        AXLOG("downloading... %d%%", percent);
+        AXLOGD("downloading... {}%", percent);
     };
 
     // get version from version file when get data success
@@ -225,7 +225,7 @@ AssetsManager::AssetsManager(const char* packageUrl /* =nullptr */,
             {
                 _delegate->onError(ErrorCode::NO_NEW_VERSION);
             }
-            AXLOG("there is not new version");
+            AXLOGD("there is not new version");
             // Set resource search path.
             setSearchPath();
             _isDownloading = false;
@@ -238,7 +238,7 @@ AssetsManager::AssetsManager(const char* packageUrl /* =nullptr */,
         if (_versionFileUrl.empty() || _packageUrl.empty() ||
             FileUtils::getInstance()->getFileExtension(_packageUrl) != ".zip")
         {
-            AXLOG("no version file url, or no package url, or the package is not a zip file");
+            AXLOGD("no version file url, or no package url, or the package is not a zip file");
             _isDownloading = false;
             return;
         }
@@ -341,7 +341,7 @@ void AssetsManager::downloadAndUncompress()
                 string zipfileName = this->_storagePath + TEMP_PACKAGE_FILE_NAME;
                 if (remove(zipfileName.c_str()) != 0)
                 {
-                    AXLOG("can not remove downloaded zip file %s", zipfileName.c_str());
+                    AXLOGD("can not remove downloaded zip file {}", zipfileName);
                 }
 
                 if (this->_delegate)
@@ -377,7 +377,7 @@ bool AssetsManager::uncompress()
     unzFile zipfile = unzOpen2(outFileName.c_str(), &zipFunctionOverrides);
     if (!zipfile)
     {
-        AXLOG("can not open downloaded zip file %s", outFileName.c_str());
+        AXLOGD("can not open downloaded zip file {}", outFileName);
         return false;
     }
 
@@ -385,7 +385,7 @@ bool AssetsManager::uncompress()
     unz_global_info global_info;
     if (unzGetGlobalInfo(zipfile, &global_info) != UNZ_OK)
     {
-        AXLOG("can not read file global info of %s", outFileName.c_str());
+        AXLOGD("can not read file global info of {}", outFileName);
         unzClose(zipfile);
         return false;
     }
@@ -393,7 +393,7 @@ bool AssetsManager::uncompress()
     // Buffer to hold data read from the zip file
     char readBuffer[BUFFER_SIZE];
 
-    AXLOG("start uncompressing");
+    AXLOGD("start uncompressing");
 
     // Loop to extract all files.
     uLong i;
@@ -404,7 +404,7 @@ bool AssetsManager::uncompress()
         char fileName[MAX_FILENAME];
         if (unzGetCurrentFileInfo(zipfile, &fileInfo, fileName, MAX_FILENAME, nullptr, 0, nullptr, 0) != UNZ_OK)
         {
-            AXLOG("can not read file info");
+            AXLOGD("can not read file info");
             unzClose(zipfile);
             return false;
         }
@@ -419,7 +419,7 @@ bool AssetsManager::uncompress()
             // If the directory exists, it will failed silently.
             if (!FileUtils::getInstance()->createDirectory(fullPath))
             {
-                AXLOG("can not create directory %s", fullPath.c_str());
+                AXLOGD("can not create directory {}", fullPath);
                 unzClose(zipfile);
                 return false;
             }
@@ -444,13 +444,13 @@ bool AssetsManager::uncompress()
                 {
                     if (!FileUtils::getInstance()->createDirectory(dir))
                     {
-                        AXLOG("can not create directory %s", dir.c_str());
+                        AXLOGD("can not create directory {}", dir);
                         unzClose(zipfile);
                         return false;
                     }
                     else
                     {
-                        AXLOG("create directory %s", dir.c_str());
+                        AXLOGD("create directory {}", dir);
                     }
                 }
                 else
@@ -468,7 +468,7 @@ bool AssetsManager::uncompress()
             // Open current file.
             if (unzOpenCurrentFile(zipfile) != UNZ_OK)
             {
-                AXLOG("can not open file %s", fileName);
+                AXLOGD("can not open file {}", fileName);
                 unzClose(zipfile);
                 return false;
             }
@@ -477,7 +477,7 @@ bool AssetsManager::uncompress()
             auto fsOut = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::WRITE);
             if (!fsOut)
             {
-                AXLOG("can not open destination file %s", fullPath.c_str());
+                AXLOGD("can not open destination file {}", fullPath);
                 unzCloseCurrentFile(zipfile);
                 unzClose(zipfile);
                 return false;
@@ -490,7 +490,7 @@ bool AssetsManager::uncompress()
                 error = unzReadCurrentFile(zipfile, readBuffer, BUFFER_SIZE);
                 if (error < 0)
                 {
-                    AXLOG("can not read zip file %s, error code is %d", fileName, error);
+                    AXLOGD("can not read zip file {}, error code is {}", fileName, error);
                     unzCloseCurrentFile(zipfile);
                     unzClose(zipfile);
                     fsOut.reset();
@@ -513,14 +513,14 @@ bool AssetsManager::uncompress()
         {
             if (unzGoToNextFile(zipfile) != UNZ_OK)
             {
-                AXLOG("can not read next file");
+                AXLOGD("can not read next file");
                 unzClose(zipfile);
                 return false;
             }
         }
     }
 
-    AXLOG("end uncompressing");
+    AXLOGD("end uncompressing");
     unzClose(zipfile);
 
     return true;

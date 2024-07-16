@@ -148,7 +148,7 @@ void TestList::addTest(std::string_view testName, std::function<TestBase*()> cal
     if (!testName.empty())
     {
         _childTestNames.emplace_back(
-            StringUtils::format("%d:%s", static_cast<int>(_childTestNames.size() + 1), testName.data()));
+            fmt::format("{}:{}", static_cast<int>(_childTestNames.size() + 1), testName));
         _testCallbacks.emplace_back(callback);
     }
 }
@@ -465,8 +465,8 @@ void TestCase::onEnter()
 
     if (_testSuite)
     {
-        _titleLabel->setString(StringUtils::format("%d", static_cast<int>(_testSuite->getCurrTestIndex() + 1)) + ":" +
-                               title());
+        _titleLabel->setString(fmt::format("{}:{}", static_cast<int>(_testSuite->getCurrTestIndex() + 1), 
+                               title()));
     }
     else
     {

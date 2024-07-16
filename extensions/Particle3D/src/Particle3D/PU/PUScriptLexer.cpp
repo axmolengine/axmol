@@ -2,6 +2,7 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -223,7 +224,7 @@ void PUScriptLexer::openLexer(std::string_view str, std::string_view source, PUS
     {
         if (state == QUOTE)
         {
-            printf("Exception\n");
+            AXLOGD("Exception\n");
 
             //            OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
             //                        Ogre::String("no matching \" found for \" at line ") +

@@ -1026,7 +1026,7 @@ int lua_ax_backend_Program_getBuiltinProgram(lua_State* tolua_S)
 }
 static int lua_ax_backend_Program_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Program)");
+    AXLOGV("luabindings: finalizing LUA object (Program)");
     return 0;
 }
 
@@ -1234,7 +1234,7 @@ int lua_ax_backend_VertexLayout_constructor(lua_State* tolua_S)
 
 static int lua_ax_backend_VertexLayout_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (VertexLayout)");
+    AXLOGV("luabindings: finalizing LUA object (VertexLayout)");
     return 0;
 }
 
@@ -1827,7 +1827,7 @@ int lua_ax_backend_ProgramState_constructor(lua_State* tolua_S)
 
 static int lua_ax_backend_ProgramState_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (ProgramState)");
+    AXLOGV("luabindings: finalizing LUA object (ProgramState)");
     return 0;
 }
 
@@ -2413,7 +2413,7 @@ int lua_ax_backend_TextureBackend_getHeight(lua_State* tolua_S)
 }
 static int lua_ax_backend_TextureBackend_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TextureBackend)");
+    AXLOGV("luabindings: finalizing LUA object (TextureBackend)");
     return 0;
 }
 
@@ -2537,7 +2537,7 @@ int lua_ax_backend_Texture2DBackend_getHeight(lua_State* tolua_S)
 }
 static int lua_ax_backend_Texture2DBackend_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (Texture2DBackend)");
+    AXLOGV("luabindings: finalizing LUA object (Texture2DBackend)");
     return 0;
 }
 
@@ -2633,7 +2633,7 @@ int lua_ax_backend_TextureCubemapBackend_updateFaceData(lua_State* tolua_S)
 }
 static int lua_ax_backend_TextureCubemapBackend_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (TextureCubemapBackend)");
+    AXLOGV("luabindings: finalizing LUA object (TextureCubemapBackend)");
     return 0;
 }
 
@@ -3536,7 +3536,7 @@ int lua_ax_backend_DriverBase_destroyInstance(lua_State* tolua_S)
 }
 static int lua_ax_backend_DriverBase_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (DriverBase)");
+    AXLOGV("luabindings: finalizing LUA object (DriverBase)");
     return 0;
 }
 

@@ -48,7 +48,7 @@ HttpClientTest::HttpClientTest() : _labelStatusCode(nullptr)
     auto cafile = FileUtils::getInstance()->fullPathForFilename("cacert.pem");
     httpClient->setSSLVerification(cafile);
     httpClient->enableCookies(nullptr);
-    AXLOG("The http cookie will store to: %s", httpClient->getCookieFilename().data());
+    AXLOGD("The http cookie will store to: {}", httpClient->getCookieFilename());
 
     const int MARGIN = 40;
     const int SPACE  = 35;
@@ -338,30 +338,30 @@ void HttpClientTest::onHttpRequestCompleted(HttpClient* sender, HttpResponse* re
     auto tag = response->getHttpRequest()->getTag();
     if (!tag.empty())
     {
-        ax::print("%s completed", tag.data());
+        AXLOGI("{} completed", tag.data());
     }
 
     int32_t statusCode    = response->getResponseCode();
     char statusString[64] = {};
     sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, tag.data());
     _labelStatusCode->setString(statusString);
-    ax::print("response code: %d", statusCode);
+    AXLOGI("response code: {}", statusCode);
 
     if (response->getResponseCode() != 200)
     {
-        ax::print("response failed");
-        // ax::print("error buffer: %s", response->getErrorBuffer());
+        AXLOGI("response failed");
+        // AXLOGD("error buffer: {}", response->getErrorBuffer());
         return;
     }
 
     // dump data
     auto buffer = response->getResponseData();
     buffer->push_back('\0');  // to c_str
-    ax::print("Http Test, dump data: %s", buffer->data());
-    ax::print("\n");
+   AXLOGI("Http Test, dump data: {}", buffer->data());
+   AXLOGI("\n");
     if (response->getHttpRequest()->getReferenceCount() != 2)
     {
-        ax::print("request ref count not 2, is %d", response->getHttpRequest()->getReferenceCount());
+       AXLOGI("request ref count not 2, is {}", response->getHttpRequest()->getReferenceCount());
     }
 }
 
@@ -489,14 +489,14 @@ void HttpClientClearRequestsTest::onHttpRequestCompleted(HttpClient* sender, Htt
     auto tag = response->getHttpRequest()->getTag();
     if (!tag.empty())
     {
-        ax::print("%s completed", tag.data());
+        AXLOGD("{} completed", tag.data());
     }
 
     int32_t statusCode    = response->getResponseCode();
     char statusString[64] = {};
     sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, tag.data());
     _labelStatusCode->setString(statusString);
-    ax::print("response code: %d", statusCode);
+    AXLOGD("response code: {}", statusCode);
 
     _totalProcessedRequests++;
     sprintf(statusString, "Got %d of %d expected http requests", _totalProcessedRequests, _totalExpectedRequests);
@@ -504,7 +504,7 @@ void HttpClientClearRequestsTest::onHttpRequestCompleted(HttpClient* sender, Htt
 
     if (!response->isSucceed())
     {
-        ax::print("response failed");
-        // ax::print("error buffer: %s", response->getErrorBuffer());
+        AXLOGW("response failed");
+        // AXLOGW("error buffer: {}", response->getErrorBuffer());
     }
 }

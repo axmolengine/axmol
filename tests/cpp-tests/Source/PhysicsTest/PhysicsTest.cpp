@@ -103,7 +103,7 @@ void PhysicsDemo::onEnter()
 
 Sprite* PhysicsDemo::addGrossiniAtPosition(Vec2 p, float scale /* = 1.0*/)
 {
-    AXLOG("Add sprite %0.2f x %02.f", p.x, p.y);
+    AXLOGD("Add sprite x: {:.2} y: {:.2}", p.x, p.y);
 
     int posx, posy;
 
@@ -1311,8 +1311,8 @@ void PhysicsContactTest::onEnter()
     decrease1->setTag(1);
     increase1->setTag(1);
 
-    float prevMenuPos = getSubtitleLable()->getPosition().y - getSubtitleLable()->getContentSize().height;
-    float menuStep    = (getSubtitleLable()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
+    float prevMenuPos = getSubtitleLabel()->getPosition().y - getSubtitleLabel()->getContentSize().height;
+    float menuStep    = (getSubtitleLabel()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
     auto menu1        = Menu::create(decrease1, increase1, nullptr);
     menu1->alignItemsHorizontally();
     menu1->setPosition(Vec2(s.width / 2, prevMenuPos));
@@ -1433,8 +1433,8 @@ void PhysicsContactTest::resetTest()
     this->addChild(root);
 
     auto s            = VisibleRect::getVisibleRect().size;
-    float prevMenuPos = getSubtitleLable()->getPosition().y - getSubtitleLable()->getContentSize().height;
-    float menuStep    = (getSubtitleLable()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
+    float prevMenuPos = getSubtitleLabel()->getPosition().y - getSubtitleLabel()->getContentSize().height;
+    float menuStep    = (getSubtitleLabel()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
     std::string strNum;
     char buffer[10];
 
@@ -1996,7 +1996,7 @@ void PhysicsDemoPyramidStackFixedUpdate::onEnter()
             auto sp = addGrossiniAtPosition(VisibleRect::bottom() + Vec2((i / 2 - j) * 11, (14 - i) * 23 + 100), 0.2f);
             sp->getPhysicsBody()->setTag(DRAG_BODYS_TAG);
 
-            auto label = Label::createWithTTF(StringUtils::format("%d", count++), "fonts/arial.ttf", 24);
+            auto label = Label::createWithTTF(fmt::format("{}", count++), "fonts/arial.ttf", 24);
             label->setPosition(sp->getContentSize().width * 0.5f, sp->getContentSize().height * 0.5f);
             sp->addChild(label, 1);
         }

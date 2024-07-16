@@ -41,7 +41,7 @@ int lua_ax_audioengine_AudioProfile_constructor(lua_State* tolua_S)
 
 static int lua_ax_audioengine_AudioProfile_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (AudioProfile)");
+    AXLOGV("luabindings: finalizing LUA object (AudioProfile)");
     return 0;
 }
 
@@ -1143,7 +1143,7 @@ int lua_ax_audioengine_AudioEngine_isEnabled(lua_State* tolua_S)
 }
 static int lua_ax_audioengine_AudioEngine_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (AudioEngine)");
+    AXLOGV("luabindings: finalizing LUA object (AudioEngine)");
     return 0;
 }
 

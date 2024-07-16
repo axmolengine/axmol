@@ -161,7 +161,7 @@ void UITextFieldTest_MaxLength::textFieldEvent(Object* pSender, TextField::Event
         textField->runAction(MoveTo::create(
             0.225f,
             Vec2(screenSize.width / 2.0f, screenSize.height / 2.0f + textField->getContentSize().height / 2.0f)));
-        _displayValueLabel->setString(StringUtils::format("attach with IME max length %d", textField->getMaxLength()));
+        _displayValueLabel->setString(fmt::format("attach with IME max length {}", textField->getMaxLength()));
     }
     break;
 
@@ -170,21 +170,21 @@ void UITextFieldTest_MaxLength::textFieldEvent(Object* pSender, TextField::Event
         TextField* textField = dynamic_cast<TextField*>(pSender);
         Size screenSize      = Director::getInstance()->getWinSize();
         textField->runAction(MoveTo::create(0.175f, Vec2(screenSize.width / 2.0f, screenSize.height / 2.0f)));
-        _displayValueLabel->setString(StringUtils::format("detach with IME max length %d", textField->getMaxLength()));
+        _displayValueLabel->setString(fmt::format("detach with IME max length {}", textField->getMaxLength()));
     }
     break;
 
     case TextField::EventType::INSERT_TEXT:
     {
         TextField* textField = dynamic_cast<TextField*>(pSender);
-        _displayValueLabel->setString(StringUtils::format("insert words max length %d", textField->getMaxLength()));
+        _displayValueLabel->setString(fmt::format("insert words max length {}", textField->getMaxLength()));
     }
     break;
 
     case TextField::EventType::DELETE_BACKWARD:
     {
         TextField* textField = dynamic_cast<TextField*>(pSender);
-        _displayValueLabel->setString(StringUtils::format("delete word max length %d", textField->getMaxLength()));
+        _displayValueLabel->setString(fmt::format("delete word max length {}", textField->getMaxLength()));
     }
     break;
 
@@ -560,7 +560,7 @@ void UITextFieldTest_PlaceHolderColor::textFieldEvent(Object* pSender, TextField
     case TextField::EventType::INSERT_TEXT:
     {
         _displayValueLabel->setString(("insert words"));
-        AXLOG("%f, %f", dynamic_cast<TextField*>(pSender)->getContentSize().width,
+        AXLOGD("{}, {}", dynamic_cast<TextField*>(pSender)->getContentSize().width,
               dynamic_cast<TextField*>(pSender)->getContentSize().height);
     }
     break;

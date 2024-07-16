@@ -81,18 +81,18 @@ void SchedulerAutoremove::onEnter()
 void SchedulerAutoremove::autoremove(float dt)
 {
     accum += dt;
-    AXLOG("autoremove scheduler: Time: %f", accum);
+    AXLOGD("autoremove scheduler: Time: {}", accum);
 
     if (accum > 3)
     {
         unschedule(AX_SCHEDULE_SELECTOR(SchedulerAutoremove::autoremove));
-        AXLOG("autoremove scheduler: scheduler removed");
+        AXLOGD("autoremove scheduler: scheduler removed");
     }
 }
 
 void SchedulerAutoremove::tick(float /*dt*/)
 {
-    AXLOG("tick scheduler: This scheduler should not be removed");
+    AXLOGD("tick scheduler: This scheduler should not be removed");
 }
 
 std::string SchedulerAutoremove::title() const
@@ -120,17 +120,17 @@ void SchedulerPauseResume::onEnter()
 
 void SchedulerPauseResume::tick1(float /*dt*/)
 {
-    AXLOG("tick1");
+    AXLOGD("tick1");
 }
 
 void SchedulerPauseResume::tick2(float /*dt*/)
 {
-    AXLOG("tick2");
+    AXLOGD("tick2");
 }
 
 void SchedulerPauseResume::pause(float /*dt*/)
 {
-    AXLOG("paused, tick1 and tick2 should called six times");
+    AXLOGD("paused, tick1 and tick2 should called six times");
     Director::getInstance()->getScheduler()->pauseTarget(this);
 }
 
@@ -185,17 +185,17 @@ void SchedulerPauseResumeAll::onExit()
 
 void SchedulerPauseResumeAll::tick1(float /*dt*/)
 {
-    ax::print("tick1");
+    AXLOGD("tick1");
 }
 
 void SchedulerPauseResumeAll::tick2(float /*dt*/)
 {
-    ax::print("tick2");
+    AXLOGD("tick2");
 }
 
 void SchedulerPauseResumeAll::pause(float /*dt*/)
 {
-    ax::print("Pausing, tick1 should be called six times and tick2 three times");
+    AXLOGD("Pausing, tick1 should be called six times and tick2 three times");
     auto scheduler = Director::getInstance()->getScheduler();
     _pausedTargets = scheduler->pauseAllTargets();
 
@@ -208,7 +208,7 @@ void SchedulerPauseResumeAll::pause(float /*dt*/)
 
 void SchedulerPauseResumeAll::resume(float /*dt*/)
 {
-    ax::print("Resuming");
+    AXLOGD("Resuming");
     auto director = Director::getInstance();
     director->getScheduler()->resumeTargets(_pausedTargets);
     _pausedTargets.clear();
@@ -262,17 +262,17 @@ void SchedulerPauseResumeAllUser::onExit()
 
 void SchedulerPauseResumeAllUser::tick1(float /*dt*/)
 {
-    ax::print("tick1");
+    AXLOGD("tick1");
 }
 
 void SchedulerPauseResumeAllUser::tick2(float /*dt*/)
 {
-    ax::print("tick2");
+    AXLOGD("tick2");
 }
 
 void SchedulerPauseResumeAllUser::pause(float /*dt*/)
 {
-    ax::print("Pausing, tick1 and tick2 should be called three times");
+    AXLOGD("Pausing, tick1 and tick2 should be called three times");
     auto director  = Director::getInstance();
     _pausedTargets = director->getScheduler()->pauseAllTargetsWithMinPriority(Scheduler::PRIORITY_NON_SYSTEM_MIN);
     // because target 'this' has been paused above, so use another node(tag:123) as target
@@ -281,7 +281,7 @@ void SchedulerPauseResumeAllUser::pause(float /*dt*/)
 
 void SchedulerPauseResumeAllUser::resume(float /*dt*/)
 {
-    ax::print("Resuming");
+    AXLOGD("Resuming");
     getScheduler()->resumeTargets(_pausedTargets);
     _pausedTargets.clear();
 }
@@ -314,22 +314,22 @@ void SchedulerUnscheduleAll::onEnter()
 
 void SchedulerUnscheduleAll::tick1(float /*dt*/)
 {
-    AXLOG("tick1");
+    AXLOGD("tick1");
 }
 
 void SchedulerUnscheduleAll::tick2(float /*dt*/)
 {
-    AXLOG("tick2");
+    AXLOGD("tick2");
 }
 
 void SchedulerUnscheduleAll::tick3(float /*dt*/)
 {
-    AXLOG("tick3");
+    AXLOGD("tick3");
 }
 
 void SchedulerUnscheduleAll::tick4(float /*dt*/)
 {
-    AXLOG("tick4");
+    AXLOGD("tick4");
 }
 
 void SchedulerUnscheduleAll::unscheduleAll(float /*dt*/)
@@ -386,22 +386,22 @@ void SchedulerUnscheduleAllHard::onExit()
 
 void SchedulerUnscheduleAllHard::tick1(float /*dt*/)
 {
-    AXLOG("tick1");
+    AXLOGD("tick1");
 }
 
 void SchedulerUnscheduleAllHard::tick2(float /*dt*/)
 {
-    AXLOG("tick2");
+    AXLOGD("tick2");
 }
 
 void SchedulerUnscheduleAllHard::tick3(float /*dt*/)
 {
-    AXLOG("tick3");
+    AXLOGD("tick3");
 }
 
 void SchedulerUnscheduleAllHard::tick4(float /*dt*/)
 {
-    AXLOG("tick4");
+    AXLOGD("tick4");
 }
 
 void SchedulerUnscheduleAllHard::unscheduleAll(float /*dt*/)
@@ -445,22 +445,22 @@ void SchedulerUnscheduleAllUserLevel::onEnter()
 
 void SchedulerUnscheduleAllUserLevel::tick1(float /*dt*/)
 {
-    AXLOG("tick1");
+    AXLOGD("tick1");
 }
 
 void SchedulerUnscheduleAllUserLevel::tick2(float /*dt*/)
 {
-    AXLOG("tick2");
+    AXLOGD("tick2");
 }
 
 void SchedulerUnscheduleAllUserLevel::tick3(float /*dt*/)
 {
-    AXLOG("tick3");
+    AXLOGD("tick3");
 }
 
 void SchedulerUnscheduleAllUserLevel::tick4(float /*dt*/)
 {
-    AXLOG("tick4");
+    AXLOGD("tick4");
 }
 
 void SchedulerUnscheduleAllUserLevel::unscheduleAll(float /*dt*/)
@@ -494,22 +494,22 @@ void SchedulerSchedulesAndRemove::onEnter()
 
 void SchedulerSchedulesAndRemove::tick1(float /*dt*/)
 {
-    AXLOG("tick1");
+    AXLOGD("tick1");
 }
 
 void SchedulerSchedulesAndRemove::tick2(float /*dt*/)
 {
-    AXLOG("tick2");
+    AXLOGD("tick2");
 }
 
 void SchedulerSchedulesAndRemove::tick3(float /*dt*/)
 {
-    AXLOG("tick3");
+    AXLOGD("tick3");
 }
 
 void SchedulerSchedulesAndRemove::tick4(float /*dt*/)
 {
-    AXLOG("tick4");
+    AXLOGD("tick4");
 }
 
 std::string SchedulerSchedulesAndRemove::title() const
@@ -547,7 +547,7 @@ TestNode::~TestNode() {}
 
 void TestNode::update(float /*dt*/)
 {
-    ax::print("%s", _string.c_str());
+    AXLOGD("{}", _string);
 }
 
 //------------------------------------------------------------------
@@ -635,17 +635,17 @@ void SchedulerUpdateAndCustom::onEnter()
 
 void SchedulerUpdateAndCustom::update(float dt)
 {
-    AXLOG("update called:%f", dt);
+    AXLOGD("update called:{}", dt);
 }
 
 void SchedulerUpdateAndCustom::tick(float dt)
 {
-    AXLOG("custom selector called:%f", dt);
+    AXLOGD("custom selector called:{}", dt);
 }
 
 void SchedulerUpdateAndCustom::stopSelectors(float /*dt*/)
 {
-    ax::print("SchedulerUpdateAndCustom::stopSelectors");
+    AXLOGD("SchedulerUpdateAndCustom::stopSelectors");
     unscheduleAllCallbacks();
 }
 
@@ -673,7 +673,7 @@ void SchedulerUpdateFromCustom::onEnter()
 
 void SchedulerUpdateFromCustom::update(float dt)
 {
-    AXLOG("update called:%f", dt);
+    AXLOGD("update called:{}", dt);
 }
 
 void SchedulerUpdateFromCustom::schedUpdate(float /*dt*/)
@@ -727,7 +727,7 @@ void RescheduleSelector::schedUpdate(float dt)
 {
     _ticks++;
 
-    AXLOG("schedUpdate: %.4f", dt);
+    AXLOGD("schedUpdate: {:.4}", dt);
     if (_ticks > 3)
     {
         _interval += 1.0f;
@@ -742,7 +742,7 @@ void SchedulerDelayAndRepeat::onEnter()
 {
     SchedulerTestLayer::onEnter();
     schedule(AX_SCHEDULE_SELECTOR(SchedulerDelayAndRepeat::update), 0, 4, 3.f);
-    AXLOG("update is scheduled should begin after 3 seconds");
+    AXLOGD("update is scheduled should begin after 3 seconds");
 }
 
 std::string SchedulerDelayAndRepeat::title() const
@@ -757,7 +757,7 @@ std::string SchedulerDelayAndRepeat::subtitle() const
 
 void SchedulerDelayAndRepeat::update(float dt)
 {
-    ax::print("update called:%f", dt);
+    AXLOGD("update called: {}", dt);
 }
 
 // SchedulerTimeScale
@@ -1004,7 +1004,7 @@ public:
 
     ~TestNode2()
     {
-        ax::print("Delete TestNode (should not crash)");
+        AXLOGD("Delete TestNode (should not crash)");
         this->unscheduleAllCallbacks();
     }
 
@@ -1073,11 +1073,11 @@ void SchedulerIssueWithReschedule::onEnter()
 
     _scheduler->schedule(
         [this, verified](float dt) {
-            ax::print("SchedulerIssueWithReschedule - first timer");
+           AXLOGD("SchedulerIssueWithReschedule - first timer");
 
             _scheduler->schedule(
                 [verified](float dt) {
-                    ax::print("SchedulerIssueWithReschedule - second timer. OK");
+                   AXLOGD("SchedulerIssueWithReschedule - second timer. OK");
                     *verified = true;
                 },
                 this, 0.1f, 0, 0, false, "test_timer");
@@ -1088,13 +1088,13 @@ void SchedulerIssueWithReschedule::onEnter()
         [verified, status_text](float dt) {
             if (*verified)
             {
-                ax::print("SchedulerIssueWithReschedule - test OK");
+                AXLOGD("SchedulerIssueWithReschedule - test OK");
                 status_text->setString("OK");
                 status_text->setColor(Color3B(0, 255, 0));
             }
             else
             {
-                ax::print("SchedulerIssueWithReschedule - test failed!");
+                AXLOGD("SchedulerIssueWithReschedule - test failed!");
                 status_text->setString("Failed");
                 status_text->setColor(Color3B(255, 0, 0));
             }
@@ -1132,14 +1132,14 @@ schedule(global_function, ...)\n\
 
 static void ScheduleCallbackTest_global_callback(float dt)
 {
-    ax::print("In the callback of schedule(global_function, ...), dt = %f", dt);
+    AXLOGD("In the callback of schedule(global_function, ...), dt = {}", dt);
 }
 
 void ScheduleCallbackTest::onEnter()
 {
     SchedulerTestLayer::onEnter();
 
-    _scheduler->schedule([](float dt) { ax::print("In the callback of schedule(lambda, ...), dt = %f", dt); }, this, 1.0f,
+    _scheduler->schedule([](float dt) { AXLOGD("In the callback of schedule(lambda, ...), dt = {}", dt); }, this, 1.0f,
                          false, "lambda");
 
     _scheduler->schedule(AX_CALLBACK_1(ScheduleCallbackTest::callback, this), this, 1.0f, false, "member_function");
@@ -1149,7 +1149,7 @@ void ScheduleCallbackTest::onEnter()
 
 void ScheduleCallbackTest::callback(float dt)
 {
-    ax::print("In the callback of schedule(AX_CALLBACK_1(XXX::member_function), this), this, ...), dt = %f", dt);
+    AXLOGD("In the callback of schedule(AX_CALLBACK_1(XXX::member_function), this), this, ...), dt = {}", dt);
 }
 
 // ScheduleUpdatePriority
@@ -1167,7 +1167,7 @@ std::string ScheduleUpdatePriority::subtitle() const
 bool ScheduleUpdatePriority::onTouchBegan(Touch* /*touch*/, Event* /*event*/)
 {
     int priority = static_cast<int>(AXRANDOM_0_1() * 11) - 5;  // -5 ~ 5
-    AXLOG("change update priority to %d", priority);
+    AXLOGD("change update priority to {}", priority);
     scheduleUpdateWithPriority(priority);
     return true;
 }
@@ -1197,13 +1197,13 @@ void SchedulerIssue10232::onEnter()
 
     this->scheduleOnce(SEL_SCHEDULE(&SchedulerIssue2268::update), 0.25f);
 
-    this->scheduleOnce([](float /*dt*/) { ax::print("SchedulerIssue10232:Schedules a lambda function"); }, 0.25f,
+    this->scheduleOnce([](float /*dt*/) { AXLOGD("SchedulerIssue10232:Schedules a lambda function"); }, 0.25f,
                        "SchedulerIssue10232");
 }
 
 void SchedulerIssue10232::update(float /*dt*/)
 {
-    ax::print("SchedulerIssue10232:Schedules a selector");
+    AXLOGD("SchedulerIssue10232:Schedules a selector");
 }
 
 std::string SchedulerIssue10232::title() const
@@ -1313,12 +1313,12 @@ void SchedulerIssue17149::onEnter()
 void SchedulerIssue17149::update(float dt)
 {
     auto classa = new (_memoryPool) ClassA();
-    AXLOG("Address one: %p", classa);
+    AXLOGD("Address one: {}", fmt::ptr(classa));
     Director::getInstance()->getScheduler()->scheduleUpdate(classa, 1, false);
     Director::getInstance()->getScheduler()->unscheduleUpdate(classa);
 
     auto classb = new (_memoryPool) ClassB();
-    AXLOG("Address one: %p", classb);
+    AXLOGD("Address one: {}", fmt::ptr(classb));
     Director::getInstance()->getScheduler()->scheduleUpdate(classb, 1, false);
 
     unscheduleUpdate();
@@ -1328,14 +1328,14 @@ SchedulerIssue17149::ClassA::ClassA() : _member1(1), _member2(2), _member3(3) {}
 
 void SchedulerIssue17149::ClassA::update(float dt)
 {
-    AXLOG("i'm ClassA: %d%d%d", _member1, _member2, _member3);
+    AXLOGD("i'm ClassA: {}{}{}", _member1, _member2, _member3);
 }
 
 SchedulerIssue17149::ClassB::ClassB() : _member1(4), _member2(5), _member3(6) {}
 
 void SchedulerIssue17149::ClassB::update(float dt)
 {
-    AXLOG("i'm ClassB: %d%d%d", _member1, _member2, _member3);
+    AXLOGD("i'm ClassB: {}{}{}", _member1, _member2, _member3);
 
     Director::getInstance()->getScheduler()->unscheduleUpdate(this);
 }
@@ -1391,7 +1391,7 @@ void SchedulerRemoveEntryWhileUpdate::TestClass::update(float dt)
 {
     if (_cleanedUp)
     {
-        AXLOG("Error: cleaned object must not be called.");
+        AXLOGD("Error: cleaned object must not be called.");
         return;
     }
 
@@ -1446,7 +1446,7 @@ void SchedulerRemoveSelectorDuringCall::callback(float)
 {
     if (!_scheduled)
     {
-        ax::print("Error: unscheduled callback must not be called.");
+        AXLOGD("Error: unscheduled callback must not be called.");
         return;
     }
 

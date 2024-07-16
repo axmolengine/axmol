@@ -737,7 +737,7 @@ SpriteBatchNodeReorder::SpriteBatchNodeReorder()
 
         ssize_t currentIndex = child->getAtlasIndex();
         AXASSERT(prev == currentIndex - 1, "Child order failed");
-        ////----AXLOG("children %x - atlasIndex:%d", child, currentIndex);
+        ////----AXLOGD("children {:#x} - atlasIndex:{}", child, currentIndex);
         prev = currentIndex;
     }
 
@@ -747,7 +747,7 @@ SpriteBatchNodeReorder::SpriteBatchNodeReorder()
     {
         ssize_t currentIndex = sprite->getAtlasIndex();
         AXASSERT(prev == currentIndex - 1, "Child order failed");
-        ////----AXLOG("descendant %x - atlasIndex:%d", child, currentIndex);
+        ////----AXLOGD("descendant {:#x} - atlasIndex:{}", child, currentIndex);
         prev = currentIndex;
     }
 }
@@ -1492,10 +1492,10 @@ void SpriteFlip::flipSprites(float dt)
     bool x = sprite1->isFlippedX();
     bool y = sprite2->isFlippedY();
 
-    AXLOG("Pre: %g", sprite1->getContentSize().height);
+    AXLOGD("Pre: {}", sprite1->getContentSize().height);
     sprite1->setFlippedX(!x);
     sprite2->setFlippedY(!y);
-    AXLOG("Post: %g", sprite1->getContentSize().height);
+    AXLOGD("Post: {}", sprite1->getContentSize().height);
 }
 
 std::string SpriteFlip::title() const
@@ -1540,10 +1540,10 @@ void SpriteBatchNodeFlip::flipSprites(float dt)
     bool x = sprite1->isFlippedX();
     bool y = sprite2->isFlippedY();
 
-    AXLOG("Pre: %g", sprite1->getContentSize().height);
+    AXLOGD("Pre: {}", sprite1->getContentSize().height);
     sprite1->setFlippedX(!x);
     sprite2->setFlippedY(!y);
-    AXLOG("Post: %g", sprite1->getContentSize().height);
+    AXLOGD("Post: {}", sprite1->getContentSize().height);
 }
 
 std::string SpriteBatchNodeFlip::title() const
@@ -2603,7 +2603,7 @@ void SpriteHybrid::reparentSprite(float dt)
     if (_usingSpriteBatchNode)
         std::swap(p1, p2);
 
-    ////----AXLOG("New parent is: %x", p2);
+    ////----AXLOGD("New parent is: {:#x}", p2);
 
     auto& p1Children = p1->getChildren();
     for (const auto& node : p1Children)
@@ -4421,23 +4421,23 @@ void NodeSort::reorderSprite(float dt)
 {
     unschedule("reorder_sprite_key");
 
-    ax::print("Before reorder--");
+    AXLOGI("Before reorder--");
 
     auto& children = _node->getChildren();
 
     for (const auto& child : children)
     {
-        ax::print("tag %i z %i", (int)child->getTag(), (int)child->getLocalZOrder());
+        AXLOGI("tag {} z {}", (int)child->getTag(), (int)child->getLocalZOrder());
     }
     // z-4
     _node->reorderChild(_node->getChildren().at(0), -6);
 
     _node->sortAllChildren();
 
-    ax::print("After reorder--");
+    AXLOGI("After reorder--");
     for (const auto& child : children)
     {
-        ax::print("tag %i z %i", (int)child->getTag(), (int)child->getLocalZOrder());
+        AXLOGI("tag {} z {}", (int)child->getTag(), (int)child->getLocalZOrder());
     }
 }
 
@@ -4490,7 +4490,7 @@ void SpriteBatchNodeReorderSameIndex::reorderSprite(float dt)
 
     for (const auto& sprite : _batchNode->getDescendants())
     {
-        ax::print("tag %i", sprite->getTag());
+        AXLOGI("tag {}", sprite->getTag());
     }
 }
 

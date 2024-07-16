@@ -78,7 +78,7 @@ bool UIListViewTest_Vertical::init()
 
         for (int i = 0; i < _totalCount; ++i)
         {
-            std::string ccstr = StringUtils::format("listview_item_%d", i);
+            std::string ccstr = fmt::format("listview_item_{}", i);
             _array.emplace_back(ccstr);
         }
 
@@ -180,9 +180,9 @@ bool UIListViewTest_Vertical::init()
                 auto center = listView->getCenterItemInCurrentView();
                 auto top    = listView->getTopmostItemInCurrentView();
 
-                _indexLabels[0]->setString(StringUtils::format("Top index=%zd", listView->getIndex(top)));
-                _indexLabels[1]->setString(StringUtils::format("Center\nindex=%zd", listView->getIndex(center)));
-                _indexLabels[2]->setString(StringUtils::format("Bottom index=%zd", listView->getIndex(bottom)));
+                _indexLabels[0]->setString(fmt::format("Top index={}", listView->getIndex(top)));
+                _indexLabels[1]->setString(fmt::format("Center\nindex={}", listView->getIndex(center)));
+                _indexLabels[2]->setString(fmt::format("Bottom index={}", listView->getIndex(bottom)));
             });
         }
 
@@ -234,7 +234,7 @@ void UIListViewTest_Vertical::update(float dt)
             {
                 int itemID = item->getTag() - (int)items.size();
                 item->setPositionY(item->getPositionY() + _reuseItemOffset);
-                AXLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
+                AXLOGD("itemPos = {}, itemID = {}, templateID = {}", itemPos, itemID, i);
                 this->updateItem(itemID, i);
             }
         }
@@ -245,7 +245,7 @@ void UIListViewTest_Vertical::update(float dt)
 
                 item->setPositionY(item->getPositionY() - _reuseItemOffset);
                 int itemID = item->getTag() + (int)items.size();
-                AXLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
+                AXLOGD("itemPos = {}, itemID = {}, templateID = {}", itemPos, itemID, i);
                 this->updateItem(itemID, i);
             }
         }
@@ -262,14 +262,14 @@ void UIListViewTest_Vertical::selectedItemEvent(Object* pSender, ListView::Event
     {
         ListView* listView = static_cast<ListView*>(pSender);
         auto item          = listView->getItem(listView->getCurSelectedIndex());
-        ax::print("select child start index = %d", item->getTag());
+        AXLOGD("select child start index = {}", item->getTag());
         break;
     }
     case ax::ui::ListView::EventType::ON_SELECTED_ITEM_END:
     {
         ListView* listView = static_cast<ListView*>(pSender);
         auto item          = listView->getItem(listView->getCurSelectedIndex());
-        ax::print("select child end index = %d", item->getTag());
+        AXLOGD("select child end index = {}", item->getTag());
         break;
     }
     default:
@@ -282,10 +282,10 @@ void UIListViewTest_Vertical::selectedItemEventScrollView(Object* pSender, ui::S
     switch (type)
     {
     case ui::ScrollView::EventType::SCROLL_TO_BOTTOM:
-        AXLOG("SCROLL_TO_BOTTOM");
+        AXLOGD("SCROLL_TO_BOTTOM");
         break;
     case ui::ScrollView::EventType::SCROLL_TO_TOP:
-        AXLOG("SCROLL_TO_TOP");
+        AXLOGD("SCROLL_TO_TOP");
         break;
     default:
         break;
@@ -328,7 +328,7 @@ bool UIListViewTest_Horizontal::init()
         // The data is usually fetch from the server
         for (int i = 0; i < _totalCount; ++i)
         {
-            std::string ccstr = StringUtils::format("listview_item_%d", i);
+            std::string ccstr = fmt::format("listview_item_{}", i);
             _array.emplace_back(ccstr);
         }
 
@@ -438,7 +438,7 @@ void UIListViewTest_Horizontal::update(float dt)
             {
                 int itemID = item->getTag() + (int)items.size();
                 item->setPositionX(item->getPositionX() + _reuseItemOffset);
-                AXLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
+                AXLOGD("itemPos = {}, itemID = {}, templateID = {}", itemPos, itemID, i);
                 this->updateItem(itemID, i);
             }
         }
@@ -450,7 +450,7 @@ void UIListViewTest_Horizontal::update(float dt)
 
                 item->setPositionX(item->getPositionX() - _reuseItemOffset);
                 int itemID = item->getTag() - (int)items.size();
-                AXLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
+                AXLOGD("itemPos = {}, itemID = {}, templateID = {}", itemPos, itemID, i);
                 this->updateItem(itemID, i);
             }
         }
@@ -467,14 +467,14 @@ void UIListViewTest_Horizontal::selectedItemEvent(Object* pSender, ListView::Eve
     {
         ListView* listView = static_cast<ListView*>(pSender);
         auto item          = listView->getItem(listView->getCurSelectedIndex());
-        ax::print("select child start index = %d", item->getTag());
+        AXLOGD("select child start index = {}", item->getTag());
         break;
     }
     case ax::ui::ListView::EventType::ON_SELECTED_ITEM_END:
     {
         ListView* listView = static_cast<ListView*>(pSender);
         auto item          = listView->getItem(listView->getCurSelectedIndex());
-        ax::print("select child end index = %d", item->getTag());
+        AXLOGD("select child end index = {}", item->getTag());
         break;
     }
     default:
@@ -696,11 +696,11 @@ bool UIListViewTest_ScrollToItem::init()
     pButton->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
     pButton->setScale(0.8f);
     pButton->setPosition(Vec2(layerSize / 2) + Vec2(120.0f, -60.0f));
-    pButton->setTitleText(StringUtils::format("Go to '%d'", _nextIndex));
+    pButton->setTitleText(fmt::format("Go to '{}'", _nextIndex));
     pButton->addClickEventListener([this, pButton](Object*) {
         _listView->scrollToItem(_nextIndex, Vec2::ANCHOR_MIDDLE, Vec2::ANCHOR_MIDDLE);
         _nextIndex = (_nextIndex + (NUMBER_OF_ITEMS / 2)) % NUMBER_OF_ITEMS;
-        pButton->setTitleText(StringUtils::format("Go to '%d'", _nextIndex));
+        pButton->setTitleText(fmt::format("Go to '{}'", _nextIndex));
     });
     _uiLayer->addChild(pButton);
 
@@ -711,7 +711,7 @@ bool UIListViewTest_ScrollToItem::init()
         auto pButton = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         pButton->setContentSize(BUTTON_SIZE);
         pButton->setScale9Enabled(true);
-        pButton->setTitleText(StringUtils::format("Button-%d", i));
+        pButton->setTitleText(fmt::format("Button-{}", i));
         _listView->pushBackCustomItem(pButton);
     }
     return true;
@@ -791,11 +791,11 @@ bool UIListViewTest_Magnetic::init()
             auto bottom = listView->getBottommostItemInCurrentView();
             auto center = listView->getCenterItemInCurrentView();
 
-            _indexLabels[0]->setString(StringUtils::format("Left\nindex=%zd", listView->getIndex(left)));
-            _indexLabels[1]->setString(StringUtils::format("RIght\nindex=%zd", listView->getIndex(right)));
-            _indexLabels[2]->setString(StringUtils::format("Top index=%zd", listView->getIndex(top)));
-            _indexLabels[3]->setString(StringUtils::format("Bottom index=%zd", listView->getIndex(bottom)));
-            _indexLabels[4]->setString(StringUtils::format("Center\nindex=%zd", listView->getIndex(center)));
+            _indexLabels[0]->setString(fmt::format("Left\nindex={}", listView->getIndex(left)));
+            _indexLabels[1]->setString(fmt::format("RIght\nindex={}", listView->getIndex(right)));
+            _indexLabels[2]->setString(fmt::format("Top index={}", listView->getIndex(top)));
+            _indexLabels[3]->setString(fmt::format("Bottom index={}", listView->getIndex(bottom)));
+            _indexLabels[4]->setString(fmt::format("Center\nindex={}", listView->getIndex(center)));
         });
     }
 
@@ -857,7 +857,7 @@ bool UIListViewTest_Magnetic::init()
             sString   = "NONE";
         }
         _listView->setMagneticType(eNextType);
-        _titleLabel->setString(StringUtils::format("MagneticType - %s", sString.c_str()));
+        _titleLabel->setString(fmt::format("MagneticType - {}", sString));
     });
     _uiLayer->addChild(pButton);
 
@@ -868,7 +868,7 @@ bool UIListViewTest_Magnetic::init()
         auto pButton = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         pButton->setContentSize(BUTTON_SIZE);
         pButton->setScale9Enabled(true);
-        pButton->setTitleText(StringUtils::format("Button-%d", i));
+        pButton->setTitleText(fmt::format("Button-{}", i));
         _listView->pushBackCustomItem(pButton);
     }
     return true;
@@ -998,11 +998,11 @@ bool UIListViewTest_Padding::init()
             auto bottom = listView->getBottommostItemInCurrentView();
             auto center = listView->getCenterItemInCurrentView();
 
-            _indexLabels[0]->setString(StringUtils::format("Left\nindex=%zd", listView->getIndex(left)));
-            _indexLabels[1]->setString(StringUtils::format("RIght\nindex=%zd", listView->getIndex(right)));
-            _indexLabels[2]->setString(StringUtils::format("Top index=%zd", listView->getIndex(top)));
-            _indexLabels[3]->setString(StringUtils::format("Bottom index=%zd", listView->getIndex(bottom)));
-            _indexLabels[4]->setString(StringUtils::format("Center\nindex=%zd", listView->getIndex(center)));
+            _indexLabels[0]->setString(fmt::format("Left\nindex={}", listView->getIndex(left)));
+            _indexLabels[1]->setString(fmt::format("RIght\nindex={}", listView->getIndex(right)));
+            _indexLabels[2]->setString(fmt::format("Top index={}", listView->getIndex(top)));
+            _indexLabels[3]->setString(fmt::format("Bottom index={}", listView->getIndex(bottom)));
+            _indexLabels[4]->setString(fmt::format("Center\nindex={}", listView->getIndex(center)));
         });
     }
 
@@ -1013,7 +1013,7 @@ bool UIListViewTest_Padding::init()
         auto pButton = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         pButton->setContentSize(BUTTON_SIZE);
         pButton->setScale9Enabled(true);
-        pButton->setTitleText(StringUtils::format("Button-%d", i));
+        pButton->setTitleText(fmt::format("Button-{}", i));
         _listView->pushBackCustomItem(pButton);
     }
     return true;
@@ -1028,33 +1028,33 @@ void UIListViewTest_Padding::sliderEvent(Object* pSender, Slider::EventType type
         if (slider && slider->getTag() == 0)
         {
             int left = slider->getPercent() / 100.f * 50.f;
-            AXLOG("Left Padding: %d", left);
+            AXLOGD("Left Padding: {}", left);
             _listView->setLeftPadding(left);
-            _paddingLabels[0]->setString(StringUtils::format("Left\nPadding=%d", left));
+            _paddingLabels[0]->setString(fmt::format("Left\nPadding={}", left));
         }
         // top
         if (slider && slider->getTag() == 1)
         {
             int top = slider->getPercent() / 100.f * 50.f;
-            AXLOG("Top Padding: %d", top);
+            AXLOGD("Top Padding: {}", top);
             _listView->setTopPadding(top);
-            _paddingLabels[1]->setString(StringUtils::format("Top\nPadding=%d", top));
+            _paddingLabels[1]->setString(fmt::format("Top\nPadding={}", top));
         }
         // right
         if (slider && slider->getTag() == 2)
         {
             int right = slider->getPercent() / 100.f * 50.f;
-            AXLOG("Right Padding: %d", right);
+            AXLOGD("Right Padding: {}", right);
             _listView->setRightPadding(right);
-            _paddingLabels[2]->setString(StringUtils::format("Right\nPadding=%d", right));
+            _paddingLabels[2]->setString(fmt::format("Right\nPadding={}", right));
         }
         // bottom
         if (slider && slider->getTag() == 3)
         {
             int bottom = slider->getPercent() / 100.f * 50.f;
-            AXLOG("Bottom Padding: %d", bottom);
+            AXLOGD("Bottom Padding: {}", bottom);
             _listView->setBottomPadding(bottom);
-            _paddingLabels[3]->setString(StringUtils::format("Bottom\nPadding=%d", bottom));
+            _paddingLabels[3]->setString(fmt::format("Bottom\nPadding={}", bottom));
         }
     }
 }
