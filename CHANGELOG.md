@@ -149,6 +149,7 @@
 
 ### Improvements
 
+- Update ios/tvos LaunchScreen.storyboard to 11.0+, also fix xcode15.4 build error
 - Update prebuilt tool `glslcc` to 1.9.5, macos-arm64 support and built for macos-10.15+
 - Improve MediaPlayer: handle video rotation properly
 - Disable c++20 char8_t
