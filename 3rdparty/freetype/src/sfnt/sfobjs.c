@@ -1362,7 +1362,7 @@
          *    2. Otherwise, use the OS/2 table's usWin* metrics.
          */
 
-        if ( face->os2.version != 0xFFFFU && face->os2.fsSelection & 128 )
+        if ( face->os2.version != 0xFFFFU && face->os2.fsSelection & 64 )
         {
           root->ascender  = face->os2.sTypoAscender;
           root->descender = face->os2.sTypoDescender;
