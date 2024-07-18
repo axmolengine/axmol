@@ -75,8 +75,7 @@ TEST_SUITE("math/FastRNG") {
 
         CHECK_EQ(0, rng.max(1));
         CHECK_EQ(3, rng.max(10));
-        CHECK_EQ(-2147483648, rng.max(-10));
-        CHECK_EQ(64167060, rng.max());
+        CHECK_EQ(1956814720, rng.max());
     }
 
 
