@@ -29,6 +29,7 @@
 #define AXMOL__UTF8_H
 
 #include "platform/PlatformMacros.h"
+#include <fmt/format.h>
 #include <vector>
 #include <string>
 #include <sstream>
