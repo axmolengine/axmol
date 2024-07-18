@@ -205,7 +205,7 @@ $manifest = @{
     cmake        = '3.23.0+';
     ninja        = '1.10.0+';
     python       = '3.8.0+';
-    jdk          = '11.0.23+';
+    jdk          = '17.0.10+'; # jdk17+ works for android cmdlinetools 7.0+
     emsdk        = '3.1.53+';
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
@@ -225,7 +225,7 @@ $cmake_generators = @{
 $channels = @{}
 
 # refer to: https://developer.android.com/studio#command-line-tools-only
-$cmdlinetools_rev = '11076708'
+$cmdlinetools_rev = '11076708' # 12.0
 
 $android_sdk_tools = @{
     'build-tools' = '34.0.0'

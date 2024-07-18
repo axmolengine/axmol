@@ -68,12 +68,15 @@
 
 ### 3rdparty Updates
 
+- openssl: 3.0.13 ==> 3.3.1
 - Clipper2: 1.3.0 ==> 1.4.0
 - simdjson: 3.9.2 ==> 3.9.5
 - fmtlib: 10.2.1 ==> 11.0.1
 - yasio: 4.2.2 ==> 4.2.3
 - oboe: 1.8.1 ==> 1.9.0
 - plainlua: 5.4.6 ==> 5.4.7
+- c-ares: 1.29.0 ==> 1.32.2
+- luajit: 2.1-d06beb0 ==> 2.1-04dca79
 
 ## axmol-2.1.3 May.26 2024
 

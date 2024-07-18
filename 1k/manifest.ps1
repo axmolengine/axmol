@@ -9,7 +9,7 @@
 
 # add or overwrite tool version like follow
 if ($Global:is_axmol_app -or $Global:is_axmol_engine) {
-    $manifest['nuget'] = '5.5.1' # since 5.6.0, require .net 4.0
+    $manifest['nuget'] = '5.5.1' # since 5.6.0, requires .net 4.0
     $manifest['glslcc'] = '1.9.5+'
     $manifest['cmake'] = '3.29.3+'
     $manifest['emsdk'] = '3.1.63+'
@@ -17,5 +17,5 @@ if ($Global:is_axmol_app -or $Global:is_axmol_engine) {
 }
 
 # android sdk tools
-$android_sdk_tools['build-tools'] = '34.0.0' # match with AGP, current 8.2.1 android studio 2023.1.1
+$android_sdk_tools['build-tools'] = '34.0.0' # match with AGP-8.2.1+, android studio 2023.1.1+
 $android_sdk_tools['platforms'] = 'android-34'
