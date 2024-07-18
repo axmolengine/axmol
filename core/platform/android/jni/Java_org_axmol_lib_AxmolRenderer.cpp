@@ -30,7 +30,6 @@
 #include "base/EventDispatcher.h"
 #include "platform/Application.h"
 #include "platform/FileUtils.h"
-#include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 
 #include "base/UTF8.h"
