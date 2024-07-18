@@ -521,7 +521,7 @@ void WebSocketDelayTest::doReceiveText()
 void WebSocketDelayTest::onOpen(network::WebSocket* ws)
 {
     char status[256] = {0};
-    sprintf(status, "Opened, url: %s, protocol: {}", ws->getUrl(), ws->getProtocol());
+    sprintf(status, "Opened, url: %s, protocol: %s", ws->getUrl(), ws->getProtocol());
 
     AXLOGD("Websocket ({}) was opened, url: {}, protocol: {}", fmt::ptr(ws), ws->getUrl(), ws->getProtocol());
     if (ws == _wsiSendText)
