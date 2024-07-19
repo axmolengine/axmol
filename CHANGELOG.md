@@ -58,6 +58,7 @@
 - Use new logging system for audio by @halx99
 - Update DrawNodeV2 0.94 by @aismann in https://github.com/axmolengine/axmol/pull/2008
 - Ensure the RenderTexture reference is valid on threaded saveToFile task completion by @rh101 in https://github.com/axmolengine/axmol/pull/2024
+- Some warning and other minor fixes by @smilediver in https://github.com/axmolengine/axmol/pull/2038
 
 
 ### sdks & tools updates
