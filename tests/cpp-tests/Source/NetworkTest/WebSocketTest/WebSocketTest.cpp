@@ -271,7 +271,7 @@ void WebSocketTest::onError(network::WebSocket* ws, const network::WebSocket::Er
 {
     AXLOGD("Error was fired, error code: {}", static_cast<int>(error));
     char buf[100] = {0};
-    sprintf(buf, "An error was fired, code: {}", static_cast<int>(error));
+    sprintf(buf, "An error was fired, code: %s", static_cast<int>(error));
 
     if (ws == _wsiSendText)
     {
@@ -521,7 +521,7 @@ void WebSocketDelayTest::doReceiveText()
 void WebSocketDelayTest::onOpen(network::WebSocket* ws)
 {
     char status[256] = {0};
-    sprintf(status, "Opened, url: {}, protocol: {}", ws->getUrl(), ws->getProtocol());
+    sprintf(status, "Opened, url: %s, protocol: %s", ws->getUrl(), ws->getProtocol());
 
     AXLOGD("Websocket ({}) was opened, url: {}, protocol: {}", fmt::ptr(ws), ws->getUrl(), ws->getProtocol());
     if (ws == _wsiSendText)
