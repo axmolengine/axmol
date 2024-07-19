@@ -5,7 +5,6 @@
     "kcp": "v1.7-f2aa30e",
     "lz4": "v1.9.4",
     "yaml-cpp": "0.8.0",
-    "box2d-optimized": "7ef46c1",
     "sample-assets": "master"
   },
   "mirrors": {
