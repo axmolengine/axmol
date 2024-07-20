@@ -1,4 +1,4 @@
-## axmol-2.1.4 ?? 2024
+## axmol-2.1.4 Jun.20 2024
 
 ### Significant changes relative to 2.1.3:
 
@@ -12,7 +12,7 @@
 - Improve RenderTarget by @smilediver in https://github.com/axmolengine/axmol/pull/1996
 - Make apple controller to support four players by @paulocoutinhox in https://github.com/axmolengine/axmol/pull/2009
 
-### Mark as deprecated
+### Deprecated
 
 - `AsyncTaskPool`, use `JobSystem` instead.
 - `AXLOG`, `AXLOGINFO`, `AXLOGWARN`, `AXLOGERROR`, use `AXLOGD`, `AXLOGI`, `AXLOGE` instead.
@@ -67,7 +67,7 @@
 - AGP: 8.2.2 ==> 8.4.0
 - emsdk: 3.1.59 ==> 3.1.63
 
-### 3rdparty Updates
+### 3rdparty updates
 
 - openssl: 3.0.13 ==> 3.3.1
 - Clipper2: 1.3.0 ==> 1.4.0
