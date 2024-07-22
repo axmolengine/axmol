@@ -381,6 +381,7 @@ struct ProgramType
 
         VIDEO_TEXTURE_YUY2,
         VIDEO_TEXTURE_NV12,
+        VIDEO_TEXTURE_I420, // For some android 11 and older devices
         VIDEO_TEXTURE_BGR32,
 
         BUILTIN_COUNT,

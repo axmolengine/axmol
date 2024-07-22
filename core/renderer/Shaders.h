@@ -73,6 +73,7 @@ extern AX_DLL const std::string_view dualSampler_hsv_frag;
 
 extern AX_DLL const std::string_view videoTextureYUY2_frag;
 extern AX_DLL const std::string_view videoTextureNV12_frag;
+extern AX_DLL const std::string_view videoTextureI420_frag;
 
 /* below is 3d shaders */
 extern AX_DLL const std::string_view lineColor_frag;
