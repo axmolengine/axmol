@@ -44,7 +44,8 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeHandleVideoSamp
                                                                               int outputY,
                                                                               int videoX,
                                                                               int videoY,
-                                                                              int rotation)
+                                                                              int rotation,
+                                                                              int videoPF)
 {
     auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
     if (!mediaEngine)
@@ -52,7 +53,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeHandleVideoSamp
 
     auto sampleData = static_cast<uint8_t*>(env->GetDirectBufferAddress(sampleBuffer));
 
-    mediaEngine->handleVideoSample(sampleData, sampleLen, outputX, outputY, videoX, videoY, rotation);
+    mediaEngine->handleVideoSample(sampleData, sampleLen, outputX, outputY, videoX, videoY, rotation, videoPF);
 }
 
 JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeSetDuration(JNIEnv* env,
@@ -161,7 +162,7 @@ bool AndroidMediaEngine::transferVideoFrame()
             auto& buffer = _frameBuffer2;
 
             ax::MEVideoFrame frame{buffer.data(), buffer.data() + _outputDim.x * _outputDim.y, buffer.size(),
-                                   ax::MEVideoPixelDesc{ax::MEVideoPixelFormat::NV12, _outputDim}, _videoDim};
+                                   ax::MEVideoPixelDesc{static_cast<ax::MEVideoPixelFormat>(_videoPF), _outputDim}, _videoDim};
             frame._vpd._rotation = _videoRotation;
             assert(static_cast<int>(frame._dataLen) >= frame._vpd._dim.x * frame._vpd._dim.y * 3 / 2);
             _onVideoFrame(frame);
@@ -178,13 +179,15 @@ void AndroidMediaEngine::handleVideoSample(const uint8_t* buf,
                                            int outputY,
                                            int videoX,
                                            int videoY,
-                                           int rotation)
+                                           int rotation,
+                                           int videoPF)
 {
     std::unique_lock<std::mutex> lck(_frameBuffer1Mtx);
     _frameBuffer1.assign(buf, buf + len);
     _outputDim.set(outputX, outputY);
     _videoDim.set(videoX, videoY);
     _videoRotation = rotation;
+    _videoPF       = videoPF;
 }
 
 NS_AX_END

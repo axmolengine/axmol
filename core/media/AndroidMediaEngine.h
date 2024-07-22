@@ -59,7 +59,7 @@ public:
     MEMediaState getState() const override;
     bool transferVideoFrame() override;
 
-    void handleVideoSample(const uint8_t* buf, size_t len, int outputX, int outputY, int videoX, int videoY, int rotation);
+    void handleVideoSample(const uint8_t* buf, size_t len, int outputX, int outputY, int videoX, int videoY, int rotation, int videoPF);
     void updateCurrentTime(double currentTime) { _currentTime = currentTime; }
     void updateDuration(double duration) { _duration = duration; }
 
@@ -71,6 +71,7 @@ private:
     MEIntPoint _outputDim;
     MEIntPoint _videoDim;
     int _videoRotation{0};
+    int _videoPF{-1};
 
     yasio::byte_buffer _frameBuffer1;  // for write
     yasio::byte_buffer _frameBuffer2;  // for read
