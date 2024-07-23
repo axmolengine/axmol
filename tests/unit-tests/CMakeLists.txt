@@ -49,6 +49,7 @@ set(GAME_SOURCE
     Source/core/base/ValueTests.cpp
     Source/core/base/VectorTests.cpp
 
+    Source/core/math/FastRNGTests.cpp
     Source/core/math/MathUtilTests.cpp
 
     Source/core/network/UriTests.cpp

@@ -20,38 +20,28 @@ struct FastRNG
     uint32_t _carry = 0;
     uint32_t _k     = 0;
     uint32_t _m     = 0;
-
-#ifdef UINT64_C
     uint64_t _seed  = 0;
-#else
-    uint32_t _seed  = 0;
-#endif
 
     FastRNG() { seed_rng((uint32_t)time(NULL)); }
+    FastRNG(uint64_t seed) { seed_rng_64(seed); }
 
-    // initialize this object with a uint32_t seed
-    void seed_rng(uint32_t seed)
+    // initialize this object with seed
+    void seed_rng(uint64_t seed)
     {
+        auto seed1 = static_cast<uint32_t>(seed);
+        auto seed2 = static_cast<uint32_t>(seed >> 32);
+
         _seed  = seed;
-        _x     = seed | 1;
-        _y     = seed | 2;
-        _z     = seed | 4;
-        _w     = seed | 8;
+        _x     = static_cast<int32_t>(seed1) | 1;
+        _y     = static_cast<int32_t>(seed2) | 2;
+        _z     = static_cast<int32_t>(seed1) | 4;
+        _w     = static_cast<int32_t>(seed2) | 8;
         _carry = 0;
     }
 
-#ifdef UINT64_C
     // initialize this object with a uint64_t seed
-    void seed_rng_64(uint64_t seed)
-    {
-        _seed  = seed;
-        _x     = static_cast<int32_t>(seed) | 1;
-        _y     = static_cast<int32_t>(seed) | 2;
-        _z     = static_cast<int32_t>(seed) | 4;
-        _w     = static_cast<int32_t>(seed) | 8;
-        _carry = 0;
-    }
-#endif
+    // DEPRECATED: use seed_rng instead
+    void seed_rng_64(uint64_t seed) { seed_rng(seed); }
 
     // returns a random uint32_t value
     uint32_t rng()
@@ -83,7 +73,7 @@ struct FastRNG
     // returns a random integer from 0 to max
     int32_t max(int32_t max = INT_MAX)
     {
-        return static_cast<int32_t>(rng() / static_cast<float>(RNG_RAND_MAX / (max - 0)));
+        return static_cast<int32_t>(static_cast<float>(rng()) / static_cast<float>(RNG_RAND_MAX / (max - 0)));
     }
 
     // returns a random unsigned integer from 0 to max
@@ -92,17 +82,17 @@ struct FastRNG
     // returns a random float from min to max
     float rangef(float min = -1.0F, float max = 1.0F)
     {
-        return min + rng() / static_cast<float>(RNG_RAND_MAX / (max - min));
+        return min + static_cast<float>(rng()) / (static_cast<float>(RNG_RAND_MAX) / (max - min));
     }
 
     // returns a random float from 0.0 to max
-    float maxf(float max) { return rng() / static_cast<float>(RNG_RAND_MAX / (max - 0)); }
+    float maxf(float max) { return static_cast<float>(rng()) / (static_cast<float>(RNG_RAND_MAX) / (max - 0.0f)); }
 
     // returns a random float from 0.0 to 1.0
-    float float01() { return rng() / static_cast<float>(RNG_RAND_MAX / (1 - 0)); }
+    float float01() { return static_cast<float>(rng()) / (static_cast<float>(RNG_RAND_MAX) / (1.0f - 0.0f)); }
 
     // returns either false or true randomly
-    bool bool01() { return static_cast<bool>(floor(rng() / static_cast<float>(RNG_RAND_MAX / (2 - 0)))); }
+    bool bool01() { return static_cast<bool>(rng() & 1); }
 };
 
 #endif // _FAST_RNG_H__

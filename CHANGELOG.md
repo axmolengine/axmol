@@ -1,4 +1,4 @@
-## axmol-2.1.4 ?? 2024
+## axmol-2.1.4 Jun.20 2024
 
 ### Significant changes relative to 2.1.3:
 
@@ -12,7 +12,7 @@
 - Improve RenderTarget by @smilediver in https://github.com/axmolengine/axmol/pull/1996
 - Make apple controller to support four players by @paulocoutinhox in https://github.com/axmolengine/axmol/pull/2009
 
-### Mark as deprecated
+### Deprecated
 
 - `AsyncTaskPool`, use `JobSystem` instead.
 - `AXLOG`, `AXLOGINFO`, `AXLOGWARN`, `AXLOGERROR`, use `AXLOGD`, `AXLOGI`, `AXLOGE` instead.
@@ -58,6 +58,7 @@
 - Use new logging system for audio by @halx99
 - Update DrawNodeV2 0.94 by @aismann in https://github.com/axmolengine/axmol/pull/2008
 - Ensure the RenderTexture reference is valid on threaded saveToFile task completion by @rh101 in https://github.com/axmolengine/axmol/pull/2024
+- Some warning and other minor fixes by @smilediver in https://github.com/axmolengine/axmol/pull/2038
 
 
 ### sdks & tools updates
@@ -66,14 +67,17 @@
 - AGP: 8.2.2 ==> 8.4.0
 - emsdk: 3.1.59 ==> 3.1.63
 
-### 3rdparty Updates
+### 3rdparty updates
 
+- openssl: 3.0.13 ==> 3.3.1
 - Clipper2: 1.3.0 ==> 1.4.0
 - simdjson: 3.9.2 ==> 3.9.5
 - fmtlib: 10.2.1 ==> 11.0.1
 - yasio: 4.2.2 ==> 4.2.3
 - oboe: 1.8.1 ==> 1.9.0
 - plainlua: 5.4.6 ==> 5.4.7
+- c-ares: 1.29.0 ==> 1.32.2
+- luajit: 2.1-d06beb0 ==> 2.1-04dca79
 
 ## axmol-2.1.3 May.26 2024
 
@@ -149,6 +153,7 @@
 
 ### Improvements
 
+- Update ios/tvos LaunchScreen.storyboard to 11.0+, also fix xcode15.4 build error
 - Update prebuilt tool `glslcc` to 1.9.5, macos-arm64 support and built for macos-10.15+
 - Improve MediaPlayer: handle video rotation properly
 - Disable c++20 char8_t

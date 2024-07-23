@@ -29,12 +29,13 @@
 #define AXMOL__UTF8_H
 
 #include "platform/PlatformMacros.h"
+#include <fmt/format.h>
 #include <vector>
 #include <string>
 #include <sstream>
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#    include "platform/android/jni/JniHelper.h"
+#    include <jni.h>
 #endif
 
 NS_AX_BEGIN
