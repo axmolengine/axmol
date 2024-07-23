@@ -1284,7 +1284,7 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
         png_read_end(png_ptr, nullptr);
 
         // premultiplied alpha for RGBA8888
-        if (color_type == PNG_COLOR_TYPE_RGB_ALPHA)
+        if ((color_type == PNG_COLOR_TYPE_RGB_ALPHA) || (color_type == PNG_COLOR_TYPE_GRAY_ALPHA))
         {
             if (PNG_PREMULTIPLIED_ALPHA_ENABLED)
             {
@@ -2587,13 +2587,26 @@ bool Image::saveImageToJPG(std::string_view filePath)
 void Image::premultiplyAlpha()
 {
 #if AX_ENABLE_PREMULTIPLIED_ALPHA
-    AXASSERT(_pixelFormat == backend::PixelFormat::RGBA8, "The pixel format should be RGBA8888!");
+    AXASSERT((_pixelFormat == backend::PixelFormat::RGBA8)
+             || (_pixelFormat == backend::PixelFormat::RG8),
+              "The pixel format should be RGBA8888 or RG88.");
 
-    unsigned int* fourBytes = (unsigned int*)_data;
-    for (int i = 0; i < _width * _height; i++)
+    if (_pixelFormat ==  backend::PixelFormat::RGBA8) {
+        unsigned int* fourBytes = (unsigned int*)_data;
+        for (int i = 0; i < _width * _height; i++)
+        {
+            uint8_t* p   = _data + i * 4;
+            fourBytes[i] = AX_RGB_PREMULTIPLY_ALPHA(p[0], p[1], p[2], p[3]);
+        }
+    }
+    else
     {
-        uint8_t* p   = _data + i * 4;
-        fourBytes[i] = AX_RGB_PREMULTIPLY_ALPHA(p[0], p[1], p[2], p[3]);
+        uint16_t* twoBytes = (uint16_t*)_data;
+        for (int i = 0; i < _width * _height; i++)
+        {
+            uint8_t* p   = _data + i * 2;
+            twoBytes[i] = ((p[0] * p[1] + 1) >> 8) | (p[1] << 8);
+        }
     }
 
     _hasPremultipliedAlpha = true;
