@@ -189,7 +189,7 @@ void WebSocketTest::startTestCallback(Object* sender)
 void WebSocketTest::onOpen(network::WebSocket* ws)
 {
     char status[256] = {0};
-    sprintf(status, "Opened, url: %s, protocol: %s", ws->getUrl().data(), ws->getProtocol().data());
+    fmt::format_to(status, "Opened, url: {}, protocol: {}", ws->getUrl(), ws->getProtocol());
 
     AXLOGI("Websocket ({}) was opened, url: {}, protocol: {}", fmt::ptr(ws), ws->getUrl(), ws->getProtocol());
     if (ws == _wsiSendText)
@@ -221,7 +221,7 @@ void WebSocketTest::onMessage(network::WebSocket* ws, const network::WebSocket::
     {
         _sendBinaryTimes++;
         char times[100] = {0};
-        sprintf(times, "%d", _sendBinaryTimes);
+        fmt::format_to(times, "{}", _sendBinaryTimes);
 
         std::string binaryStr = "response bin msg: ";
 
@@ -271,7 +271,7 @@ void WebSocketTest::onError(network::WebSocket* ws, const network::WebSocket::Er
 {
     AXLOGD("Error was fired, error code: {}", static_cast<int>(error));
     char buf[100] = {0};
-    sprintf(buf, "An error was fired, code: %s", static_cast<int>(error));
+    fmt::format_to(buf, "An error was fired, code: {}", static_cast<int>(error));
 
     if (ws == _wsiSendText)
     {
@@ -521,7 +521,7 @@ void WebSocketDelayTest::doReceiveText()
 void WebSocketDelayTest::onOpen(network::WebSocket* ws)
 {
     char status[256] = {0};
-    sprintf(status, "Opened, url: %s, protocol: %s", ws->getUrl(), ws->getProtocol());
+    fmt::format_to(status, "Opened, url: {}, protocol: {}", ws->getUrl(), ws->getProtocol());
 
     AXLOGD("Websocket ({}) was opened, url: {}, protocol: {}", fmt::ptr(ws), ws->getUrl(), ws->getProtocol());
     if (ws == _wsiSendText)
@@ -536,7 +536,7 @@ void WebSocketDelayTest::onMessage(network::WebSocket* ws, const network::WebSoc
     {
         _receiveTextTimes++;
         char times[100] = {0};
-        sprintf(times, "%d", _receiveTextTimes);
+        fmt::format_to(times, "{}", _receiveTextTimes);
         std::string textStr = std::string("response text msg: ") + data.bytes + ", " + times;
         AXLOGD("{}", textStr);
         doReceiveText();
@@ -563,7 +563,7 @@ void WebSocketDelayTest::onError(network::WebSocket* ws, const network::WebSocke
 {
     AXLOGD("Error was fired, error code: {}", static_cast<int>(error));
     char buf[100] = {0};
-    sprintf(buf, "An error was fired, code: %d", static_cast<int>(error));
+    fmt::format_to(buf, "An error was fired, code: {}", static_cast<int>(error));
 
     if (ws == _wsiSendText)
     {

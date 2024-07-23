@@ -1037,7 +1037,7 @@ void AsyncLoadMeshRendererTest::menuCallback_asyncLoadMesh(Object* sender)
     int32_t index = 0;
     for (const auto& path : _paths)
     {
-        MeshRenderer::createAsync(path, AX_CALLBACK_2(AsyncLoadMeshRendererTest::asyncLoad_Callback, this), (void*)index++);
+        MeshRenderer::createAsync(path, AX_CALLBACK_2(AsyncLoadMeshRendererTest::asyncLoad_Callback, this), reinterpret_cast<void*>(static_cast<uintptr_t>(++index)));
     }
 }
 
