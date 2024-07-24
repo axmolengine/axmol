@@ -609,7 +609,6 @@ IMGUI_IMPL_API void ImGui_ImplAx_RenderDrawData(ImDrawData* draw_data)
     for (int n = 0; n < draw_data->CmdListsCount; n++)
     {
         const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        size_t ibuffer_offset      = 0;
 
         // Upload vertex/index buffers
         const auto vsize = cmd_list->VtxBuffer.Size * sizeof(ImDrawVert);
@@ -681,7 +680,7 @@ IMGUI_IMPL_API void ImGui_ImplAx_RenderDrawData(ImDrawData* draw_data)
                         cmd->setVertexBuffer(vbuffer);
                         cmd->setDrawType(CustomCommand::DrawType::ELEMENT);
                         cmd->setPrimitiveType(PrimitiveType::TRIANGLE);
-                        cmd->setIndexDrawInfo(ibuffer_offset, pcmd->ElemCount);
+                        cmd->setIndexDrawInfo(pcmd->IdxOffset, pcmd->ElemCount);
                         renderer->addCommand(cmd.get());
                     }
                     else
@@ -697,7 +696,6 @@ IMGUI_IMPL_API void ImGui_ImplAx_RenderDrawData(ImDrawData* draw_data)
                     }
                 }
             }
-            ibuffer_offset += pcmd->ElemCount;
         }
     }
 
