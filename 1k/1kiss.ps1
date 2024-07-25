@@ -567,29 +567,31 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
 
     # try get match expr and preferred ver
     $checkVerCond = $null
-    $requiredMin = ''
+    $minimalVer = ''
     $preferredVer = ''
     $requiredVer = $manifest[$name]
     if ($requiredVer) {
         $preferredVer = $null
-        if ($requiredVer.EndsWith('+')) {
-            $preferredVer = $requiredVer.TrimEnd('+')
-            $checkVerCond = '$(version_ge $foundVer $preferredVer)'
-        }
-        elseif ($requiredVer -eq '*') {
+        if ($requiredVer -eq '*') {
             $checkVerCond = '$True'
             $preferredVer = 'latest'
         }
         else {
             $verArr = $requiredVer.Split('~')
             $isRange = $verArr.Count -gt 1
+            $minimalVer = $verArr[0]
             $preferredVer = $verArr[$isRange]
-            if ($isRange -gt 1) {
-                $requiredMin = $verArr[0]
-                $checkVerCond = '$(version_in_range $foundVer $requiredMin $preferredVer)'
-            }
-            else {
-                $checkVerCond = '$(version_eq $foundVer $preferredVer)'
+            if ($preferredVer.EndsWith('+')) {
+                $preferredVer = $preferredVer.TrimEnd('+')
+                if ($minimalVer.EndsWith('+')) { $minimalVer = $minimalVer.TrimEnd('+') }
+                $checkVerCond = '$(version_ge $foundVer $minimalVer)'
+            } else {
+                if ($isRange) {
+                    $checkVerCond = '$(version_in_range $foundVer $minimalVer $preferredVer)'
+                }
+                else {
+                    $checkVerCond = '$(version_eq $foundVer $preferredVer)'
+                }
             }
         }
         if (!$checkVerCond) {
@@ -623,7 +625,7 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
         else {
             $foundVer = "$($cmd_info.Version)"
         }
-        [void]$requiredMin
+        [void]$minimalVer
         if ($checkVerCond) {
             $matched = Invoke-Expression $checkVerCond
             if ($matched) {
