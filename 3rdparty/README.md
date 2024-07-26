@@ -62,7 +62,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 11.0.1
+- Version: 11.0.2
 - License: MIT
 
 ## FreeType
@@ -133,7 +133,7 @@
 
 ## lz4
 - [![Upstream](https://img.shields.io/github/v/release/lz4/lz4?label=Upstream)](https://github.com/lz4/lz4)
-- Version: 1.9.4
+- Version: 1.10.0
 - License: BSD 2-Clause
 
 ## minimp3
