@@ -38,6 +38,15 @@ TEST_SUITE("math/FastRNG") {
         CHECK_EQ(8718988738428180276u, rng.nextSeed(s));
     }
 
+    TEST_CASE("rotL")
+    {
+        auto rng = FastRNG();
+
+        uint32_t s = 0x1357'9BDF;
+        CHECK_EQ(2939665958, rng.rotL(s, 9));
+        CHECK_EQ(4084982378, rng.rotL(s, 13));
+    }
+
     TEST_CASE("next") {
         auto rng = FastRNG();
         rng.seed(1);
