@@ -1,10 +1,37 @@
-#ifndef _FAST_RNG_H__
-#define _FAST_RNG_H__
+/****************************************************************************
+ Copyright (c) 2012 cocos2d-x.org
+ Copyright (c) 2013-2016 Chukong Technologies Inc.
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+
+#ifndef __FAST_RNG_H__
+#define __FAST_RNG_H__
 
 #include <cmath>
 #include <limits.h>
 
-/** A fast more effective seeded random number generator struct, made by kiss rng.
+/** A fast more effective seeded random number generator struct, uses xoshiro128**.
  * It uses a simple algorithm to improve the speed of generating random numbers with a decent quality,
  * Use this if you're planning to generate large amounts of random numbers in a single frame.
  *
@@ -14,6 +41,8 @@ struct FastRNG
 {
     uint32_t s[4];
 
+    // SplitMix64 implementation, doesn't modify any state for this instance
+    // but it is used to seed xoshiro128** state
     uint64_t nextSeed(uint64_t& state)
     {
         uint64_t z = (state += 0x9e3779b97f4a7c15);
@@ -24,6 +53,9 @@ struct FastRNG
 
     FastRNG() { seed(static_cast<uint64_t>(rand()) << 32 | rand()); }
 
+    // there is no need to seed this instance of FastRNG
+    // because it has already been seeded with rand() by constructor
+    // you can override the seed by giving your own 64-bit seed
     void seed(uint64_t seed)
     {
         uint64_t state = seed;
@@ -34,8 +66,10 @@ struct FastRNG
         memcpy(s, states, 16);
     }
 
+    // returns a copy of x rotated k bits to the left
     static inline uint32_t rotL(const uint32_t x, int k) { return (x << k) | (x >> (32 - k)); }
 
+    // steps once into the state, returns a random from 0 to UINT32_MAX
     uint32_t next()
     {
         const uint32_t result = rotL(s[1] * 5, 7) * 9;
@@ -65,22 +99,21 @@ struct FastRNG
         return 0;  // possibly assert?
     }
 
-    // generates a random real that ranges from min to max and is uniformly distributed
+    // generates a random real that ranges from min to max
     template <typename T>
     T nextReal(T min, T max)
     {
         return static_cast<T>(min + nextReal<T>() * (max - min));
     }
 
-    // generates a random integer that ranges from min inclusive to max exclusive [min, max) and is uniformly
-    // distributed
+    // generates a random integer that ranges from min inclusive to max exclusive [min, max) and is uniformly distributed using fastrange algorithm
     template <typename T>
     T nextInt(T min, T max)
     {
         return min + static_cast<T>(nextMax(static_cast<uint32_t>(max - min)));
     }
 
-    // generates a random integer from 0 to max that is uniformly distributed
+    // generates a random integer from 0 to max exclusive that is uniformly distributed using fastrange algorithm
     uint32_t nextMax(uint32_t max)
     {
         uint64_t multiresult = static_cast<uint64_t>(next()) * max;
@@ -125,4 +158,4 @@ struct FastRNG
     float bool01() { return next() & 1; }
 };
 
-#endif // _FAST_RNG_H__
+#endif // __FAST_RNG_H__
