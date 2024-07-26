@@ -585,7 +585,8 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
                 $preferredVer = $preferredVer.TrimEnd('+')
                 if ($minimalVer.EndsWith('+')) { $minimalVer = $minimalVer.TrimEnd('+') }
                 $checkVerCond = '$(version_ge $foundVer $minimalVer)'
-            } else {
+            }
+            else {
                 if ($isRange) {
                     $checkVerCond = '$(version_in_range $foundVer $minimalVer $preferredVer)'
                 }
@@ -1220,7 +1221,9 @@ function setup_msvc() {
     if (!$cl_prog) {
         if ($VS_INST) {
             Import-Module "$VS_PATH\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
-            Enter-VsDevShell -VsInstanceId $VS_INST.instanceId -SkipAutomaticLocation -DevCmdArguments "-arch=$target_cpu -host_arch=x64 -no_logo"
+            $dev_cmd_args = "-arch=$target_cpu -host_arch=x64 -no_logo"
+            if (!$manifest['msvc'].EndsWith('+')) { $dev_cmd_args += " -vcvars_ver=$cl_ver" }
+            Enter-VsDevShell -VsInstanceId $VS_INST.instanceId -SkipAutomaticLocation -DevCmdArguments $dev_cmd_args
 
             $cl_prog, $cl_ver = find_prog -name 'msvc' -cmd 'cl' -silent $true -usefv $true
             $1k.println("Using msvc: $cl_prog, version: $cl_ver")
