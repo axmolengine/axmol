@@ -27,6 +27,8 @@
 
 NS_AX_MATH_BEGIN
 
+#include<math/MathBase.h>
+
 /** A fast more effective seeded random number generator struct, uses xoshiro128**.
  * It uses a simple algorithm to improve the speed of generating random numbers with a decent quality,
  * Use this if you're planning to generate large amounts of random numbers in a single frame.
