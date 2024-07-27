@@ -26,7 +26,7 @@
 #define __FAST_RNG_H__
 
 #include "math/MathBase.h"
-#include <iostream>
+#include <type_traits>
 #include <stdint.h>
 
 NS_AX_MATH_BEGIN
