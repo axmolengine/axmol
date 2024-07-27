@@ -31,7 +31,7 @@
 TEST_SUITE("math/FastRNG") {
     TEST_CASE("nextSeed")
     {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
 
         uint64_t s = 0x1234'5678'9ABC'EFFF;
         CHECK_EQ(2299331620237437860u, rng.nextSeed(s));
@@ -40,7 +40,7 @@ TEST_SUITE("math/FastRNG") {
 
     TEST_CASE("rotL")
     {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
 
         uint32_t s = 0x1357'9BDF;
         CHECK_EQ(2939665958, rng.rotL(s, 9));
@@ -48,14 +48,14 @@ TEST_SUITE("math/FastRNG") {
     }
 
     TEST_CASE("next") {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(1);
 
         CHECK_EQ(1695105466, rng.next());
         CHECK_EQ(1423115009, rng.next());
         CHECK_EQ(634581793, rng.next());
 
-        auto rng2 = FastRNG();
+        auto rng2 = ax::FastRNG();
         rng2.seed(2);
 
         CHECK_EQ(1086064458, rng2.next());
@@ -65,7 +65,7 @@ TEST_SUITE("math/FastRNG") {
 
     TEST_CASE("nextInt")
     {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(12);
 
         CHECK_EQ(30, rng.nextInt<int8_t>(INT8_MIN, INT8_MAX));
@@ -80,7 +80,7 @@ TEST_SUITE("math/FastRNG") {
 
     TEST_CASE("nextReal")
     {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(14);
 
         CHECK_EQ(doctest::Approx(0.927014), rng.nextReal<float>());
@@ -94,7 +94,7 @@ TEST_SUITE("math/FastRNG") {
 
     TEST_CASE("nextMax")
     {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(16);
 
         CHECK_EQ(1381652921, rng.nextMax(UINT32_MAX));
@@ -103,7 +103,7 @@ TEST_SUITE("math/FastRNG") {
     }
 
     TEST_CASE("range") {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(12345);
 
         CHECK_EQ(0, rng.range(0, 1));
@@ -119,7 +119,7 @@ TEST_SUITE("math/FastRNG") {
 
     TEST_CASE("max")
     {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(1);
 
         CHECK_EQ(0, rng.max(1));
@@ -129,7 +129,7 @@ TEST_SUITE("math/FastRNG") {
 
 
     TEST_CASE("rangeu") {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(1);
 
         CHECK_EQ(0u, rng.rangeu(0u, 1u));
@@ -141,7 +141,7 @@ TEST_SUITE("math/FastRNG") {
 
     TEST_CASE("maxu")
     {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(1);
 
         CHECK_EQ(0u, rng.maxu(1));
@@ -150,7 +150,7 @@ TEST_SUITE("math/FastRNG") {
     }
 
     TEST_CASE("rangef") {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(1);
 
         CHECK_EQ(doctest::Approx(-0.210655), rng.rangef(-1.0f, 1.0f));
@@ -163,7 +163,7 @@ TEST_SUITE("math/FastRNG") {
 
 
     TEST_CASE("maxf") {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(1);
 
         CHECK_EQ(doctest::Approx(0.394672), rng.maxf(1.0f));
@@ -175,7 +175,7 @@ TEST_SUITE("math/FastRNG") {
 
     TEST_CASE("ranged")
     {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(1);
 
         CHECK_EQ(doctest::Approx(-0.210655), rng.ranged(-1.0, 1.0));
@@ -185,7 +185,7 @@ TEST_SUITE("math/FastRNG") {
 
     TEST_CASE("maxd")
     {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(1);
 
         CHECK_EQ(doctest::Approx(0.394672), rng.maxd(1.0f));
@@ -196,7 +196,7 @@ TEST_SUITE("math/FastRNG") {
     }
 
     TEST_CASE("float01") {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(1);
 
         CHECK_EQ(doctest::Approx(0.394672), rng.float01());
@@ -207,7 +207,7 @@ TEST_SUITE("math/FastRNG") {
 
     TEST_CASE("double01")
     {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(1);
 
         CHECK_EQ(doctest::Approx(0.394672), rng.double01());
@@ -217,7 +217,7 @@ TEST_SUITE("math/FastRNG") {
     }
 
     TEST_CASE("bool01") {
-        auto rng = FastRNG();
+        auto rng = ax::FastRNG();
         rng.seed(1);
 
         auto t = 0;

@@ -28,6 +28,8 @@
 #ifndef __FAST_RNG_H__
 #define __FAST_RNG_H__
 
+NS_AX_MATH_BEGIN
+
 /** A fast more effective seeded random number generator struct, uses xoshiro128**.
  * It uses a simple algorithm to improve the speed of generating random numbers with a decent quality,
  * Use this if you're planning to generate large amounts of random numbers in a single frame.
@@ -40,7 +42,7 @@ struct FastRNG
 
     // SplitMix64 implementation, doesn't modify any state for this instance
     // but it is used to seed xoshiro128** state
-    uint64_t nextSeed(uint64_t& state)
+    static inline uint64_t nextSeed(uint64_t& state)
     {
         uint64_t z = (state += 0x9e3779b97f4a7c15);
         z          = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
@@ -154,5 +156,7 @@ struct FastRNG
     // wrapper for next() & 1, true or false based on LSB
     float bool01() { return next() & 1; }
 };
+
+NS_AX_MATH_END
 
 #endif // __FAST_RNG_H__
