@@ -73,7 +73,7 @@ public:
     FastRNG(uint64_t _seed) { seed(_seed); }
 
     // there is no need to seed this instance of FastRNG
-    // because it has already been seeded with rand() by constructor
+    // because it's already been seeded with rand() in constructor
     // you can override the seed by giving your own 64-bit seed
     void seed(uint64_t seed)
     {
@@ -113,7 +113,7 @@ public:
         else if constexpr (std::is_same<T, double>::value)
             return static_cast<T>((static_cast<uint64_t>(next()) << 32 | next()) >> 11) * 0x1.0p-53;
         else
-            AXASSERT(false, "Type not implemented.");
+            AXASSERT(false, "datatype not implemented.");
     }
 
     // generates a random real that ranges from min to max
