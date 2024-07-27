@@ -25,9 +25,9 @@
 #ifndef __FAST_RNG_H__
 #define __FAST_RNG_H__
 
-NS_AX_MATH_BEGIN
-
 #include<math/MathBase.h>
+
+NS_AX_MATH_BEGIN
 
 /** A fast more effective seeded random number generator struct, uses xoshiro128**.
  * It uses a simple algorithm to improve the speed of generating random numbers with a decent quality,
