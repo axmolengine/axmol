@@ -60,8 +60,8 @@ struct FastRNG
         uint64_t state = seed;
         uint64_t states[2];
         memset(states, 0, 16);
-        states[0] = nextSeed(state);
-        states[1] = nextSeed(state);
+        states[0] = FastRNG::nextSeed(state);
+        states[1] = FastRNG::nextSeed(state);
         memcpy(s, states, 16);
     }
 

@@ -31,11 +31,9 @@
 TEST_SUITE("math/FastRNG") {
     TEST_CASE("nextSeed")
     {
-        auto rng = ax::FastRNG();
-
         uint64_t s = 0x1234'5678'9ABC'EFFF;
-        CHECK_EQ(2299331620237437860u, rng.nextSeed(s));
-        CHECK_EQ(8718988738428180276u, rng.nextSeed(s));
+        CHECK_EQ(2299331620237437860u, ax::FastRNG::nextSeed(s));
+        CHECK_EQ(8718988738428180276u, ax::FastRNG::nextSeed(s));
     }
 
     TEST_CASE("rotL")
