@@ -2308,19 +2308,14 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
             if (inbetweenSamples > 1)
             {
                 float a = data[(y * w + x) * 4 + 3] / 255.0F;
-                if (a >= alphaThreshold && !inverted)
-                    for (float i = 0; i < 1.0F; i += 1.0F / inbetweenSamples)
-                        points.emplace_back(Vec2{float(x + i), float(h - y + i)});
-                if (a < alphaThreshold && inverted)
+                if (a >= alphaThreshold && !inverted || a < alphaThreshold && inverted)
                     for (float i = 0; i < 1.0F; i += 1.0F / inbetweenSamples)
                         points.emplace_back(Vec2{float(x + i), float(h - y + i)});
             }
             else
             {
                 float a = data[(y * w + x) * 4 + 3] / 255.0F;
-                if (a >= alphaThreshold && !inverted)
-                    points.emplace_back(Vec2{float(x), float(h - y)});
-                if (a < alphaThreshold && inverted)
+                if (a >= alphaThreshold && !inverted || a < alphaThreshold && inverted)
                     points.emplace_back(Vec2{float(x), float(h - y)});
             }
         }
