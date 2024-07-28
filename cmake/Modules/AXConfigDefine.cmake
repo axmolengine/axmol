@@ -35,7 +35,7 @@ if (WINDOWS)
         set(CMAKE_C_STANDARD 11)
     else()
         # windows sdk < 10.0.22000.0, The c11 header stdalign.h was missing, so workaroud fallback C standard to 99
-        # refer to: 
+        # refer to:
         #  - https://github.com/axmolengine/axmol/issues/991
         #  - https://github.com/axmolengine/axmol/issues/1246
         message(WARNING "Forcing set CMAKE_C_STANDARD to 99 when winsdk < 10.0.22000.0")
@@ -132,20 +132,27 @@ function(use_ax_compile_define target)
         if(AX_USE_GL)
             target_compile_definitions(${target}
                 PUBLIC AX_USE_GL=1
-                PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE}
                 PUBLIC GL_SILENCE_DEPRECATION=1
             )
+            if(NOT _AX_USE_PREBUILT)
+                target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
+            endif()
         endif()
     elseif(LINUX)
         ax_config_pred(${target} AX_ENABLE_VLC_MEDIA)
         target_compile_definitions(${target} PUBLIC _GNU_SOURCE)
     elseif(ANDROID)
+        if(NOT _AX_USE_PREBUILT)
+            target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
+        endif()
         target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
     elseif(EMSCRIPTEN)
         target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
     elseif(WINDOWS)
-        target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
+        if(NOT _AX_USE_PREBUILT)
+            target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
+        endif()
         ax_config_pred(${target} AX_ENABLE_VLC_MEDIA)
         target_compile_definitions(${target}
             PUBLIC WIN32
