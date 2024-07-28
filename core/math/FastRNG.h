@@ -1,7 +1,4 @@
 /****************************************************************************
- Copyright (c) 2012 cocos2d-x.org
- Copyright (c) 2013-2016 Chukong Technologies Inc.
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -28,6 +25,12 @@
 #ifndef __FAST_RNG_H__
 #define __FAST_RNG_H__
 
+#include "math/MathBase.h"
+#include <type_traits>
+#include <stdint.h>
+
+NS_AX_MATH_BEGIN
+
 /** A fast more effective seeded random number generator struct, uses xoshiro128**.
  * It uses a simple algorithm to improve the speed of generating random numbers with a decent quality,
  * Use this if you're planning to generate large amounts of random numbers in a single frame.
@@ -36,11 +39,12 @@
  */
 struct FastRNG
 {
+private:
     uint32_t s[4];
 
     // SplitMix64 implementation, doesn't modify any state for this instance
     // but it is used to seed xoshiro128** state
-    uint64_t nextSeed(uint64_t& state)
+    static inline uint64_t nextSeed(uint64_t& state)
     {
         uint64_t z = (state += 0x9e3779b97f4a7c15);
         z          = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
@@ -48,23 +52,42 @@ struct FastRNG
         return z ^ (z >> 31);
     }
 
+    // returns a copy of x rotated k bits to the left
+    static inline uint32_t rotL(const uint32_t x, int k) { return (x << k) | (x >> (32 - k)); }
+
+    // generates a random integer from 0 to max exclusive that is uniformly distributed using fastrange algorithm
+    uint32_t nextMax(uint32_t max)
+    {
+        uint64_t multiresult = static_cast<uint64_t>(next()) * max;
+        uint32_t leftover    = static_cast<uint32_t>(multiresult);
+        if (leftover < max)
+        {
+            uint32_t threshold = (0 - max) % max;
+            while (leftover < threshold)
+            {
+                multiresult = static_cast<uint64_t>(next()) * max;
+                leftover    = static_cast<uint32_t>(multiresult);
+            }
+        }
+        return multiresult >> 32;
+    }
+
+public:
     FastRNG() { seed(static_cast<uint64_t>(rand()) << 32 | rand()); }
+    FastRNG(uint64_t _seed) { seed(_seed); }
 
     // there is no need to seed this instance of FastRNG
-    // because it has already been seeded with rand() by constructor
+    // because it's already been seeded with rand() in constructor
     // you can override the seed by giving your own 64-bit seed
     void seed(uint64_t seed)
     {
         uint64_t state = seed;
         uint64_t states[2];
         memset(states, 0, 16);
-        states[0] = nextSeed(state);
-        states[1] = nextSeed(state);
+        states[0] = FastRNG::nextSeed(state);
+        states[1] = FastRNG::nextSeed(state);
         memcpy(s, states, 16);
     }
-
-    // returns a copy of x rotated k bits to the left
-    static inline uint32_t rotL(const uint32_t x, int k) { return (x << k) | (x >> (32 - k)); }
 
     // steps once into the state, returns a random from 0 to UINT32_MAX
     uint32_t next()
@@ -89,11 +112,12 @@ struct FastRNG
     template <typename T>
     T nextReal()
     {
-        if (std::is_same<T, float>::value)
+        if constexpr (std::is_same<T, float>::value)
             return static_cast<T>(next() >> 8) * 0x1.0p-24f;
-        else if (std::is_same<T, double>::value)
+        else if constexpr (std::is_same<T, double>::value)
             return static_cast<T>((static_cast<uint64_t>(next()) << 32 | next()) >> 11) * 0x1.0p-53;
-        return 0;  // possibly assert?
+        else
+            AXASSERT(false, "datatype not implemented.");
     }
 
     // generates a random real that ranges from min to max
@@ -108,23 +132,6 @@ struct FastRNG
     T nextInt(T min, T max)
     {
         return min + static_cast<T>(nextMax(static_cast<uint32_t>(max - min)));
-    }
-
-    // generates a random integer from 0 to max exclusive that is uniformly distributed using fastrange algorithm
-    uint32_t nextMax(uint32_t max)
-    {
-        uint64_t multiresult = static_cast<uint64_t>(next()) * max;
-        uint32_t leftover    = static_cast<uint32_t>(multiresult);
-        if (leftover < max)
-        {
-            uint32_t threshold = (0 - max) % max;
-            while (leftover < threshold)
-            {
-                multiresult = static_cast<uint64_t>(next()) * max;
-                leftover    = static_cast<uint32_t>(multiresult);
-            }
-        }
-        return multiresult >> 32;
     }
 
     // wrapper for nextInt<int32_t>(min, max)
@@ -150,9 +157,11 @@ struct FastRNG
     // wrapper for nextReal<float>()
     float float01() { return nextReal<float>(); }
     // wrapper for nextReal<double>()
-    float double01() { return nextReal<double>(); }
+    double double01() { return nextReal<double>(); }
     // wrapper for next() & 1, true or false based on LSB
-    float bool01() { return next() & 1; }
+    bool bool01() { return static_cast<bool>(next() & 1); }
 };
+
+NS_AX_MATH_END
 
 #endif // __FAST_RNG_H__
