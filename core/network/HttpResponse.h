@@ -51,7 +51,7 @@ class HttpClient;
  * @since v2.0.2.
  * @lua NA
  */
-class AX_DLL HttpResponse : public ax::Object
+class AX_DLL HttpResponse : public TSFRefCountedBase
 {
     friend class HttpClient;
 
