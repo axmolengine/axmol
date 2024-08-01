@@ -1,10 +1,37 @@
-#ifndef _FAST_RNG_H__
-#define _FAST_RNG_H__
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
-#include <cmath>
-#include <limits.h>
+ https://axmol.dev/
 
-/** A fast more effective seeded random number generator struct, made by kiss rng.
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+
+#ifndef __FAST_RNG_H__
+#define __FAST_RNG_H__
+
+#include "math/MathBase.h"
+#include <type_traits>
+#include <stdint.h>
+
+NS_AX_MATH_BEGIN
+
+/** A fast more effective seeded random number generator struct, uses xoshiro128**.
  * It uses a simple algorithm to improve the speed of generating random numbers with a decent quality,
  * Use this if you're planning to generate large amounts of random numbers in a single frame.
  *
@@ -12,87 +39,129 @@
  */
 struct FastRNG
 {
-    const uint32_t RNG_RAND_MAX = std::numeric_limits<uint32_t>::max();
-    uint32_t _x     = 1;
-    uint32_t _y     = 2;
-    uint32_t _z     = 4;
-    uint32_t _w     = 8;
-    uint32_t _carry = 0;
-    uint32_t _k     = 0;
-    uint32_t _m     = 0;
-    uint64_t _seed  = 0;
+private:
+    uint32_t s[4];
 
-    FastRNG() { seed_rng((uint32_t)time(NULL)); }
-    FastRNG(uint64_t seed) { seed_rng_64(seed); }
-
-    // initialize this object with seed
-    void seed_rng(uint64_t seed)
+    // SplitMix64 implementation, doesn't modify any state for this instance
+    // but it is used to seed xoshiro128** state
+    static inline uint64_t nextSeed(uint64_t& state)
     {
-        auto seed1 = static_cast<uint32_t>(seed);
-        auto seed2 = static_cast<uint32_t>(seed >> 32);
-
-        _seed  = seed;
-        _x     = static_cast<int32_t>(seed1) | 1;
-        _y     = static_cast<int32_t>(seed2) | 2;
-        _z     = static_cast<int32_t>(seed1) | 4;
-        _w     = static_cast<int32_t>(seed2) | 8;
-        _carry = 0;
+        uint64_t z = (state += 0x9e3779b97f4a7c15);
+        z          = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
+        z          = (z ^ (z >> 27)) * 0x94d049bb133111eb;
+        return z ^ (z >> 31);
     }
 
-    // initialize this object with a uint64_t seed
-    // DEPRECATED: use seed_rng instead
-    void seed_rng_64(uint64_t seed) { seed_rng(seed); }
+    // returns a copy of x rotated k bits to the left
+    static inline uint32_t rotL(const uint32_t x, int k) { return (x << k) | (x >> (32 - k)); }
 
-    // returns a random uint32_t value
-    uint32_t rng()
+    // generates a random integer from 0 to max exclusive that is uniformly distributed using fastrange algorithm
+    uint32_t nextMax(uint32_t max)
     {
-        _x = _x * 69069 + 12345;
-        _y ^= _y << 13;
-        _y ^= _y >> 17;
-        _y ^= _y << 5;
-        _k     = (_z >> 2) + (_w >> 3) + (_carry >> 2);
-        _m     = _w + _w + _z + _carry;
-        _z     = _w;
-        _w     = _m;
-        _carry = _k >> 30;
-        return _x + _y + _w;
+        uint64_t multiresult = static_cast<uint64_t>(next()) * max;
+        uint32_t leftover    = static_cast<uint32_t>(multiresult);
+        if (leftover < max)
+        {
+            uint32_t threshold = (0 - max) % max;
+            while (leftover < threshold)
+            {
+                multiresult = static_cast<uint64_t>(next()) * max;
+                leftover    = static_cast<uint32_t>(multiresult);
+            }
+        }
+        return multiresult >> 32;
     }
 
-    // returns a random integer from min to max
-    int32_t range(int32_t min, int32_t max)
+public:
+    FastRNG() { seed(static_cast<uint64_t>(rand()) << 32 | rand()); }
+    FastRNG(uint64_t _seed) { seed(_seed); }
+
+    // there is no need to seed this instance of FastRNG
+    // because it's already been seeded with rand() in constructor
+    // you can override the seed by giving your own 64-bit seed
+    void seed(uint64_t seed)
     {
-        return static_cast<int32_t>(min + rng() / (RNG_RAND_MAX / (max - min)));
+        uint64_t state = seed;
+        uint64_t states[2];
+        memset(states, 0, 16);
+        states[0] = FastRNG::nextSeed(state);
+        states[1] = FastRNG::nextSeed(state);
+        memcpy(s, states, 16);
     }
 
-    // returns a random unsigned integer from min to max
-    uint32_t rangeu(uint32_t min, uint32_t max)
+    // steps once into the state, returns a random from 0 to UINT32_MAX
+    uint32_t next()
     {
-        return static_cast<uint32_t>(min + rng() / (RNG_RAND_MAX / (max - min)));
+        const uint32_t result = rotL(s[1] * 5, 7) * 9;
+
+        const uint32_t t = s[1] << 9;
+
+        s[2] ^= s[0];
+        s[3] ^= s[1];
+        s[1] ^= s[2];
+        s[0] ^= s[3];
+
+        s[2] ^= t;
+
+        s[3] = rotL(s[3], 11);
+
+        return result;
     }
 
-    // returns a random integer from 0 to max
-    int32_t max(int32_t max = INT_MAX)
+    // generates a random real that ranges from 0.0 to 1.0
+    template <typename T>
+    T nextReal()
     {
-        return static_cast<int32_t>(static_cast<float>(rng()) / static_cast<float>(RNG_RAND_MAX / (max - 0)));
+        if constexpr (std::is_same<T, float>::value)
+            return static_cast<T>(next() >> 8) * 0x1.0p-24f;
+        else if constexpr (std::is_same<T, double>::value)
+            return static_cast<T>((static_cast<uint64_t>(next()) << 32 | next()) >> 11) * 0x1.0p-53;
+        else
+            AXASSERT(false, "datatype not implemented.");
     }
 
-    // returns a random unsigned integer from 0 to max
-    uint32_t maxu(uint32_t max = UINT_MAX) { return static_cast<uint32_t>(0 + rng() / (RNG_RAND_MAX / (max - 0))); }
-
-    // returns a random float from min to max
-    float rangef(float min = -1.0F, float max = 1.0F)
+    // generates a random real that ranges from min to max
+    template <typename T>
+    T nextReal(T min, T max)
     {
-        return min + static_cast<float>(rng()) / (static_cast<float>(RNG_RAND_MAX) / (max - min));
+        return static_cast<T>(min + nextReal<T>() * (max - min));
     }
 
-    // returns a random float from 0.0 to max
-    float maxf(float max) { return static_cast<float>(rng()) / (static_cast<float>(RNG_RAND_MAX) / (max - 0.0f)); }
+    // generates a random integer that ranges from min inclusive to max exclusive [min, max) and is uniformly distributed using fastrange algorithm
+    template <typename T>
+    T nextInt(T min, T max)
+    {
+        return min + static_cast<T>(nextMax(static_cast<uint32_t>(max - min)));
+    }
 
-    // returns a random float from 0.0 to 1.0
-    float float01() { return static_cast<float>(rng()) / (static_cast<float>(RNG_RAND_MAX) / (1.0f - 0.0f)); }
+    // wrapper for nextInt<int32_t>(min, max)
+    int32_t range(int32_t min, int32_t max) { return nextInt<int32_t>(min, max); }
+    // wrapper for nextInt<int32_t>(0, max)
+    int32_t max(int32_t max = INT32_MAX) { return nextInt<int32_t>(0, max); }
 
-    // returns either false or true randomly
-    bool bool01() { return static_cast<bool>(rng() & 1); }
+    // wrapper for nextInt<uint32_t>(min, max)
+    uint32_t rangeu(uint32_t min, uint32_t max) { return nextInt<uint32_t>(min, max); }
+    // wrapper for nextInt<uint32_t>(0, max)
+    uint32_t maxu(uint32_t max = UINT_MAX) { return nextInt<uint32_t>(0, max); }
+
+    // wrapper for nextReal<float>(min, max)
+    float rangef(float min = -1.0F, float max = 1.0F) { return nextReal<float>(min, max); }
+    // wrapper for nextReal<float>(0, max)
+    float maxf(float max) { return nextReal<float>(0, max); }
+
+    // wrapper for nextReal<double>(min, max)
+    double ranged(double min = -1.0F, double max = 1.0F) { return nextReal<double>(min, max); }
+    // wrapper for nextReal<double>(0, max)
+    double maxd(double max) { return nextReal<double>(0, max); }
+
+    // wrapper for nextReal<float>()
+    float float01() { return nextReal<float>(); }
+    // wrapper for nextReal<double>()
+    double double01() { return nextReal<double>(); }
+    // wrapper for next() & 1, true or false based on LSB
+    bool bool01() { return static_cast<bool>(next() & 1); }
 };
 
-#endif // _FAST_RNG_H__
+NS_AX_MATH_END
+
+#endif // __FAST_RNG_H__

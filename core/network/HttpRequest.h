@@ -52,6 +52,26 @@ class HttpResponse;
 
 typedef std::function<void(HttpClient* client, HttpResponse* response)> ccHttpRequestCallback;
 
+class TSFRefCountedBase
+{
+public:
+    TSFRefCountedBase() : _refCount(1) {}
+    virtual ~TSFRefCountedBase() {}
+
+    void retain() { ++_refCount; }
+
+    void release()
+    {
+        if (--_refCount == 0)
+            delete this;
+    }
+
+    int getReferenceCount() const { return _refCount; }
+
+protected:
+    std::atomic_int _refCount;
+};
+
 /**
  * Defines the object which users must packed for HttpClient::send(HttpRequest*) method.
  * Please refer to tests/test-cpp/Classes/ExtensionTest/NetworkTest/HttpClientTest.cpp as a sample
@@ -60,7 +80,7 @@ typedef std::function<void(HttpClient* client, HttpResponse* response)> ccHttpRe
  * @lua NA
  */
 
-class AX_DLL HttpRequest : public Object
+class AX_DLL HttpRequest : public TSFRefCountedBase
 {
     friend class HttpClient;
 

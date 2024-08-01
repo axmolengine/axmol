@@ -1,3 +1,23 @@
+## axmol-2.1.5 ?? 2024
+
+### Significant changes relative to 2.1.5:
+
+- Add render I420 video support by @halx99 in https://github.com/axmolengine/axmol/pull/2050 , also fix issue #2049 reported by @SimplyJpk
+
+### Bug Fixes
+
+- Use correct starting index of index buffer by @rh101 in https://github.com/axmolengine/axmol/pull/2052
+- Fix ArchLinux setup dependencies always fail by @halx99
+- Fix android VolatileTexture memory leak when addImage(img,k,fmt)
+
+### Improvements
+
+- Handle premultiplied alpha for grayscale PNGs by @j-jorge in https://github.com/axmolengine/axmol/pull/2047
+
+### 3rdparty updates
+
+- lz4: 1.9.4 ==> 1.10.0
+
 ## axmol-2.1.4 Jun.20 2024
 
 ### Significant changes relative to 2.1.3:

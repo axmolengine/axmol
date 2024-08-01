@@ -29,100 +29,168 @@
 
 
 TEST_SUITE("math/FastRNG") {
-    TEST_CASE("rng") {
-        auto rng = FastRNG(1);
+    TEST_CASE("next") {
+        auto rng = ax::FastRNG();
+        rng.seed(1);
 
-        CHECK_EQ(622173, rng.rng());
-        CHECK_EQ(1462482235, rng.rng());
-        CHECK_EQ(3913629391, rng.rng());
+        CHECK_EQ(1695105466, rng.next());
+        CHECK_EQ(1423115009, rng.next());
+        CHECK_EQ(634581793, rng.next());
 
-        auto rng2 = FastRNG(2);
+        auto rng2 = ax::FastRNG();
+        rng2.seed(2);
 
-        CHECK_EQ(760312, rng2.rng());
-        CHECK_EQ(2413601167, rng2.rng());
-        CHECK_EQ(927245950, rng2.rng());
+        CHECK_EQ(1086064458, rng2.next());
+        CHECK_EQ(2256779072, rng2.next());
+        CHECK_EQ(556893360, rng2.next());
     }
 
+    TEST_CASE("nextInt")
+    {
+        auto rng = ax::FastRNG();
+        rng.seed(12);
+
+        CHECK_EQ(30, rng.nextInt<int8_t>(INT8_MIN, INT8_MAX));
+        CHECK_EQ(124, rng.nextInt<uint8_t>(0, UINT8_MAX));
+
+        CHECK_EQ(-14353, rng.nextInt<int16_t>(INT16_MIN, INT16_MAX));
+        CHECK_EQ(61806, rng.nextInt<uint16_t>(0, UINT16_MAX));
+
+        CHECK_EQ(-1775882703, rng.nextInt<int32_t>(INT32_MIN, INT32_MAX));
+        CHECK_EQ(1623340863, rng.nextInt<uint32_t>(0, UINT32_MAX));
+    }
+
+    TEST_CASE("nextReal")
+    {
+        auto rng = ax::FastRNG();
+        rng.seed(14);
+
+        CHECK_EQ(doctest::Approx(0.927014), rng.nextReal<float>());
+        CHECK_EQ(doctest::Approx(2.02437e+38), rng.nextReal<float>(0, FLT_MAX));
+        CHECK_EQ(doctest::Approx(2.79091e+38), rng.nextReal<float>(FLT_MIN, FLT_MAX));
+
+        CHECK_EQ(doctest::Approx(0.845991), rng.nextReal<double>());
+        CHECK_EQ(doctest::Approx(1.50478e+308), rng.nextReal<double>(0, DBL_MAX));
+        CHECK_EQ(doctest::Approx(9.94378e+307), rng.nextReal<double>(DBL_MIN, DBL_MAX));
+    }
 
     TEST_CASE("range") {
-        auto rng = FastRNG(12345);
+        auto rng = ax::FastRNG();
+        rng.seed(12345);
 
         CHECK_EQ(0, rng.range(0, 1));
         CHECK_EQ(-1, rng.range(-1, 0));
-        CHECK_EQ(13, rng.range(10, 20));
-        CHECK_EQ(12, rng.range(10, 20));
-        CHECK_EQ(-11, rng.range(-20, -10));
+        CHECK_EQ(14, rng.range(10, 20));
+        CHECK_EQ(19, rng.range(10, 20));
         CHECK_EQ(-18, rng.range(-20, -10));
+        CHECK_EQ(-19, rng.range(-20, -10));
 
-        CHECK_EQ(260724215, rng.range(-INT_MAX, INT_MAX));
-        CHECK_EQ(1458015400, rng.range(-INT_MAX, INT_MAX));
+        CHECK_EQ(-704160663, rng.range(-INT_MAX, INT_MAX));
+        CHECK_EQ(1299678946, rng.range(-INT_MAX, INT_MAX));
+    }
+
+    TEST_CASE("max")
+    {
+        auto rng = ax::FastRNG();
+        rng.seed(1);
+
+        CHECK_EQ(0, rng.max(1));
+        CHECK_EQ(3, rng.max(10));
+        CHECK_EQ(317290896, rng.max());
     }
 
 
     TEST_CASE("rangeu") {
-        auto rng = FastRNG(1);
+        auto rng = ax::FastRNG();
+        rng.seed(1);
 
         CHECK_EQ(0u, rng.rangeu(0u, 1u));
         CHECK_EQ(0u, rng.rangeu(0u, 1u));
-        CHECK_EQ(19u, rng.rangeu(10u, 20u));
+        CHECK_EQ(11u, rng.rangeu(10u, 20u));
 
-        CHECK_EQ(128334119, rng.rangeu(0u, UINT_MAX));
+        CHECK_EQ(1068227752, rng.rangeu(0u, UINT_MAX));
     }
 
-
-    TEST_CASE("max") {
-        auto rng = FastRNG(1);
-
-        CHECK_EQ(0, rng.max(1));
-        CHECK_EQ(3, rng.max(10));
-        CHECK_EQ(1956814720, rng.max());
-    }
-
-
-    TEST_CASE("maxu") {
-        auto rng = FastRNG(1);
+    TEST_CASE("maxu")
+    {
+        auto rng = ax::FastRNG();
+        rng.seed(1);
 
         CHECK_EQ(0u, rng.maxu(1));
         CHECK_EQ(3u, rng.maxu(10));
-        CHECK_EQ(3913629391, rng.maxu());
+        CHECK_EQ(634581792, rng.maxu());
     }
 
-
     TEST_CASE("rangef") {
-        auto rng = FastRNG(1);
+        auto rng = ax::FastRNG();
+        rng.seed(1);
 
-        CHECK_EQ(doctest::Approx(-0.99971), rng.rangef(-1.0f, 1.0f));
-        CHECK_EQ(doctest::Approx(-0.318979), rng.rangef(-1.0f, 1.0f));
-        CHECK_EQ(doctest::Approx(19.1121), rng.rangef(10.0f, 20.0f));
+        CHECK_EQ(doctest::Approx(-0.210655), rng.rangef(-1.0f, 1.0f));
+        CHECK_EQ(doctest::Approx(-0.33731), rng.rangef(-1.0f, 1.0f));
+        CHECK_EQ(doctest::Approx(11.4775), rng.rangef(10.0f, 20.0f));
         // These overflow
-        //CHECK_EQ(doctest::Approx(1.0), rng.rangef(-FLT_MAX, FLT_MAX));
-        //CHECK_EQ(doctest::Approx(1.0), rng.rangef(-FLT_MAX, FLT_MAX));
+        // CHECK_EQ(doctest::Approx(1.0), rng.rangef(-FLT_MAX, FLT_MAX));
+        // CHECK_EQ(doctest::Approx(1.0), rng.rangef(-FLT_MAX, FLT_MAX));
     }
 
 
     TEST_CASE("maxf") {
-        auto rng = FastRNG(1);
+        auto rng = ax::FastRNG();
+        rng.seed(1);
 
-        CHECK_EQ(doctest::Approx(0.000144861), rng.maxf(1.0f));
-        CHECK_EQ(doctest::Approx(0.340511), rng.maxf(1.0f));
-        CHECK_EQ(doctest::Approx(9.11213), rng.maxf(10.0f));
-        CHECK_EQ(doctest::Approx(1.01677e+37), rng.maxf(FLT_MAX));
-        CHECK_EQ(doctest::Approx(1.50114e+38), rng.maxf(FLT_MAX));
+        CHECK_EQ(doctest::Approx(0.394672), rng.maxf(1.0f));
+        CHECK_EQ(doctest::Approx(0.331345), rng.maxf(1.0f));
+        CHECK_EQ(doctest::Approx(1.4775), rng.maxf(10.0f));
+        CHECK_EQ(doctest::Approx(8.46337e+37), rng.maxf(FLT_MAX));
+        CHECK_EQ(doctest::Approx(5.67875e+37), rng.maxf(FLT_MAX));
     }
 
+    TEST_CASE("ranged")
+    {
+        auto rng = ax::FastRNG();
+        rng.seed(1);
+
+        CHECK_EQ(doctest::Approx(-0.210655), rng.ranged(-1.0, 1.0));
+        CHECK_EQ(doctest::Approx(-0.7045), rng.ranged(-1.0, 1.0));
+        CHECK_EQ(doctest::Approx(11.6688), rng.ranged(10.0, 20.0));
+    }
+
+    TEST_CASE("maxd")
+    {
+        auto rng = ax::FastRNG();
+        rng.seed(1);
+
+        CHECK_EQ(doctest::Approx(0.394672), rng.maxd(1.0f));
+        CHECK_EQ(doctest::Approx(0.14775), rng.maxd(1.0f));
+        CHECK_EQ(doctest::Approx(1.66884), rng.maxd(10.0f));
+        CHECK_EQ(doctest::Approx(1.58118e+308), rng.maxd(DBL_MAX));
+        CHECK_EQ(doctest::Approx(1.19643e+308), rng.maxd(DBL_MAX));
+    }
 
     TEST_CASE("float01") {
-        auto rng = FastRNG(1);
+        auto rng = ax::FastRNG();
+        rng.seed(1);
 
-        CHECK_EQ(doctest::Approx(0.000144861), rng.float01());
-        CHECK_EQ(doctest::Approx(0.340511), rng.float01());
-        CHECK_EQ(doctest::Approx(0.911213), rng.float01());
-        CHECK_EQ(doctest::Approx(0.0298801), rng.float01());
+        CHECK_EQ(doctest::Approx(0.394672), rng.float01());
+        CHECK_EQ(doctest::Approx(0.331345), rng.float01());
+        CHECK_EQ(doctest::Approx(0.14775), rng.float01());
+        CHECK_EQ(doctest::Approx(0.248716), rng.float01());
     }
 
+    TEST_CASE("double01")
+    {
+        auto rng = ax::FastRNG();
+        rng.seed(1);
+
+        CHECK_EQ(doctest::Approx(0.394672), rng.double01());
+        CHECK_EQ(doctest::Approx(0.14775), rng.double01());
+        CHECK_EQ(doctest::Approx(0.166884), rng.double01());
+        CHECK_EQ(doctest::Approx(0.879563), rng.double01());
+    }
 
     TEST_CASE("bool01") {
-        auto rng = FastRNG(1);
+        auto rng = ax::FastRNG();
+        rng.seed(1);
 
         auto t = 0;
         auto f = 0;
@@ -134,7 +202,7 @@ TEST_SUITE("math/FastRNG") {
             }
         }
 
-        CHECK_EQ(45, t);
-        CHECK_EQ(55, f);
+        CHECK_EQ(50, t);
+        CHECK_EQ(50, f);
     }
 }

@@ -2,6 +2,7 @@
  Copyright (c) 2014      PlayFirst Inc.
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -45,7 +46,7 @@ NS_AX_BEGIN
     {                                                                 \
         if (ptr)                                                      \
         {                                                             \
-            const_cast<Object*>(static_cast<const Object*>(ptr))->retain(); \
+            (ptr)->retain(); \
         }                                                             \
                                                                       \
     } while (0);
@@ -56,7 +57,7 @@ NS_AX_BEGIN
     {                                                                  \
         if (ptr)                                                       \
         {                                                              \
-            const_cast<Object*>(static_cast<const Object*>(ptr))->release(); \
+            (ptr)->release(); \
         }                                                              \
                                                                        \
     } while (0);
@@ -67,7 +68,7 @@ NS_AX_BEGIN
     {                                                                  \
         if (ptr)                                                       \
         {                                                              \
-            const_cast<Object*>(static_cast<const Object*>(ptr))->release(); \
+            (ptr)->release(); \
             ptr = nullptr;                                             \
         }                                                              \
                                                                        \
@@ -118,9 +119,9 @@ public:
     {
         if (other._ptr != _ptr)
         {
-            AX_REF_PTR_SAFE_RETAIN(other._ptr);
             AX_REF_PTR_SAFE_RELEASE(_ptr);
             _ptr = other._ptr;
+            AX_REF_PTR_SAFE_RETAIN(_ptr);
         }
 
         return *this;
@@ -250,7 +251,7 @@ private:
     T* _ptr;
 
     // NOTE: We can ensure T is derived from ax::Object at compile time here.
-    static_assert(std::is_base_of<Object, typename std::remove_const<T>::type>::value, "T must be derived from Object");
+    static_assert(axstd::is_ref_counted_v<typename std::remove_const<T>::type>, "T must be derived from Object");
 };
 
 template <class T>

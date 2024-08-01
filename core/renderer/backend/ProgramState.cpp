@@ -127,6 +127,25 @@ void TextureInfo::assign(TextureInfo&& other)
     }
 }
 
+void TextureInfo::assign(int slot, int index, backend::TextureBackend* texture)
+{
+    if (textures.size() != 1 or textures[0] != texture or slots[0] != slot or indexs[0] != index)
+    {
+        releaseTextures();
+        indexs.resize(1);
+        indexs[0] = index;
+        slots.resize(1);
+        slots[0] = slot;
+        textures.resize(1);
+        textures[0] = texture;
+        AX_SAFE_RETAIN(texture);
+
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+        location = -1;
+#endif
+    }
+}
+
 /* CLASS ProgramState */
 ProgramState::ProgramState(Program* program)
 {
@@ -361,7 +380,7 @@ void ProgramState::setTexture(int location,
         return;
 
     auto& info = textureInfo[location];
-    info       = {{slot}, {index}, {texture}};
+    info.assign(slot, index, texture);
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     info.location = location;
