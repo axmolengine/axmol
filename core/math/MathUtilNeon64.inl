@@ -198,8 +198,8 @@ inline void MathUtilNeon64::transformVec4(const float* m, float x, float y, floa
         //"st1 {v13.4s}, [%0]               \n\t"    // DST->V[x, y] // DST->V[z]
         "st1 {v13.2s}, [%0], 8               \n\t"
         "st1 {v13.s}[2], [%0]                \n\t"
-        :
-        : "r"(dst), "r"(&x), "r"(&y), "r"(&z), "r"(&w), "r"(m)
+        : "+r"(dst)
+        : "r"(&x), "r"(&y), "r"(&z), "r"(&w), "r"(m)
         : "v0", "v9", "v10","v11", "v12", "v13", "memory"
     );
 }
@@ -256,8 +256,8 @@ inline void MathUtilNeon64::crossVec3(const float* v1, const float* v2, float* d
 
         "st1 {v2.2s},       [%0], 8      \n\t" // V[x, y]
         "st1 {v2.s}[2],     [%0]         \n\t" // V[z]
-        :
-        : "r"(dst), "r"(v1), "r"((v1+1)), "r"(v2), "r"((v2+1))
+        : "+r"(dst)
+        : "r"(v1), "r"((v1+1)), "r"(v2), "r"((v2+1))
         : "v0", "v1", "v2", "memory"
     );
 }
