@@ -25,25 +25,29 @@
 
 #include <doctest.h>
 #include "base/Config.h"
+#include "base/Types.h"
+#include "TestUtils.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
     #if defined(__arm64__)
-        #define USE_NEON64
-        #define INCLUDE_NEON64
+        #define USE_NEON64 1
+        #define INCLUDE_NEON64 1
     #elif defined(__ARM_NEON__)
-        #define USE_NEON32
-        #define INCLUDE_NEON32
+        #define USE_NEON32 1
+        #define INCLUDE_NEON32 1
+    #endif
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_OSX)
+    #if defined(__arm64__) || defined(__aarch64__)
+        #define USE_NEON64 1
+        #define INCLUDE_NEON64 1
     #endif
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     #if defined(__arm64__) || defined(__aarch64__)
-        #define USE_NEON64
-        #define INCLUDE_NEON64
+        #define USE_NEON64 1
+        #define INCLUDE_NEON64 1
     #elif defined(__ARM_NEON__)
-        #define INCLUDE_NEON32
+        #define INCLUDE_NEON32 1
     #endif
-#elif defined(AX_USE_SSE)
-    #define USE_SSE
-    #define INCLUDE_SSE
 #endif
 
 #if defined(USE_NEON32) || defined(USE_NEON64) // || defined(USE_SSE)
@@ -80,6 +84,96 @@ static void __checkMathUtilResult(std::string_view description, const float* a1,
     {
         bool r = fabs(a1[i] - a2[i]) < 0.00001f;  // FLT_EPSILON;
         CHECK_MESSAGE(r, description, " a1[", i, "]=", a1[i], " a2[", i, "]=", a2[i]);
+    }
+}
+
+
+TEST_SUITE("math/MathUtil") {
+    using namespace UnitTest::ax;
+
+
+    static void checkVerticesAreEqual(const V3F_C4B_T2F* v1, const V3F_C4B_T2F* v2, size_t count)
+    {
+        for (size_t i = 0; i < count; ++i)
+        {
+            CHECK_EQ(v1[i].vertices, v2[i].vertices);
+            CHECK_EQ(v1[i].colors, v2[i].colors);
+            CHECK_EQ(v1[i].texCoords, v2[i].texCoords);
+        }
+    }
+
+
+    TEST_CASE("transformVertices") {
+        auto count = 5;
+        std::vector<V3F_C4B_T2F> src(count);
+        std::vector<V3F_C4B_T2F> expected(count);
+        std::vector<V3F_C4B_T2F> dst(count);
+
+        for (int i = 0; i < count; ++i) {
+            src[i].vertices.set(float(i), float(i + 1), float(i + 2));
+            src[i].colors.set(uint8_t(i + 3), uint8_t(i + 4), uint8_t(i + 5), uint8_t(i + 6));
+            src[i].texCoords.set(float(i + 7), float(i + 8));
+
+            expected[i] = src[i];
+            expected[i].vertices.x = src[i].vertices.y * 4;
+            expected[i].vertices.y = src[i].vertices.x * -5;
+            expected[i].vertices.z = src[i].vertices.z * 6;
+        }
+
+        Mat4 transform(
+            0, 4, 0, 0,
+            -5, 0, 0, 0,
+            0, 0, 6, 0,
+            1, 2, 3, 1
+        );
+
+        SUBCASE("MathUtilC") {
+            MathUtilC::transformVertices(dst.data(), src.data(), count, transform);
+            checkVerticesAreEqual(expected.data(), dst.data(), count);
+        }
+
+        #if INCLUDE_NEON32
+            SUBCASE("MathUtilNeon") {
+                MathUtilNeon::transformVertices(dst.data(), src.data(), count, transform);
+                checkVerticesAreEqual(expected.data(), dst.data(), count);
+            }
+        #endif
+
+        #if INCLUDE_NEON64
+            SUBCASE("MathUtilNeon64") {
+                MathUtilNeon64::transformVertices(dst.data(), src.data(), count, transform);
+                checkVerticesAreEqual(expected.data(), dst.data(), count);
+            }
+        #endif
+    }
+
+    TEST_CASE("transformIndices") {
+        auto count = 43;
+        std::vector<uint16_t> src(count);
+        std::vector<uint16_t> expected(count);
+
+        for (int i = 0; i < count; ++i) {
+            src[i] = i;
+            expected[i] = i + 5;
+        }
+
+        uint16_t offset = 5;
+
+        SUBCASE("MathUtilC") {
+            std::vector<uint16_t> dst(count);
+            MathUtilC::transformIndices(dst.data(), src.data(), count, offset);
+            for (int i = 0; i < count; ++i)
+                CHECK_EQ(expected[i], dst[i]);
+        }
+
+        #if INCLUDE_NEON64
+            SUBCASE("MathUtilNeon64") {
+                std::vector<uint16_t> dst(count);
+                MathUtilNeon64::transformIndices(dst.data(), src.data(), count, offset);
+                for (int i = 0; i < count; ++i)
+                    CHECK_EQ(expected[i], dst[i]);
+            }
+        #endif
     }
 }
 
