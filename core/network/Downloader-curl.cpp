@@ -668,9 +668,12 @@ private:
             }
 
             // process tasks in _requestList
-            auto size = coTaskMap.size();
-            while (0 == countOfMaxProcessingTasks || size < countOfMaxProcessingTasks)
+            while (true)
             {
+                // Check for set task limit
+                if (countOfMaxProcessingTasks && coTaskMap.size() >= countOfMaxProcessingTasks)
+                    break;
+
                 // get task wrapper from request queue
                 std::shared_ptr<DownloadTask> task;
                 {
