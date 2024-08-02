@@ -2,6 +2,7 @@
  Copyright 2013 BlackBerry Inc.
  Copyright (c) 2014-2017 Chukong Technologies
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -29,12 +30,19 @@
 
 #include "math/MathBase.h"
 
+
+NS_AX_BEGIN
+    struct V3F_C4B_T2F;
+NS_AX_END
+
 /**
  * @addtogroup base
  * @{
  */
 
 NS_AX_MATH_BEGIN
+
+class Mat4;
 
 /**
  * Defines a math utility class.
@@ -45,6 +53,7 @@ class AX_DLL MathUtil
 {
     friend class Mat4;
     friend class Vec3;
+    friend class Renderer;
 
 public:
     /**
@@ -130,6 +139,9 @@ private:
     static void transformVec4(const float* m, const float* v, float* dst);
 
     static void crossVec3(const float* v1, const float* v2, float* dst);
+
+    static void transformVertices(V3F_C4B_T2F* dst, const V3F_C4B_T2F* src, size_t count, const Mat4& transform);
+    static void transformIndices(uint16_t* dst, const uint16_t* src, size_t count, uint16_t offset);
 };
 
 NS_AX_MATH_END

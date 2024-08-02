@@ -1,6 +1,7 @@
 /**
 Copyright 2013 BlackBerry Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ This file was modified to fit the cocos2d-x project
 */
 
 #include "math/MathUtil.h"
+#include "math/Mat4.h"
 #include "base/Macros.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
@@ -35,28 +37,29 @@ This file was modified to fit the cocos2d-x project
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 #    if defined(__arm64__)
-#        define USE_NEON64
-#        define INCLUDE_NEON64
+#        define USE_NEON64 1
+#        define INCLUDE_NEON64 1
 #    elif defined(__ARM_NEON__)
-#        define USE_NEON32
-#        define INCLUDE_NEON32
-#    else
+#        define USE_NEON32 1
+#        define INCLUDE_NEON32 1
+#    endif
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_OSX)
+#    if defined(__arm64__) || defined(__aarch64__)
+#        define USE_NEON64 1
+#        define INCLUDE_NEON64 1
 #    endif
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    if defined(__arm64__) || defined(__aarch64__)
-#        define USE_NEON64
-#        define INCLUDE_NEON64
+#        define USE_NEON64 1
+#        define INCLUDE_NEON64 1
 #    elif defined(__ARM_NEON__)
-#        define INCLUDE_NEON32
-#    else
+#        define INCLUDE_NEON32 1
 #    endif
-#else
-
 #endif
 
 #if defined(AX_USE_SSE)
-#    define USE_SSE
-#    define INCLUDE_SSE
+#    define USE_SSE 1
+#    define INCLUDE_SSE 1
 #endif
 
 #ifdef INCLUDE_NEON32
@@ -295,6 +298,36 @@ void MathUtil::crossVec3(const float* v1, const float* v2, float* dst)
         MathUtilC::crossVec3(v1, v2, dst);
 #else
     MathUtilC::crossVec3(v1, v2, dst);
+#endif
+}
+
+void MathUtil::transformVertices(V3F_C4B_T2F* dst, const V3F_C4B_T2F* src, size_t count, const Mat4& transform)
+{
+    // Check some assumptions made by optimizations
+    static_assert(sizeof(V3F_C4B_T2F) == 24);
+    static_assert(offsetof(V3F_C4B_T2F, vertices) == 0);
+    static_assert(offsetof(V3F_C4B_T2F, colors) == 12);
+    static_assert(offsetof(V3F_C4B_T2F, texCoords) == 16);
+
+#ifdef USE_NEON32
+    MathUtilNeon::transformVertices(dst, src, count, transform);
+#elif defined(USE_NEON64)
+    MathUtilNeon64::transformVertices(dst, src, count, transform);
+#elif defined(INCLUDE_NEON32)
+    if (isNeon32Enabled())
+        MathUtilNeon::transformVertices(dst, src, count, transform);
+    else
+        MathUtilC::transformVertices(dst, src, count, transform);
+#else
+    MathUtilC::transformVertices(dst, src, count, transform);
+#endif
+}
+
+void MathUtil::transformIndices(uint16_t* dst, const uint16_t* src, size_t count, uint16_t offset) {
+#if defined(USE_NEON64)
+    MathUtilNeon64::transformIndices(dst, src, count, offset);
+#else
+    MathUtilC::transformIndices(dst, src, count, offset);
 #endif
 }
 
