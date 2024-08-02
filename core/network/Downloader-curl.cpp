@@ -611,7 +611,6 @@ private:
 
                         // remove from multi-handle
                         curl_multi_remove_handle(curlmHandle, curlHandle);
-                        bool reinited = false;
                         do
                         {
                             auto coTask = static_cast<DownloadTaskCURL*>(task->_coTask.get());
@@ -623,7 +622,7 @@ private:
                                     curl_easy_getinfo(curlHandle, CURLINFO_RESPONSE_CODE, &responeCode);
                                     fmt::format_to(std::back_inserter(errorMsg), FMT_COMPILE(": {}"), responeCode);
                                 }
-                                
+
                                 coTask->setErrorDesc(DownloadTask::ERROR_IMPL_INTERNAL, errCode, std::move(errorMsg));
                                 break;
                             }
