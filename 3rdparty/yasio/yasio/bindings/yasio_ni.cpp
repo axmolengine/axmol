@@ -60,14 +60,14 @@ YASIO_NI_API void yasio_init_globals(void(YASIO_INTEROP_DECL* pfn)(int level, co
 YASIO_NI_API void yasio_cleanup_globals() { io_service::cleanup_globals(); }
 
 struct yasio_io_event {
-  int kind; //
-  int channel;
-  void* thandle;
+  int kind; // event kind
+  int channel; // channel index
+  void* thandle; // transport
   union {
-    void* msg;
-    int status; //
+    void* hmsg; // io_packet*
+    int ec; // error code
   };
-  void* user;
+  void* user; // user data
 };
 
 YASIO_NI_API void* yasio_create_service(int channel_count, void(YASIO_INTEROP_DECL* event_cb)(yasio_io_event* event), void* user)
@@ -82,9 +82,9 @@ YASIO_NI_API void* yasio_create_service(int channel_count, void(YASIO_INTEROP_DE
     event.thandle = e->transport();
     event.user    = user;
     if (event.kind == yasio::YEK_ON_PACKET)
-      event.msg = !is_packet_empty(pkt) ? &pkt : nullptr;
+      event.hmsg = !is_packet_empty(pkt) ? &pkt : nullptr;
     else
-      event.status = e->status();
+      event.ec = e->status();
     event_cb(&event);
   });
   return service;
@@ -157,8 +157,12 @@ YASIO_NI_API void yasio_set_option(void* service_ptr, int opt, const char* pszAr
   std::array<cxx17::string_view, YASIO_MAX_OPTION_ARGC> args;
   int argc = 0;
   yasio::split_if(&strArgs.front(), ';', [&](char* s, char* e) {
-    *e           = '\0'; // to c style string
-    args[argc++] = cxx17::string_view(s, e - s);
+    if (e) {
+        *e           = '\0'; // to c style string
+        args[argc++] = cxx17::string_view(s, e - s);
+    } else {
+        args[argc++] = cxx17::string_view{s};
+    }
     return (argc < YASIO_MAX_OPTION_ARGC);
   });
 
