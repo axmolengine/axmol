@@ -186,22 +186,21 @@ endfunction()
 
 if(EMSCRIPTEN)
     set(AX_WASM_THREADS "4" CACHE STRING "Wasm threads count")
-
-    set(_AX_WASM_THREADS_INT 0)
+    set(_threads_hint "")
     if (AX_WASM_THREADS STREQUAL "auto") # not empty string or not 0
         # Enable pthread support globally
+        set(_threads_hint "(auto)")
         include(ProcessorCount)
+        set(_AX_WASM_THREADS_INT 0)
         ProcessorCount(_AX_WASM_THREADS_INT)
-    elseif(AX_WASM_THREADS MATCHES "^([0-9]+)$" OR AX_WASM_THREADS STREQUAL "navigator.hardwareConcurrency")
-        set(_AX_WASM_THREADS_INT ${AX_WASM_THREADS})
+        set(AX_WASM_THREADS "${_AX_WASM_THREADS_INT}" CACHE STRING "Wasm threads count" FORCE)
     endif()
 
-    message(STATUS "AX_WASM_THREADS=${AX_WASM_THREADS}")
-    message(STATUS "_AX_WASM_THREADS_INT=${_AX_WASM_THREADS_INT}")
+    message(STATUS "AX_WASM_THREADS=${AX_WASM_THREADS}${_threads_hint}")
 
-    if (_AX_WASM_THREADS_INT)
+    if(AX_WASM_THREADS MATCHES "^([0-9]+)$" OR AX_WASM_THREADS STREQUAL "navigator.hardwareConcurrency")
         list(APPEND _ax_compile_options -pthread)
-        add_link_options(-pthread -sPTHREAD_POOL_SIZE=${_AX_WASM_THREADS_INT})
+        add_link_options(-pthread -sPTHREAD_POOL_SIZE=${AX_WASM_THREADS})
     endif()
 
     set(AX_WASM_INITIAL_MEMORY "1024MB" CACHE STRING "")

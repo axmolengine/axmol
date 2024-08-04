@@ -895,6 +895,7 @@ function setup_cmake($skipOS = $false, $scope = 'local') {
             else {
                 & "$cmake_pkg_path" '--skip-license' '--prefix=/usr/local' 1>$null 2>$null
             }
+            if (!$?) { Remove-Item $cmake_pkg_path -Force }
         }
 
         $cmake_prog, $_ = find_prog -name 'cmake' -path $cmake_bin -silent $true

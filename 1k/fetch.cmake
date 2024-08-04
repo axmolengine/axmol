@@ -20,10 +20,16 @@ function(_1kfetch_init)
         set(_1kfetch_manifest "${_1kfetch_manifest}" CACHE STRING "" FORCE)
     endif()
 
+    if(NOT EXISTS ${PWSH_PROG}) # try again
+        unset(PWSH_PROG CACHE)
+        find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+    endif()
+
     execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/resolv-uri.ps1
         -name "1kdist"
         -manifest ${_1kfetch_manifest}
         OUTPUT_VARIABLE _1kdist_url
+        RESULT_VARIABLE _1kdist_error
     )
 
     if(_1kdist_url)
@@ -33,7 +39,7 @@ function(_1kfetch_init)
         set(_1kdist_base_url "${_1kdist_base_url}/${_1kdist_ver}" PARENT_SCOPE)
         set(_1kdist_ver ${_1kdist_ver} PARENT_SCOPE)
     else()
-        message(WARNING "Resolve 1kdist uri fail, the _1kfetch_dist will not work")
+        message(WARNING "Resolve 1kdist uri fail, ${_1kdist_error}, the _1kfetch_dist will not work")
     endif()
 endfunction()
 

@@ -89,12 +89,12 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
  * @since v0.99.5
  */
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#   if !defined(AX_ENABLE_CACHE_TEXTURE_DATA)
-#       define AX_ENABLE_CACHE_TEXTURE_DATA 1
-#   endif
+#    if !defined(AX_ENABLE_CACHE_TEXTURE_DATA)
+#        define AX_ENABLE_CACHE_TEXTURE_DATA 1
+#    endif
 #else
-#   undef AX_ENABLE_CACHE_TEXTURE_DATA
-#   define AX_ENABLE_CACHE_TEXTURE_DATA 0
+#    undef AX_ENABLE_CACHE_TEXTURE_DATA
+#    define AX_ENABLE_CACHE_TEXTURE_DATA 0
 #endif
 
 /** @def AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST
@@ -102,12 +102,12 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
  *
  */
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && !AX_ENABLE_CACHE_TEXTURE_DATA)
-#   if !defined(AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST)
-#       define AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST 1
-#   endif
+#    if !defined(AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST)
+#        define AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST 1
+#    endif
 #else
-#   undef AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST
-#   define AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST 0
+#    undef AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST
+#    define AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST 0
 #endif
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
@@ -188,14 +188,20 @@ protected:                                                \
     varType varName;                                      \
                                                           \
 public:                                                   \
-    virtual inline varType get##funName() const { return varName; }
+    virtual inline varType get##funName() const           \
+    {                                                     \
+        return varName;                                   \
+    }
 
 #define AX_SYNTHESIZE_READONLY_PASS_BY_REF(varType, varName, funName) \
 protected:                                                            \
     varType varName;                                                  \
                                                                       \
 public:                                                               \
-    virtual inline const varType& get##funName() const { return varName; }
+    virtual inline const varType& get##funName() const                \
+    {                                                                 \
+        return varName;                                               \
+    }
 
 /** @def AX_SYNTHESIZE
  * It is used to declare a protected variable.
@@ -209,36 +215,51 @@ public:                                                               \
  *            The variables and methods declared after AX_SYNTHESIZE are all public.
  *            If you need protected or private, please declare.
  */
-#define AX_SYNTHESIZE(varType, varName, funName)                    \
-protected:                                                          \
-    varType varName;                                                \
-                                                                    \
-public:                                                             \
-    virtual inline varType get##funName() const { return varName; } \
-    virtual inline void set##funName(varType var) { varName = var; }
+#define AX_SYNTHESIZE(varType, varName, funName)  \
+protected:                                        \
+    varType varName;                              \
+                                                  \
+public:                                           \
+    virtual inline varType get##funName() const   \
+    {                                             \
+        return varName;                           \
+    }                                             \
+    virtual inline void set##funName(varType var) \
+    {                                             \
+        varName = var;                            \
+    }
 
-#define AX_SYNTHESIZE_PASS_BY_REF(varType, varName, funName)               \
-protected:                                                                 \
-    varType varName;                                                       \
-                                                                           \
-public:                                                                    \
-    virtual inline const varType& get##funName() const { return varName; } \
-    virtual inline void set##funName(const varType& var) { varName = var; }
+#define AX_SYNTHESIZE_PASS_BY_REF(varType, varName, funName) \
+protected:                                                   \
+    varType varName;                                         \
+                                                             \
+public:                                                      \
+    virtual inline const varType& get##funName() const       \
+    {                                                        \
+        return varName;                                      \
+    }                                                        \
+    virtual inline void set##funName(const varType& var)     \
+    {                                                        \
+        varName = var;                                       \
+    }
 
-#define AX_SYNTHESIZE_RETAIN(varType, varName, funName)             \
-private:                                                            \
-    varType varName;                                                \
-                                                                    \
-public:                                                             \
-    virtual inline varType get##funName() const { return varName; } \
-    virtual inline void set##funName(varType var)                   \
-    {                                                               \
-        if (varName != var)                                         \
-        {                                                           \
-            AX_SAFE_RETAIN(var);                                    \
-            AX_SAFE_RELEASE(varName);                               \
-            varName = var;                                          \
-        }                                                           \
+#define AX_SYNTHESIZE_RETAIN(varType, varName, funName) \
+private:                                                \
+    varType varName;                                    \
+                                                        \
+public:                                                 \
+    virtual inline varType get##funName() const         \
+    {                                                   \
+        return varName;                                 \
+    }                                                   \
+    virtual inline void set##funName(varType var)       \
+    {                                                   \
+        if (varName != var)                             \
+        {                                               \
+            AX_SAFE_RETAIN(var);                        \
+            AX_SAFE_RELEASE(varName);                   \
+            varName = var;                              \
+        }                                               \
     }
 
 #define AX_SAFE_DELETE(p) \
@@ -252,7 +273,7 @@ public:                                                             \
     {                           \
         if (p)                  \
         {                       \
-            delete[](p);        \
+            delete[] (p);       \
             (p) = nullptr;      \
         }                       \
     } while (0)
@@ -318,7 +339,7 @@ public:                                                             \
         } while (0)
 
 #elif _AX_DEBUG == 1
-#    define AXLOG(format, ...) ax::print(format, ##__VA_ARGS__)
+#    define AXLOG(format, ...)      ax::print(format, ##__VA_ARGS__)
 #    define AXLOGERROR(format, ...) ax::print(format, ##__VA_ARGS__)
 #    define AXLOGINFO(format, ...) \
         do                         \
@@ -327,10 +348,10 @@ public:                                                             \
 #    define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
 
 #elif _AX_DEBUG > 1
-#    define AXLOG(format, ...) ax::print(format, ##__VA_ARGS__)
+#    define AXLOG(format, ...)      ax::print(format, ##__VA_ARGS__)
 #    define AXLOGERROR(format, ...) ax::print(format, ##__VA_ARGS__)
-#    define AXLOGINFO(format, ...) ax::print(format, ##__VA_ARGS__)
-#    define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
+#    define AXLOGINFO(format, ...)  ax::print(format, ##__VA_ARGS__)
+#    define AXLOGWARN(...)          __AXLOGWITHFUNCTION(__VA_ARGS__)
 #endif  // _AX_DEBUG
 
 /** Lua engine debug */
@@ -349,8 +370,8 @@ public:                                                             \
  */
 #if defined(__GNUC__) && ((__GNUC__ >= 5) || ((__GNUG__ == 4) && (__GNUC_MINOR__ >= 4))) || \
     (defined(__clang__) && (__clang_major__ >= 3)) || (_MSC_VER >= 1800)
-#    define AX_DISALLOW_COPY_AND_ASSIGN(TypeName) \
-        TypeName(const TypeName&) = delete;       \
+#    define AX_DISALLOW_COPY_AND_ASSIGN(TypeName)      \
+        TypeName(const TypeName&)            = delete; \
         TypeName& operator=(const TypeName&) = delete;
 #else
 #    define AX_DISALLOW_COPY_AND_ASSIGN(TypeName) \
@@ -444,15 +465,25 @@ public:                                                             \
  */
 #if __has_builtin(__builtin_expect)
 #    ifdef __cplusplus
-#        define UTILS_LIKELY(exp) (__builtin_expect(!!(exp), true))
+#        define UTILS_LIKELY(exp)   (__builtin_expect(!!(exp), true))
 #        define UTILS_UNLIKELY(exp) (__builtin_expect(!!(exp), false))
 #    else
-#        define UTILS_LIKELY(exp) (__builtin_expect(!!(exp), 1))
+#        define UTILS_LIKELY(exp)   (__builtin_expect(!!(exp), 1))
 #        define UTILS_UNLIKELY(exp) (__builtin_expect(!!(exp), 0))
 #    endif
 #else
-#    define UTILS_LIKELY(exp) (!!(exp))
+#    define UTILS_LIKELY(exp)   (!!(exp))
 #    define UTILS_UNLIKELY(exp) (!!(exp))
+#endif
+
+#if defined(_MSC_VER)
+// MSVC does not support loop unrolling hints
+#    define UTILS_UNROLL
+#    define UTILS_NOUNROLL
+#else
+// C++11 allows pragmas to be specified as part of defines using the _Pragma syntax.
+#    define UTILS_UNROLL   _Pragma("unroll")
+#    define UTILS_NOUNROLL _Pragma("nounroll")
 #endif
 
 #endif  // __AX_PLATFORM_MACROS_H__

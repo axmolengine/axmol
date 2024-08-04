@@ -52,6 +52,7 @@ default is: `navigator.hardwareConcurrency`
 - AX_WASM_SHELL_FILE: specify the wasm shell file, by default use `${_AX_ROOT}/core/platform/wasm/shell_minimal.html`
 - AX_WASM_ENABLE_DEVTOOLS: whether enable web devtools aka `pause`, `resume`, `step` buttons in webpage, default: `TRUE`
 - AX_WASM_INITIAL_MEMORY: set the wasm initial memory size, default `1024MB`
+- AX_WASM_ISA_SIMD: specify the wasm simd intrinsics type, default `none`, supports `sse`, `neon`, note the `wasm-simd` not support by axmol yet
 
 ## The options for axmol apps
 

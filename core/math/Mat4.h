@@ -18,7 +18,7 @@
 
  Original file from GamePlay3D: http://gameplay3d.org
 
- This file was modified to fit the cocos2d-x project
+ This file was modified to fit the axmol project
  */
 
 #ifndef MATH_MAT4_H
@@ -28,10 +28,6 @@
 
 #include "math/Vec3.h"
 #include "math/Vec4.h"
-
-#ifdef AX_USE_SSE
-#    include <xmmintrin.h>
-#endif
 
 /**
  * @addtogroup base
@@ -73,7 +69,7 @@ NS_AX_MATH_BEGIN
  *
  * @see Transform
  */
-#ifdef AX_USE_SSE
+#if defined(AX_SSE_INTRINSICS) || defined(AX_NEON_INTRINSICS)
 class AX_DLL alignas(16) Mat4
 #else
 class AX_DLL Mat4
@@ -95,10 +91,10 @@ public:
     /**
      * Stores the columns of this 4x4 matrix.
      * */
-#ifdef AX_USE_SSE
+#if defined(AX_SSE_INTRINSICS) || defined(AX_NEON_INTRINSICS)
     union
     {
-        __m128 col[4];
+        _xm128_t col[4];
         float m[16];
     };
 #else

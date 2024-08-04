@@ -17,7 +17,7 @@
 
  Original file from GamePlay3D: http://gameplay3d.org
 
- This file was modified to fit the cocos2d-x project
+ This file was modified to fit the axmol project
  */
 
 #include "math/Mat4.h"
@@ -459,11 +459,7 @@ void Mat4::add(float scalar)
 void Mat4::add(float scalar, Mat4* dst)
 {
     GP_ASSERT(dst);
-#ifdef AX_USE_SSE
-    MathUtil::addMatrix(col, scalar, dst->col);
-#else
     MathUtil::addMatrix(m, scalar, dst->m);
-#endif
 }
 
 void Mat4::add(const Mat4& mat)
@@ -474,11 +470,7 @@ void Mat4::add(const Mat4& mat)
 void Mat4::add(const Mat4& m1, const Mat4& m2, Mat4* dst)
 {
     GP_ASSERT(dst);
-#ifdef AX_USE_SSE
-    MathUtil::addMatrix(m1.col, m2.col, dst->col);
-#else
     MathUtil::addMatrix(m1.m, m2.m, dst->m);
-#endif
 }
 
 bool Mat4::decompose(Vec3* scale, Quaternion* rotation, Vec3* translation) const
@@ -751,11 +743,7 @@ void Mat4::multiply(float scalar, Mat4* dst) const
 void Mat4::multiply(const Mat4& m, float scalar, Mat4* dst)
 {
     GP_ASSERT(dst);
-#ifdef AX_USE_SSE
-    MathUtil::multiplyMatrix(m.col, scalar, dst->col);
-#else
     MathUtil::multiplyMatrix(m.m, scalar, dst->m);
-#endif
 }
 
 void Mat4::multiply(const Mat4& mat)
@@ -766,20 +754,12 @@ void Mat4::multiply(const Mat4& mat)
 void Mat4::multiply(const Mat4& m1, const Mat4& m2, Mat4* dst)
 {
     GP_ASSERT(dst);
-#ifdef AX_USE_SSE
-    MathUtil::multiplyMatrix(m1.col, m2.col, dst->col);
-#else
     MathUtil::multiplyMatrix(m1.m, m2.m, dst->m);
-#endif
 }
 
 void Mat4::negate()
 {
-#ifdef AX_USE_SSE
-    MathUtil::negateMatrix(col, col);
-#else
     MathUtil::negateMatrix(m, m);
-#endif
 }
 
 Mat4 Mat4::getNegated() const
@@ -945,11 +925,7 @@ void Mat4::subtract(const Mat4& mat)
 void Mat4::subtract(const Mat4& m1, const Mat4& m2, Mat4* dst)
 {
     GP_ASSERT(dst);
-#ifdef AX_USE_SSE
-    MathUtil::subtractMatrix(m1.col, m2.col, dst->col);
-#else
     MathUtil::subtractMatrix(m1.m, m2.m, dst->m);
-#endif
 }
 
 void Mat4::transformVector(Vec3* vector) const
@@ -967,7 +943,7 @@ void Mat4::transformVector(float x, float y, float z, float w, Vec3* dst) const
 {
     GP_ASSERT(dst);
 
-    MathUtil::transformVec4(m, x, y, z, w, (float*)dst);
+    MathUtil::transformVec4(m, x, y, z, w, reinterpret_cast<float*>(dst));
 }
 
 void Mat4::transformVector(Vec4* vector) const
@@ -979,14 +955,7 @@ void Mat4::transformVector(Vec4* vector) const
 void Mat4::transformVector(const Vec4& vector, Vec4* dst) const
 {
     GP_ASSERT(dst);
-#ifdef AX_USE_SSE
-    alignas(16) Vec4 inVal{vector};
-    alignas(16) Vec4 outVal;
-    MathUtil::transformVec4(col, reinterpret_cast<const __m128&>(inVal), reinterpret_cast<__m128&>(outVal));
-    *dst = outVal;
-#else
-    MathUtil::transformVec4(m, (const float*)&vector, (float*)dst);
-#endif
+    MathUtil::transformVec4(m, reinterpret_cast<const float*>(&vector), reinterpret_cast<float*>(dst));
 }
 
 void Mat4::translate(float x, float y, float z)
@@ -1013,11 +982,7 @@ void Mat4::translate(const Vec3& t, Mat4* dst) const
 
 void Mat4::transpose()
 {
-#ifdef AX_USE_SSE
-    MathUtil::transposeMatrix(col, col);
-#else
     MathUtil::transposeMatrix(m, m);
-#endif
 }
 
 Mat4 Mat4::getTransposed() const
