@@ -1,6 +1,7 @@
 /**
  Copyright 2013 BlackBerry Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -27,23 +28,15 @@
 
 NS_AX_MATH_BEGIN
 
-Vec4::Vec4() : Vec4Base() {}
+Vec4::Vec4() {}
 
 Vec4::Vec4(float xx, float yy, float zz, float ww) : Vec4Base(xx, yy, zz, ww) {}
 
-Vec4::Vec4(const float* src)
-{
-    set(src);
-}
+Vec4::Vec4(const float* src) : Vec4Base(src) {}
 
 Vec4::Vec4(const Vec4& p1, const Vec4& p2)
 {
-    set(p1, p2);
-}
-
-Vec4::Vec4(const Vec4& copy)
-{
-    set(copy);
+    setDirection(p1, p2);
 }
 
 Vec4 Vec4::fromColor(unsigned int color)
@@ -219,33 +212,7 @@ Vec4 Vec4::getNormalized() const
     return v;
 }
 
-void Vec4::set(float xx, float yy, float zz, float ww)
-{
-    this->x = xx;
-    this->y = yy;
-    this->z = zz;
-    this->w = ww;
-}
-
-void Vec4::set(const float* array)
-{
-    GP_ASSERT(array);
-
-    x = array[0];
-    y = array[1];
-    z = array[2];
-    w = array[3];
-}
-
-void Vec4::set(const Vec4& v)
-{
-    this->x = v.x;
-    this->y = v.y;
-    this->z = v.z;
-    this->w = v.w;
-}
-
-void Vec4::set(const Vec4& p1, const Vec4& p2)
+void Vec4::setDirection(const Vec4& p1, const Vec4& p2)
 {
     x = p2.x - p1.x;
     y = p2.y - p1.y;
