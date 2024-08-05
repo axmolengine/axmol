@@ -24,6 +24,7 @@
 #ifndef MATH_VEC4_H
 #define MATH_VEC4_H
 
+#include "base/Macros.h"
 #include "math/MathBase.h"
 
 /**
