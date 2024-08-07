@@ -18,7 +18,10 @@ option(AX_WITH_LLHTTP "Build with internal LLHTTP support" ON)
 # some libs not depended by axmol
 option(AX_WITH_LZ4 "Build with internal lz4 support" OFF)
 option(AX_WITH_YAML_CPP "Build with yaml-cpp support" OFF)
-option(AX_WITH_DOCTEST "Build with doctest support" ON)
+
+if(LINUX OR MACOSX OR WINDOWS)
+    option(AX_WITH_DOCTEST "Build with doctest support" ON)
+endif()
 
 # by default, enable ios,macOS openal-soft framework for legal license LGPL-2.1
 option(ALSOFT_OSX_FRAMEWORK "" ON)
@@ -474,7 +477,7 @@ if(AX_WITH_LZ4)
     )
 endif()
 
-if(AX_WITH_DOCTEST)
+if(LINUX OR MACOSX OR WINDOWS)
     ax_add_3rd(doctest NO_LINK)
 endif()
 
