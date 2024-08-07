@@ -50,6 +50,11 @@
 - Version: 8.8.0
 - License: Curl (MIT/X)
 
+## doctest
+- [![Upstream](https://img.shields.io/github/v/release/doctest/doctest?label=Upstream)](https://github.com/doctest/doctest)
+- Version: 2.4.11
+- License: MIT
+
 ## FastLZ
 - Upstream: https://github.com/ariya/FastLZ
 - Version: git 344eb40 (121)
