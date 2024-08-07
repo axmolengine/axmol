@@ -599,7 +599,7 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
                         $checkVerCond = '$(version_eq $foundVer $preferredVer)'
                     } else {
                         $wildcardVer = $preferredVer
-                        $preferredVer = $wildcardVer.TrimLast('*')
+                        $preferredVer = $wildcardVer.TrimEnd('.*')
                         $checkVerCond = '$(version_like $foundVer $wildcardVer)'
                     }
                 }
