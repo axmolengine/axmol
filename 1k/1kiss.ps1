@@ -484,6 +484,9 @@ function devtool_url($filename) {
 function version_eq($ver1, $ver2) {
     return $ver1 -eq $ver2
 }
+function version_like($ver1, $ver2) {
+    return $ver1 -like $ver2
+}
 
 # $ver2: accept x.y.z-rc1
 function version_ge($ver1, $ver2) {
@@ -569,6 +572,7 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
     $checkVerCond = $null
     $minimalVer = ''
     $preferredVer = ''
+    $wildcardVer = ''
     $requiredVer = $manifest[$name]
     if ($requiredVer) {
         $preferredVer = $null
@@ -591,7 +595,13 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
                     $checkVerCond = '$(version_in_range $foundVer $minimalVer $preferredVer)'
                 }
                 else {
-                    $checkVerCond = '$(version_eq $foundVer $preferredVer)'
+                    if (!$preferredVer.Contains('*')) {
+                        $checkVerCond = '$(version_eq $foundVer $preferredVer)'
+                    } else {
+                        $wildcardVer = $preferredVer
+                        $preferredVer = $wildcardVer.TrimLast('*')
+                        $checkVerCond = '$(version_like $foundVer $wildcardVer)'
+                    }
                 }
             }
         }
@@ -645,7 +655,6 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
     }
     else {
         if ($preferredVer) {
-            # if (!$silent) { $1k.println("Not found $name, needs install: $preferredVer") }
             $found_rets = $null, $preferredVer
         }
         else {

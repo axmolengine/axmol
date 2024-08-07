@@ -29,6 +29,7 @@
   - Move FastRNG to ax ns and more improvements by @DelinWorks in https://github.com/axmolengine/axmol/pull/2057
 - Handle premultiplied alpha for grayscale PNGs by @j-jorge in https://github.com/axmolengine/axmol/pull/2047
 - Optimize ProgramState::setTexture() to avoid vector (de)allocations by @smilediver in https://github.com/axmolengine/axmol/pull/2061
+- Add OpenType font (.otf) to the noCompress list by @danialias in https://github.com/axmolengine/axmol/pull/2077
 
 ### 3rdparty updates
 
