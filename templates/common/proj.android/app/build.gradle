@@ -80,7 +80,7 @@ android {
     }
 
     aaptOptions {
-       noCompress 'mp3','ogg','wav','mp4','ttf','ttc'
+       noCompress 'mp3','ogg','wav','mp4','ttf','ttc','otf'
     }
 
     buildFeatures {
