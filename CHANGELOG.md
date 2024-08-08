@@ -11,6 +11,7 @@
 
 ### Bug Fixes
 
+- Fix checkReallySupportsASTC does not work on ios device reported by @BIGCATDOG in https://github.com/axmolengine/axmol/issues/2078
 - Fix ImGui index draw info incorrect by @rh101 in https://github.com/axmolengine/axmol/pull/2052
 - Fix ArchLinux setup dependencies always fail by @halx99
 - Fix android VolatileTexture memory leak when addImage(img,k,fmt)
