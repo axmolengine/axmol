@@ -22,7 +22,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.32.2
+- Version: 1.33.0
 - License: MIT
 
 ## Chipmunk2D
@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.8.0
+- Version: 8.9.1
 - License: Curl (MIT/X)
 
 ## doctest
