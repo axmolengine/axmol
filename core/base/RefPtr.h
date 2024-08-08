@@ -82,10 +82,10 @@ struct ReferencedObject
 };
 
 /**
- * Wrapper class which maintains a strong reference to a cocos2dx ax::Object* type object.
+ * Wrapper class which maintains a strong reference to a axmol ax::Object* type object.
  * Similar in concept to a boost smart pointer.
  *
- * Enables the use of the RAII idiom with Cocos2dx objects and helps automate some of the more
+ * Enables the use of the RAII idiom with axmol objects and helps automate some of the more
  * mundane tasks of pointer initialization and cleanup.
  *
  * The class itself is modelled on C++ 11 std::shared_ptr, and trys to keep some of the methods

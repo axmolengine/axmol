@@ -32,7 +32,7 @@
 
 @interface UIEditBoxImplIOS_objc : NSObject <UITextFieldDelegate, UITextViewDelegate>
 
-@property(nonatomic, retain) UIView<UITextInput, CCUITextInput>* textInput;
+@property(nonatomic, retain) UIView<UITextInput, AXUITextInput>* textInput;
 @property(nonatomic, assign) void* editBox;
 @property(nonatomic, assign) NSString* text;
 @property(nonatomic, assign) CGRect frameRect;

@@ -50,7 +50,7 @@ NS_AX_BEGIN
 namespace
 {
 // It's used for creating a default texture when lightMap is nullpter
-static unsigned char cc_2x2_white_image[] = {
+static unsigned char ax_2x2_white_image[] = {
     // RGBA8888
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 }  // namespace
@@ -267,7 +267,7 @@ Terrain::Terrain()
 #endif
 #ifdef AX_USE_METAL
     auto image          = new Image();
-    bool AX_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
+    bool AX_UNUSED isOK = image->initWithRawData(ax_2x2_white_image, sizeof(ax_2x2_white_image), 2, 2, 8);
     AXASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
     _dummyTexture = new Texture2D();
     _dummyTexture->initWithImage(image);

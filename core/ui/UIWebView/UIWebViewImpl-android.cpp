@@ -82,7 +82,7 @@ static std::string getFixedBaseUrl(std::string_view baseUrl)
 
 extern "C" {
 /*
- * Class:     org_cocos2dx_lib_Cocos2dxWebViewHelper
+ * Class:     org_axmol_lib_WebViewHelper
  * Method:    shouldStartLoading
  * Signature: (ILjava/lang/String;)Z
  */
@@ -98,7 +98,7 @@ JNIEXPORT jboolean JNICALL Java_org_axmol_lib_WebViewHelper_shouldStartLoading(J
 }
 
 /*
- * Class:     org_cocos2dx_lib_Cocos2dxWebViewHelper
+ * Class:     org_axmol_lib_WebViewHelper
  * Method:    didFinishLoading
  * Signature: (ILjava/lang/String;)V
  */
@@ -115,7 +115,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_WebViewHelper_didFinishLoading(JNIEnv*
 }
 
 /*
- * Class:     org_cocos2dx_lib_Cocos2dxWebViewHelper
+ * Class:     org_axmol_lib_WebViewHelper
  * Method:    didFailLoading
  * Signature: (ILjava/lang/String;)V
  */
@@ -132,7 +132,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_WebViewHelper_didFailLoading(JNIEnv* e
 }
 
 /*
- * Class:     org_cocos2dx_lib_Cocos2dxWebViewHelper
+ * Class:     org_axmol_lib_WebViewHelper
  * Method:    onJsCallback
  * Signature: (ILjava/lang/String;)V
  */

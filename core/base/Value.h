@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCValue__
-#define __cocos2d_libs__CCValue__
+#ifndef _AX_VALUE_H_
+#define _AX_VALUE_H_
 
 #include "platform/PlatformMacros.h"
 #include "base/Macros.h"
@@ -289,4 +289,4 @@ inline const ax::Value& optValue(const ValueMap& dictionary, std::string_view ke
 
 NS_AX_END
 
-#endif /* defined(__cocos2d_libs__CCValue__) */
+#endif /* defined(_AX_VALUE_H_) */

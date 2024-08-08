@@ -62,5 +62,5 @@ namespace ax { namespace network
         static void onLoad(emscripten_fetch_t *fetch);
     };
 
-}}  // namespace cocos2d::network
+}}  // namespace ax::network
 
