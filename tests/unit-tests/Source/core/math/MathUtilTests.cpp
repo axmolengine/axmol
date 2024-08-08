@@ -25,53 +25,33 @@
 
 #include <doctest.h>
 #include "base/Config.h"
+#include "base/Types.h"
+#include "math/MathBase.h"
+#include "TestUtils.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
-    #if defined(__arm64__)
-        #define USE_NEON64
-        #define INCLUDE_NEON64
-    #elif defined(__ARM_NEON__)
-        #define USE_NEON32
-        #define INCLUDE_NEON32
-    #endif
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    #if defined(__arm64__) || defined(__aarch64__)
-        #define USE_NEON64
-        #define INCLUDE_NEON64
-    #elif defined(__ARM_NEON__)
-        #define INCLUDE_NEON32
-    #endif
-#elif defined(AX_USE_SSE)
-    #define USE_SSE
-    #define INCLUDE_SSE
-#endif
+#define INCLUDE_SSE
+#define USE_SSE
 
-#if defined(USE_NEON32) || defined(USE_NEON64) // || defined(USE_SSE)
-    #define SKIP_SIMD_TEST doctest::skip(false)
+#if defined(AX_SSE_INTRINSICS) || defined(AX_NEON_INTRINSICS)
+#    define SKIP_SIMD_TEST doctest::skip(false)
 #else
-    #define SKIP_SIMD_TEST doctest::skip(true)
+#    define SKIP_SIMD_TEST doctest::skip(true)
 #endif
 
 USING_NS_AX;
 
-namespace UnitTest {
+namespace UnitTest
+{
 
-#ifdef INCLUDE_NEON32
-    #include "math/MathUtilNeon.inl"
-#endif
-
-#ifdef INCLUDE_NEON64
-    #include "math/MathUtilNeon64.inl"
-#endif
-
-#ifdef INCLUDE_SSE
-    // #include "math/MathUtilSSE.inl"
+#ifdef AX_NEON_INTRINSICS
+#    include "math/MathUtilNeon.inl"
+#elif defined(AX_SSE_INTRINSICS)
+#    include "math/MathUtilSSE.inl"
 #endif
 
 #include "math/MathUtil.inl"
 
 }  // namespace UnitTest
-
 
 static void __checkMathUtilResult(std::string_view description, const float* a1, const float* a2, int size)
 {
@@ -83,9 +63,108 @@ static void __checkMathUtilResult(std::string_view description, const float* a1,
     }
 }
 
+TEST_SUITE("math/MathUtil")
+{
+    using namespace UnitTest::ax;
 
-TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST) {
-    TEST_CASE("old_tests") {
+    static void checkVerticesAreEqual(const V3F_C4B_T2F* v1, const V3F_C4B_T2F* v2, size_t count)
+    {
+        for (size_t i = 0; i < count; ++i)
+        {
+            CHECK_EQ(v1[i].vertices, v2[i].vertices);
+            CHECK_EQ(v1[i].colors, v2[i].colors);
+            CHECK_EQ(v1[i].texCoords, v2[i].texCoords);
+        }
+    }
+
+    TEST_CASE("transformVertices")
+    {
+        auto count = 5;
+        std::vector<V3F_C4B_T2F> src(count);
+        std::vector<V3F_C4B_T2F> expected(count);
+        std::vector<V3F_C4B_T2F> dst(count);
+
+        for (int i = 0; i < count; ++i)
+        {
+            src[i].vertices.set(float(i), float(i + 1), float(i + 2));
+            src[i].colors.set(uint8_t(i + 3), uint8_t(i + 4), uint8_t(i + 5), uint8_t(i + 6));
+            src[i].texCoords.set(float(i + 7), float(i + 8));
+
+            expected[i]            = src[i];
+            expected[i].vertices.x = src[i].vertices.y * 4;
+            expected[i].vertices.y = src[i].vertices.x * -5;
+            expected[i].vertices.z = src[i].vertices.z * 6;
+        }
+
+        Mat4 transform(0, 4, 0, 0, -5, 0, 0, 0, 0, 0, 6, 0, 1, 2, 3, 1);
+
+        SUBCASE("MathUtilC")
+        {
+            MathUtilC::transformVertices(dst.data(), src.data(), count, transform);
+            checkVerticesAreEqual(expected.data(), dst.data(), count);
+        }
+
+#ifdef AX_NEON_INTRINSICS
+        SUBCASE("MathUtilNeon")
+        {
+            MathUtilNeon::transformVertices(dst.data(), src.data(), count, transform);
+            checkVerticesAreEqual(expected.data(), dst.data(), count);
+        }
+#elif defined(AX_SSE_INTRINSICS)
+        SUBCASE("MathUtilSSE")
+        {
+            MathUtilSSE::transformVertices(dst.data(), src.data(), count, transform);
+            checkVerticesAreEqual(expected.data(), dst.data(), count);
+        }
+#endif
+    }
+
+    TEST_CASE("transformIndices")
+    {
+        auto count = 43;
+        std::vector<uint16_t> src(count);
+        std::vector<uint16_t> expected(count);
+
+        for (int i = 0; i < count; ++i)
+        {
+            src[i]      = i;
+            expected[i] = i + 5;
+        }
+
+        uint16_t offset = 5;
+
+        SUBCASE("MathUtilC")
+        {
+            std::vector<uint16_t> dst(count);
+            MathUtilC::transformIndices(dst.data(), src.data(), count, offset);
+            for (int i = 0; i < count; ++i)
+                CHECK_EQ(expected[i], dst[i]);
+        }
+
+#if defined(AX_NEON_INTRINSICS) && AX_64BITS
+        SUBCASE("MathUtilNeon")
+        {
+            std::vector<uint16_t> dst(count);
+            MathUtilNeon::transformIndices(dst.data(), src.data(), count, offset);
+            for (int i = 0; i < count; ++i)
+                CHECK_EQ(expected[i], dst[i]);
+        }
+#elif defined(AX_SSE_INTRINSICS)
+        SUBCASE("MathUtilSSE")
+        {
+            std::vector<uint16_t> dst(count);
+            MathUtilSSE::transformIndices(dst.data(), src.data(), count, offset);
+            for (int i = 0; i < count; ++i)
+                CHECK_EQ(expected[i], dst[i]);
+        }
+#endif
+    }
+}
+
+TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST)
+{
+    TEST_CASE("old_tests")
+    {
         // I know the next line looks ugly, but it's a way to test MathUtil. :)
         using namespace UnitTest::ax;
 
@@ -119,20 +198,18 @@ TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST) {
         // inline static void addMatrix(const float* m, float scalar, float* dst);
         MathUtilC::addMatrix(inMat41, scalar, outMat4C);
 
-        #ifdef INCLUDE_NEON32
-            MathUtilNeon::addMatrix(inMat41, scalar, outMat4Opt);
-        #endif
+#ifdef AX_NEON_INTRINSICS
+        MathUtilNeon::addMatrix(reinterpret_cast<const _xm128_t*>(inMat41), scalar,
+                                reinterpret_cast<_xm128_t*>(outMat4Opt));
+#endif
 
-        #ifdef INCLUDE_NEON64
-            MathUtilNeon64::addMatrix(inMat41, scalar, outMat4Opt);
-        #endif
-
-        #ifdef INCLUDE_SSE
-        // FIXME:
-        #endif
+#ifdef AX_SSE_INTRINSICS
+        MathUtilSSE::addMatrix(reinterpret_cast<const _xm128_t*>(inMat41), scalar,
+                               reinterpret_cast<_xm128_t*>(outMat4Opt));
+#endif
 
         __checkMathUtilResult("inline static void addMatrix(const float* m, float scalar, float* dst);", outMat4C,
-                            outMat4Opt, MAT4_SIZE);
+                              outMat4Opt, MAT4_SIZE);
         // Clean
         memset(outMat4C, 0, sizeof(outMat4C));
         memset(outMat4Opt, 0, sizeof(outMat4Opt));
@@ -140,20 +217,16 @@ TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST) {
         // inline static void addMatrix(const float* m1, const float* m2, float* dst);
         MathUtilC::addMatrix(inMat41, inMat42, outMat4C);
 
-        #ifdef INCLUDE_NEON32
-            MathUtilNeon::addMatrix(inMat41, inMat42, outMat4Opt);
-        #endif
-
-        #ifdef INCLUDE_NEON64
-            MathUtilNeon64::addMatrix(inMat41, inMat42, outMat4Opt);
-        #endif
-
-        #ifdef INCLUDE_SSE
-            // FIXME:
-        #endif
+#ifdef AX_NEON_INTRINSICS
+        MathUtilNeon::addMatrix(reinterpret_cast<const _xm128_t*>(inMat41), reinterpret_cast<const _xm128_t*>(inMat42),
+                                reinterpret_cast<_xm128_t*>(outMat4Opt));
+#elif defined(AX_SSE_INTRINSICS)
+        MathUtilSSE::addMatrix(reinterpret_cast<const _xm128_t*>(inMat41), reinterpret_cast<const _xm128_t*>(inMat42),
+                               reinterpret_cast<_xm128_t*>(outMat4Opt));
+#endif
 
         __checkMathUtilResult("inline static void addMatrix(const float* m1, const float* m2, float* dst);", outMat4C,
-                            outMat4Opt, MAT4_SIZE);
+                              outMat4Opt, MAT4_SIZE);
         // Clean
         memset(outMat4C, 0, sizeof(outMat4C));
         memset(outMat4Opt, 0, sizeof(outMat4Opt));
@@ -161,20 +234,18 @@ TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST) {
         // inline static void subtractMatrix(const float* m1, const float* m2, float* dst);
         MathUtilC::subtractMatrix(inMat41, inMat42, outMat4C);
 
-        #ifdef INCLUDE_NEON32
-            MathUtilNeon::subtractMatrix(inMat41, inMat42, outMat4Opt);
-        #endif
+#ifdef AX_NEON_INTRINSICS
+        MathUtilNeon::subtractMatrix(reinterpret_cast<const _xm128_t*>(inMat41),
+                                     reinterpret_cast<const _xm128_t*>(inMat42),
+                                     reinterpret_cast<_xm128_t*>(outMat4Opt));
+#elif defined(AX_SSE_INTRINSICS)
+        MathUtilSSE::subtractMatrix(reinterpret_cast<const _xm128_t*>(inMat41),
+                                    reinterpret_cast<const _xm128_t*>(inMat42),
+                                    reinterpret_cast<_xm128_t*>(outMat4Opt));
+#endif
 
-        #ifdef INCLUDE_NEON64
-            MathUtilNeon64::subtractMatrix(inMat41, inMat42, outMat4Opt);
-        #endif
-
-        #ifdef INCLUDE_SSE
-            // FIXME:
-        #endif
-
-        __checkMathUtilResult("inline static void subtractMatrix(const float* m1, const float* m2, float* dst);", outMat4C,
-                            outMat4Opt, MAT4_SIZE);
+        __checkMathUtilResult("inline static void subtractMatrix(const float* m1, const float* m2, float* dst);",
+                              outMat4C, outMat4Opt, MAT4_SIZE);
         // Clean
         memset(outMat4C, 0, sizeof(outMat4C));
         memset(outMat4Opt, 0, sizeof(outMat4Opt));
@@ -182,20 +253,16 @@ TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST) {
         // inline static void multiplyMatrix(const float* m, float scalar, float* dst);
         MathUtilC::multiplyMatrix(inMat41, scalar, outMat4C);
 
-        #ifdef INCLUDE_NEON32
-            MathUtilNeon::multiplyMatrix(inMat41, scalar, outMat4Opt);
-        #endif
-
-        #ifdef INCLUDE_NEON64
-            MathUtilNeon64::multiplyMatrix(inMat41, scalar, outMat4Opt);
-        #endif
-
-        #ifdef INCLUDE_SSE
-            // FIXME:
-        #endif
+#ifdef AX_NEON_INTRINSICS
+        MathUtilNeon::multiplyMatrix(reinterpret_cast<const _xm128_t*>(inMat41), scalar,
+                                     reinterpret_cast<_xm128_t*>(outMat4Opt));
+#elif defined(AX_SSE_INTRINSICS)
+        MathUtilSSE::multiplyMatrix(reinterpret_cast<const _xm128_t*>(inMat41), scalar,
+                                    reinterpret_cast<_xm128_t*>(outMat4Opt));
+#endif
 
         __checkMathUtilResult("inline static void multiplyMatrix(const float* m, float scalar, float* dst);", outMat4C,
-                            outMat4Opt, MAT4_SIZE);
+                              outMat4Opt, MAT4_SIZE);
         // Clean
         memset(outMat4C, 0, sizeof(outMat4C));
         memset(outMat4Opt, 0, sizeof(outMat4Opt));
@@ -203,20 +270,18 @@ TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST) {
         // inline static void multiplyMatrix(const float* m1, const float* m2, float* dst);
         MathUtilC::multiplyMatrix(inMat41, inMat42, outMat4C);
 
-        #ifdef INCLUDE_NEON32
-            MathUtilNeon::multiplyMatrix(inMat41, inMat42, outMat4Opt);
-        #endif
+#ifdef AX_NEON_INTRINSICS
+        MathUtilNeon::multiplyMatrix(reinterpret_cast<const _xm128_t*>(inMat41),
+                                     reinterpret_cast<const _xm128_t*>(inMat42),
+                                     reinterpret_cast<_xm128_t*>(outMat4Opt));
+#elif defined(AX_SSE_INTRINSICS)
+        MathUtilSSE::multiplyMatrix(reinterpret_cast<const _xm128_t*>(inMat41),
+                                    reinterpret_cast<const _xm128_t*>(inMat42),
+                                    reinterpret_cast<_xm128_t*>(outMat4Opt));
+#endif
 
-        #ifdef INCLUDE_NEON64
-            MathUtilNeon64::multiplyMatrix(inMat41, inMat42, outMat4Opt);
-        #endif
-
-        #ifdef INCLUDE_SSE
-            // FIXME:
-        #endif
-
-        __checkMathUtilResult("inline static void multiplyMatrix(const float* m1, const float* m2, float* dst);", outMat4C,
-                            outMat4Opt, MAT4_SIZE);
+        __checkMathUtilResult("inline static void multiplyMatrix(const float* m1, const float* m2, float* dst);",
+                              outMat4C, outMat4Opt, MAT4_SIZE);
         // Clean
         memset(outMat4C, 0, sizeof(outMat4C));
         memset(outMat4Opt, 0, sizeof(outMat4Opt));
@@ -224,20 +289,14 @@ TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST) {
         // inline static void negateMatrix(const float* m, float* dst);
         MathUtilC::negateMatrix(inMat41, outMat4C);
 
-        #ifdef INCLUDE_NEON32
-            MathUtilNeon::negateMatrix(inMat41, outMat4Opt);
-        #endif
-
-        #ifdef INCLUDE_NEON64
-            MathUtilNeon64::negateMatrix(inMat41, outMat4Opt);
-        #endif
-
-        #ifdef INCLUDE_SSE
-            // FIXME:
-        #endif
+#ifdef AX_NEON_INTRINSICS
+        MathUtilNeon::negateMatrix(reinterpret_cast<const _xm128_t*>(inMat41), reinterpret_cast<_xm128_t*>(outMat4Opt));
+#elif defined(AX_SSE_INTRINSICS)
+        MathUtilSSE::negateMatrix(reinterpret_cast<const _xm128_t*>(inMat41), reinterpret_cast<_xm128_t*>(outMat4Opt));
+#endif
 
         __checkMathUtilResult("inline static void negateMatrix(const float* m, float* dst);", outMat4C, outMat4Opt,
-                            MAT4_SIZE);
+                              MAT4_SIZE);
         // Clean
         memset(outMat4C, 0, sizeof(outMat4C));
         memset(outMat4Opt, 0, sizeof(outMat4Opt));
@@ -245,20 +304,16 @@ TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST) {
         // inline static void transposeMatrix(const float* m, float* dst);
         MathUtilC::transposeMatrix(inMat41, outMat4C);
 
-        #ifdef INCLUDE_NEON32
-            MathUtilNeon::transposeMatrix(inMat41, outMat4Opt);
-        #endif
-
-        #ifdef INCLUDE_NEON64
-            MathUtilNeon64::transposeMatrix(inMat41, outMat4Opt);
-        #endif
-
-        #ifdef INCLUDE_SSE
-            // FIXME:
-        #endif
+#ifdef AX_NEON_INTRINSICS
+        MathUtilNeon::transposeMatrix(reinterpret_cast<const _xm128_t*>(inMat41),
+                                      reinterpret_cast<_xm128_t*>(outMat4Opt));
+#elif defined(AX_SSE_INTRINSICS)
+        MathUtilSSE::transposeMatrix(reinterpret_cast<const _xm128_t*>(inMat41),
+                                     reinterpret_cast<_xm128_t*>(outMat4Opt));
+#endif
 
         __checkMathUtilResult("inline static void transposeMatrix(const float* m, float* dst);", outMat4C, outMat4Opt,
-                            MAT4_SIZE);
+                              MAT4_SIZE);
         // Clean
         memset(outMat4C, 0, sizeof(outMat4C));
         memset(outMat4Opt, 0, sizeof(outMat4Opt));
@@ -266,21 +321,16 @@ TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST) {
         // inline static void transformVec4(const float* m, float x, float y, float z, float w, float* dst);
         MathUtilC::transformVec4(inMat41, x, y, z, w, outVec4C);
 
-        #ifdef INCLUDE_NEON32
-            MathUtilNeon::transformVec4(inMat41, x, y, z, w, outVec4Opt);
-        #endif
-
-        #ifdef INCLUDE_NEON64
-            MathUtilNeon64::transformVec4(inMat41, x, y, z, w, outVec4Opt);
-        #endif
-
-        #ifdef INCLUDE_SSE
-            // FIXME:
-        #endif
+#ifdef AX_NEON_INTRINSICS
+        MathUtilNeon::transformVec4(reinterpret_cast<const _xm128_t*>(inMat41), x, y, z, w, outVec4Opt);
+#elif defined(AX_SSE_INTRINSICS)
+        // FIXME:
+        MathUtilSSE::transformVec4(reinterpret_cast<const _xm128_t*>(inMat41), x, y, z, w, outVec4Opt);
+#endif
 
         __checkMathUtilResult(
-            "inline static void transformVec4(const float* m, float x, float y, float z, float w, float* dst);", outVec4C,
-            outVec4Opt, VEC4_SIZE);
+            "inline static void transformVec4(const float* m, float x, float y, float z, float w, float* dst);",
+            outVec4C, outVec4Opt, VEC4_SIZE);
         // Clean
         memset(outVec4C, 0, sizeof(outVec4C));
         memset(outVec4Opt, 0, sizeof(outVec4Opt));
@@ -288,20 +338,15 @@ TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST) {
         // inline static void transformVec4(const float* m, const float* v, float* dst);
         MathUtilC::transformVec4(inMat41, inVec4, outVec4C);
 
-        #ifdef INCLUDE_NEON32
-            MathUtilNeon::transformVec4(inMat41, inVec4, outVec4Opt);
-        #endif
-
-        #ifdef INCLUDE_NEON64
-            MathUtilNeon64::transformVec4(inMat41, inVec4, outVec4Opt);
-        #endif
-
-        #ifdef INCLUDE_SSE
-            // FIXME:
-        #endif
+#ifdef AX_NEON_INTRINSICS
+        MathUtilNeon::transformVec4(reinterpret_cast<const _xm128_t*>(inMat41), reinterpret_cast<const float*>(inVec4),
+                                    reinterpret_cast<float*>(outVec4Opt));
+#elif defined(AX_SSE_INTRINSICS)
+        MathUtilSSE::transformVec4(reinterpret_cast<const _xm128_t*>(inMat41), reinterpret_cast<const float*>(inVec4), reinterpret_cast<float*>(outVec4Opt));
+#endif
 
         __checkMathUtilResult("inline static void transformVec4(const float* m, const float* v, float* dst);", outVec4C,
-                            outVec4Opt, VEC4_SIZE);
+                              outVec4Opt, VEC4_SIZE);
         // Clean
         memset(outVec4C, 0, sizeof(outVec4C));
         memset(outVec4Opt, 0, sizeof(outVec4Opt));
@@ -309,20 +354,14 @@ TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST) {
         // inline static void crossVec3(const float* v1, const float* v2, float* dst);
         MathUtilC::crossVec3(inVec4, inVec42, outVec4C);
 
-        #ifdef INCLUDE_NEON32
-            MathUtilNeon::crossVec3(inVec4, inVec42, outVec4Opt);
-        #endif
-
-        #ifdef INCLUDE_NEON64
-            MathUtilNeon64::crossVec3(inVec4, inVec42, outVec4Opt);
-        #endif
-
-        #ifdef INCLUDE_SSE
-            // FIXME:
-        #endif
+#ifdef AX_NEON_INTRINSICS
+        MathUtilNeon::crossVec3(inVec4, inVec42, outVec4Opt);
+#elif defined(AX_SSE_INTRINSICS)
+        MathUtilSSE::crossVec3(inVec4, inVec42, outVec4Opt);
+#endif
 
         __checkMathUtilResult("inline static void crossVec3(const float* v1, const float* v2, float* dst);", outVec4C,
-                            outVec4Opt, VEC4_SIZE);
+                              outVec4Opt, VEC4_SIZE);
         // Clean
         memset(outVec4C, 0, sizeof(outVec4C));
         memset(outVec4Opt, 0, sizeof(outVec4Opt));

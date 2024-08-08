@@ -98,11 +98,12 @@ enum class MEMediaState
 
 enum class MEVideoPixelFormat
 {
-    INVALID,
-    YUY2,
-    NV12,  // '420v' '420f'
+    INVALID = -1,
     RGB32,
     BGR32,
+    YUY2,
+    NV12,  // '420v' '420f'
+    I420
 };
 
 struct MEIntPoint

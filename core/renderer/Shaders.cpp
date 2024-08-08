@@ -62,6 +62,7 @@ AX_DLL const std::string_view hsv_frag                             = "hsv_fs"sv;
 AX_DLL const std::string_view dualSampler_hsv_frag                 = "dualSampler_hsv_fs"sv;
 AX_DLL const std::string_view videoTextureYUY2_frag                = "videoTextureYUY2_fs"sv;
 AX_DLL const std::string_view videoTextureNV12_frag                = "videoTextureNV12_fs"sv;
+AX_DLL const std::string_view videoTextureI420_frag                = "videoTextureI420_fs"sv;
 AX_DLL const std::string_view lineColor_frag                       = "lineColor_fs"sv;
 AX_DLL const std::string_view lineColor_vert                       = "lineColor_vs"sv;
 AX_DLL const std::string_view color_frag                           = "color_fs"sv;

@@ -47,7 +47,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
 
 private:
     ax::extension::DrawNodeEx* drawNodeEx;
@@ -63,7 +63,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
 
 private:
     ax::extension::DrawNodeEx* drawNodeEx;
@@ -96,7 +96,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
 
     fireObj* createFireObjs(int count);
 
@@ -174,7 +174,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
 
     void initSliders();
     void changeThickness(ax::Object* pSender, ax::ui::Slider::EventType type);
@@ -198,7 +198,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
 
 private:
     ax::extension::DrawNodeEx* drawNodeEx;
@@ -225,7 +225,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
 
     void initSliders();
     void changeStartAngle(ax::Object* pSender, ax::ui::Slider::EventType type);
@@ -254,7 +254,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
 
     void sliderCallback(ax::Object* sender, ax::ui::Slider::EventType type);
     void listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type);
@@ -288,7 +288,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
 
     void sliderCallback(ax::Object* sender, ax::ui::Slider::EventType type);
     void listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type);
@@ -319,7 +319,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
 
 private:
     ax::extension::DrawNodeEx* drawNodeEx;
@@ -338,7 +338,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
 
 private:
     ax::extension::DrawNodeEx* drawNodeEx;
@@ -380,7 +380,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
 
     void initSliders();
     void changeThreshold(Object* pSender, ax::ui::Slider::EventType type);
@@ -426,7 +426,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
 
     void initSliders();
     void changeStartAngle(Object* pSender, ax::ui::Slider::EventType type);

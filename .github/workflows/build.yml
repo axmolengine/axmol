@@ -28,6 +28,11 @@ jobs:
       run: |
         .\tools\cmdline\axmol -p win32 -a x64
         .\tools\cmdline\axmol run -p win32 -a x64 -xb '--target,unit-tests'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: windows_x64
+        path: |
+          build_x64/bin/cpp-tests/**/*
   win32-dll:
         runs-on: windows-latest
         steps:

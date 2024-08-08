@@ -589,23 +589,17 @@ void Renderer::setViewPort(int x, int y, unsigned int w, unsigned int h)
 
 void Renderer::fillVerticesAndIndices(const TrianglesCommand* cmd, unsigned int vertexBufferOffset)
 {
-    size_t vertexCount = cmd->getVertexCount();
-    memcpy(&_verts[_filledVertex], cmd->getVertices(), sizeof(V3F_C4B_T2F) * vertexCount);
+    auto destVertices = &_verts[_filledVertex];
+    auto srcVertices = cmd->getVertices();
+    auto vertexCount = cmd->getVertexCount();
+    auto&& modelView = cmd->getModelView();
+    MathUtil::transformVertices(destVertices, srcVertices, vertexCount, modelView);
 
-    // fill vertex, and convert them to world coordinates
-    const Mat4& modelView = cmd->getModelView();
-    for (size_t i = 0; i < vertexCount; ++i)
-    {
-        modelView.transformPoint(&(_verts[i + _filledVertex].vertices));
-    }
-
-    // fill index
-    const unsigned short* indices = cmd->getIndices();
-    size_t indexCount             = cmd->getIndexCount();
-    for (size_t i = 0; i < indexCount; ++i)
-    {
-        _indices[_filledIndex + i] = vertexBufferOffset + _filledVertex + indices[i];
-    }
+    auto destIndices = &_indices[_filledIndex];
+    auto srcIndices = cmd->getIndices();
+    auto indexCount = cmd->getIndexCount();
+    auto offset = vertexBufferOffset + _filledVertex;
+    MathUtil::transformIndices(destIndices, srcIndices, indexCount, int(offset));
 
     _filledVertex += vertexCount;
     _filledIndex += indexCount;

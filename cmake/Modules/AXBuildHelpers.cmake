@@ -17,7 +17,7 @@ function(ax_sync_target_res ax_target)
     set(oneValueArgs LINK_TO SYNC_TARGET_ID)
     set(multiValueArgs FOLDERS)
     cmake_parse_arguments(opt "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
-   
+
     if (NOT DEFINED opt_SYNC_TARGET_ID)
         set(sync_target_name "SYNC_RESOURCE-${ax_target}")
     else()
@@ -25,7 +25,7 @@ function(ax_sync_target_res ax_target)
     endif()
 
     ax_def_sync_resource_target(${ax_target} ${sync_target_name})
-    
+
     if(NOT TARGET ${sync_target_name})
         message(WARNING "SyncResource targe for ${ax_target} is not defined")
         return()
@@ -291,7 +291,7 @@ function(ax_mark_resources)
             # MakeAppx.exe require deployment location path rule
             #   - must full quailfied windows style path
             #   - can't start with .\xxx.txt, must be xxx.txt
-            # 
+            #
             # Otherwise, will fail with:
             #  MakeAppx : error : 0x8007007b - The filename, directory name, or volume label syntax is incorrect.
             if (opt_RESOURCEBASE STREQUAL ".")
@@ -439,7 +439,7 @@ function(ax_setup_app_config app_name)
         # windows: visual studio/LLVM-clang default is Console app, but we need Windows app
         set(_win32_linker_flags "")
         set(_win32_console_app FALSE)
-        
+
         if (NOT opt_CONSOLE OR WINRT)
             set(_win32_linker_flags "/SUBSYSTEM:WINDOWS")
         else()
@@ -571,8 +571,13 @@ macro (ax_setup_app_props app_name)
         foreach(FOLDER IN LISTS _APP_RES_FOLDER)
             string(APPEND EMSCRIPTEN_LINK_FLAGS " --preload-file ${FOLDER}/@/")
         endforeach()
-        
+
         set_target_properties(${app_name} PROPERTIES LINK_FLAGS "${EMSCRIPTEN_LINK_FLAGS}")
+    endif()
+
+    if(MSVC)
+        # explicit set source charset to utf-8 for windows targets
+        target_compile_options(${APP_NAME} PRIVATE "/utf-8")
     endif()
 endmacro()
 
@@ -590,11 +595,15 @@ macro(ax_setup_winrt_sources )
 
     get_target_depends_ext_dlls(3rdparty prebuilt_dlls)
 
-    if (NOT prebuilt_dlls) 
+    if (NOT prebuilt_dlls)
+        set(ssl_dll_suffix "")
+        if(WIN64)
+            set(ssl_dll_suffix "-${ARCH_ALIAS}")
+        endif()
         set(prebuilt_dlls
             ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3-x64.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3-x64.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll
             ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll
             ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
             ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll

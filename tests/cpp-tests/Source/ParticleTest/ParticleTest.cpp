@@ -1764,21 +1764,25 @@ void DemoEmissionShapeAlphaMask::onEnter()
     removeChild(_background, true);
     _background = nullptr;
 
-    _emitter = ParticleFireworks::createWithTotalParticles(8000);
+    _emitter = ParticleFireworks::createWithTotalParticles(6000);
     _emitter->retain();
     addChild(_emitter, 10);
     _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
 
     _emitter->setBlendAdditive(true);
 
+    _emitter->setLife(1);
     _emitter->setGravity({0, 0});
     _emitter->setSpeed(0);
     _emitter->setSpeedVar(0);
 
-    _emitter->setStartSize(3);
+    _emitter->setStartColor(Color4F::WHITE);
+    _emitter->setEndColor(Color4F::WHITE);
+
+    _emitter->setStartSize(6);
     _emitter->setEndSize(3);
 
-    _emitter->setEmissionRate(1000);
+    _emitter->setEmissionRate(6000);
 
     _emitter->setEmissionShapes(true);
 

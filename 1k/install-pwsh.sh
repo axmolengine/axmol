@@ -12,20 +12,31 @@ mkdir -p $cacheDir
 
 pwsh_ver=$1
 if [ "$pwsh_ver" = "" ] ; then
-    pwsh_ver='7.4.2'
+    pwsh_ver='7.4.4'
+fi
+
+pwsh_min_ver=$2
+if [ "$pwsh_min_ver" = "" ] ; then
+    pwsh_min_ver='7.3.0'
+fi
+
+if [[ "$pwsh_ver" < "$pwsh_min_ver" ]] ; then
+    pwsh_ver=$pwsh_min_ver
 fi
 
 function check_pwsh {
-    pwsh_ver=$1
+    min_ver=$1
+    preferred_ver=$2
     if command -v pwsh >/dev/null ; then
-        pwsh_veri_a=$(pwsh --version)
-        pwsh_veri_b="PowerShell $pwsh_ver"
-        if [ "$pwsh_veri_b" = "$pwsh_veri_a" ] ; then
-            echo axmol: $pwsh_veri_a already installed.
+        verx=$(pwsh --version)
+        very="PowerShell $min_ver"
+        if ([ "$preferred_ver" != "$min_ver" ] && ([[ "$verx" > "$very" ]] || [ "$verx" = "$very" ])) \
+          || ([ "$preferred_ver" = "$min_ver" ] && [ "$verx" = "$very" ]) ; then
+            echo "1kiss: $verx installed."
             exit 0
         fi
     fi
-    echo "Installing PowerShell $pwsh_ver ..."
+    echo "Installing PowerShell $preferred_ver ..."
 }
 
 HOST_ARCH=$(uname -m)
@@ -34,7 +45,7 @@ if [ "$HOST_ARCH" = 'x86_64' ] ; then
 fi
 
 if [ $HOST_OS = 'Darwin' ] ; then
-    check_pwsh $pwsh_ver
+    check_pwsh $pwsh_min_ver $preferred_ver
     pwsh_pkg="powershell-$pwsh_ver-osx-$HOST_ARCH.pkg"
     pwsh_pkg_out="$cacheDir/$pwsh_pkg"
     if [ ! -f  "$pwsh_pkg_out" ] ; then
@@ -45,8 +56,8 @@ if [ $HOST_OS = 'Darwin' ] ; then
     sudo xattr -rd com.apple.quarantine "$pwsh_pkg_out"
     sudo installer -pkg "$pwsh_pkg_out" -target /
 elif [ $HOST_OS = 'Linux' ] ; then
-    if which dpkg > /dev/null; then  # Linux distro: deb (ubuntu)
-        check_pwsh $pwsh_ver
+    if command -v dpkg > /dev/null; then  # Linux distro: deb (ubuntu)
+        check_pwsh $pwsh_min_ver $preferred_ver
         pwsh_pkg="powershell_$pwsh_ver-1.deb_amd64.deb"
         pwsh_pkg_out="$cacheDir/$pwsh_pkg"
         if [ ! -f  "$pwsh_pkg_out" ] ; then
@@ -55,10 +66,10 @@ elif [ $HOST_OS = 'Linux' ] ; then
         sudo_cmd=$(which sudo)
         $sudo_cmd dpkg -i "$pwsh_pkg_out"
         $sudo_cmd apt-get install -f
-    elif which pacman > /dev/null; then # Linux distro: Arch
+    elif command -v pacman > /dev/null; then # Linux distro: Arch
         # refer: https://ephos.github.io/posts/2018-9-17-Pwsh-ArchLinux
         # available pwsh version, refer to: https://aur.archlinux.org/packages/powershell-bin
-        check_pwsh $pwsh_ver
+        check_pwsh $pwsh_min_ver
         git clone https://aur.archlinux.org/powershell-bin.git $cacheDir/powershell-bin
         cd $cacheDir/powershell-bin
         makepkg -si --needed --noconfirm
@@ -69,10 +80,11 @@ else
     exit 1
 fi
 
-if [ $? = 0 ] ; then
-    echo "Install PowerShell $pwsh_ver done"
+if command -v pwsh >/dev/null ; then
+    installed_pwsh_ver=$(pwsh --version)
+    echo "Install PowerShell $installed_pwsh_ver succeed."
 else
-    echo "Install PowerShell fail"
+    echo "Install PowerShell fail, try again"
     if [ -f "$pwsh_pkg_out" ] ; then
         rm -f "$pwsh_pkg_out"
     fi

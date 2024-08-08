@@ -656,7 +656,7 @@ void CubismRendererProfile_Cocos2dx::Save()
     // _lastRenderTargetFlag = GetCocos2dRenderer()->getRenderTargetFlag();
     // _lastColorBuffer  = nullptr; // unused
     _lastRenderTarget = GetCocos2dRenderer()->getRenderTarget();
-	_lastRenderTargetFlag = _lastRenderTarget->getTargetFlags();
+	//_lastRenderTargetFlag = _lastRenderTarget->getTargetFlags();
 	_lastColorBuffer  = _lastRenderTarget->_color[0].texture;
 	_lastDepthBuffer = _lastRenderTarget->_depth.texture;
 	_lastStencilBuffer = _lastRenderTarget->_stencil.texture;
@@ -684,7 +684,7 @@ void CubismRendererProfile_Cocos2dx::Restore()
 		restoringRT->setColorAttachment(_lastColorBuffer);
 		restoringRT->setDepthAttachment(_lastDepthBuffer);
         restoringRT->setStencilAttachment(_lastStencilBuffer);
-		restoringRT->setTargetFlags(_lastRenderTargetFlag);
+		// restoringRT->setTargetFlags(_lastRenderTargetFlag);
         cmd->func        = [=]() -> void {
             GetCocos2dRenderer()->setRenderTarget(restoringRT);
         };

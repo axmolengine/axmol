@@ -71,7 +71,7 @@ bool Configuration::init()
 #if AX_ENABLE_PROFILERS
     _valueDict["axmol.compiled_with_profiler"] = Value(true);
 #else
-    _valueDict["axmol.compiled_with_profiler"]       = Value(false);
+    _valueDict["axmol.compiled_with_profiler"] = Value(false);
 #endif
 
 #if AX_ENABLE_GL_STATE_CACHE == 0
@@ -83,7 +83,17 @@ bool Configuration::init()
 #if _AX_DEBUG
     _valueDict["axmol.build_type"] = Value("DEBUG");
 #else
-    _valueDict["axmol.build_type"]                   = Value("RELEASE");
+    _valueDict["axmol.build_type"] = Value("RELEASE");
+#endif
+
+#if defined(AX_SSE_INTRINSICS)
+#    if defined(__SSE4_1__)
+    _valueDict["axmol.simd"] = Value("SSE41");
+#    else
+    _valueDict["axmol.simd"] = Value("SSE2");
+#    endif
+#elif defined(AX_NEON_INTRINSICS)
+    _valueDict["axmol.simd"] = Value("NEON");
 #endif
 
     return true;

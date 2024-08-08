@@ -152,6 +152,8 @@ bool ProgramManager::init()
                     VertexLayoutType::Sprite);
     registerProgram(ProgramType::VIDEO_TEXTURE_NV12, positionTextureColor_vert, videoTextureNV12_frag,
                     VertexLayoutType::Sprite);
+    registerProgram(ProgramType::VIDEO_TEXTURE_I420, positionTextureColor_vert, videoTextureI420_frag,
+                    VertexLayoutType::Sprite);
 
     // The builtin dual sampler shader registry
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::POSITION_TEXTURE_COLOR,

@@ -68,6 +68,7 @@ struct AX_DLL TextureInfo
 
     void assign(const TextureInfo& other);
     void assign(TextureInfo&& other);
+    void assign(int slot, int index, backend::TextureBackend* texture);
 
     void retainTextures();
     void releaseTextures();

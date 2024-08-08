@@ -26,6 +26,7 @@ package org.axmol.lib;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
+import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
 import android.net.Uri;
 import android.os.Handler;
@@ -61,6 +62,10 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     public static final int EVENT_PAUSED = 1;
     public static final int EVENT_STOPPED = 2;
     public static final int EVENT_ERROR = 3;
+
+    // The native video pixel formats, match with MEVideoPixelFormat
+    public static final int VIDEO_PF_NV12 = 3;
+    public static final int VIDEO_PF_I420 = 4;
 
     /** Media has been closed and cannot be played again. */
     public static final int STATE_CLOSED = 0;
@@ -100,11 +105,12 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     private AtomicInteger mState = new AtomicInteger(STATE_CLOSED);
     Point mOutputDim = new Point(); // The output dim match with buffer
     Point mVideoDim = new Point(); // The video dim (validate image dim)
+    private int mVideoPF = -1;
     private int mVideoRotation = 0;
 
     /** ------ native methods ------- */
     public static native void nativeHandleEvent(long nativeObj, int arg1);
-    public static native void nativeHandleVideoSample(long nativeObj, ByteBuffer sampleData, int sampleLen, int outputX, int outputY, int videoX, int videoY, int rotation);
+    public static native void nativeHandleVideoSample(long nativeObj, ByteBuffer sampleData, int sampleLen, int outputX, int outputY, int videoX, int videoY, int rotation, int videoPF);
     public static native void nativeSetDuration(long nativeObj, double duration);
     public static native void nativeSetCurrentTime(long nativeObj, double currentTime);
 
@@ -306,10 +312,23 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     /** update video informations */
     private void updateVideoMeta() {
         MediaFormat format = mOutputFormat;
-        // String mimeType = format.getString(MediaFormat.KEY_MIME); // "video/raw" (NV12)
-        // Integer colorFormat = format.getInteger(MediaFormat.KEY_COLOR_FORMAT);
-        // boolean NV12 = colorFormat == MediaCodecVideoRenderer.DESIRED_PIXEL_FORMAT;
         if(format != null) {
+            // String mimeType = format.getString(MediaFormat.KEY_MIME); // "video/raw"
+            // Note: some android 11 and older devices not response desired color format(NV12), instead will be YUV420P aka I420
+            // refer: https://github.com/axmolengine/axmol/issues/2049
+            Integer colorFormat = format.getInteger(MediaFormat.KEY_COLOR_FORMAT);
+            switch(colorFormat) {
+                case MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420SemiPlanar:
+                    mVideoPF = VIDEO_PF_NV12;
+                    break;
+                case MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420Planar:
+                    mVideoPF = VIDEO_PF_I420;
+                    break;
+                default:
+                    mVideoPF = VIDEO_PF_NV12;
+                    Log.w(TAG, String.format("Unsupported color format: %d, video render may incorrect!", colorFormat));
+            }
+
             mOutputDim.x = format.getInteger(MediaFormat.KEY_WIDTH);
             if (format.containsKey(MediaFormat.KEY_CROP_LEFT)
                 && format.containsKey(MediaFormat.KEY_CROP_RIGHT)) {
@@ -343,7 +362,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         }
 
         ByteBuffer tmpBuffer = codec.getOutputBuffer(index);
-        nativeHandleVideoSample(mNativeObj, tmpBuffer, tmpBuffer.remaining(), mOutputDim.x, mOutputDim.y, mVideoDim.x, mVideoDim.y, mVideoRotation);
+        nativeHandleVideoSample(mNativeObj, tmpBuffer, tmpBuffer.remaining(), mOutputDim.x, mOutputDim.y, mVideoDim.x, mVideoDim.y, mVideoRotation, mVideoPF);
 
         AxmolEngine.getActivity().runOnUiThread(() -> {
             if (mPlayer != null) {

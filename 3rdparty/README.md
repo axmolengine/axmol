@@ -22,7 +22,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.29.0
+- Version: 1.32.2
 - License: MIT
 
 ## Chipmunk2D
@@ -62,7 +62,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 11.0.1
+- Version: 11.0.2
 - License: MIT
 
 ## FreeType
@@ -133,7 +133,7 @@
 
 ## lz4
 - [![Upstream](https://img.shields.io/github/v/release/lz4/lz4?label=Upstream)](https://github.com/lz4/lz4)
-- Version: 1.9.4
+- Version: 1.10.0
 - License: BSD 2-Clause
 
 ## minimp3
@@ -174,7 +174,7 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.13
+- Version: 3.3.1
 - License: Apache-2.0
 
 ## png
@@ -248,7 +248,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 4.2.3
+- Version: 4.2.4
 - License: MIT WITH Anti-996
 
 ## zlib

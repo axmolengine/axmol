@@ -50,14 +50,14 @@ USING_NS_AX;
         do                                                          \
         {                                                           \
             decltype(value) __v = value;                            \
-            auto __loc          = (ps)->getUniformLocation(name); \
+            auto __loc          = (ps) -> getUniformLocation(name); \
             (ps)->setUniform(__loc, &__v, sizeof(__v));             \
         } while (false)
 
 #    define PS_SET_UNIFORM_R(ps, name, value)               \
         do                                                  \
         {                                                   \
-            auto __loc = (ps)->getUniformLocation(name);    \
+            auto __loc = (ps) -> getUniformLocation(name);  \
             (ps)->setUniform(__loc, &value, sizeof(value)); \
         } while (false)
 
@@ -67,10 +67,11 @@ namespace
 {
 struct PrivateVideoDescriptor
 {
-    MediaEngine* _engine       = nullptr;
-    Texture2D* _vtexture       = nullptr;
-    Texture2D* _vchromaTexture = nullptr;
-    Sprite* _vrender           = nullptr;
+    MediaEngine* _engine        = nullptr;
+    Texture2D* _vtexture        = nullptr;
+    Texture2D* _vchromaTexture  = nullptr;
+    Texture2D* _vchroma2Texture = nullptr;
+    Sprite* _vrender            = nullptr;
 
     MEVideoPixelDesc _vpixelDesc;
 
@@ -518,11 +519,13 @@ void BasicMediaController::initRenderer()
     // loop. This is a work-around for a RenderTexture issue
     // when being created such places as a button click event handler
     // on Apple platforms/Metal renderer backend
-    scheduleOnce([this](float){
+    scheduleOnce(
+        [this](float) {
         createControls();
         updateControlsForContentSize(_mediaPlayer->getContentSize());
         updateControllerState();
-    }, 0.f, "__create_video_controls"sv);
+    },
+        0.f, "__create_video_controls"sv);
 }
 
 void BasicMediaController::onPressStateChangedToPressed()
@@ -551,8 +554,10 @@ void BasicMediaController::onPressStateChangedToPressed()
                 _controlPanel->runAction(Sequence::create(FadeOut::create(0.5f), nullptr));
                 _mediaOverlay->runAction(Sequence::create(FadeOut::create(0.5f), nullptr));
             }
-        }, 1.f, "__media_controller_fader"sv);
-    }), nullptr));
+        },
+            1.f, "__media_controller_fader"sv);
+    }),
+                                              nullptr));
 }
 
 void BasicMediaController::setContentSize(const Vec2& contentSize)
@@ -586,8 +591,7 @@ void BasicMediaController::updateControllerState()
         return;
 
     auto state = _mediaPlayer->getState();
-    if (state == MediaPlayer::MediaState::LOADING ||
-        state == MediaPlayer::MediaState::CLOSED ||
+    if (state == MediaPlayer::MediaState::LOADING || state == MediaPlayer::MediaState::CLOSED ||
         state == MediaPlayer::MediaState::ERROR)
     {
         _playButton->setVisible(false);
@@ -882,7 +886,8 @@ MediaPlayer::MediaPlayer()
         pvd->_vrender->setAutoUpdatePS(false);
         this->addProtectedChild(pvd->_vrender);
         /// setup media event callback
-        pvd->_engine->setCallbacks([this, pvd](MEMediaEventType event) {
+        pvd->_engine->setCallbacks(
+            [this, pvd](MEMediaEventType event) {
             switch (event)
             {
             case MEMediaEventType::Playing:
@@ -895,7 +900,7 @@ MediaPlayer::MediaPlayer()
                 break;
 
             case MEMediaEventType::Stopped:
-                onPlayEvent(pvd->_engine->isPlaybackEnded() ? (int) EventType::COMPLETED : (int) EventType::STOPPED);
+                onPlayEvent(pvd->_engine->isPlaybackEnded() ? (int)EventType::COMPLETED : (int)EventType::STOPPED);
                 break;
 
             /* Raised by a media source when a presentation ends. This event signals that all streams in the
@@ -914,7 +919,8 @@ MediaPlayer::MediaPlayer()
                 onPlayEvent((int)EventType::ERROR);
                 break;
             }
-        }, [this, pvd](const ax::MEVideoFrame& frame) {
+        },
+            [this, pvd](const ax::MEVideoFrame& frame) {
             auto pixelFormat       = frame._vpd._PF;
             auto bPixelDescChnaged = !frame._vpd.equals(pvd->_vpixelDesc);
             if (bPixelDescChnaged)
@@ -925,10 +931,17 @@ MediaPlayer::MediaPlayer()
                 pvd->_vtexture = new Texture2D();  // deault is Sampler Filter is: LINEAR
 
                 AX_SAFE_RELEASE_NULL(pvd->_vchromaTexture);
+                AX_SAFE_RELEASE_NULL(pvd->_vchroma2Texture);
                 if (pixelFormat >= MEVideoPixelFormat::YUY2)
                 {  // use separated texture we can set differrent sample filter
                     pvd->_vchromaTexture = new Texture2D();  // Sampler Filter: NEAREST
                     pvd->_vchromaTexture->setAliasTexParameters();
+
+                    if (pixelFormat == MEVideoPixelFormat::I420)
+                    {
+                        pvd->_vchroma2Texture = new Texture2D();  // Sampler Filter: NEAREST
+                        pvd->_vchroma2Texture->setAliasTexParameters();
+                    }
                 }
 
                 auto programManager = ProgramManager::getInstance();
@@ -940,6 +953,9 @@ MediaPlayer::MediaPlayer()
                     break;
                 case MEVideoPixelFormat::NV12:
                     pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_NV12);
+                    break;
+                case MEVideoPixelFormat::I420:
+                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_I420);
                     break;
                 default:
                     pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_RGB32);
@@ -967,6 +983,18 @@ MediaPlayer::MediaPlayer()
                                                      bufferDim.y >> 1, false, 0);
                 break;
             }
+            case MEVideoPixelFormat::I420:
+            {
+                pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::R8,
+                                               PixelFormat::R8, bufferDim.x, bufferDim.y, false, 0);
+                const auto chromaTexDataSize = (bufferDim.x * bufferDim.y) >> 2;
+                pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, chromaTexDataSize, PixelFormat::R8,
+                                                     PixelFormat::R8, bufferDim.x >> 1, bufferDim.y >> 1, false, 0);
+                pvd->_vchroma2Texture->updateWithData(frame._cbcrDataPointer + chromaTexDataSize, chromaTexDataSize,
+                                                      PixelFormat::R8, PixelFormat::R8, bufferDim.x >> 1,
+                                                      bufferDim.y >> 1, false, 0);
+                break;
+            }
             case MEVideoPixelFormat::RGB32:
                 pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
                                                PixelFormat::RGBA8, bufferDim.x, bufferDim.y, false, 0);
@@ -989,7 +1017,11 @@ MediaPlayer::MediaPlayer()
                 {
                     auto ps = pvd->_vrender->getProgramState();
                     PrivateVideoDescriptor::updateColorTransform(ps, frame._vpd._fullRange);
+
                     ps->setTexture(ps->getUniformLocation("u_tex1"), 1, pvd->_vchromaTexture->getBackendTexture());
+
+                    if (pixelFormat == MEVideoPixelFormat::I420)
+                        ps->setTexture(ps->getUniformLocation("u_tex2"), 2, pvd->_vchroma2Texture->getBackendTexture());
                 }
 
                 pvd->_scaleDirty = true;
@@ -1016,6 +1048,7 @@ MediaPlayer::~MediaPlayer()
     AX_SAFE_RELEASE(pvd->_vrender);
     AX_SAFE_RELEASE(pvd->_vtexture);
     AX_SAFE_RELEASE(pvd->_vchromaTexture);
+    AX_SAFE_RELEASE(pvd->_vchroma2Texture);
 
     if (g_mediaControlsTexture && g_mediaControlsTexture->getReferenceCount() == 1)
     {

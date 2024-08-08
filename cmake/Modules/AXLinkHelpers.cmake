@@ -43,9 +43,9 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     message(STATUS "AX_ENABLE_EXT_EFFEKSEER=${AX_ENABLE_EXT_EFFEKSEER}")
     message(STATUS "AX_ENABLE_EXT_LUA=${AX_ENABLE_EXT_LUA}")
 	message(STATUS "AX_ENABLE_EXT_DRAWNODEEX=${AX_ENABLE_EXT_DRAWNODEEX}")
-    
+
     # compile defines can't inherit when link prebuits, so need add manually
-    target_compile_definitions(${APP_NAME} 
+    target_compile_definitions(${APP_NAME}
         PRIVATE AX_GLES_PROFILE=${AX_GLES_PROFILE}
         PRIVATE OPENSSL_SUPPRESS_DEPRECATED=1
         PRIVATE NOUNCRYPT=1
@@ -156,8 +156,8 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         websocket-parser
     )
 
-    ax_link_ext(AX_ENABLE_EXT_DRAGONBONES "DragonBones""${AX_ROOT_DIR}/extensions/DragonBones/src")
-    ax_link_ext(AX_ENABLE_EXT_COCOSTUDIO "cocosstudio" "${AX_ROOT_DIR}/extensions/cocostudio/src")
+    ax_link_ext(AX_ENABLE_EXT_DRAGONBONES "DragonBones" "${AX_ROOT_DIR}/extensions/DragonBones/src")
+    ax_link_ext(AX_ENABLE_EXT_COCOSTUDIO "cocostudio" "${AX_ROOT_DIR}/extensions/cocostudio/src")
     ax_link_ext(AX_ENABLE_EXT_ASSETMANAGER "assets-manager" "${AX_ROOT_DIR}/extensions/assets-manager/src")
     ax_link_ext(AX_ENABLE_EXT_PARTICLE3D "particle3d" "${AX_ROOT_DIR}/extensions/Particle3D/src")
     ax_link_ext(AX_ENABLE_EXT_INSPECTOR "Inspector" "${AX_ROOT_DIR}/extensions/Inspector/src")
@@ -188,11 +188,11 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             libssl
             libcurl_imp
         )
-        
+
         if (AX_ENABLE_AUDIO)
             target_link_libraries(${APP_NAME}
                 OpenAL32
-            )   
+            )
         endif()
     else()
         target_link_libraries(${APP_NAME}
@@ -203,12 +203,12 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             ssl
             crypto
         )
-        
+
         if (AX_ENABLE_AUDIO)
             target_link_libraries(${APP_NAME}
                 openal
-            )        
-        endif()        
+            )
+        endif()
     endif()
 
     target_link_libraries(${APP_NAME} debug fmtd optimized fmt)
@@ -231,7 +231,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             add_custom_command(TARGET ${APP_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
-                $<TARGET_FILE_DIR:${APP_NAME}>)        
+                $<TARGET_FILE_DIR:${APP_NAME}>)
         endif()
 
         if (BUILD_SHARED_LIBS)

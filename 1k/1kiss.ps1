@@ -205,7 +205,7 @@ $manifest = @{
     cmake        = '3.23.0+';
     ninja        = '1.10.0+';
     python       = '3.8.0+';
-    jdk          = '11.0.23+';
+    jdk          = '17.0.10+'; # jdk17+ works for android cmdlinetools 7.0+
     emsdk        = '3.1.53+';
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
@@ -225,7 +225,7 @@ $cmake_generators = @{
 $channels = @{}
 
 # refer to: https://developer.android.com/studio#command-line-tools-only
-$cmdlinetools_rev = '11076708'
+$cmdlinetools_rev = '11076708' # 12.0
 
 $android_sdk_tools = @{
     'build-tools' = '34.0.0'
@@ -567,29 +567,32 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
 
     # try get match expr and preferred ver
     $checkVerCond = $null
-    $requiredMin = ''
+    $minimalVer = ''
     $preferredVer = ''
     $requiredVer = $manifest[$name]
     if ($requiredVer) {
         $preferredVer = $null
-        if ($requiredVer.EndsWith('+')) {
-            $preferredVer = $requiredVer.TrimEnd('+')
-            $checkVerCond = '$(version_ge $foundVer $preferredVer)'
-        }
-        elseif ($requiredVer -eq '*') {
+        if ($requiredVer -eq '*') {
             $checkVerCond = '$True'
             $preferredVer = 'latest'
         }
         else {
             $verArr = $requiredVer.Split('~')
             $isRange = $verArr.Count -gt 1
+            $minimalVer = $verArr[0]
             $preferredVer = $verArr[$isRange]
-            if ($isRange -gt 1) {
-                $requiredMin = $verArr[0]
-                $checkVerCond = '$(version_in_range $foundVer $requiredMin $preferredVer)'
+            if ($preferredVer.EndsWith('+')) {
+                $preferredVer = $preferredVer.TrimEnd('+')
+                if ($minimalVer.EndsWith('+')) { $minimalVer = $minimalVer.TrimEnd('+') }
+                $checkVerCond = '$(version_ge $foundVer $minimalVer)'
             }
             else {
-                $checkVerCond = '$(version_eq $foundVer $preferredVer)'
+                if ($isRange) {
+                    $checkVerCond = '$(version_in_range $foundVer $minimalVer $preferredVer)'
+                }
+                else {
+                    $checkVerCond = '$(version_eq $foundVer $preferredVer)'
+                }
             }
         }
         if (!$checkVerCond) {
@@ -623,7 +626,7 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
         else {
             $foundVer = "$($cmd_info.Version)"
         }
-        [void]$requiredMin
+        [void]$minimalVer
         if ($checkVerCond) {
             $matched = Invoke-Expression $checkVerCond
             if ($matched) {
@@ -892,6 +895,7 @@ function setup_cmake($skipOS = $false, $scope = 'local') {
             else {
                 & "$cmake_pkg_path" '--skip-license' '--prefix=/usr/local' 1>$null 2>$null
             }
+            if (!$?) { Remove-Item $cmake_pkg_path -Force }
         }
 
         $cmake_prog, $_ = find_prog -name 'cmake' -path $cmake_bin -silent $true
@@ -1218,7 +1222,9 @@ function setup_msvc() {
     if (!$cl_prog) {
         if ($VS_INST) {
             Import-Module "$VS_PATH\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
-            Enter-VsDevShell -VsInstanceId $VS_INST.instanceId -SkipAutomaticLocation -DevCmdArguments "-arch=$target_cpu -host_arch=x64 -no_logo"
+            $dev_cmd_args = "-arch=$target_cpu -host_arch=x64 -no_logo"
+            if (!$manifest['msvc'].EndsWith('+')) { $dev_cmd_args += " -vcvars_ver=$cl_ver" }
+            Enter-VsDevShell -VsInstanceId $VS_INST.instanceId -SkipAutomaticLocation -DevCmdArguments $dev_cmd_args
 
             $cl_prog, $cl_ver = find_prog -name 'msvc' -cmd 'cl' -silent $true -usefv $true
             $1k.println("Using msvc: $cl_prog, version: $cl_ver")

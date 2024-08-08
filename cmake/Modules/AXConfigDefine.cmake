@@ -35,7 +35,7 @@ if (WINDOWS)
         set(CMAKE_C_STANDARD 11)
     else()
         # windows sdk < 10.0.22000.0, The c11 header stdalign.h was missing, so workaroud fallback C standard to 99
-        # refer to: 
+        # refer to:
         #  - https://github.com/axmolengine/axmol/issues/991
         #  - https://github.com/axmolengine/axmol/issues/1246
         message(WARNING "Forcing set CMAKE_C_STANDARD to 99 when winsdk < 10.0.22000.0")
@@ -132,20 +132,27 @@ function(use_ax_compile_define target)
         if(AX_USE_GL)
             target_compile_definitions(${target}
                 PUBLIC AX_USE_GL=1
-                PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE}
                 PUBLIC GL_SILENCE_DEPRECATION=1
             )
+            if(NOT _AX_USE_PREBUILT)
+                target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
+            endif()
         endif()
     elseif(LINUX)
         ax_config_pred(${target} AX_ENABLE_VLC_MEDIA)
         target_compile_definitions(${target} PUBLIC _GNU_SOURCE)
     elseif(ANDROID)
+        if(NOT _AX_USE_PREBUILT)
+            target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
+        endif()
         target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
     elseif(EMSCRIPTEN)
         target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
     elseif(WINDOWS)
-        target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
+        if(NOT _AX_USE_PREBUILT)
+            target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
+        endif()
         ax_config_pred(${target} AX_ENABLE_VLC_MEDIA)
         target_compile_definitions(${target}
             PUBLIC WIN32
@@ -179,22 +186,21 @@ endfunction()
 
 if(EMSCRIPTEN)
     set(AX_WASM_THREADS "4" CACHE STRING "Wasm threads count")
-
-    set(_AX_WASM_THREADS_INT 0)
+    set(_threads_hint "")
     if (AX_WASM_THREADS STREQUAL "auto") # not empty string or not 0
         # Enable pthread support globally
+        set(_threads_hint "(auto)")
         include(ProcessorCount)
+        set(_AX_WASM_THREADS_INT 0)
         ProcessorCount(_AX_WASM_THREADS_INT)
-    elseif(AX_WASM_THREADS MATCHES "^([0-9]+)$" OR AX_WASM_THREADS STREQUAL "navigator.hardwareConcurrency")
-        set(_AX_WASM_THREADS_INT ${AX_WASM_THREADS})
+        set(AX_WASM_THREADS "${_AX_WASM_THREADS_INT}" CACHE STRING "Wasm threads count" FORCE)
     endif()
 
-    message(STATUS "AX_WASM_THREADS=${AX_WASM_THREADS}")
-    message(STATUS "_AX_WASM_THREADS_INT=${_AX_WASM_THREADS_INT}")
+    message(STATUS "AX_WASM_THREADS=${AX_WASM_THREADS}${_threads_hint}")
 
-    if (_AX_WASM_THREADS_INT)
+    if(AX_WASM_THREADS MATCHES "^([0-9]+)$" OR AX_WASM_THREADS STREQUAL "navigator.hardwareConcurrency")
         list(APPEND _ax_compile_options -pthread)
-        add_link_options(-pthread -sPTHREAD_POOL_SIZE=${_AX_WASM_THREADS_INT})
+        add_link_options(-pthread -sPTHREAD_POOL_SIZE=${AX_WASM_THREADS})
     endif()
 
     set(AX_WASM_INITIAL_MEMORY "1024MB" CACHE STRING "")

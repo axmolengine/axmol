@@ -3,6 +3,7 @@ Copyright (c) 2010 ForzeField Studios S.L. http://forzefield.com
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2017 Chukong Technologies
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -110,7 +111,7 @@ public:
     /** Constructor. */
     Vector() : _data()
     {
-        static_assert(std::is_convertible<T, Object*>::value, "Invalid Type for ax::Vector!");
+        static_assert(axstd::is_ref_counted_v<T>, "Invalid Type for ax::Vector!");
     }
 
     /**
@@ -119,7 +120,7 @@ public:
      */
     explicit Vector(ssize_t capacity) : _data()
     {
-        static_assert(std::is_convertible<T, Object*>::value, "Invalid Type for ax::Vector!");
+        static_assert(axstd::is_ref_counted_v<T>, "Invalid Type for ax::Vector!");
         AXLOGV("In the default constructor with capacity of Vector.");
         reserve(capacity);
     }
@@ -143,7 +144,7 @@ public:
     /** Copy constructor. */
     Vector(const Vector& other)
     {
-        static_assert(std::is_convertible<T, Object*>::value, "Invalid Type for ax::Vector!");
+        static_assert(axstd::is_ref_counted_v<T>, "Invalid Type for ax::Vector!");
         AXLOGV("In the copy constructor!");
         _data = other._data;
         addRefForAllObjects();
@@ -152,7 +153,7 @@ public:
     /** Constructor with std::move semantic. */
     Vector(Vector&& other)
     {
-        static_assert(std::is_convertible<T, Object*>::value, "Invalid Type for ax::Vector!");
+        static_assert(axstd::is_ref_counted_v<T>, "Invalid Type for ax::Vector!");
         AXLOGV("In the move constructor of Vector!");
         _data = std::move(other._data);
     }

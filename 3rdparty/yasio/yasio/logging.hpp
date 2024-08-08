@@ -40,6 +40,9 @@ inline void yasio__print(std::string&& message) { ::write(::fileno(stdout), mess
 #  include <android/log.h>
 #  include <jni.h>
 #  define YASIO_LOG_TAG(tag, format, ...) __android_log_print(ANDROID_LOG_INFO, "yasio", (tag format), ##__VA_ARGS__)
+#elif defined(__OHOS__)
+#  include <hilog/log.h>
+#  define YASIO_LOG_TAG(tag, format, ...) OH_LOG_INFO(LOG_APP, (tag format "\n"), ##__VA_ARGS__)
 #else
 #  define YASIO_LOG_TAG(tag, format, ...) printf((tag format "\n"), ##__VA_ARGS__)
 #endif

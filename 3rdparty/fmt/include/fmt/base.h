@@ -23,7 +23,7 @@
 #endif
 
 // The fmt library version in the form major * 10000 + minor * 100 + patch.
-#define FMT_VERSION 110001
+#define FMT_VERSION 110002
 
 // Detect compiler versions.
 #if defined(__clang__) && !defined(__ibmxl__)
@@ -441,7 +441,8 @@ struct is_std_string_like : std::false_type {};
 template <typename T>
 struct is_std_string_like<T, void_t<decltype(std::declval<T>().find_first_of(
                                  typename T::value_type(), 0))>>
-    : std::true_type {};
+    : std::is_convertible<decltype(std::declval<T>().data()),
+                          const typename T::value_type*> {};
 
 // Returns true iff the literal encoding is UTF-8.
 constexpr auto is_utf8_enabled() -> bool {
@@ -466,6 +467,7 @@ template <typename Char> FMT_CONSTEXPR auto length(const Char* s) -> size_t {
 template <typename Char>
 FMT_CONSTEXPR auto compare(const Char* s1, const Char* s2, std::size_t n)
     -> int {
+  if (!is_constant_evaluated() && sizeof(Char) == 1) return memcmp(s1, s2, n);
   for (; n != 0; ++s1, ++s2, --n) {
     if (*s1 < *s2) return -1;
     if (*s1 > *s2) return 1;
@@ -473,14 +475,22 @@ FMT_CONSTEXPR auto compare(const Char* s1, const Char* s2, std::size_t n)
   return 0;
 }
 
+namespace adl {
+using namespace std;
+
+template <typename Container>
+auto invoke_back_inserter()
+    -> decltype(back_inserter(std::declval<Container&>()));
+}  // namespace adl
+
 template <typename It, typename Enable = std::true_type>
 struct is_back_insert_iterator : std::false_type {};
+
 template <typename It>
 struct is_back_insert_iterator<
-    It,
-    bool_constant<std::is_same<
-        decltype(back_inserter(std::declval<typename It::container_type&>())),
-        It>::value>> : std::true_type {};
+    It, bool_constant<std::is_same<
+            decltype(adl::invoke_back_inserter<typename It::container_type>()),
+            It>::value>> : std::true_type {};
 
 // Extracts a reference to the container from *insert_iterator.
 template <typename OutputIt>
@@ -611,11 +621,12 @@ namespace detail {
 // to it, deducing Char. Explicitly convertible types such as the ones returned
 // from FMT_STRING are intentionally excluded.
 template <typename Char, FMT_ENABLE_IF(is_char<Char>::value)>
-auto to_string_view(const Char* s) -> basic_string_view<Char> {
+constexpr auto to_string_view(const Char* s) -> basic_string_view<Char> {
   return s;
 }
 template <typename T, FMT_ENABLE_IF(is_std_string_like<T>::value)>
-auto to_string_view(const T& s) -> basic_string_view<typename T::value_type> {
+constexpr auto to_string_view(const T& s)
+    -> basic_string_view<typename T::value_type> {
   return s;
 }
 template <typename Char>
@@ -919,12 +930,9 @@ template <typename T> class buffer {
       try_reserve(size_ + count);
       auto free_cap = capacity_ - size_;
       if (free_cap < count) count = free_cap;
-      if (std::is_same<T, U>::value) {
-        memcpy(ptr_ + size_, begin, count * sizeof(T));
-      } else {
-        T* out = ptr_ + size_;
-        for (size_t i = 0; i < count; ++i) out[i] = begin[i];
-      }
+      // A loop is faster than memcpy on small sizes.
+      T* out = ptr_ + size_;
+      for (size_t i = 0; i < count; ++i) out[i] = begin[i];
       size_ += count;
       begin += count;
     }
@@ -1157,6 +1165,7 @@ template <typename T> class basic_appender {
   using difference_type = ptrdiff_t;
   using pointer = T*;
   using reference = T&;
+  using container_type = detail::buffer<T>;
   FMT_UNCHECKED_ITERATOR(basic_appender);
 
   FMT_CONSTEXPR basic_appender(detail::buffer<T>& buf) : buffer_(&buf) {}
@@ -1173,6 +1182,8 @@ template <typename T> class basic_appender {
 using appender = basic_appender<char>;
 
 namespace detail {
+template <typename T>
+struct is_back_insert_iterator<basic_appender<T>> : std::true_type {};
 
 template <typename T, typename Enable = void>
 struct locking : std::true_type {};
@@ -1189,12 +1200,6 @@ FMT_CONSTEXPR inline auto is_locking() -> bool {
 }
 
 // An optimized version of std::copy with the output value type (T).
-template <typename T, typename InputIt>
-auto copy(InputIt begin, InputIt end, appender out) -> appender {
-  get_container(out).append(begin, end);
-  return out;
-}
-
 template <typename T, typename InputIt, typename OutputIt,
           FMT_ENABLE_IF(is_back_insert_iterator<OutputIt>::value)>
 auto copy(InputIt begin, InputIt end, OutputIt out) -> OutputIt {
@@ -1207,14 +1212,6 @@ template <typename T, typename InputIt, typename OutputIt,
 FMT_CONSTEXPR auto copy(InputIt begin, InputIt end, OutputIt out) -> OutputIt {
   while (begin != end) *out++ = static_cast<T>(*begin++);
   return out;
-}
-
-template <typename T>
-FMT_CONSTEXPR auto copy(const T* begin, const T* end, T* out) -> T* {
-  if (is_constant_evaluated()) return copy<T, const T*, T*>(begin, end, out);
-  auto size = to_unsigned(end - begin);
-  if (size > 0) memcpy(out, begin, size * sizeof(T));
-  return out + size;
 }
 
 template <typename T, typename V, typename OutputIt>
@@ -1238,12 +1235,25 @@ constexpr auto has_const_formatter() -> bool {
   return has_const_formatter_impl<Context>(static_cast<T*>(nullptr));
 }
 
+template <typename It, typename Enable = std::true_type>
+struct is_buffer_appender : std::false_type {};
+template <typename It>
+struct is_buffer_appender<
+    It, bool_constant<
+            is_back_insert_iterator<It>::value &&
+            std::is_base_of<buffer<typename It::container_type::value_type>,
+                            typename It::container_type>::value>>
+    : std::true_type {};
+
 // Maps an output iterator to a buffer.
-template <typename T, typename OutputIt>
+template <typename T, typename OutputIt,
+          FMT_ENABLE_IF(!is_buffer_appender<OutputIt>::value)>
 auto get_buffer(OutputIt out) -> iterator_buffer<OutputIt, T> {
   return iterator_buffer<OutputIt, T>(out);
 }
-template <typename T> auto get_buffer(basic_appender<T> out) -> buffer<T>& {
+template <typename T, typename OutputIt,
+          FMT_ENABLE_IF(is_buffer_appender<OutputIt>::value)>
+auto get_buffer(OutputIt out) -> buffer<T>& {
   return get_container(out);
 }
 
@@ -1475,6 +1485,12 @@ template <typename Context> struct arg_mapper {
 
   FMT_MAP_API auto map(void* val) -> const void* { return val; }
   FMT_MAP_API auto map(const void* val) -> const void* { return val; }
+  FMT_MAP_API auto map(volatile void* val) -> const void* {
+    return const_cast<const void*>(val);
+  }
+  FMT_MAP_API auto map(const volatile void* val) -> const void* {
+    return const_cast<const void*>(val);
+  }
   FMT_MAP_API auto map(std::nullptr_t val) -> const void* { return val; }
 
   // Use SFINAE instead of a const T* parameter to avoid a conflict with the
@@ -1760,7 +1776,7 @@ template <typename Context> class basic_format_arg {
    * `vis(value)` will be called with the value of type `double`.
    */
   template <typename Visitor>
-  FMT_CONSTEXPR auto visit(Visitor&& vis) const -> decltype(vis(0)) {
+  FMT_CONSTEXPR FMT_INLINE auto visit(Visitor&& vis) const -> decltype(vis(0)) {
     switch (type_) {
     case detail::type::none_type:
       break;
