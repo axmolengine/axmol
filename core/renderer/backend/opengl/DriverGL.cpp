@@ -324,7 +324,7 @@ static bool checkASTCRenderability()
     {
         uint8_t pixels[TEX_DATA_LEN] = {0};
 
-#if AX_GLES_PROFILE
+#if !AX_GLES_PROFILE
         // read 1 pixel RGB: should be: 255, 128, 0
         glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
         error     = glGetError();
