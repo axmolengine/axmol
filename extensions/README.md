@@ -7,7 +7,7 @@
 
 ## DrawNodeEx => DrawNodeV2
 - Upstream: https://github.com/axmolengine/axmol
-- Version: still in progress...
+- Version: 0.95.1
 - License: MIT
 
 ## Effekseer (OFF default)
