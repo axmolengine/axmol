@@ -432,6 +432,7 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
     {
         unsigned int count = 2;
         Vec2 line[] = { origin, destination };
+
         Vec2* _vertices = transform(line, count, false);
 
         ensureCapacityLine(count);
@@ -445,13 +446,12 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
         _bufferCountLine += 2;
         _dirtyLine = true;
         _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
+
         AX_SAFE_DELETE_ARRAY(_vertices);
         return;
     }
     else
     {
-        //if (_drawOrder) thickness /= _scaleFactor;
-
         drawSegment(origin, destination, thickness, color);
         return;
     }
@@ -1336,9 +1336,9 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
 
             for (int i = 0; i < count; i++)
             {
-                Vec2 v0 = verts[(i - 1 + count) % count];
-                Vec2 v1 = verts[i];
-                Vec2 v2 = verts[(i + 1) % count];
+                Vec2 v0 = _vertices[(i - 1 + count) % count];
+                Vec2 v1 = _vertices[i];
+                Vec2 v2 = _vertices[(i + 1) % count];
 
                 Vec2 n1 = ((v1 - v0).getPerp()).getNormalized();
                 Vec2 n2 = ((v2 - v1).getPerp()).getNormalized();
@@ -1350,8 +1350,8 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             for (int i = 0; i < count; i++)
             {
                 int j = (i + 1) % count;
-                Vec2 v0 = verts[i];
-                Vec2 v1 = verts[j];
+                Vec2 v0 = _vertices[i];
+                Vec2 v1 = _vertices[j];
 
                 Vec2 n0 = extrude[i].n;
 
@@ -1376,10 +1376,10 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             free(extrude);
         }
     }
-    if (ii * 3 != vertex_count)
-    {
-        //       AXLOGD("==============end  ii {}*3: {}  vertex_count: {} tempCount: {}", ii, ii * 3, vertex_count, tempCount);
-    }
+    //if (ii * 3 != vertex_count)
+    //{
+    //    //       AXLOGD("==============end  ii {}*3: {}  vertex_count: {} tempCount: {}", ii, ii * 3, vertex_count, tempCount);
+    //}
 
     _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F), vertex_count * sizeof(V2F_C4B_T2F));
     _bufferCountTriangle += vertex_count;

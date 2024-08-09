@@ -92,6 +92,11 @@ protected:
 public:
 
     DrawNodeExBaseTest();
+  
+    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
+    void listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type);
+
+    void update(float dt);
 
     virtual std::string title() const override;
     void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
@@ -105,16 +110,20 @@ public:
     void changeCounter(ax::Object* pSender, ax::ui::Slider::EventType type);
 
 protected:
-
+    //UI stuff
     ax::ui::Slider* slider[sliderType::sliderTypeLast];
     ax::Label* sliderLabel[sliderType::sliderTypeLast];
     float sliderValue[sliderType::sliderTypeLast];
 
+    ax::ui::RadioButtonGroup* _radioButtonGroup;
+    int selectedRadioButton;
+
+    // DrawNode stuff
     ax::extension::DrawNodeEx* drawNodeEx = nullptr;
     ax::extension::DrawNodeEx* drawNodeExArray[10];
     ax::DrawNode* drawNode;
 
-
+    // Window stuff
     ax::Vec2 origin;
     ax::Vec2 size;
     ax::Vec2 center;
