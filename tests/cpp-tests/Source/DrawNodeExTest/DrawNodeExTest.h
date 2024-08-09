@@ -577,6 +577,7 @@ public:
     CREATE_FUNC(CandyMixEeffect);
 
     CandyMixEeffect();
+    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -588,4 +589,7 @@ private:
     std::vector<ax::Vec2> points;
     ax::extension::DrawNodeEx* drawNodeCP;
     ax::PointArray* array;
+
+    ax::ui::RadioButtonGroup* _radioButtonGroup;
+    int selectedRadioButton;
 };
