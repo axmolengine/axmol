@@ -1155,9 +1155,9 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
 
     bool outline = (thickness != 0.0f);
 
-    if (thickness == 1.0f && !_drawOrder)  // usefull for a DrawNode:::_drawPolygon thickness = 1.0 only ?
-    {
-    }
+    //if (thickness == 1.0f && !_drawOrder)  // usefull for a DrawNode:::_drawPolygon thickness = 1.0 only ?
+    //{
+    //}
 
     Vec2* _vertices = transform(verts, count, closedPolygon);
 
@@ -1204,17 +1204,16 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
     //std::vector<Vec2> vectorList;
     if (outline)
     {
-        if (1/* thickness != 1.0f*/)
+
+        if (thickness != 1.0f || _drawOrder)
         {
-            if (1 /*thickness != 1.0f*/)
-            {
-                vertex_count += 6 * (count - 1);
-            }
-            else
-            {
-                vertex_count += 2 * count;
-            }
+            vertex_count += 6 * (count - 1);
         }
+        else
+        {
+            vertex_count += 2 * count;
+        }
+
     }
 
     vertex_count *= 3;
@@ -1248,7 +1247,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
     }
     if (outline)
     {
-        if (1/* thickness != 1.0f*/)
+        if (thickness != 1.0f || _drawOrder)
         {
             Vec2 vo0, vo1, vo2, vo3, vo4, vo5, vo6, vo7;
 
