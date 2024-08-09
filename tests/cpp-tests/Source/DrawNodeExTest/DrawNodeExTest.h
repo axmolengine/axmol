@@ -349,6 +349,7 @@ public:
     CREATE_FUNC(DrawNodeMethodsTest);
 
     DrawNodeMethodsTest();
+    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -373,7 +374,11 @@ private:
     ax::Label* label1;
     ax::Label* label2;
     ax::Label* label3;
+
+    ax::ui::RadioButtonGroup* _radioButtonGroup;
+    int selectedRadioButton;
 };
+
 
 class DrawNodePerformaneTest : public DrawNodeExBaseTest
 {

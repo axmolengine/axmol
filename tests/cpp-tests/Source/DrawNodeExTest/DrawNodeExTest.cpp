@@ -1558,6 +1558,30 @@ string DrawNodeFilledPolygonTest::subtitle() const
 DrawNodeMethodsTest::DrawNodeMethodsTest()
 {
     _currentSeletedItemIndex = 0;
+    selectedRadioButton = 0;
+
+    _radioButtonGroup = ui::RadioButtonGroup::create();
+    addChild(_radioButtonGroup, 50);
+
+    static const float BUTTON_WIDTH = 30;
+    static float startPosX = 0;
+
+    // Create the radio buttons
+    static const int NUMBER_OF_BUTTONS = 4;
+    startPosX = size.width / 2.0f - ((NUMBER_OF_BUTTONS - 1) / 2.0f) * BUTTON_WIDTH;
+    for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
+    {
+        ui::RadioButton* radioButton =
+            ui::RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
+        float posX = startPosX + BUTTON_WIDTH * i;
+        radioButton->setPosition(Vec2(posX, size.height - 80));
+        radioButton->setScale(1.2f);
+        radioButton->setTag(i);
+        _radioButtonGroup->addRadioButton(radioButton);
+        addChild(radioButton, 50);
+        radioButton->addEventListener(
+            AX_CALLBACK_2(DrawNodeMethodsTest::onChangedRadioButtonSelect, this));
+    }
 
     auto listview = createListView();
     listview->setPosition(Vec2(0.0f, 40.0f));
@@ -1622,8 +1646,79 @@ ax::ui::ListView* DrawNodeMethodsTest::createListView()
     return listview;
 }
 
+void DrawNodeMethodsTest::onChangedRadioButtonSelect(ui::RadioButton* radioButton, ui::RadioButton::EventType type)
+{
+    if (radioButton == nullptr)
+    {
+        return;
+    }
+    switch (type)
+    {
+    case ui::RadioButton::EventType::SELECTED:
+    {
+        selectedRadioButton = radioButton->getTag();
+        break;
+    }
+
+    case ui::RadioButton::EventType::UNSELECTED:
+    {
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+//void DrawNodeMethodsTest::onChangedRadioButtonSelect(ui::RadioButton* radioButton, ui::RadioButton::EventType type)
+//{
+//    if (radioButton == nullptr)
+//    {
+//        return;
+//    }
+//    switch (type)
+//    {
+//    case ui::RadioButton::EventType::SELECTED:
+//    {
+//        selectedRadioButton = radioButton->getTag();
+//        break;
+//    }
+//
+//    case ui::RadioButton::EventType::UNSELECTED:
+//    {
+//        break;
+//    }
+//    default:
+//        break;
+//    }
+//}
+
 void DrawNodeMethodsTest::update(float dt)
 {
+    switch (selectedRadioButton)
+    {
+    case 0:
+        setSubtitleLabel("drawOrder/dnTransform = true/true");
+        drawNodeEx->_drawOrder = true;
+        drawNodeEx->_dnTransform = true;
+        break;
+    case 1:
+        setSubtitleLabel("drawOrder/dnTransform = true/false");
+        drawNodeEx->_drawOrder = true;
+        drawNodeEx->_dnTransform = false;
+        break;
+    case 2:
+        setSubtitleLabel("drawOrder/dnTransform = false/true");
+        drawNodeEx->_drawOrder = false;
+        drawNodeEx->_dnTransform = true;
+        break;
+    case 3:
+        setSubtitleLabel("drawOrder/dnTransform = false/false");
+        drawNodeEx->_drawOrder = false;
+        drawNodeEx->_dnTransform = false;
+        break;
+    default:
+        break;
+    }
     drawAll();
 }
 
