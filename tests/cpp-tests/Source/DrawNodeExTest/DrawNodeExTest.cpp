@@ -1669,29 +1669,6 @@ void DrawNodeMethodsTest::onChangedRadioButtonSelect(ui::RadioButton* radioButto
     }
 }
 
-//void DrawNodeMethodsTest::onChangedRadioButtonSelect(ui::RadioButton* radioButton, ui::RadioButton::EventType type)
-//{
-//    if (radioButton == nullptr)
-//    {
-//        return;
-//    }
-//    switch (type)
-//    {
-//    case ui::RadioButton::EventType::SELECTED:
-//    {
-//        selectedRadioButton = radioButton->getTag();
-//        break;
-//    }
-//
-//    case ui::RadioButton::EventType::UNSELECTED:
-//    {
-//        break;
-//    }
-//    default:
-//        break;
-//    }
-//}
-
 void DrawNodeMethodsTest::update(float dt)
 {
     switch (selectedRadioButton)

@@ -1225,15 +1225,15 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
     int ii = 0;
     if (closedPolygon && !_isConvex && fillColor.a > 0.0f && !isConvex(_vertices, count) && count >= 3)
     {
-        AXLOGD("============================  start");
+        //AXLOGD("============================  start");
         for (auto&& t : triangleList)
         {
-            AXLOGD("{}, {} ", t.a.vertices.x, t.a.vertices.y);
-            AXLOGD("{}, {} ", t.b.vertices.x, t.b.vertices.y);
-            AXLOGD("{}, {} ", t.a.vertices.x, t.a.vertices.y);
+            //AXLOGD("{}, {} ", t.a.vertices.x, t.a.vertices.y);
+            //AXLOGD("{}, {} ", t.b.vertices.x, t.b.vertices.y);
+            //AXLOGD("{}, {} ", t.a.vertices.x, t.a.vertices.y);
             triangles[ii++] = t;
         }
-        AXLOGD("============================  end");
+        //AXLOGD("============================  end");
     }
     else if (fillColor.a > 0.0f)
     {
@@ -1396,7 +1396,7 @@ void DrawNodeEx::_drawPoly(const Vec2* verts,
     const Color4B& color,
     float thickness)
 {
-    if (0 /*thickness == 1.0f && !_drawOrder*/)  // usefull for a DrawNode:::_drawPoly thickness = 1.0 only ?
+    if (thickness == 1.0f && !_drawOrder)  // usefull for a DrawNode:::_drawPoly thickness = 1.0 only ?
     {
         Vec2* _vertices = transform(verts, count);
 
@@ -1429,36 +1429,6 @@ void DrawNodeEx::_drawPoly(const Vec2* verts,
     }
     else
     {
-        //bool _clipper = false;
-        //if (_clipper)
-        //{
-        //    // clipper2 is maybe a good idea here
-        //    //Clipper2Lib::Path64 subject, clip, solution;
-        //    //subject.push_back(MakePath({100, 50, 10, 79, 65, 2, 65, 98, 10, 21}));
-        //    //clip.push_back(MakePath({98, 63, 4, 68, 77, 8, 52, 100, 19, 12}));
-        //    //solution = Clipper2Lib::Intersect(subject, clip, Clipper2Lib::FillRule::NonZero);
-
-
-        //    std::vector<Vec2> points;
-        //    for (int i = 0; i < count + 1; ++i)
-        //    {
-        //        points.emplace_back(verts[i].x, verts[i].y);
-        //    }
-
-        //    std::vector<Vec2> res = expand(points, Rect(0, 0, 600, 600), 0.5f);
-
-        //    Vec2* ress = new Vec2[res.size()];
-        //    int i = 0;
-        //    for (auto&& t : res)  // use it later; only one calculate!!!
-        //    {
-        //        ress[i++] = t;
-        //    }
-
-        //    _drawPolygon(ress, res.size(), Color4B::TRANSPARENT, thickness, color, closedPolygon);
-        //}
-
-
-        //  thickness /= _scaleFactor;
         _drawPolygon(verts, count, Color4B::TRANSPARENT, thickness, color, closedPolygon);
     }
 }
