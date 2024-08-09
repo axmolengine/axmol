@@ -3438,7 +3438,6 @@ void CandyMixEeffect::update(float dt)
         setSubtitleLabel("drawOrder/dnTransform = true/false");
         drawNodeEx->_drawOrder = true;
         drawNodeEx->_dnTransform = false;
-        ;
         break;
     case 2:
         setSubtitleLabel("drawOrder/dnTransform = false/true");
