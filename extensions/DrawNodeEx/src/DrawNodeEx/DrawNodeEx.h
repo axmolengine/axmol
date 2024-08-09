@@ -50,11 +50,6 @@ NS_AX_EXT_BEGIN
 // returnValue func(position, dimension1, dimensionN, colors1, colorsN, stettings1, settingsN, stettings1withDefault, stettingsNwithDefault)
 
 
-
-
-// AX_ENABLE_DRAWNODE_DRAW_LINE_POINT an option for future versions of DrawNode (currently: defined)
-#define AX_ENABLE_DRAWNODE_DRAW_LINE_POINT
-
 static const int DEFAULT_LINEWIDTH = 2;
 
 
@@ -121,10 +116,8 @@ public:
     ax::Vec2 _dnPositionTmp = _dnPosition;
     float _dnLineWidthTmp = _dnLineWidth;
     bool  _dnTransform = false;
-
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     bool _drawOrder = true;
-#endif
+
 
     bool swapIsConvex(bool isConvex) {
         _isConvexTmp = _isConvex; _isConvex = isConvex; return _isConvexTmp;
@@ -639,10 +632,8 @@ public:
 
 protected:
     void ensureCapacityTriangle(int count);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     void ensureCapacityPoint(int count);
     void ensureCapacityLine(int count);
-#endif
 
     void updateShader();
     void updateShaderInternal(ax::CustomCommand& cmd,
@@ -662,7 +653,6 @@ protected:
     ax::CustomCommand _customCommandTriangle;
     bool _dirtyTriangle = false;
 
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     int _bufferCapacityPoint = 0;
     int _bufferCountPoint = 0;
     ax::V2F_C4B_T2F* _bufferPoint = nullptr;
@@ -678,7 +668,6 @@ protected:
     ax::CustomCommand _customCommandLine;
     bool _dirtyPoint = false;
     bool _dirtyLine = false;
-#endif
 
     ax::BlendFunc _blendFunc;
 

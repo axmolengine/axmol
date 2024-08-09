@@ -163,13 +163,11 @@ DrawNodeEx::~DrawNodeEx()
     AX_SAFE_FREE(_bufferTriangle);
     freeShaderInternal(_customCommandTriangle);
 
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     AX_SAFE_FREE(_bufferPoint);
-    AX_SAFE_FREE(_bufferLine);
-
     freeShaderInternal(_customCommandPoint);
+
+    AX_SAFE_FREE(_bufferLine);
     freeShaderInternal(_customCommandLine);
-#endif
 }
 
 DrawNodeEx* DrawNodeEx::create(float defaultLineWidth)
@@ -202,7 +200,6 @@ void DrawNodeEx::ensureCapacityTriangle(int count)
     }
 }
 
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
 void DrawNodeEx::ensureCapacityPoint(int count)
 {
     AXASSERT(count >= 0, "capacity must be >= 0");
@@ -232,7 +229,6 @@ void DrawNodeEx::ensureCapacityLine(int count)
         _customCommandLine.updateVertexBuffer(_bufferLine, _bufferCapacityLine * sizeof(V2F_C4B_T2F));
     }
 }
-#endif
 
 bool DrawNodeEx::init()
 {
@@ -241,12 +237,10 @@ bool DrawNodeEx::init()
     ensureCapacityTriangle(512);
     _dirtyTriangle = true;
 
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     ensureCapacityPoint(64);
     ensureCapacityLine(256);
     _dirtyLine = true;
     _dirtyPoint = true;
-#endif
 
     return true;
 }
@@ -255,13 +249,12 @@ void DrawNodeEx::updateShader()
 {
     updateShaderInternal(_customCommandTriangle, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::TRIANGLE);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+
     updateShaderInternal(_customCommandPoint, backend::ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::POINT);
 
     updateShaderInternal(_customCommandLine, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
         CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::LINE);
-#endif
 }
 
 void DrawNodeEx::updateShaderInternal(CustomCommand& cmd,
@@ -335,7 +328,7 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         _customCommandTriangle.init(_globalZOrder);
         renderer->addCommand(&_customCommandTriangle);
     }
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+
     if (_bufferCountPoint)
     {
         updateBlendState(_customCommandPoint);
@@ -351,7 +344,6 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         _customCommandLine.init(_globalZOrder);
         renderer->addCommand(&_customCommandLine);
     }
-#endif
 }
 
 void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Color4B& color,
@@ -359,13 +351,11 @@ void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Co
 {
     if (pointSize == 0) return;
 
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     if (_drawOrder == true)
     {
-#endif
         float pointSize4 = pointSize / 4;
         drawSolidRect(position - Vec2(pointSize4, pointSize4), position + Vec2(pointSize4, pointSize4), color);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
+
     }
     else
     {
@@ -379,7 +369,6 @@ void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Co
         _dirtyPoint = true;
         _customCommandPoint.setVertexDrawInfo(0, _bufferCountPoint);
     }
-#endif
 }
 
 void DrawNodeEx::drawPoints(const Vec2* position, unsigned int numberOfPoints, const Color4B& color,
@@ -396,10 +385,8 @@ void DrawNodeEx::drawPoints(const Vec2* position,
 {
     if (pointSize == 0) return;
 
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     if (_drawOrder == true)
     {
-#endif
         Vec2 pointSize4 = Vec2(pointSize / 4, pointSize / 4);
         for (unsigned int i = 0; i < numberOfPoints; i++)
         {
@@ -412,14 +399,13 @@ void DrawNodeEx::drawPoints(const Vec2* position,
                 drawSolidRect(position[i] - pointSize4, position[i] + pointSize4, color);
                 break;
             case PointType::Triangle:
-             //   drawTriangle(position[i] - pointSize4, position[i] + pointSize4, color);
+                //   drawTriangle(position[i] - pointSize4, position[i] + pointSize4, color);
                 break;
 
             default:
                 break;
             }
         }
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         return;
     }
     ensureCapacityPoint(numberOfPoints);
@@ -435,7 +421,7 @@ void DrawNodeEx::drawPoints(const Vec2* position,
     _bufferCountPoint += numberOfPoints;
     _dirtyPoint = true;
     _customCommandPoint.setVertexDrawInfo(0, _bufferCountPoint);
-#endif
+
 }
 
 void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness, DrawNodeEx::EndType etStart, DrawNodeEx::EndType etEnd)
@@ -1116,12 +1102,11 @@ void DrawNodeEx::clear()
 {
     _bufferCountTriangle = 0;
     _dirtyTriangle = true;
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     _bufferCountLine = 0;
     _dirtyLine = true;
     _bufferCountPoint = 0;
     _dirtyPoint = true;
-#endif
+
     _lineWidth = _defaultLineWidth;
 }
 
@@ -1240,10 +1225,15 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
     int ii = 0;
     if (closedPolygon && !_isConvex && fillColor.a > 0.0f && !isConvex(_vertices, count) && count >= 3)
     {
+        AXLOGD("============================  start");
         for (auto&& t : triangleList)
         {
+            AXLOGD("{}, {} ", t.a.vertices.x, t.a.vertices.y);
+            AXLOGD("{}, {} ", t.b.vertices.x, t.b.vertices.y);
+            AXLOGD("{}, {} ", t.a.vertices.x, t.a.vertices.y);
             triangles[ii++] = t;
         }
+        AXLOGD("============================  end");
     }
     else if (fillColor.a > 0.0f)
     {
