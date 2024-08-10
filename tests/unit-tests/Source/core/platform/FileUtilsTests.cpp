@@ -62,6 +62,15 @@ TEST_SUITE("platform/FileUtils") {
         CHECK(fu->fullPathForDirectory(path) == path);
     }
 
+    TEST_CASE("path_ops")
+    {
+        CHECK(FileUtils::getPathDirName("a/b/c.txt") == "a/b");
+        CHECK(FileUtils::getPathBaseName("a/b/c.txt") == "c.txt");
+        CHECK(FileUtils::getPathBaseNameNoExtension("a/b/c.txt") == "c");
+        CHECK(FileUtils::getPathBaseNameNoExtension("a/b/c") == "c");
+        CHECK(FileUtils::getPathBaseNameNoExtension("abc.txt") == "abc");
+        CHECK(FileUtils::getPathBaseNameNoExtension("a/b/c.txt.bytes") == "c.txt");
+    }
 
     TEST_CASE("search_paths") {
         fu->purgeCachedEntries();
@@ -241,7 +250,7 @@ TEST_SUITE("platform/FileUtils") {
 
         SUBCASE("createDirectory,removeDirectory,isDirectoryExist") {
             REQUIRE(not fu->isDirectoryExist(dir));
-            REQUIRE(fu->createDirectory(subdirs));
+            REQUIRE(fu->createDirectories(subdirs));
             REQUIRE(fu->isDirectoryExist(dir));
             REQUIRE(fu->isDirectoryExist(subdirs));
             REQUIRE(fu->removeDirectory(dir));

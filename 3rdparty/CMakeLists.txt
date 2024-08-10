@@ -477,7 +477,7 @@ if(AX_WITH_LZ4)
     )
 endif()
 
-if(LINUX OR MACOSX OR WINDOWS)
+if(AX_WITH_DOCTEST)
     ax_add_3rd(doctest NO_LINK)
 endif()
 
