@@ -13,6 +13,9 @@ if (WINRT)
     # refer to: https://learn.microsoft.com/en-us/windows/msix/supported-platforms?source=recommendations
     set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "10.0.17763" CACHE STRING "")
     set(AX_CPPWINRT_VERSION "2.0.240111.5" CACHE STRING "")
+    # For axmol deprecated policy, we need disable /sdl checks explicitly to avoid compiler traits invoking deprecated functions as error
+    set(CMAKE_C_FLAGS  "/sdl- ${CMAKE_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS  "/sdl- ${CMAKE_CXX_FLAGS}")
 endif()
 
 # config c standard

@@ -151,7 +151,7 @@ public:
             dir = _tempFileName.substr(0, found + 1);
             if (!FileUtils::getInstance()->isDirectoryExistInternal(dir))
             {
-                if (!FileUtils::getInstance()->createDirectory(dir))
+                if (!FileUtils::getInstance()->createDirectories(dir))
                 {
                     _errCode         = DownloadTask::ERROR_CREATE_DIR_FAILED;
                     _errCodeInternal = 0;
