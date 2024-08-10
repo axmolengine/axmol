@@ -32,9 +32,16 @@
 - Optimize ProgramState::setTexture() to avoid vector (de)allocations by @smilediver in https://github.com/axmolengine/axmol/pull/2061
 - Add OpenType font (.otf) to the noCompress list by @danialias in https://github.com/axmolengine/axmol/pull/2077
 
+### sdks updates
+
+- cppwinrt: 2.0.240111.5 ==> 2.0.240405.15
+
 ### 3rdparty updates
 
+- box2d: 2.4.1 ==> 2.4.2
+- curl: 8.8.0 ==> 8.9.1
 - lz4: 1.9.4 ==> 1.10.0
+- c-ares: 1.32.2 ==> 1.33.0
 
 ## axmol-2.1.4 Jun.20 2024
 
