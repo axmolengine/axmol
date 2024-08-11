@@ -439,8 +439,8 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
 
         V2F_C4B_T2F* line = _bufferLine + _bufferCountLine;
 
-        line[0] = {_vertices[0], color, Tex2F::ZERO};
-        line[1] = {_vertices[1], color, Tex2F::ZERO};
+        line[0] = { _vertices[0], color, Tex2F::ZERO };
+        line[1] = { _vertices[1], color, Tex2F::ZERO };
 
         _customCommandLine.updateVertexBuffer(line, _bufferCountLine * sizeof(V2F_C4B_T2F), 2 * sizeof(V2F_C4B_T2F));
         _bufferCountLine += count;
@@ -973,9 +973,19 @@ void DrawNodeEx::drawPie(const Vec2& center,
         _drawPolygon(vertices, n, Color4B::TRANSPARENT, thickness, borderColor, false);
         break;
     case DrawMode::Line:
-        _drawPolygon(vertices, n, Color4B::TRANSPARENT, thickness, borderColor, false);
+        if (_circle)
+        {
+            drawSolidCircle(center, radius, 0.0f, 36, scaleX, scaleY, Color4B::TRANSPARENT, thickness, borderColor);
+            break;
+        }
+        _drawPolygon(vertices, n - 1, Color4B::TRANSPARENT, thickness, borderColor, false);
         break;
     case DrawMode::Semi:
+        if (_circle)
+        {
+            drawSolidCircle(center, radius, 0.0f, 36, scaleX, scaleY, fillColor, thickness, borderColor);
+            break;
+        }
         _drawPolygon(vertices, n - 1, fillColor, thickness, borderColor, true);
         break;
 
@@ -1279,18 +1289,6 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
                         {v5, debugColor, Tex2F(n)},
                     };
                 }
-
-                //if (i == ???)
-                //{
-                //    vo0 = v0;
-                //    vo1 = v1;
-                //    vo2 = v2;
-                //    vo3 = v3;
-                //    vo4 = v4;
-                //    vo5 = v5;
-                //    vo6 = v6;
-                //    vo7 = v7;
-                //}
             }
         }
         else
@@ -1301,6 +1299,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
             };
             struct ExtrudeVerts* extrude = (struct ExtrudeVerts*)malloc(sizeof(struct ExtrudeVerts) * count);
 
+            int ccount = count - ((closedPolygon) ? 0 : 1);
             for (unsigned int i = 0; i < count; i++)
             {
                 Vec2 v0 = _vertices[(i - 1 + count) % count];
@@ -1313,8 +1312,9 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
                 Vec2 offset = (n1 + n2) * (1.0f / (Vec2::dot(n1, n2) + 1.0f));
                 extrude[i] = { offset, n2 };
             }
+      
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < ccount; i++)
             {
                 int j = (i + 1) % count;
                 Vec2 v0 = _vertices[i];
@@ -1367,15 +1367,15 @@ void DrawNodeEx::_drawPoly(const Vec2* verts,
         ensureCapacityLine(vertex_count);
         V2F_C4B_T2F* line = _bufferLine + _bufferCountLine;
 
-        int ii = 0;        
-        for (unsigned int i = 0; i < count-1; i++)
+        int ii = 0;
+        for (unsigned int i = 0; i < count - 1; i++)
         {
             line[ii++] = { _vertices[i], color, Tex2F::ZERO };
-            line[ii++] = { _vertices[i+1], color, Tex2F::ZERO };
+            line[ii++] = { _vertices[i + 1], color, Tex2F::ZERO };
         }
         if (closedPolygon)
         {
-            line[ii++] = { _vertices[count-1], color, Tex2F::ZERO };
+            line[ii++] = { _vertices[count - 1], color, Tex2F::ZERO };
             line[ii++] = line[0];
         }
 
