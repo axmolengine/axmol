@@ -424,11 +424,9 @@ DrawNodeMorphTest_SolidPolygon::DrawNodeMorphTest_SolidPolygon()
 
     for (size_t n = 0; n < 10; n++)
     {
-        if (!drawNodeExArray[n])
-        {
-            drawNodeExArray[n] = DrawNodeEx::create();
-            addChild(drawNodeExArray[n]);
-        }
+
+        drawNodeExArray[n] = DrawNodeEx::create();
+        addChild(drawNodeExArray[n]);
         drawNodeExArray[n]->setPosition(Vec2(AXRANDOM_MINUS1_1() * size.width / 4, AXRANDOM_MINUS1_1() * size.height / 4) + Vec2(100, 100));
         color[n] = Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f);
         rad[n] = 90 + AXRANDOM_0_1() * 10;
@@ -1401,66 +1399,36 @@ void DrawNodeMethodsTest::drawAll()
     {
     case drawMethodes::Line:
     {
-        drawNodeEx->setScale(0.3);
-        float thick = 0.0f;
-        float y = -420.0f;
-        for (int i = 0; i < 55; i++)
+        for (int i = 0; i < 100; i++)
         {
-            thick += 0.5f;
-            y += thick + 1;
-            drawNodeEx->drawLine(Vec2(-380, y), Vec2(150, y), Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thick);
+            drawNodeEx->drawLine(Vec2(-size.x + 50, -size.y + AXRANDOM_0_1() * 2 * size.y), Vec2(size.x - 50, -size.y + AXRANDOM_0_1() * 2 * size.y), Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
         }
-
-        Vec2 gear1 = { 280.f, 320.f };
-        Vec2 gear2 = { 160.f, 320.f };
-        Vec2 gear3 = { 200.f, 200.f };
-        Vec2 gear4 = { size.width - 200, size.height - 200 };
-
-        drawNodeEx->resetDNValues();
-        drawNodeEx->setDNPosition(Vec2(200, 0));
-        drawNodeEx->drawLine(gear2, gear4, Color4F::BLUE, sliderValue[sliderType::Thickness]);  // line
-        drawNodeEx->drawLine(gear2, gear1, Color4F::RED, sliderValue[sliderType::Thickness]);  // line
-        drawNodeEx->drawLine(gear3, gear4, Color4F::YELLOW, sliderValue[sliderType::Thickness]);  // line
 
         break;
     }
     case drawMethodes::Rect:
     {
-        drawNodeEx->drawRect(Vec2(23, 23), Vec2(7, 7), Color4F(1, 1, 0, 1), sliderValue[sliderType::Thickness]);
-        drawNodeEx->drawRect(Vec2(15, 30), Vec2(30, 15), Vec2(15, 0), Vec2(0, 15),
-            Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1), sliderValue[sliderType::Thickness]);
-        drawNodeEx->drawRect(Vec2(123, 123), Vec2(227, 227), Color4F(1, 1, 0, 1), sliderValue[sliderType::Thickness]);
-        drawNodeEx->drawRect(Vec2(115, 130), Vec2(130, 115), Vec2(115, 100), Vec2(100, 115), Color4F::MAGENTA, sliderValue[sliderType::Thickness]);
-
-
+        Vec2 rec;
         for (int i = 0; i < 100; i++)
         {
-            drawNodeEx->drawRect(Vec2(AXRANDOM_MINUS1_1() * 200 + 200, AXRANDOM_MINUS1_1() * 200 + 200), Vec2(AXRANDOM_0_1() * 50 + 150, AXRANDOM_0_1() * 50 + 150), Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
-            //     drawNodeEx->drawRect(Vec2(-380, y), Vec2(150, y), Vec2(-380, y), Vec2(150, y),Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
+            rec = Vec2(i * 5, i * 5);
+            drawNodeEx->drawRect(center / 2 - rec, center / 2 + rec, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
+            drawNodeEx->drawRect(Vec2(AXRANDOM_MINUS1_1() * 300, AXRANDOM_MINUS1_1() * 300), Vec2(AXRANDOM_MINUS1_1() * 400, AXRANDOM_MINUS1_1() * 400), Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
         }
-
 
         break;
     }
     case drawMethodes::Circle:
     {
-        for (int i = 2; i < 30; i++)
-        {
-            drawNodeEx->drawCircle(VisibleRect::center()/* + Vec2(AXRANDOM_MINUS1_1()*100, AXRANDOM_MINUS1_1()*100)*/, 5 * i, AX_DEGREES_TO_RADIANS(90), i, false, 1.0f, 1.0f,
-                Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
-        }
-
         for (int i = 0; i < 100; i++)
         {
+            drawNodeEx->drawCircle(VisibleRect::center(), 5 * i, AX_DEGREES_TO_RADIANS(90), i, false, 1.0f, 1.0f,
+                Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
+
             Vec2 pos = Vec2(-100, -100) + Vec2(AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x, AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y);
-            drawNodeEx->drawCircle(VisibleRect::center() + pos, AXRANDOM_0_1() * 50 + 50, AX_DEGREES_TO_RADIANS(90), 30, true,
+            drawNodeEx->drawCircle(VisibleRect::center() + pos, AXRANDOM_0_1() * 200, AX_DEGREES_TO_RADIANS(AXRANDOM_MINUS1_1() * 90), 30, true,
                 Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
         }
-
-        drawNodeEx->drawCircle(VisibleRect::center() + Vec2(140, 0), 100, AX_DEGREES_TO_RADIANS(AXRANDOM_0_1() * 90), 30, true, 1.0f, 2.0f,
-            Color4F(1.0f, 0.0f, 0.0f, 0.5f), sliderValue[sliderType::Thickness]);
-        drawNodeEx->drawCircle(VisibleRect::center() - Vec2(140, 0), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-            Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
 
         break;
     }
@@ -1643,7 +1611,6 @@ void DrawNodeMethodsTest::drawAll()
         for (int i = 0; i < 100; i++)
         {
             drawNodeEx->drawDot(Vec2(AXRANDOM_MINUS1_1() * 400 + 200, AXRANDOM_MINUS1_1() * 400), 20 + sliderValue[sliderType::Thickness], Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
-
         }
 
         break;
@@ -1652,8 +1619,8 @@ void DrawNodeMethodsTest::drawAll()
     {
         for (int i = 0; i < 100; i++)
         {
-            drawNodeEx->drawPoint(Vec2(i * 7.0f, 50.0f), (float)i / 5 + 1,
-                Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+            drawNodeEx->drawPoint(Vec2(AXRANDOM_MINUS1_1() * 400 + 200, AXRANDOM_MINUS1_1() * 400), 30 + sliderValue[sliderType::Thickness], Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+
         }
         break;
     }
@@ -1675,7 +1642,7 @@ void DrawNodeMethodsTest::drawAll()
         drawNodeEx->setDNScale(Vec2(3, 3));
         for (int i = 0; i < count; i++)
         {
-            Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y);
+            Vec2 pos = Vec2(AXRANDOM_MINUS1_1() * 400 + 200, AXRANDOM_MINUS1_1() * 400);
             drawNodeEx->drawTriangle(pos + Vec2(10.0f, 10.0f), pos + Vec2(70.0f, 30.0f), pos + Vec2(100.0f, 140.0f),
                 Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
         }
@@ -1691,39 +1658,19 @@ void DrawNodeMethodsTest::drawAll()
         int yy = 50;
         drawNodeEx->drawSegment(Vec2(-450.0f, yy - yy1), Vec2(200, yy - yy1), 50 + 5 * sliderValue[sliderType::Thickness],
             Color4F::GREEN, DrawNodeEx::Round, DrawNodeEx::Round);
-        label1->setPosition(Vec2(410.0f, yy));
+        label1->setPosition(Vec2(410.0f, yy - yy1));
 
 
         yy += 220;
         drawNodeEx->drawSegment(Vec2(-450.0f, yy - yy1), Vec2(200, yy - yy1), 50 + 5 * sliderValue[sliderType::Thickness],
             Color4F::BLUE, DrawNodeEx::Round, DrawNodeEx::Square);
-        label2->setPosition(Vec2(410.0f, yy));
+        label2->setPosition(Vec2(410.0f, yy - yy1));
 
 
         yy += 220;
         drawNodeEx->drawSegment(Vec2(-450.0f, yy - yy1), Vec2(200, yy - yy1), 50 + 5 * sliderValue[sliderType::Thickness],
             Color4F::RED, DrawNodeEx::Round, DrawNodeEx::Butt);
-        label3->setPosition(Vec2(410.0f, yy));
-
-
-        //int yy1 = 0;
-        //int yy = 50;
-        //drawNodeEx->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20,
-        //	Color4F::GREEN, DrawNodeEx::Square, DrawNodeEx::Round);  //default  DrawNodeEx::Round
-
-        ////     label1->setPosition(Vec2(410.0f, yy + 55));
-
-
-        //yy += 110;
-        //drawNodeEx->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20,
-        //	Color4F::BLUE, DrawNodeEx::Butt, DrawNodeEx::Square);
-        ////     label2->setPosition(Vec2(410.0f, yy));
-
-
-        //yy += 110;
-        //drawNodeEx->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20,
-        //	Color4F::RED, DrawNodeEx::Round, DrawNodeEx::Butt);
-        ////   label3->setPosition(Vec2(410.0f, yy - 55));
+        label3->setPosition(Vec2(410.0f, yy - yy1));
 
         break;
     }
@@ -1732,7 +1679,7 @@ void DrawNodeMethodsTest::drawAll()
         for (int i = 0; i < count; i++)
         {
             drawNodeEx->drawSolidCircle(
-                Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y),
+                Vec2(AXRANDOM_0_1() * -VisibleRect::rightTop().x, -AXRANDOM_0_1() * VisibleRect::rightTop().y),
                 AXRANDOM_0_1() * 40.f + 40.f, AX_DEGREES_TO_RADIANS(90), 50, 2.0f, 2.0f,
                 Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
         }
@@ -1757,12 +1704,12 @@ void DrawNodeMethodsTest::drawAll()
     }
     case  drawMethodes::SolidRect:
     {
-        for (int i = 0; i < sliderValue[sliderType::Counter]; i++)
+        for (int i = 0; i < 100; i++)
         {
-            Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y);
-            drawNodeEx->drawSolidRect(pos, pos + Vec2(20.0f, 20.0f),
-                Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
-        }
+            Vec2 pos = Vec2(VisibleRect::rightTop().x - AXRANDOM_0_1() * VisibleRect::rightTop().x,VisibleRect::rightTop().y - AXRANDOM_0_1() * VisibleRect::rightTop().y);
+            drawNodeEx->drawSolidRect(pos, pos + Vec2(20.0f*sliderValue[sliderType::Thickness], 20.0f*sliderValue[sliderType::Thickness]),  Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f), sliderValue[sliderType::Thickness]);
+         }
+
         break;
     }
     case  drawMethodes::Star:
@@ -1801,10 +1748,10 @@ void DrawNodeMethodsTest::drawAll()
         drawNodeEx->drawStar(Vec2(-150, -100), 5, 70, 3, Color4F::GREEN, 1.0);
 
         drawNodeEx->setDNRotation(0);
-        for (int i = 0; i < sliderValue[sliderType::Counter]; i++)
+        for (int i = 0; i < 10; i++)
         {
-            Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y - 400);
-            drawNodeEx->drawStar(pos, 40, 60, 60, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), sliderValue[sliderType::Thickness]));
+            Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x- 100, AXRANDOM_0_1() * VisibleRect::rightTop().y - 300);
+            drawNodeEx->drawStar(pos, 40, 60, AXRANDOM_0_1()*60+3, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), sliderValue[sliderType::Thickness]));
         }
         break;
     }
@@ -1843,10 +1790,10 @@ void DrawNodeMethodsTest::drawAll()
         drawNodeEx->drawSolidStar(Vec2(-150, -100), 5, 70, 3, Color4F::GREEN, Color4F::YELLOW, 1.0);
 
         drawNodeEx->setDNRotation(0);
-        for (int i = 0; i < sliderValue[sliderType::Counter]; i++)
+        for (int i = 0; i < 10; i++)
         {
-            Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y - 400);
-            drawNodeEx->drawSolidStar(pos, 40, 60, 60, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), sliderValue[sliderType::Thickness]), Color4F::YELLOW);
+            Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x- 100, AXRANDOM_0_1() * VisibleRect::rightTop().y - 300);
+            drawNodeEx->drawSolidStar(pos, 40, 60, AXRANDOM_0_1()*60+3, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), sliderValue[sliderType::Thickness]), Color4F::YELLOW);
         }
         break;
     }
