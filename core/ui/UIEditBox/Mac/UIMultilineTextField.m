@@ -42,89 +42,89 @@
     [super dealloc];
 }
 
--(void)ccui_setPlaceholderFont:(NSFont *)font
+-(void)axui_setPlaceholderFont:(NSFont *)font
 {
     //TODO
 }
 
--(NSFont*)ccui_placeholderFont
+-(NSFont*)axui_placeholderFont
 {
     return NULL;
 }
 
--(void)ccui_setPlaceholder:(NSString *)text
+-(void)axui_setPlaceholder:(NSString *)text
 {
     self.placeHolder = text;
 }
 
--(NSString*)ccui_placeholder
+-(NSString*)axui_placeholder
 {
     return self.placeHolder;
 }
 
--(void)ccui_setPlaceholderColor:(NSColor *)color
+-(void)axui_setPlaceholderColor:(NSColor *)color
 {
     //TODO
 }
 
--(NSColor*)ccui_placeholderColor
+-(NSColor*)axui_placeholderColor
 {
     return NULL;
 }
 
 
-#pragma mark - CCUITextInput
-- (NSString *)ccui_text
+#pragma mark - AXUITextInput
+- (NSString *)axui_text
 {
     return self.string;
 }
 
-- (void)ccui_setText:(NSString *)ccui_text
+- (void)axui_setText:(NSString *)axui_text
 {
-    self.string = ccui_text;
+    self.string = axui_text;
 }
 
-- (NSColor *)ccui_textColor
+- (NSColor *)axui_textColor
 {
     return self.textColor;
 }
 
-- (void)ccui_setTextColor:(NSColor *)ccui_textColor
+- (void)axui_setTextColor:(NSColor *)axui_textColor
 {
-    self.textColor = ccui_textColor;
+    self.textColor = axui_textColor;
 }
 
-- (NSFont *)ccui_font
+- (NSFont *)axui_font
 {
     return self.font;
 }
 
-- (void)ccui_setFont:(NSFont *)ccui_font
+- (void)axui_setFont:(NSFont *)axui_font
 {
-    self.font = ccui_font;
+    self.font = axui_font;
 }
 
-- (NSTextAlignment)ccui_alignment
+- (NSTextAlignment)axui_alignment
 {
   return self.alignment;
 }
 
-- (void)ccui_setTextHorizontalAlignment:(NSTextAlignment)ccui_alignment
+- (void)axui_setTextHorizontalAlignment:(NSTextAlignment)axui_alignment
 {
-  self.alignment = ccui_alignment;
+  self.alignment = axui_alignment;
 }
 
 
-- (void)ccui_setDelegate:(id<NSTextFieldDelegate,NSTextViewDelegate>)delegate
+- (void)axui_setDelegate:(id<NSTextFieldDelegate,NSTextViewDelegate>)delegate
 {
     self.delegate = delegate;
 }
 
-- (void)ccui_setMaxLength:(int)ccui_maxLength
+- (void)axui_setMaxLength:(int)axui_maxLength
 {
     //noop
 }
--(int)ccui_maxLength
+-(int)axui_maxLength
 {
     return 0;
 }

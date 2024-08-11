@@ -192,6 +192,7 @@ def main():
 
     extraFlags = _defaultIncludePath()
     extraFlags += " -DFMT_USE_CONCEPTS=0"
+    extraFlags += " -DAX_ENABLE_MEDIA=1"
     
     # save config to file
     if(sys.version_info.major >= 3):

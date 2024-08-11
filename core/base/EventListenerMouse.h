@@ -24,8 +24,8 @@
 
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCMouseEventListener__
-#define __cocos2d_libs__CCMouseEventListener__
+#ifndef _AX_MOUSEEVENTLISTENER_H_
+#define _AX_MOUSEEVENTLISTENER_H_
 
 #include "base/EventListener.h"
 #include "base/EventMouse.h"
@@ -72,4 +72,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif /* defined(__cocos2d_libs__CCMouseEventListener__) */
+#endif /* defined(_AX_MOUSEEVENTLISTENER_H_) */

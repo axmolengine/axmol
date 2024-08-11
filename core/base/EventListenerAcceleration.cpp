@@ -30,7 +30,7 @@
 
 NS_AX_BEGIN
 
-const std::string EventListenerAcceleration::LISTENER_ID = "__cc_acceleration";
+const std::string EventListenerAcceleration::LISTENER_ID = "__ax_acceleration";
 
 EventListenerAcceleration::EventListenerAcceleration() {}
 

@@ -6,15 +6,22 @@ option(AX_WITH_WEBP "Build with internal webp support" ON)
 option(AX_WITH_CLIPPER2 "Build with internal Clipper2 support" ON)
 option(AX_WITH_POLY2TRI "Build with internal poly2tri support" ON)
 option(AX_WITH_FASTLZ "Build with internal fastlz support" ON)
-option(AX_WITH_LZ4 "Build with internal lz4 support" OFF)
+
 option(AX_WITH_CURL "Build with internal curl support" ON)
 option(AX_WITH_UNZIP "Build with internal unzip support" ON)
 option(AX_WITH_ASTCENC "Build with internal ASTCENC support" ON)
 option(AX_WITH_CARES "Build with internal c-ares support" OFF)
-option(AX_WITH_YAML_CPP "Build with yaml-cpp support" OFF)
 option(AX_WITH_KCP "Build with internal kcp support" OFF)
 option(AX_WITH_OBOE "Build with oboe support" OFF)
 option(AX_WITH_LLHTTP "Build with internal LLHTTP support" ON)
+
+# some libs not depended by axmol
+option(AX_WITH_LZ4 "Build with internal lz4 support" OFF)
+option(AX_WITH_YAML_CPP "Build with yaml-cpp support" OFF)
+
+if(LINUX OR MACOSX OR WINDOWS)
+    option(AX_WITH_DOCTEST "Build with doctest support" ON)
+endif()
 
 # by default, enable ios,macOS openal-soft framework for legal license LGPL-2.1
 option(ALSOFT_OSX_FRAMEWORK "" ON)
@@ -319,19 +326,6 @@ if (AX_WITH_FASTLZ)
     ax_add_3rd(fastlz)
 endif()
 
-if(AX_WITH_LZ4)
-    if (NOT BUILD_SHARED_LIBS)
-        set(lz4_tgt lz4_static)
-    else()
-        set(lz4_tgt lz4_shared)
-    endif()
-    _1kfetch(lz4)
-    ax_add_3rd(${lz4_SOURCE_DIR}/build/cmake TARGETS ${lz4_tgt} OPTIONS
-      "LZ4_BUILD_CLI OFF"
-      "LZ4_BUILD_LEGACY_LZ4C OFF"
-    )
-endif()
-
 if(AX_WITH_CLIPPER2)
     ax_add_3rd(clipper2)
 endif()
@@ -468,6 +462,23 @@ if(AX_WITH_YAML_CPP)
       "YAML_CPP_INSTALL OFF"
       "YAML_CPP_CLANG_FORMAT_EXE OFF"
     )
+endif()
+
+if(AX_WITH_LZ4)
+    if (NOT BUILD_SHARED_LIBS)
+        set(lz4_tgt lz4_static)
+    else()
+        set(lz4_tgt lz4_shared)
+    endif()
+    _1kfetch(lz4)
+    ax_add_3rd(${lz4_SOURCE_DIR}/build/cmake NO_LINK TARGETS ${lz4_tgt} OPTIONS
+      "LZ4_BUILD_CLI OFF"
+      "LZ4_BUILD_LEGACY_LZ4C OFF"
+    )
+endif()
+
+if(AX_WITH_DOCTEST)
+    ax_add_3rd(doctest NO_LINK)
 endif()
 
 # kcp

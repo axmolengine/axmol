@@ -139,11 +139,11 @@ static id s_sharedDirectorCaller;
     {
         ax::Director* director = ax::Director::getInstance();
 #if AX_GLES_PROFILE
-        EAGLContext* cocos2dxContext = [(EAGLView*)director->getGLView()->getEAGLView() context];
-        if (cocos2dxContext != [EAGLContext currentContext])
+        EAGLContext* context = [(EAGLView*)director->getGLView()->getEAGLView() context];
+        if (context != [EAGLContext currentContext])
             glFlush();
 
-        [EAGLContext setCurrentContext:cocos2dxContext];
+        [EAGLContext setCurrentContext:context];
 #endif
         CFTimeInterval dt = ((CADisplayLink*)displayLink).timestamp - lastDisplayTime;
         lastDisplayTime   = ((CADisplayLink*)displayLink).timestamp;

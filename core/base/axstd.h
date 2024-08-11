@@ -126,4 +126,36 @@ inline void split_of_cb(std::string_view s, const char* delims, _Fn&& func)
     split_of_cb(s.data(), s.length(), delims, std::move(func));
 }
 
+template <typename _Elem, typename _Pred, typename _Fn>
+inline void splitpath_cb(_Elem* s, _Pred&& pred, _Fn&& func) // will convert '\\' to '/'
+{
+  _Elem* _Start = s; // the start of every string
+  _Elem* _Ptr   = s; // source string iterator
+  while (pred(_Ptr))
+  {
+    if ('\\' == *_Ptr || '/' == *_Ptr)
+    {
+      if (_Ptr != _Start)
+      {
+        auto _Ch        = *_Ptr;
+        *_Ptr           = '\0';
+        bool should_brk = func(s);
+#if defined(_WIN32)
+        *_Ptr = '\\';
+#else // For unix linux like system.
+        *_Ptr = '/';
+#endif
+        if (should_brk)
+          return;
+      }
+      _Start = _Ptr + 1;
+    }
+    ++_Ptr;
+  }
+  if (_Start < _Ptr)
+  {
+    func(s);
+  }
+}
+
 }  // namespace axstd

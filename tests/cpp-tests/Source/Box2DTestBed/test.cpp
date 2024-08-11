@@ -465,7 +465,11 @@ void Test::initShader(void)
 void Test::DrawString(int x, int y, const char* fmt, ...)
 {
 #if defined(AX_PLATFORM_PC)
-    debugString.append(std::string(fmt));
+    va_list args;
+    va_start(args, fmt);
+    auto str = StringUtils::vformat(fmt, args);
+    va_end(args);
+    debugString.append(str);
     debugString.append("\n");
     labelDebugDraw->setString(debugString);
     //	labelDebugDraw->setPosition(x, y);
@@ -475,7 +479,11 @@ void Test::DrawString(int x, int y, const char* fmt, ...)
 void Test::DrawString(const b2Vec2& pw, const char* fmt, ...)
 {
 #if defined(AX_PLATFORM_PC)
-    debugString.append(std::string(fmt));
+    va_list args;
+    va_start(args, fmt);
+    auto str = StringUtils::vformat(fmt, args);
+    va_end(args);
+    debugString.append(str);
     debugString.append("\n");
     labelDebugDraw->setString(debugString);
     //	labelDebugDraw->setPosition(pw.x, pw.y);

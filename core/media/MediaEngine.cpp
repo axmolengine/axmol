@@ -66,7 +66,7 @@ std::unique_ptr<MediaEngineFactory> MediaEngineFactory::create()
 #    if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP && !defined(AXME_USE_IMFME)
 #        if defined(AX_ENABLE_MFMEDIA)
     return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<WmfMediaEngineFactory>());
-#        elif (AX_ENABLE_VLC_MEDIA)
+#        elif defined(AX_ENABLE_VLC_MEDIA)
     return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<VlcMediaEngineFactory>());
 #        endif
 #    else

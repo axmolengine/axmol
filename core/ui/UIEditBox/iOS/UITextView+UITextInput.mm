@@ -25,19 +25,19 @@
 
 #import "ui/UIEditBox/iOS/UITextView+UITextInput.h"
 
-@implementation UITextView (CCUITextInput)
+@implementation UITextView (AXUITextInput)
 
-- (NSString*)ccui_text
+- (NSString*)axui_text
 {
     return self.text;
 }
 
-- (void)ccui_setText:(NSString*)ccui_text
+- (void)axui_setText:(NSString*)axui_text
 {
-    self.text = ccui_text;
+    self.text = axui_text;
 }
 
-- (NSString*)ccui_placeholder
+- (NSString*)axui_placeholder
 {
     SEL selector = @selector(placeholder);
     if ([self respondsToSelector:selector])
@@ -47,46 +47,46 @@
     return nil;
 }
 
-- (void)ccui_setPlaceholder:(NSString*)ccui_placeholder
+- (void)axui_setPlaceholder:(NSString*)axui_placeholder
 {
     SEL selector = @selector(setPlaceholder:);
     if ([self respondsToSelector:selector])
     {
-        [self performSelector:selector withObject:ccui_placeholder];
+        [self performSelector:selector withObject:axui_placeholder];
     }
 }
 
-- (UIColor*)ccui_textColor
+- (UIColor*)axui_textColor
 {
     return self.textColor;
 }
 
-- (void)ccui_setTextColor:(UIColor*)ccui_textColor
+- (void)axui_setTextColor:(UIColor*)axui_textColor
 {
-    self.textColor = ccui_textColor;
+    self.textColor = axui_textColor;
 }
 
-- (UIFont*)ccui_font
+- (UIFont*)axui_font
 {
     return self.font;
 }
 
-- (void)ccui_setFont:(UIFont*)ccui_font
+- (void)axui_setFont:(UIFont*)axui_font
 {
-    self.font = ccui_font;
+    self.font = axui_font;
 }
 
-- (NSTextAlignment)ccui_alignment
+- (NSTextAlignment)axui_alignment
 {
     return self.textAlignment;
 }
 
-- (void)ccui_setTextHorizontalAlignment:(NSTextAlignment)ccui_alignment
+- (void)axui_setTextHorizontalAlignment:(NSTextAlignment)axui_alignment
 {
-    self.textAlignment = ccui_alignment;
+    self.textAlignment = axui_alignment;
 }
 
-- (UIColor*)ccui_placeholderTextColor
+- (UIColor*)axui_placeholderTextColor
 {
     SEL selector = NSSelectorFromString(@"placeHolderLabel");
     if ([self respondsToSelector:selector])
@@ -96,16 +96,16 @@
     return nil;
 }
 
-- (void)ccui_setPlaceholderTextColor:(UIColor*)ccui_placeholderTextColor
+- (void)axui_setPlaceholderTextColor:(UIColor*)axui_placeholderTextColor
 {
     SEL selector = NSSelectorFromString(@"placeHolderLabel");
     if ([self respondsToSelector:selector])
     {
-        ((UILabel*)[self performSelector:selector]).textColor = ccui_placeholderTextColor;
+        ((UILabel*)[self performSelector:selector]).textColor = axui_placeholderTextColor;
     }
 }
 
-- (UIFont*)ccui_placeholderFont
+- (UIFont*)axui_placeholderFont
 {
     SEL selector = NSSelectorFromString(@"placeHolderLabel");
     if ([self respondsToSelector:selector])
@@ -115,30 +115,30 @@
     return nil;
 }
 
-- (void)ccui_setPlaceholderFont:(UIFont*)ccui_placeholderFont
+- (void)axui_setPlaceholderFont:(UIFont*)axui_placeholderFont
 {
     SEL selector = NSSelectorFromString(@"placeHolderLabel");
     if ([self respondsToSelector:selector])
     {
-        ((UILabel*)[self performSelector:selector]).font = ccui_placeholderFont;
+        ((UILabel*)[self performSelector:selector]).font = axui_placeholderFont;
     }
 }
 
-- (BOOL)ccui_secureTextEntry
+- (BOOL)axui_secureTextEntry
 {
     return self.secureTextEntry;
 }
 
-- (void)ccui_setSecureTextEntry:(BOOL)ccui_secureTextEntry
+- (void)axui_setSecureTextEntry:(BOOL)axui_secureTextEntry
 {
-    self.secureTextEntry = ccui_secureTextEntry;
+    self.secureTextEntry = axui_secureTextEntry;
 }
 
-- (void)ccui_setDelegate:(id<UITextFieldDelegate, UITextViewDelegate>)delegate
+- (void)axui_setDelegate:(id<UITextFieldDelegate, UITextViewDelegate>)delegate
 {
     self.delegate = delegate;
 }
 
 @end
 
-void LoadUITextViewCCUITextInputCategory() {}
+void LoadUITextViewAXUITextInputCategory() {}

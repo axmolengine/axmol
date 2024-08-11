@@ -161,7 +161,7 @@ namespace ui {
 
 NS_AX_END
 
-#endif // CC_PLATFORM_WINRT
+#endif // AX_PLATFORM_WINRT
 
 #endif // #ifdef __UIEditBoxIMPLWINRT_H__
 

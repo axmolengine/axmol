@@ -25,8 +25,8 @@
 
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCTouchEventListener__
-#define __cocos2d_libs__CCTouchEventListener__
+#ifndef _AX_TOUCHEVENTLISTENER_H_
+#define _AX_TOUCHEVENTLISTENER_H_
 
 #include "base/EventListener.h"
 #include <vector>
@@ -136,4 +136,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif /* defined(__cocos2d_libs__CCTouchEventListener__) */
+#endif /* defined(_AX_TOUCHEVENTLISTENER_H_) */

@@ -1287,8 +1287,8 @@ void Director::calculateMPF()
 void Director::getFPSImageData(unsigned char** datapointer, ssize_t* length)
 {
     // FIXME: fixed me if it should be used
-    *datapointer = cc_fps_images_png;
-    *length      = cc_fps_images_len();
+    *datapointer = ax_fps_images_png;
+    *length      = ax_fps_images_len();
 }
 
 void Director::createStatsLabel()
@@ -1306,7 +1306,7 @@ void Director::createStatsLabel()
         AX_SAFE_RELEASE_NULL(_FPSLabel);
         AX_SAFE_RELEASE_NULL(_drawnBatchesLabel);
         AX_SAFE_RELEASE_NULL(_drawnVerticesLabel);
-        _textureCache->removeTextureForKey("/cc_fps_images");
+        _textureCache->removeTextureForKey("/ax_fps_images");
         FileUtils::getInstance()->purgeCachedEntries();
     }
 
@@ -1324,7 +1324,7 @@ void Director::createStatsLabel()
         return;
     }
 
-    texture = _textureCache->addImage(image, "/cc_fps_images", PixelFormat::RGBA4);
+    texture = _textureCache->addImage(image, "/ax_fps_images", PixelFormat::RGBA4);
     AX_SAFE_RELEASE(image);
 
     /*

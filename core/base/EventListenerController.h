@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__EventListenerController__
-#define __cocos2d_libs__EventListenerController__
+#ifndef _AX_EVENTLISTENERCONTROLLER_H_
+#define _AX_EVENTLISTENERCONTROLLER_H_
 
 #include "platform/PlatformMacros.h"
 #include "base/EventListener.h"
@@ -77,4 +77,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif /* defined(__cocos2d_libs__EventListenerController__) */
+#endif /* defined(_AX_EVENTLISTENERCONTROLLER_H_) */

@@ -117,93 +117,93 @@
     [self setCellClass:[RSVerticallyCenteredTextFieldCell class]];
 }
 
--(void)ccui_setPlaceholderFont:(NSFont *)font
+-(void)axui_setPlaceholderFont:(NSFont *)font
 {
     //TODO:
 }
 
 
 
--(void)ccui_setPlaceholder:(NSString *)text
+-(void)axui_setPlaceholder:(NSString *)text
 {
     //TODO:
 }
 
--(NSString*)ccui_placeholder
+-(NSString*)axui_placeholder
 {
     return self.placeholderString;
 }
 
--(NSFont*)ccui_placeholderFont
+-(NSFont*)axui_placeholderFont
 {
     //FIXME:
     return [NSFont systemFontOfSize:self.bounds.size.height * 3.0 / 2.0];
 }
 
--(NSColor*)ccui_placeholderColor
+-(NSColor*)axui_placeholderColor
 {
     return [NSColor whiteColor];
 }
 
--(void)ccui_setPlaceholderColor:(NSColor *)color
+-(void)axui_setPlaceholderColor:(NSColor *)color
 {
     //TODO:
 }
 
-- (NSString *)ccui_text
+- (NSString *)axui_text
 {
     return self.stringValue;
 }
 
-- (void)ccui_setText:(NSString *)ccui_text
+- (void)axui_setText:(NSString *)axui_text
 {
-    self.stringValue = ccui_text;
+    self.stringValue = axui_text;
 }
 
-- (NSColor *)ccui_textColor
+- (NSColor *)axui_textColor
 {
     return self.textColor;
 }
 
-- (void)ccui_setTextColor:(NSColor *)ccui_textColor
+- (void)axui_setTextColor:(NSColor *)axui_textColor
 {
-    self.textColor = ccui_textColor;
+    self.textColor = axui_textColor;
 }
 
-- (NSFont *)ccui_font
+- (NSFont *)axui_font
 {
     return self.font;
 }
 
-- (void)ccui_setFont:(NSFont *)ccui_font
+- (void)axui_setFont:(NSFont *)axui_font
 {
-    self.font = ccui_font;
+    self.font = axui_font;
 }
 
-- (NSTextAlignment)ccui_alignment
+- (NSTextAlignment)axui_alignment
 {
   return self.alignment;
 }
 
-- (void)ccui_setTextHorizontalAlignment:(NSTextAlignment)ccui_alignment
+- (void)axui_setTextHorizontalAlignment:(NSTextAlignment)axui_alignment
 {
-    self.alignment = ccui_alignment;
+    self.alignment = axui_alignment;
 }
 
 
-- (void)ccui_setDelegate:(id<NSTextFieldDelegate,NSTextViewDelegate>)delegate
+- (void)axui_setDelegate:(id<NSTextFieldDelegate,NSTextViewDelegate>)delegate
 {
     self.delegate = delegate;
 }
 
-- (void)ccui_setMaxLength:(int)length
+- (void)axui_setMaxLength:(int)length
 {
     id formater =  [[[CCUITextFieldFormatter alloc]init] autorelease];
     [formater setMaximumLength:length];
     [self setFormatter:formater];
 }
 
-- (int)ccui_maxLength
+- (int)axui_maxLength
 {
     return [self.formatter maximumLength];
 }
