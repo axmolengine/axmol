@@ -182,33 +182,6 @@ struct MEVideoFrame
 };
 
 //
-// file uri helper: https://www.ietf.org/rfc/rfc3986.txt
-//
-static constexpr std::string_view LOCAL_FILE_URI_PREFIX = "file:///"sv;  // The localhost file prefix
-
-inline std::string& path2uri(std::string& path)
-{
-    // windows: file:///D:/xxx/xxx.mp4
-    // unix: file:///home/xxx/xxx.mp4
-    // android_asset:
-    //   - file:///android_asset/xxx/xxx.mp4
-    //   - asset://android_asset/xxx/xxx.mp4
-    if (!path.empty())
-    {
-        if (path[0] == '/')
-            path.insert(0, LOCAL_FILE_URI_PREFIX.data(), LOCAL_FILE_URI_PREFIX.length() - 1);
-        else
-        {
-            if (!cxx20::starts_with(path, "assets/"sv))  // not android asset
-                path.insert(0, LOCAL_FILE_URI_PREFIX.data(), LOCAL_FILE_URI_PREFIX.length());
-            else
-                path.replace(0, "assets/"sv.length(), "file:///android_asset/");
-        }
-    }
-    return path;
-}
-
-//
 // redisigned corss-platform MediaEngine, inspired from microsoft media foundation: IMFMediaEngine
 //
 class MediaEngine
