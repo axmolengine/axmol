@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCAccelerometerEvent__
-#define __cocos2d_libs__CCAccelerometerEvent__
+#ifndef _AX_ACCELEROMETEREVENT_H_
+#define _AX_ACCELEROMETEREVENT_H_
 
 #include "base/Event.h"
 #include "base/Types.h"
@@ -58,4 +58,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif /* defined(__cocos2d_libs__CCAccelerometerEvent__) */
+#endif /* defined(_AX_ACCELEROMETEREVENT_H_) */

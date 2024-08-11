@@ -50,8 +50,8 @@ function fetch_repo($url, $name, $dest, $ext) {
             if ($ext -eq '.zip') {
                 Expand-Archive -Path $out -DestinationPath $prefix -Force
             }
-            elseif ($ext -match '\.tar(\..*)?$'){
-                tar xf "$out" -C $prefix
+            elseif ($ext -match '\.tar(\..*)?$') {
+                tar xvf "$out" -C $prefix
             }
         }
         catch {
@@ -62,7 +62,22 @@ function fetch_repo($url, $name, $dest, $ext) {
         if (!(Test-Path $dest -PathType Container)) {
             $original_lib_src = Join-Path $prefix $Script:url_pkg_name
             if (Test-Path $original_lib_src -PathType Container) {
-                Rename-Item $original_lib_src $dest -Force
+                $tries = 0
+                do {
+                    try {
+                        Rename-Item $original_lib_src $dest -Force
+                        if ($?) {
+                            break
+                        }
+                    }
+                    catch {
+      
+                    }
+
+                    println "fetch.ps1: rename $original_lib_src to $dest failed, try after 1 seconds"
+                    $tries += 1
+                    Start-Sleep -Seconds 1
+                } while ($tries -lt 10)
             }
             else {
                 throw "fetch.ps1: the package name mismatch for $out"

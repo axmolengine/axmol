@@ -40,14 +40,14 @@ THE SOFTWARE.
 #ifndef AXASSERT
 #    if _AX_DEBUG > 0
 #        if AX_ENABLE_SCRIPT_BINDING
-extern bool AX_DLL cc_assert_script_compatible(const char* msg);
+extern bool AX_DLL ax_assert_script_compatible(const char* msg);
 #            define AXASSERT(cond, msg)                                 \
                 do                                                      \
                 {                                                       \
                     if (!(cond))                                        \
                     {                                                   \
                         const char* m = (msg);                          \
-                        if (m && *m && !cc_assert_script_compatible(m)) \
+                        if (m && *m && !ax_assert_script_compatible(m)) \
                             AXLOGE("Assert failed: {}", m);             \
                         AX_ASSERT(cond);                                \
                     }                                                   \

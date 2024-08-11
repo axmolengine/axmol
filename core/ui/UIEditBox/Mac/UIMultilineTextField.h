@@ -27,7 +27,7 @@
 #import <AppKit/AppKit.h>
 #include "ui/UIEditBox/Mac/UITextInput.h"
 
-@interface CCUIMultilineTextField : NSTextView <CCUITextInput> {
+@interface CCUIMultilineTextField : NSTextView <AXUITextInput> {
     NSString* _placeHolder;
 }
 

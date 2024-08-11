@@ -557,4 +557,4 @@ ax::Vec2 UIEditBoxImplWinrt::convertDesignCoordToXamlCoord(const ax::Vec2& desig
 
 }  // namespace ax
 
-#endif // (CC_TARGET_PLATFORM == CC_PLATFORM_WP8 || CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+#endif // (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)

@@ -329,7 +329,7 @@ THE SOFTWARE.
 #endif
 
 /** @def AX_STRIP_FPS
- * Whether to strip FPS related data and functions, such as cc_fps_images_png
+ * Whether to strip FPS related data and functions, such as ax_fps_images_png
  */
 #ifndef AX_STRIP_FPS
 #    define AX_STRIP_FPS 0

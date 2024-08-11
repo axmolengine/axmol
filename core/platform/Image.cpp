@@ -1914,7 +1914,7 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
             // etc2_decode_image always decode to RGBA8888
             _dataLen = _width * _height * 4;
             _data    = static_cast<uint8_t*>(malloc(_dataLen));
-            if (UTILS_UNLIKELY(etc2_decode_image(format, static_cast<const uint8_t*>(data) + pixelOffset,
+            if (AX_UNLIKELY(etc2_decode_image(format, static_cast<const uint8_t*>(data) + pixelOffset,
                                                  static_cast<etc2_byte*>(_data), _width, _height) != 0))
             {
                 // software decode fail, release pixels data
@@ -1999,7 +1999,7 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
             _dataLen = _width * _height * 4;
             _data    = static_cast<uint8_t*>(malloc(_dataLen));
-            if (UTILS_UNLIKELY(astc_decompress_image(static_cast<const uint8_t*>(data) + ASTC_HEAD_SIZE,
+            if (AX_UNLIKELY(astc_decompress_image(static_cast<const uint8_t*>(data) + ASTC_HEAD_SIZE,
                                                      static_cast<uint32_t>(dataLen) - ASTC_HEAD_SIZE, _data, _width,
                                                      _height, block_x, block_y) != 0))
             {

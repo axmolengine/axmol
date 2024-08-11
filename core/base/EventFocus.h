@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCEventFocus__
-#define __cocos2d_libs__CCEventFocus__
+#ifndef _AX_EVENTFOCUS_H_
+#define _AX_EVENTFOCUS_H_
 
 #include "base/Event.h"
 
@@ -67,4 +67,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif /* defined(__cocos2d_libs__CCEventFocus__) */
+#endif /* defined(_AX_EVENTFOCUS_H_) */

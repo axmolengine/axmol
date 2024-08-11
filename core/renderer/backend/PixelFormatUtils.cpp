@@ -88,7 +88,7 @@ static_assert(AX_ARRAYSIZE(s_pixelFormatDescriptors) == (int)PixelFormat::COUNT,
 // pixel format helper functions
 const PixelFormatDescriptor& getFormatDescriptor(PixelFormat format)
 {
-    if (UTILS_LIKELY(format < PixelFormat::COUNT))
+    if (AX_LIKELY(format < PixelFormat::COUNT))
         return s_pixelFormatDescriptors[(uint32_t)format];
 
     static const PixelFormatDescriptor s_invalidDescriptor = {};
@@ -97,9 +97,9 @@ const PixelFormatDescriptor& getFormatDescriptor(PixelFormat format)
 
 uint32_t computeRowPitch(PixelFormat format, uint32_t width)
 {
-    if (UTILS_LIKELY(format < PixelFormat::COUNT))
+    if (AX_LIKELY(format < PixelFormat::COUNT))
     {
-        if (UTILS_LIKELY(format >= PixelFormat::ETC1))
+        if (AX_LIKELY(format >= PixelFormat::ETC1))
         {  // @MTL: PVRTC.rowPitc must be 0
             auto& descriptor = s_pixelFormatDescriptors[(uint32_t)format];
             if (format < PixelFormat::RGBA8)

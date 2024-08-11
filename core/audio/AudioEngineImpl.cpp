@@ -930,7 +930,7 @@ void AudioEngineImpl::_updatePlayers(bool forStop)
     }
 
     // don't invoke finish callback when stop/stopAll to avoid stack overflow
-    if (UTILS_LIKELY(!forStop))
+    if (AX_LIKELY(!forStop))
     {
         if (!_finishCallbacks.empty())
         {

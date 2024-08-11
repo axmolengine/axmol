@@ -24,8 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __cocos2d_libs__LayoutComponent__
-#define __cocos2d_libs__LayoutComponent__
+#ifndef _AX_LAYOUTCOMPONENT_H_
+#define _AX_LAYOUTCOMPONENT_H_
 #include "2d/Component.h"
 #include "ui/GUIExport.h"
 
@@ -429,4 +429,4 @@ protected:
 // end of ui group
 /// @}
 NS_AX_END
-#endif /* defined(__cocos2d_libs__LayoutComponent__) */
+#endif /* defined(_AX_LAYOUTCOMPONENT_H_) */

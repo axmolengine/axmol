@@ -24,26 +24,26 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef CCUITextInput_h
-#define CCUITextInput_h
+#ifndef AXUITextInput_h
+#define AXUITextInput_h
 
 /**
  This protocol provides a common interface for consolidating text input method calls
  */
-@protocol CCUITextInput <NSObject>
+@protocol AXUITextInput <NSObject>
 
-@property(nonatomic, retain, setter=ccui_setText:) NSString* ccui_text;
-@property(nonatomic, retain, setter=ccui_setTextColor:) NSColor* ccui_textColor;
-@property(nonatomic, retain, setter=ccui_setFont:) NSFont* ccui_font;
-@property(nonatomic, assign, setter=ccui_setMaxLength:) int ccui_maxLength;
-@property(nonatomic, retain, setter=ccui_setPlaceholder:) NSString* ccui_placeholder;
-@property(nonatomic, retain, setter=ccui_setPlaceholderColor:) NSColor* ccui_placeholderColor;
-@property(nonatomic, retain, setter=ccui_setPlaceholderFont:) NSFont* ccui_placeholderFont;
-@property(nonatomic, assign, setter=ccui_setTextHorizontalAlignment:) NSTextAlignment ccui_alignment;
+@property(nonatomic, retain, setter=axui_setText:) NSString* axui_text;
+@property(nonatomic, retain, setter=axui_setTextColor:) NSColor* axui_textColor;
+@property(nonatomic, retain, setter=axui_setFont:) NSFont* axui_font;
+@property(nonatomic, assign, setter=axui_setMaxLength:) int axui_maxLength;
+@property(nonatomic, retain, setter=axui_setPlaceholder:) NSString* axui_placeholder;
+@property(nonatomic, retain, setter=axui_setPlaceholderColor:) NSColor* axui_placeholderColor;
+@property(nonatomic, retain, setter=axui_setPlaceholderFont:) NSFont* axui_placeholderFont;
+@property(nonatomic, assign, setter=axui_setTextHorizontalAlignment:) NSTextAlignment axui_alignment;
 
 /* can only set. and not get, since the getter will only return one delegate implementation */
-- (void)ccui_setDelegate:(id<NSTextFieldDelegate, NSTextViewDelegate>)delegate;
+- (void)axui_setDelegate:(id<NSTextFieldDelegate, NSTextViewDelegate>)delegate;
 
 @end
 
-#endif /* CCUITextInput_h */
+#endif /* AXUITextInput_h */

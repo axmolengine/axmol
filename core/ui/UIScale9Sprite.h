@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__UIScale9Sprite__
-#define __cocos2d_libs__UIScale9Sprite__
+#ifndef _AXUI_SCALE9SPRITE_H_
+#define _AXUI_SCALE9SPRITE_H_
 
 #include "2d/Sprite.h"
 #include "2d/SpriteFrame.h"
@@ -562,4 +562,4 @@ protected:
 // end of ui group
 /// @}
 
-#endif /* defined(__cocos2d_libs__UIScale9Sprite__) */
+#endif /* defined(_AXUI_SCALE9SPRITE_H_) */

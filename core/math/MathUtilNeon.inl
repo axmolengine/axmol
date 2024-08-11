@@ -57,7 +57,7 @@ struct MathUtilNeon
     inline static void multiplyMatrix(const _xm128_t* m, float scalar, _xm128_t* dst)
     {
         _xm128_t s = vdupq_n_f32(scalar);
-        UTILS_UNROLL
+        AX_UNROLL
         for (int i = 0; i < 4; ++i)
         {
             dst[i] = vmulq_f32(m[i], s);
@@ -68,7 +68,7 @@ struct MathUtilNeon
     {
         float32x4_t product[4];
         float32x4_t val;
-        UTILS_UNROLL
+        AX_UNROLL
         for (int i = 0; i < 4; ++i)
         {
             val        = vmulq_n_f32(m1[0], vgetq_lane_f32(m2[i], 0));
@@ -82,7 +82,7 @@ struct MathUtilNeon
 
     inline static void negateMatrix(const _xm128_t* m, _xm128_t* dst)
     {
-        UTILS_UNROLL
+        AX_UNROLL
         for (int i = 0; i < 4; ++i)
         {
             dst[i] = vnegq_f32(m[i]);

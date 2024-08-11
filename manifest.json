@@ -1,6 +1,6 @@
 {
   "versions": {
-    "1kdist": "v88",
+    "1kdist": "v90",
     "oboe": "1.9.0",
     "kcp": "v1.7-f2aa30e",
     "lz4": "v1.10.0",

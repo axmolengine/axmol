@@ -24,8 +24,8 @@
 
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCKeyboardEvent__
-#define __cocos2d_libs__CCKeyboardEvent__
+#ifndef _AX_KEYBOARDEVENT_H_
+#define _AX_KEYBOARDEVENT_H_
 
 #include "base/Event.h"
 
@@ -240,4 +240,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif /* defined(__cocos2d_libs__CCKeyboardEvent__) */
+#endif /* defined(_AX_KEYBOARDEVENT_H_) */

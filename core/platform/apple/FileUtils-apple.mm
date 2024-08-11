@@ -256,7 +256,7 @@ std::string FileUtilsApple::getFullPathForFilenameWithinDirectory(std::string_vi
     return fullPath;
 }
 
-bool FileUtilsApple::createDirectory(std::string_view path) const
+bool FileUtilsApple::createDirectories(std::string_view path) const
 {
     AXASSERT(!path.empty(), "Invalid path");
 

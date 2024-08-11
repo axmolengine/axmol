@@ -1,22 +1,60 @@
-## axmol-2.1.5 ?? 2024
+## axmol-2.1.5 Aug.11 2024
 
-### Significant changes relative to 2.1.5:
+### Significant changes relative to 2.1.4:
 
 - Add render I420 video support by @halx99 in https://github.com/axmolengine/axmol/pull/2050 , also fix issue #2049 reported by @SimplyJpk
+- Refactor math simd by @halx99 in https://github.com/axmolengine/axmol/pull/2070, proposed by @huiguochen and @smilediver
+  - Implement NEON transformVertices & transformIndices by @smilediver in https://github.com/axmolengine/axmol/pull/2065
+  - Implement SSE transformVertices & transformIndices, proposed by @huiguochen
+  - Add cmake option `AX_WASM_ISA_SIMD` to support build wasm with SIMD support, supports values `sse`, `neon`
+  - Rewrite all neon inline asm code with NEON intrinsics, this will allow WASM and winuwp-arm64 can compile with NEON intrinsic
+- Improve FileUtils by @halx99
+  - Rename FileUtils::createDirectory to FileUtils::createDirectories
+  - Use splitpath_cb to optimize FileUtils::createDirectories
+  - Rename FileUtils::getFileShortName to FileUtils::getPathBaseName
+  - Rename FileUtils::getFileExtension to FileUtils::getPathExtension
+  - Add FileUtils::getPathDirName
+  - Add FileUtils::getPathBaseNameNoExtension
+  - Mark all renamed FileUtils stubs old name deprecated
+  - Mark all FileUtils offthread APIs deprecated
+- Remove arch suffix of host default build output directory for axmol cmdline
 
 ### Bug Fixes
 
-- Use correct starting index of index buffer by @rh101 in https://github.com/axmolengine/axmol/pull/2052
+- Fix checkReallySupportsASTC does not work on ios device reported by @BIGCATDOG in https://github.com/axmolengine/axmol/issues/2078
+- Fix ImGui index draw info incorrect by @rh101 in https://github.com/axmolengine/axmol/pull/2052
 - Fix ArchLinux setup dependencies always fail by @halx99
 - Fix android VolatileTexture memory leak when addImage(img,k,fmt)
+- Fix cmake prebuilt link error by @IamSanjid in https://github.com/axmolengine/axmol/pull/2058
+- Fix prebuilt openssl dll path incorrect for winuwp by @halx99
+- Fix #2060, make http request/respose reference counter thread-safe by @halx99 in https://github.com/axmolengine/axmol/pull/2064, reported by @qq461787436
+- Fix Curl downloader not observing set task limits by @smilediver in https://github.com/axmolengine/axmol/pull/2067
+- Fix a regression introduced by 2.1.4 that live2d compile error by @halx99, reported by @Sevael
+- Fix unexpected libpng from system used
+- Fix #1751, use coroutine control AutoTest flow
 
 ### Improvements
 
+- Enhance Color4F and method naming change by @rh101 in https://github.com/axmolengine/axmol/pull/2072
+- Improve FastRNG implementation by @DelinWorks in https://github.com/axmolengine/axmol/pull/2056
+  - Move FastRNG to ax ns and more improvements by @DelinWorks in https://github.com/axmolengine/axmol/pull/2057
+  - Add missing include for AXASSERT by @smilediver in https://github.com/axmolengine/axmol/pull/2081
 - Handle premultiplied alpha for grayscale PNGs by @j-jorge in https://github.com/axmolengine/axmol/pull/2047
+- Optimize ProgramState::setTexture() to avoid vector (de)allocations by @smilediver in https://github.com/axmolengine/axmol/pull/2061
+- Add OpenType font (.otf) to the noCompress list by @danialias in https://github.com/axmolengine/axmol/pull/2077
+- Update DrawNodeEx aka DrawNodeV2 to 0.95.1 by @aismann in https://github.com/axmolengine/axmol/pull/2079
+
+### sdks updates
+
+- cppwinrt: 2.0.240111.5 ==> 2.0.240405.15
 
 ### 3rdparty updates
 
+- box2d: 2.4.1 ==> 2.4.2
+- curl: 8.8.0 ==> 8.9.1
+- simdjson: 3.9.5 ==> 3.10.0
 - lz4: 1.9.4 ==> 1.10.0
+- c-ares: 1.32.2 ==> 1.33.0
 
 ## axmol-2.1.4 Jun.20 2024
 

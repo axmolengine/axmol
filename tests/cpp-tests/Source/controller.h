@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include <atomic>
 
 #include "platform/PlatformMacros.h"
+#include "2d/ActionCoroutine.h"
 
 class TestList;
 class TestSuite;
@@ -69,24 +70,17 @@ public:
 private:
     TestController();
 
-    void traverseThreadFunc();
-
-    void traverseTestList(TestList* testList);
-    void traverseTestSuite(TestSuite* testSuite);
+    ax::Coroutine traverseTestList(TestList* testList);
+    ax::Coroutine traverseTestSuite(TestSuite* testSuite);
     bool checkTest(TestCase* testCase);
 
-    void logEx(const char* format, ...);
-
-    std::atomic<bool> _stopAutoTest;
+    bool _stopAutoTest;
     bool _isRunInBackground;
 
     TestList* _rootTestList;
     TestSuite* _testSuite;
 
-    std::thread _autoTestThread;
-
-    std::condition_variable _sleepCondition;
-    std::unique_lock<std::mutex>* _sleepUniqueLock;
+    ax::Node* _autoTestRunner{nullptr};
 
     ax::Director* _director;
     ax::EventListenerTouchOneByOne* _touchListener;
