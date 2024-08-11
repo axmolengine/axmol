@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCCustomEvent__
-#define __cocos2d_libs__CCCustomEvent__
+#ifndef _AX_CUSTOMEVENT_H_
+#define _AX_CUSTOMEVENT_H_
 
 #include <string>
 #include "base/Event.h"
@@ -77,4 +77,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif /* defined(__cocos2d_libs__CCCustomEvent__) */
+#endif /* defined(_AX_CUSTOMEVENT_H_) */

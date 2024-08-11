@@ -60,7 +60,7 @@ public:
     void setBundle(NSBundle* bundle);
 #endif
 
-    virtual bool createDirectory(std::string_view path) const override;
+    virtual bool createDirectories(std::string_view path) const override;
     virtual std::string getPathForDirectory(std::string_view dir,
                                             std::string_view searchPath) const override;
 

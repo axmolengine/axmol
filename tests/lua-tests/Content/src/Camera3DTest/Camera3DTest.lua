@@ -145,7 +145,7 @@ function Camera3DTestDemo:updateState( dt )
             end
         else
             if cosAngle > 0.01 then
-                self._curState = bit._or(State.Rotate,State.Move)
+                self._curState = bit.bor(State.Rotate,State.Move)
             else
                 self._curState = State.Move
             end
@@ -154,7 +154,7 @@ function Camera3DTestDemo:updateState( dt )
 end
 
 function Camera3DTestDemo:isState(state, dstState)
-    return bit._and(state, dstState) == dstState
+    return bit.band(state, dstState) == dstState
 end
 
 function Camera3DTestDemo:move3D(dt)

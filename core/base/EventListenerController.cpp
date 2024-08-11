@@ -31,7 +31,7 @@
 
 NS_AX_BEGIN
 
-const std::string EventListenerController::LISTENER_ID = "__cc_controller";
+const std::string EventListenerController::LISTENER_ID = "__ax_controller";
 
 EventListenerController* EventListenerController::create()
 {

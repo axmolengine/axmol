@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCController__
-#define __cocos2d_libs__CCController__
+#ifndef _AX_CONTROLLER_H_
+#define _AX_CONTROLLER_H_
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
      AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX ||   \
      defined(_WIN32) /* win32 & winuwp */ || \
@@ -251,4 +251,4 @@ private:
 
 NS_AX_END
 #endif
-#endif /* defined(__cocos2d_libs__CCController__) */
+#endif /* defined(_AX_CONTROLLER_H_) */

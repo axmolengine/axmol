@@ -151,58 +151,38 @@ bool FileUtilsWinRT::isDirectoryExistInternal(std::string_view dirPath) const
     return (fAttrib != INVALID_FILE_ATTRIBUTES && (fAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
-bool FileUtilsWinRT::createDirectory(std::string_view path) const
+bool FileUtilsWinRT::createDirectories(std::string_view dirPath) const
 {
-    AXASSERT(!path.empty(), "Invalid path");
+    AXASSERT(!dirPath.empty(), "Invalid path");
 
-    if (isDirectoryExist(path))
+    if (isDirectoryExist(dirPath))
         return true;
 
-    // Split the path
-    size_t start = 0;
-    size_t found = path.find_first_of("/\\", start);
-    std::string subpath;
-    std::vector<std::string> dirs;
+    std::wstring path = ntcvt::from_chars(dirPath);
 
-    if (found != std::string::npos)
+    bool fail = false;
+    if ((GetFileAttributesW(path.c_str())) == INVALID_FILE_ATTRIBUTES)
     {
-        while (true)
-        {
-            subpath = path.substr(start, found - start + 1);
-            if (!subpath.empty())
-                dirs.push_back(subpath);
-            start = found + 1;
-            found = path.find_first_of("/\\", start);
-            if (found == std::string::npos)
+        axstd::splitpath_cb(
+            &path.front(), [](wchar_t* ptr) { return *ptr != '\0'; },
+            [&dirPath, &fail](const wchar_t* subpath) {
+            auto attribs = GetFileAttributesW(subpath);
+            if (attribs == INVALID_FILE_ATTRIBUTES)
             {
-                if (start < path.length())
-                {
-                    dirs.emplace_back(path.substr(start));
-                }
-                break;
-            }
-        }
-    }
-
-    WIN32_FILE_ATTRIBUTE_DATA wfad;
-
-    if (!(GetFileAttributesEx(ntcvt::from_chars(path).c_str(), GetFileExInfoStandard, &wfad)))
-    {
-        subpath = "";
-        for (unsigned int i = 0, size = dirs.size(); i < size; ++i)
-        {
-            subpath += dirs[i];
-            if (i > 0 && !isDirectoryExist(subpath))
-            {
-                BOOL ret = CreateDirectory(ntcvt::from_chars(subpath).c_str(), NULL);
+                BOOL ret = CreateDirectoryW(subpath, NULL);
                 if (!ret && ERROR_ALREADY_EXISTS != GetLastError())
                 {
-                    return false;
+                    fail = true;
+                    AXLOGE("Fail create directory {} !Error code is 0x{:x}", dirPath, GetLastError());
                 }
             }
-        }
+            else
+                fail = !(attribs & FILE_ATTRIBUTE_DIRECTORY);
+
+            return fail;
+        });
     }
-    return true;
+    return !fail;
 }
 
 bool FileUtilsWinRT::removeDirectory(std::string_view path) const

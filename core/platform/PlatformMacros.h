@@ -465,25 +465,25 @@ public:                                                 \
  */
 #if __has_builtin(__builtin_expect)
 #    ifdef __cplusplus
-#        define UTILS_LIKELY(exp)   (__builtin_expect(!!(exp), true))
-#        define UTILS_UNLIKELY(exp) (__builtin_expect(!!(exp), false))
+#        define AX_LIKELY(exp)   (__builtin_expect(!!(exp), true))
+#        define AX_UNLIKELY(exp) (__builtin_expect(!!(exp), false))
 #    else
-#        define UTILS_LIKELY(exp)   (__builtin_expect(!!(exp), 1))
-#        define UTILS_UNLIKELY(exp) (__builtin_expect(!!(exp), 0))
+#        define AX_LIKELY(exp)   (__builtin_expect(!!(exp), 1))
+#        define AX_UNLIKELY(exp) (__builtin_expect(!!(exp), 0))
 #    endif
 #else
-#    define UTILS_LIKELY(exp)   (!!(exp))
-#    define UTILS_UNLIKELY(exp) (!!(exp))
+#    define AX_LIKELY(exp)   (!!(exp))
+#    define AX_UNLIKELY(exp) (!!(exp))
 #endif
 
 #if defined(_MSC_VER)
 // MSVC does not support loop unrolling hints
-#    define UTILS_UNROLL
-#    define UTILS_NOUNROLL
+#    define AX_UNROLL
+#    define AX_NOUNROLL
 #else
 // C++11 allows pragmas to be specified as part of defines using the _Pragma syntax.
-#    define UTILS_UNROLL   _Pragma("unroll")
-#    define UTILS_NOUNROLL _Pragma("nounroll")
+#    define AX_UNROLL   _Pragma("unroll")
+#    define AX_NOUNROLL _Pragma("nounroll")
 #endif
 
 #endif  // __AX_PLATFORM_MACROS_H__

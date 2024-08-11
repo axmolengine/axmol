@@ -25,8 +25,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _CCFontFNT_h_
-#define _CCFontFNT_h_
+#ifndef _AX_FONTFNT_H_
+#define _AX_FONTFNT_H_
 
 /// @cond DO_NOT_SHOW
 
@@ -190,4 +190,4 @@ protected:
 
 NS_AX_END
 
-#endif /* defined(__cocos2d_libs__CCFontFNT__) */
+#endif /* defined(_AX_FONTFNT_H_) */

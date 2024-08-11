@@ -96,7 +96,7 @@ protected:
      *  @param dirPath The path of the directory, it must be an absolute path.
      *  @return True if the directory have been created successfully, false if not.
      */
-    virtual bool createDirectory(std::string_view dirPath) const override;
+    virtual bool createDirectories(std::string_view dirPath) const override;
 
     /**
      *  Removes a directory.

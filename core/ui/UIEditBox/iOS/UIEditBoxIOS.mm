@@ -43,8 +43,8 @@
 {
     [super initialize];
 
-    LoadUITextViewCCUITextInputCategory();
-    LoadUITextFieldCCUITextInputCategory();
+    LoadUITextViewAXUITextInputCategory();
+    LoadUITextFieldAXUITextInputCategory();
 }
 
 #pragma mark - Init & Dealloc
@@ -77,7 +77,7 @@
 
 #pragma mark - Properties
 
-- (void)setTextInput:(UIView<UITextInput, CCUITextInput>*)textInput
+- (void)setTextInput:(UIView<UITextInput, AXUITextInput>*)textInput
 {
     if (_textInput == textInput)
     {
@@ -88,15 +88,15 @@
     textInput.backgroundColor = [UIColor clearColor];
     textInput.hidden          = true;
     textInput.returnKeyType   = UIReturnKeyDefault;
-    [textInput ccui_setDelegate:self];
+    [textInput axui_setDelegate:self];
 
     // Migrate properties
-    textInput.ccui_textColor   = _textInput.ccui_textColor ?: [UIColor whiteColor];
-    textInput.ccui_text        = _textInput.ccui_text ?: @"";
-    textInput.ccui_placeholder = _textInput.ccui_placeholder ?: @"";
-    textInput.ccui_font        = _textInput.ccui_font ?: [UIFont systemFontOfSize:self.frameRect.size.height * 2 / 3];
-    textInput.ccui_placeholderFont      = _textInput.ccui_placeholderFont ?: textInput.ccui_font;
-    textInput.ccui_placeholderTextColor = _textInput.ccui_placeholderTextColor ?: [UIColor lightGrayColor];
+    textInput.axui_textColor   = _textInput.axui_textColor ?: [UIColor whiteColor];
+    textInput.axui_text        = _textInput.axui_text ?: @"";
+    textInput.axui_placeholder = _textInput.axui_placeholder ?: @"";
+    textInput.axui_font        = _textInput.axui_font ?: [UIFont systemFontOfSize:self.frameRect.size.height * 2 / 3];
+    textInput.axui_placeholderFont      = _textInput.axui_placeholderFont ?: textInput.axui_font;
+    textInput.axui_placeholderTextColor = _textInput.axui_placeholderTextColor ?: [UIColor lightGrayColor];
 
     [_textInput resignFirstResponder];
     [_textInput removeFromSuperview];
@@ -131,22 +131,22 @@
 
 - (void)setFont:(UIFont*)font
 {
-    self.textInput.ccui_font = font;
+    self.textInput.axui_font = font;
 }
 
 - (void)setTextColor:(UIColor*)color
 {
-    self.textInput.ccui_textColor = color;
+    self.textInput.axui_textColor = color;
 }
 
 - (void)setPlaceholderFont:(UIFont*)font
 {
-    self.textInput.ccui_placeholderFont = font;
+    self.textInput.axui_placeholderFont = font;
 }
 
 - (void)setPlaceholderTextColor:(UIColor*)color
 {
-    self.textInput.ccui_placeholderTextColor = color;
+    self.textInput.axui_placeholderTextColor = color;
 }
 
 - (void)setInputMode:(ax::ui::EditBox::InputMode)inputMode
@@ -205,7 +205,7 @@
     {
     case ax::ui::EditBox::InputFlag::PASSWORD:
         // textView can't be used for input password
-        self.textInput.ccui_secureTextEntry = YES;
+        self.textInput.axui_secureTextEntry = YES;
         break;
 
     case ax::ui::EditBox::InputFlag::INITIAL_CAPS_WORD:
@@ -270,17 +270,17 @@
 
 - (void)setTextHorizontalAlignment:(ax::TextHAlignment)alignment
 {
-    self.textInput.ccui_alignment = static_cast<NSTextAlignment>(alignment);
+    self.textInput.axui_alignment = static_cast<NSTextAlignment>(alignment);
 }
 
 - (void)setText:(NSString*)text
 {
-    self.textInput.ccui_text = text;
+    self.textInput.axui_text = text;
 }
 
 - (NSString*)text
 {
-    return self.textInput.ccui_text ?: @"";
+    return self.textInput.axui_text ?: @"";
 }
 
 - (void)setVisible:(BOOL)visible
@@ -290,7 +290,7 @@
 
 - (NSString*)getDefaultFontName
 {
-    return self.textInput.ccui_font.fontName ?: @"";
+    return self.textInput.axui_font.fontName ?: @"";
 }
 
 - (ax::ui::EditBoxDelegate::EditBoxEndAction)getEndAction
@@ -314,7 +314,7 @@
 
 - (void)setPlaceHolder:(NSString*)text
 {
-    self.textInput.ccui_placeholder = text;
+    self.textInput.axui_placeholder = text;
 }
 
 - (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)distance

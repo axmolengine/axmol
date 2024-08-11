@@ -576,4 +576,4 @@ void Device::selectionChanged() {}
 
 NS_AX_END
 
-#endif  // (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+#endif  // (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
