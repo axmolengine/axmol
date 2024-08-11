@@ -1,4 +1,4 @@
-## axmol-2.1.5 ?? 2024
+## axmol-2.1.5 Aug.11 2024
 
 ### Significant changes relative to 2.1.4:
 
@@ -8,6 +8,16 @@
   - Implement SSE transformVertices & transformIndices, proposed by @huiguochen
   - Add cmake option `AX_WASM_ISA_SIMD` to support build wasm with SIMD support, supports values `sse`, `neon`
   - Rewrite all neon inline asm code with NEON intrinsics, this will allow WASM and winuwp-arm64 can compile with NEON intrinsic
+- Improve FileUtils by @halx99
+  - Rename FileUtils::createDirectory to FileUtils::createDirectories
+  - Use splitpath_cb to optimize FileUtils::createDirectories
+  - Rename FileUtils::getFileShortName to FileUtils::getPathBaseName
+  - Rename FileUtils::getFileExtension to FileUtils::getPathExtension
+  - Add FileUtils::getPathDirName
+  - Add FileUtils::getPathBaseNameNoExtension
+  - Mark all renamed FileUtils stubs old name deprecated
+  - Mark all FileUtils offthread APIs deprecated
+- Remove arch suffix of host default build output directory for axmol cmdline
 
 ### Bug Fixes
 
@@ -28,9 +38,11 @@
 - Enhance Color4F and method naming change by @rh101 in https://github.com/axmolengine/axmol/pull/2072
 - Improve FastRNG implementation by @DelinWorks in https://github.com/axmolengine/axmol/pull/2056
   - Move FastRNG to ax ns and more improvements by @DelinWorks in https://github.com/axmolengine/axmol/pull/2057
+  - Add missing include for AXASSERT by @smilediver in https://github.com/axmolengine/axmol/pull/2081
 - Handle premultiplied alpha for grayscale PNGs by @j-jorge in https://github.com/axmolengine/axmol/pull/2047
 - Optimize ProgramState::setTexture() to avoid vector (de)allocations by @smilediver in https://github.com/axmolengine/axmol/pull/2061
 - Add OpenType font (.otf) to the noCompress list by @danialias in https://github.com/axmolengine/axmol/pull/2077
+- Update DrawNodeEx aka DrawNodeV2 to 0.95.1 by @aismann in https://github.com/axmolengine/axmol/pull/2079
 
 ### sdks updates
 
@@ -40,6 +52,7 @@
 
 - box2d: 2.4.1 ==> 2.4.2
 - curl: 8.8.0 ==> 8.9.1
+- simdjson: 3.9.5 ==> 3.10.0
 - lz4: 1.9.4 ==> 1.10.0
 - c-ares: 1.32.2 ==> 1.33.0
 
