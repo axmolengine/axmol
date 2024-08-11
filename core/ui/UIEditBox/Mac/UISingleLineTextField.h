@@ -27,7 +27,7 @@
 #import <AppKit/AppKit.h>
 #include "ui/UIEditBox/Mac/UITextInput.h"
 
-@interface CCUISingleLineTextField : NSTextField <CCUITextInput> {
+@interface CCUISingleLineTextField : NSTextField <AXUITextInput> {
 }
 
 @end

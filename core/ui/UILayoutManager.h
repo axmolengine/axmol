@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCLayoutManager__
-#define __cocos2d_libs__CCLayoutManager__
+#ifndef _AX_LAYOUTMANAGER_H_
+#define _AX_LAYOUTMANAGER_H_
 
 #include "base/Object.h"
 #include "base/Vector.h"
@@ -172,4 +172,4 @@ private:
 NS_AX_END
 // end of ui group
 /// @}
-#endif /* defined(__cocos2d_libs__CCLayoutManager__) */
+#endif /* defined(_AX_LAYOUTMANAGER_H_) */

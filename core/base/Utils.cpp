@@ -56,6 +56,7 @@ THE SOFTWARE.
 
 #include "base/base64.h"
 #include "base/axstd.h"
+#include "yasio/string_view.hpp"
 
 using namespace std::string_view_literals;
 
@@ -825,6 +826,37 @@ std::string urlDecode(std::string_view st)
         }
     }
     return decoded;
+}
+
+AX_DLL std::string& filePathToUrl(std::string&& path)
+{
+    //
+    // file uri helper: https://www.ietf.org/rfc/rfc3986.txt
+    //
+    static constexpr std::string_view LOCAL_FILE_URL_PREFIX = "file:///"sv;  // The localhost file prefix
+
+    // windows: file:///D:/xxx/xxx.mp4
+    // unix: file:///home/xxx/xxx.mp4
+    // android_asset:
+    //   - file:///android_asset/xxx/xxx.mp4
+    //   - asset://android_asset/xxx/xxx.mp4
+    if (!path.empty())
+    {
+        if (path[0] == '/')
+            path.insert(0, LOCAL_FILE_URL_PREFIX.data(), LOCAL_FILE_URL_PREFIX.length() - 1);
+        else if (!cxx20::ic::starts_with(path, LOCAL_FILE_URL_PREFIX))
+        {
+#if !defined(__ANDROID__)
+            path.insert(0, LOCAL_FILE_URL_PREFIX.data(), LOCAL_FILE_URL_PREFIX.length());
+#else
+            if (!cxx20::starts_with(path, "assets/"sv))  // not android asset
+                path.insert(0, LOCAL_FILE_URL_PREFIX.data(), LOCAL_FILE_URL_PREFIX.length());
+            else
+                path.replace(0, "assets/"sv.length(), "file:///android_asset/");
+#endif
+        }
+    }
+    return path;
 }
 
 AX_DLL std::string base64Encode(const void* in, size_t inlen)

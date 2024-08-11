@@ -457,7 +457,7 @@ bool VlcMediaEngine::transferVideoFrame()
         return false;
 
     std::unique_lock<std::mutex> lck(_frameBuffer1Mtx);
-    if (UTILS_LIKELY(!_frameBuffer1.empty()))
+    if (AX_LIKELY(!_frameBuffer1.empty()))
     {
         _frameBuffer2.swap(_frameBuffer1);
         lck.unlock();  // unlock immidiately before invoke user callback (maybe upload buffer to GPU)

@@ -11,7 +11,7 @@
 
 ## Box2D
 - [![Upstream](https://img.shields.io/github/v/release/erincatto/box2d?label=Upstream)](https://github.com/erincatto/box2d)
-- Version: 2.4.1
+- Version: 2.4.2
 - License: MIT
 
 ## Bullet
@@ -22,7 +22,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.32.2
+- Version: 1.33.0
 - License: MIT
 
 ## Chipmunk2D
@@ -47,8 +47,13 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.8.0
+- Version: 8.9.1
 - License: Curl (MIT/X)
+
+## doctest
+- [![Upstream](https://img.shields.io/github/v/release/doctest/doctest?label=Upstream)](https://github.com/doctest/doctest)
+- Version: 2.4.11
+- License: MIT
 
 ## FastLZ
 - Upstream: https://github.com/ariya/FastLZ
@@ -118,7 +123,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-5790d25
+  - Version: 2.1-04dca79
   - License: MIT
 
 - tolua
@@ -213,7 +218,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 3.9.5
+- Version: 3.10.0
 - License: Apache-2.0
 
 ## stb (stb_image)

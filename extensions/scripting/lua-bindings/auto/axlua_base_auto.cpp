@@ -33153,56 +33153,6 @@ int lua_ax_base_FileUtils_isFileExist(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_FileUtils_getFileExtension(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::FileUtils* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_getFileExtension'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:getFileExtension");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_getFileExtension'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->getFileExtension(arg0);
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:getFileExtension",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_getFileExtension'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_FileUtils_isAbsolutePath(lua_State* tolua_S)
 {
     int argc = 0;
@@ -33316,65 +33266,52 @@ int lua_ax_base_FileUtils_isDirectoryExist(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_FileUtils_createDirectory(lua_State* tolua_S)
+int lua_ax_base_FileUtils_createDirectories(lua_State* tolua_S)
 {
     int argc = 0;
     ax::FileUtils* cobj = nullptr;
     bool ok  = true;
+
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
+
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
 #endif
+
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
+
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_createDirectory'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_createDirectories'", nullptr);
         return 0;
     }
 #endif
+
     argc = lua_gettop(tolua_S)-1;
-    do{
-        if (argc == 2) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:createDirectory");
+    if (argc == 1) 
+    {
+        std::string_view arg0;
 
-            if (!ok) { break; }
-            std::function<void (bool)> arg1;
-            do {
-			// Lambda binding for lua is not supported.
-			assert(false);
-		} while(0)
-		;
-
-            if (!ok) { break; }
-            cobj->createDirectory(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:createDirectories");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_createDirectories'", nullptr);
+            return 0;
         }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 1) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:createDirectory");
-
-            if (!ok) { break; }
-            bool ret = cobj->createDirectory(arg0);
-            tolua_pushboolean(tolua_S,(bool)ret);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.FileUtils:createDirectory",argc, 1);
+        auto&& ret = cobj->createDirectories(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:createDirectories",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_createDirectory'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_createDirectories'.",&tolua_err);
 #endif
 
     return 0;
@@ -33384,55 +33321,42 @@ int lua_ax_base_FileUtils_removeDirectory(lua_State* tolua_S)
     int argc = 0;
     ax::FileUtils* cobj = nullptr;
     bool ok  = true;
+
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
+
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
 #endif
+
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
+
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_removeDirectory'", nullptr);
         return 0;
     }
 #endif
+
     argc = lua_gettop(tolua_S)-1;
-    do{
-        if (argc == 2) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:removeDirectory");
+    if (argc == 1) 
+    {
+        std::string_view arg0;
 
-            if (!ok) { break; }
-            std::function<void (bool)> arg1;
-            do {
-			// Lambda binding for lua is not supported.
-			assert(false);
-		} while(0)
-		;
-
-            if (!ok) { break; }
-            cobj->removeDirectory(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:removeDirectory");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_removeDirectory'", nullptr);
+            return 0;
         }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 1) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:removeDirectory");
-
-            if (!ok) { break; }
-            bool ret = cobj->removeDirectory(arg0);
-            tolua_pushboolean(tolua_S,(bool)ret);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.FileUtils:removeDirectory",argc, 1);
+        auto&& ret = cobj->removeDirectory(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:removeDirectory",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -33447,55 +33371,42 @@ int lua_ax_base_FileUtils_removeFile(lua_State* tolua_S)
     int argc = 0;
     ax::FileUtils* cobj = nullptr;
     bool ok  = true;
+
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
+
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
 #endif
+
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
+
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_removeFile'", nullptr);
         return 0;
     }
 #endif
+
     argc = lua_gettop(tolua_S)-1;
-    do{
-        if (argc == 2) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:removeFile");
+    if (argc == 1) 
+    {
+        std::string_view arg0;
 
-            if (!ok) { break; }
-            std::function<void (bool)> arg1;
-            do {
-			// Lambda binding for lua is not supported.
-			assert(false);
-		} while(0)
-		;
-
-            if (!ok) { break; }
-            cobj->removeFile(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:removeFile");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_removeFile'", nullptr);
+            return 0;
         }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 1) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:removeFile");
-
-            if (!ok) { break; }
-            bool ret = cobj->removeFile(arg0);
-            tolua_pushboolean(tolua_S,(bool)ret);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.FileUtils:removeFile",argc, 1);
+        auto&& ret = cobj->removeFile(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:removeFile",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -33527,54 +33438,6 @@ int lua_ax_base_FileUtils_renameFile(lua_State* tolua_S)
 #endif
     argc = lua_gettop(tolua_S)-1;
     do{
-        if (argc == 4) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:renameFile");
-
-            if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.FileUtils:renameFile");
-
-            if (!ok) { break; }
-            std::string_view arg2;
-            ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "ax.FileUtils:renameFile");
-
-            if (!ok) { break; }
-            std::function<void (bool)> arg3;
-            do {
-			// Lambda binding for lua is not supported.
-			assert(false);
-		} while(0)
-		;
-
-            if (!ok) { break; }
-            cobj->renameFile(arg0, arg1, arg2, arg3);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 3) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:renameFile");
-
-            if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.FileUtils:renameFile");
-
-            if (!ok) { break; }
-            std::string_view arg2;
-            ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "ax.FileUtils:renameFile");
-
-            if (!ok) { break; }
-            bool ret = cobj->renameFile(arg0, arg1, arg2);
-            tolua_pushboolean(tolua_S,(bool)ret);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:renameFile");
@@ -33600,16 +33463,12 @@ int lua_ax_base_FileUtils_renameFile(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.FileUtils:renameFile");
 
             if (!ok) { break; }
-            std::function<void (bool)> arg2;
-            do {
-			// Lambda binding for lua is not supported.
-			assert(false);
-		} while(0)
-		;
+            std::string_view arg2;
+            ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "ax.FileUtils:renameFile");
 
             if (!ok) { break; }
-            cobj->renameFile(arg0, arg1, arg2);
-            lua_settop(tolua_S, 1);
+            bool ret = cobj->renameFile(arg0, arg1, arg2);
+            tolua_pushboolean(tolua_S,(bool)ret);
             return 1;
         }
     }while(0);
@@ -33629,55 +33488,42 @@ int lua_ax_base_FileUtils_getFileSize(lua_State* tolua_S)
     int argc = 0;
     ax::FileUtils* cobj = nullptr;
     bool ok  = true;
+
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
+
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
 #endif
+
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
+
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_getFileSize'", nullptr);
         return 0;
     }
 #endif
+
     argc = lua_gettop(tolua_S)-1;
-    do{
-        if (argc == 2) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:getFileSize");
+    if (argc == 1) 
+    {
+        std::string_view arg0;
 
-            if (!ok) { break; }
-            std::function<void (long long)> arg1;
-            do {
-			// Lambda binding for lua is not supported.
-			assert(false);
-		} while(0)
-		;
-
-            if (!ok) { break; }
-            cobj->getFileSize(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:getFileSize");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_getFileSize'", nullptr);
+            return 0;
         }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 1) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:getFileSize");
-
-            if (!ok) { break; }
-            long long ret = cobj->getFileSize(arg0);
-            tolua_pushnumber(tolua_S,(lua_Number)ret);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.FileUtils:getFileSize",argc, 1);
+        auto&& ret = cobj->getFileSize(arg0);
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:getFileSize",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -33737,63 +33583,6 @@ int lua_ax_base_FileUtils_listFiles(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_FileUtils_listFilesAsync(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::FileUtils* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_listFilesAsync'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
-    {
-        std::string_view arg0;
-        std::function<void (std::vector<std::string>)> arg1;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:listFilesAsync");
-
-        do {
-			// Lambda binding for lua is not supported.
-			assert(false);
-		} while(0)
-		;
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_listFilesAsync'", nullptr);
-            return 0;
-        }
-        cobj->listFilesAsync(arg0, arg1);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:listFilesAsync",argc, 2);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_listFilesAsync'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_FileUtils_listFilesRecursively(lua_State* tolua_S)
 {
     int argc = 0;
@@ -33843,63 +33632,6 @@ int lua_ax_base_FileUtils_listFilesRecursively(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_listFilesRecursively'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_FileUtils_listFilesRecursivelyAsync(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::FileUtils* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_listFilesRecursivelyAsync'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
-    {
-        std::string_view arg0;
-        std::function<void (std::vector<std::string>)> arg1;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:listFilesRecursivelyAsync");
-
-        do {
-			// Lambda binding for lua is not supported.
-			assert(false);
-		} while(0)
-		;
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_listFilesRecursivelyAsync'", nullptr);
-            return 0;
-        }
-        cobj->listFilesRecursivelyAsync(arg0, arg1);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:listFilesRecursivelyAsync",argc, 2);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_listFilesRecursivelyAsync'.",&tolua_err);
 #endif
 
     return 0;
@@ -34113,7 +33845,7 @@ int lua_ax_base_FileUtils_writeBinaryToFile(lua_State* tolua_S)
 #endif
     return 0;
 }
-int lua_ax_base_FileUtils_getFileShortName(lua_State* tolua_S)
+int lua_ax_base_FileUtils_getFileExtension(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -34131,21 +33863,129 @@ int lua_ax_base_FileUtils_getFileShortName(lua_State* tolua_S)
     if (argc == 1)
     {
         std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:getFileShortName");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:getFileExtension");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_getFileShortName'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_getFileExtension'", nullptr);
             return 0;
         }
-        auto&& ret = ax::FileUtils::getFileShortName(arg0);
+        auto&& ret = ax::FileUtils::getFileExtension(arg0);
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.FileUtils:getFileShortName",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.FileUtils:getFileExtension",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_getFileShortName'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_getFileExtension'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_FileUtils_getPathBaseName(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:getPathBaseName");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_getPathBaseName'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::FileUtils::getPathBaseName(arg0);
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.FileUtils:getPathBaseName",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_getPathBaseName'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_FileUtils_getPathBaseNameNoExtension(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:getPathBaseNameNoExtension");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_getPathBaseNameNoExtension'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::FileUtils::getPathBaseNameNoExtension(arg0);
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.FileUtils:getPathBaseNameNoExtension",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_getPathBaseNameNoExtension'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_FileUtils_getPathDirName(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:getPathDirName");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_getPathDirName'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::FileUtils::getPathDirName(arg0);
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.FileUtils:getPathDirName",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_getPathDirName'.",&tolua_err);
 #endif
     return 0;
 }
@@ -34221,24 +34061,24 @@ int lua_register_ax_base_FileUtils(lua_State* tolua_S)
         tolua_function(tolua_S,"writeValueVectorToFile",lua_ax_base_FileUtils_writeValueVectorToFile);
         tolua_function(tolua_S,"getValueVectorFromFile",lua_ax_base_FileUtils_getValueVectorFromFile);
         tolua_function(tolua_S,"isFileExist",lua_ax_base_FileUtils_isFileExist);
-        tolua_function(tolua_S,"getFileExtension",lua_ax_base_FileUtils_getFileExtension);
         tolua_function(tolua_S,"isAbsolutePath",lua_ax_base_FileUtils_isAbsolutePath);
         tolua_function(tolua_S,"isDirectoryExist",lua_ax_base_FileUtils_isDirectoryExist);
-        tolua_function(tolua_S,"createDirectory",lua_ax_base_FileUtils_createDirectory);
+        tolua_function(tolua_S,"createDirectories",lua_ax_base_FileUtils_createDirectories);
         tolua_function(tolua_S,"removeDirectory",lua_ax_base_FileUtils_removeDirectory);
         tolua_function(tolua_S,"removeFile",lua_ax_base_FileUtils_removeFile);
         tolua_function(tolua_S,"renameFile",lua_ax_base_FileUtils_renameFile);
         tolua_function(tolua_S,"getFileSize",lua_ax_base_FileUtils_getFileSize);
         tolua_function(tolua_S,"listFiles",lua_ax_base_FileUtils_listFiles);
-        tolua_function(tolua_S,"listFilesAsync",lua_ax_base_FileUtils_listFilesAsync);
         tolua_function(tolua_S,"listFilesRecursively",lua_ax_base_FileUtils_listFilesRecursively);
-        tolua_function(tolua_S,"listFilesRecursivelyAsync",lua_ax_base_FileUtils_listFilesRecursivelyAsync);
         tolua_function(tolua_S,"isFileExistInternal",lua_ax_base_FileUtils_isFileExistInternal);
         tolua_function(tolua_S,"isDirectoryExistInternal",lua_ax_base_FileUtils_isDirectoryExistInternal);
         tolua_function(tolua_S,"getInstance", lua_ax_base_FileUtils_getInstance);
         tolua_function(tolua_S,"destroyInstance", lua_ax_base_FileUtils_destroyInstance);
         tolua_function(tolua_S,"writeBinaryToFile", lua_ax_base_FileUtils_writeBinaryToFile);
-        tolua_function(tolua_S,"getFileShortName", lua_ax_base_FileUtils_getFileShortName);
+        tolua_function(tolua_S,"getFileExtension", lua_ax_base_FileUtils_getFileExtension);
+        tolua_function(tolua_S,"getPathBaseName", lua_ax_base_FileUtils_getPathBaseName);
+        tolua_function(tolua_S,"getPathBaseNameNoExtension", lua_ax_base_FileUtils_getPathBaseNameNoExtension);
+        tolua_function(tolua_S,"getPathDirName", lua_ax_base_FileUtils_getPathDirName);
         tolua_function(tolua_S,"isAbsolutePathInternal", lua_ax_base_FileUtils_isAbsolutePathInternal);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::FileUtils).name(); // rtti is literal storage

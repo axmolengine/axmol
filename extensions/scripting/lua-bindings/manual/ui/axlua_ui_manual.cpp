@@ -38,6 +38,13 @@
 #        include "lua-bindings/auto/axlua_webview_auto.hpp"
 #        include "lua-bindings/manual/ui/axlua_webview_manual.hpp"
 #    endif
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+#    include "lua-bindings/auto/axlua_webview_auto.hpp"
+#    include "lua-bindings/manual/ui/axlua_webview_manual.hpp"
+#    if defined(AX_ENABLE_VLC_MEDIA)
+#        include "lua-bindings/auto/axlua_video_auto.hpp"
+#        include "lua-bindings/manual/ui/axlua_video_manual.hpp"
+#    endif
 #endif
 
 #include "lua-bindings/manual/tolua_fix.h"
@@ -1178,8 +1185,7 @@ static int toaxlua_EventListenerFocus_registerScriptHandler(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(L, "invalid 'self' in function 'toaxlua_EventListenerFocus_registerScriptHandler'\n",
-                    nullptr);
+        tolua_error(L, "invalid 'self' in function 'toaxlua_EventListenerFocus_registerScriptHandler'\n", nullptr);
         return 0;
     }
 #endif
@@ -1256,6 +1262,13 @@ int register_ui_module(lua_State* L)
 #    if defined(AX_ENABLE_MSEDGE_WEBVIEW2)
         register_all_ax_webview(L);
         register_all_ax_webview_manual(L);
+#    endif
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+        register_all_ax_webview(L);
+        register_all_ax_webview_manual(L);
+#    if defined(AX_ENABLE_VLC_MEDIA)
+        register_all_ax_video(L);
+        register_all_ax_video_manual(L);
 #    endif
 #endif
         extendEventListenerFocusEvent(L);

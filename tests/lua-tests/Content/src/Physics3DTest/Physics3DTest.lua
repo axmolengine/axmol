@@ -9,6 +9,9 @@ local ARRAY_SIZE_Z = 4
 ----------------------------------------
 ----Physics3DTestDemo
 ----------------------------------------
+
+cc.PhysicsSprite3D = ax.PhysicsMeshRenderer
+
 local Physics3DTestDemo = class("Physics3DTestDemo", function ()
     -- body
     local layer = cc.Layer:create()

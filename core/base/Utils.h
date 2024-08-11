@@ -423,6 +423,8 @@ AX_DLL std::string urlEncode(std::string_view s);
 
 AX_DLL std::string urlDecode(std::string_view st);
 
+AX_DLL std::string& filePathToUrl(std::string&& path);
+
 /**
  * Encodes bytes into a 64base buffer
  * @returns base64 encoded string

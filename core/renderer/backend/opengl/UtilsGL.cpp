@@ -292,7 +292,7 @@ void UtilsGL::toGLTypes(PixelFormat textureFormat,
                         GLenum& type,
                         bool& isCompressed)
 {
-    if (UTILS_LIKELY(textureFormat < PixelFormat::COUNT))
+    if (AX_LIKELY(textureFormat < PixelFormat::COUNT))
     {
         auto& info     = s_textureFormats[(int)textureFormat];
         internalFormat = info.internalFmt;

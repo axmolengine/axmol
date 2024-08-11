@@ -21,8 +21,8 @@
  This file was modified to fit the cocos2d-x project
  */
 
-#ifndef __cocos2d_libs__CCProperties__
-#define __cocos2d_libs__CCProperties__
+#ifndef _AX_PROPERTIES_H_
+#define _AX_PROPERTIES_H_
 
 #include <string>
 #include <functional>
@@ -602,4 +602,4 @@ private:
 };
 }
 
-#endif  // __cocos2d_libs__CCProperties__
+#endif  // _AX_PROPERTIES_H_

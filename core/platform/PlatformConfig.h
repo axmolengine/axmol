@@ -174,14 +174,15 @@ Linux: Desktop GL/Vulkan
 
 #ifdef AX_SSE_INTRINSICS
 // axmol math ISA require SSE2 at latest
-#    include <emmintrin.h>
 #    if defined(__SSE4_1__)
 #        include <smmintrin.h>
+#    else
+#        include <emmintrin.h>
 #    endif
-using _xm128_t = __m128;
+typedef __m128 _xm128_t;
 #elif defined(AX_NEON_INTRINSICS)
 #    include <arm_neon.h>
-using _xm128_t = float32x4_t;
+typedef float32x4_t _xm128_t;
 #endif
 
 /// @endcond

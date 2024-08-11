@@ -38,14 +38,12 @@
 #include "renderer/backend/ProgramState.h"
 #include "poly2tri/poly2tri.h"
 
-
 #if defined(_WIN32)
 #    pragma push_macro("TRANSPARENT")
 #    undef TRANSPARENT
 #endif
 
 NS_AX_EXT_BEGIN
-
 
 /** Is a polygon convex?
 * @param verts A pointer to point coordinates.
@@ -62,33 +60,42 @@ static bool isConvex(const Vec2* verts, int count)
 
         double crossProduct = (B.x - A.x) * (C.y - B.y) - (B.y - A.y) * (C.x - B.x);
 
-        if (crossProduct > 0)
-        {
-            isPositive = true;
-        }
-        else if (crossProduct < 0)
-        {
-            isNegative = true;
-        }
+        if (crossProduct > 0) isPositive = true;
+        else if (crossProduct < 0) isNegative = true;
 
         if (isPositive && isNegative)
             return false;  // Polygon is concave
     }
-
     return true;  // Polygon is convex
 }
 
-Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
+Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int& count, bool closedPolygon)
 {
-    Vec2* vert = _abuf.get<Vec2>(count);
+    Vec2* vert = nullptr;
+    Vec2 vert0 = vertices[0];
+    int closedCounter = 0;
+
+    if (closedPolygon && vertices[0] != vertices[count - 1])
+    {
+        closedCounter = 1;
+    }
+
+    vert = new Vec2[count + closedCounter];
+    AXASSERT(vert != nullptr, "NO memory");
+
     if (_dnTransform == false)
     {
-        memcpy(vert, vertices, count);
+        memcpy(vert, vertices, (count) * sizeof(Vec2));
+        if (closedCounter)
+        {
+            vert[count] = vert0;
+            count++;
+        }
         return vert;
     }
 
-    const float s = sin(_dnRotation);
-    const float c = cos(_dnRotation);
+    const float sinRot = sin(_dnRotation);
+    const float cosRot = cos(_dnRotation);
 
     for (unsigned int i = 0; i < count; i++)
     {
@@ -105,8 +112,8 @@ Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
             vert[i].y = vertices[i].y - _dnCenter.y;
 
             // rotate point
-            float xnew = vert[i].x * c - vert[i].y * s;
-            float ynew = vert[i].x * s + vert[i].y * c;
+            float xnew = vert[i].x * cosRot - vert[i].y * sinRot;
+            float ynew = vert[i].x * sinRot + vert[i].y * cosRot;
 
             // translate point back:
             vert[i].x = xnew + _dnCenter.x;
@@ -117,10 +124,16 @@ Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int count)
             vert[i].y = vert[i].y * _dnScale.y + _dnPosition.y;
         }
     }
+
+    if (closedCounter)
+    {
+        vert[count] = vert[0];
+        count++;
+    }
+
     return vert;
 }
 
-// implementation of DrawNodeEx
 DrawNodeEx::DrawNodeEx(float lineWidth)
     : _lineWidth(lineWidth)
     , _defaultLineWidth(lineWidth)
@@ -128,7 +141,8 @@ DrawNodeEx::DrawNodeEx(float lineWidth)
     , _dnPosition(Vec2::ZERO)
     , _dnRotation(0.0f)
     , _dnScale(Vec2::ONE)
-    , _dnTransform(true)
+    , _dnTransform(true)  // check true/false
+    , _drawOrder(false)     // check true/false
 {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
@@ -147,14 +161,12 @@ DrawNodeEx::DrawNodeEx(float lineWidth)
 DrawNodeEx::~DrawNodeEx()
 {
     AX_SAFE_FREE(_bufferTriangle);
+    freeShaderInternal(_customCommandTriangle);
 
 #if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     AX_SAFE_FREE(_bufferPoint);
     AX_SAFE_FREE(_bufferLine);
-#endif
 
-    freeShaderInternal(_customCommandTriangle);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     freeShaderInternal(_customCommandPoint);
     freeShaderInternal(_customCommandLine);
 #endif
@@ -342,31 +354,36 @@ void DrawNodeEx::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 #endif
 }
 
-void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Color4B& color)
+void DrawNodeEx::drawPoint(const Vec2& position, const float pointSize, const Color4B& color,
+    const DrawNodeEx::PointType pointType)
 {
+    if (pointSize == 0) return;
+
 #if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     if (_drawOrder == true)
     {
 #endif
-        drawSolidCircle(position, pointSize, 0.f, 12, 1.f, 1.f, color, 0.f, color);
+        float pointSize4 = pointSize / 4;
+        drawSolidRect(position - Vec2(pointSize4, pointSize4), position + Vec2(pointSize4, pointSize4), color);
 #if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
-        return;
     }
-#endif
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
-    ensureCapacityPoint(1);
+    else
+    {
+        ensureCapacityPoint(1);
 
-    V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
-    *point = { position, color, Tex2F(pointSize, 0) };
+        V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
+        *point = { position, color, Tex2F(pointSize, 0.0f) };
 
-    _customCommandPoint.updateVertexBuffer(point, _bufferCountPoint * sizeof(V2F_C4B_T2F), sizeof(V2F_C4B_T2F));
-    _bufferCountPoint += 1;
-    _dirtyPoint = true;
-    _customCommandPoint.setVertexDrawInfo(0, _bufferCountPoint);
+        _customCommandPoint.updateVertexBuffer(point, _bufferCountPoint * sizeof(V2F_C4B_T2F), sizeof(V2F_C4B_T2F));
+        _bufferCountPoint += 1;
+        _dirtyPoint = true;
+        _customCommandPoint.setVertexDrawInfo(0, _bufferCountPoint);
+    }
 #endif
 }
 
-void DrawNodeEx::drawPoints(const Vec2* position, unsigned int numberOfPoints, const Color4B& color)
+void DrawNodeEx::drawPoints(const Vec2* position, unsigned int numberOfPoints, const Color4B& color,
+    const DrawNodeEx::PointType pointType)
 {
     drawPoints(position, numberOfPoints, 1.f, color);
 }
@@ -374,27 +391,43 @@ void DrawNodeEx::drawPoints(const Vec2* position, unsigned int numberOfPoints, c
 void DrawNodeEx::drawPoints(const Vec2* position,
     unsigned int numberOfPoints,
     const float pointSize,
-    const Color4B& color)
+    const Color4B& color,
+    const DrawNodeEx::PointType pointType)
 {
+    if (pointSize == 0) return;
+
 #if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     if (_drawOrder == true)
     {
 #endif
+        Vec2 pointSize4 = Vec2(pointSize / 4, pointSize / 4);
         for (unsigned int i = 0; i < numberOfPoints; i++)
         {
-            drawSolidCircle(position[i], pointSize, 0.f, 12, 1.f, 1.f, color, 0.f, color);
+            switch (pointType)
+            {
+            case PointType::Circle:
+                drawSolidCircle(position[i], pointSize, 90, 8, color);
+                break;
+            case PointType::Rect:
+                drawSolidRect(position[i] - pointSize4, position[i] + pointSize4, color);
+                break;
+            case PointType::Triangle:
+             //   drawTriangle(position[i] - pointSize4, position[i] + pointSize4, color);
+                break;
+
+            default:
+                break;
+            }
         }
 #if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
         return;
     }
-#endif
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     ensureCapacityPoint(numberOfPoints);
 
     V2F_C4B_T2F* point = _bufferPoint + _bufferCountPoint;
     for (unsigned int i = 0; i < numberOfPoints; i++)
     {
-        *(point + i) = { position[i], color, Tex2F(pointSize, 0) };
+        *(point + i) = { position[i], color, Tex2F(pointSize, 0.0f) };
     }
 
     _customCommandPoint.updateVertexBuffer(point, _bufferCountPoint * sizeof(V2F_C4B_T2F),
@@ -405,29 +438,17 @@ void DrawNodeEx::drawPoints(const Vec2* position,
 #endif
 }
 
-void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness)
+void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness, DrawNodeEx::EndType etStart, DrawNodeEx::EndType etEnd)
 {
-    if (thickness != 1.0f)
-    {
-        drawSegment(origin, destination, thickness, color);
-        return;
-    }
-    else
-    {
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
-        if (_drawOrder == true)
-        {
-#endif
-            drawSegment(origin, destination, thickness / 3, color);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
-            return;
-        }
-#endif
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
-        Vec2 line[2] = { origin, destination };
-        Vec2* _vertices = transform(line, 2);
+    if (thickness == 0) return;
 
-        ensureCapacityLine(2);
+    if (thickness == 1.0f && !_drawOrder)  // usefull for a DrawNode::drawline thickness = 1.0 only ?
+    {
+        unsigned int count = 2;
+        Vec2 line[] = { origin, destination };
+        Vec2* _vertices = transform(line, count, false);
+
+        ensureCapacityLine(count);
 
         V2F_C4B_T2F* point = _bufferLine + _bufferCountLine;
 
@@ -438,88 +459,26 @@ void DrawNodeEx::drawLine(const Vec2& origin, const Vec2& destination, const Col
         _bufferCountLine += 2;
         _dirtyLine = true;
         _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
-#endif
-    }
-}
-
-void DrawNodeEx::drawRect(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness)
-{
-    if (thickness != 1.0f)
-    {
-        Vec2 line[4] = { {origin}, {Vec2(destination.x, origin.y)}, {destination}, {Vec2(origin.x, destination.y)} };
-
-        swapIsConvex(true);
-        _drawPoly(line, 4, true, color, thickness);
-        _isConvex = _isConvexTmp;
+        AX_SAFE_DELETE_ARRAY(_vertices);
         return;
     }
     else
     {
-        drawLine(origin, Vec2(destination.x, origin.y), color);
-        drawLine(Vec2(destination.x, origin.y), destination, color);
-        drawLine(destination, Vec2(origin.x, destination.y), color);
-        drawLine(Vec2(origin.x, destination.y), origin, color);
+        //if (_drawOrder) thickness /= _scaleFactor;
+
+        drawSegment(origin, destination, thickness, color);
+        return;
     }
 }
 
 void DrawNodeEx::drawPoly(const Vec2* poli,
     unsigned int numberOfPoints,
-    bool closePolygon,
+    bool closedPolygon,
     const Color4B& color,
     float thickness)
 {
-    if (thickness != 1.0f)
-    {
-        _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness, color, closePolygon);
-        return;
-    }
-    else
-    {
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
-        if (_drawOrder == true)
-        {
-#endif
-            _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness / 3, color, closePolygon);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
-            return;
-        }
-#endif
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
-        Vec2* _vertices = transform(poli, numberOfPoints);
-
-        unsigned int vertex_count;
-        if (closePolygon)
-        {
-            vertex_count = 2 * numberOfPoints;
-        }
-        else
-        {
-            vertex_count = 2 * (numberOfPoints - 1);
-        }
-        ensureCapacityLine(vertex_count);
-
-        V2F_C4B_T2F* point = _bufferLine + _bufferCountLine;
-        V2F_C4B_T2F* cursor = point;
-
-        unsigned int i = 0;
-        for (; i < numberOfPoints - 1; i++)
-        {
-            *point = { poli[i], color, Tex2F::ZERO };
-            *(point + 1) = { poli[i + 1], color, Tex2F::ZERO };
-            point += 2;
-        }
-        if (closePolygon)
-        {
-            *point = { poli[i], color, Tex2F::ZERO };
-            *(point + 1) = { poli[0], color, Tex2F::ZERO };
-        }
-
-        _customCommandLine.updateVertexBuffer(cursor, _bufferCountLine * sizeof(V2F_C4B_T2F),
-            vertex_count * sizeof(V2F_C4B_T2F));
-        _bufferCountLine += vertex_count;
-        _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
-#endif
-    }
+    if (thickness == 0) return;
+    _drawPoly(poli, numberOfPoints, closedPolygon, color, thickness);
 }
 
 void DrawNodeEx::drawCircle(const Vec2& center,
@@ -532,31 +491,31 @@ void DrawNodeEx::drawCircle(const Vec2& center,
     const Color4B& color,
     float thickness)
 {
+    if (thickness == 0) return;
+
+    if (segments > 40) segments = 40; // performance issue; 40 is enouggh (I hope)
+
+
     const float coef = 2.0f * (float)M_PI / segments;
 
-    auto vertices = _abuf.get<Vec2>(segments + 2);
+    Vec2* _vertices = _abuf.get<Vec2>(segments + 2);
 
-    for (unsigned int i = 0; i <= segments; i++)
+    for (unsigned int i = 0; i < segments; i++)
     {
         float rads = i * coef;
-        vertices[i].x = radius * cosf(rads + angle) * scaleX + center.x;
-        vertices[i].y = radius * sinf(rads + angle) * scaleY + center.y;
+        float j = radius * cosf(rads + angle) * scaleX + center.x;
+        float k = radius * sinf(rads + angle) * scaleY + center.y;
+
+        _vertices[i].x = j;
+        _vertices[i].y = k;
     }
-    swapIsConvex(false);
-    if (thickness != 1.0f)
-    {
-        _drawPolygon(vertices, segments, Color4B::TRANSPARENT, thickness, color, true);
-    }
-    else
-    {
-        if (drawLineToCenter)
-        {
-            vertices[segments + 1] = center;
-            _drawPoly(vertices, segments + 2, true, color, 1.0f);
-        }
-        else
-            _drawPoly(vertices, segments + 1, true, color, thickness);
-    }
+    _vertices[segments] = _vertices[0];
+
+    if (drawLineToCenter)  _vertices[++segments] = center;
+
+    swapIsConvex(true);
+    //_drawPolygon(_vertices, segments+1, Color4B::TRANSPARENT, thickness, color, false);
+    _drawPoly(_vertices, segments + 1, false, color, thickness);
     _isConvex = _isConvexTmp;
 }
 
@@ -568,30 +527,19 @@ void DrawNodeEx::drawCircle(const Vec2& center,
     const Color4B& color,
     float thickness)
 {
+    if (thickness == 0) return;
     drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color, thickness);
 }
 
 void DrawNodeEx::drawStar(const Vec2& center,
-    float radius1,
-    float radius2,
+    float radiusI,
+    float radiusO,
     unsigned int segments,
     const Color4B& color,
     float thickness)
 {
-    const float coef = 2.0f * (float)M_PI / segments;
-
-    float halfAngle = coef / 2.0f;
-
-    auto vertices = _abuf.get<Vec2>(segments * 2);
-    int i = 0;
-    for (unsigned int a = 0; a < segments; a++)
-    {
-        float rads = a * coef;
-        vertices[i] = Vec2(center.x + cos(rads) * radius2, center.y + sin(rads) * radius2);
-        vertices[i + 1] = Vec2(center.x + cos(rads + halfAngle) * radius1, center.y + sin(rads + halfAngle) * radius1);
-        i += 2;
-    }
-    _drawPolygon(vertices, segments * 2, Color4B::TRANSPARENT, thickness, color, true);
+    if (thickness == 0) return;
+    _drawAStar(center, radiusI, radiusO, segments, color, color, thickness, false);
 }
 
 void DrawNodeEx::drawSolidStar(const Vec2& center,
@@ -602,22 +550,42 @@ void DrawNodeEx::drawSolidStar(const Vec2& center,
     const Color4B& filledColor,
     float thickness)
 {
-    const float coef = 2.0f * (float)M_PI / segments;
+    _drawAStar(center, radiusI, radiusO, segments, color, filledColor, thickness, true);
+}
 
+void DrawNodeEx::_drawAStar(const Vec2& center,
+    float radiusI, // inner 
+    float radiusO, // outer
+    unsigned int segments,
+    const Color4B& color,
+    const Color4B& filledColor,
+    float thickness,
+    bool solid)
+{
+    const float coef = 2.0f * (float)M_PI / segments;
     float halfAngle = coef / 2.0f;
 
-    auto vertices = _abuf.get<Vec2>(segments * 2);
+    auto vertices = _abuf.get<Vec2>(segments * 2 + 1);
+
     int i = 0;
     for (unsigned int a = 0; a < segments; a++)
     {
         float rads = a * coef;
-        vertices[i] = Vec2(center.x + cos(rads) * radiusO, center.y + sin(rads) * radiusO);
-        vertices[i + 1] = Vec2(center.x + cos(rads + halfAngle) * radiusI, center.y + sin(rads + halfAngle) * radiusI);
-        i += 2;
+        vertices[i++] = Vec2(center.x + cos(rads) * radiusO, center.y + sin(rads) * radiusO);
+        vertices[i++] = Vec2(center.x + cos(rads + halfAngle) * radiusI, center.y + sin(rads + halfAngle) * radiusI);
     }
-    swapIsConvex(false);
-    _drawPolygon(vertices, segments * 2, filledColor, thickness, color, true);
-    _isConvex = _isConvexTmp;
+
+    if (solid)
+    {
+        swapIsConvex(false);
+        _drawPolygon(vertices, i, filledColor, thickness, color, true);
+        _isConvex = _isConvexTmp;
+    }
+    else
+    {
+        vertices[i++] = vertices[0];
+        _drawPoly(vertices, i, true, color, thickness);
+    }
 }
 
 void DrawNodeEx::drawQuadBezier(const Vec2& origin,
@@ -627,20 +595,30 @@ void DrawNodeEx::drawQuadBezier(const Vec2& origin,
     const Color4B& color,
     float thickness)
 {
+    if (thickness == 0) return;
+
     Vec2* vertices = _abuf.get<Vec2>(segments + 1);
 
     float t = 0.0f;
     for (unsigned int i = 0; i < segments; i++)
     {
-        vertices[i].x = powf(1 - t, 2) * origin.x + 2.0f * (1 - t) * t * control.x + t * t * destination.x;
-        vertices[i].y = powf(1 - t, 2) * origin.y + 2.0f * (1 - t) * t * control.y + t * t * destination.y;
+        vertices[i].x = powf(1.0f - t, 2.0f) * origin.x + 2.0f * (1.0f - t) * t * control.x + t * t * destination.x;
+        vertices[i].y = powf(1.0f - t, 2.0f) * origin.y + 2.0f * (1.0f - t) * t * control.y + t * t * destination.y;
         t += 1.0f / segments;
     }
     vertices[segments].x = destination.x;
     vertices[segments].y = destination.y;
+
+    ////  if (_drawOrder == true)
+    //{
+    //    thickness /= _scaleFactor;
+    //}
+
     swapIsConvex(false);
-    _drawPolygon(vertices, segments, Color4B::TRANSPARENT, thickness, color, false);
+    // _drawPoly(vertices, segments + 1, false, color, thickness);
+    _drawPolygon(vertices, segments + 1, Color4B::TRANSPARENT, thickness, color, false);
     _isConvex = _isConvexTmp;
+
 }
 
 void DrawNodeEx::drawCubicBezier(const Vec2& origin,
@@ -651,21 +629,29 @@ void DrawNodeEx::drawCubicBezier(const Vec2& origin,
     const Color4B& color,
     float thickness)
 {
+    if (thickness == 0) return;
+
     Vec2* vertices = _abuf.get<Vec2>(segments + 1);
 
-    float t = 0;
+    float t = 0.0f;
     for (unsigned int i = 0; i < segments; i++)
     {
-        vertices[i].x = powf(1 - t, 3) * origin.x + 3.0f * powf(1 - t, 2) * t * control1.x +
+        vertices[i].x = powf(1.0f - t, 3.0f) * origin.x + 3.0f * powf(1.0f - t, 2.0f) * t * control1.x +
             3.0f * (1 - t) * t * t * control2.x + t * t * t * destination.x;
-        vertices[i].y = powf(1 - t, 3) * origin.y + 3.0f * powf(1 - t, 2) * t * control1.y +
+        vertices[i].y = powf(1.0f - t, 3.0f) * origin.y + 3.0f * powf(1.0f - t, 2.0f) * t * control1.y +
             3.0f * (1 - t) * t * t * control2.y + t * t * t * destination.y;
         t += 1.0f / segments;
     }
     vertices[segments].x = destination.x;
     vertices[segments].y = destination.y;
+
+    //  if (_drawOrder == true)
+    {
+        //     thickness /= _scaleFactor;
+    }
     swapIsConvex(true);
-    _drawPolygon(vertices, segments, Color4B::TRANSPARENT, thickness, color, false);
+    //   _drawPoly(vertices, segments + 1, false, color, thickness);
+    _drawPolygon(vertices, segments + 1, Color4B::TRANSPARENT, thickness, color, false);
     _isConvex = _isConvexTmp;
 }
 
@@ -675,7 +661,12 @@ void DrawNodeEx::drawCardinalSpline(ax::PointArray* config,
     const Color4B& color,
     float thickness)
 {
+    if (thickness == 0.0f) return;
+
     Vec2* vertices = _abuf.get<Vec2>(segments + 1);
+
+    if (!vertices)
+        return;
 
     ssize_t p;
     float lt;
@@ -707,18 +698,23 @@ void DrawNodeEx::drawCardinalSpline(ax::PointArray* config,
         vertices[i].x = newPos.x;
         vertices[i].y = newPos.y;
     }
+
     swapIsConvex(true);
-    _drawPolygon(vertices, segments, Color4B::TRANSPARENT, thickness, color, false);
+    _drawPoly(vertices, segments + 1, false, color, thickness);
     _isConvex = _isConvexTmp;
 }
 
 void DrawNodeEx::drawCatmullRom(ax::PointArray* points, unsigned int segments, const Color4B& color, float thickness)
 {
+    if (thickness == 0.0f) return;
     drawCardinalSpline(points, 0.5f, segments, color, thickness);
 }
 
+
 void DrawNodeEx::drawDot(const Vec2& pos, float radius, const Color4B& color)
 {
+    if (radius == 0.0f) return;
+
     unsigned int vertex_count = 2 * 3;
     ensureCapacityTriangle(vertex_count);
 
@@ -745,33 +741,48 @@ void DrawNodeEx::drawRect(const Vec2& p1,
     const Color4B& color,
     float thickness)
 {
-    if (thickness != 1.0f)
+    if (thickness == 0.0f) return;
+
+    ////  if (thickness == 1.0f)  // usefull for a DrawNode::drawRect thickness = 1.0 only ?
+    //{
+    //    if (_drawOrder)
+    //        thickness /= 1.33;//(_scaleFactor/3.5);  //  ???   its works but .... 
+
+    //    drawLine(p1, p2, color, thickness);
+    //    drawLine(p2, p3, color, thickness);
+    //    drawLine(p3, p4, color, thickness);
+    //    drawLine(p4, p1, color, thickness);
+    //}
+    //else
     {
-        Vec2 line[4] = { {p1}, {p2}, {p3}, {p4} };
+        Vec2 line[5] = { {p1}, {p2}, {p3}, {p4}, {p1} };
         swapIsConvex(true);
-        _drawPoly(line, 4, true, color, thickness);
+        _drawPoly(line, 5, false, color, thickness);
         _isConvex = _isConvexTmp;
-    }
-    else
-    {
-        drawLine(p1, p2, color);
-        drawLine(p2, p3, color);
-        drawLine(p3, p4, color);
-        drawLine(p4, p1, color);
     }
 }
 
-void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, const Color4B& color, DrawNodeEx::EndType etStart, DrawNodeEx::EndType etEnd)
+void DrawNodeEx::drawRect(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness)
 {
-    Vec2 line[2] = { from, to };
-    Vec2* _vertices = transform(line, 2);
+    if (thickness == 0.0f) return;
+
+    drawRect(origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), color, thickness);
+}
+
+void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float thickness, const Color4B& color, DrawNodeEx::EndType etStart, DrawNodeEx::EndType etEnd)
+{
+    if (thickness == 0.0f) return;
+
+    unsigned int count = 2;
+    Vec2 line[] = { from, to };
+    Vec2* _vertices = transform(line, count, false);
 
     Vec2 a = _vertices[0];
     Vec2 b = _vertices[1];
     Vec2 n = ((b - a).getPerp()).getNormalized();
     Vec2 t = n.getPerp();
-    Vec2 nw = n * radius;
-    Vec2 tw = t * radius;
+    Vec2 nw = n * thickness;
+    Vec2 tw = t * thickness;
     Vec2 v0 = b - (nw + tw);
     Vec2 v1 = b + (nw - tw);
     Vec2 v2 = b - nw;
@@ -781,15 +792,12 @@ void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, con
     Vec2 v6 = a - (nw - tw);
     Vec2 v7 = a + (nw + tw);
 
-    int ii = 0;
-    unsigned int vertex_count = 6 * 3;
-
+    //   unsigned int vertex_count = 6 * 3;
+    unsigned int vertex_count = 3 * ((etStart != DrawNodeEx::EndType::Butt) ? 2 : 0) + 3 * 2 + 3 * ((etEnd != DrawNodeEx::EndType::Butt) ? 2 : 0);
     ensureCapacityTriangle(vertex_count);
     V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
 
-    // 
-    Color4B col = color;
-    // End
+    int ii = 0;
     switch (etEnd)
     {
     case DrawNodeEx::EndType::Butt:
@@ -797,29 +805,29 @@ void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, con
 
     case DrawNodeEx::EndType::Square:
         triangles[ii++] = {
-            {v0, col, Tex2F::ZERO},
-            {v1, col, Tex2F(-n)},
-            {v2, col, Tex2F(n)},
+            {v0, color, Tex2F::ZERO},
+            {v1, color, Tex2F(-n)},
+            {v2, color, Tex2F(n)},
         };
 
         triangles[ii++] = {
-            {v3, col, Tex2F(n)},
-            {v1, col, Tex2F::ZERO},
-            {v2, col, Tex2F(-n)},
+            {v3, color, Tex2F(n)},
+            {v1, color, Tex2F::ZERO},
+            {v2, color, Tex2F(-n)},
         };
 
         break;
     case DrawNodeEx::EndType::Round:
         triangles[ii++] = {
-            {v0, col, Tex2F(-(n + t))},
-            {v1, col, Tex2F(n - t)},
-            {v2, col, Tex2F(-n)},
+            {v0, color, Tex2F(-(n + t))},
+            {v1, color, Tex2F(n - t)},
+            {v2, color, Tex2F(-n)},
         };
 
         triangles[ii++] = {
-            {v3, col, Tex2F(n)},
-            {v1, col, Tex2F(n - t)},
-            {v2, col, Tex2F(-n)},
+            {v3, color, Tex2F(n)},
+            {v1, color, Tex2F(n - t)},
+            {v2, color, Tex2F(-n)},
         };
         break;
 
@@ -829,15 +837,15 @@ void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, con
 
     // BODY
     triangles[ii++] = {
-        {v3, col, Tex2F(n)},
-        {v4, col, Tex2F(-n)},
-        {v2, col, Tex2F(-n)},
+        {v3, color, Tex2F(n)},
+        {v4, color, Tex2F(-n)},
+        {v2, color, Tex2F(-n)},
     };
 
     triangles[ii++] = {
-        {v3, col, Tex2F(n)},
-        {v4, col, Tex2F(-n)},
-        {v5, col, Tex2F(n)},
+        {v3, color, Tex2F(n)},
+        {v4, color, Tex2F(-n)},
+        {v5, color, Tex2F(n)},
     };
 
     // Start
@@ -848,81 +856,91 @@ void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float radius, con
 
     case DrawNodeEx::EndType::Square:
         triangles[ii++] = {
-            {v6, col, Tex2F::ZERO},
-            {v4, col, Tex2F(-n)},
-            {v5, col, Tex2F(n)},
+            {v6, color, Tex2F::ZERO},
+            {v4, color, Tex2F(-n)},
+            {v5, color, Tex2F(n)},
         };
 
         triangles[ii++] = {
-            {v6, col, Tex2F(-n)},
-            {v7, col, Tex2F::ZERO},
-            {v5, col, Tex2F(n)},
+            {v6, color, Tex2F(-n)},
+            {v7, color, Tex2F::ZERO},
+            {v5, color, Tex2F(n)},
         };
         break;
 
     case DrawNodeEx::EndType::Round:
         triangles[ii++] = {
-            {v6, col, Tex2F(t - n)},
-            {v4, col, Tex2F(-n)},
-            {v5, col, Tex2F(n)},
+            {v6, color, Tex2F(t - n)},
+            {v4, color, Tex2F(-n)},
+            {v5, color, Tex2F(n)},
         };
 
         triangles[ii++] = {
-            {v6, col, Tex2F(t - n)},
-            {v7, col, Tex2F(t + n)},
-            {v5, col, Tex2F(n)},
+            {v6, color, Tex2F(t - n)},
+            {v7, color, Tex2F(t + n)},
+            {v5, color, Tex2F(n)},
         };
         break;
 
     default:
         break;
     }
-
+    if (ii * 3 != vertex_count)
+    {
+        //       AXLOGD("==============end  ii {}*3: {}  vertex_count: {}", ii, ii * 3, vertex_count);
+    }
 
     _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F),
         vertex_count * sizeof(V2F_C4B_T2F));
-    _bufferCountTriangle += ii * 3; //vertex_count;
+    _bufferCountTriangle += vertex_count; //ii * 3; 
     _dirtyTriangle = true;
     _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
+
+    AX_SAFE_DELETE_ARRAY(_vertices);
 }
 
-void DrawNodeEx::drawPolygon(const Vec2* verts,
+void DrawNodeEx::drawPolygon(Vec2* verts,
     int count,
     const Color4B& fillColor,
-    float borderWidth,
+    float thickness,
     const Color4B& borderColor)
 {
-    _drawPolygon(verts, count, fillColor, borderWidth, borderColor, true);
+    _drawPolygon(verts, count, fillColor, thickness, borderColor, true);
 }
 
-void DrawNodeEx::drawPolygon(const Vec2* verts,
+void DrawNodeEx::drawPolygon(Vec2* verts,
     int count,
-    float borderWidth,
+    float thickness,
     const Color4B& borderColor)
 {
-    _drawPolygon(verts, count, Color4B::TRANSPARENT, borderWidth, borderColor, true);
+    _drawPolygon(verts, count, Color4B::TRANSPARENT, thickness, borderColor, true);
 }
 
-void DrawNodeEx::drawSolidPolygon(const Vec2* verts,
+void DrawNodeEx::drawSolidPolygon(Vec2* verts,
     int count,
     const Color4B& fillColor,
-    float borderWidth,
+    float thickness,
     const Color4B& borderColor)
 {
-    _drawPolygon(verts, count, fillColor, borderWidth, borderColor, true);
+    _drawPolygon(verts, count, fillColor, thickness, borderColor, true);
 }
 
-void DrawNodeEx::drawSolidRect(const Vec2& origin, const Vec2& destination, const Color4B& color)
+void DrawNodeEx::drawSolidRect(const Vec2& origin, const Vec2& destination, const Color4B& fillColor, float thickness,
+    const Color4B& borderColor)
 {
+    //   if (_drawOrder == true) thickness /= _scaleFactor; //2;
+
     Vec2 vertices[] = { origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y) };
     swapIsConvex(true);
-    _drawPolygon(vertices, 4, color, 0.0f, Color4B(), true);
+    _drawPolygon(vertices, 4, fillColor, thickness, borderColor, false);
     _isConvex = _isConvexTmp;
 }
 
-void DrawNodeEx::drawSolidPoly(const Vec2* poli, unsigned int numberOfPoints, const Color4B& color)
+void DrawNodeEx::drawSolidPoly(const Vec2* poli, unsigned int numberOfPoints, const Color4B& color, float thickness,
+    const Color4B& borderColor)
 {
-    _drawPolygon(poli, numberOfPoints, color, 0.0f, Color4B(), true);
+    //   thickness /= _scaleFactor;
+    _drawPolygon(poli, numberOfPoints, color, thickness, borderColor, true);
 }
 
 void DrawNodeEx::drawPie(const Vec2& center,
@@ -945,7 +963,7 @@ void DrawNodeEx::drawPie(const Vec2& center,
         return;
 
     // Its a circle?
-    if (MAX((startAngle - endAngle), (endAngle-startAngle)) == DEGREES)
+    if (MAX((startAngle - endAngle), (endAngle - startAngle)) == DEGREES)
     {
         _circle = true;
     }
@@ -954,7 +972,7 @@ void DrawNodeEx::drawPie(const Vec2& center,
     Vec2* vertices = _abuf.get<Vec2>(DEGREES + 2);
 
     int n = 0;
-    float rads = 0;
+    float rads = 0.0f;
     float _angle = AX_DEGREES_TO_RADIANS(rotation);
 
     if (startAngle > endAngle)
@@ -980,28 +998,29 @@ void DrawNodeEx::drawPie(const Vec2& center,
     {
     case DrawMode::Fill:
         vertices[n++] = center;
+        vertices[n++] = vertices[0];
         if (_circle)
         {
-            this->drawSolidCircle(center, radius, 0, 36, scaleX, scaleY, fillColor, thickness, borderColor);
+            drawSolidCircle(center, radius, 0.0f, 36, scaleX, scaleY, fillColor, thickness, borderColor);
             break;
         }
         _drawPolygon(vertices, n, fillColor, thickness, borderColor, true);
         break;
     case DrawMode::Outline:
         vertices[n++] = center;
+        vertices[n++] = vertices[0];
         if (_circle)
         {
-            this->drawCircle(center, radius, 0, 36, false, scaleX, scaleY, borderColor, thickness);
+            drawSolidCircle(center, radius, 0.0f, 36, scaleX, scaleY, Color4B::TRANSPARENT, thickness, borderColor);
             break;
         }
-        _drawPolygon(vertices, n, Color4B::TRANSPARENT, thickness, borderColor, true);
+        _drawPolygon(vertices, n, Color4B::TRANSPARENT, thickness, borderColor, false);
         break;
     case DrawMode::Line:
-        vertices[n++] = center;
         _drawPolygon(vertices, n, Color4B::TRANSPARENT, thickness, borderColor, false);
         break;
     case DrawMode::Semi:
-        _drawPolygon(vertices, n-1, fillColor, thickness, borderColor, true);
+        _drawPolygon(vertices, n - 1, fillColor, thickness, borderColor, true);
         break;
 
     default:
@@ -1016,7 +1035,7 @@ void DrawNodeEx::drawSolidCircle(const Vec2& center,
     float scaleX,
     float scaleY,
     const Color4B& fillColor,
-    float borderWidth,
+    float thickness,
     const Color4B& borderColor)
 {
     const float coef = 2.0f * (float)M_PI / segments;
@@ -1033,7 +1052,7 @@ void DrawNodeEx::drawSolidCircle(const Vec2& center,
         vertices[i].y = k;
     }
     swapIsConvex(true);
-    _drawPolygon(vertices, segments, fillColor, borderWidth, borderColor);
+    _drawPolygon(vertices, segments, fillColor, thickness, borderColor);
     _isConvex = _isConvexTmp;
 }
 
@@ -1045,22 +1064,7 @@ void DrawNodeEx::drawSolidCircle(const Vec2& center,
     float scaleY,
     const Color4B& color)
 {
-    const float coef = 2.0f * (float)M_PI / segments;
-
-    Vec2* vertices = _abuf.get<Vec2>(segments);
-
-    for (unsigned int i = 0; i < segments; i++)
-    {
-        float rads = i * coef;
-        float j = radius * cosf(rads + angle) * scaleX + center.x;
-        float k = radius * sinf(rads + angle) * scaleY + center.y;
-
-        vertices[i].x = j;
-        vertices[i].y = k;
-    }
-    swapIsConvex(true);
-    _drawPolygon(vertices, segments, color, 0.0f, Color4B(), true);
-    _isConvex = _isConvexTmp;
+    drawSolidCircle(center, radius, angle, segments, scaleX, scaleY, color, 0.0f, Color4B());
 }
 
 void DrawNodeEx::drawSolidCircle(const Vec2& center,
@@ -1069,11 +1073,13 @@ void DrawNodeEx::drawSolidCircle(const Vec2& center,
     unsigned int segments,
     const Color4B& color)
 {
-    drawSolidCircle(center, radius, angle, segments, 1.0f, 1.0f, color);
+    drawSolidCircle(center, radius, angle, segments, 1.0f, 1.0f, color, 0.0f, Color4B());
 }
 
 void DrawNodeEx::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color4B& color, float thickness)
 {
+    if (thickness == 0.0f) return;
+
     Vec2 poli[3] = { p1, p2, p3 };
     unsigned int vertex_count = 3;
 
@@ -1082,24 +1088,28 @@ void DrawNodeEx::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, co
         swapIsConvex(true);
         _drawPolygon(poli, vertex_count, Color4B::TRANSPARENT, thickness, color, true);
         _isConvex = _isConvexTmp;
-        return;
     }
-    Vec2* _vertices = transform(poli, vertex_count);
+    else   // PeEi Noch checken!!!!!!
+    {
+        Vec2* _vertices = transform(poli, vertex_count, false);
 
-    ensureCapacityTriangle(vertex_count);
+        ensureCapacityTriangle(vertex_count);
 
-    V2F_C4B_T2F a = { _vertices[0], color, Tex2F::ZERO };
-    V2F_C4B_T2F b = { _vertices[1], color, Tex2F::ZERO };
-    V2F_C4B_T2F c = { _vertices[2], color, Tex2F::ZERO };
+        V2F_C4B_T2F a = { _vertices[0], color, Tex2F::ZERO };
+        V2F_C4B_T2F b = { _vertices[1], color, Tex2F::ZERO };
+        V2F_C4B_T2F c = { _vertices[2], color, Tex2F::ZERO };
 
-    V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
-    triangles[0] = { a, b, c };
+        V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
+        triangles[0] = { a, b, c };
 
-    _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F),
-        vertex_count * sizeof(V2F_C4B_T2F));
-    _bufferCountTriangle += vertex_count;
-    _dirtyTriangle = true;
-    _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
+        _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F),
+            vertex_count * sizeof(V2F_C4B_T2F));
+        _bufferCountTriangle += vertex_count;
+        _dirtyTriangle = true;
+        _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
+
+        AX_SAFE_DELETE_ARRAY(_vertices);
+    }
 }
 
 void DrawNodeEx::clear()
@@ -1127,12 +1137,12 @@ void DrawNodeEx::setBlendFunc(const BlendFunc& blendFunc)
 
 void DrawNodeEx::setLineWidth(float lineWidth)
 {
-    _lineWidth = lineWidth;
+    _defaultLineWidth = lineWidth;
 }
 
 float DrawNodeEx::getLineWidth()
 {
-    return this->_lineWidth;
+    return this->_defaultLineWidth;
 }
 
 void DrawNodeEx::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
@@ -1151,30 +1161,34 @@ void DrawNodeEx::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
 void DrawNodeEx::_drawPolygon(const Vec2* verts,
     unsigned int count,
     const Color4B& fillColor,
-    float borderWidth,
+    float thickness,
     const Color4B& borderColor,
     bool closedPolygon)
 {
     AXASSERT(count >= 0, "invalid count value");
+    Color4B debugColor;
 
-    Vec2* _vertices = transform(verts, count);
-    bool outline = (borderColor.a > 0.0f && borderWidth > 0.0f);
+    bool outline = (thickness != 0.0f);
 
-    auto triangle_count = outline ? (3 * count - 2) : (count - 2);
-    auto vertex_count = 3 * triangle_count;
-    ensureCapacityTriangle(vertex_count);
+    if (thickness == 1.0f && !_drawOrder)  // usefull for a DrawNode:::_drawPolygon thickness = 1.0 only ?
+    {
+    }
 
-    V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
-    V2F_C4B_T2F_Triangle* cursor = triangles;
+    Vec2* _vertices = transform(verts, count, closedPolygon);
 
-    if (closedPolygon && !_isConvex && count >= 3 && !isConvex(_vertices, count))
+    std::vector<V2F_C4B_T2F_Triangle> triangleList;
+
+    // 
+    int vertex_count = 0;
+    // calculate the memory (important for correct drawing stuff)
+    if (closedPolygon && !_isConvex && fillColor.a > 0.0f && !isConvex(_vertices, count) && count >= 3)
     {
         std::vector<p2t::Point> p2pointsStorage;
         p2pointsStorage.reserve(count);
         std::vector<p2t::Point*> p2points;
         p2points.reserve(count);
 
-        for (int i = 0; i < count; ++i)
+        for (int i = 0; i < count - 1; i++)  // count-1 is needed because of: _vertices[0] = _vertices[i < count]
         {
             p2points.emplace_back(&p2pointsStorage.emplace_back((float)_vertices[i].x, (float)_vertices[i].y));
         }
@@ -1182,184 +1196,235 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
         cdt.Triangulate();
         std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
 
-        if ((tris.size() * 3) > vertex_count)
-        {
-            ensureCapacityTriangle((tris.size() * 3));
-            triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
-            cursor = triangles;
-        }
-
-        for (auto&& t : tris)
+        vertex_count += tris.size();
+        for (auto&& t : tris)  // use it later; only one calculate!!!
         {
             p2t::Point* vec1 = t->GetPoint(0);
             p2t::Point* vec2 = t->GetPoint(1);
             p2t::Point* vec3 = t->GetPoint(2);
 
-            V2F_C4B_T2F_Triangle tmp = {
+            V2F_C4B_T2F_Triangle triangle = {
                 {Vec2(vec1->x, vec1->y), fillColor, Tex2F::ZERO},
                 {Vec2(vec2->x, vec2->y), fillColor, Tex2F::ZERO},
                 {Vec2(vec3->x, vec3->y), fillColor, Tex2F::ZERO},
             };
-            *cursor++ = tmp;
+            triangleList.emplace_back(triangle); // use it for drawing later
         }
     }
-    else
+    else if (fillColor.a > 0.0f)
+    {
+        vertex_count += count - 2;
+    }
+
+    //std::vector<Vec2> vectorList;
+    if (outline)
+    {
+        if (1/* thickness != 1.0f*/)
+        {
+            if (1 /*thickness != 1.0f*/)
+            {
+                vertex_count += 6 * (count - 1);
+            }
+            else
+            {
+                vertex_count += 2 * count;
+            }
+        }
+    }
+
+    vertex_count *= 3;
+    ensureCapacityTriangle(vertex_count);
+    V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
+
+    // start drawing...
+    int ii = 0;
+    if (closedPolygon && !_isConvex && fillColor.a > 0.0f && !isConvex(_vertices, count) && count >= 3)
+    {
+        for (auto&& t : triangleList)
+        {
+            triangles[ii++] = t;
+        }
+    }
+    else if (fillColor.a > 0.0f)
     {
         for (int i = 0; i < count - 2; i++)
         {
-            V2F_C4B_T2F_Triangle tmp = {
+            triangles[ii++] = {
                 {_vertices[0], fillColor, Tex2F::ZERO},
                 {_vertices[i + 1], fillColor, Tex2F::ZERO},
                 {_vertices[i + 2], fillColor, Tex2F::ZERO},
             };
-
-            *cursor++ = tmp;
         }
     }
     if (outline)
     {
-        struct ExtrudeVerts
+        if (1/* thickness != 1.0f*/)
         {
-            Vec2 offset, n;
-        };
-        struct ExtrudeVerts* extrude = (struct ExtrudeVerts*)malloc(sizeof(struct ExtrudeVerts) * count);
+            Vec2 vo0, vo1, vo2, vo3, vo4, vo5, vo6, vo7;
 
-        for (unsigned int i = 0; i < count; i++)
-        {
-            Vec2 v0 = _vertices[(i - 1 + count) % count];
-            Vec2 v1 = _vertices[i];
-            Vec2 v2 = _vertices[(i + 1) % count];
+            for (int i = 1; i < (count); i++)
+            {
+                Vec2 a = _vertices[i - 1];
+                Vec2 b = _vertices[i];
+                Vec2 n = ((b - a).getPerp()).getNormalized();
+                Vec2 t = n.getPerp();
+                Vec2 nw = n * thickness;  //  geteilt durch 2 ?
+                Vec2 tw = t * thickness;  //  geteilt durch 2 ?
+                Vec2 v0 = b - (nw + tw);
+                Vec2 v1 = b + (nw - tw);
+                Vec2 v2 = b - nw;
+                Vec2 v3 = b + nw;
+                Vec2 v4 = a - nw;
+                Vec2 v5 = a + nw;
+                Vec2 v6 = a - (nw - tw);
+                Vec2 v7 = a + (nw + tw);
 
-            Vec2 n1 = ((v1 - v0).getPerp()).getNormalized();
-            Vec2 n2 = ((v2 - v1).getPerp()).getNormalized();
+                //   if (i == 1)
+                {
+                    //  debugColor = Color4B::BLUE;
+                    debugColor = borderColor;
+                    triangles[ii++] = {
+                        {v0, debugColor, Tex2F(-(n + t))},
+                        {v1, debugColor, Tex2F(n - t)},
+                        {v2, debugColor, Tex2F(-n)},
+                    };
+                    //          debugColor = Color4B::BLUE;//borderColor;
+                    triangles[ii++] = {
+                        {v3, debugColor, Tex2F(n)},
+                        {v1, debugColor, Tex2F(n - t)},
+                        {v2, debugColor, Tex2F(-n)},
+                    };
+                }
 
-            Vec2 offset = (n1 + n2) * (1.0f / (Vec2::dot(n1, n2) + 1.0f));
-            extrude[i] = { offset, n2 };
+                triangles[ii++] = {
+                    {v3, borderColor, Tex2F(n)},
+                    {v4, borderColor, Tex2F(-n)},
+                    {v2, borderColor, Tex2F(-n)},
+                };
+                triangles[ii++] = {
+                    {v3, borderColor, Tex2F(n)},
+                    {v4, borderColor, Tex2F(-n)},
+                    {v5, borderColor, Tex2F(n)},
+                };
+
+                //         if (i == count - 1)  //only the last 
+                {
+                    //    debugColor = Color4B::RED; //borderColor; //Color4B::RED;
+                    debugColor = borderColor; //Color4B::BLUE;
+                    triangles[ii++] = {
+                        {v6, debugColor, Tex2F(t - n)},
+                        {v4, debugColor, Tex2F(-n)},
+                        {v5, debugColor, Tex2F(n)},
+                    };
+                    //    debugColor = Color4B::RED; //borderColor; //Color4B::RED;
+                    triangles[ii++] = {
+                        {v6, debugColor, Tex2F(t - n)},
+                        {v7, debugColor, Tex2F(t + n)},
+                        {v5, debugColor, Tex2F(n)},
+                    };
+                }
+
+                //if (i == ???)
+                //{
+                //    vo0 = v0;
+                //    vo1 = v1;
+                //    vo2 = v2;
+                //    vo3 = v3;
+                //    vo4 = v4;
+                //    vo5 = v5;
+                //    vo6 = v6;
+                //    vo7 = v7;
+                //}
+            }
         }
-
-        for (unsigned int i = 0; i < (count - 2); i++)
+        else
         {
-            int j = (i + 1) % count;
-            Vec2 v0 = _vertices[i];
-            Vec2 v1 = _vertices[j];
+            struct ExtrudeVerts
+            {
+                Vec2 offset, n;
+            };
+            struct ExtrudeVerts* extrude = (struct ExtrudeVerts*)malloc(sizeof(struct ExtrudeVerts) * count);
 
-            Vec2 n0 = extrude[i].n;
+            for (int i = 0; i < count; i++)
+            {
+                Vec2 v0 = verts[(i - 1 + count) % count];
+                Vec2 v1 = verts[i];
+                Vec2 v2 = verts[(i + 1) % count];
 
-            Vec2 offset0 = extrude[i].offset;
-            Vec2 offset1 = extrude[j].offset;
+                Vec2 n1 = ((v1 - v0).getPerp()).getNormalized();
+                Vec2 n2 = ((v2 - v1).getPerp()).getNormalized();
 
-            Vec2 inner0 = v0 - offset0 * borderWidth;
-            Vec2 inner1 = v1 - offset1 * borderWidth;
-            Vec2 outer0 = v0 + offset0 * borderWidth;
-            Vec2 outer1 = v1 + offset1 * borderWidth;
+                Vec2 offset = (n1 + n2) * (1.0f / (Vec2::dot(n1, n2) + 1.0f));
+                extrude[i] = { offset, n2 };
+            }
 
-            V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColor, Tex2F(-n0)},
-                {inner1, borderColor, Tex2F(-n0)},
-                {outer1, borderColor, Tex2F(n0)} };
-            *cursor++ = tmp1;
+            for (int i = 0; i < count; i++)
+            {
+                int j = (i + 1) % count;
+                Vec2 v0 = verts[i];
+                Vec2 v1 = verts[j];
 
-            V2F_C4B_T2F_Triangle tmp2 = { {inner0, borderColor, Tex2F(-n0)},
-                {outer0, borderColor, Tex2F(n0)},
-                {outer1, borderColor, Tex2F(n0)} };
-            *cursor++ = tmp2;
+                Vec2 n0 = extrude[i].n;
+
+                Vec2 offset0 = extrude[i].offset;
+                Vec2 offset1 = extrude[j].offset;
+
+                Vec2 inner0 = v0 - offset0 * thickness;
+                Vec2 inner1 = v1 - offset1 * thickness;
+                Vec2 outer0 = v0 + offset0 * thickness;
+                Vec2 outer1 = v1 + offset1 * thickness;
+
+                triangles[ii++] = {
+                    {inner0, borderColor, Tex2F(-n0)},
+                    {inner1, borderColor, Tex2F(-n0)},
+                    {outer1, borderColor, Tex2F(n0)} };
+
+                triangles[ii++] = {
+                    {inner0, borderColor, Tex2F(-n0)},
+                    {outer0, borderColor, Tex2F(n0)},
+                    {outer1, borderColor, Tex2F(n0)} };
+            }
+            free(extrude);
         }
-
-        // drawPie stuff
-        for (unsigned int i =  count - 2; i <= (count - 1); i++)
-        {
-            int j = (i + 1) % count;
-            Vec2 v0 = _vertices[i];
-            Vec2 v1 = _vertices[j];
-
-            Vec2 n0 = extrude[i].n;
-
-            Vec2 offset0 = extrude[i].offset;
-            Vec2 offset1 = extrude[j].offset;
-
-            Vec2 inner0 = v0 - offset0 * borderWidth;
-            Vec2 inner1 = v1 - offset1 * borderWidth;
-            Vec2 outer0 = v0 + offset0 * borderWidth;
-            Vec2 outer1 = v1 + offset1 * borderWidth;
-
-            Color4B borderColorTemp = (!closedPolygon) ?  Color4B::TRANSPARENT : borderColor;
-
-            V2F_C4B_T2F_Triangle tmp1 = { {inner0, borderColorTemp, Tex2F(-n0)},
-                {inner1, borderColorTemp, Tex2F(-n0)},
-                {outer1, borderColorTemp, Tex2F(n0)} };
-            *cursor++ = tmp1;
-
-            V2F_C4B_T2F_Triangle tmp2 = { {inner0, borderColorTemp, Tex2F(-n0)},
-                {outer0, borderColorTemp, Tex2F(n0)},
-                {outer1, borderColorTemp, Tex2F(n0)} };
-            *cursor++ = tmp2;
-        }
-
-        free(extrude);
+    }
+    if (ii * 3 != vertex_count)
+    {
+        //       AXLOGD("==============end  ii {}*3: {}  vertex_count: {} tempCount: {}", ii, ii * 3, vertex_count, tempCount);
     }
 
-    _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F),
-        vertex_count * sizeof(V2F_C4B_T2F));
+    _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F), vertex_count * sizeof(V2F_C4B_T2F));
     _bufferCountTriangle += vertex_count;
     _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
     _dirtyTriangle = true;
+
+    //  AX_SAFE_DELETE_ARRAY(_vertices);
 }
 
-void DrawNodeEx::_drawPoly(const Vec2* poli,
-    unsigned int numberOfPoints,
-    bool closePolygon,
+void DrawNodeEx::_drawPoly(const Vec2* verts,
+    unsigned int count,
+    bool closedPolygon,
     const Color4B& color,
     float thickness)
 {
-
-    if (thickness != 1.0f)
+    if (0 /*thickness == 1.0f && !_drawOrder*/)  // usefull for a DrawNode:::_drawPoly thickness = 1.0 only ?
     {
-        if (closePolygon)
-        {
-            _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness, color, true);
-            return;
-        }
-        else
-        {
-            _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness, color, false);
-            return;
-        }
-    }
-    else
-    {
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
-        if (_drawOrder == true)
-        {
-#endif
-            _drawPolygon(poli, numberOfPoints, Color4B::TRANSPARENT, thickness / 3, color, false);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
-            return;
-        }
-#endif
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
-        Vec2* _vertices = transform(poli, numberOfPoints);
+        Vec2* _vertices = transform(verts, count);
 
-        unsigned int vertex_count;
-        if (closePolygon)
-        {
-            vertex_count = 2 * numberOfPoints;
-        }
-        else
-        {
-            vertex_count = 2 * (numberOfPoints - 1);
-        }
+        unsigned int vertex_count = (closedPolygon) ? 2 * count : 2 * (count - 1);
+
         ensureCapacityLine(vertex_count);
 
         V2F_C4B_T2F* point = _bufferLine + _bufferCountLine;
         V2F_C4B_T2F* cursor = point;
 
         unsigned int i = 0;
-        for (; i < numberOfPoints - 1; i++)
+        for (; i < count - 1; i++)
         {
             *point = { _vertices[i], color, Tex2F::ZERO };
             *(point + 1) = { _vertices[i + 1], color, Tex2F::ZERO };
             point += 2;
         }
-        if (closePolygon)
+        if (closedPolygon)
         {
             *point = { _vertices[i], color, Tex2F::ZERO };
             *(point + 1) = { _vertices[0], color, Tex2F::ZERO };
@@ -1369,7 +1434,42 @@ void DrawNodeEx::_drawPoly(const Vec2* poli,
             vertex_count * sizeof(V2F_C4B_T2F));
         _bufferCountLine += vertex_count;
         _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
-#endif
+
+        AX_SAFE_DELETE_ARRAY(_vertices);
+    }
+    else
+    {
+        //bool _clipper = false;
+        //if (_clipper)
+        //{
+        //    // clipper2 is maybe a good idea here
+        //    //Clipper2Lib::Path64 subject, clip, solution;
+        //    //subject.push_back(MakePath({100, 50, 10, 79, 65, 2, 65, 98, 10, 21}));
+        //    //clip.push_back(MakePath({98, 63, 4, 68, 77, 8, 52, 100, 19, 12}));
+        //    //solution = Clipper2Lib::Intersect(subject, clip, Clipper2Lib::FillRule::NonZero);
+
+
+        //    std::vector<Vec2> points;
+        //    for (int i = 0; i < count + 1; ++i)
+        //    {
+        //        points.emplace_back(verts[i].x, verts[i].y);
+        //    }
+
+        //    std::vector<Vec2> res = expand(points, Rect(0, 0, 600, 600), 0.5f);
+
+        //    Vec2* ress = new Vec2[res.size()];
+        //    int i = 0;
+        //    for (auto&& t : res)  // use it later; only one calculate!!!
+        //    {
+        //        ress[i++] = t;
+        //    }
+
+        //    _drawPolygon(ress, res.size(), Color4B::TRANSPARENT, thickness, color, closedPolygon);
+        //}
+
+
+        //  thickness /= _scaleFactor;
+        _drawPolygon(verts, count, Color4B::TRANSPARENT, thickness, color, closedPolygon);
     }
 }
 NS_AX_EXT_END

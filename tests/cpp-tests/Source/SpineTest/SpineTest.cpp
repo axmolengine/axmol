@@ -487,6 +487,18 @@ void SkeletonRendererSeparatorExample::update(float deltaTime)
     // Director::getInstance()->replaceScene(SpineboyExample::scene());
 }
 
+template <>
+class fmt::formatter<spine::String>
+{
+public:
+    constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
+    template <typename Context>
+    constexpr auto format(spine::String const& value, Context& ctx) const
+    {
+        return fmt::format_to(ctx.out(), FMT_COMPILE("{}"), fmt::string_view{value.buffer(), value.length()});
+    }
+};
+
 bool SpineboyExample::init()
 {
     if (!SpineTestLayer::init())
@@ -504,8 +516,8 @@ bool SpineboyExample::init()
     skeletonNode->setCompleteListener([](TrackEntry* entry) { AXLOGI("{} complete", entry->getTrackIndex()); });
     skeletonNode->setDisposeListener([](TrackEntry* entry) { AXLOGI("{} dispose", entry->getTrackIndex()); });
     skeletonNode->setEventListener([](TrackEntry* entry, spine::Event* event) {
-        AXLOGI("{} event: {}, {}, {}, {}", entry->getTrackIndex(), event->getData().getName().buffer(),
-            event->getIntValue(), event->getFloatValue(), event->getStringValue().buffer());
+        AXLOGI("{} event: {}, {}, {}, {}", entry->getTrackIndex(), event->getData().getName(),
+               event->getIntValue(), event->getFloatValue(), event->getStringValue());
     });
 
     skeletonNode->setMix("walk", "jump", 0.4);

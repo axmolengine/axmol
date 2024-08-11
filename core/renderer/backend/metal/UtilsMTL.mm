@@ -144,7 +144,7 @@ void UtilsMTL::updateDefaultColorAttachmentTexture(id<MTLTexture> texture)
 
 MTLPixelFormat UtilsMTL::toMTLPixelFormat(PixelFormat textureFormat)
 {
-    if (UTILS_LIKELY(textureFormat < PixelFormat::COUNT))
+    if (AX_LIKELY(textureFormat < PixelFormat::COUNT))
     {
         return s_textureFormats[(int)textureFormat].fmt;
     }

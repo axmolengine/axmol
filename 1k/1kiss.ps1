@@ -210,9 +210,8 @@ $manifest = @{
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
-# the default generator of unix targets: linux, osx, ios, android, wasm
+# the default generator requires explicit specified: osx, ios, android, wasm
 $cmake_generators = @{
-    'linux'   = 'Unix Makefiles'
     'android' = 'Ninja'
     'wasm'    = 'Ninja'
     'wasm64'  = 'Ninja'
@@ -484,6 +483,9 @@ function devtool_url($filename) {
 function version_eq($ver1, $ver2) {
     return $ver1 -eq $ver2
 }
+function version_like($ver1, $ver2) {
+    return $ver1 -like $ver2
+}
 
 # $ver2: accept x.y.z-rc1
 function version_ge($ver1, $ver2) {
@@ -569,6 +571,7 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
     $checkVerCond = $null
     $minimalVer = ''
     $preferredVer = ''
+    $wildcardVer = ''
     $requiredVer = $manifest[$name]
     if ($requiredVer) {
         $preferredVer = $null
@@ -591,7 +594,13 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
                     $checkVerCond = '$(version_in_range $foundVer $minimalVer $preferredVer)'
                 }
                 else {
-                    $checkVerCond = '$(version_eq $foundVer $preferredVer)'
+                    if (!$preferredVer.Contains('*')) {
+                        $checkVerCond = '$(version_eq $foundVer $preferredVer)'
+                    } else {
+                        $wildcardVer = $preferredVer
+                        $preferredVer = $wildcardVer.TrimEnd('.*')
+                        $checkVerCond = '$(version_like $foundVer $wildcardVer)'
+                    }
                 }
             }
         }
@@ -645,7 +654,6 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
     }
     else {
         if ($preferredVer) {
-            # if (!$silent) { $1k.println("Not found $name, needs install: $preferredVer") }
             $found_rets = $null, $preferredVer
         }
         else {
@@ -1593,6 +1601,7 @@ elseif ($Global:is_wasm) {
 }
 
 $is_host_target = $Global:is_win32 -or $Global:is_linux -or $Global:is_mac
+$is_host_cpu = $HOST_CPU -eq $TARGET_CPU
 
 if (!$setupOnly) {
     $BUILD_DIR = $null
@@ -1600,7 +1609,11 @@ if (!$setupOnly) {
 
     function resolve_out_dir($prefix) {
         if ($is_host_target) {
-            $out_dir = "${prefix}${TARGET_CPU}"
+            if (!$is_host_cpu) {
+                $out_dir = "${prefix}${TARGET_CPU}"
+            } else {
+                $out_dir = $prefix.TrimEnd("_")
+            }
         }
         else {
             $out_dir = "${prefix}${TARGET_OS}"
@@ -1711,7 +1724,7 @@ if (!$setupOnly) {
                 }
             }
 
-            if (!$cmake_generator -and !$TARGET_OS.StartsWith('win')) {
+            if (!$cmake_generator -and !$TARGET_OS.StartsWith('win') -and $TARGET_OS -ne 'linux') {
                 $cmake_generator = $cmake_generators[$TARGET_OS]
                 if ($null -eq $cmake_generator) {
                     $cmake_generator = if (!$IsWin) { 'Unix Makefiles' } else { 'Ninja' }

@@ -33,7 +33,7 @@
 
 NS_AX_BEGIN
 
-const std::string EventListenerTouchOneByOne::LISTENER_ID = "__cc_touch_one_by_one";
+const std::string EventListenerTouchOneByOne::LISTENER_ID = "__ax_touch_one_by_one";
 
 EventListenerTouchOneByOne::EventListenerTouchOneByOne()
     : onTouchBegan(nullptr)
@@ -119,7 +119,7 @@ EventListenerTouchOneByOne* EventListenerTouchOneByOne::clone()
 
 /////////
 
-const std::string EventListenerTouchAllAtOnce::LISTENER_ID = "__cc_touch_all_at_once";
+const std::string EventListenerTouchAllAtOnce::LISTENER_ID = "__ax_touch_all_at_once";
 
 EventListenerTouchAllAtOnce::EventListenerTouchAllAtOnce()
     : onTouchesBegan(nullptr), onTouchesMoved(nullptr), onTouchesEnded(nullptr), onTouchesCancelled(nullptr)
