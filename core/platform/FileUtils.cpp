@@ -1210,7 +1210,7 @@ bool FileUtils::createDirectories(std::string_view path) const
         else
             fail = !S_ISDIR(st.st_mode);
 
-        return !fail;
+        return fail;
     });
 
     return fail;
