@@ -1602,6 +1602,7 @@ elseif ($Global:is_wasm) {
 }
 
 $is_host_target = $Global:is_win32 -or $Global:is_linux -or $Global:is_mac
+$is_host_cpu = $HOST_CPU -eq $TARGET_CPU
 
 if (!$setupOnly) {
     $BUILD_DIR = $null
@@ -1609,7 +1610,11 @@ if (!$setupOnly) {
 
     function resolve_out_dir($prefix) {
         if ($is_host_target) {
-            $out_dir = "${prefix}${TARGET_CPU}"
+            if (!$is_host_cpu) {
+                $out_dir = "${prefix}${TARGET_CPU}"
+            } else {
+                $out_dir = $prefix.TrimEnd("_")
+            }
         }
         else {
             $out_dir = "${prefix}${TARGET_OS}"
