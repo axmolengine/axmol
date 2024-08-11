@@ -210,9 +210,8 @@ $manifest = @{
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
-# the default generator of unix targets: linux, osx, ios, android, wasm
+# the default generator requires explicit specified: osx, ios, android, wasm
 $cmake_generators = @{
-    'linux'   = 'Unix Makefiles'
     'android' = 'Ninja'
     'wasm'    = 'Ninja'
     'wasm64'  = 'Ninja'
@@ -1725,7 +1724,7 @@ if (!$setupOnly) {
                 }
             }
 
-            if (!$cmake_generator -and !$TARGET_OS.StartsWith('win')) {
+            if (!$cmake_generator -and !$TARGET_OS.StartsWith('win') -and $TARGET_OS -ne 'linux') {
                 $cmake_generator = $cmake_generators[$TARGET_OS]
                 if ($null -eq $cmake_generator) {
                     $cmake_generator = if (!$IsWin) { 'Unix Makefiles' } else { 'Ninja' }
