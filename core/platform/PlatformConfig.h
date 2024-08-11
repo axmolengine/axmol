@@ -163,5 +163,26 @@ Linux: Desktop GL/Vulkan
 #    endif
 #endif
 
+// ## SIMD detections
+#if !defined(AX_NEON_INTRINSICS)
+#    if (AX_TARGET_PLATFORM != AX_PLATFORM_WASM)
+#        if defined(__arm64__) || defined(__aarch64__) || defined(_M_ARM64) || defined(_M_ARM) || defined(__ARM_NEON__)
+#            define AX_NEON_INTRINSICS 1
+#        endif
+#    endif
+#endif
+
+#ifdef AX_SSE_INTRINSICS
+// axmol math ISA require SSE2 at latest
+#    include <emmintrin.h>
+#    if defined(__SSE4_1__)
+#        include <smmintrin.h>
+#    endif
+using _xm128_t = __m128;
+#elif defined(AX_NEON_INTRINSICS)
+#    include <arm_neon.h>
+using _xm128_t = float32x4_t;
+#endif
+
 /// @endcond
 #endif  // __BASE_AX_PLATFORM_CONFIG_H__

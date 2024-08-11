@@ -366,7 +366,7 @@ private:
     backend::TextureBackend* _lastColorBuffer;                         ///< モデル描画直前のフレームバッファ
     backend::TextureBackend* _lastDepthBuffer;
     backend::TextureBackend* _lastStencilBuffer;
-    ax::RenderTargetFlag _lastRenderTargetFlag;
+    //ax::RenderTargetFlag _lastRenderTargetFlag;
     backend::RenderTarget* _lastRenderTarget;
     csmRectF _lastViewport;                 ///< モデル描画直前のビューポート
 };

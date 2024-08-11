@@ -234,7 +234,7 @@ void CubismCommandBuffer_Cocos2dx::SetColorBuffer(backend::TextureBackend* color
         {
             rt = GetCocos2dRenderer()->getOffscreenRenderTarget();
             rt->setColorAttachment(colorBuffer);
-            rt->setTargetFlags(RenderTargetFlag::COLOR);
+            //rt->setTargetFlags(RenderTargetFlag::COLOR);
         }
         else
         {

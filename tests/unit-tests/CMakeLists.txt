@@ -42,6 +42,7 @@ _1klink("${sample-assets_SOURCE_DIR}/unit-tests/Content" "${CMAKE_CURRENT_LIST_D
 set(GAME_SOURCE
     Source/AppDelegate.cpp
     Source/doctest.cpp
+    Source/TestUtils.cpp
 
     Source/core/base/MapTests.cpp
     Source/core/base/UTF8Tests.cpp
@@ -74,13 +75,9 @@ elseif(WINDOWS)
 endif()
 
 if(ANDROID)
-    list(APPEND GAME_HEADER
-         Source/JNITest/JNITest.h
-         )
     list(APPEND GAME_SOURCE
-         Source/JNITest/JNITest.cpp
-         proj.android/app/jni/main.cpp
-         )
+        proj.android/app/jni/main.cpp
+    )
 elseif(LINUX)
     list(APPEND GAME_SOURCE
          proj.linux/main.cpp

@@ -1,6 +1,7 @@
 /**
 Copyright 2013 BlackBerry Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,59 +17,21 @@ limitations under the License.
 
 Original file from GamePlay3D: http://gameplay3d.org
 
-This file was modified to fit the cocos2d-x project
+This file was modified to fit the axmol project
 */
 
 #include "math/MathUtil.h"
+#include "math/Mat4.h"
 #include "base/Macros.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include <cpu-features.h>
 #endif
 
-//#define USE_NEON32        : neon 32 code will be used
-//#define USE_NEON64        : neon 64 code will be used
-//#define INCLUDE_NEON32    : neon 32 code included
-//#define INCLUDE_NEON64    : neon 64 code included
-//#define USE_SSE           : SSE code used
-//#define INCLUDE_SSE       : SSE code included
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
-#    if defined(__arm64__)
-#        define USE_NEON64
-#        define INCLUDE_NEON64
-#    elif defined(__ARM_NEON__)
-#        define USE_NEON32
-#        define INCLUDE_NEON32
-#    else
-#    endif
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#    if defined(__arm64__) || defined(__aarch64__)
-#        define USE_NEON64
-#        define INCLUDE_NEON64
-#    elif defined(__ARM_NEON__)
-#        define INCLUDE_NEON32
-#    else
-#    endif
-#else
-
-#endif
-
-#if defined(AX_USE_SSE)
-#    define USE_SSE
-#    define INCLUDE_SSE
-#endif
-
-#ifdef INCLUDE_NEON32
-#    include "math/MathUtilNeon.inl"
-#endif
-
-#ifdef INCLUDE_NEON64
-#    include "math/MathUtilNeon64.inl"
-#endif
-
-#ifdef INCLUDE_SSE
+#if defined(AX_SSE_INTRINSICS)
 #    include "math/MathUtilSSE.inl"
+#elif defined(AX_NEON_INTRINSICS)
+#    include "math/MathUtilNeon.inl"
 #endif
 
 #include "math/MathUtil.inl"
@@ -103,9 +66,8 @@ float MathUtil::lerp(float from, float to, float alpha)
 
 bool MathUtil::isNeon32Enabled()
 {
-#ifdef USE_NEON32
-    return true;
-#elif (defined(INCLUDE_NEON32) && (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID))
+#if defined(AX_NEON_INTRINSICS) && !AX_64BITS
+#    if AX_NEON_INTRINSICS == 1 && AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     class AnrdoidNeonChecker
     {
     public:
@@ -124,15 +86,9 @@ bool MathUtil::isNeon32Enabled()
     };
     static AnrdoidNeonChecker checker;
     return checker.isNeonEnabled();
-#else
-    return false;
-#endif
-}
-
-bool MathUtil::isNeon64Enabled()
-{
-#ifdef USE_NEON64
+#    else
     return true;
+#    endif
 #else
     return false;
 #endif
@@ -140,15 +96,17 @@ bool MathUtil::isNeon64Enabled()
 
 void MathUtil::addMatrix(const float* m, float scalar, float* dst)
 {
-#ifdef USE_NEON32
-    MathUtilNeon::addMatrix(m, scalar, dst);
-#elif defined(USE_NEON64)
-    MathUtilNeon64::addMatrix(m, scalar, dst);
-#elif defined(INCLUDE_NEON32)
+#if defined(AX_SSE_INTRINSICS)
+    MathUtilSSE::addMatrix(reinterpret_cast<const _xm128_t*>(m), scalar, reinterpret_cast<_xm128_t*>(dst));
+#elif defined(AX_NEON_INTRINSICS)
+#    if AX_64BITS || AX_NEON_INTRINSICS > 1
+    MathUtilNeon::addMatrix(reinterpret_cast<const _xm128_t*>(m), scalar, reinterpret_cast<_xm128_t*>(dst));
+#    else
     if (isNeon32Enabled())
-        MathUtilNeon::addMatrix(m, scalar, dst);
+        MathUtilNeon::addMatrix(reinterpret_cast<const _xm128_t*>(m), scalar, reinterpret_cast<_xm128_t*>(dst));
     else
         MathUtilC::addMatrix(m, scalar, dst);
+#    endif
 #else
     MathUtilC::addMatrix(m, scalar, dst);
 #endif
@@ -156,15 +114,20 @@ void MathUtil::addMatrix(const float* m, float scalar, float* dst)
 
 void MathUtil::addMatrix(const float* m1, const float* m2, float* dst)
 {
-#ifdef USE_NEON32
-    MathUtilNeon::addMatrix(m1, m2, dst);
-#elif defined(USE_NEON64)
-    MathUtilNeon64::addMatrix(m1, m2, dst);
-#elif defined(INCLUDE_NEON32)
+#if defined(AX_SSE_INTRINSICS)
+    MathUtilSSE::addMatrix(reinterpret_cast<const _xm128_t*>(m1), reinterpret_cast<const _xm128_t*>(m2),
+                           reinterpret_cast<_xm128_t*>(dst));
+#elif defined(AX_NEON_INTRINSICS)
+#    if AX_64BITS || AX_NEON_INTRINSICS > 1
+    MathUtilNeon::addMatrix(reinterpret_cast<const _xm128_t*>(m1), reinterpret_cast<const _xm128_t*>(m2),
+                            reinterpret_cast<_xm128_t*>(dst));
+#    else
     if (isNeon32Enabled())
-        MathUtilNeon::addMatrix(m1, m2, dst);
+        MathUtilNeon::addMatrix(reinterpret_cast<const _xm128_t*>(m1), reinterpret_cast<const _xm128_t*>(m2),
+                                reinterpret_cast<_xm128_t*>(dst));
     else
         MathUtilC::addMatrix(m1, m2, dst);
+#    endif
 #else
     MathUtilC::addMatrix(m1, m2, dst);
 #endif
@@ -172,15 +135,20 @@ void MathUtil::addMatrix(const float* m1, const float* m2, float* dst)
 
 void MathUtil::subtractMatrix(const float* m1, const float* m2, float* dst)
 {
-#ifdef USE_NEON32
-    MathUtilNeon::subtractMatrix(m1, m2, dst);
-#elif defined(USE_NEON64)
-    MathUtilNeon64::subtractMatrix(m1, m2, dst);
-#elif defined(INCLUDE_NEON32)
+#if defined(AX_SSE_INTRINSICS)
+    MathUtilSSE::subtractMatrix(reinterpret_cast<const _xm128_t*>(m1), reinterpret_cast<const _xm128_t*>(m2),
+                                reinterpret_cast<_xm128_t*>(dst));
+#elif defined(AX_NEON_INTRINSICS)
+#    if AX_64BITS || AX_NEON_INTRINSICS > 1
+    MathUtilNeon::subtractMatrix(reinterpret_cast<const _xm128_t*>(m1), reinterpret_cast<const _xm128_t*>(m2),
+                                 reinterpret_cast<_xm128_t*>(dst));
+#    else
     if (isNeon32Enabled())
-        MathUtilNeon::subtractMatrix(m1, m2, dst);
+        MathUtilNeon::subtractMatrix(reinterpret_cast<const _xm128_t*>(m1), reinterpret_cast<const _xm128_t*>(m2),
+                                     reinterpret_cast<_xm128_t*>(dst));
     else
         MathUtilC::subtractMatrix(m1, m2, dst);
+#    endif
 #else
     MathUtilC::subtractMatrix(m1, m2, dst);
 #endif
@@ -188,15 +156,17 @@ void MathUtil::subtractMatrix(const float* m1, const float* m2, float* dst)
 
 void MathUtil::multiplyMatrix(const float* m, float scalar, float* dst)
 {
-#ifdef USE_NEON32
-    MathUtilNeon::multiplyMatrix(m, scalar, dst);
-#elif defined(USE_NEON64)
-    MathUtilNeon64::multiplyMatrix(m, scalar, dst);
-#elif defined(INCLUDE_NEON32)
+#if defined(AX_SSE_INTRINSICS)
+    MathUtilSSE::multiplyMatrix(reinterpret_cast<const _xm128_t*>(m), scalar, reinterpret_cast<_xm128_t*>(dst));
+#elif defined(AX_NEON_INTRINSICS)
+#    if AX_64BITS || AX_NEON_INTRINSICS > 1
+    MathUtilNeon::multiplyMatrix(reinterpret_cast<const _xm128_t*>(m), scalar, reinterpret_cast<_xm128_t*>(dst));
+#    else
     if (isNeon32Enabled())
-        MathUtilNeon::multiplyMatrix(m, scalar, dst);
+        MathUtilNeon::multiplyMatrix(reinterpret_cast<const _xm128_t*>(m), scalar, reinterpret_cast<_xm128_t*>(dst));
     else
         MathUtilC::multiplyMatrix(m, scalar, dst);
+#    endif
 #else
     MathUtilC::multiplyMatrix(m, scalar, dst);
 #endif
@@ -204,15 +174,20 @@ void MathUtil::multiplyMatrix(const float* m, float scalar, float* dst)
 
 void MathUtil::multiplyMatrix(const float* m1, const float* m2, float* dst)
 {
-#ifdef USE_NEON32
-    MathUtilNeon::multiplyMatrix(m1, m2, dst);
-#elif defined(USE_NEON64)
-    MathUtilNeon64::multiplyMatrix(m1, m2, dst);
-#elif defined(INCLUDE_NEON32)
+#if defined(AX_SSE_INTRINSICS)
+    MathUtilSSE::multiplyMatrix(reinterpret_cast<const _xm128_t*>(m1), reinterpret_cast<const _xm128_t*>(m2),
+                                reinterpret_cast<_xm128_t*>(dst));
+#elif defined(AX_NEON_INTRINSICS)
+#    if AX_64BITS || AX_NEON_INTRINSICS > 1
+    MathUtilNeon::multiplyMatrix(reinterpret_cast<const _xm128_t*>(m1), reinterpret_cast<const _xm128_t*>(m2),
+                                 reinterpret_cast<_xm128_t*>(dst));
+#    else
     if (isNeon32Enabled())
-        MathUtilNeon::multiplyMatrix(m1, m2, dst);
+        MathUtilNeon::multiplyMatrix(reinterpret_cast<const _xm128_t*>(m1), reinterpret_cast<const _xm128_t*>(m2),
+                                     reinterpret_cast<_xm128_t*>(dst));
     else
         MathUtilC::multiplyMatrix(m1, m2, dst);
+#    endif
 #else
     MathUtilC::multiplyMatrix(m1, m2, dst);
 #endif
@@ -220,15 +195,17 @@ void MathUtil::multiplyMatrix(const float* m1, const float* m2, float* dst)
 
 void MathUtil::negateMatrix(const float* m, float* dst)
 {
-#ifdef USE_NEON32
-    MathUtilNeon::negateMatrix(m, dst);
-#elif defined(USE_NEON64)
-    MathUtilNeon64::negateMatrix(m, dst);
-#elif defined(INCLUDE_NEON32)
+#if defined(AX_SSE_INTRINSICS)
+    MathUtilSSE::negateMatrix(reinterpret_cast<const _xm128_t*>(m), reinterpret_cast<_xm128_t*>(dst));
+#elif defined(AX_NEON_INTRINSICS)
+#    if AX_64BITS || AX_NEON_INTRINSICS > 1
+    MathUtilNeon::negateMatrix(reinterpret_cast<const _xm128_t*>(m), reinterpret_cast<_xm128_t*>(dst));
+#    else
     if (isNeon32Enabled())
-        MathUtilNeon::negateMatrix(m, dst);
+        MathUtilNeon::negateMatrix(reinterpret_cast<const _xm128_t*>(m), reinterpret_cast<_xm128_t*>(dst));
     else
         MathUtilC::negateMatrix(m, dst);
+#    endif
 #else
     MathUtilC::negateMatrix(m, dst);
 #endif
@@ -236,47 +213,53 @@ void MathUtil::negateMatrix(const float* m, float* dst)
 
 void MathUtil::transposeMatrix(const float* m, float* dst)
 {
-#ifdef USE_NEON32
-    MathUtilNeon::transposeMatrix(m, dst);
-#elif defined(USE_NEON64)
-    MathUtilNeon64::transposeMatrix(m, dst);
-#elif defined(INCLUDE_NEON32)
+#if defined(AX_SSE_INTRINSICS)
+    MathUtilSSE::transposeMatrix(reinterpret_cast<const _xm128_t*>(m), reinterpret_cast<_xm128_t*>(dst));
+#elif defined(AX_NEON_INTRINSICS)
+#    if AX_64BITS || AX_NEON_INTRINSICS > 1
+    MathUtilNeon::transposeMatrix(reinterpret_cast<const _xm128_t*>(m), reinterpret_cast<_xm128_t*>(dst));
+#    else
     if (isNeon32Enabled())
-        MathUtilNeon::transposeMatrix(m, dst);
+        MathUtilNeon::transposeMatrix(reinterpret_cast<const _xm128_t*>(m), reinterpret_cast<_xm128_t*>(dst));
     else
         MathUtilC::transposeMatrix(m, dst);
+#    endif
 #else
     MathUtilC::transposeMatrix(m, dst);
 #endif
 }
 
-void MathUtil::transformVec4(const float* m, float x, float y, float z, float w, float* dst)
+void MathUtil::transformVec4(const float* m, float x, float y, float z, float w, float* dst /*vec3*/)
 {
-#ifdef USE_NEON32
-    MathUtilNeon::transformVec4(m, x, y, z, w, dst);
-#elif defined(USE_NEON64)
-    MathUtilNeon64::transformVec4(m, x, y, z, w, dst);
-#elif defined(INCLUDE_NEON32)
+#if defined(AX_SSE_INTRINSICS)
+    MathUtilSSE::transformVec4(reinterpret_cast<const _xm128_t*>(m), x, y, z, w, dst);
+#elif defined(AX_NEON_INTRINSICS)
+#    if AX_64BITS || AX_NEON_INTRINSICS > 1
+    MathUtilNeon::transformVec4(reinterpret_cast<const _xm128_t*>(m), x, y, z, w, dst);
+#    else
     if (isNeon32Enabled())
-        MathUtilNeon::transformVec4(m, x, y, z, w, dst);
+        MathUtilNeon::transformVec4(reinterpret_cast<const _xm128_t*>(m), x, y, z, w, dst);
     else
         MathUtilC::transformVec4(m, x, y, z, w, dst);
+#    endif
 #else
     MathUtilC::transformVec4(m, x, y, z, w, dst);
 #endif
 }
 
-void MathUtil::transformVec4(const float* m, const float* v, float* dst)
+void MathUtil::transformVec4(const float* m, const float* v, float* dst /*vec4*/)
 {
-#ifdef USE_NEON32
-    MathUtilNeon::transformVec4(m, v, dst);
-#elif defined(USE_NEON64)
-    MathUtilNeon64::transformVec4(m, v, dst);
-#elif defined(INCLUDE_NEON32)
+#if defined(AX_SSE_INTRINSICS)
+    MathUtilSSE::transformVec4(reinterpret_cast<const _xm128_t*>(m), v, dst);
+#elif defined(AX_NEON_INTRINSICS)
+#    if AX_64BITS || AX_NEON_INTRINSICS > 1
+    MathUtilNeon::transformVec4(reinterpret_cast<const _xm128_t*>(m), v, dst);
+#    else
     if (isNeon32Enabled())
-        MathUtilNeon::transformVec4(m, v, dst);
+        MathUtilNeon::transformVec4(reinterpret_cast<const _xm128_t*>(m), v, dst);
     else
         MathUtilC::transformVec4(m, v, dst);
+#    endif
 #else
     MathUtilC::transformVec4(m, v, dst);
 #endif
@@ -284,17 +267,53 @@ void MathUtil::transformVec4(const float* m, const float* v, float* dst)
 
 void MathUtil::crossVec3(const float* v1, const float* v2, float* dst)
 {
-#ifdef USE_NEON32
+#if defined(AX_SSE_INTRINSICS)
+    MathUtilSSE::crossVec3(v1, v2, dst);
+#elif defined(AX_NEON_INTRINSICS)
+#    if AX_64BITS || AX_NEON_INTRINSICS > 1
     MathUtilNeon::crossVec3(v1, v2, dst);
-#elif defined(USE_NEON64)
-    MathUtilNeon64::crossVec3(v1, v2, dst);
-#elif defined(INCLUDE_NEON32)
+#    else
     if (isNeon32Enabled())
         MathUtilNeon::crossVec3(v1, v2, dst);
     else
         MathUtilC::crossVec3(v1, v2, dst);
+#    endif
 #else
     MathUtilC::crossVec3(v1, v2, dst);
+#endif
+}
+
+void MathUtil::transformVertices(V3F_C4B_T2F* dst, const V3F_C4B_T2F* src, size_t count, const Mat4& transform)
+{
+    // Check some assumptions made by optimizations
+    static_assert(sizeof(V3F_C4B_T2F) == 24);
+    static_assert(offsetof(V3F_C4B_T2F, vertices) == 0);
+    static_assert(offsetof(V3F_C4B_T2F, colors) == 12);
+    static_assert(offsetof(V3F_C4B_T2F, texCoords) == 16);
+#if defined(AX_SSE_INTRINSICS)
+    MathUtilSSE::transformVertices(dst, src, count, transform);
+#elif defined(AX_NEON_INTRINSICS)
+#    if AX_64BITS || AX_NEON_INTRINSICS > 1
+    MathUtilNeon::transformVertices(dst, src, count, transform);
+#    else
+    if (isNeon32Enabled())
+        MathUtilNeon::transformVertices(dst, src, count, transform);
+    else
+        MathUtilC::transformVertices(dst, src, count, transform);
+#    endif
+#else
+    MathUtilC::transformVertices(dst, src, count, transform);
+#endif
+}
+
+void MathUtil::transformIndices(uint16_t* dst, const uint16_t* src, size_t count, uint16_t offset)
+{
+#if defined(AX_SSE_INTRINSICS)
+    MathUtilSSE::transformIndices(dst, src, count, offset);
+#elif defined(AX_NEON_INTRINSICS) && AX_64BITS
+    MathUtilNeon::transformIndices(dst, src, count, offset);
+#else
+    MathUtilC::transformIndices(dst, src, count, offset);
 #endif
 }
 

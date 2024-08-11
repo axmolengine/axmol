@@ -2,6 +2,7 @@
  Copyright 2013 BlackBerry Inc.
  Copyright (c) 2014-2017 Chukong Technologies
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@
 #ifndef MATH_VEC4_H
 #define MATH_VEC4_H
 
+#include "base/Macros.h"
 #include "math/MathBase.h"
 
 /**
@@ -45,6 +47,8 @@ public:
 
     Vec4Base() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
     Vec4Base(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
+    explicit Vec4Base(const float* src) { this->set(src); }
+
     union
     {
         struct
@@ -106,6 +110,50 @@ public:
         z *= scalar;
         w *= scalar;
         return *static_cast<impl_type*>(this);
+    }
+
+    /**
+     * Sets the elements of this vector to the specified values.
+     *
+     * @param xx The new x coordinate.
+     * @param yy The new y coordinate.
+     * @param zz The new z coordinate.
+     * @param ww The new w coordinate.
+     */
+    void set(float xx, float yy, float zz, float ww)
+    {
+        this->x = xx;
+        this->y = yy;
+        this->z = zz;
+        this->w = ww;        
+    }
+
+    /**
+     * Sets the elements of this vector from the values in the specified array.
+     *
+     * @param array An array containing the elements of the vector in the order x, y, z, w.
+     */
+    void set(const float* array)
+    {
+        GP_ASSERT(array);
+
+        this->x = array[0];
+        this->y = array[1];
+        this->z = array[2];
+        this->w = array[3];        
+    }
+
+    /**
+     * Sets the elements of this vector to those in the specified vector.
+     *
+     * @param v The vector to copy.
+     */
+    void set(const impl_type& v)
+    {
+        this->x = v.x;
+        this->y = v.y;
+        this->z = v.z;
+        this->w = v.w;        
     }
 
     inline impl_type& operator-() { return impl_type{*static_cast<impl_type*>(this)}.negate(); }
@@ -246,7 +294,7 @@ public:
      *
      * @param array An array containing the elements of the vector in the order x, y, z, w.
      */
-    Vec4(const float* array);
+    explicit Vec4(const float* array);
 
     /**
      * Constructs a vector that describes the direction between the specified points.
@@ -255,15 +303,6 @@ public:
      * @param p2 The second point.
      */
     Vec4(const Vec4& p1, const Vec4& p2);
-
-    /**
-     * Constructor.
-     *
-     * Creates a new vector that is a copy of the specified vector.
-     *
-     * @param copy The vector to copy.
-     */
-    Vec4(const Vec4& copy);
 
     /**
      * Creates a new vector from an integer interpreted as an RGBA value.
@@ -414,36 +453,12 @@ public:
     Vec4 getNormalized() const;
 
     /**
-     * Sets the elements of this vector to the specified values.
-     *
-     * @param xx The new x coordinate.
-     * @param yy The new y coordinate.
-     * @param zz The new z coordinate.
-     * @param ww The new w coordinate.
-     */
-    void set(float xx, float yy, float zz, float ww);
-
-    /**
-     * Sets the elements of this vector from the values in the specified array.
-     *
-     * @param array An array containing the elements of the vector in the order x, y, z, w.
-     */
-    void set(const float* array);
-
-    /**
-     * Sets the elements of this vector to those in the specified vector.
-     *
-     * @param v The vector to copy.
-     */
-    void set(const Vec4& v);
-
-    /**
      * Sets this vector to the directional vector between the specified points.
      *
      * @param p1 The first point.
      * @param p2 The second point.
      */
-    void set(const Vec4& p1, const Vec4& p2);
+    void setDirection(const Vec4& p1, const Vec4& p2);
 
     /**
      * Subtracts the specified vectors and stores the result in dst.

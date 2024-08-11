@@ -398,7 +398,7 @@ bool Console::listenOnTCP(int port)
     if (sock.pserve(ep) != 0)
     {
         int ec = xxsocket::get_last_errno();
-        AXLOGW("Console: open server failed, ec:{}", ec);
+        AXLOGW("Console: open server failed, ec:{}, {}", ec, xxsocket::strerror(ec));
         return false;
     }
 

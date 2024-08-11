@@ -2,6 +2,7 @@
  Copyright 2013 BlackBerry Inc.
  Copyright (c) 2014-2017 Chukong Technologies
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,17 +18,18 @@
 
  Original file from GamePlay3D: http://gameplay3d.org
 
- This file was modified to fit the cocos2d-x project
+ This file was modified to fit the axmol project
  */
 
 #ifndef MATHUTIL_H_
 #define MATHUTIL_H_
 
-#ifdef AX_USE_SSE
-#    include <xmmintrin.h>
-#endif
-
 #include "math/MathBase.h"
+
+
+NS_AX_BEGIN
+    struct V3F_C4B_T2F;
+NS_AX_END
 
 /**
  * @addtogroup base
@@ -35,6 +37,8 @@
  */
 
 NS_AX_MATH_BEGIN
+
+class Vec4;
 
 /**
  * Defines a math utility class.
@@ -45,6 +49,7 @@ class AX_DLL MathUtil
 {
     friend class Mat4;
     friend class Vec3;
+    friend class Renderer;
 
 public:
     /**
@@ -91,26 +96,8 @@ public:
 private:
     // Indicates that if neon is enabled
     static bool isNeon32Enabled();
-    static bool isNeon64Enabled();
 
 private:
-#ifdef AX_USE_SSE
-    static void addMatrix(const __m128 m[4], float scalar, __m128 dst[4]);
-
-    static void addMatrix(const __m128 m1[4], const __m128 m2[4], __m128 dst[4]);
-
-    static void subtractMatrix(const __m128 m1[4], const __m128 m2[4], __m128 dst[4]);
-
-    static void multiplyMatrix(const __m128 m[4], float scalar, __m128 dst[4]);
-
-    static void multiplyMatrix(const __m128 m1[4], const __m128 m2[4], __m128 dst[4]);
-
-    static void negateMatrix(const __m128 m[4], __m128 dst[4]);
-
-    static void transposeMatrix(const __m128 m[4], __m128 dst[4]);
-
-    static void transformVec4(const __m128 m[4], const __m128& v, __m128& dst);
-#endif
     static void addMatrix(const float* m, float scalar, float* dst);
 
     static void addMatrix(const float* m1, const float* m2, float* dst);
@@ -125,11 +112,14 @@ private:
 
     static void transposeMatrix(const float* m, float* dst);
 
-    static void transformVec4(const float* m, float x, float y, float z, float w, float* dst);
+    static void transformVec4(const float* m, float x, float y, float z, float w, float* dst/*vec3*/);
 
-    static void transformVec4(const float* m, const float* v, float* dst);
+    static void transformVec4(const float* m, const float* v, float* dst/*vec4*/);
 
     static void crossVec3(const float* v1, const float* v2, float* dst);
+
+    static void transformVertices(V3F_C4B_T2F* dst, const V3F_C4B_T2F* src, size_t count, const Mat4& transform);
+    static void transformIndices(uint16_t* dst, const uint16_t* src, size_t count, uint16_t offset);
 };
 
 NS_AX_MATH_END

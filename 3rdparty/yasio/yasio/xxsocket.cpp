@@ -209,7 +209,7 @@ int xxsocket::pserve(const endpoint& ep)
   if (!this->reopen(ep.af()))
     return -1;
 
-  set_optval(SOL_SOCKET, SO_REUSEADDR, 1);
+  this->reuse_address(true);
 
   int n = this->bind(ep);
   if (n != 0)
