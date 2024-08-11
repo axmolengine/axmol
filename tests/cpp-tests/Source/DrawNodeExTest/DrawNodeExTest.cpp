@@ -662,8 +662,8 @@ string DrawNodeMorphTest_Polygon::subtitle() const
 
 DrawNodePictureTest::DrawNodePictureTest()
 {
-    initSliders();
-    initRadioButtuns();
+    //initSliders();
+    //initRadioButtuns();
 
     drawNodeEx->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2f), FadeOut::create(1.2f), NULL)));
 
@@ -672,7 +672,7 @@ DrawNodePictureTest::DrawNodePictureTest()
 
 void DrawNodePictureTest::update(float dt)
 {
-    DrawNodeExBaseTest::update(dt);
+    //DrawNodeExBaseTest::update(dt);
 
     static float rot = 0.1f;
     static int count = 0;
@@ -2664,7 +2664,6 @@ CandyMixEeffect::CandyMixEeffect()
     static const float BUTTON_WIDTH = 30;
     static float startPosX = 0;
 
-    initSliders();
     initRadioButtuns();
 
     scheduleUpdate();
