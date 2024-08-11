@@ -61,6 +61,30 @@ Vec2 vertices2[] = {
     {362.750000f, 131.625000f}, {362.750000f, 106.875000f}, {306.500000f, 119.125000f}, {324.250000f, 85.1250000f},
     {227.500000f, 61.8750000} };
 
+Vec2 vertices21[] = {
+    {290.250000f, 98.1250000f}, {235.000000f, 90.8750000f}, {270.500000f, 109.875000f}, {235.000000f, 119.125000f},
+    {275.250000f, 145.875000f}, {249.500000f, 145.875000f}, {249.500000f, 178.125000f}, {275.250000f, 187.375015f},
+    {294.750488f, 168.333344f}, {311.250000f, 181.125000f}, {257.000000f, 213.625015f}, {338.500000f, 193.125000f},
+    {300.000000f, 211.125015f}, {333.750000f, 211.125015f}, {368.250000f, 206.625000f}, {377.000000f, 178.125000f},
+    {421.750000f, 170.125000f}, {416.250000f, 115.375000f}, {391.250000f, 157.875000f}, {338.500000f, 131.625000f},
+    {362.750000f, 131.625000f}, {362.750000f, 106.875000f}, {306.500000f, 119.125000f}, {324.250000f, 85.1250000f},
+    {227.500000f, 61.8750000} };
+
+Vec2 vertices24[] = {
+    {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},  {100.250000f, 161.375000f},
+    {65.500000f, 181.375000f},  {102.250000f, 179.125000f}, {95.000000f, 215.125000f},  {129.331467f, 189.926208f},
+    {131.371460f, 206.366196f}, {139.651474f, 192.446198f}, {161.851471f, 200.606201f}, {151.000000f, 220.375000f},
+    {110.500000f, 244.375000f}, {153.750000f, 238.125000f}, {142.500000f, 253.875000f}, {220.750000f, 259.375000f},
+    {250.500000f, 244.375000f}, {168.750000f, 241.875000f}, {182.250000f, 154.125000f}, {190.250000f, 227.375000f},
+    {196.500000f, 197.375000f}, {208.750000f, 210.625000f}, {220.750000f, 194.375000f}, {208.750000f, 176.375000f},
+    {253.250000f, 173.875000f}, {243.750000f, 154.125000f}, {213.750000f, 161.375000f}, {202.250000f, 139.875000f},
+    {236.000000f, 131.875000f}, {218.500000f, 120.875000f}, {206.500000f, 125.625000f}, {184.500000f, 110.375000f},
+    {157.000000f, 108.625000f}, {147.500000f, 96.625000f},  {153.750000f, 85.125000f},  {147.500000f, 75.375000f},
+    {126.500000f, 74.125000f},  {110.500000f, 86.625000f},  {127.750000f, 85.125000f},  {135.250000f, 91.125000f},
+    {135.250000f, 97.875000f},  {124.000000f, 93.875000f},  {115.500000f, 100.875000f}, {115.500000f, 111.875000f},
+    {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
+    {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
+};
 
 // Original https :  // www.purebasic.fr/english/viewtopic.php?t=82915
 float verticesHead[] = { 107.f, 9.f, 0.3333333433f, 0.3411764801f, 0.3686274588f, 255.f, 81.f, 599.f, 116.f, 571.f, 180.f, 562.f, 255.f, 559.f, 213.f, 586.f, 199.f, 599.f, 0.f,  7.f, 0.3333333433f, 0.3411764801f, 0.3686274588f, 255.f, 765.f, 584.f, 782.f, 590.f, 794.f, 599.f, 772.f, 599.f, 0.f,  13.f, 0.4156862795f, 0.4313725531f, 0.4549019635f, 255.f, 278.f, 573.f, 287.f, 599.f, 199.f, 599.f, 217.f, 582.f, 256.f, 557.f, 313.f, 532.f, 352.f, 508.f, 366.f, 512.f, 368.f, 545.f, 285.f, 598.f, 0.f,  8.f, 0.4156862795f, 0.4313725531f, 0.4549019635f, 255.f, 760.f, 591.f, 754.f, 579.f, 766.f, 584.f, 773.f, 599.f, 751.f, 599.f, 0.f,  12.f, 0.400000006f, 0.4117647111f, 0.4196078479f, 255.f, 701.f, 563.f, 615.f, 599.f, 652.f, 558.f, 705.f, 507.f, 716.f, 534.f, 753.f, 577.f, 760.f, 591.f, 752.f, 599.f, 613.f, 599.f, 0.f,  10.f, 0.400000006f, 0.4117647111f, 0.4196078479f, 255.f, 704.f, 506.f, 701.f, 493.f, 686.f, 488.f, 688.f, 503.f, 692.f, 514.f, 691.f, 528.f, 708.f, 518.f, 0.f,  8.f, 0.4784313738f, 0.3647058904f, 0.2156862766f, 255.f, 285.f, 599.f, 309.f, 579.f, 365.f, 546.f, 375.f, 578.f, 378.f, 599.f, 0.f,  16.f, 0.4784313738f, 0.3647058904f, 0.2156862766f, 255.f, 471.f, 599.f, 377.f, 599.f, 365.f, 546.f, 360.f, 511.f, 394.f, 515.f, 428.f, 507.f, 492.f, 471.f, 553.f, 417.f, 568.f, 397.f, 562.f, 422.f, 552.f, 462.f, 547.f, 487.f, 524.f, 529.f, 0.f,  19.f, 0.5921568871f, 0.4980392158f, 0.3647058904f, 255.f, 614.f, 599.f, 683.f, 531.f, 690.f, 512.f, 686.f, 493.f, 684.f, 429.f, 656.f, 245.f, 654.f, 242.f, 644.f, 273.f, 628.f, 288.f, 621.f, 288.f, 592.f, 308.f, 571.f, 378.f, 554.f, 454.f, 543.f, 494.f, 514.f, 542.f, 469.f, 599.f, 0.f,  12.f, 0.5921568871f, 0.4980392158f, 0.3647058904f, 255.f, 598.f, 259.f, 602.f, 233.f, 619.f, 236.f, 624.f, 250.f, 630.f, 257.f, 629.f, 269.f, 623.f, 291.f, 603.f, 312.f, 589.f, 311.f, 0.f,  15.f, 0.4784313738f, 0.3647058904f, 0.2156862766f, 255.f, 642.f, 211.f, 606.f, 197.f, 609.f, 236.f, 621.f, 236.f, 621.f, 246.f, 630.f, 256.f, 627.f, 279.f, 626.f, 286.f, 636.f, 282.f, 641.f, 274.f, 649.f, 250.f, 656.f, 221.f, 0.f,  24.f, 0.4784313738f, 0.3647058904f, 0.2156862766f, 255.f, 309.f, 333.f, 334.f, 269.f, 346.f, 207.f, 347.f, 169.f, 323.f, 42.f, 265.f, 39.f, 256.f, 156.f, 272.f, 212.f, 276.f, 302.f, 292.f, 372.f, 323.f, 469.f, 334.f, 500.f, 350.f, 509.f, 365.f, 511.f, 358.f, 472.f, 370.f, 451.f, 382.f, 438.f, 382.f, 433.f, 389.f, 392.f, 382.f, 309.f, 315.f, 291.f, 0.f,  35.f, 0.5921568871f, 0.4980392158f, 0.3647058904f, 255.f, 439.f, 399.f, 384.f, 393.f, 354.f, 396.f, 349.f, 395.f, 348.f, 405.f, 349.f, 421.f, 352.f, 428.f, 363.f, 434.f, 383.f, 435.f, 364.f, 458.f, 358.f, 473.f, 360.f, 499.f, 364.f, 512.f, 382.f, 516.f, 407.f, 514.f, 437.f, 506.f, 476.f, 482.f, 534.f, 437.f, 562.f, 408.f, 571.f, 382.f, 581.f, 346.f, 598.f, 0.f, 333.f, 0.f, 345.f, 190.f, 336.f, 249.f, 379.f, 333.f, 373.f, 347.f, 347.f, 353.f, 347.f, 371.f, 354.f, 377.f, 387.f, 384.f, 389.f, 396.f, 0.f,  7.f, 0.5921568871f, 0.4980392158f, 0.3647058904f, 255.f, 370.f, 309.f, 322.f, 296.f, 333.f, 268.f, 339.f, 238.f, 0.f,  10.f, 0.5921568871f, 0.4980392158f, 0.3647058904f, 255.f, 341.f, 289.f, 323.f, 293.f, 314.f, 317.f, 324.f, 328.f, 352.f, 326.f, 390.f, 332.f, 388.f, 288.f, 0.f,  12.f, 0.4784313738f, 0.3647058904f, 0.2156862766f, 255.f, 440.f, 145.f, 520.f, 146.f, 464.f, 167.f, 429.f, 220.f, 422.f, 222.f, 400.f, 206.f, 392.f, 188.f, 390.f, 173.f, 393.f, 160.f, 0.f,  15.f, 0.7960784435f, 0.7490196228f, 0.6705882549f, 255.f, 460.f, 194.f, 489.f, 189.f, 500.f, 199.f, 499.f, 211.f, 489.f, 217.f, 467.f, 223.f, 445.f, 224.f, 431.f, 217.f, 422.f, 209.f, 420.f, 200.f, 436.f, 181.f, 491.f, 189.f, 0.f,  12.f, 0.7960784435f, 0.7490196228f, 0.6705882549f, 255.f, 342.f, 199.f, 343.f, 211.f, 337.f, 218.f, 322.f, 222.f, 306.f, 221.f, 292.f, 212.f, 288.f, 197.f, 297.f, 186.f, 332.f, 189.f, 0.f,  13.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 461.f, 182.f, 445.f, 184.f, 442.f, 196.f, 446.f, 210.f, 454.f, 218.f, 462.f, 219.f, 472.f, 217.f, 480.f, 207.f, 480.f, 196.f, 477.f, 185.f, 0.f,  11.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 309.f, 186.f, 306.f, 192.f, 307.f, 204.f, 313.f, 213.f, 325.f, 216.f, 334.f, 210.f, 336.f, 197.f, 332.f, 189.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 433.f, 186.f, 422.f, 199.f, 416.f, 199.f, 432.f, 179.f, 475.f, 183.f, 470.f, 185.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 470.f, 183.f, 491.f, 187.f, 497.f, 194.f, 482.f, 188.f, 433.f, 184.f, 436.f, 181.f, 0.f,  10.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 331.f, 190.f, 340.f, 199.f, 342.f, 197.f, 333.f, 188.f, 296.f, 184.f, 292.f, 186.f, 296.f, 186.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 299.f, 187.f, 291.f, 198.f, 287.f, 198.f, 296.f, 185.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 312.f, 176.f, 297.f, 178.f, 297.f, 181.f, 312.f, 177.f, 326.f, 181.f, 326.f, 179.f, 0.f,  11.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 439.f, 172.f, 470.f, 174.f, 488.f, 180.f, 457.f, 176.f, 432.f, 176.f, 423.f, 180.f, 423.f, 178.f, 431.f, 173.f, 0.f,  10.f, 0.7843137383f, 0.7254902124f, 0.6078431606f, 255.f, 467.f, 186.f, 464.f, 189.f, 464.f, 194.f, 467.f, 199.f, 473.f, 198.f, 477.f, 193.f, 477.f, 188.f, 0.f,  10.f, 0.7843137383f, 0.7254902124f, 0.6078431606f, 255.f, 332.f, 191.f, 334.f, 194.f, 332.f, 198.f, 327.f, 198.f, 323.f, 196.f, 322.f, 192.f, 324.f, 188.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 398.f, 195.f, 399.f, 204.f, 401.f, 208.f, 400.f, 198.f, 400.f, 194.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 365.f, 434.f, 350.f, 427.f, 350.f, 427.f, 356.f, 433.f, 372.f, 437.f, 382.f, 434.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 389.f, 393.f, 418.f, 401.f, 420.f, 403.f, 390.f, 396.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 391.f, 397.f, 355.f, 397.f, 356.f, 396.f, 388.f, 393.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 354.f, 397.f, 344.f, 393.f, 343.f, 390.f, 355.f, 396.f, 358.f, 396.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 343.f, 392.f, 335.f, 393.f, 337.f, 391.f, 344.f, 389.f, 346.f, 392.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 354.f, 379.f, 345.f, 372.f, 346.f, 370.f, 355.f, 377.f, 361.f, 373.f, 361.f, 377.f, 0.f,  11.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 368.f, 336.f, 375.f, 337.f, 373.f, 340.f, 367.f, 337.f, 360.f, 340.f, 356.f, 346.f, 356.f, 342.f, 363.f, 336.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 338.f, 337.f, 348.f, 351.f, 345.f, 351.f, 336.f, 339.f, 324.f, 327.f, 329.f, 328.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 367.f, 325.f, 326.f, 327.f, 330.f, 330.f, 367.f, 327.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 367.f, 326.f, 378.f, 331.f, 378.f, 328.f, 367.f, 325.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 325.f, 327.f, 316.f, 317.f, 315.f, 319.f, 322.f, 328.f, 329.f, 332.f, 329.f, 329.f, 0.f,  10.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 336.f, 256.f, 329.f, 284.f, 315.f, 312.f, 316.f, 312.f, 331.f, 267.f, 343.f, 213.f, 345.f, 214.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 654.f, 243.f, 644.f, 272.f, 635.f, 283.f, 647.f, 261.f, 651.f, 238.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 634.f, 282.f, 617.f, 290.f, 608.f, 301.f, 625.f, 287.f, 634.f, 286.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 605.f, 310.f, 609.f, 302.f, 616.f, 294.f, 610.f, 295.f, 605.f, 307.f, 0.f,  10.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 556.f, 578.f, 569.f, 550.f, 569.f, 544.f, 556.f, 576.f, 539.f, 599.f, 543.f, 599.f, 559.f, 576.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 572.f, 548.f, 582.f, 507.f, 582.f, 496.f, 583.f, 496.f, 577.f, 537.f, 575.f, 552.f, 0.f,  10.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 588.f, 497.f, 589.f, 474.f, 590.f, 468.f, 592.f, 467.f, 589.f, 499.f, 582.f, 527.f, 581.f, 521.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 572.f, 376.f, 574.f, 376.f, 563.f, 411.f, 560.f, 411.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 562.f, 406.f, 540.f, 432.f, 552.f, 422.f, 564.f, 409.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 547.f, 425.f, 504.f, 463.f, 501.f, 463.f, 530.f, 443.f, 551.f, 424.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 503.f, 462.f, 467.f, 488.f, 468.f, 489.f, 502.f, 465.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 464.f, 489.f, 438.f, 504.f, 438.f, 506.f, 452.f, 501.f, 470.f, 490.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 441.f, 503.f, 406.f, 513.f, 406.f, 515.f, 431.f, 509.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 409.f, 513.f, 377.f, 513.f, 377.f, 516.f, 397.f, 516.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 378.f, 514.f, 357.f, 510.f, 358.f, 513.f, 383.f, 517.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 622.f, 282.f, 623.f, 289.f, 625.f, 288.f, 625.f, 281.f, 632.f, 269.f, 631.f, 264.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 631.f, 267.f, 630.f, 257.f, 627.f, 247.f, 629.f, 266.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 628.f, 251.f, 621.f, 239.f, 618.f, 239.f, 624.f, 250.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 620.f, 241.f, 621.f, 231.f, 619.f, 229.f, 617.f, 241.f, 0.f,  10.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 620.f, 231.f, 627.f, 226.f, 633.f, 218.f, 633.f, 215.f, 624.f, 226.f, 619.f, 229.f, 617.f, 237.f, 0.f,  8.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 636.f, 274.f, 638.f, 260.f, 635.f, 252.f, 638.f, 267.f, 635.f, 275.f, 0.f,  11.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 631.f, 251.f, 636.f, 257.f, 636.f, 259.f, 639.f, 257.f, 634.f, 250.f, 625.f, 249.f, 628.f, 253.f, 634.f, 253.f, 0.f,  11.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 598.f, 339.f, 595.f, 334.f, 594.f, 328.f, 597.f, 328.f, 601.f, 337.f, 611.f, 339.f, 611.f, 341.f, 602.f, 342.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 341.f, 198.f, 339.f, 187.f, 337.f, 187.f, 338.f, 197.f, 0.f,  9.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 360.f, 512.f, 364.f, 546.f, 378.f, 599.f, 379.f, 599.f, 374.f, 572.f, 366.f, 547.f, 0.f,  7.f, 0.4470588267f, 0.3764705956f, 0.2666666806f, 255.f, 373.f, 583.f, 370.f, 599.f, 378.f, 599.f, 374.f, 577.f, 0.f,  19.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 684.f, 453.f, 685.f, 478.f, 691.f, 473.f, 701.f, 460.f, 717.f, 414.f, 713.f, 382.f, 709.f, 374.f, 724.f, 312.f, 718.f, 299.f, 758.f, 118.f, 754.f, 83.f, 685.f, 48.f, 657.f, 247.f, 654.f, 281.f, 652.f, 289.f, 621.f, 328.f, 0.f,  10.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 710.f, 443.f, 708.f, 402.f, 718.f, 405.f, 713.f, 443.f, 708.f, 460.f, 706.f, 460.f, 710.f, 438.f, 0.f,  11.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 726.f, 378.f, 732.f, 402.f, 734.f, 419.f, 732.f, 420.f, 727.f, 392.f, 720.f, 381.f, 702.f, 371.f, 698.f, 344.f, 0.f,  14.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 722.f, 308.f, 730.f, 328.f, 728.f, 354.f, 725.f, 365.f, 726.f, 348.f, 722.f, 359.f, 721.f, 361.f, 717.f, 339.f, 716.f, 357.f, 712.f, 359.f, 706.f, 282.f, 0.f,  10.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 730.f, 292.f, 742.f, 281.f, 744.f, 275.f, 740.f, 278.f, 727.f, 287.f, 706.f, 292.f, 712.f, 301.f, 0.f,  11.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 719.f, 284.f, 729.f, 274.f, 748.f, 237.f, 758.f, 208.f, 761.f, 182.f, 761.f, 142.f, 757.f, 110.f, 691.f, 262.f, 0.f,  10.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 661.f, 433.f, 666.f, 445.f, 672.f, 456.f, 671.f, 453.f, 668.f, 433.f, 674.f, 424.f, 643.f, 349.f, 0.f,  10.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 646.f, 432.f, 662.f, 407.f, 655.f, 356.f, 649.f, 412.f, 642.f, 431.f, 634.f, 443.f, 636.f, 444.f, 0.f,  14.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 643.f, 413.f, 647.f, 404.f, 658.f, 389.f, 644.f, 314.f, 637.f, 328.f, 641.f, 402.f, 636.f, 422.f, 633.f, 427.f, 634.f, 428.f, 642.f, 417.f, 650.f, 401.f, 0.f,  8.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 642.f, 385.f, 634.f, 377.f, 619.f, 329.f, 627.f, 322.f, 652.f, 323.f, 0.f,  16.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 622.f, 373.f, 632.f, 383.f, 636.f, 385.f, 636.f, 382.f, 627.f, 374.f, 626.f, 367.f, 633.f, 364.f, 622.f, 326.f, 609.f, 340.f, 610.f, 348.f, 612.f, 359.f, 623.f, 376.f, 631.f, 382.f, 0.f,  21.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 682.f, 97.f, 660.f, 248.f, 652.f, 242.f, 648.f, 234.f, 647.f, 227.f, 641.f, 223.f, 633.f, 216.f, 624.f, 206.f, 580.f, 194.f, 579.f, 179.f, 565.f, 159.f, 558.f, 133.f, 560.f, 123.f, 539.f, 93.f, 529.f, 68.f, 521.f, 16.f, 529.f, 0.f, 698.f, 0.f, 0.f,  13.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 514.f, 48.f, 517.f, 92.f, 519.f, 106.f, 521.f, 106.f, 519.f, 81.f, 521.f, 59.f, 527.f, 39.f, 526.f, 7.f, 520.f, 16.f, 516.f, 32.f, 0.f,  8.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 449.f, 59.f, 464.f, 36.f, 471.f, 16.f, 472.f, 1.f, 466.f, 13.f, 0.f,  8.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 472.f, 0.f, 468.f, 21.f, 460.f, 31.f, 461.f, 6.f, 458.f, 0.f, 0.f,  20.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 458.f, 0.f, 451.f, 26.f, 441.f, 52.f, 428.f, 76.f, 414.f, 92.f, 399.f, 103.f, 387.f, 116.f, 389.f, 113.f, 411.f, 75.f, 418.f, 45.f, 399.f, 76.f, 319.f, 131.f, 315.f, 112.f, 309.f, 98.f, 316.f, 83.f, 323.f, 51.f, 246.f, 0.f, 0.f,  12.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 327.f, 149.f, 339.f, 172.f, 349.f, 189.f, 354.f, 194.f, 352.f, 188.f, 347.f, 167.f, 350.f, 123.f, 353.f, 114.f, 318.f, 128.f, 0.f,  8.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 396.f, 77.f, 377.f, 96.f, 348.f, 121.f, 321.f, 131.f, 318.f, 116.f, 0.f,  15.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 299.f, 59.f, 305.f, 88.f, 312.f, 105.f, 312.f, 84.f, 315.f, 62.f, 327.f, 44.f, 326.f, 23.f, 121.f, 0.f, 287.f, 56.f, 290.f, 78.f, 299.f, 101.f, 302.f, 107.f, 0.f,  14.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 207.f, 0.f, 286.f, 50.f, 270.f, 86.f, 257.f, 144.f, 256.f, 244.f, 237.f, 220.f, 227.f, 206.f, 211.f, 191.f, 197.f, 161.f, 128.f, 56.f, 142.f, 0.f, 0.f,  12.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 179.f, 168.f, 196.f, 198.f, 210.f, 221.f, 212.f, 219.f, 201.f, 200.f, 196.f, 174.f, 202.f, 148.f, 169.f, 96.f, 171.f, 141.f, 0.f,  16.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 152.f, 157.f, 158.f, 178.f, 168.f, 198.f, 172.f, 206.f, 172.f, 202.f, 165.f, 178.f, 164.f, 154.f, 173.f, 121.f, 129.f, 48.f, 126.f, 78.f, 130.f, 108.f, 133.f, 121.f, 144.f, 146.f, 0.f,  10.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 254.f, 155.f, 269.f, 202.f, 272.f, 221.f, 273.f, 258.f, 262.f, 243.f, 259.f, 248.f, 240.f, 222.f, 0.f,  14.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 112.f, 33.f, 121.f, 12.f, 124.f, 0.f, 145.f, 0.f, 134.f, 34.f, 127.f, 38.f, 118.f, 58.f, 112.f, 92.f, 108.f, 100.f, 107.f, 86.f, 106.f, 63.f, 0.f,  24.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 298.f, 146.f, 293.f, 134.f, 284.f, 132.f, 272.f, 136.f, 272.f, 138.f, 267.f, 140.f, 264.f, 149.f, 266.f, 158.f, 272.f, 157.f, 274.f, 159.f, 289.f, 154.f, 303.f, 157.f, 324.f, 171.f, 334.f, 176.f, 340.f, 181.f, 332.f, 171.f, 330.f, 162.f, 328.f, 153.f, 311.f, 146.f, 298.f, 136.f, 290.f, 133.f, 0.f,  22.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 485.f, 139.f, 487.f, 130.f, 509.f, 129.f, 532.f, 137.f, 544.f, 152.f, 549.f, 168.f, 543.f, 164.f, 543.f, 168.f, 522.f, 159.f, 496.f, 155.f, 470.f, 156.f, 435.f, 164.f, 407.f, 173.f, 391.f, 171.f, 384.f, 168.f, 379.f, 156.f, 413.f, 151.f, 414.f, 148.f, 489.f, 129.f, 0.f,  16.f, 0.1882352978f, 0.1686274558f, 0.0862745121f, 255.f, 607.f, 191.f, 606.f, 241.f, 606.f, 275.f, 596.f, 314.f, 592.f, 314.f, 581.f, 350.f, 574.f, 364.f, 574.f, 364.f, 580.f, 328.f, 577.f, 326.f, 577.f, 312.f, 583.f, 247.f, 579.f, 164.f, 0.f,  13.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 756.f, 68.f, 754.f, 97.f, 749.f, 104.f, 734.f, 107.f, 715.f, 100.f, 701.f, 102.f, 696.f, 97.f, 682.f, 26.f, 661.f, 0.f, 736.f, 0.f, 0.f,  11.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 689.f, 76.f, 687.f, 88.f, 683.f, 99.f, 676.f, 99.f, 674.f, 78.f, 669.f, 39.f, 659.f, 0.f, 705.f, 0.f, 0.f,  9.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 652.f, 0.f, 651.f, 16.f, 646.f, 29.f, 642.f, 31.f, 638.f, 24.f, 631.f, 0.f, 0.f,  9.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 628.f, 0.f, 628.f, 20.f, 625.f, 27.f, 619.f, 29.f, 616.f, 19.f, 616.f, 0.f, 0.f,  12.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 415.f, 0.f, 403.f, 31.f, 392.f, 54.f, 376.f, 68.f, 364.f, 74.f, 362.f, 70.f, 365.f, 61.f, 390.f, 25.f, 400.f, 0.f, 0.f,  12.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 352.f, 42.f, 341.f, 66.f, 339.f, 82.f, 344.f, 81.f, 350.f, 70.f, 364.f, 44.f, 381.f, 21.f, 380.f, 16.f, 368.f, 19.f, 0.f,  11.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 344.f, 0.f, 365.f, 0.f, 353.f, 21.f, 341.f, 49.f, 332.f, 62.f, 329.f, 58.f, 329.f, 51.f, 344.f, 0.f, 0.f,  10.f, 0.1568627506f, 0.1686274558f, 0.2352941185f, 255.f, 333.f, 2.f, 329.f, 17.f, 323.f, 23.f, 318.f, 18.f, 319.f, 6.f, 320.f, 0.f, 331.f, 0.f, 0.f,  11.f, 0.1764705926f, 0.1960784346f, 0.2666666806f, 255.f, 760.f, 0.f, 761.f, 39.f, 757.f, 80.f, 750.f, 86.f, 709.f, 69.f, 692.f, 47.f, 692.f, 26.f, 696.f, 0.f, 0.f,  7.f, 0.160784319f, 0.1764705926f, 0.1882352978f, 255.f, 278.f, 599.f, 324.f, 554.f, 322.f, 557.f, 283.f, 599.f, 0.f,  9.f, 0.160784319f, 0.1764705926f, 0.1882352978f, 255.f, 758.f, 589.f, 753.f, 577.f, 755.f, 577.f, 762.f, 591.f, 756.f, 599.f, 754.f, 599.f, 0.f,  7.f, 0.160784319f, 0.1764705926f, 0.1882352978f, 255.f, 773.f, 599.f, 765.f, 583.f, 763.f, 583.f, 770.f, 599.f, 0.f,  10.f, 0.160784319f, 0.1764705926f, 0.1882352978f, 255.f, 694.f, 507.f, 694.f, 498.f, 691.f, 498.f, 694.f, 509.f, 690.f, 519.f, 693.f, 521.f, 696.f, 507.f, 0.f,  9.f, 0.160784319f, 0.1764705926f, 0.1882352978f, 255.f, 215.f, 583.f, 256.f, 556.f, 253.f, 556.f, 216.f, 579.f, 198.f, 599.f, 200.f, 599.f, 0.f,  0.f };
@@ -157,8 +181,9 @@ float verticesFB[] = { {0.842}, {1.052}, {0.842}, {1.649}, {5.296}, {1.649}, {5.
 
 DrawNodeExTests::DrawNodeExTests()
 {
+
     ADD_TEST_CASE(DrawNodeMethodsTest);
-    ADD_TEST_CASE(DrawNodeAxmolTest2);
+    //    ADD_TEST_CASE(DrawNodeAxmolTest2);  <<<<<<<<<<<<<<<<<<<<<<
     ADD_TEST_CASE(CandyMixEeffect);
     ADD_TEST_CASE(DrawNodePictureTest);
 
@@ -166,16 +191,10 @@ DrawNodeExTests::DrawNodeExTests()
     ADD_TEST_CASE(DrawNodeMorphTest_Polygon);
     ADD_TEST_CASE(DrawNodeMorphTest_SolidPolygon);
 
-
     ADD_TEST_CASE(DrawNodePieTest);
 
     ADD_TEST_CASE(DrawNodeDrawInWrongOrder_Issue1888);
     ADD_TEST_CASE(DrawNodeDrawOrderTest);
-
-
-    //ADD_TEST_CASE(DrawNodeHeartTest);
-    // ADD_TEST_CASE(DrawNodeFireworkTest);
-
 
     //  ADD_TEST_CASE(DrawNodePerformaneTest);
     ADD_TEST_CASE(DrawNodeThicknessTest);
@@ -183,42 +202,10 @@ DrawNodeExTests::DrawNodeExTests()
 
     ADD_TEST_CASE(DrawNodeCocos2dxBackwardsAPITest);
     ADD_TEST_CASE(DrawNodeIssueTester);
-
-    //	ADD_TEST_CASE(DrawNodeFilledPolygonTest);
-    //   ADD_TEST_CASE(DrawNodeIssueTester);
-    //	ADD_TEST_CASE(DrawNodeCocos2dxDrawNodePieTest);
-    //	ADD_TEST_CASE(DrawNodeCocos2dx_Issue829);
-    //	ADD_TEST_CASE(DrawNodeCocos2dx_Issue1319);
 }
 
 DrawNodeExBaseTest::DrawNodeExBaseTest()
 {
-    selectedRadioButton = 0;
-
-    _radioButtonGroup = ui::RadioButtonGroup::create();
-    addChild(_radioButtonGroup, 50);
-
-    static const float BUTTON_WIDTH = 30;
-    static float startPosX = 0;
-
-    // Create the radio buttons
-    static const int NUMBER_OF_BUTTONS = 4;
-    startPosX = size.width / 2.0f - ((NUMBER_OF_BUTTONS - 1) / 2.0f) * BUTTON_WIDTH;
-    for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
-    {
-        ui::RadioButton* radioButton =
-            ui::RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
-        float posX = startPosX + BUTTON_WIDTH * i;
-        radioButton->setPosition(Vec2(posX, size.height - 80));
-        radioButton->setScale(1.2f);
-        radioButton->setTag(i);
-        _radioButtonGroup->addRadioButton(radioButton);
-        addChild(radioButton, 50);
-        radioButton->addEventListener(
-            AX_CALLBACK_2(DrawNodeExBaseTest::onChangedRadioButtonSelect, this));
-    }
-
-
     auto director = Director::getInstance();
     director->setClearColor(Color4F(0, 0, 0, 0));
 
@@ -226,8 +213,25 @@ DrawNodeExBaseTest::DrawNodeExBaseTest()
     size = director->getVisibleSize();
     center = Vec2(origin.x + size.width / 2, origin.y + size.height / 2);
 
-    scheduleUpdate();
+    if (!drawNodeEx)
+    {
+        drawNodeEx = DrawNodeEx::create();
+        addChild(drawNodeEx);
+    }
 }
+
+void DrawNodeExBaseTest::listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type)
+{
+    // clear all text to white
+    auto listview = static_cast<ax::ui::ListView*>(sender);
+    for (auto&& item : listview->getItems())
+    {
+        static_cast<ax::ui::Text*>(item)->setColor(ax::Color3B::WHITE);
+    }
+    _currentSeletedItemIndex = (int)listview->getCurSelectedIndex();
+    listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color3B::RED);
+}
+
 
 void DrawNodeExBaseTest::onChangedRadioButtonSelect(ui::RadioButton* radioButton, ui::RadioButton::EventType type)
 {
@@ -349,6 +353,8 @@ void DrawNodeExBaseTest::changeCounter(ax::Object* pSender, ax::ui::Slider::Even
 
 void DrawNodeExBaseTest::initSliders()
 {
+    _currentSeletedItemIndex = 0;
+
     std::string text[sliderType::sliderTypeLast] = { "AngleStart", "AngleEnd", "Rotation", "Thickness", "Counter" };
 
     auto ttfConfig = TTFConfig("fonts/arial.ttf", 5);
@@ -379,6 +385,34 @@ void DrawNodeExBaseTest::initSliders()
     slider[sliderType::Counter]->addEventListener(AX_CALLBACK_2(DrawNodeExBaseTest::changeCounter, this));
 }
 
+void DrawNodeExBaseTest::initRadioButtuns()
+{
+    selectedRadioButton = 0;
+
+    _radioButtonGroup = ui::RadioButtonGroup::create();
+    addChild(_radioButtonGroup, 50);
+
+    static const float BUTTON_WIDTH = 30;
+    static float startPosX = 0;
+
+    // Create the radio buttons
+    static const int NUMBER_OF_BUTTONS = 4;
+    startPosX = size.width / 2.0f - ((NUMBER_OF_BUTTONS - 1) / 2.0f) * BUTTON_WIDTH;
+    for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
+    {
+        ui::RadioButton* radioButton =
+            ui::RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
+        float posX = startPosX + BUTTON_WIDTH * i;
+        radioButton->setPosition(Vec2(posX, size.height - 80));
+        radioButton->setScale(1.2f);
+        radioButton->setTag(i);
+        _radioButtonGroup->addRadioButton(radioButton);
+        addChild(radioButton, 50);
+        radioButton->addEventListener(
+            AX_CALLBACK_2(DrawNodeExBaseTest::onChangedRadioButtonSelect, this));
+    }
+}
+
 
 DrawNodeMorphTest_SolidPolygon::DrawNodeMorphTest_SolidPolygon()
 {
@@ -390,8 +424,11 @@ DrawNodeMorphTest_SolidPolygon::DrawNodeMorphTest_SolidPolygon()
 
     for (size_t n = 0; n < 10; n++)
     {
-        drawNodeExArray[n] = DrawNodeEx::create();
-        addChild(drawNodeExArray[n]);
+        if (!drawNodeExArray[n])
+        {
+            drawNodeExArray[n] = DrawNodeEx::create();
+            addChild(drawNodeExArray[n]);
+        }
         drawNodeExArray[n]->setPosition(Vec2(AXRANDOM_MINUS1_1() * size.width / 4, AXRANDOM_MINUS1_1() * size.height / 4) + Vec2(100, 100));
         color[n] = Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f);
         rad[n] = 90 + AXRANDOM_0_1() * 10;
@@ -625,302 +662,10 @@ string DrawNodeMorphTest_Polygon::subtitle() const
     return "Polygons";
 }
 
-
-string DrawNodeFireworkTest::title() const
-{
-    return "Endless FireWork";
-}
-
-string DrawNodeFireworkTest::subtitle() const
-{
-    return "Performance";
-}
-
-DrawNodeFireworkTest::DrawNodeFireworkTest()
-{
-    drawNodeEx = DrawNodeEx::create();
-    addChild(drawNodeEx);
-
-    projectile = new Vec2[20];
-
-    ember = createFireObjs(30);
-
-
-    // canon;
-    // projectile;
-    // wall;
-
-    scheduleUpdate();
-}
-
-
-DrawNodeFireworkTest::fireObj* DrawNodeFireworkTest::createFireObjs(int count)
-{
-    fireObj* fobj = new fireObj[count];
-
-    for (int n = 0; n < count; n++)
-    {
-        fobj[n].life = 20 + burnTime * AXRANDOM_0_1();
-        fobj[n].x = x + midx;
-        fobj[n].y = nomy - y;
-        alfa = tupi * AXRANDOM_0_1();
-        if (shape > 15)
-        {
-            fobj[n].vx = sin(alfa) * pow * sin(AXRANDOM_0_1() * tupi);
-            fobj[n].vy = cos(alfa) * pow * sin(AXRANDOM_0_1() * tupi);
-        }
-        else
-        {
-            fobj[n].vx = sin(alfa) * pow * sin(AXRANDOM_0_1() * tupi);
-            fobj[n].vy = cos(alfa) * pow * 0.25;
-        }
-        if (cmix > 75)
-        {
-            fobj[n].color = Color4F::WHITE;
-        }
-        else if (cmix > 65)
-        {
-            fobj[n].color = Color4F::RED;
-        }
-        else
-        {
-            fobj[n].color = Color4F::BLUE;
-        }
-    }
-
-    return fobj;
-}
-void DrawNodeFireworkTest::update(float dt)
-{
-    drawNodeEx->clear();
-
-    float thickness = 2.0f;
-    static float rotation = 0.1;
-    rotation += 0.1;
-
-    //  drawNodeEx->setRotation(rotation * 3);
-    drawNodeEx->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    drawNodeEx->setScale(0.3);
-    drawNodeEx->setPosition({ 200,80 });
-
-    // drawNodeEx->setPosition(0.1);
-    Vec2 gear1 = { 280.f, 320.f };
-    Vec2 gear2 = { 160.f, 320.f };
-    Vec2 gear3 = { 200.f, 200.f };
-    Vec2 gear4 = { size.width - 200, size.height - 200 };
-
-    drawNodeEx->drawLine(gear2, gear4, Color4F::RED, thickness);  // line
-    //  DrawNodeEx::DNObject* test1 = drawNodeEx->getDNObject();
-    drawNodeEx->setDNCenter(gear1);
-    drawNodeEx->setDNRotation(rotation + 45);
-    drawNodeEx->drawStar(Vec2(gear1), 30, 60, 8, Color4F::BLUE, 4.0);
-    drawNodeEx->setDNRotation(-rotation);
-    drawNodeEx->setDNCenter(gear2);
-    drawNodeEx->drawSolidStar(gear2, 30, 60, 8, Color4F::GREEN, Color4F::YELLOW, 4.0);
-    //   drawDirection(gear2, 30, gear2[0]->getPosition());
-
-    drawNodeEx->resetDNValues();
-    drawNodeEx->drawLine(gear2, gear1, Color4F::RED, thickness);  // line
-    drawNodeEx->setDNCenter(gear4);
-    drawNodeEx->setDNRotation(rotation + 45);
-    drawNodeEx->drawStar(gear3, 30, 60, 18, Color4F::RED, 1.0);
-    drawNodeEx->drawLine(gear3, gear4, Color4F::YELLOW, thickness);  // line
-    drawNodeEx->resetDNValues();
-    drawNodeEx->setDNRotation(rotation - 45);
-    drawNodeEx->setDNCenter(gear4);
-    drawNodeEx->drawStar(gear4, 40, 60, 60, Color4F::GREEN, 1.0);
-    drawNodeEx->resetDNValues();
-
-    //  DrawNodeEx::DNObject* test = drawNodeEx->getDNObject();
-    drawNodeEx->setDNScale(Vec2(0.5f, 0.5f));
-    drawNodeEx->setDNPosition(Vec2(100, 100));
-    //drawNodeEx->drawPoly(test->_vertices, test->_size, true, Color4B::ORANGE);
-    //drawNodeEx->drawPoly(test1->_vertices, test1->_size, true, Color4B::ORANGE);
-    drawNodeEx->resetDNValues();
-
-
-    // drawRect
-    drawNodeEx->drawRect(Vec2(23, 23), Vec2(7, 7), Color4F(1, 1, 0, 1), thickness);
-    drawNodeEx->drawRect(Vec2(15, 30), Vec2(30, 15), Vec2(15, 0), Vec2(0, 15),
-        Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1), thickness);
-    drawNodeEx->drawRect(Vec2(123, 123), Vec2(227, 227), Color4F(1, 1, 0, 1), thickness);
-    drawNodeEx->drawRect(Vec2(115, 130), Vec2(130, 115), Vec2(115, 100), Vec2(100, 115), Color4F::MAGENTA, thickness);
-
-    // drawCircle
-    drawNodeEx->drawCircle(VisibleRect::center() + Vec2(140, 0), 100, AX_DEGREES_TO_RADIANS(90), 50, true, 1.0f, 2.0f,
-        Color4F(1.0f, 0.0f, 0.0f, 0.5f), thickness);
-    drawNodeEx->drawCircle(VisibleRect::center() - Vec2(140, 0), 50, AX_DEGREES_TO_RADIANS(90), 30, true,
-        Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
-
-    // drawCubicBezier
-    drawNodeEx->drawQuadBezier(Vec2(size.width - 150, size.height - 150), Vec2(size.width - 70, size.height - 10),
-        Vec2(size.width - 10, size.height - 10), 10, Color4F::BLUE, thickness);
-    drawNodeEx->drawQuadBezier(Vec2(0.0f + 100, size.height - 100), Vec2(size.width / 2, size.height / 2),
-        Vec2(size.width - 100, size.height - 100), 50, Color4F::RED, thickness);
-
-    // drawCubicBezier
-    drawNodeEx->drawCubicBezier(VisibleRect::center(), Vec2(VisibleRect::center().x + 30, VisibleRect::center().y + 50),
-        Vec2(VisibleRect::center().x + 60, VisibleRect::center().y - 50), VisibleRect::right(),
-        100, Color4F::WHITE, thickness);
-    drawNodeEx->drawCubicBezier(Vec2(size.width - 250, 40.0f), Vec2(size.width - 70, 100.0f), Vec2(size.width - 30, 250.0f),
-        Vec2(size.width - 10, size.height - 50), 10, Color4F::GRAY, thickness);
-
-    // drawCardinalSpline
-    auto array = ax::PointArray::create(20);
-    array->addControlPoint(Vec2(0.0f, 0.0f));
-    array->addControlPoint(Vec2(80.0f, 80.0f));
-    array->addControlPoint(Vec2(size.width - 80, 80.0f));
-    array->addControlPoint(Vec2(size.width - 80, size.height - 80));
-    array->addControlPoint(Vec2(80.0f, size.height - 80));
-    array->addControlPoint(Vec2(80.0f, 80.0f));
-    array->addControlPoint(Vec2(size.width / 2, size.height / 2));
-    drawNodeEx->drawCardinalSpline(array, 0.5f, 50, Color4F::MAGENTA, thickness);
-
-    auto array2 = ax::PointArray::create(20);
-    array2->addControlPoint(Vec2(size.width / 2, 80.0f));
-    array2->addControlPoint(Vec2(size.width - 80, 80.0f));
-    array2->addControlPoint(Vec2(size.width - 80, size.height - 80));
-    array2->addControlPoint(Vec2(size.width / 2, size.height - 80));
-    array2->addControlPoint(Vec2(size.width / 2, 80.0f));
-    drawNodeEx->drawCardinalSpline(array2, 5.0f, 50, Color4F::ORANGE, thickness);
-
-    // drawCatmullRom
-    array2 = ax::PointArray::create(20);
-    array2->addControlPoint(Vec2(size.width / 2, 80.0f));
-    array2->addControlPoint(Vec2(size.width - 80, 80.0f));
-    array2->addControlPoint(Vec2(size.width - 80, size.height - 80));
-    array2->addControlPoint(Vec2(size.width / 2, size.height - 80));
-    array2->addControlPoint(Vec2(size.width / 2, 80.0f));
-    drawNodeEx->drawCatmullRom(array2, 50, Color4F::ORANGE, thickness);
-
-    array = ax::PointArray::create(20);
-    array->addControlPoint(Vec2(0.0f, 0.0f));
-    array->addControlPoint(Vec2(80.0f, 80.0f));
-    array->addControlPoint(Vec2(size.width - 80, 80.0f));
-    array->addControlPoint(Vec2(size.width - 80, size.height - 80));
-    array->addControlPoint(Vec2(80.0f, size.height - 80));
-    array->addControlPoint(Vec2(80.0f, 80.0f));
-    array->addControlPoint(Vec2(size.width / 2, size.height / 2));
-    drawNodeEx->drawCatmullRom(array, 50, Color4F::MAGENTA, thickness);
-
-    // drawPoly
-    // for (int n = 0; n < 10; n++)
-    bool isReal = false;
-
-    // drawNodeEx->drawPoly(verticess, sizeof(verticess) / sizeof(verticess[0]), true,
-    //                Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thickness);
-
-    Vec2 vertices[5] = { Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f),
-        Vec2(50.0f, 100.0f) };
-    drawNodeEx->drawPoly(vertices, 5, false, Color4B::BLUE, thickness);
-
-    Vec2 vertices2[3] = { Vec2(30.0f, 130.0f), Vec2(30.0f, 230.0f), Vec2(50.0f, 200.0f) };
-    drawNodeEx->drawPoly(vertices2, 3, true, Color4B::GREEN, thickness);
-
-    drawNodeEx->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color4B::RED, thickness);
-
-    // drawPolygon
-
-    drawNodeEx->setDNScale(Vec2(thickness, thickness));
-    drawNodeEx->setDNPosition(Vec2(0, 0));
-    drawNodeEx->setDNRotation(0);
-    drawNodeEx->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color4F::GREEN, thickness,
-        Color4F::YELLOW);
-    drawNodeEx->setDNPosition(Vec2(0, 0));
-    drawNodeEx->setDNRotation(thickness);
-    drawNodeEx->setDNScale(Vec2(thickness, thickness));
-    drawNodeEx->setDNCenter(vertices1[0]);
-    drawNodeEx->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color4F::GREEN, thickness,
-        Color4F::YELLOW);
-
-
-
-    //if (fuse > 0)
-    //{
-    //    drawNodeEx->drawLine(Vec2(ember[a].x, ember[a].y),
-    //        Vec2((ember[a].x - ember[a].vx), (ember[a].y - ember[a].vy)), Color4B::GREEN); //[a].color);
-    //    fuse--;
-    //    a = old - 1;
-    //    do
-    //    {
-    //        a++;
-    //        if (a > max)
-    //        {
-    //            a = 0;
-    //        }
-    //        ember[a].life--;
-    //        if (ember[a].life <= 0)
-    //        {
-    //            old++;
-    //            if (old > max)
-    //                old = 0;
-    //        }
-    //        else
-    //        {
-    //            AXLOGD("{} {}", ember[a].x, ember[a].y);
-
-    //            ember[a].x += ember[a].vx;
-    //            ember[a].y += ember[a].vy;
-    //            ember[a].vx *= drag;
-    //            ember[a].vy *= drag + gravity;
-    //        }
-
-    //    } while (a != young);
-    //}
-    //else  // fuse has reached the end size. create a new burst
-    //{
-    //    x = 300;
-    //    y = 300;
-    //    emberCount = 50 + 100 * AXRANDOM_0_1();
-    //    pow = emberCount / impulse;
-
-    //    cmix = 100 * AXRANDOM_0_1();
-    //    c1 = 5 * AXRANDOM_0_1();
-    //    c2 = 5 * AXRANDOM_0_1();
-    //    while (c1 == c2)
-    //    {
-    //        c2 = 5 * AXRANDOM_0_1();
-    //    };
-    //    shape = 100 * AXRANDOM_0_1();
-    //    a = young;
-    //    for (int n = 0; n < emberCount; n++)
-    //    {
-    //        ember[n].life = 20 + burnTime * AXRANDOM_0_1();
-    //        ember[n].x = x + midx;
-    //        ember[n].y = nomy - y;
-    //        alfa = tupi * AXRANDOM_0_1();
-    //        if (shape > 15)
-    //        {
-    //            ember[n].vx = sin(alfa) * pow * sin(AXRANDOM_0_1() * tupi);
-    //            ember[n].vy = cos(alfa) * pow * sin(AXRANDOM_0_1() * tupi);
-    //        }
-    //        else
-    //        {
-    //            ember[n].vx = sin(alfa) * pow * sin(AXRANDOM_0_1() * tupi);
-    //            ember[n].vy = cos(alfa) * pow * 0.25;
-    //        }
-    //        if (cmix > 75)
-    //        {
-    //            ember[n].color = Color4F::WHITE;
-    //        }
-    //        else if (cmix > 65)
-    //        {
-    //            ember[n].color = Color4F::RED;
-    //        }
-    //        else
-    //        {
-    //            ember[n].color = Color4F::BLUE;
-    //        }
-    //    }
-    //    young = a;
-    //    fuse = 25;    // AXRANDOM_0_1() * fuseTime + 25;
-    //} 
-}
-
 DrawNodePictureTest::DrawNodePictureTest()
 {
-    drawNodeEx = DrawNodeEx::create();
-    addChild(drawNodeEx);
+    initSliders();
+    initRadioButtuns();
 
     drawNodeEx->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2f), FadeOut::create(1.2f), NULL)));
 
@@ -929,6 +674,8 @@ DrawNodePictureTest::DrawNodePictureTest()
 
 void DrawNodePictureTest::update(float dt)
 {
+    DrawNodeExBaseTest::update(dt);
+
     static float rot = 0.1f;
     static int count = 0;
     static bool wait = false;
@@ -996,15 +743,7 @@ string DrawNodePictureTest::subtitle() const
 
 DrawNodeDrawOrderTest::DrawNodeDrawOrderTest()
 {
-    if (drawNodeEx == nullptr)
-    {
-        drawNodeEx = DrawNodeEx::create();
-        addChild(drawNodeEx);
-    }
-
-
     drawNodeEx->clear();
-
 
     auto draw = DrawNodeEx::create();
     addChild(draw, 10);
@@ -1197,15 +936,15 @@ DrawNodeDrawOrderTest::DrawNodeDrawOrderTest()
 
     drawNodeEx->drawSolidRect(Vec2(30, 80), Vec2(500, 180), Color4B::GRAY);
 
-
+    initSliders();
+    initRadioButtuns();
 
     scheduleUpdate();
 }
 
-void DrawNodeDrawOrderTest::update(float dt) // drawAll()
+void DrawNodeDrawOrderTest::update(float dt)
 {
-
-
+    DrawNodeExBaseTest::update(dt);
 }
 
 string DrawNodeDrawOrderTest::title() const
@@ -1220,53 +959,17 @@ string DrawNodeDrawOrderTest::subtitle() const
 
 DrawNodeThicknessTest::DrawNodeThicknessTest()
 {
-    // Add lines to see the correct "scale of the 'rings'" changing the window size
-
-    //auto draw = DrawNodeEx::create();
-    //draw->setLineWidth(1);
-    //addChild(draw, 10);
-
-    //for (float y = 0; y < VisibleRect::top().y; y += 10)
-    //{
-    //    draw->drawLine({ VisibleRect::left().x, y }, { VisibleRect::right().x, y }, Color4B::GRAY);
-    //}
-
-    drawNodeEx = DrawNodeEx::create();
-    addChild(drawNodeEx, 10);
-
     initSliders();
+    initRadioButtuns();
     slider[sliderType::Thickness]->setEnabled(true);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     scheduleUpdate();
 }
 
 void DrawNodeThicknessTest::update(float dt)
 {
+    DrawNodeExBaseTest::update(dt);
+
     drawNodeEx->clear();
 
     drawNodeEx->drawCircle(VisibleRect::center(), 60, AX_DEGREES_TO_RADIANS(77), 30, false,
@@ -1340,10 +1043,6 @@ void DrawNodeThicknessTest::update(float dt)
     array2->addControlPoint(Vec2(size.width / 2, size.height - 80));
     array2->addControlPoint(Vec2(size.width / 2, 30.0f));
     drawNodeEx->drawCatmullRom(array2, 50, Color4F::ORANGE, sliderValue[sliderType::Thickness]);
-
-
-
-
 
 
     auto s = Director::getInstance()->getWinSize();
@@ -1527,10 +1226,8 @@ string DrawNodeThicknessTest::subtitle() const
 
 DrawNodePieTest::DrawNodePieTest()
 {
-    drawNodeEx = DrawNodeEx::create();
-    addChild(drawNodeEx, 10);
-
     initSliders();
+    initRadioButtuns();
     slider[sliderType::AngleStart]->setEnabled(true);
     slider[sliderType::AngleEnd]->setEnabled(true);
     slider[sliderType::Rotation]->setEnabled(true);
@@ -1541,6 +1238,8 @@ DrawNodePieTest::DrawNodePieTest()
 
 void DrawNodePieTest::update(float dt)
 {
+    DrawNodeExBaseTest::update(dt);
+
     drawNodeEx->clear();
 
     // Filled
@@ -1597,82 +1296,22 @@ string DrawNodePieTest::subtitle() const
     return "Filled, Outlined, Line, Semi, Semi (Filled)";
 }
 
-DrawNodeFilledPolygonTest::DrawNodeFilledPolygonTest()
-{
-
-    DrawNodeEx* drawNode[4];
-    for (int i = 0; i < 4; i++)
-    {
-        drawNode[i] = DrawNodeEx::create();
-        addChild(drawNode[i]);
-    }
-
-    // draw a solid circle
-    drawNode[1]->drawSolidCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 40, AX_DEGREES_TO_RADIANS(90), 30, 2.0f,
-        2.0f, Color4F::BLUE);
-
-    drawNode[1]->drawSolidCircle(VisibleRect::center() + Vec2(-40.0f, 0.0f), 40, AX_DEGREES_TO_RADIANS(90), 30, 2.0f,
-        2.0f, Color4F::WHITE);
-
-    drawNode[0]->setPosition(Vec2(-30, -20));
-    // drawNodeExArray[0]->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, 0.3f,
-    //                          Color4F::GREEN);
-
-    drawNode[2]->drawPolygon(vertices2, sizeof(vertices2) / sizeof(vertices2[0]), Color4F::GREEN, 0.3f,
-        Color4F::YELLOW);
-
-    drawNode[2]->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color4F::TRANSPARENT, 5.3f,
-        Color4F::RED);
-}
-
-string DrawNodeFilledPolygonTest::title() const
-{
-    return "Filled Polygon Test #2";
-}
-
-string DrawNodeFilledPolygonTest::subtitle() const
-{
-    return "";
-}
-
 DrawNodeMethodsTest::DrawNodeMethodsTest()
 {
-    _currentSeletedItemIndex = 0;
-    selectedRadioButton = 0;
-
-    _radioButtonGroup = ui::RadioButtonGroup::create();
-    addChild(_radioButtonGroup, 50);
-
     static const float BUTTON_WIDTH = 30;
     static float startPosX = 0;
 
-    // Create the radio buttons
-    static const int NUMBER_OF_BUTTONS = 4;
-    startPosX = size.width / 2.0f - ((NUMBER_OF_BUTTONS - 1) / 2.0f) * BUTTON_WIDTH;
-    for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
-    {
-        ui::RadioButton* radioButton =
-            ui::RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
-        float posX = startPosX + BUTTON_WIDTH * i;
-        radioButton->setPosition(Vec2(posX, size.height - 80));
-        radioButton->setScale(1.2f);
-        radioButton->setTag(i);
-        _radioButtonGroup->addRadioButton(radioButton);
-        addChild(radioButton, 50);
-        radioButton->addEventListener(
-            AX_CALLBACK_2(DrawNodeMethodsTest::onChangedRadioButtonSelect, this));
-    }
+
 
     auto listview = createListView();
     listview->setPosition(Vec2(0.0f, 40.0f));
     addChild(listview);
 
-    drawNodeEx = DrawNodeEx::create();
     drawNodeEx->setScale(0.5);
     drawNodeEx->setPosition(center);
-    addChild(drawNodeEx, 10);
 
     initSliders();
+    initRadioButtuns();
     slider[sliderType::Thickness]->setEnabled(true);
     slider[sliderType::Rotation]->setEnabled(true);
 
@@ -1686,18 +1325,6 @@ DrawNodeMethodsTest::DrawNodeMethodsTest()
     addChild(label3, 1);
 
     scheduleUpdate();
-}
-
-void DrawNodeMethodsTest::listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type)
-{
-    // clear all text to white
-    auto listview = static_cast<ax::ui::ListView*>(sender);
-    for (auto&& item : listview->getItems())
-    {
-        static_cast<ax::ui::Text*>(item)->setColor(ax::Color3B::WHITE);
-    }
-    _currentSeletedItemIndex = (int)listview->getCurSelectedIndex();
-    listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color3B::RED);
 }
 
 ax::ui::ListView* DrawNodeMethodsTest::createListView()
@@ -1718,7 +1345,7 @@ ax::ui::ListView* DrawNodeMethodsTest::createListView()
     listview->setCurSelectedIndex(0);
     listview->setTouchEnabled(true);
     listview->addEventListener(
-        (ui::ListView::ccListViewCallback)AX_CALLBACK_2(DrawNodeMethodsTest::listviewCallback, this));
+        (ui::ListView::ccListViewCallback)AX_CALLBACK_2(DrawNodeExBaseTest::listviewCallback, this));
     listview->setTag(100);
 
     listview->getItem(_currentSeletedItemIndex)->setColor(Color3B::RED);
@@ -1726,56 +1353,9 @@ ax::ui::ListView* DrawNodeMethodsTest::createListView()
     return listview;
 }
 
-void DrawNodeMethodsTest::onChangedRadioButtonSelect(ui::RadioButton* radioButton, ui::RadioButton::EventType type)
-{
-    if (radioButton == nullptr)
-    {
-        return;
-    }
-    switch (type)
-    {
-    case ui::RadioButton::EventType::SELECTED:
-    {
-        selectedRadioButton = radioButton->getTag();
-        break;
-    }
-
-    case ui::RadioButton::EventType::UNSELECTED:
-    {
-        break;
-    }
-    default:
-        break;
-    }
-}
-
 void DrawNodeMethodsTest::update(float dt)
 {
-    switch (selectedRadioButton)
-    {
-    case 0:
-        setSubtitleLabel("drawOrder/dnTransform = true/true");
-        drawNodeEx->_drawOrder = true;
-        drawNodeEx->_dnTransform = true;
-        break;
-    case 1:
-        setSubtitleLabel("drawOrder/dnTransform = true/false");
-        drawNodeEx->_drawOrder = true;
-        drawNodeEx->_dnTransform = false;
-        break;
-    case 2:
-        setSubtitleLabel("drawOrder/dnTransform = false/true");
-        drawNodeEx->_drawOrder = false;
-        drawNodeEx->_dnTransform = true;
-        break;
-    case 3:
-        setSubtitleLabel("drawOrder/dnTransform = false/false");
-        drawNodeEx->_drawOrder = false;
-        drawNodeEx->_dnTransform = false;
-        break;
-    default:
-        break;
-    }
+    DrawNodeExBaseTest::update(dt);
     drawAll();
 }
 
@@ -1872,7 +1452,7 @@ void DrawNodeMethodsTest::drawAll()
 
         for (int i = 0; i < 100; i++)
         {
-            Vec2 pos = Vec2(-100,-100) + Vec2(AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x, AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y);
+            Vec2 pos = Vec2(-100, -100) + Vec2(AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x, AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y);
             drawNodeEx->drawCircle(VisibleRect::center() + pos, AXRANDOM_0_1() * 50 + 50, AX_DEGREES_TO_RADIANS(90), 30, true,
                 Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
         }
@@ -2278,18 +1858,15 @@ void DrawNodeMethodsTest::drawAll()
 
 DrawNodePerformaneTest::DrawNodePerformaneTest()
 {
-    _currentSeletedItemIndex = 0;
-
     auto listview = createListView();
     listview->setPosition(Vec2(0.0f, 90.0f));
     addChild(listview);
 
-    drawNodeEx = DrawNodeEx::create();
     drawNodeEx->setScale(0.5);
     drawNodeEx->setPosition(size / 4);
-    addChild(drawNodeEx);
 
     initSliders();
+    initRadioButtuns();
 
     label = Label::createWithTTF("Count: ", "fonts/Marker Felt.ttf", 10);
     label->setPosition(Vec2(Vec2(center.x, 80.0f)));
@@ -2313,18 +1890,6 @@ std::string DrawNodePerformaneTest::title() const
 string DrawNodePerformaneTest::subtitle() const
 {
     return "";
-}
-
-void DrawNodePerformaneTest::listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type)
-{
-    // clear all text to white
-    auto listview = static_cast<ax::ui::ListView*>(sender);
-    for (auto&& item : listview->getItems())
-    {
-        static_cast<ax::ui::Text*>(item)->setColor(ax::Color3B::WHITE);
-    }
-    _currentSeletedItemIndex = (int)listview->getCurSelectedIndex();
-    listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color3B::RED);
 }
 
 ax::ui::ListView* DrawNodePerformaneTest::createListView()
@@ -2375,7 +1940,7 @@ ax::ui::ListView* DrawNodePerformaneTest::createListView()
     listview->setCurSelectedIndex(0);
     listview->setTouchEnabled(true);
     listview->addEventListener(
-        (ui::ListView::ccListViewCallback)AX_CALLBACK_2(DrawNodePerformaneTest::listviewCallback, this));
+        (ui::ListView::ccListViewCallback)AX_CALLBACK_2(DrawNodeExBaseTest::listviewCallback, this));
     listview->setTag(100);
 
     listview->getItem(_currentSeletedItemIndex)->setColor(Color3B::RED);
@@ -2385,6 +1950,8 @@ ax::ui::ListView* DrawNodePerformaneTest::createListView()
 
 void DrawNodePerformaneTest::update(float dt)
 {
+    DrawNodeExBaseTest::update(dt);
+
     drawNodeEx->clear();
 
     label1->setVisible(false);
@@ -2509,7 +2076,6 @@ void DrawNodePerformaneTest::update(float dt)
     }
 }
 
-
 void DrawNodePerformaneTest::onEnter()
 {
     for (int i = 0; i < sliderType::sliderTypeLast; i++)
@@ -2525,87 +2091,6 @@ void DrawNodePerformaneTest::onEnter()
     DrawNodeExBaseTest::onEnter();
 }
 
-DrawNodeHeartTest::DrawNodeHeartTest()
-{
-    //// https://virusinlinux.github.io/heartAnimation/
-
-    heart = new Vec2[totalFrames];
-
-    for (int i = 0; i < totalFrames; i++)
-    {
-        float a = AXRANDOM_0_1() * M_PI * 4;
-        float r = AXRANDOM_0_1() * sin(a);
-        heart[i] = { r * 100, r * 100 };
-        heart[i] = { size.width / 2,size.height / 2 };
-    }
-    drawNodeEx = DrawNodeEx::create();
-    addChild(drawNodeEx);
-    scheduleUpdate();
-}
-
-std::string DrawNodeHeartTest::title() const
-{
-    return "Heart Animation";
-}
-std::string DrawNodeHeartTest::subtitle() const
-{
-    return "";
-}
-void DrawNodeHeartTest::update(float dt)
-{
-    static int counter = 0;
-    //function draw() {
-    //
-    //
-    float percent = float(counter % totalFrames) / totalFrames;
-    //    render(percent);
-
-    //}
-    //
-    //function render(percent) {
-    //    background(0);
-    //    translate(width / 2, height / 2);
-    //    stroke(255, 0, 100);
-    //    strokeWeight(4);
-    //    fill(255, 0, 100);
-    //
-    //    beginShape();
-    //   
-    //        
-    //       
-    //        
-    //
-    //    }
-    for (int i = 0; i < totalFrames; i++) // for (let v of heart) {
-    {
-        float a = percent * M_PI * 2;           // const a = map(percent, 0, 1, 0, TWO_PI * 2);
-        float r = AXRANDOM_0_1() * sin(a);      //  const r = map(sin(a), -1, 1, height / 80, height / 40);
-        //     Vec2 vertex = { r * v.x, r * v.y } ;    //  vertex(r * v.x, r * v.y);          //  heart[i] = { r * heart[i].x, r * heart[i].y };
-        // heart.splice(0, 1);             //   The splice() method of Array instances changes the contents of an array by removing or replacing existing elements and/or adding new elements in place.
-        if (percent < 0.5)  //  if (percent < 0.5) {
-        {
-            float a = percent * M_PI * 2;       // const a = map(percent, 0, 0.5, 0, TWO_PI);
-            float r = AXRANDOM_0_1() * sin(a);  // const x = 16 * pow(sin(a), 3);
-            float y = 1;                        // const y = -(13 * cos(a) - 5 * cos(2 * a) - 2 * cos(3 * a) - cos(4 * a));
-            // heart.push(createVector(x, y));
-        }
-        heart[i] = { r * heart[i].x, r * heart[i].y };
-    }
-
-
-
-    drawNodeEx->clear();
-    drawNodeEx->setIsConvex(true);
-    drawNodeEx->drawPolygon(heart, totalFrames, 1.0, Color4B::RED);
-    drawNodeEx->setIsConvex(false);
-    //    endShape();
-    //
-
-
-    drawNodeEx->drawStar({ size.width / 2, size.height / 2 }, 40, 20, 8, Color4B::BLUE);
-    counter++;
-}
-
 DrawNodeDrawInWrongOrder_Issue1888::DrawNodeDrawInWrongOrder_Issue1888()
 {
 
@@ -2618,8 +2103,10 @@ DrawNodeDrawInWrongOrder_Issue1888::DrawNodeDrawInWrongOrder_Issue1888()
         heart[i] = { r * 100, r * 100 };
         heart[i] = { size.width / 2,size.height / 2 };
     }
-    drawNodeEx = DrawNodeEx::create();
-    addChild(drawNodeEx);
+
+    initSliders();
+    initRadioButtuns();
+
     scheduleUpdate();
 }
 
@@ -2635,11 +2122,9 @@ std::string DrawNodeDrawInWrongOrder_Issue1888::subtitle() const
 
 void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
 {
-    drawNodeEx->clear();
+    DrawNodeExBaseTest::update(dt);
 
-#if defined(DRAWNODE_DRAW_LINE_POINT)
-    drawNodeEx->_drawOrder = true;
-#endif
+    drawNodeEx->clear();
 
     drawNodeEx->drawLine(Vec2(20, 140), Vec2(450, 110), Color4B::RED, 20.0f);
 
@@ -2664,89 +2149,46 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
 #endif
 }
 
-void DrawNodeAxmolTest2::onChangedRadioButtonSelect(ui::RadioButton* radioButton, ui::RadioButton::EventType type)
-{
-    if (radioButton == nullptr)
-    {
-        return;
-    }
-    switch (type)
-    {
-    case ui::RadioButton::EventType::SELECTED:
-    {
-        selectedRadioButton = radioButton->getTag();
-        break;
-    }
-
-    case ui::RadioButton::EventType::UNSELECTED:
-    {
-        break;
-    }
-    default:
-        break;
-    }
-}
 
 DrawNodeAxmolTest2::DrawNodeAxmolTest2()
 {
-    selectedRadioButton = 0;
-
-    _radioButtonGroup = ui::RadioButtonGroup::create();
-    addChild(_radioButtonGroup, 50);
-
     static const float BUTTON_WIDTH = 30;
     static float startPosX = 0;
 
-    // Create the radio buttons
-    static const int NUMBER_OF_BUTTONS = 3;
-    startPosX = size.width / 2.0f - ((NUMBER_OF_BUTTONS - 1) / 2.0f) * BUTTON_WIDTH;
-    for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
-    {
-        ui::RadioButton* radioButton =
-            ui::RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
-        float posX = startPosX + BUTTON_WIDTH * i;
-        radioButton->setPosition(Vec2(posX, size.height - 80));
-        radioButton->setScale(1.2f);
-        radioButton->setTag(i);
-        _radioButtonGroup->addRadioButton(radioButton);
-        addChild(radioButton, 50);
-        radioButton->addEventListener(
-            AX_CALLBACK_2(DrawNodeAxmolTest2::onChangedRadioButtonSelect, this));
-    }
-    drawNE = DrawNodeEx::create();
-    addChild(drawNE, 10);
+    drawNode = DrawNode::create();
+    addChild(drawNode, 10);
 
-    drawN = DrawNode::create();
-    addChild(drawN, 10);
-
-
-
+    initSliders();
+    initRadioButtuns();
     scheduleUpdate();
 }
 
 void DrawNodeAxmolTest2::update(float dt)
 {
-    if (!drawN || !drawNE)
+    DrawNodeExBaseTest::update(dt);
+
+
+    if (!drawNode || !drawNodeEx)
     {
         return;
     }
 
-    drawN->clear();
-    drawNE->clear();
+    drawNode->clear();
+    drawNodeEx->clear();
 
     switch (selectedRadioButton)
     {
     case 0:
         setSubtitleLabel("Axmol v2 drawOrder ON (T)");
-        drawAllv2(drawNE, true);
+        drawAllv2(drawNodeEx, true);
         break;
     case 1:
         setSubtitleLabel("Axmol v2 drawOrder OFF (T,P,L)");
-        drawAllv2(drawNE, false);
+        drawAllv2(drawNodeEx, false);
         break;
     case 2:
         setSubtitleLabel("Axmol v1");
-        drawAllv1(drawN);
+        drawAllv1(drawNode);
         break;
 
     default:
@@ -3075,14 +2517,13 @@ DrawNodeCocos2dxBackwardsAPITest::DrawNodeCocos2dxBackwardsAPITest()
     float w = 20;
     float h = 50;
 
-    auto drawNode1 = DrawNodeEx::create();
-    addChild(drawNode1);
-    drawNode1->setPosition(-40, 20);
+
+    drawNodeEx->setPosition(-40, 20);
 
     int x = 0;
     int y = 0;
     Vec2 vertices[5];
-    drawNode1->setScale(0.5);
+    drawNodeEx->setScale(0.5);
     Color4F color;
     for (int iy = 0; iy < 5; iy++)
     {
@@ -3097,15 +2538,15 @@ DrawNodeCocos2dxBackwardsAPITest::DrawNodeCocos2dxBackwardsAPITest()
 
             if (AXRANDOM_0_1() > 0.5f)
             {
-                drawNode1->setIsConvex(true);
+                drawNodeEx->setIsConvex(true);
                 color = Color4F::YELLOW;
             }
             else
             {
-                drawNode1->setIsConvex(false);  // default value!
+                drawNodeEx->setIsConvex(false);  // default value!
                 color = Color4F::ORANGE;
             }
-            drawNode1->drawPolygon(vertices, 5, Color4F(0.7f, 0.7f, 0.7f, 0.5f), 1.0f, color);
+            drawNodeEx->drawPolygon(vertices, 5, Color4F(0.7f, 0.7f, 0.7f, 0.5f), 1.0f, color);
             x += 70;
         }
         y += 80;
@@ -3124,50 +2565,31 @@ string DrawNodeCocos2dxBackwardsAPITest::subtitle() const
 
 DrawNodeIssueTester::DrawNodeIssueTester()
 {
-    DrawNodeExBaseTest();
     static Vec2 vertices[] = { Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f), Vec2(50.0f, 100.0f) };
-    int verticesCount = 5;  // <<<<<<<<<<<<<<  5 is correct; 6 makes like "closed"
-
-    if (drawNodeEx == NULL)
-    {
-        drawNodeEx = DrawNodeEx::create();
-        addChild(drawNodeEx, 10);
-    }
+    int verticesCount = 5;
 
     drawNodeEx->setPosition(5, 100);
     drawNodeEx->setLineWidth(1);
     drawNodeEx->drawPoly(vertices, verticesCount, false, Color4F::GREEN);
 
-    if (drawNodeEx == nullptr)
-    {
-        drawNodeEx = DrawNodeEx::create();
-        addChild(drawNodeEx, 10);
-    }
     auto draw = DrawNode::create();
     addChild(draw, 10);
     draw->setPosition(70, 100);
     draw->drawPoly(vertices, verticesCount, false, Color4F::BLUE);
 
+    drawNodeEx->setPosition(140, 100);
+    drawNodeEx->setLineWidth(1);
+    drawNodeEx->drawPoly(vertices, verticesCount, false, Color4F::RED);
 
-    auto drawNodeEx1 = DrawNodeEx::create();
-    addChild(drawNodeEx1, 10);
-    drawNodeEx1->setPosition(140, 100);
-    drawNodeEx1->setLineWidth(1);
-    drawNodeEx1->drawPoly(vertices, verticesCount, false, Color4F::RED);
+    drawNodeEx->setPosition(200, 100);
+    drawNodeEx->setLineWidth(1);
+    drawNodeEx->drawPoly(vertices, verticesCount, false, Color4F::RED, 3);
+    drawNodeEx->drawPoly(vertices, verticesCount, false, Color4F::WHITE);
 
-    auto drawNodeEx2 = DrawNodeEx::create();
-    addChild(drawNodeEx2, 10);
-    drawNodeEx2->setPosition(200, 100);
-    drawNodeEx2->setLineWidth(1);
-    drawNodeEx2->drawPoly(vertices, verticesCount, false, Color4F::RED, 3);
-    drawNodeEx2->drawPoly(vertices, verticesCount, false, Color4F::WHITE);
-
-    auto drawNodeEx3 = DrawNodeEx::create();
-    addChild(drawNodeEx3, 10);
-    drawNodeEx3->setPosition(270, 100);
-    drawNodeEx3->setLineWidth(1);
-    drawNodeEx3->drawPoly(vertices, verticesCount, false, Color4F(0.0f, 0.5f, 0.5f, 0.5f), 10);
-    drawNodeEx3->drawPoly(vertices, verticesCount, false, Color4F::BLACK);
+    drawNodeEx->setPosition(270, 100);
+    drawNodeEx->setLineWidth(1);
+    drawNodeEx->drawPoly(vertices, verticesCount, false, Color4F(0.0f, 0.5f, 0.5f, 0.5f), 10);
+    drawNodeEx->drawPoly(vertices, verticesCount, false, Color4F::BLACK);
 
     float thick = 0.0f;
     float y = -90.0f;
@@ -3175,33 +2597,52 @@ DrawNodeIssueTester::DrawNodeIssueTester()
     {
         thick += 0.5f;
         y += thick + 1;
-        drawNodeEx3->drawLine(Vec2(140, y), Vec2(180, y), Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thick);
+        drawNodeEx->drawLine(Vec2(140, y), Vec2(180, y), Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), thick);
     }
-    drawNodeEx3->drawPie(Vec2(-200, 150), 20, 0, 100, 300, 1, 1, Color4B::TRANSPARENT, Color4B::BLUE, DrawNodeEx::DrawMode::Line, 10);
+    drawNodeEx->drawPie(Vec2(-200, 150), 20, 0, 100, 300, 1, 1, Color4B::TRANSPARENT, Color4B::BLUE, DrawNodeEx::DrawMode::Line, 10);
 
-    auto drawNodeEx4 = DrawNodeEx::create();
-    addChild(drawNodeEx4, 10);
+
     for (int i = 2; i < 30; i++)
     {
-        drawNodeEx4->drawCircle(VisibleRect::center()/* + Vec2(AXRANDOM_MINUS1_1()*100, AXRANDOM_MINUS1_1()*100)*/, 5 * i, AX_DEGREES_TO_RADIANS(90), i, false, 1.0f, 1.0f,
+        drawNodeEx->drawCircle(VisibleRect::center()/* + Vec2(AXRANDOM_MINUS1_1()*100, AXRANDOM_MINUS1_1()*100)*/, 5 * i, AX_DEGREES_TO_RADIANS(90), i, false, 1.0f, 1.0f,
             Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), 0.5f);
     }
 
-    auto drawNodeEx5 = DrawNodeEx::create();
-    addChild(drawNodeEx5, 10);
     Vec2* fbHorse = new Vec2[856 / 2];
     int n = 0;
     Vec2 pos = { 100,210 };
     float scale = 3.0f;
     for (size_t i = 0; i < sizeof(verticesFB) / sizeof(verticesFB[0]); i += 4)
     {
-        drawNodeEx5->drawLine(Vec2(verticesFB[i] * scale, verticesFB[i + 1] * scale) + pos, Vec2(verticesFB[i + 2] * scale, verticesFB[i + 3] * scale) + pos, Color4F::RED, 0.5f);
+        drawNodeEx->drawLine(Vec2(verticesFB[i] * scale, verticesFB[i + 1] * scale) + pos, Vec2(verticesFB[i + 2] * scale, verticesFB[i + 3] * scale) + pos, Color4F::RED, 0.5f);
     }
+
+    initSliders();
+    initRadioButtuns();
+
+    scheduleUpdate();
 }
+
+void DrawNodeIssueTester::onEnter()
+{
+    //for (int i = 0; i < sliderType::sliderTypeLast; i++)
+    //{
+    //    sliderValue[i] = 1;
+    //    slider[i]->setPercent(sliderValue[i]);
+    //}
+    //sliderValue[sliderType::Thickness] = 10;
+    //slider[sliderType::Thickness]->setPercent(sliderValue[sliderType::Thickness]);
+    //sliderValue[sliderType::Rotation] = 0;
+    //slider[sliderType::Rotation]->setPercent(sliderValue[sliderType::Rotation]);
+
+    DrawNodeExBaseTest::onEnter();
+}
+
+
 
 void DrawNodeIssueTester::update(float dt)
 {
-
+    DrawNodeExBaseTest::update(dt);
 }
 
 string DrawNodeIssueTester::title() const
@@ -3214,214 +2655,22 @@ string DrawNodeIssueTester::subtitle() const
     return "setLineWidth()";
 }
 
-DrawNodeCocos2dxDrawNodePieTest::DrawNodeCocos2dxDrawNodePieTest()
-{
-    drawNode = DrawNode::create();
-    addChild(drawNode, 10);
-
-    initSliders();
-
-    scheduleUpdate();
-}
-
-void DrawNodeCocos2dxDrawNodePieTest::update(float dt)
-{
-    drawNode->clear();
-
-    // Pie
-    drawNode->drawPie(VisibleRect::center() - Vec2(170.0f, -35.0f), 50, sliderValue[sliderType::Rotation], sliderValue[sliderType::AngleStart], sliderValue[sliderType::AngleEnd], 1.0f, 1.0f,
-        Color4B::BLUE, drawNode->DrawMode::Fill);
-    drawNode->drawPie(VisibleRect::center() - Vec2(60.0f, -35.0f), 50, sliderValue[sliderType::Rotation], sliderValue[sliderType::AngleStart], sliderValue[sliderType::AngleEnd], 1.0f, 1.0f,
-        Color4B::BLUE, drawNode->DrawMode::Outline);
-    drawNode->drawPie(VisibleRect::center() + Vec2(60.0f, 35.0f), 50, sliderValue[sliderType::Rotation], sliderValue[sliderType::AngleStart], sliderValue[sliderType::AngleEnd], 1.0f, 1.0f,
-        Color4B::BLUE, drawNode->DrawMode::Line);
-    drawNode->drawPie(VisibleRect::center() + Vec2(170.0f, 35.0f), 50, sliderValue[sliderType::Rotation], sliderValue[sliderType::AngleStart], sliderValue[sliderType::AngleEnd], 1.0f, 1.0f,
-        Color4B::BLUE, drawNode->DrawMode::Semi);
-}
-
-string DrawNodeCocos2dxDrawNodePieTest::title() const
-{
-    return "DrawNode::drawPie";
-}
-
-string DrawNodeCocos2dxDrawNodePieTest::subtitle() const
-{
-    return "Filled, Outlined, Line, Semi";
-}
-
-DrawNodeCocos2dx_Issue829::DrawNodeCocos2dx_Issue829()
-{
-    Vec2 vertices0[] = { {50.0, 20.0}, {100.0, 0.0}, {80.0, 50.0}, {100.0, 100.0},
-        {50.0, 80.0}, {0.0, 100.0}, {20.0, 50.0}, {0, 0} };
-
-    Vec2 vertices4[] = { {362, 148}, {326, 241}, {295, 219}, {258, 88}, {440, 129},
-        {370, 196}, {372, 275}, {348, 257}, {364, 148} };
-
-    Vec2* ver[] = { vertices0, vertices4 };
-
-    DrawNodeEx* drawNode[sizeof(ver) + 1];
-    for (int i = 0; i < sizeof(ver); i++)
-    {
-        drawNode[i] = DrawNodeEx::create();
-        addChild(drawNode[i]);
-    }
-
-    drawNode[0]->drawPolygon(vertices0, sizeof(vertices0) / sizeof(vertices0[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 3,
-        Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-    drawNode[0]->setPosition({ 20, 200 });
-    drawDirection(vertices0, sizeof(vertices0) / sizeof(vertices0[0]), drawNode[0]->getPosition());
-
-    drawNode[4]->drawPolygon(vertices4, sizeof(vertices4) / sizeof(vertices4[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 3,
-        Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-    drawNode[4]->setPosition({ -70, -20 });
-    drawDirection(vertices4, sizeof(vertices4) / sizeof(vertices4[0]), drawNode[4]->getPosition());
-
-    {
-        const float o = 80;
-        const float w = 20;
-        const float h = 50;
-        {  // star
-            auto drawNode1 = DrawNodeEx::create();
-            addChild(drawNode1);
-            drawNode1->setPosition(300, 100);
-            Vec2 star[] = {
-                Vec2(o, o),
-                Vec2(o + w, o - h),
-                Vec2(o + w * 2, o),  // lower spike
-                Vec2(o + w * 2 + h, o + w),
-                Vec2(o + w * 2, o + w * 2),  // right spike
-                Vec2(o + w, o + w * 2 + h),
-                Vec2(o, o + w * 2),  // top spike
-                Vec2(o - h, o + w),  // left spike
-            };
-
-            drawNode1->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1,
-                Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-
-            drawDirection(star, sizeof(star) / sizeof(star[0]), drawNode1->getPosition());
-        }
-
-        {  // wrong order
-            auto drawNode1 = DrawNodeEx::create();
-            addChild(drawNode1);
-            drawNode1->setPosition(-80, 20);
-            Vec2 wrongOrder[] = { Vec2(o + w, o - h), Vec2(o + w * 2, o), Vec2(o + w * 2 + h, o + w),
-                Vec2(o + w * 2, o + w * 2) };
-
-            drawNode1->drawPolygon(wrongOrder, sizeof(wrongOrder) / sizeof(wrongOrder[0]),
-                Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1, Color4F(1.0f, 0.0f, 0.0f, 1.0f));
-
-            drawDirection(wrongOrder, sizeof(wrongOrder) / sizeof(wrongOrder[0]), drawNode1->getPosition());
-        }
-        {  // correct order
-            Vec2 correctOrder[] = { Vec2(o + w * 2, o), Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2),
-                Vec2(o + w, o - h) };
-            auto drawNode2 = DrawNodeEx::create();
-            addChild(drawNode2);
-            drawNode2->setPosition({ -10, 20 });
-            drawNode2->drawPolygon(correctOrder, sizeof(correctOrder) / sizeof(correctOrder[0]),
-                Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1, Color4F(0.0f, 1.0f, 0.0f, 1.0f));
-
-            drawDirection(correctOrder, sizeof(correctOrder) / sizeof(correctOrder[0]), drawNode2->getPosition());
-        }
-    }
-}
-
-void DrawNodeCocos2dx_Issue829::drawDirection(const Vec2* vec, const int size, Vec2 offset)
-{
-    for (size_t i = 0; i < size; i++)
-    {
-        auto label = Label::createWithTTF(std::to_string(i).c_str(), "fonts/Marker Felt.ttf", 10);
-        this->addChild(label);
-        label->setPosition(vec[i] + offset);
-    }
-}
-
-string DrawNodeCocos2dx_Issue829::title() const
-{
-    return "GitHub Issue #829";
-}
-
-string DrawNodeCocos2dx_Issue829::subtitle() const
-{
-    return "Is also fixed with #1319!";
-}
-
-DrawNodeCocos2dx_Issue1319::DrawNodeCocos2dx_Issue1319()
-{
-    Vec2 vertices21[] = {
-        {290.250000f, 98.1250000f}, {235.000000f, 90.8750000f}, {270.500000f, 109.875000f}, {235.000000f, 119.125000f},
-        {275.250000f, 145.875000f}, {249.500000f, 145.875000f}, {249.500000f, 178.125000f}, {275.250000f, 187.375015f},
-        {294.750488f, 168.333344f}, {311.250000f, 181.125000f}, {257.000000f, 213.625015f}, {338.500000f, 193.125000f},
-        {300.000000f, 211.125015f}, {333.750000f, 211.125015f}, {368.250000f, 206.625000f}, {377.000000f, 178.125000f},
-        {421.750000f, 170.125000f}, {416.250000f, 115.375000f}, {391.250000f, 157.875000f}, {338.500000f, 131.625000f},
-        {362.750000f, 131.625000f}, {362.750000f, 106.875000f}, {306.500000f, 119.125000f}, {324.250000f, 85.1250000f},
-        {227.500000f, 61.8750000} };
-
-    Vec2 vertices24[] = {
-        {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},  {100.250000f, 161.375000f},
-        {65.500000f, 181.375000f},  {102.250000f, 179.125000f}, {95.000000f, 215.125000f},  {129.331467f, 189.926208f},
-        {131.371460f, 206.366196f}, {139.651474f, 192.446198f}, {161.851471f, 200.606201f}, {151.000000f, 220.375000f},
-        {110.500000f, 244.375000f}, {153.750000f, 238.125000f}, {142.500000f, 253.875000f}, {220.750000f, 259.375000f},
-        {250.500000f, 244.375000f}, {168.750000f, 241.875000f}, {182.250000f, 154.125000f}, {190.250000f, 227.375000f},
-        {196.500000f, 197.375000f}, {208.750000f, 210.625000f}, {220.750000f, 194.375000f}, {208.750000f, 176.375000f},
-        {253.250000f, 173.875000f}, {243.750000f, 154.125000f}, {213.750000f, 161.375000f}, {202.250000f, 139.875000f},
-        {236.000000f, 131.875000f}, {218.500000f, 120.875000f}, {206.500000f, 125.625000f}, {184.500000f, 110.375000f},
-        {157.000000f, 108.625000f}, {147.500000f, 96.625000f},  {153.750000f, 85.125000f},  {147.500000f, 75.375000f},
-        {126.500000f, 74.125000f},  {110.500000f, 86.625000f},  {127.750000f, 85.125000f},  {135.250000f, 91.125000f},
-        {135.250000f, 97.875000f},  {124.000000f, 93.875000f},  {115.500000f, 100.875000f}, {115.500000f, 111.875000f},
-        {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
-        {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
-    };
-
-    DrawNodeEx* drawNode[3];
-    for (int i = 0; i < 3; i++)
-    {
-        drawNode[i] = DrawNodeEx::create();
-        addChild(drawNode[i]);
-    }
-
-    // draw a solid circle
-    drawNode[1]->drawSolidCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 40, AX_DEGREES_TO_RADIANS(90), 30, 2.0f, 2.0f, Color4F::BLUE);
-
-    drawNode[1]->drawSolidCircle(VisibleRect::center() + Vec2(-40.0f, 0.0f), 40, AX_DEGREES_TO_RADIANS(90), 30, 2.0f, 2.0f, Color4F::WHITE);
-
-    drawNode[0]->setPosition(Vec2(-30, -20));
-    drawNode[0]->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::RED, 0.3f, Color4F::GREEN);
-
-    drawNode[2]->setPosition(Vec2(0, -10));
-    drawNode[2]->setLocalZOrder(5);
-    drawNode[2]->drawPolygon(vertices21, sizeof(vertices21) / sizeof(vertices21[0]), Color4F::GREEN, 0.3f, Color4F::YELLOW);
-    drawNode[2]->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::BLUE, 0.3f, Color4F::RED);
-}
-
-string DrawNodeCocos2dx_Issue1319::title() const
-{
-    return "GitHub Issue #1319";
-}
-
-string DrawNodeCocos2dx_Issue1319::subtitle() const
-{
-    return "Draw complex FILLED polygons";
-}
-
 DrawNodeSpLinesTest::DrawNodeSpLinesTest()
 {
     auto listener = EventListenerTouchAllAtOnce::create();
     listener->onTouchesEnded = AX_CALLBACK_2(DrawNodeSpLinesTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-
-    drawNodeEx = DrawNodeEx::create();
-    addChild(drawNodeEx);
-
-    drawNodeCP = DrawNodeEx::create();
-    addChild(drawNodeCP, 20);
+    drawNodeExCP = DrawNodeEx::create();
+    addChild(drawNodeExCP, 20);
 
     drawNode = DrawNode::create();
-    addChild(drawNode);
+    addChild(drawNode, 30);
 
     addNewControlPoint(VisibleRect::center());
+
+    initSliders();
+    initRadioButtuns();
 
     scheduleUpdate();
 }
@@ -3452,23 +2701,23 @@ std::string DrawNodeSpLinesTest::subtitle() const
 
 void DrawNodeSpLinesTest::update(float dt)
 {
+    DrawNodeExBaseTest::update(dt);
+
     if (points.size() == 0) return;
 
     array = PointArray::create(points.size());
 
-    drawNodeEx->clear();
+    drawNodeExCP->clear();
+
     drawNode->clear();
-
-
-    drawNodeCP->clear();
+    drawNodeEx->clear();
 
     int boxSize = 3;
     for (auto&& p : points)
     {
-        drawNodeCP->drawRect(Vec2(p.x - boxSize, p.y - boxSize), Vec2(p.x + boxSize, p.y + boxSize), Color4F::BLUE);
+        drawNodeExCP->drawRect(Vec2(p.x - boxSize, p.y - boxSize), Vec2(p.x + boxSize, p.y + boxSize), Color4F::BLUE);
         array->addControlPoint(Vec2(p.x, p.y));
     }
-
 
     drawNodeEx->drawCardinalSpline(array, 0.2f, points.size() * 8, Color4F::GREEN, 20);
     drawNode->drawCardinalSpline(array, 0.2f, points.size() * 8, Color4F::BLUE);
@@ -3483,62 +2732,15 @@ void DrawNodeSpLinesTest::update(float dt)
     //}
 }
 
-
 CandyMixEeffect::CandyMixEeffect()
 {
-    selectedRadioButton = 0;
-
-    _radioButtonGroup = ui::RadioButtonGroup::create();
-    addChild(_radioButtonGroup, 50);
-
     static const float BUTTON_WIDTH = 30;
     static float startPosX = 0;
 
-    // Create the radio buttons
-    static const int NUMBER_OF_BUTTONS = 4;
-    startPosX = size.width / 2.0f - ((NUMBER_OF_BUTTONS - 1) / 2.0f) * BUTTON_WIDTH;
-    for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
-    {
-        ui::RadioButton* radioButton =
-            ui::RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
-        float posX = startPosX + BUTTON_WIDTH * i;
-        radioButton->setPosition(Vec2(posX, size.height - 80));
-        radioButton->setScale(1.2f);
-        radioButton->setTag(i);
-        _radioButtonGroup->addRadioButton(radioButton);
-        addChild(radioButton, 50);
-        radioButton->addEventListener(
-            AX_CALLBACK_2(CandyMixEeffect::onChangedRadioButtonSelect, this));
-    }
-
-    drawNodeEx = DrawNodeEx::create();
-    addChild(drawNodeEx);
-
+    initSliders();
+    initRadioButtuns();
 
     scheduleUpdate();
-}
-
-void CandyMixEeffect::onChangedRadioButtonSelect(ui::RadioButton* radioButton, ui::RadioButton::EventType type)
-{
-    if (radioButton == nullptr)
-    {
-        return;
-    }
-    switch (type)
-    {
-    case ui::RadioButton::EventType::SELECTED:
-    {
-        selectedRadioButton = radioButton->getTag();
-        break;
-    }
-
-    case ui::RadioButton::EventType::UNSELECTED:
-    {
-        break;
-    }
-    default:
-        break;
-    }
 }
 
 std::string CandyMixEeffect::title() const
@@ -3550,7 +2752,6 @@ std::string CandyMixEeffect::subtitle() const
 {
     return "";
 }
-
 
 void CandyMixEeffect::renderLine(float x1, float x2, float y, ax::Color4F color, float angle)
 {
@@ -3582,35 +2783,11 @@ void CandyMixEeffect::renderLine(float x1, float x2, float y, ax::Color4F color,
 
 void CandyMixEeffect::update(float dt)
 {
+    DrawNodeExBaseTest::update(dt);
+
     static float WID = 400;
     static float HIG = 600;
     static b2Timer timer;
-
-    switch (selectedRadioButton)
-    {
-    case 0:
-        setSubtitleLabel("drawOrder/dnTransform = true/true");
-        drawNodeEx->_drawOrder = true;
-        drawNodeEx->_dnTransform = true;
-        break;
-    case 1:
-        setSubtitleLabel("drawOrder/dnTransform = true/false");
-        drawNodeEx->_drawOrder = true;
-        drawNodeEx->_dnTransform = false;
-        break;
-    case 2:
-        setSubtitleLabel("drawOrder/dnTransform = false/true");
-        drawNodeEx->_drawOrder = false;
-        drawNodeEx->_dnTransform = true;
-        break;
-    case 3:
-        setSubtitleLabel("drawOrder/dnTransform = false/false");
-        drawNodeEx->_drawOrder = false;
-        drawNodeEx->_dnTransform = false;
-        break;
-    default:
-        break;
-    }
 
     drawNodeEx->clear();
 
