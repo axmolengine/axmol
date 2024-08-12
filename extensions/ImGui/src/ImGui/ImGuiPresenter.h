@@ -75,32 +75,48 @@ public:
     /// Add ImGui font with contentZoomFactor
     /// </summary>
     /// <param name="fontFile"></param>
+    /// <param name="fontSize"></param>
     /// <param name="glyphRange"></param>
+    /// <param name="fontConfig"></param>
     void addFont(std::string_view fontFile,
                  float fontSize          = DEFAULT_FONT_SIZE,
-                 GLYPH_RANGES glyphRange = GLYPH_RANGES::NONE);
+                 GLYPH_RANGES glyphRange = GLYPH_RANGES::NONE,
+                 const ImFontConfig& fontConfig = ImFontConfig());
     /// <summary>
     /// Add ImGui font with contentZoomFactor and use pre-existing glyph range for the specified font
     /// </summary>
     /// <param name="fontFile"></param>
-    /// <param name="glyphRanges">The glyph range vector must end with 0 and it should be included in the size</param>
-    void addFont(std::string_view fontFile, float fontSize, std::string_view glyphRangesId);
+    /// <param name="fontSize"></param>
+    /// <param name="glyphRangesId"></param>
+    /// <param name="fontConfig"></param>
+    void addFont(std::string_view fontFile,
+                 float fontSize,
+                 std::string_view glyphRangesId,
+                 const ImFontConfig& fontConfig = ImFontConfig());
     /// <summary>
     /// Add ImGui font with contentZoomFactor and use specified custom glyph range for the specified font
     /// </summary>
     /// <param name="fontFile"></param>
-    /// <param name="glyphRange">The glyph range vector must end with 0 and it should be included in the size</param>
-    void addFont(std::string_view fontFile, float fontSize, const std::vector<ImWchar>& glyphRanges);
+    /// <param name="fontSize"></param>
+    /// <param name="glyphRanges">The glyph range vector must end with 0 and it should be included in the size</param>
+    /// <param name="fontConfig"></param>
+    void addFont(std::string_view fontFile,
+                 float fontSize,
+                 const std::vector<ImWchar>& glyphRanges,
+                 const ImFontConfig& fontConfig = ImFontConfig());
     /// <summary>
     /// Add ImGui font with contentZoomFactor and use custom glyph range and specify a custom id
     /// </summary>
     /// <param name="fontFile"></param>
+    /// <param name="fontSize"></param>
     /// <param name="glyphRangesId">Custom Lookup Id</param>
     /// <param name="glyphRanges">The glyph range vector must end with 0 and it should be included in the size</param>
+    /// <param name="fontConfig"></param>
     void addFont(std::string_view fontFile,
                  float fontSize,
                  std::string_view glyphRangesId,
-                 const std::vector<ImWchar>& glyphRanges);
+                 const std::vector<ImWchar>& glyphRanges,
+                 const ImFontConfig& fontConfig = ImFontConfig());
     void removeFont(std::string_view fontFile);
     void clearFonts();
 
@@ -213,6 +229,7 @@ private:
         float fontSize;
         ImWchar* glyphRanges;
         std::string glyphRangesId;
+        ImFontConfig fontConfig;
     };
 
     hlookup::string_map<FontInfo> _fontsInfoMap;
