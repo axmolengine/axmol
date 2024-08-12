@@ -582,7 +582,7 @@ Texture2D* TextureCache::addImage(const Data& imageData, std::string_view key)
             if (texture->initWithImage(image))
             {
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
                 VolatileTextureMgr::addImage(texture, image);
 #endif
                 _textures.emplace(key, texture);

@@ -23,27 +23,27 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef cocos2d_libs_CCUITextInput_h
-#define cocos2d_libs_CCUITextInput_h
+#ifndef _AXUI_TEXTINPUT_H_
+#define _AXUI_TEXTINPUT_H_
 
 static const int AX_EDIT_BOX_PADDING = 5;
 
 /**
     This protocol provides a common interface for consolidating text input method calls
  */
-@protocol CCUITextInput <NSObject>
+@protocol AXUITextInput <NSObject>
 
-@property(nonatomic, retain, setter=ccui_setText:) NSString* ccui_text;
-@property(nonatomic, retain, setter=ccui_setPlaceholder:) NSString* ccui_placeholder;
-@property(nonatomic, retain, setter=ccui_setTextColor:) UIColor* ccui_textColor;
-@property(nonatomic, retain, setter=ccui_setFont:) UIFont* ccui_font;
-@property(nonatomic, retain, setter=ccui_setPlaceholderTextColor:) UIColor* ccui_placeholderTextColor;
-@property(nonatomic, retain, setter=ccui_setPlaceholderFont:) UIFont* ccui_placeholderFont;
-@property(nonatomic, assign, setter=ccui_setSecureTextEntry:) BOOL ccui_secureTextEntry;
-@property(nonatomic, assign, setter=ccui_setTextHorizontalAlignment:) NSTextAlignment ccui_alignment;
+@property(nonatomic, retain, setter=axui_setText:) NSString* axui_text;
+@property(nonatomic, retain, setter=axui_setPlaceholder:) NSString* axui_placeholder;
+@property(nonatomic, retain, setter=axui_setTextColor:) UIColor* axui_textColor;
+@property(nonatomic, retain, setter=axui_setFont:) UIFont* axui_font;
+@property(nonatomic, retain, setter=axui_setPlaceholderTextColor:) UIColor* axui_placeholderTextColor;
+@property(nonatomic, retain, setter=axui_setPlaceholderFont:) UIFont* axui_placeholderFont;
+@property(nonatomic, assign, setter=axui_setSecureTextEntry:) BOOL axui_secureTextEntry;
+@property(nonatomic, assign, setter=axui_setTextHorizontalAlignment:) NSTextAlignment axui_alignment;
 
 /* can only set. and not get, since the getter will only return one delegate implementation */
-- (void)ccui_setDelegate:(id<UITextFieldDelegate, UITextViewDelegate>)delegate;
+- (void)axui_setDelegate:(id<UITextFieldDelegate, UITextViewDelegate>)delegate;
 
 @end
 

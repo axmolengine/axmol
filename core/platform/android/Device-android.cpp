@@ -213,7 +213,7 @@ void Device::selectionChanged()
 
 NS_AX_END
 
-// this method is called by Cocos2dxBitmap
+// this method is called by BitmapHelper
 extern "C" {
 /**
  * this method is called by java code to init width, height and pixels data

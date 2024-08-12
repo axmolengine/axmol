@@ -30,8 +30,8 @@ THE SOFTWARE.
 /// @cond DO_NOT_SHOW
 
 #if !AX_STRIP_FPS
-extern unsigned char cc_fps_images_png[];
-extern unsigned int cc_fps_images_len(void);
+extern unsigned char ax_fps_images_png[];
+extern unsigned int ax_fps_images_len(void);
 #endif
 
 /// @endcond

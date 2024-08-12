@@ -31,7 +31,7 @@
 
 NS_AX_BEGIN
 
-const std::string EventListenerFocus::LISTENER_ID = "__cc_focus_event";
+const std::string EventListenerFocus::LISTENER_ID = "__ax_focus_event";
 
 EventListenerFocus::EventListenerFocus() : onFocusChanged(nullptr) {}
 

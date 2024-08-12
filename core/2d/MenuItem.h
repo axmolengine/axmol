@@ -33,7 +33,7 @@ THE SOFTWARE.
 // C++ includes
 #include <functional>
 
-// cocos2d includes
+// axmol includes
 #include "2d/Node.h"
 #include "base/Protocols.h"
 

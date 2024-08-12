@@ -25,6 +25,7 @@
 #ifndef __FAST_RNG_H__
 #define __FAST_RNG_H__
 
+#include "base/Macros.h"
 #include "math/MathBase.h"
 #include <type_traits>
 #include <stdint.h>

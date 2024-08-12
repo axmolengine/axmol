@@ -52,7 +52,10 @@ add_library(${target_name} STATIC
   ${libpng_intel_sources}
 )
 
-set(PNG_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE STRING "png include dir" FORCE)
+# cmake builtin FindPNG.cmake detect cached variable PNG_PNG_INCLUDE_DIR
+set(PNG_PNG_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "png include dir" FORCE)
+
+set(PNG_INCLUDE_DIR "${PNG_PNG_INCLUDE_DIR}" CACHE INTERNAL "" FORCE)
 target_include_directories(${target_name} PUBLIC "${PNG_INCLUDE_DIR}")
 
 if(_PNG_ISA_SIMD)

@@ -75,7 +75,7 @@
     self.textInput = textField;
 }
 
-- (void)setTextInput:(NSView<CCUITextInput>*)textInput
+- (void)setTextInput:(NSView<AXUITextInput>*)textInput
 {
     if (_textInput == textInput)
     {
@@ -83,19 +83,19 @@
     }
 
     // Migrate properties
-    textInput.ccui_textColor   = _textInput.ccui_textColor ?: [NSColor whiteColor];
-    textInput.ccui_text        = _textInput.ccui_text ?: @"";
-    textInput.ccui_placeholder = _textInput.ccui_placeholder ?: @"";
-    textInput.ccui_font        = _textInput.ccui_font ?: [NSFont systemFontOfSize:self.frameRect.size.height * 3 / 2];
-    textInput.ccui_maxLength   = getEditBoxImplMac()->getMaxLength();
-    textInput.ccui_alignment   = _textInput.ccui_alignment;
+    textInput.axui_textColor   = _textInput.axui_textColor ?: [NSColor whiteColor];
+    textInput.axui_text        = _textInput.axui_text ?: @"";
+    textInput.axui_placeholder = _textInput.axui_placeholder ?: @"";
+    textInput.axui_font        = _textInput.axui_font ?: [NSFont systemFontOfSize:self.frameRect.size.height * 3 / 2];
+    textInput.axui_maxLength   = getEditBoxImplMac()->getMaxLength();
+    textInput.axui_alignment   = _textInput.axui_alignment;
 
     [_textInput removeFromSuperview];
     [_textInput release];
 
     _textInput = [textInput retain];
 
-    [_textInput performSelector:@selector(setTextColor:) withObject:_textInput.ccui_textColor];
+    [_textInput performSelector:@selector(setTextColor:) withObject:_textInput.axui_textColor];
     [_textInput performSelector:@selector(setBackgroundColor:) withObject:[NSColor clearColor]];
 
     if (![_textInput isKindOfClass:[NSTextView class]])
@@ -105,7 +105,7 @@
     _textInput.hidden     = NO;
     _textInput.wantsLayer = YES;
 
-    [_textInput ccui_setDelegate:self];
+    [_textInput axui_setDelegate:self];
 
     [self setInputFlag:self.dataInputMode];
     [self setReturnType:self.keyboardReturnType];
@@ -166,7 +166,7 @@
 
 - (const char*)getText
 {
-    return [self.textInput.ccui_text UTF8String];
+    return [self.textInput.axui_text UTF8String];
 }
 
 - (void)controlTextDidBeginEditing:(NSNotification*)notification
@@ -185,7 +185,7 @@
 
 - (void)setMaxLength:(int)length
 {
-    self.textInput.ccui_maxLength = length;
+    self.textInput.axui_maxLength = length;
 }
 
 /**
@@ -198,7 +198,7 @@
 
 - (NSString*)getDefaultFontName
 {
-    return self.textInput.ccui_font.fontName ?: @"";
+    return self.textInput.axui_font.fontName ?: @"";
 }
 
 - (void)setInputMode:(ax::ui::EditBox::InputMode)inputMode
@@ -279,12 +279,12 @@
         alignment = ax::TextHAlignment::RIGHT;
     else if (alignment == ax::TextHAlignment::RIGHT)
         alignment = ax::TextHAlignment::CENTER;
-    self.textInput.ccui_alignment = static_cast<NSTextAlignment>(alignment);
+    self.textInput.axui_alignment = static_cast<NSTextAlignment>(alignment);
 }
 
 - (void)setPlaceHolder:(const char*)text
 {
-    self.textInput.ccui_placeholder = [NSString stringWithUTF8String:text];
+    self.textInput.axui_placeholder = [NSString stringWithUTF8String:text];
 }
 
 - (void)setVisible:(BOOL)visible
@@ -294,30 +294,30 @@
 
 - (void)setTextColor:(NSColor*)color
 {
-    self.textInput.ccui_textColor = color;
+    self.textInput.axui_textColor = color;
 }
 
 - (void)setFont:(NSFont*)font
 {
     if (font != nil)
     {
-        self.textInput.ccui_font = font;
+        self.textInput.axui_font = font;
     }
 }
 
 - (void)setPlaceholderFontColor:(NSColor*)color
 {
-    self.textInput.ccui_placeholderColor = color;
+    self.textInput.axui_placeholderColor = color;
 }
 
 - (void)setPlaceholderFont:(NSFont*)font
 {
-    self.textInput.ccui_placeholderFont = font;
+    self.textInput.axui_placeholderFont = font;
 }
 
 - (void)setText:(NSString*)text
 {
-    self.textInput.ccui_text = text;
+    self.textInput.axui_text = text;
 }
 
 - (BOOL)textShouldBeginEditing:(NSText*)textObject  // YES means do it

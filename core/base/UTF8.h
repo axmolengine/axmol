@@ -270,4 +270,4 @@ private:
 
 NS_AX_END
 
-#endif /** defined(__cocos2dx__ccUTF8__) */
+#endif /** defined(AXMOL__UTF8_H) */

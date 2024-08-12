@@ -28,7 +28,7 @@
 
 NS_AX_BEGIN
 
-const std::string EventListenerMouse::LISTENER_ID = "__cc_mouse";
+const std::string EventListenerMouse::LISTENER_ID = "__ax_mouse";
 
 bool EventListenerMouse::checkAvailable()
 {

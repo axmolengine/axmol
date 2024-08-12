@@ -167,6 +167,18 @@ elseif(WINDOWS)
             auto/axlua_webview_auto.cpp
             )
     endif()
+elseif(LINUX)
+    set(lua_bindings_manual_files
+        ${lua_bindings_manual_files}
+        manual/ui/axlua_webview_manual.cpp
+        auto/axlua_webview_auto.cpp)
+    if(AX_ENABLE_VLC_MEDIA)
+        set(lua_bindings_manual_files
+            ${lua_bindings_manual_files}
+            manual/ui/axlua_video_manual.cpp
+            auto/axlua_video_auto.cpp
+            )
+    endif()
 endif()
 
 set(lua_bindings_files

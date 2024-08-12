@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__TouchEvent__
-#define __cocos2d_libs__TouchEvent__
+#ifndef _AX_TOUCHEVENT_H_
+#define _AX_TOUCHEVENT_H_
 
 #include "base/Event.h"
 #include <vector>
@@ -100,4 +100,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif /* defined(__cocos2d_libs__TouchEvent__) */
+#endif /* defined(_AX_TOUCHEVENT_H_) */

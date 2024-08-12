@@ -25,8 +25,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _COCOS2D_CCLABEL_H_
-#define _COCOS2D_CCLABEL_H_
+#ifndef _AX_LABEL_H_
+#define _AX_LABEL_H_
 
 #include "2d/Node.h"
 #include "renderer/CustomCommand.h"
@@ -945,4 +945,4 @@ private:
 
 NS_AX_END
 
-#endif /*__COCOS2D_CCLABEL_H */
+#endif /*_AX_LABEL_H */

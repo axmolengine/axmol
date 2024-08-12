@@ -1076,7 +1076,7 @@ bool MediaPlayer::init()
 void MediaPlayer::setFileName(std::string_view fileName)
 {
     auto fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
-    if (ax::path2uri(fullPath) != _videoURL)
+    if (ax::utils::filePathToUrl(std::forward<std::string>(fullPath)) != _videoURL)
     {
         reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->closePlayer();
         _videoURL = std::move(fullPath);

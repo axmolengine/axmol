@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCAccelerometerListener__
-#define __cocos2d_libs__CCAccelerometerListener__
+#ifndef _AX_ACCELEROMETERLISTENER_H_
+#define _AX_ACCELEROMETERLISTENER_H_
 
 #include "base/EventListener.h"
 #include "base/Types.h"
@@ -76,4 +76,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif /* defined(__cocos2d_libs__CCAccelerometerListener__) */
+#endif /* defined(_AX_ACCELEROMETERLISTENER_H_) */

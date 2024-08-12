@@ -25,8 +25,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _CCFontAtlas_h_
-#define _CCFontAtlas_h_
+#ifndef _AX_FONTATLAS_H_
+#define _AX_FONTATLAS_H_
 
 /// @cond DO_NOT_SHOW
 
@@ -184,4 +184,4 @@ protected:
 NS_AX_END
 
 /// @endcond
-#endif /* defined(__cocos2d_libs__CCFontAtlas__) */
+#endif /* defined(_AX_FONTATLAS_H_) */

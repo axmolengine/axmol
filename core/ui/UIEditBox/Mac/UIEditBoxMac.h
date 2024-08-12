@@ -35,11 +35,11 @@
 
 @interface UIEditBoxImplMac : NSObject <NSTextFieldDelegate, NSTextViewDelegate> {
     BOOL _editState;
-    NSView<CCUITextInput>* _textInput;
+    NSView<AXUITextInput>* _textInput;
     void* _editBox;
 }
 
-@property(nonatomic, retain) NSView<CCUITextInput>* textInput;
+@property(nonatomic, retain) NSView<AXUITextInput>* textInput;
 @property(nonatomic, readonly) NSWindow* window;
 
 @property(nonatomic, readonly, getter=isEditState) BOOL editState;

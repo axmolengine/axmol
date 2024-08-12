@@ -42,7 +42,6 @@
 #include "base/axstd.h"
 #include "xxhash/xxhash.h"
 
-
 #if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
 #    define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
 #endif
@@ -90,7 +89,8 @@ DriverBase* DriverBase::getInstance()
     return _instance;
 }
 
-void DriverBase::destroyInstance() {
+void DriverBase::destroyInstance()
+{
     AX_SAFE_DELETE(_instance);
 }
 
@@ -166,7 +166,6 @@ DriverGL::DriverGL()
         if (textureCompressions.find(GL_COMPRESSED_RGBA8_ETC2_EAC) != textureCompressions.end())
             _textureCompressionEtc2 = true;
     }
-
 
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
 
@@ -298,7 +297,10 @@ static GLuint compileShader(GLenum shaderType, const GLchar* source)
 /// <returns>true: support, false: not support</returns>
 static bool checkASTCRenderability()
 {
-    // 1x1/2x2 astc 4x4 compressed texels srgb
+    constexpr int TEX_DIM      = 1;
+    constexpr int TEX_DATA_LEN = TEX_DIM * TEX_DIM * 4;
+
+    // 1x1/2x2/4x4 astc 4x4 compressed texels srgb present solid orange color: rgba(255, 128, 0, 255)
     uint8_t astctexels[] = {0xfc, 0xfd, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
                             0xff, 0xff, 0x80, 0x80, 0x00, 0x00, 0xff, 0xff};
 
@@ -320,12 +322,13 @@ static bool checkASTCRenderability()
     auto error     = glGetError();
     if (!error)
     {
+        uint8_t pixels[TEX_DATA_LEN] = {0};
+
 #if !AX_GLES_PROFILE
-        // read 1 spixel RGB: should be: 255, 128, 0
-        uint8_t pixel[4] = {0};
-        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
+        // read 1 pixel RGB: should be: 255, 128, 0
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
         error     = glGetError();
-        supported = !error && pixel[0] == 255 && pixel[1] == 128;
+        supported = !error && pixels[0] == 255 && pixels[1] == 128;
 #else  // GLES no API: glGetTexImage
        // prepare a back frame buffer
         GLuint defaultFBO{0};
@@ -336,20 +339,17 @@ static bool checkASTCRenderability()
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
         /// color attachment0
-        GLuint colorAttachment = 0;
-        glGenTextures(1, &colorAttachment);
-        glBindTexture(GL_TEXTURE_2D, colorAttachment);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        GLuint colorAttachment{0};
+        glGenRenderbuffers(1, &colorAttachment);
+        glBindRenderbuffer(GL_RENDERBUFFER, colorAttachment);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, TEX_DIM, TEX_DIM);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorAttachment);
 
-        uint8_t black1x1[] = {0x00, 0x00, 0x00, 0x00};  // 1*1*4
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, black1x1);
-
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorAttachment, 0);
         // GLenum buffers[1] = {GL_COLOR_ATTACHMENT0};
         // glDrawBuffers(1, buffers);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
-        {  // does back framebuffer reandy for render
+        {  // does back framebuffer ready for rendering
             const char* vertexShader = R"(#version 100
 precision highp float;
 attribute vec3 aPos;
@@ -380,7 +380,7 @@ void main()
                 -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,  // bottom left
                 -1.0f, 1.0f,  0.0f, 0.0f, 1.0f   // top left
             };
-            unsigned int indices[] = {
+            unsigned short indices[] = {
                 0, 1, 3,  // first triangle
                 1, 2, 3   // second triangle
             };
@@ -422,16 +422,23 @@ void main()
             glBindTexture(GL_TEXTURE_2D, texID);
             glUniform1i(glGetUniformLocation(program, "u_tex0"), 0);
 
+            // Some device can't draw our test texture to back buffer due to viewport is 0, i.e. iOS
+            GLint viewport[4] = {0};
+            glGetIntegerv(GL_VIEWPORT, viewport);
+            glViewport(0, 0, TEX_DIM, TEX_DIM);
+
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 
             // read pixel RGB: should be: 255, 128, 0
-            // uint32_t pixel = 0;
-            uint8_t pixel[4];
-            glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
-            supported = pixel[0] == 255 && pixel[1] == 128 && pixel[2] == 0;
+            glReadPixels(0, 0, TEX_DIM, TEX_DIM, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+            // restore viewport after read rendered pixels
+            glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+
+            supported = pixels[0] == 255 && pixels[1] == 128 && pixels[2] == 0;
 
             // clean render resources: VBO, VAO, EBO, program, vShader, fShader
             glDeleteBuffers(1, &VBO);
@@ -446,7 +453,7 @@ void main()
         }
 
         // clean framebuffer resources
-        glDeleteTextures(1, &colorAttachment);
+        glDeleteRenderbuffers(1, &colorAttachment);
         glDeleteFramebuffers(1, &fbo);
 
         // restore binding to defaultFBO

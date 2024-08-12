@@ -980,7 +980,7 @@ void FileUtils::isDirectoryExist(std::string_view fullPath, std::function<void(b
 void FileUtils::createDirectory(std::string_view dirPath, std::function<void(bool)> callback) const
 {
     performOperationOffthread(
-        [path = std::string{dirPath}]() -> bool { return FileUtils::getInstance()->createDirectory(path); },
+        [path = std::string{dirPath}]() -> bool { return FileUtils::getInstance()->createDirectories(path); },
         std::move(callback));
 }
 
@@ -1133,9 +1133,9 @@ bool FileUtils::isDirectoryExistInternal(std::string_view dirPath) const
     return false;
 }
 
-bool FileUtils::createDirectory(std::string_view path) const
+bool FileUtils::createDirectories(std::string_view path) const
 {
-    AXASSERT(false, "FileUtils not support createDirectory");
+    AXASSERT(false, "FileUtils not support createDirectories");
     return false;
 }
 
@@ -1190,67 +1190,30 @@ bool FileUtils::isDirectoryExistInternal(std::string_view dirPath) const
     return false;
 }
 
-bool FileUtils::createDirectory(std::string_view path) const
+bool FileUtils::createDirectories(std::string_view path) const
 {
     AXASSERT(!path.empty(), "Invalid path");
 
     if (isDirectoryExist(path))
         return true;
 
-    // Split the path
-    size_t start = 0;
-    size_t found = path.find_first_of("/\\", start);
-    std::string_view subpath;
-    std::vector<std::string> dirs;
-
-    if (found != std::string::npos)
-    {
-        while (true)
+    bool fail{false};
+    std::string mpath{path};
+    axstd::splitpath_cb(&mpath.front(), [](char* ptr) { return *ptr != '\0'; }, [&fail](const char* subpath) {
+        struct stat st;
+        if (stat(subpath, &st) != 0)
         {
-            subpath = path.substr(start, found - start + 1);
-            if (!subpath.empty())
-                dirs.emplace_back(std::string{subpath});
-            start = found + 1;
-            found = path.find_first_of("/\\", start);
-            if (found == std::string::npos)
-            {
-                if (start < path.length())
-                {
-                    dirs.emplace_back(std::string{path.substr(start)});
-                }
-                break;
-            }
-        }
-    }
-
-    DIR* dir = NULL;
-
-    // Create path recursively
-    std::string strSubpath;
-    for (const auto& iter : dirs)
-    {
-        strSubpath += iter;
-        dir = opendir(strSubpath.c_str());
-
-        if (!dir)
-        {
-            // directory doesn't exist, should create a new one
-
-            int ret = mkdir(strSubpath.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+            int ret = mkdir(subpath, S_IRWXU | S_IRWXG | S_IRWXO);
             if (ret != 0 && (errno != EEXIST))
-            {
-                // current directory can not be created, sub directories can not be created too
-                // should return
-                return false;
-            }
+                fail = true;
         }
         else
-        {
-            // directory exists, should close opened dir
-            closedir(dir);
-        }
-    }
-    return true;
+            fail = !S_ISDIR(st.st_mode);
+
+        return fail;
+    });
+
+    return !fail;
 }
 
 namespace
@@ -1379,29 +1342,42 @@ bool FileUtils::isPopupNotify() const
     return s_popupNotify;
 }
 
-std::string FileUtils::getFileExtension(std::string_view filePath) const
+std::string FileUtils::getFileExtension(std::string_view filePath)
 {
     std::string fileExtension;
     size_t pos = filePath.find_last_of('.');
     if (pos != std::string::npos)
     {
         fileExtension = filePath.substr(pos, filePath.length());
-
         std::transform(fileExtension.begin(), fileExtension.end(), fileExtension.begin(), ::tolower);
     }
 
     return fileExtension;
 }
 
-std::string FileUtils::getFileShortName(std::string_view filePath)
+std::string FileUtils::getPathBaseName(std::string_view filePath)
 {
-    // std::string fileExtension;
     size_t pos = filePath.find_last_of("/\\");
     if (pos != std::string::npos)
-    {
         return std::string{filePath.substr(pos + 1)};
-    }
 
+    return std::string{filePath};
+}
+
+std::string FileUtils::getPathBaseNameNoExtension(std::string_view filePath)
+{
+    size_t pos = filePath.find_last_of("/\\");
+    size_t dot = filePath.find_last_of('.');
+    if (pos != std::string::npos)
+        return std::string{filePath.substr(pos + 1, dot != std::string_view::npos ? dot - (pos + 1) : dot)};
+
+    return std::string{filePath.substr(0, dot)};
+}
+
+std::string FileUtils::getPathDirName(std::string_view filePath) {
+    auto pos = filePath.find_last_of("/\\");
+    if (pos != std::string_view::npos)
+        return std::string{filePath.substr(0, pos)};
     return std::string{filePath};
 }
 

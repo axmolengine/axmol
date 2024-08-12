@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__EventController__
-#define __cocos2d_libs__EventController__
+#ifndef _AX_EVENTCONTROLLER_H_
+#define _AX_EVENTCONTROLLER_H_
 
 #include "platform/PlatformMacros.h"
 #include "base/Event.h"
@@ -111,4 +111,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif /* defined(__cocos2d_libs__EventController__) */
+#endif /* defined(_AX_EVENTCONTROLLER_H_) */

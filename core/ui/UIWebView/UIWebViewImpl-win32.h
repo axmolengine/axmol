@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __COCOS2D__UI__WEBVIEWIMPL_WIN32_H_
-#define __COCOS2D__UI__WEBVIEWIMPL_WIN32_H_
+#ifndef _AXUI__WEBVIEWIMPL_WIN32_H_
+#define _AXUI__WEBVIEWIMPL_WIN32_H_
 
 #include "platform/PlatformMacros.h"
 
@@ -95,4 +95,4 @@ NS_AX_END  // namespace ax
 
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 
-#endif  // __COCOS2D__UI__WEBVIEWIMPL_WIN32_H_
+#endif  // _AXUI__WEBVIEWIMPL_WIN32_H_

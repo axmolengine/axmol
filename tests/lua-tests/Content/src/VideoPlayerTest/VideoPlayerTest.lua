@@ -1,6 +1,8 @@
 local visibleRect = cc.Director:getInstance():getGLView():getVisibleRect()
 local centerPos   = cc.p(visibleRect.x + visibleRect.width / 2,visibleRect.y + visibleRect.height /2)
 
+axui.VideoPlayer = axui.MediaPlayer
+
 local function VideoPlayerTest()
     local layer = cc.Layer:create() --createTestLayer("VideoPlayerTest", "")
     titleLabel = cc.Label:createWithTTF("VideoPlayerTest", s_arialPath, 28)

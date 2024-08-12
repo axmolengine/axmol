@@ -24,8 +24,8 @@
 
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCMouseEvent__
-#define __cocos2d_libs__CCMouseEvent__
+#ifndef _AX_MOUSEEVENT_H_
+#define _AX_MOUSEEVENT_H_
 
 #include "base/Event.h"
 #include "math/Math.h"
@@ -203,4 +203,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif /* defined(__cocos2d_libs__CCMouseEvent__) */
+#endif /* defined(_AX_MOUSEEVENT_H_) */

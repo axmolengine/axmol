@@ -29,7 +29,7 @@
 
 NS_AX_BEGIN
 
-const std::string EventListenerKeyboard::LISTENER_ID = "__cc_keyboard";
+const std::string EventListenerKeyboard::LISTENER_ID = "__ax_keyboard";
 
 bool EventListenerKeyboard::checkAvailable()
 {

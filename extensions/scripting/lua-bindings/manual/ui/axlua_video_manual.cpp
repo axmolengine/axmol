@@ -30,19 +30,19 @@
 #include "lua-bindings/manual/LuaValue.h"
 #include "lua-bindings/manual/LuaEngine.h"
 
-static int axlua_video_VideoPlayer_addEventListener(lua_State* L)
+static int axlua_video_MediaPlayer_addEventListener(lua_State* L)
 {
 
     int argc                       = 0;
-    ax::ui::VideoPlayer* self = nullptr;
+    ax::ui::MediaPlayer* self = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertype(L, 1, "axui.VideoPlayer", 0, &tolua_err))
+    if (!tolua_isusertype(L, 1, "axui.MediaPlayer", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
-    self = static_cast<ax::ui::VideoPlayer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::ui::MediaPlayer*>(tolua_tousertype(L, 1, 0));
 
 #    if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -65,7 +65,7 @@ static int axlua_video_VideoPlayer_addEventListener(lua_State* L)
 
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
-        self->addEventListener([=](ax::Object* ref, ax::ui::VideoPlayer::EventType eventType) {
+        self->addEventListener([=](ax::Object* ref, ax::ui::MediaPlayer::EventType eventType) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
 
             stack->pushObject(ref, "ax.Object");
@@ -76,23 +76,23 @@ static int axlua_video_VideoPlayer_addEventListener(lua_State* L)
 
         return 0;
     }
-    luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.VideoPlayer:addEventListener",
+    luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.MediaPlayer:addEventListener",
                argc, 0);
     return 0;
 #    if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L, "#ferror in function 'axlua_VideoPlayer_addEventListener'.", &tolua_err);
+    tolua_error(L, "#ferror in function 'axlua_MediaPlayer_addEventListener'.", &tolua_err);
 #    endif
     return 0;
 }
 
-static void extendVideoPlayer(lua_State* L)
+static void extendMediaPlayer(lua_State* L)
 {
-    lua_pushstring(L, "axui.VideoPlayer");
+    lua_pushstring(L, "axui.MediaPlayer");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
-        tolua_function(L, "addEventListener", axlua_video_VideoPlayer_addEventListener);
+        tolua_function(L, "addEventListener", axlua_video_MediaPlayer_addEventListener);
     }
     lua_pop(L, 1);
 }
@@ -102,7 +102,7 @@ int register_all_ax_video_manual(lua_State* L)
     if (nullptr == L)
         return 0;
 
-    extendVideoPlayer(L);
+    extendMediaPlayer(L);
 
     return 0;
 }

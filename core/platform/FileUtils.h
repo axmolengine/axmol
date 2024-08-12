@@ -564,14 +564,29 @@ public:
      *  @param filePath The path of the file, it could be a relative or absolute path.
      *  @return suffix for filename in lower case or empty if a dot not found.
      */
-    virtual std::string getFileExtension(std::string_view filePath) const;
+    static std::string getFileExtension(std::string_view filePath);
 
     /**
      *  Gets filename shotName
      *  @param filePath The path of the file, it could be a relative or absolute path.
      *  @return fileName.Extension without path
      */
-    static std::string getFileShortName(std::string_view filePath);
+    AX_DEPRECATED_ATTRIBUTE static std::string getFileShortName(std::string_view filePath) { return getPathBaseName(filePath); }
+
+    /*
+     * @since axmol-2.1.5
+     */
+    static std::string getPathBaseName(std::string_view filePath);
+
+    /*
+     * @since axmol-2.1.5
+     */
+    static std::string getPathBaseNameNoExtension(std::string_view filePath);
+
+    /*
+     * @since axmol-2.1.5
+     */
+    static std::string getPathDirName(std::string_view filePath);
 
     /**
      *  Checks whether the path is an absolute path.
@@ -609,7 +624,8 @@ public:
      *  @param dirPath The path of the directory, it must be an absolute path.
      *  @return True if the directory have been created successfully, false if not.
      */
-    virtual bool createDirectory(std::string_view dirPath) const;
+    virtual bool createDirectories(std::string_view dirPath) const;
+    AX_DEPRECATED_ATTRIBUTE bool createDirectory(std::string_view dirPath) const { return createDirectories(dirPath); }
 
     /**
      * Create a directory, async off the main cocos thread.
@@ -618,7 +634,7 @@ public:
      * @param callback The function that will be called when the operation is complete. Will have one boolean
      * argument, true if the directory was successfully, false otherwise.
      */
-    virtual void createDirectory(std::string_view dirPath, std::function<void(bool)> callback) const;
+    AX_DEPRECATED_ATTRIBUTE void createDirectory(std::string_view dirPath, std::function<void(bool)> callback) const;
 
     /**
      *  Removes a directory.
@@ -635,7 +651,7 @@ public:
      * @param callback The function that will be called when the operation is complete. Will have one boolean
      * argument, true if the directory was successfully removed, false otherwise.
      */
-    virtual void removeDirectory(std::string_view dirPath, std::function<void(bool)> callback) const;
+    AX_DEPRECATED_ATTRIBUTE void removeDirectory(std::string_view dirPath, std::function<void(bool)> callback) const;
 
     /**
      *  Removes a file.
@@ -652,7 +668,7 @@ public:
      * @param callback The function that will be called when the operation is complete. Will have one boolean
      * argument, true if the file was successfully removed, false otherwise.
      */
-    virtual void removeFile(std::string_view filepath, std::function<void(bool)> callback) const;
+    AX_DEPRECATED_ATTRIBUTE virtual void removeFile(std::string_view filepath, std::function<void(bool)> callback) const;
 
     /**
      *  Renames a file under the given directory.
@@ -673,7 +689,7 @@ public:
      *  @param callback The function that will be called when the operation is complete. Will have one boolean
      * argument, true if the file was successfully renamed, false otherwise.
      */
-    virtual void renameFile(std::string_view path,
+    AX_DEPRECATED_ATTRIBUTE virtual void renameFile(std::string_view path,
                             std::string_view oldname,
                             std::string_view name,
                             std::function<void(bool)> callback) const;
@@ -695,7 +711,7 @@ public:
      *  @param callback The function that will be called when the operation is complete. Will have one boolean
      * argument, true if the file was successfully renamed, false otherwise.
      */
-    virtual void renameFile(std::string_view oldfullpath,
+    AX_DEPRECATED_ATTRIBUTE void renameFile(std::string_view oldfullpath,
                             std::string_view newfullpath,
                             std::function<void(bool)> callback) const;
 
@@ -716,7 +732,7 @@ public:
      *  @param callback The function that will be called when the operation is complete. Will have one long
      * argument, the file size.
      */
-    virtual void getFileSize(std::string_view filepath, std::function<void(int64_t)> callback) const;
+    AX_DEPRECATED_ATTRIBUTE void getFileSize(std::string_view filepath, std::function<void(int64_t)> callback) const;
 
     /**
      *  List all files in a directory.
@@ -735,7 +751,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual void listFilesAsync(std::string_view dirPath, std::function<void(std::vector<std::string>)> callback) const;
+    AX_DEPRECATED_ATTRIBUTE void listFilesAsync(std::string_view dirPath, std::function<void(std::vector<std::string>)> callback) const;
 
     /**
      *  List all files recursively in a directory.
@@ -754,7 +770,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual void listFilesRecursivelyAsync(std::string_view dirPath,
+    AX_DEPRECATED_ATTRIBUTE void listFilesRecursivelyAsync(std::string_view dirPath,
                                            std::function<void(std::vector<std::string>)> callback) const;
 
     /** Returns the full path cache. */

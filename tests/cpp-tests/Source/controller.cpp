@@ -31,10 +31,8 @@
 
 USING_NS_AX;
 
-#define TEST_TIME_OUT 50
-#define CREATE_TIME_OUT 25
 #define LOG_INDENTATION "  "
-#define LOG_TAG "[TestController]"
+#define LOG_TAG         "[TestController]"
 
 static void initCrashCatch();
 static void disableCrashCatch();
@@ -45,7 +43,7 @@ public:
     RootTests()
     {
 #if defined(AX_ENABLE_EXT_EFFEKSEER)
-#pragma message("The optional extension Effekseer is enabled.")
+#    pragma message("The optional extension Effekseer is enabled.")
         addTest("Effekseer", []() { return new EffekseerTests(); });
 #endif
 #if defined(AX_ENABLE_EXT_DRAWNODE)
@@ -136,7 +134,8 @@ public:
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
         addTest("Vibrate", []() { return new VibrateTests(); });
 #endif
- //       addTest("Zwoptex Deprecrated, will be removed in release axmol-2.2.0 (see #1602)", []() { return new ZwoptexTests(); });
+        //       addTest("Zwoptex Deprecrated, will be removed in release axmol-2.2.0 (see #1602)", []() { return new
+        //       ZwoptexTests(); });
         addTest("SpriteFrameCache", []() { return new SpriteFrameCacheTests(); });  // TODO
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || \
      AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
@@ -168,224 +167,175 @@ TestController::~TestController()
 
 void TestController::startAutoTest()
 {
-    if (!_autoTestThread.joinable())
+    if (_stopAutoTest)
     {
         _stopAutoTest   = false;
         _logIndentation = "";
-        _autoTestThread = std::thread(&TestController::traverseThreadFunc, this);
-        _autoTestThread.detach();
+
+        _autoTestRunner = Node::create();
+        _director->setNotificationNode(_autoTestRunner);
+
+        auto action = ActionCoroutine::create(std::bind(&TestController::traverseTestList, this, _rootTestList));
+
+        _autoTestRunner->runAction(action);
     }
 }
 
 void TestController::stopAutoTest()
 {
     _stopAutoTest = true;
-
-    if (_autoTestThread.joinable())
-    {
-        _sleepCondition.notify_all();
-        _autoTestThread.join();
-    }
 }
 
-void TestController::traverseThreadFunc()
+Coroutine TestController::traverseTestList(TestList* testList)
 {
-    std::mutex sleepMutex;
-    auto lock        = std::unique_lock<std::mutex>(sleepMutex);
-    _sleepUniqueLock = &lock;
-    traverseTestList(_rootTestList);
-    _sleepUniqueLock = nullptr;
-}
+     if (testList != _rootTestList)
+     {
+         _logIndentation += LOG_INDENTATION;
+     }
 
-void TestController::traverseTestList(TestList* testList)
-{
-    if (testList == _rootTestList)
-    {
-        _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(500));
-    }
-    else
-    {
-        _logIndentation += LOG_INDENTATION;
-        _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(500));
-    }
-    logEx("%s%sBegin traverse TestList:%s", LOG_TAG, _logIndentation.c_str(), testList->getTestName().c_str());
+     co_yield DelayTime::create(0.5);  
+     AXLOGD("{}{}Begin traverse TestList:{}", LOG_TAG, _logIndentation, testList->getTestName());
 
-    auto scheduler = _director->getScheduler();
-    int testIndex  = 0;
-    for (auto&& callback : testList->_testCallbacks)
-    {
-        if (_stopAutoTest)
-            break;
-        while (_isRunInBackground)
-        {
-            logEx("_director is paused");
-            _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(500));
-        }
-        if (callback)
-        {
-            auto test = callback();
-            test->setTestParent(testList);
-            test->setTestName(testList->_childTestNames[testIndex++]);
-            if (test->isTestList())
-            {
-                scheduler->runOnAxmolThread([&]() { test->runThisTest(); });
+     auto scheduler = _director->getScheduler();
+     int testIndex  = 0;
+     for (auto&& callback : testList->_testCallbacks)
+     {
+         if (_stopAutoTest)
+             break;
+         while (_isRunInBackground)
+         {
+             AXLOGD("_director is paused");
+             co_yield DelayTime::create(0.5);  
+         }
+         if (callback)
+         {
+             auto test = callback();
+             test->setTestParent(testList);
+             test->setTestName(testList->_childTestNames[testIndex++]);
 
-                traverseTestList((TestList*)test);
-            }
-            else
-            {
-                traverseTestSuite((TestSuite*)test);
-            }
-        }
-    }
+             ActionCoroutine* subAction = nullptr;
+             if (test->isTestList())
+             {
+                 test->runThisTest();
 
-    if (testList == _rootTestList)
-    {
-        _stopAutoTest = true;
-        if (std::getenv("AXMOL_START_AUTOTEST"))
-            utils::killCurrentProcess();
-    }
-    else
-    {
-        if (!_stopAutoTest)
-        {
-            // Backs up one level and release TestList object.
-            scheduler->runOnAxmolThread([&]() { testList->_parentTest->runThisTest(); });
-            _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(500));
-            testList->release();
-        }
+                 subAction =
+                     ActionCoroutine::create(std::bind(&TestController::traverseTestList, this, static_cast<TestList*>(test)));
+             }
+             else
+             {
+                 subAction =
+                     ActionCoroutine::create(std::bind(&TestController::traverseTestSuite, this, static_cast<TestSuite*>(test)));
+             }
+             co_yield subAction;  // co_yield _autoTestRunner->runAction(subAction);
+         }
+     }
 
-        _logIndentation.erase(_logIndentation.rfind(LOG_INDENTATION));
-    }
-}
+     if (testList == _rootTestList)
+     {
+         _stopAutoTest = true;
+         if (std::getenv("AXMOL_START_AUTOTEST"))
+             utils::killCurrentProcess();
+     }
+     else
+     {
+         if (!_stopAutoTest)
+         {
+             // Backs up one level and release TestList object.
+             testList->_parentTest->runThisTest();
+             testList->release();
+         }
 
-void TestController::traverseTestSuite(TestSuite* testSuite)
-{
-    auto scheduler         = _director->getScheduler();
-    int testIndex          = 0;
-    float testCaseDuration = 0.0f;
-    _logIndentation += LOG_INDENTATION;
-    logEx("%s%sBegin traverse TestSuite:%s", LOG_TAG, _logIndentation.c_str(), testSuite->getTestName().c_str());
+         _logIndentation.erase(_logIndentation.rfind(LOG_INDENTATION));
+     }
+ }
 
-    _logIndentation += LOG_INDENTATION;
-    testSuite->_currTestIndex = -1;
+ Coroutine TestController::traverseTestSuite(TestSuite* testSuite)
+ {
+     auto scheduler         = _director->getScheduler();
+     int testIndex          = 0;
+     float testCaseDuration = 0.0f;
+     _logIndentation += LOG_INDENTATION;
+     AXLOGD("{}{}Begin traverse TestSuite:{}", LOG_TAG, _logIndentation.c_str(), testSuite->getTestName().c_str());
 
-    auto logIndentation = _logIndentation;
-    for (auto&& callback : testSuite->_testCallbacks)
-    {
-        auto testName = testSuite->_childTestNames[testIndex++];
+     _logIndentation += LOG_INDENTATION;
+     testSuite->_currTestIndex = -1;
 
-        Scene* testScene                 = nullptr;
-        TestCase* testCase               = nullptr;
-        TransitionScene* transitionScene = nullptr;
+     auto logIndentation = _logIndentation;
+     for (auto&& callback : testSuite->_testCallbacks)
+     {
+         auto testName = testSuite->_childTestNames[testIndex++];
 
-        if (_stopAutoTest)
-            break;
+         Scene* testScene                 = nullptr;
+         TestCase* testCase               = nullptr;
+         TransitionScene* transitionScene = nullptr;
 
-        while (_isRunInBackground)
-        {
-            logEx("_director is paused");
-            _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(500));
-        }
-        // Run test case in the cocos[GL] thread.
-        scheduler->runOnAxmolThread([&, logIndentation, testName]() {
-            if (_stopAutoTest)
-                return;
-            logEx("%s%sRun test:%s.", LOG_TAG, logIndentation.c_str(), testName.c_str());
+         if (_stopAutoTest)
+             break;
 
-            auto scene = callback();
-            if (_stopAutoTest)
-                return;
+         while (_isRunInBackground)
+         {
+             AXLOGD("_director is paused");
+             co_yield DelayTime::create(0.5);
+         }
+         if (_stopAutoTest)
+             break;
+         AXLOGD("{}{}Run test:{}.", LOG_TAG, logIndentation, testName);
 
-            if (scene)
-            {
-                transitionScene = dynamic_cast<TransitionScene*>(scene);
-                if (transitionScene)
-                {
-                    testCase         = (TestCase*)transitionScene->getInScene();
-                    testCaseDuration = transitionScene->getDuration() + 0.5f;
-                }
-                else
-                {
-                    testCase         = (TestCase*)scene;
-                    testCaseDuration = testCase->getDuration();
-                }
-                testSuite->_currTestIndex++;
-                testCase->setTestSuite(testSuite);
-                testCase->setTestCaseName(testName);
-                _director->replaceScene(scene);
+         auto scene = callback();
+         if (_stopAutoTest)
+             break;
 
-                testScene = scene;
-            }
-        });
+         if (scene)
+         {
+             transitionScene = dynamic_cast<TransitionScene*>(scene);
+             if (transitionScene)
+             {
+                 testCase         = (TestCase*)transitionScene->getInScene();
+                 testCaseDuration = transitionScene->getDuration() + 0.5f;
+                 
+             }
+             else
+             {
+                 testCase         = (TestCase*)scene;
+                 testCaseDuration = testCase->getDuration();
+             }
+             testSuite->_currTestIndex++;
+             testCase->setTestSuite(testSuite);
+             testCase->setTestCaseName(testName);
+             _director->replaceScene(scene);
 
-        if (_stopAutoTest)
-            break;
+             testScene = scene;
 
-        // Wait for the test case be created.
-        float waitTime = 0.0f;
-        while (!testScene && !_stopAutoTest)
-        {
-            _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(50));
-            if (!_isRunInBackground)
-            {
-                waitTime += 0.05f;
-            }
+             co_yield DelayTime::create(testCaseDuration);
+         }
 
-            if (waitTime > CREATE_TIME_OUT)
-            {
-                logEx("%sCreate test %s time out", LOG_TAG, testName.c_str());
-                _stopAutoTest = true;
-                break;
-            }
-        }
+         if (_stopAutoTest)
+             break;
 
-        if (_stopAutoTest)
-            break;
+         if (transitionScene == nullptr)
+         {
 
-        // Wait for test completed.
-        _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(int(1000 * testCaseDuration)));
+             if (!_stopAutoTest)
+             {
+                 // Check the result of test.
+                 checkTest(testCase);
+             }
+         }
+     }
 
-        if (transitionScene == nullptr)
-        {
-            waitTime = 0.0f;
-            while (!_stopAutoTest && testCase->getRunTime() < testCaseDuration)
-            {
-                _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(50));
-                if (!_isRunInBackground)
-                {
-                    waitTime += 0.05f;
-                }
+     if (!_stopAutoTest)
+     {
+         // Backs up one level and release TestSuite object.
+         auto parentTest = testSuite->_parentTest;
+         parentTest->runThisTest();
 
-                if (waitTime > TEST_TIME_OUT)
-                {
-                    logEx("%sRun test %s time out", LOG_TAG, testName.c_str());
-                    _stopAutoTest = true;
-                    break;
-                }
-            }
+         co_yield DelayTime::create(1);
+         testSuite->release();
+     }
 
-            if (!_stopAutoTest)
-            {
-                // Check the result of test.
-                checkTest(testCase);
-            }
-        }
-    }
-
-    if (!_stopAutoTest)
-    {
-        // Backs up one level and release TestSuite object.
-        auto parentTest = testSuite->_parentTest;
-        scheduler->runOnAxmolThread([&]() { parentTest->runThisTest(); });
-
-        _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(1000));
-        testSuite->release();
-    }
-
-    _logIndentation.erase(_logIndentation.rfind(LOG_INDENTATION));
-    _logIndentation.erase(_logIndentation.rfind(LOG_INDENTATION));
-}
+     _logIndentation.erase(_logIndentation.rfind(LOG_INDENTATION));
+     _logIndentation.erase(_logIndentation.rfind(LOG_INDENTATION));
+ }
 
 bool TestController::checkTest(TestCase* testCase)
 {
@@ -397,11 +347,11 @@ bool TestController::checkTest(TestCase* testCase)
         {
             if (testCase && testCase->getExpectedOutput() != testCase->getActualOutput())
             {
-                logEx("%s %s test fail", LOG_TAG, testCase->getTestCaseName().c_str());
+                AXLOGE("{} {} test fail", LOG_TAG, testCase->getTestCaseName());
             }
             else
             {
-                logEx("%s %s test pass", LOG_TAG, testCase->getTestCaseName().c_str());
+                AXLOGE("{} {} test pass", LOG_TAG, testCase->getTestCaseName());
             }
             break;
         }
@@ -425,7 +375,7 @@ void TestController::handleCrash()
 {
     disableCrashCatch();
 
-    logEx("%sCatch an crash event", LOG_TAG);
+    AXLOGE("{}Catch an crash event", LOG_TAG);
 
     if (!_stopAutoTest)
     {
@@ -441,31 +391,6 @@ void TestController::onEnterBackground()
 void TestController::onEnterForeground()
 {
     _isRunInBackground = false;
-}
-
-void TestController::logEx(const char* format, ...)
-{
-    char buff[1024];
-
-    va_list args;
-    va_start(args, format);
-    vsnprintf(buff, 1020, format, args);
-    strcat(buff, "\n");
-
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-    __android_log_print(ANDROID_LOG_DEBUG, "axmol debug info", "%s", buff);
-
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-    WCHAR wszBuf[1024] = {0};
-    MultiByteToWideChar(CP_UTF8, 0, buff, -1, wszBuf, sizeof(wszBuf));
-    OutputDebugStringW(wszBuf);
-
-#else
-    // Linux, Mac, iOS, etc
-    fprintf(stdout, "%s", buff);
-    fflush(stdout);
-#endif
-    va_end(args);
 }
 
 static TestController* s_testController = nullptr;
