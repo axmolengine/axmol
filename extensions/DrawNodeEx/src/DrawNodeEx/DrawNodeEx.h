@@ -101,7 +101,7 @@ public:
     // DrawNodeExt stuff
     Version _dnVersion = Version::v1;
     ax::Vec2 _dnScale;
-    float _scaleFactor = 3.0f;  /// maybe wrong use 4?
+    float _dnFactor = 0.5f;  /// set the lineWith like Axmol 1.0 
     ax::Vec2 _dnCenter;
     float _dnRotation = 0.0f;
     ax::Vec2 _dnPosition;
@@ -580,10 +580,28 @@ public:
     * @param color The triangle color.
     * @js NA
     */
+
+    void drawTriangle(const Vec2* vertices3, 
+        const ax::Color4B& fillColor,
+        const ax::Color4B& borderColor,
+        float thickness = 1.0f);
+
     void drawTriangle(const ax::Vec2& p1,
         const ax::Vec2& p2,
         const ax::Vec2& p3,
         const ax::Color4B& color,
+        float thickness = 1.0f);
+
+    void drawSolidTriangle(const Vec2* vertices3, 
+        const ax::Color4B& fillColor,
+        const ax::Color4B& borderColor,
+        float thickness = 1.0f);
+
+    void drawSolidTriangle(const ax::Vec2& p1,
+        const ax::Vec2& p2,
+        const ax::Vec2& p3,
+        const ax::Color4B& fillColor,
+        const ax::Color4B& borderColor,
         float thickness = 1.0f);
 
     /** Clear the geometry in the node's buffer. */

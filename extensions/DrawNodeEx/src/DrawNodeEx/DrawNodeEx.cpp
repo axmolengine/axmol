@@ -81,7 +81,7 @@ Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int& count, bool clos
     }
 
     vert = new Vec2[count + closedCounter];
-    AXASSERT(vert != nullptr, "NO memory");
+    AXASSERT(vert != nullptr, "DrawNode::transform: NO MEMORY");
 
     if (_dnTransform == false)
     {
@@ -464,6 +464,7 @@ void DrawNodeEx::drawPoly(const Vec2* poli,
     float thickness)
 {
     if (thickness == 0) return;
+
     _drawPoly(poli, numberOfPoints, closedPolygon, color, thickness);
 }
 
@@ -625,10 +626,6 @@ void DrawNodeEx::drawCubicBezier(const Vec2& origin,
     vertices[segments].x = destination.x;
     vertices[segments].y = destination.y;
 
-    //  if (_drawOrder == true)
-    {
-        //     thickness /= _scaleFactor;
-    }
     swapIsConvex(true);
     _drawPoly(vertices, segments + 1, false, color, thickness);
     // _drawPolygon(vertices, segments + 1, Color4B::TRANSPARENT, thickness, color, false);
@@ -1042,6 +1039,15 @@ void DrawNodeEx::drawSolidCircle(const Vec2& center,
     drawSolidCircle(center, radius, angle, segments, 1.0f, 1.0f, color, 0.0f, Color4B());
 }
 
+
+void DrawNodeEx::drawTriangle(const Vec2* vertices3, 
+    const ax::Color4B& fillColor,
+    const ax::Color4B& borderColor,
+    float thickness)
+{
+}
+
+
 void DrawNodeEx::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color4B& color, float thickness)
 {
     if (thickness == 0.0f) return;
@@ -1064,6 +1070,56 @@ void DrawNodeEx::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, co
         V2F_C4B_T2F a = { _vertices[0], color, Tex2F::ZERO };
         V2F_C4B_T2F b = { _vertices[1], color, Tex2F::ZERO };
         V2F_C4B_T2F c = { _vertices[2], color, Tex2F::ZERO };
+
+        V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
+        triangles[0] = { a, b, c };
+
+        _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F),
+            vertex_count * sizeof(V2F_C4B_T2F));
+        _bufferCountTriangle += vertex_count;
+        _dirtyTriangle = true;
+        _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
+
+        AX_SAFE_DELETE_ARRAY(_vertices);
+    }
+}
+
+
+
+void DrawNodeEx::drawSolidTriangle(const Vec2* vertices3, 
+    const ax::Color4B& fillColor,
+    const ax::Color4B& borderColor,
+    float thickness)
+{
+}
+
+void DrawNodeEx::drawSolidTriangle(const ax::Vec2& p1,
+    const ax::Vec2& p2,
+    const ax::Vec2& p3,
+    const ax::Color4B& fillColor,
+    const ax::Color4B& borderColor,
+    float thickness)
+{
+    if (thickness == 0.0f) return;
+
+    Vec2 poli[3] = { p1, p2, p3 };
+    unsigned int vertex_count = 3;
+
+    if (thickness != 1.0f)
+    {
+        swapIsConvex(true);
+        _drawPolygon(poli, vertex_count, borderColor, thickness, fillColor, true);
+        _isConvex = _isConvexTmp;
+    }
+    else
+    {
+        Vec2* _vertices = transform(poli, vertex_count, false);
+
+        ensureCapacityTriangle(vertex_count);
+
+        V2F_C4B_T2F a = { _vertices[0], borderColor, Tex2F::ZERO };
+        V2F_C4B_T2F b = { _vertices[1], borderColor, Tex2F::ZERO };
+        V2F_C4B_T2F c = { _vertices[2], borderColor, Tex2F::ZERO };
 
         V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
         triangles[0] = { a, b, c };
@@ -1134,7 +1190,6 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
     Color4B debugColor;
 
     bool outline = (thickness != 0.0f);
-
 
     Vec2* _vertices = transform(verts, count, closedPolygon);
 
@@ -1226,6 +1281,8 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
     {
         if (thickness != 1.0f || _drawOrder)
         {
+            thickness *= _dnFactor;  // thickness 1 is the same for all
+
             Vec2 vo0, vo1, vo2, vo3, vo4, vo5, vo6, vo7;
 
             for (unsigned int i = 1; i < (count); i++)
@@ -1234,8 +1291,8 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
                 Vec2 b = _vertices[i];
                 Vec2 n = ((b - a).getPerp()).getNormalized();
                 Vec2 t = n.getPerp();
-                Vec2 nw = n * thickness;  //  geteilt durch 2 ?
-                Vec2 tw = t * thickness;  //  geteilt durch 2 ?
+                Vec2 nw = n * thickness;
+                Vec2 tw = t * thickness;
                 Vec2 v0 = b - (nw + tw);
                 Vec2 v1 = b + (nw - tw);
                 Vec2 v2 = b - nw;

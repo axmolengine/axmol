@@ -361,6 +361,7 @@ public:
     CREATE_FUNC(DrawNodeAxmolTest2);
 
     DrawNodeAxmolTest2();
+    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -437,7 +438,8 @@ public:
     CREATE_FUNC(CandyMixEeffect);
 
     CandyMixEeffect();
- 
+
+    void rotozoom();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 

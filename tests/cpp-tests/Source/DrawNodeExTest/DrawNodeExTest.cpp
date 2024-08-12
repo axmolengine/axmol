@@ -183,7 +183,7 @@ DrawNodeExTests::DrawNodeExTests()
 {
 
     ADD_TEST_CASE(DrawNodeMethodsTest);
-    //    ADD_TEST_CASE(DrawNodeAxmolTest2);  <<<<<<<<<<<<<<<<<<<<<<
+    ADD_TEST_CASE(DrawNodeAxmolTest2);
     ADD_TEST_CASE(CandyMixEeffect);
     ADD_TEST_CASE(DrawNodePictureTest);
 
@@ -1627,10 +1627,10 @@ void DrawNodeMethodsTest::drawAll()
         {
             Vec2 pos = Vec2(-100, -100) + Vec2(AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x, AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y);
             Vec2 position[] = {
-                {60 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y/2},
-                {70 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y/2},
-                {60 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y/2},
-                {70 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y/2} };
+                {60 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y / 2},
+                {70 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y / 2},
+                {60 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y / 2},
+                {70 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y / 2} };
             drawNodeEx->drawPoints(position, 4, 10 + 2 * sliderValue[sliderType::Thickness], Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
         }
         break;
@@ -2108,20 +2108,66 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
 
 DrawNodeAxmolTest2::DrawNodeAxmolTest2()
 {
+    selectedRadioButton = 0;
+
+    _radioButtonGroup = ui::RadioButtonGroup::create();
+    addChild(_radioButtonGroup, 50);
+
     static const float BUTTON_WIDTH = 30;
     static float startPosX = 0;
+
+    // Create the radio buttons
+    static const int NUMBER_OF_BUTTONS = 3;
+    startPosX = size.width / 2.0f - ((NUMBER_OF_BUTTONS - 1) / 2.0f) * BUTTON_WIDTH;
+    for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
+    {
+        ui::RadioButton* radioButton =
+            ui::RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
+        float posX = startPosX + BUTTON_WIDTH * i;
+        radioButton->setPosition(Vec2(posX, size.height - 80));
+        radioButton->setScale(1.2f);
+        radioButton->setTag(i);
+        _radioButtonGroup->addRadioButton(radioButton);
+        addChild(radioButton, 50);
+        radioButton->addEventListener(
+            AX_CALLBACK_2(DrawNodeAxmolTest2::onChangedRadioButtonSelect, this));
+    }
+
 
     drawNode = DrawNode::create();
     addChild(drawNode, 10);
 
-    initSliders();
-    initRadioButtuns();
+    //initSliders();
+    //initRadioButtuns();
     scheduleUpdate();
+}
+
+void DrawNodeAxmolTest2::onChangedRadioButtonSelect(ui::RadioButton* radioButton, ui::RadioButton::EventType type)
+{
+    if (radioButton == nullptr)
+    {
+        return;
+    }
+    switch (type)
+    {
+    case ui::RadioButton::EventType::SELECTED:
+    {
+        selectedRadioButton = radioButton->getTag();
+        break;
+    }
+
+    case ui::RadioButton::EventType::UNSELECTED:
+    {
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 void DrawNodeAxmolTest2::update(float dt)
 {
-    DrawNodeExBaseTest::update(dt);
+    //   DrawNodeExBaseTest::update(dt);
 
 
     if (!drawNode || !drawNodeEx)
@@ -2691,8 +2737,73 @@ std::string CandyMixEeffect::subtitle() const
     return "";
 }
 
+
+
+void CandyMixEeffect::rotozoom()
+{
+    float centerX, centerY, angleSpeed, zoomSpeed, zoom;
+    static b2Timer timer;
+    float angle;
+    int WIDTH = 1024;
+    int HEIGHT = 768;
+
+    float cosAngle = cos(angle);
+    float sinAngle = sin(angle);
+    float t = timer.GetMilliseconds() * 0.001;
+
+    int c = (1 + sin(t * 2)) * 127;
+    Color4B cc = Color4B(c, 255 - c, 32, 32);
+
+    Color4B *pixelArray = new Color4B[WIDTH*HEIGHT];
+
+    int o = 0;
+    for (int py = 0; py < HEIGHT; py++)
+    {
+        for (int px = 0; px < WIDTH; px++)
+        {
+            float x = (px - centerX) * zoom;
+            float y = (py - centerY) * zoom;
+            float u = (x * cosAngle - y * sinAngle) * 0.01;
+            float v = (x * sinAngle + y * cosAngle) * 0.01;
+            if ((u + v) && 1)
+            {
+                pixelArray[o] = Color4B(255, 255, 255, 255);
+            }
+            else if ((u * v) && 25 == 0)
+            {
+                pixelArray[o] = cc;
+            }
+            o++;
+        }
+
+    }
+
+    angle += angleSpeed;
+    angleSpeed = sin(t * 0.5) * 0.005;
+    zoom = 2 - sin(t * 0.5) * 0.5;
+    centerX = WIDTH * 0.5 + sin(angle) * zoom * 350;
+    centerY = HEIGHT * 0.5 + cos(angle) * zoom * 350;
+
+  //  drawNodeEx->drawPoints(&pixelArray, o, Color4B::GREEN);
+   // drawNodeEx->drawPoints(pixelArray, o, 10, Color4F::BLUE);
+}
+
+
+
+
+
+
+
+
+
+
+
 void CandyMixEeffect::renderLine(float x1, float x2, float y, ax::Color4F color, float angle)
 {
+
+
+
+
     static float WID = 400;
 
 
