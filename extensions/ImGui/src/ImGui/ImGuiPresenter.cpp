@@ -1,3 +1,27 @@
+/****************************************************************************
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+https://axmol.dev/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+
 #include "ImGuiPresenter.h"
 #include <assert.h>
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
@@ -382,8 +406,8 @@ void ImGuiPresenter::loadCustomFonts(void* ud)
         ssize_t bufferSize = 0;
         auto* buffer       = fontData.takeBuffer(&bufferSize);  // Buffer automatically freed by IMGUI
 
-        imFonts->AddFontFromMemoryTTF(buffer, bufferSize, fontInfo.second.fontSize * contentZoomFactor, nullptr,
-                                      imChars);
+        imFonts->AddFontFromMemoryTTF(buffer, bufferSize, fontInfo.second.fontSize * contentZoomFactor,
+                                      &fontInfo.second.fontConfig, imChars);
     }
     // the temporary bucket gets emptied out
     thiz->_eraseGlyphRanges.clear();
@@ -423,19 +447,25 @@ void ImGuiPresenter::setViewResolution(float width, float height)
     ImGui_ImplAx_SetViewResolution(width, height);
 }
 
-void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, GLYPH_RANGES glyphRange)
+void ImGuiPresenter::addFont(std::string_view fontFile,
+                             float fontSize,
+                             GLYPH_RANGES glyphRange,
+                             const ImFontConfig& fontConfig)
 {
     addGlyphRanges(glyphRange);
     std::string_view glyphId = getGlyphRangesId(glyphRange);
-    addFont(fontFile, fontSize, glyphId);
+    addFont(fontFile, fontSize, glyphId, fontConfig);
 }
 
-void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, std::string_view glyphRangeId)
+void ImGuiPresenter::addFont(std::string_view fontFile,
+                             float fontSize,
+                             std::string_view glyphRangeId,
+                             const ImFontConfig& fontConfig)
 {
     auto it = _glyphRanges.find(glyphRangeId);
     if (it == _glyphRanges.end())
     {
-        addFont(fontFile, fontSize, std::vector<ImWchar>(0));
+        addFont(fontFile, fontSize, std::vector<ImWchar>(0), fontConfig);
         return;
     }
 
@@ -443,7 +473,8 @@ void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, std::str
     {
         ImWchar* imChars = it->second.data();
 
-        bool isDirty = _fontsInfoMap.emplace(fontFile, FontInfo{fontSize, imChars, std::string(glyphRangeId)}).second;
+        bool isDirty =
+            _fontsInfoMap.emplace(fontFile, FontInfo{fontSize, imChars, std::string(glyphRangeId), fontConfig}).second;
         isDirty |=
             _usedGlyphRanges.emplace((uintptr_t)imChars).second || _fontsInfoMap.at(fontFile).glyphRanges != imChars;
         if (isDirty)
@@ -451,15 +482,19 @@ void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, std::str
     }
 }
 
-void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, const std::vector<ImWchar>& glyphRanges)
+void ImGuiPresenter::addFont(std::string_view fontFile,
+                             float fontSize,
+                             const std::vector<ImWchar>& glyphRanges,
+                             const ImFontConfig& fontConfig)
 {
-    addFont(fontFile, fontSize, fontFile, glyphRanges);
+    addFont(fontFile, fontSize, fontFile, glyphRanges, fontConfig);
 }
 
 void ImGuiPresenter::addFont(std::string_view fontFile,
                              float fontSize,
                              std::string_view glyphRangesId,
-                             const std::vector<ImWchar>& glyphRanges)
+                             const std::vector<ImWchar>& glyphRanges,
+                             const ImFontConfig& fontConfig)
 {
     if (FileUtils::getInstance()->isFileExistInternal(fontFile))
     {
@@ -467,7 +502,8 @@ void ImGuiPresenter::addFont(std::string_view fontFile,
         if (!glyphRanges.empty())
             imChars = addGlyphRanges(glyphRangesId, glyphRanges);
 
-        bool isDirty = _fontsInfoMap.emplace(fontFile, FontInfo{fontSize, imChars, std::string(glyphRangesId)}).second;
+        bool isDirty =
+            _fontsInfoMap.emplace(fontFile, FontInfo{fontSize, imChars, std::string(glyphRangesId), fontConfig}).second;
         isDirty |= imChars && (_usedGlyphRanges.emplace((uintptr_t)imChars).second ||
                                _fontsInfoMap.at(fontFile).glyphRanges != imChars);
         if (isDirty)
