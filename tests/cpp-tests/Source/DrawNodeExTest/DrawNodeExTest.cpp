@@ -181,13 +181,13 @@ float verticesFB[] = { {0.842}, {1.052}, {0.842}, {1.649}, {5.296}, {1.649}, {5.
 
 DrawNodeExTests::DrawNodeExTests()
 {
-
+    ADD_TEST_CASE(DrawNodeSpLinesTest);
     ADD_TEST_CASE(DrawNodeMethodsTest);
     ADD_TEST_CASE(DrawNodeAxmolTest2);
     ADD_TEST_CASE(CandyMixEeffect);
     ADD_TEST_CASE(DrawNodePictureTest);
 
-    ADD_TEST_CASE(DrawNodeSpLinesTest);
+
     ADD_TEST_CASE(DrawNodeMorphTest_Polygon);
     ADD_TEST_CASE(DrawNodeMorphTest_SolidPolygon);
 
@@ -258,6 +258,7 @@ void DrawNodeExBaseTest::onChangedRadioButtonSelect(ui::RadioButton* radioButton
 
 void DrawNodeExBaseTest::update(float dt)
 {
+    drawNodeEx->clear();
     switch (selectedRadioButton)
     {
     case 0:
@@ -1317,10 +1318,13 @@ DrawNodeMethodsTest::DrawNodeMethodsTest()
 
     label1 = Label::createWithTTF("DrawNodeEx::Round", "fonts/Arial.ttf", 12);
     addChild(label1, 1);
+    label1->setVisible(false);
     label2 = Label::createWithTTF("DrawNodeEx::Square", "fonts/Arial.ttf", 12);
     addChild(label2, 1);
+    label2->setVisible(false);
     label3 = Label::createWithTTF("DrawNodeEx::Butt", "fonts/Arial.ttf", 12);
     addChild(label3, 1);
+    label3->setVisible(false);
 
     scheduleUpdate();
 }
@@ -1394,6 +1398,9 @@ void DrawNodeMethodsTest::drawAll()
 
     drawNodeEx->clear();
     drawNodeEx->resetDNValues();
+    label1->setVisible(false);
+    label2->setVisible(false);
+    label3->setVisible(false);
 
     switch (_currentSeletedItemIndex)
     {
@@ -1654,20 +1661,20 @@ void DrawNodeMethodsTest::drawAll()
 
         int yy1 = 150;
         int yy = 50;
-        drawNodeEx->drawSegment(Vec2(-450.0f, yy - yy1), Vec2(200, yy - yy1), 50 + 5 * sliderValue[sliderType::Thickness],
+        drawNodeEx->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * sliderValue[sliderType::Thickness],
             Color4F::GREEN, DrawNodeEx::Round, DrawNodeEx::Round);
         label1->setPosition(Vec2(410.0f, yy - yy1));
 
 
-        yy += 220;
-        drawNodeEx->drawSegment(Vec2(-450.0f, yy - yy1), Vec2(200, yy - yy1), 50 + 5 * sliderValue[sliderType::Thickness],
-            Color4F::BLUE, DrawNodeEx::Round, DrawNodeEx::Square);
+        yy += 170;
+        drawNodeEx->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * sliderValue[sliderType::Thickness],
+            Color4F::BLUE, DrawNodeEx::Square, DrawNodeEx::Square);
         label2->setPosition(Vec2(410.0f, yy - yy1));
 
 
-        yy += 220;
-        drawNodeEx->drawSegment(Vec2(-450.0f, yy - yy1), Vec2(200, yy - yy1), 50 + 5 * sliderValue[sliderType::Thickness],
-            Color4F::RED, DrawNodeEx::Round, DrawNodeEx::Butt);
+        yy += 170;
+        drawNodeEx->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * sliderValue[sliderType::Thickness],
+            Color4F::RED, DrawNodeEx::Butt, DrawNodeEx::Butt);
         label3->setPosition(Vec2(410.0f, yy - yy1));
 
         break;
@@ -2167,7 +2174,7 @@ void DrawNodeAxmolTest2::onChangedRadioButtonSelect(ui::RadioButton* radioButton
 
 void DrawNodeAxmolTest2::update(float dt)
 {
-    //   DrawNodeExBaseTest::update(dt);
+    DrawNodeExBaseTest::update(dt);
 
 
     if (!drawNode || !drawNodeEx)
@@ -2632,7 +2639,7 @@ void DrawNodeIssueTester::onEnter()
 
 void DrawNodeIssueTester::update(float dt)
 {
-    DrawNodeExBaseTest::update(dt);
+   // DrawNodeExBaseTest::update(dt);
 }
 
 string DrawNodeIssueTester::title() const
@@ -2657,6 +2664,29 @@ DrawNodeSpLinesTest::DrawNodeSpLinesTest()
     drawNode = DrawNode::create();
     addChild(drawNode, 30);
 
+    node = DrawNodeEx::create();
+    addChild(node, 20);
+
+    screen = Director::getInstance()->getVisibleSize();
+    origin = Director::getInstance()->getVisibleOrigin();
+    center = Vec2(screen.width / 2, screen.height / 2);
+    sixth = Vec2(screen.width / 6, screen.height / 6);sixth.y;
+
+    defY = (int) (center.y + sixth.y);
+    defY2 = (int) (center.y - sixth.y);
+    dev = sixth.y;
+
+    pts = PointArray::create(n);
+    pts2 = PointArray::create(n);
+    pts->retain();
+    pts2->retain();
+    for (int i = 0; i < n; ++ i) {
+        pts->insertControlPoint(Vec2(0, 0), i);
+        pts2->insertControlPoint(Vec2(0, 0), i);
+    }
+
+    generateDataPoints();
+
     addNewControlPoint(VisibleRect::center());
 
     scheduleUpdate();
@@ -2673,6 +2703,16 @@ void DrawNodeSpLinesTest::onTouchesEnded(const std::vector<Touch*>& touches, Eve
     {
         auto location = touch->getLocation();
         addNewControlPoint(location);
+    }
+}
+
+void DrawNodeSpLinesTest::generateDataPoints() {
+    for (int i = 0; i < n; ++i)
+    {
+        float yy1 = RandomHelper::random_real<float>(defY - dev, defY + dev);
+        float yy2 = RandomHelper::random_real<float>(defY2 - dev, defY2 + dev);
+        pts->replaceControlPoint(Vec2(margin + i * (screen.width - 3 * margin) / n, yy1), i);
+        pts2->replaceControlPoint(Vec2(margin + i * (screen.width - 3 * margin) / n, yy2),i);
     }
 }
 
@@ -2697,6 +2737,9 @@ void DrawNodeSpLinesTest::update(float dt)
     drawNode->clear();
     drawNodeEx->clear();
 
+    //drawNodeEx->drawSolidRect(origin, Vec2(screen.width, screen.height), GREY);
+    //drawGrid(Vec2(margin, screen.height - margin), Vec2(screen.width - margin, margin));
+
     int boxSize = 3;
     for (auto&& p : points)
     {
@@ -2707,7 +2750,7 @@ void DrawNodeSpLinesTest::update(float dt)
     drawNodeEx->drawCardinalSpline(array, 0.2f, points.size() * 8, Color4F::GREEN, 20);
     drawNode->drawCardinalSpline(array, 0.2f, points.size() * 8, Color4F::BLUE);
 
-    drawNodeEx->drawCardinalSpline(array, 0.2f, points.size() * 8, Color4F(1.0, 1.0, 0.5, 1.0), 10);
+    drawNodeEx->drawCardinalSpline(array, 0.2f, points.size() * 16, Color4F(1.0, 1.0, 0.5, 0.3), 10);
 
     //  drawNodeEx->drawCatmullRom(array, points.size() * 8, Color4F::YELLOW,5);
     //if (points.size()>3)
@@ -2715,6 +2758,29 @@ void DrawNodeSpLinesTest::update(float dt)
     //    int step = points.size()/4;
     //    drawNodeEx->drawCubicBezier(points.at(0), points.at(step),points.at(step*2),points.at(points.size()-1), points.size(), Color4F::BLUE);
     //}
+
+
+
+
+    //auto level1 = (int) defY + RandomHelper::random_int(2, 12);
+    //drawNodeEx->drawLine(Vec2(margin, level1),
+    //    Vec2(screen.width - margin, level1),  GREEN, 5 );
+
+    //auto level2 = (int) defY2 + RandomHelper::random_int(2, 12);
+
+    //drawNodeEx->drawLine(Vec2(margin, level1),
+    //    Vec2(screen.width - margin, level2),  RED, 5 );
+
+    drawNodeEx->drawCardinalSpline(pts, 0.5, 360, RED, 5);
+    drawNodeEx->drawCardinalSpline(pts2, 0.5, 360, GREEN, 2);
+
+    int i1 = RandomHelper::random_int(0, n - 1);
+    int i2 = RandomHelper::random_int(0, n - 1);
+    drawNodeEx->drawDot(pts->getControlPointAtIndex(i1), 7, Color4F(0, 1, 0, 0.3));
+    drawNodeEx->drawDot(pts->getControlPointAtIndex(i1), 4, Color4F::GREEN);
+
+    drawNodeEx->drawDot(pts2->getControlPointAtIndex(i2), 7, Color4F(0, 1, 0, 0.3));
+    drawNodeEx->drawDot(pts2->getControlPointAtIndex(i2), 4, Color4F::GREEN);
 }
 
 CandyMixEeffect::CandyMixEeffect()
@@ -2737,15 +2803,13 @@ std::string CandyMixEeffect::subtitle() const
     return "";
 }
 
-
-
 void CandyMixEeffect::rotozoom()
 {
-    float centerX, centerY, angleSpeed, zoomSpeed, zoom;
+    float centerX = 200, centerY = 200, angleSpeed = 0, zoomSpeed = 0, zoom = 0;
     static b2Timer timer;
-    float angle;
-    int WIDTH = 1024;
-    int HEIGHT = 768;
+    float angle = 0;
+    int WIDTH = 800;
+    int HEIGHT = 600;
 
     float cosAngle = cos(angle);
     float sinAngle = sin(angle);
@@ -2754,7 +2818,7 @@ void CandyMixEeffect::rotozoom()
     int c = (1 + sin(t * 2)) * 127;
     Color4B cc = Color4B(c, 255 - c, 32, 32);
 
-    Color4B *pixelArray = new Color4B[WIDTH*HEIGHT];
+    Color4B color;
 
     int o = 0;
     for (int py = 0; py < HEIGHT; py++)
@@ -2765,14 +2829,17 @@ void CandyMixEeffect::rotozoom()
             float y = (py - centerY) * zoom;
             float u = (x * cosAngle - y * sinAngle) * 0.01;
             float v = (x * sinAngle + y * cosAngle) * 0.01;
-            if ((u + v) && 1)
+            if ((int(u * v) & 1) == 0)
             {
-                pixelArray[o] = Color4B(255, 255, 255, 255);
+                color = Color4B(255, 255, 255, 255);
             }
-            else if ((u * v) && 25 == 0)
+            else if  ((int(u * v) & 25) == 0)
             {
-                pixelArray[o] = cc;
+                color = cc;
+
             }
+       //     color = Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f);
+            drawNodeEx->drawPoint(Vec2(px, py), 2, color);
             o++;
         }
 
@@ -2783,9 +2850,6 @@ void CandyMixEeffect::rotozoom()
     zoom = 2 - sin(t * 0.5) * 0.5;
     centerX = WIDTH * 0.5 + sin(angle) * zoom * 350;
     centerY = HEIGHT * 0.5 + cos(angle) * zoom * 350;
-
-  //  drawNodeEx->drawPoints(&pixelArray, o, Color4B::GREEN);
-   // drawNodeEx->drawPoints(pixelArray, o, 10, Color4F::BLUE);
 }
 
 
@@ -2833,12 +2897,15 @@ void CandyMixEeffect::renderLine(float x1, float x2, float y, ax::Color4F color,
 void CandyMixEeffect::update(float dt)
 {
     DrawNodeExBaseTest::update(dt);
+    drawNodeEx->clear();
+    //rotozoom();
+    //return;
 
     static float WID = 400;
     static float HIG = 600;
     static b2Timer timer;
 
-    drawNodeEx->clear();
+
 
     float t = timer.GetMilliseconds() / 1000.0f;
     float ta = sin(t * cos(t) * 0.02f) + t;

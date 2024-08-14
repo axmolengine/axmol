@@ -671,6 +671,16 @@ void DrawNodeEx::drawCardinalSpline(ax::PointArray* config,
         Vec2 newPos = ccCardinalSplineAt(pp0, pp1, pp2, pp3, tension, lt);
         vertices[i].x = newPos.x;
         vertices[i].y = newPos.y;
+        if (newPos == config->getControlPointAtIndex(config->count()-1) && i > 0)
+        {
+            segments = i+1;
+            break;
+        }
+        //else
+        //{
+        //    vertices[i].x = newPos.x;
+        //    vertices[i].y = newPos.y;
+        //}
     }
 
     swapIsConvex(true);
@@ -736,6 +746,7 @@ void DrawNodeEx::drawSegment(const Vec2& from, const Vec2& to, float thickness, 
 
     unsigned int count = 2;
     Vec2 line[] = { from, to };
+
     Vec2* _vertices = transform(line, count, false);
 
     Vec2 a = _vertices[0];
@@ -1255,16 +1266,11 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
     // start drawing...
     int ii = 0;
     if (closedPolygon && !_isConvex && fillColor.a > 0.0f && !isConvex(_vertices, count) && count >= 3)
-    {
-        //AXLOGD("============================  start");
+    {;
         for (auto&& t : triangleList)
         {
-            //AXLOGD("{}, {} ", t.a.vertices.x, t.a.vertices.y);
-            //AXLOGD("{}, {} ", t.b.vertices.x, t.b.vertices.y);
-            //AXLOGD("{}, {} ", t.a.vertices.x, t.a.vertices.y);
             triangles[ii++] = t;
         }
-        //AXLOGD("============================  end");
     }
     else if (fillColor.a > 0.0f)
     {

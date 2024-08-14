@@ -429,6 +429,33 @@ private:
     ax::extension::DrawNodeEx* drawNodeExCP = nullptr;
     std::vector<ax::Vec2> points;
     ax::PointArray* array;
+
+
+    void drawGrid(ax::Vec2 A, ax::Vec2 B);
+
+    void generateDataPoints();
+
+    void drawEverything();
+
+    ax::PointArray *pts = nullptr;
+    ax::PointArray *pts2 = nullptr;
+    ax::extension::DrawNodeEx *node = nullptr;
+
+    ax::Size screen;
+    ax::Vec2 origin, center, sixth;
+    float defY, defY2, dev;
+    const int n = 50;
+    const int grid = 10;
+    const int margin = 20;
+
+    const ax::Color4F BLACK = ax::Color4F(ax::Color4B(21, 23, 33, 255));
+    const ax::Color4F GREY = ax::Color4F(ax::Color4B(34, 38, 50, 255));
+    const ax::Color4F GREEN = ax::Color4F(ax::Color4B(64, 209, 163, 255));
+    const ax::Color4F GREEN_SH = ax::Color4F(ax::Color4B(27, 67, 63, 255));
+    const ax::Color4F RED = ax::Color4F(ax::Color4B(214, 41, 84, 255));
+    const ax::Color4F RED_SH = ax::Color4F(ax::Color4B(68, 27, 45, 255));
+
+
 };
 
 
