@@ -2664,9 +2664,6 @@ DrawNodeSpLinesTest::DrawNodeSpLinesTest()
     drawNode = DrawNode::create();
     addChild(drawNode, 30);
 
-    node = DrawNodeEx::create();
-    addChild(node, 20);
-
     screen = Director::getInstance()->getVisibleSize();
     origin = Director::getInstance()->getVisibleOrigin();
     center = Vec2(screen.width / 2, screen.height / 2);
