@@ -843,7 +843,6 @@ void EditBox::keyboardWillShow(IMEKeyboardNotificationInfo& info)
     // if the keyboard area doesn't intersect with the tracking node area, nothing needs to be done.
     if (!rectTracked.intersectsRect(info.end))
     {
-        AXLOGW("needn't to adjust view layout.");
         return;
     }
 
