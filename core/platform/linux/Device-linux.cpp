@@ -103,7 +103,7 @@ int Device::getDPI()
     return dpi;
 }
 
-float Device::getPixelRatio() 
+float Device::getPixelRatio()
 {
     return Device::getDPI() / 96.0f;
 }

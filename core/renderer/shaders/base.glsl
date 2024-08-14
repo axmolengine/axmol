@@ -36,7 +36,7 @@
 #  define RG8_CHANNEL xy
 
 #  define FWIDTH(dist) 0.4
-    
+
 #else
 
 #  define vfloat_def(x, y) float x[y]

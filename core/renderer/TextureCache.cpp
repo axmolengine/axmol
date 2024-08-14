@@ -850,7 +850,7 @@ void VolatileTextureMgr::addImage(Texture2D* tt, Image* image)
         return;
 
     VolatileTexture* vt = findVolotileTexture(tt);
-    
+
     if(vt->_uiImage != image) {
         AX_SAFE_RELEASE(vt->_uiImage);
         image->retain();

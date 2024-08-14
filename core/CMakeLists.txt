@@ -3,7 +3,7 @@
 # Copyright (c) 2014 martell malone
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
 # Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
-# 
+#
 # https://axmol.dev/
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -178,7 +178,7 @@ configure_file(
         "${CMAKE_CURRENT_LIST_DIR}/axmolver.h.in"
         "${CMAKE_CURRENT_LIST_DIR}/axmolver.h" @ONLY)
 
-# early experimental features     
+# early experimental features
 # include(CMakeDependentOption)
 # cmake_dependent_option(AX_ENABLE_EARLY_FEATURES
 #   "Build the tests when we are the root project" ON
@@ -359,16 +359,16 @@ if(XCODE OR VS)
 endif()
 
 message("CMake ${_AX_CORE_LIB} target_precompile_headers")
-target_precompile_headers(${_AX_CORE_LIB} PRIVATE 
+target_precompile_headers(${_AX_CORE_LIB} PRIVATE
   "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
 )
 
 if(WINDOWS)
     # cppwinrt or webview2 require nuget
     if(WINDOWS_STORE OR AX_ENABLE_MSEDGE_WEBVIEW2)
-        find_program(NUGET_EXE NAMES nuget 
+        find_program(NUGET_EXE NAMES nuget
             PATHS ${_AX_ROOT}/tools/external/nuget)
-            
+
         if(NOT NUGET_EXE)
             message("NUGET.EXE not found.")
             message(FATAL_ERROR "Please run setup.ps1 again to download NUGET.EXE, and run CMake again.")

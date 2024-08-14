@@ -31,7 +31,7 @@ THE SOFTWARE.
 NS_AX_BEGIN
 
 
-enum class AxmolKeyEvent : int 
+enum class AxmolKeyEvent : int
 {
     Text,
     Escape,

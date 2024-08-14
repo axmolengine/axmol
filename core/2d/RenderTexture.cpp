@@ -210,7 +210,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
              _renderTarget = backend::DriverBase::getInstance()->newRenderTarget(
                  _texture2D ? _texture2D->getBackendTexture() : nullptr,
                  _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr,
-                 _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);	        
+                 _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);
         }
 
         _renderTarget->setColorAttachment(_texture2D ? _texture2D->getBackendTexture() : nullptr);
@@ -494,7 +494,7 @@ void RenderTexture::onSaveToFile(std::string filename, bool isRGBA, bool forceNo
             if (_saveFileCallback)
             {
                 _saveFileCallback(this, _filename);
-            }          
+            }
         }
     };
     newImage(callbackFunc);

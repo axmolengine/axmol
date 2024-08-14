@@ -161,7 +161,7 @@ public:
      * @return  An autoreleased sprite object.
      */
     static Sprite* create(const ax::Data& imageData, std::string_view key);
-    
+
     /**
      * Creates a sprite with a Texture2D object.
      *
@@ -627,7 +627,7 @@ public:
      * @lua     init
      */
     virtual bool initWithFile(std::string_view filename, const Rect& rect);
-    
+
     /**
      * Initializes a sprite with an image data, and a key for the cache.
      *

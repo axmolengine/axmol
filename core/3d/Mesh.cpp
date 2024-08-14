@@ -199,7 +199,7 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     int perVertexSizeInFloat = 0;
     std::vector<float> vertices;
     std::vector<MeshVertexAttrib> attribs;
-    
+
     MeshVertexAttrib att;
     att.type = backend::VertexFormat::FLOAT3;
 

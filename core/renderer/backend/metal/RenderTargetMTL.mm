@@ -61,7 +61,7 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
             // We're rendering into our temporary MSAA texture and doing an automatic resolve.
             // We should not be attempting to load anything into the MSAA texture.
             assert(descriptor.colorAttachments[i].loadAction != MTLLoadActionLoad);
-            
+
             descriptor.colorAttachments[i].texture = multisampledColor[i];
             descriptor.colorAttachments[i].level = 0;
             descriptor.colorAttachments[i].slice = 0;
@@ -108,7 +108,7 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
         // We're rendering into our temporary MSAA texture and doing an automatic resolve.
         // We should not be attempting to load anything into the MSAA texture.
         assert(descriptor.depthAttachment.loadAction != MTLLoadActionLoad);
-        
+
         descriptor.depthAttachment.texture = multisampledDepth;
         descriptor.depthAttachment.level = 0;
         descriptor.depthAttachment.slice = 0;
@@ -121,7 +121,7 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
         }
     }
 #endif
-    
+
     _dirtyFlags = TargetBufferFlags::NONE;
 }
 

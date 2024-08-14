@@ -247,7 +247,7 @@ public:
 
     T operator[](ssize_t index) const
     {
-        return this->at(index); 
+        return this->at(index);
     }
 
     /** Returns the first element in the Vector. */

@@ -137,7 +137,7 @@ public:
      * @ see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
     void setIndexBuffer(Buffer* buffer) override;
-    
+
     void setInstanceBuffer(Buffer* buffer) override;
 
     /**
@@ -167,7 +167,7 @@ public:
                               std::size_t count,
                               std::size_t offset,
                               bool wireframe) override;
-    
+
     void drawElementsInstanced(PrimitiveType primitiveType,
                                IndexFormat indexType,
                                std::size_t count,
@@ -200,7 +200,7 @@ public:
      * @param callback A callback to deal with pixel data read.
      */
     void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
-    
+
     id<MTLRenderCommandEncoder> getRenderCommandEncoder() const { return _mtlRenderEncoder; }
 
     id<MTLCommandBuffer> getMTLCommandBuffer() const { return _mtlCommandBuffer; }

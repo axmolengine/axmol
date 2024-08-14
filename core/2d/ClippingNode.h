@@ -138,7 +138,7 @@ public:
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     virtual void setGlobalZOrder(float globalZOrder) override;
-    
+
     virtual void setCameraMask(unsigned short mask, bool applyChildren = true) override;
 
     ClippingNode();

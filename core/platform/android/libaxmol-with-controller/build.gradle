@@ -16,7 +16,7 @@ android {
         java.srcDirs = ['../java/src','../ControllerManualAdapter/src']
         manifest.srcFile "AndroidManifest.xml"
     }
-    
+
     buildTypes {
         release {
             minifyEnabled false

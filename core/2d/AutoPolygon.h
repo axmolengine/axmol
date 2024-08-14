@@ -256,9 +256,9 @@ public:
      * auto sp = Sprite::create(AutoPolygon::generatePolygon("grossini.png"));
      * @endcode
      */
-    static PolygonInfo generatePolygon(std::string_view filename, 
-                                       const Rect& rect = Rect::ZERO, 
-                                       float epsilon = 2.0f,  
+    static PolygonInfo generatePolygon(std::string_view filename,
+                                       const Rect& rect = Rect::ZERO,
+                                       float epsilon = 2.0f,
                                        float threshold = 0.05f);
 
 protected:

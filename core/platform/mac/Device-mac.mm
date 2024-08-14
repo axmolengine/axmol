@@ -65,7 +65,7 @@ int Device::getDPI()
     return ((displayPixelSize.width / displayPhysicalSize.width) * 25.4f);
 }
 
-float Device::getPixelRatio() 
+float Device::getPixelRatio()
 {
     NSScreen* screen    = [NSScreen mainScreen];
     const auto points = [screen frame];

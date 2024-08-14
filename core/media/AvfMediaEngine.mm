@@ -63,7 +63,7 @@ USING_NS_AX;
 {
 #if TARGET_OS_IPHONE
     auto nc = [NSNotificationCenter defaultCenter];
-    
+
     [nc addObserver:self
            selector:@selector(handleAudioRouteChange:)
                name:AVAudioSessionRouteChangeNotification
@@ -170,7 +170,7 @@ void AvfMediaEngine::onPlayerEnd()
     _playbackEnded = true;
     _state = MEMediaState::Stopped;
     fireMediaEvent(MEMediaEventType::Stopped);
-    
+
     if (_repeatEnabled) {
         this->setCurrentTime(0);
         this->play();
@@ -297,11 +297,11 @@ void AvfMediaEngine::onStatusNotification(void* context)
         NSString* mediaType      = assetTrack.mediaType;
         if ([mediaType isEqualToString:AVMediaTypeVideo])
         {  // we only care about video
-            
+
             auto naturalSize = [assetTrack naturalSize];
             _videoExtent.x = naturalSize.width;
             _videoExtent.y = naturalSize.height;
-            
+
             NSMutableDictionary* outputAttrs = [NSMutableDictionary dictionary];
             CMFormatDescriptionRef DescRef   = (CMFormatDescriptionRef)[assetTrack.formatDescriptions objectAtIndex:0];
             CMVideoCodecType codecType       = CMFormatDescriptionGetMediaSubType(DescRef);
@@ -487,7 +487,7 @@ double AvfMediaEngine::getCurrentTime()
         if (CMTIME_IS_VALID(currTime))
             return CMTimeGetSeconds(currTime);
     }
-        
+
     return 0.0;
 }
 

@@ -66,7 +66,7 @@ public:
     bool isEditingMode() const { return _editingMode; }
 private:
     void createEditCtrl(EditBox::InputMode inputMode);
-    
+
     static bool s_isInitialized;
     static int s_editboxChildID;
     static void lazyInit();

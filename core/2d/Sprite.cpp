@@ -327,7 +327,7 @@ bool Sprite::initWithImageData(const Data& imageData, std::string_view key)
     //_fileName = filename;
 
     Texture2D *texture = _director->getTextureCache()->addImage(imageData, key);
-    
+
     if (texture)
     {
         Rect rect = Rect::ZERO;

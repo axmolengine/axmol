@@ -60,7 +60,7 @@ public:
     std::string identifier;
     std::string requestURL;
     std::string storagePath;
-    
+
     std::string cacertPath;
 
     struct

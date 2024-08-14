@@ -125,7 +125,7 @@ public:
         this->x = xx;
         this->y = yy;
         this->z = zz;
-        this->w = ww;        
+        this->w = ww;
     }
 
     /**
@@ -140,7 +140,7 @@ public:
         this->x = array[0];
         this->y = array[1];
         this->z = array[2];
-        this->w = array[3];        
+        this->w = array[3];
     }
 
     /**
@@ -153,7 +153,7 @@ public:
         this->x = v.x;
         this->y = v.y;
         this->z = v.z;
-        this->w = v.w;        
+        this->w = v.w;
     }
 
     inline impl_type& operator-() { return impl_type{*static_cast<impl_type*>(this)}.negate(); }

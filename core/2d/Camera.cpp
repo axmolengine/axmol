@@ -217,7 +217,7 @@ void Camera::initDefault()
     }
 
     setDepth(0);
-	
+
     if (_zoomFactor != 1.0F)
         applyZoom();
 }

@@ -34,8 +34,8 @@ class AxmolRenderer
 public:
     AxmolRenderer(int width,
                   int height,
-                  float dpi, 
-        Windows::Graphics::Display::DisplayOrientations orientation, 
+                  float dpi,
+        Windows::Graphics::Display::DisplayOrientations orientation,
         Windows::UI::Core::CoreDispatcher const& dispatcher, Windows::UI::Xaml::Controls::Panel const& panel);
     AxmolRenderer(const AxmolRenderer&) = delete;
     ~AxmolRenderer();

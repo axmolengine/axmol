@@ -214,7 +214,7 @@ void DrawNode::setVertexLayout(CustomCommand& cmd)
 }
 
 void DrawNode::freeShaderInternal(CustomCommand& cmd)
-{   
+{
     auto& pipelinePS = cmd.getPipelineDescriptor().programState;
     AX_SAFE_RELEASE_NULL(pipelinePS);
 }

@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-Based upon code from the DirectX Tool Kit by Microsoft Corporation, 
+Based upon code from the DirectX Tool Kit by Microsoft Corporation,
 obtained from https://directxtk.codeplex.com
 ****************************************************************************/
 
@@ -65,7 +65,7 @@ public:
 
 protected:
 	bool processImage(IWICBitmapDecoder* decoder);
-	size_t getBitsPerPixel(WICPixelFormatGUID format); 
+	size_t getBitsPerPixel(WICPixelFormatGUID format);
 	HRESULT convertFormatIfRequired(IWICBitmapFrameDecode* pFrame, IWICFormatConverter** ppConv);
 
 	static IWICImagingFactory* getWICFactory();

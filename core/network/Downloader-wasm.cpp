@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -90,7 +90,7 @@ namespace ax { namespace network {
 
             DownloadTaskEmscripten *coTask = new DownloadTaskEmscripten(fetch->id);
             coTask->task = task;
-            
+
             AXLOGD("DownloaderEmscripten::createCoTask id: {}", coTask->id);
             _taskMap.insert(make_pair(coTask->id, coTask));
         }
@@ -111,7 +111,7 @@ namespace ax { namespace network {
             std::vector<unsigned char> buf(reinterpret_cast<const uint8_t*>(fetch->data), reinterpret_cast<const uint8_t*>(fetch->data) + size);
             emscripten_fetch_close(fetch);
             coTask->fetch = fetch = NULL;
-            
+
             downloader->_taskMap.erase(iter);
             downloader->onTaskFinish(*coTask->task,
                 DownloadTask::ERROR_NO_ERROR,
@@ -119,7 +119,7 @@ namespace ax { namespace network {
                 "",
                 buf
             );
-            
+
             coTask->task.reset();
         }
 
@@ -138,7 +138,7 @@ namespace ax { namespace network {
             DownloadTaskEmscripten *coTask = iter->second;
             vector<unsigned char> buf;
             downloader->_taskMap.erase(iter);
-            
+
             string storagePath = coTask->task->storagePath;
             int errCode = DownloadTask::ERROR_NO_ERROR;
             int errCodeInternal = 0;

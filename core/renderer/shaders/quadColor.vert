@@ -1,6 +1,6 @@
 #version 310 es
 
-                                              
+
 layout(location = POSITION) in vec4 a_position;
 layout(location = COLOR0) in vec4 a_color;
 

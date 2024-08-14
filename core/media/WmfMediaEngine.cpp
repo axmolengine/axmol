@@ -10,7 +10,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
 // Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
-// 
+//
 // https://axmol.dev/
 //////////////////////////////////////////////////////////////////////////
 
