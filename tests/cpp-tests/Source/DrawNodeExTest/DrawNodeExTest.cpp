@@ -2761,18 +2761,8 @@ void DrawNodeSpLinesTest::update(float dt)
 
 
 
-
-    //auto level1 = (int) defY + RandomHelper::random_int(2, 12);
-    //drawNodeEx->drawLine(Vec2(margin, level1),
-    //    Vec2(screen.width - margin, level1),  GREEN, 5 );
-
-    //auto level2 = (int) defY2 + RandomHelper::random_int(2, 12);
-
-    //drawNodeEx->drawLine(Vec2(margin, level1),
-    //    Vec2(screen.width - margin, level2),  RED, 5 );
-
-    drawNodeEx->drawCardinalSpline(pts, 0.5, 360, RED, 5);
-    drawNodeEx->drawCardinalSpline(pts2, 0.5, 360, GREEN, 2);
+    drawNodeEx->drawCardinalSpline(pts, 0.5, 360, Color4F::RED, 5);
+    drawNodeEx->drawCardinalSpline(pts2, 0.5, 360, Color4F::GREEN, 2);
 
     int i1 = RandomHelper::random_int(0, n - 1);
     int i2 = RandomHelper::random_int(0, n - 1);
