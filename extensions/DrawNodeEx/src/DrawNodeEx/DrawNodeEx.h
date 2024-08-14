@@ -50,11 +50,6 @@ NS_AX_EXT_BEGIN
 // returnValue func(position, dimension1, dimensionN, colors1, colorsN, stettings1, settingsN, stettings1withDefault, stettingsNwithDefault)
 
 
-
-
-// AX_ENABLE_DRAWNODE_DRAW_LINE_POINT an option for future versions of DrawNode (currently: defined)
-#define AX_ENABLE_DRAWNODE_DRAW_LINE_POINT
-
 static const int DEFAULT_LINEWIDTH = 2;
 
 
@@ -106,7 +101,7 @@ public:
     // DrawNodeExt stuff
     Version _dnVersion = Version::v1;
     ax::Vec2 _dnScale;
-    float _scaleFactor = 3.0f;  /// maybe wrong use 4?
+    float _dnFactor = 0.5f;  /// set the lineWith like Axmol 1.0 
     ax::Vec2 _dnCenter;
     float _dnRotation = 0.0f;
     ax::Vec2 _dnPosition;
@@ -121,10 +116,8 @@ public:
     ax::Vec2 _dnPositionTmp = _dnPosition;
     float _dnLineWidthTmp = _dnLineWidth;
     bool  _dnTransform = false;
-
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     bool _drawOrder = true;
-#endif
+
 
     bool swapIsConvex(bool isConvex) {
         _isConvexTmp = _isConvex; _isConvex = isConvex; return _isConvexTmp;
@@ -587,10 +580,28 @@ public:
     * @param color The triangle color.
     * @js NA
     */
+
+    void drawTriangle(const Vec2* vertices3, 
+        const ax::Color4B& fillColor,
+        const ax::Color4B& borderColor,
+        float thickness = 1.0f);
+
     void drawTriangle(const ax::Vec2& p1,
         const ax::Vec2& p2,
         const ax::Vec2& p3,
         const ax::Color4B& color,
+        float thickness = 1.0f);
+
+    void drawSolidTriangle(const Vec2* vertices3, 
+        const ax::Color4B& fillColor,
+        const ax::Color4B& borderColor,
+        float thickness = 1.0f);
+
+    void drawSolidTriangle(const ax::Vec2& p1,
+        const ax::Vec2& p2,
+        const ax::Vec2& p3,
+        const ax::Color4B& fillColor,
+        const ax::Color4B& borderColor,
         float thickness = 1.0f);
 
     /** Clear the geometry in the node's buffer. */
@@ -639,10 +650,8 @@ public:
 
 protected:
     void ensureCapacityTriangle(int count);
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     void ensureCapacityPoint(int count);
     void ensureCapacityLine(int count);
-#endif
 
     void updateShader();
     void updateShaderInternal(ax::CustomCommand& cmd,
@@ -662,7 +671,6 @@ protected:
     ax::CustomCommand _customCommandTriangle;
     bool _dirtyTriangle = false;
 
-#if defined(AX_ENABLE_DRAWNODE_DRAW_LINE_POINT)
     int _bufferCapacityPoint = 0;
     int _bufferCountPoint = 0;
     ax::V2F_C4B_T2F* _bufferPoint = nullptr;
@@ -678,7 +686,6 @@ protected:
     ax::CustomCommand _customCommandLine;
     bool _dirtyPoint = false;
     bool _dirtyLine = false;
-#endif
 
     ax::BlendFunc _blendFunc;
 
