@@ -224,14 +224,14 @@ public:
 
     /**
      * Gets the field of view of the camera if the projection mode is 3D.
-     * 
+     *
      * @since axmol-1.0.0b8
      */
     float getFOV() const { return _fieldOfView; }
 
     /**
      * Sets the field of view of the camera if the projection mode is 3D.
-     * 
+     *
      * @since axmol-1.0.0b8
      */
     void setFOV(float fov);
@@ -243,7 +243,7 @@ public:
 
     /**
      * Sets the frustum's far plane.
-     * 
+     *
      * @since axmol-1.0.0b8
      */
     void setFarPlane(float farPlane);
@@ -255,14 +255,14 @@ public:
 
     /**
      * Gets the frustum's near plane.
-     * 
+     *
      * @since axmol-1.0.0b8
      */
     void setNearPlane(float nearPlane);
 
     /**
      * Gets the zoom multiplier of the camera.
-     * 
+     *
      * @since axmol-1.0.0b8
      */
     float getZoom() const { return _zoomFactor; }
@@ -270,16 +270,16 @@ public:
     /**
      * Sets the zoom multiplier of the camera.
      * This is designed to be used with 2D views only.
-     * 
+     *
      * @param factor The zoom factor of the camera.
-     * 
+     *
      * @since axmol-1.0.0b8
      */
     void setZoom(float factor);
 
     /**
      Apply the zoom factor.
-     * 
+     *
      * @since axmol-1.0.0b8
      */
     void applyZoom();
@@ -332,7 +332,7 @@ public:
      * WP8*/
     void setAdditionalProjection(const Mat4& mat);
 
-    /** Init default camera with director current projection, 
+    /** Init default camera with director current projection,
     !!!Note: Must invoke this function again when director projection or winsize changed */
     void initDefault();
 

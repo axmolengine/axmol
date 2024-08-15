@@ -281,7 +281,7 @@ bool createMappedCacheFile(const std::string& srcFilePath, std::string& cacheFil
 void destroyMappedCacheFile(const std::string& key)
 {
     auto value = UserDefault::getInstance()->getStringForKey(key.c_str());
-    
+
     if (!value.empty()) {
         FileUtils::getInstance()->removeFile(value);
     }

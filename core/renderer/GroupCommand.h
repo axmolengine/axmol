@@ -77,7 +77,7 @@ public:
 
     /**
      * @brief Reset the command state for reuse
-     * 
+     *
      */
     void reset();
 

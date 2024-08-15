@@ -11,7 +11,7 @@ set(_AX_AUDIO_HEADER
     audio/AudioCache.h
     audio/AudioEngineImpl.h
     )
-    
+
 set(_AX_AUDIO_SRC
     audio/AudioEngine.cpp
     audio/AudioDecoderManager.cpp
@@ -24,7 +24,7 @@ set(_AX_AUDIO_SRC
 
 if(APPLE)
     set_source_files_properties(audio/AudioEngineImpl.cpp PROPERTIES LANGUAGE OBJCXX)
-    
+
     set(_AX_AUDIO_HEADER ${_AX_AUDIO_HEADER}
                         audio/AudioDecoderEXT.h)
     set(_AX_AUDIO_SRC ${_AX_AUDIO_SRC}

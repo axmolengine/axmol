@@ -83,7 +83,7 @@ public:
      * @lua NA
      */
     virtual std::string getDescription() const;
-    
+
     /** Gets a 2x2 white texture  */
     Texture2D* getWhiteTexture();
 
@@ -114,7 +114,7 @@ public:
      @param filepath The file path.
      @param callback A callback function would be invoked after the image is loaded.
      @since v0.8
-     
+
      @remark Please don't invoke Texture2D::setDefaultAlphaPixelFormat in main GL thread before invoke this API.
     */
     virtual void addImageAsync(std::string_view filepath, const std::function<void(Texture2D*)>& callback);

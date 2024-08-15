@@ -100,7 +100,7 @@ protected:
     LARGE_INTEGER m_nFreq;
     LARGE_INTEGER m_nLast;
     LARGE_INTEGER m_nNow;
-    
+
     std::string m_resourceRootPath;
     std::string m_startupScriptFilename;
 

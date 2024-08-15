@@ -40,7 +40,7 @@ OpenGLES::~OpenGLES()
 
 void OpenGLES::Initialize()
 {
-    const EGLint configAttributes[] = 
+    const EGLint configAttributes[] =
     {
         EGL_RED_SIZE, 8,
         EGL_GREEN_SIZE, 8,
@@ -51,9 +51,9 @@ void OpenGLES::Initialize()
         EGL_NONE
     };
 
-    const EGLint contextAttributes[] = 
-    { 
-        EGL_CONTEXT_CLIENT_VERSION, 2, 
+    const EGLint contextAttributes[] =
+    {
+        EGL_CONTEXT_CLIENT_VERSION, 2,
         EGL_NONE
     };
 
@@ -68,14 +68,14 @@ void OpenGLES::Initialize()
 //         // Its syntax is subject to change, though. Please update your Visual Studio templates if you experience compilation issues with it.
 //         EGL_ANGLE_DISPLAY_ALLOW_RENDER_TO_BACK_BUFFER, EGL_TRUE,
 // #endif
-        
-        // EGL_PLATFORM_ANGLE_ENABLE_AUTOMATIC_TRIM_ANGLE is an option that enables ANGLE to automatically call 
-        // the IDXGIDevice3::Trim method on behalf of the application when it gets suspended. 
+
+        // EGL_PLATFORM_ANGLE_ENABLE_AUTOMATIC_TRIM_ANGLE is an option that enables ANGLE to automatically call
+        // the IDXGIDevice3::Trim method on behalf of the application when it gets suspended.
         // Calling IDXGIDevice3::Trim when an application is suspended is a Windows Store application certification requirement.
         EGL_PLATFORM_ANGLE_ENABLE_AUTOMATIC_TRIM_ANGLE, EGL_TRUE,
         EGL_NONE,
     };
-    
+
     const EGLint fl9_3DisplayAttributes[] =
     {
         // These can be used to request ANGLE's D3D11 renderer, with D3D11 Feature Level 9_3.
@@ -102,7 +102,7 @@ void OpenGLES::Initialize()
         EGL_PLATFORM_ANGLE_ENABLE_AUTOMATIC_TRIM_ANGLE, EGL_TRUE,
         EGL_NONE,
     };
-    
+
     EGLConfig config = NULL;
 
     // eglGetPlatformDisplayEXT is an alternative to eglGetDisplay. It allows us to pass in display attributes, used to configure D3D11.
@@ -113,15 +113,15 @@ void OpenGLES::Initialize()
     }
 
     //
-    // To initialize the display, we make three sets of calls to eglGetPlatformDisplayEXT and eglInitialize, with varying 
+    // To initialize the display, we make three sets of calls to eglGetPlatformDisplayEXT and eglInitialize, with varying
     // parameters passed to eglGetPlatformDisplayEXT:
     // 1) The first calls uses "defaultDisplayAttributes" as a parameter. This corresponds to D3D11 Feature Level 10_0+.
-    // 2) If eglInitialize fails for step 1 (e.g. because 10_0+ isn't supported by the default GPU), then we try again 
+    // 2) If eglInitialize fails for step 1 (e.g. because 10_0+ isn't supported by the default GPU), then we try again
     //    using "fl9_3DisplayAttributes". This corresponds to D3D11 Feature Level 9_3.
-    // 3) If eglInitialize fails for step 2 (e.g. because 9_3+ isn't supported by the default GPU), then we try again 
+    // 3) If eglInitialize fails for step 2 (e.g. because 9_3+ isn't supported by the default GPU), then we try again
     //    using "warpDisplayAttributes".  This corresponds to D3D11 Feature Level 11_0 on WARP, a D3D11 software rasterizer.
     //
-    
+
     // This tries to initialize EGL to D3D11 Feature Level 10_0+. See above comment for details.
     mEglDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE, EGL_DEFAULT_DISPLAY, defaultDisplayAttributes);
     if (mEglDisplay == EGL_NO_DISPLAY)
@@ -195,7 +195,7 @@ EGLSurface OpenGLES::CreateSurface(SwapChainPanel const& panel, const Size* rend
     {
         throw winrt::hresult_error(E_INVALIDARG, L"SwapChainPanel parameter is invalid");
     }
-    
+
     if (renderSurfaceSize != nullptr && resolutionScale != nullptr)
     {
         throw winrt::hresult_error(E_INVALIDARG, L"A size and a scale can't both be specified");
@@ -212,7 +212,7 @@ EGLSurface OpenGLES::CreateSurface(SwapChainPanel const& panel, const Size* rend
 //#endif
         EGL_NONE
     };
-    
+
     // Create a PropertySet and initialize with the EGLNativeWindowType.
     PropertySet surfaceCreationProperties = PropertySet();
     surfaceCreationProperties.Insert(winrt::hstring(EGLNativeWindowTypeProperty), panel);

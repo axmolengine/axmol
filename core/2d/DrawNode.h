@@ -152,7 +152,7 @@ public:
                     float scaleX,
                     float scaleY,
                     const Color4B& color,
-                    float threshold = 500);  // 500 should "simulate/save" the backwards compatibility  
+                    float threshold = 500);  // 500 should "simulate/save" the backwards compatibility
 
     /** Draws a circle given the center, radius and number of segments.
      *
@@ -320,7 +320,7 @@ public:
      * @param scaleX The scale value in x.
      * @param scaleY The scale value in y.
      * @param color The solid circle color.
-     * @param DrawMode The draw mode 
+     * @param DrawMode The draw mode
      * @js NA
      */
     void drawPie(const Vec2& center,

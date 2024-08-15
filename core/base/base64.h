@@ -43,7 +43,7 @@ decoded_size(std::size_t n)
 /** Encode a series of octets as a padded, base64 string.
 
     The resulting string will not be null terminated.
-      
+
     @par Requires
 
     The memory pointed to by `out` points to valid memory

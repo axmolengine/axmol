@@ -1827,7 +1827,7 @@ public:
      * @param applyChildren A boolean value to determine whether the mask bit should apply to its children or not.
      */
     void applyMaskOnEnter(bool applyChildren);
-    
+
     virtual void setProgramState(uint32_t programType) { setProgramStateWithRegistry(programType, nullptr); }
     void setProgramStateWithRegistry(uint32_t programType, Texture2D* texture);
 
@@ -1998,7 +1998,7 @@ protected:
 
     bool _usingNormalizedPosition;
     bool _normalizedPositionDirty;
-    
+
     bool _childFollowCameraMask;
     // camera mask, it is visible only when _cameraMask & current camera' camera flag is true
     unsigned short _cameraMask;

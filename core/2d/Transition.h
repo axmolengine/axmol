@@ -122,7 +122,7 @@ public:
 protected:
     virtual void sceneOrder();
     void setNewScene(float dt);
-    
+
     /**  Set the number of actions to be done to finish
      */
     void setWaitForFinishCount(int count);
@@ -132,11 +132,11 @@ protected:
     float _duration;
     bool _isInSceneOnTop;
     bool _isSendCleanupToScene;
-    
-    
+
+
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(TransitionScene);
-    
+
     int _waitForFinishCount = 1;
 };
 

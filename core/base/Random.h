@@ -42,7 +42,7 @@ NS_AX_BEGIN
 
 /**
  * @class RandomHelper
- * @brief A helper class for creating device dependent random number 
+ * @brief A helper class for creating device dependent random number
  * @remark
  *     Random Generator: std::mt19937 32bit
  */

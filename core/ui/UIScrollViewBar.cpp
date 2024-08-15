@@ -154,7 +154,7 @@ void ScrollViewBar::setAutoHideEnabled(bool autoHideEnabled)
 {
     if (_autoHideEnabled == autoHideEnabled)
         return;
-    
+
     _autoHideEnabled = autoHideEnabled;
     if (!_autoHideEnabled)
     {

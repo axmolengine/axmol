@@ -4,7 +4,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 // Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
-// 
+//
 // https://axmol.dev/
 //-------------------------------------------------------------------------------------
 

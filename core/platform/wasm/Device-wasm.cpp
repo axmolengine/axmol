@@ -41,7 +41,7 @@ int Device::getDPI()
     return static_cast<int>(160 * Device::getPixelRatio());
 }
 
-float Device::getPixelRatio() 
+float Device::getPixelRatio()
 {
     return EM_ASM_DOUBLE(return window.devicePixelRatio);
 }
@@ -70,11 +70,11 @@ Data Device::getTextureDataForText(std::string_view text, const FontDefinition& 
         var dimWidth = $4;
         var dimHeight = $5;
         var align = $6;
-        
+
         var canvas = Module.axmolSharedCanvas = Module.axmolSharedCanvas || document.createElement("canvas");
         var context = canvas.getContext("2d");
         context.font = fontSize + "px " + fontName;
-        
+
         var canvasWidth = dimWidth;
         var canvasHeight = dimHeight;
         for (var i = 0; i < lines.length; i++) {
@@ -82,7 +82,7 @@ Data Device::getTextureDataForText(std::string_view text, const FontDefinition& 
             linesWidth[i] = lineWidth;
             if (lineWidth > canvasWidth && dimWidth <= 0) {
                 canvasWidth = lineWidth;
-            }             
+            }
         };
 
         if (dimHeight <= 0) {
@@ -94,11 +94,11 @@ Data Device::getTextureDataForText(std::string_view text, const FontDefinition& 
 
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
-        
+
         context.clearRect(0, 0, canvasWidth, canvasHeight);
         context.font = fontSize + "px " + fontName;
         context.fillStyle = color;
-        context.textBaseline = "top"; 
+        context.textBaseline = "top";
 
         //Vertical top
         var offsetY = 0;
@@ -122,14 +122,14 @@ Data Device::getTextureDataForText(std::string_view text, const FontDefinition& 
             }
             context.fillText(lines[i], offsetX, offsetY + lineHeight * i);
         }
-        
+
         var data = context.getImageData(0, 0, canvasWidth, canvasHeight).data;
         var ptr = _malloc(data.byteLength); // Cocos Data object free it
         var buffer= new Uint8Array(Module.HEAPU8.buffer, ptr, data.byteLength);
         buffer.set(data);
         return ptr;
     }, text.data(), textDefinition._fontName.c_str(), textDefinition._fontSize, color, textDefinition._dimensions.width, textDefinition._dimensions.height, align);
-    
+
     width = EM_ASM_INT({
         return Module.axmolSharedCanvas.width;
     });
@@ -137,7 +137,7 @@ Data Device::getTextureDataForText(std::string_view text, const FontDefinition& 
         return Module.axmolSharedCanvas.height;
     });
     hasPremultipliedAlpha = false;
-    
+
     Data ret;
     ret.fastSet(ptr, width * height * 4);
     return ret;

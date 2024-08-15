@@ -342,11 +342,11 @@ int Device::getDPI()
         float scale = getDevicePixelRatio(sdpi);
         return static_cast<int>(scale * sdpi);
     }
-    
+
     return dpi;
 }
 
-float Device::getPixelRatio() 
+float Device::getPixelRatio()
 {
     int ignored_sdpi;
     return getDevicePixelRatio(ignored_sdpi);

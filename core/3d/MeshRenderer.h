@@ -154,7 +154,7 @@ public:
      * This node becomes the action's target. Refer to Action::getTarget()
      * @warning Actions don't retain their target.
      *
-     * @return a pointer to Action 
+     * @return a pointer to Action
      */
     virtual Action* runAction(Action* action) override;
 
@@ -196,13 +196,13 @@ public:
 
     /** Adds a new material to a particular mesh in this mesh renderer.
      * if meshIndex == -1, then it will be applied to all the meshes that belong to this mesh renderer.
-     * 
+     *
      * @param meshIndex Index of the mesh to apply the material to.
      */
     void setMaterial(Material* material, int meshIndex);
 
     /** Gets the material of a specific mesh in this mesh renderer.
-     * 
+     *
      * @param meshIndex Index of the mesh to get the material from. 0 is the default index.
      */
     Material* getMaterial(int meshIndex = 0) const;

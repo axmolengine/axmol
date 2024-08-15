@@ -153,7 +153,7 @@ void EditBoxImplWasm::setNativeVisible(bool visible)
 {
     EM_ASM({
         var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
-        
+
         if ($0 == 0)
             input.style.display = "none";
         else
@@ -172,7 +172,7 @@ void EditBoxImplWasm::setNativeVisible(bool visible)
                     input.type = 'password';
                 }
             }
-            
+
             input.style.display = "";
             var canvas = document.getElementById('canvas');
             var inputParent = input.parentNode;
@@ -212,7 +212,7 @@ void EditBoxImplWasm::nativeOpenKeyboard()
     _activeEditBox = this;
 
     this->editBoxEditingDidBegin();
-    
+
     EM_ASM({
         var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
         // sync input value from native and focus

@@ -83,7 +83,7 @@ public:
      *  @return The DPI of device.
      */
     static int getDPI();
-    
+
     /**
      * Gets the device pixel ratio
      * @since axmol-2.1.0

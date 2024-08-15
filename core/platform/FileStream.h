@@ -40,7 +40,7 @@ class AX_DLL FileStream : public IFileStream
 {
 public:
     using IFileStream::Mode;
-    
+
     FileStream() = default;
     ~FileStream() override;
 

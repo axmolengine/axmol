@@ -174,7 +174,7 @@ bool Uri::doParse(std::string_view str)
     }
 
     bool hasScheme = true;
-	
+
     std::string copied(str);
     if (copied.find("://") == std::string::npos)
     {

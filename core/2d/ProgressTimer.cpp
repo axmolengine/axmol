@@ -232,15 +232,15 @@ void ProgressTimer::updateDisplayedOpacity(uint8_t parentOpacity)
     Node::updateDisplayedOpacity(parentOpacity);
 
     _displayedOpacity = _realOpacity * parentOpacity / 0xFF;
-    
+
     _sprite->setOpacity(_displayedOpacity);
     updateColor();
     updateProgress();
-    
+
     if (_cascadeOpacityEnabled)
     {
         _sprite->updateDisplayedOpacity(_displayedOpacity);
-        
+
         for(const auto& child : _children)
         {
             child->updateDisplayedOpacity(_displayedOpacity);
@@ -306,10 +306,10 @@ const Color3B& ProgressTimer::getColor() const
 void ProgressTimer::setOpacity(uint8_t opacity)
 {
     _displayedOpacity = _realOpacity = opacity;
-    
+
     _sprite->setOpacity(_displayedOpacity);
     updateColor();
-    
+
     updateCascadeOpacity();
 }
 
@@ -622,7 +622,7 @@ Vec2 ProgressTimer::boundaryTexCoord(char index)
             return Vec2((kProgressTextureCoords >> ((index << 1) + 1)) & 1,
                         (kProgressTextureCoords >> (index << 1)) & 1);
     }
-    
+
     return Vec2::ZERO;
 }
 

@@ -821,7 +821,7 @@ protected:
     void updateBuffer(TextureAtlas* textureAtlas, CustomCommand& customCommand);
 
     void updateBatchCommand(BatchCommand& batch);
-    
+
     bool _contentDirty;
     bool _useDistanceField;
     bool _useA8Shader;
@@ -881,7 +881,7 @@ protected:
     Color4B _textColor;
 
     BlendFunc _blendFunc;
-   
+
     Vec2 _labelDimensions;
     Vec2 _shadowOffset;
     mutable Vec2 _scaledContentSize;  // !SDF scale
@@ -916,7 +916,7 @@ protected:
 
     std::vector<float> _linesWidth;
     std::vector<float> _linesOffsetX;
-    
+
     QuadCommand _quadCommand;
 
     std::vector<BatchCommand> _batchCommands;

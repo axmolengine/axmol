@@ -973,7 +973,7 @@ void PhysicsWorld::update(float delta, bool userCall /* = false*/)
                 cpSpaceStep(_cpSpace, dt);
 #    else
                 cpHastySpaceStep(_cpSpace, dt);
-#    endif                
+#    endif
             }
         }
         else

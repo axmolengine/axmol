@@ -233,7 +233,7 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
 void ClippingNode::setGlobalZOrder(float globalZOrder)
 {
     Node::setGlobalZOrder(globalZOrder);
-    
+
     if (_stencil) {
         // Make sure our stencil stays on the same globalZOrder:
         _stencil->setGlobalZOrder(globalZOrder);
