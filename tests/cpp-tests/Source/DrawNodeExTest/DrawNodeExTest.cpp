@@ -242,8 +242,8 @@ DrawNodeExBaseTest::DrawNodeExBaseTest()
     menuItemTransform = MenuItemFont::create("transform: true", AX_CALLBACK_1(DrawNodeExBaseTest::setTransform, this));
 
     auto menu = Menu::create(menuItemDrawOrder, menuItemTransform, nullptr);
-    menu->alignItemsVerticallyWithPadding(20);
-    menu->setPosition(size / 2);
+    menu->alignItemsVerticallyWithPadding(4);
+    menu->setPosition(Vec2(size.x-50,size.y/2-20));
     addChild(menu, 1000);
 }
 
@@ -1725,6 +1725,10 @@ void DrawNodeMethodsTest::drawAll()
     }
     case  drawMethodes::SolidPoly:
     {
+        Vec2 ppp = Vec2(AXRANDOM_MINUS1_1() * size.x / 2, AXRANDOM_MINUS1_1() * size.y / 2);
+        drawNodeEx->setDNPosition(Vec2(ppp));
+
+
         drawNodeEx->setDNPosition(Vec2(0.0f, -300.0f));
         drawNodeEx->setDNRotation(rotation / 10.0f);
         drawNodeEx->setDNScale(Vec2(2.0f, 2.0f));
@@ -1786,10 +1790,19 @@ void DrawNodeMethodsTest::drawAll()
         drawNodeEx->drawStar(Vec2(-150, -100), 5, 70, 3, Color4F::GREEN, 1.0);
 
         drawNodeEx->setDNRotation(0);
+        //for (int i = 0; i < 10; i++)
+        //{
+        //    Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x - 100, AXRANDOM_0_1() * VisibleRect::rightTop().y - 300);
+        //    drawNodeEx->drawStar(pos, 40, 60, AXRANDOM_0_1() * 60 + 3, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), sliderValue[sliderType::Thickness]));
+        //}
+
+        drawNodeEx->setDNRotation(0);
         for (int i = 0; i < 10; i++)
         {
-            Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x - 100, AXRANDOM_0_1() * VisibleRect::rightTop().y - 300);
-            drawNodeEx->drawStar(pos, 40, 60, AXRANDOM_0_1() * 60 + 3, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), sliderValue[sliderType::Thickness]));
+            Vec2 ppp = Vec2(AXRANDOM_MINUS1_1() * size.x / 2, AXRANDOM_MINUS1_1() * size.y / 2);
+            drawNodeEx->setDNPosition(Vec2(ppp));
+            drawNodeEx->drawStar(Vec2::ZERO, 40, 60, AXRANDOM_0_1() * 60 + 3, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), sliderValue[sliderType::Thickness]));
+            // drawNodeEx->drawSolidStar(Vec2::ZERO, 40, 60, AXRANDOM_0_1() * 60 + 3, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
         }
         break;
     }
@@ -1828,18 +1841,12 @@ void DrawNodeMethodsTest::drawAll()
         drawNodeEx->drawSolidStar(Vec2(-150, -100), 5, 70, 3, Color4F::GREEN, Color4F::YELLOW, 1.0);
 
         drawNodeEx->setDNRotation(0);
-
-        
-        drawNodeEx->setDNPosition(Vec2(-100, -100));
-        for (int i = 0; i < 10;)
+        for (int i = 0; i < 10; i++)
         {
-            Vec2 ppp = Vec2(AXRANDOM_0_1()*400, AXRANDOM_0_1()*400);
-
-
-            drawNodeEx->drawSolidStar(ppp, 40, 60, AXRANDOM_0_1() * 60 + 3, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), sliderValue[sliderType::Thickness]), Color4F::YELLOW);
+            Vec2 ppp = Vec2(AXRANDOM_MINUS1_1() * size.x / 2, AXRANDOM_MINUS1_1() * size.y / 2);
+            drawNodeEx->setDNPosition(Vec2(ppp));
+            drawNodeEx->drawSolidStar(Vec2::ZERO, 40, 60, AXRANDOM_0_1() * 60 + 3, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
         }
-
-
 
         break;
     }

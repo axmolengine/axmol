@@ -169,19 +169,24 @@ public:
         DrawMode drawMode,
         float thickness);
 
-    /** Swap the isConvex flag.
+    /** Set backwards compatible with cocos2dx/axmol 2.0  
     *
-    * @param position A Vec2 pointer.
-    * @param numberOfPoints The number of points.
-    * @param color The point color.
+    * @param isConvex swap the '_isConvex' flag.
     * @js NA
     */
     bool swapIsConvex(bool isConvex) {
         _isConvexTmp = _isConvex; _isConvex = isConvex; return _isConvexTmp;
     };
+    /** Set backwards compatible with cocos2dx/axmol 2.0
+    *
+    * @param isConvex Polygons be convex (true).
+    * @js NA
+    */
+    void setIsConvex(bool isConvex) {
+        _isConvex = isConvex;
+    };
 
     /** Get the actual DrawNode version
-    *
     * @js NA
     */
     const ax::extension::DrawNodeEx::Version getDNVersion() {
@@ -197,6 +202,11 @@ public:
     void setDNDrawOrder(bool drawOrder) {
         _drawOrder = drawOrder;
     };
+
+    /** Swap the _drawOrder flag.
+    *
+    * @js NA
+    */
     bool swapDNDrawOrder() {
         return _drawOrder = (_drawOrder) ? false : true;
     };
@@ -210,9 +220,15 @@ public:
     void setDNTransform(bool transform) {
         _dnTransform = transform;
     };
+
+    /** Swap the _dnTransform flag.
+    *
+    * @js NA
+    */
     bool swapDNTransform() {
         return _dnTransform = (_dnTransform) ? false: true;
     };
+
     /** Set the DrawNode scale for each drawing primitive after this.
 
     * @js NA
@@ -304,9 +320,9 @@ public:
 
     /** DrawNode transform method.
     *
-    * @param position A Vec2 pointer.
-    * @param numberOfPoints The number of points.
-    * @param color The point color.
+    * @param vertices A Vec2 vertices list.
+    * @param count The number of vertices.
+    * @param closedPolygon The closedPolygon flag.
     * @js NA
     */
     ax::Vec2* transform(const ax::Vec2* vertices, unsigned int& count, bool closedPolygon = false);
@@ -324,7 +340,7 @@ public:
         _dnLineWidth = 1.0f;
     };
 
-    /** Ensure all DrawNode properties.
+    /** Ensure the DrawNode properties.
 
     * @js NA
     */
@@ -337,7 +353,7 @@ public:
         _dnLineWidthTmp = _dnLineWidth;
     };
 
-    /** Restore all DrawNode properties from last ensureDNValues() call.
+    /** Restore the DrawNode properties from last ensureDNValues() call.
 
     * @js NA
     */
@@ -349,15 +365,6 @@ public:
         _dnRotation = _dnRotationTmp;
         _dnPosition = _dnPositionTmp;
         _dnLineWidth = _dnLineWidthTmp;
-    };
-
-    /** Set backwards compatible with cocos2dx/axmol 2.0
-    *
-    * @param isConvex Polygons be convex (true).
-    * @js NA
-    */
-    void setIsConvex(bool isConvex) {
-        _isConvex = isConvex;
     };
 
     /** creates and initialize a DrawNodeExt node.

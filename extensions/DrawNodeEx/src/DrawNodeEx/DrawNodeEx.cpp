@@ -455,7 +455,6 @@ void DrawNodeEx::drawQuadBezier(const Vec2& origin,
 
     swapIsConvex(false);
     _drawPoly(vertices, segments + 1, false, color, thickness);
-    //  _drawPolygon(vertices, segments + 1, Color4B::TRANSPARENT, thickness, color, false);
     _isConvex = _isConvexTmp;
 }
 
@@ -485,7 +484,6 @@ void DrawNodeEx::drawCubicBezier(const Vec2& origin,
 
     swapIsConvex(true);
     _drawPoly(vertices, segments + 1, false, color, thickness);
-    // _drawPolygon(vertices, segments + 1, Color4B::TRANSPARENT, thickness, color, false);
     _isConvex = _isConvexTmp;
 }
 
@@ -533,11 +531,6 @@ void DrawNodeEx::drawCardinalSpline(ax::PointArray* config,
             segments = i + 1;
             break;
         }
-        //else
-        //{
-        //    vertices[i].x = newPos.x;
-        //    vertices[i].y = newPos.y;
-        //}
     }
 
     swapIsConvex(true);
@@ -753,10 +746,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
     float thickness
     )
 {
-//    drawDirection(verts, sizeof(verts) / sizeof(verts[0]), drawNode2->getPosition());
-
     AXASSERT(count >= 0, "invalid count value");
-    Color4B debugColor;
 
     bool outline = (thickness != 0.0f);
 
@@ -866,20 +856,17 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
                 Vec2 v6 = a - (nw - tw);
                 Vec2 v7 = a + (nw + tw);
 
-                //   if (i == 1)
                 {
-                    //  debugColor = Color4B::BLUE;
-                    debugColor = borderColor;
                     triangles[ii++] = {
-                        {v0, debugColor, Tex2F(-(n + t))},
-                        {v1, debugColor, Tex2F(n - t)},
-                        {v2, debugColor, Tex2F(-n)},
+                        {v0, borderColor, Tex2F(-(n + t))},
+                        {v1, borderColor, Tex2F(n - t)},
+                        {v2, borderColor, Tex2F(-n)},
                     };
                     //          debugColor = Color4B::BLUE;//borderColor;
                     triangles[ii++] = {
-                        {v3, debugColor, Tex2F(n)},
-                        {v1, debugColor, Tex2F(n - t)},
-                        {v2, debugColor, Tex2F(-n)},
+                        {v3, borderColor, Tex2F(n)},
+                        {v1, borderColor, Tex2F(n - t)},
+                        {v2, borderColor, Tex2F(-n)},
                     };
                 }
 
@@ -894,20 +881,16 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
                     {v5, borderColor, Tex2F(n)},
                 };
 
-                //         if (i == count - 1)  //only the last
                 {
-                    //    debugColor = Color4B::RED; //borderColor; //Color4B::RED;
-                    debugColor = borderColor; //Color4B::BLUE;
                     triangles[ii++] = {
-                        {v6, debugColor, Tex2F(t - n)},
-                        {v4, debugColor, Tex2F(-n)},
-                        {v5, debugColor, Tex2F(n)},
+                        {v6, borderColor, Tex2F(t - n)},
+                        {v4, borderColor, Tex2F(-n)},
+                        {v5, borderColor, Tex2F(n)},
                     };
-                    //    debugColor = Color4B::RED; //borderColor; //Color4B::RED;
                     triangles[ii++] = {
-                        {v6, debugColor, Tex2F(t - n)},
-                        {v7, debugColor, Tex2F(t + n)},
-                        {v5, debugColor, Tex2F(n)},
+                        {v6, borderColor, Tex2F(t - n)},
+                        {v7, borderColor, Tex2F(t + n)},
+                        {v5, borderColor, Tex2F(n)},
                     };
                 }
             }
@@ -1116,7 +1099,6 @@ void DrawNodeEx::_drawSegment(const Vec2& from, const Vec2& to, const Color4B& c
         {v5, color, Tex2F(n)},
     };
 
-    // Start
     switch (etStart)
     {
     case DrawNodeEx::EndType::Butt:
@@ -1199,8 +1181,6 @@ void DrawNodeEx::_drawCircle(const Vec2& center,
     bool solid,
     float thickness)
 {
- //   if (segments > 36) segments = 36; // performance issue; 36 segemnts should be enough
-
     const float coef = 2.0f * (float)M_PI / segments;
 
     Vec2* _vertices = new Vec2[segments + 2]; //_abuf.get<Vec2>(segments + 2);
@@ -1239,7 +1219,6 @@ void DrawNodeEx::_drawTriangle(const Vec2* vertices3, const Color4B& borderColor
     {
         swapIsConvex(true);
         _drawPolygon(vertices3, vertex_count, Color4B::BLUE, Color4B::BLUE, true, thickness);
-     //   _drawPolygon(vertices3, vertex_count, fillColor, thickness, borderColor, true);
         _isConvex = _isConvexTmp;
     }
     else
