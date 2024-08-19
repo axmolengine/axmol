@@ -80,8 +80,7 @@ public:
         Triangle,
     };
 
-
-    // see https://www.angusj.com/clipper2/Docs/Units/Clipper/Types/EndType.htm
+    // See also example on https://www.angusj.com/clipper2/Docs/Units/Clipper/Types/EndType.htm
     enum EndType
     {
         Square,
@@ -93,103 +92,274 @@ public:
     {
         v0,  // DrawNode cocos2dx/axmol 1.0
         v1,  // DrawNode 1.0
-        v2,
+        v2,  // DrawNode 2.0 (aka DrawNodeEx)
         v3,
         v4,
     };
 
-    // DrawNodeExt stuff
-    Version _dnVersion = Version::v1;
-    ax::Vec2 _dnScale;
-    float _dnFactor = 0.5f;  /// set the lineWith like Axmol 1.0 
-    ax::Vec2 _dnCenter;
-    float _dnRotation = 0.0f;
-    ax::Vec2 _dnPosition;
-    float _dnLineWidth = 0.0f;
-    float _dnDefaultLineWidth = 0.0f;
-    bool _isConvex = true;
-    bool _isConvexTmp = _isConvex;
-    Version _dnVersionTmp = _dnVersion;
-    ax::Vec2 _dnScaleTmp = _dnScale;
-    ax::Vec2 _dnCenterTmp = _dnCenter;
-    float _dnRotationTmp = _dnRotation;
-    ax::Vec2 _dnPositionTmp = _dnPosition;
-    float _dnLineWidthTmp = _dnLineWidth;
-    bool  _dnTransform = false;
-    bool _drawOrder = true;
 
+    // Internal function _drawPoint
+    void _drawPoint(const Vec2& position, const float pointSize, const Color4B& color, const DrawNodeEx::PointType pointType);
 
+    // Internal function _drawPoints
+    void _drawPoints(const Vec2* position, unsigned int numberOfPoints, const float pointSize, const Color4B& color, const DrawNodeEx::PointType pointType);
+
+    // Internal function _drawDot
+    void _drawDot(const Vec2& pos, float radius, const Color4B& color);
+
+    // Internal function _drawTriangle
+    void _drawTriangle(const Vec2* vertices3, const Color4B& borderColor, const Color4B& fillColor, bool solid = true, float thickness = 0.0f);
+
+    // Internal function _drawAStar
+    void _drawAStar(const Vec2& center,
+        float radiusI,
+        float radiusO,
+        unsigned int segments,
+        const Color4B& color,
+        const Color4B& filledColor,
+        float thickness = 1.0f,
+        bool solid = false);
+
+    // Internal function _drawPoly
+    void _drawPoly(const ax::Vec2* poli,
+        unsigned int numberOfPoints,
+        bool closedPolygon,
+        const ax::Color4B& color,
+        float thickness = 1.0f);
+
+    // Internal function _drawPolygon
+    void _drawPolygon(const ax::Vec2* verts,
+        unsigned int count,
+        const ax::Color4B& fillColor,
+        const ax::Color4B& borderColor,
+        bool closedPolygon = true,
+        float thickness = 1.0f);
+
+    // Internal function _drawSegment
+    void _drawSegment(const ax::Vec2& origin,
+        const ax::Vec2& destination,
+        const ax::Color4B& color,
+        float thickness = 1.0f,
+        DrawNodeEx::EndType etStart = DrawNodeEx::EndType::Square,
+        DrawNodeEx::EndType etEnd = DrawNodeEx::EndType::Square);
+
+    // Internal function _drawCircle
+    void _drawCircle(const Vec2& center,
+        float radius,
+        float angle,
+        unsigned int segments,
+        bool drawLineToCenter,
+        float scaleX,
+        float scaleY,
+        const Color4B& borderColor,
+        const Color4B& fillColor,
+        bool solid,
+        float thickness = 1.0f);
+
+    // Internal function _drawPie
+    void _drawPie(const Vec2& center,
+        float radius,
+        float rotation,
+        int startAngle,
+        int endAngle,
+        float scaleX,
+        float scaleY,
+        const Color4B& fillColor,
+        const Color4B& borderColor,
+        DrawMode drawMode,
+        float thickness);
+
+    /** Set backwards compatible with cocos2dx/axmol 2.0  
+    *
+    * @param isConvex swap the '_isConvex' flag.
+    * @js NA
+    */
     bool swapIsConvex(bool isConvex) {
         _isConvexTmp = _isConvex; _isConvex = isConvex; return _isConvexTmp;
     };
-    ax::extension::DrawNodeEx::Version getDNVersion() {
+    /** Set backwards compatible with cocos2dx/axmol 2.0
+    *
+    * @param isConvex Polygons be convex (true).
+    * @js NA
+    */
+    void setIsConvex(bool isConvex) {
+        _isConvex = isConvex;
+    };
+
+    /** Get the actual DrawNode version
+    * @js NA
+    */
+    const ax::extension::DrawNodeEx::Version getDNVersion() {
         return _dnVersion;
     };
+
+    /** Set the DrawNode draw order
+    *
+    * @param drawOrder. true/false = On/Off
+
+    * @js NA
+    */
+    void setDNDrawOrder(bool drawOrder) {
+        _drawOrder = drawOrder;
+    };
+
+    /** Swap the _drawOrder flag.
+    *
+    * @js NA
+    */
+    bool swapDNDrawOrder() {
+        return _drawOrder = (_drawOrder) ? false : true;
+    };
+
+    /** Set the DrawNode transformation
+    *
+    * @param transform. true/false = On/Off
+    *
+    * @js NA
+    */
+    void setDNTransform(bool transform) {
+        _dnTransform = transform;
+    };
+
+    /** Swap the _dnTransform flag.
+    *
+    * @js NA
+    */
+    bool swapDNTransform() {
+        return _dnTransform = (_dnTransform) ? false: true;
+    };
+
+    /** Set the DrawNode scale for each drawing primitive after this.
+
+    * @js NA
+    */
     void setDNScale(ax::Vec2 scale) {
-        _dnTransform = true;
         _dnScale = scale;
     };
+
+    /** Set the DrawNode scaleX for each drawing primitive after this.
+
+    * @js NA
+    */
     void setDNScaleX(float scaleX) {
-        _dnTransform = true;
         _dnScale.x = scaleX;
     };
+
+    /** Set the DrawNode scaleY for each drawing primitive after this.
+
+    * @js NA
+    */
     void setDNScaleY(float scaleY) {
-        _dnTransform = true;
         _dnScale.y = scaleY;
     };
+
+    /** Set the DrawNode rotation for each drawing primitive after this.
+
+    * @js NA
+    */
     void setDNRotation(float rotation) {
-        _dnTransform = true;
         _dnRotation = rotation;
     };
+
+    /** Get the DrawNode rotation for each drawing primitive after this.
+
+    * @js NA
+    */
     float getDNRotation() {
         return _dnRotation;
     };
+
+    /** Set the DrawNode center of rotation for each drawing primitive after this.
+
+    * @js NA
+    */
     void setDNCenter(ax::Vec2 center) {
-        _dnTransform = true;
         _dnCenter = center;
     };
+
+    /** Get the DrawNode center of rotation for each drawing primitive after this.
+
+    * @js NA
+    */
     ax::Vec2 getDNCenter() {
         return _dnCenter;
     };
+
+    /** Set the DrawNode position for each drawing primitive after this.
+
+    * @js NA
+    */
     void setDNPosition(ax::Vec2 position) {
-        _dnTransform = true;
         _dnPosition = position;
     };
+
+    /** Get the DrawNode position for drawing primitive.
+
+    * @js NA
+    */
     ax::Vec2 getDNPosition() {
         return _dnPosition;
     };
+
+    /** Set the DrawNode line width for each drawing primitive after this.
+
+    * @js NA
+    */
     void setDNLineWidth(float lineWidth) {
-        _dnTransform = true;
         _dnLineWidth = lineWidth;
     };
+
+    /** Get the DrawNode line width for each drawing primitive after this.
+
+    * @js NA
+    */
     float getDNLineWidth() {
         return _dnLineWidth;
     };
+
+
+    /** DrawNode transform method.
+    *
+    * @param vertices A Vec2 vertices list.
+    * @param count The number of vertices.
+    * @param closedPolygon The closedPolygon flag.
+    * @js NA
+    */
     ax::Vec2* transform(const ax::Vec2* vertices, unsigned int& count, bool closedPolygon = false);
 
+    /** Reset all DrawNode properties.
+
+    * @js NA
+    */
     void resetDNValues()
     {
-        _dnTransform = false;
-        _dnVersion = Version::v2;
         _dnScale = Vec2(1.f, 1.f);
         _dnCenter = Vec2(0.f, 0.f);
         _dnRotation = 0.0f;
         _dnPosition = Vec2(0.f, 0.f);
         _dnLineWidth = 1.0f;
     };
+
+    /** Ensure the DrawNode properties.
+
+    * @js NA
+    */
     void ensureDNValues()
     {
-        _dnVersionTmp = _dnVersion;
         _dnScaleTmp = _dnScale;
         _dnCenterTmp = _dnCenter;
         _dnRotationTmp = _dnRotation;
         _dnPositionTmp = _dnPosition;
         _dnLineWidthTmp = _dnLineWidth;
     };
+
+    /** Restore the DrawNode properties from last ensureDNValues() call.
+
+    * @js NA
+    */
     void restoreDNValues()
     {
         _dnTransform = true;
-        _dnVersion = _dnVersionTmp;
         _dnScale = _dnScaleTmp;
         _dnCenter = _dnCenterTmp;
         _dnRotation = _dnRotationTmp;
@@ -246,8 +416,8 @@ public:
         const ax::Vec2& destination,
         const ax::Color4B& color,
         float thickness = 1.0f,
-        DrawNodeEx::EndType etStart = DrawNodeEx::EndType::Square,
-        DrawNodeEx::EndType etEnd = DrawNodeEx::EndType::Square);
+        DrawNodeEx::EndType etStart = DrawNodeEx::EndType::Round,
+        DrawNodeEx::EndType etEnd = DrawNodeEx::EndType::Round);
 
     /** Draws a rectangle given the origin and destination point measured in points.
     * The origin and the destination can not have the same x and y coordinate.
@@ -271,11 +441,8 @@ public:
         bool closedPolygon,
         const ax::Color4B& color,
         float thickness = 1.0f);
-    void _drawPoly(const ax::Vec2* poli,
-        unsigned int numberOfPoints,
-        bool closedPolygon,
-        const ax::Color4B& color,
-        float thickness = 1.0f);
+
+
 
     /** Draws a circle given the center, radius and number of segments.
     *
@@ -287,7 +454,7 @@ public:
     * @param scaleX The scale value in x.
     * @param scaleY The scale value in y.
     * @param color Set the circle color.
-    * @param threshold (optional) Set the threshold which will be draws a better rendered polygon.
+    * @param thickness  (default 1.0f)
     */
     void drawCircle(const ax::Vec2& center,
         float radius,
@@ -307,7 +474,7 @@ public:
     * @param segments The number of segments.
     * @param drawLineToCenter Whether or not draw the line from the origin to center.
     * @param color Set the circle color.
-    * @param thickness  (optional) Set the threshold which will be draws a better rendered polygon.
+    * @param thickness  (default 1.0f)
     */
     void drawCircle(const Vec2& center,
         float radius,
@@ -317,14 +484,14 @@ public:
         const Color4B& color,
         float thickness = 1.0f);  // 500 should "simulate/save" the backwards compatibility
 
-    /** Draws a star given the center, radius1, radius2 and number of segments.
+    /** Draws a star given the center, radiusI, radiusO and number of segments.
     *
     * @param center The circle center point.
     * @param radiusI The inner radius.
     * @param radiusO The outer radius.
     * @param segments The number of segments.
     * @param color Set the star color.
-    * @param thickness  (optional)
+    * @param thickness  (default = 1.0f)
     */
     void drawStar(const Vec2& center,
         float radiusI,
@@ -333,6 +500,15 @@ public:
         const Color4B& color,
         float thickness = 1.0f);
 
+    /** Draws a solid star given the center, radiusI, radiusO and number of segments.
+    *
+    * @param center The circle center point.
+    * @param radiusI The inner radius.
+    * @param radiusO The outer radius.
+    * @param segments The number of segments.
+    * @param color Set the star color.
+    * @param thickness  (default = 1.0f)
+    */
     void drawSolidStar(const Vec2& center,
         float radiusI,
         float radiusO,
@@ -341,14 +517,7 @@ public:
         const Color4B& filledColor,
         float thickness = 1.0f);
 
-    void _drawAStar(const Vec2& center,
-        float radiusI,
-        float radiusO,
-        unsigned int segments,
-        const Color4B& color,
-        const Color4B& filledColor,
-        float thickness = 1.0f,
-        bool solid = false);
+
 
     /** Draws a quad bezier path.
     *
@@ -565,12 +734,7 @@ public:
         float thickness,
         const ax::Color4B& borderColor);
 
-    void _drawPolygon(const ax::Vec2* verts,
-        unsigned int count,
-        const ax::Color4B& fillColor,
-        float thickness,
-        const ax::Color4B& borderColor,
-        bool closedPolygon = true);
+
 
     /** draw a triangle with color.
     *
@@ -581,7 +745,7 @@ public:
     * @js NA
     */
 
-    void drawTriangle(const Vec2* vertices3, 
+    void drawTriangle(const Vec2* vertices3,
         const ax::Color4B& fillColor,
         const ax::Color4B& borderColor,
         float thickness = 1.0f);
@@ -592,7 +756,7 @@ public:
         const ax::Color4B& color,
         float thickness = 1.0f);
 
-    void drawSolidTriangle(const Vec2* vertices3, 
+    void drawSolidTriangle(const Vec2* vertices3,
         const ax::Color4B& fillColor,
         const ax::Color4B& borderColor,
         float thickness = 1.0f);
@@ -627,10 +791,6 @@ public:
     void setLineWidth(float lineWidth);
     // Get CocosStudio guide lines width.
     float getLineWidth();
-
-    void setIsConvex(bool isConvex) {
-        _isConvex = isConvex;
-    };  // Set backwards compatible with cocos2dx/axmol 2.0
 
     /**
     * When isolated is set, the position of the node is no longer affected by parent nodes.
@@ -695,6 +855,41 @@ protected:
 
     ax::any_buffer _abuf;
     ax::any_buffer _abufTransform;
+
+
+    // DrawNode V2
+    const Version _dnVersion = Version::v2;
+    float _dnFactor = 0.5f;  /// set the lineWith like Axmol 1.0
+
+    // transforming stuff
+    ax::Vec2 _dnScale;
+    ax::Vec2 _dnScaleTmp = _dnScale;
+
+    ax::Vec2 _dnCenter;
+    ax::Vec2 _dnCenterTmp = _dnCenter;
+
+    float _dnRotation = 0.0f;
+    float _dnRotationTmp = _dnRotation;
+
+    ax::Vec2 _dnPosition;
+    ax::Vec2 _dnPositionTmp = _dnPosition;
+
+    // Thickness stuff
+    float _dnLineWidth = 0.0f;
+    float _dnLineWidthTmp = _dnLineWidth;
+    float _dnDefaultLineWidth = 0.0f;
+
+
+    // Filling stuff
+    bool _isConvex = true;
+    bool _isConvexTmp = _isConvex;
+
+    // Drawing flags
+    bool  _dnTransform = true;
+    bool  _dnTransformTemp = _dnTransform;
+
+    bool _drawOrder = false;
+    bool _drawOrderTemp = _drawOrder;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNodeEx);

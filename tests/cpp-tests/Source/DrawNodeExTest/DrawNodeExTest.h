@@ -42,7 +42,6 @@ protected:
         AngleEnd,
         Rotation,
         Thickness,
-        Counter,
         sliderTypeLast
     };
     enum drawMethodes
@@ -92,9 +91,11 @@ protected:
 public:
 
     DrawNodeExBaseTest();
-  
+
     void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
     void listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type);
+    void setDrawOrder(Object* sender);
+    void setTransform(Object* sender);
 
     void update(float dt);
 
@@ -108,7 +109,18 @@ public:
     void changeEndAngle(ax::Object* pSender, ax::ui::Slider::EventType type);
     void changeRotation(ax::Object* pSender, ax::ui::Slider::EventType type);
     void changeThickness(ax::Object* pSender, ax::ui::Slider::EventType type);
-    void changeCounter(ax::Object* pSender, ax::ui::Slider::EventType type);
+
+    // using from https://github.com/intmainreturn00/AwesomeNode/
+    void generateDataPoints();
+
+    ax::PointArray *pts = nullptr;
+    ax::PointArray *pts2 = nullptr;
+    float defY, defY2, dev;
+    const int n = 50;
+    const int grid = 10;
+    const int margin = 20;
+    ax::Size screen;
+    ax::Vec2  sixth;
 
 protected:
 
@@ -119,8 +131,14 @@ protected:
     ax::Label* sliderLabel[sliderType::sliderTypeLast];
     float sliderValue[sliderType::sliderTypeLast];
 
+
     ax::ui::RadioButtonGroup* _radioButtonGroup;
+    ax::Layer* _uiLayer;
+    ax::ui::Layout* _widget;
     int selectedRadioButton;
+
+    ax::MenuItemFont* menuItemDrawOrder;
+    ax::MenuItemFont* menuItemTransform;
 
     // DrawNode stuff
     ax::extension::DrawNodeEx* drawNodeEx = nullptr;
@@ -266,15 +284,6 @@ public:
     void update(float dt);
     void onEnter();
 
-private:
-    //ax::Label* _StartAngleLabel;
-    //float startAngle = 0;
-    //ax::Label* _EndAngleLabel;
-    //float endAngle = 0;
-    //ax::Label* _RotationLabel;
-    //float rotation = 0;
-    //ax::Label* _ThicknessLabel;
-    //float thickness = 0;
 };
 
 class DrawNodeMethodsTest : public DrawNodeExBaseTest
@@ -299,9 +308,9 @@ private:
 
     int count = 1;
 
-    ax::Label* label1;
-    ax::Label* label2;
-    ax::Label* label3;
+    ax::Label* labelRound;
+    ax::Label* labelSquare;
+    ax::Label* labelButt;
 
     ax::ui::RadioButtonGroup* _radioButtonGroup;
     int selectedRadioButton;
@@ -431,18 +440,18 @@ private:
     ax::PointArray* array;
 
 
-    // using from https://github.com/intmainreturn00/AwesomeNode/ 
-    void generateDataPoints();  
 
-    ax::PointArray *pts = nullptr;
-    ax::PointArray *pts2 = nullptr;
 
-    ax::Size screen;
-    ax::Vec2 origin, center, sixth;
-    float defY, defY2, dev;
-    const int n = 50;
-    const int grid = 10;
-    const int margin = 20;
+
+    //ax::PointArray *pts = nullptr;
+    //ax::PointArray *pts2 = nullptr;
+
+    //ax::Size screen;
+    //ax::Vec2 origin, center, sixth;
+    //float defY, defY2, dev;
+    //const int n = 50;
+    //const int grid = 10;
+    //const int margin = 20;
 };
 
 
