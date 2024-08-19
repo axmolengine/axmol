@@ -71,7 +71,6 @@ static bool isConvex(const Vec2* verts, int count)
 
 Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int& count, bool closedPolygon)
 {
-    Vec2* vert = nullptr;
     Vec2 vert0 = vertices[0];
     int closedCounter = 0;
 
@@ -80,12 +79,12 @@ Vec2* DrawNodeEx::transform(const Vec2* vertices, unsigned int& count, bool clos
         closedCounter = 1;
     }
 
-    vert = new Vec2[count + closedCounter];
+    Vec2* vert = new Vec2[count + closedCounter];
     AXASSERT(vert != nullptr, "DrawNode::transform: NO MEMORY");
 
     if (_dnTransform == false)
     {
-        memcpy(vert, vertices, (count) * sizeof(Vec2));
+        memcpy(vert, vertices, count * sizeof(Vec2));
         if (closedCounter)
         {
             vert[count] = vert0;
@@ -141,8 +140,8 @@ DrawNodeEx::DrawNodeEx(float lineWidth)
     , _dnPosition(Vec2::ZERO)
     , _dnRotation(0.0f)
     , _dnScale(Vec2::ONE)
-    , _dnTransform(_dnTransform)  
-    , _drawOrder(false)   
+    , _dnTransform(_dnTransform)
+    , _drawOrder(false)
 {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
@@ -423,7 +422,7 @@ void DrawNodeEx::drawStar(const Vec2& center,
 }
 
 void DrawNodeEx::drawSolidStar(const Vec2& center,
-    float radiusI, // inner 
+    float radiusI, // inner
     float radiusO, // outer
     unsigned int segments,
     const Color4B& color,
@@ -765,7 +764,6 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
 
     std::vector<V2F_C4B_T2F_Triangle> triangleList;
 
-
     int vertex_count = 0;
 
     // calculate the memory (important for correct drawing stuff)
@@ -896,7 +894,7 @@ void DrawNodeEx::_drawPolygon(const Vec2* verts,
                     {v5, borderColor, Tex2F(n)},
                 };
 
-                //         if (i == count - 1)  //only the last 
+                //         if (i == count - 1)  //only the last
                 {
                     //    debugColor = Color4B::RED; //borderColor; //Color4B::RED;
                     debugColor = borderColor; //Color4B::BLUE;
@@ -1158,7 +1156,7 @@ void DrawNodeEx::_drawSegment(const Vec2& from, const Vec2& to, const Color4B& c
 
     _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F),
         vertex_count * sizeof(V2F_C4B_T2F));
-    _bufferCountTriangle += vertex_count; //ii * 3; 
+    _bufferCountTriangle += vertex_count; //ii * 3;
     _dirtyTriangle = true;
     _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
 
@@ -1266,7 +1264,7 @@ void DrawNodeEx::_drawTriangle(const Vec2* vertices3, const Color4B& borderColor
 }
 
 void DrawNodeEx::_drawAStar(const Vec2& center,
-    float radiusI, // inner 
+    float radiusI, // inner
     float radiusO, // outer
     unsigned int segments,
     const Color4B& color,

@@ -91,12 +91,12 @@ protected:
 public:
 
     DrawNodeExBaseTest();
-  
+
     void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
     void listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type);
     void setDrawOrder(Object* sender);
     void setTransform(Object* sender);
-    
+
     void update(float dt);
 
     virtual std::string title() const override;
@@ -110,6 +110,17 @@ public:
     void changeRotation(ax::Object* pSender, ax::ui::Slider::EventType type);
     void changeThickness(ax::Object* pSender, ax::ui::Slider::EventType type);
 
+    // using from https://github.com/intmainreturn00/AwesomeNode/
+    void generateDataPoints();
+
+    ax::PointArray *pts = nullptr;
+    ax::PointArray *pts2 = nullptr;
+    float defY, defY2, dev;
+    const int n = 50;
+    const int grid = 10;
+    const int margin = 20;
+    ax::Size screen;
+    ax::Vec2  sixth;
 
 protected:
 
@@ -429,18 +440,18 @@ private:
     ax::PointArray* array;
 
 
-    // using from https://github.com/intmainreturn00/AwesomeNode/ 
-    void generateDataPoints();  
 
-    ax::PointArray *pts = nullptr;
-    ax::PointArray *pts2 = nullptr;
 
-    ax::Size screen;
-    ax::Vec2 origin, center, sixth;
-    float defY, defY2, dev;
-    const int n = 50;
-    const int grid = 10;
-    const int margin = 20;
+
+    //ax::PointArray *pts = nullptr;
+    //ax::PointArray *pts2 = nullptr;
+
+    //ax::Size screen;
+    //ax::Vec2 origin, center, sixth;
+    //float defY, defY2, dev;
+    //const int n = 50;
+    //const int grid = 10;
+    //const int margin = 20;
 };
 
 

@@ -213,6 +213,24 @@ DrawNodeExBaseTest::DrawNodeExBaseTest()
     size = director->getVisibleSize();
     center = Vec2(origin.x + size.width / 2, origin.y + size.height / 2);
 
+    screen = Director::getInstance()->getVisibleSize();
+    sixth = Vec2(screen.width / 6, screen.height / 6); sixth.y;
+
+    defY = (int)(center.y + sixth.y);
+    defY2 = (int)(center.y - sixth.y);
+    dev = sixth.y;
+
+    pts = PointArray::create(n);
+    pts2 = PointArray::create(n);
+    pts->retain();
+    pts2->retain();
+    for (int i = 0; i < n; ++i) {
+        pts->insertControlPoint(Vec2(0, 0), i);
+        pts2->insertControlPoint(Vec2(0, 0), i);
+    }
+
+    generateDataPoints();
+
     if (!drawNodeEx)
     {
         drawNodeEx = DrawNodeEx::create();
@@ -225,8 +243,19 @@ DrawNodeExBaseTest::DrawNodeExBaseTest()
 
     auto menu = Menu::create(menuItemDrawOrder, menuItemTransform, nullptr);
     menu->alignItemsVerticallyWithPadding(20);
-    menu->setPosition(size/2);
-    addChild(menu,1000);
+    menu->setPosition(size / 2);
+    addChild(menu, 1000);
+}
+
+
+void DrawNodeExBaseTest::generateDataPoints() {
+    for (int i = 0; i < n; ++i)
+    {
+        float yy1 = RandomHelper::random_real<float>(defY - dev, defY + dev);
+        float yy2 = RandomHelper::random_real<float>(defY2 - dev, defY2 + dev);
+        pts->replaceControlPoint(Vec2(margin + i * (screen.width - 3 * margin) / n, yy1), i);
+        pts2->replaceControlPoint(Vec2(margin + i * (screen.width - 3 * margin) / n, yy2), i);
+    }
 }
 
 void DrawNodeExBaseTest::setDrawOrder(Object* sender)
@@ -422,7 +451,7 @@ DrawNodeMorphTest_SolidPolygon::DrawNodeMorphTest_SolidPolygon()
         verticesObj2[n] = new Vec2[segments];  //square
         verticesObjMorph[n] = new Vec2[segments];
 
-        for (unsigned int i = 0; i < segments; i++) // 
+        for (unsigned int i = 0; i < segments; i++) //
         {
             float rads = i * coef + angle;
             int radius = 150 + AXRANDOM_MINUS1_1() * 50;
@@ -544,7 +573,7 @@ DrawNodeMorphTest_Polygon::DrawNodeMorphTest_Polygon()
         verticesObj2[n] = new Vec2[segments];  //square
         verticesObjMorph[n] = new Vec2[segments];
 
-        for (unsigned int i = 0; i < segments; i++) // 
+        for (unsigned int i = 0; i < segments; i++) //
         {
             float rads = i * coef + angle;
             int radius = 150 + AXRANDOM_MINUS1_1() * 50;
@@ -1421,18 +1450,31 @@ void DrawNodeMethodsTest::drawAll()
     }
     case drawMethodes::QuadBezier:
     {
-        for (int i = 0; i < 10; i++)
-        {
-            Vec2 p1 = Vec2(-600, AXRANDOM_MINUS1_1() * 600);
-            Vec2 p2 = Vec2(size.width / 2, AXRANDOM_MINUS1_1() * 600);
-            Vec2 p3 = Vec2(size.width, AXRANDOM_MINUS1_1() * 600);
-            drawNodeEx->drawQuadBezier(p1, p2, p3, 30, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
-        }
-
         drawNodeEx->drawQuadBezier(Vec2(size.width - 150, size.height - 150), Vec2(size.width - 70, size.height - 10),
             Vec2(size.width - 10, size.height - 10), 10, Color4F::BLUE, sliderValue[sliderType::Thickness]);
         drawNodeEx->drawQuadBezier(Vec2(0.0f + 100, size.height - 100), Vec2(size.width / 2, size.height / 2),
             Vec2(size.width - 100, size.height - 100), 50, Color4F::RED, sliderValue[sliderType::Thickness]);
+
+
+        for (int i = 0; i < 360;)
+        {
+            Vec2 p1 = pts->getControlPointAtIndex(i);
+            Vec2 p2 = pts->getControlPointAtIndex(i++);
+            Vec2 p3 = pts->getControlPointAtIndex(i);
+
+            drawNodeEx->setDNPosition(Vec2(-100, -100));
+            drawNodeEx->drawQuadBezier(p1, p2, p3, 30, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
+        }
+
+        for (int i = 0; i < 360;)
+        {
+            Vec2 p1 = pts2->getControlPointAtIndex(i);
+            Vec2 p2 = pts2->getControlPointAtIndex(i++);
+            Vec2 p3 = pts2->getControlPointAtIndex(i);
+
+            drawNodeEx->setDNPosition(Vec2(-100, -100));
+            drawNodeEx->drawQuadBezier(p1, p2, p3, 30, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
+        }
 
         break;
     }
@@ -1445,13 +1487,25 @@ void DrawNodeMethodsTest::drawAll()
             Vec2(size.width - 10, size.height - 50), 20, Color4F::GRAY, sliderValue[sliderType::Thickness]);
 
 
-        for (int i = 0; i < 10; i++)
+
+        for (int i = 0; i < 360;)
         {
-            Vec2 p1 = Vec2(-600, AXRANDOM_MINUS1_1() * 600);
-            Vec2 p2 = Vec2(size.width / 2, AXRANDOM_MINUS1_1() * 600);
-            Vec2 p3 = Vec2(size.width, AXRANDOM_MINUS1_1() * 600);
-            Vec2 p4 = Vec2(AXRANDOM_0_1() * 200 + 200, AXRANDOM_0_1() * 200 + 200);
-            drawNodeEx->drawCubicBezier(p1, p2, p3, p4, 40, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
+            Vec2 p1 = pts->getControlPointAtIndex(i);
+            Vec2 p2 = pts->getControlPointAtIndex(i++);
+            Vec2 p3 = pts->getControlPointAtIndex(i++);
+            Vec2 p4 = pts->getControlPointAtIndex(i);
+            drawNodeEx->setDNPosition(Vec2(-100, -100));
+            drawNodeEx->drawCubicBezier(p1, p2, p3, p4, 120, Color4F::ORANGE, sliderValue[sliderType::Thickness]);
+        }
+
+        for (int i = 0; i < 360;)
+        {
+            Vec2 p1 = pts2->getControlPointAtIndex(i);
+            Vec2 p2 = pts2->getControlPointAtIndex(i++);
+            Vec2 p3 = pts2->getControlPointAtIndex(i++);
+            Vec2 p4 = pts2->getControlPointAtIndex(i);
+            drawNodeEx->setDNPosition(Vec2(-100, -100));
+            drawNodeEx->drawCubicBezier(p1, p2, p3, p4, 120, Color4F::ORANGE, sliderValue[sliderType::Thickness]);
         }
 
         break;
@@ -1477,14 +1531,8 @@ void DrawNodeMethodsTest::drawAll()
         drawNodeEx->drawCardinalSpline(array2, 5.0f, 120, Color4F::ORANGE, sliderValue[sliderType::Thickness]);
 
 
-        for (int i = 0; i < 10; i++)
-        {
-            auto array3 = ax::PointArray::create(3);
-            array3->addControlPoint(Vec2(-600, AXRANDOM_MINUS1_1() * 600));
-            array3->addControlPoint(Vec2(size.width / 2, AXRANDOM_MINUS1_1() * 600));
-            array3->addControlPoint(Vec2(size.width, AXRANDOM_MINUS1_1() * 600));
-            drawNodeEx->drawCardinalSpline(array3, 5.0f, 40, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
-        }
+        drawNodeEx->drawCardinalSpline(pts, 0.1f, 360, Color4F::RED, 5.0f);
+        drawNodeEx->drawCardinalSpline(pts2, 0.1f, 360, Color4F::GREEN, 2.0f);
 
         break;
     }
@@ -1508,15 +1556,10 @@ void DrawNodeMethodsTest::drawAll()
         array->addControlPoint(Vec2(size.width / 2, size.height / 2));
         drawNodeEx->drawCatmullRom(array, 20, Color4F::MAGENTA, sliderValue[sliderType::Thickness]);
 
-        for (int i = 0; i < 10; i++)
-        {
-            auto array3 = ax::PointArray::create(4);
-            array3->addControlPoint(Vec2(-600, AXRANDOM_MINUS1_1() * 600));
-            array3->addControlPoint(Vec2(size.width / 2, AXRANDOM_MINUS1_1() * 600));
-            array3->addControlPoint(Vec2(size.width, AXRANDOM_MINUS1_1() * 600));
-            array3->addControlPoint(Vec2(AXRANDOM_0_1() * 200 + 200, AXRANDOM_0_1() * 200 + 200));
-            drawNodeEx->drawCatmullRom(array3, 30, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), sliderValue[sliderType::Thickness]);
-        }
+
+        drawNodeEx->drawCatmullRom(pts, 360, Color4F::RED, 5.0f);
+        drawNodeEx->drawCatmullRom(pts2, 360, Color4F::GREEN, 2.0f);
+
         break;
     }
     case  drawMethodes::Poly:
@@ -1785,11 +1828,19 @@ void DrawNodeMethodsTest::drawAll()
         drawNodeEx->drawSolidStar(Vec2(-150, -100), 5, 70, 3, Color4F::GREEN, Color4F::YELLOW, 1.0);
 
         drawNodeEx->setDNRotation(0);
-        for (int i = 0; i < 10; i++)
+
+        
+        drawNodeEx->setDNPosition(Vec2(-100, -100));
+        for (int i = 0; i < 10;)
         {
-            Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x - 100, AXRANDOM_0_1() * VisibleRect::rightTop().y - 300);
-            drawNodeEx->drawSolidStar(pos, 40, 60, AXRANDOM_0_1() * 60 + 3, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), sliderValue[sliderType::Thickness]), Color4F::YELLOW);
+            Vec2 ppp = Vec2(AXRANDOM_0_1()*400, AXRANDOM_0_1()*400);
+
+
+            drawNodeEx->drawSolidStar(ppp, 40, 60, AXRANDOM_0_1() * 60 + 3, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), sliderValue[sliderType::Thickness]), Color4F::YELLOW);
         }
+
+
+
         break;
     }
 
@@ -2660,7 +2711,7 @@ DrawNodeSpLinesTest::DrawNodeSpLinesTest()
         pts2->insertControlPoint(Vec2(0, 0), i);
     }
 
-    generateDataPoints();
+    DrawNodeExBaseTest::generateDataPoints();
 
     addNewControlPoint(VisibleRect::center());
 
@@ -2681,15 +2732,6 @@ void DrawNodeSpLinesTest::onTouchesEnded(const std::vector<Touch*>& touches, Eve
     }
 }
 
-void DrawNodeSpLinesTest::generateDataPoints() {
-    for (int i = 0; i < n; ++i)
-    {
-        float yy1 = RandomHelper::random_real<float>(defY - dev, defY + dev);
-        float yy2 = RandomHelper::random_real<float>(defY2 - dev, defY2 + dev);
-        pts->replaceControlPoint(Vec2(margin + i * (screen.width - 3 * margin) / n, yy1), i);
-        pts2->replaceControlPoint(Vec2(margin + i * (screen.width - 3 * margin) / n, yy2), i);
-    }
-}
 
 std::string DrawNodeSpLinesTest::title() const
 {
@@ -2804,7 +2846,6 @@ void CandyMixEeffect::rotozoom()
             drawNodeEx->drawPoint(Vec2(px, py), 2, color);
             o++;
         }
-
     }
 
     angle += angleSpeed;
@@ -2813,16 +2854,6 @@ void CandyMixEeffect::rotozoom()
     centerX = WIDTH * 0.5 + sin(angle) * zoom * 350;
     centerY = HEIGHT * 0.5 + cos(angle) * zoom * 350;
 }
-
-
-
-
-
-
-
-
-
-
 
 void CandyMixEeffect::renderLine(float x1, float x2, float y, ax::Color4F color, float angle)
 {
@@ -2846,7 +2877,7 @@ void CandyMixEeffect::renderLine(float x1, float x2, float y, ax::Color4F color,
     for (size_t x = x1; x < x2; x++)
     {
         float pos = (x - xMid) * rng;
-        float ang = (angle + asin(pos) + (cos((angle + pos * (float)M_PI) * 1.78f))) + (float)M_PI * 0.5f;
+        float ang = (angle + asin(pos) + (cos((angle + pos * (float)M_PI) * 1.78f) * 0.3f)) + (float)M_PI * 0.5f;
         float sf = 0.2f + 0.8f * MAX(mm - 0.8, MIN(mm, cos(ang)));
         float sp = pow(MAX(0, cos(2 * ang)), 20);
         float rr = MIN(mm, r * sf + sp);
@@ -2867,8 +2898,6 @@ void CandyMixEeffect::update(float dt)
     static float HIG = 600;
     static b2Timer timer;
 
-
-
     float t = timer.GetMilliseconds() / 1000.0f;
     float ta = sin(t * cos(t) * 0.02f) + t;
     float tb = (1.0f + sin(t) * 1.0f) * 0.02f + 0.01f;
@@ -2876,7 +2905,7 @@ void CandyMixEeffect::update(float dt)
     for (int y = 0; y < HIG; y++)
     {
         float ya = y * 0.01f;
-        float rad = 60 + sin(ta + ya) * 45;
+        float rad = 60 + sin(ta + ya) * 30;
         float rot = t + sin(ya * 2) * 0.5f + cos(ta * 0.3f) * 0.3f;
         float x1 = xa + sin(rot) * rad;
         float x2 = xa + sin(rot + (float)M_PI * 0.5f) * rad;

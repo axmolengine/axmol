@@ -850,7 +850,7 @@ protected:
     ax::any_buffer _abufTransform;
 
 
-    // DrawNode V2 
+    // DrawNode V2
     const Version _dnVersion = Version::v2;
     float _dnFactor = 0.5f;  /// set the lineWith like Axmol 1.0
 
