@@ -3,8 +3,7 @@
 # PowerShell Param statement : every line must end in #\ except the last line must with <#\
 # And, you can't use backticks in this section        #\
 # refer https://gist.github.com/ryanmaclean/a1f3135f49c1ab3fa7ec958ac3f8babe #\
-param( [string]$gradlewVersion,                       #\
-    [switch]$setupCMake                               #\
+param( [string]$gradlewVersion                    #\
 )                                                <#\
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `
 #vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
@@ -356,10 +355,6 @@ if (!(Test-Path $prefix -PathType Container)) {
 
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
 . $1k_script -setupOnly -prefix $prefix @args
-
-if ($setupCMake) {
-    setup_cmake -scope 'global'
-}
 
 if ($gradlewVersion) {
     $aproj_source_root = Join-Path $AX_ROOT 'templates/common/proj.android'

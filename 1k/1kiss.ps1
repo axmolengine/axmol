@@ -250,6 +250,7 @@ $options = @{
     u      = $false # whether delete 1kdist cross-platform prebuilt folder: path/to/_x
     dm     = $false # dump compiler preprocessors
     i      = $false # perform install
+    scope  = 'local'
 }
 
 $optName = $null
@@ -842,7 +843,7 @@ function setup_ninja() {
 }
 
 # setup cmake
-function setup_cmake($skipOS = $false, $scope = 'local') {
+function setup_cmake($skipOS = $false) {
     $cmake_prog, $cmake_ver = find_prog -name 'cmake'
     if ($cmake_prog -and (!$skipOS -or $cmake_prog.Contains($myRoot))) {
         return $cmake_prog, $cmake_ver
@@ -896,12 +897,13 @@ function setup_cmake($skipOS = $false, $scope = 'local') {
             }
         }
         elseif ($IsLinux) {
-            if ($scope -ne 'global') {
+            if ($option.scope -ne 'global') {
                 $1k.mkdirs($cmake_root)
                 & "$cmake_pkg_path" '--skip-license' '--exclude-subdir' "--prefix=$cmake_root" 1>$null 2>$null
             }
             else {
-                & "$cmake_pkg_path" '--skip-license' '--prefix=/usr/local' 1>$null 2>$null
+                $cmake_bin = '/usr/local/bin'
+                sudo bash "$cmake_pkg_path" '--skip-license' '--prefix=/usr/local' 1>$null 2>$null
             }
             if (!$?) { Remove-Item $cmake_pkg_path -Force }
         }
@@ -913,6 +915,7 @@ function setup_cmake($skipOS = $false, $scope = 'local') {
 
         $1k.println("Using cmake: $cmake_prog, version: $cmake_ver")
     }
+    
     $1k.addpath($cmake_bin)
     return $cmake_prog, $cmake_ver
 }
@@ -1572,7 +1575,7 @@ elseif ($Global:is_android) {
     $ninja_prog = setup_ninja
     # ensure ninja in cmake_bin
     if (!(ensure_cmake_ninja $cmake_prog $ninja_prog)) {
-        $cmake_prog, $Script:cmake_ver = setup_cmake -Force
+        $cmake_prog, $Script:cmake_ver = setup_cmake -skipOS $true
         if (!(ensure_cmake_ninja $cmake_prog $ninja_prog)) {
             $1k.println("Ensure ninja in cmake bin directory fail")
         }
