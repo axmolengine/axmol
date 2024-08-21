@@ -72,7 +72,7 @@
 
 ## FreeType
 - [![Upstream](https://img.shields.io/gitlab/v/tag/freetype/freetype?label=Upstream)](https://gitlab.freedesktop.org/freetype/freetype)
-- Version: 2.13.2
+- Version: 2.13.3
 - License: BSD-style (The FreeType Project)
 
 ## Glad
