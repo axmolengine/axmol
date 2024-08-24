@@ -42,7 +42,8 @@ extern "C" {
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * The Lua engine integrated into the axmol to process the interactive operation between lua and c++.
@@ -259,7 +260,7 @@ private:
     LuaStack* _stack;
 };
 
-NS_AX_END
+}
 
 // end group
 /// @}

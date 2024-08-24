@@ -37,7 +37,8 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 class DrawNode;
 class LayerColor;
@@ -658,7 +659,7 @@ protected:
 };
 
 }  // namespace ui
-NS_AX_END
+}
 // end of ui group
 /// @}
 #endif /* defined(__Layout__) */

@@ -27,7 +27,8 @@
 #include "Particle3D/PU/PUEventHandler.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUEventHandler::PUEventHandler()
     : _parentObserver(0)
@@ -44,4 +45,4 @@ void PUEventHandler::copyAttributesTo(PUEventHandler* eventHandler)
     eventHandler->_eventHandlerScale = _eventHandlerScale;
 }
 
-NS_AX_END
+}

@@ -135,7 +135,8 @@ struct dirent* readdir$INODE64(DIR* dir)
 #    include "platform/winrt/WICImageLoader-winrt.h"
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 //////////////////////////////////////////////////////////////////////////
 // struct and data for pvr structure
@@ -2639,4 +2640,4 @@ void Image::reversePremultipliedAlpha()
     _hasPremultipliedAlpha = false;
 }
 
-NS_AX_END
+}

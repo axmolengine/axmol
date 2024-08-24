@@ -1,9 +1,10 @@
 #include "CocosStudioExtension.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 NodeExtension::NodeExtension() {}
 
 NodeExtension::~NodeExtension() {}
 
-NS_AX_END
+}

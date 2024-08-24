@@ -25,7 +25,8 @@
 
 #include "lua-bindings/manual/LuaBridge.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 lua_State* LuaBridge::s_luaState = NULL;
 int LuaBridge::s_newFunctionId   = 0;
@@ -243,4 +244,4 @@ int LuaBridge::retainLuaFunction(lua_State* L, int functionIndex, int* retainCou
     return functionId;
 }
 
-NS_AX_END
+}

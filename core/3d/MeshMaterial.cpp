@@ -35,7 +35,8 @@
 #include "renderer/Shaders.h"
 #include "renderer/Pass.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 MeshMaterialCache* MeshMaterialCache::_cacheInstance = nullptr;
 
@@ -404,4 +405,4 @@ void MeshMaterialCache::removeUnusedMeshMaterial()
     }
 }
 
-NS_AX_END
+}

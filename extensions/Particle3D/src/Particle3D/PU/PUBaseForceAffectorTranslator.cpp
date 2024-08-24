@@ -29,7 +29,8 @@
 #include "Particle3D/PU/PUDynamicAttribute.h"
 #include "Particle3D/PU/PUDynamicAttributeTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUBaseForceAffectorTranslator::PUBaseForceAffectorTranslator() {}
 //-------------------------------------------------------------------------
@@ -113,4 +114,4 @@ bool PUBaseForceAffectorTranslator::translateChildObject(PUScriptCompiler* /*com
     return false;
 }
 
-NS_AX_END
+}

@@ -30,7 +30,8 @@
 #include "Particle3D/PU/PUDynamicAttributeTranslator.h"
 #include "Particle3D/PU/PUBaseForceAffectorTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PULinearForceAffectorTranslator::PULinearForceAffectorTranslator() {}
 //-------------------------------------------------------------------------
@@ -49,4 +50,4 @@ bool PULinearForceAffectorTranslator::translateChildObject(PUScriptCompiler* /*c
     return false;
 }
 
-NS_AX_END
+}

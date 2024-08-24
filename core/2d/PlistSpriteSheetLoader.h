@@ -30,7 +30,8 @@
 #include "base/Value.h"
 #include "base/Data.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PlistSpriteSheetLoader : public SpriteSheetLoader
 {
@@ -65,4 +66,4 @@ protected:
                                           SpriteFrameCache& cache);
 };
 
-NS_AX_END
+}

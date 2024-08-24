@@ -28,7 +28,8 @@ THE SOFTWARE.
 #include "2d/ActionGrid3D.h"
 #include "base/Director.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // implementation of Waves3D
 
 Waves3D* Waves3D::create(float duration, const Vec2& gridSize, unsigned int waves, float amplitude)
@@ -736,4 +737,4 @@ void Twirl::update(float time)
     }
 }
 
-NS_AX_END
+}

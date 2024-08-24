@@ -40,7 +40,8 @@
 #include "3d/MeshVertexIndexData.h"
 #include "3d/MeshMaterial.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _3d
@@ -400,5 +401,5 @@ protected:
 // end of 3d group
 /// @}
 
-NS_AX_END
+}
 #endif  // __AX_MESH_RENDERER_H__

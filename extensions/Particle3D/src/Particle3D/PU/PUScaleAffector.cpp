@@ -27,7 +27,8 @@
 #include "PUScaleAffector.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const float PUScaleAffector::DEFAULT_X_SCALE   = 1.0f;
@@ -284,4 +285,4 @@ void PUScaleAffector::copyAttributesTo(PUAffector* affector)
     scaleAffector->_sinceStartSystem = _sinceStartSystem;
 }
 
-NS_AX_END
+}

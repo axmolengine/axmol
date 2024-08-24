@@ -27,7 +27,8 @@
 #include "Particle3D/PU/PUOnClearObserver.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 //-----------------------------------------------------------------------
 void PUOnClearObserver::notifyStart()
@@ -77,4 +78,4 @@ PUOnClearObserver* PUOnClearObserver::create()
     return pco;
 }
 
-NS_AX_END
+}

@@ -27,7 +27,8 @@
 #include "PUBoxCollider.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const float PUBoxCollider::DEFAULT_WIDTH  = 100.0f;
@@ -280,4 +281,4 @@ void PUBoxCollider::copyAttributesTo(PUAffector* affector)
     boxCollider->_innerCollision = _innerCollision;
 }
 
-NS_AX_END
+}

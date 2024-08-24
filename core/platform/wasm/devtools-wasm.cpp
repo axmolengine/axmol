@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include <emscripten.h>
 #include "base/UTF8.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 DevToolsImpl::DevToolsImpl()
 {
@@ -75,7 +76,7 @@ DevToolsImpl* DevToolsImpl::getInstance()
     return &instance;
 }
 
-NS_AX_END
+}
 
 extern "C"
 {

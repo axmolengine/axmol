@@ -33,7 +33,8 @@
 #include "base/Director.h"
 #include "2d/Scene.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 ProtectedNode::ProtectedNode() : _reorderProtectedChildDirty(false) {}
 
@@ -451,4 +452,4 @@ void ProtectedNode::setGlobalZOrder(float globalZOrder)
         child->setGlobalZOrder(globalZOrder);
 }
 
-NS_AX_END
+}

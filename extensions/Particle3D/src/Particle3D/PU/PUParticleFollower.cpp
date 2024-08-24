@@ -27,7 +27,8 @@
 #include "PUParticleFollower.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const float PUParticleFollower::DEFAULT_MAX_DISTANCE = 3.40282e+038f;
@@ -106,4 +107,4 @@ void PUParticleFollower::copyAttributesTo(PUAffector* affector)
     particleFollower->_minDistance       = _minDistance;
 }
 
-NS_AX_END
+}

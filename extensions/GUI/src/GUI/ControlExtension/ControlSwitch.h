@@ -33,10 +33,11 @@
 #include "Control.h"
 #include "extensions/ExtensionExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 class Sprite;
 class Label;
-NS_AX_END
+}
 
 NS_AX_EXT_BEGIN
 

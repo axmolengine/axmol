@@ -35,7 +35,8 @@
 #include "base/Types.h"
 #include "base/Vector.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Properties;
 class Vec2;

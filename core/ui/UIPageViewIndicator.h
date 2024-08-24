@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "ui/UIPageView.h"
 #include "2d/Sprite.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 /**
  * @addtogroup ui
  * @{
@@ -100,6 +101,6 @@ protected:
 }  // namespace ui
 // end of ui group
 /// @}
-NS_AX_END
+}
 
 #endif /* defined(__UIPAGEVIEWINDICATOR_H__) */

@@ -26,7 +26,8 @@
 #include "base/EventListenerCustom.h"
 #include "base/EventCustom.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 EventListenerCustom::EventListenerCustom() : _onCustomEvent(nullptr) {}
 
@@ -89,4 +90,4 @@ bool EventListenerCustom::checkAvailable()
     return ret;
 }
 
-NS_AX_END
+}

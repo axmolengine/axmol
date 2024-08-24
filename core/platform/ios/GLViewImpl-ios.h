@@ -29,7 +29,8 @@
 #include "platform/Common.h"
 #include "platform/GLView.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /** Class that represent the OpenGL View
  */
@@ -90,4 +91,4 @@ protected:
     void* _eaglView;
 };
 
-NS_AX_END
+}

@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "2d/Transition.h"
 #include "renderer/CustomCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class NodeGrid;
 
@@ -121,6 +122,6 @@ protected:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __CCPAGE_TURN_TRANSITION_H__

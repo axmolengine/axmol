@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "2d/Node.h"
 #include "renderer/CustomCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Texture2D;
 
@@ -206,4 +207,4 @@ private:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}

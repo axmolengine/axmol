@@ -38,7 +38,8 @@
 #include "Particle3D/PU/PUObserverTranslator.h"
 #include "Particle3D/PU/PUBehaviourTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 class PUMaterialCache;
 class PUTranslateManager
 {
@@ -77,6 +78,6 @@ public:
     virtual ~PUTranslateManager();
 };
 
-NS_AX_END
+}
 
 #endif /* defined(__cocos2d_libs__CCParticle3DTranslateManager__) */

@@ -41,7 +41,8 @@
 #include "renderer/Pass.h"
 #include "xxhash.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 MeshCommand::MeshCommand()
 #if AX_ENABLE_CACHE_TEXTURE_DATA
@@ -84,4 +85,4 @@ MeshCommand::~MeshCommand()
 void MeshCommand::listenRendererRecreated(EventCustom* event) {}
 #endif
 
-NS_AX_END
+}

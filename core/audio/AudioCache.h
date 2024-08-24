@@ -37,7 +37,8 @@
 #include "audio/AudioMacros.h"
 #include "audio/alconfig.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AudioEngineImpl;
 class AudioPlayer;
@@ -107,4 +108,4 @@ protected:
     friend class AudioPlayer;
 };
 
-NS_AX_END
+}

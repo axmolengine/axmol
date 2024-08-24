@@ -34,7 +34,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -62,7 +63,7 @@ private:
     friend class EventListenerFocus;
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

@@ -35,7 +35,8 @@
 #    include <errno.h>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static size_t ov_fread_r(void* buffer, size_t element_size, size_t element_count, void* handle)
 {
@@ -115,6 +116,6 @@ bool AudioDecoderOgg::seek(uint32_t frameOffset)
 {
     return 0 == ov_pcm_seek(&_vf, frameOffset);
 }
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #undef LOG_TAG

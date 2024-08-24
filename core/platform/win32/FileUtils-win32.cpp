@@ -38,7 +38,8 @@ THE SOFTWARE.
 
 #define DECLARE_GUARD (void)0  // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #define AX_MAX_PATH 512
 
@@ -358,4 +359,4 @@ bool FileUtilsWin32::removeDirectory(std::string_view dirPath) const
     return false;
 }
 
-NS_AX_END
+}

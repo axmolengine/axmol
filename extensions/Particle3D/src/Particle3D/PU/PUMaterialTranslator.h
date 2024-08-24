@@ -30,7 +30,8 @@
 #include "Particle3D/PU/PUScriptTranslator.h"
 #include "Particle3D/PU/PUScriptCompiler.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 class PUMaterial;
 class PUMaterialCache;
 class CCPUMaterialTranslator : public PUScriptTranslator
@@ -67,6 +68,6 @@ public:
     virtual void translate(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-NS_AX_END
+}
 
 #endif /* defined(__cocos2d_libs__CCParticle3DTechniqueTranslator__) */

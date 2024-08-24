@@ -26,7 +26,8 @@
 
 #include "lua-bindings/manual/LuaValue.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const LuaValue LuaValue::intValue(const int intValue)
 {
@@ -156,4 +157,4 @@ void LuaValue::copy(const LuaValue& rhs)
     }
 }
 
-NS_AX_END
+}

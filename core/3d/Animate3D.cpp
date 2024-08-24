@@ -33,7 +33,8 @@
 #include "base/Director.h"
 #include "base/EventDispatcher.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 std::unordered_map<Node*, Animate3D*> Animate3D::s_fadeInAnimates;
 std::unordered_map<Node*, Animate3D*> Animate3D::s_fadeOutAnimates;
@@ -536,4 +537,4 @@ void Animate3D::removeFromMap()
     }
 }
 
-NS_AX_END
+}

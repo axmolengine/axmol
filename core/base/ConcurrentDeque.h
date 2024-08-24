@@ -28,7 +28,8 @@
 #include <deque>
 #include <mutex>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 template <typename _Ty>
 class ConcurrentDeque
@@ -113,4 +114,4 @@ private:
     std::deque<_Ty> queue_;
     mutable std::recursive_mutex mtx_;
 };
-NS_AX_END  // namespace ax
+}  // namespace ax

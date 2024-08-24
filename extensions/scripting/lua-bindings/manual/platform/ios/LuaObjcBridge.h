@@ -32,7 +32,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * Build a bridge between ObjectC and Lua script.
@@ -57,7 +58,7 @@ protected:
 
     static void pushValue(lua_State* L, void* val);
 };
-NS_AX_END
+}
 
 // end group
 /// @}

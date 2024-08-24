@@ -33,7 +33,8 @@ THE SOFTWARE.
 
 #include <math.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 bool ax::Image::saveToFile(std::string_view filename, bool isToRGB)
 {
@@ -129,4 +130,4 @@ bool ax::Image::saveToFile(std::string_view filename, bool isToRGB)
     return true;
 }
 
-NS_AX_END
+}

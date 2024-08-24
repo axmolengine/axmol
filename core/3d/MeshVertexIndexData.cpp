@@ -46,7 +46,8 @@
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 MeshIndexData* MeshIndexData::create(std::string_view id,
@@ -200,4 +201,4 @@ MeshVertexData::~MeshVertexData()
 #endif
 }
 
-NS_AX_END
+}

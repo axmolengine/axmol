@@ -77,7 +77,8 @@ struct LineBreakLine
     }
 };
 
-NS_AX_BEGIN
+namespace ax
+{
 
 int Device::getDPI()
 {
@@ -589,4 +590,4 @@ void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged() {}
 
-NS_AX_END
+}

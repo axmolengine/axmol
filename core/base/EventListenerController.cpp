@@ -29,7 +29,8 @@
 #include "base/Macros.h"
 #include "base/Controller.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const std::string EventListenerController::LISTENER_ID = "__ax_controller";
 
@@ -115,4 +116,4 @@ EventListenerController* EventListenerController::clone()
     return nullptr;
 }
 
-NS_AX_END
+}

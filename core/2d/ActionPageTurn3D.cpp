@@ -28,7 +28,8 @@ THE SOFTWARE.
 #include "2d/Grid.h"
 #include "2d/NodeGrid.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PageTurn3D* PageTurn3D::create(float duration, const Vec2& gridSize)
 {
@@ -130,4 +131,4 @@ void PageTurn3D::update(float time)
     }
 }
 
-NS_AX_END
+}

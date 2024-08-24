@@ -29,7 +29,8 @@
 
 #include "PUBaseCollider.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUBoxCollider : public PUBaseCollider
 {
@@ -110,6 +111,6 @@ protected:
     Vec3 _predictedPosition;
     bool _innerCollision;
 };
-NS_AX_END
+}
 
 #endif

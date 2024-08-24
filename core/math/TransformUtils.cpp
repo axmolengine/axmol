@@ -28,7 +28,8 @@ THE SOFTWARE.
 #include "math/TransformUtils.h"
 #include "math/AffineTransform.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void CGAffineToGL(const AffineTransform& t, float* m)
 {

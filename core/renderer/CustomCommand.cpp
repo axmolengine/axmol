@@ -29,7 +29,8 @@
 #include "base/Utils.h"
 #include <stddef.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 CustomCommand::CustomCommand()
 {
@@ -211,4 +212,4 @@ std::size_t CustomCommand::computeIndexSize() const
         return sizeof(unsigned int);
 }
 
-NS_AX_END
+}

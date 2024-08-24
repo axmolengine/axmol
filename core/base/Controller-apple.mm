@@ -117,7 +117,8 @@ static GCControllerConnectionEventHandler* __instance = nil;
 
 @end
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class ControllerImpl
 {
@@ -359,6 +360,6 @@ bool Controller::isConnected() const
 
 void Controller::receiveExternalKeyEvent(int externalKeyCode, bool receive) {}
 
-NS_AX_END
+}
 
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)

@@ -26,7 +26,8 @@
 #include "3d/AttachNode.h"
 #include "3d/Skeleton3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AttachNode* AttachNode::create(Bone3D* attachBone)
 {
@@ -72,4 +73,4 @@ void AttachNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
 {
     Node::visit(renderer, parentTransform, Node::FLAGS_DIRTY_MASK);
 }
-NS_AX_END
+}

@@ -28,7 +28,8 @@
 #include "3d/3DProgramInfo.h"
 #include "3d/VertexAttribBinding.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static std::vector<VertexAttribBinding*> __vertexAttribBindingCache;
 
@@ -156,4 +157,4 @@ void VertexAttribBinding::setVertexAttribPointer(VertexLayout* vertexLayout,
     }
 }
 
-NS_AX_END
+}

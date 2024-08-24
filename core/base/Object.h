@@ -37,7 +37,8 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 class Object;
 
@@ -170,7 +171,7 @@ typedef void (Object::*SEL_SCHEDULE)(float);
 #define AX_MENU_SELECTOR(_SELECTOR)       static_cast<ax::SEL_MenuHandler>(&_SELECTOR)
 #define AX_SCHEDULE_SELECTOR(_SELECTOR)   static_cast<ax::SEL_SCHEDULE>(&_SELECTOR)
 
-NS_AX_END
+}
 // end of base group
 /** @} */
 

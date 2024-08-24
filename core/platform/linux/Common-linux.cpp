@@ -28,11 +28,12 @@ THE SOFTWARE.
 #include "platform/linux/StdC-linux.h"
 #include "base/Logging.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void messageBox(const char* msg, const char* title)
 {
     AXLOGE("{}: {}", title, msg);
 }
 
-NS_AX_END
+}

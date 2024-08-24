@@ -38,7 +38,8 @@
 #    endif
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PXIoF
 {
@@ -396,4 +397,4 @@ bool FileStream::isOpen() const
     return !!_iof;
 }
 
-NS_AX_END
+}

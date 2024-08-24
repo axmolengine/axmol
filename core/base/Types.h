@@ -41,7 +41,8 @@ THE SOFTWARE.
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /** @struct Tex2F
  * A TEXCOORD composed of 2 floats: u, v
@@ -473,6 +474,6 @@ using ClearFlag         = backend::ClearFlag;
 
 typedef void (*AsyncOperation)(void* param);
 
-NS_AX_END
+}
 // end group
 /// @}

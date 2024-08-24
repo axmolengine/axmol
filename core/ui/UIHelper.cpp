@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "base/UTF8.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -206,4 +207,4 @@ Rect Helper::convertBoundingBoxToScreen(Node* node)
 }
 }  // namespace ui
 
-NS_AX_END
+}

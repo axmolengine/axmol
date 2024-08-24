@@ -29,7 +29,8 @@
 
 #include "Particle3D/PU/PUAffector.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUFlockCenteringAffector : public PUAffector
 {
@@ -49,6 +50,6 @@ protected:
     Vec3 _average;
     float _count;
 };
-NS_AX_END
+}
 
 #endif

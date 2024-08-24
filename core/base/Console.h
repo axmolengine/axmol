@@ -49,7 +49,8 @@ typedef SSIZE_T ssize_t;
 #include "base/Object.h"
 #include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /** Console is helper class that lets the developer control the game from TCP connection.
  Console will spawn a new thread that will listen to a specified TCP port.
@@ -290,7 +291,7 @@ private:
     static void sendHelp(socket_native_type fd, const hlookup::string_map<Command*>& commands, const char* msg);
 };
 
-NS_AX_END
+}
 
 /// @endcond
 #endif /* defined(__CCCONSOLE_H__) */

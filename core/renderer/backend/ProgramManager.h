@@ -176,7 +176,8 @@ NS_AX_BACKEND_END
  * @alias some feq use types to namespace ax
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 using ProgramType      = ::ax::backend::ProgramType;
 using ProgramState     = ::ax::backend::ProgramState;
@@ -186,4 +187,4 @@ using VertexLayoutType = ::ax::backend::VertexLayoutType;
 using ProgramManager   = ::ax::backend::ProgramManager;
 using ProgramRegistry  = ::ax::backend::ProgramStateRegistry;
 
-NS_AX_END
+}

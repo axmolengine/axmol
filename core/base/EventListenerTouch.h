@@ -36,7 +36,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Touch;
 
@@ -131,7 +132,7 @@ private:
     friend class EventDispatcher;
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

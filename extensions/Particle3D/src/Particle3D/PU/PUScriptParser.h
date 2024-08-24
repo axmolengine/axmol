@@ -37,7 +37,8 @@
 #include "base/Object.h"
 #include "Particle3D/PU/PUScriptLexer.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PUConcreteNode;
 
@@ -84,6 +85,6 @@ private:
                                                    PUScriptTokenList::const_iterator end);
 };
 
-NS_AX_END
+}
 
 #endif /* defined(__cocos2d_libs__CCScriptParser__) */

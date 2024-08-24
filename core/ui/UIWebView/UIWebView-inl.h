@@ -36,7 +36,8 @@
 #include "base/Director.h"
 #include "platform/FileUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 namespace ui
 {
 WebView::WebView() : _impl(new WebViewImpl(this)) {}
@@ -240,7 +241,7 @@ WebView::ccWebViewCallback WebView::getOnJSCallback() const
 }
 
 }  // namespace ui
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #endif
 

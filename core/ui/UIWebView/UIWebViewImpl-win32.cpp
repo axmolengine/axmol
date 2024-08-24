@@ -451,7 +451,8 @@ private:
     };
 };
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -668,7 +669,7 @@ void WebViewImpl::setBackgroundTransparent()
     _systemWebControl->setBackgroundTransparent();
 }
 }  // namespace ui
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 //
 // Implement Win32WebControl

@@ -38,7 +38,8 @@ THE SOFTWARE.
 #include "base/StencilStateManager.h"
 #include <algorithm>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -1896,4 +1897,4 @@ ResourceData Layout::getRenderFile()
 }
 
 }  // namespace ui
-NS_AX_END
+}

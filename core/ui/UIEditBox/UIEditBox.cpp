@@ -29,7 +29,8 @@
 #include "ui/UIEditBox/UIEditBoxImpl.h"
 #include "ui/UIHelper.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -897,4 +898,4 @@ void EditBox::unregisterScriptEditBoxHandler()
 
 }  // namespace ui
 
-NS_AX_END
+}

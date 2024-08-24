@@ -34,7 +34,8 @@ THE SOFTWARE.
 #include "2d/Scene.h"
 #include "renderer/Renderer.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace
 {
@@ -503,4 +504,4 @@ void GLView::queueOperation(AsyncOperation /*op*/, void* /*param*/)
 {
 }
 
-NS_AX_END
+}

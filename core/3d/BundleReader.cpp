@@ -27,7 +27,8 @@
 #include "3d/BundleReader.h"
 #include "platform/FileUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 BundleReader::BundleReader()
 {
@@ -188,4 +189,4 @@ bool BundleReader::readMatrix(float* m)
     return (read(m, sizeof(float), 16) == 16);
 }
 
-NS_AX_END
+}

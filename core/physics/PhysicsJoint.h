@@ -37,7 +37,8 @@
 
 struct cpConstraint;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Node;
 class PhysicsBody;
@@ -602,7 +603,7 @@ protected:
 /** @} */
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // defined(AX_ENABLE_PHYSICS)
 #endif  // __CCPHYSICS_JOINT_H__

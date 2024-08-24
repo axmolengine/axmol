@@ -27,7 +27,8 @@
 #include "PUBehaviourManager.h"
 #include "Particle3D/PU/PUSlaveBehaviour.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 PUBehaviourManager::PUBehaviourManager() {}
 
 PUBehaviourManager::~PUBehaviourManager() {}
@@ -56,4 +57,4 @@ PUBehaviour* PUBehaviourManager::createBehaviour(std::string_view type)
     return nullptr;
 }
 
-NS_AX_END
+}

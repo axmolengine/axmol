@@ -27,7 +27,8 @@
 #include "Particle3D/PU/PUOnCountObserver.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const unsigned int PUOnCountObserver::DEFAULT_THRESHOLD        = 0;
@@ -112,4 +113,4 @@ void PUOnCountObserver::copyAttributesTo(PUObserver* observer)
     onCountObserver->_compare          = _compare;
 }
 
-NS_AX_END
+}

@@ -62,7 +62,8 @@ private:
 
 }  // namespace
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static EventListener::ListenerID __getListenerID(Event* event)
 {
@@ -1690,4 +1691,4 @@ void EventDispatcher::releaseListener(EventListener* listener)
     AX_SAFE_RELEASE(listener);
 }
 
-NS_AX_END
+}

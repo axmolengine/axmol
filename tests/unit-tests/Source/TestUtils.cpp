@@ -2,7 +2,8 @@
 #include "base/Types.h"
 #include "TestUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 
 doctest::String toString(const Vec2& value) {
@@ -42,4 +43,4 @@ doctest::String toString(const Color4B& value) {
 }
 
 
-NS_AX_END
+}

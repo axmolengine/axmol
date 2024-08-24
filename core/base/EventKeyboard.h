@@ -34,7 +34,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /** @class EventKeyboard
  * @brief Keyboard event.
@@ -235,7 +236,7 @@ private:
     friend class EventListenerKeyboard;
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

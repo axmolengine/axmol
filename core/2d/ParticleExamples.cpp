@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "base/firePngData.h"
 #include "renderer/TextureCache.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //
 // ParticleFire
 //
@@ -1229,4 +1230,4 @@ bool ParticleRain::initWithTotalParticles(int numberOfParticles)
     return false;
 }
 
-NS_AX_END
+}

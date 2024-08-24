@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "ui/UIWidget.h"
 #include "ui/GUIExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup ui
@@ -361,6 +362,6 @@ protected:
 // end of ui group
 /// @}
 
-NS_AX_END
+}
 
 #endif /* defined(__CocoGUI__Slider__) */

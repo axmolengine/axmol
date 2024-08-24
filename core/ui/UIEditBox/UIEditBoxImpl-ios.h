@@ -35,7 +35,8 @@
 @class UIEditBoxImplIOS_objc;
 @class UIFont;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -86,7 +87,7 @@ private:
 
 }
 
-NS_AX_END
+}
 
 #endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) */
 

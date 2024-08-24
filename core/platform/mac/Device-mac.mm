@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "base/Types.h"
 #include "platform/apple/Device-apple.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedString* attributedString, CGFloat fontSize)
 {
@@ -453,4 +454,4 @@ void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged() {}
 
-NS_AX_END
+}

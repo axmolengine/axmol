@@ -32,7 +32,8 @@
 #include "3d/AABB.h"
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 /** A sphere primitive, mostly used for bounds checking.
 @remarks
     A sphere in math texts is normally represented by the function
@@ -86,6 +87,6 @@ public:
     /** Merges another Sphere into the current sphere */
     void merge(const PUSphere& oth);
 };
-NS_AX_END
+}
 
 #endif

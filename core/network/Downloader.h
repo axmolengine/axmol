@@ -33,7 +33,8 @@
 
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -151,4 +152,4 @@ private:
 };
 
 }  // namespace network
-NS_AX_END  // namespace ax
+}  // namespace ax

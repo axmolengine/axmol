@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "base/UTF8.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // implementation TileMapAtlas
 
@@ -252,4 +253,4 @@ void TileMapAtlas::updateAtlasValues()
     }
 }
 
-NS_AX_END
+}

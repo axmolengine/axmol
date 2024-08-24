@@ -29,7 +29,8 @@
 #include <unordered_map>
 #include "2d/Component.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class ComponentLua : public Component
 {
@@ -76,4 +77,4 @@ private:
     static const std::string UPDATE;
 };
 
-NS_AX_END
+}

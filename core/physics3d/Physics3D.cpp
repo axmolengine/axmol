@@ -30,7 +30,8 @@
 
 #    if (AX_ENABLE_BULLET_INTEGRATION)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AX_DLL const char* physics3dVersion()
 {
@@ -39,7 +40,7 @@ AX_DLL const char* physics3dVersion()
 #        endif
 }
 
-NS_AX_END
+}
 
 ax::Vec3 convertbtVector3ToVec3(const btVector3& btVec3)
 {

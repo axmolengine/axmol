@@ -29,7 +29,8 @@
 #include "Particle3D/PU/PUDynamicAttribute.h"
 #include "Particle3D/PU/PUDynamicAttributeTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUOnTimeObserverTranslator::PUOnTimeObserverTranslator() {}
 //-------------------------------------------------------------------------
@@ -93,4 +94,4 @@ bool PUOnTimeObserverTranslator::translateChildObject(PUScriptCompiler* /*compil
     return false;
 }
 
-NS_AX_END
+}

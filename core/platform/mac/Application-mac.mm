@@ -35,7 +35,8 @@ THE SOFTWARE.
 #include "base/Utils.h"
 #include "renderer/backend/metal/DriverMTL.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Application* Application::sm_pSharedApplication = nullptr;
 
@@ -178,4 +179,4 @@ std::string_view Application::getStartupScriptFilename()
     return _startupScriptFilename;
 }
 
-NS_AX_END
+}

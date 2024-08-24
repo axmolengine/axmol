@@ -29,7 +29,8 @@
 #include "Particle3D/PU/PUEventHandlerManager.h"
 #include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const bool PUObserver::DEFAULT_ENABLED                             = true;
@@ -339,4 +340,4 @@ void PUObserver::copyAttributesTo(PUObserver* observer)
     }
 }
 
-NS_AX_END
+}

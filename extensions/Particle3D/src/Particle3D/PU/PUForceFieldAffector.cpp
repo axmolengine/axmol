@@ -27,7 +27,8 @@
 #include "PUForceFieldAffector.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //-----------------------------------------------------------------------
 // Constants
 const PUForceField::ForceFieldType PUForceFieldAffector::DEFAULT_FORCEFIELD_TYPE = PUForceField::FF_REALTIME_CALC;
@@ -333,4 +334,4 @@ void PUForceFieldAffector::copyAttributesTo(PUAffector* affector)
     forceFieldAffector->_movement            = _movement;
 }
 
-NS_AX_END
+}

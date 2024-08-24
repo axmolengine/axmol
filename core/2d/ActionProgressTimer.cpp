@@ -27,7 +27,8 @@ THE SOFTWARE.
 #include "2d/ActionProgressTimer.h"
 #include "2d/ProgressTimer.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #define kProgressTimerCast ProgressTimer*
 
@@ -130,4 +131,4 @@ void ProgressFromTo::update(float time)
     ((kProgressTimerCast)(_target))->setPercentage(_from + (_to - _from) * time);
 }
 
-NS_AX_END
+}

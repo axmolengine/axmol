@@ -694,7 +694,8 @@ private:
     ax::Vec2 m_LastSize;
 };
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -914,6 +915,6 @@ void WebViewImpl::setBackgroundTransparent()
 
 }  // namespace ui
 
-NS_AX_END
+}
 
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_LINUX

@@ -33,7 +33,8 @@
 #include "renderer/CustomCommand.h"
 #include "math/Math.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class GLProgramState;
 class EventListenerCustom;
@@ -83,4 +84,4 @@ protected:
 #endif
 };
 
-NS_AX_END
+}

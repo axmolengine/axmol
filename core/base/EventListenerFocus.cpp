@@ -29,7 +29,8 @@
 #include "base/EventFocus.h"
 #include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const std::string EventListenerFocus::LISTENER_ID = "__ax_focus_event";
 
@@ -92,4 +93,4 @@ bool EventListenerFocus::checkAvailable()
     return true;
 }
 
-NS_AX_END
+}

@@ -31,7 +31,8 @@
 #include "Particle3D/PU/PUDynamicAttribute.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUJetAffector : public PUAffector
 {
@@ -60,6 +61,6 @@ protected:
      */
     PUDynamicAttribute* _dynAcceleration;
 };
-NS_AX_END
+}
 
 #endif

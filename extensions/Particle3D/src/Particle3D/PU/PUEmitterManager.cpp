@@ -34,7 +34,8 @@
 #include "Particle3D/PU/PUSlaveEmitter.h"
 #include "Particle3D/PU/PUSphereSurfaceEmitter.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 PUEmitterManager::PUEmitterManager() {}
 
 PUEmitterManager::~PUEmitterManager() {}
@@ -127,4 +128,4 @@ PUEmitter* PUEmitterManager::createEmitter(std::string_view type)
     return nullptr;
 }
 
-NS_AX_END
+}

@@ -29,7 +29,8 @@
 #include "Particle3D/PU/PUUtil.h"
 #include "base/Random.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const float PUCircleEmitter::DEFAULT_RADIUS = 100.0f;
@@ -272,4 +273,4 @@ PUCircleEmitter* PUCircleEmitter::clone()
     return be;
 }
 
-NS_AX_END
+}

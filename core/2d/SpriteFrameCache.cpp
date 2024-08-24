@@ -44,7 +44,8 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static SpriteFrameCache* _sharedSpriteFrameCache = nullptr;
 
@@ -457,4 +458,4 @@ ISpriteSheetLoader* SpriteFrameCache::getSpriteSheetLoader(uint32_t spriteSheetF
     return nullptr;
 }
 
-NS_AX_END
+}

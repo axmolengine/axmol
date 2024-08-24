@@ -45,7 +45,8 @@ USING_NS_AX;
 #include "3d/3DProgramInfo.h"
 #include "base/Utils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace
 {
@@ -1819,4 +1820,4 @@ void Terrain::StateBlock::apply()
     renderer->setWinding(winding);
 }
 
-NS_AX_END
+}

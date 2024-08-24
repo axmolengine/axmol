@@ -27,7 +27,8 @@
 #include "Particle3D/PU/PUBehaviour.h"
 #include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUBehaviour::PUBehaviour(void) : _particleSystem(nullptr), _behaviourScale(Vec3::ONE) {}
 
@@ -54,4 +55,4 @@ void PUBehaviour::copyAttributesTo(PUBehaviour* behaviour)
     behaviour->_behaviourScale = _behaviourScale;
 }
 
-NS_AX_END
+}

@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include <string>
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup platform
@@ -61,7 +62,7 @@ private:
 // end of platform group
 /// @}
 
-NS_AX_END
+}
 
 #endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 

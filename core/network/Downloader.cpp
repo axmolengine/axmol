@@ -37,7 +37,8 @@
 #include <ctype.h>
 #include <algorithm>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -191,4 +192,4 @@ std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(std::string_vie
 //}
 
 }  // namespace network
-NS_AX_END  // namespace ax
+}  // namespace ax

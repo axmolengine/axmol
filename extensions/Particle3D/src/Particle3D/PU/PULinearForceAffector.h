@@ -30,7 +30,8 @@
 #include "PUBaseForceAffector.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PULinearForceAffector : public PUBaseForceAffector
 {
@@ -45,6 +46,6 @@ public:
     PULinearForceAffector(){};
     virtual ~PULinearForceAffector(){};
 };
-NS_AX_END
+}
 
 #endif

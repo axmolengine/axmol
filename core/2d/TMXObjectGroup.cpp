@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "2d/TMXObjectGroup.h"
 #include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // implementation TMXObjectGroup
 
@@ -68,4 +69,4 @@ Value TMXObjectGroup::getProperty(std::string_view propertyName) const
     return Value();
 }
 
-NS_AX_END
+}

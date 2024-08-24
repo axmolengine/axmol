@@ -30,7 +30,8 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 #include "simdjson/simdjson.h"
 #include "platform/FileUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup base
@@ -101,4 +102,4 @@ private:
 // end of base group
 /** @} */
 
-NS_AX_END
+}

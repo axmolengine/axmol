@@ -37,7 +37,8 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 class EventListenerTouchOneByOne;
 class Camera;
@@ -839,7 +840,7 @@ private:
 };
 }  // namespace ui
 
-NS_AX_END
+}
 // end of ui group
 /// @}
 

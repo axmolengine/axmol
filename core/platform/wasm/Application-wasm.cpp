@@ -37,7 +37,8 @@ THE SOFTWARE.
 #include "platform/FileUtils.h"
 #include <emscripten/emscripten.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 
 // sharedApplication pointer
@@ -198,7 +199,7 @@ LanguageType Application::getCurrentLanguage()
     return utils::getLanguageTypeByISO2(pLanguageName);
 }
 
-NS_AX_END
+}
 
 #endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 

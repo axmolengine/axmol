@@ -33,7 +33,8 @@
 #include <vector>
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PUParticle3D;
 class PUObserver;
@@ -52,6 +53,6 @@ public:
     virtual ~PUDoFreezeEventHandler(){};
 };
 
-NS_AX_END
+}
 
 #endif

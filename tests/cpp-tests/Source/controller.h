@@ -38,12 +38,13 @@ class TestList;
 class TestSuite;
 class TestCase;
 
-NS_AX_BEGIN
+namespace ax
+{
 class Director;
 class Touch;
 class Event;
 class EventListenerTouchOneByOne;
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 class TestController
 {

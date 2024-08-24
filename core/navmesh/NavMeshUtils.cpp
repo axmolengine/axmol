@@ -30,7 +30,8 @@
 #    include "recast/DetourNavMeshBuilder.h"
 #    include "fastlz/fastlz.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 LinearAllocator::LinearAllocator(const int cap) : buffer(nullptr), capacity(0), top(0), high(0)
 {
@@ -290,6 +291,6 @@ bool inRange(const float* v1, const float* v2, const float r, const float h)
     return (dx * dx + dz * dz) < r * r && fabsf(dy) < h;
 }
 
-NS_AX_END
+}
 
 #endif  // AX_ENABLE_NAVMESH

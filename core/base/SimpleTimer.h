@@ -7,7 +7,8 @@
 #include "base/Macros.h"
 #include <functional>
 
-NS_AX_BEGIN
+namespace ax
+{
 namespace stimer
 {
 typedef void* TIMER_ID;
@@ -17,6 +18,6 @@ AX_DLL TIMER_ID delay(float delay, vcallback_t callback, bool bNative = true);
 AX_DLL void kill(TIMER_ID timerId, bool bNative = true);
 AX_DLL void killAll(bool bNative = true);
 }  // namespace stimer
-NS_AX_END
+}
 
 #endif

@@ -37,7 +37,8 @@ THE SOFTWARE.
 #    include <string>
 #    include <functional>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_DLL Application : public ApplicationBase
 {
@@ -109,7 +110,7 @@ protected:
     static Application* sm_pSharedApplication;
 };
 
-NS_AX_END
+}
 
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 

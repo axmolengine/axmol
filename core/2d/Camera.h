@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include "renderer/CustomCommand.h"
 #include "base/Director.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Scene;
 class CameraBackgroundBrush;
@@ -377,4 +378,4 @@ protected:
     CameraBackgroundBrush* _clearBrush = nullptr;  // brush used to clear the back ground
 };
 
-NS_AX_END
+}

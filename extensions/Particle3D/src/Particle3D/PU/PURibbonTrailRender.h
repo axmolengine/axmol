@@ -36,7 +36,8 @@
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PURibbonTrailVisualData : public Object
 {
@@ -148,5 +149,5 @@ protected:
     std::string _texFile;
 };
 
-NS_AX_END
+}
 #endif

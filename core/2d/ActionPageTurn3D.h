@@ -29,7 +29,8 @@ THE SOFTWARE.
 
 #include "2d/ActionGrid3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup actions
@@ -69,6 +70,6 @@ public:
 // end of actions group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __ACTION_CCPAGETURN3D_ACTION_H__

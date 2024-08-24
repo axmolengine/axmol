@@ -27,7 +27,8 @@
 #include "PUTextureRotator.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // Constants
 const bool PUTextureRotator::DEFAULT_USE_OWN_SPEED   = false;
 const float PUTextureRotator::DEFAULT_ROTATION_SPEED = 10.0f;
@@ -174,4 +175,4 @@ void PUTextureRotator::copyAttributesTo(PUAffector* affector)
     textureRotator->_useOwnRotationSpeed = _useOwnRotationSpeed;
 }
 
-NS_AX_END
+}

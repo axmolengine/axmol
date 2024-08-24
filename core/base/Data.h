@@ -40,7 +40,8 @@
  * @lua NA
  * @DEPRECATED use axstd::byte_buffer directly
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_DLL Data
 {
@@ -160,7 +161,7 @@ private:
     mutable axstd::byte_buffer _impl;
 };
 
-NS_AX_END
+}
 
 /** @} */
 #endif  // __CCDATA_H__

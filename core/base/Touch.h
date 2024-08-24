@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "base/Object.h"
 #include "math/Math.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup base
@@ -171,6 +172,6 @@ private:
 // end of base group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __PLATFORM_TOUCH_H__

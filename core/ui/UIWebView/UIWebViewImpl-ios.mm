@@ -371,7 +371,8 @@
 
 @end
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {

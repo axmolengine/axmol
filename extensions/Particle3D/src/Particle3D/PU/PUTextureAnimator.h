@@ -30,7 +30,8 @@
 #include "Particle3D/PU/PUAffector.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUTextureAnimator : public PUAffector
 {
@@ -105,6 +106,6 @@ protected:
     unsigned short _textureCoordsStart;
     unsigned short _textureCoordsEnd;
 };
-NS_AX_END
+}
 
 #endif

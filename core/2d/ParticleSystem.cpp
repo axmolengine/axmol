@@ -60,7 +60,8 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // ideas taken from:
 //     . The ocean spray in your face [Jeff Lander]
@@ -2374,4 +2375,4 @@ void ParticleEmissionMaskCache::removeAllMasks()
     this->masks.clear();
 }
 
-NS_AX_END
+}

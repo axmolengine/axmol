@@ -33,7 +33,8 @@
 #include "Particle3D/PU/PUDoScaleEventHandler.h"
 #include "Particle3D/PU/PUDoStopSystemEventHandler.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 PUEventHandlerManager::PUEventHandlerManager() {}
 
 PUEventHandlerManager::~PUEventHandlerManager() {}
@@ -110,4 +111,4 @@ PUEventHandler* PUEventHandlerManager::createEventHandler(std::string_view type)
     return nullptr;
 }
 
-NS_AX_END
+}

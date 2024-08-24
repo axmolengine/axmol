@@ -36,7 +36,8 @@ THE SOFTWARE.
 #    include "renderer/Renderer.h"
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // CCLabelAtlas - Creation & Init
 
@@ -286,4 +287,4 @@ std::string LabelAtlas::getDescription() const
     return fmt::format("<LabelAtlas | Tag = {}, Label = '{}'>", _tag, _string);
 }
 
-NS_AX_END
+}

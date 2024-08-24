@@ -33,7 +33,8 @@
 #    include "2d/Scene.h"
 #    include <algorithm>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 NavMeshAgentParam::NavMeshAgentParam()
     : radius(0.6f)
@@ -423,6 +424,6 @@ Vec3 NavMeshAgent::getVelocity() const
     return Vec3::ZERO;
 }
 
-NS_AX_END
+}
 
 #endif  // AX_ENABLE_NAVMESH

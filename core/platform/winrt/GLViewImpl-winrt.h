@@ -44,7 +44,8 @@ THE SOFTWARE.
 
 using namespace winrt;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class GLViewImpl;
 
@@ -201,6 +202,6 @@ private:
     ax::EventListenerKeyboard* m_backButtonListener;
 };
 
-NS_AX_END
+}
 
 #endif  // end of __AX_EGLVIEWIMPL_WINRT_H__

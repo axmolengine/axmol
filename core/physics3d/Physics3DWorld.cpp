@@ -31,7 +31,8 @@
 
 #    if (AX_ENABLE_BULLET_INTEGRATION)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Physics3DWorld::Physics3DWorld()
     : _needCollisionChecking(false)
@@ -422,7 +423,7 @@ void Physics3DWorld::setGhostPairCallback()
     }
 }
 
-NS_AX_END
+}
 
 #    endif  // AX_ENABLE_BULLET_INTEGRATION
 

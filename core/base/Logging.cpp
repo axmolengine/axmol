@@ -36,7 +36,8 @@
 #    include <android/log.h>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #if defined(_AX_DEBUG) && _AX_DEBUG == 1
 static LogLevel s_logLevel = LogLevel::Debug;
@@ -243,4 +244,4 @@ AX_API void print(const char* format, ...)
                   "axmol debug info");
 }
 
-NS_AX_END
+}

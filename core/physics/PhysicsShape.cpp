@@ -38,7 +38,8 @@
 #    include "physics/PhysicsWorld.h"
 #    include "physics/PhysicsHelper.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 extern const float PHYSICS_INFINITY;
 static cpBody* s_sharedBody = nullptr;
 
@@ -974,6 +975,6 @@ bool PhysicsShape::containsPoint(const Vec2& point) const
     return false;
 }
 
-NS_AX_END
+}
 
 #endif  // defined(AX_ENABLE_PHYSICS)

@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "base/UTF8.h"
 #include "2d/Sprite.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #define CURSOR_TIME_SHOW_HIDE 0.5f
 #define CURSOR_DEFAULT_CHAR '|'
@@ -757,4 +758,4 @@ bool TextFieldTTF::isSecureTextEntry() const
     return _secureTextEntry;
 }
 
-NS_AX_END
+}

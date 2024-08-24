@@ -38,7 +38,8 @@
 #include "renderer/CustomCommand.h"
 #include "renderer/backend/Backend.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _3d
@@ -332,4 +333,4 @@ protected:
 extern std::string AX_DLL s_uniformSamplerName[];  // uniform sampler names array
 /// @endcond
 
-NS_AX_END
+}

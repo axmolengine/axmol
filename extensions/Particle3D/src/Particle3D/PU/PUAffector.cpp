@@ -28,7 +28,8 @@
 #include "Particle3D/PU/PUEmitter.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUAffector::PUAffector() : _affectorScale(Vec3::ONE), _affectSpecialisation(AFSP_DEFAULT), _mass(1.0f) {}
 
@@ -200,4 +201,4 @@ void PUAffector::process(PUParticle3D* particle, float delta, bool firstParticle
     updatePUAffector(particle, delta);
 }
 
-NS_AX_END
+}

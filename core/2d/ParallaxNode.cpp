@@ -27,7 +27,8 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "2d/ParallaxNode.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PointObject : public Object
 {
@@ -161,4 +162,4 @@ void ParallaxNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
     Node::visit(renderer, parentTransform, parentFlags);
 }
 
-NS_AX_END
+}

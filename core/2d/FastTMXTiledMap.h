@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "2d/Node.h"
 #include "2d/TMXObjectGroup.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class TMXLayerInfo;
 class TMXTilesetInfo;
@@ -267,4 +268,4 @@ private:
 // @API compatible
 typedef FastTMXTiledMap TMXTiledMap;
 
-NS_AX_END
+}

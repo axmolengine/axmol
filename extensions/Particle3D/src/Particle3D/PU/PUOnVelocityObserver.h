@@ -33,7 +33,8 @@
 #include <vector>
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PUParticle3D;
 class PUParticleSystem3D;
@@ -69,6 +70,6 @@ protected:
     PUComparisionOperator _compare;
 };
 
-NS_AX_END
+}
 
 #endif

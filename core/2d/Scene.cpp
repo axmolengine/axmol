@@ -48,7 +48,8 @@ THE SOFTWARE.
 #    include "navmesh/NavMesh.h"
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Scene::Scene()
     : _event(_director->getEventDispatcher()->addCustomEventListener(
@@ -396,4 +397,4 @@ void Scene::stepPhysicsAndNavigation(float deltaTime)
 }
 #endif
 
-NS_AX_END
+}

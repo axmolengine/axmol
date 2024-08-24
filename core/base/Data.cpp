@@ -28,7 +28,8 @@
 #include "base/Data.h"
 #include "base/Logging.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const Data Data::Null;
 
@@ -125,4 +126,4 @@ uint8_t* Data::takeBuffer(ssize_t* size)
     return _impl.release_pointer();
 }
 
-NS_AX_END
+}

@@ -28,7 +28,8 @@
 #include "renderer/GroupCommand.h"
 #include "renderer/CustomCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class GridBase;
 /**
@@ -106,4 +107,4 @@ private:
     AX_DISALLOW_COPY_AND_ASSIGN(NodeGrid);
 };
 /** @} */
-NS_AX_END
+}

@@ -55,7 +55,8 @@ THE SOFTWARE.
 
 typedef int32_t udflen_t;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * implements of UserDefault
@@ -533,4 +534,4 @@ void UserDefault::setFileName(std::string_view nameFile)
         _userDefalutFileName.assign(nameFile).append("UserDefault.bin"sv);
 }
 
-NS_AX_END
+}

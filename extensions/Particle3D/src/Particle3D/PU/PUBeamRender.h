@@ -35,7 +35,8 @@
 #include "Particle3D/PU/PURender.h"
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PUParticle3DBeamVisualData : public Object
 {
@@ -146,5 +147,5 @@ protected:
     PUBillboardChain::TexCoordDirection _texCoordDirection;
 };
 
-NS_AX_END
+}
 #endif

@@ -30,7 +30,8 @@ THE SOFTWARE.
 
 #include "ntcvt/ntcvt.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 int Device::getDPI()
 {
@@ -510,4 +511,4 @@ void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged() {}
 
-NS_AX_END
+}

@@ -37,7 +37,8 @@
 
 using namespace yasio;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -526,6 +527,6 @@ std::string_view HttpClient::getSSLVerification()
 
 }  // namespace network
 
-NS_AX_END
+}
 
 #endif

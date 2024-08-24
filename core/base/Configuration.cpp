@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include "base/EventDispatcher.h"
 #include "renderer/backend/DriverBase.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 extern const char* axmolVersion();
 
@@ -416,4 +417,4 @@ int Configuration::getMaxAttributes() const
     return backend::DriverBase::getInstance()->getMaxAttributes();
 }
 
-NS_AX_END
+}

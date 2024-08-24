@@ -30,7 +30,8 @@
 #include "Particle3D/PU/PUAffector.h"
 #include "Particle3D/PU/PUDynamicAttribute.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 struct PUParticle3D;
 class AX_EX_DLL PUGeometryRotator : public PUAffector
 {
@@ -98,6 +99,6 @@ protected:
      */
     PUDynamicAttributeHelper _dynamicAttributeHelper;
 };
-NS_AX_END
+}
 
 #endif

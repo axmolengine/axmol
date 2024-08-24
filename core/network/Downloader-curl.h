@@ -29,7 +29,8 @@
 #include <stdint.h>
 #include "network/IDownloaderImpl.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Scheduler;
 
@@ -69,4 +70,4 @@ protected:
 };
 
 }  // namespace network
-NS_AX_END  // namespace ax
+}  // namespace ax

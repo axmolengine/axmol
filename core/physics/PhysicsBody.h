@@ -37,7 +37,8 @@
 
 struct cpBody;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Node;
 class PhysicsWorld;
@@ -623,7 +624,7 @@ protected:
 /** @} */
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // defined(AX_ENABLE_PHYSICS)
 #endif  // __CCPHYSICS_BODY_H__

@@ -36,7 +36,8 @@ static const char* CIRCLE_IMAGE =
     "AIV+dRpFLOYoAAAAAElFTkSuQmCC";
 static const char* CIRCLE_IMAGE_KEY = "/__circleImage";
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace
 {
@@ -292,4 +293,4 @@ void PageViewIndicator::clear()
 
 }  // namespace ui
 
-NS_AX_END
+}

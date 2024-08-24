@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "2d/NodeGrid.h"
 #include "base/Director.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // implementation of GridAction
 
 bool GridAction::initWithDuration(float duration, const Vec2& gridSize)
@@ -446,4 +447,4 @@ ReuseGrid* ReuseGrid::reverse() const
     return this->clone();
 }
 
-NS_AX_END
+}

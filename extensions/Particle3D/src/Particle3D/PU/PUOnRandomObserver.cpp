@@ -27,7 +27,8 @@
 #include "Particle3D/PU/PUOnRandomObserver.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const float PUOnRandomObserver::DEFAULT_THRESHOLD = 0.5f;
@@ -68,4 +69,4 @@ void PUOnRandomObserver::copyAttributesTo(PUObserver* observer)
     onRandomObserver->_threshold         = _threshold;
 }
 
-NS_AX_END
+}

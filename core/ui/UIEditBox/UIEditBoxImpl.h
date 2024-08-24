@@ -30,7 +30,8 @@
 
 #include "ui/UIEditBox/UIEditBox.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -119,6 +120,6 @@ protected:
 extern EditBoxImpl* __createSystemEditBox(EditBox* pEditBox);
 
 }  // namespace ui
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #endif /* __UIEditBoxIMPL_H__ */

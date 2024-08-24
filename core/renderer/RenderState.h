@@ -40,7 +40,8 @@
 #include "renderer/backend/Types.h"
 #include "renderer/MeshCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Texture2D;
 class Pass;
@@ -259,4 +260,4 @@ protected:
     std::string _name;
 };
 
-NS_AX_END
+}

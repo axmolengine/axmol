@@ -30,7 +30,8 @@
 #include "Particle3D/PU/PUAffector.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PULineAffector : public PUAffector
 {
@@ -86,6 +87,6 @@ protected:
     bool _update;
     bool _first;
 };
-NS_AX_END
+}
 
 #endif

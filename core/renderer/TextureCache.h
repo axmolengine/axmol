@@ -46,7 +46,8 @@ THE SOFTWARE.
 #    include <list>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _2d
@@ -323,6 +324,6 @@ private:
 // end of textures group
 /// @}
 
-NS_AX_END
+}
 
 #endif  //__CCTEXTURE_CACHE_H__

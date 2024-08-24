@@ -27,7 +27,8 @@
 #include "Particle3D/PU/PUSlaveBehaviour.h"
 #include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUSlaveBehaviour::PUSlaveBehaviour() : masterParticle(nullptr) {}
 
@@ -61,4 +62,4 @@ void PUSlaveBehaviour::copyAttributesTo(PUBehaviour* behaviour)
     PUBehaviour::copyAttributesTo(behaviour);
 }
 
-NS_AX_END
+}

@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include "2d/ActionEase.h"
 #include "2d/TweenFunction.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #ifndef M_PI_X_2
 #    define M_PI_X_2 (float)M_PI * 2.0f
@@ -305,4 +306,4 @@ EaseBezierAction* EaseBezierAction::reverse() const
     return reverseAction;
 }
 
-NS_AX_END
+}

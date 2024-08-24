@@ -31,7 +31,8 @@
 #include "base/Director.h"
 #include "renderer/TextureCache.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 FontCharMap* FontCharMap::create(std::string_view plistFile)
 {
@@ -142,4 +143,4 @@ FontAtlas* FontCharMap::newFontAtlas()
     return tempAtlas;
 }
 
-NS_AX_END
+}

@@ -26,7 +26,8 @@
 
 #include "ui/UIRelativeBox.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -81,4 +82,4 @@ bool RelativeBox::initWithSize(const Vec2& size)
 
 }  // namespace ui
 
-NS_AX_END
+}

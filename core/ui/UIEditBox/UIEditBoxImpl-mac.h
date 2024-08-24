@@ -37,7 +37,8 @@
 @class UIEditBoxImplMac;
 @class NSFont;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -85,7 +86,7 @@ private:
 
 }
 
-NS_AX_END
+}
 
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 

@@ -44,7 +44,8 @@
 #    include "navmesh/NavMeshObstacle.h"
 #    include "navmesh/NavMeshUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup 3d
@@ -129,7 +130,7 @@ protected:
 
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // AX_ENABLE_NAVMESH
 

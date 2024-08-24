@@ -48,7 +48,8 @@ using namespace std;
 
 #define DECLARE_GUARD (void)0  // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AAssetManager* FileUtilsAndroid::assetmanager = nullptr;
 ZipFile* FileUtilsAndroid::obbfile            = nullptr;
@@ -319,7 +320,7 @@ std::string FileUtilsAndroid::getNativeWritableAbsolutePath() const
     return path;
 }
 
-NS_AX_END
+}
 
 #undef DECLARE_GUARD
 #undef ASSETS_FOLDER_NAME_LENGTH

@@ -48,7 +48,8 @@
 
 #include "yasio/string_view.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUMaterial::PUMaterial()
     : isEnabledLight(true)
@@ -227,4 +228,4 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     return state;
 }
 
-NS_AX_END
+}

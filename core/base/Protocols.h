@@ -34,7 +34,8 @@ THE SOFTWARE.
 #include "base/Types.h"
 #include "renderer/Texture2D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * RGBA protocol that affects Node's color and opacity
@@ -281,7 +282,7 @@ public:
 
     virtual void stop() = 0;
 };
-NS_AX_END
+}
 
 /// @endcond
 #endif  // __BASE_CCPROTOCOLS_H__

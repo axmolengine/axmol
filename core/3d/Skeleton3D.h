@@ -30,7 +30,8 @@
 #include "base/Object.h"
 #include "base/Vector.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _3d
@@ -224,6 +225,6 @@ protected:
 // end of 3d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __CCSKELETON3D_H__

@@ -34,7 +34,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /** @class EventAcceleration
  * @brief Accelerometer event.
@@ -53,7 +54,7 @@ private:
     friend class EventListenerAcceleration;
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

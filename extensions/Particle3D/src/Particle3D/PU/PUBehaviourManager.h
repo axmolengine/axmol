@@ -32,7 +32,8 @@
 #include "Particle3D/PU/PUBehaviour.h"
 #include "Particle3D/PU/PUSlaveBehaviourTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PUBehaviourManager
 {
@@ -51,6 +52,6 @@ protected:
     PUSlaveBehaviourTranslator _slaveBehaviourTranslator;
 };
 
-NS_AX_END
+}
 
 #endif

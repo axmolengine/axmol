@@ -34,7 +34,8 @@
  * @addtogroup ui
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 class Label;
 
@@ -383,6 +384,6 @@ private:
 }  // namespace ui
 // end group
 /// @}
-NS_AX_END
+}
 
 #endif  // __UITABVIEW_H__

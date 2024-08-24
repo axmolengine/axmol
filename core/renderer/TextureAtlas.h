@@ -34,7 +34,8 @@ THE SOFTWARE.
 #include "base/Object.h"
 #include "base/Config.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Texture2D;
 class EventCustom;
@@ -248,4 +249,4 @@ protected:
 // end of textures group
 /// @}
 
-NS_AX_END
+}

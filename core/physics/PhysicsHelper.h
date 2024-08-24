@@ -34,7 +34,8 @@
 #    include "platform/PlatformMacros.h"
 #    include "math/Math.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup physics
@@ -110,7 +111,7 @@ public:
 /** @} */
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // AX_ENABLE_PHYSICS
 #endif  // __CCPHYSICS_HELPER_H__

@@ -18,7 +18,8 @@
 
 #    include "yasio/string_view.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 using Microsoft::WRL::ComPtr;
 
@@ -382,6 +383,6 @@ void MfMediaEngine::UpdateVideoExtent()
     }
 }
 
-NS_AX_END
+}
 
 #endif

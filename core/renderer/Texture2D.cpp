@@ -53,7 +53,8 @@ THE SOFTWARE.
 #    include "renderer/TextureCache.h"
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // CLASS IMPLEMENTATIONS:
 
@@ -811,4 +812,4 @@ void Texture2D::drawInRect(const Rect& rect, float globalZOrder)
     Director::getInstance()->getRenderer()->addCommand(&_customCommand);
 }
 
-NS_AX_END
+}

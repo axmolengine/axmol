@@ -30,7 +30,8 @@
 #include <iomanip>
 #include "base/Utils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const ValueVector ValueVectorNull;
 const ValueMap ValueMapNull;
@@ -971,4 +972,4 @@ void Value::reset(Type type)
     _type = type;
 }
 
-NS_AX_END
+}

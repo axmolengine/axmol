@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "2d/AnchoredSprite.h"
 #include "renderer/backend/DriverBase.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // FIXME: HACK: optimization
 #define SET_DIRTY_RECURSIVELY()            \
@@ -206,4 +207,4 @@ Rect AnchoredSprite::getTouchRect()
     return Rect(-a.x, -a.y, s.width, s.height);
 }
 
-NS_AX_END
+}

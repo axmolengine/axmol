@@ -32,7 +32,8 @@
 #include "Particle3D/PU/PUScriptTranslator.h"
 #include "Particle3D/PU/PUScriptCompiler.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PUParticleSystem3DTranslator : public PUScriptTranslator
 {
@@ -51,6 +52,6 @@ protected:
     PUParticleSystem3D* _system;
 };
 
-NS_AX_END
+}
 
 #endif

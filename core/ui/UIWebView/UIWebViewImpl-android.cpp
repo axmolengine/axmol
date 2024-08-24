@@ -183,7 +183,8 @@ std::string getUrlStringByFileName(std::string_view fileName)
 }
 }  // namespace
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -367,4 +368,4 @@ void WebViewImpl::setBounces(bool bounces)
     // empty function as this was mainly a fix for iOS
 }
 }  // namespace ui
-NS_AX_END  // namespace ax
+}  // namespace ax

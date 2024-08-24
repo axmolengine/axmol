@@ -35,7 +35,8 @@ THE SOFTWARE.
 
 static const char* deviceHelperClassName = "org.axmol.lib.AxmolEngine";
 
-NS_AX_BEGIN
+namespace ax
+{
 
 int Device::getDPI()
 {
@@ -211,7 +212,7 @@ void Device::selectionChanged()
     JniHelper::callStaticVoidMethod(deviceHelperClassName, "selectionChanged");
 }
 
-NS_AX_END
+}
 
 // this method is called by BitmapHelper
 extern "C" {

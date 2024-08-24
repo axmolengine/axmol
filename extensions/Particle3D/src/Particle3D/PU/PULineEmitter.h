@@ -29,7 +29,8 @@
 
 #include "Particle3D/PU/PUEmitter.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PUParticle3D;
 class AX_EX_DLL PULineEmitter : public PUEmitter
@@ -115,6 +116,6 @@ protected:
     float _scaledMaxIncrement;
     float _scaledLength;
 };
-NS_AX_END
+}
 
 #endif

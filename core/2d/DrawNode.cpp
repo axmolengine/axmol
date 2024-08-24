@@ -38,7 +38,8 @@
 #include "renderer/backend/ProgramState.h"
 #include "poly2tri/poly2tri.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static inline Tex2F v2ToTex2F(const Vec2& v)
 {
@@ -949,4 +950,4 @@ void DrawNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
     }
 }
 
-NS_AX_END
+}

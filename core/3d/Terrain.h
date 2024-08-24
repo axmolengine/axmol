@@ -41,7 +41,8 @@ THE SOFTWARE.
 #include "base/EventListenerCustom.h"
 #include "base/EventDispatcher.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _3d
@@ -578,4 +579,4 @@ private:
 // end of actions group
 /// @}
 
-NS_AX_END
+}

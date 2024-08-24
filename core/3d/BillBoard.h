@@ -27,7 +27,8 @@
 
 #include "2d/Sprite.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 /**
  * @addtogroup _3d
  * @{
@@ -124,4 +125,4 @@ private:
 // end of 3d group
 /// @}
 
-NS_AX_END
+}

@@ -27,7 +27,8 @@
 #include "PUSineForceAffector.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // Constants
 const float PUSineForceAffector::DEFAULT_FREQ_MIN = 1.0f;
 const float PUSineForceAffector::DEFAULT_FREQ_MAX = 1.0f;
@@ -121,4 +122,4 @@ void PUSineForceAffector::copyAttributesTo(PUAffector* affector)
     sineForceAffector->_angle              = _angle;
 }
 
-NS_AX_END
+}

@@ -41,7 +41,8 @@ THE SOFTWARE.
 #include <winrt/Windows.UI.Popups.h>
 #include <winrt/Windows.UI.Input.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static GLViewImpl* s_pEglView = nullptr;
 
@@ -610,4 +611,4 @@ void GLViewImpl::queueOperation(AsyncOperation op, void* param)
         mQueueOperationCb(std::move(op), param);
 }
 
-NS_AX_END
+}

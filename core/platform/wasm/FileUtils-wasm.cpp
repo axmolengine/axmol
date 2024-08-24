@@ -39,7 +39,8 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 FileUtils* FileUtils::getInstance()
 {
@@ -101,6 +102,6 @@ bool FileUtilsEmscripten::isFileExistInternal(std::string_view path) const
     return access(strPath.c_str(), F_OK) != -1 ? true : false;
 }
 
-NS_AX_END
+}
 
 #endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM

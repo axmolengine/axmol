@@ -34,7 +34,8 @@
 #include "ui/UIEditBox/UIEditBoxImpl-common.h"
 #include "ui/UIEditBox/UIEditBoxImpl.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -167,6 +168,6 @@ protected:
 
 }  // namespace ui
 
-NS_AX_END
+}
 
 #endif /* __UIEditBoxIMPLICOMMON_H__ */

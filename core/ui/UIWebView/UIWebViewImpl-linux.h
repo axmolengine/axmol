@@ -32,7 +32,8 @@
 #    include <string>
 #    include "StdC.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Data;
 class Renderer;
@@ -43,11 +44,12 @@ namespace ui
 class WebView;
 }
 
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 class GTKWebKit;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -86,7 +88,7 @@ private:
     WebView* _webView;
 };
 }  // namespace ui
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #endif
 

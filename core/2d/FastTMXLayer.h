@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include "2d/TMXXMLParser.h"
 #include "renderer/CustomCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class TMXMapInfo;
 class TMXLayerInfo;
@@ -455,4 +456,4 @@ typedef FastTMXLayer TMXLayer;
 
 // end of tilemap_parallax_nodes group
 /// @}
-NS_AX_END
+}

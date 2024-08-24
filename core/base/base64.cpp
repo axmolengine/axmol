@@ -9,7 +9,8 @@
 
 #include "base64.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace base64 {
 
@@ -133,4 +134,4 @@ decode(void* dest, char const* src, std::size_t len)
 
 } // base64
 
-NS_AX_END
+}

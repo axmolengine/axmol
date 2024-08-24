@@ -32,7 +32,8 @@
 #include "base/Object.h"
 #include "math/Math.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _3d
@@ -99,7 +100,7 @@ protected:
 // end of 3d group
 /// @}
 
-NS_AX_END
+}
 
 #include "3d/AnimationCurve.inl"
 

@@ -89,7 +89,8 @@ static const char* SCALE         = "scale";
 static const char* KEYTIME       = "keytime";
 static const char* AABBS         = "aabb";
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void getChildMap(std::map<int, std::vector<int>>& map, SkinData* skinData, const rapidjson::Value& val)
 {
@@ -2335,4 +2336,4 @@ ax::AABB Bundle3D::calculateAABB(const std::vector<float>& vertex,
     return aabb;
 }
 
-NS_AX_END
+}

@@ -28,7 +28,8 @@
 
 #include "axmol.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * Copy DrawNode for 3D geometry drawing.
@@ -106,6 +107,6 @@ private:
     bool _rendererDepthTestEnabled = true;
 };
 
-NS_AX_END
+}
 
 #endif  // __DRAW_NODE_3D_H__

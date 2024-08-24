@@ -33,7 +33,8 @@
 #include "renderer/Texture2D.h"
 #include "base/Utils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 int QuadCommand::__indexCapacity = -1;
 uint16_t* QuadCommand::__indices = nullptr;
@@ -107,4 +108,4 @@ void QuadCommand::init(float globalOrder,
     TrianglesCommand::init(globalOrder, texture, blendType, triangles, mv, flags);
 }
 
-NS_AX_END
+}

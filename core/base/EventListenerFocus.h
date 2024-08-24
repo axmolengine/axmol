@@ -35,7 +35,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -75,7 +76,7 @@ public:
     friend class EventDispatcher;
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

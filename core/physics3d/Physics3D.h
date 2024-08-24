@@ -39,11 +39,12 @@
 #    include "physics3d/Physics3DComponent.h"
 #    include "physics3d/Physics3DConstraint.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AX_DLL const char* physics3dVersion();
 
-NS_AX_END
+}
 
 #    if (AX_ENABLE_BULLET_INTEGRATION)
 

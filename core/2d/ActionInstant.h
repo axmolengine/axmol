@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include <functional>
 #include "2d/Action.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup actions
@@ -395,6 +396,6 @@ private:
 // end of actions group
 /// @}
 
-NS_AX_END
+}
 
 #endif  //__CCINSTANT_ACTION_H__

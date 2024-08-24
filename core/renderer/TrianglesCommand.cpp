@@ -29,7 +29,8 @@
 #include "renderer/Texture2D.h"
 #include "base//Utils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 TrianglesCommand::TrianglesCommand()
 {
@@ -105,4 +106,4 @@ void TrianglesCommand::generateMaterialID()
     _materialID    = XXH32((const void*)&hashMe, sizeof(hashMe), 0);
 }
 
-NS_AX_END
+}

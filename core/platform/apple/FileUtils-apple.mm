@@ -39,7 +39,8 @@ THE SOFTWARE.
 
 #define DECLARE_GUARD (void)0  // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct FileUtilsApple::IMPL
 {
@@ -278,4 +279,4 @@ bool FileUtilsApple::createDirectories(std::string_view path) const
     return result;
 }
 
-NS_AX_END
+}

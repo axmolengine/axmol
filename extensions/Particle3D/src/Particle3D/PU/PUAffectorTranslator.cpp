@@ -28,7 +28,8 @@
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include "Particle3D/PU/PUAffectorManager.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUAffectorTranslator::PUAffectorTranslator() : _affector(nullptr) {}
 //-------------------------------------------------------------------------
@@ -191,4 +192,4 @@ void PUAffectorTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode*
     }
 }
 
-NS_AX_END
+}

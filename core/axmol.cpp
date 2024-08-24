@@ -31,7 +31,8 @@ THE SOFTWARE.
 
 #include "axmolver.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AX_DLL const char* axmolVersion()
 {
@@ -43,4 +44,4 @@ AX_DLL const char* cocos2dVersion()
     return axmolVersion();
 }
 
-NS_AX_END
+}

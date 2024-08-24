@@ -45,7 +45,8 @@ THE SOFTWARE.
                ((unsigned)((uint8_t)(vg) * ((uint8_t)(va) + 1) >> 8) << 8) | \
                ((unsigned)((uint8_t)(vb) * ((uint8_t)(va) + 1) >> 8) << 16) | ((unsigned)(uint8_t)(va) << 24))
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup platform
@@ -275,6 +276,6 @@ protected:
 // end of platform group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __AX_IMAGE_H__

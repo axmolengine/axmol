@@ -33,7 +33,8 @@
 #include "base/EventListenerCustom.h"
 #include "2d/Node.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 class LuaEventListenerCustom
 {
 public:
@@ -45,7 +46,7 @@ class LuaEventListenerAcceleration
 public:
     static EventListenerAcceleration* create();
 };
-NS_AX_END
+}
 
 USING_NS_AX;
 

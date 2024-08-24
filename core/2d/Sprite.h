@@ -37,7 +37,8 @@ THE SOFTWARE.
 #include "renderer/CustomCommand.h"
 #include "2d/AutoPolygon.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class SpriteBatchNode;
 class SpriteFrame;
@@ -743,4 +744,4 @@ private:
 // end of sprite_nodes group
 /// @}
 
-NS_AX_END
+}

@@ -35,7 +35,8 @@ THE SOFTWARE.
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct AffineTransform;
 /**@{

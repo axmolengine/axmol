@@ -28,7 +28,8 @@
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include "Particle3D/PU/PUUtil.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // Constants
 const float PUSphereSurfaceEmitter::DEFAULT_RADIUS = 10.0f;
 
@@ -117,4 +118,4 @@ PUSphereSurfaceEmitter* PUSphereSurfaceEmitter::clone()
     return be;
 }
 
-NS_AX_END
+}

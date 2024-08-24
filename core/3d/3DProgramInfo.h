@@ -7,7 +7,8 @@
 #include <unordered_map>
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace shaderinfos
 {
@@ -278,4 +279,4 @@ const std::vector<std::pair<const char*, VertexKey>>& getPredefinedAttributes();
 const std::string getAttributeName(const VertexKey& key);
 };  // namespace shaderinfos
 
-NS_AX_END
+}

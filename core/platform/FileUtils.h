@@ -45,7 +45,8 @@ THE SOFTWARE.
 #define AX_CONTENT_DIR "Content/"
 #define AX_CONTENT_DIR_LEN (sizeof("Content/") - 1)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup platform
@@ -921,6 +922,6 @@ protected:
 // end of support group
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // __AX_FILEUTILS_H__

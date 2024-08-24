@@ -34,7 +34,8 @@
 #include "platform/PlatformMacros.h"
 #include "base/Logging.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _3d
@@ -219,6 +220,6 @@ inline bool BundleReader::readArray<std::string>(unsigned int* length, std::vect
 // end of 3d group
 /// @}
 
-NS_AX_END
+}
 
 #endif

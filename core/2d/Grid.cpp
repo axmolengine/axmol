@@ -38,7 +38,8 @@ THE SOFTWARE.
 #include "renderer/backend/RenderTarget.h"
 #include "2d/Camera.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // implementation of GridBase
 
 bool GridBase::initWithSize(const Vec2& gridSize)
@@ -796,4 +797,4 @@ void TiledGrid3D::updateVertexAndTexCoordinate()
     _drawCommand.updateIndexBuffer(_indices, gradSize * 6 * sizeof(unsigned short));
 }
 
-NS_AX_END
+}

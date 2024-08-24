@@ -12,7 +12,8 @@
 #include <utility>
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace base64 {
 
@@ -70,4 +71,4 @@ std::size_t decode(void* dest, char const* src, std::size_t len);
 
 } // base64
 
-NS_AX_END
+}

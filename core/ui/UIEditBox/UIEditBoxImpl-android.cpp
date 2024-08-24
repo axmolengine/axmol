@@ -41,7 +41,8 @@
 #    include "platform/FileUtils.h"
 #    include "yasio/string_view.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static const char* editBoxClassName = "org.axmol.lib.EditBoxHelper";
 
@@ -247,7 +248,7 @@ const char* EditBoxImplAndroid::getNativeDefaultFontName()
 
 }  // namespace ui
 
-NS_AX_END
+}
 
 #undef LOGD
 

@@ -36,7 +36,8 @@
 #    include "base/Event.h"
 #    include "base/EventCustom.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PhysicsShape;
 class PhysicsBody;
@@ -320,7 +321,7 @@ protected:
 /** @} */
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // defined(AX_ENABLE_PHYSICS)
 #endif  //__CCPHYSICS_CONTACT_H__

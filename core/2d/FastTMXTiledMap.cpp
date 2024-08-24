@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "2d/FastTMXLayer.h"
 #include "base/UTF8.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // implementation FastTMXTiledMap
 
@@ -311,4 +312,4 @@ Vector<FastTMXLayer*> FastTMXTiledMap::getLayers() const
     return layers;
 }
 
-NS_AX_END
+}

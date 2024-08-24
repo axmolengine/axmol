@@ -27,7 +27,8 @@
 #include "PUScaleVelocityAffector.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // Constants
 const float PUScaleVelocityAffector::DEFAULT_VELOCITY_SCALE = 1.0f;
 
@@ -123,4 +124,4 @@ void PUScaleVelocityAffector::copyAttributesTo(PUAffector* affector)
     scaleVelocityAffector->_stopAtFlip       = _stopAtFlip;
 }
 
-NS_AX_END
+}

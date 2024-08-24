@@ -41,7 +41,8 @@ THE SOFTWARE.
 #include "platform/StdC.h"
 #include "base/ScriptSupport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Extra action for making a Sequence or Spawn when only adding one action to it.
 class ExtraAction : public FiniteTimeAction
@@ -2765,4 +2766,4 @@ ActionFloat* ActionFloat::reverse() const
     return ActionFloat::create(_duration, _to, _from, _callback);
 }
 
-NS_AX_END
+}

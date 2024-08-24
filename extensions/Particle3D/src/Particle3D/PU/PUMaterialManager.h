@@ -31,7 +31,8 @@
 #include <vector>
 #include "extensions/ExtensionExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUMaterial : public Object
 {
@@ -73,6 +74,6 @@ protected:
     MaterialVector _materialMap;
 };
 
-NS_AX_END
+}
 
 #endif

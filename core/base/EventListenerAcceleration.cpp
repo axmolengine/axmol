@@ -28,7 +28,8 @@
 #include "base/EventAcceleration.h"
 #include "base/Logging.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const std::string EventListenerAcceleration::LISTENER_ID = "__ax_acceleration";
 
@@ -93,4 +94,4 @@ bool EventListenerAcceleration::checkAvailable()
     return true;
 }
 
-NS_AX_END
+}

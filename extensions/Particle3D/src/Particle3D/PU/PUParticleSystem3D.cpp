@@ -39,7 +39,8 @@
 #include "Particle3D/PU/PUBehaviour.h"
 #include "platform/FileUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 float PUParticle3D::DEFAULT_TTL  = 10.0f;
 float PUParticle3D::DEFAULT_MASS = 1.0f;
@@ -1577,4 +1578,4 @@ void PUParticleSystem3D::forceStopParticleSystem()
     unPrepared();
 }
 
-NS_AX_END
+}

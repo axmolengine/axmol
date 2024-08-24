@@ -41,7 +41,8 @@ THE SOFTWARE.
 
 #include "yasio/string_view.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 bool AudioDecoderManager::init()
 {
@@ -90,6 +91,6 @@ void AudioDecoderManager::destroyDecoder(AudioDecoder* decoder)
     delete decoder;
 }
 
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #undef LOG_TAG

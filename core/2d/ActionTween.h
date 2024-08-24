@@ -29,7 +29,8 @@ THE SOFTWARE.
 
 #include "2d/ActionInterval.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup actions
@@ -120,6 +121,6 @@ protected:
 // end of actions group
 /// @}
 
-NS_AX_END
+}
 
 #endif /* __CCACTIONTWEEN_H__ */

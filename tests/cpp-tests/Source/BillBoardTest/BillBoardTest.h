@@ -29,10 +29,11 @@
 #include "../BaseTest.h"
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 class BillBoard;
 class Camera;
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 class BillBoardRotationTest : public TestCase
 {

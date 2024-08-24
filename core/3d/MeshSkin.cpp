@@ -27,7 +27,8 @@
 #include "3d/Bundle3D.h"
 #include "3d/Skeleton3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static int PALETTE_ROWS = 3;
 
@@ -161,4 +162,4 @@ const Mat4& MeshSkin::getInvBindPose(const Bone3D* bone)
     return Mat4::IDENTITY;
 }
 
-NS_AX_END
+}

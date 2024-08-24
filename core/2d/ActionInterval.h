@@ -37,7 +37,8 @@ THE SOFTWARE.
 #include "base/Protocols.h"
 #include "base/Vector.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Node;
 class SpriteFrame;
@@ -1617,6 +1618,6 @@ private:
 // end of actions group
 /// @}
 
-NS_AX_END
+}
 
 #endif  //__ACTION_CCINTERVAL_ACTION_H__

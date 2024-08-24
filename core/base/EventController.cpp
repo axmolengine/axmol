@@ -26,7 +26,8 @@
 
 #include "base/EventController.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 EventController::EventController(ControllerEventType type, Controller* controller, int keyCode)
     : Event(Type::GAME_CONTROLLER)
@@ -44,4 +45,4 @@ EventController::EventController(ControllerEventType type, Controller* controlle
     , _isConnected(isConnected)
 {}
 
-NS_AX_END
+}

@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "2d/Component.h"
 #include "ui/GUIExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 /**
  * @addtogroup ui
  * @{
@@ -428,5 +429,5 @@ protected:
 
 // end of ui group
 /// @}
-NS_AX_END
+}
 #endif /* defined(_AX_LAYOUTCOMPONENT_H_) */

@@ -29,7 +29,8 @@
 #include "base/Macros.h"
 #include "math/Math.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 enum class PointSide
 {
@@ -106,6 +107,6 @@ protected:
     float _dist;   // original displacement of the normal
 };
 
-NS_AX_END
+}
 
 #endif

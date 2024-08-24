@@ -32,7 +32,8 @@
 #    include "recast/DetourDebugDraw.h"
 #    include <sstream>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #    pragma pack(push, 1)
 struct TileCacheSetHeader
@@ -660,6 +661,6 @@ void ax::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec3>
     }
 }
 
-NS_AX_END
+}
 
 #endif  // AX_ENABLE_NAVMESH

@@ -36,7 +36,8 @@
  * @addtogroup renderer
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 struct AX_DLL PipelineDescriptor
 {
@@ -46,4 +47,4 @@ struct AX_DLL PipelineDescriptor
 
 // end of renderer group
 /// @}
-NS_AX_END
+}

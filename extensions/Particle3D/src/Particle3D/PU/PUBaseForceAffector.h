@@ -30,7 +30,8 @@
 #include "math/Math.h"
 #include "Particle3D/PU/PUAffector.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUBaseForceAffector : public PUAffector
 {
@@ -65,6 +66,6 @@ protected:
     Vec3 _scaledVector;
     ForceApplication _forceApplication;
 };
-NS_AX_END
+}
 
 #endif

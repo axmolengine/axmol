@@ -37,7 +37,8 @@ THE SOFTWARE.
 #define WIDE_SCREEN_ASPECT_RATIO_ANDROID 2.0f
 
 
-NS_AX_BEGIN
+namespace ax
+{
 void GLViewImpl::loadGLES2()
 {
     auto glesVer = gladLoaderLoadGLES2();
@@ -271,4 +272,4 @@ void GLViewImpl::queueOperation(void (*op)(void*), void* param)
                                     (jlong)(uintptr_t)param);
 }
 
-NS_AX_END
+}

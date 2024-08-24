@@ -30,7 +30,8 @@
 #include "Particle3D/PU/PUDynamicAttributeTranslator.h"
 #include "Particle3D/PU/PUEmitterManager.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUEmitterTranslator::PUEmitterTranslator() : _emitter(nullptr) {}
 //-------------------------------------------------------------------------
@@ -645,4 +646,4 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* 
     }
 }
 
-NS_AX_END
+}

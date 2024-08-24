@@ -35,7 +35,8 @@
 
 #include "yasio/thread_name.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace
 {
@@ -458,5 +459,5 @@ bool AudioPlayer::setTime(float time)
     }
     return false;
 }
-NS_AX_END
+}
 #undef LOG_TAG

@@ -31,7 +31,8 @@
 
 #include <algorithm>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const std::string EventListenerTouchOneByOne::LISTENER_ID = "__ax_touch_one_by_one";
 
@@ -185,4 +186,4 @@ EventListenerTouchAllAtOnce* EventListenerTouchAllAtOnce::clone()
     return ret;
 }
 
-NS_AX_END
+}

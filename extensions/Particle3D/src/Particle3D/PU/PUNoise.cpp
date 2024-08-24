@@ -26,7 +26,8 @@
 
 #include "PUNoise.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static int permutation[] = {
     151, 160, 137, 91,  90,  15,  131, 13,  201, 95,  96,  53,  194, 233, 7,   225, 140, 36,  103, 30,  69,  142,
@@ -151,4 +152,4 @@ double PUNoise3D::grad(int hash, double x, double y, double z)
     return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 }
 
-NS_AX_END
+}

@@ -63,7 +63,8 @@ class ActionTimelineNode;
 }  // namespace timeline
 }  // namespace cocostudio
 
-NS_AX_BEGIN
+namespace ax
+{
 
 typedef std::function<void(Object*)> ccNodeLoadCallback;
 
@@ -175,6 +176,6 @@ protected:
     std::string _csBuildID;
 };
 
-NS_AX_END
+}
 
 #endif /* defined(__cocos2d_libs__CSLoader__) */

@@ -35,7 +35,8 @@
 #include <functional>
 #include <stdexcept>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #pragma region JobExecutor
 class JobExecutor
@@ -234,4 +235,4 @@ void JobSystem::enqueue(std::function<void()> task, std::function<void()> done)
 
 #pragma endregion
 
-NS_AX_END
+}

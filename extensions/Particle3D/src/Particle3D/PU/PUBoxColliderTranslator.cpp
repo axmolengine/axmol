@@ -30,7 +30,8 @@
 #include "Particle3D/PU/PUDynamicAttributeTranslator.h"
 #include "Particle3D/PU/PUBaseColliderTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUBoxColliderTranslator::PUBoxColliderTranslator() {}
 //-------------------------------------------------------------------------
@@ -147,4 +148,4 @@ bool PUBoxColliderTranslator::translateChildObject(PUScriptCompiler* /*compiler*
     return false;
 }
 
-NS_AX_END
+}

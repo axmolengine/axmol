@@ -5,7 +5,8 @@
 #include "math/AffineTransform.h"
 #include "CocosStudioExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class CCS_DLL NodeExtension
 {
@@ -16,6 +17,6 @@ public:
 private:
 };
 
-NS_AX_END
+}
 
 #endif

@@ -29,7 +29,8 @@
 
 #include "fmt/compile.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 enum class LogLevel
 {
@@ -164,4 +165,4 @@ inline void printLogT(_FmtType&& fmt, LogItem& item, _Types&&... args)
  */
 /* AX_DEPRECATED_ATTRIBUTE*/ AX_API void print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use AXLOGD instead
 
-NS_AX_END
+}

@@ -35,7 +35,8 @@
 #include "base/Protocols.h"
 #include "renderer/CustomCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Texture2D;
 class TextureAtlas;
@@ -191,4 +192,4 @@ private:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}

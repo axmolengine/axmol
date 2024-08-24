@@ -27,7 +27,8 @@
 
 #include "PUScriptParser.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUScriptParser::PUScriptParser() {}
 
@@ -530,4 +531,4 @@ PUConcreteNode::~PUConcreteNode()
     }
 }
 
-NS_AX_END
+}

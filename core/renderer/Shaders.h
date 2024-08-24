@@ -37,7 +37,8 @@ THE SOFTWARE.
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 extern AX_DLL const std::string_view positionColor_vert;
 extern AX_DLL const std::string_view positionColor_frag;
@@ -102,7 +103,7 @@ extern AX_DLL const std::string_view colorNormalTexture_frag_1;
 extern AX_DLL const std::string_view positionNormalTexture_vert_1;
 extern AX_DLL const std::string_view skinPositionNormalTexture_vert_1;
 
-NS_AX_END
+}
 /**
  end of support group
  @}

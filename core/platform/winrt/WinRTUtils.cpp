@@ -46,7 +46,8 @@ using namespace Windows::Networking::Connectivity;
 using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Controls;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 bool isWindowsPhone()
 {
@@ -289,4 +290,4 @@ void destroyMappedCacheFile(const std::string& key)
     UserDefault::getInstance()->setStringForKey(key.c_str(), "");
 }
 
-NS_AX_END
+}

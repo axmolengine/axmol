@@ -28,7 +28,8 @@
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include "Particle3D/PU/PUSlaveBehaviour.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //-----------------------------------------------------------------------
 PUSlaveEmitter::PUSlaveEmitter()
     : PUEmitter()
@@ -179,4 +180,4 @@ PUSlaveEmitter* PUSlaveEmitter::clone()
     return be;
 }
 
-NS_AX_END
+}

@@ -63,7 +63,8 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 namespace ui
 {
 
@@ -75,7 +76,7 @@ AX_GUI_DLL const char* axmolUIVersion();
 
 }  // namespace ui
 
-NS_AX_END
+}
 // end of ui group
 /// @}
 
