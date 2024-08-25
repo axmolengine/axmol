@@ -50,7 +50,7 @@
 #include "yasio/string_view.hpp"
 #include <thread>
 
-USING_NS_AX;
+using namespace ax;
 
 extern std::unordered_map<uintptr_t, const char*> g_luaType;
 extern std::unordered_map<cxx17::string_view, const char*> g_typeCast;

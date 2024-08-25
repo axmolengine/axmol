@@ -1,6 +1,6 @@
 #include "Window2.h"
 
-USING_NS_AX;
+using namespace ax;
 
 void Window2::onInit()
 {

@@ -9,7 +9,7 @@
 #include "spine/spine-cocos2dx.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GLoader3D::GLoader3D()
     : _autoSize(false),

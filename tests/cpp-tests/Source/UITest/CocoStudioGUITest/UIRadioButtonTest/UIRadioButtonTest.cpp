@@ -24,7 +24,7 @@
 
 #include "UIRadioButtonTest.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 UIRadioButtonTests::UIRadioButtonTests()

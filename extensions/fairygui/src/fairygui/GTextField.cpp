@@ -3,7 +3,7 @@
 #include "utils/ToolSet.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GTextField::GTextField()
     : _templateVars(nullptr),

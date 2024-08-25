@@ -28,7 +28,7 @@
 #include "cocostudio/SGUIReader.h"
 #include "CocosGUIScene.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 UIScene::UIScene() : _uiLayer(nullptr), _sceneTitle(nullptr) {}

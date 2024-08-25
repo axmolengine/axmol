@@ -38,7 +38,7 @@
 
 #include "yasio/byte_buffer.hpp"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::network;
 
 class LuaMinXmlHttpRequest : public ax::Object

@@ -23,7 +23,7 @@ using namespace ax::experimental;
 using namespace CocosDenshion;
 #endif
 
-USING_NS_AX;
+using namespace ax;
 
 static ax::Size designResolutionSize = ax::Size(LAppDefine::RenderTargetWidth, LAppDefine::RenderTargetHeight);
 static ax::Size smallResolutionSize = ax::Size(480, 320);

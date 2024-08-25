@@ -16,7 +16,7 @@ to use those with specific font.
 ## How to use
 ```cpp
 #include "ImGui/ImGuiPresenter.h"
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 class GameScene : public Scene {

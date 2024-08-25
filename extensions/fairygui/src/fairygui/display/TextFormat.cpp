@@ -1,7 +1,7 @@
 #include "TextFormat.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 TextFormat::TextFormat() :
     fontSize(12),

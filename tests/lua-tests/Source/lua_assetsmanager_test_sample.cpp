@@ -34,7 +34,7 @@
 #    include <sys/stat.h>
 #endif
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 static int lua_cocos2dx_createDownloadDir(lua_State* L)

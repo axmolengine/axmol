@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "2d/ActionInstant.h"
 #include "base/Utils.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

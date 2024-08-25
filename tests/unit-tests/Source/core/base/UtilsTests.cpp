@@ -26,7 +26,7 @@
 #include <doctest.h>
 #include "base/Utils.h"
 
-USING_NS_AX;
+using namespace ax;
 
 
 TEST_SUITE("base/Utils") {

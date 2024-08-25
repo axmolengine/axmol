@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include "ComAttribute.h"
 #include "platform/FileUtils.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

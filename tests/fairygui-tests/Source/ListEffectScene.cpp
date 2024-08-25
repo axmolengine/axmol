@@ -2,7 +2,7 @@
 #include "MailItem.h"
 #include "GList.h"
 
-USING_NS_AX;
+using namespace ax;
 
 void ListEffectScene::continueInit()
 {

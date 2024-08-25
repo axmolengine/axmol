@@ -4,7 +4,7 @@
 #include "GProgressBar.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 void TweenPropTypeUtils::setProps(GObject * target, TweenPropType propType, const TweenValue & value)
 {

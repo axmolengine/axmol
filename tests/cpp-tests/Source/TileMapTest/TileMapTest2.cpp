@@ -28,7 +28,7 @@
 #include "2d/FastTMXLayer.h"
 #include "2d/FastTMXTiledMap.h"
 
-USING_NS_AX;
+using namespace ax;
 
 enum
 {

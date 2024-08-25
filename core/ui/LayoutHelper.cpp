@@ -4,7 +4,7 @@
 //
 #include "ui/LayoutHelper.h"
 
-USING_NS_AX;
+using namespace ax;
 
 Vec2 LayoutHelper::s_designSize;
 float LayoutHelper::s_adjustedScale = 1.0f;

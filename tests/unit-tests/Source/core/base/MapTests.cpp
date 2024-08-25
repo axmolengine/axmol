@@ -27,7 +27,7 @@
 #include "2d/Node.h"
 #include "base/Map.h"
 
-USING_NS_AX;
+using namespace ax;
 
 
 TEST_SUITE("base/Map") {

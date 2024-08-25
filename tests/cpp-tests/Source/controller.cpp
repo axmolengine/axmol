@@ -29,7 +29,7 @@
 #include "BaseTest.h"
 #include "tests.h"
 
-USING_NS_AX;
+using namespace ax;
 
 #define LOG_INDENTATION "  "
 #define LOG_TAG         "[TestController]"

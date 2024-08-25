@@ -24,7 +24,7 @@
 
 #include "UILayoutTest.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 UILayoutTests::UILayoutTests()

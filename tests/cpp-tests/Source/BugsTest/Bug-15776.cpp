@@ -32,7 +32,7 @@
 
 #include "Bug-15776.h"
 
-USING_NS_AX;
+using namespace ax;
 
 //
 // IMPORTANT:

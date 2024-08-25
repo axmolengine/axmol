@@ -30,7 +30,7 @@
 #include "lua-bindings/manual/lua_module_register.h"
 #include "lua_test_bindings.h"
 
-USING_NS_AX;
+using namespace ax;
 
 AppDelegate::AppDelegate() {}
 

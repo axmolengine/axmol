@@ -45,7 +45,7 @@
 
 #include "platform/SAXParser.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 class UrlTouchListenerComponent : public Component

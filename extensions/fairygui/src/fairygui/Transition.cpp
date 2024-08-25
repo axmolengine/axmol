@@ -7,7 +7,7 @@
 #include "utils/ToolSet.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 using namespace std;
 
 const int OPTION_IGNORE_DISPLAY_CONTROLLER = 1;

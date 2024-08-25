@@ -53,8 +53,6 @@ using Ref                   = Object;
 
 namespace cocos2d = ax;
 
-#define USING_NS_CC                  USING_NS_AX
-
 #define CC_SAFE_RELEASE              AX_SAFE_RELEASE
 #define CC_SAFE_RELEASE_NULL         AX_SAFE_RELEASE_NULL
 #define CC_SAFE_DELETE               AX_SAFE_DELETE

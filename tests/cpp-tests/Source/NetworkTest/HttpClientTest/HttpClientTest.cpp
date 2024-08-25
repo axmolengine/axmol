@@ -26,7 +26,7 @@
 #include "HttpClientTest.h"
 #include <string>
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::network;
 
 #define CHROME_UA                                                                                                   \

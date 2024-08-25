@@ -42,7 +42,7 @@
 NS_AX_EXT_BEGIN
 
 using namespace std;
-USING_NS_AX;
+using namespace ax;
 using namespace ax::network;
 
 #define KEY_OF_VERSION "current-version-code"

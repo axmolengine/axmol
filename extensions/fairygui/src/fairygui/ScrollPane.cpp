@@ -8,7 +8,7 @@
 #include "utils/ByteBuffer.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 ScrollPane* ScrollPane::_draggingPane = nullptr;
 int ScrollPane::_gestureFlag = 0;

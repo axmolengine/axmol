@@ -28,7 +28,7 @@
 #include "lua-bindings/manual/LuaEngine.h"
 #include "lua-bindings/manual/LuaBridge.h"
 
-USING_NS_AX;
+using namespace ax;
 
 @implementation LuaObjectCBridgeTest
 

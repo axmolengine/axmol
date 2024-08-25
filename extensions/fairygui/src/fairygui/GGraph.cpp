@@ -3,7 +3,7 @@
 #include "utils/ToolSet.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 static void drawVertRect(ax::DrawNode* shape, float x, float y, float width, float height, const ax::Color4F& color)
 {

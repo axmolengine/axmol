@@ -58,7 +58,7 @@
 
 #    include "ntcvt/ntcvt.hpp"
 
-USING_NS_AX;
+using namespace ax;
 using namespace webview_common;
 
 using msg_cb_t = std::function<void(std::string_view)>;

@@ -24,7 +24,7 @@
 
 #include "UIListViewTest.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 const char* font_UIListViewTest = "fonts/Marker Felt.ttf";

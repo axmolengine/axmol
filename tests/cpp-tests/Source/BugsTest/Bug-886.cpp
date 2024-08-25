@@ -29,7 +29,7 @@
 
 #include "Bug-886.h"
 
-USING_NS_AX;
+using namespace ax;
 
 bool Bug886Layer::init()
 {

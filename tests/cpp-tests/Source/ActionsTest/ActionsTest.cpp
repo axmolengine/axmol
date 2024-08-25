@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "renderer/CustomCommand.h"
 #include "renderer/GroupCommand.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 ActionsTests::ActionsTests()

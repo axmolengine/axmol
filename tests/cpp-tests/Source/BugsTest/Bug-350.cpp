@@ -29,7 +29,7 @@
 
 #include "Bug-350.h"
 
-USING_NS_AX;
+using namespace ax;
 
 bool Bug350Layer::init()
 {

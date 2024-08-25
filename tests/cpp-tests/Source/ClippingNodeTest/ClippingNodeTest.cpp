@@ -36,7 +36,7 @@
 #include "renderer/backend/ProgramState.h"
 #include "renderer/Shaders.h"
 
-USING_NS_AX;
+using namespace ax;
 
 enum
 {

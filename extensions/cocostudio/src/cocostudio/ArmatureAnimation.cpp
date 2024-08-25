@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "ArmatureDefine.h"
 #include "Datas.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

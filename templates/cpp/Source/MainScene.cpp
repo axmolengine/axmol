@@ -25,7 +25,7 @@
 
 #include "MainScene.h"
 
-USING_NS_AX;
+using namespace ax;
 
 // Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char* filename)

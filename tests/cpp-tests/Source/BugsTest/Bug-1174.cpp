@@ -29,7 +29,7 @@
 
 #include "Bug-1174.h"
 
-USING_NS_AX;
+using namespace ax;
 
 int check_for_error(Vec2 p1, Vec2 p2, Vec2 p3, Vec2 p4, float s, float t);
 

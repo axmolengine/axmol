@@ -31,7 +31,7 @@
 #include "Inspector/Inspector.h"
 #endif
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 #define TABEL_LABEL_TAG 1024

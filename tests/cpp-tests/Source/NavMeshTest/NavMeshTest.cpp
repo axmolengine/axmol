@@ -32,7 +32,7 @@
 #include "2d/Light.h"
 
 USING_NS_AX_EXT;
-USING_NS_AX;
+using namespace ax;
 
 struct AgentUserData
 {

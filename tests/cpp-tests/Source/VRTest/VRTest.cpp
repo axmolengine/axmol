@@ -26,7 +26,7 @@
 
 #include "VRTest.h"
 
-USING_NS_AX;
+using namespace ax;
 
 VRTests::VRTests()
 {

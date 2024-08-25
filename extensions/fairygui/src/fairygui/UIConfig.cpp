@@ -1,7 +1,7 @@
 #include "UIConfig.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 std::string UIConfig::defaultFont = "";
 std::string UIConfig::buttonSound = "";

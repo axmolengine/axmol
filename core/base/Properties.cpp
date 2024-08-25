@@ -35,7 +35,7 @@
 #include "base/UTF8.h"
 #include "base/Data.h"
 
-USING_NS_AX;
+using namespace ax;
 
 // Utility functions (shared with SceneLoader).
 /** @script{ignore} */

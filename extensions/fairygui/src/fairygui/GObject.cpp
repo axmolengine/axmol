@@ -11,7 +11,7 @@
 #include "utils/WeakPtr.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GObject* GObject::_draggingObject = nullptr;
 

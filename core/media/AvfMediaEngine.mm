@@ -37,7 +37,7 @@
 #    import <UIKit/UIKit.h>
 #endif
 
-USING_NS_AX;
+using namespace ax;
 
 #define AX_ALIGN_ANY(x, a) ((((x) + (a) - 1) / (a)) * (a))
 

@@ -40,7 +40,7 @@ THE SOFTWARE.
 #    include "chipmunk/chipmunk.h"
 #endif
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

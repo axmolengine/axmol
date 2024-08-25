@@ -25,7 +25,7 @@
 
 #include "UIVideoPlayerTest.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 static MenuItemFont* createMenuFontWithColor(std::string_view title,

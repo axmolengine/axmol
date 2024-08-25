@@ -33,7 +33,7 @@
 
 #include "Bug-12847.h"
 
-USING_NS_AX;
+using namespace ax;
 
 Bug12847Layer::Bug12847Layer()
 {

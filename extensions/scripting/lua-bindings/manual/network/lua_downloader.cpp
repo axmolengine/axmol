@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include "lua-bindings/manual/LuaEngine.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::network;
 
 static int get_field_int(lua_State* L, const char* field, int def)

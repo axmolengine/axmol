@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "lua-bindings/manual/LuaEngine.h"
 
 using namespace spine;
-USING_NS_AX;
+using namespace ax;
 
 LuaSkeletonAnimation::LuaSkeletonAnimation() : spine::SkeletonAnimation() {}
 

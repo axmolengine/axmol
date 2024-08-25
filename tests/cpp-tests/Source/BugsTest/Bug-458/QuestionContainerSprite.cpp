@@ -26,7 +26,7 @@
 
 #define kLabelTag
 
-USING_NS_AX;
+using namespace ax;
 
 bool QuestionContainerSprite::init()
 {

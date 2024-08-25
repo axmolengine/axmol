@@ -32,7 +32,7 @@
 #include "physics3d/Physics3D.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 USING_NS_AX_EXT;
-USING_NS_AX;
+using namespace ax;
 
 static const std::string_view boss[] = {"MeshRendererTest/boss.c3b", "MeshRendererTest/boss.obj"};
 static const int boss_count          = sizeof(boss) / sizeof(boss[0]);

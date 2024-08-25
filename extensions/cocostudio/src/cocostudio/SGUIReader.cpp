@@ -49,7 +49,7 @@ THE SOFTWARE.
 #include "CocoLoader.h"
 #include "pugixml/pugixml.hpp"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 namespace cocostudio

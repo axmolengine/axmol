@@ -2,7 +2,7 @@
 #include "cocos2d.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 static const float _PiOver2 = (float)(M_PI * 0.5f);
 static const float _TwoPi = (float)(M_PI * 2);

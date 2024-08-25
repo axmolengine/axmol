@@ -53,7 +53,7 @@ Let's say you want to write unit tests for `ax::Node` class. To add a new test f
     #include <doctest.h>
     #include "2d/Node.h" // Include the thing you're testing
 
-    USING_NS_AX;
+    using namespace ax;
 
     // For suite name use the part of the source file path, in this case `2d` followed by the
     // class name you will be testing, in this case `Node`. Separate the parts with a slash.

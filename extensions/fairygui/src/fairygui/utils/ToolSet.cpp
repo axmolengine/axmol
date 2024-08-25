@@ -1,7 +1,7 @@
 #include "utils/ToolSet.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 using namespace std;
 
 Color4B ToolSet::hexToColor(const char* str)

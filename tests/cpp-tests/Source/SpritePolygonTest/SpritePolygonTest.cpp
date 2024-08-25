@@ -28,7 +28,7 @@
 #include <chrono>
 #include <sstream>
 
-USING_NS_AX;
+using namespace ax;
 
 SpritePolygonTest::SpritePolygonTest()
 {

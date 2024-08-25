@@ -27,7 +27,7 @@
 #include "TestUtils.h"
 #include "platform/FileUtils.h"
 
-USING_NS_AX;
+using namespace ax;
 
 
 TEST_SUITE("platform/FileUtils") {

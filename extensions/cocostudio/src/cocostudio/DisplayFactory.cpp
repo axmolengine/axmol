@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "2d/ParticleSystemQuad.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

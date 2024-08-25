@@ -10,7 +10,7 @@
 #include "cocos2d.h"
 
 using namespace Csm;
-USING_NS_AX;
+using namespace ax;
 
 csmByte* LAppPal::LoadFileAsBytes(const csmChar* filePath, csmSizeInt* outSize)
 {
