@@ -30,7 +30,8 @@ THE SOFTWARE.
 
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup platform
@@ -72,7 +73,7 @@ enum class LanguageType
 // END of platform group
 /// @}
 
-NS_AX_END
+}
 
 /// @endcond
 #endif  // __AX_COMMON_H__

@@ -29,7 +29,8 @@ THE SOFTWARE.
 
 #include "ui/UIScrollView.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 /**
  * @addtogroup ui
  * @{
@@ -183,6 +184,6 @@ private:
 }  // namespace ui
 // end of ui group
 /// @}
-NS_AX_END
+}
 
 #endif /* defined(__UISCROLLVIEWBAR_H__) */

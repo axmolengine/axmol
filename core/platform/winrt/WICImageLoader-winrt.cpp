@@ -29,7 +29,8 @@ obtained from https://directxtk.codeplex.com
 #include "platform/winrt/WinRTUtils.h"
 #include "ntcvt/ntcvt.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #if AX_USE_WIC
 
@@ -539,4 +540,4 @@ IWICImagingFactory* WICImageLoader::getWICFactory()
 
 #endif
 
-NS_AX_END
+}

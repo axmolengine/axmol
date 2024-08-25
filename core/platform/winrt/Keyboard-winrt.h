@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include <winrt/Windows.UI.Xaml.h>
 #include "platform/winrt/InputEvent.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class KeyBoardWinRT
 {
@@ -58,4 +59,4 @@ private:
 	bool m_useInputMethod;
 };
 
-NS_AX_END
+}

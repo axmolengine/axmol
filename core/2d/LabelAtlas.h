@@ -33,7 +33,8 @@ THE SOFTWARE.
 #    include "renderer/CustomCommand.h"
 #    include "2d/DrawNode.h"
 #endif
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _2d
@@ -137,6 +138,6 @@ protected:
 // end group
 /// @}
 
-NS_AX_END
+}
 
 #endif  //__CCLABEL_ATLAS_H__

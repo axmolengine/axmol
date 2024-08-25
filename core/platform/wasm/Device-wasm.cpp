@@ -34,7 +34,8 @@ THE SOFTWARE.
 #include <emscripten/emscripten.h>
 #include <emscripten/html5.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 int Device::getDPI()
 {
@@ -165,6 +166,6 @@ void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged() {}
 
-NS_AX_END
+}
 
 #endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM

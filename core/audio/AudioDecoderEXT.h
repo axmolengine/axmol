@@ -31,7 +31,8 @@
 #include "audio/AudioDecoder.h"
 #include "platform/IFileStream.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @brief The class for decoding compressed audio file to PCM buffer.
@@ -105,4 +106,4 @@ private:
     AudioStreamBasicDescription _outputFormat;
 };
 
-NS_AX_END  // namespace ax
+}  // namespace ax

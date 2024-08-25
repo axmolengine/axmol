@@ -39,7 +39,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Event;
 class Node;
@@ -180,7 +181,7 @@ protected:
     friend class EventDispatcher;
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

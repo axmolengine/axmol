@@ -46,7 +46,8 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 std::string TextureCache::s_etc1AlphaFileSuffix = "@alpha";
 
@@ -990,4 +991,4 @@ void VolatileTextureMgr::reloadTexture(Texture2D* texture, std::string_view file
 
 #endif  // AX_ENABLE_CACHE_TEXTURE_DATA
 
-NS_AX_END
+}

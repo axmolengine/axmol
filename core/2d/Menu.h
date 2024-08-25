@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "2d/Layer.h"
 #include "base/Value.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 class Touch;
 
 /**
@@ -186,6 +187,6 @@ private:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  //__CCMENU_H_

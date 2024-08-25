@@ -61,7 +61,8 @@ struct TypeSignature<std::string>
 };
 }  // namespace jni
 
-NS_AX_BEGIN
+namespace ax
+{
 
 typedef struct JniMethodInfo_
 {
@@ -534,6 +535,6 @@ private:
     static void reportError(const char* className, const char* methodName, const char* signature);
 };
 
-NS_AX_END
+}
 
 #endif  // __ANDROID_JNI_HELPER_H__

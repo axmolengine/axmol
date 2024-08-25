@@ -45,7 +45,8 @@ extern "C" size_t __ctype_get_mb_cur_max(void)
 
 static const char* applicationHelperClassName = "org.axmol.lib.AxmolEngine";
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // sharedApplication pointer
 Application* Application::sm_pSharedApplication = nullptr;
@@ -126,7 +127,7 @@ bool Application::openURL(std::string_view url)
 
 void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {}
 
-NS_AX_END
+}
 
 #undef LOGD
 #undef LOG_TAG

@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include "platform/ApplicationBase.h"
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 class Rect;
 
 class Application : public ApplicationBase
@@ -117,7 +118,7 @@ protected:
     static Application * sm_pSharedApplication;
 };
 
-NS_AX_END
+}
 
 #endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 

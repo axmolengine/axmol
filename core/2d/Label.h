@@ -35,7 +35,8 @@
 #include "2d/FontFreeType.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _2d
@@ -943,6 +944,6 @@ private:
 // end group
 /// @}
 
-NS_AX_END
+}
 
 #endif /*_AX_LABEL_H */

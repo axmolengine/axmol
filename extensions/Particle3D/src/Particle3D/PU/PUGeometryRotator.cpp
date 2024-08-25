@@ -27,7 +27,8 @@
 #include "PUGeometryRotator.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //-----------------------------------------------------------------------
 // Constants
 const bool PUGeometryRotator::DEFAULT_USE_OWN         = false;
@@ -185,4 +186,4 @@ void PUGeometryRotator::copyAttributesTo(PUAffector* affector)
 
 //-----------------------------------------------------------------------
 
-NS_AX_END
+}

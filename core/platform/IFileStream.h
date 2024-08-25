@@ -6,7 +6,8 @@
 #include "platform/PlatformConfig.h"
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup platform
@@ -114,4 +115,4 @@ protected:
 // end of support group
 /** @} */
 
-NS_AX_END
+}

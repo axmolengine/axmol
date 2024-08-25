@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "2d/Node.h"
 #include "platform/StdC.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //
 // CameraAction
 //
@@ -242,4 +243,4 @@ void OrbitCamera::sphericalRadius(float* newRadius, float* zenith, float* azimut
     *newRadius = r / FLT_EPSILON;
 }
 
-NS_AX_END
+}

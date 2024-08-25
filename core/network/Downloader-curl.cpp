@@ -60,7 +60,8 @@ enum
     kCheckSumStateFailed  = 1 << 1,
 };
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -974,6 +975,6 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task, int checkState)
 }
 
 }  // namespace network
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #endif

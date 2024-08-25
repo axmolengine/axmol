@@ -27,7 +27,8 @@
 #include "Particle3D/PU/PUOnTimeObserver.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const float PUOnTimeObserver::DEFAULT_THRESHOLD         = 0.0f;
@@ -121,4 +122,4 @@ void PUOnTimeObserver::copyAttributesTo(PUObserver* observer)
     onTimeObserver->_sinceStartSystem = _sinceStartSystem;
 }
 
-NS_AX_END
+}

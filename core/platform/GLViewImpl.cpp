@@ -92,7 +92,8 @@ THE SOFTWARE.
 #    include <emscripten/html5.h>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class GLFWEventHandler
 {
@@ -1438,4 +1439,4 @@ bool GLViewImpl::loadGL()
 
 #endif
 
-NS_AX_END  // end of namespace ax;
+}  // end of namespace ax;

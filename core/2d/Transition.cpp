@@ -40,7 +40,8 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "base/EventDispatcher.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const unsigned int kSceneFade = 0xFADEFADE;
 
@@ -1507,4 +1508,4 @@ ActionInterval* TransitionFadeDown::actionWithSize(const Vec2& size)
     return FadeOutDownTiles::create(_duration, size);
 }
 
-NS_AX_END
+}

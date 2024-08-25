@@ -27,7 +27,8 @@
 
 #include "media/MFUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 //-------------------------------------------------------------------------------------
 class IMFNotify
@@ -139,7 +140,7 @@ struct MfMediaEngineFactory : public MediaEngineFactory {
     }
 };
 
-NS_AX_END
+}
 
 #endif
 #endif

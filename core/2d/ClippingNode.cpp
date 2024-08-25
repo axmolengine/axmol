@@ -33,7 +33,8 @@
 #include "base/Director.h"
 #include "base/StencilStateManager.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 ClippingNode::ClippingNode() : _stencilStateManager(new StencilStateManager()) {}
 
@@ -383,4 +384,4 @@ void ClippingNode::restoreAllProgramStates()
     }
 }
 
-NS_AX_END
+}

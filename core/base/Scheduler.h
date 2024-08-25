@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include "base/Object.h"
 #include "base/Vector.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Scheduler;
 
@@ -546,6 +547,6 @@ protected:
 // end of base group
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // __CCSCHEDULER_H__

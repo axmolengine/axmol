@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "ui/UIScale9Sprite.h"
 #include "2d/Sprite.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /* FIXME:
  Code could be simplified by using Sprite's setContentSize feature.
@@ -434,4 +435,4 @@ ResourceData LoadingBar::getRenderFile()
 
 }  // namespace ui
 
-NS_AX_END
+}

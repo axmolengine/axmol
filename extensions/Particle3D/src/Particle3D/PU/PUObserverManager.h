@@ -42,7 +42,8 @@
 #include "Particle3D/PU/PUOnTimeObserverTranslator.h"
 #include "Particle3D/PU/PUOnVelocityObserverTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 class PUObserverManager
 {
 public:
@@ -70,6 +71,6 @@ protected:
     PUOnVelocityObserverTranslator _onVelocityObserverTranslator;
 };
 
-NS_AX_END
+}
 
 #endif

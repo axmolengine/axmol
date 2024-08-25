@@ -30,10 +30,6 @@
 #    define AXME_TRACE AXLOGD
 #else
 #    define AXME_TRACE printf
-#    define NS_AX_BEGIN \
-        namespace ax    \
-        {
-#    define NS_AX_END }
 #    define AX_BREAK_IF(cond) \
         if (cond)             \
         break
@@ -55,7 +51,8 @@
 
 using namespace std::string_view_literals;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 enum class MEMediaEventType
 {
@@ -216,4 +213,4 @@ public:
     virtual void destroyMediaEngine(MediaEngine* me) = 0;
 };
 
-NS_AX_END
+}

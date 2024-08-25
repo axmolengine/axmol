@@ -37,7 +37,8 @@ THE SOFTWARE.
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #define kProgressTextureCoordsCount 4
 //  kProgressTextureCoords holds points {0,1} {0,0} {1,0} {1,1} we can represent it as bits
@@ -661,4 +662,4 @@ void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t fla
     }
 }
 
-NS_AX_END
+}

@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "base/UTF8.h"
 #include "2d/Camera.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -839,4 +840,4 @@ void TextField::setCursorFromPoint(const Vec2& point, const Camera* camera)
 
 }  // namespace ui
 
-NS_AX_END
+}

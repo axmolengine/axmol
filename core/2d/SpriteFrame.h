@@ -35,7 +35,8 @@ THE SOFTWARE.
 #include "base/Object.h"
 #include "math/Math.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Texture2D;
 
@@ -319,6 +320,6 @@ protected:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  //__SPRITE_CCSPRITE_FRAME_H__

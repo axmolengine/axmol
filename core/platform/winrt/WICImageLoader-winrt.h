@@ -40,7 +40,8 @@ obtained from https://directxtk.codeplex.com
 
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct WICConvert
 {
@@ -93,7 +94,7 @@ void SafeRelease(T **ppObj)
 }
 
 
-NS_AX_END
+}
 
 #endif
 #endif    // #ifndef __WIC_IMAGE_LOADER_H__

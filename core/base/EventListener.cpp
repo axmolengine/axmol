@@ -26,7 +26,8 @@
 #include "base/EventListener.h"
 #include "base/Logging.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 EventListener::EventListener() {}
 
@@ -52,4 +53,4 @@ bool EventListener::checkAvailable()
     return (_onEvent != nullptr);
 }
 
-NS_AX_END
+}

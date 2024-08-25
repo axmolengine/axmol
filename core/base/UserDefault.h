@@ -39,7 +39,8 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * UserDefault acts as a tiny database. You can save and get base type values by it.
@@ -299,7 +300,7 @@ protected:
 
 };
 
-NS_AX_END
+}
 // end of base group
 /** @} */
 

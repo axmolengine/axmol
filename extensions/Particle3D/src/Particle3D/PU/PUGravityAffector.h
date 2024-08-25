@@ -30,7 +30,8 @@
 #include "Particle3D/PU/PUAffector.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUGravityAffector : public PUAffector
 {
@@ -56,6 +57,6 @@ public:
 protected:
     float _gravity;
 };
-NS_AX_END
+}
 
 #endif

@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "2d/Label.h"
 #include "base/EventListenerKeyboard.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -213,6 +214,6 @@ protected:
 
 };  // namespace ui
 
-NS_AX_END
+}
 
 #endif

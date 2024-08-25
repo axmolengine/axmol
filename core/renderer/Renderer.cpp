@@ -49,7 +49,8 @@
 #include "renderer/backend/Backend.h"
 #include "renderer/backend/RenderTarget.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // helper
 static bool compareRenderCommand(RenderCommand* a, RenderCommand* b)
@@ -1032,4 +1033,4 @@ void Renderer::popStateBlock()
     _stateBlockStack.pop_back();
 }
 
-NS_AX_END
+}

@@ -27,7 +27,8 @@ THE SOFTWARE.
 #include "base/AutoreleasePool.h"
 #include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AutoreleasePool::AutoreleasePool()
     : _name("")
@@ -167,4 +168,4 @@ void PoolManager::pop()
     _releasePoolStack.pop_back();
 }
 
-NS_AX_END
+}

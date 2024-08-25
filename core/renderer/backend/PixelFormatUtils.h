@@ -28,7 +28,8 @@
 #include "PlatformMacros.h"
 #include "renderer/Texture2D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace backend
 {
@@ -74,4 +75,4 @@ PixelFormat convertDataToFormat(const unsigned char* data,
                                 size_t* outDataLen);
 };  // namespace PixelFormatUtils
 }  // namespace backend
-NS_AX_END
+}

@@ -37,7 +37,8 @@
 #include "renderer/GroupCommand.h"
 #include "renderer/CallbackCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Technique;
 class Node;
@@ -185,4 +186,4 @@ private:
     bool _rendererDepthWrite                       = false;
 };
 
-NS_AX_END
+}

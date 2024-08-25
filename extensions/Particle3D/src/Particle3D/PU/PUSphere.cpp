@@ -26,7 +26,8 @@
 
 #include "PUSphere.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUSphere::PUSphere() : _radius(1.0) {}
 
@@ -69,4 +70,4 @@ void PUSphere::merge(const PUSphere& oth)
     _radius = newRadius;
 }
 
-NS_AX_END
+}

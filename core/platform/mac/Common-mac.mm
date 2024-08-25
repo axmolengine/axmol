@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include <stdio.h>
 #include <Cocoa/Cocoa.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // ios no MessageBox, use log instead
 void messageBox(const char* msg, const char* title)
@@ -50,4 +51,4 @@ void messageBox(const char* msg, const char* title)
     [alert beginSheetModalForWindow:window completionHandler:nil];
 }
 
-NS_AX_END
+}

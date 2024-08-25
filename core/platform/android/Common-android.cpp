@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include <stdio.h>
 #include <jni.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #define MAX_LEN (ax::kMaxLogLen + 1)
 
@@ -38,4 +39,4 @@ void messageBox(const char* pszMsg, const char* pszTitle)
     JniHelper::callStaticVoidMethod("org.axmol.lib.AxmolEngine", "showDialog", pszTitle, pszMsg);
 }
 
-NS_AX_END
+}

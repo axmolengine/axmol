@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "base/Macros.h"
 
 // implementation of Vec2
-NS_AX_BEGIN
+namespace ax
+{
 
 // implementation of Rect
 
@@ -208,4 +209,4 @@ Rect Rect::unionWithRect(const Rect& rect) const
 
 const Rect Rect::ZERO = Rect(0, 0, 0, 0);
 
-NS_AX_END
+}

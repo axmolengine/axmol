@@ -12,7 +12,8 @@
 #    include <android/asset_manager.h>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct ZipEntryInfo;
 
@@ -88,4 +89,4 @@ private:
     const PXIoF* _iof{nullptr};
 };
 
-NS_AX_END
+}

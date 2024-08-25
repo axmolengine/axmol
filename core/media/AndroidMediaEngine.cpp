@@ -81,7 +81,8 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeSetCurrentTime(
 }
 }
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static const char* className                    = "org.axmol.lib.AxmolMediaEngine";
 
@@ -190,6 +191,6 @@ void AndroidMediaEngine::handleVideoSample(const uint8_t* buf,
     _videoPF       = videoPF;
 }
 
-NS_AX_END
+}
 
 #endif

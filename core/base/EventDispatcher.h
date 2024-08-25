@@ -43,7 +43,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Event;
 class EventTouch;
@@ -358,7 +359,7 @@ protected:
     std::set<std::string> _internalCustomListenerIDs;
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

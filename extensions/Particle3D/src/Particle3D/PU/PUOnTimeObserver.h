@@ -33,7 +33,8 @@
 #include <vector>
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PUParticle3D;
 class PUParticleSystem3D;
@@ -81,6 +82,6 @@ protected:
     bool _sinceStartSystem;
 };
 
-NS_AX_END
+}
 
 #endif

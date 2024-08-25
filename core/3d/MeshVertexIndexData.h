@@ -36,7 +36,8 @@
 #include "math/Math.h"
 #include "renderer/MeshCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _3d
@@ -157,4 +158,4 @@ protected:
 // end of 3d group
 /// @}
 
-NS_AX_END
+}

@@ -1,5 +1,6 @@
 #include "3d/AnimationCurve.h"
-NS_AX_BEGIN
+namespace ax
+{
 
 template <int componentSize>
 void AnimationCurve<componentSize>::evaluate(float time, float* dst, EvaluateType type) const
@@ -144,4 +145,4 @@ int AnimationCurve<componentSize>::determineIndex(float time) const
     return -1;
 }
 
-NS_AX_END
+}

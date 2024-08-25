@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "renderer/Texture2D.h"
 #include "base/Director.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AnimationFrame* AnimationFrame::create(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo)
 {
@@ -196,4 +197,4 @@ Animation* Animation::clone() const
     return a;
 }
 
-NS_AX_END
+}

@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include "base/Types.h"
 #include "renderer/CustomCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Image;
 class NinePatchInfo;
@@ -461,4 +462,4 @@ protected:
 // end of textures group
 /// @}
 
-NS_AX_END
+}

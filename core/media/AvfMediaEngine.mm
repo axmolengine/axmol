@@ -163,7 +163,8 @@ USING_NS_AX;
 
 @end
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void AvfMediaEngine::onPlayerEnd()
 {
@@ -554,6 +555,6 @@ MEMediaState AvfMediaEngine::getState() const
     return _state;
 }
 
-NS_AX_END
+}
 
 #endif

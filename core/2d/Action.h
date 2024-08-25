@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include "math/Math.h"
 #include "base/ScriptSupport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Node;
 
@@ -445,6 +446,6 @@ private:
 // end of actions group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __ACTIONS_CCACTION_H__

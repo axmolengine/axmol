@@ -29,7 +29,8 @@
 #include "Particle3D/PU/PUDynamicAttribute.h"
 #include "Particle3D/PU/PUDynamicAttributeTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUTextureRotatorTranslator::PUTextureRotatorTranslator() {}
 //-------------------------------------------------------------------------
@@ -172,4 +173,4 @@ bool PUTextureRotatorTranslator::translateChildObject(PUScriptCompiler* compiler
     return false;
 }
 
-NS_AX_END
+}

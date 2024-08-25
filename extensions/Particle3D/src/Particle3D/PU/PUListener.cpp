@@ -27,10 +27,11 @@
 #include "Particle3D/PU/PUListener.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUListener::PUListener() {}
 
 PUListener::~PUListener() {}
 
-NS_AX_END
+}

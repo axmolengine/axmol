@@ -40,7 +40,8 @@
 
 using namespace std;
 
-NS_AX_BEGIN;
+namespace ax
+{
 
 /*
  *  Implementation of PointArray
@@ -508,4 +509,4 @@ CatmullRomBy* CatmullRomBy::reverse() const
     return CatmullRomBy::create(_duration, reverse);
 }
 
-NS_AX_END;
+}

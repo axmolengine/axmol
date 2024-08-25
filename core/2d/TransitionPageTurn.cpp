@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "2d/NodeGrid.h"
 #include "renderer/Renderer.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 TransitionPageTurn::TransitionPageTurn()
 {
@@ -154,4 +155,4 @@ ActionInterval* TransitionPageTurn::actionWithSize(const Vec2& vector)
     }
 }
 
-NS_AX_END
+}

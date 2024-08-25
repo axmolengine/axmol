@@ -32,7 +32,8 @@
 #include <unordered_map>
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class FontAtlas;
 class Texture2D;
@@ -86,7 +87,7 @@ private:
     static hlookup::string_map<FontAtlas*> _atlasMap;
 };
 
-NS_AX_END
+}
 
 /// @endcond
 #endif

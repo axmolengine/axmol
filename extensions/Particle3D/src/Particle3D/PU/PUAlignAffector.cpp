@@ -27,7 +27,8 @@
 #include "PUAlignAffector.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const bool PUAlignAffector::DEFAULT_RESIZE = false;
@@ -90,4 +91,4 @@ void PUAlignAffector::copyAttributesTo(PUAffector* affector)
     alignAffector->_resize         = _resize;
 }
 
-NS_AX_END
+}

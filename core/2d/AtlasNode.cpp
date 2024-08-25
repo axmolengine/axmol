@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include "renderer/Renderer.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // implementation AtlasNode
 
@@ -272,4 +273,4 @@ void AtlasNode::setQuadsToDraw(ssize_t quadsToDraw)
     _quadsToDraw = quadsToDraw;
 }
 
-NS_AX_END
+}

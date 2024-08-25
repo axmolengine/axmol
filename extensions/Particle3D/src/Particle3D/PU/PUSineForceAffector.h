@@ -30,7 +30,8 @@
 #include "PUBaseForceAffector.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUSineForceAffector : public PUBaseForceAffector
 {
@@ -65,6 +66,6 @@ protected:
     float _frequencyMax;
     float _frequency;
 };
-NS_AX_END
+}
 
 #endif

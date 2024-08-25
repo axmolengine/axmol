@@ -31,7 +31,8 @@
 #include "Particle3D/PU/PUSimpleSpline.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUPathFollower : public PUAffector
 {
@@ -63,6 +64,6 @@ public:
 protected:
     PUSimpleSpline _spline;
 };
-NS_AX_END
+}
 
 #endif

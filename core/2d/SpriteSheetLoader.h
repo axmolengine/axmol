@@ -39,7 +39,8 @@ THE SOFTWARE.
 #include "base/Map.h"
 #include "base/Data.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Sprite;
 class Texture2D;
@@ -103,4 +104,4 @@ public:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}

@@ -40,7 +40,8 @@ THE SOFTWARE.
 #    include <windows.h>
 #    include "ui/UIHelper.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -437,6 +438,6 @@ LRESULT EditBoxImplWin::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 }
 }  // namespace ui
 
-NS_AX_END
+}
 
 #endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */

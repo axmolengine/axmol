@@ -34,7 +34,8 @@
 #        include "bullet/btBulletCollisionCommon.h"
 #        include "bullet/btBulletDynamicsCommon.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Physics3DRigidBody::Physics3DRigidBody() : _btRigidBody(nullptr), _physics3DShape(nullptr) {}
 
@@ -550,7 +551,7 @@ ax::Mat4 Physics3DCollider::getWorldTransform() const
     return convertbtTransformToMat4(_btGhostObject->getWorldTransform());
 }
 
-NS_AX_END
+}
 
 #    endif  // AX_ENABLE_BULLET_INTEGRATION
 

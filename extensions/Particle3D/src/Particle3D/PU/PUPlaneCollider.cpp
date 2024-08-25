@@ -27,7 +27,8 @@
 #include "PUPlaneCollider.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const Vec3 PUPlaneCollider::DEFAULT_NORMAL(0, 0, 0);
@@ -169,4 +170,4 @@ void PUPlaneCollider::copyAttributesTo(PUAffector* affector)
     planeCollider->setNormal(_normal);
 }
 
-NS_AX_END
+}

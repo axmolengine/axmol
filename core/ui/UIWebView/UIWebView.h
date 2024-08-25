@@ -37,7 +37,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 namespace ui
 {
 
@@ -252,7 +253,7 @@ private:
 };
 
 }  // namespace ui
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #endif
 

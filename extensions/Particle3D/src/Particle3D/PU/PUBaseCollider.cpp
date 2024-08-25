@@ -27,7 +27,8 @@
 #include "PUBaseCollider.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const float PUBaseCollider::DEFAULT_BOUNCYNESS                                   = 1.0f;
@@ -127,4 +128,4 @@ void PUBaseCollider::copyAttributesTo(PUAffector* affector)
     baseCollider->_collisionType    = _collisionType;
 }
 
-NS_AX_END
+}

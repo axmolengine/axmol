@@ -46,7 +46,8 @@
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Helpers
 
@@ -854,4 +855,4 @@ backend::Buffer* Mesh::getIndexBuffer() const
 {
     return _meshIndexData->getIndexBuffer();
 }
-NS_AX_END
+}

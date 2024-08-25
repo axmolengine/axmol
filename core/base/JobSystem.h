@@ -42,7 +42,8 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 #include "base/Config.h"
 #include "platform/PlatformDefine.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class JobExecutor;
 class JobSystem;
@@ -109,4 +110,4 @@ private:
     JobThreadData* _mainThreadData{nullptr};
 };
 
-NS_AX_END
+}

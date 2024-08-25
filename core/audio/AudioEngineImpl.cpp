@@ -322,7 +322,8 @@ ALvoid ax::AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint no
 }
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AudioEngineImpl::AudioEngineImpl() : _scheduled(false), _currentAudioID(0), _scheduler(nullptr)
 {
@@ -968,5 +969,5 @@ void AudioEngineImpl::uncacheAll()
 
     _audioCaches.clear();
 }
-NS_AX_END
+}
 #undef LOG_TAG

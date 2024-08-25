@@ -34,7 +34,8 @@
 #include <set>
 #include <unordered_map>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
 @struct BMFontDef
@@ -188,6 +189,6 @@ protected:
 
 /// @endcond
 
-NS_AX_END
+}
 
 #endif /* defined(_AX_FONTFNT_H_) */

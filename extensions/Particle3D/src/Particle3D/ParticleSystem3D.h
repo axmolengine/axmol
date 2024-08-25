@@ -33,7 +33,8 @@
 #include <list>
 #include "extensions/ExtensionExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * 3d particle system
@@ -296,6 +297,6 @@ protected:
     bool _isEnabled;
 };
 
-NS_AX_END
+}
 
 #endif

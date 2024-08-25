@@ -37,7 +37,8 @@
 
 class btCollisionShape;
 
-NS_AX_BEGIN
+namespace ax
+{
 /**
  * @addtogroup _3d
  * @{
@@ -169,7 +170,7 @@ protected:
 // end of 3d group
 /// @}
 
-NS_AX_END
+}
 
 #    endif  // AX_ENABLE_BULLET_INTEGRATION
 

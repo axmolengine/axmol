@@ -34,7 +34,8 @@
 #    include "ui/UIEditBox/UIEditBox.h"
 #    include "ui/UIEditBox/Mac/UIEditBoxMac.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -220,6 +221,6 @@ void EditBoxImplMac::nativeCloseKeyboard()
 
 }
 
-NS_AX_END
+}
 
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)

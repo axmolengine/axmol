@@ -31,9 +31,10 @@ THE SOFTWARE.
 #include <map>
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 class SpriteFrame;
-NS_AX_END
+}
 
 namespace cocostudio
 {

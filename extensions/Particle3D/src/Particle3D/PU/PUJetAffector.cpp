@@ -27,7 +27,8 @@
 #include "PUJetAffector.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const float PUJetAffector::DEFAULT_ACCELERATION = 1.0f;
@@ -89,4 +90,4 @@ void PUJetAffector::copyAttributesTo(PUAffector* affector)
     jetAffector->setDynAcceleration(getDynAcceleration()->clone());
 }
 
-NS_AX_END
+}

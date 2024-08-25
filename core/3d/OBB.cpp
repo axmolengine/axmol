@@ -25,7 +25,8 @@
 
 #include "3d/OBB.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #define ROTATE(a, i, j, k, l)                        \
     g              = a.m[i + 4 * j];                 \
@@ -474,4 +475,4 @@ void OBB::transform(const Mat4& mat)
     computeExtAxis();
 }
 
-NS_AX_END
+}

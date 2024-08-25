@@ -45,7 +45,8 @@
 #    define strcasecmp _stricmp
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace
 {
@@ -588,4 +589,4 @@ static const char* getOptionalString(Properties* properties, const char* key, co
     return ret;
 }
 
-NS_AX_END
+}

@@ -45,7 +45,8 @@
 #    include "physics/PhysicsBody.h"
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class GridBase;
 class Touch;
@@ -2069,6 +2070,6 @@ bool AX_DLL isScreenPointInRect(const Vec2& pt, const Camera* camera, const Mat4
 // end of _2d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __CCNODE_H__

@@ -33,7 +33,8 @@
 #include <string>
 #include "extensions/ExtensionExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PUParticle3D;
 class PUParticleSystem3D;
@@ -53,6 +54,6 @@ public:
     virtual void particleExpired(PUParticleSystem3D* particleSystem, PUParticle3D* particle) = 0;
 };
 
-NS_AX_END
+}
 
 #endif

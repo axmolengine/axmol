@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "base/Map.h"
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Component;
 class Node;
@@ -74,7 +75,7 @@ private:
     friend class Node;
 };
 
-NS_AX_END
+}
 
 /// @endcond
 #endif  // __AX_FRAMEWORK_COMCONTAINER_H__

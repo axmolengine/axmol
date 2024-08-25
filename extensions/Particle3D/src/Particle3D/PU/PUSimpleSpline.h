@@ -32,7 +32,8 @@
 #include <vector>
 #include "extensions/ExtensionExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 class PUSimpleSpline
 {
 public:
@@ -101,6 +102,6 @@ protected:
     /// Matrix of coefficients
     Mat4 _coeffs;
 };
-NS_AX_END
+}
 
 #endif

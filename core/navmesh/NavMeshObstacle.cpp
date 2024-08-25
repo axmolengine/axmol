@@ -32,7 +32,8 @@
 #    include "2d/Scene.h"
 #    include "recast/DetourTileCache.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 NavMeshObstacle* NavMeshObstacle::create(float radius, float height)
 {
@@ -163,6 +164,6 @@ void NavMeshObstacle::syncToObstacle()
     }
 }
 
-NS_AX_END
+}
 
 #endif  // AX_ENABLE_NAVMESH

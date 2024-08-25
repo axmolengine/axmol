@@ -30,7 +30,8 @@
 
 #    if (AX_ENABLE_BULLET_INTEGRATION)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Physics3DConstraint::Physics3DConstraint()
     : _constraint(nullptr)
@@ -879,7 +880,7 @@ void Physics3D6DofConstraint::setUseFrameOffset(bool frameOffsetOnOff) const
     static_cast<btGeneric6DofConstraint*>(_constraint)->setUseFrameOffset(frameOffsetOnOff);
 }
 
-NS_AX_END
+}
 
 #    endif  // AX_ENABLE_BULLET_INTEGRATION
 

@@ -34,7 +34,8 @@
 #    include "base/EventController.h"
 #    include "base/Director.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 std::vector<Controller*> Controller::s_allController;
 
@@ -125,7 +126,7 @@ void Controller::onAxisEvent(int axisCode, float value, bool isAnalog)
     _eventDispatcher->dispatchEvent(_axisEvent);
 }
 
-NS_AX_END
+}
 
 #endif  // (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM ==
         // AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_WASM)

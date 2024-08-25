@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "platform/FileUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // implementation of SpriteFrame
 
@@ -266,4 +267,4 @@ bool SpriteFrame::hasPolygonInfo() const
     return _polygonInfo.triangles.vertCount != 0;
 }
 
-NS_AX_END
+}

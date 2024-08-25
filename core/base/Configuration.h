@@ -39,7 +39,8 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 class EventCustom;
 
@@ -275,7 +276,7 @@ protected:
     EventCustom* _loadedEvent;
 };
 
-NS_AX_END
+}
 // end of base group
 /// @}
 

@@ -40,7 +40,8 @@
 #include "3d/Mesh.h"
 #include "2d/Camera.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void PURender::updateRender(PUParticle3D* /*particle*/, float /*deltaTime*/, bool /*firstParticle*/) {}
 
@@ -1041,4 +1042,4 @@ PUSphereRender* PUSphereRender::clone()
     return render;
 }
 
-NS_AX_END
+}

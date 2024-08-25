@@ -35,7 +35,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /** @class EventListenerAcceleration
  * @brief Acceleration event listener.
@@ -71,7 +72,7 @@ private:
     friend class LuaEventListenerAcceleration;
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

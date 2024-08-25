@@ -33,7 +33,8 @@
 #include "ui/UIWidget.h"
 #include "ui/UIScale9Sprite.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup ui
@@ -716,6 +717,6 @@ protected:
 
 // end of ui group
 /// @}
-NS_AX_END
+}
 
 #endif /* __UIEDITTEXT_H__ */

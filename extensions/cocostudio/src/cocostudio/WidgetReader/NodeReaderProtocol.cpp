@@ -50,7 +50,8 @@ NodeReaderProtocol::~NodeReaderProtocol(){};
 void NodeReaderProtocol::setCurrentCustomClassName(const char* className){};
 }  // namespace cocostudio
 
-NS_AX_BEGIN
+namespace ax
+{
 namespace wext
 {
 bool (*onBeforeLoadObjectAsset)(ax::Node*,
@@ -126,7 +127,7 @@ void resetReaderAllHooks()
 static uint8_t _AUTO_INIT_VARS = (resetReaderAllHooks(), 0);
 } // namespace wext
 
-NS_AX_END // namespace ax
+} // namespace ax
 
 ax::ResourceData ax::wext::makeResourceData(const flatbuffers::ResourceData* orig)
 {

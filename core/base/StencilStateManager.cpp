@@ -29,7 +29,8 @@
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 int StencilStateManager::s_layer = -1;
 
@@ -211,4 +212,4 @@ void StencilStateManager::onAfterVisit()
     s_layer--;
 }
 
-NS_AX_END
+}

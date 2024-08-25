@@ -31,7 +31,8 @@
 #    if (AX_ENABLE_BULLET_INTEGRATION)
 #        include "bullet/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Physics3DShape::ShapeType Physics3DShape::getShapeType() const
 {
@@ -217,7 +218,7 @@ bool Physics3DShape::initCompoundShape(const std::vector<std::pair<Physics3DShap
     return true;
 }
 
-NS_AX_END
+}
 
 #    endif  // AX_ENABLE_BULLET_INTEGRATION
 

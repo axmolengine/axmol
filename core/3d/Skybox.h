@@ -32,7 +32,8 @@
 #include "2d/Node.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _3d
@@ -126,6 +127,6 @@ private:
 // end of 3d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __SKYBOX_H__

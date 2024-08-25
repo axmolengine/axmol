@@ -1,6 +1,7 @@
 #include "3DProgramInfo.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace shaderinfos
 {
@@ -118,4 +119,4 @@ const std::string getAttributeName(const VertexKey& key)
 }
 };  // namespace shaderinfos
 
-NS_AX_END
+}

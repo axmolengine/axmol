@@ -26,7 +26,8 @@
 #include "lua-bindings/manual/platform/ios/LuaObjcBridge.h"
 #include <Foundation/Foundation.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void LuaObjcBridge::luaopen_luaoc(lua_State* L)
 {
@@ -286,4 +287,4 @@ void LuaObjcBridge::pushValue(lua_State* L, void* val)
     }
 }
 
-NS_AX_END
+}

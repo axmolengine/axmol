@@ -41,9 +41,10 @@ namespace flatbuffers
 struct ResourceData;  // x-studio spec, csb batch load support, assets hook functions.
 }  // namespace flatbuffers
 
-NS_AX_BEGIN
+namespace ax
+{
 class Node;
-NS_AX_END
+}
 
 #if !defined(GL_ONE)
 #    define GL_ZERO 0
@@ -96,7 +97,8 @@ class BoneNode;
 }  // namespace timeline
 };  // namespace cocostudio
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // builtin ui predecl
 class Sprite;
@@ -174,6 +176,6 @@ CCS_DLL extern ax::MeshRenderer* (*aSprite3D)();
 CCS_DLL extern ax::Node* (*aParticleSystem3D)();
 }  // namespace wext
 
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #endif /* defined(__cocos2d_libs__NodeReaderProtocol__) */

@@ -39,7 +39,8 @@
 #include "Particle3D/PU/PUSlaveEmitterTranslator.h"
 #include "Particle3D/PU/PUSphereSurfaceEmitterTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PUEmitterManager
 {
@@ -65,6 +66,6 @@ protected:
     PUSphereSurfaceEmitterTranslator _sphereSurfaceEmitterTranlator;
 };
 
-NS_AX_END
+}
 
 #endif

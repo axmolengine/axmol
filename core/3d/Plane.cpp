@@ -25,7 +25,8 @@
 
 #include "3d/Plane.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Plane::Plane() : _normal(0.f, 0.f, 1.f), _dist(0.f) {}
 
@@ -86,4 +87,4 @@ PointSide Plane::getSide(const Vec3& point) const
         return PointSide::IN_PLANE;
 }
 
-NS_AX_END
+}

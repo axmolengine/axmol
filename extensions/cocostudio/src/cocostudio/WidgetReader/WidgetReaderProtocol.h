@@ -37,12 +37,13 @@ class NodeTree;
 class ResourceData;  // please match in CSParseBinary.pb
 }  // namespace protocolbuffers
 
-NS_AX_BEGIN
+namespace ax
+{
 namespace ui
 {
 class Widget;
 }
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 namespace cocostudio
 {

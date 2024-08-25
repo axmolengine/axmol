@@ -28,7 +28,8 @@
 #include "base/Random.h"
 #include "platform/StdC.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //-----------------------------------------------------------------------
 PUDynamicAttribute::PUDynamicAttribute() {}
 //-----------------------------------------------------------------------
@@ -449,4 +450,4 @@ float PUDynamicAttributeHelper::calculate(PUDynamicAttribute* dyn, float x, floa
 
     return defaultValue;
 }
-NS_AX_END
+}

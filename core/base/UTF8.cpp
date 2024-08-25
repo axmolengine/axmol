@@ -33,7 +33,8 @@
 
 using namespace llvm;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace StringUtils
 {
@@ -559,4 +560,4 @@ bool StringUTF8::insert(std::size_t pos, const StringUTF8& insertStr)
 
 }  // namespace StringUtils
 
-NS_AX_END
+}

@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "base/Utils.h"
 #include "platform/FileUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // sharedApplication pointer
 Application* Application::sm_pSharedApplication = nullptr;
@@ -167,4 +168,4 @@ LanguageType Application::getCurrentLanguage()
     return utils::getLanguageTypeByISO2(pLanguageName);
 }
 
-NS_AX_END
+}

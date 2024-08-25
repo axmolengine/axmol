@@ -27,7 +27,8 @@
 #include "PULinearForceAffector.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 //-----------------------------------------------------------------------
 void PULinearForceAffector::preUpdateAffector(float deltaTime)
@@ -66,4 +67,4 @@ void PULinearForceAffector::copyAttributesTo(PUAffector* affector)
     PUBaseForceAffector::copyAttributesTo(affector);
 }
 
-NS_AX_END
+}

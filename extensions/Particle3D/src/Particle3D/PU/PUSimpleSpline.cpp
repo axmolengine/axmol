@@ -27,7 +27,8 @@
 #include "PUSimpleSpline.h"
 #include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //---------------------------------------------------------------------
 PUSimpleSpline::PUSimpleSpline()
 {
@@ -235,4 +236,4 @@ void PUSimpleSpline::setAutoCalculate(bool autoCalc)
 {
     _autoCalc = autoCalc;
 }
-NS_AX_END
+}

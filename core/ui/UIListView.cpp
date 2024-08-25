@@ -27,7 +27,8 @@ THE SOFTWARE.
 #include "ui/UIListView.h"
 #include "ui/UIHelper.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -1058,4 +1059,4 @@ void ListView::startMagneticScroll()
 }
 
 }  // namespace ui
-NS_AX_END
+}

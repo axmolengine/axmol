@@ -34,7 +34,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /** @class EventCustom
  * @brief Custom event.
@@ -72,7 +73,7 @@ protected:
     std::string _eventName;
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

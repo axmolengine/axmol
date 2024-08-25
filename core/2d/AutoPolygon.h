@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include "platform/Image.h"
 #include "renderer/TrianglesCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _2d
@@ -290,6 +291,6 @@ protected:
     unsigned int _threshold;
 };
 
-NS_AX_END
+}
 
 #endif  // #ifndef COCOS_2D_CCAUTOPOLYGON_H__

@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "2d/ActionInterval.h"
 #include "2d/TweenFunction.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup actions
@@ -552,6 +553,6 @@ private:
 // end of actions group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __ACTION_CCEASE_ACTION_H__

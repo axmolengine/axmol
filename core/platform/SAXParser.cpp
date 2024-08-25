@@ -34,7 +34,8 @@
 #include "platform/FileUtils.h"
 #include "xsxml/xsxml.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /// xsxml SAX2 handler
 class SAX2Hander
@@ -175,4 +176,4 @@ void SAXParser::setDelegator(SAXDelegator* delegator)
     _delegator = delegator;
 }
 
-NS_AX_END
+}

@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include <string>
 #include <chrono>
 
-NS_AX_BEGIN
+namespace ax
+{
 class Rect;
 
 class Application : public ApplicationBase
@@ -100,4 +101,4 @@ protected:
     static Application* sm_pSharedApplication;
 };
 
-NS_AX_END
+}

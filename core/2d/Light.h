@@ -28,7 +28,8 @@
 
 #include "2d/Node.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 enum class LightType
 {
@@ -288,6 +289,6 @@ public:
     virtual ~AmbientLight();
 };
 
-NS_AX_END
+}
 
 #endif

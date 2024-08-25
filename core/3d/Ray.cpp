@@ -23,7 +23,8 @@ THE SOFTWARE.
 
 #include "3d/Ray.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Ray::Ray() : _direction(0, 0, 1) {}
 
@@ -223,4 +224,4 @@ void Ray::transform(const Mat4& matrix)
     _direction.normalize();
 }
 
-NS_AX_END
+}

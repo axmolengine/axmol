@@ -42,7 +42,8 @@
 
 #include "yasio/byte_buffer.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 using ilist_u16_t = std::initializer_list<uint16_t>;
 using ilist_u32_t = std::initializer_list<uint32_t>;
@@ -574,6 +575,6 @@ struct Reference
     unsigned int offset;
 };
 
-NS_AX_END
+}
 
 #endif  //__AX_BUNDLE_3D_DATA_H__

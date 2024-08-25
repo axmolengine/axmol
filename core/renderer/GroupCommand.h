@@ -37,7 +37,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Used for internal
 class GroupCommandManager : public Object
@@ -85,7 +86,7 @@ protected:
     int _renderQueueID;
 };
 
-NS_AX_END
+}
 
 /**
  end of support group

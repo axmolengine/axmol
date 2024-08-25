@@ -29,7 +29,8 @@
 #include "Particle3D/PU/PUDynamicAttribute.h"
 #include "Particle3D/PU/PUDynamicAttributeTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUDoStopSystemEventHandlerTranslator::PUDoStopSystemEventHandlerTranslator() {}
 //-------------------------------------------------------------------------
@@ -46,4 +47,4 @@ bool PUDoStopSystemEventHandlerTranslator::translateChildObject(PUScriptCompiler
     return false;
 }
 
-NS_AX_END
+}

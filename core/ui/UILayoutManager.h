@@ -35,7 +35,8 @@
  * @addtogroup ui
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -169,7 +170,7 @@ private:
 
 }  // namespace ui
 
-NS_AX_END
+}
 // end of ui group
 /// @}
 #endif /* defined(_AX_LAYOUTMANAGER_H_) */

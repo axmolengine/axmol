@@ -26,7 +26,8 @@
 #if defined(__ANDROID__)
 #    include "MediaEngine.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AndroidMediaEngine : public MediaEngine
 {
@@ -87,6 +88,6 @@ struct AndroidMediaEngineFactory : public MediaEngineFactory
     void destroyMediaEngine(MediaEngine* me) override { delete static_cast<AndroidMediaEngine*>(me); }
 };
 
-NS_AX_END
+}
 
 #endif

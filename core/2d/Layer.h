@@ -33,7 +33,8 @@ THE SOFTWARE.
 
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _2d
@@ -445,4 +446,4 @@ private:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}

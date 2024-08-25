@@ -33,7 +33,8 @@
 
 USING_NS_AX;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 ScheduleHandlerDelegate* ScheduleHandlerDelegate::create()
 {
@@ -227,7 +228,7 @@ ScriptHandlerMgr::HandlerType ScriptHandlerMgr::addCustomHandler(void* object, i
     return handlerType;
 }
 
-NS_AX_END
+}
 
 static void tolua_reg_script_handler_mgr_type(lua_State* tolua_S)
 {

@@ -31,7 +31,8 @@
 #include "Particle3D/PU/PUPlane.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUPlaneCollider : public PUBaseCollider
 {
@@ -66,6 +67,6 @@ protected:
     Vec3 _predictedPosition;
     PUPlane _plane;
 };
-NS_AX_END
+}
 
 #endif

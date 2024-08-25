@@ -26,10 +26,11 @@
 
 #include "base/Event.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Event::Event(Type type) : _type(type), _isStopped(false), _currentTarget(nullptr) {}
 
 Event::~Event() {}
 
-NS_AX_END
+}

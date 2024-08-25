@@ -32,7 +32,8 @@
 #include "3d/OBB.h"
 #include "3d/Plane.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Camera;
 
@@ -84,6 +85,6 @@ protected:
     bool _initialized;
 };
 
-NS_AX_END
+}
 
 #endif  //__AX_FRUSTUM_H_

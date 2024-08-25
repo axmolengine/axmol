@@ -31,7 +31,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace backend
 {
@@ -261,7 +262,7 @@ protected:
     CallBackFunc _afterCallback  = nullptr;
 };
 
-NS_AX_END
+}
 /**
  end of support group
  @}

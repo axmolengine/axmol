@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "base/AutoreleasePool.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup platform
@@ -154,6 +155,6 @@ using ApplicationProtocol = ApplicationBase;
 // end of platform group
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // __AX_APPLICATION_PROTOCOL_H__

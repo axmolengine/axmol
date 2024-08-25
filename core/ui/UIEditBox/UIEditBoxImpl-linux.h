@@ -34,7 +34,8 @@
 
 #    include "ui/UIEditBox/UIEditBoxImpl-common.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Label;
 
@@ -81,7 +82,7 @@ private:
 
 }  // namespace ui
 
-NS_AX_END
+}
 
 #endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) */
 

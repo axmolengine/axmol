@@ -37,7 +37,8 @@
 #include "Particle3D/PU/PUDoScaleEventHandlerTranslator.h"
 #include "Particle3D/PU/PUDoStopSystemEventHandlerTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 class PUEventHandlerManager
 {
 public:
@@ -61,6 +62,6 @@ protected:
     PUDoStopSystemEventHandlerTranslator _doStopSystemEventHandlerTranslator;
 };
 
-NS_AX_END
+}
 
 #endif

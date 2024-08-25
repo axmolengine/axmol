@@ -66,7 +66,8 @@ public:                                          \
 #define __LAYOUT_COMPONENT_NAME "__ui_layout"
 ///@endcond
 
-NS_AX_BEGIN
+namespace ax
+{
 struct AX_DLL ResourceData
 {
     int type;
@@ -113,6 +114,6 @@ struct AX_DLL ResourceData
         return *this;
     }
 };
-NS_AX_END
+}
 
 #endif /* defined(__TestCpp__GUIDefine__) */

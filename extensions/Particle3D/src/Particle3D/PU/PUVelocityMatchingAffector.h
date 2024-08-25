@@ -30,7 +30,8 @@
 #include "Particle3D/PU/PUAffector.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUVelocityMatchingAffector : public PUAffector
 {
@@ -63,6 +64,6 @@ public:
 protected:
     float _radius;
 };
-NS_AX_END
+}
 
 #endif

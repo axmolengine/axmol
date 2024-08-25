@@ -33,7 +33,8 @@
 #include "renderer/CustomCommand.h"
 #include "renderer/CallbackCommand.h"
 #include <unordered_map>
-NS_AX_BEGIN
+namespace ax
+{
 
 class StencilStateManager;
 /**
@@ -174,4 +175,4 @@ private:
     AX_DISALLOW_COPY_AND_ASSIGN(ClippingNode);
 };
 /** @} */
-NS_AX_END
+}

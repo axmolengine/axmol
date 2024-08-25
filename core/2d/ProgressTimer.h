@@ -33,7 +33,8 @@ THE SOFTWARE.
 
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Sprite;
 
@@ -208,4 +209,4 @@ private:
 // end of misc_nodes group
 /// @}
 
-NS_AX_END
+}

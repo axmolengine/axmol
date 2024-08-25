@@ -33,10 +33,11 @@ THE SOFTWARE.
 
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 class MeshRenderer;
 class Delay;
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 enum State
 {

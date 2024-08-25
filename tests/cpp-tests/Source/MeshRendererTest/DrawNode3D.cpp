@@ -25,7 +25,8 @@
 
 #include "DrawNode3D.h"
 #include "renderer/backend/Buffer.h"
-NS_AX_BEGIN
+namespace ax
+{
 
 DrawNode3D::DrawNode3D()
 {
@@ -209,4 +210,4 @@ void DrawNode3D::onAfterDraw()
     renderer->setDepthTest(_rendererDepthTestEnabled);
 }
 
-NS_AX_END
+}

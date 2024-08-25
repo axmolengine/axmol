@@ -39,7 +39,8 @@
 #include "base/axstd.h"
 #include "fmt/compile.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -303,4 +304,4 @@ void HttpCookie::setCookieFileName(std::string_view filename)
 
 }  // namespace network
 
-NS_AX_END
+}

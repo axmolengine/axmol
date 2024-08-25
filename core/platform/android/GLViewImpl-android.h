@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "math/Math.h"
 #include "platform/GLView.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_DLL GLViewImpl : public GLView
 {
@@ -57,4 +58,4 @@ protected:
     bool initWithFullScreen(std::string_view viewName);
 };
 
-NS_AX_END
+}

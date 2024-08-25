@@ -35,7 +35,8 @@
 #include "base/Object.h"
 #include "2d/ActionInterval.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Bone3D;
 class MeshRenderer;
@@ -184,6 +185,6 @@ protected:
 // end of 3d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __CCANIMATE3D_H__

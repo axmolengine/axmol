@@ -27,7 +27,8 @@
 #include "PUTranslateManager.h"
 #include "Particle3D/PU/PUScriptCompiler.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 PUTranslateManager::PUTranslateManager() {}
 
 PUTranslateManager::~PUTranslateManager() {}
@@ -134,4 +135,4 @@ void PUTranslateManager::translateMaterialSystem(PUMaterialCache* ms, const PUAb
     }
 }
 
-NS_AX_END
+}

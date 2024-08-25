@@ -33,7 +33,8 @@
 #include <vector>
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PUParticle3D;
 class AX_EX_DLL PUOnCollisionObserver : public PUObserver
@@ -48,6 +49,6 @@ public:
     virtual ~PUOnCollisionObserver(){};
 };
 
-NS_AX_END
+}
 
 #endif

@@ -36,14 +36,15 @@
 
 struct zlib_filefunc_def_s;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
 class Downloader;
 }
 
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 NS_AX_EXT_BEGIN
 

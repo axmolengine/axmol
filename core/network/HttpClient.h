@@ -46,7 +46,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -247,7 +248,7 @@ private:
 
 }  // namespace network
 
-NS_AX_END
+}
 
 // end group
 /// @}

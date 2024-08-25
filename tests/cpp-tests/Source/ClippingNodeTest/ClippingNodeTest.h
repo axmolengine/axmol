@@ -28,12 +28,13 @@
 #include "renderer/CustomCommand.h"
 #include <list>
 
-NS_AX_BEGIN
+namespace ax
+{
 namespace backend
 {
 class ProgramState;
 }
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 DEFINE_TEST_SUITE(ClippingNodeTests);
 

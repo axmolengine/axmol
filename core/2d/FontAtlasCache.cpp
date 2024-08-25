@@ -35,7 +35,8 @@
 #include "platform/FileUtils.h"
 #include "base/format.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 hlookup::string_map<FontAtlas*> FontAtlasCache::_atlasMap;
 
@@ -279,4 +280,4 @@ void FontAtlasCache::unloadFontAtlasTTF(std::string_view fontFileName)
     }
 }
 
-NS_AX_END
+}

@@ -25,8 +25,9 @@
 
 #include "base/EventAcceleration.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 EventAcceleration::EventAcceleration(const Acceleration& acc) : Event(Type::ACCELERATION), _acc(acc) {}
 
-NS_AX_END
+}

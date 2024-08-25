@@ -27,7 +27,8 @@
 #include "PUPathFollower.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUPathFollower::PUPathFollower(void) {}
 
@@ -82,4 +83,4 @@ void PUPathFollower::copyAttributesTo(PUAffector* affector)
     }
 }
 
-NS_AX_END
+}

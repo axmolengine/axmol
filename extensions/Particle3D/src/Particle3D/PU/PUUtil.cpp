@@ -27,7 +27,8 @@
 #include "PUUtil.h"
 #include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 ax::Vec3 PUUtil::randomDeviant(const Vec3& src, float angle, const Vec3& up /*= Vec3::ZERO*/)
 {
@@ -116,4 +117,4 @@ ax::Vec3 PUUtil::perpendicular(const Vec3& src)
     return perp;
 }
 
-NS_AX_END
+}

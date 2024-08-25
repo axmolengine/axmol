@@ -29,7 +29,8 @@
 
 #include "Particle3D/PU/PUEmitter.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUCircleEmitter : public PUEmitter
 {
@@ -101,6 +102,6 @@ protected:
     Quaternion _orientation;
     Vec3 _normal;
 };
-NS_AX_END
+}
 
 #endif

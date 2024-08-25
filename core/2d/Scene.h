@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include <string>
 #include "2d/Node.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Camera;
 class BaseLight;
@@ -227,6 +228,6 @@ public:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __CCSCENE_H__

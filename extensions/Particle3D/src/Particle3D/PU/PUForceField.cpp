@@ -26,7 +26,8 @@
 
 #include "PUForceField.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const Vec3 PUForceFieldCalculationFactory::DEFAULT_WORLDSIZE(500.0f, 500.0f, 500.0f);
 
@@ -356,4 +357,4 @@ void PUForceField::setWorldSize(const Vec3& worldSize)
     }
 }
 
-NS_AX_END
+}

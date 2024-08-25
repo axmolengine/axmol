@@ -35,7 +35,8 @@ THE SOFTWARE.
 #include <winrt/Windows.UI.Core.h>
 using namespace winrt;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 enum PointerEventType
 {
@@ -175,7 +176,7 @@ protected:
   winrt::delegate<Windows::Foundation::IInspectable const&, EndEventArgs const&> m_handler;
 };
 
-NS_AX_END
+}
 
 #endif // #ifndef __WINRT_INPUT_EVENT__
 

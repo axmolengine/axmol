@@ -38,7 +38,8 @@ THE SOFTWARE.
 #include "2d/Sprite.h"
 #include "ui/UIScale9Sprite.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -1442,4 +1443,4 @@ bool Widget::isLayoutComponentEnabled() const
 }
 
 }  // namespace ui
-NS_AX_END
+}

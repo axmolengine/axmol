@@ -31,7 +31,8 @@ THE SOFTWARE.
 
 #include "2d/Transition.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class ProgressTimer;
 class RenderTexture;
@@ -246,6 +247,6 @@ protected:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}
 
 #endif /* __CCTRANSITIONPROGRESS_H__ */

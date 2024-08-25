@@ -29,11 +29,12 @@ THE SOFTWARE.
 #include "ArmatureDefine.h"
 #include "CocosStudioExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class GroupCommand;
 
-NS_AX_END
+}
 
 namespace cocostudio
 {

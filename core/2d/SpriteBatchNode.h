@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include "renderer/TextureAtlas.h"
 #include "renderer/QuadCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _2d
@@ -283,4 +284,4 @@ protected:
 // end of sprite_nodes group
 /** @} */
 
-NS_AX_END
+}

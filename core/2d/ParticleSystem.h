@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include "2d/SpriteFrameCache.h"
 #include "math/FastRNG.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class ParticleBatchNode;
 
@@ -1690,6 +1691,6 @@ private:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  //__CCPARTICLE_SYSTEM_H__

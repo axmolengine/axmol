@@ -54,7 +54,8 @@ using coroutine_handle = std::experimental::coroutine_handle<_Ty>;
 #    error This compiler missing c++20 coroutine
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup actions
@@ -153,6 +154,6 @@ private:
     AX_DISALLOW_COPY_AND_ASSIGN(ActionCoroutine);
 };
 
-NS_AX_END
+}
 
 #endif  // __ACTION_CCCOROUTINE_ACTION_H__

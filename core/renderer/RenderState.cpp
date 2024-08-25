@@ -38,7 +38,8 @@
 #include "renderer/Renderer.h"
 #include "renderer/Material.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 std::string RenderState::getName() const
 {
@@ -410,4 +411,4 @@ void RenderState::StateBlock::setDepthFunction(DepthFunction func)
     _modifiedBits |= RS_DEPTH_FUNC;
 }
 
-NS_AX_END
+}

@@ -26,7 +26,8 @@
 #include "platform/Image.h"
 #include "base/Director.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 NinePatchImageParser::~NinePatchImageParser() {}
 
@@ -196,4 +197,4 @@ bool NinePatchImageParser::isNinePatchImage(std::string_view filepath)
     }
 }
 
-NS_AX_END
+}

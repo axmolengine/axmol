@@ -41,7 +41,8 @@ THE SOFTWARE.
 #include "renderer/backend/Texture.h"
 #include "renderer/backend/RenderTarget.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // implementation RenderTexture
 RenderTexture::RenderTexture()
@@ -691,4 +692,4 @@ void RenderTexture::clearColorAttachment()
     renderer->addCommand(afterClearAttachmentCommand);
 }
 
-NS_AX_END
+}

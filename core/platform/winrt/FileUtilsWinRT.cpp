@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include <winrt/Windows.Storage.h>
 #include <winrt/Windows.ApplicationModel.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #define AX_MAX_PATH 512
 
@@ -303,4 +304,4 @@ std::string FileUtilsWinRT::getAppPath()
     return convertPathFormatToUnixStyle(PlatformStringToString(package.InstalledLocation().Path()));
 }
 
-NS_AX_END
+}

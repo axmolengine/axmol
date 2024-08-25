@@ -43,7 +43,8 @@
 
 #    define getEditBoxImplIOS() ((ax::ui::EditBoxImplIOS*)_editBox)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -244,6 +245,6 @@ UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 }
 }
 
-NS_AX_END
+}
 
 #endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) */

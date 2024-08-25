@@ -25,7 +25,8 @@
 #include "renderer/CallbackCommand.h"
 #include "renderer/backend/DriverBase.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static uint64_t s_nextId = 1;
 
@@ -59,4 +60,4 @@ void CallbackCommand::execute()
         func();
 }
 
-NS_AX_END
+}

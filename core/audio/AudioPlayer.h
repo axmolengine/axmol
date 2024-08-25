@@ -37,7 +37,8 @@
 #include "platform/PlatformMacros.h"
 #include "audio/alconfig.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AudioCache;
 class AudioEngineImpl;
@@ -97,4 +98,4 @@ protected:
     friend class AudioEngineImpl;
 };
 
-NS_AX_END
+}

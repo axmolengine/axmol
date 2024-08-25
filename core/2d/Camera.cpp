@@ -33,7 +33,8 @@
 #include "renderer/Renderer.h"
 #include "renderer/QuadCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Camera* Camera::_visitingCamera = nullptr;
 Viewport Camera::_defaultViewport;
@@ -555,4 +556,4 @@ bool Camera::isBrushValid()
     return _clearBrush != nullptr && _clearBrush->isValid();
 }
 
-NS_AX_END
+}

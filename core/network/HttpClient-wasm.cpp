@@ -37,7 +37,8 @@
 #include <emscripten.h>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -352,4 +353,4 @@ namespace network
 
 } // namespace network
 
-NS_AX_END
+}

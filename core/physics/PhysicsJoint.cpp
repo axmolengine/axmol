@@ -33,7 +33,8 @@
 #    include "physics/PhysicsHelper.h"
 #    include "2d/Node.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 template <typename T>
 class Optional
@@ -931,5 +932,5 @@ void PhysicsJointMotor::setRate(float rate)
     AX_PJOINT_CACHE_WRITE(_rate, cpSimpleMotorSetRate, rate);
 }
 
-NS_AX_END
+}
 #endif  // AX_ENABLE_PHYSICS

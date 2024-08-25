@@ -34,7 +34,8 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -363,7 +364,7 @@ protected:
 };
 
 }  // namespace ui
-NS_AX_END
+}
 // end of ui group
 /// @}
 

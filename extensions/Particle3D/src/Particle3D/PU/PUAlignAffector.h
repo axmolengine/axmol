@@ -29,7 +29,8 @@
 
 #include "Particle3D/PU/PUAffector.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUAlignAffector : public PUAffector
 {
@@ -60,6 +61,6 @@ protected:
     bool _resize;
     PUParticle3D* _previousParticle;
 };
-NS_AX_END
+}
 
 #endif

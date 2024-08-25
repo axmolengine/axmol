@@ -34,7 +34,8 @@ THE SOFTWARE.
 #include "base/Value.h"
 #include "base/Object.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _2d
@@ -136,6 +137,6 @@ protected:
 // end of tilemap_parallax_nodes group
 /** @} */
 
-NS_AX_END
+}
 
 #endif  //__CCTMX_OBJECT_GROUP_H__

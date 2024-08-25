@@ -30,7 +30,8 @@
 
 #    if (AX_ENABLE_BULLET_INTEGRATION)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PhysicsMeshRenderer* PhysicsMeshRenderer::create(std::string_view modelPath,
                                          Physics3DRigidBodyDes* rigidDes,
@@ -98,7 +99,7 @@ void PhysicsMeshRenderer::syncPhysicsToNode()
 PhysicsMeshRenderer::PhysicsMeshRenderer() : _physicsComponent(nullptr) {}
 PhysicsMeshRenderer::~PhysicsMeshRenderer() {}
 
-NS_AX_END
+}
 
 #    endif  // AX_ENABLE_BULLET_INTEGRATION
 

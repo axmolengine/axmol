@@ -34,7 +34,8 @@
 #include "2d/Camera.h"
 #include "3d/MeshRenderer.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PURibbonTrail::PURibbonTrail(std::string_view name,
                              std::string_view texFile,
@@ -419,4 +420,4 @@ void PURibbonTrail::update(float deltaTime)
     }
 }
 
-NS_AX_END
+}

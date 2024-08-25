@@ -34,7 +34,8 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 class Label;
 class SpriteFrame;
@@ -389,7 +390,7 @@ protected:
 
 }  // namespace ui
 
-NS_AX_END
+}
 // end of ui group
 /// @}
 

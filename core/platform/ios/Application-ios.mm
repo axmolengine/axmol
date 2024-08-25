@@ -31,7 +31,8 @@
 #import "platform/ios/DirectorCaller-ios.h"
 #import "base/Utils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Application* Application::sm_pSharedApplication = nullptr;
 
@@ -137,4 +138,4 @@ bool Application::openURL(std::string_view url)
 
 void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {}
 
-NS_AX_END
+}

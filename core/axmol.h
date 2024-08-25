@@ -281,10 +281,11 @@ THE SOFTWARE.
 #include "3d/Terrain.h"
 #include "3d/VertexAttribBinding.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AX_DLL const char* axmolVersion();
 
-NS_AX_END
+}
 
 #endif  // __AX_H__

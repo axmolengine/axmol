@@ -32,7 +32,8 @@ THE SOFTWARE.
 
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Texture2D;
 
@@ -220,6 +221,6 @@ private:
 // end of _3d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  //__AX_MOTION_STREAK3D_H__

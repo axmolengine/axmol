@@ -33,7 +33,8 @@
 #include <string>
 #include "extensions/ExtensionExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PUParticle3D;
 class PUObserver;
@@ -85,6 +86,6 @@ protected:
     Vec3 _eventHandlerScale;
 };
 
-NS_AX_END
+}
 
 #endif

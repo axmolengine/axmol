@@ -44,7 +44,8 @@
 #include "math/Mat4.h"
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Technique;
 class Pass;
@@ -218,4 +219,4 @@ protected:
         ax::backend::PrimitiveType::TRIANGLE;  // primitive draw type for meshes
 };
 
-NS_AX_END
+}

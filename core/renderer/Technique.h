@@ -35,7 +35,8 @@
 #include "platform/PlatformMacros.h"
 #include "base/Vector.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Pass;
 class Material;
@@ -99,4 +100,4 @@ protected:
     Material* _material = nullptr;
 };
 
-NS_AX_END
+}

@@ -45,7 +45,8 @@ THE SOFTWARE.
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/DriverBase.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // MARK: create, init, dealloc
 Sprite* Sprite::createWithTexture(Texture2D* texture)
@@ -1725,4 +1726,4 @@ void Sprite::setMVPMatrixUniform()
         programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
 }
 
-NS_AX_END
+}

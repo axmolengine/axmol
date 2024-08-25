@@ -31,7 +31,8 @@
 #include "renderer/Pass.h"
 #include "3d/3DProgramInfo.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class MeshIndexData;
 class VertexAttribValue;
@@ -121,4 +122,4 @@ private:
     uint32_t _vertexAttribsFlags;
 };
 
-NS_AX_END
+}

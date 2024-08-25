@@ -41,7 +41,8 @@
 #include "base/Map.h"
 #include "2d/FontFreeType.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Font;
 class EventCustom;
@@ -181,7 +182,7 @@ protected:
     friend class Label;
 };
 
-NS_AX_END
+}
 
 /// @endcond
 #endif /* defined(_AX_FONTATLAS_H_) */

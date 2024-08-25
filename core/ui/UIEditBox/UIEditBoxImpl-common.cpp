@@ -42,7 +42,8 @@ static const int AX_EDIT_BOX_PADDING = 5;
 #    define PASSWORD_CHAR "\u25CF"
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static Vec2 applyPadding(const Vec2& sizeToCorrect)
 {
@@ -446,4 +447,4 @@ void EditBoxImplCommon::editBoxEditingChanged(std::string_view text)
 
 }  // namespace ui
 
-NS_AX_END
+}

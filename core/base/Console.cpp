@@ -55,7 +55,8 @@
 
 #include "yasio/xxsocket.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 extern const char* axmolVersion(void);
 
@@ -1425,4 +1426,4 @@ void Console::sendHelp(socket_native_type fd, const hlookup::string_map<Command*
     }
 }
 
-NS_AX_END
+}

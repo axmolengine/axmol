@@ -38,7 +38,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Value;
 
@@ -287,6 +288,6 @@ inline const ax::Value& optValue(const ValueMap& dictionary, std::string_view ke
 
 /** @} */
 
-NS_AX_END
+}
 
 #endif /* defined(_AX_VALUE_H_) */

@@ -41,7 +41,8 @@ bool AX_DLL ax_assert_script_compatible(const char* msg)
     return false;
 }
 
-NS_AX_BEGIN
+namespace ax
+{
 
 //
 // // ScriptHandlerEntry
@@ -181,6 +182,6 @@ int ScriptEngineManager::sendEventToLua(const ScriptEvent& event)
     return 0;
 }
 
-NS_AX_END
+}
 
 #endif  // #if AX_ENABLE_SCRIPT_BINDING

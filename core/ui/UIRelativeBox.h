@@ -30,7 +30,8 @@
 #include "ui/UILayout.h"
 #include "ui/GUIExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 /**
  * @addtogroup ui
  * @{
@@ -84,6 +85,6 @@ public:
 
 // end of ui group
 /// @}
-NS_AX_END
+}
 
 #endif /* defined(__UIRelativeBox__) */

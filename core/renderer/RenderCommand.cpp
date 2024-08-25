@@ -27,7 +27,8 @@
 #include "2d/Camera.h"
 #include "2d/Node.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 RenderCommand::RenderCommand() {}
 
@@ -55,4 +56,4 @@ void RenderCommand::printID()
     AXLOGI("Command Depth: {}\n", _globalOrder);
 }
 
-NS_AX_END
+}

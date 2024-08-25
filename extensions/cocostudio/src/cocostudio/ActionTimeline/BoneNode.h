@@ -32,12 +32,13 @@ THE SOFTWARE.
 #include "cocostudio/CocosStudioExport.h"
 #include "SkinNode.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 namespace backend
 {
 class ProgramState;
 }
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 NS_TIMELINE_BEGIN
 

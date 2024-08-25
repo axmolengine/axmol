@@ -38,7 +38,8 @@ using namespace std;
 
 #define DECLARE_GUARD (void)0  // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static std::string _checkPath(const char* path) {
     std::string ret;
@@ -144,4 +145,4 @@ bool FileUtilsLinux::isFileExistInternal(std::string_view path) const
     return (stat(path.data(), &sts) == 0) && S_ISREG(sts.st_mode);
 }
 
-NS_AX_END
+}

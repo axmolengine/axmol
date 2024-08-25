@@ -47,7 +47,8 @@ static unsigned short quadIndices9[] = {
 
 const static float PRECISION = 10.0f;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PolygonInfo::PolygonInfo() : _isVertsOwner(true), _rect(Rect::ZERO), _filename("")
 {
@@ -728,4 +729,4 @@ PolygonInfo AutoPolygon::generatePolygon(std::string_view filename, const Rect& 
     return ap.generateTriangles(rect, epsilon, threshold);
 }
 
-NS_AX_END
+}

@@ -26,7 +26,8 @@
 #include "yasio/errc.hpp"
 #include "base/Logging.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -165,4 +166,4 @@ void WebSocket::closeAsync()
 
 }  // namespace network
 
-NS_AX_END
+}

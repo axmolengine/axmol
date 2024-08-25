@@ -38,7 +38,8 @@
 #    include <jni.h>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace StringUtils
 {
@@ -268,6 +269,6 @@ private:
 
 }  // namespace StringUtils
 
-NS_AX_END
+}
 
 #endif /** defined(AXMOL__UTF8_H) */

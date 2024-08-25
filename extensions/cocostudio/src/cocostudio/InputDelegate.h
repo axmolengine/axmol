@@ -33,9 +33,10 @@ THE SOFTWARE.
 #include "base/EventListener.h"
 #include "CocosStudioExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 class __Set;
-NS_AX_END
+}
 
 namespace cocostudio
 {

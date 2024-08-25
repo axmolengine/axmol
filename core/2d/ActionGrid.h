@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "2d/ActionInterval.h"
 #include "2d/ActionInstant.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class GridBase;
 class NodeGrid;
@@ -408,6 +409,6 @@ private:
 // end of actions group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __ACTION_CCGRID_ACTION_H__

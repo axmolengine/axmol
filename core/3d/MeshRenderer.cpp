@@ -46,7 +46,8 @@
 #include "renderer/Technique.h"
 #include "renderer/Pass.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight);
 
@@ -1120,4 +1121,4 @@ static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVerte
     return MeshMaterial::createBuiltInMaterial(type, hasSkin);
 }
 
-NS_AX_END
+}

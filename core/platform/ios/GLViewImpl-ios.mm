@@ -31,7 +31,8 @@
 #include "base/Touch.h"
 #include "base/Director.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void* GLViewImpl::_pixelFormat      = kEAGLColorFormatRGB565;
 int GLViewImpl::_depthFormat        = GL_DEPTH_COMPONENT16;
@@ -292,4 +293,4 @@ void GLViewImpl::queueOperation(void (*op)(void*), void* param)
     }];
 }
 
-NS_AX_END
+}

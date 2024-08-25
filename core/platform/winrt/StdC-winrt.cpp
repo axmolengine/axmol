@@ -26,7 +26,8 @@ THE SOFTWARE.
 
 #include "platform/StdC.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 int AX_DLL gettimeofday(struct timeval * val, struct timezone *)
 {
     if (val)
@@ -48,4 +49,4 @@ int AX_DLL gettimeofday(struct timeval * val, struct timezone *)
     }
     return 0;
 }
-NS_AX_END
+}

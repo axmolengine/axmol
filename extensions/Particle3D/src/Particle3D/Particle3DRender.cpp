@@ -37,7 +37,8 @@
 #include "3d/MeshRenderer.h"
 #include "2d/Camera.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Particle3DQuadRender::Particle3DQuadRender()
     : _texture(nullptr), _programState(nullptr), _indexBuffer(nullptr), _vertexBuffer(nullptr), _texFile("")
@@ -391,4 +392,4 @@ void Particle3DRender::setBlendFunc(const BlendFunc& blendFunc)
     _stateBlock.setBlendFunc(blendFunc);
 }
 
-NS_AX_END
+}

@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "2d/ParticleSystem.h"
 #include "renderer/QuadCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class SpriteFrame;
 class EventCustom;
@@ -183,4 +184,4 @@ private:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}

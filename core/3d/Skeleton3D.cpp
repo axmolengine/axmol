@@ -25,7 +25,8 @@
 
 #include "3d/Skeleton3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * Sets the inverse bind pose matrix.
@@ -347,4 +348,4 @@ Bone3D* Skeleton3D::createBone3D(const NodeData& nodedata)
     return bone;
 }
 
-NS_AX_END
+}

@@ -27,7 +27,8 @@
 #include "PUVelocityMatchingAffector.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // Constants
 const float PUVelocityMatchingAffector::DEFAULT_RADIUS = 100.0f;
 
@@ -118,4 +119,4 @@ void PUVelocityMatchingAffector::copyAttributesTo(PUAffector* affector)
     velocityMatchingAffector->_radius                    = _radius;
 }
 
-NS_AX_END
+}

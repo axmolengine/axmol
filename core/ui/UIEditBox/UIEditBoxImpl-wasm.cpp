@@ -32,7 +32,8 @@ THE SOFTWARE.
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 #    include "ui/UIHelper.h"
 #    include <emscripten/emscripten.h>
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -314,6 +315,6 @@ void EditBoxImplWasm::createEditCtrl(EditBox::InputMode inputMode)
 
 }  // namespace ui
 
-NS_AX_END
+}
 
 #endif

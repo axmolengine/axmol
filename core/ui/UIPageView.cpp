@@ -27,7 +27,8 @@ THE SOFTWARE.
 #include "ui/UIPageView.h"
 #include "ui/UIPageViewIndicator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -483,4 +484,4 @@ void PageView::remedyLayoutParameter(Widget* item)
 
 }  // namespace ui
 
-NS_AX_END
+}

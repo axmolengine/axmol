@@ -29,7 +29,8 @@
 #include "Particle3D/PU/PUDynamicAttribute.h"
 #include "Particle3D/PU/PUDynamicAttributeTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUOnRandomObserverTranslator::PUOnRandomObserverTranslator() {}
 //-------------------------------------------------------------------------
@@ -62,4 +63,4 @@ bool PUOnRandomObserverTranslator::translateChildObject(PUScriptCompiler* /*comp
     return false;
 }
 
-NS_AX_END
+}

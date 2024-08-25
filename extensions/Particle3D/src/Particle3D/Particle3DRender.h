@@ -36,7 +36,8 @@
 #include "math/Math.h"
 #include "extensions/ExtensionExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class ParticleSystem3D;
 class Renderer;
@@ -160,4 +161,4 @@ protected:
     Vec3 _meshSize;
 };
 
-NS_AX_END
+}

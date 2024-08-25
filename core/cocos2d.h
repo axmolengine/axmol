@@ -34,7 +34,8 @@ THE SOFTWARE.
 
 #define COCOS2D_VERSION 0x00040000
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AX_DLL const char* cocos2dVersion();
 
@@ -48,7 +49,7 @@ using Ref                   = Object;
 
 #define setDisplayStats setStatsDisplay
 
-NS_AX_END
+}
 
 namespace cocos2d = ax;
 

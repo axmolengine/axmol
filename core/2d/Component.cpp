@@ -25,7 +25,8 @@ THE SOFTWARE.
 
 #include "2d/Component.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Component::Component() : _owner(nullptr), _enabled(true) {}
 
@@ -77,4 +78,4 @@ void Component::setEnabled(bool enabled)
     _enabled = enabled;
 }
 
-NS_AX_END
+}

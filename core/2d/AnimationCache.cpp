@@ -32,7 +32,8 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AnimationCache* AnimationCache::s_sharedAnimationCache = nullptr;
 
@@ -266,4 +267,4 @@ void AnimationCache::addAnimationsWithFile(std::string_view plist)
     addAnimationsWithDictionary(dict, plist);
 }
 
-NS_AX_END
+}

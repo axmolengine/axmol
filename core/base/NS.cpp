@@ -33,7 +33,8 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 typedef std::vector<std::string> strArray;
 
@@ -183,4 +184,4 @@ Vec2 SizeFromString(std::string_view pszContent)
     return ret;
 }
 
-NS_AX_END
+}

@@ -67,7 +67,8 @@ void _detachCurrentThread(void* a)
     ax::JniHelper::getJavaVM()->DetachCurrentThread();
 }
 
-NS_AX_BEGIN
+namespace ax
+{
 
 JavaVM* JniHelper::_psJavaVM                         = nullptr;
 jmethodID JniHelper::loadclassMethod_methodID        = nullptr;
@@ -348,7 +349,7 @@ void JniHelper::reportError(const char* className, const char* methodName, const
          signature);
 }
 
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #undef LOGE
 #undef LOGD

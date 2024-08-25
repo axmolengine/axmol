@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "platform/Common.h"
 #include "platform/ApplicationBase.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_DLL Application : public ApplicationBase
 {
@@ -101,4 +102,4 @@ protected:
     static Application* sm_pSharedApplication;
 };
 
-NS_AX_END
+}

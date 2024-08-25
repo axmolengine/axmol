@@ -40,7 +40,8 @@
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void PlistSpriteSheetLoader::load(std::string_view filePath, SpriteFrameCache& cache)
 {
@@ -506,4 +507,4 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
     }
 }
 
-NS_AX_END
+}

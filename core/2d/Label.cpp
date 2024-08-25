@@ -51,7 +51,8 @@
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/ProgramStateRegistry.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace
 {
@@ -3071,4 +3072,4 @@ void Label::recordPlaceholderInfo(int letterIndex, char32_t utf32Char)
     _lettersInfo[letterIndex].valid     = false;
 }
 
-NS_AX_END
+}

@@ -34,7 +34,8 @@
 
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Data;
 class Renderer;
@@ -44,9 +45,10 @@ namespace ui
 {
 class WebView;
 }
-NS_AX_END  // namespace ax
+}  // namespace ax
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -111,6 +113,6 @@ private:
 };
 
 }  // namespace ui
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 /// @endcond

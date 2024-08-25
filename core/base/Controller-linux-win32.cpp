@@ -36,7 +36,8 @@ THE SOFTWARE.
 #    include "base/EventController.h"
 #    include "glfw3.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_DLL ControllerImpl
 {
@@ -4453,6 +4454,6 @@ Controller::~Controller()
     delete _axisEvent;
 }
 
-NS_AX_END
+}
 
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)

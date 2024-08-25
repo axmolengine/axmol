@@ -29,7 +29,8 @@
 #include "Particle3D/PU/PUObserverManager.h"
 #include "Particle3D/PU/PUObserver.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUObserverTranslator::PUObserverTranslator() : _observer(nullptr) {}
 //-------------------------------------------------------------------------
@@ -196,4 +197,4 @@ void PUObserverTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode*
     }
 }
 
-NS_AX_END
+}

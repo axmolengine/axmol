@@ -51,7 +51,8 @@ using namespace Windows::Foundation;
 using namespace Windows::Phone::Devices::Notification;
 #    endif  // (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 template <typename T>
 inline HRESULT CreateInstance(REFCLSID clsid, winrt::com_ptr<T>& ptr)
@@ -574,6 +575,6 @@ void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged() {}
 
-NS_AX_END
+}
 
 #endif  // (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)

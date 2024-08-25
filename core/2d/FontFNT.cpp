@@ -37,7 +37,8 @@
 
 #include <cmath>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup GUI
@@ -783,4 +784,4 @@ void FontFNT::reloadBMFontResource(std::string_view fntFilePath)
     }
 }
 
-NS_AX_END
+}

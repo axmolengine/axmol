@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "base/Data.h"
 #include "platform/FileUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static bool tgaLoadRLEImageData(unsigned char* Buffer, uint32_t bufSize, tImageTGA* info);
 void tgaFlipImage(tImageTGA* info);
@@ -337,4 +338,4 @@ void tgaDestroy(tImageTGA* info)
         free(info);
     }
 }
-NS_AX_END
+}

@@ -30,7 +30,8 @@
 #include "PUBaseCollider.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 struct PUParticle3D;
 class AX_EX_DLL PUParticle3DInterParticleCollider : public PUBaseCollider
 {
@@ -81,6 +82,6 @@ protected:
     float _adjustment;
     InterParticleCollisionResponse _interParticleCollisionResponse;
 };
-NS_AX_END
+}
 
 #endif

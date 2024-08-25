@@ -32,7 +32,8 @@
 
 #include "2d/Font.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Texture2D;
 class FontCharMap : public Font
@@ -64,6 +65,6 @@ private:
 
 /// @endcond
 
-NS_AX_END
+}
 
 #endif /* defined(_CCFontCharMap_h_) */

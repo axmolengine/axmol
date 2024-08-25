@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "2d/Sprite.h"
 #include "base/Utils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -316,4 +317,4 @@ Vec2 ScrollViewBar::calculatePosition(float innerContainerMeasure,
 }
 }  // namespace ui
 
-NS_AX_END
+}

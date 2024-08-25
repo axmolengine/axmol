@@ -41,7 +41,8 @@ THE SOFTWARE.
 #include FT_BBOX_H
 #include FT_FONT_FORMATS_H
 
-NS_AX_BEGIN
+namespace ax
+{
 
 FT_Library FontFreeType::_FTlibrary;
 bool FontFreeType::_FTInitialized             = false;
@@ -709,4 +710,4 @@ void FontFreeType::releaseFont(std::string_view fontName)
     }
 }
 
-NS_AX_END
+}

@@ -39,7 +39,8 @@ typedef struct mp3dec_impl* mp3dec_handle_t;
 typedef struct mpg123_handle_struct* mp3dec_handle_t;
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @brief The class for decoding compressed audio file to PCM buffer.
@@ -89,4 +90,4 @@ protected:
     friend class AudioDecoderManager;
 };
 
-NS_AX_END  // namespace ax
+}  // namespace ax

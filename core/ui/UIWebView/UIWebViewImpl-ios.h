@@ -35,7 +35,8 @@
 
 @class UIWebViewWrapper;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Data;
 class Renderer;
@@ -101,6 +102,6 @@ private:
 };
 
 }  // namespace ui
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 /// @endcond

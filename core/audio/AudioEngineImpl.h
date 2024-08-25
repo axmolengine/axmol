@@ -37,7 +37,8 @@
 #    include "audio/AudioCache.h"
 #    include "audio/AudioPlayer.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Scheduler;
 
@@ -95,5 +96,5 @@ private:
     Scheduler* _scheduler;
 };
 
-NS_AX_END
+}
 #endif  // __AUDIO_ENGINE_INL_H_

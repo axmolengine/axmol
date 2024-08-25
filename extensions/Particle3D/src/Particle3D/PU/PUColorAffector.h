@@ -31,7 +31,8 @@
 #include "base/Types.h"
 #include <map>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUColorAffector : public PUAffector
 {
@@ -85,6 +86,6 @@ protected:
     ColorMap _colorMap;
     ColorOperation _colorOperation;
 };
-NS_AX_END
+}
 
 #endif

@@ -35,7 +35,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /** @class EventMouse
  * @brief The mouse event.
@@ -198,7 +199,7 @@ private:
     friend class EventListenerMouse;
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

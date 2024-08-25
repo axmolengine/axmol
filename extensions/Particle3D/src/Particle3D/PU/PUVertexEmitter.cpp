@@ -27,7 +27,8 @@
 #include "PUVertexEmitter.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //// Constants
 // const unsigned short Particle3DVertexEmitter::DEFAULT_STEP = 1;
 // const unsigned short Particle3DVertexEmitter::DEFAULT_SEGMENTS = 1;
@@ -340,4 +341,4 @@ NS_AX_BEGIN
 //			iterator--;
 //	}
 // }
-NS_AX_END
+}

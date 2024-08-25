@@ -59,7 +59,8 @@ THE SOFTWARE.
  */
 #define AX_HASH_NODE_NAME(name) (!name.empty() ? XXH3_64bits(name.data(), name.length()) : 0)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // FIXME:: Yes, nodes might have a sort problem once every 30 days if the game runs at 60 FPS and each frame sprites are
 // reordered.
@@ -2281,4 +2282,4 @@ backend::ProgramState* Node::getProgramState() const
     return _programState;
 }
 
-NS_AX_END
+}

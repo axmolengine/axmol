@@ -26,11 +26,12 @@
 #include "base/EventTouch.h"
 #include "base/Touch.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 EventTouch::EventTouch() : Event(Type::TOUCH)
 {
     _touches.reserve(MAX_TOUCHES);
 }
 
-NS_AX_END
+}

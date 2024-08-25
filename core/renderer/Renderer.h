@@ -41,7 +41,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 using CullMode = backend::CullMode;
 using Winding  = backend::Winding;
@@ -575,7 +576,7 @@ protected:
     std::deque<StateBlock> _stateBlockStack;
 };
 
-NS_AX_END
+}
 
 /**
  end of support group

@@ -40,7 +40,8 @@
 #    undef ERROR
 #endif  // ERROR
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const int AudioEngine::INVALID_AUDIO_ID = -1;
 const float AudioEngine::TIME_UNKNOWN   = -1.0f;
@@ -530,5 +531,5 @@ bool AudioEngine::isEnabled()
 {
     return _isEnabled;
 }
-NS_AX_END
+}
 #undef LOG_TAG

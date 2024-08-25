@@ -24,7 +24,8 @@
 #    include "ntcvt/ntcvt.hpp"
 #    include "yasio/sz.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // IF_FAILED_GOTO macro.
 // Jumps to 'label' on failure.
@@ -1798,6 +1799,6 @@ HRESULT WmfMediaEngine::GetNativeVideoSize(DWORD* cx, DWORD* cy)
     return hr;
 }
 
-NS_AX_END
+}
 
 #endif

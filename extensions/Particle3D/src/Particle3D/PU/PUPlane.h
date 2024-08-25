@@ -32,7 +32,8 @@
 #include "3d/AABB.h"
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 /** Defines a plane in 3D space.
     @remarks
         A plane is defined in 3D space by the equation
@@ -133,6 +134,6 @@ public:
 };
 
 typedef std::vector<PUPlane> PlaneList;
-NS_AX_END
+}
 
 #endif

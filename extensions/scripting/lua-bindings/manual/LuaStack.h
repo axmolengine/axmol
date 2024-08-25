@@ -38,7 +38,8 @@ extern "C" {
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * LuaStack is used to manager the operation on the lua_State,eg., push data onto the lua_State, execute the function
@@ -328,7 +329,7 @@ protected:
     int _callFromLua;
 };
 
-NS_AX_END
+}
 
 // end group
 /// @}

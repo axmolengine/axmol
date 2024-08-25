@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include "2d/ActionInstant.h"
 #include "2d/ActionProgressTimer.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 enum
 {
@@ -330,4 +331,4 @@ ProgressTimer* TransitionProgressOutIn::progressTimerNodeWithRenderTexture(Rende
     return node;
 }
 
-NS_AX_END
+}

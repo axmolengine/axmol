@@ -33,7 +33,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class EventCustom;
 
@@ -84,7 +85,7 @@ protected:
     friend class LuaEventListenerCustom;
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

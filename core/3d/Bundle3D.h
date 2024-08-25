@@ -32,7 +32,8 @@
 #include "3d/BundleReader.h"
 #include "rapidjson/document-wrapper.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _3d
@@ -201,6 +202,6 @@ protected:
 // end of 3d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __CCBUNDLE3D_H__

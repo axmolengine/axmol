@@ -313,7 +313,8 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
 
 //
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static float getDevicePixelRatio(int& sdpi) {
     float scale = 1.0f;
@@ -761,4 +762,4 @@ void Device::selectionChanged()
 #endif
 }
 
-NS_AX_END
+}

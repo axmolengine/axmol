@@ -26,7 +26,8 @@
 #include "PixelFormatUtils.h"
 #include "Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace backend
 {
@@ -864,4 +865,4 @@ ax::backend::PixelFormat convertDataToFormat(const unsigned char* data,
 }  // namespace PixelFormatUtils
 }  // namespace backend
 
-NS_AX_END
+}

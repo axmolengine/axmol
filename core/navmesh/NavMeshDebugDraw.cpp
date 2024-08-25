@@ -35,7 +35,8 @@
 #    include "base/Director.h"
 #    include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 NavMeshDebugDraw::NavMeshDebugDraw()
 {
@@ -265,6 +266,6 @@ void NavMeshDebugDraw::clear()
     _primitiveList.clear();
 }
 
-NS_AX_END
+}
 
 #endif  // AX_ENABLE_NAVMESH

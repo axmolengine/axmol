@@ -35,7 +35,8 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 #include "jni.h"
 #include "android/asset_manager.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class ZipFile;
 
@@ -82,4 +83,4 @@ private:
 // end of platform group
 /// @}
 
-NS_AX_END
+}

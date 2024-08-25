@@ -36,7 +36,8 @@ THE SOFTWARE.
 
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Animation;
 
@@ -128,6 +129,6 @@ private:
 // end of sprite_nodes group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __AX_ANIMATION_CACHE_H__

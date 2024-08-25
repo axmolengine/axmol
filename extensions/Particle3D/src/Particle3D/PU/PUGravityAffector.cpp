@@ -27,7 +27,8 @@
 #include "PUGravityAffector.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const float PUGravityAffector::DEFAULT_GRAVITY = 1.0f;
@@ -90,4 +91,4 @@ void PUGravityAffector::copyAttributesTo(PUAffector* affector)
     gravityAffector->_gravity          = _gravity;
 }
 
-NS_AX_END
+}
