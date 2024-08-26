@@ -43,6 +43,8 @@ set(GAME_SOURCE
     Source/AppDelegate.cpp
     Source/TestUtils.cpp
 
+    Source/core/2d/NodeTests.cpp
+
     Source/core/base/MapTests.cpp
     Source/core/base/UTF8Tests.cpp
     Source/core/base/UtilsTests.cpp
