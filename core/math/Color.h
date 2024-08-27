@@ -201,6 +201,8 @@ struct AX_DLL HSL : public Vec4Base<HSL>
 
 NS_AX_MATH_END
 
+#include "math/Color.inl"
+
 #if defined(_WIN32)
 #    pragma pop_macro("TRANSPARENT")
 #endif
