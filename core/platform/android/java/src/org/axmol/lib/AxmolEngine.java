@@ -73,6 +73,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -237,8 +238,12 @@ public class AxmolEngine {
     public static String getPackageName() {
         return AxmolEngine.sPackageName;
     }
-    public static String getWritablePath() {
+    public static String getInternalFilesDir() {
         return sActivity.getFilesDir().getAbsolutePath();
+    }
+
+    public static String getExternalFilesDir() {
+        return Objects.requireNonNull(sActivity.getExternalFilesDir(null)).getAbsolutePath();
     }
 
     public static String getCurrentLanguage() {
