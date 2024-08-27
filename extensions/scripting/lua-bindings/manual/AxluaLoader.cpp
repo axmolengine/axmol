@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "platform/FileUtils.h"
 #include "yasio/string_view.hpp"
 
-USING_NS_AX;
+using namespace ax;
 
 extern "C" {
 int axlua_loader(lua_State* L)

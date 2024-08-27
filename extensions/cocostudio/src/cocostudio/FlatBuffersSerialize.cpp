@@ -62,7 +62,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 using namespace cocostudio;
 using namespace cocostudio::timeline;

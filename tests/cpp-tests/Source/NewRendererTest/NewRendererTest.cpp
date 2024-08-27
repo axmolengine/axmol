@@ -35,7 +35,7 @@ static uint64_t s_blur_program_id = 0;
 static uint64_t s_sepia_program_id = 0;
 }
 
-USING_NS_AX;
+using namespace ax;
 
 class DurationRecorder
 {

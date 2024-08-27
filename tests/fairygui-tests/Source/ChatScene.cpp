@@ -1,7 +1,7 @@
 #include "ChatScene.h"
 #include "EmojiParser.h"
 
-USING_NS_AX;
+using namespace ax;
 
 ChatScene::ChatScene() :_emojiSelectUI(nullptr)
 {

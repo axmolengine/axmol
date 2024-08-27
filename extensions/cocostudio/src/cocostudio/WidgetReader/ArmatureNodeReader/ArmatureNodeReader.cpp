@@ -11,7 +11,7 @@
 #    include "DragonBones/CCDragonBonesHeaders.h"
 #endif
 
-USING_NS_AX;
+using namespace ax;
 using namespace cocostudio;
 using namespace flatbuffers;
 

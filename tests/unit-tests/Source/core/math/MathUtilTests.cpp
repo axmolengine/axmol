@@ -38,7 +38,7 @@
 #    define SKIP_SIMD_TEST doctest::skip(true)
 #endif
 
-USING_NS_AX;
+using namespace ax;
 
 namespace UnitTest
 {

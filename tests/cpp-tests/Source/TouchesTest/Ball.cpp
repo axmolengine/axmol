@@ -26,7 +26,7 @@
 #include "Paddle.h"
 #include "../VisibleRect.h"
 
-USING_NS_AX;
+using namespace ax;
 
 Ball::Ball() {}
 

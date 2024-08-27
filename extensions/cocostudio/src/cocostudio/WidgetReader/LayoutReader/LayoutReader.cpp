@@ -15,7 +15,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ui;
 using namespace flatbuffers;
 

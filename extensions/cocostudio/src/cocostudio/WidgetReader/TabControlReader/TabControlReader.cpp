@@ -32,7 +32,7 @@
 #include "platform/FileUtils.h"
 #include "2d/SpriteFrameCache.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace cocostudio;
 using namespace flatbuffers;
 using namespace ax::ui;

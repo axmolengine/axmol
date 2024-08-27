@@ -24,7 +24,7 @@
 
 #include "TextureCacheTest.h"
 
-USING_NS_AX;
+using namespace ax;
 
 TextureCacheTests::TextureCacheTests()
 {

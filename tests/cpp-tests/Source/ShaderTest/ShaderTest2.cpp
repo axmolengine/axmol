@@ -30,7 +30,7 @@
 #include "renderer/backend/DriverBase.h"
 #include <tuple>
 
-USING_NS_AX;
+using namespace ax;
 
 #define SET_UNIFORM(ps, name, value)                          \
     do                                                        \

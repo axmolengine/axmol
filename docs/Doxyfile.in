@@ -2399,7 +2399,6 @@ PREDEFINED             = "AX_PROPERTY_READONLY(varType, varName, funName)=protec
                          "NS_AX_MATH_END=}" \
                          "NS_AX_BACKEND_BEGIN=namespace ax { namespace backend{" \
                          "NS_AX_BACKEND_BEGIN=}}" \
-                         "USING_NS_AX=using namespace ax" \
                          "USING_NS_AX_MATH=using namespace ax" \
                          "NS_AX_EXT_BEGIN=namespace ax { namespace extension {" \
                          "NS_AX_EXT_END=}}" \

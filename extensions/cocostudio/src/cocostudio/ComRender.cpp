@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "2d/ParticleSystemQuad.h"
 #include "2d/SpriteFrameCache.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

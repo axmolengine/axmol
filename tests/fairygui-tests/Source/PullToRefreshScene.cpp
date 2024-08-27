@@ -1,6 +1,6 @@
 #include "PullToRefreshScene.h"
 
-USING_NS_AX;
+using namespace ax;
 
 class ScrollPaneHeader : public GComponent
 {

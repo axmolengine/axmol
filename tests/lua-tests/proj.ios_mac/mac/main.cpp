@@ -25,7 +25,7 @@
 
 #include "AppDelegate.h"
 
-USING_NS_AX;
+using namespace ax;
 
 int main(int argc, char* argv[])
 {

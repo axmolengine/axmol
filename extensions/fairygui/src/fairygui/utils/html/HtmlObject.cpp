@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "UIPackage.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 using namespace std;
 

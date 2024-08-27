@@ -26,7 +26,7 @@
 #include "CustomTableViewCell.h"
 #include "../ExtensionsTest.h"
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 TableViewTests::TableViewTests()

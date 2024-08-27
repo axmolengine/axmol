@@ -36,7 +36,7 @@
 
 #include "renderer/backend/Texture.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace Live2D { namespace Cubism { namespace Framework { namespace Rendering {
 

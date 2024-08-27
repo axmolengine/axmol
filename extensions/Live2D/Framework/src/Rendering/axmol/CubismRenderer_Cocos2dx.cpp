@@ -12,7 +12,7 @@
 #include <float.h>
 #include "renderer/backend/DriverBase.h"
 
-USING_NS_AX;
+using namespace ax;
 
 #ifdef CSM_TARGET_WIN_GL
 #include <Windows.h>

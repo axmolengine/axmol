@@ -30,7 +30,7 @@
 
 #define TG3_GRAVITY_EARTH (9.80665f)
 
-USING_NS_AX;
+using namespace ax;
 
 extern "C" {
 JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolAccelerometer_onSensorChanged(JNIEnv*,

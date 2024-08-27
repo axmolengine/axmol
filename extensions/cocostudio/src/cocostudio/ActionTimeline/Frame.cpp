@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include <exception>
 #include <iostream>
 
-USING_NS_AX;
+using namespace ax;
 
 NS_TIMELINE_BEGIN
 

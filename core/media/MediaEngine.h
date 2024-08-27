@@ -33,7 +33,6 @@
 #    define AX_BREAK_IF(cond) \
         if (cond)             \
         break
-#    define USING_NS_AX using namespace ax
 #endif
 
 // #define AXME_USE_IMFME 1

@@ -2,7 +2,7 @@
 #include "GObject.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 using namespace std;
 
 std::unordered_map<uint64_t, GObject*> _weakPointers;

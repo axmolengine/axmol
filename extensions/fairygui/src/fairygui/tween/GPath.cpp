@@ -1,7 +1,7 @@
 #include "GPath.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 static std::vector<ax::Vec3> splinePoints;
 

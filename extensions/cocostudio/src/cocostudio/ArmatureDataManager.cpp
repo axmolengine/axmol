@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "DataReaderHelper.h"
 #include "SpriteFrameCacheHelper.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #include "cocostudio/ComExtensionData.h"
 
-USING_NS_AX;
+using namespace ax;
 
 NS_TIMELINE_BEGIN
 

@@ -1,6 +1,6 @@
 #include "GuideScene.h"
 
-USING_NS_AX;
+using namespace ax;
 
 GuideScene::GuideScene():_guideLayer(nullptr)
 {

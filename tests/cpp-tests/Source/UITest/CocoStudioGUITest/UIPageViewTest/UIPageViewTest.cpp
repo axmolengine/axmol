@@ -25,7 +25,7 @@
 #include "UIPageViewTest.h"
 #include "axmol.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 UIPageViewTests::UIPageViewTests()

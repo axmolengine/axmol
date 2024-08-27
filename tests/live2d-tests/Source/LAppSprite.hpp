@@ -11,7 +11,7 @@
 #include "Rendering/axmol/CubismCommandBuffer_Cocos2dx.hpp"
 #include "cocos2d.h"
 
-USING_NS_AX;
+using namespace ax;
 
 /**
 * @brief スプライトを実装するクラス。

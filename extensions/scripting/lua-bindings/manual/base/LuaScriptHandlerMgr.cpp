@@ -31,7 +31,7 @@
 #include "lua-bindings/manual/LuaValue.h"
 #include "lua-bindings/manual/LuaEngine.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace ax
 {

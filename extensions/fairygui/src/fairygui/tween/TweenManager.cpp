@@ -2,7 +2,7 @@
 #include "GTweener.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GTweener** TweenManager::_activeTweens = nullptr;
 std::vector<GTweener*> TweenManager::_tweenerPool;

@@ -7,7 +7,7 @@
 #include "utils/WeakPtr.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 InputProcessor* InputProcessor::_activeProcessor = nullptr;
 bool InputProcessor::_touchOnUI = false;

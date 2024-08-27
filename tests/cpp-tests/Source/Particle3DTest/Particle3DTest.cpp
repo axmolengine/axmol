@@ -28,7 +28,7 @@
 #include "Particle3D/ParticleSystem3D.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-USING_NS_AX;
+using namespace ax;
 
 #define PARTICLE_SYSTEM_TAG 0x0001
 

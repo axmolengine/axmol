@@ -4,7 +4,7 @@
 #include "CSLanguageDataBinary_generated.h"
 
 using namespace cocostudio;
-USING_NS_AX;
+using namespace ax;
 
 static JsonLocalizationManager* _sharedJsonLocalizationManager = nullptr;
 

@@ -26,7 +26,7 @@
 #include "../testResource.h"
 #include "../core/ui/UIText.h"
 
-USING_NS_AX;
+using namespace ax;
 
 enum
 {

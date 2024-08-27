@@ -33,7 +33,7 @@
 
 #    define center_coord(__SZ__, __sz__, __achor__) (((__SZ__) - (__sz__) + 2 * (__sz__) * (__achor__)) * 0.5f)
 
-USING_NS_AX;
+using namespace ax;
 
 // inline Vec2 operator*(const Vec2& left, const ax::Vec2& right)
 //{

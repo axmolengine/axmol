@@ -26,7 +26,7 @@
 #include "renderer/Renderer.h"
 #include "renderer/CustomCommand.h"
 
-USING_NS_AX;
+using namespace ax;
 
 using namespace std;
 

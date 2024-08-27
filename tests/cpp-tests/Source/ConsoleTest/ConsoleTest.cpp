@@ -37,7 +37,7 @@
 #    include <WS2tcpip.h>
 #endif
 
-USING_NS_AX;
+using namespace ax;
 
 //------------------------------------------------------------------
 //

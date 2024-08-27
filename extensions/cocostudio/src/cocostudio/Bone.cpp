@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "TransformHelp.h"
 #include "DisplayManager.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

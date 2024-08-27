@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #include "3d/Terrain.h"
 
-USING_NS_AX;
+using namespace ax;
 #include <stdlib.h>
 #include <float.h>
 #include <set>

@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include "ActionManagerEx.h"
 #include "CocoLoader.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

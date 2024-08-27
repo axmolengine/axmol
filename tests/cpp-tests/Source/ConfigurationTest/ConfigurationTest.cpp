@@ -26,7 +26,7 @@
 #include "../testResource.h"
 #include "axmol.h"
 
-USING_NS_AX;
+using namespace ax;
 
 ConfigurationTests::ConfigurationTests()
 {

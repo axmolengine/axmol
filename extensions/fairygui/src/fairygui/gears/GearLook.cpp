@@ -5,7 +5,7 @@
 #include "utils/ByteBuffer.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GearLook::GearLookValue::GearLookValue() : alpha(0), rotation(0), grayed(false), touchable(false)
 {

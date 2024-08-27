@@ -14,7 +14,7 @@
 using namespace Csm;
 using namespace LAppDefine;
 
-USING_NS_AX;
+using namespace ax;
 
 LAppView::LAppView(): DrawNode()
                     , _debugRects(NULL)

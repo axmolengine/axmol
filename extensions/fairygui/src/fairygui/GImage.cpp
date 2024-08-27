@@ -29,7 +29,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "utils/ToolSet.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GImage::GImage() : _content(nullptr)
 {

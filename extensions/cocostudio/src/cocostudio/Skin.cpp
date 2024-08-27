@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "TransformHelp.h"
 #include "Armature.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

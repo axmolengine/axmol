@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "UIPackage.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 #if COCOS2D_VERSION < 0x00040000
 using namespace ax::experimental;

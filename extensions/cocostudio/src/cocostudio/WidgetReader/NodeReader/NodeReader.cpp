@@ -31,7 +31,7 @@
 #include "flatbuffers/flatbuffers.h"
 #include "ui/UILayoutComponent.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio

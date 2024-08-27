@@ -1,6 +1,6 @@
 #include "ModalWaitingScene.h"
 
-USING_NS_AX;
+using namespace ax;
 
 ModalWaitingScene::ModalWaitingScene():_testWin(nullptr)
 {

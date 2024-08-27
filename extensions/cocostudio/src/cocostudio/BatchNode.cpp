@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "renderer/GroupCommand.h"
 #include "base/Director.h"
 
-USING_NS_AX;
+using namespace ax;
 namespace cocostudio
 {
 BatchNode* BatchNode::create()

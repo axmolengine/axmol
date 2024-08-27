@@ -35,7 +35,7 @@
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 
-USING_NS_AX;
+using namespace ax;
 
 bool Bug14327Layer::init()
 {

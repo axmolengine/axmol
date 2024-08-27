@@ -28,7 +28,7 @@
 #include "VibrateTest.h"
 #include "ui/CocosGUI.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 VibrateTests::VibrateTests()

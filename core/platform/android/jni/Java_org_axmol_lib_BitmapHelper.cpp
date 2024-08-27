@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 static const char* className = "org.axmol.lib.BitmapHelper";
 
-USING_NS_AX;
+using namespace ax;
 
 int getFontSizeAccordingHeightJni(int height)
 {

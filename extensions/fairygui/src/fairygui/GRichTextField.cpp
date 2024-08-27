@@ -4,7 +4,7 @@
 #include "utils/html/HtmlObject.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GRichTextField::GRichTextField() :
     _richText(nullptr),

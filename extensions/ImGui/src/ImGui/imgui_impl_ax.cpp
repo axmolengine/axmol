@@ -83,7 +83,7 @@
 #include "renderer/backend/opengl/OpenGLState.h"
 #endif
 
-USING_NS_AX;
+using namespace ax;
 using namespace backend;
 
 // Clang warnings with -Weverything

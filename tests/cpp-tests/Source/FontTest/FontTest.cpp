@@ -27,7 +27,7 @@
 #include "2d/FontAtlasCache.h"
 #include "2d/FontFreeType.h"
 
-USING_NS_AX;
+using namespace ax;
 
 enum
 {

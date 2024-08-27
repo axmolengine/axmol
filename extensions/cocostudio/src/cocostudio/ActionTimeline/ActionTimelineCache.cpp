@@ -43,7 +43,7 @@ THE SOFTWARE.
 
 #include <fstream>
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio

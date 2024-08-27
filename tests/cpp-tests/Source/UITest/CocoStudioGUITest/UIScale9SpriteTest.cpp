@@ -26,7 +26,7 @@
 #include "UIScale9SpriteTest.h"
 #include "testResource.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 UIScale9SpriteTests::UIScale9SpriteTests()

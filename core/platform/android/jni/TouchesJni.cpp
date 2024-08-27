@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include <android/log.h>
 #include <jni.h>
 
-USING_NS_AX;
+using namespace ax;
 
 extern "C" {
 JNIEXPORT void JNICALL

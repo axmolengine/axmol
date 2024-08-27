@@ -37,7 +37,7 @@ THE SOFTWARE.
 
 #include "CocoLoader.h"
 
-USING_NS_AX;
+using namespace ax;
 
 static const char* VERSION     = "version";
 static const float VERSION_2_0 = 2.0f;

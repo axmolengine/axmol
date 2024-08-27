@@ -44,7 +44,7 @@ static void* s_ctx                         = nullptr;
 
 static std::string g_apkPath;
 
-USING_NS_AX;
+using namespace ax;
 using namespace std;
 
 extern "C" {

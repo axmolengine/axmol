@@ -31,7 +31,7 @@
 
 namespace webview_common
 {
-USING_NS_AX;
+using namespace ax;
 using namespace rapidjson;
 
 inline std::string htmlFromUri(std::string_view s)

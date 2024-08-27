@@ -30,7 +30,7 @@
 #include <spine/Extension.h>
 #include <spine/spine-axmol.h>
 
-USING_NS_AX;
+using namespace ax;
 using namespace spine;
 
 AxmolAtlasAttachmentLoader::AxmolAtlasAttachmentLoader(Atlas *atlas) : AtlasAttachmentLoader(atlas) {

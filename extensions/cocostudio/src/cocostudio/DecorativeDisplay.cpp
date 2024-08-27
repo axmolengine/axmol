@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include "DecorativeDisplay.h"
 #include "2d/Node.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

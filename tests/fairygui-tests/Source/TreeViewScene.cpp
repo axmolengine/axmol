@@ -1,6 +1,6 @@
 #include "TreeViewScene.h"
 
-USING_NS_AX;
+using namespace ax;
 
 TreeViewScene::TreeViewScene() : _tree1(nullptr)
 {

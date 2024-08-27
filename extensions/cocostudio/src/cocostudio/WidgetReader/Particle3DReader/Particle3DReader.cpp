@@ -34,7 +34,7 @@
 
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio

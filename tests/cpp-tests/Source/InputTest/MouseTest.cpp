@@ -24,7 +24,7 @@
 
 #include "MouseTest.h"
 
-USING_NS_AX;
+using namespace ax;
 
 template <typename T>
 std::string tostr(const T& t)

@@ -26,7 +26,7 @@
 #include <doctest.h>
 #include "base/UTF8.h"
 
-USING_NS_AX;
+using namespace ax;
 
 
 constexpr int kUtf16TestStrLength = 11;

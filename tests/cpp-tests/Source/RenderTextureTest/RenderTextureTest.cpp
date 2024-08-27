@@ -24,7 +24,7 @@
 
 #include "RenderTextureTest.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 RenderTextureTests::RenderTextureTests()

@@ -48,7 +48,7 @@ public:
 };
 }
 
-USING_NS_AX;
+using namespace ax;
 
 TOLUA_API int register_all_ax_manual(lua_State* tolua_S);
 

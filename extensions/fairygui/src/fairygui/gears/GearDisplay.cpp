@@ -3,7 +3,7 @@
 #include "utils/ByteBuffer.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GearDisplay::GearDisplay(GObject* owner)
     : GearBase(owner),

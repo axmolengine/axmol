@@ -43,7 +43,7 @@ THE SOFTWARE.
 
 void axmol_android_app_init(JNIEnv* env) __attribute__((weak));
 
-USING_NS_AX;
+using namespace ax;
 
 extern "C" {
 

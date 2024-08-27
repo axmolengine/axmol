@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/Utils.h"
 #include "ActionManagerEx.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ui;
 
 namespace cocostudio

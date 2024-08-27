@@ -1,6 +1,6 @@
 #include "HitTestScene.h"
 
-USING_NS_AX;
+using namespace ax;
 
 void HitTestScene::continueInit()
 {

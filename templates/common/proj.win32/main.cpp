@@ -30,7 +30,7 @@
 // Uncomment to enable win32 console
 #define USE_WIN32_CONSOLE
 
-USING_NS_AX;
+using namespace ax;
 
 int axmol_main() {
     // create the application instance

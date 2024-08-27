@@ -8,7 +8,7 @@
 #   include "SDFGen/SDFGen.h"
 #endif
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 

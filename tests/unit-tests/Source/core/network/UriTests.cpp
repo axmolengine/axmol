@@ -26,7 +26,7 @@
 #include <doctest.h>
 #include "network/Uri.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::network;
 
 

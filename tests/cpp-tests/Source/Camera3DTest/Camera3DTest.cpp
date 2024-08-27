@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "platform/FileUtils.h"
 #include "renderer/backend/DriverBase.h"
 
-USING_NS_AX;
+using namespace ax;
 
 #define SET_UNIFORM(name, addr, size)                          \
     do                                                         \

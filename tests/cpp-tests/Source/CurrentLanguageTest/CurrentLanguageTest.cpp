@@ -24,7 +24,7 @@
 
 #include "CurrentLanguageTest.h"
 
-USING_NS_AX;
+using namespace ax;
 
 CurrentLanguageTests::CurrentLanguageTests()
 {

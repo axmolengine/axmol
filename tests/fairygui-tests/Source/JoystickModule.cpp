@@ -1,6 +1,6 @@
 #include "JoystickModule.h"
 
-USING_NS_AX;
+using namespace ax;
 
 JoystickModule * JoystickModule::create(GComponent * mainView)
 {
