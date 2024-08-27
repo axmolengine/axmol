@@ -23,6 +23,19 @@
 
 NS_AX_MATH_BEGIN
 
+inline constexpr Vec3::Vec3() : x(0.0f), y(0.0f), z(0.0f) {}
+
+inline constexpr Vec3::Vec3(float xx, float yy, float zz) : x(xx), y(yy), z(zz) {}
+
+inline constexpr Vec3::Vec3(const float* array)
+{
+    set(array);
+}
+
+inline constexpr Vec3::Vec3(const Vec3& p1, const Vec3& p2)
+{
+    set(p1, p2);
+}
 
 inline bool Vec3::isZero() const
 {
@@ -77,14 +90,14 @@ inline Vec3 Vec3::lerp(const Vec3 &target, float alpha) const
     return *this * (1.f - alpha) + target * alpha;
 }
 
-inline void Vec3::set(float xx, float yy, float zz)
+inline constexpr void Vec3::set(float xx, float yy, float zz)
 {
     this->x = xx;
     this->y = yy;
     this->z = zz;
 }
 
-inline void Vec3::set(const float* array)
+inline constexpr void Vec3::set(const float* array)
 {
     GP_ASSERT(array);
 
@@ -93,14 +106,14 @@ inline void Vec3::set(const float* array)
     z = array[2];
 }
 
-inline void Vec3::set(const Vec3& v)
+inline constexpr void Vec3::set(const Vec3& v)
 {
     this->x = v.x;
     this->y = v.y;
     this->z = v.z;
 }
 
-inline void Vec3::set(const Vec3& p1, const Vec3& p2)
+inline constexpr void Vec3::set(const Vec3& p1, const Vec3& p2)
 {
     x = p2.x - p1.x;
     y = p2.y - p1.y;
@@ -186,5 +199,11 @@ inline Vec3 operator*(float x, const Vec3& v)
     result.scale(x);
     return result;
 }
+
+constexpr Vec3 Vec3::ZERO(0.0f, 0.0f, 0.0f);
+constexpr Vec3 Vec3::ONE(1.0f, 1.0f, 1.0f);
+constexpr Vec3 Vec3::UNIT_X(1.0f, 0.0f, 0.0f);
+constexpr Vec3 Vec3::UNIT_Y(0.0f, 1.0f, 0.0f);
+constexpr Vec3 Vec3::UNIT_Z(0.0f, 0.0f, 1.0f);
 
 NS_AX_MATH_END

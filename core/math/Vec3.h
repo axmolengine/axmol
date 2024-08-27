@@ -66,7 +66,7 @@ public:
     /**
      * Constructs a new vector initialized to all zeros.
      */
-    Vec3();
+    constexpr Vec3();
 
     /**
      * Constructs a new vector initialized to the specified values.
@@ -75,14 +75,14 @@ public:
      * @param yy The y coordinate.
      * @param zz The z coordinate.
      */
-    Vec3(float xx, float yy, float zz);
+    constexpr Vec3(float xx, float yy, float zz);
 
     /**
      * Constructs a new vector from the values in the specified array.
      *
      * @param array An array containing the elements of the vector in the order x, y, z.
      */
-    Vec3(const float* array);
+    constexpr Vec3(const float* array);
 
     /**
      * Constructs a vector that describes the direction between the specified points.
@@ -90,7 +90,7 @@ public:
      * @param p1 The first point.
      * @param p2 The second point.
      */
-    Vec3(const Vec3& p1, const Vec3& p2);
+    constexpr Vec3(const Vec3& p1, const Vec3& p2);
 
     /**
      * Creates a new vector from an integer interpreted as an RGB value.
@@ -291,26 +291,26 @@ public:
      * @param yy The new y coordinate.
      * @param zz The new z coordinate.
      */
-    inline void set(float xx, float yy, float zz);
+    constexpr void set(float xx, float yy, float zz);
 
     /**
      * Sets the elements of this vector from the values in the specified array.
      *
      * @param array An array containing the elements of the vector in the order x, y, z.
      */
-    inline void set(const float* array);
+    constexpr void set(const float* array);
 
     /**
      * Sets the elements of this vector to those in the specified vector.
      *
      * @param v The vector to copy.
      */
-    inline void set(const Vec3& v);
+    constexpr void set(const Vec3& v);
 
     /**
      * Sets this vector to the directional vector between the specified points.
      */
-    inline void set(const Vec3& p1, const Vec3& p2);
+    constexpr void set(const Vec3& p1, const Vec3& p2);
 
     /**
      * Sets the elements of this vector to zero.
@@ -485,8 +485,6 @@ public:
  * @return The scaled vector.
  */
 inline Vec3 operator*(float x, const Vec3& v);
-
-// typedef Vec3 Point3;
 
 NS_AX_MATH_END
 /**
