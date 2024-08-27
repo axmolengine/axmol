@@ -119,7 +119,7 @@ protected:
 
     // Cached value to determine to generate material id or not.
     BlendFunc _blendType              = BlendFunc::DISABLE;
-    uint64_t _batchId                 = 0;
+    uint64_t _batchId                 = std::numeric_limits<uint64_t>::max();
     backend::TextureBackend* _texture = nullptr;
 };
 

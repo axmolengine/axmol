@@ -399,7 +399,7 @@ protected:
     VertexLayout* _vertexLayout = nullptr;
     bool _ownVertexLayout       = false;
 
-    uint64_t _batchId = -1;
+    uint64_t _batchId = std::numeric_limits<uint64_t>::max();
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;

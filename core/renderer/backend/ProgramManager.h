@@ -157,9 +157,9 @@ protected:
     };
 
     BuiltinRegInfo _builtinRegistry[(int)backend::ProgramType::BUILTIN_COUNT];
-    std::unordered_map<int64_t, BuiltinRegInfo> _customRegistry;
+    std::unordered_map<uint64_t, BuiltinRegInfo> _customRegistry;
 
-    std::unordered_map<int64_t, Program*> _cachedPrograms;  ///< The cached program object.
+    std::unordered_map<uint64_t, Program*> _cachedPrograms;  ///< The cached program object.
 
     XXH64_state_s* _programIdGen;
 

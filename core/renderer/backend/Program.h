@@ -152,7 +152,7 @@ public:
      * Get program id.
      * @return The program id.
      */
-    int64_t getProgramId() const { return _programId; }
+    uint64_t getProgramId() const { return _programId; }
 
     /**
      * Get uniform buffer size in bytes that can hold all the uniforms.

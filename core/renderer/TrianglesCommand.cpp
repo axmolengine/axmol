@@ -68,7 +68,7 @@ void TrianglesCommand::init(float globalOrder,
         blendDescriptor.sourceRGBBlendFactor = blendDescriptor.sourceAlphaBlendFactor = blendType.src;
         blendDescriptor.destinationRGBBlendFactor = blendDescriptor.destinationAlphaBlendFactor = blendType.dst;
 
-        if (_batchId == -1)
+        if (_batchId == std::numeric_limits<uint64_t>::max())
             setSkipBatching(true);
 
         if (!isSkipBatching())
