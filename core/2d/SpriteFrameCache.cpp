@@ -259,11 +259,10 @@ void SpriteFrameCache::removeSpriteFramesFromTexture(Texture2D* texture)
 
     for (auto&& iter : getSpriteFrames())
     {
-        auto key    = iter.first;
-        auto* frame = findFrame(key);
+        auto* frame = findFrame(iter.first);
         if (frame && (frame->getTexture() == texture))
         {
-            keysToRemove.emplace_back(key);
+            keysToRemove.emplace_back(iter.first);
         }
     }
 
@@ -327,8 +326,8 @@ bool SpriteFrameCache::eraseFrame(std::string_view frameName)
 {
     // drop SpriteFrame
     const auto itFrame = _spriteFrameToSpriteSheetMap.find(frameName);
-    bool hint = itFrame != _spriteFrameToSpriteSheetMap.end();
-    if (hint)
+    bool found = itFrame != _spriteFrameToSpriteSheetMap.end();
+    if (found)
     {
         auto& spriteSheet = itFrame->second;
         spriteSheet->full = false;
@@ -348,7 +347,7 @@ bool SpriteFrameCache::eraseFrame(std::string_view frameName)
         //}
     }
     _spriteFrames.erase(frameName);
-    return hint;
+    return found;
 }
 
 bool SpriteFrameCache::eraseFrames(const std::vector<std::string_view>& frames)
