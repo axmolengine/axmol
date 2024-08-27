@@ -171,7 +171,7 @@ struct MEVideoFrame
     const size_t _dataLen;        // the video data len
     const uint8_t* _cbcrDataPointer;
     MEVideoPixelDesc _vpd;  // the video pixel desc
-    MEIntPoint _videoDim;   // the aligned frame size
+    MEIntPoint _videoDim;   // the video size
 #if defined(_DEBUG) || !defined(_NDEBUG)
     YCbCrBiPlanarPixelInfo _ycbcrDesc{};
 #endif
