@@ -411,30 +411,60 @@ void Widget::updateSizeAndPosition(const Vec2& parentSize)
     }
 
     // update position & position percent
-    Vec2 absPos = getPosition();
-    switch (_positionType)
+    if (_usingNormalizedPosition)
     {
-    case PositionType::ABSOLUTE:
-    {
-        if (parentSize.width <= 0.0f || parentSize.height <= 0.0f)
+        Vec2 absPos = getNormalizedPosition();
+        switch (_positionType)
         {
-            _positionPercent.setZero();
-        }
-        else
+        case PositionType::ABSOLUTE:
         {
-            _positionPercent.set(absPos.x / parentSize.width, absPos.y / parentSize.height);
+            if (parentSize.width <= 0.0f || parentSize.height <= 0.0f)
+            {
+                _positionPercent.setZero();
+            }
+            else
+            {
+                _positionPercent.set(absPos.x, absPos.y);
+            }
+            break;
         }
-        break;
+        case PositionType::PERCENT:
+        {
+            absPos.set(_positionPercent.x, _positionPercent.y);
+            break;
+        }
+        default:
+            break;
+        }
+        setPositionNormalized(absPos);
     }
-    case PositionType::PERCENT:
+    else
     {
-        absPos.set(parentSize.width * _positionPercent.x, parentSize.height * _positionPercent.y);
-        break;
+        Vec2 absPos = getPosition();
+        switch (_positionType)
+        {
+        case PositionType::ABSOLUTE:
+        {
+            if (parentSize.width <= 0.0f || parentSize.height <= 0.0f)
+            {
+                _positionPercent.setZero();
+            }
+            else
+            {
+                _positionPercent.set(absPos.x / parentSize.width, absPos.y / parentSize.height);
+            }
+            break;
+        }
+        case PositionType::PERCENT:
+        {
+            absPos.set(parentSize.width * _positionPercent.x, parentSize.height * _positionPercent.y);
+            break;
+        }
+        default:
+            break;
+        }
+        setPosition(absPos);
     }
-    default:
-        break;
-    }
-    setPosition(absPos);
 }
 
 void Widget::setSizeType(SizeType type)
@@ -986,6 +1016,27 @@ void Widget::setPosition(const Vec2& pos)
     ProtectedNode::setPosition(pos);
 }
 
+void Widget::setPositionNormalized(const Vec2& position)
+{
+    if (!_usingLayoutComponent && _running)
+    {
+        Widget* widgetParent = getWidgetParent();
+        if (widgetParent)
+        {
+            Vec2 pSize = widgetParent->getContentSize();
+            if (pSize.width <= 0.0f || pSize.height <= 0.0f)
+            {
+                _positionPercent.setZero();
+            }
+            else
+            {
+                _positionPercent.set(position.x, position.y);
+            }
+        }
+    }
+    ProtectedNode::setPositionNormalized(position);
+}
+
 void Widget::setPositionPercent(const Vec2& percent)
 {
     if (_usingLayoutComponent)
@@ -1000,12 +1051,19 @@ void Widget::setPositionPercent(const Vec2& percent)
         _positionPercent = percent;
         if (_running)
         {
-            Widget* widgetParent = getWidgetParent();
-            if (widgetParent)
+            if (_usingNormalizedPosition)
             {
-                Vec2 parentSize = widgetParent->getContentSize();
-                Vec2 absPos(parentSize.width * _positionPercent.x, parentSize.height * _positionPercent.y);
-                setPosition(absPos);
+                setPositionNormalized(Vec2(_positionPercent.x, _positionPercent.y));
+            }
+            else
+            {
+                Widget* widgetParent = getWidgetParent();
+                if (widgetParent)
+                {
+                    Vec2 parentSize = widgetParent->getContentSize();
+                    Vec2 absPos(parentSize.width * _positionPercent.x, parentSize.height * _positionPercent.y);
+                    setPosition(absPos);
+                }
             }
         }
     }
@@ -1013,7 +1071,6 @@ void Widget::setPositionPercent(const Vec2& percent)
 
 const Vec2& Widget::getPositionPercent()
 {
-
     if (_usingLayoutComponent)
     {
         auto component = this->getOrCreateLayoutComponent();
@@ -1285,7 +1342,9 @@ void Widget::setFocused(bool focus)
         {
             _focusNavigationController->setFirstFocusedWidget(this);
         }
-    } else if(_focusedWidget == this) {
+    }
+    else if (_focusedWidget == this)
+    {
         _focusedWidget = nullptr;
     }
 }
