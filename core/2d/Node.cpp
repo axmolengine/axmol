@@ -522,7 +522,7 @@ void Node::getPosition(float* x, float* y) const
 
 void Node::setPosition(float x, float y)
 {
-    if (_position.x == x && _position.y == y)
+    if (_position.x == x && _position.y == y && !_usingNormalizedPosition)
         return;
 
     _position.x = x;
@@ -587,7 +587,7 @@ const Vec2& Node::getPositionNormalized() const
 /// position setter
 void Node::setPositionNormalized(const Vec2& position)
 {
-    if (_normalizedPosition.equals(position))
+    if (_normalizedPosition.equals(position) && _usingNormalizedPosition)
         return;
 
     _normalizedPosition      = position;
