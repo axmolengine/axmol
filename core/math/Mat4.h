@@ -76,18 +76,6 @@ class AX_DLL Mat4
 #endif
 {
 public:
-    // //temp add conversion
-    // operator kmMat4() const
-    // {
-    //     kmMat4 result;
-    //     kmMat4Fill(&result, m);
-    //     return result;
-    // }
-
-    // Mat4(const kmMat4& mat)
-    // {
-    //     set(mat.mat);
-    // }
     /**
      * Stores the columns of this 4x4 matrix.
      * */
@@ -110,7 +98,7 @@ public:
      *     0  0  1  0
      *     0  0  0  1
      */
-    Mat4();
+    constexpr Mat4();
 
     /**
      * Constructs a matrix initialized to the specified value.
@@ -132,7 +120,7 @@ public:
      * @param m43 The third element of the fourth row.
      * @param m44 The fourth element of the fourth row.
      */
-    Mat4(float m11,
+    constexpr Mat4(float m11,
          float m12,
          float m13,
          float m14,
@@ -169,11 +157,6 @@ public:
      * @param copy The matrix to copy.
      */
     Mat4(const Mat4& copy);
-
-    /**
-     * Destructor.
-     */
-    ~Mat4();
 
     /**
      * Creates a view matrix based on the specified input parameters.
@@ -744,7 +727,7 @@ public:
      * @param m43 The third element of the fourth row.
      * @param m44 The fourth element of the fourth row.
      */
-    void set(float m11,
+    constexpr void set(float m11,
              float m12,
              float m13,
              float m14,
@@ -778,7 +761,7 @@ public:
     /**
      * Sets this matrix to the identity matrix.
      */
-    void setIdentity();
+    constexpr void setIdentity();
 
     /**
      * Sets all elements of the current matrix to zero.
