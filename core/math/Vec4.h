@@ -45,9 +45,9 @@ class Vec4Base
 public:
     using impl_type = _ImplType;
 
-    Vec4Base() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
-    Vec4Base(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
-    explicit Vec4Base(const float* src) { this->set(src); }
+    constexpr Vec4Base() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
+    constexpr Vec4Base(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
+    constexpr explicit Vec4Base(const float* src) { this->set(src); }
 
     union
     {
@@ -120,7 +120,7 @@ public:
      * @param zz The new z coordinate.
      * @param ww The new w coordinate.
      */
-    void set(float xx, float yy, float zz, float ww)
+    constexpr void set(float xx, float yy, float zz, float ww)
     {
         this->x = xx;
         this->y = yy;
@@ -277,7 +277,7 @@ public:
     /**
      * Constructs a new vector initialized to all zeros.
      */
-    Vec4();
+    constexpr Vec4();
 
     /**
      * Constructs a new vector initialized to the specified values.
@@ -287,14 +287,14 @@ public:
      * @param zz The z coordinate.
      * @param ww The w coordinate.
      */
-    Vec4(float xx, float yy, float zz, float ww);
+    constexpr Vec4(float xx, float yy, float zz, float ww);
 
     /**
      * Constructs a new vector from the values in the specified array.
      *
      * @param array An array containing the elements of the vector in the order x, y, z, w.
      */
-    explicit Vec4(const float* array);
+    constexpr explicit Vec4(const float* array);
 
     /**
      * Constructs a vector that describes the direction between the specified points.
@@ -302,7 +302,7 @@ public:
      * @param p1 The first point.
      * @param p2 The second point.
      */
-    Vec4(const Vec4& p1, const Vec4& p2);
+    constexpr Vec4(const Vec4& p1, const Vec4& p2);
 
     /**
      * Creates a new vector from an integer interpreted as an RGBA value.
@@ -489,5 +489,7 @@ NS_AX_MATH_END
  end of base group
  @}
  */
+
+#include "math/Vec4.inl"
 
 #endif  // MATH_VEC4_H
