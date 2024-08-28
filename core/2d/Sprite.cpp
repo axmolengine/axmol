@@ -1360,7 +1360,7 @@ void Sprite::setVisible(bool bVisible)
 
 void Sprite::setContentSize(const Vec2& size)
 {
-    if (_renderMode == RenderMode::QUAD_BATCHNODE || _renderMode == RenderMode::POLYGON)
+    if (_stretchEnabled && (_renderMode == RenderMode::QUAD_BATCHNODE || _renderMode == RenderMode::POLYGON))
         AXLOGW(
             "Sprite::setContentSize() doesn't stretch the sprite when using QUAD_BATCHNODE or POLYGON render modes");
 
