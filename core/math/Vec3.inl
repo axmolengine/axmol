@@ -200,10 +200,12 @@ inline Vec3 operator*(float x, const Vec3& v)
     return result;
 }
 
-inline constexpr Vec3 Vec3::ZERO(0.0f, 0.0f, 0.0f);
-inline constexpr Vec3 Vec3::ONE(1.0f, 1.0f, 1.0f);
-inline constexpr Vec3 Vec3::UNIT_X(1.0f, 0.0f, 0.0f);
-inline constexpr Vec3 Vec3::UNIT_Y(0.0f, 1.0f, 0.0f);
-inline constexpr Vec3 Vec3::UNIT_Z(0.0f, 0.0f, 1.0f);
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+    inline constexpr Vec3 Vec3::ZERO(0.0f, 0.0f, 0.0f);
+    inline constexpr Vec3 Vec3::ONE(1.0f, 1.0f, 1.0f);
+    inline constexpr Vec3 Vec3::UNIT_X(1.0f, 0.0f, 0.0f);
+    inline constexpr Vec3 Vec3::UNIT_Y(0.0f, 1.0f, 0.0f);
+    inline constexpr Vec3 Vec3::UNIT_Z(0.0f, 0.0f, 1.0f);
+#endif
 
 NS_AX_MATH_END

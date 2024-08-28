@@ -116,6 +116,8 @@ inline bool Rect::intersectsRect(const Rect& rect) const
              rect.getMaxY() < getMinY());
 }
 
-inline constexpr Rect Rect::ZERO(0, 0, 0, 0);
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+    inline constexpr Rect Rect::ZERO(0, 0, 0, 0);
+#endif
 
 }

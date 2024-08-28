@@ -129,6 +129,8 @@ inline Vec3 Quaternion::operator*(const Vec3& v) const
     return v + uv + uuv;
 }
 
-inline constexpr Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+    inline constexpr Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
+#endif
 
 NS_AX_MATH_END

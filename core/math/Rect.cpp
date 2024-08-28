@@ -30,11 +30,13 @@ THE SOFTWARE.
 #include <cmath>
 #include "base/Macros.h"
 
-// implementation of Vec2
 namespace ax
 {
 
-// implementation of Rect
+#if defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT)
+    const Rect Rect::ZERO = Rect(0, 0, 0, 0);
+#endif
+
 
 bool Rect::intersectsCircle(const Vec2& center, float radius) const
 {
