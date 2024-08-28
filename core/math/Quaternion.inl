@@ -18,9 +18,90 @@
  This file was modified to fit the cocos2d-x project
  */
 
+#include "base/Macros.h"
 #include "math/Quaternion.h"
 
 NS_AX_MATH_BEGIN
+
+inline constexpr Quaternion::Quaternion() : x(0.0f), y(0.0f), z(0.0f), w(1.0f) {}
+
+inline constexpr Quaternion::Quaternion(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
+
+inline constexpr Quaternion::Quaternion(float* array)
+{
+    set(array);
+}
+
+inline constexpr Quaternion::Quaternion(const Vec3& axis, float angle)
+{
+    set(axis, angle);
+}
+
+inline const Quaternion& Quaternion::identity()
+{
+    static Quaternion value(0.0f, 0.0f, 0.0f, 1.0f);
+    return value;
+}
+
+inline const Quaternion& Quaternion::zero()
+{
+    static Quaternion value(0.0f, 0.0f, 0.0f, 0.0f);
+    return value;
+}
+
+inline constexpr void Quaternion::createFromAxisAngle(const Vec3& axis, float angle, Quaternion* dst)
+{
+    GP_ASSERT(dst);
+
+    float halfAngle    = angle * 0.5f;
+    float sinHalfAngle = sinf(halfAngle);
+
+    Vec3 normal(axis);
+    normal.normalize();
+    dst->x = normal.x * sinHalfAngle;
+    dst->y = normal.y * sinHalfAngle;
+    dst->z = normal.z * sinHalfAngle;
+    dst->w = cosf(halfAngle);
+}
+
+inline constexpr void Quaternion::set(float xx, float yy, float zz, float ww)
+{
+    this->x = xx;
+    this->y = yy;
+    this->z = zz;
+    this->w = ww;
+}
+
+inline constexpr void Quaternion::set(float* array)
+{
+    GP_ASSERT(array);
+
+    x = array[0];
+    y = array[1];
+    z = array[2];
+    w = array[3];
+}
+
+inline constexpr void Quaternion::set(const Quaternion& q)
+{
+    this->x = q.x;
+    this->y = q.y;
+    this->z = q.z;
+    this->w = q.w;
+}
+
+inline constexpr void Quaternion::set(const Vec3& axis, float angle)
+{
+    Quaternion::createFromAxisAngle(axis, angle, this);
+}
+
+inline void Quaternion::setIdentity()
+{
+    x = 0.0f;
+    y = 0.0f;
+    z = 0.0f;
+    w = 1.0f;
+}
 
 inline Quaternion Quaternion::operator*(const Quaternion& q) const
 {
@@ -47,5 +128,7 @@ inline Vec3 Quaternion::operator*(const Vec3& v) const
 
     return v + uv + uuv;
 }
+
+constexpr Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
 
 NS_AX_MATH_END

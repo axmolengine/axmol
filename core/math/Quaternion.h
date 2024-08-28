@@ -97,7 +97,7 @@ public:
     /**
      * Constructs a quaternion initialized to (0, 0, 0, 1).
      */
-    Quaternion();
+    constexpr Quaternion();
 
     /**
      * Constructs a quaternion initialized to (0, 0, 0, 1).
@@ -107,14 +107,14 @@ public:
      * @param zz The z component of the quaternion.
      * @param ww The w component of the quaternion.
      */
-    Quaternion(float xx, float yy, float zz, float ww);
+    constexpr Quaternion(float xx, float yy, float zz, float ww);
 
     /**
      * Constructs a new quaternion from the values in the specified array.
      *
      * @param array The values for the new quaternion.
      */
-    Quaternion(float* array);
+    constexpr Quaternion(float* array);
 
     /**
      * Constructs a quaternion equal to the rotational part of the specified matrix.
@@ -129,7 +129,7 @@ public:
      * @param axis A vector describing the axis of rotation.
      * @param angle The angle of rotation (in radians).
      */
-    Quaternion(const Vec3& axis, float angle);
+    constexpr Quaternion(const Vec3& axis, float angle);
 
     /**
      * Returns the identity quaternion.
@@ -176,7 +176,7 @@ public:
      * @param angle The angle of rotation (in radians).
      * @param dst A quaternion to store the conjugate in.
      */
-    static void createFromAxisAngle(const Vec3& axis, float angle, Quaternion* dst);
+    static constexpr void createFromAxisAngle(const Vec3& axis, float angle, Quaternion* dst);
 
     /**
      * Sets this quaternion to the conjugate of itself.
@@ -252,14 +252,14 @@ public:
      * @param zz The new z-value.
      * @param ww The new w-value.
      */
-    void set(float xx, float yy, float zz, float ww);
+    constexpr void set(float xx, float yy, float zz, float ww);
 
     /**
      * Sets the elements of the quaternion from the values in the specified array.
      *
      * @param array An array containing the elements of the quaternion in the order x, y, z, w.
      */
-    void set(float* array);
+    constexpr void set(float* array);
 
     /**
      * Sets the quaternion equal to the rotational part of the specified matrix.
@@ -274,14 +274,14 @@ public:
      * @param axis The axis of rotation.
      * @param angle The angle of rotation (in radians).
      */
-    void set(const Vec3& axis, float angle);
+    constexpr void set(const Vec3& axis, float angle);
 
     /**
      * Sets the elements of this quaternion to a copy of the specified quaternion.
      *
      * @param q The quaternion to copy.
      */
-    void set(const Quaternion& q);
+    constexpr void set(const Quaternion& q);
 
     /**
      * Sets this quaternion to be equal to the identity quaternion.

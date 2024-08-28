@@ -26,37 +26,9 @@
 
 NS_AX_MATH_BEGIN
 
-const Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
-
-Quaternion::Quaternion() : x(0.0f), y(0.0f), z(0.0f), w(1.0f) {}
-
-Quaternion::Quaternion(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
-
-Quaternion::Quaternion(float* array)
-{
-    set(array);
-}
-
 Quaternion::Quaternion(const Mat4& m)
 {
     set(m);
-}
-
-Quaternion::Quaternion(const Vec3& axis, float angle)
-{
-    set(axis, angle);
-}
-
-const Quaternion& Quaternion::identity()
-{
-    static Quaternion value(0.0f, 0.0f, 0.0f, 1.0f);
-    return value;
-}
-
-const Quaternion& Quaternion::zero()
-{
-    static Quaternion value(0.0f, 0.0f, 0.0f, 0.0f);
-    return value;
 }
 
 bool Quaternion::isIdentity() const
@@ -72,21 +44,6 @@ bool Quaternion::isZero() const
 void Quaternion::createFromRotationMatrix(const Mat4& m, Quaternion* dst)
 {
     m.getRotation(dst);
-}
-
-void Quaternion::createFromAxisAngle(const Vec3& axis, float angle, Quaternion* dst)
-{
-    GP_ASSERT(dst);
-
-    float halfAngle    = angle * 0.5f;
-    float sinHalfAngle = sinf(halfAngle);
-
-    Vec3 normal(axis);
-    normal.normalize();
-    dst->x = normal.x * sinHalfAngle;
-    dst->y = normal.y * sinHalfAngle;
-    dst->z = normal.z * sinHalfAngle;
-    dst->w = cosf(halfAngle);
 }
 
 void Quaternion::conjugate()
@@ -184,48 +141,9 @@ Quaternion Quaternion::getNormalized() const
     return q;
 }
 
-void Quaternion::set(float xx, float yy, float zz, float ww)
-{
-    this->x = xx;
-    this->y = yy;
-    this->z = zz;
-    this->w = ww;
-}
-
-void Quaternion::set(float* array)
-{
-    GP_ASSERT(array);
-
-    x = array[0];
-    y = array[1];
-    z = array[2];
-    w = array[3];
-}
-
 void Quaternion::set(const Mat4& m)
 {
     Quaternion::createFromRotationMatrix(m, this);
-}
-
-void Quaternion::set(const Vec3& axis, float angle)
-{
-    Quaternion::createFromAxisAngle(axis, angle, this);
-}
-
-void Quaternion::set(const Quaternion& q)
-{
-    this->x = q.x;
-    this->y = q.y;
-    this->z = q.z;
-    this->w = q.w;
-}
-
-void Quaternion::setIdentity()
-{
-    x = 0.0f;
-    y = 0.0f;
-    z = 0.0f;
-    w = 1.0f;
 }
 
 float Quaternion::toAxisAngle(Vec3* axis) const
