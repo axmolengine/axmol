@@ -52,23 +52,23 @@ public:
     Constructor an empty Rect.
      * @js NA
      */
-    Rect();
+    constexpr Rect();
     /**
     Constructor a rect.
      * @js NA
      */
-    Rect(float x, float y, float width, float height);
+    constexpr Rect(float x, float y, float width, float height);
     /**
      Constructor a rect.
      * @js NA
      */
-    Rect(const Vec2& pos, const Vec2& dimension);
+    constexpr Rect(const Vec2& pos, const Vec2& dimension);
     /**
     Copy constructor.
      * @js NA
      * @lua NA
      */
-    Rect(const Rect& other);
+    constexpr Rect(const Rect& other);
     /**
      * @js NA
      * @lua NA
@@ -79,7 +79,7 @@ public:
      * @js NA
      * @lua NA
      */
-    void setRect(float x, float y, float width, float height);
+    constexpr void setRect(float x, float y, float width, float height);
     /**
     Get the left of the rect.
      * @js NA
@@ -146,5 +146,7 @@ public:
 
 // end of base group
 /// @}
+
+#include "math/Rect.inl"
 
 #endif  // __MATH_RECT_H__
