@@ -458,7 +458,7 @@ public:
      * @param p1 The first point.
      * @param p2 The second point.
      */
-    void setDirection(const Vec4& p1, const Vec4& p2);
+    constexpr void setDirection(const Vec4& p1, const Vec4& p2);
 
     /**
      * Subtracts the specified vectors and stores the result in dst.

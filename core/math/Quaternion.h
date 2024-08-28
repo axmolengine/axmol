@@ -129,7 +129,7 @@ public:
      * @param axis A vector describing the axis of rotation.
      * @param angle The angle of rotation (in radians).
      */
-    constexpr Quaternion(const Vec3& axis, float angle);
+    Quaternion(const Vec3& axis, float angle);
 
     /**
      * Returns the identity quaternion.
@@ -176,7 +176,7 @@ public:
      * @param angle The angle of rotation (in radians).
      * @param dst A quaternion to store the conjugate in.
      */
-    static constexpr void createFromAxisAngle(const Vec3& axis, float angle, Quaternion* dst);
+    static void createFromAxisAngle(const Vec3& axis, float angle, Quaternion* dst);
 
     /**
      * Sets this quaternion to the conjugate of itself.
@@ -274,7 +274,7 @@ public:
      * @param axis The axis of rotation.
      * @param angle The angle of rotation (in radians).
      */
-    constexpr void set(const Vec3& axis, float angle);
+    void set(const Vec3& axis, float angle);
 
     /**
      * Sets the elements of this quaternion to a copy of the specified quaternion.

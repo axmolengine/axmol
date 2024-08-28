@@ -33,7 +33,7 @@ inline constexpr Vec4::Vec4(const Vec4& p1, const Vec4& p2)
     setDirection(p1, p2);
 }
 
-inline void Vec4::setDirection(const Vec4& p1, const Vec4& p2)
+inline constexpr void Vec4::setDirection(const Vec4& p1, const Vec4& p2)
 {
     x = p2.x - p1.x;
     y = p2.y - p1.y;
@@ -41,11 +41,11 @@ inline void Vec4::setDirection(const Vec4& p1, const Vec4& p2)
     w = p2.w - p1.w;
 }
 
-constexpr Vec4 Vec4::ZERO   = Vec4(0.0f, 0.0f, 0.0f, 0.0f);
-constexpr Vec4 Vec4::ONE    = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
-constexpr Vec4 Vec4::UNIT_X = Vec4(1.0f, 0.0f, 0.0f, 0.0f);
-constexpr Vec4 Vec4::UNIT_Y = Vec4(0.0f, 1.0f, 0.0f, 0.0f);
-constexpr Vec4 Vec4::UNIT_Z = Vec4(0.0f, 0.0f, 1.0f, 0.0f);
-constexpr Vec4 Vec4::UNIT_W = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
+inline constexpr Vec4 Vec4::ZERO   = Vec4(0.0f, 0.0f, 0.0f, 0.0f);
+inline constexpr Vec4 Vec4::ONE    = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
+inline constexpr Vec4 Vec4::UNIT_X = Vec4(1.0f, 0.0f, 0.0f, 0.0f);
+inline constexpr Vec4 Vec4::UNIT_Y = Vec4(0.0f, 1.0f, 0.0f, 0.0f);
+inline constexpr Vec4 Vec4::UNIT_Z = Vec4(0.0f, 0.0f, 1.0f, 0.0f);
+inline constexpr Vec4 Vec4::UNIT_W = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 }

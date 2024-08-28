@@ -32,7 +32,7 @@ inline constexpr Quaternion::Quaternion(float* array)
     set(array);
 }
 
-inline constexpr Quaternion::Quaternion(const Vec3& axis, float angle)
+inline Quaternion::Quaternion(const Vec3& axis, float angle)
 {
     set(axis, angle);
 }
@@ -49,7 +49,7 @@ inline const Quaternion& Quaternion::zero()
     return value;
 }
 
-inline constexpr void Quaternion::createFromAxisAngle(const Vec3& axis, float angle, Quaternion* dst)
+inline void Quaternion::createFromAxisAngle(const Vec3& axis, float angle, Quaternion* dst)
 {
     GP_ASSERT(dst);
 
@@ -90,7 +90,7 @@ inline constexpr void Quaternion::set(const Quaternion& q)
     this->w = q.w;
 }
 
-inline constexpr void Quaternion::set(const Vec3& axis, float angle)
+inline void Quaternion::set(const Vec3& axis, float angle)
 {
     Quaternion::createFromAxisAngle(axis, angle, this);
 }
@@ -129,6 +129,6 @@ inline Vec3 Quaternion::operator*(const Vec3& v) const
     return v + uv + uuv;
 }
 
-constexpr Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
+inline constexpr Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
 
 NS_AX_MATH_END

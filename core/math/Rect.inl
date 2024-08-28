@@ -116,6 +116,6 @@ inline bool Rect::intersectsRect(const Rect& rect) const
              rect.getMaxY() < getMinY());
 }
 
-constexpr Rect Rect::ZERO(0, 0, 0, 0);
+inline constexpr Rect Rect::ZERO(0, 0, 0, 0);
 
 }
