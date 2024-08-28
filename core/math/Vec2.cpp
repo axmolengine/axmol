@@ -188,25 +188,12 @@ void Vec2::rotate(const Vec2& point, float angle)
     }
 }
 
-void Vec2::set(const float* array)
-{
-    GP_ASSERT(array);
-
-    x = array[0];
-    y = array[1];
-}
-
 void Vec2::subtract(const Vec2& v1, const Vec2& v2, Vec2* dst)
 {
     GP_ASSERT(dst);
 
     dst->x = v1.x - v2.x;
     dst->y = v1.y - v2.y;
-}
-
-bool Vec2::equals(const Vec2& target) const
-{
-    return (std::abs(this->x - target.x) < FLT_EPSILON) && (std::abs(this->y - target.y) < FLT_EPSILON);
 }
 
 bool Vec2::fuzzyEquals(const Vec2& b, float var) const

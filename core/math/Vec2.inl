@@ -18,26 +18,27 @@
  This file was modified to fit the cocos2d-x project
  */
 
+#include "base/Macros.h"
 #include "math/Vec2.h"
 
 NS_AX_MATH_BEGIN
 
-inline Vec2::Vec2()
+inline constexpr Vec2::Vec2()
 : x(0.0f), y(0.0f)
 {
 }
 
-inline Vec2::Vec2(float xx, float yy)
+inline constexpr Vec2::Vec2(float xx, float yy)
 : x(xx), y(yy)
 {
 }
 
-inline Vec2::Vec2(const float* array)
+inline constexpr Vec2::Vec2(const float* array)
 {
     set(array);
 }
 
-inline Vec2::Vec2(const Vec2& p1, const Vec2& p2)
+inline constexpr Vec2::Vec2(const Vec2& p1, const Vec2& p2)
 {
     set(p1, p2);
 }
@@ -47,7 +48,7 @@ inline bool Vec2::isZero() const
     return x == 0.0f && y == 0.0f;
 }
 
-bool Vec2::isOne() const
+inline bool Vec2::isOne() const
 {
     return x == 1.0f && y == 1.0f;
 }
@@ -93,25 +94,33 @@ inline void Vec2::scale(const Vec2& scale)
     y *= scale.y;
 }
 
-inline void Vec2::set(float xx, float yy)
+inline constexpr void Vec2::set(float xx, float yy)
 {
     this->x = xx;
     this->y = yy;
 }
 
-inline void Vec2::set(const Vec2& v)
+inline constexpr void Vec2::set(const float* array)
+{
+    GP_ASSERT(array);
+
+    x = array[0];
+    y = array[1];
+}
+
+inline constexpr void Vec2::set(const Vec2& v)
 {
     this->x = v.x;
     this->y = v.y;
 }
 
-inline void Vec2::set(const Vec2& p1, const Vec2& p2)
+inline constexpr void Vec2::set(const Vec2& p1, const Vec2& p2)
 {
     x = p2.x - p1.x;
     y = p2.y - p1.y;
 }
 
-void Vec2::setZero()
+inline void Vec2::setZero()
 {
     x = y = 0.0f;
 }
@@ -120,6 +129,11 @@ inline void Vec2::subtract(const Vec2& v)
 {
     x -= v.x;
     y -= v.y;
+}
+
+inline bool Vec2::equals(const Vec2& target) const
+{
+    return (std::abs(this->x - target.x) < FLT_EPSILON) && (std::abs(this->y - target.y) < FLT_EPSILON);
 }
 
 inline void Vec2::smooth(const Vec2& target, float elapsedTime, float responseTime)
@@ -209,7 +223,7 @@ inline bool Vec2::operator!=(const Vec2& v) const
     return x != v.x || y != v.y;
 }
 
-void Vec2::setPoint(float xx, float yy)
+inline void Vec2::setPoint(float xx, float yy)
 {
     this->x = xx;
     this->y = yy;

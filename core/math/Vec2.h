@@ -86,7 +86,7 @@ public:
     /**
      * Constructs a new vector initialized to all zeros.
      */
-    Vec2();
+    constexpr Vec2();
 
     /**
      * Constructs a new vector initialized to the specified values.
@@ -94,14 +94,14 @@ public:
      * @param xx The x coordinate.
      * @param yy The y coordinate.
      */
-    Vec2(float xx, float yy);
+    constexpr Vec2(float xx, float yy);
 
     /**
      * Constructs a new vector from the values in the specified array.
      *
      * @param array An array containing the elements of the vector in the order x, y.
      */
-    Vec2(const float* array);
+    constexpr Vec2(const float* array);
 
     /**
      * Constructs a vector that describes the direction between the specified points.
@@ -109,7 +109,7 @@ public:
      * @param p1 The first point.
      * @param p2 The second point.
      */
-    Vec2(const Vec2& p1, const Vec2& p2);
+    constexpr Vec2(const Vec2& p1, const Vec2& p2);
 
     /**
      * Indicates whether this vector contains all zeros.
@@ -289,26 +289,26 @@ public:
      * @param xx The new x coordinate.
      * @param yy The new y coordinate.
      */
-    inline void set(float xx, float yy);
+    constexpr void set(float xx, float yy);
 
     /**
      * [DEPRECATED] use Vec2::set instead
      */
-    inline void setSize(float w, float h) { this->set(w, h); }
+    constexpr void setSize(float w, float h) { this->set(w, h); }
 
     /**
      * Sets the elements of this vector from the values in the specified array.
      *
      * @param array An array containing the elements of the vector in the order x, y.
      */
-    void set(const float* array);
+    constexpr void set(const float* array);
 
     /**
      * Sets the elements of this vector to those in the specified vector.
      *
      * @param v The vector to copy.
      */
-    inline void set(const Vec2& v);
+    constexpr void set(const Vec2& v);
 
     /**
      * Sets this vector to the directional vector between the specified points.
@@ -316,7 +316,7 @@ public:
      * @param p1 The first point.
      * @param p2 The second point.
      */
-    inline void set(const Vec2& p1, const Vec2& p2);
+    constexpr void set(const Vec2& p1, const Vec2& p2);
 
     /**
      * Sets the elements of this vector to zero.
