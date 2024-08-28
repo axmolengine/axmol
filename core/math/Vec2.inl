@@ -246,4 +246,20 @@ inline Vec2 operator/(const Vec2& left, const Vec2& right)
     return Vec2(left.x / right.x, left.y / right.y);
 }
 
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+    inline constexpr Vec2 Vec2::ZERO(0.0f, 0.0f);
+    inline constexpr Vec2 Vec2::ONE(1.0f, 1.0f);
+    inline constexpr Vec2 Vec2::UNIT_X(1.0f, 0.0f);
+    inline constexpr Vec2 Vec2::UNIT_Y(0.0f, 1.0f);
+    inline constexpr Vec2 Vec2::ANCHOR_MIDDLE(0.5f, 0.5f);
+    inline constexpr Vec2 Vec2::ANCHOR_BOTTOM_LEFT(0.0f, 0.0f);
+    inline constexpr Vec2 Vec2::ANCHOR_TOP_LEFT(0.0f, 1.0f);
+    inline constexpr Vec2 Vec2::ANCHOR_BOTTOM_RIGHT(1.0f, 0.0f);
+    inline constexpr Vec2 Vec2::ANCHOR_TOP_RIGHT(1.0f, 1.0f);
+    inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_RIGHT(1.0f, 0.5f);
+    inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_LEFT(0.0f, 0.5f);
+    inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_TOP(0.5f, 1.0f);
+    inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_BOTTOM(0.5f, 0.0f);
+#endif
+
 NS_AX_MATH_END
