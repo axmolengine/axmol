@@ -271,6 +271,8 @@ if(WASM)
       target_link_options(${_AX_CORE_LIB} PUBLIC -sGL_ENABLE_GET_PROC_ADDRESS)
   endif()
   target_link_options(${_AX_CORE_LIB} PUBLIC -lwebsocket.js)
+elseif(AX_ENABLE_MFMEDIA AND NOT WINRT AND FULL_MSVC)
+  target_link_options(${_AX_CORE_LIB} PUBLIC "/DELAYLOAD:mf.dll" "/DELAYLOAD:mfplat.dll")
 endif()
 
 ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
