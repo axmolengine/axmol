@@ -421,7 +421,7 @@ void RenderTextureZbuffer::renderScreenShot()
     this->addChild(sprite, 999999);
     sprite->setColor(Color3B::GREEN);
 
-    sprite->runAction(Sequence::create(FadeTo::create(2, 0), Hide::create(), nullptr));
+    sprite->runAction(Sequence::create(FadeTo::create(2, 0), RemoveSelf::create(), nullptr));
 }
 
 RenderTexturePartTest::RenderTexturePartTest()
