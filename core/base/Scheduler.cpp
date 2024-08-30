@@ -500,9 +500,11 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
         unscheduleAllForTarget(timerIt);
     }
 
+    axstd::pod_vector<void*> targets;
+
     for (auto&& entry : _waitList)
     {
-        unscheduleUpdate(entry->target);
+        targets.push_back(entry->target);
     }
 
     // Updates selectors
@@ -512,7 +514,7 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
         {
             if (entry->priority >= minPriority)
             {
-                unscheduleUpdate(entry->target);
+                targets.push_back(entry->target);
             }
         }
     }
@@ -521,7 +523,7 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
     {
         for (auto&& entry : _updates0List)
         {
-            unscheduleUpdate(entry->target);
+            targets.push_back(entry->target);
         }
     }
 
@@ -529,9 +531,13 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
     {
         if (entry->priority >= minPriority)
         {
-            unscheduleUpdate(entry->target);
+            targets.push_back(entry->target);
         }
     }
+
+    for (auto target: targets)
+        unscheduleUpdate(target);
+
 #if AX_ENABLE_SCRIPT_BINDING
     _scriptHandlerEntries.clear();
 #endif
