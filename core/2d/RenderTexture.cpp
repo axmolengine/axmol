@@ -166,6 +166,8 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         h                          = (int)(h * AX_CONTENT_SCALE_FACTOR());
         _fullviewPort              = Rect(0, 0, w, h);
 
+        setContentSize(Vec2(static_cast<float>(w), static_cast<float>(h)));
+        
         // textures must be power of two squared
         int powW = 0;
         int powH = 0;
