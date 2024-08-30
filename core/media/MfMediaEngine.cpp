@@ -13,9 +13,7 @@
 #if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP || defined(AXME_USE_IMFME))
 
 #    include "ntcvt/ntcvt.hpp"
-
 #    include "MFUtils.h"
-
 #    include "yasio/string_view.hpp"
 
 namespace ax
