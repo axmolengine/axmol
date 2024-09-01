@@ -189,6 +189,7 @@ list(APPEND GAME_HEADER
      Source/ExtensionsTest/TableViewTest/TableViewTestScene.h
      Source/MeshRendererTest/MeshRendererTest.h
      Source/MeshRendererTest/DrawNode3D.h
+     Source/DrawNodeTest/DrawNodeTest.h
      Source/BaseTest.h
      Source/SceneTest/SceneTest.h
      Source/ReleasePoolTest/ReleasePoolTest.h
@@ -221,7 +222,6 @@ list(APPEND GAME_HEADER
      Source/UITest/CocoStudioGUITest/UICheckBoxTest/UICheckBoxTest.h
      Source/UITest/CocoStudioGUITest/UIFocusTest/UIFocusTest.h
      Source/UITest/CocoStudioGUITest/UITextTest/UITextTest.h
-     Source/DrawPrimitivesTest/DrawPrimitivesTest.h
      Source/BillBoardTest/BillBoardTest.h
      Source/SpriteFrameCacheTest/SpriteFrameCacheTest.h
      Source/EffectsAdvancedTest/EffectsAdvancedTest.h
@@ -286,7 +286,6 @@ list(APPEND GAME_SOURCE
      Source/NetworkTest/DownloaderTest/DownloaderTest.cpp
      Source/NetworkTest/HttpClientTest/HttpClientTest.cpp
      Source/NetworkTest/WebSocketTest/WebSocketTest.cpp
-     Source/DrawPrimitivesTest/DrawPrimitivesTest.cpp
      Source/EffectsAdvancedTest/EffectsAdvancedTest.cpp
      Source/EffectsTest/EffectsTest.cpp
      Source/ExtensionsTest/AssetsManagerExTest/AssetsManagerExTest.cpp
@@ -323,6 +322,7 @@ list(APPEND GAME_SOURCE
      Source/SpineTest/SpineTest.cpp
     #  Source/Scene3DTest/Scene3DTest.cpp
      Source/MeshRendererTest/DrawNode3D.cpp
+     Source/DrawNodeTest/DrawNodeTest.cpp
      Source/MeshRendererTest/MeshRendererTest.cpp
      Source/SpritePolygonTest/SpritePolygonTest.cpp
      Source/SpriteTest/SpriteTest.cpp
@@ -536,12 +536,6 @@ if (AX_ENABLE_EXT_EFFEKSEER)
     list(APPEND GAME_SOURCE Source/EffekseerTest/EffekseerTest.cpp)
 endif()
 
-if (AX_ENABLE_EXT_DRAWNODEEX)
-    list(APPEND GAME_HEADER Source/DrawNodeExTest/DrawNodeExTest.h)
-    list(APPEND GAME_SOURCE Source/DrawNodeExTest/DrawNodeExTest.cpp)
-endif()
-
-
 list(APPEND GAME_SOURCE
         Source/UITest/CocoStudioGUITest/UIEditBoxTest.cpp
         )
@@ -571,9 +565,6 @@ if (AX_ENABLE_EXT_EFFEKSEER)
     target_compile_definitions(${APP_NAME} PRIVATE AX_ENABLE_EXT_EFFEKSEER=1)
 endif()
 
-if (AX_ENABLE_EXT_DRAWNODEEX)
-    target_compile_definitions(${APP_NAME} PRIVATE AX_ENABLE_EXT_DRAWNODE=1)
-endif()
 
 # mark app resources
 ax_setup_app_config(${APP_NAME})

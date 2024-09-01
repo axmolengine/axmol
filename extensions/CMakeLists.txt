@@ -127,8 +127,4 @@ if(AX_ENABLE_EXT_JSONDEFAULT)
   add_subdirectory(JSONDefault)
 endif()
 
-if(AX_ENABLE_EXT_DRAWNODEEX)
-  add_subdirectory(DrawNodeEx)
-endif()
-
 message(STATUS "Enabled ${_AX_CORE_LIB} extensions:${_AX_EXTENSION_LIBS}")

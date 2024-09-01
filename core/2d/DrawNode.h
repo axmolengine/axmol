@@ -30,8 +30,8 @@
  *
  */
 
-#ifndef __CCDRAWNODES_CCDRAW_NODE_H__
-#define __CCDRAWNODES_CCDRAW_NODE_H__
+#ifndef __DRAW_NODE_H__
+#define __DRAW_NODE_H__
 
 #include "2d/Node.h"
 #include "base/Types.h"
@@ -41,14 +41,21 @@
 
 namespace ax
 {
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 static const int DEFAULT_LINE_WIDTH = 2;
 
 class PointArray;
+
+
 /**
  * @addtogroup _2d
  * @{
  */
+
+
 
 /** @class DrawNode
  * @brief Node that draws dots, segments and polygons.
@@ -58,7 +65,6 @@ class PointArray;
 class AX_DLL DrawNode : public Node
 {
 public:
-
     /** Different draw modus types.
      *
      *.
@@ -71,11 +77,26 @@ public:
         Semi,
     };
 
+    enum PointType
+    {
+        Circle,
+        Rect,
+    };
+
+    // See also example on https://www.angusj.com/clipper2/Docs/Units/Clipper/Types/EndType.htm
+    enum EndType
+    {
+        Square,
+        Round,
+        Butt,
+    };
+
     /** creates and initialize a DrawNode node.
      *
      * @return Return an autorelease object.
      */
     static DrawNode* create(float defaultLineWidth = DEFAULT_LINE_WIDTH);
+    // DrawNode();
 
     /** Draw a point.
      *
@@ -84,7 +105,10 @@ public:
      * @param color The point color.
      * @js NA
      */
-    void drawPoint(const Vec2& point, const float pointSize, const Color4B& color);
+    void drawPoint(const Vec2& point,
+                   const float pointSize,
+                   const Color4B& color,
+                   DrawNode::PointType pointType = DrawNode::PointType::Rect);
 
     /** Draw a group point.
      *
@@ -93,7 +117,10 @@ public:
      * @param color The point color.
      * @js NA
      */
-    void drawPoints(const Vec2* position, unsigned int numberOfPoints, const Color4B& color);
+    void drawPoints(const Vec2* position,
+                    unsigned int numberOfPoints,
+                    const Color4B& color,
+                    DrawNode::PointType pointType = DrawNode::PointType::Rect);
 
     /** Draw a group point.
      *
@@ -103,7 +130,11 @@ public:
      * @param color The point color.
      * @js NA
      */
-    void drawPoints(const Vec2* position, unsigned int numberOfPoints, const float pointSize, const Color4B& color);
+    void drawPoints(const Vec2* position,
+                    unsigned int numberOfPoints,
+                    const float pointSize,
+                    const Color4B& color,
+                    DrawNode::PointType pointType = DrawNode::PointType::Rect);
 
     /** Draw an line from origin to destination with color.
      *
@@ -112,7 +143,12 @@ public:
      * @param color The line color.
      * @js NA
      */
-    void drawLine(const Vec2& origin, const Vec2& destination, const Color4B& color);
+    void drawLine(const Vec2& origin,
+                  const Vec2& destination,
+                  const Color4B& color,
+                  float thickness           = 1.0f,
+                  DrawNode::EndType etStart = DrawNode::EndType::Round,
+                  DrawNode::EndType etEnd   = DrawNode::EndType::Round);
 
     /** Draws a rectangle given the origin and destination point measured in points.
      * The origin and the destination can not have the same x and y coordinate.
@@ -121,7 +157,7 @@ public:
      * @param destination The rectangle destination.
      * @param color The rectangle color.
      */
-    void drawRect(const Vec2& origin, const Vec2& destination, const Color4B& color);
+    void drawRect(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness = 1.0f);
 
     /** Draws a polygon given a pointer to point coordinates and the number of vertices measured in points.
      * The polygon can be closed or open.
@@ -131,7 +167,11 @@ public:
      * @param closePolygon The polygon can be closed or open.
      * @param color The polygon color.
      */
-    void drawPoly(const Vec2* poli, unsigned int numberOfPoints, bool closePolygon, const Color4B& color);
+    void drawPoly(const Vec2* poli,
+                  unsigned int numberOfPoints,
+                  bool closedPolygon,
+                  const Color4B& color,
+                  float thickness = 1.0f);
 
     /** Draws a circle given the center, radius and number of segments.
      *
@@ -143,7 +183,7 @@ public:
      * @param scaleX The scale value in x.
      * @param scaleY The scale value in y.
      * @param color Set the circle color.
-     * @param threshold (optional) Set the threshold which will be draws a better rendered polygon.
+     * @param thickness  (default 1.0f)
      */
     void drawCircle(const Vec2& center,
                     float radius,
@@ -153,7 +193,11 @@ public:
                     float scaleX,
                     float scaleY,
                     const Color4B& color,
+<<<<<<< Updated upstream
                     float threshold = 500);  // 500 should "simulate/save" the backwards compatibility
+=======
+                    float thickness = 1.0f);
+>>>>>>> Stashed changes
 
     /** Draws a circle given the center, radius and number of segments.
      *
@@ -163,7 +207,7 @@ public:
      * @param segments The number of segments.
      * @param drawLineToCenter Whether or not draw the line from the origin to center.
      * @param color Set the circle color.
-     * @param threshold  (optional) Set the threshold which will be draws a better rendered polygon.
+     * @param thickness  (default 1.0f)
      */
     void drawCircle(const Vec2& center,
                     float radius,
@@ -171,7 +215,40 @@ public:
                     unsigned int segments,
                     bool drawLineToCenter,
                     const Color4B& color,
-                    float threshold = 500);  // 500 should "simulate/save" the backwards compatibility
+                    float thickness = 1.0f);
+
+    /** Draws a star given the center, radiusI, radiusO and number of segments.
+     *
+     * @param center The circle center point.
+     * @param radiusI The inner radius.
+     * @param radiusO The outer radius.
+     * @param segments The number of segments.
+     * @param color Set the star color.
+     * @param thickness  (default = 1.0f)
+     */
+    void drawStar(const Vec2& center,
+                  float radiusI,
+                  float radiusO,
+                  unsigned int segments,
+                  const Color4B& color,
+                  float thickness = 1.0f);
+
+    /** Draws a solid star given the center, radiusI, radiusO and number of segments.
+     *
+     * @param center The circle center point.
+     * @param radiusI The inner radius.
+     * @param radiusO The outer radius.
+     * @param segments The number of segments.
+     * @param color Set the star color.
+     * @param thickness  (default = 1.0f)
+     */
+    void drawSolidStar(const Vec2& center,
+                       float radiusI,
+                       float radiusO,
+                       unsigned int segments,
+                       const Color4B& color,
+                       const Color4B& filledColor,
+                       float thickness = 1.0f);
 
     /** Draws a quad bezier path.
      *
@@ -185,7 +262,8 @@ public:
                         const Vec2& control,
                         const Vec2& destination,
                         unsigned int segments,
-                        const Color4B& color);
+                        const Color4B& color,
+                        float thickness = 1.0f);
 
     /** Draw a cubic bezier curve with color and number of segments
      *
@@ -201,7 +279,8 @@ public:
                          const Vec2& control2,
                          const Vec2& destination,
                          unsigned int segments,
-                         const Color4B& color);
+                         const Color4B& color,
+                         float thickness = 1.0f);
 
     /** Draws a Cardinal Spline path.
      *
@@ -210,7 +289,11 @@ public:
      * @param segments The number of segments.
      * @param color Set the Spline color.
      */
-    void drawCardinalSpline(PointArray* config, float tension, unsigned int segments, const Color4B& color);
+    void drawCardinalSpline(PointArray* config,
+                            float tension,
+                            unsigned int segments,
+                            const Color4B& color,
+                            float thickness = 1.0f);
 
     /** Draws a Catmull Rom path.
      *
@@ -218,7 +301,7 @@ public:
      * @param segments The number of segments.
      * @param color The Catmull Rom color.
      */
-    void drawCatmullRom(PointArray* points, unsigned int segments, const Color4B& color);
+    void drawCatmullRom(PointArray* points, unsigned int segments, const Color4B& color, float thickness = 1.0f);
 
     /** draw a dot at a position, with a given radius and color.
      *
@@ -236,7 +319,12 @@ public:
      * @param p4 The rectangle vertex point.
      * @param color The rectangle color.
      */
-    void drawRect(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Vec2& p4, const Color4B& color);
+    void drawRect(const Vec2& p1,
+                  const Vec2& p2,
+                  const Vec2& p3,
+                  const Vec2& p4,
+                  const Color4B& color,
+                  float thickness = 1.0f);
 
     /** Draws a solid rectangle given the origin and destination point measured in points.
      * The origin and the destination can not have the same x and y coordinate.
@@ -246,7 +334,11 @@ public:
      * @param color The rectangle color.
      * @js NA
      */
-    void drawSolidRect(const Vec2& origin, const Vec2& destination, const Color4B& color);
+    void drawSolidRect(const Vec2& origin,
+                       const Vec2& destination,
+                       const Color4B& color,
+                       float thickness            = 0,
+                       const Color4B& borderColor = Color4B(0, 0, 0, 0));
 
     /** Draws a solid polygon given a pointer to CGPoint coordinates, the number of vertices measured in points, and a
      * color.
@@ -256,7 +348,12 @@ public:
      * @param color The solid polygon color.
      * @js NA
      */
-    void drawSolidPoly(const Vec2* poli, unsigned int numberOfPoints, const Color4B& color);
+    void drawSolidPoly(const Vec2* poli,
+                       unsigned int numberOfPoints,
+                       const Color4B& color,
+                       float thickness            = 0,
+                       const Color4B& borderColor = Color4B(0, 0, 0, 0),
+                       bool isconvex              = false);
 
     /** Draws a solid circle given the center, radius and number of segments.
      * @param center The circle center point.
@@ -266,7 +363,7 @@ public:
      * @param scaleX The scale value in x.
      * @param scaleY The scale value in y.
      * @param fillColor The color will fill in polygon.
-     * @param borderWidth The border of line width.
+     * @param thickness The border of line width.
      * @param borderColor The border of line color.
      * @js NA
      */
@@ -277,7 +374,7 @@ public:
                          float scaleX,
                          float scaleY,
                          const Color4B& fillColor,
-                         float borderWidth,
+                         float thickness,
                          const Color4B& borderColor);
 
     /** Draws a solid circle given the center, radius and number of segments.
@@ -306,13 +403,9 @@ public:
      * @param color The solid circle color.
      * @js NA
      */
-    void drawSolidCircle(const Vec2& center,
-                 float radius,
-                 float angle,
-                 unsigned int segments,
-                 const Color4B& color);
+    void drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, const Color4B& color);
 
-     /** Draws a pie given the center, radius, angle, start angle, end angle  and number of segments.
+    /** Draws a pie given the center, radius, angle, start angle, end angle  and number of segments.
      * @param center The circle center point.
      * @param radius The circle rotate of radius.
      * @param angle  The circle angle.
@@ -326,13 +419,15 @@ public:
      */
     void drawPie(const Vec2& center,
                  float radius,
-                 float angle,
+                 float rotation,
                  int startAngle,
                  int endAngle,
                  float scaleX,
                  float scaleY,
-                 const Color4B& color,
-                 DrawMode drawMode);
+                 const Color4B& fillColor,
+                 const Color4B& borderColor,
+                 DrawMode drawMode,
+                 float thickness = 1.0f);
 
     /** draw a segment with a radius and color.
      *
@@ -340,8 +435,15 @@ public:
      * @param to The segment destination.
      * @param radius The segment radius.
      * @param color The segment color.
+     * @param etStart The segment first DrawNode::EndType.
+     * @param etEnd The segment last DrawNode::EndType.
      */
-    void drawSegment(const Vec2& from, const Vec2& to, float radius, const Color4B& color);
+    void drawSegment(const Vec2& from,
+                     const Vec2& to,
+                     float radius,
+                     const Color4B& color,
+                     DrawNode::EndType etStart = DrawNode::EndType::Round,
+                     DrawNode::EndType etEnd   = DrawNode::EndType::Round);
 
     /** draw a polygon with a fill color and line color
      * @code
@@ -352,15 +454,25 @@ public:
      * @param verts A pointer to point coordinates.
      * @param count The number of verts measured in points.
      * @param fillColor The color will fill in polygon.
-     * @param borderWidth The border of line width.
+     * @param thickness The border of line width.
      * @param borderColor The border of line color.
      * @js NA
      */
-    void drawPolygon(const Vec2* verts,
+    void drawPolygon(Vec2* verts,
                      int count,
                      const Color4B& fillColor,
-                     float borderWidth,
-                     const Color4B& borderColor);
+                     float thickness,
+                     const Color4B& borderColor,
+                     bool isconvex = false);
+
+    void drawPolygon(Vec2* verts, int count, float thickness, const Color4B& borderColor, bool isconvex = false);
+
+    void drawSolidPolygon(Vec2* verts,
+                          int count,
+                          const Color4B& fillColor,
+                          float thickness,
+                          const Color4B& borderColor,
+                          bool isconvex = false);
 
     /** draw a triangle with color.
      *
@@ -371,7 +483,21 @@ public:
      * @js NA
      */
 
-    void drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color4B& color);
+    void drawTriangle(const Vec2* vertices3, const Color4B& color, float thickness = 1.0f);
+
+    void drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color4B& color, float thickness = 1.0f);
+
+    void drawSolidTriangle(const Vec2* vertices3,
+                           const Color4B& fillColor,
+                           const Color4B& borderColor,
+                           float thickness = 1.0f);
+
+    void drawSolidTriangle(const Vec2& p1,
+                           const Vec2& p2,
+                           const Vec2& p3,
+                           const Color4B& fillColor,
+                           const Color4B& borderColor,
+                           float thickness = 1.0f);
 
     /** Clear the geometry in the node's buffer. */
     void clear();
@@ -394,12 +520,14 @@ public:
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     void setLineWidth(float lineWidth);
-
     // Get CocosStudio guide lines width.
     float getLineWidth();
 
+<<<<<<< Updated upstream
     void setIsConvex(bool isConvex) { _isConvex = isConvex; }; // Set backwards compatible with axmol 2.0
 
+=======
+>>>>>>> Stashed changes
     /**
      * When isolated is set, the position of the node is no longer affected by parent nodes.
      * Which means it will be drawn just like a root node.
@@ -412,10 +540,132 @@ public:
     virtual ~DrawNode();
     virtual bool init() override;
 
+    class Properties
+    {
+public:
+
+        float factor = 0.5f;  /// set the lineWidth like Axmol 1.0
+
+        // transforming stuff
+        Vec2 scale;
+        Vec2 center;
+        float rotation;
+        Vec2 position;
+
+        // Thickness stuff
+        float lineWidth;
+        float defaultLineWidth = 1.0f;
+
+        // Drawing flags
+        bool transform = true;
+        bool drawOrder = false;
+
+
+        /** Set the DrawNode drawOrder
+        *
+        * @param drawOrder. true/false = On/Off
+        * Its for performance there
+        * false = cocos2dx behaviour => faster but works only on 1.0f thickness
+
+        * @js NA
+        */
+        void setDrawOrder(bool dO) { drawOrder = dO; };
+
+        /** Get the DrawNode drawOrder
+         *
+         * @js NA
+         */
+        bool getDrawOrder(void) { return drawOrder; };
+
+        /** Set the DrawNode transform
+         *
+         * @param transform. true/false = On/Off
+         *
+         * @js NA
+         */
+        void setTransform(bool t) { transform = t; };
+
+        /** Get the DrawNode transform
+         *
+         * @js NA
+         */
+        bool getTransform(void) { return transform; };
+
+        /** Set the DrawNode scale for each drawing primitive after this.
+
+        * @js NA
+        */
+        void setScale(Vec2 s) { scale = s; };
+
+        /** Set the DrawNode rotation for each drawing primitive after this.
+
+        * @js NA
+        */
+        void setRotation(float r) { rotation = r; };
+
+        /** Get the DrawNode rotation for each drawing primitive after this.
+
+        * @js NA
+        */
+        float getRotation() { return rotation; };
+
+        /** Set the DrawNode center of rotation for each drawing primitive after this.
+
+        * @js NA
+        */
+        void setCenter(Vec2 c) { center = c; };
+
+        /** Get the DrawNode center of rotation for each drawing primitive after this.
+
+        * @js NA
+        */
+        Vec2 getCenter() { return center; };
+
+        /** Set the DrawNode position for each drawing primitive after this.
+
+        * @js NA
+        */
+        void setPosition(Vec2 p) { position = p; };
+
+        /** Get the DrawNode position for drawing primitive.
+
+        * @js NA
+        */
+        Vec2 getPosition() { return position; };
+
+        /** Set the DrawNode line width for each drawing primitive after this.
+
+        * @js NA
+        */
+        void setLineWidth(float lw) { lineWidth = lw; };
+
+        /** Get the DrawNode line width for each drawing primitive after this.
+
+        * @js NA
+        */
+        float getLineWidth() { return lineWidth; };
+
+        /** Set all default DrawNode properties.
+
+        * @js NA
+        */
+        void setDefaultValues()
+        {
+            scale     = Vec2(1.0f, 1.0f);
+            center    = Vec2(0.0f, 0.0f);
+            rotation  = 0.0f;
+            position  = Vec2(0.0f, 0.0f);
+            lineWidth = 1.0f;
+            drawOrder = false;
+        };
+    } properties;
+
+
 protected:
-    void ensureCapacity(int count);
-    void ensureCapacityGLPoint(int count);
-    void ensureCapacityGLLine(int count);
+
+    void ensureCapacityTriangle(int count);
+    void ensureCapacityPoint(int count);
+    void ensureCapacityLine(int count);
 
     void updateShader();
     void updateShaderInternal(CustomCommand& cmd,
@@ -432,38 +682,135 @@ protected:
     int _bufferCapacityTriangle  = 0;
     int _bufferCountTriangle     = 0;
     V2F_C4B_T2F* _bufferTriangle = nullptr;
+    CustomCommand _customCommandTriangle;
+    bool _dirtyTriangle = false;
 
     int _bufferCapacityPoint  = 0;
     int _bufferCountPoint     = 0;
     V2F_C4B_T2F* _bufferPoint = nullptr;
-    Color4F _pointColor;
+    Color4B _pointColor;
     int _pointSize = 0;
 
     int _bufferCapacityLine  = 0;
     int _bufferCountLine     = 0;
     V2F_C4B_T2F* _bufferLine = nullptr;
 
-    BlendFunc _blendFunc;
-
-    CustomCommand _customCommandTriangle;
     CustomCommand _customCommandPoint;
     CustomCommand _customCommandLine;
+    bool _dirtyPoint = false;
+    bool _dirtyLine  = false;
 
-    bool _dirtyTriangle     = false;
-    bool _dirtyPoint        = false;
-    bool _dirtyLine         = false;
+    BlendFunc _blendFunc;
+
     bool _isolated          = false;
-    float _lineWidth        = 0.0f;
-    float _defaultLineWidth = 0.0f;
+    float _lineWidth        = 1.0f;
+    float _defaultLineWidth = 1.0f;
 
-    ax::any_buffer _abuf;
+    any_buffer _abuf;
 
-    bool _isConvex = true;
+private:
+    // Internal function _drawPoint
+    void _drawPoint(const Vec2& position,
+                    const float pointSize,
+                    const Color4B& color,
+                    const DrawNode::PointType pointType);
+
+    // Internal function _drawPoints
+    void _drawPoints(const Vec2* position,
+                     unsigned int numberOfPoints,
+                     const float pointSize,
+                     const Color4B& color,
+                     const DrawNode::PointType pointType);
+
+    // Internal function _drawDot
+    void _drawDot(const Vec2& pos, float radius, const Color4B& color);
+
+    // Internal function _drawTriangle
+    void _drawTriangle(const Vec2* vertices3,
+                       const Color4B& borderColor,
+                       const Color4B& fillColor,
+                       bool solid      = true,
+                       float thickness = 0.0f);
+
+    // Internal function _drawAStar
+    void _drawAStar(const Vec2& center,
+                    float radiusI,
+                    float radiusO,
+                    unsigned int segments,
+                    const Color4B& color,
+                    const Color4B& filledColor,
+                    float thickness = 1.0f,
+                    bool solid      = false);
+
+    // Internal function _drawPoly
+    void _drawPoly(const Vec2* poli,
+                   unsigned int numberOfPoints,
+                   bool closedPolygon,
+                   const Color4B& color,
+                   float thickness = 1.0f,
+                   bool isconvex   = true);
+
+    // Internal function _drawPolygon
+    void _drawPolygon(const Vec2* verts,
+                      unsigned int count,
+                      const Color4B& fillColor,
+                      const Color4B& borderColor,
+                      bool closedPolygon = true,
+                      float thickness    = 1.0f,
+                      bool isconvex      = true);
+
+    // Internal function _drawSegment
+    void _drawSegment(const Vec2& origin,
+                      const Vec2& destination,
+                      const Color4B& color,
+                      float thickness           = 1.0f,
+                      DrawNode::EndType etStart = DrawNode::EndType::Square,
+                      DrawNode::EndType etEnd   = DrawNode::EndType::Square);
+
+    // Internal function _drawCircle
+    void _drawCircle(const Vec2& center,
+                     float radius,
+                     float angle,
+                     unsigned int segments,
+                     bool drawLineToCenter,
+                     float scaleX,
+                     float scaleY,
+                     const Color4B& borderColor,
+                     const Color4B& fillColor,
+                     bool solid,
+                     float thickness = 1.0f);
+
+    // Internal function _drawPie
+    void _drawPie(const Vec2& center,
+                  float radius,
+                  float rotation,
+                  int startAngle,
+                  int endAngle,
+                  float scaleX,
+                  float scaleY,
+                  const Color4B& fillColor,
+                  const Color4B& borderColor,
+                  DrawMode drawMode,
+                  float thickness = 1.0f);
+
+    /* Internal function _transform
+     * @param vertices A Vec2 vertices list.
+     * @param count The number of vertices.
+     * @param closedPolygon The closedPolygon flag.
+     * @js NA
+     */
+    Vec2* _transform(const Vec2* vertices, unsigned int& count, bool closedPolygon = false);
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode);
 };
+<<<<<<< Updated upstream
 /** @} */
 }
+=======
+>>>>>>> Stashed changes
 
-#endif  // __CCDRAWNODES_CCDRAW_NODE_H__
+/** @} */
+}  // namespace ax
+
+#endif  // __DRAW_NODE_EX_H__
