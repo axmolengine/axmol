@@ -38,11 +38,6 @@
 #include "renderer/backend/ProgramState.h"
 #include "poly2tri/poly2tri.h"
 
-<<<<<<< Updated upstream
-namespace ax
-{
-=======
->>>>>>> Stashed changes
 
 namespace ax
 {
@@ -709,9 +704,6 @@ void DrawNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
     }
 }
 
-<<<<<<< Updated upstream
-}
-=======
 void DrawNode::_drawPolygon(const Vec2* verts,
                             unsigned int count,
                             const Color4B& fillColor,
@@ -1492,4 +1484,4 @@ Vec2* DrawNode::_transform(const Vec2* _vertices, unsigned int& count, bool clos
 #    pragma pop_macro("TRANSPARENT")
 #endif
 }  // namespace ax
->>>>>>> Stashed changes
+

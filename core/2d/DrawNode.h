@@ -41,21 +41,15 @@
 
 namespace ax
 {
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 static const int DEFAULT_LINE_WIDTH = 2;
 
 class PointArray;
-
 
 /**
  * @addtogroup _2d
  * @{
  */
-
-
 
 /** @class DrawNode
  * @brief Node that draws dots, segments and polygons.
@@ -193,11 +187,7 @@ public:
                     float scaleX,
                     float scaleY,
                     const Color4B& color,
-<<<<<<< Updated upstream
-                    float threshold = 500);  // 500 should "simulate/save" the backwards compatibility
-=======
                     float thickness = 1.0f);
->>>>>>> Stashed changes
 
     /** Draws a circle given the center, radius and number of segments.
      *
@@ -523,11 +513,6 @@ public:
     // Get CocosStudio guide lines width.
     float getLineWidth();
 
-<<<<<<< Updated upstream
-    void setIsConvex(bool isConvex) { _isConvex = isConvex; }; // Set backwards compatible with axmol 2.0
-
-=======
->>>>>>> Stashed changes
     /**
      * When isolated is set, the position of the node is no longer affected by parent nodes.
      * Which means it will be drawn just like a root node.
@@ -540,129 +525,7 @@ public:
     virtual ~DrawNode();
     virtual bool init() override;
 
-    class Properties
-    {
-public:
-
-        float factor = 0.5f;  /// set the lineWidth like Axmol 1.0
-
-        // transforming stuff
-        Vec2 scale;
-        Vec2 center;
-        float rotation;
-        Vec2 position;
-
-        // Thickness stuff
-        float lineWidth;
-        float defaultLineWidth = 1.0f;
-
-        // Drawing flags
-        bool transform = true;
-        bool drawOrder = false;
-
-
-        /** Set the DrawNode drawOrder
-        *
-        * @param drawOrder. true/false = On/Off
-        * Its for performance there
-        * false = cocos2dx behaviour => faster but works only on 1.0f thickness
-
-        * @js NA
-        */
-        void setDrawOrder(bool dO) { drawOrder = dO; };
-
-        /** Get the DrawNode drawOrder
-         *
-         * @js NA
-         */
-        bool getDrawOrder(void) { return drawOrder; };
-
-        /** Set the DrawNode transform
-         *
-         * @param transform. true/false = On/Off
-         *
-         * @js NA
-         */
-        void setTransform(bool t) { transform = t; };
-
-        /** Get the DrawNode transform
-         *
-         * @js NA
-         */
-        bool getTransform(void) { return transform; };
-
-        /** Set the DrawNode scale for each drawing primitive after this.
-
-        * @js NA
-        */
-        void setScale(Vec2 s) { scale = s; };
-
-        /** Set the DrawNode rotation for each drawing primitive after this.
-
-        * @js NA
-        */
-        void setRotation(float r) { rotation = r; };
-
-        /** Get the DrawNode rotation for each drawing primitive after this.
-
-        * @js NA
-        */
-        float getRotation() { return rotation; };
-
-        /** Set the DrawNode center of rotation for each drawing primitive after this.
-
-        * @js NA
-        */
-        void setCenter(Vec2 c) { center = c; };
-
-        /** Get the DrawNode center of rotation for each drawing primitive after this.
-
-        * @js NA
-        */
-        Vec2 getCenter() { return center; };
-
-        /** Set the DrawNode position for each drawing primitive after this.
-
-        * @js NA
-        */
-        void setPosition(Vec2 p) { position = p; };
-
-        /** Get the DrawNode position for drawing primitive.
-
-        * @js NA
-        */
-        Vec2 getPosition() { return position; };
-
-        /** Set the DrawNode line width for each drawing primitive after this.
-
-        * @js NA
-        */
-        void setLineWidth(float lw) { lineWidth = lw; };
-
-        /** Get the DrawNode line width for each drawing primitive after this.
-
-        * @js NA
-        */
-        float getLineWidth() { return lineWidth; };
-
-        /** Set all default DrawNode properties.
-
-        * @js NA
-        */
-        void setDefaultValues()
-        {
-            scale     = Vec2(1.0f, 1.0f);
-            center    = Vec2(0.0f, 0.0f);
-            rotation  = 0.0f;
-            position  = Vec2(0.0f, 0.0f);
-            lineWidth = 1.0f;
-            drawOrder = false;
-        };
-    } properties;
-
-
 protected:
-
     void ensureCapacityTriangle(int count);
     void ensureCapacityPoint(int count);
     void ensureCapacityLine(int count);
@@ -803,12 +666,125 @@ private:
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode);
+
+    class Properties
+    {
+    public:
+        float factor = 0.5f;  /// set the lineWidth like Axmol 1.0
+
+        // transforming stuff
+        Vec2 scale;
+        Vec2 center;
+        float rotation;
+        Vec2 position;
+
+        // Thickness stuff
+        float lineWidth;
+        float defaultLineWidth = 1.0f;
+
+        // Drawing flags
+        bool transform = true;
+        bool drawOrder = false;
+
+        /** Set the DrawNode drawOrder
+        *
+        * @param drawOrder. true/false = On/Off
+        * Its for performance there
+        * false = cocos2dx behaviour => faster but works only on 1.0f thickness
+
+        * @js NA
+        */
+        void setDrawOrder(bool dO) { drawOrder = dO; };
+
+        /** Get the DrawNode drawOrder
+         *
+         * @js NA
+         */
+        bool getDrawOrder(void) { return drawOrder; };
+
+        /** Set the DrawNode transform
+         *
+         * @param transform. true/false = On/Off
+         *
+         * @js NA
+         */
+        void setTransform(bool t) { transform = t; };
+
+        /** Get the DrawNode transform
+         *
+         * @js NA
+         */
+        bool getTransform(void) { return transform; };
+
+        /** Set the DrawNode scale for each drawing primitive after this.
+
+        * @js NA
+        */
+        void setScale(Vec2 s) { scale = s; };
+
+        /** Set the DrawNode rotation for each drawing primitive after this.
+
+        * @js NA
+        */
+        void setRotation(float r) { rotation = r; };
+
+        /** Get the DrawNode rotation for each drawing primitive after this.
+
+        * @js NA
+        */
+        float getRotation() { return rotation; };
+
+        /** Set the DrawNode center of rotation for each drawing primitive after this.
+
+        * @js NA
+        */
+        void setCenter(Vec2 c) { center = c; };
+
+        /** Get the DrawNode center of rotation for each drawing primitive after this.
+
+        * @js NA
+        */
+        Vec2 getCenter() { return center; };
+
+        /** Set the DrawNode position for each drawing primitive after this.
+
+        * @js NA
+        */
+        void setPosition(Vec2 p) { position = p; };
+
+        /** Get the DrawNode position for drawing primitive.
+
+        * @js NA
+        */
+        Vec2 getPosition() { return position; };
+
+        /** Set the DrawNode line width for each drawing primitive after this.
+
+        * @js NA
+        */
+        void setLineWidth(float lw) { lineWidth = lw; };
+
+        /** Get the DrawNode line width for each drawing primitive after this.
+
+        * @js NA
+        */
+        float getLineWidth() { return lineWidth; };
+
+        /** Set all default DrawNode properties.
+
+        * @js NA
+        */
+        void setDefaultValues()
+        {
+            scale     = Vec2(1.0f, 1.0f);
+            center    = Vec2(0.0f, 0.0f);
+            rotation  = 0.0f;
+            position  = Vec2(0.0f, 0.0f);
+            lineWidth = 1.0f;
+            drawOrder = false;
+        };
+    } properties;
 };
-<<<<<<< Updated upstream
-/** @} */
-}
-=======
->>>>>>> Stashed changes
 
 /** @} */
 }  // namespace ax
