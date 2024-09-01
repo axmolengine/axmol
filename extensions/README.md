@@ -5,11 +5,6 @@
 - Version: 4.5
 - License: MIT
 
-## DrawNodeEx => DrawNodeV2
-- Upstream: https://github.com/axmolengine/axmol
-- Version: 0.95.1
-- License: MIT
-
 ## Effekseer (OFF default)
 - [![Upstream](https://img.shields.io/github/v/release/effekseer/Effekseer?label=Upstream)](https://github.com/effekseer/EffekseerForCocos2d-x)
 - https://github.com/effekseer/EffekseerForCocos2d-x
