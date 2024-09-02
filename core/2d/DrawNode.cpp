@@ -316,7 +316,7 @@ void DrawNode::drawLine(const Vec2& origin,
                         DrawNode::EndType etStart,
                         DrawNode::EndType etEnd)
 {
-    if (thickness == 0)
+    if (thickness <= 0.0f)
         return;
     _drawSegment(origin, destination, color, thickness, etStart, etEnd);
 }
@@ -327,7 +327,7 @@ void DrawNode::drawPoly(const Vec2* poli,
                         const Color4B& color,
                         float thickness)
 {
-    if (thickness == 0)
+    if (thickness <= 0.0f)
         return;
     _drawPoly(poli, numberOfPoints, closedPolygon, color, thickness);
 }
@@ -342,7 +342,7 @@ void DrawNode::drawCircle(const Vec2& center,
                           const Color4B& color,
                           float thickness)
 {
-    if (thickness == 0)
+    if (thickness <= 0.0f)
         return;
     _drawCircle(center, radius, angle, segments, drawLineToCenter, scaleX, scaleY, color, Color4B(), false, thickness);
 }
@@ -355,7 +355,7 @@ void DrawNode::drawCircle(const Vec2& center,
                           const Color4B& color,
                           float thickness)
 {
-    if (thickness == 0)
+    if (thickness <= 0.0f)
         return;
     _drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color, color, false, thickness);
 }
@@ -367,7 +367,7 @@ void DrawNode::drawStar(const Vec2& center,
                         const Color4B& color,
                         float thickness)
 {
-    if (thickness == 0)
+    if (thickness <= 0.0f)
         return;
     _drawAStar(center, radiusI, radiusO, segments, color, color, thickness, false);
 }
@@ -390,7 +390,7 @@ void DrawNode::drawQuadBezier(const Vec2& origin,
                               const Color4B& color,
                               float thickness)
 {
-    if (thickness == 0)
+    if (thickness <= 0.0f)
         return;
 
     Vec2* _vertices = _abuf.get<Vec2>(segments + 1);
@@ -416,7 +416,7 @@ void DrawNode::drawCubicBezier(const Vec2& origin,
                                const Color4B& color,
                                float thickness)
 {
-    if (thickness == 0)
+    if (thickness <= 0.0f)
         return;
 
     Vec2* _vertices = _abuf.get<Vec2>(segments + 1);
@@ -442,7 +442,7 @@ void DrawNode::drawCardinalSpline(PointArray* config,
                                   const Color4B& color,
                                   float thickness)
 {
-    if (thickness == 0.0f)
+    if (thickness <= 0.0f)
         return;
 
     Vec2* _vertices = _abuf.get<Vec2>(segments);
@@ -488,7 +488,7 @@ void DrawNode::drawCardinalSpline(PointArray* config,
 
 void DrawNode::drawCatmullRom(PointArray* points, unsigned int segments, const Color4B& color, float thickness)
 {
-    if (thickness == 0.0f)
+    if (thickness <= 0.0f)
         return;
     drawCardinalSpline(points, 0.5f, segments, color, thickness);
 }
@@ -507,7 +507,7 @@ void DrawNode::drawRect(const Vec2& p1,
                         const Color4B& color,
                         float thickness)
 {
-    if (thickness == 0.0f)
+    if (thickness <= 0.0f)
         return;
 
     Vec2 line[5] = {p1, p2, p3, p4, p1};
@@ -516,7 +516,7 @@ void DrawNode::drawRect(const Vec2& p1,
 
 void DrawNode::drawRect(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness)
 {
-    if (thickness == 0.0f)
+    if (thickness <= 0.0f)
         return;
 
     Vec2 line[5] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
@@ -530,7 +530,7 @@ void DrawNode::drawSegment(const Vec2& from,
                            DrawNode::EndType etStart,
                            DrawNode::EndType etEnd)
 {
-    if (thickness == 0.0f)
+    if (thickness <= 0.0f)
         return;
     _drawSegment(from, to, color, thickness, etStart, etEnd);
 }
@@ -917,7 +917,7 @@ void DrawNode::_drawPoly(const Vec2* verts,
                          float thickness,
                          bool isconvex)
 {
-    if (thickness == 0.0f)
+    if (thickness <= 0.0f)
         return;
     if (thickness == 1.0f && !properties.drawOrder)
     {
@@ -960,7 +960,7 @@ void DrawNode::_drawSegment(const Vec2& from,
                             DrawNode::EndType etStart,
                             DrawNode::EndType etEnd)
 {
-    if (thickness == 0.0f)
+    if (thickness <= 0.0f)
         return;
     if (thickness == 1.0f && !properties.drawOrder)
     {
@@ -1109,7 +1109,7 @@ void DrawNode::_drawSegment(const Vec2& from,
 
 void DrawNode::_drawDot(const Vec2& pos, float radius, const Color4B& color)
 {
-    if (radius == 0.0f)
+    if (radius <= 0.0f)
         return;
 
     unsigned int vertex_count = 2 * 3;
@@ -1178,7 +1178,7 @@ void DrawNode::_drawTriangle(const Vec2* _vertices3,
                              bool solid,
                              float thickness)
 {
-    if (thickness == 0.0f)
+    if (thickness <= 0.0f)
         return;
 
     unsigned int vertex_count = 3;
