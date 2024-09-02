@@ -73,7 +73,6 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     private boolean hasFocus = false;
     private boolean showVirtualButton = false;
     private boolean paused = true;
-    private boolean rendererPaused = true;
 
     public AxmolGLSurfaceView getGLSurfaceView(){
         return  mGLSurfaceView;
@@ -225,11 +224,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     private void resume() {
         this.hideVirtualButton();
         AxmolEngine.onResume();
-        if (rendererPaused) {
-            mGLSurfaceView.onResume();
-            rendererPaused = false;
-        }
-        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        mGLSurfaceView.onResume();
     }
 
     private void resumeIfHasFocus() {
@@ -248,13 +243,6 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         paused = true;
         super.onPause();
         AxmolEngine.onPause();
-        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        rendererPaused = true;
         mGLSurfaceView.onPause();
     }
 
@@ -324,7 +312,8 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         //if (isAndroidEmulator())
         //   this.mGLSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 
-        this.mGLSurfaceView.setRenderer(new AxmolRenderer());
+        this.mGLSurfaceView.setRenderer(new AxmolRenderer(this.mGLSurfaceView));
+        this.mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         this.mGLSurfaceView.setEditText(edittext);
 
         // Set framelayout as the content view
