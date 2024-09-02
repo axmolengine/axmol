@@ -1247,7 +1247,7 @@ void DrawNode::_drawPoints(const Vec2* position,
                            const Color4B& color,
                            const DrawNode::PointType pointType)
 {
-    if (pointSize == 0)
+    if (pointSize <= 0.0f)
         return;
 
     if (properties.drawOrder == true)
@@ -1294,7 +1294,7 @@ void DrawNode::_drawPoint(const Vec2& position,
                           const Color4B& color,
                           const DrawNode::PointType pointType)
 {
-    if (pointSize == 0)
+    if (pointSize <= 0.0f)
         return;
 
     if (properties.drawOrder == true)
