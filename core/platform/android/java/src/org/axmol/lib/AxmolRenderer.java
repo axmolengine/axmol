@@ -34,6 +34,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
 
         private GLSurfaceView gameSurfaceView;
         private AxmolRenderer renderer;
+        private boolean pausing = false;
 
         public RendererThread(GLSurfaceView gameSurfaceView, AxmolRenderer renderer){
             this.gameSurfaceView = gameSurfaceView;
