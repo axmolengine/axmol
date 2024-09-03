@@ -33,9 +33,7 @@ THE SOFTWARE.
 #endif
 
 USING_NS_AX;
-
 using namespace std;
-
 
 
 Vec2 vertices1[] = {
@@ -182,6 +180,7 @@ float verticesFB[] = { {0.842}, {1.052}, {0.842}, {1.649}, {5.296}, {1.649}, {5.
 
 DrawNodeTests::DrawNodeTests()
 {
+    ADD_TEST_CASE(DrawNodeThicknessStressTest);
     ADD_TEST_CASE(DrawNodeSpLinesTest);
     ADD_TEST_CASE(DrawNodeMethodsTest);
     ADD_TEST_CASE(DrawNodeAxmolTest2);
@@ -995,6 +994,186 @@ string DrawNodeThicknessTest::subtitle() const
     return "";
 }
 
+
+
+
+DrawNodeThicknessStressTest::DrawNodeThicknessStressTest()
+{
+    initSliders();
+    slider[sliderType::Thickness]->setEnabled(true);
+
+    scheduleUpdate();
+}
+
+void DrawNodeThicknessStressTest::update(float dt)
+{
+    static float negativThickness = -99999999.9999;
+    DrawNodeBaseTest::update(dt);
+
+    drawNode->clear();
+
+    drawNode->drawCircle(VisibleRect::center(), 60, AX_DEGREES_TO_RADIANS(77), 30, false, Color4F::GREEN,  negativThickness);
+
+    drawNode->drawLine(Vec2(0.0f, size.height), Vec2(size.width, size.height - 20), Color4F::YELLOW, negativThickness);
+
+
+    // drawNode a rectangles
+    drawNode->drawRect(Vec2(123, 123), Vec2(227, 227), Color4F(1, 1, 0, 1), negativThickness);
+
+
+    Vec2 vertices24[] = {
+        {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},  {100.250000f, 161.375000f},
+        {65.500000f, 181.375000f},  {102.250000f, 179.125000f}, {95.000000f, 215.125000f},  {129.331467f, 189.926208f},
+        {131.371460f, 206.366196f}, {139.651474f, 192.446198f}, {161.851471f, 200.606201f}, {151.000000f, 220.375000f},
+        {110.500000f, 244.375000f}, {153.750000f, 238.125000f}, {142.500000f, 253.875000f}, {220.750000f, 259.375000f},
+        {250.500000f, 244.375000f}, {168.750000f, 241.875000f}, {182.250000f, 154.125000f}, {190.250000f, 227.375000f},
+        {196.500000f, 197.375000f}, {208.750000f, 210.625000f}, {220.750000f, 194.375000f}, {208.750000f, 176.375000f},
+        {253.250000f, 173.875000f}, {243.750000f, 154.125000f}, {213.750000f, 161.375000f}, {202.250000f, 139.875000f},
+        {236.000000f, 131.875000f}, {218.500000f, 120.875000f}, {206.500000f, 125.625000f}, {184.500000f, 110.375000f},
+        {157.000000f, 108.625000f}, {147.500000f, 96.625000f},  {153.750000f, 85.125000f},  {147.500000f, 75.375000f},
+        {126.500000f, 74.125000f},  {110.500000f, 86.625000f},  {127.750000f, 85.125000f},  {135.250000f, 91.125000f},
+        {135.250000f, 97.875000f},  {124.000000f, 93.875000f},  {115.500000f, 100.875000f}, {115.500000f, 111.875000f},
+        {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
+        {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
+    };
+    drawNode->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4B::TRANSPARENT, negativThickness, Color4F::RED);
+
+    // open random color poly
+    Vec2 vertices[] = {Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f),
+                       Vec2(50.0f, 100.0f)};
+    drawNode->drawPoly(vertices, 5, false, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), negativThickness);
+
+    // closed random color poly
+    Vec2 vertices2[] = {Vec2(30.0f, 130.0f), Vec2(30.0f, 230.0f), Vec2(50.0f, 200.0f)};
+    drawNode->drawPoly(vertices2, 3, true, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f), negativThickness);
+
+    // drawNode some beziers
+    drawNode->drawQuadBezier(Vec2(size.width - 150, size.height - 150), Vec2(size.width - 70, size.height - 10),
+                             Vec2(size.width - 10, size.height - 10), 10, Color4F::BLUE, negativThickness);
+
+
+
+    drawNode->drawCubicBezier(VisibleRect::center(), Vec2(VisibleRect::center().x + 30, VisibleRect::center().y + 50),
+                              Vec2(VisibleRect::center().x + 60, VisibleRect::center().y - 50), VisibleRect::right(),
+                              100, Color4F::WHITE, negativThickness);
+
+   
+
+    auto array = ax::PointArray::create(20);
+    array->addControlPoint(Vec2(0.0f, 0.0f));
+    array->addControlPoint(Vec2(80.0f, 80.0f));
+    array->addControlPoint(Vec2(size.width - 80, 80.0f));
+    array->addControlPoint(Vec2(size.width - 80, size.height - 80));
+    array->addControlPoint(Vec2(80.0f, size.height - 80));
+    array->addControlPoint(Vec2(80.0f, 80.0f));
+    array->addControlPoint(Vec2(size.width / 2, size.height / 2));
+    drawNode->drawCardinalSpline(array, 0.5f, 50, Color4F::MAGENTA, negativThickness);
+
+    auto array2 = ax::PointArray::create(20);
+    array2->addControlPoint(Vec2(size.width / 2, 30.0f));
+    array2->addControlPoint(Vec2(size.width - 80, 30.0f));
+    array2->addControlPoint(Vec2(size.width - 80, size.height - 80));
+    array2->addControlPoint(Vec2(size.width / 2, size.height - 80));
+    array2->addControlPoint(Vec2(size.width / 2, 30.0f));
+    drawNode->drawCatmullRom(array2, 50, Color4F::ORANGE, negativThickness);
+
+    auto s = Director::getInstance()->getWinSize();
+
+    drawNode->drawPoint(Vec2(s.width / 2 - 120, s.height / 2 - 120), negativThickness,
+                        Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+
+
+
+    // drawNode 4 small points
+    Vec2 position[] = {Vec2(60, 60), Vec2(70, 70), Vec2(60, 70), Vec2(70, 60)};
+    drawNode->drawPoints(position, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+
+
+
+    // drawNode a rectangle
+    drawNode->drawRect(Vec2(23, 23), Vec2(7, 7), Color4F(1, 1, 0, 1), negativThickness);
+
+
+
+    // drawNode 10 circles
+    for (int i = 0; i < 10; i++)
+    {
+        drawNode->drawDot(Vec2(s.width / 2, s.height / 2), negativThickness,
+                          Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+    }
+
+
+
+    // star poly (doesn't trigger bug... order is important un tesselation is supported.
+    {
+        const float o = 180;
+        const float w = 20;
+        const float h = 50;
+        Vec2 star[]   = {
+            Vec2(o, o),
+            Vec2(o + w, o - h),
+            Vec2(o + w * 2, o),  // lower spike
+            Vec2(o + w * 2 + h, o + w),
+            Vec2(o + w * 2, o + w * 2),  // right spike
+            Vec2(o + w, o + w * 2 + h),
+            Vec2(o, o + w * 2),  // top spike
+            Vec2(o - h, o + w),  // left spike
+        };
+
+        drawNode->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(1.0f, 0.0f, 0.0f, 0.5f), 1,
+                              Color4F(0.0f, 0.0f, 1.0f, 1.0f));
+    }
+
+    // drawNode a solid polygon
+    Vec2 vertices3[] = {Vec2(60.0f, 160.0f), Vec2(70.0f, 190.0f), Vec2(100.0f, 190.0f), Vec2(90.0f, 160.0f)};
+    drawNode->drawSolidPoly(vertices3, 4, Color4F(1.0f, 1.0f, 0.0f, 1.0f));
+
+    // drawNode a solid rectangle
+    drawNode->drawSolidRect(Vec2(10.0f, 10.0f), Vec2(20.0f, 20.0f), Color4F(1.0f, 1.0f, 0.0f, 1.0f));
+
+    // drawNode a solid circle
+    drawNode->drawSolidCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 40, AX_DEGREES_TO_RADIANS(90), 50, 2.0f, 2.0f,
+                              Color4F(0.0f, 1.0f, 0.0f, 1.0f));
+
+    // drawNode segment
+    drawNode->drawSegment(Vec2(20.0f, s.height), Vec2(20.0f, s.height / 2), 10, Color4F(0.0f, 1.0f, 0.0f, 1.0f));
+
+
+
+    // drawNode triangle
+    drawNode->drawTriangle(Vec2(10.0f, 10.0f), Vec2(70.0f, 30.0f), Vec2(100.0f, 140.0f),
+                           Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
+
+
+}
+
+void DrawNodeThicknessStressTest::onEnter()
+{
+    for (int i = 0; i < sliderType::sliderTypeLast; i++)
+    {
+        sliderValue[i] = 1;
+        slider[i]->setPercent(sliderValue[i]);
+    }
+
+    sliderValue[sliderType::Thickness] = 5;
+    slider[sliderType::Thickness]->setPercent(sliderValue[sliderType::Thickness]);
+
+    DrawNodeBaseTest::onEnter();
+}
+
+string DrawNodeThicknessStressTest::title() const
+{
+    return "Thickness Stress Test";
+}
+
+string DrawNodeThicknessStressTest::subtitle() const
+{
+    return "";
+}
+
+
+
+
 DrawNodePieTest::DrawNodePieTest()
 {
     initSliders();
@@ -1083,13 +1262,13 @@ DrawNodeMethodsTest::DrawNodeMethodsTest()
     slider[sliderType::Rotation]->setEnabled(true);
 
 
-    labelRound = Label::createWithTTF("DrawNode::Round", "fonts/Arial.ttf", 12);
+    labelRound = Label::createWithTTF("DrawNode::Round", "fonts/arial.ttf", 12);
     addChild(labelRound, 1);
     labelRound->setVisible(false);
-    labelSquare = Label::createWithTTF("DrawNode::Square", "fonts/Arial.ttf", 12);
+    labelSquare = Label::createWithTTF("DrawNode::Square", "fonts/arial.ttf", 12);
     addChild(labelSquare, 1);
     labelSquare->setVisible(false);
-    labelButt = Label::createWithTTF("DrawNode::Butt", "fonts/Arial.ttf", 12);
+    labelButt = Label::createWithTTF("DrawNode::Butt", "fonts/arial.ttf", 12);
     addChild(labelButt, 1);
     labelButt->setVisible(false);
 
@@ -1613,11 +1792,11 @@ DrawNodePerformaneTest::DrawNodePerformaneTest()
     label->setPosition(Vec2(Vec2(center.x, 80.0f)));
     this->addChild(label, 1);
 
-    label1 = Label::createWithTTF("DrawNode::Round", "fonts/Arial.ttf", 12);
+    label1 = Label::createWithTTF("DrawNode::Round", "fonts/arial.ttf", 12);
     addChild(label1, 1);
-    label2 = Label::createWithTTF("DrawNode::Square", "fonts/Arial.ttf", 12);
+    label2 = Label::createWithTTF("DrawNode::Square", "fonts/arial.ttf", 12);
     addChild(label2, 1);
-    label3 = Label::createWithTTF("DrawNode::Butt", "fonts/Arial.ttf", 12);
+    label3 = Label::createWithTTF("DrawNode::Butt", "fonts/arial.ttf", 12);
     addChild(label3, 1);
 
     scheduleUpdate();

@@ -403,7 +403,8 @@ public:
      * @param endAngle The end angle.
      * @param scaleX The scale value in x.
      * @param scaleY The scale value in y.
-     * @param color The solid circle color.
+     * @param fillColor The solid circle color.
+     * @param borderColor The borderColor.
      * @param DrawMode The draw mode
      * @js NA
      */
@@ -416,17 +417,44 @@ public:
                  float scaleY,
                  const Color4B& fillColor,
                  const Color4B& borderColor,
-                 DrawMode drawMode,
+                 DrawMode drawMode = DrawMode::Outline,
                  float thickness = 1.0f);
 
-    /** draw a segment with a radius and color.
+    // Cocos2dx/Axmol 1.0 API backwards compatibhility
+    /** Draws a pie given the center, radius, angle, start angle, end angle  and number of segments.
+     * @param center The circle center point.
+     * @param radius The circle rotate of radius.
+     * @param angle  The circle angle.
+     * @param startAngle The start angle.
+     * @param endAngle The end angle.
+     * @param scaleX The scale value in x.
+     * @param scaleY The scale value in y.
+     * @param color The solid circle color.
+     * @param DrawMode The draw mode
+     * @js NA
+     */
+    void drawPie(const Vec2& center,
+                 float radius,
+                 float angle,
+                 int startAngle,
+                 int endAngle,
+                 float scaleX,
+                 float scaleY,
+                 const Color4B& color,
+                 DrawMode drawMode = DrawMode::Outline);
+
+    void setIsConvex(bool isConvex)
+    {
+        AXLOGW("'setIsConvex()' No longer supported. Use the new drawPolygon API.");
+    }; 
+
+
+     /** draw a segment with a radius and color.
      *
      * @param from The segment origin.
      * @param to The segment destination.
      * @param radius The segment radius.
      * @param color The segment color.
-     * @param etStart The segment first DrawNode::EndType.
-     * @param etEnd The segment last DrawNode::EndType.
      */
     void drawSegment(const Vec2& from,
                      const Vec2& to,

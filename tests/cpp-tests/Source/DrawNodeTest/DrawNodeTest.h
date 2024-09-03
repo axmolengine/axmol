@@ -396,6 +396,34 @@ private:
 };
 
 
+class DrawNodeThicknessStressTest : public DrawNodeBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeThicknessStressTest);
+
+    DrawNodeThicknessStressTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+    void update(float dt);
+    void onEnter();
+
+    void changeThreshold(Object* pSender, ax::ui::Slider::EventType type);
+    void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);
+
+private:
+    ax::Label* _lineWidthLabel;
+    float lineWidth = 0;
+    ax::Label* _thresholdLabel;
+    float threshold = 0;
+};
+
+
+
+
+
+
 class DrawNodeSpLinesTest : public DrawNodeBaseTest
 {
 public:
