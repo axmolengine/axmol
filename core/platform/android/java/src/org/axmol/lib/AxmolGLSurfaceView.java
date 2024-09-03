@@ -419,6 +419,21 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
     // Methods
     // ===========================================================
 
+    public void onLooseFocus() {
+        this.queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                AxmolGLSurfaceView.this.mRenderer.handleOnLooseFocus();
+            }
+        });
+    }
+    public void onGainFocus() {
+        this.queueEvent(new Runnable() {
+            @Override
+            public void run() { AxmolGLSurfaceView.this.mRenderer.handleOnGainFocus(); }
+        });
+    }
+    
     // ===========================================================
     // Inner and Anonymous Classes
     // ===========================================================

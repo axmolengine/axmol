@@ -93,6 +93,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     private boolean mNativeInitCompleted = false;
     private boolean mIsPaused = false;
     private boolean mIsReady = true;
+    private boolean mRendererThreadIsPaused = false;
     private RendererThread mRendererThread = null;
 
     // ===========================================================
@@ -207,16 +208,38 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
         if (!mNativeInitCompleted)
             return;
 
-        mRendererThread.onPause();
+        pauseRendererThread();
         AxmolRenderer.nativeOnPause();
         mIsPaused = true;
     }
 
     public void handleOnResume() {
-        mRendererThread.onResume();
+        resumeRendererThread();
         if (mIsPaused) {
             AxmolRenderer.nativeOnResume();
             mIsPaused = false;
+        }
+    }
+
+    public void handleOnLooseFocus() {
+        pauseRendererThread();
+    }
+
+    public void handleOnGainFocus() {
+        resumeRendererThread();
+    }
+
+    private void pauseRendererThread() {
+        if(!mRendererThreadIsPaused) {
+            mRendererThread.onPause();
+            mRendererThreadIsPaused = true;
+        }
+    }
+
+    private void resumeRendererThread() {
+        if(mRendererThreadIsPaused) {
+            mRendererThread.onResume();
+            mRendererThreadIsPaused = false;
         }
     }
 
