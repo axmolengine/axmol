@@ -277,7 +277,7 @@ public:
     /**
      * Constructs a new vector initialized to all zeros.
      */
-    constexpr Vec4();
+    constexpr Vec4() {}
 
     /**
      * Constructs a new vector initialized to the specified values.
@@ -287,14 +287,14 @@ public:
      * @param zz The z coordinate.
      * @param ww The w coordinate.
      */
-    constexpr Vec4(float xx, float yy, float zz, float ww);
+    constexpr Vec4(float xx, float yy, float zz, float ww) : Vec4Base(xx, yy, zz, ww) {}
 
     /**
      * Constructs a new vector from the values in the specified array.
      *
      * @param array An array containing the elements of the vector in the order x, y, z, w.
      */
-    constexpr explicit Vec4(const float* array);
+    constexpr explicit Vec4(const float* array) : Vec4Base(array) {}
 
     /**
      * Constructs a vector that describes the direction between the specified points.
@@ -302,7 +302,7 @@ public:
      * @param p1 The first point.
      * @param p2 The second point.
      */
-    constexpr Vec4(const Vec4& p1, const Vec4& p2);
+    constexpr Vec4(const Vec4& p1, const Vec4& p2) { setDirection(p1, p2); }
 
     /**
      * Creates a new vector from an integer interpreted as an RGBA value.
@@ -458,7 +458,13 @@ public:
      * @param p1 The first point.
      * @param p2 The second point.
      */
-    constexpr void setDirection(const Vec4& p1, const Vec4& p2);
+    constexpr void setDirection(const Vec4& p1, const Vec4& p2)
+    {
+        x = p2.x - p1.x;
+        y = p2.y - p1.y;
+        z = p2.z - p1.z;
+        w = p2.w - p1.w;
+    }
 
     /**
      * Subtracts the specified vectors and stores the result in dst.
@@ -484,12 +490,19 @@ public:
     static const Vec4 UNIT_W;
 };
 
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+    inline constexpr Vec4 Vec4::ZERO   = Vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    inline constexpr Vec4 Vec4::ONE    = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    inline constexpr Vec4 Vec4::UNIT_X = Vec4(1.0f, 0.0f, 0.0f, 0.0f);
+    inline constexpr Vec4 Vec4::UNIT_Y = Vec4(0.0f, 1.0f, 0.0f, 0.0f);
+    inline constexpr Vec4 Vec4::UNIT_Z = Vec4(0.0f, 0.0f, 1.0f, 0.0f);
+    inline constexpr Vec4 Vec4::UNIT_W = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
+#endif
+
 NS_AX_MATH_END
 /**
  end of base group
  @}
  */
-
-#include "math/Vec4.inl"
 
 #endif  // MATH_VEC4_H
