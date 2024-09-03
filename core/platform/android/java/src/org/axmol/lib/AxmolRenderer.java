@@ -91,6 +91,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     private int mScreenWidth;
     private int mScreenHeight;
     private boolean mNativeInitCompleted = false;
+    private boolean mIsPaused = false;
     private boolean mIsReady = true;
     private RendererThread mRendererThread = null;
 
@@ -208,11 +209,15 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
 
         mRendererThread.onPause();
         AxmolRenderer.nativeOnPause();
+        mIsPaused = true;
     }
 
     public void handleOnResume() {
         mRendererThread.onResume();
-        AxmolRenderer.nativeOnResume();
+        if (mIsPaused) {
+            AxmolRenderer.nativeOnResume();
+            mIsPaused = false;
+        }
     }
 
     private static native void nativeInsertText(final String text);
