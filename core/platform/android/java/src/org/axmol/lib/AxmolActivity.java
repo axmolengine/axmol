@@ -224,7 +224,10 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     private void resume() {
         this.hideVirtualButton();
         AxmolEngine.onResume();
-        mGLSurfaceView.onResume();
+        if (rendererPaused) {
+            mGLSurfaceView.onResume();
+            rendererPaused = false;
+        }
     }
 
     private void resumeIfHasFocus() {
@@ -243,6 +246,12 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         paused = true;
         super.onPause();
         AxmolEngine.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        rendererPaused = true;
         mGLSurfaceView.onPause();
     }
 

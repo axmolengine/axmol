@@ -35,8 +35,9 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
         private GLSurfaceView gameSurfaceView;
         private AxmolRenderer renderer;
         private boolean pausing = false;
+        private Object monitor = new Object();
 
-        public RendererThread(GLSurfaceView gameSurfaceView, AxmolRenderer renderer){
+        public RendererThread(GLSurfaceView gameSurfaceView, AxmolRenderer renderer) {
             this.gameSurfaceView = gameSurfaceView;
             this.renderer = renderer;
         }
@@ -47,14 +48,25 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
 
         public void onResume(){
             pausing = false;
+            synchronized (monitor) {
+                monitor.notify();
+            }
         }
 
         @Override
-        public void run(){
+        public void run() {
+            while (true) {
+                synchronized (monitor) {
+                    if(pausing) {
+                        try {
+                            monitor.wait();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
 
-            while (!Thread.interrupted()){
-
-                if(renderer.isReadyForRendering()){
+                if (renderer.isReadyForRendering()) {
                     renderer.prepareForRendering();
                     this.gameSurfaceView.requestRender();
                 }
@@ -79,17 +91,16 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     private int mScreenWidth;
     private int mScreenHeight;
     private boolean mNativeInitCompleted = false;
-    private boolean isReady = true;
-    private static RendererThread rendererThread = null;
+    private boolean mIsReady = true;
+    private RendererThread mRendererThread = null;
 
     // ===========================================================
     // Constructors
     // ===========================================================
 
-    public AxmolRenderer(GLSurfaceView surfaceView){
-
+    public AxmolRenderer(GLSurfaceView surfaceView) {
         super();
-        this.rendererThread = new RendererThread(surfaceView, this);
+        this.mRendererThread = new RendererThread(surfaceView, this);
     }
 
     // ===========================================================
@@ -106,11 +117,11 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     }
 
     public boolean isReadyForRendering(){
-        return isReady && System.nanoTime() - mLastTickInNanoSeconds >= AxmolRenderer.sAnimationInterval;
+        return mIsReady && System.nanoTime() - mLastTickInNanoSeconds >= AxmolRenderer.sAnimationInterval;
     }
 
     public void prepareForRendering(){
-        isReady = false;
+        mIsReady = false;
     }
 
 
@@ -123,7 +134,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
         AxmolRenderer.nativeInit(this.mScreenWidth, this.mScreenHeight);
         this.mLastTickInNanoSeconds = System.nanoTime();
 
-        rendererThread.start();
+        mRendererThread.start();
 
         if (mNativeInitCompleted) {
             // This must be from an OpenGL context loss
@@ -142,7 +153,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(final GL10 gl) {
         mLastTickInNanoSeconds = System.nanoTime();
         AxmolRenderer.nativeRender();
-        isReady = true;
+        mIsReady = true;
     }
 
     // ===========================================================
@@ -195,12 +206,12 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
         if (!mNativeInitCompleted)
             return;
 
-        rendererThread.onPause();
+        mRendererThread.onPause();
         AxmolRenderer.nativeOnPause();
     }
 
     public void handleOnResume() {
-        rendererThread.onResume();
+        mRendererThread.onResume();
         AxmolRenderer.nativeOnResume();
     }
 
