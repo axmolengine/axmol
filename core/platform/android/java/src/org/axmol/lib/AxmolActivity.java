@@ -229,15 +229,8 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
             mGLSurfaceView.onResume();
             rendererPaused = false;
         }
-    }
-
-    private void resumeIfHasFocus() {
-        //It is possible for the app to receive the onWindowsFocusChanged(true) event
-        //even though it is locked or asleep
-        boolean readyToPlay = !isDeviceLocked() && !isDeviceAsleep();
-
-        if(hasFocus && readyToPlay) {
-            resume();
+        else {
+            mGLSurfaceView.onGainFocus();
         }
     }
 
@@ -246,6 +239,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     	Log.d(TAG, "onPause()");
         paused = true;
         super.onPause();
+        mGLSurfaceView.onLooseFocus();
         AxmolEngine.onPause();
     }
 
