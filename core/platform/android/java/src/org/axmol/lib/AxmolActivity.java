@@ -73,6 +73,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     private boolean hasFocus = false;
     private boolean showVirtualButton = false;
     private boolean paused = true;
+    private boolean rendererPaused = true;
 
     public AxmolGLSurfaceView getGLSurfaceView(){
         return  mGLSurfaceView;
