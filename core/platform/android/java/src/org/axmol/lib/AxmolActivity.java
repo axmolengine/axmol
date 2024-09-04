@@ -239,7 +239,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     	Log.d(TAG, "onPause()");
         paused = true;
         super.onPause();
-        mGLSurfaceView.onLooseFocus();
+        mGLSurfaceView.onLoseFocus();
         AxmolEngine.onPause();
     }
 
