@@ -1086,7 +1086,10 @@ void DrawNodeThicknessStressTest::update(float dt)
 
     // drawNode 4 small points
     Vec2 position[] = {Vec2(60, 60), Vec2(70, 70), Vec2(60, 70), Vec2(70, 60)};
-    drawNode->drawPoints(position, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+    drawNode->drawPoints(position, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1), DrawNode::Rect);
+
+    Vec2 position1[] = {Vec2(100, 100), Vec2(170, 170), Vec2(260, 170), Vec2(170, 260)};
+    drawNode->drawPoints(position1, 4, 25, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1), DrawNode::Rect);
 
 
 
@@ -2391,7 +2394,7 @@ DrawNodeSpLinesTest::DrawNodeSpLinesTest()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     drawNodeCP = DrawNode::create();
-    addChild(drawNodeCP, 20);
+    addChild(drawNodeCP, 50);
 
     drawNode = DrawNode::create();
     addChild(drawNode, 30);
@@ -2512,7 +2515,7 @@ void CandyMixEeffect::renderLine(float x1, float x2, float y, ax::Color4F color,
 {
     static float WID = 400;
 
-    float xMid = /*AXRANDOM_0_1()*100 +*/ (x1 + x2) * 0.5f;
+    float xMid =  (x1 + x2) * 0.5f;
     float r = color.r;
     float g = color.g;
     float b = color.b;
@@ -2531,7 +2534,7 @@ void CandyMixEeffect::renderLine(float x1, float x2, float y, ax::Color4F color,
         float rr = MIN(mm, r * sf + sp);
         float gg = MIN(mm, g * sf + sp);
         float bb = MIN(mm, b * sf + sp);
-        drawNode->drawPoint(Vec2(y, x - 50), 2.0f, Color4F(rr, gg, bb, 0.8f));
+        drawNode->drawPoint(Vec2(y, x - 50), 2.0f, Color4F(rr, gg, bb, 1.0f));
     }
 }
 

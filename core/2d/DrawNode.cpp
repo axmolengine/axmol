@@ -829,10 +829,6 @@ void DrawNode::_drawPolygon(const Vec2* verts,
                             float thickness,
                             bool isconvex)
 {
-    if (thickness < 0.0f)
-    {
-        thickness = 0.0f;
-    }
     AXASSERT(count >= 0, "invalid count value");
 
     bool outline = (thickness != 0.0f);
@@ -1038,8 +1034,6 @@ void DrawNode::_drawPoly(const Vec2* verts,
                          float thickness,
                          bool isconvex)
 {
-    if (thickness <= 0.0f)
-        return;
     if (thickness == 1.0f && !properties.drawOrder)
     {
         Vec2* _vertices = _transform(verts, count);
@@ -1081,8 +1075,6 @@ void DrawNode::_drawSegment(const Vec2& from,
                             DrawNode::EndType etStart,
                             DrawNode::EndType etEnd)
 {
-    if (thickness <= 0.0f)
-        return;
     if (thickness == 1.0f && !properties.drawOrder)
     {
         unsigned int count = 2;
@@ -1230,9 +1222,6 @@ void DrawNode::_drawSegment(const Vec2& from,
 
 void DrawNode::_drawDot(const Vec2& pos, float radius, const Color4B& color)
 {
-    if (radius <= 0.0f)
-        return;
-
     unsigned int vertex_count = 2 * 3;
     ensureCapacityTriangle(vertex_count);
 
@@ -1298,9 +1287,6 @@ void DrawNode::_drawTriangle(const Vec2* _vertices3,
                              bool solid,
                              float thickness)
 {
-    if (thickness <= 0.0f)
-        return;
-
     unsigned int vertex_count = 3;
 
     if (thickness != 1.0f)
@@ -1367,25 +1353,26 @@ void DrawNode::_drawPoints(const Vec2* position,
                            const Color4B& color,
                            const DrawNode::PointType pointType)
 {
-    if (pointSize <= 0.0f)
-        return;
-
     if (properties.drawOrder == true)
     {
-        Vec2 pointSize4 = Vec2(pointSize / 4, pointSize / 4);
+        float pointSize4 = pointSize * 0.25f;
+        Vec2 vec2Size4   = Vec2(pointSize4, pointSize4);
         for (unsigned int i = 0; i < numberOfPoints; i++)
         {
             switch (pointType)
             {
             case PointType::Circle:
-                _drawCircle(position[i], pointSize, 90, 8, false, 1.0f, 1.0f, Color4B(), color, true);
+            {
+                _drawCircle(position[i], pointSize4, 90, 32, false, 1.0f, 1.0f, Color4B(), color, true);
                 break;
+            }
             case PointType::Rect:
             {
-                Vec2 origin      = position[i] - pointSize4;
-                Vec2 destination = position[i] + pointSize4;
-                Vec2 _vertices[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y)};
-                _drawPolygon(_vertices, 4, color, color, false, pointSize, true);
+                Vec2 origin      = position[i] - vec2Size4;
+                Vec2 destination = position[i] + vec2Size4;
+                Vec2 _vertices[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y),
+                                    origin};
+                _drawPolygon(_vertices, 5, color, color, false, 0.0f, true);
             }
             break;
             default:
@@ -1414,17 +1401,41 @@ void DrawNode::_drawPoint(const Vec2& position,
                           const Color4B& color,
                           const DrawNode::PointType pointType)
 {
-    if (pointSize <= 0.0f)
+    if (properties.drawOrder == true)
+    {
+        float pointSize4 = pointSize * 0.25f;
+        Vec2 vec2Size4   = Vec2(pointSize4, pointSize4);
+
+        switch (pointType)
+        {
+        case PointType::Circle:
+        {
+            _drawCircle(position, pointSize4, 90, 32, false, 1.0f, 1.0f, Color4B(), color, true);
+            break;
+        }
+        case PointType::Rect:
+        {
+            Vec2 origin      = position - vec2Size4;
+            Vec2 destination = position + vec2Size4;
+            Vec2 _vertices[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y),
+                                origin};
+            _drawPolygon(_vertices, 5, color, color, false, 0.0f, true);
+        }
+        break;
+        default:
+            break;
+        }
+
         return;
+    }
 
     if (properties.drawOrder == true)
     {
-        float pointSize4 = pointSize / 4;
-
+        float pointSize4 = pointSize * 0.25f;
         Vec2 origin      = position - Vec2(pointSize4, pointSize4);
         Vec2 destination = position + Vec2(pointSize4, pointSize4);
         Vec2 _vertices[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y)};
-        _drawPolygon(_vertices, 4, color, color, false, pointSize, true);
+        _drawPolygon(_vertices, 4, color, color, false, 0.0f, true);
     }
     else
     {
@@ -1467,10 +1478,12 @@ void DrawNode::_drawPie(const Vec2& center,
             _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, fillColor, true, thickness);
             break;
         case DrawMode::Outline:
-            _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color4B::TRANSPARENT, true, thickness);
+            _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color4B::TRANSPARENT, true,
+                        thickness);
             break;
         case DrawMode::Line:
-            _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color4B::TRANSPARENT, true, thickness);
+            _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color4B::TRANSPARENT, true,
+                        thickness);
             break;
         case DrawMode::Semi:
             _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, fillColor, true, thickness);
