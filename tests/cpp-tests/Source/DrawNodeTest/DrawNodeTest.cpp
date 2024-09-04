@@ -2493,6 +2493,7 @@ void DrawNodeSpLinesTest::update(float dt)
     drawNode->drawDot(pts2->getControlPointAtIndex(i2), 4, Color4F::GREEN);
 }
 
+#if defined(AX_PLATFORM_PC)
 CandyMixEeffect::CandyMixEeffect()
 {
     static const float BUTTON_WIDTH = 30;
@@ -2572,6 +2573,7 @@ void CandyMixEeffect::update(float dt)
         xa += sin(t + ta) * 0.1f;
     }
 }
+#endif
 
 #if defined(_WIN32)
 #    pragma pop_macro("TRANSPARENT")

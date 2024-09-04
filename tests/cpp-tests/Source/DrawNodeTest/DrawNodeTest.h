@@ -444,7 +444,7 @@ private:
     ax::PointArray* array;
 };
 
-
+#if defined(AX_PLATFORM_PC)
 class CandyMixEeffect : public DrawNodeBaseTest
 {
 public:
@@ -465,3 +465,4 @@ private:
     ax::ui::RadioButtonGroup* _radioButtonGroup;
     int selectedRadioButton;
 };
+#endif

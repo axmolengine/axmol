@@ -916,7 +916,7 @@ void DrawNode::_drawPolygon(const Vec2* verts,
     {
         if (thickness != 1.0f || properties.drawOrder)
         {
-            thickness *= properties.factor;  // thickness 1 is the same for all
+            thickness *= properties.factor;
 
             for (unsigned int i = 1; i < (count); i++)
             {
