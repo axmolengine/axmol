@@ -36,14 +36,6 @@ NS_AX_MATH_BEGIN
  * Color3B
  */
 
-Color3B::Color3B() {}
-
-Color3B::Color3B(uint8_t _r, uint8_t _g, uint8_t _b) : r(_r), g(_g), b(_b) {}
-
-Color3B::Color3B(const Color4B& color) : r(color.r), g(color.g), b(color.b) {}
-
-Color3B::Color3B(const Color4F& color) : r(color.r * 255.0f), g(color.g * 255.0f), b(color.b * 255.0f) {}
-
 bool Color3B::operator==(const Color3B& right) const
 {
     return (r == right.r && g == right.g && b == right.b);
@@ -78,14 +70,6 @@ bool Color3B::operator!=(const Color4F& right) const
  * Color4B
  */
 
-Color4B::Color4B() {}
-
-Color4B::Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) : r(_r), g(_g), b(_b), a(_a) {}
-
-Color4B::Color4B(const Color3B& color, uint8_t _a) : r(color.r), g(color.g), b(color.b), a(_a) {}
-
-Color4B::Color4B(const Color4F& color) : r(color.r * 255), g(color.g * 255), b(color.b * 255), a(color.a * 255) {}
-
 bool Color4B::operator==(const Color4B& right) const
 {
     return (r == right.r && g == right.g && b == right.b && a == right.a);
@@ -119,18 +103,6 @@ bool Color4B::operator!=(const Color4F& right) const
 /**
  * Color4F
  */
-
-Color4F::Color4F() {}
-
-Color4F::Color4F(float _r, float _g, float _b, float _a) : Vec4Base(_r, _g, _b, _a) {}
-
-Color4F::Color4F(const Color3B& color, float _a)
-    : Vec4Base(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, _a)
-{}
-
-Color4F::Color4F(const Color4B& color)
-    : Vec4Base(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f)
-{}
 
 bool Color4F::operator==(const Color3B& right) const
 {
