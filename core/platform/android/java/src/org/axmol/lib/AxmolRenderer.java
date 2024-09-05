@@ -74,8 +74,8 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
                     }
 
                     long now = System.nanoTime();
-                    this.gameSurfaceView.requestRender();
                     synchronized (drawMonitor) {
+                        this.gameSurfaceView.requestRender();
                         drawMonitor.wait();
                     }
                     long wait = (AxmolRenderer.sAnimationInterval - (System.nanoTime()-now)) / AxmolRenderer.NANOSECONDSPERMICROSECOND;
