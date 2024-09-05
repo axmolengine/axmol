@@ -1331,9 +1331,10 @@ float verticesFB[] = {
 
 DrawNodeTests::DrawNodeTests()
 {
-    ADD_TEST_CASE(DrawNodeThicknessStressTest);
-    ADD_TEST_CASE(DrawNodeSpLinesTest);
     ADD_TEST_CASE(DrawNodeMethodsTest);
+
+    ADD_TEST_CASE(DrawNodeSpLinesTest);
+
     ADD_TEST_CASE(DrawNodeAxmolTest2);
 
 #if defined(AX_PLATFORM_PC)
@@ -1348,11 +1349,11 @@ DrawNodeTests::DrawNodeTests()
 
     ADD_TEST_CASE(DrawNodeDrawInWrongOrder_Issue1888);
 
-    //  ADD_TEST_CASE(DrawNodePerformaneTest);
     ADD_TEST_CASE(DrawNodeThicknessTest);
+    ADD_TEST_CASE(DrawNodeThicknessStressTest);
 
-    //   ADD_TEST_CASE(DrawNodeCocos2dxBackwardsAPITest);
     ADD_TEST_CASE(DrawNodeIssueTester);
+
 }
 
 DrawNodeBaseTest::DrawNodeBaseTest()
@@ -2991,235 +2992,6 @@ void DrawNodeMethodsTest::drawAll()
     }
 }
 
-DrawNodePerformaneTest::DrawNodePerformaneTest()
-{
-    auto listview = createListView();
-    listview->setPosition(Vec2(0.0f, 90.0f));
-    addChild(listview);
-
-    drawNode->setScale(0.5);
-    drawNode->setPosition(size / 4);
-
-    initSliders();
-
-    label = Label::createWithTTF("Count: ", "fonts/Marker Felt.ttf", 10);
-    label->setPosition(Vec2(Vec2(center.x, 80.0f)));
-    this->addChild(label, 1);
-
-    label1 = Label::createWithTTF("DrawNode::Round", "fonts/arial.ttf", 12);
-    addChild(label1, 1);
-    label2 = Label::createWithTTF("DrawNode::Square", "fonts/arial.ttf", 12);
-    addChild(label2, 1);
-    label3 = Label::createWithTTF("DrawNode::Butt", "fonts/arial.ttf", 12);
-    addChild(label3, 1);
-
-    scheduleUpdate();
-}
-
-std::string DrawNodePerformaneTest::title() const
-{
-    return "DrawNode Performance Test";
-}
-
-string DrawNodePerformaneTest::subtitle() const
-{
-    return "";
-}
-
-ax::ui::ListView* DrawNodePerformaneTest::createListView()
-{
-    auto listview = ax::ui::ListView::create();
-
-    auto drawLine = ax::ui::Text::create();
-    drawLine->setString("drawDot");
-    drawLine->setTouchEnabled(true);
-    listview->pushBackCustomItem(drawLine);
-
-    auto drawSegment = ax::ui::Text::create();
-    drawSegment->setString("drawPoint");
-    drawSegment->setTouchEnabled(true);
-    listview->pushBackCustomItem(drawSegment);
-
-    auto drawTriangle = ax::ui::Text::create();
-    drawTriangle->setString("drawPoints");
-    drawTriangle->setTouchEnabled(true);
-    listview->pushBackCustomItem(drawTriangle);
-
-    auto drawRect = ax::ui::Text::create();
-    drawRect->setString("drawTriangle");
-    drawRect->setTouchEnabled(true);
-    listview->pushBackCustomItem(drawRect);
-
-    auto drawCircle = ax::ui::Text::create();
-    drawCircle->setString("drawSegment");
-    drawCircle->setTouchEnabled(true);
-    listview->pushBackCustomItem(drawCircle);
-
-    auto drawQuadBezier = ax::ui::Text::create();
-    drawQuadBezier->setString("drawSolidCircle");
-    drawQuadBezier->setTouchEnabled(true);
-    listview->pushBackCustomItem(drawQuadBezier);
-
-    auto drawCubicBezier = ax::ui::Text::create();
-    drawCubicBezier->setString("drawSolidPoly");
-    drawCubicBezier->setTouchEnabled(true);
-    listview->pushBackCustomItem(drawCubicBezier);
-
-    auto drawCardinalSpline = ax::ui::Text::create();
-    drawCardinalSpline->setString("drawSolidRect");
-    drawCardinalSpline->setTouchEnabled(true);
-    listview->pushBackCustomItem(drawCardinalSpline);
-
-    listview->setContentSize(drawLine->getContentSize() * 8);
-    listview->setCurSelectedIndex(0);
-    listview->setTouchEnabled(true);
-    listview->addEventListener(
-        (ui::ListView::ccListViewCallback)AX_CALLBACK_2(DrawNodeBaseTest::listviewCallback, this));
-    listview->setTag(100);
-
-    listview->getItem(_currentSeletedItemIndex)->setColor(Color3B::RED);
-
-    return listview;
-}
-
-void DrawNodePerformaneTest::update(float dt)
-{
-    DrawNodeBaseTest::update(dt);
-
-    drawNode->clear();
-
-    label1->setVisible(false);
-    label2->setVisible(false);
-    label3->setVisible(false);
-
-    label->setString("Count: (" + Value(count).asString() + ")");
-    switch (_currentSeletedItemIndex)
-    {
-    case 0:
-    {
-        // Draw 10 circles/dots
-        for (int i = 0; i < count / 100; i++)
-        {
-            drawNode->drawDot(Vec2(100.f + AXRANDOM_0_1() * VisibleRect::rightTop().x,
-                                   100.f + AXRANDOM_0_1() * VisibleRect::rightTop().y),
-                              AXRANDOM_0_1() * 20 + 20, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
-        }
-        break;
-    }
-    case 1:
-    {
-        for (int i = 0; i < 100; i++)
-        {
-            drawNode->drawPoint(Vec2(i * 7.0f, 50.0f), (float)i / 5 + 1,
-                                Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
-        }
-        break;
-    }
-    case 2:
-    {
-        // drawPoints
-        for (int i = 0; i < count; i++)
-        {
-            Vec2 position[] = {
-                {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
-                {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
-                {60 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 60 + AXRANDOM_0_1() * VisibleRect::rightTop().y},
-                {70 + AXRANDOM_0_1() * VisibleRect::rightTop().x, 70 + AXRANDOM_0_1() * VisibleRect::rightTop().y}};
-            drawNode->drawPoints(position, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
-        }
-
-        break;
-    }
-    case 3:
-    {
-        // drawTriangle
-        for (int i = 0; i < count; i++)
-        {
-            Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y);
-            drawNode->drawTriangle(pos + Vec2(10.0f, 10.0f), pos + Vec2(70.0f, 30.0f), pos + Vec2(100.0f, 140.0f),
-                                   Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
-        }
-        break;
-    }
-    case 4:
-    {
-        // Draw segment
-        label1->setVisible(true);
-        label2->setVisible(true);
-        label3->setVisible(true);
-
-        int yy1 = 0;
-        int yy  = 50;
-        drawNode->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20, Color4F::GREEN, DrawNode::Round,
-                              DrawNode::Round);
-
-        label1->setPosition(Vec2(410.0f, yy + 55));
-
-        yy += 110;
-        drawNode->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20, Color4F::BLUE, DrawNode::Round,
-                              DrawNode::Square);
-        label2->setPosition(Vec2(410.0f, yy));
-
-        yy += 110;
-        drawNode->drawSegment(Vec2(50.0f, yy), Vec2(400, yy - yy1), count / 20, Color4F::RED, DrawNode::Round,
-                              DrawNode::Butt);
-        label3->setPosition(Vec2(410.0f, yy - 55));
-
-        break;
-    }
-    case 5:
-    {
-        // draw a solid circle
-        for (int i = 0; i < count; i++)
-        {
-            drawNode->drawSolidCircle(
-                Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y),
-                AXRANDOM_0_1() * 40.f + 40.f, AX_DEGREES_TO_RADIANS(90), 50, 2.0f, 2.0f,
-                Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
-        }
-        break;
-    }
-    case 6:
-    {
-        // draw a solid poly
-        drawNode->properties.setDefaultValues();
-        drawNode->properties.setPosition(vertices1[0]);
-        drawNode->properties.setRotation(count);
-        //    draw->properties.setScale(Vec2(count, count));
-        drawNode->properties.setCenter(vertices1[0]);
-        drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color4F::GREEN, count);
-        drawNode->properties.setDefaultValues();
-        break;
-    }
-    case 7:
-    {
-        // draw a solid rectangle
-        for (int i = 0; i < count; i++)
-        {
-            Vec2 pos = Vec2(AXRANDOM_0_1() * VisibleRect::rightTop().x, AXRANDOM_0_1() * VisibleRect::rightTop().y);
-            drawNode->drawSolidRect(pos, pos + Vec2(20.0f, 20.0f),
-                                    Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
-        }
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-void DrawNodePerformaneTest::onEnter()
-{
-    for (int i = 0; i < sliderType::sliderTypeLast; i++)
-    {
-        sliderValue[i] = 1;
-        slider[i]->setPercent(sliderValue[i]);
-    }
-
-    sliderValue[sliderType::Thickness] = 10;
-    slider[sliderType::Thickness]->setPercent(sliderValue[sliderType::Thickness]);
-
-    DrawNodeBaseTest::onEnter();
-}
 
 DrawNodeDrawInWrongOrder_Issue1888::DrawNodeDrawInWrongOrder_Issue1888()
 {
@@ -3507,7 +3279,7 @@ void DrawNodeAxmolTest2::drawAllv2(DrawNode* drawNode, bool drawOrder)
 
 string DrawNodeAxmolTest2::title() const
 {
-    return "DrawNode.v1 vs DrawNode.v2";
+    return "DrawNode Order test";
 }
 
 string DrawNodeAxmolTest2::subtitle() const

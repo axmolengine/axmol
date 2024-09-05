@@ -304,36 +304,6 @@ private:
 };
 
 
-class DrawNodePerformaneTest : public DrawNodeBaseTest
-{
-public:
-    CREATE_FUNC(DrawNodePerformaneTest);
-
-    DrawNodePerformaneTest();
-
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-
-    void update(float dt);
-    void onEnter();
-
-    void drawAll();
-
-private:
-    ax::ui::ListView* createListView();
-
-
-    int count = 1;
-    bool isDirty = false;
-
-    ax::Label* label;
-    ax::Label* label1;
-    ax::Label* label2;
-    ax::Label* label3;
-};
-
-
-
 class DrawNodeDrawInWrongOrder_Issue1888 : public DrawNodeBaseTest
 {
 public:
