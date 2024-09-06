@@ -72,12 +72,8 @@
 #include "CurrentLanguageTest/CurrentLanguageTest.h"
 #include "DataVisitorTest/DataVisitorTest.h"
 #include "NetworkTest/NetworkTest.h"
+#include "DrawNodeTest/DrawNodeTest.h"
 #include "DrawPrimitivesTest/DrawPrimitivesTest.h"
-
-#if defined(AX_ENABLE_EXT_DRAWNODE)
-#include "DrawNodeExTest/DrawNodeExTest.h"
-#endif
-
 #include "EffectsAdvancedTest/EffectsAdvancedTest.h"
 #include "EffectsTest/EffectsTest.h"
 #include "ExtensionsTest/ExtensionsTest.h"
