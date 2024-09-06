@@ -52856,6 +52856,265 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
     int argc = 0;
     ax::DrawNode* cobj = nullptr;
     bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_drawPie'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 8) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            int arg3;
+            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            int arg4;
+            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg5;
+            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg6;
+            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            ax::Color4B arg7;
+            ok &=luaval_to_color4b(tolua_S, 9, &arg7, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            cobj->drawPie(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 9) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            int arg3;
+            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            int arg4;
+            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg5;
+            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg6;
+            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            ax::Color4B arg7;
+            ok &=luaval_to_color4b(tolua_S, 9, &arg7, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            ax::DrawNode::DrawMode arg8;
+            ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            cobj->drawPie(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 9) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            int arg3;
+            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            int arg4;
+            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg5;
+            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg6;
+            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            ax::Color4B arg7;
+            ok &=luaval_to_color4b(tolua_S, 9, &arg7, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            ax::Color4B arg8;
+            ok &=luaval_to_color4b(tolua_S, 10, &arg8, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            cobj->drawPie(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 10) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            int arg3;
+            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            int arg4;
+            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg5;
+            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg6;
+            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            ax::Color4B arg7;
+            ok &=luaval_to_color4b(tolua_S, 9, &arg7, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            ax::Color4B arg8;
+            ok &=luaval_to_color4b(tolua_S, 10, &arg8, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            ax::DrawNode::DrawMode arg9;
+            ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            cobj->drawPie(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 11) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            int arg3;
+            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            int arg4;
+            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg5;
+            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg6;
+            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            ax::Color4B arg7;
+            ok &=luaval_to_color4b(tolua_S, 9, &arg7, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            ax::Color4B arg8;
+            ok &=luaval_to_color4b(tolua_S, 10, &arg8, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            ax::DrawNode::DrawMode arg9;
+            ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            double arg10;
+            ok &= luaval_to_number(tolua_S, 12,&arg10, "ax.DrawNode:drawPie");
+
+            if (!ok) { break; }
+            cobj->drawPie(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.DrawNode:drawPie",argc, 9);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_drawPie'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_setIsConvex(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* cobj = nullptr;
+    bool ok  = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -52871,103 +53130,32 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_drawPie'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_setIsConvex'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 10) 
+    if (argc == 1) 
     {
-        ax::Vec2 arg0;
-        double arg1;
-        double arg2;
-        int arg3;
-        int arg4;
-        double arg5;
-        double arg6;
-        ax::Color4B arg7;
-        ax::Color4B arg8;
-        ax::DrawNode::DrawMode arg9;
+        bool arg0;
 
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawPie");
-
-        ok &=luaval_to_color4b(tolua_S, 9, &arg7, "ax.DrawNode:drawPie");
-
-        ok &=luaval_to_color4b(tolua_S, 10, &arg8, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "ax.DrawNode:drawPie");
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.DrawNode:setIsConvex");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawPie'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_setIsConvex'", nullptr);
             return 0;
         }
-        cobj->drawPie(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+        cobj->setIsConvex(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 11) 
-    {
-        ax::Vec2 arg0;
-        double arg1;
-        double arg2;
-        int arg3;
-        int arg4;
-        double arg5;
-        double arg6;
-        ax::Color4B arg7;
-        ax::Color4B arg8;
-        ax::DrawNode::DrawMode arg9;
-        double arg10;
-
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawPie");
-
-        ok &=luaval_to_color4b(tolua_S, 9, &arg7, "ax.DrawNode:drawPie");
-
-        ok &=luaval_to_color4b(tolua_S, 10, &arg8, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "ax.DrawNode:drawPie");
-
-        ok &= luaval_to_number(tolua_S, 12,&arg10, "ax.DrawNode:drawPie");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawPie'", nullptr);
-            return 0;
-        }
-        cobj->drawPie(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:drawPie",argc, 10);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:setIsConvex",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_drawPie'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_setIsConvex'.",&tolua_err);
 #endif
 
     return 0;
@@ -53804,6 +53992,7 @@ int lua_register_ax_base_DrawNode(lua_State* tolua_S)
         tolua_function(tolua_S,"drawSolidRect",lua_ax_base_DrawNode_drawSolidRect);
         tolua_function(tolua_S,"drawSolidCircle",lua_ax_base_DrawNode_drawSolidCircle);
         tolua_function(tolua_S,"drawPie",lua_ax_base_DrawNode_drawPie);
+        tolua_function(tolua_S,"setIsConvex",lua_ax_base_DrawNode_setIsConvex);
         tolua_function(tolua_S,"drawSegment",lua_ax_base_DrawNode_drawSegment);
         tolua_function(tolua_S,"drawTriangle",lua_ax_base_DrawNode_drawTriangle);
         tolua_function(tolua_S,"drawSolidTriangle",lua_ax_base_DrawNode_drawSolidTriangle);
