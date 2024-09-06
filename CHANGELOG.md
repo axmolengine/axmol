@@ -12,7 +12,6 @@
   - Rename FileUtils::createDirectory to FileUtils::createDirectories
   - Use splitpath_cb to optimize FileUtils::createDirectories
   - Rename FileUtils::getFileShortName to FileUtils::getPathBaseName
-  - Rename FileUtils::getFileExtension to FileUtils::getPathExtension
   - Add FileUtils::getPathDirName
   - Add FileUtils::getPathBaseNameNoExtension
   - Mark all renamed FileUtils stubs old name deprecated
