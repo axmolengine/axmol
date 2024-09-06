@@ -33845,7 +33845,7 @@ int lua_ax_base_FileUtils_writeBinaryToFile(lua_State* tolua_S)
 #endif
     return 0;
 }
-int lua_ax_base_FileUtils_getFileExtension(lua_State* tolua_S)
+int lua_ax_base_FileUtils_getPathExtension(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -33863,21 +33863,21 @@ int lua_ax_base_FileUtils_getFileExtension(lua_State* tolua_S)
     if (argc == 1)
     {
         std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:getFileExtension");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:getPathExtension");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_getFileExtension'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_getPathExtension'", nullptr);
             return 0;
         }
-        auto&& ret = ax::FileUtils::getFileExtension(arg0);
+        auto&& ret = ax::FileUtils::getPathExtension(arg0);
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.FileUtils:getFileExtension",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.FileUtils:getPathExtension",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_getFileExtension'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_getPathExtension'.",&tolua_err);
 #endif
     return 0;
 }
@@ -34075,7 +34075,7 @@ int lua_register_ax_base_FileUtils(lua_State* tolua_S)
         tolua_function(tolua_S,"getInstance", lua_ax_base_FileUtils_getInstance);
         tolua_function(tolua_S,"destroyInstance", lua_ax_base_FileUtils_destroyInstance);
         tolua_function(tolua_S,"writeBinaryToFile", lua_ax_base_FileUtils_writeBinaryToFile);
-        tolua_function(tolua_S,"getFileExtension", lua_ax_base_FileUtils_getFileExtension);
+        tolua_function(tolua_S,"getPathExtension", lua_ax_base_FileUtils_getPathExtension);
         tolua_function(tolua_S,"getPathBaseName", lua_ax_base_FileUtils_getPathBaseName);
         tolua_function(tolua_S,"getPathBaseNameNoExtension", lua_ax_base_FileUtils_getPathBaseNameNoExtension);
         tolua_function(tolua_S,"getPathDirName", lua_ax_base_FileUtils_getPathDirName);
