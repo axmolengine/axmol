@@ -190,7 +190,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         mState.set(STATE_PREPARING);
 
         final AxmolMediaEngine mediaEngine = this;
-        AxmolEngine.getActivity().runOnUiThread(() -> {
+        AxmolEngine.runOnUiThread(() -> {
             try {
                 DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(sContext);
                 MediaSource mediaSource =
@@ -219,7 +219,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
             final ExoPlayer player = mPlayer;
             mPlayer = null;
             final AxmolMediaEngine mediaEngine = this;
-            AxmolEngine.getActivity().runOnUiThread(() -> {
+            AxmolEngine.runOnUiThread(() -> {
                 mVideoRenderer.setOutput(null);
                 player.removeListener(mediaEngine);
                 player.stop();
@@ -234,7 +234,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         if (mLooping != bLooping) {
             mLooping = bLooping;
             if (mPlayer == null) return false;
-            AxmolEngine.getActivity().runOnUiThread(() -> {
+            AxmolEngine.runOnUiThread(() -> {
                 if (mPlayer != null)
                     mPlayer.setRepeatMode(mLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
             });
@@ -245,7 +245,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     @SuppressWarnings("unused")
     public boolean setRate(double fRate) {
         if (mPlayer == null) return false;
-        AxmolEngine.getActivity().runOnUiThread(() -> {
+        AxmolEngine.runOnUiThread(() -> {
             if (mPlayer != null)
                 mPlayer.setPlaybackSpeed((float) fRate);
         });
@@ -255,7 +255,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     public boolean setCurrentTime(double fSeekTimeInSec) {
         if (mPlayer == null) return false;
 
-        AxmolEngine.getActivity().runOnUiThread(() -> {
+        AxmolEngine.runOnUiThread(() -> {
             if (mPlayer != null)
                 mPlayer.seekTo((long) (fSeekTimeInSec * 1000));
         });
@@ -264,7 +264,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
 
     public boolean play() {
         if (mPlayer == null) return false;
-        AxmolEngine.getActivity().runOnUiThread(() -> {
+        AxmolEngine.runOnUiThread(() -> {
             if (mPlayer != null) {
                 if (!mPlaybackEnded && mState.compareAndSet(STATE_STOPPED, STATE_PREPARING)) // TO-CHECK: can't reply after playback stopped
                 {
@@ -285,7 +285,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
 
     public boolean pause() {
         if (mPlayer == null) return false;
-        AxmolEngine.getActivity().runOnUiThread(() -> {
+        AxmolEngine.runOnUiThread(() -> {
             if (mPlayer != null)
                 mPlayer.pause();
         });
@@ -294,7 +294,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
 
     public boolean stop() {
         if (mPlayer == null) return false;
-        AxmolEngine.getActivity().runOnUiThread(() -> {
+        AxmolEngine.runOnUiThread(() -> {
             if (mPlayer != null) {
                 mPlayer.stop();
                 nativeStoreDuration(mNativeObj, 0.0);
@@ -417,7 +417,14 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
 
         ByteBuffer tmpBuffer = codec.getOutputBuffer(index);
         nativeStoreLastVideoSample(mNativeObj, tmpBuffer, tmpBuffer.remaining());
-        nativeStoreCurrentTime(mNativeObj, mPlayer.getCurrentPosition() / 1000.0);
+
+        AxmolEngine.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(mPlayer != null)
+                    nativeStoreCurrentTime(mNativeObj, mPlayer.getCurrentPosition() / 1000.0);
+            }
+        });
     }
 
     @Override
@@ -425,14 +432,20 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         Log.d(TAG, "[Individual]onIsPlayingChanged: " + isPlaying);
         if (mPlayer == null) return;
         if (!isPlaying) {
-            int playbackState = mPlayer.getPlaybackState();
-            if (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) {
-                mState.set(STATE_PAUSED);
-                nativeEvent(EVENT_PAUSED);
-            } else if (playbackState == Player.STATE_IDLE && mState.get() != STATE_STOPPED) {
-                mState.set(STATE_STOPPED);
-                nativeEvent(EVENT_STOPPED);
-            }
+            AxmolEngine.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mPlayer == null) return;
+                    int playbackState = mPlayer.getPlaybackState();
+                    if (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) {
+                        mState.set(STATE_PAUSED);
+                        nativeEvent(EVENT_PAUSED);
+                    } else if (playbackState == Player.STATE_IDLE && mState.get() != STATE_STOPPED) {
+                        mState.set(STATE_STOPPED);
+                        nativeEvent(EVENT_STOPPED);
+                    }
+                }
+            });
         }
     }
 
@@ -448,7 +461,13 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         if (mPlayer == null) return;
         switch (playbackState) {
             case Player.STATE_READY:
-                nativeStoreDuration(mNativeObj, mPlayer.getContentDuration() / 1000.0);
+                AxmolEngine.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mPlayer == null) return;
+                        nativeStoreDuration(mNativeObj, mPlayer.getContentDuration() / 1000.0);
+                    }
+                });
                 break;
             case Player.STATE_ENDED:
                 mPlaybackEnded = true;
