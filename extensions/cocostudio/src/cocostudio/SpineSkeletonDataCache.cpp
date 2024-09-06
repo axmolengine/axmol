@@ -41,7 +41,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
     spine::AttachmentLoader* loader   = nullptr;
     bool ok                           = false;
 
-    auto fileExtension = ax::FileUtils::getInstance()->getFileExtension(dataFile);
+    auto fileExtension = ax::FileUtils::getPathExtension(dataFile);
 
     static spine::AxmolTextureLoader s_textureLoader;
 
@@ -174,7 +174,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
     spAttachmentLoader* loader   = nullptr;
     bool ok                      = false;
 
-    auto fileExtension = ax::FileUtils::getInstance()->getFileExtension(dataFile);
+    auto fileExtension = ax::FileUtils::getPathExtension(dataFile);
 
     do
     {

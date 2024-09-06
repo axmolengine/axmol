@@ -565,7 +565,8 @@ public:
      *  @param filePath The path of the file, it could be a relative or absolute path.
      *  @return suffix for filename in lower case or empty if a dot not found.
      */
-    static std::string getFileExtension(std::string_view filePath);
+    AX_DEPRECATED_ATTRIBUTE static std::string getFileExtension(std::string_view filePath) { return getPathExtension(filePath); }
+    static std::string getPathExtension(std::string_view filePath);
 
     /**
      *  Gets filename shotName

@@ -240,7 +240,7 @@ bool MeshRenderer::loadFromFile(std::string_view path,
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(path);
 
-    std::string ext = FileUtils::getInstance()->getFileExtension(path);
+    std::string ext = FileUtils::getPathExtension(path);
     if (ext == ".obj")
     {
         return Bundle3D::loadObj(*meshdatas, *materialdatas, *nodedatas, fullPath);

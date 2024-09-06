@@ -1343,7 +1343,7 @@ bool FileUtils::isPopupNotify() const
     return s_popupNotify;
 }
 
-std::string FileUtils::getFileExtension(std::string_view filePath)
+std::string FileUtils::getPathExtension(std::string_view filePath)
 {
     std::string fileExtension;
     size_t pos = filePath.find_last_of('.');

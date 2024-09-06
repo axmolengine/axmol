@@ -627,7 +627,7 @@ void UIPackage::loadAtlas(PackageItem* item)
     delete image;
 
     string alphaFilePath;
-    string ext = FileUtils::getInstance()->getFileExtension(item->file);
+    string ext = FileUtils::getPathExtension(item->file);
     size_t pos = item->file.find_last_of('.');
     if (pos != -1)
         alphaFilePath = item->file.substr(0, pos) + "!a" + ext;
