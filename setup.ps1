@@ -391,6 +391,7 @@ if ($gradlewVersion) {
     update_gradle_for_test 'fairygui-tests'
     update_gradle_for_test 'live2d-tests'
     update_gradle_for_test 'lua-tests'
+    update_gradle_for_test 'unit-tests'
 }
 
 if ($IsLinux -and (Test-Path '/etc/wsl.conf' -PathType Leaf)) {
