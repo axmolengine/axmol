@@ -160,9 +160,6 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void update(float dt) override;
-
-private:
-    ax::any_buffer _abuf;
 };
 
 class DrawNodeMorphTest_SolidPolygon : public DrawNodeBaseTest
@@ -318,7 +315,6 @@ public:
 private:
     ax::Vec2* heart;
     const int totalFrames = 240;
-    ax::any_buffer _abuf;
 };
 
 class DrawNodeAxmolTest2 : public DrawNodeBaseTest

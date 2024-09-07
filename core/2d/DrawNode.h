@@ -34,10 +34,10 @@
 #define __DRAW_NODE_H__
 
 #include "2d/Node.h"
+#include "base/axstd.h"
 #include "base/Types.h"
 #include "renderer/CustomCommand.h"
 #include "math/Math.h"
-#include "base/any_buffer.h"
 
 namespace ax
 {
@@ -596,9 +596,6 @@ protected:
     bool _isolated          = false;
     float _lineWidth        = 1.0f;
     float _defaultLineWidth = 1.0f;
-
-    any_buffer _abuf;
-
 private:
     // Internal function _drawPoint
     void _drawPoint(const Vec2& position,
@@ -690,7 +687,7 @@ private:
      * @param closedPolygon The closedPolygon flag.
      * @js NA
      */
-    Vec2* _transform(const Vec2* vertices, unsigned int& count, bool closedPolygon = false);
+    axstd::pod_vector<Vec2> _transform(const Vec2* vertices, unsigned int& count, bool closedPolygon = false);
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode);

@@ -416,7 +416,8 @@ void DrawNode::drawQuadBezier(const Vec2& origin,
         return;
     }
 
-    Vec2* _vertices = _abuf.get<Vec2>(segments + 1);
+    axstd::pod_vector<Vec2> _vertices{
+        static_cast<size_t>(segments + 1)};  // Vec2* _vertices = _abuf.get<Vec2>(segments + 1);
 
     float t = 0.0f;
     for (unsigned int i = 0; i < segments; i++)
@@ -428,7 +429,7 @@ void DrawNode::drawQuadBezier(const Vec2& origin,
     _vertices[segments].x = destination.x;
     _vertices[segments].y = destination.y;
 
-    _drawPoly(_vertices, segments + 1, false, color, thickness, false);
+    _drawPoly(_vertices.data(), segments + 1, false, color, thickness, false);
 }
 
 void DrawNode::drawCubicBezier(const Vec2& origin,
@@ -445,7 +446,7 @@ void DrawNode::drawCubicBezier(const Vec2& origin,
         return;
     }
 
-    Vec2* _vertices = _abuf.get<Vec2>(segments + 1);
+    axstd::pod_vector<Vec2> _vertices{static_cast<size_t>(segments + 1)};
 
     float t = 0.0f;
     for (unsigned int i = 0; i < segments; i++)
@@ -459,7 +460,7 @@ void DrawNode::drawCubicBezier(const Vec2& origin,
     _vertices[segments].x = destination.x;
     _vertices[segments].y = destination.y;
 
-    _drawPoly(_vertices, segments + 1, false, color, thickness, true);
+    _drawPoly(_vertices.data(), segments + 1, false, color, thickness, true);
 }
 
 void DrawNode::drawCardinalSpline(PointArray* config,
@@ -474,7 +475,7 @@ void DrawNode::drawCardinalSpline(PointArray* config,
         return;
     }
 
-    Vec2* _vertices = _abuf.get<Vec2>(segments);
+    axstd::pod_vector<Vec2> _vertices{static_cast<size_t>(segments)};
 
     ssize_t p;
     float lt;
@@ -512,7 +513,7 @@ void DrawNode::drawCardinalSpline(PointArray* config,
         }
     }
 
-    _drawPoly(_vertices, segments, false, color, thickness, true);
+    _drawPoly(_vertices.data(), segments, false, color, thickness, true);
 }
 
 void DrawNode::drawCatmullRom(PointArray* points, unsigned int segments, const Color4B& color, float thickness)
@@ -833,14 +834,14 @@ void DrawNode::_drawPolygon(const Vec2* verts,
 
     bool outline = (thickness != 0.0f);
 
-    Vec2* _vertices = _transform(verts, count, closedPolygon);
+    auto _vertices = _transform(verts, count, closedPolygon);
 
     std::vector<V2F_C4B_T2F_Triangle> triangleList;
 
     int vertex_count = 0;
 
     // calculate the memory (important for correct drawing stuff)
-    if (closedPolygon && !isconvex && fillColor.a > 0.0f && !isConvex(_vertices, count) && count >= 3)
+    if (closedPolygon && !isconvex && fillColor.a > 0.0f && !isConvex(_vertices.data(), count) && count >= 3)
     {
         std::vector<p2t::Point> p2pointsStorage;
         p2pointsStorage.reserve(count);
@@ -894,7 +895,7 @@ void DrawNode::_drawPolygon(const Vec2* verts,
 
     // start drawing...
     int ii = 0;
-    if (closedPolygon && !isconvex && fillColor.a > 0.0f && !isConvex(_vertices, count) && count >= 3)
+    if (closedPolygon && !isconvex && fillColor.a > 0.0f && !isConvex(_vertices.data(), count) && count >= 3)
     {
         for (auto&& t : triangleList)
         {
@@ -979,7 +980,8 @@ void DrawNode::_drawPolygon(const Vec2* verts,
             {
                 Vec2 offset, n;
             };
-            struct ExtrudeVerts* extrude = _abuf.get<struct ExtrudeVerts>(sizeof(struct ExtrudeVerts) * count);
+
+            axstd::pod_vector<ExtrudeVerts> extrude{static_cast<size_t>(sizeof(struct ExtrudeVerts) * count)};
 
             int closeCount = count - ((closedPolygon) ? 0 : 1);
             for (unsigned int i = 0; i < count; i++)
@@ -1023,8 +1025,6 @@ void DrawNode::_drawPolygon(const Vec2* verts,
     _bufferCountTriangle += vertex_count;
     _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
     _dirtyTriangle = true;
-
-    AX_SAFE_DELETE_ARRAY(_vertices);
 }
 
 void DrawNode::_drawPoly(const Vec2* verts,
@@ -1036,7 +1036,7 @@ void DrawNode::_drawPoly(const Vec2* verts,
 {
     if (thickness == 1.0f && !properties.drawOrder)
     {
-        Vec2* _vertices = _transform(verts, count);
+        auto _vertices = _transform(verts, count);
 
         unsigned int vertex_count = (closedPolygon) ? 2 * count : 2 * (count - 1);
 
@@ -1059,8 +1059,6 @@ void DrawNode::_drawPoly(const Vec2* verts,
                                               vertex_count * sizeof(V2F_C4B_T2F));
         _bufferCountLine += vertex_count;
         _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
-
-        AX_SAFE_DELETE_ARRAY(_vertices);
     }
     else
     {
@@ -1075,13 +1073,13 @@ void DrawNode::_drawSegment(const Vec2& from,
                             DrawNode::EndType etStart,
                             DrawNode::EndType etEnd)
 {
+    unsigned int count = 2;
+    Vec2 line[]        = {from, to};
+
+    auto _vertices = _transform(line, count, false);
+
     if (thickness == 1.0f && !properties.drawOrder)
     {
-        unsigned int count = 2;
-        Vec2 aLine[]       = {from, to};
-
-        Vec2* _vertices = _transform(aLine, count, false);
-
         ensureCapacityLine(count);
 
         V2F_C4B_T2F* line = _bufferLine + _bufferCountLine;
@@ -1093,131 +1091,123 @@ void DrawNode::_drawSegment(const Vec2& from,
         _bufferCountLine += count;
         _dirtyLine = true;
         _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
-
-        AX_SAFE_DELETE_ARRAY(_vertices);
-        return;
     }
-
-    unsigned int count = 2;
-    Vec2 line[]        = {from, to};
-
-    Vec2* _vertices = _transform(line, count, false);
-
-    Vec2 a  = _vertices[0];
-    Vec2 b  = _vertices[1];
-    Vec2 n  = ((b - a).getPerp()).getNormalized();
-    Vec2 t  = n.getPerp();
-    Vec2 nw = n * thickness;
-    Vec2 tw = t * thickness;
-    Vec2 v0 = b - (nw + tw);
-    Vec2 v1 = b + (nw - tw);
-    Vec2 v2 = b - nw;
-    Vec2 v3 = b + nw;
-    Vec2 v4 = a - nw;
-    Vec2 v5 = a + nw;
-    Vec2 v6 = a - (nw - tw);
-    Vec2 v7 = a + (nw + tw);
-
-    unsigned int vertex_count =
-        3 * ((etStart != DrawNode::EndType::Butt) ? 2 : 0) + 3 * 2 + 3 * ((etEnd != DrawNode::EndType::Butt) ? 2 : 0);
-    ensureCapacityTriangle(vertex_count);
-    V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
-
-    int ii = 0;
-    switch (etEnd)
+    else
     {
-    case DrawNode::EndType::Butt:
-        break;
+        Vec2 a  = _vertices[0];
+        Vec2 b  = _vertices[1];
+        Vec2 n  = ((b - a).getPerp()).getNormalized();
+        Vec2 t  = n.getPerp();
+        Vec2 nw = n * thickness;
+        Vec2 tw = t * thickness;
+        Vec2 v0 = b - (nw + tw);
+        Vec2 v1 = b + (nw - tw);
+        Vec2 v2 = b - nw;
+        Vec2 v3 = b + nw;
+        Vec2 v4 = a - nw;
+        Vec2 v5 = a + nw;
+        Vec2 v6 = a - (nw - tw);
+        Vec2 v7 = a + (nw + tw);
 
-    case DrawNode::EndType::Square:
+        unsigned int vertex_count = 3 * ((etStart != DrawNode::EndType::Butt) ? 2 : 0) + 3 * 2 +
+                                    3 * ((etEnd != DrawNode::EndType::Butt) ? 2 : 0);
+        ensureCapacityTriangle(vertex_count);
+        V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
+
+        int ii = 0;
+        switch (etEnd)
+        {
+        case DrawNode::EndType::Butt:
+            break;
+
+        case DrawNode::EndType::Square:
+            triangles[ii++] = {
+                {v0, color, Vec2::ZERO},
+                {v1, color, -n},
+                {v2, color, n},
+            };
+
+            triangles[ii++] = {
+                {v3, color, n},
+                {v1, color, Vec2::ZERO},
+                {v2, color, -n},
+            };
+
+            break;
+        case DrawNode::EndType::Round:
+            triangles[ii++] = {
+                {v0, color, -(n + t)},
+                {v1, color, n - t},
+                {v2, color, -n},
+            };
+
+            triangles[ii++] = {
+                {v3, color, n},
+                {v1, color, n - t},
+                {v2, color, -n},
+            };
+            break;
+
+        default:
+            break;
+        }
+
+        // BODY
         triangles[ii++] = {
-            {v0, color, Vec2::ZERO},
-            {v1, color, -n},
-            {v2, color, n},
+            {v3, color, n},
+            {v4, color, -n},
+            {v2, color, -n},
         };
 
         triangles[ii++] = {
             {v3, color, n},
-            {v1, color, Vec2::ZERO},
-            {v2, color, -n},
-        };
-
-        break;
-    case DrawNode::EndType::Round:
-        triangles[ii++] = {
-            {v0, color, -(n + t)},
-            {v1, color, n - t},
-            {v2, color, -n},
-        };
-
-        triangles[ii++] = {
-            {v3, color, n},
-            {v1, color, n - t},
-            {v2, color, -n},
-        };
-        break;
-
-    default:
-        break;
-    }
-
-    // BODY
-    triangles[ii++] = {
-        {v3, color, n},
-        {v4, color, -n},
-        {v2, color, -n},
-    };
-
-    triangles[ii++] = {
-        {v3, color, n},
-        {v4, color, -n},
-        {v5, color, n},
-    };
-
-    switch (etStart)
-    {
-    case DrawNode::EndType::Butt:
-        break;
-
-    case DrawNode::EndType::Square:
-        triangles[ii++] = {
-            {v6, color, Vec2::ZERO},
             {v4, color, -n},
             {v5, color, n},
         };
 
-        triangles[ii++] = {
-            {v6, color, -n},
-            {v7, color, Vec2::ZERO},
-            {v5, color, n},
-        };
-        break;
+        switch (etStart)
+        {
+        case DrawNode::EndType::Butt:
+            break;
 
-    case DrawNode::EndType::Round:
-        triangles[ii++] = {
-            {v6, color, t - n},
-            {v4, color, -n},
-            {v5, color, n},
-        };
+        case DrawNode::EndType::Square:
+            triangles[ii++] = {
+                {v6, color, Vec2::ZERO},
+                {v4, color, -n},
+                {v5, color, n},
+            };
 
-        triangles[ii++] = {
-            {v6, color, t - n},
-            {v7, color, t + n},
-            {v5, color, n},
-        };
-        break;
+            triangles[ii++] = {
+                {v6, color, -n},
+                {v7, color, Vec2::ZERO},
+                {v5, color, n},
+            };
+            break;
 
-    default:
-        break;
+        case DrawNode::EndType::Round:
+            triangles[ii++] = {
+                {v6, color, t - n},
+                {v4, color, -n},
+                {v5, color, n},
+            };
+
+            triangles[ii++] = {
+                {v6, color, t - n},
+                {v7, color, t + n},
+                {v5, color, n},
+            };
+            break;
+
+        default:
+            break;
+        }
+
+        _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F),
+                                                  vertex_count * sizeof(V2F_C4B_T2F));
+        _bufferCountTriangle += vertex_count;  // ii * 3;
+        _dirtyTriangle = true;
+        _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
     }
-
-    _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F),
-                                              vertex_count * sizeof(V2F_C4B_T2F));
-    _bufferCountTriangle += vertex_count;  // ii * 3;
-    _dirtyTriangle = true;
-    _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
-
-    AX_SAFE_DELETE_ARRAY(_vertices);
 }
 
 void DrawNode::_drawDot(const Vec2& pos, float radius, const Color4B& color)
@@ -1295,7 +1285,7 @@ void DrawNode::_drawTriangle(const Vec2* _vertices3,
     }
     else
     {
-        Vec2* _vertices = _transform(_vertices3, vertex_count, false);
+        auto _vertices = _transform(_vertices3, vertex_count, false);
 
         ensureCapacityTriangle(vertex_count);
 
@@ -1309,8 +1299,6 @@ void DrawNode::_drawTriangle(const Vec2* _vertices3,
         _bufferCountTriangle += vertex_count;
         _dirtyTriangle = true;
         _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
-
-        AX_SAFE_DELETE_ARRAY(_vertices);
     }
 }
 
@@ -1326,7 +1314,7 @@ void DrawNode::_drawAStar(const Vec2& center,
     const float coef = 2.0f * (float)M_PI / segments;
     float halfAngle  = coef / 2.0f;
 
-    auto _vertices = _abuf.get<Vec2>(segments * 2 + 1);
+    axstd::pod_vector<Vec2> _vertices(segments * 2 + 1);
 
     int i = 0;
     for (unsigned int a = 0; a < segments; a++)
@@ -1338,12 +1326,12 @@ void DrawNode::_drawAStar(const Vec2& center,
 
     if (solid)
     {
-        _drawPolygon(_vertices, i, filledColor, color, true, thickness, false);
+        _drawPolygon(_vertices.data(), i, filledColor, color, true, thickness, false);
     }
     else
     {
         _vertices[i++] = _vertices[0];
-        _drawPoly(_vertices, i, true, color, thickness, false);
+        _drawPoly(_vertices.data(), i, true, color, thickness, false);
     }
 }
 
@@ -1497,7 +1485,7 @@ void DrawNode::_drawPie(const Vec2& center,
     {
         const float coef = 2.0f * (float)M_PI / DEGREES;
 
-        auto _vertices = _abuf.get<Vec2>(DEGREES + 2);
+        axstd::pod_vector<Vec2> _vertices(DEGREES + 2);
 
         int n        = 0;
         float rads   = 0.0f;
@@ -1527,18 +1515,18 @@ void DrawNode::_drawPie(const Vec2& center,
         case DrawMode::Fill:
             _vertices[n++] = center;
             _vertices[n++] = _vertices[0];
-            _drawPolygon(_vertices, n, fillColor, borderColor, true, thickness, false);
+            _drawPolygon(_vertices.data(), n, fillColor, borderColor, true, thickness, false);
             break;
         case DrawMode::Outline:
             _vertices[n++] = center;
             _vertices[n++] = _vertices[0];
-            _drawPolygon(_vertices, n, Color4B::TRANSPARENT, borderColor, false, thickness, false);
+            _drawPolygon(_vertices.data(), n, Color4B::TRANSPARENT, borderColor, false, thickness, false);
             break;
         case DrawMode::Line:
-            _drawPolygon(_vertices, n - 1, Color4B::TRANSPARENT, borderColor, false, thickness, false);
+            _drawPolygon(_vertices.data(), n - 1, Color4B::TRANSPARENT, borderColor, false, thickness, false);
             break;
         case DrawMode::Semi:
-            _drawPolygon(_vertices, n - 1, fillColor, borderColor, true, thickness, false);
+            _drawPolygon(_vertices.data(), n - 1, fillColor, borderColor, true, thickness, false);
             break;
         default:
             break;
@@ -1546,7 +1534,7 @@ void DrawNode::_drawPie(const Vec2& center,
     }
 }
 
-Vec2* DrawNode::_transform(const Vec2* _vertices, unsigned int& count, bool closedPolygon)
+axstd::pod_vector<Vec2> DrawNode::_transform(const Vec2* _vertices, unsigned int& count, bool closedPolygon)
 {
     Vec2 vert0        = _vertices[0];
     int closedCounter = 0;
@@ -1556,12 +1544,10 @@ Vec2* DrawNode::_transform(const Vec2* _vertices, unsigned int& count, bool clos
         closedCounter = 1;
     }
 
-    Vec2* vert = new Vec2[count + closedCounter];
-    AXASSERT(vert != nullptr, "DrawNode::transform: NO MEMORY");
-
+    axstd::pod_vector<Vec2> vert(count + closedCounter);
     if (properties.transform == false)
     {
-        memcpy(vert, _vertices, count * sizeof(Vec2));
+        memcpy(vert.data(), _vertices, count * sizeof(Vec2));
         if (closedCounter)
         {
             vert[count++] = vert0;
