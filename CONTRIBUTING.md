@@ -63,7 +63,7 @@ $ git commit
 ```
 -   When all changes are finished push your new branch to your forked repository
 ```
-git push origin <new_branch_name>
+$ git push origin <new_branch_name>
 ```
 -   Send a “pull request” to user “axmol”
 -   It must be _complete_. See the definition below
