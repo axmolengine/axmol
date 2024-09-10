@@ -61,7 +61,7 @@ $ git checkout -b <new_branch_name> official/dev
 ```
 $ git commit
 ```
--   When all changes are finished push your new branch to your forked repository
+-   When all changes are finished push your new branch to your forked repository:
 ```
 $ git push origin <new_branch_name>
 ```
