@@ -33,18 +33,38 @@ If you want to contribute code, please follow these steps:
 
 (If you are new to git and/or GitHub, you should read [Pro Git](http://progit.org/book/) , especially the section on [Contributing to a project:Small/Large Public Project](http://progit.org/book/ch5-2.html#public_small_project) )
 
--   Download the latest axmol develop branch from github:
 
+### Following steps must be done once in order to setup repository
+
+-   Fork axmol on github page to your own github account
+-   Clone your own fork:
 ```
-$ git clone git://github.com/axmolengine/axmol.git
+$ git clone https://github.com/<your git accout>/axmol.git
+```
+-   Add remote official from axmolengine/axmol:
+```
 $ cd axmol
-$ git checkout dev
+$ git remote add official https://github.com/axmolengine/axmol.git
 ```
 
--   Apply your changes in the recently downloaded repository
--   Commit your changes in your own repository
--   Create a new branch with your patch: `$ git checkout -b my_fix_branch`
--   Push your new branch to your public repository
+### Following steps must be done for every pull request
+
+-   Sync with official:
+```
+$ git fetch official
+```
+-   Create a new branch on top of the latest dev from official:
+```
+$ git checkout -b <new_branch_name> official/dev
+```
+-   Do local changes on your new branch. Do as much commits as you need and add short descriptive message to each commit:
+```
+$ git commit
+```
+-   When all changes are finished push your new branch to your forked repository:
+```
+$ git push origin <new_branch_name>
+```
 -   Send a “pull request” to user “axmol”
 -   It must be _complete_. See the definition below
 -   It must follow the _Releases_ rules. See the definition below
