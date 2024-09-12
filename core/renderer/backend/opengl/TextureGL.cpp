@@ -171,7 +171,12 @@ void Texture2DGL::initWithZeros()
 
     _width        = (std::max)(_width, (uint32_t)1);
     _height       = (std::max)(_height, (uint32_t)1);
-    _bitsPerPixel = (std::max)(_bitsPerPixel, (uint8_t)(8 * 4));
+
+    constexpr auto maxBitsPerPixel = (uint8_t)(8 * 4);
+    if (_bitsPerPixel > maxBitsPerPixel || _bitsPerPixel == 0)
+    {
+        _bitsPerPixel = maxBitsPerPixel;
+    }
 
     auto size     = _width * _height * _bitsPerPixel / 8;
     uint8_t* data = (uint8_t*)malloc(size);
