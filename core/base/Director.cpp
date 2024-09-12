@@ -1325,7 +1325,7 @@ void Director::createStatsLabel()
         return;
     }
 
-    texture = _textureCache->addImage(image, "/ax_fps_images", PixelFormat::RGBA4);
+    texture = _textureCache->addImage(image, "/ax_fps_images", image->getPixelFormat());
     AX_SAFE_RELEASE(image);
 
     /*
