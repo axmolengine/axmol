@@ -57,11 +57,6 @@ Particle3DReader* Particle3DReader::getInstance()
     return _instanceParticle3DReader;
 }
 
-void Particle3DReader::purge()
-{
-    AX_SAFE_DELETE(_instanceParticle3DReader);
-}
-
 void Particle3DReader::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceParticle3DReader);

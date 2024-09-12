@@ -63,11 +63,6 @@ CameraBackgroundBrush* GameNode3DReader::getSceneBrushInstance()
     return _sceneBrushInstance;
 }
 
-void GameNode3DReader::purge()
-{
-    AX_SAFE_DELETE(_instanceNode3DReader);
-}
-
 void GameNode3DReader::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceNode3DReader);

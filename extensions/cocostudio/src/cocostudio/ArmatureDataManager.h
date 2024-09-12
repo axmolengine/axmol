@@ -46,15 +46,6 @@ struct RelativeData
 class CCS_DLL ArmatureDataManager : public ax::Object
 {
 public:
-    /** @deprecated Use getInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static ArmatureDataManager* sharedArmatureDataManager()
-    {
-        return ArmatureDataManager::getInstance();
-    }
-
-    /** @deprecated Use destroyInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static void purge() { ArmatureDataManager::destroyInstance(); };
-
     static ArmatureDataManager* getInstance();
     static void destroyInstance();
 

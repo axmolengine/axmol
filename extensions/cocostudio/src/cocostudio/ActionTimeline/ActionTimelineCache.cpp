@@ -102,11 +102,6 @@ void ActionTimelineCache::destroyInstance()
     AX_SAFE_DELETE(_sharedActionCache);
 }
 
-void ActionTimelineCache::purge()
-{
-    _animationActions.clear();
-}
-
 void ActionTimelineCache::init()
 {
     using namespace std::placeholders;

@@ -230,7 +230,7 @@ AX_DLL void writeLog(LogItem& item, const char* tag)
 #    endif
 #endif
 }
-
+#ifndef AX_CORE_PROFILE
 AX_API void print(const char* format, ...)
 {
     va_list args;
@@ -243,5 +243,5 @@ AX_API void print(const char* format, ...)
         outputLog(LogItem::vformat(FMT_COMPILE("{}{}\n"), preprocessLog(LogItem{LogLevel::Silent}), message),
                   "axmol debug info");
 }
-
+#endif
 }

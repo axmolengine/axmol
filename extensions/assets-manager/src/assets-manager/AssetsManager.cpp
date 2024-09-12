@@ -417,7 +417,7 @@ bool AssetsManager::uncompress()
         {
             // Entry is a directory, so create it.
             // If the directory exists, it will failed silently.
-            if (!FileUtils::getInstance()->createDirectory(fullPath))
+            if (!FileUtils::getInstance()->createDirectories(fullPath))
             {
                 AXLOGD("can not create directory {}", fullPath);
                 unzClose(zipfile);
@@ -442,7 +442,7 @@ bool AssetsManager::uncompress()
                 auto fsOut = FileUtils::getInstance()->openFileStream(dir, FileStream::Mode::READ);
                 if (!fsOut)
                 {
-                    if (!FileUtils::getInstance()->createDirectory(dir))
+                    if (!FileUtils::getInstance()->createDirectories(dir))
                     {
                         AXLOGD("can not create directory {}", dir);
                         unzClose(zipfile);

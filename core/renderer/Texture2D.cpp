@@ -192,7 +192,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 {
     if (image == nullptr)
     {
-        __AXLOGWITHFUNCTION("axmol: Texture2D. Can't create Texture. UIImage is nil");
+        AXLOGW("axmol: Texture2D. Can't create Texture. UIImage is nil");
         return false;
     }
 

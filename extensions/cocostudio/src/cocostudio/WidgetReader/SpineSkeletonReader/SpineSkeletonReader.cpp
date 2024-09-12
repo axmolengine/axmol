@@ -60,11 +60,6 @@ SpineSkeletonReader* SpineSkeletonReader::getInstance()
     return _instanceSpriteReader;
 }
 
-void SpineSkeletonReader::purge()
-{
-    AX_SAFE_DELETE(_instanceSpriteReader);
-}
-
 void SpineSkeletonReader::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceSpriteReader);

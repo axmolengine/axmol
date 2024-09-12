@@ -53,11 +53,6 @@ SingleNodeReader* SingleNodeReader::getInstance()
     return _instanceSingleNodeReader;
 }
 
-void SingleNodeReader::purge()
-{
-    AX_SAFE_DELETE(_instanceSingleNodeReader);
-}
-
 void SingleNodeReader::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceSingleNodeReader);

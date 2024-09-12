@@ -50,11 +50,6 @@ ProjectNodeReader* ProjectNodeReader::getInstance()
     return _instanceProjectNodeReader;
 }
 
-void ProjectNodeReader::purge()
-{
-    AX_SAFE_DELETE(_instanceProjectNodeReader);
-}
-
 void ProjectNodeReader::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceProjectNodeReader);
