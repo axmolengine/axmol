@@ -63,11 +63,6 @@ SpriteReader* SpriteReader::getInstance()
     return _instanceSpriteReader;
 }
 
-void SpriteReader::purge()
-{
-    AX_SAFE_DELETE(_instanceSpriteReader);
-}
-
 void SpriteReader::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceSpriteReader);

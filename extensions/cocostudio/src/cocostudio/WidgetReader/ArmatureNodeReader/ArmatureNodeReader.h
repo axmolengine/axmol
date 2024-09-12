@@ -46,8 +46,6 @@ public:
     ~ArmatureNodeReader();
 
     static ArmatureNodeReader* getInstance();
-    /** @deprecated Use method destroyInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(

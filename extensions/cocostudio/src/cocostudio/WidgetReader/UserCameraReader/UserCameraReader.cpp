@@ -58,11 +58,6 @@ UserCameraReader* UserCameraReader::getInstance()
     return _instanceUserCameraReader;
 }
 
-void UserCameraReader::purge()
-{
-    AX_SAFE_DELETE(_instanceUserCameraReader);
-}
-
 void UserCameraReader::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceUserCameraReader);

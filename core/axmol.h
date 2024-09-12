@@ -38,7 +38,9 @@ THE SOFTWARE.
 #include "base/Config.h"
 
 // base
-#include "base/AsyncTaskPool.h"
+#ifndef AX_CORE_PROFILE
+#    include "base/AsyncTaskPool.h"
+#endif
 #include "base/AutoreleasePool.h"
 #include "base/Configuration.h"
 #include "base/Logging.h"

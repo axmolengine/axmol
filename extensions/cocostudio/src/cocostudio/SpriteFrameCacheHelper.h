@@ -46,15 +46,10 @@ namespace cocostudio
 class CCS_DLL SpriteFrameCacheHelper
 {
 public:
-    /** @deprecated Use getInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static SpriteFrameCacheHelper* sharedSpriteFrameCacheHelper()
-    {
-        return SpriteFrameCacheHelper::getInstance();
-    }
 
     static SpriteFrameCacheHelper* getInstance();
 
-    static void purge();
+    static void destroyInstance();
 
 public:
     /**

@@ -51,11 +51,6 @@ ComAudioReader* ComAudioReader::getInstance()
     return _instanceComAudioReader;
 }
 
-void ComAudioReader::purge()
-{
-    AX_SAFE_DELETE(_instanceComAudioReader);
-}
-
 void ComAudioReader::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceComAudioReader);

@@ -56,8 +56,6 @@ typedef void (ax::Object::*SEL_ParseEvent)(std::string_view, ax::Object*, const 
 class CCS_DLL GUIReader : public ax::Object
 {
 public:
-    AX_DEPRECATED_ATTRIBUTE static GUIReader* shareReader() { return GUIReader::getInstance(); };
-    AX_DEPRECATED_ATTRIBUTE static void purgeGUIReader() { GUIReader::destroyInstance(); };
 
     static GUIReader* getInstance();
     static void destroyInstance();

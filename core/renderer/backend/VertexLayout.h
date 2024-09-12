@@ -81,8 +81,8 @@ public:
                    VertexFormat format,
                    std::size_t offset,
                    bool needNormalized);
-
-    AX_DEPRECATED_ATTRIBUTE void setAttribute(std::string_view name,
+#ifndef AX_CORE_PROFILE
+    AX_DEPRECATED(2.1) void setAttribute(std::string_view name,
                       std::size_t index,
                       VertexFormat format,
                       std::size_t offset,
@@ -90,7 +90,7 @@ public:
     {
         setAttrib(name, index, format, offset, needNormalized);
     }
-
+#endif
     /**
      * Set stride of vertices.
      * @param stride Specifies the distance between the data of two vertices, in bytes.

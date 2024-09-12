@@ -55,11 +55,6 @@ Node3DReader* Node3DReader::getInstance()
     return _instanceNode3DReader;
 }
 
-void Node3DReader::purge()
-{
-    AX_SAFE_DELETE(_instanceNode3DReader);
-}
-
 void Node3DReader::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceNode3DReader);

@@ -54,11 +54,6 @@ ButtonReader* ButtonReader::getInstance()
     return instanceButtonReader;
 }
 
-void ButtonReader::purge()
-{
-    AX_SAFE_DELETE(instanceButtonReader);
-}
-
 void ButtonReader::destroyInstance()
 {
     AX_SAFE_DELETE(instanceButtonReader);

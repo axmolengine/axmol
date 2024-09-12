@@ -50,8 +50,8 @@ ArmatureDataManager* ArmatureDataManager::getInstance()
 
 void ArmatureDataManager::destroyInstance()
 {
-    SpriteFrameCacheHelper::purge();
-    DataReaderHelper::purge();
+    SpriteFrameCacheHelper::destroyInstance();
+    DataReaderHelper::destroyInstance();
     AX_SAFE_RELEASE_NULL(s_sharedArmatureDataManager);
 }
 

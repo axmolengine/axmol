@@ -484,7 +484,7 @@ bool AudioWavTest::init()
                 AudioEngine::stop(_audioID);
                 _audioID = AudioEngine::play2d(_wavFiles[--_curIndex]);
                 _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex,
-                                                           FileUtils::getFileShortName(_wavFiles[_curIndex])));
+                                                           FileUtils::getPathBaseName(_wavFiles[_curIndex])));
             }
         });
         playPrev->setPosition(layerSize.width * 0.35f, layerSize.height * 0.5f);
@@ -495,8 +495,7 @@ bool AudioWavTest::init()
             {
                 AudioEngine::stop(_audioID);
                 _audioID = AudioEngine::play2d(_wavFiles[++_curIndex]);
-                _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex,
-                                                           FileUtils::getFileShortName(_wavFiles[_curIndex])));
+                _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex, FileUtils::getPathBaseName(_wavFiles[_curIndex])));
             }
         });
         playNext->setPosition(layerSize.width * 0.65f, layerSize.height * 0.5f);
@@ -517,7 +516,7 @@ void AudioWavTest::onEnter()
         _curIndex = 0;
         _audioID  = AudioEngine::play2d(_wavFiles[_curIndex]);
         _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex,
-                                                   FileUtils::getFileShortName(_wavFiles[_curIndex])));
+                                                   FileUtils::getPathBaseName(_wavFiles[_curIndex])));
     }
 }
 
