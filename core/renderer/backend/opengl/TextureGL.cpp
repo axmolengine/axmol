@@ -173,7 +173,7 @@ void Texture2DGL::initWithZeros()
     _height       = (std::max)(_height, (uint32_t)1);
 
     constexpr auto maxBitsPerPixel = (uint8_t)(8 * 4);
-    if (_bitsPerPixel > maxBitsPerPixel || _bitsPerPixel == 0)
+    if (_bitsPerPixel == 0)
     {
         _bitsPerPixel = maxBitsPerPixel;
     }
