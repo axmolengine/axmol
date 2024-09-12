@@ -168,17 +168,9 @@ void Texture2DGL::initWithZeros()
     // FIXME: Don't call at Texture2DGL::updateTextureDescriptor, when the texture is compressed, initWithZeros will
     // cause GL Error: 0x501 We call at here once to ensure depth buffer works well. Ensure the final data size at least
     // 4 byte
-
-    _width        = (std::max)(_width, (uint32_t)1);
-    _height       = (std::max)(_height, (uint32_t)1);
-
-    constexpr auto maxBitsPerPixel = (uint8_t)(8 * 4);
-    if (_bitsPerPixel == 0)
-    {
-        _bitsPerPixel = maxBitsPerPixel;
-    }
-
     auto size     = _width * _height * _bitsPerPixel / 8;
+    assert(size > 0);
+
     uint8_t* data = (uint8_t*)malloc(size);
     memset(data, 0, size);
     updateData(data, _width, _height, 0);
