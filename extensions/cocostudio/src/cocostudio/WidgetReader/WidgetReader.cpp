@@ -126,11 +126,6 @@ WidgetReader* WidgetReader::getInstance()
     return instanceWidgetReader;
 }
 
-void WidgetReader::purge()
-{
-    AX_SAFE_DELETE(instanceWidgetReader);
-}
-
 void WidgetReader::destroyInstance()
 {
     AX_SAFE_DELETE(instanceWidgetReader);

@@ -237,7 +237,7 @@ float DataReaderHelper::getPositionReadScale()
     return s_PositionReadScale;
 }
 
-void DataReaderHelper::purge()
+void DataReaderHelper::destroyInstance()
 {
     _configFileList.clear();
     AX_SAFE_RELEASE_NULL(_dataReaderHelper);

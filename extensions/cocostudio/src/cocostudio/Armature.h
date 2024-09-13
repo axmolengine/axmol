@@ -39,36 +39,6 @@ struct cpBody;
 
 namespace cocostudio
 {
-
-AX_DEPRECATED_ATTRIBUTE typedef ProcessBase CCProcessBase;
-AX_DEPRECATED_ATTRIBUTE typedef BaseData CCBaseData;
-AX_DEPRECATED_ATTRIBUTE typedef DisplayData CCDisplayData;
-AX_DEPRECATED_ATTRIBUTE typedef SpriteDisplayData CCSpriteDisplayData;
-AX_DEPRECATED_ATTRIBUTE typedef ArmatureDisplayData CCArmatureDisplayData;
-AX_DEPRECATED_ATTRIBUTE typedef ParticleDisplayData CCParticleDisplayData;
-AX_DEPRECATED_ATTRIBUTE typedef BoneData CCBoneData;
-AX_DEPRECATED_ATTRIBUTE typedef FrameData CCFrameData;
-AX_DEPRECATED_ATTRIBUTE typedef MovementBoneData CCMovementBoneData;
-AX_DEPRECATED_ATTRIBUTE typedef MovementData CCMovementData;
-AX_DEPRECATED_ATTRIBUTE typedef AnimationData CCAnimationData;
-AX_DEPRECATED_ATTRIBUTE typedef ContourData CCContourData;
-AX_DEPRECATED_ATTRIBUTE typedef TextureData CCTextureData;
-AX_DEPRECATED_ATTRIBUTE typedef DecorativeDisplay CCDecorativeDisplay;
-AX_DEPRECATED_ATTRIBUTE typedef DisplayData CCDisplayData;
-AX_DEPRECATED_ATTRIBUTE typedef DisplayFactory CCDisplayFactory;
-AX_DEPRECATED_ATTRIBUTE typedef BatchNode CCBatchNode;
-AX_DEPRECATED_ATTRIBUTE typedef DecorativeDisplay CCDecorativeDisplay;
-AX_DEPRECATED_ATTRIBUTE typedef DisplayManager CCDisplayManager;
-AX_DEPRECATED_ATTRIBUTE typedef ColliderBody CCColliderBody;
-AX_DEPRECATED_ATTRIBUTE typedef ColliderDetector CCColliderDetector;
-AX_DEPRECATED_ATTRIBUTE typedef SpriteFrameCacheHelper CCSpriteFrameCacheHelper;
-AX_DEPRECATED_ATTRIBUTE typedef ArmatureData CCArmatureData;
-AX_DEPRECATED_ATTRIBUTE typedef Bone CCBone;
-AX_DEPRECATED_ATTRIBUTE typedef ArmatureAnimation CCArmatureAnimation;
-AX_DEPRECATED_ATTRIBUTE typedef Armature CCArmature;
-AX_DEPRECATED_ATTRIBUTE typedef ArmatureDataManager CCArmatureDataManager;
-AX_DEPRECATED_ATTRIBUTE typedef ax::tweenfunc::TweenType CCTweenType;
-
 class CCS_DLL Armature : public ax::Node, public ax::BlendProtocol
 {
 
@@ -195,7 +165,7 @@ public:
 #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
     virtual void setColliderFilter(ColliderFilter* filter);
 #elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
-    AX_DEPRECATED_ATTRIBUTE virtual void drawContour();
+    AX_DEPRECATED(2.1) virtual void drawContour();
 #endif
 
     virtual void setArmatureData(ArmatureData* armatureData) { _armatureData = armatureData; }

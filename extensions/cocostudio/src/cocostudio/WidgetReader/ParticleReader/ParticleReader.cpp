@@ -56,11 +56,6 @@ ParticleReader* ParticleReader::getInstance()
     return _instanceParticleReader;
 }
 
-void ParticleReader::purge()
-{
-    AX_SAFE_DELETE(_instanceParticleReader);
-}
-
 void ParticleReader::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceParticleReader);

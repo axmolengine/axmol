@@ -55,27 +55,6 @@ InputDelegate::~InputDelegate(void)
     Device::setAccelerometerEnabled(false);
 }
 
-void InputDelegate::didAccelerate(ax::Acceleration* /*accelerationValue*/) {}
-
-bool InputDelegate::ccTouchBegan(ax::Touch* /*touch*/, ax::Event* /*event*/)
-{
-    return false;
-}
-
-void InputDelegate::ccTouchMoved(ax::Touch* /*touch*/, ax::Event* /*event*/) {}
-
-void InputDelegate::ccTouchEnded(ax::Touch* /*touch*/, ax::Event* /*event*/) {}
-
-void InputDelegate::ccTouchCancelled(ax::Touch* /*touch*/, ax::Event* /*event*/) {}
-
-void InputDelegate::ccTouchesBegan(ax::__Set* /*touches*/, ax::Event* /*event*/) {}
-
-void InputDelegate::ccTouchesMoved(ax::__Set* /*touches*/, ax::Event* /*event*/) {}
-
-void InputDelegate::ccTouchesEnded(ax::__Set* /*touches*/, ax::Event* /*event*/) {}
-
-void InputDelegate::ccTouchesCancelled(ax::__Set* /*touches*/, ax::Event* /*event*/) {}
-
 void InputDelegate::onAcceleration(ax::Acceleration* /*acc*/, ax::Event* /*event*/) {}
 
 void InputDelegate::onKeyPressed(ax::EventKeyboard::KeyCode /*keyCode*/, ax::Event* /*event*/) {}

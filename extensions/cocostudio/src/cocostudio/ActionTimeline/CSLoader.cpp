@@ -248,8 +248,6 @@ CSLoader::CSLoader()
     CREATE_CLASS_NODE_READER_INFO(TextFieldExReader);
 }
 
-void CSLoader::purge() {}
-
 void CSLoader::init()
 {
     using namespace std::placeholders;

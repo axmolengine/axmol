@@ -44,7 +44,7 @@ SpriteFrameCacheHelper* SpriteFrameCacheHelper::getInstance()
     return _spriteFrameCacheHelper;
 }
 
-void SpriteFrameCacheHelper::purge()
+void SpriteFrameCacheHelper::destroyInstance()
 {
     delete _spriteFrameCacheHelper;
     _spriteFrameCacheHelper = nullptr;

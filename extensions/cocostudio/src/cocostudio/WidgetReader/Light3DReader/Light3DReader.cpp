@@ -56,11 +56,6 @@ Light3DReader* Light3DReader::getInstance()
     return _instanceLight3DReader;
 }
 
-void Light3DReader::purge()
-{
-    AX_SAFE_DELETE(_instanceLight3DReader);
-}
-
 void Light3DReader::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceLight3DReader);

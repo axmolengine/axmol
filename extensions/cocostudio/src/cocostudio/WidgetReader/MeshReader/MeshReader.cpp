@@ -61,11 +61,6 @@ MeshReader* MeshReader::getInstance()
     return _instanceMeshReader;
 }
 
-void MeshReader::purge()
-{
-    AX_SAFE_DELETE(_instanceMeshReader);
-}
-
 void MeshReader::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceMeshReader);
