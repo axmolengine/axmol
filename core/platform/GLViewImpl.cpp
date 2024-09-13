@@ -341,6 +341,24 @@ static keyCodeItem g_keyCodeStructArray[] = {
 // implement GLViewImpl
 //////////////////////////////////////////////////////////////////////////
 
+static EventMouse::MouseButton checkMouseButton(GLFWwindow* window)
+{
+    EventMouse::MouseButton mouseButton{EventMouse::MouseButton::BUTTON_UNSET};
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+    {
+        mouseButton = static_cast<ax::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_LEFT);
+    }
+    else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+    {
+        mouseButton = static_cast<ax::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_RIGHT);
+    }
+    else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
+    {
+        mouseButton = static_cast<ax::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_MIDDLE);
+    }
+    return mouseButton;
+}
+
 GLViewImpl::GLViewImpl(bool initglfw)
     : _captured(false)
     , _isInRetinaMonitor(false)
@@ -1079,22 +1097,19 @@ void GLViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int act
         }
     }
 
-    // Because OpenGL and axmol uses different Y axis, we need to convert the coordinate here
-    float cursorX = (_mouseX - _viewPortRect.origin.x) / _scaleX;
-    float cursorY = (_viewPortRect.origin.y + _viewPortRect.size.height - _mouseY) / _scaleY;
+    float cursorX = transformInputX(_mouseX);
+    float cursorY = transformInputY(_mouseY);
 
     if (GLFW_PRESS == action)
     {
         EventMouse event(EventMouse::MouseEventType::MOUSE_DOWN);
-        event.setCursorPosition(cursorX, cursorY);
-        event.setMouseButton(static_cast<ax::EventMouse::MouseButton>(button));
+        event.setMouseInfo(cursorX, cursorY, static_cast<ax::EventMouse::MouseButton>(button));
         Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
     }
     else if (GLFW_RELEASE == action)
     {
         EventMouse event(EventMouse::MouseEventType::MOUSE_UP);
-        event.setCursorPosition(cursorX, cursorY);
-        event.setMouseButton(static_cast<ax::EventMouse::MouseButton>(button));
+        event.setMouseInfo(cursorX, cursorY, static_cast<ax::EventMouse::MouseButton>(button));
         Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
     }
 }
@@ -1124,25 +1139,13 @@ void GLViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
         }
     }
 
-    // Because OpenGL and axmol uses different Y axis, we need to convert the coordinate here
-    float cursorX = (_mouseX - _viewPortRect.origin.x) / _scaleX;
-    float cursorY = (_viewPortRect.origin.y + _viewPortRect.size.height - _mouseY) / _scaleY;
+    float cursorX = transformInputX(_mouseX);
+    float cursorY = transformInputY(_mouseY);
 
     EventMouse event(EventMouse::MouseEventType::MOUSE_MOVE);
     // Set current button
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-    {
-        event.setMouseButton(static_cast<ax::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_LEFT));
-    }
-    else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
-    {
-        event.setMouseButton(static_cast<ax::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_RIGHT));
-    }
-    else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
-    {
-        event.setMouseButton(static_cast<ax::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_MIDDLE));
-    }
-    event.setCursorPosition(cursorX, cursorY);
+    EventMouse::MouseButton mouseButton{EventMouse::MouseButton::BUTTON_UNSET};
+    event.setMouseInfo(cursorX, cursorY, checkMouseButton(window));
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
@@ -1194,14 +1197,13 @@ void GLViewImpl::onWebTouchCallback(int eventType, const EmscriptenTouchEvent* t
 }
 #endif
 
-void GLViewImpl::onGLFWMouseScrollCallback(GLFWwindow* /*window*/, double x, double y)
+void GLViewImpl::onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y)
 {
     EventMouse event(EventMouse::MouseEventType::MOUSE_SCROLL);
-    // Because OpenGL and axmol uses different Y axis, we need to convert the coordinate here
-    float cursorX = (_mouseX - _viewPortRect.origin.x) / _scaleX;
-    float cursorY = (_viewPortRect.origin.y + _viewPortRect.size.height - _mouseY) / _scaleY;
+    float cursorX = transformInputX(_mouseX);
+    float cursorY = transformInputY(_mouseY);
     event.setScrollData((float)x, -(float)y);
-    event.setCursorPosition(cursorX, cursorY);
+    event.setMouseInfo(cursorX, cursorY, checkMouseButton(window));
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 

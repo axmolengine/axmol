@@ -168,7 +168,6 @@ private:
 
     ax::Vec2 TransformToOrientation(Windows::Foundation::Point const& point);
     ax::Vec2 GetPoint(Windows::UI::Core::PointerEventArgs const& args);
-    ax::Vec2 GetPointMouse(Windows::UI::Core::PointerEventArgs const& args);
 
     Windows::Foundation::Rect m_windowBounds;
     winrt::event_token m_eventToken;
