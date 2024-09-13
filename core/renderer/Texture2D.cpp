@@ -334,7 +334,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
     }
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-    VolatileTextureMgr::findVolotileTexture(this);
+    VolatileTextureMgr::getOrAddVolatileTexture(this);
 #endif
 
     backend::TextureDescriptor textureDescriptor;
