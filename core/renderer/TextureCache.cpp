@@ -838,7 +838,7 @@ void VolatileTextureMgr::addImageTexture(Texture2D* tt, std::string_view imageFi
         return;
     }
 
-    VolatileTexture* vt = findVolotileTexture(tt);
+    VolatileTexture* vt = getOrAddVolatileTexture(tt);
 
     vt->_cashedImageType = VolatileTexture::kImageFile;
     vt->_fileName        = imageFileName;
@@ -850,7 +850,7 @@ void VolatileTextureMgr::addImage(Texture2D* tt, Image* image)
     if (tt == nullptr || image == nullptr)
         return;
 
-    VolatileTexture* vt = findVolotileTexture(tt);
+    VolatileTexture* vt = getOrAddVolatileTexture(tt);
 
     if(vt->_uiImage != image) {
         AX_SAFE_RELEASE(vt->_uiImage);
@@ -894,7 +894,7 @@ void VolatileTextureMgr::addDataTexture(Texture2D* tt,
         return;
     }
 
-    VolatileTexture* vt = findVolotileTexture(tt);
+    VolatileTexture* vt = getOrAddVolatileTexture(tt);
 
     vt->_cashedImageType = VolatileTexture::kImageData;
     vt->_textureData     = data;
@@ -910,7 +910,7 @@ void VolatileTextureMgr::addStringTexture(Texture2D* tt, std::string_view text, 
         return;
     }
 
-    VolatileTexture* vt = findVolotileTexture(tt);
+    VolatileTexture* vt = getOrAddVolatileTexture(tt);
 
     vt->_cashedImageType = VolatileTexture::kString;
     vt->_text            = text;
