@@ -313,8 +313,8 @@ public:
 
     // find VolatileTexture by Texture2D*
     // if not found, create a new one
-    AX_DEPRECATED(2.2) VolatileTexture* findVolotileTexture(Texture2D* tt) { return getOrAddVolatileTexture(tt); }
-    VolatileTexture* getOrAddVolatileTexture(Texture2D* tt);
+    AX_DEPRECATED(2.2) static VolatileTexture* findVolotileTexture(Texture2D* tt) { return getOrAddVolatileTexture(tt); }
+    static VolatileTexture* getOrAddVolatileTexture(Texture2D* tt);
 
 private:
     static void reloadTexture(Texture2D* texture, std::string_view filename, backend::PixelFormat pixelFormat);
