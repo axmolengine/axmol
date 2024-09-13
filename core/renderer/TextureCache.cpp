@@ -861,7 +861,7 @@ void VolatileTextureMgr::addImage(Texture2D* tt, Image* image)
     }
 }
 
-VolatileTexture* VolatileTextureMgr::findVolotileTexture(Texture2D* tt)
+VolatileTexture* VolatileTextureMgr::getOrAddVolatileTexture(Texture2D* tt)
 {
     VolatileTexture* vt = nullptr;
     for (const auto& texture : _textures)
