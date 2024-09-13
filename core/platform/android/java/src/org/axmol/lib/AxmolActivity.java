@@ -229,7 +229,6 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
             mGLSurfaceView.onResume();
             rendererPaused = false;
         }
-        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     private void resumeIfHasFocus() {
@@ -248,7 +247,6 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         paused = true;
         super.onPause();
         AxmolEngine.onPause();
-        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
     @Override
@@ -325,6 +323,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         //   this.mGLSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 
         this.mGLSurfaceView.setRenderer(new AxmolRenderer());
+        this.mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         this.mGLSurfaceView.setEditText(edittext);
 
         // Set framelayout as the content view

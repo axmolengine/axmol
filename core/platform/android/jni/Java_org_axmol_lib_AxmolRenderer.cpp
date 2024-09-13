@@ -31,6 +31,8 @@
 #include "platform/Application.h"
 #include "platform/FileUtils.h"
 #include <jni.h>
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
 
 #include "base/UTF8.h"
 
@@ -38,9 +40,35 @@ using namespace ax;
 
 extern "C" {
 
-JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeRender(JNIEnv*, jclass)
+
+static EGLDisplay gEglDisplay = EGL_NO_DISPLAY;
+static EGLSurface gEglSurface = EGL_NO_SURFACE;
+static PFNEGLPRESENTATIONTIMEANDROIDPROC gEglPresentationTime = nullptr;
+
+
+JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeInitEglPresentationTime(JNIEnv*, jclass)
+{
+    gEglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+    gEglSurface = eglGetCurrentSurface(EGL_DRAW);
+    gEglPresentationTime = nullptr;
+
+    if (gEglDisplay != EGL_NO_SURFACE && gEglSurface != EGL_NO_SURFACE)
+    {
+        auto extensions = eglQueryString(gEglDisplay, EGL_EXTENSIONS);
+        if (strstr(extensions, "EGL_ANDROID_presentation_time"))
+        {
+            gEglPresentationTime = reinterpret_cast<PFNEGLPRESENTATIONTIMEANDROIDPROC>(
+                eglGetProcAddress("eglPresentationTimeANDROID"));
+        }
+    }
+}
+
+JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeRender(JNIEnv*, jclass, jlong framePresentationTimeNanos)
 {
     ax::Director::getInstance()->mainLoop();
+
+    if (gEglPresentationTime != nullptr)
+        gEglPresentationTime(gEglDisplay, gEglSurface, EGLnsecsANDROID(framePresentationTimeNanos));
 }
 
 JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeOnPause(JNIEnv*, jclass)

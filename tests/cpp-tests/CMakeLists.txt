@@ -167,6 +167,7 @@ list(APPEND GAME_HEADER
      Source/TouchesTest/Paddle.h
      Source/ActionManagerTest/ActionManagerTest.h
      Source/ClickAndMoveTest/ClickAndMoveTest.h
+     Source/MainLoopTest/MainLoopTest.h
      Source/MaterialSystemTest/MaterialSystemTest.h
      Source/IntervalTest/IntervalTest.h
      Source/TileMapTest/TileMapTest2.h
@@ -302,6 +303,7 @@ list(APPEND GAME_SOURCE
      Source/LayerTest/LayerTest.cpp
      Source/LightTest/LightTest.cpp
      Source/MaterialSystemTest/MaterialSystemTest.cpp
+     Source/MainLoopTest/MainLoopTest.cpp
      Source/MenuTest/MenuTest.cpp
      Source/MotionStreakTest/MotionStreakTest.cpp
      Source/MultiTouchTest/MultiTouchTest.cpp
@@ -608,7 +610,7 @@ endif()
 
 if((NOT IOS) AND (NOT WINRT))
     message("CMake ${APP_NAME} target_precompile_headers")
-    target_precompile_headers(${APP_NAME} PRIVATE 
+    target_precompile_headers(${APP_NAME} PRIVATE
       "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
     )
 endif()
