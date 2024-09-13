@@ -59,8 +59,6 @@ extern bool AX_DLL ax_assert_script_compatible(const char* msg);
 #        define AXASSERT(cond, msg)
 #    endif
 
-#    define GP_ASSERT(cond) AXASSERT(cond, "")
-
 // FIXME:: Backward compatible
 #    define CCAssert AXASSERT
 #endif  // AXASSERT

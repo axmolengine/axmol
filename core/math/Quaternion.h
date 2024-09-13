@@ -179,7 +179,7 @@ public:
      */
     static void createFromAxisAngle(const Vec3& axis, float angle, Quaternion* dst)
     {
-        GP_ASSERT(dst);
+        AX_ASSERT(dst);
 
         float halfAngle    = angle * 0.5f;
         float sinHalfAngle = sinf(halfAngle);
@@ -281,7 +281,7 @@ public:
      */
     constexpr void set(float* array)
     {
-        GP_ASSERT(array);
+        AX_ASSERT(array);
 
         x = array[0];
         y = array[1];

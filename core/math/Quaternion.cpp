@@ -106,7 +106,7 @@ void Quaternion::multiply(const Quaternion& q)
 
 void Quaternion::multiply(const Quaternion& q1, const Quaternion& q2, Quaternion* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     float x = q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y;
     float y = q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x;
@@ -153,7 +153,7 @@ void Quaternion::set(const Mat4& m)
 
 float Quaternion::toAxisAngle(Vec3* axis) const
 {
-    GP_ASSERT(axis);
+    AX_ASSERT(axis);
 
     Quaternion q(x, y, z, w);
     q.normalize();
@@ -167,8 +167,8 @@ float Quaternion::toAxisAngle(Vec3* axis) const
 
 void Quaternion::lerp(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)
 {
-    GP_ASSERT(dst);
-    GP_ASSERT(!(t < 0.0f || t > 1.0f));
+    AX_ASSERT(dst);
+    AX_ASSERT(!(t < 0.0f || t > 1.0f));
 
     if (t == 0.0f)
     {
@@ -191,7 +191,7 @@ void Quaternion::lerp(const Quaternion& q1, const Quaternion& q2, float t, Quate
 
 void Quaternion::slerp(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
     slerp(q1.x, q1.y, q1.z, q1.w, q2.x, q2.y, q2.z, q2.w, t, &dst->x, &dst->y, &dst->z, &dst->w);
 }
 
@@ -202,7 +202,7 @@ void Quaternion::squad(const Quaternion& q1,
                        float t,
                        Quaternion* dst)
 {
-    GP_ASSERT(!(t < 0.0f || t > 1.0f));
+    AX_ASSERT(!(t < 0.0f || t > 1.0f));
 
     Quaternion dstQ(0.0f, 0.0f, 0.0f, 1.0f);
     Quaternion dstS(0.0f, 0.0f, 0.0f, 1.0f);
@@ -230,8 +230,8 @@ void Quaternion::slerp(float q1x,
     // It contains no division operations, no trig, no inverse trig
     // and no sqrt. Not only does this code tolerate small constraint
     // errors in the input quaternions, it actually corrects for them.
-    GP_ASSERT(dstx && dsty && dstz && dstw);
-    GP_ASSERT(!(t < 0.0f || t > 1.0f));
+    AX_ASSERT(dstx && dsty && dstz && dstw);
+    AX_ASSERT(!(t < 0.0f || t > 1.0f));
 
     if (t == 0.0f)
     {
@@ -325,7 +325,7 @@ void Quaternion::slerp(float q1x,
 
 void Quaternion::slerpForSquad(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     // cos(omega) = q1 * q2;
     // slerp(q1, q2, t) = (q1*sin((1-t)*omega) + q2*sin(t*omega))/sin(omega);

@@ -772,7 +772,7 @@ public:
      */
     void set(const float* mat)
     {
-        GP_ASSERT(mat);
+        AX_ASSERT(mat);
         memcpy(m, mat, sizeof(m));
     }
 
@@ -821,7 +821,7 @@ public:
      */
     inline void transformPoint(Vec3* point) const
     {
-        GP_ASSERT(point);
+        AX_ASSERT(point);
         transformVector(point->x, point->y, point->z, 1.0f, point);
     }
 
@@ -834,7 +834,7 @@ public:
      */
     inline void transformPoint(const Vec3& point, Vec3* dst) const
     {
-        GP_ASSERT(dst);
+        AX_ASSERT(dst);
         transformVector(point.x, point.y, point.z, 1.0f, dst);
     }
 
