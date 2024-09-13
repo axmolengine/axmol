@@ -322,7 +322,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         //if (isAndroidEmulator())
         //   this.mGLSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 
-        this.mGLSurfaceView.setRenderer(new AxmolRenderer());
+        this.mGLSurfaceView.setRenderer(new AxmolRenderer(getDisplay()));
         this.mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         this.mGLSurfaceView.setEditText(edittext);
 

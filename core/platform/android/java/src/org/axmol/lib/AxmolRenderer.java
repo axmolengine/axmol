@@ -25,6 +25,7 @@
 package org.axmol.lib;
 
 import android.opengl.GLSurfaceView;
+import android.view.Display;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -46,6 +47,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     // ===========================================================
 
     private long mNextFrameStartTime = 0; // Note: read and written by VsyncNotifierThread's thread
+    private long mVsyncInterval;
     private final AtomicLong mCurrentFrameStartTime = new AtomicLong();
 
     private int mScreenWidth;
@@ -56,6 +58,11 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     // ===========================================================
     // Constructors
     // ===========================================================
+
+    public AxmolRenderer(Display display)
+    {
+        mVsyncInterval = (long)((double)NANOSECONDSPERSECOND / (double)display.getRefreshRate());
+    }
 
     // ===========================================================
     // Getter & Setter
@@ -108,7 +115,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(final GL10 gl) {
         long frameStartTime = mCurrentFrameStartTime.get();
-        long framePresentationTime = frameStartTime + 2 * NANOSECONDSPERSECOND / 60;
+        long framePresentationTime = frameStartTime + 2 * mVsyncInterval;
         AxmolRenderer.nativeRender(framePresentationTime);
     }
 
