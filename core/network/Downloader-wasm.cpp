@@ -172,7 +172,7 @@ namespace ax { namespace network {
                 dir = storagePath.substr(0, found + 1);
                 if (false == util->isDirectoryExist(dir))
                 {
-                    if (false == util->createDirectory(dir))
+                    if (false == util->createDirectories(dir))
                     {
                         errCode = DownloadTask::ERROR_CREATE_DIR_FAILED;
                         errCodeInternal = 0;

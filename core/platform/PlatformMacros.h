@@ -88,7 +88,7 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
  *
  * @since v0.99.5
  */
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 #    if !defined(AX_ENABLE_CACHE_TEXTURE_DATA)
 #        define AX_ENABLE_CACHE_TEXTURE_DATA 1
 #    endif
