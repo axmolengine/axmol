@@ -62,6 +62,7 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
 
     private boolean mSoftKeyboardShown = false;
     private boolean mMultipleTouchEnabled = true;
+    private boolean mPaused = true;
 
     public boolean isSoftKeyboardShown() {
         return mSoftKeyboardShown;
@@ -186,13 +187,15 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
 
     @Override
     public void onResume() {
-        super.onResume();
-        this.queueEvent(new Runnable() {
-            @Override
-            public void run() {
-                AxmolGLSurfaceView.this.mRenderer.handleOnResume();
-            }
-        });
+        if (mPaused) {
+            super.onResume();
+            this.queueEvent(new Runnable() {
+                @Override
+                public void run() {
+                    AxmolGLSurfaceView.this.mRenderer.handleOnResume();
+                }
+            });
+        }
     }
 
     @Override
@@ -206,6 +209,7 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
     }
 
     public void onStop() {
+        mPaused = true;
         super.onPause();
     }
 
