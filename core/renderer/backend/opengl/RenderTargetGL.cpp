@@ -34,6 +34,14 @@ RenderTargetGL::RenderTargetGL(bool defaultRenderTarget, DriverGL* driver) : Ren
     if (!defaultRenderTarget)
     {
         glGenFramebuffers(1, &_FBO);
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+        _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
+            glGenFramebuffers(1, &_FBO);
+            _dirtyFlags = TargetBufferFlags::ALL;
+        });
+        Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_rendererRecreatedListener,
+                                                                                         -1);
+#endif
     }
     else
     {
@@ -44,6 +52,10 @@ RenderTargetGL::~RenderTargetGL()
 {
     if (!_defaultRenderTarget)
     {
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+        Director::getInstance()->getEventDispatcher()->removeEventListener(_rendererRecreatedListener);
+#endif
+
         bindFrameBuffer();
 
         for (auto slot = 0; slot < MAX_COLOR_ATTCHMENT; ++slot)
