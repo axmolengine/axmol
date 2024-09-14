@@ -83,6 +83,7 @@ public:
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
         addTest("JNIHelper", []() { return new JNITests(); });
 #endif
+        addTest("Main Loop", []() { return new MainLoopTests(); });
         addTest("Material System", []() { return new MaterialSystemTest(); });
         addTest("Navigation Mesh", []() { return new NavMeshTests(); });
         addTest("Node: BillBoard Test", []() { return new BillBoardTests(); });
@@ -190,7 +191,7 @@ Coroutine TestController::traverseTestList(TestList* testList)
          _logIndentation += LOG_INDENTATION;
      }
 
-     co_yield DelayTime::create(0.5);  
+     co_yield DelayTime::create(0.5);
      AXLOGD("{}{}Begin traverse TestList:{}", LOG_TAG, _logIndentation, testList->getTestName());
 
      auto scheduler = _director->getScheduler();
@@ -202,7 +203,7 @@ Coroutine TestController::traverseTestList(TestList* testList)
          while (_isRunInBackground)
          {
              AXLOGD("_director is paused");
-             co_yield DelayTime::create(0.5);  
+             co_yield DelayTime::create(0.5);
          }
          if (callback)
          {
@@ -289,7 +290,7 @@ Coroutine TestController::traverseTestList(TestList* testList)
              {
                  testCase         = (TestCase*)transitionScene->getInScene();
                  testCaseDuration = transitionScene->getDuration() + 0.5f;
-                 
+
              }
              else
              {

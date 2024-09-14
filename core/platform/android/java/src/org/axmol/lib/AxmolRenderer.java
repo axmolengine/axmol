@@ -25,6 +25,9 @@
 package org.axmol.lib;
 
 import android.opengl.GLSurfaceView;
+import android.view.Display;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -34,16 +37,19 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     // ===========================================================
 
     private final static long NANOSECONDSPERSECOND = 1000000000L;
-    private final static long NANOSECONDSPERMICROSECOND = 1000000L;
+    private final static long NANOSECONDSPERMILLISECOND = 1000000L;
 
-    // The final animation interval which is used in 'onDrawFrame'
-    private static long sAnimationInterval = (long) (1.0f / 60f * AxmolRenderer.NANOSECONDSPERSECOND);
+    // Reference interval between render requests.
+    private static final AtomicLong sAnimationInterval = new AtomicLong(AxmolRenderer.NANOSECONDSPERSECOND / 60);
 
     // ===========================================================
     // Fields
     // ===========================================================
 
-    private long mLastTickInNanoSeconds;
+    private long mNextFrameStartTime = 0; // Note: read and written by VsyncNotifierThread's thread
+    private long mVsyncInterval;
+    private final AtomicLong mCurrentFrameStartTime = new AtomicLong();
+
     private int mScreenWidth;
     private int mScreenHeight;
     private boolean mNativeInitCompleted = false;
@@ -53,12 +59,17 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     // Constructors
     // ===========================================================
 
+    public AxmolRenderer(Display display)
+    {
+        mVsyncInterval = (long)((double)NANOSECONDSPERSECOND / (double)display.getRefreshRate());
+    }
+
     // ===========================================================
     // Getter & Setter
     // ===========================================================
 
     public static void setAnimationInterval(float interval) {
-        sAnimationInterval = (long) (interval * AxmolRenderer.NANOSECONDSPERSECOND);
+        sAnimationInterval.set((long)((double)interval * (double)AxmolRenderer.NANOSECONDSPERSECOND));
     }
 
     public void setScreenWidthAndHeight(final int surfaceWidth, final int surfaceHeight) {
@@ -73,7 +84,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(final GL10 GL10, final EGLConfig EGLConfig) {
         AxmolRenderer.nativeInit(this.mScreenWidth, this.mScreenHeight);
-        this.mLastTickInNanoSeconds = System.nanoTime();
+        AxmolRenderer.nativeInitEglPresentationTime();
 
         if (mNativeInitCompleted) {
             // This must be from an OpenGL context loss
@@ -88,30 +99,24 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
         AxmolRenderer.nativeOnSurfaceChanged(width, height);
     }
 
+    // Determines if frame rendering should be requested.
+    // Note: this is called in VsyncNotifierThread's thread via AxmolGLSurfaceView.
+    public boolean onVsync(long frameTimeNanos) {
+        if (frameTimeNanos >= mNextFrameStartTime) {
+            long threshold = NANOSECONDSPERMILLISECOND;
+            mNextFrameStartTime = frameTimeNanos + sAnimationInterval.get() - threshold;
+            mCurrentFrameStartTime.set(frameTimeNanos);
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public void onDrawFrame(final GL10 gl) {
-        /*
-         * Fix 60fps limiting doesn't work when high-end device is working in 120fps mode.
-         */
-        if (AxmolRenderer.sAnimationInterval <= 1.0f / 1200.0f * AxmolRenderer.NANOSECONDSPERSECOND) {
-            AxmolRenderer.nativeRender();
-        } else {
-            final long now = System.nanoTime();
-            final long interval = now - this.mLastTickInNanoSeconds;
-
-            /*
-             * Render time MUST be counted in, or the FPS will slower than appointed.
-            */
-            this.mLastTickInNanoSeconds = now;
-            AxmolRenderer.nativeRender();
-
-            if (interval < AxmolRenderer.sAnimationInterval) {
-                try {
-                    Thread.sleep((AxmolRenderer.sAnimationInterval - interval) / AxmolRenderer.NANOSECONDSPERMICROSECOND);
-                } catch (final Exception e) {
-                }
-            }
-        }
+        long frameStartTime = mCurrentFrameStartTime.get();
+        long framePresentationTime = frameStartTime + 2 * mVsyncInterval;
+        AxmolRenderer.nativeRender(framePresentationTime);
     }
 
     // ===========================================================
@@ -123,7 +128,8 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     private static native void nativeTouchesMove(final int[] ids, final float[] xs, final float[] ys);
     private static native void nativeTouchesCancel(final int[] ids, final float[] xs, final float[] ys);
     private static native boolean nativeKeyEvent(final int keyCode,boolean isPressed);
-    private static native void nativeRender();
+    private static native void nativeInitEglPresentationTime();
+    private static native void nativeRender(final long framePresentationTimeNanos);
     private static native void nativeInit(final int width, final int height);
     private static native void nativeOnContextLost();
     private static native void nativeOnSurfaceChanged(final int width, final int height);

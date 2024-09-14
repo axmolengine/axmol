@@ -29,13 +29,82 @@ import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Choreographer;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import java.util.concurrent.CountDownLatch;
+
+
+// This runs a thread that notifies AxmolGLSurfaceView about vsync events, so that it can request
+// rendering a new frame from the GL thread if required.
+//
+// Choreographer notifies about vsync events using the Looper running in current thread. We could
+// use the Choreographer/Looper in UI thread, but it means that if UI thread is busy for some
+// reason, then vsync notifications would be delayed. To avoid this we create a separate thread,
+// that handles only vsync events.
+class VsyncNotifierThread extends Thread implements Choreographer.FrameCallback {
+    private AxmolGLSurfaceView mSurfaceView;
+    private Choreographer mChoreographer;
+    private CountDownLatch mStartSignal = new CountDownLatch(1);
+
+    static VsyncNotifierThread sThread;
+
+    private VsyncNotifierThread() {}
+
+    // AxmolGLSurfaceView uses this to subscribe or unsubscribe from vsync events.
+    public synchronized void setSubscriber(AxmolGLSurfaceView subscriber) {
+        mSurfaceView = subscriber;
+        if (subscriber == null)
+            mChoreographer.removeFrameCallback(this);
+        else
+            mChoreographer.postFrameCallback(this);
+    }
+
+    // Choreographer calls this on vsync event.
+    @Override
+    public synchronized void doFrame(long frameTimeNanos) {
+        if (mSurfaceView != null) {
+            mSurfaceView.onVsync(frameTimeNanos);
+            mChoreographer.postFrameCallback(this);
+        }
+    }
+
+    @Override
+    public void run() {
+        Looper.prepare();
+
+        mChoreographer = Choreographer.getInstance();
+        mStartSignal.countDown();
+
+        Looper.loop();
+    }
+
+    public static VsyncNotifierThread getInstance() {
+        if (sThread == null) {
+            sThread = new VsyncNotifierThread();
+            sThread.setName("Axmol VsyncNotifierThread");
+            sThread.start();
+            // Make sure the thread has started, because the later code most likely will call
+            // setSubscriber() which will try to access mChoreographer, that is initialized during
+            // thread start.
+            while (sThread.mStartSignal.getCount() > 0) {
+                try {
+                    sThread.mStartSignal.await();
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+        return sThread;
+    }
+}
+
 
 public class AxmolGLSurfaceView extends GLSurfaceView {
     // ===========================================================
@@ -193,10 +262,12 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
                 AxmolGLSurfaceView.this.mRenderer.handleOnResume();
             }
         });
+        VsyncNotifierThread.getInstance().setSubscriber(this);
     }
 
     @Override
     public void onPause() {
+        VsyncNotifierThread.getInstance().setSubscriber(null);
         this.queueEvent(new Runnable() {
             @Override
             public void run() {
@@ -204,6 +275,11 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
             }
         });
         super.onPause();
+    }
+
+    public void onVsync(long frameTimeNanos) {
+        if (mRenderer.onVsync(frameTimeNanos))
+            requestRender();
     }
 
     @Override

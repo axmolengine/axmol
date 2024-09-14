@@ -40,6 +40,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.Log;
+import android.view.Display;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
@@ -229,7 +230,6 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
             mGLSurfaceView.onResume();
             rendererPaused = false;
         }
-        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     private void resumeIfHasFocus() {
@@ -248,7 +248,6 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         paused = true;
         super.onPause();
         AxmolEngine.onPause();
-        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
     @Override
@@ -324,7 +323,9 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         //if (isAndroidEmulator())
         //   this.mGLSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 
-        this.mGLSurfaceView.setRenderer(new AxmolRenderer());
+        Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        this.mGLSurfaceView.setRenderer(new AxmolRenderer(display));
+        this.mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         this.mGLSurfaceView.setEditText(edittext);
 
         // Set framelayout as the content view
