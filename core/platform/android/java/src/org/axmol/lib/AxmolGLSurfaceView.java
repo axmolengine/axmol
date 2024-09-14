@@ -188,6 +188,7 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
     @Override
     public void onResume() {
         if (mPaused) {
+            mPaused = false;
             super.onResume();
             this.queueEvent(new Runnable() {
                 @Override
