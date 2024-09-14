@@ -1245,9 +1245,9 @@ void DrawNode::_drawCircle(const Vec2& center,
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
-    Vec2* _vertices = new Vec2[segments + 2];
+    Vec2* _vertices = new Vec2[segments + 3];
 
-    for (unsigned int i = 0; i < segments; i++)
+    for (unsigned int i = 0; i < segments + 1; i++)
     {
         float rads = i * coef;
         float j    = radius * cosf(rads + angle) * scaleX + center.x;
@@ -1256,7 +1256,7 @@ void DrawNode::_drawCircle(const Vec2& center,
         _vertices[i].x = j;
         _vertices[i].y = k;
     }
-    _vertices[segments] = _vertices[0];
+    _vertices[++segments] = _vertices[0];
 
     if (solid)
     {
