@@ -90,16 +90,6 @@ namespace ax
 // sharedApplication pointer
 Application* Application::sm_pSharedApplication = nullptr;
 
-static long getCurrentMillSecond()
-{
-    long lLastTime;
-    struct timeval stCurrentTime;
-
-    gettimeofday(&stCurrentTime, NULL);
-    lLastTime = stCurrentTime.tv_sec * 1000 + stCurrentTime.tv_usec * 0.001;  // milliseconds
-    return lLastTime;
-}
-
 Application::Application() : _animationSpeed(60)
 {
     AX_ASSERT(!sm_pSharedApplication);
