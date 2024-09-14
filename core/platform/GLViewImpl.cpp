@@ -547,12 +547,22 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
         return false;
     }
 
+    /*
+     *  Note that the created window and context may differ from what you requested,
+     *  as not all parameters and hints are
+     *  [hard constraints](@ref window_hints_hard).  This includes the size of the
+     *  window, especially for full screen windows.  To retrieve the actual
+     *  attributes of the created window and context, use queries like @ref
+     *  glfwGetWindowAttrib and @ref glfwGetWindowSize.
+     *
+     *  see declaration glfwCreateWindow
+     */
     int actualWidth, actualHeight;
     glfwGetWindowSize(_mainWindow, &actualWidth, &actualHeight);
-    if (static_cast<int>(windowSize.width) != actualWidth || static_cast<int>(windowSize.height) != actualHeight)
-    {
-        windowSize.set(static_cast<float>(actualWidth), static_cast<float>(actualHeight));
-    }
+    if (static_cast<int>(windowSize.width) != actualWidth)
+        windowSize.x = static_cast<float>(actualWidth);
+    if (static_cast<int>(windowSize.height) != actualHeight)
+        windowSize.y = static_cast<float>(actualHeight);
 
 #if defined(AX_USE_METAL)
     int fbWidth, fbHeight;
@@ -585,21 +595,12 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     glfwMakeContextCurrent(_mainWindow);
     glfwSetWindowUserPointer(_mainWindow, backend::__gl);
 #endif
-    /*
-     *  Note that the created window and context may differ from what you requested,
-     *  as not all parameters and hints are
-     *  [hard constraints](@ref window_hints_hard).  This includes the size of the
-     *  window, especially for full screen windows.  To retrieve the actual
-     *  attributes of the created window and context, use queries like @ref
-     *  glfwGetWindowAttrib and @ref glfwGetWindowSize.
-     *
-     *  see declaration glfwCreateWindow
-     */
+    
 #if !defined(__APPLE__)
     handleWindowSize(static_cast<int>(windowSize.width), static_cast<int>(windowSize.height));
 #else
     // sense retina
-    setFrameSize(rect.size.width, rect.size.height);
+    setFrameSize(windowSize.width, windowSize.height);
 #endif
 
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
@@ -1441,4 +1442,4 @@ bool GLViewImpl::loadGL()
 
 #endif
 
-}  // end of namespace ax;
+}  // namespace ax
