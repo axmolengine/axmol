@@ -249,9 +249,6 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         // Disabled by default.
         _autoDraw = false;
 
-        // add sprite for backward compatibility
-        addChild(_sprite);
-
         ret = true;
     } while (0);
 
