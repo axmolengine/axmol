@@ -203,6 +203,9 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
                 AxmolGLSurfaceView.this.mRenderer.handleOnPause();
             }
         });
+    }
+
+    public void onStop() {
         super.onPause();
     }
 
