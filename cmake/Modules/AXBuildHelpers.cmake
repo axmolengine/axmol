@@ -531,9 +531,9 @@ set(AX_WASM_SHELL_FILE "${_AX_ROOT}/core/platform/wasm/shell_minimal.html" CACHE
 
 option(AX_WASM_ENABLE_DEVTOOLS "Enable wasm devtools" ON)
 
-set(_AX_WASM_EXPORTS "_main")
+set(_AX_WASM_EXPORTS "_main,_axmol_wgl_context_lost,_axmol_wgl_context_restored,_axmol_hdoc_visibilitychange")
 if(AX_WASM_ENABLE_DEVTOOLS)
-    set(_AX_WASM_EXPORTS "${_AX_WASM_EXPORTS},_axmol_director_pause,_axmol_director_resume,_axmol_director_step")
+    string(APPEND _AX_WASM_EXPORTS ",_axmol_dev_pause,_axmol_dev_resume,_axmol_dev_step")
 endif()
 set(AX_WASM_EXPORTS "${_AX_WASM_EXPORTS}" CACHE STRING "" FORCE)
 

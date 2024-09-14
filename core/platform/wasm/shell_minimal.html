@@ -46,9 +46,9 @@
       <input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked,
                                                                                 document.getElementById('resize').checked)">
       |
-      <input type="button" value="Pause" onclick="Module.ccall('axmol_director_pause')">
-      <input type="button" value="Resume" onclick="Module.ccall('axmol_director_resume')">
-      <input type="button" value="Step" onclick="Module.ccall('axmol_director_step')">
+      <input type="button" value="Pause" onclick="Module.ccall('axmol_dev_pause')">
+      <input type="button" value="Resume" onclick="Module.ccall('axmol_dev_resume')">
+      <input type="button" value="Step" onclick="Module.ccall('axmol_dev_step')">
     </div>
 
     <div class="emscripten">
@@ -140,7 +140,10 @@
           // As a default initial behavior, pop up an alert when webgl context is lost. To make your
           // application robust, you may want to override this behavior before shipping!
           // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-          canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+          canvas.addEventListener("webglcontextlost", function(e) { Module.ccall('axmol_wgl_context_lost'); alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+          canvas.addEventListener("webglcontextrestored", function(e) { Module.ccall('axmol_wgl_context_restored'); e.preventDefault(); }, false);
+
+          document.addEventListener("visibilitychange", () => { Module.ccall('axmol_hdoc_visibilitychange', document.hidden); });
 
           return canvas;
         })(),
