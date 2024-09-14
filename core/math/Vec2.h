@@ -326,7 +326,7 @@ public:
      */
     constexpr void set(const float* array)
     {
-        GP_ASSERT(array);
+        AX_ASSERT(array);
 
         x = array[0];
         y = array[1];

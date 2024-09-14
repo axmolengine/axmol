@@ -74,7 +74,7 @@ float Vec4::angle(const Vec4& v1, const Vec4& v2)
 
 void Vec4::add(const Vec4& v1, const Vec4& v2, Vec4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->x = v1.x + v2.x;
     dst->y = v1.y + v2.y;
@@ -84,7 +84,7 @@ void Vec4::add(const Vec4& v1, const Vec4& v2, Vec4* dst)
 
 void Vec4::clamp(const Vec4& min, const Vec4& max)
 {
-    GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
+    AX_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
 
     // Clamp the x value.
     if (x < min.x)
@@ -113,8 +113,8 @@ void Vec4::clamp(const Vec4& min, const Vec4& max)
 
 void Vec4::clamp(const Vec4& v, const Vec4& min, const Vec4& max, Vec4* dst)
 {
-    GP_ASSERT(dst);
-    GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
+    AX_ASSERT(dst);
+    AX_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
 
     // Clamp the x value.
     dst->x = v.x;
@@ -213,7 +213,7 @@ Vec4 Vec4::getNormalized() const
 
 void Vec4::subtract(const Vec4& v1, const Vec4& v2, Vec4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->x = v1.x - v2.x;
     dst->y = v1.y - v2.y;

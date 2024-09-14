@@ -135,7 +135,7 @@ public:
      */
     void set(const float* array)
     {
-        GP_ASSERT(array);
+        AX_ASSERT(array);
 
         this->x = array[0];
         this->y = array[1];

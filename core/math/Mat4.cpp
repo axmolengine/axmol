@@ -54,7 +54,7 @@ void Mat4::createLookAt(float eyePositionX,
                         float upZ,
                         Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     Vec3 eye(eyePositionX, eyePositionY, eyePositionZ);
     Vec3 target(targetPositionX, targetPositionY, targetPositionZ);
@@ -96,8 +96,8 @@ void Mat4::createLookAt(float eyePositionX,
 
 void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPlane, float zFarPlane, Mat4* dst)
 {
-    GP_ASSERT(dst);
-    GP_ASSERT(zFarPlane != zNearPlane);
+    AX_ASSERT(dst);
+    AX_ASSERT(zFarPlane != zNearPlane);
 
     float f_n   = 1.0f / (zFarPlane - zNearPlane);
     float theta = MATH_DEG_TO_RAD(fieldOfView) * 0.5f;
@@ -108,12 +108,12 @@ void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPl
         return;
     }
     float divisor = std::tan(theta);
-    GP_ASSERT(divisor);
+    AX_ASSERT(divisor);
     float factor = 1.0f / divisor;
 
     memset(dst->m, 0, sizeof(dst->m));
 
-    GP_ASSERT(aspectRatio);
+    AX_ASSERT(aspectRatio);
     dst->m[0]  = (1.0f / aspectRatio) * factor;
     dst->m[5]  = factor;
     dst->m[10] = (-(zFarPlane + zNearPlane)) * f_n;
@@ -142,10 +142,10 @@ void Mat4::createOrthographicOffCenter(float left,
                                        float zFarPlane,
                                        Mat4* dst)
 {
-    GP_ASSERT(dst);
-    GP_ASSERT(right != left);
-    GP_ASSERT(top != bottom);
-    GP_ASSERT(zFarPlane != zNearPlane);
+    AX_ASSERT(dst);
+    AX_ASSERT(right != left);
+    AX_ASSERT(top != bottom);
+    AX_ASSERT(zFarPlane != zNearPlane);
 
     memset(dst->m, 0, sizeof(dst->m));
     dst->m[0]  = 2 / (right - left);
@@ -237,7 +237,7 @@ void Mat4::createBillboardHelper(const Vec3& objectPosition,
 
 void Mat4::createScale(const Vec3& scale, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->setIdentity();
 
@@ -248,7 +248,7 @@ void Mat4::createScale(const Vec3& scale, Mat4* dst)
 
 void Mat4::createScale(float xScale, float yScale, float zScale, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->setIdentity();
 
@@ -259,7 +259,7 @@ void Mat4::createScale(float xScale, float yScale, float zScale, Mat4* dst)
 
 void Mat4::createRotation(const Quaternion& q, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     float x2 = q.x + q.x;
     float y2 = q.y + q.y;
@@ -298,7 +298,7 @@ void Mat4::createRotation(const Quaternion& q, Mat4* dst)
 
 void Mat4::createRotation(const Vec3& axis, float angle, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     float x = axis.x;
     float y = axis.y;
@@ -357,7 +357,7 @@ void Mat4::createRotation(const Vec3& axis, float angle, Mat4* dst)
 
 void Mat4::createRotationX(float angle, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->setIdentity();
 
@@ -372,7 +372,7 @@ void Mat4::createRotationX(float angle, Mat4* dst)
 
 void Mat4::createRotationY(float angle, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->setIdentity();
 
@@ -387,7 +387,7 @@ void Mat4::createRotationY(float angle, Mat4* dst)
 
 void Mat4::createRotationZ(float angle, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->setIdentity();
 
@@ -402,7 +402,7 @@ void Mat4::createRotationZ(float angle, Mat4* dst)
 
 void Mat4::createTranslation(const Vec3& translation, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->setIdentity();
 
@@ -413,7 +413,7 @@ void Mat4::createTranslation(const Vec3& translation, Mat4* dst)
 
 void Mat4::createTranslation(float xTranslation, float yTranslation, float zTranslation, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->setIdentity();
 
@@ -429,7 +429,7 @@ void Mat4::add(float scalar)
 
 void Mat4::add(float scalar, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
     MathUtil::addMatrix(m, scalar, dst->m);
 }
 
@@ -440,7 +440,7 @@ void Mat4::add(const Mat4& mat)
 
 void Mat4::add(const Mat4& m1, const Mat4& m2, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
     MathUtil::addMatrix(m1.m, m2.m, dst->m);
 }
 
@@ -588,7 +588,7 @@ void Mat4::getTranslation(Vec3* translation) const
 
 void Mat4::getUpVector(Vec3* dst) const
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->x = m[4];
     dst->y = m[5];
@@ -597,7 +597,7 @@ void Mat4::getUpVector(Vec3* dst) const
 
 void Mat4::getDownVector(Vec3* dst) const
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->x = -m[4];
     dst->y = -m[5];
@@ -606,7 +606,7 @@ void Mat4::getDownVector(Vec3* dst) const
 
 void Mat4::getLeftVector(Vec3* dst) const
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->x = -m[0];
     dst->y = -m[1];
@@ -615,7 +615,7 @@ void Mat4::getLeftVector(Vec3* dst) const
 
 void Mat4::getRightVector(Vec3* dst) const
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->x = m[0];
     dst->y = m[1];
@@ -624,7 +624,7 @@ void Mat4::getRightVector(Vec3* dst) const
 
 void Mat4::getForwardVector(Vec3* dst) const
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->x = -m[8];
     dst->y = -m[9];
@@ -633,7 +633,7 @@ void Mat4::getForwardVector(Vec3* dst) const
 
 void Mat4::getBackVector(Vec3* dst) const
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     dst->x = m[8];
     dst->y = m[9];
@@ -713,7 +713,7 @@ void Mat4::multiply(float scalar, Mat4* dst) const
 
 void Mat4::multiply(const Mat4& m, float scalar, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
     MathUtil::multiplyMatrix(m.m, scalar, dst->m);
 }
 
@@ -724,7 +724,7 @@ void Mat4::multiply(const Mat4& mat)
 
 void Mat4::multiply(const Mat4& m1, const Mat4& m2, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
     MathUtil::multiplyMatrix(m1.m, m2.m, dst->m);
 }
 
@@ -839,13 +839,13 @@ void Mat4::subtract(const Mat4& mat)
 
 void Mat4::subtract(const Mat4& m1, const Mat4& m2, Mat4* dst)
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
     MathUtil::subtractMatrix(m1.m, m2.m, dst->m);
 }
 
 void Mat4::transformVector(Vec3* vector) const
 {
-    GP_ASSERT(vector);
+    AX_ASSERT(vector);
     transformVector(vector->x, vector->y, vector->z, 0.0f, vector);
 }
 
@@ -856,20 +856,20 @@ void Mat4::transformVector(const Vec3& vector, Vec3* dst) const
 
 void Mat4::transformVector(float x, float y, float z, float w, Vec3* dst) const
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
 
     MathUtil::transformVec4(m, x, y, z, w, reinterpret_cast<float*>(dst));
 }
 
 void Mat4::transformVector(Vec4* vector) const
 {
-    GP_ASSERT(vector);
+    AX_ASSERT(vector);
     transformVector(*vector, vector);
 }
 
 void Mat4::transformVector(const Vec4& vector, Vec4* dst) const
 {
-    GP_ASSERT(dst);
+    AX_ASSERT(dst);
     MathUtil::transformVec4(m, reinterpret_cast<const float*>(&vector), reinterpret_cast<float*>(dst));
 }
 
