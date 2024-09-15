@@ -54,9 +54,6 @@ public:
     void removeThis();
     void logCbkAfterDelayTime();
     void logCbkAfterFadeOut();
-
-private:
-    int logCallbackCnt;
 };
 
 class LogicTest : public ActionManagerTest
