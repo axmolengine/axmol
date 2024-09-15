@@ -112,9 +112,7 @@ void CrashTest::removeThis()
     AXLOGI("CrashTest::removeThis() is called");
 
     auto child = getChildByTag(kTagGrossini);
-    child->removeChild(child, true);
-
-    getTestSuite()->enterNextTest();
+    removeChild(child, true);
 }
 
 void CrashTest::logCbkAfterDelayTime()
