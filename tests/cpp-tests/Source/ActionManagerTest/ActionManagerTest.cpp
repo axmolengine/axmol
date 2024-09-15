@@ -38,13 +38,13 @@ enum
 ActionManagerTests::ActionManagerTests()
 {
     ADD_TEST_CASE(CrashTest);
-    //ADD_TEST_CASE(LogicTest);
-    //ADD_TEST_CASE(PauseTest);
-    //ADD_TEST_CASE(StopActionTest);
-    //ADD_TEST_CASE(StopAllActionsTest);
-    //ADD_TEST_CASE(StopActionsByFlagsTest);
+    ADD_TEST_CASE(LogicTest);
+    ADD_TEST_CASE(PauseTest);
+    ADD_TEST_CASE(StopActionTest);
+    ADD_TEST_CASE(StopAllActionsTest);
+    ADD_TEST_CASE(StopActionsByFlagsTest);
     ADD_TEST_CASE(ResumeTest);
-    //ADD_TEST_CASE(Issue14050Test);
+    ADD_TEST_CASE(Issue14050Test);
 }
 
 //------------------------------------------------------------------
@@ -80,30 +80,47 @@ void CrashTest::onEnter()
     child->setPosition(VisibleRect::center());
     addChild(child, 1, kTagGrossini);
 
-    // Sum of all action's duration is 1.5 second.
-    child->runAction(RotateBy::create(1.5f, 90));
-    child->runAction(
-        Sequence::create(DelayTime::create(1.4f),
-                         CallFunc::create(AX_CALLBACK_0(CrashTest::logCallback, this)),
-                         FadeOut::create(1.1f),
-                         CallFunc::create(AX_CALLBACK_0(CrashTest::logCallback, this)),
-                         nullptr));
+    // Grossini should be rotated by 90 degrees during 3000ms,
+    // but rotation will be interruped at 1500ms by call of removeThis() callback.
+    AXLOGI("Create RotateBy ActionInterval which should last for 3000 ms");
+    child->runAction(RotateBy::create(3.0f, 90));
 
-    AXLOG("CrashTest::onEnter()");
-    // After 1.5 second, self will be removed.
-    child->runAction(Sequence::create(DelayTime::create(1.4f),
+    // This Sequence of 4 Actions will be started at the same frame as Grossini rotation,
+    // but also will not be finished because of removeThis() callback call.
+    AXLOGI("Create Sequence of 4 Actions: DelayTime (1500ms), CrashTest::logCbkAfterDelayTime, Fadeout (1500ms), CrashTest::logCbkAfterFadeOut");
+    child->runAction(Sequence::create(DelayTime::create(1.5f),
+                                      CallFunc::create(AX_CALLBACK_0(CrashTest::logCbkAfterDelayTime, this)),
+                                      FadeOut::create(1.5f),
+                                      CallFunc::create(AX_CALLBACK_0(CrashTest::logCbkAfterFadeOut, this)),
+                                      nullptr));
+
+    // This Sequence of 2 Actions will be started at the same frame as Grossini rotation.
+    // At 1500ms Grossini will be removed by the call of removeThis() callback. At that point
+    // RotateBy Action will still be ongoing and FadeOut Action will be created. AXMOL must not crash at that point.
+    AXLOGI("Create Sequence of 2 Actions: DelayTime (1500ms), CrashTest::removeThis");
+    child->runAction(Sequence::create(DelayTime::create(1.5f),
                                       CallFunc::create(AX_CALLBACK_0(CrashTest::removeThis, this)),
                                       nullptr));
 }
 
 void CrashTest::removeThis()
 {
+    AXLOGI("CrashTest::removeThis() is called");
+
     auto child = getChildByTag(kTagGrossini);
     child->removeChild(child, true);
 
-    AXLOG("CrashTest::removeThis()");
-
     getTestSuite()->enterNextTest();
+}
+
+void CrashTest::logCbkAfterDelayTime()
+{
+    AXLOGI("CrashTest::logCbkAfterDelayTime() is called");
+}
+
+void CrashTest::logCbkAfterFadeOut()
+{
+    AXLOGI("CrashTest::logCbkAfterFadeOut() is called");
 }
 
 std::string CrashTest::subtitle() const

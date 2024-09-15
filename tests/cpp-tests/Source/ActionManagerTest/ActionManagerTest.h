@@ -52,7 +52,11 @@ public:
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
     void removeThis();
-    void logCallback() { AXLOG("CrashTest::logCallback()"); }
+    void logCbkAfterDelayTime();
+    void logCbkAfterFadeOut();
+
+private:
+    int logCallbackCnt;
 };
 
 class LogicTest : public ActionManagerTest
