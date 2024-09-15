@@ -76,23 +76,23 @@ void CrashTest::onEnter()
 {
     ActionManagerTest::onEnter();
 
-    auto l = Label::createWithTTF("Remove Node during ongoing ActionInterval. AXMOL must not crash.", "fonts/Thonburi.ttf", 16.0f);
-    addChild(l);
-    l->setPosition(VisibleRect::center().x, VisibleRect::top().y - 75);
+    auto explanationLabel = Label::createWithTTF("Remove Node during ongoing ActionInterval. AXMOL must not crash.", "fonts/Thonburi.ttf", 16.0f);
+    addChild(explanationLabel);
+    explanationLabel->setPosition(VisibleRect::center().x, VisibleRect::top().y - 75);
 
-    auto child = Sprite::create(s_pathGrossini);
-    child->setPosition(VisibleRect::center());
-    addChild(child, 1, kTagGrossini);
+    auto grossiniSprite = Sprite::create(s_pathGrossini);
+    grossiniSprite->setPosition(VisibleRect::center());
+    addChild(grossiniSprite, 1, kTagGrossini);
 
     // Grossini should be rotated by 90 degrees during 3000ms,
     // but rotation will be interruped at 1500ms by call of removeThis() callback.
     AXLOGI("Create RotateBy ActionInterval which should last for 3000 ms");
-    child->runAction(RotateBy::create(3.0f, 90));
+    grossiniSprite->runAction(RotateBy::create(3.0f, 90));
 
     // This Sequence of 4 Actions will be started at the same frame as Grossini rotation,
     // but also will not be finished because of removeThis() callback call.
     AXLOGI("Create Sequence of 4 Actions: DelayTime (1500ms), CrashTest::logCbkAfterDelayTime, Fadeout (1500ms), CrashTest::logCbkAfterFadeOut");
-    child->runAction(Sequence::create(DelayTime::create(1.5f),
+    grossiniSprite->runAction(Sequence::create(DelayTime::create(1.5f),
                                       CallFunc::create(AX_CALLBACK_0(CrashTest::logCbkAfterDelayTime, this)),
                                       FadeOut::create(1.5f),
                                       CallFunc::create(AX_CALLBACK_0(CrashTest::logCbkAfterFadeOut, this)),
@@ -102,7 +102,7 @@ void CrashTest::onEnter()
     // At 1500ms Grossini will be removed by the call of removeThis() callback. At that point
     // RotateBy Action will still be ongoing and FadeOut Action will be created. AXMOL must not crash at that point.
     AXLOGI("Create Sequence of 2 Actions: DelayTime (1500ms), CrashTest::removeThis");
-    child->runAction(Sequence::create(DelayTime::create(1.5f),
+    grossiniSprite->runAction(Sequence::create(DelayTime::create(1.5f),
                                       CallFunc::create(AX_CALLBACK_0(CrashTest::removeThis, this)),
                                       nullptr));
 }
@@ -111,8 +111,8 @@ void CrashTest::removeThis()
 {
     AXLOGI("CrashTest::removeThis() is called");
 
-    auto child = getChildByTag(kTagGrossini);
-    removeChild(child, true);
+    auto grossiniSprite = getChildByTag(kTagGrossini);
+    removeChild(grossiniSprite, true);
 }
 
 void CrashTest::logCbkAfterDelayTime()
