@@ -76,6 +76,10 @@ void CrashTest::onEnter()
 {
     ActionManagerTest::onEnter();
 
+    auto l = Label::createWithTTF("Remove Node during ongoing ActionInterval. AXMOL must not crash.", "fonts/Thonburi.ttf", 16.0f);
+    addChild(l);
+    l->setPosition(VisibleRect::center().x, VisibleRect::top().y - 75);
+
     auto child = Sprite::create(s_pathGrossini);
     child->setPosition(VisibleRect::center());
     addChild(child, 1, kTagGrossini);
@@ -125,7 +129,7 @@ void CrashTest::logCbkAfterFadeOut()
 
 std::string CrashTest::subtitle() const
 {
-    return "CrashTest. Remove Node during ongoing ActionInterval. AXMOL must not crash.";
+    return "CrashTest";
 }
 
 //------------------------------------------------------------------
