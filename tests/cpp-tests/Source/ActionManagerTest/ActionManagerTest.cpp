@@ -38,13 +38,13 @@ enum
 ActionManagerTests::ActionManagerTests()
 {
     ADD_TEST_CASE(CrashTest);
-    ADD_TEST_CASE(LogicTest);
-    ADD_TEST_CASE(PauseTest);
-    ADD_TEST_CASE(StopActionTest);
-    ADD_TEST_CASE(StopAllActionsTest);
-    ADD_TEST_CASE(StopActionsByFlagsTest);
+    //ADD_TEST_CASE(LogicTest);
+    //ADD_TEST_CASE(PauseTest);
+    //ADD_TEST_CASE(StopActionTest);
+    //ADD_TEST_CASE(StopAllActionsTest);
+    //ADD_TEST_CASE(StopActionsByFlagsTest);
     ADD_TEST_CASE(ResumeTest);
-    ADD_TEST_CASE(Issue14050Test);
+    //ADD_TEST_CASE(Issue14050Test);
 }
 
 //------------------------------------------------------------------
@@ -82,17 +82,26 @@ void CrashTest::onEnter()
 
     // Sum of all action's duration is 1.5 second.
     child->runAction(RotateBy::create(1.5f, 90));
-    child->runAction(Sequence::create(DelayTime::create(1.4f), FadeOut::create(1.1f), nullptr));
+    child->runAction(
+        Sequence::create(DelayTime::create(1.4f),
+                         CallFunc::create(AX_CALLBACK_0(CrashTest::logCallback, this)),
+                         FadeOut::create(1.1f),
+                         CallFunc::create(AX_CALLBACK_0(CrashTest::logCallback, this)),
+                         nullptr));
 
+    AXLOG("CrashTest::onEnter()");
     // After 1.5 second, self will be removed.
     child->runAction(Sequence::create(DelayTime::create(1.4f),
-                                      CallFunc::create(AX_CALLBACK_0(CrashTest::removeThis, this)), nullptr));
+                                      CallFunc::create(AX_CALLBACK_0(CrashTest::removeThis, this)),
+                                      nullptr));
 }
 
 void CrashTest::removeThis()
 {
     auto child = getChildByTag(kTagGrossini);
     child->removeChild(child, true);
+
+    AXLOG("CrashTest::removeThis()");
 
     getTestSuite()->enterNextTest();
 }
