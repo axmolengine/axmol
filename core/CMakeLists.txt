@@ -459,10 +459,17 @@ if(LINUX)
     target_include_directories(${_AX_CORE_LIB} PUBLIC "${X11_X11_INCLUDE_PATH}")
     # X11 gets linked by cmake/Modules/AXLinkHelpers.cmake
 
-    # including GTK3.0 and WebKit2Gtk4.0
+    # including GTK3.0 and WebKit2Gtk4.x
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(GKT3 REQUIRED gtk+-3.0)
-    pkg_check_modules(WEBKIT2GTK webkit2gtk-4.0)
+
+    set(_webkit2gtk_vers "4.1;4.0")
+    foreach(_ver ${_webkit2gtk_vers})
+        pkg_check_modules(WEBKIT2GTK webkit2gtk-${_ver})
+        if (WEBKIT2GTK_LIBRARY_DIRS)
+            break()
+        endif()
+    endforeach()
 
     target_include_directories(${_AX_CORE_LIB} PUBLIC ${GTK3_INCLUDE_DIRS} ${WEBKIT2GTK_INCLUDE_DIRS})
     target_link_directories(${_AX_CORE_LIB} PRIVATE ${GTK3_LIBRARY_DIRS} ${WEBKIT2GTK_LIBRARY_DIRS})
