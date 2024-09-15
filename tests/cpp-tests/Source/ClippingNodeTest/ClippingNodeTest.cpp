@@ -991,7 +991,7 @@ void ClippingNodePerformanceTest::setup()
     countLabel->setPosition(Vec2(s.width / 2, s.height - 120));
     addChild(countLabel, 1);
     
-    auto addClippingNode = [=] (int count) -> void {
+    auto addClippingNode = [this, s, countLabel] (int count) -> void {
         for (int i = 0; i < count; i++) {
             Vec2 pos = Vec2(random(0, (int) s.width), random(0, (int) s.height));
             auto stencil = Sprite::create("Images/stars2.png");

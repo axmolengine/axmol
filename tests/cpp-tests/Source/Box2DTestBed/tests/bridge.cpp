@@ -73,7 +73,7 @@ public:
                 prevBody = body;
             }
 
-            b2Vec2 anchor(-15.0f + 1.0f * e_count, 5.0f);
+            b2Vec2 anchor(-15.0f + 1.0f * static_cast<float>(e_count), 5.0f);
             jd.Initialize(prevBody, ground, anchor);
             m_world->CreateJoint(&jd);
         }

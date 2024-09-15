@@ -2323,7 +2323,7 @@ void LabelLayoutBaseTest::initWrapOption(const ax::Size& size)
     checkBox->setSelected(true);
     checkBox->setName("toggleWrap");
 
-    checkBox->addEventListener([=](Object* ref, CheckBox::EventType event) {
+    checkBox->addEventListener([this](Object* /*sender*/, CheckBox::EventType event) {
         if (event == CheckBox::EventType::SELECTED)
         {
             _label->enableWrap(true);
@@ -2354,7 +2354,7 @@ void LabelLayoutBaseTest::initToggleLabelTypeOption(const ax::Size& size)
 
     auto stepper = (ControlStepper*)this->getChildByName("stepper");
 
-    checkBox->addEventListener([=](Object* ref, CheckBox::EventType event) {
+    checkBox->addEventListener([this, stepper](Object* /*sender*/, CheckBox::EventType event) {
         float fontSize = stepper->getValue();
 
         if (event == CheckBox::EventType::SELECTED)
@@ -2419,7 +2419,7 @@ void LabelLayoutBaseTest::initSliders(const ax::Size& size)
     addChild(slider2);
     auto winSize = Director::getInstance()->getVisibleSize();
 
-    slider->addEventListener([=](Object* ref, Slider::EventType event) {
+    slider->addEventListener([this, slider, winSize](Object* /*sender*/, Slider::EventType event) {
         float percent     = slider->getPercent();
         auto labelSize    = _label->getContentSize();
         auto drawNodeSize = Size(percent / 100.0 * winSize.width, labelSize.height);
@@ -2431,7 +2431,7 @@ void LabelLayoutBaseTest::initSliders(const ax::Size& size)
         this->updateDrawNodeSize(drawNodeSize);
     });
 
-    slider2->addEventListener([=](Object* ref, Slider::EventType event) {
+    slider2->addEventListener([this, slider2, winSize](Object* /*sender*/, Slider::EventType event) {
         float percent     = slider2->getPercent();
         auto labelSize    = _label->getContentSize();
         auto drawNodeSize = Size(labelSize.width, percent / 100.0 * winSize.height);
@@ -2663,7 +2663,7 @@ LabelResizeTest::LabelResizeTest()
     slider2->setVisible(false);
 
     auto winSize = Director::getInstance()->getVisibleSize();
-    slider1->addEventListener([=](Object* ref, Slider::EventType event) {
+    slider1->addEventListener([this, slider1, winSize](Object* /*sender*/, Slider::EventType event) {
         float percent     = slider1->getPercent();
         auto drawNodeSize = Size(percent / 100.0 * winSize.width, _label->getContentSize().height);
         if (drawNodeSize.height <= 0)
@@ -2690,7 +2690,7 @@ LabelResizeTest::LabelResizeTest()
     checkBox->setSelected(false);
     checkBox->setName("LineBreak");
 
-    checkBox->addEventListener([=](Object* ref, CheckBox::EventType event) {
+    checkBox->addEventListener([this](Object* /*sender*/, CheckBox::EventType event) {
         if (event == CheckBox::EventType::SELECTED)
         {
             _label->setLineBreakWithoutSpace(true);
@@ -2729,7 +2729,7 @@ LabelToggleTypeTest::LabelToggleTypeTest()
     slider2->setVisible(false);
 
     auto winSize = Director::getInstance()->getVisibleSize();
-    slider1->addEventListener([=](Object* ref, Slider::EventType event) {
+    slider1->addEventListener([this, slider1, winSize](Object* /*sender*/, Slider::EventType event) {
         float percent     = slider1->getPercent();
         auto drawNodeSize = Size(percent / 100.0 * winSize.width, _label->getContentSize().height);
         if (drawNodeSize.height <= 0)
@@ -2756,7 +2756,7 @@ LabelToggleTypeTest::LabelToggleTypeTest()
     checkBox->setSelected(false);
     checkBox->setName("LineBreak");
 
-    checkBox->addEventListener([=](Object* ref, CheckBox::EventType event) {
+    checkBox->addEventListener([this](Object* /*sender*/, CheckBox::EventType event) {
         if (event == CheckBox::EventType::SELECTED)
         {
             _label->setLineBreakWithoutSpace(true);
@@ -2875,7 +2875,7 @@ LabelSystemFontTest::LabelSystemFontTest()
     auto slider1 = (ui::Slider*)this->getChildByTag(1);
 
     auto winSize = Director::getInstance()->getVisibleSize();
-    slider1->addEventListener([=](Object* ref, Slider::EventType event) {
+    slider1->addEventListener([this, slider1, winSize](Object* /*sender*/, Slider::EventType event) {
         float percent     = slider1->getPercent();
         auto drawNodeSize = Size(percent / 100.0 * winSize.width, _label->getContentSize().height);
         if (drawNodeSize.height <= 0)
@@ -2899,7 +2899,7 @@ LabelSystemFontTest::LabelSystemFontTest()
     checkBox->setSelected(false);
     checkBox->setName("LineBreak");
 
-    checkBox->addEventListener([=](Object* ref, CheckBox::EventType event) {
+    checkBox->addEventListener([this](Object* /*sender*/, CheckBox::EventType event) {
         if (event == CheckBox::EventType::SELECTED)
         {
             _label->setLineBreakWithoutSpace(true);
