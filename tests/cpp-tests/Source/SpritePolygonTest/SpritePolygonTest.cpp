@@ -78,7 +78,7 @@ bool SpritePolygonTestCase::init()
         {
             TTFConfig ttfConfig("fonts/arial.ttf", 10);
             auto label    = Label::createWithTTF(ttfConfig, "DebugDraw OFF");
-            auto menuItem = MenuItemLabel::create(label, [=](Object* ref) {
+            auto menuItem = MenuItemLabel::create(label, [this, label](Object* ref) {
                 if (_isDebugDraw)
                 {
                     _isDebugDraw = false;

@@ -117,7 +117,7 @@ bool Physics3DTestDemo::init()
 
         TTFConfig ttfConfig("fonts/arial.ttf", 10);
         auto label = Label::createWithTTF(ttfConfig, "DebugDraw OFF");
-        auto menuItem = MenuItemLabel::create(label, [=](Object* /*ref*/) {
+        auto menuItem = MenuItemLabel::create(label, [this, label](Object* /*sender*/) {
             if (getPhysics3DWorld()->isDebugDrawEnabled())
             {
                 getPhysics3DWorld()->setDebugDrawEnable(false);
@@ -758,7 +758,7 @@ bool Physics3DCollisionCallbackDemo::init()
             this->addChild(mesh);
             // preload
             //
-            rigidBody->setCollisionCallback([=](const Physics3DCollisionInfo& ci) {
+            rigidBody->setCollisionCallback([this](const Physics3DCollisionInfo& ci) {
                 if (!ci.collisionPointList.empty())
                 {
                     if (ci.objA->getMask() != 0)
