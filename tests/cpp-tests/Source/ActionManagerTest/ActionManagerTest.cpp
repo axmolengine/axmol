@@ -68,7 +68,7 @@ std::string ActionManagerTest::subtitle() const
 
 //------------------------------------------------------------------
 //
-// Test1
+// CrashTest
 //
 //------------------------------------------------------------------
 
@@ -125,12 +125,12 @@ void CrashTest::logCbkAfterFadeOut()
 
 std::string CrashTest::subtitle() const
 {
-    return "Test 1. Should not crash";
+    return "CrashTest. Remove Node during ongoing ActionInterval. AXMOL must not crash.";
 }
 
 //------------------------------------------------------------------
 //
-// Test2
+// LogicTest
 //
 //------------------------------------------------------------------
 void LogicTest::onEnter()
