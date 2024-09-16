@@ -353,6 +353,12 @@ void DrawNode::drawCircle(const Vec2& center,
         AXLOGW("{}: thickness <= 0", __FUNCTION__);
         return;
     }
+    if (radius == 0.0f)
+    {
+        AXLOGW("{}: radius == 0", __FUNCTION__);
+        return;
+    }
+
     _drawCircle(center, radius, angle, segments, drawLineToCenter, scaleX, scaleY, color, Color4B(), false, thickness);
 }
 
@@ -369,6 +375,12 @@ void DrawNode::drawCircle(const Vec2& center,
         AXLOGW("{}: thickness <= 0", __FUNCTION__);
         return;
     }
+    if (radius == 0.0f)
+    {
+        AXLOGW("{}: radius == 0", __FUNCTION__);
+        return;
+    }
+
     _drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color, color, false, thickness);
 }
 
@@ -983,7 +995,6 @@ void DrawNode::_drawPolygon(const Vec2* verts,
 
             axstd::pod_vector<ExtrudeVerts> extrude{static_cast<size_t>(sizeof(struct ExtrudeVerts) * count)};
 
-            int closeCount = count - ((closedPolygon) ? 0 : 1);
             for (unsigned int i = 0; i < count; i++)
             {
                 Vec2 v0 = _vertices[(i - 1 + count) % count];
@@ -997,7 +1008,7 @@ void DrawNode::_drawPolygon(const Vec2* verts,
                 extrude[i]  = {offset, n2};
             }
 
-            for (unsigned int i = 0; i < closeCount; i++)
+            for (unsigned int i = 0; i < count; i++)
             {
                 int j   = (i + 1) % count;
                 Vec2 v0 = _vertices[i];
@@ -1245,28 +1256,30 @@ void DrawNode::_drawCircle(const Vec2& center,
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
-    Vec2* _vertices = new Vec2[segments + 2];
+    const int count = (drawLineToCenter) ? 2 : 1;
 
+    Vec2* _vertices = new Vec2[segments + count];
+
+    float rsX = radius * scaleX;
+    float rsY = radius * scaleY;
     for (unsigned int i = 0; i < segments; i++)
     {
-        float rads = i * coef;
-        float j    = radius * cosf(rads + angle) * scaleX + center.x;
-        float k    = radius * sinf(rads + angle) * scaleY + center.y;
-
-        _vertices[i].x = j;
-        _vertices[i].y = k;
+        float rads     = i * coef + angle;
+        _vertices[i].x = rsX * cosf(rads) + center.x;
+        _vertices[i].y = rsY * sinf(rads) + center.y;
     }
     _vertices[segments] = _vertices[0];
 
+    if (drawLineToCenter)
+        _vertices[++segments] = center;
+
     if (solid)
     {
-        _drawPolygon(_vertices, segments, fillColor, borderColor, false, thickness, true);
+        _drawPolygon(_vertices, segments + count-1, fillColor, borderColor, false, thickness, true);
     }
     else
     {
-        if (drawLineToCenter)
-            _vertices[++segments] = center;
-        _drawPoly(_vertices, segments + 1, false, borderColor, thickness, true);
+        _drawPoly(_vertices, segments + count-1, false, borderColor, thickness, true);
     }
     AX_SAFE_DELETE_ARRAY(_vertices);
 }
