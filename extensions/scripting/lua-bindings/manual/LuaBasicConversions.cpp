@@ -3098,7 +3098,8 @@ bool luaval_to_stageUniformLocation(lua_State* L, int pos, ax::backend::StageUni
         pos -= 1; // since we'll be pushing keys for table access
 
     lua_pushstring(L, "location");
-    if (lua_gettable(L, pos) == LUA_TNIL)
+    lua_gettable(L, pos);
+    if (lua_isnil(L, -1))
     {
         AXASSERT(false, "invalidate UniformLocation value");
     }
@@ -3106,7 +3107,8 @@ bool luaval_to_stageUniformLocation(lua_State* L, int pos, ax::backend::StageUni
     lua_pop(L, 1);
 
     lua_pushstring(L, "offset");
-    if (lua_gettable(L, pos) == LUA_TNIL)
+    lua_gettable(L, pos);
+    if (lua_isnil(L, -1))
     {
         AXASSERT(false, "invalidate UniformLocation value");
     }
@@ -3138,7 +3140,8 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, ax::backend::UniformLocati
         return false;
 
     lua_pushstring(L, "vertStage");
-    if (lua_gettable(L, pos) == LUA_TNIL)
+    lua_gettable(L, pos);
+    if (lua_isnil(L, -1))
     {
         AXASSERT(false, "invalidate UniformLocation value");
     }
@@ -3146,7 +3149,8 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, ax::backend::UniformLocati
     lua_pop(L, 1);
 
     lua_pushstring(L, "fragStage");
-    if (lua_gettable(L, pos) == LUA_TNIL)
+    lua_gettable(L, pos);
+    if (lua_isnil(L, -1))
     {
         AXASSERT(false, "invalidate UniformLocation value");
     }
