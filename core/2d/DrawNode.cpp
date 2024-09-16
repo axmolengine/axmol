@@ -1256,13 +1256,13 @@ void DrawNode::_drawCircle(const Vec2& center,
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
-    const int count = (drawLineToCenter) ? 2 : 1;
+    int count = (drawLineToCenter) ? 3 : 2;
 
     Vec2* _vertices = new Vec2[segments + count];
 
     float rsX = radius * scaleX;
     float rsY = radius * scaleY;
-    for (unsigned int i = 0; i < segments; i++)
+    for (unsigned int i = 0; i <= segments; i++)
     {
         float rads     = i * coef + angle;
         _vertices[i].x = rsX * cosf(rads) + center.x;
@@ -1273,13 +1273,17 @@ void DrawNode::_drawCircle(const Vec2& center,
     if (drawLineToCenter)
         _vertices[++segments] = center;
 
+
     if (solid)
     {
-        _drawPolygon(_vertices, segments + count-1, fillColor, borderColor, false, thickness, true);
+        _drawPolygon(_vertices, segments + count - 1, fillColor, borderColor, false, thickness, true);
     }
     else
     {
-        _drawPoly(_vertices, segments + count-1, false, borderColor, thickness, true);
+        if (drawLineToCenter)
+            _drawPoly(_vertices, segments + count - 2, false, borderColor, thickness, true);
+        else
+            _drawPoly(_vertices, segments + count - 1, false, borderColor, thickness, true);
     }
     AX_SAFE_DELETE_ARRAY(_vertices);
 }
