@@ -355,6 +355,7 @@ public:
      * @param fillColor The color will fill in polygon.
      * @param thickness The border of line width.
      * @param borderColor The border of line color.
+     * @param drawLineToCenter Whether or not draw the line from the origin to center.
      * @js NA
      */
     void drawSolidCircle(const Vec2& center,
@@ -365,7 +366,8 @@ public:
                          float scaleY,
                          const Color4B& fillColor,
                          float thickness,
-                         const Color4B& borderColor);
+                         const Color4B& borderColor,
+                         bool drawLineToCenter = false);
 
     /** Draws a solid circle given the center, radius and number of segments.
      * @param center The circle center point.

@@ -704,14 +704,16 @@ void DrawNode::drawSolidCircle(const Vec2& center,
                                float scaleY,
                                const Color4B& fillColor,
                                float thickness,
-                               const Color4B& borderColor)
+                               const Color4B& borderColor,
+                               bool drawLineToCenter)
 {
     if (thickness < 0.0f)
     {
         AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
         thickness = 0.0f;
     }
-    _drawCircle(center, radius, angle, segments, false, scaleX, scaleY, borderColor, fillColor, true, thickness);
+    _drawCircle(center, radius, angle, segments, drawLineToCenter, scaleX, scaleY, borderColor, fillColor, true,
+                thickness);
 }
 
 void DrawNode::drawSolidCircle(const Vec2& center,
@@ -1256,7 +1258,7 @@ void DrawNode::_drawCircle(const Vec2& center,
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
-    int count = (drawLineToCenter) ? 3 : 2;
+    int count       = (drawLineToCenter) ? 3 : 2;
     Vec2* _vertices = new Vec2[segments + count];
 
     float rsX = radius * scaleX;
@@ -1272,18 +1274,11 @@ void DrawNode::_drawCircle(const Vec2& center,
     if (drawLineToCenter)
         _vertices[++segments] = center;
 
-
     if (solid)
-    {
         _drawPolygon(_vertices, segments + 1, fillColor, borderColor, false, thickness, true);
-    }
     else
-    {
-        if (drawLineToCenter)
-            _drawPoly(_vertices, segments + 1, false, borderColor, thickness, true);
-        else
-            _drawPoly(_vertices, segments + 1, false, borderColor, thickness, true);
-    }
+        _drawPoly(_vertices, segments + 1, false, borderColor, thickness, true);
+
     AX_SAFE_DELETE_ARRAY(_vertices);
 }
 
