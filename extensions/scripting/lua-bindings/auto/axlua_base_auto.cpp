@@ -52628,6 +52628,54 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
     }while(0);
     ok  = true;
     do{
+        if (argc == 10) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            unsigned int arg3;
+            ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg4;
+            ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg5;
+            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            ax::Color4B arg6;
+            ok &=luaval_to_color4b(tolua_S, 8, &arg6, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg7;
+            ok &= luaval_to_number(tolua_S, 9,&arg7, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            ax::Color4B arg8;
+            ok &=luaval_to_color4b(tolua_S, 10, &arg8, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            bool arg9;
+            ok &= luaval_to_boolean(tolua_S, 11,&arg9, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            cobj->drawSolidCircle(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
         if (argc == 5) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidCircle");
@@ -53134,34 +53182,6 @@ int lua_ax_base_DrawNode_drawTriangle(lua_State* tolua_S)
     }while(0);
     ok  = true;
     do{
-        if (argc == 5) {
-            ax::Vec2 arg0;
-            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawTriangle");
-
-            if (!ok) { break; }
-            ax::Vec2 arg1;
-            ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.DrawNode:drawTriangle");
-
-            if (!ok) { break; }
-            ax::Vec2 arg2;
-            ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.DrawNode:drawTriangle");
-
-            if (!ok) { break; }
-            ax::Color4B arg3;
-            ok &=luaval_to_color4b(tolua_S, 5, &arg3, "ax.DrawNode:drawTriangle");
-
-            if (!ok) { break; }
-            double arg4;
-            ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.DrawNode:drawTriangle");
-
-            if (!ok) { break; }
-            cobj->drawTriangle(arg0, arg1, arg2, arg3, arg4);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
         if (argc == 2) {
             const ax::Vec2* arg0;
             ok &= luaval_to_object<const ax::Vec2>(tolua_S, 2, "ax.Vec2",&arg0, "ax.DrawNode:drawTriangle");
@@ -53172,26 +53192,6 @@ int lua_ax_base_DrawNode_drawTriangle(lua_State* tolua_S)
 
             if (!ok) { break; }
             cobj->drawTriangle(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 3) {
-            const ax::Vec2* arg0;
-            ok &= luaval_to_object<const ax::Vec2>(tolua_S, 2, "ax.Vec2",&arg0, "ax.DrawNode:drawTriangle");
-
-            if (!ok) { break; }
-            ax::Color4B arg1;
-            ok &=luaval_to_color4b(tolua_S, 3, &arg1, "ax.DrawNode:drawTriangle");
-
-            if (!ok) { break; }
-            double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawTriangle");
-
-            if (!ok) { break; }
-            cobj->drawTriangle(arg0, arg1, arg2);
             lua_settop(tolua_S, 1);
             return 1;
         }
