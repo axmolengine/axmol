@@ -503,9 +503,9 @@ public:
      * @js NA
      */
 
-    void drawTriangle(const Vec2* vertices3, const Color4B& color, float thickness = 1.0f);
+    void drawTriangle(const Vec2* vertices3, const Color4B& color);
 
-    void drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color4B& color, float thickness = 1.0f);
+    void drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color4B& color);
 
     void drawSolidTriangle(const Vec2* vertices3,
                            const Color4B& fillColor,
