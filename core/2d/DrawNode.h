@@ -448,7 +448,7 @@ public:
     void setIsConvex(bool isConvex)
     {
         AXLOGW("'setIsConvex()' No longer supported. Use the new drawPolygon API.");
-    }; 
+    };
 
 
      /** draw a segment with a radius and color.
@@ -556,10 +556,7 @@ public:
     virtual bool init() override;
 
 protected:
-    void ensureCapacityTriangle(int count);
-    void ensureCapacityPoint(int count);
-    void ensureCapacityLine(int count);
-
+    void updateBuffers();
     void updateShader();
     void updateShaderInternal(CustomCommand& cmd,
                               uint32_t programType,
@@ -572,32 +569,27 @@ protected:
     void updateBlendState(CustomCommand& cmd);
     void updateUniforms(const Mat4& transform, CustomCommand& cmd);
 
-    int _bufferCapacityTriangle  = 0;
-    int _bufferCountTriangle     = 0;
-    V2F_C4B_T2F* _bufferTriangle = nullptr;
-    CustomCommand _customCommandTriangle;
-    bool _dirtyTriangle = false;
+    bool _trianglesDirty: 1 = false;
+    bool _pointsDirty: 1 = false;
+    bool _linesDirty: 1 = false;
 
-    int _bufferCapacityPoint  = 0;
-    int _bufferCountPoint     = 0;
-    V2F_C4B_T2F* _bufferPoint = nullptr;
-    Color4B _pointColor;
-    int _pointSize = 0;
-
-    int _bufferCapacityLine  = 0;
-    int _bufferCountLine     = 0;
-    V2F_C4B_T2F* _bufferLine = nullptr;
-
-    CustomCommand _customCommandPoint;
-    CustomCommand _customCommandLine;
-    bool _dirtyPoint = false;
-    bool _dirtyLine  = false;
+    bool _isolated: 1 = false;
 
     BlendFunc _blendFunc;
 
-    bool _isolated          = false;
+    CustomCommand _customCommandTriangle;
+    CustomCommand _customCommandPoint;
+    CustomCommand _customCommandLine;
+
+    axstd::pod_vector<V2F_C4B_T2F> _triangles;
+    axstd::pod_vector<V2F_C4B_T2F> _points;
+    axstd::pod_vector<V2F_C4B_T2F> _lines;
+
+    Color4B _pointColor;
+    int _pointSize = 0;
     float _lineWidth        = 1.0f;
     float _defaultLineWidth = 1.0f;
+
 private:
     // Internal function _drawPoint
     void _drawPoint(const Vec2& position,
@@ -711,7 +703,7 @@ public:
         float defaultLineWidth = 1.0f;
 
         // Drawing flags
-        bool transform = true;
+        bool transform = false;
         bool drawOrder = false;
 
         /** Set the DrawNode drawOrder
