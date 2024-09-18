@@ -38,6 +38,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
 
     // The final animation interval which is used in 'onDrawFrame'
     private static long sAnimationInterval = (long) (1.0f / 60f * AxmolRenderer.NANOSECONDSPERSECOND);
+    private static float FPS_CONTROL_THRESHOLD = 1.0f / 1200.0f * AxmolRenderer.NANOSECONDSPERSECOND;
 
     // ===========================================================
     // Fields
@@ -91,19 +92,15 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(final GL10 gl) {
         /*
-         * Fix 60fps limiting doesn't work when high-end device is working in 120fps mode.
+         * Render time MUST be counted in, or the FPS will slower than appointed.
          */
-        if (AxmolRenderer.sAnimationInterval <= 1.0f / 1200.0f * AxmolRenderer.NANOSECONDSPERSECOND) {
-            AxmolRenderer.nativeRender();
-        } else {
-            final long now = System.nanoTime();
-            final long interval = now - this.mLastTickInNanoSeconds;
-
-            /*
-             * Render time MUST be counted in, or the FPS will slower than appointed.
-            */
-            this.mLastTickInNanoSeconds = now;
-            AxmolRenderer.nativeRender();
+        AxmolRenderer.nativeRender();
+        /*
+         * No need to use algorithm in default(60,90,120... FPS) situation,
+         * since onDrawFrame() was called by system 60 times per second by default.
+         */
+        if (AxmolRenderer.sAnimationInterval > AxmolRenderer.FPS_CONTROL_THRESHOLD) {
+            final long interval = System.nanoTime() - this.mLastTickInNanoSeconds;
 
             if (interval < AxmolRenderer.sAnimationInterval) {
                 try {
@@ -111,6 +108,8 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
                 } catch (final Exception e) {
                 }
             }
+
+            this.mLastTickInNanoSeconds = System.nanoTime();
         }
     }
 
