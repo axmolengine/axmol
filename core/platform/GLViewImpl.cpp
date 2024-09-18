@@ -600,7 +600,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     handleWindowSize(static_cast<int>(windowSize.width), static_cast<int>(windowSize.height));
 #else
     // sense retina
-    setFrameSize(windowSize.width, windowSize.height);
+    setFrameSize(windowSize.width / frameZoomFactor, windowSize.height / frameZoomFactor);
 #endif
 
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
