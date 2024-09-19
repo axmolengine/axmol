@@ -1315,7 +1315,7 @@ void Sprite::setScaleX(float scaleX)
 void Sprite::setScaleY(float scaleY)
 {
 #ifdef AX_USE_METAL
-    if (_texture->isRenderTarget())
+    if (_texture &&_texture->isRenderTarget())
         scaleY = std::abs(scaleY);
 #endif
     Node::setScaleY(scaleY);
@@ -1444,7 +1444,7 @@ bool Sprite::isFlippedX() const
 void Sprite::setFlippedY(bool flippedY)
 {
 #ifdef AX_USE_METAL
-    if (_texture->isRenderTarget())
+    if (_texture && _texture->isRenderTarget())
         flippedY = !flippedY;
 #endif
     if (_flippedY != flippedY)
