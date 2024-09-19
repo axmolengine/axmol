@@ -585,8 +585,6 @@ protected:
     axstd::pod_vector<V2F_C4B_T2F> _points;
     axstd::pod_vector<V2F_C4B_T2F> _lines;
 
-    Color4B _pointColor;
-    int _pointSize = 0;
     float _lineWidth        = 1.0f;
     float _defaultLineWidth = 1.0f;
 
