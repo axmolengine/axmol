@@ -733,19 +733,19 @@ void DrawNode::drawSolidCircle(const Vec2& center,
     _drawCircle(center, radius, angle, segments, false, 1.0f, 1.0f, Color4B(), color, true);
 }
 
-void DrawNode::drawTriangle(const Vec2* _vertices3, const Color4B& color)
+void DrawNode::drawTriangle(const Vec2* vertices3, const Color4B& color)
 {
-    _drawTriangle(_vertices3, Color4B::TRANSPARENT, color, false, 0.0f);
+    Vec2 vertices[3] = {vertices3[0], vertices3[1], vertices3[2]};
+    _drawTriangle(vertices, Color4B::TRANSPARENT, color, false, 0.0f);
 }
 
 void DrawNode::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color4B& color)
 {
-
-    Vec2 _vertices3[3] = {p1, p2, p3};
-    _drawTriangle(_vertices3, Color4B::TRANSPARENT, color, false, 0.0f);
+    Vec2 vertices[3] = {p1, p2, p3};
+    _drawTriangle(vertices, Color4B::TRANSPARENT, color, false, 0.0f);
 }
 
-void DrawNode::drawSolidTriangle(const Vec2* _vertices3,
+void DrawNode::drawSolidTriangle(const Vec2* vertices3,
                                  const Color4B& fillColor,
                                  const Color4B& borderColor,
                                  float thickness)
@@ -755,7 +755,8 @@ void DrawNode::drawSolidTriangle(const Vec2* _vertices3,
         AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
         thickness = 0.0f;
     }
-    _drawTriangle(_vertices3, fillColor, borderColor, true, thickness);
+    Vec2 vertices[3] = {vertices3[0], vertices3[1], vertices3[2]};
+    _drawTriangle(vertices, fillColor, borderColor, true, thickness);
 }
 
 void DrawNode::drawSolidTriangle(const Vec2& p1,
@@ -770,8 +771,8 @@ void DrawNode::drawSolidTriangle(const Vec2& p1,
         AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
         thickness = 0.0f;
     }
-    Vec2 _vertices3[3] = {p1, p2, p3};
-    _drawTriangle(_vertices3, fillColor, borderColor, false, thickness);
+    Vec2 vertices[3] = {p1, p2, p3};
+    _drawTriangle(vertices, fillColor, borderColor, false, thickness);
 }
 
 void DrawNode::clear()
@@ -1060,23 +1061,21 @@ void DrawNode::_drawSegment(const Vec2& from,
                             DrawNode::EndType etStart,
                             DrawNode::EndType etEnd)
 {
-    unsigned int count = 2;
-    Vec2 line[]        = {from, to};
-
-    auto _vertices = _transform(line, count, false);
+    Vec2 vertices[2] = {from, to};
+    applyTransform(vertices, vertices, 2);
 
     if (thickness == 1.0f && !properties.drawOrder)
     {
-        auto line = expandBufferAndGetPointer(_lines, count);
+        auto line = expandBufferAndGetPointer(_lines, 2);
         _linesDirty = true;
 
-        line[0] = {_vertices[0], color, Vec2::ZERO};
-        line[1] = {_vertices[1], color, Vec2::ZERO};
+        line[0] = {vertices[0], color, Vec2::ZERO};
+        line[1] = {vertices[1], color, Vec2::ZERO};
     }
     else
     {
-        Vec2 a  = _vertices[0];
-        Vec2 b  = _vertices[1];
+        Vec2 a  = vertices[0];
+        Vec2 b  = vertices[1];
         Vec2 n  = ((b - a).getPerp()).getNormalized();
         Vec2 t  = n.getPerp();
         Vec2 nw = n * thickness;
@@ -1238,7 +1237,7 @@ void DrawNode::_drawCircle(const Vec2& center,
     AX_SAFE_DELETE_ARRAY(_vertices);
 }
 
-void DrawNode::_drawTriangle(const Vec2* _vertices3,
+void DrawNode::_drawTriangle(Vec2* vertices3,
                              const Color4B& borderColor,
                              const Color4B& fillColor,
                              bool solid,
@@ -1248,18 +1247,18 @@ void DrawNode::_drawTriangle(const Vec2* _vertices3,
 
     if (thickness != 0.0f)
     {
-        _drawPolygon(_vertices3, vertex_count, fillColor, borderColor, true, thickness, true);
+        _drawPolygon(vertices3, vertex_count, fillColor, borderColor, true, thickness, true);
     }
     else
     {
-        auto _vertices = _transform(_vertices3, vertex_count, false);
+        applyTransform(vertices3, vertices3, vertex_count);
 
         auto triangles = (V2F_C4B_T2F_Triangle*)expandBufferAndGetPointer(_triangles, vertex_count);
         _trianglesDirty = true;
 
-        triangles[0] = {{_vertices[0], fillColor, Vec2::ZERO},
-                        {_vertices[1], fillColor, Vec2::ZERO},
-                        {_vertices[2], fillColor, Vec2::ZERO}};
+        triangles[0] = {{vertices3[0], fillColor, Vec2::ZERO},
+                        {vertices3[1], fillColor, Vec2::ZERO},
+                        {vertices3[2], fillColor, Vec2::ZERO}};
     }
 }
 
@@ -1506,36 +1505,7 @@ axstd::pod_vector<Vec2> DrawNode::_transform(const Vec2* _vertices, unsigned int
         return vert;
     }
 
-    const float sinRot = sin(properties.rotation);
-    const float cosRot = cos(properties.rotation);
-
-    for (unsigned int i = 0; i < count; i++)
-    {
-        if (properties.rotation == 0.0f)
-        {
-            vert[i].x = _vertices[i].x * properties.scale.x + properties.position.x;
-            vert[i].y = _vertices[i].y * properties.scale.y + properties.position.y;
-        }
-        else  // https://stackoverflow.com/questions/2259476/rotating-a-point-about-another-point-2d
-        {
-
-            // translate point back to origin:
-            vert[i].x = _vertices[i].x - properties.center.x;
-            vert[i].y = _vertices[i].y - properties.center.y;
-
-            // rotate point
-            float xnew = vert[i].x * cosRot - vert[i].y * sinRot;
-            float ynew = vert[i].x * sinRot + vert[i].y * cosRot;
-
-            // translate point back:
-            vert[i].x = xnew + properties.center.x;
-            vert[i].y = ynew + properties.center.y;
-
-            // scale and position
-            vert[i].x = vert[i].x * properties.scale.x + properties.position.x;
-            vert[i].y = vert[i].y * properties.scale.y + properties.position.y;
-        }
-    }
+    applyTransform(_vertices, vert.data(), count);
 
     if (closedCounter)
     {
@@ -1543,6 +1513,50 @@ axstd::pod_vector<Vec2> DrawNode::_transform(const Vec2* _vertices, unsigned int
     }
 
     return vert;
+}
+
+void DrawNode::applyTransform(const Vec2* from, Vec2* to, unsigned int count)
+{
+    if (properties.transform == false)
+        return;
+
+    auto scale = properties.scale;
+    auto position = properties.position;
+
+    if (properties.rotation == 0.0f)
+    {
+        for (unsigned int i = 0; i < count; i++)
+        {
+            to[i].x = from[i].x * scale.x + position.x;
+            to[i].y = from[i].y * scale.y + position.y;
+        }
+    }
+    else
+    {
+        const float sinRot = sin(properties.rotation);
+        const float cosRot = cos(properties.rotation);
+        auto center = properties.center;
+
+        // https://stackoverflow.com/questions/2259476/rotating-a-point-about-another-point-2d
+        for (unsigned int i = 0; i < count; i++)
+        {
+            // translate point to origin
+            float x = from[i].x - center.x;
+            float y = from[i].y - center.y;
+
+            // rotate point
+            float rx = x * cosRot - y * sinRot;
+            float ry = x * sinRot + y * cosRot;
+
+            // translate point back
+            x = rx + center.x;
+            y = ry + center.y;
+
+            // scale and position
+            to[i].x = x * scale.x + position.x;
+            to[i].y = y * scale.y + position.y;
+        }
+    }
 }
 
 #if defined(_WIN32)

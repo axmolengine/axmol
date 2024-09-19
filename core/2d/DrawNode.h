@@ -608,7 +608,8 @@ private:
     void _drawDot(const Vec2& pos, float radius, const Color4B& color);
 
     // Internal function _drawTriangle
-    void _drawTriangle(const Vec2* vertices3,
+    // Note: modifies supplied vertex array
+    void _drawTriangle(Vec2* vertices3,
                        const Color4B& borderColor,
                        const Color4B& fillColor,
                        bool solid      = true,
@@ -682,6 +683,8 @@ private:
      * @js NA
      */
     axstd::pod_vector<Vec2> _transform(const Vec2* vertices, unsigned int& count, bool closedPolygon = false);
+
+    void applyTransform(const Vec2* from, Vec2* to, unsigned int count);
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode);
