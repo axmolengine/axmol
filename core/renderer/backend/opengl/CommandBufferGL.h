@@ -204,13 +204,17 @@ public:
      */
     void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
 
-protected:
+
+    /**
+    * For internal use only
+    */
     void readPixels(RenderTarget* rt,
                     int x,
                     int y,
                     uint32_t width,
                     uint32_t height,
                     uint32_t bytesPerRow,
+                    bool eglCacheHint,
                     PixelBufferDescriptor& pbd);
 
 protected:

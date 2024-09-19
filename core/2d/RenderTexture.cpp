@@ -40,6 +40,9 @@ THE SOFTWARE.
 #include "renderer/backend/DriverBase.h"
 #include "renderer/backend/Texture.h"
 #include "renderer/backend/RenderTarget.h"
+#if defined(AX_USE_GL)
+#    include "renderer/backend/opengl/CommandBufferGL.h"
+#endif
 
 namespace ax
 {
@@ -72,12 +75,14 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
     // We have not found a way to dispatch the enter background message before the texture data are destroyed.
     // So we disable this pair of message handler at present.
 #if AX_ENABLE_CACHE_TEXTURE_DATA
+    if (!_cachedTextureDirty)
+        return;
     // to get the rendered texture data
     auto func = [&](RefPtr<Image> uiTextureImage) {
         if (uiTextureImage)
         {
             _UITextureImage = uiTextureImage;
-            const Vec2& s = _texture2D->getContentSizeInPixels();
+            const Vec2& s   = _texture2D->getContentSizeInPixels();
             VolatileTextureMgr::addDataTexture(_texture2D, uiTextureImage->getData(), s.width * s.height * 4,
                                                backend::PixelFormat::RGBA8, s);
         }
@@ -87,8 +92,7 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
         }
     };
     auto callback = std::bind(func, std::placeholders::_1);
-    newImage(callback, false);
-
+    newImage(callback, true);
 #endif
 }
 
@@ -112,7 +116,11 @@ RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat,
     return nullptr;
 }
 
-RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat, PixelFormat uDepthStencilFormat, bool sharedRenderTarget)
+RenderTexture* RenderTexture::create(int w,
+                                     int h,
+                                     backend::PixelFormat eFormat,
+                                     PixelFormat uDepthStencilFormat,
+                                     bool sharedRenderTarget)
 {
     RenderTexture* ret = new RenderTexture();
 
@@ -149,7 +157,8 @@ bool RenderTexture::initWithWidthAndHeight(int w,
                                            PixelFormat depthStencilFormat,
                                            bool sharedRenderTarget)
 {
-    AXASSERT(format == backend::PixelFormat::RGBA8 || format == PixelFormat::RGB8 || format == PixelFormat::RGBA4, "only RGB and RGBA formats are valid for a render texture");
+    AXASSERT(format == backend::PixelFormat::RGBA8 || format == PixelFormat::RGB8 || format == PixelFormat::RGBA4,
+             "only RGB and RGBA formats are valid for a render texture");
 
     bool ret = false;
     do
@@ -160,7 +169,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         _fullviewPort              = Rect(0, 0, w, h);
 
         setContentSize(Vec2(static_cast<float>(w), static_cast<float>(h)));
-        
+
         // textures must be power of two squared
         int powW = 0;
         int powH = 0;
@@ -203,10 +212,10 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         }
         else
         {
-             _renderTarget = backend::DriverBase::getInstance()->newRenderTarget(
-                 _texture2D ? _texture2D->getBackendTexture() : nullptr,
-                 _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr,
-                 _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);
+            _renderTarget = backend::DriverBase::getInstance()->newRenderTarget(
+                _texture2D ? _texture2D->getBackendTexture() : nullptr,
+                _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr,
+                _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);
         }
 
         _renderTarget->setColorAttachment(_texture2D ? _texture2D->getBackendTexture() : nullptr);
@@ -494,7 +503,7 @@ void RenderTexture::onSaveToFile(std::string filename, bool isRGBA, bool forceNo
 }
 
 /* get buffer as Image */
-void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, bool flipImage)
+void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, bool eglCacheHint)
 {
     AXASSERT(_pixelFormat == backend::PixelFormat::RGBA8, "only RGBA8888 can be saved as image");
 
@@ -512,7 +521,7 @@ void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, b
     int savedBufferHeight      = (int)s.height;
     bool hasPremultipliedAlpha = _texture2D->hasPremultipliedAlpha();
 
-    _director->getRenderer()->readPixels(_renderTarget, [=](const backend::PixelBufferDescriptor& pbd) {
+    auto callback = [hasPremultipliedAlpha, imageCallback](const backend::PixelBufferDescriptor& pbd) {
         if (pbd)
         {
             auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(),
@@ -521,7 +530,25 @@ void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, b
         }
         else
             imageCallback(nullptr);
-    });
+    };
+#if defined(AX_USE_GL)
+    if (eglCacheHint)
+    {
+        auto colorAttachment = _renderTarget->_color[0].texture;
+        if (colorAttachment)
+        {
+            backend::PixelBufferDescriptor pbd;
+            static_cast<backend::CommandBufferGL*>(_director->getRenderer()->getCommandBuffer())
+                ->readPixels(_renderTarget, 0, 0, colorAttachment->getWidth(), colorAttachment->getHeight(),
+                             colorAttachment->getWidth() * 4, true, pbd);
+            callback(pbd);
+        }
+    }
+    else
+        _director->getRenderer()->readPixels(_renderTarget, callback);
+#else
+    _director->getRenderer()->readPixels(_renderTarget, callback);
+#endif
 }
 
 void RenderTexture::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
@@ -626,7 +653,6 @@ void RenderTexture::begin()
         _director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, orthoMatrix);
     }
 
-
     Renderer* renderer = _director->getRenderer();
     auto* groupCommand = renderer->getNextGroupCommand();
     groupCommand->init(_globalZOrder);
@@ -637,6 +663,9 @@ void RenderTexture::begin()
     beginCommand->init(_globalZOrder);
     beginCommand->func = AX_CALLBACK_0(RenderTexture::onBegin, this);
     renderer->addCommand(beginCommand);
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+    _cachedTextureDirty = true;
+#endif
 }
 
 void RenderTexture::end()
@@ -684,4 +713,4 @@ void RenderTexture::clearColorAttachment()
     renderer->addCommand(afterClearAttachmentCommand);
 }
 
-}
+}  // namespace ax
