@@ -837,11 +837,6 @@ protected:
                                                               std::string_view filename) const;
 
     /**
-     * mutex used to protect fields.
-     */
-    mutable std::recursive_mutex _mutex;
-
-    /**
      * The vector contains search paths.
      * The lower index of the element in this vector, the higher priority for this search path.
      */

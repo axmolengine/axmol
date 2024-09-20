@@ -51,8 +51,6 @@ THE SOFTWARE.
 
 #include "pugixml/pugixml.hpp"
 
-#define DECLARE_GUARD (void)0
-
 #include "base/filesystem.h"
 
 #if defined(_WIN32)
@@ -535,14 +533,12 @@ bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, std::string
 
 bool FileUtils::init()
 {
-    DECLARE_GUARD;
     _searchPathArray.emplace_back(_defaultResRootPath);
     return true;
 }
 
 void FileUtils::purgeCachedEntries()
 {
-    DECLARE_GUARD;
     _fullPathCache.clear();
     _fullPathCacheDir.clear();
 }
@@ -663,9 +659,6 @@ std::string FileUtils::getPathForDirectory(std::string_view dir, std::string_vie
 
 std::string FileUtils::fullPathForFilename(std::string_view filename) const
 {
-
-    DECLARE_GUARD;
-
     if (filename.empty())
     {
         return "";
@@ -714,8 +707,6 @@ std::string FileUtils::fullPathForFilename(std::string_view filename) const
 
 std::string FileUtils::fullPathForDirectory(std::string_view dir) const
 {
-    DECLARE_GUARD;
-
     auto result = std::string();
 
     if (dir.empty())
@@ -777,31 +768,26 @@ std::string FileUtils::fullPathFromRelativeFile(std::string_view filename, std::
 
 const std::vector<std::string>& FileUtils::getSearchPaths() const
 {
-    DECLARE_GUARD;
     return _searchPathArray;
 }
 
 const std::vector<std::string>& FileUtils::getOriginalSearchPaths() const
 {
-    DECLARE_GUARD;
     return _originalSearchPaths;
 }
 
 void FileUtils::setWritablePath(std::string_view writablePath)
 {
-    DECLARE_GUARD;
     _writablePath = writablePath;
 }
 
 const std::string& FileUtils::getDefaultResourceRootPath() const
 {
-    DECLARE_GUARD;
     return _defaultResRootPath;
 }
 
 void FileUtils::setDefaultResourceRootPath(std::string_view path)
 {
-    DECLARE_GUARD;
     if (_defaultResRootPath != path)
     {
         _fullPathCache.clear();
@@ -819,7 +805,6 @@ void FileUtils::setDefaultResourceRootPath(std::string_view path)
 
 void FileUtils::setSearchPaths(const std::vector<std::string>& searchPaths)
 {
-    DECLARE_GUARD;
     bool existDefaultRootPath = false;
     _originalSearchPaths      = searchPaths;
 
@@ -857,7 +842,6 @@ void FileUtils::setSearchPaths(const std::vector<std::string>& searchPaths)
 
 void FileUtils::addSearchPath(std::string_view searchpath, const bool front)
 {
-    DECLARE_GUARD;
     std::string path;
     if (!isAbsolutePath(searchpath))
         path = _defaultResRootPath;
@@ -956,8 +940,6 @@ bool FileUtils::isAbsolutePathInternal(std::string_view path)
 bool FileUtils::isDirectoryExist(std::string_view dirPath) const
 {
     AXASSERT(!dirPath.empty(), "Invalid path");
-
-    DECLARE_GUARD;
 
     if (isAbsolutePath(dirPath))
     {
