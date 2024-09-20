@@ -235,33 +235,39 @@ void DrawNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     }
 }
 
+static void udpateCommand(CustomCommand& cmd, const axstd::pod_vector<V2F_C4B_T2F>& buffer)
+{
+    if (buffer.empty())
+    {
+        cmd.setVertexBuffer(nullptr);
+    }
+    else
+    {
+        cmd.createVertexBuffer(sizeof(V2F_C4B_T2F), buffer.size(), CustomCommand::BufferUsage::STATIC);
+        cmd.updateVertexBuffer(buffer.data(), buffer.size() * sizeof(V2F_C4B_T2F));
+    }
+
+    cmd.setVertexDrawInfo(0, buffer.size());
+}
+
 void DrawNode::updateBuffers()
 {
     if (_trianglesDirty)
     {
         _trianglesDirty = false;
-        _customCommandTriangle.createVertexBuffer(sizeof(V2F_C4B_T2F), _triangles.size(), CustomCommand::BufferUsage::STATIC);
-        if (!_triangles.empty())
-            _customCommandTriangle.updateVertexBuffer(_triangles.data(), _triangles.size() * sizeof(V2F_C4B_T2F));
-        _customCommandTriangle.setVertexDrawInfo(0, _triangles.size());
+        udpateCommand(_customCommandTriangle, _triangles);
     }
 
     if (_pointsDirty)
     {
         _pointsDirty = false;
-        _customCommandPoint.createVertexBuffer(sizeof(V2F_C4B_T2F), _points.size(), CustomCommand::BufferUsage::STATIC);
-        if (!_points.empty())
-            _customCommandPoint.updateVertexBuffer(_points.data(), _points.size() * sizeof(V2F_C4B_T2F));
-        _customCommandPoint.setVertexDrawInfo(0, _points.size());
+        udpateCommand(_customCommandPoint, _points);
     }
 
     if (_linesDirty)
     {
         _linesDirty = false;
-        _customCommandLine.createVertexBuffer(sizeof(V2F_C4B_T2F), _lines.size(), CustomCommand::BufferUsage::STATIC);
-        if (!_lines.empty())
-            _customCommandLine.updateVertexBuffer(_lines.data(), _lines.size() * sizeof(V2F_C4B_T2F));
-        _customCommandLine.setVertexDrawInfo(0, _lines.size());
+        udpateCommand(_customCommandLine, _lines);
     }
 }
 
