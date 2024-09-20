@@ -37,8 +37,6 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "platform/FileUtils.h"
 
-#define DECLARE_GUARD (void)0  // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
-
 namespace ax
 {
 
@@ -100,13 +98,11 @@ FileUtils* FileUtils::getInstance()
 
 std::string FileUtilsApple::getWritablePath() const
 {
-    DECLARE_GUARD;
     return getNativeWritableAbsolutePath();
 }
 
 std::string FileUtilsApple::getNativeWritableAbsolutePath() const
 {
-    DECLARE_GUARD;
     if (_writablePath.length())
     {
         return _writablePath;

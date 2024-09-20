@@ -46,8 +46,6 @@ THE SOFTWARE.
 
 // #define AX_USE_ANDROID_EXTERNAL_FILES_DIR 1
 
-#define DECLARE_GUARD (void)0  // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
-
 namespace ax
 {
 
@@ -93,8 +91,6 @@ FileUtilsAndroid::~FileUtilsAndroid()
 
 bool FileUtilsAndroid::init()
 {
-    DECLARE_GUARD;
-
     _defaultResRootPath = ASSETS_FOLDER_NAME;
 
     std::string assetsPath(getApkPath());
@@ -108,9 +104,6 @@ bool FileUtilsAndroid::init()
 
 bool FileUtilsAndroid::isFileExistInternal(std::string_view strFilePath) const
 {
-
-    DECLARE_GUARD;
-
     if (strFilePath.empty())
     {
         return false;
@@ -210,7 +203,6 @@ bool FileUtilsAndroid::isDirectoryExistInternal(std::string_view dirPath) const
 
 bool FileUtilsAndroid::isAbsolutePath(std::string_view strPath) const
 {
-    DECLARE_GUARD;
     // On Android, there are two situations for full path.
     // 1) Files in APK, e.g. assets/path/path/file.png
     // 2) Files not in APK, e.g. /data/data/org.axmol.hellocpp/cache/path/path/file.png, or
@@ -220,7 +212,6 @@ bool FileUtilsAndroid::isAbsolutePath(std::string_view strPath) const
 
 int64_t FileUtilsAndroid::getFileSize(std::string_view filepath) const
 {
-    DECLARE_GUARD;
     int64_t size = FileUtils::getFileSize(filepath);
     if (size != -1)
     {
@@ -326,7 +317,6 @@ std::string FileUtilsAndroid::getNativeWritableAbsolutePath() const
 
 }
 
-#undef DECLARE_GUARD
 #undef ASSETS_FOLDER_NAME_LENGTH
 #undef ASSETS_FOLDER_NAME
 #undef LOGD
