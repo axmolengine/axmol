@@ -157,13 +157,13 @@ void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, 
     _indexBuffer = backend::DriverBase::getInstance()->newBuffer(_indexSize * capacity, backend::BufferType::INDEX, usage);
 }
 
-void CustomCommand::updateVertexBuffer(void* data, std::size_t offset, std::size_t length)
+void CustomCommand::updateVertexBuffer(const void* data, std::size_t offset, std::size_t length)
 {
     assert(_vertexBuffer);
     _vertexBuffer->updateSubData(data, offset, length);
 }
 
-void CustomCommand::updateIndexBuffer(void* data, std::size_t offset, std::size_t length)
+void CustomCommand::updateIndexBuffer(const void* data, std::size_t offset, std::size_t length)
 {
     assert(_indexBuffer);
     _indexBuffer->updateSubData(data, offset, length);
@@ -192,13 +192,13 @@ void CustomCommand::setIndexBuffer(backend::Buffer* indexBuffer, IndexFormat for
     _indexSize   = computeIndexSize();
 }
 
-void CustomCommand::updateVertexBuffer(void* data, std::size_t length)
+void CustomCommand::updateVertexBuffer(const void* data, std::size_t length)
 {
     assert(_vertexBuffer);
     _vertexBuffer->updateData(data, length);
 }
 
-void CustomCommand::updateIndexBuffer(void* data, std::size_t length)
+void CustomCommand::updateIndexBuffer(const void* data, std::size_t length)
 {
     assert(_indexBuffer);
     _indexBuffer->updateData(data, length);

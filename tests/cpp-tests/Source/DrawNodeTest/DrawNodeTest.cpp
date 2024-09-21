@@ -1387,6 +1387,7 @@ DrawNodeBaseTest::DrawNodeBaseTest()
     if (!drawNode)
     {
         drawNode = DrawNode::create();
+        drawNode->properties.setTransform(true);
         addChild(drawNode);
     }
     menuItemDrawOrder->setFontSize(10);
@@ -1585,6 +1586,7 @@ DrawNodeMorphTest_SolidPolygon::DrawNodeMorphTest_SolidPolygon()
     {
 
         drawNodeArray[n] = DrawNode::create();
+        drawNodeArray[n]->properties.setTransform(true);
         addChild(drawNodeArray[n]);
         drawNodeArray[n]->setPosition(
             Vec2(AXRANDOM_MINUS1_1() * size.width / 4, AXRANDOM_MINUS1_1() * size.height / 4) + Vec2(100, 100));
@@ -1714,6 +1716,7 @@ DrawNodeMorphTest_Polygon::DrawNodeMorphTest_Polygon()
     for (size_t n = 0; n < 10; n++)
     {
         drawNodeArray[n] = DrawNode::create();
+        drawNodeArray[n]->properties.setTransform(true);
         addChild(drawNodeArray[n]);
         drawNodeArray[n]->setPosition(
             Vec2(AXRANDOM_MINUS1_1() * size.width / 4, AXRANDOM_MINUS1_1() * size.height / 4) + Vec2(100, 100));
@@ -3112,6 +3115,7 @@ DrawNodeAxmolTest2::DrawNodeAxmolTest2()
     }
 
     drawNode = DrawNode::create();
+    drawNode->properties.setTransform(true);
     addChild(drawNode, 10);
 
     scheduleUpdate();
@@ -3432,9 +3436,11 @@ DrawNodeSpLinesTest::DrawNodeSpLinesTest()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     drawNodeCP = DrawNode::create();
+    drawNodeCP->properties.setTransform(true);
     addChild(drawNodeCP, 50);
 
     drawNode = DrawNode::create();
+    drawNode->properties.setTransform(true);
     addChild(drawNode, 30);
 
     screen = Director::getInstance()->getVisibleSize();
