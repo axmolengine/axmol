@@ -53486,103 +53486,6 @@ int lua_ax_base_DrawNode_setBlendFunc(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_DrawNode_setLineWidth(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::DrawNode* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_setLineWidth'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        double arg0;
-
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.DrawNode:setLineWidth");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_setLineWidth'", nullptr);
-            return 0;
-        }
-        cobj->setLineWidth(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:setLineWidth",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_setLineWidth'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_DrawNode_getLineWidth(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::DrawNode* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_getLineWidth'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_getLineWidth'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->getLineWidth();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:getLineWidth",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_getLineWidth'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_DrawNode_setIsolated(lua_State* tolua_S)
 {
     int argc = 0;
@@ -53706,19 +53609,6 @@ int lua_ax_base_DrawNode_create(lua_State* tolua_S)
         object_to_luaval<ax::DrawNode>(tolua_S, "ax.DrawNode",(ax::DrawNode*)ret);
         return 1;
     }
-    if (argc == 1)
-    {
-        double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.DrawNode:create");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_create'", nullptr);
-            return 0;
-        }
-        auto&& ret = ax::DrawNode::create(arg0);
-        object_to_luaval<ax::DrawNode>(tolua_S, "ax.DrawNode",(ax::DrawNode*)ret);
-        return 1;
-    }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.DrawNode:create",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
@@ -53748,23 +53638,6 @@ int lua_ax_base_DrawNode_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::DrawNode();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.DrawNode");
-        return 1;
-    }
-    if (argc == 1) 
-    {
-        double arg0;
-
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.DrawNode:DrawNode");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_constructor'", nullptr);
-            return 0;
-        }
-        cobj = new ax::DrawNode(arg0);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -53813,8 +53686,6 @@ int lua_register_ax_base_DrawNode(lua_State* tolua_S)
         tolua_function(tolua_S,"clear",lua_ax_base_DrawNode_clear);
         tolua_function(tolua_S,"getBlendFunc",lua_ax_base_DrawNode_getBlendFunc);
         tolua_function(tolua_S,"setBlendFunc",lua_ax_base_DrawNode_setBlendFunc);
-        tolua_function(tolua_S,"setLineWidth",lua_ax_base_DrawNode_setLineWidth);
-        tolua_function(tolua_S,"getLineWidth",lua_ax_base_DrawNode_getLineWidth);
         tolua_function(tolua_S,"setIsolated",lua_ax_base_DrawNode_setIsolated);
         tolua_function(tolua_S,"isIsolated",lua_ax_base_DrawNode_isIsolated);
         tolua_function(tolua_S,"create", lua_ax_base_DrawNode_create);
