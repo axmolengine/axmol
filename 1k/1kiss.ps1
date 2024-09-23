@@ -195,6 +195,7 @@ $1k = [_1kiss]::new()
 # x.y.z~x2.y2.z2 : range
 $manifest = @{
     msvc         = '14.39+'; # cl.exe @link.exe 14.39 VS2022 17.9.x
+    vs           = '12.0+';
     ndk          = 'r23c';
     xcode        = '13.0.0+'; # range
     # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang xx.x.x or newer.");
@@ -597,7 +598,8 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
                 else {
                     if (!$preferredVer.Contains('*')) {
                         $checkVerCond = '$(version_eq $foundVer $preferredVer)'
-                    } else {
+                    }
+                    else {
                         $wildcardVer = $preferredVer
                         $preferredVer = $wildcardVer.TrimEnd('.*')
                         $checkVerCond = '$(version_like $foundVer $wildcardVer)'
@@ -750,6 +752,46 @@ function fetch_pkg($url, $exrep = $null) {
     download_and_expand $url $out $dest
 
     if ($pfn_rename) { &$pfn_rename }
+}
+
+
+#
+# Find latest installed: Visual Studio 12 2013 +
+#   installationVersion
+#   installationPath
+#   instanceId: used for EnterDevShell
+# result:
+#   $Global:VS_INST
+#
+$Global:VS_INST = $null
+function find_vs() {
+    if (!$Global:VS_INST) {
+        $VSWHERE_EXE = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+        $eap = $ErrorActionPreference
+        $ErrorActionPreference = 'SilentlyContinue'
+
+        $required_vs_ver = $manifest['vs']
+        if (!$required_vs_ver) { $required_vs_ver = '12.0+' }
+        
+        $require_comps = @('Microsoft.Component.MSBuild', 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')
+        $vs_installs = ConvertFrom-Json "$(&$VSWHERE_EXE -version $required_vs_ver.TrimEnd('+') -format 'json' -requires $require_comps)"
+        $ErrorActionPreference = $eap
+
+        if ($vs_installs) {
+            $vs_inst_latest = $null
+            $vs_ver = ''
+            foreach ($vs_inst in $vs_installs) {
+                $inst_ver = [VersionEx]$vs_inst.installationVersion
+                if ($vs_ver -lt $inst_ver) {
+                    $vs_ver = $inst_ver
+                    $vs_inst_latest = $vs_inst
+                }
+            }
+            $Global:VS_INST = $vs_inst_latest
+        } else {
+            throw "No suitable visual studio installed, required: $required_vs_ver"
+        }
+    }
 }
 
 # setup nuget, not add to path
@@ -1231,11 +1273,12 @@ function setup_emsdk() {
 function setup_msvc() {
     $cl_prog, $cl_ver = find_prog -name 'msvc' -cmd 'cl' -silent $true -usefv $true
     if (!$cl_prog) {
-        if ($VS_INST) {
-            Import-Module "$VS_PATH\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
+        if ($Global:VS_INST) {
+            $vs_path = $Global:VS_INST.installationPath
+            Import-Module "$vs_path\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
             $dev_cmd_args = "-arch=$target_cpu -host_arch=x64 -no_logo"
             if (!$manifest['msvc'].EndsWith('+')) { $dev_cmd_args += " -vcvars_ver=$cl_ver" }
-            Enter-VsDevShell -VsInstanceId $VS_INST.instanceId -SkipAutomaticLocation -DevCmdArguments $dev_cmd_args
+            Enter-VsDevShell -VsInstanceId $Global:VS_INST.instanceId -SkipAutomaticLocation -DevCmdArguments $dev_cmd_args
 
             $cl_prog, $cl_ver = find_prog -name 'msvc' -cmd 'cl' -silent $true -usefv $true
             $1k.println("Using msvc: $cl_prog, version: $cl_ver")
@@ -1297,44 +1340,6 @@ function setup_gclient() {
     $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
 }
 
-#
-# Find latest installed: Visual Studio 12 2013 +
-# installationVersion
-# instanceId EnterDevShell can use it
-# result:
-#   $Global:VS_VERSION
-#   $Global:VS_INST
-#   $Global:VS_PATH
-#
-$Global:VS_VERSION = $null
-$Global:VS_PATH = $null
-$Global:VS_INST = $null
-function find_vs_latest() {
-    $vs_version = [VersionEx]'12.0'
-    if (!$Global:VS_INST) {
-        $VSWHERE_EXE = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-        $eap = $ErrorActionPreference
-        $ErrorActionPreference = 'SilentlyContinue'
-
-        $vs_installs = ConvertFrom-Json "$(&$VSWHERE_EXE -version '12.0' -format 'json')"
-        $ErrorActionPreference = $eap
-
-        if ($vs_installs) {
-            $vs_inst_latest = $null
-            foreach ($vs_inst in $vs_installs) {
-                $inst_ver = [VersionEx]$vs_inst.installationVersion
-                if ($vs_version -lt $inst_ver) {
-                    $vs_version = $inst_ver
-                    $vs_inst_latest = $vs_inst
-                }
-            }
-            $Global:VS_PATH = $vs_inst_latest.installationPath
-            $Global:VS_INST = $vs_inst_latest
-        }
-    }
-    $Global:VS_VERSION = $vs_version
-}
-
 # preprocess methods:
 #   <param>-inputOptions</param> [CMAKE_OPTIONS]
 function preprocess_win([string[]]$inputOptions) {
@@ -1350,13 +1355,15 @@ function preprocess_win([string[]]$inputOptions) {
         $arch = if ($options.a -eq 'x86') { 'Win32' } else { $options.a }
 
         # arch
-        if ($VS_VERSION -ge [VersionEx]'16.0') {
+        $vs_ver = [VersionEx]$Global:VS_INST.installationVersion
+        if ($vs_ver -ge [VersionEx]'16.0') {
             $outputOptions += '-A', $arch
             if ($TOOLCHAIN_VER) {
                 $outputOptions += "-Tv$TOOLCHAIN_VER"
             }
         }
         else {
+            if (!$TOOLCHAIN_VER) { $TOOLCHAIN_VER = "$($vs_ver.Major)0" }
             $gens = @{
                 '120' = 'Visual Studio 12 2013';
                 '140' = 'Visual Studio 14 2015'
@@ -1364,7 +1371,7 @@ function preprocess_win([string[]]$inputOptions) {
             }
             $Script:cmake_generator = $gens[$TOOLCHAIN_VER]
             if (!$Script:cmake_generator) {
-                throw "Unsupported toolchain: $TOOLCHAIN"
+                throw "Unsupported toolchain: $TOOLCHAIN$TOOLCHAIN_VER"
             }
             if ($options.a -eq "x64") {
                 $Script:cmake_generator += ' Win64'
@@ -1558,7 +1565,7 @@ $null = setup_glslcc
 $cmake_prog, $Script:cmake_ver = setup_cmake
 
 if ($Global:is_win_family) {
-    find_vs_latest
+    find_vs
     $nuget_prog = setup_nuget
 }
 
@@ -1614,7 +1621,8 @@ if (!$setupOnly) {
         if ($is_host_target) {
             if (!$is_host_cpu) {
                 $out_dir = "${prefix}${TARGET_CPU}"
-            } else {
+            }
+            else {
                 $out_dir = $prefix.TrimEnd("_")
             }
         }
