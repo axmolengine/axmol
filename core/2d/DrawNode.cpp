@@ -1025,7 +1025,7 @@ void DrawNode::_drawPoly(const Vec2* verts,
 {
     if (thickness == 1.0f && !properties.drawOrder)
     {
-        auto _vertices = _transform(verts, count);
+        auto _vertices = _transform(verts, count, closedPolygon);
 
         unsigned int vertex_count = (closedPolygon) ? 2 * count : 2 * (count - 1);
 
