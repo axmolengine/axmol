@@ -532,7 +532,6 @@ namespace spine {
 
 		// Draw bounding rectangle
 		if (_debugBoundingRect) {
-			drawNode->setLineWidth(2.0f);
 			const axmol::Rect brect = getBoundingBox();
 			const Vec2 points[4] =
 					{
@@ -540,13 +539,12 @@ namespace spine {
 							{brect.origin.x + brect.size.width, brect.origin.y},
 							{brect.origin.x + brect.size.width, brect.origin.y + brect.size.height},
 							{brect.origin.x, brect.origin.y + brect.size.height}};
-			drawNode->drawPoly(points, 4, true, Color4F::GREEN);
+			drawNode->drawPoly(points, 4, true, Color4F::GREEN, 2.0f);
 		}
 
 		if (_debugSlots) {
 			// Slots.
 			// DrawPrimitives::setDrawColor4B(0, 0, 255, 255);
-			drawNode->setLineWidth(2.0f);
 			V3F_C4B_T2F_Quad quad;
 			for (int i = 0, n = (int)_skeleton->getSlots().size(); i < n; i++) {
 				Slot *slot = _skeleton->getDrawOrder()[i];
@@ -567,19 +565,18 @@ namespace spine {
 								{worldVertices[2], worldVertices[3]},
 								{worldVertices[4], worldVertices[5]},
 								{worldVertices[6], worldVertices[7]}};
-				drawNode->drawPoly(points, 4, true, Color4F::BLUE);
+				drawNode->drawPoly(points, 4, true, Color4F::BLUE, 2.0f);
 			}
 		}
 
 		if (_debugBones) {
 			// Bone lengths.
-			drawNode->setLineWidth(2.0f);
 			for (int i = 0, n = (int)_skeleton->getBones().size(); i < n; i++) {
 				Bone *bone = _skeleton->getBones()[i];
 				if (!bone->isActive()) continue;
 				float x = bone->getData().getLength() * bone->getA() + bone->getWorldX();
 				float y = bone->getData().getLength() * bone->getC() + bone->getWorldY();
-				drawNode->drawLine(Vec2(bone->getWorldX(), bone->getWorldY()), Vec2(x, y), Color4F::RED);
+				drawNode->drawLine(Vec2(bone->getWorldX(), bone->getWorldY()), Vec2(x, y), Color4F::RED, 2.0f);
 			}
 			// Bone origins.
 			auto color = Color4F::BLUE;// Root bone is blue.
@@ -593,7 +590,6 @@ namespace spine {
 
 		if (_debugMeshes) {
 			// Meshes.
-			drawNode->setLineWidth(2.0f);
 			for (int i = 0, n = (int)_skeleton->getSlots().size(); i < n; ++i) {
 				Slot *slot = _skeleton->getDrawOrder()[i];
 				if (!slot->getBone().isActive()) continue;
@@ -611,7 +607,7 @@ namespace spine {
 									worldCoord + (idx0 * 2),
 									worldCoord + (idx1 * 2),
 									worldCoord + (idx2 * 2)};
-					drawNode->drawPoly(v, 3, true, Color4F::YELLOW);
+					drawNode->drawPoly(v, 3, true, Color4F::YELLOW, 2.0f);
 				}
 				VLA_FREE(worldCoord);
 			}

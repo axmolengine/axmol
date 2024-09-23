@@ -79,7 +79,7 @@ static V2F_C4B_T2F* expandBufferAndGetPointer(axstd::pod_vector<V2F_C4B_T2F>& bu
     return buffer.data() + oldSize;
 }
 
-DrawNode::DrawNode(float lineWidth) : _lineWidth(lineWidth), _defaultLineWidth(lineWidth)
+DrawNode::DrawNode()
 {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
 
@@ -105,9 +105,9 @@ DrawNode::~DrawNode()
     freeShaderInternal(_customCommandLine);
 }
 
-DrawNode* DrawNode::create(float defaultLineWidth)
+DrawNode* DrawNode::create()
 {
-    DrawNode* ret = new DrawNode(defaultLineWidth);
+    DrawNode* ret = new DrawNode();
     if (ret->init())
     {
         ret->autorelease();
@@ -790,8 +790,6 @@ void DrawNode::clear()
     _triangles.clear();
     _points.clear();
     _lines.clear();
-
-    _lineWidth = _defaultLineWidth;
 }
 
 const BlendFunc& DrawNode::getBlendFunc() const
@@ -804,15 +802,7 @@ void DrawNode::setBlendFunc(const BlendFunc& blendFunc)
     _blendFunc = blendFunc;
 }
 
-void DrawNode::setLineWidth(float lineWidth)
-{
-    _defaultLineWidth = lineWidth;
-}
 
-float DrawNode::getLineWidth()
-{
-    return _defaultLineWidth;
-}
 
 void DrawNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
