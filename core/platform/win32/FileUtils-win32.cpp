@@ -36,8 +36,6 @@ THE SOFTWARE.
 
 #include "ntcvt/ntcvt.hpp"
 
-#define DECLARE_GUARD (void)0  // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
-
 namespace ax
 {
 
@@ -164,13 +162,11 @@ int64_t FileUtilsWin32::getFileSize(std::string_view filepath) const
 
 std::string FileUtilsWin32::getWritablePath() const
 {
-    DECLARE_GUARD;
     return getNativeWritableAbsolutePath();
 }
 
 std::string FileUtilsWin32::getNativeWritableAbsolutePath() const
 {
-    DECLARE_GUARD;
     if (_writablePath.length())
     {
         return _writablePath;

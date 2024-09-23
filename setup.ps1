@@ -283,6 +283,16 @@ if ($IsLinux) {
     if ($answer -like 'y*') {
         if ($LinuxDistro -eq 'Debian') {
             println "It will take few minutes"
+            $os_name = $PSVersionTable.OS
+            $os_ver = [Regex]::Match($os_name, '(\d+\.)+(\*|\d+)(\-[a-z0-9]+)?').Value
+            if (($os_name -match 'Ubuntu' -and [VersionEx]$os_ver -ge [VersionEx]'24.04') -or 
+            ($os_name -match 'Debian' -and [VersionEx]$os_ver -ge [VersionEx]'13')) {
+                $webkit2gtk_dev = 'libwebkit2gtk-4.1-dev'
+            }
+            else {
+                $webkit2gtk_dev = 'libwebkit2gtk-4.0-dev'
+            }
+
             sudo apt update
             # for vm, libxxf86vm-dev also required
 
@@ -298,7 +308,7 @@ if ($IsLinux) {
             $DEPENDS += 'libxi-dev'
             $DEPENDS += 'libfontconfig1-dev'
             $DEPENDS += 'libgtk-3-dev'
-            $DEPENDS += 'libwebkit2gtk-4.0-dev'
+            $DEPENDS += $webkit2gtk_dev
             $DEPENDS += 'binutils'
             $DEPENDS += 'g++'
             $DEPENDS += 'libasound2-dev'
@@ -307,7 +317,7 @@ if ($IsLinux) {
 
             # if vlc encouter codec error, install
             # sudo apt install ubuntu-restricted-extras
-
+            println "Install packages: $DEPENDS ..."
             sudo apt install --allow-unauthenticated --yes $DEPENDS > /dev/null
         }
         elseif ($LinuxDistro -eq 'Arch') {
@@ -391,6 +401,7 @@ if ($gradlewVersion) {
     update_gradle_for_test 'fairygui-tests'
     update_gradle_for_test 'live2d-tests'
     update_gradle_for_test 'lua-tests'
+    update_gradle_for_test 'unit-tests'
 }
 
 if ($IsLinux -and (Test-Path '/etc/wsl.conf' -PathType Leaf)) {

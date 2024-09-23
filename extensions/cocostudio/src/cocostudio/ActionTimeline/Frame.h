@@ -316,10 +316,6 @@ public:
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    /** @deprecated Use method setAlpha() and getAlpha() of AlphaFrame instead */
-    AX_DEPRECATED_ATTRIBUTE inline void setAlpha(uint8_t alpha) { _alpha = alpha; }
-    AX_DEPRECATED_ATTRIBUTE inline uint8_t getAlpha() const { return _alpha; }
-
     inline void setColor(const ax::Color3B& color) { _color = color; }
     inline ax::Color3B getColor() const { return _color; }
 

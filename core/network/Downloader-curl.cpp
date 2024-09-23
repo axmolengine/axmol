@@ -294,7 +294,7 @@ public:
             }
         }
 
-        curl_easy_getinfo(_curl, CURLINFO_SPEED_DOWNLOAD, &_speed);
+        curl_easy_getinfo(_curl, CURLINFO_SPEED_DOWNLOAD_T, &_speed);
 
         return ret;
     }
@@ -309,7 +309,7 @@ private:
     bool _acceptRanges;
     int64_t _totalBytesExpected;
 
-    double _speed;
+    curl_off_t _speed;
     CURL* _curl;
     curl_socket_t _sockfd = -1;  // store the sockfd to support cancel download manually
     bool _cancelled       = false;

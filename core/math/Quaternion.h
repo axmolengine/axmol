@@ -23,6 +23,7 @@
 #ifndef QUATERNION_H_
 #define QUATERNION_H_
 
+#include "base/Macros.h"
 #include "math/Vec3.h"
 #include "math/Mat4.h"
 //#include "Plane.h"
@@ -97,7 +98,7 @@ public:
     /**
      * Constructs a quaternion initialized to (0, 0, 0, 1).
      */
-    Quaternion();
+    constexpr Quaternion() : x(0.0f), y(0.0f), z(0.0f), w(1.0f) {}
 
     /**
      * Constructs a quaternion initialized to (0, 0, 0, 1).
@@ -107,14 +108,14 @@ public:
      * @param zz The z component of the quaternion.
      * @param ww The w component of the quaternion.
      */
-    Quaternion(float xx, float yy, float zz, float ww);
+    constexpr Quaternion(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
 
     /**
      * Constructs a new quaternion from the values in the specified array.
      *
      * @param array The values for the new quaternion.
      */
-    Quaternion(float* array);
+    constexpr Quaternion(float* array) { set(array); }
 
     /**
      * Constructs a quaternion equal to the rotational part of the specified matrix.
@@ -129,21 +130,21 @@ public:
      * @param axis A vector describing the axis of rotation.
      * @param angle The angle of rotation (in radians).
      */
-    Quaternion(const Vec3& axis, float angle);
+    Quaternion(const Vec3& axis, float angle) { set(axis, angle); }
 
     /**
      * Returns the identity quaternion.
      *
      * @return The identity quaternion.
      */
-    static const Quaternion& identity();
+    static const Quaternion identity() { return Quaternion(0.0f, 0.0f, 0.0f, 1.0f); }
 
     /**
      * Returns the quaternion with all zeros.
      *
      * @return The quaternion.
      */
-    static const Quaternion& zero();
+    static const Quaternion zero() { return Quaternion(0.0f, 0.0f, 0.0f, 0.0f); }
 
     /**
      * Determines if this quaternion is equal to the identity quaternion.
@@ -176,7 +177,20 @@ public:
      * @param angle The angle of rotation (in radians).
      * @param dst A quaternion to store the conjugate in.
      */
-    static void createFromAxisAngle(const Vec3& axis, float angle, Quaternion* dst);
+    static void createFromAxisAngle(const Vec3& axis, float angle, Quaternion* dst)
+    {
+        AX_ASSERT(dst);
+
+        float halfAngle    = angle * 0.5f;
+        float sinHalfAngle = sinf(halfAngle);
+
+        Vec3 normal(axis);
+        normal.normalize();
+        dst->x = normal.x * sinHalfAngle;
+        dst->y = normal.y * sinHalfAngle;
+        dst->z = normal.z * sinHalfAngle;
+        dst->w = cosf(halfAngle);
+    }
 
     /**
      * Sets this quaternion to the conjugate of itself.
@@ -252,14 +266,28 @@ public:
      * @param zz The new z-value.
      * @param ww The new w-value.
      */
-    void set(float xx, float yy, float zz, float ww);
+    constexpr void set(float xx, float yy, float zz, float ww)
+    {
+        this->x = xx;
+        this->y = yy;
+        this->z = zz;
+        this->w = ww;
+    }
 
     /**
      * Sets the elements of the quaternion from the values in the specified array.
      *
      * @param array An array containing the elements of the quaternion in the order x, y, z, w.
      */
-    void set(float* array);
+    constexpr void set(float* array)
+    {
+        AX_ASSERT(array);
+
+        x = array[0];
+        y = array[1];
+        z = array[2];
+        w = array[3];
+    }
 
     /**
      * Sets the quaternion equal to the rotational part of the specified matrix.
@@ -274,19 +302,34 @@ public:
      * @param axis The axis of rotation.
      * @param angle The angle of rotation (in radians).
      */
-    void set(const Vec3& axis, float angle);
+    void set(const Vec3& axis, float angle)
+    {
+        Quaternion::createFromAxisAngle(axis, angle, this);
+    }
 
     /**
      * Sets the elements of this quaternion to a copy of the specified quaternion.
      *
      * @param q The quaternion to copy.
      */
-    void set(const Quaternion& q);
+    constexpr void set(const Quaternion& q)
+    {
+        this->x = q.x;
+        this->y = q.y;
+        this->z = q.z;
+        this->w = q.w;
+    }
 
     /**
      * Sets this quaternion to be equal to the identity quaternion.
      */
-    void setIdentity();
+    void setIdentity()
+    {
+        x = 0.0f;
+        y = 0.0f;
+        z = 0.0f;
+        w = 1.0f;
+    }
 
     /**
      * Converts this Quaternion4f to axis-angle notation. The axis is normalized.
@@ -359,14 +402,30 @@ public:
      * @param q The quaternion to multiply.
      * @return The quaternion product.
      */
-    inline Quaternion operator*(const Quaternion& q) const;
+    Quaternion operator*(const Quaternion& q) const
+    {
+        Quaternion result(*this);
+        result.multiply(q);
+        return result;
+    }
 
     /**
      * Calculates the quaternion product of this quaternion with the given vec3.
      * @param v The vec3 to multiply.
      * @return The vec3 product.
      */
-    inline Vec3 operator*(const Vec3& v) const;
+    Vec3 operator*(const Vec3& v) const
+    {
+        Vec3 uv, uuv;
+        Vec3 qvec(x, y, z);
+        Vec3::cross(qvec, v, &uv);
+        Vec3::cross(qvec, uv, &uuv);
+
+        uv *= (2.0f * w);
+        uuv *= 2.0f;
+
+        return v + uv + uuv;
+    }
 
     /**
      * Multiplies this quaternion with the given quaternion.
@@ -374,7 +433,11 @@ public:
      * @param q The quaternion to multiply.
      * @return This quaternion, after the multiplication occurs.
      */
-    inline Quaternion& operator*=(const Quaternion& q);
+    Quaternion& operator*=(const Quaternion& q)
+    {
+        multiply(q);
+        return *this;
+    }
 
     /** equals to Quaternion(0,0,0, 0) */
     static const Quaternion ZERO;
@@ -421,11 +484,14 @@ private:
     static void slerpForSquad(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst);
 };
 
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+    inline constexpr Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
+#endif
+
 NS_AX_MATH_END
 /**
  end of base group
  @}
  */
-#include "math/Quaternion.inl"
 
 #endif

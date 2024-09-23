@@ -65,44 +65,6 @@ public:
     virtual ax::Touch::DispatchMode getTouchMode() const;
     virtual void setTouchPriority(int priority);
     virtual int getTouchPriority() const;
-    /** @deprecated Please override onAcceleration */
-    /**
-     * @js NA
-     */
-    AX_DEPRECATED_ATTRIBUTE virtual void didAccelerate(ax::Acceleration* accelerationValue) final;
-    // Deprecated touch callbacks.
-    /**
-     * @js NA
-     */
-    AX_DEPRECATED_ATTRIBUTE virtual bool ccTouchBegan(ax::Touch* touch, ax::Event* event) final;
-    /**
-     * @js NA
-     */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchMoved(ax::Touch* touch, ax::Event* event) final;
-    /**
-     * @js NA
-     */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchEnded(ax::Touch* touch, ax::Event* event) final;
-    /**
-     * @js NA
-     */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchCancelled(ax::Touch* touch, ax::Event* event) final;
-    /**
-     * @js NA
-     */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesBegan(ax::__Set* touches, ax::Event* event) final;
-    /**
-     * @js NA
-     */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesMoved(ax::__Set* touches, ax::Event* event) final;
-    /**
-     * @js NA
-     */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesEnded(ax::__Set* touches, ax::Event* event) final;
-    /**
-     * @js NA
-     */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesCancelled(ax::__Set* touches, ax::Event* event) final;
     /**
      * @js NA
      */

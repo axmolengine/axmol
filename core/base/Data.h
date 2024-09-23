@@ -38,7 +38,6 @@
  * @addtogroup base
  * @js NA
  * @lua NA
- * @DEPRECATED use axstd::byte_buffer directly
  */
 namespace ax
 {
@@ -71,7 +70,7 @@ public:
     Data(const Data& other);
 
     /**
-     * Copy constructor of Data.
+     * Move constructor of Data.
      */
     Data(Data&& other);
 

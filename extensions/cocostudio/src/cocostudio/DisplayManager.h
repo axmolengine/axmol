@@ -76,12 +76,6 @@ public:
 
     const ax::Vector<DecorativeDisplay*>& getDecorativeDisplayList() const;
 
-    /*
-     * @deprecated, please use changeDisplayWithIndex and changeDisplayWithName
-     */
-    AX_DEPRECATED_ATTRIBUTE void changeDisplayByIndex(int index, bool force);
-    AX_DEPRECATED_ATTRIBUTE void changeDisplayByName(std::string_view name, bool force);
-
     /**
      * Change display by index. You can just use this method to change display in the display list.
      * The display list is just used for this bone, and it is the displays you may use in every frame.

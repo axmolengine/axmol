@@ -44,8 +44,8 @@ struct HSV;
  */
 struct AX_DLL Color3B
 {
-    Color3B();
-    Color3B(uint8_t _r, uint8_t _g, uint8_t _b);
+    Color3B() {};
+    Color3B(uint8_t _r, uint8_t _g, uint8_t _b) : r(_r), g(_g), b(_b) {}
     explicit Color3B(const Color4B& color);
     explicit Color3B(const Color4F& color);
 
@@ -79,9 +79,9 @@ struct AX_DLL Color3B
  */
 struct AX_DLL Color4B
 {
-    Color4B();
-    Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a);
-    explicit Color4B(const Color3B& color, uint8_t _a = 255);
+    Color4B() {}
+    Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) : r(_r), g(_g), b(_b), a(_a) {}
+    explicit Color4B(const Color3B& color, uint8_t _a = 255) : r(color.r), g(color.g), b(color.b), a(_a) {}
     Color4B(const Color4F& color);
 
     inline void set(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
@@ -123,10 +123,15 @@ struct AX_DLL Color4B
 struct AX_DLL Color4F : public Vec4Base<Color4F>
 {
     using Vec4Base = Vec4Base<Color4F>;
-    Color4F();
-    Color4F(float _r, float _g, float _b, float _a);
-    explicit Color4F(const Color3B& color, float _a = 1.0f);
-    explicit Color4F(const Color4B& color);
+
+    Color4F() {}
+    Color4F(float _r, float _g, float _b, float _a) : Vec4Base(_r, _g, _b, _a) {}
+    explicit Color4F(const Color3B& color, float _a = 1.0f)
+        : Vec4Base(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, _a)
+    {}
+    explicit Color4F(const Color4B& color)
+        : Vec4Base(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f)
+    {}
 
     bool operator==(const Color3B& rhs) const;
     bool operator==(const Color4B& rhs) const;
@@ -198,6 +203,11 @@ struct AX_DLL HSL : public Vec4Base<HSL>
     Color4B toColor4B() const;
     Color4F toColor4F() const;
 };
+
+inline Color3B::Color3B(const Color4B& color) : r(color.r), g(color.g), b(color.b) {}
+inline Color3B::Color3B(const Color4F& color) : r(color.r * 255.0f), g(color.g * 255.0f), b(color.b * 255.0f) {}
+
+inline Color4B::Color4B(const Color4F& color) : r(color.r * 255), g(color.g * 255), b(color.b * 255), a(color.a * 255) {}
 
 NS_AX_MATH_END
 

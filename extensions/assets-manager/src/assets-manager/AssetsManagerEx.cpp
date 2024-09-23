@@ -307,7 +307,7 @@ void AssetsManagerEx::loadLocalManifest(std::string_view /*manifestUrl*/)
             {
                 // Recreate storage, to empty the content
                 _fileUtils->removeDirectory(_storagePath);
-                _fileUtils->createDirectory(_storagePath);
+                _fileUtils->createDirectories(_storagePath);
                 AX_SAFE_RELEASE(cachedManifest);
             }
             else
@@ -371,12 +371,12 @@ void AssetsManagerEx::setStoragePath(std::string_view storagePath)
 {
     _storagePath = storagePath;
     adjustPath(_storagePath);
-    _fileUtils->createDirectory(_storagePath);
+    _fileUtils->createDirectories(_storagePath);
 
     _tempStoragePath = _storagePath;
     _tempStoragePath.append(TEMP_FOLDERNAME);
     adjustPath(_tempStoragePath);
-    _fileUtils->createDirectory(_tempStoragePath);
+    _fileUtils->createDirectories(_tempStoragePath);
 }
 
 void AssetsManagerEx::adjustPath(std::string& path)
@@ -447,7 +447,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
         {
             // There are not directory entry in some case.
             // So we need to create directory when decompressing file entry
-            if (!_fileUtils->createDirectory(basename(fullPath)))
+            if (!_fileUtils->createDirectories(basename(fullPath)))
             {
                 // Failed to create directory
                 AXLOGD("AssetsManagerEx : can not create directory {}\n", fullPath);
@@ -461,7 +461,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
             std::string_view dir = basename(fullPath);
             if (!_fileUtils->isDirectoryExist(dir))
             {
-                if (!_fileUtils->createDirectory(dir))
+                if (!_fileUtils->createDirectories(dir))
                 {
                     // Failed to create directory
                     AXLOGD("AssetsManagerEx : can not create directory {}\n", fullPath);
@@ -778,7 +778,7 @@ void AssetsManagerEx::startUpdate()
             _fileUtils->removeDirectory(_tempStoragePath);
             AX_SAFE_RELEASE(_tempManifest);
             // Recreate temp storage path and save remote manifest
-            _fileUtils->createDirectory(_tempStoragePath);
+            _fileUtils->createDirectories(_tempStoragePath);
             _remoteManifest->saveToFile(_tempManifestPath);
         }
 
@@ -846,7 +846,7 @@ void AssetsManagerEx::updateSucceed()
             // Create directory
             if (relativePath.back() == '/')
             {
-                _fileUtils->createDirectory(dstPath);
+                _fileUtils->createDirectories(dstPath);
             }
             // Copy file
             else
@@ -1258,7 +1258,7 @@ void AssetsManagerEx::queueDowload()
 
         _currConcurrentTask++;
         DownloadUnit& unit = _downloadUnits[key];
-        _fileUtils->createDirectory(basename(unit.storagePath));
+        _fileUtils->createDirectories(basename(unit.storagePath));
         _downloader->createDownloadFileTask(unit.srcUrl, unit.storagePath, unit.customId);
 
         _tempManifest->setAssetDownloadState(key, Manifest::DownloadState::DOWNLOADING);

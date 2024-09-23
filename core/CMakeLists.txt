@@ -32,7 +32,7 @@
 # include_guard (GLOBAL)
 
 # The version number
-set(_AX_VERSION 2.1)
+set(_AX_VERSION 2.2)
 
 if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
@@ -114,6 +114,7 @@ cmake_dependent_option(AX_ENABLE_NAVMESH "Build NavMesh support" ON "AX_ENABLE_3
 
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
+option(AX_CORE_PROFILE "Whether strip deprecated features" OFF)
 
 # default value for axmol extensions modules to Build
 # total supported extensions count: 13
@@ -138,8 +139,6 @@ cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ${AX_
 cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
 
 option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ${AX_EXT_HINT})
-
-option(AX_ENABLE_EXT_DRAWNODEEX "Build extension DrawNodeEx" ${AX_EXT_HINT})
 
 set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "" )
 
@@ -321,6 +320,7 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_NAVMESH)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_AUDIO)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_CONSOLE)
+ax_config_pred(${_AX_CORE_LIB} AX_CORE_PROFILE)
 
 # use 3rdparty libs
 add_subdirectory(${_AX_ROOT}/3rdparty ${ENGINE_BINARY_PATH}/3rdparty)
@@ -459,10 +459,17 @@ if(LINUX)
     target_include_directories(${_AX_CORE_LIB} PUBLIC "${X11_X11_INCLUDE_PATH}")
     # X11 gets linked by cmake/Modules/AXLinkHelpers.cmake
 
-    # including GTK3.0 and WebKit2Gtk4.0
+    # including GTK3.0 and WebKit2Gtk4.x
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(GKT3 REQUIRED gtk+-3.0)
-    pkg_check_modules(WEBKIT2GTK webkit2gtk-4.0)
+
+    set(_webkit2gtk_vers "4.1;4.0")
+    foreach(_ver ${_webkit2gtk_vers})
+        pkg_check_modules(WEBKIT2GTK webkit2gtk-${_ver})
+        if (WEBKIT2GTK_LIBRARY_DIRS)
+            break()
+        endif()
+    endforeach()
 
     target_include_directories(${_AX_CORE_LIB} PUBLIC ${GTK3_INCLUDE_DIRS} ${WEBKIT2GTK_INCLUDE_DIRS})
     target_link_directories(${_AX_CORE_LIB} PRIVATE ${GTK3_LIBRARY_DIRS} ${WEBKIT2GTK_LIBRARY_DIRS})

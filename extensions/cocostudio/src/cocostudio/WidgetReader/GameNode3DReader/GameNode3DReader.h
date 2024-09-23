@@ -42,8 +42,6 @@ public:
 
     static GameNode3DReader* getInstance();
     static ax::CameraBackgroundBrush* getSceneBrushInstance();
-    /** @deprecated Use method destroyInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,

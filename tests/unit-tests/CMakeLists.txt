@@ -170,10 +170,6 @@ if (AX_ENABLE_EXT_EFFEKSEER)
     target_compile_definitions(${APP_NAME} PRIVATE AX_ENABLE_EXT_EFFEKSEER=1)
 endif()
 
-if (AX_ENABLE_EXT_DRAWNODEEX)
-    target_compile_definitions(${APP_NAME} PRIVATE AX_ENABLE_EXT_DRAWNODE=1)
-endif()
-
 # mark app resources
 ax_setup_app_config(${APP_NAME} CONSOLE)
 

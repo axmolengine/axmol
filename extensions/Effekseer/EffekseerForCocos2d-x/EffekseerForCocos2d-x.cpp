@@ -215,7 +215,7 @@ Effekseer::TextureRef TextureLoader::Load(const EFK_CHAR* path, ::Effekseer::Tex
 					{
 						char path8[300];
 						::Effekseer::ConvertUtf16ToUtf8(path8, 300, path);
-						CCLOG("%s : The texture is not shown on a mobile. The size is not power of two.", path8);
+						AXLOGW("{} : The texture is not shown on a mobile. The size is not power of two.", path8);
 					}
 #endif
 				}

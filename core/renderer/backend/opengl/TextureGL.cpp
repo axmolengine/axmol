@@ -138,10 +138,11 @@ Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor)
     updateTextureDescriptor(descriptor);
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-    // Listen this event to restored texture id after coming to foreground on Android.
+    // Listen this event to restored texture id after coming to foreground on GLES.
     _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
         _textureInfo.onRendererRecreated(GL_TEXTURE_2D);
-        this->initWithZeros();
+        if (_usedForRT)
+            this->ensureTexStorageForRT();
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
 #endif
@@ -156,24 +157,20 @@ void Texture2DGL::updateTextureDescriptor(const ax::backend::TextureDescriptor& 
 
     updateSamplerDescriptor(descriptor.samplerDescriptor);
 
-    if (descriptor.textureUsage == TextureUsage::RENDER_TARGET)
-        initWithZeros();
+    const bool useForRT = descriptor.textureUsage == TextureUsage::RENDER_TARGET;
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+    _usedForRT = useForRT;
+#endif
+    if(useForRT) {
+        ensureTexStorageForRT();
+    }
 }
 
-void Texture2DGL::initWithZeros()
+void Texture2DGL::ensureTexStorageForRT()
 {
-    // !!!Only used for depth stencil render buffer
-    // For example, a texture used as depth buffer will not invoke updateData(), see cpp-tests 'Effect Basic/Effects
-    // Advanced'.
-    // FIXME: Don't call at Texture2DGL::updateTextureDescriptor, when the texture is compressed, initWithZeros will
-    // cause GL Error: 0x501 We call at here once to ensure depth buffer works well. Ensure the final data size at least
-    // 4 byte
-
-    _width        = (std::max)(_width, (uint32_t)1);
-    _height       = (std::max)(_height, (uint32_t)1);
-    _bitsPerPixel = (std::max)(_bitsPerPixel, (uint8_t)(8 * 4));
-
     auto size     = _width * _height * _bitsPerPixel / 8;
+    assert(size > 0);
+
     uint8_t* data = (uint8_t*)malloc(size);
     memset(data, 0, size);
     updateData(data, _width, _height, 0);

@@ -234,6 +234,7 @@ DrawNodeBackwardsAPITest::DrawNodeBackwardsAPITest()
     Vec2 vertices[4];
     drawNode1->setScale(0.5);
     Color4F color;
+    bool setIsConvex = false;
     for (int iy = 0; iy < 5; iy++)
     {
         x = 0;
@@ -247,14 +248,16 @@ DrawNodeBackwardsAPITest::DrawNodeBackwardsAPITest()
             if (AXRANDOM_0_1() > 0.5f)
             {
                 drawNode1->setIsConvex(true);
+                setIsConvex = true;
                 color = Color4F::YELLOW;
             }
             else
             {
                 drawNode1->setIsConvex(false);  // default value!
+                setIsConvex = false;
                 color = Color4F::ORANGE;
             }
-            drawNode1->drawPolygon(vertices, 4, Color4F(0.7f, 0.7f, 0.7f, 0.5f), 1, color);
+            drawNode1->drawPolygon(vertices, 4, Color4F(0.7f, 0.7f, 0.7f, 0.5f), 1, color, setIsConvex);
             x += 70;
         }
         y += 80;

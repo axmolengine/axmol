@@ -88,7 +88,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jcla
     auto glView   = director->getGLView();
     if (!glView)
     {
-        glView = ax::GLViewImpl::create("Android app");
+        glView = ax::GLViewImpl::create("axmol2");
         glView->setFrameSize(w, h);
         director->setGLView(glView);
 
@@ -97,7 +97,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jcla
     else
     {
         backend::DriverBase::getInstance()->resetState();
-        ax::Director::getInstance()->resetMatrixStack();
+        director->resetMatrixStack();
         ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
         director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
         director->setGLDefaultValues();

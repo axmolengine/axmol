@@ -229,9 +229,6 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
             mGLSurfaceView.onResume();
             rendererPaused = false;
         }
-        else {
-            mGLSurfaceView.onGainFocus();
-        }
     }
 
     @Override
@@ -239,15 +236,15 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     	Log.d(TAG, "onPause()");
         paused = true;
         super.onPause();
-        mGLSurfaceView.onLoseFocus();
         AxmolEngine.onPause();
+        mGLSurfaceView.onPause();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         rendererPaused = true;
-        mGLSurfaceView.onPause();
+        mGLSurfaceView.onStop();
     }
 
     @Override

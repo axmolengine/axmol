@@ -56,7 +56,7 @@ ax::Node* SceneReader::createNodeWithSceneFile(
     std::string_view fileName,
     AttachComponentType attachComponent /*= AttachComponentType::EMPTY_NODE*/)
 {
-    std::string fileExtension = ax::FileUtils::getInstance()->getFileExtension(fileName);
+    std::string fileExtension = ax::FileUtils::getPathExtension(fileName);
     if (fileExtension == ".json")
     {
         _node = nullptr;

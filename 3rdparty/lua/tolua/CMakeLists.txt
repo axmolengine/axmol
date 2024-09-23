@@ -19,7 +19,7 @@ add_library(${target_name} STATIC
 if(NOT AX_USE_LUAJIT)
   target_include_directories(${target_name} PRIVATE ../${AX_LUA_ENGINE})
 else()
-  target_include_directories(${target_name} PRIVATE ../${AX_LUA_ENGINE}/include)
+  target_include_directories(${target_name} PRIVATE ../${AX_LUA_ENGINE}/_x/include)
 endif()
 target_include_directories(${target_name} PUBLIC .)
 

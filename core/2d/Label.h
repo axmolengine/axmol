@@ -273,12 +273,13 @@ public:
      * @return An automatically released Label object.
      * @see setBMFontFilePath setMaxLineWidth
      */
-    AX_DEPRECATED_ATTRIBUTE static Label* createWithBMFont(std::string_view bmfontPath,
+#ifndef AX_CORE_PROFILE
+    AX_DEPRECATED(2.1) static Label* createWithBMFont(std::string_view bmfontPath,
                                                            std::string_view text,
                                                            const TextHAlignment& hAlignment,
                                                            int maxLineWidth,
                                                            const Vec2& imageOffset);
-
+#endif
     /**
      * Allocates and initializes a Label, with char map configuration.
      *
@@ -341,12 +342,12 @@ public:
 
     /** Sets a new bitmap font to Label */
     virtual bool setBMFontFilePath(std::string_view bmfontFilePath, std::string_view subTextureKey, float fontSize = 0);
-
+#ifndef AX_CORE_PROFILE
     /** Sets a new bitmap font to Label */
-    AX_DEPRECATED_ATTRIBUTE virtual bool setBMFontFilePath(std::string_view bmfontFilePath,
+    AX_DEPRECATED(2.1) virtual bool setBMFontFilePath(std::string_view bmfontFilePath,
                                                            const Vec2& imageOffset,
                                                            float fontSize = 0);
-
+#endif
     /** Returns the bitmap font used by the Label.*/
     std::string_view getBMFontFilePath() const { return _bmFontPath; }
 
@@ -794,8 +795,10 @@ protected:
 
     virtual void updateShaderProgram();
     virtual void updateFontScale();
+#ifndef AX_CORE_PROFILE
     /* DEPRECATED: use updateFontScale instead */
-    AX_DEPRECATED_ATTRIBUTE virtual void updateBMFontScale() { updateFontScale(); }
+    AX_DEPRECATED(2.1) virtual void updateBMFontScale() { updateFontScale(); }
+#endif
     void scaleFontSize(float fontSize);
     bool setTTFConfigInternal(const TTFConfig& ttfConfig);
     bool updateTTFConfigInternal();

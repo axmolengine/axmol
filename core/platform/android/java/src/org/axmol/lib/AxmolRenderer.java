@@ -98,6 +98,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
 
     // The final animation interval which is used in 'onDrawFrame'
     private static long sAnimationInterval = (long) (1.0f / 60f * AxmolRenderer.NANOSECONDSPERSECOND);
+    private static float FPS_CONTROL_THRESHOLD = 1.0f / 1200.0f * AxmolRenderer.NANOSECONDSPERSECOND;
 
     // ===========================================================
     // Fields
@@ -210,33 +211,17 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
         if (!mNativeInitCompleted)
             return;
 
-        pauseRendererThread();
+        mRendererThread.onPause();
         AxmolRenderer.nativeOnPause();
         mIsPaused = true;
     }
 
     public void handleOnResume() {
-        resumeRendererThread();
         if (mIsPaused) {
+            mRendererThread.onResume();
             AxmolRenderer.nativeOnResume();
             mIsPaused = false;
         }
-    }
-
-    public void handleOnLoseFocus() {
-        pauseRendererThread();
-    }
-
-    public void handleOnGainFocus() {
-        resumeRendererThread();
-    }
-
-    private void pauseRendererThread() {
-        mRendererThread.onPause();
-    }
-
-    private void resumeRendererThread() {
-        mRendererThread.onResume();
     }
 
     private static native void nativeInsertText(final String text);

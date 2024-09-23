@@ -439,7 +439,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt, std::function<void(const Pixe
     PixelBufferDescriptor pbd;
     if (rt->isDefaultRenderTarget())
     {  // read pixels from screen
-        readPixels(rt, _viewPort.x, _viewPort.y, _viewPort.width, _viewPort.height, _viewPort.width * 4, pbd);
+        readPixels(rt, _viewPort.x, _viewPort.y, _viewPort.width, _viewPort.height, _viewPort.width * 4, false, pbd);
     }
     else
     {
@@ -448,7 +448,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt, std::function<void(const Pixe
         if (colorAttachment)
         {
             readPixels(rt, 0, 0, colorAttachment->getWidth(), colorAttachment->getHeight(),
-                       colorAttachment->getWidth() * 4, pbd);
+                       colorAttachment->getWidth() * 4, false, pbd);
         }
     }
     callback(pbd);
@@ -460,6 +460,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
                                  uint32_t width,
                                  uint32_t height,
                                  uint32_t bytesPerRow,
+                                 bool eglCacheHint,
                                  PixelBufferDescriptor& pbd)
 {
     auto rtGL = static_cast<RenderTargetGL*>(rt);
@@ -474,25 +475,44 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
     __gl->bindBuffer(BufferType::PIXEL_PACK_BUFFER, pbo);
     glBufferData(GL_PIXEL_PACK_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    auto buffer = (uint8_t*)glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, bufferSize, GL_MAP_READ_BIT);
+    auto buffer_ptr = (uint8_t*)glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, bufferSize, GL_MAP_READ_BIT);
 #else
-    std::unique_ptr<uint8_t[]> bufferStorage(new uint8_t[bufferSize]);
-    auto buffer = bufferStorage.get();
-    memset(buffer, 0, bufferSize);
-    glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    axstd::byte_buffer buffer(static_cast<size_t>(bufferSize), 0);
+    auto buffer_ptr = buffer.data();
+    glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer_ptr);
 #endif
-    uint8_t* wptr = nullptr;
-    if (buffer && (wptr = pbd._data.resize(bufferSize)))
+    CHECK_GL_ERROR_DEBUG();
+
+    if (buffer_ptr)
     {
-        auto rptr = buffer + (height - 1) * bytesPerRow;
-        for (int row = 0; row < height; ++row)
+        if (!eglCacheHint)
         {
-            memcpy(wptr, rptr, bytesPerRow);
-            wptr += bytesPerRow;
-            rptr -= bytesPerRow;
+            // we need to flip the buffer vertically to match our API
+            uint8_t* wptr = nullptr;
+            if (wptr = pbd._data.resize(bufferSize))
+            {
+                auto rptr = buffer_ptr + (height - 1) * bytesPerRow;
+                for (int row = 0; row < height; ++row)
+                {
+                    memcpy(wptr, rptr, bytesPerRow);
+                    wptr += bytesPerRow;
+                    rptr -= bytesPerRow;
+                }
+                pbd._width  = width;
+                pbd._height = height;
+            }
         }
-        pbd._width  = width;
-        pbd._height = height;
+        else
+        {
+            // for cache for restore on EGL context resume, don't need flip
+            pbd._width  = width;
+            pbd._height = height;
+#if AX_GLES_PROFILE != 200
+            pbd._data.copy(buffer_ptr, static_cast<ssize_t>(bufferSize));
+#else
+            static_cast<axstd::byte_buffer&>(pbd._data).swap(buffer);
+#endif
+        }
     }
 #if AX_GLES_PROFILE != 200
     glUnmapBuffer(GL_PIXEL_PACK_BUFFER);

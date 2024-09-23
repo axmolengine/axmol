@@ -92,16 +92,15 @@ void MouseEventTest::onMouseUp(Event* event)
 void MouseEventTest::onMouseMove(Event* event)
 {
     EventMouse* e   = (EventMouse*)event;
-    std::string str = "MousePosition X:";
-    str             = str + tostr(e->getCursorX()) + " Y:" + tostr(e->getCursorY());
-    _labelPosition->setString(str.c_str());
+    auto loc = e->getLocation();
+    std::string str = fmt::format("MousePosition:({},{})", loc.x, loc.y);
+    _labelPosition->setString(str);
 }
 
 void MouseEventTest::onMouseScroll(Event* event)
 {
     EventMouse* e   = (EventMouse*)event;
-    std::string str = "Mouse Scroll detected, X: ";
-    str             = str + tostr(e->getScrollX()) + " Y: " + tostr(e->getScrollY());
+    std::string str = fmt::format("Mouse Scroll detected, X:{} Y:{}", e->getScrollX(), e->getScrollY());
     _labelAction->setString(str.c_str());
 }
 

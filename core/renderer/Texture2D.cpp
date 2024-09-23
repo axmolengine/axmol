@@ -192,7 +192,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 {
     if (image == nullptr)
     {
-        __AXLOGWITHFUNCTION("axmol: Texture2D. Can't create Texture. UIImage is nil");
+        AXLOGW("axmol: Texture2D. Can't create Texture. UIImage is nil");
         return false;
     }
 
@@ -334,7 +334,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
     }
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-    VolatileTextureMgr::findVolotileTexture(this);
+    VolatileTextureMgr::getOrAddVolatileTexture(this);
 #endif
 
     backend::TextureDescriptor textureDescriptor;

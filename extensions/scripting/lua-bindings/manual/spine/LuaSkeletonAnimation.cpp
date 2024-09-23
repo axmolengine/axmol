@@ -45,7 +45,7 @@ LuaSkeletonAnimation* LuaSkeletonAnimation::createWithFile(const char* skeletonD
                                                            float scale)
 {
     LuaSkeletonAnimation* node = new LuaSkeletonAnimation();
-    if (FileUtils::getInstance()->getFileExtension(skeletonDataFile) == ".json")
+    if (FileUtils::getPathExtension(skeletonDataFile) == ".json")
         node->initWithJsonFile(skeletonDataFile, atlasFile, scale);
     else
         node->initWithBinaryFile(skeletonDataFile, atlasFile, scale);

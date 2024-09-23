@@ -122,11 +122,6 @@ FlatBuffersSerialize* FlatBuffersSerialize::getInstance()
     return _instanceFlatBuffersSerialize;
 }
 
-void FlatBuffersSerialize::purge()
-{
-    AX_SAFE_DELETE(_instanceFlatBuffersSerialize);
-}
-
 void FlatBuffersSerialize::destroyInstance()
 {
     AX_SAFE_DELETE(_instanceFlatBuffersSerialize);

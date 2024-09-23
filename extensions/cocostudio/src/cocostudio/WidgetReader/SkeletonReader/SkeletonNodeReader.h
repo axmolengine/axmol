@@ -36,8 +36,6 @@ public:
     ~SkeletonNodeReader();
 
     static SkeletonNodeReader* getInstance();
-    /** @deprecated Use method destroyInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
     ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* boneOptions) override;
