@@ -198,7 +198,6 @@ DrawNodeTest::DrawNodeTest()
 
     auto draw1 = DrawNode::create();
     this->addChild(draw1, 10);
-    draw1->setLineWidth(4);
     draw1->drawLine(Vec2(0.0f, s.height), Vec2(s.width, s.height - 20), Color4F::YELLOW);
     draw1->drawLine(Vec2(0.0f, 0.0f), Vec2(s.width, s.height - 20), Color4F::YELLOW);
 
@@ -282,7 +281,7 @@ BetterCircleRendering::BetterCircleRendering()
     // Add lines to see the correct "scale of the 'rings'" changing the window size
 
     auto draw = DrawNode::create();
-    draw->setLineWidth(1);
+
     addChild(draw, 10);
 
     for (float y = 0; y < VisibleRect::top().y; y += 10)
@@ -294,7 +293,7 @@ BetterCircleRendering::BetterCircleRendering()
     drawNode = DrawNode::create();
     addChild(drawNode, 10);
 
-    lineWidth = 0;
+
 
     scheduleUpdate();
 }
@@ -357,7 +356,7 @@ void BetterCircleRendering::initSliders()
 void BetterCircleRendering::update(float dt)
 {
     drawNode->clear();
-    drawNode->setLineWidth(lineWidth);  // value from the slider
+
 
     // Old behavior => faster but badly rendering if line width > 5 (= rings)
     drawNode->drawCircle(VisibleRect::center() + Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false,

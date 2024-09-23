@@ -1717,7 +1717,6 @@ void Label::updateContent()
         {
             // This is the logic for TTF fonts
             const float charheight = (_textDesiredHeight / _numberOfLines);
-            _underlineNode->setLineWidth(charheight / 6);
 
             // atlas font
             for (int i = 0; i < _numberOfLines; ++i)
@@ -1731,7 +1730,7 @@ void Label::updateContent()
                 // Github issue #15214. Uses _displayedColor instead of _textColor for the underline.
                 // This is to have the same behavior of SystemFonts.
                 _underlineNode->drawLine(Vec2(_linesOffsetX[i], y), Vec2(_linesWidth[i] + _linesOffsetX[i], y),
-                                         Color4F(_displayedColor));
+                                         Color4F(_displayedColor), charheight / 6);
             }
         }
         else if (_textSprite)
@@ -1739,7 +1738,6 @@ void Label::updateContent()
             // ...and is the logic for System fonts
             float y               = 0;
             const auto spriteSize = _textSprite->getContentSize();
-            _underlineNode->setLineWidth(spriteSize.height / 6);
 
             if (_strikethroughEnabled)
                 // FIXME: system fonts don't report the height of the font correctly. only the size of the texture,
@@ -1747,7 +1745,7 @@ void Label::updateContent()
                 y += spriteSize.height / 2;
             // FIXME: Might not work with different vertical alignments
             _underlineNode->drawLine(Vec2(0.0f, y), Vec2(spriteSize.width, y),
-                                     Color4F(_textSprite->getDisplayedColor()));
+                                     Color4F(_textSprite->getDisplayedColor()), spriteSize.height / 6);
         }
     }
 

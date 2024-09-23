@@ -89,7 +89,7 @@ public:
      *
      * @return Return an autorelease object.
      */
-    static DrawNode* create(float defaultLineWidth = DEFAULT_LINE_WIDTH);
+    static DrawNode* create(void);
     // DrawNode();
 
     /** Draw a point.
@@ -539,10 +539,6 @@ public:
 
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
-    void setLineWidth(float lineWidth);
-    // Get CocosStudio guide lines width.
-    float getLineWidth();
-
     /**
      * When isolated is set, the position of the node is no longer affected by parent nodes.
      * Which means it will be drawn just like a root node.
@@ -551,7 +547,7 @@ public:
 
     bool isIsolated() const { return _isolated; }
 
-    DrawNode(float lineWidth = DEFAULT_LINE_WIDTH);
+    DrawNode();
     virtual ~DrawNode();
     virtual bool init() override;
 
@@ -585,8 +581,6 @@ protected:
     axstd::pod_vector<V2F_C4B_T2F> _points;
     axstd::pod_vector<V2F_C4B_T2F> _lines;
 
-    float _lineWidth        = 1.0f;
-    float _defaultLineWidth = 1.0f;
 
 private:
     // Internal function _drawPoint
@@ -691,7 +685,7 @@ public:
     class Properties
     {
     public:
-        float factor = 0.5f;  /// set the lineWidth like Axmol 1.0
+        float factor = 0.5f;  /// thickness factor
 
         // transforming stuff
         Vec2 scale;
@@ -699,9 +693,6 @@ public:
         float rotation;
         Vec2 position;
 
-        // Thickness stuff
-        float lineWidth;
-        float defaultLineWidth = 1.0f;
 
         // Drawing flags
         bool transform = false;
@@ -779,18 +770,6 @@ public:
         */
         Vec2 getPosition() { return position; };
 
-        /** Set the DrawNode line width for each drawing primitive after this.
-
-        * @js NA
-        */
-        void setLineWidth(float lw) { lineWidth = lw; };
-
-        /** Get the DrawNode line width for each drawing primitive after this.
-
-        * @js NA
-        */
-        float getLineWidth() { return lineWidth; };
-
         /** Set all default DrawNode properties.
 
         * @js NA
@@ -801,7 +780,6 @@ public:
             center    = Vec2(0.0f, 0.0f);
             rotation  = 0.0f;
             position  = Vec2(0.0f, 0.0f);
-            lineWidth = 1.0f;
             drawOrder = false;
         };
     } properties;
