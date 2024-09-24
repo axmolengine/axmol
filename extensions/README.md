@@ -1,10 +1,5 @@
 # The Axmol extensions
 
-## DragonBones - Deprecrated, will be removed in axmol-2.2.0 (see #1602)
-- Upstream: https://github.com/DragonBones/DragonBonesCPP
-- Version: 4.5
-- License: MIT
-
 ## Effekseer (OFF default)
 - [![Upstream](https://img.shields.io/github/v/release/effekseer/Effekseer?label=Upstream)](https://github.com/effekseer/EffekseerForCocos2d-x)
 - https://github.com/effekseer/EffekseerForCocos2d-x
@@ -12,7 +7,7 @@
 - Version: 1.70
 - License: MIT
 
-## GUI - Deprecrated, will be removed in axmol-2.2.0 (see #1602)
+## GUI - Deprecrated, should only used for the axmol test suit (e.g. cpp-tests)  
 - Upstream: https://github.com/axmolengine/axmol
 - Version: axmol-1.0
 - License: MIT

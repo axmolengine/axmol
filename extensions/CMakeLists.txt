@@ -58,10 +58,6 @@ if(AX_ENABLE_EXT_SPINE)
   add_subdirectory(spine)
 endif()
 
-if(AX_ENABLE_EXT_DRAGONBONES)
-  add_subdirectory(DragonBones)
-endif()
-
 if(AX_ENABLE_EXT_FAIRYGUI)
   add_subdirectory(fairygui)
   if(BUILD_SHARED_LIBS)
