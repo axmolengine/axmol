@@ -89,6 +89,8 @@ public:
 
     virtual ~DownloadTaskCURL()
     {
+        AXLOGD("Destruct DownloadTaskCURL {}", fmt::ptr(this));
+
         if (_errCode != DownloadTask::ERROR_TASK_DUPLICATED)
         {
             auto lock = std::lock_guard<std::mutex>(_sStoragePathSetMutex);
@@ -103,11 +105,6 @@ public:
 
         _fs.reset();
         _fsMd5.reset();
-
-        if (_requestHeaders)
-            curl_slist_free_all(_requestHeaders);
-
-        AXLOGD("Destruct DownloadTaskCURL {}", fmt::ptr(this));
     }
 
     bool init(std::string_view filename, std::string_view tempSuffix)
@@ -318,15 +315,12 @@ private:
     std::recursive_mutex _mutex;
 
     // header info
-    bool _acceptRanges;
     int64_t _totalBytesExpected = -1; // some server may not send data size, so set it to -1
 
     curl_off_t _speed = 0;
     CURL* _curl = nullptr;
     curl_socket_t _sockfd = -1;  // store the sockfd to support cancel download manually
     bool _cancelled       = false;
-
-    curl_slist* _requestHeaders = nullptr;
 
     // progress
     bool _alreadyDownloaded = false;
@@ -483,7 +477,6 @@ private:
 
         /* Resolve host domain to ip */
         std::string internalURL = task->requestURL;
-        // Curl_custom_setup(handle, internalURL, (void**)& coTask->_requestHeaders);
 
         // set url
         curl_easy_setopt(handle, CURLOPT_URL, internalURL.c_str());
