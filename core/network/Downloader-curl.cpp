@@ -82,7 +82,7 @@ public:
     int serialId;
     DownloaderCURL& owner;
 
-    DownloadTaskCURL(DownloaderCURL& o) : serialId(_sSerialId++), owner(o)
+    explicit DownloadTaskCURL(DownloaderCURL& o) : serialId(_sSerialId++), owner(o)
     {
         AXLOGD("Construct DownloadTaskCURL {}", fmt::ptr(this));
     }
