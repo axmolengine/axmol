@@ -61,7 +61,7 @@ protected:
     static void _updateTaskProgressInfo(DownloadTask& task, int64_t totalExpected = -1);
 
     // scheduler for update processing and finished task in main schedule
-    void _onDownloadFinished(DownloadTask& task, int checkState = 0);
+    void _onDownloadFinished(DownloadTask& task);
 
     // scheduler for update processing and finished task in main schedule
     void _onUpdate(float);
