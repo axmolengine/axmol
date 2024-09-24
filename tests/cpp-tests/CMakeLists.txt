@@ -130,7 +130,6 @@ list(APPEND GAME_HEADER
      Source/ActionsEaseTest/ActionsEaseTest.h
      Source/ParallaxTest/ParallaxTest.h
      Source/testBasic.h
-     Source/ZwoptexTest/ZwoptexTest.h
      Source/CurlTest/CurlTest.h
      Source/ConfigurationTest/ConfigurationTest.h
      Source/CurrentLanguageTest/CurrentLanguageTest.h
