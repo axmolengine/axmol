@@ -119,7 +119,6 @@
 #include "UITest/UITest.h"
 #include "UserDefaultTest/UserDefaultTest.h"
 #include "VibrateTest/VibrateTest.h"
-#include "ZwoptexTest/ZwoptexTest.h"
 #include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "ZipTest/ZipTests.h"
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)

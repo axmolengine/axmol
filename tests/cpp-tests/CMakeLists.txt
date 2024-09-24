@@ -130,7 +130,6 @@ list(APPEND GAME_HEADER
      Source/ActionsEaseTest/ActionsEaseTest.h
      Source/ParallaxTest/ParallaxTest.h
      Source/testBasic.h
-     Source/ZwoptexTest/ZwoptexTest.h
      Source/CurlTest/CurlTest.h
      Source/ConfigurationTest/ConfigurationTest.h
      Source/CurrentLanguageTest/CurrentLanguageTest.h
@@ -364,7 +363,6 @@ list(APPEND GAME_SOURCE
      Source/ImGuiTest/ImGuiTest.cpp
      Source/VisibleRect.cpp
      Source/VibrateTest/VibrateTest.cpp
-     Source/ZwoptexTest/ZwoptexTest.cpp
      Source/SpriteFrameCacheTest/SpriteFrameCacheTest.cpp
      Source/controller.cpp
      Source/ZipTest/ZipTests.cpp

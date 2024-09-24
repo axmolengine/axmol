@@ -973,4 +973,29 @@ public:
     virtual std::string subtitle() const override;
 };
 
+class ZwoptexTest : public TestCase
+{
+public:
+};
+
+class ZwoptexGenericTest : public ZwoptexTest
+{
+public:
+    CREATE_FUNC(ZwoptexGenericTest);
+
+    virtual ~ZwoptexGenericTest();
+
+    virtual void onEnter() override;
+    void flipSprites(float dt);
+    void startIn05Secs(float dt);
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+protected:
+    ax::Sprite* sprite1;
+    ax::Sprite* sprite2;
+    int counter;
+};
+
 #endif
