@@ -366,7 +366,6 @@ list(APPEND GAME_SOURCE
      Source/ImGuiTest/ImGuiTest.cpp
      Source/VisibleRect.cpp
      Source/VibrateTest/VibrateTest.cpp
-     Source/ZwoptexTest/ZwoptexTest.cpp
      Source/SpriteFrameCacheTest/SpriteFrameCacheTest.cpp
      Source/controller.cpp
      Source/ZipTest/ZipTests.cpp
