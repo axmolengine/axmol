@@ -52,10 +52,6 @@ protected:
     class Impl;
     std::shared_ptr<Impl> _impl;
 
-    // for transfer data on schedule
-    DownloadTaskCURL* _currTask;  // temp ref
-    std::function<int64_t(void*, int64_t)> _transferDataToBuffer;
-
     void _lazyScheduleUpdate();
 
     static void _updateTaskProgressInfo(DownloadTask& task, int64_t totalExpected = -1);

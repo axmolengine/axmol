@@ -91,8 +91,7 @@ Downloader::Downloader(const DownloaderHints& hints)
 {
     AXLOGD("Construct Downloader {}", fmt::ptr(this));
     _impl.reset(new DownloaderImpl(hints));
-    _impl->onTaskProgress = [this](const DownloadTask& task,
-                                   std::function<int64_t(void* buffer, int64_t len)>& /*transferDataToBuffer*/) {
+    _impl->onTaskProgress = [this](const DownloadTask& task) {
         if (onTaskProgress)
         {
             onTaskProgress(task);

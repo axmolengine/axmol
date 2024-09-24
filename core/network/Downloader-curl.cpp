@@ -464,7 +464,7 @@ private:
         {
             auto& downloaderImpl = coTask->owner;
             downloaderImpl._updateTaskProgressInfo(*task);
-            downloaderImpl.onTaskProgress(*task, downloaderImpl._transferDataToBuffer);
+            downloaderImpl.onTaskProgress(*task);
         }
         return 0;
     }
@@ -763,24 +763,11 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////
 //  Implementation DownloaderCURL
-DownloaderCURL::DownloaderCURL(const DownloaderHints& hints) : _impl(std::make_shared<Impl>()), _currTask(nullptr)
+DownloaderCURL::DownloaderCURL(const DownloaderHints& hints) : _impl(std::make_shared<Impl>())
 {
     AXLOGD("Construct DownloaderCURL {}", fmt::ptr(this));
     _impl->hints  = hints;
     _impl->_owner = this;
-
-    _transferDataToBuffer = [this](void* buf, int64_t len) -> int64_t {
-        DownloadTaskCURL& coTask = *_currTask;
-        int64_t dataLen          = coTask._buf.size();
-        if (len < dataLen)
-        {
-            return 0;
-        }
-
-        memcpy(buf, coTask._buf.data(), dataLen);
-        coTask._buf.resize(0);
-        return dataLen;
-    };
 }
 
 DownloaderCURL::~DownloaderCURL()
@@ -846,10 +833,8 @@ void DownloaderCURL::_onUpdate(float)
         std::lock_guard<std::recursive_mutex> lock(coTask._mutex);
         if (coTask._bytesReceived)
         {
-            _currTask = &coTask;
             _updateTaskProgressInfo(*task);
-            onTaskProgress(*task, _transferDataToBuffer);
-            _currTask             = nullptr;
+            onTaskProgress(*task);
             coTask._bytesReceived = 0;
         }
     }
@@ -885,11 +870,9 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task)
     // if there is bytesReceived, call progress update first
     if (coTask._bytesReceived)
     {
-        _currTask = &coTask;
         _updateTaskProgressInfo(task);
-        onTaskProgress(task, _transferDataToBuffer);
+        onTaskProgress(task);
         coTask._bytesReceived = 0;
-        _currTask             = nullptr;
     }
 
     // if file task, close file handle and rename file if needed
@@ -914,7 +897,7 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task)
 
                     pFileUtils->removeFile(coTask._tempFileName);
 
-                    onTaskProgress(task, _transferDataToBuffer);
+                    onTaskProgress(task);
 
                     fsOrigin = nullptr;
                 }
