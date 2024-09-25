@@ -179,6 +179,7 @@ function is_console_app($path) {
     # $isConsole = $peReader.PEHeaders.PEHeader.Subsystem -eq 3
     # $peFile.Close()
     # return $isConsole
+    $path = $1k.realpath($path)
     $buffer = New-Object Byte[] 248
     $fileStream = [System.IO.FileStream]::new($path, [IO.FileMode]::Open, [IO.FileAccess]::Read)
     $fileStream.Seek(0x3C, [System.IO.SeekOrigin]::Begin) | Out-Null
