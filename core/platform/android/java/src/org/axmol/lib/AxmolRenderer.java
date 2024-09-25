@@ -29,6 +29,66 @@ import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 public class AxmolRenderer implements GLSurfaceView.Renderer {
+
+    private static class RendererThread extends Thread {
+
+        private GLSurfaceView gameSurfaceView;
+        private AxmolRenderer renderer;
+        private boolean pausing = false;
+        private Object drawMonitor = new Object();
+        private Object pauseMonitor = new Object();
+
+        public RendererThread(GLSurfaceView gameSurfaceView, AxmolRenderer renderer) {
+            this.gameSurfaceView = gameSurfaceView;
+            this.renderer = renderer;
+        }
+
+        public void onPause(){
+            pausing = true;
+        }
+
+        public void onResume(){
+            if (pausing) {
+                pausing = false;
+                synchronized (pauseMonitor) {
+                    pauseMonitor.notify();
+                }
+            }
+        }
+
+        public void drawFrameDone() {
+            synchronized (drawMonitor) {
+                drawMonitor.notify();
+            }
+        }
+
+        @Override
+        public void run() {
+
+            while (true) {
+                try {
+                    synchronized (pauseMonitor) {
+                        if (pausing) {
+                            pauseMonitor.wait();
+                        }
+                    }
+
+                    long now = System.nanoTime();
+                    synchronized (drawMonitor) {
+                        this.gameSurfaceView.requestRender();
+                        drawMonitor.wait();
+                    }
+                    long wait = (AxmolRenderer.sAnimationInterval - (System.nanoTime()-now)) / AxmolRenderer.NANOSECONDSPERMICROSECOND;
+                    if (wait > 0) {
+                        sleep(wait);
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
     // ===========================================================
     // Constants
     // ===========================================================
@@ -44,15 +104,21 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     // Fields
     // ===========================================================
 
-    private long mLastTickInNanoSeconds;
     private int mScreenWidth;
     private int mScreenHeight;
     private boolean mNativeInitCompleted = false;
     private boolean mIsPaused = false;
+    private RendererThread mRendererThread = null;
 
     // ===========================================================
     // Constructors
     // ===========================================================
+
+    public AxmolRenderer(GLSurfaceView surfaceView){
+
+        super();
+        this.mRendererThread = new RendererThread(surfaceView, this);
+    }
 
     // ===========================================================
     // Getter & Setter
@@ -74,13 +140,13 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(final GL10 GL10, final EGLConfig EGLConfig) {
         AxmolRenderer.nativeInit(this.mScreenWidth, this.mScreenHeight);
-        this.mLastTickInNanoSeconds = System.nanoTime();
-
+        
         if (mNativeInitCompleted) {
             // This must be from an OpenGL context loss
             nativeOnContextLost();
         } else {
             mNativeInitCompleted = true;
+            mRendererThread.start();
         }
     }
 
@@ -91,26 +157,8 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(final GL10 gl) {
-        /*
-         * Render time MUST be counted in, or the FPS will slower than appointed.
-         */
         AxmolRenderer.nativeRender();
-        /*
-         * No need to use algorithm in default(60,90,120... FPS) situation,
-         * since onDrawFrame() was called by system 60 times per second by default.
-         */
-        if (AxmolRenderer.sAnimationInterval > AxmolRenderer.FPS_CONTROL_THRESHOLD) {
-            final long interval = System.nanoTime() - this.mLastTickInNanoSeconds;
-
-            if (interval < AxmolRenderer.sAnimationInterval) {
-                try {
-                    Thread.sleep((AxmolRenderer.sAnimationInterval - interval) / AxmolRenderer.NANOSECONDSPERMICROSECOND);
-                } catch (final Exception e) {
-                }
-            }
-
-            this.mLastTickInNanoSeconds = System.nanoTime();
-        }
+        mRendererThread.drawFrameDone();
     }
 
     // ===========================================================
@@ -163,12 +211,14 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
         if (!mNativeInitCompleted)
             return;
 
+        mRendererThread.onPause();
         AxmolRenderer.nativeOnPause();
         mIsPaused = true;
     }
 
     public void handleOnResume() {
         if (mIsPaused) {
+            mRendererThread.onResume();
             AxmolRenderer.nativeOnResume();
             mIsPaused = false;
         }
