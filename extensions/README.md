@@ -1,6 +1,6 @@
 # The Axmol extensions
 
-## DragonBones - Deprecrated, will be removed in axmol-2.2.0 (see #1602)
+## DragonBones - Deprecrated
 - Upstream: https://github.com/DragonBones/DragonBonesCPP
 - Version: 4.5
 - License: MIT
@@ -12,7 +12,7 @@
 - Version: 1.70
 - License: MIT
 
-## GUI - Deprecrated, will be removed in axmol-2.2.0 (see #1602)
+## GUI - Deprecrated, should only used for the axmol tests (e.g. cpp-tests)  
 - Upstream: https://github.com/axmolengine/axmol
 - Version: axmol-1.0
 - License: MIT
