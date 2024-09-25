@@ -1,6 +1,6 @@
 # The Axmol extensions
 
-## DragonBones - Deprecrated, will be removed in axmol-2.3.0 (see #1602)
+## DragonBones - Deprecrated
 - Upstream: https://github.com/DragonBones/DragonBonesCPP
 - Version: 4.5
 - License: MIT
