@@ -89,7 +89,6 @@ public:
         addTest("Node: Camera3D Test", []() { return new Camera3DTests(); });
         addTest("Node: Clipping", []() { return new ClippingNodeTests(); });
         addTest("Node: Draw", []() { return new DrawNodeTests(); });
-        addTest("Node: Draw (cocos2dx)", []() { return new DrawPrimitivesTests(); });
         addTest("Node: Label - New API", []() { return new NewLabelTests(); });
         addTest("Node: Layer", []() { return new LayerTests(); });
         addTest("Node: Light", []() { return new LightTests(); });

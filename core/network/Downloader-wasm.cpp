@@ -228,10 +228,8 @@ namespace ax { namespace network {
             }
 
             DownloadTaskEmscripten *coTask = iter->second;
-            function<int64_t(void*, int64_t)> transferDataToBuffer; // just a placeholder
-            // int dl = dlNow - coTask->bytesReceived;
             coTask->bytesReceived = dlNow;
-            downloader->onTaskProgress(*coTask->task, transferDataToBuffer);
+            downloader->onTaskProgress(*coTask->task);
         }
 
         void DownloaderEmscripten::onError(emscripten_fetch_t *fetch)

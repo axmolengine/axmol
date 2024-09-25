@@ -2150,7 +2150,7 @@ void DrawNodeThicknessTest::update(float dt)
                             Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
     }
 
-    drawNode->setLineWidth(4);
+
     drawNode->drawLine(Vec2(0.0f, s.height), Vec2(s.width, s.height - 20), Color4F::YELLOW);
     drawNode->drawLine(Vec2(0.0f, 0.0f), Vec2(s.width, s.height - 20), Color4F::YELLOW);
 
@@ -3321,7 +3321,7 @@ void DrawNodeAxmolTest2::drawAllv2(DrawNode* drawNode, bool drawOrder)
                             Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
     }
 
-    drawNode->setLineWidth(4);
+
     drawNode->drawLine(Vec2(0.0f, size.height), Vec2(size.width, size.height - 20), Color4F::YELLOW);
     drawNode->drawLine(Vec2(0.0f, 0.0f), Vec2(size.width, size.height - 20), Color4F::YELLOW);
 }

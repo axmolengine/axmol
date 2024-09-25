@@ -680,14 +680,13 @@ bool UIListViewTest_ScrollToItem::init()
         if (getListViewDirection() == ScrollView::Direction::HORIZONTAL)
         {
             float halfY = 110;
-            pNode->drawLine(Vec2(center.x, center.y - halfY), Vec2(center.x, center.y + halfY), Color4F(0, 0, 0, 1));
+            pNode->drawLine(Vec2(center.x, center.y - halfY), Vec2(center.x, center.y + halfY), Color4F(0, 0, 0, 1), 2.0f);
         }
         else
         {
             float halfX = 150;
-            pNode->drawLine(Vec2(center.x - halfX, center.y), Vec2(center.x + halfX, center.y), Color4F(0, 0, 0, 1));
+            pNode->drawLine(Vec2(center.x - halfX, center.y), Vec2(center.x + halfX, center.y), Color4F(0, 0, 0, 1), 2.0f);
         }
-        pNode->setLineWidth(2);
         _uiLayer->addChild(pNode);
     }
 
@@ -752,14 +751,13 @@ bool UIListViewTest_Magnetic::init()
         if (getListViewDirection() == ScrollView::Direction::HORIZONTAL)
         {
             float halfY = 110;
-            pNode->drawLine(Vec2(center.x, center.y - halfY), Vec2(center.x, center.y + halfY), Color4F(0, 0, 0, 1));
+            pNode->drawLine(Vec2(center.x, center.y - halfY), Vec2(center.x, center.y + halfY), Color4F(0, 0, 0, 1), 2.0f);
         }
         else
         {
             float halfX = 150;
-            pNode->drawLine(Vec2(center.x - halfX, center.y), Vec2(center.x + halfX, center.y), Color4F(0, 0, 0, 1));
+            pNode->drawLine(Vec2(center.x - halfX, center.y), Vec2(center.x + halfX, center.y), Color4F(0, 0, 0, 1), 2.0f);
         }
-        pNode->setLineWidth(2);
         _uiLayer->addChild(pNode);
     }
 
@@ -910,14 +908,13 @@ bool UIListViewTest_Padding::init()
         if (getListViewDirection() == ScrollView::Direction::HORIZONTAL)
         {
             float halfY = 110;
-            pNode->drawLine(Vec2(center.x, center.y - halfY), Vec2(center.x, center.y + halfY), Color4F(0, 0, 0, 1));
+            pNode->drawLine(Vec2(center.x, center.y - halfY), Vec2(center.x, center.y + halfY), Color4F(0, 0, 0, 1), 2.0f);
         }
         else
         {
             float halfX = 150;
-            pNode->drawLine(Vec2(center.x - halfX, center.y), Vec2(center.x + halfX, center.y), Color4F(0, 0, 0, 1));
+            pNode->drawLine(Vec2(center.x - halfX, center.y), Vec2(center.x + halfX, center.y), Color4F(0, 0, 0, 1), 2.0f);
         }
-        pNode->setLineWidth(2);
         _uiLayer->addChild(pNode);
     }
 

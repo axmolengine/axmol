@@ -1300,7 +1300,6 @@ LabelTTFDistanceField::LabelTTFDistanceField()
     auto borderDraw        = DrawNode::create();
     label1->addChild(borderDraw);
     borderDraw->clear();
-    borderDraw->setLineWidth(1);
     Vec2 vertices[4] = {Vec2::ZERO, Vec2(labelContentSize.width, 0.0f),
                         Vec2(labelContentSize.width, labelContentSize.height), Vec2(0.0f, labelContentSize.height)};
     borderDraw->drawPoly(vertices, 4, true, Color4F::RED);
@@ -1315,7 +1314,6 @@ LabelTTFDistanceField::LabelTTFDistanceField()
     auto borderDraw2        = DrawNode::create();
     label2->addChild(borderDraw2);
     borderDraw2->clear();
-    borderDraw2->setLineWidth(1);
     Vec2 vertices2[4] = {Vec2::ZERO, Vec2(labelContentSize2.width, 0.0f),
                          Vec2(labelContentSize2.width, labelContentSize2.height), Vec2(0.0f, labelContentSize2.height)};
     borderDraw2->drawPoly(vertices2, 4, true, Color4F::GREEN);

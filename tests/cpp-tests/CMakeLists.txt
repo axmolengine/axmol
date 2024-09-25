@@ -130,7 +130,6 @@ list(APPEND GAME_HEADER
      Source/ActionsEaseTest/ActionsEaseTest.h
      Source/ParallaxTest/ParallaxTest.h
      Source/testBasic.h
-     Source/ZwoptexTest/ZwoptexTest.h
      Source/CurlTest/CurlTest.h
      Source/ConfigurationTest/ConfigurationTest.h
      Source/CurrentLanguageTest/CurrentLanguageTest.h
@@ -190,7 +189,6 @@ list(APPEND GAME_HEADER
      Source/MeshRendererTest/MeshRendererTest.h
      Source/MeshRendererTest/DrawNode3D.h
      Source/DrawNodeTest/DrawNodeTest.h
-     Source/DrawPrimitivesTest/DrawPrimitivesTest.h
      Source/BaseTest.h
      Source/SceneTest/SceneTest.h
      Source/ReleasePoolTest/ReleasePoolTest.h
@@ -324,7 +322,6 @@ list(APPEND GAME_SOURCE
     #  Source/Scene3DTest/Scene3DTest.cpp
      Source/MeshRendererTest/DrawNode3D.cpp
      Source/DrawNodeTest/DrawNodeTest.cpp
-     Source/DrawPrimitivesTest/DrawPrimitivesTest.cpp
      Source/MeshRendererTest/MeshRendererTest.cpp
      Source/SpritePolygonTest/SpritePolygonTest.cpp
      Source/SpriteTest/SpriteTest.cpp
@@ -366,7 +363,6 @@ list(APPEND GAME_SOURCE
      Source/ImGuiTest/ImGuiTest.cpp
      Source/VisibleRect.cpp
      Source/VibrateTest/VibrateTest.cpp
-     Source/ZwoptexTest/ZwoptexTest.cpp
      Source/SpriteFrameCacheTest/SpriteFrameCacheTest.cpp
      Source/controller.cpp
      Source/ZipTest/ZipTests.cpp
