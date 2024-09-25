@@ -140,13 +140,13 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(final GL10 GL10, final EGLConfig EGLConfig) {
         AxmolRenderer.nativeInit(this.mScreenWidth, this.mScreenHeight);
-        mRendererThread.start();
-
+        
         if (mNativeInitCompleted) {
             // This must be from an OpenGL context loss
             nativeOnContextLost();
         } else {
             mNativeInitCompleted = true;
+            mRendererThread.start();
         }
     }
 
