@@ -70,10 +70,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     private static AxmolActivity sContext = null;
     private WebViewHelper mWebViewHelper = null;
     private EditBoxHelper mEditBoxHelper = null;
-    private boolean hasFocus = false;
     private boolean showVirtualButton = false;
-    private boolean paused = true;
-    private boolean rendererPaused = true;
 
     public AxmolGLSurfaceView getGLSurfaceView(){
         return  mGLSurfaceView;
@@ -206,6 +203,40 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     protected void onStart() {
         Log.i(TAG, "onStart()");
         super.onStart();
+
+        mGLSurfaceView.onResume();
+    }
+
+    @Override
+    protected void onResume() {
+    	Log.i(TAG, "onResume()");
+        super.onResume();
+
+        hideVirtualButton();
+        AxmolEngine.onResume();
+        mGLSurfaceView.handleOnResume();
+        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+    }
+
+    @Override
+    protected void onPause() {
+    	Log.i(TAG, "onPause()");
+
+        AxmolEngine.onPause();
+        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        mGLSurfaceView.handleOnPause();
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i(TAG, "onStop()");
+
+        mGLSurfaceView.waitForPauseToComplete();
+        mGLSurfaceView.onPause();
+
+        super.onStop();
     }
 
     @Override
@@ -215,68 +246,15 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     }
 
     @Override
-    protected void onResume() {
-    	Log.i(TAG, "onResume()");
-        paused = false;
-        super.onResume();
-       	if (this.hasFocus) {
-            resume();
-        }
+    protected void onDestroy() {
+        Log.i(TAG, "onDestroy()");
+        super.onDestroy();
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-    	Log.i(TAG, "onWindowFocusChanged() hasFocus=" + hasFocus);
+        Log.i(TAG, "onWindowFocusChanged() hasFocus=" + hasFocus);
         super.onWindowFocusChanged(hasFocus);
-
-        this.hasFocus = hasFocus;
-        if (this.hasFocus && !paused) {
-            resume();
-        }
-    }
-
-    private void resume() {
-        this.hideVirtualButton();
-        AxmolEngine.onResume();
-        if (rendererPaused) {
-            mGLSurfaceView.onResume();
-            rendererPaused = false;
-        }
-        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-    }
-
-    private void resumeIfHasFocus() {
-        //It is possible for the app to receive the onWindowsFocusChanged(true) event
-        //even though it is locked or asleep
-        boolean readyToPlay = !isDeviceLocked() && !isDeviceAsleep();
-
-        if(hasFocus && readyToPlay) {
-            resume();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-    	Log.i(TAG, "onPause()");
-        paused = true;
-        super.onPause();
-        AxmolEngine.onPause();
-        mGLSurfaceView.onPause();
-        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-    }
-
-    @Override
-    protected void onStop() {
-        Log.i(TAG, "onStop()");
-        super.onStop();
-        rendererPaused = true;
-        mGLSurfaceView.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.i(TAG, "onDestroy()");
-        super.onDestroy();
     }
 
     @Override
