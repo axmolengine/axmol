@@ -151,6 +151,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
         // Workaround in https://stackoverflow.com/questions/16283079/re-launch-of-activity-on-home-button-but-only-the-first-time/16447508
@@ -202,8 +203,20 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     // ===========================================================
 
     @Override
+    protected void onStart() {
+        Log.i(TAG, "onStart()");
+        super.onStart();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.i(TAG, "onRestart()");
+        super.onRestart();
+    }
+
+    @Override
     protected void onResume() {
-    	Log.d(TAG, "onResume()");
+    	Log.i(TAG, "onResume()");
         paused = false;
         super.onResume();
        	if (this.hasFocus) {
@@ -213,7 +226,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-    	Log.d(TAG, "onWindowFocusChanged() hasFocus=" + hasFocus);
+    	Log.i(TAG, "onWindowFocusChanged() hasFocus=" + hasFocus);
         super.onWindowFocusChanged(hasFocus);
 
         this.hasFocus = hasFocus;
@@ -244,7 +257,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
     @Override
     protected void onPause() {
-    	Log.d(TAG, "onPause()");
+    	Log.i(TAG, "onPause()");
         paused = true;
         super.onPause();
         AxmolEngine.onPause();
@@ -254,6 +267,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
     @Override
     protected void onStop() {
+        Log.i(TAG, "onStop()");
         super.onStop();
         rendererPaused = true;
         mGLSurfaceView.onStop();
@@ -261,6 +275,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
     @Override
     protected void onDestroy() {
+        Log.i(TAG, "onDestroy()");
         super.onDestroy();
     }
 
