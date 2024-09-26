@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCEVENT_TYPE_H__
-#define __CCEVENT_TYPE_H__
+#ifndef __AXEVENT_TYPE_H__
+#define __AXEVENT_TYPE_H__
 /// @cond DO_NOT_SHOW
 
 /**

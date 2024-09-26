@@ -53,7 +53,8 @@ THE SOFTWARE.
 #    include "renderer/TextureCache.h"
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // CLASS IMPLEMENTATIONS:
 
@@ -191,7 +192,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 {
     if (image == nullptr)
     {
-        __AXLOGWITHFUNCTION("axmol: Texture2D. Can't create Texture. UIImage is nil");
+        AXLOGW("axmol: Texture2D. Can't create Texture. UIImage is nil");
         return false;
     }
 
@@ -333,7 +334,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
     }
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-    VolatileTextureMgr::findVolotileTexture(this);
+    VolatileTextureMgr::getOrAddVolatileTexture(this);
 #endif
 
     backend::TextureDescriptor textureDescriptor;
@@ -811,4 +812,4 @@ void Texture2D::drawInRect(const Rect& rect, float globalZOrder)
     Director::getInstance()->getRenderer()->addCommand(&_customCommand);
 }
 
-NS_AX_END
+}

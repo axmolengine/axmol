@@ -42,7 +42,8 @@
 #include "2d/ActionInterval.h"
 #include "math/Math.h"
 
-NS_AX_BEGIN;
+namespace ax
+{
 
 class Node;
 
@@ -341,6 +342,6 @@ ccCardinalSplineAt(const Vec2& p0, const Vec2& p1, const Vec2& p2, const Vec2& p
 // end of actions group
 /// @}
 
-NS_AX_END;
+}
 
 #endif  // __CCACTION_CATMULLROM_H__

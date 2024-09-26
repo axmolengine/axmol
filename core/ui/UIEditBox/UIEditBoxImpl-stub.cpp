@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,7 +28,8 @@
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS) && \
     (AX_TARGET_PLATFORM != AX_PLATFORM_WIN32) && (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -40,6 +41,6 @@ EditBoxImpl* __createSystemEditBox(EditBox* pEditBox)
 
 }  // namespace ui
 
-NS_AX_END
+}
 
 #endif /* #if (..) */

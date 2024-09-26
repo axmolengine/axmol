@@ -30,14 +30,9 @@
 #    define AXME_TRACE AXLOGD
 #else
 #    define AXME_TRACE printf
-#    define NS_AX_BEGIN \
-        namespace ax    \
-        {
-#    define NS_AX_END }
 #    define AX_BREAK_IF(cond) \
         if (cond)             \
         break
-#    define USING_NS_AX using namespace ax
 #endif
 
 // #define AXME_USE_IMFME 1
@@ -55,7 +50,8 @@
 
 using namespace std::string_view_literals;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 enum class MEMediaEventType
 {
@@ -175,7 +171,7 @@ struct MEVideoFrame
     const size_t _dataLen;        // the video data len
     const uint8_t* _cbcrDataPointer;
     MEVideoPixelDesc _vpd;  // the video pixel desc
-    MEIntPoint _videoDim;   // the aligned frame size
+    MEIntPoint _videoDim;   // the video size
 #if defined(_DEBUG) || !defined(_NDEBUG)
     YCbCrBiPlanarPixelInfo _ycbcrDesc{};
 #endif
@@ -216,4 +212,4 @@ public:
     virtual void destroyMediaEngine(MediaEngine* me) = 0;
 };
 
-NS_AX_END
+}

@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 #include "ProcessBase.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

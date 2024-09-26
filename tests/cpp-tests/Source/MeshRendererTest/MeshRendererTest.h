@@ -28,7 +28,8 @@
 #include "renderer/backend/ProgramState.h"
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 class Animate3D;
 class MeshRenderer;
 class Delay;
@@ -36,7 +37,7 @@ class Ray;
 class DrawNode3D;
 class GLProgramState;
 class MotionStreak3D;
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 DEFINE_TEST_SUITE(MeshRendererTests);
 
@@ -498,10 +499,11 @@ protected:
     int _vectorIndex;
 };
 
-NS_AX_BEGIN
+namespace ax
+{
 class TextureCube;
 class Skybox;
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 class MeshRendererCubeMapTest : public MeshRendererTestDemo
 {

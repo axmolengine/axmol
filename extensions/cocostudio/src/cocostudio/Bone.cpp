@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "TransformHelp.h"
 #include "DisplayManager.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {
@@ -409,16 +409,6 @@ void Bone::addDisplay(Node* display, int index)
 void Bone::removeDisplay(int index)
 {
     _displayManager->removeDisplay(index);
-}
-
-void Bone::changeDisplayByIndex(int index, bool force)
-{
-    changeDisplayWithIndex(index, force);
-}
-
-void Bone::changeDisplayByName(std::string_view name, bool force)
-{
-    changeDisplayWithName(name, force);
 }
 
 void Bone::changeDisplayWithIndex(int index, bool force)

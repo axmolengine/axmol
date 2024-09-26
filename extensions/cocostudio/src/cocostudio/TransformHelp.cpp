@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "base/EventDispatcher.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

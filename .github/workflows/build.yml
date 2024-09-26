@@ -32,7 +32,7 @@ jobs:
       with:
         name: windows_x64
         path: |
-          build_x64/bin/cpp-tests/**/*
+          build/bin/cpp-tests/**/*
   win32-dll:
         runs-on: windows-latest
         steps:

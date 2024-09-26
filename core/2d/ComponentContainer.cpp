@@ -27,7 +27,8 @@ THE SOFTWARE.
 #include "2d/Component.h"
 #include "2d/Node.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 ComponentContainer::ComponentContainer(Node* node) : _owner(node) {}
 
@@ -141,4 +142,4 @@ void ComponentContainer::onExit()
     }
 }
 
-NS_AX_END
+}

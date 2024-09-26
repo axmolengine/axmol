@@ -34,7 +34,8 @@
 #include "base/Object.h"
 #include "3d/Bundle3DData.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 /**
  * @addtogroup _3d
  * @{
@@ -130,6 +131,6 @@ protected:
 
 // end of 3d group
 /// @}
-NS_AX_END
+}
 
 #endif  // __CCANIMATION3D_H__

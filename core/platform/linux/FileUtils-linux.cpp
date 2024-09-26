@@ -36,9 +36,8 @@ THE SOFTWARE.
 
 using namespace std;
 
-#define DECLARE_GUARD (void)0  // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
-
-NS_AX_BEGIN
+namespace ax
+{
 
 static std::string _checkPath(const char* path) {
     std::string ret;
@@ -72,8 +71,6 @@ FileUtilsLinux::FileUtilsLinux() {}
 
 bool FileUtilsLinux::init()
 {
-    DECLARE_GUARD;
-
     // application path
     if (s_exeDir.empty()) {
         s_exeDir = _checkPath("/proc/self/exe");
@@ -122,7 +119,6 @@ bool FileUtilsLinux::init()
 
 string FileUtilsLinux::getWritablePath() const
 {
-    DECLARE_GUARD;
     return getNativeWritableAbsolutePath();
 }
 
@@ -144,4 +140,4 @@ bool FileUtilsLinux::isFileExistInternal(std::string_view path) const
     return (stat(path.data(), &sts) == 0) && S_ISREG(sts.st_mode);
 }
 
-NS_AX_END
+}

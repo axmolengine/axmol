@@ -29,7 +29,8 @@
 
 #include "Particle3D/PU/PUEmitter.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUPointEmitter : public PUEmitter
 {
@@ -42,6 +43,6 @@ public:
     PUPointEmitter();
     virtual ~PUPointEmitter();
 };
-NS_AX_END
+}
 
 #endif

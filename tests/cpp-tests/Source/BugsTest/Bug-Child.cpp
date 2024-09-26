@@ -32,7 +32,7 @@
 
 #include "Bug-Child.h"
 
-USING_NS_AX;
+using namespace ax;
 
 bool BugChild::init()
 {

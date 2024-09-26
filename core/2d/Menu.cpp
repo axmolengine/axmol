@@ -38,7 +38,8 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 enum
 {
@@ -558,4 +559,4 @@ std::string Menu::getDescription() const
     return fmt::format("<Menu | Tag = {}>", _tag);
 }
 
-NS_AX_END
+}

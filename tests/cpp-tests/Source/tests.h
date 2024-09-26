@@ -72,12 +72,7 @@
 #include "CurrentLanguageTest/CurrentLanguageTest.h"
 #include "DataVisitorTest/DataVisitorTest.h"
 #include "NetworkTest/NetworkTest.h"
-#include "DrawPrimitivesTest/DrawPrimitivesTest.h"
-
-#if defined(AX_ENABLE_EXT_DRAWNODE)
-#include "DrawNodeExTest/DrawNodeExTest.h"
-#endif
-
+#include "DrawNodeTest/DrawNodeTest.h"
 #include "EffectsAdvancedTest/EffectsAdvancedTest.h"
 #include "EffectsTest/EffectsTest.h"
 #include "ExtensionsTest/ExtensionsTest.h"
@@ -124,7 +119,6 @@
 #include "UITest/UITest.h"
 #include "UserDefaultTest/UserDefaultTest.h"
 #include "VibrateTest/VibrateTest.h"
-#include "ZwoptexTest/ZwoptexTest.h"
 #include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "ZipTest/ZipTests.h"
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)

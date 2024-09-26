@@ -33,7 +33,8 @@
 #include <unordered_map>
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _3d
@@ -101,6 +102,6 @@ private:
 // end of 3d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __CCTEXTURECUBE_H__

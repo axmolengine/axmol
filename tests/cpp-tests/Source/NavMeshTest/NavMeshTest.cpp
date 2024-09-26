@@ -32,7 +32,7 @@
 #include "2d/Light.h"
 
 USING_NS_AX_EXT;
-USING_NS_AX;
+using namespace ax;
 
 struct AgentUserData
 {
@@ -308,7 +308,7 @@ bool NavMeshBasicTestDemo::init()
     TTFConfig ttfConfig("fonts/arial.ttf", 15);
     _debugLabel = Label::createWithTTF(ttfConfig, "Debug Draw ON");
     _debugLabel->retain();
-    auto menuItem1 = MenuItemLabel::create(_debugLabel, [=](Object*) {
+    auto menuItem1 = MenuItemLabel::create(_debugLabel, [this](Object*) {
         bool enabledDebug = !getNavMesh()->isDebugDrawEnabled();
         getNavMesh()->setDebugDrawEnable(enabledDebug);
         if (enabledDebug)
@@ -355,7 +355,7 @@ bool NavMeshAdvanceTestDemo::init()
     _debugLabel = Label::createWithTTF(ttfConfig, "Debug Draw ON");
     _debugLabel->retain();
 
-    auto menuItem0 = MenuItemLabel::create(_obstacleLabel, [=](Object*) {
+    auto menuItem0 = MenuItemLabel::create(_obstacleLabel, [this](Object*) {
         float x = ax::random(-50.0f, 50.0f);
         float z = ax::random(-50.0f, 50.0f);
         Physics3DWorld::HitResult result;
@@ -365,7 +365,7 @@ bool NavMeshAdvanceTestDemo::init()
     menuItem0->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
     menuItem0->setPosition(Vec2(VisibleRect::left().x, VisibleRect::top().y - 50));
 
-    auto menuItem1 = MenuItemLabel::create(_agentLabel, [=](Object*) {
+    auto menuItem1 = MenuItemLabel::create(_agentLabel, [this](Object*) {
         float x = ax::random(-50.0f, 50.0f);
         float z = ax::random(-50.0f, 50.0f);
         Physics3DWorld::HitResult result;
@@ -375,7 +375,7 @@ bool NavMeshAdvanceTestDemo::init()
     menuItem1->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
     menuItem1->setPosition(Vec2(VisibleRect::left().x, VisibleRect::top().y - 100));
 
-    auto menuItem2 = MenuItemLabel::create(_debugLabel, [=](Object*) {
+    auto menuItem2 = MenuItemLabel::create(_debugLabel, [this](Object*) {
         bool enabledDebug = !getNavMesh()->isDebugDrawEnabled();
         getNavMesh()->setDebugDrawEnable(enabledDebug);
         if (enabledDebug)

@@ -4,7 +4,7 @@
 #include "UIConfig.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 Window::Window() :
     _requestingCmd(0),

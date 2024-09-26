@@ -26,10 +26,11 @@
 
 #include "base/EventKeyboard.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 EventKeyboard::EventKeyboard(KeyCode keyCode, bool isPressed)
     : Event(Type::KEYBOARD), _keyCode(keyCode), _isPressed(isPressed)
 {}
 
-NS_AX_END
+}

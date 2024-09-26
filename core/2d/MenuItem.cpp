@@ -35,7 +35,8 @@ THE SOFTWARE.
 #include "base/UTF8.h"
 #include <stdarg.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static int _globalFontSize         = kItemSize;
 static std::string _globalFontName = "Marker Felt";
@@ -868,4 +869,4 @@ MenuItem* MenuItemToggle::getSelectedItem()
     return _subItems.at(_selectedIndex);
 }
 
-NS_AX_END
+}

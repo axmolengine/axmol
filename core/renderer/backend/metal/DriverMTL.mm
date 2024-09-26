@@ -397,7 +397,7 @@ DriverBase* DriverBase::getInstance()
     return _instance;
 }
 
-void DriverBase::destroyInstance() 
+void DriverBase::destroyInstance()
 {
     AX_SAFE_DELETE(_instance);
 }

@@ -32,7 +32,8 @@
 #include "renderer/Material.h"
 #include "renderer/Pass.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Technique* Technique::createWithProgramState(Material* parent, backend::ProgramState* state)
 {
@@ -119,4 +120,4 @@ const Vector<Pass*>& Technique::getPasses() const
     return _passes;
 }
 
-NS_AX_END
+}

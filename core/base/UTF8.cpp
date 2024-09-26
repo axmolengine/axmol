@@ -33,11 +33,12 @@
 
 using namespace llvm;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace StringUtils
 {
-
+//#ifndef AX_CORE_PROFILE
 std::string AX_DLL format(const char* format, ...)
 {
     va_list args;
@@ -115,7 +116,7 @@ std::string vformat(const char* format, va_list ap)
 
     return buf;
 }
-
+//#endif
 /*
  * @str:    the string to search through.
  * @c:        the character to not look for.
@@ -559,4 +560,4 @@ bool StringUTF8::insert(std::size_t pos, const StringUTF8& insertStr)
 
 }  // namespace StringUtils
 
-NS_AX_END
+}

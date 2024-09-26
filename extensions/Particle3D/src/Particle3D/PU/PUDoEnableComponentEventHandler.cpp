@@ -29,7 +29,8 @@
 #include "Particle3D/PU/PUEmitter.h"
 #include "Particle3D/PU/PUObserver.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //-----------------------------------------------------------------------
 PUDoEnableComponentEventHandler::PUDoEnableComponentEventHandler()
     : PUEventHandler(), _componentType(CT_EMITTER), _componentEnabled(true)
@@ -178,4 +179,4 @@ void PUDoEnableComponentEventHandler::copyAttributesTo(PUEventHandler* eventHand
     doEnableComponentEventHandler->setComponentEnabled(_componentEnabled);
 }
 
-NS_AX_END
+}

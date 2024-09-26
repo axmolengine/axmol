@@ -4,7 +4,7 @@
  Copyright (c) 2013-2015 zilongshanren
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -42,7 +42,8 @@ static const int AX_EDIT_BOX_PADDING = 5;
 #    define PASSWORD_CHAR "\u25CF"
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static Vec2 applyPadding(const Vec2& sizeToCorrect)
 {
@@ -446,4 +447,4 @@ void EditBoxImplCommon::editBoxEditingChanged(std::string_view text)
 
 }  // namespace ui
 
-NS_AX_END
+}

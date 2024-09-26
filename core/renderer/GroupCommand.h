@@ -37,7 +37,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Used for internal
 class GroupCommandManager : public Object
@@ -77,7 +78,7 @@ public:
 
     /**
      * @brief Reset the command state for reuse
-     * 
+     *
      */
     void reset();
 
@@ -85,7 +86,7 @@ protected:
     int _renderQueueID;
 };
 
-NS_AX_END
+}
 
 /**
  end of support group

@@ -67,11 +67,11 @@ The `axmol build` command will auto-setup the general toolsets, so you'll be abl
 - iOS:
   - for devices: `axmol build -p ios -a arm64 -c` (generate a xcodeproj, open with XCode to setup the code sign cert and build)
   - for simulators:
-      - for Intel (x64): `axmol build -p ios -a x64 -c`
-      - for Apple Silicon (arm64): `axmol build -p ios -a arm64 -c`
+      - for Intel (x64): `axmol build -p ios -a x64 -sdk simulator -c`
+      - for Apple Silicon (arm64): `axmol build -p ios -a arm64 -sdk simulator -c`
 - tvOS:
   - for devices: `axmol build -p tvos -a arm64 -c` (generate a xcodeproj, open with XCode to setup code sign cert and build)
-  - for simulator: `axmol build -p tvos -a x64`
+  - for simulator: `axmol build -p tvos -a x64 -sdk simulator`
 - WASM: `axmol build -p wasm` (it can run on Windows 8.1+, Linux and macOS, it requires a preinstalled [python3](https://www.python.org/) in env `PATH`)
 
 

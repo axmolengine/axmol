@@ -29,7 +29,7 @@
 #include <string.h>
 #include "spine/spine.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace std;
 using namespace spine;
 

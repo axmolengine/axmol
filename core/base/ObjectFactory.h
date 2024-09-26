@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "base/Object.h"
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_DLL ObjectFactory
 {
@@ -68,6 +69,6 @@ protected:
     FactoryMap _typeMap;
 };
 
-NS_AX_END
+}
 
 #endif

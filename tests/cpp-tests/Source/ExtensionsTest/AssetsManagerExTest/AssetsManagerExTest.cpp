@@ -26,7 +26,7 @@
 #include "../../testResource.h"
 #include "axmol.h"
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 const char* sceneManifests[]  = {"Manifests/AMTestScene1/project.manifest", "Manifests/AMTestScene2/project.manifest",

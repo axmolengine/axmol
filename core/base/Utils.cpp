@@ -60,7 +60,8 @@ THE SOFTWARE.
 
 using namespace std::string_view_literals;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace utils
 {
@@ -944,4 +945,4 @@ AX_DLL uint32_t fourccValue(std::string_view str)
 
 }  // namespace utils
 
-NS_AX_END
+}

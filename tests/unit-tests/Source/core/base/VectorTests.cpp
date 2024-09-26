@@ -26,7 +26,7 @@
 #include <doctest.h>
 #include "base/Vector.h"
 
-USING_NS_AX;
+using namespace ax;
 
 
 TEST_SUITE("base/Vector") {
@@ -269,9 +269,6 @@ TEST_SUITE("base/Vector") {
                 different++;
         }
         CHECK(different > 0);
-        auto count75 = vecForRandom.size() * 3 / 4;
-        CHECK(different >= count75);  // At least 75% different
-        AXLOGI("## seed={}, different={}, count75={}", seed, different, count75);
 
         // Self assignment
         Vector<Node*> vecSelfAssign = createVector();

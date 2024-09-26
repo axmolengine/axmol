@@ -27,7 +27,8 @@
 #include "PUPointEmitter.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUPointEmitter::PUPointEmitter(void) {}
 
@@ -52,4 +53,4 @@ PUPointEmitter* PUPointEmitter::clone()
     return be;
 }
 
-NS_AX_END
+}

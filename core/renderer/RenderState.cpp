@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2014 GamePlay3D team
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
 
@@ -38,7 +38,8 @@
 #include "renderer/Renderer.h"
 #include "renderer/Material.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 std::string RenderState::getName() const
 {
@@ -410,4 +411,4 @@ void RenderState::StateBlock::setDepthFunction(DepthFunction func)
     _modifiedBits |= RS_DEPTH_FUNC;
 }
 
-NS_AX_END
+}

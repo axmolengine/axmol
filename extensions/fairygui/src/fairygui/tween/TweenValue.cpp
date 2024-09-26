@@ -2,7 +2,7 @@
 #include "base/format.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 TweenValue::TweenValue():x(0),y(0),z(0),w(0),d(0)
 {

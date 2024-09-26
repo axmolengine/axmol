@@ -26,7 +26,7 @@
 #include "UIScale9SpriteTest.h"
 #include "testResource.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 UIScale9SpriteTests::UIScale9SpriteTests()
@@ -990,7 +990,7 @@ bool UIS9BatchTest::init()
         addSpriteButton->setPosition(Vec2(winSize.width / 2 - 50, winSize.height - 100));
         addSpriteButton->setTitleText("Add Normal Sprite");
         std::srand((unsigned)time(nullptr));
-        addSpriteButton->addClickEventListener([=](Object*) {
+        addSpriteButton->addClickEventListener([this, spriteFrameNameArray, winSize](Object*) {
             auto spriteFrameName = spriteFrameNameArray[rand() % 2];
             auto sprite          = Sprite::createWithSpriteFrameName(spriteFrameName);
             sprite->setPosition(Vec2(rand() % (int)winSize.width + 50.0f, winSize.height / 2));
@@ -1002,7 +1002,7 @@ bool UIS9BatchTest::init()
             ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         addSliceSpriteButton->setPosition(Vec2(winSize.width / 2 + 50, winSize.height - 100));
         addSliceSpriteButton->setTitleText("Add Slice Sprite");
-        addSliceSpriteButton->addClickEventListener([=](Object*) {
+        addSliceSpriteButton->addClickEventListener([this, spriteFrameNameArray, winSize, preferedSize](Object*) {
             int random           = rand() % 2;
             auto spriteFrameName = spriteFrameNameArray[random];
             auto sprite          = ui::Scale9Sprite::createWithSpriteFrameName(spriteFrameName);

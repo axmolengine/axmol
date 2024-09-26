@@ -35,7 +35,8 @@
 #    include "base/Director.h"
 #    include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 NavMeshDebugDraw::NavMeshDebugDraw()
 {
@@ -45,15 +46,15 @@ NavMeshDebugDraw::NavMeshDebugDraw()
 
     // the POSITION_COLOR default vertex layout is: V3F_C4B, so we need modify it
     auto vertexLayout = _programState->getMutableVertexLayout();
-    vertexLayout->setAttrib("a_position", 
+    vertexLayout->setAttrib("a_position",
                                 _programState->getAttributeLocation(backend::Attribute::POSITION),
                                 backend::VertexFormat::FLOAT3,
-                                offsetof(V3F_C4F, position), 
+                                offsetof(V3F_C4F, position),
                                 false);
-    vertexLayout->setAttrib("a_color", 
-                                _programState->getAttributeLocation(backend::Attribute::COLOR), 
-                                backend::VertexFormat::FLOAT4, 
-                                offsetof(V3F_C4F, color), 
+    vertexLayout->setAttrib("a_color",
+                                _programState->getAttributeLocation(backend::Attribute::COLOR),
+                                backend::VertexFormat::FLOAT4,
+                                offsetof(V3F_C4F, color),
                                 false);
     vertexLayout->setStride(sizeof(V3F_C4F));
 }
@@ -166,7 +167,7 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
     auto& transform = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto beforeCommand = renderer->nextCallbackCommand();
     auto afterCommand  = renderer->nextCallbackCommand();
-    
+
     beforeCommand->init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
     afterCommand->init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
 
@@ -265,6 +266,6 @@ void NavMeshDebugDraw::clear()
     _primitiveList.clear();
 }
 
-NS_AX_END
+}
 
 #endif  // AX_ENABLE_NAVMESH

@@ -34,9 +34,10 @@ THE SOFTWARE.
 #    include "ColliderDetector.h"
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 class Node;
-NS_AX_END
+}
 
 namespace cocostudio
 {

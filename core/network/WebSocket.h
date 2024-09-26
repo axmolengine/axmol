@@ -55,7 +55,8 @@
 #    include "llhttp.h"
 #    include "websocket_parser.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class EventListenerCustom;
 
@@ -437,7 +438,7 @@ protected:
 };
 }  // namespace network
 
-NS_AX_END
+}
 #else
 #    include "network/WebSocket-wasm.h"
 #endif

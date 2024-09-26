@@ -38,7 +38,8 @@
 #    include <jni.h>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace StringUtils
 {
@@ -65,10 +66,11 @@ inline std::string toString(T arg)
 {
     return fmt::to_string(arg);
 }
-
+//#ifndef AX_CORE_PROFILE
 // DEPRECATED since axmol-2.1.4, use fmt::format instead
 std::string AX_DLL format(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
 std::string AX_DLL vformat(const char* format, va_list ap);
+//#endif
 
 /**
  *  @brief Converts from UTF8 string to UTF16 string.
@@ -268,6 +270,6 @@ private:
 
 }  // namespace StringUtils
 
-NS_AX_END
+}
 
 #endif /** defined(AXMOL__UTF8_H) */

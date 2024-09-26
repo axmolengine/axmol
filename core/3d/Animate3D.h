@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,7 +35,8 @@
 #include "base/Object.h"
 #include "2d/ActionInterval.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Bone3D;
 class MeshRenderer;
@@ -184,6 +185,6 @@ protected:
 // end of 3d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __CCANIMATE3D_H__

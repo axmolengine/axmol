@@ -13,7 +13,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ui;
 using namespace flatbuffers;
 
@@ -52,11 +52,6 @@ ButtonReader* ButtonReader::getInstance()
         instanceButtonReader = new ButtonReader();
     }
     return instanceButtonReader;
-}
-
-void ButtonReader::purge()
-{
-    AX_SAFE_DELETE(instanceButtonReader);
 }
 
 void ButtonReader::destroyInstance()

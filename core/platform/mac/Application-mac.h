@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include <string>
 #include <chrono>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_DLL Application : public ApplicationBase
 {
@@ -106,4 +107,4 @@ protected:
     std::string _startupScriptFilename;
 };
 
-NS_AX_END
+}

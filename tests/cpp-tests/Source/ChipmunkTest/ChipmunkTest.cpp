@@ -33,7 +33,7 @@
 
 #include "ChipmunkTest.h"
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 enum

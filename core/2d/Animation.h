@@ -37,7 +37,8 @@ THE SOFTWARE.
 
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Texture2D;
 class SpriteFrame;
@@ -321,6 +322,6 @@ private:
 // end of sprite_nodes group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __AX_ANIMATION_H__

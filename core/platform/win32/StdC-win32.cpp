@@ -27,7 +27,8 @@ THE SOFTWARE.
 
 #ifndef __MINGW32__
 
-NS_AX_BEGIN
+namespace ax
+{
 
 int gettimeofday(struct timeval* val, struct timezone*)
 {
@@ -42,6 +43,6 @@ int gettimeofday(struct timeval* val, struct timezone*)
     return 0;
 }
 
-NS_AX_END
+}
 
 #endif  // __MINGW32__

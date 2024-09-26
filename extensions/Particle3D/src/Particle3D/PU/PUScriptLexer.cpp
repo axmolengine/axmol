@@ -27,7 +27,8 @@
 
 #include "PUScriptLexer.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 PUScriptLexer::PUScriptLexer() {}
 
 PUScriptLexer::~PUScriptLexer() {}
@@ -292,4 +293,4 @@ bool PUScriptLexer::isNewline(char c) const
     return c == '\n' || c == '\r';
 }
 
-NS_AX_END
+}

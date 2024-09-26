@@ -46,7 +46,8 @@
 #include "renderer/Technique.h"
 #include "renderer/Pass.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight);
 
@@ -239,7 +240,7 @@ bool MeshRenderer::loadFromFile(std::string_view path,
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(path);
 
-    std::string ext = FileUtils::getInstance()->getFileExtension(path);
+    std::string ext = FileUtils::getPathExtension(path);
     if (ext == ".obj")
     {
         return Bundle3D::loadObj(*meshdatas, *materialdatas, *nodedatas, fullPath);
@@ -1120,4 +1121,4 @@ static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVerte
     return MeshMaterial::createBuiltInMaterial(type, hasSkin);
 }
 
-NS_AX_END
+}

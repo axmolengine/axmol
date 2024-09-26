@@ -4,7 +4,7 @@
 #include "UIPackage.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 static Color3B toGrayed(const Color3B& source)
 {

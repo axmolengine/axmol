@@ -32,7 +32,7 @@
 #include <algorithm>
 #include <spine/Extension.h>
 
-USING_NS_AX;
+using namespace ax;
 #define EVENT_AFTER_DRAW_RESET_POSITION "director_after_draw"
 using std::max;
 #define INITIAL_SIZE (10000)

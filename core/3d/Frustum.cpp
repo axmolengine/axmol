@@ -26,7 +26,8 @@
 #include "3d/Frustum.h"
 #include "2d/Camera.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 bool Frustum::initFrustum(const Camera* camera)
 {
@@ -99,4 +100,4 @@ void Frustum::createPlane(const Camera* camera)
                         (mat.m[15] - mat.m[14]));  // far
 }
 
-NS_AX_END
+}

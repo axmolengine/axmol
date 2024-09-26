@@ -31,7 +31,7 @@
 
 #    include <string>
 
-USING_NS_AX;
+using namespace ax;
 
 JNITests::JNITests()
 {

@@ -27,9 +27,10 @@
 #include "math/MathBase.h"
 
 
-NS_AX_BEGIN
+namespace ax
+{
     struct V3F_C4B_T2F;
-NS_AX_END
+}
 
 /**
  * @addtogroup base
@@ -127,6 +128,5 @@ NS_AX_MATH_END
  end of base group
  @}
  */
-#define MATRIX_SIZE (sizeof(float) * 16)
 
 #endif

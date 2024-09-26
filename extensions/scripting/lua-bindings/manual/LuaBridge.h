@@ -40,7 +40,8 @@ using namespace std;
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 /** LuaBridge Error enum, with inline docs. */
 typedef enum
 {
@@ -111,7 +112,7 @@ protected:
     static int s_newFunctionId;
 };
 
-NS_AX_END
+}
 
 // end group
 /// @}

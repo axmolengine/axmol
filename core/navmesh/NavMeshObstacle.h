@@ -37,7 +37,8 @@
 #    include "recast/DetourNavMesh.h"
 #    include "recast/DetourTileCache.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup 3d
@@ -116,7 +117,7 @@ private:
 
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // AX_ENABLE_NAVMESH
 

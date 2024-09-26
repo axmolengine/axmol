@@ -27,7 +27,8 @@
 #include "Particle3D/PU/PUOnQuotaObserver.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 //-----------------------------------------------------------------------
 bool PUOnQuotaObserver::observe(PUParticle3D* /*particle*/, float /*timeElapsed*/)
@@ -89,4 +90,4 @@ PUOnQuotaObserver* PUOnQuotaObserver::create()
     return pqo;
 }
 
-NS_AX_END
+}

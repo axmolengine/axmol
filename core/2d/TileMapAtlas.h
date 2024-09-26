@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "2d/AtlasNode.h"
 #include "base/Value.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /// @cond DO_NOT_SHOW
 
@@ -116,6 +117,6 @@ protected:
 
 /// @endcond
 
-NS_AX_END
+}
 
 #endif  //__CCTILE_MAP_ATLAS__

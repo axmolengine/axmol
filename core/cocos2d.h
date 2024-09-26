@@ -25,16 +25,21 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+!!! The cocos2d-x compatibility header, please reserve this file, because some
+extensions use it, i.g fairygui, live2d ...
+
 ****************************************************************************/
 
-#ifndef __COCOS2D_H__
-#define __COCOS2D_H__
+#ifndef __AX_COCOS2DX_H__
+#define __AX_COCOS2DX_H__
 
 #include "axmol.h"
 
 #define COCOS2D_VERSION 0x00040000
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AX_DLL const char* cocos2dVersion();
 
@@ -48,25 +53,22 @@ using Ref                   = Object;
 
 #define setDisplayStats setStatsDisplay
 
-NS_AX_END
+}  // namespace ax
 
 namespace cocos2d = ax;
 
-#define USING_NS_CC                  USING_NS_AX
-
-#define CC_SAFE_RELEASE              AX_SAFE_RELEASE
-#define CC_SAFE_RELEASE_NULL         AX_SAFE_RELEASE_NULL
-#define CC_SAFE_DELETE               AX_SAFE_DELETE
-#define CCASSERT                     AXASSERT
-#define CC_ASSERT                    AX_ASSERT
-#define CC_CONSTRUCTOR_ACCESS        public
-
-#define CCLOG                        AXLOG
-#define CCLOGINFO                    AXLOGINFO
-#define CCLOGWARN                    AXLOGWARN
-#define CCLOGERROR                   AXLOGERROR
-
-#define CC_DEPRECATED_ATTRIBUTE      AX_DEPRECATED_ATTRIBUTE
+#define CC_SAFE_RELEASE       AX_SAFE_RELEASE
+#define CC_SAFE_RELEASE_NULL  AX_SAFE_RELEASE_NULL
+#define CC_SAFE_DELETE        AX_SAFE_DELETE
+#define CCASSERT              AXASSERT
+#define CC_ASSERT             AX_ASSERT
+#define CC_CONSTRUCTOR_ACCESS public
+#ifndef AX_CORE_PROFILE
+#    define CCLOG      AXLOG
+#    define CCLOGINFO  AXLOGINFO
+#    define CCLOGWARN  AXLOGWARN
+#    define CCLOGERROR AXLOGERROR
+#endif
 
 #define CC_SAFE_RETAIN               AX_SAFE_RETAIN
 

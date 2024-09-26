@@ -28,7 +28,8 @@
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include "Particle3D/PU/PUUtil.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // Constants
 const Vec3 PULineEmitter::DEFAULT_END(0, 0, 0);
 const float PULineEmitter::DEFAULT_MIN_INCREMENT = 0.0f;
@@ -250,4 +251,4 @@ PULineEmitter* PULineEmitter::clone()
     return be;
 }
 
-NS_AX_END
+}

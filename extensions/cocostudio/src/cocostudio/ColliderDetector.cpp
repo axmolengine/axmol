@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include "Bone.h"
 #include "TransformHelp.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

@@ -36,13 +36,14 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 #define AX_RAND_MAX 2147483647
 
 /**
  * @class RandomHelper
- * @brief A helper class for creating device dependent random number 
+ * @brief A helper class for creating device dependent random number
  * @remark
  *     Random Generator: std::mt19937 32bit
  */
@@ -125,7 +126,7 @@ inline float rand_0_1()
     return std::rand() / (float)RAND_MAX;
 }
 
-NS_AX_END
+}
 // end group
 /// @}
 #endif  //__ccRandom_H_

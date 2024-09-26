@@ -29,7 +29,8 @@
 #include "Particle3D/PU/PUEventHandlerManager.h"
 #include "Particle3D/PU/PUObserver.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUEventHandlerTranslator::PUEventHandlerTranslator() : _handler(nullptr) {}
 //-------------------------------------------------------------------------
@@ -121,4 +122,4 @@ void PUEventHandlerTranslator::translate(PUScriptCompiler* compiler, PUAbstractN
     }
 }
 
-NS_AX_END
+}

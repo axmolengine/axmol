@@ -25,7 +25,8 @@
 
 #include "Particle3DEmitter.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Particle3DEmitter::Particle3DEmitter() : _particleSystem(nullptr), _isEnabled(true) {}
 
@@ -38,4 +39,4 @@ void Particle3DEmitter::updateEmitter(Particle3D* /*particle*/, float /*deltaTim
 
 void Particle3DEmitter::emit(int /*count*/) {}
 
-NS_AX_END
+}

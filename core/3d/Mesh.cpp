@@ -46,7 +46,8 @@
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Helpers
 
@@ -199,7 +200,7 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     int perVertexSizeInFloat = 0;
     std::vector<float> vertices;
     std::vector<MeshVertexAttrib> attribs;
-    
+
     MeshVertexAttrib att;
     att.type = backend::VertexFormat::FLOAT3;
 
@@ -854,4 +855,4 @@ backend::Buffer* Mesh::getIndexBuffer() const
 {
     return _meshIndexData->getIndexBuffer();
 }
-NS_AX_END
+}

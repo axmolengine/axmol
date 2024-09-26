@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "base/ScriptSupport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // implementation Timer
 
@@ -993,4 +994,4 @@ void Scheduler::unschedule(SEL_SCHEDULE selector, Object* target)
     }
 }
 
-NS_AX_END
+}

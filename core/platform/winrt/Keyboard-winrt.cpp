@@ -48,7 +48,8 @@ using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::UI::Xaml::Input;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct keyCodeItem
 {
@@ -358,5 +359,5 @@ void KeyBoardWinRT::OnTextCompositionEnded(Windows::UI::Xaml::Controls::TextBox,
 	}
 }
 
-NS_AX_END
+}
 

@@ -3,7 +3,7 @@
 #include "utils/ByteBuffer.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GearFontSize::GearFontSize(GObject* owner) : GearBase(owner), _default(13) {
 }

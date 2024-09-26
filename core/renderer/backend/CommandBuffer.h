@@ -40,9 +40,10 @@
 #include <memory>
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 struct PipelineDescriptor;
-NS_AX_END
+}
 
 NS_AX_BACKEND_BEGIN
 

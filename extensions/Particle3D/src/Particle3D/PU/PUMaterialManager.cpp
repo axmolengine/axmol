@@ -48,7 +48,8 @@
 
 #include "yasio/string_view.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUMaterial::PUMaterial()
     : isEnabledLight(true)
@@ -126,7 +127,7 @@ int iterPath(const char* fpath, const struct stat* /*sb*/, int typeflag)
 {
     if (typeflag == FTW_F)
     {
-        if (FileUtils::getInstance()->getFileExtension(fpath) == ".material")
+        if (FileUtils::getPathExtension(fpath) == ".material")
             PUMaterialCache::Instance()->loadMaterials(fpath);
     }
     return 0;
@@ -170,7 +171,7 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     std::string fullpath;
     while ((fileName = AAssetDir_getNextFileName(dir)) != nullptr)
     {
-        if (FileUtils::getInstance()->getFileExtension(fileName) == ".material")
+        if (FileUtils::getPathExtension(fileName) == ".material")
         {
             fullpath.assign(fileFolder).append(seg).append(fileName);
             loadMaterials(fullpath);
@@ -197,7 +198,7 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
             continue;
         }
 
-        if (FileUtils::getInstance()->getFileExtension(file->d_name) == ".material")
+        if (FileUtils::getPathExtension(file->d_name) == ".material")
         {
             std::string fullpath{fileFolder};
             fullpath.append("/"sv).append(file->d_name);
@@ -227,4 +228,4 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     return state;
 }
 
-NS_AX_END
+}

@@ -36,7 +36,8 @@
 #    include <android/log.h>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #if defined(_AX_DEBUG) && _AX_DEBUG == 1
 static LogLevel s_logLevel = LogLevel::Debug;
@@ -229,7 +230,7 @@ AX_DLL void writeLog(LogItem& item, const char* tag)
 #    endif
 #endif
 }
-
+#ifndef AX_CORE_PROFILE
 AX_API void print(const char* format, ...)
 {
     va_list args;
@@ -242,5 +243,5 @@ AX_API void print(const char* format, ...)
         outputLog(LogItem::vformat(FMT_COMPILE("{}{}\n"), preprocessLog(LogItem{LogLevel::Silent}), message),
                   "axmol debug info");
 }
-
-NS_AX_END
+#endif
+}

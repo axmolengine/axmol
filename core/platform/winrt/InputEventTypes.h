@@ -28,10 +28,11 @@ THE SOFTWARE.
 #define __INPUT_EVENT_TYPES__
 
 
-NS_AX_BEGIN
+namespace ax
+{
 
 
-enum class AxmolKeyEvent : int 
+enum class AxmolKeyEvent : int
 {
     Text,
     Escape,
@@ -39,7 +40,7 @@ enum class AxmolKeyEvent : int
     Enter
 };
 
-NS_AX_END
+}
 
 
 #endif // #ifndef __INPUT_EVENT_TYPES__

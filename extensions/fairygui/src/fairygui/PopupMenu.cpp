@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "UIConfig.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 PopupMenu* PopupMenu::create(const std::string & resourceURL)
 {

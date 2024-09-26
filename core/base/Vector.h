@@ -38,7 +38,8 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 /*
  * Similar to std::vector, but it will manage reference count automatically internally.
@@ -247,7 +248,7 @@ public:
 
     T operator[](ssize_t index) const
     {
-        return this->at(index); 
+        return this->at(index);
     }
 
     /** Returns the first element in the Vector. */
@@ -480,6 +481,6 @@ protected:
 // end of base group
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // __CCVECTOR_H__

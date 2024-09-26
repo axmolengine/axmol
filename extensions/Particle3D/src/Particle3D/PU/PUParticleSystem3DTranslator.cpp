@@ -26,7 +26,8 @@
 
 #include "PUParticleSystem3DTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUParticleSystem3DTranslator::PUParticleSystem3DTranslator() {}
 PUParticleSystem3DTranslator::~PUParticleSystem3DTranslator() {}
@@ -260,4 +261,4 @@ void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstr
     }
 }
 
-NS_AX_END
+}

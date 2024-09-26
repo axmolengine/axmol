@@ -37,7 +37,8 @@ THE SOFTWARE.
 #    include <vector>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #if AX_OBJECT_LEAK_DETECTION
 static void trackRef(Object* ref);
@@ -195,4 +196,4 @@ static void untrackRef(Object* ref)
 
 #endif  // #if AX_OBJECT_LEAK_DETECTION
 
-NS_AX_END
+}

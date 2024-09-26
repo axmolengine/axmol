@@ -28,11 +28,12 @@
 #include "Types.h"
 #include "base/Object.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class MeshVertexData;
 class MeshIndexData;
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 NS_AX_BACKEND_BEGIN
 

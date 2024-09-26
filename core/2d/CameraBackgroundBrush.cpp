@@ -43,7 +43,8 @@
 #    include "base/EventDispatcher.h"
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 CameraBackgroundBrush::CameraBackgroundBrush() {}
 
@@ -460,4 +461,4 @@ void CameraBackgroundSkyBoxBrush::onAfterDraw()
     renderer->setCullMode(_stateBlock.cullMode);
 }
 
-NS_AX_END
+}

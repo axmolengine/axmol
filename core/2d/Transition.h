@@ -31,7 +31,8 @@ THE SOFTWARE.
 
 #include "2d/Scene.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _2d
@@ -122,7 +123,7 @@ public:
 protected:
     virtual void sceneOrder();
     void setNewScene(float dt);
-    
+
     /**  Set the number of actions to be done to finish
      */
     void setWaitForFinishCount(int count);
@@ -132,11 +133,11 @@ protected:
     float _duration;
     bool _isInSceneOnTop;
     bool _isSendCleanupToScene;
-    
-    
+
+
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(TransitionScene);
-    
+
     int _waitForFinishCount = 1;
 };
 
@@ -1064,6 +1065,6 @@ private:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __CCTRANSITION_H__

@@ -27,7 +27,8 @@
 #include "PUCollisionAvoidanceAffector.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // Constants
 const float PUCollisionAvoidanceAffector::DEFAULT_RADIUS = 100.0f;
 
@@ -102,4 +103,4 @@ void PUCollisionAvoidanceAffector::copyAttributesTo(PUAffector* affector)
     collisionAvoidanceAffector->_radius                      = _radius;
 }
 
-NS_AX_END
+}

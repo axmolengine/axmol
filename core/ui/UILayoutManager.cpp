@@ -27,7 +27,8 @@
 #include "ui/UILayoutManager.h"
 #include "ui/UILayout.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -687,4 +688,4 @@ void RelativeLayoutManager::doLayout(LayoutProtocol* layout)
 
 }  // namespace ui
 
-NS_AX_END
+}

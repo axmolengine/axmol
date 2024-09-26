@@ -28,7 +28,8 @@ THE SOFTWARE.
 #include "2d/Label.h"
 #include "platform/FileUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -452,4 +453,4 @@ void Text::copySpecialProperties(Widget* widget)
 
 }  // namespace ui
 
-NS_AX_END
+}

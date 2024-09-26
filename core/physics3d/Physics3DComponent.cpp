@@ -32,7 +32,8 @@ THE SOFTWARE.
 
 #    if (AX_ENABLE_BULLET_INTEGRATION)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Physics3DComponent::~Physics3DComponent()
 {
@@ -249,7 +250,7 @@ void Physics3DComponent::syncNodeToPhysics()
     }
 }
 
-NS_AX_END
+}
 
 #    endif  // AX_ENABLE_BULLET_INTEGRATION
 

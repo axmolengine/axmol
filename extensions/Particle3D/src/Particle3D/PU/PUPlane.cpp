@@ -27,7 +27,8 @@
 
 #include "PUPlane.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //-----------------------------------------------------------------------
 PUPlane::PUPlane()
 {
@@ -158,4 +159,4 @@ float PUPlane::normalize()
 
     return fLength;
 }
-NS_AX_END
+}

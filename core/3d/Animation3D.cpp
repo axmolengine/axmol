@@ -29,7 +29,8 @@
 #include "platform/FileUtils.h"
 #include "base/axstd.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Animation3D* Animation3D::create(std::string_view fileName, std::string_view animationName)
 {
@@ -250,4 +251,4 @@ Animation3DCache::~Animation3DCache()
     removeAllAnimations();
 }
 
-NS_AX_END
+}

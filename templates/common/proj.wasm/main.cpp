@@ -31,7 +31,7 @@
 #include <unistd.h>
 #include <string>
 
-USING_NS_AX;
+using namespace ax;
 
 int main(int argc, char** argv)
 {

@@ -2,7 +2,7 @@
 #include "TweenManager.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GTweener* GTween::to(float startValue, float endValue, float duration)
 {

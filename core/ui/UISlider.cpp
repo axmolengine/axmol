@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "2d/Sprite.h"
 #include "2d/Camera.h"
 #include "renderer/Shaders.h"
-NS_AX_BEGIN
+namespace ax
+{
 
 /* FIXME:
  Code could be simplified by using Sprite's setContentSize feature.
@@ -825,4 +826,4 @@ ResourceData Slider::getBallDisabledFile()
 
 }  // namespace ui
 
-NS_AX_END
+}

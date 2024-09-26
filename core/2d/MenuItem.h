@@ -37,7 +37,8 @@ THE SOFTWARE.
 #include "2d/Node.h"
 #include "base/Protocols.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 typedef std::function<void(Object*)> ccMenuCallback;
 
@@ -508,6 +509,6 @@ private:
 // end of 2d group
 /// @}
 
-NS_AX_END
+}
 
 #endif  //__CCMENU_ITEM_H__

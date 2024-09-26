@@ -26,7 +26,8 @@ THE SOFTWARE.
 
 #include "base/AsyncTaskPool.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AsyncTaskPool* AsyncTaskPool::s_asyncTaskPool = nullptr;
 
@@ -49,4 +50,4 @@ AsyncTaskPool::AsyncTaskPool() {}
 
 AsyncTaskPool::~AsyncTaskPool() {}
 
-NS_AX_END
+}

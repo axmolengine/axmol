@@ -27,7 +27,8 @@ THE SOFTWARE.
 #include "ui/UITextBMFont.h"
 #include "2d/Label.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -191,4 +192,4 @@ void TextBMFont::resetRender()
 }
 }  // namespace ui
 
-NS_AX_END
+}

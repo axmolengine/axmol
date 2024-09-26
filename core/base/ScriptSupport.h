@@ -45,7 +45,8 @@
 
 typedef struct lua_State lua_State;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class TimerScriptHandler;
 class Layer;
@@ -864,7 +865,7 @@ private:
     ScriptEngineProtocol* _scriptEngine;
 };
 
-NS_AX_END
+}
 
 #endif  // #if AX_ENABLE_SCRIPT_BINDING
 

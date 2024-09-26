@@ -27,7 +27,8 @@
 #include "platform/PlatformMacros.h"
 #include "math/Math.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Image;
 class SpriteFrame;
@@ -118,4 +119,4 @@ private:
     bool _isRotated;
 };
 
-NS_AX_END
+}

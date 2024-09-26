@@ -45,9 +45,9 @@ class Vec4Base
 public:
     using impl_type = _ImplType;
 
-    Vec4Base() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
-    Vec4Base(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
-    explicit Vec4Base(const float* src) { this->set(src); }
+    constexpr Vec4Base() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
+    constexpr Vec4Base(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
+    constexpr explicit Vec4Base(const float* src) { this->set(src); }
 
     union
     {
@@ -120,12 +120,12 @@ public:
      * @param zz The new z coordinate.
      * @param ww The new w coordinate.
      */
-    void set(float xx, float yy, float zz, float ww)
+    constexpr void set(float xx, float yy, float zz, float ww)
     {
         this->x = xx;
         this->y = yy;
         this->z = zz;
-        this->w = ww;        
+        this->w = ww;
     }
 
     /**
@@ -135,12 +135,12 @@ public:
      */
     void set(const float* array)
     {
-        GP_ASSERT(array);
+        AX_ASSERT(array);
 
         this->x = array[0];
         this->y = array[1];
         this->z = array[2];
-        this->w = array[3];        
+        this->w = array[3];
     }
 
     /**
@@ -153,7 +153,7 @@ public:
         this->x = v.x;
         this->y = v.y;
         this->z = v.z;
-        this->w = v.w;        
+        this->w = v.w;
     }
 
     inline impl_type& operator-() { return impl_type{*static_cast<impl_type*>(this)}.negate(); }
@@ -277,7 +277,7 @@ public:
     /**
      * Constructs a new vector initialized to all zeros.
      */
-    Vec4();
+    constexpr Vec4() {}
 
     /**
      * Constructs a new vector initialized to the specified values.
@@ -287,14 +287,14 @@ public:
      * @param zz The z coordinate.
      * @param ww The w coordinate.
      */
-    Vec4(float xx, float yy, float zz, float ww);
+    constexpr Vec4(float xx, float yy, float zz, float ww) : Vec4Base(xx, yy, zz, ww) {}
 
     /**
      * Constructs a new vector from the values in the specified array.
      *
      * @param array An array containing the elements of the vector in the order x, y, z, w.
      */
-    explicit Vec4(const float* array);
+    constexpr explicit Vec4(const float* array) : Vec4Base(array) {}
 
     /**
      * Constructs a vector that describes the direction between the specified points.
@@ -302,7 +302,7 @@ public:
      * @param p1 The first point.
      * @param p2 The second point.
      */
-    Vec4(const Vec4& p1, const Vec4& p2);
+    constexpr Vec4(const Vec4& p1, const Vec4& p2) { setDirection(p1, p2); }
 
     /**
      * Creates a new vector from an integer interpreted as an RGBA value.
@@ -458,7 +458,13 @@ public:
      * @param p1 The first point.
      * @param p2 The second point.
      */
-    void setDirection(const Vec4& p1, const Vec4& p2);
+    constexpr void setDirection(const Vec4& p1, const Vec4& p2)
+    {
+        x = p2.x - p1.x;
+        y = p2.y - p1.y;
+        z = p2.z - p1.z;
+        w = p2.w - p1.w;
+    }
 
     /**
      * Subtracts the specified vectors and stores the result in dst.
@@ -483,6 +489,15 @@ public:
     /** equals to Vec4(0,0,0,1) */
     static const Vec4 UNIT_W;
 };
+
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+    inline constexpr Vec4 Vec4::ZERO   = Vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    inline constexpr Vec4 Vec4::ONE    = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    inline constexpr Vec4 Vec4::UNIT_X = Vec4(1.0f, 0.0f, 0.0f, 0.0f);
+    inline constexpr Vec4 Vec4::UNIT_Y = Vec4(0.0f, 1.0f, 0.0f, 0.0f);
+    inline constexpr Vec4 Vec4::UNIT_Z = Vec4(0.0f, 0.0f, 1.0f, 0.0f);
+    inline constexpr Vec4 Vec4::UNIT_W = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
+#endif
 
 NS_AX_MATH_END
 /**

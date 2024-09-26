@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -62,7 +62,8 @@ private:
 
 }  // namespace
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static EventListener::ListenerID __getListenerID(Event* event)
 {
@@ -1690,4 +1691,4 @@ void EventDispatcher::releaseListener(EventListener* listener)
     AX_SAFE_RELEASE(listener);
 }
 
-NS_AX_END
+}

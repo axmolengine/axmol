@@ -23,7 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "SkinNode.h"
-USING_NS_AX;
+using namespace ax;
 
 NS_TIMELINE_BEGIN
 

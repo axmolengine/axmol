@@ -34,7 +34,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /** @file CCVertex.h */
 
@@ -46,7 +47,7 @@ ccVertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned int o
 bool AX_DLL
 ccVertexLineIntersect(float Ax, float Ay, float Bx, float By, float Cx, float Cy, float Dx, float Dy, float* T);
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramStateRegistry.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -619,4 +620,4 @@ ResourceData AbstractCheckButton::getCrossDisabledFile()
 
 }  // namespace ui
 
-NS_AX_END
+}

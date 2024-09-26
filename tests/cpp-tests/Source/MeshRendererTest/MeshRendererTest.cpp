@@ -35,7 +35,7 @@
 #include <algorithm>
 #include "../testResource.h"
 
-USING_NS_AX;
+using namespace ax;
 
 MeshRendererTests::MeshRendererTests()
 {
@@ -1026,9 +1026,6 @@ std::string AsyncLoadMeshRendererTest::subtitle() const
 
 void AsyncLoadMeshRendererTest::menuCallback_asyncLoadMesh(Object* sender)
 {
-    // Note that you must stop the tasks before leaving the scene.
-    AsyncTaskPool::getInstance()->stopTasks(AsyncTaskPool::TaskType::TASK_IO);
-
     auto node = getChildByTag(101);
     node->removeAllChildren();  // remove all loaded mesh
 

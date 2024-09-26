@@ -34,7 +34,8 @@
 #include <set>
 #include <unordered_map>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
 @struct BMFontDef
@@ -148,9 +149,9 @@ public:
     static FontFNT* create(std::string_view fntFilePath, const Rect& imageRect, bool imageRotated);
     static FontFNT* create(std::string_view fntFilePath, std::string_view subTextureKey);
     static FontFNT* create(std::string_view fntFilePath);
-
-    AX_DEPRECATED_ATTRIBUTE static FontFNT* create(std::string_view fntFilePath, const Vec2& imageOffset = Vec2::ZERO);
-
+#ifndef AX_CORE_PROFILE
+    AX_DEPRECATED(2.1) static FontFNT* create(std::string_view fntFilePath, const Vec2& imageOffset = Vec2::ZERO);
+#endif
     /** Purges the cached data.
     Removes from memory the cached configurations and the atlas name dictionary.
     */
@@ -188,6 +189,6 @@ protected:
 
 /// @endcond
 
-NS_AX_END
+}
 
 #endif /* defined(_AX_FONTFNT_H_) */

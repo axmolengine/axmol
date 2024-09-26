@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include "TriggerBase.h"
 #include "base/EventCustom.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace cocostudio;
 
 void sendEvent(unsigned int event)

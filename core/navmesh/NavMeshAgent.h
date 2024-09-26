@@ -36,7 +36,8 @@
 #    include "recast/DetourCrowd.h"
 
 class dtNavMeshQuery;
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup 3d
@@ -231,7 +232,7 @@ private:
 
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // AX_ENABLE_NAVMESH
 

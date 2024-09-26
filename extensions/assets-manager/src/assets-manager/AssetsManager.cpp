@@ -42,7 +42,7 @@
 NS_AX_EXT_BEGIN
 
 using namespace std;
-USING_NS_AX;
+using namespace ax;
 using namespace ax::network;
 
 #define KEY_OF_VERSION "current-version-code"
@@ -195,7 +195,7 @@ AssetsManager::AssetsManager(const char* packageUrl /* =nullptr */,
 
     // progress callback
     _downloader->onTaskProgress = [this](const DownloadTask& task) {
-        if (FileUtils::getInstance()->getFileExtension(task.requestURL) != ".zip")
+        if (FileUtils::getPathExtension(task.requestURL) != ".zip")
         {
             // get version progress don't report
             return;
@@ -236,7 +236,7 @@ AssetsManager::AssetsManager(const char* packageUrl /* =nullptr */,
         // 1. Urls of package and version should be valid;
         // 2. Package should be a zip file.
         if (_versionFileUrl.empty() || _packageUrl.empty() ||
-            FileUtils::getInstance()->getFileExtension(_packageUrl) != ".zip")
+            FileUtils::getPathExtension(_packageUrl) != ".zip")
         {
             AXLOGD("no version file url, or no package url, or the package is not a zip file");
             _isDownloading = false;
@@ -417,7 +417,7 @@ bool AssetsManager::uncompress()
         {
             // Entry is a directory, so create it.
             // If the directory exists, it will failed silently.
-            if (!FileUtils::getInstance()->createDirectory(fullPath))
+            if (!FileUtils::getInstance()->createDirectories(fullPath))
             {
                 AXLOGD("can not create directory {}", fullPath);
                 unzClose(zipfile);
@@ -442,7 +442,7 @@ bool AssetsManager::uncompress()
                 auto fsOut = FileUtils::getInstance()->openFileStream(dir, FileStream::Mode::READ);
                 if (!fsOut)
                 {
-                    if (!FileUtils::getInstance()->createDirectory(dir))
+                    if (!FileUtils::getInstance()->createDirectories(dir))
                     {
                         AXLOGD("can not create directory {}", dir);
                         unzClose(zipfile);

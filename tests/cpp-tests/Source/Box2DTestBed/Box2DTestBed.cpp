@@ -31,7 +31,7 @@
 #include "tests/test.h"
 #include "tests/settings.h"
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 enum
@@ -190,11 +190,11 @@ void Box2DTestBed::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
 void Box2DTestBed::onMouseDown(Event* event)
 {
     EventMouse* e = (EventMouse*)event;
+    button[(int)EventMouse::MouseButton::BUTTON_LEFT]   = false;
+    button[(int)EventMouse::MouseButton::BUTTON_RIGHT]  = false;
+    button[(int)EventMouse::MouseButton::BUTTON_MIDDLE] = false;
     switch (e->getMouseButton())
     {
-        button[(int)EventMouse::MouseButton::BUTTON_LEFT]   = false;
-        button[(int)EventMouse::MouseButton::BUTTON_RIGHT]  = false;
-        button[(int)EventMouse::MouseButton::BUTTON_MIDDLE] = false;
     case EventMouse::MouseButton::BUTTON_LEFT:
         button[(int)EventMouse::MouseButton::BUTTON_LEFT] = true;
         break;
@@ -217,7 +217,8 @@ void Box2DTestBed::onMouseUp(Event* event)
 void Box2DTestBed::onMouseMove(Event* event)
 {
     EventMouse* e = (EventMouse*)event;
-    pos           = {e->getCursorX() / g_debugDraw.mRatio, e->getCursorY() / g_debugDraw.mRatio};
+    auto pt = e->getLocation();
+    pos           = {pt.x / g_debugDraw.mRatio, pt.y / g_debugDraw.mRatio};
 
     if (button[(int)EventMouse::MouseButton::BUTTON_RIGHT])
     {

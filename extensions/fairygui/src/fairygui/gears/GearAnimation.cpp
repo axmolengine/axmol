@@ -4,7 +4,7 @@
 #include "utils/ByteBuffer.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GearAnimation::GearAnimationValue::GearAnimationValue() : frame(0), playing(false)
 {

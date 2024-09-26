@@ -57,7 +57,9 @@ THE SOFTWARE.
 #include "base/Logging.h"
 #include "base/AutoreleasePool.h"
 #include "base/Configuration.h"
-#include "base/AsyncTaskPool.h"
+#ifndef AX_CORE_PROFILE
+#    include "base/AsyncTaskPool.h"
+#endif
 #include "base/ObjectFactory.h"
 #include "platform/Application.h"
 #if defined(AX_ENABLE_AUDIO)
@@ -70,7 +72,8 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 // FIXME: it should be a Director ivar. Move it there once support for multiple directors is added
 
 // singleton stuff
@@ -1056,7 +1059,9 @@ void Director::reset()
     AnimationCache::destroyInstance();
     SpriteFrameCache::destroyInstance();
     FileUtils::destroyInstance();
+#ifndef AX_CORE_PROFILE
     AsyncTaskPool::destroyInstance();
+#endif
     backend::ProgramStateRegistry::destroyInstance();
     backend::ProgramManager::destroyInstance();
 
@@ -1588,4 +1593,4 @@ void Director::setAnimationInterval(float interval, SetIntervalReason reason)
     }
 }
 
-NS_AX_END
+}

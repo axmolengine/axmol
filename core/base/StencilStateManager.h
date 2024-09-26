@@ -34,7 +34,8 @@
  * @addtogroup base
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_DLL StencilStateManager
 {
@@ -85,6 +86,6 @@ private:
     backend::ProgramState* _programState = nullptr;
 };
 
-NS_AX_END
+}
 // end of base group
 /** @} */

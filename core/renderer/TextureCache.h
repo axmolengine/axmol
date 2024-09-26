@@ -46,7 +46,8 @@ THE SOFTWARE.
 #    include <list>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _2d
@@ -83,7 +84,7 @@ public:
      * @lua NA
      */
     virtual std::string getDescription() const;
-    
+
     /** Gets a 2x2 white texture  */
     Texture2D* getWhiteTexture();
 
@@ -114,7 +115,7 @@ public:
      @param filepath The file path.
      @param callback A callback function would be invoked after the image is loaded.
      @since v0.8
-     
+
      @remark Please don't invoke Texture2D::setDefaultAlphaPixelFormat in main GL thread before invoke this API.
     */
     virtual void addImageAsync(std::string_view filepath, const std::function<void(Texture2D*)>& callback);
@@ -312,7 +313,8 @@ public:
 
     // find VolatileTexture by Texture2D*
     // if not found, create a new one
-    static VolatileTexture* findVolotileTexture(Texture2D* tt);
+    AX_DEPRECATED(2.2) static VolatileTexture* findVolotileTexture(Texture2D* tt) { return getOrAddVolatileTexture(tt); }
+    static VolatileTexture* getOrAddVolatileTexture(Texture2D* tt);
 
 private:
     static void reloadTexture(Texture2D* texture, std::string_view filename, backend::PixelFormat pixelFormat);
@@ -323,6 +325,6 @@ private:
 // end of textures group
 /// @}
 
-NS_AX_END
+}
 
 #endif  //__CCTEXTURE_CACHE_H__

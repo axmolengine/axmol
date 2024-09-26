@@ -37,7 +37,7 @@
 
 #    include "flatbuffers/flatbuffers.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -58,11 +58,6 @@ SpineSkeletonReader* SpineSkeletonReader::getInstance()
     }
 
     return _instanceSpriteReader;
-}
-
-void SpineSkeletonReader::purge()
-{
-    AX_SAFE_DELETE(_instanceSpriteReader);
 }
 
 void SpineSkeletonReader::destroyInstance()

@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include <string>
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup platform
@@ -136,4 +137,4 @@ protected:
 // end of platform group
 /// @}
 
-NS_AX_END
+}

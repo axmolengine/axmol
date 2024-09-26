@@ -29,8 +29,6 @@ public:
 
     SpineSkeletonDataCache();
 
-    void setErrorReportFunc(void (*errorfunc)(const char* pszFormat, ...));
-
     SkeletonData* addData(const char* dataFile, const char* atlasFile, float scale);
 
     void removeData(const char* dataFile);
@@ -40,7 +38,6 @@ public:
 
 public:
     hlookup::string_map<SkeletonData*> _cacheTable;
-    void (*_reportError)(const char* pszFormat, ...);
 };
 
 #else
@@ -64,8 +61,6 @@ public:
 
     SpineSkeletonDataCache();
 
-    void setErrorReportFunc(void (*errorfunc)(const char* pszFormat, ...));
-
     static SpineSkeletonDataCache* getInstance();
 
     SkeletonData* addData(const char* dataFile, const char* atlasFile, float scale);
@@ -77,7 +72,6 @@ public:
 
 public:
     hlookup::string_map<SkeletonData*> _cacheTable;
-    void (*_reportError)(const char* pszFormat, ...);
 };
 
 #endif

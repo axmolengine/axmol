@@ -32,7 +32,7 @@
 
 using namespace std;
 
-USING_NS_AX;
+using namespace ax;
 
 UserDefaultTests::UserDefaultTests()
 {

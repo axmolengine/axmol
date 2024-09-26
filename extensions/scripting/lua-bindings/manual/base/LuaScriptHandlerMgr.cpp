@@ -31,9 +31,10 @@
 #include "lua-bindings/manual/LuaValue.h"
 #include "lua-bindings/manual/LuaEngine.h"
 
-USING_NS_AX;
+using namespace ax;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 ScheduleHandlerDelegate* ScheduleHandlerDelegate::create()
 {
@@ -227,7 +228,7 @@ ScriptHandlerMgr::HandlerType ScriptHandlerMgr::addCustomHandler(void* object, i
     return handlerType;
 }
 
-NS_AX_END
+}
 
 static void tolua_reg_script_handler_mgr_type(lua_State* tolua_S)
 {

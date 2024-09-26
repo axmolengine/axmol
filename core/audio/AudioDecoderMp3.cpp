@@ -53,7 +53,8 @@ struct mp3dec_impl
 };
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #if !AX_USE_MPG123
 static size_t minimp3_read_r(void* buf, size_t size, void* user_data)
@@ -297,6 +298,6 @@ bool AudioDecoderMp3::seek(uint32_t frameOffset)
     return (offset >= 0 && offset == frameOffset);
 #endif
 }
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #undef LOG_TAG

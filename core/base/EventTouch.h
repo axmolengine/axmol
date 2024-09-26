@@ -34,7 +34,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Touch;
 
@@ -95,7 +96,7 @@ private:
     friend class GLView;
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

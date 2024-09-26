@@ -27,7 +27,8 @@
 #include "Particle3D/PU/PUOnCollisionObserver.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 bool PUOnCollisionObserver::observe(PUParticle3D* particle, float /*timeElapsed*/)
 {
@@ -41,4 +42,4 @@ PUOnCollisionObserver* PUOnCollisionObserver::create()
     return pco;
 }
 
-NS_AX_END
+}

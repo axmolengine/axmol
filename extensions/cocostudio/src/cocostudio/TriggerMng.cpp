@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "base/Utils.h"
 #include "base/EventCustom.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

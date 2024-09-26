@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-Based upon code from the DirectX Tool Kit by Microsoft Corporation, 
+Based upon code from the DirectX Tool Kit by Microsoft Corporation,
 obtained from https://directxtk.codeplex.com
 ****************************************************************************/
 
@@ -40,7 +40,8 @@ obtained from https://directxtk.codeplex.com
 
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct WICConvert
 {
@@ -65,7 +66,7 @@ public:
 
 protected:
 	bool processImage(IWICBitmapDecoder* decoder);
-	size_t getBitsPerPixel(WICPixelFormatGUID format); 
+	size_t getBitsPerPixel(WICPixelFormatGUID format);
 	HRESULT convertFormatIfRequired(IWICBitmapFrameDecode* pFrame, IWICFormatConverter** ppConv);
 
 	static IWICImagingFactory* getWICFactory();
@@ -93,7 +94,7 @@ void SafeRelease(T **ppObj)
 }
 
 
-NS_AX_END
+}
 
 #endif
 #endif    // #ifndef __WIC_IMAGE_LOADER_H__

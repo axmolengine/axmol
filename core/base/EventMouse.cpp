@@ -27,14 +27,13 @@
 #include "base/EventMouse.h"
 #include "base/Director.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 EventMouse::EventMouse(MouseEventType mouseEventCode)
     : Event(Type::MOUSE)
     , _mouseEventType(mouseEventCode)
     , _mouseButton(MouseButton::BUTTON_UNSET)
-    , _x(0.0f)
-    , _y(0.0f)
     , _scrollX(0.0f)
     , _scrollY(0.0f)
     , _startPointCaptured(false){};
@@ -80,4 +79,4 @@ Vec2 EventMouse::getDelta() const
 {
     return getLocation() - getPreviousLocation();
 }
-NS_AX_END
+}

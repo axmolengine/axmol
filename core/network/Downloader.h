@@ -33,7 +33,8 @@
 
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -60,7 +61,7 @@ public:
     std::string identifier;
     std::string requestURL;
     std::string storagePath;
-    
+
     std::string cacertPath;
 
     struct
@@ -70,7 +71,7 @@ public:
         int64_t bytesReceived      = 0;
         int64_t totalBytesReceived = 0;
         // speed
-        double speedInBytes = 0;
+        int64_t speedInBytes = 0;
     } mutable progressInfo;
 
     DownloadTask();
@@ -151,4 +152,4 @@ private:
 };
 
 }  // namespace network
-NS_AX_END  // namespace ax
+}  // namespace ax

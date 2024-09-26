@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include "base/Logging.h"
 #include <emscripten/emscripten.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void messageBox(const char * msg, const char * title)
 {
@@ -42,6 +43,6 @@ void messageBox(const char * msg, const char * title)
     }, title, msg);
 }
 
-NS_AX_END
+}
 
 #endif //  AX_TARGET_PLATFORM == AX_PLATFORM_WASM

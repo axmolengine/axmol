@@ -3,7 +3,7 @@
  Copyright (c) 2012 James Chen
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,7 +30,8 @@
 
 #include "ui/UIEditBox/UIEditBox.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -119,6 +120,6 @@ protected:
 extern EditBoxImpl* __createSystemEditBox(EditBox* pEditBox);
 
 }  // namespace ui
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #endif /* __UIEditBoxIMPL_H__ */

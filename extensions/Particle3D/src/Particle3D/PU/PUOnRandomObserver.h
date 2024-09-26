@@ -33,7 +33,8 @@
 #include <vector>
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PUParticle3D;
 class PUParticleSystem3D;
@@ -71,6 +72,6 @@ protected:
     float _threshold;  // Value between 0..1
 };
 
-NS_AX_END
+}
 
 #endif

@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "base/EventDispatcher.h"
 #include "base/IMEDispatcher.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AccelerometerEvent::AccelerometerEvent(const Acceleration& event)
     : m_event(event)
@@ -193,6 +194,6 @@ void UIEditBoxEndEvent::execute()
   }
 }
 
-NS_AX_END
+}
 
 

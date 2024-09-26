@@ -44,7 +44,8 @@ THE SOFTWARE.
 
 using namespace winrt;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class GLViewImpl;
 
@@ -167,7 +168,6 @@ private:
 
     ax::Vec2 TransformToOrientation(Windows::Foundation::Point const& point);
     ax::Vec2 GetPoint(Windows::UI::Core::PointerEventArgs const& args);
-    ax::Vec2 GetPointMouse(Windows::UI::Core::PointerEventArgs const& args);
 
     Windows::Foundation::Rect m_windowBounds;
     winrt::event_token m_eventToken;
@@ -201,6 +201,6 @@ private:
     ax::EventListenerKeyboard* m_backButtonListener;
 };
 
-NS_AX_END
+}
 
 #endif  // end of __AX_EGLVIEWIMPL_WINRT_H__

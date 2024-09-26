@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "2d/Sprite.h"
 #include "base/Utils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -154,7 +155,7 @@ void ScrollViewBar::setAutoHideEnabled(bool autoHideEnabled)
 {
     if (_autoHideEnabled == autoHideEnabled)
         return;
-    
+
     _autoHideEnabled = autoHideEnabled;
     if (!_autoHideEnabled)
     {
@@ -316,4 +317,4 @@ Vec2 ScrollViewBar::calculatePosition(float innerContainerMeasure,
 }
 }  // namespace ui
 
-NS_AX_END
+}

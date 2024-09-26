@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "cocostudio/ActionTimeline/BoneNode.h"
 #include "base/Utils.h"
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_TIMELINE;
 using namespace cocostudio;
 using namespace flatbuffers;

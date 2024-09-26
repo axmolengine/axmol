@@ -5,7 +5,7 @@
 #include "utils/ByteBuffer.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GearSize::GearSize(GObject* owner) : GearBase(owner)
 {

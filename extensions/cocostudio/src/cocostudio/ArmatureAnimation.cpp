@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "ArmatureDefine.h"
 #include "Datas.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {
@@ -115,16 +115,6 @@ void ArmatureAnimation::stop()
     }
     _tweenList.clear();
     ProcessBase::stop();
-}
-
-void ArmatureAnimation::setAnimationScale(float animationScale)
-{
-    setSpeedScale(animationScale);
-}
-
-float ArmatureAnimation::getAnimationScale() const
-{
-    return getSpeedScale();
 }
 
 void ArmatureAnimation::setSpeedScale(float speedScale)
@@ -244,11 +234,6 @@ void ArmatureAnimation::play(std::string_view animationName, int durationTo, int
     }
 
     _armature->update(0);
-}
-
-void ArmatureAnimation::playByIndex(int animationIndex, int durationTo, int loop)
-{
-    playWithIndex(animationIndex, durationTo, loop);
 }
 
 void ArmatureAnimation::playWithIndex(int animationIndex, int durationTo, int loop)
@@ -454,18 +439,6 @@ std::string ArmatureAnimation::getCurrentMovementID() const
         return "";
     }
     return _movementID;
-}
-
-void ArmatureAnimation::setMovementEventCallFunc(Object* target, SEL_MovementEventCallFunc callFunc)
-{
-    _movementEventTarget   = target;
-    _movementEventCallFunc = callFunc;
-}
-
-void ArmatureAnimation::setFrameEventCallFunc(Object* target, SEL_FrameEventCallFunc callFunc)
-{
-    _frameEventTarget   = target;
-    _frameEventCallFunc = callFunc;
 }
 
 void ArmatureAnimation::setMovementEventCallFunc(

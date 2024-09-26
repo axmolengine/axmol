@@ -33,7 +33,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -54,11 +54,6 @@ Light3DReader* Light3DReader::getInstance()
     }
 
     return _instanceLight3DReader;
-}
-
-void Light3DReader::purge()
-{
-    AX_SAFE_DELETE(_instanceLight3DReader);
 }
 
 void Light3DReader::destroyInstance()

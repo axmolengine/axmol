@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,12 +21,13 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "network/WebSocket-wasm.h"
 #include "yasio/errc.hpp"
 #include "base/Logging.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -165,4 +166,4 @@ void WebSocket::closeAsync()
 
 }  // namespace network
 
-NS_AX_END
+}

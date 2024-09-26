@@ -32,7 +32,8 @@
 #include <unordered_map>
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class FontAtlas;
 class Texture2D;
@@ -51,8 +52,9 @@ public:
     static FontAtlas* getFontAtlasFNT(std::string_view fontFileName);
     static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, std::string_view subTextureKey);
     static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, const Rect& imageRect, bool imageRotated);
-    AX_DEPRECATED_ATTRIBUTE static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, const Vec2& imageOffset);
-
+#ifndef AX_CORE_PROFILE
+    AX_DEPRECATED(2.1) static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, const Vec2& imageOffset);
+#endif
     static FontAtlas* getFontAtlasCharMap(std::string_view charMapFile,
                                           int itemWidth,
                                           int itemHeight,
@@ -72,10 +74,10 @@ public:
                otherwise, it will cause program crash!
     */
     static void reloadFontAtlasFNT(std::string_view fontFileName, const Rect& imageRect, bool imageRotated);
-
-    AX_DEPRECATED_ATTRIBUTE static void reloadFontAtlasFNT(std::string_view fontFileName,
+#ifndef AX_CORE_PROFILE
+    AX_DEPRECATED(2.1) static void reloadFontAtlasFNT(std::string_view fontFileName,
                                                            const Vec2& imageOffset = Vec2::ZERO);
-
+#endif
     /** Unload all texture atlas texture create by special file name.
      CAUTION : All component use this font texture should be reset font name, though the file name is same!
                otherwise, it will cause program crash!
@@ -86,7 +88,7 @@ private:
     static hlookup::string_map<FontAtlas*> _atlasMap;
 };
 
-NS_AX_END
+}
 
 /// @endcond
 #endif

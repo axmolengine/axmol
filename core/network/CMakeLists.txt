@@ -15,7 +15,7 @@ if(EMSCRIPTEN)
         network/Downloader-wasm.cpp
         network/Uri.cpp
     )
-    
+
     if (AX_ENABLE_HTTP)
         list(APPEND _AX_NETWORK_HEADER
             network/HttpClient.h
@@ -27,9 +27,9 @@ if(EMSCRIPTEN)
         list(APPEND _AX_NETWORK_SRC
             network/HttpClient-wasm.cpp
             network/HttpCookie.cpp
-        )    
+        )
     endif()
-    
+
     if (AX_ENABLE_WEBSOCKET)
         list(APPEND _AX_NETWORK_HEADER
             network/WebSocket.h
@@ -37,9 +37,9 @@ if(EMSCRIPTEN)
 
         list(APPEND _AX_NETWORK_SRC
             network/WebSocket-wasm.cpp
-        )    
+        )
     endif()
-    
+
 else()
     set(_AX_NETWORK_HEADER
         network/Downloader-curl.h
@@ -53,7 +53,7 @@ else()
         network/Downloader-curl.cpp
         network/Uri.cpp
     )
-    
+
     if (AX_ENABLE_HTTP)
         list(APPEND _AX_NETWORK_HEADER
             network/HttpClient.h
@@ -65,9 +65,9 @@ else()
         list(APPEND _AX_NETWORK_SRC
             network/HttpClient.cpp
             network/HttpCookie.cpp
-        )    
+        )
     endif()
-    
+
     if (AX_ENABLE_WEBSOCKET)
         list(APPEND _AX_NETWORK_HEADER
             network/WebSocket.h
@@ -75,7 +75,7 @@ else()
 
         list(APPEND _AX_NETWORK_SRC
             network/WebSocket.cpp
-        )    
+        )
     endif()
 endif()
 

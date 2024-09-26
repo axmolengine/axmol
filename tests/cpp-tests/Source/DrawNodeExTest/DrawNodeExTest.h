@@ -1,27 +1,27 @@
 /****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmol.dev/
+https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
 #pragma once
 
 #include "axmol.h"
@@ -42,7 +42,6 @@ protected:
         AngleEnd,
         Rotation,
         Thickness,
-        Counter,
         sliderTypeLast
     };
     enum drawMethodes
@@ -70,51 +69,83 @@ protected:
     };
 
     std::string drawMethods[drawMethodes::LAST] = { "drawLine",
-                                                    "drawRect",
-                                                    "drawCircle",
-                                                    "drawQuadBezier",
-                                                    "drawCubicBezier",
-                                                    "drawCardinalSpline",
-                                                    "drawCatmullRom",
-                                                    "drawPoly",
-                                                    "drawPolygon",
-                                                    "drawDot",
-                                                    "drawPoint",
-                                                    "drawPoints",
-                                                    "drawTriangle",
-                                                    "drawSegment",
-                                                    "drawSolidCircle",
-                                                    "drawSolidPoly",
-                                                    "drawSolidRect",
-                                                    "drawStar",
-                                                    "drawSolidStar", };
+        "drawRect",
+        "drawCircle",
+        "drawQuadBezier",
+        "drawCubicBezier",
+        "drawCardinalSpline",
+        "drawCatmullRom",
+        "drawPoly",
+        "drawPolygon",
+        "drawDot",
+        "drawPoint",
+        "drawPoints",
+        "drawTriangle",
+        "drawSegment",
+        "drawSolidCircle",
+        "drawSolidPoly",
+        "drawSolidRect",
+        "drawStar",
+        "drawSolidStar", };
 
 public:
 
     DrawNodeExBaseTest();
 
+    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
+    void listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type);
+    void setDrawOrder(Object* sender);
+    void setTransform(Object* sender);
+
+    void update(float dt);
+
     virtual std::string title() const override;
     void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
 
     void initSliders();
+    void initRadioButtuns();
 
     void changeStartAngle(ax::Object* pSender, ax::ui::Slider::EventType type);
     void changeEndAngle(ax::Object* pSender, ax::ui::Slider::EventType type);
     void changeRotation(ax::Object* pSender, ax::ui::Slider::EventType type);
     void changeThickness(ax::Object* pSender, ax::ui::Slider::EventType type);
-    void changeCounter(ax::Object* pSender, ax::ui::Slider::EventType type);
+
+    // using from https://github.com/intmainreturn00/AwesomeNode/
+    void generateDataPoints();
+
+    ax::PointArray *pts = nullptr;
+    ax::PointArray *pts2 = nullptr;
+    float defY, defY2, dev;
+    const int n = 50;
+    const int grid = 10;
+    const int margin = 20;
+    ax::Size screen;
+    ax::Vec2  sixth;
 
 protected:
 
+    int _currentSeletedItemIndex = 0;
+
+    //UI stuff
     ax::ui::Slider* slider[sliderType::sliderTypeLast];
     ax::Label* sliderLabel[sliderType::sliderTypeLast];
     float sliderValue[sliderType::sliderTypeLast];
 
+
+    ax::ui::RadioButtonGroup* _radioButtonGroup;
+    ax::Layer* _uiLayer;
+    ax::ui::Layout* _widget;
+    int selectedRadioButton;
+
+    ax::MenuItemFont* menuItemDrawOrder;
+    ax::MenuItemFont* menuItemTransform;
+
+    // DrawNode stuff
     ax::extension::DrawNodeEx* drawNodeEx = nullptr;
     ax::extension::DrawNodeEx* drawNodeExArray[10];
     ax::DrawNode* drawNode;
 
-
+    // Window stuff
     ax::Vec2 origin;
     ax::Vec2 size;
     ax::Vec2 center;
@@ -181,72 +212,6 @@ private:
     int segments = 40;
 };
 
-class DrawNodeFireworkTest : public DrawNodeExBaseTest
-{
-public:
-    struct fireObj
-    {
-        float x;
-        float y;
-        float vx;
-        float vy;
-        ax::Color4F color;
-        int life;
-    };
-
-    CREATE_FUNC(DrawNodeFireworkTest);
-
-    DrawNodeFireworkTest();
-
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-    void update(float dt) override;
-
-    fireObj* createFireObjs(int count);
-
-private:
-    ax::Vec2* canon;
-    ax::Vec2* projectile;
-    ax::Vec2* wall;
-    fireObj* ember;
-
-    //ax::extension::DrawNodeEx* drawNodeEx;
-    //ax::any_buffer _abuf;
-
-    int ScreenWidth = 400;
-    // DesktopWidth(0)
-    int ScreenHeight = 400;
-    // DesktopHeight(0)
-    // variable assignments
-    const int max = 750;
-    // This sets the size of the ember array
-    int fuse = 0;
-    // countdown timer until next burst
-    int old = 0;
-    //     index to oldest ember
-    int young = -1;
-    // index to youngest ember
-    int impulse = 20;
-    // determines average explosion force
-    float drag = 0.97;  // 0 < drag < 1;        smaller = more drag
-    float gravity = 0.02;
-
-    int burnTime = 150;
-    //   determines average ember lifetime
-    int fuseTime = 25;
-    // determines average fuse time
-    float tupi = 2 * M_PI, pow, alfa;
-    float midx = ScreenWidth / 2;
-    //      middle of screen
-    float devx = midx * 0.75;
-    //   maximum x burst deviation from center
-    float nomy = ScreenHeight * 0.45;
-    //  nominal y burst location
-    float devy = ScreenHeight * 0.25;
-    //  maximum y deviation from nomy
-    int a, n, x, y, emberCount, cmix, c1, c2, shape;
-};
-
 class DrawNodeDrawOrderTest : public DrawNodeExBaseTest
 {
 public:
@@ -272,12 +237,7 @@ public:
     void update(float dt);
     void onEnter();
 
-  //  void initSliders();
-    void changeThickness(ax::Object* pSender, ax::ui::Slider::EventType type);
-    // void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);
-
 private:
-    ax::extension::DrawNodeEx* drawNodeEx;
     // ax::Label* _lineWidthLabel;
     // float lineWidth = 0;
     ax::Label* _thicknessLabel;
@@ -297,7 +257,6 @@ public:
     void update(float dt) override;
 
 private:
-    ax::extension::DrawNodeEx* drawNodeEx;
     ax::Vec2 center;
 };
 
@@ -325,22 +284,6 @@ public:
     void update(float dt);
     void onEnter();
 
-  //  void initSliders();
-    void changeStartAngle(ax::Object* pSender, ax::ui::Slider::EventType type);
-    void changeEndAngle(ax::Object* pSender, ax::ui::Slider::EventType type);
-    void changeRotation(ax::Object* pSender, ax::ui::Slider::EventType type);
-    void changeThickness(ax::Object* pSender, ax::ui::Slider::EventType type);
-
-private:
-    ax::extension::DrawNodeEx* drawNode;
-    ax::Label* _StartAngleLabel;
-    float startAngle = 0;
-    ax::Label* _EndAngleLabel;
-    float endAngle = 0;
-    ax::Label* _RotationLabel;
-    float rotation = 0;
-    ax::Label* _ThicknessLabel;
-    float thickness = 0;
 };
 
 class DrawNodeMethodsTest : public DrawNodeExBaseTest
@@ -356,24 +299,23 @@ public:
     void update(float dt);
     void onEnter();
 
-    void listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type);
-
     void drawAll();
 
 private:
     ax::ui::ListView* createListView();
-  //  ax::extension::DrawNodeEx* drawNodeEx;
 
     ax::Vec2* verticess;
 
-    int _currentSeletedItemIndex = 0;
-
     int count = 1;
 
-    ax::Label* label1;
-    ax::Label* label2;
-    ax::Label* label3;
+    ax::Label* labelRound;
+    ax::Label* labelSquare;
+    ax::Label* labelButt;
+
+    ax::ui::RadioButtonGroup* _radioButtonGroup;
+    int selectedRadioButton;
 };
+
 
 class DrawNodePerformaneTest : public DrawNodeExBaseTest
 {
@@ -388,15 +330,12 @@ public:
     void update(float dt);
     void onEnter();
 
-
-    void listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type);
-
     void drawAll();
 
 private:
     ax::ui::ListView* createListView();
 
-    int _currentSeletedItemIndex = 0;
+
     int count = 1;
     bool isDirty = false;
 
@@ -406,22 +345,7 @@ private:
     ax::Label* label3;
 };
 
-class DrawNodeHeartTest : public DrawNodeExBaseTest
-{
-public:
-    CREATE_FUNC(DrawNodeHeartTest);
 
-    DrawNodeHeartTest();
-
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-    void update(float dt) override;
-
-private:
-    ax::Vec2* heart;
-    const int totalFrames = 240;
-    ax::any_buffer _abuf;
-};
 
 class DrawNodeDrawInWrongOrder_Issue1888 : public DrawNodeExBaseTest
 {
@@ -455,11 +379,7 @@ public:
     void drawAllv1(ax::DrawNode* drawNodeEx);
 
 private:
-    ax::DrawNode* drawN = nullptr;
-    ax::extension::DrawNodeEx* drawNE = nullptr;
-
     ax::Vec2 s;
-
 
     ax::ui::RadioButtonGroup* _radioButtonGroup;
     int selectedRadioButton;
@@ -485,70 +405,20 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-	
-    void update(float dt);
 
- //   void initSliders();
+    void update(float dt);
+    void onEnter();
+
     void changeThreshold(Object* pSender, ax::ui::Slider::EventType type);
     void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);
 
 private:
-    ax::extension::DrawNodeEx* drawNode;
     ax::Label* _lineWidthLabel;
     float lineWidth = 0;
     ax::Label* _thresholdLabel;
     float threshold = 0;
 };
 
-class DrawNodeCocos2dx_Issue829 : public DrawNodeExBaseTest
-{
-public:
-    CREATE_FUNC(DrawNodeCocos2dx_Issue829);
-
-    DrawNodeCocos2dx_Issue829();
-    void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
-
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-};
-
-class DrawNodeCocos2dx_Issue1319 : public DrawNodeExBaseTest
-{
-public:
-    CREATE_FUNC(DrawNodeCocos2dx_Issue1319);
-
-    DrawNodeCocos2dx_Issue1319();
-
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-};
-
-class DrawNodeCocos2dxDrawNodePieTest : public DrawNodeExBaseTest
-{
-public:
-    CREATE_FUNC(DrawNodeCocos2dxDrawNodePieTest);
-
-    DrawNodeCocos2dxDrawNodePieTest();
-
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-
-    void update(float dt);
-
- //   void initSliders();
-    void changeStartAngle(Object* pSender, ax::ui::Slider::EventType type);
-    void changeEndAngle(Object* pSender, ax::ui::Slider::EventType type);
-    void changeAngle(Object* pSender, ax::ui::Slider::EventType type);
-
-private:
- //   ax::extension::DrawNodeEx* drawNode;
-    ax::Label* _StartAngleLabel;
-    float startAngle = 0;
-    ax::Label* _EndAngleLabel;
-    float endAngle = 0;
-    ax::Label* _AngleLabel;
-    float angle = 0;
-};
 
 class DrawNodeSpLinesTest : public DrawNodeExBaseTest
 {
@@ -565,9 +435,23 @@ public:
     void update(float dt);
 
 private:
+    ax::extension::DrawNodeEx* drawNodeExCP = nullptr;
     std::vector<ax::Vec2> points;
-    ax::extension::DrawNodeEx* drawNodeCP;
     ax::PointArray* array;
+
+
+
+
+
+    //ax::PointArray *pts = nullptr;
+    //ax::PointArray *pts2 = nullptr;
+
+    //ax::Size screen;
+    //ax::Vec2 origin, center, sixth;
+    //float defY, defY2, dev;
+    //const int n = 50;
+    //const int grid = 10;
+    //const int margin = 20;
 };
 
 
@@ -578,6 +462,7 @@ public:
 
     CandyMixEeffect();
 
+    void rotozoom();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
@@ -586,6 +471,8 @@ public:
 
 private:
     std::vector<ax::Vec2> points;
-    ax::extension::DrawNodeEx* drawNodeCP;
     ax::PointArray* array;
+
+    ax::ui::RadioButtonGroup* _radioButtonGroup;
+    int selectedRadioButton;
 };

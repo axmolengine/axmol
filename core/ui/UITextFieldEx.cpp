@@ -25,7 +25,8 @@ THE SOFTWARE.
 #include "UITextFieldEx.h"
 #include "base/Director.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #if defined(WINAPI_FAMILY) && WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
 #    define axbeep(t) MessageBeep(t)
@@ -1046,5 +1047,5 @@ void TextFieldEx::__moveCursorTo(float x)
 }
 };  // namespace ui
 
-NS_AX_END
+}
 

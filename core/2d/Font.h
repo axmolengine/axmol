@@ -33,7 +33,8 @@
 #include "base/Types.h"
 #include "base/UTF8.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class FontAtlas;
 
@@ -45,7 +46,7 @@ public:
     virtual int getFontMaxHeight() const { return 0; }
 };
 
-NS_AX_END
+}
 
 /// @endcond
 

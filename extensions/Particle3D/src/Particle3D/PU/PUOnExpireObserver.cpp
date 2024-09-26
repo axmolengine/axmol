@@ -27,7 +27,8 @@
 #include "Particle3D/PU/PUOnExpireObserver.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 //-----------------------------------------------------------------------
 bool PUOnExpireObserver::observe(PUParticle3D* particle, float /*timeElapsed*/)
@@ -45,4 +46,4 @@ PUOnExpireObserver* PUOnExpireObserver::create()
     return peo;
 }
 
-NS_AX_END
+}

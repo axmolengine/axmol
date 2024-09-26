@@ -35,7 +35,8 @@ THE SOFTWARE.
 #include "renderer/CallbackCommand.h"
 #include "renderer/backend/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace backend
 {
@@ -72,7 +73,11 @@ public:
      * @param depthStencilFormat The depthStencil format.
      * @param sharedRenderTarget Select whether to use a new or shared render target.
      */
-    static RenderTexture* create(int w, int h, backend::PixelFormat format, backend::PixelFormat depthStencilFormat, bool sharedRenderTarget = false);
+    static RenderTexture* create(int w,
+                                 int h,
+                                 backend::PixelFormat format,
+                                 backend::PixelFormat depthStencilFormat,
+                                 bool sharedRenderTarget = false);
 
     /** Creates a RenderTexture object with width and height in Points and a pixel format, only RGB and RGBA formats are
      * valid.
@@ -162,11 +167,11 @@ public:
     /* Creates a new Image from with the texture's data.
      * Caller is responsible for releasing it by calling delete.
      *
-     * @param flipImage Whether or not to flip image.
+     * @param eglCacheHint Whether for egl cache, internal use
      * @return An image.
      * @js NA
      */
-    void newImage(std::function<void(RefPtr<Image>)> imageCallback, bool flipImage = true);
+    void newImage(std::function<void(RefPtr<Image>)> imageCallback, bool eglCacheHint = false);
 
     /** Saves the texture into a file using JPEG format. The file will be saved in the Documents folder.
      * Returns true if the operation is successful.
@@ -383,7 +388,9 @@ protected:
     void clearColorAttachment();
 
     void onSaveToFile(std::string fileName, bool isRGBA = true, bool forceNonPMA = false);
-
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+    bool _cachedTextureDirty = false;
+#endif
     bool _keepMatrix = false;
     Rect _rtTextureRect;
     Rect _fullRect;
@@ -397,7 +404,7 @@ protected:
     backend::RenderTarget* _renderTarget    = nullptr;
     backend::RenderTarget* _oldRenderTarget = nullptr;
 
-    RefPtr<Image> _UITextureImage            = nullptr;
+    RefPtr<Image> _UITextureImage     = nullptr;
     backend::PixelFormat _pixelFormat = backend::PixelFormat::RGBA8;
 
     Color4F _clearColor;
@@ -413,16 +420,16 @@ protected:
      */
     Sprite* _sprite = nullptr;
 
-    //CallbackCommand _beginCommand;
-    //CallbackCommand _endCommand;
+    // CallbackCommand _beginCommand;
+    // CallbackCommand _endCommand;
 
-    //CallbackCommand _beforeClearAttachmentCommand;
-    //CallbackCommand _afterClearAttachmentCommand;
+    // CallbackCommand _beforeClearAttachmentCommand;
+    // CallbackCommand _afterClearAttachmentCommand;
     /*this command is used to encapsulate saveToFile,
      call saveToFile twice will overwrite this command and callback
      and the command and callback will be executed twice.
     */
-    //CallbackCommand _saveToFileCommand;
+    // CallbackCommand _saveToFileCommand;
     std::function<void(RenderTexture*, std::string_view)> _saveFileCallback = nullptr;
 
     Mat4 _oldTransMatrix, _oldProjMatrix;
@@ -435,4 +442,4 @@ private:
 // end of textures group
 /// @}
 
-NS_AX_END
+}  // namespace ax

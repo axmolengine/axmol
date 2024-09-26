@@ -44,7 +44,8 @@
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 ParticleBatchNode::ParticleBatchNode()
 {
@@ -561,4 +562,4 @@ const BlendFunc& ParticleBatchNode::getBlendFunc() const
     return _blendFunc;
 }
 
-NS_AX_END
+}

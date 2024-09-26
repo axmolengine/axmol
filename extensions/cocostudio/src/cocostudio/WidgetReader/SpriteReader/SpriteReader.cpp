@@ -40,7 +40,7 @@
 #include "renderer/backend/ProgramManager.h"
 #include "renderer/backend/ProgramState.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -61,11 +61,6 @@ SpriteReader* SpriteReader::getInstance()
     }
 
     return _instanceSpriteReader;
-}
-
-void SpriteReader::purge()
-{
-    AX_SAFE_DELETE(_instanceSpriteReader);
 }
 
 void SpriteReader::destroyInstance()

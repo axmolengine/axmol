@@ -28,7 +28,8 @@ THE SOFTWARE.
 
 #include <list>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 //////////////////////////////////////////////////////////////////////////
 // add/remove delegate in IMEDelegate Cons/Destructor
@@ -342,4 +343,4 @@ IMEDispatcher* IMEDispatcher::sharedDispatcher()
     return &s_instance;
 }
 
-NS_AX_END
+}

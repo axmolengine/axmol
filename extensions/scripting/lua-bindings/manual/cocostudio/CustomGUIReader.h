@@ -27,7 +27,7 @@
 
 #include "cocostudio/SGUIReader.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {

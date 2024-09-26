@@ -27,11 +27,12 @@ THE SOFTWARE.
 #include "base/Random.h"
 
 #ifdef EMSCRIPTEN
-#include <limits>
-#include <emscripten.h>
+#    include <limits>
+#    include <emscripten.h>
 std::mt19937& ax::RandomHelper::getEngine()
 {
-    static std::mt19937 engine(emscripten_random() * (std::numeric_limits<int>::max)());
+    static std::mt19937 engine(
+        static_cast<int>(emscripten_random() * static_cast<float>((std::numeric_limits<int>::max)())));
     return engine;
 }
 #else

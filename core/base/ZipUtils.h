@@ -52,7 +52,8 @@ struct unz_file_info_s;
  * @addtogroup base
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 /** XXX: pragma pack ???
  * @struct CCZHeader
@@ -318,7 +319,7 @@ private:
     ZipFilePrivate* _data;
 };
 
-NS_AX_END // end of namespace ax
+} // end of namespace ax
 
 // end group
 /// @}

@@ -37,7 +37,8 @@ struct EmscriptenMouseEvent;
 struct EmscriptenTouchEvent;
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class GLFWEventHandler;
 class AX_DLL GLViewImpl : public GLView
@@ -217,4 +218,4 @@ private:
     AX_DISALLOW_COPY_AND_ASSIGN(GLViewImpl);
 };
 
-NS_AX_END  // end of namespace   cocos2d
+}  // end of namespace   cocos2d

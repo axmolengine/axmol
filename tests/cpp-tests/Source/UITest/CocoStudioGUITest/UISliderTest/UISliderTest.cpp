@@ -24,7 +24,7 @@
 
 #include "UISliderTest.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 UISliderTests::UISliderTests()

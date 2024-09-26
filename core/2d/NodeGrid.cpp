@@ -26,7 +26,8 @@
 #include "2d/Grid.h"
 #include "renderer/Renderer.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 NodeGrid* NodeGrid::create()
 {
@@ -178,4 +179,4 @@ void NodeGrid::setGrid(GridBase* grid)
     _nodeGrid = grid;
 }
 
-NS_AX_END
+}

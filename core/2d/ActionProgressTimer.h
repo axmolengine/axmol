@@ -29,7 +29,8 @@ THE SOFTWARE.
 
 #include "2d/ActionInterval.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup actions
@@ -127,6 +128,6 @@ private:
 // end of actions group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __ACTION_CCPROGRESS_TIMER_H__

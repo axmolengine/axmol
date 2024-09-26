@@ -25,7 +25,7 @@
 #include "UIPageViewTest.h"
 #include "axmol.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 UIPageViewTests::UIPageViewTests()
@@ -513,7 +513,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);
         button->setTitleColor(Color3B::RED);
-        button->addClickEventListener([=](Object* sender) {
+        button->addClickEventListener([this, pageView](Object* /*sender*/) {
             HBox* outerBox = HBox::create();
             outerBox->setContentSize(Size(240.0f, 130.0f));
 
@@ -547,7 +547,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button2->setZoomScale(0.3f);
         button2->setPressedActionEnabled(true);
         button2->setTitleColor(Color3B::RED);
-        button2->addClickEventListener([=](Object* sender) {
+        button2->addClickEventListener([this, pageView](Object* /*sender*/) {
             if (pageView->getItems().size() > 0)
             {
                 pageView->removeItem(pageView->getItems().size() - 1);
@@ -568,7 +568,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button3->setZoomScale(0.3f);
         button3->setPressedActionEnabled(true);
         button3->setTitleColor(Color3B::RED);
-        button3->addClickEventListener([=](Object* sender) {
+        button3->addClickEventListener([this, pageView](Object* /*sender*/) {
             pageView->removeAllItems();
             _displayValueLabel->setString(
                 fmt::format("page count = {}", static_cast<int32_t>(pageView->getItems().size())));
@@ -579,7 +579,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         auto button4 = (ui::Button*)button3->clone();
         button4->setTitleText("Scroll to Page4");
         button4->setPositionNormalized(Vec2(0.85f, 0.5f));
-        button4->addClickEventListener([=](Object* sender) {
+        button4->addClickEventListener([pageView](Object* /*sender*/) {
             pageView->scrollToItem(3);
             AXLOGD("current page index = {}", pageView->getCurrentPageIndex());
         });

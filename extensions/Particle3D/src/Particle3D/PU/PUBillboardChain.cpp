@@ -38,7 +38,8 @@
 #include "2d/Camera.h"
 #include "3d/MeshRenderer.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const size_t PUBillboardChain::SEGMENT_EMPTY = std::numeric_limits<size_t>::max();
 //-----------------------------------------------------------------------
@@ -784,4 +785,4 @@ void PUBillboardChain::onAfterDraw()
 //}
 //---------------------------------------------------------------------
 
-NS_AX_END
+}

@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -73,6 +74,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -110,6 +112,10 @@ public class AxmolEngine {
 
     public static void runOnGLThread(final Runnable r) {
         nativeRunOnGLThread(r);
+    }
+
+    public static void runOnUiThread(final Runnable r) {
+        sActivity.runOnUiThread(r);
     }
 
     public static void queueOperation(final long op, final long param) {
@@ -237,8 +243,12 @@ public class AxmolEngine {
     public static String getPackageName() {
         return AxmolEngine.sPackageName;
     }
-    public static String getWritablePath() {
+    public static String getInternalFilesDir() {
         return sActivity.getFilesDir().getAbsolutePath();
+    }
+
+    public static String getExternalFilesDir() {
+        return Objects.requireNonNull(sActivity.getExternalFilesDir(null)).getAbsolutePath();
     }
 
     public static String getCurrentLanguage() {

@@ -27,7 +27,8 @@
 #include "Particle3D/PU/PUOnVelocityObserver.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static bool almostEquals(float a, float b, float epsilon = std::numeric_limits<float>::epsilon())
 {
@@ -82,4 +83,4 @@ void PUOnVelocityObserver::copyAttributesTo(PUObserver* observer)
     onVelocityObserver->_compare             = _compare;
 }
 
-NS_AX_END
+}

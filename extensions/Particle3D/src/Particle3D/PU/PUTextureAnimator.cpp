@@ -27,7 +27,8 @@
 #include "PUTextureAnimator.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // Constants
 const float PUTextureAnimator::DEFAULT_TIME_STEP                                        = 0.0f;
 const unsigned short PUTextureAnimator::DEFAULT_TEXCOORDS_START                         = 0;
@@ -268,4 +269,4 @@ void PUTextureAnimator::copyAttributesTo(PUAffector* affector)
     textureAnimator->_startRandom          = _startRandom;
 }
 
-NS_AX_END
+}

@@ -33,7 +33,8 @@
 #include "base/Director.h"
 #include "base/Logging.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // ios no MessageBox, use log instead
 void messageBox(const char* msg, const char* title)
@@ -59,4 +60,4 @@ void messageBox(const char* msg, const char* title)
 #endif
 }
 
-NS_AX_END
+}

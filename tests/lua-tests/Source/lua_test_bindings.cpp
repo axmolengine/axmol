@@ -26,7 +26,8 @@
 #include "cocos2d.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * Copy DrawNode for 3D geometry drawing.
@@ -330,7 +331,7 @@ ValueTypeJudgeInTable* ValueTypeJudgeInTable::create(ValueMap valueMap)
 
     return ret;
 }
-NS_AX_END
+}
 
 int lua_cocos2dx_DrawNode3D_getBlendFunc(lua_State* L)
 {

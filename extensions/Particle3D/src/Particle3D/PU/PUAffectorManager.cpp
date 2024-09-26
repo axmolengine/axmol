@@ -52,7 +52,8 @@
 #include "Particle3D/PU/PUVelocityMatchingAffector.h"
 #include "Particle3D/PU/PUVortexAffector.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 PUAffectorManager::PUAffectorManager() {}
 
 PUAffectorManager::~PUAffectorManager() {}
@@ -281,4 +282,4 @@ PUAffector* PUAffectorManager::createAffector(std::string_view type)
     return nullptr;
 }
 
-NS_AX_END
+}

@@ -33,7 +33,7 @@
 #include "axmol.h"
 #include "ui/CocosGUI.h"
 
-USING_NS_AX;
+using namespace ax;
 
 static void printProperties(Properties* properties, int indent);
 

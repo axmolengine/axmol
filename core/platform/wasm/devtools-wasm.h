@@ -7,7 +7,8 @@
 #include "base/Scheduler.h"
 #include "base/Director.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class DevToolsImpl
 {
@@ -30,7 +31,7 @@ private:
     Director* _director;
 };
 
-NS_AX_END
+}
 
 #endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 #endif // __DEVTOOLS_EMSCRIPTEN_H__

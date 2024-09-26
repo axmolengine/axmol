@@ -34,7 +34,8 @@ sudo apt install ubuntu-restricted-extras
 
 #    include "VlcMediaEngine.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static constexpr auto VLC_OUTPUT_FORMAT = ax::MEVideoPixelFormat::NV12;
 
@@ -475,6 +476,6 @@ bool VlcMediaEngine::transferVideoFrame()
     return false;
 }
 
-NS_AX_END
+}
 
 #endif

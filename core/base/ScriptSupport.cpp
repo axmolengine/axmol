@@ -41,7 +41,8 @@ bool AX_DLL ax_assert_script_compatible(const char* msg)
     return false;
 }
 
-NS_AX_BEGIN
+namespace ax
+{
 
 //
 // // ScriptHandlerEntry
@@ -58,7 +59,7 @@ ScriptHandlerEntry::~ScriptHandlerEntry()
     if (_handler != 0)
     {
         ScriptEngineManager::getInstance()->getScriptEngine()->removeScriptHandler(_handler);
-        LUALOG("[LUA] Remove event handler: %d", _handler);
+        AXLOGD("[LUA] Remove event handler: %d", _handler);
         _handler = 0;
     }
 }
@@ -79,14 +80,14 @@ bool SchedulerScriptHandlerEntry::init(float interval, bool paused)
     _timer = new TimerScriptHandler();
     _timer->initWithScriptHandler(_handler, interval);
     _paused = paused;
-    LUALOG("[LUA] ADD script schedule: %d, entryID: %d", _handler, _entryId);
+    AXLOGD("[LUA] ADD script schedule: {}, entryID: {}", _handler, _entryId);
     return true;
 }
 
 SchedulerScriptHandlerEntry::~SchedulerScriptHandlerEntry()
 {
     _timer->release();
-    LUALOG("[LUA] DEL script schedule %d, entryID: %d", _handler, _entryId);
+    AXLOGD("[LUA] DEL script schedule {}, entryID: {}", _handler, _entryId);
 }
 
 //
@@ -181,6 +182,6 @@ int ScriptEngineManager::sendEventToLua(const ScriptEvent& event)
     return 0;
 }
 
-NS_AX_END
+}
 
 #endif  // #if AX_ENABLE_SCRIPT_BINDING

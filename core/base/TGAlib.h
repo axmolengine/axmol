@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "stdint.h"
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 enum
 {
@@ -78,7 +79,7 @@ void tgaRGBtogreyscale(tImageTGA* info);
 /// releases the memory used for the image
 void tgaDestroy(tImageTGA* info);
 
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 /// @endcond
 #endif  // __SUPPORT_DATA_SUPPORT_TGALIB_H__

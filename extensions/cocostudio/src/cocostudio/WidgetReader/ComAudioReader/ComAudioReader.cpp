@@ -30,7 +30,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -49,11 +49,6 @@ ComAudioReader* ComAudioReader::getInstance()
     }
 
     return _instanceComAudioReader;
-}
-
-void ComAudioReader::purge()
-{
-    AX_SAFE_DELETE(_instanceComAudioReader);
 }
 
 void ComAudioReader::destroyInstance()

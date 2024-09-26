@@ -31,7 +31,8 @@
 #include "Particle3D/PU/PUSphere.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUSphereCollider : public PUBaseCollider
 {
@@ -79,6 +80,6 @@ protected:
     Vec3 _predictedPosition;
     bool _innerCollision;
 };
-NS_AX_END
+}
 
 #endif

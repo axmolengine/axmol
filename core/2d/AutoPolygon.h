@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include "platform/Image.h"
 #include "renderer/TrianglesCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _2d
@@ -256,9 +257,9 @@ public:
      * auto sp = Sprite::create(AutoPolygon::generatePolygon("grossini.png"));
      * @endcode
      */
-    static PolygonInfo generatePolygon(std::string_view filename, 
-                                       const Rect& rect = Rect::ZERO, 
-                                       float epsilon = 2.0f,  
+    static PolygonInfo generatePolygon(std::string_view filename,
+                                       const Rect& rect = Rect::ZERO,
+                                       float epsilon = 2.0f,
                                        float threshold = 0.05f);
 
 protected:
@@ -290,6 +291,6 @@ protected:
     unsigned int _threshold;
 };
 
-NS_AX_END
+}
 
 #endif  // #ifndef COCOS_2D_CCAUTOPOLYGON_H__

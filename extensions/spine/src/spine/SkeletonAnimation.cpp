@@ -32,7 +32,7 @@
 #include <spine/SkeletonAnimation.h>
 #include <spine/spine-axmol.h>
 
-USING_NS_AX;
+using namespace ax;
 using std::max;
 using std::min;
 using std::vector;

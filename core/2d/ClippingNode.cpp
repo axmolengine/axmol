@@ -33,7 +33,8 @@
 #include "base/Director.h"
 #include "base/StencilStateManager.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 ClippingNode::ClippingNode() : _stencilStateManager(new StencilStateManager()) {}
 
@@ -101,10 +102,6 @@ void ClippingNode::onEnter()
     {
         _stencil->onEnter();
     }
-    else
-    {
-        AXLOGW("ClippingNode warning: _stencil is nil.");
-    }
 }
 
 void ClippingNode::onEnterTransitionDidFinish()
@@ -141,6 +138,8 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
 {
     if (!_visible || !hasContent())
         return;
+
+    AXASSERT(_stencil, "No stencil set");
 
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
@@ -235,7 +234,7 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
 void ClippingNode::setGlobalZOrder(float globalZOrder)
 {
     Node::setGlobalZOrder(globalZOrder);
-    
+
     if (_stencil) {
         // Make sure our stencil stays on the same globalZOrder:
         _stencil->setGlobalZOrder(globalZOrder);
@@ -385,4 +384,4 @@ void ClippingNode::restoreAllProgramStates()
     }
 }
 
-NS_AX_END
+}

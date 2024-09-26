@@ -32,7 +32,7 @@
 #    include "audio/AudioEngine.h"
 #endif
 
-USING_NS_AX;
+using namespace ax;
 
 static ax::Size designResolutionSize = ax::Size(1280, 720);
 
@@ -46,6 +46,8 @@ void AppDelegate::initGLContextAttrs()
 {
     // set OpenGL context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
+    // since axmol-2.2 vsync was enabled in engine by default
+    // glContextAttrs.vsync = false;
 
     GLView::setGLContextAttrs(glContextAttrs);
 }

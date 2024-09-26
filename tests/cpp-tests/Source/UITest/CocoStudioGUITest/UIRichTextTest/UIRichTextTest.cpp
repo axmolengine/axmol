@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "cocostudio/ArmatureDataManager.h"
 #include "cocostudio/Armature.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 UIRichTextTests::UIRichTextTests()

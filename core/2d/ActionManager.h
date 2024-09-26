@@ -35,7 +35,8 @@ THE SOFTWARE.
 #include "base/Vector.h"
 #include "base/Object.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct ActionHandle
 {
@@ -220,6 +221,6 @@ protected:
 // end of actions group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __ACTION_CCACTION_MANAGER_H__

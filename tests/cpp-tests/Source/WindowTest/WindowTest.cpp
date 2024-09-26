@@ -26,7 +26,7 @@
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || \
      AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-USING_NS_AX;
+using namespace ax;
 
 WindowTests::WindowTests()
 {

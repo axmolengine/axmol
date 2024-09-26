@@ -3,7 +3,7 @@
 #include "InputProcessor.h"
 #include "utils/WeakPtr.h"
 
-USING_NS_AX;
+using namespace ax;
 NS_FGUI_BEGIN
 
 const EventTag EventTag::None;

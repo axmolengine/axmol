@@ -27,7 +27,8 @@
 #include "PUFlockCenteringAffector.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //-----------------------------------------------------------------------
 PUFlockCenteringAffector::PUFlockCenteringAffector() : PUAffector(), _count(0.0f) {}
 
@@ -75,4 +76,4 @@ void PUFlockCenteringAffector::copyAttributesTo(PUAffector* affector)
     flockCenteringAffector->_count                   = _count;
 }
 
-NS_AX_END
+}

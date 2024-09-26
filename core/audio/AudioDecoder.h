@@ -30,7 +30,8 @@
 #include <string>
 #include "platform/IFileStream.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 enum class AUDIO_SOURCE_FORMAT : uint16_t
 {
@@ -148,4 +149,4 @@ protected:
     friend class AudioDecoderManager;
 };
 
-NS_AX_END  // namespace ax
+}  // namespace ax

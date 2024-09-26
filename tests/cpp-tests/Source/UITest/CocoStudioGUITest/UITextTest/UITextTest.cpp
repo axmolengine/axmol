@@ -24,7 +24,7 @@
 
 #include "UITextTest.h"
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 using namespace ax::ui;
 

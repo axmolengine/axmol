@@ -29,7 +29,8 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Profiling Categories
 /* set to false the categories that you don't want to profile */
@@ -165,4 +166,4 @@ void ProfilingResetTimingBlock(const char* timerName)
     timer->reset();
 }
 
-NS_AX_END
+}

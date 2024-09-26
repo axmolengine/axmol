@@ -35,7 +35,8 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * A pool for managing autorelease objects.
@@ -181,6 +182,6 @@ private:
  * @endcond
  */
 
-NS_AX_END
+}
 
 #endif  //__AUTORELEASEPOOL_H__

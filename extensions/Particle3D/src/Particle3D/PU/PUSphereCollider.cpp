@@ -27,7 +27,8 @@
 #include "PUSphereCollider.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // Constants
 const float PUSphereCollider::DEFAULT_RADIUS = 100.0f;
 
@@ -198,4 +199,4 @@ void PUSphereCollider::copyAttributesTo(PUAffector* affector)
     sphereCollider->_innerCollision  = _innerCollision;
 }
 
-NS_AX_END
+}

@@ -33,7 +33,8 @@
 #include <vector>
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PUParticle3D;
 class PUParticleSystem3D;
@@ -83,6 +84,6 @@ protected:
     Vec3 _behaviourScale;
 };
 
-NS_AX_END
+}
 
 #endif

@@ -145,7 +145,7 @@ ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std
 
                 // refl_storage_buffers: ignore
                 ibs.advance(refl.num_storage_buffers * sizeof(sgs_refl_buffer));
-                
+
                 assert(ibs.tell() - refl_data_offset == refl_size);
             }
             else
@@ -192,14 +192,14 @@ ShaderModuleMTL::~ShaderModuleMTL()
 void ShaderModuleMTL::parseAttibute(SLCReflectContext* context)
 {
     auto ibs = context->ibs;
-    
+
     for (int i = 0; i < context->refl->num_inputs; ++i)
     {
         std::string_view name = _sgs_read_name(ibs);
         auto loc = ibs->read<int32_t>();
-        
+
         ibs->advance(sizeof(sgs_refl_input) - offsetof(sgs_refl_input, semantic));
-        
+
         AttributeBindInfo attributeInfo;
         attributeInfo.location = loc;
         _attributeInfo[name]   = attributeInfo;
@@ -217,7 +217,7 @@ void ShaderModuleMTL::parseUniform(SLCReflectContext* context)
         auto ub_size_bytes = ibs->read<uint32_t>();
         ibs->advance(sizeof(sgs_refl_ub::array_size));
         auto ub_num_members = ibs->read<uint16_t>();
-        
+
         for (int k = 0; k < ub_num_members; ++k)
         {
             UniformInfo uniform;
@@ -226,7 +226,7 @@ void ShaderModuleMTL::parseUniform(SLCReflectContext* context)
             auto format     = ibs->read<uint32_t>();
             auto size_bytes = ibs->read<uint32_t>();
             auto array_size = ibs->read<uint16_t>();
-            
+
             uniform.count               = array_size;
             uniform.location            = ub_binding;
             uniform.size                = size_bytes;
@@ -250,7 +250,7 @@ void ShaderModuleMTL::parseTexture(SLCReflectContext* context)
     {
         std::string_view name = _sgs_read_name(ibs);
         auto binding = ibs->read<int32_t>();
-        
+
         ibs->advance(sizeof(sgs_refl_texture) - offsetof(sgs_refl_texture, image_dim));
 
         UniformInfo uniform;

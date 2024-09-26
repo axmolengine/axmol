@@ -46,7 +46,8 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 std::string TextureCache::s_etc1AlphaFileSuffix = "@alpha";
 
@@ -837,7 +838,7 @@ void VolatileTextureMgr::addImageTexture(Texture2D* tt, std::string_view imageFi
         return;
     }
 
-    VolatileTexture* vt = findVolotileTexture(tt);
+    VolatileTexture* vt = getOrAddVolatileTexture(tt);
 
     vt->_cashedImageType = VolatileTexture::kImageFile;
     vt->_fileName        = imageFileName;
@@ -849,8 +850,8 @@ void VolatileTextureMgr::addImage(Texture2D* tt, Image* image)
     if (tt == nullptr || image == nullptr)
         return;
 
-    VolatileTexture* vt = findVolotileTexture(tt);
-    
+    VolatileTexture* vt = getOrAddVolatileTexture(tt);
+
     if(vt->_uiImage != image) {
         AX_SAFE_RELEASE(vt->_uiImage);
         image->retain();
@@ -860,7 +861,7 @@ void VolatileTextureMgr::addImage(Texture2D* tt, Image* image)
     }
 }
 
-VolatileTexture* VolatileTextureMgr::findVolotileTexture(Texture2D* tt)
+VolatileTexture* VolatileTextureMgr::getOrAddVolatileTexture(Texture2D* tt)
 {
     VolatileTexture* vt = nullptr;
     for (const auto& texture : _textures)
@@ -893,7 +894,7 @@ void VolatileTextureMgr::addDataTexture(Texture2D* tt,
         return;
     }
 
-    VolatileTexture* vt = findVolotileTexture(tt);
+    VolatileTexture* vt = getOrAddVolatileTexture(tt);
 
     vt->_cashedImageType = VolatileTexture::kImageData;
     vt->_textureData     = data;
@@ -909,7 +910,7 @@ void VolatileTextureMgr::addStringTexture(Texture2D* tt, std::string_view text, 
         return;
     }
 
-    VolatileTexture* vt = findVolotileTexture(tt);
+    VolatileTexture* vt = getOrAddVolatileTexture(tt);
 
     vt->_cashedImageType = VolatileTexture::kString;
     vt->_text            = text;
@@ -990,4 +991,4 @@ void VolatileTextureMgr::reloadTexture(Texture2D* texture, std::string_view file
 
 #endif  // AX_ENABLE_CACHE_TEXTURE_DATA
 
-NS_AX_END
+}

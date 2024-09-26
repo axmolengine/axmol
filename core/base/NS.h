@@ -29,7 +29,8 @@ THE SOFTWARE.
 
 #include "math/Math.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup base
@@ -75,6 +76,6 @@ Vec2 AX_DLL SizeFromString(std::string_view str);
 // end of data_structure group
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // __PLATFORM_CCNS_H__

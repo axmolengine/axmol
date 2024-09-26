@@ -31,7 +31,8 @@
 #    include "physics/PhysicsHelper.h"
 #    include "base/EventCustom.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const char* PHYSICSCONTACT_EVENT_NAME = "PhysicsContactEvent";
 
@@ -430,5 +431,5 @@ EventListenerPhysicsContactWithGroup* EventListenerPhysicsContactWithGroup::clon
     return nullptr;
 }
 
-NS_AX_END
+}
 #endif  // defined(AX_ENABLE_PHYSICS)

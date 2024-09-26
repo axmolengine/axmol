@@ -27,7 +27,7 @@ using namespace LAppDefine;
 //#define USE_RENDER_TARGET
 //#define USE_MODEL_RENDER_TARGET
 
-USING_NS_AX;
+using namespace ax;
 
 namespace {
     LAppLive2DManager* s_instance = NULL;

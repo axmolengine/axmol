@@ -31,7 +31,8 @@
 #include "Particle3D/PU/PUScriptCompiler.h"
 #include "Particle3D/PU/PURandomiser.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PURandomiserTranslator : public PUScriptTranslator
 {
@@ -43,6 +44,6 @@ public:
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-NS_AX_END
+}
 
 #endif

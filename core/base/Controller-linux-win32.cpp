@@ -4,7 +4,7 @@
   Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
   Copyright (c) 2017 Wilson E. Alvarez <wilson.e.alvarez1@gmail.com>
   Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
 https://axmol.dev/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,7 +36,8 @@ THE SOFTWARE.
 #    include "base/EventController.h"
 #    include "glfw3.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_DLL ControllerImpl
 {
@@ -4453,6 +4454,6 @@ Controller::~Controller()
     delete _axisEvent;
 }
 
-NS_AX_END
+}
 
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)

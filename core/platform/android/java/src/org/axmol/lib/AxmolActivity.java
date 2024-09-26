@@ -248,6 +248,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         paused = true;
         super.onPause();
         AxmolEngine.onPause();
+        mGLSurfaceView.onPause();
         mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
@@ -255,7 +256,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     protected void onStop() {
         super.onStop();
         rendererPaused = true;
-        mGLSurfaceView.onPause();
+        mGLSurfaceView.onStop();
     }
 
     @Override

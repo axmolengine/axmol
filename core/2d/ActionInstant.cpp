@@ -30,7 +30,8 @@
 #include "2d/Node.h"
 #include "2d/Sprite.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //
 // InstantAction
 //
@@ -399,4 +400,4 @@ CallFuncN* CallFuncN::clone() const
     return a;
 }
 
-NS_AX_END
+}

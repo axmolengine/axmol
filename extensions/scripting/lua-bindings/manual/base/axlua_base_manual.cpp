@@ -4528,7 +4528,8 @@ static void extendSpriteBatchNode(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
-NS_AX_BEGIN
+namespace ax
+{
 EventListenerAcceleration* LuaEventListenerAcceleration::create()
 {
     EventListenerAcceleration* eventAcceleration = new EventListenerAcceleration();
@@ -4563,7 +4564,7 @@ EventListenerCustom* LuaEventListenerCustom::create(std::string_view eventName)
     }
     return eventCustom;
 }
-NS_AX_END
+}
 
 static int toaxlua_LuaEventListenerAcceleration_create(lua_State* tolua_S)
 {

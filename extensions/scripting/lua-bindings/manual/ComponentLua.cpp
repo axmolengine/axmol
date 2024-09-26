@@ -31,7 +31,8 @@
 #include "lua-bindings/manual/LuaBasicConversions.h"
 #include "base/UTF8.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const std::string ComponentLua::ON_ENTER = "onEnter";
 const std::string ComponentLua::ON_EXIT  = "onExit";
@@ -271,4 +272,4 @@ void ComponentLua::getUserData()
     object_to_luaval<ax::ComponentLua>(l, "ax.ComponentLua", this);
 }
 
-NS_AX_END
+}

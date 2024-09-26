@@ -129,7 +129,7 @@ public:
         product[14] = m1[2] * m2[12] + m1[6] * m2[13] + m1[10] * m2[14] + m1[14] * m2[15];
         product[15] = m1[3] * m2[12] + m1[7] * m2[13] + m1[11] * m2[14] + m1[15] * m2[15];
 
-        memcpy(dst, product, MATRIX_SIZE);
+        memcpy(dst, product, sizeof(product));
     }
 
     inline static void negateMatrix(const float* m, float* dst)
@@ -156,7 +156,7 @@ public:
     {
         float t[16] = {m[0], m[4], m[8],  m[12], m[1], m[5], m[9],  m[13],
                        m[2], m[6], m[10], m[14], m[3], m[7], m[11], m[15]};
-        memcpy(dst, t, MATRIX_SIZE);
+        memcpy(dst, t, sizeof(t));
     }
 
     inline static void transformVec4(const float* m, float x, float y, float z, float w, float* dst)

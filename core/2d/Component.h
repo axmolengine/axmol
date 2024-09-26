@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "base/Object.h"
 #include "base/ScriptSupport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Node;
 
@@ -85,7 +86,7 @@ protected:
     bool _enabled;
 };
 
-NS_AX_END
+}
 
 /// @endcond
 #endif  // __AX_FRAMEWORK_COMPONENT_H__

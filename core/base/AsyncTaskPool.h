@@ -43,7 +43,8 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @class AsyncTaskPool
@@ -225,7 +226,7 @@ inline void AsyncTaskPool::enqueue(AsyncTaskPool::TaskType type, std::function<v
         type, [](void*) {}, nullptr, std::move(task));
 }
 
-NS_AX_END
+}
 // end group
 /// @}
 #endif  //__CCSYNC_TASK_POOL_H_

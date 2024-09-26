@@ -51,7 +51,8 @@ THE SOFTWARE.
 #include "base/UTF8.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const int FastTMXLayer::FAST_TMX_ORIENTATION_ORTHO = 0;
 const int FastTMXLayer::FAST_TMX_ORIENTATION_HEX   = 1;
@@ -439,7 +440,7 @@ void FastTMXLayer::updatePrimitives()
         {
             auto command = new CustomCommand();
             command->setVertexBuffer(_vertexBuffer);
-  
+
 #ifdef AX_FAST_TILEMAP_32_BIT_INDICES
             CustomCommand::IndexFormat indexFormat = CustomCommand::IndexFormat::U_INT;
 #else
@@ -906,11 +907,11 @@ void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid
 {
     auto tempPosAt = getPositionAt(pos);
     auto tempSpriteContentSize = sprite->getContentSize();
-    
+
     sprite->setPositionZ((float)getVertexZForPos(pos));
     sprite->setOpacity(this->getOpacity());
 
-    // fix issue #1283 too;  put the anchor in the middle for ease of rotation. 
+    // fix issue #1283 too;  put the anchor in the middle for ease of rotation.
     sprite->setAnchorPoint(Vec2(0.5f, 0.5f));
     sprite->setPosition(tempPosAt.x + std::roundf(tempSpriteContentSize.height / 2),
                         tempPosAt.y + std::roundf(tempSpriteContentSize.width / 2));
@@ -1051,4 +1052,4 @@ TMXTileAnimTask* TMXTileAnimTask::create(FastTMXLayer* layer, TMXTileAnimInfo* a
     return ret;
 }
 
-NS_AX_END
+}

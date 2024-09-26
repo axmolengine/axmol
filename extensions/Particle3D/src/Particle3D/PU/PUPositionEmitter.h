@@ -29,7 +29,8 @@
 
 #include "Particle3D/PU/PUEmitter.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUPositionEmitter : public PUEmitter
 {
@@ -81,6 +82,6 @@ protected:
     bool _randomized;
     size_t _index;
 };
-NS_AX_END
+}
 
 #endif

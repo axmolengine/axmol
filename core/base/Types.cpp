@@ -29,7 +29,8 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 #include "base/Types.h"
 #include "renderer/backend/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const std::string STD_STRING_EMPTY{};
 const ssize_t AX_INVALID_INDEX = -1;
@@ -40,5 +41,5 @@ const BlendFunc BlendFunc::ALPHA_NON_PREMULTIPLIED = {backend::BlendFactor::SRC_
                                                       backend::BlendFactor::ONE_MINUS_SRC_ALPHA};
 const BlendFunc BlendFunc::ADDITIVE                = {backend::BlendFactor::SRC_ALPHA, backend::BlendFactor::ONE};
 
-NS_AX_END
+}
 

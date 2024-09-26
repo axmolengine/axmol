@@ -43,6 +43,8 @@ set(GAME_SOURCE
     Source/AppDelegate.cpp
     Source/TestUtils.cpp
 
+    Source/core/2d/NodeTests.cpp
+
     Source/core/base/MapTests.cpp
     Source/core/base/UTF8Tests.cpp
     Source/core/base/UtilsTests.cpp
@@ -166,10 +168,6 @@ target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 
 if (AX_ENABLE_EXT_EFFEKSEER)
     target_compile_definitions(${APP_NAME} PRIVATE AX_ENABLE_EXT_EFFEKSEER=1)
-endif()
-
-if (AX_ENABLE_EXT_DRAWNODEEX)
-    target_compile_definitions(${APP_NAME} PRIVATE AX_ENABLE_EXT_DRAWNODE=1)
 endif()
 
 # mark app resources

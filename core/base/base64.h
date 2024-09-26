@@ -12,7 +12,8 @@
 #include <utility>
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace base64 {
 
@@ -43,7 +44,7 @@ decoded_size(std::size_t n)
 /** Encode a series of octets as a padded, base64 string.
 
     The resulting string will not be null terminated.
-      
+
     @par Requires
 
     The memory pointed to by `out` points to valid memory
@@ -70,4 +71,4 @@ std::size_t decode(void* dest, char const* src, std::size_t len);
 
 } // base64
 
-NS_AX_END
+}

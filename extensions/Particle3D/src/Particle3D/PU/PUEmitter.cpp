@@ -28,7 +28,8 @@
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include "Particle3D/PU/PUUtil.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const bool PUEmitter::DEFAULT_ENABLED = true;
@@ -979,4 +980,4 @@ void PUEmitter::copyAttributesTo(PUEmitter* emitter)
     }
 }
 
-NS_AX_END
+}

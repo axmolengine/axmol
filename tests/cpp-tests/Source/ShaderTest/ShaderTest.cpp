@@ -28,7 +28,7 @@
 #include "renderer/Shaders.h"
 #include "renderer/backend/DriverBase.h"
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 #define SET_UNIFORM(ps, name, value)                          \

@@ -57,7 +57,8 @@
 #include "Particle3D/PU/PUVelocityMatchingAffectorTranslator.h"
 #include "Particle3D/PU/PUVortexAffectorTranslator.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUAffectorManager
 {
@@ -101,6 +102,6 @@ protected:
     PUVortexAffectorTranslator _vortexAffectorTranslator;
 };
 
-NS_AX_END
+}
 
 #endif

@@ -97,15 +97,14 @@ void AxmolRenderer::DeviceLost()
     auto director = ax::Director::getInstance();
     if (director->getGLView())
     {
-        // TODO:
-        // ax::GL::invalidateStateCache();
-        // ax::GLProgramCache::getInstance()->reloadDefaultGLPrograms();
-        // ax::DrawPrimitives::init();
-        // ax::VolatileTextureMgr::reloadAllTextures();
-
+        backend::DriverBase::getInstance()->resetState();
+        ax::Director::getInstance()->resetMatrixStack();
         ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
         director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
         director->setGLDefaultValues();
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+        ax::VolatileTextureMgr::reloadAllTextures();
+#endif
 
         Application::getInstance()->applicationWillEnterForeground();
         ax::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);

@@ -1,6 +1,6 @@
 #include "BagWindow.h"
 
-USING_NS_AX;
+using namespace ax;
 
 void BagWindow::onInit()
 {

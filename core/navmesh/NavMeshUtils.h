@@ -39,7 +39,8 @@
 #    include "recast/DetourTileCache.h"
 #    include "recast/DetourTileCacheBuilder.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup 3d
@@ -143,7 +144,7 @@ bool getSteerTarget(dtNavMeshQuery* navQuery,
                     int* outPointCount = nullptr);
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // AX_ENABLE_NAVMESH
 

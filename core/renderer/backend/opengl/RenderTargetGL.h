@@ -23,6 +23,9 @@ public:
 
 public:
     GLuint _FBO = 0;
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+    EventListenerCustom* _rendererRecreatedListener{nullptr};
+#endif
 };
 
 NS_AX_BACKEND_END

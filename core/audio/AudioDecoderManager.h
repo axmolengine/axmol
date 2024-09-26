@@ -29,7 +29,8 @@ THE SOFTWARE.
 
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AudioDecoder;
 
@@ -42,4 +43,4 @@ public:
     static void destroyDecoder(AudioDecoder* decoder);
 };
 
-NS_AX_END  // namespace ax
+}  // namespace ax

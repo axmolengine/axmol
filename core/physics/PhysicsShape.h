@@ -35,7 +35,8 @@
 
 struct cpShape;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PhysicsBody;
 
@@ -784,7 +785,7 @@ protected:
 /** @} */
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // defined(AX_ENABLE_PHYSICS)
 #endif  // __CCPHYSICS_FIXTURE_H__

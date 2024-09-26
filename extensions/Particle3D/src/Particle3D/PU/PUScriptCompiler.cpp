@@ -27,7 +27,8 @@
 #include "PUScriptCompiler.h"
 #include "Particle3D/PU/PUTranslateManager.h"
 #include "platform/FileUtils.h"
-NS_AX_BEGIN
+namespace ax
+{
 
 // ObjectAbstractNode
 PUObjectAbstractNode::PUObjectAbstractNode(PUAbstractNode* ptr) : PUAbstractNode(ptr), id(0), abstract(false)
@@ -407,4 +408,4 @@ PUScriptCompiler* PUScriptCompiler::Instance()
     return &psc;
 }
 
-NS_AX_END
+}

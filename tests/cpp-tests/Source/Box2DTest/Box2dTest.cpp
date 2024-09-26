@@ -29,7 +29,7 @@
 #include "renderer/Renderer.h"
 #include "renderer/CustomCommand.h"
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 #define PTM_RATIO 32

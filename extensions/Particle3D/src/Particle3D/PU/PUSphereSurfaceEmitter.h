@@ -29,7 +29,8 @@
 
 #include "Particle3D/PU/PUEmitter.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUSphereSurfaceEmitter : public PUEmitter
 {
@@ -61,6 +62,6 @@ protected:
     float _radius;
     Vec3 _randomVector;
 };
-NS_AX_END
+}
 
 #endif

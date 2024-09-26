@@ -34,7 +34,8 @@
 #include <vector>
 #include <map>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * 3d particle system
@@ -419,6 +420,6 @@ protected:
     PUParticleSystem3D* _parentParticleSystem;
 };
 
-NS_AX_END
+}
 
 #endif

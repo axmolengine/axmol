@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "base/Types.h"
 #include "platform/apple/Device-apple.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedString* attributedString, CGFloat fontSize)
 {
@@ -65,7 +66,7 @@ int Device::getDPI()
     return ((displayPixelSize.width / displayPhysicalSize.width) * 25.4f);
 }
 
-float Device::getPixelRatio() 
+float Device::getPixelRatio()
 {
     NSScreen* screen    = [NSScreen mainScreen];
     const auto points = [screen frame];
@@ -453,4 +454,4 @@ void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged() {}
 
-NS_AX_END
+}

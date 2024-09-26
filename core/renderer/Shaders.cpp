@@ -27,7 +27,8 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "renderer/Shaders.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 using namespace std::string_view_literals;
 
@@ -85,4 +86,4 @@ AX_DLL const std::string_view colorNormalTexture_frag_1            = "colorNorma
 AX_DLL const std::string_view positionNormalTexture_vert_1         = "positionNormalTexture_vs_1"sv;
 AX_DLL const std::string_view skinPositionNormalTexture_vert_1     = "skinPositionNormalTexture_vs_1"sv;
 
-NS_AX_END
+}

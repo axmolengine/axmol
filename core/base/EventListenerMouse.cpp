@@ -26,7 +26,8 @@
 
 #include "base/EventListenerMouse.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const std::string EventListenerMouse::LISTENER_ID = "__ax_mouse";
 
@@ -106,4 +107,4 @@ bool EventListenerMouse::init()
     return false;
 }
 
-NS_AX_END
+}

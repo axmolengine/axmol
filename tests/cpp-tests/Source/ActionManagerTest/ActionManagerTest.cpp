@@ -26,7 +26,7 @@
 #include "../testResource.h"
 #include "axmol.h"
 
-USING_NS_AX;
+using namespace ax;
 
 enum
 {
@@ -138,13 +138,14 @@ std::string LogicTest::subtitle() const
 
 void PauseTest::onEnter()
 {
+    AXLOGI("PauseTest::onEnter() is called");
     //
     // This test MUST be done in 'onEnter' and not on 'init'
     // otherwise the paused action will be resumed at 'onEnter' time
     //
     ActionManagerTest::onEnter();
 
-    auto l = Label::createWithTTF("After 5 seconds grossini should move", "fonts/Thonburi.ttf", 16.0f);
+    auto l = Label::createWithTTF("After 3 seconds Grossini should move.", "fonts/Thonburi.ttf", 16.0f);
     addChild(l);
     l->setPosition(VisibleRect::center().x, VisibleRect::top().y - 75);
 
@@ -165,6 +166,7 @@ void PauseTest::onEnter()
 
 void PauseTest::unpause(float dt)
 {
+    AXLOGI("PauseTest::unpause() is called");
     unschedule(AX_SCHEDULE_SELECTOR(PauseTest::unpause));
     auto node     = getChildByTag(kTagGrossini);
     auto director = Director::getInstance();

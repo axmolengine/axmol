@@ -34,7 +34,8 @@ THE SOFTWARE.
 #include "2d/Scene.h"
 #include "renderer/Renderer.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace
 {
@@ -320,8 +321,7 @@ void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
             }
 
             Touch* touch = g_touches[unusedIndex] = new Touch();
-            touch->setTouchInfo(unusedIndex, (x - _viewPortRect.origin.x) / _scaleX,
-                                (y - _viewPortRect.origin.y) / _scaleY);
+            touch->setTouchInfo(unusedIndex, transformInputX(x), transformInputY(y));
 
             AXLOGV("x = {} y = {}", touch->getLocationInView().x, touch->getLocationInView().y);
 
@@ -374,8 +374,7 @@ void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], 
         Touch* touch = g_touches[iter->second];
         if (touch)
         {
-            touch->setTouchInfo(iter->second, (x - _viewPortRect.origin.x) / _scaleX,
-                                (y - _viewPortRect.origin.y) / _scaleY, force, maxForce);
+            touch->setTouchInfo(iter->second, transformInputX(x), transformInputY(y), force, maxForce);
 
             touchEvent._touches.emplace_back(touch);
         }
@@ -427,8 +426,7 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
         if (touch)
         {
             AXLOGV("Ending touches with id: {}, x={}, y={}", (int)id, x, y);
-            touch->setTouchInfo(iter->second, (x - _viewPortRect.origin.x) / _scaleX,
-                                (y - _viewPortRect.origin.y) / _scaleY);
+            touch->setTouchInfo(iter->second, transformInputX(x), transformInputY(y));
 
             touchEvent._touches.emplace_back(touch);
 
@@ -503,4 +501,4 @@ void GLView::queueOperation(AsyncOperation /*op*/, void* /*param*/)
 {
 }
 
-NS_AX_END
+}

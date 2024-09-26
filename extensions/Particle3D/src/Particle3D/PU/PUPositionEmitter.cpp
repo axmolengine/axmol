@@ -27,7 +27,8 @@
 #include "PUPositionEmitter.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // Constants
 const bool PUPositionEmitter::DEFAULT_RANDOMIZE = true;
 
@@ -142,4 +143,4 @@ PUPositionEmitter* PUPositionEmitter::clone()
     return be;
 }
 
-NS_AX_END
+}

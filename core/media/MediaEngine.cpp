@@ -58,7 +58,8 @@ std::unique_ptr<T> static_pointer_cast(std::unique_ptr<U>&& r)
 
 }  // namespace axstd
 
-NS_AX_BEGIN
+namespace ax
+{
 
 std::unique_ptr<MediaEngineFactory> MediaEngineFactory::create()
 {
@@ -83,4 +84,4 @@ std::unique_ptr<MediaEngineFactory> MediaEngineFactory::create()
 #endif
 }
 
-NS_AX_END
+}

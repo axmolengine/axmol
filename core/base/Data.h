@@ -3,7 +3,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -38,9 +38,9 @@
  * @addtogroup base
  * @js NA
  * @lua NA
- * @DEPRECATED use axstd::byte_buffer directly
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_DLL Data
 {
@@ -70,7 +70,7 @@ public:
     Data(const Data& other);
 
     /**
-     * Copy constructor of Data.
+     * Move constructor of Data.
      */
     Data(Data&& other);
 
@@ -160,7 +160,7 @@ private:
     mutable axstd::byte_buffer _impl;
 };
 
-NS_AX_END
+}
 
 /** @} */
 #endif  // __CCDATA_H__

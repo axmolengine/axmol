@@ -28,11 +28,12 @@ THE SOFTWARE.
 #include "ApplicationBase.h"
 #include "base/Director.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 ApplicationBase::~ApplicationBase()
 {
     Director::destroyInstance();
 }
 
-NS_AX_END
+}

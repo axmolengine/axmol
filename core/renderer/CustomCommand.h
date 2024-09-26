@@ -31,7 +31,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace backend
 {
@@ -128,13 +129,13 @@ TODO: should remove it.
     @param data Specifies a pointer to the new data that will be copied into the data store.
     @param length Specifies the length in bytes of the data store region being replaced.
     */
-    void updateVertexBuffer(void* data, std::size_t length);
+    void updateVertexBuffer(const void* data, std::size_t length);
     /**
     Update index buffer contents.
     @param data Specifies a pointer to the new data that will be copied into the data store.
     @param length Specifies the size in bytes of the data store region being replaced.
     */
-    void updateIndexBuffer(void* data, std::size_t length);
+    void updateIndexBuffer(const void* data, std::size_t length);
     /**
     Update some or all contents of vertex buffer.
     @param data Specifies a pointer to the new data that will be copied into the data store.
@@ -142,7 +143,7 @@ TODO: should remove it.
     in bytes.
     @param length Specifies the size in bytes of the data store region being replaced.
     */
-    void updateVertexBuffer(void* data, std::size_t offset, std::size_t length);
+    void updateVertexBuffer(const void* data, std::size_t offset, std::size_t length);
     /**
     Update some or call contents of index buffer
     @param data Specifies a pointer to the new data that will be copied into the data store.
@@ -150,7 +151,7 @@ TODO: should remove it.
     in bytes.
     @param length Specifies the size in bytes of the data store region being replaced.
     */
-    void updateIndexBuffer(void* data, std::size_t offset, std::size_t length);
+    void updateIndexBuffer(const void* data, std::size_t offset, std::size_t length);
 
     /**
     Get vertex buffer capacity.
@@ -261,7 +262,7 @@ protected:
     CallBackFunc _afterCallback  = nullptr;
 };
 
-NS_AX_END
+}
 /**
  end of support group
  @}

@@ -26,18 +26,14 @@
 #if defined(__ANDROID__)
 #    include "MediaEngine.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AndroidMediaEngine : public MediaEngine
 {
 public:
     AndroidMediaEngine();
     ~AndroidMediaEngine();
-    void fireMediaEvent(MEMediaEventType event)
-    {
-        if (_onMediaEvent)
-            _onMediaEvent(event);
-    }
     void setCallbacks(std::function<void(MEMediaEventType)> onMediaEvent,
                      std::function<void(const MEVideoFrame&)> onVideoFrame) override
     {
@@ -59,9 +55,16 @@ public:
     MEMediaState getState() const override;
     bool transferVideoFrame() override;
 
-    void handleVideoSample(const uint8_t* buf, size_t len, int outputX, int outputY, int videoX, int videoY, int rotation, int videoPF);
-    void updateCurrentTime(double currentTime) { _currentTime = currentTime; }
-    void updateDuration(double duration) { _duration = duration; }
+    // internal stubs
+    void _fireMediaEvent(MEMediaEventType event)
+    {
+        if (_onMediaEvent)
+            _onMediaEvent(event);
+    }
+    void _storeDuration(double duration) { _duration = duration; }
+    void _storeCurrentTime(double currentTime) { _currentTime = currentTime; }
+    void _storeLastVideoSample(const uint8_t* buf, size_t len);
+    void _storeVideoMeta(int outputX, int outputY, int videoX, int videoY, int cbcrOffset, int rotation, int videoPF);
 
 private:
     void* context{};  // java object strong-refs
@@ -70,6 +73,7 @@ private:
 
     MEIntPoint _outputDim;
     MEIntPoint _videoDim;
+    int _cbcrOffset{0};
     int _videoRotation{0};
     int _videoPF{-1};
 
@@ -87,6 +91,6 @@ struct AndroidMediaEngineFactory : public MediaEngineFactory
     void destroyMediaEngine(MediaEngine* me) override { delete static_cast<AndroidMediaEngine*>(me); }
 };
 
-NS_AX_END
+}
 
 #endif

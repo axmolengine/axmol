@@ -29,7 +29,8 @@ THE SOFTWARE.
 
 #include "ActionCoroutine.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 //
 // Coroutine
@@ -118,4 +119,4 @@ void ActionCoroutine::step(float dt)
     _coroutine.moveNext();
 }
 
-NS_AX_END
+}

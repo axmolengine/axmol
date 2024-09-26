@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "base/UTF8.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //
 // Action Base Class
 //
@@ -298,4 +299,4 @@ void Follow::stop()
     Action::stop();
 }
 
-NS_AX_END
+}

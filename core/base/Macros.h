@@ -59,8 +59,6 @@ extern bool AX_DLL ax_assert_script_compatible(const char* msg);
 #        define AXASSERT(cond, msg)
 #    endif
 
-#    define GP_ASSERT(cond) AXASSERT(cond, "")
-
 // FIXME:: Backward compatible
 #    define CCAssert AXASSERT
 #endif  // AXASSERT
@@ -204,49 +202,49 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 /**********************/
 #if AX_ENABLE_PROFILERS
 
-#    define AX_PROFILER_DISPLAY_TIMERS() NS_AX::Profiler::getInstance()->displayTimers()
-#    define AX_PROFILER_PURGE_ALL()      NS_AX::Profiler::getInstance()->releaseAllTimers()
+#    define AX_PROFILER_DISPLAY_TIMERS() ax::Profiler::getInstance()->displayTimers()
+#    define AX_PROFILER_PURGE_ALL()      ax::Profiler::getInstance()->releaseAllTimers()
 
-#    define AX_PROFILER_START(__name__)  NS_AX::ProfilingBeginTimingBlock(__name__)
-#    define AX_PROFILER_STOP(__name__)   NS_AX::ProfilingEndTimingBlock(__name__)
-#    define AX_PROFILER_RESET(__name__)  NS_AX::ProfilingResetTimingBlock(__name__)
+#    define AX_PROFILER_START(__name__)  ax::ProfilingBeginTimingBlock(__name__)
+#    define AX_PROFILER_STOP(__name__)   ax::ProfilingEndTimingBlock(__name__)
+#    define AX_PROFILER_RESET(__name__)  ax::ProfilingResetTimingBlock(__name__)
 
 #    define AX_PROFILER_START_CATEGORY(__cat__, __name__)   \
         do                                                  \
         {                                                   \
             if (__cat__)                                    \
-                NS_AX::ProfilingBeginTimingBlock(__name__); \
+                ax::ProfilingBeginTimingBlock(__name__); \
         } while (0)
 #    define AX_PROFILER_STOP_CATEGORY(__cat__, __name__)  \
         do                                                \
         {                                                 \
             if (__cat__)                                  \
-                NS_AX::ProfilingEndTimingBlock(__name__); \
+                ax::ProfilingEndTimingBlock(__name__); \
         } while (0)
 #    define AX_PROFILER_RESET_CATEGORY(__cat__, __name__)   \
         do                                                  \
         {                                                   \
             if (__cat__)                                    \
-                NS_AX::ProfilingResetTimingBlock(__name__); \
+                ax::ProfilingResetTimingBlock(__name__); \
         } while (0)
 
 #    define AX_PROFILER_START_INSTANCE(__id__, __name__)                                       \
         do                                                                                     \
         {                                                                                      \
-            NS_AX::ProfilingBeginTimingBlock(                                                  \
-                NS_AX::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
+            ax::ProfilingBeginTimingBlock(                                                  \
+                ax::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
         } while (0)
 #    define AX_PROFILER_STOP_INSTANCE(__id__, __name__)                                        \
         do                                                                                     \
         {                                                                                      \
-            NS_AX::ProfilingEndTimingBlock(                                                    \
-                NS_AX::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
+            ax::ProfilingEndTimingBlock(                                                    \
+                ax::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
         } while (0)
 #    define AX_PROFILER_RESET_INSTANCE(__id__, __name__)                                       \
         do                                                                                     \
         {                                                                                      \
-            NS_AX::ProfilingResetTimingBlock(                                                  \
-                NS_AX::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
+            ax::ProfilingResetTimingBlock(                                                  \
+                ax::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
         } while (0)
 
 #else

@@ -38,7 +38,8 @@
  * @addtogroup ui
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 class DrawNode;
 class Texture2D;
 

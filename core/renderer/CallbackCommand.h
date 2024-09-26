@@ -33,7 +33,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace backend
 {
@@ -59,7 +60,7 @@ public:
 
     /**
      * @brief Reset the command state for reuse
-     * 
+     *
      */
     void reset();
 
@@ -71,7 +72,7 @@ public:
     std::function<void()> func;
 };
 
-NS_AX_END
+}
 /**
  end of support group
  @}

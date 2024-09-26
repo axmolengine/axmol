@@ -27,7 +27,8 @@
 #include "renderer/Renderer.h"
 #include "base/Director.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 GroupCommandManager::GroupCommandManager() {}
 
@@ -94,4 +95,4 @@ GroupCommand::~GroupCommand()
     Director::getInstance()->getRenderer()->getGroupCommandManager()->releaseGroupID(_renderQueueID);
 }
 
-NS_AX_END
+}

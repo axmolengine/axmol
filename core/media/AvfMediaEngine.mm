@@ -37,7 +37,7 @@
 #    import <UIKit/UIKit.h>
 #endif
 
-USING_NS_AX;
+using namespace ax;
 
 #define AX_ALIGN_ANY(x, a) ((((x) + (a) - 1) / (a)) * (a))
 
@@ -63,7 +63,7 @@ USING_NS_AX;
 {
 #if TARGET_OS_IPHONE
     auto nc = [NSNotificationCenter defaultCenter];
-    
+
     [nc addObserver:self
            selector:@selector(handleAudioRouteChange:)
                name:AVAudioSessionRouteChangeNotification
@@ -163,14 +163,15 @@ USING_NS_AX;
 
 @end
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void AvfMediaEngine::onPlayerEnd()
 {
     _playbackEnded = true;
     _state = MEMediaState::Stopped;
     fireMediaEvent(MEMediaEventType::Stopped);
-    
+
     if (_repeatEnabled) {
         this->setCurrentTime(0);
         this->play();
@@ -208,7 +209,7 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
     // open media file
     if (nsMediaUrl == nil)
     {
-        AXME_TRACE("Failed to open Media file: %s", sourceUri.data());
+        AXME_TRACE("Failed to open Media file: {}", sourceUri);
         return false;
     }
 
@@ -217,7 +218,7 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
 
     if (!_player)
     {
-        AXME_TRACE("Failed to create instance of an AVPlayer: %s", sourceUri.data());
+        AXME_TRACE("Failed to create instance of an AVPlayer: {}", sourceUri);
         return false;
     }
 
@@ -235,7 +236,7 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
 
     if (_playerItem == nil)
     {
-        AXME_TRACE("Failed to open player item with Url: %s", sourceUri.data());
+        AXME_TRACE("Failed to open player item with Url: {}", sourceUri);
         return false;
     }
 
@@ -261,7 +262,7 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
                                              NSString* errStr =
                                                  [[errDetail objectForKey:NSUnderlyingErrorKey] localizedDescription];
                                              NSString* errorReason = [errDetail objectForKey:NSLocalizedFailureReasonErrorKey];
-                                             AXME_TRACE("Load media asset failed, %s, %s", errStr.UTF8String, errorReason.UTF8String);
+                                             AXME_TRACE("Load media asset failed, {}, {}", errStr.UTF8String, errorReason.UTF8String);
                                          }
                                        }];
 
@@ -297,11 +298,11 @@ void AvfMediaEngine::onStatusNotification(void* context)
         NSString* mediaType      = assetTrack.mediaType;
         if ([mediaType isEqualToString:AVMediaTypeVideo])
         {  // we only care about video
-            
+
             auto naturalSize = [assetTrack naturalSize];
             _videoExtent.x = naturalSize.width;
             _videoExtent.y = naturalSize.height;
-            
+
             NSMutableDictionary* outputAttrs = [NSMutableDictionary dictionary];
             CMFormatDescriptionRef DescRef   = (CMFormatDescriptionRef)[assetTrack.formatDescriptions objectAtIndex:0];
             CMVideoCodecType codecType       = CMFormatDescriptionGetMediaSubType(DescRef);
@@ -487,7 +488,7 @@ double AvfMediaEngine::getCurrentTime()
         if (CMTIME_IS_VALID(currTime))
             return CMTimeGetSeconds(currTime);
     }
-        
+
     return 0.0;
 }
 
@@ -554,6 +555,6 @@ MEMediaState AvfMediaEngine::getState() const
     return _state;
 }
 
-NS_AX_END
+}
 
 #endif

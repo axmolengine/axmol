@@ -18,7 +18,7 @@ set(_AX_RENDERER_HEADER
     renderer/TextureCache.h
     renderer/TextureCube.h
     renderer/TrianglesCommand.h
-    
+
     renderer/backend/Backend.h
     renderer/backend/Buffer.h
     renderer/backend/CommandBuffer.h
@@ -39,8 +39,8 @@ set(_AX_RENDERER_HEADER
     renderer/backend/ShaderModule.h
     renderer/backend/Texture.h
     renderer/backend/Types.h
-    renderer/backend/VertexLayout.h    
-    
+    renderer/backend/VertexLayout.h
+
     )
 
 set(_AX_RENDERER_SRC
@@ -61,7 +61,7 @@ set(_AX_RENDERER_SRC
     renderer/TextureCube.cpp
     renderer/TrianglesCommand.cpp
     renderer/Shaders.cpp
-    
+
     renderer/backend/ProgramManager.cpp
     renderer/backend/ProgramStateRegistry.cpp
 

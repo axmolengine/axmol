@@ -1,7 +1,7 @@
 /****************************************************************************
 
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,7 +35,8 @@
 #include <functional>
 #include <stdexcept>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #pragma region JobExecutor
 class JobExecutor
@@ -234,4 +235,4 @@ void JobSystem::enqueue(std::function<void()> task, std::function<void()> done)
 
 #pragma endregion
 
-NS_AX_END
+}

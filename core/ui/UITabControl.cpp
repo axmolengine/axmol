@@ -30,7 +30,8 @@
 #include "ui/UILayout.h"
 #include "ui/UITabControl.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -722,4 +723,4 @@ void TabHeader::copySpecialProperties(Widget* model)
 }
 
 }  // namespace ui
-NS_AX_END
+}

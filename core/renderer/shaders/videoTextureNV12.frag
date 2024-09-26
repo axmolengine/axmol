@@ -12,7 +12,7 @@ layout(binding = 0) uniform sampler2D u_tex0; // Y sample: LumaTexture
 layout(binding = 1) uniform sampler2D u_tex1; // UV sample: ChromaTexture
 
 layout(std140) uniform fs_ub {
-    mat4 colorTransform; 
+    mat4 colorTransform;
 };
 
 layout(location = SV_Target0) out vec4 FragColor;
@@ -23,7 +23,7 @@ void main()
 
     YUV.x = texture(u_tex0, v_texCoord).x; // Y
     YUV.yz = texture(u_tex1, v_texCoord).RG8_CHANNEL; // CbCr
-	
+
     /* Convert YUV to RGB */
     vec4 OutColor;
     OutColor.xyz = trasnformYUV(YUV, colorTransform);

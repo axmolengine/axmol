@@ -66,8 +66,6 @@ public:
     /** Destroys the singleton */
     static void destroyInstance();
 
-    void purge();
-
     void init();
 
     /** Remove action with filename, and also remove other resource relate with this file */

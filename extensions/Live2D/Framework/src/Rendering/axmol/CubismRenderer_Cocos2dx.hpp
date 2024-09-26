@@ -41,7 +41,7 @@
 #include <OpenGL/gl.h>
 #endif
 
-USING_NS_AX;
+using namespace ax;
 
 //------------ LIVE2D NAMESPACE ------------
 namespace Live2D { namespace Cubism { namespace Framework { namespace Rendering {

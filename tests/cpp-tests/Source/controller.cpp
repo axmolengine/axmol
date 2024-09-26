@@ -29,7 +29,7 @@
 #include "BaseTest.h"
 #include "tests.h"
 
-USING_NS_AX;
+using namespace ax;
 
 #define LOG_INDENTATION "  "
 #define LOG_TAG         "[TestController]"
@@ -45,10 +45,6 @@ public:
 #if defined(AX_ENABLE_EXT_EFFEKSEER)
 #    pragma message("The optional extension Effekseer is enabled.")
         addTest("Effekseer", []() { return new EffekseerTests(); });
-#endif
-#if defined(AX_ENABLE_EXT_DRAWNODE)
-#    pragma message("The optional extension DrawNodeEx is enabled.")
-        addTest("DrawNodeEx", []() { return new DrawNodeExTests(); });
 #endif
 //        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
@@ -92,7 +88,7 @@ public:
         addTest("Node: BillBoard Test", []() { return new BillBoardTests(); });
         addTest("Node: Camera3D Test", []() { return new Camera3DTests(); });
         addTest("Node: Clipping", []() { return new ClippingNodeTests(); });
-        addTest("Node: Draw", []() { return new DrawPrimitivesTests(); });
+        addTest("Node: Draw", []() { return new DrawNodeTests(); });
         addTest("Node: Label - New API", []() { return new NewLabelTests(); });
         addTest("Node: Layer", []() { return new LayerTests(); });
         addTest("Node: Light", []() { return new LightTests(); });

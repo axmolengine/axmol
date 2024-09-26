@@ -29,7 +29,7 @@
 #include "doctest.h"
 #include "AppDelegate.h"
 
-USING_NS_AX;
+using namespace ax;
 
 static Vec2 gWindowSize = Vec2(1024, 768);
 

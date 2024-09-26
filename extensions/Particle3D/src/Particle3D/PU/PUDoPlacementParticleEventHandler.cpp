@@ -28,7 +28,8 @@
 #include "Particle3D/PU/PUAffector.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const unsigned int PUDoPlacementParticleEventHandler::DEFAULT_NUMBER_OF_PARTICLES = 1;
@@ -290,4 +291,4 @@ void PUDoPlacementParticleEventHandler::copyAttributesTo(PUEventHandler* eventHa
     doPlacementParticleEventHandler->_inheritParticleDepth     = _inheritParticleDepth;
 }
 
-NS_AX_END
+}

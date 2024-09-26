@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "base/Macros.h"
 #include "base/Data.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct FontDefinition;
 
@@ -83,7 +84,7 @@ public:
      *  @return The DPI of device.
      */
     static int getDPI();
-    
+
     /**
      * Gets the device pixel ratio
      * @since axmol-2.1.0
@@ -172,6 +173,6 @@ private:
 // end group
 /// @}
 
-NS_AX_END
+}
 
 #endif /* __CCDEVICE_H__ */

@@ -135,7 +135,8 @@ struct dirent* readdir$INODE64(DIR* dir)
 #    include "platform/winrt/WICImageLoader-winrt.h"
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 //////////////////////////////////////////////////////////////////////////
 // struct and data for pvr structure
@@ -1436,7 +1437,7 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
 
     if (ret)
     {
-        if (FileUtils::getInstance()->getFileExtension(_filePath) != ".tga")
+        if (FileUtils::getPathExtension(_filePath) != ".tga")
         {
             AXLOGW("Image WARNING: the image file suffix is not tga, but parsed as a tga image file. FILE: {}",
                   _filePath);
@@ -2317,7 +2318,7 @@ bool Image::saveToFile(std::string_view filename, bool isToRGB)
         return false;
     }
 
-    std::string fileExtension = FileUtils::getInstance()->getFileExtension(filename);
+    std::string fileExtension = FileUtils::getPathExtension(filename);
 
     if (fileExtension == ".png")
     {
@@ -2639,4 +2640,4 @@ void Image::reversePremultipliedAlpha()
     _hasPremultipliedAlpha = false;
 }
 
-NS_AX_END
+}

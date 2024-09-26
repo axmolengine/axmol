@@ -36,7 +36,7 @@
 #include "renderer/backend/ProgramState.h"
 #include "renderer/Shaders.h"
 
-USING_NS_AX;
+using namespace ax;
 
 enum
 {
@@ -991,7 +991,7 @@ void ClippingNodePerformanceTest::setup()
     countLabel->setPosition(Vec2(s.width / 2, s.height - 120));
     addChild(countLabel, 1);
     
-    auto addClippingNode = [=] (int count) -> void {
+    auto addClippingNode = [this, s, countLabel] (int count) -> void {
         for (int i = 0; i < count; i++) {
             Vec2 pos = Vec2(random(0, (int) s.width), random(0, (int) s.height));
             auto stencil = Sprite::create("Images/stars2.png");
@@ -1083,13 +1083,13 @@ void UniqueChildStencilTest::addChildStencils()
 
     // Child stencil 1
     constexpr auto radius = 30.f;
-    auto* drawNode        = DrawNode::create(2);
+    auto* drawNode        = DrawNode::create();
     drawNode->drawSolidCircle(Vec2(50, 50), radius, 360, 180, 1, 1, Color4B::MAGENTA);
 
     _parentStencil->addChild(drawNode);
 
     // Child stencil 2
-    drawNode = DrawNode::create(2);
+    drawNode = DrawNode::create();
     drawNode->drawSolidRect(Vec2(contentSize.width - 75, contentSize.height - 75),
                             Vec2(contentSize.width - 25, contentSize.height - 25), Color4B::MAGENTA);
     _parentStencil->addChild(drawNode);

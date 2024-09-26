@@ -32,7 +32,8 @@
 
 #include "base/Logging.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -50,9 +51,7 @@ class IDownloaderImpl
 public:
     virtual ~IDownloaderImpl() {}
 
-    std::function<void(const DownloadTask& task,
-                       std::function<int64_t(void* buffer, int64_t len)>& transferDataToBuffer)>
-        onTaskProgress;
+    std::function<void(const DownloadTask& task)> onTaskProgress;
 
     std::function<void(const DownloadTask& task,
                        int errorCode,
@@ -65,4 +64,4 @@ public:
 };
 
 }  // namespace network
-NS_AX_END  // namespace ax
+}  // namespace ax

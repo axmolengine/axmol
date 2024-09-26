@@ -74,7 +74,8 @@ static void internalBodyUpdateVelocity(cpBody* body, cpVect gravity, cpFloat dam
     cpBodySetTorque(body, 0.0f);
 }
 
-NS_AX_BEGIN
+namespace ax
+{
 extern const float PHYSICS_INFINITY;
 
 const std::string PhysicsBody::COMPONENT_NAME = "PhysicsBody";
@@ -1021,6 +1022,6 @@ void PhysicsBody::removeFromPhysicsWorld()
     }
 }
 
-NS_AX_END
+}
 
 #endif  // defined(AX_ENABLE_PHYSICS)

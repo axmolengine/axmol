@@ -4,7 +4,7 @@
 #include "GPath.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GTweener::GTweener() : _target(nullptr),
                        _refTarget(nullptr),

@@ -57,7 +57,8 @@
 
 #    include "yasio/byte_buffer.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 using namespace MFUtils;
 
@@ -306,6 +307,6 @@ struct WmfMediaEngineFactory : public MediaEngineFactory
     }
 };
 
-NS_AX_END
+}
 
 #endif

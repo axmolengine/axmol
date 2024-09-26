@@ -41,7 +41,8 @@ THE SOFTWARE.
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/DriverBase.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /*
  * creation with Texture2D
@@ -787,4 +788,4 @@ std::string SpriteBatchNode::getDescription() const
     return fmt::format("<SpriteBatchNode | tag = {}>", _tag);
 }
 
-NS_AX_END
+}

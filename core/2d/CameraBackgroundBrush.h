@@ -35,7 +35,8 @@
 #include "renderer/backend/Types.h"
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class CameraBackgroundColorBrush;
 class CameraBackgroundDepthBrush;
@@ -320,4 +321,4 @@ private:
     } _stateBlock;
 };
 
-NS_AX_END
+}

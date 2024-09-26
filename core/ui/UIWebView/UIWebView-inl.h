@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,7 +36,8 @@
 #include "base/Director.h"
 #include "platform/FileUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 namespace ui
 {
 WebView::WebView() : _impl(new WebViewImpl(this)) {}
@@ -240,7 +241,7 @@ WebView::ccWebViewCallback WebView::getOnJSCallback() const
 }
 
 }  // namespace ui
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #endif
 

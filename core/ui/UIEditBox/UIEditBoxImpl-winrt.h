@@ -39,7 +39,8 @@ using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::UI::Xaml::Input;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui {
 
@@ -159,7 +160,7 @@ namespace ui {
 
 } // namespace ui
 
-NS_AX_END
+}
 
 #endif // AX_PLATFORM_WINRT
 

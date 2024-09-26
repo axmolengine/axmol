@@ -30,7 +30,8 @@
 #include "base/Object.h"
 #include "math/Math.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PUNoise3D
 {
@@ -76,6 +77,6 @@ protected:
     double _persistence;
 };
 
-NS_AX_END
+}
 
 #endif

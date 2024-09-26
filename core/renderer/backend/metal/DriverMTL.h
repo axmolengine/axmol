@@ -81,11 +81,11 @@ public:
     /* The max vertex attribs, it's not how many device supports which may be lower. */
     static constexpr uint32_t MAX_VERTEX_ATTRIBS = 16;
 
-    /* The vertex data buffers binding index start, the glslcc(SPIRV-Cross), default UBO binding index is 0, 
+    /* The vertex data buffers binding index start, the glslcc(SPIRV-Cross), default UBO binding index is 0,
     scope is per stage in MSL
      */
     static constexpr uint32_t VBO_BINDING_INDEX_START = 0;
-    
+
     /* The vertex instancing buffer binding index */
     static constexpr uint32_t VBO_INSTANCING_BINDING_INDEX = VBO_BINDING_INDEX_START + 1;
 

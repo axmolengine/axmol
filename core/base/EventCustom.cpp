@@ -26,8 +26,9 @@
 #include "base/EventCustom.h"
 #include "base/Event.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 EventCustom::EventCustom(std::string_view eventName) : Event(Type::CUSTOM), _userData(nullptr), _eventName(eventName) {}
 
-NS_AX_END
+}

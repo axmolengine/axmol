@@ -124,9 +124,9 @@ private:
 
     hlookup::string_map<UniformInfo> _activeUniformInfos;
     hlookup::string_map<AttributeBindInfo> _attributeInfo;
-    
+
     int _attributeLocation[ATTRIBUTE_MAX];
-    
+
     int _maxLocation = -1;
     UniformInfo _builtinUniforms[UNIFORM_MAX];
 

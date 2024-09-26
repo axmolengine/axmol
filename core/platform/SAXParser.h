@@ -30,7 +30,8 @@
 #include "platform/Common.h"
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup platform
@@ -130,7 +131,7 @@ public:
 // end of platform group
 /// @}
 
-NS_AX_END
+}
 
 /// @endcond
 #endif  //__CCSAXPARSER_H__

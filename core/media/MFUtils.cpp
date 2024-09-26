@@ -9,7 +9,6 @@
 
 #pragma comment(lib, "mf")
 #pragma comment(lib, "Mfplat")
-#pragma comment(lib, "mfplay")
 #pragma comment(lib, "mfuuid")
 #pragma comment(lib, "shlwapi")
 

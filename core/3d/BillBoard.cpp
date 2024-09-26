@@ -29,7 +29,8 @@
 #include "2d/Camera.h"
 #include "renderer/Renderer.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 BillBoard::BillBoard() : _mode(Mode::VIEW_POINT_ORIENTED), _modeDirty(false)
 {
@@ -253,4 +254,4 @@ BillBoard::Mode BillBoard::getMode() const
     return _mode;
 }
 
-NS_AX_END
+}

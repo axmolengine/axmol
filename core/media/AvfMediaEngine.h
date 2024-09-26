@@ -31,7 +31,8 @@
 
 @class AVMediaSessionHandler;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AvfMediaEngine : public MediaEngine
 {
@@ -103,6 +104,6 @@ struct AvfMediaEngineFactory : public MediaEngineFactory
     void destroyMediaEngine(MediaEngine* me) override { delete static_cast<AvfMediaEngine*>(me); }
 };
 
-NS_AX_END
+}
 
 #endif

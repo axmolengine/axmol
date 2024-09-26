@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "DataReaderHelper.h"
 #include "SpriteFrameCacheHelper.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {
@@ -50,8 +50,8 @@ ArmatureDataManager* ArmatureDataManager::getInstance()
 
 void ArmatureDataManager::destroyInstance()
 {
-    SpriteFrameCacheHelper::purge();
-    DataReaderHelper::purge();
+    SpriteFrameCacheHelper::destroyInstance();
+    DataReaderHelper::destroyInstance();
     AX_SAFE_RELEASE_NULL(s_sharedArmatureDataManager);
 }
 

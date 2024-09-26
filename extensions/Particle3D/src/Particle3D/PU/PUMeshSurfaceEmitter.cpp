@@ -28,7 +28,8 @@
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include "Particle3D/PU/PUUtil.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 // Constants
 const Vec3 PUMeshSurfaceEmitter::DEFAULT_SCALE(1, 1, 1);
 const MeshInfo::MeshSurfaceDistribution PUMeshSurfaceEmitter::DEFAULT_DISTRIBUTION = MeshInfo::MSD_HOMOGENEOUS;
@@ -600,4 +601,4 @@ PUMeshSurfaceEmitter* PUMeshSurfaceEmitter::clone()
     return be;
 }
 
-NS_AX_END
+}

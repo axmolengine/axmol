@@ -2,7 +2,7 @@
  Copyright (c) 2014 cocos2d-x.org
  Author: Jeff Wang <wohaaitinciu@gmail.com>
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,7 +34,8 @@
 #    include <string>
 #    include "StdC.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Data;
 class Renderer;
@@ -45,11 +46,12 @@ namespace ui
 class WebView;
 }
 
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 class Win32WebControl;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -91,7 +93,7 @@ private:
     WebView* _webView;
 };
 }  // namespace ui
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 

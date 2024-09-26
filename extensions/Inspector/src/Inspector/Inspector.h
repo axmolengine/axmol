@@ -9,11 +9,12 @@
 #include "RefPtr.h"
 #include "2d/Node.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 class Node;
 class Scene;
 
-NS_AX_END
+}
 
 NS_AX_EXT_BEGIN
 

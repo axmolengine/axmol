@@ -3,7 +3,7 @@
  Copyright (c) Microsoft Open Technologies, Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,7 +34,8 @@
 #include "platform/PlatformMacros.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup platform
@@ -122,6 +123,6 @@ private:
 // end of platform group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __AX_FILEUTILS_WINRT_H__

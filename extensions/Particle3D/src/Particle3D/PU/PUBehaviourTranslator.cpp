@@ -28,7 +28,8 @@
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include "Particle3D/PU/PUBehaviourManager.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUBehaviourTranslator::PUBehaviourTranslator() : _behaviour(nullptr) {}
 //-------------------------------------------------------------------------
@@ -119,4 +120,4 @@ void PUBehaviourTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode
     }
 }
 
-NS_AX_END
+}

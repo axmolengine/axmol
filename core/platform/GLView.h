@@ -3,7 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
 https://axmol.dev/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCGLVIEW_H__
-#define __CCGLVIEW_H__
+#ifndef __AXGLVIEW_H__
+#define __AXGLVIEW_H__
 
 #include "base/Types.h"
 #include "base/EventTouch.h"
@@ -88,13 +88,14 @@ struct GLContextAttrs
     int multisamplingCount;
     bool visible   = true;
     bool decorated = true;
-    bool vsync       = false;
+    bool vsync     = true;
 #if defined(_WIN32)
     void* viewParent = nullptr;
 #endif
 };
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Scene;
 class Renderer;
@@ -110,6 +111,7 @@ class Director;
 class AX_DLL GLView : public Object
 {
     friend class Director;
+
 public:
     /**
      * @js ctor
@@ -423,16 +425,16 @@ public:
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     virtual void* getCocoaWindow() = 0;
     virtual void* getNSGLContext() = 0;  // stevetranby: added
-#endif                                /* (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) */
+#endif                                   /* (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) */
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-    virtual void* getX11Window() = 0;
+    virtual void* getX11Window()  = 0;
     virtual void* getX11Display() = 0;
     /* TODO: Implement AX_PLATFORM_LINUX_WAYLAND
     virtual void* getWaylandWindow() = 0;
     virtual void* getWaylandDisplay() = 0;
     */
-#endif // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
     /**
      * Renders a Scene with a Renderer
@@ -441,10 +443,13 @@ public:
     void renderScene(Scene* scene, Renderer* renderer);
 
 protected:
-    /**
-    * queue a priority operation in render thread for non-PC platforms, even through app in background
-    * invoked by Director
-    */
+    float transformInputX(float x) { return (x - _viewPortRect.origin.x) / _scaleX; }
+    float transformInputY(float y) { return (y - _viewPortRect.origin.y) / _scaleY; }
+
+    /** 
+     * queue a priority operation in render thread for non-PC platforms, even through app in background
+     * invoked by Director
+     */
     virtual void queueOperation(AsyncOperation op, void* param = nullptr);
 
     void updateDesignResolutionSize();
@@ -468,6 +473,6 @@ protected:
 // end of platform group
 /// @}
 
-NS_AX_END
+}  // namespace ax
 
 #endif /* __CCGLVIEW_H__ */

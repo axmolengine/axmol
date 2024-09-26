@@ -34,7 +34,8 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 struct AX_DLL ResourceData;
 
@@ -176,7 +177,7 @@ protected:
 
 }  // namespace ui
 
-NS_AX_END
+}
 // end of ui group
 /// @}
 

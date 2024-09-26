@@ -45,7 +45,8 @@
 
 #include "base/PaddedString.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const int FontAtlas::CacheTextureWidth     = 512;
 const int FontAtlas::CacheTextureHeight    = 512;
@@ -553,4 +554,4 @@ void FontAtlas::setAntiAliasTexParameters()
     }
 }
 
-NS_AX_END
+}

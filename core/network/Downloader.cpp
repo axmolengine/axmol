@@ -37,7 +37,8 @@
 #include <ctype.h>
 #include <algorithm>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -90,8 +91,7 @@ Downloader::Downloader(const DownloaderHints& hints)
 {
     AXLOGD("Construct Downloader {}", fmt::ptr(this));
     _impl.reset(new DownloaderImpl(hints));
-    _impl->onTaskProgress = [this](const DownloadTask& task,
-                                   std::function<int64_t(void* buffer, int64_t len)>& /*transferDataToBuffer*/) {
+    _impl->onTaskProgress = [this](const DownloadTask& task) {
         if (onTaskProgress)
         {
             onTaskProgress(task);
@@ -191,4 +191,4 @@ std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(std::string_vie
 //}
 
 }  // namespace network
-NS_AX_END  // namespace ax
+}  // namespace ax

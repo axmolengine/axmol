@@ -34,12 +34,13 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 class TextFieldTTF;
 
 /**
- * A input protocol for TextField. 
+ * A input protocol for TextField.
  * !!!DEPRECATED since axmol-2.1.3
  */
 class AX_DLL TextFieldDelegate
@@ -297,7 +298,7 @@ private:
     LengthStack* _lens;
 };
 
-NS_AX_END
+}
 // end of ui group
 /// @}
 

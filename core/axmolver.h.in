@@ -4,8 +4,8 @@
 // 0x00 HI ME LO
 // 00   03 08 00
 #define AX_VERSION_MAJOR 2
-#define AX_VERSION_MINOR 1
-#define AX_VERSION_PATCH 5
+#define AX_VERSION_MINOR 2
+#define AX_VERSION_PATCH 0
 
 /* Define axmol version helper macros */
 #define AX_VERSION_MAKE(a, b, c) ((a << 16) | (b << 8) | (c & 0xff))

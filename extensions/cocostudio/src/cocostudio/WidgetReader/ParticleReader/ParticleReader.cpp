@@ -33,7 +33,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -54,11 +54,6 @@ ParticleReader* ParticleReader::getInstance()
     }
 
     return _instanceParticleReader;
-}
-
-void ParticleReader::purge()
-{
-    AX_SAFE_DELETE(_instanceParticleReader);
 }
 
 void ParticleReader::destroyInstance()

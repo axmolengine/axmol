@@ -14,7 +14,7 @@
 #include "base/Utils.h"
 #include "base/Director.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ui;
 using namespace flatbuffers;
 /**/
@@ -124,11 +124,6 @@ WidgetReader* WidgetReader::getInstance()
         instanceWidgetReader = new WidgetReader();
     }
     return instanceWidgetReader;
-}
-
-void WidgetReader::purge()
-{
-    AX_SAFE_DELETE(instanceWidgetReader);
 }
 
 void WidgetReader::destroyInstance()

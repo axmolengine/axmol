@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "SkeletonNodeReader.h"
 #include "cocostudio/ActionTimeline/SkeletonNode.h"
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_TIMELINE;
 using namespace cocostudio;
 using namespace flatbuffers;

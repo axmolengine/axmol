@@ -43,7 +43,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @struct AudioPlayerSettings
@@ -387,7 +388,7 @@ protected:
     friend class AudioEngineImpl;
 };
 
-NS_AX_END
+}
 
 // end group
 /// @}

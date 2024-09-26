@@ -38,7 +38,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -59,11 +59,6 @@ MeshReader* MeshReader::getInstance()
     }
 
     return _instanceMeshReader;
-}
-
-void MeshReader::purge()
-{
-    AX_SAFE_DELETE(_instanceMeshReader);
 }
 
 void MeshReader::destroyInstance()

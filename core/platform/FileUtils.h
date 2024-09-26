@@ -45,7 +45,8 @@ THE SOFTWARE.
 #define AX_CONTENT_DIR "Content/"
 #define AX_CONTENT_DIR_LEN (sizeof("Content/") - 1)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup platform
@@ -144,28 +145,10 @@ public:
     virtual std::string getStringFromFile(std::string_view filename) const;
 
     /**
-     * Gets string from a file, async off the main cocos thread
-     *
-     * @param path filepath for the string to be read. Can be relative or absolute path
-     * @param callback Function that will be called when file is read. Will be called
-     * on the main cocos thread.
-     */
-    virtual void getStringFromFile(std::string_view path, std::function<void(std::string)> callback) const;
-
-    /**
      *  Creates binary data from a file.
      *  @return A data object.
      */
     virtual Data getDataFromFile(std::string_view filename) const;
-
-    /**
-     * Gets a binary data object from a file, async off the main cocos thread.
-     *
-     * @param filename filepath for the data to be read. Can be relative or absolute path
-     * @param callback Function that will be called when file is read. Will be called
-     * on the main cocos thread.
-     */
-    virtual void getDataFromFile(std::string_view filename, std::function<void(Data)> callback) const;
 
     enum class Status
     {
@@ -433,23 +416,6 @@ public:
     virtual bool writeStringToFile(std::string_view dataStr, std::string_view fullPath) const;
 
     /**
-     * Write a string to a file, done async off the main cocos thread
-     * Use this function if you need file access without blocking the main thread.
-     *
-     * This function takes a std::string by value on purpose, to leverage move sematics.
-     * If you want to avoid a copy of your datastr, use std::move/std::forward if appropriate
-     *
-     * @param dataStr the string want to save
-     * @param fullPath The full path to the file you want to save a string
-     * @param callback The function called once the string has been written to a file. This
-     * function will be executed on the main cocos thread. It will have on boolean argument
-     * signifying if the write was successful.
-     */
-    virtual void writeStringToFile(std::string dataStr,
-                                   std::string_view fullPath,
-                                   std::function<void(bool)> callback) const;
-
-    /**
      * write Data into a file
      *
      *@param data the data want to save
@@ -464,22 +430,6 @@ public:
     static bool writeBinaryToFile(const void* data, size_t dataSize, std::string_view fullPath);
 
     /**
-     * Write Data into a file, done async off the main cocos thread.
-     *
-     * Use this function if you need to write Data while not blocking the main cocos thread.
-     *
-     * This function takes Data by value on purpose, to leverage move sematics.
-     * If you want to avoid a copy of your data, use std::move/std::forward if appropriate
-     *
-     *@param data The data that will be written to disk
-     *@param fullPath The absolute file path that the data will be written to
-     *@param callback The function that will be called when data is written to disk. This
-     * function will be executed on the main cocos thread. It will have on boolean argument
-     * signifying if the write was successful.
-     */
-    virtual void writeDataToFile(Data data, std::string_view fullPath, std::function<void(bool)> callback) const;
-
-    /**
      * write ValueMap into a plist file
      *
      *@param dict the ValueMap want to save
@@ -489,24 +439,6 @@ public:
     virtual bool writeValueMapToFile(const ValueMap& dict, std::string_view fullPath) const;
 
     /**
-     * Write a ValueMap into a file, done async off the main cocos thread.
-     *
-     * Use this function if you need to write a ValueMap while not blocking the main cocos thread.
-     *
-     * This function takes ValueMap by value on purpose, to leverage move sematics.
-     * If you want to avoid a copy of your dict, use std::move/std::forward if appropriate
-     *
-     *@param dict The ValueMap that will be written to disk
-     *@param fullPath The absolute file path that the data will be written to
-     *@param callback The function that will be called when dict is written to disk. This
-     * function will be executed on the main cocos thread. It will have on boolean argument
-     * signifying if the write was successful.
-     */
-    virtual void writeValueMapToFile(ValueMap dict,
-                                     std::string_view fullPath,
-                                     std::function<void(bool)> callback) const;
-
-    /**
      * write ValueVector into a plist file
      *
      *@param vecData the ValueVector want to save
@@ -514,24 +446,6 @@ public:
      *@return bool
      */
     virtual bool writeValueVectorToFile(const ValueVector& vecData, std::string_view fullPath) const;
-
-    /**
-     * Write a ValueVector into a file, done async off the main cocos thread.
-     *
-     * Use this function if you need to write a ValueVector while not blocking the main cocos thread.
-     *
-     * This function takes ValueVector by value on purpose, to leverage move sematics.
-     * If you want to avoid a copy of your dict, use std::move/std::forward if appropriate
-     *
-     *@param vecData The ValueVector that will be written to disk
-     *@param fullPath The absolute file path that the data will be written to
-     *@param callback The function that will be called when vecData is written to disk. This
-     * function will be executed on the main cocos thread. It will have on boolean argument
-     * signifying if the write was successful.
-     */
-    virtual void writeValueVectorToFile(ValueVector vecData,
-                                        std::string_view fullPath,
-                                        std::function<void(bool)> callback) const;
 
     // Converts the contents of a file to a ValueVector.
     // This method is used internally.
@@ -547,31 +461,12 @@ public:
     virtual bool isFileExist(std::string_view filename) const;
 
     /**
-     * Checks if a file exists, done async off the main cocos thread.
-     *
-     * Use this function if you need to check if a file exists while not blocking the main cocos thread.
-     *
-     *  @note If a relative path was passed in, it will be inserted a default root path at the beginning.
-     *  @param filename The path of the file, it could be a relative or absolute path.
-     *  @param callback The function that will be called when the operation is complete. Will have one boolean
-     * argument, true if the file exists, false otherwise.
-     */
-    virtual void isFileExist(std::string_view filename, std::function<void(bool)> callback) const;
-
-    /**
      *  Gets filename extension is a suffix (separated from the base filename by a dot) in lower case.
      *  Examples of filename extensions are .png, .jpeg, .exe, .dmg and .txt.
      *  @param filePath The path of the file, it could be a relative or absolute path.
      *  @return suffix for filename in lower case or empty if a dot not found.
      */
-    static std::string getFileExtension(std::string_view filePath);
-
-    /**
-     *  Gets filename shotName
-     *  @param filePath The path of the file, it could be a relative or absolute path.
-     *  @return fileName.Extension without path
-     */
-    AX_DEPRECATED_ATTRIBUTE static std::string getFileShortName(std::string_view filePath) { return getPathBaseName(filePath); }
+    static std::string getPathExtension(std::string_view filePath);
 
     /*
      * @since axmol-2.1.5
@@ -610,31 +505,12 @@ public:
     virtual bool isDirectoryExist(std::string_view dirPath) const;
 
     /**
-     *  Checks whether the absoulate path is a directory, async off of the main cocos thread.
-     *
-     * @param dirPath The path of the directory, it must be an absolute path
-     * @param callback that will accept a boolean, true if the file exists, false otherwise.
-     * Callback will happen on the main cocos thread.
-     */
-    virtual void isDirectoryExist(std::string_view fullPath, std::function<void(bool)> callback) const;
-
-    /**
      *  Creates a directory.
      *
      *  @param dirPath The path of the directory, it must be an absolute path.
      *  @return True if the directory have been created successfully, false if not.
      */
     virtual bool createDirectories(std::string_view dirPath) const;
-    AX_DEPRECATED_ATTRIBUTE bool createDirectory(std::string_view dirPath) const { return createDirectories(dirPath); }
-
-    /**
-     * Create a directory, async off the main cocos thread.
-     *
-     * @param dirPath the path of the directory, it must be an absolute path
-     * @param callback The function that will be called when the operation is complete. Will have one boolean
-     * argument, true if the directory was successfully, false otherwise.
-     */
-    AX_DEPRECATED_ATTRIBUTE void createDirectory(std::string_view dirPath, std::function<void(bool)> callback) const;
 
     /**
      *  Removes a directory.
@@ -645,30 +521,12 @@ public:
     virtual bool removeDirectory(std::string_view dirPath) const;
 
     /**
-     * Removes a directory, async off the main cocos thread.
-     *
-     * @param dirPath the path of the directory, it must be an absolute path
-     * @param callback The function that will be called when the operation is complete. Will have one boolean
-     * argument, true if the directory was successfully removed, false otherwise.
-     */
-    AX_DEPRECATED_ATTRIBUTE void removeDirectory(std::string_view dirPath, std::function<void(bool)> callback) const;
-
-    /**
      *  Removes a file.
      *
      *  @param filepath The full path of the file, it must be an absolute path.
      *  @return True if the file have been removed successfully, false if not.
      */
     virtual bool removeFile(std::string_view filepath) const;
-
-    /**
-     * Removes a file, async off the main cocos thread.
-     *
-     * @param filepath the path of the file to remove, it must be an absolute path
-     * @param callback The function that will be called when the operation is complete. Will have one boolean
-     * argument, true if the file was successfully removed, false otherwise.
-     */
-    AX_DEPRECATED_ATTRIBUTE virtual void removeFile(std::string_view filepath, std::function<void(bool)> callback) const;
 
     /**
      *  Renames a file under the given directory.
@@ -681,20 +539,6 @@ public:
     virtual bool renameFile(std::string_view path, std::string_view oldname, std::string_view name) const;
 
     /**
-     *  Renames a file under the given directory, async off the main cocos thread.
-     *
-     *  @param path     The parent directory path of the file, it must be an absolute path.
-     *  @param oldname  The current name of the file.
-     *  @param name     The new name of the file.
-     *  @param callback The function that will be called when the operation is complete. Will have one boolean
-     * argument, true if the file was successfully renamed, false otherwise.
-     */
-    AX_DEPRECATED_ATTRIBUTE virtual void renameFile(std::string_view path,
-                            std::string_view oldname,
-                            std::string_view name,
-                            std::function<void(bool)> callback) const;
-
-    /**
      *  Renames a file under the given directory.
      *
      *  @param oldfullpath  The current fullpath of the file. Includes path and name.
@@ -702,18 +546,6 @@ public:
      *  @return True if the file have been renamed successfully, false if not.
      */
     virtual bool renameFile(std::string_view oldfullpath, std::string_view newfullpath) const;
-
-    /**
-     *  Renames a file under the given directory, async off the main cocos thread.
-     *
-     *  @param oldfullpath  The current fullpath of the file. Includes path and name.
-     *  @param newfullpath  The new fullpath of the file. Includes path and name.
-     *  @param callback The function that will be called when the operation is complete. Will have one boolean
-     * argument, true if the file was successfully renamed, false otherwise.
-     */
-    AX_DEPRECATED_ATTRIBUTE void renameFile(std::string_view oldfullpath,
-                            std::string_view newfullpath,
-                            std::function<void(bool)> callback) const;
 
     /**
      *  Retrieve the file size.
@@ -725,6 +557,183 @@ public:
     virtual int64_t getFileSize(std::string_view filepath) const;
 
     /**
+     *  List all files in a directory.
+     *
+     *  @param dirPath The path of the directory, it could be a relative or an absolute path.
+     *  @return File paths in a string vector
+     */
+    virtual std::vector<std::string> listFiles(std::string_view dirPath) const;
+
+    /**
+     *  List all files recursively in a directory.
+     *
+     *  @param dirPath The path of the directory, it could be a relative or an absolute path.
+     *  @return File paths in a string vector
+     */
+    virtual void listFilesRecursively(std::string_view dirPath, std::vector<std::string>* files) const;
+
+
+#ifndef AX_CORE_PROFILE
+    /**
+     * Gets string from a file, async off the main cocos thread
+     *
+     * @param path filepath for the string to be read. Can be relative or absolute path
+     * @param callback Function that will be called when file is read. Will be called
+     * on the main cocos thread.
+     */
+    AX_DEPRECATED(2.1) virtual void getStringFromFile(std::string_view path, std::function<void(std::string)> callback) const;
+    /**
+     * Gets a binary data object from a file, async off the main cocos thread.
+     *
+     * @param filename filepath for the data to be read. Can be relative or absolute path
+     * @param callback Function that will be called when file is read. Will be called
+     * on the main cocos thread.
+     */
+    AX_DEPRECATED(2.1) virtual void getDataFromFile(std::string_view filename, std::function<void(Data)> callback) const;
+   /**
+     * Write a string to a file, done async off the main cocos thread
+     * Use this function if you need file access without blocking the main thread.
+     *
+     * This function takes a std::string by value on purpose, to leverage move sematics.
+     * If you want to avoid a copy of your datastr, use std::move/std::forward if appropriate
+     *
+     * @param dataStr the string want to save
+     * @param fullPath The full path to the file you want to save a string
+     * @param callback The function called once the string has been written to a file. This
+     * function will be executed on the main cocos thread. It will have on boolean argument
+     * signifying if the write was successful.
+     */
+    AX_DEPRECATED(2.1) virtual void writeStringToFile(std::string dataStr,
+                                   std::string_view fullPath,
+                                   std::function<void(bool)> callback) const;
+    /**
+     * Write Data into a file, done async off the main cocos thread.
+     *
+     * Use this function if you need to write Data while not blocking the main cocos thread.
+     *
+     * This function takes Data by value on purpose, to leverage move sematics.
+     * If you want to avoid a copy of your data, use std::move/std::forward if appropriate
+     *
+     *@param data The data that will be written to disk
+     *@param fullPath The absolute file path that the data will be written to
+     *@param callback The function that will be called when data is written to disk. This
+     * function will be executed on the main cocos thread. It will have on boolean argument
+     * signifying if the write was successful.
+     */
+    AX_DEPRECATED(2.1) virtual void writeDataToFile(Data data, std::string_view fullPath, std::function<void(bool)> callback) const;
+    /**
+     * Write a ValueMap into a file, done async off the main cocos thread.
+     *
+     * Use this function if you need to write a ValueMap while not blocking the main cocos thread.
+     *
+     * This function takes ValueMap by value on purpose, to leverage move sematics.
+     * If you want to avoid a copy of your dict, use std::move/std::forward if appropriate
+     *
+     *@param dict The ValueMap that will be written to disk
+     *@param fullPath The absolute file path that the data will be written to
+     *@param callback The function that will be called when dict is written to disk. This
+     * function will be executed on the main cocos thread. It will have on boolean argument
+     * signifying if the write was successful.
+     */
+    AX_DEPRECATED(2.1) virtual void writeValueMapToFile(ValueMap dict,
+                                     std::string_view fullPath,
+                                     std::function<void(bool)> callback) const;
+    /**
+     * Write a ValueVector into a file, done async off the main cocos thread.
+     *
+     * Use this function if you need to write a ValueVector while not blocking the main cocos thread.
+     *
+     * This function takes ValueVector by value on purpose, to leverage move sematics.
+     * If you want to avoid a copy of your dict, use std::move/std::forward if appropriate
+     *
+     *@param vecData The ValueVector that will be written to disk
+     *@param fullPath The absolute file path that the data will be written to
+     *@param callback The function that will be called when vecData is written to disk. This
+     * function will be executed on the main cocos thread. It will have on boolean argument
+     * signifying if the write was successful.
+     */
+    AX_DEPRECATED(2.1) virtual void writeValueVectorToFile(ValueVector vecData,
+                                        std::string_view fullPath,
+                                        std::function<void(bool)> callback) const;
+    /**
+     * Checks if a file exists, done async off the main cocos thread.
+     *
+     * Use this function if you need to check if a file exists while not blocking the main cocos thread.
+     *
+     *  @note If a relative path was passed in, it will be inserted a default root path at the beginning.
+     *  @param filename The path of the file, it could be a relative or absolute path.
+     *  @param callback The function that will be called when the operation is complete. Will have one boolean
+     * argument, true if the file exists, false otherwise.
+     */
+    AX_DEPRECATED(2.1) virtual void isFileExist(std::string_view filename, std::function<void(bool)> callback) const;
+
+    AX_DEPRECATED(2.1) static std::string getFileExtension(std::string_view filePath) { return getPathExtension(filePath); }
+    AX_DEPRECATED(2.1) static std::string getFileShortName(std::string_view filePath) { return getPathBaseName(filePath); }
+    /**
+     *  Checks whether the absoulate path is a directory, async off of the main cocos thread.
+     *
+     * @param dirPath The path of the directory, it must be an absolute path
+     * @param callback that will accept a boolean, true if the file exists, false otherwise.
+     * Callback will happen on the main cocos thread.
+     */
+    AX_DEPRECATED(2.1) virtual void isDirectoryExist(std::string_view fullPath, std::function<void(bool)> callback) const;
+    
+    AX_DEPRECATED(2.1) bool createDirectory(std::string_view dirPath) const { return createDirectories(dirPath); }
+
+    /**
+     * Create a directory, async off the main cocos thread.
+     *
+     * @param dirPath the path of the directory, it must be an absolute path
+     * @param callback The function that will be called when the operation is complete. Will have one boolean
+     * argument, true if the directory was successfully, false otherwise.
+     */
+    AX_DEPRECATED(2.1) void createDirectory(std::string_view dirPath, std::function<void(bool)> callback) const;
+
+    /**
+     * Removes a directory, async off the main cocos thread.
+     *
+     * @param dirPath the path of the directory, it must be an absolute path
+     * @param callback The function that will be called when the operation is complete. Will have one boolean
+     * argument, true if the directory was successfully removed, false otherwise.
+     */
+    AX_DEPRECATED(2.1) void removeDirectory(std::string_view dirPath, std::function<void(bool)> callback) const;
+
+    /**
+     * Removes a file, async off the main cocos thread.
+     *
+     * @param filepath the path of the file to remove, it must be an absolute path
+     * @param callback The function that will be called when the operation is complete. Will have one boolean
+     * argument, true if the file was successfully removed, false otherwise.
+     */
+    AX_DEPRECATED(2.1) virtual void removeFile(std::string_view filepath, std::function<void(bool)> callback) const;
+
+    /**
+     *  Renames a file under the given directory, async off the main cocos thread.
+     *
+     *  @param path     The parent directory path of the file, it must be an absolute path.
+     *  @param oldname  The current name of the file.
+     *  @param name     The new name of the file.
+     *  @param callback The function that will be called when the operation is complete. Will have one boolean
+     * argument, true if the file was successfully renamed, false otherwise.
+     */
+    AX_DEPRECATED(2.1) virtual void renameFile(std::string_view path,
+                            std::string_view oldname,
+                            std::string_view name,
+                            std::function<void(bool)> callback) const;
+
+    /**
+     *  Renames a file under the given directory, async off the main cocos thread.
+     *
+     *  @param oldfullpath  The current fullpath of the file. Includes path and name.
+     *  @param newfullpath  The new fullpath of the file. Includes path and name.
+     *  @param callback The function that will be called when the operation is complete. Will have one boolean
+     * argument, true if the file was successfully renamed, false otherwise.
+     */
+    AX_DEPRECATED(2.1) void renameFile(std::string_view oldfullpath,
+                            std::string_view newfullpath,
+                            std::function<void(bool)> callback) const;
+
+    /**
      *  Retrieve the file size, async off the main cocos thread.
      *
      *  @note If a relative path was passed in, it will be inserted a default root path at the beginning.
@@ -732,15 +741,7 @@ public:
      *  @param callback The function that will be called when the operation is complete. Will have one long
      * argument, the file size.
      */
-    AX_DEPRECATED_ATTRIBUTE void getFileSize(std::string_view filepath, std::function<void(int64_t)> callback) const;
-
-    /**
-     *  List all files in a directory.
-     *
-     *  @param dirPath The path of the directory, it could be a relative or an absolute path.
-     *  @return File paths in a string vector
-     */
-    virtual std::vector<std::string> listFiles(std::string_view dirPath) const;
+    AX_DEPRECATED(2.1) void getFileSize(std::string_view filepath, std::function<void(int64_t)> callback) const;
 
     /**
      * List all files in a directory async, off of the main cocos thread.
@@ -751,15 +752,7 @@ public:
      * @js NA
      * @lua NA
      */
-    AX_DEPRECATED_ATTRIBUTE void listFilesAsync(std::string_view dirPath, std::function<void(std::vector<std::string>)> callback) const;
-
-    /**
-     *  List all files recursively in a directory.
-     *
-     *  @param dirPath The path of the directory, it could be a relative or an absolute path.
-     *  @return File paths in a string vector
-     */
-    virtual void listFilesRecursively(std::string_view dirPath, std::vector<std::string>* files) const;
+    AX_DEPRECATED(2.1) void listFilesAsync(std::string_view dirPath, std::function<void(std::vector<std::string>)> callback) const;
 
     /**
      *  List all files recursively in a directory, async off the main cocos thread.
@@ -770,9 +763,9 @@ public:
      * @js NA
      * @lua NA
      */
-    AX_DEPRECATED_ATTRIBUTE void listFilesRecursivelyAsync(std::string_view dirPath,
+    AX_DEPRECATED(2.1) void listFilesRecursivelyAsync(std::string_view dirPath,
                                            std::function<void(std::vector<std::string>)> callback) const;
-
+#endif
     /** Returns the full path cache. */
     const hlookup::string_map<std::string> getFullPathCache() const { return _fullPathCache; }
 
@@ -842,11 +835,6 @@ protected:
      */
     virtual std::string getFullPathForFilenameWithinDirectory(std::string_view directory,
                                                               std::string_view filename) const;
-
-    /**
-     * mutex used to protect fields.
-     */
-    mutable std::recursive_mutex _mutex;
 
     /**
      * The vector contains search paths.
@@ -921,6 +909,6 @@ protected:
 // end of support group
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // __AX_FILEUTILS_H__

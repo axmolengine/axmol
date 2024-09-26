@@ -29,7 +29,8 @@
 #include "PUScriptTranslator.h"
 #include "Particle3D/PU/PUTranslateManager.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const std::string token[1000] = {
     // Generic
@@ -772,4 +773,4 @@ void PUScriptTranslator::processNode(PUScriptCompiler* compiler, PUAbstractNode*
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 
-NS_AX_END
+}

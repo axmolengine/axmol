@@ -27,7 +27,8 @@
 #include "PUTechniqueTranslator.h"
 #include "Particle3D/PU/PUMaterialManager.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 PUTechniqueTranslator::PUTechniqueTranslator()  //: mTechnique(0)
 {}
@@ -405,4 +406,4 @@ void PUTechniqueTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode
     }
 }
 
-NS_AX_END
+}

@@ -1,6 +1,6 @@
  /****************************************************************************
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "2d/PlistSpriteSheetLoader.h"
 
 #include "platform/FileUtils.h"
@@ -40,7 +40,8 @@
 
 using namespace std;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void PlistSpriteSheetLoader::load(std::string_view filePath, SpriteFrameCache& cache)
 {
@@ -506,4 +507,4 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
     }
 }
 
-NS_AX_END
+}

@@ -30,7 +30,8 @@
 #include "2d/Node.h"
 #include "renderer/CallbackCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _2d
@@ -102,4 +103,4 @@ protected:
 // end of _2d group
 /// @}
 
-NS_AX_END
+}

@@ -3,7 +3,7 @@
 #include "GTree.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GTreeNode* GTreeNode::create(bool isFolder, const std::string& resURL)
 {

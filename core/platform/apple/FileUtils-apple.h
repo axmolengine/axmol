@@ -35,7 +35,8 @@
 #include "platform/PlatformMacros.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup platform
@@ -75,6 +76,6 @@ private:
 // end of platform group
 /// @}
 
-NS_AX_END
+}
 
 #endif  // __AX_FILEUTILS_APPLE_H__

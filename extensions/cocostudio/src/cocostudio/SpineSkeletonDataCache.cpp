@@ -9,12 +9,6 @@ SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 
 SpineSkeletonDataCache::SpineSkeletonDataCache()
 {
-    _reportError = &ax::print;
-}
-
-void SpineSkeletonDataCache::setErrorReportFunc(void (*errorfunc)(const char* pszFormat, ...))
-{
-    _reportError = std::move(errorfunc);
 }
 
 void SpineSkeletonDataCache::removeData(const char* dataFile)
@@ -41,7 +35,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
     spine::AttachmentLoader* loader   = nullptr;
     bool ok                           = false;
 
-    auto fileExtension = ax::FileUtils::getInstance()->getFileExtension(dataFile);
+    auto fileExtension = ax::FileUtils::getPathExtension(dataFile);
 
     static spine::AxmolTextureLoader s_textureLoader;
 
@@ -69,7 +63,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
             if ((!binary.getError().isEmpty()))
             {
                 ++failed;
-                _reportError("#parse spine .skel data file failed, error:%s", binary.getError().buffer());
+                AXLOGE("#parse spine .skel data file failed, error:{}", binary.getError().buffer());
             }
         }
         else
@@ -81,7 +75,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
             if ((!json.getError().isEmpty()))
             {
                 ++failed;
-                _reportError("#parse spine .json data file failed, error:%s", json.getError().buffer());
+                AXLOGE("#parse spine .json data file failed, error:{}", json.getError().buffer());
             }
         }
 
@@ -142,12 +136,6 @@ SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 
 SpineSkeletonDataCache::SpineSkeletonDataCache()
 {
-    _reportError = &ax::print;
-}
-
-void SpineSkeletonDataCache::setErrorReportFunc(void (*errorfunc)(const char* pszFormat, ...))
-{
-    _reportError = errorfunc;
 }
 
 void SpineSkeletonDataCache::removeData(const char* dataFile)
@@ -174,7 +162,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
     spAttachmentLoader* loader   = nullptr;
     bool ok                      = false;
 
-    auto fileExtension = ax::FileUtils::getInstance()->getFileExtension(dataFile);
+    auto fileExtension = ax::FileUtils::getPathExtension(dataFile);
 
     do
     {
@@ -205,7 +193,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
             if ((binary->error != nullptr))
             {
                 ++failed;
-                _reportError("#parse spine .skel data file failed, error:%s", binary->error);
+                AXLOGE("#parse spine .skel data file failed, error:{}", binary->error);
             }
 
             spSkeletonBinary_dispose(binary);
@@ -224,7 +212,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
             if ((json->error != nullptr))
             {
                 ++failed;
-                _reportError("#parse spine .json data file failed, error:%s", json->error);
+                AXLOGE("#parse spine .json data file failed, error:{}", json->error);
             }
 
             spSkeletonJson_dispose(json);
@@ -233,7 +221,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
         if ((loader->error1 != nullptr))
         {
             ++failed;
-            _reportError("#parse spine attachment failed, error:%s%s", loader->error1, loader->error2);
+            AXLOGE("#parse spine attachment failed, error:{}{}", loader->error1, loader->error2);
         }
 
         if (failed > 0)

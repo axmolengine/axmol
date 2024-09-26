@@ -34,7 +34,8 @@
 #include "base/Logging.h"
 #include "extensions/ExtensionExport.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 enum
 {
     TID_LBRACKET = 0,  // {
@@ -79,6 +80,6 @@ private:  // Private utility operations
     bool isNewline(char c) const;
 };
 
-NS_AX_END
+}
 
 #endif

@@ -1,7 +1,7 @@
 #include "VirtualListScene.h"
 #include "MailItem.h"
 
-USING_NS_AX;
+using namespace ax;
 
 void VirtualListScene::continueInit()
 {

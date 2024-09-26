@@ -26,7 +26,8 @@
 #include "Particle3DAffector.h"
 #include "ParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Particle3DAffector::Particle3DAffector() : _particleSystem(nullptr), _isEnabled(true) {}
 
@@ -37,4 +38,4 @@ Particle3DAffector::~Particle3DAffector()
 
 void Particle3DAffector::updateAffector(Particle3D* /*particle*/, float /*deltaTime*/) {}
 
-NS_AX_END
+}

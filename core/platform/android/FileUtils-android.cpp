@@ -44,11 +44,10 @@ THE SOFTWARE.
 #define ASSETS_FOLDER_NAME "assets/"
 #define ASSETS_FOLDER_NAME_LENGTH 7
 
-using namespace std;
+// #define AX_USE_ANDROID_EXTERNAL_FILES_DIR 1
 
-#define DECLARE_GUARD (void)0  // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
-
-NS_AX_BEGIN
+namespace ax
+{
 
 AAssetManager* FileUtilsAndroid::assetmanager = nullptr;
 ZipFile* FileUtilsAndroid::obbfile            = nullptr;
@@ -92,8 +91,6 @@ FileUtilsAndroid::~FileUtilsAndroid()
 
 bool FileUtilsAndroid::init()
 {
-    DECLARE_GUARD;
-
     _defaultResRootPath = ASSETS_FOLDER_NAME;
 
     std::string assetsPath(getApkPath());
@@ -107,9 +104,6 @@ bool FileUtilsAndroid::init()
 
 bool FileUtilsAndroid::isFileExistInternal(std::string_view strFilePath) const
 {
-
-    DECLARE_GUARD;
-
     if (strFilePath.empty())
     {
         return false;
@@ -209,7 +203,6 @@ bool FileUtilsAndroid::isDirectoryExistInternal(std::string_view dirPath) const
 
 bool FileUtilsAndroid::isAbsolutePath(std::string_view strPath) const
 {
-    DECLARE_GUARD;
     // On Android, there are two situations for full path.
     // 1) Files in APK, e.g. assets/path/path/file.png
     // 2) Files not in APK, e.g. /data/data/org.axmol.hellocpp/cache/path/path/file.png, or
@@ -219,7 +212,6 @@ bool FileUtilsAndroid::isAbsolutePath(std::string_view strPath) const
 
 int64_t FileUtilsAndroid::getFileSize(std::string_view filepath) const
 {
-    DECLARE_GUARD;
     int64_t size = FileUtils::getFileSize(filepath);
     if (size != -1)
     {
@@ -255,7 +247,7 @@ std::vector<std::string> FileUtilsAndroid::listFiles(std::string_view dirPath) c
         return FileUtils::listFiles(dirPath);
 
     std::vector<std::string> fileList;
-    string fullPath = fullPathForDirectory(dirPath);
+    std::string fullPath = fullPathForDirectory(dirPath);
 
     static const std::string apkprefix("assets/");
     std::string relativePath;
@@ -294,7 +286,7 @@ std::vector<std::string> FileUtilsAndroid::listFiles(std::string_view dirPath) c
     const char* tmpDir = nullptr;
     while ((tmpDir = AAssetDir_getNextFileName(dir)) != nullptr)
     {
-        string filepath(tmpDir);
+        std::string filepath(tmpDir);
         if (isDirectoryExistInternal(filepath))
             filepath += "/";
         fileList.emplace_back(fullPath + filepath);
@@ -312,16 +304,19 @@ std::string FileUtilsAndroid::getNativeWritableAbsolutePath() const
 {
     // Fix for Nexus 10 (Android 4.2 multi-user environment)
     // the path is retrieved through Java Context.getCacheDir() method
-    std::string path = JniHelper::callStaticStringMethod("org.axmol.lib.AxmolEngine", "getWritablePath");
+#ifdef AX_USE_ANDROID_EXTERNAL_FILES_DIR
+    std::string path = JniHelper::callStaticStringMethod("org.axmol.lib.AxmolEngine", "getExternalFilesDir");
+#else
+    std::string path = JniHelper::callStaticStringMethod("org.axmol.lib.AxmolEngine", "getInternalFilesDir");
+#endif
     if (!path.empty())
         path.append("/");
 
     return path;
 }
 
-NS_AX_END
+}
 
-#undef DECLARE_GUARD
 #undef ASSETS_FOLDER_NAME_LENGTH
 #undef ASSETS_FOLDER_NAME
 #undef LOGD

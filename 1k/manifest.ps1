@@ -14,6 +14,7 @@ if ($Global:is_axmol_app -or $Global:is_axmol_engine) {
     $manifest['cmake'] = '3.29.3~3.30.2+'
     $manifest['emsdk'] = '3.1.63+'
     $manifest['jdk'] = '17.0.10~17.0.12+'
+    $manifest['vs'] = '16.0+'
 }
 
 # android sdk tools

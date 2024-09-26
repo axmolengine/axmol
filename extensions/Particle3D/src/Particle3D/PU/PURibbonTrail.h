@@ -33,7 +33,8 @@
 #include <vector>
 #include <unordered_map>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PURibbonTrail : public PUBillboardChain
 {
@@ -191,5 +192,5 @@ protected:
     bool _needTimeUpdate;
 };
 
-NS_AX_END
+}
 #endif

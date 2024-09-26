@@ -28,34 +28,71 @@ THE SOFTWARE.
 #include "platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "platform/wasm/Application-wasm.h"
-#include <unistd.h>
-#include <sys/time.h>
-#include <string>
-#include "base/Director.h"
-#include "base/Utils.h"
-#include "platform/FileUtils.h"
-#include <emscripten/emscripten.h>
+#    include "platform/wasm/Application-wasm.h"
+#    include "platform/wasm/devtools-wasm.h"
+#    include <unistd.h>
+#    include <sys/time.h>
+#    include <string>
+#    include "base/Director.h"
+#    include "base/Utils.h"
+#    include "platform/FileUtils.h"
+#    include <emscripten/emscripten.h>
 
-NS_AX_BEGIN
-
-
-// sharedApplication pointer
-Application * Application::sm_pSharedApplication = nullptr;
-
-static long getCurrentMillSecond() {
-    long lLastTime;
-    struct timeval stCurrentTime;
-
-    gettimeofday(&stCurrentTime,NULL);
-    lLastTime = stCurrentTime.tv_sec*1000+stCurrentTime.tv_usec*0.001; // milliseconds
-    return lLastTime;
+extern "C" {
+//
+void axmol_hdoc_visibilitychange(bool hidden)
+{
+    ax::EventCustom event(hidden ? EVENT_COME_TO_BACKGROUND : EVENT_COME_TO_FOREGROUND);
+    ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event, true);
 }
 
-Application::Application()
-: _animationSpeed(60)
+// webglcontextlost
+void axmol_wgl_context_lost()
 {
-    AX_ASSERT(! sm_pSharedApplication);
+    AXLOGI("receive event: webglcontextlost");
+}
+
+// webglcontextrestored
+void axmol_wgl_context_restored()
+{
+    AXLOGI("receive event: webglcontextrestored");
+
+    auto director = ax::Director::getInstance();
+    ax::backend::DriverBase::getInstance()->resetState();
+    director->resetMatrixStack();
+    ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
+    director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
+    director->setGLDefaultValues();
+#    if AX_ENABLE_CACHE_TEXTURE_DATA
+    ax::VolatileTextureMgr::reloadAllTextures();
+#    endif
+}
+
+void axmol_dev_pause()
+{
+    ax::DevToolsImpl::getInstance()->pause();
+}
+
+void axmol_dev_resume()
+{
+    ax::DevToolsImpl::getInstance()->resume();
+}
+
+void axmol_dev_step()
+{
+    ax::DevToolsImpl::getInstance()->step();
+}
+}
+
+namespace ax
+{
+
+// sharedApplication pointer
+Application* Application::sm_pSharedApplication = nullptr;
+
+Application::Application() : _animationSpeed(60)
+{
+    AX_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
 }
 
@@ -68,7 +105,7 @@ Application::~Application()
 extern "C" void mainLoopIter(void)
 {
     auto director = Director::getInstance();
-    auto glview = director->getGLView();
+    auto glview   = director->getGLView();
 
     director->mainLoop();
     glview->pollEvents();
@@ -78,25 +115,25 @@ int Application::run()
 {
     initGLContextAttrs();
     // Initialize instance and cocos2d.
-    if (! applicationDidFinishLaunching())
+    if (!applicationDidFinishLaunching())
     {
         return 1;
     }
 
     auto director = Director::getInstance();
-    auto glview = director->getGLView();
+    auto glview   = director->getGLView();
 
     // Retain glview to avoid glview being released in the while loop
     glview->retain();
 
-    //emscripten_set_main_loop(&mainLoopIter, 0, 1);
+    // emscripten_set_main_loop(&mainLoopIter, 0, 1);
     emscripten_set_main_loop(&mainLoopIter, _animationSpeed, 1);
     // TODO: ? does these cleanup really run?
     /* Only work on Desktop
-    *  Director::mainLoop is really one frame logic
-    *  when we want to close the window, we should call Director::end();
-    *  then call Director::mainLoop to do release of internal resources
-    */
+     *  Director::mainLoop is really one frame logic
+     *  when we want to close the window, we should call Director::end();
+     *  then call Director::mainLoop to do release of internal resources
+     */
     if (glview->isOpenGLReady())
     {
         director->end();
@@ -119,7 +156,7 @@ void Application::setResourceRootPath(const std::string& rootResDir)
     {
         _resourceRootPath += '/';
     }
-    FileUtils* pFileUtils = FileUtils::getInstance();
+    FileUtils* pFileUtils                = FileUtils::getInstance();
     std::vector<std::string> searchPaths = pFileUtils->getSearchPaths();
     searchPaths.insert(searchPaths.begin(), _resourceRootPath);
     pFileUtils->setSearchPaths(searchPaths);
@@ -142,9 +179,7 @@ std::string Application::getVersion()
 
 bool Application::openURL(std::string_view url)
 {
-    EM_ASM_ARGS({
-        window.open(UTF8ToString($0));
-    }, url.data());
+    EM_ASM_ARGS({ window.open(UTF8ToString($0)); }, url.data());
 
     return true;
 }
@@ -164,21 +199,26 @@ Application* Application::sharedApplication()
     return Application::getInstance();
 }
 
-const char * Application::getCurrentLanguageCode()
+const char* Application::getCurrentLanguageCode()
 {
-    static char code[3]={0};
+    static char code[3] = {0};
     char pLanguageName[16];
 
-    EM_ASM_ARGS({
-        var lang = localStorage.getItem('localization_language');
-        if (lang == null) {
-            stringToUTF8(window.navigator.language.replace(/-.*/, ""), $0, 16);
-        } else {
-            stringToUTF8(lang, $0, 16);
-        }
-    }, pLanguageName);
-    strncpy(code,pLanguageName,2);
-    code[2]='\0';
+    EM_ASM_ARGS(
+        {
+            var lang = localStorage.getItem('localization_language');
+            if (lang == null)
+            {
+                stringToUTF8(window.navigator.language.replace(/ - .*/, ""), $0, 16);
+            }
+            else
+            {
+                stringToUTF8(lang, $0, 16);
+            }
+        },
+        pLanguageName);
+    strncpy(code, pLanguageName, 2);
+    code[2] = '\0';
     return code;
 }
 
@@ -186,19 +226,23 @@ LanguageType Application::getCurrentLanguage()
 {
     char pLanguageName[16];
 
-    EM_ASM_ARGS({
-        var lang = localStorage.getItem('localization_language');
-        if (lang == null) {
-            stringToUTF8(window.navigator.language.replace(/-.*/, ""), $0, 16);
-        } else {
-            stringToUTF8(lang, $0, 16);
-        }
-    }, pLanguageName);
+    EM_ASM_ARGS(
+        {
+            var lang = localStorage.getItem('localization_language');
+            if (lang == null)
+            {
+                stringToUTF8(window.navigator.language.replace(/ - .*/, ""), $0, 16);
+            }
+            else
+            {
+                stringToUTF8(lang, $0, 16);
+            }
+        },
+        pLanguageName);
 
     return utils::getLanguageTypeByISO2(pLanguageName);
 }
 
-NS_AX_END
+}  // namespace ax
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
-
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WASM

@@ -5,7 +5,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
 https://axmol.dev/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "platform/FileUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // implementation of SpriteFrame
 
@@ -266,4 +267,4 @@ bool SpriteFrame::hasPolygonInfo() const
     return _polygonInfo.triangles.vertCount != 0;
 }
 
-NS_AX_END
+}

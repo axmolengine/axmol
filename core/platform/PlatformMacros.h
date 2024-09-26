@@ -88,7 +88,7 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
  *
  * @since v0.99.5
  */
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 #    if !defined(AX_ENABLE_CACHE_TEXTURE_DATA)
 #        define AX_ENABLE_CACHE_TEXTURE_DATA 1
 #    endif
@@ -314,52 +314,52 @@ public:                                                 \
 #define AX_BREAK_IF(cond) \
     if (cond)             \
     break
-
-#define __AXLOGWITHFUNCTION(s, ...) \
-    ax::print("%s : %s", __FUNCTION__, ax::StringUtils::format(s, ##__VA_ARGS__).c_str())
-
+#ifndef AX_CORE_PROFILE
+#    define __AXLOGWITHFUNCTION(s, ...) \
+        ax::print("%s : %s", __FUNCTION__, ax::StringUtils::format(s, ##__VA_ARGS__).c_str())
 /// @name legacy log macros, deprecated since axmol 2.1.4, use AXLOGD, AXLOGI, AXLOGW, ... instead
 /// @{
-#if !defined(_AX_DEBUG) || _AX_DEBUG == 0
-#    define AXLOG(...) \
-        do             \
-        {              \
-        } while (0)
-#    define AXLOGINFO(...) \
-        do                 \
-        {                  \
-        } while (0)
-#    define AXLOGERROR(...) \
-        do                  \
-        {                   \
-        } while (0)
-#    define AXLOGWARN(...) \
-        do                 \
-        {                  \
-        } while (0)
+#    if !defined(_AX_DEBUG) || _AX_DEBUG == 0
+#        define AXLOG(...) \
+            do             \
+            {              \
+            } while (0)
+#        define AXLOGINFO(...) \
+            do                 \
+            {                  \
+            } while (0)
+#        define AXLOGERROR(...) \
+            do                  \
+            {                   \
+            } while (0)
+#        define AXLOGWARN(...) \
+            do                 \
+            {                  \
+            } while (0)
 
-#elif _AX_DEBUG == 1
-#    define AXLOG(format, ...)      ax::print(format, ##__VA_ARGS__)
-#    define AXLOGERROR(format, ...) ax::print(format, ##__VA_ARGS__)
-#    define AXLOGINFO(format, ...) \
-        do                         \
-        {                          \
-        } while (0)
-#    define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
+#    elif _AX_DEBUG == 1
+#        define AXLOG(format, ...)      ax::print(format, ##__VA_ARGS__)
+#        define AXLOGERROR(format, ...) ax::print(format, ##__VA_ARGS__)
+#        define AXLOGINFO(format, ...) \
+            do                         \
+            {                          \
+            } while (0)
+#        define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
 
-#elif _AX_DEBUG > 1
-#    define AXLOG(format, ...)      ax::print(format, ##__VA_ARGS__)
-#    define AXLOGERROR(format, ...) ax::print(format, ##__VA_ARGS__)
-#    define AXLOGINFO(format, ...)  ax::print(format, ##__VA_ARGS__)
-#    define AXLOGWARN(...)          __AXLOGWITHFUNCTION(__VA_ARGS__)
-#endif  // _AX_DEBUG
+#    elif _AX_DEBUG > 1
+#        define AXLOG(format, ...)      ax::print(format, ##__VA_ARGS__)
+#        define AXLOGERROR(format, ...) ax::print(format, ##__VA_ARGS__)
+#        define AXLOGINFO(format, ...)  ax::print(format, ##__VA_ARGS__)
+#        define AXLOGWARN(...)          __AXLOGWITHFUNCTION(__VA_ARGS__)
+#    endif  // _AX_DEBUG
 
 /** Lua engine debug */
-#if !defined(_AX_DEBUG) || _AX_DEBUG == 0 || AX_LUA_ENGINE_DEBUG == 0
-#    define LUALOG(...)
-#else
-#    define LUALOG(format, ...) ax::print(format, ##__VA_ARGS__)
-#endif  // Lua engine debug
+#    if !defined(_AX_DEBUG) || _AX_DEBUG == 0 || AX_LUA_ENGINE_DEBUG == 0
+#        define LUALOG(...)
+#    else
+#        define LUALOG(format, ...) ax::print(format, ##__VA_ARGS__)
+#    endif  // Lua engine debug
+#endif
 
 //  end of debug group
 /// @}
@@ -391,23 +391,18 @@ public:                                                 \
     TypeName();                                     \
     AX_DISALLOW_COPY_AND_ASSIGN(TypeName)
 
-/** @def AX_DEPRECATED_ATTRIBUTE
- * Only certain compilers support __attribute__((deprecated)).
- */
-#if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
-#    define AX_DEPRECATED_ATTRIBUTE __attribute__((deprecated))
-#elif _MSC_VER >= 1400  // vs 2005 or higher
-#    define AX_DEPRECATED_ATTRIBUTE __declspec(deprecated)
-#else
-#    define AX_DEPRECATED_ATTRIBUTE
-#endif
-
 /** @def AX_DEPRECATED(...)
  * Macro to mark things deprecated as of a particular version
  * can be used with arbitrary parameters which are thrown away.
  * e.g. AX_DEPRECATED(4.0) or AX_DEPRECATED(4.0, "not going to need this anymore") etc.
  */
-#define AX_DEPRECATED(...) AX_DEPRECATED_ATTRIBUTE
+#if defined(_WIN32)
+#    define AX_DEPRECATED(...) __declspec(deprecated)
+#elif defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
+#    define AX_DEPRECATED(...) __attribute__((deprecated))
+#else
+#    define AX_DEPRECATED(...)
+#endif
 
 /** @def AX_FORMAT_PRINTF(formatPos, argPos)
  * Only certain compiler support __attribute__((format))

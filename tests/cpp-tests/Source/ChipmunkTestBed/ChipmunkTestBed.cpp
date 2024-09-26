@@ -31,7 +31,7 @@
 
 #include "ChipmunkTestBed.h"
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 enum
@@ -481,9 +481,9 @@ void ChipmunkTestBed::onMouseUp(Event* event)
 void ChipmunkTestBed::onMouseMove(Event* event)
 {
     EventMouse* e = (EventMouse*)event;
-
-    ChipmunkDemoMouse.x = e->getCursorX() - physicsDebugNodeOffset.x;
-    ChipmunkDemoMouse.y = e->getCursorY() - physicsDebugNodeOffset.y;
+    auto pt = e->getLocation();
+    ChipmunkDemoMouse.x = pt.x - physicsDebugNodeOffset.x;
+    ChipmunkDemoMouse.y = pt.y - physicsDebugNodeOffset.y;
 
     cpBodySetPosition(mouse_body, ChipmunkDemoMouse);
 }

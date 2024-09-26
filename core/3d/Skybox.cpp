@@ -32,7 +32,8 @@
 #include "renderer/Shaders.h"
 #include "2d/Camera.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Skybox::Skybox() : _texture(nullptr) {}
 
@@ -190,4 +191,4 @@ void Skybox::onAfterDraw()
     renderer->setCullMode(_rendererCullMode);
 }
 
-NS_AX_END
+}

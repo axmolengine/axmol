@@ -46,8 +46,6 @@ public:
     virtual ~WidgetReader();
 
     static WidgetReader* getInstance();
-    /** @deprecated Use method destroyInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
     virtual void setPropsFromJsonDictionary(ax::ui::Widget* widget, const rapidjson::Value& options);

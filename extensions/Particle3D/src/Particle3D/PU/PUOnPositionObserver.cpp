@@ -27,7 +27,8 @@
 #include "Particle3D/PU/PUOnPositionObserver.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const Vec3 PUOnPositionObserver::DEFAULT_POSITION_THRESHOLD(0, 0, 0);
@@ -108,4 +109,4 @@ void PUOnPositionObserver::copyAttributesTo(PUObserver* observer)
     onPositionObserver->_positionZThresholdSet = _positionZThresholdSet;
 }
 
-NS_AX_END
+}

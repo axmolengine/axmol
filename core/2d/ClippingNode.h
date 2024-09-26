@@ -33,7 +33,8 @@
 #include "renderer/CustomCommand.h"
 #include "renderer/CallbackCommand.h"
 #include <unordered_map>
-NS_AX_BEGIN
+namespace ax
+{
 
 class StencilStateManager;
 /**
@@ -138,7 +139,7 @@ public:
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     virtual void setGlobalZOrder(float globalZOrder) override;
-    
+
     virtual void setCameraMask(unsigned short mask, bool applyChildren = true) override;
 
     ClippingNode();
@@ -174,4 +175,4 @@ private:
     AX_DISALLOW_COPY_AND_ASSIGN(ClippingNode);
 };
 /** @} */
-NS_AX_END
+}

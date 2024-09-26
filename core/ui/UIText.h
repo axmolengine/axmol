@@ -36,7 +36,8 @@ THE SOFTWARE.
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Label;
 class Sprite;
@@ -371,7 +372,7 @@ protected:
 
 }  // namespace ui
 
-NS_AX_END
+}
 
 // end of ui group
 /// @}

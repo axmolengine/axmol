@@ -37,7 +37,8 @@
 
 struct cpSpace;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PhysicsBody;
 class PhysicsJoint;
@@ -474,7 +475,7 @@ extern const float AX_DLL PHYSICS_INFINITY;
 /** @} */
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // defined(AX_ENABLE_PHYSICS)
 #endif  // __CCPHYSICS_WORLD_H__

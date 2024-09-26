@@ -62,7 +62,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 using namespace cocostudio;
 using namespace cocostudio::timeline;
@@ -120,11 +120,6 @@ FlatBuffersSerialize* FlatBuffersSerialize::getInstance()
     }
 
     return _instanceFlatBuffersSerialize;
-}
-
-void FlatBuffersSerialize::purge()
-{
-    AX_SAFE_DELETE(_instanceFlatBuffersSerialize);
 }
 
 void FlatBuffersSerialize::destroyInstance()

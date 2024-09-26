@@ -30,7 +30,7 @@
 #include "stdlib.h"
 #include "curl/curl.h"
 
-USING_NS_AX;
+using namespace ax;
 
 CurlTests::CurlTests()
 {

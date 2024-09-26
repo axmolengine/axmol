@@ -36,7 +36,8 @@
 #include "base/Director.h"
 #include "base/EventCustom.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 LuaEngine* LuaEngine::_defaultEngine = nullptr;
 
@@ -1025,4 +1026,4 @@ int LuaEngine::reload(const char* moduleFileName)
     return _stack->reload(moduleFileName);
 }
 
-NS_AX_END
+}

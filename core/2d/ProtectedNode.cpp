@@ -6,7 +6,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,7 +33,8 @@
 #include "base/Director.h"
 #include "2d/Scene.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 ProtectedNode::ProtectedNode() : _reorderProtectedChildDirty(false) {}
 
@@ -451,4 +452,4 @@ void ProtectedNode::setGlobalZOrder(float globalZOrder)
         child->setGlobalZOrder(globalZOrder);
 }
 
-NS_AX_END
+}

@@ -34,7 +34,8 @@
 #include "base/Object.h"
 #include "math/Math.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class MeshCommand;
 class GLProgramState;
@@ -339,4 +340,4 @@ protected:
     bool _rendererDepthWrite                       = false;
 };
 
-NS_AX_END
+}

@@ -42,7 +42,8 @@
 #    include "base/EventDispatcher.h"
 #    include "base/EventCustom.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 const float PHYSICS_INFINITY = FLT_MAX;
 extern const char* PHYSICSCONTACT_EVENT_NAME;
 
@@ -973,7 +974,7 @@ void PhysicsWorld::update(float delta, bool userCall /* = false*/)
                 cpSpaceStep(_cpSpace, dt);
 #    else
                 cpHastySpaceStep(_cpSpace, dt);
-#    endif                
+#    endif
             }
         }
         else
@@ -1101,6 +1102,6 @@ void PhysicsWorld::setPreUpdateCallback(const std::function<void()>& callback)
     _preUpdateCallback = callback;
 }
 
-NS_AX_END
+}
 
 #endif  // defined(AX_ENABLE_PHYSICS)

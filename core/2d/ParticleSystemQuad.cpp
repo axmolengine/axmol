@@ -46,7 +46,8 @@ THE SOFTWARE.
 #include "renderer/backend/ProgramState.h"
 #include "2d/TweenFunction.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 ParticleSystemQuad::ParticleSystemQuad()
 {
@@ -843,4 +844,4 @@ std::string ParticleSystemQuad::getDescription() const
 {
     return fmt::format("<ParticleSystemQuad | Tag = {}, Total Particles = {}>", _tag, _totalParticles);
 }
-NS_AX_END
+}

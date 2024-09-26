@@ -29,7 +29,8 @@
 
 #include "Particle3D/PU/PUEmitter.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /** Definition of a Triangle
  */
@@ -248,6 +249,6 @@ protected:
     bool _directionSet;
 };
 
-NS_AX_END
+}
 
 #endif

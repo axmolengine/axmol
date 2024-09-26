@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "ui/UIScrollViewBar.h"
 #include "2d/TweenFunction.h"
 #include "2d/Camera.h"
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace
 {
@@ -1640,4 +1641,4 @@ void ScrollView::scrollToItem(Node* item, const Vec2& positionRatioInView, const
 }
 }  // namespace ui
 
-NS_AX_END
+}

@@ -35,7 +35,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -56,11 +56,6 @@ UserCameraReader* UserCameraReader::getInstance()
     }
 
     return _instanceUserCameraReader;
-}
-
-void UserCameraReader::purge()
-{
-    AX_SAFE_DELETE(_instanceUserCameraReader);
 }
 
 void UserCameraReader::destroyInstance()

@@ -43,7 +43,7 @@
 #define ECHO_SERVER_URL "wss://echo.websocket.events/.ws" //"wss://ws.postman-echo.com/raw"
 #define SOCKETIO_SERVICE "wss://ws.postman-echo.com/socketio"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::network;
 // USING_NS_AX_EXT;
 

@@ -10,7 +10,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
 // Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
-// 
+//
 // https://axmol.dev/
 //////////////////////////////////////////////////////////////////////////
 
@@ -24,7 +24,8 @@
 #    include "ntcvt/ntcvt.hpp"
 #    include "yasio/sz.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // IF_FAILED_GOTO macro.
 // Jumps to 'label' on failure.
@@ -342,7 +343,7 @@ bool WmfMediaEngine::open(std::string_view sourceUri)
         return false;
 
     AXME_TRACE("WmfMediaEngine::OpenURL\n");
-    AXME_TRACE("URL = %s\n", sourceUri.data());
+    AXME_TRACE("URL = {}\n", sourceUri);
 
     // 1. Create a new media session.
     // 2. Create the media source.
@@ -408,7 +409,7 @@ bool WmfMediaEngine::open(std::string_view sourceUri)
         }
         catch (const std::exception& ex)
         {
-            AXME_TRACE("Exception occurred when Open Media: %s", ex.what());
+            AXME_TRACE("Exception occurred when Open Media: {}", ex.what());
             (void)ex;
             m_state = MEMediaState::Error;
         }
@@ -1564,7 +1565,7 @@ HRESULT WmfMediaEngine::CreateTopologyFromSource(IMFTopology** ppTopology)
     // Get the number of streams in the media source.
     CHECK_HR(hr = m_PresentDescriptor->GetStreamDescriptorCount(&cSourceStreams));
 
-    AXME_TRACE("Stream count: %d\n", cSourceStreams);
+    AXME_TRACE("Stream count: {}\n", cSourceStreams);
 
     // For each stream, create the topology nodes and add them to the topology.
     for (DWORD i = 0; i < cSourceStreams; ++i)
@@ -1685,7 +1686,7 @@ HRESULT WmfMediaEngine::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopo
     if (MFMediaType_Video == guidMajorType)
     {
         // Create the video renderer.
-        AXME_TRACE("Stream %d: video stream\n", streamID);
+        AXME_TRACE("Stream {}: video stream\n", streamID);
         // CHECK_HR(hr = MFCreateVideoRendererActivate(hwndVideo, &pRendererActivate));
         auto Sampler                     = MFUtils::MakeComPtr<MFVideoSampler>(this);
         TComPtr<IMFMediaType>& InputType = m_videoInputType;
@@ -1696,7 +1697,7 @@ HRESULT WmfMediaEngine::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopo
         CHECK_HR(hr = InputType->GetGUID(MF_MT_SUBTYPE, &SubType));
 
         auto strType = MFUtils::GetVideoTypeName(SubType);
-        AXME_TRACE("WmfMediaEngine: Input video type: %s", strType.data());
+        AXME_TRACE("WmfMediaEngine: Input video type: {}", strType);
 
         m_bIsH264 = SubType == MFVideoFormat_H264 || SubType == MFVideoFormat_H264_ES;
         m_bIsHEVC = SubType == MFVideoFormat_HEVC || SubType == MFVideoFormat_HEVC_ES;
@@ -1738,12 +1739,12 @@ HRESULT WmfMediaEngine::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopo
     else if (MFMediaType_Audio == guidMajorType)
     {
         // Create the audio renderer.
-        AXME_TRACE("Stream %d: audio stream\n", streamID);
+        AXME_TRACE("Stream {}: audio stream\n", streamID);
         CHECK_HR(hr = MFCreateAudioRendererActivate(&pRendererActivate));
     }
     else
     {
-        AXME_TRACE("Stream %d: Unknown format\n", streamID);
+        AXME_TRACE("Stream {}: Unknown format\n", streamID);
         CHECK_HR(hr = E_FAIL);
     }
 
@@ -1798,6 +1799,6 @@ HRESULT WmfMediaEngine::GetNativeVideoSize(DWORD* cx, DWORD* cy)
     return hr;
 }
 
-NS_AX_END
+}
 
 #endif

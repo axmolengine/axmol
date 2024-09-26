@@ -37,7 +37,8 @@
 #include "2d/Camera.h"
 #include <sstream>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const bool PURibbonTrailRender::DEFAULT_USE_VERTEX_COLOURS    = true;
@@ -420,4 +421,4 @@ void PURibbonTrailRender::updateParticles(const ParticlePool& pool)
     }
 }
 
-NS_AX_END
+}

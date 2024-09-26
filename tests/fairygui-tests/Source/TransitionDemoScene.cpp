@@ -1,6 +1,6 @@
 #include "TransitionDemoScene.h"
 
-USING_NS_AX;
+using namespace ax;
 
 TransitionDemoScene::~TransitionDemoScene()
 {

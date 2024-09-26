@@ -38,7 +38,9 @@ THE SOFTWARE.
 #include "base/Config.h"
 
 // base
-#include "base/AsyncTaskPool.h"
+#ifndef AX_CORE_PROFILE
+#    include "base/AsyncTaskPool.h"
+#endif
 #include "base/AutoreleasePool.h"
 #include "base/Configuration.h"
 #include "base/Logging.h"
@@ -281,10 +283,11 @@ THE SOFTWARE.
 #include "3d/Terrain.h"
 #include "3d/VertexAttribBinding.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AX_DLL const char* axmolVersion();
 
-NS_AX_END
+}
 
 #endif  // __AX_H__

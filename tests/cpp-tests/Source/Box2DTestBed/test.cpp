@@ -24,7 +24,7 @@
 
 #include <stdio.h>
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 #if defined(AX_PLATFORM_PC)

@@ -29,7 +29,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -48,11 +48,6 @@ ProjectNodeReader* ProjectNodeReader::getInstance()
     }
 
     return _instanceProjectNodeReader;
-}
-
-void ProjectNodeReader::purge()
-{
-    AX_SAFE_DELETE(_instanceProjectNodeReader);
 }
 
 void ProjectNodeReader::destroyInstance()

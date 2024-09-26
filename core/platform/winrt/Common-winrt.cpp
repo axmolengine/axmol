@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include <vld.h>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void messageBox(const char * pszMsg, const char * pszTitle)
 {
@@ -42,4 +43,4 @@ void messageBox(const char * pszMsg, const char * pszTitle)
     GLViewImpl::sharedGLView()->ShowMessageBox(title, message);
 }
 
-NS_AX_END
+}

@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct Tile
 {
@@ -876,4 +877,4 @@ void SplitCols::update(float time)
     }
 }
 
-NS_AX_END
+}

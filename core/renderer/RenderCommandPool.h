@@ -31,7 +31,8 @@
 
 #include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 template <class T>
 class RenderCommandPool
@@ -95,7 +96,7 @@ private:
     // std::set<T*> _usedPool;
 };
 
-NS_AX_END
+}
 
 /// @endcond
 #endif

@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- 
+
  https://axmol.dev
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -50,9 +50,9 @@ namespace ax { namespace network
         int _id;
 
         DownloaderHints hints;
-        
+
         std::unordered_map<unsigned int, DownloadTaskEmscripten*> _taskMap;
-        
+
         static void onError(emscripten_fetch_t *fetch);
 
         static void onProgress(emscripten_fetch_t *fetch);

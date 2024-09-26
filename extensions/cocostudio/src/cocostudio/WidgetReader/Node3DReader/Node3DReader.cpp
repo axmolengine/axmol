@@ -32,7 +32,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -53,11 +53,6 @@ Node3DReader* Node3DReader::getInstance()
     }
 
     return _instanceNode3DReader;
-}
-
-void Node3DReader::purge()
-{
-    AX_SAFE_DELETE(_instanceNode3DReader);
 }
 
 void Node3DReader::destroyInstance()

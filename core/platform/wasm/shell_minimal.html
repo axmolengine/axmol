@@ -35,7 +35,7 @@
     <div class="emscripten_border">
       <div class="emscripten" id="status">Downloading...</div>
       <div class="emscripten">
-        <progress value="0" max="100" id="progress" hidden=1></progress>  
+        <progress value="0" max="100" id="progress" hidden=1></progress>
       </div>
       <canvas class="emscripten" id="canvas"  oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
     </div>
@@ -43,14 +43,14 @@
       <input type="checkbox" id="resize">Resize canvas
       <input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer
       &nbsp;&nbsp;&nbsp;
-      <input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, 
+      <input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked,
                                                                                 document.getElementById('resize').checked)">
       |
-      <input type="button" value="Pause" onclick="Module.ccall('axmol_director_pause')">
-      <input type="button" value="Resume" onclick="Module.ccall('axmol_director_resume')">
-      <input type="button" value="Step" onclick="Module.ccall('axmol_director_step')">
+      <input type="button" value="Pause" onclick="Module.ccall('axmol_dev_pause')">
+      <input type="button" value="Resume" onclick="Module.ccall('axmol_dev_resume')">
+      <input type="button" value="Step" onclick="Module.ccall('axmol_dev_step')">
     </div>
-    
+
     <div class="emscripten">
       <textarea class="emscripten" id="output" rows="8"></textarea>
     </div>
@@ -58,7 +58,7 @@
     <script type='text/javascript'>
       var statusElement = document.getElementById('status');
       var progressElement = document.getElementById('progress');
-      
+
       var hierarchyElement = document.getElementById('hierarchy');
       var nodeProperties = [];
       for(var i = 0; i < 20; i++) {
@@ -140,7 +140,10 @@
           // As a default initial behavior, pop up an alert when webgl context is lost. To make your
           // application robust, you may want to override this behavior before shipping!
           // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-          canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+          canvas.addEventListener("webglcontextlost", function(e) { Module.ccall('axmol_wgl_context_lost'); alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+          canvas.addEventListener("webglcontextrestored", function(e) { Module.ccall('axmol_wgl_context_restored'); e.preventDefault(); }, false);
+
+          document.addEventListener("visibilitychange", () => { Module.ccall('axmol_hdoc_visibilitychange', document.hidden); });
 
           return canvas;
         })(),

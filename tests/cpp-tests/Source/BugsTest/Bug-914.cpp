@@ -25,7 +25,7 @@
 // Import the interfaces
 #include "Bug-914.h"
 
-USING_NS_AX;
+using namespace ax;
 
 // on "init" you need to initialize your instance
 bool Bug914Layer::init()

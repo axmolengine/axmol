@@ -27,7 +27,8 @@ THE SOFTWARE.
 #include "platform/StdC.h"
 #include "ntcvt/ntcvt.hpp"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #define MAX_LEN (ax::kMaxLogLen + 1)
 
@@ -38,4 +39,4 @@ void messageBox(const char* pszMsg, const char* pszTitle)
     MessageBoxW(nullptr, wsMsg.c_str(), wsTitle.c_str(), MB_OK);
 }
 
-NS_AX_END
+}

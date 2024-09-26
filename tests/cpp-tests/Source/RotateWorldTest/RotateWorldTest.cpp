@@ -25,7 +25,7 @@
 #include "RotateWorldTest.h"
 #include "../testResource.h"
 
-USING_NS_AX;
+using namespace ax;
 
 RotateWorldTests::RotateWorldTests()
 {

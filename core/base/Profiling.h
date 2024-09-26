@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include "base/Object.h"
 #include "base/Map.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup global
@@ -157,7 +158,7 @@ extern bool kProfilerCategoryParticles;
 // end of global group
 /// @}
 
-NS_AX_END
+}
 
 /// @endcond
 #endif  // __SUPPORT_CCPROFILING_H__

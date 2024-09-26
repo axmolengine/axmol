@@ -1,5 +1,6 @@
 #include "3d/AnimationCurve.h"
-NS_AX_BEGIN
+namespace ax
+{
 
 template <int componentSize>
 void AnimationCurve<componentSize>::evaluate(float time, float* dst, EvaluateType type) const
@@ -14,15 +15,15 @@ void AnimationCurve<componentSize>::evaluate(float time, float* dst, EvaluateTyp
         memcpy(dst, &_value[(_count - 1) * componentSize], _componentSizeByte);
         return;
     }
-    
+
     unsigned int index = determineIndex(time);
-    
+
     float scale = (_keytime[index + 1] - _keytime[index]);
     float t = (time - _keytime[index]) / scale;
-    
+
     float* fromValue = &_value[index * componentSize];
     float* toValue = fromValue + componentSize;
-    
+
     switch (type) {
         case EvaluateType::INT_LINEAR:
         {
@@ -45,7 +46,7 @@ void AnimationCurve<componentSize>::evaluate(float time, float* dst, EvaluateTyp
                 Quaternion::slerp(Quaternion(fromValue), Quaternion(toValue), t, &quat);
             else
                 Quaternion::slerp(Quaternion(toValue), Quaternion(fromValue), t, &quat);
-            
+
             dst[0] = quat.x;
             dst[1] = quat.y;
             dst[2] = quat.z;
@@ -58,7 +59,7 @@ void AnimationCurve<componentSize>::evaluate(float time, float* dst, EvaluateTyp
                 _evaluateFun(time, dst);
         }
         break;
-            
+
         default:
             break;
     }
@@ -78,15 +79,15 @@ AnimationCurve<componentSize>* AnimationCurve<componentSize>::create(float* keyt
     AnimationCurve* curve = new AnimationCurve();
     curve->_keytime = new float[count];
     memcpy(curve->_keytime, keytime, count * floatSize);
-    
+
     int compoentSizeByte = componentSize * floatSize;
     int totalByte = count * compoentSizeByte;
     curve->_value = new float[totalByte / floatSize];
     memcpy(curve->_value, value, totalByte);
-    
+
     curve->_count = count;
     curve->_componentSizeByte = compoentSizeByte;
-    
+
     curve->autorelease();
     return curve;
 }
@@ -112,7 +113,7 @@ AnimationCurve<componentSize>::AnimationCurve()
 , _componentSizeByte(0)
 , _evaluateFun(nullptr)
 {
-    
+
 }
 template <int componentSize>
 AnimationCurve<componentSize>::~AnimationCurve()
@@ -127,11 +128,11 @@ int AnimationCurve<componentSize>::determineIndex(float time) const
     unsigned int min = 0;
     unsigned int max = _count - 1;
     unsigned int mid = 0;
-    
+
     do
     {
         mid = (min + max) >> 1;
-        
+
         if (time >= _keytime[mid] && time <= _keytime[mid + 1])
             return mid;
         else if (time < _keytime[mid])
@@ -139,9 +140,9 @@ int AnimationCurve<componentSize>::determineIndex(float time) const
         else
             min = mid + 1;
     } while (min <= max);
-    
+
     // We should never hit this!
     return -1;
 }
 
-NS_AX_END
+}

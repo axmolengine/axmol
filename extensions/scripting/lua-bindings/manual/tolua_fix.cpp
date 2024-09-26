@@ -28,7 +28,7 @@
 #include "lua-bindings/manual/LuaBasicConversions.h"
 #include <stdlib.h>
 
-USING_NS_AX;
+using namespace ax;
 
 static int s_function_ref_id = 0;
 

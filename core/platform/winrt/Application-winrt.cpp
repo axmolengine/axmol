@@ -47,7 +47,8 @@ using namespace Windows::Foundation;
 @param  bEnable If true show the PVRFrame window, otherwise hide.
 */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // sharedApplication pointer
 Application* Application::sm_pSharedApplication = nullptr;
@@ -176,4 +177,4 @@ void Application::setStartupScriptFilename(const std::string& startupScriptFile)
     std::replace(m_startupScriptFilename.begin(), m_startupScriptFilename.end(), '\\', '/');
 }
 
-NS_AX_END
+}

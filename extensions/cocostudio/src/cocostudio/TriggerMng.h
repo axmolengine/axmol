@@ -26,10 +26,11 @@ THE SOFTWARE.
 
 #include "CocoStudio.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 class EventDispatcher;
 class EventListener;
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 namespace cocostudio
 {

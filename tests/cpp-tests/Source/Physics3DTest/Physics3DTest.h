@@ -29,11 +29,12 @@
 #include "../BaseTest.h"
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Physics3DConstraint;
 
-NS_AX_END
+}
 
 DEFINE_TEST_SUITE(Physics3DTests);
 

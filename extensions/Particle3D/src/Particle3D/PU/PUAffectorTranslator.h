@@ -31,7 +31,8 @@
 #include "Particle3D/PU/PUScriptCompiler.h"
 #include "Particle3D/PU/PUAffector.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUAffectorTranslator : public PUScriptTranslator
 {
@@ -44,6 +45,6 @@ public:
     virtual void translate(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-NS_AX_END
+}
 
 #endif /* defined(__cocos2d_libs__CCParticle3DAffectorTranslator__) */

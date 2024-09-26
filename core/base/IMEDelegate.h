@@ -35,7 +35,8 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * A static global empty std::string install.
@@ -171,7 +172,7 @@ protected:
     IMEDelegate();
 };
 
-NS_AX_END
+}
 // end of base group
 /// @}
 

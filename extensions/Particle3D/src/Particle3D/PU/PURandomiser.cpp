@@ -27,7 +27,8 @@
 #include "PURandomiser.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // Constants
 const Vec3 PURandomiser::DEFAULT_MAX_DEVIATION(0, 0, 0);
@@ -165,4 +166,4 @@ void PURandomiser::copyAttributesTo(PUAffector* affector)
     randomiser->_randomDirection = _randomDirection;
 }
 
-NS_AX_END
+}

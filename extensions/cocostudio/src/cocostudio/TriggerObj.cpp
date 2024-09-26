@@ -24,7 +24,7 @@ THE SOFTWARE.
 #include "TriggerObj.h"
 #include "base/EventListenerCustom.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {
@@ -198,10 +198,7 @@ void TriggerObj::serialize(const rapidjson::Value& val)
             continue;
         }
 
-        char buf[10];
-        sprintf(buf, "%d", event);
-        std::string custom_event_name(buf);
-
+        std::string custom_event_name = fmt::to_string(event);
         EventListenerCustom* listener = EventListenerCustom::create(custom_event_name, [this](EventCustom* /*evt*/) {
             if (detect())
             {
@@ -290,9 +287,8 @@ void TriggerObj::serialize(cocostudio::CocoLoader* pCocoLoader, cocostudio::stEx
                 {
                     continue;
                 }
-                char buf[10];
-                sprintf(buf, "%d", event);
-                std::string custom_event_name(buf);
+
+                std::string custom_event_name = fmt::to_string(event);
 
                 EventListenerCustom* listener =
                     EventListenerCustom::create(custom_event_name, [this](EventCustom* /*evt*/) {

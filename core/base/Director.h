@@ -47,7 +47,8 @@ THE SOFTWARE.
 
 #include "base/JobSystem.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup base
@@ -692,4 +693,4 @@ protected:
 // end of base group
 /** @} */
 
-NS_AX_END
+}

@@ -28,7 +28,7 @@
 #include "NewAudioEngineTest.h"
 #include "ui/CocosGUI.h"
 
-USING_NS_AX;
+using namespace ax;
 using namespace ax::ui;
 
 AudioEngineTests::AudioEngineTests()
@@ -478,25 +478,24 @@ bool AudioWavTest::init()
         _stateLabel->setPosition(layerSize.width / 2, layerSize.height * 0.7f);
         addChild(_stateLabel);
 
-        auto playPrev = TextButton::create("Play Prev", [=](TextButton* button) {
+        auto playPrev = TextButton::create("Play Prev", [this](TextButton* button) {
             if (_curIndex > 0)
             {
                 AudioEngine::stop(_audioID);
                 _audioID = AudioEngine::play2d(_wavFiles[--_curIndex]);
                 _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex,
-                                                           FileUtils::getFileShortName(_wavFiles[_curIndex])));
+                                                           FileUtils::getPathBaseName(_wavFiles[_curIndex])));
             }
         });
         playPrev->setPosition(layerSize.width * 0.35f, layerSize.height * 0.5f);
         addChild(playPrev);
 
-        auto playNext = TextButton::create("Play Next", [=](TextButton* button) {
+        auto playNext = TextButton::create("Play Next", [this](TextButton* button) {
             if (_curIndex != -1 && _curIndex < (_wavFiles.size() - 1))
             {
                 AudioEngine::stop(_audioID);
                 _audioID = AudioEngine::play2d(_wavFiles[++_curIndex]);
-                _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex,
-                                                           FileUtils::getFileShortName(_wavFiles[_curIndex])));
+                _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex, FileUtils::getPathBaseName(_wavFiles[_curIndex])));
             }
         });
         playNext->setPosition(layerSize.width * 0.65f, layerSize.height * 0.5f);
@@ -517,7 +516,7 @@ void AudioWavTest::onEnter()
         _curIndex = 0;
         _audioID  = AudioEngine::play2d(_wavFiles[_curIndex]);
         _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex,
-                                                   FileUtils::getFileShortName(_wavFiles[_curIndex])));
+                                                   FileUtils::getPathBaseName(_wavFiles[_curIndex])));
     }
 }
 
@@ -737,7 +736,7 @@ bool AudioIssue18597Test::init()
 
         // test case for https://github.com/cocos2d/cocos2d-x/issues/18597
         this->schedule(
-            [=](float dt) {
+            [this](float dt) {
                 AXLOGD("issues 18597 audio crash test");
                 for (int i = 0; i < 2; ++i)
                 {
@@ -755,7 +754,7 @@ bool AudioIssue18597Test::init()
         this->addChild(labelTime);
         // update label quickly
         this->schedule(
-            [=](float dt) {
+            [this](float dt) {
                 _time += dt;
                 char timeString[20] = {0};
                 sprintf(timeString, "Time %2.2f", _time);

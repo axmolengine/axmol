@@ -43,7 +43,8 @@
  * @addtogroup base
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * Similar to std::unordered_map, but it will manage reference count automatically internally.
@@ -442,7 +443,7 @@ protected:
 template <typename _Valty>
 using StringMap = Map<std::string, _Valty, hlookup::string_hash, hlookup::equal_to>;
 
-NS_AX_END
+}
 // end group
 /// @}
 

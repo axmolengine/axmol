@@ -15,7 +15,7 @@
 #include "VirtualListScene.h"
 #include "CooldownScene.h"
 
-USING_NS_AX;
+using namespace ax;
 
 void MenuScene::continueInit()
 {

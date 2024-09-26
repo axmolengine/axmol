@@ -30,7 +30,8 @@
 #include "audio/AudioMacros.h"
 #include "platform/FileUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 enum : uint32_t
 {
@@ -258,7 +259,7 @@ bool AudioDecoderWav::seek(uint32_t frameOffset)
     auto offset = framesToBytes(frameOffset);
     return wav_seek(&_wavf, offset) == offset;
 }
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #undef LOG_TAG
 

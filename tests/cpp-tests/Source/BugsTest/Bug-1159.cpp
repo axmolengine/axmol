@@ -24,7 +24,7 @@
 
 #include "Bug-1159.h"
 
-USING_NS_AX;
+using namespace ax;
 
 bool Bug1159Layer::init()
 {

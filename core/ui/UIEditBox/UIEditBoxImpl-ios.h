@@ -3,7 +3,7 @@
  Copyright (c) 2012 James Chen
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,7 +35,8 @@
 @class UIEditBoxImplIOS_objc;
 @class UIFont;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -86,7 +87,7 @@ private:
 
 }
 
-NS_AX_END
+}
 
 #endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) */
 

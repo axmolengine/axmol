@@ -24,7 +24,7 @@
 
 #include "LightTest.h"
 
-USING_NS_AX;
+using namespace ax;
 
 LightTests::LightTests()
 {

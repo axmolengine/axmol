@@ -3,7 +3,7 @@ Copyright (c) 2010 cocos2d-x.org
 Copyright (c) Microsoft Open Technologies, Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
 https://axmol.dev/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include <winrt/Windows.Storage.h>
 #include <winrt/Windows.ApplicationModel.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 #define AX_MAX_PATH 512
 
@@ -303,4 +304,4 @@ std::string FileUtilsWinRT::getAppPath()
     return convertPathFormatToUnixStyle(PlatformStringToString(package.InstalledLocation().Path()));
 }
 
-NS_AX_END
+}

@@ -35,7 +35,8 @@ AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 #    include <vector>
 #    include <unordered_map>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class ControllerImpl;
 class EventListenerController;
@@ -249,6 +250,6 @@ private:
 // end group
 /// @}
 
-NS_AX_END
+}
 #endif
 #endif /* defined(_AX_CONTROLLER_H_) */

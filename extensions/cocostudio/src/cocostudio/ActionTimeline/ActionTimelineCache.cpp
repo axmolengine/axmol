@@ -43,7 +43,7 @@ THE SOFTWARE.
 
 #include <fstream>
 
-USING_NS_AX;
+using namespace ax;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -100,11 +100,6 @@ ActionTimelineCache* ActionTimelineCache::getInstance()
 void ActionTimelineCache::destroyInstance()
 {
     AX_SAFE_DELETE(_sharedActionCache);
-}
-
-void ActionTimelineCache::purge()
-{
-    _animationActions.clear();
 }
 
 void ActionTimelineCache::init()

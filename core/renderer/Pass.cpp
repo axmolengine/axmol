@@ -42,7 +42,8 @@
 #include "base/Utils.h"
 #include "2d/Node.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // uniform names
 
@@ -363,4 +364,4 @@ void Pass::setUniformAmbientLigthColor(const void* data, size_t dataLen)
     TRY_SET_UNIFORM(_locAmbientLigthColor);
 }
 
-NS_AX_END
+}

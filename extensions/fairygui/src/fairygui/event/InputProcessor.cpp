@@ -7,7 +7,7 @@
 #include "utils/WeakPtr.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 InputProcessor* InputProcessor::_activeProcessor = nullptr;
 bool InputProcessor::_touchOnUI = false;
@@ -529,7 +529,7 @@ void InputProcessor::onMouseDown(ax::EventMouse * event)
         return;
 
     auto camera = Camera::getVisitingCamera();
-    Vec2 pt(event->getCursorX(), event->getCursorY());
+    Vec2 pt = event->getLocation();
     GObject* target = _owner->hitTest(pt, camera);
     if (!target)
         target = _owner;
@@ -559,7 +559,7 @@ void InputProcessor::onMouseUp(ax::EventMouse * event)
         return;
 
     auto camera = Camera::getVisitingCamera();
-    Vec2 pt(event->getCursorX(), event->getCursorY());
+    Vec2 pt = event->getLocation();
     GObject* target = _owner->hitTest(pt, camera);
     if (!target)
         target = _owner;
@@ -620,13 +620,13 @@ void InputProcessor::onMouseUp(ax::EventMouse * event)
 void InputProcessor::onMouseMove(ax::EventMouse * event)
 {
     TouchInfo* ti = getTouch(0);
-    Vec2 npos = UIRoot->worldToRoot(Vec2(event->getCursorX(), event->getCursorY()));
+    auto pt = event->getLocation();
+    Vec2 npos = UIRoot->worldToRoot(pt);
     if (std::abs(ti->pos.x - npos.x) < 1
         && std::abs(ti->pos.y - npos.y) < 1)
         return;
 
     auto camera = Camera::getVisitingCamera();
-    Vec2 pt(event->getCursorX(), event->getCursorY());
     GObject* target = _owner->hitTest(pt, camera);
     if (!target)
         target = _owner;
@@ -669,7 +669,7 @@ void InputProcessor::onMouseMove(ax::EventMouse * event)
 void InputProcessor::onMouseScroll(ax::EventMouse * event)
 {
     auto camera = Camera::getVisitingCamera();
-    Vec2 pt(event->getCursorX(), event->getCursorY());
+    Vec2 pt = event->getLocation();
     GObject* target = _owner->hitTest(pt, camera);
     if (!target)
         target = _owner;

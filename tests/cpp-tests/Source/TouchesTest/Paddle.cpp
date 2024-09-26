@@ -24,7 +24,7 @@
 
 #include "Paddle.h"
 
-USING_NS_AX;
+using namespace ax;
 
 Paddle::Paddle() {}
 

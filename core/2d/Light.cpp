@@ -25,7 +25,8 @@
 #include "2d/Light.h"
 #include "2d/Scene.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 void BaseLight::setIntensity(float intensity)
 {
@@ -176,4 +177,4 @@ AmbientLight::AmbientLight() {}
 
 AmbientLight::~AmbientLight() {}
 
-NS_AX_END
+}

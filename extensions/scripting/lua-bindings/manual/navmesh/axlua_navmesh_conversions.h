@@ -31,10 +31,11 @@
 #    include "lua-bindings/manual/tolua_fix.h"
 #    include "platform/PlatformMacros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 struct NavMeshAgentParam;
 struct OffMeshLinkData;
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 extern bool luaval_to_navmeshagentparam(lua_State* L,
                                         int lo,

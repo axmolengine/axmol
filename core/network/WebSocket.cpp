@@ -33,7 +33,8 @@ using namespace yasio;
 
 #define WS_MAX_PAYLOAD_LENGTH (1 << 24)  // 16M
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network
 {
@@ -646,4 +647,4 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
 
 }  // namespace network
 
-NS_AX_END
+}

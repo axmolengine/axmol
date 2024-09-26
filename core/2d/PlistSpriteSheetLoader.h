@@ -1,6 +1,6 @@
  /****************************************************************************
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,7 +30,8 @@
 #include "base/Value.h"
 #include "base/Data.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class PlistSpriteSheetLoader : public SpriteSheetLoader
 {
@@ -65,4 +66,4 @@ protected:
                                           SpriteFrameCache& cache);
 };
 
-NS_AX_END
+}

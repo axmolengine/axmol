@@ -34,7 +34,8 @@
 #include <functional>
 #include <type_traits>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * Utility/support macros. Defined to enable RefPtr<T> to contain types like 'const T' because we do not
@@ -333,7 +334,7 @@ RefPtr<T> dynamic_pointer_cast(const RefPtr<U>& r)
 #undef AX_REF_PTR_SAFE_RELEASE
 #undef AX_REF_PTR_SAFE_RELEASE_NULL
 
-NS_AX_END
+}
 
 /// @endcond
 #endif  // __AX_REF_PTR_H__

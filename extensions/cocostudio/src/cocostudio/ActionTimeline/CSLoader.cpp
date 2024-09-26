@@ -103,7 +103,8 @@ using namespace cocostudio::timeline;
 using namespace flatbuffers;
 /**/
 
-NS_AX_BEGIN
+namespace ax
+{
 
 static const char* ClassName_Node        = "Node";
 static const char* ClassName_SubGraph    = "SubGraph";
@@ -246,8 +247,6 @@ CSLoader::CSLoader()
 
     CREATE_CLASS_NODE_READER_INFO(TextFieldExReader);
 }
-
-void CSLoader::purge() {}
 
 void CSLoader::init()
 {
@@ -1581,4 +1580,4 @@ Node* CSLoader::nodeWithFlatBuffersForSimulator(const flatbuffers::NodeTree* nod
     return node;
 }
 
-NS_AX_END
+}

@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "base/Types.h"
 #include "renderer/QuadCommand.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @addtogroup _2d
@@ -153,4 +154,4 @@ private:
 // end of base_node group
 /// @}
 
-NS_AX_END
+}

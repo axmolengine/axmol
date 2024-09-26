@@ -35,7 +35,8 @@ THE SOFTWARE.
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**Rectangle area.*/
 class AX_DLL Rect
@@ -51,79 +52,122 @@ public:
     Constructor an empty Rect.
      * @js NA
      */
-    Rect();
+    constexpr Rect() { setRect(0.0f, 0.0f, 0.0f, 0.0f); }
     /**
     Constructor a rect.
      * @js NA
      */
-    Rect(float x, float y, float width, float height);
+    constexpr Rect(float x, float y, float width, float height) { setRect(x, y, width, height); }
     /**
      Constructor a rect.
      * @js NA
      */
-    Rect(const Vec2& pos, const Vec2& dimension);
+    constexpr Rect(const Vec2& pos, const Vec2& dimension) { setRect(pos.x, pos.y, dimension.x, dimension.y); }
     /**
     Copy constructor.
      * @js NA
      * @lua NA
      */
-    Rect(const Rect& other);
+    constexpr Rect(const Rect& other) { setRect(other.origin.x, other.origin.y, other.size.x, other.size.y); }
     /**
      * @js NA
      * @lua NA
      */
-    Rect& operator=(const Rect& other);
+    Rect& operator=(const Rect& other)
+    {
+        setRect(other.origin.x, other.origin.y, other.size.x, other.size.y);
+        return *this;
+    }
     /**
     Set the x, y, width and height of Rect.
      * @js NA
      * @lua NA
      */
-    void setRect(float x, float y, float width, float height);
+    constexpr void setRect(float x, float y, float width, float height)
+    {
+        origin.x = x;
+        origin.y = y;
+
+        size.x = width;
+        size.y = height;
+    }
     /**
     Get the left of the rect.
      * @js NA
      */
-    float getMinX() const;  /// return the leftmost x-value of current rect
+    float getMinX() const  /// return the leftmost x-value of current rect
+    {
+        return origin.x;
+    }
     /**
     Get the X coordinate of center point.
      * @js NA
      */
-    float getMidX() const;  /// return the midpoint x-value of current rect
+    float getMidX() const  /// return the midpoint x-value of current rect
+    {
+        return origin.x + size.x / 2.0f;
+    }
     /**
     Get the right of rect.
      * @js NA
      */
-    float getMaxX() const;  /// return the rightmost x-value of current rect
+    float getMaxX() const  /// return the rightmost x-value of current rect
+    {
+        return origin.x + size.x;
+    }
     /**
     Get the bottom of rect.
      * @js NA
      */
-    float getMinY() const;  /// return the bottommost y-value of current rect
+    float getMinY() const  /// return the bottommost y-value of current rect
+    {
+        return origin.y;
+    }
     /**
     Get the Y coordinate of center point.
      * @js NA
      */
-    float getMidY() const;  /// return the midpoint y-value of current rect
+    float getMidY() const  /// return the midpoint y-value of current rect
+    {
+        return origin.y + size.y / 2.0f;
+    }
     /**
     Get top of rect.
      * @js NA
      */
-    float getMaxY() const;  /// return the topmost y-value of current rect
+    float getMaxY() const  /// return the topmost y-value of current rect
+    {
+        return origin.y + size.y;
+    }
     /**
     Compare two rects.
      * @js NA
      */
-    bool equals(const Rect& rect) const;
+    bool equals(const Rect& rect) const { return (origin.equals(rect.origin) && size.equals(rect.size)); }
     /**
     Check if the points is contained in the rect.
      * @js NA
      */
-    bool containsPoint(const Vec2& point) const;
+    bool containsPoint(const Vec2& point) const
+    {
+        bool bRet = false;
+
+        if (point.x >= getMinX() && point.x <= getMaxX() && point.y >= getMinY() && point.y <= getMaxY())
+        {
+            bRet = true;
+        }
+
+        return bRet;
+    }
     /**
     Check the intersect status of two rects.
      * @js NA
      */
-    bool intersectsRect(const Rect& rect) const;
+    bool intersectsRect(const Rect& rect) const
+    {
+        return !(getMaxX() < rect.getMinX() || rect.getMaxX() < getMinX() || getMaxY() < rect.getMinY() ||
+                rect.getMaxY() < getMinY());
+    }
     /**
     Check the intersect status of the rect and a circle.
      * @js NA
@@ -141,7 +185,11 @@ public:
     static const Rect ZERO;
 };
 
-NS_AX_END
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+    inline constexpr Rect Rect::ZERO(0, 0, 0, 0);
+#endif
+
+}
 
 // end of base group
 /// @}

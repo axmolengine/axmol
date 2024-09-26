@@ -42,7 +42,8 @@ THE SOFTWARE.
 Misc free functions
 */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Sprite;
 class Image;
@@ -471,6 +472,6 @@ AX_DLL uint32_t fourccValue(std::string_view str);
 
 }  // namespace utils
 
-NS_AX_END
+}
 
 #endif  // __SUPPORT_AX_UTILS_H__

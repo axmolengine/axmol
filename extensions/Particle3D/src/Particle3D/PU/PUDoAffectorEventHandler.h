@@ -33,7 +33,8 @@
 #include <vector>
 #include <string>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PUParticle3D;
 class PUObserver;
@@ -84,6 +85,6 @@ protected:
     bool _prePost;
 };
 
-NS_AX_END
+}
 
 #endif

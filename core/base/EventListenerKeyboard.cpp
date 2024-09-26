@@ -27,7 +27,8 @@
 #include "base/EventListenerKeyboard.h"
 #include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 const std::string EventListenerKeyboard::LISTENER_ID = "__ax_keyboard";
 
@@ -98,4 +99,4 @@ bool EventListenerKeyboard::init()
     return false;
 }
 
-NS_AX_END
+}

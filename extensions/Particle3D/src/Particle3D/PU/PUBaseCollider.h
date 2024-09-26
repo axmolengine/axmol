@@ -30,7 +30,8 @@
 #include "Particle3D/PU/PUAffector.h"
 #include "3d/AABB.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct PUParticle3D;
 class AX_EX_DLL PUBaseCollider : public PUAffector
@@ -124,6 +125,6 @@ protected:
     CollisionType _collisionType;
     float _velocityScale;  // Value set in the particle system, but stored in the collider for convenience.
 };
-NS_AX_END
+}
 
 #endif

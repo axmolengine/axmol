@@ -34,7 +34,8 @@ THE SOFTWARE.
 #include "base/Scheduler.h"
 #include "base/Macros.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 //
 // singleton stuff
 //
@@ -453,4 +454,4 @@ void ActionManager::update(float dt)
     _currentTarget = nullptr;
 }
 
-NS_AX_END
+}

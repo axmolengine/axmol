@@ -84,7 +84,8 @@ typedef SSIZE_T ssize_t;
 // Structure timeval has define in winsock.h, include windows.h for it.
 #include <Windows.h>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct timezone
 {
@@ -94,7 +95,7 @@ struct timezone
 
 int AX_DLL gettimeofday(struct timeval*, struct timezone*);
 
-NS_AX_END
+}
 
 // Conflicted with ParticleSystem::PositionType::RELATIVE, so we need to undef it.
 #ifdef RELATIVE

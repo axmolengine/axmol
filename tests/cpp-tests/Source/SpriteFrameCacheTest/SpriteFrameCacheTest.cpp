@@ -31,7 +31,7 @@
 
 #include "NinePatchImageParser.h"
 
-USING_NS_AX;
+using namespace ax;
 
 SpriteFrameCacheTests::SpriteFrameCacheTests()
 {

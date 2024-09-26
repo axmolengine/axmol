@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "lua-bindings/manual/LuaEngine.h"
 
 using namespace spine;
-USING_NS_AX;
+using namespace ax;
 
 LuaSkeletonAnimation::LuaSkeletonAnimation() : spine::SkeletonAnimation() {}
 
@@ -45,7 +45,7 @@ LuaSkeletonAnimation* LuaSkeletonAnimation::createWithFile(const char* skeletonD
                                                            float scale)
 {
     LuaSkeletonAnimation* node = new LuaSkeletonAnimation();
-    if (FileUtils::getInstance()->getFileExtension(skeletonDataFile) == ".json")
+    if (FileUtils::getPathExtension(skeletonDataFile) == ".json")
         node->initWithJsonFile(skeletonDataFile, atlasFile, scale);
     else
         node->initWithBinaryFile(skeletonDataFile, atlasFile, scale);

@@ -32,7 +32,7 @@
 #include "ui/UIButton.h"
 #include "network/Downloader.h"
 
-USING_NS_AX;
+using namespace ax;
 
 static const char* sURLList[] = {
     "https://www.cocos2d-x.org/attachments/802/cocos2dx_landscape.png", "https://cocos2d-x.org/images/logo.png",

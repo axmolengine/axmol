@@ -37,7 +37,8 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_AX_BEGIN
+namespace ax
+{
 
 class EventListenerTouchOneByOne;
 class Camera;
@@ -270,7 +271,6 @@ public:
      * @lua NA
      */
     virtual void addCCSEventListener(const ccWidgetEventCallback& callback);
-    /**/
 
     /**
      * Changes the position (x,y) of the widget in OpenGL coordinates
@@ -281,6 +281,12 @@ public:
      * @param pos  The position (x,y) of the widget in OpenGL coordinates
      */
     virtual void setPosition(const Vec2& pos) override;
+
+    /** Sets the position (x,y) using values between 0 and 1.
+     *
+     * @param position The normalized position (x,y) of the node, using value between 0 and 1.
+     */
+    void setPositionNormalized(const Vec2& position) override;
 
     /**
      * Set the percent(x,y) of the widget in OpenGL coordinates
@@ -839,7 +845,7 @@ private:
 };
 }  // namespace ui
 
-NS_AX_END
+}
 // end of ui group
 /// @}
 

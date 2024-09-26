@@ -31,7 +31,8 @@
 #include "math/Math.h"
 #include "PUNoise.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /** Pure virtual ForceFieldCalculationFactory
  */
@@ -205,6 +206,6 @@ protected:
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 
-NS_AX_END
+}
 
 #endif

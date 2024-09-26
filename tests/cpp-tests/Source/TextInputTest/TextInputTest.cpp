@@ -24,7 +24,7 @@
 
 #include "TextInputTest.h"
 
-USING_NS_AX;
+using namespace ax;
 
 #define FONT_NAME "fonts/Thonburi.ttf"
 #define FONT_SIZE 36

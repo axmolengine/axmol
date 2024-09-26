@@ -32,7 +32,7 @@
 #include "lua-bindings/manual/LuaEngine.h"
 #include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 

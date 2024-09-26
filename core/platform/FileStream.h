@@ -12,7 +12,8 @@
 #    include <android/asset_manager.h>
 #endif
 
-NS_AX_BEGIN
+namespace ax
+{
 
 struct ZipEntryInfo;
 
@@ -40,7 +41,7 @@ class AX_DLL FileStream : public IFileStream
 {
 public:
     using IFileStream::Mode;
-    
+
     FileStream() = default;
     ~FileStream() override;
 
@@ -88,4 +89,4 @@ private:
     const PXIoF* _iof{nullptr};
 };
 
-NS_AX_END
+}

@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,7 +27,8 @@
 #include "2d/Camera.h"
 #include "2d/Node.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 RenderCommand::RenderCommand() {}
 
@@ -55,4 +56,4 @@ void RenderCommand::printID()
     AXLOGI("Command Depth: {}\n", _globalOrder);
 }
 
-NS_AX_END
+}

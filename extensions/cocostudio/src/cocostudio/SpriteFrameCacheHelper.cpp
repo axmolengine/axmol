@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "2d/SpriteFrame.h"
 #include "2d/SpriteFrameCache.h"
 
-USING_NS_AX;
+using namespace ax;
 
 namespace cocostudio
 {
@@ -44,7 +44,7 @@ SpriteFrameCacheHelper* SpriteFrameCacheHelper::getInstance()
     return _spriteFrameCacheHelper;
 }
 
-void SpriteFrameCacheHelper::purge()
+void SpriteFrameCacheHelper::destroyInstance()
 {
     delete _spriteFrameCacheHelper;
     _spriteFrameCacheHelper = nullptr;

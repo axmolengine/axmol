@@ -31,7 +31,8 @@ THE SOFTWARE.
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 #    include "ui/UIEditBox/UIEditBoxImpl-common.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace ui
 {
@@ -66,7 +67,7 @@ public:
     bool isEditingMode() const { return _editingMode; }
 private:
     void createEditCtrl(EditBox::InputMode inputMode);
-    
+
     static bool s_isInitialized;
     static int s_editboxChildID;
     static void lazyInit();
@@ -74,7 +75,7 @@ private:
 
 }  // namespace ui
 
-NS_AX_END
+}
 
 #endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WASM) */
 

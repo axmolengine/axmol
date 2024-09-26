@@ -36,7 +36,8 @@ struct emscripten_fetch_t;
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 namespace network {
 
@@ -150,7 +151,7 @@ public:
      * If defined, the method uses the ClearRequestPredicate and ClearResponsePredicate
      * to check for each request/response which to delete
      */
-    void clearResponseAndRequestQueue(); 
+    void clearResponseAndRequestQueue();
 
     void clearResponseQueue() { clearResponseAndRequestQueue(); }
 
@@ -158,7 +159,7 @@ public:
     * Sets a predicate function that is going to be called to determine if we proceed
     * each of the pending requests
     *
-    * @param predicate function that will be called 
+    * @param predicate function that will be called
     */
     void setClearRequestPredicate(ClearRequestPredicate predicate) { _clearRequestPredicate = predicate; }
 
@@ -166,15 +167,15 @@ public:
      Sets a predicate function that is going to be called to determine if we proceed
     * each of the pending requests
     *
-    * @param cb predicate function that will be called 
+    * @param cb predicate function that will be called
     */
     void setClearResponsePredicate(ClearResponsePredicate predicate) { _clearResponsePredicate = predicate; }
 
-        
+
 private:
     HttpClient();
     virtual ~HttpClient();
-    
+
     void processResponse(HttpResponse* response, bool isAlone);
     static void onRequestComplete(emscripten_fetch_t *fetch);
     void increaseThreadCount();
@@ -182,17 +183,17 @@ private:
 
 private:
     int _timeoutForConnect;
-    
+
     int _timeoutForRead;
-    
+
     int _threadCount;
-    
+
     Vector<HttpRequest*>  _requestQueue;
-    
+
     std::string _cookieFilename;
-    
+
     std::string _sslCaFilename;
-    
+
     HttpCookie* _cookie;
 
     ClearRequestPredicate _clearRequestPredicate;
@@ -201,7 +202,7 @@ private:
 
 } // namespace network
 
-NS_AX_END
+}
 
 // end group
 /// @}

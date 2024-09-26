@@ -28,7 +28,8 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-NS_AX_BEGIN
+namespace ax
+{
 
 /**
  * @brief Effects used by `Label`
@@ -137,4 +138,4 @@ enum class EmissionShapeType
     TEXTURE_ALPHA_MASK
 };
 
-NS_AX_END
+}

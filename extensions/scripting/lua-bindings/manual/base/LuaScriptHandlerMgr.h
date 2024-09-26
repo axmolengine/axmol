@@ -37,7 +37,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class ScheduleHandlerDelegate;
 
@@ -321,7 +322,7 @@ private:
     MapObjectHandlers _mapObjectHandlers;
 };
 
-NS_AX_END
+}
 
 // end group
 /// @}

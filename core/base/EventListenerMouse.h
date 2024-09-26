@@ -35,7 +35,8 @@
  * @{
  */
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Event;
 
@@ -67,7 +68,7 @@ public:
     bool init();
 };
 
-NS_AX_END
+}
 
 // end of base group
 /// @}

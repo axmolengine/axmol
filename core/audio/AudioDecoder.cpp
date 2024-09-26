@@ -30,7 +30,8 @@
 
 #define LOG_TAG "AudioDecoder"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 AudioDecoder::AudioDecoder()
     : _isOpened(false)
@@ -101,6 +102,6 @@ AUDIO_SOURCE_FORMAT AudioDecoder::getSourceFormat() const
 {
     return _sourceFormat;
 }
-NS_AX_END  // namespace ax
+}  // namespace ax
 
 #undef LOG_TAG

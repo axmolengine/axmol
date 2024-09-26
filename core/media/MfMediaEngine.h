@@ -6,7 +6,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 // Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
-// 
+//
 // https://axmol.dev/
 //-------------------------------------------------------------------------------------
 
@@ -27,7 +27,8 @@
 
 #include "media/MFUtils.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 //-------------------------------------------------------------------------------------
 class IMFNotify
@@ -54,7 +55,7 @@ class MfMediaEngine : public IMFNotify, public MediaEngine
 public:
     MfMediaEngine() noexcept;
     ~MfMediaEngine();
-    
+
     MfMediaEngine(const MfMediaEngine&)            = delete;
     MfMediaEngine& operator=(const MfMediaEngine&) = delete;
 
@@ -80,7 +81,7 @@ public:
 
     bool open(std::string_view sourceUri) override;
     bool close() override;
- 
+
     bool setLoop(bool bLoop) override;
     bool setRate(double fRate) override;
 
@@ -133,13 +134,13 @@ struct MfMediaEngineFactory : public MediaEngineFactory {
         engine->Initialize();
         return engine;
     }
-    void destroyMediaEngine(MediaEngine* me) override 
+    void destroyMediaEngine(MediaEngine* me) override
     {
         delete static_cast<MfMediaEngine*>(me);
     }
 };
 
-NS_AX_END
+}
 
 #endif
 #endif

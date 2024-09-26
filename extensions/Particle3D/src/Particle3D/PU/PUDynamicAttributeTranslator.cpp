@@ -27,7 +27,8 @@
 #include "PUDynamicAttributeTranslator.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 PUDynamicAttributeTranslator::PUDynamicAttributeTranslator() {}
 
 PUDynamicAttributeTranslator::~PUDynamicAttributeTranslator() {}
@@ -215,4 +216,4 @@ void PUDynamicAttributeTranslator::translate(PUScriptCompiler* compiler, PUAbstr
     obj->context = _dynamicAttribute;
 }
 
-NS_AX_END
+}

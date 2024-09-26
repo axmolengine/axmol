@@ -28,7 +28,7 @@
 
 using namespace std;
 
-USING_NS_AX;
+using namespace ax;
 USING_NS_AX_EXT;
 
 JSONDefaultTests::JSONDefaultTests()

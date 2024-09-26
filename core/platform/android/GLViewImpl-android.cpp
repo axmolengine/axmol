@@ -3,7 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
 https://axmol.dev/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -37,7 +37,8 @@ THE SOFTWARE.
 #define WIDE_SCREEN_ASPECT_RATIO_ANDROID 2.0f
 
 
-NS_AX_BEGIN
+namespace ax
+{
 void GLViewImpl::loadGLES2()
 {
     auto glesVer = gladLoaderLoadGLES2();
@@ -149,7 +150,7 @@ Rect GLViewImpl::getSafeAreaRect() const
     float insetLeft = 0.0f;
     float insetRight = 0.0f;
 
-    static int* cornerRadii =
+    static axstd::pod_vector<int32_t> cornerRadii =
             JniHelper::callStaticIntArrayMethod("org/axmol/lib/AxmolEngine", "getDeviceCornerRadii");
 
     if (isScreenRound)
@@ -171,13 +172,13 @@ Rect GLViewImpl::getSafeAreaRect() const
             // landscape: no changes with X-coords
         }
     }
-    else if (deviceAspectRatio >= WIDE_SCREEN_ASPECT_RATIO_ANDROID || cornerRadii != nullptr)
+    else if (deviceAspectRatio >= WIDE_SCREEN_ASPECT_RATIO_ANDROID || cornerRadii.size() >= 4)
     {
         // almost all devices on the market have round corners if
         // deviceAspectRatio more than 2 (@see "android.max_aspect" parameter in AndroidManifest.xml)
 
         // cornerRadii is only available in API31+ (Android 12+)
-        if (cornerRadii != nullptr)
+        if (cornerRadii.size() >= 4)
         {
             float radiiBottom = cornerRadii[0] / _scaleY;
             float radiiLeft   = cornerRadii[1] / _scaleX;
@@ -239,9 +240,10 @@ Rect GLViewImpl::getSafeAreaRect() const
     if (isCutoutEnabled)
     {
         // screen with enabled cutout area (ex. Google Pixel 3 XL, Huawei P20, Asus ZenFone 5, etc)
-        static int* safeInsets =
-            JniHelper::callStaticIntArrayMethod("org/axmol/lib/AxmolEngine", "getSafeInsets");
-        if (safeInsets != nullptr)
+        static axstd::pod_vector<int32_t> safeInsets =
+                JniHelper::callStaticIntArrayMethod("org/axmol/lib/AxmolEngine", "getSafeInsets");
+
+        if (safeInsets.size() >= 4)
         {
             float safeInsetBottom = safeInsets[0] / _scaleY;
             float safeInsetLeft   = safeInsets[1] / _scaleX;
@@ -271,4 +273,4 @@ void GLViewImpl::queueOperation(void (*op)(void*), void* param)
                                     (jlong)(uintptr_t)param);
 }
 
-NS_AX_END
+}

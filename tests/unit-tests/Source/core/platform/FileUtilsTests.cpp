@@ -27,7 +27,7 @@
 #include "TestUtils.h"
 #include "platform/FileUtils.h"
 
-USING_NS_AX;
+using namespace ax;
 
 
 TEST_SUITE("platform/FileUtils") {
@@ -114,12 +114,6 @@ TEST_SUITE("platform/FileUtils") {
         CHECK(not fu->isFileExist("/text/doesnt_exist"));
         CHECK(not fu->isFileExist("text"));
         CHECK(not fu->isFileExist(fu->fullPathForDirectory("text")));
-
-        auto run = AsyncRunner<bool>();
-        fu->isFileExist("text/123.txt", [&](bool exists) {
-            run.finish(exists);
-        });
-        CHECK(run());
     }
 
 
@@ -130,12 +124,6 @@ TEST_SUITE("platform/FileUtils") {
         CHECK(not fu->isDirectoryExist("/doesnt_exist"));
         CHECK(not fu->isDirectoryExist("text/123.txt"));
         CHECK(not fu->isDirectoryExist(fu->fullPathForFilename("text/123.txt")));
-
-        auto run = AsyncRunner<bool>();
-        fu->isDirectoryExist(fu->fullPathForDirectory("text"), [&](bool exists) {
-            run.finish(exists);
-        });
-        CHECK(run());
     }
 
 
@@ -143,12 +131,6 @@ TEST_SUITE("platform/FileUtils") {
         CHECK(fu->getFileSize(fu->fullPathForFilename("text/123.txt")) == 3);
         CHECK(fu->getFileSize(fu->fullPathForFilename("text/hello.txt")) == 12);
         CHECK(fu->getFileSize("text/doesnt_exist.txt") == -1);
-
-        auto run = AsyncRunner<int>();
-        fu->getFileSize("text/123.txt", [&](int size) {
-            run.finish(size);
-        });
-        CHECK(run() == 3);
     }
 
 
@@ -167,15 +149,6 @@ TEST_SUITE("platform/FileUtils") {
         REQUIRE(fu->renameFile(fu->getWritablePath(), "__test1.txt", "__test2.txt"));
         CHECK(not fu->isFileExist(file1));
         CHECK(fu->isFileExist(file2));
-
-        auto run = AsyncRunner<bool>();
-        fu->renameFile(fu->getWritablePath(), "__test2.txt", "__test1.txt", [&](bool success) {
-            run.finish(success);
-        });
-        CHECK(run());
-        CHECK(fu->isFileExist(file1));
-
-        CHECK(fu->removeFile(file1));
     }
 
 
@@ -193,16 +166,6 @@ TEST_SUITE("platform/FileUtils") {
             CHECK(fu->removeFile(file));
             CHECK(not fu->isFileExist(file));
             CHECK(not fu->removeFile(file));
-        }
-
-
-        SUBCASE("async") {
-            auto run = AsyncRunner<bool>();
-            fu->removeFile(file, [&](bool success) {
-                run.finish(success);
-            });
-            CHECK(run());
-            CHECK(not fu->isFileExist(file));
         }
     }
 
@@ -224,19 +187,7 @@ TEST_SUITE("platform/FileUtils") {
             CHECK(fu->getStringFromFile(file1) == "Hello!");
             REQUIRE(fu->removeFile(file1));
 
-            auto run = AsyncRunner<bool>();
-            fu->writeStringToFile("Hello!", file1, [&](bool success) {
-                run.finish(success);
-            });
-            REQUIRE(run());
-
-            auto run2 = AsyncRunner<std::string>();
-            fu->getStringFromFile(file1, [&](std::string_view value) {
-                run2.finish(std::string(value));
-            });
-            CHECK(run2() == "Hello!");
-
-            CHECK(fu->removeFile(file1));
+            CHECK(not fu->removeFile(file1));
         }
     }
 
@@ -267,7 +218,7 @@ TEST_SUITE("platform/FileUtils") {
         CHECK(buffer[0] == '1');
         CHECK(buffer[1] == '2');
         CHECK(buffer[2] == '3');
-
+        
         fu->getContents("text/hello.txt", &buffer);
         REQUIRE(buffer.size() == 12);
         auto expected = std::string_view("Hello world!");
@@ -337,14 +288,6 @@ TEST_SUITE("platform/FileUtils") {
             REQUIRE(fu->isFileExist(file));
             CHECK(fu->getStringFromFile(file) == writeDataStr);
             fu->removeFile(file);
-
-            auto run = AsyncRunner<bool>();
-            fu->writeDataToFile(writeData, file, [&](bool success) {
-                run.finish(success);
-            });
-            REQUIRE(run());
-            CHECK(fu->getStringFromFile(file) == writeDataStr);
-            fu->removeFile(file);
         }
 
 
@@ -353,16 +296,6 @@ TEST_SUITE("platform/FileUtils") {
             REQUIRE(not readData.isNull());
             CHECK(readData.getSize() == 12);
             CHECK(std::equal(readData.getBytes(), readData.getBytes() + readData.getSize(), "Hello world!"));
-
-            readData.clear();
-            auto run = AsyncRunner<Data>();
-            fu->getDataFromFile("text/hello.txt", [&](const Data& readData) {
-                run.finish(readData);
-            });
-            auto result = run();
-            REQUIRE(not result.isNull());
-            CHECK(result.getSize() == 12);
-            CHECK(std::equal(result.getBytes(), result.getBytes() + result.getSize(), "Hello world!"));
         }
     }
 
@@ -519,7 +452,7 @@ TEST_SUITE("platform/FileUtils") {
             REQUIRE(fu->removeFile(filename));
 
         REQUIRE(not fu->isDirectoryExist(dir));
-        REQUIRE(fu->createDirectory(dir));
+        REQUIRE(fu->createDirectories(dir));
         REQUIRE(fu->isDirectoryExist(dir));
 
         std::string writeDataStr = " 测试字符串.";

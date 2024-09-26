@@ -3,7 +3,7 @@
 #include "utils/ToolSet.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 static void drawVertRect(ax::DrawNode* shape, float x, float y, float width, float height, const ax::Color4F& color)
 {
@@ -137,8 +137,7 @@ void GGraph::updateShape()
     {
         if (_lineSize > 0)
         {
-            _shape->setLineWidth(_lineSize);
-            _shape->drawCircle(Vec2(_size.width / 2, _size.height / 2), _size.width / 2, 0, 360, false, 1, _size.height / _size.width, _lineColor);
+            _shape->drawCircle(Vec2(_size.width / 2, _size.height / 2), _size.width / 2, 0, 360, false, 1, _size.height / _size.width, _lineColor, _lineSize);
         }
         _shape->drawSolidCircle(Vec2(_size.width / 2, _size.height / 2), _size.width / 2, 0, 360, 1, _size.height / _size.width, _fillColor);
         break;

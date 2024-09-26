@@ -29,7 +29,8 @@
 
 #include "Particle3D/PU/PUEmitter.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL CCPUBoxEmitter : public PUEmitter
 {
@@ -76,6 +77,6 @@ protected:
     float _yRange;
     float _zRange;
 };
-NS_AX_END
+}
 
 #endif

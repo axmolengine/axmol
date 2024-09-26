@@ -59,7 +59,8 @@ THE SOFTWARE.
  */
 #define AX_HASH_NODE_NAME(name) (!name.empty() ? XXH3_64bits(name.data(), name.length()) : 0)
 
-NS_AX_BEGIN
+namespace ax
+{
 
 // FIXME:: Yes, nodes might have a sort problem once every 30 days if the game runs at 60 FPS and each frame sprites are
 // reordered.
@@ -521,7 +522,7 @@ void Node::getPosition(float* x, float* y) const
 
 void Node::setPosition(float x, float y)
 {
-    if (_position.x == x && _position.y == y)
+    if (_position.x == x && _position.y == y && !_usingNormalizedPosition)
         return;
 
     _position.x = x;
@@ -586,7 +587,7 @@ const Vec2& Node::getPositionNormalized() const
 /// position setter
 void Node::setPositionNormalized(const Vec2& position)
 {
-    if (_normalizedPosition.equals(position))
+    if (_normalizedPosition.equals(position) && _usingNormalizedPosition)
         return;
 
     _normalizedPosition      = position;
@@ -1005,13 +1006,13 @@ void Node::addChildHelper(Node* child, int localZOrder, int tag, std::string_vie
     this->insertChild(child, localZOrder);
 
     child->setParent(this);
-    
+
     if (_childFollowCameraMask)
     {
         child->setCameraMask(this->getCameraMask());
         child->applyMaskOnEnter(true);
     }
-    
+
     if (setTag)
     {
         child->setTag(tag);
@@ -2281,4 +2282,4 @@ backend::ProgramState* Node::getProgramState() const
     return _programState;
 }
 
-NS_AX_END
+}

@@ -39,7 +39,7 @@ using namespace ax::experimental;
 using namespace CocosDenshion;
 #endif
 
-USING_NS_AX;
+using namespace ax;
 
 namespace {
 csmByte* CreateBuffer(const csmChar* path, csmSizeInt* size)

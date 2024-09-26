@@ -46,7 +46,8 @@ THE SOFTWARE.
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 Layer* Layer::create()
 {
@@ -753,4 +754,4 @@ std::string LayerMultiplex::getDescription() const
     return fmt::format("<LayerMultiplex | Tag = {}, Layers = {}", _tag, static_cast<int>(_children.size()));
 }
 
-NS_AX_END
+}

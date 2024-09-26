@@ -32,7 +32,8 @@
 #include "PUSimpleSpline.h"
 #include <vector>
 
-NS_AX_BEGIN
+namespace ax
+{
 
 enum PUInterpolationType
 {
@@ -327,6 +328,6 @@ public:
      */
     float calculate(PUDynamicAttribute* dyn, float x, float defaultValue = 0.0f);
 };
-NS_AX_END
+}
 
 #endif

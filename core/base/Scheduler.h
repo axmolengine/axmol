@@ -36,7 +36,8 @@ THE SOFTWARE.
 #include "base/Object.h"
 #include "base/Vector.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class Scheduler;
 
@@ -470,12 +471,12 @@ public:
      @js NA
      */
     void runOnAxmolThread(std::function<void()> action);
-
-    AX_DEPRECATED_ATTRIBUTE void performFunctionInCocosThread(std::function<void()> action)
+#ifndef AX_CORE_PROFILE
+    AX_DEPRECATED(2.1) void performFunctionInCocosThread(std::function<void()> action)
     {
         runOnAxmolThread(std::move(action));
     }
-
+#endif
     /**
      * Remove all pending functions queued to be performed with Scheduler::runOnAxmolThread
      * Functions unscheduled in this manner will not be executed
@@ -484,8 +485,9 @@ public:
      * @js NA
      */
     void removeAllPendingActions();
-    AX_DEPRECATED_ATTRIBUTE void removeAllFunctionsToBePerformedInCocosThread() { removeAllPendingActions(); }
-
+#ifndef AX_CORE_PROFILE
+    AX_DEPRECATED(2.1) void removeAllFunctionsToBePerformedInCocosThread() { removeAllPendingActions(); }
+#endif
 protected:
     /** Schedules the 'callback' function for a given target with a given priority.
      The 'callback' selector will be called every frame.
@@ -546,6 +548,6 @@ protected:
 // end of base group
 /** @} */
 
-NS_AX_END
+}
 
 #endif  // __CCSCHEDULER_H__

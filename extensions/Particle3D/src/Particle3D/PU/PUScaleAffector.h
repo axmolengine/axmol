@@ -31,7 +31,8 @@
 #include "Particle3D/PU/PUDynamicAttribute.h"
 #include "base/Types.h"
 
-NS_AX_BEGIN
+namespace ax
+{
 
 class AX_EX_DLL PUScaleAffector : public PUAffector
 {
@@ -99,6 +100,6 @@ protected:
 
     float _latestTimeElapsed;
 };
-NS_AX_END
+}
 
 #endif

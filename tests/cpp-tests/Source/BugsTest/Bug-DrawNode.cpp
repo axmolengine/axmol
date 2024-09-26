@@ -32,7 +32,7 @@
 #include "Bug-DrawNode.h"
 #include "renderer/backend/Types.h"
 
-USING_NS_AX;
+using namespace ax;
 
 bool BugDrawNodeLayer::init()
 {

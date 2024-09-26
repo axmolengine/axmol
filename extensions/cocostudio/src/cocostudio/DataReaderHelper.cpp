@@ -37,7 +37,7 @@ THE SOFTWARE.
 
 #include "CocoLoader.h"
 
-USING_NS_AX;
+using namespace ax;
 
 static const char* VERSION     = "version";
 static const float VERSION_2_0 = 2.0f;
@@ -237,7 +237,7 @@ float DataReaderHelper::getPositionReadScale()
     return s_PositionReadScale;
 }
 
-void DataReaderHelper::purge()
+void DataReaderHelper::destroyInstance()
 {
     _configFileList.clear();
     AX_SAFE_RELEASE_NULL(_dataReaderHelper);
@@ -287,7 +287,7 @@ void DataReaderHelper::addDataFromFile(std::string_view filePath)
         basefilePath = filePath.substr(0, pos + 1);
     }
 
-    std::string fileExtension = ax::FileUtils::getInstance()->getFileExtension(filePath);
+    std::string fileExtension = ax::FileUtils::getPathExtension(filePath);
 
     // Read content from file
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
@@ -390,7 +390,7 @@ void DataReaderHelper::addDataFromFileAsync(std::string_view imagePath,
     data->imagePath = imagePath;
     data->plistPath = plistPath;
 
-    std::string fileExtension = ax::FileUtils::getInstance()->getFileExtension(filePath);
+    std::string fileExtension = ax::FileUtils::getPathExtension(filePath);
     std::string fullPath      = FileUtils::getInstance()->fullPathForFilename(filePath);
 
     bool isbinaryfilesrc = fileExtension == ".csb";

@@ -34,7 +34,8 @@ THE SOFTWARE.
 #include <winrt/Windows.Foundation.h>
 using namespace winrt;
 
-NS_AX_BEGIN
+namespace ax
+{
 
 bool isWindowsPhone();
 
@@ -60,6 +61,6 @@ std::string computeHashForFile(const std::string& filePath);
 bool createMappedCacheFile(/*In*/ const std::string& srcFilePath, /*Out*/ std::string& cacheFilePath, /*Optional*/ const std::string& ext = "");
 void destroyMappedCacheFile(const std::string& key);
 
-NS_AX_END
+}
 
 #endif // __CCWINRT_UTILS_H__

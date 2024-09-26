@@ -9,7 +9,7 @@
 #include "spine/spine-cocos2dx.h"
 
 NS_FGUI_BEGIN
-USING_NS_AX;
+using namespace ax;
 
 GLoader3D::GLoader3D()
     : _autoSize(false),
@@ -199,7 +199,7 @@ void GLoader3D::loadFromPackage()
             if (!ToolSet::isFileExist(atlasFile))
                 atlasFile = _contentItem->file.substr(0, pos + 1).append("atlas.txt");
             spine::SkeletonAnimation* skeletonAni;
-            if (FileUtils::getInstance()->getFileExtension(_contentItem->file) == ".skel")
+            if (FileUtils::getPathExtension(_contentItem->file) == ".skel")
                 skeletonAni = spine::SkeletonAnimation::createWithBinaryFile(_contentItem->file, atlasFile);
             else
                 skeletonAni = spine::SkeletonAnimation::createWithJsonFile(_contentItem->file, atlasFile);
