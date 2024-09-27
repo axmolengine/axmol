@@ -428,7 +428,6 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
             try {
                 mNativePauseComplete.await();
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
             }
         }
     }
