@@ -1,3 +1,23 @@
+## axmol-2.2.0 ??
+
+### sdks updates
+
+- emsdk: 3.1.63 ==> 3.1.67
+
+### 3rdparty updates
+
+- glad: 2.0.6 ==> 2.0.7
+- curl: 8.9.1 ==> 8.10.1
+- simdjson: 3.10.0 ==> 3.10.1
+- libpng: 1.6.43 ==> 1.6.44
+- c-ares: 1.33.0 ==> 1.33.1
+- openssl: 3.3.1 ==> 3.0.15
+- yasio: 4.2.4 ==> 4.3.1
+- jpeg-turbo: 3.0.3 ==> 3.0.4
+- luajit: 2.1-04dca79 ==> 2.1-87ae18a
+- simdjson: 3.10.0 ==> 3.10.1
+- rapidjson: 1.1.0-b4a6da3 ==> 1.1.0-815e6e7
+
 ## axmol-2.1.5 Aug.11 2024
 
 ### Significant changes relative to 2.1.4:

@@ -34,7 +34,9 @@ THE SOFTWARE.
 #include "pugixml/pugixml.hpp"
 #include "pugixml/pugiext.hpp"
 
-#include "rapidjson/document-wrapper.h"
+#include "rapidjson/rapidjson.h"
+#include "rapidjson/document.h"
+
 
 #include <string>
 #include <queue>

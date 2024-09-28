@@ -39,7 +39,9 @@
 #include "Manifest.h"
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
-#include "rapidjson/document-wrapper.h"
+#include "rapidjson/rapidjson.h"
+#include "rapidjson/document.h"
+
 
 struct zlib_filefunc_def_s;
 

@@ -871,6 +871,7 @@ int GLAD_GL_QCOM_texture_foveated_subsampled_layout = 0;
 int GLAD_GL_QCOM_texture_lod_bias = 0;
 int GLAD_GL_QCOM_tiled_rendering = 0;
 int GLAD_GL_QCOM_writeonly_rendering = 0;
+int GLAD_GL_QCOM_ycbcr_degamma = 0;
 int GLAD_GL_VIV_shader_binary = 0;
 
 
@@ -10812,6 +10813,7 @@ static int glad_gl_find_extensions_gles2(void) {
     GLAD_GL_QCOM_texture_lod_bias = glad_gl_has_extension(exts, exts_i, "GL_QCOM_texture_lod_bias");
     GLAD_GL_QCOM_tiled_rendering = glad_gl_has_extension(exts, exts_i, "GL_QCOM_tiled_rendering");
     GLAD_GL_QCOM_writeonly_rendering = glad_gl_has_extension(exts, exts_i, "GL_QCOM_writeonly_rendering");
+    GLAD_GL_QCOM_ycbcr_degamma = glad_gl_has_extension(exts, exts_i, "GL_QCOM_ycbcr_degamma");
     GLAD_GL_VIV_shader_binary = glad_gl_has_extension(exts, exts_i, "GL_VIV_shader_binary");
 
     glad_gl_free_extensions(exts_i);

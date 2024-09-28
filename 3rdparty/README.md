@@ -22,7 +22,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.33.0
+- Version: 1.33.1
 - License: MIT
 
 ## Chipmunk2D
@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.9.1
+- Version: 8.10.1
 - License: Curl (MIT/X)
 
 ## doctest
@@ -77,7 +77,7 @@
 
 ## Glad
 - [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
-- Version: 2.0.6
+- Version: 2.0.7
 - License: MIT
 
 ## glfw
@@ -97,7 +97,7 @@
 
 ## jpeg-turbo
 - [![Upstream](https://img.shields.io/github/v/release/libjpeg-turbo/libjpeg-turbo?label=Upstream)](https://github.com/libjpeg-turbo/libjpeg-turbo)
-- Version: 3.0.3
+- Version: 3.0.4
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -123,7 +123,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-04dca79
+  - Version: 2.1-87ae18a
   - License: MIT
 
 - tolua
@@ -179,12 +179,12 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.3.1
+- Version: 3.0.15
 - License: Apache-2.0
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
-- Version: 1.6.43
+- Version: 1.6.44
 - License: PNG Reference Library License version 2
 
 ## poly2tri
@@ -201,7 +201,7 @@
 
 ## rapidjson
 - [![Upstream](https://img.shields.io/github/v/tag/Tencent/rapidjson?label=Upstream)](https://github.com/Tencent/rapidjson)
-- Version: 1.1.0-b4a6da3
+- Version: 1.1.0-815e6e7 (until Sep 24, 2024)
 - License: MIT
 
 ## recast
@@ -218,7 +218,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 3.10.0
+- Version: 3.10.1
 - License: Apache-2.0
 
 ## stb (stb_image)
@@ -253,7 +253,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 4.2.4
+- Version: 4.3.1
 - License: MIT WITH Anti-996
 
 ## zlib

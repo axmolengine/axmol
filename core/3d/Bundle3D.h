@@ -30,7 +30,9 @@
 #include "base/Data.h"
 #include "3d/Bundle3DData.h"
 #include "3d/BundleReader.h"
-#include "rapidjson/document-wrapper.h"
+#include "rapidjson/rapidjson.h"
+#include "rapidjson/document.h"
+
 
 namespace ax
 {
