@@ -257,7 +257,7 @@ void LabelAtlas::updateColor()
             color4.b *= _displayedOpacity / 255.0f;
         }
         auto quads     = _textureAtlas->getQuads();
-        ssize_t length = _string.length();
+        ssize_t length = _string.length(); 
         for (int index = 0; index < length; index++)
         {
             quads[index].bl.colors = color4;
@@ -278,7 +278,7 @@ void LabelAtlas::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     _debugDrawNode->clear();
     auto size        = getContentSize();
     Vec2 vertices[4] = {Vec2::ZERO, Vec2(size.width, 0), Vec2(size.width, size.height), Vec2(0.0f, size.height)};
-    _debugDrawNode->drawPoly(vertices, 4, true, Color4B(1.0, 1.0, 1.0, 1.0));
+    _debugDrawNode->drawPoly(vertices, 4, true, Color4B::WHITE);
 }
 #endif
 

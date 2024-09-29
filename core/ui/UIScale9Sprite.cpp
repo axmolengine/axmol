@@ -33,7 +33,7 @@
 #include "renderer/Shaders.h"
 #include "platform/Image.h"
 #include "base/NinePatchImageParser.h"
-#include "2d/DrawNode.h"
+//#include "2d/DrawNode.h"
 #include "2d/Camera.h"
 #include "renderer/Renderer.h"
 #include "renderer/backend/ProgramStateRegistry.h"
