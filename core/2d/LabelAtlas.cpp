@@ -29,7 +29,6 @@ THE SOFTWARE.
 #include "renderer/TextureAtlas.h"
 #include "platform/FileUtils.h"
 #include "base/Director.h"
-#include "base/UTF8.h"
 #include "renderer/TextureCache.h"
 
 #if AX_LABELATLAS_DEBUG_DRAW
@@ -257,7 +256,7 @@ void LabelAtlas::updateColor()
             color4.b *= _displayedOpacity / 255.0f;
         }
         auto quads     = _textureAtlas->getQuads();
-        ssize_t length = _string.length(); 
+        ssize_t length = _string.length();
         for (int index = 0; index < length; index++)
         {
             quads[index].bl.colors = color4;
