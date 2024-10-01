@@ -220,7 +220,7 @@ void createMediaControlTexture()
 
     auto DrawStop = [&](const Vec2& middle) -> void {
         auto s = Vec2(middle.x - iconW / 2.f, middle.y + iconH / 2.f);
-        drawNode->drawSolidRect(s, s + Vec2(iconW, -iconH), Color4F::WHITE);
+        drawNode->drawSolidRect(s, s + Vec2(iconW, -iconH), Color4B::WHITE);
     };
 
     auto DrawPlay = [&](const Vec2& middle) -> void {
@@ -1142,7 +1142,7 @@ void MediaPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
     _debugDrawNode->clear();
     auto size         = getContentSize();
     Point vertices[4] = {Point::ZERO, Point(size.width, 0), Point(size.width, size.height), Point(0, size.height)};
-    _debugDrawNode->drawPoly(vertices, 4, true, Color4F(1.0, 1.0, 1.0, 1.0));
+    _debugDrawNode->drawPoly(vertices, 4, true, Color4B::WHITE);
 #    endif
 }
 

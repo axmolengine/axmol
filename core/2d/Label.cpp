@@ -1758,7 +1758,7 @@ void Label::updateContent()
     _debugDrawNode->clear();
     Vec2 vertices[4] = {Vec2::ZERO, Vec2(_contentSize.width, 0.0f), Vec2(_contentSize.width, _contentSize.height),
                         Vec2(0.0f, _contentSize.height)};
-    _debugDrawNode->drawPoly(vertices, 4, true, Color4F::WHITE);
+    _debugDrawNode->drawPoly(vertices, 4, true, Color4B::WHITE);
 #endif
 }
 

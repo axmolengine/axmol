@@ -54,19 +54,19 @@ static const cpVect spring_verts[] = {
 };
 static const int spring_count = sizeof(spring_verts) / sizeof(cpVect);
 
-static Color4F ColorForBody(cpBody* body)
+static Color4B ColorForBody(cpBody* body)
 {
     if (CP_BODY_TYPE_STATIC == cpBodyGetType(body) || cpBodyIsSleeping(body))
     {
-        return Color4F(0.5f, 0.5f, 0.5f, 0.5f);
+        return Color4B(127, 127, 127, 127);
     }
     else if (body->sleeping.idleTime > cpBodyGetSpace(body)->sleepTimeThreshold)
     {
-        return Color4F(0.33f, 0.33f, 0.33f, 0.5f);
+        return Color4B(85, 85, 85, 127);
     }
     else
     {
-        return Color4F(1.0f, 0.0f, 0.0f, 0.5f);
+        return Color4B(255, 0, 0, 127);
     }
 }
 
@@ -78,7 +78,7 @@ static Vec2 cpVert2Point(const cpVect& vert)
 static void DrawShape(cpShape* shape, DrawNode* renderer)
 {
     cpBody* body  = cpShapeGetBody(shape);
-    Color4F color = ColorForBody(body);
+    Color4B color = ColorForBody(body);
 
     switch (shape->klass->type)
     {
@@ -101,7 +101,7 @@ static void DrawShape(cpShape* shape, DrawNode* renderer)
     case CP_POLY_SHAPE:
     {
         cpPolyShape* poly = (cpPolyShape*)shape;
-        Color4F line      = color;
+        Color4B line      = color;
         line.a            = cpflerp(color.a, 1.0, 0.5);
         int num           = poly->count;
         Vec2* pPoints     = new Vec2[num];
@@ -109,7 +109,7 @@ static void DrawShape(cpShape* shape, DrawNode* renderer)
             pPoints[i] = cpVert2Point(poly->planes[i].v0);
         if (cpfmax(poly->r, 1.0) > 1.0)
         {
-            renderer->drawPolygon(pPoints, num, Color4F(0.5f, 0.5f, 0.5f, 0.0f), poly->r, color);
+            renderer->drawPolygon(pPoints, num, Color4B(127, 127, 127,0), poly->r, color);
         }
         else
         {
@@ -124,7 +124,7 @@ static void DrawShape(cpShape* shape, DrawNode* renderer)
     }
 }
 
-static Color4F CONSTRAINT_COLOR(0, 1, 0, 0.5);
+static Color4B CONSTRAINT_COLOR(0, 255, 0, 127);
 
 static void DrawConstraint(cpConstraint* constraint, DrawNode* renderer)
 {
