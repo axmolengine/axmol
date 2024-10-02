@@ -324,6 +324,10 @@ protected:
     std::vector<float> _spotLightUniformRangeInverseValues;
 
     std::string _texFile;
+
+    // add by binxiaojiao
+public:
+    std::function<void()>& GetVisibleChanged() { return _visibleChanged; }
 };
 
 // end of 3d group

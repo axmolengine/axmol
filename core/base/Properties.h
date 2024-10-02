@@ -186,6 +186,8 @@ public:
      * @script{create}
      */
     static Properties* createNonRefCounted(std::string_view url);
+    // add by binxiaojiao
+    static Properties* createNonRefCounted(Data* data, ssize_t* dataIdx);
 
     /**
      * Destructor.

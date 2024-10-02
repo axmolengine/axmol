@@ -142,6 +142,38 @@ Properties* Properties::createNonRefCounted(std::string_view url)
     return p;
 }
 
+Properties* Properties::createNonRefCounted(Data* data, ssize_t* dataIdx)
+{
+    std::vector<std::string_view> namespacePath;
+
+    // data will be released automatically when 'data' goes out of scope
+    // so we pass data as weak pointer
+    Properties* properties = new Properties(data, dataIdx);
+    properties->resolveInheritance();
+
+    // Get the specified properties object.
+    Properties* p = getPropertiesFromNamespacePath(properties, namespacePath);
+    if (!p)
+    {
+        AXLOGWARN("Failed to load properties from mem.");
+        AX_SAFE_DELETE(properties);
+        return nullptr;
+    }
+
+    // If the loaded properties object is not the root namespace,
+    // then we have to clone it and delete the root namespace
+    // so that we don't leak memory.
+    if (p != properties)
+    {
+        p = p->clone();
+        AX_SAFE_DELETE(properties);
+    }
+    // XXX
+    //    p->setDirectoryPath(FileSystem::getDirectoryName(fileString));
+    p->setDirectoryPath("");
+    return p;
+}
+
 static bool isVariable(const char* str, char* outName, size_t outSize)
 {
     size_t len = strlen(str);
