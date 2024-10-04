@@ -49,8 +49,9 @@ public:
     enum class DrawType
     {
         ARRAY,
+        ARRAY_INSTANCED,
         ELEMENT,
-        ELEMENT_INSTANCE
+        ELEMENT_INSTANCED
     };
 
     using PrimitiveType = backend::PrimitiveType;
@@ -112,6 +113,8 @@ TODO: should remove it.
                  every frame, otherwise use DYNAMIC.
     */
     void createVertexBuffer(std::size_t vertexSize, std::size_t capacity, BufferUsage usage);
+    void createInstanceBuffer(std::size_t vertexSize, std::size_t capacity, BufferUsage usage);
+
     /**
     Create an index buffer of the custom command. The buffer size is (indexSize * capacity).
     Index size is determined by format. If the buffer already exists, then it will delete the
@@ -221,11 +224,8 @@ TODO: should remove it.
      */
     void setAfterCallback(const CallBackFunc& after) { _afterCallback = after; }
 
-    void setInstanceBuffer(backend::Buffer* transformBuffer, int count)
-    {
-        _InstanceTransformBuffer = transformBuffer, _instanceCount = count;
-    }
-    backend::Buffer* getInstanceBuffer() const { return _InstanceTransformBuffer; }
+    void setInstanceBuffer(backend::Buffer* instanceBuffer, int count);
+    backend::Buffer* getInstanceBuffer() const { return _instanceBuffer; }
     int getInstanceCount() const { return _instanceCount; }
 
     const CallBackFunc& getBeforeCallback() { return _beforeCallback; }
@@ -238,7 +238,7 @@ protected:
     backend::Buffer* _vertexBuffer = nullptr;
     backend::Buffer* _indexBuffer  = nullptr;
 
-    backend::Buffer* _InstanceTransformBuffer = nullptr;
+    backend::Buffer* _instanceBuffer = nullptr;
     int _instanceCount                        = 0;
 
     std::size_t _vertexDrawStart = 0;

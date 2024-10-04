@@ -131,7 +131,7 @@ bool ProgramManager::init()
     registerProgram(ProgramType::POSITION_TEXTURE_3D, positionTexture3D_vert, colorTexture_frag,
                     VertexLayoutType::Unspec);
     registerProgram(ProgramType::POSITION_TEXTURE_3D_INSTANCE, positionTextureInstance_vert, colorTexture_frag,
-                    VertexLayoutType::Unspec);
+                    VertexLayoutType::Instanced);
     registerProgram(ProgramType::POSITION_3D, position_vert, color_frag, VertexLayoutType::Unspec);
     registerProgram(ProgramType::POSITION_NORMAL_3D, positionNormalTexture_vert, colorNormal_frag,
                     VertexLayoutType::Unspec);
