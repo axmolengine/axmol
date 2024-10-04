@@ -172,6 +172,8 @@ public:
     virtual void enterNextTest();
     virtual void enterPreviousTest();
 
+    void enterTest(int index);
+
     int getCurrTestIndex() { return _currTestIndex; }
     virtual void runThisTest() override;
 

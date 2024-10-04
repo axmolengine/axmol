@@ -32,11 +32,7 @@
 
 // Physics integration
 #include "physics-nodes/src/physics-nodes/PhysicsDebugNode.h"
-#include "physics-nodes/src/physics-nodes/PhysicsDebugNodeBox2D.h"
-#include "physics-nodes/src/physics-nodes/PhysicsDebugNodeChipmunk2D.h"
 #include "physics-nodes/src/physics-nodes/PhysicsSprite.h"
-#include "physics-nodes/src/physics-nodes/PhysicsSpriteBox2D.h"
-#include "physics-nodes/src/physics-nodes/PhysicsSpriteChipmunk2D.h"
 
 #include "assets-manager/src/assets-manager/AssetsManager.h"
 #include "assets-manager/src/assets-manager/AssetsManagerEx.h"

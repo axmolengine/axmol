@@ -23,8 +23,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef __COCOS2DX_SCRIPTING_LUA_COCOS2DXSUPPORT_LUABAISCCONVERSIONS_H__
-#define __COCOS2DX_SCRIPTING_LUA_COCOS2DXSUPPORT_LUABAISCCONVERSIONS_H__
+#ifndef __AXMOL_SCRIPTING_LUA_COCOS2DXSUPPORT_LUABAISCCONVERSIONS_H__
+#define __AXMOL_SCRIPTING_LUA_COCOS2DXSUPPORT_LUABAISCCONVERSIONS_H__
 
 #include <unordered_map>
 #include <string>
@@ -39,10 +39,11 @@
 #include "3d/Bundle3D.h"
 #include "base/Value.h"
 #include "base/Types.h"
+#    if defined(AX_ENABLE_PHYSICS) && 0
 #include "physics/PhysicsContact.h"
 #include "physics/PhysicsJoint.h"
-#include "physics/PhysicsShape.h"
 #include "physics/PhysicsWorld.h"
+#    endif
 #include "renderer/backend/Types.h"
 #include "renderer/backend/VertexLayout.h"
 #include "ui/GUIDefine.h"
@@ -309,7 +310,7 @@ extern bool luaval_to_color4b(lua_State* L, int lo, Color4B* outValue, const cha
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 extern bool luaval_to_color4f(lua_State* L, int lo, Color4F* outValue, const char* funcName = "");
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS) && 0
 
 /**
  * Get a PhysicsMaterial object value from the given acceptable index of stack.
@@ -961,7 +962,7 @@ extern void color4f_to_luaval(lua_State* L, const Color4F& cc);
 
 void std_thread_id_to_luaval(lua_State* L, const std::thread::id& value);
 
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS) && 0
 
 /**
  * Push a table converted from a ax::PhysicsMaterial object into the Lua stack.
