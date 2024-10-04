@@ -71,7 +71,8 @@ enum class VertexFormat : uint32_t
     INT,
     USHORT4,
     USHORT2,
-    UBYTE4
+    UBYTE4,
+    MAT4,
 };
 /** @typedef backend::PixelFormat
      Possible texture pixel formats

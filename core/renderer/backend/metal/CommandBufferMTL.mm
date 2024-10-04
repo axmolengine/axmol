@@ -300,6 +300,12 @@ void CommandBufferMTL::drawArrays(PrimitiveType primitiveType, std::size_t start
     [_mtlRenderEncoder drawPrimitives:toMTLPrimitive(primitiveType) vertexStart:start vertexCount:count];
 }
 
+void CommandBufferMTL::drawArraysInstanced(PrimitiveType primitiveType, std::size_t start, std::size_t count, int instanceCount, bool wireframe /* unused */)
+{
+    prepareDrawing();
+    [_mtlRenderEncoder drawPrimitives:toMTLPrimitive(primitiveType) vertexStart:start vertexCount:count instanceCount:instanceCount];
+}
+
 void CommandBufferMTL::drawElements(PrimitiveType primitiveType,
                                     IndexFormat indexType,
                                     std::size_t count,
@@ -308,10 +314,10 @@ void CommandBufferMTL::drawElements(PrimitiveType primitiveType,
 {
     prepareDrawing();
     [_mtlRenderEncoder drawIndexedPrimitives:toMTLPrimitive(primitiveType)
-                                  indexCount:count
-                                   indexType:toMTLIndexType(indexType)
-                                 indexBuffer:_mtlIndexBuffer
-                           indexBufferOffset:offset];
+                                indexCount:count
+                                indexType:toMTLIndexType(indexType)
+                                indexBuffer:_mtlIndexBuffer
+                                indexBufferOffset:offset];
 }
 
 void CommandBufferMTL::drawElementsInstanced(PrimitiveType primitiveType,
@@ -323,11 +329,11 @@ void CommandBufferMTL::drawElementsInstanced(PrimitiveType primitiveType,
 {
     prepareDrawing();
     [_mtlRenderEncoder drawIndexedPrimitives:toMTLPrimitive(primitiveType)
-                                  indexCount:count
-                                   indexType:toMTLIndexType(indexType)
-                                 indexBuffer:_mtlIndexBuffer
-                           indexBufferOffset:offset
-                               instanceCount:instanceCount];
+                                indexCount:count
+                                indexType:toMTLIndexType(indexType)
+                                indexBuffer:_mtlIndexBuffer
+                                indexBufferOffset:offset
+                                instanceCount:instanceCount];
 }
 
 void CommandBufferMTL::endRenderPass()

@@ -290,15 +290,18 @@ public:
      */
     void setParameterAutoBinding(std::string_view uniformName, std::string_view autoBinding);
 
-    inline const VertexLayout* getVertexLayout() const { return _vertexLayout; }
+    inline const VertexLayout* getVertexLayout(bool instanced = false) const
+    {
+        return !instanced ? _vertexLayout : _vertexLayoutInstanced;
+    }
 
-    VertexLayout* getMutableVertexLayout();
+    VertexLayout* getMutableVertexLayout(bool instanced = false);
 
     void setSharedVertexLayout(VertexLayout* vertexLayout);
 
     /*
-    * Gets batch id of current program state, part of batch draw materialID
-    */
+     * Gets batch id of current program state, part of batch draw materialID
+     */
     uint64_t getBatchId() const { return _batchId; };
 
     /*
@@ -391,8 +394,10 @@ protected:
     std::unordered_map<std::string, std::string> _autoBindings;
 
     static std::vector<AutoBindingResolver*> _customAutoBindingResolvers;
-    VertexLayout* _vertexLayout = nullptr;
-    bool _ownVertexLayout       = false;
+    VertexLayout* _vertexLayout          = nullptr;
+    VertexLayout* _vertexLayoutInstanced = nullptr;
+    bool _ownVertexLayout                = false;
+    bool _ownVertexLayoutInstanced       = false;
 
     uint64_t _batchId    = -1;
     bool _isBatchable = false;
