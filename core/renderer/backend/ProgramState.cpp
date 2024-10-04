@@ -285,24 +285,6 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
 }
 #endif
 
-#ifndef AX_CORE_PROFILE
-void ProgramState::setVertexAttrib(std::string_view name,
-                                   std::size_t index,
-                                   VertexFormat format,
-                                   std::size_t offset,
-                                   bool needToBeNormallized)
-{
-    ensureVertexLayoutMutable();
-
-    _vertexLayout->setAttrib(name, index, format, offset, needToBeNormallized);
-}
-
-void ProgramState::setVertexStride(uint32_t stride)
-{
-    ensureVertexLayoutMutable();
-    _vertexLayout->setStride(stride);
-}
-#endif
 void ProgramState::validateSharedVertexLayout(VertexLayoutType vlt)
 {
     if (!_ownVertexLayout && !_vertexLayout->isValid())

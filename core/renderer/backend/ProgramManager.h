@@ -103,23 +103,6 @@ public:
      * Unload all program objects from cache.
      */
     void unloadAllPrograms();
-#ifndef AX_CORE_PROFILE
-    /**
-     * Remove a program object from cache.
-     * @param program Specifies the program object to move.
-     */
-    AX_DEPRECATED(2.1) void removeProgram(Program* prog) { unloadProgram(prog); }
-
-    /**
-     * Remove all unused program objects from cache.
-     */
-    AX_DEPRECATED(2.1) void removeUnusedProgram() { unloadUnusedPrograms(); }
-
-    /**
-     * Remove all program objects from cache.
-     */
-    AX_DEPRECATED(2.1) void removeAllPrograms() { unloadAllPrograms(); }
-#endif
 protected:
     ProgramManager();
     virtual ~ProgramManager();
