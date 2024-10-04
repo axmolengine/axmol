@@ -33,8 +33,6 @@
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
-
 class btDynamicsWorld;
 class btDefaultCollisionConfiguration;
 class btCollisionDispatcher;
@@ -169,7 +167,6 @@ protected:
     bool _collisionCheckingFlag;
     bool _needGhostPairCallbackChecking;
 
-#        if (AX_ENABLE_BULLET_INTEGRATION)
     btDynamicsWorld* _btPhyiscsWorld;
     btDefaultCollisionConfiguration* _collisionConfiguration;
     btCollisionDispatcher* _dispatcher;
@@ -177,14 +174,11 @@ protected:
     btSequentialImpulseConstraintSolver* _solver;
     btGhostPairCallback* _ghostCallback;
     Physics3DDebugDrawer* _debugDrawer;
-#        endif  // AX_ENABLE_BULLET_INTEGRATION
 };
 
 // end of 3d group
 /// @}
 }
-
-#    endif
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)
 

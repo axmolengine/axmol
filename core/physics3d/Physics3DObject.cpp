@@ -29,8 +29,6 @@
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
-
 #        include "bullet/btBulletCollisionCommon.h"
 #        include "bullet/btBulletDynamicsCommon.h"
 
@@ -552,7 +550,5 @@ ax::Mat4 Physics3DCollider::getWorldTransform() const
 }
 
 }
-
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)

@@ -35,11 +35,11 @@ THE SOFTWARE.
 #include "base/UTF8.h"
 #include "renderer/Renderer.h"
 
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS) && 0
 #    include "physics/PhysicsWorld.h"
 #endif
 
-#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS)
 #    include "physics3d/Physics3DWorld.h"
 #    include "physics3d/Physics3DComponent.h"
 #endif
@@ -66,7 +66,7 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS)
     AX_SAFE_RELEASE(_physics3DWorld);
     AX_SAFE_RELEASE(_physics3dDebugCamera);
 #endif
@@ -233,7 +233,7 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
         //        camera->setNodeToParentTransform(eyeCopy);
     }
 
-#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS)
     if (_physics3DWorld && _physics3DWorld->isDebugDrawEnabled())
     {
         Camera* physics3dDebugCamera = _physics3dDebugCamera != nullptr ? _physics3dDebugCamera : defaultCamera;
@@ -307,7 +307,7 @@ void Scene::removeAllChildren()
     }
 }
 
-#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS)
 void Scene::setPhysics3DDebugCamera(Camera* camera)
 {
     AX_SAFE_RETAIN(camera);
@@ -326,7 +326,7 @@ void Scene::setNavMeshDebugCamera(Camera* camera)
 
 #endif
 
-#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION))
+#if defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS)
 
 Scene* Scene::createWithPhysics()
 {
@@ -351,7 +351,7 @@ bool Scene::initWithPhysics()
 
 bool Scene::initPhysicsWorld()
 {
-#    if defined(AX_ENABLE_PHYSICS)
+#    if defined(AX_ENABLE_PHYSICS) && 0
     _physicsWorld = PhysicsWorld::construct(this);
 #    endif
 
@@ -360,7 +360,7 @@ bool Scene::initPhysicsWorld()
     {
         this->setContentSize(_director->getWinSize());
 
-#    if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
+#    if defined(AX_ENABLE_3D_PHYSICS)
         Physics3DWorldDes info;
         AX_BREAK_IF(!(_physics3DWorld = Physics3DWorld::create(&info)));
         _physics3DWorld->retain();
@@ -374,15 +374,15 @@ bool Scene::initPhysicsWorld()
 
 #endif
 
-#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || defined(AX_ENABLE_NAVMESH))
+#if defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || defined(AX_ENABLE_NAVMESH)
 void Scene::stepPhysicsAndNavigation(float deltaTime)
 {
-#    if defined(AX_ENABLE_PHYSICS)
+#    if defined(AX_ENABLE_PHYSICS) && 0
     if (_physicsWorld && _physicsWorld->isAutoStep())
         _physicsWorld->update(deltaTime);
 #    endif
 
-#    if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
+#    if defined(AX_ENABLE_3D_PHYSICS)
     if (_physics3DWorld)
     {
         _physics3DWorld->stepSimulate(deltaTime);

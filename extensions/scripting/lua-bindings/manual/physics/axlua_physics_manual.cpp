@@ -25,7 +25,7 @@
 
 #include "lua-bindings/manual/base/axlua_base_manual.hpp"
 
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS) && 0
 #    include "lua-bindings/manual/tolua_fix.h"
 #    include "lua-bindings/manual/LuaBasicConversions.h"
 #    include "lua-bindings/manual/LuaValue.h"

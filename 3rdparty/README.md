@@ -11,7 +11,7 @@
 
 ## Box2D
 - [![Upstream](https://img.shields.io/github/v/release/erincatto/box2d?label=Upstream)](https://github.com/erincatto/box2d)
-- Version: 2.4.2
+- Version: 3.0.0-df7373c
 - License: MIT
 
 ## Bullet
@@ -23,11 +23,6 @@
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
 - Version: 1.34.5
-- License: MIT
-
-## Chipmunk2D
-- [![Upstream](https://img.shields.io/github/v/tag/slembcke/Chipmunk2D?label=Upstream)](https://github.com/slembcke/Chipmunk2D)
-- Version: git 7.0.3-0cb05e7 {until Dec 16, 2021}
 - License: MIT
 
 ## Clipper2

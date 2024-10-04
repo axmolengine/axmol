@@ -30,8 +30,6 @@ THE SOFTWARE.
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
-
 namespace ax
 {
 
@@ -251,7 +249,5 @@ void Physics3DComponent::syncNodeToPhysics()
 }
 
 }
-
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)

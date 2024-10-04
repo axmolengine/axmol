@@ -11550,7 +11550,8 @@ int lua_ax_base_Node_initLayer(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Node_setPhysicsBody(lua_State* tolua_S)
+#if defined(AX_ENABLE_PHYSICS) && 0
+    int lua_ax_base_Node_setPhysicsBody(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Node* cobj = nullptr;
@@ -11647,6 +11648,7 @@ int lua_ax_base_Node_getPhysicsBody(lua_State* tolua_S)
 
     return 0;
 }
+#endif
 int lua_ax_base_Node_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -11909,8 +11911,10 @@ int lua_register_ax_base_Node(lua_State* tolua_S)
         tolua_function(tolua_S,"resetChild",lua_ax_base_Node_resetChild);
         tolua_function(tolua_S,"init",lua_ax_base_Node_init);
         tolua_function(tolua_S,"initLayer",lua_ax_base_Node_initLayer);
+#if defined(AX_ENABLE_PHYSICS) && 0
         tolua_function(tolua_S,"setPhysicsBody",lua_ax_base_Node_setPhysicsBody);
         tolua_function(tolua_S,"getPhysicsBody",lua_ax_base_Node_getPhysicsBody);
+#endif
         tolua_function(tolua_S,"create", lua_ax_base_Node_create);
         tolua_function(tolua_S,"getAttachedNodeCount", lua_ax_base_Node_getAttachedNodeCount);
     tolua_endmodule(tolua_S);
@@ -12187,6 +12191,7 @@ int lua_ax_base_Scene_onProjectionChanged(lua_State* tolua_S)
 
     return 0;
 }
+#if defined(AX_ENABLE_PHYSICS) && 0
 int lua_ax_base_Scene_getPhysicsWorld(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12234,6 +12239,7 @@ int lua_ax_base_Scene_getPhysicsWorld(lua_State* tolua_S)
 
     return 0;
 }
+#endif
 int lua_ax_base_Scene_initWithPhysics(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12587,7 +12593,9 @@ int lua_register_ax_base_Scene(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSize",lua_ax_base_Scene_initWithSize);
         tolua_function(tolua_S,"setCameraOrderDirty",lua_ax_base_Scene_setCameraOrderDirty);
         tolua_function(tolua_S,"onProjectionChanged",lua_ax_base_Scene_onProjectionChanged);
+#if defined(AX_ENABLE_PHYSICS) && 0
         tolua_function(tolua_S,"getPhysicsWorld",lua_ax_base_Scene_getPhysicsWorld);
+#endif
         tolua_function(tolua_S,"initWithPhysics",lua_ax_base_Scene_initWithPhysics);
         tolua_function(tolua_S,"initPhysicsWorld",lua_ax_base_Scene_initPhysicsWorld);
         tolua_function(tolua_S,"fixedUpdate",lua_ax_base_Scene_fixedUpdate);

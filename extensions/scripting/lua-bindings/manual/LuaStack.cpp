@@ -223,7 +223,7 @@ bool LuaStack::init()
 
     tolua_luanode_open(_state);
     register_luanode_manual(_state);
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS) && 0
     register_all_ax_physics(_state);
     register_all_ax_physics_manual(_state);
 #endif

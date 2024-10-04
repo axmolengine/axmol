@@ -1,5 +1,5 @@
 #include "base/Config.h"
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS) && 0
 #ifndef __ax_physics_h__
 #define __ax_physics_h__
 #include "tolua++.h"

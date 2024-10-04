@@ -44,7 +44,7 @@ class EventCustom;
 #if defined(AX_ENABLE_PHYSICS)
 class PhysicsWorld;
 #endif
-#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS)
 class Physics3DWorld;
 #endif
 #if defined(AX_ENABLE_NAVMESH)
@@ -152,7 +152,7 @@ protected:
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Scene);
 
-#if (AX_ENABLE_PHYSICS || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION))
+#if AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)
 public:
 #    if defined(AX_ENABLE_PHYSICS)
     /** Get the physics world of the scene.
@@ -161,7 +161,7 @@ public:
     PhysicsWorld* getPhysicsWorld() const { return _physicsWorld; }
 #    endif
 
-#    if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
+#    if defined(AX_ENABLE_3D_PHYSICS)
     /** Get the 3d physics world of the scene.
      * @return The 3d physics world of the scene.
      */
@@ -189,7 +189,7 @@ protected:
     PhysicsWorld* _physicsWorld = nullptr;
 #    endif
 
-#    if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
+#    if defined(AX_ENABLE_3D_PHYSICS)
     Physics3DWorld* _physics3DWorld = nullptr;
     Camera* _physics3dDebugCamera   = nullptr;
 #    endif
@@ -211,7 +211,7 @@ protected:
     Camera* _navMeshDebugCamera = nullptr;
 #endif
 
-#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || defined(AX_ENABLE_NAVMESH))
+#if defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || defined(AX_ENABLE_NAVMESH)
 public:
     void stepPhysicsAndNavigation(float deltaTime);
 #endif
