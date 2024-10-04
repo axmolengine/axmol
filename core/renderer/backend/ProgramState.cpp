@@ -157,9 +157,11 @@ bool ProgramState::init(Program* program)
     AX_SAFE_RETAIN(program);
     _program = program;
 
-    _vertexLayout            = program->getVertexLayout();
-    _ownVertexLayout         = false;
-    _vertexUniformBufferSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
+    _vertexLayout             = program->getVertexLayout();
+    _vertexLayoutInstanced    = program->getVertexLayout(true);
+    _ownVertexLayout          = false;
+    _ownVertexLayoutInstanced = false;
+    _vertexUniformBufferSize  = _program->getUniformBufferSize(ShaderStage::VERTEX);
 
 #ifdef AX_USE_METAL
     _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
@@ -220,6 +222,9 @@ ProgramState::~ProgramState()
 
     if (_ownVertexLayout)
         AX_SAFE_DELETE(_vertexLayout);
+
+    if (_ownVertexLayoutInstanced)
+        AX_SAFE_DELETE(_vertexLayoutInstanced);
 }
 
 ProgramState* ProgramState::clone() const
@@ -231,6 +236,9 @@ ProgramState* ProgramState::clone() const
 
     cp->_ownVertexLayout = _ownVertexLayout;
     cp->_vertexLayout    = !_ownVertexLayout ? _vertexLayout : new VertexLayout(*_vertexLayout);
+
+    cp->_ownVertexLayoutInstanced = _ownVertexLayout;
+    cp->_vertexLayoutInstanced = !_ownVertexLayout ? _vertexLayoutInstanced : new VertexLayout(*_vertexLayoutInstanced);
 
     cp->_batchId = this->_batchId;
     cp->_isBatchable = this->_isBatchable;
@@ -300,13 +308,24 @@ void ProgramState::ensureVertexLayoutMutable()
     }
 }
 
-VertexLayout* ProgramState::getMutableVertexLayout()
+VertexLayout* ProgramState::getMutableVertexLayout(bool instanced)
 {
-    if (_ownVertexLayout || !_vertexLayout->isValid())
-        return _vertexLayout;
+    if (!instanced)
+    {
+        if (_ownVertexLayout || !_vertexLayout->isValid())
+            return _vertexLayout;
 
-    _ownVertexLayout     = true;
-    return _vertexLayout = new VertexLayout();
+        _ownVertexLayout     = true;
+        return _vertexLayout = new VertexLayout();
+    }
+    else
+    {
+        if (_ownVertexLayoutInstanced || !_vertexLayoutInstanced->isValid())
+            return _vertexLayoutInstanced;
+
+        _ownVertexLayoutInstanced = true;
+        return _vertexLayoutInstanced = new VertexLayout();
+    }
 }
 
 void ProgramState::setSharedVertexLayout(VertexLayout* vertexLayout)
@@ -354,7 +373,8 @@ void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocati
         setTextureArray(uniformLocation.vertStage.location, std::move(slots), std::move(textures), _vertexTextureInfos);
 #ifdef AX_USE_METAL
     if (uniformLocation.fragStage)
-        setTextureArray(uniformLocation.fragStage.location, std::move(slots), std::move(textures), _fragmentTextureInfos);
+        setTextureArray(uniformLocation.fragStage.location, std::move(slots), std::move(textures),
+                        _fragmentTextureInfos);
 #endif
 }
 
