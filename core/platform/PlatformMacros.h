@@ -314,52 +314,6 @@ public:                                                 \
 #define AX_BREAK_IF(cond) \
     if (cond)             \
     break
-#ifndef AX_CORE_PROFILE
-#    define __AXLOGWITHFUNCTION(s, ...) \
-        ax::print("%s : %s", __FUNCTION__, ax::StringUtils::format(s, ##__VA_ARGS__).c_str())
-/// @name legacy log macros, deprecated since axmol 2.1.4, use AXLOGD, AXLOGI, AXLOGW, ... instead
-/// @{
-#    if !defined(_AX_DEBUG) || _AX_DEBUG == 0
-#        define AXLOG(...) \
-            do             \
-            {              \
-            } while (0)
-#        define AXLOGINFO(...) \
-            do                 \
-            {                  \
-            } while (0)
-#        define AXLOGERROR(...) \
-            do                  \
-            {                   \
-            } while (0)
-#        define AXLOGWARN(...) \
-            do                 \
-            {                  \
-            } while (0)
-
-#    elif _AX_DEBUG == 1
-#        define AXLOG(format, ...)      ax::print(format, ##__VA_ARGS__)
-#        define AXLOGERROR(format, ...) ax::print(format, ##__VA_ARGS__)
-#        define AXLOGINFO(format, ...) \
-            do                         \
-            {                          \
-            } while (0)
-#        define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
-
-#    elif _AX_DEBUG > 1
-#        define AXLOG(format, ...)      ax::print(format, ##__VA_ARGS__)
-#        define AXLOGERROR(format, ...) ax::print(format, ##__VA_ARGS__)
-#        define AXLOGINFO(format, ...)  ax::print(format, ##__VA_ARGS__)
-#        define AXLOGWARN(...)          __AXLOGWITHFUNCTION(__VA_ARGS__)
-#    endif  // _AX_DEBUG
-
-/** Lua engine debug */
-#    if !defined(_AX_DEBUG) || _AX_DEBUG == 0 || AX_LUA_ENGINE_DEBUG == 0
-#        define LUALOG(...)
-#    else
-#        define LUALOG(format, ...) ax::print(format, ##__VA_ARGS__)
-#    endif  // Lua engine debug
-#endif
 
 //  end of debug group
 /// @}

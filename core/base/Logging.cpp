@@ -230,18 +230,4 @@ AX_DLL void writeLog(LogItem& item, const char* tag)
 #    endif
 #endif
 }
-#ifndef AX_CORE_PROFILE
-AX_API void print(const char* format, ...)
-{
-    va_list args;
-
-    va_start(args, format);
-    auto message = StringUtils::vformat(format, args);
-    va_end(args);
-
-    if (!message.empty())
-        outputLog(LogItem::vformat(FMT_COMPILE("{}{}\n"), preprocessLog(LogItem{LogLevel::Silent}), message),
-                  "axmol debug info");
-}
-#endif
 }

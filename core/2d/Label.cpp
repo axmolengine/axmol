@@ -360,17 +360,6 @@ Label* Label::createWithBMFont(std::string_view bmfontPath,
     return nullptr;
 }
 
-#ifndef AX_CORE_PROFILE
-Label* Label::createWithBMFont(std::string_view bmfontPath,
-                               std::string_view text,
-                               const TextHAlignment& hAlignment,
-                               int maxLineWidth,
-                               const Vec2& imageOffset)
-{
-    return createWithBMFont(bmfontPath, text, hAlignment, maxLineWidth, Rect(imageOffset.x, imageOffset.y, 0, 0),
-                            false);
-}
-#endif
 Label* Label::createWithCharMap(std::string_view plistFile)
 {
     auto ret = new Label();
@@ -928,12 +917,7 @@ bool Label::setBMFontFilePath(std::string_view bmfontFilePath, std::string_view 
 
     return true;
 }
-#ifndef AX_CORE_PROFILE
-bool Label::setBMFontFilePath(std::string_view bmfontFilePath, const Vec2& imageOffset, float fontSize)
-{
-    return setBMFontFilePath(bmfontFilePath, Rect(imageOffset.x, imageOffset.y, 0, 0), false);
-}
-#endif
+
 void Label::setString(std::string_view text)
 {
     if (text.compare(_utf8Text))

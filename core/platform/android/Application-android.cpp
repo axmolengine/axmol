@@ -88,12 +88,6 @@ Application* Application::getInstance()
     return sm_pSharedApplication;
 }
 
-// @deprecated Use getInstance() instead
-Application* Application::sharedApplication()
-{
-    return Application::getInstance();
-}
-
 const char* Application::getCurrentLanguageCode()
 {
     static char code[3]  = {0};
