@@ -40,6 +40,7 @@ CustomCommand::CustomCommand()
 CustomCommand::~CustomCommand()
 {
     AX_SAFE_RELEASE(_vertexBuffer);
+    AX_SAFE_RELEASE(_instanceBuffer);
     AX_SAFE_RELEASE(_indexBuffer);
 }
 
@@ -143,6 +144,24 @@ void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capac
     _vertexDrawCount = capacity;
 
     _vertexBuffer = backend::DriverBase::getInstance()->newBuffer(vertexSize * capacity, backend::BufferType::VERTEX, usage);
+}
+
+void CustomCommand::createInstanceBuffer(std::size_t vertexSize, std::size_t capacity, BufferUsage usage)
+{
+    AX_SAFE_RELEASE(_instanceBuffer);
+    _instanceBuffer = backend::DriverBase::getInstance()->newBuffer(vertexSize * capacity, backend::BufferType::VERTEX, usage);
+    _instanceCount = capacity;
+}
+
+void CustomCommand::setInstanceBuffer(backend::Buffer* instanceBuffer, int count)
+{
+    if (_instanceBuffer != instanceBuffer)
+    {
+        AX_SAFE_RELEASE(_instanceBuffer);
+        _instanceBuffer = instanceBuffer;
+        _instanceCount  = count;
+        AX_SAFE_RETAIN(_instanceBuffer);
+    }
 }
 
 void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, BufferUsage usage)

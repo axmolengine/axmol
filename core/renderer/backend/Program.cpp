@@ -163,20 +163,32 @@ struct VertexLayoutHelper
                                 backend::VertexFormat::FLOAT3, offsetof(V3F_T2F_N3F, normal), false);
         vertexLayout->setStride(sizeof(V3F_T2F_N3F));
     }
+
+    static void setupInstanced(Program* program)
+    {
+        auto vertexLayout = program->getVertexLayout(true);
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_INSTANCE,
+                                program->getAttributeLocation(backend::Attribute::INSTANCE),
+                                backend::VertexFormat::MAT4, 0, false);
+        vertexLayout->setStride(sizeof(Mat4));
+    }
 };
 std::function<void(Program*)> Program::s_vertexLayoutSetupList[static_cast<int>(VertexLayoutType::Count)] = {
     VertexLayoutHelper::setupDummy,    VertexLayoutHelper::setupPos,      VertexLayoutHelper::setupTexture,
     VertexLayoutHelper::setupSprite,   VertexLayoutHelper::setupDrawNode, VertexLayoutHelper::setupDrawNode3D,
     VertexLayoutHelper::setupSkyBox,   VertexLayoutHelper::setupPU3D,     VertexLayoutHelper::setupPosColor,
-    VertexLayoutHelper::setupTerrain3D};
+    VertexLayoutHelper::setupTerrain3D, VertexLayoutHelper::setupInstanced};
 
-Program::Program(std::string_view vs, std::string_view fs)
-    : _vertexShader(vs), _fragmentShader(fs), _vertexLayout(new VertexLayout())
-{}
+Program::Program(std::string_view vs, std::string_view fs) : _vertexShader(vs), _fragmentShader(fs)
+{
+    _vertexLayout[0] = new VertexLayout();
+    _vertexLayout[1] = new VertexLayout(); // instanced draw
+}
 
 Program::~Program()
 {
-    delete _vertexLayout;
+    delete _vertexLayout[0];
+    delete _vertexLayout[1];
 }
 
 void Program::setupVertexLayout(VertexLayoutType vlt)

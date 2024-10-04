@@ -50,9 +50,6 @@ public:
                                std::size_t offset,
                                int instanceCount,
                                bool wireframe = false) override;
-
-    void bindInstanceBuffer(ProgramGL* program, uint32_t& usedBits) const override;
-
 };
 
 // end of _opengl group

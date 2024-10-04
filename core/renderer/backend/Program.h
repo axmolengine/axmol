@@ -58,6 +58,7 @@ enum class VertexLayoutType
     PU3D,        // V3F_C4B_T2F // same with sprite, TODO: reuse spriete
     posColor,    // V3F_C4B
     Terrain3D,   // V3F_T2F_V3F
+    Instanced,   // builtin instanced vertex format for 3D transform
     Count
 };
 
@@ -167,7 +168,7 @@ public:
      */
     virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const = 0;
 
-    inline VertexLayout* getVertexLayout() const { return _vertexLayout; }
+    inline VertexLayout* getVertexLayout(bool instanced = false) const { return !instanced ? _vertexLayout[0] : _vertexLayout[1]; }
 
 protected:
 
@@ -211,7 +212,7 @@ protected:
 
     std::string _vertexShader;                            ///< Vertex shader.
     std::string _fragmentShader;                          ///< Fragment shader.
-    VertexLayout* _vertexLayout = nullptr;
+    VertexLayout* _vertexLayout[2] = {};
     uint32_t _programType = ProgramType::CUSTOM_PROGRAM;  ///< built-in program type, initial value is CUSTOM_PROGRAM.
     uint64_t _programId   = 0;
 

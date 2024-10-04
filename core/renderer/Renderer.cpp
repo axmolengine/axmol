@@ -729,26 +729,34 @@ void Renderer::drawCustomCommand(RenderCommand* command)
     _commandBuffer->setProgramState(cmd->getPipelineDescriptor().programState);
 
     auto drawType = cmd->getDrawType();
-    if (CustomCommand::DrawType::ELEMENT == drawType)
+    switch (drawType)
     {
+    case CustomCommand::DrawType::ELEMENT:
         _commandBuffer->setIndexBuffer(cmd->getIndexBuffer());
         _commandBuffer->drawElements(cmd->getPrimitiveType(), cmd->getIndexFormat(), cmd->getIndexDrawCount(),
                                      cmd->getIndexDrawOffset(), cmd->isWireframe());
         _drawnVertices += cmd->getIndexDrawCount();
-    }
-    else if (CustomCommand::DrawType::ELEMENT_INSTANCE == drawType)
-    {
+        break;
+    case CustomCommand::DrawType::ELEMENT_INSTANCED:
         _commandBuffer->setIndexBuffer(cmd->getIndexBuffer());
         _commandBuffer->setInstanceBuffer(cmd->getInstanceBuffer());
         _commandBuffer->drawElementsInstanced(cmd->getPrimitiveType(), cmd->getIndexFormat(), cmd->getIndexDrawCount(),
                                               cmd->getIndexDrawOffset(), cmd->getInstanceCount(), cmd->isWireframe());
         _drawnVertices += cmd->getIndexDrawCount() * cmd->getInstanceCount();
-    }
-    else
-    {
+        break;
+    case CustomCommand::DrawType::ARRAY:
         _commandBuffer->drawArrays(cmd->getPrimitiveType(), cmd->getVertexDrawStart(), cmd->getVertexDrawCount(),
                                    cmd->isWireframe());
         _drawnVertices += cmd->getVertexDrawCount();
+        break;
+    case CustomCommand::DrawType::ARRAY_INSTANCED:
+        _commandBuffer->setInstanceBuffer(cmd->getInstanceBuffer());
+        _commandBuffer->drawArraysInstanced(cmd->getPrimitiveType(), cmd->getVertexDrawStart(),
+                                            cmd->getVertexDrawCount(), cmd->getInstanceCount(),
+                                   cmd->isWireframe());
+        _drawnVertices += cmd->getVertexDrawCount() * cmd->getInstanceCount();
+        break;
+    default:;
     }
     _drawnBatches++;
     endRenderPass();
