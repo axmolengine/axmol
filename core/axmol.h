@@ -165,11 +165,11 @@ THE SOFTWARE.
 #include "renderer/Shaders.h"
 
 // physics
-#include "physics/PhysicsBody.h"
-#include "physics/PhysicsContact.h"
-#include "physics/PhysicsJoint.h"
-#include "physics/PhysicsShape.h"
-#include "physics/PhysicsWorld.h"
+// #include "physics/PhysicsBody.h"
+// #include "physics/PhysicsContact.h"
+// #include "physics/PhysicsJoint.h"
+// #include "physics/PhysicsCollider.h"
+// #include "physics/PhysicsWorld.h"
 
 // platform
 #include "platform/Common.h"

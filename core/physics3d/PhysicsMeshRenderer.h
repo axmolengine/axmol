@@ -34,8 +34,6 @@
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
-
 namespace ax
 {
 /**
@@ -83,8 +81,6 @@ protected:
 // end of 3d group
 /// @}
 }
-
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)
 

@@ -404,74 +404,8 @@ list(APPEND GAME_SOURCE
 )
 
 if((WINDOWS OR MACOSX OR LINUX OR WASM) AND (NOT WINRT))
-    list(APPEND GAME_HEADER
-        Source/Box2DTestBed/tests/test.h
-        Source/Box2DTestBed/tests/settings.h
-        Source/Box2DTestBed/Box2DTestBed.h
-     )
-
-   list(APPEND GAME_SOURCE
-    Source/Box2DTestBed/Box2DTestBed.cpp
-    Source/Box2DTestBed/test.cpp
-    Source/Box2DTestBed/tests/add_pair.cpp
-    Source/Box2DTestBed/tests/apply_force.cpp
-    Source/Box2DTestBed/tests/body_types.cpp
-    Source/Box2DTestBed/tests/box_stack.cpp
-    Source/Box2DTestBed/tests/breakable.cpp
-    Source/Box2DTestBed/tests/bridge.cpp
-    Source/Box2DTestBed/tests/bullet_test.cpp
-    Source/Box2DTestBed/tests/cantilever.cpp
-    Source/Box2DTestBed/tests/car.cpp
-    Source/Box2DTestBed/tests/chain.cpp
-    Source/Box2DTestBed/tests/chain_problem.cpp
-    Source/Box2DTestBed/tests/character_collision.cpp
-    Source/Box2DTestBed/tests/circle_stack.cpp
-    Source/Box2DTestBed/tests/collision_filtering.cpp
-    Source/Box2DTestBed/tests/collision_processing.cpp
-    Source/Box2DTestBed/tests/compound_shapes.cpp
-    Source/Box2DTestBed/tests/confined.cpp
-    Source/Box2DTestBed/tests/continuous_test.cpp
-    Source/Box2DTestBed/tests/convex_hull.cpp
-    Source/Box2DTestBed/tests/conveyor_belt.cpp
-    Source/Box2DTestBed/tests/distance_joint.cpp
-    Source/Box2DTestBed/tests/distance_test.cpp
-    Source/Box2DTestBed/tests/dominos.cpp
-    Source/Box2DTestBed/tests/dump_loader.cpp
-    Source/Box2DTestBed/tests/dynamic_tree.cpp
-    Source/Box2DTestBed/tests/edge_shapes.cpp
-    Source/Box2DTestBed/tests/edge_test.cpp
-    Source/Box2DTestBed/tests/friction.cpp
-    Source/Box2DTestBed/tests/gear_joint.cpp
-    Source/Box2DTestBed/tests/heavy1.cpp
-    Source/Box2DTestBed/tests/heavy2.cpp
-    Source/Box2DTestBed/tests/mobile_balanced.cpp
-    Source/Box2DTestBed/tests/mobile_unbalanced.cpp
-    Source/Box2DTestBed/tests/motor_joint.cpp
-    Source/Box2DTestBed/tests/pinball.cpp
-    Source/Box2DTestBed/tests/platformer.cpp
-    Source/Box2DTestBed/tests/polygon_collision.cpp
-    Source/Box2DTestBed/tests/polygon_shapes.cpp
-    Source/Box2DTestBed/tests/prismatic_joint.cpp
-    Source/Box2DTestBed/tests/pulley_joint.cpp
-    Source/Box2DTestBed/tests/pyramid.cpp
-    Source/Box2DTestBed/tests/ray_cast.cpp
-    Source/Box2DTestBed/tests/restitution.cpp
-    Source/Box2DTestBed/tests/revolute_joint.cpp
-    Source/Box2DTestBed/tests/rope.cpp
-    Source/Box2DTestBed/tests/sensor.cpp
-    Source/Box2DTestBed/tests/shape_cast.cpp
-    Source/Box2DTestBed/tests/shape_editing.cpp
-    Source/Box2DTestBed/tests/skier.cpp
-    Source/Box2DTestBed/tests/slider_crank_1.cpp
-    Source/Box2DTestBed/tests/slider_crank_2.cpp
-    Source/Box2DTestBed/tests/theo_jansen.cpp
-    Source/Box2DTestBed/tests/tiles.cpp
-    Source/Box2DTestBed/tests/time_of_impact.cpp
-    Source/Box2DTestBed/tests/tumbler.cpp
-    Source/Box2DTestBed/tests/web.cpp
-    Source/Box2DTestBed/tests/wheel_joint.cpp
-    Source/Box2DTestBed/tests/wrecking_ball.cpp
-     )
+    file(GLOB_RECURSE BOX2D_TESTBED_SOURCES Source/Box2DTestBed/*.h;Source/Box2DTestBed/*.cpp)
+    list(APPEND GAME_SOURCE ${BOX2D_TESTBED_SOURCES})
 endif()
 
 list(APPEND GAME_HEADER
@@ -484,50 +418,11 @@ list(APPEND GAME_SOURCE
      )
 list(APPEND GAME_HEADER
      Source/PhysicsTest/PhysicsTest.h
-     Source/ChipmunkTest/ChipmunkTest.h
 	 )
 
 list(APPEND GAME_SOURCE
      Source/PhysicsTest/PhysicsTest.cpp
-     Source/ChipmunkTest/ChipmunkTest.cpp
 	 )
-
-if(WINDOWS OR MACOSX OR LINUX OR WASM)
-	list(APPEND GAME_HEADER
-	    Source/ChipmunkTestBed/demo/ChipmunkDemo.h
-		Source/ChipmunkTestBed/ChipmunkTestBed.h
-	)
-   set (TESTBED_C_SORUCES
-        Source/ChipmunkTestBed/demo/Bench.cpp
-        Source/ChipmunkTestBed/demo/Chains.cpp
-        Source/ChipmunkTestBed/demo/Convex.cpp
-        Source/ChipmunkTestBed/demo/Crane.cpp
-        Source/ChipmunkTestBed/demo/Joints.cpp
-        Source/ChipmunkTestBed/demo/LogoSmash.cpp
-        Source/ChipmunkTestBed/demo/OneWay.cpp
-        Source/ChipmunkTestBed/demo/Planet.cpp
-        Source/ChipmunkTestBed/demo/Player.cpp
-        Source/ChipmunkTestBed/demo/Plink.cpp
-        Source/ChipmunkTestBed/demo/Pump.cpp
-        Source/ChipmunkTestBed/demo/PyramidStack.cpp
-        Source/ChipmunkTestBed/demo/PyramidTopple.cpp
-        Source/ChipmunkTestBed/demo/Shatter.cpp
-        Source/ChipmunkTestBed/demo/Springies.cpp
-        Source/ChipmunkTestBed/demo/Sticky.cpp
-        Source/ChipmunkTestBed/demo/Tank.cpp
-        Source/ChipmunkTestBed/demo/TheoJansen.cpp
-        Source/ChipmunkTestBed/demo/Buoyancy.cpp
-        Source/ChipmunkTestBed/demo/ContactGraph.cpp
-        Source/ChipmunkTestBed/demo/Example.cpp
-        Source/ChipmunkTestBed/demo/Query.cpp
-        Source/ChipmunkTestBed/demo/Slice.cpp
-        Source/ChipmunkTestBed/demo/Unicycle.cpp
-        Source/ChipmunkTestBed/demo/Tumble.cpp)
-	list(APPEND GAME_SOURCE
-		${TESTBED_C_SORUCES}
-		Source/ChipmunkTestBed/ChipmunkTestBed.cpp
-	)
-endif()
 
 if (AX_ENABLE_EXT_EFFEKSEER)
     list(APPEND GAME_HEADER Source/EffekseerTest/EffekseerTest.h)

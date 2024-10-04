@@ -28,28 +28,17 @@
 #include "axmol.h"
 #include "box2d/box2d.h"
 #include "../BaseTest.h"
+#include "Box2DTestDebugDrawNode.h"
+
+class SampleEntry;
+class Sample;
 
 DEFINE_TEST_SUITE(Box2DTestBedTests);
 
-class Test;
-typedef Test* TestCreateFcn();
-
-struct TestEntry
-{
-    const char* category;
-    const char* name;
-    TestCreateFcn* createFcn;
-};
-
-#define MAX_TESTS 256
-extern TestEntry g_testEntries[MAX_TESTS];
-
-int RegisterTest(const char* category, const char* name, TestCreateFcn* fcn);
-
-class Box2DTestBed : public TestCase, ax::Layer
+class Box2DTestBed : public TestCase
 {
 public:
-    static Box2DTestBed* createWithEntryID(int entryId);
+    static Box2DTestBed* create(int entryIndex);
 
     Box2DTestBed();
     virtual ~Box2DTestBed();
@@ -62,13 +51,7 @@ public:
     void initPhysics();
     void update(float dt) override;
 
-    void createResetButton();
-
-    bool initWithEntryID(int entryId);
-
-    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
-    void onTouchMoved(ax::Touch* touch, ax::Event* event);
-    void onTouchEnded(ax::Touch* touch, ax::Event* event);
+    bool initWithEntryIndex(int entryIndex);
 
     void onKeyPressed(ax::EventKeyboard::KeyCode code, ax::Event* event);
     void onKeyReleased(ax::EventKeyboard::KeyCode code, ax::Event* event);
@@ -78,24 +61,23 @@ public:
     void onMouseMove(ax::Event* event);
     void onMouseScroll(ax::Event* event);
 
-    ax::EventListenerTouchOneByOne* _touchListener;
-    ax::EventListenerKeyboard* _keyboardListener;
+    void RestartSample();
 
-    TestEntry* m_entry;
-    Test* m_test;
-    int m_entryID;
+    SampleEntry* m_entry{};
+    Sample* m_sample{};
+    int m_entryIndex{};
 
 private:
-    b2World* world;
-    ax::Texture2D* _spriteTexture;
+    b2Vec2 _mouseDownPos{};
+    ax::Vec2 _dragingStartPos;
+    bool _draging{false};
 
-    b2Vec2 pos;
-    b2Vec2 oldPos;
-    bool button[2];
+    /*ax::EventListenerTouchOneByOne* _touchListener{};*/
+    ax::EventListenerKeyboard* _keyboardListener{};
+    ax::EventListenerMouse* _mouseListener{};
 
     // Debug stuff
-    ax::DrawNode* debugDrawNode;
-    ax::extension::PhysicsDebugNodeBox2D g_debugDraw;
+    Box2DTestDebugDrawNode* _debugDraw{};
 };
 
 #endif

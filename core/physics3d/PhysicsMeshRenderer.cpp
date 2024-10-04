@@ -28,8 +28,6 @@
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
-
 namespace ax
 {
 
@@ -100,7 +98,5 @@ PhysicsMeshRenderer::PhysicsMeshRenderer() : _physicsComponent(nullptr) {}
 PhysicsMeshRenderer::~PhysicsMeshRenderer() {}
 
 }
-
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)

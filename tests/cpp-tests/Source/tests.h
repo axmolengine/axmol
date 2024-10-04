@@ -27,11 +27,8 @@
 #define _TESTS_H_
 
 #include "Box2DTest/Box2dTest.h"
-#include "Box2DTestBed/Box2DTestBed.h"
-
-#include "ChipmunkTest/ChipmunkTest.h"
 #if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
-#    include "ChipmunkTestBed/ChipmunkTestBed.h"
+#    include "Box2DTestBed/Box2DTestBed.h"
 #endif
 
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MARMALADE)
@@ -55,7 +52,7 @@
 #endif
 
 #if defined(AX_ENABLE_EXT_EFFEKSEER)
-#include "EffekseerTest/EffekseerTest.h"
+#    include "EffekseerTest/EffekseerTest.h"
 #endif
 
 // sort them alphabetically. thanks
