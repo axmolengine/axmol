@@ -40,7 +40,7 @@
 #include "2d/ComponentContainer.h"
 #include "2d/Component.h"
 
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS) && 0
 #    include "physics/PhysicsBody.h"
 #endif
 
@@ -2006,7 +2006,7 @@ protected:
     backend::ProgramState* _programState = nullptr;
 
 // Physics:remaining backwardly compatible
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS) && 0
     PhysicsBody* _physicsBody;
 
 public:

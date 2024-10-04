@@ -94,154 +94,139 @@ bool Box2DTest::init()
     this->addChild(menu);
     menu->setPosition(VisibleRect::right().x - 100, VisibleRect::top().y - 60);
 
-    drawBox2D = g_debugDraw.GetDrawNode();
-    addChild(drawBox2D, 100);
-    drawBox2D->setOpacity(150);
-
     scheduleUpdate();
 
     return true;
 }
 
-Box2DTest::Box2DTest() : _spriteTexture(nullptr), world(nullptr) {}
+Box2DTest::Box2DTest() : _spriteTexture(nullptr) {}
 
 Box2DTest::~Box2DTest()
 {
-    AX_SAFE_DELETE(world);
+    b2DestroyWorld(world);
 }
 
 void Box2DTest::toggleDebugCallback(Object* sender)
 {
     showDebugDraw = !showDebugDraw;
-    drawBox2D->clear();
+    _debugDrawNode->setVisible(showDebugDraw);
+}
+
+b2BodyId Box2DTest::createRigibody(b2BodyDef* def)
+{
+    auto bodyId = b2CreateBody(world, def);
+    return bodyId;
 }
 
 void Box2DTest::initPhysics()
 {
-    b2Vec2 gravity;
-    gravity.Set(0.0f, -10.0f);
-    world = new b2World(gravity);
+    b2Vec2 gravity      = {0.0f, -10.0f};
+    b2WorldDef worldDef = b2DefaultWorldDef();
+    worldDef.gravity    = gravity;
+    world               = b2CreateWorld(&worldDef);
+
+    // debug draw node for world
+    _debugDrawNode = utils::createInstance<PhysicsDebugNode>(&PhysicsDebugNode::initWithWorld, world);
+    addChild(_debugDrawNode, 100);
+    _debugDrawNode->setOpacity(150);
 
     // Do we want to let bodies sleep?
-    world->SetAllowSleeping(true);
+    b2World_EnableSleeping(world, true);
+    b2World_EnableContinuous(world, true);
 
-    world->SetContinuousPhysics(true);
+    // The segment ground
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    b2BodyId groundId = createRigibody(&bodyDef);
 
-    // Define the ground body.
-    b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(0, 0);  // bottom-left corner
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
 
-    // Call the body factory which allocates memory for the ground body
-    // from a pool and creates the ground box shape (also from a pool).
-    // The body is also added to the world.
-    b2Body* groundBody = world->CreateBody(&groundBodyDef);
+    auto conerOffset  = 1.0f / PTM_RATIO;
+    auto viewRect     = VisibleRect::getVisibleRect();
+    b2Segment segment = {{conerOffset, conerOffset}, {viewRect.size.width / PTM_RATIO - conerOffset, conerOffset}};
+    b2CreateSegmentShape(groundId, &shapeDef, &segment);  // bottom
 
-    // Define the ground box shape.
-    b2EdgeShape groundBox;
+    segment = {{conerOffset, viewRect.size.height / PTM_RATIO - conerOffset},
+               {viewRect.size.width / PTM_RATIO - conerOffset, viewRect.size.height / PTM_RATIO - conerOffset}};
+    b2CreateSegmentShape(groundId, &shapeDef, &segment);  // top
 
-    // bottom
-    groundBox.SetTwoSided(b2Vec2(VisibleRect::leftBottom().x / PTM_RATIO, VisibleRect::leftBottom().y / PTM_RATIO),
-                          b2Vec2(VisibleRect::rightBottom().x / PTM_RATIO, VisibleRect::rightBottom().y / PTM_RATIO));
-    groundBody->CreateFixture(&groundBox, 0);
+    segment = {{conerOffset, conerOffset}, {conerOffset, viewRect.size.height / PTM_RATIO - conerOffset}};
+    b2CreateSegmentShape(groundId, &shapeDef, &segment);  // left
 
-    // top
-    groundBox.SetTwoSided(b2Vec2(VisibleRect::leftTop().x / PTM_RATIO, VisibleRect::leftTop().y / PTM_RATIO),
-                          b2Vec2(VisibleRect::rightTop().x / PTM_RATIO, VisibleRect::rightTop().y / PTM_RATIO));
-    groundBody->CreateFixture(&groundBox, 0);
-
-    // left
-    groundBox.SetTwoSided(b2Vec2(VisibleRect::leftTop().x / PTM_RATIO, VisibleRect::leftTop().y / PTM_RATIO),
-                          b2Vec2(VisibleRect::leftBottom().x / PTM_RATIO, VisibleRect::leftBottom().y / PTM_RATIO));
-    groundBody->CreateFixture(&groundBox, 0);
-
-    // right
-    groundBox.SetTwoSided(b2Vec2(VisibleRect::rightBottom().x / PTM_RATIO, VisibleRect::rightBottom().y / PTM_RATIO),
-                          b2Vec2(VisibleRect::rightTop().x / PTM_RATIO, VisibleRect::rightTop().y / PTM_RATIO));
-    groundBody->CreateFixture(&groundBox, 0);
+    segment = {{viewRect.size.width / PTM_RATIO - conerOffset, conerOffset},
+               {viewRect.size.width / PTM_RATIO - conerOffset, viewRect.size.height / PTM_RATIO - conerOffset}};
+    b2CreateSegmentShape(groundId, &shapeDef, &segment);  // right
 
     // Small triangle
     b2Vec2 vertices[3];
-    vertices[0].Set(-1.0f, 0.0f);
-    vertices[1].Set(1.0f, 0.0f);
-    vertices[2].Set(0.0f, 2.0f);
+    vertices[0]       = b2Vec2{-1.0f, 0.0f};
+    vertices[1]       = b2Vec2{1.0f, 0.0f};
+    vertices[2]       = b2Vec2{0.0f, 2.0f};
+    b2Hull hull       = b2ComputeHull(vertices, 3);
+    b2Polygon polygon = b2MakePolygon(&hull, 0.0f);
 
-    b2PolygonShape polygon;
-    polygon.Set(vertices, 3);
-
-    b2FixtureDef triangleShapeDef;
-    triangleShapeDef.shape   = &polygon;
-    triangleShapeDef.density = 1.0f;
-
-    b2BodyDef triangleBodyDef;
-    triangleBodyDef.type = b2_dynamicBody;
-    triangleBodyDef.position.Set(rand() % 13 + 3, 4);
-
-    b2Body* body1 = world->CreateBody(&triangleBodyDef);
-    body1->CreateFixture(&triangleShapeDef);
+    b2BodyDef triangleBodyDef   = b2DefaultBodyDef();
+    triangleBodyDef.type        = b2_dynamicBody;
+    triangleBodyDef.position    = b2Vec2{static_cast<float>(rand() % 13 + 3), 4.0f};  // bottom-left corner
+    auto body1                  = createRigibody(&triangleBodyDef);
+    b2ShapeDef triangleShapeDef = b2DefaultShapeDef();
+    triangleShapeDef.density    = 1.0f;
+    b2CreatePolygonShape(body1, &triangleShapeDef, &polygon);
 
     // Large triangle (recycle definitions)
     vertices[0] *= 2.0f;
     vertices[1] *= 2.0f;
     vertices[2] *= 2.0f;
-    polygon.Set(vertices, 3);
 
-    triangleBodyDef.position.Set(rand() % 13 + 3, 4);
-
-    b2Body* body2 = world->CreateBody(&triangleBodyDef);
-    body2->CreateFixture(&triangleShapeDef);
+    triangleBodyDef.position = b2Vec2{static_cast<float>(rand() % 13 + 3), 4.0f};
+    auto body2               = createRigibody(&triangleBodyDef);
+    hull                     = b2ComputeHull(vertices, 3);
+    polygon                  = b2MakePolygon(&hull, 0.0f);
+    b2CreatePolygonShape(body2, &triangleShapeDef, &polygon);
 
     // Small box
-    polygon.SetAsBox(1.0f, 0.5f);
+    polygon = b2MakeBox(1.0f, 0.5f);  // .SetAsBox(1.0f, 0.5f);
 
-    b2FixtureDef boxShapeDef;
-    boxShapeDef.shape   = &polygon;
+    auto boxShapeDef    = b2DefaultShapeDef();
     boxShapeDef.density = 1.0f;
 
-    b2BodyDef boxBodyDef;
-    boxBodyDef.type = b2_dynamicBody;
-    boxBodyDef.position.Set(rand() % 13 + 3, 4);
+    b2BodyDef boxBodyDef = b2DefaultBodyDef();
+    boxBodyDef.type      = b2_dynamicBody;
+    boxBodyDef.position  = b2Vec2{static_cast<float>(rand() % 13 + 3), 4.0f};
 
-    b2Body* body3 = world->CreateBody(&boxBodyDef);
-    body3->CreateFixture(&boxShapeDef);
+    auto body3 = createRigibody(&boxBodyDef);
+    b2CreatePolygonShape(body3, &boxShapeDef, &polygon);
 
     // Large box (recycle definitions)
-    polygon.SetAsBox(2.0f, 1.0f);
-    boxBodyDef.position.Set(rand() % 13 + 3, 4);
+    polygon             = b2MakeBox(2.0f, 1.0f);  // .SetAsBox(2.0f, 1.0f);
+    boxBodyDef.position = b2Vec2{static_cast<float>(rand() % 13 + 3), 4.0f};
 
-    b2Body* body4 = world->CreateBody(&boxBodyDef);
-    body4->CreateFixture(&boxShapeDef);
+    auto body4 = createRigibody(&boxBodyDef);
+    b2CreatePolygonShape(body4, &boxShapeDef, &polygon);
 
     // Small circle
-    b2CircleShape circle;
-    circle.m_radius = 1.0f;
-
-    b2FixtureDef circleShapeDef;
-    circleShapeDef.shape   = &circle;
+    auto circleShapeDef    = b2DefaultShapeDef();
     circleShapeDef.density = 1.0f;
 
-    b2BodyDef circleBodyDef;
-    circleBodyDef.type = b2_dynamicBody;
-    circleBodyDef.position.Set(rand() % 13 + 3, 4);
+    b2Circle circle{{0.0f, 0.0f}, 1.0f};
 
-    b2Body* body5 = world->CreateBody(&circleBodyDef);
-    body5->CreateFixture(&circleShapeDef);
+    b2BodyDef circleBodyDef = b2DefaultBodyDef();
+    circleBodyDef.type      = b2_dynamicBody;
+    circleBodyDef.position  = b2Vec2{static_cast<float>(rand() % 13 + 3), 4.0f};
+
+    auto body5 = createRigibody(&circleBodyDef);
+    b2CreateCircleShape(body5, &circleShapeDef, &circle);
 
     // Large circle
-    circle.m_radius *= 2.0f;
-    circleBodyDef.position.Set(rand() % 13 + 3, 4);
+    circle.radius *= 2.0f;
+    circleBodyDef.position = b2Vec2{static_cast<float>(rand() % 13 + 3), 4.0f};
 
-    b2Body* body6 = world->CreateBody(&circleBodyDef);
-    body6->CreateFixture(&circleShapeDef);
+    auto body6 = createRigibody(&circleBodyDef);
+    b2CreateCircleShape(body6, &circleShapeDef, &circle);
 
-    uint32 flags = 0;
-    flags += 1 * b2Draw::e_shapeBit;
-    flags += 1 * b2Draw::e_jointBit;
-    flags += 0 * b2Draw::e_aabbBit;
-    flags += 0 * b2Draw::e_centerOfMassBit;
-    g_debugDraw.SetFlags(flags);
-    g_debugDraw.mRatio          = PTM_RATIO;
-    g_debugDraw.debugNodeOffset = {0, 0};
-    world->SetDebugDraw(&g_debugDraw);
+    _debugDrawNode->setPTMRatio(PTM_RATIO);
+    auto& settings      = _debugDrawNode->getB2DebugDraw();
+    settings.drawShapes = true;
+    settings.drawJoints = true;
 }
 
 void Box2DTest::createResetButton()
@@ -261,24 +246,22 @@ void Box2DTest::addNewSpriteAtPosition(Vec2 p)
 
     // Define the dynamic body.
     // Set up a 1m squared box in the physics world
-    b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(p.x / PTM_RATIO, p.y / PTM_RATIO);
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.type      = b2_dynamicBody;
+    bodyDef.position  = b2Vec2{p.x / PTM_RATIO, p.y / PTM_RATIO};
 
     AXLOGD("Add PTM_RATIO sprite x: {:.2} y: {:.2}", p.x / PTM_RATIO, p.y / PTM_RATIO);
 
-    b2Body* body = world->CreateBody(&bodyDef);
+    auto body = createRigibody(&bodyDef);
 
     // Define another box shape for our dynamic body.
-    b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(.5f, .5f);  // These are mid points for our 1m box
+    auto dynamicBox = b2MakeBox(.5f, .5f);  // These are mid points for our 1m box
 
     // Define the dynamic body fixture.
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape    = &dynamicBox;
-    fixtureDef.density  = 1.0f;
-    fixtureDef.friction = 0.3f;
-    body->CreateFixture(&fixtureDef);
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
+    shapeDef.density    = 1.0f;
+    shapeDef.friction   = 0.3f;
+    b2CreatePolygonShape(body, &shapeDef, &dynamicBox);
 
     auto parent = this->getChildByTag(kTagParentNode);
 
@@ -286,7 +269,7 @@ void Box2DTest::addNewSpriteAtPosition(Vec2 p)
     // just randomly picking one of the images
     int idx     = (AXRANDOM_0_1() > .5 ? 0 : 1);
     int idy     = (AXRANDOM_0_1() > .5 ? 0 : 1);
-    auto sprite = PhysicsSpriteBox2D::createWithTexture(_spriteTexture, Rect(32 * idx, 32 * idy, 32, 32));
+    auto sprite = PhysicsSprite::createWithTexture(_spriteTexture, Rect(32 * idx, 32 * idy, 32, 32));
     parent->addChild(sprite);
     sprite->setB2Body(body);
     sprite->setPTMRatio(PTM_RATIO);
@@ -300,19 +283,9 @@ void Box2DTest::update(float dt)
     // You need to make an informed choice, the following URL is useful
     // http://gafferongames.com/game-physics/fix-your-timestep/
 
-    int velocityIterations = 8;
-    int positionIterations = 1;
-
-    // Instruct the world to perform a single step of simulation. It is
-    // generally best to keep the time step and iterations fixed.
-    world->Step(dt, velocityIterations, positionIterations);
-
-    // Debug draw
-    if (showDebugDraw)
-    {
-        drawBox2D->clear();
-        world->DebugDraw();
-    }
+    // The number of sub-steps, increasing the sub-step count can increase accuracy. Typically 4.
+    constexpr int subStepCount = 4;
+    b2World_Step(world, _director->getAnimationInterval(), subStepCount);
 }
 
 void Box2DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)

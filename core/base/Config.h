@@ -252,20 +252,6 @@ THE SOFTWARE.
 #    define AX_LUA_ENGINE_DEBUG 0
 #endif
 
-/** Use physics integration API. */
-//  It works with:
-// Chipmunk2D or Box2D
-#if defined(AX_ENABLE_PHYSICS)
-/** Use Chipmunk2D physics 2d engine on physics integration API. */
-#    ifndef AX_ENABLE_CHIPMUNK_INTEGRATION
-#        define AX_ENABLE_CHIPMUNK_INTEGRATION 0
-#    endif
-/** or use Box2D physics 2d engine on physics integration API. */
-#    ifndef AX_ENABLE_BOX2D_INTEGRATION
-#        define AX_ENABLE_BOX2D_INTEGRATION 1
-#    endif
-#endif  // defined(AX_ENABLE_PHYSICS)
-
 /** Use culling or not. */
 #ifndef AX_USE_CULLING
 #    define AX_USE_CULLING 1

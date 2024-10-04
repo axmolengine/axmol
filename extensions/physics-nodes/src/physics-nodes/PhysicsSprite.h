@@ -29,18 +29,13 @@
 #include "extensions/ExtensionExport.h"
 #include "base/EventListenerCustom.h"
 
-#if (AX_ENABLE_CHIPMUNK_INTEGRATION || AX_ENABLE_BOX2D_INTEGRATION)
-
-struct cpBody;
-class b2Body;
+#include "box2d/box2d.h"
 
 NS_AX_EXT_BEGIN
 
 /** A Sprite subclass that is bound to a physics body.
  It works with:
- - Chipmunk: Preprocessor macro AX_ENABLE_CHIPMUNK_INTEGRATION should be defined
- - Objective-Chipmunk: Preprocessor macro AX_ENABLE_CHIPMUNK_INTEGRATION should be defined
- - Box2d: Preprocessor macro AX_ENABLE_BOX2D_INTEGRATION should be defined
+ - Box2D
 
  Features and Limitations:
  - Scale and Skew properties are ignored.
@@ -94,18 +89,11 @@ public:
     void setIgnoreBodyRotation(bool bIgnoreBodyRotation);
 
     //
-    // Chipmunk specific
-    //
-    /** Body accessor when using regular Chipmunk */
-    cpBody* getCPBody() const;
-    void setCPBody(cpBody* pBody);
-
-    //
     // Box2d specific
     //
     /** Body accessor when using box2d */
-    b2Body* getB2Body() const;
-    void setB2Body(b2Body* pBody);
+    b2BodyId getB2Body() const;
+    void setB2Body(b2BodyId pBody);
 
     float getPTMRatio() const;
     void setPTMRatio(float fPTMRatio);
@@ -135,11 +123,8 @@ protected:
 protected:
     bool _ignoreBodyRotation;
 
-    // chipmunk specific
-    cpBody* _CPBody;
-
     // box2d specific
-    b2Body* _pB2Body;
+    b2BodyId _bodyId{};
     float _PTMRatio;
 
     // Event for update synchronise physic transform

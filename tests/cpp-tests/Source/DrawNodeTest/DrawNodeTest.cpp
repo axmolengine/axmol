@@ -3747,9 +3747,7 @@ void CandyMixEeffect::update(float dt)
 
     static float WID = 400;
     static float HIG = 600;
-    static b2Timer timer;
-
-    float t = timer.GetMilliseconds() / 1000.0f;
+    float t  = utils::getTimeInMilliseconds() / 1000.0f;
     float ta = sin(t * cos(t) * 0.02f) + t;
     float tb = (1.0f + sin(t) * 1.0f) * 0.02f + 0.01f;
     float xa = WID * 0.5f;
