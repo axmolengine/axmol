@@ -3,8 +3,8 @@
 /* Define the axmol version */
 // 0x00 HI ME LO
 // 00   03 08 00
-#define AX_VERSION_MAJOR 2
-#define AX_VERSION_MINOR 8
+#define AX_VERSION_MAJOR 3
+#define AX_VERSION_MINOR 0
 #define AX_VERSION_PATCH 0
 
 /* Define axmol version helper macros */
