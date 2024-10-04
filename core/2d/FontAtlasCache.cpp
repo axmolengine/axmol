@@ -144,12 +144,7 @@ FontAtlas* FontAtlasCache::getFontAtlasFNT(std::string_view fontFileName, const 
 
     return nullptr;
 }
-#ifndef AX_CORE_PROFILE
-FontAtlas* FontAtlasCache::getFontAtlasFNT(std::string_view fontFileName, const Vec2& imageOffset)
-{
-    return getFontAtlasFNT(fontFileName, Rect(imageOffset.x, imageOffset.y, 0, 0), false);
-}
-#endif
+
 FontAtlas* FontAtlasCache::getFontAtlasCharMap(std::string_view plistFile)
 {
     std::string_view atlasName = plistFile;
@@ -260,12 +255,6 @@ void FontAtlasCache::reloadFontAtlasFNT(std::string_view fontFileName, const Rec
             _atlasMap.emplace(std::move(atlasName), tempAtlas);
     }
 }
-#ifndef AX_CORE_PROFILE
-void FontAtlasCache::reloadFontAtlasFNT(std::string_view fontFileName, const Vec2& imageOffset)
-{
-    reloadFontAtlasFNT(fontFileName, Rect(imageOffset.x, imageOffset.y, 0, 0), false);
-}
-#endif
 
 void FontAtlasCache::unloadFontAtlasTTF(std::string_view fontFileName)
 {
