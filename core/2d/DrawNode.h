@@ -512,7 +512,7 @@ public:
                            float thickness = 1.0f);
 
     /** Clear the geometry in the node's buffer. */
-    void clear();
+    virtual void clear();
     /** Get the color mixed mode.
      * @lua NA
      */
