@@ -113,7 +113,7 @@ TODO: should remove it.
                  every frame, otherwise use DYNAMIC.
     */
     void createVertexBuffer(std::size_t vertexSize, std::size_t capacity, BufferUsage usage);
-    void createInstanceBuffer(std::size_t vertexSize, std::size_t capacity, BufferUsage usage);
+    void createInstanceBuffer(std::size_t vertexSize, int capacity, BufferUsage usage);
 
     /**
     Create an index buffer of the custom command. The buffer size is (indexSize * capacity).
@@ -139,6 +139,9 @@ TODO: should remove it.
     @param length Specifies the size in bytes of the data store region being replaced.
     */
     void updateIndexBuffer(const void* data, std::size_t length);
+
+    void updateInstanceBuffer(const void* data, std::size_t length);
+
     /**
     Update some or all contents of vertex buffer.
     @param data Specifies a pointer to the new data that will be copied into the data store.
@@ -164,6 +167,8 @@ TODO: should remove it.
     Get index buffer capacity.
     */
     inline std::size_t getIndexCapacity() const { return _indexCapacity; }
+
+    int getInstanceCapacity() const { return _instanceCapacity; }
 
     inline void setDrawType(DrawType drawType) { _drawType = drawType; }
     inline DrawType getDrawType() const { return _drawType; }
@@ -207,6 +212,8 @@ TODO: should remove it.
         _indexDrawCount  = count;
     }
 
+    void setInstanceDrawInfo(int count) { _instanceCount = count; }
+
     inline std::size_t getIndexDrawOffset() const { return _indexDrawOffset; }
     inline std::size_t getIndexDrawCount() const { return _indexDrawCount; }
 
@@ -239,7 +246,8 @@ protected:
     backend::Buffer* _indexBuffer  = nullptr;
 
     backend::Buffer* _instanceBuffer = nullptr;
-    int _instanceCount                        = 0;
+    int _instanceCount               = 0;
+    int _instanceCapacity            = 0;
 
     std::size_t _vertexDrawStart = 0;
     std::size_t _vertexDrawCount = 0;
@@ -262,7 +270,7 @@ protected:
     CallBackFunc _afterCallback  = nullptr;
 };
 
-}
+}  // namespace ax
 /**
  end of support group
  @}
