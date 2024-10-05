@@ -147,8 +147,8 @@ void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color4F& color
     unsigned int vertex_count = 2;
     ensureCapacity(vertex_count);
 
-    _bufferLines.emplace_back(from);
-    _bufferLines.emplace_back(to);
+    _bufferLines.emplace_back(from, color);
+    _bufferLines.emplace_back(to, color);
 
     _isDirty = true;
 }
