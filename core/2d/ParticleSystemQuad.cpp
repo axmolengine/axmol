@@ -194,17 +194,17 @@ void ParticleSystemQuad::initTexCoordsWithRect(const Rect& pointRect)
     for (unsigned int i = start; i < end; i++)
     {
         // bottom-left vertex:
-        quads[i].bl.texCoords.u = left;
-        quads[i].bl.texCoords.v = bottom;
+        quads[i].bl.texCoord.u = left;
+        quads[i].bl.texCoord.v = bottom;
         // bottom-right vertex:
-        quads[i].br.texCoords.u = right;
-        quads[i].br.texCoords.v = bottom;
+        quads[i].br.texCoord.u = right;
+        quads[i].br.texCoord.v = bottom;
         // top-left vertex:
-        quads[i].tl.texCoords.u = left;
-        quads[i].tl.texCoords.v = top;
+        quads[i].tl.texCoord.u = left;
+        quads[i].tl.texCoord.v = top;
         // top-right vertex:
-        quads[i].tr.texCoords.u = right;
-        quads[i].tr.texCoords.v = top;
+        quads[i].tr.texCoord.u = right;
+        quads[i].tr.texCoord.v = top;
     }
 }
 
@@ -290,20 +290,20 @@ inline void updatePosWithParticle(V3F_C4F_T2F_Quad* quad,
     float dy = x1 * sr + y2 * cr + y;
 
     // bottom-left
-    quad->bl.vertices.x = ax;
-    quad->bl.vertices.y = ay;
+    quad->bl.position.x = ax;
+    quad->bl.position.y = ay;
 
     // bottom-right vertex:
-    quad->br.vertices.x = bx;
-    quad->br.vertices.y = by;
+    quad->br.position.x = bx;
+    quad->br.position.y = by;
 
     // top-left vertex:
-    quad->tl.vertices.x = dx;
-    quad->tl.vertices.y = dy;
+    quad->tl.position.x = dx;
+    quad->tl.position.y = dy;
 
     // top-right vertex:
-    quad->tr.vertices.x = cx;
-    quad->tr.vertices.y = cy;
+    quad->tr.position.x = cx;
+    quad->tr.position.y = cy;
 }
 
 void ParticleSystemQuad::updateParticleQuads()
@@ -479,13 +479,13 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.s     = abs(*sat);
                     hsv.v     = abs(*val);
                     auto colF = hsv.toRgba();
-                    quad->bl.colors.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
+                    quad->bl.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
                                         colF.a);
-                    quad->br.colors.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
+                    quad->br.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
                                         colF.a);
-                    quad->tl.colors.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
+                    quad->tl.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
                                         colF.a);
-                    quad->tr.colors.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
+                    quad->tr.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
                                         colF.a);
                 }
             }
@@ -500,10 +500,10 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.s    = abs(*sat);
                     hsv.v    = abs(*val);
                     auto col = hsv.toColor4B();
-                    quad->bl.colors.set(col.r, col.g, col.b, col.a);
-                    quad->br.colors.set(col.r, col.g, col.b, col.a);
-                    quad->tl.colors.set(col.r, col.g, col.b, col.a);
-                    quad->tr.colors.set(col.r, col.g, col.b, col.a);
+                    quad->bl.color.set(col.r, col.g, col.b, col.a);
+                    quad->br.color.set(col.r, col.g, col.b, col.a);
+                    quad->tl.color.set(col.r, col.g, col.b, col.a);
+                    quad->tr.color.set(col.r, col.g, col.b, col.a);
                 }
             }
         }
@@ -518,10 +518,10 @@ void ParticleSystemQuad::updateParticleQuads()
                     auto colorG = *g * *a;
                     auto colorB = *b * *a;
                     auto colorA = *a * (*fadeDt / *fadeLn);
-                    quad->bl.colors.set(colorR, colorG, colorB, colorA);
-                    quad->br.colors.set(colorR, colorG, colorB, colorA);
-                    quad->tl.colors.set(colorR, colorG, colorB, colorA);
-                    quad->tr.colors.set(colorR, colorG, colorB, colorA);
+                    quad->bl.color.set(colorR, colorG, colorB, colorA);
+                    quad->br.color.set(colorR, colorG, colorB, colorA);
+                    quad->tl.color.set(colorR, colorG, colorB, colorA);
+                    quad->tr.color.set(colorR, colorG, colorB, colorA);
                 }
             }
             else
@@ -532,10 +532,10 @@ void ParticleSystemQuad::updateParticleQuads()
                     auto colorG = *g;
                     auto colorB = *b;
                     auto colorA = *a * (*fadeDt / *fadeLn);
-                    quad->bl.colors.set(colorR, colorG, colorB, colorA);
-                    quad->br.colors.set(colorR, colorG, colorB, colorA);
-                    quad->tl.colors.set(colorR, colorG, colorB, colorA);
-                    quad->tr.colors.set(colorR, colorG, colorB, colorA);
+                    quad->bl.color.set(colorR, colorG, colorB, colorA);
+                    quad->br.color.set(colorR, colorG, colorB, colorA);
+                    quad->tl.color.set(colorR, colorG, colorB, colorA);
+                    quad->tr.color.set(colorR, colorG, colorB, colorA);
                 }
             }
         }
@@ -559,13 +559,13 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.s     = abs(*sat);
                     hsv.v     = abs(*val);
                     auto colF = hsv.toRgba();
-                    quad->bl.colors.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
+                    quad->bl.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
                                         colF.a);
-                    quad->br.colors.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
+                    quad->br.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
                                         colF.a);
-                    quad->tl.colors.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
+                    quad->tl.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
                                         colF.a);
-                    quad->tr.colors.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
+                    quad->tr.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
                                         colF.a);
                 }
             }
@@ -579,10 +579,10 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.s    = abs(*sat);
                     hsv.v    = abs(*val);
                     auto col = hsv.toColor4B();
-                    quad->bl.colors.set(col.r, col.g, col.b, col.a);
-                    quad->br.colors.set(col.r, col.g, col.b, col.a);
-                    quad->tl.colors.set(col.r, col.g, col.b, col.a);
-                    quad->tr.colors.set(col.r, col.g, col.b, col.a);
+                    quad->bl.color.set(col.r, col.g, col.b, col.a);
+                    quad->br.color.set(col.r, col.g, col.b, col.a);
+                    quad->tl.color.set(col.r, col.g, col.b, col.a);
+                    quad->tr.color.set(col.r, col.g, col.b, col.a);
                 }
             }
         }
@@ -597,10 +597,10 @@ void ParticleSystemQuad::updateParticleQuads()
                     auto colorG = *g * *a;
                     auto colorB = *b * *a;
                     auto colorA = *a;
-                    quad->bl.colors.set(colorR, colorG, colorB, colorA);
-                    quad->br.colors.set(colorR, colorG, colorB, colorA);
-                    quad->tl.colors.set(colorR, colorG, colorB, colorA);
-                    quad->tr.colors.set(colorR, colorG, colorB, colorA);
+                    quad->bl.color.set(colorR, colorG, colorB, colorA);
+                    quad->br.color.set(colorR, colorG, colorB, colorA);
+                    quad->tl.color.set(colorR, colorG, colorB, colorA);
+                    quad->tr.color.set(colorR, colorG, colorB, colorA);
                 }
             }
             else
@@ -611,10 +611,10 @@ void ParticleSystemQuad::updateParticleQuads()
                     auto colorG = *g;
                     auto colorB = *b;
                     auto colorA = *a;
-                    quad->bl.colors.set(colorR, colorG, colorB, colorA);
-                    quad->br.colors.set(colorR, colorG, colorB, colorA);
-                    quad->tl.colors.set(colorR, colorG, colorB, colorA);
-                    quad->tr.colors.set(colorR, colorG, colorB, colorA);
+                    quad->bl.color.set(colorR, colorG, colorB, colorA);
+                    quad->br.color.set(colorR, colorG, colorB, colorA);
+                    quad->tl.color.set(colorR, colorG, colorB, colorA);
+                    quad->tr.color.set(colorR, colorG, colorB, colorA);
                 }
             }
         }
@@ -653,17 +653,17 @@ void ParticleSystemQuad::updateParticleQuads()
             top    = index.rect.origin.y / texHeight;
             bottom = (index.rect.origin.y + index.rect.size.y) / texHeight;
 
-            quad->bl.texCoords.u = left;
-            quad->bl.texCoords.v = bottom;
+            quad->bl.texCoord.u = left;
+            quad->bl.texCoord.v = bottom;
 
-            quad->br.texCoords.u = right;
-            quad->br.texCoords.v = bottom;
+            quad->br.texCoord.u = right;
+            quad->br.texCoord.v = bottom;
 
-            quad->tl.texCoords.u = left;
-            quad->tl.texCoords.v = top;
+            quad->tl.texCoord.u = left;
+            quad->tl.texCoord.v = top;
 
-            quad->tr.texCoords.u = right;
-            quad->tr.texCoords.v = top;
+            quad->tr.texCoord.u = right;
+            quad->tr.texCoord.v = top;
         }
     }
 }

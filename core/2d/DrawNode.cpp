@@ -72,7 +72,7 @@ static bool isConvex(const Vec2* verts, int count)
     return true;  // is convex
 }
 
-static V2F_C4F_T2F* expandBufferAndGetPointer(axstd::pod_vector<V2F_C4F_T2F>& buffer, size_t count)
+static V2F_T2F_C4F* expandBufferAndGetPointer(axstd::pod_vector<V2F_T2F_C4F>& buffer, size_t count)
 {
     size_t oldSize = buffer.size();
     buffer.expand(count);
@@ -235,7 +235,7 @@ void DrawNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     }
 }
 
-static void udpateCommand(CustomCommand& cmd, const axstd::pod_vector<V2F_C4F_T2F>& buffer)
+static void udpateCommand(CustomCommand& cmd, const axstd::pod_vector<V2F_T2F_C4F>& buffer)
 {
     if (buffer.empty())
     {
@@ -244,8 +244,8 @@ static void udpateCommand(CustomCommand& cmd, const axstd::pod_vector<V2F_C4F_T2
     else
     {
         if (cmd.getVertexCapacity() < buffer.size())
-            cmd.createVertexBuffer(sizeof(V2F_C4F_T2F), buffer.size(), CustomCommand::BufferUsage::DYNAMIC);
-        cmd.updateVertexBuffer(buffer.data(), buffer.size() * sizeof(V2F_C4F_T2F));
+            cmd.createVertexBuffer(sizeof(V2F_T2F_C4F), buffer.size(), CustomCommand::BufferUsage::DYNAMIC);
+        cmd.updateVertexBuffer(buffer.data(), buffer.size() * sizeof(V2F_T2F_C4F));
     }
 
     cmd.setVertexDrawInfo(0, buffer.size());
@@ -861,9 +861,9 @@ void DrawNode::_drawPolygon(const Vec2* verts,
             p2t::Point* vec3 = t->GetPoint(2);
 
             V2F_C4F_T2F_Triangle triangle = {
-                {Vec2(vec1->x, vec1->y), fillColor, Vec2::ZERO},
-                {Vec2(vec2->x, vec2->y), fillColor, Vec2::ZERO},
-                {Vec2(vec3->x, vec3->y), fillColor, Vec2::ZERO},
+                {Vec2(vec1->x, vec1->y), Vec2::ZERO, fillColor},
+                {Vec2(vec2->x, vec2->y), Vec2::ZERO, fillColor},
+                {Vec2(vec3->x, vec3->y), Vec2::ZERO, fillColor},
             };
             triangleList.emplace_back(triangle);  // use it for drawing later
         }
@@ -904,9 +904,9 @@ void DrawNode::_drawPolygon(const Vec2* verts,
         for (unsigned int i = 0; i < count - 2; i++)
         {
             triangles[ii++] = {
-                {_vertices[0], fillColor, Vec2::ZERO},
-                {_vertices[i + 1], fillColor, Vec2::ZERO},
-                {_vertices[i + 2], fillColor, Vec2::ZERO},
+                {_vertices[0], Vec2::ZERO, fillColor},
+                {_vertices[i + 1], Vec2::ZERO, fillColor},
+                {_vertices[i + 2], Vec2::ZERO, fillColor},
             };
         }
     }
@@ -935,38 +935,38 @@ void DrawNode::_drawPolygon(const Vec2* verts,
 
                 {
                     triangles[ii++] = {
-                        {v0, borderColor, -(n + t)},
-                        {v1, borderColor, n - t},
-                        {v2, borderColor, -n},
+                        {v0, -(n + t), borderColor},
+                        {v1, n - t, borderColor},
+                        {v2, -n, borderColor},
                     };
                     triangles[ii++] = {
-                        {v3, borderColor, n},
-                        {v1, borderColor, n - t},
-                        {v2, borderColor, -n},
+                        {v3, n, borderColor},
+                        {v1, n - t, borderColor},
+                        {v2, -n, borderColor},
                     };
                 }
 
                 triangles[ii++] = {
-                    {v3, borderColor, n},
-                    {v4, borderColor, -n},
-                    {v2, borderColor, -n},
+                    {v3, n, borderColor},
+                    {v4, -n, borderColor},
+                    {v2, -n, borderColor},
                 };
                 triangles[ii++] = {
-                    {v3, borderColor, n},
-                    {v4, borderColor, -n},
-                    {v5, borderColor, n},
+                    {v3, n, borderColor},
+                    {v4, -n, borderColor},
+                    {v5, n, borderColor},
                 };
 
                 {
                     triangles[ii++] = {
-                        {v6, borderColor, t - n},
-                        {v4, borderColor, -n},
-                        {v5, borderColor, n},
+                        {v6, t - n, borderColor},
+                        {v4, -n, borderColor},
+                        {v5, n, borderColor},
                     };
                     triangles[ii++] = {
-                        {v6, borderColor, t - n},
-                        {v7, borderColor, t + n},
-                        {v5, borderColor, n},
+                        {v6, t - n, borderColor},
+                        {v7, t + n, borderColor},
+                        {v5, n, borderColor},
                     };
                 }
             }
@@ -1009,9 +1009,9 @@ void DrawNode::_drawPolygon(const Vec2* verts,
                 Vec2 outer0 = v0 + offset0 * thickness;
                 Vec2 outer1 = v1 + offset1 * thickness;
 
-                triangles[ii++] = {{inner0, borderColor, -n0}, {inner1, borderColor, -n0}, {outer1, borderColor, n0}};
+                triangles[ii++] = {{inner0, -n0, borderColor}, {inner1, -n0, borderColor}, {outer1, n0, borderColor}};
 
-                triangles[ii++] = {{inner0, borderColor, -n0}, {outer0, borderColor, n0}, {outer1, borderColor, n0}};
+                triangles[ii++] = {{inner0, -n0, borderColor}, {outer0, n0, borderColor}, {outer1, n0, borderColor}};
             }
         }
     }
@@ -1036,12 +1036,12 @@ void DrawNode::_drawPoly(const Vec2* verts,
         int ii = 0;
         for (unsigned int i = 0; i < count - 1; i++)
         {
-            line[ii++] = {_vertices[i], color, Vec2::ZERO};
-            line[ii++] = {_vertices[i + 1], color, Vec2::ZERO};
+            line[ii++] = {_vertices[i], Vec2::ZERO, color};
+            line[ii++] = {_vertices[i + 1], Vec2::ZERO, color};
         }
         if (closedPolygon)
         {
-            line[ii++] = {_vertices[count - 1], color, Vec2::ZERO};
+            line[ii++] = {_vertices[count - 1], Vec2::ZERO, color};
             line[ii++] = line[0];
         }
     }
@@ -1066,8 +1066,8 @@ void DrawNode::_drawSegment(const Vec2& from,
         auto line = expandBufferAndGetPointer(_lines, 2);
         _linesDirty = true;
 
-        line[0] = {vertices[0], color, Vec2::ZERO};
-        line[1] = {vertices[1], color, Vec2::ZERO};
+        line[0] = {vertices[0], Vec2::ZERO, color};
+        line[1] = {vertices[1], Vec2::ZERO, color};
     }
     else
     {
@@ -1099,29 +1099,29 @@ void DrawNode::_drawSegment(const Vec2& from,
 
         case DrawNode::EndType::Square:
             triangles[ii++] = {
-                {v0, color, Vec2::ZERO},
-                {v1, color, -n},
-                {v2, color, n},
+                {v0, Vec2::ZERO, color},
+                {v1, -n, color},
+                {v2, n, color},
             };
 
             triangles[ii++] = {
-                {v3, color, n},
-                {v1, color, Vec2::ZERO},
-                {v2, color, -n},
+                {v3, n, color},
+                {v1, Vec2::ZERO, color},
+                {v2, -n, color},
             };
 
             break;
         case DrawNode::EndType::Round:
             triangles[ii++] = {
-                {v0, color, -(n + t)},
-                {v1, color, n - t},
-                {v2, color, -n},
+                {v0, -(n + t), color},
+                {v1, n - t, color},
+                {v2, -n, color},
             };
 
             triangles[ii++] = {
-                {v3, color, n},
-                {v1, color, n - t},
-                {v2, color, -n},
+                {v3, n, color},
+                {v1, n - t, color},
+                {v2, -n, color},
             };
             break;
 
@@ -1131,15 +1131,15 @@ void DrawNode::_drawSegment(const Vec2& from,
 
         // BODY
         triangles[ii++] = {
-            {v3, color, n},
-            {v4, color, -n},
-            {v2, color, -n},
+            {v3, n, color},
+            {v4, -n, color},
+            {v2, -n, color},
         };
 
         triangles[ii++] = {
-            {v3, color, n},
-            {v4, color, -n},
-            {v5, color, n},
+            {v3, n, color},
+            {v4, -n, color},
+            {v5, n, color},
         };
 
         switch (etStart)
@@ -1149,29 +1149,29 @@ void DrawNode::_drawSegment(const Vec2& from,
 
         case DrawNode::EndType::Square:
             triangles[ii++] = {
-                {v6, color, Vec2::ZERO},
-                {v4, color, -n},
-                {v5, color, n},
+                {v6, Vec2::ZERO, color},
+                {v4, -n, color},
+                {v5, n, color},
             };
 
             triangles[ii++] = {
-                {v6, color, -n},
-                {v7, color, Vec2::ZERO},
-                {v5, color, n},
+                {v6, -n, color},
+                {v7, Vec2::ZERO, color},
+                {v5, n, color},
             };
             break;
 
         case DrawNode::EndType::Round:
             triangles[ii++] = {
-                {v6, color, t - n},
-                {v4, color, -n},
-                {v5, color, n},
+                {v6, t - n, color},
+                {v4, -n, color},
+                {v5, n, color},
             };
 
             triangles[ii++] = {
-                {v6, color, t - n},
-                {v7, color, t + n},
-                {v5, color, n},
+                {v6, t - n, color},
+                {v7, t + n, color},
+                {v5, n, color},
             };
             break;
 
@@ -1187,10 +1187,10 @@ void DrawNode::_drawDot(const Vec2& pos, float radius, const Color& color)
     auto triangles = reinterpret_cast<V2F_C4F_T2F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
     _trianglesDirty = true;
 
-    V2F_C4F_T2F a = {Vec2(pos.x - radius, pos.y - radius), color, Vec2(-1.0f, -1.0f)};
-    V2F_C4F_T2F b = {Vec2(pos.x - radius, pos.y + radius), color, Vec2(-1.0f, 1.0f)};
-    V2F_C4F_T2F c = {Vec2(pos.x + radius, pos.y + radius), color, Vec2(1.0f, 1.0f)};
-    V2F_C4F_T2F d = {Vec2(pos.x + radius, pos.y - radius), color, Vec2(1.0f, -1.0f)};
+    V2F_T2F_C4F a = {Vec2(pos.x - radius, pos.y - radius), Vec2(-1.0f, -1.0f), color};
+    V2F_T2F_C4F b = {Vec2(pos.x - radius, pos.y + radius), Vec2(-1.0f, 1.0f), color};
+    V2F_T2F_C4F c = {Vec2(pos.x + radius, pos.y + radius), Vec2(1.0f, 1.0f), color};
+    V2F_T2F_C4F d = {Vec2(pos.x + radius, pos.y - radius), Vec2(1.0f, -1.0f), color};
 
     triangles[0] = {a, b, c};
     triangles[1] = {a, c, d};
@@ -1253,9 +1253,9 @@ void DrawNode::_drawTriangle(Vec2* vertices3,
         auto triangles = reinterpret_cast<V2F_C4F_T2F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
         _trianglesDirty = true;
 
-        triangles[0] = {{vertices3[0], fillColor, Vec2::ZERO},
-                        {vertices3[1], fillColor, Vec2::ZERO},
-                        {vertices3[2], fillColor, Vec2::ZERO}};
+        triangles[0] = {{vertices3[0], Vec2::ZERO, fillColor},
+                        {vertices3[1], Vec2::ZERO, fillColor},
+                        {vertices3[2], Vec2::ZERO, fillColor}};
     }
 }
 
@@ -1332,7 +1332,7 @@ void DrawNode::_drawPoints(const Vec2* position,
 
     for (unsigned int i = 0; i < numberOfPoints; i++)
     {
-        *(point + i) = {position[i], color, Vec2(pointSize, 0.0f)};
+        *(point + i) = {position[i], Vec2(pointSize, 0.0f), color};
     }
 }
 
@@ -1382,7 +1382,7 @@ void DrawNode::_drawPoint(const Vec2& position,
         auto point = expandBufferAndGetPointer(_points, 1);
         _pointsDirty = true;
 
-        *point             = {position, color, Vec2(pointSize, 0.0f)};
+        *point             = {position, Vec2(pointSize, 0.0f), color};
     }
 }
 

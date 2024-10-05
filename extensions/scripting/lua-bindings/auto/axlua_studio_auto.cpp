@@ -24342,9 +24342,9 @@ int lua_ax_studio_BoneNode_setDebugDrawColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color4F arg0;
+        ax::Color arg0;
 
-        ok &=luaval_to_color4f(tolua_S, 2, &arg0, "ccs.BoneNode:setDebugDrawColor");
+        ok &=luaval_to_color(tolua_S, 2, &arg0, "ccs.BoneNode:setDebugDrawColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_setDebugDrawColor'", nullptr);
@@ -24398,7 +24398,7 @@ int lua_ax_studio_BoneNode_getDebugDrawColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getDebugDrawColor();
-        color4f_to_luaval(tolua_S, ret);
+        color_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getDebugDrawColor",argc, 0);

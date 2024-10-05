@@ -187,7 +187,7 @@ protected:
     Vec2 _barChangeRate;
     float _percentage = 0.0f;
     Sprite* _sprite   = nullptr;
-    axstd::pod_vector<V2F_C4F_T2F> _vertexData;
+    axstd::pod_vector<V2F_T2F_C4F> _vertexData;
     axstd::pod_vector<unsigned short> _indexData;
     bool _reverseDirection = false;
 

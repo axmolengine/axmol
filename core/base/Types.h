@@ -72,32 +72,32 @@ struct Quad3
     Vec3 tr;
 };
 
-/** @struct V2F_C4F_T2F
+/** @struct V2F_T2F_C4F
  * A Vec2 with a vertex point, a tex coord point and a color 4F.
  */
-struct V2F_C4F_T2F
+struct V2F_T2F_C4F
 {
-    /// vertices (2F)
-    Vec2 vertices;
-    /// colors (4F)
-    Color colors;
+    /// position (2F)
+    Vec2 position;
     /// tex coords (2F)
-    Tex2F texCoords;
+    Tex2F texCoord;
+    /// color (4F)
+    Color color;
 };
 
-/** @struct V3F_C4F_T2F aka PosColorTex
+/** @struct V3F_T2F_C4F aka PosColorTex
  * A Vec2 with a vertex point, a tex coord point and a color 4B.
  */
-struct V3F_C4F_T2F
+struct V3F_T2F_C4F
 {
-    /// vertices (3F)
-    Vec3 vertices;  // 12 bytes
-
-    /// colors (4B)
-    Color colors;  // 4 bytes
+    /// position (3F)
+    Vec3 position;  // 12 bytes
 
     // tex coords (2F)
-    Tex2F texCoords;  // 8 bytes
+    Tex2F texCoord;  // 8 bytes
+
+    /// color (4F)
+    Color color;  // 16 bytes
 };
 
 /** @struct V3F_T2F
@@ -105,10 +105,10 @@ struct V3F_C4F_T2F
  */
 struct V3F_T2F
 {
-    /// vertices (2F)
-    Vec3 vertices;
+    /// position (2F)
+    Vec3 position;
     /// tex coords (2F)
-    Tex2F texCoords;
+    Tex2F texCoord;
 };
 
 /** @struct V3F_C4F
@@ -116,17 +116,10 @@ struct V3F_T2F
  */
 struct V3F_C4F
 {
-    /// vertices (3F)
-    Vec3 vertices;
-    /// vertices (4F)
-    Color colors;
-};
-
-struct V3F_T2F_C4F
-{
+    /// position (3F)
     Vec3 position;
-    Vec2 uv;
-    Vec4 color;
+    /// color (4F)
+    Color color;
 };
 
 struct V3F_T2F_N3F
@@ -138,9 +131,9 @@ struct V3F_T2F_N3F
 
 struct V2F_C4F_T2F_Triangle
 {
-    V2F_C4F_T2F a;
-    V2F_C4F_T2F b;
-    V2F_C4F_T2F c;
+    V2F_T2F_C4F a;
+    V2F_T2F_C4F b;
+    V2F_T2F_C4F c;
 };
 
 /** @struct V3F_C4F_T2F_Quad
@@ -149,13 +142,13 @@ struct V2F_C4F_T2F_Triangle
 struct V3F_C4F_T2F_Quad
 {
     /// top left
-    V3F_C4F_T2F tl;
+    V3F_T2F_C4F tl;
     /// bottom left
-    V3F_C4F_T2F bl;
+    V3F_T2F_C4F bl;
     /// top right
-    V3F_C4F_T2F tr;
+    V3F_T2F_C4F tr;
     /// bottom right
-    V3F_C4F_T2F br;
+    V3F_T2F_C4F br;
 };
 
 /** @struct V2F_C4F_T2F_Quad
@@ -164,13 +157,13 @@ struct V3F_C4F_T2F_Quad
 struct V2F_C4F_T2F_Quad
 {
     /// bottom left
-    V2F_C4F_T2F bl;
+    V2F_T2F_C4F bl;
     /// bottom right
-    V2F_C4F_T2F br;
+    V2F_T2F_C4F br;
     /// top left
-    V2F_C4F_T2F tl;
+    V2F_T2F_C4F tl;
     /// top right
-    V2F_C4F_T2F tr;
+    V2F_T2F_C4F tr;
 };
 
 /** @struct V3F_T2F_Quad

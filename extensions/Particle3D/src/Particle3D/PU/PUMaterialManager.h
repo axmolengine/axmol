@@ -42,10 +42,10 @@ public:
     std::string fileName;
     std::string name;
     bool isEnabledLight;
-    Vec4 ambientColor;
-    Vec4 diffuseColor;
-    Vec4 specularColor;
-    Vec4 emissiveColor;
+    Color ambientColor;
+    Color diffuseColor;
+    Color specularColor;
+    Color emissiveColor;
     float shininess;
 
     BlendFunc blendFunc;

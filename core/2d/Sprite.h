@@ -716,7 +716,7 @@ protected:
 
     // vertex coords, texture coords and color info
     V3F_C4F_T2F_Quad _quad;
-    V3F_C4F_T2F* _trianglesVertex   = nullptr;
+    V3F_T2F_C4F* _trianglesVertex   = nullptr;
     unsigned short* _trianglesIndex = nullptr;
     PolygonInfo _polyInfo;
 

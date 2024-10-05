@@ -580,7 +580,7 @@ void PURendererTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode*
                         // Property: initial_colour
                         if (passValidateProperty(compiler, prop, token[TOKEN_INITIAL_COLOUR], VAL_COLOURVALUE))
                         {
-                            Vec4 val;
+                            Color val;
                             if (getVector4(prop->values.begin(), prop->values.end(), &val))
                             {
                                 static_cast<PURibbonTrailRender*>(_renderer)->setInitialColor(val);
@@ -593,7 +593,7 @@ void PURendererTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode*
                         if (passValidateProperty(compiler, prop, token[TOKEN_RIBBONTRAIL_INITIAL_COLOUR],
                                                  VAL_COLOURVALUE))
                         {
-                            Vec4 val;
+                            Color val;
                             if (getVector4(prop->values.begin(), prop->values.end(), &val))
                             {
                                 static_cast<PURibbonTrailRender*>(_renderer)->setInitialColor(val);
@@ -605,7 +605,7 @@ void PURendererTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode*
                         // Property: colour_change
                         if (passValidateProperty(compiler, prop, token[TOKEN_COLOUR_CHANGE], VAL_COLOURVALUE))
                         {
-                            Vec4 val;
+                            Color val;
                             if (getVector4(prop->values.begin(), prop->values.end(), &val))
                             {
                                 static_cast<PURibbonTrailRender*>(_renderer)->setColorChange(val);
@@ -618,7 +618,7 @@ void PURendererTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode*
                         if (passValidateProperty(compiler, prop, token[TOKEN_RIBBONTRAIL_COLOUR_CHANGE],
                                                  VAL_COLOURVALUE))
                         {
-                            Vec4 val;
+                            Color val;
                             if (getVector4(prop->values.begin(), prop->values.end(), &val))
                             {
                                 static_cast<PURibbonTrailRender*>(_renderer)->setColorChange(val);

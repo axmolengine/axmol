@@ -1,21 +1,12 @@
 #include "Box2DTestDebugDrawNode.h"
 #include "VisibleRect.h"
+#include "physics/PhysicsHelper.h"
 
 using namespace ax;
 
 Box2DTestDebugDrawNode* g_pDebugDrawNode;
 GLFWwindow* g_mainWindow;
 b2SampleCamera g_camera;
-
-static Vec2 toVec2(const b2Vec2& v)
-{
-    return Vec2{v.x, v.y};
-}
-
-static b2Vec2 tob2Vec2(const Vec2& v)
-{
-    return b2Vec2{v.x, v.y};
-}
 
 b2AABB b2SampleCamera::GetViewBounds()
 {
@@ -47,7 +38,7 @@ static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, Box2DTes
     auto ratio  = context->getPTMRatio();
     auto offset = context->getWorldOffset();
     context->AddCircle(CircleData{b2Vec2{center.x * ratio + offset.x, center.y * ratio + offset.y}, radius * ratio,
-                                  Color::fromHex(color)});
+                                  PhysicsHelper::toColor(color)});
 }
 
 static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Box2DTestDebugDrawNode* context)
@@ -56,8 +47,9 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Box
     // m_circles.push_back({{transform.p.x, transform.p.y, transform.q.c, transform.q.s}, radius, rgba});
     auto ratio  = context->getPTMRatio();
     auto offset = context->getWorldOffset();
-    context->AddCircle(
-        {{t.p.x * ratio + offset.x, t.p.y * ratio + offset.y, t.q.c, t.q.s}, radius * ratio, Color::fromHex(color)});
+    context->AddCircle({{t.p.x * ratio + offset.x, t.p.y * ratio + offset.y, t.q.c, t.q.s},
+                        radius * ratio,
+                        PhysicsHelper::toColor(color)});
 }
 
 static void b2DrawSolidCapsule(b2Vec2 pt1, b2Vec2 pt2, float radius, b2HexColor c, Box2DTestDebugDrawNode* context)
@@ -76,11 +68,11 @@ static void b2DrawSolidCapsule(b2Vec2 pt1, b2Vec2 pt2, float radius, b2HexColor 
 
     b2Vec2 axis = {d.x / length, d.y / length};
     b2Transform transform;
-    transform.p   = tob2Vec2(0.5f * (p1 + p2));
+    transform.p   = PhysicsHelper::tob2Vec2(0.5f * (p1 + p2));
     transform.q.c = axis.x;
     transform.q.s = axis.y;
 
-    ax::Color4F rgba = Color::fromHex(c);
+    auto rgba = PhysicsHelper::toColor(c);
 
     context->AddCapsule({{transform.p.x + offset.x, transform.p.y + offset.y, transform.q.c, transform.q.s},
                          radius * ratio,
@@ -415,5 +407,5 @@ void Box2DTestDebugDrawNode::clear()
 void Box2DTestDebugDrawNode::DrawAABB(b2AABB aabb, b2HexColor color)
 {
     this->drawRect(Vec2{aabb.lowerBound.x, aabb.lowerBound.y}, Vec2{aabb.upperBound.x, aabb.upperBound.y},
-                   Color::fromHex(color));
+                   PhysicsHelper::toColor(color));
 }

@@ -162,7 +162,7 @@ const Color Color::TRANSPARENT(0, 0, 0, 0);
 
 HSV::HSV() {}
 
-HSV::HSV(float _h, float _s, float _v, float _a) : Vec4Base(_h, _s, _v, _a) {}
+HSV::HSV(float _h, float _s, float _v, float _a) : Vec4Adapter(_h, _s, _v, _a) {}
 
 HSV::HSV(const Color3B& c)
 {
@@ -299,7 +299,7 @@ Color4B HSV::toColor4B() const
 }
 
 HSL::HSL() {}
-HSL::HSL(float _h, float _s, float _l, float _a) : Vec4Base(_h, _s, _l, _a) {}
+HSL::HSL(float _h, float _s, float _l, float _a) : Vec4Adapter(_h, _s, _l, _a) {}
 
 HSL::HSL(const Color3B& c)
 {

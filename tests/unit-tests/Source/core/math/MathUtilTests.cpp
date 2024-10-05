@@ -67,33 +67,33 @@ TEST_SUITE("math/MathUtil")
 {
     using namespace UnitTest::ax;
 
-    static void checkVerticesAreEqual(const V3F_C4F_T2F* v1, const V3F_C4F_T2F* v2, size_t count)
+    static void checkVerticesAreEqual(const V3F_T2F_C4F* v1, const V3F_T2F_C4F* v2, size_t count)
     {
         for (size_t i = 0; i < count; ++i)
         {
-            CHECK_EQ(v1[i].vertices, v2[i].vertices);
-            CHECK_EQ(v1[i].colors, v2[i].colors);
-            CHECK_EQ(v1[i].texCoords, v2[i].texCoords);
+            CHECK_EQ(v1[i].position, v2[i].position);
+            CHECK_EQ(v1[i].color, v2[i].color);
+            CHECK_EQ(v1[i].texCoord, v2[i].texCoord);
         }
     }
 
     TEST_CASE("transformVertices")
     {
         auto count = 5;
-        std::vector<V3F_C4F_T2F> src(count);
-        std::vector<V3F_C4F_T2F> expected(count);
-        std::vector<V3F_C4F_T2F> dst(count);
+        std::vector<V3F_T2F_C4F> src(count);
+        std::vector<V3F_T2F_C4F> expected(count);
+        std::vector<V3F_T2F_C4F> dst(count);
 
         for (int i = 0; i < count; ++i)
         {
-            src[i].vertices.set(float(i), float(i + 1), float(i + 2));
-            src[i].colors.set(uint8_t(i + 3), uint8_t(i + 4), uint8_t(i + 5), uint8_t(i + 6));
-            src[i].texCoords.set(float(i + 7), float(i + 8));
+            src[i].position.set(float(i), float(i + 1), float(i + 2));
+            src[i].color.set(uint8_t(i + 3), uint8_t(i + 4), uint8_t(i + 5), uint8_t(i + 6));
+            src[i].texCoord.set(float(i + 7), float(i + 8));
 
             expected[i]            = src[i];
-            expected[i].vertices.x = src[i].vertices.y * 4;
-            expected[i].vertices.y = src[i].vertices.x * -5;
-            expected[i].vertices.z = src[i].vertices.z * 6;
+            expected[i].position.x = src[i].position.y * 4;
+            expected[i].position.y = src[i].position.x * -5;
+            expected[i].position.z = src[i].position.z * 6;
         }
 
         Mat4 transform(0, 4, 0, 0, -5, 0, 0, 0, 0, 0, 6, 0, 1, 2, 3, 1);

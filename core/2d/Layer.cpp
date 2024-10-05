@@ -238,25 +238,25 @@ void LayerGradient::updateColor()
     Color E(_endColor, _endOpacity * opacityf / 255.0f);
 
     // (-1, -1)
-    _quad.bl.colors.r = (E.r + (S.r - E.r) * ((c + u.x + u.y) / (2.0f * c))) * 255;
-    _quad.bl.colors.g = (E.g + (S.g - E.g) * ((c + u.x + u.y) / (2.0f * c))) * 255;
-    _quad.bl.colors.b = (E.b + (S.b - E.b) * ((c + u.x + u.y) / (2.0f * c))) * 255;
-    _quad.bl.colors.a = (E.a + (S.a - E.a) * ((c + u.x + u.y) / (2.0f * c))) * 255;
+    _quad.bl.color.r = (E.r + (S.r - E.r) * ((c + u.x + u.y) / (2.0f * c))) * 255;
+    _quad.bl.color.g = (E.g + (S.g - E.g) * ((c + u.x + u.y) / (2.0f * c))) * 255;
+    _quad.bl.color.b = (E.b + (S.b - E.b) * ((c + u.x + u.y) / (2.0f * c))) * 255;
+    _quad.bl.color.a = (E.a + (S.a - E.a) * ((c + u.x + u.y) / (2.0f * c))) * 255;
     // (1, -1)
-    _quad.br.colors.r = (E.r + (S.r - E.r) * ((c - u.x + u.y) / (2.0f * c))) * 255;
-    _quad.br.colors.g = (E.g + (S.g - E.g) * ((c - u.x + u.y) / (2.0f * c))) * 255;
-    _quad.br.colors.b = (E.b + (S.b - E.b) * ((c - u.x + u.y) / (2.0f * c))) * 255;
-    _quad.br.colors.a = (E.a + (S.a - E.a) * ((c - u.x + u.y) / (2.0f * c))) * 255;
+    _quad.br.color.r = (E.r + (S.r - E.r) * ((c - u.x + u.y) / (2.0f * c))) * 255;
+    _quad.br.color.g = (E.g + (S.g - E.g) * ((c - u.x + u.y) / (2.0f * c))) * 255;
+    _quad.br.color.b = (E.b + (S.b - E.b) * ((c - u.x + u.y) / (2.0f * c))) * 255;
+    _quad.br.color.a = (E.a + (S.a - E.a) * ((c - u.x + u.y) / (2.0f * c))) * 255;
     // (-1, 1)
-    _quad.tl.colors.r = (E.r + (S.r - E.r) * ((c + u.x - u.y) / (2.0f * c))) * 255;
-    _quad.tl.colors.g = (E.g + (S.g - E.g) * ((c + u.x - u.y) / (2.0f * c))) * 255;
-    _quad.tl.colors.b = (E.b + (S.b - E.b) * ((c + u.x - u.y) / (2.0f * c))) * 255;
-    _quad.tl.colors.a = (E.a + (S.a - E.a) * ((c + u.x - u.y) / (2.0f * c))) * 255;
+    _quad.tl.color.r = (E.r + (S.r - E.r) * ((c + u.x - u.y) / (2.0f * c))) * 255;
+    _quad.tl.color.g = (E.g + (S.g - E.g) * ((c + u.x - u.y) / (2.0f * c))) * 255;
+    _quad.tl.color.b = (E.b + (S.b - E.b) * ((c + u.x - u.y) / (2.0f * c))) * 255;
+    _quad.tl.color.a = (E.a + (S.a - E.a) * ((c + u.x - u.y) / (2.0f * c))) * 255;
     // (1, 1)
-    _quad.tr.colors.r = (E.r + (S.r - E.r) * ((c - u.x - u.y) / (2.0f * c))) * 255;
-    _quad.tr.colors.g = (E.g + (S.g - E.g) * ((c - u.x - u.y) / (2.0f * c))) * 255;
-    _quad.tr.colors.b = (E.b + (S.b - E.b) * ((c - u.x - u.y) / (2.0f * c))) * 255;
-    _quad.tr.colors.a = (E.a + (S.a - E.a) * ((c - u.x - u.y) / (2.0f * c))) * 255;
+    _quad.tr.color.r = (E.r + (S.r - E.r) * ((c - u.x - u.y) / (2.0f * c))) * 255;
+    _quad.tr.color.g = (E.g + (S.g - E.g) * ((c - u.x - u.y) / (2.0f * c))) * 255;
+    _quad.tr.color.b = (E.b + (S.b - E.b) * ((c - u.x - u.y) / (2.0f * c))) * 255;
+    _quad.tr.color.a = (E.a + (S.a - E.a) * ((c - u.x - u.y) / (2.0f * c))) * 255;
 
     // renders using batch node
     if (_renderMode == RenderMode::QUAD_BATCHNODE)

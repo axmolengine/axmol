@@ -44,7 +44,7 @@ SpritePolygonTest::SpritePolygonTest()
     ADD_TEST_CASE(SpritePolygonTestAutoPolyIsland);
     ADD_TEST_CASE(SpritePolygonTestFrameAnim);
     ADD_TEST_CASE(Issue14017Test);
-    ADD_TEST_CASE(SpritePolygonTestPerformance);   
+    ADD_TEST_CASE(SpritePolygonTestPerformance);
 }
 
 SpritePolygonTestCase::SpritePolygonTestCase()
@@ -129,16 +129,16 @@ void SpritePolygonTestCase::updateDrawNode()
             for (ssize_t i = 0; i < count; i++)
             {
                 // draw 3 lines
-                Vec3 from = verts[indices[i * 3]].vertices;
-                Vec3 to   = verts[indices[i * 3 + 1]].vertices;
+                Vec3 from = verts[indices[i * 3]].position;
+                Vec3 to   = verts[indices[i * 3 + 1]].position;
                 drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4F::BLUE);
 
-                from = verts[indices[i * 3 + 1]].vertices;
-                to   = verts[indices[i * 3 + 2]].vertices;
+                from = verts[indices[i * 3 + 1]].position;
+                to   = verts[indices[i * 3 + 2]].position;
                 drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4F::GREEN);
 
-                from = verts[indices[i * 3 + 2]].vertices;
-                to   = verts[indices[i * 3]].vertices;
+                from = verts[indices[i * 3 + 2]].position;
+                to   = verts[indices[i * 3]].position;
                 drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4F::RED);
             }
         }
@@ -241,10 +241,10 @@ void SpritePolygonTest2::initSprites()
     auto offset   = Vec2(0.15 * s.width, 0);
     auto filename = s_pathGrossini;
 
-    // Fix for issue #231  Rect have to be adapt to the 2.0/"ContentScaleFactor()" 
+    // Fix for issue #231  Rect have to be adapt to the 2.0/"ContentScaleFactor()"
     auto a    = 2.0 / Director::getInstance()->getContentScaleFactor();
     Rect head = Rect(30 * a, 25 * a, 25 * a, 25 * a);
- 
+
     // Sprite
     auto pinfo     = AutoPolygon::generatePolygon(filename, head);
     _polygonSprite = Sprite::create(pinfo);

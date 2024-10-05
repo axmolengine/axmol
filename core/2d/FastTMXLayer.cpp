@@ -275,7 +275,7 @@ void FastTMXLayer::updateTiles(const Rect& culledRect)
 
 void FastTMXLayer::updateVertexBuffer()
 {
-    unsigned int vertexBufferSize = (unsigned int)(sizeof(V3F_C4F_T2F) * _totalQuads.size() * 4);
+    unsigned int vertexBufferSize = (unsigned int)(sizeof(V3F_T2F_C4F) * _totalQuads.size() * 4);
     if (!_vertexBuffer)
     {
         _vertexBuffer = backend::DriverBase::getInstance()->newBuffer(vertexBufferSize, backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
@@ -569,33 +569,33 @@ void FastTMXLayer::updateTotalQuads()
                 if (tileGID & kTMXTileDiagonalFlag)
                 {
                     // FIXME: not working correctly
-                    quad.bl.vertices.x = left;
-                    quad.bl.vertices.y = bottom;
-                    quad.bl.vertices.z = z;
-                    quad.br.vertices.x = left;
-                    quad.br.vertices.y = top;
-                    quad.br.vertices.z = z;
-                    quad.tl.vertices.x = right;
-                    quad.tl.vertices.y = bottom;
-                    quad.tl.vertices.z = z;
-                    quad.tr.vertices.x = right;
-                    quad.tr.vertices.y = top;
-                    quad.tr.vertices.z = z;
+                    quad.bl.position.x = left;
+                    quad.bl.position.y = bottom;
+                    quad.bl.position.z = z;
+                    quad.br.position.x = left;
+                    quad.br.position.y = top;
+                    quad.br.position.z = z;
+                    quad.tl.position.x = right;
+                    quad.tl.position.y = bottom;
+                    quad.tl.position.z = z;
+                    quad.tr.position.x = right;
+                    quad.tr.position.y = top;
+                    quad.tr.position.z = z;
                 }
                 else
                 {
-                    quad.bl.vertices.x = left;
-                    quad.bl.vertices.y = bottom;
-                    quad.bl.vertices.z = z;
-                    quad.br.vertices.x = right;
-                    quad.br.vertices.y = bottom;
-                    quad.br.vertices.z = z;
-                    quad.tl.vertices.x = left;
-                    quad.tl.vertices.y = top;
-                    quad.tl.vertices.z = z;
-                    quad.tr.vertices.x = right;
-                    quad.tr.vertices.y = top;
-                    quad.tr.vertices.z = z;
+                    quad.bl.position.x = left;
+                    quad.bl.position.y = bottom;
+                    quad.bl.position.z = z;
+                    quad.br.position.x = right;
+                    quad.br.position.y = bottom;
+                    quad.br.position.z = z;
+                    quad.tl.position.x = left;
+                    quad.tl.position.y = top;
+                    quad.tl.position.z = z;
+                    quad.tr.position.x = right;
+                    quad.tr.position.y = top;
+                    quad.tr.position.z = z;
                 }
 
                 // texcoords
@@ -609,19 +609,19 @@ void FastTMXLayer::updateTotalQuads()
                 float ptx = 1.0 / (_tileSet->_imageSize.x * tileSize.x);
                 float pty = 1.0 / (_tileSet->_imageSize.y * tileSize.y);
 
-                quad.bl.texCoords.u = left + ptx;
-                quad.bl.texCoords.v = bottom + pty;
-                quad.br.texCoords.u = right - ptx;
-                quad.br.texCoords.v = bottom + pty;
-                quad.tl.texCoords.u = left + ptx;
-                quad.tl.texCoords.v = top - pty;
-                quad.tr.texCoords.u = right - ptx;
-                quad.tr.texCoords.v = top - pty;
+                quad.bl.texCoord.u = left + ptx;
+                quad.bl.texCoord.v = bottom + pty;
+                quad.br.texCoord.u = right - ptx;
+                quad.br.texCoord.v = bottom + pty;
+                quad.tl.texCoord.u = left + ptx;
+                quad.tl.texCoord.v = top - pty;
+                quad.tr.texCoord.u = right - ptx;
+                quad.tr.texCoord.v = top - pty;
 
-                quad.bl.colors = color;
-                quad.br.colors = color;
-                quad.tl.colors = color;
-                quad.tr.colors = color;
+                quad.bl.color = color;
+                quad.br.color = color;
+                quad.tl.color = color;
+                quad.tr.color = color;
 
                 ++quadIndex;
             }

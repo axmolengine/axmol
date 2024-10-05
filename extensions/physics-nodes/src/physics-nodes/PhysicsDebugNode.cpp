@@ -17,6 +17,7 @@
  */
 
 #include "PhysicsDebugNode.h"
+#include "physics/PhysicsHelper.h"
 
 #if defined(_WIN32)
 #    pragma push_macro("TRANSPARENT")
@@ -24,26 +25,6 @@
 #endif
 
 NS_AX_EXT_BEGIN
-
-static Color4F toColor4F(b2HexColor color)
-{
-    unsigned int r = ((unsigned int)color >> 16) & 0xff;
-    unsigned int g = ((unsigned int)color >> 8) & 0xff;
-    unsigned int b = ((unsigned int)color) & 0xff;
-    return Color4F{r / 255.f, g / 255.f, b / 255.f, 1.0f};
-}
-
-static Vec2 toVec2(const b2Vec2& v)
-{
-    return Vec2{v.x, v.y};
-}
-
-static b2HexColor tob2HexColor(Color4F color)
-{
-    Color3B ret(color);
-    return (b2HexColor)(static_cast<uint32_t>(ret.r) << 16 | static_cast<uint32_t>(ret.g) << 8 |
-                        static_cast<uint32_t>(ret.b));
-}
 
 /// Draw a closed polygon provided in CCW order.
 // void (*DrawPolygon)(const b2Vec2* vertices, int vertexCount, b2HexColor color, void* context);
@@ -54,7 +35,7 @@ static void b2DrawPolygon(const b2Vec2* verts, int vertexCount, b2HexColor color
     {
         vec[i] = Vec2(verts[i].x * dn->getPTMRatio(), verts[i].y * dn->getPTMRatio()) + dn->getWorldOffset();
     }
-    dn->drawPolygon(vec, vertexCount, Color4F::BLACK, 0.4f, toColor4F(color));
+    dn->drawPolygon(vec, vertexCount, ax::Color::BLACK, 0.4f, PhysicsHelper::toColor(color));
 }
 
 /// Draw a solid closed polygon provided in CCW order.
@@ -77,8 +58,8 @@ static void b2DrawSolidPolygon(b2Transform t,
         auto pt = b2TransformPoint(t, verts[i]);
         vec[i]  = Vec2(pt.x * dn->getPTMRatio(), pt.y * dn->getPTMRatio()) + dn->getWorldOffset();
     }
-    auto color4f = toColor4F(color);
-    dn->drawPolygon(vec.data(), vertexCount, Color4F(color4f.r / 2, color4f.g / 2, color4f.b / 2, color4f.a), 0.5f,
+    auto color4f = PhysicsHelper::toColor(color);
+    dn->drawPolygon(vec.data(), vertexCount, ax::Color(color4f.r / 2, color4f.g / 2, color4f.b / 2, color4f.a), 0.5f,
                     color4f);
 }
 
@@ -87,7 +68,8 @@ static void b2DrawSolidPolygon(b2Transform t,
 static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, PhysicsDebugNode* dn)
 {
     dn->drawCircle(Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset(),
-                   radius * dn->getPTMRatio(), AX_DEGREES_TO_RADIANS(0), 30, true, 1.0f, 1.0f, toColor4F(color));
+                   radius * dn->getPTMRatio(), AX_DEGREES_TO_RADIANS(0), 30, true, 1.0f, 1.0f,
+                   PhysicsHelper::toColor(color));
 }
 
 /// Draw a solid circle.
@@ -96,10 +78,10 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Phy
 {
     auto center  = b2TransformPoint(t, b2Vec2_zero);
     Vec2 c       = {Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset()};
-    auto color4f = toColor4F(color);
+    auto color4f = PhysicsHelper::toColor(color);
 
     dn->drawSolidCircle(c, radius * dn->getPTMRatio(), AX_DEGREES_TO_RADIANS(0), 20, 1.0f, 1.0f,
-                        Color4F(color4f.r / 2, color4f.g / 2, color4f.b / 2, color4f.a), 0.4f, color4f);
+                        ax::Color(color4f.r / 2, color4f.g / 2, color4f.b / 2, color4f.a), 0.4f, color4f);
     // Draw a line fixed in the circle to animate rotation.
     b2Vec2 pp = {(center + radius * b2Rot_GetXAxis(t.q))};
     Vec2 cp   = {Vec2(pp.x * dn->getPTMRatio(), pp.y * dn->getPTMRatio()) + dn->getWorldOffset()};
@@ -114,7 +96,8 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Phy
 static void b2DrawSegment(b2Vec2 p1, b2Vec2 p2, b2HexColor color, PhysicsDebugNode* dn)
 {
     dn->drawLine(Vec2(p1.x * dn->getPTMRatio(), p1.y * dn->getPTMRatio()) + dn->getWorldOffset(),
-                 Vec2(p2.x * dn->getPTMRatio(), p2.y * dn->getPTMRatio()) + dn->getWorldOffset(), toColor4F(color));
+                 Vec2(p2.x * dn->getPTMRatio(), p2.y * dn->getPTMRatio()) + dn->getWorldOffset(),
+                 PhysicsHelper::toColor(color));
 }
 
 /// Draw a transform. Choose your own length scale.
@@ -136,7 +119,7 @@ static void b2DrawTransform(b2Transform t, PhysicsDebugNode* dn)
 static void b2DrawPoint(b2Vec2 p, float size, b2HexColor color, PhysicsDebugNode* dn)
 {
     dn->drawPoint(Vec2(p.x * dn->getPTMRatio(), p.y * dn->getPTMRatio()) + dn->getWorldOffset(), size,
-                  toColor4F(color));
+                  PhysicsHelper::toColor(color));
 }
 
 bool PhysicsDebugNode::initWithWorld(b2WorldId worldId)

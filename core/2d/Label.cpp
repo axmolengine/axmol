@@ -136,10 +136,10 @@ public:
             float dx = x1 * cr - y2 * sr2 + x;
             float dy = x1 * sr + y2 * cr2 + y;
 
-            _quad.bl.vertices.set(SPRITE_RENDER_IN_SUBPIXEL(ax), SPRITE_RENDER_IN_SUBPIXEL(ay), _positionZ);
-            _quad.br.vertices.set(SPRITE_RENDER_IN_SUBPIXEL(bx), SPRITE_RENDER_IN_SUBPIXEL(by), _positionZ);
-            _quad.tl.vertices.set(SPRITE_RENDER_IN_SUBPIXEL(dx), SPRITE_RENDER_IN_SUBPIXEL(dy), _positionZ);
-            _quad.tr.vertices.set(SPRITE_RENDER_IN_SUBPIXEL(cx), SPRITE_RENDER_IN_SUBPIXEL(cy), _positionZ);
+            _quad.bl.position.set(SPRITE_RENDER_IN_SUBPIXEL(ax), SPRITE_RENDER_IN_SUBPIXEL(ay), _positionZ);
+            _quad.br.position.set(SPRITE_RENDER_IN_SUBPIXEL(bx), SPRITE_RENDER_IN_SUBPIXEL(by), _positionZ);
+            _quad.tl.position.set(SPRITE_RENDER_IN_SUBPIXEL(dx), SPRITE_RENDER_IN_SUBPIXEL(dy), _positionZ);
+            _quad.tr.position.set(SPRITE_RENDER_IN_SUBPIXEL(cx), SPRITE_RENDER_IN_SUBPIXEL(cy), _positionZ);
 
             if (_textureAtlas)
             {
@@ -173,10 +173,10 @@ public:
             color.g *= displayedOpacity / 255.0f;
             color.b *= displayedOpacity / 255.0f;
         }
-        _quad.bl.colors = color;
-        _quad.br.colors = color;
-        _quad.tl.colors = color;
-        _quad.tr.colors = color;
+        _quad.bl.color = color;
+        _quad.br.color = color;
+        _quad.tl.color = color;
+        _quad.tr.color = color;
 
         _textureAtlas->updateQuad(_quad, _atlasIndex);
     }
@@ -619,7 +619,7 @@ void Label::reset()
     _hAlignment             = TextHAlignment::LEFT;
     _vAlignment             = TextVAlignment::TOP;
 
-    _effectColorF = Color::BLACK;
+    _effectColor  = Color::BLACK;
     _textColor    = Color4B::WHITE;
     _textColorF   = Color::WHITE;
     setColor(Color3B::WHITE);
@@ -1357,10 +1357,10 @@ void Label::enableGlow(const Color4B& glowColor)
             _contentDirty = true;
         }
         _currLabelEffect = LabelEffect::GLOW;
-        _effectColorF.r  = glowColor.r / 255.0f;
-        _effectColorF.g  = glowColor.g / 255.0f;
-        _effectColorF.b  = glowColor.b / 255.0f;
-        _effectColorF.a  = glowColor.a / 255.0f;
+        _effectColor.r  = glowColor.r / 255.0f;
+        _effectColor.g  = glowColor.g / 255.0f;
+        _effectColor.b  = glowColor.b / 255.0f;
+        _effectColor.a  = glowColor.a / 255.0f;
         updateShaderProgram();
     }
 }
@@ -1374,10 +1374,10 @@ void Label::enableOutline(const Color4B& outlineColor, int outlineSize /* = -1 *
     {
         if (_currentLabelType == LabelType::TTF)
         {
-            _effectColorF.r = outlineColor.r / 255.0f;
-            _effectColorF.g = outlineColor.g / 255.0f;
-            _effectColorF.b = outlineColor.b / 255.0f;
-            _effectColorF.a = outlineColor.a / 255.0f;
+            _effectColor.r = outlineColor.r / 255.0f;
+            _effectColor.g = outlineColor.g / 255.0f;
+            _effectColor.b = outlineColor.b / 255.0f;
+            _effectColor.a = outlineColor.a / 255.0f;
 
             if (!_useDistanceField)
             {  // not SDF, request font atlas from feetype
@@ -1394,12 +1394,12 @@ void Label::enableOutline(const Color4B& outlineColor, int outlineSize /* = -1 *
                 updateShaderProgram();
             }
         }
-        else if (_effectColorF != outlineColor || _outlineSize != outlineSize)
+        else if (_effectColor != outlineColor || _outlineSize != outlineSize)
         {
-            _effectColorF.r  = outlineColor.r / 255.f;
-            _effectColorF.g  = outlineColor.g / 255.f;
-            _effectColorF.b  = outlineColor.b / 255.f;
-            _effectColorF.a  = outlineColor.a / 255.f;
+            _effectColor.r  = outlineColor.r / 255.f;
+            _effectColor.g  = outlineColor.g / 255.f;
+            _effectColor.b  = outlineColor.b / 255.f;
+            _effectColor.a  = outlineColor.a / 255.f;
             _currLabelEffect = LabelEffect::OUTLINE;
             _contentDirty    = true;
         }
@@ -1428,7 +1428,7 @@ void Label::enableShadow(const Color4B& shadowColor /* = Color4B::BLACK */,
         auto fontDef = _getFontDefinition();
         if (_shadowNode)
         {
-            if (shadowColor != _shadowColor4F)
+            if (shadowColor != _shadowColor)
             {
                 _shadowNode->release();
                 _shadowNode = nullptr;
@@ -1445,10 +1445,10 @@ void Label::enableShadow(const Color4B& shadowColor /* = Color4B::BLACK */,
         }
     }
 
-    _shadowColor4F.r = shadowColor.r / 255.0f;
-    _shadowColor4F.g = shadowColor.g / 255.0f;
-    _shadowColor4F.b = shadowColor.b / 255.0f;
-    _shadowColor4F.a = shadowColor.a / 255.0f;
+    _shadowColor.r = shadowColor.r / 255.0f;
+    _shadowColor.g = shadowColor.g / 255.0f;
+    _shadowColor.b = shadowColor.b / 255.0f;
+    _shadowColor.a = shadowColor.a / 255.0f;
 
     if (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::CHARMAP)
     {
@@ -1813,14 +1813,13 @@ void Label::updateEffectUniforms(BatchCommand& batch,
         case LabelEffect::OUTLINE:
         {
             int effectType = 0;
-            Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
+            Vec4 effectColor(_effectColor.r, _effectColor.g, _effectColor.b, _effectColor.a);
             // draw shadow
             if (_shadowEnabled)
             {
                 effectType               = 2;
-                Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
                 auto* programStateShadow = batch.shadowCommand.getPipelineDescriptor().programState;
-                programStateShadow->setUniform(_effectColorLocation, &shadowColor, sizeof(Vec4));
+                programStateShadow->setUniform(_effectColorLocation, &_shadowColor, sizeof(ax::Color));
                 programStateShadow->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
@@ -1830,7 +1829,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             {  // distance outline
                 effectColor.w = _outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize;
                 batch.textCommand.getPipelineDescriptor().programState->setUniform(_effectColorLocation, &effectColor,
-                                                                                   sizeof(Vec4));
+                                                                                   sizeof(ax::Color));
             }
             else
             {
@@ -1860,9 +1859,8 @@ void Label::updateEffectUniforms(BatchCommand& batch,
         {
             if (_shadowEnabled)
             {
-                Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
                 auto* programStateShadow = batch.shadowCommand.getPipelineDescriptor().programState;
-                programStateShadow->setUniform(_textColorLocation, &shadowColor, sizeof(Vec4));
+                programStateShadow->setUniform(_textColorLocation, &_shadowColor, sizeof(Vec4));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
             }
@@ -1873,16 +1871,14 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             // draw shadow
             if (_shadowEnabled)
             {
-                Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
                 auto* programStateShadow = batch.shadowCommand.getPipelineDescriptor().programState;
-                programStateShadow->setUniform(_textColorLocation, &shadowColor, sizeof(Vec4));
-                programStateShadow->setUniform(_effectColorLocation, &shadowColor, sizeof(Vec4));
+                programStateShadow->setUniform(_textColorLocation, &_shadowColor, sizeof(Vec4));
+                programStateShadow->setUniform(_effectColorLocation, &_shadowColor, sizeof(Vec4));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
             }
 
-            Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
-            batch.textCommand.getPipelineDescriptor().programState->setUniform(_effectColorLocation, &effectColor,
+            batch.textCommand.getPipelineDescriptor().programState->setUniform(_effectColorLocation, &_effectColor,
                                                                                sizeof(Vec4));
         }
         break;
@@ -1896,8 +1892,8 @@ void Label::updateEffectUniforms(BatchCommand& batch,
         {
             Color3B oldColor   = _realColor;
             uint8_t oldOPacity = _displayedOpacity;
-            _displayedOpacity  = _shadowColor4F.a * (oldOPacity / 255.0f) * 255;
-            setColor(Color3B(_shadowColor4F));
+            _displayedOpacity  = _shadowColor.a * (oldOPacity / 255.0f) * 255;
+            setColor(Color3B(_shadowColor));
             batch.shadowCommand.updateVertexBuffer(
                 textureAtlas->getQuads(), (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_C4F_T2F_Quad)));
             batch.shadowCommand.init(_globalZOrder);
@@ -2400,10 +2396,10 @@ void Label::updateColor()
 
         for (int index = 0; index < count; ++index)
         {
-            quads[index].bl.colors = color;
-            quads[index].br.colors = color;
-            quads[index].tl.colors = color;
-            quads[index].tr.colors = color;
+            quads[index].bl.color = color;
+            quads[index].br.color = color;
+            quads[index].tl.color = color;
+            quads[index].tr.color = color;
             textureAtlas->updateQuad(quads[index], index);
         }
     }
@@ -2494,10 +2490,10 @@ FontDefinition Label::_getFontDefinition() const
     {
         systemFontDef._stroke._strokeEnabled = true;
         systemFontDef._stroke._strokeSize    = _outlineSize;
-        systemFontDef._stroke._strokeColor.r = _effectColorF.r * 255;
-        systemFontDef._stroke._strokeColor.g = _effectColorF.g * 255;
-        systemFontDef._stroke._strokeColor.b = _effectColorF.b * 255;
-        systemFontDef._stroke._strokeAlpha   = _effectColorF.a * 255;
+        systemFontDef._stroke._strokeColor.r = _effectColor.r * 255.f;
+        systemFontDef._stroke._strokeColor.g = _effectColor.g * 255.f;
+        systemFontDef._stroke._strokeColor.b = _effectColor.b * 255.f;
+        systemFontDef._stroke._strokeAlpha   = _effectColor.a * 255.f;
     }
     else
     {

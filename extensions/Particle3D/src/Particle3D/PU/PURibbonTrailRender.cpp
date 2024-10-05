@@ -192,22 +192,22 @@ void PURibbonTrailRender::setRandomInitialColor(bool randomInitialColour)
     _randomInitialColor = randomInitialColour;
 }
 //-----------------------------------------------------------------------
-const Vec4& PURibbonTrailRender::getInitialColor() const
+const Color& PURibbonTrailRender::getInitialColor() const
 {
     return _initialColor;
 }
 //-----------------------------------------------------------------------
-void PURibbonTrailRender::setInitialColor(const Vec4& initialColour)
+void PURibbonTrailRender::setInitialColor(const Color& initialColour)
 {
     _initialColor = initialColour;
 }
 //-----------------------------------------------------------------------
-const Vec4& PURibbonTrailRender::getColorChange() const
+const Color& PURibbonTrailRender::getColorChange() const
 {
     return _colorChange;
 }
 //-----------------------------------------------------------------------
-void PURibbonTrailRender::setColorChange(const Vec4& colourChange)
+void PURibbonTrailRender::setColorChange(const Color& colourChange)
 {
     _colorChange = colourChange;
 }

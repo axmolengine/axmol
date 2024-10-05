@@ -963,8 +963,8 @@ bool MySprite::setProgramState(backend::ProgramState* programState, bool ownPS/*
 
         _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
         _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE_STRIP);
-        _customCommand.createVertexBuffer(sizeof(V3F_C4F_T2F), 4, CustomCommand::BufferUsage::STATIC);
-        _customCommand.updateVertexBuffer(&_quad, 4 * sizeof(V3F_C4F_T2F));
+        _customCommand.createVertexBuffer(sizeof(V3F_T2F_C4F), 4, CustomCommand::BufferUsage::STATIC);
+        _customCommand.updateVertexBuffer(&_quad, 4 * sizeof(V3F_T2F_C4F));
         return true;
     }
     return false;

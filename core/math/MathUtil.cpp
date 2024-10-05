@@ -283,13 +283,13 @@ void MathUtil::crossVec3(const float* v1, const float* v2, float* dst)
 #endif
 }
 
-void MathUtil::transformVertices(V3F_C4F_T2F* dst, const V3F_C4F_T2F* src, size_t count, const Mat4& transform)
+void MathUtil::transformVertices(V3F_T2F_C4F* dst, const V3F_T2F_C4F* src, size_t count, const Mat4& transform)
 {
     // Check some assumptions made by optimizations
-    static_assert(sizeof(V3F_C4F_T2F) == 36);
-    static_assert(offsetof(V3F_C4F_T2F, vertices) == 0);
-    static_assert(offsetof(V3F_C4F_T2F, colors) == 12);
-    static_assert(offsetof(V3F_C4F_T2F, texCoords) == 28);
+    static_assert(sizeof(V3F_T2F_C4F) == 36);
+    static_assert(offsetof(V3F_T2F_C4F, position) == 0);
+    static_assert(offsetof(V3F_T2F_C4F, texCoord) == 12);
+    static_assert(offsetof(V3F_T2F_C4F, color) == 20);
 #if defined(AX_SSE_INTRINSICS)
     MathUtilSSE::transformVertices(dst, src, count, transform);
 #elif defined(AX_NEON_INTRINSICS)

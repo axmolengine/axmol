@@ -167,7 +167,7 @@ void GRoot::createModalLayer()
 {
     _modalLayer = GGraph::create();
     _modalLayer->retain();
-    _modalLayer->drawRect(getWidth(), getHeight(), 0, Color4F::WHITE, UIConfig::modalLayerColor);
+    _modalLayer->drawRect(getWidth(), getHeight(), 0, ax::Color::WHITE, UIConfig::modalLayerColor);
     _modalLayer->addRelation(this, RelationType::Size);
 }
 

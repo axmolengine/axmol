@@ -286,11 +286,11 @@ namespace spine {
 					triangles.vertCount = 4;
 					assert(triangles.vertCount == 4);
                     for (int v = 0, i = 0; v < triangles.vertCount; v++, i += 2) {
-                        auto &texCoords = triangles.verts[v].texCoords;
+                        auto &texCoords = triangles.verts[v].texCoord;
                         texCoords.u = attachment->getUVs()[i];
                         texCoords.v = attachment->getUVs()[i + 1];
                     }
-					dstStride = sizeof(V3F_C4F_T2F) / sizeof(float);
+					dstStride = sizeof(V3F_T2F_C4F) / sizeof(float);
 					dstTriangleVertices = reinterpret_cast<float *>(triangles.verts);
 				} else {
 					trianglesTwoColor.indices = quadIndices;
@@ -299,7 +299,7 @@ namespace spine {
 					trianglesTwoColor.vertCount = 4;
 					assert(trianglesTwoColor.vertCount == 4);
                     for (int v = 0, i = 0; v < trianglesTwoColor.vertCount; v++, i += 2) {
-                        auto &texCoords = trianglesTwoColor.verts[v].texCoords;
+                        auto &texCoords = trianglesTwoColor.verts[v].texCoord;
                         texCoords.u = attachment->getUVs()[i];
                         texCoords.v = attachment->getUVs()[i + 1];
                     }
@@ -324,12 +324,12 @@ namespace spine {
 					triangles.verts = batch->allocateVertices((int)attachment->getWorldVerticesLength() / 2);
 					triangles.vertCount = (int)attachment->getWorldVerticesLength() / 2;
                     for (int v = 0, i = 0; v < triangles.vertCount; v++, i += 2) {
-                        auto &texCoords = triangles.verts[v].texCoords;
+                        auto &texCoords = triangles.verts[v].texCoord;
                         texCoords.u = attachment->getUVs()[i];
                         texCoords.v = attachment->getUVs()[i + 1];
                     }
 					dstTriangleVertices = (float *) triangles.verts;
-					dstStride = sizeof(V3F_C4F_T2F) / sizeof(float);
+					dstStride = sizeof(V3F_T2F_C4F) / sizeof(float);
 					dstVertexCount = triangles.vertCount;
 				} else {
 					trianglesTwoColor.indices = attachment->getTriangles().buffer();
@@ -337,7 +337,7 @@ namespace spine {
 					trianglesTwoColor.verts = twoColorBatch->allocateVertices((int)attachment->getWorldVerticesLength() / 2);
 					trianglesTwoColor.vertCount = (int)attachment->getWorldVerticesLength() / 2;
                     for (int v = 0, i = 0; v < trianglesTwoColor.vertCount; v++, i += 2) {
-                        auto &texCoords = trianglesTwoColor.verts[v].texCoords;
+                        auto &texCoords = trianglesTwoColor.verts[v].texCoord;
                         texCoords.u = attachment->getUVs()[i];
                         texCoords.v = attachment->getUVs()[i + 1];
                     }
@@ -391,7 +391,7 @@ namespace spine {
 
 			if (hasSingleTint) {
 				if (_clipper->isClipping()) {
-					_clipper->clipTriangles((float *) &triangles.verts[0].vertices, triangles.indices, triangles.indexCount, (float *) &triangles.verts[0].texCoords, sizeof(axmol::V3F_C4F_T2F) / 4);
+					_clipper->clipTriangles((float *) &triangles.verts[0].position, triangles.indices, triangles.indexCount, (float *) &triangles.verts[0].texCoord, sizeof(axmol::V3F_T2F_C4F) / 4);
 					batch->deallocateVertices(triangles.vertCount);
 
 					if (_clipper->getClippedTriangles().size() == 0) {
@@ -407,24 +407,24 @@ namespace spine {
 
                     const float* verts  = _clipper->getClippedVertices().buffer();
                     const float* uvs    = _clipper->getClippedUVs().buffer();
-                    V3F_C4F_T2F* vertex = triangles.verts;
+                    V3F_T2F_C4F* vertex = triangles.verts;
                     for (int v = 0, vn = triangles.vertCount, vv = 0; v < vn;
                          ++v, vv += 2, ++vertex)
                     {
-                        vertex->vertices.x  = verts[vv];
-                        vertex->vertices.y  = verts[vv + 1];
-                        vertex->texCoords.u = uvs[vv];
-                        vertex->texCoords.v = uvs[vv + 1];
-                        vertex->colors      = color_r;
+                        vertex->position.x  = verts[vv];
+                        vertex->position.y  = verts[vv + 1];
+                        vertex->texCoord.u = uvs[vv];
+                        vertex->texCoord.v = uvs[vv + 1];
+                        vertex->color      = color_r;
                     }
 					batch->addCommand(renderer, _globalZOrder, texture, _programState, blendFunc, triangles, transform, transformFlags);
 				} else {
 					// Not clipping.
-                    V3F_C4F_T2F* vertex = triangles.verts;
+                    V3F_T2F_C4F* vertex = triangles.verts;
                     for (int v = 0, vn = triangles.vertCount; v < vn;
                          ++v, ++vertex)
                     {
-                        vertex->colors = color_r;
+                        vertex->color = color_r;
                     }
 					batch->addCommand(renderer, _globalZOrder, texture, _programState, blendFunc, triangles, transform, transformFlags);
 				}
@@ -432,7 +432,7 @@ namespace spine {
 				// Two color tinting.
 
 				if (_clipper->isClipping()) {
-					_clipper->clipTriangles((float *) &trianglesTwoColor.verts[0].position, trianglesTwoColor.indices, trianglesTwoColor.indexCount, (float *) &trianglesTwoColor.verts[0].texCoords, sizeof(V3F_C4B_C4B_T2F) / 4);
+					_clipper->clipTriangles((float *) &trianglesTwoColor.verts[0].position, trianglesTwoColor.indices, trianglesTwoColor.indexCount, (float *) &trianglesTwoColor.verts[0].texCoord, sizeof(V3F_C4B_C4B_T2F) / 4);
 					twoColorBatch->deallocateVertices(trianglesTwoColor.vertCount);
 
 					if (_clipper->getClippedTriangles().size() == 0) {
@@ -455,8 +455,8 @@ namespace spine {
                     {
                         vertex->position.x  = verts[vv];
                         vertex->position.y  = verts[vv + 1];
-                        vertex->texCoords.u = uvs[vv];
-                        vertex->texCoords.v = uvs[vv + 1];
+                        vertex->texCoord.u = uvs[vv];
+                        vertex->texCoord.v = uvs[vv + 1];
                         vertex->color       = color_r;
                         vertex->color2      = darkColor_r;
                     }

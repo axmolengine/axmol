@@ -4,7 +4,7 @@ set(target_name ${lib_name})
 
 project(${lib_name})
 
-FILE(GLOB_RECURSE box2d_sources *.h;*.c)
+file(GLOB_RECURSE box2d_sources *.h;*.c)
 
 add_library(${target_name} ${box2d_sources})
 
