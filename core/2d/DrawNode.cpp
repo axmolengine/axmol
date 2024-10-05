@@ -850,7 +850,7 @@ void DrawNode::_drawPolygon(const Vec2* verts,
 
     auto _vertices = _transform(verts, count, closedPolygon);
 
-    std::vector<V2F_C4F_T2F_Triangle> triangleList;
+    axstd::pod_vector<V2F_C4F_T2F_Triangle> triangleList;
 
     int vertex_count = 0;
 
