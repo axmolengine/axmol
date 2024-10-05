@@ -3744,10 +3744,11 @@ void CandyMixEeffect::update(float dt)
 {
     DrawNodeBaseTest::update(dt);
     drawNode->clear();
+    static b2Timer timer = b2CreateTimer();
 
     static float WID = 400;
     static float HIG = 600;
-    float t  = utils::getTimeInMilliseconds() / 1000.0f;
+    float t          = b2GetMilliseconds(&timer) / 1000.0f;
     float ta = sin(t * cos(t) * 0.02f) + t;
     float tb = (1.0f + sin(t) * 1.0f) * 0.02f + 0.01f;
     float xa = WID * 0.5f;
