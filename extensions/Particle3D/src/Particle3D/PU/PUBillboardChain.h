@@ -57,13 +57,13 @@ public:
     public:
         Element();
 
-        Element(const Vec3& position, float width, float texCoord, const Vec4& colour, const Quaternion& orientation);
+        Element(const Vec3& position, float width, float texCoord, const Color& colour, const Quaternion& orientation);
 
         Vec3 position;
         float width;
         /// U or V texture coord depending on options
         float texCoord;
-        Vec4 color;
+        Color color;
 
         // Only used when mFaceCamera == false
         Quaternion orientation;
@@ -310,12 +310,6 @@ protected:
     /// Chain segment has no elements
     static const size_t SEGMENT_EMPTY;
 
-    struct VertexInfo
-    {
-        Vec3 position;
-        Vec2 uv;
-        Vec4 color;
-    };
     MeshCommand _meshCommand;
     RenderState::StateBlock _stateBlock;
     Texture2D* _texture                  = nullptr;
@@ -323,7 +317,7 @@ protected:
     backend::Buffer* _indexBuffer        = nullptr;  // index buffer
     backend::Buffer* _vertexBuffer       = nullptr;  // vertex buffer
 
-    std::vector<VertexInfo> _vertices;
+    std::vector<V3F_T2F_C4F> _vertices;
     std::vector<uint16_t> _indices;
 
     std::string _texFile;

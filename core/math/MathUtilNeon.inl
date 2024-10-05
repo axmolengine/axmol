@@ -147,7 +147,7 @@ struct MathUtilNeon
     }
 
 #if AX_64BITS
-    inline static void transformVertices(V3F_C4F_T2F* dst, const V3F_C4F_T2F* src, size_t count, const Mat4& transform)
+    inline static void transformVertices(V3F_T2F_C4F* dst, const V3F_T2F_C4F* src, size_t count, const Mat4& transform)
     {
         auto end = dst + count;
 
@@ -159,26 +159,26 @@ struct MathUtilNeon
         while (dst < end4)
         {
             // Do this for each vertex
-            // dst->vertices.x = pos.x * m[0] + pos.y * m[4] + pos.z * m[8]  + m[12];
-            // dst->vertices.y = pos.x * m[1] + pos.y * m[5] + pos.z * m[9]  + m[13];
-            // dst->vertices.z = pos.x * m[2] + pos.y * m[6] + pos.z * m[10] + m[14];
+            // dst->position.x = pos.x * m[0] + pos.y * m[4] + pos.z * m[8]  + m[12];
+            // dst->position.y = pos.x * m[1] + pos.y * m[5] + pos.z * m[9]  + m[13];
+            // dst->position.z = pos.x * m[2] + pos.y * m[6] + pos.z * m[10] + m[14];
 
             // First, load each vertex, multiply x by column 0 and add to column 3
-            // Note: since we're reading 4 floats it will load color bytes into v.w
-            float32x4_t v0 = vld1q_f32(&src[0].vertices.x);
+            // Note: since we're reading 4 floats it will load color.u into v.w
+            float32x4_t v0 = vld1q_f32(&src[0].position.x);
             float32x4_t r0 = vmlaq_laneq_f32(m.val[3], m.val[0], v0, 0);
-            float32x4_t v1 = vld1q_f32(&src[1].vertices.x);
+            float32x4_t v1 = vld1q_f32(&src[1].position.x);
             float32x4_t r1 = vmlaq_laneq_f32(m.val[3], m.val[0], v1, 0);
-            float32x4_t v2 = vld1q_f32(&src[2].vertices.x);
+            float32x4_t v2 = vld1q_f32(&src[2].position.x);
             float32x4_t r2 = vmlaq_laneq_f32(m.val[3], m.val[0], v2, 0);
-            float32x4_t v3 = vld1q_f32(&src[3].vertices.x);
+            float32x4_t v3 = vld1q_f32(&src[3].position.x);
             float32x4_t r3 = vmlaq_laneq_f32(m.val[3], m.val[0], v3, 0);
 
-            // Load texCoords
-            float32x2_t uv0 = vld1_f32(&src[0].texCoords.u);
-            float32x2_t uv1 = vld1_f32(&src[1].texCoords.u);
-            float32x2_t uv2 = vld1_f32(&src[2].texCoords.u);
-            float32x2_t uv3 = vld1_f32(&src[3].texCoords.u);
+            // Load texCoord.v and color.rgb
+            float32x4_t vrgb0 = vld1q_f32(&src[0].texCoord.v);
+            float32x4_t vrgb1 = vld1q_f32(&src[1].texCoord.v);
+            float32x4_t vrgb2 = vld1q_f32(&src[2].texCoord.v);
+            float32x4_t vrgb3 = vld1q_f32(&src[3].texCoord.v);
 
             // Multiply y by column 1 and add to result
             r0 = vmlaq_laneq_f32(r0, m.val[1], v0, 1);
@@ -192,21 +192,27 @@ struct MathUtilNeon
             r2 = vmlaq_laneq_f32(r2, m.val[2], v2, 2);
             r3 = vmlaq_laneq_f32(r3, m.val[2], v3, 2);
 
-            // Set w to loaded color
+            // Set w to loaded color.r
             r0 = vsetq_lane_f32(vgetq_lane_f32(v0, 3), r0, 3);
             r1 = vsetq_lane_f32(vgetq_lane_f32(v1, 3), r1, 3);
             r2 = vsetq_lane_f32(vgetq_lane_f32(v2, 3), r2, 3);
             r3 = vsetq_lane_f32(vgetq_lane_f32(v3, 3), r3, 3);
 
             // Store result
-            vst1q_f32(&dst[0].vertices.x, r0);
-            vst1_f32(&dst[0].texCoords.u, uv0);
-            vst1q_f32(&dst[1].vertices.x, r1);
-            vst1_f32(&dst[1].texCoords.u, uv1);
-            vst1q_f32(&dst[2].vertices.x, r2);
-            vst1_f32(&dst[2].texCoords.u, uv2);
-            vst1q_f32(&dst[3].vertices.x, r3);
-            vst1_f32(&dst[3].texCoords.u, uv3);
+            vst1q_f32(&dst[0].position.x, r0);
+            vst1q_f32(&dst[0].texCoord.v, vrgb0);
+            vst1q_f32(&dst[1].position.x, r1);
+            vst1q_f32(&dst[1].texCoord.v, vrgb1);
+            vst1q_f32(&dst[2].position.x, r2);
+            vst1q_f32(&dst[2].texCoord.v, vrgb2);
+            vst1q_f32(&dst[3].position.x, r3);
+            vst1q_f32(&dst[3].texCoord.v, vrgb3);
+
+            // Store color.a
+            dst[0].color.a = src[0].color.a;
+            dst[1].color.a = src[1].color.a;
+            dst[2].color.a = src[2].color.a;
+            dst[3].color.a = src[3].color.a;
 
             dst += 4;
             src += 4;
@@ -215,14 +221,15 @@ struct MathUtilNeon
         // Process remaining vertices one by one
         while (dst < end)
         {
-            float32x4_t v  = vld1q_f32(&src->vertices.x);
+            float32x4_t v  = vld1q_f32(&src->position.x);
             float32x4_t r  = vmlaq_laneq_f32(m.val[3], m.val[0], v, 0);
             r              = vmlaq_laneq_f32(r, m.val[1], v, 1);
             r              = vmlaq_laneq_f32(r, m.val[2], v, 2);
             r              = vsetq_lane_f32(vgetq_lane_f32(v, 3), r, 3);
-            float32x2_t uv = vld1_f32(&src->texCoords.u);
-            vst1q_f32(&dst->vertices.x, r);
-            vst1_f32(&dst->texCoords.u, uv);
+            float32x4_t vrgb = vld1q_f32(&src->texCoord.v);
+            vst1q_f32(&dst->position.x, r);
+            vst1q_f32(&dst->texCoord.v, vrgb);
+            dst->color.a = src->color.a;
 
             ++dst;
             ++src;
@@ -280,8 +287,8 @@ struct MathUtilNeon
         }
     }
 #else
-    inline static void transformVertices(ax::V3F_C4F_T2F* dst,
-                                         const ax::V3F_C4F_T2F* src,
+    inline static void transformVertices(ax::V3F_T2F_C4F* dst,
+                                         const ax::V3F_T2F_C4F* src,
                                          size_t count,
                                          const ax::Mat4& transform)
     {
@@ -297,19 +304,19 @@ struct MathUtilNeon
         auto end4 = dst + count / 4 * 4;
         while (dst < end4)
         {
-            // Load 4 vertices. Note that color will also get loaded into w
-            float32x2_t xy0 = vld1_f32(&src[0].vertices.x);
-            float32x2_t zw0 = vld1_f32(&src[0].vertices.z);
-            float32x2_t uv0 = vld1_f32(&src[0].texCoords.u);
-            float32x2_t xy1 = vld1_f32(&src[1].vertices.x);
-            float32x2_t zw1 = vld1_f32(&src[1].vertices.z);
-            float32x2_t uv1 = vld1_f32(&src[1].texCoords.u);
-            float32x2_t xy2 = vld1_f32(&src[2].vertices.x);
-            float32x2_t zw2 = vld1_f32(&src[2].vertices.z);
-            float32x2_t uv2 = vld1_f32(&src[2].texCoords.u);
-            float32x2_t xy3 = vld1_f32(&src[3].vertices.x);
-            float32x2_t zw3 = vld1_f32(&src[3].vertices.z);
-            float32x2_t uv3 = vld1_f32(&src[3].texCoords.u);
+            // Load 4 vertices. Note that texCoord.u will also get loaded into w
+            float32x2_t xy0 = vld1_f32(&src[0].position.x);
+            float32x2_t zw0 = vld1_f32(&src[0].position.z);
+            //float32x2_t uv0 = vld1_f32(&src[0].texCoord.u);
+            float32x2_t xy1 = vld1_f32(&src[1].position.x);
+            float32x2_t zw1 = vld1_f32(&src[1].position.z);
+            //float32x2_t uv1 = vld1_f32(&src[1].texCoord.u);
+            float32x2_t xy2 = vld1_f32(&src[2].position.x);
+            float32x2_t zw2 = vld1_f32(&src[2].position.z);
+            //float32x2_t uv2 = vld1_f32(&src[2].texCoord.u);
+            float32x2_t xy3 = vld1_f32(&src[3].position.x);
+            float32x2_t zw3 = vld1_f32(&src[3].position.z);
+            //float32x2_t uv3 = vld1_f32(&src[3].texCoord.u);
 
             // Multiply x by column 0
             float32x4_t r0 = vmulq_lane_f32(mc0, xy0, 0);
@@ -341,15 +348,27 @@ struct MathUtilNeon
             r2 = vsetq_lane_f32(vget_lane_f32(zw2, 1), r2, 3);
             r3 = vsetq_lane_f32(vget_lane_f32(zw3, 1), r3, 3);
 
+            // Load texCoords.v color.rgb
+            float32x4_t vrgb0 = vld1q_f32(&src[0].texCoord.v);
+            float32x4_t vrgb1 = vld1q_f32(&src[1].texCoord.v);
+            float32x4_t vrgb2 = vld1q_f32(&src[2].texCoord.v);
+            float32x4_t vrgb3 = vld1q_f32(&src[3].texCoord.v);
+
             // Store result
-            vst1q_f32(&dst[0].vertices.x, r0);
-            vst1_f32(&dst[0].texCoords.u, uv0);
-            vst1q_f32(&dst[1].vertices.x, r1);
-            vst1_f32(&dst[1].texCoords.u, uv1);
-            vst1q_f32(&dst[2].vertices.x, r2);
-            vst1_f32(&dst[2].texCoords.u, uv2);
-            vst1q_f32(&dst[3].vertices.x, r3);
-            vst1_f32(&dst[3].texCoords.u, uv3);
+            vst1q_f32(&dst[0].position.x, r0);
+            vst1q_f32(&dst[0].texCoord.v, vrgb0);
+            vst1q_f32(&dst[1].position.x, r1);
+            vst1q_f32(&dst[1].texCoord.v, vrgb1);
+            vst1q_f32(&dst[2].position.x, r2);
+            vst1q_f32(&dst[2].texCoord.v, vrgb2);
+            vst1q_f32(&dst[3].position.x, r3);
+            vst1q_f32(&dst[3].texCoord.v, vrgb3);
+
+            // Store texture color.a
+            dst[0].color.a = src[0].color.a;
+            dst[1].color.a = src[1].color.a;
+            dst[2].color.a = src[2].color.a;
+            dst[3].color.a = src[3].color.a;
 
             dst += 4;
             src += 4;
@@ -359,9 +378,9 @@ struct MathUtilNeon
         while (dst < end)
         {
             // Load vertex
-            float32x2_t xy = vld1_f32(&src->vertices.x);
-            float32x2_t zw = vld1_f32(&src->vertices.z);
-            float32x2_t uv = vld1_f32(&src->texCoords.u);
+            float32x2_t xy = vld1_f32(&src->position.x);
+            float32x2_t zw = vld1_f32(&src->position.z);
+            float32x4_t vrgb = vld1q_f32(&src->color.v);
 
             // Multiply x by column 0
             float32x4_t r = vmulq_lane_f32(mc0, xy, 0);
@@ -376,8 +395,10 @@ struct MathUtilNeon
             r = vsetq_lane_f32(vget_lane_f32(zw, 1), r, 3);
 
             // Store result
-            vst1q_f32(&dst->vertices.x, r);
-            vst1_f32(&dst->texCoords.u, uv);
+            vst1q_f32(&dst->position.x, r);
+            vst1q_f32(&dst->texCoord.v, vrgb);
+
+            dst->color.a = src->color.a;
 
             ++dst;
             ++src;

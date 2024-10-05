@@ -62,12 +62,12 @@ struct VertexLayoutHelper
         /// a_texCoord
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
                                 program->getAttributeLocation(backend::Attribute::TEXCOORD),
-                                backend::VertexFormat::FLOAT2, offsetof(V3F_C4F_T2F, texCoords), false);
+                                backend::VertexFormat::FLOAT2, offsetof(V3F_T2F_C4F, texCoord), false);
 
         /// a_color
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::FLOAT4, offsetof(V3F_C4F_T2F, colors), false);
-        vertexLayout->setStride(sizeof(V3F_C4F_T2F));
+                                backend::VertexFormat::FLOAT4, offsetof(V3F_T2F_C4F, color), false);
+        vertexLayout->setStride(sizeof(V3F_T2F_C4F));
     }
 
     static void setupDrawNode(Program* program)
@@ -80,12 +80,12 @@ struct VertexLayoutHelper
 
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
                                 program->getAttributeLocation(backend::Attribute::TEXCOORD),
-                                backend::VertexFormat::FLOAT2, offsetof(V2F_C4F_T2F, texCoords), false);
+                                backend::VertexFormat::FLOAT2, offsetof(V2F_T2F_C4F, texCoord), false);
 
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::FLOAT4, offsetof(V2F_C4F_T2F, colors), true);
+                                backend::VertexFormat::FLOAT4, offsetof(V2F_T2F_C4F, color), true);
 
-        vertexLayout->setStride(sizeof(V2F_C4F_T2F));
+        vertexLayout->setStride(sizeof(V2F_T2F_C4F));
     }
 
     static void setupDrawNode3D(Program* program)
@@ -97,7 +97,7 @@ struct VertexLayoutHelper
                                 backend::VertexFormat::FLOAT3, 0, false);
 
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::FLOAT4, offsetof(V3F_C4F, colors), true);
+                                backend::VertexFormat::FLOAT4, offsetof(V3F_C4F, color), true);
 
         vertexLayout->setStride(sizeof(V3F_C4F));
     }
@@ -109,24 +109,6 @@ struct VertexLayoutHelper
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION, attrNameLoc,
                                 backend::VertexFormat::FLOAT3, 0, false);
         vertexLayout->setStride(sizeof(Vec3));
-    }
-
-    static void setupPU3D(Program* program)
-    {
-        auto vertexLayout = program->getVertexLayout();
-
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
-                                backend::VertexFormat::FLOAT3, offsetof(V3F_T2F_C4F, position), false);
-
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                                program->getAttributeLocation(backend::Attribute::TEXCOORD),
-                                backend::VertexFormat::FLOAT2, offsetof(V3F_T2F_C4F, uv), false);
-
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::FLOAT4, offsetof(V3F_T2F_C4F, color), false);
-
-        vertexLayout->setStride(sizeof(V3F_T2F_C4F));
     }
 
     static void setupPos(Program* program)
@@ -145,7 +127,7 @@ struct VertexLayoutHelper
                                 program->getAttributeLocation(backend::Attribute::POSITION),
                                 backend::VertexFormat::FLOAT3, 0, false);
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::FLOAT4, offsetof(V3F_C4F, colors), false);
+                                backend::VertexFormat::FLOAT4, offsetof(V3F_C4F, color), false);
         vertexLayout->setStride(sizeof(V3F_C4F));
     }
 
@@ -176,7 +158,7 @@ struct VertexLayoutHelper
 std::function<void(Program*)> Program::s_vertexLayoutSetupList[static_cast<int>(VertexLayoutType::Count)] = {
     VertexLayoutHelper::setupDummy,    VertexLayoutHelper::setupPos,      VertexLayoutHelper::setupTexture,
     VertexLayoutHelper::setupSprite,   VertexLayoutHelper::setupDrawNode, VertexLayoutHelper::setupDrawNode3D,
-    VertexLayoutHelper::setupSkyBox,   VertexLayoutHelper::setupPU3D,     VertexLayoutHelper::setupPosColor,
+    VertexLayoutHelper::setupSkyBox,     VertexLayoutHelper::setupPosColor,
     VertexLayoutHelper::setupTerrain3D, VertexLayoutHelper::setupInstanced};
 
 Program::Program(std::string_view vs, std::string_view fs) : _vertexShader(vs), _fragmentShader(fs)

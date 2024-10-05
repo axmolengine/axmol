@@ -46,7 +46,7 @@ bool PUColorAffectorTranslator::translateChildProperty(PUScriptCompiler* compile
         {
             int n = 0;
             float time;
-            Vec4 colour;
+            Color color;
             PUAbstractNodeList::const_iterator i   = prop->values.begin();
             PUAbstractNodeList::const_iterator end = prop->values.end();
             while (i != end)
@@ -60,23 +60,23 @@ bool PUColorAffectorTranslator::translateChildProperty(PUScriptCompiler* compile
                         time = v;
                         break;
                     case 1:
-                        colour.x = v;
+                        color.x = v;
                         break;
                     case 2:
-                        colour.y = v;
+                        color.y = v;
                         break;
                     case 3:
-                        colour.z = v;
+                        color.z = v;
                         break;
                     case 4:
-                        colour.w = v;
+                        color.w = v;
                         break;
                     }
                 }
                 ++n;
                 ++i;
             }
-            affector->addColor(time, colour);
+            affector->addColor(time, color);
             return true;
         }
     }

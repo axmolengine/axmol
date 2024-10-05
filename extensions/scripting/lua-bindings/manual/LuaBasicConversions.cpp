@@ -708,7 +708,7 @@ bool luaval_to_color4b(lua_State* L, int lo, Color4B* outValue, const char* func
     return ok;
 }
 
-bool luaval_to_color4f(lua_State* L, int lo, Color4F* outValue, const char* funcName)
+bool luaval_to_color(lua_State* L, int lo, ax::Color* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
         return false;
@@ -1885,7 +1885,7 @@ bool luaval_to_tex2f(lua_State* L, int lo, ax::Tex2F* outValue, const char* func
     return ok;
 }
 
-bool luaval_to_v3f_c4f_t2f(lua_State* L, int lo, ax::V3F_C4F_T2F* outValue, const char* funcName)
+bool luaval_to_v3f_c4f_t2f(lua_State* L, int lo, ax::V3F_T2F_C4F* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1903,7 +1903,7 @@ bool luaval_to_v3f_c4f_t2f(lua_State* L, int lo, ax::V3F_C4F_T2F* outValue, cons
 
     if (ok)
     {
-        lua_pushstring(L, "vertices");
+        lua_pushstring(L, "position");
         lua_gettable(L, lo);
         if (!tolua_istable(L, lua_gettop(L), 0, &tolua_err))
         {
@@ -1911,7 +1911,7 @@ bool luaval_to_v3f_c4f_t2f(lua_State* L, int lo, ax::V3F_C4F_T2F* outValue, cons
             return false;
         }
 
-        ok &= luaval_to_vec3(L, lua_gettop(L), &outValue->vertices);
+        ok &= luaval_to_vec3(L, lua_gettop(L), &outValue->position);
         if (!ok)
         {
             lua_pop(L, 1);
@@ -1919,14 +1919,14 @@ bool luaval_to_v3f_c4f_t2f(lua_State* L, int lo, ax::V3F_C4F_T2F* outValue, cons
         }
         lua_pop(L, 1);
 
-        lua_pushstring(L, "colors");
+        lua_pushstring(L, "color");
         lua_gettable(L, lo);
         if (!tolua_istable(L, lua_gettop(L), 0, &tolua_err))
         {
             lua_pop(L, 1);
             return false;
         }
-        ok &= luaval_to_color4f(L, lua_gettop(L), &outValue->colors);
+        ok &= luaval_to_color(L, lua_gettop(L), &outValue->color);
         if (!ok)
         {
             lua_pop(L, 1);
@@ -1934,14 +1934,14 @@ bool luaval_to_v3f_c4f_t2f(lua_State* L, int lo, ax::V3F_C4F_T2F* outValue, cons
         }
         lua_pop(L, 1);
 
-        lua_pushstring(L, "texCoords");
+        lua_pushstring(L, "texCoord");
         lua_gettable(L, lo);
         if (!tolua_istable(L, lua_gettop(L), 0, &tolua_err))
         {
             lua_pop(L, 1);
             return false;
         }
-        ok &= luaval_to_tex2f(L, lua_gettop(L), &outValue->texCoords);
+        ok &= luaval_to_tex2f(L, lua_gettop(L), &outValue->texCoord);
         if (!ok)
         {
             lua_pop(L, 1);
@@ -2040,7 +2040,7 @@ bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<ax::Vec3>* ret,
 
 bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
                                       int lo,
-                                      std::vector<ax::V3F_C4F_T2F>* ret,
+                                      std::vector<ax::V3F_T2F_C4F>* ret,
                                       const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
@@ -2060,7 +2060,7 @@ bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
     if (ok)
     {
         size_t len = lua_objlen(L, lo);
-        ax::V3F_C4F_T2F value;
+        ax::V3F_T2F_C4F value;
         for (size_t i = 0; i < len; i++)
         {
             lua_pushnumber(L, i + 1);
@@ -2075,7 +2075,7 @@ bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
             }
             else
             {
-                AXASSERT(false, "V3F_C4F_T2F type is needed");
+                AXASSERT(false, "V3F_T2F_C4F type is needed");
             }
             lua_pop(L, 1);
         }
@@ -2386,7 +2386,7 @@ void color4b_to_luaval(lua_State* L, const Color4B& color)
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
 }
 
-void color4f_to_luaval(lua_State* L, const Color4F& color)
+void color_to_luaval(lua_State* L, const ax::Color& color)
 {
     if (NULL == L)
         return;

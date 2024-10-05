@@ -433,33 +433,33 @@ bool PUEmitter::makeParticleLocal(PUParticle3D* particle)
 }
 
 //-----------------------------------------------------------------------
-const Vec4& PUEmitter::getParticleColor() const
+const Color& PUEmitter::getParticleColor() const
 {
     return _particleColor;
 }
 //-----------------------------------------------------------------------
-void PUEmitter::setParticleColor(const Vec4& particleColor)
+void PUEmitter::setParticleColor(const Color& particleColor)
 {
     _particleColor = particleColor;
 }
 //-----------------------------------------------------------------------
-const Vec4& PUEmitter::getParticleColorRangeStart() const
+const Color& PUEmitter::getParticleColorRangeStart() const
 {
     return _particleColorRangeStart;
 }
 //-----------------------------------------------------------------------
-void PUEmitter::setParticleColorRangeStart(const Vec4& particleColorRangeStart)
+void PUEmitter::setParticleColorRangeStart(const Color& particleColorRangeStart)
 {
     _particleColorRangeStart = particleColorRangeStart;
     _particleColorRangeSet   = true;
 }
 //-----------------------------------------------------------------------
-const Vec4& PUEmitter::getParticleColorRangeEnd() const
+const Color& PUEmitter::getParticleColorRangeEnd() const
 {
     return _particleColorRangeEnd;
 }
 //-----------------------------------------------------------------------
-void PUEmitter::setParticleColorRangeEnd(const Vec4& particleColorRangeEnd)
+void PUEmitter::setParticleColorRangeEnd(const Color& particleColorRangeEnd)
 {
     _particleColorRangeEnd = particleColorRangeEnd;
     _particleColorRangeSet = true;

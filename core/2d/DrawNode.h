@@ -569,9 +569,9 @@ protected:
     CustomCommand _customCommandPoint;
     CustomCommand _customCommandLine;
 
-    axstd::pod_vector<V2F_C4F_T2F> _triangles;
-    axstd::pod_vector<V2F_C4F_T2F> _points;
-    axstd::pod_vector<V2F_C4F_T2F> _lines;
+    axstd::pod_vector<V2F_T2F_C4F> _triangles;
+    axstd::pod_vector<V2F_T2F_C4F> _points;
+    axstd::pod_vector<V2F_T2F_C4F> _lines;
 
 
 private:
