@@ -67,7 +67,7 @@ TEST_SUITE("math/MathUtil")
 {
     using namespace UnitTest::ax;
 
-    static void checkVerticesAreEqual(const V3F_C4B_T2F* v1, const V3F_C4B_T2F* v2, size_t count)
+    static void checkVerticesAreEqual(const V3F_C4F_T2F* v1, const V3F_C4F_T2F* v2, size_t count)
     {
         for (size_t i = 0; i < count; ++i)
         {
@@ -80,9 +80,9 @@ TEST_SUITE("math/MathUtil")
     TEST_CASE("transformVertices")
     {
         auto count = 5;
-        std::vector<V3F_C4B_T2F> src(count);
-        std::vector<V3F_C4B_T2F> expected(count);
-        std::vector<V3F_C4B_T2F> dst(count);
+        std::vector<V3F_C4F_T2F> src(count);
+        std::vector<V3F_C4F_T2F> expected(count);
+        std::vector<V3F_C4F_T2F> dst(count);
 
         for (int i = 0; i < count; ++i)
         {

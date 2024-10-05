@@ -230,7 +230,7 @@ struct MathUtilSSE
 #    endif
     }
 
-    static void transformVertices(V3F_C4B_T2F* dst, const V3F_C4B_T2F* src, size_t count, const Mat4& transform)
+    static void transformVertices(V3F_C4F_T2F* dst, const V3F_C4F_T2F* src, size_t count, const Mat4& transform)
     {
         auto& m = transform.col;
 
@@ -243,10 +243,14 @@ struct MathUtilSSE
                 _mm_add_ps(_mm_mul_ps(m[2], _mm_shuffle_ps(v, v, 0xaa)), _mm_mul_ps(m[3], _mm_shuffle_ps(v, v, 0xff))));
             _mm_storeu_ps((float*)&dst[i].vertices, v);
 
+            v = _mm_set_ps(src[i].colors.w, src[i].colors.z, src[i].colors.y, src[i].colors.x);
+            _mm_storeu_ps((float*)&dst[i].colors, v);
+            memcpy(&dst[i].texCoords, &src[i].texCoords, sizeof(V3F_C4F_T2F::texCoords));
+
             // Copy tex coords and colors
             // dst[i].texCoords = src[i].texCoords;
             // dst[i].colors    = src[i].colors;
-            memcpy(&dst[i].colors, &src[i].colors, sizeof(V3F_C4B_T2F::colors) + sizeof(V3F_C4B_T2F::texCoords));
+            // memcpy(&dst[i].colors, &src[i].colors, sizeof(V3F_C4F_T2F::colors) + sizeof(V3F_C4F_T2F::texCoords));
         }
     }
 

@@ -55,7 +55,7 @@ private:
     bool _scaleByTile;
     int _vertexDataCount;
     ax::TrianglesCommand::Triangles _fillTriangles;
-    ax::V3F_C4B_T2F *_vertexData;
+    ax::V3F_C4F_T2F *_vertexData;
     unsigned short *_vertexIndex;
     
     static ax::Texture2D* _empty;

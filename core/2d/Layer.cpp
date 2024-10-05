@@ -232,10 +232,10 @@ void LayerGradient::updateColor()
 
     float opacityf = (float)_displayedOpacity / 255.0f;
 
-    Color4F S(_displayedColor.r / 255.0f, _displayedColor.g / 255.0f, _displayedColor.b / 255.0f,
+    Color S(_displayedColor,
               _startOpacity * opacityf / 255.0f);
 
-    Color4F E(_endColor.r / 255.0f, _endColor.g / 255.0f, _endColor.b / 255.0f, _endOpacity * opacityf / 255.0f);
+    Color E(_endColor, _endOpacity * opacityf / 255.0f);
 
     // (-1, -1)
     _quad.bl.colors.r = (E.r + (S.r - E.r) * ((c + u.x + u.y) / (2.0f * c))) * 255;
@@ -558,7 +558,7 @@ const BlendFunc& LayerRadialGradient::getBlendFunc() const
     return _blendFunc;
 }
 
-void LayerRadialGradient::convertColor4B24F(Color4F& outColor, const Color4B& inColor)
+void LayerRadialGradient::convertColor4B24F(Color& outColor, const Color4B& inColor)
 {
     outColor.r = inColor.r / 255.0f;
     outColor.g = inColor.g / 255.0f;

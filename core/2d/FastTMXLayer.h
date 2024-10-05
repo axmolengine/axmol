@@ -371,7 +371,7 @@ protected:
     float _cameraZoomDirty;
 
     std::vector<int> _tileToQuadIndex;
-    std::vector<V3F_C4B_T2F_Quad> _totalQuads;
+    std::vector<V3F_C4F_T2F_Quad> _totalQuads;
 #ifdef AX_FAST_TILEMAP_32_BIT_INDICES
     std::vector<unsigned int> _indices;
 #else

@@ -161,7 +161,7 @@ void LabelAtlas::updateAtlasValues()
     }
 
     AXASSERT(n <= _textureAtlas->getCapacity(), "updateAtlasValues: Invalid String length");
-    V3F_C4B_T2F_Quad* quads = _textureAtlas->getQuads();
+    V3F_C4F_T2F_Quad* quads = _textureAtlas->getQuads();
     for (ssize_t i = 0; i < n; i++)
     {
 
@@ -203,7 +203,7 @@ void LabelAtlas::updateAtlasValues()
         quads[i].tr.vertices.x = (float)(i * _itemWidth + _itemWidth);
         quads[i].tr.vertices.y = (float)(_itemHeight);
         quads[i].tr.vertices.z = 0.0f;
-        Color4B c(_displayedColor.r, _displayedColor.g, _displayedColor.b, _displayedOpacity);
+        Color c(_displayedColor, _displayedOpacity / 255.0f);
         quads[i].tl.colors = c;
         quads[i].tr.colors = c;
         quads[i].bl.colors = c;
@@ -248,21 +248,21 @@ void LabelAtlas::updateColor()
 {
     if (_textureAtlas)
     {
-        Color4B color4(_displayedColor.r, _displayedColor.g, _displayedColor.b, _displayedOpacity);
+        Color color(_displayedColor, _displayedOpacity / 255.0f);
         if (_isOpacityModifyRGB)
         {
-            color4.r *= _displayedOpacity / 255.0f;
-            color4.g *= _displayedOpacity / 255.0f;
-            color4.b *= _displayedOpacity / 255.0f;
+            color.r *= color.a;
+            color.g *= color.a;
+            color.b *= color.a;
         }
         auto quads     = _textureAtlas->getQuads();
         ssize_t length = _string.length();
         for (int index = 0; index < length; index++)
         {
-            quads[index].bl.colors = color4;
-            quads[index].br.colors = color4;
-            quads[index].tl.colors = color4;
-            quads[index].tr.colors = color4;
+            quads[index].bl.colors = color;
+            quads[index].br.colors = color;
+            quads[index].tl.colors = color;
+            quads[index].tr.colors = color;
             _textureAtlas->updateQuad(quads[index], index);
         }
     }

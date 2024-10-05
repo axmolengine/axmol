@@ -818,45 +818,45 @@ public:
      *
      * @return The start color of each particle.
      */
-    const Color4F& getStartColor() const { return _startColor; }
+    const Color& getStartColor() const { return _startColor; }
     /** Sets the start color of each particle.
      *
      * @param color The start color of each particle.
      */
-    void setStartColor(const Color4F& color) { _startColor = color; }
+    void setStartColor(const Color& color) { _startColor = color; }
 
     /** Gets the start color variance of each particle.
      *
      * @return The start color variance of each particle.
      */
-    const Color4F& getStartColorVar() const { return _startColorVar; }
+    const Color& getStartColorVar() const { return _startColorVar; }
     /** Sets the start color variance of each particle.
      *
      * @param color The start color variance of each particle.
      */
-    void setStartColorVar(const Color4F& color) { _startColorVar = color; }
+    void setStartColorVar(const Color& color) { _startColorVar = color; }
 
     /** Gets the end color and end color variation of each particle.
      *
      * @return The end color and end color variation of each particle.
      */
-    const Color4F& getEndColor() const { return _endColor; }
+    const Color& getEndColor() const { return _endColor; }
     /** Sets the end color and end color variation of each particle.
      *
      * @param color The end color and end color variation of each particle.
      */
-    void setEndColor(const Color4F& color) { _endColor = color; }
+    void setEndColor(const Color& color) { _endColor = color; }
 
     /** Gets the end color variance of each particle.
      *
      * @return The end color variance of each particle.
      */
-    const Color4F& getEndColorVar() const { return _endColorVar; }
+    const Color& getEndColorVar() const { return _endColorVar; }
     /** Sets the end color variance of each particle.
      *
      * @param color The end color variance of each particle.
      */
-    void setEndColorVar(const Color4F& color) { _endColorVar = color; }
+    void setEndColorVar(const Color& color) { _endColorVar = color; }
 
     /** Sets wether to use HSV color system.
      * WARNING: becareful when using HSV with too many particles because it's expensive.
@@ -1588,13 +1588,13 @@ protected:
     /** end size variance in pixels of each particle */
     float _endSizeVar;
     /** start color of each particle */
-    Color4F _startColor;
+    Color _startColor;
     /** start color variance of each particle */
-    Color4F _startColorVar;
+    Color _startColorVar;
     /** end color and end color variation of each particle */
-    Color4F _endColor;
+    Color _endColor;
     /** end color variance of each particle */
-    Color4F _endColorVar;
+    Color _endColorVar;
     /** hsv color of each particle */
     HSV _hsv;
     /** hsv color variance of each particle */

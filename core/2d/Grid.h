@@ -152,7 +152,7 @@ protected:
     Director::Projection _directorProjection = Director::Projection::_2D;
     Rect _gridRect;
 
-    Color4F _clearColor = {0, 0, 0, 0};
+    Color _clearColor = {0, 0, 0, 0};
 
     CustomCommand _drawCommand;
     //CallbackCommand _beforeDrawCommand;

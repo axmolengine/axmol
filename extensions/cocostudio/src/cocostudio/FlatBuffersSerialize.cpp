@@ -902,7 +902,7 @@ Offset<flatbuffers::ColorFrame> FlatBuffersSerialize::createColorFrame(pugi::xml
         child = child.next_sibling();
     }
 
-    Color f_color(255, color.r, color.g, color.b);
+    FColor f_color(255, color.r, color.g, color.b);
 
     return CreateColorFrame(*_builder, frameIndex, tween, &f_color, createEasingData(objectData.first_child()));
 }

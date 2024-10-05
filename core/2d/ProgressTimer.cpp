@@ -57,17 +57,17 @@ backend::ProgramState* initPipelineDescriptor(ax::CustomCommand& command,
     AX_SAFE_RELEASE(pipelieDescriptor.programState);
     pipelieDescriptor.programState = programState;
 
-    // set custom vertexLayout according to V2F_C4B_T2F structure
+    // set custom vertexLayout according to V2F_C4F_T2F structure
     auto vertexLayout = programState->getMutableVertexLayout();
     vertexLayout->setAttrib("a_position", program->getAttributeLocation(backend::Attribute::POSITION),
                             backend::VertexFormat::FLOAT2, 0, false);
     vertexLayout->setAttrib("a_texCoord", program->getAttributeLocation(backend::Attribute::TEXCOORD),
                             backend::VertexFormat::FLOAT2,
-                             offsetof(V2F_C4B_T2F, texCoords), false);
+                             offsetof(V2F_C4F_T2F, texCoords), false);
     vertexLayout->setAttrib("a_color", program->getAttributeLocation(backend::Attribute::COLOR),
-                                  backend::VertexFormat::UBYTE4,
-                                   offsetof(V2F_C4B_T2F, colors), true);
-    vertexLayout->setStride(sizeof(V2F_C4B_T2F));
+                                  backend::VertexFormat::FLOAT4,
+                                   offsetof(V2F_C4F_T2F, colors), false);
+    vertexLayout->setStride(sizeof(V2F_C4F_T2F));
 
     if (ridal)
     {
@@ -202,7 +202,7 @@ Tex2F ProgressTimer::textureCoordFromAlphaPoint(Vec2 alpha)
     {
         return ret;
     }
-    V3F_C4B_T2F_Quad quad = _sprite->getQuad();
+    V3F_C4F_T2F_Quad quad = _sprite->getQuad();
     Vec2 min(quad.bl.texCoords.u, quad.bl.texCoords.v);
     Vec2 max(quad.tr.texCoords.u, quad.tr.texCoords.v);
     //  Fix bug #1303 so that progress timer handles sprite frame texture rotation
@@ -220,7 +220,7 @@ Vec2 ProgressTimer::vertexFromAlphaPoint(Vec2 alpha)
     {
         return ret;
     }
-    V3F_C4B_T2F_Quad quad = _sprite->getQuad();
+    V3F_C4F_T2F_Quad quad = _sprite->getQuad();
     Vec2 min(quad.bl.vertices.x, quad.bl.vertices.y);
     Vec2 max(quad.tr.vertices.x, quad.tr.vertices.y);
     ret.x = min.x * (1.f - alpha.x) + max.x * alpha.x;
@@ -263,7 +263,7 @@ void ProgressTimer::updateColor()
         sc.a = sc.a * _sprite->getOpacity() / 255.0f;
         for (auto& d : _vertexData)
         {
-            d.colors = sc;
+            d.colors = ax::Color{sc};
         }
     }
 }

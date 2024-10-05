@@ -107,11 +107,11 @@ namespace spine {
 		reset();
 	}
 
-	axmol::V3F_C4B_T2F *SkeletonBatch::allocateVertices(uint32_t numVertices) {
+	axmol::V3F_C4F_T2F *SkeletonBatch::allocateVertices(uint32_t numVertices) {
 		if (_vertices.size() - _numVertices < numVertices) {
-			axmol::V3F_C4B_T2F *oldData = _vertices.data();
+			axmol::V3F_C4F_T2F *oldData = _vertices.data();
 			_vertices.resize((_vertices.size() + numVertices) * 2 + 1);
-			axmol::V3F_C4B_T2F *newData = _vertices.data();
+			axmol::V3F_C4F_T2F *newData = _vertices.data();
 			for (uint32_t i = 0; i < this->_nextFreeCommand; i++) {
 				SkeletonCommand *command = _commandsPool[i];
 				SkeletonCommand::Triangles &triangles = (SkeletonCommand::Triangles &) command->getTriangles();
@@ -119,7 +119,7 @@ namespace spine {
 			}
 		}
 
-		axmol::V3F_C4B_T2F *vertices = _vertices.data() + _numVertices;
+		axmol::V3F_C4F_T2F *vertices = _vertices.data() + _numVertices;
 		_numVertices += numVertices;
 		return vertices;
 	}

@@ -147,7 +147,7 @@ AnchoredSprite* AnchoredSprite::create()
     return nullptr;
 }
 
-void AnchoredSprite::setVertexCoords(const Rect& rect, V3F_C4B_T2F_Quad* outQuad)
+void AnchoredSprite::setVertexCoords(const Rect& rect, V3F_C4F_T2F_Quad* outQuad)
 {
     float relativeOffsetX = _unflippedOffsetPositionFromCenter.x - getContentSize().x * _spriteVertexAnchor.x;
     float relativeOffsetY = _unflippedOffsetPositionFromCenter.y - getContentSize().y * _spriteVertexAnchor.y;

@@ -147,7 +147,7 @@ struct MathUtilNeon
     }
 
 #if AX_64BITS
-    inline static void transformVertices(V3F_C4B_T2F* dst, const V3F_C4B_T2F* src, size_t count, const Mat4& transform)
+    inline static void transformVertices(V3F_C4F_T2F* dst, const V3F_C4F_T2F* src, size_t count, const Mat4& transform)
     {
         auto end = dst + count;
 
@@ -280,8 +280,8 @@ struct MathUtilNeon
         }
     }
 #else
-    inline static void transformVertices(ax::V3F_C4B_T2F* dst,
-                                         const ax::V3F_C4B_T2F* src,
+    inline static void transformVertices(ax::V3F_C4F_T2F* dst,
+                                         const ax::V3F_C4F_T2F* src,
                                          size_t count,
                                          const ax::Mat4& transform)
     {

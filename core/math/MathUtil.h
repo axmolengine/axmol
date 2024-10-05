@@ -29,7 +29,7 @@
 
 namespace ax
 {
-    struct V3F_C4B_T2F;
+    struct V3F_C4F_T2F;
 }
 
 /**
@@ -119,7 +119,7 @@ private:
 
     static void crossVec3(const float* v1, const float* v2, float* dst);
 
-    static void transformVertices(V3F_C4B_T2F* dst, const V3F_C4B_T2F* src, size_t count, const Mat4& transform);
+    static void transformVertices(V3F_C4F_T2F* dst, const V3F_C4F_T2F* src, size_t count, const Mat4& transform);
     static void transformIndices(uint16_t* dst, const uint16_t* src, size_t count, uint16_t offset);
 };
 

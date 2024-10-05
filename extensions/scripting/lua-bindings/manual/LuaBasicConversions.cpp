@@ -1885,7 +1885,7 @@ bool luaval_to_tex2f(lua_State* L, int lo, ax::Tex2F* outValue, const char* func
     return ok;
 }
 
-bool luaval_to_v3f_c4b_t2f(lua_State* L, int lo, ax::V3F_C4B_T2F* outValue, const char* funcName)
+bool luaval_to_v3f_c4f_t2f(lua_State* L, int lo, ax::V3F_C4F_T2F* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1926,7 +1926,7 @@ bool luaval_to_v3f_c4b_t2f(lua_State* L, int lo, ax::V3F_C4B_T2F* outValue, cons
             lua_pop(L, 1);
             return false;
         }
-        ok &= luaval_to_color4b(L, lua_gettop(L), &outValue->colors);
+        ok &= luaval_to_color4f(L, lua_gettop(L), &outValue->colors);
         if (!ok)
         {
             lua_pop(L, 1);
@@ -2040,7 +2040,7 @@ bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<ax::Vec3>* ret,
 
 bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
                                       int lo,
-                                      std::vector<ax::V3F_C4B_T2F>* ret,
+                                      std::vector<ax::V3F_C4F_T2F>* ret,
                                       const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
@@ -2060,14 +2060,14 @@ bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
     if (ok)
     {
         size_t len = lua_objlen(L, lo);
-        ax::V3F_C4B_T2F value;
+        ax::V3F_C4F_T2F value;
         for (size_t i = 0; i < len; i++)
         {
             lua_pushnumber(L, i + 1);
             lua_gettable(L, lo);
             if (lua_istable(L, lua_gettop(L)))
             {
-                ok &= luaval_to_v3f_c4b_t2f(L, lua_gettop(L), &value);
+                ok &= luaval_to_v3f_c4f_t2f(L, lua_gettop(L), &value);
                 if (ok)
                 {
                     ret->emplace_back(value);
@@ -2075,7 +2075,7 @@ bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
             }
             else
             {
-                AXASSERT(false, "V3F_C4B_T2F type is needed");
+                AXASSERT(false, "V3F_C4F_T2F type is needed");
             }
             lua_pop(L, 1);
         }

@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "2d/Node.h"
 #include "renderer/PipelineDescriptor.h"
 
-#include <vector>
+#include "base/axstd.h"
 
 namespace ax
 {
@@ -187,8 +187,8 @@ protected:
     Vec2 _barChangeRate;
     float _percentage = 0.0f;
     Sprite* _sprite   = nullptr;
-    std::vector<V2F_C4B_T2F> _vertexData;
-    std::vector<unsigned short> _indexData;
+    axstd::pod_vector<V2F_C4F_T2F> _vertexData;
+    axstd::pod_vector<unsigned short> _indexData;
     bool _reverseDirection = false;
 
     CustomCommand _customCommand;

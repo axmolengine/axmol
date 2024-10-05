@@ -275,7 +275,7 @@ void FastTMXLayer::updateTiles(const Rect& culledRect)
 
 void FastTMXLayer::updateVertexBuffer()
 {
-    unsigned int vertexBufferSize = (unsigned int)(sizeof(V3F_C4B_T2F) * _totalQuads.size() * 4);
+    unsigned int vertexBufferSize = (unsigned int)(sizeof(V3F_C4F_T2F) * _totalQuads.size() * 4);
     if (!_vertexBuffer)
     {
         _vertexBuffer = backend::DriverBase::getInstance()->newBuffer(vertexBufferSize, backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
@@ -503,7 +503,7 @@ void FastTMXLayer::updateTotalQuads()
         _tileToQuadIndex.resize(int(_layerSize.width * _layerSize.height), -1);
         _indicesVertexZOffsets.clear();
 
-        auto color = Color4B::WHITE;
+        auto color = Color::WHITE;
         color.a    = getDisplayedOpacity();
 
         if (_texture->hasPremultipliedAlpha())

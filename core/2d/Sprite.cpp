@@ -296,10 +296,10 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect, bool rotated)
         memset(&_quad, 0, sizeof(_quad));
 
         // Atlas: Color
-        _quad.bl.colors = Color4B::WHITE;
-        _quad.br.colors = Color4B::WHITE;
-        _quad.tl.colors = Color4B::WHITE;
-        _quad.tr.colors = Color4B::WHITE;
+        _quad.bl.colors = Color::WHITE;
+        _quad.br.colors = Color::WHITE;
+        _quad.tl.colors = Color::WHITE;
+        _quad.tr.colors = Color::WHITE;
 
         // update texture (calls updateBlendFunc)
         setTexture(texture);
@@ -683,7 +683,7 @@ void Sprite::updatePoly()
         };
 
         // needed in order to get color from "_quad"
-        V3F_C4B_T2F_Quad tmpQuad = _quad;
+        V3F_C4F_T2F_Quad tmpQuad = _quad;
 
         for (int i = 0; i < 9; ++i)
         {
@@ -736,7 +736,7 @@ void Sprite::setCenterRectNormalized(const ax::Rect& rectTopLeft)
             {
                 _renderMode = RenderMode::SLICE9;
                 // 9 quads + 7 exterior points = 16
-                _trianglesVertex = (V3F_C4B_T2F*)malloc(sizeof(*_trianglesVertex) * (9 + 3 + 4));
+                _trianglesVertex = (V3F_C4F_T2F*)malloc(sizeof(*_trianglesVertex) * (9 + 3 + 4));
                 // 9 quads, each needs 6 vertices = 54
                 _trianglesIndex = (unsigned short*)malloc(sizeof(*_trianglesIndex) * 6 * 9);
 
@@ -808,7 +808,7 @@ void Sprite::setTextureCoords(const Rect& rectInPoints)
     setTextureCoords(rectInPoints, &_quad);
 }
 
-void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_C4B_T2F_Quad* outQuad)
+void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_C4F_T2F_Quad* outQuad)
 {
     Texture2D* tex = (_renderMode == RenderMode::QUAD_BATCHNODE) ? _textureAtlas->getTexture() : _texture;
 
@@ -878,7 +878,7 @@ void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_C4B_T2F_Quad* outQua
     }
 }
 
-void Sprite::setVertexCoords(const Rect& rect, V3F_C4B_T2F_Quad* outQuad)
+void Sprite::setVertexCoords(const Rect& rect, V3F_C4F_T2F_Quad* outQuad)
 {
     float relativeOffsetX = _unflippedOffsetPositionFromCenter.x;
     float relativeOffsetY = _unflippedOffsetPositionFromCenter.y;
@@ -924,7 +924,7 @@ void Sprite::setVertexCoords(const Rect& rect, V3F_C4B_T2F_Quad* outQuad)
     }
 }
 
-void Sprite::populateTriangle(int quadIndex, const V3F_C4B_T2F_Quad& quad)
+void Sprite::populateTriangle(int quadIndex, const V3F_C4F_T2F_Quad& quad)
 {
     AXASSERT(quadIndex < 9, "Invalid quadIndex");
     // convert Quad intro Triangle since it takes less memory
@@ -1499,23 +1499,23 @@ void Sprite::flipY()
 
 void Sprite::updateColor()
 {
-    Color4B color4(_displayedColor.r, _displayedColor.g, _displayedColor.b, _displayedOpacity);
+    Color color(_displayedColor, _displayedOpacity / 255.0f);
 
     // special opacity for premultiplied textures
     if (_opacityModifyRGB)
     {
-        color4.r *= _displayedOpacity / 255.0f;
-        color4.g *= _displayedOpacity / 255.0f;
-        color4.b *= _displayedOpacity / 255.0f;
+        color.r *= color.a;
+        color.g *= color.a;
+        color.b *= color.a;
     }
 
     for (unsigned int i = 0; i < _polyInfo.triangles.vertCount; i++)
-        _polyInfo.triangles.verts[i].colors = color4;
+        _polyInfo.triangles.verts[i].colors = color;
 
     // related to issue #17116
     // when switching from Quad to Slice9, the color will be obtained from _quad
     // so it is important to update _quad colors as well.
-    _quad.bl.colors = _quad.tl.colors = _quad.br.colors = _quad.tr.colors = color4;
+    _quad.bl.colors = _quad.tl.colors = _quad.br.colors = _quad.tr.colors = color;
 
     // renders using batch node
     if (_renderMode == RenderMode::QUAD_BATCHNODE)

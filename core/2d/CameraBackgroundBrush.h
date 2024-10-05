@@ -95,7 +95,7 @@ public:
      * @param depth Depth used to clear depth buffer
      * @return Created brush
      */
-    static CameraBackgroundColorBrush* createColorBrush(const Color4F& color, float depth);
+    static CameraBackgroundColorBrush* createColorBrush(const Color& color, float depth);
 
     /** Creates a Skybox brush with 6 textures.
      @param positive_x texture for the right side of the texture cube face.
@@ -179,7 +179,7 @@ protected:
     CustomCommand _customCommand;
 
     bool _clearColor;
-    std::vector<V3F_C4B_T2F> _vertices;
+    std::vector<V3F_C4F_T2F> _vertices;
     struct
     {
         uint32_t stencilWriteMask            = 0;
@@ -206,7 +206,7 @@ public:
      * @param depth Depth used to clear the depth buffer
      * @return Created brush
      */
-    static CameraBackgroundColorBrush* create(const Color4F& color, float depth);
+    static CameraBackgroundColorBrush* create(const Color& color, float depth);
 
     /**
      * Draw background
@@ -217,7 +217,7 @@ public:
      * Set clear color
      * @param color Color used to clear the color buffer
      */
-    void setColor(const Color4F& color);
+    void setColor(const Color& color);
 
     CameraBackgroundColorBrush();
     virtual ~CameraBackgroundColorBrush();
@@ -225,7 +225,7 @@ public:
     virtual bool init() override;
 
 protected:
-    Color4F _color;
+    Color _color;
 };
 
 class TextureCube;

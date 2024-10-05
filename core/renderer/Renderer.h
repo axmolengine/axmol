@@ -209,13 +209,13 @@ public:
     @depth The clear depth value.
     @stencil The clear stencil value.
     */
-    void clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder);
+    void clear(ClearFlag flags, const Color& color, float depth, unsigned int stencil, float globalOrder);
 
     /**
      * Get color clear value.
      * @return Color clear value.
      */
-    const Color4F& getClearColor() const;
+    const Color& getClearColor() const;
 
     /**
      * Get depth clear value.
@@ -509,7 +509,7 @@ protected:
     std::vector<GroupCommand*> _groupCommandPool;
 
     // for TrianglesCommand
-    V3F_C4B_T2F _verts[VBO_SIZE];
+    V3F_C4F_T2F _verts[VBO_SIZE];
     unsigned short _indices[INDEX_VBO_SIZE];
     backend::Buffer* _vertexBuffer = nullptr;
     backend::Buffer* _indexBuffer  = nullptr;
@@ -556,7 +556,7 @@ protected:
 
     backend::RenderTarget* _offscreenRT = nullptr;
 
-    Color4F _clearColor = Color4F::BLACK;
+    Color _clearColor = Color::BLACK;
     ClearFlag _clearFlag;
 
     struct ScissorState

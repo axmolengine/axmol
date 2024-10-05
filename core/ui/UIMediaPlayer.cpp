@@ -220,7 +220,7 @@ void createMediaControlTexture()
 
     auto DrawStop = [&](const Vec2& middle) -> void {
         auto s = Vec2(middle.x - iconW / 2.f, middle.y + iconH / 2.f);
-        drawNode->drawSolidRect(s, s + Vec2(iconW, -iconH), Color4B::WHITE);
+        drawNode->drawSolidRect(s, s + Vec2(iconW, -iconH), Color::WHITE);
     };
 
     auto DrawPlay = [&](const Vec2& middle) -> void {
@@ -228,15 +228,15 @@ void createMediaControlTexture()
         auto p2 = Vec2(middle.x + iconW / 2.f, middle.y);
         auto p3 = Vec2(middle.x - iconW / 2.f, middle.y - iconH / 2.f);
 
-        drawNode->drawTriangle(p1, p2, p3, Color4B::WHITE);
+        drawNode->drawTriangle(p1, p2, p3, Color::WHITE);
     };
 
     auto DrawPause = [&](const Vec2& middle) -> void {
         auto start = Vec2(middle.x - 3, middle.y + iconH / 2.f);
-        drawNode->drawSolidRect(start, start + Vec2(-6, -iconH), Color4B::WHITE);
+        drawNode->drawSolidRect(start, start + Vec2(-6, -iconH), Color::WHITE);
 
         start = Vec2(middle.x + 3, middle.y + iconH / 2.f);
-        drawNode->drawSolidRect(start, start + Vec2(6, -iconH), Color4B::WHITE);
+        drawNode->drawSolidRect(start, start + Vec2(6, -iconH), Color::WHITE);
     };
 
     auto DrawEnterFullscreen = [&](const Vec2& middle) -> void {
@@ -246,20 +246,20 @@ void createMediaControlTexture()
         auto bottomRight = Vec2(middle.x + panelW / 2.f - 6, middle.y - panelH / 2.f + 6);
 
         // Top left
-        drawNode->drawSolidRect(topLeft, topLeft + Vec2(20, -6), Color4B::WHITE);
-        drawNode->drawSolidRect(topLeft, topLeft + Vec2(6, -20), Color4B::WHITE);
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(20, -6), Color::WHITE);
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(6, -20), Color::WHITE);
 
         // Top right
-        drawNode->drawSolidRect(topRight, topRight + Vec2(-20, -6), Color4B::WHITE);
-        drawNode->drawSolidRect(topRight, topRight + Vec2(-6, -20), Color4B::WHITE);
+        drawNode->drawSolidRect(topRight, topRight + Vec2(-20, -6), Color::WHITE);
+        drawNode->drawSolidRect(topRight, topRight + Vec2(-6, -20), Color::WHITE);
 
         // Bottom left
-        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(20, 6), Color4B::WHITE);
-        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(6, 20), Color4B::WHITE);
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(20, 6), Color::WHITE);
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(6, 20), Color::WHITE);
 
         // Bottom right
-        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(-20, 6), Color4B::WHITE);
-        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(-6, 20), Color4B::WHITE);
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(-20, 6), Color::WHITE);
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(-6, 20), Color::WHITE);
     };
 
     auto DrawExitFullScreen = [&](const Vec2& middle) -> void {
@@ -269,24 +269,24 @@ void createMediaControlTexture()
         auto bottomRight = Vec2(middle.x + 4, middle.y - 4);
 
         // Top left
-        drawNode->drawSolidRect(topLeft, topLeft + Vec2(-20, 6), Color4B::WHITE);
-        drawNode->drawSolidRect(topLeft, topLeft + Vec2(-6, 20), Color4B::WHITE);
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(-20, 6), Color::WHITE);
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(-6, 20), Color::WHITE);
 
         // Top right
-        drawNode->drawSolidRect(topRight, topRight + Vec2(20, 6), Color4B::WHITE);
-        drawNode->drawSolidRect(topRight, topRight + Vec2(6, 20), Color4B::WHITE);
+        drawNode->drawSolidRect(topRight, topRight + Vec2(20, 6), Color::WHITE);
+        drawNode->drawSolidRect(topRight, topRight + Vec2(6, 20), Color::WHITE);
 
         // Bottom left
-        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(-20, -6), Color4B::WHITE);
-        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(-6, -20), Color4B::WHITE);
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(-20, -6), Color::WHITE);
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(-6, -20), Color::WHITE);
 
         // Bottom right
-        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(20, -6), Color4B::WHITE);
-        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(6, -20), Color4B::WHITE);
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(20, -6), Color::WHITE);
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(6, -20), Color::WHITE);
     };
 
     auto DrawSliderControlButton = [&](const Vec2& middle) -> void {
-        drawNode->drawSolidCircle(middle, panelW / 2, 0, 180, Color4B::WHITE);
+        drawNode->drawSolidCircle(middle, panelW / 2, 0, 180, Color::WHITE);
     };
 
     std::map<MediaControlButtonId, std::function<void(const Vec2&)>> items = {

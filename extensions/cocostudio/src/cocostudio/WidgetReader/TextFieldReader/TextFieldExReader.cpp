@@ -16,12 +16,12 @@ using namespace ax;
 using namespace ui;
 using namespace flatbuffers;
 
-inline Color4B Color4BFromFb(const flatbuffers::Color* pColor)
+inline Color4B Color4BFromFb(const flatbuffers::FColor* pColor)
 {
     return Color4B(pColor->r(), pColor->g(), pColor->b(), pColor->a());
 }
 
-inline Color3B Color3BFromFb(const flatbuffers::Color* pColor)
+inline Color3B Color3BFromFb(const flatbuffers::FColor* pColor)
 {
     return Color3B(pColor->r(), pColor->g(), pColor->b());
 }
@@ -259,9 +259,9 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
         child = child.next_sibling();
     }
 
-    Color f_textColor(textColor.a, textColor.r, textColor.g, textColor.b);
-    Color f_placeholderColor(placeholderColor.a, placeholderColor.r, placeholderColor.g, placeholderColor.b);
-    Color f_cursorColor(255, cursorColor.r, cursorColor.g, cursorColor.b);
+    FColor f_textColor(textColor.a, textColor.r, textColor.g, textColor.b);
+    FColor f_placeholderColor(placeholderColor.a, placeholderColor.r, placeholderColor.g, placeholderColor.b);
+    FColor f_cursorColor(255, cursorColor.r, cursorColor.g, cursorColor.b);
     auto options = CreateTextFieldExOptions(
         *builder, widgetOptions,
         CreateResourceData(*builder, builder->CreateString(path), builder->CreateString(plistFile), resourceType),

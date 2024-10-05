@@ -320,13 +320,13 @@ public:
                        float expand);
 
 private:
-    void convertColor4B24F(Color4F& outColor, const Color4B& inColor);
+    void convertColor4B24F(Color& outColor, const Color4B& inColor);
 
     Color4B _startColor     = Color4B::BLACK;
-    Color4F _startColorRend = Color4F::BLACK;  // start color used in shader
+    Color _startColorRend = Color::BLACK;  // start color used in shader
 
     Color4B _endColor     = Color4B::BLACK;
-    Color4F _endColorRend = Color4F::BLACK;  // end color used in shader
+    Color _endColorRend = Color::BLACK;  // end color used in shader
 
     Vec2 _vertices[4];
     Vec2 _center;

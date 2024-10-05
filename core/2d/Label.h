@@ -474,7 +474,7 @@ public:
     /**
      * Return the shadow effect color value.
      */
-    Color4F getShadowColor() const { return _shadowColor4F; }
+    Color getShadowColor() const { return _shadowColor4F; }
 
     /**
      * Return the outline effect size value.
@@ -489,7 +489,7 @@ public:
     /**
      * Return current effect color value.
      */
-    Color4F getEffectColor() const { return _effectColorF; }
+    Color getEffectColor() const { return _effectColorF; }
 
     /** Sets the Label's text horizontal alignment.*/
     void setAlignment(TextHAlignment hAlignment) { setAlignment(hAlignment, _vAlignment); }
@@ -874,9 +874,9 @@ protected:
     Rect _bmRect;
     Rect _reusedRect;
 
-    Color4F _effectColorF;
-    Color4F _textColorF;
-    Color4F _shadowColor4F;
+    Color _effectColorF;
+    Color _textColorF;
+    Color _shadowColor4F;
     Mat4 _shadowTransform;
 
     std::u32string _utf32Text;

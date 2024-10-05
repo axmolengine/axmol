@@ -5,7 +5,7 @@
 NS_FGUI_BEGIN
 using namespace ax;
 
-static void drawVertRect(ax::DrawNode* shape, float x, float y, float width, float height, const ax::Color4B& color)
+static void drawVertRect(ax::DrawNode* shape, float x, float y, float width, float height, const ax::Color& color)
 {
     float mx = x + width;
     float my = y + height;
@@ -40,7 +40,7 @@ void GGraph::handleInit()
     _displayObject = _shape;
 }
 
-void GGraph::drawRect(float aWidth, float aHeight, int lineSize, const ax::Color4B& lineColor, const ax::Color4B& fillColor)
+void GGraph::drawRect(float aWidth, float aHeight, int lineSize, const ax::Color& lineColor, const ax::Color& fillColor)
 {
     _type = 0; //avoid updateshape call in handleSizeChange
     setSize(aWidth, aHeight);
@@ -51,7 +51,7 @@ void GGraph::drawRect(float aWidth, float aHeight, int lineSize, const ax::Color
     updateShape();
 }
 
-void GGraph::drawEllipse(float aWidth, float aHeight, int lineSize, const ax::Color4B& lineColor, const ax::Color4B& fillColor)
+void GGraph::drawEllipse(float aWidth, float aHeight, int lineSize, const ax::Color& lineColor, const ax::Color& fillColor)
 {
     _type = 0; //avoid updateshape call in handleSizeChange
     setSize(aWidth, aHeight);
@@ -62,7 +62,7 @@ void GGraph::drawEllipse(float aWidth, float aHeight, int lineSize, const ax::Co
     updateShape();
 }
 
-void GGraph::drawPolygon(int lineSize, const ax::Color4B& lineColor, const ax::Color4B& fillColor, const ax::Vec2* points, int count)
+void GGraph::drawPolygon(int lineSize, const ax::Color& lineColor, const ax::Color& fillColor, const ax::Vec2* points, int count)
 {
     _type = 3;
     _lineSize = lineSize;
@@ -83,7 +83,7 @@ void GGraph::drawPolygon(int lineSize, const ax::Color4B& lineColor, const ax::C
     updateShape();
 }
 
-void GGraph::drawRegularPolygon(int lineSize, const ax::Color4B& lineColor, const ax::Color4B& fillColor,
+void GGraph::drawRegularPolygon(int lineSize, const ax::Color& lineColor, const ax::Color& fillColor,
                                 int sides, float startAngle, const float* distances, int count)
 {
     _type = 4;
@@ -189,7 +189,7 @@ ax::Color3B GGraph::getColor() const
 
 void GGraph::setColor(const ax::Color3B& value)
 {
-    _fillColor = Color4B(value, _fillColor.a);
+    _fillColor = ax::Color{value, _fillColor.a};
     updateShape();
 }
 
@@ -247,8 +247,8 @@ void GGraph::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
     if (_type != 0)
     {
         _lineSize = buffer->readInt();
-        _lineColor = (Color4B)buffer->readColor();
-        _fillColor = (Color4B)buffer->readColor();
+        _lineColor = ax::Color{buffer->readColor()};
+        _fillColor = ax::Color{buffer->readColor()};
         if (buffer->readBool())
         {
             _cornerRadius = new float[4];

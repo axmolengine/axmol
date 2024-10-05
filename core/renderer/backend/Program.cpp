@@ -62,12 +62,12 @@ struct VertexLayoutHelper
         /// a_texCoord
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
                                 program->getAttributeLocation(backend::Attribute::TEXCOORD),
-                                backend::VertexFormat::FLOAT2, offsetof(V3F_C4B_T2F, texCoords), false);
+                                backend::VertexFormat::FLOAT2, offsetof(V3F_C4F_T2F, texCoords), false);
 
         /// a_color
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::UBYTE4, offsetof(V3F_C4B_T2F, colors), true);
-        vertexLayout->setStride(sizeof(V3F_C4B_T2F));
+                                backend::VertexFormat::FLOAT4, offsetof(V3F_C4F_T2F, colors), false);
+        vertexLayout->setStride(sizeof(V3F_C4F_T2F));
     }
 
     static void setupDrawNode(Program* program)
@@ -80,12 +80,12 @@ struct VertexLayoutHelper
 
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
                                 program->getAttributeLocation(backend::Attribute::TEXCOORD),
-                                backend::VertexFormat::FLOAT2, offsetof(V2F_C4B_T2F, texCoords), false);
+                                backend::VertexFormat::FLOAT2, offsetof(V2F_C4F_T2F, texCoords), false);
 
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::UBYTE4, offsetof(V2F_C4B_T2F, colors), true);
+                                backend::VertexFormat::FLOAT4, offsetof(V2F_C4F_T2F, colors), true);
 
-        vertexLayout->setStride(sizeof(V2F_C4B_T2F));
+        vertexLayout->setStride(sizeof(V2F_C4F_T2F));
     }
 
     static void setupDrawNode3D(Program* program)
@@ -97,9 +97,9 @@ struct VertexLayoutHelper
                                 backend::VertexFormat::FLOAT3, 0, false);
 
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::UBYTE4, offsetof(V3F_C4B, colors), true);
+                                backend::VertexFormat::FLOAT4, offsetof(V3F_C4F, colors), true);
 
-        vertexLayout->setStride(sizeof(V3F_C4B));
+        vertexLayout->setStride(sizeof(V3F_C4F));
     }
 
     static void setupSkyBox(Program* program)

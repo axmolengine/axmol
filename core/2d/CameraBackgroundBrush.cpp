@@ -62,7 +62,7 @@ CameraBackgroundBrush* CameraBackgroundBrush::createNoneBrush()
     return ret;
 }
 
-CameraBackgroundColorBrush* CameraBackgroundBrush::createColorBrush(const Color4F& color, float depth)
+CameraBackgroundColorBrush* CameraBackgroundBrush::createColorBrush(const Color& color, float depth)
 {
     return CameraBackgroundColorBrush::create(color, depth);
 }
@@ -138,7 +138,7 @@ bool CameraBackgroundDepthBrush::init()
     _vertices[2].vertices = Vec3(1, 1, 0);
     _vertices[3].vertices = Vec3(-1, 1, 0);
 
-    _vertices[0].colors = _vertices[1].colors = _vertices[2].colors = _vertices[3].colors = Color4B(0, 0, 0, 1);
+    _vertices[0].colors = _vertices[1].colors = _vertices[2].colors = _vertices[3].colors = Color(0, 0, 0, 1);
 
     _vertices[0].texCoords = Tex2F(0, 0);
     _vertices[1].texCoords = Tex2F(1, 0);
@@ -231,16 +231,16 @@ void CameraBackgroundColorBrush::drawBackground(Camera* camera)
     CameraBackgroundDepthBrush::drawBackground(camera);
 }
 
-void CameraBackgroundColorBrush::setColor(const Color4F& color)
+void CameraBackgroundColorBrush::setColor(const Color& color)
 {
     for (auto&& vert : _vertices)
     {
-        vert.colors = Color4B(color);
+        vert.colors = color;
     }
     _customCommand.updateVertexBuffer(_vertices.data(), sizeof(_vertices[0]) * _vertices.size());
 }
 
-CameraBackgroundColorBrush* CameraBackgroundColorBrush::create(const Color4F& color, float depth)
+CameraBackgroundColorBrush* CameraBackgroundColorBrush::create(const Color& color, float depth)
 {
     auto ret = new CameraBackgroundColorBrush();
 
