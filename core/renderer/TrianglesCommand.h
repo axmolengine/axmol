@@ -54,14 +54,14 @@ public:
     /**The structure of Triangles. */
     struct Triangles
     {
-        Triangles(V3F_C4B_T2F* _verts, unsigned short* _indices, unsigned int _vertCount, unsigned int _indexCount)
+        Triangles(V3F_C4F_T2F* _verts, unsigned short* _indices, unsigned int _vertCount, unsigned int _indexCount)
             : verts(_verts), indices(_indices), vertCount(_vertCount), indexCount(_indexCount)
         {}
 
         Triangles() {}
 
         /**Vertex data pointer.*/
-        V3F_C4B_T2F* verts = nullptr;
+        V3F_C4F_T2F* verts = nullptr;
         /**Index data pointer.*/
         unsigned short* indices = nullptr;
         /**The number of vertices.*/
@@ -98,7 +98,7 @@ public:
     /**Get the index count of the triangles.*/
     size_t getIndexCount() const { return _triangles.indexCount; }
     /**Get the vertex data pointer.*/
-    const V3F_C4B_T2F* getVertices() const { return _triangles.verts; }
+    const V3F_C4F_T2F* getVertices() const { return _triangles.verts; }
     /**Get the index data pointer.*/
     const unsigned short* getIndices() const { return _triangles.indices; }
     /**Get the model view matrix.*/

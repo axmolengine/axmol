@@ -46,9 +46,9 @@ void Physics3DDebugDrawer::drawLine(const btVector3& from, const btVector3& to, 
 
     V3F_C4F a, b;
     a.vertices = convertbtVector3ToVec3(from);
-    a.colors   = Color4F(col.x, col.y, col.z, 1.0f);
+    a.colors   = Color(col.x, col.y, col.z, 1.0f);
     b.vertices = convertbtVector3ToVec3(to);
-    b.colors   = Color4F(col.x, col.y, col.z, 1.0f);
+    b.colors   = Color(col.x, col.y, col.z, 1.0f);
 
     _buffer.emplace_back(a);
     _buffer.emplace_back(b);

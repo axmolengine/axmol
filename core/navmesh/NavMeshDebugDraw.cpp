@@ -44,7 +44,7 @@ NavMeshDebugDraw::NavMeshDebugDraw()
     _programState = new backend::ProgramState(program);
     _locMVP       = _programState->getUniformLocation("u_MVPMatrix");
 
-    // the POSITION_COLOR default vertex layout is: V3F_C4B, so we need modify it
+    // the POSITION_COLOR default vertex layout is: V3F_C4F, so we need modify it
     auto vertexLayout = _programState->getMutableVertexLayout();
     vertexLayout->setAttrib("a_position",
                                 _programState->getAttributeLocation(backend::Attribute::POSITION),

@@ -51,12 +51,12 @@ enum class VertexLayoutType
     Unspec,      // needs binding after program load
     Pos,         // V2F
     Texture,     // T2F
-    Sprite,      // V3F_C4B_T2F posTexColor
-    DrawNode,    // V2F_C4B_T2F
-    DrawNode3D,  // V3F_C4B
+    Sprite,      // V3F_C4F_T2F posTexColor
+    DrawNode,    // V2F_C4F_T2F
+    DrawNode3D,  // V3F_C4F
     SkyBox,      // V3F
-    PU3D,        // V3F_C4B_T2F // same with sprite, TODO: reuse spriete
-    posColor,    // V3F_C4B
+    PU3D,        // V3F_C4F_T2F // same with sprite, TODO: reuse sprite
+    posColor,    // V3F_C4F
     Terrain3D,   // V3F_T2F_V3F
     Instanced,   // builtin instanced vertex format for 3D transform
     Count

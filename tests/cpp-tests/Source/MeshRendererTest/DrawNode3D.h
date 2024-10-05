@@ -98,7 +98,7 @@ protected:
     backend::ProgramState* _programStateLine                 = nullptr;
     backend::DepthStencilDescriptor* _depthstencilDescriptor = nullptr;
     backend::UniformLocation _locMVPMatrix;
-    std::vector<V3F_C4B> _bufferLines;
+    std::vector<V3F_C4F> _bufferLines;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode3D);
