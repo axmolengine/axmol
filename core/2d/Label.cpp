@@ -2523,18 +2523,16 @@ void Label::updateColor()
     // special opacity for premultiplied textures
     if (_isOpacityModifyRGB)
     {
-        color.r *= _displayedOpacity / 255.0f;
-        color.g *= _displayedOpacity / 255.0f;
-        color.b *= _displayedOpacity / 255.0f;
+        color.r *= color.a;
+        color.g *= color.a;
+        color.b *= color.a;
     }
 
-    ax::TextureAtlas* textureAtlas;
-    V3F_C4F_T2F_Quad* quads;
     for (auto&& batchNode : _batchNodes)
     {
-        textureAtlas = batchNode->getTextureAtlas();
-        quads        = textureAtlas->getQuads();
-        auto count   = textureAtlas->getTotalQuads();
+        auto textureAtlas = batchNode->getTextureAtlas();
+        auto quads        = textureAtlas->getQuads();
+        auto count        = textureAtlas->getTotalQuads();
 
         for (int index = 0; index < count; ++index)
         {
