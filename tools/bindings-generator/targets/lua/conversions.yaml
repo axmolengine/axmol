@@ -53,7 +53,7 @@ conversions:
     "Rect": "ok &= luaval_to_rect(tolua_S, ${arg_idx}, &${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
     "Size": "ok &= luaval_to_size(tolua_S, ${arg_idx}, &${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
     "Color4B": "ok &=luaval_to_color4b(tolua_S, ${arg_idx}, &${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
-    "Color4F": "ok &=luaval_to_color4f(tolua_S, ${arg_idx}, &${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
+    "Color": "ok &=luaval_to_color(tolua_S, ${arg_idx}, &${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
     "Color3B": "ok &= luaval_to_color3b(tolua_S, ${arg_idx}, &${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
     "PhysicsMaterial": "ok &= luaval_to_physics_material(tolua_S, ${arg_idx}, &${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"
     "Array*": "ok &= luaval_to_array(tolua_S, ${arg_idx}, &${out_value}, \"${lua_namespaced_class_name}:${func_name}\")"

@@ -465,7 +465,7 @@ int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
 
         ok &= luaval_to_vec3(L, 3, &arg1, "ax.DrawNode3D:drawLine");
 
-        ok &= luaval_to_color4f(L, 4, &arg2, "ax.DrawNode3D:drawLine");
+        ok &= luaval_to_color(L, 4, &arg2, "ax.DrawNode3D:drawLine");
         if (!ok)
             return 0;
         cobj->drawLine(arg0, arg1, arg2);
@@ -587,7 +587,7 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
             lua_pop(L, 1);
         }
 
-        ok &= luaval_to_color4f(L, 3, &arg1, "ax.DrawNode3D:drawCube");
+        ok &= luaval_to_color(L, 3, &arg1, "ax.DrawNode3D:drawCube");
         if (!ok)
             return 0;
         cobj->drawCube(&arg0[0], arg1);

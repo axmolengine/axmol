@@ -475,8 +475,8 @@ void ParticleBatchNode::increaseAtlasCapacityTo(ssize_t quantity)
 void ParticleBatchNode::disableParticle(int particleIndex)
 {
     V3F_C4F_T2F_Quad* quad = &((_textureAtlas->getQuads())[particleIndex]);
-    quad->br.vertices.x = quad->br.vertices.y = quad->tr.vertices.x = quad->tr.vertices.y = quad->tl.vertices.x =
-        quad->tl.vertices.y = quad->bl.vertices.x = quad->bl.vertices.y = 0.0f;
+    quad->br.position.x = quad->br.position.y = quad->tr.position.x = quad->tr.position.y = quad->tl.position.x =
+        quad->tl.position.y = quad->bl.position.x = quad->bl.position.y = 0.0f;
 }
 
 // ParticleBatchNode - add / remove / reorder helper methods

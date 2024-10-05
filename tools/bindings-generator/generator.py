@@ -1743,8 +1743,8 @@ class Generator(object):
                     return "color3b_object"
                 if namespace_class_name.find("ax::Color4B") == 0:
                     return "color4b_object"
-                if namespace_class_name.find("ax::Color4F") == 0:
-                    return "color4f_object"
+                if namespace_class_name.find("ax::Color") == 0:
+                    return "color_object"
                 else:
                     return namespace_class_name.replace("*","").replace("const ", "").replace(k,v)
         return namespace_class_name.replace("*","").replace("const ", "")

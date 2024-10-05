@@ -81,7 +81,7 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
 
     if (_vertexBuffer == nullptr)
     {
-        size_t stride = sizeof(VertexInfo);
+        size_t stride = sizeof(V3F_T2F_C4F);
         _vertexBuffer =
             backend::DriverBase::getInstance()->newBuffer(stride * 4 * particleSystem->getParticleQuota(),
                                                       backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
@@ -441,11 +441,11 @@ void PUParticle3DQuadRender::determineUVCoords(PUParticle3D* particle)
     particle->rt_uv = particle->lb_uv + Vec2(_textureCoordsColStep, _textureCoordsRowStep);
 }
 
-void PUParticle3DQuadRender::fillVertex(unsigned short index, const Vec3& pos, const Vec4& color, const Vec2& uv)
+void PUParticle3DQuadRender::fillVertex(unsigned short index, const Vec3& pos, const Color& color, const Vec2& uv)
 {
     _vertices[index].position = pos;
     _vertices[index].color    = color;
-    _vertices[index].uv       = uv;
+    _vertices[index].texCoord = uv;
 }
 
 void PUParticle3DQuadRender::fillTriangle(unsigned short index, unsigned short v0, unsigned short v1, unsigned short v2)
@@ -699,7 +699,7 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
 
     if (_vertexBuffer == nullptr && _indexBuffer == nullptr)
     {
-        size_t stride = sizeof(VertexInfo);
+        size_t stride = sizeof(V3F_T2F_C4F);
         _vertexBuffer =
             backend::DriverBase::getInstance()->newBuffer(stride * 8 * particleSystem->getParticleQuota(),
                                                       backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
@@ -736,44 +736,44 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
         val                                 = texRot * Vec3(0.0f, 0.75f, 0.0);
         _vertices[vertexindex + 0].position = particle->position + Vec3(-halfWidth, -halfHeight, halfDepth);
         _vertices[vertexindex + 0].color    = particle->color;
-        _vertices[vertexindex + 0].uv.x     = val.x;
-        _vertices[vertexindex + 0].uv.y     = val.y;
+        _vertices[vertexindex + 0].texCoord.x     = val.x;
+        _vertices[vertexindex + 0].texCoord.y     = val.y;
         val                                 = texRot * Vec3(0.0f, 0.25f, 0.0);
         _vertices[vertexindex + 1].position = particle->position + Vec3(halfWidth, -halfHeight, halfDepth);
         _vertices[vertexindex + 1].color    = particle->color;
-        _vertices[vertexindex + 1].uv.x     = val.x;
-        _vertices[vertexindex + 1].uv.y     = val.y;
+        _vertices[vertexindex + 1].texCoord.x     = val.x;
+        _vertices[vertexindex + 1].texCoord.y     = val.y;
         val                                 = texRot * Vec3(0.5f, 0.25f, 0.0);
         _vertices[vertexindex + 2].position = particle->position + Vec3(halfWidth, halfHeight, halfDepth);
         _vertices[vertexindex + 2].color    = particle->color;
-        _vertices[vertexindex + 2].uv.x     = val.x;
-        _vertices[vertexindex + 2].uv.y     = val.y;
+        _vertices[vertexindex + 2].texCoord.x     = val.x;
+        _vertices[vertexindex + 2].texCoord.y     = val.y;
         val                                 = texRot * Vec3(0.5f, 0.75f, 0.0);
         _vertices[vertexindex + 3].position = particle->position + Vec3(-halfWidth, halfHeight, halfDepth);
         _vertices[vertexindex + 3].color    = particle->color;
-        _vertices[vertexindex + 3].uv.x     = val.x;
-        _vertices[vertexindex + 3].uv.y     = val.y;
+        _vertices[vertexindex + 3].texCoord.x     = val.x;
+        _vertices[vertexindex + 3].texCoord.y     = val.y;
 
         val                                 = texRot * Vec3(0.0f, 0.0f, 0.0);
         _vertices[vertexindex + 4].position = particle->position + Vec3(halfWidth, -halfHeight, -halfDepth);
         _vertices[vertexindex + 4].color    = particle->color;
-        _vertices[vertexindex + 4].uv.x     = val.x;
-        _vertices[vertexindex + 4].uv.y     = val.y;
+        _vertices[vertexindex + 4].texCoord.x     = val.x;
+        _vertices[vertexindex + 4].texCoord.y     = val.y;
         val                                 = texRot * Vec3(0.0f, 1.0f, 0.0);
         _vertices[vertexindex + 5].position = particle->position + Vec3(-halfWidth, -halfHeight, -halfDepth);
         _vertices[vertexindex + 5].color    = particle->color;
-        _vertices[vertexindex + 5].uv.x     = val.x;
-        _vertices[vertexindex + 5].uv.y     = val.y;
+        _vertices[vertexindex + 5].texCoord.x     = val.x;
+        _vertices[vertexindex + 5].texCoord.y     = val.y;
         val                                 = texRot * Vec3(0.5f, 1.0f, 0.0);
         _vertices[vertexindex + 6].position = particle->position + Vec3(-halfWidth, halfHeight, -halfDepth);
         _vertices[vertexindex + 6].color    = particle->color;
-        _vertices[vertexindex + 6].uv.x     = val.x;
-        _vertices[vertexindex + 6].uv.y     = val.y;
+        _vertices[vertexindex + 6].texCoord.x     = val.x;
+        _vertices[vertexindex + 6].texCoord.y     = val.y;
         val                                 = texRot * Vec3(0.5f, 0.0f, 0.0);
         _vertices[vertexindex + 7].position = particle->position + Vec3(halfWidth, halfHeight, -halfDepth);
         _vertices[vertexindex + 7].color    = particle->color;
-        _vertices[vertexindex + 7].uv.x     = val.x;
-        _vertices[vertexindex + 7].uv.y     = val.y;
+        _vertices[vertexindex + 7].texCoord.x     = val.x;
+        _vertices[vertexindex + 7].texCoord.y     = val.y;
 
         vertexindex += 8;
         index += 36;
@@ -891,7 +891,7 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
     unsigned int indexCount  = 6 * _numberOfRings * (_numberOfSegments + 1);
     if (_vertexBuffer == nullptr && _indexBuffer == nullptr)
     {
-        size_t stride = sizeof(VertexInfo);
+        size_t stride = sizeof(V3F_T2F_C4F);
         _vertexBuffer =
             backend::DriverBase::getInstance()->newBuffer(stride * vertexCount * particleSystem->getParticleQuota(),
                                                       backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
@@ -937,11 +937,11 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
 
         for (unsigned int i = 0; i < vertexCount; ++i)
         {
-            val = texRot * Vec3(_vertexTemplate[vertexindex + i].uv.x, _vertexTemplate[vertexindex + i].uv.y, 0.0f);
+            val = texRot * Vec3(_vertexTemplate[vertexindex + i].texCoord.x, _vertexTemplate[vertexindex + i].texCoord.y, 0.0f);
             mat.transformPoint(_vertexTemplate[vertexindex + i].position, &_vertices[vertexindex + i].position);
             _vertices[vertexindex + i].color = particle->color;
-            _vertices[vertexindex + i].uv.x  = val.x;
-            _vertices[vertexindex + i].uv.y  = val.y;
+            _vertices[vertexindex + i].texCoord.x  = val.x;
+            _vertices[vertexindex + i].texCoord.y  = val.y;
         }
         vertexindex += vertexCount;
         index += indexCount;
@@ -990,7 +990,7 @@ void PUSphereRender::buildBuffers(unsigned short count)
 
             for (unsigned int segment = 0; segment <= _numberOfSegments; segment++)
             {
-                VertexInfo vi;
+                V3F_T2F_C4F vi;
                 float x0 = r0 * sinf(segment * stepSegmentAngle);
                 float z0 = r0 * cosf(segment * stepSegmentAngle);
 
@@ -998,11 +998,11 @@ void PUSphereRender::buildBuffers(unsigned short count)
                 vi.position.set(x0, y0, z0);
 
                 // Colour
-                vi.color = Vec4::ONE;
+                vi.color = Color::WHITE;
 
                 // Texture Coordinates
-                vi.uv.x = (float)segment / (float)_numberOfSegments;
-                vi.uv.y = 1.0f - (float)ring / (float)_numberOfRings;
+                vi.texCoord.x = (float)segment / (float)_numberOfSegments;
+                vi.texCoord.y = 1.0f - (float)ring / (float)_numberOfRings;
 
                 if (ring != _numberOfRings)
                 {

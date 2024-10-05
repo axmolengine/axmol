@@ -19,13 +19,13 @@ void SpriteSheetLoader::initializePolygonInfo(const Vec2& textureSize,
 
     const auto scaleFactor = AX_CONTENT_SCALE_FACTOR();
 
-    auto* vertexData = new V3F_C4F_T2F[vertexCount];
+    auto* vertexData = new V3F_T2F_C4F[vertexCount];
     for (size_t i = 0; i < vertexCount / 2; i++)
     {
-        vertexData[i].colors = Color::WHITE;
-        vertexData[i].vertices =
+        vertexData[i].color = Color::WHITE;
+        vertexData[i].position =
             Vec3(vertices[i * 2] / scaleFactor, (spriteSize.height - vertices[i * 2 + 1]) / scaleFactor, 0);
-        vertexData[i].texCoords =
+        vertexData[i].texCoord =
             Tex2F(verticesUV[i * 2] / textureSize.width, verticesUV[i * 2 + 1] / textureSize.height);
     }
 

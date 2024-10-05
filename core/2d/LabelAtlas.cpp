@@ -182,32 +182,32 @@ void LabelAtlas::updateAtlasValues()
         float bottom = top + itemHeightInPixels / textureHigh;
 #endif  // ! AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
 
-        quads[i].tl.texCoords.u = left;
-        quads[i].tl.texCoords.v = top;
-        quads[i].tr.texCoords.u = right;
-        quads[i].tr.texCoords.v = top;
-        quads[i].bl.texCoords.u = left;
-        quads[i].bl.texCoords.v = bottom;
-        quads[i].br.texCoords.u = right;
-        quads[i].br.texCoords.v = bottom;
+        quads[i].tl.texCoord.u = left;
+        quads[i].tl.texCoord.v = top;
+        quads[i].tr.texCoord.u = right;
+        quads[i].tr.texCoord.v = top;
+        quads[i].bl.texCoord.u = left;
+        quads[i].bl.texCoord.v = bottom;
+        quads[i].br.texCoord.u = right;
+        quads[i].br.texCoord.v = bottom;
 
-        quads[i].bl.vertices.x = (float)(i * _itemWidth);
-        quads[i].bl.vertices.y = 0;
-        quads[i].bl.vertices.z = 0.0f;
-        quads[i].br.vertices.x = (float)(i * _itemWidth + _itemWidth);
-        quads[i].br.vertices.y = 0;
-        quads[i].br.vertices.z = 0.0f;
-        quads[i].tl.vertices.x = (float)(i * _itemWidth);
-        quads[i].tl.vertices.y = (float)(_itemHeight);
-        quads[i].tl.vertices.z = 0.0f;
-        quads[i].tr.vertices.x = (float)(i * _itemWidth + _itemWidth);
-        quads[i].tr.vertices.y = (float)(_itemHeight);
-        quads[i].tr.vertices.z = 0.0f;
+        quads[i].bl.position.x = (float)(i * _itemWidth);
+        quads[i].bl.position.y = 0;
+        quads[i].bl.position.z = 0.0f;
+        quads[i].br.position.x = (float)(i * _itemWidth + _itemWidth);
+        quads[i].br.position.y = 0;
+        quads[i].br.position.z = 0.0f;
+        quads[i].tl.position.x = (float)(i * _itemWidth);
+        quads[i].tl.position.y = (float)(_itemHeight);
+        quads[i].tl.position.z = 0.0f;
+        quads[i].tr.position.x = (float)(i * _itemWidth + _itemWidth);
+        quads[i].tr.position.y = (float)(_itemHeight);
+        quads[i].tr.position.z = 0.0f;
         Color c(_displayedColor, _displayedOpacity / 255.0f);
-        quads[i].tl.colors = c;
-        quads[i].tr.colors = c;
-        quads[i].bl.colors = c;
-        quads[i].br.colors = c;
+        quads[i].tl.color = c;
+        quads[i].tr.color = c;
+        quads[i].bl.color = c;
+        quads[i].br.color = c;
     }
     if (n > 0)
     {
@@ -259,10 +259,10 @@ void LabelAtlas::updateColor()
         ssize_t length = _string.length();
         for (int index = 0; index < length; index++)
         {
-            quads[index].bl.colors = color;
-            quads[index].br.colors = color;
-            quads[index].tl.colors = color;
-            quads[index].tr.colors = color;
+            quads[index].bl.color = color;
+            quads[index].br.color = color;
+            quads[index].tl.color = color;
+            quads[index].tr.color = color;
             _textureAtlas->updateQuad(quads[index], index);
         }
     }

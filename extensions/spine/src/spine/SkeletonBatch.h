@@ -49,7 +49,7 @@ namespace spine {
 
 		void update(float delta);
 
-		axmol::V3F_C4F_T2F *allocateVertices(uint32_t numVertices);
+		axmol::V3F_T2F_C4F *allocateVertices(uint32_t numVertices);
 		void deallocateVertices(uint32_t numVertices);
 		unsigned short *allocateIndices(uint32_t numIndices);
 		void deallocateIndices(uint32_t numVertices);
@@ -74,7 +74,7 @@ namespace spine {
 		uint32_t _nextFreeCommand;
 
 		// pool of vertices
-		std::vector<axmol::V3F_C4F_T2F> _vertices;
+		std::vector<axmol::V3F_T2F_C4F> _vertices;
 		uint32_t _numVertices;
 
 		// pool of indices

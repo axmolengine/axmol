@@ -296,10 +296,10 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect, bool rotated)
         memset(&_quad, 0, sizeof(_quad));
 
         // Atlas: Color
-        _quad.bl.colors = Color::WHITE;
-        _quad.br.colors = Color::WHITE;
-        _quad.tl.colors = Color::WHITE;
-        _quad.tr.colors = Color::WHITE;
+        _quad.bl.color = Color::WHITE;
+        _quad.br.color = Color::WHITE;
+        _quad.tl.color = Color::WHITE;
+        _quad.tr.color = Color::WHITE;
 
         // update texture (calls updateBlendFunc)
         setTexture(texture);
@@ -736,7 +736,7 @@ void Sprite::setCenterRectNormalized(const ax::Rect& rectTopLeft)
             {
                 _renderMode = RenderMode::SLICE9;
                 // 9 quads + 7 exterior points = 16
-                _trianglesVertex = (V3F_C4F_T2F*)malloc(sizeof(*_trianglesVertex) * (9 + 3 + 4));
+                _trianglesVertex = (V3F_T2F_C4F*)malloc(sizeof(*_trianglesVertex) * (9 + 3 + 4));
                 // 9 quads, each needs 6 vertices = 54
                 _trianglesIndex = (unsigned short*)malloc(sizeof(*_trianglesIndex) * 6 * 9);
 
@@ -856,25 +856,25 @@ void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_C4F_T2F_Quad* outQua
 
     if (_rectRotated)
     {
-        outQuad->bl.texCoords.u = left;
-        outQuad->bl.texCoords.v = top;
-        outQuad->br.texCoords.u = left;
-        outQuad->br.texCoords.v = bottom;
-        outQuad->tl.texCoords.u = right;
-        outQuad->tl.texCoords.v = top;
-        outQuad->tr.texCoords.u = right;
-        outQuad->tr.texCoords.v = bottom;
+        outQuad->bl.texCoord.u = left;
+        outQuad->bl.texCoord.v = top;
+        outQuad->br.texCoord.u = left;
+        outQuad->br.texCoord.v = bottom;
+        outQuad->tl.texCoord.u = right;
+        outQuad->tl.texCoord.v = top;
+        outQuad->tr.texCoord.u = right;
+        outQuad->tr.texCoord.v = bottom;
     }
     else
     {
-        outQuad->bl.texCoords.u = left;
-        outQuad->bl.texCoords.v = bottom;
-        outQuad->br.texCoords.u = right;
-        outQuad->br.texCoords.v = bottom;
-        outQuad->tl.texCoords.u = left;
-        outQuad->tl.texCoords.v = top;
-        outQuad->tr.texCoords.u = right;
-        outQuad->tr.texCoords.v = top;
+        outQuad->bl.texCoord.u = left;
+        outQuad->bl.texCoord.v = bottom;
+        outQuad->br.texCoord.u = right;
+        outQuad->br.texCoord.v = bottom;
+        outQuad->tl.texCoord.u = left;
+        outQuad->tl.texCoord.v = top;
+        outQuad->tr.texCoord.u = right;
+        outQuad->tr.texCoord.v = top;
     }
 }
 
@@ -917,10 +917,10 @@ void Sprite::setVertexCoords(const Rect& rect, V3F_C4F_T2F_Quad* outQuad)
         const float y2 = y1 + rect.size.height;
 
         // Don't update Z.
-        outQuad->bl.vertices.set(x1, y1, 0.0f);
-        outQuad->br.vertices.set(x2, y1, 0.0f);
-        outQuad->tl.vertices.set(x1, y2, 0.0f);
-        outQuad->tr.vertices.set(x2, y2, 0.0f);
+        outQuad->bl.position.set(x1, y1, 0.0f);
+        outQuad->br.position.set(x2, y1, 0.0f);
+        outQuad->tl.position.set(x1, y2, 0.0f);
+        outQuad->tr.position.set(x2, y2, 0.0f);
     }
 }
 
@@ -993,10 +993,10 @@ void Sprite::updateTransform()
         // If it is not visible, or one of its ancestors is not visible, then do nothing:
         if (!_visible || (_parent && _parent != _batchNode && static_cast<Sprite*>(_parent)->_shouldBeHidden))
         {
-            _quad.br.vertices.setZero();
-            _quad.tl.vertices.setZero();
-            _quad.tr.vertices.setZero();
-            _quad.bl.vertices.setZero();
+            _quad.br.position.setZero();
+            _quad.tl.position.setZero();
+            _quad.tr.position.setZero();
+            _quad.bl.position.setZero();
             _shouldBeHidden = true;
         }
         else
@@ -1044,10 +1044,10 @@ void Sprite::updateTransform()
             float dx = x1 * cr - y2 * sr2 + x;
             float dy = x1 * sr + y2 * cr2 + y;
 
-            _quad.bl.vertices.set(SPRITE_RENDER_IN_SUBPIXEL(ax), SPRITE_RENDER_IN_SUBPIXEL(ay), _positionZ);
-            _quad.br.vertices.set(SPRITE_RENDER_IN_SUBPIXEL(bx), SPRITE_RENDER_IN_SUBPIXEL(by), _positionZ);
-            _quad.tl.vertices.set(SPRITE_RENDER_IN_SUBPIXEL(dx), SPRITE_RENDER_IN_SUBPIXEL(dy), _positionZ);
-            _quad.tr.vertices.set(SPRITE_RENDER_IN_SUBPIXEL(cx), SPRITE_RENDER_IN_SUBPIXEL(cy), _positionZ);
+            _quad.bl.position.set(SPRITE_RENDER_IN_SUBPIXEL(ax), SPRITE_RENDER_IN_SUBPIXEL(ay), _positionZ);
+            _quad.br.position.set(SPRITE_RENDER_IN_SUBPIXEL(bx), SPRITE_RENDER_IN_SUBPIXEL(by), _positionZ);
+            _quad.tl.position.set(SPRITE_RENDER_IN_SUBPIXEL(dx), SPRITE_RENDER_IN_SUBPIXEL(dy), _positionZ);
+            _quad.tr.position.set(SPRITE_RENDER_IN_SUBPIXEL(cx), SPRITE_RENDER_IN_SUBPIXEL(cy), _positionZ);
             setTextureCoords(_rect);
         }
 
@@ -1099,16 +1099,16 @@ void Sprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         for (unsigned int i = 0; i < count; i++)
         {
             // draw 3 lines
-            Vec3 from = verts[indices[i * 3]].vertices;
-            Vec3 to   = verts[indices[i * 3 + 1]].vertices;
+            Vec3 from = verts[indices[i * 3]].position;
+            Vec3 to   = verts[indices[i * 3 + 1]].position;
             _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4B::WHITE);
 
-            from = verts[indices[i * 3 + 1]].vertices;
-            to   = verts[indices[i * 3 + 2]].vertices;
+            from = verts[indices[i * 3 + 1]].position;
+            to   = verts[indices[i * 3 + 2]].position;
             _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4B::WHITE);
 
-            from = verts[indices[i * 3 + 2]].vertices;
-            to   = verts[indices[i * 3]].vertices;
+            from = verts[indices[i * 3 + 2]].position;
+            to   = verts[indices[i * 3]].position;
             _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4B::WHITE);
         }
 #endif  // AX_SPRITE_DEBUG_DRAW
@@ -1467,7 +1467,7 @@ void Sprite::flipX()
     {
         for (unsigned int i = 0; i < _polyInfo.triangles.vertCount; i++)
         {
-            auto& v = _polyInfo.triangles.verts[i].vertices;
+            auto& v = _polyInfo.triangles.verts[i].position;
             v.x     = _contentSize.width - v.x;
         }
     }
@@ -1484,7 +1484,7 @@ void Sprite::flipY()
     {
         for (unsigned int i = 0; i < _polyInfo.triangles.vertCount; i++)
         {
-            auto& v = _polyInfo.triangles.verts[i].vertices;
+            auto& v = _polyInfo.triangles.verts[i].position;
             v.y     = _contentSize.height - v.y;
         }
     }
@@ -1510,12 +1510,12 @@ void Sprite::updateColor()
     }
 
     for (unsigned int i = 0; i < _polyInfo.triangles.vertCount; i++)
-        _polyInfo.triangles.verts[i].colors = color;
+        _polyInfo.triangles.verts[i].color = color;
 
     // related to issue #17116
     // when switching from Quad to Slice9, the color will be obtained from _quad
     // so it is important to update _quad colors as well.
-    _quad.bl.colors = _quad.tl.colors = _quad.br.colors = _quad.tr.colors = color;
+    _quad.bl.color = _quad.tl.color = _quad.br.color = _quad.tr.color = color;
 
     // renders using batch node
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
@@ -1658,10 +1658,10 @@ void Sprite::setBatchNode(SpriteBatchNode* spriteBatchNode)
         float y1 = _offsetPosition.y;
         float x2 = x1 + _rect.size.width;
         float y2 = y1 + _rect.size.height;
-        _quad.bl.vertices.set(x1, y1, 0);
-        _quad.br.vertices.set(x2, y1, 0);
-        _quad.tl.vertices.set(x1, y2, 0);
-        _quad.tr.vertices.set(x2, y2, 0);
+        _quad.bl.position.set(x1, y1, 0);
+        _quad.br.position.set(x2, y1, 0);
+        _quad.tl.position.set(x1, y2, 0);
+        _quad.tr.position.set(x2, y2, 0);
     }
     else
     {

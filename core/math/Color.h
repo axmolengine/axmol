@@ -120,28 +120,27 @@ struct AX_DLL Color4B
  * RGBA color composed of 4 floats.
  * @since v3.0
  */
-struct AX_DLL Color : public Vec4Base<Color>
+struct AX_DLL Color : public Vec4Adapter<Color>
 {
-    using Vec4Base = Vec4Base<Color>;
-
     Color() {}
-    Color(float _r, float _g, float _b, float _a) : Vec4Base(_r, _g, _b, _a) {}
+    Color(float _r, float _g, float _b, float _a) : Vec4Adapter(_r, _g, _b, _a) {}
     explicit Color(const Color3B& color, float _a = 1.0f)
-        : Vec4Base(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, _a)
+        : Vec4Adapter(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, _a)
     {}
     explicit Color(const Color4B& color)
-        : Vec4Base(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f)
+        : Vec4Adapter(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f)
     {}
     template <typename _Other>
-    explicit Color(const _Other& color) : Vec4Base(color.r, color.g, color.b, color.a)
+    explicit Color(const _Other& color) : Vec4Adapter(color.r, color.g, color.b, color.a)
     {}
 
-    static Color fromHex(unsigned int hexVal, bool useAlpha = false)
+    static Color fromHex(unsigned int v)
     {
-        unsigned int r = (hexVal >> 16) & 0xff;
-        unsigned int g = (hexVal >> 8) & 0xff;
-        unsigned int b = (hexVal) & 0xff;
-        return Color{r / 255.f, g / 255.f, b / 255.f, !useAlpha ? 1.0f : ((hexVal >> 24) & 0xff) / 255.f};
+        auto r = (v >> 24) & 0xff;
+        auto g = (v >> 16) & 0xff;
+        auto b = (v >> 8) & 0xff;
+        auto a = v & 0xff;
+        return Color{r / 255.f, g / 255.f, b / 255.f, a / 255.f };
     }
 
     bool operator==(const Color3B& rhs) const;
@@ -170,7 +169,7 @@ using Color4F = Color;  // DEPRECATED
  *
  * Implementation source: https://gist.github.com/fairlight1337/4935ae72bcbcc1ba5c72
  */
-struct AX_DLL HSV : public Vec4Base<HSV>
+struct AX_DLL HSV : public Vec4Adapter<HSV>
 {
     HSV();
     HSV(float _h, float _s, float _v, float _a = 1.0F);
@@ -194,7 +193,7 @@ struct AX_DLL HSV : public Vec4Base<HSV>
  *
  * Implementation source: https://gist.github.com/ciembor/1494530
  */
-struct AX_DLL HSL : public Vec4Base<HSL>
+struct AX_DLL HSL : public Vec4Adapter<HSL>
 {
     HSL();
     HSL(float _h, float _s, float _l, float _a = 1.0F);

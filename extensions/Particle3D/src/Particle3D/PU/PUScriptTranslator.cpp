@@ -444,7 +444,7 @@ bool PUScriptTranslator::getVector3(PUAbstractNodeList::const_iterator i,
 //-------------------------------------------------------------------------
 bool PUScriptTranslator::getVector4(PUAbstractNodeList::const_iterator i,
                                     PUAbstractNodeList::const_iterator end,
-                                    Vec4* result,
+                                    Color* result,
                                     int maxEntries)
 {
     int n = 0;
@@ -715,7 +715,7 @@ bool PUScriptTranslator::passValidatePropertyValidVector3(PUScriptCompiler* /*co
 //-------------------------------------------------------------------------
 bool PUScriptTranslator::passValidatePropertyValidVector4(PUScriptCompiler* /*compiler*/, PUPropertyAbstractNode* prop)
 {
-    Vec4 val;
+    Color val;
     if (getVector4(prop->values.begin(), prop->values.end(), &val))
     {
         return true;

@@ -128,8 +128,8 @@ public:
     virtual float getDebugDrawWidth() const { return _rackWidth; }
 
     // bone's debug draw's width
-    virtual void setDebugDrawColor(const ax::Color4F& color);
-    virtual ax::Color4F getDebugDrawColor() const { return _rackColor; }
+    virtual void setDebugDrawColor(const ax::Color& color);
+    virtual ax::Color getDebugDrawColor() const { return _rackColor; }
 
     // get bone's bounding box, depends on getVisibleSkinsRect, apply on node to parent's transform
     ax::Rect getBoundingBox() const override;
@@ -218,7 +218,7 @@ protected:
     ax::BlendFunc _blendFunc = ax::BlendFunc::ALPHA_NON_PREMULTIPLIED;
 
     bool _isRackShow            = false;
-    ax::Color4F _rackColor = ax::Color4F::WHITE;
+    ax::Color _rackColor = ax::Color::WHITE;
     float _rackLength           = 50.0f;
     float _rackWidth            = 20.0f;
 
@@ -229,7 +229,7 @@ protected:
 private:
     struct VertexData
     {
-        ax::Color4F squareColor;
+        ax::Color squareColor;
         ax::Vec3 noMVPVertices;
     };
 
