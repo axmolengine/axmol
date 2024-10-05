@@ -50,20 +50,10 @@ namespace ax
  */
 typedef Vec2 Tex2F;
 
-/** @struct PointSprite
- * Vec2 Sprite component.
- */
-struct AX_DLL PointSprite
-{
-    Vec2 pos;          // 8 bytes
-    Color4B color;     // 4 bytes
-    float size = 0.f;  // 4 bytes
-};
-
 /** @struct Quad2
  * A 2D Quad. 4 * 2 floats.
  */
-struct AX_DLL Quad2
+struct Quad2
 {
     Vec2 tl;
     Vec2 tr;
@@ -74,7 +64,7 @@ struct AX_DLL Quad2
 /** @struct Quad3
  * A 3D Quad. 4 * 3 floats.
  */
-struct AX_DLL Quad3
+struct Quad3
 {
     Vec3 bl;
     Vec3 br;
@@ -82,55 +72,29 @@ struct AX_DLL Quad3
     Vec3 tr;
 };
 
-/** @struct V2F_C4B_T2F
- * A Vec2 with a vertex point, a tex coord point and a color 4B.
- */
-struct V2F_C4B_T2F
-{
-    /// vertices (2F)
-    Vec2 vertices;
-    /// colors (4B)
-    Color4B colors;
-    /// tex coords (2F)
-    Tex2F texCoords;
-};
-
-/** @struct V2F_C4B_PF
- *
- */
-struct V2F_C4B_PF
-{
-    /// vertices (2F)
-    Vec2 vertices;
-    /// colors (4B)
-    Color4B colors;
-    /// pointsize
-    float pointSize = 0.f;
-};
-
 /** @struct V2F_C4F_T2F
  * A Vec2 with a vertex point, a tex coord point and a color 4F.
  */
-struct AX_DLL V2F_C4F_T2F
+struct V2F_C4F_T2F
 {
     /// vertices (2F)
     Vec2 vertices;
     /// colors (4F)
-    Color4F colors;
+    Color colors;
     /// tex coords (2F)
     Tex2F texCoords;
 };
 
-/** @struct V3F_C4B_T2F
+/** @struct V3F_C4F_T2F aka PosColorTex
  * A Vec2 with a vertex point, a tex coord point and a color 4B.
  */
-struct AX_DLL V3F_C4B_T2F
+struct V3F_C4F_T2F
 {
     /// vertices (3F)
     Vec3 vertices;  // 12 bytes
 
     /// colors (4B)
-    Color4B colors;  // 4 bytes
+    Color colors;  // 4 bytes
 
     // tex coords (2F)
     Tex2F texCoords;  // 8 bytes
@@ -139,7 +103,7 @@ struct AX_DLL V3F_C4B_T2F
 /** @struct V3F_T2F
  * A Vec2 with a vertex point, a tex coord point.
  */
-struct AX_DLL V3F_T2F
+struct V3F_T2F
 {
     /// vertices (2F)
     Vec3 vertices;
@@ -150,18 +114,12 @@ struct AX_DLL V3F_T2F
 /** @struct V3F_C4F
  * A Vec3 with a vertex point, a color.
  */
-struct AX_DLL V3F_C4F
+struct V3F_C4F
 {
     /// vertices (3F)
     Vec3 vertices;
     /// vertices (4F)
-    Color4F colors;
-};
-
-struct V3F_C4B
-{
-    Vec3 vertices;
-    Color4B colors;
+    Color colors;
 };
 
 struct V3F_T2F_C4F
@@ -178,50 +136,32 @@ struct V3F_T2F_N3F
     Vec3 normal;
 };
 
-/** @struct V2F_C4B_T2F_Triangle
- * A Triangle of V2F_C4B_T2F.
- */
-struct AX_DLL V2F_C4B_T2F_Triangle
+struct V2F_C4F_T2F_Triangle
 {
-    V2F_C4B_T2F a;
-    V2F_C4B_T2F b;
-    V2F_C4B_T2F c;
+    V2F_C4F_T2F a;
+    V2F_C4F_T2F b;
+    V2F_C4F_T2F c;
 };
 
-/** @struct V2F_C4B_T2F_Quad
- * A Quad of V2F_C4B_T2F.
- */
-struct AX_DLL V2F_C4B_T2F_Quad
-{
-    /// bottom left
-    V2F_C4B_T2F bl;
-    /// bottom right
-    V2F_C4B_T2F br;
-    /// top left
-    V2F_C4B_T2F tl;
-    /// top right
-    V2F_C4B_T2F tr;
-};
-
-/** @struct V3F_C4B_T2F_Quad
+/** @struct V3F_C4F_T2F_Quad
  * 4 Vertex3FTex2FColor4B.
  */
-struct AX_DLL V3F_C4B_T2F_Quad
+struct V3F_C4F_T2F_Quad
 {
     /// top left
-    V3F_C4B_T2F tl;
+    V3F_C4F_T2F tl;
     /// bottom left
-    V3F_C4B_T2F bl;
+    V3F_C4F_T2F bl;
     /// top right
-    V3F_C4B_T2F tr;
+    V3F_C4F_T2F tr;
     /// bottom right
-    V3F_C4B_T2F br;
+    V3F_C4F_T2F br;
 };
 
 /** @struct V2F_C4F_T2F_Quad
  * 4 Vertex2FTex2FColor4F Quad.
  */
-struct AX_DLL V2F_C4F_T2F_Quad
+struct V2F_C4F_T2F_Quad
 {
     /// bottom left
     V2F_C4F_T2F bl;
@@ -236,7 +176,7 @@ struct AX_DLL V2F_C4F_T2F_Quad
 /** @struct V3F_T2F_Quad
  *
  */
-struct AX_DLL V3F_T2F_Quad
+struct V3F_T2F_Quad
 {
     /// bottom left
     V3F_T2F bl;

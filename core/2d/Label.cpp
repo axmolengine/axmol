@@ -165,18 +165,18 @@ public:
         {
             displayedOpacity = 0.0f;
         }
-        Color4B color4(_displayedColor.r, _displayedColor.g, _displayedColor.b, displayedOpacity);
+        Color color(_displayedColor, displayedOpacity);
         // special opacity for premultiplied textures
         if (_opacityModifyRGB)
         {
-            color4.r *= displayedOpacity / 255.0f;
-            color4.g *= displayedOpacity / 255.0f;
-            color4.b *= displayedOpacity / 255.0f;
+            color.r *= displayedOpacity / 255.0f;
+            color.g *= displayedOpacity / 255.0f;
+            color.b *= displayedOpacity / 255.0f;
         }
-        _quad.bl.colors = color4;
-        _quad.br.colors = color4;
-        _quad.tl.colors = color4;
-        _quad.tr.colors = color4;
+        _quad.bl.colors = color;
+        _quad.br.colors = color;
+        _quad.tl.colors = color;
+        _quad.tr.colors = color;
 
         _textureAtlas->updateQuad(_quad, _atlasIndex);
     }
@@ -620,9 +620,9 @@ void Label::reset()
     _hAlignment             = TextHAlignment::LEFT;
     _vAlignment             = TextVAlignment::TOP;
 
-    _effectColorF = Color4F::BLACK;
+    _effectColorF = Color::BLACK;
     _textColor    = Color4B::WHITE;
-    _textColorF   = Color4F::WHITE;
+    _textColorF   = Color::WHITE;
     setColor(Color3B::WHITE);
 
     _shadowDirty      = false;
@@ -1810,13 +1810,14 @@ void Label::updateContent()
                 if (_strikethroughEnabled)
                 {
                     auto y = nextY - lineHeight / 2;
-                    _lineDrawNode->drawLine(Vec2(startOffset, y), Vec2(endOffset, y), Color4F(lineColor), thickness);
+                    _lineDrawNode->drawLine(Vec2(_linesOffsetX[i], y), Vec2(_linesWidth[i] + _linesOffsetX[i], y),
+                                            Color(lineColor), thickness);
                 }
 
                 if (_underlineEnabled)
                 {
                     auto y = nextY - lineHeight;
-                    _lineDrawNode->drawLine(Vec2(startOffset, y), Vec2(endOffset, y), Color4F(lineColor), thickness);
+                    _lineDrawNode->drawLine(Vec2(startOffset, y), Vec2(endOffset, y), Color(lineColor), thickness);
                 }
                 nextY -= lineHeight + lineSpacing;
             }
@@ -1838,7 +1839,7 @@ void Label::updateContent()
                 for (int i = 0; i < _numberOfLines; ++i)
                 {
                     float y = baseY + lineSize * i;
-                    _lineDrawNode->drawLine(Vec2(0.0f, y), Vec2(spriteSize.width, y), Color4F(lineColor), thickness);
+                    _lineDrawNode->drawLine(Vec2(0.0f, y), Vec2(spriteSize.width, y), Color(lineColor), thickness);
                 }
             }
 
@@ -1849,7 +1850,7 @@ void Label::updateContent()
                 for (int i = 0; i < _numberOfLines; ++i)
                 {
                     float y = baseY + lineSize * i;
-                    _lineDrawNode->drawLine(Vec2(0.0f, y), Vec2(spriteSize.width, y), Color4F(lineColor), thickness);
+                    _lineDrawNode->drawLine(Vec2(0.0f, y), Vec2(spriteSize.width, y), Color(lineColor), thickness);
                 }
             }
         }
@@ -1897,7 +1898,7 @@ void Label::updateBuffer(TextureAtlas* textureAtlas, CustomCommand& customComman
 {
     if (textureAtlas->getTotalQuads() > customCommand.getVertexCapacity())
     {
-        customCommand.createVertexBuffer((unsigned int)sizeof(V3F_C4B_T2F_Quad),
+        customCommand.createVertexBuffer((unsigned int)sizeof(V3F_C4F_T2F_Quad),
                                          (unsigned int)textureAtlas->getTotalQuads(),
                                          CustomCommand::BufferUsage::DYNAMIC);
         customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT,
@@ -1905,7 +1906,7 @@ void Label::updateBuffer(TextureAtlas* textureAtlas, CustomCommand& customComman
                                         CustomCommand::BufferUsage::DYNAMIC);
     }
     customCommand.updateVertexBuffer(textureAtlas->getQuads(),
-                                     (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_C4B_T2F_Quad)));
+                                     (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_C4F_T2F_Quad)));
     customCommand.updateIndexBuffer(textureAtlas->getIndices(),
                                     (unsigned int)(textureAtlas->getTotalQuads() * 6 * sizeof(unsigned short)));
     customCommand.setIndexDrawInfo(0, (unsigned int)(textureAtlas->getTotalQuads() * 6));
@@ -2021,7 +2022,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             _displayedOpacity  = _shadowColor4F.a * (oldOPacity / 255.0f) * 255;
             setColor(Color3B(_shadowColor4F));
             batch.shadowCommand.updateVertexBuffer(
-                textureAtlas->getQuads(), (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_C4B_T2F_Quad)));
+                textureAtlas->getQuads(), (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_C4F_T2F_Quad)));
             batch.shadowCommand.init(_globalZOrder);
             renderer->addCommand(&batch.shadowCommand);
 
@@ -2517,18 +2518,18 @@ void Label::updateColor()
         return;
     }
 
-    Color4B color4(_displayedColor.r, _displayedColor.g, _displayedColor.b, _displayedOpacity);
+    Color color(_displayedColor, _displayedOpacity / 255.0f);
 
     // special opacity for premultiplied textures
     if (_isOpacityModifyRGB)
     {
-        color4.r *= _displayedOpacity / 255.0f;
-        color4.g *= _displayedOpacity / 255.0f;
-        color4.b *= _displayedOpacity / 255.0f;
+        color.r *= _displayedOpacity / 255.0f;
+        color.g *= _displayedOpacity / 255.0f;
+        color.b *= _displayedOpacity / 255.0f;
     }
 
     ax::TextureAtlas* textureAtlas;
-    V3F_C4B_T2F_Quad* quads;
+    V3F_C4F_T2F_Quad* quads;
     for (auto&& batchNode : _batchNodes)
     {
         textureAtlas = batchNode->getTextureAtlas();
@@ -2537,10 +2538,10 @@ void Label::updateColor()
 
         for (int index = 0; index < count; ++index)
         {
-            quads[index].bl.colors = color4;
-            quads[index].br.colors = color4;
-            quads[index].tl.colors = color4;
-            quads[index].tr.colors = color4;
+            quads[index].bl.colors = color;
+            quads[index].br.colors = color;
+            quads[index].tl.colors = color;
+            quads[index].tr.colors = color;
             textureAtlas->updateQuad(quads[index], index);
         }
     }

@@ -52,7 +52,7 @@ StencilStateManager::StencilStateManager()
     _customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, 6, CustomCommand::BufferUsage::STATIC);
     _customCommand.updateIndexBuffer(indices, sizeof(indices));
 
-    Color4F color(1, 1, 1, 1);
+    Color color(1, 1, 1, 1);
     pipelineDescriptor.programState->setUniform(_colorUniformLocation, &color, sizeof(color));
 }
 

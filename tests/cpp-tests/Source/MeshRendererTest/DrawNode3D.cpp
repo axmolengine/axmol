@@ -65,7 +65,7 @@ void DrawNode3D::ensureCapacity(int count)
     if (!_customCommand.getVertexBuffer() ||
         _customCommand.getVertexBuffer()->getSize() < (EXTENDED_SIZE * sizeof(_bufferLines[0])))
     {
-        _customCommand.createVertexBuffer(sizeof(V3F_C4B), EXTENDED_SIZE + (EXTENDED_SIZE >> 1),
+        _customCommand.createVertexBuffer(sizeof(V3F_C4F), EXTENDED_SIZE + (EXTENDED_SIZE >> 1),
                                           CustomCommand::BufferUsage::DYNAMIC);
     }
 }
@@ -90,7 +90,7 @@ bool DrawNode3D::init()
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::LINE);
 
-    _customCommand.createVertexBuffer(sizeof(V3F_C4B), INITIAL_VERTEX_BUFFER_LENGTH,
+    _customCommand.createVertexBuffer(sizeof(V3F_C4F), INITIAL_VERTEX_BUFFER_LENGTH,
                                       CustomCommand::BufferUsage::DYNAMIC);
     _isDirty = true;
 
@@ -147,15 +147,8 @@ void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color4F& color
     unsigned int vertex_count = 2;
     ensureCapacity(vertex_count);
 
-    Color4B col = Color4B(color);
-    V3F_C4B a   = {Vec3(from.x, from.y, from.z), col};
-    V3F_C4B b   = {
-        Vec3(to.x, to.y, to.z),
-        col,
-    };
-
-    _bufferLines.emplace_back(a);
-    _bufferLines.emplace_back(b);
+    _bufferLines.emplace_back(from);
+    _bufferLines.emplace_back(to);
 
     _isDirty = true;
 }

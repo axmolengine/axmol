@@ -260,13 +260,13 @@ public:
      *
      * @return Color value.
      */
-    inline const Color4F& getClearColor() const { return _clearColor; }
+    inline const Color& getClearColor() const { return _clearColor; }
 
     /** Set color value.
      *
      * @param clearColor Color value.
      */
-    inline void setClearColor(const Color4F& clearColor) { _clearColor = clearColor; }
+    inline void setClearColor(const Color& clearColor) { _clearColor = clearColor; }
 
     /** Value for clearDepth. Valid only when "autoDraw" is true.
      *
@@ -421,7 +421,7 @@ protected:
     RefPtr<Image> _UITextureImage     = nullptr;
     backend::PixelFormat _pixelFormat = backend::PixelFormat::RGBA8;
 
-    Color4F _clearColor;
+    Color _clearColor;
     float _clearDepth     = 1.f;
     int _clearStencil     = 0;
     bool _autoDraw        = false;
