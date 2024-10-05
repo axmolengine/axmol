@@ -44,7 +44,6 @@ namespace spine {
 		BlendFunc makeBlendFunc(BlendMode blendMode, bool premultipliedAlpha);
 		void transformWorldVertices(float *dstCoord, int coordCount, Skeleton &skeleton, int startSlotIndex, int endSlotIndex);
 		bool cullRectangle(Renderer *renderer, const Mat4 &transform, const axmol::Rect &rect);
-		Color4B ColorToColor4B(const Color &color);
 		bool slotIsOutRange(Slot &slot, int startSlotIndex, int endSlotIndex);
 		bool nothingToDraw(Slot &slot, int startSlotIndex, int endSlotIndex);
 	}// namespace
@@ -291,7 +290,7 @@ namespace spine {
                         texCoords.u = attachment->getUVs()[i];
                         texCoords.v = attachment->getUVs()[i + 1];
                     }
-					dstStride = sizeof(V3F_C4B_T2F) / sizeof(float);
+					dstStride = sizeof(V3F_C4F_T2F) / sizeof(float);
 					dstTriangleVertices = reinterpret_cast<float *>(triangles.verts);
 				} else {
 					trianglesTwoColor.indices = quadIndices;
@@ -330,7 +329,7 @@ namespace spine {
                         texCoords.v = attachment->getUVs()[i + 1];
                     }
 					dstTriangleVertices = (float *) triangles.verts;
-					dstStride = sizeof(V3F_C4B_T2F) / sizeof(float);
+					dstStride = sizeof(V3F_C4F_T2F) / sizeof(float);
 					dstVertexCount = triangles.vertCount;
 				} else {
 					trianglesTwoColor.indices = attachment->getTriangles().buffer();
@@ -385,14 +384,14 @@ namespace spine {
 				color.b *= color.a;
 			}
 
-			const axmol::Color4B color4B = ColorToColor4B(color);
-			const axmol::Color4B darkColor4B = ColorToColor4B(darkColor);
+			const axmol::Color color_r{color};
+            const axmol::Color darkColor_r{darkColor};
 			const BlendFunc blendFunc = makeBlendFunc(slot->getData().getBlendMode(), texture->hasPremultipliedAlpha());
 			_blendFunc = blendFunc;
 
 			if (hasSingleTint) {
 				if (_clipper->isClipping()) {
-					_clipper->clipTriangles((float *) &triangles.verts[0].vertices, triangles.indices, triangles.indexCount, (float *) &triangles.verts[0].texCoords, sizeof(axmol::V3F_C4B_T2F) / 4);
+					_clipper->clipTriangles((float *) &triangles.verts[0].vertices, triangles.indices, triangles.indexCount, (float *) &triangles.verts[0].texCoords, sizeof(axmol::V3F_C4F_T2F) / 4);
 					batch->deallocateVertices(triangles.vertCount);
 
 					if (_clipper->getClippedTriangles().size() == 0) {
@@ -408,7 +407,7 @@ namespace spine {
 
                     const float* verts  = _clipper->getClippedVertices().buffer();
                     const float* uvs    = _clipper->getClippedUVs().buffer();
-                    V3F_C4B_T2F* vertex = triangles.verts;
+                    V3F_C4F_T2F* vertex = triangles.verts;
                     for (int v = 0, vn = triangles.vertCount, vv = 0; v < vn;
                          ++v, vv += 2, ++vertex)
                     {
@@ -416,16 +415,16 @@ namespace spine {
                         vertex->vertices.y  = verts[vv + 1];
                         vertex->texCoords.u = uvs[vv];
                         vertex->texCoords.v = uvs[vv + 1];
-                        vertex->colors      = color4B;
+                        vertex->colors      = color_r;
                     }
 					batch->addCommand(renderer, _globalZOrder, texture, _programState, blendFunc, triangles, transform, transformFlags);
 				} else {
 					// Not clipping.
-                    V3F_C4B_T2F* vertex = triangles.verts;
+                    V3F_C4F_T2F* vertex = triangles.verts;
                     for (int v = 0, vn = triangles.vertCount; v < vn;
                          ++v, ++vertex)
                     {
-                        vertex->colors = color4B;
+                        vertex->colors = color_r;
                     }
 					batch->addCommand(renderer, _globalZOrder, texture, _programState, blendFunc, triangles, transform, transformFlags);
 				}
@@ -458,8 +457,8 @@ namespace spine {
                         vertex->position.y  = verts[vv + 1];
                         vertex->texCoords.u = uvs[vv];
                         vertex->texCoords.v = uvs[vv + 1];
-                        vertex->color       = color4B;
-                        vertex->color2      = darkColor4B;
+                        vertex->color       = color_r;
+                        vertex->color2      = darkColor_r;
                     }
 					lastTwoColorTrianglesCommand = twoColorBatch->addCommand(renderer, _globalZOrder, texture, _programState, blendFunc, trianglesTwoColor, transform, transformFlags);
 				} else {
@@ -467,8 +466,8 @@ namespace spine {
                     for (int v = 0, vn = trianglesTwoColor.vertCount; v < vn;
                          ++v, ++vertex)
                     {
-                        vertex->color  = color4B;
-                        vertex->color2 = darkColor4B;
+                        vertex->color  = color_r;
+                        vertex->color2 = darkColor_r;
                     }
 					lastTwoColorTrianglesCommand = twoColorBatch->addCommand(renderer, _globalZOrder, texture, _programState, blendFunc, trianglesTwoColor, transform, transformFlags);
 				}
@@ -539,13 +538,13 @@ namespace spine {
 							{brect.origin.x + brect.size.width, brect.origin.y},
 							{brect.origin.x + brect.size.width, brect.origin.y + brect.size.height},
 							{brect.origin.x, brect.origin.y + brect.size.height}};
-			drawNode->drawPoly(points, 4, true, Color4B::GREEN, 2.0f);
+			drawNode->drawPoly(points, 4, true, ax::Color::GREEN, 2.0f);
 		}
 
 		if (_debugSlots) {
 			// Slots.
 			// DrawPrimitives::setDrawColor4B(0, 0, 255, 255);
-			V3F_C4B_T2F_Quad quad;
+			V3F_C4F_T2F_Quad quad;
 			for (int i = 0, n = (int)_skeleton->getSlots().size(); i < n; i++) {
 				Slot *slot = _skeleton->getDrawOrder()[i];
 
@@ -565,7 +564,7 @@ namespace spine {
 								{worldVertices[2], worldVertices[3]},
 								{worldVertices[4], worldVertices[5]},
 								{worldVertices[6], worldVertices[7]}};
-				drawNode->drawPoly(points, 4, true, Color4B::BLUE, 2.0f);
+				drawNode->drawPoly(points, 4, true, ax::Color::BLUE, 2.0f);
 			}
 		}
 
@@ -576,15 +575,15 @@ namespace spine {
 				if (!bone->isActive()) continue;
 				float x = bone->getData().getLength() * bone->getA() + bone->getWorldX();
 				float y = bone->getData().getLength() * bone->getC() + bone->getWorldY();
-				drawNode->drawLine(Vec2(bone->getWorldX(), bone->getWorldY()), Vec2(x, y), Color4B::RED, 2.0f);
+				drawNode->drawLine(Vec2(bone->getWorldX(), bone->getWorldY()), Vec2(x, y), ax::Color::RED, 2.0f);
 			}
 			// Bone origins.
-			auto color = Color4B::BLUE;// Root bone is blue.
+            auto color = ax::Color::BLUE;  // Root bone is blue.
 			for (int i = 0, n = (int)_skeleton->getBones().size(); i < n; i++) {
 				Bone *bone = _skeleton->getBones()[i];
 				if (!bone->isActive()) continue;
 				drawNode->drawPoint(Vec2(bone->getWorldX(), bone->getWorldY()), 4, color);
-				if (i == 0) color = Color4B::GREEN;
+				if (i == 0) color = ax::Color::GREEN;
 			}
 		}
 
@@ -607,7 +606,7 @@ namespace spine {
 									worldCoord + (idx0 * 2),
 									worldCoord + (idx1 * 2),
 									worldCoord + (idx2 * 2)};
-					drawNode->drawPoly(v, 3, true, Color4B::YELLOW, 2.0f);
+					drawNode->drawPoly(v, 3, true, ax::Color::YELLOW, 2.0f);
 				}
 				VLA_FREE(worldCoord);
 			}
@@ -916,10 +915,6 @@ namespace spine {
 			return !visibleRect.containsPoint(v2p);
 		}
 
-
-		Color4B ColorToColor4B(const Color &color) {
-			return {(uint8_t) (color.r * 255.f), (uint8_t) (color.g * 255.f), (uint8_t) (color.b * 255.f), (uint8_t) (color.a * 255.f)};
-		}
 	}// namespace
 
 }// namespace spine

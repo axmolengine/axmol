@@ -7,14 +7,6 @@ Box2DTestDebugDrawNode* g_pDebugDrawNode;
 GLFWwindow* g_mainWindow;
 b2SampleCamera g_camera;
 
-static Color4F toColor4F(b2HexColor color)
-{
-    unsigned int r = ((unsigned int)color >> 16) & 0xff;
-    unsigned int g = ((unsigned int)color >> 8) & 0xff;
-    unsigned int b = ((unsigned int)color) & 0xff;
-    return Color4F{r / 255.f, g / 255.f, b / 255.f, 1.0f};
-}
-
 static Vec2 toVec2(const b2Vec2& v)
 {
     return Vec2{v.x, v.y};
@@ -54,7 +46,8 @@ static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, Box2DTes
 {
     auto ratio  = context->getPTMRatio();
     auto offset = context->getWorldOffset();
-    context->AddCircle(CircleData{b2Vec2{center.x * ratio + offset.x, center.y * ratio + offset.y}, radius * ratio, toColor4F(color)});
+    context->AddCircle(CircleData{b2Vec2{center.x * ratio + offset.x, center.y * ratio + offset.y}, radius * ratio,
+                                  Color::fromHex(color)});
 }
 
 static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Box2DTestDebugDrawNode* context)
@@ -64,7 +57,7 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Box
     auto ratio  = context->getPTMRatio();
     auto offset = context->getWorldOffset();
     context->AddCircle(
-        {{t.p.x * ratio + offset.x, t.p.y * ratio + offset.y, t.q.c, t.q.s}, radius * ratio, toColor4F(color)});
+        {{t.p.x * ratio + offset.x, t.p.y * ratio + offset.y, t.q.c, t.q.s}, radius * ratio, Color::fromHex(color)});
 }
 
 static void b2DrawSolidCapsule(b2Vec2 pt1, b2Vec2 pt2, float radius, b2HexColor c, Box2DTestDebugDrawNode* context)
@@ -87,7 +80,7 @@ static void b2DrawSolidCapsule(b2Vec2 pt1, b2Vec2 pt2, float radius, b2HexColor 
     transform.q.c = axis.x;
     transform.q.s = axis.y;
 
-    ax::Color4F rgba = toColor4F(c);
+    ax::Color4F rgba = Color::fromHex(c);
 
     context->AddCapsule({{transform.p.x + offset.x, transform.p.y + offset.y, transform.q.c, transform.q.s},
                          radius * ratio,
@@ -122,10 +115,9 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
         AX_SAFE_RELEASE(pipelinePS);
 
         // vertex attributes
-        auto program =
-            backend::ProgramManager::getInstance()->loadProgram("custom/circle_vs", "custom/circle_fs");
-        pipelinePS = new backend::ProgramState(program);
-        auto vfmt  = pipelinePS->getMutableVertexLayout();
+        auto program = backend::ProgramManager::getInstance()->loadProgram("custom/circle_vs", "custom/circle_fs");
+        pipelinePS   = new backend::ProgramState(program);
+        auto vfmt    = pipelinePS->getMutableVertexLayout();
         vfmt->setAttrib("a_localPosition", program->getAttributeLocation("a_localPosition"),
                         backend::VertexFormat::FLOAT2, 0, false);
         vfmt->setStride(sizeof(Vec2));
@@ -321,10 +313,11 @@ void Box2DTestDebugDrawNode::draw(Renderer* renderer, const Mat4& transform, uin
             _customCommandCircle.setInstanceBuffer(nullptr, 0);
         else
         {
-            _customCommandCircle.createInstanceBuffer(sizeof(CircleData), _circles.size(),
-                                                      CustomCommand::BufferUsage::DYNAMIC);
-            auto instanceBuffer = _customCommandCircle.getInstanceBuffer();
-            instanceBuffer->updateData(_circles.data(), _circles.size() * sizeof(CircleData));
+            if (_customCommandCircle.getInstanceCapacity() < static_cast<int>(_circles.size()))
+                _customCommandCircle.createInstanceBuffer(sizeof(CircleData), _circles.size(),
+                                                          CustomCommand::BufferUsage::DYNAMIC);
+            _customCommandCircle.updateInstanceBuffer(_circles.data(), _circles.size() * sizeof(CircleData));
+            _customCommandCircle.setInstanceDrawInfo(static_cast<int>(_circles.size()));
         }
     }
 
@@ -342,10 +335,12 @@ void Box2DTestDebugDrawNode::draw(Renderer* renderer, const Mat4& transform, uin
             _customCommandSolidCircle.setInstanceBuffer(nullptr, 0);
         else
         {
-            _customCommandSolidCircle.createInstanceBuffer(sizeof(SolidCircleData), _solidCircles.size(),
-                                                           CustomCommand::BufferUsage::DYNAMIC);
-            auto instanceBuffer = _customCommandSolidCircle.getInstanceBuffer();
-            instanceBuffer->updateData(_solidCircles.data(), _solidCircles.size() * sizeof(SolidCircleData));
+            if (_customCommandSolidCircle.getInstanceCapacity() < static_cast<int>(_solidCircles.size()))
+                _customCommandSolidCircle.createInstanceBuffer(sizeof(SolidCircleData), _solidCircles.size(),
+                                                               CustomCommand::BufferUsage::DYNAMIC);
+            _customCommandSolidCircle.updateInstanceBuffer(_solidCircles.data(),
+                                                           _solidCircles.size() * sizeof(SolidCircleData));
+            _customCommandSolidCircle.setInstanceDrawInfo(static_cast<int>(_solidCircles.size()));
         }
     }
 
@@ -363,10 +358,11 @@ void Box2DTestDebugDrawNode::draw(Renderer* renderer, const Mat4& transform, uin
             _customCommandCapsule.setInstanceBuffer(nullptr, 0);
         else
         {
-            _customCommandCapsule.createInstanceBuffer(sizeof(CapsuleData), _capsules.size(),
-                                                       CustomCommand::BufferUsage::DYNAMIC);
-            auto instanceBuffer = _customCommandCapsule.getInstanceBuffer();
-            instanceBuffer->updateData(_capsules.data(), _capsules.size() * sizeof(CapsuleData));
+            if (_customCommandCapsule.getInstanceCapacity() < static_cast<int>(_capsules.size()))
+                _customCommandCapsule.createInstanceBuffer(sizeof(CapsuleData), _capsules.size(),
+                                                           CustomCommand::BufferUsage::DYNAMIC);
+            _customCommandCapsule.updateInstanceBuffer(_capsules.data(), _capsules.size() * sizeof(CapsuleData));
+            _customCommandCapsule.setInstanceDrawInfo(static_cast<int>(_capsules.size()));
         }
     }
 
@@ -419,5 +415,5 @@ void Box2DTestDebugDrawNode::clear()
 void Box2DTestDebugDrawNode::DrawAABB(b2AABB aabb, b2HexColor color)
 {
     this->drawRect(Vec2{aabb.lowerBound.x, aabb.lowerBound.y}, Vec2{aabb.upperBound.x, aabb.upperBound.y},
-                   toColor4F(color));
+                   Color::fromHex(color));
 }
