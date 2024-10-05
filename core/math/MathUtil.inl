@@ -191,7 +191,7 @@ public:
         dst[2] = z;
     }
 
-    inline static void transformVertices(V3F_C4B_T2F* dst, const V3F_C4B_T2F* src, size_t count, const Mat4& transform)
+    inline static void transformVertices(V3F_C4F_T2F* dst, const V3F_C4F_T2F* src, size_t count, const Mat4& transform)
     {
         auto end = dst + count;
         auto& t  = transform;  // Make copy for better aliasing inference
@@ -203,7 +203,7 @@ public:
             dst->vertices.x = pos.x * m[0] + pos.y * m[4] + pos.z * m[8] + m[12];
             dst->vertices.y = pos.x * m[1] + pos.y * m[5] + pos.z * m[9] + m[13];
             dst->vertices.z = pos.x * m[2] + pos.y * m[6] + pos.z * m[10] + m[14];
-            memcpy(&dst->colors, &src->colors, sizeof(V3F_C4B_T2F::colors) + sizeof(V3F_C4B_T2F::texCoords));
+            memcpy(&dst->colors, &src->colors, sizeof(V3F_C4F_T2F::colors) + sizeof(V3F_C4F_T2F::texCoords));
             ++dst;
             ++src;
         }

@@ -46,9 +46,9 @@ bool Color3B::operator==(const Color4B& right) const
     return (r == right.r && g == right.g && b == right.b && 255 == right.a);
 }
 
-bool Color3B::operator==(const Color4F& right) const
+bool Color3B::operator==(const Color& right) const
 {
-    return (right.a == 1.0f && Color4F(*this) == right);
+    return (right.a == 1.0f && Color(*this) == right);
 }
 
 bool Color3B::operator!=(const Color3B& right) const
@@ -61,7 +61,7 @@ bool Color3B::operator!=(const Color4B& right) const
     return !(*this == right);
 }
 
-bool Color3B::operator!=(const Color4F& right) const
+bool Color3B::operator!=(const Color& right) const
 {
     return !(*this == right);
 }
@@ -80,7 +80,7 @@ bool Color4B::operator==(const Color3B& right) const
     return (r == right.r && g == right.g && b == right.b && a == 255);
 }
 
-bool Color4B::operator==(const Color4F& right) const
+bool Color4B::operator==(const Color& right) const
 {
     return (*this == Color4B(right));
 }
@@ -95,31 +95,31 @@ bool Color4B::operator!=(const Color3B& right) const
     return !(*this == right);
 }
 
-bool Color4B::operator!=(const Color4F& right) const
+bool Color4B::operator!=(const Color& right) const
 {
     return !(*this == right);
 }
 
 /**
- * Color4F
+ * Color
  */
 
-bool Color4F::operator==(const Color3B& right) const
+bool Color::operator==(const Color3B& right) const
 {
     return (a == 1.0f && Color3B(*this) == right);
 }
 
-bool Color4F::operator==(const Color4B& right) const
+bool Color::operator==(const Color4B& right) const
 {
-    return (*this == Color4F(right));
+    return (*this == Color(right));
 }
 
-bool Color4F::operator!=(const Color3B& right) const
+bool Color::operator!=(const Color3B& right) const
 {
     return !(*this == right);
 }
 
-bool Color4F::operator!=(const Color4B& right) const
+bool Color::operator!=(const Color4B& right) const
 {
     return !(*this == right);
 }
@@ -149,16 +149,16 @@ const Color4B Color4B::ORANGE(255, 127, 0, 255);
 const Color4B Color4B::GRAY(166, 166, 166, 255);
 const Color4B Color4B::TRANSPARENT(0, 0, 0, 0);
 
-const Color4F Color4F::WHITE(1, 1, 1, 1);
-const Color4F Color4F::YELLOW(1, 1, 0, 1);
-const Color4F Color4F::GREEN(0, 1, 0, 1);
-const Color4F Color4F::BLUE(0, 0, 1, 1);
-const Color4F Color4F::RED(1, 0, 0, 1);
-const Color4F Color4F::MAGENTA(1, 0, 1, 1);
-const Color4F Color4F::BLACK(0, 0, 0, 1);
-const Color4F Color4F::ORANGE(1, 0.5f, 0, 1);
-const Color4F Color4F::GRAY(0.65f, 0.65f, 0.65f, 1);
-const Color4F Color4F::TRANSPARENT(0, 0, 0, 0);
+const Color Color::WHITE(1, 1, 1, 1);
+const Color Color::YELLOW(1, 1, 0, 1);
+const Color Color::GREEN(0, 1, 0, 1);
+const Color Color::BLUE(0, 0, 1, 1);
+const Color Color::RED(1, 0, 0, 1);
+const Color Color::MAGENTA(1, 0, 1, 1);
+const Color Color::BLACK(0, 0, 0, 1);
+const Color Color::ORANGE(1, 0.5f, 0, 1);
+const Color Color::GRAY(0.65f, 0.65f, 0.65f, 1);
+const Color Color::TRANSPARENT(0, 0, 0, 0);
 
 HSV::HSV() {}
 
@@ -166,20 +166,20 @@ HSV::HSV(float _h, float _s, float _v, float _a) : Vec4Base(_h, _s, _v, _a) {}
 
 HSV::HSV(const Color3B& c)
 {
-    fromRgba(Color4F(c));
+    fromRgba(Color(c));
 };
 
 HSV::HSV(const Color4B& c)
 {
-    fromRgba(Color4F(c));
+    fromRgba(Color(c));
 }
 
-HSV::HSV(const Color4F& c)
+HSV::HSV(const Color& c)
 {
     fromRgba(c);
 }
 
-void HSV::fromRgba(const Color4F& rgba)
+void HSV::fromRgba(const Color& rgba)
 {
     float fcmax = MAX(MAX(rgba.r, rgba.g), rgba.b);
     float fcmin = MIN(MIN(rgba.r, rgba.g), rgba.b);
@@ -226,9 +226,9 @@ void HSV::fromRgba(const Color4F& rgba)
     this->a = rgba.a;
 }
 
-Color4F HSV::toRgba() const
+Color HSV::toRgba() const
 {
-    auto rgba = Color4F(0, 0, 0, a);
+    auto rgba = Color(0, 0, 0, a);
 
     float hue = remainder(std::fabs(h), 360);
     hue += 360;
@@ -298,30 +298,25 @@ Color4B HSV::toColor4B() const
     return Color4B(toRgba());
 }
 
-Color4F HSV::toColor4F() const
-{
-    return toRgba();
-}
-
 HSL::HSL() {}
 HSL::HSL(float _h, float _s, float _l, float _a) : Vec4Base(_h, _s, _l, _a) {}
 
 HSL::HSL(const Color3B& c)
 {
-    fromRgba(Color4F(c));
+    fromRgba(Color(c));
 }
 
 HSL::HSL(const Color4B& c)
 {
-    fromRgba(Color4F(c));
+    fromRgba(Color(c));
 }
 
-HSL::HSL(const Color4F& c)
+HSL::HSL(const Color& c)
 {
     fromRgba(c);
 }
 
-void HSL::fromRgba(const Color4F& rgba)
+void HSL::fromRgba(const Color& rgba)
 {
     float max = MAX(MAX(rgba.r, rgba.g), rgba.b);
     float min = MIN(MIN(rgba.r, rgba.g), rgba.b);
@@ -372,9 +367,9 @@ float HSL::hue2rgb(float p, float q, float t)
     return p;
 }
 
-Color4F HSL::toRgba() const
+Color HSL::toRgba() const
 {
-    auto rgba = Color4F(0, 0, 0, a);
+    auto rgba = Color(0, 0, 0, a);
 
     float hue = remainder(std::fabs(h), 360);
     hue += 360;
@@ -404,11 +399,6 @@ Color3B HSL::toColor3B() const
 Color4B HSL::toColor4B() const
 {
     return Color4B(toRgba());
-}
-
-Color4F HSL::toColor4F() const
-{
-    return Color4F(toRgba());
 }
 
 NS_AX_MATH_END

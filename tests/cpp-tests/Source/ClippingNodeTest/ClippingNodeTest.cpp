@@ -1084,14 +1084,14 @@ void UniqueChildStencilTest::addChildStencils()
     // Child stencil 1
     constexpr auto radius = 30.f;
     auto* drawNode        = DrawNode::create();
-    drawNode->drawSolidCircle(Vec2(50, 50), radius, 360, 180, 1, 1, Color4B::MAGENTA);
+    drawNode->drawSolidCircle(Vec2(50, 50), radius, 360, 180, 1, 1, Color::MAGENTA);
 
     _parentStencil->addChild(drawNode);
 
     // Child stencil 2
     drawNode = DrawNode::create();
     drawNode->drawSolidRect(Vec2(contentSize.width - 75, contentSize.height - 75),
-                            Vec2(contentSize.width - 25, contentSize.height - 25), Color4B::MAGENTA);
+                            Vec2(contentSize.width - 25, contentSize.height - 25), Color::MAGENTA);
     _parentStencil->addChild(drawNode);
 
     // Child stencil 3

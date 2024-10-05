@@ -6,7 +6,14 @@ project(${lib_name})
 
 FILE(GLOB_RECURSE box2d_sources *.h;*.c)
 
-add_library(${target_name} STATIC ${box2d_sources})
+add_library(${target_name} ${box2d_sources})
+
+if (MSVC)
+    if (BUILD_SHARED_LIBS)
+		# this is needed by DLL users to import Box2D symbols
+		target_compile_definitions(box2d INTERFACE BOX2D_DLL)
+	endif()
+endif()
 
 # Atomics are still considered experimental in Visual Studio 17.8
 if (FULL_MSVC)

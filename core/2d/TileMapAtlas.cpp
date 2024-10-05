@@ -163,7 +163,7 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
 {
     AXASSERT(index >= 0 && index < _textureAtlas->getCapacity(), "updateAtlasValueAt: Invalid index");
 
-    V3F_C4B_T2F_Quad* quad = &((_textureAtlas->getQuads())[index]);
+    V3F_C4F_T2F_Quad* quad = &((_textureAtlas->getQuads())[index]);
 
     int x     = pos.x;
     int y     = pos.y;
@@ -210,7 +210,7 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
     quad->tr.vertices.y = (float)(y * _itemHeight + _itemHeight);
     quad->tr.vertices.z = 0.0f;
 
-    Color4B color(_displayedColor.r, _displayedColor.g, _displayedColor.b, _displayedOpacity);
+    Color color(_displayedColor, _displayedOpacity / 255.0f);
     quad->tr.colors = color;
     quad->tl.colors = color;
     quad->br.colors = color;
@@ -243,7 +243,7 @@ void TileMapAtlas::updateAtlasValues()
                 {
                     this->updateAtlasValueAt(Vec2(x, y), value, total);
 
-                    std::string key       = StringUtils::toString(x) + "," + StringUtils::toString(y);
+                    std::string key       = fmt::format("{},{}", x, y);
                     _posToAtlasIndex[key] = total;
 
                     total++;

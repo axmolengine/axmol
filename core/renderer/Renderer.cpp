@@ -21,7 +21,7 @@
  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ THE SOFTWARE. 
  ****************************************************************************/
 #include "renderer/Renderer.h"
 
@@ -868,7 +868,7 @@ void Renderer::endRenderPass()
     _commandBuffer->endRenderPass();
 }
 
-void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder)
+void Renderer::clear(ClearFlag flags, const Color& color, float depth, unsigned int stencil, float globalOrder)
 {
     _clearFlag = flags;
 
@@ -913,7 +913,7 @@ CallbackCommand* Renderer::nextCallbackCommand()
     return cmd;
 }
 
-const Color4F& Renderer::getClearColor() const
+const Color& Renderer::getClearColor() const
 {
     return _clearColor;
 }

@@ -1,4 +1,4 @@
-﻿#include "CCSlot.h"
+#include "CCSlot.h"
 #include "CCTextureAtlasData.h"
 #include "CCArmatureDisplay.h"
 
@@ -92,7 +92,7 @@ void CCSlot::_updateFrame()
 
                 const auto& region           = currentTextureData->region;
                 const auto& textureAtlasSize = currentTextureData->spriteFrame->getTexture()->getContentSizeInPixels();
-                auto vertices                = new ax::V3F_C4B_T2F[vertexCount];  // does cocos2dx release it?
+                auto vertices                = new ax::V3F_C4F_T2F[vertexCount];  // does cocos2dx release it?
                 auto vertexIndices           = new unsigned short[triangleCount * 3];  // does cocos2dx release it?
                 ax::Rect boundsRect(999999.0f, 999999.0f, -999999.0f, -999999.0f);
 
@@ -103,7 +103,7 @@ void CCSlot::_updateFrame()
                     const auto y  = floatArray[vertexOffset + i + 1];
                     auto u        = floatArray[uvOffset + i];
                     auto v        = floatArray[uvOffset + i + 1];
-                    ax::V3F_C4B_T2F vertexData;
+                    ax::V3F_C4F_T2F vertexData;
                     vertexData.vertices.set(x, -y, 0.0f);
 
                     if (currentTextureData->rotated)
@@ -117,7 +117,7 @@ void CCSlot::_updateFrame()
                         vertexData.texCoords.v = (region.y + v * region.height) / textureAtlasSize.height;
                     }
 
-                    vertexData.colors = ax::Color4B::WHITE;
+                    vertexData.colors = ax::Color::WHITE;
                     vertices[iH]      = vertexData;
 
                     if (boundsRect.origin.x > x)

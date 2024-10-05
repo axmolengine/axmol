@@ -193,7 +193,7 @@ Tex2F FUISprite::textureCoordFromAlphaPoint(Vec2 alpha)
 {
     Tex2F ret(0.0f, 0.0f);
 
-    V3F_C4B_T2F_Quad quad = getQuad();
+    V3F_C4F_T2F_Quad quad = getQuad();
     Vec2 min(quad.bl.texCoords.u, quad.bl.texCoords.v);
     Vec2 max(quad.tr.texCoords.u, quad.tr.texCoords.v);
     //  Fix bug #1303 so that progress timer handles sprite frame texture rotation
@@ -208,7 +208,7 @@ Vec3 FUISprite::vertexFromAlphaPoint(Vec2 alpha)
 {
     Vec3 ret(0.0f, 0.0f, 0.0f);
 
-    V3F_C4B_T2F_Quad quad = getQuad();
+    V3F_C4F_T2F_Quad quad = getQuad();
     Vec2 min(quad.bl.vertices.x, quad.bl.vertices.y);
     Vec2 max(quad.tr.vertices.x, quad.tr.vertices.y);
     ret.x = min.x * (1.f - alpha.x) + max.x * alpha.x;
@@ -222,7 +222,7 @@ void FUISprite::updateColor(void)
 
     if (_vertexData)
     {
-        Color4B sc = getQuad().tl.colors;
+        Color sc = getQuad().tl.colors;
         for (int i = 0; i < _vertexDataCount; ++i)
         {
             _vertexData[i].colors = sc;
@@ -344,7 +344,7 @@ void FUISprite::updateRadial(void)
     {
         _vertexDataCount = index + 3;
         triangleCount = _vertexDataCount - 2;
-        _vertexData = (V3F_C4B_T2F*)malloc(_vertexDataCount * sizeof(*_vertexData));
+        _vertexData = (V3F_C4F_T2F*)malloc(_vertexDataCount * sizeof(*_vertexData));
         _vertexIndex = (unsigned short *)malloc(triangleCount * 3 * sizeof(*_vertexIndex));
         AXASSERT(_vertexData, "FUISprite. Not enough memory");
     }
@@ -433,7 +433,7 @@ void FUISprite::updateBar(void)
     if (!_vertexData)
     {
         _vertexDataCount = 4;
-        _vertexData = (V3F_C4B_T2F*)malloc(_vertexDataCount * sizeof(*_vertexData));
+        _vertexData = (V3F_C4F_T2F*)malloc(_vertexDataCount * sizeof(*_vertexData));
         _vertexIndex = (unsigned short*)malloc(6 * sizeof(*_vertexIndex));
         AXASSERT(_vertexData, "FUISprite. Not enough memory");
     }
