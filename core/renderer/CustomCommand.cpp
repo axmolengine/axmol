@@ -201,6 +201,9 @@ void CustomCommand::setVertexBuffer(backend::Buffer* vertexBuffer)
     AX_SAFE_RELEASE(_vertexBuffer);
     _vertexBuffer = vertexBuffer;
     AX_SAFE_RETAIN(_vertexBuffer);
+
+    if (!_vertexBuffer)
+        _vertexCapacity = _vertexDrawCount = 0;
 }
 
 void CustomCommand::setIndexBuffer(backend::Buffer* indexBuffer, IndexFormat format)
@@ -214,6 +217,9 @@ void CustomCommand::setIndexBuffer(backend::Buffer* indexBuffer, IndexFormat for
 
     _indexFormat = format;
     _indexSize   = computeIndexSize();
+
+    if(!_indexBuffer)
+        _indexCapacity = _indexDrawCount = 0;
 }
 
 void CustomCommand::updateVertexBuffer(const void* data, std::size_t length)
