@@ -955,12 +955,7 @@ bool Properties::getQuaternionFromAxisAngle(const char* name, Quaternion* out) c
     return parseAxisAngle(getString(name), out);
 }
 
-bool Properties::getColor(const char* name, Vec3* out) const
-{
-    return parseColor(getString(name), out);
-}
-
-bool Properties::getColor(const char* name, Vec4* out) const
+bool Properties::getColor(const char* name, Color* out) const
 {
     return parseColor(getString(name), out);
 }
@@ -1261,39 +1256,7 @@ bool Properties::parseAxisAngle(const char* str, Quaternion* out)
     return false;
 }
 
-bool Properties::parseColor(const char* str, Vec3* out)
-{
-    if (str)
-    {
-        if (strlen(str) == 7 && str[0] == '#')
-        {
-            // Read the string into an int as hex.
-            unsigned int color;
-            if (sscanf(str + 1, "%x", &color) == 1)
-            {
-                if (out)
-                    out->set(Vec3::fromColor(color));
-                return true;
-            }
-            else
-            {
-                // Invalid format
-                AXLOGW("Error attempting to parse property as an RGB color: {}", str);
-            }
-        }
-        else
-        {
-            // Not a color string.
-            AXLOGW("Error attempting to parse property as an RGB color (not specified as a color string): {}", str);
-        }
-    }
-
-    if (out)
-        out->set(0.0f, 0.0f, 0.0f);
-    return false;
-}
-
-bool Properties::parseColor(const char* str, Vec4* out)
+bool Properties::parseColor(const char* str, Color* out)
 {
     if (str)
     {
@@ -1304,7 +1267,7 @@ bool Properties::parseColor(const char* str, Vec4* out)
             if (sscanf(str + 1, "%x", &color) == 1)
             {
                 if (out)
-                    out->set(Vec4::fromColor(color));
+                    out->set(Color::fromHex(color));
                 return true;
             }
             else

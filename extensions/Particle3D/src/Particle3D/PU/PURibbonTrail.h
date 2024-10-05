@@ -94,7 +94,7 @@ public:
     @note
         Only used if this instance is using vertex colours.
     */
-    virtual void setInitialColour(size_t chainIndex, const Vec4& col);
+    virtual void setInitialColour(size_t chainIndex, const Color& col);
     /** Set the starting ribbon colour.
     @param chainIndex The index of the chain
     @param r,b,g,a The initial colour
@@ -103,13 +103,13 @@ public:
     */
     virtual void setInitialColour(size_t chainIndex, float r, float g, float b, float a = 1.0);
     /** Get the starting ribbon colour. */
-    virtual const Vec4& getInitialColour(size_t chainIndex) const;
+    virtual const Color& getInitialColour(size_t chainIndex) const;
 
     /** Enables / disables fading the trail using colour.
     @param chainIndex The index of the chain
     @param valuePerSecond The amount to subtract from colour each second
     */
-    virtual void setColourChange(size_t chainIndex, const Vec4& valuePerSecond);
+    virtual void setColourChange(size_t chainIndex, const Color& valuePerSecond);
 
     /** Set the starting ribbon width in world units.
     @param chainIndex The index of the chain
@@ -134,7 +134,7 @@ public:
     virtual void setColourChange(size_t chainIndex, float r, float g, float b, float a);
 
     /** Get the per-second fading amount */
-    virtual const Vec4& getColourChange(size_t chainIndex) const;
+    virtual const Color& getColourChange(size_t chainIndex) const;
 
     void update(float deltaTime);
 
@@ -177,7 +177,7 @@ protected:
     float _elemLength;
     /// Squared length of each element
     float _squaredElemLength;
-    typedef std::vector<Vec4> ColorValueList;
+    typedef std::vector<Color> ColorValueList;
     typedef std::vector<float> RealList;
     /// Initial colour of the ribbon
     ColorValueList _initialColor;

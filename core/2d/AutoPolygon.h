@@ -225,7 +225,7 @@ public:
      * ap.calculateUV(rect, myPolygons.verts, 20);
      * @endcode
      */
-    void calculateUV(const Rect& rect, V3F_C4F_T2F* verts, ssize_t count);
+    void calculateUV(const Rect& rect, V3F_T2F_C4F* verts, ssize_t count);
 
     /**
      * a helper function, packing trace, reduce, expand, triangulate and calculate uv in one function

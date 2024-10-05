@@ -303,7 +303,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* 
                 // Property: start_colour_range
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_START_COLOUR_RANGE], VAL_COLOURVALUE))
                 {
-                    Vec4 val;
+                    Color val;
                     if (getVector4(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleColorRangeStart(val);
@@ -315,7 +315,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* 
                 // Property: end_colour_range
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_END_COLOUR_RANGE], VAL_COLOURVALUE))
                 {
-                    Vec4 val;
+                    Color val;
                     if (getVector4(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleColorRangeEnd(val);
@@ -327,7 +327,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* 
                 // Property: colour
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_COLOUR], VAL_COLOURVALUE))
                 {
-                    Vec4 val;
+                    Color val;
                     if (getVector4(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleColor(val);

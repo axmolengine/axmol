@@ -94,16 +94,6 @@ public:
     constexpr Vec3(const Vec3& p1, const Vec3& p2) { set(p1, p2); }
 
     /**
-     * Creates a new vector from an integer interpreted as an RGB value.
-     * E.g. 0xff0000 represents red or the vector (1, 0, 0).
-     *
-     * @param color The integer to interpret as an RGB value.
-     *
-     * @return A vector corresponding to the interpreted RGB color.
-     */
-    static Vec3 fromColor(unsigned int color);
-
-    /**
      * Indicates whether this vector contains all zeros.
      *
      * @return true if this vector contains all zeros, false otherwise.

@@ -210,7 +210,7 @@ void CubismCommandBuffer_Cocos2dx::SetWindingMode(WindingType windingType)
 void CubismCommandBuffer_Cocos2dx::Clear(csmFloat32 r, csmFloat32 g, csmFloat32 b, csmFloat32 a)
 {
     // Add the callback command internally.
-    GetCocos2dRenderer()->clear(ax::ClearFlag::COLOR, ax::Color4F(r, g, b, a), 0.0f, 0, 0.0f);
+    GetCocos2dRenderer()->clear(ax::ClearFlag::COLOR, ax::Color(r, g, b, a), 0.0f, 0, 0.0f);
 }
 
 void CubismCommandBuffer_Cocos2dx::Viewport(csmFloat32 x, csmFloat32 y, csmFloat32 w, csmFloat32 h)

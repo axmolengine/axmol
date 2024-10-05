@@ -666,7 +666,7 @@ public:
      */
     bool getVector4(PUAbstractNodeList::const_iterator i,
                     PUAbstractNodeList::const_iterator end,
-                    Vec4* result,
+                    Color* result,
                     int maxEntries = 4);
 
     /** Parse Quaternion

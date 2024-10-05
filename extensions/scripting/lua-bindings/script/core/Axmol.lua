@@ -295,7 +295,7 @@ function cc.c4b( _r,_g,_b,_a )
     return { r = _r, g = _g, b = _b, a = _a }
 end
 
---Color4F
+--ax::Color
 function cc.c4f( _r,_g,_b,_a )
     return { r = _r, g = _g, b = _b, a = _a }
 end
@@ -379,13 +379,13 @@ function cc.Quad3(_tl, _tr, _bl, _br)
     return { tl = _tl, tr = _tr, bl = _bl, br = _br }
 end
 
---V2F_C4F_T2F
-function cc.V2F_C4F_T2F(_vertices, _colors, _texCoords)
+--V2F_T2F_C4F
+function cc.V2F_T2F_C4F(_vertices, _colors, _texCoords)
     return { vertices = _vertices, colors = _colors, texCoords = _texCoords }
 end
 
---V3F_C4F_T2F
-function cc.V3F_C4F_T2F(_vertices, _colors, _texCoords)
+--V3F_T2F_C4F
+function cc.V3F_T2F_C4F(_vertices, _colors, _texCoords)
     return { vertices = _vertices, colors = _colors, texCoords = _texCoords }
 end
 

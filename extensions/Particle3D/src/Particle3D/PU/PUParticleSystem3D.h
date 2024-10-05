@@ -108,7 +108,7 @@ struct AX_EX_DLL PUParticle3D : public Particle3D
     Vec3 rotationAxis;
     /** Current and original colour */
 
-    Vec4 originalColor;
+    Color originalColor;
 
     /** The zRotationSpeed is used in combination with zRotation and defines tha actual rotationspeed
         in 2D. */

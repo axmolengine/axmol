@@ -179,7 +179,7 @@ protected:
     CustomCommand _customCommand;
 
     bool _clearColor;
-    std::vector<V3F_C4F_T2F> _vertices;
+    std::vector<V3F_T2F_C4F> _vertices;
     struct
     {
         uint32_t stencilWriteMask            = 0;

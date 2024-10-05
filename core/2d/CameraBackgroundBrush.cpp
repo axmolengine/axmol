@@ -133,17 +133,17 @@ bool CameraBackgroundDepthBrush::init()
     pipelineDescriptor.programState = _programState;
 
     _vertices.resize(4);
-    _vertices[0].vertices = Vec3(-1, -1, 0);
-    _vertices[1].vertices = Vec3(1, -1, 0);
-    _vertices[2].vertices = Vec3(1, 1, 0);
-    _vertices[3].vertices = Vec3(-1, 1, 0);
+    _vertices[0].position = Vec3(-1, -1, 0);
+    _vertices[1].position = Vec3(1, -1, 0);
+    _vertices[2].position = Vec3(1, 1, 0);
+    _vertices[3].position = Vec3(-1, 1, 0);
 
-    _vertices[0].colors = _vertices[1].colors = _vertices[2].colors = _vertices[3].colors = Color(0, 0, 0, 1);
+    _vertices[0].color = _vertices[1].color = _vertices[2].color = _vertices[3].color = Color(0, 0, 0, 1);
 
-    _vertices[0].texCoords = Tex2F(0, 0);
-    _vertices[1].texCoords = Tex2F(1, 0);
-    _vertices[2].texCoords = Tex2F(1, 1);
-    _vertices[3].texCoords = Tex2F(0, 1);
+    _vertices[0].texCoord = Tex2F(0, 0);
+    _vertices[1].texCoord = Tex2F(1, 0);
+    _vertices[2].texCoord = Tex2F(1, 1);
+    _vertices[3].texCoord = Tex2F(0, 1);
 
     _customCommand.setBeforeCallback(AX_CALLBACK_0(CameraBackgroundDepthBrush::onBeforeDraw, this));
     _customCommand.setAfterCallback(AX_CALLBACK_0(CameraBackgroundDepthBrush::onAfterDraw, this));
@@ -235,7 +235,7 @@ void CameraBackgroundColorBrush::setColor(const Color& color)
 {
     for (auto&& vert : _vertices)
     {
-        vert.colors = color;
+        vert.color = color;
     }
     _customCommand.updateVertexBuffer(_vertices.data(), sizeof(_vertices[0]) * _vertices.size());
 }
