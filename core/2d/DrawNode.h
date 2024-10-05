@@ -100,7 +100,7 @@ public:
      */
     void drawPoint(const Vec2& point,
                    const float pointSize,
-                   const Color4B& color,
+                   const Color& color,
                    DrawNode::PointType pointType = DrawNode::PointType::Rect);
 
     /** Draw a group point.
@@ -111,7 +111,7 @@ public:
      */
     void drawPoints(const Vec2* position,
                     unsigned int numberOfPoints,
-                    const Color4B& color,
+                    const Color& color,
                     DrawNode::PointType pointType = DrawNode::PointType::Rect);
 
     /** Draw a group point.
@@ -124,7 +124,7 @@ public:
     void drawPoints(const Vec2* position,
                     unsigned int numberOfPoints,
                     const float pointSize,
-                    const Color4B& color,
+                    const Color& color,
                     DrawNode::PointType pointType = DrawNode::PointType::Rect);
 
     /** Draw an line from origin to destination with color.
@@ -135,7 +135,7 @@ public:
      */
     void drawLine(const Vec2& origin,
                   const Vec2& destination,
-                  const Color4B& color,
+                  const Color& color,
                   float thickness           = 1.0f,
                   DrawNode::EndType etStart = DrawNode::EndType::Round,
                   DrawNode::EndType etEnd   = DrawNode::EndType::Round);
@@ -147,7 +147,7 @@ public:
      * @param destination The rectangle destination.
      * @param color The rectangle color.
      */
-    void drawRect(const Vec2& origin, const Vec2& destination, const Color4B& color, float thickness = 1.0f);
+    void drawRect(const Vec2& origin, const Vec2& destination, const Color& color, float thickness = 1.0f);
 
     /** Draws a polygon given a pointer to point coordinates and the number of vertices measured in points.
      * The polygon can be closed or open.
@@ -160,7 +160,7 @@ public:
     void drawPoly(const Vec2* poli,
                   unsigned int numberOfPoints,
                   bool closedPolygon,
-                  const Color4B& color,
+                  const Color& color,
                   float thickness = 1.0f);
 
     /** Draws a circle given the center, radius and number of segments.
@@ -182,7 +182,7 @@ public:
                     bool drawLineToCenter,
                     float scaleX,
                     float scaleY,
-                    const Color4B& color,
+                    const Color& color,
                     float thickness = 1.0f);
 
     /** Draws a circle given the center, radius and number of segments.
@@ -200,7 +200,7 @@ public:
                     float angle,
                     unsigned int segments,
                     bool drawLineToCenter,
-                    const Color4B& color,
+                    const Color& color,
                     float thickness = 1.0f);
 
     /** Draws a star given the center, radiusI, radiusO and number of segments.
@@ -216,7 +216,7 @@ public:
                   float radiusI,
                   float radiusO,
                   unsigned int segments,
-                  const Color4B& color,
+                  const Color& color,
                   float thickness = 1.0f);
 
     /** Draws a solid star given the center, radiusI, radiusO and number of segments.
@@ -232,8 +232,8 @@ public:
                        float radiusI,
                        float radiusO,
                        unsigned int segments,
-                       const Color4B& color,
-                       const Color4B& filledColor,
+                       const Color& color,
+                       const Color& filledColor,
                        float thickness = 1.0f);
 
     /** Draws a quad bezier path.
@@ -248,7 +248,7 @@ public:
                         const Vec2& control,
                         const Vec2& destination,
                         unsigned int segments,
-                        const Color4B& color,
+                        const Color& color,
                         float thickness = 1.0f);
 
     /** Draw a cubic bezier curve with color and number of segments
@@ -265,7 +265,7 @@ public:
                          const Vec2& control2,
                          const Vec2& destination,
                          unsigned int segments,
-                         const Color4B& color,
+                         const Color& color,
                          float thickness = 1.0f);
 
     /** Draws a Cardinal Spline path.
@@ -278,7 +278,7 @@ public:
     void drawCardinalSpline(const PointArray* configIn,
                             float tension,
                             unsigned int segments,
-                            const Color4B& color,
+                            const Color& color,
                             float thickness = 1.0f,
                             bool closed = false);
 
@@ -290,7 +290,7 @@ public:
      */
     void drawCatmullRom(const PointArray* pointsIn,
                         unsigned int segments,
-                        const Color4B& color,
+                        const Color& color,
                         float thickness = 1.0f,
                         bool closed = false);
 
@@ -300,7 +300,7 @@ public:
      * @param radius The dot radius.
      * @param color The dot color.
      */
-    void drawDot(const Vec2& pos, float radius, const Color4B& color);
+    void drawDot(const Vec2& pos, float radius, const Color& color);
 
     /** Draws a rectangle with 4 points.
      *
@@ -314,7 +314,7 @@ public:
                   const Vec2& p2,
                   const Vec2& p3,
                   const Vec2& p4,
-                  const Color4B& color,
+                  const Color& color,
                   float thickness = 1.0f);
 
     /** Draws a solid rectangle given the origin and destination point measured in points.
@@ -326,9 +326,9 @@ public:
      */
     void drawSolidRect(const Vec2& origin,
                        const Vec2& destination,
-                       const Color4B& color,
+                       const Color& color,
                        float thickness            = 0,
-                       const Color4B& borderColor = Color4B(0, 0, 0, 0));
+                       const Color& borderColor = Color(0, 0, 0, 0));
 
     /** Draws a solid polygon given a pointer to CGPoint coordinates, the number of vertices measured in points, and a
      * color.
@@ -339,9 +339,9 @@ public:
      */
     void drawSolidPoly(const Vec2* poli,
                        unsigned int numberOfPoints,
-                       const Color4B& color,
+                       const Color& color,
                        float thickness            = 0,
-                       const Color4B& borderColor = Color4B(0, 0, 0, 0),
+                       const Color& borderColor = Color(0, 0, 0, 0),
                        bool isconvex              = false);
 
     /** Draws a solid circle given the center, radius and number of segments.
@@ -362,9 +362,9 @@ public:
                          unsigned int segments,
                          float scaleX,
                          float scaleY,
-                         const Color4B& fillColor,
+                         const Color& fillColor,
                          float thickness,
-                         const Color4B& borderColor,
+                         const Color& borderColor,
                          bool drawLineToCenter = false);
 
     /** Draws a solid circle given the center, radius and number of segments.
@@ -382,7 +382,7 @@ public:
                          unsigned int segments,
                          float scaleX,
                          float scaleY,
-                         const Color4B& color);
+                         const Color& color);
 
     /** Draws a solid circle given the center, radius and number of segments.
      * @param center The circle center point.
@@ -391,7 +391,7 @@ public:
      * @param segments The number of segments.
      * @param color The solid circle color.
      */
-    void drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, const Color4B& color);
+    void drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, const Color& color);
 
     /** Draws a pie given the center, radius, angle, start angle, end angle  and number of segments.
      * @param center The circle center point.
@@ -412,8 +412,8 @@ public:
                  int endAngle,
                  float scaleX,
                  float scaleY,
-                 const Color4B& fillColor,
-                 const Color4B& borderColor,
+                 const Color& fillColor,
+                 const Color& borderColor,
                  DrawMode drawMode = DrawMode::Outline,
                  float thickness = 1.0f);
 
@@ -436,7 +436,7 @@ public:
                  int endAngle,
                  float scaleX,
                  float scaleY,
-                 const Color4B& color,
+                 const Color& color,
                  DrawMode drawMode = DrawMode::Outline);
 
     void setIsConvex(bool isConvex)
@@ -455,7 +455,7 @@ public:
     void drawSegment(const Vec2& from,
                      const Vec2& to,
                      float radius,
-                     const Color4B& color,
+                     const Color& color,
                      DrawNode::EndType etStart = DrawNode::EndType::Round,
                      DrawNode::EndType etEnd   = DrawNode::EndType::Round);
 
@@ -473,18 +473,18 @@ public:
      */
     void drawPolygon(const Vec2* verts,
                      int count,
-                     const Color4B& fillColor,
+                     const Color& fillColor,
                      float thickness,
-                     const Color4B& borderColor,
+                     const Color& borderColor,
                      bool isconvex = false);
 
-    void drawPolygon(const Vec2* verts, int count, float thickness, const Color4B& borderColor, bool isconvex = false);
+    void drawPolygon(const Vec2* verts, int count, float thickness, const Color& borderColor, bool isconvex = false);
 
     void drawSolidPolygon(const Vec2* verts,
                           int count,
-                          const Color4B& fillColor,
+                          const Color& fillColor,
                           float thickness,
-                          const Color4B& borderColor,
+                          const Color& borderColor,
                           bool isconvex = false);
 
     /** draw a triangle with color.
@@ -495,21 +495,21 @@ public:
      * @param color The triangle color.
      */
 
-    void drawColoredTriangle(const Vec2* vertices3, const Color4B* color3);
-    void drawTriangle(const Vec2* vertices3, const Color4B& color);
+    void drawColoredTriangle(const Vec2* vertices3, const Color* color3);
+    void drawTriangle(const Vec2* vertices3, const Color& color);
 
-    void drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color4B& color);
+    void drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color& color);
 
     void drawSolidTriangle(const Vec2* vertices3,
-                           const Color4B& fillColor,
-                           const Color4B& borderColor,
+                           const Color& fillColor,
+                           const Color& borderColor,
                            float thickness = 1.0f);
 
     void drawSolidTriangle(const Vec2& p1,
                            const Vec2& p2,
                            const Vec2& p3,
-                           const Color4B& fillColor,
-                           const Color4B& borderColor,
+                           const Color& fillColor,
+                           const Color& borderColor,
                            float thickness = 1.0f);
 
     /** Clear the geometry in the node's buffer. */
@@ -570,33 +570,33 @@ protected:
     CustomCommand _customCommandPoint;
     CustomCommand _customCommandLine;
 
-    axstd::pod_vector<V2F_C4B_T2F> _triangles;
-    axstd::pod_vector<V2F_C4B_T2F> _points;
-    axstd::pod_vector<V2F_C4B_T2F> _lines;
+    axstd::pod_vector<V2F_C4F_T2F> _triangles;
+    axstd::pod_vector<V2F_C4F_T2F> _points;
+    axstd::pod_vector<V2F_C4F_T2F> _lines;
 
 
 private:
     // Internal function _drawPoint
     void _drawPoint(const Vec2& position,
                     const float pointSize,
-                    const Color4B& color,
+                    const Color& color,
                     const DrawNode::PointType pointType);
 
     // Internal function _drawPoints
     void _drawPoints(const Vec2* position,
                      unsigned int numberOfPoints,
                      const float pointSize,
-                     const Color4B& color,
+                     const Color& color,
                      const DrawNode::PointType pointType);
 
     // Internal function _drawDot
-    void _drawDot(const Vec2& pos, float radius, const Color4B& color);
+    void _drawDot(const Vec2& pos, float radius, const Color& color);
 
     // Internal function _drawTriangle
     // Note: modifies supplied vertex array
     void _drawTriangle(Vec2* vertices3,
-                       const Color4B& borderColor,
-                       const Color4B& fillColor,
+                       const Color& borderColor,
+                       const Color& fillColor,
                        bool solid      = true,
                        float thickness = 0.0f);
 
@@ -608,8 +608,8 @@ private:
                     float radiusI,
                     float radiusO,
                     unsigned int segments,
-                    const Color4B& color,
-                    const Color4B& filledColor,
+                    const Color& color,
+                    const Color& filledColor,
                     float thickness = 1.0f,
                     bool solid      = false);
 
@@ -617,15 +617,15 @@ private:
     void _drawPoly(const Vec2* poli,
                    unsigned int numberOfPoints,
                    bool closedPolygon,
-                   const Color4B& color,
+                   const Color& color,
                    float thickness = 1.0f,
                    bool isconvex   = true);
 
     // Internal function _drawPolygon
     void _drawPolygon(const Vec2* verts,
                       unsigned int count,
-                      const Color4B& fillColor,
-                      const Color4B& borderColor,
+                      const Color& fillColor,
+                      const Color& borderColor,
                       bool closedPolygon = true,
                       float thickness    = 1.0f,
                       bool isconvex      = true);
@@ -636,7 +636,7 @@ private:
     // Internal function _drawSegment
     void _drawSegment(const Vec2& origin,
                       const Vec2& destination,
-                      const Color4B& color,
+                      const Color& color,
                       float thickness           = 1.0f,
                       DrawNode::EndType etStart = DrawNode::EndType::Square,
                       DrawNode::EndType etEnd   = DrawNode::EndType::Square);
@@ -649,8 +649,8 @@ private:
                      bool drawLineToCenter,
                      float scaleX,
                      float scaleY,
-                     const Color4B& borderColor,
-                     const Color4B& fillColor,
+                     const Color& borderColor,
+                     const Color& fillColor,
                      bool solid,
                      float thickness = 1.0f);
 
@@ -662,8 +662,8 @@ private:
                   int endAngle,
                   float scaleX,
                   float scaleY,
-                  const Color4B& fillColor,
-                  const Color4B& borderColor,
+                  const Color& fillColor,
+                  const Color& borderColor,
                   DrawMode drawMode,
                   float thickness = 1.0f);
 
