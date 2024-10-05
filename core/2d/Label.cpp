@@ -1728,8 +1728,8 @@ void Label::updateContent()
                 // which is POT
                 y += spriteSize.height / 2;
             // FIXME: Might not work with different vertical alignments
-            _underlineNode->drawLine(Vec2(0.0f, y), Vec2(spriteSize.width, y),
-                                     Color(_textSprite->getDisplayedColor()), spriteSize.height / 6);
+            _underlineNode->drawLine(Vec2(0.0f, y), Vec2(spriteSize.width, y), Color(_textSprite->getDisplayedColor()),
+                                     spriteSize.height / 6);
         }
     }
 
@@ -2387,18 +2387,16 @@ void Label::updateColor()
     // special opacity for premultiplied textures
     if (_isOpacityModifyRGB)
     {
-        color.r *= _displayedOpacity / 255.0f;
-        color.g *= _displayedOpacity / 255.0f;
-        color.b *= _displayedOpacity / 255.0f;
+        color.r *= color.a;
+        color.g *= color.a;
+        color.b *= color.a;
     }
 
-    ax::TextureAtlas* textureAtlas;
-    V3F_C4F_T2F_Quad* quads;
     for (auto&& batchNode : _batchNodes)
     {
-        textureAtlas = batchNode->getTextureAtlas();
-        quads        = textureAtlas->getQuads();
-        auto count   = textureAtlas->getTotalQuads();
+        auto textureAtlas = batchNode->getTextureAtlas();
+        auto quads        = textureAtlas->getQuads();
+        auto count        = textureAtlas->getTotalQuads();
 
         for (int index = 0; index < count; ++index)
         {
@@ -2820,7 +2818,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
             {
                 recordPlaceholderInfo(letterIndex, character);
                 AXLOGW("LabelTextFormatter error: can't find letter definition in font file for letter: 0x{:x}",
-                      static_cast<uint32_t>(character));
+                       static_cast<uint32_t>(character));
                 continue;
             }
 
@@ -3036,11 +3034,11 @@ void Label::recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int lett
         LetterInfo tmpInfo;
         _lettersInfo.emplace_back(tmpInfo);
     }
-    _lettersInfo[letterIndex].lineIndex  = lineIndex;
-    _lettersInfo[letterIndex].utf32Char  = utf32Char;
-    _lettersInfo[letterIndex].valid      = _fontAtlas->_letterDefinitions[utf32Char].validDefinition && utf32Char != ' ';
-    _lettersInfo[letterIndex].positionX  = point.x;
-    _lettersInfo[letterIndex].positionY  = point.y;
+    _lettersInfo[letterIndex].lineIndex = lineIndex;
+    _lettersInfo[letterIndex].utf32Char = utf32Char;
+    _lettersInfo[letterIndex].valid     = _fontAtlas->_letterDefinitions[utf32Char].validDefinition && utf32Char != ' ';
+    _lettersInfo[letterIndex].positionX = point.x;
+    _lettersInfo[letterIndex].positionY = point.y;
     _lettersInfo[letterIndex].atlasIndex = -1;
 }
 
@@ -3055,4 +3053,4 @@ void Label::recordPlaceholderInfo(int letterIndex, char32_t utf32Char)
     _lettersInfo[letterIndex].valid     = false;
 }
 
-}
+}  // namespace ax
