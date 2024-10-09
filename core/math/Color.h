@@ -118,7 +118,7 @@ struct AX_DLL Color4B
 
 /**
  * RGBA color composed of 4 floats.
- * @since v3.0
+ * @since v3.0, renamed from Color4F
  */
 struct AX_DLL Color : public Vec4Adapter<Color>
 {
@@ -161,7 +161,6 @@ struct AX_DLL Color : public Vec4Adapter<Color>
     static const Color GRAY;
     static const Color TRANSPARENT;  // TRANSPARENT is defined on wingdi.h /*Background Modes*/
 };
-using Color4F = Color;  // DEPRECATED
 
 /**
  * Hue Saturation Value color space composed of 4 floats.

@@ -189,8 +189,8 @@ struct ProceduralModelParameter
 			if (Ribbon.Rotate != rhs.Ribbon.Rotate)
 				return Ribbon.Rotate < rhs.Ribbon.Rotate;
 
-			if (Ribbon.position != rhs.Ribbon.position)
-				return Ribbon.position < rhs.Ribbon.position;
+			if (Ribbon.Vertices != rhs.Ribbon.Vertices)
+				return Ribbon.Vertices < rhs.Ribbon.Vertices;
 
 			if (Ribbon.RibbonSizes != rhs.Ribbon.RibbonSizes)
 				return Ribbon.RibbonSizes < rhs.Ribbon.RibbonSizes;
@@ -366,7 +366,7 @@ struct ProceduralModelParameter
 		{
 			reader.Read(Ribbon.CrossSection);
 			reader.Read(Ribbon.Rotate);
-			reader.Read(Ribbon.position);
+			reader.Read(Ribbon.Vertices);
 			reader.Read(Ribbon.RibbonSizes);
 			reader.Read(Ribbon.RibbonAngles);
 			reader.Read(Ribbon.RibbonNoises);
