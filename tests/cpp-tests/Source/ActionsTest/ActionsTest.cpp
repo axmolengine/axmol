@@ -1244,7 +1244,7 @@ void ActionFollow::onEnter()
     float y            = s.height;
 
     Vec2 vertices[] = {Vec2(5.0f, 5.0f), Vec2(x - 5, 5.0f), Vec2(x - 5, y - 5), Vec2(5.0f, y - 5)};
-    drawNode->drawPoly(vertices, 4, true, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+    drawNode->drawPoly(vertices, 4, true, Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
 
     this->addChild(drawNode);
 
@@ -1281,7 +1281,7 @@ void ActionFollowWithOffset::onEnter()
     float y            = s.height;
 
     Vec2 vertices[] = {Vec2(5.0f, 5.0f), Vec2(x - 5, 5.0f), Vec2(x - 5, y - 5), Vec2(5.0f, y - 5)};
-    drawNode->drawPoly(vertices, 4, true, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+    drawNode->drawPoly(vertices, 4, true, Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
 
     this->addChild(drawNode);
 
@@ -1523,7 +1523,7 @@ void ActionCatmullRomStacked::onEnter()
 
     auto drawNode1 = DrawNode::create();
     drawNode1->setPosition(Vec2(50.0f, 50.0f));
-    drawNode1->drawCatmullRom(array, 50, Color4F(1.0f, 1.0f, 0.0f, 0.5f));
+    drawNode1->drawCatmullRom(array, 50, Color(1.0f, 1.0f, 0.0f, 0.5f));
     this->addChild(drawNode1);
 
     //
@@ -1552,7 +1552,7 @@ void ActionCatmullRomStacked::onEnter()
                                                               MoveBy::create(0.05f, Vec2(-10.0f, 0.0f)), nullptr)));
 
     auto drawNode2 = DrawNode::create();
-    drawNode2->drawCatmullRom(array2, 50, Color4F(1.0, 0.0, 0.0, 0.5));
+    drawNode2->drawCatmullRom(array2, 50, Color(1.0, 0.0, 0.0, 0.5));
     this->addChild(drawNode2);
 }
 
@@ -1605,7 +1605,7 @@ void ActionCardinalSplineStacked::onEnter()
 
     auto drawNode1 = DrawNode::create();
     drawNode1->setPosition(Vec2(50.0f, 50.0f));
-    drawNode1->drawCardinalSpline(array, 0, 100, Color4F(1.0f, 0.0f, 1.0f, 1.0f));
+    drawNode1->drawCardinalSpline(array, 0, 100, Color(1.0f, 0.0f, 1.0f, 1.0f));
     this->addChild(drawNode1);
 
     //
@@ -1628,7 +1628,7 @@ void ActionCardinalSplineStacked::onEnter()
 
     auto drawNode2 = DrawNode::create();
     drawNode2->setPosition(Vec2(s.width / 2, 50.0f));
-    drawNode2->drawCardinalSpline(array, 1, 100, Color4F(0.0f, 0.0f, 1.0f, 1.0f));
+    drawNode2->drawCardinalSpline(array, 1, 100, Color(0.0f, 0.0f, 1.0f, 1.0f));
     this->addChild(drawNode2);
 }
 
@@ -1950,7 +1950,7 @@ void ActionCatmullRom::onEnter()
 
     auto drawNode1 = DrawNode::create();
     drawNode1->setPosition(Vec2(50.0f, 50.0f));
-    drawNode1->drawCatmullRom(array, 50, Color4F(1.0f, 0.0f, 1.0f, 1.0f));
+    drawNode1->drawCatmullRom(array, 50, Color(1.0f, 0.0f, 1.0f, 1.0f));
     this->addChild(drawNode1);
 
     //
@@ -1976,7 +1976,7 @@ void ActionCatmullRom::onEnter()
     _kathia->runAction(seq2);
 
     auto drawNode2 = DrawNode::create();
-    drawNode2->drawCatmullRom(array2, 50, Color4F(0.0f, 1.0f, 1.0f, 1.0f));
+    drawNode2->drawCatmullRom(array2, 50, Color(0.0f, 1.0f, 1.0f, 1.0f));
     this->addChild(drawNode2);
 }
 
@@ -2026,7 +2026,7 @@ void ActionCardinalSpline::onEnter()
 
     auto drawNode1 = DrawNode::create();
     drawNode1->setPosition(Vec2(50.0f, 50.0f));
-    drawNode1->drawCardinalSpline(array, 0, 100, Color4F(1.0f, 0.0f, 1.0f, 1.0f));
+    drawNode1->drawCardinalSpline(array, 0, 100, Color(1.0f, 0.0f, 1.0f, 1.0f));
     this->addChild(drawNode1);
 
     //
@@ -2045,7 +2045,7 @@ void ActionCardinalSpline::onEnter()
 
     auto drawNode2 = DrawNode::create();
     drawNode2->setPosition(Vec2(s.width / 2, 50.0f));
-    drawNode2->drawCardinalSpline(array, 1, 100, Color4F(1.0f, 0.0f, 1.0f, 1.0f));
+    drawNode2->drawCardinalSpline(array, 1, 100, Color(1.0f, 0.0f, 1.0f, 1.0f));
     this->addChild(drawNode2);
 }
 
