@@ -97,11 +97,11 @@ void Bug12847Layer::update(float dt)
 void Bug12847Layer::onEnter()
 {
     BugsTestBase::onEnter();
-    Director::getInstance()->setClearColor(Color4F::RED);
+    Director::getInstance()->setClearColor(Color::RED);
 }
 
 void Bug12847Layer::onExit()
 {
-    Director::getInstance()->setClearColor(Color4F::BLACK);
+    Director::getInstance()->setClearColor(Color::BLACK);
     BugsTestBase::onExit();
 }

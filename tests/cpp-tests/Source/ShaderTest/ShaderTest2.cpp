@@ -413,7 +413,7 @@ public:
     }
     void setKBump(float value);
     void setLightPos(const Vec3& pos);
-    void setLightColor(const Color4F& color);
+    void setLightColor(const Color& color);
     float getKBump() const { return _kBump; }
 
 protected:
@@ -422,7 +422,7 @@ protected:
     virtual void setTarget(EffectSprite* sprite) override;
     EffectSprite* _sprite;
     Vec3 _lightPos;
-    Color4F _lightColor;
+    Color _lightColor;
     float _kBump;
 };
 
@@ -457,7 +457,7 @@ void EffectNormalMapped::setLightPos(const Vec3& pos)
     SET_UNIFORM(_programState, "u_lightPosInLocalSpace", Vec4(_lightPos.x, _lightPos.y, _lightPos.z, 1));
 }
 
-void EffectNormalMapped::setLightColor(const Color4F& color)
+void EffectNormalMapped::setLightColor(const Color& color)
 {
     _lightColor = color;
     SET_UNIFORM(_programState, "u_diffuseL", Vec3(_lightColor.r, _lightColor.g, _lightColor.b));
@@ -552,7 +552,7 @@ bool EffectSpriteLamp::init()
         Mat4 mat = _sprite->getNodeToWorldTransform();
         Point lightPosInLocalSpace =
             PointApplyAffineTransform(Vec2(pos.x, pos.y), _sprite->getWorldToNodeAffineTransform());
-        lampEffect->setLightColor(Color4F(1, 1, 1, 1));
+        lampEffect->setLightColor(Color(1, 1, 1, 1));
         lampEffect->setLightPos(Vec3(lightPosInLocalSpace.x, lightPosInLocalSpace.y, 50.0f));
         lampEffect->setKBump(2);
         _sprite->setEffect(lampEffect);

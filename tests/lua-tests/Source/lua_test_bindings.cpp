@@ -41,7 +41,7 @@ public:
     /**
      * Draw 3D Line
      */
-    void drawLine(const Vec3& from, const Vec3& to, const Color4F& color);
+    void drawLine(const Vec3& from, const Vec3& to, const Color& color);
 
     /**
      * Draw 3D cube
@@ -56,7 +56,7 @@ public:
      *        vertices[7]:Left-top-back.
      * @param color
      */
-    void drawCube(Vec3* vertices, const Color4F& color);
+    void drawCube(Vec3* vertices, const Color& color);
 
     /** Clear the geometry in the node's buffer. */
     void clear();
@@ -223,7 +223,7 @@ void DrawNode3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     }
 }
 
-void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color4F& color)
+void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color& color)
 {
     unsigned int vertex_count = 2;
     ensureCapacity(vertex_count);
@@ -239,7 +239,7 @@ void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color4F& color
     _dirty = true;
 }
 
-void DrawNode3D::drawCube(Vec3* vertices, const Color4F& color)
+void DrawNode3D::drawCube(Vec3* vertices, const Color& color)
 {
     // front face
     drawLine(vertices[0], vertices[1], color);
@@ -459,7 +459,7 @@ int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
     {
         ax::Vec3 arg0;
         ax::Vec3 arg1;
-        ax::Color4F arg2;
+        ax::Color arg2;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "ax.DrawNode3D:drawLine");
 
@@ -555,7 +555,7 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
     if (argc == 2)
     {
         std::vector<ax::Vec3> arg0;
-        ax::Color4F arg1;
+        ax::Color arg1;
         Vec3 vec3;
 #if _AX_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))

@@ -142,7 +142,7 @@ void DrawNode3D::updateCommand(ax::Renderer* renderer, const Mat4& transform, ui
     AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _bufferLines.size());
 }
 
-void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color4F& color)
+void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color& color)
 {
     unsigned int vertex_count = 2;
     ensureCapacity(vertex_count);
@@ -153,7 +153,7 @@ void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color4F& color
     _isDirty = true;
 }
 
-void DrawNode3D::drawCube(Vec3* vertices, const Color4F& color)
+void DrawNode3D::drawCube(Vec3* vertices, const Color& color)
 {
     // front face
     drawLine(vertices[0], vertices[1], color);

@@ -9,14 +9,14 @@ struct CircleData
 {
     b2Vec2 position;
     float radius;
-    ax::Color4F rgba;
+    ax::Color rgba;
 };
 
 struct SolidCircleData
 {
     b2Transform transform;
     float radius;
-    ax::Color4F rgba;
+    ax::Color rgba;
 };
 
 struct CapsuleData
@@ -24,7 +24,7 @@ struct CapsuleData
     b2Transform transform;
     float radius;
     float length;
-    ax::Color4F rgba;
+    ax::Color rgba;
 };
 
 class Box2DTestDebugDrawNode : public ax::extension::PhysicsDebugNode

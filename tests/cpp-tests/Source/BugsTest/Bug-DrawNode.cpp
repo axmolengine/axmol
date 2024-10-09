@@ -49,9 +49,9 @@ bool BugDrawNodeLayer::init()
         addChild(testSprite);
 
         auto drawNode = DrawNode::create();
-        drawNode->drawLine(Vec2(0, 0), Vec2(size.width, size.height), Color4F(1, 0, 0, 0.5f));
+        drawNode->drawLine(Vec2(0, 0), Vec2(size.width, size.height), Color(1, 0, 0, 0.5f));
         Vec2 point = Vec2(size.width / 2, size.height / 2);
-        drawNode->drawPoint(point, 8, Color4F(1, 0, 0, 0.5f));
+        drawNode->drawPoint(point, 8, Color(1, 0, 0, 0.5f));
         addChild(drawNode);
 
         auto label = Label::create();

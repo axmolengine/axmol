@@ -885,7 +885,7 @@ ModelRef ProceduralModelGenerator::Generate(const ProceduralModelParameter& para
 		generator.Rotator = primitiveGenerator;
 		generator.Noise = noiseFunc;
 		generator.CrossSectionType = parameter.Ribbon.CrossSection;
-		generator.position = parameter.Ribbon.position;
+		generator.Vertices = parameter.Ribbon.Vertices;
 		generator.Rotate = parameter.Ribbon.Rotate;
 		generator.Count = parameter.Ribbon.Count;
 		generator.RibbonSizes = parameter.Ribbon.RibbonSizes;

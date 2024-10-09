@@ -43,7 +43,7 @@ public:
     /**
      * Draw 3D Line
      */
-    void drawLine(const ax::Vec3& from, const ax::Vec3& to, const Color4F& color);
+    void drawLine(const ax::Vec3& from, const ax::Vec3& to, const Color& color);
 
     /**
      * Draw 3D cube
@@ -58,7 +58,7 @@ public:
      *        vertices[7]:Left-top-back.
      * @param color
      */
-    void drawCube(ax::Vec3* vertices, const Color4F& color);
+    void drawCube(ax::Vec3* vertices, const Color& color);
 
     /** Clear the geometry in the node's buffer. */
     void clear();

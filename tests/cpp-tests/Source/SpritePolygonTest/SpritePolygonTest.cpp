@@ -61,12 +61,12 @@ SpritePolygonTestCase::~SpritePolygonTestCase()
 void SpritePolygonTestCase::onEnter()
 {
     TestCase::onEnter();
-    Director::getInstance()->setClearColor(Color4F(102.0f / 255.0f, 184.0f / 255.0f, 204.0f / 255.0f, 1.0f));
+    Director::getInstance()->setClearColor(Color(102.0f / 255.0f, 184.0f / 255.0f, 204.0f / 255.0f, 1.0f));
 }
 
 void SpritePolygonTestCase::onExit()
 {
-    Director::getInstance()->setClearColor(Color4F::BLACK);
+    Director::getInstance()->setClearColor(Color::BLACK);
     TestCase::onExit();
 }
 
@@ -131,15 +131,15 @@ void SpritePolygonTestCase::updateDrawNode()
                 // draw 3 lines
                 Vec3 from = verts[indices[i * 3]].position;
                 Vec3 to   = verts[indices[i * 3 + 1]].position;
-                drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4F::BLUE);
+                drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color::BLUE);
 
                 from = verts[indices[i * 3 + 1]].position;
                 to   = verts[indices[i * 3 + 2]].position;
-                drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4F::GREEN);
+                drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color::GREEN);
 
                 from = verts[indices[i * 3 + 2]].position;
                 to   = verts[indices[i * 3]].position;
-                drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4F::RED);
+                drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color::RED);
             }
         }
     }

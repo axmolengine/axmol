@@ -152,7 +152,7 @@ DrawNode* BasicTest::shape()
     triangle[1] = Vec2(100, -100);
     triangle[2] = Vec2(0, 100);
 
-    static Color4F green(0, 1, 0, 1);
+    static Color green(0, 1, 0, 1);
     shape->drawPolygon(triangle, 3, green, 0, green);
     return shape;
 }
@@ -464,7 +464,7 @@ void ScrollViewDemo::setup()
     rectangle[2] = Vec2(clipper->getContentSize().width, clipper->getContentSize().height);
     rectangle[3] = Vec2(0.0f, clipper->getContentSize().height);
 
-    Color4F white(1, 1, 1, 1);
+    Color white(1, 1, 1, 1);
     stencil->drawPolygon(rectangle, 4, white, 1, white);
     clipper->setStencil(stencil);
 
@@ -623,7 +623,7 @@ void RawStencilBufferTest::draw(Renderer* renderer, const Mat4& transform, uint3
         _sprites.at(i)->setPosition(spritePoint);
         _spritesStencil.at(i)->setPosition(spritePoint);
 
-        renderer->clear(ClearFlag::STENCIL, Color4F::BLACK, 0.f, 0x0, _globalZOrder);
+        renderer->clear(ClearFlag::STENCIL, Color::BLACK, 0.f, 0x0, _globalZOrder);
 
         renderer->addCommand(&_renderCmds[cmdIndex]);
         cmdIndex++;
@@ -870,7 +870,7 @@ void ClippingToRenderTextureTest::expectedBehaviour()
     triangle[0] = Point(-50, -50);
     triangle[1] = Point(50, -50);
     triangle[2] = Point(0, 50);
-    Color4F green(0, 1, 0, 1);
+    Color green(0, 1, 0, 1);
     stencil->drawPolygon(triangle, 3, green, 0, green);
 
     auto clipper = ClippingNode::create();
@@ -884,7 +884,7 @@ void ClippingToRenderTextureTest::expectedBehaviour()
     triangle[0] = Point(-200, -200);
     triangle[1] = Point(200, -200);
     triangle[2] = Point(0, 200);
-    Color4F red(1, 0, 0, 1);
+    Color red(1, 0, 0, 1);
     img->drawPolygon(triangle, 3, red, 0, red);
     clipper->addChild(img);
 }
@@ -913,7 +913,7 @@ void ClippingToRenderTextureTest::reproduceBug()
     triangle[0] = Point(-50, -50);
     triangle[1] = Point(50, -50);
     triangle[2] = Point(0, 50);
-    Color4F green(0, 1, 0, 1);
+    Color green(0, 1, 0, 1);
     stencil->drawPolygon(triangle, 3, green, 0, green);
 
     auto clipper = ClippingNode::create();
@@ -927,7 +927,7 @@ void ClippingToRenderTextureTest::reproduceBug()
     triangle[0] = Point(-200, -200);
     triangle[1] = Point(200, -200);
     triangle[2] = Point(0, 200);
-    Color4F red(1, 0, 0, 1);
+    Color red(1, 0, 0, 1);
     img->drawPolygon(triangle, 3, red, 0, red);
     clipper->addChild(img);
 

@@ -58,7 +58,7 @@ PhysicsTests::PhysicsTests()
 
 namespace
 {
-Color4F STATIC_COLOR(1.0f, 0.0f, 0.0f, 1.0f);
+Color STATIC_COLOR(1.0f, 0.0f, 0.0f, 1.0f);
 const int DRAG_BODYS_TAG = 0x80;
 }  // namespace
 
@@ -548,7 +548,7 @@ void PhysicsDemoRayCast::update(float /*delta*/)
 
         if (point2 != point3)
         {
-            _node->drawDot(point3, 2, Color4F(1.0f, 1.0f, 1.0f, 1.0f));
+            _node->drawDot(point3, 2, Color(1.0f, 1.0f, 1.0f, 1.0f));
         }
         addChild(_node);
 
@@ -574,7 +574,7 @@ void PhysicsDemoRayCast::update(float /*delta*/)
 
         if (point2 != point3)
         {
-            _node->drawDot(point3, 2, Color4F(1.0f, 1.0f, 1.0f, 1.0f));
+            _node->drawDot(point3, 2, Color(1.0f, 1.0f, 1.0f, 1.0f));
         }
         addChild(_node);
 
@@ -602,7 +602,7 @@ void PhysicsDemoRayCast::update(float /*delta*/)
 
         for (int i = 0; i < num; ++i)
         {
-            _node->drawDot(points[i], 2, Color4F(1.0f, 1.0f, 1.0f, 1.0f));
+            _node->drawDot(points[i], 2, Color(1.0f, 1.0f, 1.0f, 1.0f));
         }
 
         addChild(_node);
