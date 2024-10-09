@@ -41,7 +41,7 @@ public:
     {
         DrawNode* drawNode = DrawNode::create();
         auto s             = Director::getInstance()->getWinSize();
-        Color4F color(touchColor.r / 255.0f, touchColor.g / 255.0f, touchColor.b / 255.0f, 1.0f);
+        Color color(touchColor.r / 255.0f, touchColor.g / 255.0f, touchColor.b / 255.0f, 1.0f);
         drawNode->drawLine(Vec2(0.0f, touchPoint.y), Vec2(s.width, touchPoint.y), color);
         drawNode->drawLine(Vec2(touchPoint.x, 0.0f), Vec2(touchPoint.x, s.height), color);
         drawNode->drawDot(touchPoint, 3, color);

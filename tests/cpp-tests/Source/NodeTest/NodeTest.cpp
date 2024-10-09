@@ -1500,9 +1500,9 @@ void Issue16735Test::onEnter()
 
     auto d = DrawNode::create();
     d->drawLine(Vec2(origin.x, origin.y + visibleSize.height / 2),
-                Vec2(origin.x + visibleSize.width, origin.y + visibleSize.height / 2), Color4F::RED);
+                Vec2(origin.x + visibleSize.width, origin.y + visibleSize.height / 2), Color::RED);
     d->drawLine(Vec2(origin.x + visibleSize.width / 2, origin.y),
-                Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height), Color4F::RED);
+                Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height), Color::RED);
 
     addChild(d);
 }
