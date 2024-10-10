@@ -123,7 +123,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-87ae18a
+  - Version: 2.1-97813fb
   - License: MIT
 
 - tolua
