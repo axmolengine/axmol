@@ -10,7 +10,7 @@
 
 ### Bug fixes
 
-* Scheduler: fix invalidated iterator access in `unscheduleAllWithMinPriority()` by @smilediver in https://github.com/axmolengine/axmol/pull/2194
+* Fix invalidated iterator access in `Scheduler::unscheduleAllWithMinPriority()` by @smilediver in https://github.com/axmolengine/axmol/pull/2194
 * Fix label in PauseTest. by @Tosik86 in https://github.com/axmolengine/axmol/pull/2157
 * Fix #2147 full screen incorrect on macOS by @halx99 in https://github.com/axmolengine/axmol/pull/2150
 * Fix RenderTargetGL FBO not recreate when recv EVENT_RENDERER_RECREATED by @halx99 in https://github.com/axmolengine/axmol/pull/2148
