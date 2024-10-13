@@ -320,8 +320,6 @@ public:
                        float expand);
 
 private:
-    void convertColor4B24F(Color& outColor, const Color4B& inColor);
-
     Color4B _startColor     = Color4B::BLACK;
     Color _startColorRend = Color::BLACK;  // start color used in shader
 

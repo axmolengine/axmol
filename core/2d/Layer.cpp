@@ -238,25 +238,25 @@ void LayerGradient::updateColor()
     Color E(_endColor, _endOpacity * opacityf / 255.0f);
 
     // (-1, -1)
-    _quad.bl.color.r = (E.r + (S.r - E.r) * ((c + u.x + u.y) / (2.0f * c))) * 255;
-    _quad.bl.color.g = (E.g + (S.g - E.g) * ((c + u.x + u.y) / (2.0f * c))) * 255;
-    _quad.bl.color.b = (E.b + (S.b - E.b) * ((c + u.x + u.y) / (2.0f * c))) * 255;
-    _quad.bl.color.a = (E.a + (S.a - E.a) * ((c + u.x + u.y) / (2.0f * c))) * 255;
+    _quad.bl.color.r = (E.r + (S.r - E.r) * ((c + u.x + u.y) / (2.0f * c)));
+    _quad.bl.color.g = (E.g + (S.g - E.g) * ((c + u.x + u.y) / (2.0f * c)));
+    _quad.bl.color.b = (E.b + (S.b - E.b) * ((c + u.x + u.y) / (2.0f * c)));
+    _quad.bl.color.a = (E.a + (S.a - E.a) * ((c + u.x + u.y) / (2.0f * c)));
     // (1, -1)
-    _quad.br.color.r = (E.r + (S.r - E.r) * ((c - u.x + u.y) / (2.0f * c))) * 255;
-    _quad.br.color.g = (E.g + (S.g - E.g) * ((c - u.x + u.y) / (2.0f * c))) * 255;
-    _quad.br.color.b = (E.b + (S.b - E.b) * ((c - u.x + u.y) / (2.0f * c))) * 255;
-    _quad.br.color.a = (E.a + (S.a - E.a) * ((c - u.x + u.y) / (2.0f * c))) * 255;
+    _quad.br.color.r = (E.r + (S.r - E.r) * ((c - u.x + u.y) / (2.0f * c)));
+    _quad.br.color.g = (E.g + (S.g - E.g) * ((c - u.x + u.y) / (2.0f * c)));
+    _quad.br.color.b = (E.b + (S.b - E.b) * ((c - u.x + u.y) / (2.0f * c)));
+    _quad.br.color.a = (E.a + (S.a - E.a) * ((c - u.x + u.y) / (2.0f * c)));
     // (-1, 1)
-    _quad.tl.color.r = (E.r + (S.r - E.r) * ((c + u.x - u.y) / (2.0f * c))) * 255;
-    _quad.tl.color.g = (E.g + (S.g - E.g) * ((c + u.x - u.y) / (2.0f * c))) * 255;
-    _quad.tl.color.b = (E.b + (S.b - E.b) * ((c + u.x - u.y) / (2.0f * c))) * 255;
-    _quad.tl.color.a = (E.a + (S.a - E.a) * ((c + u.x - u.y) / (2.0f * c))) * 255;
+    _quad.tl.color.r = (E.r + (S.r - E.r) * ((c + u.x - u.y) / (2.0f * c)));
+    _quad.tl.color.g = (E.g + (S.g - E.g) * ((c + u.x - u.y) / (2.0f * c)));
+    _quad.tl.color.b = (E.b + (S.b - E.b) * ((c + u.x - u.y) / (2.0f * c)));
+    _quad.tl.color.a = (E.a + (S.a - E.a) * ((c + u.x - u.y) / (2.0f * c)));
     // (1, 1)
-    _quad.tr.color.r = (E.r + (S.r - E.r) * ((c - u.x - u.y) / (2.0f * c))) * 255;
-    _quad.tr.color.g = (E.g + (S.g - E.g) * ((c - u.x - u.y) / (2.0f * c))) * 255;
-    _quad.tr.color.b = (E.b + (S.b - E.b) * ((c - u.x - u.y) / (2.0f * c))) * 255;
-    _quad.tr.color.a = (E.a + (S.a - E.a) * ((c - u.x - u.y) / (2.0f * c))) * 255;
+    _quad.tr.color.r = (E.r + (S.r - E.r) * ((c - u.x - u.y) / (2.0f * c)));
+    _quad.tr.color.g = (E.g + (S.g - E.g) * ((c - u.x - u.y) / (2.0f * c)));
+    _quad.tr.color.b = (E.b + (S.b - E.b) * ((c - u.x - u.y) / (2.0f * c)));
+    _quad.tr.color.a = (E.a + (S.a - E.a) * ((c - u.x - u.y) / (2.0f * c)));
 
     // renders using batch node
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
@@ -409,10 +409,10 @@ bool LayerRadialGradient::initWithColor(const ax::Color4B& startColor,
 
     if (Node::initLayer())
     {
-        convertColor4B24F(_startColorRend, startColor);
+        _startColorRend = static_cast<ax::Color>(startColor);
         _startColor = startColor;
 
-        convertColor4B24F(_endColorRend, endColor);
+        _endColorRend = static_cast<ax::Color>(endColor);
         _endColor = endColor;
 
         _expand = expand;
@@ -514,7 +514,7 @@ void LayerRadialGradient::setStartColor(const Color3B& color)
 void LayerRadialGradient::setStartColor(const ax::Color4B& color)
 {
     _startColor = color;
-    convertColor4B24F(_startColorRend, _startColor);
+    _startColorRend = static_cast<ax::Color>(color);
 }
 
 Color4B LayerRadialGradient::getStartColor() const
@@ -535,7 +535,7 @@ void LayerRadialGradient::setEndColor(const Color3B& color)
 void LayerRadialGradient::setEndColor(const ax::Color4B& color)
 {
     _endColor = color;
-    convertColor4B24F(_endColorRend, _endColor);
+    _endColorRend = static_cast<ax::Color>(color);
 }
 
 Color4B LayerRadialGradient::getEndColor() const
@@ -556,14 +556,6 @@ void LayerRadialGradient::setBlendFunc(const BlendFunc& blendFunc)
 const BlendFunc& LayerRadialGradient::getBlendFunc() const
 {
     return _blendFunc;
-}
-
-void LayerRadialGradient::convertColor4B24F(Color& outColor, const Color4B& inColor)
-{
-    outColor.r = inColor.r / 255.0f;
-    outColor.g = inColor.g / 255.0f;
-    outColor.b = inColor.b / 255.0f;
-    outColor.a = inColor.a / 255.0f;
 }
 
 /// MultiplexLayer
