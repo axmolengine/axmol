@@ -185,7 +185,7 @@ public:
             }
         };
         auto mouseListener         = EventListenerMouse::create();
-        mouseListener->onMouseDown = mouseListener->onMouseUp = stopAnyMouse;
+        mouseListener->onMouseDown = mouseListener->onMouseUp = mouseListener->onMouseMove =  mouseListener->onMouseScroll = stopAnyMouse;
         _trackLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(mouseListener, _trackLayer);
         scene->addChild(_trackLayer, INT_MAX);
 #endif

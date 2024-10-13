@@ -189,8 +189,8 @@ struct TabHeaderOption FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const ::flatbuffers::String *titleText() const {
     return GetPointer<const ::flatbuffers::String *>(VT_TITLETEXT);
   }
-  const flatbuffers::Color *textColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_TEXTCOLOR);
+  const flatbuffers::FColor *textColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_TEXTCOLOR);
   }
   const flatbuffers::ResourceData *normalBackFile() const {
     return GetPointer<const flatbuffers::ResourceData *>(VT_NORMALBACKFILE);
@@ -216,7 +216,7 @@ struct TabHeaderOption FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyField<int32_t>(verifier, VT_FONTSIZE, 4) &&
            VerifyOffset(verifier, VT_TITLETEXT) &&
            verifier.VerifyString(titleText()) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_TEXTCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_TEXTCOLOR, 1) &&
            VerifyOffset(verifier, VT_NORMALBACKFILE) &&
            verifier.VerifyTable(normalBackFile()) &&
            VerifyOffset(verifier, VT_PRESSBACKFILE) &&
@@ -247,7 +247,7 @@ struct TabHeaderOptionBuilder {
   void add_titleText(::flatbuffers::Offset<::flatbuffers::String> titleText) {
     fbb_.AddOffset(TabHeaderOption::VT_TITLETEXT, titleText);
   }
-  void add_textColor(const flatbuffers::Color *textColor) {
+  void add_textColor(const flatbuffers::FColor *textColor) {
     fbb_.AddStruct(TabHeaderOption::VT_TEXTCOLOR, textColor);
   }
   void add_normalBackFile(::flatbuffers::Offset<flatbuffers::ResourceData> normalBackFile) {
@@ -282,7 +282,7 @@ inline ::flatbuffers::Offset<TabHeaderOption> CreateTabHeaderOption(
     ::flatbuffers::Offset<flatbuffers::ResourceData> fontRes = 0,
     int32_t fontSize = 0,
     ::flatbuffers::Offset<::flatbuffers::String> titleText = 0,
-    const flatbuffers::Color *textColor = nullptr,
+    const flatbuffers::FColor *textColor = nullptr,
     ::flatbuffers::Offset<flatbuffers::ResourceData> normalBackFile = 0,
     ::flatbuffers::Offset<flatbuffers::ResourceData> pressBackFile = 0,
     ::flatbuffers::Offset<flatbuffers::ResourceData> disableBackFile = 0,
@@ -308,7 +308,7 @@ inline ::flatbuffers::Offset<TabHeaderOption> CreateTabHeaderOptionDirect(
     ::flatbuffers::Offset<flatbuffers::ResourceData> fontRes = 0,
     int32_t fontSize = 0,
     const char *titleText = nullptr,
-    const flatbuffers::Color *textColor = nullptr,
+    const flatbuffers::FColor *textColor = nullptr,
     ::flatbuffers::Offset<flatbuffers::ResourceData> normalBackFile = 0,
     ::flatbuffers::Offset<flatbuffers::ResourceData> pressBackFile = 0,
     ::flatbuffers::Offset<flatbuffers::ResourceData> disableBackFile = 0,

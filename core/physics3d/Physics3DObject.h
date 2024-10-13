@@ -35,8 +35,6 @@
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
-
 class btCollisionShape;
 class btRigidBody;
 class btPersistentManifold;
@@ -496,8 +494,6 @@ protected:
 /// @}
 
 }
-
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)
 

@@ -622,7 +622,7 @@ RenderTextureTargetNode::RenderTextureTargetNode()
     /* add the sprites to the render texture */
     renderTexture->addChild(sprite1);
     renderTexture->addChild(sprite2);
-    renderTexture->setClearColor(Color4F(0, 0, 0, 0));
+    renderTexture->setClearColor(Color(0, 0, 0, 0));
     renderTexture->setClearFlags(ClearFlag::COLOR);
 
     /* add the render texture to the scene */
@@ -650,7 +650,7 @@ void RenderTextureTargetNode::touched(Object* sender)
     else
     {
         renderTexture->setClearFlags(ClearFlag::NONE);
-        renderTexture->setClearColor(Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+        renderTexture->setClearColor(Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
     }
 }
 

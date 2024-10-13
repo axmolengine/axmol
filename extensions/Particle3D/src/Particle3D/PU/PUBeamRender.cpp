@@ -269,7 +269,7 @@ void PUBeamRender::prepare()
             PUBillboardChain::Element element;
             element = PUBillboardChain::Element(
                 Vec3::ZERO, _rendererScale.x * static_cast<PUParticleSystem3D*>(_particleSystem)->getDefaultWidth(),
-                0.0f, Vec4::ONE, Quaternion::identity());  // V1.51
+                0.0f, Color::WHITE, Quaternion::identity());  // V1.51
             _billboardChain->addChainElement(i, element);
         }
 

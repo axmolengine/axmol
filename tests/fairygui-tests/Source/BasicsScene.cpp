@@ -186,7 +186,7 @@ void BasicsScene::playDepth()
         startPos.x += 10;
         startPos.y += 10;
         graph->setPosition(startPos.x, startPos.y);
-        graph->drawRect(150, 150, 1, Color4F::BLACK, Color4F::RED);
+        graph->drawRect(150, 150, 1, Color::BLACK, Color::RED);
         obj->getChild("n22")->as<GComponent>()->addChild(graph);
     },
                                             EventTag(this)); //avoid duplicate register
@@ -196,7 +196,7 @@ void BasicsScene::playDepth()
         startPos.x += 10;
         startPos.y += 10;
         graph->setPosition(startPos.x, startPos.y);
-        graph->drawRect(150, 150, 1, Color4F::BLACK, Color4F::GREEN);
+        graph->drawRect(150, 150, 1, Color::BLACK, Color::GREEN);
         graph->setSortingOrder(200);
         obj->getChild("n22")->as<GComponent>()->addChild(graph);
     },

@@ -147,7 +147,7 @@ AnchoredSprite* AnchoredSprite::create()
     return nullptr;
 }
 
-void AnchoredSprite::setVertexCoords(const Rect& rect, V3F_C4B_T2F_Quad* outQuad)
+void AnchoredSprite::setVertexCoords(const Rect& rect, V3F_C4F_T2F_Quad* outQuad)
 {
     float relativeOffsetX = _unflippedOffsetPositionFromCenter.x - getContentSize().x * _spriteVertexAnchor.x;
     float relativeOffsetY = _unflippedOffsetPositionFromCenter.y - getContentSize().y * _spriteVertexAnchor.y;
@@ -186,10 +186,10 @@ void AnchoredSprite::setVertexCoords(const Rect& rect, V3F_C4B_T2F_Quad* outQuad
         const float y2 = y1 + rect.size.height;
 
         // Don't update Z.
-        outQuad->bl.vertices.set(x1, y1, 0.0f);
-        outQuad->br.vertices.set(x2, y1, 0.0f);
-        outQuad->tl.vertices.set(x1, y2, 0.0f);
-        outQuad->tr.vertices.set(x2, y2, 0.0f);
+        outQuad->bl.position.set(x1, y1, 0.0f);
+        outQuad->br.position.set(x2, y1, 0.0f);
+        outQuad->tl.position.set(x1, y2, 0.0f);
+        outQuad->tr.position.set(x2, y2, 0.0f);
     }
 }
 

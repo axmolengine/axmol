@@ -46,8 +46,6 @@ AX_DLL const char* physics3dVersion();
 
 }
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
-
 // include bullet header files
 #        include "bullet/LinearMath/btTransform.h"
 #        include "bullet/LinearMath/btVector3.h"
@@ -64,8 +62,6 @@ ax::Mat4 convertbtTransformToMat4(const btTransform& btTrans);
 btTransform convertMat4TobtTransform(const ax::Mat4& mat4);
 ax::Quaternion convertbtQuatToQuat(const btQuaternion& btQuat);
 btQuaternion convertQuatTobtQuat(const ax::Quaternion& quat);
-
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)
 

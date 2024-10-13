@@ -154,7 +154,7 @@ struct FVec2;
 
 struct FVec3;
 
-struct Color;
+struct FColor;
 
 struct FlatSize;
 
@@ -220,7 +220,7 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) FVec3 FLATBUFFERS_FINAL_CLASS {
 };
 FLATBUFFERS_STRUCT_END(FVec3, 12);
 
-FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(1) Color FLATBUFFERS_FINAL_CLASS {
+FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(1) FColor FLATBUFFERS_FINAL_CLASS {
  private:
   uint8_t a_;
   uint8_t r_;
@@ -228,13 +228,13 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(1) Color FLATBUFFERS_FINAL_CLASS {
   uint8_t b_;
 
  public:
-  Color()
+  FColor()
       : a_(0),
         r_(0),
         g_(0),
         b_(0) {
   }
-  Color(uint8_t _a, uint8_t _r, uint8_t _g, uint8_t _b)
+  FColor(uint8_t _a, uint8_t _r, uint8_t _g, uint8_t _b)
       : a_(::flatbuffers::EndianScalar(_a)),
         r_(::flatbuffers::EndianScalar(_r)),
         g_(::flatbuffers::EndianScalar(_g)),
@@ -253,7 +253,7 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(1) Color FLATBUFFERS_FINAL_CLASS {
     return ::flatbuffers::EndianScalar(b_);
   }
 };
-FLATBUFFERS_STRUCT_END(Color, 4);
+FLATBUFFERS_STRUCT_END(FColor, 4);
 
 FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) FlatSize FLATBUFFERS_FINAL_CLASS {
  private:
@@ -650,8 +650,8 @@ struct WidgetOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const flatbuffers::FVec2 *anchorPoint() const {
     return GetStruct<const flatbuffers::FVec2 *>(VT_ANCHORPOINT);
   }
-  const flatbuffers::Color *color() const {
-    return GetStruct<const flatbuffers::Color *>(VT_COLOR);
+  const flatbuffers::FColor *color() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_COLOR);
   }
   const flatbuffers::FlatSize *size() const {
     return GetStruct<const flatbuffers::FlatSize *>(VT_SIZE);
@@ -702,7 +702,7 @@ struct WidgetOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyField<flatbuffers::FVec2>(verifier, VT_POSITION, 4) &&
            VerifyField<flatbuffers::FVec2>(verifier, VT_SCALE, 4) &&
            VerifyField<flatbuffers::FVec2>(verifier, VT_ANCHORPOINT, 4) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_COLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_COLOR, 1) &&
            VerifyField<flatbuffers::FlatSize>(verifier, VT_SIZE, 4) &&
            VerifyField<uint8_t>(verifier, VT_FLIPX, 1) &&
            VerifyField<uint8_t>(verifier, VT_FLIPY, 1) &&
@@ -758,7 +758,7 @@ struct WidgetOptionsBuilder {
   void add_anchorPoint(const flatbuffers::FVec2 *anchorPoint) {
     fbb_.AddStruct(WidgetOptions::VT_ANCHORPOINT, anchorPoint);
   }
-  void add_color(const flatbuffers::Color *color) {
+  void add_color(const flatbuffers::FColor *color) {
     fbb_.AddStruct(WidgetOptions::VT_COLOR, color);
   }
   void add_size(const flatbuffers::FlatSize *size) {
@@ -820,7 +820,7 @@ inline ::flatbuffers::Offset<WidgetOptions> CreateWidgetOptions(
     const flatbuffers::FVec2 *position = nullptr,
     const flatbuffers::FVec2 *scale = nullptr,
     const flatbuffers::FVec2 *anchorPoint = nullptr,
-    const flatbuffers::Color *color = nullptr,
+    const flatbuffers::FColor *color = nullptr,
     const flatbuffers::FlatSize *size = nullptr,
     bool flipX = false,
     bool flipY = false,
@@ -872,7 +872,7 @@ inline ::flatbuffers::Offset<WidgetOptions> CreateWidgetOptionsDirect(
     const flatbuffers::FVec2 *position = nullptr,
     const flatbuffers::FVec2 *scale = nullptr,
     const flatbuffers::FVec2 *anchorPoint = nullptr,
-    const flatbuffers::Color *color = nullptr,
+    const flatbuffers::FColor *color = nullptr,
     const flatbuffers::FlatSize *size = nullptr,
     bool flipX = false,
     bool flipY = false,
@@ -1735,8 +1735,8 @@ struct ButtonOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   int32_t fontSize() const {
     return GetField<int32_t>(VT_FONTSIZE, 0);
   }
-  const flatbuffers::Color *textColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_TEXTCOLOR);
+  const flatbuffers::FColor *textColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_TEXTCOLOR);
   }
   const flatbuffers::CapInsets *capInsets() const {
     return GetStruct<const flatbuffers::CapInsets *>(VT_CAPINSETS);
@@ -1753,8 +1753,8 @@ struct ButtonOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool outlineEnabled() const {
     return GetField<uint8_t>(VT_OUTLINEENABLED, 0) != 0;
   }
-  const flatbuffers::Color *outlineColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_OUTLINECOLOR);
+  const flatbuffers::FColor *outlineColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_OUTLINECOLOR);
   }
   int32_t outlineSize() const {
     return GetField<int32_t>(VT_OUTLINESIZE, 1);
@@ -1762,8 +1762,8 @@ struct ButtonOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool shadowEnabled() const {
     return GetField<uint8_t>(VT_SHADOWENABLED, 0) != 0;
   }
-  const flatbuffers::Color *shadowColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_SHADOWCOLOR);
+  const flatbuffers::FColor *shadowColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_SHADOWCOLOR);
   }
   float shadowOffsetX() const {
     return GetField<float>(VT_SHADOWOFFSETX, 2.0f);
@@ -1780,8 +1780,8 @@ struct ButtonOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool glowEnabled() const {
     return GetField<uint8_t>(VT_GLOWENABLED, 0) != 0;
   }
-  const flatbuffers::Color *glowColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_GLOWCOLOR);
+  const flatbuffers::FColor *glowColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_GLOWCOLOR);
   }
   bool boldEnabled() const {
     return GetField<uint8_t>(VT_BOLDENABLED, 0) != 0;
@@ -1812,22 +1812,22 @@ struct ButtonOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyOffset(verifier, VT_FONTNAME) &&
            verifier.VerifyString(fontName()) &&
            VerifyField<int32_t>(verifier, VT_FONTSIZE, 4) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_TEXTCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_TEXTCOLOR, 1) &&
            VerifyField<flatbuffers::CapInsets>(verifier, VT_CAPINSETS, 4) &&
            VerifyField<flatbuffers::FlatSize>(verifier, VT_SCALE9SIZE, 4) &&
            VerifyField<uint8_t>(verifier, VT_SCALE9ENABLED, 1) &&
            VerifyField<uint8_t>(verifier, VT_DISPLAYSTATE, 1) &&
            VerifyField<uint8_t>(verifier, VT_OUTLINEENABLED, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_OUTLINECOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_OUTLINECOLOR, 1) &&
            VerifyField<int32_t>(verifier, VT_OUTLINESIZE, 4) &&
            VerifyField<uint8_t>(verifier, VT_SHADOWENABLED, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_SHADOWCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_SHADOWCOLOR, 1) &&
            VerifyField<float>(verifier, VT_SHADOWOFFSETX, 4) &&
            VerifyField<float>(verifier, VT_SHADOWOFFSETY, 4) &&
            VerifyField<int32_t>(verifier, VT_SHADOWBLURRADIUS, 4) &&
            VerifyField<uint8_t>(verifier, VT_ISLOCALIZED, 1) &&
            VerifyField<uint8_t>(verifier, VT_GLOWENABLED, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_GLOWCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_GLOWCOLOR, 1) &&
            VerifyField<uint8_t>(verifier, VT_BOLDENABLED, 1) &&
            VerifyField<uint8_t>(verifier, VT_UNDERLINEENABLED, 1) &&
            VerifyField<uint8_t>(verifier, VT_ITALICSENABLED, 1) &&
@@ -1864,7 +1864,7 @@ struct ButtonOptionsBuilder {
   void add_fontSize(int32_t fontSize) {
     fbb_.AddElement<int32_t>(ButtonOptions::VT_FONTSIZE, fontSize, 0);
   }
-  void add_textColor(const flatbuffers::Color *textColor) {
+  void add_textColor(const flatbuffers::FColor *textColor) {
     fbb_.AddStruct(ButtonOptions::VT_TEXTCOLOR, textColor);
   }
   void add_capInsets(const flatbuffers::CapInsets *capInsets) {
@@ -1882,7 +1882,7 @@ struct ButtonOptionsBuilder {
   void add_outlineEnabled(bool outlineEnabled) {
     fbb_.AddElement<uint8_t>(ButtonOptions::VT_OUTLINEENABLED, static_cast<uint8_t>(outlineEnabled), 0);
   }
-  void add_outlineColor(const flatbuffers::Color *outlineColor) {
+  void add_outlineColor(const flatbuffers::FColor *outlineColor) {
     fbb_.AddStruct(ButtonOptions::VT_OUTLINECOLOR, outlineColor);
   }
   void add_outlineSize(int32_t outlineSize) {
@@ -1891,7 +1891,7 @@ struct ButtonOptionsBuilder {
   void add_shadowEnabled(bool shadowEnabled) {
     fbb_.AddElement<uint8_t>(ButtonOptions::VT_SHADOWENABLED, static_cast<uint8_t>(shadowEnabled), 0);
   }
-  void add_shadowColor(const flatbuffers::Color *shadowColor) {
+  void add_shadowColor(const flatbuffers::FColor *shadowColor) {
     fbb_.AddStruct(ButtonOptions::VT_SHADOWCOLOR, shadowColor);
   }
   void add_shadowOffsetX(float shadowOffsetX) {
@@ -1909,7 +1909,7 @@ struct ButtonOptionsBuilder {
   void add_glowEnabled(bool glowEnabled) {
     fbb_.AddElement<uint8_t>(ButtonOptions::VT_GLOWENABLED, static_cast<uint8_t>(glowEnabled), 0);
   }
-  void add_glowColor(const flatbuffers::Color *glowColor) {
+  void add_glowColor(const flatbuffers::FColor *glowColor) {
     fbb_.AddStruct(ButtonOptions::VT_GLOWCOLOR, glowColor);
   }
   void add_boldEnabled(bool boldEnabled) {
@@ -1945,22 +1945,22 @@ inline ::flatbuffers::Offset<ButtonOptions> CreateButtonOptions(
     ::flatbuffers::Offset<::flatbuffers::String> text = 0,
     ::flatbuffers::Offset<::flatbuffers::String> fontName = 0,
     int32_t fontSize = 0,
-    const flatbuffers::Color *textColor = nullptr,
+    const flatbuffers::FColor *textColor = nullptr,
     const flatbuffers::CapInsets *capInsets = nullptr,
     const flatbuffers::FlatSize *scale9Size = nullptr,
     bool scale9Enabled = false,
     bool displaystate = true,
     bool outlineEnabled = false,
-    const flatbuffers::Color *outlineColor = nullptr,
+    const flatbuffers::FColor *outlineColor = nullptr,
     int32_t outlineSize = 1,
     bool shadowEnabled = false,
-    const flatbuffers::Color *shadowColor = nullptr,
+    const flatbuffers::FColor *shadowColor = nullptr,
     float shadowOffsetX = 2.0f,
     float shadowOffsetY = -2.0f,
     int32_t shadowBlurRadius = 0,
     bool isLocalized = false,
     bool glowEnabled = false,
-    const flatbuffers::Color *glowColor = nullptr,
+    const flatbuffers::FColor *glowColor = nullptr,
     bool boldEnabled = false,
     bool underlineEnabled = false,
     bool italicsEnabled = false,
@@ -2007,22 +2007,22 @@ inline ::flatbuffers::Offset<ButtonOptions> CreateButtonOptionsDirect(
     const char *text = nullptr,
     const char *fontName = nullptr,
     int32_t fontSize = 0,
-    const flatbuffers::Color *textColor = nullptr,
+    const flatbuffers::FColor *textColor = nullptr,
     const flatbuffers::CapInsets *capInsets = nullptr,
     const flatbuffers::FlatSize *scale9Size = nullptr,
     bool scale9Enabled = false,
     bool displaystate = true,
     bool outlineEnabled = false,
-    const flatbuffers::Color *outlineColor = nullptr,
+    const flatbuffers::FColor *outlineColor = nullptr,
     int32_t outlineSize = 1,
     bool shadowEnabled = false,
-    const flatbuffers::Color *shadowColor = nullptr,
+    const flatbuffers::FColor *shadowColor = nullptr,
     float shadowOffsetX = 2.0f,
     float shadowOffsetY = -2.0f,
     int32_t shadowBlurRadius = 0,
     bool isLocalized = false,
     bool glowEnabled = false,
-    const flatbuffers::Color *glowColor = nullptr,
+    const flatbuffers::FColor *glowColor = nullptr,
     bool boldEnabled = false,
     bool underlineEnabled = false,
     bool italicsEnabled = false,
@@ -2700,8 +2700,8 @@ struct TextOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool outlineEnabled() const {
     return GetField<uint8_t>(VT_OUTLINEENABLED, 0) != 0;
   }
-  const flatbuffers::Color *outlineColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_OUTLINECOLOR);
+  const flatbuffers::FColor *outlineColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_OUTLINECOLOR);
   }
   int32_t outlineSize() const {
     return GetField<int32_t>(VT_OUTLINESIZE, 1);
@@ -2709,8 +2709,8 @@ struct TextOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool shadowEnabled() const {
     return GetField<uint8_t>(VT_SHADOWENABLED, 0) != 0;
   }
-  const flatbuffers::Color *shadowColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_SHADOWCOLOR);
+  const flatbuffers::FColor *shadowColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_SHADOWCOLOR);
   }
   float shadowOffsetX() const {
     return GetField<float>(VT_SHADOWOFFSETX, 2.0f);
@@ -2727,8 +2727,8 @@ struct TextOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool glowEnabled() const {
     return GetField<uint8_t>(VT_GLOWENABLED, 0) != 0;
   }
-  const flatbuffers::Color *glowColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_GLOWCOLOR);
+  const flatbuffers::FColor *glowColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_GLOWCOLOR);
   }
   bool boldEnabled() const {
     return GetField<uint8_t>(VT_BOLDENABLED, 0) != 0;
@@ -2760,16 +2760,16 @@ struct TextOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyField<uint8_t>(verifier, VT_TOUCHSCALEENABLE, 1) &&
            VerifyField<uint8_t>(verifier, VT_ISCUSTOMSIZE, 1) &&
            VerifyField<uint8_t>(verifier, VT_OUTLINEENABLED, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_OUTLINECOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_OUTLINECOLOR, 1) &&
            VerifyField<int32_t>(verifier, VT_OUTLINESIZE, 4) &&
            VerifyField<uint8_t>(verifier, VT_SHADOWENABLED, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_SHADOWCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_SHADOWCOLOR, 1) &&
            VerifyField<float>(verifier, VT_SHADOWOFFSETX, 4) &&
            VerifyField<float>(verifier, VT_SHADOWOFFSETY, 4) &&
            VerifyField<int32_t>(verifier, VT_SHADOWBLURRADIUS, 4) &&
            VerifyField<uint8_t>(verifier, VT_ISLOCALIZED, 1) &&
            VerifyField<uint8_t>(verifier, VT_GLOWENABLED, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_GLOWCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_GLOWCOLOR, 1) &&
            VerifyField<uint8_t>(verifier, VT_BOLDENABLED, 1) &&
            VerifyField<uint8_t>(verifier, VT_UNDERLINEENABLED, 1) &&
            VerifyField<uint8_t>(verifier, VT_ITALICSENABLED, 1) &&
@@ -2818,7 +2818,7 @@ struct TextOptionsBuilder {
   void add_outlineEnabled(bool outlineEnabled) {
     fbb_.AddElement<uint8_t>(TextOptions::VT_OUTLINEENABLED, static_cast<uint8_t>(outlineEnabled), 0);
   }
-  void add_outlineColor(const flatbuffers::Color *outlineColor) {
+  void add_outlineColor(const flatbuffers::FColor *outlineColor) {
     fbb_.AddStruct(TextOptions::VT_OUTLINECOLOR, outlineColor);
   }
   void add_outlineSize(int32_t outlineSize) {
@@ -2827,7 +2827,7 @@ struct TextOptionsBuilder {
   void add_shadowEnabled(bool shadowEnabled) {
     fbb_.AddElement<uint8_t>(TextOptions::VT_SHADOWENABLED, static_cast<uint8_t>(shadowEnabled), 0);
   }
-  void add_shadowColor(const flatbuffers::Color *shadowColor) {
+  void add_shadowColor(const flatbuffers::FColor *shadowColor) {
     fbb_.AddStruct(TextOptions::VT_SHADOWCOLOR, shadowColor);
   }
   void add_shadowOffsetX(float shadowOffsetX) {
@@ -2845,7 +2845,7 @@ struct TextOptionsBuilder {
   void add_glowEnabled(bool glowEnabled) {
     fbb_.AddElement<uint8_t>(TextOptions::VT_GLOWENABLED, static_cast<uint8_t>(glowEnabled), 0);
   }
-  void add_glowColor(const flatbuffers::Color *glowColor) {
+  void add_glowColor(const flatbuffers::FColor *glowColor) {
     fbb_.AddStruct(TextOptions::VT_GLOWCOLOR, glowColor);
   }
   void add_boldEnabled(bool boldEnabled) {
@@ -2885,16 +2885,16 @@ inline ::flatbuffers::Offset<TextOptions> CreateTextOptions(
     bool touchScaleEnable = false,
     bool isCustomSize = false,
     bool outlineEnabled = false,
-    const flatbuffers::Color *outlineColor = nullptr,
+    const flatbuffers::FColor *outlineColor = nullptr,
     int32_t outlineSize = 1,
     bool shadowEnabled = false,
-    const flatbuffers::Color *shadowColor = nullptr,
+    const flatbuffers::FColor *shadowColor = nullptr,
     float shadowOffsetX = 2.0f,
     float shadowOffsetY = -2.0f,
     int32_t shadowBlurRadius = 0,
     bool isLocalized = false,
     bool glowEnabled = false,
-    const flatbuffers::Color *glowColor = nullptr,
+    const flatbuffers::FColor *glowColor = nullptr,
     bool boldEnabled = false,
     bool underlineEnabled = false,
     bool italicsEnabled = false,
@@ -2943,16 +2943,16 @@ inline ::flatbuffers::Offset<TextOptions> CreateTextOptionsDirect(
     bool touchScaleEnable = false,
     bool isCustomSize = false,
     bool outlineEnabled = false,
-    const flatbuffers::Color *outlineColor = nullptr,
+    const flatbuffers::FColor *outlineColor = nullptr,
     int32_t outlineSize = 1,
     bool shadowEnabled = false,
-    const flatbuffers::Color *shadowColor = nullptr,
+    const flatbuffers::FColor *shadowColor = nullptr,
     float shadowOffsetX = 2.0f,
     float shadowOffsetY = -2.0f,
     int32_t shadowBlurRadius = 0,
     bool isLocalized = false,
     bool glowEnabled = false,
-    const flatbuffers::Color *glowColor = nullptr,
+    const flatbuffers::FColor *glowColor = nullptr,
     bool boldEnabled = false,
     bool underlineEnabled = false,
     bool italicsEnabled = false,
@@ -3483,14 +3483,14 @@ struct PanelOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool clipEnabled() const {
     return GetField<uint8_t>(VT_CLIPENABLED, 0) != 0;
   }
-  const flatbuffers::Color *bgColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_BGCOLOR);
+  const flatbuffers::FColor *bgColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_BGCOLOR);
   }
-  const flatbuffers::Color *bgStartColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_BGSTARTCOLOR);
+  const flatbuffers::FColor *bgStartColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_BGSTARTCOLOR);
   }
-  const flatbuffers::Color *bgEndColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_BGENDCOLOR);
+  const flatbuffers::FColor *bgEndColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_BGENDCOLOR);
   }
   int32_t colorType() const {
     return GetField<int32_t>(VT_COLORTYPE, 0);
@@ -3517,9 +3517,9 @@ struct PanelOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyOffset(verifier, VT_BACKGROUNDIMAGEDATA) &&
            verifier.VerifyTable(backGroundImageData()) &&
            VerifyField<uint8_t>(verifier, VT_CLIPENABLED, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_BGCOLOR, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_BGSTARTCOLOR, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_BGENDCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_BGCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_BGSTARTCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_BGENDCOLOR, 1) &&
            VerifyField<int32_t>(verifier, VT_COLORTYPE, 4) &&
            VerifyField<uint8_t>(verifier, VT_BGCOLOROPACITY, 1) &&
            VerifyField<flatbuffers::FVec2>(verifier, VT_COLORVECTOR, 4) &&
@@ -3543,13 +3543,13 @@ struct PanelOptionsBuilder {
   void add_clipEnabled(bool clipEnabled) {
     fbb_.AddElement<uint8_t>(PanelOptions::VT_CLIPENABLED, static_cast<uint8_t>(clipEnabled), 0);
   }
-  void add_bgColor(const flatbuffers::Color *bgColor) {
+  void add_bgColor(const flatbuffers::FColor *bgColor) {
     fbb_.AddStruct(PanelOptions::VT_BGCOLOR, bgColor);
   }
-  void add_bgStartColor(const flatbuffers::Color *bgStartColor) {
+  void add_bgStartColor(const flatbuffers::FColor *bgStartColor) {
     fbb_.AddStruct(PanelOptions::VT_BGSTARTCOLOR, bgStartColor);
   }
-  void add_bgEndColor(const flatbuffers::Color *bgEndColor) {
+  void add_bgEndColor(const flatbuffers::FColor *bgEndColor) {
     fbb_.AddStruct(PanelOptions::VT_BGENDCOLOR, bgEndColor);
   }
   void add_colorType(int32_t colorType) {
@@ -3586,9 +3586,9 @@ inline ::flatbuffers::Offset<PanelOptions> CreatePanelOptions(
     ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
     ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
     bool clipEnabled = false,
-    const flatbuffers::Color *bgColor = nullptr,
-    const flatbuffers::Color *bgStartColor = nullptr,
-    const flatbuffers::Color *bgEndColor = nullptr,
+    const flatbuffers::FColor *bgColor = nullptr,
+    const flatbuffers::FColor *bgStartColor = nullptr,
+    const flatbuffers::FColor *bgEndColor = nullptr,
     int32_t colorType = 0,
     uint8_t bgColorOpacity = 255,
     const flatbuffers::FVec2 *colorVector = nullptr,
@@ -3642,14 +3642,14 @@ struct ScrollViewOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table 
   bool clipEnabled() const {
     return GetField<uint8_t>(VT_CLIPENABLED, 0) != 0;
   }
-  const flatbuffers::Color *bgColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_BGCOLOR);
+  const flatbuffers::FColor *bgColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_BGCOLOR);
   }
-  const flatbuffers::Color *bgStartColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_BGSTARTCOLOR);
+  const flatbuffers::FColor *bgStartColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_BGSTARTCOLOR);
   }
-  const flatbuffers::Color *bgEndColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_BGENDCOLOR);
+  const flatbuffers::FColor *bgEndColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_BGENDCOLOR);
   }
   int32_t colorType() const {
     return GetField<int32_t>(VT_COLORTYPE, 0);
@@ -3694,9 +3694,9 @@ struct ScrollViewOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table 
            VerifyOffset(verifier, VT_BACKGROUNDIMAGEDATA) &&
            verifier.VerifyTable(backGroundImageData()) &&
            VerifyField<uint8_t>(verifier, VT_CLIPENABLED, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_BGCOLOR, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_BGSTARTCOLOR, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_BGENDCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_BGCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_BGSTARTCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_BGENDCOLOR, 1) &&
            VerifyField<int32_t>(verifier, VT_COLORTYPE, 4) &&
            VerifyField<uint8_t>(verifier, VT_BGCOLOROPACITY, 1) &&
            VerifyField<flatbuffers::FVec2>(verifier, VT_COLORVECTOR, 4) &&
@@ -3726,13 +3726,13 @@ struct ScrollViewOptionsBuilder {
   void add_clipEnabled(bool clipEnabled) {
     fbb_.AddElement<uint8_t>(ScrollViewOptions::VT_CLIPENABLED, static_cast<uint8_t>(clipEnabled), 0);
   }
-  void add_bgColor(const flatbuffers::Color *bgColor) {
+  void add_bgColor(const flatbuffers::FColor *bgColor) {
     fbb_.AddStruct(ScrollViewOptions::VT_BGCOLOR, bgColor);
   }
-  void add_bgStartColor(const flatbuffers::Color *bgStartColor) {
+  void add_bgStartColor(const flatbuffers::FColor *bgStartColor) {
     fbb_.AddStruct(ScrollViewOptions::VT_BGSTARTCOLOR, bgStartColor);
   }
-  void add_bgEndColor(const flatbuffers::Color *bgEndColor) {
+  void add_bgEndColor(const flatbuffers::FColor *bgEndColor) {
     fbb_.AddStruct(ScrollViewOptions::VT_BGENDCOLOR, bgEndColor);
   }
   void add_colorType(int32_t colorType) {
@@ -3787,9 +3787,9 @@ inline ::flatbuffers::Offset<ScrollViewOptions> CreateScrollViewOptions(
     ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
     ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
     bool clipEnabled = false,
-    const flatbuffers::Color *bgColor = nullptr,
-    const flatbuffers::Color *bgStartColor = nullptr,
-    const flatbuffers::Color *bgEndColor = nullptr,
+    const flatbuffers::FColor *bgColor = nullptr,
+    const flatbuffers::FColor *bgStartColor = nullptr,
+    const flatbuffers::FColor *bgEndColor = nullptr,
     int32_t colorType = 0,
     uint8_t bgColorOpacity = 255,
     const flatbuffers::FVec2 *colorVector = nullptr,
@@ -3849,14 +3849,14 @@ struct PageViewOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool clipEnabled() const {
     return GetField<uint8_t>(VT_CLIPENABLED, 0) != 0;
   }
-  const flatbuffers::Color *bgColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_BGCOLOR);
+  const flatbuffers::FColor *bgColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_BGCOLOR);
   }
-  const flatbuffers::Color *bgStartColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_BGSTARTCOLOR);
+  const flatbuffers::FColor *bgStartColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_BGSTARTCOLOR);
   }
-  const flatbuffers::Color *bgEndColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_BGENDCOLOR);
+  const flatbuffers::FColor *bgEndColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_BGENDCOLOR);
   }
   int32_t colorType() const {
     return GetField<int32_t>(VT_COLORTYPE, 0);
@@ -3883,9 +3883,9 @@ struct PageViewOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyOffset(verifier, VT_BACKGROUNDIMAGEDATA) &&
            verifier.VerifyTable(backGroundImageData()) &&
            VerifyField<uint8_t>(verifier, VT_CLIPENABLED, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_BGCOLOR, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_BGSTARTCOLOR, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_BGENDCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_BGCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_BGSTARTCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_BGENDCOLOR, 1) &&
            VerifyField<int32_t>(verifier, VT_COLORTYPE, 4) &&
            VerifyField<uint8_t>(verifier, VT_BGCOLOROPACITY, 1) &&
            VerifyField<flatbuffers::FVec2>(verifier, VT_COLORVECTOR, 4) &&
@@ -3909,13 +3909,13 @@ struct PageViewOptionsBuilder {
   void add_clipEnabled(bool clipEnabled) {
     fbb_.AddElement<uint8_t>(PageViewOptions::VT_CLIPENABLED, static_cast<uint8_t>(clipEnabled), 0);
   }
-  void add_bgColor(const flatbuffers::Color *bgColor) {
+  void add_bgColor(const flatbuffers::FColor *bgColor) {
     fbb_.AddStruct(PageViewOptions::VT_BGCOLOR, bgColor);
   }
-  void add_bgStartColor(const flatbuffers::Color *bgStartColor) {
+  void add_bgStartColor(const flatbuffers::FColor *bgStartColor) {
     fbb_.AddStruct(PageViewOptions::VT_BGSTARTCOLOR, bgStartColor);
   }
-  void add_bgEndColor(const flatbuffers::Color *bgEndColor) {
+  void add_bgEndColor(const flatbuffers::FColor *bgEndColor) {
     fbb_.AddStruct(PageViewOptions::VT_BGENDCOLOR, bgEndColor);
   }
   void add_colorType(int32_t colorType) {
@@ -3952,9 +3952,9 @@ inline ::flatbuffers::Offset<PageViewOptions> CreatePageViewOptions(
     ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
     ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
     bool clipEnabled = false,
-    const flatbuffers::Color *bgColor = nullptr,
-    const flatbuffers::Color *bgStartColor = nullptr,
-    const flatbuffers::Color *bgEndColor = nullptr,
+    const flatbuffers::FColor *bgColor = nullptr,
+    const flatbuffers::FColor *bgStartColor = nullptr,
+    const flatbuffers::FColor *bgEndColor = nullptr,
     int32_t colorType = 0,
     uint8_t bgColorOpacity = 255,
     const flatbuffers::FVec2 *colorVector = nullptr,
@@ -4009,14 +4009,14 @@ struct ListViewOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool clipEnabled() const {
     return GetField<uint8_t>(VT_CLIPENABLED, 0) != 0;
   }
-  const flatbuffers::Color *bgColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_BGCOLOR);
+  const flatbuffers::FColor *bgColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_BGCOLOR);
   }
-  const flatbuffers::Color *bgStartColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_BGSTARTCOLOR);
+  const flatbuffers::FColor *bgStartColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_BGSTARTCOLOR);
   }
-  const flatbuffers::Color *bgEndColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_BGENDCOLOR);
+  const flatbuffers::FColor *bgEndColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_BGENDCOLOR);
   }
   int32_t colorType() const {
     return GetField<int32_t>(VT_COLORTYPE, 0);
@@ -4064,9 +4064,9 @@ struct ListViewOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyOffset(verifier, VT_BACKGROUNDIMAGEDATA) &&
            verifier.VerifyTable(backGroundImageData()) &&
            VerifyField<uint8_t>(verifier, VT_CLIPENABLED, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_BGCOLOR, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_BGSTARTCOLOR, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_BGENDCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_BGCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_BGSTARTCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_BGENDCOLOR, 1) &&
            VerifyField<int32_t>(verifier, VT_COLORTYPE, 4) &&
            VerifyField<uint8_t>(verifier, VT_BGCOLOROPACITY, 1) &&
            VerifyField<flatbuffers::FVec2>(verifier, VT_COLORVECTOR, 4) &&
@@ -4100,13 +4100,13 @@ struct ListViewOptionsBuilder {
   void add_clipEnabled(bool clipEnabled) {
     fbb_.AddElement<uint8_t>(ListViewOptions::VT_CLIPENABLED, static_cast<uint8_t>(clipEnabled), 0);
   }
-  void add_bgColor(const flatbuffers::Color *bgColor) {
+  void add_bgColor(const flatbuffers::FColor *bgColor) {
     fbb_.AddStruct(ListViewOptions::VT_BGCOLOR, bgColor);
   }
-  void add_bgStartColor(const flatbuffers::Color *bgStartColor) {
+  void add_bgStartColor(const flatbuffers::FColor *bgStartColor) {
     fbb_.AddStruct(ListViewOptions::VT_BGSTARTCOLOR, bgStartColor);
   }
-  void add_bgEndColor(const flatbuffers::Color *bgEndColor) {
+  void add_bgEndColor(const flatbuffers::FColor *bgEndColor) {
     fbb_.AddStruct(ListViewOptions::VT_BGENDCOLOR, bgEndColor);
   }
   void add_colorType(int32_t colorType) {
@@ -4164,9 +4164,9 @@ inline ::flatbuffers::Offset<ListViewOptions> CreateListViewOptions(
     ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
     ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
     bool clipEnabled = false,
-    const flatbuffers::Color *bgColor = nullptr,
-    const flatbuffers::Color *bgStartColor = nullptr,
-    const flatbuffers::Color *bgEndColor = nullptr,
+    const flatbuffers::FColor *bgColor = nullptr,
+    const flatbuffers::FColor *bgStartColor = nullptr,
+    const flatbuffers::FColor *bgEndColor = nullptr,
     int32_t colorType = 0,
     uint8_t bgColorOpacity = 255,
     const flatbuffers::FVec2 *colorVector = nullptr,
@@ -4208,9 +4208,9 @@ inline ::flatbuffers::Offset<ListViewOptions> CreateListViewOptionsDirect(
     ::flatbuffers::Offset<flatbuffers::WidgetOptions> widgetOptions = 0,
     ::flatbuffers::Offset<flatbuffers::ResourceData> backGroundImageData = 0,
     bool clipEnabled = false,
-    const flatbuffers::Color *bgColor = nullptr,
-    const flatbuffers::Color *bgStartColor = nullptr,
-    const flatbuffers::Color *bgEndColor = nullptr,
+    const flatbuffers::FColor *bgColor = nullptr,
+    const flatbuffers::FColor *bgStartColor = nullptr,
+    const flatbuffers::FColor *bgEndColor = nullptr,
     int32_t colorType = 0,
     uint8_t bgColorOpacity = 255,
     const flatbuffers::FVec2 *colorVector = nullptr,
@@ -4296,14 +4296,14 @@ struct TextFieldExOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table
   int32_t maxLength() const {
     return GetField<int32_t>(VT_MAXLENGTH, 0);
   }
-  const flatbuffers::Color *textColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_TEXTCOLOR);
+  const flatbuffers::FColor *textColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_TEXTCOLOR);
   }
-  const flatbuffers::Color *placeholderColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_PLACEHOLDERCOLOR);
+  const flatbuffers::FColor *placeholderColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_PLACEHOLDERCOLOR);
   }
-  const flatbuffers::Color *cursorColor() const {
-    return GetStruct<const flatbuffers::Color *>(VT_CURSORCOLOR);
+  const flatbuffers::FColor *cursorColor() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_CURSORCOLOR);
   }
   bool enabled() const {
     return GetField<uint8_t>(VT_ENABLED, 1) != 0;
@@ -4331,9 +4331,9 @@ struct TextFieldExOptions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table
            VerifyOffset(verifier, VT_PASSWORDSTYLETEXT) &&
            verifier.VerifyString(passwordStyleText()) &&
            VerifyField<int32_t>(verifier, VT_MAXLENGTH, 4) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_TEXTCOLOR, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_PLACEHOLDERCOLOR, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_CURSORCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_TEXTCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_PLACEHOLDERCOLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_CURSORCOLOR, 1) &&
            VerifyField<uint8_t>(verifier, VT_ENABLED, 1) &&
            VerifyField<uint8_t>(verifier, VT_EDITABLE, 1) &&
            VerifyField<uint8_t>(verifier, VT_ISLOCALIZED, 1) &&
@@ -4372,13 +4372,13 @@ struct TextFieldExOptionsBuilder {
   void add_maxLength(int32_t maxLength) {
     fbb_.AddElement<int32_t>(TextFieldExOptions::VT_MAXLENGTH, maxLength, 0);
   }
-  void add_textColor(const flatbuffers::Color *textColor) {
+  void add_textColor(const flatbuffers::FColor *textColor) {
     fbb_.AddStruct(TextFieldExOptions::VT_TEXTCOLOR, textColor);
   }
-  void add_placeholderColor(const flatbuffers::Color *placeholderColor) {
+  void add_placeholderColor(const flatbuffers::FColor *placeholderColor) {
     fbb_.AddStruct(TextFieldExOptions::VT_PLACEHOLDERCOLOR, placeholderColor);
   }
-  void add_cursorColor(const flatbuffers::Color *cursorColor) {
+  void add_cursorColor(const flatbuffers::FColor *cursorColor) {
     fbb_.AddStruct(TextFieldExOptions::VT_CURSORCOLOR, cursorColor);
   }
   void add_enabled(bool enabled) {
@@ -4412,9 +4412,9 @@ inline ::flatbuffers::Offset<TextFieldExOptions> CreateTextFieldExOptions(
     bool passwordEnabled = false,
     ::flatbuffers::Offset<::flatbuffers::String> passwordStyleText = 0,
     int32_t maxLength = 0,
-    const flatbuffers::Color *textColor = nullptr,
-    const flatbuffers::Color *placeholderColor = nullptr,
-    const flatbuffers::Color *cursorColor = nullptr,
+    const flatbuffers::FColor *textColor = nullptr,
+    const flatbuffers::FColor *placeholderColor = nullptr,
+    const flatbuffers::FColor *cursorColor = nullptr,
     bool enabled = true,
     bool editable = true,
     bool isLocalized = false) {
@@ -4448,9 +4448,9 @@ inline ::flatbuffers::Offset<TextFieldExOptions> CreateTextFieldExOptionsDirect(
     bool passwordEnabled = false,
     const char *passwordStyleText = nullptr,
     int32_t maxLength = 0,
-    const flatbuffers::Color *textColor = nullptr,
-    const flatbuffers::Color *placeholderColor = nullptr,
-    const flatbuffers::Color *cursorColor = nullptr,
+    const flatbuffers::FColor *textColor = nullptr,
+    const flatbuffers::FColor *placeholderColor = nullptr,
+    const flatbuffers::FColor *cursorColor = nullptr,
     bool enabled = true,
     bool editable = true,
     bool isLocalized = false) {
@@ -5274,8 +5274,8 @@ struct ColorFrame FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool tween() const {
     return GetField<uint8_t>(VT_TWEEN, 1) != 0;
   }
-  const flatbuffers::Color *color() const {
-    return GetStruct<const flatbuffers::Color *>(VT_COLOR);
+  const flatbuffers::FColor *color() const {
+    return GetStruct<const flatbuffers::FColor *>(VT_COLOR);
   }
   const flatbuffers::EasingData *easingData() const {
     return GetPointer<const flatbuffers::EasingData *>(VT_EASINGDATA);
@@ -5284,7 +5284,7 @@ struct ColorFrame FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_FRAMEINDEX, 4) &&
            VerifyField<uint8_t>(verifier, VT_TWEEN, 1) &&
-           VerifyField<flatbuffers::Color>(verifier, VT_COLOR, 1) &&
+           VerifyField<flatbuffers::FColor>(verifier, VT_COLOR, 1) &&
            VerifyOffset(verifier, VT_EASINGDATA) &&
            verifier.VerifyTable(easingData()) &&
            verifier.EndTable();
@@ -5301,7 +5301,7 @@ struct ColorFrameBuilder {
   void add_tween(bool tween) {
     fbb_.AddElement<uint8_t>(ColorFrame::VT_TWEEN, static_cast<uint8_t>(tween), 1);
   }
-  void add_color(const flatbuffers::Color *color) {
+  void add_color(const flatbuffers::FColor *color) {
     fbb_.AddStruct(ColorFrame::VT_COLOR, color);
   }
   void add_easingData(::flatbuffers::Offset<flatbuffers::EasingData> easingData) {
@@ -5322,7 +5322,7 @@ inline ::flatbuffers::Offset<ColorFrame> CreateColorFrame(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     int32_t frameIndex = 0,
     bool tween = true,
-    const flatbuffers::Color *color = nullptr,
+    const flatbuffers::FColor *color = nullptr,
     ::flatbuffers::Offset<flatbuffers::EasingData> easingData = 0) {
   ColorFrameBuilder builder_(_fbb);
   builder_.add_easingData(easingData);

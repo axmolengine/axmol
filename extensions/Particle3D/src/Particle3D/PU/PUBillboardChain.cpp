@@ -45,7 +45,7 @@ const size_t PUBillboardChain::SEGMENT_EMPTY = std::numeric_limits<size_t>::max(
 //-----------------------------------------------------------------------
 PUBillboardChain::Element::Element() {}
 //-----------------------------------------------------------------------
-PUBillboardChain::Element::Element(const Vec3& pos, float w, float tex, const Vec4& col, const Quaternion& ori)
+PUBillboardChain::Element::Element(const Vec3& pos, float w, float tex, const Color& col, const Quaternion& ori)
     : position(pos), width(w), texCoord(tex), color(col), orientation(ori)
 {}
 //-----------------------------------------------------------------------
@@ -157,10 +157,10 @@ void PUBillboardChain::setupBuffers()
         AX_SAFE_RELEASE_NULL(_vertexBuffer);
         AX_SAFE_RELEASE_NULL(_indexBuffer);
 
-        size_t stride = sizeof(VertexInfo);
+        size_t stride = sizeof(V3F_T2F_C4F);
         _vertexBuffer = backend::DriverBase::getInstance()->newBuffer(
             stride * _chainElementList.size() * 2, backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
-        VertexInfo vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Vec4::ONE};
+        V3F_T2F_C4F vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Color::WHITE};
         _vertices.resize(_chainElementList.size() * 2, vi);
 
         _indexBuffer =
@@ -404,7 +404,7 @@ void PUBillboardChain::updateVertexBuffer(const Mat4& camMat)
     if (!_vertexContentDirty)
         return;
 
-    VertexInfo vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Vec4::ONE};
+    V3F_T2F_C4F vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Color::WHITE};
     _vertices.assign(_vertices.size(), vi);
     // HardwareVertexBufferSharedPtr pBuffer =
     //	_vertexData->vertexBufferBinding->getBuffer(0);
@@ -501,15 +501,15 @@ void PUBillboardChain::updateVertexBuffer(const Mat4& camMat)
                     {
                         //*pFloat++ = elem.texCoord;
                         //*pFloat++ = _otherTexCoordRange[0];
-                        _vertices[vertexIndex + 0].uv.x = elem.texCoord;
-                        _vertices[vertexIndex + 0].uv.y = _otherTexCoordRange[0];
+                        _vertices[vertexIndex + 0].texCoord.x = elem.texCoord;
+                        _vertices[vertexIndex + 0].texCoord.y = _otherTexCoordRange[0];
                     }
                     else
                     {
                         //*pFloat++ = _otherTexCoordRange[0];
                         //*pFloat++ = elem.texCoord;
-                        _vertices[vertexIndex + 0].uv.x = _otherTexCoordRange[0];
-                        _vertices[vertexIndex + 0].uv.y = elem.texCoord;
+                        _vertices[vertexIndex + 0].texCoord.x = _otherTexCoordRange[0];
+                        _vertices[vertexIndex + 0].texCoord.y = elem.texCoord;
                     }
                     // pBase = static_cast<void*>(pFloat);
                 }
@@ -538,15 +538,15 @@ void PUBillboardChain::updateVertexBuffer(const Mat4& camMat)
                     {
                         //*pFloat++ = elem.texCoord;
                         //*pFloat++ = _otherTexCoordRange[1];
-                        _vertices[vertexIndex + 1].uv.x = elem.texCoord;
-                        _vertices[vertexIndex + 1].uv.y = _otherTexCoordRange[1];
+                        _vertices[vertexIndex + 1].texCoord.x = elem.texCoord;
+                        _vertices[vertexIndex + 1].texCoord.y = _otherTexCoordRange[1];
                     }
                     else
                     {
                         //*pFloat++ = _otherTexCoordRange[1];
                         //*pFloat++ = elem.texCoord;
-                        _vertices[vertexIndex + 1].uv.x = _otherTexCoordRange[1];
-                        _vertices[vertexIndex + 1].uv.y = elem.texCoord;
+                        _vertices[vertexIndex + 1].texCoord.x = _otherTexCoordRange[1];
+                        _vertices[vertexIndex + 1].texCoord.y = elem.texCoord;
                     }
                 }
 

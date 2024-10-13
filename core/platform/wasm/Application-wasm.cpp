@@ -149,24 +149,6 @@ void Application::setAnimationInterval(float interval)
     _animationSpeed = 1.0f / interval;
 }
 
-void Application::setResourceRootPath(const std::string& rootResDir)
-{
-    _resourceRootPath = rootResDir;
-    if (_resourceRootPath[_resourceRootPath.length() - 1] != '/')
-    {
-        _resourceRootPath += '/';
-    }
-    FileUtils* pFileUtils                = FileUtils::getInstance();
-    std::vector<std::string> searchPaths = pFileUtils->getSearchPaths();
-    searchPaths.insert(searchPaths.begin(), _resourceRootPath);
-    pFileUtils->setSearchPaths(searchPaths);
-}
-
-const std::string& Application::getResourceRootPath()
-{
-    return _resourceRootPath;
-}
-
 Application::Platform Application::getTargetPlatform()
 {
     return Platform::Wasm;
@@ -191,12 +173,6 @@ Application* Application::getInstance()
 {
     AX_ASSERT(sm_pSharedApplication);
     return sm_pSharedApplication;
-}
-
-// @deprecated Use getInstance() instead
-Application* Application::sharedApplication()
-{
-    return Application::getInstance();
 }
 
 const char* Application::getCurrentLanguageCode()

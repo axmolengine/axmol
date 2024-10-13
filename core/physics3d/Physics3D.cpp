@@ -28,16 +28,12 @@
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
-
 namespace ax
 {
 
 AX_DLL const char* physics3dVersion()
 {
-#        if AX_ENABLE_BULLET_INTEGRATION
     return "bullet2.82";
-#        endif
 }
 
 }
@@ -92,7 +88,5 @@ btQuaternion convertQuatTobtQuat(const ax::Quaternion& quat)
 {
     return btQuaternion(quat.x, quat.y, quat.z, quat.w);
 }
-
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)

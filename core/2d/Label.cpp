@@ -136,10 +136,10 @@ public:
             float dx = x1 * cr - y2 * sr2 + x;
             float dy = x1 * sr + y2 * cr2 + y;
 
-            _quad.bl.vertices.set(SPRITE_RENDER_IN_SUBPIXEL(ax), SPRITE_RENDER_IN_SUBPIXEL(ay), _positionZ);
-            _quad.br.vertices.set(SPRITE_RENDER_IN_SUBPIXEL(bx), SPRITE_RENDER_IN_SUBPIXEL(by), _positionZ);
-            _quad.tl.vertices.set(SPRITE_RENDER_IN_SUBPIXEL(dx), SPRITE_RENDER_IN_SUBPIXEL(dy), _positionZ);
-            _quad.tr.vertices.set(SPRITE_RENDER_IN_SUBPIXEL(cx), SPRITE_RENDER_IN_SUBPIXEL(cy), _positionZ);
+            _quad.bl.position.set(SPRITE_RENDER_IN_SUBPIXEL(ax), SPRITE_RENDER_IN_SUBPIXEL(ay), _positionZ);
+            _quad.br.position.set(SPRITE_RENDER_IN_SUBPIXEL(bx), SPRITE_RENDER_IN_SUBPIXEL(by), _positionZ);
+            _quad.tl.position.set(SPRITE_RENDER_IN_SUBPIXEL(dx), SPRITE_RENDER_IN_SUBPIXEL(dy), _positionZ);
+            _quad.tr.position.set(SPRITE_RENDER_IN_SUBPIXEL(cx), SPRITE_RENDER_IN_SUBPIXEL(cy), _positionZ);
 
             if (_textureAtlas)
             {
@@ -165,18 +165,18 @@ public:
         {
             displayedOpacity = 0.0f;
         }
-        Color4B color4(_displayedColor.r, _displayedColor.g, _displayedColor.b, displayedOpacity);
+        Color color(_displayedColor, displayedOpacity);
         // special opacity for premultiplied textures
         if (_opacityModifyRGB)
         {
-            color4.r *= displayedOpacity / 255.0f;
-            color4.g *= displayedOpacity / 255.0f;
-            color4.b *= displayedOpacity / 255.0f;
+            color.r *= displayedOpacity / 255.0f;
+            color.g *= displayedOpacity / 255.0f;
+            color.b *= displayedOpacity / 255.0f;
         }
-        _quad.bl.colors = color4;
-        _quad.br.colors = color4;
-        _quad.tl.colors = color4;
-        _quad.tr.colors = color4;
+        _quad.bl.color = color;
+        _quad.br.color = color;
+        _quad.tl.color = color;
+        _quad.tr.color = color;
 
         _textureAtlas->updateQuad(_quad, _atlasIndex);
     }
@@ -360,17 +360,6 @@ Label* Label::createWithBMFont(std::string_view bmfontPath,
     return nullptr;
 }
 
-#ifndef AX_CORE_PROFILE
-Label* Label::createWithBMFont(std::string_view bmfontPath,
-                               std::string_view text,
-                               const TextHAlignment& hAlignment,
-                               int maxLineWidth,
-                               const Vec2& imageOffset)
-{
-    return createWithBMFont(bmfontPath, text, hAlignment, maxLineWidth, Rect(imageOffset.x, imageOffset.y, 0, 0),
-                            false);
-}
-#endif
 Label* Label::createWithCharMap(std::string_view plistFile)
 {
     auto ret = new Label();
@@ -630,9 +619,9 @@ void Label::reset()
     _hAlignment             = TextHAlignment::LEFT;
     _vAlignment             = TextVAlignment::TOP;
 
-    _effectColorF = Color4F::BLACK;
+    _effectColor  = Color::BLACK;
     _textColor    = Color4B::WHITE;
-    _textColorF   = Color4F::WHITE;
+    _textColorF   = Color::WHITE;
     setColor(Color3B::WHITE);
 
     _shadowDirty      = false;
@@ -928,12 +917,7 @@ bool Label::setBMFontFilePath(std::string_view bmfontFilePath, std::string_view 
 
     return true;
 }
-#ifndef AX_CORE_PROFILE
-bool Label::setBMFontFilePath(std::string_view bmfontFilePath, const Vec2& imageOffset, float fontSize)
-{
-    return setBMFontFilePath(bmfontFilePath, Rect(imageOffset.x, imageOffset.y, 0, 0), false);
-}
-#endif
+
 void Label::setString(std::string_view text)
 {
     if (text.compare(_utf8Text))
@@ -1373,10 +1357,10 @@ void Label::enableGlow(const Color4B& glowColor)
             _contentDirty = true;
         }
         _currLabelEffect = LabelEffect::GLOW;
-        _effectColorF.r  = glowColor.r / 255.0f;
-        _effectColorF.g  = glowColor.g / 255.0f;
-        _effectColorF.b  = glowColor.b / 255.0f;
-        _effectColorF.a  = glowColor.a / 255.0f;
+        _effectColor.r  = glowColor.r / 255.0f;
+        _effectColor.g  = glowColor.g / 255.0f;
+        _effectColor.b  = glowColor.b / 255.0f;
+        _effectColor.a  = glowColor.a / 255.0f;
         updateShaderProgram();
     }
 }
@@ -1390,10 +1374,10 @@ void Label::enableOutline(const Color4B& outlineColor, int outlineSize /* = -1 *
     {
         if (_currentLabelType == LabelType::TTF)
         {
-            _effectColorF.r = outlineColor.r / 255.0f;
-            _effectColorF.g = outlineColor.g / 255.0f;
-            _effectColorF.b = outlineColor.b / 255.0f;
-            _effectColorF.a = outlineColor.a / 255.0f;
+            _effectColor.r = outlineColor.r / 255.0f;
+            _effectColor.g = outlineColor.g / 255.0f;
+            _effectColor.b = outlineColor.b / 255.0f;
+            _effectColor.a = outlineColor.a / 255.0f;
 
             if (!_useDistanceField)
             {  // not SDF, request font atlas from feetype
@@ -1410,12 +1394,12 @@ void Label::enableOutline(const Color4B& outlineColor, int outlineSize /* = -1 *
                 updateShaderProgram();
             }
         }
-        else if (_effectColorF != outlineColor || _outlineSize != outlineSize)
+        else if (_effectColor != outlineColor || _outlineSize != outlineSize)
         {
-            _effectColorF.r  = outlineColor.r / 255.f;
-            _effectColorF.g  = outlineColor.g / 255.f;
-            _effectColorF.b  = outlineColor.b / 255.f;
-            _effectColorF.a  = outlineColor.a / 255.f;
+            _effectColor.r  = outlineColor.r / 255.f;
+            _effectColor.g  = outlineColor.g / 255.f;
+            _effectColor.b  = outlineColor.b / 255.f;
+            _effectColor.a  = outlineColor.a / 255.f;
             _currLabelEffect = LabelEffect::OUTLINE;
             _contentDirty    = true;
         }
@@ -1444,7 +1428,7 @@ void Label::enableShadow(const Color4B& shadowColor /* = Color4B::BLACK */,
         auto fontDef = _getFontDefinition();
         if (_shadowNode)
         {
-            if (shadowColor != _shadowColor4F)
+            if (shadowColor != _shadowColor)
             {
                 _shadowNode->release();
                 _shadowNode = nullptr;
@@ -1461,10 +1445,10 @@ void Label::enableShadow(const Color4B& shadowColor /* = Color4B::BLACK */,
         }
     }
 
-    _shadowColor4F.r = shadowColor.r / 255.0f;
-    _shadowColor4F.g = shadowColor.g / 255.0f;
-    _shadowColor4F.b = shadowColor.b / 255.0f;
-    _shadowColor4F.a = shadowColor.a / 255.0f;
+    _shadowColor.r = shadowColor.r / 255.0f;
+    _shadowColor.g = shadowColor.g / 255.0f;
+    _shadowColor.b = shadowColor.b / 255.0f;
+    _shadowColor.a = shadowColor.a / 255.0f;
 
     if (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::CHARMAP)
     {
@@ -1730,7 +1714,7 @@ void Label::updateContent()
                 // Github issue #15214. Uses _displayedColor instead of _textColor for the underline.
                 // This is to have the same behavior of SystemFonts.
                 _underlineNode->drawLine(Vec2(_linesOffsetX[i], y), Vec2(_linesWidth[i] + _linesOffsetX[i], y),
-                                         Color4F(_displayedColor), charheight / 6);
+                                         Color(_displayedColor), charheight / 6);
             }
         }
         else if (_textSprite)
@@ -1744,8 +1728,8 @@ void Label::updateContent()
                 // which is POT
                 y += spriteSize.height / 2;
             // FIXME: Might not work with different vertical alignments
-            _underlineNode->drawLine(Vec2(0.0f, y), Vec2(spriteSize.width, y),
-                                     Color4F(_textSprite->getDisplayedColor()), spriteSize.height / 6);
+            _underlineNode->drawLine(Vec2(0.0f, y), Vec2(spriteSize.width, y), Color(_textSprite->getDisplayedColor()),
+                                     spriteSize.height / 6);
         }
     }
 
@@ -1791,7 +1775,7 @@ void Label::updateBuffer(TextureAtlas* textureAtlas, CustomCommand& customComman
 {
     if (textureAtlas->getTotalQuads() > customCommand.getVertexCapacity())
     {
-        customCommand.createVertexBuffer((unsigned int)sizeof(V3F_C4B_T2F_Quad),
+        customCommand.createVertexBuffer((unsigned int)sizeof(V3F_C4F_T2F_Quad),
                                          (unsigned int)textureAtlas->getTotalQuads(),
                                          CustomCommand::BufferUsage::DYNAMIC);
         customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT,
@@ -1799,7 +1783,7 @@ void Label::updateBuffer(TextureAtlas* textureAtlas, CustomCommand& customComman
                                         CustomCommand::BufferUsage::DYNAMIC);
     }
     customCommand.updateVertexBuffer(textureAtlas->getQuads(),
-                                     (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_C4B_T2F_Quad)));
+                                     (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_C4F_T2F_Quad)));
     customCommand.updateIndexBuffer(textureAtlas->getIndices(),
                                     (unsigned int)(textureAtlas->getTotalQuads() * 6 * sizeof(unsigned short)));
     customCommand.setIndexDrawInfo(0, (unsigned int)(textureAtlas->getTotalQuads() * 6));
@@ -1829,14 +1813,13 @@ void Label::updateEffectUniforms(BatchCommand& batch,
         case LabelEffect::OUTLINE:
         {
             int effectType = 0;
-            Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
+            Vec4 effectColor(_effectColor.r, _effectColor.g, _effectColor.b, _effectColor.a);
             // draw shadow
             if (_shadowEnabled)
             {
                 effectType               = 2;
-                Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
                 auto* programStateShadow = batch.shadowCommand.getPipelineDescriptor().programState;
-                programStateShadow->setUniform(_effectColorLocation, &shadowColor, sizeof(Vec4));
+                programStateShadow->setUniform(_effectColorLocation, &_shadowColor, sizeof(ax::Color));
                 programStateShadow->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
@@ -1846,7 +1829,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             {  // distance outline
                 effectColor.w = _outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize;
                 batch.textCommand.getPipelineDescriptor().programState->setUniform(_effectColorLocation, &effectColor,
-                                                                                   sizeof(Vec4));
+                                                                                   sizeof(ax::Color));
             }
             else
             {
@@ -1876,9 +1859,8 @@ void Label::updateEffectUniforms(BatchCommand& batch,
         {
             if (_shadowEnabled)
             {
-                Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
                 auto* programStateShadow = batch.shadowCommand.getPipelineDescriptor().programState;
-                programStateShadow->setUniform(_textColorLocation, &shadowColor, sizeof(Vec4));
+                programStateShadow->setUniform(_textColorLocation, &_shadowColor, sizeof(Vec4));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
             }
@@ -1889,16 +1871,14 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             // draw shadow
             if (_shadowEnabled)
             {
-                Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
                 auto* programStateShadow = batch.shadowCommand.getPipelineDescriptor().programState;
-                programStateShadow->setUniform(_textColorLocation, &shadowColor, sizeof(Vec4));
-                programStateShadow->setUniform(_effectColorLocation, &shadowColor, sizeof(Vec4));
+                programStateShadow->setUniform(_textColorLocation, &_shadowColor, sizeof(Vec4));
+                programStateShadow->setUniform(_effectColorLocation, &_shadowColor, sizeof(Vec4));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
             }
 
-            Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
-            batch.textCommand.getPipelineDescriptor().programState->setUniform(_effectColorLocation, &effectColor,
+            batch.textCommand.getPipelineDescriptor().programState->setUniform(_effectColorLocation, &_effectColor,
                                                                                sizeof(Vec4));
         }
         break;
@@ -1912,10 +1892,10 @@ void Label::updateEffectUniforms(BatchCommand& batch,
         {
             Color3B oldColor   = _realColor;
             uint8_t oldOPacity = _displayedOpacity;
-            _displayedOpacity  = _shadowColor4F.a * (oldOPacity / 255.0f) * 255;
-            setColor(Color3B(_shadowColor4F));
+            _displayedOpacity  = _shadowColor.a * (oldOPacity / 255.0f) * 255;
+            setColor(Color3B(_shadowColor));
             batch.shadowCommand.updateVertexBuffer(
-                textureAtlas->getQuads(), (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_C4B_T2F_Quad)));
+                textureAtlas->getQuads(), (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_C4F_T2F_Quad)));
             batch.shadowCommand.init(_globalZOrder);
             renderer->addCommand(&batch.shadowCommand);
 
@@ -2398,30 +2378,28 @@ void Label::updateColor()
         return;
     }
 
-    Color4B color4(_displayedColor.r, _displayedColor.g, _displayedColor.b, _displayedOpacity);
+    Color color(_displayedColor, _displayedOpacity / 255.0f);
 
     // special opacity for premultiplied textures
     if (_isOpacityModifyRGB)
     {
-        color4.r *= _displayedOpacity / 255.0f;
-        color4.g *= _displayedOpacity / 255.0f;
-        color4.b *= _displayedOpacity / 255.0f;
+        color.r *= color.a;
+        color.g *= color.a;
+        color.b *= color.a;
     }
 
-    ax::TextureAtlas* textureAtlas;
-    V3F_C4B_T2F_Quad* quads;
     for (auto&& batchNode : _batchNodes)
     {
-        textureAtlas = batchNode->getTextureAtlas();
-        quads        = textureAtlas->getQuads();
-        auto count   = textureAtlas->getTotalQuads();
+        auto textureAtlas = batchNode->getTextureAtlas();
+        auto quads        = textureAtlas->getQuads();
+        auto count        = textureAtlas->getTotalQuads();
 
         for (int index = 0; index < count; ++index)
         {
-            quads[index].bl.colors = color4;
-            quads[index].br.colors = color4;
-            quads[index].tl.colors = color4;
-            quads[index].tr.colors = color4;
+            quads[index].bl.color = color;
+            quads[index].br.color = color;
+            quads[index].tl.color = color;
+            quads[index].tr.color = color;
             textureAtlas->updateQuad(quads[index], index);
         }
     }
@@ -2512,10 +2490,10 @@ FontDefinition Label::_getFontDefinition() const
     {
         systemFontDef._stroke._strokeEnabled = true;
         systemFontDef._stroke._strokeSize    = _outlineSize;
-        systemFontDef._stroke._strokeColor.r = _effectColorF.r * 255;
-        systemFontDef._stroke._strokeColor.g = _effectColorF.g * 255;
-        systemFontDef._stroke._strokeColor.b = _effectColorF.b * 255;
-        systemFontDef._stroke._strokeAlpha   = _effectColorF.a * 255;
+        systemFontDef._stroke._strokeColor.r = _effectColor.r * 255.f;
+        systemFontDef._stroke._strokeColor.g = _effectColor.g * 255.f;
+        systemFontDef._stroke._strokeColor.b = _effectColor.b * 255.f;
+        systemFontDef._stroke._strokeAlpha   = _effectColor.a * 255.f;
     }
     else
     {
@@ -2836,7 +2814,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
             {
                 recordPlaceholderInfo(letterIndex, character);
                 AXLOGW("LabelTextFormatter error: can't find letter definition in font file for letter: 0x{:x}",
-                      static_cast<uint32_t>(character));
+                       static_cast<uint32_t>(character));
                 continue;
             }
 
@@ -3052,11 +3030,11 @@ void Label::recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int lett
         LetterInfo tmpInfo;
         _lettersInfo.emplace_back(tmpInfo);
     }
-    _lettersInfo[letterIndex].lineIndex  = lineIndex;
-    _lettersInfo[letterIndex].utf32Char  = utf32Char;
-    _lettersInfo[letterIndex].valid      = _fontAtlas->_letterDefinitions[utf32Char].validDefinition && utf32Char != ' ';
-    _lettersInfo[letterIndex].positionX  = point.x;
-    _lettersInfo[letterIndex].positionY  = point.y;
+    _lettersInfo[letterIndex].lineIndex = lineIndex;
+    _lettersInfo[letterIndex].utf32Char = utf32Char;
+    _lettersInfo[letterIndex].valid     = _fontAtlas->_letterDefinitions[utf32Char].validDefinition && utf32Char != ' ';
+    _lettersInfo[letterIndex].positionX = point.x;
+    _lettersInfo[letterIndex].positionY = point.y;
     _lettersInfo[letterIndex].atlasIndex = -1;
 }
 
@@ -3071,4 +3049,4 @@ void Label::recordPlaceholderInfo(int letterIndex, char32_t utf32Char)
     _lettersInfo[letterIndex].valid     = false;
 }
 
-}
+}  // namespace ax

@@ -413,9 +413,9 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
         child = child.next_sibling();
     }
 
-    flatbuffers::Color f_outlineColor(outlineColor.a, outlineColor.r, outlineColor.g, outlineColor.b);
-    flatbuffers::Color f_shadowColor(shadowColor.a, shadowColor.r, shadowColor.g, shadowColor.b);
-    flatbuffers::Color f_glowColor(glowColor.a, glowColor.r, glowColor.g, glowColor.b);
+    FColor f_outlineColor(outlineColor.a, outlineColor.r, outlineColor.g, outlineColor.b);
+    FColor f_shadowColor(shadowColor.a, shadowColor.r, shadowColor.g, shadowColor.b);
+    FColor f_glowColor(glowColor.a, glowColor.r, glowColor.g, glowColor.b);
 
     auto options = CreateTextOptions(
         *builder, widgetOptions,

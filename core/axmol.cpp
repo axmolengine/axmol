@@ -36,12 +36,7 @@ namespace ax
 
 AX_DLL const char* axmolVersion()
 {
-    return "axmol-" AX_VERSION_STR_FULL;
-}
-
-AX_DLL const char* cocos2dVersion()
-{
-    return axmolVersion();
+    return AX_VERSION_STR_FULL;
 }
 
 }

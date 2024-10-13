@@ -362,9 +362,9 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
         child = child.next_sibling();
     }
 
-    Color f_bgColor(255, bgColor.r, bgColor.g, bgColor.b);
-    Color f_bgStartColor(255, bgStartColor.r, bgStartColor.g, bgStartColor.b);
-    Color f_bgEndColor(255, bgEndColor.r, bgEndColor.g, bgEndColor.b);
+    FColor f_bgColor(255, bgColor.r, bgColor.g, bgColor.b);
+    FColor f_bgStartColor(255, bgStartColor.r, bgStartColor.g, bgStartColor.b);
+    FColor f_bgEndColor(255, bgEndColor.r, bgEndColor.g, bgEndColor.b);
     FVec2 f_colorVector(colorVector.x, colorVector.y);
     CapInsets f_capInsets(capInsets.origin.x, capInsets.origin.y, capInsets.size.width, capInsets.size.height);
     FlatSize f_scale9Size(scale9Size.width, scale9Size.height);

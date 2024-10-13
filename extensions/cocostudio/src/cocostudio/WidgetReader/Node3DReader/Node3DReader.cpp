@@ -253,7 +253,7 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node o
     FVec2 f_position(position.x, position.y);
     FVec2 f_scale(scale.x, scale.y);
     FVec2 f_anchortpoint(anchorPoint.x, anchorPoint.y);
-    Color f_color(color.a, color.r, color.g, color.b);
+    FColor f_color(color.a, color.r, color.g, color.b);
     FlatSize f_size(size.x, size.y);
     auto f_layoutComponent = CreateLayoutComponentTable(
         *builder, positionXPercentEnabled, positionYPercentEnabled, positionXPercent, positionYPercent,

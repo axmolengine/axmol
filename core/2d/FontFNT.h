@@ -149,9 +149,7 @@ public:
     static FontFNT* create(std::string_view fntFilePath, const Rect& imageRect, bool imageRotated);
     static FontFNT* create(std::string_view fntFilePath, std::string_view subTextureKey);
     static FontFNT* create(std::string_view fntFilePath);
-#ifndef AX_CORE_PROFILE
-    AX_DEPRECATED(2.1) static FontFNT* create(std::string_view fntFilePath, const Vec2& imageOffset = Vec2::ZERO);
-#endif
+
     /** Purges the cached data.
     Removes from memory the cached configurations and the atlas name dictionary.
     */

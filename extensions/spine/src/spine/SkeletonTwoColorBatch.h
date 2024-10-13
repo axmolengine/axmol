@@ -40,7 +40,7 @@ namespace spine {
 		axmol::Vec3 position;
 		axmol::Color4B color;
 		axmol::Color4B color2;
-		axmol::Tex2F texCoords;
+		axmol::Tex2F texCoord;
 	};
 
 	struct TwoColorTriangles {
