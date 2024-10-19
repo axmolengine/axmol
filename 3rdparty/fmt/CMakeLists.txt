@@ -240,7 +240,13 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   endif ()
   if (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6.0)
       set(PEDANTIC_COMPILE_FLAGS ${PEDANTIC_COMPILE_FLAGS} -Wshift-overflow=2
-          -Wnull-dereference -Wduplicated-cond)
+          -Wduplicated-cond)
+      # Workaround for GCC regression
+      # [12/13/14/15 regression] New (since gcc 12) false positive null-dereference in vector.resize
+      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108860
+      if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 12.0)
+        set(PEDANTIC_COMPILE_FLAGS ${PEDANTIC_COMPILE_FLAGS} -Wnull-dereference)
+      endif ()
   endif ()
   set(WERROR_FLAG -Werror)
 endif ()
@@ -319,7 +325,7 @@ else ()
   message(WARNING "Feature cxx_std_11 is unknown for the CXX compiler")
 endif ()
 
-target_include_directories(fmt ${FMT_SYSTEM_HEADERS_ATTRIBUTE} PUBLIC
+target_include_directories(fmt ${FMT_SYSTEM_HEADERS_ATTRIBUTE} BEFORE PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:${FMT_INC_DIR}>)
 
@@ -359,8 +365,8 @@ if (NOT MSVC)
   # Unicode is always supported on compilers other than MSVC.
 elseif (FMT_UNICODE)
   # Unicode support requires compiling with /utf-8.
-  target_compile_options(fmt PUBLIC $<$<COMPILE_LANGUAGE:CXX>:/utf-8>)
-  target_compile_options(fmt-header-only INTERFACE $<$<COMPILE_LANGUAGE:CXX>:/utf-8>)
+  target_compile_options(fmt PUBLIC $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<CXX_COMPILER_ID:MSVC>>:/utf-8>)
+  target_compile_options(fmt-header-only INTERFACE $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<CXX_COMPILER_ID:MSVC>>:/utf-8>)
 else ()
   target_compile_definitions(fmt PUBLIC FMT_UNICODE=0)
 endif ()
@@ -369,7 +375,7 @@ target_compile_definitions(fmt-header-only INTERFACE FMT_HEADER_ONLY=1)
 target_compile_features(fmt-header-only INTERFACE cxx_std_11)
 
 target_include_directories(fmt-header-only
-  ${FMT_SYSTEM_HEADERS_ATTRIBUTE} INTERFACE
+  ${FMT_SYSTEM_HEADERS_ATTRIBUTE} BEFORE INTERFACE
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:${FMT_INC_DIR}>)
 

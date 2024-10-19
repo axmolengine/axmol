@@ -1,4 +1,4 @@
-## axmol-2.2.0 Oct.13 2024
+## axmol-2.2.0 ?? 2024
 
 ### Significant changes relative to 2.1.5:
 
@@ -64,7 +64,7 @@
 
 ### sdks updates
 
-- emsdk: 3.1.63 ==> 3.1.68
+- emsdk: 3.1.63 ==> 3.1.69
 
 ### 3rdparty updates
 
