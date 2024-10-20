@@ -1,4 +1,4 @@
-## axmol-2.2.0 ?? 2024
+## axmol-2.2.0 Oct.20 2024
 
 ### Significant changes relative to 2.1.5:
 
