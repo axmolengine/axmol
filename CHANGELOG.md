@@ -64,7 +64,7 @@
 
 ### sdks updates
 
-- emsdk: 3.1.63 ==> 3.1.69
+- emsdk: 3.1.63 ==> 3.1.67
 
 ### 3rdparty updates
 

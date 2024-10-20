@@ -1,7 +1,3 @@
-# 11.1.0 - TBD
-
-- Improved debug codegen.
-
 # 11.0.2 - 2024-07-20
 
 - Fixed compatibility with non-POSIX systems

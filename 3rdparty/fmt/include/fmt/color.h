@@ -330,7 +330,7 @@ FMT_CONSTEXPR inline auto operator|(emphasis lhs, emphasis rhs) noexcept
 namespace detail {
 
 template <typename Char> struct ansi_color_escape {
-  FMT_CONSTEXPR ansi_color_escape(color_type text_color,
+  FMT_CONSTEXPR ansi_color_escape(detail::color_type text_color,
                                   const char* esc) noexcept {
     // If we have a terminal color, we need to output another escape code
     // sequence.
@@ -412,13 +412,13 @@ template <typename Char> struct ansi_color_escape {
 };
 
 template <typename Char>
-FMT_CONSTEXPR auto make_foreground_color(color_type foreground) noexcept
+FMT_CONSTEXPR auto make_foreground_color(detail::color_type foreground) noexcept
     -> ansi_color_escape<Char> {
   return ansi_color_escape<Char>(foreground, "\x1b[38;2;");
 }
 
 template <typename Char>
-FMT_CONSTEXPR auto make_background_color(color_type background) noexcept
+FMT_CONSTEXPR auto make_background_color(detail::color_type background) noexcept
     -> ansi_color_escape<Char> {
   return ansi_color_escape<Char>(background, "\x1b[48;2;");
 }
@@ -434,35 +434,36 @@ template <typename Char> inline void reset_color(buffer<Char>& buffer) {
   buffer.append(reset_color.begin(), reset_color.end());
 }
 
-template <typename T> struct styled_arg : view {
+template <typename T> struct styled_arg : detail::view {
   const T& value;
   text_style style;
   styled_arg(const T& v, text_style s) : value(v), style(s) {}
 };
 
 template <typename Char>
-void vformat_to(buffer<Char>& buf, const text_style& ts,
-                basic_string_view<Char> fmt,
-                basic_format_args<buffered_context<Char>> args) {
+void vformat_to(
+    buffer<Char>& buf, const text_style& ts, basic_string_view<Char> format_str,
+    basic_format_args<buffered_context<type_identity_t<Char>>> args) {
   bool has_style = false;
   if (ts.has_emphasis()) {
     has_style = true;
-    auto emphasis = make_emphasis<Char>(ts.get_emphasis());
+    auto emphasis = detail::make_emphasis<Char>(ts.get_emphasis());
     buf.append(emphasis.begin(), emphasis.end());
   }
   if (ts.has_foreground()) {
     has_style = true;
-    auto foreground = make_foreground_color<Char>(ts.get_foreground());
+    auto foreground = detail::make_foreground_color<Char>(ts.get_foreground());
     buf.append(foreground.begin(), foreground.end());
   }
   if (ts.has_background()) {
     has_style = true;
-    auto background = make_background_color<Char>(ts.get_background());
+    auto background = detail::make_background_color<Char>(ts.get_background());
     buf.append(background.begin(), background.end());
   }
-  vformat_to(buf, fmt, args);
-  if (has_style) reset_color<Char>(buf);
+  detail::vformat_to(buf, format_str, args, {});
+  if (has_style) detail::reset_color<Char>(buf);
 }
+
 }  // namespace detail
 
 inline void vprint(FILE* f, const text_style& ts, string_view fmt,
@@ -484,7 +485,7 @@ inline void vprint(FILE* f, const text_style& ts, string_view fmt,
 template <typename... T>
 void print(FILE* f, const text_style& ts, format_string<T...> fmt,
            T&&... args) {
-  vprint(f, ts, fmt.str, vargs<T...>{{args...}});
+  vprint(f, ts, fmt, fmt::make_format_args(args...));
 }
 
 /**
@@ -523,7 +524,7 @@ inline auto vformat(const text_style& ts, string_view fmt, format_args args)
 template <typename... T>
 inline auto format(const text_style& ts, format_string<T...> fmt, T&&... args)
     -> std::string {
-  return fmt::vformat(ts, fmt.str, vargs<T...>{{args...}});
+  return fmt::vformat(ts, fmt, fmt::make_format_args(args...));
 }
 
 /// Formats a string with the given text_style and writes the output to `out`.
@@ -550,7 +551,7 @@ template <typename OutputIt, typename... T,
           FMT_ENABLE_IF(detail::is_output_iterator<OutputIt, char>::value)>
 inline auto format_to(OutputIt out, const text_style& ts,
                       format_string<T...> fmt, T&&... args) -> OutputIt {
-  return vformat_to(out, ts, fmt.str, vargs<T...>{{args...}});
+  return vformat_to(out, ts, fmt, fmt::make_format_args(args...));
 }
 
 template <typename T, typename Char>
@@ -559,30 +560,31 @@ struct formatter<detail::styled_arg<T>, Char> : formatter<T, Char> {
   auto format(const detail::styled_arg<T>& arg, FormatContext& ctx) const
       -> decltype(ctx.out()) {
     const auto& ts = arg.style;
+    const auto& value = arg.value;
     auto out = ctx.out();
 
     bool has_style = false;
     if (ts.has_emphasis()) {
       has_style = true;
       auto emphasis = detail::make_emphasis<Char>(ts.get_emphasis());
-      out = detail::copy<Char>(emphasis.begin(), emphasis.end(), out);
+      out = std::copy(emphasis.begin(), emphasis.end(), out);
     }
     if (ts.has_foreground()) {
       has_style = true;
       auto foreground =
           detail::make_foreground_color<Char>(ts.get_foreground());
-      out = detail::copy<Char>(foreground.begin(), foreground.end(), out);
+      out = std::copy(foreground.begin(), foreground.end(), out);
     }
     if (ts.has_background()) {
       has_style = true;
       auto background =
           detail::make_background_color<Char>(ts.get_background());
-      out = detail::copy<Char>(background.begin(), background.end(), out);
+      out = std::copy(background.begin(), background.end(), out);
     }
-    out = formatter<T, Char>::format(arg.value, ctx);
+    out = formatter<T, Char>::format(value, ctx);
     if (has_style) {
       auto reset_color = string_view("\x1b[0m");
-      out = detail::copy<Char>(reset_color.begin(), reset_color.end(), out);
+      out = std::copy(reset_color.begin(), reset_color.end(), out);
     }
     return out;
   }

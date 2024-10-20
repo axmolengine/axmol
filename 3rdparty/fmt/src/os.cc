@@ -160,7 +160,7 @@ void detail::format_windows_error(detail::buffer<char>& out, int error_code,
 }
 
 void report_windows_error(int error_code, const char* message) noexcept {
-  do_report_error(detail::format_windows_error, error_code, message);
+  report_error(detail::format_windows_error, error_code, message);
 }
 #endif  // _WIN32
 
@@ -374,25 +374,30 @@ long getpagesize() {
 }
 #  endif
 
-void ostream::grow(buffer<char>& buf, size_t) {
-  if (buf.size() == buf.capacity()) static_cast<ostream&>(buf).flush();
+namespace detail {
+
+void file_buffer::grow(buffer<char>& buf, size_t) {
+  if (buf.size() == buf.capacity()) static_cast<file_buffer&>(buf).flush();
 }
 
-ostream::ostream(cstring_view path, const detail::ostream_params& params)
+file_buffer::file_buffer(cstring_view path, const ostream_params& params)
     : buffer<char>(grow), file_(path, params.oflag) {
   set(new char[params.buffer_size], params.buffer_size);
 }
 
-ostream::ostream(ostream&& other) noexcept
+file_buffer::file_buffer(file_buffer&& other) noexcept
     : buffer<char>(grow, other.data(), other.size(), other.capacity()),
       file_(std::move(other.file_)) {
   other.clear();
   other.set(nullptr, 0);
 }
 
-ostream::~ostream() {
+file_buffer::~file_buffer() {
   flush();
   delete[] data();
 }
+}  // namespace detail
+
+ostream::~ostream() = default;
 #endif  // FMT_USE_FCNTL
 FMT_END_NAMESPACE

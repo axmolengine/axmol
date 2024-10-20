@@ -67,7 +67,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 11.0.2-601be1c
+- Version: 11.0.2
 
 - License: MIT
 
