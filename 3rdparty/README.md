@@ -67,7 +67,8 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 11.0.2
+- Version: 11.0.2-601be1c
+
 - License: MIT
 
 ## FreeType
@@ -123,7 +124,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-87ae18a
+  - Version: 2.1-97813fb
   - License: MIT
 
 - tolua
