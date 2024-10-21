@@ -147,7 +147,7 @@ void MainScene::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event
 {
     for (auto&& t : touches)
     {
-        AXLOG("onTouchesBegan detected, X:%f  Y:%f", t->getLocation().x, t->getLocation().y);
+        AXLOGD("onTouchesBegan detected, X:{}  Y:{}", t->getLocation().x, t->getLocation().y);
     }
 }
 
@@ -155,7 +155,7 @@ void MainScene::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event
 {
     for (auto&& t : touches)
     {
-        AXLOG("onTouchesMoved detected, X:%f  Y:%f", t->getLocation().x, t->getLocation().y);
+        AXLOGD("onTouchesMoved detected, X:{}  Y:{}", t->getLocation().x, t->getLocation().y);
     }
 }
 
@@ -163,42 +163,42 @@ void MainScene::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event
 {
     for (auto&& t : touches)
     {
-        AXLOG("onTouchesEnded detected, X:%f  Y:%f", t->getLocation().x, t->getLocation().y);
+        AXLOGD("onTouchesEnded detected, X:{}  Y:{}", t->getLocation().x, t->getLocation().y);
     }
 }
 
 void MainScene::onMouseDown(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
-    AXLOG("onMouseDown detected, Key: %d", static_cast<int>(e->getMouseButton()));
+    AXLOGD("onMouseDown detected, Key: {}", static_cast<int>(e->getMouseButton()));
 }
 
 void MainScene::onMouseUp(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
-    AXLOG("onMouseUp detected, Key: %d", static_cast<int>(e->getMouseButton()));
+    AXLOGD("onMouseUp detected, Key: {}", static_cast<int>(e->getMouseButton()));
 }
 
 void MainScene::onMouseMove(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
-    AXLOG("onMouseMove detected, X:%f  Y:%f", e->getCursorX(), e->getCursorY());
+    AXLOGD("onMouseMove detected, X:{}  Y:{}", e->getCursorX(), e->getCursorY());
 }
 
 void MainScene::onMouseScroll(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
-    AXLOG("onMouseScroll detected, X:%f  Y:%f", e->getScrollX(), e->getScrollY());
+    AXLOGD("onMouseScroll detected, X:{}  Y:{}", e->getScrollX(), e->getScrollY());
 }
 
 void MainScene::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
 {
-    AXLOG("onKeyPressed, keycode: %d", static_cast<int>(code));
+    AXLOGD("onKeyPressed, keycode: {}", static_cast<int>(code));
 }
 
 void MainScene::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
 {
-    AXLOG("onKeyReleased, keycode: %d", static_cast<int>(code));
+    AXLOGD("onKeyReleased, keycode: {}", static_cast<int>(code));
 }
 
 void MainScene::update(float delta)

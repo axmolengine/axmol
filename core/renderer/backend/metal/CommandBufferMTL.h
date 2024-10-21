@@ -150,6 +150,11 @@ public:
 	 * TODO: Implement a wireframe mode for METAL devices. Refer to: https://forums.ogre3d.org/viewtopic.php?t=95089
      */
     void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe) override;
+    void drawArraysInstanced(PrimitiveType primitiveType,
+                             std::size_t start,
+                             std::size_t count,
+                             int instanceCount,
+                             bool wireframe = false) override;
 
     /**
      * Draw primitives with an index list.

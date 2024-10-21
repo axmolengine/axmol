@@ -537,7 +537,7 @@ void Mesh::draw(Renderer* renderer,
         command.setWireframe(wireframe);
         if (_instancing && _instances.size() > 0)
         {
-            command.setDrawType(CustomCommand::DrawType::ELEMENT_INSTANCE);
+            command.setDrawType(CustomCommand::DrawType::ELEMENT_INSTANCED);
             command.setInstanceBuffer(_instanceTransformBuffer, _instances.size());
         }
         else if (_instancing)

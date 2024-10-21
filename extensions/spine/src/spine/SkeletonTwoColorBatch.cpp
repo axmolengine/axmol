@@ -69,7 +69,7 @@ namespace {
         vertexLayout->setAttrib("a_color2", locColor2, backend::VertexFormat::UBYTE4,
                                      offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
         vertexLayout->setAttrib("a_texCoord", locTexcoord, backend::VertexFormat::FLOAT2,
-                                     offsetof(spine::V3F_C4B_C4B_T2F, texCoords), false);
+                                     offsetof(spine::V3F_C4B_C4B_T2F, texCoord), false);
         vertexLayout->setStride(sizeof(spine::V3F_C4B_C4B_T2F));
     }
 

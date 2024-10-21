@@ -290,33 +290,26 @@ public:
      */
     void setParameterAutoBinding(std::string_view uniformName, std::string_view autoBinding);
 
-    inline const VertexLayout* getVertexLayout() const { return _vertexLayout; }
+    inline const VertexLayout* getVertexLayout(bool instanced = false) const
+    {
+        return !instanced ? _vertexLayout : _vertexLayoutInstanced;
+    }
 
-    VertexLayout* getMutableVertexLayout();
+    VertexLayout* getMutableVertexLayout(bool instanced = false);
 
     void setSharedVertexLayout(VertexLayout* vertexLayout);
 
     /*
-    * Gets batch id of current program state, part of batch draw materialID
-    */
+     * Gets batch id of current program state, part of batch draw materialID
+     */
     uint64_t getBatchId() const { return _batchId; };
 
     /*
-    * Update batchID of current program state, by default, custom program was traits with mutable uniforms
-    * so batch ID was set to -1 indicate batch was disabled
-    */
-    void updateBatchId();
-#ifndef AX_CORE_PROFILE
-    /*
-     * Follow API is deprecated, use getMutableVertexLayout instead
+     * Update batchID of current program state, by default, custom program was traits with mutable uniforms
+     * so batch ID was set to -1 indicate batch was disabled
      */
-    AX_DEPRECATED(2.1) void setVertexAttrib(std::string_view name,
-                                                 std::size_t index,
-                                                 VertexFormat format,
-                                                 std::size_t offset,
-                                                 bool needToBeNormallized);
-    AX_DEPRECATED(2.1) void setVertexStride(uint32_t stride);
-#endif
+    void updateBatchId();
+
     /** Custom shader program's vertex layout maybe not setup
      * so engine specific render node(such as Sprite) should invoke this API when ProgramState changed
      */
@@ -396,8 +389,10 @@ protected:
     std::unordered_map<std::string, std::string> _autoBindings;
 
     static std::vector<AutoBindingResolver*> _customAutoBindingResolvers;
-    VertexLayout* _vertexLayout = nullptr;
-    bool _ownVertexLayout       = false;
+    VertexLayout* _vertexLayout          = nullptr;
+    VertexLayout* _vertexLayoutInstanced = nullptr;
+    bool _ownVertexLayout                = false;
+    bool _ownVertexLayoutInstanced       = false;
 
     uint64_t _batchId = -1;
 

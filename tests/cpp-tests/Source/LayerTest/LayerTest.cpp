@@ -838,7 +838,7 @@ void LayerRadialGradientTest::onEnter()
     _currentSeletedItemIndex = 0;
 
     auto director = Director::getInstance();
-    director->setClearColor(Color4F(0, 0, 0, 0));
+    director->setClearColor(Color(0, 0, 0, 0));
     auto origin = director->getVisibleOrigin();
     auto size   = director->getVisibleSize();
     Vec2 center(origin.x + size.width / 2 + 50, origin.y + size.height / 2);

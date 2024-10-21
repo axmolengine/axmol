@@ -379,7 +379,7 @@ public:
      * value range of each element is [0.0, 1.0].
      * @js NA
      */
-    void setClearColor(const Color4F& clearColor);
+    void setClearColor(const Color& clearColor);
 
     void mainLoop();
     /** Invoke main loop with delta time. Then `calculateDeltaTime` can just use the delta time directly.
@@ -662,7 +662,7 @@ protected:
     /* Renderer for the Director */
     Renderer* _renderer = nullptr;
 
-    Color4F _clearColor = {0, 0, 0, 1};
+    Color _clearColor = {0, 0, 0, 1};
 #ifdef AX_ENABLE_CONSOLE
     /* Console for the director */
     Console* _console = nullptr;

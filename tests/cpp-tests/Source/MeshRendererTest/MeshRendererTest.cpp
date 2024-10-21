@@ -1657,7 +1657,7 @@ void MeshRendererWithOBBPerformanceTest::update(float dt)
 
         Vec3 corners[8] = {};
         _obbt.getCorners(corners);
-        _drawDebug->drawCube(corners, Color4F(0, 0, 1, 1));
+        _drawDebug->drawCube(corners, Color(0, 0, 1, 1));
     }
     if (_obb.size() > 0)
     {
@@ -1667,7 +1667,7 @@ void MeshRendererWithOBBPerformanceTest::update(float dt)
         {
             Vec3 corners[8] = {};
             _obb[i].getCorners(corners);
-            _drawOBB->drawCube(corners, _obbt.intersects(_obb[i]) ? Color4F(1, 0, 0, 1) : Color4F(0, 1, 0, 1));
+            _drawOBB->drawCube(corners, _obbt.intersects(_obb[i]) ? Color(1, 0, 0, 1) : Color(0, 1, 0, 1));
         }
     }
 }
@@ -2558,7 +2558,7 @@ void CameraBackgroundClearTest::switch_CameraClearMode(ax::Object* sender)
     }
     else if (type == CameraBackgroundBrush::BrushType::DEPTH)
     {
-        _camera->setBackgroundBrush(CameraBackgroundBrush::createColorBrush(Color4F(1.f, 0.f, 0.f, 1.f), 1.f));
+        _camera->setBackgroundBrush(CameraBackgroundBrush::createColorBrush(Color(1.f, 0.f, 0.f, 1.f), 1.f));
         _label->setString("Color Clear Brush");
     }
     else if (type == CameraBackgroundBrush::BrushType::COLOR)

@@ -334,7 +334,7 @@ void BoneNode::setDebugDrawEnabled(bool isDebugDraw)
     _isRackShow = isDebugDraw;
 }
 
-void BoneNode::setDebugDrawColor(const ax::Color4F& color)
+void BoneNode::setDebugDrawColor(const ax::Color& color)
 {
     _rackColor = color;
     updateColor();

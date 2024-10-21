@@ -590,12 +590,7 @@ FontFNT* FontFNT::create(std::string_view fntFilePath)
     tempFont->autorelease();
     return tempFont;
 }
-#ifndef AX_CORE_PROFILE
-FontFNT* FontFNT::create(std::string_view fntFilePath, const Vec2& imageOffset)
-{
-    return create(fntFilePath, Rect(imageOffset.x, imageOffset.y, 0, 0), false);
-}
-#endif
+
 FontFNT::FontFNT(BMFontConfiguration* theContfig, const Rect& imageRect, bool imageRotated)
     : _configuration(theContfig), _imageRectInPoints(AX_RECT_PIXELS_TO_POINTS(imageRect)), _imageRotated(imageRotated)
 {

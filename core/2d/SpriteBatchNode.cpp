@@ -397,7 +397,7 @@ void SpriteBatchNode::swap(ssize_t oldIndex, ssize_t newIndex)
         oldIndex >= 0 && oldIndex < (int)_descendants.size() && newIndex >= 0 && newIndex < (int)_descendants.size(),
         "Invalid index");
 
-    V3F_C4B_T2F_Quad* quads = _textureAtlas->getQuads();
+    V3F_C4F_T2F_Quad* quads = _textureAtlas->getQuads();
     std::swap(quads[oldIndex], quads[newIndex]);
 
     // update the index of other swapped item

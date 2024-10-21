@@ -208,16 +208,16 @@ void DBCCSprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_
         for (ssize_t i = 0; i < count; i++)
         {
             // draw 3 lines
-            auto from = verts[indices[i * 3]].vertices;
-            auto to   = verts[indices[i * 3 + 1]].vertices;
+            auto from = verts[indices[i * 3]].position;
+            auto to   = verts[indices[i * 3 + 1]].position;
             _debugDrawNode->drawLine(ax::Vec2(from.x, from.y), ax::Vec2(to.x, to.y), ax::Color4B::WHITE);
 
-            from = verts[indices[i * 3 + 1]].vertices;
-            to   = verts[indices[i * 3 + 2]].vertices;
+            from = verts[indices[i * 3 + 1]].position;
+            to   = verts[indices[i * 3 + 2]].position;
             _debugDrawNode->drawLine(ax::Vec2(from.x, from.y), ax::Vec2(to.x, to.y), ax::Color4B::WHITE);
 
-            from = verts[indices[i * 3 + 2]].vertices;
-            to   = verts[indices[i * 3]].vertices;
+            from = verts[indices[i * 3 + 2]].position;
+            to   = verts[indices[i * 3]].position;
             _debugDrawNode->drawLine(ax::Vec2(from.x, from.y), ax::Vec2(to.x, to.y), ax::Color4B::WHITE);
         }
 #endif  // AX_SPRITE_DEBUG_DRAW

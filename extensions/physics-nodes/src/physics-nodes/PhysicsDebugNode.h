@@ -1,73 +1,68 @@
-/* Copyright (c) 2012 Scott Lembcke and Howling Moon Software
- * Copyright (c) 2012 cocos2d-x.org
- * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+/*
+ * Copyright (c) 2019 Erin Catto
  * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef __PHYSICSNODES_DEBUGNODE_H__
-#define __PHYSICSNODES_DEBUGNODE_H__
+#ifndef __PHYSICSNODES_DEBUGNODE_BOX2D_H__
+#define __PHYSICSNODES_DEBUGNODE_BOX2D_H__
 
 #include "extensions/ExtensionMacros.h"
-#include "2d/DrawNode.h"
 #include "extensions/ExtensionExport.h"
-
-struct cpSpace;
+#include "2d/DrawNode.h"
+#include "box2d/box2d.h"
+#include "axmol.h"
 
 NS_AX_EXT_BEGIN
 
-/**
- * A BaseData that draws the components of a physics engine.
-
- * Supported physics engines:
- * - Chipmunk
- * - Objective-Chipmunk
- * @since v2.1
- * @lua NA
- */
-
+// This class implements debug drawing callbacks that are invoked inside b2World::Step.
 class AX_EX_DLL PhysicsDebugNode : public DrawNode
 {
-
 public:
-    /** Create a debug node for a regular Chipmunk space. */
-    static PhysicsDebugNode* create(cpSpace* space);
-    /**
-     * @js ctor
-     */
     PhysicsDebugNode();
-    /**
-     * @js NA
-     */
-    virtual ~PhysicsDebugNode();
+    virtual bool initWithWorld(b2WorldId worldId);
 
-    cpSpace* getSpace() const;
-    void setSpace(cpSpace* space);
+    void setAutoDraw(bool bval) { _autoDraw = bval; }
+    bool isAutoDraw() const { return _autoDraw; }
+
+    // control border thinkness
+    void setThinkness(float fval) { _thinkness = fval; }
+    float getThinkness() const { return _thinkness; }
+
+    void setWorldOffset(const Vec2& offset) { _worldOffset = offset; }
+    const Vec2& getWorldOffset() const { return _worldOffset; }
+
+    void setPTMRatio(float ratio) { _ratio = ratio; }
+    float getPTMRatio() const { return _ratio; }
 
     // Overrides
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
+    b2DebugDraw& getB2DebugDraw() { return _debugDraw; }
+
 protected:
-    cpSpace* _spacePtr;
+    b2WorldId _world{};
+    b2DebugDraw _debugDraw{b2DefaultDebugDraw()};
+    bool _autoDraw{true};
+    float _thinkness{0.5f};
+
+    ax::Vec2 _worldOffset{};
+    float _ratio{1.0f};
 };
 
 NS_AX_EXT_END
 
-#endif  // __PHYSICSNODES_DEBUGNODE_H__
+#endif  //__PHYSICSNODES_DEBUGNODE_BOX2D_H__

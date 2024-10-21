@@ -28,7 +28,6 @@
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
 #        include "bullet/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 
 namespace ax
@@ -41,14 +40,11 @@ Physics3DShape::ShapeType Physics3DShape::getShapeType() const
 
 Physics3DShape::Physics3DShape() : _shapeType(ShapeType::UNKNOWN)
 {
-#        if (AX_ENABLE_BULLET_INTEGRATION)
     _btShape         = nullptr;
     _heightfieldData = nullptr;
-#        endif
 }
 Physics3DShape::~Physics3DShape()
 {
-#        if (AX_ENABLE_BULLET_INTEGRATION)
     AX_SAFE_DELETE(_btShape);
     AX_SAFE_DELETE_ARRAY(_heightfieldData);
     for (auto&& iter : _compoundChildShapes)
@@ -56,7 +52,6 @@ Physics3DShape::~Physics3DShape()
         AX_SAFE_RELEASE(iter);
     }
     _compoundChildShapes.clear();
-#        endif
 }
 
 Physics3DShape* Physics3DShape::createBox(const ax::Vec3& extent)
@@ -219,7 +214,5 @@ bool Physics3DShape::initCompoundShape(const std::vector<std::pair<Physics3DShap
 }
 
 }
-
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)

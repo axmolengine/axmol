@@ -113,14 +113,14 @@ public:
     @param index Index must be between 0 and the atlas capacity - 1.
     @since v0.8
     */
-    void updateQuad(const V3F_C4B_T2F_Quad& quad, ssize_t index);
+    void updateQuad(const V3F_C4F_T2F_Quad& quad, ssize_t index);
 
     /** Inserts a Quad (texture, vertex and color) at a certain index.
      @param quad Quad that are going to be rendered.
      @param index Index must be between 0 and the atlas capacity - 1.
      @since v0.8
     */
-    void insertQuad(const V3F_C4B_T2F_Quad& quad, ssize_t index);
+    void insertQuad(const V3F_C4F_T2F_Quad& quad, ssize_t index);
 
     /** Inserts a c array of quads at a given index.
      @param quads Quad that are going to be rendered.
@@ -129,7 +129,7 @@ public:
      @attention This method doesn't enlarge the array when amount + index > totalQuads.
      @since v1.1
     */
-    void insertQuads(V3F_C4B_T2F_Quad* quads, ssize_t index, ssize_t amount);
+    void insertQuads(V3F_C4F_T2F_Quad* quads, ssize_t index, ssize_t amount);
 
     /** Removes the quad that is located at a certain index and inserts it at a new index.
     This operation is faster than removing and inserting in a quad in 2 different steps.
@@ -214,10 +214,10 @@ public:
     void setTexture(Texture2D* texture);
 
     /** Gets the quads that are going to be rendered. */
-    V3F_C4B_T2F_Quad* getQuads();
+    V3F_C4F_T2F_Quad* getQuads();
 
     /** Sets the quads that are going to be rendered. */
-    void setQuads(V3F_C4B_T2F_Quad* quads);
+    void setQuads(V3F_C4F_T2F_Quad* quads);
 
     inline unsigned short* getIndices() { return _indices; }
 
@@ -239,7 +239,7 @@ protected:
     /** Texture of the texture atlas */
     Texture2D* _texture = nullptr;
     /** Quads that are going to be rendered */
-    V3F_C4B_T2F_Quad* _quads = nullptr;
+    V3F_C4F_T2F_Quad* _quads = nullptr;
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _rendererRecreatedListener = nullptr;

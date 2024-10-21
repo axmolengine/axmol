@@ -25,7 +25,7 @@
  ****************************************************************************/
 #include "platform/PlatformConfig.h"
 #include "base/Config.h"
-#if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
+#if defined(AX_ENABLE_3D_PHYSICS) && 0
 #    include "lua-bindings/manual/physics3d/axlua_physics3d_manual.h"
 #    include "lua-bindings/auto/axlua_physics3d_auto.hpp"
 #    include "lua-bindings/manual/tolua_fix.h"

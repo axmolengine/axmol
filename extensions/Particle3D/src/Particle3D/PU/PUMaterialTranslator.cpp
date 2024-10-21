@@ -198,7 +198,7 @@ void PUMaterialPassTranslator::translate(PUScriptCompiler* compiler, PUAbstractN
             {
                 if (passValidateProperty(compiler, prop, matToken[TOKEN_MAT_AMIBIENT], VAL_VECTOR4))
                 {
-                    Vec4 val;
+                    Color val;
                     if (getVector4(prop->values.begin(), prop->values.end(), &val))
                     {
                         material->ambientColor = val;
@@ -209,7 +209,7 @@ void PUMaterialPassTranslator::translate(PUScriptCompiler* compiler, PUAbstractN
             {
                 if (passValidateProperty(compiler, prop, matToken[TOKEN_MAT_AMIBIENT], VAL_VECTOR4))
                 {
-                    Vec4 val;
+                    Color val;
                     if (getVector4(prop->values.begin(), prop->values.end(), &val))
                     {
                         material->diffuseColor = val;
@@ -221,7 +221,7 @@ void PUMaterialPassTranslator::translate(PUScriptCompiler* compiler, PUAbstractN
                 PUAbstractNodeList::const_iterator it  = prop->values.begin();
                 PUAbstractNodeList::const_iterator end = prop->values.end();
                 unsigned int n                         = 0;
-                Vec4 color;
+                Color color;
                 float shininess = 0.0f;
                 while (it != end)
                 {
@@ -258,7 +258,7 @@ void PUMaterialPassTranslator::translate(PUScriptCompiler* compiler, PUAbstractN
             {
                 if (passValidateProperty(compiler, prop, matToken[TOKEN_MAT_AMIBIENT], VAL_VECTOR4))
                 {
-                    Vec4 val;
+                    Color val;
                     if (getVector4(prop->values.begin(), prop->values.end(), &val))
                     {
                         material->emissiveColor = val;

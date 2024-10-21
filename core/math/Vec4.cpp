@@ -37,52 +37,8 @@ NS_AX_MATH_BEGIN
     const Vec4 Vec4::UNIT_W = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
 #endif
 
-
-Vec4 Vec4::fromColor(unsigned int color)
-{
-    float components[4];
-    int componentIndex = 0;
-    for (int i = 3; i >= 0; --i)
-    {
-        int component = (color >> i * 8) & 0x000000ff;
-
-        components[componentIndex++] = static_cast<float>(component) / 255.0f;
-    }
-
-    Vec4 value(components);
-    return value;
-}
-
-bool Vec4::isZero() const
-{
-    return x == 0.0f && y == 0.0f && z == 0.0f && w == 0.0f;
-}
-
-bool Vec4::isOne() const
-{
-    return x == 1.0f && y == 1.0f && z == 1.0f && w == 1.0f;
-}
-
-float Vec4::angle(const Vec4& v1, const Vec4& v2)
-{
-    float dx = v1.w * v2.x - v1.x * v2.w - v1.y * v2.z + v1.z * v2.y;
-    float dy = v1.w * v2.y - v1.y * v2.w - v1.z * v2.x + v1.x * v2.z;
-    float dz = v1.w * v2.z - v1.z * v2.w - v1.x * v2.y + v1.y * v2.x;
-
-    return std::atan2(std::sqrt(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
-}
-
-void Vec4::add(const Vec4& v1, const Vec4& v2, Vec4* dst)
-{
-    AX_ASSERT(dst);
-
-    dst->x = v1.x + v2.x;
-    dst->y = v1.y + v2.y;
-    dst->z = v1.z + v2.z;
-    dst->w = v1.w + v2.w;
-}
-
-void Vec4::clamp(const Vec4& min, const Vec4& max)
+    
+void Vec4Base::clamp(const Vec4Base& min, const Vec4Base& max)
 {
     AX_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
 
@@ -111,7 +67,7 @@ void Vec4::clamp(const Vec4& min, const Vec4& max)
         w = max.w;
 }
 
-void Vec4::clamp(const Vec4& v, const Vec4& min, const Vec4& max, Vec4* dst)
+void Vec4Base::clamp(const Vec4Base& v, const Vec4Base& min, const Vec4Base& max, Vec4Base* dst)
 {
     AX_ASSERT(dst);
     AX_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
@@ -143,6 +99,35 @@ void Vec4::clamp(const Vec4& v, const Vec4& min, const Vec4& max, Vec4* dst)
         dst->w = min.w;
     if (dst->w > max.w)
         dst->w = max.w;
+}
+
+bool Vec4::isZero() const
+{
+    return x == 0.0f && y == 0.0f && z == 0.0f && w == 0.0f;
+}
+
+bool Vec4::isOne() const
+{
+    return x == 1.0f && y == 1.0f && z == 1.0f && w == 1.0f;
+}
+
+float Vec4::angle(const Vec4& v1, const Vec4& v2)
+{
+    float dx = v1.w * v2.x - v1.x * v2.w - v1.y * v2.z + v1.z * v2.y;
+    float dy = v1.w * v2.y - v1.y * v2.w - v1.z * v2.x + v1.x * v2.z;
+    float dz = v1.w * v2.z - v1.z * v2.w - v1.x * v2.y + v1.y * v2.x;
+
+    return std::atan2(std::sqrt(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
+}
+
+void Vec4::add(const Vec4& v1, const Vec4& v2, Vec4* dst)
+{
+    AX_ASSERT(dst);
+
+    dst->x = v1.x + v2.x;
+    dst->y = v1.y + v2.y;
+    dst->z = v1.z + v2.z;
+    dst->w = v1.w + v2.w;
 }
 
 float Vec4::distance(const Vec4& v) const
