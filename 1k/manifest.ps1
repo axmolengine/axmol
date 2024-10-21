@@ -11,8 +11,8 @@
 if ($Global:is_axmol_app -or $Global:is_axmol_engine) {
     $manifest['nuget'] = '5.5.1' # since 5.6.0, requires .net 4.0
     $manifest['glslcc'] = '1.9.5+'
-    $manifest['cmake'] = '3.29.3~3.30.2+'
-    $manifest['emsdk'] = '3.1.63+'
+    $manifest['cmake'] = '3.29.3~3.30.5+'
+    $manifest['emsdk'] = '3.1.66~3.1.67+'
     $manifest['jdk'] = '17.0.10~17.0.12+'
     $manifest['vs'] = '16.0+'
 }

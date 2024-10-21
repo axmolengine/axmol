@@ -15,10 +15,10 @@ public:
 
     CREATE_FUNC(GGraph);
 
-    void drawRect(float aWidth, float aHeight, int lineSize, const ax::Color4F& lineColor, const ax::Color4F& fillColor);
-    void drawEllipse(float aWidth, float aHeight, int lineSize, const ax::Color4F& lineColor, const ax::Color4F& fillColor);
-    void drawPolygon(int lineSize, const ax::Color4F& lineColor, const ax::Color4F& fillColor, const ax::Vec2* points, int count);
-    void drawRegularPolygon(int lineSize, const ax::Color4F& lineColor, const ax::Color4F& fillColor, int sides, float startAngle = 0, const float* distances = nullptr, int distanceCount = 0);
+    void drawRect(float aWidth, float aHeight, int lineSize, const ax::Color4B& lineColor, const ax::Color4B& fillColor);
+    void drawEllipse(float aWidth, float aHeight, int lineSize, const ax::Color4B& lineColor, const ax::Color4B& fillColor);
+    void drawPolygon(int lineSize, const ax::Color4B& lineColor, const ax::Color4B& fillColor, const ax::Vec2* points, int count);
+    void drawRegularPolygon(int lineSize, const ax::Color4B& lineColor, const ax::Color4B& fillColor, int sides, float startAngle = 0, const float* distances = nullptr, int distanceCount = 0);
     bool isEmpty() const { return _type == 0; }
 
     ax::Color3B getColor() const;
@@ -36,8 +36,8 @@ private:
     void updateShape();
 
     int _type;
-    ax::Color4F _lineColor;
-    ax::Color4F _fillColor;
+    ax::Color4B _lineColor;
+    ax::Color4B _fillColor;
     int _lineSize;
     float* _cornerRadius;
     std::vector<ax::Vec2>* _polygonPoints;

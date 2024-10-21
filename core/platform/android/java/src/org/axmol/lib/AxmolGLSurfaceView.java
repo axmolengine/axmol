@@ -37,6 +37,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import java.util.concurrent.CountDownLatch;
+
 public class AxmolGLSurfaceView extends GLSurfaceView {
     // ===========================================================
     // Constants
@@ -62,7 +64,8 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
 
     private boolean mSoftKeyboardShown = false;
     private boolean mMultipleTouchEnabled = true;
-    private boolean mPaused = true;
+
+    private CountDownLatch mNativePauseComplete;
 
     public boolean isSoftKeyboardShown() {
         return mSoftKeyboardShown;
@@ -184,35 +187,6 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
-
-    @Override
-    public void onResume() {
-        if (mPaused) {
-            mPaused = false;
-            super.onResume();
-            this.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    AxmolGLSurfaceView.this.mRenderer.handleOnResume();
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onPause() {
-        this.queueEvent(new Runnable() {
-            @Override
-            public void run() {
-                AxmolGLSurfaceView.this.mRenderer.handleOnPause();
-            }
-        });
-    }
-
-    public void onStop() {
-        mPaused = true;
-        super.onPause();
-    }
 
     @Override
     public boolean onTouchEvent(final MotionEvent pMotionEvent) {
@@ -426,6 +400,37 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
     // ===========================================================
     // Methods
     // ===========================================================
+
+    public void handleOnResume() {
+        this.queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                AxmolGLSurfaceView.this.mRenderer.handleOnResume();
+            }
+        });
+    }
+
+    public void handleOnPause() {
+        mNativePauseComplete = new CountDownLatch(1);
+
+        CountDownLatch complete = mNativePauseComplete;
+        this.queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                AxmolGLSurfaceView.this.mRenderer.handleOnPause();
+                complete.countDown();
+            }
+        });
+    }
+
+    public void waitForPauseToComplete() {
+        while (mNativePauseComplete.getCount() > 0) {
+            try {
+                mNativePauseComplete.await();
+            } catch (InterruptedException e) {
+            }
+        }
+    }
 
     // ===========================================================
     // Inner and Anonymous Classes

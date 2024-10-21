@@ -26,17 +26,8 @@
 
 #include "ui/UIScale9Sprite.h"
 #include "2d/Sprite.h"
-#include "2d/SpriteFrameCache.h"
 #include "base/Vector.h"
 #include "base/Director.h"
-#include "base/UTF8.h"
-#include "renderer/Shaders.h"
-#include "platform/Image.h"
-#include "base/NinePatchImageParser.h"
-#include "2d/DrawNode.h"
-#include "2d/Camera.h"
-#include "renderer/Renderer.h"
-#include "renderer/backend/ProgramStateRegistry.h"
 
 using namespace ax::ui;
 

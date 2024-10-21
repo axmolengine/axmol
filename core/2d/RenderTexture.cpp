@@ -77,6 +77,7 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     if (!_cachedTextureDirty)
         return;
+    _cachedTextureDirty = false;
     // to get the rendered texture data
     auto func = [&](RefPtr<Image> uiTextureImage) {
         if (uiTextureImage)

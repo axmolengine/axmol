@@ -24,13 +24,9 @@
 
 #if !defined(RAPIDJSON_SCHEMA_USE_INTERNALREGEX)
 #define RAPIDJSON_SCHEMA_USE_INTERNALREGEX 1
-#else
-#define RAPIDJSON_SCHEMA_USE_INTERNALREGEX 0
 #endif
 
-#if !RAPIDJSON_SCHEMA_USE_INTERNALREGEX && defined(RAPIDJSON_SCHEMA_USE_STDREGEX) && (__cplusplus >=201103L || (defined(_MSC_VER) && _MSC_VER >= 1800))
-#define RAPIDJSON_SCHEMA_USE_STDREGEX 1
-#else
+#if !defined(RAPIDJSON_SCHEMA_USE_STDREGEX) || !(__cplusplus >=201103L || (defined(_MSC_VER) && _MSC_VER >= 1800))
 #define RAPIDJSON_SCHEMA_USE_STDREGEX 0
 #endif
 
@@ -367,7 +363,9 @@ public:
         uint64_t h = Hash(0, kObjectType);
         uint64_t* kv = stack_.template Pop<uint64_t>(memberCount * 2);
         for (SizeType i = 0; i < memberCount; i++)
-            h ^= Hash(kv[i * 2], kv[i * 2 + 1]);  // Use xor to achieve member order insensitive
+            // Issue #2205
+            // Hasing the key to avoid key=value cases with bug-prone zero-value hash
+            h ^= Hash(Hash(0, kv[i * 2]), kv[i * 2 + 1]);  // Use xor to achieve member order insensitive
         *stack_.template Push<uint64_t>() = h;
         return true;
     }
@@ -405,7 +403,7 @@ private:
     
     bool WriteBuffer(Type type, const void* data, size_t len) {
         // FNV-1a from http://isthe.com/chongo/tech/comp/fnv/
-        uint64_t h = Hash(RAPIDJSON_UINT64_C2(0x84222325, 0xcbf29ce4), type);
+        uint64_t h = Hash(RAPIDJSON_UINT64_C2(0xcbf29ce4, 0x84222325), type);
         const unsigned char* d = static_cast<const unsigned char*>(data);
         for (size_t i = 0; i < len; i++)
             h = Hash(h, d[i]);
@@ -1643,9 +1641,13 @@ private:
 
     bool CheckDoubleMultipleOf(Context& context, double d) const {
         double a = std::abs(d), b = std::abs(multipleOf_.GetDouble());
-        double q = std::floor(a / b);
-        double r = a - q * b;
-        if (r > 0.0) {
+        double q = a / b;
+        double qRounded = std::floor(q + 0.5);
+        double scaledEpsilon = (q + qRounded) * std::numeric_limits<double>::epsilon();
+        double difference = std::abs(qRounded - q);
+        bool isMultiple = (difference <= scaledEpsilon)
+                                        || (difference < std::numeric_limits<double>::min());
+        if (!isMultiple) {
             context.error_handler.NotMultipleOf(d, multipleOf_);
             RAPIDJSON_INVALID_KEYWORD_RETURN(kValidateErrorMultipleOf);
         }

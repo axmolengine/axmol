@@ -26,7 +26,8 @@
 #define _COCOLOADER_H
 
 #include <stdint.h>
-#include "rapidjson/document-wrapper.h"
+#include "rapidjson/rapidjson.h"
+#include "rapidjson/document.h"
 #include "CocosStudioExport.h"
 
 #pragma pack(4)

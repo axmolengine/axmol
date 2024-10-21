@@ -29,10 +29,7 @@
 
 #include "2d/Sprite.h"
 #include "2d/SpriteFrame.h"
-#include "2d/SpriteBatchNode.h"
-#include "platform/PlatformMacros.h"
 #include "ui/GUIExport.h"
-#include "renderer/TrianglesCommand.h"
 
 /**
  * @addtogroup ui

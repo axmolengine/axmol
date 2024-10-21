@@ -29,7 +29,6 @@ THE SOFTWARE.
 #include "renderer/TextureAtlas.h"
 #include "platform/FileUtils.h"
 #include "base/Director.h"
-#include "base/UTF8.h"
 #include "renderer/TextureCache.h"
 
 #if AX_LABELATLAS_DEBUG_DRAW
@@ -278,7 +277,7 @@ void LabelAtlas::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     _debugDrawNode->clear();
     auto size        = getContentSize();
     Vec2 vertices[4] = {Vec2::ZERO, Vec2(size.width, 0), Vec2(size.width, size.height), Vec2(0.0f, size.height)};
-    _debugDrawNode->drawPoly(vertices, 4, true, Color4F(1.0, 1.0, 1.0, 1.0));
+    _debugDrawNode->drawPoly(vertices, 4, true, Color4B::WHITE);
 }
 #endif
 
