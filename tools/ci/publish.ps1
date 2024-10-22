@@ -1,8 +1,13 @@
 param(
-    $version = $null
+    $version = $null,
+    $commitish = $null
 )
 
 $AX_ROOT = (Resolve-Path $PSScriptRoot/../..).Path
+if ($commitish) {
+    echo "Creating package from revision: $commitish"
+    git -C $AX_ROOT checkout $commitish
+}
 
 $prerelease = 'false'
 if (!$version -or ($version -eq 'auto')) {
