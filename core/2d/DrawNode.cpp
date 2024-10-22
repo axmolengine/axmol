@@ -992,7 +992,7 @@ void DrawNode::_drawPolygon(const Vec2* verts,
                 extrude[i]  = {offset, n2};
             }
 
-            for (unsigned int i = 0; i < count; i++)
+            for (unsigned int i = 0; i < count-1; i++)
             {
                 int j   = (i + 1) % count;
                 Vec2 v0 = _vertices[i];
