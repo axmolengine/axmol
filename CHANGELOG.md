@@ -1,3 +1,9 @@
+## axmol-2.2.1 Oct.22 2024
+
+### Bug fixes
+
+- Fix curl link error on macOS
+
 ## axmol-2.2.0 Oct.20 2024
 
 ### Significant changes relative to 2.1.5:
