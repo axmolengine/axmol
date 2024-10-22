@@ -161,7 +161,7 @@ Please see the [Windows workflow guide](https://github.com/axmolengine/axmol/iss
 
 ### Android (Android Studio)
 
-  1. Install [Android Studio 2023.1.1+](https://developer.android.com/studio).
+  1. Install [Android Studio 2024.1.2+](https://developer.android.com/studio).
   2. When starting Android Studio for the first time, it will guide you through the installation of the SDK and other tools. Please make sure that you do install them.
   3. Start Android Studio and choose [Open an existing Android Studio Project] and select your project. For example, the existing `cpp-test` project located in `axmol\tests\cpp-tests\proj.android`.
   4. Start Android Studio and open 'Tools' -> 'SDKManager', then switch to 'SDK Tools', check the 'Show Package Details' field, and choose the following tools clicking the button 'Apply' to install them:  

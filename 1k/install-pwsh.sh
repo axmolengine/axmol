@@ -12,7 +12,7 @@ mkdir -p $cacheDir
 
 pwsh_ver=$1
 if [ "$pwsh_ver" = "" ] ; then
-    pwsh_ver='7.4.4'
+    pwsh_ver='7.4.5'
 fi
 
 pwsh_min_ver=$2
@@ -64,8 +64,8 @@ elif [ $HOST_OS = 'Linux' ] ; then
             curl -L "https://github.com/PowerShell/PowerShell/releases/download/v$pwsh_ver/$pwsh_pkg" -o "$pwsh_pkg_out"
         fi
         sudo_cmd=$(which sudo)
-        $sudo_cmd dpkg -i "$pwsh_pkg_out"
-        $sudo_cmd apt-get install -f
+        $sudo_cmd dpkg -i --ignore-depends=libicu72 "$pwsh_pkg_out"
+        $sudo_cmd apt-get install -f powershell
     elif command -v pacman > /dev/null; then # Linux distro: Arch
         # refer: https://ephos.github.io/posts/2018-9-17-Pwsh-ArchLinux
         # available pwsh version, refer to: https://aur.archlinux.org/packages/powershell-bin

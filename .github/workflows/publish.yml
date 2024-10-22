@@ -14,6 +14,10 @@ on:
          default: 'auto'
          # Input has to be provided for the workflow to run
          required: false
+      commitish: 
+        description: 'Please input commitis value that determines where the Git tag is created from. Can be any branch or commit SHA. Defaults to repository default branch.'
+        default: 'dev'
+        required: false
 jobs:
   publish:
     runs-on: windows-latest
@@ -62,7 +66,7 @@ jobs:
         ./setup.ps1
         ./1k/fetch.ps1 -uri 'oboe' -prefix $(Join-Path $AX_ROOT 'cache') -manifest $(Join-Path $AX_ROOT 'manifest.json')
         axmol -xc '-DAX_WITH_LZ4=ON,-DAX_WITH_CARES=ON,-DAX_WITH_YAML_CPP=ON,-DAX_WITH_KCP=ON' -c
-        ./tools/ci/publish.ps1 -version "${{ steps.forward_ver.outputs.release_ver }}"
+        ./tools/ci/publish.ps1 -version "${{ steps.forward_ver.outputs.release_ver }}" -commitish "${{ github.event.inputs.commitish }}"
 
     - name: Publish to github release page
       if: ${{ steps.make_pkg.outputs.release_tag != '' }}
@@ -73,5 +77,6 @@ jobs:
         files: ${{ steps.make_pkg.outputs.release_pkg }}
         body_path: ${{ steps.make_pkg.outputs.release_note }}
         prerelease: ${{ steps.make_pkg.outputs.prerelease }}
+        target_commitish: ${{ github.event.inputs.commitish }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

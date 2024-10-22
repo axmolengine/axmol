@@ -22,7 +22,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.33.1
+- Version: 1.34.2
 - License: MIT
 
 ## Chipmunk2D
@@ -68,6 +68,7 @@
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
 - Version: 11.0.2
+
 - License: MIT
 
 ## FreeType
@@ -123,7 +124,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-87ae18a
+  - Version: 2.1-97813fb
   - License: MIT
 
 - tolua
