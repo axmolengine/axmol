@@ -169,7 +169,7 @@ protected:
 
     bool allocMemory();
 
-    V3F_C4B_T2F_Quad* _quads = nullptr;  // quads to be rendered
+    V3F_C4F_T2F_Quad* _quads = nullptr;  // quads to be rendered
     unsigned short* _indices = nullptr;  // indices
 
     QuadCommand _quadCommand;  // quad command

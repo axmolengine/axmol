@@ -61,10 +61,7 @@ public:
     @return Current application instance pointer.
     */
     static Application* getInstance();
-#ifndef AX_CORE_PROFILE
-    /** @deprecated Use getInstance() instead */
-    AX_DEPRECATED(2.1) static Application* sharedApplication();
-#endif
+
     /**
     @brief Get current language config
     @return Current language config

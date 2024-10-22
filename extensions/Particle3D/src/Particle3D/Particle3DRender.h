@@ -119,14 +119,7 @@ protected:
     backend::Buffer* _indexBuffer        = nullptr;  // index buffer
     backend::Buffer* _vertexBuffer       = nullptr;  // vertex buffer
 
-    struct posuvcolor
-    {
-        Vec3 position;
-        Vec2 uv;
-        Vec4 color;
-    };
-
-    std::vector<posuvcolor> _posuvcolors;  // vertex data
+    std::vector<ax::V3F_T2F_C4F> _posuvcolors;  // vertex data
     std::vector<uint16_t> _indexData;      // index data
     std::string _texFile;
 

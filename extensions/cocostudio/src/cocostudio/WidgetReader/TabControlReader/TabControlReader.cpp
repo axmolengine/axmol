@@ -505,7 +505,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
 
         child = child.next_sibling();
     }
-    Color f_textColor(255, textColor.r, textColor.g, textColor.b);
+    FColor f_textColor(255, textColor.r, textColor.g, textColor.b);
     auto option = CreateTabHeaderOption(
         *builder, nodeOptions,
         CreateResourceData(*builder, builder->CreateString(fontResourcePath),

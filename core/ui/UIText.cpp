@@ -382,7 +382,7 @@ float Text::getShadowBlurRadius() const
 }
 Color4B Text::getShadowColor() const
 {
-    Color4F effect = _labelRenderer->getShadowColor();
+    Color effect = _labelRenderer->getShadowColor();
     return Color4B(effect.r * 255, effect.g * 255, effect.b * 255, effect.a * 255);
 }
 
@@ -396,7 +396,7 @@ LabelEffect Text::getLabelEffectType() const
 }
 Color4B Text::getEffectColor() const
 {
-    Color4F effect = _labelRenderer->getEffectColor();
+    Color effect = _labelRenderer->getEffectColor();
     return Color4B(effect.r * 255, effect.g * 255, effect.b * 255, effect.a * 255);
 }
 

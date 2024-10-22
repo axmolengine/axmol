@@ -360,16 +360,16 @@ void Camera3DTestDemo::onEnter()
     // draw x
     for (int j = -20; j <= 20; j++)
     {
-        line->drawLine(Vec3(-100.0f, 0.0f, 5.0f * j), Vec3(100.0f, 0.0f, 5.0f * j), Color4F(1, 0, 0, 1));
+        line->drawLine(Vec3(-100.0f, 0.0f, 5.0f * j), Vec3(100.0f, 0.0f, 5.0f * j), Color(1, 0, 0, 1));
     }
     // draw z
     for (int j = -20; j <= 20; j++)
     {
-        line->drawLine(Vec3(5.0f * j, 0.0f, -100.0f), Vec3(5.0f * j, 0.0f, 100.0f), Color4F(0, 0, 1, 1));
+        line->drawLine(Vec3(5.0f * j, 0.0f, -100.0f), Vec3(5.0f * j, 0.0f, 100.0f), Color(0, 0, 1, 1));
     }
     // draw y
-    line->drawLine(Vec3(0.0f, -50.0f, 0.0f), Vec3(0, 0, 0), Color4F(0, 0.5, 0, 1));
-    line->drawLine(Vec3(0, 0, 0), Vec3(0, 50.0f, 0), Color4F(0, 1, 0, 1));
+    line->drawLine(Vec3(0.0f, -50.0f, 0.0f), Vec3(0, 0, 0), Color(0, 0.5, 0, 1));
+    line->drawLine(Vec3(0, 0, 0), Vec3(0, 50.0f, 0), Color(0, 1, 0, 1));
     _layer3D->addChild(line);
 
     _layer3D->setCameraMask(2);
@@ -809,7 +809,7 @@ void CameraCullingDemo::update(float dt)
         if (_cameraFirst->isVisibleInFrustum(&aabb))
         {
             aabb.getCorners(corners);
-            _drawAABB->drawCube(corners, Color4F(0, 1, 0, 1));
+            _drawAABB->drawCube(corners, Color(0, 1, 0, 1));
         }
     }
 }
@@ -934,7 +934,7 @@ void CameraCullingDemo::drawCameraFrustum()
     _drawFrustum->clear();
     auto size = Director::getInstance()->getWinSize();
 
-    Color4F color(1.f, 1.f, 0.f, 1);
+    Color color(1.f, 1.f, 0.f, 1);
 
     // top-left
     Vec3 tl_0, tl_1;
@@ -1060,15 +1060,15 @@ void CameraArcBallDemo::onEnter()
     // draw x
     for (int j = -20; j <= 20; j++)
     {
-        _drawGrid->drawLine(Vec3(-100.0f, 0, 5.0f * j), Vec3(100.0f, 0, 5.0f * j), Color4F(1, 0, 0, 1));
+        _drawGrid->drawLine(Vec3(-100.0f, 0, 5.0f * j), Vec3(100.0f, 0, 5.0f * j), Color(1, 0, 0, 1));
     }
     // draw z
     for (int j = -20; j <= 20; j++)
     {
-        _drawGrid->drawLine(Vec3(5.0f * j, 0, -100.0f), Vec3(5.0f * j, 0, 100.0f), Color4F(0, 0, 1, 1));
+        _drawGrid->drawLine(Vec3(5.0f * j, 0, -100.0f), Vec3(5.0f * j, 0, 100.0f), Color(0, 0, 1, 1));
     }
     // draw y
-    _drawGrid->drawLine(Vec3(0, 0, 0), Vec3(0, 50.0f, 0), Color4F(0, 1, 0, 1));
+    _drawGrid->drawLine(Vec3(0, 0, 0), Vec3(0, 50.0f, 0), Color(0, 1, 0, 1));
     _layer3D->addChild(_drawGrid);
 
     _layer3D->setCameraMask(2);
@@ -1221,7 +1221,7 @@ void FogTestDemo::onEnter()
 {
     CameraBaseTest::onEnter();
     schedule(AX_SCHEDULE_SELECTOR(FogTestDemo::update), 0.0f);
-    Director::getInstance()->setClearColor(Color4F(0.5, 0.5, 0.5, 1));
+    Director::getInstance()->setClearColor(Color(0.5, 0.5, 0.5, 1));
 
     auto s                   = Director::getInstance()->getWinSize();
     auto listener            = EventListenerTouchAllAtOnce::create();
@@ -1296,7 +1296,7 @@ void FogTestDemo::onEnter()
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
-        Director::getInstance()->setClearColor(Color4F(0.5, 0.5, 0.5, 1));
+        Director::getInstance()->setClearColor(Color(0.5, 0.5, 0.5, 1));
         AX_SAFE_RELEASE_NULL(_programState1);
         AX_SAFE_RELEASE_NULL(_programState2);
 
@@ -1360,7 +1360,7 @@ void FogTestDemo::switchTypeCallback(Object* sender, int type)
 void FogTestDemo::onExit()
 {
     CameraBaseTest::onExit();
-    Director::getInstance()->setClearColor(Color4F(0, 0, 0, 1));
+    Director::getInstance()->setClearColor(Color(0, 0, 0, 1));
     if (_camera)
     {
         _camera = nullptr;
@@ -1460,7 +1460,7 @@ void FogTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, ax::Event* 
 //     camera->setCameraFlag(CameraFlag::USER1);
 //     camera->setDepth(-1);
 //     camera->setFrameBufferObject(fbo);
-//     fbo->setClearColor(Color4F(1,1,1,1));
+//     fbo->setClearColor(Color(1,1,1,1));
 //     addChild(camera);
 // }
 
@@ -1511,7 +1511,7 @@ void BackgroundColorBrushTest::onEnter()
 
         // 2nd Camera
         auto camera     = Camera::createPerspective(60, (float)s.width / s.height, 1, 1000);
-        auto colorBrush = CameraBackgroundBrush::createColorBrush(Color4F(.1f, .1f, 1.f, .5f), 1.f);
+        auto colorBrush = CameraBackgroundBrush::createColorBrush(Color(.1f, .1f, 1.f, .5f), 1.f);
         camera->setBackgroundBrush(colorBrush);
         camera->setPosition3D(Vec3(0.0f, 0.0f, 200.0f));
         camera->lookAt(Vec3::ZERO);
@@ -1527,7 +1527,7 @@ void BackgroundColorBrushTest::onEnter()
         slider->setPosition(Vec2(s.width / 2, s.height / 4));
         slider->setPercent(50);
         slider->addEventListener([slider, colorBrush](Object*, ui::Slider::EventType) {
-            colorBrush->setColor(Color4F(.1f, .1f, 1.f, (float)slider->getPercent() / 100.f));
+            colorBrush->setColor(Color(.1f, .1f, 1.f, (float)slider->getPercent() / 100.f));
         });
         addChild(slider);
 

@@ -487,32 +487,12 @@ bool FileUtils::writeStringToFile(std::string_view dataStr, std::string_view ful
 {
     return FileUtils::writeBinaryToFile(dataStr.data(), dataStr.size(), fullPath);
 }
-#ifndef AX_CORE_PROFILE
-void FileUtils::writeStringToFile(std::string dataStr,
-                                  std::string_view fullPath,
-                                  std::function<void(bool)> callback) const
-{
-    performOperationOffthread(
-        [path = std::string{fullPath}](std::string_view dataStrIn) -> bool {
-            return FileUtils::getInstance()->writeStringToFile(dataStrIn, path);
-        },
-        std::move(callback), std::move(dataStr));
-}
-#endif
+
 bool FileUtils::writeDataToFile(const Data& data, std::string_view fullPath) const
 {
     return FileUtils::writeBinaryToFile(data.getBytes(), data.getSize(), fullPath);
 }
-#ifndef AX_CORE_PROFILE
-void FileUtils::writeDataToFile(Data data, std::string_view fullPath, std::function<void(bool)> callback) const
-{
-    performOperationOffthread(
-        [path = std::string{fullPath}](const Data& dataIn) -> bool {
-            return FileUtils::getInstance()->writeDataToFile(dataIn, path);
-        },
-        std::move(callback), std::move(data));
-}
-#endif
+
 bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, std::string_view fullPath)
 {
     AXASSERT(!fullPath.empty() && dataSize > 0, "Invalid parameters.");
@@ -549,32 +529,14 @@ std::string FileUtils::getStringFromFile(std::string_view filename) const
     getContents(filename, &s);
     return s;
 }
-#ifndef AX_CORE_PROFILE
-void FileUtils::getStringFromFile(std::string_view path, std::function<void(std::string)> callback) const
-{
-    // Get the full path on the main thread, to avoid the issue that FileUtil's is not
-    // thread safe, and accessing the fullPath cache and searching the search paths is not thread safe
-    auto fullPath = fullPathForFilename(path);
-    performOperationOffthread(
-        [path = std::string{fullPath}]() -> std::string { return FileUtils::getInstance()->getStringFromFile(path); },
-        std::move(callback));
-}
-#endif
+
 Data FileUtils::getDataFromFile(std::string_view filename) const
 {
     Data d;
     getContents(filename, &d);
     return d;
 }
-#ifndef AX_CORE_PROFILE
-void FileUtils::getDataFromFile(std::string_view filename, std::function<void(Data)> callback) const
-{
-    auto fullPath = fullPathForFilename(filename);
-    performOperationOffthread(
-        [path = std::string{fullPath}]() -> Data { return FileUtils::getInstance()->getDataFromFile(path); },
-        std::move(callback));
-}
-#endif
+
 FileUtils::Status FileUtils::getContents(std::string_view filename, ResizableBuffer* buffer) const
 {
     if (filename.empty())
@@ -610,28 +572,7 @@ FileUtils::Status FileUtils::getContents(std::string_view filename, ResizableBuf
 
     return Status::OK;
 }
-#ifndef AX_CORE_PROFILE
-void FileUtils::writeValueMapToFile(ValueMap dict, std::string_view fullPath, std::function<void(bool)> callback) const
-{
 
-    performOperationOffthread(
-        [path = std::string{fullPath}](const ValueMap& dictIn) -> bool {
-            return FileUtils::getInstance()->writeValueMapToFile(dictIn, path);
-        },
-        std::move(callback), std::move(dict));
-}
-
-void FileUtils::writeValueVectorToFile(ValueVector vecData,
-                                       std::string_view fullPath,
-                                       std::function<void(bool)> callback) const
-{
-    performOperationOffthread(
-        [path = std::string{fullPath}](const ValueVector& vecDataIn) -> bool {
-            return FileUtils::getInstance()->writeValueVectorToFile(vecDataIn, path);
-        },
-        std::move(callback), std::move(vecData));
-}
-#endif
 std::string FileUtils::getPathForFilename(std::string_view filename, std::string_view searchPath) const
 {
     auto file                  = filename;
@@ -907,15 +848,7 @@ bool FileUtils::isFileExist(std::string_view filename) const
         return !fullpath.empty();
     }
 }
-#ifndef AX_CORE_PROFILE
-void FileUtils::isFileExist(std::string_view filename, std::function<void(bool)> callback) const
-{
-    auto fullPath = fullPathForFilename(filename);
-    performOperationOffthread(
-        [path = std::string{fullPath}]() -> bool { return FileUtils::getInstance()->isFileExist(path); },
-        std::move(callback));
-}
-#endif
+
 bool FileUtils::isAbsolutePath(std::string_view path) const
 {
     return isAbsolutePathInternal(path);
@@ -951,89 +884,6 @@ bool FileUtils::isDirectoryExist(std::string_view dirPath) const
         return !fullPath.empty();
     }
 }
-
-#ifndef AX_CORE_PROFILE
-
-void FileUtils::isDirectoryExist(std::string_view fullPath, std::function<void(bool)> callback) const
-{
-    AXASSERT(isAbsolutePath(fullPath), "Async isDirectoryExist only accepts absolute file paths");
-    performOperationOffthread(
-        [path = std::string{fullPath}]() -> bool { return FileUtils::getInstance()->isDirectoryExist(path); },
-        std::move(callback));
-}
-
-void FileUtils::createDirectory(std::string_view dirPath, std::function<void(bool)> callback) const
-{
-    performOperationOffthread(
-        [path = std::string{dirPath}]() -> bool { return FileUtils::getInstance()->createDirectories(path); },
-        std::move(callback));
-}
-
-void FileUtils::removeDirectory(std::string_view dirPath, std::function<void(bool)> callback) const
-{
-    performOperationOffthread(
-        [path = std::string{dirPath}]() -> bool { return FileUtils::getInstance()->removeDirectory(path); },
-        std::move(callback));
-}
-
-void FileUtils::removeFile(std::string_view filepath, std::function<void(bool)> callback) const
-{
-    auto fullPath = fullPathForFilename(filepath);
-    performOperationOffthread(
-        [path = std::string{fullPath}]() -> bool { return FileUtils::getInstance()->removeFile(path); },
-        std::move(callback));
-}
-
-void FileUtils::renameFile(std::string_view path,
-                           std::string_view oldname,
-                           std::string_view name,
-                           std::function<void(bool)> callback) const
-{
-    performOperationOffthread(
-        [path = std::string{path}, oldname = std::string{oldname}, name = std::string{name}]() -> bool {
-            return FileUtils::getInstance()->renameFile(path, oldname, name);
-        },
-        std::move(callback));
-}
-
-void FileUtils::renameFile(std::string_view oldfullpath,
-                           std::string_view newfullpath,
-                           std::function<void(bool)> callback) const
-{
-    performOperationOffthread(
-        [oldpath = std::string{oldfullpath}, newpath = std::string{newfullpath}]() {
-        return FileUtils::getInstance()->renameFile(oldpath, newpath);
-        },
-        std::move(callback));
-}
-
-void FileUtils::getFileSize(std::string_view filepath, std::function<void(int64_t)> callback) const
-{
-    auto fullPath = fullPathForFilename(filepath);
-    performOperationOffthread([path = std::string{fullPath}]() { return FileUtils::getInstance()->getFileSize(path); },
-                              std::move(callback));
-}
-
-void FileUtils::listFilesAsync(std::string_view dirPath, std::function<void(std::vector<std::string>)> callback) const
-{
-    auto fullPath = fullPathForDirectory(dirPath);
-    performOperationOffthread([path = std::string{fullPath}]() { return FileUtils::getInstance()->listFiles(path); },
-                              std::move(callback));
-}
-
-void FileUtils::listFilesRecursivelyAsync(std::string_view dirPath,
-                                          std::function<void(std::vector<std::string>)> callback) const
-{
-    auto fullPath = fullPathForDirectory(dirPath);
-    performOperationOffthread(
-        [path = std::string{fullPath}]() {
-        std::vector<std::string> retval;
-        FileUtils::getInstance()->listFilesRecursively(path, &retval);
-        return retval;
-        },
-        std::move(callback));
-}
-#endif
 
 std::unique_ptr<IFileStream> FileUtils::openFileStream(std::string_view filePath, IFileStream::Mode mode) const
 {

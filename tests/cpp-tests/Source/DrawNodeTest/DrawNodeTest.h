@@ -180,7 +180,7 @@ private:
     ax::Vec2* verticesObj1[10];
     ax::Vec2* verticesObj2[10];
     ax::Vec2* verticesObjMorph[10];
-    ax::Color4F color[10];
+    ax::Color color[10];
     float rad[10];
     bool state[10];
 
@@ -203,7 +203,7 @@ private:
     ax::Vec2* verticesObj1[10];
     ax::Vec2* verticesObj2[10];
     ax::Vec2* verticesObjMorph[10];
-    ax::Color4F color[10];
+    ax::Color color[10];
     float rad[10];
     bool state[10];
 
@@ -424,7 +424,7 @@ public:
     virtual std::string subtitle() const override;
 
     void update(float dt);
-    void renderLine(float x1, float x2, float y, ax::Color4F color, float angle);
+    void renderLine(float x1, float x2, float y, ax::Color color, float angle);
 
 private:
     std::vector<ax::Vec2> points;

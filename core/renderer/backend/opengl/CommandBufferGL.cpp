@@ -194,12 +194,12 @@ void CommandBufferGL::setIndexBuffer(Buffer* buffer)
 void CommandBufferGL::setInstanceBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
-    if (buffer == nullptr || _instanceTransformBuffer == buffer)
+    if (buffer == nullptr || _instanceBuffer == buffer)
         return;
 
     buffer->retain();
-    AX_SAFE_RELEASE(_instanceTransformBuffer);
-    _instanceTransformBuffer = static_cast<BufferGL*>(buffer);
+    AX_SAFE_RELEASE(_instanceBuffer);
+    _instanceBuffer = static_cast<BufferGL*>(buffer);
 }
 
 void CommandBufferGL::setVertexBuffer(Buffer* buffer)
@@ -231,6 +231,24 @@ void CommandBufferGL::drawArrays(PrimitiveType primitiveType, std::size_t start,
         primitiveType = PrimitiveType::LINE;
 #endif
     glDrawArrays(UtilsGL::toGLPrimitiveType(primitiveType), start, count);
+#if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
+    if (wireframe)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+#endif
+    cleanResources();
+}
+
+void CommandBufferGL::drawArraysInstanced(PrimitiveType primitiveType, std::size_t start, std::size_t count, int instanceCount, bool wireframe)
+{
+    prepareDrawing();
+#if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
+    if (wireframe)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+#else
+    if (wireframe)
+        primitiveType = PrimitiveType::LINE;
+#endif
+    glDrawArraysInstanced(UtilsGL::toGLPrimitiveType(primitiveType), start, count, instanceCount);
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -293,7 +311,7 @@ void CommandBufferGL::endRenderPass()
 {
     AX_SAFE_RELEASE_NULL(_indexBuffer);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
-    AX_SAFE_RELEASE_NULL(_instanceTransformBuffer);
+    AX_SAFE_RELEASE_NULL(_instanceBuffer);
 }
 
 void CommandBufferGL::endFrame() {}
@@ -306,7 +324,6 @@ void CommandBufferGL::prepareDrawing() const
     uint32_t usedBits{0};
 
     bindVertexBuffer(usedBits);
-    bindInstanceBuffer(program, usedBits);
     __gl->disableUnusedVertexAttribs(usedBits);
 
     bindUniforms(program);
@@ -327,47 +344,64 @@ void CommandBufferGL::prepareDrawing() const
 void CommandBufferGL::bindVertexBuffer(uint32_t& usedBits) const
 {
     // Bind vertex buffers and set the attributes.
-    auto vertexLayout = _programState->getVertexLayout();
-
-    const auto& attributes = vertexLayout->getAttributes();
-    if (!vertexLayout->isValid())
-        return;
-
-    // Bind VAO, engine share 1 VAO for all vertexLayouts aka vfmts
-    // optimize proposal: create VAO per vertexLayout, just need bind VAO
-    __gl->bindBuffer(BufferType::ARRAY_BUFFER, _vertexBuffer->getHandler());
-
-    for (const auto& attributeInfo : attributes)
     {
-        const auto& attribute = attributeInfo.second;
-        __gl->enableVertexAttribArray(attribute.index);
-        glVertexAttribPointer(attribute.index, UtilsGL::getGLAttributeSize(attribute.format),
-                              UtilsGL::toGLAttributeType(attribute.format), attribute.needToBeNormallized,
-                              vertexLayout->getStride(), (GLvoid*)attribute.offset);
-        // non-instance attrib not use divisor, so clear to 0
-        __gl->clearVertexAttribDivisor(attribute.index);
-        usedBits |= (1 << attribute.index);
-    }
-}
+        auto vertexLayout = _programState->getVertexLayout();
 
-void CommandBufferGL::bindInstanceBuffer(ProgramGL* program, uint32_t& usedBits) const
-{
-    // if we have an instance transform buffer pointer then we must be rendering in instance mode.
-    if (_instanceTransformBuffer)
-    {
-        auto instanceLoc = program->getAttributeLocation(Attribute::INSTANCE);
-        if (instanceLoc != -1)
+        const auto& attributes = vertexLayout->getAttributes();
+        if (!vertexLayout->isValid())
+            return;
+
+        // Bind VAO, engine share 1 VAO for all vertexLayouts aka vfmts
+        // optimize proposal: create VAO per vertexLayout, just need bind VAO
+        __gl->bindBuffer(BufferType::ARRAY_BUFFER, _vertexBuffer->getHandler());
+
+        for (const auto& attributeInfo : attributes)
         {
-            __gl->bindBuffer(BufferType::ARRAY_BUFFER, _instanceTransformBuffer->getHandler());
+            const auto& attribute = attributeInfo.second;
+            __gl->enableVertexAttribArray(attribute.index);
+            glVertexAttribPointer(attribute.index, UtilsGL::getGLAttributeSize(attribute.format),
+                                  UtilsGL::toGLAttributeType(attribute.format), attribute.needToBeNormallized,
+                                  vertexLayout->getStride(), (GLvoid*)attribute.offset);
+            // non-instance attrib not use divisor, so clear to 0
+            __gl->clearVertexAttribDivisor(attribute.index);
+            usedBits |= (1 << attribute.index);
+        }
+    }
 
-            for (auto i = 0; i < 4; ++i)
+    // Bind instanced vertex buffer
+    // if we have an instance buffer pointer then we must be rendering in instance mode.
+    if (_instanceBuffer)
+    {
+        auto vertexLayout      = _programState->getVertexLayout(true);
+        const auto& attributes = vertexLayout->getAttributes();
+        if (!vertexLayout->isValid())
+            return;
+
+        __gl->bindBuffer(BufferType::ARRAY_BUFFER, _instanceBuffer->getHandler());
+
+        for (const auto& attributeInfo : attributes)
+        {
+            const auto& attribute = attributeInfo.second;
+            switch (attribute.format)
             {
-                auto elementLoc = instanceLoc + i;
-                __gl->enableVertexAttribArray(elementLoc);
-                glVertexAttribPointer(elementLoc, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16,
-                                      (void*)(sizeof(float) * 4 * i));
-                __gl->setVertexAttribDivisor(elementLoc);
-                usedBits |= (1 << elementLoc);
+            case VertexFormat::MAT4:
+                for (auto i = 0; i < 4; ++i)
+                {
+                    auto elementLoc = attribute.index + i;
+                    __gl->enableVertexAttribArray(elementLoc);
+                    glVertexAttribPointer(elementLoc, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16,
+                                          (void*)(sizeof(float) * 4 * i));
+                    __gl->setVertexAttribDivisor(elementLoc);
+                    usedBits |= (1 << elementLoc);
+                }
+                break;
+            default:
+                __gl->enableVertexAttribArray(attribute.index);
+                glVertexAttribPointer(attribute.index, UtilsGL::getGLAttributeSize(attribute.format),
+                                      UtilsGL::toGLAttributeType(attribute.format), attribute.needToBeNormallized,
+                                      vertexLayout->getStride(), (GLvoid*)attribute.offset);
+                __gl->setVertexAttribDivisor(attribute.index);
+                usedBits |= (1 << attribute.index);
             }
         }
     }

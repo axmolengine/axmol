@@ -343,6 +343,17 @@ void TestSuite::enterNextTest()
     Director::getInstance()->replaceScene(scene);
 }
 
+void TestSuite::enterTest(int index) {
+    _currTestIndex = index % _childTestNames.size();
+
+    auto scene    = _testCallbacks[_currTestIndex]();
+    auto testCase = getTestCase(scene);
+    testCase->setTestSuite(this);
+    testCase->setTestCaseName(_childTestNames[_currTestIndex]);
+
+    Director::getInstance()->replaceScene(scene);
+}
+
 void TestSuite::enterPreviousTest()
 {
     if (_currTestIndex > 0)

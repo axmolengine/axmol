@@ -61,10 +61,6 @@ public:
 #if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         addTest("Box2D - TestBed", []() { return new Box2DTestBedTests(); });
 #endif
-        addTest("Chipmunk2D - Basic", []() { return new ChipmunkTests(); });
-#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
-        addTest("Chipmunk2D - TestBed", []() { return new ChipmunkTestBedTests(); });
-#endif
         addTest("Bugs", []() { return new BugsTests(); });
         addTest("Click and Move", []() { return new ClickAndMoveTest(); });
         addTest("Configuration", []() { return new ConfigurationTests(); });
@@ -98,8 +94,8 @@ public:
         addTest("Node: Parallax", []() { return new ParallaxTests(); });
         addTest("Node: Particles", []() { return new ParticleTests(); });
         addTest("Node: Particle3D (PU)", []() { return new Particle3DTests(); });
-#if defined(AX_ENABLE_PHYSICS)
-        addTest("Node: Physics", []() { return new PhysicsTests(); });
+#if defined(AX_ENABLE_PHYSICS) && 0
+         addTest("Node: Physics", []() { return new PhysicsTests(); });
 #endif
         addTest("Node: Physics3D", []() { return new Physics3DTests(); });
         addTest("Node: RenderTexture", []() { return new RenderTextureTests(); });

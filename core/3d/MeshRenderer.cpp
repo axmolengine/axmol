@@ -869,7 +869,7 @@ void MeshRenderer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
     if (_skeleton)
         _skeleton->updateBoneMatrix();
 
-    Color4F color(getDisplayedColor());
+    Color color(getDisplayedColor());
     color.a = getDisplayedOpacity() / 255.0f;
 
     // check light and determine the shader used

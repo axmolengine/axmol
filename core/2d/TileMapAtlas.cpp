@@ -163,7 +163,7 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
 {
     AXASSERT(index >= 0 && index < _textureAtlas->getCapacity(), "updateAtlasValueAt: Invalid index");
 
-    V3F_C4B_T2F_Quad* quad = &((_textureAtlas->getQuads())[index]);
+    V3F_C4F_T2F_Quad* quad = &((_textureAtlas->getQuads())[index]);
 
     int x     = pos.x;
     int y     = pos.y;
@@ -188,33 +188,33 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
     float bottom = top + itemHeightInPixels / textureHigh;
 #endif
 
-    quad->tl.texCoords.u = left;
-    quad->tl.texCoords.v = top;
-    quad->tr.texCoords.u = right;
-    quad->tr.texCoords.v = top;
-    quad->bl.texCoords.u = left;
-    quad->bl.texCoords.v = bottom;
-    quad->br.texCoords.u = right;
-    quad->br.texCoords.v = bottom;
+    quad->tl.texCoord.u = left;
+    quad->tl.texCoord.v = top;
+    quad->tr.texCoord.u = right;
+    quad->tr.texCoord.v = top;
+    quad->bl.texCoord.u = left;
+    quad->bl.texCoord.v = bottom;
+    quad->br.texCoord.u = right;
+    quad->br.texCoord.v = bottom;
 
-    quad->bl.vertices.x = (float)(x * _itemWidth);
-    quad->bl.vertices.y = (float)(y * _itemHeight);
-    quad->bl.vertices.z = 0.0f;
-    quad->br.vertices.x = (float)(x * _itemWidth + _itemWidth);
-    quad->br.vertices.y = (float)(y * _itemHeight);
-    quad->br.vertices.z = 0.0f;
-    quad->tl.vertices.x = (float)(x * _itemWidth);
-    quad->tl.vertices.y = (float)(y * _itemHeight + _itemHeight);
-    quad->tl.vertices.z = 0.0f;
-    quad->tr.vertices.x = (float)(x * _itemWidth + _itemWidth);
-    quad->tr.vertices.y = (float)(y * _itemHeight + _itemHeight);
-    quad->tr.vertices.z = 0.0f;
+    quad->bl.position.x = (float)(x * _itemWidth);
+    quad->bl.position.y = (float)(y * _itemHeight);
+    quad->bl.position.z = 0.0f;
+    quad->br.position.x = (float)(x * _itemWidth + _itemWidth);
+    quad->br.position.y = (float)(y * _itemHeight);
+    quad->br.position.z = 0.0f;
+    quad->tl.position.x = (float)(x * _itemWidth);
+    quad->tl.position.y = (float)(y * _itemHeight + _itemHeight);
+    quad->tl.position.z = 0.0f;
+    quad->tr.position.x = (float)(x * _itemWidth + _itemWidth);
+    quad->tr.position.y = (float)(y * _itemHeight + _itemHeight);
+    quad->tr.position.z = 0.0f;
 
-    Color4B color(_displayedColor.r, _displayedColor.g, _displayedColor.b, _displayedOpacity);
-    quad->tr.colors = color;
-    quad->tl.colors = color;
-    quad->br.colors = color;
-    quad->bl.colors = color;
+    Color color(_displayedColor, _displayedOpacity / 255.0f);
+    quad->tr.color = color;
+    quad->tl.color = color;
+    quad->br.color = color;
+    quad->bl.color = color;
 
     _textureAtlas->setDirty(true);
     ssize_t totalQuads = _textureAtlas->getTotalQuads();
@@ -243,7 +243,7 @@ void TileMapAtlas::updateAtlasValues()
                 {
                     this->updateAtlasValueAt(Vec2(x, y), value, total);
 
-                    std::string key       = StringUtils::toString(x) + "," + StringUtils::toString(y);
+                    std::string key       = fmt::format("{},{}", x, y);
                     _posToAtlasIndex[key] = total;
 
                     total++;

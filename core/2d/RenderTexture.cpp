@@ -318,7 +318,7 @@ void RenderTexture::beginWithClear(float r,
                                    int stencilValue,
                                    ClearFlag flags)
 {
-    setClearColor(Color4F(r, g, b, a));
+    setClearColor(Color(r, g, b, a));
     setClearDepth(depthValue);
     setClearStencil(stencilValue);
     setClearFlags(flags);
@@ -704,7 +704,7 @@ void RenderTexture::clearColorAttachment()
     };
     renderer->addCommand(beforeClearAttachmentCommand);
 
-    Color4F color(0.f, 0.f, 0.f, 0.f);
+    Color color(0.f, 0.f, 0.f, 0.f);
     renderer->clear(ClearFlag::COLOR, color, 1, 0, _globalZOrder);
 
     // auto renderer                    = _director->getRenderer();

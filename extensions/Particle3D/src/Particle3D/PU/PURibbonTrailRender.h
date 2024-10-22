@@ -112,11 +112,11 @@ public:
     bool isRandomInitialColor() const;
     void setRandomInitialColor(bool randomInitialColour);
 
-    const Vec4& getInitialColor() const;
-    void setInitialColor(const Vec4& initialColour);
+    const Color& getInitialColor() const;
+    void setInitialColor(const Color& initialColour);
 
-    const Vec4& getColorChange() const;
-    void setColorChange(const Vec4& colourChange);
+    const Color& getColorChange() const;
+    void setColorChange(const Color& colourChange);
 
     /** Deletes all ChildSceneNodes en Entities.
      */
@@ -143,8 +143,8 @@ protected:
     bool _randomInitialColor;
     bool _setLength;
     bool _setWidth;
-    Vec4 _initialColor;
-    Vec4 _colorChange;
+    Color _initialColor;
+    Color _colorChange;
     Node* _childNode;
     std::string _texFile;
 };

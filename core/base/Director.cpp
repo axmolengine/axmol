@@ -57,9 +57,6 @@ THE SOFTWARE.
 #include "base/Logging.h"
 #include "base/AutoreleasePool.h"
 #include "base/Configuration.h"
-#ifndef AX_CORE_PROFILE
-#    include "base/AsyncTaskPool.h"
-#endif
 #include "base/ObjectFactory.h"
 #include "platform/Application.h"
 #if defined(AX_ENABLE_AUDIO)
@@ -308,8 +305,8 @@ void Director::drawScene()
 
     if (_runningScene)
     {
-#if (defined(AX_ENABLE_PHYSICS) || (defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION) || \
-     defined(AX_ENABLE_NAVMESH))
+#if defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || \
+     defined(AX_ENABLE_NAVMESH)
         _runningScene->stepPhysicsAndNavigation(_deltaTime);
 #endif
         // clear draw stats
@@ -693,7 +690,7 @@ float Director::getZEye() const
     return (_winSizeInPoints.height / 1.154700538379252f);  //(2 * tanf(M_PI/6))
 }
 
-void Director::setClearColor(const Color4F& clearColor)
+void Director::setClearColor(const Color& clearColor)
 {
     _clearColor = clearColor;
 }
@@ -1059,9 +1056,7 @@ void Director::reset()
     AnimationCache::destroyInstance();
     SpriteFrameCache::destroyInstance();
     FileUtils::destroyInstance();
-#ifndef AX_CORE_PROFILE
-    AsyncTaskPool::destroyInstance();
-#endif
+
     backend::ProgramStateRegistry::destroyInstance();
     backend::ProgramManager::destroyInstance();
 

@@ -262,25 +262,6 @@ public:
                                    std::string_view subTextureKey);
 
     /**
-     * Allocates and initializes a Label, with a bitmap font file.
-     *
-     * @param bmfontPath A bitmap font file, it's a FNT format.
-     * @param text The initial text.
-     * @param hAlignment Text horizontal alignment.
-     * @param maxLineWidth The max line width.
-     * @param imageOffset Offset into larger texture
-     *
-     * @return An automatically released Label object.
-     * @see setBMFontFilePath setMaxLineWidth
-     */
-#ifndef AX_CORE_PROFILE
-    AX_DEPRECATED(2.1) static Label* createWithBMFont(std::string_view bmfontPath,
-                                                           std::string_view text,
-                                                           const TextHAlignment& hAlignment,
-                                                           int maxLineWidth,
-                                                           const Vec2& imageOffset);
-#endif
-    /**
      * Allocates and initializes a Label, with char map configuration.
      *
      * @param charMapFile A char map file, it's a PNG format.
@@ -342,12 +323,7 @@ public:
 
     /** Sets a new bitmap font to Label */
     virtual bool setBMFontFilePath(std::string_view bmfontFilePath, std::string_view subTextureKey, float fontSize = 0);
-#ifndef AX_CORE_PROFILE
-    /** Sets a new bitmap font to Label */
-    AX_DEPRECATED(2.1) virtual bool setBMFontFilePath(std::string_view bmfontFilePath,
-                                                           const Vec2& imageOffset,
-                                                           float fontSize = 0);
-#endif
+
     /** Returns the bitmap font used by the Label.*/
     std::string_view getBMFontFilePath() const { return _bmFontPath; }
 
@@ -498,7 +474,7 @@ public:
     /**
      * Return the shadow effect color value.
      */
-    Color4F getShadowColor() const { return _shadowColor4F; }
+    Color getShadowColor() const { return _shadowColor; }
 
     /**
      * Return the outline effect size value.
@@ -513,7 +489,7 @@ public:
     /**
      * Return current effect color value.
      */
-    Color4F getEffectColor() const { return _effectColorF; }
+    Color getEffectColor() const { return _effectColor; }
 
     /** Sets the Label's text horizontal alignment.*/
     void setAlignment(TextHAlignment hAlignment) { setAlignment(hAlignment, _vAlignment); }
@@ -795,10 +771,7 @@ protected:
 
     virtual void updateShaderProgram();
     virtual void updateFontScale();
-#ifndef AX_CORE_PROFILE
-    /* DEPRECATED: use updateFontScale instead */
-    AX_DEPRECATED(2.1) virtual void updateBMFontScale() { updateFontScale(); }
-#endif
+
     void scaleFontSize(float fontSize);
     bool setTTFConfigInternal(const TTFConfig& ttfConfig);
     bool updateTTFConfigInternal();
@@ -901,9 +874,9 @@ protected:
     Rect _bmRect;
     Rect _reusedRect;
 
-    Color4F _effectColorF;
-    Color4F _textColorF;
-    Color4F _shadowColor4F;
+    Color _effectColor;
+    Color _textColorF;
+    Color _shadowColor;
     Mat4 _shadowTransform;
 
     std::u32string _utf32Text;

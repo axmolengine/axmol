@@ -33,22 +33,6 @@ NS_AX_MATH_BEGIN
     const Vec3 Vec3::UNIT_Z(0.0f, 0.0f, 1.0f);
 #endif
 
-
-Vec3 Vec3::fromColor(unsigned int color)
-{
-    float components[3];
-    int componentIndex = 0;
-    for (int i = 2; i >= 0; --i)
-    {
-        int component = (color >> i * 8) & 0x0000ff;
-
-        components[componentIndex++] = static_cast<float>(component) / 255.0f;
-    }
-
-    Vec3 value(components);
-    return value;
-}
-
 float Vec3::angle(const Vec3& v1, const Vec3& v2)
 {
     float dx = v1.y * v2.z - v1.z * v2.y;

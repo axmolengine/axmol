@@ -258,7 +258,7 @@ NewClippingNodeTest::NewClippingNodeTest()
     //    rectangle[2] = Vec2(clipper->getContentSize().width, clipper->getContentSize().height);
     //    rectangle[3] = Vec2(0, clipper->getContentSize().height);
     //
-    //    Color4F white(1, 1, 1, 1);
+    //    Color white(1, 1, 1, 1);
     //    stencil->drawPolygon(rectangle, 4, white, 1, white);
     //    clipper->setStencil(stencil);
 
@@ -343,7 +343,7 @@ NewDrawNodeTest::NewDrawNodeTest()
     rectangle[2] = Vec2(50, 50);
     rectangle[3] = Vec2(-50, 50);
 
-    Color4F white(1, 1, 1, 1);
+    Color white(1, 1, 1, 1);
     rectNode->drawPolygon(rectangle, 4, white, 1, white);
     parent->addChild(rectNode);
 }

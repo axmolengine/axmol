@@ -263,22 +263,6 @@ if(AX_ENABLE_PHYSICS)
     ax_add_3rd(box2d OPTIONS ${box2d_opts})
 endif()
 
-if(AX_ENABLE_PHYSICS)
-    ax_add_3rd(chipmunk OPTIONS
-        "CP_BUILD_SHARED OFF"
-        "CP_BUILD_STATIC ON"
-        "CP_BUILD_DEMOS OFF"
-        "CP_INSTALL_STATIC OFF"
-    )
-    set_target_properties(chipmunk PROPERTIES
-      INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/chipmunk/include"
-    )
-
-    # !important axmol not use double precision
-    target_compile_definitions(chipmunk PUBLIC CP_USE_CGTYPES=0)
-    target_compile_definitions(chipmunk PUBLIC CP_USE_DOUBLES=0)
-endif()
-
 ax_add_3rd(freetype OPTIONS
     "DISABLE_FORCE_DEBUG_POSTFIX ON"
     "SKIP_INSTALL_ALL TRUE"

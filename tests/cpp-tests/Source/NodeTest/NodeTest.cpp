@@ -963,8 +963,8 @@ bool MySprite::setProgramState(backend::ProgramState* programState, bool ownPS/*
 
         _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
         _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE_STRIP);
-        _customCommand.createVertexBuffer(sizeof(V3F_C4B_T2F), 4, CustomCommand::BufferUsage::STATIC);
-        _customCommand.updateVertexBuffer(&_quad, 4 * sizeof(V3F_C4B_T2F));
+        _customCommand.createVertexBuffer(sizeof(V3F_T2F_C4F), 4, CustomCommand::BufferUsage::STATIC);
+        _customCommand.updateVertexBuffer(&_quad, 4 * sizeof(V3F_T2F_C4F));
         return true;
     }
     return false;
@@ -1500,9 +1500,9 @@ void Issue16735Test::onEnter()
 
     auto d = DrawNode::create();
     d->drawLine(Vec2(origin.x, origin.y + visibleSize.height / 2),
-                Vec2(origin.x + visibleSize.width, origin.y + visibleSize.height / 2), Color4F::RED);
+                Vec2(origin.x + visibleSize.width, origin.y + visibleSize.height / 2), Color::RED);
     d->drawLine(Vec2(origin.x + visibleSize.width / 2, origin.y),
-                Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height), Color4F::RED);
+                Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height), Color::RED);
 
     addChild(d);
 }

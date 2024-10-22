@@ -92,7 +92,7 @@ private:
     struct VertexData
     {
         ax::Vec3 vertex;
-        ax::Color4F color;
+        ax::Color color;
     };
 
     ax::Vec2 _squareVertices[8];

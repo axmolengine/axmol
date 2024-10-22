@@ -159,11 +159,4 @@ inline void printLogT(_FmtType&& fmt, LogItem& item, _Types&&... args)
 #define AXLOGE(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Error, fmtOrMsg, ##__VA_ARGS__)
 
 #define AXLOGT AXLOGV
-
-#ifndef AX_CORE_PROFILE
-/**
- @brief Output Debug message.
- */
-/* AX_DEPRECATED(2.1)*/ AX_API void print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use AXLOGD instead
-#endif
 }

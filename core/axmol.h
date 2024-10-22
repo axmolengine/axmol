@@ -38,9 +38,6 @@ THE SOFTWARE.
 #include "base/Config.h"
 
 // base
-#ifndef AX_CORE_PROFILE
-#    include "base/AsyncTaskPool.h"
-#endif
 #include "base/AutoreleasePool.h"
 #include "base/Configuration.h"
 #include "base/Logging.h"
@@ -168,11 +165,11 @@ THE SOFTWARE.
 #include "renderer/Shaders.h"
 
 // physics
-#include "physics/PhysicsBody.h"
-#include "physics/PhysicsContact.h"
-#include "physics/PhysicsJoint.h"
-#include "physics/PhysicsShape.h"
-#include "physics/PhysicsWorld.h"
+// #include "physics/PhysicsBody.h"
+// #include "physics/PhysicsContact.h"
+// #include "physics/PhysicsJoint.h"
+// #include "physics/PhysicsCollider.h"
+// #include "physics/PhysicsWorld.h"
 
 // platform
 #include "platform/Common.h"

@@ -239,8 +239,8 @@ LabelFNTSpriteActions::LabelFNTSpriteActions()
     auto s = Director::getInstance()->getWinSize();
 
     auto drawNode = DrawNode::create();
-    drawNode->drawLine(Vec2(0.0f, s.height / 2), Vec2(s.width, s.height / 2), Color4F(1.0f, 1.0f, 1.0f, 1.0f));
-    drawNode->drawLine(Vec2(s.width / 2, 0.0f), Vec2(s.width / 2, s.height), Color4F(1.0f, 1.0f, 1.0f, 1.0f));
+    drawNode->drawLine(Vec2(0.0f, s.height / 2), Vec2(s.width, s.height / 2), Color(1.0f, 1.0f, 1.0f, 1.0f));
+    drawNode->drawLine(Vec2(s.width / 2, 0.0f), Vec2(s.width / 2, s.height), Color(1.0f, 1.0f, 1.0f, 1.0f));
     addChild(drawNode, -1);
 
     // Upper Label
@@ -944,7 +944,7 @@ LabelFNTBounds::LabelFNTBounds()
     Vec2 vertices[4] = {Vec2(origin.width, origin.height), Vec2(labelSize.width + origin.width, origin.height),
                         Vec2(labelSize.width + origin.width, labelSize.height + origin.height),
                         Vec2(origin.width, labelSize.height + origin.height)};
-    drawNode->drawPoly(vertices, 4, true, Color4F(1.0f, 1.0f, 1.0f, 1.0f));
+    drawNode->drawPoly(vertices, 4, true, Color(1.0f, 1.0f, 1.0f, 1.0f));
     addChild(drawNode);
 }
 
@@ -1134,9 +1134,9 @@ LabelTTFCJKWrappingTest::LabelTTFCJKWrappingTest()
     drawNode->setAnchorPoint(Vec2(0, 0));
     this->addChild(drawNode);
     drawNode->drawSegment(Vec2(size.width * 0.1f, size.height * 0.8f), Vec2(size.width * 0.1, 0.0f), 1,
-                          Color4F(1.0f, 0.0f, 0.0f, 1.0f));
+                          Color(1.0f, 0.0f, 0.0f, 1.0f));
     drawNode->drawSegment(Vec2(size.width * 0.85f, size.height * 0.8f), Vec2(size.width * 0.85f, 0.0f), 1,
-                          Color4F(1.0f, 0.0f, 0.0f, 1.0f));
+                          Color(1.0f, 0.0f, 0.0f, 1.0f));
 
     TTFConfig ttfConfig("fonts/HKYuanMini.ttf", 25, GlyphCollection::DYNAMIC);
     auto label1 = Label::createWithTTF(ttfConfig, "你好，Axmol Label.", TextHAlignment::LEFT, size.width * 0.75f);
@@ -1302,7 +1302,7 @@ LabelTTFDistanceField::LabelTTFDistanceField()
     borderDraw->clear();
     Vec2 vertices[4] = {Vec2::ZERO, Vec2(labelContentSize.width, 0.0f),
                         Vec2(labelContentSize.width, labelContentSize.height), Vec2(0.0f, labelContentSize.height)};
-    borderDraw->drawPoly(vertices, 4, true, Color4F::RED);
+    borderDraw->drawPoly(vertices, 4, true, Color::RED);
 
     auto label2 = Label::createWithTTF(ttfConfig, "Distance Field", TextHAlignment::CENTER, size.width);
     label2->setPosition(Vec2(size.width / 2, size.height * 0.3f));
@@ -1316,7 +1316,7 @@ LabelTTFDistanceField::LabelTTFDistanceField()
     borderDraw2->clear();
     Vec2 vertices2[4] = {Vec2::ZERO, Vec2(labelContentSize2.width, 0.0f),
                          Vec2(labelContentSize2.width, labelContentSize2.height), Vec2(0.0f, labelContentSize2.height)};
-    borderDraw2->drawPoly(vertices2, 4, true, Color4F::GREEN);
+    borderDraw2->drawPoly(vertices2, 4, true, Color::GREEN);
 }
 
 std::string LabelTTFDistanceField::title() const
@@ -1622,7 +1622,7 @@ LabelTTFOldNew::LabelTTFOldNew()
     Vec2 vertices[4] = {Vec2(origin.width, origin.height), Vec2(labelSize.width + origin.width, origin.height),
                         Vec2(labelSize.width + origin.width, labelSize.height + origin.height),
                         Vec2(origin.width, labelSize.height + origin.height)};
-    drawNode->drawPoly(vertices, 4, true, Color4F(1.0f, 0.0f, 0.0f, 1.0f));
+    drawNode->drawPoly(vertices, 4, true, Color(1.0f, 0.0f, 0.0f, 1.0f));
 
     labelSize = label2->getContentSize();
     origin    = Director::getInstance()->getWinSize();
@@ -1633,7 +1633,7 @@ LabelTTFOldNew::LabelTTFOldNew()
     Vec2 vertices2[4] = {Vec2(origin.width, origin.height), Vec2(labelSize.width + origin.width, origin.height),
                          Vec2(labelSize.width + origin.width, labelSize.height + origin.height),
                          Vec2(origin.width, labelSize.height + origin.height)};
-    drawNode->drawPoly(vertices2, 4, true, Color4F(1.0f, 1.0f, 1.0f, 1.0f));
+    drawNode->drawPoly(vertices2, 4, true, Color(1.0f, 1.0f, 1.0f, 1.0f));
 
     addChild(drawNode);
 }
@@ -2111,7 +2111,7 @@ LabelIssue12409Test::LabelIssue12409Test()
                         Vec2(labelOrigin.x, labelOrigin.y + labelSize.height)};
 
     auto drawNode = DrawNode::create();
-    drawNode->drawPoly(vertices, 4, true, Color4F::WHITE);
+    drawNode->drawPoly(vertices, 4, true, Color::WHITE);
     addChild(drawNode);
 }
 
@@ -2538,10 +2538,10 @@ void LabelLayoutBaseTest::updateDrawNodeSize(const ax::Size& drawNodeSize)
                         Vec2(drawNodeSize.width + origin.width, drawNodeSize.height + origin.height),
                         Vec2(origin.width, drawNodeSize.height + origin.height)};
     _drawNode->clear();
-    _drawNode->drawLine(vertices[0], vertices[1], Color4F(1.0f, 1.0f, 1.0f, 1.0f));
-    _drawNode->drawLine(vertices[0], vertices[3], Color4F(1.0f, 1.0f, 1.0f, 1.0f));
-    _drawNode->drawLine(vertices[2], vertices[3], Color4F(1.0f, 1.0f, 1.0f, 1.0f));
-    _drawNode->drawLine(vertices[1], vertices[2], Color4F(1.0f, 1.0f, 1.0f, 1.0f));
+    _drawNode->drawLine(vertices[0], vertices[1], Color(1.0f, 1.0f, 1.0f, 1.0f));
+    _drawNode->drawLine(vertices[0], vertices[3], Color(1.0f, 1.0f, 1.0f, 1.0f));
+    _drawNode->drawLine(vertices[2], vertices[3], Color(1.0f, 1.0f, 1.0f, 1.0f));
+    _drawNode->drawLine(vertices[1], vertices[2], Color(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 LabelWrapByWordTest::LabelWrapByWordTest()

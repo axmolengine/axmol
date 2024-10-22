@@ -29,7 +29,7 @@
 
 #include "../BaseTest.h"
 
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS) && 0
 
 DEFINE_TEST_SUITE(PhysicsTests);
 

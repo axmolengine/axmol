@@ -33,8 +33,6 @@
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
-
 class btTypedConstraint;
 
 namespace ax
@@ -117,9 +115,7 @@ public:
      */
     void setOverrideNumSolverIterations(int overrideNumIterations);
 
-#        if (AX_ENABLE_BULLET_INTEGRATION)
     btTypedConstraint* getbtContraint() { return _constraint; }
-#        endif
 
 protected:
     Physics3DConstraint();
@@ -616,8 +612,6 @@ public:
 /// @}
 
 }
-
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)
 

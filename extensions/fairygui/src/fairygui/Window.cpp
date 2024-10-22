@@ -102,7 +102,7 @@ void Window::setDragArea(GObject * value)
         {
             _dragArea->retain();
             if (dynamic_cast<GGraph*>(_dragArea) && ((GGraph*)_dragArea)->isEmpty())
-                ((GGraph*)_dragArea)->drawRect(_dragArea->getWidth(), _dragArea->getHeight(), 0, Color4F(0, 0, 0, 0), Color4F(0, 0, 0, 0));
+                ((GGraph*)_dragArea)->drawRect(_dragArea->getWidth(), _dragArea->getHeight(), 0, ax::Color(0, 0, 0, 0), ax::Color(0, 0, 0, 0));
             _dragArea->setDraggable(true);
             _dragArea->addEventListener(UIEventType::DragStart, AX_CALLBACK_1(Window::onDragStart, this), EventTag(this));
         }

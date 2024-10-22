@@ -48,7 +48,7 @@ void PUColorAffector::setColorOperation(const PUColorAffector::ColorOperation& c
     _colorOperation = colorOperation;
 }
 //-----------------------------------------------------------------------
-void PUColorAffector::addColor(float timeFraction, const Vec4& color)
+void PUColorAffector::addColor(float timeFraction, const Color& color)
 {
     _colorMap[timeFraction] = color;
 }
@@ -91,7 +91,7 @@ void PUColorAffector::updatePUAffector(PUParticle3D* particle, float /*deltaTime
     {
         // PUParticle3D *particle = iter;
         //  Linear interpolation of the colour
-        Vec4 color           = Vec4::ONE;
+        Color color           = Color::WHITE;
         float timeFraction   = (particle->totalTimeToLive - particle->timeToLive) / particle->totalTimeToLive;
         ColorMapIterator it1 = findNearestColorMapIterator(timeFraction);
         ColorMapIterator it2 = it1;
@@ -117,7 +117,7 @@ void PUColorAffector::updatePUAffector(PUParticle3D* particle, float /*deltaTime
         else
         {
             // Multiply
-            particle->color = Vec4(color.x * particle->originalColor.x, color.y * particle->originalColor.y,
+            particle->color = Color(color.x * particle->originalColor.x, color.y * particle->originalColor.y,
                                    color.z * particle->originalColor.z, color.w * particle->originalColor.w);
         }
     }

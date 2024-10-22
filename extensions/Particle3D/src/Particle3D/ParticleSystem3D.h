@@ -50,7 +50,7 @@ struct AX_EX_DLL Particle3D
     // property of particles
     Vec3 position;           // position
     Quaternion orientation;  //  Orientation of the particle.
-    Vec4 color;              // particle color
+    Color color;              // particle color
     Vec2 lb_uv;              // left bottom uv
     Vec2 rt_uv;              // right top uv
     float width;             // Own width

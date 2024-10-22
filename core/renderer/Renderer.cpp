@@ -21,7 +21,7 @@
  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ THE SOFTWARE. 
  ****************************************************************************/
 #include "renderer/Renderer.h"
 
@@ -729,26 +729,34 @@ void Renderer::drawCustomCommand(RenderCommand* command)
     _commandBuffer->setProgramState(cmd->getPipelineDescriptor().programState);
 
     auto drawType = cmd->getDrawType();
-    if (CustomCommand::DrawType::ELEMENT == drawType)
+    switch (drawType)
     {
+    case CustomCommand::DrawType::ELEMENT:
         _commandBuffer->setIndexBuffer(cmd->getIndexBuffer());
         _commandBuffer->drawElements(cmd->getPrimitiveType(), cmd->getIndexFormat(), cmd->getIndexDrawCount(),
                                      cmd->getIndexDrawOffset(), cmd->isWireframe());
         _drawnVertices += cmd->getIndexDrawCount();
-    }
-    else if (CustomCommand::DrawType::ELEMENT_INSTANCE == drawType)
-    {
+        break;
+    case CustomCommand::DrawType::ELEMENT_INSTANCED:
         _commandBuffer->setIndexBuffer(cmd->getIndexBuffer());
         _commandBuffer->setInstanceBuffer(cmd->getInstanceBuffer());
         _commandBuffer->drawElementsInstanced(cmd->getPrimitiveType(), cmd->getIndexFormat(), cmd->getIndexDrawCount(),
                                               cmd->getIndexDrawOffset(), cmd->getInstanceCount(), cmd->isWireframe());
         _drawnVertices += cmd->getIndexDrawCount() * cmd->getInstanceCount();
-    }
-    else
-    {
+        break;
+    case CustomCommand::DrawType::ARRAY:
         _commandBuffer->drawArrays(cmd->getPrimitiveType(), cmd->getVertexDrawStart(), cmd->getVertexDrawCount(),
                                    cmd->isWireframe());
         _drawnVertices += cmd->getVertexDrawCount();
+        break;
+    case CustomCommand::DrawType::ARRAY_INSTANCED:
+        _commandBuffer->setInstanceBuffer(cmd->getInstanceBuffer());
+        _commandBuffer->drawArraysInstanced(cmd->getPrimitiveType(), cmd->getVertexDrawStart(),
+                                            cmd->getVertexDrawCount(), cmd->getInstanceCount(),
+                                   cmd->isWireframe());
+        _drawnVertices += cmd->getVertexDrawCount() * cmd->getInstanceCount();
+        break;
+    default:;
     }
     _drawnBatches++;
     endRenderPass();
@@ -860,7 +868,7 @@ void Renderer::endRenderPass()
     _commandBuffer->endRenderPass();
 }
 
-void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder)
+void Renderer::clear(ClearFlag flags, const Color& color, float depth, unsigned int stencil, float globalOrder)
 {
     _clearFlag = flags;
 
@@ -905,7 +913,7 @@ CallbackCommand* Renderer::nextCallbackCommand()
     return cmd;
 }
 
-const Color4F& Renderer::getClearColor() const
+const Color& Renderer::getClearColor() const
 {
     return _clearColor;
 }

@@ -165,6 +165,12 @@ public:
                             std::size_t count,
                             bool wireframe = false) = 0;
 
+    virtual void drawArraysInstanced(PrimitiveType primitiveType,
+                             std::size_t start,
+                             std::size_t count,
+                             int instanceCount,
+                             bool wireframe = false) = 0;
+
     /**
      * Draw primitives with an index list.
      * @param primitiveType The type of primitives that elements are assembled into.

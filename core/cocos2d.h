@@ -40,9 +40,6 @@ extensions use it, i.g fairygui, live2d ...
 
 namespace ax
 {
-
-AX_DLL const char* cocos2dVersion();
-
 /** Backward compatibility with old axmol projects */
 
 using Sprite3D              = MeshRenderer;
@@ -63,12 +60,6 @@ namespace cocos2d = ax;
 #define CCASSERT              AXASSERT
 #define CC_ASSERT             AX_ASSERT
 #define CC_CONSTRUCTOR_ACCESS public
-#ifndef AX_CORE_PROFILE
-#    define CCLOG      AXLOG
-#    define CCLOGINFO  AXLOGINFO
-#    define CCLOGWARN  AXLOGWARN
-#    define CCLOGERROR AXLOGERROR
-#endif
 
 #define CC_SAFE_RETAIN               AX_SAFE_RETAIN
 

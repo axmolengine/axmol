@@ -147,6 +147,12 @@ public:
      */
     void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe = false) override;
 
+    void drawArraysInstanced(PrimitiveType primitiveType,
+                             std::size_t start,
+                             std::size_t count,
+                             int instanceCount,
+                             bool wireframe = false) override;
+
     /**
      * Draw primitives with an index list.
      * @param primitiveType The type of primitives that elements are assembled into.
@@ -157,10 +163,10 @@ public:
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
      */
     void drawElements(PrimitiveType primitiveType,
-                              IndexFormat indexType,
-                              std::size_t count,
-                              std::size_t offset,
-                              bool wireframe = false) override;
+                      IndexFormat indexType,
+                      std::size_t count,
+                      std::size_t offset,
+                      bool wireframe = false) override;
 
     /**
      * Draw primitives with an index list instanced.
@@ -174,11 +180,11 @@ public:
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
      */
     void drawElementsInstanced(PrimitiveType primitiveType,
-                                       IndexFormat indexType,
-                                       std::size_t count,
-                                       std::size_t offset,
-                                       int instanceCount,
-                                       bool wireframe = false) override;
+                               IndexFormat indexType,
+                               std::size_t count,
+                               std::size_t offset,
+                               int instanceCount,
+                               bool wireframe = false) override;
 
     /**
      * Do some resources release.
@@ -204,10 +210,9 @@ public:
      */
     void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
 
-
     /**
-    * For internal use only
-    */
+     * For internal use only
+     */
     void readPixels(RenderTarget* rt,
                     int x,
                     int y,
@@ -218,22 +223,20 @@ public:
                     PixelBufferDescriptor& pbd);
 
 protected:
-
     void prepareDrawing() const;
     void bindVertexBuffer(uint32_t& usedBits) const;
-    virtual void bindInstanceBuffer(ProgramGL* program, uint32_t& usedBits) const;
     void bindUniforms(ProgramGL* program) const;
     void cleanResources();
 
     BufferGL* _vertexBuffer                   = nullptr;
     ProgramState* _programState               = nullptr;
     BufferGL* _indexBuffer                    = nullptr;
-    BufferGL* _instanceTransformBuffer        = nullptr;
+    BufferGL* _instanceBuffer                 = nullptr;
     RenderPipelineGL* _renderPipeline         = nullptr;
     CullMode _cullMode                        = CullMode::NONE;
     DepthStencilStateGL* _depthStencilStateGL = nullptr;
     Viewport _viewPort;
-    GLboolean _alphaTestEnabled               = false;
+    GLboolean _alphaTestEnabled = false;
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;

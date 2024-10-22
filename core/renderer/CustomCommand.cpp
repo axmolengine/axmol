@@ -40,6 +40,7 @@ CustomCommand::CustomCommand()
 CustomCommand::~CustomCommand()
 {
     AX_SAFE_RELEASE(_vertexBuffer);
+    AX_SAFE_RELEASE(_instanceBuffer);
     AX_SAFE_RELEASE(_indexBuffer);
 }
 
@@ -142,7 +143,29 @@ void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capac
     _vertexCapacity  = capacity;
     _vertexDrawCount = capacity;
 
-    _vertexBuffer = backend::DriverBase::getInstance()->newBuffer(vertexSize * capacity, backend::BufferType::VERTEX, usage);
+    _vertexBuffer =
+        backend::DriverBase::getInstance()->newBuffer(vertexSize * capacity, backend::BufferType::VERTEX, usage);
+}
+
+void CustomCommand::createInstanceBuffer(std::size_t vertexSize, int capacity, BufferUsage usage)
+{
+    AX_SAFE_RELEASE(_instanceBuffer);
+    _instanceBuffer =
+        backend::DriverBase::getInstance()->newBuffer(vertexSize * capacity, backend::BufferType::VERTEX, usage);
+    _instanceCapacity = capacity;
+    _instanceCount    = capacity;
+}
+
+void CustomCommand::setInstanceBuffer(backend::Buffer* instanceBuffer, int count)
+{
+    if (_instanceBuffer != instanceBuffer)
+    {
+        AX_SAFE_RELEASE(_instanceBuffer);
+        _instanceBuffer = instanceBuffer;
+        _instanceCount  = count;
+        _instanceCapacity = count;
+        AX_SAFE_RETAIN(_instanceBuffer);
+    }
 }
 
 void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, BufferUsage usage)
@@ -154,7 +177,8 @@ void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, 
     _indexCapacity  = capacity;
     _indexDrawCount = capacity;
 
-    _indexBuffer = backend::DriverBase::getInstance()->newBuffer(_indexSize * capacity, backend::BufferType::INDEX, usage);
+    _indexBuffer =
+        backend::DriverBase::getInstance()->newBuffer(_indexSize * capacity, backend::BufferType::INDEX, usage);
 }
 
 void CustomCommand::updateVertexBuffer(const void* data, std::size_t offset, std::size_t length)
@@ -177,6 +201,9 @@ void CustomCommand::setVertexBuffer(backend::Buffer* vertexBuffer)
     AX_SAFE_RELEASE(_vertexBuffer);
     _vertexBuffer = vertexBuffer;
     AX_SAFE_RETAIN(_vertexBuffer);
+
+    if (!_vertexBuffer)
+        _vertexCapacity = _vertexDrawCount = 0;
 }
 
 void CustomCommand::setIndexBuffer(backend::Buffer* indexBuffer, IndexFormat format)
@@ -190,6 +217,9 @@ void CustomCommand::setIndexBuffer(backend::Buffer* indexBuffer, IndexFormat for
 
     _indexFormat = format;
     _indexSize   = computeIndexSize();
+
+    if(!_indexBuffer)
+        _indexCapacity = _indexDrawCount = 0;
 }
 
 void CustomCommand::updateVertexBuffer(const void* data, std::size_t length)
@@ -204,6 +234,12 @@ void CustomCommand::updateIndexBuffer(const void* data, std::size_t length)
     _indexBuffer->updateData(data, length);
 }
 
+void CustomCommand::updateInstanceBuffer(const void* data, std::size_t length)
+{
+    assert(_instanceBuffer);
+    _instanceBuffer->updateData(data, length);
+}
+
 std::size_t CustomCommand::computeIndexSize() const
 {
     if (IndexFormat::U_SHORT == _indexFormat)
@@ -212,4 +248,4 @@ std::size_t CustomCommand::computeIndexSize() const
         return sizeof(unsigned int);
 }
 
-}
+}  // namespace ax

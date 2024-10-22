@@ -26,18 +26,10 @@
 #include "base/Director.h"
 #include "base/EventDispatcher.h"
 
-#if (AX_ENABLE_CHIPMUNK_INTEGRATION || AX_ENABLE_BOX2D_INTEGRATION)
-
-#    if AX_ENABLE_CHIPMUNK_INTEGRATION
-#        include "chipmunk/chipmunk.h"
-#    elif AX_ENABLE_BOX2D_INTEGRATION
-#        include "box2d/box2d.h"
-#    endif
-
 NS_AX_EXT_BEGIN
 
 PhysicsSprite::PhysicsSprite()
-    : _ignoreBodyRotation(false), _CPBody(nullptr), _pB2Body(nullptr), _PTMRatio(0.0f), _syncTransform(nullptr)
+    : _ignoreBodyRotation(false), _PTMRatio(0.0f), _syncTransform(nullptr)
 {}
 
 PhysicsSprite* PhysicsSprite::create()
@@ -196,67 +188,24 @@ Vec3 PhysicsSprite::getPosition3D() const
     return Vec3(pos.x, pos.y, 0);
 }
 
-//
-// Chipmunk only
-//
-
-cpBody* PhysicsSprite::getCPBody() const
+b2BodyId PhysicsSprite::getB2Body() const
 {
-#    if AX_ENABLE_CHIPMUNK_INTEGRATION
-    return _CPBody;
-#    else
-    AXASSERT(false, "Can't call chipmunk methods when Chipmunk is disabled");
-    return nullptr;
-#    endif
+    return _bodyId;
 }
 
-void PhysicsSprite::setCPBody(cpBody* pBody)
+void PhysicsSprite::setB2Body(b2BodyId pBody)
 {
-#    if AX_ENABLE_CHIPMUNK_INTEGRATION
-    _CPBody = pBody;
-#    else
-    AXASSERT(false, "Can't call chipmunk methods when Chipmunk is disabled");
-#    endif
-}
-
-b2Body* PhysicsSprite::getB2Body() const
-{
-#    if AX_ENABLE_BOX2D_INTEGRATION
-    return _pB2Body;
-#    else
-    AXASSERT(false, "Can't call box2d methods when Box2d is disabled");
-    return nullptr;
-#    endif
-}
-
-void PhysicsSprite::setB2Body(b2Body* pBody)
-{
-#    if AX_ENABLE_BOX2D_INTEGRATION
-    _pB2Body = pBody;
-#    else
-    AX_UNUSED_PARAM(pBody);
-    AXASSERT(false, "Can't call box2d methods when Box2d is disabled");
-#    endif
+    _bodyId = pBody;
 }
 
 float PhysicsSprite::getPTMRatio() const
 {
-#    if AX_ENABLE_BOX2D_INTEGRATION
     return _PTMRatio;
-#    else
-    AXASSERT(false, "Can't call box2d methods when Box2d is disabled");
-    return 0;
-#    endif
 }
 
 void PhysicsSprite::setPTMRatio(float fRatio)
 {
-#    if AX_ENABLE_BOX2D_INTEGRATION
     _PTMRatio = fRatio;
-#    else
-    AX_UNUSED_PARAM(fRatio);
-    AXASSERT(false, "Can't call box2d methods when Box2d is disabled");
-#    endif
 }
 
 //
@@ -266,33 +215,18 @@ void PhysicsSprite::setPTMRatio(float fRatio)
 const Vec2& PhysicsSprite::getPosFromPhysics() const
 {
     static Vec2 s_physicPosion;
-#    if AX_ENABLE_CHIPMUNK_INTEGRATION
-
-    cpVect cpPos   = cpBodyGetPosition(_CPBody);
-    s_physicPosion = Vec2(cpPos.x, cpPos.y);
-
-#    elif AX_ENABLE_BOX2D_INTEGRATION
-
-    b2Vec2 pos = _pB2Body->GetPosition();
+    b2Vec2 pos = b2Body_GetPosition(_bodyId);
     float x    = pos.x * _PTMRatio;
     float y    = pos.y * _PTMRatio;
     s_physicPosion.set(x, y);
-#    endif
+
     return s_physicPosion;
 }
 
 void PhysicsSprite::setPosition(float x, float y)
 {
-#    if AX_ENABLE_CHIPMUNK_INTEGRATION
-
-    cpVect cpPos = cpv(x, y);
-    cpBodySetPosition(_CPBody, cpPos);
-
-#    elif AX_ENABLE_BOX2D_INTEGRATION
-
-    float angle = _pB2Body->GetAngle();
-    _pB2Body->SetTransform(b2Vec2(x / _PTMRatio, y / _PTMRatio), angle);
-#    endif
+    auto rot = b2Body_GetRotation(_bodyId);
+    b2Body_SetTransform(_bodyId, b2Vec2{x / _PTMRatio, y / _PTMRatio}, rot);
 }
 
 void PhysicsSprite::setPosition(const Vec2& pos)
@@ -317,16 +251,8 @@ void PhysicsSprite::setPosition3D(const Vec3& position)
 
 float PhysicsSprite::getRotation() const
 {
-#    if AX_ENABLE_CHIPMUNK_INTEGRATION
-
-    return (_ignoreBodyRotation ? Sprite::getRotation() : -AX_RADIANS_TO_DEGREES(cpBodyGetAngle(_CPBody)));
-
-#    elif AX_ENABLE_BOX2D_INTEGRATION
-
-    return (_ignoreBodyRotation ? Sprite::getRotation() : AX_RADIANS_TO_DEGREES(_pB2Body->GetAngle()));
-#    else
-    return 0.0f;
-#    endif
+    auto angle = b2Rot_GetAngle(b2Body_GetRotation(_bodyId));
+    return (_ignoreBodyRotation ? Sprite::getRotation() : AX_RADIANS_TO_DEGREES(angle));
 }
 
 void PhysicsSprite::setRotation(float fRotation)
@@ -336,20 +262,13 @@ void PhysicsSprite::setRotation(float fRotation)
         Sprite::setRotation(fRotation);
     }
 
-#    if AX_ENABLE_CHIPMUNK_INTEGRATION
     else
     {
-        cpBodySetAngle(_CPBody, -AX_DEGREES_TO_RADIANS(fRotation));
-    }
-
-#    elif AX_ENABLE_BOX2D_INTEGRATION
-    else
-    {
-        b2Vec2 p      = _pB2Body->GetPosition();
+        b2Vec2 p      = b2Body_GetPosition(_bodyId);
         float radians = AX_DEGREES_TO_RADIANS(fRotation);
-        _pB2Body->SetTransform(p, radians);
+        auto rot = b2MakeRot(radians);
+        b2Body_SetTransform(_bodyId, p, rot);
     }
-#    endif
 }
 
 void PhysicsSprite::syncPhysicsTransform() const
@@ -358,42 +277,7 @@ void PhysicsSprite::syncPhysicsTransform() const
     // the sprite is animated (scaled up/down) using actions.
     // For more info see: http://www.cocos2d-iphone.org/forum/topic/68990
 
-#    if AX_ENABLE_CHIPMUNK_INTEGRATION
-
-    cpVect rot = (_ignoreBodyRotation ? cpvforangle(-AX_DEGREES_TO_RADIANS(_rotationX)) : cpBodyGetRotation(_CPBody));
-    float x    = cpBodyGetPosition(_CPBody).x + rot.x * -_anchorPointInPoints.x * _scaleX -
-              rot.y * -_anchorPointInPoints.y * _scaleY;
-    float y = cpBodyGetPosition(_CPBody).y + rot.y * -_anchorPointInPoints.x * _scaleX +
-              rot.x * -_anchorPointInPoints.y * _scaleY;
-
-    if (_ignoreAnchorPointForPosition)
-    {
-        x += _anchorPointInPoints.x;
-        y += _anchorPointInPoints.y;
-    }
-
-    float mat[] = {(float)rot.x * _scaleX,
-                   (float)rot.y * _scaleX,
-                   0,
-                   0,
-                   (float)-rot.y * _scaleY,
-                   (float)rot.x * _scaleY,
-                   0,
-                   0,
-                   0,
-                   0,
-                   1,
-                   0,
-                   x,
-                   y,
-                   0,
-                   1};
-
-    _transform.set(mat);
-
-#    elif AX_ENABLE_BOX2D_INTEGRATION
-
-    b2Vec2 pos = _pB2Body->GetPosition();
+    b2Vec2 pos = b2Body_GetPosition(_bodyId);
 
     float x = pos.x * _PTMRatio;
     float y = pos.y * _PTMRatio;
@@ -405,7 +289,8 @@ void PhysicsSprite::syncPhysicsTransform() const
     }
 
     // Make matrix
-    float radians = _pB2Body->GetAngle();
+    auto rot      = b2Body_GetRotation(_bodyId);
+    float radians = b2Rot_GetAngle(rot);
     float c       = cosf(radians);
     float s       = sinf(radians);
 
@@ -435,7 +320,6 @@ void PhysicsSprite::syncPhysicsTransform() const
                    1};
 
     _transform.set(mat);
-#    endif
 }
 
 void PhysicsSprite::onEnter()
@@ -466,5 +350,3 @@ void PhysicsSprite::afterUpdate(EventCustom* /*event*/)
 }
 
 NS_AX_EXT_END
-
-#endif  // AX_ENABLE_CHIPMUNK_INTEGRATION || AX_ENABLE_BOX2D_INTEGRATION

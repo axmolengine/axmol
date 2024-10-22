@@ -37,8 +37,8 @@ namespace ax
 class AX_EX_DLL PUColorAffector : public PUAffector
 {
 public:
-    typedef std::map<float, Vec4> ColorMap;
-    typedef std::map<float, Vec4>::iterator ColorMapIterator;
+    typedef std::map<float, Color> ColorMap;
+    typedef std::map<float, Color>::iterator ColorMapIterator;
     enum ColorOperation
     {
         CAO_MULTIPLY,
@@ -54,7 +54,7 @@ public:
 
     /**
      */
-    void addColor(float timeFraction, const Vec4& color);
+    void addColor(float timeFraction, const Color& color);
 
     /**
      */
