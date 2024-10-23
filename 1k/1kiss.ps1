@@ -774,7 +774,7 @@ function find_vs() {
         if (!$required_vs_ver) { $required_vs_ver = '12.0+' }
         
         $require_comps = @('Microsoft.Component.MSBuild', 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')
-        $vs_installs = ConvertFrom-Json "$(&$VSWHERE_EXE -version $required_vs_ver.TrimEnd('+') -format 'json' -requires $require_comps)"
+        $vs_installs = ConvertFrom-Json "$(&$VSWHERE_EXE -version $required_vs_ver.TrimEnd('+') -format 'json' -all -products Microsoft.VisualStudio.Product.BuildTools -requires $require_comps)"
         $ErrorActionPreference = $eap
 
         if ($vs_installs) {
