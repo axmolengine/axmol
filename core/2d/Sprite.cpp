@@ -434,7 +434,25 @@ void Sprite::setTexture(Texture2D* texture)
     }
 
     if (needsUpdatePS)
-        setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+    {
+        const PixelFormat pixelFormat = _texture->getPixelFormat();
+
+        switch(pixelFormat)
+          {
+          case PixelFormat::R8:
+            setProgramState(backend::ProgramType::POSITION_TEXTURE_GRAY);
+            break;
+          case PixelFormat::RG8:
+            setProgramState(backend::ProgramType::POSITION_TEXTURE_GRAY_ALPHA);
+            break;
+          case PixelFormat::RGBA8:
+            setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+            break;
+          default:
+            AXLOGW("Warning: Sprite::setTexture() unhandled pixel format {}", (int)pixelFormat);
+            setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+          }
+    }
     else
         updateProgramStateTexture(_texture);
 }

@@ -115,6 +115,10 @@ bool ProgramManager::init()
                     VertexLayoutType::Texture);
     registerProgram(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST, positionTextureColor_vert,
                     positionTextureColorAlphaTest_frag, VertexLayoutType::Sprite);
+    registerProgram(ProgramType::POSITION_TEXTURE_GRAY_ALPHA, positionTextureColor_vert,
+                    positionTextureGrayAlpha_frag, VertexLayoutType::Sprite);
+    registerProgram(ProgramType::POSITION_TEXTURE_GRAY, positionTextureColor_vert,
+                    positionTextureGray_frag, VertexLayoutType::Sprite);
     registerProgram(ProgramType::POSITION_UCOLOR, positionUColor_vert, positionColor_frag, VertexLayoutType::Pos);
     registerProgram(ProgramType::DUAL_SAMPLER_GRAY, positionTextureColor_vert, dualSampler_gray_frag,
                     VertexLayoutType::Sprite);

@@ -343,6 +343,8 @@ struct ProgramType
         POSITION_TEXTURE,                     // positionTexture_vert,            positionTexture_frag
         POSITION_TEXTURE_COLOR,               // positionTextureColor_vert,       positionTextureColor_frag
         POSITION_TEXTURE_COLOR_ALPHA_TEST,    // positionTextureColor_vert,       positionTextureColorAlphaTest_frag
+        POSITION_TEXTURE_GRAY_ALPHA,          // positionTextureColor_vert,       positionTextureGrayAlpha_frag
+        POSITION_TEXTURE_GRAY,                // positionTextureColor_vert,       positionTextureGray_frag
         LABEL_NORMAL,                         // positionTextureColor_vert,       label_normal_frag
         LABLE_OUTLINE,                        // positionTextureColor_vert,       labelOutline_frag
         LABEL_DISTANCE_NORMAL,                // positionTextureColor_vert,       label_distanceNormal_frag

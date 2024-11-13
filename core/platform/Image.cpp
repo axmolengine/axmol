@@ -1314,7 +1314,8 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
         png_read_end(png_ptr, nullptr);
 
         // premultiplied alpha for RGBA8888
-        if ((color_type == PNG_COLOR_TYPE_RGB_ALPHA) || (color_type == PNG_COLOR_TYPE_GRAY_ALPHA))
+        if ((color_type == PNG_COLOR_TYPE_RGB_ALPHA)
+            || (color_type == PNG_COLOR_TYPE_GRAY_ALPHA))
         {
             if (PNG_PREMULTIPLIED_ALPHA_ENABLED)
             {
@@ -2635,7 +2636,7 @@ void Image::premultiplyAlpha()
         for (int i = 0; i < _width * _height; i++)
         {
             uint8_t* p   = _data + i * 2;
-            twoBytes[i] = ((p[0] * p[1] + 1) >> 8) | (p[1] << 8);
+            twoBytes[i] = ((p[0] * (p[1] + 1)) >> 8) | (p[1] << 8);
         }
     }
 

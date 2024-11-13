@@ -236,16 +236,6 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     default:
         break;
     }
-#elif !AX_GLES_PROFILE
-    // Non-GLES doesn't support follow render formats, needs convert PixelFormat::RGBA8
-    // Note: axmol-1.1 deprecated A8, L8, LA8 as renderFormat, preferred R8, RG8
-    switch (renderFormat)
-    {
-    case PixelFormat::R8:
-    case PixelFormat::RG8:
-        // Note: conversion to RGBA8 will happends
-        renderFormat = PixelFormat::RGBA8;
-    }
 #endif
 
     if (image->getNumberOfMipmaps() > 1)
