@@ -1,7 +1,9 @@
 #ifndef CORE_EVENT_H
 #define CORE_EVENT_H
 
-#include <stdint.h>
+#include <array>
+#include <cstdint>
+#include <string>
 #include <variant>
 
 #include "almalloc.h"
@@ -11,7 +13,7 @@ struct EffectState;
 using uint = unsigned int;
 
 
-enum class AsyncEnableBits : uint8_t {
+enum class AsyncEnableBits : std::uint8_t {
     SourceState,
     BufferCompleted,
     Disconnected,
@@ -19,7 +21,7 @@ enum class AsyncEnableBits : uint8_t {
 };
 
 
-enum class AsyncSrcState : uint8_t {
+enum class AsyncSrcState : std::uint8_t {
     Reset,
     Stop,
     Play,
@@ -39,7 +41,7 @@ struct AsyncBufferCompleteEvent {
 };
 
 struct AsyncDisconnectEvent {
-    char msg[244];
+    std::string msg;
 };
 
 struct AsyncEffectReleaseEvent {

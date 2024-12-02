@@ -1,26 +1,26 @@
 #ifndef CORE_HELPERS_H
 #define CORE_HELPERS_H
 
-#include <utility>
 #include <string>
+#include <string_view>
 #include <vector>
 
 
 struct PathNamePair {
     std::string path, fname;
-
-    PathNamePair() = default;
-    template<typename T, typename U>
-    PathNamePair(T&& path_, U&& fname_)
-        : path{std::forward<T>(path_)}, fname{std::forward<U>(fname_)}
-    { }
 };
-const PathNamePair &GetProcBinary(void);
+const PathNamePair &GetProcBinary();
 
-extern int RTPrioLevel;
-extern bool AllowRTTimeLimit;
-void SetRTPriority(void);
+/* Mixing thread priority level */
+inline int RTPrioLevel{1};
 
-std::vector<std::string> SearchDataFiles(const char *match, const char *subdir);
+/* Allow reducing the process's RTTime limit for RTKit. */
+inline bool AllowRTTimeLimit{true};
+
+void SetRTPriority();
+
+auto SearchDataFiles(const std::string_view ext) -> std::vector<std::string>;
+auto SearchDataFiles(const std::string_view ext, const std::string_view subdir)
+    -> std::vector<std::string>;
 
 #endif /* CORE_HELPERS_H */

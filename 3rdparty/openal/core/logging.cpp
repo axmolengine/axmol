@@ -3,6 +3,7 @@
 
 #include "logging.h"
 
+#include <array>
 #include <cctype>
 #include <cstdarg>
 #include <cstdio>
@@ -13,6 +14,7 @@
 #include <vector>
 
 #include "alspan.h"
+#include "opthelpers.h"
 #include "strutils.h"
 
 
@@ -46,7 +48,7 @@ LogState gLogState{LogState::FirstRun};
 LogCallbackFunc gLogCallback{};
 void *gLogCallbackPtr{};
 
-constexpr std::optional<char> GetLevelCode(LogLevel level)
+constexpr auto GetLevelCode(LogLevel level) noexcept -> std::optional<char>
 {
     switch(level)
     {
@@ -75,8 +77,8 @@ void al_set_log_callback(LogCallbackFunc callback, void *userptr)
     }
 }
 
-void al_print(LogLevel level, const char *fmt, ...)
-{
+void al_print(LogLevel level, const char *fmt, ...) noexcept
+try {
     /* Kind of ugly since string literals are const char arrays with a size
      * that includes the null terminator, which we want to exclude from the
      * span.
@@ -97,6 +99,7 @@ void al_print(LogLevel level, const char *fmt, ...)
     auto prefend1 = std::copy_n(prefix.begin(), prefix.size(), stcmsg.begin());
     al::span<char> msg{prefend1, stcmsg.end()};
 
+    /* NOLINTBEGIN(*-array-to-pointer-decay) */
     std::va_list args, args2;
     va_start(args, fmt);
     va_copy(args2, args);
@@ -119,6 +122,7 @@ void al_print(LogLevel level, const char *fmt, ...)
         msg = {msg.data(), std::strlen(msg.data())};
     va_end(args2);
     va_end(args);
+    /* NOLINTEND(*-array-to-pointer-decay) */
 
     if(gLogLevel >= level)
     {
@@ -166,4 +170,7 @@ void al_print(LogLevel level, const char *fmt, ...)
                 gLogState = LogState::Disable;
         }
     }
+}
+catch(...) {
+    /* Swallow any exceptions */
 }

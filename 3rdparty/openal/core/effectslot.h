@@ -2,10 +2,11 @@
 #define CORE_EFFECTSLOT_H
 
 #include <atomic>
+#include <memory>
 
-#include "almalloc.h"
 #include "device.h"
 #include "effects/base.h"
+#include "flexarray.h"
 #include "intrusive_ptr.h"
 
 struct EffectSlot;
@@ -18,20 +19,18 @@ enum class EffectSlotType : unsigned char {
     None,
     Reverb,
     Chorus,
-    Distortion,
-    Echo,
-    Flanger,
-    FrequencyShifter,
-    VocalMorpher,
-    PitchShifter,
-    RingModulator,
     Autowah,
     Compressor,
+    Convolution,
+    Dedicated,
+    Distortion,
+    Echo,
     Equalizer,
-    EAXReverb,
-    DedicatedLFE,
-    DedicatedDialog,
-    Convolution
+    Flanger,
+    FrequencyShifter,
+    PitchShifter,
+    RingModulator,
+    VocalMorpher,
 };
 
 struct EffectSlotProps {
@@ -45,8 +44,6 @@ struct EffectSlotProps {
     al::intrusive_ptr<EffectState> State;
 
     std::atomic<EffectSlotProps*> next;
-
-    DEF_NEWDEL(EffectSlotProps)
 };
 
 
@@ -67,7 +64,7 @@ struct EffectSlot {
     EffectSlot *Target{nullptr};
 
     EffectSlotType EffectType{EffectSlotType::None};
-    EffectProps mEffectProps{};
+    EffectProps mEffectProps;
     al::intrusive_ptr<EffectState> mEffectState;
 
     float RoomRolloff{0.0f}; /* Added to the source's room rolloff, not multiplied. */
@@ -81,9 +78,7 @@ struct EffectSlot {
     al::vector<FloatBufferLine,16> mWetBuffer;
 
 
-    static EffectSlotArray *CreatePtrArray(size_t count) noexcept;
-
-    DEF_NEWDEL(EffectSlot)
+    static std::unique_ptr<EffectSlotArray> CreatePtrArray(size_t count);
 };
 
 #endif /* CORE_EFFECTSLOT_H */

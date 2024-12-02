@@ -8,9 +8,11 @@
 #include <ratio>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #include "core/device.h"
 #include "core/except.h"
+#include "alc/events.h"
 
 
 using uint = unsigned int;
@@ -33,15 +35,22 @@ struct BackendBase {
     virtual ClockLatency getClockLatency();
 
     DeviceBase *const mDevice;
+    std::string mDeviceName;
 
+    BackendBase() = delete;
+    BackendBase(const BackendBase&) = delete;
+    BackendBase(BackendBase&&) = delete;
     BackendBase(DeviceBase *device) noexcept : mDevice{device} { }
     virtual ~BackendBase() = default;
 
+    void operator=(const BackendBase&) = delete;
+    void operator=(BackendBase&&) = delete;
+
 protected:
     /** Sets the default channel order used by most non-WaveFormatEx-based APIs. */
-    void setDefaultChannelOrder();
+    void setDefaultChannelOrder() const;
     /** Sets the default channel order used by WaveFormatEx. */
-    void setDefaultWFXChannelOrder();
+    void setDefaultWFXChannelOrder() const;
 };
 using BackendPtr = std::unique_ptr<BackendBase>;
 
@@ -50,18 +59,6 @@ enum class BackendType {
     Capture
 };
 
-
-/* Helper to get the current clock time from the device's ClockBase, and
- * SamplesDone converted from the sample rate.
- */
-inline std::chrono::nanoseconds GetDeviceClockTime(DeviceBase *device)
-{
-    using std::chrono::seconds;
-    using std::chrono::nanoseconds;
-
-    auto ns = nanoseconds{seconds{device->SamplesDone}} / device->Frequency;
-    return device->ClockBase + ns;
-}
 
 /* Helper to get the device latency from the backend, including any fixed
  * latency from post-processing.
@@ -75,16 +72,24 @@ inline ClockLatency GetClockLatency(DeviceBase *device, BackendBase *backend)
 
 
 struct BackendFactory {
-    virtual bool init() = 0;
-
-    virtual bool querySupport(BackendType type) = 0;
-
-    virtual std::string probe(BackendType type) = 0;
-
-    virtual BackendPtr createBackend(DeviceBase *device, BackendType type) = 0;
-
-protected:
+    BackendFactory() = default;
+    BackendFactory(const BackendFactory&) = delete;
+    BackendFactory(BackendFactory&&) = delete;
     virtual ~BackendFactory() = default;
+
+    void operator=(const BackendFactory&) = delete;
+    void operator=(BackendFactory&&) = delete;
+
+    virtual auto init() -> bool = 0;
+
+    virtual auto querySupport(BackendType type) -> bool = 0;
+
+    virtual auto queryEventSupport(alc::EventType, BackendType) -> alc::EventSupport
+    { return alc::EventSupport::NoSupport; }
+
+    virtual auto enumerate(BackendType type) -> std::vector<std::string> = 0;
+
+    virtual auto createBackend(DeviceBase *device, BackendType type) -> BackendPtr = 0;
 };
 
 namespace al {
@@ -99,15 +104,15 @@ class backend_exception final : public base_exception {
     backend_error mErrorCode;
 
 public:
-#ifdef __USE_MINGW_ANSI_STDIO
-    [[gnu::format(gnu_printf, 3, 4)]]
+#ifdef __MINGW32__
+    [[gnu::format(__MINGW_PRINTF_FORMAT, 3, 4)]]
 #else
     [[gnu::format(printf, 3, 4)]]
 #endif
     backend_exception(backend_error code, const char *msg, ...);
     ~backend_exception() override;
 
-    backend_error errorCode() const noexcept { return mErrorCode; }
+    [[nodiscard]] auto errorCode() const noexcept -> backend_error { return mErrorCode; }
 };
 
 } // namespace al

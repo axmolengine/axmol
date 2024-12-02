@@ -24,7 +24,9 @@
 
 #include <cinttypes>
 #include <cmath>
+#include <functional>
 #include <memory>
+#include <optional>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,14 +34,13 @@
 #include <string.h>
 #include <unistd.h>
 #include <vector>
-#include <optional>
 
 #include "alnumeric.h"
+#include "alstring.h"
 #include "core/converter.h"
 #include "core/device.h"
 #include "core/logging.h"
 #include "ringbuffer.h"
-#include "alc/events.h"
 
 #include <AudioUnit/AudioUnit.h>
 #include <AudioToolbox/AudioToolbox.h>
@@ -55,6 +56,36 @@ namespace {
 
 constexpr auto OutputElement = 0;
 constexpr auto InputElement = 1;
+
+// These following arrays should always be defined in ascending AudioChannelLabel value order
+constexpr std::array<AudioChannelLabel, 1> MonoChanMap { kAudioChannelLabel_Mono };
+constexpr std::array<AudioChannelLabel, 2> StereoChanMap { kAudioChannelLabel_Left, kAudioChannelLabel_Right};
+constexpr std::array<AudioChannelLabel, 4> QuadChanMap {
+        kAudioChannelLabel_Left, kAudioChannelLabel_Right,
+        kAudioChannelLabel_LeftSurround, kAudioChannelLabel_RightSurround
+};
+constexpr std::array<AudioChannelLabel, 6> X51ChanMap {
+        kAudioChannelLabel_Left, kAudioChannelLabel_Right,
+        kAudioChannelLabel_Center, kAudioChannelLabel_LFEScreen,
+        kAudioChannelLabel_LeftSurround, kAudioChannelLabel_RightSurround
+};
+constexpr std::array<AudioChannelLabel, 6> X51RearChanMap {
+        kAudioChannelLabel_Left, kAudioChannelLabel_Right,
+        kAudioChannelLabel_Center, kAudioChannelLabel_LFEScreen,
+        kAudioChannelLabel_RearSurroundRight, kAudioChannelLabel_RearSurroundLeft
+};
+constexpr std::array<AudioChannelLabel, 7> X61ChanMap {
+        kAudioChannelLabel_Left, kAudioChannelLabel_Right,
+        kAudioChannelLabel_Center, kAudioChannelLabel_LFEScreen,
+        kAudioChannelLabel_CenterSurround,
+        kAudioChannelLabel_RearSurroundRight, kAudioChannelLabel_RearSurroundLeft
+};
+constexpr std::array<AudioChannelLabel, 8> X71ChanMap {
+        kAudioChannelLabel_Left, kAudioChannelLabel_Right,
+        kAudioChannelLabel_Center, kAudioChannelLabel_LFEScreen,
+        kAudioChannelLabel_LeftSurround, kAudioChannelLabel_RightSurround,
+        kAudioChannelLabel_LeftCenter, kAudioChannelLabel_RightCenter
+};
 
 struct FourCCPrinter {
     char mString[sizeof(UInt32) + 1]{};
@@ -159,7 +190,7 @@ std::string GetDeviceName(AudioDeviceID devId)
     /* Clear extraneous nul chars that may have been written with the name
      * string, and return it.
      */
-    while(!devname.back())
+    while(!devname.empty() && !devname.back())
         devname.pop_back();
     return devname;
 }
@@ -167,7 +198,7 @@ std::string GetDeviceName(AudioDeviceID devId)
 UInt32 GetDeviceChannelCount(AudioDeviceID devId, bool isCapture)
 {
     UInt32 propSize{};
-    auto err = GetDevPropertySize(devId, kAudioDevicePropertyStreamConfiguration, isCapture, 0,
+    auto err = GetDevPropertySize(devId, kAudioUnitProperty_AudioChannelLayout, isCapture, 0,
         &propSize);
     if(err)
     {
@@ -176,11 +207,11 @@ UInt32 GetDeviceChannelCount(AudioDeviceID devId, bool isCapture)
         return 0;
     }
 
-    auto buflist_data = std::make_unique<char[]>(propSize);
-    auto *buflist = reinterpret_cast<AudioBufferList*>(buflist_data.get());
+    auto channel_data = std::make_unique<char[]>(propSize);
+    auto *channel_layout = reinterpret_cast<AudioChannelLayout*>(channel_data.get());
 
-    err = GetDevProperty(devId, kAudioDevicePropertyStreamConfiguration, isCapture, 0, propSize,
-        buflist);
+    err = GetDevProperty(devId, kAudioUnitProperty_AudioChannelLayout, isCapture, 0, propSize,
+        channel_layout);
     if(err)
     {
         ERR("kAudioDevicePropertyStreamConfiguration query failed: '%s' (%u)\n",
@@ -188,11 +219,7 @@ UInt32 GetDeviceChannelCount(AudioDeviceID devId, bool isCapture)
         return 0;
     }
 
-    UInt32 numChannels{0};
-    for(size_t i{0};i < buflist->mNumberBuffers;++i)
-        numChannels += buflist->mBuffers[i].mNumberChannels;
-
-    return numChannels;
+    return channel_layout->mNumberChannelDescriptions;
 }
 
 
@@ -277,7 +304,7 @@ struct DeviceHelper {
     DeviceHelper()
     {
         AudioObjectPropertyAddress addr{kAudioHardwarePropertyDefaultOutputDevice,
-            kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain};
+            kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster};
         OSStatus status = AudioObjectAddPropertyListener(kAudioObjectSystemObject, &addr, DeviceListenerProc, nil);
         if (status != noErr)
             ERR("AudioObjectAddPropertyListener fail: %d", status);
@@ -285,7 +312,7 @@ struct DeviceHelper {
     ~DeviceHelper()
     {
         AudioObjectPropertyAddress addr{kAudioHardwarePropertyDefaultOutputDevice,
-            kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain};
+            kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster};
         OSStatus status = AudioObjectRemovePropertyListener(kAudioObjectSystemObject, &addr, DeviceListenerProc, nil);
         if (status != noErr)
             ERR("AudioObjectRemovePropertyListener fail: %d", status);
@@ -338,8 +365,6 @@ struct CoreAudioPlayback final : public BackendBase {
 
     uint mFrameSize{0u};
     AudioStreamBasicDescription mFormat{}; // This is the OpenAL format as a CoreAudio ASBD
-
-    DEF_NEWDEL(CoreAudioPlayback)
 };
 
 CoreAudioPlayback::~CoreAudioPlayback()
@@ -379,7 +404,7 @@ void CoreAudioPlayback::open(std::string_view name)
         auto devmatch = std::find_if(PlaybackList.cbegin(), PlaybackList.cend(), find_name);
         if(devmatch == PlaybackList.cend())
             throw al::backend_exception{al::backend_error::NoDevice,
-                "Device name \"%.*s\" not found", static_cast<int>(name.length()), name.data()};
+                "Device name \"%.*s\" not found", al::sizei(name), name.data()};
 
         audioDevice = devmatch->mId;
     }
@@ -388,7 +413,7 @@ void CoreAudioPlayback::open(std::string_view name)
         name = ca_device;
     else if(name != ca_device)
         throw al::backend_exception{al::backend_error::NoDevice, "Device name \"%.*s\" not found",
-            static_cast<int>(name.length()), name.data()};
+            al::sizei(name), name.data()};
 #endif
 
     /* open the default output unit */
@@ -437,7 +462,7 @@ void CoreAudioPlayback::open(std::string_view name)
 
 #if CAN_ENUMERATE
     if(!name.empty())
-        mDevice->DeviceName = name;
+        mDeviceName = name;
     else
     {
         UInt32 propSize{sizeof(audioDevice)};
@@ -446,8 +471,8 @@ void CoreAudioPlayback::open(std::string_view name)
             kAudioUnitScope_Global, OutputElement, &audioDevice, &propSize);
 
         std::string devname{GetDeviceName(audioDevice)};
-        if(!devname.empty()) mDevice->DeviceName = std::move(devname);
-        else mDevice->DeviceName = "Unknown Device Name";
+        if(!devname.empty()) mDeviceName = std::move(devname);
+        else mDeviceName = "Unknown Device Name";
     }
 
     if(audioDevice != kAudioDeviceUnknown)
@@ -465,7 +490,7 @@ void CoreAudioPlayback::open(std::string_view name)
     }
 
 #else
-    mDevice->DeviceName = name;
+    mDeviceName = name;
 #endif
 }
 
@@ -506,6 +531,22 @@ bool CoreAudioPlayback::reset()
             mDevice->Frequency + 0.5);
         mDevice->Frequency = static_cast<uint>(streamFormat.mSampleRate);
     }
+
+    struct ChannelMap {
+        DevFmtChannels fmt;
+        al::span<const AudioChannelLabel> map;
+        bool is_51rear;
+    };
+
+    static constexpr std::array<ChannelMap,7> chanmaps{{
+        { DevFmtX71, X71ChanMap, false },
+        { DevFmtX61, X61ChanMap, false },
+        { DevFmtX51, X51ChanMap, false },
+        { DevFmtX51, X51RearChanMap, true },
+        { DevFmtQuad, QuadChanMap, false },
+        { DevFmtStereo, StereoChanMap, false },
+        { DevFmtMono, MonoChanMap, false }
+    }};
 
     /* FIXME: How to tell what channels are what in the output device, and how
      * to specify what we're giving? e.g. 6.0 vs 5.1
@@ -553,6 +594,42 @@ bool CoreAudioPlayback::reset()
         ERR("AudioUnitSetProperty(StreamFormat) failed: '%s' (%u)\n", FourCCPrinter{err}.c_str(),
             err);
         return false;
+    }
+
+    if(!mDevice->Flags.test(ChannelsRequest))
+    {
+        auto propSize = UInt32{};
+        auto writable = Boolean{};
+
+        err = AudioUnitGetPropertyInfo(mAudioUnit, kAudioUnitProperty_AudioChannelLayout,
+            kAudioUnitScope_Output, OutputElement, &propSize, &writable);
+        if(err == noErr)
+        {
+            auto layout_data = std::make_unique<char[]>(propSize);
+            auto *layout = reinterpret_cast<AudioChannelLayout*>(layout_data.get());
+
+            err = AudioUnitGetProperty(mAudioUnit, kAudioUnitProperty_AudioChannelLayout,
+                kAudioUnitScope_Output, OutputElement, layout, &propSize);
+            if(err == noErr)
+            {
+                auto descs = al::span{std::data(layout->mChannelDescriptions),
+                    layout->mNumberChannelDescriptions};
+                auto labels = std::vector<AudioChannelLayoutTag>(descs.size());
+
+                std::transform(descs.begin(), descs.end(), labels.begin(),
+                    std::mem_fn(&AudioChannelDescription::mChannelLabel));
+                sort(labels.begin(), labels.end());
+
+                auto chaniter = std::find_if(chanmaps.cbegin(), chanmaps.cend(),
+                    [&labels](const ChannelMap &chanmap) -> bool
+                    {
+                        return std::includes(labels.begin(), labels.end(), chanmap.map.begin(),
+                            chanmap.map.end());
+                    });
+                if(chaniter != chanmaps.cend())
+                    mDevice->FmtChans = chaniter->fmt;
+            }
+        }
     }
 
     setDefaultWFXChannelOrder();
@@ -624,8 +701,6 @@ struct CoreAudioCapture final : public BackendBase {
     std::vector<char> mCaptureData;
 
     RingBufferPtr mRing{nullptr};
-
-    DEF_NEWDEL(CoreAudioCapture)
 };
 
 CoreAudioCapture::~CoreAudioCapture()
@@ -641,7 +716,7 @@ OSStatus CoreAudioCapture::RecordProc(AudioUnitRenderActionFlags *ioActionFlags,
     AudioBufferList*) noexcept
 {
     union {
-        std::byte _[maxz(sizeof(AudioBufferList), offsetof(AudioBufferList, mBuffers[1]))];
+        std::byte buf[std::max(sizeof(AudioBufferList), offsetof(AudioBufferList, mBuffers[1]))];
         AudioBufferList list;
     } audiobuf{};
 
@@ -658,7 +733,7 @@ OSStatus CoreAudioCapture::RecordProc(AudioUnitRenderActionFlags *ioActionFlags,
         return err;
     }
 
-    mRing->write(mCaptureData.data(), inNumberFrames);
+    std::ignore = mRing->write(mCaptureData.data(), inNumberFrames);
     return noErr;
 }
 
@@ -680,7 +755,7 @@ void CoreAudioCapture::open(std::string_view name)
         auto devmatch = std::find_if(CaptureList.cbegin(), CaptureList.cend(), find_name);
         if(devmatch == CaptureList.cend())
             throw al::backend_exception{al::backend_error::NoDevice,
-                "Device name \"%.*s\" not found", static_cast<int>(name.length()), name.data()};
+                "Device name \"%.*s\" not found", al::sizei(name), name.data()};
 
         audioDevice = devmatch->mId;
     }
@@ -689,7 +764,7 @@ void CoreAudioCapture::open(std::string_view name)
         name = ca_device;
     else if(name != ca_device)
         throw al::backend_exception{al::backend_error::NoDevice, "Device name \"%.*s\" not found",
-            static_cast<int>(name.length()), name.data()};
+            al::sizei(name), name.data()};
 #endif
 
     AudioComponentDescription desc{};
@@ -826,6 +901,7 @@ void CoreAudioCapture::open(std::string_view name)
     case DevFmtX61:
     case DevFmtX71:
     case DevFmtX714:
+    case DevFmtX7144:
     case DevFmtX3D71:
     case DevFmtAmbi3D:
         throw al::backend_exception{al::backend_error::DeviceError, "%s not supported",
@@ -860,8 +936,8 @@ void CoreAudioCapture::open(std::string_view name)
      * conversion ring buffer. Ensure at least 100ms for the total buffer.
      */
     double srateScale{outputFormat.mSampleRate / mDevice->Frequency};
-    auto FrameCount64 = maxu64(static_cast<uint64_t>(std::ceil(mDevice->BufferSize*srateScale)),
-        static_cast<UInt32>(outputFormat.mSampleRate)/10);
+    auto FrameCount64 = std::max(static_cast<uint64_t>(std::ceil(mDevice->BufferSize*srateScale)),
+        static_cast<UInt32>(outputFormat.mSampleRate)/10_u64);
     FrameCount64 += MaxResamplerPadding;
     if(FrameCount64 > std::numeric_limits<int32_t>::max())
         throw al::backend_exception{al::backend_error::DeviceError,
@@ -877,7 +953,7 @@ void CoreAudioCapture::open(std::string_view name)
 
     mCaptureData.resize(outputFrameCount * mFrameSize);
 
-    outputFrameCount = static_cast<UInt32>(maxu64(outputFrameCount, FrameCount64));
+    outputFrameCount = static_cast<UInt32>(std::max(uint64_t{outputFrameCount}, FrameCount64));
     mRing = RingBuffer::Create(outputFrameCount, mFrameSize, false);
 
     /* Set up sample converter if needed */
@@ -888,7 +964,7 @@ void CoreAudioCapture::open(std::string_view name)
 
 #if CAN_ENUMERATE
     if(!name.empty())
-        mDevice->DeviceName = name;
+        mDeviceName = name;
     else
     {
         UInt32 propSize{sizeof(audioDevice)};
@@ -897,11 +973,11 @@ void CoreAudioCapture::open(std::string_view name)
             kAudioUnitScope_Global, InputElement, &audioDevice, &propSize);
 
         std::string devname{GetDeviceName(audioDevice)};
-        if(!devname.empty()) mDevice->DeviceName = std::move(devname);
-        else mDevice->DeviceName = "Unknown Device Name";
+        if(!devname.empty()) mDeviceName = std::move(devname);
+        else mDeviceName = "Unknown Device Name";
     }
 #else
-    mDevice->DeviceName = name;
+    mDeviceName = name;
 #endif
 }
 
@@ -925,21 +1001,21 @@ void CoreAudioCapture::captureSamples(std::byte *buffer, uint samples)
 {
     if(!mConverter)
     {
-        mRing->read(buffer, samples);
+        std::ignore = mRing->read(buffer, samples);
         return;
     }
 
     auto rec_vec = mRing->getReadVector();
-    const void *src0{rec_vec.first.buf};
-    auto src0len = static_cast<uint>(rec_vec.first.len);
+    const void *src0{rec_vec[0].buf};
+    auto src0len = static_cast<uint>(rec_vec[0].len);
     uint got{mConverter->convert(&src0, &src0len, buffer, samples)};
-    size_t total_read{rec_vec.first.len - src0len};
-    if(got < samples && !src0len && rec_vec.second.len > 0)
+    size_t total_read{rec_vec[0].len - src0len};
+    if(got < samples && !src0len && rec_vec[1].len > 0)
     {
-        const void *src1{rec_vec.second.buf};
-        auto src1len = static_cast<uint>(rec_vec.second.len);
+        const void *src1{rec_vec[1].buf};
+        auto src1len = static_cast<uint>(rec_vec[1].len);
         got += mConverter->convert(&src1, &src1len, buffer + got*mFrameSize, samples-got);
-        total_read += rec_vec.second.len - src1len;
+        total_read += rec_vec[1].len - src1len;
     }
 
     mRing->readAdvance(total_read);
@@ -970,23 +1046,23 @@ bool CoreAudioBackendFactory::init()
 bool CoreAudioBackendFactory::querySupport(BackendType type)
 { return type == BackendType::Playback || type == BackendType::Capture; }
 
-std::string CoreAudioBackendFactory::probe(BackendType type)
+auto CoreAudioBackendFactory::enumerate(BackendType type) -> std::vector<std::string>
 {
-    std::string outnames;
+    std::vector<std::string> outnames;
 #if CAN_ENUMERATE
     auto append_name = [&outnames](const DeviceEntry &entry) -> void
-    {
-        /* Includes null char. */
-        outnames.append(entry.mName.c_str(), entry.mName.length()+1);
-    };
+    { outnames.emplace_back(entry.mName); };
+
     switch(type)
     {
     case BackendType::Playback:
         EnumerateDevices(PlaybackList, false);
+        outnames.reserve(PlaybackList.size());
         std::for_each(PlaybackList.cbegin(), PlaybackList.cend(), append_name);
         break;
     case BackendType::Capture:
         EnumerateDevices(CaptureList, true);
+        outnames.reserve(CaptureList.size());
         std::for_each(CaptureList.cbegin(), CaptureList.cend(), append_name);
         break;
     }
@@ -997,8 +1073,7 @@ std::string CoreAudioBackendFactory::probe(BackendType type)
     {
     case BackendType::Playback:
     case BackendType::Capture:
-        /* Includes null char. */
-        outnames.append(ca_device, sizeof(ca_device));
+        outnames.emplace_back(ca_device);
         break;
     }
 #endif
@@ -1012,4 +1087,19 @@ BackendPtr CoreAudioBackendFactory::createBackend(DeviceBase *device, BackendTyp
     if(type == BackendType::Capture)
         return BackendPtr{new CoreAudioCapture{device}};
     return nullptr;
+}
+
+alc::EventSupport CoreAudioBackendFactory::queryEventSupport(alc::EventType eventType, BackendType)
+{
+    switch(eventType)
+    {
+    case alc::EventType::DefaultDeviceChanged:
+        return alc::EventSupport::FullSupport;
+
+    case alc::EventType::DeviceAdded:
+    case alc::EventType::DeviceRemoved:
+    case alc::EventType::Count:
+        break;
+    }
+    return alc::EventSupport::NoSupport;
 }
