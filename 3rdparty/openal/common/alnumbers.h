@@ -1,11 +1,9 @@
 #ifndef COMMON_ALNUMBERS_H
 #define COMMON_ALNUMBERS_H
 
-#include <utility>
+#include <type_traits>
 
-namespace al {
-
-namespace numbers {
+namespace al::numbers {
 
 namespace detail_ {
     template<typename T>
@@ -29,8 +27,6 @@ inline constexpr auto inv_pi = inv_pi_v<double>;
 inline constexpr auto sqrt2 = sqrt2_v<double>;
 inline constexpr auto sqrt3 = sqrt3_v<double>;
 
-} // namespace numbers
-
-} // namespace al
+} // namespace al::numbers
 
 #endif /* COMMON_ALNUMBERS_H */

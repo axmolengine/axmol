@@ -1,14 +1,15 @@
 
 #include "config.h"
 
-#include <stddef.h>
+#include <cstddef>
 
-#include "almalloc.h"
 #include "alspan.h"
 #include "base.h"
 #include "core/bufferline.h"
+#include "core/effects/base.h"
 #include "intrusive_ptr.h"
 
+struct BufferStorage;
 struct ContextBase;
 struct DeviceBase;
 struct EffectSlot;
@@ -25,8 +26,6 @@ struct NullState final : public EffectState {
         const EffectTarget target) override;
     void process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn,
         const al::span<FloatBufferLine> samplesOut) override;
-
-    DEF_NEWDEL(NullState)
 };
 
 /* This constructs the effect state. It's called when the object is first

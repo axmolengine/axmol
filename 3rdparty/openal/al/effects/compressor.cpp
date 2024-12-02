@@ -7,8 +7,8 @@
 #include "alc/effects/base.h"
 #include "effects.h"
 
-#ifdef ALSOFT_EAX
-#include "alnumeric.h"
+#if ALSOFT_EAX
+#include "al/eax/effect.h"
 #include "al/eax/exception.h"
 #include "al/eax/utils.h"
 #endif // ALSOFT_EAX
@@ -16,14 +16,25 @@
 
 namespace {
 
-void Compressor_setParami(EffectProps *props, ALenum param, int val)
+constexpr EffectProps genDefaultProps() noexcept
+{
+    CompressorProps props{};
+    props.OnOff = AL_COMPRESSOR_DEFAULT_ONOFF;
+    return props;
+}
+
+} // namespace
+
+const EffectProps CompressorEffectProps{genDefaultProps()};
+
+void CompressorEffectHandler::SetParami(CompressorProps &props, ALenum param, int val)
 {
     switch(param)
     {
     case AL_COMPRESSOR_ONOFF:
         if(!(val >= AL_COMPRESSOR_MIN_ONOFF && val <= AL_COMPRESSOR_MAX_ONOFF))
             throw effect_exception{AL_INVALID_VALUE, "Compressor state out of range"};
-        props->Compressor.OnOff = (val != AL_FALSE);
+        props.OnOff = (val != AL_FALSE);
         break;
 
     default:
@@ -31,53 +42,38 @@ void Compressor_setParami(EffectProps *props, ALenum param, int val)
             param};
     }
 }
-void Compressor_setParamiv(EffectProps *props, ALenum param, const int *vals)
-{ Compressor_setParami(props, param, vals[0]); }
-void Compressor_setParamf(EffectProps*, ALenum param, float)
+void CompressorEffectHandler::SetParamiv(CompressorProps &props, ALenum param, const int *vals)
+{ SetParami(props, param, *vals); }
+void CompressorEffectHandler::SetParamf(CompressorProps&, ALenum param, float)
 { throw effect_exception{AL_INVALID_ENUM, "Invalid compressor float property 0x%04x", param}; }
-void Compressor_setParamfv(EffectProps*, ALenum param, const float*)
+void CompressorEffectHandler::SetParamfv(CompressorProps&, ALenum param, const float*)
 {
     throw effect_exception{AL_INVALID_ENUM, "Invalid compressor float-vector property 0x%04x",
         param};
 }
 
-void Compressor_getParami(const EffectProps *props, ALenum param, int *val)
+void CompressorEffectHandler::GetParami(const CompressorProps &props, ALenum param, int *val)
 { 
     switch(param)
     {
-    case AL_COMPRESSOR_ONOFF:
-        *val = props->Compressor.OnOff;
-        break;
-
+    case AL_COMPRESSOR_ONOFF: *val = props.OnOff; break;
     default:
         throw effect_exception{AL_INVALID_ENUM, "Invalid compressor integer property 0x%04x",
             param};
     }
 }
-void Compressor_getParamiv(const EffectProps *props, ALenum param, int *vals)
-{ Compressor_getParami(props, param, vals); }
-void Compressor_getParamf(const EffectProps*, ALenum param, float*)
+void CompressorEffectHandler::GetParamiv(const CompressorProps &props, ALenum param, int *vals)
+{ GetParami(props, param, vals); }
+void CompressorEffectHandler::GetParamf(const CompressorProps&, ALenum param, float*)
 { throw effect_exception{AL_INVALID_ENUM, "Invalid compressor float property 0x%04x", param}; }
-void Compressor_getParamfv(const EffectProps*, ALenum param, float*)
+void CompressorEffectHandler::GetParamfv(const CompressorProps&, ALenum param, float*)
 {
     throw effect_exception{AL_INVALID_ENUM, "Invalid compressor float-vector property 0x%04x",
         param};
 }
 
-EffectProps genDefaultProps() noexcept
-{
-    EffectProps props{};
-    props.Compressor.OnOff = AL_COMPRESSOR_DEFAULT_ONOFF;
-    return props;
-}
 
-} // namespace
-
-DEFINE_ALEFFECT_VTABLE(Compressor);
-
-const EffectProps CompressorEffectProps{genDefaultProps()};
-
-#ifdef ALSOFT_EAX
+#if ALSOFT_EAX
 namespace {
 
 using CompressorCommitter = EaxCommitter<EaxCompressorCommitter>;
@@ -115,28 +111,24 @@ template<>
     throw Exception{message};
 }
 
-template<>
-bool CompressorCommitter::commit(const EaxEffectProps &props)
+bool EaxCompressorCommitter::commit(const EAXAGCCOMPRESSORPROPERTIES &props)
 {
-    if(props == mEaxProps)
+    if(auto *cur = std::get_if<EAXAGCCOMPRESSORPROPERTIES>(&mEaxProps); cur && *cur == props)
         return false;
 
     mEaxProps = props;
+    mAlProps = CompressorProps{props.ulOnOff != 0};
 
-    mAlProps.Compressor.OnOff = (std::get<EAXAGCCOMPRESSORPROPERTIES>(props).ulOnOff != 0);
     return true;
 }
 
-template<>
-void CompressorCommitter::SetDefaults(EaxEffectProps &props)
+void EaxCompressorCommitter::SetDefaults(EaxEffectProps &props)
 {
     props = EAXAGCCOMPRESSORPROPERTIES{EAXAGCCOMPRESSOR_DEFAULTONOFF};
 }
 
-template<>
-void CompressorCommitter::Get(const EaxCall &call, const EaxEffectProps &props_)
+void EaxCompressorCommitter::Get(const EaxCall &call, const EAXAGCCOMPRESSORPROPERTIES &props)
 {
-    auto &props = std::get<EAXAGCCOMPRESSORPROPERTIES>(props_);
     switch(call.get_property_id())
     {
     case EAXAGCCOMPRESSOR_NONE: break;
@@ -146,10 +138,8 @@ void CompressorCommitter::Get(const EaxCall &call, const EaxEffectProps &props_)
     }
 }
 
-template<>
-void CompressorCommitter::Set(const EaxCall &call, EaxEffectProps &props_)
+void EaxCompressorCommitter::Set(const EaxCall &call, EAXAGCCOMPRESSORPROPERTIES &props)
 {
-    auto &props = std::get<EAXAGCCOMPRESSORPROPERTIES>(props_);
     switch(call.get_property_id())
     {
     case EAXAGCCOMPRESSOR_NONE: break;

@@ -24,7 +24,6 @@ constexpr auto AL_STORAGE_AUTOMATIC_NAME = "AL_STORAGE_AUTOMATIC";
 constexpr auto AL_STORAGE_HARDWARE_NAME = "AL_STORAGE_HARDWARE";
 constexpr auto AL_STORAGE_ACCESSIBLE_NAME = "AL_STORAGE_ACCESSIBLE";
 
-
 ALboolean AL_APIENTRY EAXSetBufferMode(ALsizei n, const ALuint *buffers, ALint value) noexcept;
 ALenum AL_APIENTRY EAXGetBufferMode(ALuint buffer, ALint *pReserved) noexcept;
 

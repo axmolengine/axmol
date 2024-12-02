@@ -1,17 +1,13 @@
 
 #include "config.h"
-
+#include "config_backends.h"
 
 #ifndef AL_NO_UID_DEFS
 
-#if defined(HAVE_GUIDDEF_H) || defined(HAVE_INITGUID_H)
+#if defined(HAVE_GUIDDEF_H)
 #define INITGUID
 #include <windows.h>
-#ifdef HAVE_GUIDDEF_H
 #include <guiddef.h>
-#else
-#include <initguid.h>
-#endif
 
 DEFINE_GUID(KSDATAFORMAT_SUBTYPE_PCM,        0x00000001, 0x0000, 0x0010, 0x80,0x00, 0x00,0xaa,0x00,0x38,0x9b,0x71);
 DEFINE_GUID(KSDATAFORMAT_SUBTYPE_IEEE_FLOAT, 0x00000003, 0x0000, 0x0010, 0x80,0x00, 0x00,0xaa,0x00,0x38,0x9b,0x71);
@@ -20,7 +16,7 @@ DEFINE_GUID(IID_IDirectSoundNotify,   0xb0210783, 0x89cd, 0x11d0, 0xaf,0x08, 0x0
 
 DEFINE_GUID(CLSID_MMDeviceEnumerator, 0xbcde0395, 0xe52f, 0x467c, 0x8e,0x3d, 0xc4,0x57,0x92,0x91,0x69,0x2e);
 
-#if defined(HAVE_WASAPI) && !defined(ALSOFT_UWP)
+#if HAVE_WASAPI && !ALSOFT_UWP
 #include <wtypes.h>
 #include <devpropdef.h>
 #include <propkeydef.h>

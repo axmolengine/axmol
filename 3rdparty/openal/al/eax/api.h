@@ -14,6 +14,7 @@
 #include <cfloat>
 #include <cstdint>
 #include <cstring>
+#include <tuple>
 #ifdef _WIN32
 #include <guiddef.h>
 #endif
@@ -22,12 +23,12 @@
 
 
 #ifndef _WIN32
-typedef struct _GUID {
+using GUID = struct _GUID { /* NOLINT(*-reserved-identifier) */
     std::uint32_t Data1;
     std::uint16_t Data2;
     std::uint16_t Data3;
-    std::uint8_t Data4[8];
-} GUID;
+    std::array<std::uint8_t,8> Data4;
+};
 
 inline bool operator==(const GUID& lhs, const GUID& rhs) noexcept
 { return std::memcmp(&lhs, &rhs, sizeof(GUID)) == 0; }
@@ -36,9 +37,14 @@ inline bool operator!=(const GUID& lhs, const GUID& rhs) noexcept
 { return !(lhs == rhs); }
 #endif // _WIN32
 
-#define DECL_EQOP(T) \
-friend bool operator==(const T &lhs, const T &rhs) noexcept { return std::memcmp(&lhs, &rhs, sizeof(T)) == 0;  } \
-friend bool operator!=(const T &lhs, const T &rhs) noexcept { return !(lhs == rhs);  }
+/* TODO: This seems to create very inefficient comparisons. C++20 should allow
+ * creating default comparison operators, avoiding the need for this.
+ */
+#define DECL_EQOP(T, ...) \
+[[nodiscard]] auto get_members() const noexcept { return std::forward_as_tuple(__VA_ARGS__); } \
+[[nodiscard]] friend bool operator==(const T &lhs, const T &rhs) noexcept \
+{ return lhs.get_members() == rhs.get_members(); } \
+[[nodiscard]] friend bool operator!=(const T &lhs, const T &rhs) noexcept { return !(lhs == rhs); }
 
 extern const GUID DSPROPSETID_EAX_ReverbProperties;
 
@@ -277,11 +283,13 @@ struct EAXVECTOR {
     float x;
     float y;
     float z;
-}; // EAXVECTOR
+};
 
+[[nodiscard]]
 inline bool operator==(const EAXVECTOR& lhs, const EAXVECTOR& rhs) noexcept
-{ return std::memcmp(&lhs, &rhs, sizeof(EAXVECTOR)) == 0; }
+{ return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z; }
 
+[[nodiscard]]
 inline bool operator!=(const EAXVECTOR& lhs, const EAXVECTOR& rhs) noexcept
 { return !(lhs == rhs); }
 
@@ -362,6 +370,7 @@ constexpr auto EAXCONTEXT_MINMACROFXFACTOR = 0.0F;
 constexpr auto EAXCONTEXT_MAXMACROFXFACTOR = 1.0F;
 constexpr auto EAXCONTEXT_DEFAULTMACROFXFACTOR = 0.0F;
 
+constexpr auto EAXCONTEXT_DEFAULTLASTERROR = EAX_OK;
 
 extern const GUID EAXPROPERTYID_EAX40_FXSlot0;
 extern const GUID EAXPROPERTYID_EAX50_FXSlot0;
@@ -654,11 +663,11 @@ struct EAXSPEAKERLEVELPROPERTIES {
 }; // EAXSPEAKERLEVELPROPERTIES
 
 struct EAX40ACTIVEFXSLOTS {
-    GUID guidActiveFXSlots[EAX40_MAX_ACTIVE_FXSLOTS];
+    std::array<GUID,EAX40_MAX_ACTIVE_FXSLOTS> guidActiveFXSlots;
 }; // EAX40ACTIVEFXSLOTS
 
 struct EAX50ACTIVEFXSLOTS {
-    GUID guidActiveFXSlots[EAX50_MAX_ACTIVE_FXSLOTS];
+    std::array<GUID,EAX50_MAX_ACTIVE_FXSLOTS> guidActiveFXSlots;
 }; // EAX50ACTIVEFXSLOTS
 
 // Use this structure for EAXSOURCE_OBSTRUCTIONPARAMETERS property.
@@ -837,7 +846,11 @@ struct EAXREVERBPROPERTIES {
     float flLFReference; // reference low frequency 
     float flRoomRolloffFactor; // like DS3D flRolloffFactor but for room effect
     unsigned long ulFlags; // modifies the behavior of properties
-    DECL_EQOP(EAXREVERBPROPERTIES)
+    DECL_EQOP(EAXREVERBPROPERTIES, ulEnvironment, flEnvironmentSize, flEnvironmentDiffusion, lRoom,
+        lRoomHF, lRoomLF, flDecayTime, flDecayHFRatio, flDecayLFRatio, lReflections,
+        flReflectionsDelay, vReflectionsPan, lReverb, flReverbDelay, vReverbPan, flEchoTime,
+        flEchoDepth, flModulationTime, flModulationDepth, flAirAbsorptionHF, flHFReference,
+        flLFReference, flRoomRolloffFactor, ulFlags)
 }; // EAXREVERBPROPERTIES
 
 
@@ -967,7 +980,7 @@ enum EAXAGCCOMPRESSOR_PROPERTY : unsigned int {
 
 struct EAXAGCCOMPRESSORPROPERTIES {
     unsigned long ulOnOff; // Switch Compressor on or off
-    DECL_EQOP(EAXAGCCOMPRESSORPROPERTIES)
+    DECL_EQOP(EAXAGCCOMPRESSORPROPERTIES, ulOnOff)
 }; // EAXAGCCOMPRESSORPROPERTIES
 
 
@@ -994,7 +1007,7 @@ struct EAXAUTOWAHPROPERTIES {
     float flReleaseTime; // Release time (seconds)
     long lResonance; // Resonance (mB)
     long lPeakLevel; // Peak level (mB)
-    DECL_EQOP(EAXAUTOWAHPROPERTIES)
+    DECL_EQOP(EAXAUTOWAHPROPERTIES, flAttackTime, flReleaseTime, lResonance, lPeakLevel)
 }; // EAXAUTOWAHPROPERTIES
 
 
@@ -1042,7 +1055,7 @@ struct EAXCHORUSPROPERTIES {
     float flDepth; // Depth (0 to 1)
     float flFeedback; // Feedback (-1 to 1)
     float flDelay; // Delay (seconds)
-    DECL_EQOP(EAXCHORUSPROPERTIES)
+    DECL_EQOP(EAXCHORUSPROPERTIES, ulWaveform, lPhase, flRate, flDepth, flFeedback, flDelay)
 }; // EAXCHORUSPROPERTIES
 
 
@@ -1091,7 +1104,7 @@ struct EAXDISTORTIONPROPERTIES {
     float flLowPassCutOff; // Controls the cut-off of the filter pre-distortion (Hz)
     float flEQCenter; // Controls the center frequency of the EQ post-distortion (Hz)
     float flEQBandwidth; // Controls the bandwidth of the EQ post-distortion (Hz)
-    DECL_EQOP(EAXDISTORTIONPROPERTIES)
+    DECL_EQOP(EAXDISTORTIONPROPERTIES, flEdge, lGain, flLowPassCutOff, flEQCenter, flEQBandwidth)
 }; // EAXDISTORTIONPROPERTIES
 
 
@@ -1136,7 +1149,7 @@ struct EAXECHOPROPERTIES {
     float flDamping; // Controls a low-pass filter that dampens the echoes (0 to 1)
     float flFeedback; // Controls the duration of echo repetition (0 to 1)
     float flSpread; // Controls the left-right spread of the echoes
-    DECL_EQOP(EAXECHOPROPERTIES)
+    DECL_EQOP(EAXECHOPROPERTIES, flDelay, flLRDelay, flDamping, flFeedback, flSpread)
 }; // EAXECHOPROPERTIES
 
 
@@ -1191,7 +1204,8 @@ struct EAXEQUALIZERPROPERTIES {
     float flMid2Width; // (octaves)
     long lHighGain; // (mB)
     float flHighCutOff; // (Hz)
-    DECL_EQOP(EAXEQUALIZERPROPERTIES)
+    DECL_EQOP(EAXEQUALIZERPROPERTIES, lLowGain, flLowCutOff, lMid1Gain, flMid1Center, flMid1Width,
+        lMid2Gain, flMid2Center, flMid2Width, lHighGain, flHighCutOff)
 }; // EAXEQUALIZERPROPERTIES
 
 
@@ -1263,7 +1277,7 @@ struct EAXFLANGERPROPERTIES {
     float flDepth; // Depth (0 to 1)
     float flFeedback; // Feedback (0 to 1)
     float flDelay; // Delay (seconds)
-    DECL_EQOP(EAXFLANGERPROPERTIES)
+    DECL_EQOP(EAXFLANGERPROPERTIES, ulWaveform, lPhase, flRate, flDepth, flFeedback, flDelay)
 }; // EAXFLANGERPROPERTIES
 
 
@@ -1314,7 +1328,7 @@ struct EAXFREQUENCYSHIFTERPROPERTIES {
     float flFrequency; // (Hz)
     unsigned long ulLeftDirection; // see enum above
     unsigned long ulRightDirection; // see enum above
-    DECL_EQOP(EAXFREQUENCYSHIFTERPROPERTIES)
+    DECL_EQOP(EAXFREQUENCYSHIFTERPROPERTIES, flFrequency, ulLeftDirection, ulRightDirection)
 }; // EAXFREQUENCYSHIFTERPROPERTIES
 
 
@@ -1393,7 +1407,8 @@ struct EAXVOCALMORPHERPROPERTIES {
     long lPhonemeBCoarseTuning; // (semitones)
     unsigned long ulWaveform; // Waveform selector - see enum above
     float flRate; // (Hz)
-    DECL_EQOP(EAXVOCALMORPHERPROPERTIES)
+    DECL_EQOP(EAXVOCALMORPHERPROPERTIES, ulPhonemeA, lPhonemeACoarseTuning, ulPhonemeB,
+        lPhonemeBCoarseTuning, ulWaveform, flRate)
 }; // EAXVOCALMORPHERPROPERTIES
 
 
@@ -1436,7 +1451,7 @@ enum EAXPITCHSHIFTER_PROPERTY : unsigned int {
 struct EAXPITCHSHIFTERPROPERTIES {
     long lCoarseTune; // Amount of pitch shift (semitones)
     long lFineTune; // Amount of pitch shift (cents)
-    DECL_EQOP(EAXPITCHSHIFTERPROPERTIES)
+    DECL_EQOP(EAXPITCHSHIFTERPROPERTIES, lCoarseTune, lFineTune)
 }; // EAXPITCHSHIFTERPROPERTIES
 
 
@@ -1472,7 +1487,7 @@ struct EAXRINGMODULATORPROPERTIES {
     float flFrequency; // Frequency of modulation (Hz)
     float flHighPassCutOff; // Cut-off frequency of high-pass filter (Hz)
     unsigned long ulWaveform; // Waveform selector - see enum above
-    DECL_EQOP(EAXRINGMODULATORPROPERTIES)
+    DECL_EQOP(EAXRINGMODULATORPROPERTIES, flFrequency, flHighPassCutOff, ulWaveform)
 }; // EAXRINGMODULATORPROPERTIES
 
 

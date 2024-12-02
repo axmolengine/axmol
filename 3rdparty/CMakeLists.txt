@@ -285,11 +285,11 @@ if(AX_ENABLE_AUDIO)
       set(ALSOFT_CPPWINRT_VERSION ${AX_CPPWINRT_VERSION} CACHE STRING "" FORCE)
     endif()
 
-    ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS alcommon;OpenAL OPTIONS ${alsoft_opts})
+    ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS OpenAL;alsoft.excommon;alsoft.common OPTIONS ${alsoft_opts})
 
     target_include_directories(3rdparty INTERFACE openal)
     target_compile_definitions(3rdparty INTERFACE AX_USE_ALSOFT=1)
-    set_target_properties(OpenAL alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
+    set_target_properties(OpenAL alsoft.excommon alsoft.common PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
 
     if(AX_USE_ALSOFT_STATIC)
       target_compile_definitions(3rdparty INTERFACE AL_LIBTYPE_STATIC=1)
