@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include "platform/StdC.h"
 
 #ifndef AXASSERT
-#    if _AX_DEBUG > 0
+#    if defined(_AX_DEBUG) && _AX_DEBUG > 0
 #        if AX_ENABLE_SCRIPT_BINDING
 extern bool AX_DLL ax_assert_script_compatible(const char* msg);
 #            define AXASSERT(cond, msg)                                 \

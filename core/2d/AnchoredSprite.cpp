@@ -126,7 +126,7 @@ AnchoredSprite* AnchoredSprite::createWithSpriteFrameName(std::string_view sprit
 {
     SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
 
-#if _AX_DEBUG > 0
+#if defined(_AX_DEBUG) && _AX_DEBUG > 0
     char msg[256] = {0};
     snprintf(msg, sizeof(msg), "Invalid spriteFrameName: %s", spriteFrameName.data());
     AXASSERT(frame != nullptr, msg);
