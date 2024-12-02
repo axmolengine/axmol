@@ -100,6 +100,7 @@ include(GNUInstallDirs)
 find_package(PkgConfig)
 find_package(SDL2 QUIET)
 
+# add_subdirectory(fmt-11.0.2 EXCLUDE_FROM_ALL)
 
 option(ALSOFT_DLOPEN  "Check for the dlopen API for loading optional libs"  ON)
 
@@ -181,7 +182,7 @@ if(NOT LIBTYPE)
 endif()
 
 set(LIB_MAJOR_VERSION "1")
-set(LIB_MINOR_VERSION "23")
+set(LIB_MINOR_VERSION "24")
 set(LIB_REVISION "1")
 set(LIB_VERSION "${LIB_MAJOR_VERSION}.${LIB_MINOR_VERSION}.${LIB_REVISION}")
 set(LIB_VERSION_NUM ${LIB_MAJOR_VERSION},${LIB_MINOR_VERSION},${LIB_REVISION},0)
@@ -201,31 +202,6 @@ int main()
 HAVE_STDC_FORMAT_MACROS)
 if(NOT HAVE_STDC_FORMAT_MACROS)
     set(CPP_DEFS ${CPP_DEFS} __STDC_FORMAT_MACROS)
-endif()
-
-if(NOT WIN32)
-    # Check if _POSIX_C_SOURCE and _XOPEN_SOURCE needs to be set for POSIX functions
-    check_symbol_exists(posix_memalign stdlib.h HAVE_POSIX_MEMALIGN_DEFAULT)
-    if(NOT HAVE_POSIX_MEMALIGN_DEFAULT)
-        set(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
-        set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE=600")
-        check_symbol_exists(posix_memalign stdlib.h HAVE_POSIX_MEMALIGN_POSIX)
-        if(NOT HAVE_POSIX_MEMALIGN_POSIX)
-            set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-        else()
-            set(CPP_DEFS ${CPP_DEFS} _POSIX_C_SOURCE=200112L _XOPEN_SOURCE=600)
-        endif()
-    endif()
-    unset(OLD_REQUIRED_FLAGS)
-endif()
-
-# C99 has restrict, but C++ does not, so we can only utilize __restrict.
-check_cxx_source_compiles("int *__restrict foo;
-int main() { return 0; }" HAVE___RESTRICT)
-if(HAVE___RESTRICT)
-    set(CPP_DEFS ${CPP_DEFS} RESTRICT=__restrict)
-else()
-    set(CPP_DEFS ${CPP_DEFS} "RESTRICT=")
 endif()
 
 # Some systems may need libatomic for atomic functions to work
@@ -252,12 +228,18 @@ if(ANDROID)
 endif()
 
 if(MSVC)
-    set(CPP_DEFS ${CPP_DEFS} _CRT_SECURE_NO_WARNINGS)
+    # NOTE: _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR is temporary. When building on
+    # VS 2022 17.10 or newer, but using an older runtime, mutexes can crash
+    # when locked. Ideally the runtime should be updated on the system, but
+    # until the update becomes more widespread, this helps avoid some pain
+    # points.
+    set(CPP_DEFS ${CPP_DEFS} _CRT_SECURE_NO_WARNINGS _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
     check_cxx_compiler_flag(/permissive- HAVE_PERMISSIVE_SWITCH)
     if(HAVE_PERMISSIVE_SWITCH)
         set(C_FLAGS ${C_FLAGS} $<$<COMPILE_LANGUAGE:CXX>:/permissive->)
     endif()
-    set(C_FLAGS ${C_FLAGS} /W4 /w14640 /wd4065 /wd4127 /wd4268 /wd4324 /wd5030 /wd5051)
+    set(C_FLAGS ${C_FLAGS} /W4 /w14640 /wd4065 /wd4127 /wd4268 /wd4324 /wd5030 /wd5051
+        $<$<COMPILE_LANGUAGE:CXX>:/EHsc>)
 
     if(NOT DXSDK_DIR)
         string(REGEX REPLACE "\\\\" "/" DXSDK_DIR "$ENV{DXSDK_DIR}")
@@ -295,8 +277,15 @@ else()
         endif()
     endif()
 
+    check_cxx_compiler_flag(-Wno-interference-size HAVE_WNO_INTERFERENCE_SIZE)
+    if(HAVE_WNO_INTERFERENCE_SIZE)
+        set(C_FLAGS ${C_FLAGS} $<$<COMPILE_LANGUAGE:CXX>:-Wno-interference-size>)
+    endif()
+
     if(ALSOFT_WERROR)
         set(C_FLAGS ${C_FLAGS} -Werror)
+    # else()
+    #     set(C_FLAGS ${C_FLAGS} -Werror=undef)
     endif()
 
     check_c_compiler_flag(-fno-math-errno HAVE_FNO_MATH_ERRNO)
@@ -321,7 +310,7 @@ else()
     option(ALSOFT_STATIC_STDCXX "Static link libstdc++" OFF)
     if(ALSOFT_STATIC_STDCXX)
         set(OLD_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES})
-        set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} "-Wl,--push-state,-Bstatic,-lstdc++,--pop-state")
+        set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} "-static-libstdc++")
         check_cxx_source_compiles("int main() { }" HAVE_STATIC_LIBSTDCXX_SWITCH)
         set(CMAKE_REQUIRED_LIBRARIES ${OLD_REQUIRED_LIBRARIES})
         unset(OLD_REQUIRED_LIBRARIES)
@@ -329,14 +318,14 @@ else()
         if(NOT HAVE_STATIC_LIBSTDCXX_SWITCH)
             message(FATAL_ERROR "Cannot static link libstdc++")
         endif()
-        set(LINKER_FLAGS ${LINKER_FLAGS} "-Wl,--push-state,-Bstatic,-lstdc++,--pop-state")
+        set(LINKER_FLAGS ${LINKER_FLAGS} "-static-libstdc++")
     endif()
 
     if(WIN32)
         option(ALSOFT_STATIC_WINPTHREAD "Static link libwinpthread" OFF)
         if(ALSOFT_STATIC_WINPTHREAD)
             set(OLD_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES})
-            set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} "-Wl,--push-state,-Bstatic,-lwinpthread,--pop-state")
+            set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} "-Wl,--push-state,-Bstatic,-lstdc++,-lwinpthread,--pop-state")
             check_cxx_source_compiles("int main() { }" HAVE_STATIC_LIBWINPTHREAD_SWITCH)
             set(CMAKE_REQUIRED_LIBRARIES ${OLD_REQUIRED_LIBRARIES})
             unset(OLD_REQUIRED_LIBRARIES)
@@ -344,7 +333,7 @@ else()
             if(NOT HAVE_STATIC_LIBWINPTHREAD_SWITCH)
                 message(FATAL_ERROR "Cannot static link libwinpthread")
             endif()
-            set(LINKER_FLAGS ${LINKER_FLAGS} "-Wl,--push-state,-Bstatic,-lwinpthread,--pop-state")
+            set(LINKER_FLAGS ${LINKER_FLAGS} "-Wl,--push-state,-Bstatic,-lstdc++,-lwinpthread,--pop-state")
         endif()
     endif()
 endif()
@@ -412,7 +401,7 @@ if(ALSOFT_CPUEXT_SSE AND HAVE_XMMINTRIN_H)
     set(HAVE_SSE 1)
 endif()
 if(ALSOFT_REQUIRE_SSE AND NOT HAVE_SSE)
-    message(FATAL_ERROR "Failed to enabled required SSE CPU extensions")
+    message(FATAL_ERROR "Failed to enable required SSE CPU extensions")
 endif()
 
 option(ALSOFT_CPUEXT_SSE2 "Enable SSE2 support" ON)
@@ -457,7 +446,7 @@ if(ALSOFT_CPUEXT_NEON AND HAVE_ARM_NEON_H)
     endif()
 endif()
 if(ALSOFT_REQUIRE_NEON AND NOT HAVE_NEON)
-    message(FATAL_ERROR "Failed to enabled required ARM NEON CPU extensions")
+    message(FATAL_ERROR "Failed to enable required ARM NEON CPU extensions")
 endif()
 
 
@@ -504,13 +493,9 @@ if(HAVE_SSE2)
 endif()
 
 
-check_include_file(malloc.h HAVE_MALLOC_H)
 check_include_file(cpuid.h HAVE_CPUID_H)
 check_include_file(intrin.h HAVE_INTRIN_H)
 check_include_file(guiddef.h HAVE_GUIDDEF_H)
-if(NOT HAVE_GUIDDEF_H)
-    check_include_file(initguid.h HAVE_INITGUID_H)
-endif()
 
 # Some systems need libm for some math functions to work
 set(MATH_LIB )
@@ -557,8 +542,6 @@ if(HAVE_INTRIN_H)
         }" HAVE_CPUID_INTRINSIC)
 endif()
 
-check_symbol_exists(posix_memalign   stdlib.h HAVE_POSIX_MEMALIGN)
-check_symbol_exists(_aligned_malloc  malloc.h HAVE__ALIGNED_MALLOC)
 check_symbol_exists(proc_pidpath     libproc.h HAVE_PROC_PIDPATH)
 
 if(NOT WIN32)
@@ -593,19 +576,15 @@ if(NOT WIN32)
     endif()
 endif()
 
-check_symbol_exists(getopt unistd.h HAVE_GETOPT)
-
 
 # Common sources used by both the OpenAL implementation library, the OpenAL
 # router, and certain tools and examples.
 set(COMMON_OBJS
+    common/alassert.cpp
+    common/alassert.h
     common/albit.h
     common/alcomplex.cpp
     common/alcomplex.h
-    common/aldeque.h
-    common/alfstream.cpp
-    common/alfstream.h
-    common/almalloc.cpp
     common/almalloc.h
     common/alnumbers.h
     common/alnumeric.h
@@ -616,13 +595,17 @@ set(COMMON_OBJS
     common/alstring.h
     common/althrd_setname.cpp
     common/althrd_setname.h
+    common/althreads.h
     common/altraits.h
     common/atomic.h
     common/comptr.h
     common/dynload.cpp
     common/dynload.h
+    common/flexarray.h
     common/intrusive_ptr.h
     common/opthelpers.h
+    common/pffft.cpp
+    common/pffft.h
     common/phase_shifter.h
     common/polyphase_resampler.cpp
     common/polyphase_resampler.h
@@ -691,6 +674,8 @@ set(CORE_OBJS
     core/mixer.cpp
     core/mixer.h
     core/resampler_limits.h
+    core/storage_formats.cpp
+    core/storage_formats.h
     core/uhjfilter.cpp
     core/uhjfilter.h
     core/uiddefs.cpp
@@ -737,7 +722,7 @@ if(NOT WIN32)
     endif()
 endif()
 if(ALSOFT_REQUIRE_RTKIT AND NOT HAVE_RTKIT)
-    message(FATAL_ERROR "Failed to enabled required RTKit support")
+    message(FATAL_ERROR "Failed to enable required RTKit support")
 endif()
 
 # Default mixers, always available
@@ -775,6 +760,7 @@ set(OPENAL_OBJS
     al/effects/reverb.cpp
     al/effects/vmorpher.cpp
     al/error.cpp
+    al/error.h
     al/event.cpp
     al/event.h
     al/extension.cpp
@@ -876,6 +862,7 @@ set(HAVE_PULSEAUDIO 0)
 set(HAVE_COREAUDIO  0)
 set(HAVE_OPENSL     0)
 set(HAVE_OBOE       0)
+set(HAVE_OTHERIO    0)
 set(HAVE_WAVE       0)
 set(HAVE_SDL2       0)
 
@@ -915,7 +902,7 @@ if(ALSOFT_BACKEND_PIPEWIRE AND PkgConfig_FOUND)
     endif()
 endif()
 if(ALSOFT_REQUIRE_PIPEWIRE AND NOT HAVE_PIPEWIRE)
-    message(FATAL_ERROR "Failed to enabled required PipeWire backend")
+    message(FATAL_ERROR "Failed to enable required PipeWire backend")
 endif()
 
 # Check PulseAudio backend
@@ -932,7 +919,7 @@ if(ALSOFT_BACKEND_PULSEAUDIO)
     endif()
 endif()
 if(ALSOFT_REQUIRE_PULSEAUDIO AND NOT HAVE_PULSEAUDIO)
-    message(FATAL_ERROR "Failed to enabled required PulseAudio backend")
+    message(FATAL_ERROR "Failed to enable required PulseAudio backend")
 endif()
 
 if(NOT WIN32)
@@ -979,31 +966,35 @@ if(NOT WIN32)
         endif()
     endif()
 
-    # Check SndIO backend
-    option(ALSOFT_BACKEND_SNDIO "Enable SndIO backend" ON)
+    # Check SndIO backend (disabled by default on non-BSDs)
+    if(BSD)
+        option(ALSOFT_BACKEND_SNDIO "Enable SndIO backend" ON)
+    else()
+        option(ALSOFT_BACKEND_SNDIO "Enable SndIO backend" OFF)
+    endif()
     option(ALSOFT_REQUIRE_SNDIO "Require SndIO backend" OFF)
     if(ALSOFT_BACKEND_SNDIO)
-        find_package(SoundIO)
-        if(SOUNDIO_FOUND)
+        find_package(SndIO)
+        if(SNDIO_FOUND)
             set(HAVE_SNDIO 1)
             set(BACKENDS  "${BACKENDS} SndIO (linked),")
             set(ALC_OBJS  ${ALC_OBJS} alc/backends/sndio.cpp alc/backends/sndio.h)
-            set(EXTRA_LIBS ${SOUNDIO_LIBRARIES} ${EXTRA_LIBS})
-            set(INC_PATHS ${INC_PATHS} ${SOUNDIO_INCLUDE_DIRS})
+            set(EXTRA_LIBS ${SNDIO_LIBRARIES} ${EXTRA_LIBS})
+            set(INC_PATHS ${INC_PATHS} ${SNDIO_INCLUDE_DIRS})
         endif()
     endif()
 endif()
 if(ALSOFT_REQUIRE_ALSA AND NOT HAVE_ALSA)
-    message(FATAL_ERROR "Failed to enabled required ALSA backend")
+    message(FATAL_ERROR "Failed to enable required ALSA backend")
 endif()
 if(ALSOFT_REQUIRE_OSS AND NOT HAVE_OSS)
-    message(FATAL_ERROR "Failed to enabled required OSS backend")
+    message(FATAL_ERROR "Failed to enable required OSS backend")
 endif()
 if(ALSOFT_REQUIRE_SOLARIS AND NOT HAVE_SOLARIS)
-    message(FATAL_ERROR "Failed to enabled required Solaris backend")
+    message(FATAL_ERROR "Failed to enable required Solaris backend")
 endif()
 if(ALSOFT_REQUIRE_SNDIO AND NOT HAVE_SNDIO)
-    message(FATAL_ERROR "Failed to enabled required SndIO backend")
+    message(FATAL_ERROR "Failed to enable required SndIO backend")
 endif()
 
 # Check Windows-only backends
@@ -1054,17 +1045,32 @@ if(WIN32)
             set(HAVE_WASAPI 1)
             set(BACKENDS  "${BACKENDS} WASAPI,")
             set(ALC_OBJS  ${ALC_OBJS} alc/backends/wasapi.cpp alc/backends/wasapi.h)
+
+            if(NOT ALSOFT_UWP)
+                set(EXTRA_LIBS avrt ${EXTRA_LIBS})
+            endif()
         endif()
+    endif()
+
+    option(ALSOFT_BACKEND_OTHERIO "Enable OtherIO backend" OFF)
+    option(ALSOFT_REQUIRE_OTHERIO "Require OtherIO backend" OFF)
+    if(ALSOFT_BACKEND_OTHERIO)
+        set(HAVE_OTHERIO 1)
+        set(BACKENDS  "${BACKENDS} OtherIO,")
+        set(ALC_OBJS  ${ALC_OBJS} alc/backends/otherio.cpp alc/backends/otherio.h)
     endif()
 endif()
 if(ALSOFT_REQUIRE_WINMM AND NOT HAVE_WINMM)
-    message(FATAL_ERROR "Failed to enabled required WinMM backend")
+    message(FATAL_ERROR "Failed to enable required WinMM backend")
 endif()
 if(ALSOFT_REQUIRE_DSOUND AND NOT HAVE_DSOUND)
-    message(FATAL_ERROR "Failed to enabled required DSound backend")
+    message(FATAL_ERROR "Failed to enable required DSound backend")
 endif()
 if(ALSOFT_REQUIRE_WASAPI AND NOT HAVE_WASAPI)
-    message(FATAL_ERROR "Failed to enabled required WASAPI backend")
+    message(FATAL_ERROR "Failed to enable required WASAPI backend")
+endif()
+if(ALSOFT_REQUIRE_OTHERIO AND NOT HAVE_OTHERIO)
+    message(FATAL_ERROR "Failed to enable required OtherIO backend")
 endif()
 
 # Check JACK backend
@@ -1081,7 +1087,7 @@ if(ALSOFT_BACKEND_JACK)
     endif()
 endif()
 if(ALSOFT_REQUIRE_JACK AND NOT HAVE_JACK)
-    message(FATAL_ERROR "Failed to enabled required JACK backend")
+    message(FATAL_ERROR "Failed to enable required JACK backend")
 endif()
 
 # Check CoreAudio backend
@@ -1116,7 +1122,7 @@ if(ALSOFT_BACKEND_COREAUDIO)
     endif()
 endif()
 if(ALSOFT_REQUIRE_COREAUDIO AND NOT HAVE_COREAUDIO)
-    message(FATAL_ERROR "Failed to enabled required CoreAudio backend")
+    message(FATAL_ERROR "Failed to enable required CoreAudio backend")
 endif()
 
 # Check for Oboe (Android) backend
@@ -1127,7 +1133,7 @@ if(ALSOFT_BACKEND_OBOE)
     if(ANDROID)
         set(OBOE_SOURCE "" CACHE STRING "Source directory for Oboe.")
         if(OBOE_SOURCE)
-            add_subdirectory(${OBOE_SOURCE} ./oboe)
+            add_subdirectory(${OBOE_SOURCE} ./oboe EXCLUDE_FROM_ALL)
             set(OBOE_TARGET oboe)
         else()
             find_package(oboe CONFIG)
@@ -1148,7 +1154,7 @@ if(ALSOFT_BACKEND_OBOE)
     endif()
 endif()
 if(ALSOFT_REQUIRE_OBOE AND NOT HAVE_OBOE)
-    message(FATAL_ERROR "Failed to enabled required Oboe backend")
+    message(FATAL_ERROR "Failed to enable required Oboe backend")
 endif()
 
 # Check for OpenSL (Android) backend
@@ -1165,7 +1171,7 @@ if(ALSOFT_BACKEND_OPENSL)
     endif()
 endif()
 if(ALSOFT_REQUIRE_OPENSL AND NOT HAVE_OPENSL)
-    message(FATAL_ERROR "Failed to enabled required OpenSL backend")
+    message(FATAL_ERROR "Failed to enable required OpenSL backend")
 endif()
 
 # Check PortAudio backend
@@ -1182,7 +1188,7 @@ if(ALSOFT_BACKEND_PORTAUDIO)
     endif()
 endif()
 if(ALSOFT_REQUIRE_PORTAUDIO AND NOT HAVE_PORTAUDIO)
-    message(FATAL_ERROR "Failed to enabled required PortAudio backend")
+    message(FATAL_ERROR "Failed to enable required PortAudio backend")
 endif()
 
 # Check for SDL2 backend
@@ -1199,8 +1205,8 @@ if(ALSOFT_BACKEND_SDL2)
         message(STATUS "Could NOT find SDL2")
     endif()
 endif()
-if(ALSOFT_REQUIRE_SDL2 AND NOT SDL2_FOUND)
-    message(FATAL_ERROR "Failed to enabled required SDL2 backend")
+if(ALSOFT_REQUIRE_SDL2 AND NOT HAVE_SDL2)
+    message(FATAL_ERROR "Failed to enable required SDL2 backend")
 endif()
 
 # Optionally enable the Wave Writer backend
@@ -1241,7 +1247,7 @@ if(ALSOFT_UPDATE_BUILD_VERSION AND GIT_FOUND AND EXISTS "${OpenAL_SOURCE_DIR}/.g
         VERBATIM
     )
 
-    add_custom_target(build_version DEPENDS "${OpenAL_BINARY_DIR}/version_witness.txt")
+    add_custom_target(alsoft.build_version DEPENDS "${OpenAL_BINARY_DIR}/version_witness.txt")
 else()
     set(GIT_BRANCH "UNKNOWN")
     set(GIT_COMMIT_HASH "unknown")
@@ -1323,20 +1329,43 @@ configure_file(
     "${OpenAL_SOURCE_DIR}/config.h.in"
     "${OpenAL_BINARY_DIR}/config.h")
 configure_file(
+    "${OpenAL_SOURCE_DIR}/config_backends.h.in"
+    "${OpenAL_BINARY_DIR}/config_backends.h")
+configure_file(
+    "${OpenAL_SOURCE_DIR}/config_simd.h.in"
+    "${OpenAL_BINARY_DIR}/config_simd.h")
+configure_file(
     "${OpenAL_SOURCE_DIR}/openal.pc.in"
     "${OpenAL_BINARY_DIR}/openal.pc"
     @ONLY)
 
 
-add_library(alcommon STATIC EXCLUDE_FROM_ALL ${COMMON_OBJS})
-target_include_directories(alcommon PRIVATE ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/include)
-target_compile_definitions(alcommon PRIVATE ${CPP_DEFS})
-target_compile_options(alcommon PRIVATE ${C_FLAGS})
-set_target_properties(alcommon PROPERTIES ${DEFAULT_TARGET_PROPS} POSITION_INDEPENDENT_CODE TRUE)
+add_library(alsoft.common STATIC EXCLUDE_FROM_ALL ${COMMON_OBJS})
+target_include_directories(alsoft.common PRIVATE ${OpenAL_SOURCE_DIR}/include
+    PUBLIC ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/common)
+target_compile_definitions(alsoft.common PRIVATE ${CPP_DEFS})
+target_compile_options(alsoft.common PRIVATE ${C_FLAGS})
+set_target_properties(alsoft.common PROPERTIES ${DEFAULT_TARGET_PROPS} POSITION_INDEPENDENT_CODE TRUE)
 
 
 unset(HAS_ROUTER)
 set(IMPL_TARGET OpenAL) # Either OpenAL or soft_oal.
+
+
+set(NEED_ANALYZE_SOURCE_FILES "")
+foreach(obj ${CORE_OBJS} ${OPENAL_OBJS} ${ALC_OBJS} ${COMMON_OBJS})
+    IF (NOT ${obj} MATCHES "${CMAKE_BINARY_DIR}/default_hrtf.txt")
+        list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${obj}")
+    endif()
+endforeach()
+IF (ALSOFT_UTILS)
+    list(APPEND NEED_ANALYZE_SOURCE_FILES "${CMAKE_SOURCE_DIR}/utils/openal-info.c")
+endif()
+SET(CLANG_TIDY_EXECUTABLE "clang-tidy")
+if(DEFINED ENV{CLANG_TIDY_EXECUTABLE})
+    SET(CLANG_TIDY_EXECUTABLE $ENV{CLANG_TIDY_EXECUTABLE})
+endif()
+add_custom_target(clang-tidy-check ${CLANG_TIDY_EXECUTABLE} -format-style=file -p ${CMAKE_BINARY_DIR}/compile_commands.json ${NEED_ANALYZE_SOURCE_FILES} DEPENDS ${NEED_ANALYZE_SOURCE_FILES})
 
 # Build main library
 if(LIBTYPE STREQUAL "STATIC")
@@ -1367,7 +1396,7 @@ else()
             PRIVATE AL_BUILD_LIBRARY AL_ALEXT_PROTOTYPES "ALC_API=${EXPORT_DECL}"
             "AL_API=${EXPORT_DECL}" ${CPP_DEFS})
         target_compile_options(OpenAL PRIVATE ${C_FLAGS})
-        target_link_libraries(OpenAL PRIVATE alcommon ${LINKER_FLAGS})
+        target_link_libraries(OpenAL PRIVATE alsoft.common ${LINKER_FLAGS})
         target_include_directories(OpenAL
           PUBLIC
             $<BUILD_INTERFACE:${OpenAL_SOURCE_DIR}/include>
@@ -1378,8 +1407,8 @@ else()
         )
         set_target_properties(OpenAL PROPERTIES ${DEFAULT_TARGET_PROPS} PREFIX ""
             OUTPUT_NAME ${LIBNAME})
-        if(TARGET build_version)
-            add_dependencies(OpenAL build_version)
+        if(TARGET alsoft.build_version)
+            add_dependencies(OpenAL alsoft.build_version)
         endif()
         set(HAS_ROUTER 1)
 
@@ -1398,24 +1427,30 @@ else()
     if(WIN32)
         set_target_properties(${IMPL_TARGET} PROPERTIES PREFIX "")
     endif()
-    target_link_libraries(${IMPL_TARGET} PRIVATE alcommon ${LINKER_FLAGS} ${EXTRA_LIBS} ${MATH_LIB})
+    target_link_libraries(${IMPL_TARGET} PRIVATE alsoft.common ${LINKER_FLAGS} ${EXTRA_LIBS}
+        ${MATH_LIB})
 
     if(ALSOFT_UWP)
-        set(ALSOFT_CPPWINRT_VERSION "2.0.230706.1" CACHE STRING "The soft-oal default cppwinrt version")
-        
-        find_program(NUGET_EXE NAMES nuget)
-        if(NOT NUGET_EXE)
-            message("NUGET.EXE not found.")
-            message(FATAL_ERROR "Please install this executable, and run CMake again.")
+        find_package(cppwinrt CONFIG)
+        if (TARGET Microsoft::CppWinRT)
+            target_link_libraries(${IMPL_TARGET} PRIVATE Microsoft::CppWinRT)
+        else()
+            set(ALSOFT_CPPWINRT_VERSION "2.0.230706.1" CACHE STRING "The soft-oal default cppwinrt version")
+
+            find_program(NUGET_EXE NAMES nuget)
+            if(NOT NUGET_EXE)
+                message("NUGET.EXE not found.")
+                message(FATAL_ERROR "Please install this executable, and run CMake again.")
+            endif()
+
+            exec_program(${NUGET_EXE}
+                ARGS install "Microsoft.Windows.CppWinRT" -Version ${ALSOFT_CPPWINRT_VERSION} -ExcludeVersion -OutputDirectory "\"${CMAKE_BINARY_DIR}/packages\"")
+
+            set_target_properties(${IMPL_TARGET} PROPERTIES
+                VS_PROJECT_IMPORT ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.props
+            )
+            target_link_libraries(${IMPL_TARGET} PRIVATE ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.targets)
         endif()
-
-        exec_program(${NUGET_EXE}
-            ARGS install "Microsoft.Windows.CppWinRT" -Version ${ALSOFT_CPPWINRT_VERSION} -ExcludeVersion -OutputDirectory "\"${CMAKE_BINARY_DIR}/packages\"")
-
-        set_target_properties(${IMPL_TARGET} PROPERTIES
-            VS_PROJECT_IMPORT ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.props
-        )
-        target_link_libraries(${IMPL_TARGET} PRIVATE ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.targets)
     endif()
 
     if(NOT WIN32 AND NOT APPLE)
@@ -1480,12 +1515,12 @@ set_target_properties(${IMPL_TARGET} PROPERTIES ${DEFAULT_TARGET_PROPS}
     SOVERSION ${LIB_MAJOR_VERSION}
 )
 target_compile_definitions(${IMPL_TARGET}
-    PRIVATE AL_BUILD_LIBRARY AL_ALEXT_PROTOTYPES "ALC_API=${EXPORT_DECL}" "AL_API=${EXPORT_DECL}"
+    PRIVATE AL_BUILD_LIBRARY AL_ALEXT_PROTOTYPES  "ALC_API=${EXPORT_DECL}" "AL_API=${EXPORT_DECL}"
     ${CPP_DEFS})
 target_compile_options(${IMPL_TARGET} PRIVATE ${C_FLAGS})
 
-if(TARGET build_version)
-    add_dependencies(${IMPL_TARGET} build_version)
+if(TARGET alsoft.build_version)
+    add_dependencies(${IMPL_TARGET} alsoft.build_version)
 endif()
 
 if(WIN32 AND MINGW AND ALSOFT_BUILD_IMPORT_LIB AND NOT LIBTYPE STREQUAL "STATIC")
@@ -1499,7 +1534,7 @@ if(WIN32 AND MINGW AND ALSOFT_BUILD_IMPORT_LIB AND NOT LIBTYPE STREQUAL "STATIC"
             message(STATUS "WARNING: Cannot find dlltool, disabling .def/.lib generation")
         endif()
     else()
-        target_link_options(OpenAL PRIVATE "-Wl,--output-def,OpenAL32.def")
+        target_link_options(OpenAL PRIVATE "-Wl,--output-def,${PROJECT_BINARY_DIR}/OpenAL32.def")
         add_custom_command(TARGET OpenAL POST_BUILD
             COMMAND "${SED_EXECUTABLE}" -i -e "s/ @[^ ]*//" OpenAL32.def
             COMMAND "${CMAKE_DLLTOOL}" -d OpenAL32.def -l OpenAL32.lib -D OpenAL32.dll
@@ -1619,8 +1654,8 @@ if(ALSOFT_UTILS)
         target_include_directories(uhjdecoder
             PRIVATE ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/common)
         target_compile_options(uhjdecoder PRIVATE ${C_FLAGS})
-        target_link_libraries(uhjdecoder PUBLIC alcommon
-            PRIVATE ${LINKER_FLAGS} SndFile::SndFile ${UNICODE_FLAG})
+        target_link_libraries(uhjdecoder PUBLIC alsoft.common
+            PRIVATE ${LINKER_FLAGS} SndFile::SndFile ${UNICODE_FLAG} alsoft::fmt)
         set_target_properties(uhjdecoder PROPERTIES ${DEFAULT_TARGET_PROPS})
 
         add_executable(uhjencoder utils/uhjencoder.cpp)
@@ -1628,8 +1663,8 @@ if(ALSOFT_UTILS)
         target_include_directories(uhjencoder
             PRIVATE ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/common)
         target_compile_options(uhjencoder PRIVATE ${C_FLAGS})
-        target_link_libraries(uhjencoder PUBLIC alcommon
-            PRIVATE ${LINKER_FLAGS} SndFile::SndFile ${UNICODE_FLAG})
+        target_link_libraries(uhjencoder PUBLIC alsoft.common
+            PRIVATE ${LINKER_FLAGS} SndFile::SndFile ${UNICODE_FLAG} alsoft::fmt)
         set_target_properties(uhjencoder PROPERTIES ${DEFAULT_TARGET_PROPS})
     endif()
 
@@ -1637,12 +1672,13 @@ if(ALSOFT_UTILS)
         set(SOFA_SUPPORT_SRCS
             utils/sofa-support.cpp
             utils/sofa-support.h)
-        add_library(sofa-support STATIC EXCLUDE_FROM_ALL ${SOFA_SUPPORT_SRCS})
-        target_compile_definitions(sofa-support PRIVATE ${CPP_DEFS})
-        target_include_directories(sofa-support PUBLIC ${OpenAL_SOURCE_DIR}/common)
-        target_compile_options(sofa-support PRIVATE ${C_FLAGS})
-        target_link_libraries(sofa-support PUBLIC alcommon MySOFA::MySOFA PRIVATE ${LINKER_FLAGS})
-        set_target_properties(sofa-support PROPERTIES ${DEFAULT_TARGET_PROPS})
+        add_library(alsoft.sofa-support STATIC EXCLUDE_FROM_ALL ${SOFA_SUPPORT_SRCS})
+        target_compile_definitions(alsoft.sofa-support PRIVATE ${CPP_DEFS})
+        target_include_directories(alsoft.sofa-support PUBLIC ${OpenAL_SOURCE_DIR}/common)
+        target_compile_options(alsoft.sofa-support PRIVATE ${C_FLAGS})
+        target_link_libraries(alsoft.sofa-support PUBLIC alsoft.common MySOFA::MySOFA
+            PRIVATE ${LINKER_FLAGS} alsoft::fmt)
+        set_target_properties(alsoft.sofa-support PROPERTIES ${DEFAULT_TARGET_PROPS})
 
         set(MAKEMHR_SRCS
             utils/makemhr/loaddef.cpp
@@ -1651,15 +1687,13 @@ if(ALSOFT_UTILS)
             utils/makemhr/loadsofa.h
             utils/makemhr/makemhr.cpp
             utils/makemhr/makemhr.h)
-        if(NOT HAVE_GETOPT)
-            set(MAKEMHR_SRCS  ${MAKEMHR_SRCS} utils/getopt.c utils/getopt.h)
-        endif()
         add_executable(makemhr ${MAKEMHR_SRCS})
         target_compile_definitions(makemhr PRIVATE ${CPP_DEFS})
         target_include_directories(makemhr
             PRIVATE ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/utils)
         target_compile_options(makemhr PRIVATE ${C_FLAGS})
-        target_link_libraries(makemhr PRIVATE ${LINKER_FLAGS} sofa-support ${UNICODE_FLAG})
+        target_link_libraries(makemhr PRIVATE ${LINKER_FLAGS} alsoft.sofa-support ${UNICODE_FLAG}
+            alsoft::fmt)
         set_target_properties(makemhr PROPERTIES ${DEFAULT_TARGET_PROPS})
         if(ALSOFT_INSTALL_EXAMPLES)
             set(EXTRA_INSTALLS ${EXTRA_INSTALLS} makemhr)
@@ -1670,7 +1704,8 @@ if(ALSOFT_UTILS)
         target_compile_definitions(sofa-info PRIVATE ${CPP_DEFS})
         target_include_directories(sofa-info PRIVATE ${OpenAL_SOURCE_DIR}/utils)
         target_compile_options(sofa-info PRIVATE ${C_FLAGS})
-        target_link_libraries(sofa-info PRIVATE ${LINKER_FLAGS} sofa-support ${UNICODE_FLAG})
+        target_link_libraries(sofa-info PRIVATE ${LINKER_FLAGS} alsoft.sofa-support
+            ${UNICODE_FLAG} alsoft::fmt)
         set_target_properties(sofa-info PROPERTIES ${DEFAULT_TARGET_PROPS})
     endif()
     message(STATUS "Building utility programs")
@@ -1683,74 +1718,90 @@ endif()
 
 
 # Add a static library with common functions used by multiple example targets
-add_library(al-excommon STATIC EXCLUDE_FROM_ALL
+add_library(alsoft.excommon STATIC EXCLUDE_FROM_ALL
     examples/common/alhelpers.c
     examples/common/alhelpers.h)
-target_compile_definitions(al-excommon PUBLIC ${CPP_DEFS})
-target_include_directories(al-excommon PUBLIC ${OpenAL_SOURCE_DIR}/common)
-target_compile_options(al-excommon PUBLIC ${C_FLAGS})
-target_link_libraries(al-excommon PUBLIC OpenAL PRIVATE ${RT_LIB})
-set_target_properties(al-excommon PROPERTIES ${DEFAULT_TARGET_PROPS})
+target_compile_definitions(alsoft.excommon PUBLIC ${CPP_DEFS})
+target_include_directories(alsoft.excommon PUBLIC ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/common)
+target_compile_options(alsoft.excommon PUBLIC ${C_FLAGS})
+target_link_libraries(alsoft.excommon PUBLIC OpenAL PRIVATE ${RT_LIB})
+set_target_properties(alsoft.excommon PROPERTIES ${DEFAULT_TARGET_PROPS})
 
 if(ALSOFT_EXAMPLES)
     add_executable(altonegen examples/altonegen.c)
-    target_link_libraries(altonegen PRIVATE ${LINKER_FLAGS} ${MATH_LIB} al-excommon ${UNICODE_FLAG})
+    target_link_libraries(altonegen PRIVATE ${LINKER_FLAGS} ${MATH_LIB} alsoft.excommon
+        ${UNICODE_FLAG})
     set_target_properties(altonegen PROPERTIES ${DEFAULT_TARGET_PROPS})
 
     add_executable(alrecord examples/alrecord.c)
-    target_link_libraries(alrecord PRIVATE ${LINKER_FLAGS} al-excommon ${UNICODE_FLAG})
+    target_link_libraries(alrecord PRIVATE ${LINKER_FLAGS} alsoft.excommon ${UNICODE_FLAG})
     set_target_properties(alrecord PROPERTIES ${DEFAULT_TARGET_PROPS})
 
+    add_executable(aldebug examples/aldebug.cpp)
+    target_link_libraries(aldebug PRIVATE ${LINKER_FLAGS} alsoft.excommon ${UNICODE_FLAG}
+        alsoft::fmt)
+    set_target_properties(aldebug PROPERTIES ${DEFAULT_TARGET_PROPS})
+
+    add_executable(allafplay examples/allafplay.cpp)
+    target_link_libraries(allafplay PRIVATE ${LINKER_FLAGS} alsoft.common alsoft.excommon
+        ${UNICODE_FLAG} alsoft::fmt)
+    set_target_properties(allafplay PROPERTIES ${DEFAULT_TARGET_PROPS})
+
     if(ALSOFT_INSTALL_EXAMPLES)
-        set(EXTRA_INSTALLS ${EXTRA_INSTALLS} altonegen alrecord)
+        set(EXTRA_INSTALLS ${EXTRA_INSTALLS} altonegen alrecord aldebug allafplay)
     endif()
 
     message(STATUS "Building example programs")
 
     if(SNDFILE_FOUND)
         add_executable(alplay examples/alplay.c)
-        target_link_libraries(alplay PRIVATE ${LINKER_FLAGS} SndFile::SndFile al-excommon
+        target_link_libraries(alplay PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.excommon
             ${UNICODE_FLAG})
         set_target_properties(alplay PROPERTIES ${DEFAULT_TARGET_PROPS})
 
         add_executable(alstream examples/alstream.c)
-        target_link_libraries(alstream PRIVATE ${LINKER_FLAGS} SndFile::SndFile al-excommon
+        target_link_libraries(alstream PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.excommon
             ${UNICODE_FLAG})
         set_target_properties(alstream PROPERTIES ${DEFAULT_TARGET_PROPS})
 
         add_executable(alreverb examples/alreverb.c)
-        target_link_libraries(alreverb PRIVATE ${LINKER_FLAGS} SndFile::SndFile al-excommon
+        target_link_libraries(alreverb PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.excommon
             ${UNICODE_FLAG})
         set_target_properties(alreverb PROPERTIES ${DEFAULT_TARGET_PROPS})
 
         add_executable(almultireverb examples/almultireverb.c)
         target_link_libraries(almultireverb
-            PRIVATE ${LINKER_FLAGS} SndFile::SndFile al-excommon ${MATH_LIB} ${UNICODE_FLAG})
+            PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.excommon ${MATH_LIB} ${UNICODE_FLAG})
         set_target_properties(almultireverb PROPERTIES ${DEFAULT_TARGET_PROPS})
 
         add_executable(allatency examples/allatency.c)
-        target_link_libraries(allatency PRIVATE ${LINKER_FLAGS} SndFile::SndFile al-excommon
+        target_link_libraries(allatency PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.excommon
             ${UNICODE_FLAG})
         set_target_properties(allatency PROPERTIES ${DEFAULT_TARGET_PROPS})
 
         add_executable(alhrtf examples/alhrtf.c)
         target_link_libraries(alhrtf
-            PRIVATE ${LINKER_FLAGS} SndFile::SndFile al-excommon ${MATH_LIB} ${UNICODE_FLAG})
+            PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.excommon ${MATH_LIB} ${UNICODE_FLAG})
         set_target_properties(alhrtf PROPERTIES ${DEFAULT_TARGET_PROPS})
 
         add_executable(alstreamcb examples/alstreamcb.cpp)
-        target_link_libraries(alstreamcb PRIVATE ${LINKER_FLAGS} SndFile::SndFile al-excommon
-            ${UNICODE_FLAG})
+        target_link_libraries(alstreamcb PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.excommon
+            ${UNICODE_FLAG} alsoft::fmt)
         set_target_properties(alstreamcb PROPERTIES ${DEFAULT_TARGET_PROPS})
 
+        add_executable(aldirect examples/aldirect.cpp)
+        target_link_libraries(aldirect PRIVATE ${LINKER_FLAGS} SndFile::SndFile alsoft.excommon
+            ${UNICODE_FLAG} alsoft::fmt)
+        set_target_properties(aldirect PROPERTIES ${DEFAULT_TARGET_PROPS})
+
         add_executable(alconvolve examples/alconvolve.c)
-        target_link_libraries(alconvolve PRIVATE ${LINKER_FLAGS} alcommon SndFile::SndFile
-            al-excommon ${UNICODE_FLAG})
+        target_link_libraries(alconvolve PRIVATE ${LINKER_FLAGS} alsoft.common SndFile::SndFile
+            alsoft.excommon ${UNICODE_FLAG})
         set_target_properties(alconvolve PROPERTIES ${DEFAULT_TARGET_PROPS})
 
         if(ALSOFT_INSTALL_EXAMPLES)
             set(EXTRA_INSTALLS ${EXTRA_INSTALLS} alplay alstream alreverb almultireverb allatency
-                alhrtf)
+                alhrtf aldirect)
         endif()
 
         message(STATUS "Building SndFile example programs")
@@ -1759,7 +1810,7 @@ if(ALSOFT_EXAMPLES)
     if(SDL2_FOUND)
         add_executable(alloopback examples/alloopback.c)
         target_link_libraries(alloopback
-            PRIVATE ${LINKER_FLAGS} SDL2::SDL2 al-excommon ${MATH_LIB})
+            PRIVATE ${LINKER_FLAGS} SDL2::SDL2 alsoft.excommon ${MATH_LIB})
         set_target_properties(alloopback PROPERTIES ${DEFAULT_TARGET_PROPS})
 
         if(ALSOFT_INSTALL_EXAMPLES)
@@ -1796,7 +1847,7 @@ if(ALSOFT_EXAMPLES)
             add_executable(alffplay examples/alffplay.cpp)
             target_include_directories(alffplay PRIVATE ${FFMPEG_INCLUDE_DIRS})
             target_link_libraries(alffplay
-                PRIVATE ${LINKER_FLAGS} SDL2::SDL2 ${FFMPEG_LIBRARIES} al-excommon)
+                PRIVATE ${LINKER_FLAGS} SDL2::SDL2 ${FFMPEG_LIBRARIES} alsoft.excommon alsoft::fmt)
             set_target_properties(alffplay PROPERTIES ${DEFAULT_TARGET_PROPS})
 
             if(ALSOFT_INSTALL_EXAMPLES)

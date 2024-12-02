@@ -34,14 +34,12 @@ struct LoopbackBackend final : public BackendBase {
     bool reset() override;
     void start() override;
     void stop() override;
-
-    DEF_NEWDEL(LoopbackBackend)
 };
 
 
 void LoopbackBackend::open(std::string_view name)
 {
-    mDevice->DeviceName = name;
+    mDeviceName = name;
 }
 
 bool LoopbackBackend::reset()
@@ -65,8 +63,8 @@ bool LoopbackBackendFactory::init()
 bool LoopbackBackendFactory::querySupport(BackendType)
 { return true; }
 
-std::string LoopbackBackendFactory::probe(BackendType)
-{ return std::string{}; }
+auto LoopbackBackendFactory::enumerate(BackendType) -> std::vector<std::string>
+{ return {}; }
 
 BackendPtr LoopbackBackendFactory::createBackend(DeviceBase *device, BackendType)
 { return BackendPtr{new LoopbackBackend{device}}; }

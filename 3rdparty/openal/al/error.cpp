@@ -20,19 +20,22 @@
 
 #include "config.h"
 
+#include "error.h"
+
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
 
-#include <atomic>
 #include <csignal>
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <limits>
-#include <mutex>
+#include <optional>
+#include <string>
+#include <utility>
 #include <vector>
 
 #include "AL/al.h"
@@ -41,22 +44,30 @@
 #include "al/debug.h"
 #include "alc/alconfig.h"
 #include "alc/context.h"
-#include "almalloc.h"
-#include "alstring.h"
-#include "core/except.h"
 #include "core/logging.h"
-#include "direct_defs.h"
 #include "opthelpers.h"
 #include "strutils.h"
 
 
-bool TrapALError{false};
+namespace al {
+context_error::context_error(ALenum code, const char *msg, ...) : mErrorCode{code}
+{
+    /* NOLINTBEGIN(*-array-to-pointer-decay) */
+    std::va_list args;
+    va_start(args, msg);
+    setMessage(msg, args);
+    va_end(args);
+    /* NOLINTEND(*-array-to-pointer-decay) */
+}
+context_error::~context_error() = default;
+} /* namespace al */
 
 void ALCcontext::setError(ALenum errorCode, const char *msg, ...)
 {
     auto message = std::vector<char>(256);
 
-    va_list args, args2;
+    /* NOLINTBEGIN(*-array-to-pointer-decay) */
+    std::va_list args, args2;
     va_start(args, msg);
     va_copy(args2, args);
     int msglen{std::vsnprintf(message.data(), message.size(), msg, args)};
@@ -67,6 +78,7 @@ void ALCcontext::setError(ALenum errorCode, const char *msg, ...)
     }
     va_end(args2);
     va_end(args);
+    /* NOLINTEND(*-array-to-pointer-decay) */
 
     if(msglen >= 0)
         msg = message.data();
@@ -89,54 +101,55 @@ void ALCcontext::setError(ALenum errorCode, const char *msg, ...)
 #endif
     }
 
-    ALenum curerr{AL_NO_ERROR};
-    mLastError.compare_exchange_strong(curerr, errorCode);
+    if(mLastThreadError.get() == AL_NO_ERROR)
+        mLastThreadError.set(errorCode);
 
-    debugMessage(DebugSource::API, DebugType::Error, 0, DebugSeverity::High,
-        {msg, static_cast<uint>(msglen)});
+    debugMessage(DebugSource::API, DebugType::Error, static_cast<ALuint>(errorCode),
+        DebugSeverity::High, {msg, static_cast<uint>(msglen)});
 }
 
 /* Special-case alGetError since it (potentially) raises a debug signal and
  * returns a non-default value for a null context.
  */
-AL_API ALenum AL_APIENTRY alGetError(void) noexcept
+AL_API auto AL_APIENTRY alGetError() noexcept -> ALenum
 {
-    auto context = GetContextRef();
-    if(!context) UNLIKELY
+    if(auto context = GetContextRef()) LIKELY
+        return alGetErrorDirect(context.get());
+
+    auto get_value = [](const char *envname, const char *optname) -> ALenum
     {
-        static const ALenum deferror{[](const char *envname, const char *optname) -> ALenum
+        auto optstr = al::getenv(envname);
+        if(!optstr)
+            optstr = ConfigValueStr({}, "game_compat", optname);
+        if(optstr)
         {
-            auto optstr = al::getenv(envname);
-            if(!optstr)
-                optstr = ConfigValueStr(nullptr, "game_compat", optname);
-
-            if(optstr)
-            {
-                char *end{};
-                auto value = std::strtoul(optstr->c_str(), &end, 0);
-                if(end && *end == '\0' && value <= std::numeric_limits<ALenum>::max())
-                    return static_cast<ALenum>(value);
-                ERR("Invalid default error value: \"%s\"", optstr->c_str());
-            }
-            return AL_INVALID_OPERATION;
-        }("__ALSOFT_DEFAULT_ERROR", "default-error")};
-
-        WARN("Querying error state on null context (implicitly 0x%04x)\n", deferror);
-        if(TrapALError)
-        {
-#ifdef _WIN32
-            if(IsDebuggerPresent())
-                DebugBreak();
-#elif defined(SIGTRAP)
-            raise(SIGTRAP);
-#endif
+            char *end{};
+            auto value = std::strtoul(optstr->c_str(), &end, 0);
+            if(end && *end == '\0' && value <= std::numeric_limits<ALenum>::max())
+                return static_cast<ALenum>(value);
+            ERR("Invalid default error value: \"%s\"", optstr->c_str());
         }
-        return deferror;
+        return AL_INVALID_OPERATION;
+    };
+    static const ALenum deferror{get_value("__ALSOFT_DEFAULT_ERROR", "default-error")};
+
+    WARN("Querying error state on null context (implicitly 0x%04x)\n", deferror);
+    if(TrapALError)
+    {
+#ifdef _WIN32
+        if(IsDebuggerPresent())
+            DebugBreak();
+#elif defined(SIGTRAP)
+        raise(SIGTRAP);
+#endif
     }
-    return alGetErrorDirect(context.get());
+    return deferror;
 }
 
 FORCE_ALIGN ALenum AL_APIENTRY alGetErrorDirect(ALCcontext *context) noexcept
 {
-    return context->mLastError.exchange(AL_NO_ERROR);
+    ALenum ret{context->mLastThreadError.get()};
+    if(ret != AL_NO_ERROR) UNLIKELY
+        context->mLastThreadError.set(AL_NO_ERROR);
+    return ret;
 }

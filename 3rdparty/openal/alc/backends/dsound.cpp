@@ -35,18 +35,17 @@
 #include <algorithm>
 #include <atomic>
 #include <cassert>
+#include <cstdio>
+#include <cstdlib>
 #include <functional>
 #include <memory.h>
 #include <mutex>
-#include <stdlib.h>
-#include <stdio.h>
 #include <string>
 #include <thread>
 #include <vector>
 
-#include "albit.h"
-#include "alnumeric.h"
 #include "alspan.h"
+#include "alstring.h"
 #include "althrd_setname.h"
 #include "comptr.h"
 #include "core/device.h"
@@ -90,9 +89,6 @@ DEFINE_GUID(KSDATAFORMAT_SUBTYPE_IEEE_FLOAT, 0x00000003, 0x0000, 0x0010, 0x80, 0
 #endif
 
 namespace {
-
-#define DEVNAME_HEAD "OpenAL Soft on "
-
 
 #ifdef HAVE_DYNLOAD
 void *ds_handle;
@@ -147,7 +143,7 @@ BOOL CALLBACK DSoundEnumDevices(GUID *guid, const WCHAR *desc, const WCHAR*, voi
         return TRUE;
 
     auto& devices = *static_cast<std::vector<DevMap>*>(data);
-    const std::string basename{DEVNAME_HEAD + wstr_to_utf8(desc)};
+    const auto basename = wstr_to_utf8(desc);
 
     int count{1};
     std::string newname{basename};
@@ -191,8 +187,6 @@ struct DSoundPlayback final : public BackendBase {
 
     std::atomic<bool> mKillNow{true};
     std::thread mThread;
-
-    DEF_NEWDEL(DSoundPlayback)
 };
 
 DSoundPlayback::~DSoundPlayback()
@@ -211,7 +205,7 @@ DSoundPlayback::~DSoundPlayback()
 FORCE_ALIGN int DSoundPlayback::mixerProc()
 {
     SetRTPriority();
-    althrd_setname(MIXER_THREAD_NAME);
+    althrd_setname(GetMixerThreadName());
 
     DSBCAPS DSBCaps{};
     DSBCaps.dwSize = sizeof(DSBCaps);
@@ -307,12 +301,10 @@ void DSoundPlayback::open(std::string_view name)
     if(PlaybackDevices.empty())
     {
         /* Initialize COM to prevent name truncation */
-        HRESULT hrcom{CoInitialize(nullptr)};
+        ComWrapper com{};
         hr = DirectSoundEnumerateW(DSoundEnumDevices, &PlaybackDevices);
         if(FAILED(hr))
             ERR("Error enumerating DirectSound devices (0x%lx)!\n", hr);
-        if(SUCCEEDED(hrcom))
-            CoUninitialize();
     }
 
     const GUID *guid{nullptr};
@@ -334,8 +326,7 @@ void DSoundPlayback::open(std::string_view name)
                     [&id](const DevMap &entry) -> bool { return entry.guid == id; });
             if(iter == PlaybackDevices.cend())
                 throw al::backend_exception{al::backend_error::NoDevice,
-                    "Device name \"%.*s\" not found", static_cast<int>(name.length()),
-                    name.data()};
+                    "Device name \"%.*s\" not found", al::sizei(name), name.data()};
         }
         guid = &iter->guid;
     }
@@ -362,7 +353,7 @@ void DSoundPlayback::open(std::string_view name)
     mPrimaryBuffer = nullptr;
     mDS = std::move(ds);
 
-    mDevice->DeviceName = name;
+    mDeviceName = name;
 }
 
 bool DSoundPlayback::reset()
@@ -428,49 +419,53 @@ bool DSoundPlayback::reset()
     case DevFmtX51: OutputType.dwChannelMask = isRear51 ? X5DOT1REAR : X5DOT1; break;
     case DevFmtX61: OutputType.dwChannelMask = X6DOT1; break;
     case DevFmtX71: OutputType.dwChannelMask = X7DOT1; break;
+    case DevFmtX7144: mDevice->FmtChans = DevFmtX714;
+        /* fall-through */
     case DevFmtX714: OutputType.dwChannelMask = X7DOT1DOT4; break;
     case DevFmtX3D71: OutputType.dwChannelMask = X7DOT1; break;
     }
 
-retry_open:
-    hr = S_OK;
-    OutputType.Format.wFormatTag = WAVE_FORMAT_PCM;
-    OutputType.Format.nChannels = static_cast<WORD>(mDevice->channelsFromFmt());
-    OutputType.Format.wBitsPerSample = static_cast<WORD>(mDevice->bytesFromFmt() * 8);
-    OutputType.Format.nBlockAlign = static_cast<WORD>(OutputType.Format.nChannels *
-        OutputType.Format.wBitsPerSample / 8);
-    OutputType.Format.nSamplesPerSec = mDevice->Frequency;
-    OutputType.Format.nAvgBytesPerSec = OutputType.Format.nSamplesPerSec *
-        OutputType.Format.nBlockAlign;
-    OutputType.Format.cbSize = 0;
+    do {
+        hr = S_OK;
+        OutputType.Format.wFormatTag = WAVE_FORMAT_PCM;
+        OutputType.Format.nChannels = static_cast<WORD>(mDevice->channelsFromFmt());
+        OutputType.Format.wBitsPerSample = static_cast<WORD>(mDevice->bytesFromFmt() * 8);
+        OutputType.Format.nBlockAlign = static_cast<WORD>(OutputType.Format.nChannels *
+            OutputType.Format.wBitsPerSample / 8);
+        OutputType.Format.nSamplesPerSec = mDevice->Frequency;
+        OutputType.Format.nAvgBytesPerSec = OutputType.Format.nSamplesPerSec *
+            OutputType.Format.nBlockAlign;
+        OutputType.Format.cbSize = 0;
 
-    if(OutputType.Format.nChannels > 2 || mDevice->FmtType == DevFmtFloat)
-    {
-        OutputType.Format.wFormatTag = WAVE_FORMAT_EXTENSIBLE;
-        OutputType.Samples.wValidBitsPerSample = OutputType.Format.wBitsPerSample;
-        OutputType.Format.cbSize = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
-        if(mDevice->FmtType == DevFmtFloat)
-            OutputType.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
-        else
-            OutputType.SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
-
-        mPrimaryBuffer = nullptr;
-    }
-    else
-    {
-        if(SUCCEEDED(hr) && !mPrimaryBuffer)
+        if(OutputType.Format.nChannels > 2 || mDevice->FmtType == DevFmtFloat)
         {
-            DSBUFFERDESC DSBDescription{};
-            DSBDescription.dwSize = sizeof(DSBDescription);
-            DSBDescription.dwFlags = DSBCAPS_PRIMARYBUFFER;
-            hr = mDS->CreateSoundBuffer(&DSBDescription, al::out_ptr(mPrimaryBuffer), nullptr);
-        }
-        if(SUCCEEDED(hr))
-            hr = mPrimaryBuffer->SetFormat(&OutputType.Format);
-    }
+            OutputType.Format.wFormatTag = WAVE_FORMAT_EXTENSIBLE;
+            /* NOLINTNEXTLINE(cppcoreguidelines-pro-type-union-access) */
+            OutputType.Samples.wValidBitsPerSample = OutputType.Format.wBitsPerSample;
+            OutputType.Format.cbSize = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
+            if(mDevice->FmtType == DevFmtFloat)
+                OutputType.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
+            else
+                OutputType.SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
 
-    if(SUCCEEDED(hr))
-    {
+            mPrimaryBuffer = nullptr;
+        }
+        else
+        {
+            if(SUCCEEDED(hr) && !mPrimaryBuffer)
+            {
+                DSBUFFERDESC DSBDescription{};
+                DSBDescription.dwSize = sizeof(DSBDescription);
+                DSBDescription.dwFlags = DSBCAPS_PRIMARYBUFFER;
+                hr = mDS->CreateSoundBuffer(&DSBDescription, al::out_ptr(mPrimaryBuffer), nullptr);
+            }
+            if(SUCCEEDED(hr))
+                hr = mPrimaryBuffer->SetFormat(&OutputType.Format);
+        }
+
+        if(FAILED(hr))
+            break;
+
         uint num_updates{mDevice->BufferSize / mDevice->UpdateSize};
         if(num_updates > MAX_UPDATES)
             num_updates = MAX_UPDATES;
@@ -484,12 +479,10 @@ retry_open:
         DSBDescription.lpwfxFormat = &OutputType.Format;
 
         hr = mDS->CreateSoundBuffer(&DSBDescription, al::out_ptr(mBuffer), nullptr);
-        if(FAILED(hr) && mDevice->FmtType == DevFmtFloat)
-        {
-            mDevice->FmtType = DevFmtShort;
-            goto retry_open;
-        }
-    }
+        if(SUCCEEDED(hr) || mDevice->FmtType != DevFmtFloat)
+            break;
+        mDevice->FmtType = DevFmtShort;
+    } while(FAILED(hr));
 
     if(SUCCEEDED(hr))
     {
@@ -499,7 +492,7 @@ retry_open:
             uint num_updates{mDevice->BufferSize / mDevice->UpdateSize};
             assert(num_updates <= MAX_UPDATES);
 
-            std::array<DSBPOSITIONNOTIFY,MAX_UPDATES> nots;
+            std::array<DSBPOSITIONNOTIFY,MAX_UPDATES> nots{};
             for(uint i{0};i < num_updates;++i)
             {
                 nots[i].dwOffset = i * mDevice->UpdateSize * OutputType.Format.nBlockAlign;
@@ -562,8 +555,6 @@ struct DSoundCapture final : public BackendBase {
     DWORD mCursor{0u};
 
     RingBufferPtr mRing;
-
-    DEF_NEWDEL(DSoundCapture)
 };
 
 DSoundCapture::~DSoundCapture()
@@ -583,12 +574,10 @@ void DSoundCapture::open(std::string_view name)
     if(CaptureDevices.empty())
     {
         /* Initialize COM to prevent name truncation */
-        HRESULT hrcom{CoInitialize(nullptr)};
+        ComWrapper com{};
         hr = DirectSoundCaptureEnumerateW(DSoundEnumDevices, &CaptureDevices);
         if(FAILED(hr))
             ERR("Error enumerating DirectSound devices (0x%lx)!\n", hr);
-        if(SUCCEEDED(hrcom))
-            CoUninitialize();
     }
 
     const GUID *guid{nullptr};
@@ -610,8 +599,7 @@ void DSoundCapture::open(std::string_view name)
                     [&id](const DevMap &entry) -> bool { return entry.guid == id; });
             if(iter == CaptureDevices.cend())
                 throw al::backend_exception{al::backend_error::NoDevice,
-                    "Device name \"%.*s\" not found", static_cast<int>(name.length()),
-                    name.data()};
+                    "Device name \"%.*s\" not found", al::sizei(name), name.data()};
         }
         guid = &iter->guid;
     }
@@ -642,6 +630,7 @@ void DSoundCapture::open(std::string_view name)
     case DevFmtX61: InputType.dwChannelMask = X6DOT1; break;
     case DevFmtX71: InputType.dwChannelMask = X7DOT1; break;
     case DevFmtX714: InputType.dwChannelMask = X7DOT1DOT4; break;
+    case DevFmtX7144:
     case DevFmtX3D71:
     case DevFmtAmbi3D:
         WARN("%s capture not supported\n", DevFmtChannelsString(mDevice->FmtChans));
@@ -658,6 +647,7 @@ void DSoundCapture::open(std::string_view name)
     InputType.Format.nAvgBytesPerSec = InputType.Format.nSamplesPerSec *
         InputType.Format.nBlockAlign;
     InputType.Format.cbSize = 0;
+    /* NOLINTNEXTLINE(cppcoreguidelines-pro-type-union-access) */
     InputType.Samples.wValidBitsPerSample = InputType.Format.wBitsPerSample;
     if(mDevice->FmtType == DevFmtFloat)
         InputType.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
@@ -670,8 +660,7 @@ void DSoundCapture::open(std::string_view name)
         InputType.Format.cbSize = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
     }
 
-    uint samples{mDevice->BufferSize};
-    samples = maxu(samples, 100 * mDevice->Frequency / 1000);
+    const uint samples{std::max(mDevice->BufferSize, mDevice->Frequency/10u)};
 
     DSCBUFFERDESC DSCBDescription{};
     DSCBDescription.dwSize = sizeof(DSCBDescription);
@@ -699,7 +688,7 @@ void DSoundCapture::open(std::string_view name)
     mBufferBytes = DSCBDescription.dwBufferBytes;
     setDefaultWFXChannelOrder();
 
-    mDevice->DeviceName = name;
+    mDeviceName = name;
 }
 
 void DSoundCapture::start()
@@ -721,7 +710,7 @@ void DSoundCapture::stop()
 }
 
 void DSoundCapture::captureSamples(std::byte *buffer, uint samples)
-{ mRing->read(buffer, samples); }
+{ std::ignore = mRing->read(buffer, samples); }
 
 uint DSoundCapture::availableSamples()
 {
@@ -744,9 +733,9 @@ uint DSoundCapture::availableSamples()
     }
     if(SUCCEEDED(hr))
     {
-        mRing->write(ReadPtr1, ReadCnt1/FrameSize);
+        std::ignore = mRing->write(ReadPtr1, ReadCnt1/FrameSize);
         if(ReadPtr2 != nullptr && ReadCnt2 > 0)
-            mRing->write(ReadPtr2, ReadCnt2/FrameSize);
+            std::ignore = mRing->write(ReadPtr2, ReadCnt2/FrameSize);
         hr = mDSCbuffer->Unlock(ReadPtr1, ReadCnt1, ReadPtr2, ReadCnt2);
         mCursor = ReadCursor;
     }
@@ -782,7 +771,7 @@ bool DSoundBackendFactory::init()
         }
 
 #define LOAD_FUNC(f) do {                                                     \
-    p##f = al::bit_cast<decltype(p##f)>(GetSymbol(ds_handle, #f));            \
+    p##f = reinterpret_cast<decltype(p##f)>(GetSymbol(ds_handle, #f));        \
     if(!p##f)                                                                 \
     {                                                                         \
         CloseLib(ds_handle);                                                  \
@@ -803,40 +792,32 @@ bool DSoundBackendFactory::init()
 bool DSoundBackendFactory::querySupport(BackendType type)
 { return (type == BackendType::Playback || type == BackendType::Capture); }
 
-std::string DSoundBackendFactory::probe(BackendType type)
+auto DSoundBackendFactory::enumerate(BackendType type) -> std::vector<std::string>
 {
-    std::string outnames;
+    std::vector<std::string> outnames;
     auto add_device = [&outnames](const DevMap &entry) -> void
-    {
-        /* +1 to also append the null char (to ensure a null-separated list and
-         * double-null terminated list).
-         */
-        outnames.append(entry.name.c_str(), entry.name.length()+1);
-    };
+    { outnames.emplace_back(entry.name); };
 
     /* Initialize COM to prevent name truncation */
-    HRESULT hr;
-    HRESULT hrcom{CoInitialize(nullptr)};
+    ComWrapper com{};
     switch(type)
     {
     case BackendType::Playback:
         PlaybackDevices.clear();
-        hr = DirectSoundEnumerateW(DSoundEnumDevices, &PlaybackDevices);
-        if(FAILED(hr))
+        if(HRESULT hr{DirectSoundEnumerateW(DSoundEnumDevices, &PlaybackDevices)}; FAILED(hr))
             ERR("Error enumerating DirectSound playback devices (0x%lx)!\n", hr);
+        outnames.reserve(PlaybackDevices.size());
         std::for_each(PlaybackDevices.cbegin(), PlaybackDevices.cend(), add_device);
         break;
 
     case BackendType::Capture:
         CaptureDevices.clear();
-        hr = DirectSoundCaptureEnumerateW(DSoundEnumDevices, &CaptureDevices);
-        if(FAILED(hr))
+        if(HRESULT hr{DirectSoundCaptureEnumerateW(DSoundEnumDevices, &CaptureDevices)};FAILED(hr))
             ERR("Error enumerating DirectSound capture devices (0x%lx)!\n", hr);
+        outnames.reserve(CaptureDevices.size());
         std::for_each(CaptureDevices.cbegin(), CaptureDevices.cend(), add_device);
         break;
     }
-    if(SUCCEEDED(hrcom))
-        CoUninitialize();
 
     return outnames;
 }

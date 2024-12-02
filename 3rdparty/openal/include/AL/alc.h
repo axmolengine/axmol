@@ -1,12 +1,23 @@
 #ifndef AL_ALC_H
 #define AL_ALC_H
 
+/* NOLINTBEGIN */
 #ifdef __cplusplus
 extern "C" {
 
+#ifdef _MSVC_LANG
+#define ALC_CPLUSPLUS _MSVC_LANG
+#else
+#define ALC_CPLUSPLUS __cplusplus
+#endif
+
 #ifndef AL_DISABLE_NOEXCEPT
+#if ALC_CPLUSPLUS >= 201103L
 #define ALC_API_NOEXCEPT noexcept
-#if __cplusplus >= 201703L
+#else
+#define ALC_API_NOEXCEPT
+#endif
+#if ALC_CPLUSPLUS >= 201703L
 #define ALC_API_NOEXCEPT17 noexcept
 #else
 #define ALC_API_NOEXCEPT17
@@ -17,6 +28,8 @@ extern "C" {
 #define ALC_API_NOEXCEPT
 #define ALC_API_NOEXCEPT17
 #endif
+
+#undef ALC_CPLUSPLUS
 
 #else /* __cplusplus */
 
@@ -289,5 +302,6 @@ typedef void           (ALC_APIENTRY *LPALCCAPTURESAMPLES)(ALCdevice *device, AL
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
+/* NOLINTEND */
 
 #endif /* AL_ALC_H */

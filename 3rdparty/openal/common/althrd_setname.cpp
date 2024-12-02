@@ -14,13 +14,14 @@ void althrd_setname(const char *name [[maybe_unused]])
 
 #define MS_VC_EXCEPTION 0x406D1388
 #pragma pack(push,8)
-    struct {
+    struct InfoStruct {
         DWORD dwType;     // Must be 0x1000.
         LPCSTR szName;    // Pointer to name (in user addr space).
         DWORD dwThreadID; // Thread ID (-1=caller thread).
         DWORD dwFlags;    // Reserved for future use, must be zero.
-    } info;
+    };
 #pragma pack(pop)
+    InfoStruct info{};
     info.dwType = 0x1000;
     info.szName = name;
     info.dwThreadID = ~DWORD{0};
@@ -60,7 +61,7 @@ using setname_t4 = int(*)(pthread_t, const char*, void*);
 { func(pthread_self(), name); }
 
 [[maybe_unused]] void setname_caller(setname_t4 func, const char *name)
-{ func(pthread_self(), "%s", static_cast<void*>(const_cast<char*>(name))); }
+{ func(pthread_self(), "%s", const_cast<char*>(name)); /* NOLINT(*-const-cast) */ }
 
 } // namespace
 

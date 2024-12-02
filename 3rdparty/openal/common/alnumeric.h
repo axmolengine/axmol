@@ -1,15 +1,19 @@
 #ifndef AL_NUMERIC_H
 #define AL_NUMERIC_H
 
+#include "config_simd.h"
+
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <iterator>
 #include <type_traits>
 #ifdef HAVE_INTRIN_H
 #include <intrin.h>
 #endif
-#ifdef HAVE_SSE_INTRINSICS
+#if HAVE_SSE_INTRINSICS
 #include <xmmintrin.h>
 #endif
 
@@ -18,76 +22,29 @@
 #include "opthelpers.h"
 
 
-constexpr auto operator "" _i64(unsigned long long n) noexcept { return static_cast<int64_t>(n); }
-constexpr auto operator "" _u64(unsigned long long n) noexcept { return static_cast<uint64_t>(n); }
+constexpr auto operator "" _i64(unsigned long long n) noexcept { return static_cast<std::int64_t>(n); }
+constexpr auto operator "" _u64(unsigned long long n) noexcept { return static_cast<std::uint64_t>(n); }
 
 constexpr auto operator "" _z(unsigned long long n) noexcept
-{ return static_cast<std::make_signed_t<size_t>>(n); }
-constexpr auto operator "" _uz(unsigned long long n) noexcept { return static_cast<size_t>(n); }
-constexpr auto operator "" _zu(unsigned long long n) noexcept { return static_cast<size_t>(n); }
+{ return static_cast<std::make_signed_t<std::size_t>>(n); }
+constexpr auto operator "" _uz(unsigned long long n) noexcept { return static_cast<std::size_t>(n); }
+constexpr auto operator "" _zu(unsigned long long n) noexcept { return static_cast<std::size_t>(n); }
 
 
-constexpr inline float minf(float a, float b) noexcept
-{ return ((a > b) ? b : a); }
-constexpr inline float maxf(float a, float b) noexcept
-{ return ((a > b) ? a : b); }
-constexpr inline float clampf(float val, float min, float max) noexcept
-{ return minf(max, maxf(min, val)); }
-
-constexpr inline double mind(double a, double b) noexcept
-{ return ((a > b) ? b : a); }
-constexpr inline double maxd(double a, double b) noexcept
-{ return ((a > b) ? a : b); }
-constexpr inline double clampd(double val, double min, double max) noexcept
-{ return mind(max, maxd(min, val)); }
-
-constexpr inline unsigned int minu(unsigned int a, unsigned int b) noexcept
-{ return ((a > b) ? b : a); }
-constexpr inline unsigned int maxu(unsigned int a, unsigned int b) noexcept
-{ return ((a > b) ? a : b); }
-constexpr inline unsigned int clampu(unsigned int val, unsigned int min, unsigned int max) noexcept
-{ return minu(max, maxu(min, val)); }
-
-constexpr inline int mini(int a, int b) noexcept
-{ return ((a > b) ? b : a); }
-constexpr inline int maxi(int a, int b) noexcept
-{ return ((a > b) ? a : b); }
-constexpr inline int clampi(int val, int min, int max) noexcept
-{ return mini(max, maxi(min, val)); }
-
-constexpr inline int64_t mini64(int64_t a, int64_t b) noexcept
-{ return ((a > b) ? b : a); }
-constexpr inline int64_t maxi64(int64_t a, int64_t b) noexcept
-{ return ((a > b) ? a : b); }
-constexpr inline int64_t clampi64(int64_t val, int64_t min, int64_t max) noexcept
-{ return mini64(max, maxi64(min, val)); }
-
-constexpr inline uint64_t minu64(uint64_t a, uint64_t b) noexcept
-{ return ((a > b) ? b : a); }
-constexpr inline uint64_t maxu64(uint64_t a, uint64_t b) noexcept
-{ return ((a > b) ? a : b); }
-constexpr inline uint64_t clampu64(uint64_t val, uint64_t min, uint64_t max) noexcept
-{ return minu64(max, maxu64(min, val)); }
-
-constexpr inline size_t minz(size_t a, size_t b) noexcept
-{ return ((a > b) ? b : a); }
-constexpr inline size_t maxz(size_t a, size_t b) noexcept
-{ return ((a > b) ? a : b); }
-constexpr inline size_t clampz(size_t val, size_t min, size_t max) noexcept
-{ return minz(max, maxz(min, val)); }
-
-
-constexpr inline float lerpf(float val1, float val2, float mu) noexcept
-{ return val1 + (val2-val1)*mu; }
-constexpr inline float cubic(float val1, float val2, float val3, float val4, float mu) noexcept
+constexpr auto GetCounterSuffix(size_t count) noexcept -> const char*
 {
-    const float mu2{mu*mu}, mu3{mu2*mu};
-    const float a0{-0.5f*mu3 +       mu2 + -0.5f*mu};
-    const float a1{ 1.5f*mu3 + -2.5f*mu2            + 1.0f};
-    const float a2{-1.5f*mu3 +  2.0f*mu2 +  0.5f*mu};
-    const float a3{ 0.5f*mu3 + -0.5f*mu2};
-    return val1*a0 + val2*a1 + val3*a2 + val4*a3;
+    auto &suffix = (((count%100)/10) == 1) ? "th" :
+        ((count%10) == 1) ? "st" :
+        ((count%10) == 2) ? "nd" :
+        ((count%10) == 3) ? "rd" : "th";
+    return std::data(suffix);
 }
+
+
+constexpr auto lerpf(float val1, float val2, float mu) noexcept -> float
+{ return val1 + (val2-val1)*mu; }
+constexpr auto lerpd(double val1, double val2, double mu) noexcept -> double
+{ return val1 + (val2-val1)*mu; }
 
 
 /** Find the next power-of-2 for non-power-of-2 numbers. */
@@ -129,24 +86,21 @@ constexpr T RoundUp(T value, al::type_identity_t<T> r) noexcept
  */
 inline int fastf2i(float f) noexcept
 {
-#if defined(HAVE_SSE_INTRINSICS)
+#if HAVE_SSE_INTRINSICS
     return _mm_cvt_ss2si(_mm_set_ss(f));
 
-#elif defined(_MSC_VER) && defined(_M_IX86_FP)
+#elif defined(_MSC_VER) && defined(_M_IX86_FP) && _M_IX86_FP == 0
 
     int i;
     __asm fld f
     __asm fistp i
     return i;
 
-#elif (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+#elif (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__)) \
+    && !defined(__SSE_MATH__)
 
     int i;
-#ifdef __SSE_MATH__
-    __asm__("cvtss2si %1, %0" : "=r"(i) : "x"(f));
-#else
     __asm__ __volatile__("fistpl %0" : "=m"(i) : "t"(f) : "st");
-#endif
     return i;
 
 #else
@@ -160,7 +114,7 @@ inline unsigned int fastf2u(float f) noexcept
 /** Converts float-to-int using standard behavior (truncation). */
 inline int float2int(float f) noexcept
 {
-#if defined(HAVE_SSE_INTRINSICS)
+#if HAVE_SSE_INTRINSICS
     return _mm_cvtt_ss2si(_mm_set_ss(f));
 
 #elif (defined(_MSC_VER) && defined(_M_IX86_FP) && _M_IX86_FP == 0) \
@@ -191,7 +145,7 @@ inline unsigned int float2uint(float f) noexcept
 /** Converts double-to-int using standard behavior (truncation). */
 inline int double2int(double d) noexcept
 {
-#if defined(HAVE_SSE_INTRINSICS)
+#if HAVE_SSE_INTRINSICS
     return _mm_cvttsd_si32(_mm_set_sd(d));
 
 #elif (defined(_MSC_VER) && defined(_M_IX86_FP) && _M_IX86_FP < 2) \
@@ -242,7 +196,7 @@ inline float fast_roundf(float f) noexcept
     /* Integral limit, where sub-integral precision is not available for
      * floats.
      */
-    static constexpr float ilim[2]{
+    static constexpr std::array ilim{
          8388608.0f /*  0x1.0p+23 */,
         -8388608.0f /* -0x1.0p+23 */
     };
@@ -266,10 +220,14 @@ inline float fast_roundf(float f) noexcept
      * optimize this out because of non-associative rules on floating-point
      * math (as long as you don't use -fassociative-math,
      * -funsafe-math-optimizations, -ffast-math, or -Ofast, in which case this
-     * may break).
+     * may break without __builtin_assoc_barrier support).
      */
+#if HAS_BUILTIN(__builtin_assoc_barrier)
+    return __builtin_assoc_barrier(f + ilim[sign]) - ilim[sign];
+#else
     f += ilim[sign];
     return f - ilim[sign];
+#endif
 #endif
 }
 
@@ -285,9 +243,9 @@ inline float level_mb_to_gain(float x)
 // Converts gain to level (mB).
 inline float gain_to_level_mb(float x)
 {
-    if (x <= 0.0f)
+    if(x <= 1e-05f)
         return -10'000.0f;
-    return maxf(std::log10(x) * 2'000.0f, -10'000.0f);
+    return std::max(std::log10(x) * 2'000.0f, -10'000.0f);
 }
 
 #endif /* AL_NUMERIC_H */

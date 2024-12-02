@@ -5,7 +5,9 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <vector>
 
+#include "alspan.h"
 #include "core/ambidefs.h"
 
 /* Helpers to read .ambdec configuration files. */
@@ -34,18 +36,17 @@ struct AmbDecConf {
         float Elevation{0.0f};
         std::string Connection;
     };
-    size_t NumSpeakers{0};
-    std::unique_ptr<SpeakerConf[]> Speakers;
+    std::vector<SpeakerConf> Speakers;
 
     using CoeffArray = std::array<float,MaxAmbiChannels>;
-    std::unique_ptr<CoeffArray[]> Matrix;
+    std::vector<CoeffArray> Matrix;
 
     /* Unused when FreqBands == 1 */
-    float LFOrderGain[MaxAmbiOrder+1]{};
-    CoeffArray *LFMatrix;
+    std::array<float,MaxAmbiOrder+1> LFOrderGain{};
+    al::span<CoeffArray> LFMatrix;
 
-    float HFOrderGain[MaxAmbiOrder+1]{};
-    CoeffArray *HFMatrix;
+    std::array<float,MaxAmbiOrder+1> HFOrderGain{};
+    al::span<CoeffArray> HFMatrix;
 
     ~AmbDecConf();
 

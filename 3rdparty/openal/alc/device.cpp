@@ -3,19 +3,22 @@
 
 #include "device.h"
 
+#include <algorithm>
+#include <cstddef>
 #include <numeric>
-#include <stddef.h>
 
+#include "al/buffer.h"
+#include "al/effect.h"
+#include "al/filter.h"
 #include "albit.h"
-#include "alconfig.h"
+#include "alnumeric.h"
+#include "atomic.h"
 #include "backends/base.h"
-#include "core/bformatdec.h"
-#include "core/bs2b.h"
-#include "core/front_stablizer.h"
+#include "core/devformat.h"
 #include "core/hrtf.h"
 #include "core/logging.h"
 #include "core/mastering.h"
-#include "core/uhjfilter.h"
+#include "flexarray.h"
 
 
 namespace {
@@ -24,11 +27,12 @@ using voidp = void*;
 
 } // namespace
 
+namespace al {
 
-ALCdevice::ALCdevice(DeviceType type) : DeviceBase{type}
+Device::Device(DeviceType type) : DeviceBase{type}
 { }
 
-ALCdevice::~ALCdevice()
+Device::~Device()
 {
     TRACE("Freeing device %p\n", voidp{this});
 
@@ -53,10 +57,10 @@ ALCdevice::~ALCdevice()
         WARN("%zu Filter%s not deleted\n", count, (count==1)?"":"s");
 }
 
-void ALCdevice::enumerateHrtfs()
+void Device::enumerateHrtfs()
 {
-    mHrtfList = EnumerateHrtf(configValue<std::string>(nullptr, "hrtf-paths"));
-    if(auto defhrtfopt = configValue<std::string>(nullptr, "default-hrtf"))
+    mHrtfList = EnumerateHrtf(configValue<std::string>({}, "hrtf-paths"));
+    if(auto defhrtfopt = configValue<std::string>({}, "default-hrtf"))
     {
         auto iter = std::find(mHrtfList.begin(), mHrtfList.end(), *defhrtfopt);
         if(iter == mHrtfList.end())
@@ -66,7 +70,7 @@ void ALCdevice::enumerateHrtfs()
     }
 }
 
-auto ALCdevice::getOutputMode1() const noexcept -> OutputMode1
+auto Device::getOutputMode1() const noexcept -> OutputMode1
 {
     if(mContexts.load(std::memory_order_relaxed)->empty())
         return OutputMode1::Any;
@@ -85,9 +89,12 @@ auto ALCdevice::getOutputMode1() const noexcept -> OutputMode1
     case DevFmtX61: return OutputMode1::X61;
     case DevFmtX71: return OutputMode1::X71;
     case DevFmtX714:
+    case DevFmtX7144:
     case DevFmtX3D71:
     case DevFmtAmbi3D:
         break;
     }
     return OutputMode1::Any;
 }
+
+} // namespace al
