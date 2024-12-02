@@ -442,7 +442,7 @@ int ZipUtils::inflateCCZBuffer(const unsigned char* buffer, ssize_t bufferLen, u
 
         decodeEncodedPvr(ints, enclen);
 
-#if _AX_DEBUG > 0
+#if defined(_AX_DEBUG) && _AX_DEBUG > 0
         // verify checksum in debug mode
         unsigned int calculated = checksumPvr(ints, enclen);
         unsigned int required   = AX_SWAP_INT32_BIG_TO_HOST(header->reserved);

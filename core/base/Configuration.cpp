@@ -81,7 +81,7 @@ bool Configuration::init()
     _valueDict["axmol.compiled_with_gl_state_cache"] = Value(true);
 #endif
 
-#if _AX_DEBUG
+#if defined(_AX_DEBUG) && _AX_DEBUG
     _valueDict["axmol.build_type"] = Value("DEBUG");
 #else
     _valueDict["axmol.build_type"] = Value("RELEASE");
