@@ -53,8 +53,6 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     PRIVATE NOUNCRYPT=1
     PRIVATE P2T_STATIC_EXPORTS=1
     PRIVATE BT_USE_SSE_IN_API=1
-    PRIVATE CP_USE_DOUBLES=0
-    PRIVATE CP_USE_CGTYPES=0
   )
 
   ax_config_pred(${APP_NAME} AX_USE_ALSOFT)
@@ -92,7 +90,6 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     PRIVATE ${AX_ROOT_DIR}/3rdparty/freetype/include
     PRIVATE ${AX_ROOT_DIR}/3rdparty/glfw/include/GLFW
     PRIVATE ${AX_ROOT_DIR}/3rdparty/box2d/include
-    PRIVATE ${AX_ROOT_DIR}/3rdparty/chipmunk/include
     PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/engine/3rdparty/freetype/include
     PRIVATE ${AX_ROOT_DIR}/3rdparty/webp/src/webp
     PRIVATE ${AX_ROOT_DIR}/3rdparty/pugixml
@@ -136,7 +133,6 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   set(LIBS
     axmol
     box2d
-    chipmunk
     freetype
     webp
     pugixml
