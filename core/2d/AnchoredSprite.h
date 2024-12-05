@@ -143,7 +143,7 @@ public:
     virtual Rect getTouchRect();
 
 protected:
-    virtual void setVertexCoords(const Rect& rect, V3F_C4F_T2F_Quad* outQuad) override;
+    virtual void setVertexCoords(const Rect& rect, V3F_T2F_C4F_Quad* outQuad) override;
     Vec2 _spriteVertexAnchor = Vec2::ANCHOR_MIDDLE;
 };
 

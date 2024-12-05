@@ -97,7 +97,7 @@ PolygonInfo::~PolygonInfo()
     releaseVertsAndIndices();
 }
 
-void PolygonInfo::setQuad(V3F_C4F_T2F_Quad* quad)
+void PolygonInfo::setQuad(V3F_T2F_C4F_Quad* quad)
 {
     releaseVertsAndIndices();
     _isVertsOwner        = false;
@@ -107,7 +107,7 @@ void PolygonInfo::setQuad(V3F_C4F_T2F_Quad* quad)
     triangles.verts      = (V3F_T2F_C4F*)quad;
 }
 
-void PolygonInfo::setQuads(V3F_C4F_T2F_Quad* quad, int numberOfQuads)
+void PolygonInfo::setQuads(V3F_T2F_C4F_Quad* quad, int numberOfQuads)
 {
     AXASSERT(numberOfQuads >= 1 && numberOfQuads <= 9, "Invalid number of Quads");
 

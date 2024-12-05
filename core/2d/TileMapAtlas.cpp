@@ -163,7 +163,7 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
 {
     AXASSERT(index >= 0 && index < _textureAtlas->getCapacity(), "updateAtlasValueAt: Invalid index");
 
-    V3F_C4F_T2F_Quad* quad = &((_textureAtlas->getQuads())[index]);
+    V3F_T2F_C4F_Quad* quad = &((_textureAtlas->getQuads())[index]);
 
     int x     = pos.x;
     int y     = pos.y;

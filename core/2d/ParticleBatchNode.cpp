@@ -474,7 +474,7 @@ void ParticleBatchNode::increaseAtlasCapacityTo(ssize_t quantity)
 // sets a 0'd quad into the quads array
 void ParticleBatchNode::disableParticle(int particleIndex)
 {
-    V3F_C4F_T2F_Quad* quad = &((_textureAtlas->getQuads())[particleIndex]);
+    V3F_T2F_C4F_Quad* quad = &((_textureAtlas->getQuads())[particleIndex]);
     quad->br.position.x = quad->br.position.y = quad->tr.position.x = quad->tr.position.y = quad->tl.position.x =
         quad->tl.position.y = quad->bl.position.x = quad->bl.position.y = 0.0f;
 }
