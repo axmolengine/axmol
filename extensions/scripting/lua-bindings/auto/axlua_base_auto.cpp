@@ -21111,9 +21111,9 @@ int lua_ax_base_PolygonInfo_setQuad(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::V3F_C4F_T2F_Quad* arg0;
+        ax::V3F_T2F_C4F_Quad* arg0;
 
-        #pragma warning NO CONVERSION TO NATIVE FOR V3F_C4F_T2F_Quad*
+        #pragma warning NO CONVERSION TO NATIVE FOR V3F_T2F_C4F_Quad*
 		ok = false;
         if(!ok)
         {
@@ -21162,10 +21162,10 @@ int lua_ax_base_PolygonInfo_setQuads(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        ax::V3F_C4F_T2F_Quad* arg0;
+        ax::V3F_T2F_C4F_Quad* arg0;
         int arg1;
 
-        #pragma warning NO CONVERSION TO NATIVE FOR V3F_C4F_T2F_Quad*
+        #pragma warning NO CONVERSION TO NATIVE FOR V3F_T2F_C4F_Quad*
 		ok = false;
 
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.PolygonInfo:setQuads");

@@ -389,14 +389,9 @@ function cc.V3F_T2F_C4F(_vertices, _colors, _texCoords)
     return { vertices = _vertices, colors = _colors, texCoords = _texCoords }
 end
 
---V3F_C4F_T2F_Quad
-function cc.V3F_C4F_T2F_Quad(_tl, _bl, _tr, _br)
+--V3F_T2F_C4F_Quad
+function cc.V3F_T2F_C4F_Quad(_tl, _bl, _tr, _br)
     return { tl = _tl, bl = _bl, tr = _tr, br = _br }
-end
-
---V2F_C4F_T2F_Quad
-function cc.V2F_C4F_T2F_Quad(_bl, _br, _tl, _tr)
-    return { bl = _bl, br = _br, tl = _tl, tr = _tr }
 end
 
 --T2F_Quad
