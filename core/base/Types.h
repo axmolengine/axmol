@@ -129,17 +129,17 @@ struct V3F_T2F_N3F
     Vec3 normal;
 };
 
-struct V2F_C4F_T2F_Triangle
+struct V2F_T2F_C4F_Triangle
 {
     V2F_T2F_C4F a;
     V2F_T2F_C4F b;
     V2F_T2F_C4F c;
 };
 
-/** @struct V3F_C4F_T2F_Quad
+/** @struct V3F_T2F_C4F_Quad
  * 4 Vertex3FTex2FColor4B.
  */
-struct V3F_C4F_T2F_Quad
+struct V3F_T2F_C4F_Quad
 {
     /// top left
     V3F_T2F_C4F tl;
@@ -149,21 +149,6 @@ struct V3F_C4F_T2F_Quad
     V3F_T2F_C4F tr;
     /// bottom right
     V3F_T2F_C4F br;
-};
-
-/** @struct V2F_C4F_T2F_Quad
- * 4 Vertex2FTex2FColor4F Quad.
- */
-struct V2F_C4F_T2F_Quad
-{
-    /// bottom left
-    V2F_T2F_C4F bl;
-    /// bottom right
-    V2F_T2F_C4F br;
-    /// top left
-    V2F_T2F_C4F tl;
-    /// top right
-    V2F_T2F_C4F tr;
 };
 
 /** @struct V3F_T2F_Quad

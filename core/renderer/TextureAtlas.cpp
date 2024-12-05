@@ -87,14 +87,14 @@ void TextureAtlas::setTexture(Texture2D* var)
     _texture = var;
 }
 
-V3F_C4F_T2F_Quad* TextureAtlas::getQuads()
+V3F_T2F_C4F_Quad* TextureAtlas::getQuads()
 {
     // if someone accesses the quads directly, presume that changes will be made
     _dirty = true;
     return _quads;
 }
 
-void TextureAtlas::setQuads(V3F_C4F_T2F_Quad* quads)
+void TextureAtlas::setQuads(V3F_T2F_C4F_Quad* quads)
 {
     _quads = quads;
 }
@@ -156,7 +156,7 @@ bool TextureAtlas::initWithTexture(Texture2D* texture, ssize_t capacity)
     // Re-initialization is not allowed
     AXASSERT(_quads == nullptr && _indices == nullptr, "_quads and _indices should be nullptr.");
 
-    _quads   = (V3F_C4F_T2F_Quad*)malloc(_capacity * sizeof(V3F_C4F_T2F_Quad));
+    _quads   = (V3F_T2F_C4F_Quad*)malloc(_capacity * sizeof(V3F_T2F_C4F_Quad));
     _indices = (uint16_t*)malloc(_capacity * 6 * sizeof(uint16_t));
 
     if (!(_quads && _indices) && _capacity > 0)
@@ -171,7 +171,7 @@ bool TextureAtlas::initWithTexture(Texture2D* texture, ssize_t capacity)
         return false;
     }
 
-    memset(_quads, 0, _capacity * sizeof(V3F_C4F_T2F_Quad));
+    memset(_quads, 0, _capacity * sizeof(V3F_T2F_C4F_Quad));
     memset(_indices, 0, _capacity * 6 * sizeof(uint16_t));
 
     this->setupIndices();
@@ -206,7 +206,7 @@ void TextureAtlas::setupIndices()
 
 // TextureAtlas - Update, Insert, Move & Remove
 
-void TextureAtlas::updateQuad(const V3F_C4F_T2F_Quad& quad, ssize_t index)
+void TextureAtlas::updateQuad(const V3F_T2F_C4F_Quad& quad, ssize_t index)
 {
     AXASSERT(index >= 0 && index < _capacity, "updateQuadWithTexture: Invalid index");
 
@@ -217,7 +217,7 @@ void TextureAtlas::updateQuad(const V3F_C4F_T2F_Quad& quad, ssize_t index)
     _dirty = true;
 }
 
-void TextureAtlas::insertQuad(const V3F_C4F_T2F_Quad& quad, ssize_t index)
+void TextureAtlas::insertQuad(const V3F_T2F_C4F_Quad& quad, ssize_t index)
 {
     AXASSERT(index >= 0 && index < _capacity, "insertQuadWithTexture: Invalid index");
 
@@ -239,7 +239,7 @@ void TextureAtlas::insertQuad(const V3F_C4F_T2F_Quad& quad, ssize_t index)
     _dirty = true;
 }
 
-void TextureAtlas::insertQuads(V3F_C4F_T2F_Quad* quads, ssize_t index, ssize_t amount)
+void TextureAtlas::insertQuads(V3F_T2F_C4F_Quad* quads, ssize_t index, ssize_t amount)
 {
     AXASSERT(index >= 0 && amount >= 0 && index + amount <= _capacity, "insertQuadWithTexture: Invalid index + amount");
 
@@ -290,7 +290,7 @@ void TextureAtlas::insertQuadFromIndex(ssize_t oldIndex, ssize_t newIndex)
     }
 
     // texture coordinates
-    V3F_C4F_T2F_Quad quadsBackup = _quads[oldIndex];
+    V3F_T2F_C4F_Quad quadsBackup = _quads[oldIndex];
     memmove(&_quads[dst], &_quads[src], sizeof(_quads[0]) * howMany);
     _quads[newIndex] = quadsBackup;
 
@@ -351,7 +351,7 @@ bool TextureAtlas::resizeCapacity(ssize_t newCapacity)
     _totalQuads = MIN(_totalQuads, newCapacity);
     _capacity   = newCapacity;
 
-    V3F_C4F_T2F_Quad* tmpQuads = nullptr;
+    V3F_T2F_C4F_Quad* tmpQuads = nullptr;
     uint16_t* tmpIndices       = nullptr;
 
     // when calling initWithTexture(fileName, 0) on bada device, calloc(0, 1) will fail and return nullptr,
@@ -361,7 +361,7 @@ bool TextureAtlas::resizeCapacity(ssize_t newCapacity)
     ssize_t new_quads_size = _capacity * _quads_size;
     if (_quads == nullptr)
     {
-        tmpQuads = (V3F_C4F_T2F_Quad*)malloc(new_quads_size);
+        tmpQuads = (V3F_T2F_C4F_Quad*)malloc(new_quads_size);
         if (tmpQuads != nullptr)
         {
             memset(tmpQuads, 0, new_quads_size);
@@ -369,7 +369,7 @@ bool TextureAtlas::resizeCapacity(ssize_t newCapacity)
     }
     else
     {
-        tmpQuads = (V3F_C4F_T2F_Quad*)realloc(_quads, new_quads_size);
+        tmpQuads = (V3F_T2F_C4F_Quad*)realloc(_quads, new_quads_size);
         if (tmpQuads != nullptr && _capacity > oldCapacity)
         {
             memset(tmpQuads + oldCapacity, 0, (_capacity - oldCapacity) * _quads_size);
@@ -436,8 +436,8 @@ void TextureAtlas::moveQuadsFromIndex(ssize_t oldIndex, ssize_t amount, ssize_t 
         return;
     }
     // create buffer
-    size_t quadSize             = sizeof(V3F_C4F_T2F_Quad);
-    V3F_C4F_T2F_Quad* tempQuads = (V3F_C4F_T2F_Quad*)malloc(quadSize * amount);
+    size_t quadSize             = sizeof(V3F_T2F_C4F_Quad);
+    V3F_T2F_C4F_Quad* tempQuads = (V3F_T2F_C4F_Quad*)malloc(quadSize * amount);
     memcpy(tempQuads, &_quads[oldIndex], quadSize * amount);
 
     if (newIndex < oldIndex)
@@ -468,7 +468,7 @@ void TextureAtlas::moveQuadsFromIndex(ssize_t index, ssize_t newIndex)
 void TextureAtlas::fillWithEmptyQuadsFromIndex(ssize_t index, ssize_t amount)
 {
     AXASSERT(index >= 0 && amount >= 0, "values must be >= 0");
-    V3F_C4F_T2F_Quad quad;
+    V3F_T2F_C4F_Quad quad;
     memset(&quad, 0, sizeof(quad));
 
     auto to = index + amount;

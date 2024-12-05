@@ -176,7 +176,7 @@ void ParticleSystemQuad::initTexCoordsWithRect(const Rect& pointRect)
     // Important. Texture in cocos2d are inverted, so the Y component should be inverted
     std::swap(top, bottom);
 
-    V3F_C4F_T2F_Quad* quads = nullptr;
+    V3F_T2F_C4F_Quad* quads = nullptr;
     unsigned int start = 0, end = 0;
     if (_batchNode)
     {
@@ -260,7 +260,7 @@ void ParticleSystemQuad::initIndices()
     }
 }
 
-inline void updatePosWithParticle(V3F_C4F_T2F_Quad* quad,
+inline void updatePosWithParticle(V3F_T2F_C4F_Quad* quad,
                                   const Vec2& newPosition,
                                   float size,
                                   float scaleInSize,
@@ -323,11 +323,11 @@ void ParticleSystemQuad::updateParticleQuads()
         currentPosition = _position;
     }
 
-    V3F_C4F_T2F_Quad* startQuad;
+    V3F_T2F_C4F_Quad* startQuad;
     Vec2 pos = Vec2::ZERO;
     if (_batchNode)
     {
-        V3F_C4F_T2F_Quad* batchQuads = _batchNode->getTextureAtlas()->getQuads();
+        V3F_T2F_C4F_Quad* batchQuads = _batchNode->getTextureAtlas()->getQuads();
         startQuad                    = &(batchQuads[_atlasIndex]);
         pos                          = _position;
     }
@@ -352,7 +352,7 @@ void ParticleSystemQuad::updateParticleQuads()
         float* sr                   = _particleData.staticRotation;
         float* sid                  = _particleData.scaleInDelta;
         float* sil                  = _particleData.scaleInLength;
-        V3F_C4F_T2F_Quad* quadStart = startQuad;
+        V3F_T2F_C4F_Quad* quadStart = startQuad;
         if (_isScaleInAllocated)
         {
             for (int i = 0; i < _particleCount;
@@ -393,7 +393,7 @@ void ParticleSystemQuad::updateParticleQuads()
         float* sr                   = _particleData.staticRotation;
         float* sid                  = _particleData.scaleInDelta;
         float* sil                  = _particleData.scaleInLength;
-        V3F_C4F_T2F_Quad* quadStart = startQuad;
+        V3F_T2F_C4F_Quad* quadStart = startQuad;
         if (_isScaleInAllocated)
         {
             for (int i = 0; i < _particleCount;
@@ -430,7 +430,7 @@ void ParticleSystemQuad::updateParticleQuads()
         float* sr                   = _particleData.staticRotation;
         float* sid                  = _particleData.scaleInDelta;
         float* sil                  = _particleData.scaleInLength;
-        V3F_C4F_T2F_Quad* quadStart = startQuad;
+        V3F_T2F_C4F_Quad* quadStart = startQuad;
         if (_isScaleInAllocated)
         {
             for (int i = 0; i < _particleCount;
@@ -450,7 +450,7 @@ void ParticleSystemQuad::updateParticleQuads()
         }
     }
 
-    V3F_C4F_T2F_Quad* quad = startQuad;
+    V3F_T2F_C4F_Quad* quad = startQuad;
     float* r               = _particleData.colorR;
     float* g               = _particleData.colorG;
     float* b               = _particleData.colorB;
@@ -628,7 +628,7 @@ void ParticleSystemQuad::updateParticleQuads()
     // It was proved to be effective especially for low-end devices.
     if ((_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated) && _isAnimAllocated)
     {
-        V3F_C4F_T2F_Quad* quad    = startQuad;
+        V3F_T2F_C4F_Quad* quad    = startQuad;
         unsigned short* cellIndex = _particleData.animCellIndex;
 
         ParticleFrameDescriptor index;
@@ -700,7 +700,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
             AXLOGW("Particle system: not enough memory");
             return;
         }
-        V3F_C4F_T2F_Quad* quadsNew = (V3F_C4F_T2F_Quad*)realloc(_quads, quadsSize);
+        V3F_T2F_C4F_Quad* quadsNew = (V3F_T2F_C4F_Quad*)realloc(_quads, quadsSize);
         unsigned short* indicesNew = (unsigned short*)realloc(_indices, indicesSize);
 
         if (quadsNew && indicesNew)
@@ -780,7 +780,7 @@ bool ParticleSystemQuad::allocMemory()
     AX_SAFE_FREE(_quads);
     AX_SAFE_FREE(_indices);
 
-    _quads   = (V3F_C4F_T2F_Quad*)malloc(_totalParticles * sizeof(V3F_C4F_T2F_Quad));
+    _quads   = (V3F_T2F_C4F_Quad*)malloc(_totalParticles * sizeof(V3F_T2F_C4F_Quad));
     _indices = (unsigned short*)malloc(_totalParticles * 6 * sizeof(unsigned short));
 
     if (!_quads || !_indices)
@@ -792,7 +792,7 @@ bool ParticleSystemQuad::allocMemory()
         return false;
     }
 
-    memset(_quads, 0, _totalParticles * sizeof(V3F_C4F_T2F_Quad));
+    memset(_quads, 0, _totalParticles * sizeof(V3F_T2F_C4F_Quad));
     memset(_indices, 0, _totalParticles * 6 * sizeof(unsigned short));
 
     return true;
@@ -818,8 +818,8 @@ void ParticleSystemQuad::setBatchNode(ParticleBatchNode* batchNode)
         else if (!oldBatch)
         {
             // copy current state to batch
-            V3F_C4F_T2F_Quad* batchQuads = _batchNode->getTextureAtlas()->getQuads();
-            V3F_C4F_T2F_Quad* quad       = &(batchQuads[_atlasIndex]);
+            V3F_T2F_C4F_Quad* batchQuads = _batchNode->getTextureAtlas()->getQuads();
+            V3F_T2F_C4F_Quad* quad       = &(batchQuads[_atlasIndex]);
             memcpy(quad, _quads, _totalParticles * sizeof(_quads[0]));
 
             AX_SAFE_FREE(_quads);

@@ -161,7 +161,7 @@ void LabelAtlas::updateAtlasValues()
     }
 
     AXASSERT(n <= _textureAtlas->getCapacity(), "updateAtlasValues: Invalid String length");
-    V3F_C4F_T2F_Quad* quads = _textureAtlas->getQuads();
+    V3F_T2F_C4F_Quad* quads = _textureAtlas->getQuads();
     for (ssize_t i = 0; i < n; i++)
     {
 
