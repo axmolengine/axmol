@@ -296,7 +296,7 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
 void ProgramState::validateSharedVertexLayout(VertexLayoutType vlt)
 {
     if (!_ownVertexLayout && !_vertexLayout->isValid())
-        _program->setupVertexLayout(vlt);
+        _program->defineVertexLayout(vlt);
 }
 
 void ProgramState::ensureVertexLayoutMutable()

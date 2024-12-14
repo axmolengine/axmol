@@ -161,7 +161,7 @@ void LabelAtlas::updateAtlasValues()
     }
 
     AXASSERT(n <= _textureAtlas->getCapacity(), "updateAtlasValues: Invalid String length");
-    V3F_T2F_C4F_Quad* quads = _textureAtlas->getQuads();
+    auto quads = _textureAtlas->getQuads();
     for (ssize_t i = 0; i < n; i++)
     {
 
@@ -203,7 +203,7 @@ void LabelAtlas::updateAtlasValues()
         quads[i].tr.position.x = (float)(i * _itemWidth + _itemWidth);
         quads[i].tr.position.y = (float)(_itemHeight);
         quads[i].tr.position.z = 0.0f;
-        Color c(_displayedColor, _displayedOpacity / 255.0f);
+        Color4B c(_displayedColor, _displayedOpacity);
         quads[i].tl.color = c;
         quads[i].tr.color = c;
         quads[i].bl.color = c;

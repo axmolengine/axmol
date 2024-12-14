@@ -44,7 +44,7 @@ struct HSV;
  */
 struct AX_DLL Color3B
 {
-    Color3B(){};
+    Color3B() {};
     Color3B(uint8_t _r, uint8_t _g, uint8_t _b) : r(_r), g(_g), b(_b) {}
     explicit Color3B(const Color4B& color);
     explicit Color3B(const Color& color);
@@ -140,7 +140,15 @@ struct AX_DLL Color : public Vec4Adapter<Color>
         auto g = (v >> 16) & 0xff;
         auto b = (v >> 8) & 0xff;
         auto a = v & 0xff;
-        return Color{r / 255.f, g / 255.f, b / 255.f, a / 255.f };
+        return Color{r / 255.f, g / 255.f, b / 255.f, a / 255.f};
+    }
+
+    inline Color& premultiplyAlpha()
+    {
+        r *= a;
+        g *= a;
+        b *= a;
+        return *this;
     }
 
     bool operator==(const Color3B& rhs) const;

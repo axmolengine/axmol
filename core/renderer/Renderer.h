@@ -509,7 +509,7 @@ protected:
     std::vector<GroupCommand*> _groupCommandPool;
 
     // for TrianglesCommand
-    V3F_T2F_C4F _verts[VBO_SIZE];
+    V3F_T2F_C4B _verts[VBO_SIZE];
     unsigned short _indices[INDEX_VBO_SIZE];
     backend::Buffer* _vertexBuffer = nullptr;
     backend::Buffer* _indexBuffer  = nullptr;

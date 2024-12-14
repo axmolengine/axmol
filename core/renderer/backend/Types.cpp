@@ -37,7 +37,7 @@ bool UniformLocation::operator==(const UniformLocation& other) const
     return vertStage == other.vertStage && fragStage == other.fragStage;
 }
 
-std::size_t UniformLocation::operator()(const UniformLocation& uniform) const
+std::size_t UniformLocation::operator()(const UniformLocation&) const
 {
     return size_t(vertStage.location) ^ size_t(fragStage.location << 16);
 }

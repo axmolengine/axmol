@@ -176,7 +176,7 @@ void ParticleSystemQuad::initTexCoordsWithRect(const Rect& pointRect)
     // Important. Texture in cocos2d are inverted, so the Y component should be inverted
     std::swap(top, bottom);
 
-    V3F_T2F_C4F_Quad* quads = nullptr;
+    V3F_T2F_C4B_Quad* quads = nullptr;
     unsigned int start = 0, end = 0;
     if (_batchNode)
     {
@@ -260,7 +260,7 @@ void ParticleSystemQuad::initIndices()
     }
 }
 
-inline void updatePosWithParticle(V3F_T2F_C4F_Quad* quad,
+static void updatePosWithParticle(V3F_T2F_C4B_Quad* quad,
                                   const Vec2& newPosition,
                                   float size,
                                   float scaleInSize,
@@ -323,11 +323,11 @@ void ParticleSystemQuad::updateParticleQuads()
         currentPosition = _position;
     }
 
-    V3F_T2F_C4F_Quad* startQuad;
+    V3F_T2F_C4B_Quad* startQuad;
     Vec2 pos = Vec2::ZERO;
     if (_batchNode)
     {
-        V3F_T2F_C4F_Quad* batchQuads = _batchNode->getTextureAtlas()->getQuads();
+        V3F_T2F_C4B_Quad* batchQuads = _batchNode->getTextureAtlas()->getQuads();
         startQuad                    = &(batchQuads[_atlasIndex]);
         pos                          = _position;
     }
@@ -352,7 +352,7 @@ void ParticleSystemQuad::updateParticleQuads()
         float* sr                   = _particleData.staticRotation;
         float* sid                  = _particleData.scaleInDelta;
         float* sil                  = _particleData.scaleInLength;
-        V3F_T2F_C4F_Quad* quadStart = startQuad;
+        V3F_T2F_C4B_Quad* quadStart = startQuad;
         if (_isScaleInAllocated)
         {
             for (int i = 0; i < _particleCount;
@@ -393,7 +393,7 @@ void ParticleSystemQuad::updateParticleQuads()
         float* sr                   = _particleData.staticRotation;
         float* sid                  = _particleData.scaleInDelta;
         float* sil                  = _particleData.scaleInLength;
-        V3F_T2F_C4F_Quad* quadStart = startQuad;
+        V3F_T2F_C4B_Quad* quadStart = startQuad;
         if (_isScaleInAllocated)
         {
             for (int i = 0; i < _particleCount;
@@ -430,7 +430,7 @@ void ParticleSystemQuad::updateParticleQuads()
         float* sr                   = _particleData.staticRotation;
         float* sid                  = _particleData.scaleInDelta;
         float* sil                  = _particleData.scaleInLength;
-        V3F_T2F_C4F_Quad* quadStart = startQuad;
+        V3F_T2F_C4B_Quad* quadStart = startQuad;
         if (_isScaleInAllocated)
         {
             for (int i = 0; i < _particleCount;
@@ -450,7 +450,7 @@ void ParticleSystemQuad::updateParticleQuads()
         }
     }
 
-    V3F_T2F_C4F_Quad* quad = startQuad;
+    auto quad = startQuad;
     float* r               = _particleData.colorR;
     float* g               = _particleData.colorG;
     float* b               = _particleData.colorB;
@@ -479,14 +479,11 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.s     = abs(*sat);
                     hsv.v     = abs(*val);
                     auto colF = hsv.toRgba();
-                    quad->bl.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
-                                        colF.a);
-                    quad->br.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
-                                        colF.a);
-                    quad->tl.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
-                                        colF.a);
-                    quad->tr.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
-                                        colF.a);
+                    Color4B col  = colF.premultiplyAlpha();
+                    quad->bl.color = col;
+                    quad->br.color = col;
+                    quad->tl.color = col;
+                    quad->tr.color = col;
                 }
             }
             else
@@ -500,10 +497,10 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.s    = abs(*sat);
                     hsv.v    = abs(*val);
                     auto col = hsv.toColor4B();
-                    quad->bl.color.set(col.r, col.g, col.b, col.a);
-                    quad->br.color.set(col.r, col.g, col.b, col.a);
-                    quad->tl.color.set(col.r, col.g, col.b, col.a);
-                    quad->tr.color.set(col.r, col.g, col.b, col.a);
+                    quad->bl.color = col;
+                    quad->br.color = col;
+                    quad->tl.color = col;
+                    quad->tr.color = col;
                 }
             }
         }
@@ -514,28 +511,22 @@ void ParticleSystemQuad::updateParticleQuads()
             {
                 for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++fadeDt, ++fadeLn)
                 {
-                    auto colorR = *r * *a;
-                    auto colorG = *g * *a;
-                    auto colorB = *b * *a;
-                    auto colorA = *a * (*fadeDt / *fadeLn);
-                    quad->bl.color.set(colorR, colorG, colorB, colorA);
-                    quad->br.color.set(colorR, colorG, colorB, colorA);
-                    quad->tl.color.set(colorR, colorG, colorB, colorA);
-                    quad->tr.color.set(colorR, colorG, colorB, colorA);
+                    Color4B col    = Color{*r * *a, *g * *a, *b * *a, *a * (*fadeDt / *fadeLn)};
+                    quad->bl.color = col;
+                    quad->br.color = col;
+                    quad->tl.color = col;
+                    quad->tr.color = col;
                 }
             }
             else
             {
                 for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++fadeDt, ++fadeLn)
                 {
-                    auto colorR = *r;
-                    auto colorG = *g;
-                    auto colorB = *b;
-                    auto colorA = *a * (*fadeDt / *fadeLn);
-                    quad->bl.color.set(colorR, colorG, colorB, colorA);
-                    quad->br.color.set(colorR, colorG, colorB, colorA);
-                    quad->tl.color.set(colorR, colorG, colorB, colorA);
-                    quad->tr.color.set(colorR, colorG, colorB, colorA);
+                    Color4B col    = Color{*r, *g, *b, *a * (*fadeDt / *fadeLn)};
+                    quad->bl.color = col;
+                    quad->br.color = col;
+                    quad->tl.color = col;
+                    quad->tr.color = col;
                 }
             }
         }
@@ -559,14 +550,12 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.s     = abs(*sat);
                     hsv.v     = abs(*val);
                     auto colF = hsv.toRgba();
-                    quad->bl.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
-                                        colF.a);
-                    quad->br.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
-                                        colF.a);
-                    quad->tl.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
-                                        colF.a);
-                    quad->tr.color.set(colF.r * colF.a, colF.g * colF.a, colF.b * colF.a,
-                                        colF.a);
+                    Color4B col = colF.premultiplyAlpha();
+                    quad->bl.color = col;
+                    quad->br.color = col;
+                    quad->tl.color = col;
+                    quad->tr.color = col;
+                                  
                 }
             }
             else
@@ -579,10 +568,10 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.s    = abs(*sat);
                     hsv.v    = abs(*val);
                     auto col = hsv.toColor4B();
-                    quad->bl.color.set(col.r, col.g, col.b, col.a);
-                    quad->br.color.set(col.r, col.g, col.b, col.a);
-                    quad->tl.color.set(col.r, col.g, col.b, col.a);
-                    quad->tr.color.set(col.r, col.g, col.b, col.a);
+                    quad->bl.color = col;
+                    quad->br.color = col;
+                    quad->tl.color = col;
+                    quad->tr.color = col;
                 }
             }
         }
@@ -593,28 +582,22 @@ void ParticleSystemQuad::updateParticleQuads()
             {
                 for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
                 {
-                    auto colorR = *r * *a;
-                    auto colorG = *g * *a;
-                    auto colorB = *b * *a;
-                    auto colorA = *a;
-                    quad->bl.color.set(colorR, colorG, colorB, colorA);
-                    quad->br.color.set(colorR, colorG, colorB, colorA);
-                    quad->tl.color.set(colorR, colorG, colorB, colorA);
-                    quad->tr.color.set(colorR, colorG, colorB, colorA);
+                    Color4B col    = Color{*r * *a, *g * *a, *b * *a, *a};
+                    quad->bl.color = col;
+                    quad->br.color = col;
+                    quad->tl.color = col;
+                    quad->tr.color = col;
                 }
             }
             else
             {
                 for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
                 {
-                    auto colorR = *r;
-                    auto colorG = *g;
-                    auto colorB = *b;
-                    auto colorA = *a;
-                    quad->bl.color.set(colorR, colorG, colorB, colorA);
-                    quad->br.color.set(colorR, colorG, colorB, colorA);
-                    quad->tl.color.set(colorR, colorG, colorB, colorA);
-                    quad->tr.color.set(colorR, colorG, colorB, colorA);
+                    Color4B col    = Color{*r, *g, *b, *a};
+                    quad->bl.color = col;
+                    quad->br.color = col;
+                    quad->tl.color = col;
+                    quad->tr.color = col;
                 }
             }
         }
@@ -628,7 +611,7 @@ void ParticleSystemQuad::updateParticleQuads()
     // It was proved to be effective especially for low-end devices.
     if ((_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated) && _isAnimAllocated)
     {
-        V3F_T2F_C4F_Quad* quad    = startQuad;
+        V3F_T2F_C4B_Quad* quad    = startQuad;
         unsigned short* cellIndex = _particleData.animCellIndex;
 
         ParticleFrameDescriptor index;
@@ -700,7 +683,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
             AXLOGW("Particle system: not enough memory");
             return;
         }
-        V3F_T2F_C4F_Quad* quadsNew = (V3F_T2F_C4F_Quad*)realloc(_quads, quadsSize);
+        auto quadsNew = (V3F_T2F_C4B_Quad*)realloc(_quads, quadsSize);
         unsigned short* indicesNew = (unsigned short*)realloc(_indices, indicesSize);
 
         if (quadsNew && indicesNew)
@@ -780,7 +763,7 @@ bool ParticleSystemQuad::allocMemory()
     AX_SAFE_FREE(_quads);
     AX_SAFE_FREE(_indices);
 
-    _quads   = (V3F_T2F_C4F_Quad*)malloc(_totalParticles * sizeof(V3F_T2F_C4F_Quad));
+    _quads   = (V3F_T2F_C4B_Quad*)malloc(_totalParticles * sizeof(V3F_T2F_C4B_Quad));
     _indices = (unsigned short*)malloc(_totalParticles * 6 * sizeof(unsigned short));
 
     if (!_quads || !_indices)
@@ -792,7 +775,7 @@ bool ParticleSystemQuad::allocMemory()
         return false;
     }
 
-    memset(_quads, 0, _totalParticles * sizeof(V3F_T2F_C4F_Quad));
+    memset(_quads, 0, _totalParticles * sizeof(V3F_T2F_C4B_Quad));
     memset(_indices, 0, _totalParticles * 6 * sizeof(unsigned short));
 
     return true;
@@ -818,8 +801,8 @@ void ParticleSystemQuad::setBatchNode(ParticleBatchNode* batchNode)
         else if (!oldBatch)
         {
             // copy current state to batch
-            V3F_T2F_C4F_Quad* batchQuads = _batchNode->getTextureAtlas()->getQuads();
-            V3F_T2F_C4F_Quad* quad       = &(batchQuads[_atlasIndex]);
+            auto batchQuads = _batchNode->getTextureAtlas()->getQuads();
+            auto quad       = &(batchQuads[_atlasIndex]);
             memcpy(quad, _quads, _totalParticles * sizeof(_quads[0]));
 
             AX_SAFE_FREE(_quads);

@@ -290,7 +290,7 @@ namespace spine {
                         texCoords.u = attachment->getUVs()[i];
                         texCoords.v = attachment->getUVs()[i + 1];
                     }
-					dstStride = sizeof(V3F_T2F_C4F) / sizeof(float);
+					dstStride = sizeof(V3F_T2F_C4B) / sizeof(float);
 					dstTriangleVertices = reinterpret_cast<float *>(triangles.verts);
 				} else {
 					trianglesTwoColor.indices = quadIndices;
@@ -329,7 +329,7 @@ namespace spine {
                         texCoords.v = attachment->getUVs()[i + 1];
                     }
 					dstTriangleVertices = (float *) triangles.verts;
-					dstStride = sizeof(V3F_T2F_C4F) / sizeof(float);
+					dstStride = sizeof(V3F_T2F_C4B) / sizeof(float);
 					dstVertexCount = triangles.vertCount;
 				} else {
 					trianglesTwoColor.indices = attachment->getTriangles().buffer();
@@ -391,7 +391,7 @@ namespace spine {
 
 			if (hasSingleTint) {
 				if (_clipper->isClipping()) {
-					_clipper->clipTriangles((float *) &triangles.verts[0].position, triangles.indices, triangles.indexCount, (float *) &triangles.verts[0].texCoord, sizeof(axmol::V3F_T2F_C4F) / 4);
+					_clipper->clipTriangles((float *) &triangles.verts[0].position, triangles.indices, triangles.indexCount, (float *) &triangles.verts[0].texCoord, sizeof(axmol::V3F_T2F_C4B) / 4);
 					batch->deallocateVertices(triangles.vertCount);
 
 					if (_clipper->getClippedTriangles().size() == 0) {
@@ -407,7 +407,7 @@ namespace spine {
 
                     const float* verts  = _clipper->getClippedVertices().buffer();
                     const float* uvs    = _clipper->getClippedUVs().buffer();
-                    V3F_T2F_C4F* vertex = triangles.verts;
+                    auto vertex = triangles.verts;
                     for (int v = 0, vn = triangles.vertCount, vv = 0; v < vn;
                          ++v, vv += 2, ++vertex)
                     {
@@ -420,7 +420,7 @@ namespace spine {
 					batch->addCommand(renderer, _globalZOrder, texture, _programState, blendFunc, triangles, transform, transformFlags);
 				} else {
 					// Not clipping.
-                    V3F_T2F_C4F* vertex = triangles.verts;
+                    auto vertex = triangles.verts;
                     for (int v = 0, vn = triangles.vertCount; v < vn;
                          ++v, ++vertex)
                     {
@@ -543,7 +543,6 @@ namespace spine {
 		if (_debugSlots) {
 			// Slots.
 			// DrawPrimitives::setDrawColor4B(0, 0, 255, 255);
-			V3F_T2F_C4F_Quad quad;
 			for (int i = 0, n = (int)_skeleton->getSlots().size(); i < n; i++) {
 				Slot *slot = _skeleton->getDrawOrder()[i];
 
