@@ -92,7 +92,7 @@ void CCSlot::_updateFrame()
 
                 const auto& region           = currentTextureData->region;
                 const auto& textureAtlasSize = currentTextureData->spriteFrame->getTexture()->getContentSizeInPixels();
-                auto vertices                = new ax::V3F_T2F_C4F[vertexCount];  // does cocos2dx release it?
+                auto vertices                = new ax::V3F_T2F_C4B[vertexCount];  // does cocos2dx release it?
                 auto vertexIndices           = new unsigned short[triangleCount * 3];  // does cocos2dx release it?
                 ax::Rect boundsRect(999999.0f, 999999.0f, -999999.0f, -999999.0f);
 
@@ -103,7 +103,7 @@ void CCSlot::_updateFrame()
                     const auto y  = floatArray[vertexOffset + i + 1];
                     auto u        = floatArray[uvOffset + i];
                     auto v        = floatArray[uvOffset + i + 1];
-                    ax::V3F_T2F_C4F vertexData;
+                    ax::V3F_T2F_C4B vertexData;
                     vertexData.position.set(x, -y, 0.0f);
 
                     if (currentTextureData->rotated)
@@ -117,7 +117,7 @@ void CCSlot::_updateFrame()
                         vertexData.texCoord.v = (region.y + v * region.height) / textureAtlasSize.height;
                     }
 
-                    vertexData.color = ax::Color::WHITE;
+                    vertexData.color = ax::Color4B::WHITE;
                     vertices[iH]      = vertexData;
 
                     if (boundsRect.origin.x > x)

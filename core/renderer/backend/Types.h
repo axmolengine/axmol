@@ -95,7 +95,7 @@ struct UniformLocation
     operator bool() const { return vertStage or fragStage; }
     void reset() { vertStage = {}; fragStage = {}; }
     bool operator==(const UniformLocation& other) const;
-    std::size_t operator()(const UniformLocation& uniform) const; // used as a hash function
+    std::size_t operator()(const UniformLocation&) const; // used as a hash function
 };
 
 struct AttributeBindInfo

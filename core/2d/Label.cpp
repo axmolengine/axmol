@@ -1898,7 +1898,7 @@ void Label::updateBuffer(TextureAtlas* textureAtlas, CustomCommand& customComman
 {
     if (textureAtlas->getTotalQuads() > customCommand.getVertexCapacity())
     {
-        customCommand.createVertexBuffer((unsigned int)sizeof(V3F_T2F_C4F_Quad),
+        customCommand.createVertexBuffer((unsigned int)sizeof(V3F_T2F_C4B_Quad),
                                          (unsigned int)textureAtlas->getTotalQuads(),
                                          CustomCommand::BufferUsage::DYNAMIC);
         customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT,
@@ -1906,7 +1906,7 @@ void Label::updateBuffer(TextureAtlas* textureAtlas, CustomCommand& customComman
                                         CustomCommand::BufferUsage::DYNAMIC);
     }
     customCommand.updateVertexBuffer(textureAtlas->getQuads(),
-                                     (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_T2F_C4F_Quad)));
+                                     (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_T2F_C4B_Quad)));
     customCommand.updateIndexBuffer(textureAtlas->getIndices(),
                                     (unsigned int)(textureAtlas->getTotalQuads() * 6 * sizeof(unsigned short)));
     customCommand.setIndexDrawInfo(0, (unsigned int)(textureAtlas->getTotalQuads() * 6));
@@ -2018,7 +2018,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             _displayedOpacity  = _shadowColor.a * (oldOPacity / 255.0f) * 255;
             setColor(Color3B(_shadowColor));
             batch.shadowCommand.updateVertexBuffer(
-                textureAtlas->getQuads(), (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_T2F_C4F_Quad)));
+                textureAtlas->getQuads(), (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_T2F_C4B_Quad)));
             batch.shadowCommand.init(_globalZOrder);
             renderer->addCommand(&batch.shadowCommand);
 
