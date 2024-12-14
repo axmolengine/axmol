@@ -140,8 +140,9 @@ bool ProgramManager::init()
     registerProgram(ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D, skinPositionNormalTexture_vert_1,
                     colorNormalTexture_frag_1, VertexLayoutType::Unspec);
     registerProgram(ProgramType::TERRAIN_3D, terrain_vert, terrain_frag, VertexLayoutType::Terrain3D);
-    registerProgram(ProgramType::PARTICLE_TEXTURE_3D, particle_vert, particleTexture_frag, VertexLayoutType::Sprite);
-    registerProgram(ProgramType::PARTICLE_COLOR_3D, particle_vert, particleColor_frag, VertexLayoutType::Sprite);
+    registerProgram(ProgramType::PARTICLE_TEXTURE_3D, particle_vert, particleTexture_frag,
+                    VertexLayoutType::PosUvColor);
+    registerProgram(ProgramType::PARTICLE_COLOR_3D, particle_vert, particleColor_frag, VertexLayoutType::PosUvColor);
     registerProgram(ProgramType::QUAD_COLOR_2D, quadColor_vert, quadColor_frag, VertexLayoutType::Unspec);
     registerProgram(ProgramType::QUAD_TEXTURE_2D, quadTexture_vert, quadTexture_frag, VertexLayoutType::Unspec);
     registerProgram(ProgramType::HSV, positionTextureColor_vert, hsv_frag, VertexLayoutType::Sprite);
@@ -216,7 +217,7 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
     {
         program->setProgramIds(progType, progId);
         if (vlt < VertexLayoutType::Count)
-            program->setupVertexLayout(vlt);
+            program->defineVertexLayout(vlt);
         _cachedPrograms.emplace(progId, program);
     }
     return program;

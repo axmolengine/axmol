@@ -399,7 +399,7 @@ public:
      * Returns the quad (tex coords, vertex coords and color) information.
      * @lua NA
      */
-    const V3F_T2F_C4F_Quad& getQuad() const { return _quad; }
+    const V3F_T2F_C4B_Quad& getQuad() const { return _quad; }
 
     /**
      * Returns whether or not the texture rectangle is rotated.
@@ -655,8 +655,8 @@ public:
 protected:
     virtual void updateColor() override;
     virtual void setTextureCoords(const Rect& rect);
-    virtual void setTextureCoords(const Rect& rect, V3F_T2F_C4F_Quad* outQuad);
-    virtual void setVertexCoords(const Rect& rect, V3F_T2F_C4F_Quad* outQuad);
+    virtual void setTextureCoords(const Rect& rect, V3F_T2F_C4B_Quad* outQuad);
+    virtual void setVertexCoords(const Rect& rect, V3F_T2F_C4B_Quad* outQuad);
     virtual void updateBlendFunc();
     virtual void setReorderChildDirtyRecursively();
     virtual void setDirtyRecursively(bool value);
@@ -665,7 +665,7 @@ protected:
 
     void updatePoly();
     void updateStretchFactor();
-    void populateTriangle(int quadIndex, const V3F_T2F_C4F_Quad& quad);
+    void populateTriangle(int quadIndex, const V3F_T2F_C4B_Quad& quad);
     void setMVPMatrixUniform();
     //
     // Data used when the sprite is rendered using a SpriteSheet
@@ -710,8 +710,8 @@ protected:
     Vec2 _unflippedOffsetPositionFromCenter;
 
     // vertex coords, texture coords and color info
-    V3F_T2F_C4F_Quad _quad;
-    V3F_T2F_C4F* _trianglesVertex   = nullptr;
+    V3F_T2F_C4B_Quad _quad;
+    V3F_T2F_C4B* _trianglesVertex   = nullptr;
     unsigned short* _trianglesIndex = nullptr;
     PolygonInfo _polyInfo;
 

@@ -683,7 +683,7 @@ void Sprite::updatePoly()
         };
 
         // needed in order to get color from "_quad"
-        V3F_T2F_C4F_Quad tmpQuad = _quad;
+        V3F_T2F_C4B_Quad tmpQuad = _quad;
 
         for (int i = 0; i < 9; ++i)
         {
@@ -736,7 +736,7 @@ void Sprite::setCenterRectNormalized(const ax::Rect& rectTopLeft)
             {
                 _renderMode = RenderMode::SLICE9;
                 // 9 quads + 7 exterior points = 16
-                _trianglesVertex = (V3F_T2F_C4F*)malloc(sizeof(*_trianglesVertex) * (9 + 3 + 4));
+                _trianglesVertex = (V3F_T2F_C4B*)malloc(sizeof(*_trianglesVertex) * (9 + 3 + 4));
                 // 9 quads, each needs 6 vertices = 54
                 _trianglesIndex = (unsigned short*)malloc(sizeof(*_trianglesIndex) * 6 * 9);
 
@@ -808,7 +808,7 @@ void Sprite::setTextureCoords(const Rect& rectInPoints)
     setTextureCoords(rectInPoints, &_quad);
 }
 
-void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_T2F_C4F_Quad* outQuad)
+void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_T2F_C4B_Quad* outQuad)
 {
     Texture2D* tex = (_renderMode == RenderMode::QUAD_BATCHNODE) ? _textureAtlas->getTexture() : _texture;
 
@@ -878,7 +878,7 @@ void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_T2F_C4F_Quad* outQua
     }
 }
 
-void Sprite::setVertexCoords(const Rect& rect, V3F_T2F_C4F_Quad* outQuad)
+void Sprite::setVertexCoords(const Rect& rect, V3F_T2F_C4B_Quad* outQuad)
 {
     float relativeOffsetX = _unflippedOffsetPositionFromCenter.x;
     float relativeOffsetY = _unflippedOffsetPositionFromCenter.y;
@@ -924,7 +924,7 @@ void Sprite::setVertexCoords(const Rect& rect, V3F_T2F_C4F_Quad* outQuad)
     }
 }
 
-void Sprite::populateTriangle(int quadIndex, const V3F_T2F_C4F_Quad& quad)
+void Sprite::populateTriangle(int quadIndex, const V3F_T2F_C4B_Quad& quad)
 {
     AXASSERT(quadIndex < 9, "Invalid quadIndex");
     // convert Quad intro Triangle since it takes less memory

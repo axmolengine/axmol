@@ -63,7 +63,7 @@ PolygonInfo::PolygonInfo(const PolygonInfo& other) : triangles(), _isVertsOwner(
     _filename         = other._filename;
     _isVertsOwner     = true;
     _rect             = other._rect;
-    triangles.verts   = new V3F_T2F_C4F[other.triangles.vertCount];
+    triangles.verts   = new V3F_T2F_C4B[other.triangles.vertCount];
     triangles.indices = new unsigned short[other.triangles.indexCount];
     AXASSERT(triangles.verts && triangles.indices, "not enough memory");
     triangles.vertCount  = other.triangles.vertCount;
@@ -80,7 +80,7 @@ PolygonInfo& PolygonInfo::operator=(const PolygonInfo& other)
         _filename         = other._filename;
         _isVertsOwner     = true;
         _rect             = other._rect;
-        triangles.verts   = new V3F_T2F_C4F[other.triangles.vertCount];
+        triangles.verts   = new V3F_T2F_C4B[other.triangles.vertCount];
         triangles.indices = new unsigned short[other.triangles.indexCount];
         AXASSERT(triangles.verts && triangles.indices, "not enough memory");
         triangles.vertCount  = other.triangles.vertCount;
@@ -97,17 +97,17 @@ PolygonInfo::~PolygonInfo()
     releaseVertsAndIndices();
 }
 
-void PolygonInfo::setQuad(V3F_T2F_C4F_Quad* quad)
+void PolygonInfo::setQuad(V3F_T2F_C4B_Quad* quad)
 {
     releaseVertsAndIndices();
     _isVertsOwner        = false;
     triangles.indices    = quadIndices9;
     triangles.vertCount  = 4;
     triangles.indexCount = 6;
-    triangles.verts      = (V3F_T2F_C4F*)quad;
+    triangles.verts      = (V3F_T2F_C4B*)quad;
 }
 
-void PolygonInfo::setQuads(V3F_T2F_C4F_Quad* quad, int numberOfQuads)
+void PolygonInfo::setQuads(V3F_T2F_C4B_Quad* quad, int numberOfQuads)
 {
     AXASSERT(numberOfQuads >= 1 && numberOfQuads <= 9, "Invalid number of Quads");
 
@@ -116,7 +116,7 @@ void PolygonInfo::setQuads(V3F_T2F_C4F_Quad* quad, int numberOfQuads)
     triangles.indices    = quadIndices9;
     triangles.vertCount  = 4 * numberOfQuads;
     triangles.indexCount = 6 * numberOfQuads;
-    triangles.verts      = (V3F_T2F_C4F*)quad;
+    triangles.verts      = (V3F_T2F_C4B*)quad;
 }
 
 void PolygonInfo::setTriangles(const TrianglesCommand::Triangles& other)
@@ -159,7 +159,7 @@ unsigned int PolygonInfo::getTrianglesCount() const
 float PolygonInfo::getArea() const
 {
     float area              = 0;
-    V3F_T2F_C4F* verts      = triangles.verts;
+    V3F_T2F_C4B* verts      = triangles.verts;
     unsigned short* indices = triangles.indices;
     for (unsigned int i = 0; i < triangles.indexCount; i += 3)
     {
@@ -610,7 +610,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
     std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
 
     axstd::pod_vector<unsigned short> indices(tris.size() * 3);
-    axstd::pod_vector<V3F_T2F_C4F> verts;
+    axstd::pod_vector<V3F_T2F_C4B> verts;
     verts.reserve(indices.size() / 2);  // we won't know the size of verts until we process all of the triangles!
 
     unsigned short idx = 0;
@@ -654,7 +654,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
     return triangles;
 }
 
-void AutoPolygon::calculateUV(const Rect& rect, V3F_T2F_C4F* verts, ssize_t count)
+void AutoPolygon::calculateUV(const Rect& rect, V3F_T2F_C4B* verts, ssize_t count)
 {
     /*
      whole texture UV coordination

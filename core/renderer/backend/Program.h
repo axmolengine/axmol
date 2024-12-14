@@ -51,7 +51,8 @@ enum class VertexLayoutType
     Unspec,      // needs binding after program load
     Pos,         // V2F
     Texture,     // T2F
-    Sprite,      // V3F_T2F_C4F posTexColor
+    PosUvColor,  // V3F_T2F_C4F
+    Sprite,      // V3F_T2F_C4B
     DrawNode,    // V2F_T2F_C4F
     DrawNode3D,  // V3F_C4F
     SkyBox,      // V3F
@@ -138,9 +139,9 @@ public:
     std::string_view getFragmentShader() const { return _fragmentShader; }
 
     /**
-    * Sets the program shared vertex layout type, see: VertexLayoutType
+    * Define the program shared vertex layout type, see: VertexLayoutType
     */
-    void setupVertexLayout(VertexLayoutType vlt);
+    void defineVertexLayout(VertexLayoutType vlt);
 
     /**
      * Get engine built-in program type.
@@ -217,7 +218,7 @@ protected:
 
     using VERTEX_LAYOUT_SETUP_FUNC = std::function<void(Program*)>;
 
-    static std::function<void(Program*)> s_vertexLayoutSetupList[static_cast<int>(VertexLayoutType::Count)];
+    static std::function<void(Program*)> s_vertexLayoutDefineList[static_cast<int>(VertexLayoutType::Count)];
 };
 
 // end of _backend group

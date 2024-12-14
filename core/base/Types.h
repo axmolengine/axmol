@@ -85,8 +85,23 @@ struct V2F_T2F_C4F
     Color color;
 };
 
-/** @struct V3F_T2F_C4F aka PosColorTex
+/** @struct V3F_T2F_C4B
  * A Vec2 with a vertex point, a tex coord point and a color 4B.
+ */
+struct V3F_T2F_C4B
+{
+    /// position (3F)
+    Vec3 position;  // 12 bytes
+
+    // tex coords (2F)
+    Tex2F texCoord;  // 8 bytes
+
+    /// color (4B)
+    Color4B color;  // 4 bytes
+};
+
+/** @struct V3F_T2F_C4F
+ * A Vec2 with a vertex point, a tex coord point and a color 4F.
  */
 struct V3F_T2F_C4F
 {
@@ -138,6 +153,21 @@ struct V2F_T2F_C4F_Triangle
 
 /** @struct V3F_T2F_C4F_Quad
  * 4 Vertex3FTex2FColor4B.
+ */
+struct V3F_T2F_C4B_Quad
+{
+    /// top left
+    V3F_T2F_C4B tl;
+    /// bottom left
+    V3F_T2F_C4B bl;
+    /// top right
+    V3F_T2F_C4B tr;
+    /// bottom right
+    V3F_T2F_C4B br;
+};
+
+/** @struct V3F_T2F_C4F_Quad
+ * 4 Vertex3FTex2FColor4F.
  */
 struct V3F_T2F_C4F_Quad
 {

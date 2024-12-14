@@ -30,12 +30,12 @@
 NS_AX_BACKEND_BEGIN
 
 /*
- * shader vertex layout setup functions
+ * shader vertex layout define functions
  */
 struct VertexLayoutHelper
 {
-    static void setupDummy(Program*) {}
-    static void setupTexture(Program* program)
+    static void defineDummy(Program*) {}
+    static void defineTexture(Program* program)
     {
         auto vertexLayout = program->getVertexLayout();
 
@@ -51,7 +51,7 @@ struct VertexLayoutHelper
         vertexLayout->setStride(4 * sizeof(float));
     }
 
-    static void setupSprite(Program* program)
+    static void definePosUvColor(Program* program)
     {
         auto vertexLayout = program->getVertexLayout();
 
@@ -70,7 +70,26 @@ struct VertexLayoutHelper
         vertexLayout->setStride(sizeof(V3F_T2F_C4F));
     }
 
-    static void setupDrawNode(Program* program)
+    static void defineSprite(Program* program)
+    {
+        auto vertexLayout = program->getVertexLayout();
+
+        /// a_position
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
+                                program->getAttributeLocation(backend::Attribute::POSITION),
+                                backend::VertexFormat::FLOAT3, 0, false);
+        /// a_texCoord
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
+                                program->getAttributeLocation(backend::Attribute::TEXCOORD),
+                                backend::VertexFormat::FLOAT2, offsetof(V3F_T2F_C4B, texCoord), false);
+
+        /// a_color
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
+                                backend::VertexFormat::UBYTE4, offsetof(V3F_T2F_C4B, color), true);
+        vertexLayout->setStride(sizeof(V3F_T2F_C4B));
+    }
+
+    static void defineDrawNode(Program* program)
     {
         auto vertexLayout = program->getVertexLayout();
 
@@ -88,7 +107,7 @@ struct VertexLayoutHelper
         vertexLayout->setStride(sizeof(V2F_T2F_C4F));
     }
 
-    static void setupDrawNode3D(Program* program)
+    static void defineDrawNode3D(Program* program)
     {
         auto vertexLayout = program->getVertexLayout();
 
@@ -102,16 +121,15 @@ struct VertexLayoutHelper
         vertexLayout->setStride(sizeof(V3F_C4F));
     }
 
-    static void setupSkyBox(Program* program)
+    static void defineSkyBox(Program* program)
     {
         auto vertexLayout = program->getVertexLayout();
         auto attrNameLoc  = program->getAttributeLocation(backend::ATTRIBUTE_NAME_POSITION);
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION, attrNameLoc,
-                                backend::VertexFormat::FLOAT3, 0, false);
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION, attrNameLoc, backend::VertexFormat::FLOAT3, 0, false);
         vertexLayout->setStride(sizeof(Vec3));
     }
 
-    static void setupPos(Program* program)
+    static void definePos(Program* program)
     {
         auto vertexLayout = program->getVertexLayout();
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
@@ -120,7 +138,7 @@ struct VertexLayoutHelper
         vertexLayout->setStride(sizeof(Vec2));
     }
 
-    static void setupPosColor(Program* program)
+    static void definePosColor(Program* program)
     {
         auto vertexLayout = program->getVertexLayout();
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
@@ -131,7 +149,7 @@ struct VertexLayoutHelper
         vertexLayout->setStride(sizeof(V3F_C4F));
     }
 
-    static void setupTerrain3D(Program* program)
+    static void defineTerrain3D(Program* program)
     {
         auto vertexLayout = program->getVertexLayout();
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
@@ -146,7 +164,7 @@ struct VertexLayoutHelper
         vertexLayout->setStride(sizeof(V3F_T2F_N3F));
     }
 
-    static void setupInstanced(Program* program)
+    static void defineInstanced(Program* program)
     {
         auto vertexLayout = program->getVertexLayout(true);
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_INSTANCE,
@@ -155,16 +173,16 @@ struct VertexLayoutHelper
         vertexLayout->setStride(sizeof(Mat4));
     }
 };
-std::function<void(Program*)> Program::s_vertexLayoutSetupList[static_cast<int>(VertexLayoutType::Count)] = {
-    VertexLayoutHelper::setupDummy,    VertexLayoutHelper::setupPos,      VertexLayoutHelper::setupTexture,
-    VertexLayoutHelper::setupSprite,   VertexLayoutHelper::setupDrawNode, VertexLayoutHelper::setupDrawNode3D,
-    VertexLayoutHelper::setupSkyBox,     VertexLayoutHelper::setupPosColor,
-    VertexLayoutHelper::setupTerrain3D, VertexLayoutHelper::setupInstanced};
+std::function<void(Program*)> Program::s_vertexLayoutDefineList[static_cast<int>(VertexLayoutType::Count)] = {
+    VertexLayoutHelper::defineDummy,      VertexLayoutHelper::definePos,      VertexLayoutHelper::defineTexture,
+    VertexLayoutHelper::definePosUvColor,     VertexLayoutHelper::defineSprite,   VertexLayoutHelper::defineDrawNode,
+    VertexLayoutHelper::defineDrawNode3D, VertexLayoutHelper::defineSkyBox,   VertexLayoutHelper::definePosColor,
+    VertexLayoutHelper::defineTerrain3D,  VertexLayoutHelper::defineInstanced};
 
 Program::Program(std::string_view vs, std::string_view fs) : _vertexShader(vs), _fragmentShader(fs)
 {
     _vertexLayout[0] = new VertexLayout();
-    _vertexLayout[1] = new VertexLayout(); // instanced draw
+    _vertexLayout[1] = new VertexLayout();  // instanced draw
 }
 
 Program::~Program()
@@ -173,10 +191,10 @@ Program::~Program()
     delete _vertexLayout[1];
 }
 
-void Program::setupVertexLayout(VertexLayoutType vlt)
+void Program::defineVertexLayout(VertexLayoutType vlt)
 {
     if (vlt < VertexLayoutType::Count)
-        s_vertexLayoutSetupList[static_cast<int>(vlt)](this);
+        s_vertexLayoutDefineList[static_cast<int>(vlt)](this);
 }
 
 Program* Program::getBuiltinProgram(uint32_t type)
@@ -186,7 +204,7 @@ Program* Program::getBuiltinProgram(uint32_t type)
 
 void Program::setProgramIds(uint32_t progType, uint64_t progId)
 {
-    _programType  = progType;
-    _programId    = progId;
+    _programType = progType;
+    _programId   = progId;
 }
 NS_AX_BACKEND_END
