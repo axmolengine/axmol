@@ -119,6 +119,7 @@ conversions:
     "Size": "size_to_luaval(tolua_S, ${in_value})"
     "Color4B": "color4b_to_luaval(tolua_S, ${in_value})"
     "Color4F": "color4f_to_luaval(tolua_S, ${in_value})"
+    "Color": "color_to_luaval(tolua_S, ${in_value})"
     "Color3B": "color3b_to_luaval(tolua_S, ${in_value})"
     "PhysicsMaterial": "physics_material_to_luaval(tolua_S, ${in_value})"
     "PhysicsContactData*": "physics_contactdata_to_luaval(tolua_S, ${in_value})"
