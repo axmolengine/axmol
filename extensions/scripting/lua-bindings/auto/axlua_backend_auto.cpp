@@ -77,6 +77,7 @@ int lua_register_ax_backend_VertexFormat(lua_State* tolua_S)
         tolua_constant(tolua_S, "USHORT4", 8);
         tolua_constant(tolua_S, "USHORT2", 9);
         tolua_constant(tolua_S, "UBYTE4", 10);
+        tolua_constant(tolua_S, "MAT4", 11);
     tolua_endmodule(tolua_S);
 
     auto typeName = typeid(ax::backend::VertexFormat).name(); // rtti is literal storage
@@ -979,6 +980,20 @@ int lua_ax_backend_Program_getVertexLayout(lua_State* tolua_S)
         object_to_luaval<ax::backend::VertexLayout>(tolua_S, "axb.VertexLayout",(ax::backend::VertexLayout*)ret);
         return 1;
     }
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axb.Program:getVertexLayout");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_getVertexLayout'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getVertexLayout(arg0);
+        object_to_luaval<ax::backend::VertexLayout>(tolua_S, "axb.VertexLayout",(ax::backend::VertexLayout*)ret);
+        return 1;
+    }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.Program:getVertexLayout",argc, 0);
     return 0;
 
@@ -1579,6 +1594,20 @@ int lua_ax_backend_ProgramState_getMutableVertexLayout(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getMutableVertexLayout();
+        object_to_luaval<ax::backend::VertexLayout>(tolua_S, "axb.VertexLayout",(ax::backend::VertexLayout*)ret);
+        return 1;
+    }
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axb.ProgramState:getMutableVertexLayout");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_getMutableVertexLayout'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getMutableVertexLayout(arg0);
         object_to_luaval<ax::backend::VertexLayout>(tolua_S, "axb.VertexLayout",(ax::backend::VertexLayout*)ret);
         return 1;
     }

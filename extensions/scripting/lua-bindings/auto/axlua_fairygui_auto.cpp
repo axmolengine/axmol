@@ -32579,11 +32579,11 @@ int lua_ax_fairygui_GTween_toColor4B(lua_State* tolua_S)
 
     if (argc == 3)
     {
-        ax::Color arg0;
-        ax::Color arg1;
+        ax::Color4B arg0;
+        ax::Color4B arg1;
         double arg2;
-        ok &=luaval_to_color(tolua_S, 2, &arg0, "fgui.GTween:toColor4B");
-        ok &=luaval_to_color(tolua_S, 3, &arg1, "fgui.GTween:toColor4B");
+        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "fgui.GTween:toColor4B");
+        ok &=luaval_to_color4b(tolua_S, 3, &arg1, "fgui.GTween:toColor4B");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "fgui.GTween:toColor4B");
         if(!ok)
         {
