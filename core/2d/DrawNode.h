@@ -438,11 +438,6 @@ public:
                  const Color& color,
                  DrawMode drawMode = DrawMode::Outline);
 
-    void setIsConvex(bool isConvex)
-    {
-        AXLOGW("'setIsConvex()' No longer supported. Use the new drawPolygon API.");
-    };
-
 
      /** draw a segment with a radius and color.
      *
@@ -600,7 +595,7 @@ private:
                        float thickness = 0.0f);
 
     void _drawColoredTriangle(Vec2* vertices3,
-                       const Color4B* color3);
+                       const Color* color3);
 
     // Internal function _drawAStar
     void _drawAStar(const Vec2& center,
