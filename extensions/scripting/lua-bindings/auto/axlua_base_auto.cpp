@@ -53855,7 +53855,6 @@ int lua_register_ax_base_DrawNode(lua_State* tolua_S)
         tolua_function(tolua_S,"drawSolidRect",lua_ax_base_DrawNode_drawSolidRect);
         tolua_function(tolua_S,"drawSolidCircle",lua_ax_base_DrawNode_drawSolidCircle);
         tolua_function(tolua_S,"drawPie",lua_ax_base_DrawNode_drawPie);
-        tolua_function(tolua_S,"setIsConvex",lua_ax_base_DrawNode_setIsConvex);
         tolua_function(tolua_S,"drawSegment",lua_ax_base_DrawNode_drawSegment);
         tolua_function(tolua_S,"drawColoredTriangle",lua_ax_base_DrawNode_drawColoredTriangle);
         tolua_function(tolua_S,"drawTriangle",lua_ax_base_DrawNode_drawTriangle);
