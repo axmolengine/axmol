@@ -52896,56 +52896,6 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_DrawNode_setIsConvex(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::DrawNode* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_setIsConvex'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.DrawNode:setIsConvex");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_setIsConvex'", nullptr);
-            return 0;
-        }
-        cobj->setIsConvex(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:setIsConvex",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_setIsConvex'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_DrawNode_drawSegment(lua_State* tolua_S)
 {
     int argc = 0;
@@ -53089,11 +53039,11 @@ int lua_ax_base_DrawNode_drawColoredTriangle(lua_State* tolua_S)
     if (argc == 2) 
     {
         const ax::Vec2* arg0;
-        const ax::Color4B* arg1;
+        const ax::Color* arg1;
 
         ok &= luaval_to_object<const ax::Vec2>(tolua_S, 2, "ax.Vec2",&arg0, "ax.DrawNode:drawColoredTriangle");
 
-        #pragma warning NO CONVERSION TO NATIVE FOR Color4B*
+        #pragma warning NO CONVERSION TO NATIVE FOR Color*
 		ok = false;
         if(!ok)
         {
@@ -53657,7 +53607,6 @@ int lua_register_ax_base_DrawNode(lua_State* tolua_S)
         tolua_function(tolua_S,"drawSolidRect",lua_ax_base_DrawNode_drawSolidRect);
         tolua_function(tolua_S,"drawSolidCircle",lua_ax_base_DrawNode_drawSolidCircle);
         tolua_function(tolua_S,"drawPie",lua_ax_base_DrawNode_drawPie);
-        tolua_function(tolua_S,"setIsConvex",lua_ax_base_DrawNode_setIsConvex);
         tolua_function(tolua_S,"drawSegment",lua_ax_base_DrawNode_drawSegment);
         tolua_function(tolua_S,"drawColoredTriangle",lua_ax_base_DrawNode_drawColoredTriangle);
         tolua_function(tolua_S,"drawTriangle",lua_ax_base_DrawNode_drawTriangle);

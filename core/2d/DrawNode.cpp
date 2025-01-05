@@ -1266,20 +1266,19 @@ void DrawNode::_drawCircle(const Vec2& center,
 }
 
 void DrawNode::_drawColoredTriangle(Vec2* vertices3,
-                             const Color4B* color3)
+                             const Color* color3)
 {
     unsigned int vertex_count = 3;
 
     applyTransform(vertices3, vertices3, vertex_count);
 
-    auto triangles  = reinterpret_cast<V2F_C4B_T2F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
+    auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
     _trianglesDirty = true;
 
-    triangles[0] = {{vertices3[0], color3[0], Vec2::ZERO},
-                    {vertices3[1], color3[1], Vec2::ZERO},
-                    {vertices3[2], color3[2], Vec2::ZERO}};
+    triangles[0] = {{vertices3[0], Vec2::ZERO, color3[0]},
+                    {vertices3[1], Vec2::ZERO, color3[1]},
+                    {vertices3[2], Vec2::ZERO, color3[2]}};
 }
-
 
 void DrawNode::_drawTriangle(Vec2* vertices3,
                              const Color& borderColor,
