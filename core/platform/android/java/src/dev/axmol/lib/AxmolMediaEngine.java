@@ -23,7 +23,6 @@
  ****************************************************************************/
 package dev.axmol.lib;
 
-import android.app.Activity;
 import android.content.Context;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
@@ -32,6 +31,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.media3.common.Format;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackException;
@@ -127,7 +127,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
 
     public static native void nativeStoreCurrentTime(long nativeObj, double currentTime);
 
-    public static void setContext(Activity activity) {
+    public static void setContext(AppCompatActivity activity) {
         sContext = activity.getApplicationContext();
     }
 

@@ -54,7 +54,7 @@ target_sdk=36
 
 # The android min sdk version, @gradle
 # as min as possible
-min_sdk=17
+min_sdk=21
 
 # The gradle version, @setup.ps1
 # as latest as possible
