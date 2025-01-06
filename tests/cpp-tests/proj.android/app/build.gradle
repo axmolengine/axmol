@@ -39,6 +39,8 @@ android {
             // noinspection ChromeOsAbiSupport
             abiFilters = __1K_ARCHS.split(':').collect{it as String}
         }
+
+        multiDexEnabled true
     }
 
     sourceSets.main {
@@ -112,6 +114,9 @@ android.applicationVariants.configureEach { variant ->
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':libaxmol')
+
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    //implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.22"))
 }
 
 project.afterEvaluate {

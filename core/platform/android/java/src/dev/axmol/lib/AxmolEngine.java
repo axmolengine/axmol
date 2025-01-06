@@ -30,7 +30,6 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.media.AudioManager;
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -58,6 +57,8 @@ import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.vending.expansion.zipfile.APKExpansionSupport;
 import com.android.vending.expansion.zipfile.ZipResourceFile;
@@ -95,7 +96,7 @@ public class AxmolEngine {
     private static boolean sCompassEnabled;
     private static boolean sActivityVisible;
     private static String sPackageName;
-    private static Activity sActivity = null;
+    private static AppCompatActivity sActivity = null;
     private static AxmolEngineListener sAxmolEngineListener;
     private static Set<OnActivityResultListener> onActivityResultListeners = new LinkedHashSet<OnActivityResultListener>();
     private static Vibrator sVibrateService = null;
@@ -128,7 +129,7 @@ public class AxmolEngine {
     }
 
     private static boolean sInited = false;
-    public static void init(final Activity activity) {
+    public static void init(final AppCompatActivity activity) {
         sActivity = activity;
         AxmolEngine.sAxmolEngineListener = (AxmolEngineListener)activity;
         if (!sInited) {
@@ -202,7 +203,7 @@ public class AxmolEngine {
         return sOBBFile;
     }
 
-    public static Activity getActivity() {
+    public static AppCompatActivity getActivity() {
         return sActivity;
     }
 
