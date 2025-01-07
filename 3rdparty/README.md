@@ -81,11 +81,6 @@
 - Version: 3.4 with modified for create as win32 child window support
 - License: zlib
 
-## GHC (iOS devices only)
-- [![Upstream](https://img.shields.io/github/v/release/gulrak/filesystem?label=Upstream)](https://github.com/gulrak/filesystem)
-- Version: 1.5.14
-- License: MIT
-
 ## jni.hpp
 - [![Upstream](https://img.shields.io/github/v/release/mapbox/jni.hpp?label=Upstream)](https://github.com/mapbox/jni.hpp)
 - Version: v4.0.0
