@@ -35,7 +35,7 @@ if(NOT DEFINED DEPLOYMENT_TARGET)
            if (XCODE_VERSION LESS "14.3.0")
                set(DEPLOYMENT_TARGET "11.0" CACHE STRING "" FORCE)
            else() # xcode 14.3+ require 12.0 for c++ std::get
-               set(DEPLOYMENT_TARGET "12.0" CACHE STRING "" FORCE)
+               set(DEPLOYMENT_TARGET "13.0" CACHE STRING "" FORCE)
            endif()
         endif()
     elseif (PLAT STREQUAL "tvOS")
