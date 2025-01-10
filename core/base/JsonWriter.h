@@ -22,7 +22,7 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 
- A simple wrapper dotnet Utf8JsonWriter like API style of rapidjson
+ A simple JsonWriter implementation like dotnet Utf8JsonWriter API.
 
  ****************************************************************************/
 
@@ -30,73 +30,46 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 #include <string_view>
 
-#include "rapidjson/writer.h"
-#include "rapidjson/prettywriter.h"
+#include "yasio/byte_buffer.hpp"
+#include "base/format.h"
 
 namespace ax
 {
 struct JsonWriterOptions
 {
-    char indentChar                              = ' ';
-    int indentCharCount                          = 2;
-    rapidjson::PrettyFormatOptions formatOptions = rapidjson::kFormatDefault;
-};
-
-template <bool _Pretty = true>
-struct JsonWriterImpl
-{
-    using type = rapidjson::PrettyWriter<rapidjson::StringBuffer>;
-};
-
-template <>
-struct JsonWriterImpl<false>
-{
-    using type = rapidjson::Writer<rapidjson::StringBuffer>;
+    char indentChar       = ' ';
+    int indentCharCount   = 2;
+    int initialBufferSize = 128;
 };
 
 template <bool _Pretty = true>
 class JsonWriter
 {
-    using writer_type = typename JsonWriterImpl<_Pretty>::type;
-
 public:
     JsonWriter()
     {
-        new (static_cast<void*>(_writerHold)) writer_type(_buffer);
         setOptions(JsonWriterOptions{});
+        _buffer.reserve(_options.initialBufferSize);
     }
-    ~JsonWriter() { writer().~writer_type(); }
+    ~JsonWriter() {}
 
     explicit JsonWriter(const JsonWriterOptions& options) { setOptions(options); }
 
-    void setOptions(const JsonWriterOptions& options)
-    {
-        if constexpr (_Pretty)
-        {
-            prettyWriter().SetIndent(options.indentChar, options.indentCharCount);
-            prettyWriter().SetFormatOptions(options.formatOptions);
-        }
-    }
+    void setOptions(const JsonWriterOptions& options) { _options = options; }
 
-    void writePropertyName(std::string_view propertyName)
-    {
-        writer().Key(propertyName.data(), static_cast<rapidjson::SizeType>(propertyName.length()), false);
-    }
+    explicit operator std::string_view() const { return std::string_view{_buffer.data(), _buffer.size()}; }
 
 #pragma region write values
-    void writeBoolValue(bool value) { writer().Bool(value); }
-    void writeNumberValue(int value) { writer().Int(value); }
-    void writeNumberValue(long long value) { writer().Int64(value); }
-    void writeNumberValue(double value) { writer().Double(value); }
-    void writeStringValue(std::string_view value)
-    {
-        writer().String(value.data(), static_cast<rapidjson::SizeType>(value.length()));
-    }
+    void writeBoolValue(bool value) { writeUnquoteValue(value); }
+    void writeNumberValue(int value) { writeUnquoteValue(value); }
+    void writeNumberValue(long long value) { writeUnquoteValue(value); }
+    void writeNumberValue(double value) { writeUnquoteValue(value); }
+    void writeNullValue() { writeUnquoteValue("null"sv); }
 
-    void writeNullValue() { writer().Null(); }
+    void writeStringValue(std::string_view value) { writeQuoteValue(value); }
 
-    template <typename Intty, size_t _N>
-    void writeNumberValues(Intty (&values)[_N])
+    template <typename _Nty, size_t _N>
+    void writeNumberValues(_Nty (&values)[_N])
     {
         for (auto v : values)
             writeNumberValue(v);
@@ -154,21 +127,108 @@ public:
         writePropertyName(propertyName);
         writeStartObject();
     }
-    void writeStartArray() { writer().StartArray(); }
-    void writeEndArray() { writer().EndArray(); }
-    void writeStartObject() { writer().StartObject(); }
-    void writeEndObject() { writer().EndObject(); }
+    void writeStartArray() { writeStartCollection('['); }
+    void writeEndArray() { writeEndCollection(']'); }
+
+    void writeStartObject() { writeStartCollection('{'); }
+    void writeEndObject() { writeEndCollection('}'); }
 #pragma endregion
 
-    explicit operator std::string_view() { return std::string_view{_buffer.GetString(), _buffer.GetLength()}; }
+    void writePropertyName(std::string_view propertyName)
+    {
+        if constexpr (_Pretty)
+        {
+            fillIndentChars();
+            _pendingValue = true;
+        }
+        _buffer += '"';
+        _buffer += propertyName;
+        _buffer += "\":"sv;
+        if constexpr (_Pretty)
+            _buffer += _options.indentChar;
+    }
 
 protected:
-    inline writer_type& writer() { return *reinterpret_cast<writer_type*>(&_writerHold[0]); }
-    inline JsonWriterImpl<true>::type& prettyWriter()
+    void writeQuoteValue(const std::string_view& value)
     {
-        return *reinterpret_cast<JsonWriterImpl<true>::type*>(&_writerHold[0]);
+        if constexpr (_Pretty)
+            if (!_pendingValue)
+                fillIndentChars();
+
+        _buffer += '"';
+        _buffer += value;
+        _buffer += "\","sv;
+        if constexpr (_Pretty)
+            _buffer += '\n';
+
+        _pendingValue = false;
     }
-    rapidjson::StringBuffer _buffer;
-    uint8_t _writerHold[sizeof(writer_type)];
+    template <typename _Ty>
+    void writeUnquoteValue(const _Ty& value)
+    {
+        if constexpr (_Pretty)
+            if (!_pendingValue)
+                fillIndentChars();
+
+        fmt::vformat_to(std::back_inserter(_buffer), "{},", fmt::make_format_args(value));
+        if constexpr (_Pretty)
+            _buffer += '\n';
+
+        _pendingValue = false;
+    }
+
+    void writeStartCollection(const char startChar)
+    {
+        if constexpr (_Pretty)
+            if (!_pendingValue)
+                fillIndentChars();
+
+        ++_level;
+
+        _buffer += startChar;
+        if constexpr (_Pretty)
+            _buffer += '\n';
+
+        _pendingValue = false;
+    }
+
+    void writeEndCollection(const char termChar)
+    {
+        if (_buffer.empty())
+            return;
+
+        --_level;
+
+        if constexpr (_Pretty)
+        {
+            if (_buffer.back() == '\n')
+                _buffer.pop_back();  // pop '\n'
+        }
+        if (_buffer.back() == ',')
+            _buffer.pop_back();
+        if constexpr (_Pretty)
+        {
+            _buffer += '\n';
+            fillIndentChars();
+        }
+        _buffer += termChar;
+
+        if (_level != 0)
+            _buffer += ',';
+        if constexpr (_Pretty)
+            _buffer += '\n';
+    }
+
+    void fillIndentChars()
+    {
+        if constexpr (_Pretty)
+            if (_level)
+                _buffer.expand(_level * _options.indentCharCount, _options.indentChar);
+    }
+
+    yasio::sbyte_buffer _buffer;
+    uint16_t _level{0};
+    bool _pendingValue{false};
+    JsonWriterOptions _options;
 };
 }  // namespace ax
