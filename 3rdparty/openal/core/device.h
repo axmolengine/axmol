@@ -18,6 +18,7 @@
 #include "devformat.h"
 #include "filters/nfc.h"
 #include "flexarray.h"
+#include "fmt/core.h"
 #include "intrusive_ptr.h"
 #include "mixer/hrtfdefs.h"
 #include "opthelpers.h"
@@ -87,7 +88,7 @@ struct DistanceComp {
     std::array<ChanData,MaxOutputChannels> mChannels;
     al::FlexArray<float,16> mSamples;
 
-    DistanceComp(std::size_t count) : mSamples{count} { }
+    explicit DistanceComp(std::size_t count) : mSamples{count} { }
 
     static std::unique_ptr<DistanceComp> Create(std::size_t numsamples)
     { return std::unique_ptr<DistanceComp>{new(FamCount(numsamples)) DistanceComp{numsamples}}; }
@@ -179,15 +180,16 @@ enum class DeviceState : std::uint8_t {
     Playing
 };
 
+/* NOLINTNEXTLINE(clang-analyzer-optin.performance.Padding) */
 struct SIMDALIGN DeviceBase {
     std::atomic<bool> Connected{true};
     const DeviceType Type{};
 
     std::string mDeviceName;
 
-    uint Frequency{};
-    uint UpdateSize{};
-    uint BufferSize{};
+    uint mSampleRate{};
+    uint mUpdateSize{};
+    uint mBufferSize{};
 
     DevFmtChannels FmtChans{};
     DevFmtType FmtType{};
@@ -336,7 +338,7 @@ struct SIMDALIGN DeviceBase {
         using std::chrono::seconds;
         using std::chrono::nanoseconds;
 
-        auto ns = nanoseconds{seconds{mSamplesDone.load(std::memory_order_relaxed)}} / Frequency;
+        auto ns = nanoseconds{seconds{mSamplesDone.load(std::memory_order_relaxed)}} / mSampleRate;
         return nanoseconds{mClockBaseNSec.load(std::memory_order_relaxed)}
             + mClockBaseSec.load(std::memory_order_relaxed) + ns;
     }
@@ -354,12 +356,11 @@ struct SIMDALIGN DeviceBase {
     void renderSamples(void *outBuffer, const uint numSamples, const std::size_t frameStep);
 
     /* Caller must lock the device state, and the mixer must not be running. */
-#ifdef __MINGW32__
-    [[gnu::format(__MINGW_PRINTF_FORMAT,2,3)]]
-#else
-    [[gnu::format(printf,2,3)]]
-#endif
-    void handleDisconnect(const char *msg, ...);
+    void doDisconnect(std::string msg);
+
+    template<typename ...Args>
+    void handleDisconnect(fmt::format_string<Args...> fmt, Args&& ...args)
+    { doDisconnect(fmt::format(std::move(fmt), std::forward<Args>(args)...)); }
 
     /**
      * Returns the index for the given channel name (e.g. FrontCenter), or
@@ -372,7 +373,7 @@ private:
     uint renderSamples(const uint numSamples);
 
 protected:
-    DeviceBase(DeviceType type);
+    explicit DeviceBase(DeviceType type);
     ~DeviceBase();
 
 public:

@@ -73,7 +73,7 @@ std::vector<std::string_view> getContextExtensions() noexcept
         "AL_EXT_STEREO_ANGLES"sv,
         "AL_LOKI_quadriphonic"sv,
         "AL_SOFT_bformat_ex"sv,
-        "AL_SOFTX_bformat_hoa"sv,
+        "AL_SOFT_bformat_hoa"sv,
         "AL_SOFT_block_alignment"sv,
         "AL_SOFT_buffer_length_query"sv,
         "AL_SOFT_callback_buffer"sv,
@@ -110,7 +110,7 @@ ALCcontext::ThreadCtx::~ThreadCtx()
     if(ALCcontext *ctx{std::exchange(ALCcontext::sLocalContext, nullptr)})
     {
         const bool result{ctx->releaseIfNoDelete()};
-        ERR("Context %p current for thread being destroyed%s!\n", voidp{ctx},
+        ERR("Context {} current for thread being destroyed{}!", voidp{ctx},
             result ? "" : ", leak detected");
     }
 }
@@ -132,13 +132,13 @@ ALCcontext::ALCcontext(al::intrusive_ptr<al::Device> device, ContextFlagBitset f
 
 ALCcontext::~ALCcontext()
 {
-    TRACE("Freeing context %p\n", voidp{this});
+    TRACE("Freeing context {}", voidp{this});
 
     size_t count{std::accumulate(mSourceList.cbegin(), mSourceList.cend(), 0_uz,
         [](size_t cur, const SourceSubList &sublist) noexcept -> size_t
         { return cur + static_cast<uint>(al::popcount(~sublist.FreeMask)); })};
     if(count > 0)
-        WARN("%zu Source%s not deleted\n", count, (count==1)?"":"s");
+        WARN("{} Source{} not deleted", count, (count==1)?"":"s");
     mSourceList.clear();
     mNumSources = 0;
 
@@ -151,7 +151,7 @@ ALCcontext::~ALCcontext()
         [](size_t cur, const EffectSlotSubList &sublist) noexcept -> size_t
         { return cur + static_cast<uint>(al::popcount(~sublist.FreeMask)); });
     if(count > 0)
-        WARN("%zu AuxiliaryEffectSlot%s not deleted\n", count, (count==1)?"":"s");
+        WARN("{} AuxiliaryEffectSlot{} not deleted", count, (count==1)?"":"s");
     mEffectSlotList.clear();
     mNumEffectSlots = 0;
 }
@@ -255,7 +255,7 @@ void ALCcontext::deinit()
 {
     if(sLocalContext == this)
     {
-        WARN("%p released while current on thread\n", voidp{this});
+        WARN("{} released while current on thread", voidp{this});
         auto _ = ContextRef{sLocalContext};
         sThreadContext.set(nullptr);
     }
@@ -579,7 +579,8 @@ unsigned long ALCcontext::eax_detect_speaker_configuration() const
      */
     case DevFmtAmbi3D: return SPEAKERS_7;
     }
-    ERR(EAX_PREFIX "Unexpected device channel format 0x%x.\n", mDevice->FmtChans);
+    ERR(EAX_PREFIX "Unexpected device channel format {:#x}.",
+        uint{al::to_underlying(mDevice->FmtChans)});
     return HEADPHONES;
 
 #undef EAX_PREFIX

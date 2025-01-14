@@ -3,10 +3,7 @@
 
 #ifdef _WIN32
 #include <cstddef>
-#include <memory>
-#include <type_traits>
 #include <utility>
-#include <variant>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -18,7 +15,7 @@ struct ComWrapper {
     ComWrapper(void *reserved, DWORD coinit)
         : mStatus{CoInitializeEx(reserved, coinit)}
     { }
-    ComWrapper(DWORD coinit=COINIT_APARTMENTTHREADED)
+    explicit ComWrapper(DWORD coinit=COINIT_APARTMENTTHREADED)
         : mStatus{CoInitializeEx(nullptr, coinit)}
     { }
     ComWrapper(ComWrapper&& rhs) { mStatus = std::exchange(rhs.mStatus, E_FAIL); }
@@ -58,7 +55,7 @@ struct ComPtr {
     ComPtr(const ComPtr &rhs) noexcept(RefIsNoexcept) : mPtr{rhs.mPtr}
     { if(mPtr) mPtr->AddRef(); }
     ComPtr(ComPtr&& rhs) noexcept : mPtr{rhs.mPtr} { rhs.mPtr = nullptr; }
-    ComPtr(std::nullptr_t) noexcept { }
+    ComPtr(std::nullptr_t) noexcept { } /* NOLINT(google-explicit-constructor) */
     explicit ComPtr(T *ptr) noexcept : mPtr{ptr} { }
     ~ComPtr() { if(mPtr) mPtr->Release(); }
 

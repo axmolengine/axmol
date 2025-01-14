@@ -152,18 +152,18 @@ void Voice::InitMixer(std::optional<std::string> resopt)
 		
         if (al::case_compare(resampler, "cubic"sv) == 0)
         {
-            WARN("Resampler option \"%s\" is deprecated, using spline\n", resopt->c_str());
+            WARN("Resampler option \"{}\" is deprecated, using spline", *resopt);
             resampler = "spline"sv;
         }
         else if(al::case_compare(resampler, "sinc4"sv) == 0
             || al::case_compare(resampler, "sinc8"sv) == 0)
         {
-            WARN("Resampler option \"%s\" is deprecated, using gaussian\n", resopt->c_str());
+            WARN("Resampler option \"{}\" is deprecated, using gaussian", *resopt);
             resampler = "gaussian"sv;
         }
         else if(al::case_compare(resampler, "bsinc"sv) == 0)
         {
-            WARN("Resampler option \"%s\" is deprecated, using bsinc12\n", resopt->c_str());
+            WARN("Resampler option \"{}\" is deprecated, using bsinc12", *resopt);
             resampler = "bsinc12"sv;
         }
 
@@ -171,7 +171,7 @@ void Voice::InitMixer(std::optional<std::string> resopt)
             [resampler](const ResamplerEntry &entry) -> bool
             { return al::case_compare(resampler, entry.name) == 0; });
         if(iter == ResamplerList.end())
-            ERR("Invalid resampler: %s\n", resopt->c_str());
+            ERR("Invalid resampler: {}", *resopt);
         else
             ResamplerDefault = iter->resampler;
     }
@@ -772,7 +772,7 @@ void Voice::mix(const State vstate, ContextBase *Context, const nanoseconds devi
          * should start at. Skip this update if it's beyond the output sample
          * count.
          */
-        OutPos = static_cast<uint>(round<seconds>(diff * Device->Frequency).count());
+        OutPos = static_cast<uint>(round<seconds>(diff * Device->mSampleRate).count());
         if(OutPos >= SamplesToDo) return;
     }
 
@@ -1213,7 +1213,7 @@ void Voice::prepare(DeviceBase *device)
         : ChannelsFromFmt(mFmtChannels, std::min(mAmbiOrder, device->mAmbiOrder))};
     if(num_channels > device->MixerChannelsMax) UNLIKELY
     {
-        ERR("Unexpected channel count: %u (limit: %zu, %s : %d)\n", num_channels,
+        ERR("Unexpected channel count: {} (limit: {}, {} : {})", num_channels,
             device->MixerChannelsMax, NameFromFormat(mFmtChannels), mAmbiOrder);
         num_channels = device->MixerChannelsMax;
     }
@@ -1288,7 +1288,7 @@ void Voice::prepare(DeviceBase *device)
          * Note this isn't needed with UHJ output (UHJ2->B-Format->UHJ2 is
          * identity, so don't mess with it).
          */
-        const BandSplitter splitter{device->mXOverFreq / static_cast<float>(device->Frequency)};
+        const BandSplitter splitter{device->mXOverFreq / static_cast<float>(device->mSampleRate)};
         for(auto &chandata : mChans)
         {
             chandata.mAmbiHFScale = 1.0f;
@@ -1315,7 +1315,7 @@ void Voice::prepare(DeviceBase *device)
         const auto scales = AmbiScale::GetHFOrderScales(mAmbiOrder, device->mAmbiOrder,
             device->m2DMixing);
 
-        const BandSplitter splitter{device->mXOverFreq / static_cast<float>(device->Frequency)};
+        const BandSplitter splitter{device->mXOverFreq / static_cast<float>(device->mSampleRate)};
         for(auto &chandata : mChans)
         {
             chandata.mAmbiHFScale = scales[*(OrderFromChan++)];

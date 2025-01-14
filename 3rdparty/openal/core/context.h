@@ -60,7 +60,7 @@ struct ContextProps {
     bool SourceDistanceModel;
     DistanceModel mDistanceModel;
 
-    std::atomic<ContextProps*> next;
+    std::atomic<ContextProps*> next{};
 };
 
 struct ContextParams {
@@ -176,7 +176,7 @@ struct ContextBase {
     std::vector<ContextPropsCluster> mContextPropClusters;
 
 
-    ContextBase(DeviceBase *device);
+    explicit ContextBase(DeviceBase *device);
     ContextBase(const ContextBase&) = delete;
     ContextBase& operator=(const ContextBase&) = delete;
     virtual ~ContextBase();
