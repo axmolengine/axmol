@@ -22,6 +22,7 @@
 #include "al/listener.h"
 #include "althreads.h"
 #include "core/context.h"
+#include "fmt/core.h"
 #include "intrusive_ptr.h"
 #include "opthelpers.h"
 
@@ -162,12 +163,18 @@ struct ALCcontext final : public al::intrusive_ref<ALCcontext>, ContextBase {
      */
     void applyAllUpdates();
 
-#ifdef __MINGW32__
-    [[gnu::format(__MINGW_PRINTF_FORMAT, 3, 4)]]
-#else
-    [[gnu::format(printf, 3, 4)]]
-#endif
-    void setError(ALenum errorCode, const char *msg, ...);
+    void setErrorImpl(ALenum errorCode, const fmt::string_view fmt, fmt::format_args args);
+
+    template<typename ...Args>
+    void setError(ALenum errorCode, fmt::format_string<Args...> msg, Args&& ...args)
+    { setErrorImpl(errorCode, msg, fmt::make_format_args(args...)); }
+
+    [[noreturn]]
+    void throw_error_impl(ALenum errorCode, const fmt::string_view fmt, fmt::format_args args);
+
+    template<typename ...Args> [[noreturn]]
+    void throw_error(ALenum errorCode, fmt::format_string<Args...> fmt, Args&&... args)
+    { throw_error_impl(errorCode, fmt, fmt::make_format_args(args...)); }
 
     void sendDebugMessage(std::unique_lock<std::mutex> &debuglock, DebugSource source,
         DebugType type, ALuint id, DebugSeverity severity, std::string_view message);

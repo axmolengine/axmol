@@ -45,7 +45,7 @@ using namespace std::string_view_literals;
 { return "Default Device"sv; }
 
 struct Sdl2Backend final : public BackendBase {
-    Sdl2Backend(DeviceBase *device) noexcept : BackendBase{device} { }
+    explicit Sdl2Backend(DeviceBase *device) noexcept : BackendBase{device} { }
     ~Sdl2Backend() override;
 
     void audioCallback(Uint8 *stream, int len) noexcept;
@@ -78,7 +78,7 @@ void Sdl2Backend::open(std::string_view name)
 {
     SDL_AudioSpec want{}, have{};
 
-    want.freq = static_cast<int>(mDevice->Frequency);
+    want.freq = static_cast<int>(mDevice->mSampleRate);
     switch(mDevice->FmtType)
     {
     case DevFmtUByte: want.format = AUDIO_U8; break;
@@ -91,7 +91,7 @@ void Sdl2Backend::open(std::string_view name)
     }
     want.channels = static_cast<Uint8>(std::min<uint>(mDevice->channelsFromFmt(),
         std::numeric_limits<Uint8>::max()));
-    want.samples = static_cast<Uint16>(std::min(mDevice->UpdateSize, 8192u));
+    want.samples = static_cast<Uint16>(std::min(mDevice->mUpdateSize, 8192u));
     want.callback = [](void *ptr, Uint8 *stream, int len) noexcept
     { return static_cast<Sdl2Backend*>(ptr)->audioCallback(stream, len); };
     want.userdata = this;
@@ -114,7 +114,7 @@ void Sdl2Backend::open(std::string_view name)
             SDL_AUDIO_ALLOW_ANY_CHANGE);
     }
     if(!mDeviceID)
-        throw al::backend_exception{al::backend_error::NoDevice, "%s", SDL_GetError()};
+        throw al::backend_exception{al::backend_error::NoDevice, "{}", SDL_GetError()};
 
     DevFmtType devtype{};
     switch(have.format)
@@ -126,8 +126,8 @@ void Sdl2Backend::open(std::string_view name)
     case AUDIO_S32SYS: devtype = DevFmtInt;    break;
     case AUDIO_F32SYS: devtype = DevFmtFloat;  break;
     default:
-        throw al::backend_exception{al::backend_error::DeviceError, "Unhandled SDL format: 0x%04x",
-            have.format};
+        throw al::backend_exception{al::backend_error::DeviceError,
+            "Unhandled SDL format: {:#04x}", have.format};
     }
 
     mFrameSize = BytesFromDevFmt(devtype) * have.channels;
@@ -142,7 +142,7 @@ bool Sdl2Backend::reset()
     mDeviceID = 0;
 
     auto want = SDL_AudioSpec{};
-    want.freq = static_cast<int>(mDevice->Frequency);
+    want.freq = static_cast<int>(mDevice->mSampleRate);
     switch(mDevice->FmtType)
     {
     case DevFmtUByte: want.format = AUDIO_U8; break;
@@ -155,7 +155,7 @@ bool Sdl2Backend::reset()
     }
     want.channels = static_cast<Uint8>(std::min<uint>(mDevice->channelsFromFmt(),
         std::numeric_limits<Uint8>::max()));
-    want.samples = static_cast<Uint16>(std::min(mDevice->UpdateSize, 8192u));
+    want.samples = static_cast<Uint16>(std::min(mDevice->mUpdateSize, 8192u));
     want.callback = [](void *ptr, Uint8 *stream, int len) noexcept
     { return static_cast<Sdl2Backend*>(ptr)->audioCallback(stream, len); };
     want.userdata = this;
@@ -172,7 +172,7 @@ bool Sdl2Backend::reset()
             SDL_AUDIO_ALLOW_ANY_CHANGE);
     }
     if(!mDeviceID)
-        throw al::backend_exception{al::backend_error::NoDevice, "%s", SDL_GetError()};
+        throw al::backend_exception{al::backend_error::NoDevice, "{}", SDL_GetError()};
 
     if(have.channels != mDevice->channelsFromFmt())
     {
@@ -191,7 +191,7 @@ bool Sdl2Backend::reset()
             mDevice->FmtChans = DevFmtMono;
         else
             throw al::backend_exception{al::backend_error::DeviceError,
-                "Unhandled SDL channel count: %d", int{have.channels}};
+                "Unhandled SDL channel count: {}", int{have.channels}};
         mDevice->mAmbiOrder = 0;
     }
 
@@ -204,19 +204,19 @@ bool Sdl2Backend::reset()
     case AUDIO_S32SYS: mDevice->FmtType = DevFmtInt;    break;
     case AUDIO_F32SYS: mDevice->FmtType = DevFmtFloat;  break;
     default:
-        throw al::backend_exception{al::backend_error::DeviceError, "Unhandled SDL format: 0x%04x",
-            have.format};
+        throw al::backend_exception{al::backend_error::DeviceError,
+            "Unhandled SDL format: {:#04x}", have.format};
     }
 
     mFrameSize = BytesFromDevFmt(mDevice->FmtType) * have.channels;
 
     if(have.freq < int{MinOutputRate})
         throw al::backend_exception{al::backend_error::DeviceError,
-            "Unhandled SDL sample rate: %d", have.format};
+            "Unhandled SDL sample rate: {}", have.freq};
 
-    mDevice->Frequency = static_cast<uint>(have.freq);
-    mDevice->UpdateSize = have.samples;
-    mDevice->BufferSize = std::max(have.size/mFrameSize, mDevice->UpdateSize*2u);
+    mDevice->mSampleRate = static_cast<uint>(have.freq);
+    mDevice->mUpdateSize = have.samples;
+    mDevice->mBufferSize = std::max(have.size/mFrameSize, mDevice->mUpdateSize*2u);
 
     setDefaultWFXChannelOrder();
 

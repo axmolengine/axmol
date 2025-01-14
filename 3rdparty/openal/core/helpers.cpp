@@ -11,7 +11,6 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
-#include <filesystem>
 #include <limits>
 #include <mutex>
 #include <optional>
@@ -23,6 +22,7 @@
 #include "alnumeric.h"
 #include "alspan.h"
 #include "alstring.h"
+#include "filesystem.h"
 #include "logging.h"
 #include "strutils.h"
 
@@ -33,11 +33,9 @@ using namespace std::string_view_literals;
 
 std::mutex gSearchLock;
 
-void DirectorySearch(const std::filesystem::path &path, const std::string_view ext,
+void DirectorySearch(const fs::path &path, const std::string_view ext,
     std::vector<std::string> *const results)
 {
-    namespace fs = std::filesystem;
-
     const auto base = results->size();
 
     try {
@@ -45,8 +43,7 @@ void DirectorySearch(const std::filesystem::path &path, const std::string_view e
         if(!fs::exists(fpath))
             return;
 
-        TRACE("Searching %s for *%.*s\n", reinterpret_cast<const char*>(fpath.u8string().c_str()),
-            al::sizei(ext), ext.data());
+        TRACE("Searching {} for *{}", al::u8_as_char(fpath.u8string()), ext);
         for(auto&& dirent : fs::directory_iterator{fpath})
         {
             auto&& entrypath = dirent.path();
@@ -61,13 +58,13 @@ void DirectorySearch(const std::filesystem::path &path, const std::string_view e
         }
     }
     catch(std::exception& e) {
-        ERR("Exception enumerating files: %s\n", e.what());
+        ERR("Exception enumerating files: {}", e.what());
     }
 
     const auto newlist = al::span{*results}.subspan(base);
     std::sort(newlist.begin(), newlist.end());
     for(const auto &name : newlist)
-        TRACE(" got %s\n", name.c_str());
+        TRACE(" got {}", name);
 }
 
 } // namespace
@@ -99,7 +96,7 @@ const PathNamePair &GetProcBinary()
         }
         if(len == 0)
         {
-            ERR("Failed to get process name: error %lu\n", GetLastError());
+            ERR("Failed to get process name: error {}", GetLastError());
             return PathNamePair{};
         }
 
@@ -108,7 +105,7 @@ const PathNamePair &GetProcBinary()
         const WCHAR *exePath{__wargv[0]};
         if(!exePath)
         {
-            ERR("Failed to get process name: __wargv[0] == nullptr\n");
+            ERR("Failed to get process name: __wargv[0] == nullptr");
             return PathNamePair{};
         }
         std::wstring fullpath{exePath};
@@ -124,7 +121,7 @@ const PathNamePair &GetProcBinary()
         else
             res.fname = wstr_to_utf8(fullpath);
 
-        TRACE("Got binary: %s, %s\n", res.path.c_str(), res.fname.c_str());
+        TRACE("Got binary: {}, {}", res.path, res.fname);
         return res;
     };
     static const PathNamePair procbin{get_procbin()};
@@ -149,7 +146,7 @@ auto SearchDataFiles(const std::string_view ext) -> std::vector<std::string>
     auto results = std::vector<std::string>{};
     if(auto localpath = al::getenv(L"ALSOFT_LOCAL_PATH"))
         DirectorySearch(*localpath, ext, &results);
-    else if(auto curpath = std::filesystem::current_path(); !curpath.empty())
+    else if(auto curpath = fs::current_path(); !curpath.empty())
         DirectorySearch(curpath, ext, &results);
 
     return results;
@@ -162,7 +159,7 @@ auto SearchDataFiles(const std::string_view ext, const std::string_view subdir)
 
     /* If the path is absolute, use it directly. */
     std::vector<std::string> results;
-    auto path = std::filesystem::u8path(subdir);
+    auto path = fs::u8path(subdir);
     if(path.is_absolute())
     {
         DirectorySearch(path, ext, &results);
@@ -179,7 +176,7 @@ auto SearchDataFiles(const std::string_view ext, const std::string_view subdir)
         if(FAILED(hr) || !buffer || !*buffer)
             continue;
 
-        DirectorySearch(std::filesystem::path{buffer.get()}/path, ext, &results);
+        DirectorySearch(fs::path{buffer.get()}/path, ext, &results);
     }
 #endif
 
@@ -192,7 +189,7 @@ void SetRTPriority()
     if(RTPrioLevel > 0)
     {
         if(!SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL))
-            ERR("Failed to set priority level for thread\n");
+            ERR("Failed to set priority level for thread");
     }
 #endif
 }
@@ -234,8 +231,8 @@ const PathNamePair &GetProcBinary()
         size_t pathlen{};
         std::array<int,4> mib{{CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1}};
         if(sysctl(mib.data(), mib.size(), nullptr, &pathlen, nullptr, 0) == -1)
-            WARN("Failed to sysctl kern.proc.pathname: %s\n",
-                std::generic_category().message(errno).c_str());
+            WARN("Failed to sysctl kern.proc.pathname: {}",
+                std::generic_category().message(errno));
         else
         {
             auto procpath = std::vector<char>(pathlen+1, '\0');
@@ -249,8 +246,8 @@ const PathNamePair &GetProcBinary()
             std::array<char,PROC_PIDPATHINFO_MAXSIZE> procpath{};
             const pid_t pid{getpid()};
             if(proc_pidpath(pid, procpath.data(), procpath.size()) < 1)
-                ERR("proc_pidpath(%d, ...) failed: %s\n", pid,
-                    std::generic_category().message(errno).c_str());
+                ERR("proc_pidpath({}, ...) failed: {}", pid,
+                    std::generic_category().message(errno));
             else
                 pathname = procpath.data();
         }
@@ -276,17 +273,16 @@ const PathNamePair &GetProcBinary()
             for(const std::string_view name : SelfLinkNames)
             {
                 try {
-                    if(!std::filesystem::exists(name))
+                    if(!fs::exists(name))
                         continue;
-                    if(auto path = std::filesystem::read_symlink(name); !path.empty())
+                    if(auto path = fs::read_symlink(name); !path.empty())
                     {
                         pathname = al::u8_as_char(path.u8string());
                         break;
                     }
                 }
                 catch(std::exception& e) {
-                    WARN("Exception getting symlink %.*s: %s\n", al::sizei(name), name.data(),
-                        e.what());
+                    WARN("Exception getting symlink {}: {}", name, e.what());
                 }
             }
         }
@@ -301,7 +297,7 @@ const PathNamePair &GetProcBinary()
         else
             res.fname = pathname;
 
-        TRACE("Got binary: \"%s\", \"%s\"\n", res.path.c_str(), res.fname.c_str());
+        TRACE("Got binary: \"{}\", \"{}\"", res.path, res.fname);
         return res;
     };
     static const PathNamePair procbin{get_procbin()};
@@ -316,7 +312,7 @@ auto SearchDataFiles(const std::string_view ext) -> std::vector<std::string>
     auto results = std::vector<std::string>{};
     if(auto localpath = al::getenv("ALSOFT_LOCAL_PATH"))
         DirectorySearch(*localpath, ext, &results);
-    else if(auto curpath = std::filesystem::current_path(); !curpath.empty())
+    else if(auto curpath = fs::current_path(); !curpath.empty())
         DirectorySearch(curpath, ext, &results);
 
     return results;
@@ -328,7 +324,7 @@ auto SearchDataFiles(const std::string_view ext, const std::string_view subdir)
     std::lock_guard<std::mutex> srchlock{gSearchLock};
 
     std::vector<std::string> results;
-    auto path = std::filesystem::u8path(subdir);
+    auto path = fs::u8path(subdir);
     if(path.is_absolute())
     {
         DirectorySearch(path, ext, &results);
@@ -337,9 +333,9 @@ auto SearchDataFiles(const std::string_view ext, const std::string_view subdir)
 
     /* Search local data dir */
     if(auto datapath = al::getenv("XDG_DATA_HOME"))
-        DirectorySearch(std::filesystem::path{*datapath}/path, ext, &results);
+        DirectorySearch(fs::path{*datapath}/path, ext, &results);
     else if(auto homepath = al::getenv("HOME"))
-        DirectorySearch(std::filesystem::path{*homepath}/".local/share"/path, ext, &results);
+        DirectorySearch(fs::path{*homepath}/".local/share"/path, ext, &results);
 
     /* Search global data dirs */
     std::string datadirs{al::getenv("XDG_DATA_DIRS").value_or("/usr/local/share/:/usr/share/")};
@@ -355,12 +351,12 @@ auto SearchDataFiles(const std::string_view ext, const std::string_view subdir)
         curpos = nextpos;
 
         if(!pathname.empty())
-            DirectorySearch(std::filesystem::path{pathname}/path, ext, &results);
+            DirectorySearch(fs::path{pathname}/path, ext, &results);
     }
 
 #ifdef ALSOFT_INSTALL_DATADIR
     /* Search the installation data directory */
-    if(auto instpath = std::filesystem::path{ALSOFT_INSTALL_DATADIR}; !instpath.empty())
+    if(auto instpath = fs::path{ALSOFT_INSTALL_DATADIR}; !instpath.empty())
         DirectorySearch(instpath/path, ext, &results);
 #endif
 
@@ -390,8 +386,7 @@ bool SetRTPriorityPthread(int prio [[maybe_unused]])
         err = pthread_setschedparam(pthread_self(), SCHED_RR, &param);
     if(err == 0) return true;
 #endif
-    WARN("pthread_setschedparam failed: %s (%d)\n", std::generic_category().message(err).c_str(),
-        err);
+    WARN("pthread_setschedparam failed: {} ({})", std::generic_category().message(err), err);
     return false;
 }
 
@@ -400,14 +395,14 @@ bool SetRTPriorityRTKit(int prio [[maybe_unused]])
 #if HAVE_RTKIT
     if(!HasDBus())
     {
-        WARN("D-Bus not available\n");
+        WARN("D-Bus not available");
         return false;
     }
     dbus::Error error;
     dbus::ConnectionPtr conn{dbus_bus_get(DBUS_BUS_SYSTEM, &error.get())};
     if(!conn)
     {
-        WARN("D-Bus connection failed with %s: %s\n", error->name, error->message);
+        WARN("D-Bus connection failed with {}: {}", error->name, error->message);
         return false;
     }
 
@@ -419,11 +414,11 @@ bool SetRTPriorityRTKit(int prio [[maybe_unused]])
     if(err == -ENOENT)
     {
         err = std::abs(err);
-        ERR("Could not query RTKit: %s (%d)\n", std::generic_category().message(err).c_str(), err);
+        ERR("Could not query RTKit: {} ({})", std::generic_category().message(err), err);
         return false;
     }
     int rtmax{rtkit_get_max_realtime_priority(conn.get())};
-    TRACE("Maximum real-time priority: %d, minimum niceness: %d\n", rtmax, nicemin);
+    TRACE("Maximum real-time priority: {}, minimum niceness: {}", rtmax, nicemin);
 
     auto limit_rttime = [](DBusConnection *c) -> int
     {
@@ -436,8 +431,7 @@ bool SetRTPriorityRTKit(int prio [[maybe_unused]])
         if(getrlimit(RLIMIT_RTTIME, &rlim) != 0)
             return errno;
 
-        TRACE("RTTime max: %llu (hard: %llu, soft: %llu)\n", umaxtime,
-            static_cast<ulonglong>(rlim.rlim_max), static_cast<ulonglong>(rlim.rlim_cur));
+        TRACE("RTTime max: {} (hard: {}, soft: {})", umaxtime, rlim.rlim_max, rlim.rlim_cur);
         if(rlim.rlim_max > umaxtime)
         {
             rlim.rlim_max = static_cast<rlim_t>(std::min<ulonglong>(umaxtime,
@@ -454,21 +448,21 @@ bool SetRTPriorityRTKit(int prio [[maybe_unused]])
         {
             err = limit_rttime(conn.get());
             if(err != 0)
-                WARN("Failed to set RLIMIT_RTTIME for RTKit: %s (%d)\n",
-                    std::generic_category().message(err).c_str(), err);
+                WARN("Failed to set RLIMIT_RTTIME for RTKit: {} ({})",
+                    std::generic_category().message(err), err);
         }
 
         /* Limit the maximum real-time priority to half. */
         rtmax = (rtmax+1)/2;
         prio = std::clamp(prio, 1, rtmax);
 
-        TRACE("Making real-time with priority %d (max: %d)\n", prio, rtmax);
+        TRACE("Making real-time with priority {} (max: {})", prio, rtmax);
         err = rtkit_make_realtime(conn.get(), 0, prio);
         if(err == 0) return true;
 
         err = std::abs(err);
-        WARN("Failed to set real-time priority: %s (%d)\n",
-            std::generic_category().message(err).c_str(), err);
+        WARN("Failed to set real-time priority: {} ({})",
+            std::generic_category().message(err), err);
     }
     /* Don't try to set the niceness for non-Linux systems. Standard POSIX has
      * niceness as a per-process attribute, while the intent here is for the
@@ -478,19 +472,18 @@ bool SetRTPriorityRTKit(int prio [[maybe_unused]])
 #ifdef __linux__
     if(nicemin < 0)
     {
-        TRACE("Making high priority with niceness %d\n", nicemin);
+        TRACE("Making high priority with niceness {}", nicemin);
         err = rtkit_make_high_priority(conn.get(), 0, nicemin);
         if(err == 0) return true;
 
         err = std::abs(err);
-        WARN("Failed to set high priority: %s (%d)\n",
-            std::generic_category().message(err).c_str(), err);
+        WARN("Failed to set high priority: {} ({})", std::generic_category().message(err), err);
     }
 #endif /* __linux__ */
 
 #else
 
-    WARN("D-Bus not supported\n");
+    WARN("D-Bus not supported");
 #endif
     return false;
 }

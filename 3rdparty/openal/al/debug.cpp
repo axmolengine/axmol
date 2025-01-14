@@ -23,15 +23,15 @@
 #include "alc/device.h"
 #include "alnumeric.h"
 #include "alspan.h"
-#include "alstring.h"
 #include "auxeffectslot.h"
 #include "buffer.h"
+#include "core/except.h"
 #include "core/logging.h"
 #include "core/voice.h"
 #include "direct_defs.h"
 #include "effect.h"
-#include "error.h"
 #include "filter.h"
+#include "fmt/core.h"
 #include "intrusive_ptr.h"
 #include "opthelpers.h"
 #include "source.h"
@@ -43,6 +43,8 @@
 DebugGroup::~DebugGroup() = default;
 
 namespace {
+
+using namespace std::string_view_literals;
 
 static_assert(DebugSeverityBase+DebugSeverityCount <= 32, "Too many debug bits");
 
@@ -108,7 +110,8 @@ constexpr auto GetDebugSourceEnum(DebugSource source) -> ALenum
     case DebugSource::Application: return AL_DEBUG_SOURCE_APPLICATION_EXT;
     case DebugSource::Other: return AL_DEBUG_SOURCE_OTHER_EXT;
     }
-    throw std::runtime_error{"Unexpected debug source value "+std::to_string(al::to_underlying(source))};
+    throw std::runtime_error{fmt::format("Unexpected debug source value: {}",
+        int{al::to_underlying(source)})};
 }
 
 constexpr auto GetDebugTypeEnum(DebugType type) -> ALenum
@@ -125,7 +128,8 @@ constexpr auto GetDebugTypeEnum(DebugType type) -> ALenum
     case DebugType::PopGroup: return AL_DEBUG_TYPE_POP_GROUP_EXT;
     case DebugType::Other: return AL_DEBUG_TYPE_OTHER_EXT;
     }
-    throw std::runtime_error{"Unexpected debug type value "+std::to_string(al::to_underlying(type))};
+    throw std::runtime_error{fmt::format("Unexpected debug type value: {}",
+        int{al::to_underlying(type)})};
 }
 
 constexpr auto GetDebugSeverityEnum(DebugSeverity severity) -> ALenum
@@ -137,50 +141,51 @@ constexpr auto GetDebugSeverityEnum(DebugSeverity severity) -> ALenum
     case DebugSeverity::Low: return AL_DEBUG_SEVERITY_LOW_EXT;
     case DebugSeverity::Notification: return AL_DEBUG_SEVERITY_NOTIFICATION_EXT;
     }
-    throw std::runtime_error{"Unexpected debug severity value "+std::to_string(al::to_underlying(severity))};
+    throw std::runtime_error{fmt::format("Unexpected debug severity value: {}",
+        int{al::to_underlying(severity)})};
 }
 
 
-constexpr auto GetDebugSourceName(DebugSource source) noexcept -> const char*
+constexpr auto GetDebugSourceName(DebugSource source) noexcept -> std::string_view
 {
     switch(source)
     {
-    case DebugSource::API: return "API";
-    case DebugSource::System: return "Audio System";
-    case DebugSource::ThirdParty: return "Third Party";
-    case DebugSource::Application: return "Application";
-    case DebugSource::Other: return "Other";
+    case DebugSource::API: return "API"sv;
+    case DebugSource::System: return "Audio System"sv;
+    case DebugSource::ThirdParty: return "Third Party"sv;
+    case DebugSource::Application: return "Application"sv;
+    case DebugSource::Other: return "Other"sv;
     }
-    return "<invalid source>";
+    return "<invalid source>"sv;
 }
 
-constexpr auto GetDebugTypeName(DebugType type) noexcept -> const char*
+constexpr auto GetDebugTypeName(DebugType type) noexcept -> std::string_view
 {
     switch(type)
     {
-    case DebugType::Error: return "Error";
-    case DebugType::DeprecatedBehavior: return "Deprecated Behavior";
-    case DebugType::UndefinedBehavior: return "Undefined Behavior";
-    case DebugType::Portability: return "Portability";
-    case DebugType::Performance: return "Performance";
-    case DebugType::Marker: return "Marker";
-    case DebugType::PushGroup: return "Push Group";
-    case DebugType::PopGroup: return "Pop Group";
-    case DebugType::Other: return "Other";
+    case DebugType::Error: return "Error"sv;
+    case DebugType::DeprecatedBehavior: return "Deprecated Behavior"sv;
+    case DebugType::UndefinedBehavior: return "Undefined Behavior"sv;
+    case DebugType::Portability: return "Portability"sv;
+    case DebugType::Performance: return "Performance"sv;
+    case DebugType::Marker: return "Marker"sv;
+    case DebugType::PushGroup: return "Push Group"sv;
+    case DebugType::PopGroup: return "Pop Group"sv;
+    case DebugType::Other: return "Other"sv;
     }
-    return "<invalid type>";
+    return "<invalid type>"sv;
 }
 
-constexpr auto GetDebugSeverityName(DebugSeverity severity) noexcept -> const char*
+constexpr auto GetDebugSeverityName(DebugSeverity severity) noexcept -> std::string_view
 {
     switch(severity)
     {
-    case DebugSeverity::High: return "High";
-    case DebugSeverity::Medium: return "Medium";
-    case DebugSeverity::Low: return "Low";
-    case DebugSeverity::Notification: return "Notification";
+    case DebugSeverity::High: return "High"sv;
+    case DebugSeverity::Medium: return "Medium"sv;
+    case DebugSeverity::Low: return "Low"sv;
+    case DebugSeverity::Notification: return "Notification"sv;
     }
-    return "<invalid severity>";
+    return "<invalid severity>"sv;
 }
 
 } // namespace
@@ -194,8 +199,8 @@ void ALCcontext::sendDebugMessage(std::unique_lock<std::mutex> &debuglock, Debug
 
     if(message.length() >= MaxDebugMessageLength) UNLIKELY
     {
-        ERR("Debug message too long (%zu >= %d):\n-> %.*s\n", message.length(),
-            MaxDebugMessageLength, al::sizei(message), message.data());
+        ERR("Debug message too long ({} >= {}):\n-> {}", message.length(),
+            MaxDebugMessageLength, message);
         return;
     }
 
@@ -230,13 +235,13 @@ void ALCcontext::sendDebugMessage(std::unique_lock<std::mutex> &debuglock, Debug
             mDebugLog.emplace_back(source, type, id, severity, message);
         else UNLIKELY
             ERR("Debug message log overflow. Lost message:\n"
-                "  Source: %s\n"
-                "  Type: %s\n"
-                "  ID: %u\n"
-                "  Severity: %s\n"
-                "  Message: \"%.*s\"\n",
+                "  Source: {}\n"
+                "  Type: {}\n"
+                "  ID: {}\n"
+                "  Severity: {}\n"
+                "  Message: \"{}\"",
                 GetDebugSourceName(source), GetDebugTypeName(type), id,
-                GetDebugSeverityName(severity), al::sizei(message), message.data());
+                GetDebugSeverityName(severity), message);
     }
 }
 
@@ -259,32 +264,36 @@ try {
         return;
 
     if(!message)
-        throw al::context_error{AL_INVALID_VALUE, "Null message pointer"};
+        context->throw_error(AL_INVALID_VALUE, "Null message pointer");
 
     auto msgview = (length < 0) ? std::string_view{message}
         : std::string_view{message, static_cast<uint>(length)};
     if(msgview.size() >= MaxDebugMessageLength)
-        throw al::context_error{AL_INVALID_VALUE, "Debug message too long (%zu >= %d)",
-            msgview.size(), MaxDebugMessageLength};
+        context->throw_error(AL_INVALID_VALUE, "Debug message too long ({} >= {})", msgview.size(),
+            MaxDebugMessageLength);
 
     auto dsource = GetDebugSource(source);
     if(!dsource)
-        throw al::context_error{AL_INVALID_ENUM, "Invalid debug source 0x%04x", source};
+        context->throw_error(AL_INVALID_ENUM, "Invalid debug source {:#04x}", as_unsigned(source));
     if(*dsource != DebugSource::ThirdParty && *dsource != DebugSource::Application)
-        throw al::context_error{AL_INVALID_ENUM, "Debug source 0x%04x not allowed", source};
+        context->throw_error(AL_INVALID_ENUM, "Debug source {:#04x} not allowed",
+            as_unsigned(source));
 
     auto dtype = GetDebugType(type);
     if(!dtype)
-        throw al::context_error{AL_INVALID_ENUM, "Invalid debug type 0x%04x", type};
+        context->throw_error(AL_INVALID_ENUM, "Invalid debug type {:#04x}", as_unsigned(type));
 
     auto dseverity = GetDebugSeverity(severity);
     if(!dseverity)
-        throw al::context_error{AL_INVALID_ENUM, "Invalid debug severity 0x%04x", severity};
+        context->throw_error(AL_INVALID_ENUM, "Invalid debug severity {:#04x}",
+            as_unsigned(severity));
 
     context->debugMessage(*dsource, *dtype, id, *dseverity, msgview);
 }
-catch(al::context_error& e) {
-    context->setError(e.errorCode(), "%s", e.what());
+catch(al::base_exception&) {
+}
+catch(std::exception &e) {
+    ERR("Caught exception: {}", e.what());
 }
 
 
@@ -295,20 +304,20 @@ try {
     if(count > 0)
     {
         if(!ids)
-            throw al::context_error{AL_INVALID_VALUE, "IDs is null with non-0 count"};
+            context->throw_error(AL_INVALID_VALUE, "IDs is null with non-0 count");
         if(source == AL_DONT_CARE_EXT)
-            throw al::context_error{AL_INVALID_OPERATION,
-                "Debug source cannot be AL_DONT_CARE_EXT with IDs"};
+            context->throw_error(AL_INVALID_OPERATION,
+                "Debug source cannot be AL_DONT_CARE_EXT with IDs");
         if(type == AL_DONT_CARE_EXT)
-            throw al::context_error{AL_INVALID_OPERATION,
-                "Debug type cannot be AL_DONT_CARE_EXT with IDs"};
+            context->throw_error(AL_INVALID_OPERATION,
+                "Debug type cannot be AL_DONT_CARE_EXT with IDs");
         if(severity != AL_DONT_CARE_EXT)
-            throw al::context_error{AL_INVALID_OPERATION,
-                "Debug severity must be AL_DONT_CARE_EXT with IDs"};
+            context->throw_error(AL_INVALID_OPERATION,
+                "Debug severity must be AL_DONT_CARE_EXT with IDs");
     }
 
     if(enable != AL_TRUE && enable != AL_FALSE)
-        throw al::context_error{AL_INVALID_ENUM, "Invalid debug enable %d", enable};
+        context->throw_error(AL_INVALID_ENUM, "Invalid debug enable {}", enable);
 
     static constexpr size_t ElemCount{DebugSourceCount + DebugTypeCount + DebugSeverityCount};
     static constexpr auto Values = make_array_sequence<uint8_t,ElemCount>();
@@ -318,7 +327,8 @@ try {
     {
         auto dsource = GetDebugSource(source);
         if(!dsource)
-            throw al::context_error{AL_INVALID_ENUM, "Invalid debug source 0x%04x", source};
+            context->throw_error(AL_INVALID_ENUM, "Invalid debug source {:#04x}",
+                as_unsigned(source));
         srcIndices = srcIndices.subspan(al::to_underlying(*dsource), 1);
     }
 
@@ -327,7 +337,7 @@ try {
     {
         auto dtype = GetDebugType(type);
         if(!dtype)
-            throw al::context_error{AL_INVALID_ENUM, "Invalid debug type 0x%04x", type};
+            context->throw_error(AL_INVALID_ENUM, "Invalid debug type {:#04x}", as_unsigned(type));
         typeIndices = typeIndices.subspan(al::to_underlying(*dtype), 1);
     }
 
@@ -336,7 +346,8 @@ try {
     {
         auto dseverity = GetDebugSeverity(severity);
         if(!dseverity)
-            throw al::context_error{AL_INVALID_ENUM, "Invalid debug severity 0x%04x", severity};
+            context->throw_error(AL_INVALID_ENUM, "Invalid debug severity {:#04x}",
+                as_unsigned(severity));
         svrIndices = svrIndices.subspan(al::to_underlying(*dseverity), 1);
     }
 
@@ -382,8 +393,10 @@ try {
             [apply_type](const uint idx){ apply_type(1<<idx); });
     }
 }
-catch(al::context_error& e) {
-    context->setError(e.errorCode(), "%s", e.what());
+catch(al::base_exception&) {
+}
+catch(std::exception &e) {
+    ERR("Caught exception: {}", e.what());
 }
 
 
@@ -395,23 +408,24 @@ try {
     {
         size_t newlen{std::strlen(message)};
         if(newlen >= MaxDebugMessageLength)
-            throw al::context_error{AL_INVALID_VALUE, "Debug message too long (%zu >= %d)", newlen,
-                MaxDebugMessageLength};
+            context->throw_error(AL_INVALID_VALUE, "Debug message too long ({} >= {})", newlen,
+                MaxDebugMessageLength);
         length = static_cast<ALsizei>(newlen);
     }
     else if(length >= MaxDebugMessageLength)
-        throw al::context_error{AL_INVALID_VALUE, "Debug message too long (%d >= %d)", length,
-            MaxDebugMessageLength};
+        context->throw_error(AL_INVALID_VALUE, "Debug message too long ({} >= {})", length,
+            MaxDebugMessageLength);
 
     auto dsource = GetDebugSource(source);
     if(!dsource)
-        throw al::context_error{AL_INVALID_ENUM, "Invalid debug source 0x%04x", source};
+        context->throw_error(AL_INVALID_ENUM, "Invalid debug source {:#04x}", as_unsigned(source));
     if(*dsource != DebugSource::ThirdParty && *dsource != DebugSource::Application)
-        throw al::context_error{AL_INVALID_ENUM, "Debug source 0x%04x not allowed", source};
+        context->throw_error(AL_INVALID_ENUM, "Debug source {:#04x} not allowed",
+            as_unsigned(source));
 
     std::unique_lock<std::mutex> debuglock{context->mDebugCbLock};
     if(context->mDebugGroups.size() >= MaxDebugGroupDepth)
-        throw al::context_error{AL_STACK_OVERFLOW_EXT, "Pushing too many debug groups"};
+        context->throw_error(AL_STACK_OVERFLOW_EXT, "Pushing too many debug groups");
 
     context->mDebugGroups.emplace_back(*dsource, id,
         std::string_view{message, static_cast<uint>(length)});
@@ -425,8 +439,10 @@ try {
         context->sendDebugMessage(debuglock, newback.mSource, DebugType::PushGroup, newback.mId,
             DebugSeverity::Notification, newback.mMessage);
 }
-catch(al::context_error& e) {
-    context->setError(e.errorCode(), "%s", e.what());
+catch(al::base_exception&) {
+}
+catch(std::exception &e) {
+    ERR("Caught exception: {}", e.what());
 }
 
 FORCE_ALIGN DECL_FUNCEXT(void, alPopDebugGroup,EXT)
@@ -434,8 +450,7 @@ FORCE_ALIGN void AL_APIENTRY alPopDebugGroupDirectEXT(ALCcontext *context) noexc
 try {
     std::unique_lock<std::mutex> debuglock{context->mDebugCbLock};
     if(context->mDebugGroups.size() <= 1)
-        throw al::context_error{AL_STACK_UNDERFLOW_EXT,
-            "Attempting to pop the default debug group"};
+        context->throw_error(AL_STACK_UNDERFLOW_EXT, "Attempting to pop the default debug group");
 
     DebugGroup &debug = context->mDebugGroups.back();
     const auto source = debug.mSource;
@@ -447,8 +462,10 @@ try {
         context->sendDebugMessage(debuglock, source, DebugType::PopGroup, id,
             DebugSeverity::Notification, message);
 }
-catch(al::context_error& e) {
-    context->setError(e.errorCode(), "%s", e.what());
+catch(al::base_exception&) {
+}
+catch(std::exception &e) {
+    ERR("Caught exception: {}", e.what());
 }
 
 
@@ -458,7 +475,7 @@ FORCE_ALIGN ALuint AL_APIENTRY alGetDebugMessageLogDirectEXT(ALCcontext *context
     ALsizei *lengths, ALchar *logBuf) noexcept
 try {
     if(logBuf && logBufSize < 0)
-        throw al::context_error{AL_INVALID_VALUE, "Negative debug log buffer size"};
+        context->throw_error(AL_INVALID_VALUE, "Negative debug log buffer size");
 
     const auto sourcesSpan = al::span{sources, sources ? count : 0u};
     const auto typesSpan = al::span{types, types ? count : 0u};
@@ -506,8 +523,11 @@ try {
 
     return count;
 }
-catch(al::context_error& e) {
-    context->setError(e.errorCode(), "%s", e.what());
+catch(al::base_exception&) {
+    return 0;
+}
+catch(std::exception &e) {
+    ERR("Caught exception: {}", e.what());
     return 0;
 }
 
@@ -516,13 +536,13 @@ FORCE_ALIGN void AL_APIENTRY alObjectLabelDirectEXT(ALCcontext *context, ALenum 
     ALuint name, ALsizei length, const ALchar *label) noexcept
 try {
     if(!label && length != 0)
-        throw al::context_error{AL_INVALID_VALUE, "Null label pointer"};
+        context->throw_error(AL_INVALID_VALUE, "Null label pointer");
 
     auto objname = (length < 0) ? std::string_view{label}
         : std::string_view{label, static_cast<uint>(length)};
     if(objname.size() >= MaxObjectLabelLength)
-        throw al::context_error{AL_INVALID_VALUE, "Object label length too long (%zu >= %d)",
-            objname.size(), MaxObjectLabelLength};
+        context->throw_error(AL_INVALID_VALUE, "Object label length too long ({} >= {})",
+            objname.size(), MaxObjectLabelLength);
 
     switch(identifier)
     {
@@ -533,10 +553,13 @@ try {
     case AL_AUXILIARY_EFFECT_SLOT_EXT: ALeffectslot::SetName(context, name, objname); return;
     }
 
-    throw al::context_error{AL_INVALID_ENUM, "Invalid name identifier 0x%04x", identifier};
+    context->throw_error(AL_INVALID_ENUM, "Invalid name identifier {:#04x}",
+        as_unsigned(identifier));
 }
-catch(al::context_error& e) {
-    context->setError(e.errorCode(), "%s", e.what());
+catch(al::base_exception&) {
+}
+catch(std::exception &e) {
+    ERR("Caught exception: {}", e.what());
 }
 
 FORCE_ALIGN DECL_FUNCEXT5(void, alGetObjectLabel,EXT, ALenum,identifier, ALuint,name, ALsizei,bufSize, ALsizei*,length, ALchar*,label)
@@ -544,12 +567,12 @@ FORCE_ALIGN void AL_APIENTRY alGetObjectLabelDirectEXT(ALCcontext *context, ALen
     ALuint name, ALsizei bufSize, ALsizei *length, ALchar *label) noexcept
 try {
     if(bufSize < 0)
-        throw al::context_error{AL_INVALID_VALUE, "Negative label bufSize"};
+        context->throw_error(AL_INVALID_VALUE, "Negative label bufSize");
 
     if(!label && !length)
-        throw al::context_error{AL_INVALID_VALUE, "Null length and label"};
+        context->throw_error(AL_INVALID_VALUE, "Null length and label");
     if(label && bufSize == 0)
-        throw al::context_error{AL_INVALID_VALUE, "Zero label bufSize"};
+        context->throw_error(AL_INVALID_VALUE, "Zero label bufSize");
 
     const auto labelOut = al::span{label, label ? static_cast<ALuint>(bufSize) : 0u};
     auto copy_name = [name,length,labelOut](std::unordered_map<ALuint,std::string> &names)
@@ -601,8 +624,11 @@ try {
         copy_name(context->mEffectSlotNames);
     }
     else
-        throw al::context_error{AL_INVALID_ENUM, "Invalid name identifier 0x%04x", identifier};
+        context->throw_error(AL_INVALID_ENUM, "Invalid name identifier {:#04x}",
+            as_unsigned(identifier));
 }
-catch(al::context_error& e) {
-    context->setError(e.errorCode(), "%s", e.what());
+catch(al::base_exception&) {
+}
+catch(std::exception &e) {
+    ERR("Caught exception: {}", e.what());
 }

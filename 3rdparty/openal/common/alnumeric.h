@@ -8,7 +8,7 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <iterator>
+#include <string_view>
 #include <type_traits>
 #ifdef HAVE_INTRIN_H
 #include <intrin.h>
@@ -31,13 +31,21 @@ constexpr auto operator "" _uz(unsigned long long n) noexcept { return static_ca
 constexpr auto operator "" _zu(unsigned long long n) noexcept { return static_cast<std::size_t>(n); }
 
 
-constexpr auto GetCounterSuffix(size_t count) noexcept -> const char*
+template<typename T, std::enable_if_t<std::is_integral_v<T>,bool> = true>
+constexpr auto as_unsigned(T value) noexcept
 {
-    auto &suffix = (((count%100)/10) == 1) ? "th" :
-        ((count%10) == 1) ? "st" :
-        ((count%10) == 2) ? "nd" :
-        ((count%10) == 3) ? "rd" : "th";
-    return std::data(suffix);
+    using UT = std::make_unsigned_t<T>;
+    return static_cast<UT>(value);
+}
+
+
+constexpr auto GetCounterSuffix(size_t count) noexcept -> std::string_view
+{
+    using namespace std::string_view_literals;
+    return (((count%100)/10) == 1) ? "th"sv :
+        ((count%10) == 1) ? "st"sv :
+        ((count%10) == 2) ? "nd"sv :
+        ((count%10) == 3) ? "rd"sv : "th"sv;
 }
 
 

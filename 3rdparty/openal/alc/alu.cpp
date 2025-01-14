@@ -337,7 +337,8 @@ void DeviceBase::ProcessBs2b(const size_t SamplesToDo)
     const size_t ridx{RealOut.ChannelIndex[FrontRight]};
 
     /* Now apply the BS2B binaural/crossfeed filter. */
-    Bs2b->cross_feed(RealOut.Buffer[lidx].data(), RealOut.Buffer[ridx].data(), SamplesToDo);
+    Bs2b->cross_feed(al::span{RealOut.Buffer[lidx]}.first(SamplesToDo),
+        al::span{RealOut.Buffer[ridx]}.first(SamplesToDo));
 }
 
 
@@ -851,7 +852,7 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
         ChanPosMap{FrontRight,  std::array{ sin30, 0.0f, -cos30}},
     };
 
-    const auto Frequency = static_cast<float>(Device->Frequency);
+    const auto Frequency = static_cast<float>(Device->mSampleRate);
     const uint NumSends{Device->NumAuxSends};
 
     const size_t num_channels{voice->mChans.size()};
@@ -1480,7 +1481,7 @@ void CalcNonAttnSourceParams(Voice *voice, const VoiceProps *props, const Contex
 
     /* Calculate the stepping value */
     const auto Pitch = static_cast<float>(voice->mFrequency) /
-        static_cast<float>(Device->Frequency) * props->Pitch;
+        static_cast<float>(Device->mSampleRate) * props->Pitch;
     if(Pitch > float{MaxPitch})
         voice->mStep = MaxPitch<<MixerFracBits;
     else
@@ -1766,7 +1767,7 @@ void CalcAttnSourceParams(Voice *voice, const VoiceProps *props, const ContextBa
     /* Adjust pitch based on the buffer and output frequencies, and calculate
      * fixed-point stepping value.
      */
-    Pitch *= static_cast<float>(voice->mFrequency) / static_cast<float>(Device->Frequency);
+    Pitch *= static_cast<float>(voice->mFrequency) / static_cast<float>(Device->mSampleRate);
     if(Pitch > float{MaxPitch})
         voice->mStep = MaxPitch<<MixerFracBits;
     else
@@ -2142,8 +2143,9 @@ void Write(const al::span<const FloatBufferLine> InBuffer, void *OutBuffer, cons
     ASSUME(FrameStep > 0);
     ASSUME(SamplesToDo > 0);
 
-    const auto output = al::span{static_cast<T*>(OutBuffer), (Offset+SamplesToDo)*FrameStep}
-        .subspan(Offset*FrameStep);
+    /* Some Clang versions don't like calling subspan on an rvalue here. */
+    const auto output_ = al::span{static_cast<T*>(OutBuffer), (Offset+SamplesToDo)*FrameStep};
+    const auto output = output_.subspan(Offset*FrameStep);
     size_t c{0};
     for(const FloatBufferLine &inbuf : InBuffer)
     {
@@ -2174,7 +2176,9 @@ void Write(const al::span<const FloatBufferLine> InBuffer, al::span<void*> OutBu
     for(auto *dstbuf : OutBuffers)
     {
         const auto src = al::span{*srcbuf}.first(SamplesToDo);
-        const auto dst = al::span{static_cast<T*>(dstbuf), Offset+SamplesToDo}.subspan(Offset);
+        /* Some Clang versions don't like calling subspan on an rvalue here. */
+        const auto dst_ = al::span{static_cast<T*>(dstbuf), Offset+SamplesToDo};
+        const auto dst = dst_.subspan(Offset);
         std::transform(src.cbegin(), src.end(), dst.begin(), SampleConv<T>);
         ++srcbuf;
     }
@@ -2202,8 +2206,8 @@ uint DeviceBase::renderSamples(const uint numSamples)
          */
         auto samplesDone = mSamplesDone.load(std::memory_order_relaxed) + samplesToDo;
         auto clockBaseSec = mClockBaseSec.load(std::memory_order_relaxed) +
-            seconds32{samplesDone/Frequency};
-        mSamplesDone.store(samplesDone%Frequency, std::memory_order_relaxed);
+            seconds32{samplesDone/mSampleRate};
+        mSamplesDone.store(samplesDone%mSampleRate, std::memory_order_relaxed);
         mClockBaseSec.store(clockBaseSec, std::memory_order_relaxed);
     }
 
@@ -2286,7 +2290,7 @@ void DeviceBase::renderSamples(void *outBuffer, const uint numSamples, const siz
     }
 }
 
-void DeviceBase::handleDisconnect(const char *msg, ...)
+void DeviceBase::doDisconnect(std::string msg)
 {
     const auto mixLock = getWriteMixLock();
 
@@ -2294,24 +2298,7 @@ void DeviceBase::handleDisconnect(const char *msg, ...)
     {
         AsyncEvent evt{std::in_place_type<AsyncDisconnectEvent>};
         auto &disconnect = std::get<AsyncDisconnectEvent>(evt);
-
-        /* NOLINTBEGIN(*-array-to-pointer-decay) */
-        va_list args, args2;
-        va_start(args, msg);
-        va_copy(args2, args);
-        if(int msglen{vsnprintf(nullptr, 0, msg, args)}; msglen > 0)
-        {
-            disconnect.msg.resize(static_cast<uint>(msglen)+1_uz);
-            vsnprintf(disconnect.msg.data(), disconnect.msg.size(), msg, args2);
-        }
-        else
-            disconnect.msg = "<failed constructing message>";
-        va_end(args2);
-        va_end(args);
-        /* NOLINTEND(*-array-to-pointer-decay) */
-
-        while(!disconnect.msg.empty() && disconnect.msg.back() == '\0')
-            disconnect.msg.pop_back();
+        disconnect.msg = std::move(msg);
 
         for(ContextBase *ctx : *mContexts.load())
         {
