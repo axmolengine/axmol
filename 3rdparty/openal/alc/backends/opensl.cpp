@@ -41,6 +41,7 @@
 #include "core/device.h"
 #include "core/helpers.h"
 #include "core/logging.h"
+#include "dynload.h"
 #include "opthelpers.h"
 #include "ringbuffer.h"
 
@@ -52,6 +53,32 @@
 namespace {
 
 using namespace std::string_view_literals;
+
+
+#if HAVE_DYNLOAD
+#define SLES_SYMBOLS(MAGIC)                 \
+    MAGIC(slCreateEngine);                  \
+    MAGIC(SL_IID_ANDROIDCONFIGURATION);     \
+    MAGIC(SL_IID_ANDROIDSIMPLEBUFFERQUEUE); \
+    MAGIC(SL_IID_ENGINE);                   \
+    MAGIC(SL_IID_PLAY);                     \
+    MAGIC(SL_IID_RECORD);
+
+void *sles_handle;
+#define MAKE_SYMBOL(f) decltype(f) * p##f
+SLES_SYMBOLS(MAKE_SYMBOL)
+#undef MAKE_SYMBOL
+
+#ifndef IN_IDE_PARSER
+#define slCreateEngine (*pslCreateEngine)
+#define SL_IID_ANDROIDCONFIGURATION (*pSL_IID_ANDROIDCONFIGURATION)
+#define SL_IID_ANDROIDSIMPLEBUFFERQUEUE (*pSL_IID_ANDROIDSIMPLEBUFFERQUEUE)
+#define SL_IID_ENGINE (*pSL_IID_ENGINE)
+#define SL_IID_PLAY (*pSL_IID_PLAY)
+#define SL_IID_RECORD (*pSL_IID_RECORD)
+#endif
+#endif
+
 
 /* Helper macros */
 #define EXTRACT_VCALL_ARGS(...)  __VA_ARGS__))
@@ -156,12 +183,12 @@ constexpr const char *res_str(SLresult result) noexcept
 inline void PrintErr(SLresult res, const char *str)
 {
     if(res != SL_RESULT_SUCCESS) UNLIKELY
-        ERR("%s: %s\n", str, res_str(res));
+        ERR("{}: {}", str, res_str(res));
 }
 
 
 struct OpenSLPlayback final : public BackendBase {
-    OpenSLPlayback(DeviceBase *device) noexcept : BackendBase{device} { }
+    explicit OpenSLPlayback(DeviceBase *device) noexcept : BackendBase{device} { }
     ~OpenSLPlayback() override;
 
     void process(SLAndroidSimpleBufferQueueItf bq) noexcept;
@@ -247,7 +274,7 @@ int OpenSLPlayback::mixerProc()
     const size_t frame_step{mDevice->channelsFromFmt()};
 
     if(SL_RESULT_SUCCESS != result)
-        mDevice->handleDisconnect("Failed to get playback buffer: 0x%08x", result);
+        mDevice->handleDisconnect("Failed to get playback buffer: {:#08x}", result);
 
     while(SL_RESULT_SUCCESS == result && !mKillNow.load(std::memory_order_acquire)
         && mDevice->Connected.load(std::memory_order_acquire))
@@ -265,7 +292,7 @@ int OpenSLPlayback::mixerProc()
             }
             if(SL_RESULT_SUCCESS != result)
             {
-                mDevice->handleDisconnect("Failed to start playback: 0x%08x", result);
+                mDevice->handleDisconnect("Failed to start playback: {:#08x}", result);
                 break;
             }
 
@@ -279,10 +306,10 @@ int OpenSLPlayback::mixerProc()
         std::unique_lock<std::mutex> dlock{mMutex};
         auto data = mRing->getWriteVector();
         mDevice->renderSamples(data[0].buf,
-            static_cast<uint>(data[0].len)*mDevice->UpdateSize, frame_step);
+            static_cast<uint>(data[0].len)*mDevice->mUpdateSize, frame_step);
         if(data[1].len > 0)
             mDevice->renderSamples(data[1].buf,
-                static_cast<uint>(data[1].len)*mDevice->UpdateSize, frame_step);
+                static_cast<uint>(data[1].len)*mDevice->mUpdateSize, frame_step);
 
         const auto todo = size_t{data[0].len + data[1].len};
         mRing->writeAdvance(todo);
@@ -297,16 +324,16 @@ int OpenSLPlayback::mixerProc()
                 data[1].len = 0;
             }
 
-            result = VCALL(bufferQueue,Enqueue)(data[0].buf, mDevice->UpdateSize*mFrameSize);
+            result = VCALL(bufferQueue,Enqueue)(data[0].buf, mDevice->mUpdateSize*mFrameSize);
             PrintErr(result, "bufferQueue->Enqueue");
             if(SL_RESULT_SUCCESS != result)
             {
-                mDevice->handleDisconnect("Failed to queue audio: 0x%08x", result);
+                mDevice->handleDisconnect("Failed to queue audio: {:#08x}", result);
                 break;
             }
 
             data[0].len--;
-            data[0].buf += mDevice->UpdateSize*mFrameSize;
+            data[0].buf += mDevice->mUpdateSize*mFrameSize;
         }
     }
 
@@ -319,8 +346,8 @@ void OpenSLPlayback::open(std::string_view name)
     if(name.empty())
         name = GetDeviceName();
     else if(name != GetDeviceName())
-        throw al::backend_exception{al::backend_error::NoDevice, "Device name \"%.*s\" not found",
-            al::sizei(name), name.data()};
+        throw al::backend_exception{al::backend_error::NoDevice, "Device name \"{}\" not found",
+            name};
 
     /* There's only one device, so if it's already open, there's nothing to do. */
     if(mEngineObj) return;
@@ -361,7 +388,7 @@ void OpenSLPlayback::open(std::string_view name)
         mEngine = nullptr;
 
         throw al::backend_exception{al::backend_error::DeviceError,
-            "Failed to initialize OpenSL device: 0x%08x", result};
+            "Failed to initialize OpenSL device: {:#08x}", result};
     }
 
     mDeviceName = name;
@@ -397,14 +424,14 @@ bool OpenSLPlayback::reset()
 
     SLDataLocator_AndroidSimpleBufferQueue loc_bufq{};
     loc_bufq.locatorType = SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE;
-    loc_bufq.numBuffers = mDevice->BufferSize / mDevice->UpdateSize;
+    loc_bufq.numBuffers = mDevice->mBufferSize / mDevice->mUpdateSize;
 
     SLDataSource audioSrc{};
 #ifdef SL_ANDROID_DATAFORMAT_PCM_EX
     SLAndroidDataFormat_PCM_EX format_pcm_ex{};
     format_pcm_ex.formatType = SL_ANDROID_DATAFORMAT_PCM_EX;
     format_pcm_ex.numChannels = mDevice->channelsFromFmt();
-    format_pcm_ex.sampleRate = mDevice->Frequency * 1000;
+    format_pcm_ex.sampleRate = mDevice->mSampleRate * 1000;
     format_pcm_ex.bitsPerSample = mDevice->bytesFromFmt() * 8;
     format_pcm_ex.containerSize = format_pcm_ex.bitsPerSample;
     format_pcm_ex.channelMask = GetChannelMask(mDevice->FmtChans);
@@ -435,7 +462,7 @@ bool OpenSLPlayback::reset()
         SLDataFormat_PCM format_pcm{};
         format_pcm.formatType = SL_DATAFORMAT_PCM;
         format_pcm.numChannels = mDevice->channelsFromFmt();
-        format_pcm.samplesPerSec = mDevice->Frequency * 1000;
+        format_pcm.samplesPerSec = mDevice->mSampleRate * 1000;
         format_pcm.bitsPerSample = mDevice->bytesFromFmt() * 8;
         format_pcm.containerSize = format_pcm.bitsPerSample;
         format_pcm.channelMask = GetChannelMask(mDevice->FmtChans);
@@ -472,8 +499,8 @@ bool OpenSLPlayback::reset()
     }
     if(SL_RESULT_SUCCESS == result)
     {
-        const uint num_updates{mDevice->BufferSize / mDevice->UpdateSize};
-        mRing = RingBuffer::Create(num_updates, mFrameSize*mDevice->UpdateSize, true);
+        const uint num_updates{mDevice->mBufferSize / mDevice->mUpdateSize};
+        mRing = RingBuffer::Create(num_updates, mFrameSize*mDevice->mUpdateSize, true);
     }
 
     if(SL_RESULT_SUCCESS != result)
@@ -505,15 +532,15 @@ void OpenSLPlayback::start()
     }
     if(SL_RESULT_SUCCESS != result)
         throw al::backend_exception{al::backend_error::DeviceError,
-            "Failed to register callback: 0x%08x", result};
+            "Failed to register callback: {:#08x}", result};
 
     try {
         mKillNow.store(false, std::memory_order_release);
-        mThread = std::thread(std::mem_fn(&OpenSLPlayback::mixerProc), this);
+        mThread = std::thread(&OpenSLPlayback::mixerProc, this);
     }
     catch(std::exception& e) {
         throw al::backend_exception{al::backend_error::DeviceError,
-            "Failed to start mixing thread: %s", e.what()};
+            "Failed to start mixing thread: {}", e.what()};
     }
 }
 
@@ -566,15 +593,15 @@ ClockLatency OpenSLPlayback::getClockLatency()
 
     std::lock_guard<std::mutex> dlock{mMutex};
     ret.ClockTime = mDevice->getClockTime();
-    ret.Latency  = std::chrono::seconds{mRing->readSpace() * mDevice->UpdateSize};
-    ret.Latency /= mDevice->Frequency;
+    ret.Latency  = std::chrono::seconds{mRing->readSpace() * mDevice->mUpdateSize};
+    ret.Latency /= mDevice->mSampleRate;
 
     return ret;
 }
 
 
 struct OpenSLCapture final : public BackendBase {
-    OpenSLCapture(DeviceBase *device) noexcept : BackendBase{device} { }
+    explicit OpenSLCapture(DeviceBase *device) noexcept : BackendBase{device} { }
     ~OpenSLCapture() override;
 
     void process(SLAndroidSimpleBufferQueueItf bq) noexcept;
@@ -623,8 +650,8 @@ void OpenSLCapture::open(std::string_view name)
     if(name.empty())
         name = GetDeviceName();
     else if(name != GetDeviceName())
-        throw al::backend_exception{al::backend_error::NoDevice, "Device name \"%.*s\" not found",
-            al::sizei(name), name.data()};
+        throw al::backend_exception{al::backend_error::NoDevice, "Device name \"{}\" not found",
+            name};
 
     SLresult result{slCreateEngine(&mEngineObj, 0, nullptr, 0, nullptr, nullptr)};
     PrintErr(result, "slCreateEngine");
@@ -642,16 +669,16 @@ void OpenSLCapture::open(std::string_view name)
     {
         mFrameSize = mDevice->frameSizeFromFmt();
         /* Ensure the total length is at least 100ms */
-        uint length{std::max(mDevice->BufferSize, mDevice->Frequency/10u)};
+        uint length{std::max(mDevice->mBufferSize, mDevice->mSampleRate/10u)};
         /* Ensure the per-chunk length is at least 10ms, and no more than 50ms. */
-        uint update_len{std::clamp(mDevice->BufferSize/3u, mDevice->Frequency/100u,
-            mDevice->Frequency/100u*5u)};
+        uint update_len{std::clamp(mDevice->mBufferSize/3u, mDevice->mSampleRate/100u,
+            mDevice->mSampleRate/100u*5u)};
         uint num_updates{(length+update_len-1) / update_len};
 
         mRing = RingBuffer::Create(num_updates, update_len*mFrameSize, false);
 
-        mDevice->UpdateSize = update_len;
-        mDevice->BufferSize = static_cast<uint>(mRing->writeSpace() * update_len);
+        mDevice->mUpdateSize = update_len;
+        mDevice->mBufferSize = static_cast<uint>(mRing->writeSpace() * update_len);
     }
     if(SL_RESULT_SUCCESS == result)
     {
@@ -670,14 +697,14 @@ void OpenSLCapture::open(std::string_view name)
 
         SLDataLocator_AndroidSimpleBufferQueue loc_bq{};
         loc_bq.locatorType = SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE;
-        loc_bq.numBuffers = mDevice->BufferSize / mDevice->UpdateSize;
+        loc_bq.numBuffers = mDevice->mBufferSize / mDevice->mUpdateSize;
 
         SLDataSink audioSnk{};
 #ifdef SL_ANDROID_DATAFORMAT_PCM_EX
         SLAndroidDataFormat_PCM_EX format_pcm_ex{};
         format_pcm_ex.formatType = SL_ANDROID_DATAFORMAT_PCM_EX;
         format_pcm_ex.numChannels = mDevice->channelsFromFmt();
-        format_pcm_ex.sampleRate = mDevice->Frequency * 1000;
+        format_pcm_ex.sampleRate = mDevice->mSampleRate * 1000;
         format_pcm_ex.bitsPerSample = mDevice->bytesFromFmt() * 8;
         format_pcm_ex.containerSize = format_pcm_ex.bitsPerSample;
         format_pcm_ex.channelMask = GetChannelMask(mDevice->FmtChans);
@@ -700,7 +727,7 @@ void OpenSLCapture::open(std::string_view name)
                 SLDataFormat_PCM format_pcm{};
                 format_pcm.formatType = SL_DATAFORMAT_PCM;
                 format_pcm.numChannels = mDevice->channelsFromFmt();
-                format_pcm.samplesPerSec = mDevice->Frequency * 1000;
+                format_pcm.samplesPerSec = mDevice->mSampleRate * 1000;
                 format_pcm.bitsPerSample = mDevice->bytesFromFmt() * 8;
                 format_pcm.containerSize = format_pcm.bitsPerSample;
                 format_pcm.channelMask = GetChannelMask(mDevice->FmtChans);
@@ -752,7 +779,7 @@ void OpenSLCapture::open(std::string_view name)
     }
     if(SL_RESULT_SUCCESS == result)
     {
-        const uint chunk_size{mDevice->UpdateSize * mFrameSize};
+        const uint chunk_size{mDevice->mUpdateSize * mFrameSize};
         const auto silence = (mDevice->FmtType == DevFmtUByte) ? std::byte{0x80} : std::byte{0};
 
         auto data = mRing->getWriteVector();
@@ -782,7 +809,7 @@ void OpenSLCapture::open(std::string_view name)
         mEngine = nullptr;
 
         throw al::backend_exception{al::backend_error::DeviceError,
-            "Failed to initialize OpenSL device: 0x%08x", result};
+            "Failed to initialize OpenSL device: {:#08x}", result};
     }
 
     mDeviceName = name;
@@ -801,7 +828,7 @@ void OpenSLCapture::start()
     }
     if(SL_RESULT_SUCCESS != result)
         throw al::backend_exception{al::backend_error::DeviceError,
-            "Failed to start capture: 0x%08x", result};
+            "Failed to start capture: {:#08x}", result};
 }
 
 void OpenSLCapture::stop()
@@ -819,7 +846,7 @@ void OpenSLCapture::stop()
 
 void OpenSLCapture::captureSamples(std::byte *buffer, uint samples)
 {
-    const uint update_size{mDevice->UpdateSize};
+    const uint update_size{mDevice->mUpdateSize};
     const uint chunk_size{update_size * mFrameSize};
 
     /* Read the desired samples from the ring buffer then advance its read
@@ -858,7 +885,7 @@ void OpenSLCapture::captureSamples(std::byte *buffer, uint samples)
         PrintErr(result, "recordObj->GetInterface");
         if(SL_RESULT_SUCCESS != result) UNLIKELY
         {
-            mDevice->handleDisconnect("Failed to get capture buffer queue: 0x%08x", result);
+            mDevice->handleDisconnect("Failed to get capture buffer queue: {:#08x}", result);
             bufferQueue = nullptr;
         }
     }
@@ -900,11 +927,43 @@ void OpenSLCapture::captureSamples(std::byte *buffer, uint samples)
 }
 
 uint OpenSLCapture::availableSamples()
-{ return static_cast<uint>(mRing->readSpace()*mDevice->UpdateSize - mSplOffset); }
+{ return static_cast<uint>(mRing->readSpace()*mDevice->mUpdateSize - mSplOffset); }
 
 } // namespace
 
-bool OSLBackendFactory::init() { return true; }
+bool OSLBackendFactory::init()
+{
+#if HAVE_DYNLOAD
+    if(!sles_handle)
+    {
+#define SLES_LIBNAME "libOpenSLES.so"
+        sles_handle = LoadLib(SLES_LIBNAME);
+        if(!sles_handle)
+        {
+            WARN("Failed to load {}", SLES_LIBNAME);
+            return false;
+        }
+
+        std::string missing_syms;
+#define LOAD_SYMBOL(f) do {                                                   \
+    p##f = reinterpret_cast<decltype(p##f)>(GetSymbol(sles_handle, #f));      \
+    if(p##f == nullptr) missing_syms += "\n" #f;                              \
+} while(0)
+        SLES_SYMBOLS(LOAD_SYMBOL);
+#undef LOAD_SYMBOL
+
+        if(!missing_syms.empty())
+        {
+            WARN("Missing expected symbols:{}", missing_syms);
+            CloseLib(sles_handle);
+            sles_handle = nullptr;
+            return false;
+        }
+    }
+#endif
+
+    return true;
+}
 
 bool OSLBackendFactory::querySupport(BackendType type)
 { return (type == BackendType::Playback || type == BackendType::Capture); }

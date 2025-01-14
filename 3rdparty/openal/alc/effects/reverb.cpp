@@ -28,8 +28,6 @@
 #include <cstdio>
 #include <functional>
 #include <numeric>
-#include <utility>
-#include <variant>
 
 #include "alc/effects/base.h"
 #include "alnumbers.h"
@@ -403,7 +401,7 @@ struct EarlyReflections {
      */
     DelayLineU Delay;
     std::array<size_t,NUM_LINES> Offset{};
-    std::array<float,NUM_LINES> Coeff{};
+    float Coeff{};
 
     /* The gain for each output channel based on 3D panning. */
     struct OutGains {
@@ -502,7 +500,7 @@ struct ReverbPipeline {
 
     /* Tap points for early reflection input delay. */
     std::array<std::array<size_t,2>,NUM_LINES> mEarlyDelayTap{};
-    std::array<std::array<float,2>,NUM_LINES> mEarlyDelayCoeff{};
+    std::array<float,2> mEarlyDelayCoeff{};
 
     /* Tap points for late reverb feed and delay. */
     std::array<std::array<size_t,2>,NUM_LINES> mLateDelayTap{};
@@ -520,7 +518,7 @@ struct ReverbPipeline {
     size_t mFadeSampleCount{1};
 
     void updateDelayLine(const float gain, const float earlyDelay, const float lateDelay,
-        const float density_mult, const float decayTime, const float frequency);
+        const float density_mult, const float frequency);
     void update3DPanning(const al::span<const float,3> ReflectionsPan,
         const al::span<const float,3> LateReverbPan, const float earlyGain, const float lateGain,
         const bool doUpmix, const MixParams *mainMix);
@@ -792,7 +790,7 @@ void ReverbState::allocLines(const float frequency)
 
 void ReverbState::deviceUpdate(const DeviceBase *device, const BufferStorage*)
 {
-    const auto frequency = static_cast<float>(device->Frequency);
+    const auto frequency = static_cast<float>(device->mSampleRate);
 
     /* Allocate the delay lines. */
     allocLines(frequency);
@@ -928,10 +926,15 @@ void EarlyReflections::updateLines(const float density_mult, const float diffusi
         /* Calculate the delay length of each delay line. */
         length = EARLY_LINE_LENGTHS[i] * density_mult;
         Offset[i] = float2uint(length * frequency);
-
-        /* Calculate the gain (coefficient) for each line. */
-        Coeff[i] = CalcDecayCoeff(length, decayTime);
     }
+
+    /* Calculate the gain (coefficient) for the secondary reflections based on
+     * the average delay and decay time.
+     */
+    const auto length = std::reduce(EARLY_LINE_LENGTHS.begin(), EARLY_LINE_LENGTHS.end(), 0.0f)
+        / float{EARLY_LINE_LENGTHS.size()} * density_mult;
+    Coeff = CalcDecayCoeff(length, decayTime);
+
 }
 
 /* Update the EAX modulation step and depth. Keep in mind that this kind of
@@ -1038,7 +1041,7 @@ void LateReverb::updateLines(const float density_mult, const float diffusion,
 
 /* Update the offsets for the main effect delay line. */
 void ReverbPipeline::updateDelayLine(const float gain, const float earlyDelay,
-    const float lateDelay, const float density_mult, const float decayTime, const float frequency)
+    const float lateDelay, const float density_mult, const float frequency)
 {
     /* Early reflection taps are decorrelated by means of an average room
      * reflection approximation described above the definition of the taps.
@@ -1050,11 +1053,11 @@ void ReverbPipeline::updateDelayLine(const float gain, const float earlyDelay,
      * delay path and offsets that would continue the propagation naturally
      * into the late lines.
      */
+    mEarlyDelayCoeff[1] = gain;
     for(size_t i{0u};i < NUM_LINES;i++)
     {
         float length{EARLY_TAP_LENGTHS[i]*density_mult};
         mEarlyDelayTap[i][1] = float2uint((earlyDelay+length) * frequency);
-        mEarlyDelayCoeff[i][1] = CalcDecayCoeff(length, decayTime) * gain;
 
         /* Reduce the late delay tap by the shortest early delay line length to
          * compensate for the late line input being fed by the delayed early
@@ -1193,7 +1196,7 @@ void ReverbState::update(const ContextBase *Context, const EffectSlot *Slot,
 {
     auto &props = std::get<ReverbProps>(*props_);
     const DeviceBase *Device{Context->mDevice};
-    const auto frequency = static_cast<float>(Device->Frequency);
+    const auto frequency = static_cast<float>(Device->mSampleRate);
 
     /* If the HF limit parameter is flagged, calculate an appropriate limit
      * based on the air absorption parameter.
@@ -1245,8 +1248,7 @@ void ReverbState::update(const ContextBase *Context, const EffectSlot *Slot,
         mCurrentPipeline = !mCurrentPipeline;
 
         auto &oldpipeline = mPipelines[!mCurrentPipeline];
-        for(size_t j{0};j < NUM_LINES;++j)
-            oldpipeline.mEarlyDelayCoeff[j][1] = 0.0f;
+        oldpipeline.mEarlyDelayCoeff[1] = 0.0f;
     }
     auto &pipeline = mPipelines[mCurrentPipeline];
 
@@ -1255,7 +1257,7 @@ void ReverbState::update(const ContextBase *Context, const EffectSlot *Slot,
 
     /* Update the main effect delay and associated taps. */
     pipeline.updateDelayLine(props.Gain, props.ReflectionsDelay, props.LateReverbDelay,
-        density_mult, props.DecayTime, frequency);
+        density_mult, frequency);
 
     /* Update early and late 3D panning. */
     mOutTarget = target.Main->Buffer;
@@ -1510,15 +1512,15 @@ void ReverbPipeline::processEarly(const DelayLineU &main_delay, size_t offset,
          * primary reflections.
          */
         const auto fadeStep = 1.0f / static_cast<float>(todo);
+        const auto earlycoeff0 = float{mEarlyDelayCoeff[0]};
+        const auto earlycoeff1 = float{mEarlyDelayCoeff[1]};
+        mEarlyDelayCoeff[0] = mEarlyDelayCoeff[1];
         for(size_t j{0_uz};j < NUM_LINES;j++)
         {
             const auto input = in_delay.get(j);
             auto early_delay_tap0 = size_t{offset - mEarlyDelayTap[j][0]};
             auto early_delay_tap1 = size_t{offset - mEarlyDelayTap[j][1]};
             mEarlyDelayTap[j][0] = mEarlyDelayTap[j][1];
-            const auto coeff0 = float{mEarlyDelayCoeff[j][0]};
-            const auto coeff1 = float{mEarlyDelayCoeff[j][1]};
-            mEarlyDelayCoeff[j][0] = mEarlyDelayCoeff[j][1];
             auto fadeCount = 0.0f;
 
             auto tmp = tempSamples[j].begin();
@@ -1531,10 +1533,10 @@ void ReverbPipeline::processEarly(const DelayLineU &main_delay, size_t offset,
                 const auto intap0 = input.subspan(early_delay_tap0, td);
                 const auto intap1 = input.subspan(early_delay_tap1, td);
 
-                auto do_blend = [coeff0,coeff1,fadeStep,&fadeCount](const float in0,
+                auto do_blend = [earlycoeff0,earlycoeff1,fadeStep,&fadeCount](const float in0,
                     const float in1) noexcept -> float
                 {
-                    const auto ret = lerpf(in0*coeff0, in1*coeff1, fadeStep*fadeCount);
+                    const auto ret = lerpf(in0*earlycoeff0, in1*earlycoeff1, fadeStep*fadeCount);
                     fadeCount += 1.0f;
                     return ret;
                 };
@@ -1554,11 +1556,11 @@ void ReverbPipeline::processEarly(const DelayLineU &main_delay, size_t offset,
 
         /* Apply a delay and bounce to generate secondary reflections. */
         early_delay.writeReflected(offset, tempSamples, todo);
+        const auto feedb_coeff = mEarly.Coeff;
         for(size_t j{0_uz};j < NUM_LINES;j++)
         {
             const auto input = early_delay.get(j);
             auto feedb_tap = size_t{offset - mEarly.Offset[j]};
-            const auto feedb_coeff = float{mEarly.Coeff[j]};
             auto out = outSamples[j].begin() + base;
             auto tmp = tempSamples[j].begin();
 

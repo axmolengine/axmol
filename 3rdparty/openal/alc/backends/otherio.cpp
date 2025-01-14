@@ -48,7 +48,6 @@
 #include <condition_variable>
 #include <cstring>
 #include <deque>
-#include <functional>
 #include <future>
 #include <mutex>
 #include <string>
@@ -57,7 +56,7 @@
 #include <vector>
 
 #include "albit.h"
-#include "alstring.h"
+#include "alnumeric.h"
 #include "althrd_setname.h"
 #include "comptr.h"
 #include "core/converter.h"
@@ -255,7 +254,7 @@ auto PopulateDeviceList() -> HRESULT
         al::out_ptr(regbase));
     if(res != ERROR_SUCCESS)
     {
-        ERR("Error opening HKLM\\Software\\ASIO: %ld\n", res);
+        ERR("Error opening HKLM\\Software\\ASIO: {}", res);
         return E_NOINTERFACE;
     }
 
@@ -265,7 +264,7 @@ auto PopulateDeviceList() -> HRESULT
         nullptr, nullptr, nullptr, nullptr, nullptr);
     if(res != ERROR_SUCCESS)
     {
-        ERR("Error querying HKLM\\Software\\ASIO info: %ld\n", res);
+        ERR("Error querying HKLM\\Software\\ASIO info: {}", res);
         return E_FAIL;
     }
 
@@ -281,12 +280,12 @@ auto PopulateDeviceList() -> HRESULT
             nullptr);
         if(res != ERROR_SUCCESS)
         {
-            ERR("Error querying HKLM\\Software\\ASIO subkey %lu: %ld\n", i, res);
+            ERR("Error querying HKLM\\Software\\ASIO subkey {}: {}", i, res);
             continue;
         }
         if(namelen == 0)
         {
-            ERR("HKLM\\Software\\ASIO subkey %lu is blank?\n", i);
+            ERR("HKLM\\Software\\ASIO subkey {} is blank?", i);
             continue;
         }
         auto subkeyname = wstr_to_utf8({keyname.data(), namelen});
@@ -295,7 +294,7 @@ auto PopulateDeviceList() -> HRESULT
         res = RegOpenKeyExW(regbase.get(), keyname.data(), 0, KEY_READ, al::out_ptr(subkey));
         if(res != ERROR_SUCCESS)
         {
-            ERR("Error opening HKLM\\Software\\ASIO\\%s: %ld\n", subkeyname.c_str(), res);
+            ERR("Error opening HKLM\\Software\\ASIO\\{}: {}", subkeyname, res);
             continue;
         }
 
@@ -305,7 +304,7 @@ auto PopulateDeviceList() -> HRESULT
             &readsize);
         if(res != ERROR_SUCCESS)
         {
-            ERR("Failed to read HKLM\\Software\\ASIO\\%s\\CLSID: %ld\n", subkeyname.c_str(), res);
+            ERR("Failed to read HKLM\\Software\\ASIO\\{}\\CLSID: {}", subkeyname, res);
             continue;
         }
         idstr.back() = 0;
@@ -313,7 +312,8 @@ auto PopulateDeviceList() -> HRESULT
         auto guid = CLSID{};
         if(auto hr = CLSIDFromString(idstr.data(), &guid); FAILED(hr))
         {
-            ERR("Failed to parse CLSID \"%s\": 0x%08lx\n", wstr_to_utf8(idstr.data()).c_str(), hr);
+            ERR("Failed to parse CLSID \"{}\": {:#x}", wstr_to_utf8(idstr.data()),
+                as_unsigned(hr));
             continue;
         }
 
@@ -328,7 +328,7 @@ auto PopulateDeviceList() -> HRESULT
             if(!iface->Init(nullptr))
 #endif
             {
-                ERR("Failed to initialize %s\n", subkeyname.c_str());
+                ERR("Failed to initialize {}", subkeyname);
                 continue;
             }
             auto drvname = std::array<char,32>{};
@@ -339,16 +339,16 @@ auto PopulateDeviceList() -> HRESULT
             entry.mDrvName = drvname.data();
             entry.mDrvGuid = guid;
 
-            TRACE("Got %s v%ld, CLSID {%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}\n",
-                entry.mDrvName.c_str(), drvver, guid.Data1, guid.Data2, guid.Data3, guid.Data4[0],
+            TRACE("Got {} v{}, CLSID {{{:08X}-{:04X}-{:04X}-{:02X}{:02X}-{:02X}{:02X}{:02X}{:02X}{:02X}{:02X}}}",
+                entry.mDrvName, drvver, guid.Data1, guid.Data2, guid.Data3, guid.Data4[0],
                 guid.Data4[1], guid.Data4[2], guid.Data4[3], guid.Data4[4], guid.Data4[5],
                 guid.Data4[6], guid.Data4[7]);
         }
         else
-            ERR("Failed to create %s instance for CLSID {%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}: 0x%08lx\n",
+            ERR("Failed to create {} instance for CLSID {{{:08X}-{:04X}-{:04X}-{:02X}{:02X}-{:02X}{:02X}{:02X}{:02X}{:02X}{:02X}}}: {:#x}",
                 subkeyname.c_str(), guid.Data1, guid.Data2, guid.Data3, guid.Data4[0],
                 guid.Data4[1], guid.Data4[2], guid.Data4[3], guid.Data4[4], guid.Data4[5],
-                guid.Data4[6], guid.Data4[7], hr);
+                guid.Data4[6], guid.Data4[7], as_unsigned(hr));
     }
 
     return S_OK;
@@ -437,12 +437,12 @@ struct OtherIOProxy {
 
 void OtherIOProxy::messageHandler(std::promise<HRESULT> *promise)
 {
-    TRACE("Starting COM message thread\n");
+    TRACE("Starting COM message thread");
 
     auto com = ComWrapper{COINIT_APARTMENTTHREADED};
     if(!com)
     {
-        WARN("Failed to initialize COM: 0x%08lx\n", com.status());
+        WARN("Failed to initialize COM: {:#x}", as_unsigned(com.status()));
         promise->set_value(com.status());
         return;
     }
@@ -457,12 +457,12 @@ void OtherIOProxy::messageHandler(std::promise<HRESULT> *promise)
     promise->set_value(S_OK);
     promise = nullptr;
 
-    TRACE("Starting message loop\n");
+    TRACE("Starting message loop");
     while(Msg msg{popMessage()})
     {
-        TRACE("Got message \"%s\" (0x%04x, this=%p, param=\"%.*s\")\n",
+        TRACE("Got message \"{}\" ({:#04x}, this={}, param=\"{}\")",
             GetMessageTypeName(msg.mType), static_cast<uint>(msg.mType),
-            static_cast<void*>(msg.mProxy), al::sizei(msg.mParam), msg.mParam.data());
+            static_cast<void*>(msg.mProxy), msg.mParam);
 
         switch(msg.mType)
         {
@@ -494,15 +494,15 @@ void OtherIOProxy::messageHandler(std::promise<HRESULT> *promise)
         case MsgType::QuitThread:
             break;
         }
-        ERR("Unexpected message: %u\n", static_cast<uint>(msg.mType));
+        ERR("Unexpected message: {}", int{al::to_underlying(msg.mType)});
         msg.mPromise.set_value(E_FAIL);
     }
-    TRACE("Message loop finished\n");
+    TRACE("Message loop finished");
 }
 
 
 struct OtherIOPlayback final : public BackendBase, OtherIOProxy {
-    OtherIOPlayback(DeviceBase *device) noexcept : BackendBase{device} { }
+    explicit OtherIOPlayback(DeviceBase *device) noexcept : BackendBase{device} { }
     ~OtherIOPlayback() final;
 
     void mixerProc();
@@ -531,7 +531,7 @@ OtherIOPlayback::~OtherIOPlayback()
 
 void OtherIOPlayback::mixerProc()
 {
-    const auto restTime = milliseconds{mDevice->UpdateSize*1000/mDevice->Frequency / 2};
+    const auto restTime = milliseconds{mDevice->mUpdateSize*1000/mDevice->mSampleRate / 2};
 
     SetRTPriority();
     althrd_setname(GetMixerThreadName());
@@ -544,23 +544,24 @@ void OtherIOPlayback::mixerProc()
         auto now = std::chrono::steady_clock::now();
 
         /* This converts from nanoseconds to nanosamples, then to samples. */
-        auto avail = int64_t{std::chrono::duration_cast<seconds>((now-start) * mDevice->Frequency).count()};
-        if(avail-done < mDevice->UpdateSize)
+        const auto avail = int64_t{std::chrono::duration_cast<seconds>((now-start)
+            * mDevice->mSampleRate).count()};
+        if(avail-done < mDevice->mUpdateSize)
         {
             std::this_thread::sleep_for(restTime);
             continue;
         }
-        while(avail-done >= mDevice->UpdateSize)
+        while(avail-done >= mDevice->mUpdateSize)
         {
-            mDevice->renderSamples(nullptr, mDevice->UpdateSize, 0u);
-            done += mDevice->UpdateSize;
+            mDevice->renderSamples(nullptr, mDevice->mUpdateSize, 0u);
+            done += mDevice->mUpdateSize;
         }
 
-        if(done >= mDevice->Frequency)
+        if(done >= mDevice->mSampleRate)
         {
-            auto s = seconds{done/mDevice->Frequency};
+            auto s = seconds{done/mDevice->mSampleRate};
             start += s;
-            done -= mDevice->Frequency*s.count();
+            done -= mDevice->mSampleRate*s.count();
         }
     }
 }
@@ -576,13 +577,12 @@ void OtherIOPlayback::open(std::string_view name)
             [name](const DeviceEntry &entry) { return entry.mDrvName == name; });
         if(iter == gDeviceList.cend())
             throw al::backend_exception{al::backend_error::NoDevice,
-                "Device name \"%.*s\" not found", al::sizei(name), name.data()};
+                "Device name \"{}\" not found", name};
     }
 
     mOpenStatus = pushMessage(MsgType::OpenDevice, name).get();
     if(FAILED(mOpenStatus))
-        throw al::backend_exception{al::backend_error::DeviceError, "Failed to open \"%.*s\"",
-            al::sizei(name), name.data()};
+        throw al::backend_exception{al::backend_error::DeviceError, "Failed to open \"{}\"", name};
 
     mDeviceName = name;
 }
@@ -612,18 +612,18 @@ void OtherIOPlayback::start()
     auto hr = pushMessage(MsgType::StartDevice).get();
     if(FAILED(hr))
         throw al::backend_exception{al::backend_error::DeviceError,
-            "Failed to start playback: 0x%08lx", hr};
+            "Failed to start playback: {:#x}", as_unsigned(hr)};
 }
 
 auto OtherIOPlayback::startProxy() -> HRESULT
 {
     try {
         mKillNow.store(false, std::memory_order_release);
-        mThread = std::thread{std::mem_fn(&OtherIOPlayback::mixerProc), this};
+        mThread = std::thread{&OtherIOPlayback::mixerProc, this};
         return S_OK;
     }
     catch(std::exception& e) {
-        ERR("Failed to start mixing thread: %s", e.what());
+        ERR("Failed to start mixing thread: {}", e.what());
     }
     return E_FAIL;
 }
