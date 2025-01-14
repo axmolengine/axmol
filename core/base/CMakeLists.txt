@@ -78,7 +78,6 @@ set(_AX_BASE_HEADER
     base/Scheduler.h
     base/EventType.h
     base/IMEDispatcher.h
-    base/PaddedString.h
     base/JsonWriter.h
     base/JobSystem.h
     )
