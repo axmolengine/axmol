@@ -18,6 +18,11 @@ if (WINRT)
     set(CMAKE_CXX_FLAGS  "/sdl- ${CMAKE_CXX_FLAGS}")
 endif()
 
+if (ANDROID OR LINUX)
+    set(CMAKE_C_FLAGS  "-fPIC ${CMAKE_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS  "-fPIC ${CMAKE_CXX_FLAGS}")
+endif()
+
 # config c standard
 if (WINDOWS)
     message(STATUS "CMAKE_HOST_SYSTEM_VERSION: ${CMAKE_HOST_SYSTEM_VERSION}")
