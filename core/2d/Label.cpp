@@ -165,14 +165,11 @@ public:
         {
             displayedOpacity = 0.0f;
         }
-        Color color(_displayedColor, displayedOpacity);
+        Color color(_displayedColor, displayedOpacity / 255.0f);
         // special opacity for premultiplied textures
         if (_opacityModifyRGB)
-        {
-            color.r *= displayedOpacity / 255.0f;
-            color.g *= displayedOpacity / 255.0f;
-            color.b *= displayedOpacity / 255.0f;
-        }
+            color.premultiplyAlpha();
+
         _quad.bl.color = color;
         _quad.br.color = color;
         _quad.tl.color = color;
