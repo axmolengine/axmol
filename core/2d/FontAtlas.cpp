@@ -43,11 +43,10 @@
 #include "fmt/format.h"
 #include "base/ZipUtils.h"
 
-#include "base/PaddedString.h"
+#include "base/json.h"
 
 namespace ax
 {
-
 const int FontAtlas::CacheTextureWidth     = 512;
 const int FontAtlas::CacheTextureHeight    = 512;
 const char* FontAtlas::CMD_PURGE_FONTATLAS = "__ax_PURGE_FONTATLAS";
@@ -55,11 +54,12 @@ const char* FontAtlas::CMD_RESET_FONTATLAS = "__ax_RESET_FONTATLAS";
 
 void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, hlookup::string_map<FontAtlas*>& outAtlasMap)
 {
-    using namespace simdjson;
+    using namespace ::simdjson;
 
     try
     {
-        auto strJson = PaddedString::load(fontatlasFile);
+        simdjson::PaddedString strJson;
+        FileUtils::getInstance()->getContents(fontatlasFile, &strJson);
         ondemand::parser parser;
         ondemand::document settings = parser.iterate(strJson);
         std::string_view type       = settings["type"];
