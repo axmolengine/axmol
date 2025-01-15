@@ -9,7 +9,7 @@ NS_FGUI_BEGIN
 class ToolSet
 {
 public:
-    static ax::Color4B hexToColor(const char* str);
+    static ax::Color32 hexToColor(const char* str);
     static ax::Color3B intToColor(unsigned int rgb);
     static unsigned int colorToInt(const ax::Color3B& color);
 

@@ -153,7 +153,7 @@ public:
      * Query the color of place holder.
      *@return The place holder color.
      */
-    virtual const Color4B& getColorSpaceHolder();
+    virtual const Color32& getColorSpaceHolder();
 
     /**
      *@brief Change input placeholder color.
@@ -163,15 +163,15 @@ public:
 
     /**
      * Change the placeholder color.
-     *@param color The placeholder color in Color4B.
+     *@param color The placeholder color in Color32.
      */
-    virtual void setColorSpaceHolder(const Color4B& color);
+    virtual void setColorSpaceHolder(const Color32& color);
 
     /**
      * Change the color of input text.
-     *@param textColor The text color in Color4B.
+     *@param textColor The text color in Color32.
      */
-    virtual void setTextColor(const Color4B& textColor) override;
+    virtual void setTextColor(const Color32& textColor) override;
 
     /**
      * Change input text of TextField.
@@ -263,8 +263,8 @@ protected:
     std::string _inputText;
 
     std::string _placeHolder;
-    Color4B _colorSpaceHolder;
-    Color4B _colorText;
+    Color32 _colorSpaceHolder;
+    Color32 _colorText;
 
     bool _secureTextEntry;
     std::string _passwordStyleText;
@@ -283,7 +283,7 @@ protected:
     void makeStringSupportCursor(std::string& displayText);
     void updateCursorDisplayText();
     void setAttachWithIME(bool isAttachWithIME);
-    void setTextColorInternally(const Color4B& color);
+    void setTextColorInternally(const Color32& color);
 
 private:
     class LengthStack;

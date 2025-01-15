@@ -12686,9 +12686,9 @@ int lua_ax_ui_Text_setTextColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color4B arg0;
+        ax::Color32 arg0;
 
-        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:setTextColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Text:setTextColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_setTextColor'", nullptr);
@@ -12742,7 +12742,7 @@ int lua_ax_ui_Text_getTextColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getTextColor();
-        color4b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Text:getTextColor",argc, 0);
@@ -12794,9 +12794,9 @@ int lua_ax_ui_Text_enableShadow(lua_State* tolua_S)
     }
     if (argc == 1) 
     {
-        ax::Color4B arg0;
+        ax::Color32 arg0;
 
-        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:enableShadow");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Text:enableShadow");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_enableShadow'", nullptr);
@@ -12808,10 +12808,10 @@ int lua_ax_ui_Text_enableShadow(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        ax::Color4B arg0;
+        ax::Color32 arg0;
         ax::Vec2 arg1;
 
-        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:enableShadow");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Text:enableShadow");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "axui.Text:enableShadow");
         if(!ok)
@@ -12825,11 +12825,11 @@ int lua_ax_ui_Text_enableShadow(lua_State* tolua_S)
     }
     if (argc == 3) 
     {
-        ax::Color4B arg0;
+        ax::Color32 arg0;
         ax::Vec2 arg1;
         int arg2;
 
-        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:enableShadow");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Text:enableShadow");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "axui.Text:enableShadow");
 
@@ -12881,9 +12881,9 @@ int lua_ax_ui_Text_enableOutline(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color4B arg0;
+        ax::Color32 arg0;
 
-        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:enableOutline");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Text:enableOutline");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_enableOutline'", nullptr);
@@ -12895,10 +12895,10 @@ int lua_ax_ui_Text_enableOutline(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        ax::Color4B arg0;
+        ax::Color32 arg0;
         int arg1;
 
-        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:enableOutline");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Text:enableOutline");
 
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Text:enableOutline");
         if(!ok)
@@ -12948,9 +12948,9 @@ int lua_ax_ui_Text_enableGlow(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color4B arg0;
+        ax::Color32 arg0;
 
-        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:enableGlow");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Text:enableGlow");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_enableGlow'", nullptr);
@@ -13196,7 +13196,7 @@ int lua_ax_ui_Text_getShadowColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getShadowColor();
-        color4b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Text:getShadowColor",argc, 0);
@@ -13337,7 +13337,7 @@ int lua_ax_ui_Text_getEffectColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getEffectColor();
-        color4b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Text:getEffectColor",argc, 0);
@@ -22528,7 +22528,7 @@ int lua_ax_ui_TextField_getPlaceHolderColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getPlaceHolderColor();
-        color4b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TextField:getPlaceHolderColor",argc, 0);
@@ -22564,8 +22564,8 @@ int lua_ax_ui_TextField_setPlaceHolderColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            ax::Color4B arg0;
-            ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.TextField:setPlaceHolderColor");
+            ax::Color32 arg0;
+            ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.TextField:setPlaceHolderColor");
 
             if (!ok) { break; }
             cobj->setPlaceHolderColor(arg0);
@@ -22630,7 +22630,7 @@ int lua_ax_ui_TextField_getTextColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getTextColor();
-        color4b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TextField:getTextColor",argc, 0);
@@ -22671,9 +22671,9 @@ int lua_ax_ui_TextField_setTextColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color4B arg0;
+        ax::Color32 arg0;
 
-        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.TextField:setTextColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.TextField:setTextColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setTextColor'", nullptr);
@@ -31375,7 +31375,7 @@ int lua_ax_ui_RichText_stringWithColor3B(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_ui_RichText_stringWithColor4B(lua_State* tolua_S)
+int lua_ax_ui_RichText_stringWithColor32(lua_State* tolua_S)
 {
     int argc = 0;
     ax::ui::RichText* cobj = nullptr;
@@ -31395,7 +31395,7 @@ int lua_ax_ui_RichText_stringWithColor4B(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_stringWithColor4B'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_stringWithColor32'", nullptr);
         return 0;
     }
 #endif
@@ -31403,24 +31403,24 @@ int lua_ax_ui_RichText_stringWithColor4B(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color4B arg0;
+        ax::Color32 arg0;
 
-        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.RichText:stringWithColor4B");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.RichText:stringWithColor32");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_stringWithColor4B'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_stringWithColor32'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->stringWithColor4B(arg0);
+        auto&& ret = cobj->stringWithColor32(arg0);
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:stringWithColor4B",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:stringWithColor32",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_stringWithColor4B'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_stringWithColor32'.",&tolua_err);
 #endif
 
     return 0;
@@ -31790,7 +31790,7 @@ int lua_register_ax_ui_RichText(lua_State* tolua_S)
         tolua_function(tolua_S,"getDefaults",lua_ax_ui_RichText_getDefaults);
         tolua_function(tolua_S,"color3BWithString",lua_ax_ui_RichText_color3BWithString);
         tolua_function(tolua_S,"stringWithColor3B",lua_ax_ui_RichText_stringWithColor3B);
-        tolua_function(tolua_S,"stringWithColor4B",lua_ax_ui_RichText_stringWithColor4B);
+        tolua_function(tolua_S,"stringWithColor32",lua_ax_ui_RichText_stringWithColor32);
         tolua_function(tolua_S,"openUrl",lua_ax_ui_RichText_openUrl);
         tolua_function(tolua_S,"initWithXML",lua_ax_ui_RichText_initWithXML);
         tolua_function(tolua_S,"setString",lua_ax_ui_RichText_setString);
@@ -35464,8 +35464,8 @@ int lua_ax_ui_EditBox_setFontColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            ax::Color4B arg0;
-            ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.EditBox:setFontColor");
+            ax::Color32 arg0;
+            ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.EditBox:setFontColor");
 
             if (!ok) { break; }
             cobj->setFontColor(arg0);
@@ -35530,7 +35530,7 @@ int lua_ax_ui_EditBox_getFontColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getFontColor();
-        color4b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.EditBox:getFontColor",argc, 0);
@@ -35813,8 +35813,8 @@ int lua_ax_ui_EditBox_setPlaceholderFontColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            ax::Color4B arg0;
-            ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.EditBox:setPlaceholderFontColor");
+            ax::Color32 arg0;
+            ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.EditBox:setPlaceholderFontColor");
 
             if (!ok) { break; }
             cobj->setPlaceholderFontColor(arg0);
@@ -35879,7 +35879,7 @@ int lua_ax_ui_EditBox_getPlaceholderFontColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getPlaceholderFontColor();
-        color4b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.EditBox:getPlaceholderFontColor",argc, 0);
@@ -39788,9 +39788,9 @@ int lua_ax_ui_TabHeader_setTitleColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color4B arg0;
+        ax::Color32 arg0;
 
-        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.TabHeader:setTitleColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.TabHeader:setTitleColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabHeader_setTitleColor'", nullptr);
@@ -39844,7 +39844,7 @@ int lua_ax_ui_TabHeader_getTitleColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getTitleColor();
-        color4b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabHeader:getTitleColor",argc, 0);

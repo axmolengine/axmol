@@ -184,7 +184,7 @@ static int wav_close(WAV_FILE* wavf)
 
 AudioDecoderWav::AudioDecoderWav()
 {
-    memset(&_wavf, 0, offsetof(WAV_FILE, Stream));
+    memset((void*)&_wavf, 0, offsetof(WAV_FILE, Stream));
 }
 
 AudioDecoderWav::~AudioDecoderWav()

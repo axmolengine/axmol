@@ -290,7 +290,7 @@ function cc.c3b( _r,_g,_b )
     return { r = _r, g = _g, b = _b }
 end
 
---Color4B
+--Color32
 function cc.c4b( _r,_g,_b,_a )
     return { r = _r, g = _g, b = _b, a = _a }
 end

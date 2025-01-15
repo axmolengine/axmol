@@ -179,7 +179,7 @@ LabelFNTColorAndOpacity::LabelFNTColorAndOpacity()
 {
     _time = 0;
 
-    auto col = LayerColor::create(Color4B(128, 128, 128, 255));
+    auto col = LayerColor::create(Color32(128, 128, 128, 255));
     addChild(col, -10);
 
     auto label1 = Label::createWithBMFont("fonts/bitmapFontTest2.fnt", "Test");
@@ -563,7 +563,7 @@ LabelFNTGlyphDesigner::LabelFNTGlyphDesigner()
 {
     auto winSize = Director::getInstance()->getWinSize();
 
-    auto layer = LayerColor::create(Color4B(128, 128, 128, 255));
+    auto layer = LayerColor::create(Color32(128, 128, 128, 255));
     addChild(layer, -10);
 
     auto label1 = Label::createWithBMFont("fonts/futura-48.fnt", "Testing Glyph Designer");
@@ -929,7 +929,7 @@ LabelFNTBounds::LabelFNTBounds()
 {
     auto s = Director::getInstance()->getWinSize();
 
-    auto layer = LayerColor::create(Color4B(128, 128, 128, 255));
+    auto layer = LayerColor::create(Color32(128, 128, 128, 255));
     addChild(layer, -10);
 
     // LabelBMFont
@@ -1046,19 +1046,19 @@ LabelTTFColor::LabelTTFColor()
     // Green
     auto label1 = Label::createWithTTF(ttfConfig, "Green", TextHAlignment::CENTER, size.width);
     label1->setPosition(size.width / 2, size.height * 0.5f);
-    label1->setTextColor(Color4B::GREEN);
+    label1->setTextColor(Color32::GREEN);
     addChild(label1);
 
     // Red
     auto label2 = Label::createWithTTF(ttfConfig, "Red", TextHAlignment::CENTER, size.width);
     label2->setPosition(size.width / 2, size.height * 0.65f);
-    label2->setTextColor(Color4B::RED);
+    label2->setTextColor(Color32::RED);
     addChild(label2);
 
     // Blue
     auto label3 = Label::createWithTTF(ttfConfig, "Blue", TextHAlignment::CENTER, size.width);
     label3->setPosition(size.width / 2, size.height * 0.35f);
-    label3->setTextColor(Color4B::BLUE);
+    label3->setTextColor(Color32::BLUE);
     addChild(label3);
 }
 
@@ -1146,7 +1146,7 @@ LabelTTFCJKWrappingTest::LabelTTFCJKWrappingTest()
     auto label1 = Label::createWithTTF(ttfConfig, "你好，Axmol Label.", TextHAlignment::LEFT, size.width * 0.75f);
     if (label1)
     {
-        label1->setTextColor(Color4B(128, 255, 255, 255));
+        label1->setTextColor(Color32(128, 255, 255, 255));
         label1->setPosition(Vec2(size.width * 0.1f, size.height * 0.6f));
         label1->setAnchorPoint(Vec2(0.0f, 0.5f));
         this->addChild(label1);
@@ -1159,7 +1159,7 @@ LabelTTFCJKWrappingTest::LabelTTFCJKWrappingTest()
     auto label2 = Label::createWithTTF(ttfConfig, "早上好，Axmol Label.", TextHAlignment::LEFT, size.width * 0.75f);
     if (label2)
     {
-        label2->setTextColor(Color4B(255, 128, 255, 255));
+        label2->setTextColor(Color32(255, 128, 255, 255));
         label2->setPosition(Vec2(size.width * 0.1f, size.height * 0.4f));
         label2->setAnchorPoint(Vec2(0.0f, 0.5f));
         this->addChild(label2);
@@ -1169,7 +1169,7 @@ LabelTTFCJKWrappingTest::LabelTTFCJKWrappingTest()
                                        size.width * 0.75f);
     if (label3)
     {
-        label3->setTextColor(Color4B(255, 255, 128, 255));
+        label3->setTextColor(Color32(255, 255, 128, 255));
         label3->setPosition(Vec2(size.width * 0.1f, size.height * 0.2f));
         label3->setAnchorPoint(Vec2(0.0f, 0.5f));
         this->addChild(label3);
@@ -1292,7 +1292,7 @@ LabelTTFDistanceField::LabelTTFDistanceField()
 
     auto label1 = Label::createWithTTF(ttfConfig, "Distance Field", TextHAlignment::CENTER, size.width);
     label1->setPosition(Vec2(size.width / 2, size.height * 0.6f));
-    label1->setTextColor(Color4B::GREEN);
+    label1->setTextColor(Color32::GREEN);
     addChild(label1);
 
     auto action = Sequence::create(DelayTime::create(1.0f), ScaleTo::create(6.0f, 5.0f, 5.0f),
@@ -1310,7 +1310,7 @@ LabelTTFDistanceField::LabelTTFDistanceField()
 
     auto label2 = Label::createWithTTF(ttfConfig, "Distance Field", TextHAlignment::CENTER, size.width);
     label2->setPosition(Vec2(size.width / 2, size.height * 0.3f));
-    label2->setTextColor(Color4B::RED);
+    label2->setTextColor(Color32::RED);
     addChild(label2);
 
     // Draw the label border
@@ -1601,7 +1601,7 @@ LabelOutlineAndGlowTest::LabelOutlineAndGlowTest()
 {
     auto size = Director::getInstance()->getWinSize();
 
-    auto bg = LayerColor::create(Color4B(200, 191, 231, 255));
+    auto bg = LayerColor::create(Color32(200, 191, 231, 255));
     this->addChild(bg);
 
     TTFConfig ttfConfig("fonts/arial.ttf", 40, GlyphCollection::DYNAMIC, nullptr, true);
@@ -1609,16 +1609,16 @@ LabelOutlineAndGlowTest::LabelOutlineAndGlowTest()
     // Glow SDF (GPU)
     auto label1 = Label::createWithTTF(ttfConfig, "Glow1", TextHAlignment::CENTER, size.width);
     label1->setPosition(Vec2(size.width / 2, size.height * 0.7));
-    label1->setTextColor(Color4B::GREEN);
-    label1->enableGlow(Color4B::YELLOW);
+    label1->setTextColor(Color32::GREEN);
+    label1->enableGlow(Color32::YELLOW);
     addChild(label1);
 
     // Glow normal(CPU)
     ttfConfig.distanceFieldEnabled = false;
     auto label2                    = Label::createWithTTF(ttfConfig, "Glow2", TextHAlignment::CENTER, size.width);
     label2->setPosition(Vec2(size.width / 2, size.height * 0.6));
-    label2->setTextColor(Color4B::GREEN);
-    label2->enableGlow(Color4B::YELLOW);
+    label2->setTextColor(Color32::GREEN);
+    label2->enableGlow(Color32::YELLOW);
     addChild(label2);
 
     // Outline SDF(GPU)
@@ -1626,8 +1626,8 @@ LabelOutlineAndGlowTest::LabelOutlineAndGlowTest()
     ttfConfig.outlineSize          = 2;
     auto label3                    = Label::createWithTTF(ttfConfig, "Outline1", TextHAlignment::CENTER, size.width);
     label3->setPosition(Vec2(size.width / 2, size.height * 0.48));
-    label3->setTextColor(Color4B::RED);
-    label3->enableOutline(Color4B::BLUE);
+    label3->setTextColor(Color32::RED);
+    label3->enableOutline(Color32::BLUE);
     addChild(label3);
 
     // Outline normal(CPU by freetype2)
@@ -1635,8 +1635,8 @@ LabelOutlineAndGlowTest::LabelOutlineAndGlowTest()
     ttfConfig.outlineSize          = 2;
     auto label4                    = Label::createWithTTF(ttfConfig, "Outline2", TextHAlignment::CENTER, size.width);
     label4->setPosition(Vec2(size.width / 2, size.height * 0.36));
-    label4->setTextColor(Color4B::RED);
-    label4->enableOutline(Color4B::BLUE, 2);
+    label4->setTextColor(Color32::RED);
+    label4->enableOutline(Color32::BLUE, 2);
     addChild(label4);
 }
 
@@ -1658,7 +1658,7 @@ void LabelShadowTest::onEnter()
 
     auto size = Director::getInstance()->getWinSize();
 
-    auto bg = LayerColor::create(Color4B(200, 191, 231, 255));
+    auto bg = LayerColor::create(Color32(200, 191, 231, 255));
     this->addChild(bg);
 
     auto slider = ui::Slider::create();
@@ -1692,28 +1692,28 @@ void LabelShadowTest::onEnter()
 
     shadowLabelTTF = Label::createWithTTF(ttfConfig, "TTF:Shadow");
     shadowLabelTTF->setPosition(Vec2(size.width / 2, horizontalSliderY + step * (0.5f + 3)));
-    shadowLabelTTF->setTextColor(Color4B::RED);
-    shadowLabelTTF->enableShadow(Color4B::BLACK);
+    shadowLabelTTF->setTextColor(Color32::RED);
+    shadowLabelTTF->enableShadow(Color32::BLACK);
     addChild(shadowLabelTTF);
 
     shadowLabelOutline = Label::createWithTTF(ttfConfig, "TTF:Shadow");
     shadowLabelOutline->setPosition(Vec2(size.width / 2, horizontalSliderY + step * (0.5f + 2)));
-    shadowLabelOutline->setTextColor(Color4B::RED);
-    shadowLabelOutline->enableOutline(Color4B::YELLOW, 1);
-    shadowLabelOutline->enableShadow(Color4B::GREEN);
+    shadowLabelOutline->setTextColor(Color32::RED);
+    shadowLabelOutline->enableOutline(Color32::YELLOW, 1);
+    shadowLabelOutline->enableShadow(Color32::GREEN);
     addChild(shadowLabelOutline);
 
     shadowLabelGrow = Label::createWithTTF(ttfConfig, "TTF:Shadow");
     shadowLabelGrow->setPosition(Vec2(size.width / 2, horizontalSliderY + step * (0.5f + 1)));
-    shadowLabelGrow->setTextColor(Color4B::RED);
-    shadowLabelGrow->enableGlow(Color4B::YELLOW);
-    shadowLabelGrow->enableShadow(Color4B::BLUE);
+    shadowLabelGrow->setTextColor(Color32::RED);
+    shadowLabelGrow->enableGlow(Color32::YELLOW);
+    shadowLabelGrow->enableShadow(Color32::BLUE);
     addChild(shadowLabelGrow);
 
     shadowLabelBMFont = Label::createWithBMFont("fonts/bitmapFontTest.fnt", "BMFont:Shadow");
     shadowLabelBMFont->setPosition(Vec2(size.width / 2, horizontalSliderY + step * 0.5f));
     shadowLabelBMFont->setColor(Color3B::RED);
-    shadowLabelBMFont->enableShadow(Color4B::GREEN);
+    shadowLabelBMFont->enableShadow(Color32::GREEN);
     addChild(shadowLabelBMFont);
 }
 
@@ -1725,10 +1725,10 @@ void LabelShadowTest::sliderEvent(Object* pSender, ui::Slider::EventType type)
         Slider* slider2 = (Slider*)this->getChildByTag(2);
 
         auto offset = Size(slider->getPercent() - 50, 50 - slider2->getPercent());
-        shadowLabelTTF->enableShadow(Color4B::BLACK, offset);
-        shadowLabelBMFont->enableShadow(Color4B::GREEN, offset);
-        shadowLabelOutline->enableShadow(Color4B::GREEN, offset);
-        shadowLabelGrow->enableShadow(Color4B::BLUE, offset);
+        shadowLabelTTF->enableShadow(Color32::BLACK, offset);
+        shadowLabelBMFont->enableShadow(Color32::GREEN, offset);
+        shadowLabelOutline->enableShadow(Color32::GREEN, offset);
+        shadowLabelGrow->enableShadow(Color32::BLUE, offset);
     }
 }
 
@@ -1946,7 +1946,7 @@ LabelAlignmentTest::LabelAlignmentTest()
     auto s         = Director::getInstance()->getWinSize();
 
     auto pos        = Vec2((s.width - blockSize.width) / 2, (s.height - blockSize.height) / 2);
-    auto colorLayer = LayerColor::create(Color4B(100, 100, 100, 255), blockSize.width, blockSize.height);
+    auto colorLayer = LayerColor::create(Color32(100, 100, 100, 255), blockSize.width, blockSize.height);
     colorLayer->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     colorLayer->setPosition(pos);
 
@@ -2069,14 +2069,14 @@ LabelLineHeightTest::LabelLineHeightTest()
 {
     auto size = Director::getInstance()->getWinSize();
 
-    auto bg = LayerColor::create(Color4B(200, 191, 231, 255));
+    auto bg = LayerColor::create(Color32(200, 191, 231, 255));
     this->addChild(bg);
 
     TTFConfig ttfConfig("fonts/arial.ttf", 25, GlyphCollection::DYNAMIC, nullptr, false);
 
     label = Label::createWithTTF(ttfConfig, "Test\nLine\nHeight");
     label->setPosition(Vec2(size.width / 2, size.height * 0.5f));
-    label->setTextColor(Color4B::RED);
+    label->setTextColor(Color32::RED);
     addChild(label);
 
     auto slider = ui::Slider::create();
@@ -2113,14 +2113,14 @@ LabelAdditionalKerningTest::LabelAdditionalKerningTest()
 {
     auto size = Director::getInstance()->getWinSize();
 
-    auto bg = LayerColor::create(Color4B(200, 191, 231, 255));
+    auto bg = LayerColor::create(Color32(200, 191, 231, 255));
     this->addChild(bg);
 
     TTFConfig ttfConfig("fonts/arial.ttf", 40, GlyphCollection::DYNAMIC, nullptr, false);
 
     label = Label::createWithTTF(ttfConfig, "Test additional kerning");
     label->setPosition(size.width / 2, size.height * 0.5f);
-    label->setTextColor(Color4B::RED);
+    label->setTextColor(Color32::RED);
     addChild(label);
 
     auto slider = ui::Slider::create();
@@ -2174,7 +2174,7 @@ std::string LabelIssue8492Test::subtitle() const
 LabelMultilineWithOutline::LabelMultilineWithOutline()
 {
     auto label = Label::createWithTTF("Multi-line text\nwith\noutline feature", "fonts/arial.ttf", 24);
-    label->enableOutline(Color4B::ORANGE, 1);
+    label->enableOutline(Color32::ORANGE, 1);
     label->setPosition(VisibleRect::center());
     addChild(label);
 }
@@ -2260,24 +2260,24 @@ LabelSystemFontColor::LabelSystemFontColor()
 {
     auto size = Director::getInstance()->getWinSize();
 
-    auto label1 = Label::createWithSystemFont("Color4B::Red", "fonts/arial.ttf", 20);
+    auto label1 = Label::createWithSystemFont("Color32::Red", "fonts/arial.ttf", 20);
     label1->setPosition(Vec2(size.width / 2, size.height * 0.3f));
-    label1->setTextColor(Color4B::RED);
+    label1->setTextColor(Color32::RED);
     addChild(label1);
 
-    auto label2 = Label::createWithSystemFont("Color4B::Green", "fonts/arial.ttf", 20);
+    auto label2 = Label::createWithSystemFont("Color32::Green", "fonts/arial.ttf", 20);
     label2->setPosition(Vec2(size.width / 2, size.height * 0.4f));
-    label2->setTextColor(Color4B::GREEN);
+    label2->setTextColor(Color32::GREEN);
     addChild(label2);
 
-    auto label3 = Label::createWithSystemFont("Color4B::Blue", "fonts/arial.ttf", 20);
+    auto label3 = Label::createWithSystemFont("Color32::Blue", "fonts/arial.ttf", 20);
     label3->setPosition(Vec2(size.width / 2, size.height * 0.5f));
-    label3->setTextColor(Color4B::BLUE);
+    label3->setTextColor(Color32::BLUE);
     addChild(label3);
 
-    auto label4 = Label::createWithSystemFont("Color4B(0, 0, 255, 100)", "fonts/arial.ttf", 20);
+    auto label4 = Label::createWithSystemFont("Color32(0, 0, 255, 100)", "fonts/arial.ttf", 20);
     label4->setPosition(Vec2(size.width / 2, size.height * 0.6f));
-    label4->setTextColor(Color4B(0, 0, 255, 100));
+    label4->setTextColor(Color32(0, 0, 255, 100));
     addChild(label4);
 }
 
@@ -2344,7 +2344,7 @@ LabelIssue11699Test::LabelIssue11699Test()
     auto center = VisibleRect::center();
 
     auto label = Label::createWithTTF("中国", "fonts/HKYuanMini.ttf", 150);
-    label->enableOutline(Color4B::RED, 2);
+    label->enableOutline(Color32::RED, 2);
     label->setPosition(center.x, center.y);
     addChild(label);
 }
@@ -2465,8 +2465,8 @@ LabelIssue10688Test::LabelIssue10688Test()
     auto center = VisibleRect::center();
 
     auto label = Label::createWithTTF("Glow MenuItemLabel", "fonts/arial.ttf", 30);
-    label->setTextColor(Color4B::RED);
-    label->enableGlow(Color4B::YELLOW);
+    label->setTextColor(Color32::RED);
+    label->enableGlow(Color32::YELLOW);
     auto menuItem1 = MenuItemLabel::create(label, [](Object*) {});
     menuItem1->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
     menuItem1->setPosition(center.x - label->getContentSize().width / 2, center.y);
@@ -3202,7 +3202,7 @@ LabelSystemFontTest::LabelSystemFontTest()
     _label->setOverflow(Label::Overflow::NONE);
     _label->setSystemFontName("Hiragino Sans GB");
     _label->setSystemFontSize(20);
-    _label->enableOutline(Color4B::RED, 1.0);
+    _label->enableOutline(Color32::RED, 1.0);
     _label->setString("This is a very\n 我爱你中国\n long sentence");
     _labelType = 2;
 
@@ -3944,14 +3944,14 @@ LabelIssue15214::LabelIssue15214()
     // 3
     Label* label3 = Label::createWithTTF("TTF with setTextColor()", "fonts/arial.ttf", 24.0f);
     label3->enableUnderline();
-    label3->setTextColor(Color4B::BLUE);
+    label3->setTextColor(Color32::BLUE);
     label3->setPosition(size.width / 2, size.height / 5 * 2);
     this->addChild(label3);
 
     // 4
     Label* label4 = Label::createWithSystemFont("System with setTextColor()", "Verdana", 24.0f);
     label4->enableUnderline();
-    label4->setTextColor(Color4B::BLUE);
+    label4->setTextColor(Color32::BLUE);
     label4->setPosition(size.width / 2, size.height / 5 * 1);
     this->addChild(label4);
 }
@@ -4009,7 +4009,7 @@ LabelIssue16471::LabelIssue16471()
     // if set false then  testLabel:setTextColor is useful
     node->setCascadeColorEnabled(true);
     Label* label = Label::createWithTTF("Should be Yellow", "fonts/arial.ttf", 12);
-    label->setTextColor(Color4B::YELLOW);
+    label->setTextColor(Color32::YELLOW);
     node->addChild(label);
 }
 
@@ -4035,16 +4035,16 @@ LabelIssue16717::LabelIssue16717()
     {
         auto label = Label::createWithTTF("Hello World", "fonts/arial.ttf", 70);
         label->setPosition(VisibleRect::center() + Vec2(0.0f, 40.0f));
-        label->enableOutline(Color4B(0, 255, 0, 100), 10);  // Set 100 alpha for outline
-        label->setTextColor(Color4B(0, 0, 255, 100));       // Also set 100 alpha for text
+        label->enableOutline(Color32(0, 255, 0, 100), 10);  // Set 100 alpha for outline
+        label->setTextColor(Color32(0, 0, 255, 100));       // Also set 100 alpha for text
         addChild(label);
     }
 
     {
         auto label = Label::createWithTTF("Hello World", "fonts/arial.ttf", 70);
         label->setPosition(VisibleRect::center() + Vec2(0.0f, -40.0f));
-        label->enableOutline(Color4B(0, 255, 0, 100), 10);  // Set 100 alpha for outline
-        label->setTextColor(Color4B(0, 255, 0, 100));       // Also set 100 alpha for text
+        label->enableOutline(Color32(0, 255, 0, 100), 10);  // Set 100 alpha for outline
+        label->setTextColor(Color32(0, 255, 0, 100));       // Also set 100 alpha for text
         addChild(label);
     }
 }

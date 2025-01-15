@@ -170,7 +170,7 @@ protected:
     struct VertexData
     {
         Vec3 pos;
-        Color4B color;
+        Color32 color;
         Tex2F texPos;
     };
 

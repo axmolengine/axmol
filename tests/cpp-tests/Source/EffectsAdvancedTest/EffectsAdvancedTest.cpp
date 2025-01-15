@@ -258,7 +258,7 @@ void Issue631::onEnter()
     removeChild(_bgNode, true);
 
     // background
-    auto layer = LayerColor::create(Color4B(255, 0, 0, 255));
+    auto layer = LayerColor::create(Color32(255, 0, 0, 255));
     addChild(layer, -10);
     auto sprite = Sprite::create("Images/grossini.png");
     sprite->setPosition(50, 80);
@@ -266,7 +266,7 @@ void Issue631::onEnter()
 
     // foreground
     auto layer2BaseGrid = NodeGrid::create();
-    auto layer2         = LayerColor::create(Color4B(0, 255, 0, 255));
+    auto layer2         = LayerColor::create(Color32(0, 255, 0, 255));
     auto fog            = Sprite::create("Images/Fog.png");
 
     BlendFunc bf = {backend::BlendFactor::SRC_ALPHA, backend::BlendFactor::ONE_MINUS_SRC_ALPHA};

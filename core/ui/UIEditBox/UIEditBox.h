@@ -466,12 +466,12 @@ public:
      * Set the font color of the widget's text.
      */
     void setFontColor(const Color3B& color);
-    void setFontColor(const Color4B& color);
+    void setFontColor(const Color32& color);
 
     /**
      * Get the font color of the widget's text.
      */
-    const Color4B& getFontColor() const;
+    const Color32& getFontColor() const;
 
     /**
      * Set the placeholder's font. Only system font is allowed.
@@ -512,12 +512,12 @@ public:
     /**
      * Set the font color of the placeholder text when the edit box is empty.
      */
-    void setPlaceholderFontColor(const Color4B& color);
+    void setPlaceholderFontColor(const Color32& color);
 
     /**
      * Get the font color of the placeholder text when the edit box is empty.
      */
-    const Color4B& getPlaceholderFontColor() const;
+    const Color32& getPlaceholderFontColor() const;
 
     /**
      * Set a text in the edit box that acts as a placeholder when an

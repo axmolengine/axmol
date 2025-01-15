@@ -130,9 +130,9 @@ namespace ui {
     virtual bool isEditing() override { return _system_control.get()->isEditing(); }
     virtual void createNativeControl(const Rect& frame) override {  }
     virtual void setNativeFont(const char* pFontName, int fontSize) override;
-    virtual void setNativeFontColor(const Color4B& color) override;
+    virtual void setNativeFontColor(const Color32& color) override;
     virtual void setNativePlaceholderFont(const char* pFontName, int fontSize) override { AXLOGD("Warning! You can't change WinRT placeholder font"); }
-    virtual void setNativePlaceholderFontColor(const Color4B& color) override { AXLOGD("Warning! You can't change WinRT placeholder font color"); }
+    virtual void setNativePlaceholderFontColor(const Color32& color) override { AXLOGD("Warning! You can't change WinRT placeholder font color"); }
     virtual void setNativeInputMode(EditBox::InputMode inputMode) override;
     virtual void setNativeInputFlag(EditBox::InputFlag inputFlag) override;
     virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType) override { AXLOGD("Warning! You can't change WinRT return type"); }

@@ -4,25 +4,25 @@ NS_FGUI_BEGIN
 using namespace ax;
 using namespace std;
 
-Color4B ToolSet::hexToColor(const char* str)
+Color32 ToolSet::hexToColor(const char* str)
 {
     ssize_t len = strlen(str);
     if (len < 7 || str[0] != '#')
-        return Color4B::BLACK;
+        return Color32::BLACK;
 
     char temp[3];
     memset(temp, 0, 3);
 
     if (len == 9)
     {
-        return Color4B(strtol(strncpy(temp, str + 3, 2), NULL, 16),
+        return Color32(strtol(strncpy(temp, str + 3, 2), NULL, 16),
             strtol(strncpy(temp, str + 5, 2), NULL, 16),
             strtol(strncpy(temp, str + 7, 2), NULL, 16),
             strtol(strncpy(temp, str + 1, 2), NULL, 16));
     }
     else
     {
-        return Color4B(strtol(strncpy(temp, str + 1, 2), NULL, 16),
+        return Color32(strtol(strncpy(temp, str + 1, 2), NULL, 16),
             strtol(strncpy(temp, str + 3, 2), NULL, 16),
             strtol(strncpy(temp, str + 5, 2), NULL, 16),
             255);

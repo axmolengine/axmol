@@ -154,7 +154,7 @@ void EditBoxImplWin::setNativeFont(const char* pFontName, int fontSize)
     );
 }
 
-void EditBoxImplWin::setNativeFontColor(const Color4B& color)
+void EditBoxImplWin::setNativeFontColor(const Color32& color)
 {
     // not implemented yet
 }
@@ -164,7 +164,7 @@ void EditBoxImplWin::setNativePlaceholderFont(const char* pFontName, int fontSiz
     // not implemented yet
 }
 
-void EditBoxImplWin::setNativePlaceholderFontColor(const Color4B& color)
+void EditBoxImplWin::setNativePlaceholderFontColor(const Color32& color)
 {
     // not implemented yet
 }

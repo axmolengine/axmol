@@ -523,8 +523,8 @@ bool UITextFieldTest_PlaceHolderColor::init()
         // Create the textfield
         TextField* textField = TextField::create("input words here", "Arial", 30);
         textField->setPlaceHolder("input text here");
-        textField->setPlaceHolderColor(Color4B::GREEN);
-        textField->setTextColor(Color4B::RED);
+        textField->setPlaceHolderColor(Color32::GREEN);
+        textField->setTextColor(Color32::RED);
         textField->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         textField->addEventListener(AX_CALLBACK_2(UITextFieldTest_PlaceHolderColor::textFieldEvent, this));
         _uiLayer->addChild(textField);

@@ -598,7 +598,7 @@ bool EffectEmitter::getRemoveOnStop() { return removeOnStop; }
 
 void EffectEmitter::setRemoveOnStop(bool value) { removeOnStop = value; }
 
-void EffectEmitter::setColor(cocos2d::Color4B color)
+void EffectEmitter::setColor(cocos2d::Color32 color)
 {
 	color_ = color;
 	Effekseer::Color col;

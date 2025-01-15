@@ -1101,15 +1101,15 @@ void Sprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
             // draw 3 lines
             Vec3 from = verts[indices[i * 3]].position;
             Vec3 to   = verts[indices[i * 3 + 1]].position;
-            _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4B::WHITE);
+            _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color32::WHITE);
 
             from = verts[indices[i * 3 + 1]].position;
             to   = verts[indices[i * 3 + 2]].position;
-            _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4B::WHITE);
+            _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color32::WHITE);
 
             from = verts[indices[i * 3 + 2]].position;
             to   = verts[indices[i * 3]].position;
-            _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4B::WHITE);
+            _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color32::WHITE);
         }
 #endif  // AX_SPRITE_DEBUG_DRAW
     }

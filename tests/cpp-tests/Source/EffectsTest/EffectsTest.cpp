@@ -349,7 +349,7 @@ bool EffectBaseTest::init()
 {
     if (TestCase::init())
     {
-        LayerColor* background = LayerColor::create(Color4B(32, 128, 32, 255));
+        LayerColor* background = LayerColor::create(Color32(32, 128, 32, 255));
         this->addChild(background, -20);
         if (isRectEffect())
         {

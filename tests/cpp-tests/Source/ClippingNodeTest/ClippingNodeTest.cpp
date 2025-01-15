@@ -987,7 +987,7 @@ void ClippingNodePerformanceTest::setup()
     auto s = Director::getInstance()->getWinSize();
 
     auto countLabel = Label::createWithTTF("0", "fonts/arial.ttf", 30);
-    countLabel->enableOutline(Color4B(0, 0, 0, 255), 2);
+    countLabel->enableOutline(Color32(0, 0, 0, 255), 2);
     countLabel->setPosition(Vec2(s.width / 2, s.height - 120));
     addChild(countLabel, 1);
     

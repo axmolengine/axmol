@@ -238,13 +238,13 @@ public:
      *
      * @param color Text color.
      */
-    void setTextColor(const Color4B color);
+    void setTextColor(const Color32 color);
 
     /** Gets text color.
      *
      * @return Text color.
      */
-    const Color4B& getTextColor() const;
+    const Color32& getTextColor() const;
 
     /**
      * Enable shadow for the label.
@@ -255,7 +255,7 @@ public:
      * @param offset The offset of shadow effect.
      * @param blurRadius The blur radius of shadow effect.
      */
-    void enableShadow(const Color4B& shadowColor = Color4B::BLACK,
+    void enableShadow(const Color32& shadowColor = Color32::BLACK,
                       const Vec2& offset         = Vec2(2, -2),
                       int blurRadius             = 0);
 
@@ -266,13 +266,13 @@ public:
      * @param outlineColor The color of outline.
      * @param outlineSize The size of outline.
      */
-    void enableOutline(const Color4B& outlineColor, int outlineSize = 1);
+    void enableOutline(const Color32& outlineColor, int outlineSize = 1);
 
     /** Only support for TTF.
      *
      * @param glowColor The color of glow.
      */
-    void enableGlow(const Color4B& glowColor);
+    void enableGlow(const Color32& glowColor);
 
     /** Disable all text effects, including shadow, outline and glow.
      */
@@ -301,7 +301,7 @@ public:
     /**
      * Return the shadow effect color value.
      */
-    Color4B getShadowColor() const;
+    Color32 getShadowColor() const;
     /**
      * Return the outline effect size value.
      */
@@ -313,7 +313,7 @@ public:
     /**
      * Return current effect color value.
      */
-    Color4B getEffectColor() const;
+    Color32 getEffectColor() const;
 
     /**
      * Provides a way to treat each character like a Sprite.

@@ -46,7 +46,7 @@ ClickAndMoveTestCase::ClickAndMoveTestCase()
 
     auto sprite = Sprite::create(s_pathGrossini);
 
-    auto layer = LayerColor::create(Color4B(255, 255, 0, 255));
+    auto layer = LayerColor::create(Color32(255, 255, 0, 255));
     addChild(layer, -1);
 
     addChild(sprite, 0, kTagSprite);

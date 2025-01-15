@@ -479,7 +479,7 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.s     = abs(*sat);
                     hsv.v     = abs(*val);
                     auto colF = hsv.toRgba();
-                    Color4B col  = colF.premultiplyAlpha();
+                    Color32 col  = colF.premultiplyAlpha();
                     quad->bl.color = col;
                     quad->br.color = col;
                     quad->tl.color = col;
@@ -496,7 +496,7 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.h += *hue;
                     hsv.s    = abs(*sat);
                     hsv.v    = abs(*val);
-                    auto col = hsv.toColor4B();
+                    auto col = hsv.toColor32();
                     quad->bl.color = col;
                     quad->br.color = col;
                     quad->tl.color = col;
@@ -511,7 +511,7 @@ void ParticleSystemQuad::updateParticleQuads()
             {
                 for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++fadeDt, ++fadeLn)
                 {
-                    Color4B col    = Color{*r * *a, *g * *a, *b * *a, *a * (*fadeDt / *fadeLn)};
+                    Color32 col    = Color{*r * *a, *g * *a, *b * *a, *a * (*fadeDt / *fadeLn)};
                     quad->bl.color = col;
                     quad->br.color = col;
                     quad->tl.color = col;
@@ -522,7 +522,7 @@ void ParticleSystemQuad::updateParticleQuads()
             {
                 for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++fadeDt, ++fadeLn)
                 {
-                    Color4B col    = Color{*r, *g, *b, *a * (*fadeDt / *fadeLn)};
+                    Color32 col    = Color{*r, *g, *b, *a * (*fadeDt / *fadeLn)};
                     quad->bl.color = col;
                     quad->br.color = col;
                     quad->tl.color = col;
@@ -550,7 +550,7 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.s     = abs(*sat);
                     hsv.v     = abs(*val);
                     auto colF = hsv.toRgba();
-                    Color4B col = colF.premultiplyAlpha();
+                    Color32 col = colF.premultiplyAlpha();
                     quad->bl.color = col;
                     quad->br.color = col;
                     quad->tl.color = col;
@@ -567,7 +567,7 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.h += *hue;
                     hsv.s    = abs(*sat);
                     hsv.v    = abs(*val);
-                    auto col = hsv.toColor4B();
+                    auto col = hsv.toColor32();
                     quad->bl.color = col;
                     quad->br.color = col;
                     quad->tl.color = col;
@@ -582,7 +582,7 @@ void ParticleSystemQuad::updateParticleQuads()
             {
                 for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
                 {
-                    Color4B col    = Color{*r * *a, *g * *a, *b * *a, *a};
+                    Color32 col    = Color{*r * *a, *g * *a, *b * *a, *a};
                     quad->bl.color = col;
                     quad->br.color = col;
                     quad->tl.color = col;
@@ -593,7 +593,7 @@ void ParticleSystemQuad::updateParticleQuads()
             {
                 for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
                 {
-                    Color4B col    = Color{*r, *g, *b, *a};
+                    Color32 col    = Color{*r, *g, *b, *a};
                     quad->bl.color = col;
                     quad->br.color = col;
                     quad->tl.color = col;

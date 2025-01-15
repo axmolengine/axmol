@@ -754,7 +754,7 @@ std::string_view Button::getTitleText() const
 void Button::setTitleColor(const Color3B& color)
 {
     createTitleRendererIfNull();
-    _titleRenderer->setTextColor(Color4B(color));
+    _titleRenderer->setTextColor(Color32(color));
 }
 
 Color3B Button::getTitleColor() const

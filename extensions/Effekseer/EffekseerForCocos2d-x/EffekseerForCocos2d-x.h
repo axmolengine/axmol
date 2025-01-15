@@ -77,7 +77,7 @@ private:
 
 	cocos2d::Vec3 targetPosition_;
 	float speed_ = 1.0f;
-	cocos2d::Color4B color_ = cocos2d::Color4B(255, 255, 255, 255);
+	cocos2d::Color32 color_ = cocos2d::Color32(255, 255, 255, 255);
 	std::array<float, 4> dynamicInputs_;
 
 	EffectManager* manager = nullptr;
@@ -240,7 +240,7 @@ public:
 		\~English	Set the color which affects whole particles.
 		\~Japanese	全てのパーティクルに影響する色を設定する。
 	*/
-	void setColor(cocos2d::Color4B color);
+	void setColor(cocos2d::Color32 color);
 
 	/**
 	@brief

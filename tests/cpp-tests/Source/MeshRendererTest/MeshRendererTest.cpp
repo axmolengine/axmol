@@ -2010,7 +2010,7 @@ void UseCaseMeshRenderer::switchCase()
     }
     else if (_caseIdx == 1)  // use case 2, ui - 3d - ui, last ui should on the top
     {
-        auto layer = LayerColor::create(Color4B(0, 0, 100, 255), s.width / 2.f, s.height / 2.f);
+        auto layer = LayerColor::create(Color32(0, 0, 100, 255), s.width / 2.f, s.height / 2.f);
         layer->setPosition(s.width * 0.25f, s.height * 0.25f);
         layer->setGlobalZOrder(-1);
         addChild(layer);
@@ -2056,7 +2056,7 @@ void UseCaseMeshRenderer::menuCallback_Message(Object* sender)
     {
         // create a new message layer on the top
         auto s            = layer->getContentSize();
-        auto messagelayer = LayerColor::create(Color4B(100, 100, 0, 255));
+        auto messagelayer = LayerColor::create(Color32(100, 100, 0, 255));
         messagelayer->setContentSize(Size(s.width * 0.5f, s.height * 0.5f));
         messagelayer->setPosition(Vec2(s.width * 0.25f, s.height * 0.25f));
         auto label = Label::create();

@@ -570,7 +570,7 @@ public:
 
     ax::Color3B color3BWithString(std::string_view color);     /*!< convert a color string into a Color3B. */
     std::string stringWithColor3B(const ax::Color3B& color3b); /*!< convert a Color3B into a color string. */
-    std::string stringWithColor4B(const ax::Color4B& color4b); /*!< convert a Color4B into a color string. */
+    std::string stringWithColor32(const ax::Color32& Color32); /*!< convert a Color32 into a color string. */
 
     /**
      * @brief add a callback to own tag.

@@ -97,7 +97,7 @@ struct V3F_T2F_C4B
     Tex2F texCoord;  // 8 bytes
 
     /// color (4B)
-    Color4B color;  // 4 bytes
+    Color32 color;  // 4 bytes
 };
 
 /** @struct V3F_T2F_C4F
@@ -152,7 +152,7 @@ struct V2F_T2F_C4F_Triangle
 };
 
 /** @struct V3F_T2F_C4F_Quad
- * 4 Vertex3FTex2FColor4B.
+ * 4 Vertex3FTex2FColor32.
  */
 struct V3F_T2F_C4B_Quad
 {

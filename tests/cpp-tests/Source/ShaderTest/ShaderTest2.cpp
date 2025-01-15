@@ -470,7 +470,7 @@ bool EffectSpriteTest::init()
     if (ShaderTestDemo2::init())
     {
 
-        auto layer = LayerColor::create(Color4B::BLUE);
+        auto layer = LayerColor::create(Color32::BLUE);
         this->addChild(layer);
 
         auto s = Director::getInstance()->getWinSize();

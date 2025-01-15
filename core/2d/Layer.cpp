@@ -74,7 +74,7 @@ LayerColor* LayerColor::create()
     return ret;
 }
 
-LayerColor* LayerColor::create(const Color4B& color, float width, float height)
+LayerColor* LayerColor::create(const Color32& color, float width, float height)
 {
     LayerColor* layer = new LayerColor();
     if (layer->initWithColor(color, width, height))
@@ -86,7 +86,7 @@ LayerColor* LayerColor::create(const Color4B& color, float width, float height)
     return nullptr;
 }
 
-LayerColor* LayerColor::create(const Color4B& color)
+LayerColor* LayerColor::create(const Color32& color)
 {
     LayerColor* layer = new LayerColor();
     if (layer->initWithColor(color))
@@ -101,10 +101,10 @@ LayerColor* LayerColor::create(const Color4B& color)
 bool LayerColor::init()
 {
     Size s = _director->getWinSize();
-    return initWithColor(Color4B(0, 0, 0, 0), s.width, s.height);
+    return initWithColor(Color32(0, 0, 0, 0), s.width, s.height);
 }
 
-bool LayerColor::initWithColor(const Color4B& color, float w, float h)
+bool LayerColor::initWithColor(const Color32& color, float w, float h)
 {
     if (Sprite::init())
     {
@@ -123,7 +123,7 @@ bool LayerColor::initWithColor(const Color4B& color, float w, float h)
     return false;
 }
 
-bool LayerColor::initWithColor(const Color4B& color)
+bool LayerColor::initWithColor(const Color32& color)
 {
     Size s = _director->getWinSize();
     return initWithColor(color, s.width, s.height);
@@ -151,7 +151,7 @@ LayerGradient::LayerGradient() {}
 
 LayerGradient::~LayerGradient() {}
 
-LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end)
+LayerGradient* LayerGradient::create(const Color32& start, const Color32& end)
 {
     LayerGradient* layer = new LayerGradient();
     if (layer->initWithColor(start, end))
@@ -163,7 +163,7 @@ LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end)
     return nullptr;
 }
 
-LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end, const Vec2& v)
+LayerGradient* LayerGradient::create(const Color32& start, const Color32& end, const Vec2& v)
 {
     LayerGradient* layer = new LayerGradient();
     if (layer->initWithColor(start, end, v))
@@ -191,15 +191,15 @@ LayerGradient* LayerGradient::create()
 
 bool LayerGradient::init()
 {
-    return initWithColor(Color4B(0, 0, 0, 255), Color4B(0, 0, 0, 255));
+    return initWithColor(Color32(0, 0, 0, 255), Color32(0, 0, 0, 255));
 }
 
-bool LayerGradient::initWithColor(const Color4B& start, const Color4B& end)
+bool LayerGradient::initWithColor(const Color32& start, const Color32& end)
 {
     return initWithColor(start, end, Vec2(0, -1));
 }
 
-bool LayerGradient::initWithColor(const Color4B& start, const Color4B& end, const Vec2& v)
+bool LayerGradient::initWithColor(const Color32& start, const Color32& end, const Vec2& v)
 {
     _endColor.r = end.r;
     _endColor.g = end.g;
@@ -211,7 +211,7 @@ bool LayerGradient::initWithColor(const Color4B& start, const Color4B& end, cons
 
     _compressedInterpolation = true;
 
-    return LayerColor::initWithColor(Color4B(start.r, start.g, start.b, 255));
+    return LayerColor::initWithColor(Color32(start.r, start.g, start.b, 255));
 }
 
 void LayerGradient::updateColor()
@@ -343,8 +343,8 @@ std::string LayerGradient::getDescription() const
 /**
  * LayerRadialGradient
  */
-LayerRadialGradient* LayerRadialGradient::create(const Color4B& startColor,
-                                                 const Color4B& endColor,
+LayerRadialGradient* LayerRadialGradient::create(const Color32& startColor,
+                                                 const Color32& endColor,
                                                  float radius,
                                                  const Vec2& center,
                                                  float expand)
@@ -363,7 +363,7 @@ LayerRadialGradient* LayerRadialGradient::create(const Color4B& startColor,
 LayerRadialGradient* LayerRadialGradient::create()
 {
     auto layerGradient = new LayerRadialGradient();
-    if (layerGradient && layerGradient->initWithColor(Color4B::BLACK, Color4B::BLACK, 0, Vec2(0, 0), 0))
+    if (layerGradient && layerGradient->initWithColor(Color32::BLACK, Color32::BLACK, 0, Vec2(0, 0), 0))
     {
         layerGradient->autorelease();
         return layerGradient;
@@ -397,8 +397,8 @@ LayerRadialGradient::~LayerRadialGradient()
     AX_SAFE_RELEASE_NULL(_customCommand.getPipelineDescriptor().programState);
 }
 
-bool LayerRadialGradient::initWithColor(const ax::Color4B& startColor,
-                                        const ax::Color4B& endColor,
+bool LayerRadialGradient::initWithColor(const ax::Color32& startColor,
+                                        const ax::Color32& endColor,
                                         float radius,
                                         const Vec2& center,
                                         float expand)
@@ -508,16 +508,16 @@ float LayerRadialGradient::getExpand() const
 
 void LayerRadialGradient::setStartColor(const Color3B& color)
 {
-    setStartColor(Color4B(color));
+    setStartColor(Color32(color));
 }
 
-void LayerRadialGradient::setStartColor(const ax::Color4B& color)
+void LayerRadialGradient::setStartColor(const ax::Color32& color)
 {
     _startColor = color;
     _startColorRend = static_cast<ax::Color>(color);
 }
 
-Color4B LayerRadialGradient::getStartColor() const
+Color32 LayerRadialGradient::getStartColor() const
 {
     return _startColor;
 }
@@ -529,16 +529,16 @@ Color3B LayerRadialGradient::getStartColor3B() const
 
 void LayerRadialGradient::setEndColor(const Color3B& color)
 {
-    setEndColor(Color4B(color));
+    setEndColor(Color32(color));
 }
 
-void LayerRadialGradient::setEndColor(const ax::Color4B& color)
+void LayerRadialGradient::setEndColor(const ax::Color32& color)
 {
     _endColor = color;
     _endColorRend = static_cast<ax::Color>(color);
 }
 
-Color4B LayerRadialGradient::getEndColor() const
+Color32 LayerRadialGradient::getEndColor() const
 {
     return _endColor;
 }

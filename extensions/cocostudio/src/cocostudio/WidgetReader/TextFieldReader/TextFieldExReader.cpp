@@ -16,9 +16,9 @@ using namespace ax;
 using namespace ui;
 using namespace flatbuffers;
 
-inline Color4B Color4BFromFb(const FColor* pColor)
+inline Color32 Color32FromFb(const FColor* pColor)
 {
-    return Color4B(pColor->r(), pColor->g(), pColor->b(), pColor->a());
+    return Color32(pColor->r(), pColor->g(), pColor->b(), pColor->a());
 }
 
 inline Color3B Color3BFromFb(const FColor* pColor)
@@ -82,9 +82,9 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     int maxLength                 = 10;
     bool isEnabled                = true;
     bool isEditable               = true;
-    Color4B textColor;
-    Color4B placeholderColor;
-    Color4B cursorColor;
+    Color32 textColor;
+    Color32 placeholderColor;
+    Color32 cursorColor;
 
     // attributes
     auto attribute = objectData.first_attribute();
@@ -335,8 +335,8 @@ void TextFieldExReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffer
     }*/
     textField->setString(text);
 
-    textField->setTextColor(Color4BFromFb(options->textColor()));
-    textField->setPlaceholderColor(Color4BFromFb(options->placeholderColor()));
+    textField->setTextColor(Color32FromFb(options->textColor()));
+    textField->setPlaceholderColor(Color32FromFb(options->placeholderColor()));
     textField->setCursorColor(Color3BFromFb(options->cursorColor()));
 
     auto widgetReader = NodeReader::getInstance();

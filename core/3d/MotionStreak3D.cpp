@@ -362,8 +362,8 @@ void MotionStreak3D::update(float delta)
         _pointState[_nuPoints]    = 1.0f;
 
         // Color assignment
-        _vertexData[_nuPoints * 2].color     = Color4B(_displayedColor, 255);
-        _vertexData[_nuPoints * 2 + 1].color = Color4B(_displayedColor, 255);
+        _vertexData[_nuPoints * 2].color     = Color32(_displayedColor, 255);
+        _vertexData[_nuPoints * 2 + 1].color = Color32(_displayedColor, 255);
 
         // Generate polygon
         {

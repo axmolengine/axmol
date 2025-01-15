@@ -91,8 +91,8 @@ public:
      */
     virtual void subtract(BaseData* from, BaseData* to, bool limit);
 
-    virtual void setColor(const ax::Color4B& color);
-    virtual ax::Color4B getColor();
+    virtual void setColor(const ax::Color32& color);
+    virtual ax::Color32 getColor();
 
 public:
     float x;     //! position x attribute

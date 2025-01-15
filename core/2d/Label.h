@@ -394,17 +394,17 @@ public:
      *
      * @warning Limiting use to only when the Label created with true type font or system font.
      */
-    virtual void setTextColor(const Color4B& color);
+    virtual void setTextColor(const Color32& color);
 
     /** Returns the text color of the Label.*/
-    const Color4B& getTextColor() const { return _textColor; }
+    const Color32& getTextColor() const { return _textColor; }
 
     /**
      * Enable shadow effect to Label.
      *
      * @todo Support blur for shadow effect.
      */
-    virtual void enableShadow(const Color4B& shadowColor = Color4B::BLACK,
+    virtual void enableShadow(const Color32& shadowColor = Color32::BLACK,
                               const Vec2& offset         = Vec2(2, -2),
                               int blurRadius             = 0);
 
@@ -412,13 +412,13 @@ public:
      * Enable outline effect to Label.
      * @warning Limiting use to only when the Label created with true type font or system font.
      */
-    virtual void enableOutline(const Color4B& outlineColor, int outlineSize = -1);
+    virtual void enableOutline(const Color32& outlineColor, int outlineSize = -1);
 
     /**
      * Enable glow effect to Label.
      * @warning Limiting use to only when the Label created with true type font.
      */
-    virtual void enableGlow(const Color4B& glowColor);
+    virtual void enableGlow(const Color32& glowColor);
 
     /**
      * Enable italics rendering
@@ -860,7 +860,7 @@ protected:
 
     Overflow _overflow;
     float _originalFontSize;
-    Color4B _textColor;
+    Color32 _textColor;
 
     BlendFunc _blendFunc;
 

@@ -156,7 +156,7 @@ void ByteBuffer::writeS(const std::string& value)
         (*_stringTable)[index] = value;
 }
 
-ax::Color4B ByteBuffer::readColor()
+ax::Color32 ByteBuffer::readColor()
 {
     int startIndex = _offset + _position;
 #if COCOS2D_VERSION >= 0x00040000
@@ -172,7 +172,7 @@ ax::Color4B ByteBuffer::readColor()
 #endif
     _position += 4;
 
-    return ax::Color4B(r, g, b, a);
+    return ax::Color32(r, g, b, a);
 }
 
 ByteBuffer* ByteBuffer::readBuffer()

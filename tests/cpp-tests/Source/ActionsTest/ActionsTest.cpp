@@ -341,7 +341,7 @@ void ActionRotationalSkewVSStandardSkew::onEnter()
 
     Size boxSize(100.0f, 100.0f);
 
-    auto box = LayerColor::create(Color4B(255, 255, 0, 255));
+    auto box = LayerColor::create(Color32(255, 255, 0, 255));
     box->setAnchorPoint(Vec2(0.5f, 0.5f));
     box->setContentSize(boxSize);
     box->setIgnoreAnchorPointForPosition(false);
@@ -357,7 +357,7 @@ void ActionRotationalSkewVSStandardSkew::onEnter()
 
     box->runAction(Sequence::create(actionTo, actionToBack, nullptr));
 
-    box = LayerColor::create(Color4B(255, 255, 0, 255));
+    box = LayerColor::create(Color32(255, 255, 0, 255));
     box->setAnchorPoint(Vec2(0.5f, 0.5f));
     box->setContentSize(boxSize);
     box->setIgnoreAnchorPointForPosition(false);
@@ -387,19 +387,19 @@ void ActionSkewRotateScale::onEnter()
 
     Size boxSize(100.0f, 100.0f);
 
-    auto box = LayerColor::create(Color4B(255, 255, 0, 255));
+    auto box = LayerColor::create(Color32(255, 255, 0, 255));
     box->setAnchorPoint(Vec2(0.0f, 0.0f));
     box->setPosition(190, 110);
     box->setContentSize(boxSize);
 
     static float markrside = 10.0f;
-    auto uL                = LayerColor::create(Color4B(255, 0, 0, 255));
+    auto uL                = LayerColor::create(Color32(255, 0, 0, 255));
     box->addChild(uL);
     uL->setContentSize(Size(markrside, markrside));
     uL->setPosition(0.f, boxSize.height - markrside);
     uL->setAnchorPoint(Vec2(0.0f, 0.0f));
 
-    auto uR = LayerColor::create(Color4B(0, 0, 255, 255));
+    auto uR = LayerColor::create(Color32(0, 0, 255, 255));
     box->addChild(uR);
     uR->setContentSize(Size(markrside, markrside));
     uR->setPosition(boxSize.width - markrside, boxSize.height - markrside);

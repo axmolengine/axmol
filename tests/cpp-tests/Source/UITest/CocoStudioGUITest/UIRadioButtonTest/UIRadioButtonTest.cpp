@@ -321,7 +321,7 @@ bool UIRadioButtonTabTest::init()
         const float buttonWidth         = 350 * BUTTON_SCALE / Director::getInstance()->getContentScaleFactor();
 
         // Background for buttons
-        LayerColor* colorLayer = LayerColor::create(Color4B::WHITE);
+        LayerColor* colorLayer = LayerColor::create(Color32::WHITE);
         colorLayer->setIgnoreAnchorPointForPosition(false);
         colorLayer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
         colorLayer->setContentSize(Size(buttonWidth * 3, 170 / Director::getInstance()->getContentScaleFactor()));

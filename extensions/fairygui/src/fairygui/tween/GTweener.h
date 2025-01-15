@@ -59,7 +59,7 @@ private:
     GTweener* _to(const ax::Vec2& start, const ax::Vec2& end, float duration);
     GTweener* _to(const ax::Vec3& start, const ax::Vec3& end, float duration);
     GTweener* _to(const ax::Vec4& start, const ax::Vec4& end, float duration);
-    GTweener* _to(const ax::Color4B& start, const ax::Color4B& end, float duration);
+    GTweener* _to(const ax::Color32& start, const ax::Color32& end, float duration);
     GTweener* _to(double start, double end, float duration);
     GTweener* _shake(const ax::Vec2& start, float amplitude, float duration);
     void _init();

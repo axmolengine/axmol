@@ -295,14 +295,14 @@ function display.newLayer(...)
         layer = cc.Layer:create()
     elseif c == 1 then
         -- /** creates a Layer with color. Width and height are the window size. */
-        -- static LayerColor * create(const Color4B& color);
+        -- static LayerColor * create(const Color32& color);
         layer = cc.LayerColor:create(cc.convertColor(params[1], "4b"))
     elseif c == 2 then
         -- /** creates a Layer with color, width and height in Points */
-        -- static LayerColor * create(const Color4B& color, const Size& size);
+        -- static LayerColor * create(const Color32& color, const Size& size);
         --
         -- /** Creates a full-screen Layer with a gradient between start and end. */
-        -- static LayerGradient* create(const Color4B& start, const Color4B& end);
+        -- static LayerGradient* create(const Color32& start, const Color32& end);
         local color1 = cc.convertColor(params[1], "4b")
         local p2 = params[2]
         assert(type(p2) == "table" and (p2.width or p2.r), "display.newLayer() - invalid paramerter 2")
@@ -313,10 +313,10 @@ function display.newLayer(...)
         end
     elseif c == 3 then
         -- /** creates a Layer with color, width and height in Points */
-        -- static LayerColor * create(const Color4B& color, GLfloat width, GLfloat height);
+        -- static LayerColor * create(const Color32& color, GLfloat width, GLfloat height);
         --
         -- /** Creates a full-screen Layer with a gradient between start and end in the direction of v. */
-        -- static LayerGradient* create(const Color4B& start, const Color4B& end, const Vec2& v);
+        -- static LayerGradient* create(const Color32& start, const Color32& end, const Vec2& v);
         local color1 = cc.convertColor(params[1], "4b")
         local p2 = params[2]
         local p2type = type(p2)
