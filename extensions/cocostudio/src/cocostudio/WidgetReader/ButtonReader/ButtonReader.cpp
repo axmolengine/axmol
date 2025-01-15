@@ -237,7 +237,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     int fontSize     = 14;
     std::string fontName;
     ax::Size scale9Size;
-    Color4B textColor(255, 255, 255, 255);
+    Color32 textColor(255, 255, 255, 255);
 
     std::string normalPath;
     std::string normalPlistFile;
@@ -256,15 +256,15 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     int fontResourceResourceType = 0;
 
     bool outlineEnabled  = false;
-    Color4B outlineColor = Color4B::BLACK;
+    Color32 outlineColor = Color32::BLACK;
     int outlineSize      = 1;
     bool shadowEnabled   = false;
-    Color4B shadowColor  = Color4B::BLACK;
+    Color32 shadowColor  = Color32::BLACK;
     Size shadowOffset    = Size(2, -2);
     int shadowBlurRadius = 0;
 
     bool glowEnabled  = false;
-    Color4B glowColor = Color4B::BLACK;
+    Color32 glowColor = Color32::BLACK;
 
     bool boldEnabled = false, underlineEnabled = false, italicsEnabled = false, strikethroughEnabled = false;
 
@@ -892,7 +892,7 @@ void ButtonReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
         auto f_outlineColor = options->outlineColor();
         if (f_outlineColor)
         {
-            Color4B outlineColor(f_outlineColor->r(), f_outlineColor->g(), f_outlineColor->b(), f_outlineColor->a());
+            Color32 outlineColor(f_outlineColor->r(), f_outlineColor->g(), f_outlineColor->b(), f_outlineColor->a());
             auto label = button->getTitleRenderer();
             label->enableOutline(outlineColor, options->outlineSize());
         }
@@ -904,7 +904,7 @@ void ButtonReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
         auto f_shadowColor = options->shadowColor();
         if (f_shadowColor)
         {
-            Color4B shadowColor(f_shadowColor->r(), f_shadowColor->g(), f_shadowColor->b(), f_shadowColor->a());
+            Color32 shadowColor(f_shadowColor->r(), f_shadowColor->g(), f_shadowColor->b(), f_shadowColor->a());
             auto label = button->getTitleRenderer();
             label->enableShadow(shadowColor, Size(options->shadowOffsetX(), options->shadowOffsetY()),
                                 options->shadowBlurRadius());
@@ -916,7 +916,7 @@ void ButtonReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
         auto f_glowColor = options->glowColor();
         if (f_glowColor)
         {
-            Color4B glowColor(f_glowColor->r(), f_glowColor->g(), f_glowColor->b(), f_glowColor->a());
+            Color32 glowColor(f_glowColor->r(), f_glowColor->g(), f_glowColor->b(), f_glowColor->a());
             auto label = button->getTitleRenderer();
             label->enableGlow(glowColor);
         }

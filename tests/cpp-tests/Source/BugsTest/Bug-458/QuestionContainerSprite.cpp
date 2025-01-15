@@ -42,7 +42,7 @@ bool QuestionContainerSprite::init()
 
         int width  = size.width * 0.9f - (corner->getContentSize().width * 2);
         int height = size.height * 0.15f - (corner->getContentSize().height * 2);
-        auto layer = LayerColor::create(Color4B(255, 255, 255, 255 * .75), width, height);
+        auto layer = LayerColor::create(Color32(255, 255, 255, 255 * .75), width, height);
         layer->setPosition(Vec2(-width / 2, -height / 2));
 
         // First button is blue,

@@ -233,7 +233,7 @@ RenderTextureIssue937::RenderTextureIssue937()
      *  B1: non-premulti sprite
      *  B2: non-premulti render
      */
-    auto background = LayerColor::create(Color4B(200, 200, 200, 255));
+    auto background = LayerColor::create(Color32(200, 200, 200, 255));
     addChild(background);
 
     auto s            = Director::getInstance()->getWinSize();
@@ -604,7 +604,7 @@ RenderTextureTargetNode::RenderTextureTargetNode()
      *  B1: non-premulti sprite
      *  B2: non-premulti render
      */
-    auto background = LayerColor::create(Color4B(40, 40, 40, 255));
+    auto background = LayerColor::create(Color32(40, 40, 40, 255));
     addChild(background);
 
     // sprite 1
@@ -797,7 +797,7 @@ Issue16113Test::Issue16113Test()
     auto item1 = MenuItemFont::create("Save Image", [&](Object* ref) {
         auto winSize = Director::getInstance()->getVisibleSize();
         auto text    = Label::createWithTTF("hello world", "fonts/Marker Felt.ttf", 40);
-        text->setTextColor(Color4B::RED);
+        text->setTextColor(Color32::RED);
         auto target = RenderTexture::create(winSize.width, winSize.height, backend::PixelFormat::RGBA8);
         target->beginWithClear(0, 0, 0, 0);
         text->setPosition(winSize.width / 2, winSize.height / 2);

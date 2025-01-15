@@ -180,7 +180,7 @@ SceneTestLayer3::SceneTestLayer3() {}
 
 bool SceneTestLayer3::init()
 {
-    if (LayerColor::initWithColor(Color4B(0, 0, 255, 255)))
+    if (LayerColor::initWithColor(Color32(0, 0, 255, 255)))
     {
         auto s = Director::getInstance()->getWinSize();
 

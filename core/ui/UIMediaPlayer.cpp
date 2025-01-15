@@ -1148,7 +1148,7 @@ void MediaPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
     _debugDrawNode->clear();
     auto size         = getContentSize();
     Point vertices[4] = {Point::ZERO, Point(size.width, 0), Point(size.width, size.height), Point(0, size.height)};
-    _debugDrawNode->drawPoly(vertices, 4, true, Color4B::WHITE);
+    _debugDrawNode->drawPoly(vertices, 4, true, Color32::WHITE);
 #    endif
 }
 

@@ -2233,7 +2233,7 @@ void ParticleDemo::onEnter()
 
     MenuItemFont::setFontSize(32);
 
-    _color = LayerColor::create(Color4B(127, 127, 127, 255));
+    _color = LayerColor::create(Color32(127, 127, 127, 255));
     this->addChild(_color);
 
     _emitter = nullptr;
@@ -2586,8 +2586,8 @@ bool RainbowEffect::initWithTotalParticles(int numberOfParticles)
         setEmissionRate(getTotalParticles() / getLife());
 
         // color of particles
-        setStartColor(Color(Color4B(50, 50, 50, 50)));
-        setEndColor(Color(Color4B(0, 0, 0, 0)));
+        setStartColor(Color(Color32(50, 50, 50, 50)));
+        setEndColor(Color(Color32(0, 0, 0, 0)));
 
         _startColorVar.r = 0.0f;
         _startColorVar.g = 0.0f;

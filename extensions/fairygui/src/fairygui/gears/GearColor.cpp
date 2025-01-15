@@ -82,7 +82,7 @@ void GearColor::apply()
             if (_owner->checkGearController(0, _controller))
                 _tweenConfig->_displayLockToken = _owner->addDisplayLock();
 
-            _tweenConfig->_tweener = GTween::to((Color4B)curColor, (Color4B)gv.color, _tweenConfig->duration)
+            _tweenConfig->_tweener = GTween::to((Color32)curColor, (Color32)gv.color, _tweenConfig->duration)
                                          ->setDelay(_tweenConfig->delay)
                                          ->setEase(_tweenConfig->easeType)
                                          ->setTargetAny(this)

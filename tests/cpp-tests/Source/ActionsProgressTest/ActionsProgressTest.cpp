@@ -58,7 +58,7 @@ void SpriteDemo::onEnter()
 {
     TestCase::onEnter();
 
-    auto background = LayerColor::create(Color4B(255, 0, 0, 255));
+    auto background = LayerColor::create(Color32(255, 0, 0, 255));
     addChild(background, -10);
 }
 

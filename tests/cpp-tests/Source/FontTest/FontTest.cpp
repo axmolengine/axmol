@@ -105,9 +105,9 @@ void FontTest::showFont(std::string_view fontFile)
     auto right  = Label::createWithSystemFont("alignment right", fontFile, fontSize, blockSize, TextHAlignment::RIGHT,
                                               verticalAlignment[vAlignIdx]);
 
-    auto leftColor   = LayerColor::create(Color4B(100, 100, 100, 255), blockSize.width, blockSize.height);
-    auto centerColor = LayerColor::create(Color4B(200, 100, 100, 255), blockSize.width, blockSize.height);
-    auto rightColor  = LayerColor::create(Color4B(100, 100, 200, 255), blockSize.width, blockSize.height);
+    auto leftColor   = LayerColor::create(Color32(100, 100, 100, 255), blockSize.width, blockSize.height);
+    auto centerColor = LayerColor::create(Color32(200, 100, 100, 255), blockSize.width, blockSize.height);
+    auto rightColor  = LayerColor::create(Color32(100, 100, 200, 255), blockSize.width, blockSize.height);
 
     leftColor->setIgnoreAnchorPointForPosition(false);
     centerColor->setIgnoreAnchorPointForPosition(false);
@@ -202,9 +202,9 @@ void FontNoReplacementTest::onEnter()
     auto right  = Label::createWithTTF("fonts/Schwarzwald.ttf" + suffix, "fonts/Schwarzwald.ttf", fontSize, blockSize,
                                        TextHAlignment::RIGHT, verticalAlignment[0]);
 
-    auto leftColor   = LayerColor::create(Color4B(100, 100, 100, 255), blockSize.width, blockSize.height);
-    auto centerColor = LayerColor::create(Color4B(200, 100, 100, 255), blockSize.width, blockSize.height);
-    auto rightColor  = LayerColor::create(Color4B(100, 100, 200, 255), blockSize.width, blockSize.height);
+    auto leftColor   = LayerColor::create(Color32(100, 100, 100, 255), blockSize.width, blockSize.height);
+    auto centerColor = LayerColor::create(Color32(200, 100, 100, 255), blockSize.width, blockSize.height);
+    auto rightColor  = LayerColor::create(Color32(100, 100, 200, 255), blockSize.width, blockSize.height);
 
     leftColor->setIgnoreAnchorPointForPosition(false);
     centerColor->setIgnoreAnchorPointForPosition(false);

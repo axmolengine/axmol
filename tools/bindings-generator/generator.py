@@ -1379,6 +1379,8 @@ class Generator(object):
 
         print(f'clang_args={self.clang_args}')
 
+        print(f'clang_args={self.clang_args}')
+
         if opts['skip']:
             list_of_skips = re.split(",\n?", opts['skip'])
             for skip in list_of_skips:
@@ -1739,8 +1741,8 @@ class Generator(object):
                     return "rect_object"
                 if namespace_class_name.find("ax::Color3B") == 0:
                     return "color3b_object"
-                if namespace_class_name.find("ax::Color4B") == 0:
-                    return "color4b_object"
+                if namespace_class_name.find("ax::Color32") == 0:
+                    return "color32_object"
                 if namespace_class_name.find("ax::Color") == 0:
                     return "color_object"
                 else:
@@ -1785,8 +1787,8 @@ class Generator(object):
                     return "rect_table"
                 if namespace_class_name.find("ax::Color3B") == 0:
                     return "color3b_table"
-                if namespace_class_name.find("ax::Color4B") == 0:
-                    return "color4b_table"
+                if namespace_class_name.find("ax::Color32") == 0:
+                    return "color32_table"
                 if namespace_class_name.find("ax::Color4F") == 0:
                     return "color4f_table"
                 if is_ret == 1:

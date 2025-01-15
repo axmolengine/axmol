@@ -109,7 +109,7 @@ void EditBoxImplWasm::setNativeFont(const char* pFontName, int fontSize)
         fontSize);
 }
 
-void EditBoxImplWasm::setNativeFontColor(const Color4B& color)
+void EditBoxImplWasm::setNativeFontColor(const Color32& color)
 {
     // not implemented yet
 }
@@ -119,7 +119,7 @@ void EditBoxImplWasm::setNativePlaceholderFont(const char* pFontName, int fontSi
     // not implemented yet
 }
 
-void EditBoxImplWasm::setNativePlaceholderFontColor(const Color4B& color)
+void EditBoxImplWasm::setNativePlaceholderFontColor(const Color32& color)
 {
     // not implemented yet
 }

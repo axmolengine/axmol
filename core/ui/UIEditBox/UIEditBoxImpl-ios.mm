@@ -100,7 +100,7 @@ void EditBoxImplIOS::setNativeFont(const char* pFontName, int fontSize)
     }
 }
 
-void EditBoxImplIOS::setNativeFontColor(const Color4B& color)
+void EditBoxImplIOS::setNativeFontColor(const Color32& color)
 {
     _systemControl.textColor = [UIColor colorWithRed:color.r / 255.0f
                                                green:color.g / 255.0f
@@ -117,7 +117,7 @@ void EditBoxImplIOS::setNativePlaceholderFont(const char* pFontName, int fontSiz
     }
 }
 
-void EditBoxImplIOS::setNativePlaceholderFontColor(const Color4B& color)
+void EditBoxImplIOS::setNativePlaceholderFontColor(const Color32& color)
 {
     [_systemControl setPlaceholderTextColor:[UIColor colorWithRed:color.r / 255.0f
                                                             green:color.g / 255.0f

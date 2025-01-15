@@ -203,7 +203,7 @@ void LabelAtlas::updateAtlasValues()
         quads[i].tr.position.x = (float)(i * _itemWidth + _itemWidth);
         quads[i].tr.position.y = (float)(_itemHeight);
         quads[i].tr.position.z = 0.0f;
-        Color4B c(_displayedColor, _displayedOpacity);
+        Color32 c(_displayedColor, _displayedOpacity);
         quads[i].tl.color = c;
         quads[i].tr.color = c;
         quads[i].bl.color = c;
@@ -277,7 +277,7 @@ void LabelAtlas::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     _debugDrawNode->clear();
     auto size        = getContentSize();
     Vec2 vertices[4] = {Vec2::ZERO, Vec2(size.width, 0), Vec2(size.width, size.height), Vec2(0.0f, size.height)};
-    _debugDrawNode->drawPoly(vertices, 4, true, Color4B::WHITE);
+    _debugDrawNode->drawPoly(vertices, 4, true, Color32::WHITE);
 }
 #endif
 

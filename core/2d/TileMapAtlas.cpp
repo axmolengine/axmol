@@ -210,7 +210,7 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
     quad->tr.position.y = (float)(y * _itemHeight + _itemHeight);
     quad->tr.position.z = 0.0f;
 
-    Color4B color(_displayedColor, _displayedOpacity);
+    Color32 color(_displayedColor, _displayedOpacity);
     quad->tr.color = color;
     quad->tl.color = color;
     quad->br.color = color;

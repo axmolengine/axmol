@@ -542,7 +542,7 @@ namespace spine {
 
 		if (_debugSlots) {
 			// Slots.
-			// DrawPrimitives::setDrawColor4B(0, 0, 255, 255);
+			// DrawPrimitives::setDrawColor32(0, 0, 255, 255);
 			for (int i = 0, n = (int)_skeleton->getSlots().size(); i < n; i++) {
 				Slot *slot = _skeleton->getDrawOrder()[i];
 

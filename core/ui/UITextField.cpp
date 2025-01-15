@@ -400,7 +400,7 @@ std::string_view TextField::getPlaceHolder() const
     return _textFieldRenderer->getPlaceHolder();
 }
 
-const Color4B& TextField::getPlaceHolderColor() const
+const Color32& TextField::getPlaceHolderColor() const
 {
     return _textFieldRenderer->getColorSpaceHolder();
 }
@@ -410,17 +410,17 @@ void TextField::setPlaceHolderColor(const ax::Color3B& color)
     _textFieldRenderer->setColorSpaceHolder(color);
 }
 
-void TextField::setPlaceHolderColor(const ax::Color4B& color)
+void TextField::setPlaceHolderColor(const ax::Color32& color)
 {
     _textFieldRenderer->setColorSpaceHolder(color);
 }
 
-const Color4B& TextField::getTextColor() const
+const Color32& TextField::getTextColor() const
 {
     return _textFieldRenderer->getTextColor();
 }
 
-void TextField::setTextColor(const ax::Color4B& textColor)
+void TextField::setTextColor(const ax::Color32& textColor)
 {
     _textFieldRenderer->setTextColor(textColor);
 }

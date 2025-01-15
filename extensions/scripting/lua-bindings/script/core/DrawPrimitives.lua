@@ -55,7 +55,7 @@ function ccPointSize(pointSize)
     dp_pointSize = pointSize * cc.Director:getInstance():getContentScaleFactor()
 end
 
-function ccDrawColor4B(r,g,b,a)
+function ccDrawColor32(r,g,b,a)
     dp_color[1] = r / 255.0
     dp_color[2] = g / 255.0
     dp_color[3] = b / 255.0

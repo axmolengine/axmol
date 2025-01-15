@@ -566,16 +566,16 @@ std::string_view TabHeader::getTitleText() const
     return _tabLabelRender->getString();
 }
 
-void TabHeader::setTitleColor(const Color4B& color)
+void TabHeader::setTitleColor(const Color32& color)
 {
     _tabLabelRender->setTextColor(color);
 }
 
-const Color4B& TabHeader::getTitleColor() const
+const Color32& TabHeader::getTitleColor() const
 {
     if (nullptr == _tabLabelRender)
     {
-        return Color4B::WHITE;
+        return Color32::WHITE;
     }
     return _tabLabelRender->getTextColor();
 }

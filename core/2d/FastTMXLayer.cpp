@@ -499,7 +499,7 @@ void FastTMXLayer::updateTotalQuads()
         _tileToQuadIndex.resize(int(_layerSize.width * _layerSize.height), -1);
         _indicesVertexZOffsets.clear();
 
-        auto color = Color4B::WHITE;
+        auto color = Color32::WHITE;
         color.a    = getDisplayedOpacity();
 
         if (_texture->hasPremultipliedAlpha())

@@ -48,11 +48,11 @@ bool Bug458Layer::init()
         //        [question2 setContentSize:CGSizeMake(50,50)];
 
         auto sprite = MenuItemSprite::create(question2, question, AX_CALLBACK_1(Bug458Layer::selectAnswer, this));
-        auto layer  = LayerColor::create(Color4B(0, 0, 255, 255), 100, 100);
+        auto layer  = LayerColor::create(Color32(0, 0, 255, 255), 100, 100);
         question->release();
         question2->release();
 
-        auto layer2  = LayerColor::create(Color4B(255, 0, 0, 255), 100, 100);
+        auto layer2  = LayerColor::create(Color32(255, 0, 0, 255), 100, 100);
         auto sprite2 = MenuItemSprite::create(layer, layer2, AX_CALLBACK_1(Bug458Layer::selectAnswer, this));
         auto menu    = Menu::create(sprite, sprite2, nullptr);
         menu->alignItemsVerticallyWithPadding(100);

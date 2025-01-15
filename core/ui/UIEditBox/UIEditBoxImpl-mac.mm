@@ -125,7 +125,7 @@ void EditBoxImplMac::setNativePlaceholderFont(const char* pFontName, int fontSiz
     [_sysEdit setPlaceholderFont:textFont];
 }
 
-void EditBoxImplMac::setNativeFontColor(const ax::Color4B& color)
+void EditBoxImplMac::setNativeFontColor(const ax::Color32& color)
 {
     NSColor* newColor = [NSColor colorWithCalibratedRed:color.r / 255.0f
                                                   green:color.g / 255.0f
@@ -135,7 +135,7 @@ void EditBoxImplMac::setNativeFontColor(const ax::Color4B& color)
     [_sysEdit setTextColor:newColor];
 }
 
-void EditBoxImplMac::setNativePlaceholderFontColor(const ax::Color4B& color)
+void EditBoxImplMac::setNativePlaceholderFontColor(const ax::Color32& color)
 {
     NSColor* newColor = [NSColor colorWithCalibratedRed:color.r / 255.f
                                                   green:color.g / 255.f

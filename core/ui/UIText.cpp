@@ -221,12 +221,12 @@ TextVAlignment Text::getTextVerticalAlignment() const
     return _labelRenderer->getVerticalAlignment();
 }
 
-void Text::setTextColor(const Color4B color)
+void Text::setTextColor(const Color32 color)
 {
     _labelRenderer->setTextColor(color);
 }
 
-const Color4B& Text::getTextColor() const
+const Color32& Text::getTextColor() const
 {
     return _labelRenderer->getTextColor();
 }
@@ -332,19 +332,19 @@ std::string Text::getDescription() const
     return "Label";
 }
 
-void Text::enableShadow(const Color4B& shadowColor, const Vec2& offset, int blurRadius)
+void Text::enableShadow(const Color32& shadowColor, const Vec2& offset, int blurRadius)
 {
     _labelRenderer->enableShadow(shadowColor, offset, blurRadius);
 }
 
-void Text::enableOutline(const Color4B& outlineColor, int outlineSize)
+void Text::enableOutline(const Color32& outlineColor, int outlineSize)
 {
     _labelRenderer->enableOutline(outlineColor, outlineSize);
     updateContentSizeWithTextureSize(_labelRenderer->getContentSize());
     _labelRendererAdaptDirty = true;
 }
 
-void Text::enableGlow(const Color4B& glowColor)
+void Text::enableGlow(const Color32& glowColor)
 {
     if (_type == Type::TTF)
         _labelRenderer->enableGlow(glowColor);
@@ -380,10 +380,10 @@ float Text::getShadowBlurRadius() const
 {
     return _labelRenderer->getShadowBlurRadius();
 }
-Color4B Text::getShadowColor() const
+Color32 Text::getShadowColor() const
 {
     Color effect = _labelRenderer->getShadowColor();
-    return Color4B(effect.r * 255, effect.g * 255, effect.b * 255, effect.a * 255);
+    return Color32(effect.r * 255, effect.g * 255, effect.b * 255, effect.a * 255);
 }
 
 int Text::getOutlineSize() const
@@ -394,10 +394,10 @@ LabelEffect Text::getLabelEffectType() const
 {
     return _labelRenderer->getLabelEffectType();
 }
-Color4B Text::getEffectColor() const
+Color32 Text::getEffectColor() const
 {
     Color effect = _labelRenderer->getEffectColor();
-    return Color4B(effect.r * 255, effect.g * 255, effect.b * 255, effect.a * 255);
+    return Color32(effect.r * 255, effect.g * 255, effect.b * 255, effect.a * 255);
 }
 
 Sprite* Text::getLetter(int lettetIndex)

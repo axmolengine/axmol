@@ -87,7 +87,7 @@ protected:
     struct V3F_C4B
     {
         Vec3 vertices;
-        Color4B colors;
+        Color32 colors;
     };
     void ensureCapacity(int count);
 
@@ -228,7 +228,7 @@ void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color& color)
     unsigned int vertex_count = 2;
     ensureCapacity(vertex_count);
 
-    Color4B col = Color4B(color);
+    Color32 col = Color32(color);
     V3F_C4B a   = {Vec3(from.x, from.y, from.z), col};
     V3F_C4B b   = {
         Vec3(to.x, to.y, to.z),

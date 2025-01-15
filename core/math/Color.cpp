@@ -41,7 +41,7 @@ bool Color3B::operator==(const Color3B& right) const
     return (r == right.r && g == right.g && b == right.b);
 }
 
-bool Color3B::operator==(const Color4B& right) const
+bool Color3B::operator==(const Color32& right) const
 {
     return (r == right.r && g == right.g && b == right.b && 255 == right.a);
 }
@@ -56,7 +56,7 @@ bool Color3B::operator!=(const Color3B& right) const
     return !(*this == right);
 }
 
-bool Color3B::operator!=(const Color4B& right) const
+bool Color3B::operator!=(const Color32& right) const
 {
     return !(*this == right);
 }
@@ -67,35 +67,35 @@ bool Color3B::operator!=(const Color& right) const
 }
 
 /**
- * Color4B
+ * Color32
  */
 
-bool Color4B::operator==(const Color4B& right) const
+bool Color32::operator==(const Color32& right) const
 {
     return (r == right.r && g == right.g && b == right.b && a == right.a);
 }
 
-bool Color4B::operator==(const Color3B& right) const
+bool Color32::operator==(const Color3B& right) const
 {
     return (r == right.r && g == right.g && b == right.b && a == 255);
 }
 
-bool Color4B::operator==(const Color& right) const
+bool Color32::operator==(const Color& right) const
 {
-    return (*this == Color4B(right));
+    return (*this == Color32(right));
 }
 
-bool Color4B::operator!=(const Color4B& right) const
-{
-    return !(*this == right);
-}
-
-bool Color4B::operator!=(const Color3B& right) const
+bool Color32::operator!=(const Color32& right) const
 {
     return !(*this == right);
 }
 
-bool Color4B::operator!=(const Color& right) const
+bool Color32::operator!=(const Color3B& right) const
+{
+    return !(*this == right);
+}
+
+bool Color32::operator!=(const Color& right) const
 {
     return !(*this == right);
 }
@@ -109,7 +109,7 @@ bool Color::operator==(const Color3B& right) const
     return (a == 1.0f && Color3B(*this) == right);
 }
 
-bool Color::operator==(const Color4B& right) const
+bool Color::operator==(const Color32& right) const
 {
     return (*this == Color(right));
 }
@@ -119,7 +119,7 @@ bool Color::operator!=(const Color3B& right) const
     return !(*this == right);
 }
 
-bool Color::operator!=(const Color4B& right) const
+bool Color::operator!=(const Color32& right) const
 {
     return !(*this == right);
 }
@@ -138,16 +138,16 @@ const Color3B Color3B::BLACK(0, 0, 0);
 const Color3B Color3B::ORANGE(255, 127, 0);
 const Color3B Color3B::GRAY(166, 166, 166);
 
-const Color4B Color4B::WHITE(255, 255, 255, 255);
-const Color4B Color4B::YELLOW(255, 255, 0, 255);
-const Color4B Color4B::GREEN(0, 255, 0, 255);
-const Color4B Color4B::BLUE(0, 0, 255, 255);
-const Color4B Color4B::RED(255, 0, 0, 255);
-const Color4B Color4B::MAGENTA(255, 0, 255, 255);
-const Color4B Color4B::BLACK(0, 0, 0, 255);
-const Color4B Color4B::ORANGE(255, 127, 0, 255);
-const Color4B Color4B::GRAY(166, 166, 166, 255);
-const Color4B Color4B::TRANSPARENT(0, 0, 0, 0);
+const Color32 Color32::WHITE(255, 255, 255, 255);
+const Color32 Color32::YELLOW(255, 255, 0, 255);
+const Color32 Color32::GREEN(0, 255, 0, 255);
+const Color32 Color32::BLUE(0, 0, 255, 255);
+const Color32 Color32::RED(255, 0, 0, 255);
+const Color32 Color32::MAGENTA(255, 0, 255, 255);
+const Color32 Color32::BLACK(0, 0, 0, 255);
+const Color32 Color32::ORANGE(255, 127, 0, 255);
+const Color32 Color32::GRAY(166, 166, 166, 255);
+const Color32 Color32::TRANSPARENT(0, 0, 0, 0);
 
 const Color Color::WHITE(1, 1, 1, 1);
 const Color Color::YELLOW(1, 1, 0, 1);
@@ -169,7 +169,7 @@ HSV::HSV(const Color3B& c)
     fromRgba(Color(c));
 };
 
-HSV::HSV(const Color4B& c)
+HSV::HSV(const Color32& c)
 {
     fromRgba(Color(c));
 }
@@ -293,9 +293,9 @@ Color3B HSV::toColor3B() const
     return Color3B(toRgba());
 }
 
-Color4B HSV::toColor4B() const
+Color32 HSV::toColor32() const
 {
-    return Color4B(toRgba());
+    return Color32(toRgba());
 }
 
 HSL::HSL() {}
@@ -306,7 +306,7 @@ HSL::HSL(const Color3B& c)
     fromRgba(Color(c));
 }
 
-HSL::HSL(const Color4B& c)
+HSL::HSL(const Color32& c)
 {
     fromRgba(Color(c));
 }
@@ -396,9 +396,9 @@ Color3B HSL::toColor3B() const
     return Color3B(toRgba());
 }
 
-Color4B HSL::toColor4B() const
+Color32 HSL::toColor32() const
 {
-    return Color4B(toRgba());
+    return Color32(toRgba());
 }
 
 NS_AX_MATH_END
