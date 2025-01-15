@@ -740,7 +740,7 @@ bool UIScrollViewTestEvents::init()
         // Jump to right bottom
         scrollView->jumpToBottomRight();
 
-        auto getRandomColor = [] { return Color4B(random(0, 255), random(0, 255), random(0, 255), 255); };
+        auto getRandomColor = [] { return Color32(random(0, 255), random(0, 255), random(0, 255), 255); };
         scrollView->addEventListener([&](Object*, ui::ScrollView::EventType e) {
             switch (e)
             {

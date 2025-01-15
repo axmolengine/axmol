@@ -118,7 +118,7 @@ void LayerTestCascadingOpacityB::onEnter()
     LayerTest::onEnter();
 
     auto s      = Director::getInstance()->getWinSize();
-    auto layer1 = LayerColor::create(Color4B(192, 0, 0, 255), s.width, s.height / 2);
+    auto layer1 = LayerColor::create(Color32(192, 0, 0, 255), s.width, s.height / 2);
     layer1->setCascadeColorEnabled(false);
 
     layer1->setPosition(Vec2(0.0f, s.height / 2));
@@ -158,7 +158,7 @@ void LayerTestCascadingOpacityC::onEnter()
     LayerTest::onEnter();
 
     auto s      = Director::getInstance()->getWinSize();
-    auto layer1 = LayerColor::create(Color4B(192, 0, 0, 255), s.width, s.height / 2);
+    auto layer1 = LayerColor::create(Color32(192, 0, 0, 255), s.width, s.height / 2);
     layer1->setCascadeColorEnabled(false);
     layer1->setCascadeOpacityEnabled(false);
 
@@ -235,7 +235,7 @@ void LayerTestCascadingColorB::onEnter()
 {
     LayerTest::onEnter();
     auto s      = Director::getInstance()->getWinSize();
-    auto layer1 = LayerColor::create(Color4B(255, 255, 255, 255), s.width, s.height / 2);
+    auto layer1 = LayerColor::create(Color32(255, 255, 255, 255), s.width, s.height / 2);
 
     layer1->setPosition(Vec2(0.0f, s.height / 2));
 
@@ -274,7 +274,7 @@ void LayerTestCascadingColorC::onEnter()
 {
     LayerTest::onEnter();
     auto s      = Director::getInstance()->getWinSize();
-    auto layer1 = LayerColor::create(Color4B(255, 255, 255, 255), s.width, s.height / 2);
+    auto layer1 = LayerColor::create(Color32(255, 255, 255, 255), s.width, s.height / 2);
     layer1->setCascadeColorEnabled(false);
     layer1->setPosition(Vec2(0.0f, s.height / 2));
 
@@ -322,7 +322,7 @@ void LayerTest1::onEnter()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s     = Director::getInstance()->getWinSize();
-    auto layer = LayerColor::create(Color4B(0xFF, 0x00, 0x00, 0x80), 200, 200);
+    auto layer = LayerColor::create(Color32(0xFF, 0x00, 0x00, 0x80), 200, 200);
 
     layer->setIgnoreAnchorPointForPosition(false);
     layer->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -372,12 +372,12 @@ void LayerTest2::onEnter()
     LayerTest::onEnter();
 
     auto s      = Director::getInstance()->getWinSize();
-    auto layer1 = LayerColor::create(Color4B(255, 255, 0, 80), 100, 300);
+    auto layer1 = LayerColor::create(Color32(255, 255, 0, 80), 100, 300);
     layer1->setPosition(Vec2(s.width / 3, s.height / 2));
     layer1->setIgnoreAnchorPointForPosition(false);
     addChild(layer1, 1);
 
-    auto layer2 = LayerColor::create(Color4B(0, 0, 255, 255), 100, 300);
+    auto layer2 = LayerColor::create(Color32(0, 0, 255, 255), 100, 300);
     layer2->setPosition(Vec2((s.width / 3) * 2, s.height / 2));
     layer2->setIgnoreAnchorPointForPosition(false);
     addChild(layer2, 1);
@@ -407,7 +407,7 @@ std::string LayerTest2::subtitle() const
 LayerTestBlend::LayerTestBlend()
 {
     auto s      = Director::getInstance()->getWinSize();
-    auto layer1 = LayerColor::create(Color4B(255, 255, 255, 80));
+    auto layer1 = LayerColor::create(Color32(255, 255, 255, 80));
 
     auto sister1 = Sprite::create(s_pathSister1);
     auto sister2 = Sprite::create(s_pathSister2);
@@ -456,7 +456,7 @@ std::string LayerTestBlend::subtitle() const
 //------------------------------------------------------------------
 LayerGradientTest::LayerGradientTest()
 {
-    auto layer1 = LayerGradient::create(Color4B(255, 0, 0, 255), Color4B(0, 255, 0, 255), Vec2(0.9f, 0.9f));
+    auto layer1 = LayerGradient::create(Color32(255, 0, 0, 255), Color32(0, 255, 0, 255), Vec2(0.9f, 0.9f));
     addChild(layer1, 0, kTagLayer);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
@@ -513,7 +513,7 @@ std::string LayerGradientTest::subtitle() const
 //------------------------------------------------------------------
 LayerGradientTest2::LayerGradientTest2()
 {
-    auto layer = LayerGradient::create(Color4B(255, 0, 0, 255), Color4B(255, 255, 0, 255));
+    auto layer = LayerGradient::create(Color32(255, 0, 0, 255), Color32(255, 255, 0, 255));
     addChild(layer);
 }
 
@@ -537,7 +537,7 @@ void LayerIgnoreAnchorPointPos::onEnter()
 
     auto s = Director::getInstance()->getWinSize();
 
-    auto l = LayerColor::create(Color4B(255, 0, 0, 255), 150, 150);
+    auto l = LayerColor::create(Color32(255, 0, 0, 255), 150, 150);
 
     l->setAnchorPoint(Vec2(0.5f, 0.5f));
     l->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -586,7 +586,7 @@ void LayerIgnoreAnchorPointRot::onEnter()
     LayerTest::onEnter();
     auto s = Director::getInstance()->getWinSize();
 
-    auto l = LayerColor::create(Color4B(255, 0, 0, 255), 200, 200);
+    auto l = LayerColor::create(Color32(255, 0, 0, 255), 200, 200);
 
     l->setAnchorPoint(Vec2(0.5f, 0.5f));
     l->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -634,7 +634,7 @@ void LayerIgnoreAnchorPointScale::onEnter()
 
     auto s = Director::getInstance()->getWinSize();
 
-    auto l = LayerColor::create(Color4B(255, 0, 0, 255), 200, 200);
+    auto l = LayerColor::create(Color32(255, 0, 0, 255), 200, 200);
 
     l->setAnchorPoint(Vec2(0.5f, 1.0f));
     l->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -680,12 +680,12 @@ std::string LayerIgnoreAnchorPointScale::subtitle() const
 
 LayerExtendedBlendOpacityTest::LayerExtendedBlendOpacityTest()
 {
-    auto layer1 = LayerGradient::create(Color4B(255, 0, 0, 255), Color4B(255, 0, 255, 255));
+    auto layer1 = LayerGradient::create(Color32(255, 0, 0, 255), Color32(255, 0, 255, 255));
     layer1->setContentSize(Size(80.0f, 80.0f));
     layer1->setPosition(Vec2(50.0f, 50.0f));
     addChild(layer1);
 
-    auto layer2 = LayerGradient::create(Color4B(0, 0, 0, 127), Color4B(255, 255, 255, 127));
+    auto layer2 = LayerGradient::create(Color32(0, 0, 0, 127), Color32(255, 255, 255, 127));
     layer2->setContentSize(Size(80.0f, 80.0f));
     layer2->setPosition(Vec2(100.0f, 90.0f));
     addChild(layer2);
@@ -719,7 +719,7 @@ void LayerBug3162A::onEnter()
     Size size        = VisibleRect::getVisibleRect().size;
     size.width       = size.width / 2;
     size.height      = size.height / 3;
-    Color4B color[3] = {Color4B(255, 0, 0, 255), Color4B(0, 255, 0, 255), Color4B(0, 0, 255, 255)};
+    Color32 color[3] = {Color32(255, 0, 0, 255), Color32(0, 255, 0, 255), Color32(0, 0, 255, 255)};
 
     for (int i = 0; i < 3; ++i)
     {
@@ -762,7 +762,7 @@ void LayerBug3162B::onEnter()
     Size size        = VisibleRect::getVisibleRect().size;
     size.width       = size.width / 2;
     size.height      = size.height / 3;
-    Color4B color[3] = {Color4B(200, 0, 0, 255), Color4B(150, 0, 0, 255), Color4B(100, 0, 0, 255)};
+    Color32 color[3] = {Color32(200, 0, 0, 255), Color32(150, 0, 0, 255), Color32(100, 0, 0, 255)};
 
     for (int i = 0; i < 3; ++i)
     {
@@ -814,7 +814,7 @@ void LayerColorOccludeBug::onEnter()
 {
     LayerTest::onEnter();
     Director::getInstance()->getRenderer()->setDepthTest(true);
-    _layer = LayerColor::create(Color4B(0, 80, 95, 255));
+    _layer = LayerColor::create(Color32(0, 80, 95, 255));
     addChild(_layer);
 }
 
@@ -843,7 +843,7 @@ void LayerRadialGradientTest::onEnter()
     auto size   = director->getVisibleSize();
     Vec2 center(origin.x + size.width / 2 + 50, origin.y + size.height / 2);
     float radius = (size.height - 50) / 2;
-    _layer       = LayerRadialGradient::create(Color4B(145, 106, 209, 140), Color4B(0, 0, 0, 0), radius, center, 1.0f);
+    _layer       = LayerRadialGradient::create(Color32(145, 106, 209, 140), Color32(0, 0, 0, 0), radius, center, 1.0f);
     addChild(_layer);
 
     auto scaleSlider = LayerRadialGradientTest::createSlider();

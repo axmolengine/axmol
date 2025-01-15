@@ -229,7 +229,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
 
     int fontsize = 12;
     std::string text;
-    ax::Color4B textColor(255, 255, 255, 255);
+    ax::Color32 textColor(255, 255, 255, 255);
     std::string fontName;
 
     int backgroundboxResourceType = 0;
@@ -533,7 +533,7 @@ void TabHeaderReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers:
     header->setTitleFontSize(options->fontSize());
     header->setTitleText(options->titleText()->c_str());
     auto textColor = options->textColor();
-    Color4B titleColor(textColor->r(), textColor->g(), textColor->b(), textColor->a());
+    Color32 titleColor(textColor->r(), textColor->g(), textColor->b(), textColor->a());
     header->setTitleColor(titleColor);
 
     auto resourceData = options->fontRes();

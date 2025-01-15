@@ -334,13 +334,13 @@ bool UIPageViewTouchPropagationTest::init()
 
         Text* propagationText = Text::create("Allow Propagation", "Arial", 10);
         propagationText->setAnchorPoint(Vec2(0.0f, 0.5f));
-        propagationText->setTextColor(Color4B::RED);
+        propagationText->setTextColor(Color32::RED);
         propagationText->setPosition(Vec2(0.0f, pageView->getPosition().y + 50));
         _uiLayer->addChild(propagationText);
 
         Text* swallowTouchText = Text::create("Swallow Touches", "Arial", 10);
         swallowTouchText->setAnchorPoint(Vec2(0.f, 0.5f));
-        swallowTouchText->setTextColor(Color4B::RED);
+        swallowTouchText->setTextColor(Color32::RED);
         swallowTouchText->setPosition(Vec2(0.0f, pageView->getPosition().y));
         _uiLayer->addChild(swallowTouchText);
 

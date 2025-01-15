@@ -105,7 +105,7 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node o
     Vec2 position     = Vec2::ZERO;
     Vec2 scale        = Vec2(1.0f, 1.0f);
     Vec2 anchorPoint  = Vec2::ZERO;
-    Color4B color(255, 255, 255, 255);
+    Color32 color(255, 255, 255, 255);
 
     Vec2 size         = Vec2::ZERO;
     bool flipX        = false;

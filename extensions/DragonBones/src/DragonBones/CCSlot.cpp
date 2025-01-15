@@ -117,7 +117,7 @@ void CCSlot::_updateFrame()
                         vertexData.texCoord.v = (region.y + v * region.height) / textureAtlasSize.height;
                     }
 
-                    vertexData.color = ax::Color4B::WHITE;
+                    vertexData.color = ax::Color32::WHITE;
                     vertices[iH]      = vertexData;
 
                     if (boundsRect.origin.x > x)

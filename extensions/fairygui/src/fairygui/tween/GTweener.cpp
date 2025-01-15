@@ -216,7 +216,7 @@ GTweener* GTweener::_to(const ax::Vec4& start, const ax::Vec4& end, float durati
     return this;
 }
 
-GTweener* GTweener::_to(const ax::Color4B& start, const ax::Color4B& end, float duration)
+GTweener* GTweener::_to(const ax::Color32& start, const ax::Color32& end, float duration)
 {
     _valueSize = 4;
     startValue.setColor(start);

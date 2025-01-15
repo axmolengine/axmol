@@ -3002,9 +3002,9 @@ int lua_ax_studio_BaseData_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color4B arg0;
+        ax::Color32 arg0;
 
-        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "ccs.BaseData:setColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ccs.BaseData:setColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BaseData_setColor'", nullptr);
@@ -3058,7 +3058,7 @@ int lua_ax_studio_BaseData_getColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getColor();
-        color4b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BaseData:getColor",argc, 0);

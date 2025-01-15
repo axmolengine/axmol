@@ -315,7 +315,7 @@ public:
      *
      * @return The color of placeholder.
      */
-    const Color4B& getPlaceHolderColor() const;
+    const Color32& getPlaceHolderColor() const;
 
     /**
      * @brief Change the placeholder color.
@@ -327,23 +327,23 @@ public:
     /**
      * @brief Change the placeholder color.
      *
-     * @param color A color value in `Color4B`.
+     * @param color A color value in `Color32`.
      */
-    void setPlaceHolderColor(const Color4B& color);
+    void setPlaceHolderColor(const Color32& color);
 
     /**
      * @brief Query the text string color.
      *
      * @return The color of the text.
      */
-    const Color4B& getTextColor() const;
+    const Color32& getTextColor() const;
 
     /**
      * @brief Change the text color.
      *
-     * @param textColor The color value in `Color4B`.
+     * @param textColor The color value in `Color32`.
      */
-    void setTextColor(const Color4B& textColor);
+    void setTextColor(const Color32& textColor);
 
     /**
      * @brief Change font size of TextField.

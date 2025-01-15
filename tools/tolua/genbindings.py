@@ -7,7 +7,6 @@
 import argparse
 import sys
 import os, os.path
-import shutil
 import subprocess
 import re
 from contextlib import contextmanager

@@ -123,7 +123,7 @@ void TextureDemo::onEnter()
 {
     TestCase::onEnter();
 
-    auto col = LayerColor::create(Color4B(128, 128, 128, 255));
+    auto col = LayerColor::create(Color32(128, 128, 128, 255));
     addChild(col, -10);
 
     auto textureCache = Director::getInstance()->getTextureCache();
@@ -148,7 +148,7 @@ void TextureASTC::onEnter()
     TextureDemo::onEnter();
 
     auto& s     = getContentSize();
-    _background = LayerColor::create(Color4B(15, 19, 42, 255), s.width, s.height);
+    _background = LayerColor::create(Color32(15, 19, 42, 255), s.width, s.height);
     _background->setIgnoreAnchorPointForPosition(false);
     _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
@@ -197,7 +197,7 @@ bool TextureETC1Alpha::init()
         return false;
 
     auto& canvasSize = getContentSize();
-    _background      = LayerColor::create(Color4B(15, 19, 42, 255), canvasSize.width, canvasSize.height);
+    _background      = LayerColor::create(Color32(15, 19, 42, 255), canvasSize.width, canvasSize.height);
     _background->setIgnoreAnchorPointForPosition(false);
     _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
@@ -278,7 +278,7 @@ bool TextureETC2::init()
         return false;
 
     auto& canvasSize = getContentSize();
-    _background      = LayerColor::create(Color4B(15, 19, 42, 255), canvasSize.width, canvasSize.height);
+    _background      = LayerColor::create(Color32(15, 19, 42, 255), canvasSize.width, canvasSize.height);
     _background->setIgnoreAnchorPointForPosition(false);
     _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
@@ -1590,7 +1590,7 @@ void TexturePixelFormat::onEnter()
 
     auto s = Director::getInstance()->getWinSize();
 
-    auto background = LayerColor::create(Color4B(128, 128, 128, 255), s.width, s.height);
+    auto background = LayerColor::create(Color32(128, 128, 128, 255), s.width, s.height);
     addChild(background, -1);
 
     // RGBA 8888 image (32-bit)
@@ -2190,7 +2190,7 @@ TexturePVRv3Premult::TexturePVRv3Premult()
 {
     auto size = Director::getInstance()->getWinSize();
 
-    auto background = LayerColor::create(Color4B(128, 128, 128, 255), size.width, size.height);
+    auto background = LayerColor::create(Color32(128, 128, 128, 255), size.width, size.height);
     addChild(background, -1);
 
     // PVR premultiplied
@@ -2375,7 +2375,7 @@ void TextureConvertRGB888::onEnter()
 
     auto s = Director::getInstance()->getWinSize();
 
-    auto background = LayerColor::create(Color4B(255, 0, 0, 255), s.width, s.height);
+    auto background = LayerColor::create(Color32(255, 0, 0, 255), s.width, s.height);
     addChild(background, -1);
 
     const char* img = "Images/test_image_rgb888.png";
@@ -2406,7 +2406,7 @@ void TextureConvertRGBA8888::onEnter()
 
     auto s = Director::getInstance()->getWinSize();
 
-    auto background = LayerColor::create(Color4B(255, 0, 0, 255), s.width, s.height);
+    auto background = LayerColor::create(Color32(255, 0, 0, 255), s.width, s.height);
     addChild(background, -1);
 
     const char* img = "Images/test_image_rgba8888.png";
@@ -2437,7 +2437,7 @@ void TextureConvertL8::onEnter()
 
     auto s = Director::getInstance()->getWinSize();
 
-    auto background = LayerColor::create(Color4B(255, 0, 0, 255), s.width, s.height);
+    auto background = LayerColor::create(Color32(255, 0, 0, 255), s.width, s.height);
     addChild(background, -1);
 
     const char* img = "Images/test_image_i8.png";
@@ -2468,7 +2468,7 @@ void TextureConvertLA8::onEnter()
 
     auto s = Director::getInstance()->getWinSize();
 
-    auto background = LayerColor::create(Color4B(255, 0, 0, 255), s.width, s.height);
+    auto background = LayerColor::create(Color32(255, 0, 0, 255), s.width, s.height);
     addChild(background, -1);
 
     const char* img = "Images/test_image_ai88.png";

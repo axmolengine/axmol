@@ -116,15 +116,15 @@ public:
 
     /**
      * Change the color of he TabHeader text
-     *@param color The he TabHeader text's color in Color4B.
+     *@param color The he TabHeader text's color in Color32.
      */
-    void setTitleColor(const Color4B& color);
+    void setTitleColor(const Color32& color);
 
     /**
      * get the TabHeader text color.
-     *@return Color4B of TabHeader text.
+     *@return Color32 of TabHeader text.
      */
-    const Color4B& getTitleColor() const;
+    const Color32& getTitleColor() const;
 
     /**
      * Change the font size of TabHeader text

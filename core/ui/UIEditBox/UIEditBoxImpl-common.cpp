@@ -101,7 +101,7 @@ void EditBoxImplCommon::initInactiveLabels(const Vec2& size)
 
     _labelPlaceHolder = Label::create();
     _labelPlaceHolder->setAnchorPoint(Vec2(0.0f, 1.0f));
-    _labelPlaceHolder->setTextColor(Color4B::GRAY);
+    _labelPlaceHolder->setTextColor(Color32::GRAY);
     _labelPlaceHolder->enableWrap(false);
     _labelPlaceHolder->setGlobalZOrder(_editBox->getGlobalZOrder());
     _editBox->addChild(_labelPlaceHolder, kLabelZOrder);
@@ -182,7 +182,7 @@ void EditBoxImplCommon::setFont(const char* pFontName, int fontSize)
     }
 }
 
-void EditBoxImplCommon::setFontColor(const Color4B& color)
+void EditBoxImplCommon::setFontColor(const Color32& color)
 {
     _colText = color;
     this->setNativeFontColor(color);
@@ -213,7 +213,7 @@ void EditBoxImplCommon::setPlaceholderFont(const char* pFontName, int fontSize)
     }
 }
 
-void EditBoxImplCommon::setPlaceholderFontColor(const Color4B& color)
+void EditBoxImplCommon::setPlaceholderFontColor(const Color32& color)
 {
     _colPlaceHolder = color;
     this->setNativePlaceholderFontColor(color);

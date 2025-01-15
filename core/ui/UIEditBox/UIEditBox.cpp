@@ -505,10 +505,10 @@ int EditBox::getFontSize() const
 }
 void EditBox::setFontColor(const Color3B& color)
 {
-    setFontColor(Color4B(color));
+    setFontColor(Color32(color));
 }
 
-void EditBox::setFontColor(const Color4B& color)
+void EditBox::setFontColor(const Color32& color)
 {
     if (_editBoxImpl != nullptr)
     {
@@ -516,13 +516,13 @@ void EditBox::setFontColor(const Color4B& color)
     }
 }
 
-const Color4B& EditBox::getFontColor() const
+const Color32& EditBox::getFontColor() const
 {
     if (_editBoxImpl != nullptr)
     {
         return _editBoxImpl->getFontColor();
     }
-    return Color4B::WHITE;
+    return Color32::WHITE;
 }
 
 void EditBox::setPlaceholderFont(const char* pFontName, int fontSize)
@@ -574,10 +574,10 @@ int EditBox::getPlaceholderFontSize() const
 
 void EditBox::setPlaceholderFontColor(const Color3B& color)
 {
-    setPlaceholderFontColor(Color4B(color));
+    setPlaceholderFontColor(Color32(color));
 }
 
-void EditBox::setPlaceholderFontColor(const Color4B& color)
+void EditBox::setPlaceholderFontColor(const Color32& color)
 {
     if (_editBoxImpl != nullptr)
     {
@@ -585,13 +585,13 @@ void EditBox::setPlaceholderFontColor(const Color4B& color)
     }
 }
 
-const Color4B& EditBox::getPlaceholderFontColor() const
+const Color32& EditBox::getPlaceholderFontColor() const
 {
     if (_editBoxImpl != nullptr)
     {
         return _editBoxImpl->getPlaceholderFontColor();
     }
-    return Color4B::GRAY;
+    return Color32::GRAY;
 }
 
 void EditBox::setPlaceHolder(const char* pText)

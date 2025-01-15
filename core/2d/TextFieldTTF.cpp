@@ -93,7 +93,7 @@ TextFieldTTF::TextFieldTTF()
     , _charCount(0)
     , _inputText("")
     , _placeHolder("")  // prevent Label initWithString assertion
-    , _colorText(Color4B::WHITE)
+    , _colorText(Color32::WHITE)
     , _secureTextEntry(false)
     , _passwordStyleText(PASSWORD_STYLE_TEXT_DEFAULT)
     , _cursorEnabled(false)
@@ -449,7 +449,7 @@ void TextFieldTTF::setAttachWithIME(bool isAttachWithIME)
     }
 }
 
-void TextFieldTTF::setTextColorInternally(const Color4B& color)
+void TextFieldTTF::setTextColorInternally(const Color32& color)
 {
     if (_currentLabelType == LabelType::BMFONT)
     {
@@ -460,7 +460,7 @@ void TextFieldTTF::setTextColorInternally(const Color4B& color)
     Label::setTextColor(color);
 }
 
-void TextFieldTTF::setTextColor(const Color4B& color)
+void TextFieldTTF::setTextColor(const Color32& color)
 {
     _colorText = color;
     if (!_inputText.empty())
@@ -509,17 +509,17 @@ void TextFieldTTF::update(float delta)
     }
 }
 
-const Color4B& TextFieldTTF::getColorSpaceHolder()
+const Color32& TextFieldTTF::getColorSpaceHolder()
 {
     return _colorSpaceHolder;
 }
 
 void TextFieldTTF::setColorSpaceHolder(const Color3B& color)
 {
-    setColorSpaceHolder(Color4B(color));
+    setColorSpaceHolder(Color32(color));
 }
 
-void TextFieldTTF::setColorSpaceHolder(const Color4B& color)
+void TextFieldTTF::setColorSpaceHolder(const Color32& color)
 {
     _colorSpaceHolder = color;
     if (_inputText.empty())

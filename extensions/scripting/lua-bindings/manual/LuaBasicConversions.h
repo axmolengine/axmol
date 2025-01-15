@@ -284,18 +284,18 @@ extern bool luaval_to_rect(lua_State* L, int lo, Rect* outValue, const char* fun
 extern AX_LUA_DLL bool luaval_to_color3b(lua_State* L, int lo, Color3B* outValue, const char* funcName = "");
 
 /**
- * Get a Color4B object value from the given acceptable index of stack.
+ * Get a Color32 object value from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
  * If the table has the `r`,`g`, `b` and 'a' keys and the corresponding values are not nil, this function would assign
  * the values to the corresponding members of outValue. Otherwise, the value of members of outValue would be 0.
  *
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param outValue the pointer to a Color4B object which stores the values from the Lua table.
+ * @param outValue the pointer to a Color32 object which stores the values from the Lua table.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_color4b(lua_State* L, int lo, Color4B* outValue, const char* funcName = "");
+extern bool luaval_to_Color32(lua_State* L, int lo, Color32* outValue, const char* funcName = "");
 
 /**
  * Get a ax::Color object value from the given acceptable index of stack.
@@ -943,13 +943,13 @@ extern void rect_to_luaval(lua_State* L, const Rect& rt);
 extern AX_LUA_DLL void color3b_to_luaval(lua_State* L, const Color3B& cc);
 
 /**
- * Push a table converted from a ax::Color4B object into the Lua stack.
+ * Push a table converted from a ax::Color32 object into the Lua stack.
  * The format of table as follows: {r=numberValue1, g=numberValue2, b=numberValue3, a=numberValue4}
  *
  * @param L the current lua_State.
- * @param cc a ax::Color4B object.
+ * @param cc a ax::Color32 object.
  */
-extern void color4b_to_luaval(lua_State* L, const Color4B& cc);
+extern void Color32_to_luaval(lua_State* L, const Color32& cc);
 
 /**
  * Push a table converted from a ax::Color object into the Lua stack.

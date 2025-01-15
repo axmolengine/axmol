@@ -971,7 +971,7 @@ NonBatchSprites::NonBatchSprites()
 
     _totalSprites = Label::createWithTTF(TTFConfig("fonts/arial.ttf"), "sprites");
     _totalSprites->setColor(Color3B::YELLOW);
-    _totalSprites->enableOutline(Color4B::RED, 2);
+    _totalSprites->enableOutline(Color32::RED, 2);
     _totalSprites->setPosition(s.width / 2, s.height / 2);
 
     addChild(_totalSprites);

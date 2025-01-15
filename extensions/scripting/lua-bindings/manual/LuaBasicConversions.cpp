@@ -666,7 +666,7 @@ bool luaval_to_rect(lua_State* L, int lo, Rect* outValue, const char* funcName)
     return ok;
 }
 
-bool luaval_to_color4b(lua_State* L, int lo, Color4B* outValue, const char* funcName)
+bool luaval_to_Color32(lua_State* L, int lo, Color32* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
         return false;
@@ -2367,7 +2367,7 @@ void rect_to_luaval(lua_State* L, const Rect& rt)
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
 }
 
-void color4b_to_luaval(lua_State* L, const Color4B& color)
+void Color32_to_luaval(lua_State* L, const Color32& color)
 {
     if (NULL == L)
         return;

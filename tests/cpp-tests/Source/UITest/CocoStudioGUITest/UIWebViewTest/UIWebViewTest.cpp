@@ -62,7 +62,7 @@ bool WebViewTest::init()
         this->addChild(urlTextField);
 
         Text* httpLabel = Text::create("https:// ", "Arial", 20);
-        httpLabel->setTextColor(Color4B::GREEN);
+        httpLabel->setTextColor(Color32::GREEN);
         httpLabel->setAnchorPoint(Vec2(1.0, 0.5));
         httpLabel->setPosition(urlTextField->getPosition() - Vec2(urlTextField->getContentSize().width / 2, 0));
         this->addChild(httpLabel);

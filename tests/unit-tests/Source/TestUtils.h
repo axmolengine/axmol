@@ -42,7 +42,7 @@ public:
 
 
 namespace ax {
-    doctest::String toString(const Color4B& value);
+    doctest::String toString(const Color32& value);
     doctest::String toString(const Vec2& value);
     doctest::String toString(const Vec3& value);
 }

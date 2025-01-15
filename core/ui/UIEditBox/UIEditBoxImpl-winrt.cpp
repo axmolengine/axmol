@@ -470,7 +470,7 @@ void UIEditBoxImplWinrt::setNativeFont(const char* pFontName, int fontSize)
     }
 }
 
-void UIEditBoxImplWinrt::setNativeFontColor(const Color4B& color)
+void UIEditBoxImplWinrt::setNativeFontColor(const Color32& color)
 {
     Windows::UI::Color win_color = {0xFF, color.r, color.g, color.b};
     _system_control->setFontColor(win_color);

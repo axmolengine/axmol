@@ -417,7 +417,7 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     Vec2 position;
     Vec2 scale(1.0f, 1.0f);
     Vec2 anchorPoint;
-    Color4B color(255, 255, 255, 255);
+    Color32 color(255, 255, 255, 255);
     Vec2 size;
     bool flipX        = false;
     bool flipY        = false;

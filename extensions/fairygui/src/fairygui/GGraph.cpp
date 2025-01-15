@@ -16,8 +16,8 @@ static void drawVertRect(ax::DrawNode* shape, float x, float y, float width, flo
 GGraph::GGraph() : _shape(nullptr),
                    _type(0),
                    _lineSize(1),
-                   _lineColor(Color4B::BLACK),
-                   _fillColor(Color4B::WHITE),
+                   _lineColor(Color32::BLACK),
+                   _fillColor(Color32::WHITE),
                    _cornerRadius(nullptr),
                    _polygonPoints(nullptr),
                    _distances(nullptr)

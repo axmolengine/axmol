@@ -618,7 +618,7 @@ void Label::reset()
     _vAlignment             = TextVAlignment::TOP;
 
     _effectColor  = Color::BLACK;
-    _textColor    = Color4B::WHITE;
+    _textColor    = Color32::WHITE;
     _textColorF   = Color::WHITE;
     setColor(Color3B::WHITE);
 
@@ -1347,7 +1347,7 @@ void Label::scaleFontSize(float fontSize)
     }
 }
 
-void Label::enableGlow(const Color4B& glowColor)
+void Label::enableGlow(const Color32& glowColor)
 {
     if (_currentLabelType == LabelType::TTF)
     {
@@ -1368,7 +1368,7 @@ void Label::enableGlow(const Color4B& glowColor)
     }
 }
 
-void Label::enableOutline(const Color4B& outlineColor, int outlineSize /* = -1 */)
+void Label::enableOutline(const Color32& outlineColor, int outlineSize /* = -1 */)
 {
     AXASSERT(_currentLabelType == LabelType::STRING_TEXTURE || _currentLabelType == LabelType::TTF,
              "Only supported system font and TTF!");
@@ -1410,7 +1410,7 @@ void Label::enableOutline(const Color4B& outlineColor, int outlineSize /* = -1 *
     }
 }
 
-void Label::enableShadow(const Color4B& shadowColor /* = Color4B::BLACK */,
+void Label::enableShadow(const Color32& shadowColor /* = Color32::BLACK */,
                          const Vec2& offset /* = Vec2(2 ,-2)*/,
                          int /* blurRadius = 0 */)
 {
@@ -1469,7 +1469,7 @@ void Label::enableBold()
     if (!_boldEnabled)
     {
         // bold is implemented with outline
-        enableShadow(Color4B::WHITE, Vec2(0.9f, 0), 0);
+        enableShadow(Color32::WHITE, Vec2(0.9f, 0), 0);
         // add one to kerning
         setAdditionalKerning(_additionalKerning + 1);
         _boldEnabled = true;
@@ -1838,7 +1838,7 @@ void Label::updateContent()
     _debugDrawNode->clear();
     Vec2 vertices[4] = {Vec2::ZERO, Vec2(_contentSize.width, 0.0f), Vec2(_contentSize.width, _contentSize.height),
                         Vec2(0.0f, _contentSize.height)};
-    _debugDrawNode->drawPoly(vertices, 4, true, Color4B::WHITE);
+    _debugDrawNode->drawPoly(vertices, 4, true, Color32::WHITE);
 #endif
 }
 
@@ -2456,7 +2456,7 @@ void Label::updateDisplayedOpacity(uint8_t parentOpacity)
 // FIXME: it is not clear what is the difference between setTextColor() and setColor()
 // if setTextColor() only changes the text and nothing but the text (no glow, no outline, not underline)
 // that's fine but it should be documented
-void Label::setTextColor(const Color4B& color)
+void Label::setTextColor(const Color32& color)
 {
     if (_textColor != color)
     {

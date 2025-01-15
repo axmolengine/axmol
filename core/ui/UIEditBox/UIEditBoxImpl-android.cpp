@@ -135,7 +135,7 @@ void EditBoxImplAndroid::setNativeFont(const char* pFontName, int fontSize)
                                     (float)fontSize * glView->getScaleX());
 }
 
-void EditBoxImplAndroid::setNativeFontColor(const Color4B& color)
+void EditBoxImplAndroid::setNativeFontColor(const Color32& color)
 {
     JniHelper::callStaticVoidMethod(editBoxClassName, "setFontColor", _editBoxIndex, (int)color.r, (int)color.g,
                                     (int)color.b, (int)color.a);
@@ -146,7 +146,7 @@ void EditBoxImplAndroid::setNativePlaceholderFont(const char* pFontName, int fon
     AXLOGD("Warning! You can't change Android Hint fontName and fontSize");
 }
 
-void EditBoxImplAndroid::setNativePlaceholderFontColor(const Color4B& color)
+void EditBoxImplAndroid::setNativePlaceholderFontColor(const Color32& color)
 {
     JniHelper::callStaticVoidMethod(editBoxClassName, "setPlaceHolderTextColor", _editBoxIndex, (int)color.r,
                                     (int)color.g, (int)color.b, (int)color.a);

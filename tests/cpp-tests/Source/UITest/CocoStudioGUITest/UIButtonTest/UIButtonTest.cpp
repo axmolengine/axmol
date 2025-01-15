@@ -804,7 +804,7 @@ bool UIButtonTitleEffectTest::init()
         button->setPressedActionEnabled(true);
         Label* title = button->getTitleRenderer();
         button->setTitleColor(Color3B::RED);
-        title->enableShadow(Color4B::BLACK, Size(2, -2));
+        title->enableShadow(Color32::BLACK, Size(2, -2));
 
         _uiLayer->addChild(button);
 
@@ -813,7 +813,7 @@ bool UIButtonTitleEffectTest::init()
         button2->setPositionNormalized(Vec2(0.8f, 0.5f));
         button2->setTitleText("PLAY GAME");
         auto title2 = button2->getTitleRenderer();
-        title2->enableOutline(Color4B::GREEN, 3);
+        title2->enableOutline(Color32::GREEN, 3);
         _uiLayer->addChild(button2);
 
         return true;

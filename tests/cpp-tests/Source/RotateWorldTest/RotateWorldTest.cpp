@@ -124,10 +124,10 @@ void RotateWorldMainLayer::onEnter()
     x         = size.width;
     y         = size.height;
 
-    auto blue  = LayerColor::create(Color4B(0, 0, 255, 255));
-    auto red   = LayerColor::create(Color4B(255, 0, 0, 255));
-    auto dark = LayerColor::create(Color4B(2, 2, 2, 255));
-    auto white = LayerColor::create(Color4B(255, 255, 255, 255));
+    auto blue  = LayerColor::create(Color32(0, 0, 255, 255));
+    auto red   = LayerColor::create(Color32(255, 0, 0, 255));
+    auto dark = LayerColor::create(Color32(2, 2, 2, 255));
+    auto white = LayerColor::create(Color32(255, 255, 255, 255));
 
     blue->setScale(0.5f);
     blue->setPosition(Vec2(-x / 4, -y / 4));

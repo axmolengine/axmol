@@ -90,19 +90,19 @@ static bool engine_inj_containsPoint(ax::Node* target, const ax::Vec2& worldPoin
     return contains;
 }
 
-static uint32_t engine_inj_c4b2dw(const Color4B& value)
+static uint32_t engine_inj_c4b2dw(const Color32& value)
 {
     auto rvalue = (uint32_t)value.a << 24 | (uint32_t)value.b << 16 | (uint32_t)value.g << 8 | (uint32_t)value.r;
     return rvalue;
 }
 
-static Sprite* engine_inj_create_lump(const Color4B& color, int height, int width)
+static Sprite* engine_inj_create_lump(const Color32& color, int height, int width)
 {
     unsigned int* pixels((unsigned int*)malloc(height * width * sizeof(unsigned int)));
 
     // Fill Pixels
     uint32_t* ptr           = pixels;
-    const Color4B fillColor = Color4B::WHITE;
+    const Color32 fillColor = Color32::WHITE;
     for (int i = 0; i < height * width; ++i)
     {
         ptr[i] = engine_inj_c4b2dw(fillColor);  // 0xffffffff;
@@ -241,8 +241,8 @@ TextFieldEx::TextFieldEx()
     , _charCount(0)
     , _inputText("")
     , _placeHolder("")
-    , _colorText(Color4B::WHITE)
-    , _colorSpaceHolder(Color4B::GRAY)
+    , _colorText(Color32::WHITE)
+    , _colorSpaceHolder(Color32::GRAY)
     , _secureTextEntry(false)
     , _cursor(nullptr)
     , _touchListener(nullptr)
@@ -277,7 +277,7 @@ TextFieldEx* TextFieldEx::create(std::string_view placeholder,
                                  std::string_view fontName,
                                  float fontSize,
                                  float cursorWidth,
-                                 const Color4B& cursorColor)
+                                 const Color32& cursorColor)
 {
     TextFieldEx* ret = new TextFieldEx();
     if (ret && ret->initWithPlaceHolder("", fontName, fontSize, cursorWidth, cursorColor))
@@ -300,7 +300,7 @@ bool TextFieldEx::initWithPlaceHolder(std::string_view placeholder,
                                       std::string_view fontName,
                                       float fontSize,
                                       float cursorWidth,
-                                      const Color4B& cursorColor)
+                                      const Color32& cursorColor)
 {
     _placeHolder = placeholder;
 
@@ -759,14 +759,14 @@ std::string_view TextFieldEx::getContentText()
     return _inputText;
 }
 
-void TextFieldEx::setTextColor(const Color4B& color)
+void TextFieldEx::setTextColor(const Color32& color)
 {
     _colorText = color;
     if (!_inputText.empty())
         _renderLabel->setTextColor(_colorText);
 }
 
-const Color4B& TextFieldEx::getTextColor(void) const
+const Color32& TextFieldEx::getTextColor(void) const
 {
     return _colorText;
 }
@@ -781,12 +781,12 @@ const Color3B& TextFieldEx::getCursorColor(void) const
     return _cursor->getColor();
 }
 
-const Color4B& TextFieldEx::getPlaceholderColor() const
+const Color32& TextFieldEx::getPlaceholderColor() const
 {
     return _colorSpaceHolder;
 }
 
-void TextFieldEx::setPlaceholderColor(const Color4B& color)
+void TextFieldEx::setPlaceholderColor(const Color32& color)
 {
     _colorSpaceHolder = color;
     if (_inputText.empty())
@@ -906,9 +906,9 @@ int TextFieldEx::getFontType() const
     return _fontType;
 }
 
-void TextFieldEx::__initCursor(int height, int width, const Color4B& color)
+void TextFieldEx::__initCursor(int height, int width, const Color32& color)
 {
-    _cursor = engine_inj_create_lump(Color4B(color), height, width);
+    _cursor = engine_inj_create_lump(Color32(color), height, width);
 
     this->addChild(_cursor);
 

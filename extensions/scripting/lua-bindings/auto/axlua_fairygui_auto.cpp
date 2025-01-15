@@ -32562,7 +32562,7 @@ int lua_ax_fairygui_GTween_toVec4(lua_State* tolua_S)
 #endif
     return 0;
 }
-int lua_ax_fairygui_GTween_toColor4B(lua_State* tolua_S)
+int lua_ax_fairygui_GTween_toColor32(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -32579,26 +32579,26 @@ int lua_ax_fairygui_GTween_toColor4B(lua_State* tolua_S)
 
     if (argc == 3)
     {
-        ax::Color4B arg0;
-        ax::Color4B arg1;
+        ax::Color32 arg0;
+        ax::Color32 arg1;
         double arg2;
-        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "fgui.GTween:toColor4B");
-        ok &=luaval_to_color4b(tolua_S, 3, &arg1, "fgui.GTween:toColor4B");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "fgui.GTween:toColor4B");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "fgui.GTween:toColor32");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "fgui.GTween:toColor32");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "fgui.GTween:toColor32");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_toColor4B'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_toColor32'", nullptr);
             return 0;
         }
-        auto&& ret = fairygui::GTween::toColor4B(arg0, arg1, arg2);
+        auto&& ret = fairygui::GTween::toColor32(arg0, arg1, arg2);
         object_to_luaval<fairygui::GTweener>(tolua_S, "fgui.GTweener",(fairygui::GTweener*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "fgui.GTween:toColor4B",argc, 3);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "fgui.GTween:toColor32",argc, 3);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_fairygui_GTween_toColor4B'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_fairygui_GTween_toColor32'.",&tolua_err);
 #endif
     return 0;
 }
@@ -32938,7 +32938,7 @@ int lua_register_ax_fairygui_GTween(lua_State* tolua_S)
         tolua_function(tolua_S,"toVec2", lua_ax_fairygui_GTween_toVec2);
         tolua_function(tolua_S,"toVec3", lua_ax_fairygui_GTween_toVec3);
         tolua_function(tolua_S,"toVec4", lua_ax_fairygui_GTween_toVec4);
-        tolua_function(tolua_S,"toColor4B", lua_ax_fairygui_GTween_toColor4B);
+        tolua_function(tolua_S,"toColor32", lua_ax_fairygui_GTween_toColor32);
         tolua_function(tolua_S,"toDouble", lua_ax_fairygui_GTween_toDouble);
         tolua_function(tolua_S,"delayedCall", lua_ax_fairygui_GTween_delayedCall);
         tolua_function(tolua_S,"shake", lua_ax_fairygui_GTween_shake);

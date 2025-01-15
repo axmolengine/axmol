@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 NS_AX_MATH_BEGIN
 
-struct Color4B;
+struct Color32;
 struct Color;
 struct HSV;
 
@@ -46,14 +46,14 @@ struct AX_DLL Color3B
 {
     Color3B() {};
     Color3B(uint8_t _r, uint8_t _g, uint8_t _b) : r(_r), g(_g), b(_b) {}
-    explicit Color3B(const Color4B& color);
+    explicit Color3B(const Color32& color);
     explicit Color3B(const Color& color);
 
     bool operator==(const Color3B& right) const;
-    bool operator==(const Color4B& right) const;
+    bool operator==(const Color32& right) const;
     bool operator==(const Color& right) const;
     bool operator!=(const Color3B& right) const;
-    bool operator!=(const Color4B& right) const;
+    bool operator!=(const Color32& right) const;
     bool operator!=(const Color& right) const;
 
     bool equals(const Color3B& other) const { return (*this == other); }
@@ -77,12 +77,12 @@ struct AX_DLL Color3B
  * RGBA color composed of 4 bytes.
  * @since v3.0
  */
-struct AX_DLL Color4B
+struct AX_DLL Color32
 {
-    Color4B() {}
-    Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) : r(_r), g(_g), b(_b), a(_a) {}
-    explicit Color4B(const Color3B& color, uint8_t _a = 255) : r(color.r), g(color.g), b(color.b), a(_a) {}
-    Color4B(const Color& color);
+    Color32() {}
+    Color32(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) : r(_r), g(_g), b(_b), a(_a) {}
+    explicit Color32(const Color3B& color, uint8_t _a = 255) : r(color.r), g(color.g), b(color.b), a(_a) {}
+    Color32(const Color& color);
 
     inline void set(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
     {
@@ -92,10 +92,10 @@ struct AX_DLL Color4B
         a = _a;
     }
 
-    bool operator==(const Color4B& right) const;
+    bool operator==(const Color32& right) const;
     bool operator==(const Color3B& right) const;
     bool operator==(const Color& right) const;
-    bool operator!=(const Color4B& right) const;
+    bool operator!=(const Color32& right) const;
     bool operator!=(const Color3B& right) const;
     bool operator!=(const Color& right) const;
 
@@ -104,16 +104,16 @@ struct AX_DLL Color4B
     uint8_t b = 0;
     uint8_t a = 0;
 
-    static const Color4B WHITE;
-    static const Color4B YELLOW;
-    static const Color4B BLUE;
-    static const Color4B GREEN;
-    static const Color4B RED;
-    static const Color4B MAGENTA;
-    static const Color4B BLACK;
-    static const Color4B ORANGE;
-    static const Color4B GRAY;
-    static const Color4B TRANSPARENT;  // TRANSPARENT is defined on wingdi.h /*Background Modes*/
+    static const Color32 WHITE;
+    static const Color32 YELLOW;
+    static const Color32 BLUE;
+    static const Color32 GREEN;
+    static const Color32 RED;
+    static const Color32 MAGENTA;
+    static const Color32 BLACK;
+    static const Color32 ORANGE;
+    static const Color32 GRAY;
+    static const Color32 TRANSPARENT;  // TRANSPARENT is defined on wingdi.h /*Background Modes*/
 };
 
 /**
@@ -127,7 +127,7 @@ struct AX_DLL Color : public Vec4Adapter<Color>
     explicit Color(const Color3B& color, float _a = 1.0f)
         : Vec4Adapter(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, _a)
     {}
-    explicit Color(const Color4B& color)
+    explicit Color(const Color32& color)
         : Vec4Adapter(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f)
     {}
     template <typename _Other>
@@ -152,9 +152,9 @@ struct AX_DLL Color : public Vec4Adapter<Color>
     }
 
     bool operator==(const Color3B& rhs) const;
-    bool operator==(const Color4B& rhs) const;
+    bool operator==(const Color32& rhs) const;
     bool operator!=(const Color3B& rhs) const;
-    bool operator!=(const Color4B& rhs) const;
+    bool operator!=(const Color32& rhs) const;
 
     bool equals(const Color& other) const { return (*this == other); }
 
@@ -182,7 +182,7 @@ struct AX_DLL HSV : public Vec4Adapter<HSV>
     HSV(float _h, float _s, float _v, float _a = 1.0F);
 
     explicit HSV(const Color3B& c);
-    explicit HSV(const Color4B& c);
+    explicit HSV(const Color32& c);
     explicit HSV(const Color& c);
 
     bool equals(const HSV& other) const { return (*this == other); }
@@ -191,7 +191,7 @@ struct AX_DLL HSV : public Vec4Adapter<HSV>
     Color toRgba() const;
 
     Color3B toColor3B() const;
-    Color4B toColor4B() const;
+    Color32 toColor32() const;
 };
 
 /**
@@ -206,7 +206,7 @@ struct AX_DLL HSL : public Vec4Adapter<HSL>
     HSL(float _h, float _s, float _l, float _a = 1.0F);
 
     explicit HSL(const Color3B& c);
-    explicit HSL(const Color4B& c);
+    explicit HSL(const Color32& c);
     explicit HSL(const Color& c);
 
     bool equals(const HSL& other) const { return (*this == other); }
@@ -217,13 +217,13 @@ struct AX_DLL HSL : public Vec4Adapter<HSL>
     static float hue2rgb(float p, float q, float t);
 
     Color3B toColor3B() const;
-    Color4B toColor4B() const;
+    Color32 toColor32() const;
 };
 
-inline Color3B::Color3B(const Color4B& color) : r(color.r), g(color.g), b(color.b) {}
+inline Color3B::Color3B(const Color32& color) : r(color.r), g(color.g), b(color.b) {}
 inline Color3B::Color3B(const Color& color) : r(color.r * 255.0f), g(color.g * 255.0f), b(color.b * 255.0f) {}
 
-inline Color4B::Color4B(const Color& color) : r(color.r * 255), g(color.g * 255), b(color.b * 255), a(color.a * 255) {}
+inline Color32::Color32(const Color& color) : r(color.r * 255), g(color.g * 255), b(color.b * 255), a(color.a * 255) {}
 
 NS_AX_MATH_END
 

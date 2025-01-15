@@ -56,13 +56,13 @@ public:
                                std::string_view fontName,
                                float fontSize,
                                float cursorWidth    = 2,
-                               const Color4B& color = Color4B::WHITE);
+                               const Color32& color = Color32::WHITE);
 
     bool initWithPlaceHolder(std::string_view placeholder,
                              std::string_view fontName,
                              float fontSize,
                              float cursorWidth    = 2,
-                             const Color4B& color = Color4B::WHITE);
+                             const Color32& color = Color32::WHITE);
 
     void enableIME(Node* control);
     void disableIME(void);
@@ -71,11 +71,11 @@ public:
 
     inline int getCharCount() const { return static_cast<int>(_charCount); };
 
-    virtual void setPlaceholderColor(const Color4B& color);
-    virtual const Color4B& getPlaceholderColor() const;
+    virtual void setPlaceholderColor(const Color32& color);
+    virtual const Color32& getPlaceholderColor() const;
 
-    virtual void setTextColor(const Color4B& textColor);
-    virtual const Color4B& getTextColor(void) const;
+    virtual void setTextColor(const Color32& textColor);
+    virtual const Color32& getTextColor(void) const;
 
     void setCursorColor(const Color3B& color);
     const Color3B& getCursorColor(void) const;
@@ -158,7 +158,7 @@ protected:
 
     void updateContentSize(void);
 
-    void __initCursor(int height, int width = 6, const Color4B& color = Color4B::WHITE);
+    void __initCursor(int height, int width = 6, const Color32& color = Color32::WHITE);
     void __showCursor(void);
     void __hideCursor(void);
     void __updateCursorPosition(void);
@@ -180,8 +180,8 @@ protected:
     std::string _inputText;
 
     std::string _placeHolder;
-    Color4B _colorSpaceHolder;
-    Color4B _colorText;
+    Color32 _colorSpaceHolder;
+    Color32 _colorText;
 
     bool _secureTextEntry;
 

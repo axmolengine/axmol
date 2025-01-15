@@ -24,7 +24,7 @@ GTweener* GTween::to(const ax::Vec4& startValue, const ax::Vec4 & endValue, floa
     return TweenManager::createTween()->_to(startValue, endValue, duration);
 }
 
-GTweener* GTween::to(const ax::Color4B& startValue, const ax::Color4B & endValue, float duration)
+GTweener* GTween::to(const ax::Color32& startValue, const ax::Color32 & endValue, float duration)
 {
     return TweenManager::createTween()->_to(startValue, endValue, duration);
 }

@@ -1222,7 +1222,7 @@ PauseResumeTargetTest::PauseResumeTargetTest()
         sprite3->getListener()->setEnabled(false);
         _eventDispatcher->pauseEventListenersForTarget(this, true);
 
-        auto colorLayer = LayerColor::create(Color4B(0, 0, 255, 100));
+        auto colorLayer = LayerColor::create(Color32(0, 0, 255, 100));
         this->addChild(colorLayer, 99999);
 
         auto closeItem = MenuItemFont::create("close", [this, colorLayer, sprite3](Object* /*sender*/) {

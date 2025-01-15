@@ -79,8 +79,8 @@ public:
     void setVec2(const ax::Vec2& value);
     ax::Vec4 getVec4() const;
     void setVec4(const ax::Vec4& value);
-    ax::Color4B getColor() const;
-    void setColor(const ax::Color4B& value);
+    ax::Color32 getColor() const;
+    void setColor(const ax::Color32& value);
 };
 
 TValue::TValue()
@@ -114,12 +114,12 @@ void TValue::setVec4(const ax::Vec4& value)
     f4 = value.w;
 }
 
-ax::Color4B TValue::getColor() const
+ax::Color32 TValue::getColor() const
 {
-    return ax::Color4B(f1, f2, f3, f4);
+    return ax::Color32(f1, f2, f3, f4);
 }
 
-void TValue::setColor(const ax::Color4B& value)
+void TValue::setColor(const ax::Color32& value)
 {
     f1 = value.r;
     f2 = value.g;
@@ -551,7 +551,7 @@ void Transition::setValue(const std::string& label, const ValueVector& values)
         case TransitionActionType::Color:
         {
             uint32_t v = values[0].asUnsignedInt();
-            ((TValue*)value)->setColor(Color4B((v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF, (v >> 24) & 0xFF));
+            ((TValue*)value)->setColor(Color32((v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF, (v >> 24) & 0xFF));
             break;
         }
 

@@ -28,7 +28,7 @@ doctest::String toString(const Vec3& value) {
     return s.c_str();
 }
 
-doctest::String toString(const Color4B& value) {
+doctest::String toString(const Color32& value) {
     std::string s;
     s.append("(");
     s.append(std::to_string(value.r));

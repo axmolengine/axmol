@@ -104,14 +104,14 @@ bool VideoPlayerTest::init()
     _videoStateLabel->setPosition(
         Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 200));
     _uiLayer->addChild(_videoStateLabel, 1);
-    _videoStateLabel->setTextColor(Color4B::YELLOW);
+    _videoStateLabel->setTextColor(Color32::YELLOW);
 
     _loopStatusLabel = Label::createWithSystemFont("(1)", "Arial", 10);
     _loopStatusLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     _loopStatusLabel->setPosition(
         Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 185));
     _uiLayer->addChild(_loopStatusLabel, 1);
-    _loopStatusLabel->setTextColor(Color4B::YELLOW);
+    _loopStatusLabel->setTextColor(Color32::YELLOW);
 
     return true;
 }

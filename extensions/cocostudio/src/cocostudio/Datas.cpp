@@ -123,7 +123,7 @@ void BaseData::subtract(BaseData* from, BaseData* to, bool limit)
     }
 }
 
-void BaseData::setColor(const Color4B& color)
+void BaseData::setColor(const Color32& color)
 {
     r = color.r;
     g = color.g;
@@ -131,9 +131,9 @@ void BaseData::setColor(const Color4B& color)
     a = color.a;
 }
 
-Color4B BaseData::getColor()
+Color32 BaseData::getColor()
 {
-    return Color4B(r, g, b, a);
+    return Color32(r, g, b, a);
 }
 
 std::string DisplayData::changeDisplayToTexture(std::string_view displayName)
