@@ -295,7 +295,7 @@ extern AX_LUA_DLL bool luaval_to_color3b(lua_State* L, int lo, Color3B* outValue
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_Color32(lua_State* L, int lo, Color32* outValue, const char* funcName = "");
+extern bool luaval_to_color32(lua_State* L, int lo, Color32* outValue, const char* funcName = "");
 
 /**
  * Get a ax::Color object value from the given acceptable index of stack.
@@ -949,7 +949,7 @@ extern AX_LUA_DLL void color3b_to_luaval(lua_State* L, const Color3B& cc);
  * @param L the current lua_State.
  * @param cc a ax::Color32 object.
  */
-extern void Color32_to_luaval(lua_State* L, const Color32& cc);
+extern void color32_to_luaval(lua_State* L, const Color32& cc);
 
 /**
  * Push a table converted from a ax::Color object into the Lua stack.
