@@ -180,3 +180,12 @@ jobs:
         token: ${{ secrets.AX_TRIGGER_SITE_TOKEN }}
         repository: axmolengine/axmol.dev
         event-type: forward-push
+  wasm64:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+    - name: Build
+      shell: pwsh
+      run: ./tools/cmdline/axmol -p wasm64 -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8' -j2 -t 'cpp-tests,fairygui-tests,lua-tests'
