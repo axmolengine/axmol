@@ -32,13 +32,13 @@ THE SOFTWARE.
 #include <unordered_map>
 #include <sstream>
 #include <regex>
-//  #include "2d/TMXTiledMap.h"
+
 #include "base/ZipUtils.h"
 #include "base/Director.h"
 #include "base/Utils.h"
 #include "platform/FileUtils.h"
-
-// using namespace std;
+#include <ranges>
+#include <charconv>
 
 namespace ax
 {
@@ -452,10 +452,9 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
 
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
             Vec2 layerSize      = layer->_layerSize;
-            auto tilesAmount     = static_cast<size_t>(layerSize.width * layerSize.height);
+            auto tilesAmount    = static_cast<size_t>(layerSize.width * layerSize.height);
 
-            layer->_tiles =
-                (uint32_t*)axstd::pod_vector<uint32_t>(tilesAmount, 0U).release_pointer();
+            layer->_tiles = (uint32_t*)axstd::pod_vector<uint32_t>(tilesAmount, 0U).release_pointer();
         }
         else if (encoding == "base64")
         {
@@ -534,7 +533,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         if (tmxMapInfo->getParentElement() == TMXPropertyNone)
         {
             AXLOGD("TMX tile map: Parent element is unsupported. Cannot add property named '{}' with value '{}'",
-                  attributeDict["name"].asString(), attributeDict["value"].asString());
+                   attributeDict["name"].asString(), attributeDict["value"].asString());
             tmxMapInfo->setStoringCharacters(false);
         }
         else if (tmxMapInfo->getParentElement() == TMXPropertyMap)
@@ -596,36 +595,36 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
             ValueVector pointsArray;
             pointsArray.reserve(10);
 
-            // parse points string into a space-separated set of points
-            std::stringstream pointsStream(value);
-            std::string pointPair;
-            while (std::getline(pointsStream, pointPair, ' '))
+            const auto offsetX = static_cast<int>(objectGroup->getPositionOffset().x);
+            const auto offsetY = static_cast<int>(objectGroup->getPositionOffset().y);
+            // std::views::split 2~3x faster than std::getline
+            for (auto pt : std::views::split(value, ' '))
             {
-                // parse each point combo into a comma-separated x,y point
-                std::stringstream pointStream(pointPair);
-                std::string xStr, yStr;
-
+                std::string_view citem{pt.data(), pt.size()};
+                int idx = 0;
                 ValueMap pointDict;
-
-                // set x
-                if (std::getline(pointStream, xStr, ','))
+                for (auto subrgn : std::views::split(pt, ','))
                 {
-                    int x          = atoi(xStr.c_str()) + (int)objectGroup->getPositionOffset().x;
-                    pointDict["x"] = Value(x);
+                    int axisVal = 0;
+                    std::string_view word(subrgn.data());
+                    std::from_chars(word.data(), word.data() + word.length(), axisVal, 10);
+                    switch (idx++)
+                    {
+                    case 0:
+                        pointDict["x"] = Value(axisVal + offsetX);
+                        break;
+                    case 1:
+                        pointDict["y"] = Value(axisVal + offsetY);
+                        break;
+                    }
+                    if (idx == 2)
+                        break;
                 }
-
-                // set y
-                if (std::getline(pointStream, yStr, ','))
-                {
-                    int y          = atoi(yStr.c_str()) + (int)objectGroup->getPositionOffset().y;
-                    pointDict["y"] = Value(y);
-                }
-
                 // add to points array
-                pointsArray.emplace_back(Value(pointDict));
+                pointsArray.emplace_back(Value(std::move(pointDict)));
             }
 
-            dict["points"] = Value(pointsArray);
+            dict["points"] = Value(std::move(pointsArray));
         }
     }
     else if (elementName == "polyline")
@@ -641,36 +640,32 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
             ValueVector pointsArray;
             pointsArray.reserve(10);
 
-            // parse points string into a space-separated set of points
-            std::stringstream pointsStream(value);
-            std::string pointPair;
-            while (std::getline(pointsStream, pointPair, ' '))
+            const auto offsetX = static_cast<int>(objectGroup->getPositionOffset().x);
+            const auto offsetY = static_cast<int>(objectGroup->getPositionOffset().y);
+            for (auto pt : std::views::split(value, ' '))
             {
-                // parse each point combo into a comma-separated x,y point
-                std::stringstream pointStream(pointPair);
-                std::string xStr, yStr;
-
+                int idx = 0;
                 ValueMap pointDict;
-
-                // set x
-                if (std::getline(pointStream, xStr, ','))
+                for (auto pt_axis : std::views::split(pt, ','))
                 {
-                    int x          = atoi(xStr.c_str()) + (int)objectGroup->getPositionOffset().x;
-                    pointDict["x"] = Value(x);
+                    int axisVal = 0;
+                    std::from_chars(pt_axis.data(), pt_axis.data() + pt_axis.size(), axisVal, 10);
+                    switch (idx++)
+                    {
+                    case 0:
+                        pointDict["x"] = Value(axisVal + offsetX);
+                        break;
+                    case 1:
+                        pointDict["y"] = Value(axisVal + offsetY);
+                        break;
+                    }
+                    if (idx == 2)
+                        break;
                 }
-
-                // set y
-                if (std::getline(pointStream, yStr, ','))
-                {
-                    int y          = atoi(yStr.c_str()) + (int)objectGroup->getPositionOffset().y;
-                    pointDict["y"] = Value(y);
-                }
-
                 // add to points array
-                pointsArray.emplace_back(Value(pointDict));
+                pointsArray.emplace_back(Value(std::move(pointDict)));
             }
-
-            dict["polylinePoints"] = Value(pointsArray);
+            dict["polylinePoints"] = Value(std::move(pointsArray));
         }
     }
     else if (elementName == "animation")
@@ -701,7 +696,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             tmxMapInfo->setStoringCharacters(false);
 
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
-            auto currentString = tmxMapInfo->getCurrentString();
+            auto currentString  = tmxMapInfo->getCurrentString();
 
             auto buffer = utils::base64Decode(currentString);
             if (buffer.empty())
@@ -712,7 +707,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
 
             if (tmxMapInfo->getLayerAttribs() & (TMXLayerAttribGzip | TMXLayerAttribZlib))
             {
-                Vec2 s                  = layer->_layerSize;
+                Vec2 s = layer->_layerSize;
                 // int sizeHint = s.width * s.height * sizeof(uint32_t);
                 ssize_t sizeHint = s.width * s.height * sizeof(unsigned int);
 
@@ -741,31 +736,17 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             tmxMapInfo->setStoringCharacters(false);
             auto currentString = tmxMapInfo->getCurrentString();
 
-            std::vector<std::string> gidTokens;
-            std::stringstream filestr;
-            filestr << currentString;
-            std::string sRow;
-            while (std::getline(filestr, sRow, '\n'))
-            {
-                std::string sGID;
-                std::istringstream rowstr(sRow);
-                while (std::getline(rowstr, sGID, ','))
-                {
-                    gidTokens.emplace_back(sGID);
-                }
-            }
+            axstd::pod_vector<uint32_t> tileGids;
+            axstd::split_cb(currentString, '\n', [&tileGids](const char* first, const char* last) {
+                axstd::split_cb(std::string_view{first, static_cast<size_t>(last - first)}, ',',
+                                [&tileGids](const char* _first, const char* _last) {
+                    unsigned int gid{0};
+                    std::from_chars(_first, _last, gid);
+                    tileGids.push_back(gid);
+                });
+            });
 
-            // 32-bits per gid
-            axstd::pod_vector<uint32_t> buffer(gidTokens.size());
-            uint32_t* bufferPtr = buffer.data();
-            for (const auto& gidToken : gidTokens)
-            {
-                auto tileGid = (uint32_t)strtoul(gidToken.c_str(), nullptr, 10);
-                *bufferPtr   = tileGid;
-                bufferPtr++;
-            }
-
-            layer->_tiles = buffer.release_pointer();
+            layer->_tiles = tileGids.release_pointer();
 
             tmxMapInfo->setCurrentString("");
         }
@@ -884,4 +865,4 @@ TMXTileAnimInfo* TMXTileAnimInfo::create(uint32_t tileID)
     return ret;
 }
 
-}
+}  // namespace ax
