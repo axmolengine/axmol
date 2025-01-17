@@ -37,6 +37,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <fcntl.h>
+#include <ranges>
+#include <charconv>
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #    include <io.h>
@@ -70,51 +72,6 @@ static const size_t SEND_BUFSIZ = 512;
 //
 
 std::string Console::Utility::_prompt(PROMPT);
-
-// TODO: these general utils should be in a separate class
-//
-//  Trimming functions were taken from: http://stackoverflow.com/a/217605
-//  Since c++17, some parts of the standard library were removed, include "ptr_fun".
-
-// trim from start
-
-std::string& Console::Utility::ltrim(std::string& s)
-{
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) { return !std::isspace(ch); }));
-    return s;
-}
-
-// trim from end
-std::string& Console::Utility::rtrim(std::string& s)
-{
-    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) { return !std::isspace(ch); }).base(), s.end());
-    return s;
-}
-
-// trim from both ends
-std::string& Console::Utility::trim(std::string& s)
-{
-    return Console::Utility::ltrim(Console::Utility::rtrim(s));
-}
-
-std::vector<std::string>& Console::Utility::split(std::string_view s, char delim, std::vector<std::string>& elems)
-{
-    std::stringstream ss;
-    ss << s;
-    std::string item;
-    while (std::getline(ss, item, delim))
-    {
-        elems.emplace_back(item);
-    }
-    return elems;
-}
-
-std::vector<std::string> Console::Utility::split(std::string_view s, char delim)
-{
-    std::vector<std::string> elems;
-    Console::Utility::split(s, delim, elems);
-    return elems;
-}
 
 // isFloat taken from http://stackoverflow.com/questions/447206/c-isfloat-function
 bool Console::Utility::isFloat(std::string_view myString)
@@ -756,14 +713,13 @@ bool Console::parseCommand(socket_native_type fd)
             return false;
         }
     }
-    std::string cmdLine;
-    cmdLine       = std::string(buf);
-    auto commands = Console::Utility::split(cmdLine, _commandSeparator);
     try
     {
-        for (auto&& command : commands)
+        std::string_view cmdLine(buf);
+        for (auto rgn : std::views::split(cmdLine, _commandSeparator))
         {
-            performCommand(fd, Console::Utility::trim(command));
+            std::string_view command{&*rgn.begin(), static_cast<size_t>(std::ranges::distance(rgn))};
+            performCommand(fd, command);
         }
     }
     catch (const std::runtime_error& e)
@@ -778,30 +734,39 @@ bool Console::parseCommand(socket_native_type fd)
 
 void Console::performCommand(socket_native_type fd, std::string_view command)
 {
-    std::vector<std::string> args = Console::Utility::split(command, ' ');
-    if (args.empty())
+    if (command.empty())
     {
-        throw std::runtime_error("Unknown command. Type 'help' for options\n");
+        return;
     }
 
-    auto it = _commands.find(Console::Utility::trim(args[0]));
+    int index = 0;
+    hlookup::string_map<Command*>::iterator it;
+    std::string cmd_args;
+    for (auto rgn : std::views::split(command, ' '))
+    {
+        std::string_view cmd_arg{&*rgn.begin(), static_cast<size_t>(std::ranges::distance(rgn))};
+        if (index == 0)
+        {
+            it = _commands.find(StringUtils::trim(cmd_arg));
+            if (it == _commands.end())
+            {
+                AXLOGW("Unknown command {} . Type 'help' for options", command);
+                break;
+            }
+        }
+        else
+        {
+            if (index > 1)
+                cmd_args += ' ';
+            cmd_args += cmd_arg;
+        }
+        ++index;
+    }
+
     if (it != _commands.end())
     {
-        std::string args2;
-        for (size_t i = 1; i < args.size(); ++i)
-        {
-            if (i > 1)
-            {
-                args2 += ' ';
-            }
-            args2 += Console::Utility::trim(args[i]);
-        }
         auto cmd = it->second;
-        cmd->commandGeneric(fd, args2);
-    }
-    else
-    {
-        throw std::runtime_error(std::string{"Unknown command "}.append(command).append(". Type 'help' for options\n"));
+        cmd->commandGeneric(fd, cmd_args);
     }
 }
 
@@ -1163,14 +1128,35 @@ void Console::commandTexturesSubCommandFlush(socket_native_type /*fd*/, std::str
 
 void Console::commandTouchSubCommandTap(socket_native_type fd, std::string_view args)
 {
-    auto argv = Console::Utility::split(args, ' ');
-
-    if ((argv.size() == 3) && (Console::Utility::isFloat(argv[1]) && Console::Utility::isFloat(argv[2])))
+    int argi = 0;
+    float x, y;
+    for (auto rgn : std::views::split(args, ' '))
     {
+        std::string_view argv{&*rgn.begin(), static_cast<size_t>(std::ranges::distance(rgn))};
+        switch (argi++)
+        {
+        case 1:
+        {
+            char* endptr = nullptr;
+            // llvm clang std::from_chars not support floating convert yet
+            x = std::strtod(argv.data(), &endptr);
+        }
+        break;
+        case 2:
+        {
+            char* endptr = nullptr;
+            y            = std::strtod(argv.data(), &endptr);
+            break;
+        }
+        }
+        if (argi == 3)
+        {
+            break;
+        }
+    }
 
-        float x = (float)utils::atof(argv[1].c_str());
-        float y = (float)utils::atof(argv[2].c_str());
-
+    if (argi == 3)
+    {
         std::srand((unsigned)time(nullptr));
         _touchId         = rand();
         Scheduler* sched = Director::getInstance()->getScheduler();
@@ -1188,16 +1174,34 @@ void Console::commandTouchSubCommandTap(socket_native_type fd, std::string_view 
 
 void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_view args)
 {
-    auto argv = Console::Utility::split(args, ' ');
+    std::vector<std::string_view> argv;
+    for (auto rgn : std::views::split(args, ' '))
+    {
+        argv.emplace_back(&*rgn.begin(), static_cast<size_t>(std::ranges::distance(rgn)));
+    }
 
     if ((argv.size() == 5) && (Console::Utility::isFloat(argv[1])) && (Console::Utility::isFloat(argv[2])) &&
         (Console::Utility::isFloat(argv[3])) && (Console::Utility::isFloat(argv[4])))
     {
+        float points[4];
 
-        float x1 = (float)utils::atof(argv[1].c_str());
-        float y1 = (float)utils::atof(argv[2].c_str());
-        float x2 = (float)utils::atof(argv[3].c_str());
-        float y2 = (float)utils::atof(argv[4].c_str());
+        for (int i = 0; i < 4; ++i)
+        {
+            const auto& val    = argv[i + 1];
+            // const auto [_, ec] = std::from_chars(val.data(), val.data() + val.size(), points[i]);
+            // if (!!(int)ec)
+            // {
+            //     AXLOGW("invalid float number: {}", val);
+            //     return;
+            // }
+            char* endptr = nullptr;
+            points[i] = std::strtod(val.data(), &endptr);
+        }
+
+        float& x1 = points[0];
+        float& y1 = points[1];
+        float& x2 = points[2];
+        float& y2 = points[3];
 
         std::srand((unsigned)time(nullptr));
         _touchId = rand();
@@ -1430,4 +1434,4 @@ void Console::sendHelp(socket_native_type fd, const hlookup::string_map<Command*
     }
 }
 
-}
+}  // namespace ax

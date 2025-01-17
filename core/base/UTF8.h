@@ -68,9 +68,16 @@ inline std::string toString(T arg)
 }
 //#ifndef AX_CORE_PROFILE
 // DEPRECATED since axmol-2.1.4, use fmt::format instead
-std::string AX_DLL format(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
-std::string AX_DLL vformat(const char* format, va_list ap);
+AX_DLL std::string format(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
+AX_DLL std::string vformat(const char* format, va_list ap);
 //#endif
+
+AX_DLL std::string_view ltrim(std::string_view s);
+AX_DLL std::string_view rtrim(std::string_view s);
+inline std::string_view trim(std::string_view s)
+{
+    return ltrim(rtrim(s));
+}
 
 /**
  *  @brief Converts from UTF8 string to UTF16 string.
