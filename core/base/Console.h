@@ -69,15 +69,6 @@ public:
     class Utility
     {
     public:
-        // Trimming functions
-        static std::string& ltrim(std::string& s);
-        static std::string& rtrim(std::string& s);
-        static std::string& trim(std::string& s);
-
-        // split
-        static std::vector<std::string>& split(std::string_view s, char delim, std::vector<std::string>& elems);
-        static std::vector<std::string> split(std::string_view s, char delim);
-
         /** Checks myString is a floating-point type. */
         static bool isFloat(std::string_view myString);
 

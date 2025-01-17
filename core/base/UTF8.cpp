@@ -117,6 +117,35 @@ std::string vformat(const char* format, va_list ap)
     return buf;
 }
 //#endif
+
+
+std::string_view ltrim(std::string_view s)
+{
+    if(!s.empty()) {
+        auto first = s.data();
+        auto last = first + s.length();
+        while(first < last && std::isspace(*first)) {
+            ++first;
+        }
+        return std::string_view{first, static_cast<size_t>(last - first)};
+    }
+    return s;
+}
+
+std::string_view rtrim(std::string_view s)
+{
+    if(!s.empty()) {
+        auto first = s.data();
+        auto last = first + s.length();
+        auto rfirst = last - 1;
+        while(rfirst > first && std::isspace(*rfirst)) {
+            --rfirst;
+        }
+        return std::string_view{first, static_cast<size_t>(rfirst + 1 - first)};
+    }
+    return s;
+}
+
 /*
  * @str:    the string to search through.
  * @c:        the character to not look for.
