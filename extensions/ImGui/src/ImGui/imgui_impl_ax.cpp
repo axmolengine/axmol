@@ -674,6 +674,14 @@ static bool ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks, Glfw
     // GLFW will emit an error which will often be printed by the app, so we temporarily disable error reporting.
     // Missing cursors will return nullptr and our _UpdateMouseCursor() function will use the Arrow cursor instead.)
     GLFWerrorfun prev_error_callback = glfwSetErrorCallback(nullptr);
+
+    // axmol spec: Fix wasm64 javascript exception
+    // Note: The WASM actually not support glfwCreateStandardCursor until emsdk-4.0.1 Jan.17 2025
+    // Uncaught TypeError: Cannot convert undefined to a BigInt
+    //     at BigInt (<anonymous>)
+    //     at _glfwCreateStandardCursor (http://localhost:6931/cpp-tests.js:16617:12)
+    //     at cpp-tests.wasm.ImGui_ImplGlfw_Init(GLFWwindow*, bool, GlfwClientApi)
+#ifndef __EMSCRIPTEN__
     bd->MouseCursors[ImGuiMouseCursor_Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
     bd->MouseCursors[ImGuiMouseCursor_TextInput] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
     bd->MouseCursors[ImGuiMouseCursor_ResizeNS] = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
@@ -689,6 +697,7 @@ static bool ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks, Glfw
     bd->MouseCursors[ImGuiMouseCursor_ResizeNESW] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
     bd->MouseCursors[ImGuiMouseCursor_ResizeNWSE] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
     bd->MouseCursors[ImGuiMouseCursor_NotAllowed] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+#endif
 #endif
     glfwSetErrorCallback(prev_error_callback);
 #if GLFW_HAS_GETERROR && !defined(__EMSCRIPTEN__) // Eat errors (see #5908)
@@ -1098,7 +1107,7 @@ struct ImGui_ImplGlfw_ViewportData
     WNDPROC     PrevWndProc;
 #endif
 
-    ImGui_ImplGlfw_ViewportData()  { memset(this, 0, sizeof(*this)); IgnoreWindowSizeEventFrame = IgnoreWindowPosEventFrame = -1; }
+    ImGui_ImplGlfw_ViewportData()  { memset((void*)this, 0, sizeof(*this)); IgnoreWindowSizeEventFrame = IgnoreWindowPosEventFrame = -1; }
     ~ImGui_ImplGlfw_ViewportData() { IM_ASSERT(Window == nullptr); }
 };
 
