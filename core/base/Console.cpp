@@ -38,7 +38,7 @@
 #include <time.h>
 #include <fcntl.h>
 #include <ranges>
-#include <charconv>
+#include <base/charconv.h>
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #    include <io.h>
@@ -1136,18 +1136,11 @@ void Console::commandTouchSubCommandTap(socket_native_type fd, std::string_view 
         switch (argi++)
         {
         case 1:
-        {
-            char* endptr = nullptr;
-            // llvm clang std::from_chars not support floating convert yet
-            x = std::strtod(argv.data(), &endptr);
-        }
-        break;
-        case 2:
-        {
-            char* endptr = nullptr;
-            y            = std::strtod(argv.data(), &endptr);
+            axstd::from_chars(argv.data(), argv.data() + argv.length(), x);
             break;
-        }
+        case 2:
+            axstd::from_chars(argv.data(), argv.data() + argv.length(), x);
+            break;
         }
         if (argi == 3)
         {
@@ -1187,7 +1180,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
 
         for (int i = 0; i < 4; ++i)
         {
-            const auto& val    = argv[i + 1];
+            const auto& val = argv[i + 1];
             // const auto [_, ec] = std::from_chars(val.data(), val.data() + val.size(), points[i]);
             // if (!!(int)ec)
             // {
@@ -1195,7 +1188,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
             //     return;
             // }
             char* endptr = nullptr;
-            points[i] = std::strtod(val.data(), &endptr);
+            points[i]    = std::strtod(val.data(), &endptr);
         }
 
         float& x1 = points[0];

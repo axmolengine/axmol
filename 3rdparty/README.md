@@ -55,6 +55,11 @@
 - Version: git 344eb40 (121)
 - License: MIT
 
+## fast_float
+- [![Upstream](https://img.shields.io/github/v/release/fastfloat/fast_float?label=Upstream)](https://github.com/fastfloat/fast_float)
+- Version: 7.0.0-482cc1f (until Jan 17, 2025)
+- License: MIT
+
 ## flatbuffers
 - [![Upstream](https://img.shields.io/github/v/release/google/flatbuffers?label=Upstream)](https://github.com/google/flatbuffers)
 - Version: 25.2.10
