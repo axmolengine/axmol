@@ -28,10 +28,8 @@
 
 #include "base/Data.h"
 #include "3d/Bundle3DData.h"
-#include "3d/BundleReader.h"
-#include "rapidjson/rapidjson.h"
-#include "rapidjson/document.h"
-
+#include "base/json.h"
+#include "yasio/ibstream.hpp"
 
 namespace ax
 {
@@ -149,7 +147,7 @@ protected:
      * load nodes of json
      */
     bool loadNodesJson(NodeDatas& nodedatas);
-    NodeData* parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bool singleSprite);
+    NodeData* parseNodesRecursivelyJson(simdjson::simdjson_result<simdjson::ondemand::value> jvalue, bool singleSprite);
 
     /**
      * load nodes of binary
@@ -188,12 +186,13 @@ protected:
     std::string _version;  // the c3b or c3t version
 
     // for json reading
-    std::string _jsonBuffer;
-    rapidjson::Document _jsonReader;
+    simdjson::PaddedString _jsonBuffer;
+    simdjson::ondemand::parser _jsonParser;
+    simdjson::ondemand::document _jsonReader;
 
     // for binary reading
     Data _binaryBuffer;
-    BundleReader _binaryReader;
+    yasio::fast_ibstream_view _binaryReader;
     unsigned int _referenceCount;
     Reference* _references;
     bool _isBinary;

@@ -38,8 +38,7 @@
 #include <string>
 
 #include "3d/3DProgramInfo.h"
-
-#include "yasio/byte_buffer.hpp"
+#include "base/axstd.h"
 
 namespace ax
 {
@@ -313,7 +312,7 @@ struct MeshData
     std::vector<std::string> subMeshIds;  // subMesh Names (since 3.3)
     std::vector<AABB> subMeshAABB;
     int numIndex;
-    std::vector<MeshVertexAttrib> attribs;
+    axstd::pod_vector<MeshVertexAttrib> attribs;
     int attribCount;
 
 public:
@@ -527,9 +526,9 @@ public:
     };
 
 public:
-    std::map<std::string, std::vector<Vec3Key>> _translationKeys;
-    std::map<std::string, std::vector<QuatKey>> _rotationKeys;
-    std::map<std::string, std::vector<Vec3Key>> _scaleKeys;
+    hlookup::string_map<std::vector<Vec3Key>> _translationKeys;
+    hlookup::string_map<std::vector<QuatKey>> _rotationKeys;
+    hlookup::string_map<std::vector<Vec3Key>> _scaleKeys;
 
     float _totalTime;
 
