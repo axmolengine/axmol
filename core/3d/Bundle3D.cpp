@@ -29,22 +29,21 @@ THE SOFTWARE.
 
 #include "base/Macros.h"
 #include "platform/FileUtils.h"
-#include "3d/BundleReader.h"
 #include "base/Data.h"
 
-#define BUNDLE_TYPE_SCENE 1
-#define BUNDLE_TYPE_NODE 2
-#define BUNDLE_TYPE_ANIMATIONS 3
-#define BUNDLE_TYPE_ANIMATION 4
+#define BUNDLE_TYPE_SCENE             1
+#define BUNDLE_TYPE_NODE              2
+#define BUNDLE_TYPE_ANIMATIONS        3
+#define BUNDLE_TYPE_ANIMATION         4
 #define BUNDLE_TYPE_ANIMATION_CHANNEL 5
-#define BUNDLE_TYPE_MODEL 10
-#define BUNDLE_TYPE_MATERIAL 16
-#define BUNDLE_TYPE_EFFECT 18
-#define BUNDLE_TYPE_CAMERA 32
-#define BUNDLE_TYPE_LIGHT 33
-#define BUNDLE_TYPE_MESH 34
-#define BUNDLE_TYPE_MESHPART 35
-#define BUNDLE_TYPE_MESHSKIN 36
+#define BUNDLE_TYPE_MODEL             10
+#define BUNDLE_TYPE_MATERIAL          16
+#define BUNDLE_TYPE_EFFECT            18
+#define BUNDLE_TYPE_CAMERA            32
+#define BUNDLE_TYPE_LIGHT             33
+#define BUNDLE_TYPE_MESH              34
+#define BUNDLE_TYPE_MESHPART          35
+#define BUNDLE_TYPE_MESHSKIN          36
 
 static const char* VERSION       = "version";
 static const char* ID            = "id";
@@ -91,23 +90,26 @@ static const char* AABBS         = "aabb";
 
 namespace ax
 {
-
-void getChildMap(std::map<int, std::vector<int>>& map, SkinData* skinData, const rapidjson::Value& val)
+using namespace simdjson;
+void getChildMap(std::map<int, std::vector<int>>& map,
+                 SkinData* skinData,
+                 simdjson::simdjson_result<ondemand::value>& val)
 {
     if (!skinData)
         return;
 
     // get transform matrix
     Mat4 transform;
-    const rapidjson::Value& parent_transform = val[OLDTRANSFORM];
-    for (rapidjson::SizeType j = 0, size = parent_transform.Size(); j < size; ++j)
+    auto parent_transform = val.get_object()[OLDTRANSFORM];
+    int j                 = 0;
+    for (auto vv : val)
     {
-        transform.m[j] = parent_transform[j].GetFloat();
+        transform.m[j++] = static_cast<double>(vv);
     }
 
     // set origin matrices
-    std::string parent_name = val[ID].GetString();
-    int parent_name_index   = skinData->getSkinBoneNameIndex(parent_name);
+    std::string_view parent_name = val[ID];
+    int parent_name_index        = skinData->getSkinBoneNameIndex(parent_name);
     if (parent_name_index < 0)
     {
         skinData->addNodeBoneNames(parent_name);
@@ -123,17 +125,13 @@ void getChildMap(std::map<int, std::vector<int>>& map, SkinData* skinData, const
     if (skinData->rootBoneIndex < 0)
         skinData->rootBoneIndex = parent_name_index;
 
-    if (!val.HasMember(CHILDREN))
+    auto children = val[CHILDREN];
+    if (children.is_null())
         return;
-
-    const rapidjson::Value& children = val[CHILDREN];
-    for (rapidjson::SizeType i = 0, size = children.Size(); i < size; ++i)
+    for (auto child : children)
     {
-        // get child bone name
-        const rapidjson::Value& child = children[i];
-
-        std::string child_name = child[ID].GetString();
-        int child_name_index   = skinData->getSkinBoneNameIndex(child_name);
+        std::string_view child_name = child[ID];
+        int child_name_index        = skinData->getSkinBoneNameIndex(child_name);
         if (child_name_index < 0)
         {
             skinData->addNodeBoneNames(child_name);
@@ -394,100 +392,79 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
 {
     if (!seekToFirstType(BUNDLE_TYPE_MESH))
         return false;
-    unsigned int meshSize = 0;
-    if (_binaryReader.read(&meshSize, 4, 1) != 1)
-    {
-        AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
-        return false;
-    }
     MeshData* meshData = nullptr;
-    for (unsigned int i = 0; i < meshSize; ++i)
+    try
     {
-        unsigned int attribSize = 0;
-        // read mesh data
-        if (_binaryReader.read(&attribSize, 4, 1) != 1 || attribSize < 1)
+        unsigned int meshSize = _binaryReader.read<unsigned int>();
+        for (unsigned int i = 0; i < meshSize; ++i)
         {
-            AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
-            goto FAILED;
-        }
-        meshData              = new MeshData();
-        meshData->attribCount = attribSize;
-        meshData->attribs.resize(meshData->attribCount);
-        for (ssize_t j = 0; j < meshData->attribCount; ++j)
-        {
-            std::string attribute = "";
-            unsigned int vSize;
-            if (_binaryReader.read(&vSize, 4, 1) != 1)
+            unsigned int attribSize = _binaryReader.read<unsigned int>();
+            
+            // read mesh data
+            if (attribSize < 1)
             {
-                AXLOGW("warning: Failed to read meshdata: usage or size '{}'.", _path);
+                AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
                 goto FAILED;
             }
-            std::string type                  = _binaryReader.readString();
-            attribute                         = _binaryReader.readString();
-            meshData->attribs[j].type         = parseGLDataType(type, vSize);
-            meshData->attribs[j].vertexAttrib = parseGLProgramAttribute(attribute);
-        }
-        unsigned int vertexSizeInFloat = 0;
-        // Read vertex data
-        if (_binaryReader.read(&vertexSizeInFloat, 4, 1) != 1 || vertexSizeInFloat == 0)
-        {
-            AXLOGW("warning: Failed to read meshdata: vertexSizeInFloat '{}'.", _path);
-            goto FAILED;
-        }
-
-        meshData->vertex.resize(vertexSizeInFloat);
-        if (_binaryReader.read(&meshData->vertex[0], 4, vertexSizeInFloat) != vertexSizeInFloat)
-        {
-            AXLOGW("warning: Failed to read meshdata: vertex element '{}'.", _path);
-            goto FAILED;
-        }
-
-        // Read index data
-        unsigned int meshPartCount = 1;
-        _binaryReader.read(&meshPartCount, 4, 1);
-
-        for (unsigned int k = 0; k < meshPartCount; ++k)
-        {
-            IndexArray indexArray{};
-            std::string meshPartid = _binaryReader.readString();
-            meshData->subMeshIds.emplace_back(meshPartid);
-            unsigned int nIndexCount;
-            if (_binaryReader.read(&nIndexCount, 4, 1) != 1)
+            meshData              = new MeshData();
+            meshData->attribCount = attribSize;
+            meshData->attribs.resize(meshData->attribCount);
+            for (ssize_t j = 0; j < meshData->attribCount; ++j)
             {
-                AXLOGW("warning: Failed to read meshdata: nIndexCount '{}'.", _path);
+                unsigned int vSize                = _binaryReader.read<unsigned int>();
+                std::string_view type             = _binaryReader.read_v32();
+                std::string_view attribute        = _binaryReader.read_v32();
+                meshData->attribs[j].type         = parseGLDataType(type, vSize);
+                meshData->attribs[j].vertexAttrib = parseGLProgramAttribute(attribute);
+            }
+            unsigned int vertexSizeInFloat = _binaryReader.read<unsigned int>();
+            // Read vertex data
+            if (vertexSizeInFloat == 0)
+            {
+                AXLOGW("warning: Failed to read meshdata: vertexSizeInFloat '{}'.", _path);
                 goto FAILED;
             }
-            indexArray.resize(nIndexCount);
-            if (_binaryReader.read(indexArray.data(), 2, nIndexCount) != nIndexCount)
+
+            meshData->vertex.resize(vertexSizeInFloat);
+
+            _binaryReader.read_blob(&meshData->vertex[0], 4, vertexSizeInFloat);
+
+            // Read index data
+            unsigned int meshPartCount = _binaryReader.read<unsigned int>();
+            for (unsigned int k = 0; k < meshPartCount; ++k)
             {
-                AXLOGW("warning: Failed to read meshdata: indices '{}'.", _path);
-                goto FAILED;
-            }
-            auto& storedIndices = meshData->subMeshIndices.emplace_back(std::move(indexArray));
-            meshData->numIndex = (int)meshData->subMeshIndices.size();
-            // meshData->subMeshAABB.emplace_back(calculateAABB(meshData->vertex, meshData->getPerVertexSize(),
-            // indexArray));
-            if (_version != "0.3" && _version != "0.4" && _version != "0.5")
-            {
-                // read mesh aabb
-                float aabb[6];
-                if (_binaryReader.read(aabb, 4, 6) != 6)
+                IndexArray indexArray{};
+                std::string_view meshPartid = _binaryReader.read_v32();
+                meshData->subMeshIds.emplace_back(meshPartid);
+                unsigned int nIndexCount = _binaryReader.read<unsigned int>();
+                indexArray.resize(nIndexCount);
+                _binaryReader.read_blob(indexArray.data(), 2, nIndexCount);
+                auto& storedIndices = meshData->subMeshIndices.emplace_back(std::move(indexArray));
+                meshData->numIndex  = (int)meshData->subMeshIndices.size();
+                // meshData->subMeshAABB.emplace_back(calculateAABB(meshData->vertex, meshData->getPerVertexSize(),
+                // indexArray));
+                if (_version != "0.3" && _version != "0.4" && _version != "0.5")
                 {
-                    AXLOGW("warning: Failed to read meshdata: aabb '{}'.", _path);
-                    goto FAILED;
+                    // read mesh aabb
+                    Vec3 aabb[2];
+                    _binaryReader.read_blob(aabb);
+                    meshData->subMeshAABB.emplace_back(AABB(aabb[0], aabb[1]));
                 }
-                meshData->subMeshAABB.emplace_back(AABB(Vec3(aabb[0], aabb[1], aabb[2]), Vec3(aabb[3], aabb[4], aabb[5])));
+                else
+                {
+                    meshData->subMeshAABB.emplace_back(
+                        calculateAABB(meshData->vertex, meshData->getPerVertexSize(), storedIndices));
+                }
             }
-            else
-            {
-                meshData->subMeshAABB.emplace_back(
-                    calculateAABB(meshData->vertex, meshData->getPerVertexSize(), storedIndices));
-            }
+            meshdatas.meshDatas.emplace_back(meshData);
         }
-        meshdatas.meshDatas.emplace_back(meshData);
-    }
-    return true;
 
+        return true;
+    }
+    catch (const std::exception& ex)
+    {
+        AXLOGW("exception occurred: {}", ex.what());
+    }
 FAILED:
 {
     AX_SAFE_DELETE(meshData);
@@ -508,113 +485,103 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
 
     MeshData* meshdata = new MeshData();
 
-    // read mesh data
-    unsigned int attribSize = 0;
-    if (_binaryReader.read(&attribSize, 4, 1) != 1 || attribSize < 1)
+    try
     {
-        AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
-        AX_SAFE_DELETE(meshdata);
-        return false;
-    }
-    enum
-    {
-        VERTEX_ATTRIB_POSITION,
-        VERTEX_ATTRIB_COLOR,
-        VERTEX_ATTRIB_TEX_COORD,
-        VERTEX_ATTRIB_NORMAL,
-        VERTEX_ATTRIB_BLEND_WEIGHT,
-        VERTEX_ATTRIB_BLEND_INDEX,
-
-        VERTEX_ATTRIB_MAX,
-
-        // backward compatibility
-        VERTEX_ATTRIB_TEX_COORDS = VERTEX_ATTRIB_TEX_COORD,
-    };
-    for (unsigned int i = 0; i < attribSize; ++i)
-    {
-        unsigned int vUsage, vSize;
-        shaderinfos::VertexKey usage;
-        if (_binaryReader.read(&vUsage, 4, 1) != 1 || _binaryReader.read(&vSize, 4, 1) != 1)
+        // read mesh data
+        unsigned int attribSize = _binaryReader.read<unsigned int>();
+        if (attribSize < 1)
         {
-            AXLOGW("warning: Failed to read meshdata: usage or size '{}'.", _path);
+            AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
+            AX_SAFE_DELETE(meshdata);
+            return false;
+        }
+        enum
+        {
+            VERTEX_ATTRIB_POSITION,
+            VERTEX_ATTRIB_COLOR,
+            VERTEX_ATTRIB_TEX_COORD,
+            VERTEX_ATTRIB_NORMAL,
+            VERTEX_ATTRIB_BLEND_WEIGHT,
+            VERTEX_ATTRIB_BLEND_INDEX,
+
+            VERTEX_ATTRIB_MAX,
+
+            // backward compatibility
+            VERTEX_ATTRIB_TEX_COORDS = VERTEX_ATTRIB_TEX_COORD,
+        };
+        for (unsigned int i = 0; i < attribSize; ++i)
+        {
+            auto vUsage = _binaryReader.read<unsigned int>();
+            auto vSize  = _binaryReader.read<unsigned int>();
+            shaderinfos::VertexKey usage;
+
+            MeshVertexAttrib meshVertexAttribute;
+            meshVertexAttribute.type = parseGLDataType("GL_FLOAT", vSize);
+            if (vUsage == VERTEX_ATTRIB_NORMAL)
+            {
+                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
+            }
+            else if (vUsage == VERTEX_ATTRIB_BLEND_WEIGHT)
+            {
+                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_WEIGHT;
+            }
+            else if (vUsage == VERTEX_ATTRIB_BLEND_INDEX)
+            {
+                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_INDEX;
+            }
+            else if (vUsage == VERTEX_ATTRIB_POSITION)
+            {
+                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
+            }
+            else if (vUsage == VERTEX_ATTRIB_TEX_COORD)
+            {
+                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
+            }
+            else
+            {
+                AXASSERT(false, "invalidate usage value");
+            }
+            meshVertexAttribute.vertexAttrib = usage;
+
+            meshdata->attribs.emplace_back(meshVertexAttribute);
+        }
+
+        // Read vertex data
+        meshdata->vertexSizeInFloat = _binaryReader.read<int>();
+        if (meshdata->vertexSizeInFloat == 0)
+        {
+            AXLOGW("warning: Failed to read meshdata: vertexSizeInFloat '{}'.", _path);
             AX_SAFE_DELETE(meshdata);
             return false;
         }
 
-        MeshVertexAttrib meshVertexAttribute;
-        meshVertexAttribute.type = parseGLDataType("GL_FLOAT", vSize);
-        if (vUsage == VERTEX_ATTRIB_NORMAL)
-        {
-            usage = shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
-        }
-        else if (vUsage == VERTEX_ATTRIB_BLEND_WEIGHT)
-        {
-            usage = shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_WEIGHT;
-        }
-        else if (vUsage == VERTEX_ATTRIB_BLEND_INDEX)
-        {
-            usage = shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_INDEX;
-        }
-        else if (vUsage == VERTEX_ATTRIB_POSITION)
-        {
-            usage = shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
-        }
-        else if (vUsage == VERTEX_ATTRIB_TEX_COORD)
-        {
-            usage = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
-        }
-        else
-        {
-            AXASSERT(false, "invalidate usage value");
-        }
-        meshVertexAttribute.vertexAttrib = usage;
+        meshdata->vertex.resize(meshdata->vertexSizeInFloat);
+        _binaryReader.read_blob(&meshdata->vertex[0], 4, meshdata->vertexSizeInFloat);
 
-        meshdata->attribs.emplace_back(meshVertexAttribute);
+        // Read index data
+        unsigned int meshPartCount = 1;
+        for (unsigned int i = 0; i < meshPartCount; ++i)
+        {
+            unsigned int nIndexCount = _binaryReader.read<unsigned int>();
+
+            IndexArray indices{};
+            indices.resize(nIndexCount);
+            _binaryReader.read_blob(indices.data(), 2, nIndexCount);
+
+            auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(indices));
+            meshdata->subMeshAABB.emplace_back(
+                calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
+        }
+
+        meshdatas.meshDatas.emplace_back(meshdata);
+
+        return true;
     }
-
-    // Read vertex data
-    if (_binaryReader.read(&meshdata->vertexSizeInFloat, 4, 1) != 1 || meshdata->vertexSizeInFloat == 0)
+    catch (const std::exception& ex)
     {
-        AXLOGW("warning: Failed to read meshdata: vertexSizeInFloat '{}'.", _path);
-        AX_SAFE_DELETE(meshdata);
-        return false;
+        AXLOGW("exception occurred: {}", ex.what());
     }
-
-    meshdata->vertex.resize(meshdata->vertexSizeInFloat);
-    if (_binaryReader.read(&meshdata->vertex[0], 4, meshdata->vertexSizeInFloat) != meshdata->vertexSizeInFloat)
-    {
-        AXLOGW("warning: Failed to read meshdata: vertex element '{}'.", _path);
-        AX_SAFE_DELETE(meshdata);
-        return false;
-    }
-
-    // Read index data
-    unsigned int meshPartCount = 1;
-    for (unsigned int i = 0; i < meshPartCount; ++i)
-    {
-        unsigned int nIndexCount;
-        if (_binaryReader.read(&nIndexCount, 4, 1) != 1)
-        {
-            AXLOGW("warning: Failed to read meshdata: nIndexCount '{}'.", _path);
-            AX_SAFE_DELETE(meshdata);
-            return false;
-        }
-
-        IndexArray indices{};
-        indices.resize(nIndexCount);
-        if (_binaryReader.read(indices.data(), 2, nIndexCount) != nIndexCount)
-        {
-            AXLOGW("warning: Failed to read meshdata: indices '{}'.", _path);
-            AX_SAFE_DELETE(meshdata);
-            return false;
-        }
-
-        auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(indices));
-        meshdata->subMeshAABB.emplace_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
-    }
-
-    meshdatas.meshDatas.emplace_back(meshdata);
-    return true;
+    return false;
 }
 
 bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
@@ -626,182 +593,183 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
 
     MeshData* meshdata = new MeshData();
 
-    // read mesh data
-    unsigned int attribSize = 0;
-    if (_binaryReader.read(&attribSize, 4, 1) != 1 || attribSize < 1)
+    try
     {
-        AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
-        AX_SAFE_DELETE(meshdata);
-        return false;
-    }
-    enum
-    {
-        VERTEX_ATTRIB_POSITION,
-        VERTEX_ATTRIB_COLOR,
-        VERTEX_ATTRIB_TEX_COORD,
-        VERTEX_ATTRIB_NORMAL,
-        VERTEX_ATTRIB_BLEND_WEIGHT,
-        VERTEX_ATTRIB_BLEND_INDEX,
-
-        VERTEX_ATTRIB_MAX,
-
-        // backward compatibility
-        VERTEX_ATTRIB_TEX_COORDS = VERTEX_ATTRIB_TEX_COORD,
-    };
-    for (unsigned int i = 0; i < attribSize; ++i)
-    {
-        unsigned int vUsage, vSize;
-        shaderinfos::VertexKey usage = shaderinfos::VertexKey::VERTEX_ATTRIB_ERROR;
-        if (_binaryReader.read(&vUsage, 4, 1) != 1 || _binaryReader.read(&vSize, 4, 1) != 1)
+        // read mesh data
+        unsigned int attribSize = 0;
+        if (_binaryReader.read_blob(attribSize) != 1 || attribSize < 1)
         {
-            AXLOGW("warning: Failed to read meshdata: usage or size '{}'.", _path);
+            AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
+            AX_SAFE_DELETE(meshdata);
+            return false;
+        }
+        enum
+        {
+            VERTEX_ATTRIB_POSITION,
+            VERTEX_ATTRIB_COLOR,
+            VERTEX_ATTRIB_TEX_COORD,
+            VERTEX_ATTRIB_NORMAL,
+            VERTEX_ATTRIB_BLEND_WEIGHT,
+            VERTEX_ATTRIB_BLEND_INDEX,
+
+            VERTEX_ATTRIB_MAX,
+
+            // backward compatibility
+            VERTEX_ATTRIB_TEX_COORDS = VERTEX_ATTRIB_TEX_COORD,
+        };
+        for (unsigned int i = 0; i < attribSize; ++i)
+        {
+            unsigned int vUsage, vSize;
+            shaderinfos::VertexKey usage = shaderinfos::VertexKey::VERTEX_ATTRIB_ERROR;
+            if (_binaryReader.read_blob(vUsage) != 1 || _binaryReader.read_blob(vSize) != 1)
+            {
+                AXLOGW("warning: Failed to read meshdata: usage or size '{}'.", _path);
+                AX_SAFE_DELETE(meshdata);
+                return false;
+            }
+
+            MeshVertexAttrib meshVertexAttribute;
+            meshVertexAttribute.type = parseGLDataType("GL_FLOAT", vSize);
+            if (vUsage == VERTEX_ATTRIB_NORMAL)
+            {
+                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
+            }
+            else if (vUsage == VERTEX_ATTRIB_BLEND_WEIGHT)
+            {
+                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_WEIGHT;
+            }
+            else if (vUsage == VERTEX_ATTRIB_BLEND_INDEX)
+            {
+                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_INDEX;
+            }
+            else if (vUsage == VERTEX_ATTRIB_POSITION)
+            {
+                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
+            }
+            else if (vUsage == VERTEX_ATTRIB_TEX_COORD)
+            {
+                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
+            }
+            meshVertexAttribute.vertexAttrib = usage;
+
+            meshdata->attribs.emplace_back(meshVertexAttribute);
+        }
+
+        // Read vertex data
+        if (_binaryReader.read_blob(&meshdata->vertexSizeInFloat, 4, 1) != 1 || meshdata->vertexSizeInFloat == 0)
+        {
+            AXLOGW("warning: Failed to read meshdata: vertexSizeInFloat '{}'.", _path);
             AX_SAFE_DELETE(meshdata);
             return false;
         }
 
-        MeshVertexAttrib meshVertexAttribute;
-        meshVertexAttribute.type = parseGLDataType("GL_FLOAT", vSize);
-        if (vUsage == VERTEX_ATTRIB_NORMAL)
+        meshdata->vertex.resize(meshdata->vertexSizeInFloat);
+        if (_binaryReader.read_blob(&meshdata->vertex[0], 4, meshdata->vertexSizeInFloat) != meshdata->vertexSizeInFloat)
         {
-            usage = shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
-        }
-        else if (vUsage == VERTEX_ATTRIB_BLEND_WEIGHT)
-        {
-            usage = shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_WEIGHT;
-        }
-        else if (vUsage == VERTEX_ATTRIB_BLEND_INDEX)
-        {
-            usage = shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_INDEX;
-        }
-        else if (vUsage == VERTEX_ATTRIB_POSITION)
-        {
-            usage = shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
-        }
-        else if (vUsage == VERTEX_ATTRIB_TEX_COORD)
-        {
-            usage = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
-        }
-        meshVertexAttribute.vertexAttrib = usage;
-
-        meshdata->attribs.emplace_back(meshVertexAttribute);
-    }
-
-    // Read vertex data
-    if (_binaryReader.read(&meshdata->vertexSizeInFloat, 4, 1) != 1 || meshdata->vertexSizeInFloat == 0)
-    {
-        AXLOGW("warning: Failed to read meshdata: vertexSizeInFloat '{}'.", _path);
-        AX_SAFE_DELETE(meshdata);
-        return false;
-    }
-
-    meshdata->vertex.resize(meshdata->vertexSizeInFloat);
-    if (_binaryReader.read(&meshdata->vertex[0], 4, meshdata->vertexSizeInFloat) != meshdata->vertexSizeInFloat)
-    {
-        AXLOGW("warning: Failed to read meshdata: vertex element '{}'.", _path);
-        AX_SAFE_DELETE(meshdata);
-        return false;
-    }
-
-    // read submesh
-    unsigned int submeshCount;
-    if (_binaryReader.read(&submeshCount, 4, 1) != 1)
-    {
-        AXLOGW("warning: Failed to read meshdata: submeshCount '{}'.", _path);
-        AX_SAFE_DELETE(meshdata);
-        return false;
-    }
-
-    for (unsigned int i = 0; i < submeshCount; ++i)
-    {
-        unsigned int nIndexCount;
-        if (_binaryReader.read(&nIndexCount, 4, 1) != 1)
-        {
-            AXLOGW("warning: Failed to read meshdata: nIndexCount '{}'.", _path);
+            AXLOGW("warning: Failed to read meshdata: vertex element '{}'.", _path);
             AX_SAFE_DELETE(meshdata);
             return false;
         }
 
-        IndexArray indices{}; /* TODO: _version == 1.3 use U_INT?*/
-        indices.resize(nIndexCount);
-        if (_binaryReader.read(indices.data(), 2, nIndexCount) != nIndexCount)
+        // read submesh
+        unsigned int submeshCount;
+        if (_binaryReader.read_blob(submeshCount) != 1)
         {
-            AXLOGW("warning: Failed to read meshdata: indices '{}'.", _path);
+            AXLOGW("warning: Failed to read meshdata: submeshCount '{}'.", _path);
             AX_SAFE_DELETE(meshdata);
             return false;
         }
 
-        auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(indices));
-        meshdata->subMeshAABB.emplace_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
+        for (unsigned int i = 0; i < submeshCount; ++i)
+        {
+            unsigned int nIndexCount;
+            if (_binaryReader.read_blob(nIndexCount) != 1)
+            {
+                AXLOGW("warning: Failed to read meshdata: nIndexCount '{}'.", _path);
+                AX_SAFE_DELETE(meshdata);
+                return false;
+            }
+
+            IndexArray indices{}; /* TODO: _version == 1.3 use U_INT?*/
+            indices.resize(nIndexCount);
+            if (_binaryReader.read_blob(indices.data(), 2, nIndexCount) != nIndexCount)
+            {
+                AXLOGW("warning: Failed to read meshdata: indices '{}'.", _path);
+                AX_SAFE_DELETE(meshdata);
+                return false;
+            }
+
+            auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(indices));
+            meshdata->subMeshAABB.emplace_back(
+                calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
+        }
+
+        meshdatas.meshDatas.emplace_back(meshdata);
+        return true;
+    }
+    catch (const std::exception& ex)
+    {
+        AXLOGW("exception occurred: {}", ex.what());
     }
 
-    meshdatas.meshDatas.emplace_back(meshdata);
-
-    return true;
+    return false;
 }
 bool Bundle3D::loadMeshDatasJson(MeshDatas& meshdatas)
 {
-    const rapidjson::Value& mesh_data_array = _jsonReader[MESHES];
-    for (rapidjson::SizeType index = 0, mesh_data_array_size = mesh_data_array.Size(); index < mesh_data_array_size;
-         ++index)
+    auto mesh_data_array = _jsonReader[MESHES];
+    for (auto&& mesh_data : mesh_data_array)
     {
-        MeshData* meshData                = new MeshData();
-        const rapidjson::Value& mesh_data = mesh_data_array[index];
+        MeshData* meshData = new MeshData();
         // mesh_vertex_attribute
-        const rapidjson::Value& mesh_vertex_attribute = mesh_data[ATTRIBUTES];
-        MeshVertexAttrib tempAttrib;
-        meshData->attribCount = mesh_vertex_attribute.Size();
-        meshData->attribs.resize(meshData->attribCount);
-        for (rapidjson::SizeType i = 0, mesh_vertex_attribute_size = mesh_vertex_attribute.Size();
-             i < mesh_vertex_attribute_size; ++i)
+        auto&& mesh_vertex_attribute = mesh_data[ATTRIBUTES].get_array();
+
+        meshData->attribCount = mesh_vertex_attribute.count_elements();
+        meshData->attribs.reserve(meshData->attribCount);
+        for (auto&& mesh_vertex_attribute_val : mesh_vertex_attribute)
         {
-            const rapidjson::Value& mesh_vertex_attribute_val = mesh_vertex_attribute[i];
+            int size                   = static_cast<int>(mesh_vertex_attribute_val[ATTRIBUTESIZE]);
+            std::string_view type      = mesh_vertex_attribute_val[TYPE];
+            std::string_view attribute = mesh_vertex_attribute_val[ATTRIBUTE];
 
-            int size              = mesh_vertex_attribute_val[ATTRIBUTESIZE].GetInt();
-            std::string type      = mesh_vertex_attribute_val[TYPE].GetString();
-            std::string attribute = mesh_vertex_attribute_val[ATTRIBUTE].GetString();
-
-            tempAttrib.type         = parseGLDataType(type, size);
-            tempAttrib.vertexAttrib = parseGLProgramAttribute(attribute);
-            meshData->attribs[i]    = tempAttrib;
+            meshData->attribs.emplace_back(parseGLDataType(type, size), parseGLProgramAttribute(attribute));
         }
         // mesh vertices
         ////////////////////////////////////////////////////////////////////////////////////////////////
-        const rapidjson::Value& mesh_data_vertex_array = mesh_data[VERTICES];
-        auto mesh_data_vertex_array_size               = mesh_data_vertex_array.Size();
-        meshData->vertexSizeInFloat                    = mesh_data_vertex_array_size;
-        for (rapidjson::SizeType i = 0; i < mesh_data_vertex_array_size; ++i)
+        auto&& mesh_data_vertex_array = mesh_data[VERTICES].get_array();
+        for (auto&& vertex_val : mesh_data_vertex_array)
         {
-            meshData->vertex.emplace_back(mesh_data_vertex_array[i].GetFloat());
+            meshData->vertex.emplace_back(static_cast<double>(vertex_val));
         }
+        meshData->vertexSizeInFloat = meshData->vertex.size();
         // mesh part
         ////////////////////////////////////////////////////////////////////////////////////////////////
-        const rapidjson::Value& mesh_part_array = mesh_data[PARTS];
-        for (rapidjson::SizeType i = 0, mesh_part_array_size = mesh_part_array.Size(); i < mesh_part_array_size; ++i)
+        auto&& mesh_part_array = mesh_data[PARTS].get_array();
+        for (auto&& mesh_part : mesh_part_array)
         {
             IndexArray indexArray{};
-            const rapidjson::Value& mesh_part = mesh_part_array[i];
-            meshData->subMeshIds.emplace_back(mesh_part[ID].GetString());
+            meshData->subMeshIds.emplace_back(static_cast<std::string_view>(mesh_part[ID]));
             // index_number
-            const rapidjson::Value& indices_val_array = mesh_part[INDICES];
-            for (rapidjson::SizeType j = 0, indices_val_array_size = indices_val_array.Size();
-                 j < indices_val_array_size; ++j)
-                indexArray.emplace_back((unsigned short)indices_val_array[j].GetUint());
+            auto&& indices_val_array = mesh_part[INDICES];
+            for (auto&& indices_val : indices_val_array)
+                indexArray.emplace_back(static_cast<unsigned short>(indices_val));
 
             auto& storedIndices = meshData->subMeshIndices.emplace_back(std::move(indexArray));
-            meshData->numIndex = (int)meshData->subMeshIndices.size();
+            meshData->numIndex  = (int)meshData->subMeshIndices.size();
 
-            if (mesh_data.HasMember(AABBS))
+            auto&& mesh_part_aabb = mesh_part[AABBS];
+            if (!mesh_part_aabb.error())
             {
-                const rapidjson::Value& mesh_part_aabb = mesh_part[AABBS];
-                if (mesh_part.HasMember(AABBS) && mesh_part_aabb.Size() == 6)
+                if (mesh_part_aabb.count_elements() == 6)
                 {
-                    Vec3 min(mesh_part_aabb[(rapidjson::SizeType)0].GetFloat(),
-                             mesh_part_aabb[(rapidjson::SizeType)1].GetFloat(),
-                             mesh_part_aabb[(rapidjson::SizeType)2].GetFloat());
-                    Vec3 max(mesh_part_aabb[(rapidjson::SizeType)3].GetFloat(),
-                             mesh_part_aabb[(rapidjson::SizeType)4].GetFloat(),
-                             mesh_part_aabb[(rapidjson::SizeType)5].GetFloat());
-                    meshData->subMeshAABB.emplace_back(AABB(min, max));
+                    Vec3 aabb_vals[2];
+                    int aabb_idx = 0;
+                    for (auto aabb_val : mesh_part_aabb)
+                    {
+                        aabb_vals->comps[aabb_idx++] = static_cast<float>(aabb_val);
+                        if (aabb_idx >= 6)
+                            break;
+                    }
+                    meshData->subMeshAABB.emplace_back(AABB(aabb_vals[0], aabb_vals[1]));
                 }
                 else
                 {
@@ -811,7 +779,8 @@ bool Bundle3D::loadMeshDatasJson(MeshDatas& meshdatas)
             }
             else
             {
-                meshData->subMeshAABB.emplace_back(calculateAABB(meshData->vertex, meshData->getPerVertexSize(), storedIndices));
+                meshData->subMeshAABB.emplace_back(
+                    calculateAABB(meshData->vertex, meshData->getPerVertexSize(), storedIndices));
             }
         }
         meshdatas.meshDatas.emplace_back(meshData);
@@ -926,45 +895,52 @@ bool Bundle3D::loadMaterialsBinary(MaterialDatas& materialdatas)
     if (!seekToFirstType(BUNDLE_TYPE_MATERIAL))
         return false;
     unsigned int materialnum = 1;
-    _binaryReader.read(&materialnum, 4, 1);
-    for (unsigned int i = 0; i < materialnum; ++i)
+    try
     {
-        NMaterialData materialData;
-        materialData.id = _binaryReader.readString();
-
-        // skip: diffuse(3), ambient(3), emissive(3), opacity(1), specular(3), shininess(1)
-        float data[14];
-        _binaryReader.read(&data, sizeof(float), 14);
-
-        unsigned int textureNum = 1;
-        _binaryReader.read(&textureNum, 4, 1);
-        for (unsigned int j = 0; j < textureNum; ++j)
+        _binaryReader.read_blob(materialnum);
+        for (unsigned int i = 0; i < materialnum; ++i)
         {
-            NTextureData textureData;
-            textureData.id = _binaryReader.readString();
-            if (textureData.id.empty())
-            {
-                AXLOGW("warning: Failed to read Materialdata: texturePath is empty '{}'.", textureData.id);
-                return false;
-            }
-            std::string texturePath = _binaryReader.readString();
-            if (texturePath.empty())
-            {
-                AXLOGW("warning: Failed to read Materialdata: texturePath is empty '{}'.", _path);
-                return false;
-            }
+            NMaterialData materialData;
+            materialData.id = _binaryReader.read_v32();
 
-            textureData.filename = texturePath.empty() ? texturePath : _modelPath + texturePath;
-            float uvdata[4];
-            _binaryReader.read(&uvdata, sizeof(float), 4);
-            textureData.type  = parseGLTextureType(_binaryReader.readString());
-            textureData.wrapS = parseSamplerAddressMode(_binaryReader.readString());
-            textureData.wrapT = parseSamplerAddressMode(_binaryReader.readString());
-            materialData.textures.emplace_back(textureData);
+            // skip: diffuse(3), ambient(3), emissive(3), opacity(1), specular(3), shininess(1)
+            float data[14];
+            _binaryReader.read_blob(data);
+
+            unsigned int textureNum = 1;
+            _binaryReader.read_blob(textureNum);
+            for (unsigned int j = 0; j < textureNum; ++j)
+            {
+                NTextureData textureData;
+                textureData.id = _binaryReader.read_v32();
+                if (textureData.id.empty())
+                {
+                    AXLOGW("warning: Failed to read Materialdata: texturePath is empty '{}'.", textureData.id);
+                    return false;
+                }
+                std::string_view texturePath = _binaryReader.read_v32();
+                if (texturePath.empty())
+                {
+                    AXLOGW("warning: Failed to read Materialdata: texturePath is empty '{}'.", _path);
+                    return false;
+                }
+                (textureData.filename = _modelPath) += texturePath;
+                float uvdata[4];
+                _binaryReader.read_blob(uvdata);
+                textureData.type  = parseGLTextureType(_binaryReader.read_v32());
+                textureData.wrapS = parseSamplerAddressMode(_binaryReader.read_v32());
+                textureData.wrapT = parseSamplerAddressMode(_binaryReader.read_v32());
+                materialData.textures.emplace_back(textureData);
+            }
+            materialdatas.materials.emplace_back(materialData);
         }
-        materialdatas.materials.emplace_back(materialData);
+        return true;
     }
-    return true;
+    catch (const std::exception& ex)
+    {
+        AXLOGW("exception occurred: {}", ex.what());
+    }
+    return false;
 }
 bool Bundle3D::loadMaterialsBinary_0_1(MaterialDatas& materialdatas)
 {
@@ -973,7 +949,7 @@ bool Bundle3D::loadMaterialsBinary_0_1(MaterialDatas& materialdatas)
 
     NMaterialData materialData;
 
-    std::string texturePath = _binaryReader.readString();
+    std::string_view texturePath = _binaryReader.read_v32();
     if (texturePath.empty())
     {
         AXLOGW("warning: Failed to read Materialdata: texturePath is empty '{}'.", _path);
@@ -981,9 +957,9 @@ bool Bundle3D::loadMaterialsBinary_0_1(MaterialDatas& materialdatas)
     }
 
     NTextureData textureData;
-    textureData.filename = texturePath.empty() ? texturePath : _modelPath + texturePath;
-    textureData.type     = NTextureData::Usage::Diffuse;
-    textureData.id       = "";
+    (textureData.filename = _modelPath) += texturePath;
+    textureData.type = NTextureData::Usage::Diffuse;
+    textureData.id   = "";
     materialData.textures.emplace_back(textureData);
     materialdatas.materials.emplace_back(materialData);
     return true;
@@ -994,28 +970,36 @@ bool Bundle3D::loadMaterialsBinary_0_2(MaterialDatas& materialdatas)
     if (!seekToFirstType(BUNDLE_TYPE_MATERIAL))
         return false;
 
-    unsigned int materialnum = 1;
-    _binaryReader.read(&materialnum, 4, 1);
-
-    for (unsigned int i = 0; i < materialnum; ++i)
+    try
     {
-        NMaterialData materialData;
+        unsigned int materialnum = 1;
+        _binaryReader.read_blob(materialnum);
 
-        std::string texturePath = _binaryReader.readString();
-        if (texturePath.empty())
+        for (unsigned int i = 0; i < materialnum; ++i)
         {
-            AXLOGW("warning: Failed to read Materialdata: texturePath is empty '{}'.", _path);
-            return true;
-        }
+            NMaterialData materialData;
 
-        NTextureData textureData;
-        textureData.filename = texturePath.empty() ? texturePath : _modelPath + texturePath;
-        textureData.type     = NTextureData::Usage::Diffuse;
-        textureData.id       = "";
-        materialData.textures.emplace_back(textureData);
-        materialdatas.materials.emplace_back(materialData);
+            std::string_view texturePath = _binaryReader.read_v32();
+            if (texturePath.empty())
+            {
+                AXLOGW("warning: Failed to read Materialdata: texturePath is empty '{}'.", _path);
+                return true;
+            }
+
+            NTextureData textureData;
+            (textureData.filename = _modelPath) += texturePath;
+            textureData.type     = NTextureData::Usage::Diffuse;
+            textureData.id       = "";
+            materialData.textures.emplace_back(textureData);
+            materialdatas.materials.emplace_back(materialData);
+        }
+        return true;
     }
-    return true;
+    catch (const std::exception& ex)
+    {
+        AXLOGW("exception occurred: {}", ex.what());
+    }
+    return false;
 }
 
 bool loadMeshDataJson(MeshData* /*meshdata*/)
@@ -1035,26 +1019,25 @@ bool loadMeshDataJson_0_2(MeshData* /*meshdata*/)
 
 bool Bundle3D::loadMaterialsJson(MaterialDatas& materialdatas)
 {
-    if (!_jsonReader.HasMember(MATERIALS))
+    auto material_array = _jsonReader[MATERIALS].get_array();
+    if (material_array.error())
         return false;
-    const rapidjson::Value& material_array = _jsonReader[MATERIALS];
-    for (rapidjson::SizeType i = 0; i < material_array.Size(); ++i)
+    for (auto&& material_val : material_array)
     {
         NMaterialData materialData;
-        const rapidjson::Value& material_val = material_array[i];
-        materialData.id                      = material_val[ID].GetString();
-        if (material_val.HasMember(TEXTURES))
+        materialData.id      = static_cast<std::string_view>(material_val[ID]);
+        auto&& texture_array = material_val[TEXTURES];
+        if (!texture_array.error())
         {
-            const rapidjson::Value& texture_array = material_val[TEXTURES];
-            for (rapidjson::SizeType j = 0; j < texture_array.Size(); ++j)
+            for (auto&& texture_val : texture_array.get_array())
             {
                 NTextureData textureData;
-                const rapidjson::Value& texture_val = texture_array[j];
-                std::string filename                = texture_val[FILENAME].GetString();
-                textureData.filename                = filename.empty() ? filename : _modelPath + filename;
-                textureData.type                    = parseGLTextureType(texture_val["type"].GetString());
-                textureData.wrapS                   = parseSamplerAddressMode(texture_val["wrapModeU"].GetString());
-                textureData.wrapT                   = parseSamplerAddressMode(texture_val["wrapModeV"].GetString());
+                std::string_view filename = texture_val[FILENAME];
+                if (!filename.empty())
+                    (textureData.filename = _modelPath) += filename;
+                textureData.type  = parseGLTextureType(texture_val["type"]);
+                textureData.wrapS = parseSamplerAddressMode(texture_val["wrapModeU"]);
+                textureData.wrapT = parseSamplerAddressMode(texture_val["wrapModeV"]);
                 materialData.textures.emplace_back(textureData);
             }
         }
@@ -1066,20 +1049,21 @@ bool Bundle3D::loadJson(std::string_view path)
 {
     clear();
 
-    _jsonBuffer = FileUtils::getInstance()->getStringFromFile(path);
+    FileUtils::getInstance()->getContents(path, &_jsonBuffer);
 
-    if (_jsonReader.ParseInsitu<0>((char*)_jsonBuffer.c_str()).HasParseError())
+    _jsonReader = _jsonParser.iterate(_jsonBuffer);
+    if (_jsonReader.is_null())
     {
         clear();
         AXLOGW("Parse json failed in Bundle3D::loadJson function");
         return false;
     }
 
-    const rapidjson::Value& mash_data_array = _jsonReader[VERSION];
-    if (mash_data_array.IsArray())  // Compatible with the old version
+    auto mash_data_array = _jsonReader[VERSION];
+    if (mash_data_array.type() == ondemand::json_type::array)  // Compatible with the old version
         _version = "1.2";
     else
-        _version = mash_data_array.GetString();
+        _version = static_cast<std::string_view>(mash_data_array);
 
     return true;
 }
@@ -1099,98 +1083,108 @@ bool Bundle3D::loadBinary(std::string_view path)
     }
 
     // Initialise bundle reader
-    _binaryReader.init((char*)_binaryBuffer.getBytes(), _binaryBuffer.getSize());
+    _binaryReader.reset((char*)_binaryBuffer.getBytes(), _binaryBuffer.getSize());
 
-    // Read identifier info
-    char identifier[] = {'C', '3', 'B', '\0'};
-    char sig[4];
-    if (_binaryReader.read(sig, 1, 4) != 4 || memcmp(sig, identifier, 4) != 0)
+    try
     {
-        clear();
-        AXLOGW("warning: Invalid identifier: {}", path);
-        return false;
-    }
-
-    // Read version
-    unsigned char ver[2];
-    if (_binaryReader.read(ver, 1, 2) != 2)
-    {
-        AXLOGW("warning: Failed to read version:");
-        return false;
-    }
-
-    char version[20] = {0};
-    snprintf(version, sizeof(version), "%d.%d", ver[0], ver[1]);
-    _version = version;
-
-    // Read ref table size
-    if (_binaryReader.read(&_referenceCount, 4, 1) != 1)
-    {
-        clear();
-        AXLOGW("warning: Failed to read ref table size '{}'.", path);
-        return false;
-    }
-
-    // Read all refs
-    AX_SAFE_DELETE_ARRAY(_references);
-    _references = new Reference[_referenceCount];
-    for (unsigned int i = 0; i < _referenceCount; ++i)
-    {
-        if ((_references[i].id = _binaryReader.readString()).empty() ||
-            _binaryReader.read(&_references[i].type, 4, 1) != 1 ||
-            _binaryReader.read(&_references[i].offset, 4, 1) != 1)
+        // Read identifier info
+        char identifier[] = {'C', '3', 'B', '\0'};
+        char sig[4];
+        if (_binaryReader.read_blob(sig) != 4 || memcmp(sig, identifier, 4) != 0)
         {
             clear();
-            AXLOGW("warning: Failed to read ref number {} for bundle '{}'.", i, path);
-            AX_SAFE_DELETE_ARRAY(_references);
+            AXLOGW("warning: Invalid identifier: {}", path);
             return false;
         }
-    }
 
-    return true;
+        // Read version
+        unsigned char ver[2];
+        if (_binaryReader.read_blob(ver) != 2)
+        {
+            AXLOGW("warning: Failed to read version:");
+            return false;
+        }
+
+        char version[20] = {0};
+        snprintf(version, sizeof(version), "%d.%d", ver[0], ver[1]);
+        _version = version;
+
+        // Read ref table size
+        if (_binaryReader.read_blob(_referenceCount) != 1)
+        {
+            clear();
+            AXLOGW("warning: Failed to read ref table size '{}'.", path);
+            return false;
+        }
+
+        // Read all refs
+        AX_SAFE_DELETE_ARRAY(_references);
+        _references = new Reference[_referenceCount];
+        for (unsigned int i = 0; i < _referenceCount; ++i)
+        {
+            if ((_references[i].id = _binaryReader.read_v32()).empty() ||
+                _binaryReader.read_blob(_references[i].type) != 1 || _binaryReader.read_blob(_references[i].offset) != 1)
+            {
+                clear();
+                AXLOGW("warning: Failed to read ref number {} for bundle '{}'.", i, path);
+                AX_SAFE_DELETE_ARRAY(_references);
+                return false;
+            }
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex)
+    {
+        AXLOGW("exception occurred: {}", ex.what());
+    }
+    return false;
 }
 
 bool Bundle3D::loadMeshDataJson_0_1(MeshDatas& meshdatas)
 {
-    const rapidjson::Value& mesh_data_array = _jsonReader[MESH];
-    MeshData* meshdata                      = new MeshData();
-    const rapidjson::Value& mesh_data_val   = mesh_data_array[(rapidjson::SizeType)0];
+    auto&& mesh_data_array = _jsonReader[MESH];
+    MeshData* meshdata     = new MeshData();
+    auto&& mesh_data_val   = mesh_data_array.at(0);
 
-    const rapidjson::Value& mesh_data_body_array = mesh_data_val[DEFAULTPART];
+    auto&& mesh_data_body_array = mesh_data_val[DEFAULTPART];
 
-    const rapidjson::Value& mesh_data_body_array_0 = mesh_data_body_array[(rapidjson::SizeType)0];
+    auto&& mesh_data_body_array_0 = mesh_data_body_array.at(0);
 
     // mesh_vertex_attribute
-    const rapidjson::Value& mesh_vertex_attribute = mesh_data_val[ATTRIBUTES];
-    meshdata->attribCount                         = mesh_vertex_attribute.Size();
-    meshdata->attribs.resize(meshdata->attribCount);
-    for (rapidjson::SizeType i = 0; i < mesh_vertex_attribute.Size(); ++i)
+    auto&& mesh_vertex_attribute = mesh_data_val[ATTRIBUTES].get_array();
+    meshdata->attribCount        = mesh_vertex_attribute.count_elements();
+    meshdata->attribs.reserve(meshdata->attribCount);
+    for (auto&& mesh_vertex_attribute_val : mesh_vertex_attribute)
     {
-        const rapidjson::Value& mesh_vertex_attribute_val = mesh_vertex_attribute[i];
-
-        int size                          = mesh_vertex_attribute_val[ATTRIBUTESIZE].GetUint();
-        meshdata->attribs[i].type         = parseGLDataType(mesh_vertex_attribute_val[TYPE].GetString(), size);
-        meshdata->attribs[i].vertexAttrib = parseGLProgramAttribute(mesh_vertex_attribute_val[ATTRIBUTE].GetString());
+        int size = mesh_vertex_attribute_val[ATTRIBUTESIZE];
+        meshdata->attribs.emplace_back(parseGLDataType(mesh_vertex_attribute_val[TYPE], size),
+                                       parseGLProgramAttribute(mesh_vertex_attribute_val[ATTRIBUTE]));
+        /*meshdata->attribs[i].type         = parseGLDataType(mesh_vertex_attribute_val[TYPE], size);
+        meshdata->attribs[i].vertexAttrib = parseGLProgramAttribute(mesh_vertex_attribute_val[ATTRIBUTE]);*/
     }
+    // meshdata->attribCount = meshdata->attribs.size();
 
     // vertices
-    meshdata->vertexSizeInFloat = mesh_data_body_array_0[VERTEXSIZE].GetInt();
+    meshdata->vertexSizeInFloat = mesh_data_body_array_0[VERTEXSIZE];
     meshdata->vertex.resize(meshdata->vertexSizeInFloat);
 
-    const rapidjson::Value& mesh_data_body_vertices = mesh_data_body_array_0[VERTICES];
-    for (rapidjson::SizeType i = 0; i < mesh_data_body_vertices.Size(); ++i)
-        meshdata->vertex[i] = mesh_data_body_vertices[i].GetFloat();
+    auto mesh_data_body_vertices = mesh_data_body_array_0[VERTICES];
+    int i                        = 0;
+    for (auto&& vertex_val : mesh_data_body_vertices)
+        meshdata->vertex[i++] = static_cast<double>(vertex_val);
 
     // index_number
-    unsigned int indexnum = mesh_data_body_array_0[INDEXNUM].GetUint();
+    int indexnum = mesh_data_body_array_0[INDEXNUM];
 
     // indices
     IndexArray indices{};
     indices.resize(indexnum);
 
-    const rapidjson::Value& indices_val_array = mesh_data_body_array_0[INDICES];
-    for (rapidjson::SizeType i = 0; i < indices_val_array.Size(); ++i)
-        indices.at<uint16_t>(i) = (unsigned short)indices_val_array[i].GetUint();
+    auto&& indices_val_array = mesh_data_body_array_0[INDICES];
+    i                        = 0;
+    for (auto&& index_val : indices_val_array.get_array())
+        indices.at<uint16_t>(i++) = static_cast<unsigned short>(indices_val_array);
 
     auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(indices));
     meshdata->subMeshAABB.emplace_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
@@ -1200,54 +1194,55 @@ bool Bundle3D::loadMeshDataJson_0_1(MeshDatas& meshdatas)
 
 bool Bundle3D::loadMeshDataJson_0_2(MeshDatas& meshdatas)
 {
-    MeshData* meshdata                   = new MeshData();
-    const rapidjson::Value& mesh_array   = _jsonReader[MESH];
-    const rapidjson::Value& mesh_array_0 = mesh_array[(rapidjson::SizeType)0];
+    MeshData* meshdata  = new MeshData();
+    auto&& mesh_array   = _jsonReader[MESH];
+    auto&& mesh_array_0 = mesh_array.at(0);
 
     // mesh_vertex_attribute
-    const rapidjson::Value& mesh_vertex_attribute = mesh_array_0[ATTRIBUTES];
-    meshdata->attribCount                         = mesh_vertex_attribute.Size();
+    auto&& mesh_vertex_attribute = mesh_array_0[ATTRIBUTES];
+    meshdata->attribCount        = mesh_vertex_attribute.count_elements();
     meshdata->attribs.resize(meshdata->attribCount);
-    for (rapidjson::SizeType i = 0; i < mesh_vertex_attribute.Size(); ++i)
+    int i = 0;
+    for (auto&& mesh_vertex_attribute_val : mesh_vertex_attribute.get_array())
     {
-        const rapidjson::Value& mesh_vertex_attribute_val = mesh_vertex_attribute[i];
-
-        auto size                         = mesh_vertex_attribute_val[ATTRIBUTESIZE].GetUint();
-        meshdata->attribs[i].type         = parseGLDataType(mesh_vertex_attribute_val[TYPE].GetString(), size);
-        meshdata->attribs[i].vertexAttrib = parseGLProgramAttribute(mesh_vertex_attribute_val[ATTRIBUTE].GetString());
+        auto size                         = static_cast<unsigned int>(mesh_vertex_attribute_val[ATTRIBUTESIZE]);
+        meshdata->attribs[i].type         = parseGLDataType(mesh_vertex_attribute_val[TYPE], size);
+        meshdata->attribs[i].vertexAttrib = parseGLProgramAttribute(mesh_vertex_attribute_val[ATTRIBUTE]);
     }
 
     // vertices
-    const rapidjson::Value& mesh_data_vertex   = mesh_array_0[VERTEX];
-    const rapidjson::Value& mesh_data_vertex_0 = mesh_data_vertex[(rapidjson::SizeType)0];
+    auto&& mesh_data_vertex   = mesh_array_0[VERTEX];
+    auto&& mesh_data_vertex_0 = mesh_data_vertex.at(0);
 
-    meshdata->vertexSizeInFloat = mesh_data_vertex_0[VERTEXSIZE].GetInt();
+    meshdata->vertexSizeInFloat = static_cast<float>(mesh_data_vertex_0[VERTEXSIZE]);
     meshdata->vertex.resize(meshdata->vertexSizeInFloat);
 
-    const rapidjson::Value& mesh_data_body_vertices = mesh_data_vertex_0[VERTICES];
-    for (rapidjson::SizeType i = 0; i < mesh_data_body_vertices.Size(); ++i)
-        meshdata->vertex[i] = mesh_data_body_vertices[i].GetFloat();
+    auto&& mesh_data_body_vertices = mesh_data_vertex_0[VERTICES];
+    i                              = 0;
+    for (auto&& vertex_val : mesh_data_body_vertices)
+        meshdata->vertex[i++] = static_cast<float>(vertex_val);
 
     // submesh
-    const rapidjson::Value& mesh_submesh_array = mesh_array_0[SUBMESH];
-    for (rapidjson::SizeType i = 0; i < mesh_submesh_array.Size(); ++i)
+    auto&& mesh_submesh_array = mesh_array_0[SUBMESH];
+    for (auto&& mesh_submesh_val : mesh_submesh_array.get_array())
     {
-        const rapidjson::Value& mesh_submesh_val = mesh_submesh_array[i];
         // std::string id = mesh_submesh_val[ID].GetString();
 
         // index_number
-        unsigned int indexnum = mesh_submesh_val[INDEXNUM].GetUint();
+        auto indexnum = static_cast<unsigned int>(mesh_submesh_val[INDEXNUM]);
 
         // indices
         IndexArray indices{};
         indices.resize(indexnum);
 
-        const rapidjson::Value& indices_val_array = mesh_submesh_val[INDICES];
-        for (rapidjson::SizeType j = 0; j < indices_val_array.Size(); ++j)
-            indices.at<uint16_t>(j) = (unsigned short)indices_val_array[j].GetUint();
+        auto indices_val_array = mesh_submesh_val[INDICES];
+        int j                  = 0;
+        for (auto&& index_val : indices_val_array)
+            indices.at<uint16_t>(j) = static_cast<unsigned short>(indices_val_array);
 
         auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(indices));
-        meshdata->subMeshAABB.emplace_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
+        meshdata->subMeshAABB.emplace_back(
+            calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
     }
     meshdatas.meshDatas.emplace_back(meshdata);
     return true;
@@ -1255,35 +1250,33 @@ bool Bundle3D::loadMeshDataJson_0_2(MeshDatas& meshdatas)
 
 bool Bundle3D::loadSkinDataJson(SkinData* skindata)
 {
-    if (!_jsonReader.HasMember(SKIN))
+    auto&& skin_data_array = _jsonReader[SKIN].get_array();
+    if (skin_data_array.error())
         return false;
 
-    const rapidjson::Value& skin_data_array = _jsonReader[SKIN];
+    // AXASSERT(skin_data_array.(), "skin data is not an array");
+    auto&& skin_data_array_val_0 = skin_data_array.at(0);
 
-    AXASSERT(skin_data_array.IsArray(), "skin data is not an array");
-    const rapidjson::Value& skin_data_array_val_0 = skin_data_array[(rapidjson::SizeType)0];
-
-    if (!skin_data_array_val_0.HasMember(BONES))
+    auto&& skin_data_bones = skin_data_array_val_0[BONES].get_array();
+    if (skin_data_bones.error())
         return false;
-
-    const rapidjson::Value& skin_data_bones = skin_data_array_val_0[BONES];
-    for (rapidjson::SizeType i = 0; i < skin_data_bones.Size(); ++i)
+    for (auto&& skin_data_bone : skin_data_bones)
     {
-        const rapidjson::Value& skin_data_bone = skin_data_bones[i];
-        std::string name                       = skin_data_bone[NODE].GetString();
+        std::string_view name = skin_data_bone[NODE];
         skindata->addSkinBoneNames(name);
 
         Mat4 mat_bind_pos;
-        const rapidjson::Value& bind_pos = skin_data_bone[BINDSHAPE];
-        for (rapidjson::SizeType j = 0; j < bind_pos.Size(); ++j)
+        auto&& bind_pos_array = skin_data_bone[BINDSHAPE];
+        int j                 = 0;
+        for (auto&& pos : bind_pos_array.get_array())
         {
-            mat_bind_pos.m[j] = bind_pos[j].GetFloat();
+            mat_bind_pos.m[j++] = static_cast<float>(pos);
         }
         skindata->inverseBindPoseMatrices.emplace_back(mat_bind_pos);
     }
 
     // set root bone information
-    const rapidjson::Value& skin_data_1 = skin_data_array[1];
+    auto&& skin_data_1 = skin_data_array.at(1);
 
     // parent and child relationship map
     skindata->skinBoneOriginMatrices.resize(skindata->skinBoneNames.size());
@@ -1296,127 +1289,132 @@ bool Bundle3D::loadSkinDataBinary(SkinData* skindata)
     if (!seekToFirstType(BUNDLE_TYPE_MESHSKIN))
         return false;
 
-    std::string boneName = _binaryReader.readString();
+    std::string_view boneName = _binaryReader.read_v32();
 
-    // transform
-    float bindShape[16];
-    if (!_binaryReader.readMatrix(bindShape))
+    try
     {
-        AXLOGW("warning: Failed to read SkinData: bindShape matrix  '{}'.", _path);
-        return false;
-    }
-
-    // bone count
-    unsigned int boneNum;
-    if (!_binaryReader.read(&boneNum))
-    {
-        AXLOGW("warning: Failed to read SkinData: boneNum  '{}'.", _path);
-        return false;
-    }
-
-    // Fix bug: check if the bone number is 0.
-    if (boneNum == 0)
-        return false;
-
-    // bone names and bind pos
-    float bindpos[16];
-    for (unsigned int i = 0; i < boneNum; ++i)
-    {
-        std::string skinBoneName = _binaryReader.readString();
-        skindata->skinBoneNames.emplace_back(skinBoneName);
-        if (!_binaryReader.readMatrix(bindpos))
+        // transform
+        float bindShape[16];
+        if (!_binaryReader.read_blob(bindShape))
         {
-            AXLOGW("warning: Failed to load SkinData: bindpos '{}'.", _path);
-            return false;
-        }
-        skindata->inverseBindPoseMatrices.emplace_back(bindpos);
-    }
-
-    skindata->skinBoneOriginMatrices.resize(boneNum);
-
-    boneName = _binaryReader.readString();
-
-    // bind shape
-    _binaryReader.readMatrix(bindShape);
-    int rootIndex = skindata->getSkinBoneNameIndex(boneName);
-    if (rootIndex < 0)
-    {
-        skindata->addNodeBoneNames(boneName);
-        rootIndex = skindata->getBoneNameIndex(boneName);
-        skindata->nodeBoneOriginMatrices.emplace_back(bindShape);
-    }
-    else
-    {
-        skindata->skinBoneOriginMatrices[rootIndex] = bindShape;
-    }
-
-    // set root bone index
-    skindata->rootBoneIndex = rootIndex;
-
-    // read parent and child relationship map
-    float transform[16];
-    unsigned int linkNum;
-    _binaryReader.read(&linkNum);
-    for (unsigned int i = 0; i < linkNum; ++i)
-    {
-        std::string id = _binaryReader.readString();
-        int index      = skindata->getSkinBoneNameIndex(id);
-
-        std::string parentid = _binaryReader.readString();
-
-        if (!_binaryReader.readMatrix(transform))
-        {
-            AXLOGW("warning: Failed to load SkinData: transform '{}'.", _path);
+            AXLOGW("warning: Failed to read SkinData: bindShape matrix  '{}'.", _path);
             return false;
         }
 
-        if (index < 0)
+        // bone count
+        unsigned int boneNum;
+        if (!_binaryReader.read_blob(boneNum))
         {
-            skindata->addNodeBoneNames(id);
-            index = skindata->getBoneNameIndex(id);
-            skindata->nodeBoneOriginMatrices.emplace_back(transform);
+            AXLOGW("warning: Failed to read SkinData: boneNum  '{}'.", _path);
+            return false;
+        }
+
+        // Fix bug: check if the bone number is 0.
+        if (boneNum == 0)
+            return false;
+
+        // bone names and bind pos
+        float bindpos[16];
+        for (unsigned int i = 0; i < boneNum; ++i)
+        {
+            std::string_view skinBoneName = _binaryReader.read_v32();
+            skindata->skinBoneNames.emplace_back(skinBoneName);
+            if (!_binaryReader.read_blob(bindpos))
+            {
+                AXLOGW("warning: Failed to load SkinData: bindpos '{}'.", _path);
+                return false;
+            }
+            skindata->inverseBindPoseMatrices.emplace_back(bindpos);
+        }
+
+        skindata->skinBoneOriginMatrices.resize(boneNum);
+
+        boneName = _binaryReader.read_v32();
+
+        // bind shape
+        _binaryReader.read_blob(bindShape);
+        int rootIndex = skindata->getSkinBoneNameIndex(boneName);
+        if (rootIndex < 0)
+        {
+            skindata->addNodeBoneNames(boneName);
+            rootIndex = skindata->getBoneNameIndex(boneName);
+            skindata->nodeBoneOriginMatrices.emplace_back(bindShape);
         }
         else
         {
-            skindata->skinBoneOriginMatrices[index] = transform;
+            skindata->skinBoneOriginMatrices[rootIndex] = bindShape;
         }
 
-        int parentIndex = skindata->getSkinBoneNameIndex(parentid);
-        if (parentIndex < 0)
+        // set root bone index
+        skindata->rootBoneIndex = rootIndex;
+
+        // read parent and child relationship map
+        float transform[16];
+        unsigned int linkNum;
+        _binaryReader.read_blob(linkNum);
+        for (unsigned int i = 0; i < linkNum; ++i)
         {
-            skindata->addNodeBoneNames(parentid);
-            parentIndex = skindata->getBoneNameIndex(parentid);
+            std::string_view id = _binaryReader.read_v32();
+            int index           = skindata->getSkinBoneNameIndex(id);
+
+            std::string_view parentid = _binaryReader.read_v32();
+            if (!_binaryReader.read_blob(transform))
+            {
+                AXLOGW("warning: Failed to load SkinData: transform '{}'.", _path);
+                return false;
+            }
+
+            if (index < 0)
+            {
+                skindata->addNodeBoneNames(id);
+                index = skindata->getBoneNameIndex(id);
+                skindata->nodeBoneOriginMatrices.emplace_back(transform);
+            }
+            else
+            {
+                skindata->skinBoneOriginMatrices[index] = transform;
+            }
+
+            int parentIndex = skindata->getSkinBoneNameIndex(parentid);
+            if (parentIndex < 0)
+            {
+                skindata->addNodeBoneNames(parentid);
+                parentIndex = skindata->getBoneNameIndex(parentid);
+            }
+
+            skindata->boneChild[parentIndex].emplace_back(index);
         }
 
-        skindata->boneChild[parentIndex].emplace_back(index);
+        return true;
     }
-
-    return true;
+    catch (const std::exception& ex)
+    {
+        AXLOGW("exception occurred: {}", ex.what());
+    }
+    return false;
 }
 
 bool Bundle3D::loadMaterialDataJson_0_1(MaterialDatas& materialdatas)
 {
-    if (!_jsonReader.HasMember(MATERIAL))
-        return false;
     NMaterialData materialData;
-    const rapidjson::Value& material_data_array = _jsonReader[MATERIAL];
+    auto&& material_data_array = _jsonReader[MATERIAL].get_array();
+    if (material_data_array.error())
+        return false;
 
-    if (material_data_array.Size() > 0)
+    auto&& material_data_array_0 = material_data_array.at(0);
+
+    auto&& material_data_base_array = material_data_array_0[BASE].get_array();
+    if (!material_data_base_array.error())
     {
-        const rapidjson::Value& material_data_array_0 = material_data_array[(rapidjson::SizeType)0];
-        if (material_data_array_0.HasMember(BASE))
-        {
-            const rapidjson::Value& material_data_base_array   = material_data_array_0[BASE];
-            const rapidjson::Value& material_data_base_array_0 = material_data_base_array[(rapidjson::SizeType)0];
-            NTextureData textureData;
-            // set texture
-            std::string filename = material_data_base_array_0[FILENAME].GetString();
-            textureData.filename = filename.empty() ? filename : _modelPath + filename;
-            textureData.type     = NTextureData::Usage::Diffuse;
-            textureData.id       = "";
-            materialData.textures.emplace_back(textureData);
-            materialdatas.materials.emplace_back(materialData);
-        }
+        auto&& material_data_base_array_0 = material_data_base_array.at(0);
+        NTextureData textureData;
+        // set texture
+        std::string_view filename = material_data_base_array_0[FILENAME];
+        if (!filename.empty())
+            (textureData.filename = _modelPath) += filename;
+        textureData.type = NTextureData::Usage::Diffuse;
+        materialData.textures.emplace_back(textureData);
+        materialdatas.materials.emplace_back(materialData);
     }
 
     return true;
@@ -1424,21 +1422,20 @@ bool Bundle3D::loadMaterialDataJson_0_1(MaterialDatas& materialdatas)
 
 bool Bundle3D::loadMaterialDataJson_0_2(MaterialDatas& materialdatas)
 {
-    if (!_jsonReader.HasMember(MATERIAL))
-        return false;
     NMaterialData materialData;
-    const rapidjson::Value& material_array = _jsonReader[MATERIAL];
+    auto&& material_array = _jsonReader[MATERIAL];
+    if (material_array.error())
+        return false;
 
-    for (rapidjson::SizeType i = 0; i < material_array.Size(); ++i)
+    for (auto&& material_val : material_array.get_array())
     {
         NTextureData textureData;
-        const rapidjson::Value& material_val = material_array[i];
 
         // set texture
-        std::string filename = material_val[TEXTURES].GetString();
-        textureData.filename = filename.empty() ? filename : _modelPath + filename;
-        textureData.type     = NTextureData::Usage::Diffuse;
-        textureData.id       = "";
+        std::string_view filename = material_val[TEXTURES];
+        if (!filename.empty())
+            (textureData.filename = _modelPath) += filename;
+        textureData.type = NTextureData::Usage::Diffuse;
         materialData.textures.emplace_back(textureData);
     }
     materialdatas.materials.emplace_back(materialData);
@@ -1468,22 +1465,22 @@ bool Bundle3D::loadAnimationDataJson(std::string_view id, Animation3DData* anima
     else
         anim = ANIMATIONS;
 
-    if (!_jsonReader.HasMember(anim.c_str()))
-        return false;
-    int the_index                                = -1;
-    const rapidjson::Value& animation_data_array = _jsonReader[anim.c_str()];
-
-    if (animation_data_array.Size() == 0)
+    int the_index               = -1;
+    auto&& animation_data_array = _jsonReader[anim];
+    if (animation_data_array.error())
         return false;
 
     if (!id.empty())
     {
-        for (rapidjson::SizeType i = 0; i < animation_data_array.Size(); ++i)
+        int i = 0;
+        for (auto&& animation_data : animation_data_array.get_array())
         {
-            if (animation_data_array[i][ID].GetString() == id)
+            std::string_view keyid = animation_data[ID];
+            if (keyid == id)
             {
                 the_index = static_cast<int>(i);
             }
+            ++i;
         }
         if (the_index < 0)
             return false;
@@ -1493,55 +1490,63 @@ bool Bundle3D::loadAnimationDataJson(std::string_view id, Animation3DData* anima
         the_index = 0;
     }
 
-    const rapidjson::Value& animation_data_array_val_0 = animation_data_array[(rapidjson::SizeType)the_index];
+    auto&& animation_data_array_val_0 = animation_data_array.at(the_index);
 
-    animationdata->_totalTime = animation_data_array_val_0[LENGTH].GetFloat();
+    animationdata->_totalTime = static_cast<float>(animation_data_array_val_0[LENGTH]);
 
-    const rapidjson::Value& bones = animation_data_array_val_0[BONES];
-    for (rapidjson::SizeType i = 0; i < bones.Size(); ++i)
+    auto&& bones = animation_data_array_val_0[BONES];
+    for (auto&& bone : bones.get_array())
     {
-        const rapidjson::Value& bone = bones[i];
-        std::string bone_name        = bone[BONEID].GetString();
+        std::string_view bone_name = bone[BONEID];
+        auto&& bone_keyframes      = bone[KEYFRAMES];
+        if (bone_keyframes.error())
+            continue;
+        size_t keyframe_size = bone_keyframes.count_elements();
+        animationdata->_rotationKeys[bone_name].reserve(keyframe_size);
+        animationdata->_scaleKeys[bone_name].reserve(keyframe_size);
+        animationdata->_translationKeys[bone_name].reserve(keyframe_size);
 
-        if (bone.HasMember(KEYFRAMES))
+        for (auto&& bone_keyframe : bone_keyframes)
         {
-            const rapidjson::Value& bone_keyframes = bone[KEYFRAMES];
-            rapidjson::SizeType keyframe_size      = bone_keyframes.Size();
-            animationdata->_rotationKeys[bone_name].reserve(keyframe_size);
-            animationdata->_scaleKeys[bone_name].reserve(keyframe_size);
-            animationdata->_translationKeys[bone_name].reserve(keyframe_size);
-
-            for (rapidjson::SizeType j = 0; j < keyframe_size; ++j)
+            float keytime                    = static_cast<float>(bone_keyframe[KEYTIME]);
+            auto&& bone_keyframe_translation = bone_keyframe[TRANSLATION];
+            if (!bone_keyframe_translation.error())
             {
-                const rapidjson::Value& bone_keyframe = bone_keyframes[j];
-
-                if (bone_keyframe.HasMember(TRANSLATION))
+                Vec3 val;
+                int i = 0;
+                for (auto&& axis_val : bone_keyframe_translation)
                 {
-                    const rapidjson::Value& bone_keyframe_translation = bone_keyframe[TRANSLATION];
-                    float keytime                                     = bone_keyframe[KEYTIME].GetFloat();
-                    Vec3 val(bone_keyframe_translation[(rapidjson::SizeType)0].GetFloat(),
-                             bone_keyframe_translation[1].GetFloat(), bone_keyframe_translation[2].GetFloat());
-                    animationdata->_translationKeys[bone_name].emplace_back(Animation3DData::Vec3Key(keytime, val));
+                    val.comps[i++] = static_cast<float>(axis_val);
+                    if (i >= 3)
+                        break;
                 }
-
-                if (bone_keyframe.HasMember(ROTATION))
+                animationdata->_translationKeys[bone_name].emplace_back(Animation3DData::Vec3Key(keytime, Vec3{val}));
+            }
+            auto&& bone_keyframe_rotation = bone_keyframe[ROTATION];
+            if (!bone_keyframe_rotation.error())
+            {
+                Quaternion val;
+                int i = 0;
+                for (auto&& axis_val : bone_keyframe_rotation)
                 {
-                    const rapidjson::Value& bone_keyframe_rotation = bone_keyframe[ROTATION];
-                    float keytime                                  = bone_keyframe[KEYTIME].GetFloat();
-                    Quaternion val                                 = Quaternion(
-                                                        bone_keyframe_rotation[(rapidjson::SizeType)0].GetFloat(), bone_keyframe_rotation[1].GetFloat(),
-                                                        bone_keyframe_rotation[2].GetFloat(), bone_keyframe_rotation[3].GetFloat());
-                    animationdata->_rotationKeys[bone_name].emplace_back(Animation3DData::QuatKey(keytime, val));
+                    val.comps[i++] = static_cast<float>(axis_val);
+                    if (i >= 4)
+                        break;
                 }
-
-                if (bone_keyframe.HasMember(SCALE))
+                animationdata->_rotationKeys[bone_name].emplace_back(Animation3DData::QuatKey(keytime, val));
+            }
+            auto&& bone_keyframe_scale = bone_keyframe[SCALE];
+            if (!bone_keyframe_scale.error())
+            {
+                Vec3 val;
+                int i = 0;
+                for (auto&& axis_val : bone_keyframe_scale)
                 {
-                    const rapidjson::Value& bone_keyframe_scale = bone_keyframe[SCALE];
-                    float keytime                               = bone_keyframe[KEYTIME].GetFloat();
-                    Vec3 val(bone_keyframe_scale[(rapidjson::SizeType)0].GetFloat(), bone_keyframe_scale[1].GetFloat(),
-                             bone_keyframe_scale[2].GetFloat());
-                    animationdata->_scaleKeys[bone_name].emplace_back(Animation3DData::Vec3Key(keytime, val));
+                    val.comps[i++] = static_cast<float>(axis_val);
+                    if (i >= 3)
+                        break;
                 }
+                animationdata->_scaleKeys[bone_name].emplace_back(Animation3DData::Vec3Key(keytime, val));
             }
         }
     }
@@ -1568,147 +1573,154 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
             return false;
     }
 
-    unsigned int animNum = 1;
-    if (_version == "0.3" || _version == "0.4")
+    try
     {
-        if (!_binaryReader.read(&animNum))
+        unsigned int animNum = 1;
+        if (_version == "0.3" || _version == "0.4")
         {
-            AXLOGW("warning: Failed to read AnimationData: animNum '{}'.", _path);
-            return false;
-        }
-    }
-
-    bool has_found = false;
-    for (unsigned int k = 0; k < animNum; ++k)
-    {
-        animationdata->resetData();
-        std::string animId = _binaryReader.readString();
-
-        if (!_binaryReader.read(&animationdata->_totalTime))
-        {
-            AXLOGW("warning: Failed to read AnimationData: totalTime '{}'.", _path);
-            return false;
-        }
-
-        unsigned int nodeAnimationNum;
-        if (!_binaryReader.read(&nodeAnimationNum))
-        {
-            AXLOGW("warning: Failed to read AnimationData: animNum '{}'.", _path);
-            return false;
-        }
-        for (unsigned int i = 0; i < nodeAnimationNum; ++i)
-        {
-            std::string boneName = _binaryReader.readString();
-            unsigned int keyframeNum;
-            if (!_binaryReader.read(&keyframeNum))
+            if (!_binaryReader.read_blob(animNum))
             {
-                AXLOGW("warning: Failed to read AnimationData: keyframeNum '{}'.", _path);
+                AXLOGW("warning: Failed to read AnimationData: animNum '{}'.", _path);
+                return false;
+            }
+        }
+
+        bool has_found = false;
+        for (unsigned int k = 0; k < animNum; ++k)
+        {
+            animationdata->resetData();
+            std::string_view animId = _binaryReader.read_v32();
+
+            if (!_binaryReader.read_blob(animationdata->_totalTime))
+            {
+                AXLOGW("warning: Failed to read AnimationData: totalTime '{}'.", _path);
                 return false;
             }
 
-            animationdata->_rotationKeys[boneName].reserve(keyframeNum);
-            animationdata->_scaleKeys[boneName].reserve(keyframeNum);
-            animationdata->_translationKeys[boneName].reserve(keyframeNum);
-
-            for (unsigned int j = 0; j < keyframeNum; ++j)
+            unsigned int nodeAnimationNum;
+            if (!_binaryReader.read_blob(nodeAnimationNum))
             {
-                float keytime;
-                if (!_binaryReader.read(&keytime))
+                AXLOGW("warning: Failed to read AnimationData: animNum '{}'.", _path);
+                return false;
+            }
+            for (unsigned int i = 0; i < nodeAnimationNum; ++i)
+            {
+                std::string_view boneName = _binaryReader.read_v32();
+                unsigned int keyframeNum;
+                if (!_binaryReader.read_blob(keyframeNum))
                 {
-                    AXLOGW("warning: Failed to read AnimationData: keytime '{}'.", _path);
+                    AXLOGW("warning: Failed to read AnimationData: keyframeNum '{}'.", _path);
                     return false;
                 }
 
-                // transform flag
-                unsigned char transformFlag(0);
-                if (_version != "0.1" && _version != "0.2" && _version != "0.3")
+                animationdata->_rotationKeys[boneName].reserve(keyframeNum);
+                animationdata->_scaleKeys[boneName].reserve(keyframeNum);
+                animationdata->_translationKeys[boneName].reserve(keyframeNum);
+
+                for (unsigned int j = 0; j < keyframeNum; ++j)
                 {
-                    if (!_binaryReader.read(&transformFlag))
+                    float keytime;
+                    if (!_binaryReader.read_blob(keytime))
                     {
-                        AXLOGW("warning: Failed to read AnimationData: transformFlag '{}'.", _path);
+                        AXLOGW("warning: Failed to read AnimationData: keytime '{}'.", _path);
                         return false;
                     }
-                }
 
-                // rotation
-                bool hasRotate = true;
-                if (_version != "0.1" && _version != "0.2" && _version != "0.3")
-                    hasRotate = transformFlag & 0x01;
-
-                if (hasRotate)
-                {
-                    Quaternion rotate;
-                    if (_binaryReader.read(&rotate, 4, 4) != 4)
+                    // transform flag
+                    unsigned char transformFlag(0);
+                    if (_version != "0.1" && _version != "0.2" && _version != "0.3")
                     {
-                        AXLOGW("warning: Failed to read AnimationData: rotate '{}'.", _path);
-                        return false;
+                        if (!_binaryReader.read_blob(transformFlag))
+                        {
+                            AXLOGW("warning: Failed to read AnimationData: transformFlag '{}'.", _path);
+                            return false;
+                        }
                     }
-                    animationdata->_rotationKeys[boneName].emplace_back(Animation3DData::QuatKey(keytime, rotate));
-                }
 
-                // scale
-                bool hasScale = true;
-                if (_version != "0.1" && _version != "0.2" && _version != "0.3")
-                    hasScale = (transformFlag >> 1) & 0x01;
+                    // rotation
+                    bool hasRotate = true;
+                    if (_version != "0.1" && _version != "0.2" && _version != "0.3")
+                        hasRotate = transformFlag & 0x01;
 
-                if (hasScale)
-                {
-                    Vec3 scale;
-                    if (_binaryReader.read(&scale, 4, 3) != 3)
+                    if (hasRotate)
                     {
-                        AXLOGW("warning: Failed to read AnimationData: scale '{}'.", _path);
-                        return false;
+                        Quaternion rotate;
+                        if (_binaryReader.read_blob(rotate.comps) != 4)
+                        {
+                            AXLOGW("warning: Failed to read AnimationData: rotate '{}'.", _path);
+                            return false;
+                        }
+                        animationdata->_rotationKeys[boneName].emplace_back(Animation3DData::QuatKey(keytime, rotate));
                     }
-                    animationdata->_scaleKeys[boneName].emplace_back(Animation3DData::Vec3Key(keytime, scale));
-                }
 
-                // translation
-                bool hasTranslation = true;
-                if (_version != "0.1" && _version != "0.2" && _version != "0.3")
-                    hasTranslation = (transformFlag >> 2) & 0x01;
+                    // scale
+                    bool hasScale = true;
+                    if (_version != "0.1" && _version != "0.2" && _version != "0.3")
+                        hasScale = (transformFlag >> 1) & 0x01;
 
-                if (hasTranslation)
-                {
-                    Vec3 position;
-                    if (_binaryReader.read(&position, 4, 3) != 3)
+                    if (hasScale)
                     {
-                        AXLOGW("warning: Failed to read AnimationData: position '{}'.", _path);
-                        return false;
+                        Vec3 scale;
+                        if (_binaryReader.read_blob(scale.comps) != 3)
+                        {
+                            AXLOGW("warning: Failed to read AnimationData: scale '{}'.", _path);
+                            return false;
+                        }
+                        animationdata->_scaleKeys[boneName].emplace_back(Animation3DData::Vec3Key(keytime, scale));
                     }
-                    animationdata->_translationKeys[boneName].emplace_back(Animation3DData::Vec3Key(keytime, position));
+
+                    // translation
+                    bool hasTranslation = true;
+                    if (_version != "0.1" && _version != "0.2" && _version != "0.3")
+                        hasTranslation = (transformFlag >> 2) & 0x01;
+
+                    if (hasTranslation)
+                    {
+                        Vec3 position;
+                        if (_binaryReader.read_blob(position.comps) != 3)
+                        {
+                            AXLOGW("warning: Failed to read AnimationData: position '{}'.", _path);
+                            return false;
+                        }
+                        animationdata->_translationKeys[boneName].emplace_back(
+                            Animation3DData::Vec3Key(keytime, position));
+                    }
                 }
             }
+            if (id == animId || id.empty())
+            {
+                has_found = true;
+                break;
+            }
         }
-        if (id == animId || id.empty())
+        if (!has_found)
         {
-            has_found = true;
-            break;
+            animationdata->resetData();
+            return false;
         }
+        return true;
     }
-    if (!has_found)
+    catch (const std::exception& ex)
     {
-        animationdata->resetData();
-        return false;
+        AXLOGW("exception occurred: {}", ex.what());
     }
-    return true;
+    return false;
 }
 
 bool Bundle3D::loadNodesJson(NodeDatas& nodedatas)
 {
-    if (!_jsonReader.HasMember(NODES))
-        return false;
-    const rapidjson::Value& nodes = _jsonReader[NODES];
-    if (!nodes.IsArray())
+    auto&& nodes = _jsonReader[NODES];
+    if (nodes.error())
         return false;
 
     // traverse the nodes again
-    for (rapidjson::SizeType i = 0; i < nodes.Size(); ++i)
+    int node_count = nodes.count_elements();
+    for (auto&& jnode : nodes.get_array())
     {
-        const rapidjson::Value& jnode = nodes[i];
-        std::string id                = jnode[ID].GetString();
-        NodeData* nodedata            = parseNodesRecursivelyJson(jnode, nodes.Size() == 1);
 
-        bool isSkeleton = jnode[SKELETON].GetBool();
+        NodeData* nodedata  = parseNodesRecursivelyJson(jnode, node_count == 1);
+
+        bool isSkeleton = jnode[SKELETON];
         if (isSkeleton)
             nodedatas.skeleton.emplace_back(nodedata);
         else
@@ -1716,19 +1728,20 @@ bool Bundle3D::loadNodesJson(NodeDatas& nodedatas)
     }
     return true;
 }
-NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bool singleSprite)
+NodeData* Bundle3D::parseNodesRecursivelyJson(simdjson::simdjson_result<simdjson::ondemand::value> jvalue,
+                                              bool singleSprite)
 {
     NodeData* nodedata = new NodeData();
     // id
-    nodedata->id = jvalue[ID].GetString();
+    nodedata->id = static_cast<std::string_view>(jvalue[ID]);
 
     // transform
     Mat4 transform;
-    const rapidjson::Value& jtransform = jvalue[TRANSFORM];
-
-    for (rapidjson::SizeType j = 0; j < jtransform.Size(); ++j)
+    auto&& jtransform = jvalue[TRANSFORM];
+    int j             = 0;
+    for (auto&& val : jtransform.get_array())
     {
-        transform.m[j] = jtransform[j].GetFloat();
+        transform.m[j++] = static_cast<float>(val);
     }
 
     nodedata->transform = transform;
@@ -1736,16 +1749,14 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bo
     bool isSkin = false;
 
     // parts
-    if (jvalue.HasMember(PARTS))
+    auto&& parts = jvalue[PARTS];
+    if (!parts.error())
     {
-        const rapidjson::Value& parts = jvalue[PARTS];
-
-        for (rapidjson::SizeType i = 0; i < parts.Size(); ++i)
+        for (auto&& part : parts.get_array())
         {
-            auto modelnodedata           = new ModelData();
-            const rapidjson::Value& part = parts[i];
-            modelnodedata->subMeshId     = part[MESHPARTID].GetString();
-            modelnodedata->materialId    = part[MATERIALID].GetString();
+            auto modelnodedata        = new ModelData();
+            modelnodedata->subMeshId  = static_cast<std::string_view>(part[MESHPARTID]);
+            modelnodedata->materialId = static_cast<std::string_view>(part[MATERIALID]);
 
             if (modelnodedata->subMeshId == "" || modelnodedata->materialId == "")
             {
@@ -1754,17 +1765,15 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bo
                 AX_SAFE_DELETE(nodedata);
                 return nullptr;
             }
-
-            if (part.HasMember(BONES))
+            auto&& bones = part[BONES];
+            if (!bones.error())
             {
-                const rapidjson::Value& bones = part[BONES];
-
-                for (rapidjson::SizeType j = 0; j < bones.Size(); ++j)
+                unsigned int bones_count = 0;
+                for (auto&& bone : bones.get_array())
                 {
-                    const rapidjson::Value& bone = bones[j];
-
                     // node
-                    if (!bone.HasMember(NODE))
+                    auto&& node_name = bone[NODE];
+                    if (node_name.error())
                     {
                         AXLOGW("warning: Bone node ID missing");
                         AX_SAFE_DELETE(modelnodedata);
@@ -1772,21 +1781,22 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bo
                         return nullptr;
                     }
 
-                    modelnodedata->bones.emplace_back(bone[NODE].GetString());
+                    ++bones_count;
+                    modelnodedata->bones.emplace_back(static_cast<std::string_view>(node_name));
 
                     Mat4 invbindpos;
-                    const rapidjson::Value& jinvbindpos = bone[TRANSFORM];
-
-                    for (rapidjson::SizeType k = 0; k < jinvbindpos.Size(); ++k)
+                    auto&& jinvbindpos = bone[TRANSFORM];
+                    int k              = 0;
+                    for (auto&& val : jinvbindpos)
                     {
-                        invbindpos.m[k] = jinvbindpos[k].GetFloat();
+                        invbindpos.m[k] = static_cast<float>(val);
                     }
 
                     // invbindpos.inverse();
                     modelnodedata->invBindPose.emplace_back(invbindpos);
                 }
 
-                if (bones.Size() > 0)
+                if (bones_count)
                     isSkin = true;
             }
             nodedata->modelNodeDatas.emplace_back(modelnodedata);
@@ -1811,13 +1821,11 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bo
         nodedata->transform = transform;
     }
 
-    if (jvalue.HasMember(CHILDREN))
+    auto&& children = jvalue[CHILDREN].get_array();
+    if (!children.error())
     {
-        const rapidjson::Value& children = jvalue[CHILDREN];
-        for (rapidjson::SizeType i = 0; i < children.Size(); ++i)
+        for (auto&& child : children)
         {
-            const rapidjson::Value& child = children[i];
-
             NodeData* tempdata = parseNodesRecursivelyJson(child, singleSprite);
             nodedata->children.emplace_back(tempdata);
         }
@@ -1831,14 +1839,14 @@ bool Bundle3D::loadNodesBinary(NodeDatas& nodedatas)
         return false;
 
     unsigned int nodeSize = 0;
-    if (_binaryReader.read(&nodeSize, 4, 1) != 1)
+    if (_binaryReader.read_blob(nodeSize) != 1)
     {
         AXLOGW("warning: Failed to read nodes");
         return false;
     }
 
     // traverse the nodes again
-    for (rapidjson::SizeType i = 0; i < nodeSize; ++i)
+    for (unsigned int i = 0; i < nodeSize; ++i)
     {
         bool skeleton      = false;
         NodeData* nodedata = parseNodesRecursivelyBinary(skeleton, nodeSize == 1);
@@ -1852,150 +1860,158 @@ bool Bundle3D::loadNodesBinary(NodeDatas& nodedatas)
 }
 NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprite)
 {
-    // id
-    std::string id = _binaryReader.readString();
-    // is skeleton
-    bool skeleton_;
-    if (_binaryReader.read(&skeleton_, 1, 1) != 1)
+    try
     {
-        AXLOGW("warning: Failed to read is skeleton");
-        return nullptr;
-    }
-    if (skeleton_)
-        skeleton = true;
-
-    // transform
-    Mat4 transform;
-    if (!_binaryReader.readMatrix(transform.m))
-    {
-        AXLOGW("warning: Failed to read transform matrix");
-        return nullptr;
-    }
-    // parts
-    unsigned int partsSize = 0;
-    if (_binaryReader.read(&partsSize, 4, 1) != 1)
-    {
-        AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
-        return nullptr;
-    }
-
-    NodeData* nodedata = new NodeData();
-    nodedata->id       = id;
-
-    bool isSkin = false;
-
-    if (partsSize > 0)
-    {
-        for (unsigned int i = 0; i < partsSize; ++i)
+        // id
+        std::string_view id = _binaryReader.read_v32();
+        // is skeleton
+        bool skeleton_;
+        if (_binaryReader.read_blob(skeleton_) != 1)
         {
-            auto modelnodedata        = new ModelData();
-            modelnodedata->subMeshId  = _binaryReader.readString();
-            modelnodedata->materialId = _binaryReader.readString();
+            AXLOGW("warning: Failed to read is skeleton");
+            return nullptr;
+        }
+        if (skeleton_)
+            skeleton = true;
 
-            if (modelnodedata->subMeshId.empty() || modelnodedata->materialId.empty())
-            {
-                AXLOGW("Node {} part is missing meshPartId or materialId", nodedata->id);
-                AX_SAFE_DELETE(modelnodedata);
-                AX_SAFE_DELETE(nodedata);
-                return nullptr;
-            }
+        // transform
+        Mat4 transform;
+        if (!_binaryReader.read_blob(transform.m))
+        {
+            AXLOGW("warning: Failed to read transform matrix");
+            return nullptr;
+        }
+        // parts
+        unsigned int partsSize = 0;
+        if (_binaryReader.read_blob(partsSize) != 1)
+        {
+            AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
+            return nullptr;
+        }
 
-            // read bone
-            unsigned int bonesSize = 0;
-            if (_binaryReader.read(&bonesSize, 4, 1) != 1)
-            {
-                AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
-                AX_SAFE_DELETE(modelnodedata);
-                AX_SAFE_DELETE(nodedata);
-                return nullptr;
-            }
+        NodeData* nodedata = new NodeData();
+        nodedata->id       = id;
 
-            if (bonesSize > 0)
+        bool isSkin = false;
+
+        if (partsSize > 0)
+        {
+            for (unsigned int i = 0; i < partsSize; ++i)
             {
-                for (unsigned int j = 0; j < bonesSize; ++j)
+                auto modelnodedata        = new ModelData();
+                modelnodedata->subMeshId  = _binaryReader.read_v32();
+                modelnodedata->materialId = _binaryReader.read_v32();
+
+                if (modelnodedata->subMeshId.empty() || modelnodedata->materialId.empty())
                 {
-                    std::string name = _binaryReader.readString();
-                    modelnodedata->bones.emplace_back(name);
-
-                    Mat4 invbindpos;
-                    if (!_binaryReader.readMatrix(invbindpos.m))
-                    {
-                        AX_SAFE_DELETE(modelnodedata);
-                        AX_SAFE_DELETE(nodedata);
-                        return nullptr;
-                    }
-
-                    modelnodedata->invBindPose.emplace_back(invbindpos);
+                    AXLOGW("Node {} part is missing meshPartId or materialId", nodedata->id);
+                    AX_SAFE_DELETE(modelnodedata);
+                    AX_SAFE_DELETE(nodedata);
+                    return nullptr;
                 }
-                isSkin = true;
-            }
-            unsigned int uvMapping = 0;
-            if (_binaryReader.read(&uvMapping, 4, 1) != 1)
-            {
-                AXLOGW("warning: Failed to read nodedata: uvMapping '{}'.", _path);
-                AX_SAFE_DELETE(modelnodedata);
-                AX_SAFE_DELETE(nodedata);
-                return nullptr;
-            }
-            for (unsigned int j = 0; j < uvMapping; ++j)
-            {
-                unsigned int textureIndexSize = 0;
-                if (_binaryReader.read(&textureIndexSize, 4, 1) != 1)
+
+                // read bone
+                unsigned int bonesSize = 0;
+                if (_binaryReader.read_blob(bonesSize) != 1)
                 {
                     AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
                     AX_SAFE_DELETE(modelnodedata);
                     AX_SAFE_DELETE(nodedata);
                     return nullptr;
                 }
-                for (unsigned int k = 0; k < textureIndexSize; ++k)
+
+                if (bonesSize > 0)
                 {
-                    unsigned int index = 0;
-                    if (_binaryReader.read(&index, 4, 1) != 1)
+                    for (unsigned int j = 0; j < bonesSize; ++j)
                     {
+                        std::string_view name = _binaryReader.read_v32();
+                        modelnodedata->bones.emplace_back(name);
+
+                        Mat4 invbindpos;
+                        if (!_binaryReader.read_blob(invbindpos.m))
+                        {
+                            AX_SAFE_DELETE(modelnodedata);
+                            AX_SAFE_DELETE(nodedata);
+                            return nullptr;
+                        }
+
+                        modelnodedata->invBindPose.emplace_back(invbindpos);
+                    }
+                    isSkin = true;
+                }
+                unsigned int uvMapping = 0;
+                if (_binaryReader.read_blob(uvMapping) != 1)
+                {
+                    AXLOGW("warning: Failed to read nodedata: uvMapping '{}'.", _path);
+                    AX_SAFE_DELETE(modelnodedata);
+                    AX_SAFE_DELETE(nodedata);
+                    return nullptr;
+                }
+                for (unsigned int j = 0; j < uvMapping; ++j)
+                {
+                    unsigned int textureIndexSize = 0;
+                    if (_binaryReader.read_blob(textureIndexSize) != 1)
+                    {
+                        AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
                         AX_SAFE_DELETE(modelnodedata);
                         AX_SAFE_DELETE(nodedata);
                         return nullptr;
                     }
+                    for (unsigned int k = 0; k < textureIndexSize; ++k)
+                    {
+                        unsigned int index = 0;
+                        if (_binaryReader.read_blob(index) != 1)
+                        {
+                            AX_SAFE_DELETE(modelnodedata);
+                            AX_SAFE_DELETE(nodedata);
+                            return nullptr;
+                        }
+                    }
                 }
+                nodedata->modelNodeDatas.emplace_back(modelnodedata);
             }
-            nodedata->modelNodeDatas.emplace_back(modelnodedata);
         }
-    }
 
-    // set transform
-    if (_version == "0.1" || _version == "0.2" || _version == "0.3" || _version == "0.4" || _version == "0.5" ||
-        _version == "0.6")
-    {
-        if (isSkin || singleSprite)
+        // set transform
+        if (_version == "0.1" || _version == "0.2" || _version == "0.3" || _version == "0.4" || _version == "0.5" ||
+            _version == "0.6")
         {
-            nodedata->transform = Mat4::IDENTITY;
+            if (isSkin || singleSprite)
+            {
+                nodedata->transform = Mat4::IDENTITY;
+            }
+            else
+            {
+                nodedata->transform = transform;
+            }
         }
         else
         {
             nodedata->transform = transform;
         }
-    }
-    else
-    {
-        nodedata->transform = transform;
-    }
 
-    unsigned int childrenSize = 0;
-    if (_binaryReader.read(&childrenSize, 4, 1) != 1)
-    {
-        AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
-        AX_SAFE_DELETE(nodedata);
-        return nullptr;
-    }
-    if (childrenSize > 0)
-    {
-        for (unsigned int i = 0; i < childrenSize; ++i)
+        unsigned int childrenSize = 0;
+        if (_binaryReader.read_blob(childrenSize) != 1)
         {
-            NodeData* tempdata = parseNodesRecursivelyBinary(skeleton, singleSprite);
-            nodedata->children.emplace_back(tempdata);
+            AXLOGW("warning: Failed to read meshdata: attribCount '{}'.", _path);
+            AX_SAFE_DELETE(nodedata);
+            return nullptr;
         }
+        if (childrenSize > 0)
+        {
+            for (unsigned int i = 0; i < childrenSize; ++i)
+            {
+                NodeData* tempdata = parseNodesRecursivelyBinary(skeleton, singleSprite);
+                nodedata->children.emplace_back(tempdata);
+            }
+        }
+        return nodedata;
     }
-    return nodedata;
+    catch (const std::exception& ex)
+    {
+        AXLOGW("exception occurred: {}", ex.what());
+    }
+    return nullptr;
 }
 
 backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
@@ -2304,8 +2320,9 @@ std::vector<Vec3> Bundle3D::getTrianglesList(std::string_view path)
         for (const auto& indices : iter->subMeshIndices)
         {
             indices.for_each([&](unsigned int ind) {
-                trianglesList.emplace_back(Vec3(iter->vertex[ind * preVertexSize], iter->vertex[ind * preVertexSize + 1],
-                                             iter->vertex[ind * preVertexSize + 2]));
+                trianglesList.emplace_back(Vec3(iter->vertex[ind * preVertexSize],
+                                                iter->vertex[ind * preVertexSize + 1],
+                                                iter->vertex[ind * preVertexSize + 2]));
             });
         }
     }
@@ -2321,14 +2338,12 @@ Bundle3D::~Bundle3D()
     clear();
 }
 
-ax::AABB Bundle3D::calculateAABB(const std::vector<float>& vertex,
-                                      int stride,
-                                      const IndexArray& indices)
+ax::AABB Bundle3D::calculateAABB(const std::vector<float>& vertex, int stride, const IndexArray& indices)
 {
     AABB aabb;
     stride /= 4;
 
-    indices.for_each ([&](uint32_t i) {
+    indices.for_each([&](uint32_t i) {
         Vec3 point(vertex[i * stride], vertex[i * stride + 1], vertex[i * stride + 2]);
         aabb.updateMinMax(&point, 1);
     });
@@ -2336,4 +2351,4 @@ ax::AABB Bundle3D::calculateAABB(const std::vector<float>& vertex,
     return aabb;
 }
 
-}
+}  // namespace ax

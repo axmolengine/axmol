@@ -16,13 +16,11 @@ set(_AX_3D_HEADER
     3d/MotionStreak3D.h
     3d/Skybox.h
     3d/MeshSkin.h
-    3d/cocos3d.h
     3d/AABB.h
     3d/Bundle3D.h
     3d/ObjLoader.h
     3d/Bundle3DData.h
     3d/Skeleton3D.h
-    3d/BundleReader.h
     3d/AttachNode.h
     3d/VertexAttribBinding.h
     3d/3DProgramInfo.h
@@ -37,7 +35,6 @@ set(_AX_3D_SRC
     3d/BillBoard.cpp
     3d/Bundle3D.cpp
     3d/Bundle3DData.cpp
-    3d/BundleReader.cpp
     3d/Frustum.cpp
     3d/Mesh.cpp
     3d/MeshSkin.cpp

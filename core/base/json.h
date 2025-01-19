@@ -1,7 +1,5 @@
 #pragma once
 
-#include "rapidjson/rapidjson.h"
-#include "rapidjson/document.h"
 #include "simdjson/simdjson.h"
 
 namespace simdjson
@@ -46,14 +44,19 @@ public:
     size_t size() const { return viable_size; }
     void resize(size_t size)
     {
-        assert(!data_ptr || size <= viable_size);  // not allow enlarge
-        if (!data_ptr)
+        assert(!data_ptr || size <= capacity);  // not allow enlarge
+        if (!data_ptr && size > 0)
+        {
+            capacity = size;
             data_ptr = internal::allocate_padded_buffer(size);
+        }
         viable_size = size;
     }
 
     char* data() { return data_ptr; }
     const char* data() const { return data_ptr; }
+
+    void clear() { resize(0); }
 
     operator padded_string_view() const noexcept
     {
@@ -63,6 +66,7 @@ public:
 private:
     PaddedString(const PaddedString&) = delete;
     size_t viable_size{0};
+    size_t capacity{0};
     char* data_ptr{nullptr};
 };
 

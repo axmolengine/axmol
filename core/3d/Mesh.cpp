@@ -199,7 +199,7 @@ Mesh* Mesh::create(const std::vector<float>& positions,
 {
     int perVertexSizeInFloat = 0;
     std::vector<float> vertices;
-    std::vector<MeshVertexAttrib> attribs;
+    axstd::pod_vector<MeshVertexAttrib> attribs;
 
     MeshVertexAttrib att;
     att.type = backend::VertexFormat::FLOAT3;
@@ -258,7 +258,7 @@ Mesh* Mesh::create(const std::vector<float>& positions,
 Mesh* Mesh::create(const std::vector<float>& vertices,
                    int /*perVertexSizeInFloat*/,
                    const IndexArray& indices,
-                   const std::vector<MeshVertexAttrib>& attribs)
+                   const axstd::pod_vector<MeshVertexAttrib>& attribs)
 {
     MeshData meshdata;
     meshdata.attribs = attribs;

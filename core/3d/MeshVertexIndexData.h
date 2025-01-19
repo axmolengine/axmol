@@ -145,7 +145,7 @@ protected:
     backend::Buffer* _vertexBuffer = nullptr;  // vertex buffer
     ssize_t _sizePerVertex         = -1;
     Vector<MeshIndexData*> _indices;           // index data
-    std::vector<MeshVertexAttrib> _attribs;    // vertex attributes
+    axstd::pod_vector<MeshVertexAttrib> _attribs;    // vertex attributes
 
     int _vertexCount = 0;  // vertex count
     std::vector<float> _vertexData;

@@ -80,7 +80,7 @@ public:
     static Mesh* create(const std::vector<float>& vertices,
                         int perVertexSizeInFloat,
                         const IndexArray& indices,
-                        const std::vector<MeshVertexAttrib>& attribs);
+                        const axstd::pod_vector<MeshVertexAttrib>& attribs);
 
     /**
      * create mesh
