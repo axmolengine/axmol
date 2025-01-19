@@ -78,22 +78,14 @@ class AX_DLL Quaternion
     friend class Transform;
 
 public:
-    /**
-     * The x-value of the quaternion's vector component.
-     */
-    float x;
-    /**
-     * The y-value of the quaternion's vector component.
-     */
-    float y;
-    /**
-     * The z-value of the quaternion's vector component.
-     */
-    float z;
-    /**
-     * The scalar component of the quaternion.
-     */
-    float w;
+    union
+    {
+        struct
+        {
+            float x, y, z, w;
+        };
+        float comps[4];
+    };
 
     /**
      * Constructs a quaternion initialized to (0, 0, 0, 1).

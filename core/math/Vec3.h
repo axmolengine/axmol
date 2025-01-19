@@ -49,20 +49,18 @@ class Quaternion;
 class AX_DLL Vec3
 {
 public:
-    /**
-     * The x-coordinate.
-     */
-    float x;
+    union
+    {
+        float comps[3];
 
-    /**
-     * The y-coordinate.
-     */
-    float y;
-
-    /**
-     * The z-coordinate.
-     */
-    float z;
+        // The coord alias
+        struct
+        {
+            float x;
+            float y;
+            float z;
+        };
+    };
 
     /**
      * Constructs a new vector initialized to all zeros.
