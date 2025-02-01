@@ -151,3 +151,5 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnSurfaceChanged(J
     ax::Application::getInstance()->applicationScreenSizeChanged(w, h);
 }
 }
+#undef LOGD
+#undef LOG_TAG
