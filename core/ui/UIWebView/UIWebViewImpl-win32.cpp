@@ -34,9 +34,6 @@
 #    include "platform/FileUtils.h"
 #    include "platform/GLView.h"
 #    include "ui/UIHelper.h"
-#    include "rapidjson/document.h"
-#    include "rapidjson/stringbuffer.h"
-#    include "rapidjson/writer.h"
 #    include "base/Utils.h"
 
 #    define WIN32_LEAN_AND_MEAN
