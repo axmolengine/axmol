@@ -115,8 +115,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':libaxmol')
 
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    //implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.22"))
+    def appcompat_ver = buildProfiles['appcompat']
+    implementation "androidx.appcompat:appcompat:$appcompat_ver"
 }
 
 project.afterEvaluate {
