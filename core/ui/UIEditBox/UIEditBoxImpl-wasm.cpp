@@ -42,11 +42,12 @@ extern "C" {
 EMSCRIPTEN_KEEPALIVE
 void getInputOver(char* dataPtr, int dataLength)
 {
-    AXLOGD("text {} ", dataPtr);
+    std::string_view text{ dataPtr, static_cast<size_t>(dataLength) };
+    AXLOGD("text {} ", text);
     if (_activeEditBox)
     {
         if (_activeEditBox->isEditingMode())
-            _activeEditBox->editBoxEditingDidEnd(std::string_view{(char*)dataPtr},
+            _activeEditBox->editBoxEditingDidEnd(text,
                                                  EditBoxDelegate::EditBoxEndAction::RETURN);
         _activeEditBox = nullptr;
     }
@@ -57,10 +58,11 @@ EMSCRIPTEN_KEEPALIVE
 
 void getInputChange(char* dataPtr, int dataLength)
 {
-    AXLOGD("text {} ", dataPtr);
+    std::string_view text{ dataPtr, static_cast<size_t>(dataLength) };
+    AXLOGD("text {} ", text);
     if (_activeEditBox && _activeEditBox->isEditingMode())
     {
-        _activeEditBox->editBoxEditingChanged(std::string_view{(char*)dataPtr});
+        _activeEditBox->editBoxEditingChanged(text);
     }
     free(dataPtr);
 }
