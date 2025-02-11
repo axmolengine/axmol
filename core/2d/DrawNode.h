@@ -625,7 +625,7 @@ private:
                       bool isconvex      = true);
 
     // Internal function _drawLine
-    void _drawLine(const Vec2& from, const Vec2& to, const Color4B& color);
+    void _drawLine(const Vec2& from, const Vec2& to, const Color& color);
 
     // Internal function _drawSegment
     void _drawSegment(const Vec2& origin,

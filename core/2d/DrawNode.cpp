@@ -1199,17 +1199,16 @@ void DrawNode::_drawSegment(const Vec2& from,
     }
 }
 // Internal function _drawLine => thickness is always 1 (fastes way to draw a line)
-void DrawNode::_drawLine(const Vec2& from, const Vec2& to, const Color4B& color)
+void DrawNode::_drawLine(const Vec2& from, const Vec2& to, const Color& color)
 {
     Vec2 vertices[2] = {from, to};
     applyTransform(vertices, vertices, 2);
 
-
-    auto line = expandBufferAndGetPointer(_lines, 2);
+    auto line   = expandBufferAndGetPointer(_lines, 2);
     _linesDirty = true;
 
-    line[0] = {vertices[0], color, Vec2::ZERO};
-    line[1] = {vertices[1], color, Vec2::ZERO};
+    line[0] = {vertices[0], Vec2::ZERO, color};
+    line[1] = {vertices[1], Vec2::ZERO, color};
 }
 
 void DrawNode::_drawDot(const Vec2& pos, float radius, const Color& color)

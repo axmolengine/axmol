@@ -3628,8 +3628,8 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
     // Glow SDF (GPU)
     auto label1 = Label::createWithTTF(ttfConf, "Glow1", TextHAlignment::CENTER, s.width);
     label1->setPosition(Vec2(s.width / 2, s.height * 0.7));
-    label1->setTextColor(Color4B::GREEN);
-    label1->enableGlow(Color4B::YELLOW);
+    label1->setTextColor(Color32::GREEN);
+    label1->enableGlow(Color32::YELLOW);
     label1->enableUnderline();
     label1->enableStrikethrough();
     addChild(label1);
@@ -3638,8 +3638,8 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
     ttfConf.distanceFieldEnabled = false;
     auto label2                    = Label::createWithTTF(ttfConf, "Glow2", TextHAlignment::CENTER, s.width);
     label2->setPosition(Vec2(s.width / 2, s.height * 0.6));
-    label2->setTextColor(Color4B::GREEN);
-    label2->enableGlow(Color4B::YELLOW);
+    label2->setTextColor(Color32::GREEN);
+    label2->enableGlow(Color32::YELLOW);
     label2->enableUnderline();
     label2->enableStrikethrough();
     addChild(label2);
@@ -3649,8 +3649,8 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
     ttfConf.outlineSize          = 2;
     auto label3                    = Label::createWithTTF(ttfConf, "Outline1", TextHAlignment::CENTER, s.width);
     label3->setPosition(Vec2(s.width / 2, s.height * 0.48));
-    label3->setTextColor(Color4B::RED);
-    label3->enableOutline(Color4B::BLUE);
+    label3->setTextColor(Color32::RED);
+    label3->enableOutline(Color32::BLUE);
     label3->enableUnderline();
     label3->enableStrikethrough();
     addChild(label3);
@@ -3660,8 +3660,8 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
     ttfConf.outlineSize          = 2;
     auto label4                    = Label::createWithTTF(ttfConf, "Outline2", TextHAlignment::CENTER, s.width);
     label4->setPosition(Vec2(s.width / 2, s.height * 0.36));
-    label4->setTextColor(Color4B::RED);
-    label4->enableOutline(Color4B::BLUE, 2);
+    label4->setTextColor(Color32::RED);
+    label4->enableOutline(Color32::BLUE, 2);
     label4->enableUnderline();
     label4->enableStrikethrough();
     addChild(label4);
@@ -3677,21 +3677,21 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
     Label* labels[count];
 
     labels[0] = Label::createWithSystemFont("SystemFont TextVAlignment::TOP\nusing setTextColor(255, 0, 255, 100)", font, 14, Vec2::ZERO, TextHAlignment::LEFT, TextVAlignment::TOP);
-    labels[0]->setTextColor(Color4B(255, 0, 255, 100));
-    labels[0]->enableGlow(Color4B::BLUE);
+    labels[0]->setTextColor(Color32(255, 0, 255, 100));
+    labels[0]->enableGlow(Color32::BLUE);
 
     labels[1] = Label::createWithSystemFont("SystemFont TextVAlignment::CENTER\nusing setColor(*RED*)", font, 14, Vec2::ZERO, TextHAlignment::RIGHT, TextVAlignment::CENTER);
     labels[1]->setColor(Color3B::RED);
  
     labels[2] = Label::createWithSystemFont("SystemFont TextVAlignment::BOTTOM\nusingsetTextColor(*YELLOW)", font, 14,
                                            Vec2::ZERO, TextHAlignment::CENTER, TextVAlignment::BOTTOM);
-    labels[2]->setTextColor(Color4B::YELLOW);
+    labels[2]->setTextColor(Color32::YELLOW);
 
     labels[3] = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "BMFont\nwith default color", TextHAlignment::CENTER, s.width);
 
     labels[4] = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "BMFont\nusing setTextColor(0, 255, 0, 100)",
                                        TextHAlignment::CENTER, s.width);
-    labels[4]->setTextColor(Color4B(0, 255, 0, 100));
+    labels[4]->setTextColor(Color32(0, 255, 0, 100));
 
     labels[5] = Label::createWithTTF(ttfConfig,  "TTF setColor(*BLUE*)\nwith multiline 1\nand a much more longer multiline 2",
                                     TextHAlignment::LEFT, s.width);
@@ -3699,7 +3699,7 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
 
     labels[6] = Label::createWithTTF("TTF setTextColor(*RED*)\nwith multiline 1\nand a much more longer multiline 2",
                                     font, 14);
-    labels[6]->setTextColor(Color4B::RED);
+    labels[6]->setTextColor(Color32::RED);
 
     for (int i = 0; i < count; i++)
     {

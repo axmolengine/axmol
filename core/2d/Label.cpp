@@ -1765,8 +1765,8 @@ void Label::updateContent()
 
     if (_lineDrawNode)
     {
-        Color4B lineColor = Color4B(_displayedColor);
-        if (_textColor != Color4B::WHITE && _textColor != lineColor)
+        Color32 lineColor = Color32(_displayedColor);
+        if (_textColor != Color32::WHITE && _textColor != lineColor)
             lineColor = _textColor;
 
         _lineDrawNode->clear();
