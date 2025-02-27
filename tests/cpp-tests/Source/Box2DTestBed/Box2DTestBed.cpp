@@ -30,6 +30,7 @@
 #include "Box2DTestBed.h"
 #include "samples/sample.h"
 #include "samples/settings.h"
+#include "samples/TaskScheduler.h"
 #include "GLView.h"
 
 using namespace ax;
@@ -95,7 +96,10 @@ Box2DTestBedTests::Box2DTestBedTests()
 //
 //------------------------------------------------------------------
 
-Box2DTestBed::Box2DTestBed() {}
+Box2DTestBed::Box2DTestBed()
+{
+    m_statsWindowOffset = Vec2(-60, -80);
+}
 
 Box2DTestBed::~Box2DTestBed()
 {
@@ -122,7 +126,7 @@ bool Box2DTestBed::initWithEntryIndex(int index)
     Vec2 visibleOrigin = director->getVisibleOrigin();
     Size visibleSize   = director->getVisibleSize();
 
-    m_entryIndex = index;
+    m_entryIndex = s_settings.sampleIndex = index;
 
     m_entry  = g_sampleEntries + index;
     m_sample = m_entry->createFcn(s_settings);
@@ -154,8 +158,6 @@ bool Box2DTestBed::initWithEntryIndex(int index)
     _mouseListener->onMouseDown   = AX_CALLBACK_1(Box2DTestBed::onMouseDown, this);
     _mouseListener->onMouseScroll = AX_CALLBACK_1(Box2DTestBed::onMouseScroll, this);
     _eventDispatcher->addEventListenerWithFixedPriority(_mouseListener, 12);
-
-    scheduleUpdate();
 
     return true;
 }
@@ -237,19 +239,12 @@ void Box2DTestBed::onEnter()
 {
     Scene::onEnter();
     ImGuiPresenter::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
-    ImGuiPresenter::getInstance()->addRenderLoop("#bv3t", AX_CALLBACK_0(Box2DTestBed::onDrawImGui, this), this);
+    ImGuiPresenter::getInstance()->addRenderLoop("#bv3t", AX_CALLBACK_0(Box2DTestBed::renderSamples, this), this);
 }
 void Box2DTestBed::onExit()
 {
     ImGuiPresenter::getInstance()->removeRenderLoop("#bv3t");
     Scene::onExit();
-}
-
-void Box2DTestBed::update(float dt)
-{
-    // Debug draw
-    _debugDraw->clear();
-    m_sample->Step(s_settings);
 }
 
 void Box2DTestBed::initPhysics()
@@ -262,7 +257,7 @@ void Box2DTestBed::initPhysics()
     auto& b2dw      = _debugDraw->getB2DebugDraw();
     b2dw.drawShapes = true;
     b2dw.drawJoints = true;
-    b2dw.drawAABBs  = false;
+    b2dw.drawBounds  = false;
 
     _debugDraw->setWorldOffset({250, 70});
     _debugDraw->setPTMRatio(3.0f);
@@ -275,16 +270,40 @@ void Box2DTestBed::RestartSample()
     getTestSuite()->restartCurrTest();
 }
 
-void Box2DTestBed::onDrawImGui()
+void Box2DTestBed::renderSamples()
 {
-    int maxWorkers = enki::GetNumHardwareThreads();
+    _debugDraw->clear();
 
     float menuWidth       = 180.0f;
     auto cursorPos        = ImGui::GetCursorScreenPos();
-    ImVec2 toolWindowPos  = {cursorPos.x + g_camera.m_width - menuWidth - 80, cursorPos.y - 80};
-    ImVec2 toolWindowSize = {menuWidth, g_camera.m_height - 200.0f};
+
+    ImVec2 statsWindowPos  = {cursorPos.x + m_statsWindowOffset.x, cursorPos.y + m_statsWindowOffset.y};
+    ImVec2 statsWindowSize = {g_camera.m_width - 10, g_camera.m_height - 10};
+    ImGui::SetNextWindowPos(statsWindowPos);
+    ImGui::SetNextWindowSize(statsWindowSize);
+    ImGui::SetNextWindowBgAlpha(0.0f);
+    ImGui::Begin("Overlay", nullptr,
+                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize |
+                     ImGuiWindowFlags_NoScrollbar);
+    ImGui::End();
+
+    char buffer[128];
     if (g_draw.m_showUI)
     {
+        const SampleEntry& entry = g_sampleEntries[s_settings.sampleIndex];
+        snprintf(buffer, 128, "%s : %s", entry.category, entry.name);
+        m_sample->DrawTitle(buffer);
+    }
+
+    m_sample->Step(s_settings);
+
+    /// BEGIN UpdateUI
+    int maxWorkers = enki::GetNumHardwareThreads();
+
+    if (g_draw.m_showUI)
+    {
+        ImVec2 toolWindowPos  = {(cursorPos.x + g_camera.m_width - menuWidth - 80), (cursorPos.y - 80)};
+        ImVec2 toolWindowSize = {menuWidth, g_camera.m_height - 200.0f};
         ImGui::SetNextWindowPos(toolWindowPos, ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(toolWindowSize, ImGuiCond_FirstUseEver);
         ImGui::Begin("Tools", &g_draw.m_showUI,
@@ -316,7 +335,7 @@ void Box2DTestBed::onDrawImGui()
                 ImGui::Checkbox("Shapes", &s_settings.drawShapes);
                 ImGui::Checkbox("Joints", &s_settings.drawJoints);
                 ImGui::Checkbox("Joint Extras", &s_settings.drawJointExtras);
-                ImGui::Checkbox("AABBs", &s_settings.drawAABBs);
+                ImGui::Checkbox("AABBs", &s_settings.drawBounds);
                 ImGui::Checkbox("Contact Points", &s_settings.drawContactPoints);
                 ImGui::Checkbox("Contact Normals", &s_settings.drawContactNormals);
                 ImGui::Checkbox("Contact Impulses", &s_settings.drawContactImpulses);
@@ -416,22 +435,21 @@ void Box2DTestBed::onDrawImGui()
 
         ImGui::End();
 
-        m_sample->UpdateUI();
+        m_sample->UpdateGui();
     }
+    /// END UpdateUI
 
-    // if (g_draw.m_showUI)
+    if (g_draw.m_showUI)
     {
-        char buffer[128];
         snprintf(buffer, 128, "%.1f ms - step %d - camera (%g, %g, %g)", 1000.0f * _director->getDeltaTime(),
                  m_sample->m_stepCount, g_camera.m_center.x, g_camera.m_center.y, g_camera.m_zoom);
         // snprintf( buffer, 128, "%.1f ms", 1000.0f * frameTime );
 
-        ImGui::SetNextWindowPos(ImVec2{cursorPos.x + 92, cursorPos.y + g_camera.m_height - 235},
-                                ImGuiCond_FirstUseEver);
         ImGui::Begin("Overlay", nullptr,
+
                      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize |
                          ImGuiWindowFlags_NoScrollbar);
-        // ImGui::SetCursorPos(ImVec2(5.0f, g_camera.m_height - 20.0f));
+        ImGui::SetCursorPos(ImVec2(5.0f, g_camera.m_height - 50.0f));
         ImGui::TextColored(ImColor(153, 230, 153, 255), "%s", buffer);
         ImGui::End();
     }

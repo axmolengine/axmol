@@ -29,7 +29,7 @@
 
 #include "../BaseTest.h"
 
-#if defined(AX_ENABLE_PHYSICS) && 0
+#if defined(AX_ENABLE_PHYSICS)
 
 DEFINE_TEST_SUITE(PhysicsTests);
 
@@ -41,6 +41,7 @@ public:
 
     virtual bool init() override;
     virtual void onEnter() override;
+    
     virtual std::string title() const override;
 
     void toggleDebugCallback(ax::Object* sender);
@@ -62,13 +63,17 @@ public:
     void onTouchMoved(ax::Touch* touch, ax::Event* event);
     void onTouchEnded(ax::Touch* touch, ax::Event* event);
 
+    void onMouseDown(ax::Event* event);
+
     void toggleDebug();
 
 protected:
+    ax::EventListenerMouse* _mouseListener{nullptr};
     ax::Texture2D* _spriteTexture;
     ax::SpriteBatchNode* _ball;
     std::unordered_map<int, ax::Node*> _mouses;
     bool _debugDraw;
+    ax::DrawNode* _debugDrawNode{nullptr};
 };
 
 class PhysicsDemoLogoSmash : public PhysicsDemo
@@ -183,7 +188,7 @@ public:
     virtual std::string subtitle() const override;
 
     bool slice(ax::PhysicsWorld& world, const ax::PhysicsRayCastInfo& info, void* data);
-    void clipPoly(ax::PhysicsShapePolygon* shape, ax::Vec2 normal, float distance);
+    void clipPoly(ax::PhysicsColliderPolygon* shape, ax::Vec2 normal, float distance);
 
     void onTouchEnded(ax::Touch* touch, ax::Event* event);
 

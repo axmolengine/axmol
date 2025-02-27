@@ -46,10 +46,9 @@ public:
     void onEnter() override;
     void onExit() override;
 
-    void onDrawImGui();
+    void renderSamples();
 
     void initPhysics();
-    void update(float dt) override;
 
     bool initWithEntryIndex(int entryIndex);
 
@@ -66,6 +65,8 @@ public:
     SampleEntry* m_entry{};
     Sample* m_sample{};
     int m_entryIndex{};
+
+    Vec2 m_statsWindowOffset{};
 
 private:
     b2Vec2 _mouseDownPos{};

@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "base/UTF8.h"
 #include "renderer/Renderer.h"
 
-#if defined(AX_ENABLE_PHYSICS) && 0
+#if defined(AX_ENABLE_PHYSICS)
 #    include "physics/PhysicsWorld.h"
 #endif
 
@@ -351,7 +351,7 @@ bool Scene::initWithPhysics()
 
 bool Scene::initPhysicsWorld()
 {
-#    if defined(AX_ENABLE_PHYSICS) && 0
+#    if defined(AX_ENABLE_PHYSICS)
     _physicsWorld = PhysicsWorld::construct(this);
 #    endif
 
@@ -377,7 +377,7 @@ bool Scene::initPhysicsWorld()
 #if (defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || defined(AX_ENABLE_NAVMESH))
 void Scene::stepPhysicsAndNavigation(float deltaTime)
 {
-#    if defined(AX_ENABLE_PHYSICS) && 0
+#    if defined(AX_ENABLE_PHYSICS)
     if (_physicsWorld && _physicsWorld->isAutoStep())
         _physicsWorld->update(deltaTime);
 #    endif

@@ -8,10 +8,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef struct b2Body b2Body;
 typedef struct b2Contact b2Contact;
 typedef struct b2Joint b2Joint;
-typedef struct b2StepContext b2StepContext;
 typedef struct b2World b2World;
 
 // Deterministic solver
@@ -51,6 +49,7 @@ typedef struct b2Island
 	int jointCount;
 
 	// Union find
+	// todo this could go away if islands are merged immediately with b2LinkJoint and b2LinkContact
 	int parentIsland;
 
 	// Keeps track of how many contacts have been removed from this island.
@@ -58,10 +57,10 @@ typedef struct b2Island
 	int constraintRemoveCount;
 } b2Island;
 
+// This is used to move islands across solver sets
 typedef struct b2IslandSim
 {
 	int islandId;
-
 } b2IslandSim;
 
 b2Island* b2CreateIsland( b2World* world, int setIndex );
@@ -86,5 +85,5 @@ void b2SplitIslandTask( int startIndex, int endIndex, uint32_t threadIndex, void
 
 void b2ValidateIsland( b2World* world, int islandId );
 
-B2_ARRAY_INLINE( b2Island, b2Island );
-B2_ARRAY_INLINE( b2IslandSim, b2IslandSim );
+B2_ARRAY_INLINE( b2Island, b2Island )
+B2_ARRAY_INLINE( b2IslandSim, b2IslandSim )

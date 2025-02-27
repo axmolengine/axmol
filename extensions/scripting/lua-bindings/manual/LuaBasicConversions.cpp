@@ -2280,7 +2280,7 @@ void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
     lua_newtable(L); /* L: table */
 
     lua_pushstring(L, "shape"); /* L: table key */
-    PhysicsShape* shape = info.shape;
+    PhysicsCollider* shape = info.shape;
     if (shape == nullptr)
     {
         lua_pushnil(L);
@@ -2289,7 +2289,7 @@ void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
     {
         int ID     = (int)(shape->_ID);
         int* luaID = &(shape->_luaID);
-        toluafix_pushusertype_object(L, ID, luaID, (void*)shape, "ax.PhysicsShape");
+        toluafix_pushusertype_object(L, ID, luaID, (void*)shape, "ax.PhysicsCollider");
     }
     lua_rawset(L, -3); /* table[key] = value, L: table */
 

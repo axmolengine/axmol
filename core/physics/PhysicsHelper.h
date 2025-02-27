@@ -11,6 +11,11 @@ struct PhysicsHelper
 
     static b2Vec2 tob2Vec2(const Vec2& v) { return b2Vec2{v.x, v.y}; }
 
+    static b2AABB tob2AABB(const Rect& v)
+    {
+        return b2AABB{b2Vec2{v.getMinX(), v.getMinY()}, b2Vec2{v.getMaxX(), v.getMaxY()}};
+    }
+
     static Color toColor(b2HexColor color)
     {
         unsigned int r = ((unsigned int)color >> 16) & 0xff;
@@ -26,5 +31,7 @@ struct PhysicsHelper
                             static_cast<uint32_t>(ret.b));
     }
 };
+
+using phl = PhysicsHelper;
 
 }  // namespace ax

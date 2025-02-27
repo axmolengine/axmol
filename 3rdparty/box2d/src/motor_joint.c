@@ -26,7 +26,7 @@ b2Vec2 b2MotorJoint_GetLinearOffset( b2JointId jointId )
 void b2MotorJoint_SetAngularOffset( b2JointId jointId, float angularOffset )
 {
 	b2JointSim* joint = b2GetJointSimCheckType( jointId, b2_motorJoint );
-	joint->motorJoint.angularOffset = b2ClampFloat( angularOffset, -b2_pi, b2_pi );
+	joint->motorJoint.angularOffset = b2ClampFloat( angularOffset, -B2_PI, B2_PI );
 }
 
 float b2MotorJoint_GetAngularOffset( b2JointId jointId )
@@ -186,6 +186,7 @@ void b2WarmStartMotorJoint( b2JointSim* base, b2StepContext* context )
 
 void b2SolveMotorJoint( b2JointSim* base, b2StepContext* context, bool useBias )
 {
+	B2_UNUSED( useBias );
 	B2_ASSERT( base->type == b2_motorJoint );
 
 	float mA = base->invMassA;

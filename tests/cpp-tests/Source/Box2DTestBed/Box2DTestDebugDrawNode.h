@@ -5,6 +5,8 @@
 
 using namespace ax;
 
+struct ImFont;
+
 struct CircleData
 {
     b2Vec2 position;
@@ -85,6 +87,8 @@ public:
     bool _circlesDirty{true};
     bool _solidCirclesDirty{true};
     bool _capsulesDirty{true};
+
+    ImFont* m_regularFont{nullptr};
 };
 
 extern Box2DTestDebugDrawNode* g_pDebugDrawNode;
@@ -95,6 +99,7 @@ extern GLFWwindow* g_mainWindow;
 struct b2SampleCamera
 {
     b2Vec2 ConvertScreenToWorld(b2Vec2 ps);
+    b2Vec2 ConvertWorldToScreen(b2Vec2 pw);
     b2AABB GetViewBounds();
     b2Vec2 m_center{0.0f, 0.0f};
     float m_zoom{1.0f};

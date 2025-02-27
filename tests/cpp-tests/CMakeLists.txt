@@ -404,7 +404,7 @@ list(APPEND GAME_SOURCE
 )
 
 if((WINDOWS OR MACOSX OR LINUX OR WASM) AND (NOT WINRT))
-    file(GLOB_RECURSE BOX2D_TESTBED_SOURCES Source/Box2DTestBed/*.h;Source/Box2DTestBed/*.cpp)
+    file(GLOB_RECURSE BOX2D_TESTBED_SOURCES Source/Box2DTestBed/*.h;Source/Box2DTestBed/*.cpp;Source/Box2DTestBed/*.c)
     list(APPEND GAME_SOURCE ${BOX2D_TESTBED_SOURCES})
 endif()
 

@@ -3,31 +3,27 @@
 
 #include "human.h"
 
-#include "sample.h"
+#include "random.h"
 
 #include "box2d/box2d.h"
 #include "box2d/math_functions.h"
 
 #include <assert.h>
 
-Human::Human()
+void CreateHuman( Human* human, b2WorldId worldId, b2Vec2 position, float scale, float frictionTorque, float hertz,
+				  float dampingRatio, int groupIndex, void* userData, bool colorize )
 {
-	for ( int i = 0; i < Bone::e_count; ++i )
+	assert( human->isSpawned == false );
+
+	for ( int i = 0; i < bone_count; ++i )
 	{
-		m_bones[i].bodyId = b2_nullBodyId;
-		m_bones[i].jointId = b2_nullJointId;
-		m_bones[i].frictionScale = 1.0f;
-		m_bones[i].parentIndex = -1;
+		human->bones[i].bodyId = b2_nullBodyId;
+		human->bones[i].jointId = b2_nullJointId;
+		human->bones[i].frictionScale = 1.0f;
+		human->bones[i].parentIndex = -1;
 	}
 
-	m_scale = 1.0f;
-	m_isSpawned = false;
-}
-
-void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float frictionTorque, float hertz, float dampingRatio,
-				   int groupIndex, void* userData, bool colorize )
-{
-	assert( m_isSpawned == false );
+	human->scale = scale;
 
 	b2BodyDef bodyDef = b2DefaultBodyDef();
 	bodyDef.type = b2_dynamicBody;
@@ -35,19 +31,23 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 	bodyDef.userData = userData;
 
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
-	shapeDef.friction = 0.2f;
+	shapeDef.material.friction = 0.2f;
 	shapeDef.filter.groupIndex = -groupIndex;
-	shapeDef.filter.maskBits = 1;
+	shapeDef.filter.categoryBits = 2;
+	shapeDef.filter.maskBits = ( 1 | 2 );
 
 	b2ShapeDef footShapeDef = shapeDef;
-	footShapeDef.friction = 0.05f;
+	footShapeDef.material.friction = 0.05f;
+
+	// feet don't collide with ragdolls
+	footShapeDef.filter.categoryBits = 2;
+	footShapeDef.filter.maskBits = 1;
 
 	if ( colorize )
 	{
-		footShapeDef.customColor = b2_colorSaddleBrown;
+		footShapeDef.material.customColor = b2_colorSaddleBrown;
 	}
 
-	m_scale = scale;
 	float s = scale;
 	float maxTorque = frictionTorque * s;
 	bool enableMotor = true;
@@ -62,16 +62,18 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 
 	// hip
 	{
-		Bone* bone = m_bones + Bone::e_hip;
+		Bone* bone = human->bones + bone_hip;
 		bone->parentIndex = -1;
 
-		bodyDef.position = b2Add( { 0.0f, 0.95f * s }, position );
+		bodyDef.position = b2Add( ( b2Vec2 ){ 0.0f, 0.95f * s }, position );
 		bodyDef.linearDamping = 0.0f;
+		bodyDef.name = "hip";
+
 		bone->bodyId = b2CreateBody( worldId, &bodyDef );
 
 		if ( colorize )
 		{
-			shapeDef.customColor = pantColor;
+			shapeDef.material.customColor = pantColor;
 		}
 
 		b2Capsule capsule = { { 0.0f, -0.02f * s }, { 0.0f, 0.02f * s }, 0.095f * s };
@@ -80,11 +82,13 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 
 	// torso
 	{
-		Bone* bone = m_bones + Bone::e_torso;
-		bone->parentIndex = Bone::e_hip;
+		Bone* bone = human->bones + bone_torso;
+		bone->parentIndex = bone_hip;
 
-		bodyDef.position = b2Add( { 0.0f, 1.2f * s }, position );
+		bodyDef.position = b2Add( ( b2Vec2 ){ 0.0f, 1.2f * s }, position );
 		bodyDef.linearDamping = 0.0f;
+		bodyDef.name = "torso";
+
 		// bodyDef.type = b2_staticBody;
 		bone->bodyId = b2CreateBody( worldId, &bodyDef );
 		bone->frictionScale = 0.5f;
@@ -92,20 +96,20 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 
 		if ( colorize )
 		{
-			shapeDef.customColor = shirtColor;
+			shapeDef.material.customColor = shirtColor;
 		}
 
 		b2Capsule capsule = { { 0.0f, -0.135f * s }, { 0.0f, 0.135f * s }, 0.09f * s };
 		b2CreateCapsuleShape( bone->bodyId, &shapeDef, &capsule );
 
-		b2Vec2 pivot = b2Add( { 0.0f, 1.0f * s }, position );
+		b2Vec2 pivot = b2Add( ( b2Vec2 ){ 0.0f, 1.0f * s }, position );
 		b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-		jointDef.bodyIdA = m_bones[bone->parentIndex].bodyId;
+		jointDef.bodyIdA = human->bones[bone->parentIndex].bodyId;
 		jointDef.bodyIdB = bone->bodyId;
 		jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
 		jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
 		jointDef.enableLimit = enableLimit;
-		jointDef.lowerAngle = -0.25f * b2_pi;
+		jointDef.lowerAngle = -0.25f * B2_PI;
 		jointDef.upperAngle = 0.0f;
 		jointDef.enableMotor = enableMotor;
 		jointDef.maxMotorTorque = bone->frictionScale * maxTorque;
@@ -119,36 +123,37 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 
 	// head
 	{
-		Bone* bone = m_bones + Bone::e_head;
-		bone->parentIndex = Bone::e_torso;
+		Bone* bone = human->bones + bone_head;
+		bone->parentIndex = bone_torso;
 
-		bodyDef.position = b2Add( { 0.0f * s, 1.5f * s }, position );
+		bodyDef.position = b2Add( ( b2Vec2 ){ 0.0f * s, 1.475f * s }, position );
 		bodyDef.linearDamping = 0.1f;
+		bodyDef.name = "head";
 
 		bone->bodyId = b2CreateBody( worldId, &bodyDef );
 		bone->frictionScale = 0.25f;
 
 		if ( colorize )
 		{
-			shapeDef.customColor = skinColor;
+			shapeDef.material.customColor = skinColor;
 		}
 
-		b2Capsule capsule = { { 0.0f, -0.0325f * s }, { 0.0f, 0.0325f * s }, 0.08f * s };
+		b2Capsule capsule = { { 0.0f, -0.038f * s }, { 0.0f, 0.039f * s }, 0.075f * s };
 		b2CreateCapsuleShape( bone->bodyId, &shapeDef, &capsule );
 
-		// neck
-		capsule = { { 0.0f, -0.12f * s }, { 0.0f, -0.08f * s }, 0.05f * s };
-		b2CreateCapsuleShape( bone->bodyId, &shapeDef, &capsule );
+		//// neck
+		// capsule = { { 0.0f, -0.12f * s }, { 0.0f, -0.08f * s }, 0.05f * s };
+		// b2CreateCapsuleShape( bone->bodyId, &shapeDef, &capsule );
 
-		b2Vec2 pivot = b2Add( { 0.0f, 1.4f * s }, position );
+		b2Vec2 pivot = b2Add( ( b2Vec2 ){ 0.0f, 1.4f * s }, position );
 		b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-		jointDef.bodyIdA = m_bones[bone->parentIndex].bodyId;
+		jointDef.bodyIdA = human->bones[bone->parentIndex].bodyId;
 		jointDef.bodyIdB = bone->bodyId;
 		jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
 		jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
 		jointDef.enableLimit = enableLimit;
-		jointDef.lowerAngle = -0.3f * b2_pi;
-		jointDef.upperAngle = 0.1f * b2_pi;
+		jointDef.lowerAngle = -0.3f * B2_PI;
+		jointDef.upperAngle = 0.1f * B2_PI;
 		jointDef.enableMotor = enableMotor;
 		jointDef.maxMotorTorque = bone->frictionScale * maxTorque;
 		jointDef.enableSpring = hertz > 0.0f;
@@ -161,31 +166,33 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 
 	// upper left leg
 	{
-		Bone* bone = m_bones + Bone::e_upperLeftLeg;
-		bone->parentIndex = Bone::e_hip;
+		Bone* bone = human->bones + bone_upperLeftLeg;
+		bone->parentIndex = bone_hip;
 
-		bodyDef.position = b2Add( { 0.0f, 0.775f * s }, position );
+		bodyDef.position = b2Add( ( b2Vec2 ){ 0.0f, 0.775f * s }, position );
 		bodyDef.linearDamping = 0.0f;
+		bodyDef.name = "upper_left_leg";
+
 		bone->bodyId = b2CreateBody( worldId, &bodyDef );
 		bone->frictionScale = 1.0f;
 
 		if ( colorize )
 		{
-			shapeDef.customColor = pantColor;
+			shapeDef.material.customColor = pantColor;
 		}
 
 		b2Capsule capsule = { { 0.0f, -0.125f * s }, { 0.0f, 0.125f * s }, 0.06f * s };
 		b2CreateCapsuleShape( bone->bodyId, &shapeDef, &capsule );
 
-		b2Vec2 pivot = b2Add( { 0.0f, 0.9f * s }, position );
+		b2Vec2 pivot = b2Add( ( b2Vec2 ){ 0.0f, 0.9f * s }, position );
 		b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-		jointDef.bodyIdA = m_bones[bone->parentIndex].bodyId;
+		jointDef.bodyIdA = human->bones[bone->parentIndex].bodyId;
 		jointDef.bodyIdB = bone->bodyId;
 		jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
 		jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
 		jointDef.enableLimit = enableLimit;
-		jointDef.lowerAngle = -0.05f * b2_pi;
-		jointDef.upperAngle = 0.4f * b2_pi;
+		jointDef.lowerAngle = -0.05f * B2_PI;
+		jointDef.upperAngle = 0.4f * B2_PI;
 		jointDef.enableMotor = enableMotor;
 		jointDef.maxMotorTorque = bone->frictionScale * maxTorque;
 		jointDef.enableSpring = hertz > 0.0f;
@@ -196,39 +203,53 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 		bone->jointId = b2CreateRevoluteJoint( worldId, &jointDef );
 	}
 
+	b2Vec2 points[4] = {
+		{ -0.03f * s, -0.185f * s },
+		{ 0.11f * s, -0.185f * s },
+		{ 0.11f * s, -0.16f * s },
+		{ -0.03f * s, -0.14f * s },
+	};
+
+	b2Hull footHull = b2ComputeHull( points, 4 );
+	b2Polygon footPolygon = b2MakePolygon( &footHull, 0.015f * s );
+
 	// lower left leg
 	{
-		Bone* bone = m_bones + Bone::e_lowerLeftLeg;
-		bone->parentIndex = Bone::e_upperLeftLeg;
+		Bone* bone = human->bones + bone_lowerLeftLeg;
+		bone->parentIndex = bone_upperLeftLeg;
 
-		bodyDef.position = b2Add( { 0.0f, 0.475f * s }, position );
+		bodyDef.position = b2Add( ( b2Vec2 ){ 0.0f, 0.475f * s }, position );
 		bodyDef.linearDamping = 0.0f;
+		bodyDef.name = "lower_left_leg";
+
 		bone->bodyId = b2CreateBody( worldId, &bodyDef );
 		bone->frictionScale = 0.5f;
 
 		if ( colorize )
 		{
-			shapeDef.customColor = pantColor;
+			shapeDef.material.customColor = pantColor;
 		}
 
-		b2Capsule capsule = { { 0.0f, -0.14f * s }, { 0.0f, 0.125f * s }, 0.05f * s };
+		b2Capsule capsule = { { 0.0f, -0.155f * s }, { 0.0f, 0.125f * s }, 0.045f * s };
 		b2CreateCapsuleShape( bone->bodyId, &shapeDef, &capsule );
 
 		// b2Polygon box = b2MakeOffsetBox(0.1f * s, 0.03f * s, {0.05f * s, -0.175f * s}, 0.0f);
 		// b2CreatePolygonShape(bone->bodyId, &shapeDef, &box);
 
-		capsule = { { -0.02f * s, -0.175f * s }, { 0.13f * s, -0.175f * s }, 0.03f * s };
-		b2CreateCapsuleShape( bone->bodyId, &footShapeDef, &capsule );
+		// capsule = { { -0.02f * s, -0.175f * s }, { 0.13f * s, -0.175f * s }, 0.03f * s };
+		// b2CreateCapsuleShape( bone->bodyId, &footShapeDef, &capsule );
 
-		b2Vec2 pivot = b2Add( { 0.0f, 0.625f * s }, position );
+		b2CreatePolygonShape( bone->bodyId, &footShapeDef, &footPolygon );
+
+		b2Vec2 pivot = b2Add( ( b2Vec2 ){ 0.0f, 0.625f * s }, position );
 		b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-		jointDef.bodyIdA = m_bones[bone->parentIndex].bodyId;
+		jointDef.bodyIdA = human->bones[bone->parentIndex].bodyId;
 		jointDef.bodyIdB = bone->bodyId;
 		jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
 		jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
 		jointDef.enableLimit = enableLimit;
-		jointDef.lowerAngle = -0.5f * b2_pi;
-		jointDef.upperAngle = -0.02f * b2_pi;
+		jointDef.lowerAngle = -0.5f * B2_PI;
+		jointDef.upperAngle = -0.02f * B2_PI;
 		jointDef.enableMotor = enableMotor;
 		jointDef.maxMotorTorque = bone->frictionScale * maxTorque;
 		jointDef.enableSpring = hertz > 0.0f;
@@ -241,31 +262,33 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 
 	// upper right leg
 	{
-		Bone* bone = m_bones + Bone::e_upperRightLeg;
-		bone->parentIndex = Bone::e_hip;
+		Bone* bone = human->bones + bone_upperRightLeg;
+		bone->parentIndex = bone_hip;
 
-		bodyDef.position = b2Add( { 0.0f, 0.775f * s }, position );
+		bodyDef.position = b2Add( ( b2Vec2 ){ 0.0f, 0.775f * s }, position );
 		bodyDef.linearDamping = 0.0f;
+		bodyDef.name = "upper_right_leg";
+
 		bone->bodyId = b2CreateBody( worldId, &bodyDef );
 		bone->frictionScale = 1.0f;
 
 		if ( colorize )
 		{
-			shapeDef.customColor = pantColor;
+			shapeDef.material.customColor = pantColor;
 		}
 
 		b2Capsule capsule = { { 0.0f, -0.125f * s }, { 0.0f, 0.125f * s }, 0.06f * s };
 		b2CreateCapsuleShape( bone->bodyId, &shapeDef, &capsule );
 
-		b2Vec2 pivot = b2Add( { 0.0f, 0.9f * s }, position );
+		b2Vec2 pivot = b2Add( ( b2Vec2 ){ 0.0f, 0.9f * s }, position );
 		b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-		jointDef.bodyIdA = m_bones[bone->parentIndex].bodyId;
+		jointDef.bodyIdA = human->bones[bone->parentIndex].bodyId;
 		jointDef.bodyIdB = bone->bodyId;
 		jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
 		jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
 		jointDef.enableLimit = enableLimit;
-		jointDef.lowerAngle = -0.05f * b2_pi;
-		jointDef.upperAngle = 0.4f * b2_pi;
+		jointDef.lowerAngle = -0.05f * B2_PI;
+		jointDef.upperAngle = 0.4f * B2_PI;
 		jointDef.enableMotor = enableMotor;
 		jointDef.maxMotorTorque = bone->frictionScale * maxTorque;
 		jointDef.enableSpring = hertz > 0.0f;
@@ -278,37 +301,41 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 
 	// lower right leg
 	{
-		Bone* bone = m_bones + Bone::e_lowerRightLeg;
-		bone->parentIndex = Bone::e_upperRightLeg;
+		Bone* bone = human->bones + bone_lowerRightLeg;
+		bone->parentIndex = bone_upperRightLeg;
 
-		bodyDef.position = b2Add( { 0.0f, 0.475f * s }, position );
+		bodyDef.position = b2Add( ( b2Vec2 ){ 0.0f, 0.475f * s }, position );
 		bodyDef.linearDamping = 0.0f;
+		bodyDef.name = "lower_right_leg";
+
 		bone->bodyId = b2CreateBody( worldId, &bodyDef );
 		bone->frictionScale = 0.5f;
 
 		if ( colorize )
 		{
-			shapeDef.customColor = pantColor;
+			shapeDef.material.customColor = pantColor;
 		}
 
-		b2Capsule capsule = { { 0.0f, -0.14f * s }, { 0.0f, 0.125f * s }, 0.05f * s };
+		b2Capsule capsule = { { 0.0f, -0.155f * s }, { 0.0f, 0.125f * s }, 0.045f * s };
 		b2CreateCapsuleShape( bone->bodyId, &shapeDef, &capsule );
 
 		// b2Polygon box = b2MakeOffsetBox(0.1f * s, 0.03f * s, {0.05f * s, -0.175f * s}, 0.0f);
 		// b2CreatePolygonShape(bone->bodyId, &shapeDef, &box);
 
-		capsule = { { -0.02f * s, -0.175f * s }, { 0.13f * s, -0.175f * s }, 0.03f * s };
-		b2CreateCapsuleShape( bone->bodyId, &footShapeDef, &capsule );
+		// capsule = { { -0.02f * s, -0.175f * s }, { 0.13f * s, -0.175f * s }, 0.03f * s };
+		// b2CreateCapsuleShape( bone->bodyId, &footShapeDef, &capsule );
 
-		b2Vec2 pivot = b2Add( { 0.0f, 0.625f * s }, position );
+		b2CreatePolygonShape( bone->bodyId, &footShapeDef, &footPolygon );
+
+		b2Vec2 pivot = b2Add( ( b2Vec2 ){ 0.0f, 0.625f * s }, position );
 		b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-		jointDef.bodyIdA = m_bones[bone->parentIndex].bodyId;
+		jointDef.bodyIdA = human->bones[bone->parentIndex].bodyId;
 		jointDef.bodyIdB = bone->bodyId;
 		jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
 		jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
 		jointDef.enableLimit = enableLimit;
-		jointDef.lowerAngle = -0.5f * b2_pi;
-		jointDef.upperAngle = -0.02f * b2_pi;
+		jointDef.lowerAngle = -0.5f * B2_PI;
+		jointDef.upperAngle = -0.02f * B2_PI;
 		jointDef.enableMotor = enableMotor;
 		jointDef.maxMotorTorque = bone->frictionScale * maxTorque;
 		jointDef.enableSpring = hertz > 0.0f;
@@ -321,31 +348,33 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 
 	// upper left arm
 	{
-		Bone* bone = m_bones + Bone::e_upperLeftArm;
-		bone->parentIndex = Bone::e_torso;
+		Bone* bone = human->bones + bone_upperLeftArm;
+		bone->parentIndex = bone_torso;
 		bone->frictionScale = 0.5f;
 
-		bodyDef.position = b2Add( { 0.0f, 1.225f * s }, position );
+		bodyDef.position = b2Add( ( b2Vec2 ){ 0.0f, 1.225f * s }, position );
 		bodyDef.linearDamping = 0.0f;
+		bodyDef.name = "lower_left_leg";
+
 		bone->bodyId = b2CreateBody( worldId, &bodyDef );
 
 		if ( colorize )
 		{
-			shapeDef.customColor = shirtColor;
+			shapeDef.material.customColor = shirtColor;
 		}
 
 		b2Capsule capsule = { { 0.0f, -0.125f * s }, { 0.0f, 0.125f * s }, 0.035f * s };
 		b2CreateCapsuleShape( bone->bodyId, &shapeDef, &capsule );
 
-		b2Vec2 pivot = b2Add( { 0.0f, 1.35f * s }, position );
+		b2Vec2 pivot = b2Add( ( b2Vec2 ){ 0.0f, 1.35f * s }, position );
 		b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-		jointDef.bodyIdA = m_bones[bone->parentIndex].bodyId;
+		jointDef.bodyIdA = human->bones[bone->parentIndex].bodyId;
 		jointDef.bodyIdB = bone->bodyId;
 		jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
 		jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
 		jointDef.enableLimit = enableLimit;
-		jointDef.lowerAngle = -0.1f * b2_pi;
-		jointDef.upperAngle = 0.8f * b2_pi;
+		jointDef.lowerAngle = -0.1f * B2_PI;
+		jointDef.upperAngle = 0.8f * B2_PI;
 		jointDef.enableMotor = enableMotor;
 		jointDef.maxMotorTorque = bone->frictionScale * maxTorque;
 		jointDef.enableSpring = hertz > 0.0f;
@@ -358,31 +387,34 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 
 	// lower left arm
 	{
-		Bone* bone = m_bones + Bone::e_lowerLeftArm;
-		bone->parentIndex = Bone::e_upperLeftArm;
+		Bone* bone = human->bones + bone_lowerLeftArm;
+		bone->parentIndex = bone_upperLeftArm;
 
-		bodyDef.position = b2Add( { 0.0f, 0.975f * s }, position );
+		bodyDef.position = b2Add( ( b2Vec2 ){ 0.0f, 0.975f * s }, position );
 		bodyDef.linearDamping = 0.1f;
+		bodyDef.name = "lower_left_arm";
+
 		bone->bodyId = b2CreateBody( worldId, &bodyDef );
 		bone->frictionScale = 0.1f;
 
 		if ( colorize )
 		{
-			shapeDef.customColor = skinColor;
+			shapeDef.material.customColor = skinColor;
 		}
 
 		b2Capsule capsule = { { 0.0f, -0.125f * s }, { 0.0f, 0.125f * s }, 0.03f * s };
 		b2CreateCapsuleShape( bone->bodyId, &shapeDef, &capsule );
 
-		b2Vec2 pivot = b2Add( { 0.0f, 1.1f * s }, position );
+		b2Vec2 pivot = b2Add( ( b2Vec2 ){ 0.0f, 1.1f * s }, position );
 		b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-		jointDef.bodyIdA = m_bones[bone->parentIndex].bodyId;
+		jointDef.bodyIdA = human->bones[bone->parentIndex].bodyId;
 		jointDef.bodyIdB = bone->bodyId;
 		jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
 		jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+		jointDef.referenceAngle = 0.25f * B2_PI;
 		jointDef.enableLimit = enableLimit;
-		jointDef.lowerAngle = 0.01f * b2_pi;
-		jointDef.upperAngle = 0.5f * b2_pi;
+		jointDef.lowerAngle = -0.2f * B2_PI;
+		jointDef.upperAngle = 0.3f * B2_PI;
 		jointDef.enableMotor = enableMotor;
 		jointDef.maxMotorTorque = bone->frictionScale * maxTorque;
 		jointDef.enableSpring = hertz > 0.0f;
@@ -395,31 +427,33 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 
 	// upper right arm
 	{
-		Bone* bone = m_bones + Bone::e_upperRightArm;
-		bone->parentIndex = Bone::e_torso;
+		Bone* bone = human->bones + bone_upperRightArm;
+		bone->parentIndex = bone_torso;
 
-		bodyDef.position = b2Add( { 0.0f, 1.225f * s }, position );
+		bodyDef.position = b2Add( ( b2Vec2 ){ 0.0f, 1.225f * s }, position );
 		bodyDef.linearDamping = 0.0f;
+		bodyDef.name = "upper_right_arm";
+
 		bone->bodyId = b2CreateBody( worldId, &bodyDef );
 		bone->frictionScale = 0.5f;
 
 		if ( colorize )
 		{
-			shapeDef.customColor = shirtColor;
+			shapeDef.material.customColor = shirtColor;
 		}
 
 		b2Capsule capsule = { { 0.0f, -0.125f * s }, { 0.0f, 0.125f * s }, 0.035f * s };
 		b2CreateCapsuleShape( bone->bodyId, &shapeDef, &capsule );
 
-		b2Vec2 pivot = b2Add( { 0.0f, 1.35f * s }, position );
+		b2Vec2 pivot = b2Add( ( b2Vec2 ){ 0.0f, 1.35f * s }, position );
 		b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-		jointDef.bodyIdA = m_bones[bone->parentIndex].bodyId;
+		jointDef.bodyIdA = human->bones[bone->parentIndex].bodyId;
 		jointDef.bodyIdB = bone->bodyId;
 		jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
 		jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
 		jointDef.enableLimit = enableLimit;
-		jointDef.lowerAngle = -0.1f * b2_pi;
-		jointDef.upperAngle = 0.8f * b2_pi;
+		jointDef.lowerAngle = -0.1f * B2_PI;
+		jointDef.upperAngle = 0.8f * B2_PI;
 		jointDef.enableMotor = enableMotor;
 		jointDef.maxMotorTorque = bone->frictionScale * maxTorque;
 		jointDef.enableSpring = hertz > 0.0f;
@@ -432,31 +466,34 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 
 	// lower right arm
 	{
-		Bone* bone = m_bones + Bone::e_lowerRightArm;
-		bone->parentIndex = Bone::e_upperRightArm;
+		Bone* bone = human->bones + bone_lowerRightArm;
+		bone->parentIndex = bone_upperRightArm;
 
-		bodyDef.position = b2Add( { 0.0f, 0.975f * s }, position );
+		bodyDef.position = b2Add( ( b2Vec2 ){ 0.0f, 0.975f * s }, position );
 		bodyDef.linearDamping = 0.1f;
+		bodyDef.name = "lower_right_arm";
+
 		bone->bodyId = b2CreateBody( worldId, &bodyDef );
 		bone->frictionScale = 0.1f;
 
 		if ( colorize )
 		{
-			shapeDef.customColor = skinColor;
+			shapeDef.material.customColor = skinColor;
 		}
 
 		b2Capsule capsule = { { 0.0f, -0.125f * s }, { 0.0f, 0.125f * s }, 0.03f * s };
 		b2CreateCapsuleShape( bone->bodyId, &shapeDef, &capsule );
 
-		b2Vec2 pivot = b2Add( { 0.0f, 1.1f * s }, position );
+		b2Vec2 pivot = b2Add( ( b2Vec2 ){ 0.0f, 1.1f * s }, position );
 		b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-		jointDef.bodyIdA = m_bones[bone->parentIndex].bodyId;
+		jointDef.bodyIdA = human->bones[bone->parentIndex].bodyId;
 		jointDef.bodyIdB = bone->bodyId;
 		jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
 		jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+		jointDef.referenceAngle = 0.25f * B2_PI;
 		jointDef.enableLimit = enableLimit;
-		jointDef.lowerAngle = 0.01f * b2_pi;
-		jointDef.upperAngle = 0.5f * b2_pi;
+		jointDef.lowerAngle = -0.2f * B2_PI;
+		jointDef.upperAngle = 0.3f * B2_PI;
 		jointDef.enableMotor = enableMotor;
 		jointDef.maxMotorTorque = bone->frictionScale * maxTorque;
 		jointDef.enableSpring = hertz > 0.0f;
@@ -467,107 +504,119 @@ void Human::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float fricti
 		bone->jointId = b2CreateRevoluteJoint( worldId, &jointDef );
 	}
 
-	m_isSpawned = true;
+	human->isSpawned = true;
 }
 
-void Human::Despawn()
+void DestroyHuman( Human* human )
 {
-	assert( m_isSpawned == true );
+	assert( human->isSpawned == true );
 
-	for ( int i = 0; i < Bone::e_count; ++i )
+	for ( int i = 0; i < bone_count; ++i )
 	{
-		if ( B2_IS_NULL( m_bones[i].jointId ) )
+		if ( B2_IS_NULL( human->bones[i].jointId ) )
 		{
 			continue;
 		}
 
-		b2DestroyJoint( m_bones[i].jointId );
-		m_bones[i].jointId = b2_nullJointId;
+		b2DestroyJoint( human->bones[i].jointId );
+		human->bones[i].jointId = b2_nullJointId;
 	}
 
-	for ( int i = 0; i < Bone::e_count; ++i )
+	for ( int i = 0; i < bone_count; ++i )
 	{
-		if ( B2_IS_NULL( m_bones[i].bodyId ) )
+		if ( B2_IS_NULL( human->bones[i].bodyId ) )
 		{
 			continue;
 		}
 
-		b2DestroyBody( m_bones[i].bodyId );
-		m_bones[i].bodyId = b2_nullBodyId;
+		b2DestroyBody( human->bones[i].bodyId );
+		human->bones[i].bodyId = b2_nullBodyId;
 	}
 
-	m_isSpawned = false;
+	human->isSpawned = false;
 }
 
-void Human::ApplyRandomAngularImpulse( float magnitude )
+void Human_SetVelocity( Human* human, b2Vec2 velocity )
 {
-	if ( m_isSpawned == false )
+	for ( int i = 0; i < bone_count; ++i )
 	{
-		return;
-	}
+		b2BodyId bodyId = human->bones[i].bodyId;
 
-	float impulse = RandomFloat( -magnitude, magnitude );
-	b2Body_ApplyAngularImpulse( m_bones[Bone::e_torso].bodyId, impulse, true );
+		if ( B2_IS_NULL( bodyId ) )
+		{
+			continue;
+		}
+
+		b2Body_SetLinearVelocity( bodyId, velocity );
+	}
 }
 
-void Human::SetJointFrictionTorque( float torque )
+void Human_ApplyRandomAngularImpulse( Human* human, float magnitude )
 {
-	if ( m_isSpawned == false )
-	{
-		return;
-	}
+	assert( human->isSpawned == true );
+	float impulse = RandomFloatRange( -magnitude, magnitude );
+	b2Body_ApplyAngularImpulse( human->bones[bone_torso].bodyId, impulse, true );
+}
 
+void Human_SetJointFrictionTorque( Human* human, float torque )
+{
+	assert( human->isSpawned == true );
 	if ( torque == 0.0f )
 	{
-		for ( int i = 1; i < Bone::e_count; ++i )
+		for ( int i = 1; i < bone_count; ++i )
 		{
-			b2RevoluteJoint_EnableMotor( m_bones[i].jointId, false );
+			b2RevoluteJoint_EnableMotor( human->bones[i].jointId, false );
 		}
 	}
 	else
 	{
-		for ( int i = 1; i < Bone::e_count; ++i )
+		for ( int i = 1; i < bone_count; ++i )
 		{
-			b2RevoluteJoint_EnableMotor( m_bones[i].jointId, true );
-			float scale = m_scale * m_bones[i].frictionScale;
-			b2RevoluteJoint_SetMaxMotorTorque( m_bones[i].jointId, scale * torque );
+			b2RevoluteJoint_EnableMotor( human->bones[i].jointId, true );
+			float scale = human->scale * human->bones[i].frictionScale;
+			b2RevoluteJoint_SetMaxMotorTorque( human->bones[i].jointId, scale * torque );
 		}
 	}
 }
 
-void Human::SetJointSpringHertz( float hertz )
+void Human_SetJointSpringHertz( Human* human, float hertz )
 {
-	if ( m_isSpawned == false )
-	{
-		return;
-	}
-
+	assert( human->isSpawned == true );
 	if ( hertz == 0.0f )
 	{
-		for ( int i = 1; i < Bone::e_count; ++i )
+		for ( int i = 1; i < bone_count; ++i )
 		{
-			b2RevoluteJoint_EnableSpring( m_bones[i].jointId, false );
+			b2RevoluteJoint_EnableSpring( human->bones[i].jointId, false );
 		}
 	}
 	else
 	{
-		for ( int i = 1; i < Bone::e_count; ++i )
+		for ( int i = 1; i < bone_count; ++i )
 		{
-			b2RevoluteJoint_EnableSpring( m_bones[i].jointId, true );
-			b2RevoluteJoint_SetSpringHertz( m_bones[i].jointId, hertz );
+			b2RevoluteJoint_EnableSpring( human->bones[i].jointId, true );
+			b2RevoluteJoint_SetSpringHertz( human->bones[i].jointId, hertz );
 		}
 	}
 }
 
-void Human::SetJointDampingRatio( float dampingRatio )
+void Human_SetJointDampingRatio( Human* human, float dampingRatio )
 {
-	if ( m_isSpawned == false )
+	assert( human->isSpawned == true );
+	for ( int i = 1; i < bone_count; ++i )
 	{
-		return;
+		b2RevoluteJoint_SetSpringDampingRatio( human->bones[i].jointId, dampingRatio );
 	}
+}
 
-	for ( int i = 1; i < Bone::e_count; ++i )
+void Human_EnableSensorEvents( Human* human, bool enable )
+{
+	assert( human->isSpawned == true );
+	b2BodyId bodyId = human->bones[bone_torso].bodyId;
+
+	b2ShapeId shapeId;
+	int count = b2Body_GetShapes( bodyId, &shapeId, 1 );
+	if ( count == 1 )
 	{
-		b2RevoluteJoint_SetSpringDampingRatio( m_bones[i].jointId, dampingRatio );
+		b2Shape_EnableSensorEvents( shapeId, enable );
 	}
 }

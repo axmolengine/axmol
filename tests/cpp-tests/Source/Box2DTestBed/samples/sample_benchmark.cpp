@@ -1,16 +1,31 @@
 // SPDX-FileCopyrightText: 2022 Erin Catto
 // SPDX-License-Identifier: MIT
 
+#include "benchmarks.h"
 #include "draw.h"
 #include "human.h"
+#include "random.h"
 #include "sample.h"
 #include "settings.h"
 
 #include "box2d/box2d.h"
 #include "box2d/math_functions.h"
 
-#include <GLFW/glfw3.h>
 #include <imgui.h>
+#include <limits.h>
+#include <stdint.h>
+#include <vector>
+
+#if defined( _MSC_VER )
+#include <intrin.h>
+#define GET_CYCLES __rdtsc()
+#else
+#define GET_CYCLES b2GetTicks()
+#endif
+
+// these are not accessible in some build types
+// extern "C" int b2_toiCalls;
+// extern "C" int b2_toiHitCount;
 
 // Note: resetting the scene is non-deterministic because the world uses freelists
 class BenchmarkBarrel : public Sample
@@ -19,7 +34,7 @@ public:
 	enum ShapeType
 	{
 		e_circleShape = 0,
-		e_caspuleShape,
+		e_capsuleShape,
 		e_mixShape,
 		e_compoundShape,
 		e_humanShape,
@@ -28,7 +43,7 @@ public:
 	enum
 	{
 		e_maxColumns = 26,
-		e_maxRows = 130,
+		e_maxRows = 150,
 	};
 
 	explicit BenchmarkBarrel( Settings& settings )
@@ -42,24 +57,43 @@ public:
 
 		settings.drawJoints = false;
 
-		float groundSize = 25.0f;
-
 		{
+			float gridSize = 1.0f;
+
 			b2BodyDef bodyDef = b2DefaultBodyDef();
 			b2BodyId groundId = b2CreateBody( m_worldId, &bodyDef );
 
-			b2Polygon box = b2MakeBox( groundSize, 1.2f );
 			b2ShapeDef shapeDef = b2DefaultShapeDef();
-			b2CreatePolygonShape( groundId, &shapeDef, &box );
 
-			box = b2MakeOffsetBox( 1.2f, 2.0f * groundSize, { -groundSize, 2.0f * groundSize }, b2Rot_identity );
-			b2CreatePolygonShape( groundId, &shapeDef, &box );
+			float y = 0.0f;
+			float x = -40.0f * gridSize;
+			for ( int i = 0; i < 81; ++i )
+			{
+				b2Polygon box = b2MakeOffsetBox( 0.5f * gridSize, 0.5f * gridSize, { x, y }, b2Rot_identity );
+				b2CreatePolygonShape( groundId, &shapeDef, &box );
+				x += gridSize;
+			}
 
-			box = b2MakeOffsetBox( 1.2f, 2.0f * groundSize, { groundSize, 2.0f * groundSize }, b2Rot_identity );
-			b2CreatePolygonShape( groundId, &shapeDef, &box );
+			y = gridSize;
+			x = -40.0f * gridSize;
+			for ( int i = 0; i < 100; ++i )
+			{
+				b2Polygon box = b2MakeOffsetBox( 0.5f * gridSize, 0.5f * gridSize, { x, y }, b2Rot_identity );
+				b2CreatePolygonShape( groundId, &shapeDef, &box );
+				y += gridSize;
+			}
 
-			box = b2MakeOffsetBox( 800.0f, 10.0f, { 0.0f, -80.0f }, b2Rot_identity );
-			b2CreatePolygonShape( groundId, &shapeDef, &box );
+			y = gridSize;
+			x = 40.0f * gridSize;
+			for ( int i = 0; i < 100; ++i )
+			{
+				b2Polygon box = b2MakeOffsetBox( 0.5f * gridSize, 0.5f * gridSize, { x, y }, b2Rot_identity );
+				b2CreatePolygonShape( groundId, &shapeDef, &box );
+				y += gridSize;
+			}
+
+			b2Segment segment = { { -800.0f, -80.0f }, { 800.0f, -80.f } };
+			b2CreateSegmentShape( groundId, &shapeDef, &segment );
 		}
 
 		for ( int i = 0; i < e_maxRows * e_maxColumns; ++i )
@@ -67,7 +101,9 @@ public:
 			m_bodies[i] = b2_nullBodyId;
 		}
 
-		m_shapeType = e_circleShape;
+		memset( m_humans, 0, sizeof( m_humans ) );
+
+		m_shapeType = e_compoundShape;
 
 		CreateScene();
 	}
@@ -84,9 +120,9 @@ public:
 				m_bodies[i] = b2_nullBodyId;
 			}
 
-			if ( m_humans[i].m_isSpawned )
+			if ( m_humans[i].isSpawned )
 			{
-				m_humans[i].Despawn();
+				DestroyHuman( m_humans + i );
 			}
 		}
 
@@ -109,8 +145,7 @@ public:
 			}
 			else
 			{
-				m_columnCount = 15;
-				m_rowCount = 50;
+				m_rowCount = 30;
 			}
 		}
 
@@ -123,9 +158,15 @@ public:
 		b2BodyDef bodyDef = b2DefaultBodyDef();
 		bodyDef.type = b2_dynamicBody;
 
+		// todo eliminate this once rolling resistance is added
+		if ( m_shapeType == e_mixShape )
+		{
+			bodyDef.angularDamping = 0.3f;
+		}
+
 		b2ShapeDef shapeDef = b2DefaultShapeDef();
 		shapeDef.density = 1.0f;
-		shapeDef.friction = 0.5f;
+		shapeDef.material.friction = 0.5f;
 
 		b2Capsule capsule = { { 0.0f, -0.25f }, { 0.0f, 0.25f }, rad };
 		b2Circle circle = { { 0.0f, 0.0f }, rad };
@@ -170,6 +211,7 @@ public:
 		}
 
 		int index = 0;
+		float yStart = m_shapeType == e_humanShape ? 2.0f : 100.0f;
 
 		for ( int i = 0; i < m_columnCount; ++i )
 		{
@@ -177,7 +219,7 @@ public:
 
 			for ( int j = 0; j < m_rowCount; ++j )
 			{
-				float y = j * ( shift + extray ) + centery + 2.0f;
+				float y = j * ( shift + extray ) + centery + yStart;
 
 				bodyDef.position = { x + side, y };
 				side = -side;
@@ -185,16 +227,18 @@ public:
 				if ( m_shapeType == e_circleShape )
 				{
 					m_bodies[index] = b2CreateBody( m_worldId, &bodyDef );
-					circle.radius = RandomFloat( 0.25f, 0.75f );
+					circle.radius = RandomFloatRange( 0.25f, 0.75f );
+					shapeDef.material.rollingResistance = 0.2f;
 					b2CreateCircleShape( m_bodies[index], &shapeDef, &circle );
 				}
-				else if ( m_shapeType == e_caspuleShape )
+				else if ( m_shapeType == e_capsuleShape )
 				{
 					m_bodies[index] = b2CreateBody( m_worldId, &bodyDef );
-					capsule.radius = RandomFloat( 0.25f, 0.5f );
-					float length = RandomFloat( 0.25f, 1.0f );
+					capsule.radius = RandomFloatRange( 0.25f, 0.5f );
+					float length = RandomFloatRange( 0.25f, 1.0f );
 					capsule.center1 = { 0.0f, -0.5f * length };
 					capsule.center2 = { 0.0f, 0.5f * length };
+					shapeDef.material.rollingResistance = 0.2f;
 					b2CreateCapsuleShape( m_bodies[index], &shapeDef, &capsule );
 				}
 				else if ( m_shapeType == e_mixShape )
@@ -204,31 +248,31 @@ public:
 					int mod = index % 3;
 					if ( mod == 0 )
 					{
-						circle.radius = RandomFloat( 0.25f, 0.75f );
+						circle.radius = RandomFloatRange( 0.25f, 0.75f );
 						b2CreateCircleShape( m_bodies[index], &shapeDef, &circle );
 					}
 					else if ( mod == 1 )
 					{
-						capsule.radius = RandomFloat( 0.25f, 0.5f );
-						float length = RandomFloat( 0.25f, 1.0f );
+						capsule.radius = RandomFloatRange( 0.25f, 0.5f );
+						float length = RandomFloatRange( 0.25f, 1.0f );
 						capsule.center1 = { 0.0f, -0.5f * length };
 						capsule.center2 = { 0.0f, 0.5f * length };
 						b2CreateCapsuleShape( m_bodies[index], &shapeDef, &capsule );
 					}
 					else if ( mod == 2 )
 					{
-						float width = RandomFloat( 0.1f, 0.5f );
-						float height = RandomFloat( 0.5f, 0.75f );
+						float width = RandomFloatRange( 0.1f, 0.5f );
+						float height = RandomFloatRange( 0.5f, 0.75f );
 						b2Polygon box = b2MakeBox( width, height );
 
 						// Don't put a function call into a macro.
-						float value = RandomFloat( -1.0f, 1.0f );
+						float value = RandomFloatRange( -1.0f, 1.0f );
 						box.radius = 0.25f * b2MaxFloat( 0.0f, value );
 						b2CreatePolygonShape( m_bodies[index], &shapeDef, &box );
 					}
 					else
 					{
-						wedge.radius = RandomFloat( 0.1f, 0.25f );
+						wedge.radius = RandomFloatRange( 0.1f, 0.25f );
 						b2CreatePolygonShape( m_bodies[index], &shapeDef, &wedge );
 					}
 				}
@@ -244,7 +288,12 @@ public:
 				}
 				else if ( m_shapeType == e_humanShape )
 				{
-					m_humans[index].Spawn( m_worldId, bodyDef.position, 3.5f, 0.05f, 0.0f, 0.0f, index + 1, nullptr, false );
+					float scale = 3.5f;
+					float jointFriction = 0.05f;
+					float jointHertz = 5.0f;
+					float jointDamping = 0.5f;
+					CreateHuman( m_humans + index, m_worldId, bodyDef.position, scale, jointFriction, jointHertz, jointDamping,
+								 index + 1, nullptr, false );
 				}
 
 				index += 1;
@@ -252,7 +301,7 @@ public:
 		}
 	}
 
-	void UpdateUI() override
+	void UpdateGui() override
 	{
 		float height = 80.0f;
 		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
@@ -303,102 +352,13 @@ public:
 			g_camera.m_zoom = 25.0f * 0.6f;
 		}
 
-		b2BodyId groundId;
-		{
-			b2BodyDef bodyDef = b2DefaultBodyDef();
-			groundId = b2CreateBody( m_worldId, &bodyDef );
-		}
-
-		{
-			b2BodyDef bodyDef = b2DefaultBodyDef();
-			bodyDef.type = b2_dynamicBody;
-			bodyDef.enableSleep = true;
-			bodyDef.position = { 0.0f, 10.0f };
-			b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
-
-			b2ShapeDef shapeDef = b2DefaultShapeDef();
-			shapeDef.density = 50.0f;
-
-			b2Polygon polygon;
-			polygon = b2MakeOffsetBox( 0.5f, 10.0f, { 10.0f, 0.0f }, b2Rot_identity );
-			b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
-			polygon = b2MakeOffsetBox( 0.5f, 10.0f, { -10.0f, 0.0f }, b2Rot_identity );
-			b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
-			polygon = b2MakeOffsetBox( 10.0f, 0.5f, { 0.0f, 10.0f }, b2Rot_identity );
-			b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
-			polygon = b2MakeOffsetBox( 10.0f, 0.5f, { 0.0f, -10.0f }, b2Rot_identity );
-			b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
-
-			// m_motorSpeed = 9.0f;
-			m_motorSpeed = 25.0f;
-
-			b2RevoluteJointDef jd = b2DefaultRevoluteJointDef();
-			jd.bodyIdA = groundId;
-			jd.bodyIdB = bodyId;
-			jd.localAnchorA = { 0.0f, 10.0f };
-			jd.localAnchorB = { 0.0f, 0.0f };
-			jd.referenceAngle = 0.0f;
-			jd.motorSpeed = ( b2_pi / 180.0f ) * m_motorSpeed;
-			jd.maxMotorTorque = 1e8f;
-			jd.enableMotor = true;
-
-			m_jointId = b2CreateRevoluteJoint( m_worldId, &jd );
-		}
-
-		int gridCount = g_sampleDebug ? 20 : 45;
-		b2Polygon polygon = b2MakeBox( 0.125f, 0.125f );
-		b2BodyDef bodyDef = b2DefaultBodyDef();
-		bodyDef.type = b2_dynamicBody;
-		b2ShapeDef shapeDef = b2DefaultShapeDef();
-
-		float y = -0.2f * gridCount + 10.0f;
-		for ( int i = 0; i < gridCount; ++i )
-		{
-			float x = -0.2f * gridCount;
-
-			for ( int j = 0; j < gridCount; ++j )
-			{
-				bodyDef.position = { x, y };
-				b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
-
-				b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
-
-				x += 0.4f;
-			}
-
-			y += 0.4f;
-		}
-	}
-
-	void UpdateUI() override
-	{
-		float height = 60.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
-		ImGui::SetNextWindowSize( ImVec2( 200.0f, height ) );
-		ImGui::Begin( "Benchmark: Tumbler", nullptr, ImGuiWindowFlags_NoResize );
-		ImGui::PushItemWidth( 120.0f );
-
-		if ( ImGui::SliderFloat( "Speed", &m_motorSpeed, 0.0f, 100.0f, "%.f" ) )
-		{
-			b2RevoluteJoint_SetMotorSpeed( m_jointId, ( b2_pi / 180.0f ) * m_motorSpeed );
-
-			if ( m_motorSpeed > 0.0f )
-			{
-				b2Joint_WakeBodies( m_jointId );
-			}
-		}
-
-		ImGui::PopItemWidth();
-		ImGui::End();
+		CreateTumbler( m_worldId );
 	}
 
 	static Sample* Create( Settings& settings )
 	{
 		return new BenchmarkTumbler( settings );
 	}
-
-	b2JointId m_jointId;
-	float m_motorSpeed;
 };
 
 static int benchmarkTumbler = RegisterSample( "Benchmark", "Tumbler", BenchmarkTumbler::Create );
@@ -448,7 +408,7 @@ public:
 		b2BodyDef bodyDef = b2DefaultBodyDef();
 		bodyDef.type = b2_kinematicBody;
 		bodyDef.position = { position.x, position.y };
-		bodyDef.angularVelocity = ( b2_pi / 180.0f ) * m_angularSpeed;
+		bodyDef.angularVelocity = ( B2_PI / 180.0f ) * m_angularSpeed;
 		b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
 		m_tumblerIds[index] = bodyId;
 
@@ -515,7 +475,7 @@ public:
 		m_bodyIndex = 0;
 	}
 
-	void UpdateUI() override
+	void UpdateGui() override
 	{
 		float height = 110.0f;
 		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
@@ -536,7 +496,7 @@ public:
 		{
 			for ( int i = 0; i < m_tumblerCount; ++i )
 			{
-				b2Body_SetAngularVelocity( m_tumblerIds[i], ( b2_pi / 180.0f ) * m_angularSpeed );
+				b2Body_SetAngularVelocity( m_tumblerIds[i], ( B2_PI / 180.0f ) * m_angularSpeed );
 				b2Body_SetAwake( m_tumblerIds[i], true );
 			}
 		}
@@ -603,49 +563,10 @@ public:
 		{
 			g_camera.m_center = { 0.0f, 50.0f };
 			g_camera.m_zoom = 25.0f * 2.2f;
+			settings.enableSleep = false;
 		}
 
-#ifdef NDEBUG
-		int baseCount = 100;
-#else
-		int baseCount = 40;
-#endif
-
-		{
-			b2BodyDef bodyDef = b2DefaultBodyDef();
-			bodyDef.position = { 0.0f, -1.0f };
-			b2BodyId groundId = b2CreateBody( m_worldId, &bodyDef );
-
-			b2Polygon box = b2MakeBox( 100.0f, 1.0f );
-			b2ShapeDef shapeDef = b2DefaultShapeDef();
-			b2CreatePolygonShape( groundId, &shapeDef, &box );
-		}
-
-		b2BodyDef bodyDef = b2DefaultBodyDef();
-		bodyDef.type = b2_dynamicBody;
-
-		b2ShapeDef shapeDef = b2DefaultShapeDef();
-		shapeDef.density = 1.0f;
-
-		float h = 0.5f;
-		b2Polygon box = b2MakeRoundedBox( h - 0.05f, h - 0.05f, 0.05f );
-
-		float shift = 1.0f * h;
-
-		for ( int i = 0; i < baseCount; ++i )
-		{
-			float y = ( 2.0f * i + 1.0f ) * shift;
-
-			for ( int j = i; j < baseCount; ++j )
-			{
-				float x = ( i + 1.0f ) * shift + 2.0f * ( j - i ) * shift - h * baseCount;
-
-				bodyDef.position = { x, y };
-
-				b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
-				b2CreatePolygonShape( bodyId, &shapeDef, &box );
-			}
-		}
+		CreateLargePyramid( m_worldId );
 	}
 
 	static Sample* Create( Settings& settings )
@@ -666,149 +587,16 @@ public:
 		{
 			g_camera.m_center = { 16.0f, 110.0f };
 			g_camera.m_zoom = 25.0f * 5.0f;
+			settings.enableSleep = false;
 		}
 
-		m_extent = 0.5f;
-		m_round = 0.0f;
-		m_baseCount = 10;
-		m_rowCount = g_sampleDebug ? 4 : 20;
-		m_columnCount = g_sampleDebug ? 4 : 20;
-		m_groundId = b2_nullBodyId;
-		m_bodyIds = nullptr;
-		m_bodyCount = 0;
-		m_bodyIndex = 0;
-
-		CreateScene();
-	}
-
-	~BenchmarkManyPyramids() override
-	{
-		free( m_bodyIds );
-	}
-
-	void CreatePyramid( float centerX, float baseY )
-	{
-		b2BodyDef bodyDef = b2DefaultBodyDef();
-		bodyDef.type = b2_dynamicBody;
-
-		b2ShapeDef shapeDef = b2DefaultShapeDef();
-		shapeDef.density = 1.0f;
-
-		float h = m_extent - m_round;
-		b2Polygon box = b2MakeRoundedBox( h, h, m_round );
-
-		float shift = 1.0f * h;
-
-		for ( int i = 0; i < m_baseCount; ++i )
-		{
-			float y = ( 2.0f * i + 1.0f ) * shift + baseY;
-
-			for ( int j = i; j < m_baseCount; ++j )
-			{
-				float x = ( i + 1.0f ) * shift + 2.0f * ( j - i ) * shift + centerX - 0.5f;
-
-				bodyDef.position = { x, y };
-
-				assert( m_bodyIndex < m_bodyCount );
-				m_bodyIds[m_bodyIndex] = b2CreateBody( m_worldId, &bodyDef );
-				b2CreatePolygonShape( m_bodyIds[m_bodyIndex], &shapeDef, &box );
-
-				m_bodyIndex += 1;
-			}
-		}
-	}
-
-	void CreateScene()
-	{
-		if ( B2_IS_NON_NULL( m_groundId ) )
-		{
-			b2DestroyBody( m_groundId );
-		}
-
-		for ( int i = 0; i < m_bodyCount; ++i )
-		{
-			b2DestroyBody( m_bodyIds[i] );
-		}
-
-		free( m_bodyIds );
-
-		m_bodyCount = m_rowCount * m_columnCount * m_baseCount * ( m_baseCount + 1 ) / 2;
-		m_bodyIds = (b2BodyId*)malloc( m_bodyCount * sizeof( b2BodyId ) );
-		m_bodyIndex = 0;
-
-		b2BodyDef bodyDef = b2DefaultBodyDef();
-		m_groundId = b2CreateBody( m_worldId, &bodyDef );
-
-		float groundDeltaY = 2.0f * m_extent * ( m_baseCount + 1.0f );
-		float groundWidth = 2.0f * m_extent * m_columnCount * ( m_baseCount + 1.0f );
-		b2ShapeDef shapeDef = b2DefaultShapeDef();
-
-		float groundY = 0.0f;
-
-		for ( int i = 0; i < m_rowCount; ++i )
-		{
-			// b2Segment segment = {{-0.5f * groundWidth, groundY}, {0.5f * groundWidth, groundY}};
-			b2Segment segment = { { -0.5f * 2.0f * groundWidth, groundY }, { 0.5f * 2.0f * groundWidth, groundY } };
-			b2CreateSegmentShape( m_groundId, &shapeDef, &segment );
-			groundY += groundDeltaY;
-		}
-
-		float baseWidth = 2.0f * m_extent * m_baseCount;
-		float baseY = 0.0f;
-
-		for ( int i = 0; i < m_rowCount; ++i )
-		{
-			for ( int j = 0; j < m_columnCount; ++j )
-			{
-				float centerX = -0.5f * groundWidth + j * ( baseWidth + 2.0f * m_extent ) + m_extent;
-				CreatePyramid( centerX, baseY );
-			}
-
-			baseY += groundDeltaY;
-		}
-
-		assert( m_bodyIndex == m_bodyCount );
-	}
-
-	void UpdateUI() override
-	{
-		float height = 160.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
-		ImGui::SetNextWindowSize( ImVec2( 200.0f, height ) );
-		ImGui::Begin( "Benchmark: Many Pyramids", nullptr, ImGuiWindowFlags_NoResize );
-		ImGui::PushItemWidth( 100.0f );
-
-		bool changed = false;
-		changed = changed || ImGui::SliderInt( "Row Count", &m_rowCount, 1, 32 );
-		changed = changed || ImGui::SliderInt( "Column Count", &m_columnCount, 1, 32 );
-		changed = changed || ImGui::SliderInt( "Base Count", &m_baseCount, 1, 30 );
-
-		changed = changed || ImGui::SliderFloat( "Round", &m_round, 0.0f, 0.4f, "%.1f" );
-		changed = changed || ImGui::Button( "Reset Scene" );
-
-		if ( changed )
-		{
-			CreateScene();
-		}
-
-		ImGui::PopItemWidth();
-		ImGui::End();
+		CreateManyPyramids( m_worldId );
 	}
 
 	static Sample* Create( Settings& settings )
 	{
 		return new BenchmarkManyPyramids( settings );
 	}
-
-	b2BodyId m_groundId;
-	b2BodyId* m_bodyIds;
-	int m_bodyCount;
-	int m_bodyIndex;
-	int m_baseCount;
-	int m_rowCount;
-	int m_columnCount;
-	float m_round;
-	float m_extent;
 };
 
 static int benchmarkManyPyramids = RegisterSample( "Benchmark", "Many Pyramids", BenchmarkManyPyramids::Create );
@@ -845,6 +633,9 @@ public:
 			m_bodies[i] = b2_nullBodyId;
 		}
 
+		m_createTime = 0.0f;
+		m_destroyTime = 0.0f;
+
 		m_baseCount = g_sampleDebug ? 40 : 100;
 		m_iterations = g_sampleDebug ? 1 : 10;
 		m_bodyCount = 0;
@@ -852,6 +643,8 @@ public:
 
 	void CreateScene()
 	{
+		uint64_t ticks = b2GetTicks();
+
 		for ( int i = 0; i < e_maxBodyCount; ++i )
 		{
 			if ( B2_IS_NON_NULL( m_bodies[i] ) )
@@ -860,6 +653,8 @@ public:
 				m_bodies[i] = b2_nullBodyId;
 			}
 		}
+
+		m_destroyTime += b2GetMillisecondsAndReset( &ticks );
 
 		int count = m_baseCount;
 		float rad = 0.5f;
@@ -872,7 +667,7 @@ public:
 
 		b2ShapeDef shapeDef = b2DefaultShapeDef();
 		shapeDef.density = 1.0f;
-		shapeDef.friction = 0.5f;
+		shapeDef.material.friction = 0.5f;
 
 		float h = 0.5f;
 		b2Polygon box = b2MakeRoundedBox( h, h, 0.0f );
@@ -896,22 +691,28 @@ public:
 			}
 		}
 
+		m_createTime += b2GetMilliseconds( ticks );
+
 		m_bodyCount = index;
+
+		b2World_Step( m_worldId, 1.0f / 60.0f, 4 );
 	}
 
 	void Step( Settings& settings ) override
 	{
-		b2Timer timer = b2CreateTimer();
+		m_createTime = 0.0f;
+		m_destroyTime = 0.0f;
 
 		for ( int i = 0; i < m_iterations; ++i )
 		{
 			CreateScene();
 		}
 
-		float ms = b2GetMilliseconds( &timer );
+		DrawTextLine( "total: create = %g ms, destroy = %g ms", m_createTime, m_destroyTime );
 
-		g_draw.DrawString( 5, m_textLine, "milliseconds = %g", ms );
-		m_textLine += m_textIncrement;
+		float createPerBody = 1000.0f * m_createTime / m_iterations / m_bodyCount;
+		float destroyPerBody = 1000.0f * m_destroyTime / m_iterations / m_bodyCount;
+		DrawTextLine( "body: create = %g us, destroy = %g us", createPerBody, destroyPerBody );
 
 		Sample::Step( settings );
 	}
@@ -921,6 +722,8 @@ public:
 		return new BenchmarkCreateDestroy( settings );
 	}
 
+	float m_createTime;
+	float m_destroyTime;
 	b2BodyId m_bodies[e_maxBodyCount];
 	int m_bodyCount;
 	int m_baseCount;
@@ -997,7 +800,7 @@ public:
 
 		b2ShapeDef shapeDef = b2DefaultShapeDef();
 		shapeDef.density = 1.0f;
-		shapeDef.friction = 0.5f;
+		shapeDef.material.friction = 0.5f;
 
 		float h = 0.5f;
 		b2Polygon box = b2MakeRoundedBox( h, h, 0.0f );
@@ -1026,21 +829,19 @@ public:
 
 	void Step( Settings& settings ) override
 	{
-		float timeStep = settings.hertz > 0.0f ? 1.0f / settings.hertz : float( 0.0f );
-
-		b2Timer timer = b2CreateTimer();
+		uint64_t ticks = b2GetTicks();
 
 		for ( int i = 0; i < m_iterations; ++i )
 		{
 			b2Body_SetAwake( m_bodies[0], m_awake );
 			if ( m_awake )
 			{
-				m_wakeTotal += b2GetMillisecondsAndReset( &timer );
+				m_wakeTotal += b2GetMillisecondsAndReset( &ticks );
 				m_wakeCount += 1;
 			}
 			else
 			{
-				m_sleepTotal += b2GetMillisecondsAndReset( &timer );
+				m_sleepTotal += b2GetMillisecondsAndReset( &ticks );
 				m_sleepCount += 1;
 			}
 			m_awake = !m_awake;
@@ -1089,94 +890,16 @@ public:
 		{
 			g_camera.m_center = { 60.0f, -57.0f };
 			g_camera.m_zoom = 25.0f * 2.5f;
+			settings.enableSleep = false;
 		}
 
-		constexpr int N = g_sampleDebug ? 10 : 100;
-
-		// Allocate to avoid huge stack usage
-		b2BodyId* bodies = static_cast<b2BodyId*>( malloc( N * N * sizeof( b2BodyId ) ) );
-		int index = 0;
-
-		b2ShapeDef shapeDef = b2DefaultShapeDef();
-		shapeDef.density = 1.0f;
-		shapeDef.filter.categoryBits = 2;
-		shapeDef.filter.maskBits = ~2u;
-
-		b2Circle circle = { { 0.0f, 0.0f }, 0.4f };
-
-		b2RevoluteJointDef jd = b2DefaultRevoluteJointDef();
-		b2BodyDef bodyDef = b2DefaultBodyDef();
-
-		for ( int k = 0; k < N; ++k )
-		{
-			for ( int i = 0; i < N; ++i )
-			{
-				float fk = (float)k;
-				float fi = (float)i;
-
-				if ( k >= N / 2 - 3 && k <= N / 2 + 3 && i == 0 )
-				{
-					bodyDef.type = b2_staticBody;
-				}
-				else
-				{
-					bodyDef.type = b2_dynamicBody;
-				}
-
-				bodyDef.position = { fk, -fi };
-
-				b2BodyId body = b2CreateBody( m_worldId, &bodyDef );
-
-				b2CreateCircleShape( body, &shapeDef, &circle );
-
-				if ( i > 0 )
-				{
-					jd.bodyIdA = bodies[index - 1];
-					jd.bodyIdB = body;
-					jd.localAnchorA = { 0.0f, -0.5f };
-					jd.localAnchorB = { 0.0f, 0.5f };
-					b2CreateRevoluteJoint( m_worldId, &jd );
-				}
-
-				if ( k > 0 )
-				{
-					jd.bodyIdA = bodies[index - N];
-					jd.bodyIdB = body;
-					jd.localAnchorA = { 0.5f, 0.0f };
-					jd.localAnchorB = { -0.5f, 0.0f };
-					b2CreateRevoluteJoint( m_worldId, &jd );
-				}
-
-				bodies[index++] = body;
-			}
-		}
-
-		free( bodies );
-
-		m_gravity = 10.0f;
-	}
-
-	void UpdateUI() override
-	{
-		float height = 60.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
-		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
-		ImGui::Begin( "Benchmark: Joint Grid", nullptr, ImGuiWindowFlags_NoResize );
-
-		if ( ImGui::SliderFloat( "gravity", &m_gravity, 0.0f, 20.0f, "%.1f" ) )
-		{
-			b2World_SetGravity( m_worldId, { 0.0f, -m_gravity } );
-		}
-
-		ImGui::End();
+		CreateJointGrid( m_worldId );
 	}
 
 	static Sample* Create( Settings& settings )
 	{
 		return new BenchmarkJointGrid( settings );
 	}
-
-	float m_gravity;
 };
 
 static int benchmarkJointGridIndex = RegisterSample( "Benchmark", "Joint Grid", BenchmarkJointGrid::Create );
@@ -1193,184 +916,13 @@ public:
 			g_camera.m_zoom = 25.0f * 1.6f;
 		}
 
-		b2World_SetGravity( m_worldId, b2Vec2_zero );
-
-		{
-			b2Polygon box = b2MakeBox( 4.0f, 4.0f );
-
-			b2BodyDef bodyDef = b2DefaultBodyDef();
-			bodyDef.type = b2_dynamicBody;
-			bodyDef.position = { -20.0f, 0.0f };
-			bodyDef.linearVelocity = { 40.0f, 0.0f };
-			b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
-
-			b2ShapeDef shapeDef = b2DefaultShapeDef();
-			shapeDef.density = 8.0f;
-			b2CreatePolygonShape( bodyId, &shapeDef, &box );
-		}
-
-		m_created = false;
-	}
-
-	void CreateScene1()
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		if ( io.Fonts->Fonts.size() == 0 )
-		{
-			return;
-		}
-
-		const ImFont* font = io.Fonts->Fonts[0];
-		const unsigned char* pixels = font->ContainerAtlas->TexPixelsAlpha8;
-		int width = font->ContainerAtlas->TexWidth;
-		int height = font->ContainerAtlas->TexHeight;
-
-		float scale = 0.1f;
-
-		b2BodyDef bodyDef = b2DefaultBodyDef();
-		bodyDef.type = b2_dynamicBody;
-		bodyDef.isAwake = false;
-
-		b2ShapeDef shapeDef = b2DefaultShapeDef();
-
-		for ( int i = 0; i < height; ++i )
-		{
-			for ( int j = 0; j < width; ++j )
-			{
-				unsigned char value = pixels[i * width + j];
-				if ( value != 0 && value != 0xFF )
-				{
-					value += 0;
-				}
-
-				if ( value > 50 )
-				{
-					b2Polygon square = b2MakeSquare( 0.95f * scale * ( value / 255.0f ) );
-					bodyDef.position = { 2.0f * j * scale, 2.0f * ( height - i ) * scale - 10.0f };
-					b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
-					b2CreatePolygonShape( bodyId, &shapeDef, &square );
-				}
-			}
-		}
-
-		m_created = true;
-	}
-
-	void CreateScene2()
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		if ( io.Fonts->Fonts.size() == 0 )
-		{
-			return;
-		}
-
-		const ImFont* font = io.Fonts->Fonts.back();
-		const unsigned char* pixels = font->ContainerAtlas->TexPixelsAlpha8;
-		int width = font->ContainerAtlas->TexWidth;
-		int height = font->ContainerAtlas->TexHeight;
-		int fontSize = font->Ascent;
-
-		float scale = 0.1f;
-
-		b2BodyDef bodyDef = b2DefaultBodyDef();
-		bodyDef.type = b2_dynamicBody;
-		bodyDef.isAwake = false;
-
-		b2ShapeDef shapeDef = b2DefaultShapeDef();
-
-		const char* text = "I";
-		int n = (int)strlen( text );
-		float zoom = 1.0f;
-
-		float x = 0.0f;
-		for ( int k = 0; k < n; ++k )
-		{
-			const ImFontGlyph* glyph = font->FindGlyph( text[k] );
-			float x1 = glyph->X0;
-			float x2 = glyph->X1;
-			float y1 = glyph->Y0;
-			float y2 = glyph->Y1;
-			float u1 = glyph->U0;
-			float v1 = glyph->V0;
-			float u2 = glyph->U1;
-			float v2 = glyph->V1;
-
-			float w = zoom * ( x2 - x1 );
-			float h = zoom * ( y2 - y1 );
-
-			int gridx = int( w );
-			int gridy = int( h );
-			for ( int i = 0; i < gridy; ++i )
-			{
-				float v = v1 + i / h * ( v2 - v1 );
-				int iy = int( v * height );
-
-				for ( int j = 0; j < gridx; ++j )
-				{
-					float u = u1 + j / w * ( u2 - u1 );
-					int ix = int( u * width );
-
-					unsigned char value = pixels[iy * width + ix];
-					if ( value > 50 )
-					{
-						b2Polygon square = b2MakeSquare( 0.9f * scale * value / 255.0f );
-						bodyDef.position = { x + 2.0f * ( zoom * x1 + j ) * scale, -2.0f * ( zoom * y1 + i ) * scale + 13.0f };
-						b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
-						b2CreatePolygonShape( bodyId, &shapeDef, &square );
-					}
-				}
-			}
-
-			x += 2.0f * zoom * scale * glyph->AdvanceX;
-		}
-
-		m_created = true;
-	}
-
-	void CreateScene3()
-	{
-		float d = 0.4f;
-		b2Polygon box = b2MakeSquare( 0.5f * d );
-
-		b2BodyDef bodyDef = b2DefaultBodyDef();
-		bodyDef.type = b2_dynamicBody;
-		bodyDef.isAwake = false;
-
-		b2ShapeDef shapeDef = b2DefaultShapeDef();
-
-		int columns = g_sampleDebug ? 20 : 120;
-		int rows = g_sampleDebug ? 10 : 80;
-
-		for ( int i = 0; i < columns; ++i )
-		{
-			for ( int j = 0; j < rows; ++j )
-			{
-				bodyDef.position.x = i * d + 30.0f;
-				bodyDef.position.y = ( j - rows / 2.0f ) * d;
-				b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
-				b2CreatePolygonShape( bodyId, &shapeDef, &box );
-			}
-		}
-
-		m_created = true;
-	}
-
-	void Step( Settings& settings ) override
-	{
-		Sample::Step( settings );
-
-		if ( m_created == false )
-		{
-			CreateScene3();
-		}
+		CreateSmash( m_worldId );
 	}
 
 	static Sample* Create( Settings& settings )
 	{
 		return new BenchmarkSmash( settings );
 	}
-
-	bool m_created;
 };
 
 static int sampleSmash = RegisterSample( "Benchmark", "Smash", BenchmarkSmash::Create );
@@ -1436,8 +988,8 @@ public:
 			b2BodyDef bodyDef = b2DefaultBodyDef();
 			bodyDef.type = b2_dynamicBody;
 			// defer mass properties to avoid n-squared mass computations
-			bodyDef.automaticMass = false;
 			b2ShapeDef shapeDef = b2DefaultShapeDef();
+			shapeDef.updateBodyMass = false;
 
 			for ( int m = 0; m < count; ++m )
 			{
@@ -1498,12 +1050,13 @@ public:
 		b2BodyDef bodyDef = b2DefaultBodyDef();
 		bodyDef.type = b2_kinematicBody;
 		bodyDef.angularVelocity = 1.0f;
-		// defer mass properties to avoid n-squared mass computations
-		bodyDef.automaticMass = false;
 
 		b2ShapeDef shapeDef = b2DefaultShapeDef();
 		shapeDef.filter.categoryBits = 1;
 		shapeDef.filter.maskBits = 2;
+
+		// defer mass properties to avoid n-squared mass computations
+		shapeDef.updateBodyMass = false;
 
 		b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
 
@@ -1529,3 +1082,629 @@ public:
 };
 
 static int sampleKinematic = RegisterSample( "Benchmark", "Kinematic", BenchmarkKinematic::Create );
+
+enum QueryType
+{
+	e_rayCast,
+	e_circleCast,
+	e_overlap,
+};
+
+class BenchmarkCast : public Sample
+{
+public:
+	explicit BenchmarkCast( Settings& settings )
+		: Sample( settings )
+	{
+		if ( settings.restart == false )
+		{
+			g_camera.m_center = { 500.0f, 500.0f };
+			g_camera.m_zoom = 25.0f * 21.0f;
+			// settings.drawShapes = g_sampleDebug;
+		}
+
+		m_queryType = e_circleCast;
+		m_ratio = 5.0f;
+		m_grid = 1.0f;
+		m_fill = 0.1f;
+		m_rowCount = g_sampleDebug ? 100 : 1000;
+		m_columnCount = g_sampleDebug ? 100 : 1000;
+		m_minTime = 1e6f;
+		m_drawIndex = 0;
+		m_topDown = false;
+		m_buildTime = 0.0f;
+		m_radius = 0.1f;
+
+		g_seed = 1234;
+		int sampleCount = g_sampleDebug ? 100 : 10000;
+		m_origins.resize( sampleCount );
+		m_translations.resize( sampleCount );
+		float extent = m_rowCount * m_grid;
+
+		// Pre-compute rays to avoid randomizer overhead
+		for ( int i = 0; i < sampleCount; ++i )
+		{
+			b2Vec2 rayStart = RandomVec2( 0.0f, extent );
+			b2Vec2 rayEnd = RandomVec2( 0.0f, extent );
+
+			m_origins[i] = rayStart;
+			m_translations[i] = rayEnd - rayStart;
+		}
+
+		BuildScene();
+	}
+
+	void BuildScene()
+	{
+		g_seed = 1234;
+		b2DestroyWorld( m_worldId );
+		b2WorldDef worldDef = b2DefaultWorldDef();
+		m_worldId = b2CreateWorld( &worldDef );
+
+		uint64_t ticks = b2GetTicks();
+
+		b2BodyDef bodyDef = b2DefaultBodyDef();
+		b2ShapeDef shapeDef = b2DefaultShapeDef();
+
+		float y = 0.0f;
+
+		for ( int i = 0; i < m_rowCount; ++i )
+		{
+			float x = 0.0f;
+
+			for ( int j = 0; j < m_columnCount; ++j )
+			{
+				float fillTest = RandomFloatRange( 0.0f, 1.0f );
+				if ( fillTest <= m_fill )
+				{
+					bodyDef.position = { x, y };
+					b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
+
+					float ratio = RandomFloatRange( 1.0f, m_ratio );
+					float halfWidth = RandomFloatRange( 0.05f, 0.25f );
+
+					b2Polygon box;
+					if ( RandomFloat() > 0.0f )
+					{
+						box = b2MakeBox( ratio * halfWidth, halfWidth );
+					}
+					else
+					{
+						box = b2MakeBox( halfWidth, ratio * halfWidth );
+					}
+
+					int category = RandomIntRange( 0, 2 );
+					shapeDef.filter.categoryBits = 1 << category;
+					if ( category == 0 )
+					{
+						shapeDef.material.customColor = b2_colorBox2DBlue;
+					}
+					else if ( category == 1 )
+					{
+						shapeDef.material.customColor = b2_colorBox2DYellow;
+					}
+					else
+					{
+						shapeDef.material.customColor = b2_colorBox2DGreen;
+					}
+
+					b2CreatePolygonShape( bodyId, &shapeDef, &box );
+				}
+
+				x += m_grid;
+			}
+
+			y += m_grid;
+		}
+
+		if ( m_topDown )
+		{
+			b2World_RebuildStaticTree( m_worldId );
+		}
+
+		m_buildTime = b2GetMilliseconds( ticks );
+		m_minTime = 1e6f;
+	}
+
+	void UpdateGui() override
+	{
+		float height = 240.0f;
+		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
+		ImGui::SetNextWindowSize( ImVec2( 200.0f, height ) );
+
+		ImGui::Begin( "Cast", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize );
+
+		ImGui::PushItemWidth( 100.0f );
+
+		bool changed = false;
+
+		const char* queryTypes[] = { "Ray", "Circle", "Overlap" };
+		int queryType = int( m_queryType );
+		if ( ImGui::Combo( "Query", &queryType, queryTypes, IM_ARRAYSIZE( queryTypes ) ) )
+		{
+			m_queryType = QueryType( queryType );
+			if ( m_queryType == e_overlap )
+			{
+				m_radius = 5.0f;
+			}
+			else
+			{
+				m_radius = 0.1f;
+			}
+
+			changed = true;
+		}
+
+		if ( ImGui::SliderInt( "rows", &m_rowCount, 0, 1000, "%d" ) )
+		{
+			changed = true;
+		}
+
+		if ( ImGui::SliderInt( "columns", &m_columnCount, 0, 1000, "%d" ) )
+		{
+			changed = true;
+		}
+
+		if ( ImGui::SliderFloat( "fill", &m_fill, 0.0f, 1.0f, "%.2f" ) )
+		{
+			changed = true;
+		}
+
+		if ( ImGui::SliderFloat( "grid", &m_grid, 0.5f, 2.0f, "%.2f" ) )
+		{
+			changed = true;
+		}
+
+		if ( ImGui::SliderFloat( "ratio", &m_ratio, 1.0f, 10.0f, "%.2f" ) )
+		{
+			changed = true;
+		}
+
+		if ( ImGui::Checkbox( "top down", &m_topDown ) )
+		{
+			changed = true;
+		}
+
+		if ( ImGui::Button( "Draw Next" ) )
+		{
+			m_drawIndex = ( m_drawIndex + 1 ) % m_origins.size();
+		}
+
+		ImGui::PopItemWidth();
+		ImGui::End();
+
+		if ( changed )
+		{
+			BuildScene();
+		}
+	}
+
+	struct CastResult
+	{
+		b2Vec2 point;
+		float fraction;
+		bool hit;
+	};
+
+	static float CastCallback( b2ShapeId shapeId, b2Vec2 point, b2Vec2 normal, float fraction, void* context )
+	{
+		CastResult* result = (CastResult*)context;
+		result->point = point;
+		result->fraction = fraction;
+		result->hit = true;
+		return fraction;
+	}
+
+	struct OverlapResult
+	{
+		b2Vec2 points[32];
+		int count;
+	};
+
+	static bool OverlapCallback( b2ShapeId shapeId, void* context )
+	{
+		OverlapResult* result = (OverlapResult*)context;
+		if ( result->count < 32 )
+		{
+			b2AABB aabb = b2Shape_GetAABB( shapeId );
+			result->points[result->count] = b2AABB_Center( aabb );
+			result->count += 1;
+		}
+
+		return true;
+	}
+
+	void Step( Settings& settings ) override
+	{
+		Sample::Step( settings );
+
+		b2QueryFilter filter = b2DefaultQueryFilter();
+		filter.maskBits = 1;
+		int hitCount = 0;
+		int nodeVisits = 0;
+		int leafVisits = 0;
+		float ms = 0.0f;
+		int sampleCount = (int)m_origins.size();
+
+		if ( m_queryType == e_rayCast )
+		{
+			uint64_t ticks = b2GetTicks();
+
+			b2RayResult drawResult = {};
+
+			for ( int i = 0; i < sampleCount; ++i )
+			{
+				b2Vec2 origin = m_origins[i];
+				b2Vec2 translation = m_translations[i];
+
+				b2RayResult result = b2World_CastRayClosest( m_worldId, origin, translation, filter );
+
+				if ( i == m_drawIndex )
+				{
+					drawResult = result;
+				}
+
+				nodeVisits += result.nodeVisits;
+				leafVisits += result.leafVisits;
+				hitCount += result.hit ? 1 : 0;
+			}
+
+			ms = b2GetMilliseconds( ticks );
+
+			m_minTime = b2MinFloat( m_minTime, ms );
+
+			b2Vec2 p1 = m_origins[m_drawIndex];
+			b2Vec2 p2 = p1 + m_translations[m_drawIndex];
+			g_draw.DrawSegment( p1, p2, b2_colorWhite );
+			g_draw.DrawPoint( p1, 5.0f, b2_colorGreen );
+			g_draw.DrawPoint( p2, 5.0f, b2_colorRed );
+			if ( drawResult.hit )
+			{
+				g_draw.DrawPoint( drawResult.point, 5.0f, b2_colorWhite );
+			}
+		}
+		else if ( m_queryType == e_circleCast )
+		{
+			uint64_t ticks = b2GetTicks();
+
+			CastResult drawResult = {};
+
+			for ( int i = 0; i < sampleCount; ++i )
+			{
+				b2ShapeProxy proxy = b2MakeProxy( &m_origins[i], 1, m_radius );
+				b2Vec2 translation = m_translations[i];
+
+				CastResult result;
+				b2TreeStats traversalResult = b2World_CastShape( m_worldId, &proxy, translation, filter, CastCallback, &result );
+
+				if ( i == m_drawIndex )
+				{
+					drawResult = result;
+				}
+
+				nodeVisits += traversalResult.nodeVisits;
+				leafVisits += traversalResult.leafVisits;
+				hitCount += result.hit ? 1 : 0;
+			}
+
+			ms = b2GetMilliseconds( ticks );
+
+			m_minTime = b2MinFloat( m_minTime, ms );
+
+			b2Vec2 p1 = m_origins[m_drawIndex];
+			b2Vec2 p2 = p1 + m_translations[m_drawIndex];
+			g_draw.DrawSegment( p1, p2, b2_colorWhite );
+			g_draw.DrawPoint( p1, 5.0f, b2_colorGreen );
+			g_draw.DrawPoint( p2, 5.0f, b2_colorRed );
+			if ( drawResult.hit )
+			{
+				b2Vec2 t = b2Lerp( p1, p2, drawResult.fraction );
+				g_draw.DrawCircle( t, m_radius, b2_colorWhite );
+				g_draw.DrawPoint( drawResult.point, 5.0f, b2_colorWhite );
+			}
+		}
+		else if ( m_queryType == e_overlap )
+		{
+			uint64_t ticks = b2GetTicks();
+
+			OverlapResult drawResult = {};
+			b2Vec2 extent = { m_radius, m_radius };
+			OverlapResult result = {};
+
+			for ( int i = 0; i < sampleCount; ++i )
+			{
+				b2Vec2 origin = m_origins[i];
+				b2AABB aabb = { origin - extent, origin + extent };
+
+				result.count = 0;
+				b2TreeStats traversalResult = b2World_OverlapAABB( m_worldId, aabb, filter, OverlapCallback, &result );
+
+				if ( i == m_drawIndex )
+				{
+					drawResult = result;
+				}
+
+				nodeVisits += traversalResult.nodeVisits;
+				leafVisits += traversalResult.leafVisits;
+				hitCount += result.count;
+			}
+
+			ms = b2GetMilliseconds( ticks );
+
+			m_minTime = b2MinFloat( m_minTime, ms );
+
+			b2Vec2 origin = m_origins[m_drawIndex];
+			b2AABB aabb = { origin - extent, origin + extent };
+
+			g_draw.DrawAABB( aabb, b2_colorWhite );
+
+			for ( int i = 0; i < drawResult.count; ++i )
+			{
+				g_draw.DrawPoint( drawResult.points[i], 5.0f, b2_colorHotPink );
+			}
+		}
+
+		g_draw.DrawString( 5, m_textLine, "build time ms = %g", m_buildTime );
+		m_textLine += m_textIncrement;
+
+		g_draw.DrawString( 5, m_textLine, "hit count = %d, node visits = %d, leaf visits = %d", hitCount, nodeVisits,
+						   leafVisits );
+		m_textLine += m_textIncrement;
+
+		g_draw.DrawString( 5, m_textLine, "total ms = %.3f", ms );
+		m_textLine += m_textIncrement;
+
+		g_draw.DrawString( 5, m_textLine, "min total ms = %.3f", m_minTime );
+		m_textLine += m_textIncrement;
+
+		float aveRayCost = 1000.0f * m_minTime / float( sampleCount );
+		g_draw.DrawString( 5, m_textLine, "average us = %.2f", aveRayCost );
+		m_textLine += m_textIncrement;
+	}
+
+	static Sample* Create( Settings& settings )
+	{
+		return new BenchmarkCast( settings );
+	}
+
+	QueryType m_queryType;
+
+	std::vector<b2Vec2> m_origins;
+	std::vector<b2Vec2> m_translations;
+	float m_minTime;
+	float m_buildTime;
+
+	int m_rowCount, m_columnCount;
+	int m_updateType;
+	int m_drawIndex;
+	float m_radius;
+	float m_fill;
+	float m_ratio;
+	float m_grid;
+	bool m_topDown;
+};
+
+static int sampleCast = RegisterSample( "Benchmark", "Cast", BenchmarkCast::Create );
+
+class BenchmarkSpinner : public Sample
+{
+public:
+	explicit BenchmarkSpinner( Settings& settings )
+		: Sample( settings )
+	{
+		if ( settings.restart == false )
+		{
+			g_camera.m_center = { 0.0f, 32.0f };
+			g_camera.m_zoom = 42.0f;
+		}
+
+		// b2_toiCalls = 0;
+		// b2_toiHitCount = 0;
+
+		CreateSpinner( m_worldId );
+	}
+
+	void Step( Settings& settings ) override
+	{
+		Sample::Step( settings );
+
+		if ( m_stepCount == 1000 && false )
+		{
+			// 0.1 : 46544, 25752
+			// 0.25 : 5745, 1947
+			// 0.5 : 2197, 660
+			settings.pause = true;
+		}
+
+		// DrawTextLine( "toi calls, hits = %d, %d", b2_toiCalls, b2_toiHitCount );
+	}
+
+	static Sample* Create( Settings& settings )
+	{
+		return new BenchmarkSpinner( settings );
+	}
+};
+
+static int sampleSpinner = RegisterSample( "Benchmark", "Spinner", BenchmarkSpinner::Create );
+
+class BenchmarkRain : public Sample
+{
+public:
+	explicit BenchmarkRain( Settings& settings )
+		: Sample( settings )
+	{
+		if ( settings.restart == false )
+		{
+			g_camera.m_center = { 0.0f, 110.0f };
+			g_camera.m_zoom = 125.0f;
+			settings.enableSleep = true;
+		}
+
+		settings.drawJoints = false;
+
+		CreateRain( m_worldId );
+	}
+
+	void Step( Settings& settings ) override
+	{
+		if ( settings.pause == false || settings.singleStep == true )
+		{
+			StepRain( m_worldId, m_stepCount );
+		}
+
+		Sample::Step( settings );
+
+		if ( m_stepCount % 1000 == 0 )
+		{
+			m_stepCount += 0;
+		}
+	}
+
+	static Sample* Create( Settings& settings )
+	{
+		return new BenchmarkRain( settings );
+	}
+};
+
+static int benchmarkRain = RegisterSample( "Benchmark", "Rain", BenchmarkRain::Create );
+
+class BenchmarkShapeDistance : public Sample
+{
+public:
+	explicit BenchmarkShapeDistance( Settings& settings )
+		: Sample( settings )
+	{
+		if ( settings.restart == false )
+		{
+			g_camera.m_center = { 0.0f, 0.0f };
+			g_camera.m_zoom = 3.0f;
+		}
+
+		{
+			b2Vec2 points[8] = {};
+			b2Rot q = b2MakeRot( 2.0f * B2_PI / 8.0f );
+			b2Vec2 p = { 0.5f, 0.0f };
+			points[0] = p;
+			for ( int i = 1; i < 8; ++i )
+			{
+				points[i] = b2RotateVector( q, points[i - 1] );
+			}
+
+			b2Hull hull = b2ComputeHull( points, 8 );
+			m_polygonA = b2MakePolygon( &hull, 0.0f );
+		}
+
+		{
+			b2Vec2 points[8] = {};
+			b2Rot q = b2MakeRot( 2.0f * B2_PI / 8.0f );
+			b2Vec2 p = { 0.5f, 0.0f };
+			points[0] = p;
+			for ( int i = 1; i < 8; ++i )
+			{
+				points[i] = b2RotateVector( q, points[i - 1] );
+			}
+
+			b2Hull hull = b2ComputeHull( points, 8 );
+			m_polygonB = b2MakePolygon( &hull, 0.1f );
+		}
+
+		// todo arena
+		m_transformAs = (b2Transform*)malloc( m_count * sizeof( b2Transform ) );
+		m_transformBs = (b2Transform*)malloc( m_count * sizeof( b2Transform ) );
+		m_outputs = (b2DistanceOutput*)calloc( m_count, sizeof( b2DistanceOutput ) );
+
+		g_seed = 42;
+		for ( int i = 0; i < m_count; ++i )
+		{
+			m_transformAs[i] = { RandomVec2( -0.1f, 0.1f ), RandomRot() };
+			m_transformBs[i] = { RandomVec2( 0.25f, 2.0f ), RandomRot() };
+		}
+
+		m_drawIndex = 0;
+		m_minCycles = INT_MAX;
+		m_minMilliseconds = FLT_MAX;
+	}
+
+	~BenchmarkShapeDistance() override
+	{
+		free( m_transformAs );
+		free( m_transformBs );
+		free( m_outputs );
+	}
+
+	void UpdateGui() override
+	{
+		float height = 80.0f;
+		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
+		ImGui::SetNextWindowSize( ImVec2( 220.0f, height ) );
+		ImGui::Begin( "Benchmark: Shape Distance", nullptr, ImGuiWindowFlags_NoResize );
+
+		ImGui::SliderInt( "draw index", &m_drawIndex, 0, m_count - 1 );
+
+		ImGui::End();
+	}
+
+	void Step( Settings& settings ) override
+	{
+		if ( settings.pause == false || settings.singleStep == true )
+		{
+			b2DistanceInput input = {};
+			input.proxyA = b2MakeProxy( m_polygonA.vertices, m_polygonA.count, m_polygonA.radius );
+			input.proxyB = b2MakeProxy( m_polygonB.vertices, m_polygonB.count, m_polygonB.radius );
+			input.useRadii = true;
+			int totalIterations = 0;
+
+			uint64_t start = b2GetTicks();
+			uint64_t startCycles = GET_CYCLES;
+			for ( int i = 0; i < m_count; ++i )
+			{
+				b2SimplexCache cache = {};
+				input.transformA = m_transformAs[i];
+				input.transformB = m_transformBs[i];
+				m_outputs[i] = b2ShapeDistance( &input, &cache, nullptr, 0 );
+				totalIterations += m_outputs[i].iterations;
+			}
+			uint64_t endCycles = GET_CYCLES;
+
+			float ms = b2GetMilliseconds( start );
+			m_minCycles = b2MinInt( m_minCycles, int( endCycles - startCycles ) );
+			m_minMilliseconds = b2MinFloat( m_minMilliseconds, ms );
+
+			DrawTextLine( "count = %d", m_count );
+			DrawTextLine( "min cycles = %d", m_minCycles );
+			DrawTextLine( "ave cycles = %g", float( m_minCycles ) / float( m_count ) );
+			DrawTextLine( "min ms = %g, ave us = %g", m_minMilliseconds, 1000.0f * m_minMilliseconds / float( m_count ) );
+			DrawTextLine( "average iterations = %g", totalIterations / float( m_count ) );
+		}
+
+		b2Transform xfA = m_transformAs[m_drawIndex];
+		b2Transform xfB = m_transformBs[m_drawIndex];
+		b2DistanceOutput output = m_outputs[m_drawIndex];
+		g_draw.DrawSolidPolygon( xfA, m_polygonA.vertices, m_polygonA.count, m_polygonA.radius, b2_colorBox2DGreen );
+		g_draw.DrawSolidPolygon( xfB, m_polygonB.vertices, m_polygonB.count, m_polygonB.radius, b2_colorBox2DBlue );
+		g_draw.DrawSegment( output.pointA, output.pointB, b2_colorDimGray );
+		g_draw.DrawPoint( output.pointA, 10.0f, b2_colorWhite );
+		g_draw.DrawPoint( output.pointB, 10.0f, b2_colorWhite );
+		g_draw.DrawSegment( output.pointA, output.pointA + 0.5f * output.normal, b2_colorYellow );
+		DrawTextLine( "distance = %g", output.distance );
+
+		Sample::Step( settings );
+	}
+
+	static Sample* Create( Settings& settings )
+	{
+		return new BenchmarkShapeDistance( settings );
+	}
+
+	static constexpr int m_count = g_sampleDebug ? 100 : 10000;
+	b2Transform* m_transformAs;
+	b2Transform* m_transformBs;
+	b2DistanceOutput* m_outputs;
+	b2Polygon m_polygonA;
+	b2Polygon m_polygonB;
+	float m_minMilliseconds;
+	int m_drawIndex;
+	int m_minCycles;
+};
+
+static int benchmarkShapeDistance = RegisterSample( "Benchmark", "Shape Distance", BenchmarkShapeDistance::Create );
