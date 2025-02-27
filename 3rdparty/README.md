@@ -11,7 +11,7 @@
 
 ## Box2D
 - [![Upstream](https://img.shields.io/github/v/release/erincatto/box2d?label=Upstream)](https://github.com/erincatto/box2d)
-- Version: 3.0.0-df7373c
+- Version: 3.1.0
 - License: MIT
 
 ## Bullet

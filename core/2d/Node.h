@@ -28,8 +28,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCNODE_H__
-#define __CCNODE_H__
+#ifndef __AXNODE_H__
+#define __AXNODE_H__
 
 #include <cstdint>
 #include "base/Macros.h"
@@ -41,7 +41,7 @@
 #include "2d/ComponentContainer.h"
 #include "2d/Component.h"
 
-#if defined(AX_ENABLE_PHYSICS) && 0
+#if defined(AX_ENABLE_PHYSICS)
 #    include "physics/PhysicsBody.h"
 #endif
 
@@ -2007,7 +2007,7 @@ protected:
     backend::ProgramState* _programState = nullptr;
 
 // Physics:remaining backwardly compatible
-#if defined(AX_ENABLE_PHYSICS) && 0
+#if defined(AX_ENABLE_PHYSICS)
     PhysicsBody* _physicsBody;
 
 public:

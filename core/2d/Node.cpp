@@ -125,7 +125,7 @@ Node::Node()
     , _onExitCallback(nullptr)
     , _onEnterTransitionDidFinishCallback(nullptr)
     , _onExitTransitionDidStartCallback(nullptr)
-#if defined(AX_ENABLE_PHYSICS) && 0
+#if defined(AX_ENABLE_PHYSICS)
     , _physicsBody(nullptr)
 #endif
 {

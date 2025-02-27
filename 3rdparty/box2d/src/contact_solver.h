@@ -14,7 +14,7 @@ typedef struct b2ContactConstraintPoint
 	float relativeVelocity;
 	float normalImpulse;
 	float tangentImpulse;
-	float maxNormalImpulse;
+	float totalNormalImpulse;
 	float normalMass;
 	float tangentMass;
 } b2ContactConstraintPoint;
@@ -29,6 +29,10 @@ typedef struct b2ContactConstraint
 	float invIA, invIB;
 	float friction;
 	float restitution;
+	float tangentSpeed;
+	float rollingResistance;
+	float rollingMass;
+	float rollingImpulse;
 	b2Softness softness;
 	int pointCount;
 } b2ContactConstraint;

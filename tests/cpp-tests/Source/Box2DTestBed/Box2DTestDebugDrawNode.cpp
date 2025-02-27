@@ -1,6 +1,7 @@
 #include "Box2DTestDebugDrawNode.h"
 #include "VisibleRect.h"
 #include "physics/PhysicsHelper.h"
+#include "imgui.h"
 
 using namespace ax;
 
@@ -31,6 +32,24 @@ b2Vec2 b2SampleCamera::ConvertScreenToWorld(b2Vec2 ps)
 
     b2Vec2 pw = {(1.0f - u) * lower.x + u * upper.x, (1.0f - v) * lower.y + v * upper.y};
     return pw;
+}
+
+b2Vec2 b2SampleCamera::ConvertWorldToScreen(b2Vec2 pw)
+{
+    float w     = float(m_width);
+    float h     = float(m_height);
+    float ratio = w / h;
+
+    b2Vec2 extents = {m_zoom * ratio, m_zoom};
+
+    b2Vec2 lower = b2Sub(m_center, extents);
+    b2Vec2 upper = b2Add(m_center, extents);
+
+    float u = (pw.x - lower.x) / (upper.x - lower.x);
+    float v = (pw.y - lower.y) / (upper.y - lower.y);
+
+    b2Vec2 ps = {u * w, (1.0f - v) * h};
+    return ps;
 }
 
 static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, Box2DTestDebugDrawNode* context)
@@ -87,7 +106,7 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
 
     bool ret = ax::extension::PhysicsDebugNode::initWithWorld(worldId);
 
-#define __b2_setfun(f) _debugDraw.f = reinterpret_cast<decltype(_debugDraw.f)>(b2##f);
+#define __b2_setfun(f) _debugDraw.f##Fcn = reinterpret_cast<decltype(_debugDraw.f##Fcn)>(b2##f);
     __b2_setfun(DrawCircle);
     __b2_setfun(DrawSolidCircle);
     __b2_setfun(DrawSolidCapsule);
@@ -208,7 +227,7 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
 
 void Box2DTestDebugDrawNode::DrawPolygon(const b2Vec2* vertices, int32_t vertexCount, b2HexColor color)
 {
-    _debugDraw.DrawPolygon(vertices, vertexCount, color, this);
+    _debugDraw.DrawPolygonFcn(vertices, vertexCount, color, this);
 }
 
 void Box2DTestDebugDrawNode::DrawSolidPolygon(b2Transform transform,
@@ -217,60 +236,84 @@ void Box2DTestDebugDrawNode::DrawSolidPolygon(b2Transform transform,
                                               float radius,
                                               b2HexColor color)
 {
-    _debugDraw.DrawSolidPolygon(transform, vertices, vertexCount, radius, color, this);
+    _debugDraw.DrawSolidPolygonFcn(transform, vertices, vertexCount, radius, color, this);
 }
 
 void Box2DTestDebugDrawNode::DrawCircle(b2Vec2 center, float radius, b2HexColor color)
 {
-    _debugDraw.DrawCircle(center, radius, color, this);
+    _debugDraw.DrawCircleFcn(center, radius, color, this);
 }
 void Box2DTestDebugDrawNode::DrawSolidCircle(b2Transform transform, b2Vec2 center, float radius, b2HexColor color)
 {
-    _debugDraw.DrawSolidCircle(transform, radius, color, this);
+    _debugDraw.DrawSolidCircleFcn(transform, radius, color, this);
 }
 
 void Box2DTestDebugDrawNode::DrawSolidCapsule(b2Vec2 p1, b2Vec2 p2, float radius, b2HexColor color)
 {
-    _debugDraw.DrawSolidCapsule(p1, p2, radius, color, this);
+    _debugDraw.DrawSolidCapsuleFcn(p1, p2, radius, color, this);
 }
 
 void Box2DTestDebugDrawNode::DrawSegment(b2Vec2 p1, b2Vec2 p2, b2HexColor color)
 {
-    _debugDraw.DrawSegment(p1, p2, color, this);
+    _debugDraw.DrawSegmentFcn(p1, p2, color, this);
 }
 
 void Box2DTestDebugDrawNode::DrawTransform(b2Transform transform)
 {
-    _debugDraw.DrawTransform(transform, this);
+    _debugDraw.DrawTransformFcn(transform, this);
 }
 
 void Box2DTestDebugDrawNode::DrawPoint(b2Vec2 p, float size, b2HexColor color)
 {
-    _debugDraw.DrawPoint(p, size, color, this);
+    _debugDraw.DrawPointFcn(p, size, color, this);
 }
 
 void Box2DTestDebugDrawNode::DrawString(int x, int y, const char* pszFormat, ...)
 {
-    va_list args;
-    va_start(args, pszFormat);
-    auto ret = StringUtils::vformat(pszFormat, args);
-    va_end(args);
+    // va_list args;
+    // va_start(args, pszFormat);
+    // auto ret = StringUtils::vformat(pszFormat, args);
+    // va_end(args);
+    // 
+    // _debugString.append(ret);
+    // _debugString.push_back('\n');
+    // _textRender->setString(_debugString);
 
-    _debugString.append(ret);
-    _debugString.push_back('\n');
-    _textRender->setString(_debugString);
+    va_list arg;
+    va_start(arg, pszFormat);
+    ImGui::Begin("Overlay", nullptr,
+                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize |
+                     ImGuiWindowFlags_NoScrollbar);
+    ImGui::PushFont(g_draw.m_regularFont);
+    ImGui::SetCursorPos(ImVec2(float(x), float(y)));
+    ImGui::TextColoredV(ImColor(230, 153, 153, 255), pszFormat, arg);
+    ImGui::PopFont();
+    ImGui::End();
+    va_end(arg);
 }
 
 void Box2DTestDebugDrawNode::DrawString(b2Vec2 p, const char* pszFormat, ...)
 {
-    va_list args;
+    /*va_list args;
     va_start(args, pszFormat);
     auto ret = StringUtils::vformat(pszFormat, args);
     va_end(args);
 
     _debugString.append(ret);
     _debugString.push_back('\n');
-    _textRender->setString(_debugString);
+    _textRender->setString(_debugString);*/
+
+    b2Vec2 ps = g_camera.ConvertWorldToScreen(p);
+
+    va_list arg;
+    va_start(arg, pszFormat);
+    ImGui::Begin("Overlay", nullptr,
+                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize |
+                     ImGuiWindowFlags_NoScrollbar);
+    ImGui::SetCursorPos(ImVec2(ps.x, ps.y));
+    ImGui::TextColoredV(ImColor(230, 230, 230, 255), pszFormat, arg);
+    ImGui::End();
+    va_end(arg);
 }
 
 void Box2DTestDebugDrawNode::AddCapsule(const CapsuleData& capsule)

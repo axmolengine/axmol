@@ -21,7 +21,7 @@ public:
 		: Sample( settings )
 	{
 		m_period = 40.0f;
-		float omega = 2.0 * b2_pi / m_period;
+		float omega = 2.0 * B2_PI / m_period;
 		m_cycleCount = g_sampleDebug ? 10 : 600;
 		m_gridSize = 1.0f;
 		m_gridCount = (int)( m_cycleCount * m_period / m_gridSize );
@@ -44,7 +44,7 @@ public:
 
 			// Setting this to false significantly reduces the cost of creating
 			// static bodies and shapes.
-			shapeDef.forceContactCreation = false;
+			shapeDef.invokeContactCreation = false;
 
 			float height = 4.0f;
 			float xBody = xStart;
@@ -71,7 +71,7 @@ public:
 
 				for ( int j = 0; j < ycount; ++j )
 				{
-					b2Polygon square = b2MakeOffsetBox( 0.4f * m_gridSize, 0.4f * m_gridSize, { xShape, y }, b2Rot_identity );
+					b2Polygon square = b2MakeOffsetBox( 0.4f * m_gridSize, 0.4f * m_gridSize,  { xShape, y }, b2Rot_identity  );
 					square.radius = 0.1f;
 					b2CreatePolygonShape( groundId, &shapeDef, &square );
 
@@ -84,7 +84,6 @@ public:
 		}
 
 		int humanIndex = 0;
-		int donutIndex = 0;
 		for ( int cycleIndex = 0; cycleIndex < m_cycleCount; ++cycleIndex )
 		{
 			float xbase = ( 0.5f + cycleIndex ) * m_period + xStart;
@@ -116,8 +115,8 @@ public:
 				b2Vec2 position = { xbase - 2.0f, 10.0f };
 				for ( int i = 0; i < 5; ++i )
 				{
-					Human human;
-					human.Spawn( m_worldId, position, 1.5f, 0.05f, 0.0f, 0.0f, humanIndex + 1, NULL, false );
+					Human human = {};
+					CreateHuman(&human, m_worldId, position, 1.5f, 0.05f, 0.0f, 0.0f, humanIndex + 1, nullptr, false );
 					humanIndex += 1;
 					position.x += 1.0f;
 				}
@@ -129,8 +128,7 @@ public:
 				for ( int i = 0; i < 5; ++i )
 				{
 					Donut donut;
-					donut.Spawn( m_worldId, position, 0.75f, 0, NULL );
-					donutIndex += 1;
+					donut.Create( m_worldId, position, 0.75f, 0, false, nullptr );
 					position.x += 2.0f;
 				}
 			}
@@ -145,7 +143,7 @@ public:
 		m_followCar = false;
 	}
 
-	void UpdateUI() override
+	void UpdateGui() override
 	{
 		float height = 160.0f;
 		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
@@ -193,7 +191,14 @@ public:
 		if ( ( m_stepCount & 0x1 ) == 0x1 && m_explode )
 		{
 			m_explosionPosition.x = ( 0.5f + m_cycleIndex ) * m_period - span;
-			b2World_Explode( m_worldId, m_explosionPosition, radius, 1.0f );
+
+			b2ExplosionDef def = b2DefaultExplosionDef();
+			def.position = m_explosionPosition;
+			def.radius = radius;
+			def.falloff = 0.1f;
+			def.impulsePerLength = 1.0f;
+			b2World_Explode( m_worldId, &def );
+
 			m_cycleIndex = ( m_cycleIndex + 1 ) % m_cycleCount;
 		}
 

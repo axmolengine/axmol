@@ -4,6 +4,7 @@
 #include "donut.h"
 #include "draw.h"
 #include "human.h"
+#include "random.h"
 #include "sample.h"
 #include "settings.h"
 
@@ -12,9 +13,10 @@
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
+#include <stdio.h>
 #include <vector>
 
-class SensorEvent : public Sample
+class SensorFunnel : public Sample
 {
 public:
 	enum
@@ -24,7 +26,7 @@ public:
 		e_count = 32
 	};
 
-	explicit SensorEvent( Settings& settings )
+	explicit SensorFunnel( Settings& settings )
 		: Sample( settings )
 	{
 		if ( settings.restart == false )
@@ -56,7 +58,7 @@ public:
 				{ -8.26825142, 11.906374 },	 { -16.8672504, 17.1978741 },
 			};
 
-			int count = sizeof( points ) / sizeof( points[0] );
+			int count = std::size( points );
 
 			// float scale = 0.25f;
 			// b2Vec2 lower = {FLT_MAX, FLT_MAX};
@@ -90,18 +92,21 @@ public:
 			// }
 			// printf("};\n");
 
+			b2SurfaceMaterial material = {};
+			material.friction = 0.2f;
+
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
 			chainDef.count = count;
 			chainDef.isLoop = true;
-			chainDef.friction = 0.2f;
+			chainDef.materials = &material;
+			chainDef.materialCount = 1;
 			b2CreateChain( groundId, &chainDef );
 
 			float sign = 1.0f;
 			float y = 14.0f;
 			for ( int i = 0; i < 3; ++i )
 			{
-				b2BodyDef bodyDef = b2DefaultBodyDef();
 				bodyDef.position = { 0.0f, y };
 				bodyDef.type = b2_dynamicBody;
 
@@ -109,8 +114,8 @@ public:
 
 				b2Polygon box = b2MakeBox( 6.0f, 0.5f );
 				b2ShapeDef shapeDef = b2DefaultShapeDef();
-				shapeDef.friction = 0.1f;
-				shapeDef.restitution = 1.0f;
+				shapeDef.material.friction = 0.1f;
+				shapeDef.material.restitution = 1.0f;
 				shapeDef.density = 1.0f;
 
 				b2CreatePolygonShape( bodyId, &shapeDef, &box );
@@ -134,6 +139,8 @@ public:
 				b2Polygon box = b2MakeOffsetBox( 4.0f, 1.0f, { 0.0f, -30.5f }, b2Rot_identity );
 				b2ShapeDef shapeDef = b2DefaultShapeDef();
 				shapeDef.isSensor = true;
+				shapeDef.enableSensorEvents = true;
+
 				b2CreatePolygonShape( groundId, &shapeDef, &box );
 			}
 		}
@@ -146,6 +153,8 @@ public:
 		{
 			m_isSpawned[i] = false;
 		}
+
+		memset( m_humans, 0, sizeof( m_humans ) );
 
 		CreateElement();
 	}
@@ -172,13 +181,18 @@ public:
 		if ( m_type == e_donut )
 		{
 			Donut* donut = m_donuts + index;
-			// donut->Spawn(m_worldId, center, index + 1, donut);
-			donut->Spawn( m_worldId, center, 1.0f, 0, donut );
+			donut->Create( m_worldId, center, 1.0f, 0, true, donut );
 		}
 		else
 		{
 			Human* human = m_humans + index;
-			human->Spawn( m_worldId, center, 2.0f, 0.05f, 0.0f, 0.0f, index + 1, human, false );
+			float scale = 2.0f;
+			float jointFriction = 0.05f;
+			float jointHertz = 6.0f;
+			float jointDamping = 0.5f;
+			bool colorize = true;
+			CreateHuman( human, m_worldId, center, scale, jointFriction, jointHertz, jointDamping, index + 1, human, colorize );
+			Human_EnableSensorEvents( human, true );
 		}
 
 		m_isSpawned[index] = true;
@@ -190,12 +204,12 @@ public:
 		if ( m_type == e_donut )
 		{
 			Donut* donut = m_donuts + index;
-			donut->Despawn();
+			donut->Destroy();
 		}
 		else
 		{
 			Human* human = m_humans + index;
-			human->Despawn();
+			DestroyHuman( human );
 		}
 
 		m_isSpawned[index] = false;
@@ -209,11 +223,11 @@ public:
 			{
 				if ( m_type == e_donut )
 				{
-					m_donuts[i].Despawn();
+					m_donuts[i].Destroy();
 				}
 				else
 				{
-					m_humans[i].Despawn();
+					DestroyHuman( m_humans + i );
 				}
 
 				m_isSpawned[i] = false;
@@ -221,7 +235,7 @@ public:
 		}
 	}
 
-	void UpdateUI() override
+	void UpdateGui() override
 	{
 		float height = 90.0f;
 		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
@@ -254,7 +268,7 @@ public:
 		Sample::Step( settings );
 
 		// Discover rings that touch the bottom sensor
-		bool deferredDestructions[e_count] = {};
+		bool deferredDestruction[e_count] = {};
 		b2SensorEvents sensorEvents = b2World_GetSensorEvents( m_worldId );
 		for ( int i = 0; i < sensorEvents.beginCount; ++i )
 		{
@@ -271,7 +285,7 @@ public:
 					assert( 0 <= index && index < e_count );
 
 					// Defer destruction to avoid double destruction and event invalidation (orphaned shape ids)
-					deferredDestructions[index] = true;
+					deferredDestruction[index] = true;
 				}
 			}
 			else
@@ -283,7 +297,7 @@ public:
 					assert( 0 <= index && index < e_count );
 
 					// Defer destruction to avoid double destruction and event invalidation (orphaned shape ids)
-					deferredDestructions[index] = true;
+					deferredDestruction[index] = true;
 				}
 			}
 		}
@@ -293,7 +307,7 @@ public:
 		// Safely destroy rings that hit the bottom sensor
 		for ( int i = 0; i < e_count; ++i )
 		{
-			if ( deferredDestructions[i] )
+			if ( deferredDestruction[i] )
 			{
 				DestroyElement( i );
 			}
@@ -312,7 +326,7 @@ public:
 
 	static Sample* Create( Settings& settings )
 	{
-		return new SensorEvent( settings );
+		return new SensorFunnel( settings );
 	}
 
 	Human m_humans[e_count];
@@ -323,7 +337,478 @@ public:
 	float m_side;
 };
 
-static int sampleSensorEvent = RegisterSample( "Events", "Sensor", SensorEvent::Create );
+static int sampleSensorBeginEvent = RegisterSample( "Events", "Sensor Funnel", SensorFunnel::Create );
+
+class SensorBookend : public Sample
+{
+public:
+	explicit SensorBookend( Settings& settings )
+		: Sample( settings )
+	{
+		if ( settings.restart == false )
+		{
+			g_camera.m_center = { 0.0f, 6.0f };
+			g_camera.m_zoom = 7.5f;
+		}
+
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			b2BodyId groundId = b2CreateBody( m_worldId, &bodyDef );
+			b2ShapeDef shapeDef = b2DefaultShapeDef();
+
+			b2Segment groundSegment = { { -10.0f, 0.0f }, { 10.0f, 0.0f } };
+			b2CreateSegmentShape( groundId, &shapeDef, &groundSegment );
+
+			groundSegment = { { -10.0f, 0.0f }, { -10.0f, 10.0f } };
+			b2CreateSegmentShape( groundId, &shapeDef, &groundSegment );
+
+			groundSegment = { { 10.0f, 0.0f }, { 10.0f, 10.0f } };
+			b2CreateSegmentShape( groundId, &shapeDef, &groundSegment );
+
+			m_isVisiting1 = false;
+			m_isVisiting2 = false;
+			m_sensorsOverlapCount = 0;
+		}
+
+		CreateSensor1();
+		CreateSensor2();
+		CreateVisitor();
+	}
+
+	void CreateSensor1()
+	{
+		b2BodyDef bodyDef = b2DefaultBodyDef();
+
+		bodyDef.position = { -2.0f, 1.0f };
+		m_sensorBodyId1 = b2CreateBody( m_worldId, &bodyDef );
+
+		b2ShapeDef shapeDef = b2DefaultShapeDef();
+		shapeDef.isSensor = true;
+		shapeDef.enableSensorEvents = true;
+
+		b2Polygon box = b2MakeSquare( 1.0f );
+		m_sensorShapeId1 = b2CreatePolygonShape( m_sensorBodyId1, &shapeDef, &box );
+	}
+
+	void CreateSensor2()
+	{
+		b2BodyDef bodyDef = b2DefaultBodyDef();
+		bodyDef.type = b2_dynamicBody;
+		bodyDef.position = { 2.0f, 1.0f };
+		m_sensorBodyId2 = b2CreateBody( m_worldId, &bodyDef );
+
+		b2ShapeDef shapeDef = b2DefaultShapeDef();
+		shapeDef.isSensor = true;
+		shapeDef.enableSensorEvents = true;
+
+		b2Polygon box = b2MakeRoundedBox( 0.5f, 0.5f, 0.5f );
+		m_sensorShapeId2 = b2CreatePolygonShape( m_sensorBodyId2, &shapeDef, &box );
+
+		// Solid middle
+		shapeDef.isSensor = false;
+		shapeDef.enableSensorEvents = false;
+		box = b2MakeSquare( 0.5f );
+		b2CreatePolygonShape( m_sensorBodyId2, &shapeDef, &box );
+	}
+
+	void CreateVisitor()
+	{
+		b2BodyDef bodyDef = b2DefaultBodyDef();
+		bodyDef.position = { -4.0f, 1.0f };
+		bodyDef.type = b2_dynamicBody;
+
+		m_visitorBodyId = b2CreateBody( m_worldId, &bodyDef );
+
+		b2ShapeDef shapeDef = b2DefaultShapeDef();
+		shapeDef.enableSensorEvents = true;
+
+		b2Circle circle = { { 0.0f, 0.0f }, 0.5f };
+		m_visitorShapeId = b2CreateCircleShape( m_visitorBodyId, &shapeDef, &circle );
+	}
+
+	void UpdateGui() override
+	{
+		float height = 260.0f;
+		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
+		ImGui::SetNextWindowSize( ImVec2( 200.0f, height ) );
+
+		ImGui::Begin( "Sensor Bookend", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize );
+
+		if ( B2_IS_NULL( m_visitorBodyId ) )
+		{
+			if ( ImGui::Button( "create visitor" ) )
+			{
+				CreateVisitor();
+			}
+		}
+		else
+		{
+			if ( ImGui::Button( "destroy visitor" ) )
+			{
+				b2DestroyBody( m_visitorBodyId );
+				m_visitorBodyId = b2_nullBodyId;
+				// Retain m_visitorShapeId for end events.
+			}
+			else
+			{
+				bool enabledEvents = b2Shape_AreSensorEventsEnabled( m_visitorShapeId );
+				if ( ImGui::Checkbox( "visitor events", &enabledEvents ) )
+				{
+					b2Shape_EnableSensorEvents( m_visitorShapeId, enabledEvents );
+				}
+
+				bool enabledBody = b2Body_IsEnabled( m_visitorBodyId );
+				if ( ImGui::Checkbox( "enable visitor body", &enabledBody ) )
+				{
+					if (enabledBody)
+					{
+						b2Body_Enable( m_visitorBodyId );
+					}
+					else
+					{
+						b2Body_Disable( m_visitorBodyId );
+					}
+				}
+			}
+		}
+
+		ImGui::Separator();
+
+		if ( B2_IS_NULL( m_sensorBodyId1 ) )
+		{
+			if ( ImGui::Button( "create sensor1" ) )
+			{
+				CreateSensor1();
+			}
+		}
+		else
+		{
+			if ( ImGui::Button( "destroy sensor1" ) )
+			{
+				b2DestroyBody( m_sensorBodyId1 );
+				m_sensorBodyId1 = b2_nullBodyId;
+				// Retain m_sensorShapeId1 for end events.
+			}
+			else
+			{
+				bool enabledEvents = b2Shape_AreSensorEventsEnabled( m_sensorShapeId1 );
+				if ( ImGui::Checkbox( "sensor 1 events", &enabledEvents ) )
+				{
+					b2Shape_EnableSensorEvents( m_sensorShapeId1, enabledEvents );
+				}
+
+				bool enabledBody = b2Body_IsEnabled( m_sensorBodyId1 );
+				if ( ImGui::Checkbox( "enable sensor1 body", &enabledBody ) )
+				{
+					if ( enabledBody )
+					{
+						b2Body_Enable( m_sensorBodyId1 );
+					}
+					else
+					{
+						b2Body_Disable( m_sensorBodyId1 );
+					}
+				}
+			}
+		}
+
+		ImGui::Separator();
+
+		if ( B2_IS_NULL( m_sensorBodyId2 ) )
+		{
+			if ( ImGui::Button( "create sensor2" ) )
+			{
+				CreateSensor2();
+			}
+		}
+		else
+		{
+			if ( ImGui::Button( "destroy sensor2" ) )
+			{
+				b2DestroyBody( m_sensorBodyId2 );
+				m_sensorBodyId2 = b2_nullBodyId;
+				// Retain m_sensorShapeId2 for end events.
+			}
+			else
+			{
+				bool enabledEvents = b2Shape_AreSensorEventsEnabled( m_sensorShapeId2 );
+				if ( ImGui::Checkbox( "sensor2 events", &enabledEvents ) )
+				{
+					b2Shape_EnableSensorEvents( m_sensorShapeId2, enabledEvents );
+				}
+
+				bool enabledBody = b2Body_IsEnabled( m_sensorBodyId2 );
+				if ( ImGui::Checkbox( "enable sensor2 body", &enabledBody ) )
+				{
+					if ( enabledBody )
+					{
+						b2Body_Enable( m_sensorBodyId2 );
+					}
+					else
+					{
+						b2Body_Disable( m_sensorBodyId2 );
+					}
+				}
+			}
+		}
+
+		ImGui::End();
+	}
+
+	void Step( Settings& settings ) override
+	{
+		Sample::Step( settings );
+
+		b2SensorEvents sensorEvents = b2World_GetSensorEvents( m_worldId );
+		for ( int i = 0; i < sensorEvents.beginCount; ++i )
+		{
+			b2SensorBeginTouchEvent event = sensorEvents.beginEvents[i];
+
+			if ( B2_ID_EQUALS( event.sensorShapeId, m_sensorShapeId1 ) )
+			{
+				if ( B2_ID_EQUALS( event.visitorShapeId, m_visitorShapeId ) )
+				{
+					assert( m_isVisiting1 == false );
+					m_isVisiting1 = true;
+				}
+				else
+				{
+					assert( B2_ID_EQUALS( event.visitorShapeId, m_sensorShapeId2 ) );
+					m_sensorsOverlapCount += 1;
+				}
+			}
+			else
+			{
+				assert( B2_ID_EQUALS( event.sensorShapeId, m_sensorShapeId2 ) );
+
+				if ( B2_ID_EQUALS( event.visitorShapeId, m_visitorShapeId ) )
+				{
+					assert( m_isVisiting2 == false );
+					m_isVisiting2 = true;
+				}
+				else
+				{
+					assert( B2_ID_EQUALS( event.visitorShapeId, m_sensorShapeId1 ) );
+					m_sensorsOverlapCount += 1;
+				}
+			}
+		}
+
+		assert( m_sensorsOverlapCount == 0 || m_sensorsOverlapCount == 2 );
+
+		for ( int i = 0; i < sensorEvents.endCount; ++i )
+		{
+			b2SensorEndTouchEvent event = sensorEvents.endEvents[i];
+
+			if ( B2_ID_EQUALS( event.sensorShapeId, m_sensorShapeId1 ) )
+			{
+				if ( B2_ID_EQUALS( event.visitorShapeId, m_visitorShapeId ))
+				{
+					assert( m_isVisiting1 == true );
+					m_isVisiting1 = false;
+				}
+				else
+				{
+					assert( B2_ID_EQUALS( event.visitorShapeId, m_sensorShapeId2 ) );
+					m_sensorsOverlapCount -= 1;
+				}
+			}
+			else
+			{
+				assert( B2_ID_EQUALS( event.sensorShapeId, m_sensorShapeId2 ) );
+
+				if ( B2_ID_EQUALS( event.visitorShapeId, m_visitorShapeId ) )
+				{
+					assert( m_isVisiting2 == true );
+					m_isVisiting2 = false;
+				}
+				else
+				{
+					assert( B2_ID_EQUALS( event.visitorShapeId, m_sensorShapeId1 ) );
+					m_sensorsOverlapCount -= 1;
+				}
+			}
+		}
+
+		assert( m_sensorsOverlapCount == 0 || m_sensorsOverlapCount == 2 );
+
+		// Nullify invalid shape ids after end events are processed.
+		if (b2Shape_IsValid(m_visitorShapeId) == false)
+		{
+			m_visitorShapeId = b2_nullShapeId;
+		}
+
+		if (b2Shape_IsValid(m_sensorShapeId1) == false)
+		{
+			m_sensorShapeId1 = b2_nullShapeId;
+		}
+
+		if (b2Shape_IsValid(m_sensorShapeId2) == false)
+		{
+			m_sensorShapeId2 = b2_nullShapeId;
+		}
+
+		DrawTextLine( "visiting 1 == %s", m_isVisiting1 ? "true" : "false" );
+		DrawTextLine( "visiting 2 == %s", m_isVisiting2 ? "true" : "false" );
+		DrawTextLine( "sensors overlap count == %d", m_sensorsOverlapCount );
+	}
+
+	static Sample* Create( Settings& settings )
+	{
+		return new SensorBookend( settings );
+	}
+
+	b2BodyId m_sensorBodyId1;
+	b2ShapeId m_sensorShapeId1;
+
+	b2BodyId m_sensorBodyId2;
+	b2ShapeId m_sensorShapeId2;
+
+	b2BodyId m_visitorBodyId;
+	b2ShapeId m_visitorShapeId;
+
+	bool m_isVisiting1;
+	bool m_isVisiting2;
+	int m_sensorsOverlapCount;
+};
+
+static int sampleSensorBookendEvent = RegisterSample( "Events", "Sensor Bookend", SensorBookend::Create );
+
+class FootSensor : public Sample
+{
+public:
+	enum CollisionBits
+	{
+		GROUND = 0x00000001,
+		PLAYER = 0x00000002,
+		FOOT = 0x00000004,
+
+		ALL_BITS = ( ~0u )
+	};
+
+	explicit FootSensor( Settings& settings )
+		: Sample( settings )
+	{
+		if ( settings.restart == false )
+		{
+			g_camera.m_center = { 0.0f, 6.0f };
+			g_camera.m_zoom = 7.5f;
+		}
+
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			b2BodyId groundId = b2CreateBody( m_worldId, &bodyDef );
+
+			b2Vec2 points[20];
+			float x = 10.0f;
+			for ( int i = 0; i < 20; ++i )
+			{
+				points[i] = { x, 0.0f };
+				x -= 1.0f;
+			}
+
+			b2ChainDef chainDef = b2DefaultChainDef();
+			chainDef.points = points;
+			chainDef.count = 20;
+			chainDef.filter.categoryBits = GROUND;
+			chainDef.filter.maskBits = FOOT | PLAYER;
+			chainDef.isLoop = false;
+			chainDef.enableSensorEvents = true;
+
+			b2CreateChain( groundId, &chainDef );
+		}
+
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			bodyDef.type = b2_dynamicBody;
+			bodyDef.fixedRotation = true;
+			bodyDef.position = { 0.0f, 1.0f };
+			m_playerId = b2CreateBody( m_worldId, &bodyDef );
+			b2ShapeDef shapeDef = b2DefaultShapeDef();
+			shapeDef.filter.categoryBits = PLAYER;
+			shapeDef.filter.maskBits = GROUND;
+			shapeDef.material.friction = 0.3f;
+			b2Capsule capsule = { { 0.0f, -0.5f }, { 0.0f, 0.5f }, 0.5f };
+			b2CreateCapsuleShape( m_playerId, &shapeDef, &capsule );
+
+			b2Polygon box = b2MakeOffsetBox( 0.5f, 0.25f, { 0.0f, -1.0f }, b2Rot_identity );
+			shapeDef.filter.categoryBits = FOOT;
+			shapeDef.filter.maskBits = GROUND;
+			shapeDef.isSensor = true;
+			shapeDef.enableSensorEvents = true;
+			m_sensorId = b2CreatePolygonShape( m_playerId, &shapeDef, &box );
+		}
+
+		m_overlapCount = 0;
+	}
+
+	void Step( Settings& settings ) override
+	{
+		if ( glfwGetKey( g_mainWindow, GLFW_KEY_A ) == GLFW_PRESS )
+		{
+			b2Body_ApplyForceToCenter( m_playerId, { -50.0f, 0.0f }, true );
+		}
+
+		if ( glfwGetKey( g_mainWindow, GLFW_KEY_D ) == GLFW_PRESS )
+		{
+			b2Body_ApplyForceToCenter( m_playerId, { 50.0f, 0.0f }, true );
+		}
+
+		Sample::Step( settings );
+
+		b2SensorEvents sensorEvents = b2World_GetSensorEvents( m_worldId );
+		for ( int i = 0; i < sensorEvents.beginCount; ++i )
+		{
+			b2SensorBeginTouchEvent event = sensorEvents.beginEvents[i];
+
+			assert( B2_ID_EQUALS( event.visitorShapeId, m_sensorId ) == false );
+
+			if ( B2_ID_EQUALS( event.sensorShapeId, m_sensorId ) )
+			{
+				m_overlapCount += 1;
+			}
+		}
+
+		for ( int i = 0; i < sensorEvents.endCount; ++i )
+		{
+			b2SensorEndTouchEvent event = sensorEvents.endEvents[i];
+
+			assert( B2_ID_EQUALS( event.visitorShapeId, m_sensorId ) == false );
+
+			if ( B2_ID_EQUALS( event.sensorShapeId, m_sensorId ) )
+			{
+				m_overlapCount -= 1;
+			}
+		}
+
+		g_draw.DrawString( 5, m_textLine, "count == %d", m_overlapCount );
+		m_textLine += m_textIncrement;
+
+		int capacity = b2Shape_GetSensorCapacity( m_sensorId );
+		m_overlaps.clear();
+		m_overlaps.resize( capacity );
+		int count = b2Shape_GetSensorOverlaps( m_sensorId, m_overlaps.data(), capacity );
+		for ( int i = 0; i < count; ++i )
+		{
+			b2ShapeId shapeId = m_overlaps[i];
+			b2AABB aabb = b2Shape_GetAABB( shapeId );
+			b2Vec2 point = b2AABB_Center( aabb );
+			g_draw.DrawPoint( point, 10.0f, b2_colorWhite );
+		}
+	}
+
+	static Sample* Create( Settings& settings )
+	{
+		return new FootSensor( settings );
+	}
+
+	b2BodyId m_playerId;
+	b2ShapeId m_sensorId;
+	std::vector<b2ShapeId> m_overlaps;
+	int m_overlapCount;
+};
+
+static int sampleCharacterSensor = RegisterSample( "Events", "Foot Sensor", FootSensor::Create );
 
 struct BodyUserData
 {
@@ -410,16 +895,16 @@ public:
 		// Debris
 		b2BodyDef bodyDef = b2DefaultBodyDef();
 		bodyDef.type = b2_dynamicBody;
-		bodyDef.position = { RandomFloat( -38.0f, 38.0f ), RandomFloat( -38.0f, 38.0f ) };
-		bodyDef.rotation = b2MakeRot( RandomFloat( -b2_pi, b2_pi ) );
-		bodyDef.linearVelocity = { RandomFloat( -5.0f, 5.0f ), RandomFloat( -5.0f, 5.0f ) };
-		bodyDef.angularVelocity = RandomFloat( -1.0f, 1.0f );
+		bodyDef.position = { RandomFloatRange( -38.0f, 38.0f ), RandomFloatRange( -38.0f, 38.0f ) };
+		bodyDef.rotation = b2MakeRot( RandomFloatRange( -B2_PI, B2_PI ) );
+		bodyDef.linearVelocity = { RandomFloatRange( -5.0f, 5.0f ), RandomFloatRange( -5.0f, 5.0f ) };
+		bodyDef.angularVelocity = RandomFloatRange( -1.0f, 1.0f );
 		bodyDef.gravityScale = 0.0f;
 		bodyDef.userData = m_bodyUserData + index;
 		m_debrisIds[index] = b2CreateBody( m_worldId, &bodyDef );
 
 		b2ShapeDef shapeDef = b2DefaultShapeDef();
-		shapeDef.restitution = 0.8f;
+		shapeDef.material.restitution = 0.8f;
 
 		// No events when debris hits debris
 		shapeDef.enableContactEvents = false;
@@ -441,7 +926,7 @@ public:
 		}
 	}
 
-	void UpdateUI() override
+	void UpdateGui() override
 	{
 		float height = 60.0f;
 		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
@@ -491,6 +976,7 @@ public:
 
 		std::vector<b2ContactData> contactData;
 
+		// Process contact begin touch events.
 		b2ContactEvents contactEvents = b2World_GetContactEvents( m_worldId );
 		for ( int i = 0; i < contactEvents.beginCount; ++i )
 		{
@@ -498,41 +984,72 @@ public:
 			b2BodyId bodyIdA = b2Shape_GetBody( event.shapeIdA );
 			b2BodyId bodyIdB = b2Shape_GetBody( event.shapeIdB );
 
+			// The begin touch events have the contact manifolds, but the impulses are zero. This is because the manifolds
+			// are gathered before the contact solver is run.
+
+			// We can get the final contact data from the shapes. The manifold is shared by the two shapes, so we just need the
+			// contact data from one of the shapes. Choose the one with the smallest number of contacts.
+
 			int capacityA = b2Shape_GetContactCapacity( event.shapeIdA );
-			contactData.resize( capacityA );
-			int countA = b2Shape_GetContactData( event.shapeIdA, contactData.data(), capacityA );
-			assert( countA >= 1 );
+			int capacityB = b2Shape_GetContactCapacity( event.shapeIdB );
 
-			for (int j = 0; j < countA; ++j)
+			if ( capacityA < capacityB )
 			{
-				b2Manifold manifold = contactData[j].manifold;
-				b2Vec2 normal = manifold.normal;
-				assert( b2AbsFloat( b2Length( normal ) - 1.0f ) < 4.0f * FLT_EPSILON );
+				contactData.resize( capacityA );
 
-				for (int k = 0; k < manifold.pointCount; ++k)
+				// The count may be less than the capacity
+				int countA = b2Shape_GetContactData( event.shapeIdA, contactData.data(), capacityA );
+				assert( countA >= 1 );
+
+				for ( int j = 0; j < countA; ++j )
 				{
-					b2ManifoldPoint point = manifold.points[k];
-					g_draw.DrawSegment( point.point, point.point + 4.0f * normal, b2_colorBlueViolet );
-					g_draw.DrawPoint( point.point, 10.0f, b2_colorWhite );
+					b2ShapeId idA = contactData[j].shapeIdA;
+					b2ShapeId idB = contactData[j].shapeIdB;
+					if ( B2_ID_EQUALS( idA, event.shapeIdB ) || B2_ID_EQUALS( idB, event.shapeIdB ) )
+					{
+						assert( B2_ID_EQUALS( idA, event.shapeIdA ) || B2_ID_EQUALS( idB, event.shapeIdA ) );
+
+						b2Manifold manifold = contactData[j].manifold;
+						b2Vec2 normal = manifold.normal;
+						assert( b2AbsFloat( b2Length( normal ) - 1.0f ) < 4.0f * FLT_EPSILON );
+
+						for ( int k = 0; k < manifold.pointCount; ++k )
+						{
+							b2ManifoldPoint point = manifold.points[k];
+							g_draw.DrawSegment( point.point, point.point + point.totalNormalImpulse * normal, b2_colorBlueViolet );
+							g_draw.DrawPoint( point.point, 10.0f, b2_colorWhite );
+						}
+					}
 				}
 			}
-
-			int capacityB = b2Shape_GetContactCapacity( event.shapeIdB );
-			contactData.resize( capacityB );
-			int countB = b2Shape_GetContactData( event.shapeIdB, contactData.data(), capacityB );
-			assert( countB >= 1 );
-
-			for (int j = 0; j < countB; ++j)
+			else
 			{
-				b2Manifold manifold = contactData[j].manifold;
-				b2Vec2 normal = manifold.normal;
-				assert( b2AbsFloat( b2Length( normal ) - 1.0f ) < 4.0f * FLT_EPSILON );
+				contactData.resize( capacityB );
 
-				for (int k = 0; k < manifold.pointCount; ++k)
+				// The count may be less than the capacity
+				int countB = b2Shape_GetContactData( event.shapeIdB, contactData.data(), capacityB );
+				assert( countB >= 1 );
+
+				for ( int j = 0; j < countB; ++j )
 				{
-					b2ManifoldPoint point = manifold.points[k];
-					g_draw.DrawSegment( point.point, point.point + 4.0f * normal, b2_colorYellowGreen );
-					g_draw.DrawPoint( point.point, 10.0f, b2_colorWhite );
+					b2ShapeId idA = contactData[j].shapeIdA;
+					b2ShapeId idB = contactData[j].shapeIdB;
+
+					if ( B2_ID_EQUALS( idA, event.shapeIdA ) || B2_ID_EQUALS( idB, event.shapeIdA ) )
+					{
+						assert( B2_ID_EQUALS( idA, event.shapeIdB ) || B2_ID_EQUALS( idB, event.shapeIdB ) );
+
+						b2Manifold manifold = contactData[j].manifold;
+						b2Vec2 normal = manifold.normal;
+						assert( b2AbsFloat( b2Length( normal ) - 1.0f ) < 4.0f * FLT_EPSILON );
+
+						for ( int k = 0; k < manifold.pointCount; ++k )
+						{
+							b2ManifoldPoint point = manifold.points[k];
+							g_draw.DrawSegment( point.point, point.point + point.totalNormalImpulse * normal, b2_colorYellowGreen );
+							g_draw.DrawPoint( point.point, 10.0f, b2_colorWhite );
+						}
+					}
 				}
 			}
 
@@ -674,7 +1191,14 @@ public:
 
 		for ( int i = 0; i < destroyCount; ++i )
 		{
-			b2DestroyShape( shapesToDestroy[i] );
+			bool updateMass = false;
+			b2DestroyShape( shapesToDestroy[i], updateMass );
+		}
+
+		if ( destroyCount > 0 )
+		{
+			// Update mass just once
+			b2Body_ApplyMassFromShapes( m_playerId );
 		}
 
 		if ( settings.hertz > 0.0f && settings.pause == false )
@@ -703,7 +1227,8 @@ public:
 
 static int sampleWeeble = RegisterSample( "Events", "Contact", ContactEvent::Create );
 
-// Shows how to make a rigid body character mover and use the pre-solve callback.
+// Shows how to make a rigid body character mover and use the pre-solve callback. In this
+// case the platform should get the pre-solve event, not the player.
 class Platformer : public Sample
 {
 public:
@@ -727,37 +1252,55 @@ public:
 			b2CreateSegmentShape( groundId, &shapeDef, &segment );
 		}
 
-		// Platform
+		// Static Platform
+		// This tests pre-solve with continuous collision
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			bodyDef.type = b2_staticBody;
+			bodyDef.position = { -6.0f, 6.0f };
+			b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
+
+			b2ShapeDef shapeDef = b2DefaultShapeDef();
+
+			// Need to turn this on to get the callback
+			shapeDef.enablePreSolveEvents = true;
+
+			b2Polygon box = b2MakeBox( 2.0f, 0.5f );
+			b2CreatePolygonShape( bodyId, &shapeDef, &box );
+		}
+
+		// Moving Platform
 		{
 			b2BodyDef bodyDef = b2DefaultBodyDef();
 			bodyDef.type = b2_kinematicBody;
 			bodyDef.position = { 0.0f, 6.0f };
 			bodyDef.linearVelocity = { 2.0f, 0.0f };
-			m_platformId = b2CreateBody( m_worldId, &bodyDef );
+			m_movingPlatformId = b2CreateBody( m_worldId, &bodyDef );
 
 			b2ShapeDef shapeDef = b2DefaultShapeDef();
+
+			// Need to turn this on to get the callback
+			shapeDef.enablePreSolveEvents = true;
+
 			b2Polygon box = b2MakeBox( 3.0f, 0.5f );
-			m_platformShapeId = b2CreatePolygonShape( m_platformId, &shapeDef, &box );
+			b2CreatePolygonShape( m_movingPlatformId, &shapeDef, &box );
 		}
 
-		// Actor
+		// Player
 		{
 			b2BodyDef bodyDef = b2DefaultBodyDef();
 			bodyDef.type = b2_dynamicBody;
 			bodyDef.fixedRotation = true;
 			bodyDef.linearDamping = 0.5f;
 			bodyDef.position = { 0.0f, 1.0f };
-			m_characterId = b2CreateBody( m_worldId, &bodyDef );
+			m_playerId = b2CreateBody( m_worldId, &bodyDef );
 
 			m_radius = 0.5f;
 			b2Capsule capsule = { { 0.0f, 0.0f }, { 0.0f, 1.0f }, m_radius };
 			b2ShapeDef shapeDef = b2DefaultShapeDef();
-			shapeDef.friction = 0.1f;
+			shapeDef.material.friction = 0.1f;
 
-			// Need to turn this on to get the callback
-			shapeDef.enablePreSolveEvents = true;
-
-			b2CreateCapsuleShape( m_characterId, &shapeDef, &capsule );
+			m_playerShapeId = b2CreateCapsuleShape( m_playerId, &shapeDef, &capsule );
 		}
 
 		m_force = 25.0f;
@@ -780,28 +1323,18 @@ public:
 		assert( b2Shape_IsValid( shapeIdA ) );
 		assert( b2Shape_IsValid( shapeIdB ) );
 
-		b2ShapeId actorShapeId = b2_nullShapeId;
 		float sign = 0.0f;
-		if ( B2_ID_EQUALS( shapeIdA, m_platformShapeId ) )
-		{
-			sign = 1.0f;
-			actorShapeId = shapeIdB;
-		}
-		else if ( B2_ID_EQUALS( shapeIdB, m_platformShapeId ) )
+		if ( B2_ID_EQUALS( shapeIdA, m_playerShapeId ) )
 		{
 			sign = -1.0f;
-			actorShapeId = shapeIdA;
+		}
+		else if ( B2_ID_EQUALS( shapeIdB, m_playerShapeId ) )
+		{
+			sign = 1.0f;
 		}
 		else
 		{
-			// not the platform, enable contact
-			return true;
-		}
-
-		b2BodyId bodyId = b2Shape_GetBody( actorShapeId );
-		if ( B2_ID_EQUALS( bodyId, m_characterId ) == false )
-		{
-			// not the character, enable contact
+			// not colliding with the player, enable contact
 			return true;
 		}
 
@@ -828,13 +1361,13 @@ public:
 		return false;
 	}
 
-	void UpdateUI() override
+	void UpdateGui() override
 	{
 		float height = 100.0f;
 		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
 		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
 
-		ImGui::Begin( "Platformer", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize );
+		ImGui::Begin( "One-Sided Platform", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize );
 
 		ImGui::SliderFloat( "force", &m_force, 0.0f, 50.0f, "%.1f" );
 		ImGui::SliderFloat( "impulse", &m_impulse, 0.0f, 50.0f, "%.1f" );
@@ -845,18 +1378,18 @@ public:
 	void Step( Settings& settings ) override
 	{
 		bool canJump = false;
-		b2Vec2 velocity = b2Body_GetLinearVelocity( m_characterId );
+		b2Vec2 velocity = b2Body_GetLinearVelocity( m_playerId );
 		if ( m_jumpDelay == 0.0f && m_jumping == false && velocity.y < 0.01f )
 		{
-			int capacity = b2Body_GetContactCapacity( m_characterId );
+			int capacity = b2Body_GetContactCapacity( m_playerId );
 			capacity = b2MinInt( capacity, 4 );
 			b2ContactData contactData[4];
-			int count = b2Body_GetContactData( m_characterId, contactData, capacity );
+			int count = b2Body_GetContactData( m_playerId, contactData, capacity );
 			for ( int i = 0; i < count; ++i )
 			{
 				b2BodyId bodyIdA = b2Shape_GetBody( contactData[i].shapeIdA );
 				float sign = 0.0f;
-				if ( B2_ID_EQUALS( bodyIdA, m_characterId ) )
+				if ( B2_ID_EQUALS( bodyIdA, m_playerId ) )
 				{
 					// normal points from A to B
 					sign = -1.0f;
@@ -876,24 +1409,24 @@ public:
 
 		// A kinematic body is moved by setting its velocity. This
 		// ensure friction works correctly.
-		b2Vec2 platformPosition = b2Body_GetPosition( m_platformId );
+		b2Vec2 platformPosition = b2Body_GetPosition( m_movingPlatformId );
 		if ( platformPosition.x < -15.0f )
 		{
-			b2Body_SetLinearVelocity( m_platformId, { 2.0f, 0.0f } );
+			b2Body_SetLinearVelocity( m_movingPlatformId, { 2.0f, 0.0f } );
 		}
 		else if ( platformPosition.x > 15.0f )
 		{
-			b2Body_SetLinearVelocity( m_platformId, { -2.0f, 0.0f } );
+			b2Body_SetLinearVelocity( m_movingPlatformId, { -2.0f, 0.0f } );
 		}
 
 		if ( glfwGetKey( g_mainWindow, GLFW_KEY_A ) == GLFW_PRESS )
 		{
-			b2Body_ApplyForceToCenter( m_characterId, { -m_force, 0.0f }, true );
+			b2Body_ApplyForceToCenter( m_playerId, { -m_force, 0.0f }, true );
 		}
 
 		if ( glfwGetKey( g_mainWindow, GLFW_KEY_D ) == GLFW_PRESS )
 		{
-			b2Body_ApplyForceToCenter( m_characterId, { m_force, 0.0f }, true );
+			b2Body_ApplyForceToCenter( m_playerId, { m_force, 0.0f }, true );
 		}
 
 		int keyState = glfwGetKey( g_mainWindow, GLFW_KEY_SPACE );
@@ -901,7 +1434,7 @@ public:
 		{
 			if ( canJump )
 			{
-				b2Body_ApplyLinearImpulseToCenter( m_characterId, { 0.0f, m_impulse }, true );
+				b2Body_ApplyLinearImpulseToCenter( m_playerId, { 0.0f, m_impulse }, true );
 				m_jumpDelay = 0.5f;
 				m_jumping = true;
 			}
@@ -912,6 +1445,12 @@ public:
 		}
 
 		Sample::Step( settings );
+
+		b2ContactData contactData = {};
+		int contactCount = b2Body_GetContactData( m_movingPlatformId, &contactData, 1 );
+		g_draw.DrawString( 5, m_textLine, "Platform contact count = %d, point count = %d", contactCount,
+						   contactData.manifold.pointCount );
+		m_textLine += m_textIncrement;
 
 		g_draw.DrawString( 5, m_textLine, "Movement: A/D/Space" );
 		m_textLine += m_textIncrement;
@@ -935,9 +1474,9 @@ public:
 	float m_force;
 	float m_impulse;
 	float m_jumpDelay;
-	b2BodyId m_characterId;
-	b2BodyId m_platformId;
-	b2ShapeId m_platformShapeId;
+	b2BodyId m_playerId;
+	b2ShapeId m_playerShapeId;
+	b2BodyId m_movingPlatformId;
 };
 
 static int samplePlatformer = RegisterSample( "Events", "Platformer", Platformer::Create );
@@ -965,15 +1504,15 @@ public:
 			b2BodyId groundId = b2CreateBody( m_worldId, &bodyDef );
 
 			b2ShapeDef shapeDef = b2DefaultShapeDef();
-			shapeDef.friction = 0.1f;
+			shapeDef.material.friction = 0.1f;
 
-			b2Polygon box = b2MakeOffsetBox( 12.0f, 0.1f, { -10.0f, -0.1f }, b2MakeRot(-0.15f * b2_pi) );
+			b2Polygon box = b2MakeOffsetBox( 12.0f, 0.1f, { -10.0f, -0.1f }, b2MakeRot( -0.15f * B2_PI ) );
 			b2CreatePolygonShape( groundId, &shapeDef, &box );
 
-			box = b2MakeOffsetBox( 12.0f, 0.1f, { 10.0f, -0.1f }, b2MakeRot(0.15f * b2_pi) );
+			box = b2MakeOffsetBox( 12.0f, 0.1f, { 10.0f, -0.1f }, b2MakeRot( 0.15f * B2_PI ) );
 			b2CreatePolygonShape( groundId, &shapeDef, &box );
 
-			shapeDef.restitution = 0.8f;
+			shapeDef.material.restitution = 0.8f;
 
 			box = b2MakeOffsetBox( 0.1f, 10.0f, { 19.9f, 10.0f }, b2Rot_identity );
 			b2CreatePolygonShape( groundId, &shapeDef, &box );
@@ -990,7 +1529,7 @@ public:
 
 		m_explosionPosition = { 0.0f, -5.0f };
 		m_explosionRadius = 10.0f;
-		m_explosionMagnitude = 6.0f;
+		m_explosionMagnitude = 10.0f;
 	}
 
 	void CreateBodies()
@@ -1007,6 +1546,7 @@ public:
 		for ( int32_t i = 0; i < 10 && m_count < e_count; ++i )
 		{
 			bodyDef.position = { x, y };
+			bodyDef.isBullet = ( m_count % 12 == 0 );
 			bodyDef.userData = m_bodyIds + m_count;
 			m_bodyIds[m_count] = b2CreateBody( m_worldId, &bodyDef );
 			m_sleeping[m_count] = false;
@@ -1036,7 +1576,7 @@ public:
 		}
 	}
 
-	void UpdateUI() override
+	void UpdateGui() override
 	{
 		float height = 100.0f;
 		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
@@ -1046,10 +1586,15 @@ public:
 
 		if ( ImGui::Button( "Explode" ) )
 		{
-			b2World_Explode( m_worldId, m_explosionPosition, m_explosionRadius, m_explosionMagnitude );
+			b2ExplosionDef def = b2DefaultExplosionDef();
+			def.position = m_explosionPosition;
+			def.radius = m_explosionRadius;
+			def.falloff = 0.1f;
+			def.impulsePerLength = m_explosionMagnitude;
+			b2World_Explode( m_worldId, &def );
 		}
 
-		ImGui::SliderFloat( "Magnitude", &m_explosionMagnitude, -8.0f, 8.0f, "%.1f" );
+		ImGui::SliderFloat( "Magnitude", &m_explosionMagnitude, -20.0f, 20.0f, "%.1f" );
 
 		ImGui::End();
 	}
@@ -1070,6 +1615,12 @@ public:
 			// draw the transform of every body that moved (not sleeping)
 			const b2BodyMoveEvent* event = events.moveEvents + i;
 			g_draw.DrawTransform( event->transform );
+
+			b2Transform transform = b2Body_GetTransform( event->bodyId );
+			B2_ASSERT( transform.p.x == event->transform.p.x );
+			B2_ASSERT( transform.p.y == event->transform.p.y );
+			B2_ASSERT( transform.q.c == event->transform.q.c );
+			B2_ASSERT( transform.q.s == event->transform.q.s );
 
 			// this shows a somewhat contrived way to track body sleeping
 			b2BodyId* bodyId = static_cast<b2BodyId*>( event->userData );
@@ -1102,8 +1653,8 @@ public:
 		return new BodyMove( settings );
 	}
 
-	b2BodyId m_bodyIds[e_count];
-	bool m_sleeping[e_count];
+	b2BodyId m_bodyIds[e_count] = {};
+	bool m_sleeping[e_count] = {};
 	int m_count;
 	int m_sleepCount;
 	b2Vec2 m_explosionPosition;
@@ -1112,3 +1663,198 @@ public:
 };
 
 static int sampleBodyMove = RegisterSample( "Events", "Body Move", BodyMove::Create );
+
+class SensorTypes : public Sample
+{
+public:
+	enum CollisionBits
+	{
+		GROUND = 0x00000001,
+		SENSOR = 0x00000002,
+		DEFAULT = 0x00000004,
+
+		ALL_BITS = ( ~0u )
+	};
+
+	explicit SensorTypes( Settings& settings )
+		: Sample( settings )
+	{
+		if ( settings.restart == false )
+		{
+			g_camera.m_center = { 0.0f, 3.0f };
+			g_camera.m_zoom = 4.5f;
+		}
+
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			bodyDef.name = "ground";
+
+			b2BodyId groundId = b2CreateBody( m_worldId, &bodyDef );
+			b2ShapeDef shapeDef = b2DefaultShapeDef();
+
+			// Enable sensor events, but filter them out as a test
+			shapeDef.filter.categoryBits = GROUND;
+			shapeDef.filter.maskBits = DEFAULT;
+			shapeDef.enableSensorEvents = true;
+
+			b2Segment groundSegment = { { -6.0f, 0.0f }, { 6.0f, 0.0f } };
+			b2CreateSegmentShape( groundId, &shapeDef, &groundSegment );
+
+			groundSegment = { { -6.0f, 0.0f }, { -6.0f, 4.0f } };
+			b2CreateSegmentShape( groundId, &shapeDef, &groundSegment );
+
+			groundSegment = { { 6.0f, 0.0f }, { 6.0f, 4.0f } };
+			b2CreateSegmentShape( groundId, &shapeDef, &groundSegment );
+		}
+
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			bodyDef.name = "static sensor";
+			bodyDef.type = b2_staticBody;
+			bodyDef.position = { -3.0f, 0.8f };
+			b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
+
+			b2ShapeDef shapeDef = b2DefaultShapeDef();
+			shapeDef.filter.categoryBits = SENSOR;
+			shapeDef.isSensor = true;
+			shapeDef.enableSensorEvents = true;
+			b2Polygon box = b2MakeSquare( 1.0f );
+			m_staticSensorId = b2CreatePolygonShape( bodyId, &shapeDef, &box );
+		}
+
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			bodyDef.name = "kinematic sensor";
+			bodyDef.type = b2_kinematicBody;
+			bodyDef.position = { 0.0f, 0.0f };
+			bodyDef.linearVelocity = { 0.0f, 1.0f };
+			m_kinematicBodyId = b2CreateBody( m_worldId, &bodyDef );
+
+			b2ShapeDef shapeDef = b2DefaultShapeDef();
+			shapeDef.filter.categoryBits = SENSOR;
+			shapeDef.isSensor = true;
+			shapeDef.enableSensorEvents = true;
+			b2Polygon box = b2MakeSquare( 1.0f );
+			m_kinematicSensorId = b2CreatePolygonShape( m_kinematicBodyId, &shapeDef, &box );
+		}
+
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			bodyDef.name = "dynamic sensor";
+			bodyDef.type = b2_dynamicBody;
+			bodyDef.position = { 3.0f, 1.0f };
+			b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
+
+			b2ShapeDef shapeDef = b2DefaultShapeDef();
+			shapeDef.filter.categoryBits = SENSOR;
+			shapeDef.isSensor = true;
+			shapeDef.enableSensorEvents = true;
+			b2Polygon box = b2MakeSquare( 1.0f );
+			m_dynamicSensorId = b2CreatePolygonShape( bodyId, &shapeDef, &box );
+
+			// Add some real collision so the dynamic body is valid
+			shapeDef.filter.categoryBits = DEFAULT;
+			shapeDef.isSensor = false;
+			shapeDef.enableSensorEvents = false;
+			box = b2MakeSquare( 0.8f );
+			b2CreatePolygonShape( bodyId, &shapeDef, &box );
+		}
+
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			bodyDef.name = "ball_01";
+			bodyDef.position = { -5.0f, 1.0f };
+			bodyDef.type = b2_dynamicBody;
+
+			b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
+
+			b2ShapeDef shapeDef = b2DefaultShapeDef();
+			shapeDef.filter.categoryBits = DEFAULT;
+			shapeDef.filter.maskBits = GROUND | DEFAULT | SENSOR;
+			shapeDef.enableSensorEvents = true;
+
+			b2Circle circle = { { 0.0f, 0.0f }, 0.5f };
+			b2CreateCircleShape( bodyId, &shapeDef, &circle );
+		}
+	}
+
+	void PrintOverlaps( b2ShapeId sensorShapeId, const char* prefix )
+	{
+		char buffer[256] = {};
+
+		// Determine the necessary capacity
+		int capacity = b2Shape_GetSensorCapacity( sensorShapeId );
+		m_overlaps.resize( capacity );
+
+		// Get all overlaps and record the actual count
+		int count = b2Shape_GetSensorOverlaps( sensorShapeId, m_overlaps.data(), capacity );
+		m_overlaps.resize( count );
+
+		int start = snprintf( buffer, sizeof( buffer ), "%s: ", prefix );
+		for ( int i = 0; i < count && start < sizeof( buffer ); ++i )
+		{
+			b2ShapeId visitorId = m_overlaps[i];
+			if ( b2Shape_IsValid( visitorId ) == false )
+			{
+				continue;
+			}
+
+			b2BodyId bodyId = b2Shape_GetBody( visitorId );
+			const char* name = b2Body_GetName( bodyId );
+			if ( name == nullptr )
+			{
+				continue;
+			}
+
+			// todo fix this
+			start += snprintf( buffer + start, sizeof( buffer ) - start, "%s, ", name );
+		}
+
+		DrawTextLine( buffer );
+	}
+
+	void Step( Settings& settings ) override
+	{
+		b2Vec2 position = b2Body_GetPosition( m_kinematicBodyId );
+		if ( position.y < 0.0f )
+		{
+			b2Body_SetLinearVelocity( m_kinematicBodyId, { 0.0f, 1.0f } );
+			// b2Body_SetKinematicTarget( m_kinematicBodyId );
+		}
+		else if ( position.y > 3.0f )
+		{
+			b2Body_SetLinearVelocity( m_kinematicBodyId, { 0.0f, -1.0f } );
+		}
+
+		Sample::Step( settings );
+
+		PrintOverlaps( m_staticSensorId, "static" );
+		PrintOverlaps( m_kinematicSensorId, "kinematic" );
+		PrintOverlaps( m_dynamicSensorId, "dynamic" );
+
+		b2Vec2 origin = { 5.0f, 1.0f };
+		b2Vec2 translation = { -10.0f, 0.0f };
+		b2RayResult result = b2World_CastRayClosest( m_worldId, origin, translation, b2DefaultQueryFilter() );
+		g_draw.DrawSegment( origin, origin + translation, b2_colorDimGray );
+
+		if ( result.hit )
+		{
+			g_draw.DrawPoint( result.point, 10.0f, b2_colorCyan );
+		}
+	}
+
+	static Sample* Create( Settings& settings )
+	{
+		return new SensorTypes( settings );
+	}
+
+	b2ShapeId m_staticSensorId;
+	b2ShapeId m_kinematicSensorId;
+	b2ShapeId m_dynamicSensorId;
+
+	b2BodyId m_kinematicBodyId;
+
+	std::vector<b2ShapeId> m_overlaps;
+};
+
+static int sampleSensorTypes = RegisterSample( "Events", "Sensor Types", SensorTypes::Create );

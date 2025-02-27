@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "draw.h"
+#include "random.h"
 #include "sample.h"
 #include "settings.h"
 
@@ -14,7 +15,7 @@ class ConvexHull : public Sample
 public:
 	enum
 	{
-		e_count = b2_maxPolygonVertices
+		e_count = B2_MAX_POLYGON_VERTICES
 	};
 
 	explicit ConvexHull( Settings& settings )
@@ -65,7 +66,7 @@ public:
 		m_count = e_count;
 #else
 
-		float angle = b2_pi * RandomFloat();
+		float angle = B2_PI * RandomFloat();
 		b2Rot r = b2MakeRot( angle );
 
 		b2Vec2 lowerBound = { -4.0f, -4.0f };
@@ -210,7 +211,7 @@ public:
 		return new ConvexHull( settings );
 	}
 
-	b2Vec2 m_points[b2_maxPolygonVertices];
+	b2Vec2 m_points[B2_MAX_POLYGON_VERTICES];
 	int32_t m_count;
 	int32_t m_generation;
 	bool m_auto;

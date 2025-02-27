@@ -12,8 +12,8 @@
 
 #include <stddef.h>
 
-B2_ARRAY_SOURCE( b2Island, b2Island );
-B2_ARRAY_SOURCE( b2IslandSim, b2IslandSim );
+B2_ARRAY_SOURCE( b2Island, b2Island )
+B2_ARRAY_SOURCE( b2IslandSim, b2IslandSim )
 
 b2Island* b2CreateIsland( b2World* world, int setIndex )
 {
@@ -57,6 +57,11 @@ b2Island* b2CreateIsland( b2World* world, int setIndex )
 
 void b2DestroyIsland( b2World* world, int islandId )
 {
+	if (world->splitIslandId == islandId)
+	{
+		world->splitIslandId = B2_NULL_INDEX;
+	}
+
 	// assume island is empty
 	b2Island* island = b2IslandArray_Get( &world->islands, islandId );
 	b2SolverSet* set = b2SolverSetArray_Get( &world->solverSets, island->setIndex );
@@ -110,7 +115,7 @@ static void b2AddContactToIsland( b2World* world, int islandId, b2Contact* conta
 // https://en.wikipedia.org/wiki/Disjoint-set_data_structure
 void b2LinkContact( b2World* world, b2Contact* contact )
 {
-	B2_ASSERT( ( contact->flags & b2_contactTouchingFlag ) != 0 && ( contact->flags & b2_contactSensorFlag ) == 0 );
+	B2_ASSERT( ( contact->flags & b2_contactTouchingFlag ) != 0 );
 
 	int bodyIdA = contact->edges[0].bodyId;
 	int bodyIdB = contact->edges[1].bodyId;
@@ -208,12 +213,13 @@ void b2LinkContact( b2World* world, b2Contact* contact )
 	{
 		b2AddContactToIsland( world, islandIdB, contact );
 	}
+
+	// todo why not merge the islands right here?
 }
 
 // This is called when a contact no longer has contact points or when a contact is destroyed.
 void b2UnlinkContact( b2World* world, b2Contact* contact )
 {
-	B2_ASSERT( ( contact->flags & b2_contactSensorFlag ) == 0 );
 	B2_ASSERT( contact->islandId != B2_NULL_INDEX );
 
 	// remove from island
@@ -615,11 +621,11 @@ void b2SplitIsland( b2World* world, int baseId )
 	int bodyCount = baseIsland->bodyCount;
 
 	b2Body* bodies = world->bodies.data;
-	b2StackAllocator* alloc = &world->stackAllocator;
+	b2ArenaAllocator* alloc = &world->arena;
 
 	// No lock is needed because I ensure the allocator is not used while this task is active.
-	int* stack = b2AllocateStackItem( alloc, bodyCount * sizeof( int ), "island stack" );
-	int* bodyIds = b2AllocateStackItem( alloc, bodyCount * sizeof( int ), "body ids" );
+	int* stack = b2AllocateArenaItem( alloc, bodyCount * sizeof( int ), "island stack" );
+	int* bodyIds = b2AllocateArenaItem( alloc, bodyCount * sizeof( int ), "body ids" );
 
 	// Build array containing all body indices from base island. These
 	// serve as seed bodies for the depth first search (DFS).
@@ -728,12 +734,6 @@ void b2SplitIsland( b2World* world, int baseId )
 					continue;
 				}
 
-				// Skip sensors
-				if ( contact->flags & b2_contactSensorFlag )
-				{
-					continue;
-				}
-
 				// Is this contact enabled and touching?
 				if ( ( contact->flags & b2_contactTouchingFlag ) == 0 )
 				{
@@ -835,8 +835,8 @@ void b2SplitIsland( b2World* world, int baseId )
 		b2ValidateIsland( world, islandId );
 	}
 
-	b2FreeStackItem( alloc, bodyIds );
-	b2FreeStackItem( alloc, stack );
+	b2FreeArenaItem( alloc, bodyIds );
+	b2FreeArenaItem( alloc, stack );
 }
 
 // Split an island because some contacts and/or joints have been removed.
@@ -848,20 +848,18 @@ void b2SplitIsland( b2World* world, int baseId )
 // are interacting with these data structures.
 void b2SplitIslandTask( int startIndex, int endIndex, uint32_t threadIndex, void* context )
 {
-	b2TracyCZoneNC( split, "Split Island", b2_colorHoneydew, true );
+	b2TracyCZoneNC( split, "Split Island", b2_colorOlive, true );
 
-	B2_MAYBE_UNUSED( startIndex );
-	B2_MAYBE_UNUSED( endIndex );
-	B2_MAYBE_UNUSED( threadIndex );
+	B2_UNUSED( startIndex, endIndex, threadIndex );
 
-	b2Timer timer = b2CreateTimer();
+	uint64_t ticks = b2GetTicks();
 	b2World* world = context;
 
 	B2_ASSERT( world->splitIslandId != B2_NULL_INDEX );
 
 	b2SplitIsland( world, world->splitIslandId );
 
-	world->profile.splitIslands += b2GetMilliseconds( &timer );
+	world->profile.splitIslands += b2GetMilliseconds( ticks );
 	b2TracyCZoneEnd( split );
 }
 
@@ -973,7 +971,7 @@ void b2ValidateIsland( b2World* world, int islandId )
 
 void b2ValidateIsland( b2World* world, int islandId )
 {
-	B2_MAYBE_UNUSED( world );
-	B2_MAYBE_UNUSED( islandId );
+	B2_UNUSED( world );
+	B2_UNUSED( islandId );
 }
 #endif
