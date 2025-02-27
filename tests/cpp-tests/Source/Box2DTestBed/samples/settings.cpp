@@ -1,12 +1,17 @@
 // SPDX-FileCopyrightText: 2023 Erin Catto
 // SPDX-License-Identifier: MIT
 
+#if defined( _MSC_VER ) && !defined( _CRT_SECURE_NO_WARNINGS )
 #define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include "settings.h"
 
 // todo consider using https://github.com/skeeto/pdjson
+#include "../src/core.h"
+
 #include <assert.h>
-#include "jsmn/jsmn.h"
+#include "jsmn.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,6 +38,7 @@ static bool ReadFile( char*& data, int& size, const char* filename )
 
 	data = (char*)malloc( size + 1 );
 	size_t count = fread( data, size, 1, file );
+	B2_UNUSED( count );
 	fclose( file );
 	data[size] = 0;
 
@@ -46,10 +52,11 @@ void Settings::Save()
 	fprintf( file, "  \"sampleIndex\": %d,\n", sampleIndex );
 	fprintf( file, "  \"drawShapes\": %s,\n", drawShapes ? "true" : "false" );
 	fprintf( file, "  \"drawJoints\": %s,\n", drawJoints ? "true" : "false" );
-	fprintf( file, "  \"drawAABBs\": %s,\n", drawAABBs ? "true" : "false" );
+	fprintf( file, "  \"drawBounds\": %s,\n", drawBounds ? "true" : "false" );
 	fprintf( file, "  \"drawContactPoints\": %s,\n", drawContactPoints ? "true" : "false" );
 	fprintf( file, "  \"drawContactNormals\": %s,\n", drawContactNormals ? "true" : "false" );
 	fprintf( file, "  \"drawContactImpulses\": %s,\n", drawContactImpulses ? "true" : "false" );
+	fprintf( file, "  \"drawContactFeatures\": %s,\n", drawContactFeatures ? "true" : "false" );
 	fprintf( file, "  \"drawFrictionImpulse\": %s,\n", drawFrictionImpulses ? "true" : "false" );
 	fprintf( file, "  \"drawMass\": %s,\n", drawMass ? "true" : "false" );
 	fprintf( file, "  \"drawCounters\": %s,\n", drawCounters ? "true" : "false" );

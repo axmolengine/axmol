@@ -595,7 +595,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     glfwMakeContextCurrent(_mainWindow);
     glfwSetWindowUserPointer(_mainWindow, backend::__gl);
 #endif
-    
+
 #if !defined(__APPLE__)
     handleWindowSize(static_cast<int>(windowSize.width), static_cast<int>(windowSize.height));
 #else
@@ -1236,6 +1236,26 @@ void GLViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scanco
             break;
         }
     }
+#if defined(AX_PLATFORM_PC) && defined(_DEBUG)
+    else
+    {
+        auto director = Director::getInstance();
+        switch (g_keyCodeMap[key])
+        {
+        case EventKeyboard::KeyCode::KEY_SPACE:
+            if (director->isPaused())
+                director->resume();
+            else
+                director->pause();
+            break;
+        case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+            director->resume();
+            director->getScheduler()->schedule([director](float) { director->pause();
+                }, director, 0, 0, 0, false, "step");
+            break;
+        }
+    }
+#endif
 }
 
 void GLViewImpl::onGLFWCharCallback(GLFWwindow* /*window*/, unsigned int charCode)

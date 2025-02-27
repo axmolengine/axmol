@@ -85,6 +85,8 @@ float b2WheelJoint_GetUpperLimit( b2JointId jointId )
 
 void b2WheelJoint_SetLimits( b2JointId jointId, float lower, float upper )
 {
+	B2_ASSERT( lower <= upper );
+
 	b2JointSim* joint = b2GetJointSimCheckType( jointId, b2_wheelJoint );
 	if ( lower != joint->wheelJoint.lowerTranslation || upper != joint->wheelJoint.upperTranslation )
 	{
@@ -315,9 +317,6 @@ void b2SolveWheelJoint( b2JointSim* base, b2StepContext* context, bool useBias )
 
 	b2WheelJoint* joint = &base->wheelJoint;
 
-	// This is a dummy body to represent a static body since static bodies don't have a solver body.
-	b2BodyState dummyBody = { 0 };
-
 	b2BodyState* stateA = joint->indexA == B2_NULL_INDEX ? &dummyState : context->states + joint->indexA;
 	b2BodyState* stateB = joint->indexB == B2_NULL_INDEX ? &dummyState : context->states + joint->indexB;
 
@@ -378,8 +377,6 @@ void b2SolveWheelJoint( b2JointSim* base, b2StepContext* context, bool useBias )
 
 	if ( joint->enableLimit )
 	{
-		float translation = b2Dot( axisA, d );
-
 		// Lower limit
 		{
 			float C = translation - joint->lowerTranslation;
@@ -527,28 +524,28 @@ void b2DrawWheelJoint( b2DebugDraw* draw, b2JointSim* base, b2Transform transfor
 	b2Vec2 pB = b2TransformPoint( transformB, base->localOriginAnchorB );
 	b2Vec2 axis = b2RotateVector( transformA.q, joint->localAxisA );
 
-	b2HexColor c1 = b2_colorGray7;
+	b2HexColor c1 = b2_colorGray;
 	b2HexColor c2 = b2_colorGreen;
 	b2HexColor c3 = b2_colorRed;
-	b2HexColor c4 = b2_colorGray4;
+	b2HexColor c4 = b2_colorDimGray;
 	b2HexColor c5 = b2_colorBlue;
 
-	draw->DrawSegment( pA, pB, c5, draw->context );
+	draw->DrawSegmentFcn( pA, pB, c5, draw->context );
 
 	if ( joint->enableLimit )
 	{
 		b2Vec2 lower = b2MulAdd( pA, joint->lowerTranslation, axis );
 		b2Vec2 upper = b2MulAdd( pA, joint->upperTranslation, axis );
 		b2Vec2 perp = b2LeftPerp( axis );
-		draw->DrawSegment( lower, upper, c1, draw->context );
-		draw->DrawSegment( b2MulSub( lower, 0.1f, perp ), b2MulAdd( lower, 0.1f, perp ), c2, draw->context );
-		draw->DrawSegment( b2MulSub( upper, 0.1f, perp ), b2MulAdd( upper, 0.1f, perp ), c3, draw->context );
+		draw->DrawSegmentFcn( lower, upper, c1, draw->context );
+		draw->DrawSegmentFcn( b2MulSub( lower, 0.1f, perp ), b2MulAdd( lower, 0.1f, perp ), c2, draw->context );
+		draw->DrawSegmentFcn( b2MulSub( upper, 0.1f, perp ), b2MulAdd( upper, 0.1f, perp ), c3, draw->context );
 	}
 	else
 	{
-		draw->DrawSegment( b2MulSub( pA, 1.0f, axis ), b2MulAdd( pA, 1.0f, axis ), c1, draw->context );
+		draw->DrawSegmentFcn( b2MulSub( pA, 1.0f, axis ), b2MulAdd( pA, 1.0f, axis ), c1, draw->context );
 	}
 
-	draw->DrawPoint( pA, 5.0f, c1, draw->context );
-	draw->DrawPoint( pB, 5.0f, c4, draw->context );
+	draw->DrawPointFcn( pA, 5.0f, c1, draw->context );
+	draw->DrawPointFcn( pB, 5.0f, c4, draw->context );
 }

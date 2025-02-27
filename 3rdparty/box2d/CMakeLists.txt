@@ -22,6 +22,13 @@ endif()
 
 set_target_properties(${target_name} PROPERTIES C_STANDARD 17 C_STANDARD_REQUIRED TRUE)
 
+if(_simdc_defines)
+    target_compile_definitions(${target_name} PRIVATE ${_simdc_defines})
+    if(_simdc_options)
+        target_compile_options(${target_name} PRIVATE ${_simdc_options})
+    endif()
+endif()
+
 target_include_directories(${target_name} 
     PUBLIC  "${CMAKE_CURRENT_SOURCE_DIR}/include"
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")

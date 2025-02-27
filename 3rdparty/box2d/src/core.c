@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #endif
 
-#include <stdatomic.h>
+#include <stdio.h>
 #include <string.h>
 
 #ifdef BOX2D_PROFILE
@@ -27,16 +27,14 @@
 
 #endif
 
-#include "box2d/math_functions.h"
-
-#include <stdio.h>
+#include "atomic.h"
 
 // This allows the user to change the length units at runtime
 float b2_lengthUnitsPerMeter = 1.0f;
 
 void b2SetLengthUnitsPerMeter( float lengthUnits )
 {
-	B2_ASSERT( b2IsValid( lengthUnits ) && lengthUnits > 0.0f );
+	B2_ASSERT( b2IsValidFloat( lengthUnits ) && lengthUnits > 0.0f );
 	b2_lengthUnitsPerMeter = lengthUnits;
 }
 
@@ -61,15 +59,26 @@ void b2SetAssertFcn( b2AssertFcn* assertFcn )
 	b2AssertHandler = assertFcn;
 }
 
+#if !defined( NDEBUG ) || defined( B2_ENABLE_ASSERT )
+int b2InternalAssertFcn( const char* condition, const char* fileName, int lineNumber )
+{
+	return b2AssertHandler( condition, fileName, lineNumber );
+}
+#endif
+
 b2Version b2GetVersion( void )
 {
-	return ( b2Version ){ 3, 1, 0 };
+	return (b2Version){
+		.major = 3,
+		.minor = 1,
+		.revision = 0,
+	};
 }
 
 static b2AllocFcn* b2_allocFcn = NULL;
 static b2FreeFcn* b2_freeFcn = NULL;
 
-static _Atomic int b2_byteCount;
+b2AtomicInt b2_byteCount;
 
 void b2SetAllocator( b2AllocFcn* allocFcn, b2FreeFcn* freeFcn )
 {
@@ -82,13 +91,13 @@ void b2SetAllocator( b2AllocFcn* allocFcn, b2FreeFcn* freeFcn )
 
 void* b2Alloc( int size )
 {
-	if (size == 0)
+	if ( size == 0 )
 	{
 		return NULL;
 	}
 
 	// This could cause some sharing issues, however Box2D rarely calls b2Alloc.
-	atomic_fetch_add_explicit( &b2_byteCount, size, memory_order_relaxed );
+	b2AtomicFetchAddInt( &b2_byteCount, size );
 
 	// Allocation must be a multiple of 32 or risk a seg fault
 	// https://en.cppreference.com/w/c/memory/aligned_alloc
@@ -148,7 +157,7 @@ void b2Free( void* mem, int size )
 #endif
 	}
 
-	atomic_fetch_sub_explicit( &b2_byteCount, size, memory_order_relaxed );
+	b2AtomicFetchAddInt( &b2_byteCount, -size );
 }
 
 void* b2GrowAlloc( void* oldMem, int oldSize, int newSize )
@@ -165,5 +174,5 @@ void* b2GrowAlloc( void* oldMem, int oldSize, int newSize )
 
 int b2GetByteCount( void )
 {
-	return atomic_load_explicit( &b2_byteCount, memory_order_relaxed );
+	return b2AtomicLoadInt( &b2_byteCount );
 }

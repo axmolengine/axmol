@@ -150,7 +150,7 @@ void PhysicsDebugNode::draw(Renderer* renderer, const Mat4& transform, uint32_t 
 PhysicsDebugNode::PhysicsDebugNode()
 {
     _debugDraw.context = this;
-#define __b2_setfun(f) _debugDraw.f = reinterpret_cast<decltype(_debugDraw.f)>(b2##f);
+#define __b2_setfun(f) _debugDraw.f##Fcn = reinterpret_cast<decltype(_debugDraw.f##Fcn)>(b2##f);
     __b2_setfun(DrawPolygon);
     __b2_setfun(DrawSolidPolygon);
     __b2_setfun(DrawCircle);

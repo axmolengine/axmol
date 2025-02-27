@@ -8,11 +8,9 @@
 #include "broad_phase.h"
 #include "constraint_graph.h"
 #include "id_pool.h"
-#include "stack_allocator.h"
+#include "arena_allocator.h"
 
 #include "box2d/types.h"
-
-typedef struct b2ContactSim b2ContactSim;
 
 enum b2SetType
 {
@@ -41,12 +39,11 @@ typedef struct b2TaskContext
 
 } b2TaskContext;
 
-/// The world class manages all physics entities, dynamic simulation,
-/// and asynchronous queries. The world also contains efficient memory
-/// management facilities.
+// The world struct manages all physics entities, dynamic simulation,  and asynchronous queries.
+// The world also contains efficient memory management facilities.
 typedef struct b2World
 {
-	b2StackAllocator stackAllocator;
+	b2ArenaAllocator arena;
 	b2BroadPhase broadPhase;
 	b2ConstraintGraph constraintGraph;
 
@@ -95,20 +92,29 @@ typedef struct b2World
 	b2ShapeArray shapes;
 	b2ChainShapeArray chainShapes;
 
+	// This is a dense array of sensor data.
+	b2SensorArray sensors;
+
 	// Per thread storage
 	b2TaskContextArray taskContexts;
+	b2SensorTaskContextArray sensorTaskContexts;
 
 	b2BodyMoveEventArray bodyMoveEvents;
 	b2SensorBeginTouchEventArray sensorBeginEvents;
-	b2SensorEndTouchEventArray sensorEndEvents;
 	b2ContactBeginTouchEventArray contactBeginEvents;
-	b2ContactEndTouchEventArray contactEndEvents;
+
+	// End events are double buffered so that the user doesn't need to flush events
+	b2SensorEndTouchEventArray sensorEndEvents[2];
+	b2ContactEndTouchEventArray contactEndEvents[2];
+	int endEventArrayIndex;
+
 	b2ContactHitEventArray contactHitEvents;
 
 	// Used to track debug draw
 	b2BitSet debugBodySet;
 	b2BitSet debugJointSet;
 	b2BitSet debugContactSet;
+	b2BitSet debugIslandSet;
 
 	// Id that is incremented every time step
 	uint64_t stepIndex;
@@ -125,14 +131,17 @@ typedef struct b2World
 	b2Vec2 gravity;
 	float hitEventThreshold;
 	float restitutionThreshold;
-	float maxLinearVelocity;
-	float contactPushoutVelocity;
+	float maxLinearSpeed;
+	float maxContactPushSpeed;
 	float contactHertz;
 	float contactDampingRatio;
 	float jointHertz;
 	float jointDampingRatio;
 
-	uint16_t revision;
+	b2FrictionCallback* frictionCallback;
+	b2RestitutionCallback* restitutionCallback;
+
+	uint16_t generation;
 
 	b2Profile profile;
 
@@ -148,6 +157,8 @@ typedef struct b2World
 	void* userTaskContext;
 	void* userTreeTask;
 
+	void* userData;
+
 	// Remember type step used for reporting forces and torques
 	float inv_h;
 
@@ -160,6 +171,7 @@ typedef struct b2World
 	bool locked;
 	bool enableWarmStarting;
 	bool enableContinuous;
+	bool enableSpeculative;
 	bool inUse;
 } b2World;
 
@@ -171,10 +183,10 @@ void b2ValidateConnectivity( b2World* world );
 void b2ValidateSolverSets( b2World* world );
 void b2ValidateContacts( b2World* world );
 
-B2_ARRAY_INLINE( b2BodyMoveEvent, b2BodyMoveEvent );
-B2_ARRAY_INLINE( b2ContactBeginTouchEvent, b2ContactBeginTouchEvent );
-B2_ARRAY_INLINE( b2ContactEndTouchEvent, b2ContactEndTouchEvent );
-B2_ARRAY_INLINE( b2ContactHitEvent, b2ContactHitEvent );
-B2_ARRAY_INLINE( b2SensorBeginTouchEvent, b2SensorBeginTouchEvent );
-B2_ARRAY_INLINE( b2SensorEndTouchEvent, b2SensorEndTouchEvent );
-B2_ARRAY_INLINE( b2TaskContext, b2TaskContext );
+B2_ARRAY_INLINE( b2BodyMoveEvent, b2BodyMoveEvent )
+B2_ARRAY_INLINE( b2ContactBeginTouchEvent, b2ContactBeginTouchEvent )
+B2_ARRAY_INLINE( b2ContactEndTouchEvent, b2ContactEndTouchEvent )
+B2_ARRAY_INLINE( b2ContactHitEvent, b2ContactHitEvent )
+B2_ARRAY_INLINE( b2SensorBeginTouchEvent, b2SensorBeginTouchEvent )
+B2_ARRAY_INLINE( b2SensorEndTouchEvent, b2SensorEndTouchEvent )
+B2_ARRAY_INLINE( b2TaskContext, b2TaskContext )

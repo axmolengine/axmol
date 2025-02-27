@@ -317,7 +317,7 @@ local function PhysicsDemoJoints()
        for j in range(0, 3) do
             local offset = cc.p(VisibleRect:leftBottom().x + 5 + j * width + width/2, 
                                 VisibleRect:leftBottom().y + 50 + i * height + height/2)
-            box:addShape(cc.PhysicsShapeEdgeBox:create(cc.size(width, height), 
+            box:addCollider(cc.PhysicsColliderEdgeBox:create(cc.size(width, height), 
                                                        cc.PHYSICSSHAPE_MATERIAL_DEFAULT,
                                                        1, 
                                                        offset)
@@ -865,43 +865,43 @@ local function PhysicsDemoPump()
     body:setDynamic(false)
     
     local staticMaterial = cc.PhysicsMaterial(cc.PHYSICS_INFINITY, 0, 0.5)
-    body:addShape(cc.PhysicsShapeEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 50, 
+    body:addShape(cc.PhysicsColliderEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 50, 
                                                          VisibleRect:leftTop().y), 
                                                     cc.p(VisibleRect:leftTop().x + 50, 
                                                         VisibleRect:leftTop().y-130),
                                                     staticMaterial, 
                                                     2.0))
-    body:addShape(cc.PhysicsShapeEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 190, 
+    body:addShape(cc.PhysicsColliderEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 190, 
                                                          VisibleRect:leftTop().y), 
                                                     cc.p(VisibleRect:leftTop().x + 100, 
                                                          VisibleRect:leftTop().y-50), 
                                                     staticMaterial, 
                                                     2.0))
-    body:addShape(cc.PhysicsShapeEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 100, 
+    body:addShape(cc.PhysicsColliderEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 100, 
                                                          VisibleRect:leftTop().y-50), 
                                                     cc.p(VisibleRect:leftTop().x + 100, 
                                                          VisibleRect:leftTop().y-90), 
                                                     staticMaterial, 
                                                     2.0))
-    body:addShape(cc.PhysicsShapeEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 50, 
+    body:addShape(cc.PhysicsColliderEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 50, 
                                                          VisibleRect:leftTop().y-130), 
                                                     cc.p(VisibleRect:leftTop().x + 100, 
                                                          VisibleRect:leftTop().y-145), 
                                                     staticMaterial, 
                                                     2.0))
-    body:addShape(cc.PhysicsShapeEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 100, 
+    body:addShape(cc.PhysicsColliderEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 100, 
                                                          VisibleRect:leftTop().y-145), 
                                                     cc.p(VisibleRect:leftBottom().x + 100, 
                                                         VisibleRect:leftBottom().y + 80), 
                                                     staticMaterial, 
                                                     2.0))
-    body:addShape(cc.PhysicsShapeEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 150, 
+    body:addShape(cc.PhysicsColliderEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 150, 
                                                          VisibleRect:leftTop().y-80), 
                                                     cc.p(VisibleRect:leftBottom().x + 150, 
                                                          VisibleRect:leftBottom().y + 80), 
                                                     staticMaterial, 
                                                     2.0))
-    body:addShape(cc.PhysicsShapeEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 150, 
+    body:addShape(cc.PhysicsColliderEdgeSegment:create(cc.p(VisibleRect:leftTop().x + 150, 
                                                          VisibleRect:leftTop().y-80), 
                                                     cc.p(VisibleRect:rightTop().x -100, 
                                                          VisibleRect:rightTop().y-150), 
@@ -957,7 +957,7 @@ local function PhysicsDemoPump()
     
     -- pump
     local pump = cc.Node:create()
-    local center = cc.PhysicsShape:getPolygonCenter(vec)
+    local center = cc.PhysicsCollider:getPolygonCenter(vec)
     pump:setPosition(center)
     local pumpB = cc.PhysicsBody:createPolygon(vec, 
                                                cc.PHYSICSBODY_MATERIAL_DEFAULT, 
@@ -1034,7 +1034,7 @@ local function PhysicsDemoSlice()
           j = i
         end
     
-        local center = cc.PhysicsShape:getPolygonCenter(points)
+        local center = cc.PhysicsCollider:getPolygonCenter(points)
         local node = cc.Node:create()
         local polygon = cc.PhysicsBody:createPolygon(points, 
                                                      cc.PHYSICSBODY_MATERIAL_DEFAULT, 

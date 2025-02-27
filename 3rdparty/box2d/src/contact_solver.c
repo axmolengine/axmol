@@ -12,13 +12,22 @@
 
 #include <stddef.h>
 
+// contact separation for sub-stepping
+// s = s0 + dot(cB + rB - cA - rA, normal)
+// normal is held constant
+// body positions c can translation and anchors r can rotate
+// s(t) = s0 + dot(cB(t) + rB(t) - cA(t) - rA(t), normal)
+// s(t) = s0 + dot(cB0 + dpB + rot(dqB, rB0) - cA0 - dpA - rot(dqA, rA0), normal)
+// s(t) = s0 + dot(cB0 - cA0, normal) + dot(dpB - dpA + rot(dqB, rB0) - rot(dqA, rA0), normal)
+// s_base = s0 + dot(cB0 - cA0, normal)
+
 void b2PrepareOverflowContacts( b2StepContext* context )
 {
 	b2TracyCZoneNC( prepare_overflow_contact, "Prepare Overflow Contact", b2_colorYellow, true );
 
 	b2World* world = context->world;
 	b2ConstraintGraph* graph = context->graph;
-	b2GraphColor* color = graph->colors + b2_overflowIndex;
+	b2GraphColor* color = graph->colors + B2_OVERFLOW_INDEX;
 	b2ContactConstraint* constraints = color->overflowConstraints;
 	int contactCount = color->contactSims.count;
 	b2ContactSim* contacts = color->contactSims.data;
@@ -62,6 +71,9 @@ void b2PrepareOverflowContacts( b2StepContext* context )
 		constraint->normal = manifold->normal;
 		constraint->friction = contactSim->friction;
 		constraint->restitution = contactSim->restitution;
+		constraint->rollingResistance = contactSim->rollingResistance;
+		constraint->rollingImpulse = warmStartScale * manifold->rollingImpulse;
+		constraint->tangentSpeed = contactSim->tangentSpeed;
 		constraint->pointCount = pointCount;
 
 		b2Vec2 vA = b2Vec2_zero;
@@ -101,6 +113,11 @@ void b2PrepareOverflowContacts( b2StepContext* context )
 		constraint->invMassB = mB;
 		constraint->invIB = iB;
 
+		{
+			float k = iA + iB;
+			constraint->rollingMass = k > 0.0f ? 1.0f / k : 0.0f;
+		}
+
 		b2Vec2 normal = constraint->normal;
 		b2Vec2 tangent = b2RightPerp( constraint->normal );
 
@@ -111,7 +128,7 @@ void b2PrepareOverflowContacts( b2StepContext* context )
 
 			cp->normalImpulse = warmStartScale * mp->normalImpulse;
 			cp->tangentImpulse = warmStartScale * mp->tangentImpulse;
-			cp->maxNormalImpulse = 0.0f;
+			cp->totalNormalImpulse = 0.0f;
 
 			b2Vec2 rA = mp->anchorA;
 			b2Vec2 rB = mp->anchorB;
@@ -145,7 +162,7 @@ void b2WarmStartOverflowContacts( b2StepContext* context )
 	b2TracyCZoneNC( warmstart_overflow_contact, "WarmStart Overflow Contact", b2_colorDarkOrange, true );
 
 	b2ConstraintGraph* graph = context->graph;
-	b2GraphColor* color = graph->colors + b2_overflowIndex;
+	b2GraphColor* color = graph->colors + B2_OVERFLOW_INDEX;
 	b2ContactConstraint* constraints = color->overflowConstraints;
 	int contactCount = color->contactSims.count;
 	b2World* world = context->world;
@@ -195,6 +212,9 @@ void b2WarmStartOverflowContacts( b2StepContext* context )
 			vB = b2MulAdd( vB, mB, P );
 		}
 
+		wA -= iA * constraint->rollingImpulse;
+		wB += iB * constraint->rollingImpulse;
+
 		stateA->linearVelocity = vA;
 		stateA->angularVelocity = wA;
 		stateB->linearVelocity = vB;
@@ -209,7 +229,7 @@ void b2SolveOverflowContacts( b2StepContext* context, bool useBias )
 	b2TracyCZoneNC( solve_contact, "Solve Contact", b2_colorAliceBlue, true );
 
 	b2ConstraintGraph* graph = context->graph;
-	b2GraphColor* color = graph->colors + b2_overflowIndex;
+	b2GraphColor* color = graph->colors + B2_OVERFLOW_INDEX;
 	b2ContactConstraint* constraints = color->overflowConstraints;
 	int contactCount = color->contactSims.count;
 	b2World* world = context->world;
@@ -217,7 +237,7 @@ void b2SolveOverflowContacts( b2StepContext* context, bool useBias )
 	b2BodyState* states = awakeSet->bodyStates.data;
 
 	float inv_h = context->inv_h;
-	const float pushout = context->world->contactPushoutVelocity;
+	const float pushout = context->world->maxContactPushSpeed;
 
 	// This is a dummy body to represent a static body since static bodies don't have a solver body.
 	b2BodyState dummyState = b2_identityBodyState;
@@ -248,15 +268,21 @@ void b2SolveOverflowContacts( b2StepContext* context, bool useBias )
 		b2Softness softness = constraint->softness;
 
 		int pointCount = constraint->pointCount;
+		float totalNormalImpulse = 0.0f;
 
+		// Non-penetration
 		for ( int j = 0; j < pointCount; ++j )
 		{
 			b2ContactConstraintPoint* cp = constraint->points + j;
 
+			// fixed anchor points
+			b2Vec2 rA = cp->anchorA;
+			b2Vec2 rB = cp->anchorB;
+
 			// compute current separation
 			// this is subject to round-off error if the anchor is far from the body center of mass
-			b2Vec2 ds = b2Add( dp, b2Sub( b2RotateVector( dqB, cp->anchorB ), b2RotateVector( dqA, cp->anchorA ) ) );
-			float s = b2Dot( ds, normal ) + cp->baseSeparation;
+			b2Vec2 ds = b2Add( dp, b2Sub( b2RotateVector( dqB, rB ), b2RotateVector( dqA, rA ) ) );
+			float s = cp->baseSeparation + b2Dot( ds, normal );
 
 			float velocityBias = 0.0f;
 			float massScale = 1.0f;
@@ -273,10 +299,6 @@ void b2SolveOverflowContacts( b2StepContext* context, bool useBias )
 				impulseScale = softness.impulseScale;
 			}
 
-			// fixed anchor points
-			b2Vec2 rA = cp->anchorA;
-			b2Vec2 rB = cp->anchorB;
-
 			// relative normal velocity at contact
 			b2Vec2 vrA = b2Add( vA, b2CrossSV( wA, rA ) );
 			b2Vec2 vrB = b2Add( vB, b2CrossSV( wB, rB ) );
@@ -289,7 +311,8 @@ void b2SolveOverflowContacts( b2StepContext* context, bool useBias )
 			float newImpulse = b2MaxFloat( cp->normalImpulse + impulse, 0.0f );
 			impulse = newImpulse - cp->normalImpulse;
 			cp->normalImpulse = newImpulse;
-			cp->maxNormalImpulse = b2MaxFloat( cp->maxNormalImpulse, impulse );
+			cp->totalNormalImpulse += newImpulse;
+			totalNormalImpulse += newImpulse;
 
 			// apply normal impulse
 			b2Vec2 P = b2MulSV( impulse, normal );
@@ -300,6 +323,7 @@ void b2SolveOverflowContacts( b2StepContext* context, bool useBias )
 			wB += iB * b2Cross( rB, P );
 		}
 
+		// Friction
 		for ( int j = 0; j < pointCount; ++j )
 		{
 			b2ContactConstraintPoint* cp = constraint->points + j;
@@ -311,7 +335,11 @@ void b2SolveOverflowContacts( b2StepContext* context, bool useBias )
 			// relative tangent velocity at contact
 			b2Vec2 vrB = b2Add( vB, b2CrossSV( wB, rB ) );
 			b2Vec2 vrA = b2Add( vA, b2CrossSV( wA, rA ) );
-			float vt = b2Dot( b2Sub( vrB, vrA ), tangent );
+
+			// vt = dot(vrB - sB * tangent - (vrA + sA * tangent), tangent)
+			//    = dot(vrB - vrA, tangent) - (sA + sB)
+
+			float vt = b2Dot( b2Sub( vrB, vrA ), tangent ) - constraint->tangentSpeed;
 
 			// incremental tangent impulse
 			float impulse = cp->tangentMass * ( -vt );
@@ -330,6 +358,18 @@ void b2SolveOverflowContacts( b2StepContext* context, bool useBias )
 			wB += iB * b2Cross( rB, P );
 		}
 
+		// Rolling resistance
+		{
+			float deltaLambda = -constraint->rollingMass * ( wB - wA );
+			float lambda = constraint->rollingImpulse;
+			float maxLambda = constraint->rollingResistance * totalNormalImpulse;
+			constraint->rollingImpulse = b2ClampFloat( lambda + deltaLambda, -maxLambda, maxLambda );
+			deltaLambda = constraint->rollingImpulse - lambda;
+
+			wA -= iA * deltaLambda;
+			wB += iB * deltaLambda;
+		}
+
 		stateA->linearVelocity = vA;
 		stateA->angularVelocity = wA;
 		stateB->linearVelocity = vB;
@@ -344,7 +384,7 @@ void b2ApplyOverflowRestitution( b2StepContext* context )
 	b2TracyCZoneNC( overflow_resitution, "Overflow Restitution", b2_colorViolet, true );
 
 	b2ConstraintGraph* graph = context->graph;
-	b2GraphColor* color = graph->colors + b2_overflowIndex;
+	b2GraphColor* color = graph->colors + B2_OVERFLOW_INDEX;
 	b2ContactConstraint* constraints = color->overflowConstraints;
 	int contactCount = color->contactSims.count;
 	b2World* world = context->world;
@@ -393,7 +433,7 @@ void b2ApplyOverflowRestitution( b2StepContext* context )
 				// if the normal impulse is zero then there was no collision
 				// this skips speculative contact points that didn't generate an impulse
 				// The max normal impulse is used in case there was a collision that moved away within the sub-step process
-				if ( cp->relativeVelocity > -threshold || cp->maxNormalImpulse == 0.0f )
+				if ( cp->relativeVelocity > -threshold || cp->totalNormalImpulse == 0.0f )
 				{
 					continue;
 				}
@@ -415,7 +455,9 @@ void b2ApplyOverflowRestitution( b2StepContext* context )
 				float newImpulse = b2MaxFloat( cp->normalImpulse + impulse, 0.0f );
 				impulse = newImpulse - cp->normalImpulse;
 				cp->normalImpulse = newImpulse;
-				cp->maxNormalImpulse = b2MaxFloat( cp->maxNormalImpulse, impulse );
+
+				// Add the incremental impulse rather than the full impulse because this is not a sub-step
+				cp->totalNormalImpulse += impulse;
 
 				// apply contact impulse
 				b2Vec2 P = b2MulSV( impulse, normal );
@@ -437,15 +479,13 @@ void b2ApplyOverflowRestitution( b2StepContext* context )
 
 void b2StoreOverflowImpulses( b2StepContext* context )
 {
-	b2TracyCZoneNC( store_impulses, "Store", b2_colorFirebrick, true );
+	b2TracyCZoneNC( store_impulses, "Store", b2_colorFireBrick, true );
 
 	b2ConstraintGraph* graph = context->graph;
-	b2GraphColor* color = graph->colors + b2_overflowIndex;
+	b2GraphColor* color = graph->colors + B2_OVERFLOW_INDEX;
 	b2ContactConstraint* constraints = color->overflowConstraints;
 	b2ContactSim* contacts = color->contactSims.data;
 	int contactCount = color->contactSims.count;
-
-	// float hitEventThreshold = context->world->hitEventThreshold;
 
 	for ( int i = 0; i < contactCount; ++i )
 	{
@@ -458,9 +498,11 @@ void b2StoreOverflowImpulses( b2StepContext* context )
 		{
 			manifold->points[j].normalImpulse = constraint->points[j].normalImpulse;
 			manifold->points[j].tangentImpulse = constraint->points[j].tangentImpulse;
-			manifold->points[j].maxNormalImpulse = constraint->points[j].maxNormalImpulse;
+			manifold->points[j].totalNormalImpulse = constraint->points[j].totalNormalImpulse;
 			manifold->points[j].normalVelocity = constraint->points[j].relativeVelocity;
 		}
+
+		manifold->rollingImpulse = constraint->rollingImpulse;
 	}
 
 	b2TracyCZoneEnd( store_impulses );
@@ -511,7 +553,7 @@ typedef struct b2RotW
 
 #if defined( B2_SIMD_AVX2 )
 
-static inline b2FloatW b2ZeroW()
+static inline b2FloatW b2ZeroW( void )
 {
 	return _mm256_setzero_ps();
 }
@@ -559,6 +601,13 @@ static inline b2FloatW b2MaxW( b2FloatW a, b2FloatW b )
 	return _mm256_max_ps( a, b );
 }
 
+// a = clamp(a, -b, b)
+static inline b2FloatW b2SymClampW( b2FloatW a, b2FloatW b )
+{
+	b2FloatW nb = _mm256_sub_ps( _mm256_setzero_ps(), b );
+	return _mm256_max_ps( nb, _mm256_min_ps( a, b ) );
+}
+
 static inline b2FloatW b2OrW( b2FloatW a, b2FloatW b )
 {
 	return _mm256_or_ps( a, b );
@@ -574,6 +623,19 @@ static inline b2FloatW b2EqualsW( b2FloatW a, b2FloatW b )
 	return _mm256_cmp_ps( a, b, _CMP_EQ_OQ );
 }
 
+static inline bool b2AllZeroW( b2FloatW a )
+{
+	// Compare each element with zero
+	b2FloatW zero = _mm256_setzero_ps();
+	b2FloatW cmp = _mm256_cmp_ps( a, zero, _CMP_EQ_OQ );
+
+	// Create a mask from the comparison results
+	int mask = _mm256_movemask_ps( cmp );
+
+	// If all elements are zero, the mask will be 0xFF (11111111 in binary)
+	return mask == 0xFF;
+}
+
 // component-wise returns mask ? b : a
 static inline b2FloatW b2BlendW( b2FloatW a, b2FloatW b, b2FloatW mask )
 {
@@ -582,7 +644,7 @@ static inline b2FloatW b2BlendW( b2FloatW a, b2FloatW b, b2FloatW mask )
 
 #elif defined( B2_SIMD_NEON )
 
-static inline b2FloatW b2ZeroW()
+static inline b2FloatW b2ZeroW( void )
 {
 	return vdupq_n_f32( 0.0f );
 }
@@ -633,6 +695,13 @@ static inline b2FloatW b2MaxW( b2FloatW a, b2FloatW b )
 	return vmaxq_f32( a, b );
 }
 
+// a = clamp(a, -b, b)
+static inline b2FloatW b2SymClampW( b2FloatW a, b2FloatW b )
+{
+	b2FloatW nb = vnegq_f32( b );
+	return vmaxq_f32( nb, vminq_f32( a, b ) );
+}
+
 static inline b2FloatW b2OrW( b2FloatW a, b2FloatW b )
 {
 	return vreinterpretq_f32_u32( vorrq_u32( vreinterpretq_u32_f32( a ), vreinterpretq_u32_f32( b ) ) );
@@ -646,6 +715,25 @@ static inline b2FloatW b2GreaterThanW( b2FloatW a, b2FloatW b )
 static inline b2FloatW b2EqualsW( b2FloatW a, b2FloatW b )
 {
 	return vreinterpretq_f32_u32( vceqq_f32( a, b ) );
+}
+
+static inline bool b2AllZeroW( b2FloatW a )
+{
+	// Create a zero vector for comparison
+	b2FloatW zero = vdupq_n_f32( 0.0f );
+
+	// Compare the input vector with zero
+	uint32x4_t cmp_result = vceqq_f32( a, zero );
+
+// Check if all comparison results are non-zero using vminvq
+#ifdef __ARM_FEATURE_SVE
+	// ARM v8.2+ has horizontal minimum instruction
+	return vminvq_u32( cmp_result ) != 0;
+#else
+	// For older ARM architectures, we need to manually check all lanes
+	return vgetq_lane_u32( cmp_result, 0 ) != 0 && vgetq_lane_u32( cmp_result, 1 ) != 0 && vgetq_lane_u32( cmp_result, 2 ) != 0 &&
+		   vgetq_lane_u32( cmp_result, 3 ) != 0;
+#endif
 }
 
 // component-wise returns mask ? b : a
@@ -662,22 +750,36 @@ static inline b2FloatW b2LoadW( const float32_t* data )
 
 static inline void b2StoreW( float32_t* data, b2FloatW a )
 {
-	return vst1q_f32( data, a );
+	vst1q_f32( data, a );
 }
 
 static inline b2FloatW b2UnpackLoW( b2FloatW a, b2FloatW b )
 {
+#if defined( __aarch64__ )
 	return vzip1q_f32( a, b );
+#else
+	float32x2_t a1 = vget_low_f32( a );
+	float32x2_t b1 = vget_low_f32( b );
+	float32x2x2_t result = vzip_f32( a1, b1 );
+	return vcombine_f32( result.val[0], result.val[1] );
+#endif
 }
 
 static inline b2FloatW b2UnpackHiW( b2FloatW a, b2FloatW b )
 {
+#if defined( __aarch64__ )
 	return vzip2q_f32( a, b );
+#else
+	float32x2_t a1 = vget_high_f32( a );
+	float32x2_t b1 = vget_high_f32( b );
+	float32x2x2_t result = vzip_f32( a1, b1 );
+	return vcombine_f32( result.val[0], result.val[1] );
+#endif
 }
 
 #elif defined( B2_SIMD_SSE2 )
 
-static inline b2FloatW b2ZeroW()
+static inline b2FloatW b2ZeroW( void )
 {
 	return _mm_setzero_ps();
 }
@@ -727,6 +829,18 @@ static inline b2FloatW b2MaxW( b2FloatW a, b2FloatW b )
 	return _mm_max_ps( a, b );
 }
 
+// a = clamp(a, -b, b)
+static inline b2FloatW b2SymClampW( b2FloatW a, b2FloatW b )
+{
+	// Create a mask with the sign bit set for each element
+	__m128 mask = _mm_set1_ps( -0.0f );
+
+	// XOR the input with the mask to negate each element
+	__m128 nb = _mm_xor_ps( b, mask );
+
+	return _mm_max_ps( nb, _mm_min_ps( a, b ) );
+}
+
 static inline b2FloatW b2OrW( b2FloatW a, b2FloatW b )
 {
 	return _mm_or_ps( a, b );
@@ -740,6 +854,19 @@ static inline b2FloatW b2GreaterThanW( b2FloatW a, b2FloatW b )
 static inline b2FloatW b2EqualsW( b2FloatW a, b2FloatW b )
 {
 	return _mm_cmpeq_ps( a, b );
+}
+
+static inline bool b2AllZeroW( b2FloatW a )
+{
+	// Compare each element with zero
+	b2FloatW zero = _mm_setzero_ps();
+	b2FloatW cmp = _mm_cmpeq_ps( a, zero );
+
+	// Create a mask from the comparison results
+	int mask = _mm_movemask_ps( cmp );
+
+	// If all elements are zero, the mask will be 0xF (1111 in binary)
+	return mask == 0xF;
 }
 
 // component-wise returns mask ? b : a
@@ -770,39 +897,39 @@ static inline b2FloatW b2UnpackHiW( b2FloatW a, b2FloatW b )
 
 #else
 
-static inline b2FloatW b2ZeroW()
+static inline b2FloatW b2ZeroW( void )
 {
-	return ( b2FloatW ){ 0.0f, 0.0f, 0.0f, 0.0f };
+	return (b2FloatW){ 0.0f, 0.0f, 0.0f, 0.0f };
 }
 
 static inline b2FloatW b2SplatW( float scalar )
 {
-	return ( b2FloatW ){ scalar, scalar, scalar, scalar };
+	return (b2FloatW){ scalar, scalar, scalar, scalar };
 }
 
 static inline b2FloatW b2AddW( b2FloatW a, b2FloatW b )
 {
-	return ( b2FloatW ){ a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w };
+	return (b2FloatW){ a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w };
 }
 
 static inline b2FloatW b2SubW( b2FloatW a, b2FloatW b )
 {
-	return ( b2FloatW ){ a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w };
+	return (b2FloatW){ a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w };
 }
 
 static inline b2FloatW b2MulW( b2FloatW a, b2FloatW b )
 {
-	return ( b2FloatW ){ a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w };
+	return (b2FloatW){ a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w };
 }
 
 static inline b2FloatW b2MulAddW( b2FloatW a, b2FloatW b, b2FloatW c )
 {
-	return ( b2FloatW ){ a.x + b.x * c.x, a.y + b.y * c.y, a.z + b.z * c.z, a.w + b.w * c.w };
+	return (b2FloatW){ a.x + b.x * c.x, a.y + b.y * c.y, a.z + b.z * c.z, a.w + b.w * c.w };
 }
 
 static inline b2FloatW b2MulSubW( b2FloatW a, b2FloatW b, b2FloatW c )
 {
-	return ( b2FloatW ){ a.x - b.x * c.x, a.y - b.y * c.y, a.z - b.z * c.z, a.w - b.w * c.w };
+	return (b2FloatW){ a.x - b.x * c.x, a.y - b.y * c.y, a.z - b.z * c.z, a.w - b.w * c.w };
 }
 
 static inline b2FloatW b2MinW( b2FloatW a, b2FloatW b )
@@ -822,6 +949,17 @@ static inline b2FloatW b2MaxW( b2FloatW a, b2FloatW b )
 	r.y = a.y >= b.y ? a.y : b.y;
 	r.z = a.z >= b.z ? a.z : b.z;
 	r.w = a.w >= b.w ? a.w : b.w;
+	return r;
+}
+
+// a = clamp(a, -b, b)
+static inline b2FloatW b2SymClampW( b2FloatW a, b2FloatW b )
+{
+	b2FloatW r;
+	r.x = b2ClampFloat( a.x, -b.x, b.x );
+	r.y = b2ClampFloat( a.y, -b.y, b.y );
+	r.z = b2ClampFloat( a.z, -b.z, b.z );
+	r.w = b2ClampFloat( a.w, -b.w, b.w );
 	return r;
 }
 
@@ -855,6 +993,11 @@ static inline b2FloatW b2EqualsW( b2FloatW a, b2FloatW b )
 	return r;
 }
 
+static inline bool b2AllZeroW( b2FloatW a )
+{
+	return a.x == 0.0f && a.y == 0.0f && a.z == 0.0f && a.w == 0.0f;
+}
+
 // component-wise returns mask ? b : a
 static inline b2FloatW b2BlendW( b2FloatW a, b2FloatW b, b2FloatW mask )
 {
@@ -880,7 +1023,7 @@ static inline b2FloatW b2CrossW( b2Vec2W a, b2Vec2W b )
 
 static inline b2Vec2W b2RotateVectorW( b2RotW q, b2Vec2W v )
 {
-	return ( b2Vec2W ){ b2SubW( b2MulW( q.C, v.X ), b2MulW( q.S, v.Y ) ), b2AddW( b2MulW( q.S, v.X ), b2MulW( q.C, v.Y ) ) };
+	return (b2Vec2W){ b2SubW( b2MulW( q.C, v.X ), b2MulW( q.S, v.Y ) ), b2AddW( b2MulW( q.S, v.X ), b2MulW( q.C, v.Y ) ) };
 }
 
 // Soft contact constraints with sub-stepping support
@@ -897,6 +1040,10 @@ typedef struct b2ContactConstraintSIMD
 	b2FloatW invIA, invIB;
 	b2Vec2W normal;
 	b2FloatW friction;
+	b2FloatW tangentSpeed;
+	b2FloatW rollingResistance;
+	b2FloatW rollingMass;
+	b2FloatW rollingImpulse;
 	b2FloatW biasRate;
 	b2FloatW massScale;
 	b2FloatW impulseScale;
@@ -904,12 +1051,12 @@ typedef struct b2ContactConstraintSIMD
 	b2FloatW normalMass1, tangentMass1;
 	b2FloatW baseSeparation1;
 	b2FloatW normalImpulse1;
-	b2FloatW maxNormalImpulse1;
+	b2FloatW totalNormalImpulse1;
 	b2FloatW tangentImpulse1;
 	b2Vec2W anchorA2, anchorB2;
 	b2FloatW baseSeparation2;
 	b2FloatW normalImpulse2;
-	b2FloatW maxNormalImpulse2;
+	b2FloatW totalNormalImpulse2;
 	b2FloatW tangentImpulse2;
 	b2FloatW normalMass2, tangentMass2;
 	b2FloatW restitution;
@@ -922,20 +1069,20 @@ int b2GetContactConstraintSIMDByteCount( void )
 }
 
 // wide version of b2BodyState
-typedef struct b2SimdBody
+typedef struct b2BodyStateW
 {
 	b2Vec2W v;
 	b2FloatW w;
 	b2FloatW flags;
 	b2Vec2W dp;
 	b2RotW dq;
-} b2SimdBody;
+} b2BodyStateW;
 
 // Custom gather/scatter for each SIMD type
 #if defined( B2_SIMD_AVX2 )
 
 // This is a load and 8x8 transpose
-static b2SimdBody b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices )
+static b2BodyStateW b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices )
 {
 	_Static_assert( sizeof( b2BodyState ) == 32, "b2BodyState not 32 bytes" );
 	B2_ASSERT( ( (uintptr_t)states & 0x1F ) == 0 );
@@ -967,7 +1114,7 @@ static b2SimdBody b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2
 	b2FloatW tt6 = _mm256_shuffle_ps( t5, t7, _MM_SHUFFLE( 1, 0, 1, 0 ) );
 	b2FloatW tt7 = _mm256_shuffle_ps( t5, t7, _MM_SHUFFLE( 3, 2, 3, 2 ) );
 
-	b2SimdBody simdBody;
+	b2BodyStateW simdBody;
 	simdBody.v.X = _mm256_permute2f128_ps( tt0, tt4, 0x20 );
 	simdBody.v.Y = _mm256_permute2f128_ps( tt1, tt5, 0x20 );
 	simdBody.w = _mm256_permute2f128_ps( tt2, tt6, 0x20 );
@@ -980,7 +1127,7 @@ static b2SimdBody b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2
 }
 
 // This writes everything back to the solver bodies but only the velocities change
-static void b2ScatterBodies( b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices, const b2SimdBody* B2_RESTRICT simdBody )
+static void b2ScatterBodies( b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices, const b2BodyStateW* B2_RESTRICT simdBody )
 {
 	_Static_assert( sizeof( b2BodyState ) == 32, "b2BodyState not 32 bytes" );
 	B2_ASSERT( ( (uintptr_t)states & 0x1F ) == 0 );
@@ -1024,7 +1171,7 @@ static void b2ScatterBodies( b2BodyState* B2_RESTRICT states, int* B2_RESTRICT i
 #elif defined( B2_SIMD_NEON )
 
 // This is a load and transpose
-static b2SimdBody b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices )
+static b2BodyStateW b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices )
 {
 	_Static_assert( sizeof( b2BodyState ) == 32, "b2BodyState not 32 bytes" );
 	B2_ASSERT( ( (uintptr_t)states & 0x1F ) == 0 );
@@ -1057,7 +1204,7 @@ static b2SimdBody b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2
 	// [w2 w4 f2 f4]
 	b2FloatW t4a = b2UnpackHiW( b2a, b4a );
 
-	b2SimdBody simdBody;
+	b2BodyStateW simdBody;
 	simdBody.v.X = b2UnpackLoW( t1a, t2a );
 	simdBody.v.Y = b2UnpackHiW( t1a, t2a );
 	simdBody.w = b2UnpackLoW( t3a, t4a );
@@ -1078,7 +1225,7 @@ static b2SimdBody b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2
 
 // This writes only the velocities back to the solver bodies
 // https://developer.arm.com/documentation/102107a/0100/Floating-point-4x4-matrix-transposition
-static void b2ScatterBodies( b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices, const b2SimdBody* B2_RESTRICT simdBody )
+static void b2ScatterBodies( b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices, const b2BodyStateW* B2_RESTRICT simdBody )
 {
 	_Static_assert( sizeof( b2BodyState ) == 32, "b2BodyState not 32 bytes" );
 	B2_ASSERT( ( (uintptr_t)states & 0x1F ) == 0 );
@@ -1130,7 +1277,7 @@ static void b2ScatterBodies( b2BodyState* B2_RESTRICT states, int* B2_RESTRICT i
 #elif defined( B2_SIMD_SSE2 )
 
 // This is a load and transpose
-static b2SimdBody b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices )
+static b2BodyStateW b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices )
 {
 	_Static_assert( sizeof( b2BodyState ) == 32, "b2BodyState not 32 bytes" );
 	B2_ASSERT( ( (uintptr_t)states & 0x1F ) == 0 );
@@ -1162,7 +1309,7 @@ static b2SimdBody b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2
 	// [w2 w4 f2 f4]
 	b2FloatW t4a = b2UnpackHiW( b2a, b4a );
 
-	b2SimdBody simdBody;
+	b2BodyStateW simdBody;
 	simdBody.v.X = b2UnpackLoW( t1a, t2a );
 	simdBody.v.Y = b2UnpackHiW( t1a, t2a );
 	simdBody.w = b2UnpackLoW( t3a, t4a );
@@ -1182,7 +1329,7 @@ static b2SimdBody b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2
 }
 
 // This writes only the velocities back to the solver bodies
-static void b2ScatterBodies( b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices, const b2SimdBody* B2_RESTRICT simdBody )
+static void b2ScatterBodies( b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices, const b2BodyStateW* B2_RESTRICT simdBody )
 {
 	_Static_assert( sizeof( b2BodyState ) == 32, "b2BodyState not 32 bytes" );
 	B2_ASSERT( ( (uintptr_t)states & 0x1F ) == 0 );
@@ -1226,7 +1373,7 @@ static void b2ScatterBodies( b2BodyState* B2_RESTRICT states, int* B2_RESTRICT i
 #else
 
 // This is a load and transpose
-static b2SimdBody b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices )
+static b2BodyStateW b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices )
 {
 	b2BodyState identity = b2_identityBodyState;
 
@@ -1235,22 +1382,24 @@ static b2SimdBody b2GatherBodies( const b2BodyState* B2_RESTRICT states, int* B2
 	b2BodyState s3 = indices[2] == B2_NULL_INDEX ? identity : states[indices[2]];
 	b2BodyState s4 = indices[3] == B2_NULL_INDEX ? identity : states[indices[3]];
 
-	b2SimdBody simdBody;
-	simdBody.v.X = ( b2FloatW ){ s1.linearVelocity.x, s2.linearVelocity.x, s3.linearVelocity.x, s4.linearVelocity.x };
-	simdBody.v.Y = ( b2FloatW ){ s1.linearVelocity.y, s2.linearVelocity.y, s3.linearVelocity.y, s4.linearVelocity.y };
-	simdBody.w = ( b2FloatW ){ s1.angularVelocity, s2.angularVelocity, s3.angularVelocity, s4.angularVelocity };
-	simdBody.flags = ( b2FloatW ){ (float)s1.flags, (float)s2.flags, (float)s3.flags, (float)s4.flags };
-	simdBody.dp.X = ( b2FloatW ){ s1.deltaPosition.x, s2.deltaPosition.x, s3.deltaPosition.x, s4.deltaPosition.x };
-	simdBody.dp.Y = ( b2FloatW ){ s1.deltaPosition.y, s2.deltaPosition.y, s3.deltaPosition.y, s4.deltaPosition.y };
-	simdBody.dq.C = ( b2FloatW ){ s1.deltaRotation.c, s2.deltaRotation.c, s3.deltaRotation.c, s4.deltaRotation.c };
-	simdBody.dq.S = ( b2FloatW ){ s1.deltaRotation.s, s2.deltaRotation.s, s3.deltaRotation.s, s4.deltaRotation.s };
+	b2BodyStateW simdBody;
+	simdBody.v.X = (b2FloatW){ s1.linearVelocity.x, s2.linearVelocity.x, s3.linearVelocity.x, s4.linearVelocity.x };
+	simdBody.v.Y = (b2FloatW){ s1.linearVelocity.y, s2.linearVelocity.y, s3.linearVelocity.y, s4.linearVelocity.y };
+	simdBody.w = (b2FloatW){ s1.angularVelocity, s2.angularVelocity, s3.angularVelocity, s4.angularVelocity };
+	simdBody.flags = (b2FloatW){ (float)s1.flags, (float)s2.flags, (float)s3.flags, (float)s4.flags };
+	simdBody.dp.X = (b2FloatW){ s1.deltaPosition.x, s2.deltaPosition.x, s3.deltaPosition.x, s4.deltaPosition.x };
+	simdBody.dp.Y = (b2FloatW){ s1.deltaPosition.y, s2.deltaPosition.y, s3.deltaPosition.y, s4.deltaPosition.y };
+	simdBody.dq.C = (b2FloatW){ s1.deltaRotation.c, s2.deltaRotation.c, s3.deltaRotation.c, s4.deltaRotation.c };
+	simdBody.dq.S = (b2FloatW){ s1.deltaRotation.s, s2.deltaRotation.s, s3.deltaRotation.s, s4.deltaRotation.s };
 
 	return simdBody;
 }
 
 // This writes only the velocities back to the solver bodies
-static void b2ScatterBodies( b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices, const b2SimdBody* B2_RESTRICT simdBody )
+static void b2ScatterBodies( b2BodyState* B2_RESTRICT states, int* B2_RESTRICT indices, const b2BodyStateW* B2_RESTRICT simdBody )
 {
+	// todo somehow skip writing to kinematic bodies
+
 	if ( indices[0] != B2_NULL_INDEX )
 	{
 		b2BodyState* state = states + indices[0];
@@ -1357,6 +1506,11 @@ void b2PrepareContactsTask( int startIndex, int endIndex, b2StepContext* context
 				( (float*)&constraint->invIA )[j] = iA;
 				( (float*)&constraint->invIB )[j] = iB;
 
+				{
+					float k = iA + iB;
+					( (float*)&constraint->rollingMass )[j] = k > 0.0f ? 1.0f / k : 0.0f;
+				}
+
 				b2Softness soft = ( indexA == B2_NULL_INDEX || indexB == B2_NULL_INDEX ) ? staticSoftness : contactSoftness;
 
 				b2Vec2 normal = manifold->normal;
@@ -1364,7 +1518,11 @@ void b2PrepareContactsTask( int startIndex, int endIndex, b2StepContext* context
 				( (float*)&constraint->normal.Y )[j] = normal.y;
 
 				( (float*)&constraint->friction )[j] = contactSim->friction;
+				( (float*)&constraint->tangentSpeed )[j] = contactSim->tangentSpeed;
 				( (float*)&constraint->restitution )[j] = contactSim->restitution;
+				( (float*)&constraint->rollingResistance )[j] = contactSim->rollingResistance;
+				( (float*)&constraint->rollingImpulse )[j] = warmStartScale * manifold->rollingImpulse;
+
 				( (float*)&constraint->biasRate )[j] = soft.biasRate;
 				( (float*)&constraint->massScale )[j] = soft.massScale;
 				( (float*)&constraint->impulseScale )[j] = soft.impulseScale;
@@ -1386,7 +1544,7 @@ void b2PrepareContactsTask( int startIndex, int endIndex, b2StepContext* context
 
 					( (float*)&constraint->normalImpulse1 )[j] = warmStartScale * mp->normalImpulse;
 					( (float*)&constraint->tangentImpulse1 )[j] = warmStartScale * mp->tangentImpulse;
-					( (float*)&constraint->maxNormalImpulse1 )[j] = 0.0f;
+					( (float*)&constraint->totalNormalImpulse1 )[j] = 0.0f;
 
 					float rnA = b2Cross( rA, normal );
 					float rnB = b2Cross( rB, normal );
@@ -1423,7 +1581,7 @@ void b2PrepareContactsTask( int startIndex, int endIndex, b2StepContext* context
 
 					( (float*)&constraint->normalImpulse2 )[j] = warmStartScale * mp->normalImpulse;
 					( (float*)&constraint->tangentImpulse2 )[j] = warmStartScale * mp->tangentImpulse;
-					( (float*)&constraint->maxNormalImpulse2 )[j] = 0.0f;
+					( (float*)&constraint->totalNormalImpulse2 )[j] = 0.0f;
 
 					float rnA = b2Cross( rA, normal );
 					float rnB = b2Cross( rB, normal );
@@ -1446,7 +1604,7 @@ void b2PrepareContactsTask( int startIndex, int endIndex, b2StepContext* context
 					( (float*)&constraint->baseSeparation2 )[j] = 0.0f;
 					( (float*)&constraint->normalImpulse2 )[j] = 0.0f;
 					( (float*)&constraint->tangentImpulse2 )[j] = 0.0f;
-					( (float*)&constraint->maxNormalImpulse2 )[j] = 0.0f;
+					( (float*)&constraint->totalNormalImpulse2 )[j] = 0.0f;
 					( (float*)&constraint->anchorA2.X )[j] = 0.0f;
 					( (float*)&constraint->anchorA2.Y )[j] = 0.0f;
 					( (float*)&constraint->anchorB2.X )[j] = 0.0f;
@@ -1470,6 +1628,10 @@ void b2PrepareContactsTask( int startIndex, int endIndex, b2StepContext* context
 				( (float*)&constraint->normal.X )[j] = 0.0f;
 				( (float*)&constraint->normal.Y )[j] = 0.0f;
 				( (float*)&constraint->friction )[j] = 0.0f;
+				( (float*)&constraint->tangentSpeed )[j] = 0.0f;
+				( (float*)&constraint->rollingResistance )[j] = 0.0f;
+				( (float*)&constraint->rollingMass )[j] = 0.0f;
+				( (float*)&constraint->rollingImpulse )[j] = 0.0f;
 				( (float*)&constraint->biasRate )[j] = 0.0f;
 				( (float*)&constraint->massScale )[j] = 0.0f;
 				( (float*)&constraint->impulseScale )[j] = 0.0f;
@@ -1481,7 +1643,7 @@ void b2PrepareContactsTask( int startIndex, int endIndex, b2StepContext* context
 				( (float*)&constraint->baseSeparation1 )[j] = 0.0f;
 				( (float*)&constraint->normalImpulse1 )[j] = 0.0f;
 				( (float*)&constraint->tangentImpulse1 )[j] = 0.0f;
-				( (float*)&constraint->maxNormalImpulse1 )[j] = 0.0f;
+				( (float*)&constraint->totalNormalImpulse1 )[j] = 0.0f;
 				( (float*)&constraint->normalMass1 )[j] = 0.0f;
 				( (float*)&constraint->tangentMass1 )[j] = 0.0f;
 
@@ -1492,7 +1654,7 @@ void b2PrepareContactsTask( int startIndex, int endIndex, b2StepContext* context
 				( (float*)&constraint->baseSeparation2 )[j] = 0.0f;
 				( (float*)&constraint->normalImpulse2 )[j] = 0.0f;
 				( (float*)&constraint->tangentImpulse2 )[j] = 0.0f;
-				( (float*)&constraint->maxNormalImpulse2 )[j] = 0.0f;
+				( (float*)&constraint->totalNormalImpulse2 )[j] = 0.0f;
 				( (float*)&constraint->normalMass2 )[j] = 0.0f;
 				( (float*)&constraint->tangentMass2 )[j] = 0.0f;
 
@@ -1516,8 +1678,8 @@ void b2WarmStartContactsTask( int startIndex, int endIndex, b2StepContext* conte
 	for ( int i = startIndex; i < endIndex; ++i )
 	{
 		b2ContactConstraintSIMD* c = constraints + i;
-		b2SimdBody bA = b2GatherBodies( states, c->indexA );
-		b2SimdBody bB = b2GatherBodies( states, c->indexB );
+		b2BodyStateW bA = b2GatherBodies( states, c->indexA );
+		b2BodyStateW bB = b2GatherBodies( states, c->indexB );
 
 		b2FloatW tangentX = c->normal.Y;
 		b2FloatW tangentY = b2SubW( b2ZeroW(), c->normal.X );
@@ -1554,6 +1716,9 @@ void b2WarmStartContactsTask( int startIndex, int endIndex, b2StepContext* conte
 			bB.v.Y = b2MulAddW( bB.v.Y, c->invMassB, P.Y );
 		}
 
+		bA.w = b2MulSubW( bA.w, c->invIA, c->rollingImpulse );
+		bB.w = b2MulAddW( bB.w, c->invIB, c->rollingImpulse );
+
 		b2ScatterBodies( states, c->indexA, &bA );
 		b2ScatterBodies( states, c->indexB, &bB );
 	}
@@ -1568,14 +1733,15 @@ void b2SolveContactsTask( int startIndex, int endIndex, b2StepContext* context, 
 	b2BodyState* states = context->states;
 	b2ContactConstraintSIMD* constraints = context->graph->colors[colorIndex].simdConstraints;
 	b2FloatW inv_h = b2SplatW( context->inv_h );
-	b2FloatW minBiasVel = b2SplatW( -context->world->contactPushoutVelocity );
+	b2FloatW minBiasVel = b2SplatW( -context->world->maxContactPushSpeed );
+	b2FloatW oneW = b2SplatW( 1.0f );
 
 	for ( int i = startIndex; i < endIndex; ++i )
 	{
 		b2ContactConstraintSIMD* c = constraints + i;
 
-		b2SimdBody bA = b2GatherBodies( states, c->indexA );
-		b2SimdBody bB = b2GatherBodies( states, c->indexB );
+		b2BodyStateW bA = b2GatherBodies( states, c->indexA );
+		b2BodyStateW bB = b2GatherBodies( states, c->indexB );
 
 		b2FloatW biasRate, massScale, impulseScale;
 		if ( useBias )
@@ -1587,17 +1753,23 @@ void b2SolveContactsTask( int startIndex, int endIndex, b2StepContext* context, 
 		else
 		{
 			biasRate = b2ZeroW();
-			massScale = b2SplatW( 1.0f );
+			massScale = oneW;
 			impulseScale = b2ZeroW();
 		}
+
+		b2FloatW totalNormalImpulse = b2ZeroW();
 
 		b2Vec2W dp = { b2SubW( bB.dp.X, bA.dp.X ), b2SubW( bB.dp.Y, bA.dp.Y ) };
 
 		// point1 non-penetration constraint
 		{
-			// moving anchors for current separation
-			b2Vec2W rsA = b2RotateVectorW( bA.dq, c->anchorA1 );
-			b2Vec2W rsB = b2RotateVectorW( bB.dq, c->anchorB1 );
+			// Fixed anchors for impulses
+			b2Vec2W rA = c->anchorA1;
+			b2Vec2W rB = c->anchorB1;
+
+			// Moving anchors for current separation
+			b2Vec2W rsA = b2RotateVectorW( bA.dq, rA );
+			b2Vec2W rsB = b2RotateVectorW( bB.dq, rB );
 
 			// compute current separation
 			// this is subject to round-off error if the anchor is far from the body center of mass
@@ -1605,14 +1777,16 @@ void b2SolveContactsTask( int startIndex, int endIndex, b2StepContext* context, 
 			b2FloatW s = b2AddW( b2DotW( c->normal, ds ), c->baseSeparation1 );
 
 			// Apply speculative bias if separation is greater than zero, otherwise apply soft constraint bias
+			// The minBiasVel is meant to limit stiffness, not increase it.
 			b2FloatW mask = b2GreaterThanW( s, b2ZeroW() );
 			b2FloatW specBias = b2MulW( s, inv_h );
 			b2FloatW softBias = b2MaxW( b2MulW( biasRate, s ), minBiasVel );
+
+			// todo try b2MaxW(softBias, specBias);
 			b2FloatW bias = b2BlendW( softBias, specBias, mask );
 
-			// fixed anchors for Jacobians
-			b2Vec2W rA = c->anchorA1;
-			b2Vec2W rB = c->anchorB1;
+			b2FloatW pointMassScale = b2BlendW( massScale, oneW, mask );
+			b2FloatW pointImpulseScale = b2BlendW( impulseScale, b2ZeroW(), mask );
 
 			// Relative velocity at contact
 			b2FloatW dvx = b2SubW( b2SubW( bB.v.X, b2MulW( bB.w, rB.Y ) ), b2SubW( bA.v.X, b2MulW( bA.w, rA.Y ) ) );
@@ -1620,14 +1794,16 @@ void b2SolveContactsTask( int startIndex, int endIndex, b2StepContext* context, 
 			b2FloatW vn = b2AddW( b2MulW( dvx, c->normal.X ), b2MulW( dvy, c->normal.Y ) );
 
 			// Compute normal impulse
-			b2FloatW negImpulse = b2AddW( b2MulW( c->normalMass1, b2MulW( massScale, b2AddW( vn, bias ) ) ),
-										  b2MulW( impulseScale, c->normalImpulse1 ) );
+			b2FloatW negImpulse = b2AddW( b2MulW( c->normalMass1, b2MulW( pointMassScale, b2AddW( vn, bias ) ) ),
+										  b2MulW( pointImpulseScale, c->normalImpulse1 ) );
 
 			// Clamp the accumulated impulse
 			b2FloatW newImpulse = b2MaxW( b2SubW( c->normalImpulse1, negImpulse ), b2ZeroW() );
 			b2FloatW impulse = b2SubW( newImpulse, c->normalImpulse1 );
 			c->normalImpulse1 = newImpulse;
-			c->maxNormalImpulse1 = b2MaxW( c->maxNormalImpulse1, newImpulse );
+			c->totalNormalImpulse1 = b2AddW( c->totalNormalImpulse1, newImpulse );
+
+			totalNormalImpulse = b2AddW( totalNormalImpulse, newImpulse );
 
 			// Apply contact impulse
 			b2FloatW Px = b2MulW( impulse, c->normal.X );
@@ -1657,6 +1833,9 @@ void b2SolveContactsTask( int startIndex, int endIndex, b2StepContext* context, 
 			b2FloatW softBias = b2MaxW( b2MulW( biasRate, s ), minBiasVel );
 			b2FloatW bias = b2BlendW( softBias, specBias, mask );
 
+			b2FloatW pointMassScale = b2BlendW( massScale, oneW, mask );
+			b2FloatW pointImpulseScale = b2BlendW( impulseScale, b2ZeroW(), mask );
+
 			// fixed anchors for Jacobians
 			b2Vec2W rA = c->anchorA2;
 			b2Vec2W rB = c->anchorB2;
@@ -1667,14 +1846,16 @@ void b2SolveContactsTask( int startIndex, int endIndex, b2StepContext* context, 
 			b2FloatW vn = b2AddW( b2MulW( dvx, c->normal.X ), b2MulW( dvy, c->normal.Y ) );
 
 			// Compute normal impulse
-			b2FloatW negImpulse = b2AddW( b2MulW( c->normalMass2, b2MulW( massScale, b2AddW( vn, bias ) ) ),
-										  b2MulW( impulseScale, c->normalImpulse2 ) );
+			b2FloatW negImpulse = b2AddW( b2MulW( c->normalMass2, b2MulW( pointMassScale, b2AddW( vn, bias ) ) ),
+										  b2MulW( pointImpulseScale, c->normalImpulse2 ) );
 
 			// Clamp the accumulated impulse
 			b2FloatW newImpulse = b2MaxW( b2SubW( c->normalImpulse2, negImpulse ), b2ZeroW() );
 			b2FloatW impulse = b2SubW( newImpulse, c->normalImpulse2 );
 			c->normalImpulse2 = newImpulse;
-			c->maxNormalImpulse2 = b2MaxW( c->maxNormalImpulse2, newImpulse );
+			c->totalNormalImpulse2 = b2AddW( c->totalNormalImpulse2, newImpulse );
+
+			totalNormalImpulse = b2AddW( totalNormalImpulse, newImpulse );
 
 			// Apply contact impulse
 			b2FloatW Px = b2MulW( impulse, c->normal.X );
@@ -1702,6 +1883,9 @@ void b2SolveContactsTask( int startIndex, int endIndex, b2StepContext* context, 
 			b2FloatW dvx = b2SubW( b2SubW( bB.v.X, b2MulW( bB.w, rB.Y ) ), b2SubW( bA.v.X, b2MulW( bA.w, rA.Y ) ) );
 			b2FloatW dvy = b2SubW( b2AddW( bB.v.Y, b2MulW( bB.w, rB.X ) ), b2AddW( bA.v.Y, b2MulW( bA.w, rA.X ) ) );
 			b2FloatW vt = b2AddW( b2MulW( dvx, tangentX ), b2MulW( dvy, tangentY ) );
+
+			// Tangent speed (conveyor belt)
+			vt = b2SubW( vt, c->tangentSpeed );
 
 			// Compute tangent force
 			b2FloatW negImpulse = b2MulW( c->tangentMass1, vt );
@@ -1737,6 +1921,9 @@ void b2SolveContactsTask( int startIndex, int endIndex, b2StepContext* context, 
 			b2FloatW dvy = b2SubW( b2AddW( bB.v.Y, b2MulW( bB.w, rB.X ) ), b2AddW( bA.v.Y, b2MulW( bA.w, rA.X ) ) );
 			b2FloatW vt = b2AddW( b2MulW( dvx, tangentX ), b2MulW( dvy, tangentY ) );
 
+			// Tangent speed (conveyor belt)
+			vt = b2SubW( vt, c->tangentSpeed );
+
 			// Compute tangent force
 			b2FloatW negImpulse = b2MulW( c->tangentMass2, vt );
 
@@ -1760,6 +1947,18 @@ void b2SolveContactsTask( int startIndex, int endIndex, b2StepContext* context, 
 			bB.w = b2MulAddW( bB.w, c->invIB, b2SubW( b2MulW( rB.X, Py ), b2MulW( rB.Y, Px ) ) );
 		}
 
+		// Rolling resistance
+		{
+			b2FloatW deltaLambda = b2MulW( c->rollingMass, b2SubW( bA.w, bB.w ) );
+			b2FloatW lambda = c->rollingImpulse;
+			b2FloatW maxLambda = b2MulW( c->rollingResistance, totalNormalImpulse );
+			c->rollingImpulse = b2SymClampW( b2AddW( lambda, deltaLambda ), maxLambda );
+			deltaLambda = b2SubW( c->rollingImpulse, lambda );
+
+			bA.w = b2MulSubW( bA.w, c->invIA, deltaLambda );
+			bB.w = b2MulAddW( bB.w, c->invIB, deltaLambda );
+		}
+
 		b2ScatterBodies( states, c->indexA, &bA );
 		b2ScatterBodies( states, c->indexB, &bB );
 	}
@@ -1780,15 +1979,25 @@ void b2ApplyRestitutionTask( int startIndex, int endIndex, b2StepContext* contex
 	{
 		b2ContactConstraintSIMD* c = constraints + i;
 
-		b2SimdBody bA = b2GatherBodies( states, c->indexA );
-		b2SimdBody bB = b2GatherBodies( states, c->indexB );
+		if ( b2AllZeroW( c->restitution ) )
+		{
+			// No lanes have restitution. Common case.
+			continue;
+		}
+
+		// Create a mask based on restitution so that lanes with no restitution are not affected
+		// by the calculations below.
+		b2FloatW restitutionMask = b2EqualsW( c->restitution, zero );
+
+		b2BodyStateW bA = b2GatherBodies( states, c->indexA );
+		b2BodyStateW bB = b2GatherBodies( states, c->indexB );
 
 		// first point non-penetration constraint
 		{
 			// Set effective mass to zero if restitution should not be applied
 			b2FloatW mask1 = b2GreaterThanW( b2AddW( c->relativeVelocity1, threshold ), zero );
-			b2FloatW mask2 = b2EqualsW( c->maxNormalImpulse1, zero );
-			b2FloatW mask = b2OrW( mask1, mask2 );
+			b2FloatW mask2 = b2EqualsW( c->totalNormalImpulse1, zero );
+			b2FloatW mask = b2OrW( b2OrW( mask1, mask2 ), restitutionMask );
 			b2FloatW mass = b2BlendW( c->normalMass1, zero, mask );
 
 			// fixed anchors for Jacobians
@@ -1825,8 +2034,8 @@ void b2ApplyRestitutionTask( int startIndex, int endIndex, b2StepContext* contex
 		{
 			// Set effective mass to zero if restitution should not be applied
 			b2FloatW mask1 = b2GreaterThanW( b2AddW( c->relativeVelocity2, threshold ), zero );
-			b2FloatW mask2 = b2EqualsW( c->maxNormalImpulse2, zero );
-			b2FloatW mask = b2OrW( mask1, mask2 );
+			b2FloatW mask2 = b2EqualsW( c->totalNormalImpulse2, zero );
+			b2FloatW mask = b2OrW( b2OrW( mask1, mask2 ), restitutionMask );
 			b2FloatW mass = b2BlendW( c->normalMass2, zero, mask );
 
 			// fixed anchors for Jacobians
@@ -1866,194 +2075,46 @@ void b2ApplyRestitutionTask( int startIndex, int endIndex, b2StepContext* contex
 	b2TracyCZoneEnd( restitution );
 }
 
-#if B2_SIMD_WIDTH == 8
-
 void b2StoreImpulsesTask( int startIndex, int endIndex, b2StepContext* context )
 {
-	b2TracyCZoneNC( store_impulses, "Store", b2_colorFirebrick, true );
+	b2TracyCZoneNC( store_impulses, "Store", b2_colorFireBrick, true );
 
 	b2ContactSim** contacts = context->contacts;
 	const b2ContactConstraintSIMD* constraints = context->simdContactConstraints;
 
 	b2Manifold dummy = { 0 };
 
-	for ( int i = startIndex; i < endIndex; ++i )
+	for ( int constraintIndex = startIndex; constraintIndex < endIndex; ++constraintIndex )
 	{
-		const b2ContactConstraintSIMD* c = constraints + i;
+		const b2ContactConstraintSIMD* c = constraints + constraintIndex;
+		const float* rollingImpulse = (float*)&c->rollingImpulse;
 		const float* normalImpulse1 = (float*)&c->normalImpulse1;
 		const float* normalImpulse2 = (float*)&c->normalImpulse2;
 		const float* tangentImpulse1 = (float*)&c->tangentImpulse1;
 		const float* tangentImpulse2 = (float*)&c->tangentImpulse2;
-		const float* maxNormalImpulse1 = (float*)&c->maxNormalImpulse1;
-		const float* maxNormalImpulse2 = (float*)&c->maxNormalImpulse2;
+		const float* totalNormalImpulse1 = (float*)&c->totalNormalImpulse1;
+		const float* totalNormalImpulse2 = (float*)&c->totalNormalImpulse2;
 		const float* normalVelocity1 = (float*)&c->relativeVelocity1;
 		const float* normalVelocity2 = (float*)&c->relativeVelocity2;
 
-		int base = 8 * i;
-		b2Manifold* m0 = contacts[base + 0] == NULL ? &dummy : &contacts[base + 0]->manifold;
-		b2Manifold* m1 = contacts[base + 1] == NULL ? &dummy : &contacts[base + 1]->manifold;
-		b2Manifold* m2 = contacts[base + 2] == NULL ? &dummy : &contacts[base + 2]->manifold;
-		b2Manifold* m3 = contacts[base + 3] == NULL ? &dummy : &contacts[base + 3]->manifold;
-		b2Manifold* m4 = contacts[base + 4] == NULL ? &dummy : &contacts[base + 4]->manifold;
-		b2Manifold* m5 = contacts[base + 5] == NULL ? &dummy : &contacts[base + 5]->manifold;
-		b2Manifold* m6 = contacts[base + 6] == NULL ? &dummy : &contacts[base + 6]->manifold;
-		b2Manifold* m7 = contacts[base + 7] == NULL ? &dummy : &contacts[base + 7]->manifold;
+		int baseIndex = B2_SIMD_WIDTH * constraintIndex;
 
-		m0->points[0].normalImpulse = normalImpulse1[0];
-		m0->points[0].tangentImpulse = tangentImpulse1[0];
-		m0->points[0].maxNormalImpulse = maxNormalImpulse1[0];
-		m0->points[0].normalVelocity = normalVelocity1[0];
+		for ( int laneIndex = 0; laneIndex < B2_SIMD_WIDTH; ++laneIndex )
+		{
+			b2Manifold* m = contacts[baseIndex + laneIndex] == NULL ? &dummy : &contacts[baseIndex + laneIndex]->manifold;
+			m->rollingImpulse = rollingImpulse[laneIndex];
 
-		m0->points[1].normalImpulse = normalImpulse2[0];
-		m0->points[1].tangentImpulse = tangentImpulse2[0];
-		m0->points[1].maxNormalImpulse = maxNormalImpulse2[0];
-		m0->points[1].normalVelocity = normalVelocity2[0];
+			m->points[0].normalImpulse = normalImpulse1[laneIndex];
+			m->points[0].tangentImpulse = tangentImpulse1[laneIndex];
+			m->points[0].totalNormalImpulse = totalNormalImpulse1[laneIndex];
+			m->points[0].normalVelocity = normalVelocity1[laneIndex];
 
-		m1->points[0].normalImpulse = normalImpulse1[1];
-		m1->points[0].tangentImpulse = tangentImpulse1[1];
-		m1->points[0].maxNormalImpulse = maxNormalImpulse1[1];
-		m1->points[0].normalVelocity = normalVelocity1[1];
-
-		m1->points[1].normalImpulse = normalImpulse2[1];
-		m1->points[1].tangentImpulse = tangentImpulse2[1];
-		m1->points[1].maxNormalImpulse = maxNormalImpulse2[1];
-		m1->points[1].normalVelocity = normalVelocity2[1];
-
-		m2->points[0].normalImpulse = normalImpulse1[2];
-		m2->points[0].tangentImpulse = tangentImpulse1[2];
-		m2->points[0].maxNormalImpulse = maxNormalImpulse1[2];
-		m2->points[0].normalVelocity = normalVelocity1[2];
-
-		m2->points[1].normalImpulse = normalImpulse2[2];
-		m2->points[1].tangentImpulse = tangentImpulse2[2];
-		m2->points[1].maxNormalImpulse = maxNormalImpulse2[2];
-		m2->points[1].normalVelocity = normalVelocity2[2];
-
-		m3->points[0].normalImpulse = normalImpulse1[3];
-		m3->points[0].tangentImpulse = tangentImpulse1[3];
-		m3->points[0].maxNormalImpulse = maxNormalImpulse1[3];
-		m3->points[0].normalVelocity = normalVelocity1[3];
-
-		m3->points[1].normalImpulse = normalImpulse2[3];
-		m3->points[1].tangentImpulse = tangentImpulse2[3];
-		m3->points[1].maxNormalImpulse = maxNormalImpulse2[3];
-		m3->points[1].normalVelocity = normalVelocity2[3];
-
-		m4->points[0].normalImpulse = normalImpulse1[4];
-		m4->points[0].tangentImpulse = tangentImpulse1[4];
-		m4->points[0].maxNormalImpulse = maxNormalImpulse1[4];
-		m4->points[0].normalVelocity = normalVelocity1[4];
-
-		m4->points[1].normalImpulse = normalImpulse2[4];
-		m4->points[1].tangentImpulse = tangentImpulse2[4];
-		m4->points[1].maxNormalImpulse = maxNormalImpulse2[4];
-		m4->points[1].normalVelocity = normalVelocity2[4];
-
-		m5->points[0].normalImpulse = normalImpulse1[5];
-		m5->points[0].tangentImpulse = tangentImpulse1[5];
-		m5->points[0].maxNormalImpulse = maxNormalImpulse1[5];
-		m5->points[0].normalVelocity = normalVelocity1[5];
-
-		m5->points[1].normalImpulse = normalImpulse2[5];
-		m5->points[1].tangentImpulse = tangentImpulse2[5];
-		m5->points[1].maxNormalImpulse = maxNormalImpulse2[5];
-		m5->points[1].normalVelocity = normalVelocity2[5];
-
-		m6->points[0].normalImpulse = normalImpulse1[6];
-		m6->points[0].tangentImpulse = tangentImpulse1[6];
-		m6->points[0].maxNormalImpulse = maxNormalImpulse1[6];
-		m6->points[0].normalVelocity = normalVelocity1[6];
-
-		m6->points[1].normalImpulse = normalImpulse2[6];
-		m6->points[1].tangentImpulse = tangentImpulse2[6];
-		m6->points[1].maxNormalImpulse = maxNormalImpulse2[6];
-		m6->points[1].normalVelocity = normalVelocity2[6];
-
-		m7->points[0].normalImpulse = normalImpulse1[7];
-		m7->points[0].tangentImpulse = tangentImpulse1[7];
-		m7->points[0].maxNormalImpulse = maxNormalImpulse1[7];
-		m7->points[0].normalVelocity = normalVelocity1[7];
-
-		m7->points[1].normalImpulse = normalImpulse2[7];
-		m7->points[1].tangentImpulse = tangentImpulse2[7];
-		m7->points[1].maxNormalImpulse = maxNormalImpulse2[7];
-		m7->points[1].normalVelocity = normalVelocity2[7];
+			m->points[1].normalImpulse = normalImpulse2[laneIndex];
+			m->points[1].tangentImpulse = tangentImpulse2[laneIndex];
+			m->points[1].totalNormalImpulse = totalNormalImpulse2[laneIndex];
+			m->points[1].normalVelocity = normalVelocity2[laneIndex];
+		}
 	}
 
 	b2TracyCZoneEnd( store_impulses );
 }
-
-#else
-
-void b2StoreImpulsesTask( int startIndex, int endIndex, b2StepContext* context )
-{
-	b2TracyCZoneNC( store_impulses, "Store", b2_colorFirebrick, true );
-
-	b2ContactSim** contacts = context->contacts;
-	const b2ContactConstraintSIMD* constraints = context->simdContactConstraints;
-
-	b2Manifold dummy = { 0 };
-
-	for ( int i = startIndex; i < endIndex; ++i )
-	{
-		const b2ContactConstraintSIMD* c = constraints + i;
-		const float* normalImpulse1 = (float*)&c->normalImpulse1;
-		const float* normalImpulse2 = (float*)&c->normalImpulse2;
-		const float* tangentImpulse1 = (float*)&c->tangentImpulse1;
-		const float* tangentImpulse2 = (float*)&c->tangentImpulse2;
-		const float* maxNormalImpulse1 = (float*)&c->maxNormalImpulse1;
-		const float* maxNormalImpulse2 = (float*)&c->maxNormalImpulse2;
-		const float* normalVelocity1 = (float*)&c->relativeVelocity1;
-		const float* normalVelocity2 = (float*)&c->relativeVelocity2;
-
-		int base = 4 * i;
-		b2Manifold* m0 = contacts[base + 0] == NULL ? &dummy : &contacts[base + 0]->manifold;
-		b2Manifold* m1 = contacts[base + 1] == NULL ? &dummy : &contacts[base + 1]->manifold;
-		b2Manifold* m2 = contacts[base + 2] == NULL ? &dummy : &contacts[base + 2]->manifold;
-		b2Manifold* m3 = contacts[base + 3] == NULL ? &dummy : &contacts[base + 3]->manifold;
-
-		m0->points[0].normalImpulse = normalImpulse1[0];
-		m0->points[0].tangentImpulse = tangentImpulse1[0];
-		m0->points[0].maxNormalImpulse = maxNormalImpulse1[0];
-		m0->points[0].normalVelocity = normalVelocity1[0];
-
-		m0->points[1].normalImpulse = normalImpulse2[0];
-		m0->points[1].tangentImpulse = tangentImpulse2[0];
-		m0->points[1].maxNormalImpulse = maxNormalImpulse2[0];
-		m0->points[1].normalVelocity = normalVelocity2[0];
-
-		m1->points[0].normalImpulse = normalImpulse1[1];
-		m1->points[0].tangentImpulse = tangentImpulse1[1];
-		m1->points[0].maxNormalImpulse = maxNormalImpulse1[1];
-		m1->points[0].normalVelocity = normalVelocity1[1];
-
-		m1->points[1].normalImpulse = normalImpulse2[1];
-		m1->points[1].tangentImpulse = tangentImpulse2[1];
-		m1->points[1].maxNormalImpulse = maxNormalImpulse2[1];
-		m1->points[1].normalVelocity = normalVelocity2[1];
-
-		m2->points[0].normalImpulse = normalImpulse1[2];
-		m2->points[0].tangentImpulse = tangentImpulse1[2];
-		m2->points[0].maxNormalImpulse = maxNormalImpulse1[2];
-		m2->points[0].normalVelocity = normalVelocity1[2];
-
-		m2->points[1].normalImpulse = normalImpulse2[2];
-		m2->points[1].tangentImpulse = tangentImpulse2[2];
-		m2->points[1].maxNormalImpulse = maxNormalImpulse2[2];
-		m2->points[1].normalVelocity = normalVelocity2[2];
-
-		m3->points[0].normalImpulse = normalImpulse1[3];
-		m3->points[0].tangentImpulse = tangentImpulse1[3];
-		m3->points[0].maxNormalImpulse = maxNormalImpulse1[3];
-		m3->points[0].normalVelocity = normalVelocity1[3];
-
-		m3->points[1].normalImpulse = normalImpulse2[3];
-		m3->points[1].tangentImpulse = tangentImpulse2[3];
-		m3->points[1].maxNormalImpulse = maxNormalImpulse2[3];
-		m3->points[1].normalVelocity = normalVelocity2[3];
-	}
-
-	b2TracyCZoneEnd( store_impulses );
-}
-
-#endif

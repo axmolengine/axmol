@@ -94,7 +94,7 @@ public:
         addTest("Node: Parallax", []() { return new ParallaxTests(); });
         addTest("Node: Particles", []() { return new ParticleTests(); });
         addTest("Node: Particle3D (PU)", []() { return new Particle3DTests(); });
-#if defined(AX_ENABLE_PHYSICS) && 0
+#if defined(AX_ENABLE_PHYSICS)
          addTest("Node: Physics", []() { return new PhysicsTests(); });
 #endif
         addTest("Node: Physics3D", []() { return new Physics3DTests(); });
