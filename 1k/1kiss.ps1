@@ -1859,6 +1859,10 @@ if (!$setupOnly) {
             $CONFIG_ALL_OPTIONS = @()
         }
 
+        if ($env:__1K_CXXSTD) {
+            $CONFIG_ALL_OPTIONS += "-DCMAKE_CXX_STANDARD=$env:__1K_CXXSTD"
+        }
+
         if ($options.u) {
             $CONFIG_ALL_OPTIONS += '-D_1KFETCH_UPGRADE=TRUE'
         }

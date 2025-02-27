@@ -32,6 +32,7 @@
 #include <vector>
 #include <memory>
 #include <future>
+#include <atomic>
 #include "base/Object.h"
 #include "base/Macros.h"
 

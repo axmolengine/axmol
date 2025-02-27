@@ -9,6 +9,7 @@
 #if defined(AX_ENABLE_VLC_MEDIA)
 
 #include "vlc/vlc.h"
+#include <atomic>
 
 namespace ax
 {

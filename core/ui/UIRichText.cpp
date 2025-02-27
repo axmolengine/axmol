@@ -450,17 +450,17 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         // size, color, align, face
         ValueMap attrValueMap;
 
-        if (tagAttrValueMap.find("size") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("size"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_FONT_SIZE] = tagAttrValueMap.at("size").asString();
+            attrValueMap[RichText::KEY_FONT_SIZE] = itr->second.asString();
         }
-        if (tagAttrValueMap.find("color") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("color"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_FONT_COLOR_STRING] = tagAttrValueMap.at("color").asString();
+            attrValueMap[RichText::KEY_FONT_COLOR_STRING] = itr->second.asString();
         }
-        if (tagAttrValueMap.find("face") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("face"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_FONT_FACE] = tagAttrValueMap.at("face").asString();
+            attrValueMap[RichText::KEY_FONT_FACE] = itr->second.asString();
         }
 
         return make_pair(attrValueMap, nullptr);
@@ -579,7 +579,7 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         }
 
         RichElementImage* elementImg = nullptr;
-        if (src.length())
+        if (!src.empty())
         {
             elementImg = RichElementImage::create(0, Color3B::WHITE, 255, src, "", resType);
             if (height >= 0)
@@ -602,14 +602,14 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         // supported attributes:
         ValueMap attrValueMap;
 
-        if (tagAttrValueMap.find("href") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("href"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_URL] = tagAttrValueMap.at("href").asString();
+            attrValueMap[RichText::KEY_URL] = itr->second.asString();
         }
 
-        if (tagAttrValueMap.find("id") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("id"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_ID] = tagAttrValueMap.at("id").asString();
+            attrValueMap[RichText::KEY_ID] = itr->second.asString();
         }
 
         return make_pair(attrValueMap, nullptr);
@@ -624,24 +624,24 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         "p", true,
         [](const ValueMap& tagAttrValueMap) -> std::pair<ValueMap, RichElement*> {
             ValueMap attrValueMap;
-            if (tagAttrValueMap.find("size") != tagAttrValueMap.end())
+            if (auto&& itr = tagAttrValueMap.find("size"); itr != tagAttrValueMap.end())
             {
-                attrValueMap[RichText::KEY_FONT_SIZE] = tagAttrValueMap.at("size").asString();
+                attrValueMap[RichText::KEY_FONT_SIZE] = itr->second.asString();
             }
 
-            if (tagAttrValueMap.find("color") != tagAttrValueMap.end())
+            if (auto&& itr = tagAttrValueMap.find("color"); itr != tagAttrValueMap.end())
             {
-                attrValueMap[RichText::KEY_FONT_COLOR_STRING] = tagAttrValueMap.at("color").asString();
+                attrValueMap[RichText::KEY_FONT_COLOR_STRING] = itr->second.asString();
             }
 
-            if (tagAttrValueMap.find("face") != tagAttrValueMap.end())
+            if (auto&& itr = tagAttrValueMap.find("face"); itr != tagAttrValueMap.end())
             {
-                attrValueMap[RichText::KEY_FONT_FACE] = tagAttrValueMap.at("face").asString();
+                attrValueMap[RichText::KEY_FONT_FACE] = itr->second.asString();
             }
 
-            if (tagAttrValueMap.find("id") != tagAttrValueMap.end())
+            if (auto&& itr = tagAttrValueMap.find("id"); itr != tagAttrValueMap.end())
             {
-                attrValueMap[RichText::KEY_ID] = tagAttrValueMap.at("id").asString();
+                attrValueMap[RichText::KEY_ID] = itr->second.asString();
             }
 
             return make_pair(attrValueMap, nullptr);
@@ -651,30 +651,30 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
     constexpr auto headerTagEnterHandler = [](const ValueMap& tagAttrValueMap,
                                               float defaultFontSize) -> std::pair<ValueMap, RichElement*> {
         ValueMap attrValueMap;
-        if (tagAttrValueMap.find("size") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("size"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_FONT_SIZE] = tagAttrValueMap.at("size").asString();
+            attrValueMap[RichText::KEY_FONT_SIZE] = itr->second.asString();
         }
         else
         {
             attrValueMap[RichText::KEY_FONT_SIZE] = defaultFontSize;
         }
 
-        if (tagAttrValueMap.find("color") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("color"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_FONT_COLOR_STRING] = tagAttrValueMap.at("color").asString();
+            attrValueMap[RichText::KEY_FONT_COLOR_STRING] = itr->second.asString();
         }
 
-        if (tagAttrValueMap.find("face") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("face"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_FONT_FACE] = tagAttrValueMap.at("face").asString();
+            attrValueMap[RichText::KEY_FONT_FACE] = itr->second.asString();
         }
 
         attrValueMap[RichText::KEY_TEXT_BOLD] = true;
 
-        if (tagAttrValueMap.find("id") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("id"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_ID] = tagAttrValueMap.at("id").asString();
+            attrValueMap[RichText::KEY_ID] = itr->second.asString();
         }
 
         return make_pair(attrValueMap, nullptr);
@@ -716,13 +716,13 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         ValueMap attrValueMap;
 
         attrValueMap[RichText::KEY_TEXT_STYLE] = RichText::VALUE_TEXT_STYLE_OUTLINE;
-        if (tagAttrValueMap.find("color") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("color"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_TEXT_OUTLINE_COLOR] = tagAttrValueMap.at("color").asString();
+            attrValueMap[RichText::KEY_TEXT_OUTLINE_COLOR] = itr->second.asString();
         }
-        if (tagAttrValueMap.find("size") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("size"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_TEXT_OUTLINE_SIZE] = tagAttrValueMap.at("size").asString();
+            attrValueMap[RichText::KEY_TEXT_OUTLINE_SIZE] = itr->second.asString();
         }
         return make_pair(attrValueMap, nullptr);
     });
@@ -733,21 +733,21 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         ValueMap attrValueMap;
 
         attrValueMap[RichText::KEY_TEXT_STYLE] = RichText::VALUE_TEXT_STYLE_SHADOW;
-        if (tagAttrValueMap.find("color") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("color"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_TEXT_SHADOW_COLOR] = tagAttrValueMap.at("color").asString();
+            attrValueMap[RichText::KEY_TEXT_SHADOW_COLOR] = itr->second.asString();
         }
-        if (tagAttrValueMap.find("offsetWidth") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("offsetWidth"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH] = tagAttrValueMap.at("offsetWidth").asString();
+            attrValueMap[RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH] = itr->second.asString();
         }
-        if (tagAttrValueMap.find("offsetHeight") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("offsetHeight"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_TEXT_SHADOW_OFFSET_HEIGHT] = tagAttrValueMap.at("offsetHeight").asString();
+            attrValueMap[RichText::KEY_TEXT_SHADOW_OFFSET_HEIGHT] = itr->second.asString();
         }
-        if (tagAttrValueMap.find("blurRadius") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("blurRadius"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_TEXT_SHADOW_BLUR_RADIUS] = tagAttrValueMap.at("blurRadius").asString();
+            attrValueMap[RichText::KEY_TEXT_SHADOW_BLUR_RADIUS] = itr->second.asString();
         }
         return make_pair(attrValueMap, nullptr);
     });
@@ -758,9 +758,9 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         ValueMap attrValueMap;
 
         attrValueMap[RichText::KEY_TEXT_STYLE] = RichText::VALUE_TEXT_STYLE_GLOW;
-        if (tagAttrValueMap.find("color") != tagAttrValueMap.end())
+        if (auto&& itr = tagAttrValueMap.find("color"); itr != tagAttrValueMap.end())
         {
-            attrValueMap[RichText::KEY_TEXT_GLOW_COLOR] = tagAttrValueMap.at("color").asString();
+            attrValueMap[RichText::KEY_TEXT_GLOW_COLOR] = itr->second.asString();
         }
         return make_pair(attrValueMap, nullptr);
     });
@@ -904,38 +904,37 @@ void MyXMLVisitor::startElement(void* /*ctx*/, const char* elementName, const ch
             {
                 Attributes attributes;
 
-                if (attrValueMap.find(RichText::KEY_FONT_SIZE) != attrValueMap.end())
+                if (auto&& itr = attrValueMap.find(RichText::KEY_FONT_SIZE); itr != attrValueMap.end())
                 {
-                    attributes.fontSize = attrValueMap.at(RichText::KEY_FONT_SIZE).asFloat();
+                    attributes.fontSize = itr->second.asFloat();
                 }
-                if (attrValueMap.find(RichText::KEY_FONT_SMALL) != attrValueMap.end())
+                if (attrValueMap.contains(RichText::KEY_FONT_SMALL))
                 {
                     attributes.fontSize = getFontSize() * 0.8f;
                 }
-                if (attrValueMap.find(RichText::KEY_FONT_BIG) != attrValueMap.end())
+                if (attrValueMap.contains(RichText::KEY_FONT_BIG))
                 {
                     attributes.fontSize = getFontSize() * 1.25f;
                 }
-                if (attrValueMap.find(RichText::KEY_FONT_COLOR_STRING) != attrValueMap.end())
+                if (auto&& itr = attrValueMap.find(RichText::KEY_FONT_COLOR_STRING); itr != attrValueMap.end())
                 {
-                    attributes.setColor(
-                        _richText->color3BWithString(attrValueMap.at(RichText::KEY_FONT_COLOR_STRING).asString()));
+                    attributes.setColor(_richText->color3BWithString(itr->second.asString()));
                 }
-                if (attrValueMap.find(RichText::KEY_FONT_FACE) != attrValueMap.end())
+                if (auto&& itr = attrValueMap.find(RichText::KEY_FONT_FACE); itr != attrValueMap.end())
                 {
-                    attributes.face = attrValueMap.at(RichText::KEY_FONT_FACE).asString();
+                    attributes.face = itr->second.asString();
                 }
-                if (attrValueMap.find(RichText::KEY_TEXT_BOLD) != attrValueMap.end())
+                if (attrValueMap.contains(RichText::KEY_TEXT_BOLD))
                 {
                     attributes.bold = true;
                 }
-                if (attrValueMap.find(RichText::KEY_TEXT_ITALIC) != attrValueMap.end())
+                if (attrValueMap.contains(RichText::KEY_TEXT_ITALIC))
                 {
                     attributes.italics = true;
                 }
-                if (attrValueMap.find(RichText::KEY_TEXT_LINE) != attrValueMap.end())
+                if (auto&& itr = attrValueMap.find(RichText::KEY_TEXT_LINE); itr != attrValueMap.end())
                 {
-                    auto keyTextLine = attrValueMap.at(RichText::KEY_TEXT_LINE).asString();
+                    auto keyTextLine = itr->second.asString();
                     if (keyTextLine == RichText::VALUE_TEXT_LINE_DEL)
                     {
                         attributes.line = StyleLine::STRIKETHROUGH;
@@ -945,9 +944,9 @@ void MyXMLVisitor::startElement(void* /*ctx*/, const char* elementName, const ch
                         attributes.line = StyleLine::UNDERLINE;
                     }
                 }
-                if (attrValueMap.find(RichText::KEY_URL) != attrValueMap.end())
+                if (auto&& itr = attrValueMap.find(RichText::KEY_URL); itr != attrValueMap.end())
                 {
-                    attributes.url = attrValueMap.at(RichText::KEY_URL).asString();
+                    attributes.url = itr->second.asString();
                     attributes.setColor(_richText->getAnchorFontColor3B());
                     if (_richText->isAnchorTextBoldEnabled())
                     {
@@ -984,56 +983,56 @@ void MyXMLVisitor::startElement(void* /*ctx*/, const char* elementName, const ch
                         attributes.glowColor = _richText->getAnchorTextGlowColor3B();
                     }
                 }
-                if (attrValueMap.find(RichText::KEY_TEXT_STYLE) != attrValueMap.end())
+                if (auto&& itr = attrValueMap.find(RichText::KEY_TEXT_STYLE); itr != attrValueMap.end())
                 {
-                    auto keyTextStyle = attrValueMap.at(RichText::KEY_TEXT_STYLE).asString();
+                    auto keyTextStyle = itr->second.asString();
                     if (keyTextStyle == RichText::VALUE_TEXT_STYLE_OUTLINE)
                     {
                         attributes.effect = StyleEffect::OUTLINE;
-                        if (attrValueMap.find(RichText::KEY_TEXT_OUTLINE_COLOR) != attrValueMap.end())
+                        if (auto&& styleItr = attrValueMap.find(RichText::KEY_TEXT_OUTLINE_COLOR);
+                            styleItr != attrValueMap.end())
                         {
-                            attributes.outlineColor = _richText->color3BWithString(
-                                attrValueMap.at(RichText::KEY_TEXT_OUTLINE_COLOR).asString());
+                            attributes.outlineColor = _richText->color3BWithString(styleItr->second.asString());
                         }
-                        if (attrValueMap.find(RichText::KEY_TEXT_OUTLINE_SIZE) != attrValueMap.end())
+                        if (auto&& styleItr = attrValueMap.find(RichText::KEY_TEXT_OUTLINE_SIZE); styleItr != attrValueMap.end())
                         {
-                            attributes.outlineSize = attrValueMap.at(RichText::KEY_TEXT_OUTLINE_SIZE).asInt();
+                            attributes.outlineSize = styleItr->second.asInt();
                         }
                     }
                     else if (keyTextStyle == RichText::VALUE_TEXT_STYLE_SHADOW)
                     {
                         attributes.effect = StyleEffect::SHADOW;
-                        if (attrValueMap.find(RichText::KEY_TEXT_SHADOW_COLOR) != attrValueMap.end())
+                        if (auto&& styleItr = attrValueMap.find(RichText::KEY_TEXT_SHADOW_COLOR); styleItr != attrValueMap.end())
                         {
-                            attributes.shadowColor = _richText->color3BWithString(
-                                attrValueMap.at(RichText::KEY_TEXT_SHADOW_COLOR).asString());
+                            attributes.shadowColor = _richText->color3BWithString(styleItr->second.asString());
                         }
-                        if ((attrValueMap.find(RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH) != attrValueMap.end()) &&
-                            (attrValueMap.find(RichText::KEY_TEXT_SHADOW_OFFSET_HEIGHT) != attrValueMap.end()))
+
+                        auto&& shadowOffsetWidthItr = attrValueMap.find(RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH);
+                        auto&& shadowOffsetHeightItr = attrValueMap.find(RichText::KEY_TEXT_SHADOW_OFFSET_HEIGHT);
+                        if (shadowOffsetWidthItr != attrValueMap.end() && shadowOffsetHeightItr != attrValueMap.end())
                         {
                             attributes.shadowOffset =
-                                Vec2(attrValueMap.at(RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH).asFloat(),
-                                     attrValueMap.at(RichText::KEY_TEXT_SHADOW_OFFSET_HEIGHT).asFloat());
+                                Vec2(shadowOffsetWidthItr->second.asFloat(), shadowOffsetHeightItr->second.asFloat());
                         }
-                        if (attrValueMap.find(RichText::KEY_TEXT_SHADOW_BLUR_RADIUS) != attrValueMap.end())
+
+                        if (auto&& styleItr =
+                                attrValueMap.find(RichText::KEY_TEXT_SHADOW_BLUR_RADIUS); styleItr != attrValueMap.end())
                         {
-                            attributes.shadowBlurRadius =
-                                attrValueMap.at(RichText::KEY_TEXT_SHADOW_BLUR_RADIUS).asInt();
+                            attributes.shadowBlurRadius = styleItr->second.asInt();
                         }
                     }
                     else if (keyTextStyle == RichText::VALUE_TEXT_STYLE_GLOW)
                     {
                         attributes.effect = StyleEffect::GLOW;
-                        if (attrValueMap.find(RichText::KEY_TEXT_GLOW_COLOR) != attrValueMap.end())
+                        if (auto&& styleItr = attrValueMap.find(RichText::KEY_TEXT_GLOW_COLOR); styleItr != attrValueMap.end())
                         {
-                            attributes.glowColor =
-                                _richText->color3BWithString(attrValueMap.at(RichText::KEY_TEXT_GLOW_COLOR).asString());
+                            attributes.glowColor = _richText->color3BWithString(styleItr->second.asString());
                         }
                     }
                 }
-                if (attrValueMap.find(RichText::KEY_URL) != attrValueMap.end())
+                if (auto&& itr = attrValueMap.find(RichText::KEY_URL); itr != attrValueMap.end())
                 {
-                    attributes.url = attrValueMap.at(RichText::KEY_URL).asString();
+                    attributes.url = itr->second.asString();
                     attributes.setColor(_richText->getAnchorFontColor3B());
                     if (_richText->isAnchorTextBoldEnabled())
                     {
@@ -1070,9 +1069,9 @@ void MyXMLVisitor::startElement(void* /*ctx*/, const char* elementName, const ch
                         attributes.glowColor = _richText->getAnchorTextGlowColor3B();
                     }
                 }
-                if (attrValueMap.find(RichText::KEY_ID) != attrValueMap.end())
+                if (auto&& itr = attrValueMap.find(RichText::KEY_ID); itr != attrValueMap.end())
                 {
-                    attributes.name = attrValueMap.at(RichText::KEY_ID).asString();
+                    attributes.name = itr->second.asString();
                 }
                 pushBackFontElement(attributes);
             }
@@ -1512,18 +1511,18 @@ bool RichText::isAnchorTextOutlineEnabled()
 
 Color3B RichText::getAnchorTextOutlineColor3B()
 {
-    if (_defaults.find(KEY_ANCHOR_TEXT_OUTLINE_COLOR) != _defaults.end())
+    if (auto&& itr = _defaults.find(KEY_ANCHOR_TEXT_OUTLINE_COLOR); itr != _defaults.end())
     {
-        return color3BWithString(_defaults.at(KEY_ANCHOR_TEXT_OUTLINE_COLOR).asString());
+        return color3BWithString(itr->second.asString());
     }
-    return Color3B();
+    return {};
 }
 
 int RichText::getAnchorTextOutlineSize()
 {
-    if (_defaults.find(KEY_ANCHOR_TEXT_OUTLINE_SIZE) != _defaults.end())
+    if (auto&& itr = _defaults.find(KEY_ANCHOR_TEXT_OUTLINE_SIZE); itr != _defaults.end())
     {
-        return _defaults.at(KEY_ANCHOR_TEXT_OUTLINE_SIZE).asInt();
+        return itr->second.asInt();
     }
     return -1;
 }
@@ -1547,33 +1546,33 @@ bool RichText::isAnchorTextShadowEnabled()
 
 Color3B RichText::getAnchorTextShadowColor3B()
 {
-    if (_defaults.find(KEY_ANCHOR_TEXT_SHADOW_COLOR) != _defaults.end())
+    if (auto&& itr = _defaults.find(KEY_ANCHOR_TEXT_SHADOW_COLOR); itr != _defaults.end())
     {
-        return color3BWithString(_defaults.at(KEY_ANCHOR_TEXT_SHADOW_COLOR).asString());
+        return color3BWithString(itr->second.asString());
     }
-    return Color3B();
+    return {};
 }
 
 Vec2 RichText::getAnchorTextShadowOffset()
 {
     float width  = 2.0f;
     float height = -2.0f;
-    if (_defaults.find(KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH) != _defaults.end())
+    if (auto&& itr = _defaults.find(KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH); itr != _defaults.end())
     {
-        width = _defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH).asFloat();
+        width = itr->second.asFloat();
     }
-    if (_defaults.find(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT) != _defaults.end())
+    if (auto&& itr = _defaults.find(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT); itr != _defaults.end())
     {
-        height = _defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT).asFloat();
+        height = itr->second.asFloat();
     }
-    return Vec2(width, height);
+    return { width, height };
 }
 
 int RichText::getAnchorTextShadowBlurRadius()
 {
-    if (_defaults.find(KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS) != _defaults.end())
+    if (auto&& itr = _defaults.find(KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS); itr != _defaults.end())
     {
-        return _defaults.at(KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS).asInt();
+        return itr->second.asInt();
     }
     return 0;
 }
@@ -1581,9 +1580,14 @@ int RichText::getAnchorTextShadowBlurRadius()
 void RichText::setAnchorTextGlow(bool enable, const Color3B& glowColor)
 {
     if (enable)
+    {
         _defaults[KEY_ANCHOR_TEXT_STYLE] = VALUE_TEXT_STYLE_GLOW;
-    else if (_defaults[KEY_ANCHOR_TEXT_STYLE].asString() == VALUE_TEXT_STYLE_GLOW)
-        _defaults[KEY_ANCHOR_TEXT_STYLE] = VALUE_TEXT_STYLE_NONE;
+    }
+    else if (auto&& itr = _defaults.find(KEY_ANCHOR_TEXT_STYLE);
+             itr != _defaults.end() && itr->second.asString() == VALUE_TEXT_STYLE_GLOW)
+    {
+        itr->second = VALUE_TEXT_STYLE_NONE;
+    }
     _defaults[KEY_ANCHOR_TEXT_GLOW_COLOR] = stringWithColor3B(glowColor);
 }
 
@@ -1594,91 +1598,59 @@ bool RichText::isAnchorTextGlowEnabled()
 
 Color3B RichText::getAnchorTextGlowColor3B()
 {
-    if (_defaults.find(KEY_ANCHOR_TEXT_GLOW_COLOR) != _defaults.end())
+    if (auto&& itr = _defaults.find(KEY_ANCHOR_TEXT_GLOW_COLOR); itr != _defaults.end())
     {
-        return color3BWithString(_defaults.at(KEY_ANCHOR_TEXT_GLOW_COLOR).asString());
+        return color3BWithString(itr->second.asString());
     }
-    return Color3B();
+    return {};
 }
 
 void RichText::setDefaults(const ValueMap& defaults)
 {
-    if (defaults.find(KEY_VERTICAL_SPACE) != defaults.end())
-    {
-        _defaults[KEY_VERTICAL_SPACE] = defaults.at(KEY_VERTICAL_SPACE).asFloat();
-    }
-    if (defaults.find(KEY_WRAP_MODE) != defaults.end())
-    {
-        _defaults[KEY_WRAP_MODE] = defaults.at(KEY_WRAP_MODE).asInt();
-    }
-    if (defaults.find(KEY_HORIZONTAL_ALIGNMENT) != defaults.end())
-    {
-        _defaults[KEY_HORIZONTAL_ALIGNMENT] = defaults.at(KEY_HORIZONTAL_ALIGNMENT).asInt();
-    }
-    if (defaults.find(KEY_VERTICAL_ALIGNMENT) != defaults.end())
-    {
-        _defaults[KEY_VERTICAL_ALIGNMENT] = defaults.at(KEY_VERTICAL_ALIGNMENT).asInt();
-    }
-    if (defaults.find(KEY_FONT_COLOR_STRING) != defaults.end())
-    {
-        _defaults[KEY_FONT_COLOR_STRING] = defaults.at(KEY_FONT_COLOR_STRING).asString();
-    }
-    if (defaults.find(KEY_FONT_SIZE) != defaults.end())
-    {
-        _defaults[KEY_FONT_SIZE] = defaults.at(KEY_FONT_SIZE).asFloat();
-    }
-    if (defaults.find(KEY_FONT_FACE) != defaults.end())
-    {
-        _defaults[KEY_FONT_FACE] = defaults.at(KEY_FONT_FACE).asString();
-    }
-    if (defaults.find(KEY_ANCHOR_FONT_COLOR_STRING) != defaults.end())
-    {
-        _defaults[KEY_ANCHOR_FONT_COLOR_STRING] = defaults.at(KEY_ANCHOR_FONT_COLOR_STRING).asString();
-    }
-    if (defaults.find(KEY_ANCHOR_TEXT_BOLD) != defaults.end())
-    {
-        _defaults[KEY_ANCHOR_TEXT_BOLD] = defaults.at(KEY_ANCHOR_TEXT_BOLD).asBool();
-    }
-    if (defaults.find(KEY_ANCHOR_TEXT_ITALIC) != defaults.end())
-    {
-        _defaults[KEY_ANCHOR_TEXT_ITALIC] = defaults.at(KEY_ANCHOR_TEXT_ITALIC).asBool();
-    }
-    if (defaults.find(KEY_ANCHOR_TEXT_LINE) != defaults.end())
-    {
-        _defaults[KEY_ANCHOR_TEXT_LINE] = defaults.at(KEY_ANCHOR_TEXT_LINE).asString();
-    }
-    if (defaults.find(KEY_ANCHOR_TEXT_STYLE) != defaults.end())
-    {
-        _defaults[KEY_ANCHOR_TEXT_STYLE] = defaults.at(KEY_ANCHOR_TEXT_STYLE).asString();
-    }
-    if (defaults.find(KEY_ANCHOR_TEXT_OUTLINE_COLOR) != defaults.end())
-    {
-        _defaults[KEY_ANCHOR_TEXT_OUTLINE_COLOR] = defaults.at(KEY_ANCHOR_TEXT_OUTLINE_COLOR).asString();
-    }
-    if (defaults.find(KEY_ANCHOR_TEXT_OUTLINE_SIZE) != defaults.end())
-    {
-        _defaults[KEY_ANCHOR_TEXT_OUTLINE_SIZE] = defaults.at(KEY_ANCHOR_TEXT_OUTLINE_SIZE).asInt();
-    }
-    if (defaults.find(KEY_ANCHOR_TEXT_SHADOW_COLOR) != defaults.end())
-    {
-        _defaults[KEY_ANCHOR_TEXT_SHADOW_COLOR] = defaults.at(KEY_ANCHOR_TEXT_SHADOW_COLOR).asString();
-    }
-    if (defaults.find(KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH) != defaults.end())
-    {
-        _defaults[KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH] = defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH).asFloat();
-    }
-    if (defaults.find(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT) != defaults.end())
-    {
-        _defaults[KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT] = defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT).asFloat();
-    }
-    if (defaults.find(KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS) != defaults.end())
-    {
-        _defaults[KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS] = defaults.at(KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS).asInt();
-    }
-    if (defaults.find(KEY_ANCHOR_TEXT_GLOW_COLOR) != defaults.end())
-    {
-        _defaults[KEY_ANCHOR_TEXT_GLOW_COLOR] = defaults.at(KEY_ANCHOR_TEXT_GLOW_COLOR).asString();
-    }
+    const auto setDefaultString = [this, defaults](const std::string& key) -> void {
+        if (auto&& itr = defaults.find(key); itr != defaults.end())
+        {
+            _defaults[key] = itr->second.asString();
+        }
+    };
+    const auto setDefaultInt = [this, defaults](const std::string& key) -> void {
+        if (auto&& itr = defaults.find(key); itr != defaults.end())
+        {
+            _defaults[key] = itr->second.asInt();
+        }
+    };
+    const auto setDefaultFloat = [this, defaults](const std::string& key) -> void {
+        if (auto&& itr = defaults.find(key); itr != defaults.end())
+        {
+            _defaults[key] = itr->second.asFloat();
+        }
+    };
+    const auto setDefaultBool = [this, defaults](const std::string& key) -> void {
+        if (auto&& itr = defaults.find(key); itr != defaults.end())
+        {
+            _defaults[key] = itr->second.asBool();
+        }
+    };
+
+    setDefaultFloat(KEY_VERTICAL_SPACE);
+    setDefaultInt(KEY_WRAP_MODE);
+    setDefaultInt(KEY_HORIZONTAL_ALIGNMENT);
+    setDefaultInt(KEY_VERTICAL_ALIGNMENT);
+    setDefaultString(KEY_FONT_COLOR_STRING);
+    setDefaultFloat(KEY_FONT_SIZE);
+    setDefaultString(KEY_FONT_FACE);
+    setDefaultString(KEY_ANCHOR_FONT_COLOR_STRING);
+    setDefaultBool(KEY_ANCHOR_TEXT_BOLD);
+    setDefaultBool(KEY_ANCHOR_TEXT_ITALIC);
+    setDefaultString(KEY_ANCHOR_TEXT_LINE);
+    setDefaultString(KEY_ANCHOR_TEXT_STYLE);
+    setDefaultString(KEY_ANCHOR_TEXT_OUTLINE_COLOR);
+    setDefaultInt(KEY_ANCHOR_TEXT_OUTLINE_SIZE);
+    setDefaultString(KEY_ANCHOR_TEXT_SHADOW_COLOR);
+    setDefaultFloat(KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH);
+    setDefaultFloat(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT);
+    setDefaultInt(KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS);
+    setDefaultString(KEY_ANCHOR_TEXT_GLOW_COLOR);
 }
 
 ValueMap RichText::getDefaults() const
@@ -1715,23 +1687,12 @@ ax::Color3B RichText::color3BWithString(std::string_view color)
 
 std::string RichText::stringWithColor3B(const ax::Color3B& color3b)
 {
-    int r = color3b.r;
-    int g = color3b.g;
-    int b = color3b.b;
-    char buf[8];
-    snprintf(buf, sizeof(buf), "#%02x%02x%02x", r, g, b);
-    return std::string(buf, 7);
+    return fmt::format("#{:02x}{:02x}{:02x}", color3b.r, color3b.g, color3b.b);
 }
 
 std::string RichText::stringWithColor4B(const ax::Color4B& color4b)
 {
-    int r = color4b.r;
-    int g = color4b.g;
-    int b = color4b.b;
-    int a = color4b.a;
-    char buf[10];
-    snprintf(buf, sizeof(buf), "#%02x%02x%02x%02x", r, g, b, a);
-    return std::string(buf, 9);
+    return fmt::format("#{:02x}{:02x}{:02x}{:02x}", color4b.r, color4b.g, color4b.b, color4b.a);
 }
 
 void RichText::setTagDescription(std::string_view tag,

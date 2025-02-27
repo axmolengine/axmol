@@ -32,6 +32,7 @@
 
 #    include <curl/curl.h>
 #    include <thread>
+#    include <atomic>
 #    include "base/Utils.h"
 #    include "base/UTF8.h"
 #    include "base/Director.h"

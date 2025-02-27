@@ -32,6 +32,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <thread>
+#include <atomic>
 
 #include "audio/AudioMacros.h"
 #include "platform/PlatformMacros.h"

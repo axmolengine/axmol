@@ -829,7 +829,7 @@ std::string urlDecode(std::string_view st)
     return decoded;
 }
 
-AX_DLL std::string& filePathToUrl(std::string&& path)
+AX_DLL std::string&& filePathToUrl(std::string&& path)
 {
     //
     // file uri helper: https://www.ietf.org/rfc/rfc3986.txt
@@ -857,7 +857,7 @@ AX_DLL std::string& filePathToUrl(std::string&& path)
 #endif
         }
     }
-    return path;
+    return std::forward<std::string>(path);
 }
 
 AX_DLL std::string base64Encode(const void* in, size_t inlen)
