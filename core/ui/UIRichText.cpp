@@ -650,7 +650,7 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     constexpr auto headerTagEnterHandler = [](const ValueMap& tagAttrValueMap,
-                                              float defaultFontSize) -> std::pair<ValueMap, RichElement*> {
+                                              std::string_view defaultFontSize) -> std::pair<ValueMap, RichElement*> {
         ValueMap attrValueMap;
         if (auto&& itr = tagAttrValueMap.find("size"); itr != tagAttrValueMap.end())
         {
@@ -681,35 +681,29 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         return make_pair(attrValueMap, nullptr);
     };
 
-    MyXMLVisitor::setTagDescription(
-        "h1", true,
-        [headerTagEnterHandler](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 34); },
-        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
+    MyXMLVisitor::setTagDescription("h1", true, [headerTagEnterHandler](const ValueMap& tagAttrValueMap) {
+        return headerTagEnterHandler(tagAttrValueMap, "2em");
+    }, [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
-    MyXMLVisitor::setTagDescription(
-        "h2", true,
-        [headerTagEnterHandler](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 30); },
-        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
+    MyXMLVisitor::setTagDescription("h2", true, [headerTagEnterHandler](const ValueMap& tagAttrValueMap) {
+        return headerTagEnterHandler(tagAttrValueMap, "1.75em");
+    }, [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
-    MyXMLVisitor::setTagDescription(
-        "h3", true,
-        [headerTagEnterHandler](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 24); },
-        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
+    MyXMLVisitor::setTagDescription("h3", true, [headerTagEnterHandler](const ValueMap& tagAttrValueMap) {
+        return headerTagEnterHandler(tagAttrValueMap, "1.5em");
+    }, [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
-    MyXMLVisitor::setTagDescription(
-        "h4", true,
-        [headerTagEnterHandler](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 20); },
-        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
+    MyXMLVisitor::setTagDescription("h4", true, [headerTagEnterHandler](const ValueMap& tagAttrValueMap) {
+        return headerTagEnterHandler(tagAttrValueMap, "1.25em");
+    }, [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
-    MyXMLVisitor::setTagDescription(
-        "h5", true,
-        [headerTagEnterHandler](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 18); },
-        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
+    MyXMLVisitor::setTagDescription("h5", true, [headerTagEnterHandler](const ValueMap& tagAttrValueMap) {
+        return headerTagEnterHandler(tagAttrValueMap, "1.125em");
+    }, [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
-    MyXMLVisitor::setTagDescription(
-        "h6", true,
-        [headerTagEnterHandler](const ValueMap& tagAttrValueMap) { return headerTagEnterHandler(tagAttrValueMap, 16); },
-        [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
+    MyXMLVisitor::setTagDescription("h6", true, [headerTagEnterHandler](const ValueMap& tagAttrValueMap) {
+        return headerTagEnterHandler(tagAttrValueMap, "1em");
+    }, [] { return RichElementNewLine::create(0, 2, Color3B::WHITE, 255); });
 
     MyXMLVisitor::setTagDescription("outline", true, [](const ValueMap& tagAttrValueMap) {
         // supported attributes:
@@ -907,20 +901,19 @@ void MyXMLVisitor::startElement(void* /*ctx*/, const char* elementName, const ch
 
                 if (auto&& itr = attrValueMap.find(RichText::KEY_FONT_SIZE); itr != attrValueMap.end())
                 {
-                    std::regex fontSizePattern(R"(([0-9]*(?:\.[0-9+])?)(%|em)$)");
+                    std::regex fontSizePattern(R"(([0-9]*(?:\.[0-9]+)?)(%|em)$)");
                     std::smatch match;
                     auto val = itr->second.asString();
-                    if (std::regex_match(val, match, fontSizePattern) && match.size() == 3)
+                    if (std::regex_match(val, match, fontSizePattern) && match.size() == 3 && !match[1].str().empty())
                     {
+                        auto value = static_cast<float>(utils::atof(match[1].str().c_str()));
                         if (match[2].str() == "%")
                         {
-                            auto percentage     = static_cast<float>(utils::atof(match[1].str().c_str())) / 100.f;
-                            attributes.fontSize = getFontSize() * percentage;
+                            attributes.fontSize = getFontSize() * value / 100.f;
                         }
                         else // em
                         {
-                            auto em             = static_cast<float>(utils::atof(match[1].str().c_str()));
-                            attributes.fontSize = getFontSize() * em;
+                            attributes.fontSize = getFontSize() * value;
                         }
                     }
                     else
