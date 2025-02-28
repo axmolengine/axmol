@@ -903,17 +903,18 @@ void MyXMLVisitor::startElement(void* /*ctx*/, const char* elementName, const ch
                 {
                     std::regex fontSizePattern(R"(([0-9]*(?:\.[0-9]+)?)(%|em)$)");
                     std::smatch match;
-                    auto val = itr->second.asString();
-                    if (std::regex_match(val, match, fontSizePattern) && match.size() == 3 && !match[1].str().empty())
+                    auto sizeString = itr->second.asString();
+                    if (std::regex_match(sizeString, match, fontSizePattern) && match.size() == 3 &&
+                        !match[1].str().empty())
                     {
-                        auto value = static_cast<float>(utils::atof(match[1].str().c_str()));
+                        auto scale = static_cast<float>(utils::atof(match[1].str().c_str()));
                         if (match[2].str() == "%")
                         {
-                            attributes.fontSize = getFontSize() * value / 100.f;
+                            attributes.fontSize = getFontSize() * scale / 100.f;
                         }
                         else // em
                         {
-                            attributes.fontSize = getFontSize() * value;
+                            attributes.fontSize = getFontSize() * scale;
                         }
                     }
                     else
