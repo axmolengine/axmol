@@ -51,7 +51,8 @@ UIRichTextTests::UIRichTextTests()
     ADD_TEST_CASE(UIRichTextXMLExtend);
     ADD_TEST_CASE(UIRichTextXMLSpace);
     ADD_TEST_CASE(UIRichTextNewline);
-    ADD_TEST_CASE(UIRichTextHeaders);
+    ADD_TEST_CASE(UIRichTextHeadings);
+    ADD_TEST_CASE(UIRichTextDynamicFontSize);
     ADD_TEST_CASE(UIRichTextParagraph);
     ADD_TEST_CASE(UIRichTextScrollTo);
 }
@@ -975,7 +976,7 @@ bool UIRichTextNewline::init()
     return false;
 }
 
-bool UIRichTextHeaders::init()
+bool UIRichTextHeadings::init()
 {
     if (UIRichTextTestBase::init())
     {
@@ -997,6 +998,44 @@ bool UIRichTextHeaders::init()
         // RichText
         _richText = RichText::createWithXML(
             R"(<h1 face="fonts/arial.ttf">h1. HEADING</h1><h2 face="fonts/Marker Felt.ttf">h2. HEADING</h2><h3 face="fonts/American Typewriter.ttf">h3. HEADING</h3><h4>h4. HEADING</h4><h5>h5. HEADING</h5><h6>h6. HEADING</h6>)");
+        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setContentSize(_defaultContentSize);
+
+        _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
+        _richText->setLocalZOrder(10);
+
+        _widget->addChild(_richText);
+
+        // test remove all children, this call won't effect the test
+        _richText->removeAllChildren();
+
+        return true;
+    }
+    return false;
+}
+
+bool UIRichTextDynamicFontSize::init()
+{
+    if (UIRichTextTestBase::init())
+    {
+        auto& widgetSize = _widget->getContentSize();
+
+        // Add the alert
+        Text* alert = Text::create("Header Tags", "fonts/Marker Felt.ttf", 30);
+        alert->setColor(Color3B(159, 168, 176));
+        alert->setPosition(
+            Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
+        _widget->addChild(alert);
+
+        createButtonPanel();
+
+#ifdef AX_PLATFORM_PC
+        _defaultContentSize = Size(290, 290);
+#endif
+
+        // RichText
+        _richText = RichText::createWithXML(
+            R"(<p>Paragraph 1 with default size font</p><p><font size="1.5em">Paragraph 2 with font size="1.5em"</font></p><p><font size="150%">Paragraph 3 with font size="150%"</font></p>)");
         _richText->ignoreContentAdaptWithSize(false);
         _richText->setContentSize(_defaultContentSize);
 
