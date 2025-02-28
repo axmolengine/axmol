@@ -971,7 +971,7 @@ void Console::commandAllocator(socket_native_type fd, std::string_view /*args*/)
     Console::Utility::mydprintf(fd, info.c_str());
 #else
     Console::Utility::mydprintf(
-        fd, "allocator diagnostics not available. AX_ENABLE_ALLOCATOR_DIAGNOSTICS must be set to 1 in ccConfig.h\n");
+        fd, "allocator diagnostics not available. AX_ENABLE_ALLOCATOR_DIAGNOSTICS must be set to 1 in Config.h\n");
 #endif
 }
 

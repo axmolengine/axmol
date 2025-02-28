@@ -49,7 +49,7 @@ class ProfilingTimer;
 /** Profiler
  cocos2d builtin profiler.
 
- To use it, enable set the AX_ENABLE_PROFILERS=1 in the ccConfig.h file
+ To use it, enable set the AX_ENABLE_PROFILERS=1 in the Config.h file
  */
 
 class AX_DLL Profiler
