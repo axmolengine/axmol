@@ -30,6 +30,7 @@
 #include <vector>
 #include <locale>
 #include <algorithm>
+#include <regex>
 
 #include "platform/FileUtils.h"
 #include "platform/Application.h"
@@ -906,7 +907,26 @@ void MyXMLVisitor::startElement(void* /*ctx*/, const char* elementName, const ch
 
                 if (auto&& itr = attrValueMap.find(RichText::KEY_FONT_SIZE); itr != attrValueMap.end())
                 {
-                    attributes.fontSize = itr->second.asFloat();
+                    std::regex fontSizePattern(R"(([0-9]*(?:\.[0-9+])?)(%|em)$)");
+                    std::smatch match;
+                    auto val = itr->second.asString();
+                    if (std::regex_match(val, match, fontSizePattern) && match.size() == 3)
+                    {
+                        if (match[2].str() == "%")
+                        {
+                            auto percentage     = static_cast<float>(utils::atof(match[1].str().c_str())) / 100.f;
+                            attributes.fontSize = getFontSize() * percentage;
+                        }
+                        else // em
+                        {
+                            auto em             = static_cast<float>(utils::atof(match[1].str().c_str()));
+                            attributes.fontSize = getFontSize() * em;
+                        }
+                    }
+                    else
+                    {
+                        attributes.fontSize = itr->second.asFloat();
+                    }
                 }
                 if (attrValueMap.contains(RichText::KEY_FONT_SMALL))
                 {
