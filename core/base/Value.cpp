@@ -727,10 +727,7 @@ std::string Value::asString() const
         return *_field.strVal;
     }
 
-    enum
-    {
-        NUMBER_MAX_DIGITS = 63
-    };
+    constexpr auto NUMBER_MAX_DIGITS = 63;
 
     std::string ret;
     size_t n = 0;
