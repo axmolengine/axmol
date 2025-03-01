@@ -111,13 +111,13 @@ std::string Configuration::getInfo() const
 #if AX_ENABLE_PROFILERS
     AXLOGD(
         "axmol: **** WARNING **** AX_ENABLE_PROFILERS is defined. Disable it when you finish profiling (from "
-        "ccConfig.h)\n");
+        "Config.h)\n");
 #endif
 
 #if AX_ENABLE_GL_STATE_CACHE == 0
     AXLOGD(
         "axmol: **** WARNING **** AX_ENABLE_GL_STATE_CACHE is disabled. To improve performance, enable it (from "
-        "ccConfig.h)\n");
+        "Config.h)\n");
 #endif
 
     // Dump

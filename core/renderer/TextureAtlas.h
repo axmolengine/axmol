@@ -56,7 +56,7 @@ Supported features:
 * The TextureAtlas capacity can be increased or decreased in runtime
 * OpenGL component: V3F, C4B, T2F.
 The quads are rendered using an OpenGL ES VBO.
-To render the quads using an interleaved vertex array list, you should modify the ccConfig.h file
+To render the quads using an interleaved vertex array list, you should modify the Config.h file
 
 @warning If you want to use TextureAtlas, you'd better setup GL status before it's rendered.
          Otherwise, the effect of TextureAtlas will be affected by the GL status of other nodes.

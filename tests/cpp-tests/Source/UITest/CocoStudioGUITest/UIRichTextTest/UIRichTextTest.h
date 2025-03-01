@@ -204,10 +204,18 @@ public:
     bool init() override;
 };
 
-class UIRichTextHeaders : public UIRichTextTestBase
+class UIRichTextHeadings : public UIRichTextTestBase
 {
 public:
-    CREATE_FUNC(UIRichTextHeaders);
+    CREATE_FUNC(UIRichTextHeadings);
+
+    bool init() override;
+};
+
+class UIRichTextDynamicFontSize : public UIRichTextTestBase
+{
+public:
+    CREATE_FUNC(UIRichTextDynamicFontSize);
 
     bool init() override;
 };
