@@ -59,7 +59,20 @@ set(content_folder
     "${CMAKE_CURRENT_SOURCE_DIR}/Content"
 )
 
+if(APPLE)
+    ax_mark_multi_resources(common_content_files RES_TO "Resources" FOLDERS ${content_folder})
+elseif(WINDOWS)
+    ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${content_folder})
+endif()
+
 include(AXGameSourceSetup)
+
+# mark app complie info and libs info
+set(APP_SOURCES
+    ${GAME_HEADER}
+    ${GAME_SOURCE}
+    )
+
 include(AXGameTargetSetup)
 
 # mark app resources, resource will be copy auto after mark

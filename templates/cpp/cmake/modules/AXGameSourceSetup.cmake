@@ -1,9 +1,3 @@
-if(APPLE)
-    ax_mark_multi_resources(common_content_files RES_TO "Resources" FOLDERS ${content_folder})
-elseif(WINDOWS)
-    ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${content_folder})
-endif()
-
 if(ANDROID)
     # the APP_NAME should match on AndroidManifest.xml
     list(APPEND GAME_SOURCE
@@ -73,9 +67,3 @@ elseif(APPLE)
     endif()
     list(APPEND GAME_SOURCE ${common_content_files})
 endif()
-
-# mark app complie info and libs info
-set(APP_SOURCES
-    ${GAME_HEADER}
-    ${GAME_SOURCE}
-    )

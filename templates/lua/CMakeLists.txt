@@ -54,7 +54,22 @@ set(GAME_INC_DIRS
 set(content_folder "${CMAKE_CURRENT_SOURCE_DIR}/Content")
 set(engine_script_folder "${_AX_ROOT}/extensions/scripting/lua-bindings/script")
 
+if(APPLE)
+    ax_mark_multi_resources(content_files RES_TO "Resources" FOLDERS ${content_folder})
+    set(common_content_files ${content_files})
+elseif(WINDOWS)
+    ax_mark_multi_resources(content_files RES_TO "Content" FOLDERS ${content_folder})
+    set(common_content_files ${content_files})
+endif()
+
 include(AXGameSourceSetup)
+
+# mark app complie info and libs info
+set(APP_SOURCES
+    ${GAME_HEADER}
+    ${GAME_SOURCE}
+    )
+
 include(AXGameTargetSetup)
 
 # mark app resources, resource will be copy auto after mark
