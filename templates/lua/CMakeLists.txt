@@ -57,6 +57,9 @@ set(engine_script_folder "${_AX_ROOT}/extensions/scripting/lua-bindings/script")
 include(AXGameSourceSetup)
 include(AXGameTargetSetup)
 
+# mark app resources, resource will be copy auto after mark
+ax_setup_app_config(${APP_NAME})
+
 # Add any libraries you need to link to the project after this point
 
 
