@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2024 HALX99
+Copyright (c) 2012-2025 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -194,10 +194,10 @@ public:
   {
     return read_blob(&out, static_cast<int>(sizeof(_Ty)), 1);
   }
-  template <typename _Ty, size_t _N>
-  size_t read_blob(_Ty (&out)[_N])
+  template <typename _Ty, size_t _Count>
+  size_t read_blob(_Ty (&out)[_Count])
   {
-    return read_blob(out, static_cast<int>(sizeof(_Ty)), static_cast<int>(_N));
+    return read_blob(out, static_cast<int>(sizeof(_Ty)), static_cast<int>(_Count));
   }
   size_t read_blob(void* out, int size, int count)
   {

@@ -62,12 +62,12 @@
 
 ## flatbuffers
 - [![Upstream](https://img.shields.io/github/v/release/google/flatbuffers?label=Upstream)](https://github.com/google/flatbuffers)
-- Version: 24.12.23
+- Version: 25.2.10
 - License: Apache-2.0
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 11.1.3
+- Version: 11.1.4
 
 - License: MIT
 
@@ -249,7 +249,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 4.3.1
+- Version: 4.3.2
 - License: MIT WITH Anti-996
 
 ## zlib

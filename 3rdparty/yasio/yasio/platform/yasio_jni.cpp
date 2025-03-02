@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2024 HALX99
+Copyright (c) 2012-2025 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -170,7 +170,7 @@ void yasio__jni_init(void* vm, void* env)
   {
     // must find class at here,
     // see: https://developer.android.com/training/articles/perf-jni#faq_FindClass
-    jclass obj_cls = jenv->FindClass("org/yasio/AppGlobals");
+    jclass obj_cls = jenv->FindClass("com/simdsoft/yasio/AppGlobals");
     if (obj_cls != nullptr)
     {
       yasio__appglobals_cls = (jclass)jenv->NewGlobalRef(obj_cls);

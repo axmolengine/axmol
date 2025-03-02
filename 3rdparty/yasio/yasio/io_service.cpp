@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2024 HALX99
+Copyright (c) 2012-2025 HALX99
 
 HAL: Hardware Abstraction Layer
 X99: Intel X99 Mainboard Platform

@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2024 HALX99
+Copyright (c) 2012-2025 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -209,6 +209,9 @@ public:
   static const size_t max_fmt_len = IN_MAX_ADDRSTRLEN + 2 /*[]*/ + sizeof("65535") /*:port*/;
 #endif
 
+  static const size_t v4m_max_len = sizeof("::ffff:255.255.255.255") - 1;
+  static const size_t v4m_offset  = sizeof("::ffff:") - 1;
+
   endpoint() { as_unspec(); }
   endpoint(const endpoint& rhs) { as_is(rhs); }
   explicit endpoint(const addrinfo* info) { as_is(info); }
@@ -410,6 +413,17 @@ public:
     return ret;
   }
 
+  endpoint to_v4mapped() const
+  {
+    if (is_v4())
+    {
+      char v4m_addr[v4m_max_len + 1] = {"::ffff:"};
+      this->format_to(v4m_addr + v4m_offset, sizeof(v4m_addr) - v4m_offset, fmt_no_port);
+      return endpoint(v4m_addr, port());
+    }
+    return *this;
+  }
+
   unsigned short port() const { return network_to_host(in4_.sin_port); }
   void port(unsigned short value) { in4_.sin_port = host_to_network(value); }
 
@@ -441,6 +455,9 @@ public:
     }
     return false;
   }
+  bool is_v4() const { return af() == AF_INET; }
+  bool is_v6() const { return af() == AF_INET6; }
+  bool is_v4mapped() const { return is_v6() && IN6_IS_ADDR_V4MAPPED(&this->in6_.sin6_addr); }
 
   void len(size_t n)
   {
@@ -1050,32 +1067,32 @@ public:
   YASIO__DECL static const char* gai_strerror(int error);
 
   /// <summary>
-  /// Resolve all as ipv4 or ipv6 endpoints
+  /// Resolve both ipv4 and ipv6 address as-is
   /// </summary>
   YASIO__DECL static int resolve(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port = 0, int socktype = SOCK_STREAM);
 
   /// <summary>
-  /// Resolve as ipv4 address only.
+  /// Resolve ipv4 address only.
   /// </summary>
   YASIO__DECL static int resolve_v4(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port = 0, int socktype = SOCK_STREAM);
 
   /// <summary>
-  /// Resolve as ipv6 address only.
+  /// Resolve ipv6 address only.
   /// </summary>
   YASIO__DECL static int resolve_v6(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port = 0, int socktype = SOCK_STREAM);
 
   /// <summary>
-  /// Resolve as ipv4 address only and convert to V4MAPPED format.
+  /// Resolve ipv4 address only and convert to V4MAPPED format.
   /// </summary>
   YASIO__DECL static int resolve_v4to6(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port = 0, int socktype = SOCK_STREAM);
 
   /// <summary>
-  /// Force resolve all addres to ipv6 endpoints, IP4 with AI_V4MAPPED
+  /// Force resolve all address to ipv6 endpoints, IP4 with AI_V4MAPPED
   /// </summary>
   YASIO__DECL static int resolve_tov6(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port = 0, int socktype = SOCK_STREAM);
 
   /// <summary>
-  /// Resolve as ipv4 or ipv6 endpoints with callback
+  /// Resolve ipv4 or ipv6 endpoints with callback
   /// </summary>
   template <typename _Fty>
   inline static int resolve_i(const _Fty& callback, const char* hostname, unsigned short port = 0, int af = 0, int flags = 0, int socktype = SOCK_STREAM)
@@ -1096,7 +1113,10 @@ public:
     }
     int error = getaddrinfo(hostname, service, &hint, &answerlist);
     if (nullptr == answerlist)
+    {
+      YASIO_LOG("getaddrinfo fail, error=%d(%s)", error, gai_strerror(error));
       return error;
+    }
 
     for (auto ai = answerlist; ai != nullptr; ai = ai->ai_next)
     {

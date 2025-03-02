@@ -222,8 +222,7 @@ public:
             if (this->_sockfd != -1)
             {
                 // may cause curl CURLE_SEND_ERROR(55) or CURLE_RECV_ERROR(56)
-                if (::shutdown(this->_sockfd, SD_BOTH) == -1)
-                    ::closesocket(this->_sockfd);
+                ::shutdown(this->_sockfd, SD_BOTH);
                 this->_sockfd = -1;
             }
         }
@@ -239,6 +238,16 @@ public:
             return this->_sockfd;
         }
         return -1;
+    }
+    
+    int closeSocket(curl_socket_t fd) {
+        std::lock_guard<std::recursive_mutex> lock(_mutex);
+        
+        int ret = ::closesocket(fd);
+        if (this->_sockfd != -1 && this->_sockfd == fd) {
+            this->_sockfd = -1;
+        }
+        return ret;
     }
 
     /*
@@ -468,6 +477,11 @@ private:
     {
         return pTask.openSocket(propose, addr);
     }
+    
+    static int _closeSocketCallback(DownloadTaskCURL& pTask, curl_socket_t fd)
+    {
+        return pTask.closeSocket(fd);
+    }
 
     // this function designed call in work thread
     // the curl handle destroyed in _threadProc
@@ -496,6 +510,10 @@ private:
 
         curl_easy_setopt(handle, CURLOPT_OPENSOCKETFUNCTION, _openSocketCallback);
         curl_easy_setopt(handle, CURLOPT_OPENSOCKETDATA, coTask);
+        
+        curl_easy_setopt(handle, CURLOPT_CLOSESOCKETFUNCTION, _closeSocketCallback);
+        curl_easy_setopt(handle, CURLOPT_CLOSESOCKETDATA, coTask);
+        
         curl_easy_setopt(handle, CURLOPT_HEADER, 0L);
 
         /** if server acceptRanges and local has part of file, we continue to download **/

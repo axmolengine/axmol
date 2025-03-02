@@ -3,7 +3,7 @@
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2012-2024 HALX99 (halx99 at live dot com)
+// Copyright (c) 2012-2025 HALX99 (halx99 at live dot com)
 // Copyright (c) 2003-2020 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 // Copyright (c) 2008 Roelof Naude (roelof.naude at gmail dot com)
 //

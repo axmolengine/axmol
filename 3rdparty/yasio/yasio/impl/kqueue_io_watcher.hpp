@@ -3,7 +3,7 @@
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2012-2024 HALX99 (halx99 at live dot com)
+// Copyright (c) 2012-2025 HALX99 (halx99 at live dot com)
 #ifndef YASIO__KQUEUE_IO_WATCHER_HPP
 #define YASIO__KQUEUE_IO_WATCHER_HPP
 #include <sys/types.h>

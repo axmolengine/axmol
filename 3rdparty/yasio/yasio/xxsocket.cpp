@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2024 HALX99
+Copyright (c) 2012-2025 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -109,7 +109,7 @@ int xxsocket::xpconnect(const char* hostname, u_short port, u_short local_port)
 
         return error == 0;
       },
-      hostname, port, AF_UNSPEC, AI_ALL);
+      hostname, port, AF_UNSPEC, 0);
 
   return error;
 }
@@ -139,7 +139,7 @@ int xxsocket::xpconnect_n(const char* hostname, u_short port, const std::chrono:
 
         return error == 0;
       },
-      hostname, port, AF_UNSPEC, AI_ALL);
+      hostname, port, AF_UNSPEC, 0);
 
   return error;
 }
@@ -272,7 +272,7 @@ int xxsocket::resolve(std::vector<endpoint>& endpoints, const char* hostname, un
         endpoints.emplace_back(ai);
         return false;
       },
-      hostname, port, AF_UNSPEC, AI_ALL, socktype);
+      hostname, port, AF_UNSPEC, 0, socktype);
 }
 int xxsocket::resolve_v4(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port, int socktype)
 {
@@ -292,23 +292,47 @@ int xxsocket::resolve_v6(std::vector<endpoint>& endpoints, const char* hostname,
       },
       hostname, port, AF_INET6, 0, socktype);
 }
-int xxsocket::resolve_v4to6(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port, int socktype)
-{
-  return xxsocket::resolve_i(
-      [&](const addrinfo* ai) {
-        endpoints.emplace_back(ai);
-        return false;
-      },
-      hostname, port, AF_INET6, AI_V4MAPPED, socktype);
-}
 int xxsocket::resolve_tov6(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port, int socktype)
 {
+#if !defined(__ANDROID__) && (!YASIO__OS_BSD_LIKE || defined(__APPLE__))
   return resolve_i(
       [&](const addrinfo* ai) {
         endpoints.emplace_back(ai);
         return false;
       },
       hostname, port, AF_INET6, AI_ALL | AI_V4MAPPED, socktype);
+#else
+  return resolve_i(
+      [&](const addrinfo* ai) {
+        if (ai->ai_family == AF_INET)
+          endpoints.emplace_back(endpoint(ai).to_v4mapped());
+        else
+          endpoints.emplace_back(ai);
+        return false;
+      },
+      hostname, port, AF_UNSPEC, 0, socktype);
+#endif
+}
+int xxsocket::resolve_v4to6(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port, int socktype)
+{
+#if !defined(__ANDROID__) && (!YASIO__OS_BSD_LIKE || defined(__APPLE__))
+  return xxsocket::resolve_i(
+      [&](const addrinfo* ai) {
+        endpoint ep{ai};
+        if (IN6_IS_ADDR_V4MAPPED(&ep.in6_.sin6_addr))
+          endpoints.emplace_back(std::forward<endpoint>(ep));
+        return false;
+      },
+      hostname, port, AF_INET6, AI_ALL | AI_V4MAPPED, socktype);
+#else
+  return resolve_i(
+      [&](const addrinfo* ai) {
+        if (ai->ai_family == AF_INET)
+          endpoints.emplace_back(endpoint(ai).to_v4mapped());
+        return false;
+      },
+      hostname, port, AF_UNSPEC, 0, socktype);
+#endif
 }
 
 int xxsocket::getipsv(void)
