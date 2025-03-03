@@ -37,6 +37,7 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
 )
 
+# NOTE: The order of the cmake module "include(AXGame...)" statements matters
 include(AXGameEngineSetup)
 
 # The common cross-platforms source files and header files
