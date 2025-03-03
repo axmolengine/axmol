@@ -37,6 +37,7 @@
             "to": "${packageName}",
             "files": [
                 "proj.android/app/build.gradle",
+                "cmake/modules/AXGameAppleSetup.cmake",                 
                 "CMakeLists.txt"
             ]
         },
@@ -61,6 +62,9 @@
             "files": [
                 "axproj-template.json"
             ]
+        },
+        {
+            
         }
     ],
     "do_portrait": [
