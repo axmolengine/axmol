@@ -78,11 +78,8 @@ ax_setup_app_config(${APP_NAME})
 # Add any libraries you need to link to the project after this point
 
 
-# Default Apple-specific setup
-include(AXGameAppleSetup)
-
-# Default Windows-specific setup
-include(AXGameWindowsSetup)
+# Default Platform-specific setup
+include(AXGamePlatformSetup)
 
 # Make sure the AXGameFinalSetup is included at the end of this file
 include(AXGameFinalSetup)
