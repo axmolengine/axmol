@@ -37,7 +37,7 @@
             "to": "${packageName}",
             "files": [
                 "proj.android/app/build.gradle",
-                "cmake/modules/AXGameAppleSetup.cmake",                 
+                "cmake/modules/AXGamePlatformSetup.cmake",
                 "CMakeLists.txt"
             ]
         },
