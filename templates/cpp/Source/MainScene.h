@@ -63,7 +63,7 @@ public:
     void menuCloseCallback(ax::Object* sender);
 
     MainScene();
-    ~MainScene();
+    ~MainScene() override;
 
 private:
     GameState _gameState                            = GameState::init;
