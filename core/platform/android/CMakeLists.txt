@@ -18,6 +18,8 @@ add_library(${target_name} STATIC
   ${${target_name}_src}
 )
 
+target_link_libraries(${target_name} ${_AX_CORE_LIB})
+
 target_include_directories(${target_name}
   PRIVATE ..
   PRIVATE ../..
