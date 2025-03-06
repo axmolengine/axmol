@@ -317,7 +317,7 @@ bool IKExample::init()
         crosshair->setY(localY);
         //crosshair->setAppliedValid(false);
 
-        node->getSkeleton()->updateWorldTransform();
+        node->getSkeleton()->updateWorldTransform(spine::Physics_Update);
     });
 
     SCALE_SKELETON_NODE(skeletonNode);

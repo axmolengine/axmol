@@ -45,18 +45,18 @@ void IkConstraint::apply(Bone &bone, float targetX, float targetY, bool compress
 	float rotationIK = -bone._ashearX - bone._arotation;
 	float tx = 0, ty = 0;
 
-	switch (bone._data.getTransformMode()) {
-		case TransformMode_OnlyTranslation:
+	switch (bone._inherit) {
+		case Inherit_OnlyTranslation:
 			tx = (targetX - bone._worldX) * MathUtil::sign(bone.getSkeleton().getScaleX());
 			ty = (targetY - bone._worldY) * MathUtil::sign(bone.getSkeleton().getScaleY());
 			break;
-		case TransformMode_NoRotationOrReflection: {
+		case Inherit_NoRotationOrReflection: {
 			float s = MathUtil::abs(pa * pd - pb * pc) / MathUtil::max(0.0001f, pa * pa + pc * pc);
 			float sa = pa / bone._skeleton.getScaleX();
 			float sc = pc / bone._skeleton.getScaleY();
 			pb = -sc * s * bone._skeleton.getScaleX();
 			pd = sa * s * bone._skeleton.getScaleY();
-			rotationIK += MathUtil::atan2(sc, sa) * MathUtil::Rad_Deg;
+			rotationIK += MathUtil::atan2Deg(sc, sa);
 		}
 		default:
 			float x = targetX - p->_worldX, y = targetY - p->_worldY;
@@ -69,7 +69,7 @@ void IkConstraint::apply(Bone &bone, float targetX, float targetY, bool compress
 				ty = (y * pa - x * pc) / d - bone._ay;
 			}
 	}
-	rotationIK += MathUtil::atan2(ty, tx) * MathUtil::Rad_Deg;
+	rotationIK += MathUtil::atan2Deg(ty, tx);
 	if (bone._ascaleX < 0) rotationIK += 180;
 	if (rotationIK > 180) rotationIK -= 360;
 	else if (rotationIK < -180)
@@ -77,18 +77,22 @@ void IkConstraint::apply(Bone &bone, float targetX, float targetY, bool compress
 	float sx = bone._ascaleX;
 	float sy = bone._ascaleY;
 	if (compress || stretch) {
-		switch (bone._data.getTransformMode()) {
-			case TransformMode_NoScale:
-			case TransformMode_NoScaleOrReflection:
+		switch (bone._inherit) {
+			case Inherit_NoScale:
+			case Inherit_NoScaleOrReflection:
 				tx = targetX - bone._worldX;
 				ty = targetY - bone._worldY;
 			default:;
 		}
-		float b = bone._data.getLength() * sx, dd = MathUtil::sqrt(tx * tx + ty * ty);
-		if (((compress && dd < b) || (stretch && dd > b)) && (b > 0.0001f)) {
-			float s = (dd / b - 1) * alpha + 1;
-			sx *= s;
-			if (uniform) sy *= s;
+
+		float b = bone._data.getLength() * sx;
+		if (b > 0.0001) {
+			float dd = tx * tx + ty * ty;
+			if ((compress && dd < b * b) || (stretch && dd > b * b)) {
+				float s = (MathUtil::sqrt(dd) / b - 1) * alpha + 1;
+				sx *= s;
+				if (uniform) sy *= s;
+			}
 		}
 	}
 	bone.updateWorldTransform(bone._ax, bone._ay, bone._arotation + rotationIK * alpha, sx, sy, bone._ashearX,
@@ -105,6 +109,7 @@ void IkConstraint::apply(Bone &parent, Bone &child, float targetX, float targetY
 	Bone *pp = parent.getParent();
 	float tx, ty, dx, dy, dd, l1, l2, a1, a2, r, td, sd, p;
 	float id, x, y;
+	if (parent._inherit != Inherit_Normal || child._inherit != Inherit_Normal) return;
 	px = parent._ax;
 	py = parent._ay;
 	psx = parent._ascaleX;
@@ -208,7 +213,7 @@ void IkConstraint::apply(Bone &parent, Bone &child, float targetX, float targetY
 			r0 = q / c2;
 			r1 = c0 / q;
 			r = MathUtil::abs(r0) < MathUtil::abs(r1) ? r0 : r1;
-			if (r * r <= dd) {
+			if (dd - r * r >= 0) {
 				y = MathUtil::sqrt(dd - r * r) * bendDir;
 				a1 = ta - MathUtil::atan2(y, r);
 				a2 = MathUtil::atan2(y / psy, (r - l1) / psx);
@@ -279,7 +284,7 @@ IkConstraint::IkConstraint(IkConstraintData &data, Skeleton &skeleton) : Updatab
 	}
 }
 
-void IkConstraint::update() {
+void IkConstraint::update(Physics) {
 	if (_mix == 0) return;
 	switch (_bones.size()) {
 		case 1: {
@@ -362,4 +367,13 @@ float IkConstraint::getSoftness() {
 
 void IkConstraint::setSoftness(float inValue) {
 	_softness = inValue;
+}
+
+void IkConstraint::setToSetupPose() {
+	IkConstraintData &data = this->_data;
+	this->_mix = data._mix;
+	this->_softness = data._softness;
+	this->_bendDirection = data._bendDirection;
+	this->_compress = data._compress;
+	this->_stretch = data._stretch;
 }

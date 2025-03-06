@@ -39,7 +39,7 @@
 
 #include <spine/SkeletonAnimation.h>
 
-#define AX_SPINE_VERSION 0x040100
+#define AX_SPINE_VERSION 0x040200
 
 namespace spine {
 	class SP_API AxmolAtlasAttachmentLoader : public AtlasAttachmentLoader {

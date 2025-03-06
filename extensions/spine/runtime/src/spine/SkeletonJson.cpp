@@ -51,12 +51,15 @@
 #include <spine/EventTimeline.h>
 #include <spine/IkConstraintData.h>
 #include <spine/IkConstraintTimeline.h>
+#include <spine/InheritTimeline.h>
 #include <spine/MeshAttachment.h>
 #include <spine/PathAttachment.h>
 #include <spine/PathConstraintData.h>
 #include <spine/PathConstraintMixTimeline.h>
 #include <spine/PathConstraintPositionTimeline.h>
 #include <spine/PathConstraintSpacingTimeline.h>
+#include <spine/PhysicsConstraintData.h>
+#include <spine/PhysicsConstraintTimeline.h>
 #include <spine/PointAttachment.h>
 #include <spine/RegionAttachment.h>
 #include <spine/RotateTimeline.h>
@@ -132,7 +135,7 @@ SkeletonData *SkeletonJson::readSkeletonDataFile(const String &path) {
 SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 	int i, ii;
 	SkeletonData *skeletonData;
-	Json *root, *skeleton, *bones, *boneMap, *ik, *transform, *path, *slots, *skins, *animations, *events;
+	Json *root, *skeleton, *bones, *boneMap, *ik, *transform, *path, *physics, *slots, *skins, *animations, *events;
 
 	_error = "";
 	_linkedMeshes.clear();
@@ -153,6 +156,7 @@ SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 		if (!skeletonData->_version.startsWith(SPINE_VERSION_STRING)) {
 			char errorMsg[255];
 			snprintf(errorMsg, 255, "Skeleton version %s does not match runtime version %s", skeletonData->_version.buffer(), SPINE_VERSION_STRING);
+			delete skeletonData;
 			setError(NULL, errorMsg, "");
 			return NULL;
 		}
@@ -160,6 +164,7 @@ SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 		skeletonData->_y = Json::getFloat(skeleton, "y", 0);
 		skeletonData->_width = Json::getFloat(skeleton, "width", 0);
 		skeletonData->_height = Json::getFloat(skeleton, "height", 0);
+		skeletonData->_referenceScale = Json::getFloat(skeleton, "referenceScale", 100) * _scale;
 		skeletonData->_fps = Json::getFloat(skeleton, "fps", 30);
 		skeletonData->_audioPath = Json::getString(skeleton, "audio", 0);
 		skeletonData->_imagesPath = Json::getString(skeleton, "images", 0);
@@ -171,7 +176,7 @@ SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 	int bonesCount = 0;
 	for (boneMap = bones->_child, i = 0; boneMap; boneMap = boneMap->_next, ++i) {
 		BoneData *data;
-		const char *transformMode;
+		const char *inherit;
 
 		BoneData *parent = 0;
 		const char *parentName = Json::getString(boneMap, "parent", 0);
@@ -194,21 +199,24 @@ SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 		data->_scaleY = Json::getFloat(boneMap, "scaleY", 1);
 		data->_shearX = Json::getFloat(boneMap, "shearX", 0);
 		data->_shearY = Json::getFloat(boneMap, "shearY", 0);
-		transformMode = Json::getString(boneMap, "transform", "normal");
-		data->_transformMode = TransformMode_Normal;
-		if (strcmp(transformMode, "normal") == 0) data->_transformMode = TransformMode_Normal;
-		else if (strcmp(transformMode, "onlyTranslation") == 0)
-			data->_transformMode = TransformMode_OnlyTranslation;
-		else if (strcmp(transformMode, "noRotationOrReflection") == 0)
-			data->_transformMode = TransformMode_NoRotationOrReflection;
-		else if (strcmp(transformMode, "noScale") == 0)
-			data->_transformMode = TransformMode_NoScale;
-		else if (strcmp(transformMode, "noScaleOrReflection") == 0)
-			data->_transformMode = TransformMode_NoScaleOrReflection;
+		inherit = Json::getString(boneMap, "inherit", "normal");
+		data->_inherit = Inherit_Normal;
+		if (strcmp(inherit, "normal") == 0) data->_inherit = Inherit_Normal;
+		else if (strcmp(inherit, "onlyTranslation") == 0)
+			data->_inherit = Inherit_OnlyTranslation;
+		else if (strcmp(inherit, "noRotationOrReflection") == 0)
+			data->_inherit = Inherit_NoRotationOrReflection;
+		else if (strcmp(inherit, "noScale") == 0)
+			data->_inherit = Inherit_NoScale;
+		else if (strcmp(inherit, "noScaleOrReflection") == 0)
+			data->_inherit = Inherit_NoScaleOrReflection;
 		data->_skinRequired = Json::getBoolean(boneMap, "skin", false);
 
 		const char *color = Json::getString(boneMap, "color", NULL);
 		if (color) toColor(data->getColor(), color, true);
+
+		data->_icon = Json::getString(boneMap, "icon", "");
+		data->_visible = Json::getBoolean(boneMap, "visible", true);
 
 		skeletonData->_bones[i] = data;
 		bonesCount++;
@@ -234,7 +242,8 @@ SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 				return NULL;
 			}
 
-			data = new (__FILE__, __LINE__) SlotData(i, Json::getString(slotMap, "name", 0), *boneData);
+			String slotName = String(Json::getString(slotMap, "name", 0));
+			data = new (__FILE__, __LINE__) SlotData(i, slotName, *boneData);
 
 			color = Json::getString(slotMap, "color", 0);
 			if (color) {
@@ -266,7 +275,7 @@ SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 				else if (strcmp(item->_valueString, "screen") == 0)
 					data->_blendMode = BlendMode_Screen;
 			}
-
+			data->_visible = Json::getBoolean(slotMap, "visible", true);
 			skeletonData->_slots[i] = data;
 		}
 	}
@@ -442,6 +451,54 @@ SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 		}
 	}
 
+	/* Physics constraints */
+	physics = Json::getItem(root, "physics");
+	if (physics) {
+		Json *constraintMap;
+		skeletonData->_physicsConstraints.ensureCapacity(physics->_size);
+		skeletonData->_physicsConstraints.setSize(physics->_size, 0);
+		for (constraintMap = physics->_child, i = 0; constraintMap; constraintMap = constraintMap->_next, ++i) {
+			const char *name;
+
+			PhysicsConstraintData *data = new (__FILE__, __LINE__) PhysicsConstraintData(
+					Json::getString(constraintMap, "name", 0));
+			data->setOrder(Json::getInt(constraintMap, "order", 0));
+			data->setSkinRequired(Json::getBoolean(constraintMap, "skin", false));
+
+			name = Json::getString(constraintMap, "bone", 0);
+			data->_bone = skeletonData->findBone(name);
+			if (!data->_bone) {
+				delete skeletonData;
+				setError(root, "Physics bone not found: ", name);
+				return NULL;
+			}
+
+			data->_x = Json::getFloat(constraintMap, "x", 0);
+			data->_y = Json::getFloat(constraintMap, "y", 0);
+			data->_rotate = Json::getFloat(constraintMap, "rotate", 0);
+			data->_scaleX = Json::getFloat(constraintMap, "scaleX", 0);
+			data->_shearX = Json::getFloat(constraintMap, "shearX", 0);
+			data->_limit = Json::getFloat(constraintMap, "limit", 5000) * _scale;
+			data->_step = 1.0f / Json::getInt(constraintMap, "fps", 60);
+			data->_inertia = Json::getFloat(constraintMap, "inertia", 1);
+			data->_strength = Json::getFloat(constraintMap, "strength", 100);
+			data->_damping = Json::getFloat(constraintMap, "damping", 1);
+			data->_massInverse = 1.0f / Json::getFloat(constraintMap, "mass", 1);
+			data->_wind = Json::getFloat(constraintMap, "wind", 0);
+			data->_gravity = Json::getFloat(constraintMap, "gravity", 0);
+			data->_mix = Json::getFloat(constraintMap, "mix", 1);
+			data->_inertiaGlobal = Json::getBoolean(constraintMap, "inertiaGlobal", false);
+			data->_strengthGlobal = Json::getBoolean(constraintMap, "strengthGlobal", false);
+			data->_dampingGlobal = Json::getBoolean(constraintMap, "dampingGlobal", false);
+			data->_massGlobal = Json::getBoolean(constraintMap, "massGlobal", false);
+			data->_windGlobal = Json::getBoolean(constraintMap, "windGlobal", false);
+			data->_gravityGlobal = Json::getBoolean(constraintMap, "gravityGlobal", false);
+			data->_mixGlobal = Json::getBoolean(constraintMap, "mixGlobal", false);
+
+			skeletonData->_physicsConstraints[i] = data;
+		}
+	}
+
 	/* Skins. */
 	skins = Json::getItem(root, "skins");
 	if (skins) {
@@ -501,6 +558,19 @@ SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 					if (!data) {
 						delete skeletonData;
 						setError(root, String("Skin path constraint not found: "), item->_valueString);
+						return NULL;
+					}
+					skin->getConstraints().add(data);
+				}
+			}
+
+			item = Json::getItem(skinMap, "physics");
+			if (item) {
+				for (item = item->_child; item; item = item->_next) {
+					PhysicsConstraintData *data = skeletonData->findPhysicsConstraint(item->_valueString);
+					if (!data) {
+						delete skeletonData;
+						setError(root, String("Skin physics constraint not found: "), item->_valueString);
 						return NULL;
 					}
 					skin->getConstraints().add(data);
@@ -880,6 +950,7 @@ Animation *SkeletonJson::readAnimation(Json *root, SkeletonData *skeletonData) {
 	Json *ik = Json::getItem(root, "ik");
 	Json *transform = Json::getItem(root, "transform");
 	Json *paths = Json::getItem(root, "path");
+	Json *physics = Json::getItem(root, "physics");
 	Json *attachments = Json::getItem(root, "attachments");
 	Json *drawOrder = Json::getItem(root, "drawOrder");
 	Json *events = Json::getItem(root, "events");
@@ -1085,6 +1156,28 @@ Animation *SkeletonJson::readAnimation(Json *root, SkeletonData *skeletonData) {
 				ShearYTimeline *timeline = new (__FILE__, __LINE__) ShearYTimeline(frames,
 																				   frames, boneIndex);
 				timelines.add(readTimeline(timelineMap->_child, timeline, 0, 1));
+			} else if (strcmp(timelineMap->_name, "inherit") == 0) {
+				InheritTimeline *timeline = new (__FILE__, __LINE__) InheritTimeline(frames, boneIndex);
+				keyMap = timelineMap->_child;
+				for (frame = 0;; frame++) {
+					float time = Json::getFloat(keyMap, "time", 0);
+					const char *value = Json::getString(keyMap, "inherit", "normal");
+					Inherit inherit = Inherit_Normal;
+					if (strcmp(value, "normal") == 0) inherit = Inherit_Normal;
+					else if (strcmp(value, "onlyTranslation") == 0)
+						inherit = Inherit_OnlyTranslation;
+					else if (strcmp(value, "noRotationOrReflection") == 0)
+						inherit = Inherit_NoRotationOrReflection;
+					else if (strcmp(value, "noScale") == 0)
+						inherit = Inherit_NoScale;
+					else if (strcmp(value, "noScaleOrReflection") == 0)
+						inherit = Inherit_NoScaleOrReflection;
+					timeline->setFrame(frame, time, inherit);
+					nextMap = keyMap->_next;
+					if (!nextMap) break;
+					keyMap = nextMap;
+				}
+				timelines.add(timeline);
 			} else {
 				ContainerUtil::cleanUpVectorOfPointers(timelines);
 				setError(NULL, "Invalid timeline type for a bone: ", timelineMap->_name);
@@ -1185,7 +1278,7 @@ Animation *SkeletonJson::readAnimation(Json *root, SkeletonData *skeletonData) {
 			mixY = mixY2;
 			mixScaleX = mixScaleX2;
 			mixScaleY = mixScaleY2;
-			mixScaleX = mixScaleX2;
+			mixShearY = mixShearY2;
 			keyMap = nextMap;
 		}
 
@@ -1251,6 +1344,54 @@ Animation *SkeletonJson::readAnimation(Json *root, SkeletonData *skeletonData) {
 				}
 				timelines.add(timeline);
 			}
+		}
+	}
+
+	/** Physics constraint timelines. */
+	for (Json *constraintMap = physics ? physics->_child : 0; constraintMap; constraintMap = constraintMap->_next) {
+		int index = -1;
+		if (constraintMap->_name && strlen(constraintMap->_name) > 0) {
+			PhysicsConstraintData *constraint = skeletonData->findPhysicsConstraint(constraintMap->_name);
+			if (!constraint) {
+				ContainerUtil::cleanUpVectorOfPointers(timelines);
+				setError(NULL, "Physics constraint not found: ", constraintMap->_name);
+				return NULL;
+			}
+			index = skeletonData->_physicsConstraints.indexOf(constraint);
+		}
+		for (Json *timelineMap = constraintMap->_child; timelineMap; timelineMap = timelineMap->_next) {
+			keyMap = timelineMap->_child;
+			if (keyMap == NULL) continue;
+			const char *timelineName = timelineMap->_name;
+			int frames = timelineMap->_size;
+			if (strcmp(timelineName, "reset") == 0) {
+				PhysicsConstraintResetTimeline *timeline = new (__FILE__, __LINE__) PhysicsConstraintResetTimeline(frames, index);
+				for (frame = 0; keyMap != nullptr; keyMap = keyMap->_next, frame++) {
+					timeline->setFrame(frame, Json::getFloat(keyMap, "time", 0));
+				}
+				timelines.add(timeline);
+				continue;
+			}
+
+			CurveTimeline1 *timeline = nullptr;
+			if (strcmp(timelineName, "inertia") == 0) {
+				timeline = new PhysicsConstraintInertiaTimeline(frames, frames, index);
+			} else if (strcmp(timelineName, "strength") == 0) {
+				timeline = new PhysicsConstraintStrengthTimeline(frames, frames, index);
+			} else if (strcmp(timelineName, "damping") == 0) {
+				timeline = new PhysicsConstraintDampingTimeline(frames, frames, index);
+			} else if (strcmp(timelineName, "mass") == 0) {
+				timeline = new PhysicsConstraintMassTimeline(frames, frames, index);
+			} else if (strcmp(timelineName, "wind") == 0) {
+				timeline = new PhysicsConstraintWindTimeline(frames, frames, index);
+			} else if (strcmp(timelineName, "gravity") == 0) {
+				timeline = new PhysicsConstraintGravityTimeline(frames, frames, index);
+			} else if (strcmp(timelineName, "mix") == 0) {
+				timeline = new PhysicsConstraintMixTimeline(frames, frames, index);
+			} else {
+				continue;
+			}
+			timelines.add(readTimeline(keyMap, timeline, 0, 1));
 		}
 	}
 

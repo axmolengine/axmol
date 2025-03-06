@@ -39,7 +39,7 @@
 #include "renderer/Shaders.h"
 #include "xxhash.h"
 
-using namespace ax;
+USING_NS_AX;
 #define EVENT_AFTER_DRAW_RESET_POSITION "director_after_draw"
 using std::max;
 #define INITIAL_SIZE (10000)
@@ -56,10 +56,10 @@ namespace {
 		__locPMatrix = programState->getUniformLocation("u_PMatrix");
 		__locTexture = programState->getUniformLocation("u_tex0");
 
-        auto locPosition = programState->getAttributeLocation("a_position");
+		auto locPosition = programState->getAttributeLocation("a_position");
         auto locTexcoord = programState->getAttributeLocation("a_texCoord");
-        auto locColor = programState->getAttributeLocation("a_color");
-        auto locColor2 = programState->getAttributeLocation("a_color2");
+		auto locColor = programState->getAttributeLocation("a_color");
+		auto locColor2 = programState->getAttributeLocation("a_color2");
 
         auto vertexLayout = programState->getMutableVertexLayout();
         vertexLayout->setAttrib("a_position", locPosition, backend::VertexFormat::FLOAT3,
@@ -71,7 +71,7 @@ namespace {
         vertexLayout->setAttrib("a_texCoord", locTexcoord, backend::VertexFormat::FLOAT2,
                                      offsetof(spine::V3F_C4B_C4B_T2F, texCoords), false);
         vertexLayout->setStride(sizeof(spine::V3F_C4B_C4B_T2F));
-    }
+	}
 
 	static void initTwoColorProgramState() {
 		if (__twoColorProgramState) {

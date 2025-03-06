@@ -44,9 +44,11 @@ BoneData::BoneData(int index, const String &name, BoneData *parent) : _index(ind
 																	  _scaleY(1),
 																	  _shearX(0),
 																	  _shearY(0),
-																	  _transformMode(TransformMode_Normal),
+																	  _inherit(Inherit_Normal),
 																	  _skinRequired(false),
-																	  _color() {
+																	  _color(),
+																	  _icon(),
+																	  _visible(true) {
 	assert(index >= 0);
 	assert(_name.length() > 0);
 }
@@ -127,12 +129,12 @@ void BoneData::setShearY(float inValue) {
 	_shearY = inValue;
 }
 
-TransformMode BoneData::getTransformMode() {
-	return _transformMode;
+Inherit BoneData::getInherit() {
+	return _inherit;
 }
 
-void BoneData::setTransformMode(TransformMode inValue) {
-	_transformMode = inValue;
+void BoneData::setInherit(Inherit inValue) {
+	_inherit = inValue;
 }
 
 bool BoneData::isSkinRequired() {
@@ -145,4 +147,20 @@ void BoneData::setSkinRequired(bool inValue) {
 
 Color &BoneData::getColor() {
 	return _color;
+}
+
+const String &BoneData::getIcon() {
+	return _icon;
+}
+
+void BoneData::setIcon(const String &icon) {
+	this->_icon = icon;
+}
+
+bool BoneData::isVisible() {
+	return _visible;
+}
+
+void BoneData::setVisible(bool inValue) {
+	this->_visible = inValue;
 }

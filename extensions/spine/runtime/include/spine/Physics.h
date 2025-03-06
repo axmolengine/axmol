@@ -26,82 +26,24 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
  * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
+#ifndef Spine_Physics_h
+#define Spine_Physics_h
 
-#include <spine/IkConstraintData.h>
+/** Determines how physics and other non-deterministic updates are applied. */
+namespace spine {
+    enum Physics {
+        /** Physics are not updated or applied. */
+        Physics_None,
 
-#include <spine/BoneData.h>
+        /** Physics are reset to the current pose. */
+        Physics_Reset,
 
-using namespace spine;
+        /** Physics are updated and the pose from physics is applied. */
+        Physics_Update,
 
-RTTI_IMPL(IkConstraintData, ConstraintData)
-
-IkConstraintData::IkConstraintData(const String &name) : ConstraintData(name),
-														 _target(NULL),
-														 _bendDirection(0),
-														 _compress(false),
-														 _stretch(false),
-														 _uniform(false),
-														 _mix(0),
-														 _softness(0) {
+        /** Physics are not updated but the pose from physics is applied. */
+        Physics_Pose
+    };
 }
 
-Vector<BoneData *> &IkConstraintData::getBones() {
-	return _bones;
-}
-
-BoneData *IkConstraintData::getTarget() {
-	return _target;
-}
-
-void IkConstraintData::setTarget(BoneData *inValue) {
-	_target = inValue;
-}
-
-int IkConstraintData::getBendDirection() {
-	return _bendDirection;
-}
-
-void IkConstraintData::setBendDirection(int inValue) {
-	_bendDirection = inValue;
-}
-
-float IkConstraintData::getMix() {
-	return _mix;
-}
-
-void IkConstraintData::setMix(float inValue) {
-	_mix = inValue;
-}
-
-bool IkConstraintData::getStretch() {
-	return _stretch;
-}
-
-void IkConstraintData::setStretch(bool inValue) {
-	_stretch = inValue;
-}
-
-bool IkConstraintData::getCompress() {
-	return _compress;
-}
-
-void IkConstraintData::setCompress(bool inValue) {
-	_compress = inValue;
-}
-
-
-bool IkConstraintData::getUniform() {
-	return _uniform;
-}
-
-void IkConstraintData::setUniform(bool inValue) {
-	_uniform = inValue;
-}
-
-float IkConstraintData::getSoftness() {
-	return _softness;
-}
-
-void IkConstraintData::setSoftness(float inValue) {
-	_softness = inValue;
-}
+#endif

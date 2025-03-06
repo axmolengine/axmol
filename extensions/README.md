@@ -75,5 +75,5 @@
 
 ## spine
 - Upstream: https://github.com/EsotericSoftware/spine-runtimes
-- Version: 4.1-c9af18e with changes to adapte axmol
+- Version: 4.2-0f8a707 (Until Mar.5 2025) with changes to adapte axmol
 - License: Spine Runtimes License

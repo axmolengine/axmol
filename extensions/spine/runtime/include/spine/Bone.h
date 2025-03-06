@@ -33,6 +33,7 @@
 #include <spine/Updatable.h>
 #include <spine/SpineObject.h>
 #include <spine/Vector.h>
+#include <spine/Inherit.h>
 
 namespace spine {
 	class BoneData;
@@ -56,6 +57,8 @@ namespace spine {
 		friend class VertexAttachment;
 
 		friend class PathConstraint;
+
+        friend class PhysicsConstraint;
 
 		friend class Skeleton;
 
@@ -93,6 +96,8 @@ namespace spine {
 
 		friend class TranslateYTimeline;
 
+        friend class InheritTimeline;
+
 	RTTI_DECL
 
 	public:
@@ -104,7 +109,7 @@ namespace spine {
 		Bone(BoneData &data, Skeleton &skeleton, Bone *parent = NULL);
 
 		/// Same as updateWorldTransform. This method exists for Bone to implement Spine::Updatable.
-		virtual void update();
+		virtual void update(Physics physics);
 
 		/// Computes the world transform using the parent bone and this bone's local transform.
 		void updateWorldTransform();
@@ -123,7 +128,11 @@ namespace spine {
 
 		void worldToLocal(float worldX, float worldY, float &outLocalX, float &outLocalY);
 
+        void worldToParent(float worldX, float worldY, float &outParentX, float &outParentY);
+
 		void localToWorld(float localX, float localY, float &outWorldX, float &outWorldY);
+
+        void parentToWorld(float worldX, float worldY, float &outX, float &outY);
 
 		float worldToLocalRotation(float worldRotation);
 
@@ -253,6 +262,10 @@ namespace spine {
 
 		void setActive(bool inValue);
 
+        Inherit getInherit() { return _inherit; }
+
+        void setInherit(Inherit inValue) { _inherit = inValue; }
+
 	private:
 		static bool yDown;
 
@@ -266,6 +279,7 @@ namespace spine {
 		float _c, _d, _worldY;
 		bool _sorted;
 		bool _active;
+        Inherit _inherit;
 	};
 }
 

@@ -34,6 +34,7 @@
 #include <spine/EventData.h>
 #include <spine/IkConstraintData.h>
 #include <spine/PathConstraintData.h>
+#include <spine/PhysicsConstraintData.h>
 #include <spine/Skin.h>
 #include <spine/SlotData.h>
 #include <spine/TransformConstraintData.h>
@@ -48,6 +49,7 @@ SkeletonData::SkeletonData() : _name(),
 							   _y(0),
 							   _width(0),
 							   _height(0),
+							   _referenceScale(100),
 							   _version(),
 							   _hash(),
 							   _fps(0),
@@ -66,6 +68,7 @@ SkeletonData::~SkeletonData() {
 	ContainerUtil::cleanUpVectorOfPointers(_ikConstraints);
 	ContainerUtil::cleanUpVectorOfPointers(_transformConstraints);
 	ContainerUtil::cleanUpVectorOfPointers(_pathConstraints);
+	ContainerUtil::cleanUpVectorOfPointers(_physicsConstraints);
 	for (size_t i = 0; i < _strings.size(); i++) {
 		SpineExtension::free(_strings[i], __FILE__, __LINE__);
 	}
@@ -101,6 +104,10 @@ TransformConstraintData *SkeletonData::findTransformConstraint(const String &con
 
 PathConstraintData *SkeletonData::findPathConstraint(const String &constraintName) {
 	return ContainerUtil::findWithName(_pathConstraints, constraintName);
+}
+
+PhysicsConstraintData *SkeletonData::findPhysicsConstraint(const String &constraintName) {
+	return ContainerUtil::findWithName(_physicsConstraints, constraintName);
 }
 
 const String &SkeletonData::getName() {
@@ -151,6 +158,10 @@ Vector<PathConstraintData *> &SkeletonData::getPathConstraints() {
 	return _pathConstraints;
 }
 
+Vector<PhysicsConstraintData *> &SkeletonData::getPhysicsConstraints() {
+	return _physicsConstraints;
+}
+
 float SkeletonData::getX() {
 	return _x;
 }
@@ -181,6 +192,14 @@ float SkeletonData::getHeight() {
 
 void SkeletonData::setHeight(float inValue) {
 	_height = inValue;
+}
+
+float SkeletonData::getReferenceScale() {
+	return _referenceScale;
+}
+
+void SkeletonData::setReferenceScale(float inValue) {
+	_referenceScale = inValue;
 }
 
 const String &SkeletonData::getVersion() {

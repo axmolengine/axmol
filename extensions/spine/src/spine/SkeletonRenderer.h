@@ -35,6 +35,8 @@
 
 namespace spine {
 
+	class AttachmentVertices;
+
 	/* Draws a skeleton. */
 	class SP_API SkeletonRenderer : public axmol::Node, public axmol::BlendProtocol {
 	public:
@@ -69,7 +71,7 @@ namespace spine {
 		bool getDebugBoundingRectEnabled() const;
 
 		// --- Convenience methods for common Skeleton_* functions.
-		void updateWorldTransform();
+		void updateWorldTransform(spine::Physics physics);
 
 		void setToSetupPose();
 		void setBonesToSetupPose();
@@ -151,6 +153,8 @@ namespace spine {
 		int _startSlotIndex;
 		int _endSlotIndex;
 		bool _twoColorTint;
+
+        Pool<AttachmentVertices*> _verticesPool;
 	};
 
 }// namespace spine

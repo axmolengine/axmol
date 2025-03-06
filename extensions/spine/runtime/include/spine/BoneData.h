@@ -30,7 +30,7 @@
 #ifndef Spine_BoneData_h
 #define Spine_BoneData_h
 
-#include <spine/TransformMode.h>
+#include <spine/Inherit.h>
 #include <spine/SpineObject.h>
 #include <spine/SpineString.h>
 #include <spine/Color.h>
@@ -115,9 +115,9 @@ namespace spine {
 		void setShearY(float inValue);
 
 		/// The transform mode for how parent world transforms affect this bone.
-		TransformMode getTransformMode();
+		Inherit getInherit();
 
-		void setTransformMode(TransformMode inValue);
+		void setInherit(Inherit inValue);
 
 		bool isSkinRequired();
 
@@ -125,15 +125,25 @@ namespace spine {
 
 		Color &getColor();
 
+        const String &getIcon();
+
+        void setIcon(const String &icon);
+
+        bool isVisible();
+
+        void setVisible(bool inValue);
+
 	private:
 		const int _index;
 		const String _name;
 		BoneData *_parent;
 		float _length;
 		float _x, _y, _rotation, _scaleX, _scaleY, _shearX, _shearY;
-		TransformMode _transformMode;
+		Inherit _inherit;
 		bool _skinRequired;
 		Color _color;
+        String _icon;
+        bool _visible;
 	};
 }
 

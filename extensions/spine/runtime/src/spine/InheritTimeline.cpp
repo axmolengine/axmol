@@ -27,81 +27,55 @@
  * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#include <spine/IkConstraintData.h>
+#include <spine/InheritTimeline.h>
 
+#include <spine/Event.h>
+#include <spine/Skeleton.h>
+
+#include <spine/Bone.h>
 #include <spine/BoneData.h>
+#include <spine/Slot.h>
+#include <spine/SlotData.h>
 
 using namespace spine;
 
-RTTI_IMPL(IkConstraintData, ConstraintData)
+RTTI_IMPL(InheritTimeline, Timeline)
 
-IkConstraintData::IkConstraintData(const String &name) : ConstraintData(name),
-														 _target(NULL),
-														 _bendDirection(0),
-														 _compress(false),
-														 _stretch(false),
-														 _uniform(false),
-														 _mix(0),
-														 _softness(0) {
+InheritTimeline::InheritTimeline(size_t frameCount, int boneIndex) : Timeline(frameCount, ENTRIES),
+																	 _boneIndex(boneIndex) {
+	PropertyId ids[] = {((PropertyId) Property_Inherit << 32) | boneIndex};
+	setPropertyIds(ids, 1);
 }
 
-Vector<BoneData *> &IkConstraintData::getBones() {
-	return _bones;
+InheritTimeline::~InheritTimeline() {
 }
 
-BoneData *IkConstraintData::getTarget() {
-	return _target;
-}
-
-void IkConstraintData::setTarget(BoneData *inValue) {
-	_target = inValue;
-}
-
-int IkConstraintData::getBendDirection() {
-	return _bendDirection;
-}
-
-void IkConstraintData::setBendDirection(int inValue) {
-	_bendDirection = inValue;
-}
-
-float IkConstraintData::getMix() {
-	return _mix;
-}
-
-void IkConstraintData::setMix(float inValue) {
-	_mix = inValue;
-}
-
-bool IkConstraintData::getStretch() {
-	return _stretch;
-}
-
-void IkConstraintData::setStretch(bool inValue) {
-	_stretch = inValue;
-}
-
-bool IkConstraintData::getCompress() {
-	return _compress;
-}
-
-void IkConstraintData::setCompress(bool inValue) {
-	_compress = inValue;
+void InheritTimeline::setFrame(int frame, float time, Inherit inherit) {
+	frame *= ENTRIES;
+	_frames[frame] = time;
+	_frames[frame + INHERIT] = inherit;
 }
 
 
-bool IkConstraintData::getUniform() {
-	return _uniform;
-}
+void InheritTimeline::apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha,
+							MixBlend blend, MixDirection direction) {
+	SP_UNUSED(lastTime);
+	SP_UNUSED(pEvents);
+	SP_UNUSED(direction);
+	SP_UNUSED(alpha);
 
-void IkConstraintData::setUniform(bool inValue) {
-	_uniform = inValue;
-}
+	Bone *bone = skeleton.getBones()[_boneIndex];
+	if (!bone->isActive()) return;
 
-float IkConstraintData::getSoftness() {
-	return _softness;
-}
+	if (direction == MixDirection_Out) {
+		if (blend == MixBlend_Setup) bone->setInherit(bone->_data.getInherit());
+		return;
+	}
 
-void IkConstraintData::setSoftness(float inValue) {
-	_softness = inValue;
+	if (time < _frames[0]) {
+		if (blend == MixBlend_Setup || blend == MixBlend_First) bone->_inherit = bone->_data.getInherit();
+		return;
+	}
+	int idx = Animation::search(_frames, time, ENTRIES) + INHERIT;
+	bone->_inherit = static_cast<Inherit>(_frames[idx]);
 }

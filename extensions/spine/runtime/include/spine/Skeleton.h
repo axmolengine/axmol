@@ -35,6 +35,7 @@
 #include <spine/SpineObject.h>
 #include <spine/SpineString.h>
 #include <spine/Color.h>
+#include <spine/Physics.h>
 
 namespace spine {
 	class SkeletonData;
@@ -49,11 +50,15 @@ namespace spine {
 
 	class PathConstraint;
 
+    class PhysicsConstraint;
+
 	class TransformConstraint;
 
 	class Skin;
 
 	class Attachment;
+
+    class SkeletonClipping;
 
 	class SP_API Skeleton : public SpineObject {
 		friend class AnimationState;
@@ -123,10 +128,13 @@ namespace spine {
 
 		void printUpdateCache();
 
-		/// Updates the world transform for each bone and applies constraints.
-		void updateWorldTransform();
+        /// Updates the world transform for each bone and applies all constraints.
+        ///
+        /// See [World transforms](http://esotericsoftware.com/spine-runtime-skeletons#World-transforms) in the Spine
+        /// Runtimes Guide.
+		void updateWorldTransform(Physics physics);
 
-		void updateWorldTransform(Bone *parent);
+		void updateWorldTransform(Physics physics, Bone *parent);
 
 		/// Sets the bones, constraints, and slots to their setup pose values.
 		void setToSetupPose();
@@ -172,13 +180,18 @@ namespace spine {
 		/// @return May be NULL.
 		PathConstraint *findPathConstraint(const String &constraintName);
 
+        /// @return May be NULL.
+        PhysicsConstraint *findPhysicsConstraint(const String &constraintName);
+
 		/// Returns the axis aligned bounding box (AABB) of the region and mesh attachments for the current pose.
 		/// @param outX The horizontal distance between the skeleton origin and the left side of the AABB.
 		/// @param outY The vertical distance between the skeleton origin and the bottom side of the AABB.
 		/// @param outWidth The width of the AABB
 		/// @param outHeight The height of the AABB.
 		/// @param outVertexBuffer Reference to hold a Vector of floats. This method will assign it with new floats as needed.
-		void getBounds(float &outX, float &outY, float &outWidth, float &outHeight, Vector<float> &outVertexBuffer);
+		// @param clipping Pointer to a SkeletonClipping instance or NULL. If a clipper is given, clipping attachments will be taken into account.
+        void getBounds(float &outX, float &outY, float &outWidth, float &outHeight, Vector<float> &outVertexBuffer);
+		void getBounds(float &outX, float &outY, float &outWidth, float &outHeight, Vector<float> &outVertexBuffer, SkeletonClipping *clipper);
 
 		Bone *getRootBone();
 
@@ -197,6 +210,8 @@ namespace spine {
 		Vector<PathConstraint *> &getPathConstraints();
 
 		Vector<TransformConstraint *> &getTransformConstraints();
+
+        Vector<PhysicsConstraint *> &getPhysicsConstraints();
 
 		Skin *getSkin();
 
@@ -220,6 +235,19 @@ namespace spine {
 
 		void setScaleY(float inValue);
 
+        float getTime();
+
+        void setTime(float time);
+
+        void update(float delta);
+
+        /// Rotates the physics constraint so next {@link #update(Physics)} forces are applied as if the bone rotated around the
+	    /// specified point in world space.
+        void physicsTranslate(float x, float y);
+
+        /// Calls {@link PhysicsConstraint#rotate(float, float, float)} for each physics constraint. */
+        void physicsRotate(float x, float y, float degrees);
+
 	private:
 		SkeletonData *_data;
 		Vector<Bone *> _bones;
@@ -228,15 +256,19 @@ namespace spine {
 		Vector<IkConstraint *> _ikConstraints;
 		Vector<TransformConstraint *> _transformConstraints;
 		Vector<PathConstraint *> _pathConstraints;
+        Vector<PhysicsConstraint *> _physicsConstraints;
 		Vector<Updatable *> _updateCache;
 		Skin *_skin;
 		Color _color;
 		float _scaleX, _scaleY;
 		float _x, _y;
+        float _time;
 
 		void sortIkConstraint(IkConstraint *constraint);
 
 		void sortPathConstraint(PathConstraint *constraint);
+
+        void sortPhysicsConstraint(PhysicsConstraint *constraint);
 
 		void sortTransformConstraint(TransformConstraint *constraint);
 

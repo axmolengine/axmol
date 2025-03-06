@@ -105,6 +105,10 @@ namespace spine {
 
 		void setBlendMode(BlendMode inValue);
 
+        bool isVisible();
+
+        void setVisible(bool inValue);
+
 	private:
 		const int _index;
 		String _name;
@@ -115,6 +119,7 @@ namespace spine {
 		bool _hasDarkColor;
 		String _attachmentName;
 		BlendMode _blendMode;
+        bool _visible;
 	};
 }
 

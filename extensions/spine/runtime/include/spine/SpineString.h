@@ -179,13 +179,41 @@ namespace spine {
 			return *this;
 		}
 
-		bool startsWith(const String &needle) {
+		bool startsWith(const String &needle) const {
 			if (needle.length() > length()) return false;
 			for (int i = 0; i < (int)needle.length(); i++) {
 				if (buffer()[i] != needle.buffer()[i]) return false;
 			}
 			return true;
 		}
+
+        int lastIndexOf(const char c) const {
+            for (int i = (int)length() - 1; i >= 0; i--) {
+                if (buffer()[i] == c) return i;
+            }
+            return -1;
+        }
+
+        String substring(int startIndex, int length) const {
+            if (startIndex < 0 || startIndex >= (int)_length || length < 0 || startIndex + length > (int)_length) {
+                return String();
+            }
+            char* subStr = SpineExtension::calloc<char>(length + 1, __FILE__, __LINE__);
+            memcpy(subStr, _buffer + startIndex, length);
+            subStr[length] = '\0';
+            return String(subStr, true, true);
+        }
+
+        String substring(int startIndex) const {
+            if (startIndex < 0 || startIndex >= (int)_length) {
+                return String();
+            }
+            int length = (int)_length - startIndex;
+            char* subStr = SpineExtension::calloc<char>(length + 1, __FILE__, __LINE__);
+            memcpy(subStr, _buffer + startIndex, length);
+            subStr[length] = '\0';
+            return String(subStr, true, true);
+        }
 
 		friend bool operator==(const String &a, const String &b) {
 			if (a._buffer == b._buffer) return true;

@@ -32,7 +32,7 @@
 #include <algorithm>
 #include <spine/Extension.h>
 
-using namespace ax;
+USING_NS_AX;
 #define EVENT_AFTER_DRAW_RESET_POSITION "director_after_draw"
 using std::max;
 #define INITIAL_SIZE (10000)
@@ -99,7 +99,7 @@ namespace spine {
 		
 			command->_locMVP     = currentState->getUniformLocation(backend::UNIFORM_NAME_MVP_MATRIX);
 	        command->_locTexture = currentState->getUniformLocation(backend::UNIFORM_NAME_TEXTURE);
-		}
+	}
 		return currentState;
 	}
 

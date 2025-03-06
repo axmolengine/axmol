@@ -30,6 +30,7 @@
 #include <spine/MathUtil.h>
 #include <math.h>
 #include <stdlib.h>
+#include <cmath>
 
 // Required for division by 0 in _isNaN on MSVC
 #ifdef _MSC_VER
@@ -40,6 +41,7 @@ using namespace spine;
 
 const float MathUtil::Pi = 3.1415926535897932385f;
 const float MathUtil::Pi_2 = 3.1415926535897932385f * 2;
+const float MathUtil::InvPi_2 = 1 / MathUtil::Pi_2;
 const float MathUtil::Deg_Rad = (3.1415926535897932385f / 180.0f);
 const float MathUtil::Rad_Deg = (180.0f / 3.1415926535897932385f);
 
@@ -64,6 +66,10 @@ float MathUtil::fmod(float a, float b) {
 /// degrees), largest error of 0.00488 radians (0.2796 degrees).
 float MathUtil::atan2(float y, float x) {
 	return (float) ::atan2(y, x);
+}
+
+float MathUtil::atan2Deg(float y, float x) {
+	return MathUtil::atan2(y, x) * MathUtil::Rad_Deg;
 }
 
 /// Returns the cosine in radians from a lookup table.
@@ -94,14 +100,12 @@ float MathUtil::cosDeg(float degrees) {
 	return (float) ::cos(degrees * MathUtil::Deg_Rad);
 }
 
-/* Need to pass 0 as an argument, so VC++ doesn't error with C2124 */
-static bool _isNan(float value, float zero) {
-	float _nan = (float) 0.0 / zero;
-	return 0 == memcmp((void *) &value, (void *) &_nan, sizeof(value));
+bool MathUtil::isNan(float v) {
+	return std::isnan(v);
 }
 
-bool MathUtil::isNan(float v) {
-	return _isNan(v, 0);
+float MathUtil::quietNan() {
+	return std::nan("");
 }
 
 float MathUtil::random() {
@@ -121,4 +125,8 @@ float MathUtil::randomTriangular(float min, float max, float mode) {
 
 float MathUtil::pow(float a, float b) {
 	return (float) ::pow(a, b);
+}
+
+float MathUtil::ceil(float v) {
+	return ::ceil(v);
 }
