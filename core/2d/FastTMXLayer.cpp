@@ -690,12 +690,14 @@ int FastTMXLayer::getTileGIDAt(const Vec2& tileCoordinate, TMXTileFlags* flags /
 
     // Bits on the far end of the 32-bit global tile ID are used for tile flags
     int tile = _tiles[idx];
-    auto it  = _spriteContainer.find(idx);
-
-    // converted to sprite.
-    if (tile == 0 && it != _spriteContainer.end())
+    if (tile == 0)
     {
-        tile = it->second.second;
+        auto it = _spriteContainer.find(idx);
+        // converted to sprite.
+        if (it != _spriteContainer.end())
+        {
+            tile = it->second.second;
+        }
     }
 
     // issue1264, flipped tiles can be changed dynamically
