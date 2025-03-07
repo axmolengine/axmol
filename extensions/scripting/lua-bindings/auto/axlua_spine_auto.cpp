@@ -3161,6 +3161,40 @@ int lua_ax_spine_SkeletonAnimation_setUpdateOnlyIfVisible(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_spine_SkeletonAnimation_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = spine::SkeletonAnimation::create();
+        object_to_luaval<spine::SkeletonAnimation>(tolua_S, "sp.SkeletonAnimation",(spine::SkeletonAnimation*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "sp.SkeletonAnimation:create",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAnimation_create'.",&tolua_err);
+#endif
+    return 0;
+}
 int lua_ax_spine_SkeletonAnimation_createWithJsonFile(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3379,6 +3413,7 @@ int lua_register_ax_spine_SkeletonAnimation(lua_State* tolua_S)
         tolua_function(tolua_S,"setTrackCompleteListener",lua_ax_spine_SkeletonAnimation_setTrackCompleteListener);
         tolua_function(tolua_S,"setTrackEventListener",lua_ax_spine_SkeletonAnimation_setTrackEventListener);
         tolua_function(tolua_S,"setUpdateOnlyIfVisible",lua_ax_spine_SkeletonAnimation_setUpdateOnlyIfVisible);
+        tolua_function(tolua_S,"create", lua_ax_spine_SkeletonAnimation_create);
         tolua_function(tolua_S,"createWithJsonFile", lua_ax_spine_SkeletonAnimation_createWithJsonFile);
         tolua_function(tolua_S,"createWithBinaryFile", lua_ax_spine_SkeletonAnimation_createWithBinaryFile);
     tolua_endmodule(tolua_S);
