@@ -641,7 +641,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
             else
             {
                 // vert does not exist yet, so we need to create a new one
-                verts.emplace_back(v3, Vec2::ZERO, Color::WHITE);
+                verts.emplace_back(v3, Vec2::ZERO, Color32::WHITE);
                 indices[idx++] = vdx++;;
             }
         }

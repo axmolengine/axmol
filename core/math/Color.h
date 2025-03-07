@@ -79,12 +79,47 @@ struct AX_DLL Color3B
  */
 struct AX_DLL Color32
 {
-    Color32() {}
+    Color32() : value(0) {}
     Color32(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) : r(_r), g(_g), b(_b), a(_a) {}
     explicit Color32(const Color3B& color, uint8_t _a = 255) : r(color.r), g(color.g), b(color.b), a(_a) {}
-    Color32(const Color& color);
 
-    inline void set(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
+    template <class _Other,
+              typename = std::enable_if_t<std::is_unsigned_v<decltype(_Other{}.r)> &&
+                                          std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.g)> &&
+                                          std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.b)> &&
+                                          std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.a)>>,
+              typename = void>
+    explicit Color32(const _Other& other) noexcept : r(other.r), g(other.g), b(other.b), a(other.a)
+    {}
+
+    template <class _Other,
+              typename = std::enable_if_t<std::is_floating_point_v<decltype(_Other{}.r)> &&
+                                          std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.g)> &&
+                                          std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.b)> &&
+                                          std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.a)>>>
+    explicit Color32(const _Other& other) noexcept
+        : r(static_cast<uint8_t>(other.r * 255.f + 0.5f))
+        , g(static_cast<uint8_t>(other.g * 255.f + 0.5f))
+        , b(static_cast<uint8_t>(other.b * 255.f + 0.5f))
+        , a(static_cast<uint8_t>(other.a * 255.f + 0.5f))
+    {}
+
+    // from normalized color, comment to refactor all low performance assign code
+    template <class _Other,
+              typename = std::enable_if_t<std::is_floating_point_v<decltype(_Other{}.r)> &&
+                                          std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.g)> &&
+                                          std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.b)> &&
+                                          std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.a)>>>
+    Color32& operator=(const _Other& other) noexcept
+    {
+        set(static_cast<uint8_t>(other.r * 255.f + 0.5f), static_cast<uint8_t>(other.g * 255.f + 0.5f),
+            static_cast<uint8_t>(other.b * 255.f + 0.5f), static_cast<uint8_t>(other.a * 255.f + 0.5f));
+        return *this;
+    }
+
+    operator Color() const;
+
+    void set(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
     {
         r = _r;
         g = _g;
@@ -99,10 +134,17 @@ struct AX_DLL Color32
     bool operator!=(const Color3B& right) const;
     bool operator!=(const Color& right) const;
 
-    uint8_t r = 0;
-    uint8_t g = 0;
-    uint8_t b = 0;
-    uint8_t a = 0;
+    union
+    {
+        struct
+        {
+            uint8_t r;
+            uint8_t g;
+            uint8_t b;
+            uint8_t a;
+        };
+        uint32_t value;
+    };
 
     static const Color32 WHITE;
     static const Color32 YELLOW;
@@ -125,10 +167,10 @@ struct AX_DLL Color : public Vec4Adapter<Color>
     Color() {}
     Color(float _r, float _g, float _b, float _a) : Vec4Adapter(_r, _g, _b, _a) {}
     explicit Color(const Color3B& color, float _a = 1.0f)
-        : Vec4Adapter(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, _a)
+        : Vec4Adapter(color.r / 255.f, color.g / 255.f, color.b / 255.f, _a)
     {}
     explicit Color(const Color32& color)
-        : Vec4Adapter(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f)
+        : Vec4Adapter(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f)
     {}
     template <typename _Other>
     explicit Color(const _Other& color) : Vec4Adapter(color.r, color.g, color.b, color.a)
@@ -226,13 +268,10 @@ inline Color3B::Color3B(const Color& color)
     , g(static_cast<uint8_t>(color.g * 255))
     , b(static_cast<uint8_t>(color.b * 255))
 {}
-
-inline Color32::Color32(const Color& color)
-    : r(static_cast<uint8_t>(color.r * 255))
-    , g(static_cast<uint8_t>(color.g * 255))
-    , b(static_cast<uint8_t>(color.b * 255))
-    , a(static_cast<uint8_t>(color.a * 255))
-{}
+inline Color32::operator Color() const
+{
+    return Color{r / 255.f, g / 255.f, b / 255.f, a / 255.f};
+}
 
 NS_AX_MATH_END
 

@@ -170,10 +170,11 @@ public:
         if (_opacityModifyRGB)
             color.premultiplyAlpha();
 
-        _quad.bl.color = color;
-        _quad.br.color = color;
-        _quad.tl.color = color;
-        _quad.tr.color = color;
+        Color32 color32{color};
+        _quad.bl.color = color32;
+        _quad.br.color = color32;
+        _quad.tl.color = color32;
+        _quad.tr.color = color32;
 
         _textureAtlas->updateQuad(_quad, _atlasIndex);
     }
@@ -2491,11 +2492,9 @@ void Label::updateColor()
 
     // special opacity for premultiplied textures
     if (_isOpacityModifyRGB)
-    {
-        color.r *= color.a;
-        color.g *= color.a;
-        color.b *= color.a;
-    }
+        color.premultiplyAlpha();
+
+    Color32 color32{color};
 
     for (auto&& batchNode : _batchNodes)
     {
@@ -2505,10 +2504,10 @@ void Label::updateColor()
 
         for (int index = 0; index < count; ++index)
         {
-            quads[index].bl.color = color;
-            quads[index].br.color = color;
-            quads[index].tl.color = color;
-            quads[index].tr.color = color;
+            quads[index].bl.color = color32;
+            quads[index].br.color = color32;
+            quads[index].tl.color = color32;
+            quads[index].tr.color = color32;
             textureAtlas->updateQuad(quads[index], index);
         }
     }
