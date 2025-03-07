@@ -296,10 +296,10 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect, bool rotated)
         memset(&_quad, 0, sizeof(_quad));
 
         // Atlas: Color
-        _quad.bl.color = Color::WHITE;
-        _quad.br.color = Color::WHITE;
-        _quad.tl.color = Color::WHITE;
-        _quad.tr.color = Color::WHITE;
+        _quad.bl.color = Color32::WHITE;
+        _quad.br.color = Color32::WHITE;
+        _quad.tl.color = Color32::WHITE;
+        _quad.tr.color = Color32::WHITE;
 
         // update texture (calls updateBlendFunc)
         setTexture(texture);
@@ -1503,19 +1503,17 @@ void Sprite::updateColor()
 
     // special opacity for premultiplied textures
     if (_opacityModifyRGB)
-    {
-        color.r *= color.a;
-        color.g *= color.a;
-        color.b *= color.a;
-    }
+        color.premultiplyAlpha();
+
+    Color32 color32{color};
 
     for (unsigned int i = 0; i < _polyInfo.triangles.vertCount; i++)
-        _polyInfo.triangles.verts[i].color = color;
+        _polyInfo.triangles.verts[i].color = color32;
 
     // related to issue #17116
     // when switching from Quad to Slice9, the color will be obtained from _quad
     // so it is important to update _quad colors as well.
-    _quad.bl.color = _quad.tl.color = _quad.br.color = _quad.tr.color = color;
+    _quad.bl.color = _quad.tl.color = _quad.br.color = _quad.tr.color = color32;
 
     // renders using batch node
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
