@@ -384,8 +384,8 @@ namespace spine {
 				color.b *= color.a;
 			}
 
-			const ax::Color color_r{color};
-            const ax::Color darkColor_r{darkColor};
+			const ax::Color32 color_r{color};
+            const ax::Color32 darkColor_r{darkColor};
 			const BlendFunc blendFunc = makeBlendFunc(slot->getData().getBlendMode(), texture->hasPremultipliedAlpha());
 			_blendFunc = blendFunc;
 
@@ -457,8 +457,8 @@ namespace spine {
                         vertex->position.y  = verts[vv + 1];
                         vertex->texCoord.u = uvs[vv];
                         vertex->texCoord.v = uvs[vv + 1];
-                        vertex->color       = color_r;
-                        vertex->color2      = darkColor_r;
+                        vertex->color = color_r;
+                        vertex->color2 = darkColor_r;
                     }
                     lastTwoColorTrianglesCommand = twoColorBatch->addCommand(renderer, _globalZOrder, texture, _programState, blendFunc, trianglesTwoColor, transform, transformFlags);
 				} else {

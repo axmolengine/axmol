@@ -250,19 +250,16 @@ void LabelAtlas::updateColor()
     {
         Color color(_displayedColor, _displayedOpacity / 255.0f);
         if (_isOpacityModifyRGB)
-        {
-            color.r *= color.a;
-            color.g *= color.a;
-            color.b *= color.a;
-        }
+            color.premultiplyAlpha();
+        Color32 color32{color};
         auto quads     = _textureAtlas->getQuads();
         ssize_t length = _string.length();
         for (int index = 0; index < length; index++)
         {
-            quads[index].bl.color = color;
-            quads[index].br.color = color;
-            quads[index].tl.color = color;
-            quads[index].tr.color = color;
+            quads[index].bl.color = color32;
+            quads[index].br.color = color32;
+            quads[index].tl.color = color32;
+            quads[index].tr.color = color32;
             _textureAtlas->updateQuad(quads[index], index);
         }
     }
