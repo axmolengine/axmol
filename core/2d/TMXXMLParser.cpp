@@ -491,7 +491,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         // Create an instance of TMXObjectInfo to store the object and its properties
         ValueMap dict;
         // Parse everything automatically
-        const char* keys[] = {"name", "type", "width", "height", "gid", "id"};
+        const char* keys[] = {"name", "type", "width", "height", "id", "visible"};
 
         for (const auto& key : keys)
         {
@@ -501,13 +501,13 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
 
         // But X and Y since they need special treatment
         // X
-        int x = attributeDict["x"].asInt();
+        double x = attributeDict["x"].asDouble();
         // Y
-        int y = attributeDict["y"].asInt();
+        double y = attributeDict["y"].asDouble();
+        // GID
+        dict["gid"] = tmxMapInfo->getParentGID();
 
-        Vec2 p(x + objectGroup->getPositionOffset().x, _mapSize.height * _tileSize.height - y -
-                                                           objectGroup->getPositionOffset().y -
-                                                           attributeDict["height"].asInt());
+        Vec2 p(x, _tileSize.height - attributeDict["height"].asInt() - y);
         p         = AX_POINT_PIXELS_TO_POINTS(p);
         dict["x"] = Value(p.x);
         dict["y"] = Value(p.y);
@@ -610,14 +610,14 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
                 // set x
                 if (std::getline(pointStream, xStr, ','))
                 {
-                    int x          = atoi(xStr.c_str()) + (int)objectGroup->getPositionOffset().x;
+                    float x          = atof(xStr.c_str()) + (int)objectGroup->getPositionOffset().x;
                     pointDict["x"] = Value(x);
                 }
 
                 // set y
                 if (std::getline(pointStream, yStr, ','))
                 {
-                    int y          = atoi(yStr.c_str()) + (int)objectGroup->getPositionOffset().y;
+                    float y        = atof(yStr.c_str()) + (int)objectGroup->getPositionOffset().y;
                     pointDict["y"] = Value(y);
                 }
 
