@@ -629,7 +629,7 @@ macro(ax_setup_winrt_sources )
         ${_AX_ROOT}/core/platform/winrt/xaml/AxmolRenderer.cpp
     )
 
-    file(TO_NATIVE_PATH "${CMAKE_CURRENT_LIST_DIR}/proj.winrt/App.xaml" APP_XAML_FULL_PATH)
+    file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/proj.winrt/App.xaml" APP_XAML_FULL_PATH)
     set_property(
         SOURCE proj.winrt/App.h proj.winrt/App.cpp proj.winrt/App.idl
         PROPERTY VS_SETTINGS
