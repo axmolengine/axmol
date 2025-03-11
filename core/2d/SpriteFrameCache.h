@@ -249,7 +249,8 @@ public:
 
     SpriteFrame* findFrame(std::string_view frame);
 
-    std::string_view getSpriteFrameName(SpriteFrame* frame);
+    // @DEPRECATED, use frame->getName() instead
+    std::string_view getSpriteFrameName(SpriteFrame* frame) { return frame->getName(); }
 
     /**  Record SpriteFrame with plist and frame name, add frame name
      *    and plist to index
@@ -261,7 +262,7 @@ public:
     /** Delete frame from cache, rebuild index
      */
     bool eraseFrame(std::string_view frameName);
-
+    
     void addSpriteFrameCapInset(SpriteFrame* spriteFrame, const Rect& capInsets, Texture2D* texture);
 
     void registerSpriteSheetLoader(std::shared_ptr<ISpriteSheetLoader> loader);
@@ -273,6 +274,9 @@ protected:
     // MARMALADE: Made this protected not private, as deriving from this class is pretty useful
     SpriteFrameCache() {}
 
+    SpriteFrame* findFrame(uint64_t frameId);
+    bool eraseFrame(uint64_t frameId);
+
     /** Removes multiple Sprite Frames from Dictionary.
      * @since v0.99.5
      */
@@ -280,38 +284,37 @@ protected:
 
     /** Delete a list of frames from cache, rebuild index
      */
-    bool eraseFrames(const std::vector<std::string_view>& frame);
+    bool eraseFrames(const std::vector<uint64_t>& frame);
     /** Delete frame from index and SpriteFrame is kept.
      */
-    bool removeSpriteSheet(std::string_view spriteSheetFileName);
+    bool removeSpriteSheet(uint64_t spriteSheetFileName);
     /** Clear index and all SpriteFrames.
      */
     void clear();
 
-    inline bool hasFrame(std::string_view frame) const;
-    inline bool isSpriteSheetInUse(std::string_view spriteSheetFileName) const;
+    inline bool isSpriteSheetInUse(uint64_t spriteSheetFileName) const;
 
-    inline StringMap<SpriteFrame*>& getSpriteFrames();
+    inline const ax::Map<uint64_t, SpriteFrame*>& getSpriteFrames();
 
-    void markPlistFull(std::string_view spriteSheetFileName, bool full)
+    void markPlistFull(uint64_t sheetId, bool full)
     {
         // _spriteSheets[spriteSheetFileName]->full = full;
-        auto it = _spriteSheets.find(spriteSheetFileName);
+        auto it = _spriteSheets.find(sheetId);
         if (it != _spriteSheets.end())
         {
             it.value()->full = full;
         }
     }
-    bool isPlistFull(std::string_view spriteSheetFileName) const
+    bool isPlistFull(uint64_t sheetId) const
     {
-        auto it = _spriteSheets.find(spriteSheetFileName);
-        return it == _spriteSheets.end() ? false : it->second->full;
+        auto it = _spriteSheets.find(sheetId);
+        return it != _spriteSheets.end() && it->second->full;
     }
 
 private:
-    StringMap<SpriteFrame*> _spriteFrames;
-    hlookup::string_map<std::shared_ptr<SpriteSheet>> _spriteSheets;
-    hlookup::string_map<std::shared_ptr<SpriteSheet>> _spriteFrameToSpriteSheetMap;
+    ax::Map<uint64_t, SpriteFrame*> _spriteFrames;
+    tsl::robin_map<uint64_t, std::shared_ptr<SpriteSheet>> _spriteSheets;
+    tsl::robin_map<uint64_t, std::shared_ptr<SpriteSheet>> _spriteFrameToSpriteSheetMap;
 
     std::map<uint32_t, std::shared_ptr<ISpriteSheetLoader>> _spriteSheetLoaders;
 };

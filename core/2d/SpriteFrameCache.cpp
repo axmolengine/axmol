@@ -41,6 +41,7 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "renderer/Texture2D.h"
 #include "base/NinePatchImageParser.h"
+#include "xxhash.h"
 
 using namespace std;
 
@@ -48,6 +49,11 @@ namespace ax
 {
 
 static SpriteFrameCache* _sharedSpriteFrameCache = nullptr;
+
+static uint64_t calcDigitId(const std::string_view& v)
+{
+    return XXH64(v.data(), v.length(), 0);
+}
 
 SpriteFrameCache* SpriteFrameCache::getInstance()
 {
@@ -121,15 +127,16 @@ void SpriteFrameCache::addSpriteFramesWithFileContent(const Data& content,
 
 bool SpriteFrameCache::isSpriteFramesWithFileLoaded(std::string_view plist) const
 {
-    return isSpriteSheetInUse(plist) && isPlistFull(plist);
+    auto sheetId = calcDigitId(plist);
+    return isSpriteSheetInUse(sheetId) && isPlistFull(sheetId);
 }
 
 void SpriteFrameCache::addSpriteFrame(SpriteFrame* frame, std::string_view frameName)
 {
     AXASSERT(frame, "frame should not be nil");
 
-    const std::string name = "by#addSpriteFrame()";
-    auto&& itr             = _spriteSheets.find(name);
+    const auto name = calcDigitId("by#addSpriteFrame()");
+    auto&& itr      = _spriteSheets.find(name);
     if (itr != _spriteSheets.end())
     {
         insertFrame(itr->second, frameName, frame);
@@ -150,7 +157,7 @@ void SpriteFrameCache::removeSpriteFrames()
 void SpriteFrameCache::removeUnusedSpriteFrames()
 {
     auto removed = false;
-    std::vector<std::string_view> toRemoveFrames;
+    std::vector<uint64_t> toRemoveFrames;
 
     const auto& frames = getSpriteFrames();
     for (auto&& iter : frames)
@@ -173,13 +180,13 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
 
 void SpriteFrameCache::removeUnusedSpriteSheets()
 {
-    std::vector<std::string_view> willRemoveSpriteSheetFileNames;
+    std::vector<uint64_t> willRemoveSpriteSheetFileNames;
     for (auto&& it : _spriteSheets)
     {
         bool isUsed = false;
         for (auto&& frame : it.second->frames)
         {
-            auto spriteFrame = getSpriteFrameByName(frame);
+            auto spriteFrame = findFrame(frame);
             if (spriteFrame && spriteFrame->getReferenceCount() > 1)
             {
                 isUsed = true;
@@ -191,10 +198,10 @@ void SpriteFrameCache::removeUnusedSpriteSheets()
             willRemoveSpriteSheetFileNames.push_back(it.first);
     }
 
-    for (auto& spriteSheetFileName : willRemoveSpriteSheetFileNames)
+    for (auto& sheetId : willRemoveSpriteSheetFileNames)
     {
-        AXLOGD("SpriteFrameCache: removing unused sprite sheet file : {}", spriteSheetFileName);
-        removeSpriteSheet(spriteSheetFileName);
+        AXLOGD("SpriteFrameCache: removing unused sprite sheet file : {}", sheetId);
+        removeSpriteSheet(sheetId);
     }
 }
 
@@ -219,7 +226,7 @@ void SpriteFrameCache::removeSpriteFramesFromFile(std::string_view atlasPath)
     // removeSpriteFramesFromDictionary(dict);
 
     // remove it from the cache
-    removeSpriteSheet(atlasPath);
+    removeSpriteSheet(calcDigitId(atlasPath));
 }
 
 void SpriteFrameCache::removeSpriteFramesFromFileContent(std::string_view plist_content)
@@ -240,13 +247,14 @@ void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
         return;
 
     const auto& framesDict = dictionary["frames"].asValueMap();
-    std::vector<std::string_view> keysToRemove;
+    std::vector<uint64_t> keysToRemove;
 
     for (const auto& iter : framesDict)
     {
-        if (findFrame(iter.first))
+        auto frameId = calcDigitId(iter.first);
+        if (findFrame(frameId))
         {
-            keysToRemove.emplace_back(iter.first);
+            keysToRemove.emplace_back(frameId);
         }
     }
 
@@ -255,7 +263,7 @@ void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
 
 void SpriteFrameCache::removeSpriteFramesFromTexture(Texture2D* texture)
 {
-    std::vector<std::string_view> keysToRemove;
+    std::vector<uint64_t> keysToRemove;
 
     for (auto&& iter : getSpriteFrames())
     {
@@ -282,8 +290,8 @@ SpriteFrame* SpriteFrameCache::getSpriteFrameByName(std::string_view name)
 bool SpriteFrameCache::reloadTexture(std::string_view spriteSheetFileName)
 {
     AXASSERT(!spriteSheetFileName.empty(), "plist filename should not be nullptr");
-
-    const auto spriteSheetItr = _spriteSheets.find(spriteSheetFileName);
+    auto sheetId              = calcDigitId(spriteSheetFileName);
+    const auto spriteSheetItr = _spriteSheets.find(sheetId);
     if (spriteSheetItr == _spriteSheets.end())
     {
         return false;  // Sprite sheet wasn't loaded, so don't reload it
@@ -291,10 +299,9 @@ bool SpriteFrameCache::reloadTexture(std::string_view spriteSheetFileName)
 
     const auto format = spriteSheetItr->second->format;
 
-    if (isSpriteSheetInUse(spriteSheetFileName))
+    if (isSpriteSheetInUse(sheetId))
     {
-        removeSpriteSheet(
-            spriteSheetFileName);  // we've removed the associated entry, so spriteSheetItr is no longer valid
+        removeSpriteSheet(sheetId);  // we've removed the associated entry, so spriteSheetItr is no longer valid
     }
     else
     {
@@ -314,28 +321,35 @@ void SpriteFrameCache::insertFrame(const std::shared_ptr<SpriteSheet>& spriteShe
                                    std::string_view frameName,
                                    SpriteFrame* spriteFrame)
 {
-    spriteSheet->frames.emplace(frameName);
-    _spriteFrames.insert(frameName, spriteFrame);  // add SpriteFrame
-    _spriteSheets[spriteSheet->path] = spriteSheet;
-    hlookup::set_item(_spriteFrameToSpriteSheetMap, frameName,
-                      spriteSheet);  // _spriteFrameToSpriteSheetMap[frameName] = spriteSheet;  // insert
-                                     // index frameName->plist
+    auto frameId = calcDigitId(frameName);
+    spriteFrame->setName(frameName);
+    spriteSheet->frames.emplace(frameId);
+    _spriteFrames.insert(frameId, spriteFrame);  // add SpriteFrame
+    if (spriteSheet->pathId == (uint64_t)-1)
+        spriteSheet->pathId = calcDigitId(spriteSheet->path);
+    hlookup::set_item(_spriteSheets, spriteSheet->pathId, spriteSheet);
+    hlookup::set_item(_spriteFrameToSpriteSheetMap, frameId, spriteSheet);
 }
 
 bool SpriteFrameCache::eraseFrame(std::string_view frameName)
 {
+    return eraseFrame(calcDigitId(frameName));
+}
+
+bool SpriteFrameCache::eraseFrame(uint64_t frameId)
+{
     // drop SpriteFrame
-    const auto itFrame = _spriteFrameToSpriteSheetMap.find(frameName);
-    bool found = itFrame != _spriteFrameToSpriteSheetMap.end();
+    const auto itFrame = _spriteFrameToSpriteSheetMap.find(frameId);
+    bool found         = itFrame != _spriteFrameToSpriteSheetMap.end();
     if (found)
     {
         auto& spriteSheet = itFrame->second;
         spriteSheet->full = false;
-        spriteSheet->frames.erase(frameName);
+        spriteSheet->frames.erase(frameId);
 
         if (spriteSheet->frames.empty())
         {
-            _spriteSheets.erase(spriteSheet->path);
+            _spriteSheets.erase(calcDigitId(spriteSheet->path));
         }
 
         _spriteFrameToSpriteSheetMap.erase(itFrame);  // update index frame->plist
@@ -346,11 +360,11 @@ bool SpriteFrameCache::eraseFrame(std::string_view frameName)
         //    _spriteSheets.clear();
         //}
     }
-    _spriteFrames.erase(frameName);
+    _spriteFrames.erase(frameId);
     return found;
 }
 
-bool SpriteFrameCache::eraseFrames(const std::vector<std::string_view>& frames)
+bool SpriteFrameCache::eraseFrames(const std::vector<uint64_t>& frames)
 {
     auto ret = false;
     for (const auto& frame : frames)
@@ -361,9 +375,9 @@ bool SpriteFrameCache::eraseFrames(const std::vector<std::string_view>& frames)
     return ret;
 }
 
-bool SpriteFrameCache::removeSpriteSheet(std::string_view spriteSheetFileName)
+bool SpriteFrameCache::removeSpriteSheet(uint64_t sheetId)
 {
-    auto it = _spriteSheets.find(spriteSheetFileName);
+    auto it = _spriteSheets.find(sheetId);
     if (it == _spriteSheets.end())
         return false;
 
@@ -375,7 +389,7 @@ bool SpriteFrameCache::removeSpriteSheet(std::string_view spriteSheetFileName)
         _spriteFrames.erase(f);
         _spriteFrameToSpriteSheetMap.erase(f);  // erase plist frame frameName->plist
     }
-    _spriteSheets.erase(spriteSheetFileName);  // update index plist->[frameNames]
+    _spriteSheets.erase(sheetId);  // update index plist->[frameNames]
 
     return true;
 }
@@ -387,32 +401,20 @@ void SpriteFrameCache::clear()
     _spriteFrames.clear();
 }
 
-bool SpriteFrameCache::hasFrame(std::string_view frame) const
+bool SpriteFrameCache::isSpriteSheetInUse(uint64_t sheetId) const
 {
-    return _spriteFrameToSpriteSheetMap.find(frame) != _spriteFrameToSpriteSheetMap.end();
-}
-
-bool SpriteFrameCache::isSpriteSheetInUse(std::string_view spriteSheetFileName) const
-{
-    const auto spriteSheetItr = _spriteSheets.find(spriteSheetFileName);
+    const auto spriteSheetItr = _spriteSheets.find(sheetId);
     return spriteSheetItr != _spriteSheets.end() && !spriteSheetItr->second->frames.empty();
 }
 
 SpriteFrame* SpriteFrameCache::findFrame(std::string_view frame)
 {
-    return _spriteFrames.at(frame);
+    return _spriteFrames.at(calcDigitId(frame));
 }
 
-std::string_view SpriteFrameCache::getSpriteFrameName(SpriteFrame* frame)
+SpriteFrame* SpriteFrameCache::findFrame(uint64_t frameId)
 {
-    for (auto& it : _spriteFrames)
-    {
-        if (it.second == frame)
-        {
-            return it.first;
-        }
-    }
-    return "";
+    return _spriteFrames.at(frameId);
 }
 
 void SpriteFrameCache::addSpriteFrameCapInset(SpriteFrame* spriteFrame, const Rect& capInsets, Texture2D* texture)
@@ -420,7 +422,7 @@ void SpriteFrameCache::addSpriteFrameCapInset(SpriteFrame* spriteFrame, const Re
     texture->addSpriteFrameCapInset(spriteFrame, capInsets);
 }
 
-StringMap<SpriteFrame*>& SpriteFrameCache::getSpriteFrames()
+const ax::Map<uint64_t, SpriteFrame*>& SpriteFrameCache::getSpriteFrames()
 {
     return _spriteFrames;
 }
@@ -457,4 +459,4 @@ ISpriteSheetLoader* SpriteFrameCache::getSpriteSheetLoader(uint32_t spriteSheetF
     return nullptr;
 }
 
-}
+}  // namespace ax

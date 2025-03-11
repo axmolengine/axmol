@@ -48,8 +48,8 @@ template <typename _Valty>
 using string_map = tsl::robin_map<std::string, _Valty, string_hash, equal_to>;
 using string_set = tsl::robin_set<std::string, string_hash, equal_to>;
 
-template <typename _Cont, typename _Valty>
-inline auto set_item(_Cont& cont, std::string_view k, _Valty&& v)
+template <typename _Cont, typename _Kty, typename _Valty>
+inline auto set_item(_Cont& cont, _Kty&& k, _Valty&& v)
 {
     typename _Cont::iterator it = cont.find(k);
     if (it != cont.end())

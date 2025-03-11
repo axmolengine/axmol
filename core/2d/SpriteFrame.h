@@ -39,7 +39,7 @@ namespace ax
 {
 
 class Texture2D;
-
+class SpriteFrameCache;
 /**
  * @addtogroup _2d
  * @{
@@ -60,6 +60,8 @@ class Texture2D;
  */
 class AX_DLL SpriteFrame : public Object, public Clonable
 {
+    friend class SpriteFrameCache;
+
 public:
     /** Create a SpriteFrame with a texture filename, rect in points.
      It is assumed that the frame was not trimmed.
@@ -302,7 +304,12 @@ public:
                                  const Vec2& offset,
                                  const Vec2& originalSize);
 
+    // @since axmol-2.5.0
+    std::string_view getName() { return _name; }
+    void setName(std::string_view name) { _name = name; }
+
 protected:
+    
     Vec2 _offset;
     Vec2 _anchorPoint;
     Vec2 _originalSize;
@@ -313,6 +320,7 @@ protected:
     Vec2 _offsetInPixels;
     Vec2 _originalSizeInPixels;
     Texture2D* _texture;
+    std::string _name;
     std::string _textureFilename;
     PolygonInfo _polygonInfo;
 };

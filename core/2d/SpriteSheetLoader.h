@@ -66,7 +66,8 @@ class SpriteSheet
 public:
     std::string path;
     uint32_t format;
-    hlookup::string_set frames;
+    uint64_t pathId = (uint64_t)-1;
+    tsl::robin_set<uint64_t> frames;
     bool full = false;
 };
 
