@@ -287,12 +287,12 @@ protected:
     bool eraseFrames(const std::vector<uint64_t>& frame);
     /** Delete frame from index and SpriteFrame is kept.
      */
-    bool removeSpriteSheet(uint64_t spriteSheetFileName);
+    bool removeSpriteSheet(uint64_t sheetId);
     /** Clear index and all SpriteFrames.
      */
     void clear();
 
-    inline bool isSpriteSheetInUse(uint64_t spriteSheetFileName) const;
+    inline bool isSpriteSheetInUse(uint64_t sheetId) const;
 
     inline const ax::Map<uint64_t, SpriteFrame*>& getSpriteFrames();
 

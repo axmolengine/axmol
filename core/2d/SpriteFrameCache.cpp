@@ -50,7 +50,7 @@ namespace ax
 
 static SpriteFrameCache* _sharedSpriteFrameCache = nullptr;
 
-static uint64_t calcDigitId(const std::string_view& v)
+static uint64_t computeHash(const std::string_view& v)
 {
     return XXH64(v.data(), v.length(), 0);
 }
@@ -127,7 +127,7 @@ void SpriteFrameCache::addSpriteFramesWithFileContent(const Data& content,
 
 bool SpriteFrameCache::isSpriteFramesWithFileLoaded(std::string_view plist) const
 {
-    auto sheetId = calcDigitId(plist);
+    auto sheetId = computeHash(plist);
     return isSpriteSheetInUse(sheetId) && isPlistFull(sheetId);
 }
 
@@ -135,7 +135,7 @@ void SpriteFrameCache::addSpriteFrame(SpriteFrame* frame, std::string_view frame
 {
     AXASSERT(frame, "frame should not be nil");
 
-    const auto name = calcDigitId("by#addSpriteFrame()");
+    const auto name = computeHash("by#addSpriteFrame()");
     auto&& itr      = _spriteSheets.find(name);
     if (itr != _spriteSheets.end())
     {
@@ -226,7 +226,7 @@ void SpriteFrameCache::removeSpriteFramesFromFile(std::string_view atlasPath)
     // removeSpriteFramesFromDictionary(dict);
 
     // remove it from the cache
-    removeSpriteSheet(calcDigitId(atlasPath));
+    removeSpriteSheet(computeHash(atlasPath));
 }
 
 void SpriteFrameCache::removeSpriteFramesFromFileContent(std::string_view plist_content)
@@ -251,7 +251,7 @@ void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
 
     for (const auto& iter : framesDict)
     {
-        auto frameId = calcDigitId(iter.first);
+        auto frameId = computeHash(iter.first);
         if (findFrame(frameId))
         {
             keysToRemove.emplace_back(frameId);
@@ -290,7 +290,7 @@ SpriteFrame* SpriteFrameCache::getSpriteFrameByName(std::string_view name)
 bool SpriteFrameCache::reloadTexture(std::string_view spriteSheetFileName)
 {
     AXASSERT(!spriteSheetFileName.empty(), "plist filename should not be nullptr");
-    auto sheetId              = calcDigitId(spriteSheetFileName);
+    auto sheetId              = computeHash(spriteSheetFileName);
     const auto spriteSheetItr = _spriteSheets.find(sheetId);
     if (spriteSheetItr == _spriteSheets.end())
     {
@@ -321,19 +321,19 @@ void SpriteFrameCache::insertFrame(const std::shared_ptr<SpriteSheet>& spriteShe
                                    std::string_view frameName,
                                    SpriteFrame* spriteFrame)
 {
-    auto frameId = calcDigitId(frameName);
+    auto frameId = computeHash(frameName);
     spriteFrame->setName(frameName);
     spriteSheet->frames.emplace(frameId);
     _spriteFrames.insert(frameId, spriteFrame);  // add SpriteFrame
     if (spriteSheet->pathId == (uint64_t)-1)
-        spriteSheet->pathId = calcDigitId(spriteSheet->path);
+        spriteSheet->pathId = computeHash(spriteSheet->path);
     hlookup::set_item(_spriteSheets, spriteSheet->pathId, spriteSheet);
     hlookup::set_item(_spriteFrameToSpriteSheetMap, frameId, spriteSheet);
 }
 
 bool SpriteFrameCache::eraseFrame(std::string_view frameName)
 {
-    return eraseFrame(calcDigitId(frameName));
+    return eraseFrame(computeHash(frameName));
 }
 
 bool SpriteFrameCache::eraseFrame(uint64_t frameId)
@@ -349,7 +349,7 @@ bool SpriteFrameCache::eraseFrame(uint64_t frameId)
 
         if (spriteSheet->frames.empty())
         {
-            _spriteSheets.erase(calcDigitId(spriteSheet->path));
+            _spriteSheets.erase(computeHash(spriteSheet->path));
         }
 
         _spriteFrameToSpriteSheetMap.erase(itFrame);  // update index frame->plist
@@ -409,7 +409,7 @@ bool SpriteFrameCache::isSpriteSheetInUse(uint64_t sheetId) const
 
 SpriteFrame* SpriteFrameCache::findFrame(std::string_view frame)
 {
-    return _spriteFrames.at(calcDigitId(frame));
+    return _spriteFrames.at(computeHash(frame));
 }
 
 SpriteFrame* SpriteFrameCache::findFrame(uint64_t frameId)
