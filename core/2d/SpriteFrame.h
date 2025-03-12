@@ -306,9 +306,9 @@ public:
 
     // @since axmol-2.5.0
     std::string_view getName() { return _name; }
-    void setName(std::string_view name) { _name = name; }
 
 protected:
+    void setName(std::string_view name) { _name = name; }
     
     Vec2 _offset;
     Vec2 _anchorPoint;
