@@ -1556,7 +1556,7 @@ void EventDispatcher::removeCustomEventListeners(std::string_view customEventNam
 void EventDispatcher::removeAllEventListeners()
 {
     bool cleanMap = true;
-    std::vector<std::string_view> types;
+    std::vector<std::string> types;
     types.reserve(_listenerMap.size());
 
     for (const auto& e : _listenerMap)
