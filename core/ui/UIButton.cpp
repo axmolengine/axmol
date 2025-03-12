@@ -39,11 +39,11 @@ namespace ax
 namespace ui
 {
 
-static const int NORMAL_RENDERER_Z       = (-2);
-static const int PRESSED_RENDERER_Z      = (-2);
-static const int DISABLED_RENDERER_Z     = (-2);
-static const int TITLE_RENDERER_Z        = (-1);
-static const float ZOOM_ACTION_TIME_STEP = 0.05f;
+constexpr int NORMAL_RENDERER_Z       = (-2);
+constexpr int PRESSED_RENDERER_Z      = (-2);
+constexpr int DISABLED_RENDERER_Z     = (-2);
+constexpr int TITLE_RENDERER_Z        = (-1);
+constexpr float ZOOM_ACTION_TIME_STEP = 0.05f;
 
 IMPLEMENT_CLASS_GUI_INFO(Button)
 
@@ -68,18 +68,17 @@ Button::Button()
     , _normalTextureAdaptDirty(true)
     , _pressedTextureAdaptDirty(true)
     , _disabledTextureAdaptDirty(true)
-    , _normalFileName("")
-    , _clickedFileName("")
-    , _disabledFileName("")
     , _normalTexType(TextureResType::LOCAL)
     , _pressedTexType(TextureResType::LOCAL)
     , _disabledTexType(TextureResType::LOCAL)
-    , _fontName("")
 {
     setTouchEnabled(true);
 }
 
-Button::~Button() {}
+Button::~Button()
+{
+    AX_SAFE_RELEASE_NULL(_titleRenderer);
+}
 
 Button* Button::create()
 {
@@ -161,7 +160,10 @@ bool Button::createTitleRendererIfNull()
 
 void Button::createTitleRenderer()
 {
+    AX_SAFE_RELEASE(_titleRenderer);
     _titleRenderer = Label::create();
+    AX_SAFE_RETAIN(_titleRenderer);
+
     _titleRenderer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     addProtectedChild(_titleRenderer, TITLE_RENDERER_Z, -1);
 }
@@ -722,7 +724,7 @@ void Button::setTitleAlignment(TextHAlignment hAlignment, TextVAlignment vAlignm
 
 void Button::setTitleText(std::string_view text)
 {
-    if (text.compare(getTitleText()) == 0)
+    if (text == getTitleText())
     {
         return;
     }
