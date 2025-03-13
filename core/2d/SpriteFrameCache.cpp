@@ -167,7 +167,7 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
         {
             toRemoveFrames.emplace_back(iter.first);
             spriteFrame->getTexture()->removeSpriteFrameCapInset(spriteFrame);
-            AXLOGD("SpriteFrameCache: removing unused frame: {}", iter.first);
+            AXLOGD("SpriteFrameCache: removing unused frame: {}", spriteFrame->getName());
             removed = true;
         }
     }
