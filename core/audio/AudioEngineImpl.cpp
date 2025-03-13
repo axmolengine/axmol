@@ -829,10 +829,11 @@ float AudioEngineImpl::getCurrentTime(AUDIO_ID audioID)
             {
                 AXLOGE("{}, audio id:{},error code:{:#x}", __FUNCTION__, audioID, error);
             }
-            else if (ret == 0.0f && player->isFinished())
-            {
-                ret = player->_audioCache->_duration;
-            }
+        }
+
+        if (ret == 0.0f && player->isFinished())
+        {
+            ret = player->_audioCache->_duration;
         }
     }
 
