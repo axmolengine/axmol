@@ -221,8 +221,8 @@ public:
     }
 
     /**
-    @brief Call of Java static String* method
-    @return axstd::pod_vector
+    @brief Call of Java static method
+    @return std::vector<std::string>
     */
     template <typename... Ts>
     static std::vector<std::string> callStaticStringArrayMethod(const char* className, const char* methodName, Ts&&... xs)
