@@ -231,7 +231,9 @@ $manifest = @{
     python       = '3.8.0+';
     jdk          = '17.0.10+'; # jdk17+ works for android cmdlinetools 7.0+
     emsdk        = '3.1.53+';
-    'cmdline-tools' = '12.0'; # android cmdlinetools
+    cmdlinetools = '12.0'; # android cmdline-tools
+    buildtools   = '34.0.0'; # android build-tools
+    target_sdk   = '35'      # android platforms
 }
 
 # the default generator requires explicit specified: osx, ios, android, wasm
@@ -252,12 +254,6 @@ $cmdlinetools_rev = '11076708' # 12.0
 
 $ndk_r23d_rev = '12186248'
 # $ndk_r25d_rev = '12161346'
-
-$android_sdk_tools = @{
-    'cmdline-tools' = '12.0'
-    'build-tools' = '34.0.0'
-    'platforms'   = '35'
-}
 
 # eva: evaluated_args
 $options = @{
@@ -474,6 +470,14 @@ $Global:is_msvc = $TOOLCHAIN_NAME -eq 'msvc'
 $manifest_file = Join-Path $myRoot 'manifest.ps1'
 if ($1k.isfile($manifest_file)) {
     . $manifest_file
+}
+
+if($1k.isfile($Global:__1k_user_profile)) {
+    $1k.println("Loading user build profile: $__1k_user_profile")
+    $user_profile = ConvertFrom-Props (Get-Content $__1k_user_profile)
+    foreach($entry in $user_profile.GetEnumerator()) {
+        $manifest[$entry.Key] = $entry.Value
+    }
 }
 
 $install_prefix = if ($options.prefix) { $options.prefix } else { Join-Path $HOME '.1kiss' }
@@ -1306,11 +1310,11 @@ function setup_android_sdk() {
     $sdk_comps = @()
 
     ### cmdline-tools ###
-    $cmdlinetools_ver = $($android_sdk_tools['cmdline-tools'])
+    $cmdlinetools_ver = $manifest['cmdlinetools']
     $sdkmanager_prog, $sdkmanager_ver = $null, $null
     $cmdlinetools_prefix = Join-Path $sdk_root "cmdline-tools"
     $cmdlinetools_bin = Join-Path $cmdlinetools_prefix "$cmdlinetools_ver/bin"
-    $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdline-tools' -cmd 'sdkmanager' -path $cmdlinetools_bin -params "--version", "--sdk_root=$sdk_root")
+    $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path $cmdlinetools_bin -params "--version", "--sdk_root=$sdk_root")
     if (!$sdkmanager_prog) {
         $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
         if (!$sdkmanager_prog) {
@@ -1319,7 +1323,7 @@ function setup_android_sdk() {
             $cmdlinetools_pkg_name = "commandlinetools-$suffix-$($cmdlinetools_rev)_latest.zip"
             $cmdlinetools_url = "https://dl.google.com/android/repository/$cmdlinetools_pkg_name"
             fetch_pkg $cmdlinetools_url -o $cmdlinetools_pkg_name -exrep "cmdline-tools=$cmdlinetools_ver" -prefix $cmdlinetools_prefix
-            $sdkmanager_prog, $_ = (find_prog -name 'cmdline-tools' -cmd 'sdkmanager' -path $cmdlinetools_bin -params "--version", "--sdk_root=$sdk_root" -silent $True)
+            $sdkmanager_prog, $_ = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path $cmdlinetools_bin -params "--version", "--sdk_root=$sdk_root" -silent $True)
             if (!$sdkmanager_prog) {
                 throw "Install cmdlinetools version: $sdkmanager_ver fail"
             }
@@ -1353,7 +1357,7 @@ function setup_android_sdk() {
             if (!$1k.isdir($ndk_root)) { throw "Install android-ndk-r23d fail, please try again" }
         }
         else {
-            $1k.println("Not found suitable android ndk, installing by sdkmanager ...")
+            $1k.println("Not found suitable android ndk, installing ndk-$ndk_ver by sdkmanager ...")
 	    
             $matchInfos = (exec_prog -prog $sdkmanager_prog -params "--sdk_root=$sdk_root", '--list' | Select-String 'ndk;')
             if ($null -ne $matchInfos -and $matchInfos.Count -gt 0) {
@@ -1382,7 +1386,7 @@ function setup_android_sdk() {
     }
 
     if (!$ndkOnly) {
-        $sdk_comps_list = 'platform-tools', "platforms/android-$($android_sdk_tools['platforms'])", "build-tools/$($android_sdk_tools['build-tools'])"
+        $sdk_comps_list = 'platform-tools', "platforms/android-$($manifest['target_sdk'])", "build-tools/$($manifest['buildtools'])"
         foreach ($comp in $sdk_comps_list) {
             if (!$1k.isfile("$sdk_root/$comp/source.properties") -or $updateAdt) {
                 $sdk_comps += $comp.Replace('/', ';')

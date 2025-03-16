@@ -219,6 +219,9 @@ class AxmolUtils {
     }
 
     private static String translateNdkVer(ndkVer) {
+        if (ndkVer.endsWith('+')) {
+            ndkVer = ndkVer.substring(0, ndkVer.length() - 1);
+        }
         def ndkMajor = ndkVer.replaceAll('[^0-9]', '')
         def ndkMinorOff = ndkMajor.length() + 1
 

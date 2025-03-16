@@ -1,13 +1,11 @@
 #!/bin/bash -l
 
-AXMOL_CONSOLE_BIN_DIRECTORY=$(dirname "$0")
-AXMOL_CONSOLE_BIN_DIRECTORY=$(cd "$AXMOL_CONSOLE_BIN_DIRECTORY" && pwd -P)
-
+SCRIPT_ROOT=$(dirname "$0")
+SCRIPT_ROOT=$(cd "$SCRIPT_ROOT" && pwd -P)
 if hash pwsh 2>/dev/null; then
     POWERSHELL=pwsh
 else
     echo "PowerShell 7+ required."
     exit 1
 fi
-
-$POWERSHELL "$AXMOL_CONSOLE_BIN_DIRECTORY/axmol.ps1" "$@"
+$POWERSHELL "$SCRIPT_ROOT/axmol.ps1" "$@"

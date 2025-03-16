@@ -99,6 +99,10 @@ $Global:is_axmol_engine = ($source_proj_dir -eq $AX_ROOT)
 $Global:is_axmol_app = !!(Get-ChildItem (Join-Path $source_proj_dir '.axproj*'))
 $is_android = $options.p -eq 'android'
 
+if($Global:is_axmol_app) {
+    $Global:__1k_user_profile = Join-Path $source_proj_dir '.axproj'
+}
+
 # start construct full cmd line
 $1k_args = @()
 
