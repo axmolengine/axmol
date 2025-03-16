@@ -746,4 +746,14 @@ public class AxmolEngine {
 
         return sAccelerometer;
     }
+
+    public static String[] getFileList(String path) {
+        try {
+            String[] list = getAssetManager().list(path);
+            return list;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
