@@ -291,12 +291,6 @@ std::vector<std::string> FileUtilsAndroid::listFiles(std::string_view dirPath) c
     }
 
     fileList = JniHelper::callStaticStringArrayMethod("dev/axmol/lib/AxmolEngine", "getFileList", relativePath);
-    for (auto& entryName : fileList)
-    {
-        if (isDirectoryExistInternal(entryName))
-            entryName += "/";
-        entryName = fullPath + "/" + entryName;
-    }
 
     return fileList;
 }
