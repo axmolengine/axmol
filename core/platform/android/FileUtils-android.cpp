@@ -290,7 +290,7 @@ std::vector<std::string> FileUtilsAndroid::listFiles(std::string_view dirPath) c
         relativePath.erase(relativePath.length() - 1);
     }
 
-    fileList = JniHelper::callStaticStringArrayMethod("dev/axmol/lib/AxmolEngine", "getFileList", relativePath);
+    fileList = JniHelper::callStaticStringArrayMethod("dev/axmol/lib/AxmolEngine", "getAssetsList", relativePath);
 
     return fileList;
 }

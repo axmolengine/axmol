@@ -747,7 +747,7 @@ public class AxmolEngine {
         return sAccelerometer;
     }
 
-    public static String[] getFileList(String path) {
+    public static String[] getAssetsList(String path) {
         try {
             String basePath;
             if (!path.isEmpty()) {
