@@ -456,6 +456,18 @@ endif()
 
 if(ANDROID)
     add_subdirectory(${_AX_ROOT}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
+    if (BUILD_SHARED_LIBS)
+        # whole archive for jni
+        target_link_libraries(${_AX_CORE_LIB} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
+        if (_AX_LUA_PROJ)
+            add_subdirectory(${_AX_ROOT}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
+            target_link_libraries(${_AX_CORE_LIB} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive)
+        endif()
+
+        if (_AX_LUA_PROJ OR AX_ENABLE_EXT_LUA)
+            target_link_libraries(${_AX_CORE_LIB} ${AX_LUA_ENGINE})
+        endif()
+    endif()
 endif()
 
 if(LINUX)

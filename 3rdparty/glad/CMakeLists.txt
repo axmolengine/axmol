@@ -13,6 +13,9 @@ if(BUILD_SHARED_LIBS)
     PUBLIC GLAD_API_CALL_EXPORT=1
     PRIVATE GLAD_API_CALL_EXPORT_BUILD=1
   )
+  if (NOT WINDOWS AND AX_USE_GL)
+    target_link_libraries(${target_name} EGL)
+  endif()
 endif()
 
 if(ANDROID)
