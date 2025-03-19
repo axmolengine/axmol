@@ -116,6 +116,7 @@ GLView::GLView()
     , _scaleX(1.0f)
     , _scaleY(1.0f)
     , _resolutionPolicy(ResolutionPolicy::UNKNOWN)
+    , _interactive(true)
 {}
 
 GLView::~GLView() {}
@@ -294,6 +295,9 @@ std::string_view GLView::getViewName() const
 
 void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
 {
+    if (!_interactive)
+        return;
+
     intptr_t id     = 0;
     float x         = 0.0f;
     float y         = 0.0f;
@@ -348,6 +352,9 @@ void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[])
 
 void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], float fs[], float ms[])
 {
+    if (!_interactive)
+        return;
+
     intptr_t id    = 0;
     float x        = 0.0f;
     float y        = 0.0f;
@@ -499,6 +506,46 @@ void GLView::renderScene(Scene* scene, Renderer* renderer)
 
 void GLView::queueOperation(AsyncOperation /*op*/, void* /*param*/)
 {
+}
+
+void GLView::setInteractive(bool interactive)
+{
+    if (_interactive && !interactive)
+    {
+        cancelAllTouches();
+    }
+
+    _interactive = interactive;
+}
+
+void GLView::cancelAllTouches()
+{
+    EventTouch touchEvent;
+    touchEvent._touches = getAllTouchesVector();
+    touchEvent._eventCode = EventTouch::EventCode::CANCELLED;
+
+    if (touchEvent._touches.empty())
+    {
+        AXLOGD("cancelling all touches: size = 0");
+        return;
+    }
+
+    auto dispatcher= Director::getInstance()->getEventDispatcher();
+    dispatcher->dispatchEvent(&touchEvent);
+
+    for (auto&& touch : touchEvent._touches)
+    {
+        // release the touch object.
+        touch->release();
+    }
+
+    g_touchIdReorderMap.clear();
+    g_indexBitsUsed = 0;
+
+    for (int i = 0; i < EventTouch::MAX_TOUCHES; ++i)
+    {
+        g_touches[i] = nullptr;
+    }
 }
 
 }

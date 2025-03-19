@@ -442,11 +442,17 @@ public:
      */
     void renderScene(Scene* scene, Renderer* renderer);
 
+    /**
+     * Enable or disable interactions.
+     * When disabled, it prevents touches to be dispatched and will cancel current touches
+     */
+    void setInteractive(bool interactive);
+
 protected:
     float transformInputX(float x) { return (x - _viewPortRect.origin.x) / _scaleX; }
     float transformInputY(float y) { return (y - _viewPortRect.origin.y) / _scaleY; }
 
-    /** 
+    /**
      * queue a priority operation in render thread for non-PC platforms, even through app in background
      * invoked by Director
      */
@@ -468,6 +474,11 @@ protected:
     float _scaleX;
     float _scaleY;
     ResolutionPolicy _resolutionPolicy;
+
+private:
+    void cancelAllTouches();
+
+    bool _interactive;
 };
 
 // end of platform group
