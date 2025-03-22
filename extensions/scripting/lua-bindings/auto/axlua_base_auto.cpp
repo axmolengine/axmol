@@ -14268,6 +14268,56 @@ int lua_ax_base_GLView_renderScene(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_GLView_setInteractive(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::GLView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setInteractive'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.GLView:setInteractive");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setInteractive'", nullptr);
+            return 0;
+        }
+        cobj->setInteractive(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:setInteractive",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setInteractive'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_GLView_setGLContextAttrs(lua_State* tolua_S)
 {
     int argc = 0;
@@ -14385,6 +14435,7 @@ int lua_register_ax_base_GLView(lua_State* tolua_S)
         tolua_function(tolua_S,"getScaleY",lua_ax_base_GLView_getScaleY);
         tolua_function(tolua_S,"getResolutionPolicy",lua_ax_base_GLView_getResolutionPolicy);
         tolua_function(tolua_S,"renderScene",lua_ax_base_GLView_renderScene);
+        tolua_function(tolua_S,"setInteractive",lua_ax_base_GLView_setInteractive);
         tolua_function(tolua_S,"setGLContextAttrs", lua_ax_base_GLView_setGLContextAttrs);
         tolua_function(tolua_S,"getGLContextAttrs", lua_ax_base_GLView_getGLContextAttrs);
     tolua_endmodule(tolua_S);
