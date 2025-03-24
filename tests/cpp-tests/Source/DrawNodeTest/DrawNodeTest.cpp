@@ -3464,10 +3464,6 @@ string DrawNodeIssueTester::subtitle() const
 
 DrawNodeSpLinesTest::DrawNodeSpLinesTest()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(DrawNodeSpLinesTest::onTouchesEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-
     drawNode = DrawNode::create();
     drawNode->properties.setTransform(true);
     addChild(drawNode, 30);
@@ -3510,8 +3506,6 @@ void DrawNodeSpLinesTest::update(float dt)
 {
     if (points.size() == 0)
         return;
-
-    array = PointArray::create(points.size());
 
     drawNode->clear();
 
