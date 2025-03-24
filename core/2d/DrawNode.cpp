@@ -468,11 +468,12 @@ void DrawNode::drawCubicBezier(const Vec2& origin,
     _drawPoly(_vertices.data(), segments + 1, false, color, thickness, true);
 }
 
-void DrawNode::drawCardinalSpline(PointArray* config,
+void DrawNode::drawCardinalSpline(const PointArray* configIn,
                                   float tension,
                                   unsigned int segments,
-                                  const Color4B& color,
-                                  float thickness)
+                                  const Color& color,
+                                  float thickness,
+                                  bool closed)
 {
     if (thickness <= 0.0f)
     {
@@ -480,16 +481,27 @@ void DrawNode::drawCardinalSpline(PointArray* config,
         return;
     }
 
-    axstd::pod_vector<Vec2> _vertices{static_cast<size_t>(segments)};
+    // Don't change the original PointArray
+    PointArray* config = configIn->clone();
+
+    if (closed && config->count() > 2)
+    {
+        config->addControlPoint(config->getControlPointAtIndex(0));
+        config->addControlPoint(config->getControlPointAtIndex(1));
+        config->insertControlPoint(config->getControlPointAtIndex(config->count() - 3), 0);
+        config->insertControlPoint(config->getControlPointAtIndex(config->count() - 4), 0);
+    }
 
     ssize_t p;
     float lt;
     float deltaT = 1.0f / config->count();
 
+    axstd::pod_vector<Vec2> _vertices{static_cast<size_t>(segments)};
+
     for (unsigned int i = 0; i < segments; i++)
     {
         float dt = (float)i / segments;
-        p  = static_cast<ssize_t>(dt / deltaT);
+        p        = static_cast<ssize_t>(dt / deltaT);
 
         // Check last control point reached
         if (p >= (config->count() - 1))
@@ -510,17 +522,25 @@ void DrawNode::drawCardinalSpline(PointArray* config,
         _vertices[i] = ccCardinalSplineAt(pp0, pp1, pp2, pp3, tension, lt);
     }
 
+    // Dont draw the first and the last point
+    if (closed && config->count() > 2)
+    {
+        auto seg = segments / (config->count() - 2);
+        for (int i = seg; i < segments - seg; i++)
+            _vertices[i - seg] = _vertices[i];
+        segments -= (seg + seg);
+    }
     _drawPoly(_vertices.data(), segments, false, color, thickness, true);
 }
 
-void DrawNode::drawCatmullRom(PointArray* points, unsigned int segments, const Color4B& color, float thickness)
+void DrawNode::drawCatmullRom(const PointArray* pointsIn, unsigned int segments, const Color& color, float thickness, bool closed)
 {
     if (thickness <= 0.0f)
     {
         AXLOGW("{}: thickness <= 0", __FUNCTION__);
         return;
     }
-    drawCardinalSpline(points, 0.5f, segments, color, thickness);
+    drawCardinalSpline(pointsIn, 0.5f, segments, color, thickness, closed);
 }
 
 void DrawNode::drawDot(const Vec2& pos, float radius, const Color4B& color)

@@ -279,11 +279,12 @@ public:
      * @param segments The number of segments.
      * @param color Set the Spline color.
      */
-    void drawCardinalSpline(PointArray* config,
+    void drawCardinalSpline(const PointArray* configIn,
                             float tension,
                             unsigned int segments,
-                            const Color4B& color,
-                            float thickness = 1.0f);
+                            const Color& color,
+                            float thickness = 1.0f,
+                            bool closed = false);
 
     /** Draws a Catmull Rom path.
      *
@@ -291,7 +292,11 @@ public:
      * @param segments The number of segments.
      * @param color The Catmull Rom color.
      */
-    void drawCatmullRom(PointArray* points, unsigned int segments, const Color4B& color, float thickness = 1.0f);
+    void drawCatmullRom(const PointArray* pointsIn,
+                        unsigned int segments,
+                        const Color& color,
+                        float thickness = 1.0f,
+                        bool closed = false);
 
     /** draw a dot at a position, with a given radius and color.
      *

@@ -1333,6 +1333,7 @@ DrawNodeTests::DrawNodeTests()
 {
     ADD_TEST_CASE(DrawNodeMethodsTest);
     ADD_TEST_CASE(DrawNodeSpLinesTest);
+	ADD_TEST_CASE(DrawNodeSpLinesOpenClosedTest);
     ADD_TEST_CASE(DrawNodeAxmolTest2);
 
 #if defined(AX_PLATFORM_PC)
@@ -3496,24 +3497,7 @@ DrawNodeSpLinesTest::DrawNodeSpLinesTest()
     }
 
     DrawNodeBaseTest::generateDataPoints();
-
-    addNewControlPoint(VisibleRect::center());
-
     scheduleUpdate();
-}
-
-void DrawNodeSpLinesTest::addNewControlPoint(Vec2 p)
-{
-    points.emplace_back(Vec2(p.x, p.y));
-}
-
-void DrawNodeSpLinesTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
-{
-    for (auto& touch : touches)
-    {
-        auto location = touch->getLocation();
-        addNewControlPoint(location);
-    }
 }
 
 std::string DrawNodeSpLinesTest::title() const
@@ -3523,7 +3507,7 @@ std::string DrawNodeSpLinesTest::title() const
 
 std::string DrawNodeSpLinesTest::subtitle() const
 {
-    return "Tap screen to add more (control) points";
+    return "";
 }
 
 void DrawNodeSpLinesTest::update(float dt)
@@ -3533,21 +3517,7 @@ void DrawNodeSpLinesTest::update(float dt)
 
     array = PointArray::create(points.size());
 
-    drawNodeCP->clear();
-
     drawNode->clear();
-    drawNode->clear();
-
-    int boxSize = 3;
-    for (auto&& p : points)
-    {
-        drawNodeCP->drawRect(Vec2(p.x - boxSize, p.y - boxSize), Vec2(p.x + boxSize, p.y + boxSize), Color4F::BLUE);
-        array->addControlPoint(Vec2(p.x, p.y));
-    }
-
-    drawNode->drawCardinalSpline(array, 0.2f, points.size() * 8, Color4F::GREEN, 20.0f);
-    drawNode->drawCardinalSpline(array, 0.2f, points.size() * 8, Color4F::BLUE);
-    drawNode->drawCardinalSpline(array, 0.2f, points.size() * 16, Color4F(1.0f, 1.0f, 0.5f, 1.0f), 10.0f);
 
     // Issue #2302
     auto array3 = PointArray::create(20);
@@ -3557,14 +3527,6 @@ void DrawNodeSpLinesTest::update(float dt)
         drawNode->drawPoint(array3->getControlPointAtIndex(i), 10, Color4F::BLUE);
     }
     drawNode->drawCardinalSpline(array3, 0.1, 20, Color4F::ORANGE);
-
-    //  drawNode->drawCatmullRom(array, points.size() * 8, Color4F::YELLOW,5);
-    // if (points.size()>3)
-    //{
-    //    int step = points.size()/4;
-    //    drawNode->drawCubicBezier(points.at(0), points.at(step),points.at(step*2),points.at(points.size()-1),
-    //    points.size(), Color4F::BLUE);
-    //}
 
     drawNode->drawCardinalSpline(pts, 0.5f, 360, Color4F::RED, 5.0f);
     drawNode->drawCardinalSpline(pts2, 0.5f, 360, Color4F::GREEN, 2.0f);
@@ -3576,6 +3538,93 @@ void DrawNodeSpLinesTest::update(float dt)
 
     drawNode->drawDot(pts2->getControlPointAtIndex(i2), 7, Color4F(0, 1, 0, 0.3));
     drawNode->drawDot(pts2->getControlPointAtIndex(i2), 4, Color4F::GREEN);
+}
+
+DrawNodeSpLinesOpenClosedTest::DrawNodeSpLinesOpenClosedTest()
+{
+    auto listener            = EventListenerTouchAllAtOnce::create();
+    listener->onTouchesEnded = AX_CALLBACK_2(DrawNodeSpLinesOpenClosedTest::onTouchesEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
+    drawNodeCP = DrawNode::create();
+    drawNodeCP->properties.setTransform(true);
+    addChild(drawNodeCP, 50);
+
+    drawNode = DrawNode::create();
+    drawNode->properties.setTransform(true);
+    addChild(drawNode, 30);
+
+    screen = Director::getInstance()->getVisibleSize();
+    origin = Director::getInstance()->getVisibleOrigin();
+    center = Vec2(screen.width / 2, screen.height / 2);
+    sixth  = Vec2(screen.width / 6, screen.height / 6);
+    sixth.y;
+
+    defY  = (int)(center.y + sixth.y);
+    defY2 = (int)(center.y - sixth.y);
+    dev   = sixth.y;
+
+    pts  = PointArray::create(n);
+    pts2 = PointArray::create(n);
+    pts->retain();
+    pts2->retain();
+    for (int i = 0; i < n; ++i)
+    {
+        pts->insertControlPoint(Vec2(0, 0), i);
+        pts2->insertControlPoint(Vec2(0, 0), i);
+    }
+
+    DrawNodeBaseTest::generateDataPoints();
+    scheduleUpdate();
+}
+
+void DrawNodeSpLinesOpenClosedTest::addNewControlPoint(Vec2 p)
+{
+    points.emplace_back(Vec2(p.x, p.y));
+}
+
+void DrawNodeSpLinesOpenClosedTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+{
+    for (auto& touch : touches)
+    {
+        auto location = touch->getLocation();
+        addNewControlPoint(location);
+    }
+}
+
+std::string DrawNodeSpLinesOpenClosedTest::title() const
+{
+    return "Testing open/closed SpLines";
+}
+
+std::string DrawNodeSpLinesOpenClosedTest::subtitle() const
+{
+    return "Tap screen to add (more) control points";
+}
+
+void DrawNodeSpLinesOpenClosedTest::update(float dt)
+{
+    if (points.size() == 0)
+        return;
+    if (points.size() > 2)
+        array = PointArray::create(points.size() + 4);
+    else
+        array = PointArray::create(points.size());
+
+    drawNodeCP->clear();
+    drawNode->clear();
+
+    int boxSize = 3;
+    for (auto&& p : points)
+    {
+
+        drawNodeCP->drawRect(Vec2(p.x - boxSize, p.y - boxSize), Vec2(p.x + boxSize, p.y + boxSize), Color::BLUE);
+        array->addControlPoint(Vec2(p.x, p.y));
+    }
+
+    drawNode->drawCardinalSpline(array, 0.0f, points.size() * 20, Color::GREEN, 1.0f, true);
+    drawNode->drawCardinalSpline(array, 0.0f, points.size() * 20, Color::RED, 1.0f, false);
+
 }
 
 #if defined(AX_PLATFORM_PC)
