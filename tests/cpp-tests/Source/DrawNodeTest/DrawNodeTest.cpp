@@ -3618,12 +3618,12 @@ void DrawNodeSpLinesOpenClosedTest::update(float dt)
     for (auto&& p : points)
     {
 
-        drawNodeCP->drawRect(Vec2(p.x - boxSize, p.y - boxSize), Vec2(p.x + boxSize, p.y + boxSize), Color::BLUE);
+        drawNodeCP->drawRect(Vec2(p.x - boxSize, p.y - boxSize), Vec2(p.x + boxSize, p.y + boxSize), Color4F::BLUE);
         array->addControlPoint(Vec2(p.x, p.y));
     }
 
-    drawNode->drawCardinalSpline(array, 0.0f, points.size() * 20, Color::GREEN, 1.0f, true);
-    drawNode->drawCardinalSpline(array, 0.0f, points.size() * 20, Color::RED, 1.0f, false);
+    drawNode->drawCardinalSpline(array, 0.0f, points.size() * 20, Color4F::GREEN, 1.0f, true);
+    drawNode->drawCardinalSpline(array, 0.0f, points.size() * 20, Color4F::RED, 1.0f, false);
 
 }
 
