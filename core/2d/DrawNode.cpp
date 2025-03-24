@@ -471,7 +471,7 @@ void DrawNode::drawCubicBezier(const Vec2& origin,
 void DrawNode::drawCardinalSpline(const PointArray* configIn,
                                   float tension,
                                   unsigned int segments,
-                                  const Color& color,
+                                  const Color4B& color,
                                   float thickness,
                                   bool closed)
 {
@@ -533,7 +533,7 @@ void DrawNode::drawCardinalSpline(const PointArray* configIn,
     _drawPoly(_vertices.data(), segments, false, color, thickness, true);
 }
 
-void DrawNode::drawCatmullRom(const PointArray* pointsIn, unsigned int segments, const Color& color, float thickness, bool closed)
+void DrawNode::drawCatmullRom(const PointArray* pointsIn, unsigned int segments, const Color4B& color, float thickness, bool closed)
 {
     if (thickness <= 0.0f)
     {

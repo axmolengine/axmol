@@ -282,7 +282,7 @@ public:
     void drawCardinalSpline(const PointArray* configIn,
                             float tension,
                             unsigned int segments,
-                            const Color& color,
+                            const Color4B& color,
                             float thickness = 1.0f,
                             bool closed = false);
 
@@ -294,7 +294,7 @@ public:
      */
     void drawCatmullRom(const PointArray* pointsIn,
                         unsigned int segments,
-                        const Color& color,
+                        const Color4B& color,
                         float thickness = 1.0f,
                         bool closed = false);
 
