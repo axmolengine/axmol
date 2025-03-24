@@ -3468,10 +3468,6 @@ DrawNodeSpLinesTest::DrawNodeSpLinesTest()
     listener->onTouchesEnded = AX_CALLBACK_2(DrawNodeSpLinesTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    drawNodeCP = DrawNode::create();
-    drawNodeCP->properties.setTransform(true);
-    addChild(drawNodeCP, 50);
-
     drawNode = DrawNode::create();
     drawNode->properties.setTransform(true);
     addChild(drawNode, 30);
