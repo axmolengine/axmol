@@ -3504,19 +3504,16 @@ std::string DrawNodeSpLinesTest::subtitle() const
 
 void DrawNodeSpLinesTest::update(float dt)
 {
-    if (points.size() == 0)
-        return;
-
     drawNode->clear();
 
     // Issue #2302
-    auto array3 = PointArray::create(20);
+    auto array = PointArray::create(20);
     for (int i = 0; i < 10; i++)
     {
-        array3->addControlPoint(Vec2((i % 2) ? 20 : screen.width - 20, 50 + i * 20));
-        drawNode->drawPoint(array3->getControlPointAtIndex(i), 10, Color4F::BLUE);
+        array->addControlPoint(Vec2((i % 2) ? 20 : screen.width - 20, 50 + i * 20));
+        drawNode->drawPoint(array->getControlPointAtIndex(i), 10, Color4F::BLUE);
     }
-    drawNode->drawCardinalSpline(array3, 0.1, 20, Color4F::ORANGE);
+    drawNode->drawCardinalSpline(array, 0.1, 20, Color4F::ORANGE);
 
     drawNode->drawCardinalSpline(pts, 0.5f, 360, Color4F::RED, 5.0f);
     drawNode->drawCardinalSpline(pts2, 0.5f, 360, Color4F::GREEN, 2.0f);
