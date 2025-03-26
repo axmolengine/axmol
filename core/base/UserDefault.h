@@ -284,7 +284,7 @@ protected:
     hlookup::string_map<std::string> _values;
 
     static UserDefault* _userDefault;
-    static std::string  _userDefalutFileName;
+    static std::string  _userDefaultFileName;
 
     std::string _filePath;
     FileStream _fileStream;  // the file handle for data persistence
