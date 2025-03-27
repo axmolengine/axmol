@@ -89,7 +89,7 @@ $compatMode = $false
 if ($Global:IsWin) {
     if (!$OutputEncoding -or $OutputEncoding.CodePage -ne 65001) {
         $OutputEncoding = [System.Text.Encoding]::UTF8
-        try { 
+        try {
             [System.Console]::OutputEncoding = $OutputEncoding
         }
         catch {
@@ -145,10 +145,10 @@ class _1kiss {
         }
     }
     [void] addpath([string]$path) { $this.addpath($path, $false) }
-    [void] addpath([string]$path, [bool]$append) { 
+    [void] addpath([string]$path, [bool]$append) {
         if (!$path -or $env:PATH.Contains($path)) { return }
-        if (!$append) { $env:PATH = "$path$Global:ENV_PATH_SEP$env:PATH" } 
-        else { $env:PATH = "$env:PATH$Global:ENV_PATH_SEP$path" } 
+        if (!$append) { $env:PATH = "$path$Global:ENV_PATH_SEP$env:PATH" }
+        else { $env:PATH = "$env:PATH$Global:ENV_PATH_SEP$path" }
     }
 
     [void] pause($msg) {
@@ -766,9 +766,9 @@ function download_and_expand($url, $out, $dest) {
     }
 }
 
-function resolve_path ($path, $prefix = $null) { 
-    if ($1k.isabspath($path)) { 
-        return $path 
+function resolve_path ($path, $prefix = $null) {
+    if ($1k.isabspath($path)) {
+        return $path
     }
     else {
         if (!$prefix) { $prefix = $install_prefix }
@@ -812,7 +812,7 @@ function fetch_pkg($url, $out = $null, $exrep = $null, $prefix = $null) {
     else {
         $prefix = $install_prefix
     }
-    
+
     download_and_expand $url $out $prefix
 
     if ($pfn_rename) { &$pfn_rename }
@@ -835,7 +835,7 @@ function find_vs() {
 
         $required_vs_ver = $manifest['vs']
         if (!$required_vs_ver) { $required_vs_ver = '12.0+' }
-        
+
         # refer: https://learn.microsoft.com/en-us/visualstudio/install/workload-and-component-ids?view=vs-2022
         $require_comps = @('Microsoft.VisualStudio.Component.VC.Tools.x86.x64', 'Microsoft.VisualStudio.Product.BuildTools')
         $vs_installs = ConvertFrom-Json "$(&$VSWHERE_EXE -version $required_vs_ver.TrimEnd('+') -format 'json' -requires $require_comps -requiresAny -prerelease)"
@@ -1035,7 +1035,12 @@ function setup_cmake($skipOS = $false) {
             $cmake_app_contents = Join-Path $cmake_dir 'CMake.app/Contents'
         }
         if (!$1k.isdir($cmake_dir)) {
-            fetch_pkg $cmake_url
+            if ($IsLinux) {
+                fetch_pkg $cmake_url -out $cmake_pkg_path
+            }
+            else {
+                fetch_pkg $cmake_url
+            }
         }
 
         if ($1k.isdir($cmake_dir)) {
@@ -1072,7 +1077,7 @@ function setup_cmake($skipOS = $false) {
 
         $1k.println("Using cmake: $cmake_prog, version: $cmake_ver")
     }
-    
+
     $1k.addpath($cmake_bin)
     return $cmake_prog, $cmake_ver
 }
@@ -1342,9 +1347,9 @@ function setup_android_sdk() {
             # - https://ci.android.com/builds/submitted/12186248/win64/latest/android-ndk-12186248-windows-x86_64.zip
             # - https://ci.android.com/builds/submitted/12186248/linux/latest/android-ndk-12186248-linux-x86_64.zip
             # - https://ci.android.com/builds/submitted/12186248/darwin_mac/latest/android-ndk-12186248-darwin-x86_64.zip
-	    
+
             $1k.println("Not found suitable android ndk, installing from ci.android.com ...")
-	    
+
             $_artifact = @("android-ndk-${ndk_r23d_rev}-windows-x86_64.zip",
                 "android-ndk-${ndk_r23d_rev}-linux-x86_64.zip",
                 "android-ndk-${ndk_r23d_rev}-darwin-x86_64.zip").Get($HOST_OS)
@@ -1358,7 +1363,7 @@ function setup_android_sdk() {
         }
         else {
             $1k.println("Not found suitable android ndk, installing ndk-$ndk_ver by sdkmanager ...")
-	    
+
             $matchInfos = (exec_prog -prog $sdkmanager_prog -params "--sdk_root=$sdk_root", '--list' | Select-String 'ndk;')
             if ($null -ne $matchInfos -and $matchInfos.Count -gt 0) {
                 $ndks = @{}
@@ -1393,7 +1398,7 @@ function setup_android_sdk() {
             }
         }
     }
-    
+
     if ($sdk_comps) {
         $sdk_cmdline_args = '--verbose', "--sdk_root=$sdk_root"
         $sdk_cmdline_args += $sdk_comps
@@ -2055,7 +2060,7 @@ if (!$setupOnly) {
                     # apply additional build options
                     $BUILD_ALL_OPTIONS += "--parallel", "$($options.j)"
 
-                    
+
                     $1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
 
                     # forward non-cmake args to underlaying build toolchain, must at last
@@ -2101,7 +2106,7 @@ if (!$setupOnly) {
                             exit $LASTEXITCODE
                         }
                     }
-                    
+
                     if ($options.i) {
                         $install_args = @($BUILD_DIR, '--config', $optimize_flag)
                         cmake --install $install_args | Out-Host

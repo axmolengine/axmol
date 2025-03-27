@@ -45,6 +45,11 @@ include(CheckCCompilerFlag)
 include(CheckCSourceCompiles)
 include(CheckCXXSourceCompiles)
 
+# Enable -fPIC flag when compiling as shared libs...
+if(BUILD_SHARED_LIBS AND UNIX AND NOT ANDROID)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
+
 # Note: we set default AX_ISA_LEVEL to 2 for sse4.1 for axmol app can runs on large amount devices
 # If you want axmol app runs on more old devices, you can specify in cmake cmdline `-DAX_ISA_LEVEL=1`,
 # otherwise, host compiler generated instructions will crash on old devices which not support high level
@@ -500,4 +505,9 @@ if (ANDROID)
         set(ANDROID_PACKAGE_NAME ${package_name})
         configure_file(${ANDROID_SHARED_LOAD_FILE_PATH} ${target_folder}/${package_path}/${ANDROID_SHARED_LOAD_FILE_NAME} @ONLY)
     endfunction()
+endif()
+
+# Disable -fPIC flag for other libs...
+if(BUILD_SHARED_LIBS AND UNIX AND NOT ANDROID)
+    set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
 endif()
