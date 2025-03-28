@@ -538,7 +538,7 @@ if(AX_WASM_ENABLE_DEVTOOLS)
     string(APPEND _AX_WASM_EXPORTS ",_axmol_dev_pause,_axmol_dev_resume,_axmol_dev_step")
 endif()
 set(AX_WASM_EXPORTS "${_AX_WASM_EXPORTS}" CACHE STRING "" FORCE)
-set(AX_WASM_RES_FOLDER "${_APP_SOURCE_DIR}/Content")
+set(AX_WASM_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/Content")
         
 # stupid & pitfall: function not emcc not output .html
 macro (ax_setup_app_props app_name)
