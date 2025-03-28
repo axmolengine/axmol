@@ -538,7 +538,6 @@ if(AX_WASM_ENABLE_DEVTOOLS)
     string(APPEND _AX_WASM_EXPORTS ",_axmol_dev_pause,_axmol_dev_resume,_axmol_dev_step")
 endif()
 set(AX_WASM_EXPORTS "${_AX_WASM_EXPORTS}" CACHE STRING "" FORCE)
-set(AX_WASM_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/Content")
         
 # stupid & pitfall: function not emcc not output .html
 macro (ax_setup_app_props app_name)
@@ -570,7 +569,10 @@ macro (ax_setup_app_props app_name)
         # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s SEPARATE_DWARF_URL=https://xxx:8080/axmolwasm/axmolwasm/build/HelloLua.debug.wasm")
         # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gseparate-dwarf=HelloLua.debug.wasm")
 
-        foreach(FOLDER IN LISTS AX_WASM_RES_FOLDER)
+        if (NOT DEFINED _APP_RES_FOLDER)
+            set(_APP_RES_FOLDER "${_APP_SOURCE_DIR}/Content")
+        endif()
+        foreach(FOLDER IN LIST _APP_RES_FOLDER)
             string(APPEND EMSCRIPTEN_LINK_FLAGS " --preload-file ${FOLDER}/@/")
         endforeach()
 
