@@ -572,7 +572,7 @@ macro (ax_setup_app_props app_name)
         if (NOT DEFINED _APP_RES_FOLDER)
             set(_APP_RES_FOLDER "${_APP_SOURCE_DIR}/Content")
         endif()
-        foreach(FOLDER IN LIST _APP_RES_FOLDER)
+        foreach(FOLDER IN LISTS _APP_RES_FOLDER)
             string(APPEND EMSCRIPTEN_LINK_FLAGS " --preload-file ${FOLDER}/@/")
         endforeach()
 
