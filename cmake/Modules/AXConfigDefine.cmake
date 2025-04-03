@@ -209,14 +209,7 @@ if(EMSCRIPTEN)
     endif()
 
     set(AX_WASM_INITIAL_MEMORY "1024MB" CACHE STRING "")
-    add_link_options(-sINITIAL_MEMORY=${AX_WASM_INITIAL_MEMORY})
-
-    # Tell emcc build port libs in cache with compiler flag `-pthread` xxx.c.o
-    # must via CMAKE_C_FLAGS and CMAKE_CXX_FLAGS?
-    set(_AX_EMCC_FLAGS "-sUSE_LIBJPEG=1")
-
-    set(CMAKE_C_FLAGS  "${_AX_EMCC_FLAGS} ${CMAKE_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS  "${_AX_EMCC_FLAGS} ${CMAKE_CXX_FLAGS}")
+    add_link_options(-sINITIAL_MEMORY=${AX_WASM_INITIAL_MEMORY} -sUSE_LIBJPEG=1)
 endif()
 
 # apply axmol spec compile options
