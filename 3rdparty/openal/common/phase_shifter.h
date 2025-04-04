@@ -38,15 +38,14 @@ struct SIMDALIGN PhaseShifterT {
          */
         for(std::size_t i{0};i < FilterSize/2;++i)
         {
-            const int k{static_cast<int>(i*2 + 1) - int{FilterSize/2}};
+            const auto k = static_cast<int>(i*2 + 1) - int{FilterSize/2};
 
             /* Calculate the Blackman window value for this coefficient. */
-            const double w{2.0*al::numbers::pi * static_cast<double>(i*2 + 1)
-                / double{FilterSize}};
-            const double window{0.3635819 - 0.4891775*std::cos(w) + 0.1365995*std::cos(2.0*w)
-                - 0.0106411*std::cos(3.0*w)};
+            const auto w = 2.0*al::numbers::pi/double{FilterSize} * static_cast<double>(i*2 + 1);
+            const auto window = 0.3635819 - 0.4891775*std::cos(w) + 0.1365995*std::cos(2.0*w)
+                - 0.0106411*std::cos(3.0*w);
 
-            const double pk{al::numbers::pi * static_cast<double>(k)};
+            const auto pk = al::numbers::pi * static_cast<double>(k);
             mCoeffs[i] = static_cast<float>(window * (1.0-std::cos(pk)) / pk);
         }
     }
@@ -55,16 +54,6 @@ struct SIMDALIGN PhaseShifterT {
 
 private:
 #if HAVE_NEON
-    static auto unpacklo(float32x4_t a, float32x4_t b)
-    {
-        float32x2x2_t result{vzip_f32(vget_low_f32(a), vget_low_f32(b))};
-        return vcombine_f32(result.val[0], result.val[1]);
-    }
-    static auto unpackhi(float32x4_t a, float32x4_t b)
-    {
-        float32x2x2_t result{vzip_f32(vget_high_f32(a), vget_high_f32(b))};
-        return vcombine_f32(result.val[0], result.val[1]);
-    }
     static auto load4(float32_t a, float32_t b, float32_t c, float32_t d)
     {
         float32x4_t ret{vmovq_n_f32(a)};
