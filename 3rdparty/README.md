@@ -162,10 +162,15 @@
 - Version: 1.9.3
 - License: Apache-2.0
 
-## ogg & vorbis
+## ogg
 - ogg
   - [![Upstream](https://img.shields.io/github/v/release/xiph/ogg?label=Upstream)](https://github.com/xiph/ogg)
   - Version: 1.3.5
+  - License: BSD-3-Clause
+
+- opus
+  - [![Upstream](https://img.shields.io/github/v/release/xiph/opus?label=Upstream)](https://github.com/xiph/opus)
+  - Version: 1.5.2
   - License: BSD-3-Clause
 
 - vorbis
