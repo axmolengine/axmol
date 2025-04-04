@@ -413,9 +413,21 @@ if (AX_ENABLE_AUDIO)
         endif()
     endif()
 
-
-    # The ogg decoder
+    # The ogg contains vorbis & opus(optional) decoders
     ax_add_3rd(ogg)
+    
+    # opus
+    if(AX_ENABLE_OPUS)
+        _1kfetch(opus)
+        ax_add_3rd(${opus_SOURCE_DIR} NO_LINK TARGETS opus OPTIONS
+            "OPUS_INSTALL_PKG_CONFIG_MODULE OFF"
+            "OPUS_INSTALL_CMAKE_CONFIG_MODULE OFF"
+            "OPUS_BUILD_PROGRAMS OFF"
+            "OPUS_BUILD_TESTING OFF"
+            "OPUS_CUSTOM_MODES OFF"
+        )
+        target_link_libraries(ogg opus)
+    endif()
 endif()
 
 if(WINDOWS OR LINUX OR ANDROID OR WASM)

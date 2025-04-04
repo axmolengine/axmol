@@ -22,7 +22,6 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#define LOG_TAG "AudioDecoderWav"
 
 #include <stddef.h>
 #include <assert.h>
@@ -260,6 +259,3 @@ bool AudioDecoderWav::seek(uint32_t frameOffset)
     return wav_seek(&_wavf, offset) == offset;
 }
 }  // namespace ax
-
-#undef LOG_TAG
-

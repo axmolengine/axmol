@@ -30,8 +30,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define LOG_TAG "AudioDecoder"
-
 namespace ax
 {
 

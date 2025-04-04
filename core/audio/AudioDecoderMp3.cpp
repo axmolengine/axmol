@@ -24,7 +24,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#define LOG_TAG "AudioDecoderMp3"
 #include "audio/AudioDecoderMp3.h"
 #include "audio/AudioMacros.h"
 #include "platform/FileUtils.h"
@@ -299,5 +298,3 @@ bool AudioDecoderMp3::seek(uint32_t frameOffset)
 #endif
 }
 }  // namespace ax
-
-#undef LOG_TAG

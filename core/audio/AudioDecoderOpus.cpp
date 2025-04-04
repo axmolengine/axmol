@@ -1,6 +1,4 @@
 /****************************************************************************
- Copyright (c) 2016 Chukong Technologies Inc.
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -22,11 +20,21 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
+
+ How to convert wav to .opus ?
+ 
+ - download official opus-tools: https://opus-codec.org/downloads/
+ - directly download link: https://archive.mozilla.org/pub/opus/win32/opus-tools-0.2-opus-1.3.zip
+
  ****************************************************************************/
 
-#include "audio/AudioDecoderOgg.h"
+#if defined(AX_ENABLE_OPUS)
+
+#include "audio/AudioDecoderOpus.h"
 #include "audio/AudioMacros.h"
 #include "platform/FileUtils.h"
+
+#include "opus/opusfile.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 #    include <unistd.h>
@@ -36,39 +44,39 @@
 namespace ax
 {
 
-static size_t ov_fread_r(void* buffer, size_t element_size, size_t element_count, void* handle)
-{
-    auto* fs = static_cast<IFileStream*>(handle);
-    return fs->read(buffer, static_cast<uint32_t>(element_size * element_count));
-}
-
-static int ov_fseek_r(void* handle, ogg_int64_t offset, int whence)
+static int op_fseek_r(void* handle, ogg_int64_t offset, int whence)
 {
     auto* fs = static_cast<IFileStream*>(handle);
     return fs->seek(offset, whence) < 0 ? -1 : 0;
 }
 
-static long ov_ftell_r(void* handle)
-{
-    auto* fs = static_cast<IFileStream*>(handle);
-    return fs->tell();
-}
-
-static int ov_fclose_r(void* handle)
+static int op_fclose_r(void* handle)
 {
     auto* fs = static_cast<IFileStream*>(handle);
     delete fs;
     return 0;
 }
 
-AudioDecoderOgg::AudioDecoderOgg() {}
+static int op_fread_r(void* _stream, unsigned char* _ptr, int _nbytes)
+{
+    auto* fs = static_cast<IFileStream*>(_stream);
+    return fs->read(_ptr, _nbytes);
+}
 
-AudioDecoderOgg::~AudioDecoderOgg()
+static opus_int64 op_ftell_r(void* handle)
+{
+    auto* fs = static_cast<IFileStream*>(handle);
+    return fs->tell();
+}
+
+AudioDecoderOpus::AudioDecoderOpus() {}
+
+AudioDecoderOpus::~AudioDecoderOpus()
 {
     close();
 }
 
-bool AudioDecoderOgg::open(std::string_view fullPath)
+bool AudioDecoderOpus::open(std::string_view fullPath)
 {
     auto fs = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ).release();
     if (!fs)
@@ -77,41 +85,40 @@ bool AudioDecoderOgg::open(std::string_view fullPath)
         return false;
     }
 
-    static ov_callbacks OV_CALLBACKS_POSIX = {ov_fread_r, ov_fseek_r, ov_fclose_r, ov_ftell_r};
+    static OpusFileCallbacks OP_CALLBACKS_POSIX = {op_fread_r, op_fseek_r, op_ftell_r, op_fclose_r};
 
-    if (0 == ov_open_callbacks(fs, &_vf, nullptr, 0, OV_CALLBACKS_POSIX))
+    if (_of = op_open_callbacks(fs, &OP_CALLBACKS_POSIX, 0, 0, nullptr))
     {
-        // header
-        vorbis_info* vi = ov_info(&_vf, -1);
-        _sampleRate     = static_cast<uint32_t>(vi->rate);
-        _channelCount   = vi->channels;
-        _bytesPerBlock  = vi->channels * sizeof(short);
-        _totalFrames    = static_cast<uint32_t>(ov_pcm_total(&_vf, -1));
-        _isOpened       = true;
-        return true;
+        auto vi        = op_head(_of, -1);
+        _sampleRate    = 48000; // opus always 48K hz
+        _channelCount  = vi->channel_count;
+        _bytesPerBlock = vi->channel_count * sizeof(short);
+        _totalFrames   = static_cast<uint32_t>(op_pcm_total(_of, -1));
+        _isOpened      = true;
     }
-    return false;
+
+    return _isOpened;
 }
 
-void AudioDecoderOgg::close()
+void AudioDecoderOpus::close()
 {
     if (isOpened())
     {
-        ov_clear(&_vf);
+        if (_of)
+            op_free(_of);
         _isOpened = false;
     }
 }
 
-uint32_t AudioDecoderOgg::read(uint32_t framesToRead, char* pcmBuf)
+uint32_t AudioDecoderOpus::read(uint32_t framesToRead, char* pcmBuf)
 {
-    int currentSection = 0;
-    int bytesToRead    = framesToBytes(framesToRead);
-    int32_t bytesRead  = static_cast<int32_t>(ov_read(&_vf, pcmBuf, bytesToRead, 0, 2, 1, &currentSection));
-    return bytesToFrames(bytesRead);
+    return op_read(_of, (opus_int16*)pcmBuf, framesToRead, nullptr);
 }
 
-bool AudioDecoderOgg::seek(uint32_t frameOffset)
+bool AudioDecoderOpus::seek(uint32_t frameOffset)
 {
-    return 0 == ov_pcm_seek(&_vf, frameOffset);
+    return op_pcm_seek(_of, frameOffset);
 }
 }  // namespace ax
+
+#endif

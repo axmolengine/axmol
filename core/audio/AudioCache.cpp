@@ -24,8 +24,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#define LOG_TAG "AudioCache"
-
 #include "platform/PlatformConfig.h"
 
 #include "audio/AudioCache.h"
@@ -414,4 +412,3 @@ void AudioCache::invokingLoadCallbacks()
     });
 }
 }
-#undef LOG_TAG

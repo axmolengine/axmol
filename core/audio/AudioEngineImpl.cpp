@@ -23,8 +23,6 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#define LOG_TAG "AudioEngineImpl"
-
 #include "platform/PlatformConfig.h"
 
 #include "audio/AudioEngineImpl.h"
@@ -1000,4 +998,3 @@ void AudioEngineImpl::uncacheAll()
     _audioCaches.clear();
 }
 }
-#undef LOG_TAG

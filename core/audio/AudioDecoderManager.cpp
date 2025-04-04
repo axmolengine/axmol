@@ -24,10 +24,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#define LOG_TAG "AudioDecoderManager"
-
 #include "audio/AudioDecoderManager.h"
 #include "audio/AudioDecoderOgg.h"
+#include "audio/AudioDecoderOpus.h"
 #include "audio/AudioMacros.h"
 #include "platform/FileUtils.h"
 #include "base/Logging.h"
@@ -65,6 +64,12 @@ AudioDecoder* AudioDecoderManager::createDecoder(std::string_view path)
     {
         return new AudioDecoderOgg();
     }
+#if defined(AX_ENABLE_OPUS)
+    else if (cxx20::ic::ends_with(path, ".opus"))
+    {
+        return new AudioDecoderOpus();
+    }
+#endif
 #if !defined(__APPLE__)
     else if (cxx20::ic::ends_with(path, ".mp3"))
     {
@@ -92,5 +97,3 @@ void AudioDecoderManager::destroyDecoder(AudioDecoder* decoder)
 }
 
 }  // namespace ax
-
-#undef LOG_TAG
