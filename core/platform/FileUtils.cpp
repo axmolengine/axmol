@@ -1069,26 +1069,13 @@ int unlink_cb(const char* fpath, const struct stat* sb, int typeflag, struct FTW
 
 bool FileUtils::removeDirectory(std::string_view path) const
 {
-#    if !defined(AX_TARGET_OS_TVOS)
-
-#        if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
-    if (nftw(path.data(), unlink_cb, 64, FTW_DEPTH | FTW_PHYS) == -1)
-        return false;
-    else
-        return true;
-#        else
-    std::string command = "rm -r \""s;
-    // Path may include space.
-    command.append(path).append("\"", 1);
-    if (system(command.c_str()) >= 0)
-        return true;
-    else
-        return false;
-#        endif  // (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
-
+#    if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && !defined(AX_TARGET_OS_TVOS)
+    return nftw(path.data(), unlink_cb, 64, FTW_DEPTH | FTW_PHYS) != -1;
 #    else
-    return false;
-#    endif  // !defined(AX_TARGET_OS_TVOS)
+    std::error_code ec;
+    auto n = stdfs::remove_all(path, ec);
+    return !ec && n > 0;
+#    endif
 }
 
 bool FileUtils::removeFile(std::string_view path) const
