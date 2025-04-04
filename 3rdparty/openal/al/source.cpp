@@ -32,6 +32,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <iterator>
+#include <functional>
 #include <limits>
 #include <memory>
 #include <mutex>
@@ -331,51 +332,45 @@ NOINLINE T GetSourceOffset(ALsource *Source, ALenum name, ALCcontext *context)
     }
     ASSUME(BufferFmt != nullptr);
 
-    T offset{};
     switch(name)
     {
     case AL_SEC_OFFSET:
         if constexpr(std::is_floating_point_v<T>)
         {
-            offset  = static_cast<T>(readPos) + static_cast<T>(readPosFrac)/T{MixerFracOne};
-            offset /= static_cast<T>(BufferFmt->mSampleRate);
+            auto offset = static_cast<T>(readPos) + static_cast<T>(readPosFrac)/T{MixerFracOne};
+            return offset / static_cast<T>(BufferFmt->mSampleRate);
         }
         else
         {
             readPos /= BufferFmt->mSampleRate;
-            offset = static_cast<T>(std::clamp<int64_t>(readPos, std::numeric_limits<T>::min(),
+            return static_cast<T>(std::clamp<int64_t>(readPos, std::numeric_limits<T>::min(),
                 std::numeric_limits<T>::max()));
         }
-        break;
 
     case AL_SAMPLE_OFFSET:
         if constexpr(std::is_floating_point_v<T>)
-            offset = static_cast<T>(readPos) + static_cast<T>(readPosFrac)/T{MixerFracOne};
+            return static_cast<T>(readPos) + static_cast<T>(readPosFrac)/T{MixerFracOne};
         else
-            offset = static_cast<T>(std::clamp<int64_t>(readPos, std::numeric_limits<T>::min(),
+            return static_cast<T>(std::clamp<int64_t>(readPos, std::numeric_limits<T>::min(),
                 std::numeric_limits<T>::max()));
-        break;
 
     case AL_BYTE_OFFSET:
-        const ALuint BlockSamples{BufferFmt->mBlockAlign};
-        const ALuint BlockSize{BufferFmt->blockSizeFromFmt()};
         /* Round down to the block boundary. */
-        readPos = readPos / BlockSamples * BlockSize;
+        const auto BlockSize = ALuint{BufferFmt->blockSizeFromFmt()};
+        readPos = readPos / BufferFmt->mBlockAlign * BlockSize;
 
         if constexpr(std::is_floating_point_v<T>)
-            offset = static_cast<T>(readPos);
+            return static_cast<T>(readPos);
         else
         {
             if(readPos > std::numeric_limits<T>::max())
-                offset = RoundDown(std::numeric_limits<T>::max(), static_cast<T>(BlockSize));
-            else if(readPos < std::numeric_limits<T>::min())
-                offset = RoundUp(std::numeric_limits<T>::min(), static_cast<T>(BlockSize));
-            else
-                offset = static_cast<T>(readPos);
+                return RoundDown(std::numeric_limits<T>::max(), static_cast<T>(BlockSize));
+            if(readPos < std::numeric_limits<T>::min())
+                return RoundUp(std::numeric_limits<T>::min(), static_cast<T>(BlockSize));
+            return static_cast<T>(readPos);
         }
-        break;
     }
-    return offset;
+    return T{0};
 }
 
 /* GetSourceLength
@@ -394,10 +389,9 @@ NOINLINE T GetSourceLength(const ALsource *source, ALenum name)
             BufferFmt = listitem.mBuffer;
         length += listitem.mSampleLen;
     }
-    if(length == 0)
+    if(length == 0 || !BufferFmt)
         return T{0};
 
-    ASSUME(BufferFmt != nullptr);
     switch(name)
     {
     case AL_SEC_LENGTH_SOFT:
@@ -414,10 +408,9 @@ NOINLINE T GetSourceLength(const ALsource *source, ALenum name)
             return static_cast<T>(std::min<uint64_t>(length, std::numeric_limits<T>::max()));
 
     case AL_BYTE_LENGTH_SOFT:
-        const ALuint BlockSamples{BufferFmt->mBlockAlign};
-        const ALuint BlockSize{BufferFmt->blockSizeFromFmt()};
         /* Round down to the block boundary. */
-        length = length / BlockSamples * BlockSize;
+        const auto BlockSize = ALuint{BufferFmt->blockSizeFromFmt()};
+        length = length / BufferFmt->mBlockAlign * BlockSize;
 
         if constexpr(std::is_floating_point_v<T>)
             return static_cast<T>(length);
@@ -459,44 +452,43 @@ std::optional<VoicePos> GetSampleOffset(std::deque<ALbufferQueueItem> &BufferLis
         return std::nullopt;
 
     /* Get sample frame offset */
-    int64_t offset{};
-    uint frac{};
-    double dbloff, dblfrac;
-    switch(OffsetType)
+    auto [offset, frac] = std::invoke([OffsetType,Offset,BufferFmt]() -> std::pair<int64_t,uint>
     {
-    case AL_SEC_OFFSET:
-        dblfrac = std::modf(Offset*BufferFmt->mSampleRate, &dbloff);
-        if(dblfrac < 0.0)
+        auto dbloff = double{};
+        auto dblfrac = double{};
+        switch(OffsetType)
         {
-            /* If there's a negative fraction, reduce the offset to "floor" it,
-             * and convert the fraction to a percentage to the next value (e.g.
-             * -2.75 -> -3 + 0.25).
-             */
-            dbloff -= 1.0;
-            dblfrac += 1.0;
-        }
-        offset = static_cast<int64_t>(dbloff);
-        frac = static_cast<uint>(std::min(dblfrac*MixerFracOne, MixerFracOne-1.0));
-        break;
+        case AL_SEC_OFFSET:
+            dblfrac = std::modf(Offset*BufferFmt->mSampleRate, &dbloff);
+            if(dblfrac < 0.0)
+            {
+                /* If there's a negative fraction, reduce the offset to "floor"
+                 * it, and convert the fraction to a percentage to the next
+                 * greater value (e.g. -2.75 -> -2 + -0.75 -> -3 + 0.25).
+                 */
+                dbloff -= 1.0;
+                dblfrac += 1.0;
+            }
+            return {static_cast<int64_t>(dbloff),
+                static_cast<uint>(std::min(dblfrac*MixerFracOne, MixerFracOne-1.0))};
 
-    case AL_SAMPLE_OFFSET:
-        dblfrac = std::modf(Offset, &dbloff);
-        if(dblfrac < 0.0)
-        {
-            dbloff -= 1.0;
-            dblfrac += 1.0;
-        }
-        offset = static_cast<int64_t>(dbloff);
-        frac = static_cast<uint>(std::min(dblfrac*MixerFracOne, MixerFracOne-1.0));
-        break;
+        case AL_SAMPLE_OFFSET:
+            dblfrac = std::modf(Offset, &dbloff);
+            if(dblfrac < 0.0)
+            {
+                dbloff -= 1.0;
+                dblfrac += 1.0;
+            }
+            return {static_cast<int64_t>(dbloff),
+                static_cast<uint>(std::min(dblfrac*MixerFracOne, MixerFracOne-1.0))};
 
-    case AL_BYTE_OFFSET:
-        /* Determine the ByteOffset (and ensure it is block aligned) */
-        Offset = std::floor(Offset / BufferFmt->blockSizeFromFmt());
-        offset = static_cast<int64_t>(Offset) * BufferFmt->mBlockAlign;
-        frac = 0;
-        break;
-    }
+        case AL_BYTE_OFFSET:
+            /* Determine the ByteOffset (and ensure it is block aligned) */
+            const auto blockoffset = std::floor(Offset / BufferFmt->blockSizeFromFmt());
+            return {static_cast<int64_t>(blockoffset) * BufferFmt->mBlockAlign, 0u};
+        }
+        return {0_i64, 0u};
+    });
 
     /* Find the bufferlist item this offset belongs to. */
     if(offset < 0)
@@ -509,17 +501,14 @@ std::optional<VoicePos> GetSampleOffset(std::deque<ALbufferQueueItem> &BufferLis
     if(BufferFmt->mCallback)
         return std::nullopt;
 
-    int64_t totalBufferLen{0};
     for(auto &item : BufferList)
     {
-        if(totalBufferLen > offset)
-            break;
-        if(item.mSampleLen > offset-totalBufferLen)
+        if(item.mSampleLen > offset)
         {
             /* Offset is in this buffer */
-            return VoicePos{static_cast<int>(offset-totalBufferLen), frac, &item};
+            return VoicePos{static_cast<int>(offset), frac, &item};
         }
-        totalBufferLen += item.mSampleLen;
+        offset -= item.mSampleLen;
     }
 
     /* Offset is out of range of the queue */
@@ -1910,7 +1899,7 @@ NOINLINE void SetProperty(ALsource *const Source, ALCcontext *const Context, con
         if constexpr(std::is_integral_v<T>)
         {
             CheckSize(1);
-            CheckValue(values[0] >= 0 && values[0] <= static_cast<int>(Resampler::Max));
+            CheckValue(values[0] >= 0 && values[0] <= al::to_underlying(Resampler::Max));
 
             Source->mResampler = static_cast<Resampler>(values[0]);
             return UpdateSourceProps(Source, Context);
@@ -3568,8 +3557,7 @@ try {
     const size_t NewListStart{source->mQueue.size()};
     try {
         ALbufferQueueItem *BufferList{nullptr};
-        std::for_each(bids.cbegin(), bids.cend(),
-        [context,source,device,&BufferFmt,&BufferList](const ALuint bid)
+        auto append_buffer = [context,source,device,&BufferFmt,&BufferList](const ALuint bid)
         {
             ALbuffer *buffer{bid ? LookupBuffer(device, bid) : nullptr};
             if(bid && !buffer)
@@ -3607,11 +3595,11 @@ try {
             BufferList->mBuffer = buffer;
             IncrementRef(buffer->ref);
 
-            bool fmt_mismatch{false};
             if(BufferFmt == nullptr)
                 BufferFmt = buffer;
             else
             {
+                auto fmt_mismatch = false;
                 fmt_mismatch |= BufferFmt->mSampleRate != buffer->mSampleRate;
                 fmt_mismatch |= BufferFmt->mChannels != buffer->mChannels;
                 fmt_mismatch |= BufferFmt->mType != buffer->mType;
@@ -3621,15 +3609,16 @@ try {
                     fmt_mismatch |= BufferFmt->mAmbiScaling != buffer->mAmbiScaling;
                 }
                 fmt_mismatch |= BufferFmt->mAmbiOrder != buffer->mAmbiOrder;
+                if(fmt_mismatch)
+                    context->throw_error(AL_INVALID_OPERATION,
+                        "Queueing buffer with mismatched format\n"
+                        "  Expected: {}hz, {}, {} ; Got: {}hz, {}, {}\n", BufferFmt->mSampleRate,
+                        NameFromFormat(BufferFmt->mType), NameFromFormat(BufferFmt->mChannels),
+                        buffer->mSampleRate, NameFromFormat(buffer->mType),
+                        NameFromFormat(buffer->mChannels));
             }
-            if(fmt_mismatch)
-                context->throw_error(AL_INVALID_OPERATION,
-                    "Queueing buffer with mismatched format\n"
-                    "  Expected: {}hz, {}, {} ; Got: {}hz, {}, {}\n", BufferFmt->mSampleRate,
-                    NameFromFormat(BufferFmt->mType), NameFromFormat(BufferFmt->mChannels),
-                    buffer->mSampleRate, NameFromFormat(buffer->mType),
-                    NameFromFormat(buffer->mChannels));
-        });
+        };
+        std::for_each(bids.cbegin(), bids.cend(), append_buffer);
     }
     catch(...) {
         /* A buffer failed (invalid ID or format), or there was some other
@@ -3821,11 +3810,6 @@ void ALsource::eaxInitialize(ALCcontext *context) noexcept
     mEaxChanged = true;
 }
 
-void ALsource::eaxDispatch(const EaxCall& call)
-{
-    call.is_get() ? eax_get(call) : eax_set(call);
-}
-
 ALsource* ALsource::EaxLookupSource(ALCcontext& al_context, ALuint source_id) noexcept
 {
     return LookupSource(&al_context, source_id);
@@ -3873,7 +3857,7 @@ void ALsource::eax_set_sends_defaults(EaxSends& sends, const EaxFxSlotIds& ids) 
     }
 }
 
-void ALsource::eax1_set_defaults(Eax1Props& props) noexcept
+void ALsource::eax1_set_defaults(EAXBUFFER_REVERBPROPERTIES& props) noexcept
 {
     props.fMix = EAX_REVERBMIX_USEDISTANCE;
 }
@@ -3884,7 +3868,7 @@ void ALsource::eax1_set_defaults() noexcept
     mEax1.d = mEax1.i;
 }
 
-void ALsource::eax2_set_defaults(Eax2Props& props) noexcept
+void ALsource::eax2_set_defaults(EAX20BUFFERPROPERTIES& props) noexcept
 {
     props.lDirect = EAXSOURCE_DEFAULTDIRECT;
     props.lDirectHF = EAXSOURCE_DEFAULTDIRECTHF;
@@ -3907,7 +3891,7 @@ void ALsource::eax2_set_defaults() noexcept
     mEax2.d = mEax2.i;
 }
 
-void ALsource::eax3_set_defaults(Eax3Props& props) noexcept
+void ALsource::eax3_set_defaults(EAX30SOURCEPROPERTIES& props) noexcept
 {
     props.lDirect = EAXSOURCE_DEFAULTDIRECT;
     props.lDirectHF = EAXSOURCE_DEFAULTDIRECTHF;
@@ -3955,7 +3939,7 @@ void ALsource::eax4_set_defaults() noexcept
 
 void ALsource::eax5_set_source_defaults(EAX50SOURCEPROPERTIES& props) noexcept
 {
-    eax3_set_defaults(static_cast<Eax3Props&>(props));
+    eax3_set_defaults(static_cast<EAX30SOURCEPROPERTIES&>(props));
     props.flMacroFXFactor = EAXSOURCE_DEFAULTMACROFXFACTOR;
 }
 
@@ -4002,7 +3986,7 @@ void ALsource::eax_set_defaults() noexcept
     eax5_set_defaults();
 }
 
-void ALsource::eax1_translate(const Eax1Props& src, Eax5Props& dst) noexcept
+void ALsource::eax1_translate(const EAXBUFFER_REVERBPROPERTIES& src, Eax5Props& dst) noexcept
 {
     eax5_set_defaults(dst);
 
@@ -4019,7 +4003,7 @@ void ALsource::eax1_translate(const Eax1Props& src, Eax5Props& dst) noexcept
     }
 }
 
-void ALsource::eax2_translate(const Eax2Props& src, Eax5Props& dst) noexcept
+void ALsource::eax2_translate(const EAX20BUFFERPROPERTIES& src, Eax5Props& dst) noexcept
 {
     // Source.
     //
@@ -4050,11 +4034,11 @@ void ALsource::eax2_translate(const Eax2Props& src, Eax5Props& dst) noexcept
     eax5_set_speaker_levels_defaults(dst.speaker_levels);
 }
 
-void ALsource::eax3_translate(const Eax3Props& src, Eax5Props& dst) noexcept
+void ALsource::eax3_translate(const EAX30SOURCEPROPERTIES& src, Eax5Props& dst) noexcept
 {
     // Source.
     //
-    static_cast<Eax3Props&>(dst.source) = src;
+    static_cast<EAX30SOURCEPROPERTIES&>(dst.source) = src;
     dst.source.flMacroFXFactor = EAXSOURCE_DEFAULTMACROFXFACTOR;
 
     // Set everything else to defaults.
@@ -4068,7 +4052,7 @@ void ALsource::eax4_translate(const Eax4Props& src, Eax5Props& dst) noexcept
 {
     // Source.
     //
-    static_cast<Eax3Props&>(dst.source) = src.source;
+    static_cast<EAX30SOURCEPROPERTIES&>(dst.source) = src.source;
     dst.source.flMacroFXFactor = EAXSOURCE_DEFAULTMACROFXFACTOR;
 
     // Sends.
@@ -4284,7 +4268,7 @@ void ALsource::eax_set_efx_wet_gain_hf_auto()
     WetGainHFAuto = ((mEax.source.ulFlags & EAXSOURCEFLAGS_ROOMHFAUTO) != 0);
 }
 
-void ALsource::eax1_set(const EaxCall& call, Eax1Props& props)
+void ALsource::eax1_set(const EaxCall& call, EAXBUFFER_REVERBPROPERTIES& props)
 {
     switch (call.get_property_id()) {
         case DSPROPERTY_EAXBUFFER_ALL:
@@ -4300,7 +4284,7 @@ void ALsource::eax1_set(const EaxCall& call, Eax1Props& props)
     }
 }
 
-void ALsource::eax2_set(const EaxCall& call, Eax2Props& props)
+void ALsource::eax2_set(const EaxCall& call, EAX20BUFFERPROPERTIES& props)
 {
     switch (call.get_property_id()) {
         case DSPROPERTY_EAX20BUFFER_NONE:
@@ -4367,7 +4351,7 @@ void ALsource::eax2_set(const EaxCall& call, Eax2Props& props)
     }
 }
 
-void ALsource::eax3_set(const EaxCall& call, Eax3Props& props)
+void ALsource::eax3_set(const EaxCall& call, EAX30SOURCEPROPERTIES& props)
 {
     switch (call.get_property_id()) {
         case EAXSOURCE_NONE:
@@ -4639,7 +4623,7 @@ void ALsource::eax_get_active_fx_slot_id(const EaxCall& call, const al::span<con
     std::uninitialized_copy_n(src_ids.begin(), dst_ids.size(), dst_ids.begin());
 }
 
-void ALsource::eax1_get(const EaxCall& call, const Eax1Props& props)
+void ALsource::eax1_get(const EaxCall& call, const EAXBUFFER_REVERBPROPERTIES& props)
 {
     switch (call.get_property_id()) {
         case DSPROPERTY_EAXBUFFER_ALL:
@@ -4652,7 +4636,7 @@ void ALsource::eax1_get(const EaxCall& call, const Eax1Props& props)
     }
 }
 
-void ALsource::eax2_get(const EaxCall& call, const Eax2Props& props)
+void ALsource::eax2_get(const EaxCall& call, const EAX20BUFFERPROPERTIES& props)
 {
     switch (call.get_property_id()) {
         case DSPROPERTY_EAX20BUFFER_NONE:
@@ -4719,25 +4703,25 @@ void ALsource::eax2_get(const EaxCall& call, const Eax2Props& props)
     }
 }
 
-void ALsource::eax3_get_obstruction(const EaxCall& call, const Eax3Props& props)
+void ALsource::eax3_get_obstruction(const EaxCall& call, const EAX30SOURCEPROPERTIES& props)
 {
     const auto& subprops = reinterpret_cast<const EAXOBSTRUCTIONPROPERTIES&>(props.lObstruction);
     call.set_value<Exception>(subprops);
 }
 
-void ALsource::eax3_get_occlusion(const EaxCall& call, const Eax3Props& props)
+void ALsource::eax3_get_occlusion(const EaxCall& call, const EAX30SOURCEPROPERTIES& props)
 {
     const auto& subprops = reinterpret_cast<const EAXOCCLUSIONPROPERTIES&>(props.lOcclusion);
     call.set_value<Exception>(subprops);
 }
 
-void ALsource::eax3_get_exclusion(const EaxCall& call, const Eax3Props& props)
+void ALsource::eax3_get_exclusion(const EaxCall& call, const EAX30SOURCEPROPERTIES& props)
 {
     const auto& subprops = reinterpret_cast<const EAXEXCLUSIONPROPERTIES&>(props.lExclusion);
     call.set_value<Exception>(subprops);
 }
 
-void ALsource::eax3_get(const EaxCall& call, const Eax3Props& props)
+void ALsource::eax3_get(const EaxCall& call, const EAX30SOURCEPROPERTIES& props)
 {
     switch (call.get_property_id()) {
         case EAXSOURCE_NONE:

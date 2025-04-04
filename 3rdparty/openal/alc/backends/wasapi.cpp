@@ -51,6 +51,7 @@
 #include <chrono>
 #include <condition_variable>
 #include <cstring>
+#include <functional>
 #include <future>
 #include <mutex>
 #include <string>
@@ -62,6 +63,7 @@
 #include "alc/alconfig.h"
 #include "alnumeric.h"
 #include "alspan.h"
+#include "alstring.h"
 #include "althrd_setname.h"
 #include "comptr.h"
 #include "core/converter.h"
@@ -316,6 +318,8 @@ struct DeviceListLock : public std::unique_lock<DeviceList> {
 };
 
 DeviceList gDeviceList;
+std::condition_variable_any gInitCV;
+std::atomic<bool> gInitDone{false};
 
 
 #ifdef AVRTAPI
@@ -541,83 +545,42 @@ struct DeviceEnumHelper final : private IMMNotificationClient {
     }
 #else
     /** ----------------------- IMMNotificationClient ------------ */
-    STDMETHODIMP OnDeviceStateChanged(LPCWSTR /*pwstrDeviceId*/, DWORD /*dwNewState*/) noexcept override { return S_OK; }
-
-    STDMETHODIMP OnDeviceAdded(LPCWSTR pwstrDeviceId) noexcept override
+    STDMETHODIMP OnDeviceStateChanged(LPCWSTR deviceId, DWORD newState) noexcept override
     {
-        ComPtr<IMMDevice> device;
-        HRESULT hr{mEnumerator->GetDevice(pwstrDeviceId, al::out_ptr(device))};
-        if(FAILED(hr))
-        {
-            ERR("Failed to get device: {:#x}", as_unsigned(hr));
-            return S_OK;
-        }
+        TRACE("OnDeviceStateChanged({}, {:#x})", deviceId ? wstr_to_utf8(deviceId)
+            : std::string{"<null>"}, newState);
 
-        ComPtr<IMMEndpoint> endpoint;
-        hr = device->QueryInterface(__uuidof(IMMEndpoint), al::out_ptr(endpoint));
-        if(FAILED(hr))
-        {
-            ERR("Failed to get device endpoint: {:#x}", as_unsigned(hr));
-            return S_OK;
-        }
-
-        EDataFlow flowdir{};
-        hr = endpoint->GetDataFlow(&flowdir);
-        if(FAILED(hr))
-        {
-            ERR("Failed to get endpoint data flow: {:#x}", as_unsigned(hr));
-            return S_OK;
-        }
-
-        auto devlock = DeviceListLock{gDeviceList};
-        auto &list = (flowdir==eRender) ? devlock.getPlaybackList() : devlock.getCaptureList();
-
-        if(AddDevice(device, pwstrDeviceId, list))
-        {
-            const auto devtype = (flowdir==eRender) ? alc::DeviceType::Playback
-                : alc::DeviceType::Capture;
-            const std::string msg{"Device added: "+list.back().name};
-            alc::Event(alc::EventType::DeviceAdded, devtype, msg);
-        }
-
-        return S_OK;
+        if(!(newState&DEVICE_STATE_ACTIVE))
+            return DeviceRemoved(deviceId);
+        return DeviceAdded(deviceId);
     }
 
-    STDMETHODIMP OnDeviceRemoved(LPCWSTR pwstrDeviceId) noexcept override
+    STDMETHODIMP OnDeviceAdded(LPCWSTR deviceId) noexcept override
     {
-        auto devlock = DeviceListLock{gDeviceList};
-        for(auto flowdir : std::array{eRender, eCapture})
-        {
-            auto &list = (flowdir==eRender) ? devlock.getPlaybackList() : devlock.getCaptureList();
-            auto devtype = (flowdir==eRender)?alc::DeviceType::Playback : alc::DeviceType::Capture;
+        TRACE("OnDeviceAdded({})", deviceId ? wstr_to_utf8(deviceId) : std::string{"<null>"});
+        return DeviceAdded(deviceId);
+    }
 
-            /* Find the ID in the list to remove. */
-            auto iter = std::find_if(list.begin(), list.end(),
-                [pwstrDeviceId](const DevMap &entry) noexcept
-                { return pwstrDeviceId == entry.devid; });
-            if(iter == list.end()) continue;
-
-            TRACE("Removing device \"{}\", \"{}\", \"{}\"", iter->name, iter->endpoint_guid,
-                wstr_to_utf8(iter->devid));
-
-            std::string msg{"Device removed: "+std::move(iter->name)};
-            list.erase(iter);
-
-            alc::Event(alc::EventType::DeviceRemoved, devtype, msg);
-        }
-        return S_OK;
+    STDMETHODIMP OnDeviceRemoved(LPCWSTR deviceId) noexcept override
+    {
+        TRACE("OnDeviceRemoved({})", deviceId ? wstr_to_utf8(deviceId) : std::string{"<null>"});
+        return DeviceRemoved(deviceId);
     }
 
     /* NOLINTNEXTLINE(clazy-function-args-by-ref) */
     STDMETHODIMP OnPropertyValueChanged(LPCWSTR /*pwstrDeviceId*/, const PROPERTYKEY /*key*/) noexcept override { return S_OK; }
 
-    STDMETHODIMP OnDefaultDeviceChanged(EDataFlow flow, ERole role, LPCWSTR pwstrDefaultDeviceId) noexcept override
+    STDMETHODIMP OnDefaultDeviceChanged(EDataFlow flow, ERole role, LPCWSTR defaultDeviceId) noexcept override
     {
+        TRACE("OnDefaultDeviceChanged({}, {}, {})", al::to_underlying(flow),
+            al::to_underlying(role), defaultDeviceId ? wstr_to_utf8(defaultDeviceId)
+            : std::string{"<null>"});
+
         if(role != eMultimedia)
             return S_OK;
 
-        const std::wstring_view devid{pwstrDefaultDeviceId ? pwstrDefaultDeviceId
-            : std::wstring_view{}};
+        const auto devid = defaultDeviceId ? std::wstring_view{defaultDeviceId}
+            : std::wstring_view{};
         if(flow == eRender)
         {
             DeviceListLock{gDeviceList}.setPlaybackDefaultId(devid);
@@ -753,6 +716,80 @@ private:
     }
 
 #if !ALSOFT_UWP
+    STDMETHODIMP DeviceAdded(LPCWSTR deviceId) noexcept
+    {
+        auto device = ComPtr<IMMDevice>{};
+        auto hr = mEnumerator->GetDevice(deviceId, al::out_ptr(device));
+        if(FAILED(hr))
+        {
+            ERR("Failed to get device: {:#x}", as_unsigned(hr));
+            return S_OK;
+        }
+
+        auto state = DWORD{};
+        hr = device->GetState(&state);
+        if(FAILED(hr))
+        {
+            ERR("Failed to get device state: {:#x}", as_unsigned(hr));
+            return S_OK;
+        }
+        if(!(state&DEVICE_STATE_ACTIVE))
+            return S_OK;
+
+        auto endpoint = ComPtr<IMMEndpoint>{};
+        hr = device->QueryInterface(__uuidof(IMMEndpoint), al::out_ptr(endpoint));
+        if(FAILED(hr))
+        {
+            ERR("Failed to get device endpoint: {:#x}", as_unsigned(hr));
+            return S_OK;
+        }
+
+        auto flowdir = EDataFlow{};
+        hr = endpoint->GetDataFlow(&flowdir);
+        if(FAILED(hr))
+        {
+            ERR("Failed to get endpoint data flow: {:#x}", as_unsigned(hr));
+            return S_OK;
+        }
+
+        auto devlock = DeviceListLock{gDeviceList};
+        auto &list = (flowdir == eRender) ? devlock.getPlaybackList() : devlock.getCaptureList();
+
+        if(AddDevice(device, deviceId, list))
+        {
+            const auto devtype = (flowdir == eRender) ? alc::DeviceType::Playback
+                : alc::DeviceType::Capture;
+            const auto msg = "Device added: "+list.back().name;
+            alc::Event(alc::EventType::DeviceAdded, devtype, msg);
+        }
+
+        return S_OK;
+    }
+
+    STDMETHODIMP DeviceRemoved(LPCWSTR deviceId) noexcept
+    {
+        auto devlock = DeviceListLock{gDeviceList};
+        for(auto flowdir : std::array{eRender, eCapture})
+        {
+            auto &list = (flowdir==eRender) ? devlock.getPlaybackList() : devlock.getCaptureList();
+            auto devtype = (flowdir==eRender)?alc::DeviceType::Playback : alc::DeviceType::Capture;
+
+            /* Find the ID in the list to remove. */
+            auto iter = std::find_if(list.begin(), list.end(),
+                [deviceId](const DevMap &entry) noexcept { return deviceId == entry.devid; });
+            if(iter == list.end()) continue;
+
+            TRACE("Removing device \"{}\", \"{}\", \"{}\"", iter->name, iter->endpoint_guid,
+                wstr_to_utf8(iter->devid));
+
+            std::string msg{"Device removed: "+std::move(iter->name)};
+            list.erase(iter);
+
+            alc::Event(alc::EventType::DeviceRemoved, devtype, msg);
+        }
+        return S_OK;
+    }
+
     ComPtr<IMMDeviceEnumerator> mEnumerator{nullptr};
 
 #else
@@ -792,22 +829,34 @@ void DeviceEnumHelper::messageHandler(std::promise<HRESULT> *promise)
         return;
     }
 
-    DeviceEnumHelper helper;
-    auto hr = helper.init();
-    promise->set_value(hr);
-    promise = nullptr;
-    if(FAILED(hr))
-        return;
-
-    {
+    auto helper = std::optional<DeviceEnumHelper>{};
+    try {
         auto devlock = DeviceListLock{gDeviceList};
-        auto defaultId = helper.probeDevices(eRender, devlock.getPlaybackList());
+
+        auto hr = helper.emplace().init();
+        promise->set_value(hr);
+        promise = nullptr;
+        if(FAILED(hr))
+            return;
+
+        auto defaultId = helper->probeDevices(eRender, devlock.getPlaybackList());
         if(!defaultId.empty()) devlock.setPlaybackDefaultId(defaultId);
-        defaultId = helper.probeDevices(eCapture, devlock.getCaptureList());
+
+        defaultId = helper->probeDevices(eCapture, devlock.getCaptureList());
         if(!defaultId.empty()) devlock.setCaptureDefaultId(defaultId);
+
+        gInitDone.store(true, std::memory_order_relaxed);
+    }
+    catch(std::exception &e) {
+        ERR("Exception probing devices: {}", e.what());
+        if(promise)
+            promise->set_value(E_FAIL);
+        return;
     }
 
     TRACE("Watcher thread started");
+    gInitCV.notify_all();
+
     while(!quit()) {
         /* Do nothing. */
     }
@@ -962,7 +1011,21 @@ struct DeviceHelper {
 
     [[nodiscard]]
     static auto activateAudioClient(_In_ DeviceHandle &device, REFIID iid, void **ppv) -> HRESULT
-    { return device->Activate(iid, CLSCTX_INPROC_SERVER, nullptr, ppv); }
+    {
+        if(iid == __uuidof(IAudioClient))
+        {
+            /* Always (try) to activate an IAudioClient3, even if giving back
+             * an IAudioClient iface. This may(?) offer more features even if
+             * not using its new methods.
+             */
+            auto ac3 = ComPtr<IAudioClient3>{};
+            const auto hr = device->Activate(__uuidof(IAudioClient3), CLSCTX_INPROC_SERVER,
+                nullptr, al::out_ptr(ac3));
+            if(SUCCEEDED(hr))
+                return ac3->QueryInterface(iid, ppv);
+        }
+        return device->Activate(iid, CLSCTX_INPROC_SERVER, nullptr, ppv);
+    }
 
     ComPtr<IMMDeviceEnumerator> mEnumerator{nullptr};
 };
@@ -1352,30 +1415,10 @@ FORCE_ALIGN void WasapiPlayback::mixerProc(SpatialDevice &audio)
      */
     mPadding.store(mOutBufferSize-mOutUpdateSize, std::memory_order_release);
 
-    ResetEvent(mNotifyEvent);
-    if(HRESULT hr{audio.mRender->Start()}; FAILED(hr))
-    {
-        ERR("Failed to start spatial audio stream: {:#x}", as_unsigned(hr));
-        mDevice->handleDisconnect("Failed to start spatial audio stream: {:#x}", as_unsigned(hr));
-        return;
-    }
-
     mBufferFilled = 0;
+    auto firstupdate = true;
     while(!mKillNow.load(std::memory_order_relaxed))
     {
-        if(DWORD res{WaitForSingleObjectEx(mNotifyEvent, 1000, FALSE)}; res != WAIT_OBJECT_0)
-        {
-            ERR("WaitForSingleObjectEx error: {:#x}", res);
-
-            HRESULT hr{audio.mRender->Reset()};
-            if(FAILED(hr))
-            {
-                ERR("ISpatialAudioObjectRenderStream::Reset failed: {:#x}", as_unsigned(hr));
-                mDevice->handleDisconnect("Device lost: {:#x}", as_unsigned(hr));
-                break;
-            }
-        }
-
         UINT32 dynamicCount{}, framesToDo{};
         HRESULT hr{audio.mRender->BeginUpdatingAudioObjects(&dynamicCount, &framesToDo)};
         if(SUCCEEDED(hr))
@@ -1389,9 +1432,8 @@ FORCE_ALIGN void WasapiPlayback::mixerProc(SpatialDevice &audio)
                     auto id = decltype(flags){1} << al::countr_zero(flags);
                     flags &= ~id;
 
-                    channels.emplace_back();
                     audio.mRender->ActivateSpatialAudioObject(static_cast<AudioObjectType>(id),
-                        al::out_ptr(channels.back()));
+                        al::out_ptr(channels.emplace_back()));
                 }
                 buffers.resize(channels.size());
                 if(mResampler)
@@ -1444,6 +1486,34 @@ FORCE_ALIGN void WasapiPlayback::mixerProc(SpatialDevice &audio)
             hr = audio.mRender->EndUpdatingAudioObjects();
         }
 
+        if(firstupdate)
+        {
+            firstupdate = false;
+            ResetEvent(mNotifyEvent);
+            hr = audio.mRender->Start();
+            if(FAILED(hr))
+            {
+                ERR("Failed to start spatial audio stream: {:#x}", as_unsigned(hr));
+                mDevice->handleDisconnect("Failed to start spatial audio stream: {:#x}",
+                    as_unsigned(hr));
+                return;
+            }
+        }
+
+        if(DWORD res{WaitForSingleObjectEx(mNotifyEvent, 1000, FALSE)}; res != WAIT_OBJECT_0)
+        {
+            ERR("WaitForSingleObjectEx error: {:#x}", res);
+
+            hr = audio.mRender->Reset();
+            if(FAILED(hr))
+            {
+                ERR("ISpatialAudioObjectRenderStream::Reset failed: {:#x}", as_unsigned(hr));
+                mDevice->handleDisconnect("Device lost: {:#x}", as_unsigned(hr));
+                break;
+            }
+            firstupdate = true;
+        }
+
         if(FAILED(hr))
             ERR("Failed to update playback objects: {:#x}", as_unsigned(hr));
     }
@@ -1467,6 +1537,12 @@ try {
         mState = ThreadState::Done;
         mProcCond.notify_all();
         return;
+    }
+
+    if(!gInitDone.load(std::memory_order_relaxed))
+    {
+        auto devlock = DeviceListLock{gDeviceList};
+        gInitCV.wait(devlock, []() -> bool { return gInitDone; });
     }
 
     auto helper = DeviceHelper{};
@@ -1493,7 +1569,7 @@ try {
         return;
     }
 
-    auto audiodev = std::variant<PlainDevice,SpatialDevice>{std::in_place_index_t<0>{}};
+    auto audiodev = std::variant<PlainDevice,SpatialDevice>{};
 
     auto plock = std::unique_lock{mProcMutex};
     mProcResult = S_OK;
@@ -1582,12 +1658,13 @@ auto WasapiPlayback::openProxy(const std::string_view name, DeviceHelper &helper
         auto list = al::span{devlock.getPlaybackList()};
         auto iter = std::find_if(list.cbegin(), list.cend(),
             [name](const DevMap &entry) -> bool
-            { return entry.name == name || entry.endpoint_guid == name; });
+            { return entry.name == name || al::case_compare(entry.endpoint_guid, name) == 0; });
         if(iter == list.cend())
         {
             const std::wstring wname{utf8_to_wstr(name)};
             iter = std::find_if(list.cbegin(), list.cend(),
-                [&wname](const DevMap &entry) -> bool { return entry.devid == wname; });
+                [&wname](const DevMap &entry) -> bool
+                { return al::case_compare(entry.devid, wname) == 0; });
         }
         if(iter == list.cend())
         {
@@ -1600,7 +1677,7 @@ auto WasapiPlayback::openProxy(const std::string_view name, DeviceHelper &helper
 
     if(HRESULT hr{helper.openDevice(devid, eRender, mmdev)}; FAILED(hr))
     {
-        WARN("Failed to open device \"{}\": {}", devname.empty()
+        WARN("Failed to open device \"{}\": {:#x}", devname.empty()
             ? "(default)"sv : std::string_view{devname}, as_unsigned(hr));
         return hr;
     }
@@ -1872,38 +1949,18 @@ auto WasapiPlayback::initSpatial(DeviceHelper &helper, DeviceHandle &mmdev, Spat
 
     setDefaultWFXChannelOrder();
 
-    /* FIXME: Get the real update and buffer size. Presumably the actual device
-     * is configured once ActivateSpatialAudioStream succeeds, and an
-     * IAudioClient from the same IMMDevice accesses the same device
-     * configuration. This isn't obviously correct, but for now assume
-     * IAudioClient::GetDevicePeriod returns the current device period time
-     * that ISpatialAudioObjectRenderStream will try to wake up at.
+    /* TODO: ISpatialAudioClient::GetMaxFrameCount returns the maximum number
+     * of frames per processing pass, which is ostensibly the period size. This
+     * should be checked on a real Windows system.
      *
-     * Unfortunately this won't get the buffer size of the
+     * In either case, this won't get the buffer size of the
      * ISpatialAudioObjectRenderStream, so we only assume there's two periods.
      */
-    mOutUpdateSize = mDevice->mUpdateSize;
+    mOutUpdateSize = maxFrames;
     mOutBufferSize = mOutUpdateSize*2;
-    ReferenceTime per_time{ReferenceTime{seconds{mDevice->mUpdateSize}} / mDevice->mSampleRate};
 
-    ComPtr<IAudioClient> tmpClient;
-    hr = helper.activateAudioClient(mmdev, __uuidof(IAudioClient), al::out_ptr(tmpClient));
-    if(FAILED(hr))
-        ERR("Failed to activate audio client: {:#x}", as_unsigned(hr));
-    else
-    {
-        hr = tmpClient->GetDevicePeriod(&reinterpret_cast<REFERENCE_TIME&>(per_time), nullptr);
-        if(FAILED(hr))
-            ERR("Failed to get device period: {:#x}", as_unsigned(hr));
-        else
-        {
-            mOutUpdateSize = RefTime2Samples(per_time, mFormat.Format.nSamplesPerSec);
-            mOutBufferSize = mOutUpdateSize*2;
-        }
-    }
-    tmpClient = nullptr;
-
-    mDevice->mUpdateSize = RefTime2Samples(per_time, mDevice->mSampleRate);
+    mDevice->mUpdateSize = static_cast<uint>((uint64_t{mOutUpdateSize}*mDevice->mSampleRate
+        + (mFormat.Format.nSamplesPerSec-1)) / mFormat.Format.nSamplesPerSec);
     mDevice->mBufferSize = mDevice->mUpdateSize*2;
 
     mResampler = nullptr;
@@ -2508,6 +2565,12 @@ try {
         return;
     }
 
+    if(!gInitDone.load(std::memory_order_relaxed))
+    {
+        auto devlock = DeviceListLock{gDeviceList};
+        gInitCV.wait(devlock, []() -> bool { return gInitDone; });
+    }
+
     auto helper = DeviceHelper{};
     if(HRESULT hr{helper.init()}; FAILED(hr))
     {
@@ -2623,12 +2686,13 @@ auto WasapiCapture::openProxy(const std::string_view name, DeviceHelper &helper,
         auto devlist = al::span{devlock.getCaptureList()};
         auto iter = std::find_if(devlist.cbegin(), devlist.cend(),
             [name](const DevMap &entry) -> bool
-            { return entry.name == name || entry.endpoint_guid == name; });
+            { return entry.name == name || al::case_compare(entry.endpoint_guid, name) == 0; });
         if(iter == devlist.cend())
         {
             const std::wstring wname{utf8_to_wstr(name)};
             iter = std::find_if(devlist.cbegin(), devlist.cend(),
-                [&wname](const DevMap &entry) -> bool { return entry.devid == wname; });
+                [&wname](const DevMap &entry) -> bool
+                { return al::case_compare(entry.devid, wname) == 0; });
         }
         if(iter == devlist.cend())
         {
@@ -2642,8 +2706,8 @@ auto WasapiCapture::openProxy(const std::string_view name, DeviceHelper &helper,
     auto hr = helper.openDevice(devid, eCapture, mmdev);
     if(FAILED(hr))
     {
-        WARN("Failed to open device \"{}\"", devname.empty()
-            ? "(default)"sv : std::string_view{devname});
+        WARN("Failed to open device \"{}\": {:#x}", devname.empty()
+            ? "(default)"sv : std::string_view{devname}, as_unsigned(hr));
         return hr;
     }
     if(!devname.empty())
@@ -3007,15 +3071,19 @@ auto WasapiBackendFactory::enumerate(BackendType type) -> std::vector<std::strin
     case BackendType::Playback:
         {
             auto defaultId = devlock.getPlaybackDefaultId();
-            for(const DevMap &entry : devlock.getPlaybackList())
+            auto &devlist = devlock.getPlaybackList();
+
+            outnames.reserve(devlist.size());
+            std::transform(devlist.cbegin(), devlist.cend(), std::back_inserter(outnames),
+                std::mem_fn(&DevMap::name));
+
+            /* Default device goes first. */
+            const auto defiter = std::find_if(devlist.cbegin(), devlist.cend(),
+                [defaultId](const DevMap &entry) -> bool { return entry.devid == defaultId; });
+            if(defiter != devlist.cend())
             {
-                if(entry.devid != defaultId)
-                {
-                    outnames.emplace_back(entry.name);
-                    continue;
-                }
-                /* Default device goes first. */
-                outnames.emplace(outnames.cbegin(), entry.name);
+                const auto defname = outnames.begin() + std::distance(devlist.cbegin(), defiter);
+                std::rotate(outnames.begin(), defname, defname+1);
             }
         }
         break;
@@ -3023,14 +3091,19 @@ auto WasapiBackendFactory::enumerate(BackendType type) -> std::vector<std::strin
     case BackendType::Capture:
         {
             auto defaultId = devlock.getCaptureDefaultId();
-            for(const DevMap &entry : devlock.getCaptureList())
+            auto &devlist = devlock.getCaptureList();
+
+            outnames.reserve(devlist.size());
+            std::transform(devlist.cbegin(), devlist.cend(), std::back_inserter(outnames),
+                std::mem_fn(&DevMap::name));
+
+            /* Default device goes first. */
+            const auto defiter = std::find_if(devlist.cbegin(), devlist.cend(),
+                [defaultId](const DevMap &entry) -> bool { return entry.devid == defaultId; });
+            if(defiter != devlist.cend())
             {
-                if(entry.devid != defaultId)
-                {
-                    outnames.emplace_back(entry.name);
-                    continue;
-                }
-                outnames.emplace(outnames.cbegin(), entry.name);
+                const auto defname = outnames.begin() + std::distance(devlist.cbegin(), defiter);
+                std::rotate(outnames.begin(), defname, defname+1);
             }
         }
         break;

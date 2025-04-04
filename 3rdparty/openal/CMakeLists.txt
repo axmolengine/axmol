@@ -93,16 +93,13 @@ include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)
 include(CheckCSourceCompiles)
 include(CheckCXXSourceCompiles)
+include(CheckLinkerFlag)
 include(CheckStructHasMember)
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
 find_package(PkgConfig)
 find_package(SDL3 QUIET)
-
-# Axmol MODIFY BEGIN
-# add_subdirectory(fmt-11.1.1 EXCLUDE_FROM_ALL)
-# Axmol MODIFY END
 
 option(ALSOFT_DLOPEN  "Check for the dlopen API for loading optional libs"  ON)
 
@@ -147,6 +144,24 @@ if(DEFINED ALSOFT_AMBDEC_PRESETS)
     message(WARNING "ALSOFT_AMBDEC_PRESETS is deprecated. Use ALSOFT_INSTALL_AMBDEC_PRESETS instead")
 endif()
 
+if(MSVC)
+    option(FORCE_STATIC_VCRT "Force /MT for static VC runtimes" OFF)
+    if(FORCE_STATIC_VCRT)
+        foreach(flag_var
+                CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
+                CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO
+                CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+                CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+            if(${flag_var} MATCHES "/MD")
+                string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+            endif()
+        endforeach(flag_var)
+    endif()
+endif()
+
+# Axmol MODIFY BEGIN
+# add_subdirectory(fmt-11.1.1 EXCLUDE_FROM_ALL)
+# Axmol MODIFY END
 
 set(CPP_DEFS ) # C pre-processor, not C++
 set(INC_PATHS )
@@ -165,6 +180,21 @@ if(WIN32)
     option(ALSOFT_BUILD_ROUTER  "Build the router (EXPERIMENTAL; creates OpenAL32.dll and soft_oal.dll)"  OFF)
     if(MINGW)
         option(ALSOFT_BUILD_IMPORT_LIB "Build an import .lib using dlltool (requires sed)" ON)
+    endif()
+
+    if(NOT ALSOFT_UWP)
+        # Some systems may need NTDDI_VERSION defined to NTDDI_VISTA or later
+        check_c_source_compiles("#define INITGUID
+            #include <shlobj.h>
+            #include <knownfolders.h>
+            int main()
+            {
+                SHGetKnownFolderPath(&FOLDERID_RoamingAppData, KF_FLAG_DONT_UNEXPAND, NULL, NULL);
+                return 0;
+            }" HAVE_SHGETKNOWNFOLDERPATH_NO_NTDDI)
+        if(NOT HAVE_SHGETKNOWNFOLDERPATH_NO_NTDDI)
+            set(CPP_DEFS ${CPP_DEFS} NTDDI_VERSION=NTDDI_VISTA)
+        endif()
     endif()
 elseif(APPLE)
     option(ALSOFT_OSX_FRAMEWORK "Build as macOS framework" OFF)
@@ -185,7 +215,7 @@ endif()
 
 set(LIB_MAJOR_VERSION "1")
 set(LIB_MINOR_VERSION "24")
-set(LIB_REVISION "2")
+set(LIB_REVISION "3")
 set(LIB_VERSION "${LIB_MAJOR_VERSION}.${LIB_MINOR_VERSION}.${LIB_REVISION}")
 set(LIB_VERSION_NUM ${LIB_MAJOR_VERSION},${LIB_MINOR_VERSION},${LIB_REVISION},0)
 
@@ -250,19 +280,6 @@ if(MSVC)
     endif()
     if(DXSDK_DIR)
         message(STATUS "Using DirectX SDK directory: ${DXSDK_DIR}")
-    endif()
-
-    option(FORCE_STATIC_VCRT "Force /MT for static VC runtimes" OFF)
-    if(FORCE_STATIC_VCRT)
-        foreach(flag_var
-                CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
-                CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO
-                CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-                CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
-            if(${flag_var} MATCHES "/MD")
-                string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
-            endif()
-        endforeach(flag_var)
     endif()
 else()
     set(C_FLAGS ${C_FLAGS} -Winline -Wunused -Wall -Wextra -Wshadow -Wconversion -Wcast-align
@@ -1306,6 +1323,15 @@ if(ALSOFT_EMBED_HRTF_DATA)
     make_hrtf_header("Default HRTF.mhr" "default_hrtf")
 endif()
 
+# Set a 16KB page size for Android
+if(ANDROID)
+    set(CPP_DEFS ${CPP_DEFS} __BIONIC_NO_PAGE_SIZE_MACRO)
+    check_linker_flag(C "-Wl,-z,max-page-size=16384" HAS_MAX_PAGE_SIZE_16384)
+    if(HAS_MAX_PAGE_SIZE_16384)
+        set(LINKER_FLAGS ${LINKER_FLAGS} "-Wl,-z,max-page-size=16384")
+    endif()
+endif()
+
 
 if(ALSOFT_UTILS)
     find_package(MySOFA)
@@ -1318,9 +1344,9 @@ if(ALSOFT_UTILS)
 endif()
 if(ALSOFT_UTILS OR ALSOFT_EXAMPLES)
     find_package(SndFile)
-    if(SDL3_FOUND)
-        find_package(FFmpeg COMPONENTS AVFORMAT AVCODEC AVUTIL SWSCALE SWRESAMPLE)
-    endif()
+endif()
+if(ALSOFT_EXAMPLES AND SDL3_FOUND)
+    find_package(FFmpeg COMPONENTS AVFORMAT AVCODEC AVUTIL SWSCALE SWRESAMPLE)
 endif()
 
 if(NOT WIN32)
@@ -1377,7 +1403,9 @@ target_include_directories(alsoft.common PRIVATE ${OpenAL_SOURCE_DIR}/include
     PUBLIC ${OpenAL_BINARY_DIR} ${OpenAL_SOURCE_DIR}/common)
 target_compile_definitions(alsoft.common PRIVATE ${CPP_DEFS})
 target_compile_options(alsoft.common PRIVATE ${C_FLAGS})
+# Axmol MODIFY BEGIN
 target_link_libraries(alsoft.common PRIVATE fmt::fmt)
+# Axmol MODIFY END
 set_target_properties(alsoft.common PROPERTIES ${ALSOFT_STD_VERSION_PROPS}
     POSITION_INDEPENDENT_CODE TRUE)
 
@@ -1751,7 +1779,8 @@ if(ALSOFT_UTILS)
     message(STATUS "")
 endif()
 
-if(ALSOFT_EXAMPLES) # Axmol MODIFY BEGIN
+# Axmol MODIFY BEGIN
+if(ALSOFT_EXAMPLES)
 # Add a static library with common functions used by multiple example targets
 add_library(alsoft.excommon STATIC EXCLUDE_FROM_ALL
     examples/common/alhelpers.c
@@ -1761,7 +1790,8 @@ target_include_directories(alsoft.excommon PUBLIC ${OpenAL_BINARY_DIR} ${OpenAL_
 target_compile_options(alsoft.excommon PUBLIC ${C_FLAGS})
 target_link_libraries(alsoft.excommon PUBLIC OpenAL PRIVATE ${RT_LIB})
 set_target_properties(alsoft.excommon PROPERTIES ${ALSOFT_STD_VERSION_PROPS})
-endif() # Axmol MODIFY END
+endif() 
+# Axmol MODIFY END
 
 if(ALSOFT_EXAMPLES)
     add_executable(altonegen examples/altonegen.c)
