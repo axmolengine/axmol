@@ -117,9 +117,14 @@ endif()
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
 set(CMAKE_PLATFORM_NO_VERSIONED_SONAME TRUE CACHE BOOL "Disable dynamic libraries symblink." FORCE)
 
-# set hash style to both for android old device compatible
-# see also: https://github.com/axmolengine/axmol/discussions/614
+
 if (ANDROID)
+    # Ensure fseeko available on ndk > 23
+    math(EXPR _ARCH_BITS "${CMAKE_SIZEOF_VOID_P} * 8")
+    add_definitions(-D_FILE_OFFSET_BITS=${_ARCH_BITS})
+
+    # set hash style to both for android old device compatible
+    # see also: https://github.com/axmolengine/axmol/discussions/614
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--hash-style=both")
 endif()
 
@@ -133,7 +138,6 @@ function(use_ax_compile_define target)
 
     if(APPLE)
         target_compile_definitions(${target} PUBLIC __APPLE__)
-        target_compile_definitions(${target} PUBLIC USE_FILE32API)
         if(AX_USE_GL)
             target_compile_definitions(${target}
                 PUBLIC AX_USE_GL=1
@@ -151,7 +155,6 @@ function(use_ax_compile_define target)
             target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
         endif()
         target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
-        target_compile_definitions(${target} PUBLIC USE_FILE32API)
     elseif(EMSCRIPTEN)
         target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
     elseif(WINDOWS)
