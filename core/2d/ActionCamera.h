@@ -50,12 +50,10 @@ class AX_DLL ActionCamera : public ActionInterval
 {
 public:
     /**
-     * @js ctor
      * @lua new
      */
     ActionCamera();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ActionCamera(){};
@@ -68,38 +66,32 @@ public:
     /* Sets the Eye value of the Camera.
      *
      * @param eye The Eye value of the Camera.
-     * @js NA
      */
     void setEye(const Vec3& eye);
     void setEye(float x, float y, float z);
     /* Returns the Eye value of the Camera.
      *
      * @return The Eye value of the Camera.
-     * @js NA
      */
     const Vec3& getEye() const { return _eye; }
     /* Sets the Center value of the Camera.
      *
      * @param center The Center value of the Camera.
-     * @js NA
      */
     void setCenter(const Vec3& center);
     /* Returns the Center value of the Camera.
      *
      * @return The Center value of the Camera.
-     * @js NA
      */
     const Vec3& getCenter() const { return _center; }
     /* Sets the Up value of the Camera.
      *
      * @param up The Up value of the Camera.
-     * @js NA
      */
     void setUp(const Vec3& up);
     /* Returns the Up value of the Camera.
      *
      * @return The Up value of the Camera.
-     * @js NA
      */
     const Vec3& getUp() const { return _up; }
 
@@ -149,11 +141,9 @@ public:
     virtual void update(float time) override;
 
     /**
-     * @js ctor
      */
     OrbitCamera();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~OrbitCamera();

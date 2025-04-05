@@ -48,7 +48,6 @@ enum AnimationType
 };
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ProcessBase : public ax::Object

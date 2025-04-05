@@ -120,7 +120,6 @@ public:
     virtual float getPositionY() const override;
     virtual Vec3 getPosition3D() const override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
@@ -131,12 +130,10 @@ public:
     virtual Texture2D* getTexture() const override;
     virtual void setTexture(Texture2D* texture) override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void setBlendFunc(const BlendFunc& blendFunc) override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual const BlendFunc& getBlendFunc() const override;

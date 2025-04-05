@@ -40,7 +40,6 @@ namespace cocostudio
 {
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL SpriteFrameCacheHelper

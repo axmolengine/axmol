@@ -57,7 +57,6 @@ class EventCustom;
  *
  *        dispatcher->removeEventListener(listener);
  * \endcode
- * @js cc._EventListenerCustom
  */
 class AX_DLL EventListenerCustom : public EventListener
 {

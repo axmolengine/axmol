@@ -191,7 +191,6 @@ public:
     virtual const BlendFunc& getBlendFunc() const override;
 
     /**
-     * @js NA
      */
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
@@ -202,16 +201,13 @@ public:
 
     virtual void removeChild(Node* child, bool cleanup) override;
     /**
-     * @js NA
      */
     virtual void removeAllChildrenWithCleanup(bool cleanup) override;
     virtual void sortAllChildren() override;
     /**
-     * @js NA
      */
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     /**
-     * @js NA
      */
     virtual std::string getDescription() const override;
 
@@ -233,11 +229,9 @@ public:
     void reserveCapacity(ssize_t newCapacity);
 
     /**
-     * @js ctor
      */
     SpriteBatchNode();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~SpriteBatchNode();
@@ -249,7 +243,6 @@ public:
     /** initializes a SpriteBatchNode with a file image (.png, .jpeg, .pvr, etc) and a capacity of children.
      The capacity will be increased in 33% in runtime if it runs out of space.
      The file will be loaded using the TextureMgr.
-     * @js init
      * @lua init
      */
     bool initWithFile(std::string_view fileImage, ssize_t capacity = DEFAULT_CAPACITY);

@@ -78,7 +78,6 @@ public:
      * for functionId exists, otherwise return 0.
      *
      * @lua NA
-     * @js NA
      */
     static int retainLuaFunctionById(int functionId);
 
@@ -93,7 +92,6 @@ public:
      * 0, and otherwise return 0.
      *
      * @lua NA
-     * @js NA
      */
     static int releaseLuaFunctionById(int functionId);
 
@@ -106,7 +104,6 @@ public:
      * number for one of the three numbers LUA_ERRRUN, LUA_ERRMEM and LUA_ERRERR.
      *
      * @lua NA
-     * @js NA
      */
     static int callLuaFunctionById(int functionId, const char* arg);
 
@@ -119,7 +116,6 @@ public:
      * number for one of the three numbers LUA_ERRRUN, LUA_ERRMEM and LUA_ERRERR.
      *
      * @lua NA
-     * @js NA
      */
     static int callLuaGlobalFunction(const char* functionName, const char* arg);
 

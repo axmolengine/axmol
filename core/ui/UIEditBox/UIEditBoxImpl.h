@@ -40,11 +40,9 @@ class AX_GUI_DLL EditBoxImpl
 {
 public:
     /**
-     * @js NA
      */
     EditBoxImpl(EditBox* pEditBox) : _delegate(nullptr), _editBox(pEditBox) {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~EditBoxImpl() {}
@@ -97,12 +95,10 @@ public:
      */
     virtual void updatePosition(float dt){};
     /**
-     * @js NA
      * @lua NA
      */
     virtual void draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags) = 0;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onEnter() = 0;

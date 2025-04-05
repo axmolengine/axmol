@@ -51,7 +51,6 @@ protected:
         : _texture(texture), _mapStartChar(startCharMap), _itemWidth(itemWidth), _itemHeight(itemHeight)
     {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~FontCharMap();

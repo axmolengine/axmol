@@ -44,7 +44,6 @@ namespace ax
 
 /**
  * @brief BundleReader is an interface for reading sequence of bytes.
- * @js NA
  * @lua NA
  */
 class BundleReader : public ax::Object

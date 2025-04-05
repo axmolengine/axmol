@@ -44,7 +44,6 @@ public:
 
 public:
     /**
-     *  @js ctor
      */
     Skin();
 
@@ -60,12 +59,10 @@ public:
     virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
     /**
-     *  @js NA
      *  @lua NA
      */
     virtual void setSkinData(const BaseData& data);
     /**
-     *  @js NA
      *  @lua NA
      */
     virtual const BaseData& getSkinData() const;

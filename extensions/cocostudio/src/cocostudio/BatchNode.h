@@ -46,7 +46,6 @@ public:
 
 public:
     /**
-     * @js ctor
      */
     BatchNode();
     /**
@@ -55,7 +54,6 @@ public:
      */
     ~BatchNode();
     /**
-     *  @js NA
      */
     virtual bool init() override;
     using Node::addChild;

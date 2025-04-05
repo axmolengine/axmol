@@ -41,19 +41,16 @@ class AX_DLL ComponentContainer
 {
 protected:
     /**
-     * @js ctor
      */
     ComponentContainer(Node* node);
 
 public:
     /**
-     * @js NA
      * @lua NA
      */
     ~ComponentContainer();
 
     /**
-     * @js getComponent
      */
     Component* get(std::string_view name) const;
 

@@ -56,7 +56,6 @@ public:
 
     static SceneReader* getInstance();
     /**
-     *  @js purge
      *  @lua destroySceneReader
      */
     static void destroyInstance();

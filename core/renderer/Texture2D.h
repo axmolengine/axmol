@@ -123,11 +123,9 @@ public:
 
 public:
     /**
-     * @js ctor
      */
     Texture2D();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~Texture2D();
@@ -141,7 +139,6 @@ public:
      @param pixelsHigh The image height.
      @param contentSize The image content size.
      @param preMultipliedAlpha The texture has premultiplied alpha
-     * @js NA
      * @lua NA
      */
     bool initWithData(const void* data,
@@ -165,7 +162,6 @@ public:
      @param pixelsHigh The image height.
      @param contentSize The image content size.
      @param preMultipliedAlpha The texture has premultiplied alpha
-     * @js NA
      * @lua NA
      */
     bool initWithData(const void* data,

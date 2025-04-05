@@ -151,7 +151,6 @@ protected:
  *
  * @note MediaPlayer play a media file base on system widget.
  * It's mean MediaPlayer play a media file above all graphical elements of axmol.
- * @js NA
  */
 class AX_GUI_DLL MediaPlayer : public ax::ui::Widget
 {

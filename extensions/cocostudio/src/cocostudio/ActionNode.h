@@ -35,7 +35,6 @@ namespace cocostudio
 class CocoLoader;
 struct stExpCocoNode;
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ActionNode : public ax::Object

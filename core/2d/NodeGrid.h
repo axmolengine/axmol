@@ -58,7 +58,6 @@ public:
      */
     GridBase* getGrid() { return _nodeGrid; }
     /**
-     * @js NA
      */
     const GridBase* getGrid() const { return _nodeGrid; }
 

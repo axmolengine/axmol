@@ -37,7 +37,6 @@ class ArmatureAnimation;
 using ax::tweenfunc::TweenType;
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL Tween : public ProcessBase

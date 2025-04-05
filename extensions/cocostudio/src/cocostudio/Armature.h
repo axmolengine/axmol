@@ -61,11 +61,9 @@ public:
 
 public:
     /**
-     *  @js ctor
      */
     Armature();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~Armature();
@@ -125,7 +123,6 @@ public:
 
     // overrides
     /**
-     * @js NA
      * @lua NA
      */
     virtual void visit(ax::Renderer* renderer,
@@ -139,12 +136,10 @@ public:
 
     virtual const ax::Mat4& getNodeToParentTransform() const override;
     /**
-     *  @js NA
      *  @lua NA
      */
     inline void setBlendFunc(const ax::BlendFunc& blendFunc) override { _blendFunc = blendFunc; }
     /**
-     *  @js NA
      *  @lua NA
      */
     inline const ax::BlendFunc& getBlendFunc() const override { return _blendFunc; }
@@ -183,28 +178,23 @@ public:
 #if ENABLE_PHYSICS_BOX2D_DETECT
     virtual b2Fixture* getShapeList();
     /**
-     *  @js NA
      *  @lua NA
      */
     virtual void setBody(b2Body* body);
     /**
-     *  @js NA
      *  @lua NA
      */
     virtual b2Body* getBody() const;
 #elif ENABLE_PHYSICS_CHIPMUNK_DETECT
     /**
-     *  @js NA
      *  @lua NA
      */
     virtual cpShape* getShapeList();
     /**
-     *  @js NA
      *  @lua NA
      */
     virtual void setBody(cpBody* body);
     /**
-     *  @js NA
      *  @lua NA
      */
     virtual cpBody* getBody() const;
@@ -213,7 +203,6 @@ public:
 protected:
     /*
      * Used to create Bone internal
-     * @js NA
      * @lua NA
      */
     Bone* createBone(std::string_view boneName);

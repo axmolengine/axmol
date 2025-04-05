@@ -86,7 +86,6 @@ public:
      * @return If you have custom stencil-based node with stencil drawing mechanics other then children-based,
      *         then this method should return true every time you wish stencil to be visited.
      *         By default returns true if has any children attached.
-     * @js NA
      */
     virtual bool hasContent() const;
 
@@ -145,7 +144,6 @@ public:
     ClippingNode();
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ClippingNode();

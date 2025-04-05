@@ -43,7 +43,6 @@ class Controller;
 
 /** @class EventListenerController
  * @param Controller event listener.
- * @js NA
  */
 class AX_DLL EventListenerController : public EventListener
 {

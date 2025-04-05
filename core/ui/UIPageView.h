@@ -78,14 +78,12 @@ public:
 
     /**
      * Default constructor
-     * @js ctor
      * @lua new
      */
     PageView();
 
     /**
      * Default destructor
-     * @js NA
      * @lua NA
      */
     virtual ~PageView();

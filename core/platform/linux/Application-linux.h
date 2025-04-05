@@ -39,11 +39,9 @@ class Application : public ApplicationBase
 {
 public:
     /**
-     * @js ctor
      */
     Application();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~Application();

@@ -93,7 +93,6 @@ typedef union
  * The general types supported as follows:int,float,bool,std::string,const char*,LuaValueDict,LuaValueArray,Object.
  *
  * @lua NA
- * @js NA
  */
 class LuaValue
 {

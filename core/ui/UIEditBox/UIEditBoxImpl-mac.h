@@ -49,11 +49,9 @@ class EditBoxImplMac : public EditBoxImplCommon
 {
 public:
     /**
-     * @js NA
      */
     EditBoxImplMac(EditBox* pEditText);
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~EditBoxImplMac();

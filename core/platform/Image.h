@@ -69,11 +69,9 @@ class AX_DLL Image : public Object
 public:
     friend class TextureCache;
     /**
-     * @js ctor
      */
     Image();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~Image();
@@ -153,7 +151,6 @@ public:
     @param dataLen  data length expressed in (number of) bytes.
     @param ownData whether take the data memory management.
     @return true if loaded correctly.
-    * @js NA
     * @lua NA
     */
     bool initWithImageData(const uint8_t* data, ssize_t dataLen);

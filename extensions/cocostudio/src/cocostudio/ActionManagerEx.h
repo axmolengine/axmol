@@ -40,27 +40,23 @@ class CCS_DLL ActionManagerEx : public ax::Object
 public:
     /**
      * Default constructor
-     * @js ctor
      */
     ActionManagerEx();
 
     /**
      * Default destructor
-     * @js NA
      * @lua NA
      */
     virtual ~ActionManagerEx();
 
     /**
      * Gets the static instance of ActionManager.
-     * @js getInstance
      * @lua getInstance
      */
     static ActionManagerEx* getInstance();
 
     /**
      * Purges ActionManager point.
-     * @js purge
      * @lua destroyActionManager
      */
     static void destroyInstance();

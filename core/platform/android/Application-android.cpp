@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include <jni.h>
 #include <cstring>
 
-#define LOG_TAG "CCApplication_android Debug"
+#define LOG_TAG "Application_android Debug"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 // FIXME: using ndk-r10c will cause the next function could not be found. It may be a bug of ndk-r10c.

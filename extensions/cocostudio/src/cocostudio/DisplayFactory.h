@@ -37,7 +37,6 @@ class Bone;
 class DecorativeDisplay;
 class DisplayData;
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL DisplayFactory

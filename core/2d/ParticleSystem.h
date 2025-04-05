@@ -359,7 +359,6 @@ class AX_DLL ParticleSystem : public Node, public TextureProtocol, public Playab
 {
 public:
     /** Mode
-     * @js cc.ParticleSystem.MODE_GRAVITY;
      */
     enum class Mode
     {
@@ -369,7 +368,6 @@ public:
 
     /** PositionType
      Types of particle positioning.
-     * @js cc.ParticleSystem.TYPE_FREE
      */
     enum class PositionType
     {
@@ -426,7 +424,6 @@ public:
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleSystemQuad object.
-     * @js NA
      */
     static ParticleSystem* createWithTotalParticles(int numberOfParticles);
 
@@ -1371,7 +1368,6 @@ public:
      */
     virtual void setBlendFunc(const BlendFunc& blendFunc) override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual const BlendFunc& getBlendFunc() const override;
@@ -1391,11 +1387,9 @@ public:
     bool isSourcePositionCompatible() const { return _sourcePositionCompatible; }
 
     /**
-     * @js ctor
      */
     ParticleSystem();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleSystem();

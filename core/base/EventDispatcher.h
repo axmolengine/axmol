@@ -60,7 +60,6 @@ The EventListener list is managed in such a way that
 event listeners can be added and removed even
 from within an EventListener, while events are being
 dispatched.
-@js NA
 */
 class AX_DLL EventDispatcher : public Object
 {

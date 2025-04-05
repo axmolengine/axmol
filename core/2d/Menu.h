@@ -69,7 +69,6 @@ public:
 
     /**
      * Creates a Menu with a Array of MenuItem objects.
-     * @js NA
      */
     static Menu* createWithArray(const Vector<MenuItem*>& arrayOfItems);
 
@@ -77,12 +76,10 @@ public:
      * Creates a Menu with it's item, then use addChild() to add
      * other items. It is used for script, it can't be initialized with undetermined
      * number of variables.
-     * @js NA
      */
     static Menu* createWithItem(MenuItem* item);
 
     /** Creates a Menu with MenuItem objects.
-     * @js NA
      */
     static Menu* createWithItems(MenuItem* firstItem, va_list args);
 
@@ -109,7 +106,6 @@ public:
     void alignItemsInColumns(int columns, va_list args);
 
     /** Align items in array of columns.
-     * @js NA
      */
     void alignItemsInColumnsWithArray(const ValueVector& rows);
 
@@ -120,7 +116,6 @@ public:
     void alignItemsInRows(int rows, va_list args);
 
     /** Align items in array of rows.
-     * @js NA
      */
     void alignItemsInRowsWithArray(const ValueVector& columns);
 
@@ -160,7 +155,6 @@ public:
     virtual std::string getDescription() const override;
 
     /**
-     * @js ctor
      */
     Menu() : _selectedItem(nullptr), _selectedWithCamera(nullptr) {}
     virtual ~Menu();

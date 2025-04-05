@@ -357,7 +357,6 @@ public:
     virtual void setDirty(bool dirty) { _dirty = dirty; }
 
     /**
-     * @js NA
      */
     virtual std::string getDescription() const override;
 
@@ -367,7 +366,6 @@ public:
     virtual void setScaleY(float scaleY) override;
     virtual void setScale(float scaleX, float scaleY) override;
     /**
-     * @js  NA
      * @lua NA
      */
     virtual void setPosition(const Vec2& pos) override;
@@ -399,7 +397,6 @@ public:
 
     /**
      * Returns the quad (tex coords, vertex coords and color) information.
-     * @js  NA
      * @lua NA
      */
     const V3F_C4B_T2F_Quad& getQuad() const { return _quad; }
@@ -518,7 +515,6 @@ public:
      */
     void setBlendFunc(const BlendFunc& blendFunc) override { _blendFunc = blendFunc; }
     /**
-     * @js  NA
      * @lua NA
      */
     const BlendFunc& getBlendFunc() const override { return _blendFunc; }
@@ -528,7 +524,6 @@ public:
     std::string_view getResourceName() const { return _fileName; }
 
     /**
-     * @js ctor
      */
     Sprite();
     virtual ~Sprite();

@@ -67,11 +67,9 @@ protected:
 
 public:
     /**
-     * @js ctor
      */
     ControlSaturationBrightnessPicker();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ControlSaturationBrightnessPicker();
@@ -81,12 +79,10 @@ public:
 
     virtual void setEnabled(bool enabled) override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void updateWithHSV(HSV hsv);
     /**
-     * @js NA
      * @lua NA
      */
     virtual void updateDraggerWithHSV(HSV hsv);

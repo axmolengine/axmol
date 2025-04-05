@@ -114,11 +114,9 @@ class AX_DLL GLView : public Object
 
 public:
     /**
-     * @js ctor
      */
     GLView();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~GLView();

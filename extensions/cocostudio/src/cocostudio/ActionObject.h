@@ -37,7 +37,6 @@ class CocoLoader;
 struct stExpCocoNode;
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ActionObject : public ax::Object

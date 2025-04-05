@@ -60,7 +60,6 @@ public:
 
     /**
      * Constructor.
-     * @js NA
      */
     EventTouch();
 

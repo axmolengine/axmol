@@ -135,7 +135,6 @@ public:
      * parameter.
      *
      * @param cleanup   true if all running actions on all children nodes should be cleanup, false otherwise.
-     * @js removeAllChildren
      * @lua removeAllChildren
      */
     virtual void removeAllProtectedChildrenWithCleanup(bool cleanup);
@@ -160,7 +159,6 @@ public:
     /// @} end of Children and Parent
 
     /**
-     * @js NA
      */
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
@@ -172,7 +170,6 @@ public:
      * If the Node enters the 'stage' with a transition, this event is called when the transition finishes.
      * If you override onEnterTransitionDidFinish, you shall call its parent's one, e.g.
      * Node::onEnterTransitionDidFinish()
-     * @js NA
      * @lua NA
      */
     virtual void onEnterTransitionDidFinish() override;
@@ -182,7 +179,6 @@ public:
      * If the Node leaves the 'stage' with a transition, this event is called when the transition finishes.
      * During onExit you can't access a sibling node.
      * If you override onExit, you shall call its parent's one, e.g., Node::onExit().
-     * @js NA
      * @lua NA
      */
     virtual void onExit() override;
@@ -190,7 +186,6 @@ public:
     /**
      * Event callback that is called every time the Node leaves the 'stage'.
      * If the Node leaves the 'stage' with a transition, this callback is called when the transition starts.
-     * @js NA
      * @lua NA
      */
     virtual void onExitTransitionDidStart() override;

@@ -45,7 +45,6 @@ class Object;
 /**
  * Interface that defines how to clone an Object.
  * @lua NA
- * @js NA
  */
 class AX_DLL Clonable
 {
@@ -54,7 +53,6 @@ public:
     virtual Clonable* clone() const = 0;
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~Clonable(){};
@@ -63,7 +61,6 @@ public:
 /**
  * Object is used for reference count management. If a class inherits from Object,
  * then it is easy to be shared in different places.
- * @js NA
  */
 class AX_DLL Object
 {
@@ -74,7 +71,6 @@ public:
      * This increases the Object's reference count.
      *
      * @see release, autorelease
-     * @js NA
      */
     void retain();
 
@@ -87,7 +83,6 @@ public:
      * destructed.
      *
      * @see retain, autorelease
-     * @js NA
      */
     void release();
 
@@ -103,7 +98,6 @@ public:
      * @returns The Object itself.
      *
      * @see AutoreleasePool, retain, release
-     * @js NA
      * @lua NA
      */
     Object* autorelease();
@@ -112,7 +106,6 @@ public:
      * Returns the Object's current reference count.
      *
      * @returns The Object's reference count.
-     * @js NA
      */
     unsigned int getReferenceCount() const;
 
@@ -121,7 +114,6 @@ protected:
      * Constructor
      *
      * The Object's reference count is 1 after construction.
-     * @js NA
      */
     Object();
 
@@ -129,7 +121,6 @@ public:
     /**
      * Destructor
      *
-     * @js NA
      * @lua NA
      */
     virtual ~Object();

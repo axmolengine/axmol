@@ -49,7 +49,6 @@ class WebViewImpl;
  *
  * @note WebView displays web pages base on system widget.
  * It's mean WebView displays web pages above all graphical elements of cocos2d-x.
- * @js NA
  */
 class AX_GUI_DLL WebView : public ax::ui::Widget
 {

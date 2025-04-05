@@ -49,11 +49,9 @@ class AX_DLL TMXObjectGroup : public Object
 {
 public:
     /**
-     * @js ctor
      */
     TMXObjectGroup();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~TMXObjectGroup();
@@ -74,7 +72,6 @@ public:
      *
      * @param propertyName The specific property name.
      * @return Return the value for the specific property name.
-     * @js NA
      */
     Value getProperty(std::string_view propertyName) const;
 

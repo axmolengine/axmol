@@ -101,16 +101,13 @@ public:  //@public
 
 public:
     /**
-     * @js ctor
      */
     BMFontConfiguration();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~BMFontConfiguration();
     /**
-     * @js NA
      * @lua NA
      */
     std::string description() const;
@@ -171,7 +168,6 @@ protected:
     FontFNT(BMFontConfiguration* theContfig);
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~FontFNT();

@@ -56,7 +56,6 @@ TOLUA_API void toluafix_open(lua_State* L);
  * @param type the type name of the ptr.
  * @return -1 if the p_refid equal to nullptr or ptr equal to nullptr, otherwise return 0.
  * @lua NA
- * @js NA
  */
 TOLUA_API int toluafix_pushusertype_object(lua_State* L, int uid, int* p_refid, void* ptr, const char* type);
 
@@ -73,7 +72,6 @@ TOLUA_API int toluafix_pushusertype_object(lua_State* L, int uid, int* p_refid, 
  * nullptr; return -2, if the Object object pointer found by refid is nullptr; return 3, if the value corresponding to the
  * Object object pointer in the tolua_ubox is nil; otherwise return 0.
  * @lua NA
- * @js NA
  */
 TOLUA_API int toluafix_remove_ccobject_by_refid(lua_State* L, int refid);
 
@@ -87,7 +85,6 @@ TOLUA_API int toluafix_remove_ccobject_by_refid(lua_State* L, int refid);
  * @return 0 if the type of value at the given acceptable index lo of stack is not LUA_TFUNCTION; otherwise return the
  * reference id.
  * @lua NA
- * @js NA
  */
 TOLUA_API int toluafix_ref_function(lua_State* L, int lo, int def);
 
@@ -98,7 +95,6 @@ TOLUA_API int toluafix_ref_function(lua_State* L, int lo, int def);
  * @param L the current lua_State.
  * @param refid reference id corresponding to the Lua function.
  * @lua NA
- * @js NA
  */
 TOLUA_API void toluafix_get_function_by_refid(lua_State* L, int refid);
 
@@ -109,7 +105,6 @@ TOLUA_API void toluafix_get_function_by_refid(lua_State* L, int refid);
  * @param L the current lua_State.
  * @param refid reference id corresponding to the Lua function.
  * @lua NA
- * @js NA
  */
 TOLUA_API void toluafix_remove_function_by_refid(lua_State* L, int refid);
 
@@ -123,7 +118,6 @@ TOLUA_API void toluafix_remove_function_by_refid(lua_State* L, int refid);
  * @param err if trigger the error, record the error message to err.
  * @return 1 if the value at the given acceptable index is a function, otherwise return 0.
  * @lua NA
- * @js NA
  */
 TOLUA_API int toluafix_isfunction(lua_State* L, int lo, const char* type, int def, tolua_Error* err);
 
@@ -141,7 +135,6 @@ TOLUA_API int toluafix_totable(lua_State* L, int lo, int def);
  * @param err if trigger the error, record the error message to err.
  * @return 1 if the value at the given acceptable index is a table or have def value is not 0, otherwise return 0.
  * @lua NA
- * @js NA
  */
 TOLUA_API int toluafix_istable(lua_State* L, int lo, const char* type, int def, tolua_Error* err);
 
@@ -153,7 +146,6 @@ TOLUA_API int toluafix_istable(lua_State* L, int lo, const char* type, int def, 
  * @param L the current lua_State.
  * @param label the string pointer to define the label of the dump information.
  * @lua NA
- * @js NA
  */
 TOLUA_API void toluafix_stack_dump(lua_State* L, const char* label);
 

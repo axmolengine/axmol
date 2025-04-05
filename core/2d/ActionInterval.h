@@ -152,7 +152,6 @@ public:
      * @param action1 The first sequenceable action.
      * @param args The va_list variable.
      * @return An autoreleased Sequence object.
-     * @js NA
      * @note ATTENTION! Last entry must be a 'nullptr' to correctly terminate the list.
      */
     static Sequence* createWithVariableList(FiniteTimeAction* action1, va_list args);
@@ -160,7 +159,6 @@ public:
      * @param actionOne The first sequenceable action.
      * @param actionTwo The second sequenceable action.
      * @return An autoreleased Sequence object.
-     * @js NA
      */
     static Sequence* createWithTwoActions(FiniteTimeAction* actionOne, FiniteTimeAction* actionTwo);
 
@@ -342,7 +340,6 @@ public:
      * @param action1   The first sequenceable action.
      * @param args  The va_list variable.
      * @return  An autoreleased Spawn object.
-     * @js NA
      */
     static Spawn* createWithVariableList(FiniteTimeAction* action1, va_list args);
 
@@ -358,7 +355,6 @@ public:
      * @param action1   The first spawned action.
      * @param action2   The second spawned action.
      * @return An autoreleased Spawn object.
-     * @js NA
      */
     static Spawn* createWithTwoActions(FiniteTimeAction* action1, FiniteTimeAction* action2);
 
@@ -1231,7 +1227,6 @@ public:
     virtual FadeTo* reverse() const override;
 
     /**
-     * @js NA
      */
     void setReverseAction(FadeTo* ac);
 
@@ -1264,7 +1259,6 @@ public:
     virtual FadeTo* reverse() const override;
 
     /**
-     * @js NA
      */
     void setReverseAction(FadeTo* ac);
 

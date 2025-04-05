@@ -197,7 +197,6 @@ protected:
      the error will then be reported to user's listener registed in addUpdateEventListener
      @param error   The error object contains ErrorCode, message, asset url, asset key
      @warning AssetsManagerEx internal use only
-     * @js NA
      * @lua NA
      */
     virtual void onError(const network::DownloadTask& task,
@@ -212,7 +211,6 @@ protected:
      @param url         The url of this asset
      @param customId    The key of this asset
      @warning AssetsManagerEx internal use only
-     * @js NA
      * @lua NA
      */
     virtual void onProgress(double total, double downloaded, std::string_view url, std::string_view customId);
@@ -222,7 +220,6 @@ protected:
      @param srcUrl      The url of this asset
      @param customId    The key of this asset
      @warning AssetsManagerEx internal use only
-     * @js NA
      * @lua NA
      */
     virtual void onSuccess(std::string_view srcUrl, std::string_view storagePath, std::string_view customId);

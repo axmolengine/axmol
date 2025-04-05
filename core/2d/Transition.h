@@ -50,7 +50,6 @@ class NodeGrid;
 /** @class TransitionEaseScene
  * @brief TransitionEaseScene can ease the actions of the scene protocol.
 @since v0.8.2
-@js NA
 */
 class AX_DLL TransitionEaseScene  // : public Object
 {
@@ -845,12 +844,10 @@ public:
      */
     virtual void onEnter() override;
     /**
-     * @js NA
      */
     virtual void onExit() override;
     virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
     /**
-     * @js NA
      */
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
@@ -961,7 +958,6 @@ public:
     // Overrides
     //
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onEnter() override;

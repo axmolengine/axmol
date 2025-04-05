@@ -50,7 +50,6 @@ class EditBoxImpl;
  *@brief Editbox delegate class.
  * It's useful when you want to do some customization during Editbox input event
  *
- * @js NA
  * @lua NA
  */
 class AX_GUI_DLL EditBoxDelegate
@@ -230,14 +229,12 @@ public:
 
     /**
      * Constructor.
-     * @js ctor
      * @lua new
      */
     EditBox();
 
     /**
      * Destructor.
-     * @js NA
      * @lua NA
      */
     virtual ~EditBox();
@@ -378,7 +375,6 @@ public:
     void setDelegate(EditBoxDelegate* delegate);
 
     /**
-     * @js NA
      * @lua NA
      */
     EditBoxDelegate* getDelegate();
@@ -407,20 +403,17 @@ public:
      * @endcode
      *
      * @param handler A number that indicates a lua function.
-     * @js NA
      * @lua NA
      */
     void registerScriptEditBoxHandler(int handler);
 
     /**
      * Unregisters a script function that will be called for EditBox events.
-     * @js NA
      * @lua NA
      */
     void unregisterScriptEditBoxHandler();
     /**
      * get a script Handler
-     * @js NA
      * @lua NA
      */
     int getScriptEditBoxHandler() { return _scriptEditBoxHandler; }
@@ -614,37 +607,30 @@ public:
     virtual std::string getDescription() const override;
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual void draw(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onEnter() override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onExit() override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void keyboardWillShow(IMEKeyboardNotificationInfo& info) override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void keyboardDidShow(IMEKeyboardNotificationInfo& info) override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void keyboardWillHide(IMEKeyboardNotificationInfo& info) override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void keyboardDidHide(IMEKeyboardNotificationInfo& info) override;

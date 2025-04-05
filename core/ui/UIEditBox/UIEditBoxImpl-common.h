@@ -46,11 +46,9 @@ class AX_GUI_DLL EditBoxImplCommon : public EditBoxImpl
 {
 public:
     /**
-     * @js NA
      */
     EditBoxImplCommon(EditBox* pEditText);
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~EditBoxImplCommon();
@@ -97,12 +95,10 @@ public:
     virtual void setGlobalZOrder(float globalZOrder) override;
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual void draw(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onEnter() override;

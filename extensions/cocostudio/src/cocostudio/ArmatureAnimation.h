@@ -75,11 +75,9 @@ public:
 
 public:
     /**
-     * @js ctor
      */
     ArmatureAnimation();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ArmatureAnimation(void);
@@ -190,12 +188,10 @@ public:
      * Similar to userData, but instead of holding a void* it holds an object
      *
      * @return A user assigned Object
-     * @js NA
      * @lua NA
      */
     virtual Object* getUserObject() { return _userObject; }
     /**
-     * @js NA
      * @lua NA
      */
     virtual const Object* getUserObject() const { return _userObject; }
@@ -215,21 +211,18 @@ public:
 protected:
     /**
      * Update(float dt) will call this handler, you can handle your logic here
-     * @js NA
      * @lua NA
      */
     void updateHandler() override;
 
     /**
      * Update current key frame, and process auto stop, pause
-     * @js NA
      * @lua NA
      */
     void updateFrameData(float currentPercent);
 
     /**
      * Emit a frame event
-     * @js NA
      * @lua NA
      */
     void frameEvent(Bone* bone, std::string_view frameEventName, int originFrameIndex, int currentFrameIndex);

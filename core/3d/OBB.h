@@ -40,7 +40,6 @@ namespace ax
  *
  * @brief Oriented Bounding Box(OBB): OBB is similar to AABB except the bounding box has the same direction as the
  * MeshRenderer. so collision detection is more precise than AABB.
- * @js NA
  */
 class AX_DLL OBB
 {

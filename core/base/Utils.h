@@ -226,7 +226,6 @@ AX_DLL std::string computeFileDigest(std::string_view filename,
 /**
 @brief Converts language iso 639-1 code to LanguageType enum.
 @return LanguageType enum.
-* @js NA
 * @lua NA
 */
 AX_DLL LanguageType getLanguageTypeByISO2(const char* code);
@@ -250,7 +249,6 @@ AX_DLL Mat3 getNormalMat3OfMat4(const Mat4& mat);
 /**
 @brief Parses a list of space-separated integers.
 @return Vector of ints.
-* @js NA
 * @lua NA
 */
 AX_DLL std::vector<int> parseIntegerList(std::string_view intsString);
@@ -258,7 +256,6 @@ AX_DLL std::vector<int> parseIntegerList(std::string_view intsString);
 /**
 @brief translate charstring/binarystream to hexstring.
 @return hexstring.
-* @js NA
 * @lua NA
 */
 AX_DLL std::string bin2hex(std::string_view binary /*charstring also regard as binary in C/C++*/,
@@ -268,7 +265,6 @@ AX_DLL std::string bin2hex(std::string_view binary /*charstring also regard as b
 /**
 @brief killCurrentProcess immidiately, any object's destructor never call
 @return NA.
-* @js NA
 * @lua NA
 */
 AX_DLL void killCurrentProcess();

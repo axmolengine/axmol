@@ -104,7 +104,6 @@ public:
 
     virtual void updateAtlasValues() override;
     /**
-     * @js NA
      */
     virtual std::string getDescription() const override;
 

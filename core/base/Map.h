@@ -50,7 +50,6 @@ namespace ax
  * Similar to std::unordered_map, but it will manage reference count automatically internally.
  * Which means it will invoke Object::retain() when adding an element, and invoke Object::release() when removing an element.
  * @warning The element should be `Object` or its sub-class.
- * @js NA
  * @lua NA
  */
 template <class K, class V, typename H = std::hash<K>, typename E = std::equal_to<K>>

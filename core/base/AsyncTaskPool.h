@@ -49,7 +49,6 @@ namespace ax
 /**
  * @class AsyncTaskPool
  * @brief This class allows to perform background operations without having to manipulate threads.
- * @js NA
  */
 class AX_DLL AsyncTaskPool
 {

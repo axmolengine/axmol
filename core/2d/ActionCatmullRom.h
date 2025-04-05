@@ -55,31 +55,26 @@ class Node;
 /** An Array that contain control points.
  * Used by CardinalSplineTo and (By) and CatmullRomTo (and By) actions.
  * @ingroup Actions
- * @js NA
  */
 class AX_DLL PointArray : public Object, public Clonable
 {
 public:
     /** Creates and initializes a Points array with capacity.
-     * @js NA
      * @param capacity The size of the array.
      */
     static PointArray* create(ssize_t capacity);
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~PointArray();
     /**
-     * @js NA
      * @lua NA
      */
     PointArray();
 
     /** Initializes a Catmull Rom config with a capacity hint.
      *
-     * @js NA
      * @param capacity The size of the array.
      * @return True.
      */
@@ -87,14 +82,12 @@ public:
 
     /** Appends a control point.
      *
-     * @js NA
      * @param controlPoint A control point.
      */
     void addControlPoint(const Vec2& controlPoint);
 
     /** Inserts a controlPoint at index.
      *
-     * @js NA
      * @param controlPoint A control point.
      * @param index Insert the point to array in index.
      */
@@ -102,7 +95,6 @@ public:
 
     /** Replaces an existing controlPoint at index.
      *
-     * @js NA
      * @param controlPoint A control point.
      * @param index Replace the point to array in index.
      */
@@ -110,7 +102,6 @@ public:
 
     /** Get the value of a controlPoint at a given index.
      *
-     * @js NA
      * @param index Get the point in index.
      * @return A Vec2.
      */
@@ -118,40 +109,33 @@ public:
 
     /** Deletes a control point at a given index
      *
-     * @js NA
      * @param index Remove the point in index.
      */
     void removeControlPointAtIndex(ssize_t index);
 
     /** Returns the number of objects of the control point array.
      *
-     * @js NA
      * @return The number of objects of the control point array.
      */
     ssize_t count() const;
 
     /** Returns a new copy of the array reversed. User is responsible for releasing this copy.
      *
-     * @js NA
      * @return A new copy of the array reversed.
      */
     PointArray* reverse() const;
 
     /** Reverse the current control point array inline, without generating a new one.
-     * @js NA
      */
     void reverseInline();
     /**
-     * @js NA
      * @lua NA
      */
     virtual PointArray* clone() const;
     /**
-     * @js NA
      */
     const std::vector<Vec2>& getControlPoints() const;
     /**
-     * @js NA
      */
     void setControlPoints(std::vector<Vec2> controlPoints);
 
@@ -180,12 +164,10 @@ public:
      */
     static CardinalSplineTo* create(float duration, PointArray* points, float tension);
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~CardinalSplineTo();
     /**
-     * @js ctor
      * @lua NA
      */
     CardinalSplineTo();
@@ -209,7 +191,6 @@ public:
      */
     PointArray* getPoints() { return _points; }
     /**
-     * @js NA
      * @lua NA
      */
     void setPoints(PointArray* points)

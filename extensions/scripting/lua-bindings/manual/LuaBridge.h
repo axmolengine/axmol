@@ -62,7 +62,6 @@ typedef enum
  * It makes Lua and ObjC can call each other conveniently.
  *
  * @lua NA
- * @js NA
  */
 class LuaBridge
 {

@@ -110,7 +110,6 @@ class TextureAtlas;
  * - http://www.n4te.com/hiero/hiero.jnlp (Free, Java)
  * - http://slick.cokeandcode.com/demos/hiero.jnlp (Free, Java)
  * - http://www.angelcode.com/products/bmfont/ (Free, Windows only)
- * @js NA
  */
 class AX_DLL Label : public Node, public LabelProtocol, public BlendProtocol
 {
@@ -712,13 +711,11 @@ public:
 
     /**
      * Constructor of Label.
-     * @js NA
      */
     Label(TextHAlignment hAlignment = TextHAlignment::LEFT, TextVAlignment vAlignment = TextVAlignment::TOP);
 
     /**
      * Destructor of Label.
-     * @js NA
      * @lua NA
      */
     virtual ~Label();

@@ -42,7 +42,6 @@ class Node;
 namespace cocostudio
 {
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL DecorativeDisplay : public ax::Object

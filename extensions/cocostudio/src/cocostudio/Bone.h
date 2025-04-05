@@ -57,11 +57,9 @@ public:
 
 public:
     /**
-     *  @js ctor
      */
     Bone();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~Bone(void);

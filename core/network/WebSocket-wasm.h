@@ -46,13 +46,11 @@ public:
     /**
      * Constructor of WebSocket.
      *
-     * @js ctor
      */
     WebSocket();
     /**
      * Destructor of WebSocket.
      *
-     * @js NA
      * @lua NA
      */
     virtual ~WebSocket();

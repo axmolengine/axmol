@@ -47,7 +47,6 @@ class AX_DLL EventMouse : public Event
 public:
     /**
      * MouseEventType Different types of MouseEvent.
-     * @js NA
      */
     enum class MouseEventType
     {
@@ -74,7 +73,6 @@ public:
     /** Constructor.
      *
      * @param mouseEventCode A given mouse event type.
-     * @js ctor
      */
     EventMouse(MouseEventType mouseEventCode);
 
@@ -103,7 +101,6 @@ public:
      *
      * @param x The x coordinate of cursor position.
      * @param y The y coordinate of cursor position.
-     * @js setLocation
      */
     void setMouseInfo(float x, float y, MouseButton button)
     {
@@ -121,25 +118,21 @@ public:
     /** Set mouse button.
      *
      * @param button a given mouse button.
-     * @js setButton
      */
     void setMouseButton(MouseButton button) { _mouseButton = button; }
     /** Get mouse button.
      *
      * @return The mouse button.
-     * @js getButton
      */
     MouseButton getMouseButton() const { return _mouseButton; }
     /** Get the cursor position of x axis.
      *
      * @return The x coordinate of cursor position.
-     * @js getLocationX
      */
     AX_DEPRECATED(2.2) float getCursorX() const { return getLocation().x; }
     /** Get the cursor position of y axis.
      *
      * @return The y coordinate of cursor position.
-     * @js getLocationY
      */
     AX_DEPRECATED(2.2) float getCursorY() const { return getLocation().y; }
 
@@ -151,13 +144,11 @@ public:
     /** Returns the previous touch location in OpenGL coordinates.
      *
      * @return The previous touch location in OpenGL coordinates.
-     * @js NA
      */
     Vec2 getPreviousLocation() const;
     /** Returns the start touch location in OpenGL coordinates.
      *
      * @return The start touch location in OpenGL coordinates.
-     * @js NA
      */
     Vec2 getStartLocation() const;
     /** Returns the delta of 2 current touches locations in screen coordinates.
@@ -173,13 +164,11 @@ public:
     /** Returns the previous touch location in screen coordinates.
      *
      * @return The previous touch location in screen coordinates.
-     * @js NA
      */
     Vec2 getPreviousLocationInView() const;
     /** Returns the start touch location in screen coordinates.
      *
      * @return The start touch location in screen coordinates.
-     * @js NA
      */
     Vec2 getStartLocationInView() const;
 

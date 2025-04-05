@@ -63,7 +63,6 @@ public:
      * You can set the default value, or it is false.
      * @param key The key to get value.
      * @return Bool value by `key`.
-     * @js NA
      */
     bool getBoolForKey(const char* key);
 
@@ -71,7 +70,6 @@ public:
      * Get bool value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
      * @param defaultValue The default value to return if the key doesn't exist.
-     * @js NA
      */
     virtual bool getBoolForKey(const char* key, bool defaultValue);
 
@@ -80,7 +78,6 @@ public:
      * You can set the default value, or it is 0.
      * @param key The key to get value.
      * @return Integer value of the key.
-     * @js NA
      */
     int getIntegerForKey(const char* key);
 
@@ -89,7 +86,6 @@ public:
      * @param key The key to get value.
      * @param defaultValue The default value to return if the key doesn't exist.
      * @return Integer value of the key.
-     * @js NA
      */
     virtual int getIntegerForKey(const char* key, int defaultValue);
 
@@ -98,7 +94,6 @@ public:
      * You can set the default value, or it is 0.
      * @param key The key to get value.
      * @return Integer value of the key.
-     * @js NA
      */
     int64_t getLargeIntForKey(const char* key);
 
@@ -107,7 +102,6 @@ public:
      * @param key The key to get value.
      * @param defaultValue The default value to return if the key doesn't exist.
      * @return Integer value of the key.
-     * @js NA
      */
     virtual int64_t getLargeIntForKey(const char* key, int64_t defaultValue);
 
@@ -115,7 +109,6 @@ public:
      * Get float value by key, if the key doesn't exist, will return 0.0.
      * @param key The key to get value.
      * @return Float value of the key.
-     * @js NA
      */
     float getFloatForKey(const char* key);
 
@@ -124,7 +117,6 @@ public:
      * @param key The key to get value.
      * @param defaultValue The default value to return if the key doesn't exist.
      * @return Float value of the key.
-     * @js NA
      */
     virtual float getFloatForKey(const char* key, float defaultValue);
 
@@ -132,7 +124,6 @@ public:
      * Get double value by key, if the key doesn't exist, will return 0.0.
      * @param key The key to get value.
      * @return Double value of the key.
-     * @js NA
      */
     double getDoubleForKey(const char* key);
 
@@ -141,7 +132,6 @@ public:
      * @param key The key to get value.
      * @param defaultValue The default value to return if the key doesn't exist.
      * @return Double value of the key.
-     * @js NA
      */
     virtual double getDoubleForKey(const char* key, double defaultValue);
 
@@ -149,7 +139,6 @@ public:
      * Get string value by key, if the key doesn't exist, will return an empty string.
      * @param key The key to get value.
      * @return String value of the key.
-     * @js NA
      */
     std::string_view getStringForKey(const char* key);
 
@@ -158,7 +147,6 @@ public:
      * @param key The key to get value.
      * @param defaultValue The default value to return if the key doesn't exist.
      * @return String value of the key.
-     * @js NA
      */
     virtual std::string_view getStringForKey(const char* key, std::string_view defaultValue);
 
@@ -168,66 +156,56 @@ public:
      * Set bool value by key.
      * @param key The key to set.
      * @param value A bool value to set to the key.
-     * @js NA
      */
     virtual void setBoolForKey(const char* key, bool value);
     /**
      * Set integer value by key.
      * @param key The key to set.
      * @param value A integer value to set to the key.
-     * @js NA
      */
     virtual void setIntegerForKey(const char* key, int value);
     /**
      * Set large integer value by key.
      * @param key The key to set.
      * @param value A integer value to set to the key.
-     * @js NA
      */
     virtual void setLargeIntForKey(const char* key, int64_t value);
     /**
      * Set float value by key.
      * @param key The key to set.
      * @param value A float value to set to the key.
-     * @js NA
      */
     virtual void setFloatForKey(const char* key, float value);
     /**
      * Set double value by key.
      * @param key The key to set.
      * @param value A double value to set to the key.
-     * @js NA
      */
     virtual void setDoubleForKey(const char* key, double value);
     /**
      * Set string value by key.
      * @param key The key to set.
      * @param value A string value to set to the key.
-     * @js NA
      */
     virtual void setStringForKey(const char* key, std::string_view value);
 
     /**
      * Since we reimplement UserDefault with file mapping io,
      * you don't needs call this function manually
-     * @js NA
      */
     virtual void flush();
 
     /**
      * delete any value by key,
      * @param key The key to delete value.
-     * @js NA
      */
     virtual void deleteValueForKey(const char* key);
 
     /** Returns the singleton.
-     * @js NA
      * @lua NA
      */
     static UserDefault* getInstance();
     /**
-     * @js NA
      */
     static void destroyInstance();
 

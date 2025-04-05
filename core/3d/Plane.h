@@ -41,7 +41,6 @@ enum class PointSide
 
 /**
  * Defines plane
- * @js NA
  * @lua NA
  **/
 class AX_DLL Plane

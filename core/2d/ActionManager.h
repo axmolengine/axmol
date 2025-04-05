@@ -67,12 +67,10 @@ class AX_DLL ActionManager : public Object
 {
 public:
     /**
-     * @js ctor
      */
     ActionManager();
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ActionManager();
@@ -118,7 +116,6 @@ public:
      *
      * @param tag       The actions' tag.
      * @param target    A certain target.
-     * @js NA
      */
     virtual void removeAllActionsByTag(int tag, Node* target);
 
@@ -126,7 +123,6 @@ public:
      *
      * @param flags     The flag field to match the actions' flags based on bitwise AND.
      * @param target    A certain target.
-     * @js NA
      */
     virtual void removeActionsByFlags(unsigned int flags, Node* target);
 
@@ -145,13 +141,11 @@ public:
      *
      * @param target    A certain target.
      * @return  The numbers of actions that are running in a certain target.
-     * @js NA
      */
     virtual ssize_t getNumberOfRunningActionsInTarget(const Node* target) const;
 
     /** Returns the numbers of actions that are running in all targets.
      * @return  The numbers of actions that are running in all target.
-     * @js NA
      */
     virtual ssize_t getNumberOfRunningActions() const;
 
@@ -167,7 +161,6 @@ public:
      * @return  The numbers of actions that are running in a certain target
      *          with a specific tag.
      * @see getNumberOfRunningActionsInTarget
-     * @js NA
      */
     virtual size_t getNumberOfRunningActionsInTargetByTag(const Node* target, int tag);
 

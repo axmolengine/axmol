@@ -70,7 +70,6 @@ public:
 
     //
     // Overrides
-    // @js NA
     //
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
@@ -101,11 +100,9 @@ public:
     virtual void onExit() override;
 
     /**
-     * @js ctor
      */
     TransitionPageTurn();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~TransitionPageTurn();

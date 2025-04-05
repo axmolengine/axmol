@@ -139,7 +139,6 @@ public:
     virtual std::string getDescription() const override;
 
     /**
-     * @js NA
      */
     virtual void adaptRenderers() override;
 

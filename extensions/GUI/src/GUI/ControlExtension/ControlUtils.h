@@ -70,7 +70,6 @@ class AX_EX_DLL Color3bObject : public Object
 public:
     Color3B value;
     /**
-     * @js NA
      * @lua NA
      */
     Color3bObject(Color3B s_value) : value(s_value) {}
@@ -80,22 +79,18 @@ class AX_EX_DLL ControlUtils
 {
 public:
     /**
-     * @js NA
      * @lua NA
      */
     static Sprite* addSpriteToTargetWithPosAndAnchor(const char* spriteName, Node* target, Vec2 pos, Vec2 anchor);
     /**
-     * @js NA
      * @lua NA
      */
     static HSV HSVfromRGB(RGBA value);
     /**
-     * @js NA
      * @lua NA
      */
     static RGBA RGBfromHSV(HSV value);
     /**
-     * @js NA
      * @lua NA
      */
     static Rect RectUnion(const Rect& src1, const Rect& src2);

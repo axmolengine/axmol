@@ -198,7 +198,6 @@ class AX_DLL Scheduler : public Object
 public:
     /** Priority level reserved for system services.
      * @lua NA
-     * @js NA
      */
     static const int PRIORITY_SYSTEM;
 
@@ -206,21 +205,18 @@ public:
      * Priority level of user scheduling should bigger then this value.
      *
      * @lua NA
-     * @js NA
      */
     static const int PRIORITY_NON_SYSTEM_MIN;
 
     /**
      * Constructor
      *
-     * @js ctor
      */
     Scheduler();
 
     /**
      * Destructor
      *
-     * @js NA
      * @lua NA
      */
     virtual ~Scheduler();
@@ -335,7 +331,6 @@ public:
      return schedule script entry ID, used for unscheduleScriptFunc().
 
      @warn Don't invoke this function unless you know what you are doing.
-     @js NA
      @lua NA
      */
     unsigned int scheduleScriptFunc(unsigned int handler, float interval, bool paused);
@@ -391,7 +386,6 @@ public:
 #if AX_ENABLE_SCRIPT_BINDING
     /** Unschedule a script entry.
      * @warning Don't invoke this function unless you know what you are doing.
-     * @js NA
      * @lua NA
      */
     void unscheduleScriptEntry(unsigned int scheduleScriptEntryID);
@@ -468,7 +462,6 @@ public:
      This function is thread safe.
      @param function The function to be run in cocos2d thread.
      @since v3.0
-     @js NA
      */
     void runOnAxmolThread(std::function<void()> action);
 #ifndef AX_CORE_PROFILE
@@ -482,7 +475,6 @@ public:
      * Functions unscheduled in this manner will not be executed
      * This function is thread safe
      * @since v3.14
-     * @js NA
      */
     void removeAllPendingActions();
 #ifndef AX_CORE_PROFILE
@@ -494,7 +486,6 @@ protected:
      The lower the priority, the earlier it is called.
      @note This method is only for internal use.
      @since v3.0
-     @js _schedulePerFrame
      */
     void schedulePerFrame(const ccSchedulerFunc& callback, void* target, int priority, bool paused);
 

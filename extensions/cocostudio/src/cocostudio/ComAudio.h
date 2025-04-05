@@ -40,11 +40,9 @@ public:
     const static std::string COMPONENT_NAME;
 
     /**
-     * @js ctor
      */
     ComAudio();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ComAudio();
@@ -54,22 +52,18 @@ public:
 
     virtual bool init() override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onEnter() override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onExit() override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onAdd() override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onRemove() override;

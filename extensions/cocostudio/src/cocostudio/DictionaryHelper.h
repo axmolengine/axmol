@@ -35,7 +35,6 @@ THE SOFTWARE.
 namespace cocostudio
 {
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL DictionaryHelper

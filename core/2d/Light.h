@@ -60,7 +60,6 @@ enum class LightFlag
 };
 
 /**
-@js NA
 */
 class AX_DLL BaseLight : public Node
 {
@@ -102,7 +101,6 @@ protected:
 };
 
 /**
-@js NA
 */
 class AX_DLL DirectionLight : public BaseLight
 {
@@ -141,7 +139,6 @@ public:
 };
 
 /**
-@js NA
 */
 class AX_DLL PointLight : public BaseLight
 {
@@ -171,7 +168,6 @@ protected:
 };
 
 /**
-@js NA
 */
 class AX_DLL SpotLight : public BaseLight
 {
@@ -269,7 +265,6 @@ protected:
 };
 
 /**
-@js NA
 */
 class AX_DLL AmbientLight : public BaseLight
 {

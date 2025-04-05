@@ -184,11 +184,9 @@ class AX_DLL TMXLayerInfo : public Object
 {
 public:
     /**
-     * @js ctor
      */
     TMXLayerInfo();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~TMXLayerInfo();
@@ -235,11 +233,9 @@ public:
 
 public:
     /**
-     * @js ctor
      */
     TMXTilesetInfo();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~TMXTilesetInfo();
@@ -268,11 +264,9 @@ public:
     static TMXMapInfo* createWithXML(std::string_view tmxString, std::string_view resourcePath);
 
     /**
-     * @js ctor
      */
     TMXMapInfo();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~TMXMapInfo();
@@ -351,17 +345,14 @@ public:
 
     // implement pure virtual methods of SAXDelegator
     /**
-     * @js NA
      * @lua NA
      */
     void startElement(void* ctx, const char* name, const char** atts) override;
     /**
-     * @js NA
      * @lua NA
      */
     void endElement(void* ctx, const char* name) override;
     /**
-     * @js NA
      * @lua NA
      */
     void textHandler(void* ctx, const char* ch, size_t len) override;

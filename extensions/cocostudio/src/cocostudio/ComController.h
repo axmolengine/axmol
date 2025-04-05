@@ -38,7 +38,6 @@ class CCS_DLL ComController : public ax::Component, public InputDelegate
     DECLARE_CLASS_COMPONENT_INFO
 public:
     /**
-     *  @js ctor
      */
     ComController();
 
@@ -48,7 +47,6 @@ public:
     static ComController* create();
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ComController();
@@ -56,25 +54,21 @@ public:
     virtual bool init() override;
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onEnter() override;
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onExit() override;
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onAdd() override;
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onRemove() override;

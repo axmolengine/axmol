@@ -53,16 +53,13 @@ public:
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleFire object.
-     * @js NA
      */
     static ParticleFire* createWithTotalParticles(int numberOfParticles);
 
     /**
-     * @js ctor
      */
     ParticleFire() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleFire() {}
@@ -89,16 +86,13 @@ public:
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleFireworks object.
-     * @js NA
      */
     static ParticleFireworks* createWithTotalParticles(int numberOfParticles);
 
     /**
-     * @js ctor
      */
     ParticleFireworks() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleFireworks() {}
@@ -125,16 +119,13 @@ public:
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleSun object.
-     * @js NA
      */
     static ParticleSun* createWithTotalParticles(int numberOfParticles);
 
     /**
-     * @js ctor
      */
     ParticleSun() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleSun() {}
@@ -161,16 +152,13 @@ public:
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleGalaxy object.
-     * @js NA
      */
     static ParticleGalaxy* createWithTotalParticles(int numberOfParticles);
 
     /**
-     * @js ctor
      */
     ParticleGalaxy() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleGalaxy() {}
@@ -197,16 +185,13 @@ public:
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleFlower object.
-     * @js NA
      */
     static ParticleFlower* createWithTotalParticles(int numberOfParticles);
 
     /**
-     * @js ctor
      */
     ParticleFlower() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleFlower() {}
@@ -233,16 +218,13 @@ public:
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleMeteor object.
-     * @js NA
      */
     static ParticleMeteor* createWithTotalParticles(int numberOfParticles);
 
     /**
-     * @js ctor
      */
     ParticleMeteor() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleMeteor() {}
@@ -269,16 +251,13 @@ public:
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleSpiral object.
-     * @js NA
      */
     static ParticleSpiral* createWithTotalParticles(int numberOfParticles);
 
     /**
-     * @js ctor
      */
     ParticleSpiral() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleSpiral() {}
@@ -305,16 +284,13 @@ public:
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleExplosion object.
-     * @js NA
      */
     static ParticleExplosion* createWithTotalParticles(int numberOfParticles);
 
     /**
-     * @js ctor
      */
     ParticleExplosion() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleExplosion() {}
@@ -341,16 +317,13 @@ public:
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleSmoke object.
-     * @js NA
      */
     static ParticleSmoke* createWithTotalParticles(int numberOfParticles);
 
     /**
-     * @js ctor
      */
     ParticleSmoke() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleSmoke() {}
@@ -377,16 +350,13 @@ public:
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleSnow object.
-     * @js NA
      */
     static ParticleSnow* createWithTotalParticles(int numberOfParticles);
 
     /**
-     * @js ctor
      */
     ParticleSnow() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleSnow() {}
@@ -413,16 +383,13 @@ public:
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleRain object.
-     * @js NA
      */
     static ParticleRain* createWithTotalParticles(int numberOfParticles);
 
     /**
-     * @js ctor
      */
     ParticleRain() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleRain() {}

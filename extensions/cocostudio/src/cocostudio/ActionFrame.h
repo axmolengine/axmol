@@ -91,7 +91,6 @@ enum class FrameEaseType
     TWEEN_EASING_MAX = 10000
 };
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ActionFrame : public ax::Object
@@ -210,7 +209,6 @@ protected:
 };
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ActionMoveFrame : public ActionFrame
@@ -254,7 +252,6 @@ protected:
 };
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ActionScaleFrame : public ActionFrame
@@ -312,7 +309,6 @@ protected:
     float _scaleY;
 };
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ActionRotationFrame : public ActionFrame
@@ -365,7 +361,6 @@ public:
     float _rotation;
 };
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ActionFadeFrame : public ActionFrame
@@ -408,7 +403,6 @@ protected:
     float _opacity;
 };
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ActionTintFrame : public ActionFrame

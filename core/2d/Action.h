@@ -57,7 +57,6 @@ public:
     /** Default tag used for all the actions. */
     static const int INVALID_TAG = -1;
     /**
-     * @js NA
      * @lua NA
      */
     virtual std::string description() const;
@@ -75,7 +74,6 @@ public:
     /** Returns a new action that performs the exact reverse of the action.
      *
      * @return A new action that performs the exact reverse of the action.
-     * @js NA
      */
     virtual Action* reverse() const
     {
@@ -359,14 +357,12 @@ public:
     virtual Follow* reverse() const override;
     /**
      * @param dt in seconds.
-     * @js NA
      */
     virtual void step(float dt) override;
     virtual bool isDone() const override;
     virtual void stop() override;
 
     /**
-     * @js ctor
      */
     Follow()
         : _followedNode(nullptr)
@@ -381,7 +377,6 @@ public:
         , _worldRect(Rect::ZERO)
     {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~Follow();

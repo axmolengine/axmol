@@ -72,12 +72,10 @@ public:
     static const char* CMD_RESET_FONTATLAS;
     static void loadFontAtlas(std::string_view fontatlasFile, hlookup::string_map<FontAtlas*>& outAtlasMap);
     /**
-     * @js ctor
      */
     FontAtlas(Font* theFont);
     FontAtlas(Font* theFont, int atlasWidth, int atlasHeight, float scaleFactor = 1.0f);
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~FontAtlas();

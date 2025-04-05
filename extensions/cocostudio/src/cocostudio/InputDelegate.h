@@ -48,11 +48,9 @@ class CCS_DLL InputDelegate
 {
 public:
     /**
-     * @js ctor
      */
     InputDelegate(void);
     /**
-     * @js NA
      */
     virtual ~InputDelegate(void);
     virtual bool isTouchEnabled() const;
@@ -66,47 +64,36 @@ public:
     virtual void setTouchPriority(int priority);
     virtual int getTouchPriority() const;
     /**
-     * @js NA
      */
     virtual void onAcceleration(ax::Acceleration* acc, ax::Event* event);
     /**
-     * @js NA
      */
     virtual void onKeyPressed(ax::EventKeyboard::KeyCode keyCode, ax::Event* event);
     /**
-     * @js NA
      */
     virtual void onKeyReleased(ax::EventKeyboard::KeyCode keyCode, ax::Event* event);
     /**
-     * @js NA
      */
     virtual bool onTouchBegan(ax::Touch* touch, ax::Event* event);
     /**
-     * @js NA
      */
     virtual void onTouchMoved(ax::Touch* touch, ax::Event* event);
     /**
-     * @js NA
      */
     virtual void onTouchEnded(ax::Touch* touch, ax::Event* event);
     /**
-     * @js NA
      */
     virtual void onTouchCancelled(ax::Touch* touch, ax::Event* event);
     /**
-     * @js NA
      */
     virtual void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
     /**
-     * @js NA
      */
     virtual void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
     /**
-     * @js NA
      */
     virtual void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     /**
-     * @js NA
      */
     virtual void onTouchesCancelled(const std::vector<ax::Touch*>& touches, ax::Event* event);
 

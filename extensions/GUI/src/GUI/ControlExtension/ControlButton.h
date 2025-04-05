@@ -192,11 +192,9 @@ public:
     std::string getCurrentTitle() { return _currentTitle; };
 
     /**
-     * @js ctor
      */
     ControlButton();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ControlButton();

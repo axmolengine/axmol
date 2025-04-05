@@ -160,11 +160,9 @@ public:
     virtual uint8_t getDisplayedOpacity() const override;
 
     /**
-     * @js ctor
      */
     ProgressTimer() = default;
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ProgressTimer();

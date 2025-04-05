@@ -53,7 +53,6 @@ public:
      *
      * @param table table contains the given cell
      * @param cell  cell that is touched
-     * @js NA
      * @lua NA
      */
     virtual void tableCellTouched(TableView* table, TableViewCell* cell) = 0;
@@ -63,7 +62,6 @@ public:
      *
      * @param table table contains the given cell
      * @param cell  cell that is pressed
-     * @js NA
      * @lua NA
      */
     virtual void tableCellHighlight(TableView* table, TableViewCell* cell);
@@ -73,7 +71,6 @@ public:
      *
      * @param table table contains the given cell
      * @param cell  cell that is pressed
-     * @js NA
      * @lua NA
      */
     virtual void tableCellUnhighlight(TableView* table, TableViewCell* cell);
@@ -85,7 +82,6 @@ public:
      *
      * @param table table contains the given cell
      * @param cell  cell that is pressed
-     * @js NA
      * @lua NA
      */
     virtual void tableCellWillRecycle(TableView* table, TableViewCell* cell);
@@ -98,7 +94,6 @@ class AX_EX_DLL TableViewDataSource
 {
 public:
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~TableViewDataSource() {}
@@ -179,12 +174,10 @@ public:
      */
     static TableView* create(TableViewDataSource* dataSource, Size size, Node* container);
     /**
-     * @js ctor
      * @lua new
      */
     TableView();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~TableView();
@@ -193,7 +186,6 @@ public:
 
     /**
      * data source
-     * @js NA
      * @lua NA
      */
     TableViewDataSource* getDataSource() { return _dataSource; }
@@ -207,7 +199,6 @@ public:
     void setDataSource(TableViewDataSource* source) { _dataSource = source; }
     /**
      * delegate
-     * @js NA
      * @lua NA
      */
     TableViewDelegate* getDelegate() { return _tableViewDelegate; }

@@ -52,11 +52,9 @@ public:
     /** Create a debug node for a regular Chipmunk space. */
     static PhysicsDebugNodeChipmunk2D* create(cpSpace* space);
     /**
-     * @js ctor
      */
     PhysicsDebugNodeChipmunk2D();
     /**
-     * @js NA
      */
     virtual ~PhysicsDebugNodeChipmunk2D();
 
