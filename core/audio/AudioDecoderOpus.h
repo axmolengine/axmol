@@ -25,12 +25,11 @@
 #pragma once
 
 #if defined(AX_ENABLE_OPUS)
-#include "audio/AudioDecoder.h"
+#    include "audio/AudioDecoder.h"
 
-#include <memory>
+#    include <memory>
 
 struct OggOpusFile;
-
 
 namespace ax
 {
@@ -74,8 +73,10 @@ protected:
     AudioDecoderOpus();
     ~AudioDecoderOpus();
 
-    OggOpusFile* _of{nullptr};
+    AudioDecoderOpus(IFileStream* stream);
+    bool open(IFileStream* stream);
 
+    OggOpusFile* _of{nullptr};
 
     friend class AudioDecoderManager;
 };

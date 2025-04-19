@@ -37,7 +37,7 @@ namespace ax
 /**
  * @brief The class for decoding compressed audio file to PCM buffer.
  */
-class AudioDecoderOgg : public AudioDecoder
+class AudioDecoderVorbis : public AudioDecoder
 {
 public:
     /**
@@ -70,8 +70,11 @@ public:
     bool seek(uint32_t frameOffset) override;
 
 protected:
-    AudioDecoderOgg();
-    ~AudioDecoderOgg();
+    AudioDecoderVorbis();
+    ~AudioDecoderVorbis();
+
+    AudioDecoderVorbis(IFileStream* stream);
+    bool open(IFileStream* stream);
 
     OggVorbis_File _vf;
 

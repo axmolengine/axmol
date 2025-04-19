@@ -126,7 +126,7 @@ class AxmolUtils {
         }
 
         if (sdkRoot != cmdlineSdkRoot) {
-            println("Warning: the sdk.dir in local.properties is differrent with cmdline preferred: $cmdlineSdkRoot, if you encounter ndk not found issue, ensure they are same, then re-run setup.ps1 -p android and retry")
+            println("Warning: the sdk.dir in local.properties is differrent with cmdline preferred: $cmdlineSdkRoot, if you encounter issue: ndk not found, ensure they are same, then re-run 'setup.ps1 -p android' and retry")
         }
 
         // ndkVer,ndkPath,cmakeVer,cmakeOptions(AX_USE_XXX, AX_ENABLE_XXX, AX_ENABLE_EXT_XXX),cmakeDir<nullable>

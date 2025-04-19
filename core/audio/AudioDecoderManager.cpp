@@ -25,7 +25,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "audio/AudioDecoderManager.h"
-#include "audio/AudioDecoderOgg.h"
+#include "audio/AudioDecoderVorbis.h"
 #include "audio/AudioDecoderOpus.h"
 #include "audio/AudioMacros.h"
 #include "platform/FileUtils.h"
@@ -60,16 +60,41 @@ void AudioDecoderManager::destroy()
 
 AudioDecoder* AudioDecoderManager::createDecoder(std::string_view path)
 {
-    if (cxx20::ic::ends_with(path, ".ogg"))
+    if (cxx20::ic::ends_with(path, ".ogg") || cxx20::ic::ends_with(path, ".opus"))
     {
-        return new AudioDecoderOgg();
-    }
+        constexpr char VORBIS_SIGN[]        = {0x1, 'v', 'o', 'r', 'b', 'i', 's', '\0'};
+        constexpr char OPUS_SIGN[]          = {'O', 'p', 'u', 's', 'H', 'e', 'a', 'd'};
+        constexpr int OGG_CODEC_SIGN_OFFSET = 28;
+        constexpr int OGG_CODEC_SIGN_SIZE   = 8;
+
+        auto stream = FileUtils::getInstance()->openFileStream(path, IFileStream::Mode::READ);
+        if (!stream)
+            return nullptr;
+        if (stream->size() < OGG_CODEC_SIGN_OFFSET + OGG_CODEC_SIGN_SIZE)
+        {
+            return nullptr;
+        }
+        stream->seek(OGG_CODEC_SIGN_OFFSET, SEEK_SET);
+        char codecSign[OGG_CODEC_SIGN_SIZE];
+        stream->read(codecSign, OGG_CODEC_SIGN_SIZE);
+        stream->seek(0, SEEK_SET);
+
+        if (memcmp(codecSign, VORBIS_SIGN, OGG_CODEC_SIGN_SIZE) == 0)
+        {
+            return new AudioDecoderVorbis(stream.release());
+        }
 #if defined(AX_ENABLE_OPUS)
-    else if (cxx20::ic::ends_with(path, ".opus"))
-    {
-        return new AudioDecoderOpus();
-    }
+        else if (memcmp(codecSign, OPUS_SIGN, OGG_CODEC_SIGN_SIZE) == 0)
+        {
+            return new AudioDecoderOpus(stream.release());
+        }
 #endif
+        else
+        {
+            AXLOGE("Fail create decoder due to codec error in file: {}", path);
+            return nullptr;
+        }
+    }
 #if !defined(__APPLE__)
     else if (cxx20::ic::ends_with(path, ".mp3"))
     {

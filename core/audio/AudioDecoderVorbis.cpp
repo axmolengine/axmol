@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "audio/AudioDecoderOgg.h"
+#include "audio/AudioDecoderVorbis.h"
 #include "audio/AudioMacros.h"
 #include "platform/FileUtils.h"
 
@@ -61,25 +61,37 @@ static int ov_fclose_r(void* handle)
     return 0;
 }
 
-AudioDecoderOgg::AudioDecoderOgg() {}
+AudioDecoderVorbis::AudioDecoderVorbis() {}
 
-AudioDecoderOgg::~AudioDecoderOgg()
+AudioDecoderVorbis::~AudioDecoderVorbis()
 {
     close();
 }
 
-bool AudioDecoderOgg::open(std::string_view fullPath)
+bool AudioDecoderVorbis::open(std::string_view fullPath)
 {
-    auto fs = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ).release();
-    if (!fs)
+    if (_isOpened)
+        return true;
+    auto stream = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ).release();
+    if (!stream)
     {
         AXLOGE("Trouble with ogg(1): {}\n", strerror(errno));
         return false;
     }
 
+    return open(stream);
+}
+
+AudioDecoderVorbis::AudioDecoderVorbis(IFileStream* stream)
+{
+    open(stream);
+}
+
+bool AudioDecoderVorbis::open(IFileStream* stream)
+{
     static ov_callbacks OV_CALLBACKS_POSIX = {ov_fread_r, ov_fseek_r, ov_fclose_r, ov_ftell_r};
 
-    if (0 == ov_open_callbacks(fs, &_vf, nullptr, 0, OV_CALLBACKS_POSIX))
+    if (0 == ov_open_callbacks(stream, &_vf, nullptr, 0, OV_CALLBACKS_POSIX))
     {
         // header
         vorbis_info* vi = ov_info(&_vf, -1);
@@ -93,7 +105,7 @@ bool AudioDecoderOgg::open(std::string_view fullPath)
     return false;
 }
 
-void AudioDecoderOgg::close()
+void AudioDecoderVorbis::close()
 {
     if (isOpened())
     {
@@ -102,7 +114,7 @@ void AudioDecoderOgg::close()
     }
 }
 
-uint32_t AudioDecoderOgg::read(uint32_t framesToRead, char* pcmBuf)
+uint32_t AudioDecoderVorbis::read(uint32_t framesToRead, char* pcmBuf)
 {
     int currentSection = 0;
     int bytesToRead    = framesToBytes(framesToRead);
@@ -110,7 +122,7 @@ uint32_t AudioDecoderOgg::read(uint32_t framesToRead, char* pcmBuf)
     return bytesToFrames(bytesRead);
 }
 
-bool AudioDecoderOgg::seek(uint32_t frameOffset)
+bool AudioDecoderVorbis::seek(uint32_t frameOffset)
 {
     return 0 == ov_pcm_seek(&_vf, frameOffset);
 }

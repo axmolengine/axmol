@@ -22,7 +22,7 @@
  THE SOFTWARE.
 
  How to convert wav to .opus ?
- 
+
  - download official opus-tools: https://opus-codec.org/downloads/
  - directly download link: https://archive.mozilla.org/pub/opus/win32/opus-tools-0.2-opus-1.3.zip
 
@@ -30,16 +30,16 @@
 
 #if defined(AX_ENABLE_OPUS)
 
-#include "audio/AudioDecoderOpus.h"
-#include "audio/AudioMacros.h"
-#include "platform/FileUtils.h"
+#    include "audio/AudioDecoderOpus.h"
+#    include "audio/AudioMacros.h"
+#    include "platform/FileUtils.h"
 
-#include "opus/opusfile.h"
+#    include "opus/opusfile.h"
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-#    include <unistd.h>
-#    include <errno.h>
-#endif
+#    if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#        include <unistd.h>
+#        include <errno.h>
+#    endif
 
 namespace ax
 {
@@ -71,26 +71,24 @@ static opus_int64 op_ftell_r(void* handle)
 
 AudioDecoderOpus::AudioDecoderOpus() {}
 
+AudioDecoderOpus::AudioDecoderOpus(IFileStream* stream)
+{
+    open(stream);
+}
+
 AudioDecoderOpus::~AudioDecoderOpus()
 {
     close();
 }
 
-bool AudioDecoderOpus::open(std::string_view fullPath)
+bool AudioDecoderOpus::open(IFileStream* stream)
 {
-    auto fs = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ).release();
-    if (!fs)
-    {
-        AXLOGE("Trouble with ogg(1): {}\n", strerror(errno));
-        return false;
-    }
-
     static OpusFileCallbacks OP_CALLBACKS_POSIX = {op_fread_r, op_fseek_r, op_ftell_r, op_fclose_r};
 
-    if (_of = op_open_callbacks(fs, &OP_CALLBACKS_POSIX, 0, 0, nullptr))
+    if (_of = op_open_callbacks(stream, &OP_CALLBACKS_POSIX, 0, 0, nullptr))
     {
         auto vi        = op_head(_of, -1);
-        _sampleRate    = 48000; // opus always 48K hz
+        _sampleRate    = 48000;  // opus always 48K hz
         _channelCount  = vi->channel_count;
         _bytesPerBlock = vi->channel_count * sizeof(short);
         _totalFrames   = static_cast<uint32_t>(op_pcm_total(_of, -1));
@@ -98,6 +96,20 @@ bool AudioDecoderOpus::open(std::string_view fullPath)
     }
 
     return _isOpened;
+}
+
+bool AudioDecoderOpus::open(std::string_view fullPath)
+{
+    if (_isOpened)
+        return true;
+    auto stream = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ).release();
+    if (!stream)
+    {
+        AXLOGE("Trouble with ogg(1): {}\n", strerror(errno));
+        return false;
+    }
+
+    return open(stream);
 }
 
 void AudioDecoderOpus::close()
