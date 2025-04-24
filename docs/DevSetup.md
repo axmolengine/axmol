@@ -5,7 +5,7 @@
 - **PowerShell**: used to install Axmol. PowerShell 7 is recommended, it supports Windows, macOS and Linux.
   - Quick installation: 
      - macOS, Ubuntu, ArchLinux: run `setup.ps1` in `axmol` root directory (recommended).
-     - Windows 10+: system installed PowerShell 5.x should work, but in that case you'll need to run the command `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force` in order to allow PowerShell script file to run. This will allow execution of PowerShell scripts for the current process.
+     - Windows 10+: system installed PowerShell 5.x should work. You will need to run the command `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force` in order to allow PowerShell script file to run. This will allow execution of PowerShell scripts for the current user, which is required if you have downloaded the ZIP release of Axmol. If you instead cloned the Axmol repository, then you can use `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force` instead, which is more secure.
   - Manual installation: [Instructions](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) /  [Download](https://github.com/PowerShell/PowerShell/releases)
 - **CMake 3.28.1+**
     - Manual installation is recommended ([download](https://cmake.org/download/)). Make sure to add CMake bin to the system `PATH`, otherwise `axmol build` will auto-setup it to `tools/external/cmake`.
