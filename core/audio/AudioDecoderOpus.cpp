@@ -129,7 +129,7 @@ uint32_t AudioDecoderOpus::read(uint32_t framesToRead, char* pcmBuf)
 
 bool AudioDecoderOpus::seek(uint32_t frameOffset)
 {
-    return op_pcm_seek(_of, frameOffset);
+    return 0 == op_pcm_seek(_of, frameOffset);
 }
 }  // namespace ax
 

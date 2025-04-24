@@ -224,58 +224,56 @@ void AudioCache::readDataTask(unsigned int selfId)
                   totalFrames, _framesRead, remainingFrames);
             if (sourceFormat == AUDIO_SOURCE_FORMAT::ADPCM || sourceFormat == AUDIO_SOURCE_FORMAT::IMA_ADPCM)
                 alBufferi(_alBufferId, AL_UNPACK_BLOCK_ALIGNMENT_SOFT, decoder->getSamplesPerBlock());
-            alBufferData(_alBufferId, _format, pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
 #else
-#    if !AX_USE_ALSOFT
             /// Apple OpenAL framework, try adjust frames
             /// May don't need, xcode11 sdk works well
             uint32_t adjustFrames = 0;
-            BREAK_IF_ERR_LOG(!decoder->seek(totalFrames), "AudioDecoder::seek({}) error", totalFrames);
-
-            char* tmpBuf = (char*)malloc(decoder->framesToBytes(framesToReadOnce));
-            std::vector<char> adjustFrameBuf;
-            adjustFrameBuf.reserve(decoder->framesToBytes(framesToReadOnce));
-
-            // Adjust total frames by setting position to the end of frames and try to read more data.
-            // This is a workaround for https://github.com/cocos2d/cocos2d-x/issues/16938
-            do
+            if(decoder->seek(totalFrames))
             {
-                framesRead = decoder->read(framesToReadOnce, tmpBuf);
-                if (framesRead > 0)
+                char* tmpBuf = (char*)malloc(decoder->framesToBytes(framesToReadOnce));
+                std::vector<char> adjustFrameBuf;
+                adjustFrameBuf.reserve(decoder->framesToBytes(framesToReadOnce));
+
+                // Adjust total frames by setting position to the end of frames and try to read more data.
+                // This is a workaround for https://github.com/cocos2d/cocos2d-x/issues/16938
+                do
                 {
-                    adjustFrames += framesRead;
-                    adjustFrameBuf.insert(adjustFrameBuf.end(), tmpBuf, tmpBuf + decoder->framesToBytes(framesRead));
+                    framesRead = decoder->read(framesToReadOnce, tmpBuf);
+                    if (framesRead > 0)
+                    {
+                        adjustFrames += framesRead;
+                        adjustFrameBuf.insert(adjustFrameBuf.end(), tmpBuf, tmpBuf + decoder->framesToBytes(framesRead));
+                    }
+
+                } while (framesRead > 0);
+
+                if (adjustFrames > 0)
+                {
+                    AXLOGV("Orignal total frames: {}, adjust frames: {}, current total frames: {}", totalFrames,
+                        adjustFrames, totalFrames + adjustFrames);
+                    totalFrames += adjustFrames;
+                    _totalFrames = remainingFrames = totalFrames;
                 }
 
-            } while (framesRead > 0);
+                free(tmpBuf);
 
-            if (adjustFrames > 0)
-            {
-                AXLOGV("Orignal total frames: {}, adjust frames: {}, current total frames: {}", totalFrames,
-                      adjustFrames, totalFrames + adjustFrames);
-                totalFrames += adjustFrames;
-                _totalFrames = remainingFrames = totalFrames;
-            }
+                // Reset to frame 0
+                BREAK_IF_ERR_LOG(!decoder->seek(0), "AudioDecoder::seek(0) failed!");
 
-            free(tmpBuf);
-
-            // Reset to frame 0
-            BREAK_IF_ERR_LOG(!decoder->seek(0), "AudioDecoder::seek(0) failed!");
-
-            if (adjustFrames > 0)
-            {
-                pcmBuffer.insert(pcmBuffer.end(), adjustFrameBuf.data(), adjustFrameBuf.data() + adjustFrameBuf.size());
-                pcmData  = pcmBuffer.data();
-                dataSize = static_cast<uint32_t>(pcmBuffer.size());
-            }
-#    endif /* Adjust frames, may not needed */
-            AXLOGV(
-                "pcm buffer was loaded successfully, total frames: {}, total read frames: {}, adjust frames: {}, "
-                "remainingFrames: {}",
-                totalFrames, _framesRead, adjustFrames, remainingFrames);
-            _framesRead += adjustFrames;
-            alBufferData(_alBufferId, _format, pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
+                if (adjustFrames > 0)
+                {
+                    pcmBuffer.insert(pcmBuffer.end(), adjustFrameBuf.data(), adjustFrameBuf.data() + adjustFrameBuf.size());
+                    pcmData  = pcmBuffer.data();
+                    dataSize = static_cast<uint32_t>(pcmBuffer.size());
+                }
+                AXLOGV(
+                    "pcm buffer was loaded successfully, total frames: {}, total read frames: {}, adjust frames: {}, "
+                    "remainingFrames: {}",
+                    totalFrames, _framesRead, adjustFrames, remainingFrames);
+                _framesRead += adjustFrames;
+            } // seek fail, means no more data need to read
 #endif
+            alBufferData(_alBufferId, _format, pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
             alError = alGetError();
             if (alError != AL_NO_ERROR)
             {
