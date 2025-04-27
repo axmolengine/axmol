@@ -59,8 +59,8 @@ if(NOT DEFINED CMAKE_C_STANDARD_REQUIRED)
     set(CMAKE_C_STANDARD_REQUIRED ON)
 endif()
 
-# config c++ standard, minimal require c++20
-set(_AX_MIN_CXX_STD 20)
+# config c++ standard, minimal require c++23
+set(_AX_MIN_CXX_STD 23)
 if (NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD ${_AX_MIN_CXX_STD})
 endif()

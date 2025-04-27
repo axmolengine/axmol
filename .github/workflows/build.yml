@@ -28,7 +28,7 @@ on:
 env:
   __1K_CXXSTD: '${{ inputs.cxxstd }}'
 
-run-name: 'build@c++${{ inputs.cxxstd || 20 }}'
+run-name: 'build@c++${{ inputs.cxxstd || 23 }}'
 
 jobs:
   win32:
