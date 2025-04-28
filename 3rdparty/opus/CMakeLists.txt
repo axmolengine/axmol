@@ -7,7 +7,7 @@ add_library(${target_name} STATIC IMPORTED GLOBAL)
 
 if(WINDOWS)
   set_target_properties(${target_name} PROPERTIES
-    IMPORTED_IMPLIB "${opus_LIB_DIR}/${target_name}.lib"
+    IMPORTED_LOCATION "${opus_LIB_DIR}/${target_name}.lib"
   )
 elseif(APPLE)
   set_target_properties(${target_name} PROPERTIES
