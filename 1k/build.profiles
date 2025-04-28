@@ -82,6 +82,7 @@ guava=33.3.1
 
 # --- region platform:wasm
 
-emsdk=3.1.73~4.0.6
+# emscan-deps available since emsdk-4.0.3, but it's still not work properly
+emsdk=3.1.73~4.0.7+
 
 # --- endregion

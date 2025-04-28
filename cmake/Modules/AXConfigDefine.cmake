@@ -75,6 +75,14 @@ if(NOT DEFINED CMAKE_CXX_EXTENSIONS)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
+# Axmol not use c++20 modules, so disable cmake scan for modules
+# benefits:
+#  1. speed up build time
+#  2. fix wasm build fail on windows host due to emsdk has bugs not trim some
+#     emsdk spec flags, i.e. -sUSE_LIBJPEG -msse2, -mss4.1 ...
+# remark: The feature scan for modules was added in cmake 3.28
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+
 # check compiler on windows
 if(WINDOWS)
     # not support other compile tools except MSVC for now
@@ -214,12 +222,11 @@ if(EMSCRIPTEN)
     set(AX_WASM_INITIAL_MEMORY "1024MB" CACHE STRING "")
     add_link_options(-sINITIAL_MEMORY=${AX_WASM_INITIAL_MEMORY})
 
-    # Tell emcc build port libs in cache with compiler flag `-pthread` xxx.c.o
-    # must via CMAKE_C_FLAGS and CMAKE_CXX_FLAGS?
+    # Tell emcc build port libjpeg in cache and add link flag manually to
+    # fix build fail on windows host when cmake invoking emscan-deps (raise unknown options)
     set(_AX_EMCC_FLAGS "-sUSE_LIBJPEG=1")
-
     set(CMAKE_C_FLAGS  "${_AX_EMCC_FLAGS} ${CMAKE_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS  "${_AX_EMCC_FLAGS} ${CMAKE_CXX_FLAGS}")
+    add_link_options(-ljpeg)
 endif()
 
 # apply axmol spec compile options
