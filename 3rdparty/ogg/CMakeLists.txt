@@ -49,11 +49,12 @@ add_library(${target_name} STATIC
 
 target_include_directories(${target_name}
   PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
+  PUBLIC "${OPUS_INCLUDE_DIR}/opus"
   PRIVATE "${CMAKE_CURRENT_LIST_DIR}/include/opus"
   PRIVATE "${CMAKE_CURRENT_LIST_DIR}/src/vorbis"
-  PRIVATE "${CMAKE_CURRENT_LIST_DIR}/src/opus"
 )
 
 if(AX_ENABLE_OPUS)
   set_target_properties(${target_name} PROPERTIES INTERFACE_COMPILE_DEFINITIONS AX_ENABLE_OPUS=1)
+  target_link_libraries(${lib_name} Opus::opus)
 endif()

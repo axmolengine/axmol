@@ -1,6 +1,6 @@
 {
   "versions": {
-    "1kdist": "v99",
+    "1kdist": "v101",
     "oboe": "1.9.3",
     "kcp": "v1.7-f2aa30e",
     "opus": "v1.5.2",
@@ -13,7 +13,6 @@
       "1kdist": "simdsoft/1kiss/releases/download",
       "oboe": "google/oboe.git",
       "kcp": "skywind3000/kcp.git",
-      "opus": "xiph/opus.git",
       "lz4": "lz4/lz4.git",
       "sample-assets": "axmolengine/axmol-sample-assets.git",
       "axslcc": "axmolengine/axslcc/releases/download"
@@ -24,7 +23,6 @@
       "1kdist": "simdsoft/1kiss/releases/download",
       "oboe": "simdsoft/oboe.git",
       "kcp": "simdsoft/kcp.git",
-      "opus": "simdsoft/opus.git",
       "lz4": "simdsoft/lz4.git",
       "sample-assets": "simdsoft/axmol-sample-assets.git",
       "axslcc": "simdsoft/axslcc/releases/download"
