@@ -140,9 +140,7 @@ cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ${AX_
 cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
 
 option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ${AX_EXT_HINT})
-
-set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "" )
-
+set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "")
 if (WIN32)
     option(WIN32_PATH_USE_ACP "" OFF)
     if(NOT WIN32_PATH_USE_ACP)
@@ -327,10 +325,6 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_AUDIO)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_CONSOLE)
 ax_config_pred(${_AX_CORE_LIB} AX_CORE_PROFILE)
 
-# use 3rdparty libs
-add_subdirectory(${_AX_ROOT}/3rdparty ${ENGINE_BINARY_PATH}/3rdparty)
-target_link_libraries(${_AX_CORE_LIB} 3rdparty)
-
 # add base macro define and compile options
 use_ax_compile_define(${_AX_CORE_LIB})
 use_ax_compile_options(${_AX_CORE_LIB})
@@ -420,7 +414,8 @@ include(CheckCXXSourceCompiles)
 set(AX_ISA_LEVEL 2 CACHE STRING "SIMD Instructions Acceleration Level")
 
 # SIMD instrinsics detetion when AX_ISA_LEVEL not 0
-if(AX_ISA_LEVEL)
+# wasm skip dynamic check
+if(AX_ISA_LEVEL AND NOT WASM)
     ### check -msse2 flag
     set(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
     if(MSVC)
@@ -479,16 +474,14 @@ if(AX_ISA_LEVEL)
     set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
 
     ### Checking ARM SIMD neon
-    if (NOT WASM) # wasm neon stupid not work, so skipped
-        check_include_file(arm_neon.h AX_HAVE_ARM_NEON_H)
-        if(AX_HAVE_ARM_NEON_H)
-            check_c_source_compiles("#include <arm_neon.h>
-            int main()
-            {
-                int32x4_t ret4 = vdupq_n_s32(0);
-                return vgetq_lane_s32(ret4, 0);
-            }" AX_HAVE_NEON_INTRINSICS)
-        endif()
+    check_include_file(arm_neon.h AX_HAVE_ARM_NEON_H)
+    if(AX_HAVE_ARM_NEON_H)
+        check_c_source_compiles("#include <arm_neon.h>
+        int main()
+        {
+            int32x4_t ret4 = vdupq_n_s32(0);
+            return vgetq_lane_s32(ret4, 0);
+        }" AX_HAVE_NEON_INTRINSICS)
     endif()
 
     set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
@@ -508,8 +501,6 @@ if(AX_ISA_LEVEL)
     else()
         set(AX_ISA_SIMD "null")
     endif()
-
-    message(AUTHOR_WARNING "AX_ISA_SIMD=${AX_ISA_SIMD}")
 
     if (WINDOWS)
         if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -533,12 +524,15 @@ if (NOT WASM) # native platforms auto detect from cmake or preprocessor check
         endif()
     endif()
 else() # wasm requires user specify SIMD intrinsics manually
-    set(AX_WASM_ISA_SIMD "none" CACHE STRING "")
+    set(AX_WASM_ISA_SIMD "sse4.1" CACHE STRING "")
     string(TOLOWER ${AX_WASM_ISA_SIMD} AX_WASM_ISA_SIMD)
+    set(AX_ISA_SIMD ${AX_WASM_ISA_SIMD} CACHE STRING "" FORCE)
     if(AX_WASM_ISA_SIMD MATCHES "sse")
         message(AUTHOR_WARNING "Using SSE intrinsics for WASM ...")
         list(APPEND _simdc_defines AX_SSE_INTRINSICS=1 __SSE__=1 __SSE2__=1 __SSE3__=1 __SSSE3__=1)
+        set(AX_HAVE_SSE2_INTRINSICS TRUE CACHE BOOL "" FORCE)
         if(AX_ISA_LEVEL GREATER_EQUAL 2)
+            set(AX_HAVE_SSE41_INTRINSICS TRUE CACHE BOOL "" FORCE)
             list(APPEND _simdc_defines __SSE4_1__=1)
         endif()
         list(APPEND _simdc_options -msimd128)
@@ -555,6 +549,12 @@ if(_simdc_defines)
         target_compile_options(${_AX_CORE_LIB} PUBLIC ${_simdc_options})
     endif()
 endif()
+
+message(AUTHOR_WARNING "AX_ISA_SIMD=${AX_ISA_SIMD}")
+
+# 3rd libs
+add_subdirectory(${_AX_ROOT}/3rdparty ${ENGINE_BINARY_PATH}/3rdparty)
+target_link_libraries(${_AX_CORE_LIB} 3rdparty)
 
 # engine extensions
 add_subdirectory(${_AX_ROOT}/extensions ${ENGINE_BINARY_PATH}/extensions)

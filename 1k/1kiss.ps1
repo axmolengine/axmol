@@ -71,10 +71,10 @@ $HOST_MAC = 2 # targets: android,ios,osx(macos),tvos,watchos
 
 # 0: windows, 1: linux, 2: macos
 $Global:IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
-if ($Global:IsWin) { $HOST_OS = $HOST_WIN }
+if ($Global:IsWin) { $HOST_OS_INT = $HOST_WIN }
 else {
-    if ($IsLinux) { $HOST_OS = $HOST_LINUX }
-    elseif ($IsMacOS) { $HOST_OS = $HOST_MAC }
+    if ($IsLinux) { $HOST_OS_INT = $HOST_LINUX }
+    elseif ($IsMacOS) { $HOST_OS_INT = $HOST_MAC }
     else {
         throw "Unsupported host OS to run 1k/1kiss.ps1"
     }
@@ -245,6 +245,7 @@ $cmake_generators = @{
     'ios'     = 'Xcode'
     'tvos'    = 'Xcode'
     'watchos' = 'Xcode'
+    'linux'   = 'Unix Makefiles'
 }
 
 $channels = @{}
@@ -342,7 +343,7 @@ $1k.println("PowerShell $pwsh_ver on $osVer")
 $TARGET_OS = $options.p
 if (!$TARGET_OS) {
     # choose host target if not specified by command line automatically
-    $TARGET_OS = $options.p = $('win32', 'linux', 'osx').Get($HOST_OS)
+    $TARGET_OS = $options.p = $('win32', 'linux', 'osx').Get($HOST_OS_INT)
 }
 else {
     $target_os_norm = @{winuwp = 'winrt'; mac = 'osx' }[$TARGET_OS]
@@ -428,7 +429,7 @@ if (!$setupOnly) {
     $1k.println("$(Out-String -InputObject $options)")
 }
 
-$HOST_OS_NAME = $('windows', 'linux', 'macos').Get($HOST_OS)
+$HOST_OS = $('windows', 'linux', 'macos').Get($HOST_OS_INT)
 
 # determine toolchain
 $TOOLCHAIN = $options.cc
@@ -966,7 +967,7 @@ function setup_axslcc() {
         return $axslcc_prog
     }
 
-    $suffix = $('win64.zip', 'linux.tar.gz', 'osx{0}.tar.gz').Get($HOST_OS)
+    $suffix = $('win64.zip', 'linux.tar.gz', 'osx{0}.tar.gz').Get($HOST_OS_INT)
     if ($IsMacOS) {
         if ([System.VersionEx]$axslcc_ver -ge [System.VersionEx]'1.9.4.1') {
             $suffix = $suffix -f "-$HOST_CPU"
@@ -982,15 +983,14 @@ function setup_axslcc() {
     $axslcc_prog = (Join-Path $axslcc_bin "axslcc$EXE_SUFFIX")
     if ($1k.isfile($axslcc_prog)) {
         $1k.println("Using axslcc: $axslcc_prog, version: $axslcc_ver")
-        return $axslcc_prog
+    } else {
+        throw "Install axslcc fail"
     }
-
-    throw "Install axslcc fail"
 }
 
 function setup_ninja() {
     if (!$manifest['ninja']) { return $null }
-    $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
+    $suffix = $('win', 'linux', 'mac').Get($HOST_OS_INT)
     $ninja_bin = Join-Path $install_prefix 'ninja'
     $ninja_prog, $ninja_ver = find_prog -name 'ninja'
     if ($ninja_prog) {
@@ -1021,8 +1021,8 @@ function setup_cmake($skipOS = $false) {
     if (!$cmake_prog) {
         $1k.rmdirs($cmake_root)
 
-        $cmake_suffix = @(".zip", ".sh", ".tar.gz").Get($HOST_OS)
-        if ($HOST_OS -ne $HOST_MAC) {
+        $cmake_suffix = @(".zip", ".sh", ".tar.gz").Get($HOST_OS_INT)
+        if ($HOST_OS_INT -ne $HOST_MAC) {
             $cmake_pkg_name = "cmake-$cmake_ver-$HOST_OS_NAME-x86_64"
         }
         else {
@@ -1152,7 +1152,7 @@ function setup_nasm() {
 function setup_jdk() {
     if (!$manifest['jdk']) { return $null }
     $arch_suffix = if ($HOST_CPU -eq 'x64') { 'x64' } else { 'aarch64' }
-    $suffix = $("windows-$arch_suffix.zip", "linux-$arch_suffix.tar.gz", "macOS-$arch_suffix.tar.gz").Get($HOST_OS)
+    $suffix = $("windows-$arch_suffix.zip", "linux-$arch_suffix.tar.gz", "macOS-$arch_suffix.tar.gz").Get($HOST_OS_INT)
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac'
     if ($javac_prog) {
         return $javac_prog
@@ -1333,7 +1333,7 @@ function setup_android_sdk() {
     $cmdlinetools_bin = Join-Path $cmdlinetools_prefix "$cmdlinetools_ver/bin"
     $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path $cmdlinetools_bin -params "--version", "--sdk_root=$sdk_root")
     if (!$sdkmanager_prog) {
-        $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
+        $suffix = $('win', 'linux', 'mac').Get($HOST_OS_INT)
         if (!$sdkmanager_prog) {
             $1k.println("Installing cmdlinetools version: $sdkmanager_ver ...")
 
@@ -1364,8 +1364,8 @@ function setup_android_sdk() {
 
             $_artifact = @("android-ndk-${ndk_r23d_rev}-windows-x86_64.zip",
                 "android-ndk-${ndk_r23d_rev}-linux-x86_64.zip",
-                "android-ndk-${ndk_r23d_rev}-darwin-x86_64.zip").Get($HOST_OS)
-            $_target_os = @('win64', 'linux', 'darwin_mac').Get($HOST_OS)
+                "android-ndk-${ndk_r23d_rev}-darwin-x86_64.zip").Get($HOST_OS_INT)
+            $_target_os = @('win64', 'linux', 'darwin_mac').Get($HOST_OS_INT)
             . (Join-Path $myRoot 'resolv-url.ps1') -artifact $_artifact -target $_target_os -build_id $ndk_r23d_rev -manifest gcloud -out_var 'artifact_info'
             $artifact_url = $artifact_info[0].messageData
             $full_ver = "23.3.${ndk_r23d_rev}"
@@ -1473,7 +1473,7 @@ function setup_msvc() {
             }
             else {
                 # vs2022 x64,x86 share same msvc component
-                install_msvc $cl_ver 'x64'
+                install_msvc $cl_ver $TARGET_CPU
                 $1k.println("Enter vs dev shell ...")
                 Enter-VsDevShell -VsInstanceId $Global:VS_INST.instanceId -SkipAutomaticLocation -DevCmdArguments $dev_cmd_args -ErrorAction SilentlyContinue
                 if ($?) {
@@ -1736,9 +1736,9 @@ function validHostAndToolchain() {
         };
     }
     $validInfo = $validTable[$TARGET_OS]
-    $validOS = $validInfo.host[$HOST_OS_NAME]
+    $validOS = $validInfo.host[$HOST_OS]
     if (!$validOS) {
-        throw "Can't build target $TARGET_OS on $HOST_OS_NAME"
+        throw "Can't build target $TARGET_OS on $HOST_OS"
     }
     $validToolchain = $validInfo.toolchain[$TOOLCHAIN_NAME]
     if (!$validToolchain) {
@@ -1763,7 +1763,7 @@ validHostAndToolchain
 
 ########## setup build tools if not installed #######
 setup_unzip
-setup_axslcc | Out-Host
+setup_axslcc
 $cmake_prog, $Script:cmake_ver = setup_cmake
 
 if ($Global:is_win_family) {
@@ -1800,7 +1800,7 @@ elseif ($Global:is_android) {
     $env:ANDROID_NDK_HOME = $ndk_root
     $env:ANDROID_NDK_ROOT = $ndk_root
 
-    $ndk_host = @('windows', 'linux', 'darwin').Get($HOST_OS)
+    $ndk_host = @('windows', 'linux', 'darwin').Get($HOST_OS_INT)
     $env:ANDROID_NDK_BIN = Join-Path $ndk_root "toolchains/llvm/prebuilt/$ndk_host-x86_64/bin"
     function active_ndk_toolchain() {
         $1k.addpath($env:ANDROID_NDK_BIN)
@@ -1872,12 +1872,12 @@ if (!$setupOnly) {
     if ($options.xt -ne 'gn') {
         $BUILD_ALL_OPTIONS = $evaluated_build_args
         if (!$optimize_flag) {
-            $optimize_flag = 'Release'
+            $optimize_flag = 'RelWithDebInfo'
         }
         $BUILD_ALL_OPTIONS += '--config', $optimize_flag
 
         # enter building steps
-        $1k.println("Building target $TARGET_OS on $HOST_OS_NAME with toolchain $TOOLCHAIN ...")
+        $1k.println("Building target $TARGET_OS on $HOST_OS with toolchain $TOOLCHAIN ...")
 
         # step1. preprocess cross make options
         $CONFIG_ALL_OPTIONS = & $preprocessTable[$TARGET_OS]
@@ -1952,17 +1952,15 @@ if (!$setupOnly) {
                 }
             }
 
-            if (!$cmake_generator -and !$TARGET_OS.StartsWith('win') -and $TARGET_OS -ne 'linux') {
+            $use_default = !$cmake_generator
+            if ($use_default) {
                 $cmake_generator = $cmake_generators[$TARGET_OS]
-                if ($null -eq $cmake_generator) {
-                    $cmake_generator = if (!$IsWin) { 'Unix Makefiles' } else { 'Ninja' }
-                }
             }
 
             if ($cmake_generator) {
                 $using_ninja = $cmake_generator.StartsWith('Ninja')
 
-                if (!$is_wasm) {
+                if (!$is_wasm -and (!$use_default -or $TARGET_OS -ne $HOST_OS)) {
                     $CONFIG_ALL_OPTIONS += '-G', $cmake_generator
                 }
 

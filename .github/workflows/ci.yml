@@ -75,7 +75,7 @@ jobs:
             submodules: 'recursive'
         - name: Build
           shell: pwsh
-          run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -sdk $env:WINSDK_VER
+          run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -sdk $env:WINSDK_VER -O3
   linux:
     runs-on: ubuntu-latest
     steps:
