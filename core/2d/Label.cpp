@@ -1765,20 +1765,38 @@ void Label::updateContent()
             // atlas font
             for (int i = 0; i < _numberOfLines; ++i)
             {
+                float startOffset = 0;
+                float endOffset   = 0;
+
+                if (_overflow == Overflow::CLAMP)
+                {
+                    startOffset = std::max(0.f, _linesOffsetX[i]);
+                    if (_hAlignment == TextHAlignment::LEFT || _hAlignment == TextHAlignment::CENTER)
+                    {
+                        endOffset = std::min(_linesWidth[i] + startOffset, _labelDimensions.width - startOffset);
+                    }
+                    else  // _hAlignment == TextHAlignment::RIGHT
+                    {
+                        endOffset = std::min(_linesWidth[i] + startOffset, _labelDimensions.width);
+                    }
+                }
+                else
+                {
+                    startOffset = _linesOffsetX[i];
+                    endOffset   = _linesWidth[i] + _linesOffsetX[i];
+                }
+
                 if (_strikethroughEnabled)
                 {
                     auto y = nextY - lineHeight / 2;
-                    _lineDrawNode->drawLine(Vec2(_linesOffsetX[i], y), Vec2(_linesWidth[i] + _linesOffsetX[i], y),
-                                            Color4F(lineColor), thickness);
+                    _lineDrawNode->drawLine(Vec2(startOffset, y), Vec2(endOffset, y), Color4F(lineColor), thickness);
                 }
 
                 if (_underlineEnabled)
                 {
                     auto y = nextY - lineHeight;
-                    _lineDrawNode->drawLine(Vec2(_linesOffsetX[i], y), Vec2(_linesWidth[i] + _linesOffsetX[i], y),
-                                            Color4F(lineColor), thickness);
+                    _lineDrawNode->drawLine(Vec2(startOffset, y), Vec2(endOffset, y), Color4F(lineColor), thickness);
                 }
-
                 nextY -= lineHeight + lineSpacing;
             }
         }
