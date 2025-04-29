@@ -1181,10 +1181,10 @@ bool Label::computeHorizontalKernings(const std::u32string& stringToRender)
         return true;
 }
 
-bool Label::isHorizontalClamped(float letterPositionX, int lineIndex)
+bool Label::isHorizontalClamped(float letterPositionX, float letterWidth, int lineIndex)
 {
     auto wordWidth       = this->_linesWidth[lineIndex];
-    bool letterOverClamp = (letterPositionX > _contentSize.width || letterPositionX < 0);
+    bool letterOverClamp = ((letterPositionX + letterWidth) > _contentSize.width || letterPositionX < 0);
     if (!_enableWrap)
     {
         return letterOverClamp;
@@ -1231,11 +1231,11 @@ bool Label::updateQuads()
             }
 
             auto lineIndex = _lettersInfo[ctr].lineIndex;
-            auto px        = _lettersInfo[ctr].positionX + letterDef.width / 2 * _fontScale + _linesOffsetX[lineIndex];
+            auto px        = _lettersInfo[ctr].positionX + _linesOffsetX[lineIndex];
 
             if (_labelWidth > 0.f)
             {
-                if (this->isHorizontalClamped(px, lineIndex))
+                if (this->isHorizontalClamped(px, letterDef.width * _fontScale, lineIndex))
                 {
                     if (_overflow == Overflow::CLAMP)
                     {

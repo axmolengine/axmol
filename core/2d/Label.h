@@ -800,7 +800,7 @@ protected:
     bool setTTFConfigInternal(const TTFConfig& ttfConfig);
     bool updateTTFConfigInternal();
     void setBMFontSizeInternal(float fontSize);
-    bool isHorizontalClamped(float letterPositionX, int lineIndex);
+    bool isHorizontalClamped(float letterPositionX, float letterWidth, int lineIndex);
     void restoreFontSize();
     void updateLetterSpriteScale(Sprite* sprite);
     int getFirstCharLen(const std::u32string& utf32Text, int startIndex, int textLen) const;
