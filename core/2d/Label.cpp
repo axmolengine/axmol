@@ -1184,7 +1184,7 @@ bool Label::computeHorizontalKernings(const std::u32string& stringToRender)
 bool Label::isHorizontalClamped(float letterPositionX, float letterWidth, int lineIndex)
 {
     auto wordWidth       = this->_linesWidth[lineIndex];
-    bool letterOverClamp = ((letterPositionX + letterWidth) > _contentSize.width || letterPositionX < 0);
+    bool letterOverClamp = ((letterPositionX + letterWidth) > _contentSize.width || (letterPositionX + letterWidth / 2) < 0);
     if (!_enableWrap)
     {
         return letterOverClamp;
