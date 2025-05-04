@@ -174,6 +174,7 @@ Please see the [Windows workflow guide](https://github.com/axmolengine/axmol/iss
      - Android SDK Build-Tools 34.0.0 match with AGP, refer to: <https://developer.android.com/studio/releases/gradle-plugin>
      - Gradle 8.11.1
      - NDK r23c, if you need support Android 15 16KB page size, you must use r23d or r27+
+     - __IMPORTANT__: NDK r26+ is required for C++20 support.
   8. Wait for the `Gradle sync` to finish.
 
 Note: if you use non-SDK provided CMake, you will need to download `ninja` from <https://github.com/ninja-build/ninja/releases>, and copy `ninja.exe` to CMake's bin directory.
