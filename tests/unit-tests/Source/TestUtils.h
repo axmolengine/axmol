@@ -3,7 +3,7 @@
 #include <future>
 #include "base/Director.h"
 #include "base/Scheduler.h"
-#include "doctest_fwd.h"
+#include "doctest.h"
 
 
 /// A helper class for testing asynchronous functions. It waits while the function

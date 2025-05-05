@@ -45,7 +45,7 @@
 
 #define DOCTEST_VERSION_MAJOR 2
 #define DOCTEST_VERSION_MINOR 4
-#define DOCTEST_VERSION_PATCH 11
+#define DOCTEST_VERSION_PATCH 12
 
 // util we need here
 #define DOCTEST_TOSTR_IMPL(x) #x
@@ -922,6 +922,7 @@ struct ContextOptions //!OCLINT too many fields
     bool no_skip;              // don't skip test cases which are marked to be skipped
     bool gnu_file_line;        // if line numbers should be surrounded with :x: and not (x):
     bool no_path_in_filenames; // if the path to files should be removed from the output
+    String strip_file_prefixes;// remove the longest matching one of these prefixes from any file paths in the output
     bool no_line_numbers;      // if source code line numbers should be omitted from the output
     bool no_debug_output;      // no output in the debug console when a debugger is attached
     bool no_skipped_summary;   // don't print "skipped" in the summary !!! UNDOCUMENTED !!!
@@ -1575,8 +1576,8 @@ DOCTEST_CLANG_SUPPRESS_WARNING_POP
         // https://github.com/catchorg/Catch2/issues/870
         // https://github.com/catchorg/Catch2/issues/565
         template <typename L>
-        Expression_lhs<L> operator<<(L&& operand) {
-            return Expression_lhs<L>(static_cast<L&&>(operand), m_at);
+        Expression_lhs<const L&&> operator<<(const L&& operand) { //bitfields bind to universal ref but not const rvalue ref
+            return Expression_lhs<const L&&>(static_cast<const L&&>(operand), m_at);
         }
 
         template <typename L,typename types::enable_if<!doctest::detail::types::is_rvalue_reference<L>::value,void >::type* = nullptr>

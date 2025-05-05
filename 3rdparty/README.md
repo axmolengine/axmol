@@ -52,7 +52,7 @@
 
 ## doctest
 - [![Upstream](https://img.shields.io/github/v/release/doctest/doctest?label=Upstream)](https://github.com/doctest/doctest)
-- Version: 2.4.11
+- Version: 2.4.12
 - License: MIT
 
 ## FastLZ
@@ -67,7 +67,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 11.1.4
+- Version: 11.2.0
 
 - License: MIT
 
@@ -108,7 +108,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 9.2.1
+- Version: 9.3.0
 - License: MIT
 
 ## lua
@@ -190,7 +190,7 @@
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
-- Version: 1.6.47
+- Version: 1.6.48
 - License: PNG Reference Library License version 2
 
 ## poly2tri
