@@ -957,7 +957,7 @@ extern void color32_to_luaval(lua_State* L, const Color32& cc);
  * @param L the current lua_State.
  * @param cc a ax::Color object.
  */
-extern void color_to_luaval(lua_State* L, const Color& cc);
+extern void color_to_luaval(lua_State* L, const ax::Color& cc);
 
 void std_thread_id_to_luaval(lua_State* L, const std::thread::id& value);
 
