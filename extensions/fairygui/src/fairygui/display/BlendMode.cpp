@@ -22,8 +22,6 @@ std::vector<BlendFunc> blendModes {
 };
 }
 
-
-
 void BlendModeUtils::apply(ax::Node* node, BlendMode blendMode)
 {
     if (!node)
