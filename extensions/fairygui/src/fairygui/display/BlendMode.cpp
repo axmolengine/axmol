@@ -22,8 +22,13 @@ std::vector<BlendFunc> blendModes {
 };
 }
 
+
+
 void BlendModeUtils::apply(ax::Node* node, BlendMode blendMode)
 {
+    if (!node)
+        return;
+
     auto blendIndex = static_cast<size_t>(blendMode);
     if (blendIndex >= blendModes.size())
     {
@@ -32,29 +37,25 @@ void BlendModeUtils::apply(ax::Node* node, BlendMode blendMode)
     }
 
     auto& blendFunc = blendModes[blendIndex];
+    apply(node, blendFunc);
+}
 
-    auto self = dynamic_cast<Sprite*>(node);
-    if (self)
+void BlendModeUtils::apply(ax::Node* node, const ax::BlendFunc& blendFunc)
+{
+    auto sprite = dynamic_cast<Sprite*>(node);
+    if (sprite)
     {
-        auto& currentBlendFunc = self->getBlendFunc();
+        auto& currentBlendFunc = sprite->getBlendFunc();
         if (currentBlendFunc.src != blendFunc.src && currentBlendFunc.dst != blendFunc.dst)
         {
-            self->setBlendFunc(blendFunc);
+            sprite->setBlendFunc(blendFunc);
         }
     }
 
     auto&& children = node->getChildren();
     for (auto&& child : children)
     {
-        auto sprite = dynamic_cast<Sprite*>(child);
-        if (!sprite)
-            continue;
-
-        auto& currentBlendFunc = sprite->getBlendFunc();
-        if (currentBlendFunc.src != blendFunc.src && currentBlendFunc.dst != blendFunc.dst)
-        {
-            sprite->setBlendFunc(blendFunc);
-        }
+        apply(child, blendFunc);
     }
 }
 
