@@ -29,6 +29,7 @@ GObject::GObject() : _scale{1, 1},
                      _handlingController(false),
                      _touchable(true),
                      _grayed(false),
+                     _blendMode(BlendMode::Normal),
                      _finalGrayed(false),
                      _draggable(false),
                      _dragBounds(nullptr),
@@ -404,6 +405,15 @@ void GObject::setTooltips(const std::string& value)
     {
         addEventListener(UIEventType::RollOver, AX_CALLBACK_1(GObject::onRollOver, this), EventTag(this));
         addEventListener(UIEventType::RollOut, AX_CALLBACK_1(GObject::onRollOut, this), EventTag(this));
+    }
+}
+
+void GObject::setBlendMode(BlendMode blendMode)
+{
+    if (_blendMode != blendMode)
+    {
+        _blendMode = blendMode;
+        BlendModeUtils::apply(displayObject(), blendMode);
     }
 }
 
@@ -869,7 +879,7 @@ void GObject::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
         setTouchable(false);
     if (buffer->readBool())
         setGrayed(true);
-    buffer->readByte(); //blendMode
+    setBlendMode((BlendMode)buffer->readByte());
     buffer->readByte(); //filter
 
     const std::string& str = buffer->readS();

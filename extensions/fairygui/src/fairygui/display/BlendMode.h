@@ -1,0 +1,30 @@
+#pragma once
+#include "cocos2d.h"
+#include "FairyGUIMacros.h"
+
+NS_FGUI_BEGIN
+
+enum class BlendMode
+{
+    Normal,
+    None,
+    Add,
+    Multiply,
+    Screen,
+    Erase,
+    Mask,
+    Below,
+    Off,
+    Custom1,
+    Custom2,
+    Custom3
+};
+
+class BlendModeUtils
+{
+public:
+    static void apply(ax::Node* node, BlendMode blendMode);
+    static void override(BlendMode blendMode, ax::backend::BlendFactor srcFactor, ax::backend::BlendFactor dstFactor);
+};
+
+NS_FGUI_END
