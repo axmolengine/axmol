@@ -32,6 +32,17 @@ void BlendModeUtils::apply(ax::Node* node, BlendMode blendMode)
     }
 
     auto& blendFunc = blendModes[blendIndex];
+
+    auto self = dynamic_cast<Sprite*>(node);
+    if (self)
+    {
+        auto& currentBlendFunc = self->getBlendFunc();
+        if (currentBlendFunc.src != blendFunc.src && currentBlendFunc.dst != blendFunc.dst)
+        {
+            self->setBlendFunc(blendFunc);
+        }
+    }
+
     auto&& children = node->getChildren();
     for (auto&& child : children)
     {
