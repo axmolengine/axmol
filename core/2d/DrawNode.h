@@ -56,7 +56,7 @@ class PointArray;
  * Faster than the "drawing primitives" since they draws everything in one single batch.
  * @since v2.1
  */
-class AX_DLL DrawNode : public Node
+class AX_DLL DrawNode : public Node, public BlendProtocol
 {
 public:
     /** Different draw modus types.
@@ -517,7 +517,7 @@ public:
     /** Get the color mixed mode.
      * @lua NA
      */
-    const BlendFunc& getBlendFunc() const;
+    const BlendFunc& getBlendFunc() const override;
     /** Set the color mixed mode.
      * @code
      * When this function bound into js or lua,the parameter will be changed
@@ -525,7 +525,7 @@ public:
      * @endcode
      * @lua NA
      */
-    void setBlendFunc(const BlendFunc& blendFunc);
+    void setBlendFunc(const BlendFunc& blendFunc) override;
 
     // Overrides
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
