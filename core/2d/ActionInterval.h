@@ -27,8 +27,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __ACTION_CCINTERVAL_ACTION_H__
-#define __ACTION_CCINTERVAL_ACTION_H__
+#ifndef __ACTION_INTERVAL_ACTION_H__
+#define __ACTION_INTERVAL_ACTION_H__
 
 #include <vector>
 
@@ -888,7 +888,7 @@ private:
 
 /** @struct Bezier configuration structure
  */
-typedef struct _ccBezierConfig
+struct BezierConfig
 {
     //! end position of the bezier
     Vec2 endPosition;
@@ -896,7 +896,9 @@ typedef struct _ccBezierConfig
     Vec2 controlPoint_1;
     //! Bezier control point 2
     Vec2 controlPoint_2;
-} ccBezierConfig;
+};
+
+using ccBezierConfig [[deprecated("Use BezierConfig instead.")]] = BezierConfig;
 
 /** @class BezierBy
  * @brief An action that moves the target with a cubic Bezier curve by a certain distance.
@@ -914,7 +916,7 @@ public:
      * in lua: local create(local t, local table)
      * @endcode
      */
-    static BezierBy* create(float t, const ccBezierConfig& c);
+    static BezierBy* create(float t, const BezierConfig& c);
 
     //
     // Overrides
@@ -934,10 +936,10 @@ public:
      * initializes the action with a duration and a bezier configuration
      * @param t in seconds
      */
-    bool initWithDuration(float t, const ccBezierConfig& c);
+    bool initWithDuration(float t, const BezierConfig& c);
 
 protected:
-    ccBezierConfig _config;
+    BezierConfig _config;
     Vec2 _startPosition;
     Vec2 _previousPosition;
 
@@ -962,7 +964,7 @@ public:
      * in lua: local create(local t, local table)
      * @endcode
      */
-    static BezierTo* create(float t, const ccBezierConfig& c);
+    static BezierTo* create(float t, const BezierConfig& c);
 
     //
     // Overrides
@@ -976,10 +978,10 @@ public:
     /**
      * @param t In seconds.
      */
-    bool initWithDuration(float t, const ccBezierConfig& c);
+    bool initWithDuration(float t, const BezierConfig& c);
 
 protected:
-    ccBezierConfig _toConfig;
+    BezierConfig _toConfig;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(BezierTo);
@@ -1614,4 +1616,4 @@ private:
 
 }
 
-#endif  //__ACTION_CCINTERVAL_ACTION_H__
+#endif

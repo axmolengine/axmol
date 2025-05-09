@@ -520,7 +520,7 @@ void ActionBezier::onEnter()
     centerSprites(3);
 
     // sprite 1
-    ccBezierConfig bezier;
+    BezierConfig bezier;
     bezier.controlPoint_1 = Vec2(0.0f, s.height / 2);
     bezier.controlPoint_2 = Vec2(300.0f, -s.height / 2);
     bezier.endPosition    = Vec2(300.0f, 100.0f);
@@ -531,7 +531,7 @@ void ActionBezier::onEnter()
 
     // sprite 2
     _tamara->setPosition(80, 160);
-    ccBezierConfig bezier2;
+    BezierConfig bezier2;
     bezier2.controlPoint_1 = Vec2(100.0f, s.height / 2);
     bezier2.controlPoint_2 = Vec2(200.0f, -s.height / 2);
     bezier2.endPosition    = Vec2(240.0f, 160.0f);
@@ -1462,7 +1462,7 @@ void ActionMoveBezierStacked::runActionsInSprite(Sprite* sprite)
     auto s = Director::getInstance()->getWinSize();
 
     // sprite 1
-    ccBezierConfig bezier;
+    BezierConfig bezier;
     bezier.controlPoint_1 = Vec2(0.0f, s.height / 2);
     bezier.controlPoint_2 = Vec2(300.0f, -s.height / 2);
     bezier.endPosition    = Vec2(300.0f, 100.0f);

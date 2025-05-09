@@ -1675,7 +1675,7 @@ static inline float bezierat(float a, float b, float c, float d, float t)
 // BezierBy
 //
 
-BezierBy* BezierBy::create(float t, const ccBezierConfig& c)
+BezierBy* BezierBy::create(float t, const BezierConfig& c)
 {
     BezierBy* bezierBy = new BezierBy();
     if (bezierBy->initWithDuration(t, c))
@@ -1688,7 +1688,7 @@ BezierBy* BezierBy::create(float t, const ccBezierConfig& c)
     return nullptr;
 }
 
-bool BezierBy::initWithDuration(float t, const ccBezierConfig& c)
+bool BezierBy::initWithDuration(float t, const BezierConfig& c)
 {
     if (ActionInterval::initWithDuration(t))
     {
@@ -1745,7 +1745,7 @@ void BezierBy::update(float time)
 
 BezierBy* BezierBy::reverse() const
 {
-    ccBezierConfig r;
+    BezierConfig r;
 
     r.endPosition    = -_config.endPosition;
     r.controlPoint_1 = _config.controlPoint_2 + (-_config.endPosition);
@@ -1759,7 +1759,7 @@ BezierBy* BezierBy::reverse() const
 // BezierTo
 //
 
-BezierTo* BezierTo::create(float t, const ccBezierConfig& c)
+BezierTo* BezierTo::create(float t, const BezierConfig& c)
 {
     BezierTo* bezierTo = new BezierTo();
     if (bezierTo->initWithDuration(t, c))
@@ -1772,7 +1772,7 @@ BezierTo* BezierTo::create(float t, const ccBezierConfig& c)
     return nullptr;
 }
 
-bool BezierTo::initWithDuration(float t, const ccBezierConfig& c)
+bool BezierTo::initWithDuration(float t, const BezierConfig& c)
 {
     if (ActionInterval::initWithDuration(t))
     {
@@ -1799,7 +1799,7 @@ void BezierTo::startWithTarget(Node* target)
 
 BezierTo* BezierTo::reverse() const
 {
-    AXASSERT(false, "CCBezierTo doesn't support the 'reverse' method");
+    AXASSERT(false, "BezierTo doesn't support the 'reverse' method");
     return nullptr;
 }
 
