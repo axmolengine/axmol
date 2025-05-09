@@ -44,7 +44,7 @@ void BlendModeUtils::apply(ax::Node* node, const ax::BlendFunc& blendFunc)
     if (blendProtocol)
     {
         auto& currentBlendFunc = blendProtocol->getBlendFunc();
-        if (currentBlendFunc.src != blendFunc.src && currentBlendFunc.dst != blendFunc.dst)
+        if (currentBlendFunc.src != blendFunc.src || currentBlendFunc.dst != blendFunc.dst)
         {
             blendProtocol->setBlendFunc(blendFunc);
         }
