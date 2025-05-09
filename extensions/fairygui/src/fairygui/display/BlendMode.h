@@ -24,7 +24,9 @@ class BlendModeUtils
 {
 public:
     static void apply(ax::Node* node, BlendMode blendMode);
-    static void override(BlendMode blendMode, ax::backend::BlendFactor srcFactor, ax::backend::BlendFactor dstFactor);
+    static void overrideBlendMode(BlendMode blendMode,
+                                  ax::backend::BlendFactor srcFactor,
+                                  ax::backend::BlendFactor dstFactor);
 
 protected:
     static void apply(ax::Node* node, const ax::BlendFunc& blendFunc);

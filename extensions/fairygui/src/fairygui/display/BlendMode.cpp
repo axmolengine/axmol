@@ -57,7 +57,7 @@ void BlendModeUtils::apply(ax::Node* node, const ax::BlendFunc& blendFunc)
     }
 }
 
-void BlendModeUtils::override(BlendMode blendMode,
+void BlendModeUtils::overrideBlendMode(BlendMode blendMode,
                               ax::backend::BlendFactor srcFactor,
                               ax::backend::BlendFactor dstFactor)
 {
