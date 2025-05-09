@@ -40,13 +40,13 @@ void BlendModeUtils::apply(ax::Node* node, BlendMode blendMode)
 
 void BlendModeUtils::apply(ax::Node* node, const ax::BlendFunc& blendFunc)
 {
-    auto sprite = dynamic_cast<Sprite*>(node);
-    if (sprite)
+    auto blendProtocol = dynamic_cast<BlendProtocol*>(node);
+    if (blendProtocol)
     {
-        auto& currentBlendFunc = sprite->getBlendFunc();
+        auto& currentBlendFunc = blendProtocol->getBlendFunc();
         if (currentBlendFunc.src != blendFunc.src && currentBlendFunc.dst != blendFunc.dst)
         {
-            sprite->setBlendFunc(blendFunc);
+            blendProtocol->setBlendFunc(blendFunc);
         }
     }
 
