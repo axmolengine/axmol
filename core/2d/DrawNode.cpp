@@ -184,10 +184,10 @@ void DrawNode::updateBlendState(CustomCommand& cmd)
     }
     else
     {
-        blendDescriptor.sourceRGBBlendFactor        = backend::BlendFactor::ONE;
-        blendDescriptor.destinationRGBBlendFactor   = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
-        blendDescriptor.sourceAlphaBlendFactor      = backend::BlendFactor::ONE;
-        blendDescriptor.destinationAlphaBlendFactor = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+        blendDescriptor.sourceRGBBlendFactor        = _blendFunc.src;
+        blendDescriptor.destinationRGBBlendFactor   = _blendFunc.dst;
+        blendDescriptor.sourceAlphaBlendFactor      = _blendFunc.src;
+        blendDescriptor.destinationAlphaBlendFactor = _blendFunc.dst;
         setOpacityModifyRGB(true);
     }
 }
