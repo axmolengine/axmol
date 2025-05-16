@@ -459,4 +459,15 @@ ISpriteSheetLoader* SpriteFrameCache::getSpriteSheetLoader(uint32_t spriteSheetF
     return nullptr;
 }
 
+std::shared_ptr<SpriteSheet> SpriteFrameCache::getSpriteSheet(std::string_view filePath)
+{
+    auto it = _spriteSheets.find(computeHash(filePath));
+    if (it != _spriteSheets.end())
+    {
+        return it->second;
+    }
+    
+    return nullptr;
+}
+
 }  // namespace ax
