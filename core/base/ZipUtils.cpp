@@ -52,7 +52,7 @@
 
 // minizip 1.2.0 is same with other platforms
 #define unzGoToFirstFile64(A, B, C, D) unzGoToFirstFile2(A, B, C, D, NULL, 0, NULL, 0)
-#define unzGoToNextFile64(A, B, C, D) unzGoToNextFile2(A, B, C, D, NULL, 0, NULL, 0)
+#define unzGoToNextFile64(A, B, C, D)  unzGoToNextFile2(A, B, C, D, NULL, 0, NULL, 0)
 
 namespace ax
 {
@@ -93,32 +93,22 @@ yasio::byte_buffer ZipUtils::compressGZ(const void* in, size_t inlen, int level)
             break;
         }
 
-        switch (err)
-        {
-        case Z_NEED_DICT:
-            err = Z_DATA_ERROR;
-        case Z_DATA_ERROR:
-        case Z_MEM_ERROR:
-            goto _L_end;
-        }
-
-        // not enough buffer ?
-        if (err != Z_STREAM_END)
+        if (!err)
         {
             output.insert(output.end(), buffer, buffer + sizeof(buffer));
 
             d_stream.next_out  = buffer;
             d_stream.avail_out = sizeof(buffer);
         }
+        else
+        {
+            output.clear();
+            output.shrink_to_fit();
+            break;
+        }
     }
 
-_L_end:
     deflateEnd(&d_stream);
-    if (err != Z_STREAM_END)
-    {
-        output.clear();
-    }
-
     return output;
 }
 
@@ -141,7 +131,21 @@ yasio::byte_buffer ZipUtils::decompressGZ(const void* in, size_t inlen, int expe
     if (err != Z_OK)  //
         return output;
 
-    output.reserve(expected_size != -1 ? expected_size : (inlen << 2));
+    // GZ contains extra data: crc32(4bytes) + uncompress size(4bytes)
+    // so at least 8bytes
+    if (inlen < 8)
+    {
+        AXLOGW("ZipUtils: Invalid gz compress data!");
+        return output;
+    }
+
+    if (expected_size < 1)
+    {
+        // gzip: extra data contains crc32(4bytes), uncompress size(4bytes)
+        memcpy(&expected_size, reinterpret_cast<const uint8_t*>(in) + inlen - 4, 4);
+        expected_size = std::clamp(expected_size, 1, 20 * 1024 * 1024);
+    }
+    output.reserve(expected_size);
 
     for (;;)
     {
@@ -153,52 +157,39 @@ yasio::byte_buffer ZipUtils::decompressGZ(const void* in, size_t inlen, int expe
             break;
         }
 
-        switch (err)
+        if (!err)
         {
-        case Z_NEED_DICT:
-            err = Z_DATA_ERROR;
-        case Z_DATA_ERROR:
-        case Z_MEM_ERROR:
-            goto _L_end;
-        }
-
-        // not enough memory ?
-        if (err != Z_STREAM_END)
-        {
-            // *out = (unsigned char*)realloc(*out, bufferSize * BUFFER_INC_FACTOR);
             output.insert(output.end(), buffer, buffer + sizeof(buffer));
-
             d_stream.next_out  = buffer;
             d_stream.avail_out = sizeof(buffer);
         }
-    }
-
-_L_end:
-    inflateEnd(&d_stream);
-    if (err != Z_STREAM_END)
-    {
-        switch (err)
+        else
         {
-        case Z_MEM_ERROR:
-            AXLOGW("ZipUtils: Out of memory while decompressing map data!");
+            switch (err)
+            {
+            case Z_MEM_ERROR:
+                AXLOGW("ZipUtils: Out of memory while decompressing map data!");
+                break;
+            case Z_VERSION_ERROR:
+                AXLOGW("ZipUtils: Incompatible zlib version!");
+                break;
+            case Z_DATA_ERROR:
+                AXLOGW("ZipUtils: Incorrect zlib compressed data!");
+                break;
+            default:
+                AXLOGW("ZipUtils: Decompress data fail, err:{}", err);
+            }
+            output.clear();
+            output.shrink_to_fit();
             break;
-        case Z_VERSION_ERROR:
-            AXLOGW("ZipUtils: Incompatible zlib version!");
-            break;
-        case Z_DATA_ERROR:
-            AXLOGW("ZipUtils: Incorrect zlib compressed data!");
-            break;
-        default:
-            AXLOGW("ZipUtils: Unknown error while decompressing map data!");
         }
-        output.clear();
-        output.shrink_to_fit();
     }
 
+    inflateEnd(&d_stream);
     return output;
 }
 
-inline void ZipUtils::decodeEncodedPvr(unsigned int* data, ssize_t len)
+void ZipUtils::decodeEncodedPvr(unsigned int* data, ssize_t len)
 {
     const int enclen    = 1024;
     const int securelen = 512;
@@ -230,7 +221,7 @@ inline void ZipUtils::decodeEncodedPvr(unsigned int* data, ssize_t len)
         do
         {
 #define DELTA 0x9e3779b9
-#define MX (((z >> 5 ^ y << 2) + (y >> 3 ^ z << 4)) ^ ((sum ^ y) + (s_uEncryptedPvrKeyParts[(p & 3) ^ e] ^ z)))
+#define MX    (((z >> 5 ^ y << 2) + (y >> 3 ^ z << 4)) ^ ((sum ^ y) + (s_uEncryptedPvrKeyParts[(p & 3) ^ e] ^ z)))
 
             sum += DELTA;
             e = (sum >> 2) & 3;
@@ -275,7 +266,7 @@ inline void ZipUtils::decodeEncodedPvr(unsigned int* data, ssize_t len)
     }
 }
 
-inline unsigned int ZipUtils::checksumPvr(const unsigned int* data, ssize_t len)
+unsigned int ZipUtils::checksumPvr(const unsigned int* data, ssize_t len)
 {
     unsigned int cs = 0;
     const int cslen = 128;
@@ -295,7 +286,7 @@ ssize_t ZipUtils::inflateMemoryWithHint(unsigned char* in, ssize_t inLength, uns
     auto outBuffer = decompressGZ(std::span{in, in + inLength}, static_cast<int>(outLengthHint));
     auto outLen    = outBuffer.size();
     if (out)
-        *out           = outBuffer.release_pointer();
+        *out = outBuffer.release_pointer();
     return outLen;
 }
 
@@ -346,7 +337,6 @@ int ZipUtils::inflateGZipFile(const char* path, unsigned char** out)
     {
         AXLOGW("ZipUtils: gzclose failed");
     }
-
 
     auto totalSize = buffer.size();
     if (out)
@@ -548,15 +538,15 @@ struct ZipFilePrivate
 {
     ZipFilePrivate()
     {
-        functionOverrides.zopen64_file   = ZipFile_open_file_func;
+        functionOverrides.zopen64_file     = ZipFile_open_file_func;
         functionOverrides.zopendisk64_file = ZipFile_opendisk_file_func;
-        functionOverrides.zread_file     = ZipFile_read_file_func;
-        functionOverrides.zwrite_file    = ZipFile_write_file_func;
+        functionOverrides.zread_file       = ZipFile_read_file_func;
+        functionOverrides.zwrite_file      = ZipFile_write_file_func;
         functionOverrides.ztell64_file     = ZipFile_tell_file_func;
         functionOverrides.zseek64_file     = ZipFile_seek_file_func;
-        functionOverrides.zclose_file    = ZipFile_close_file_func;
-        functionOverrides.zerror_file    = ZipFile_error_file_func;
-        functionOverrides.opaque         = this;
+        functionOverrides.zclose_file      = ZipFile_close_file_func;
+        functionOverrides.zerror_file      = ZipFile_error_file_func;
+        functionOverrides.opaque           = this;
     }
 
     // unzip overrides to support IFileStream
@@ -685,12 +675,15 @@ ZipFile* ZipFile::createFromFile(std::string_view zipFile, std::string_view filt
     return nullptr;
 }
 
-ZipFile *ZipFile::createWithBuffer(const void* buffer, uLong size)
+ZipFile* ZipFile::createWithBuffer(const void* buffer, uLong size)
 {
-    ZipFile *zip = new ZipFile();
-    if (zip->initWithBuffer(buffer, size)) {
+    ZipFile* zip = new ZipFile();
+    if (zip->initWithBuffer(buffer, size))
+    {
         return zip;
-    } else {
+    }
+    else
+    {
         delete zip;
         return nullptr;
     }
@@ -872,17 +865,21 @@ int ZipFile::getCurrentFileInfo(std::string* filename, unz_file_info_s* info)
     return ret;
 }
 
-bool ZipFile::initWithBuffer(const void *buffer, uLong size)
+bool ZipFile::initWithBuffer(const void* buffer, uLong size)
 {
-    if (!buffer || size == 0) return false;
-    zlib_filefunc_def memory_file = { 0 };
-    
-    std::unique_ptr<ourmemory_t> memfs(new ourmemory_t{ (char*)const_cast<void*>(buffer), static_cast<uint32_t>(size), 0, 0, 0 });
-    if (!memfs) return false;
+    if (!buffer || size == 0)
+        return false;
+    zlib_filefunc_def memory_file = {0};
+
+    std::unique_ptr<ourmemory_t> memfs(
+        new ourmemory_t{(char*)const_cast<void*>(buffer), static_cast<uint32_t>(size), 0, 0, 0});
+    if (!memfs)
+        return false;
     fill_memory_filefunc(&memory_file, memfs.get());
-    
+
     _data->zipFile = unzOpen2(nullptr, &memory_file);
-    if (!_data->zipFile) return false;
+    if (!_data->zipFile)
+        return false;
     _data->memfs = std::move(memfs);
     setFilter(emptyFilename);
     return true;
@@ -964,4 +961,4 @@ int64_t ZipFile::vsize(ZipEntryInfo* entry)
     return 0;
 }
 
-}
+}  // namespace ax
