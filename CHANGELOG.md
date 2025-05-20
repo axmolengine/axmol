@@ -3,18 +3,18 @@
 ### Bug fixes
 
 - Fix https://github.com/axmolengine/axmol/issues/2545 install pwsh fail on ubuntu-25.04
-- Fix wasm build fail on windows host by @halx99 in https://github.com/axmolengine/axmol/pull/2511
+- Fix wasm build fail on windows by @halx99 in https://github.com/axmolengine/axmol/pull/2511
 - Fix PNG_ARM_NEON_OPT flag by @halx99 in https://github.com/axmolengine/axmol/pull/2512
 - Fix #2504 play opus audio fail when build with Apple OpenAL.framework by @halx99 in https://github.com/axmolengine/axmol/pull/2506
 - Fix typo in pkg_check_modules for GTK3. by @j-jorge in https://github.com/axmolengine/axmol/pull/2534
 - Fix character, underline and strikethrough drawing over label boundary for Overflow::CLAMP mode by @rh101 in https://github.com/axmolengine/axmol/pull/2515
 - Fix for clamped and left-aligned text with certain character sets by @rh101 in https://github.com/axmolengine/axmol/pull/2518
 - Fix wasm raise runtime error due to HEAPU8 was not exported by @halx99
+- Fix decompressGZ infinite-loop when input data invalid by @halx99 in https://github.com/axmolengine/axmol/pull/2544
 
 ### Improvements
 
 - Improve ZipUtils::decompressGZ by @halx99 in https://github.com/axmolengine/axmol/pull/2544
-  - Fix decompressGZ inf-loop when input data invalid
   - Parsing uncompress size and reserve exactly avoid waste memory
   - Valid input size
 - Improve ogg audio files, detect codec via file header by @halx99 in https://github.com/axmolengine/axmol/pull/2500
@@ -38,6 +38,13 @@
 - Improve isolate project axslcc find prompt by @halx99
 - Move simd intrinsics detection from 3rd into core by @halx99
 - Add minimum version to build docs support by @halx99, now the ci will only build & deploy axmol-2.3+ docs
+- Remove deprecated DSL config: renderscriptDebuggable by @halx99 in https://github.com/axmolengine/axmol/pull/2546
+
+### SDKs & Tools updates
+
+- agp: 8.7.3 => 8.10.0
+- android target sdk: 35 => 36
+- android sdk build tools: 34.0.0 => 35.0.0
 
 ### 3rdparty updates
 
