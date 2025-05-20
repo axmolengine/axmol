@@ -1,5 +1,10 @@
 ## axmol-2.6.0 ?? 2025
 
+### Significant changes relative to 2.5.0:
+
+- Update android devenv to support android 16 by @halx99 in https://github.com/axmolengine/axmol/pull/2546
+- Update Android Studio minimum required version to `2024.3.2`
+
 ### Bug fixes
 
 - Fix https://github.com/axmolengine/axmol/issues/2545 install pwsh fail on ubuntu-25.04 by @halx99
