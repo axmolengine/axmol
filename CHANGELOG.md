@@ -2,7 +2,7 @@
 
 ### Bug fixes
 
-- Fix https://github.com/axmolengine/axmol/issues/2545 install pwsh fail on ubuntu-25.04
+- Fix https://github.com/axmolengine/axmol/issues/2545 install pwsh fail on ubuntu-25.04 by @halx99
 - Fix wasm build fail on windows by @halx99 in https://github.com/axmolengine/axmol/pull/2511
 - Fix PNG_ARM_NEON_OPT flag by @halx99 in https://github.com/axmolengine/axmol/pull/2512
 - Fix #2504 play opus audio fail when build with Apple OpenAL.framework by @halx99 in https://github.com/axmolengine/axmol/pull/2506
