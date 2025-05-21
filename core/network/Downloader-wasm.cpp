@@ -33,18 +33,18 @@ namespace ax { namespace network {
 
         static int sDownloaderCounter;
 
-        struct DownloadTaskEmscripten : public IDownloadTask
+        struct DownloadContextEmscripten : public IDownloadContext
         {
-            explicit DownloadTaskEmscripten(unsigned int id_)
+            explicit DownloadContextEmscripten(unsigned int id_)
             :id(id_)
             ,bytesReceived(0)
             ,fetch(NULL)
             {
-                AXLOGD("Construct DownloadTaskEmscripten: {}", fmt::ptr(this));
+                AXLOGD("Construct DownloadContextEmscripten: {}", fmt::ptr(this));
             }
-            virtual  ~DownloadTaskEmscripten()
+            virtual  ~DownloadContextEmscripten()
             {
-                AXLOGD("Destruct DownloadTaskEmscripten: {}", fmt::ptr(this));
+                AXLOGD("Destruct DownloadContextEmscripten: {}", fmt::ptr(this));
             }
 
             int bytesReceived;
@@ -88,11 +88,11 @@ namespace ax { namespace network {
             emscripten_fetch_t *fetch = emscripten_fetch(&attr, task->requestURL.c_str());
             fetch->userData = this;
 
-            DownloadTaskEmscripten *coTask = new DownloadTaskEmscripten(fetch->id);
-            coTask->task = task;
+            auto context = new DownloadContextEmscripten(fetch->id);
+            context->task = task;
 
-            AXLOGD("DownloaderEmscripten::createCoTask id: {}", coTask->id);
-            _taskMap.insert(make_pair(coTask->id, coTask));
+            AXLOGD("DownloaderEmscripten::startTask context-id: {}", context->id);
+            _taskMap.emplace(context->id, context);
         }
 
         void DownloaderEmscripten::onDataLoad(emscripten_fetch_t *fetch)
@@ -107,20 +107,20 @@ namespace ax { namespace network {
                 AXLOGD("DownloaderEmscripten::onDataLoad can't find task with id: {}, size: {}", taskId, size);
                 return;
             }
-            DownloadTaskEmscripten *coTask = iter->second;
+            auto context = iter->second;
             std::vector<unsigned char> buf(reinterpret_cast<const uint8_t*>(fetch->data), reinterpret_cast<const uint8_t*>(fetch->data) + size);
             emscripten_fetch_close(fetch);
-            coTask->fetch = fetch = NULL;
+            context->fetch = fetch = NULL;
 
             downloader->_taskMap.erase(iter);
-            downloader->onTaskFinish(*coTask->task,
+            downloader->onTaskFinish(*context->task,
                 DownloadTask::ERROR_NO_ERROR,
                 0,
                 "",
                 buf
             );
 
-            coTask->task.reset();
+            context->task.reset();
         }
 
         void DownloaderEmscripten::onLoad(emscripten_fetch_t *fetch)
@@ -135,11 +135,11 @@ namespace ax { namespace network {
                 AXLOGD("DownloaderEmscripten::onLoad can't find task with id: {}, size: {}", taskId, size);
                 return;
             }
-            DownloadTaskEmscripten *coTask = iter->second;
+            auto context = iter->second;
             vector<unsigned char> buf;
             downloader->_taskMap.erase(iter);
 
-            string storagePath = coTask->task->storagePath;
+            string storagePath = context->task->storagePath;
             int errCode = DownloadTask::ERROR_NO_ERROR;
             int errCodeInternal = 0;
             string errDescription;
@@ -197,15 +197,15 @@ namespace ax { namespace network {
 
             } while (0);
             emscripten_fetch_close(fetch);
-            coTask->fetch = fetch = NULL;
+            context->fetch = fetch = NULL;
 
-            downloader->onTaskFinish(*coTask->task,
+            downloader->onTaskFinish(*context->task,
                 errCode,
                 errCodeInternal,
                 errDescription,
                 buf
             );
-            coTask->task.reset();
+            context->task.reset();
         }
 
         void DownloaderEmscripten::onProgress(emscripten_fetch_t *fetch)
@@ -227,9 +227,9 @@ namespace ax { namespace network {
                 return;
             }
 
-            DownloadTaskEmscripten *coTask = iter->second;
-            coTask->bytesReceived = dlNow;
-            downloader->onTaskProgress(*coTask->task);
+            auto context = iter->second;
+            context->bytesReceived = dlNow;
+            downloader->onTaskProgress(*context->task);
         }
 
         void DownloaderEmscripten::onError(emscripten_fetch_t *fetch)
@@ -244,10 +244,10 @@ namespace ax { namespace network {
                 AXLOGD("DownloaderEmscripten::onLoad can't find task with id: {}", taskId);
                 return;
             }
-            DownloadTaskEmscripten *coTask = iter->second;
+            auto context = iter->second;
             vector<unsigned char> buf;
             downloader->_taskMap.erase(iter);
-            downloader->onTaskFinish(*coTask->task,
+            downloader->onTaskFinish(*context->task,
                 DownloadTask::ERROR_IMPL_INTERNAL,
                 fetch->status,
                 fetch->statusText,
@@ -255,8 +255,8 @@ namespace ax { namespace network {
             );
 
             emscripten_fetch_close(fetch);
-            coTask->fetch = fetch = NULL;
-            coTask->task.reset();
+            context->fetch = fetch = NULL;
+            context->task.reset();
         }
     }
 }  // namespace ax::network

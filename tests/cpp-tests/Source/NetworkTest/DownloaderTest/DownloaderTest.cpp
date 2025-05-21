@@ -34,14 +34,18 @@
 
 using namespace ax;
 
+// clang-format off
+std::string_view sBigFileDigest = "d42b00a4fbfef44e8ab38a56c2028a5e";
 static const char* sURLList[] = {
-    "https://www.cocos2d-x.org/attachments/802/cocos2dx_landscape.png", "https://cocos2d-x.org/images/logo.png",
-    "https://www.cocos2d-x.org/attachments/1503/no_exist.txt",  // try to download no exist file
-    "https://github.com/axmolengine/axmol/releases/download/v2.1.3/axmol-2.1.3.zip"
+    "https://axmol.dev/assets/img/splash_white.png",
+    "https://axmol.dev/assets/img/logo.png",
+    "https://axmol.dev/assets/img/no_exist.txt",  // try to download no exist file
+    "https://github.com/axmolengine/axmol/releases/download/v2.1.5/axmol-2.1.5.zip"
 };
+// clang-format on
 const static int sListSize              = (sizeof(sURLList) / sizeof(sURLList[0]));
 static const char* sNameList[sListSize] = {
-    "cocos2dx_landscape.png",
+    "splash_white.png",
     "logo.png",
     "inexist file",
     "big file",
@@ -208,7 +212,7 @@ struct DownloaderTest : public TestCase
             bar->setVisible(true);
             bar->setEnabled(true);
             auto path = FileUtils::getInstance()->getWritablePath() + "CppTests/DownloaderTest/" + sNameList[3];
-            auto task = this->downloader->createDownloadFileTask(sURLList[3], path, sNameList[3], "1CF78E3F23A2B1A6806D8719A5771D34", false);
+            auto task = this->downloader->createDownloadFileTask(sURLList[3], path, sNameList[3], sBigFileDigest, false);
         });
         bottomRightView->setName(sNameList[3]);
         bottomRightView->setAnchorPoint(Vec2(0, 1));

@@ -52,7 +52,7 @@ class HttpClient;
  * @since v2.0.2.
  * @lua NA
  */
-class AX_DLL HttpResponse : public TSFRefCountedBase
+class AX_DLL HttpResponse : public ConcurrentRefCountedBase
 {
     friend class HttpClient;
 

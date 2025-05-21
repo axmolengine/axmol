@@ -39,10 +39,10 @@ namespace network
 {
 class DownloadTask;
 
-class AX_DLL IDownloadTask
+class AX_DLL IDownloadContext
 {
 public:
-    virtual ~IDownloadTask() {}
+    virtual ~IDownloadContext(){}
     virtual void cancel() {}
 };
 

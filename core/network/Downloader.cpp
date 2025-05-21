@@ -79,8 +79,8 @@ DownloadTask::~DownloadTask()
 
 void DownloadTask::cancel()
 {
-    if (_coTask)
-        _coTask->cancel();
+    if (_context)
+        _context->cancel();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
