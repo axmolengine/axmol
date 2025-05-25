@@ -44,7 +44,7 @@ android {
         java.srcDir "src"
         res.srcDir "res"
         manifest.srcFile "AndroidManifest.xml"
-        assets.srcDirs = ["../../Content", "${projectDir}/build/runtime/axslc"]
+        assets.srcDirs = ["../../Content", "${projectDir}/build/runtime"]
     }
 
     externalNativeBuild {
