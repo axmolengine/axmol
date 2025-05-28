@@ -53,7 +53,6 @@ IMPORTANT:
 This class is deprecated. It is maintained for compatibility reasons only.
 You SHOULD not use this class.
 Instead, use the newer TMX file format: TMXTiledMap
-@js NA
 */
 class AX_DLL TileMapAtlas : public AtlasNode
 {
@@ -63,11 +62,9 @@ public:
      */
     static TileMapAtlas* create(std::string_view tile, std::string_view mapFile, int tileWidth, int tileHeight);
     /**
-     * @js ctor
      */
     TileMapAtlas();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~TileMapAtlas();

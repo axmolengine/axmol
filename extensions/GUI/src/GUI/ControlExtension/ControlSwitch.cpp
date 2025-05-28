@@ -50,32 +50,26 @@ public:
                                        Label* offLabel);
 
     /**
-     * @js NA
      * @lua NA
      */
     void needsLayout();
     /**
-     * @js NA
      * @lua NA
      */
     void setSliderXPosition(float sliderXPosition);
     /**
-     * @js NA
      * @lua NA
      */
     float getSliderXPosition() { return _sliderXPosition; }
     /**
-     * @js NA
      * @lua NA
      */
     float onSideWidth();
     /**
-     * @js NA
      * @lua NA
      */
     float offSideWidth();
     /**
-     * @js NA
      * @lua NA
      */
     virtual void updateTweenAction(float value, std::string_view key) override;
@@ -99,17 +93,14 @@ public:
 
 protected:
     /**
-     * @js NA
      * @lua NA
      */
     ControlSwitchSprite();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ControlSwitchSprite();
     /**
-     * @js NA
      * @lua NA
      */
     bool initWithMaskSprite(Sprite* maskSprite,

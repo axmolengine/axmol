@@ -5,6 +5,7 @@
 #include "FairyGUIMacros.h"
 #include "Relations.h"
 #include "cocos2d.h"
+#include "display/BlendMode.h"
 #include "event/UIEventDispatcher.h"
 #include "gears/GearBase.h"
 
@@ -97,6 +98,9 @@ public:
 
     const std::string& getTooltips() const { return _tooltips; }
     void setTooltips(const std::string& value);
+
+    BlendMode getBlendMode() const { return _blendMode; }
+    void setBlendMode(BlendMode blendMode);
 
     void* getData() const { return _data; };
     void setData(void* value) { _data = value; }
@@ -205,6 +209,7 @@ protected:
     bool _touchable;
     bool _grayed;
     bool _finalGrayed;
+    BlendMode _blendMode;
 
 private:
     bool internalVisible() const;

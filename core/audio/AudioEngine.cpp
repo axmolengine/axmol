@@ -552,4 +552,3 @@ bool AudioEngine::isEnabled()
     return _isEnabled;
 }
 }
-#undef LOG_TAG

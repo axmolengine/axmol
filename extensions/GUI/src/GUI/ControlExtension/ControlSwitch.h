@@ -64,12 +64,10 @@ public:
     /** Creates a switch with a mask sprite, on/off sprites for on/off states and a thumb sprite. */
     static ControlSwitch* create(Sprite* maskSprite, Sprite* onSprite, Sprite* offSprite, Sprite* thumbSprite);
     /**
-     * @js ctor
      * @lua new
      */
     ControlSwitch();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ControlSwitch();

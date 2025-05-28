@@ -66,11 +66,9 @@ public:
 
     int getVersionInteger(const char* str);
     /**
-     *  @js NA
      */
     void storeFileDesignSize(const char* fileName, const ax::Size& size);
     /**
-     *  @js NA
      */
     ax::Size getFileDesignSize(const char* fileName) const;
 

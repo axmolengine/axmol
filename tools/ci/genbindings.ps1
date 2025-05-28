@@ -24,7 +24,7 @@ if (($stage -band 1)) {
     echo "$ndk_root=$ndk_root"
 
     ## download win64 libclang.dll
-    $lib_name = @('libclang.dll', 'libclang.so', 'libclang.dylib')[$HOST_OS]
+    $lib_name = @('libclang.dll', 'libclang.so', 'libclang.dylib')[$HOST_OS_INT]
     $lib_path = Join-Path $AX_ROOT "tools/bindings-generator/clang/prebuilt/$lib_name"
     if (!(Test-Path $lib_path -PathType Leaf)) {
         setup_7z
@@ -38,7 +38,7 @@ if (($stage -band 1)) {
 
         $1k.mkdirs($prefix)
         download_and_expand -url $llvm_url -out $llvm_out -dest $prefix
-        $suffix = @('win32/x64/libclang.dll', 'linux/libclang.so', 'mac/libclang.dylib')[$HOST_OS]
+        $suffix = @('win32/x64/libclang.dll', 'linux/libclang.so', 'mac/libclang.dylib')[$HOST_OS_INT]
         $lib_dir = Split-Path $lib_path -Parent
         $1k.mkdirs($lib_dir)
         Copy-Item "$prefix/llvm-$llvm_ver/lib/$suffix" -Destination $lib_path

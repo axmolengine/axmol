@@ -55,12 +55,10 @@ public:
 
     static ControlStepper* create(Sprite* minusSprite, Sprite* plusSprite);
     /**
-     * @js ctor
      * @lua new
      */
     ControlStepper();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ControlStepper();

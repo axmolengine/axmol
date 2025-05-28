@@ -53,14 +53,12 @@ class AX_GUI_DLL ImageView : public Widget, public ax::BlendProtocol
 public:
     /**
      * Default constructor
-     * @js ctor
      * @lua new
      */
     ImageView();
 
     /**
      * Default destructor
-     * @js NA
      * @lua NA
      */
     virtual ~ImageView();
@@ -126,7 +124,6 @@ public:
      *
      * @param blendFunc A structure with source and destination factor to specify pixel arithmetic. e.g.
      * {BlendFactor::ONE, BlendFactor::ONE}, {BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA}.
-     * @js NA
      * @lua NA
      */
     virtual void setBlendFunc(const BlendFunc& blendFunc) override;
@@ -135,7 +132,6 @@ public:
      * Returns the blending function that is currently being used.
      *
      * @return A BlendFunc structure with source and destination factor which specified pixel arithmetic.
-     * @js NA
      * @lua NA
      */
     virtual const BlendFunc& getBlendFunc() const override;

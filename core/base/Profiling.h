@@ -56,40 +56,33 @@ class AX_DLL Profiler
 {
 public:
     /**
-     * @js NA
      * @lua NA
      */
     ~Profiler();
     /** display the timers
-     * @js NA
      * @lua NA
      */
     void displayTimers();
     /**
-     * @js NA
      * @lua NA
      */
     bool init();
 
 public:
     /** returns the singleton
-     * @js NA
      * @lua NA
      */
     static Profiler* getInstance();
 
     /** Creates and adds a new timer
-     * @js NA
      * @lua NA
      */
     ProfilingTimer* createAndAddTimerWithName(const char* timerName);
     /** releases a timer
-     * @js NA
      * @lua NA
      */
     void releaseTimer(const char* timerName);
     /** releases all timers
-     * @js NA
      * @lua NA
      */
     void releaseAllTimers();
@@ -101,33 +94,27 @@ class ProfilingTimer : public Object
 {
 public:
     /**
-     * @js NA
      * @lua NA
      */
     ProfilingTimer();
     /**
-     * @js NA
      * @lua NA
      */
     ~ProfilingTimer();
     /**
-     * @js NA
      * @lua NA
      */
     bool initWithName(const char* timerName);
     /**
-     * @js NA
      * @lua NA
      */
     virtual std::string getDescription() const;
     /**
-     * @js NA
      * @lua NA
      */
     const std::chrono::high_resolution_clock::time_point& getStartTime() { return _startTime; }
 
     /** resets the timer properties
-     * @js NA
      * @lua NA
      */
     void reset();

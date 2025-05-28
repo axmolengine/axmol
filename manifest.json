@@ -1,8 +1,9 @@
 {
   "versions": {
-    "1kdist": "v99",
+    "1kdist": "v101",
     "oboe": "1.9.3",
     "kcp": "v1.7-f2aa30e",
+    "opus": "v1.5.2",
     "lz4": "v1.10.0",
     "sample-assets": "master"
   },

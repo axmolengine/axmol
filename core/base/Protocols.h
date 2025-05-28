@@ -49,7 +49,6 @@ public:
      * Changes the color with R,G,B bytes
      *
      * @param color Example: Color3B(255,100,0) means R=255, G=100, B=0
-     * @js NA
      * @lua NA
      */
     virtual void setColor(const Color3B& color) = 0;
@@ -58,7 +57,6 @@ public:
      * Returns color that is currently used.
      *
      * @return The Color3B contains R,G,B bytes.
-     * @js NA
      * @lua NA
      */
     virtual const Color3B& getColor() const = 0;
@@ -67,7 +65,6 @@ public:
      * Returns the displayed color.
      *
      * @return The Color3B contains R,G,B bytes.
-     * @js NA
      * @lua NA
      */
     virtual const Color3B& getDisplayedColor() const = 0;
@@ -76,7 +73,6 @@ public:
      * Returns the displayed opacity.
      *
      * @return  The opacity of sprite, from 0 ~ 255
-     * @js NA
      * @lua NA
      */
     virtual unsigned char getDisplayedOpacity() const = 0;
@@ -87,7 +83,6 @@ public:
      * 0 indicates fully transparent and 255 is fully opaque.
      *
      * @return  The opacity of sprite, from 0 ~ 255
-     * @js NA
      * @lua NA
      */
     virtual unsigned char getOpacity() const = 0;
@@ -96,7 +91,6 @@ public:
      * Changes the opacity.
      *
      * @param opacity   Goes from 0 to 255, where 255 means fully opaque and 0 means fully transparent.
-     * @js NA
      * @lua NA
      */
     virtual void setOpacity(unsigned char opacity) = 0;
@@ -110,7 +104,6 @@ public:
      *
      * @param value If true, then the opacity will be applied as: glColor(R,G,B,opacity);
      *              If false, then the opacity will be applied as: glColor(opacity, opacity, opacity, opacity);
-     * @js NA
      * @lua NA
      */
     virtual void setOpacityModifyRGB(bool value) = 0;
@@ -120,45 +113,38 @@ public:
      * or glColor(opacity, opacity, opacity, opacity)
      *
      * @return  Returns opacity modify flag.
-     * @js NA
      * @lua NA
      */
     virtual bool isOpacityModifyRGB() const = 0;
 
     /**
      *  whether or not color should be propagated to its children.
-     * @js NA
      * @lua NA
      */
     virtual bool isCascadeColorEnabled() const = 0;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void setCascadeColorEnabled(bool cascadeColorEnabled) = 0;
 
     /**
      *  recursive method that updates display color
-     * @js NA
      * @lua NA
      */
     virtual void updateDisplayedColor(const Color3B& color) = 0;
 
     /**
      *  whether or not opacity should be propagated to its children.
-     * @js NA
      * @lua NA
      */
     virtual bool isCascadeOpacityEnabled() const = 0;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void setCascadeOpacityEnabled(bool cascadeOpacityEnabled) = 0;
 
     /**
      *  recursive method that updates the displayed opacity.
-     * @js NA
      * @lua NA
      */
     virtual void updateDisplayedOpacity(unsigned char opacity) = 0;
@@ -180,7 +166,6 @@ public:
      * @param blendFunc A structure with source and destination factor to specify pixel arithmetic,
      *                  e.g. {BlendFactor::ONE, BlendFactor::ONE}, {BlendFactor::SRC_ALPHA,
      * BlendFactor::ONE_MINUS_SRC_ALPHA}.
-     * @js NA
      * @lua NA
      */
     virtual void setBlendFunc(const BlendFunc& blendFunc) = 0;
@@ -189,7 +174,6 @@ public:
      * Returns the blending function that is currently being used.
      *
      * @return A BlendFunc structure with source and destination factor which specified pixel arithmetic.
-     * @js NA
      * @lua NA
      */
     virtual const BlendFunc& getBlendFunc() const = 0;
@@ -212,7 +196,6 @@ public:
      * Returns the currently used texture
      *
      * @return  The texture that is currently being used.
-     * @js NA
      * @lua NA
      */
     virtual Texture2D* getTexture() const = 0;
@@ -221,7 +204,6 @@ public:
      * Sets a new texture. It will be retained.
      *
      * @param   texture A valid Texture2D object, which will be applied to this sprite object.
-     * @js NA
      * @lua NA
      */
     virtual void setTexture(Texture2D* texture) = 0;
@@ -239,7 +221,6 @@ public:
      * Sets a new label using a string
      *
      * @param label The name of the new label.
-     * @js NA
      * @lua NA
      */
     virtual void setString(std::string_view label) = 0;
@@ -248,7 +229,6 @@ public:
      * Returns the string that is currently being used in this label
      *
      * @return The string that is currently being used in this label
-     * @js NA
      * @lua NA
      */
     virtual std::string_view getString() const = 0;
@@ -264,7 +244,6 @@ public:
 
     /**
      * Will be called by Director when the projection is updated, and "custom" projection is used
-     * @js NA
      * @lua NA
      */
     virtual void updateProjection() = 0;

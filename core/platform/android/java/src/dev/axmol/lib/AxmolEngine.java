@@ -746,4 +746,31 @@ public class AxmolEngine {
 
         return sAccelerometer;
     }
+
+    public static String[] getAssetsList(String path) {
+        try {
+            String basePath;
+            if (!path.isEmpty()) {
+                basePath = path + "/";
+            } else {
+                basePath = path;
+            }
+
+            AssetManager assetManager = getAssetManager();
+            String[] list = assetManager.list(path);
+            for (int i = 0; i < list.length; i++) {
+                try {
+                    list[i] = basePath + list[i];
+                    java.io.InputStream stream = assetManager.open(list[i]);
+                    stream.close(); // if we got to here, then it is a file
+                } catch (IOException e) {
+                    list[i] += "/";
+                }
+            }
+            return list;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

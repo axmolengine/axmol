@@ -53,7 +53,6 @@ class AX_DLL FileUtilsAndroid : public FileUtils
 public:
     FileUtilsAndroid();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~FileUtilsAndroid();

@@ -64,9 +64,9 @@ namespace ax
 
 UserDefault* UserDefault::_userDefault = nullptr;
 #if !USER_DEFAULT_PLAIN_MODE
-std::string UserDefault::_userDefalutFileName = "UserDefault.bin";
+std::string UserDefault::_userDefaultFileName = "UserDefault.bin";
 #else
-std::string UserDefault::_userDefalutFileName = "UserDefault.xml";
+std::string UserDefault::_userDefaultFileName = "UserDefault.xml";
 #endif
 
 static void ud_setkey(std::string& lhs, const cxx17::string_view& rhs)
@@ -375,7 +375,7 @@ void UserDefault::lazyInit()
         return;
 
 #if !USER_DEFAULT_PLAIN_MODE
-    _filePath = FileUtils::getInstance()->getNativeWritableAbsolutePath() + _userDefalutFileName;
+    _filePath = FileUtils::getInstance()->getNativeWritableAbsolutePath() + _userDefaultFileName;
 
     // construct file mapping
     if (!_fileStream.open(_filePath, IFileStream::Mode::OVERLAPPED))
@@ -438,7 +438,7 @@ void UserDefault::lazyInit()
 #else
     pugi::xml_document doc;
 
-    _filePath = FileUtils::getInstance()->getWritablePath() + _userDefalutFileName;
+    _filePath = FileUtils::getInstance()->getWritablePath() + _userDefaultFileName;
 
     if (FileUtils::getInstance()->isFileExist(_filePath))
     {
@@ -529,9 +529,9 @@ void UserDefault::deleteValueForKey(const char* key)
 void UserDefault::setFileName(std::string_view nameFile)
 {
     if (USER_DEFAULT_PLAIN_MODE)
-        _userDefalutFileName.assign(nameFile).append("UserDefault.xml"sv);
+        _userDefaultFileName.assign(nameFile).append("UserDefault.xml"sv);
     else
-        _userDefalutFileName.assign(nameFile).append("UserDefault.bin"sv);
+        _userDefaultFileName.assign(nameFile).append("UserDefault.bin"sv);
 }
 
 }

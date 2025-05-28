@@ -124,11 +124,9 @@ public:
     virtual AnimationFrame* clone() const override;
 
     /**
-     * @js ctor
      */
     AnimationFrame();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~AnimationFrame();

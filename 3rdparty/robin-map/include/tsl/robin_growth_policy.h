@@ -35,6 +35,16 @@
 #include <ratio>
 #include <stdexcept>
 
+// A change of the major version indicates an API and/or ABI break (change of
+// in-memory layout of the data structure)
+#define TSL_RH_VERSION_MAJOR 1
+// A change of the minor version indicates the addition of a feature without
+// impact on the API/ABI
+#define TSL_RH_VERSION_MINOR 3
+// A change of the patch version indicates a bugfix without additional
+// functionality
+#define TSL_RH_VERSION_PATCH 0
+
 #ifdef TSL_DEBUG
 #define tsl_rh_assert(expr) assert(expr)
 #else
@@ -243,7 +253,7 @@ namespace detail {
 #define TSL_RH_NB_PRIMES 23
 #endif
 
-static constexpr const std::array<std::size_t, TSL_RH_NB_PRIMES> PRIMES = {{
+inline constexpr std::array<std::size_t, TSL_RH_NB_PRIMES> PRIMES = {{
     1u,
     5u,
     17u,
@@ -309,8 +319,7 @@ static constexpr std::size_t mod(std::size_t hash) {
 // MOD_PRIME[iprime](hash) returns hash % PRIMES[iprime]. This table allows for
 // faster modulo as the compiler can optimize the modulo code better with a
 // constant known at the compilation.
-static constexpr const std::array<std::size_t (*)(std::size_t),
-                                  TSL_RH_NB_PRIMES>
+inline constexpr std::array<std::size_t (*)(std::size_t), TSL_RH_NB_PRIMES>
     MOD_PRIME = {{
         &mod<0>,  &mod<1>,  &mod<2>,  &mod<3>,  &mod<4>,  &mod<5>,
         &mod<6>,  &mod<7>,  &mod<8>,  &mod<9>,  &mod<10>, &mod<11>,

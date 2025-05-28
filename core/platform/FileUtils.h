@@ -129,7 +129,6 @@ public:
 
     /**
      *  The destructor of FileUtils.
-     * @js NA
      * @lua NA
      */
     virtual ~FileUtils();
@@ -749,7 +748,6 @@ public:
      * @param dirPath The path of the directory, it could be a relative or an absolute path.
      * @param callback The callback to be called once the list operation is complete. Will be called on the main cocos
      * thread.
-     * @js NA
      * @lua NA
      */
     AX_DEPRECATED(2.1) void listFilesAsync(std::string_view dirPath, std::function<void(std::vector<std::string>)> callback) const;
@@ -760,7 +758,6 @@ public:
      *  @param dirPath The path of the directory, it could be a relative or an absolute path.
      *  @param callback The callback to be called once the list operation is complete.
      *          Will be called on the main cocos thread.
-     * @js NA
      * @lua NA
      */
     AX_DEPRECATED(2.1) void listFilesRecursivelyAsync(std::string_view dirPath,

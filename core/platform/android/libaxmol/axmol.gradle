@@ -91,11 +91,6 @@ class VersionComparator implements Comparator<String> {
 
 class AxmolUtils {
 
-//    @SuppressWarnings('unused')
-//    static String getCoreLibsDir(project) {
-//        return new File(project.projectDir.toString() + "/../java/libs").getCanonicalPath();
-//    }
-
     @SuppressWarnings('unused')
     static Map<String, String> resolveBuildProfiles(project) {
         def profiles = loadProfiles(project, true)
@@ -109,6 +104,12 @@ class AxmolUtils {
             cmakeVer = project.properties.__1K_CMAKE_VERSION
 
         // Detecting sdkRoot
+        def cmdlineSdkRoot = Paths.get("${System.env.ANDROID_HOME}").toAbsolutePath().toString()
+        if (!new File(cmdlineSdkRoot).isDirectory()) {
+            cmdlineSdkRoot = null
+            println("Warning: the cmdline preferred env ANDROID_HOME not set, strongly recommended to set it, on macOS, you can use 'launchctl setenv ANDROID_HOME path/to/android/sdk'")
+        }
+
         def sdkRoot = null
         Properties localProps = new Properties()
         try {
@@ -119,24 +120,16 @@ class AxmolUtils {
         catch(ignored) {
         }
 
-        if (sdkRoot == null || !new File(sdkRoot).isDirectory()) {
-            sdkRoot = Paths.get("${System.env.ANDROID_HOME}").toAbsolutePath().toString()
-            if (!new File(sdkRoot).isDirectory())
-                sdkRoot = null
+        if (sdkRoot == null) { sdkRoot = cmdlineSdkRoot }
+        if (sdkRoot == null) {
+            throw new Exception("Couldn't find android sdk. Specify path in local.properties or system env ANDROID_HOME")
         }
 
-        if (sdkRoot == null) {
-            sdkRoot = Paths.get("${System.env.HOME}").toAbsolutePath().toString() + "/Library/android/sdk"
-            if (!new File(sdkRoot).isDirectory())
-                sdkRoot = null
-        }
-
-        if (sdkRoot == null) {
-            throw new Exception('Couldn\'t find android sdk. Specify path in local.properties or system env ANDROID_HOME')
+        if (sdkRoot != cmdlineSdkRoot) {
+            println("Warning: the sdk.dir in local.properties is differrent with cmdline preferred: $cmdlineSdkRoot, if you encounter issue: ndk not found, ensure they are same, then re-run 'setup.ps1 -p android' and retry")
         }
 
         // ndkVer,ndkPath,cmakeVer,cmakeOptions(AX_USE_XXX, AX_ENABLE_XXX, AX_ENABLE_EXT_XXX),cmakeDir<nullable>
-        // def rets = new ArrayList(5) //
         findNDK(sdkRoot, ndkVer, buildProfiles)
         findCMake(sdkRoot, cmakeVer, buildProfiles)
         parseCMakeOptions(project, buildProfiles)
@@ -219,6 +212,9 @@ class AxmolUtils {
     }
 
     private static String translateNdkVer(ndkVer) {
+        if (ndkVer.endsWith('+')) {
+            ndkVer = ndkVer.substring(0, ndkVer.length() - 1);
+        }
         def ndkMajor = ndkVer.replaceAll('[^0-9]', '')
         def ndkMinorOff = ndkMajor.length() + 1
 
@@ -276,7 +272,7 @@ class AxmolUtils {
             }
         }
 
-        throw new Exception("No installed ndk found, required $ndkVer.*")
+        throw new Exception("No installed ndk found, required $ndkVer.*, sdkRoot: $sdkRoot")
     }
 
     /**

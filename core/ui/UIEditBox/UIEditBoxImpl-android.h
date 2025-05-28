@@ -48,11 +48,9 @@ class EditBoxImplAndroid : public EditBoxImplCommon
 {
 public:
     /**
-     * @js NA
      */
     EditBoxImplAndroid(EditBox* pEditText);
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~EditBoxImplAndroid();

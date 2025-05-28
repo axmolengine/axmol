@@ -86,12 +86,10 @@ public:
      * @param packageUrl URL of new package, the package should be a zip file.
      * @param versionFileUrl URL of version file. It should contain version code of new package.
      * @param storagePath The path to store downloaded resources.
-     * @js NA
      * @lua new
      */
     AssetsManager(const char* packageUrl = NULL, const char* versionFileUrl = NULL, const char* storagePath = NULL);
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~AssetsManager();
@@ -157,13 +155,11 @@ public:
     void setStoragePath(const char* storagePath);
 
     /** @brief Sets delegate, the delegate will receive messages
-     * @js NA
      * @lua NA
      */
     void setDelegate(AssetsManagerDelegateProtocol* delegate);
 
     /**
-     * @js NA
      * @lua NA
      */
     AssetsManagerDelegateProtocol* getDelegate() const { return _delegate; }
@@ -216,7 +212,6 @@ public:
 public:
     /* @brief Call back function for error
        @param errorCode Type of error
-     * @js NA
      * @lua NA
      */
     virtual void onError(AssetsManager::ErrorCode errorCode) {}
@@ -225,12 +220,10 @@ public:
         @warning    This call back function just for recording downloading percent.
               AssetsManager will do some other thing after downloading, you should
               write code in onSuccess() after downloading.
-     * @js NA
      * @lua NA
      */
     virtual void onProgress(int percent) {}
     /** @brief Call back function for success
-     * @js NA
      * @lua NA
      */
     virtual void onSuccess() {}

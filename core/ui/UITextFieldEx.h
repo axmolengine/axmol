@@ -45,11 +45,9 @@ class AX_DLL TextFieldEx : public Widget, public IMEDelegate
 {
 public:
     /**
-     * @js ctor
      */
     TextFieldEx();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~TextFieldEx();

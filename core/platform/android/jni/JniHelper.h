@@ -221,6 +221,50 @@ public:
     }
 
     /**
+    @brief Call of Java static method
+    @return std::vector<std::string>
+    */
+    template <typename... Ts>
+    static std::vector<std::string> callStaticStringArrayMethod(const char* className, const char* methodName, Ts&&... xs)
+    {
+        ax::JniMethodInfo t;
+        const auto signature = "(Ljava/lang/String;)[Ljava/lang/String;";
+        if (ax::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        {
+            LocalRefMapType localRefs;
+            jobjectArray array =
+                    (jobjectArray)t.env->CallStaticObjectMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
+
+            if (array == nullptr)
+            {
+                t.env->DeleteLocalRef(t.classID);
+                deleteLocalRefs(t.env, localRefs);
+                return {};
+            }
+
+            jsize len = t.env->GetArrayLength(array);
+            std::vector<std::string> result(len);
+            for (int i=0; i < len; ++i)
+            {
+                jstring string = (jstring)t.env->GetObjectArrayElement(array, i);
+                const char* arrayItem = t.env->GetStringUTFChars(string, 0);
+                result[i] = std::move((std::string(arrayItem)));
+                t.env->ReleaseStringUTFChars(string, arrayItem);
+                t.env->DeleteLocalRef(string);
+            }
+
+            t.env->DeleteLocalRef(t.classID);
+            deleteLocalRefs(t.env, localRefs);
+            return result;
+        }
+        else
+        {
+            reportError(className, methodName, signature);
+        }
+        return {};
+    }
+
+    /**
     @brief Call of Java static float* method
     @return axstd::pod_vector
     */

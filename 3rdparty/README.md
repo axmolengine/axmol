@@ -22,7 +22,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.34.4
+- Version: 1.34.5
 - License: MIT
 
 ## Chipmunk2D
@@ -32,7 +32,7 @@
 
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
-- Version: 1.5.2
+- Version: 1.5.3
 - License: BSL-1.0
 
 ## ConcurrentQueue
@@ -47,12 +47,12 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.12.1
+- Version: 8.13.0
 - License: Curl (MIT/X)
 
 ## doctest
 - [![Upstream](https://img.shields.io/github/v/release/doctest/doctest?label=Upstream)](https://github.com/doctest/doctest)
-- Version: 2.4.11
+- Version: 2.4.12
 - License: MIT
 
 ## FastLZ
@@ -67,7 +67,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 11.1.4
+- Version: 11.2.0
 
 - License: MIT
 
@@ -108,7 +108,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 9.2.1
+- Version: 9.3.0
 - License: MIT
 
 ## lua
@@ -124,7 +124,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-a4f56a4
+  - Version: 2.1-eec7a80
   - License: MIT
 
 - tolua
@@ -162,10 +162,15 @@
 - Version: 1.9.3
 - License: Apache-2.0
 
-## ogg & vorbis
+## ogg
 - ogg
   - [![Upstream](https://img.shields.io/github/v/release/xiph/ogg?label=Upstream)](https://github.com/xiph/ogg)
   - Version: 1.3.5
+  - License: BSD-3-Clause
+
+- opus
+  - [![Upstream](https://img.shields.io/github/v/release/xiph/opus?label=Upstream)](https://github.com/xiph/opus)
+  - Version: 1.5.2
   - License: BSD-3-Clause
 
 - vorbis
@@ -180,12 +185,12 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.16
+- Version: 3.5.0
 - License: Apache-2.0
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
-- Version: 1.6.47
+- Version: 1.6.48
 - License: PNG Reference Library License version 2
 
 ## poly2tri
@@ -212,9 +217,10 @@
 
 ## robin-map
 - [![Upstream](https://img.shields.io/github/v/tag/Tessil/robin-map?label=Upstream)](https://github.com/Tessil/robin-map)
-- Version: 1.2.1 with modified for more compatible with stl
+- Version: 1.4.0 with modified for stl compatibility
     - Modify `robin_map::iterator->second` to mutable same with `stl map/unordered_map`
     - Forward `robin_map::operator[]` key by `std::forward` same with `stl map/unordered_map`
+    - Improve code compiler compatibility, i.g. `std::max` ==> `(std::max)`
 - License: MIT
 
 ## simdjson

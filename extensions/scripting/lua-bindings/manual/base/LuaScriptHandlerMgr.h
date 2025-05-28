@@ -71,7 +71,6 @@ private:
  * processing the lua in the CallFuncN.
  *
  * @lua NA
- * @js NA
  */
 class LuaCallFunc : public ax::CallFuncN
 {
@@ -120,7 +119,6 @@ public:
      * HandlerType enum.
      * This enum class represent the processing type for c++ call the Lua function.
      *
-     * @js NA
      */
     enum class HandlerType : int
     {
@@ -228,7 +226,6 @@ public:
      * Default constructor.
      *
      * @lua NA
-     * @js NA
      */
     ScriptHandlerMgr(void);
 
@@ -236,7 +233,6 @@ public:
      * Destructor.
      *
      * @lua NA
-     * @js NA
      */
     virtual ~ScriptHandlerMgr(void);
 
@@ -244,7 +240,6 @@ public:
      * Get the instance of the ScriptHandlerMgr.
      *
      * @return the instance of the ScriptHandlerMgr.
-     * @js NA
      */
     static ScriptHandlerMgr* getInstance(void);
 
@@ -252,7 +247,6 @@ public:
      * Destroy the instance of the ScriptHandlerMgr.
      *
      * @lua NA
-     * @js NA
      */
     static void destroyInstance(void);
 
@@ -264,7 +258,6 @@ public:
      * @param handler a reference index corresponding to the pointer of Lua function.
      * @param handlerType ScriptHandlerMgr::HandlerType.
      * @lua registerScriptHandler
-     * @js NA
      */
     void addObjectHandler(void* object, int handler, ScriptHandlerMgr::HandlerType handlerType);
 
@@ -276,7 +269,6 @@ public:
      * @param object a Object object.
      * @param handlerType ScriptHandlerMgr::HandlerType.
      * @lua unregisterScriptHandler
-     * @js NA
      */
     void removeObjectHandler(void* object, ScriptHandlerMgr::HandlerType handlerType);
 
@@ -287,7 +279,6 @@ public:
      * @param handlerType ScriptHandlerMgr::HandlerType.
      * @return index corresponding to the pointer of Lua function,otherwise 0.
      * @lua NA
-     * @js NA
      */
     int getObjectHandler(void* object, ScriptHandlerMgr::HandlerType handlerType);
 
@@ -297,7 +288,6 @@ public:
      * 'toluafix_refid_function_mapping' table.
      *
      * @param object the Object object.
-     * @js NA
      */
     void removeObjectAllHandlers(void* object);
 
@@ -312,7 +302,6 @@ public:
      * @param handler a reference index corresponding to the pointer of Lua function.
      * @return ScriptHandlerMgr::HandlerType the value of current ScriptHandlerMgr::HandlerType after adding.
      * @lua NA
-     * @js NA
      */
     ScriptHandlerMgr::HandlerType addCustomHandler(void* object, int handler);
 

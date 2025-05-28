@@ -34,6 +34,9 @@ using namespace ax::ui;
 AudioEngineTests::AudioEngineTests()
 {
     ADD_TEST_CASE(AudioControlTest);
+#if defined(AX_ENABLE_OPUS)
+    ADD_TEST_CASE(AudioOpusTest);
+#endif
     ADD_TEST_CASE(AudioWavTest);
     ADD_TEST_CASE(AudioLoadTest);
     ADD_TEST_CASE(PlaySimultaneouslyTest);
@@ -457,6 +460,51 @@ std::string AudioLoadTest::title() const
     return "Audio preload/uncache test";
 }
 
+// AudioOpusTest
+AudioOpusTest::~AudioOpusTest() {}
+
+std::string AudioOpusTest::title() const
+{
+    return "Audio opus test";
+}
+
+bool AudioOpusTest::init()
+{
+    if (AudioEngineTestDemo::init())
+    {
+        auto& layerSize = this->getContentSize();
+
+        _stateLabel = Label::createWithTTF("Idle", "fonts/arial.ttf", 30);
+        _stateLabel->setPosition(layerSize.width / 2, layerSize.height * 0.7f);
+        addChild(_stateLabel);
+
+        auto buttonPlay = TextButton::create("Play", [this](TextButton* button) {
+            if (_audioID != -1)
+                return;
+            _audioID = AudioEngine::play2d("audio/LuckyDay.opus");
+            if (_audioID != -1)
+            {
+                _stateLabel->setString("Playing");
+                AudioEngine::setFinishCallback(_audioID, [=](int, std::string_view) {
+                    _audioID = -1;
+                    _stateLabel->setString("Play Over");
+                });
+            }
+        });
+        buttonPlay->setPosition(layerSize.width * 0.5f, layerSize.height * 0.5f);
+        addChild(buttonPlay);
+
+        return true;
+    }
+
+    return false;
+}
+
+void AudioOpusTest::onEnter()
+{
+    AudioEngineTestDemo::onEnter();
+}
+
 // AudioWavTest
 AudioWavTest::~AudioWavTest() {}
 
@@ -679,9 +727,7 @@ bool InvalidAudioFileTest::init()
     auto ret = AudioEngineTestDemo::init();
 
     auto playItem = TextButton::create("play unsupported media type", [&](TextButton* button) {
-#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-        AudioEngine::play2d("background.ogg");
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#if !defined(__APPLE__)
         AudioEngine::play2d("background.caf");
 #endif
     });

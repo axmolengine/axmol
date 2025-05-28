@@ -52,7 +52,6 @@ public:
      *
      * @param widgetLoseFocus The widget which lose focus.
      * @param widgetGetFocus The widget which get focus.
-     * @js ctor
      */
     EventFocus(ui::Widget* widgetLoseFocus, ui::Widget* widgetGetFocus);
 

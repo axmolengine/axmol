@@ -49,7 +49,6 @@ namespace ax
  * The Lua engine integrated into the axmol to process the interactive operation between lua and c++.
  *
  * @lua NA
- * @js NA
  */
 class AX_LUA_DLL LuaEngine : public ScriptEngineProtocol
 {

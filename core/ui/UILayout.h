@@ -54,7 +54,6 @@ class Scale9Sprite;
 
 /**
  *@brief Layout interface for creating LayoutManger and do actual layout.
- * @js NA
  */
 class AX_GUI_DLL LayoutProtocol
 {
@@ -150,14 +149,12 @@ public:
 
     /**
      * Default constructor
-     * @js ctor
      * @lua new
      */
     Layout();
 
     /**
      * Default destructor
-     * @js NA
      * @lua NA
      */
     virtual ~Layout();
@@ -390,7 +387,6 @@ public:
      * parameter.
      *
      * @param cleanup   true if all running actions on all children nodes should be cleanup, false otherwise.
-     * @js removeAllChildren
      * @lua removeAllChildren
      */
     virtual void removeAllChildrenWithCleanup(bool cleanup) override;

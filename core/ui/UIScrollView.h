@@ -93,14 +93,12 @@ public:
 
     /**
      * Default constructor
-     * @js ctor
      * @lua new
      */
     ScrollView();
 
     /**
      * Default destructor
-     * @js NA
      * @lua NA
      */
     ~ScrollView() override;

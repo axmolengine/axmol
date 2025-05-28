@@ -49,14 +49,12 @@ class AX_GUI_DLL HBox : public Layout
 public:
     /**
      * Default constructor
-     * @js ctor
      * @lua new
      */
     HBox();
 
     /**
      * Default destructor
-     * @js NA
      * @lua NA
      */
     virtual ~HBox();

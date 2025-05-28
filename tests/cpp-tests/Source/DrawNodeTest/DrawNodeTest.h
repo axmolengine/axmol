@@ -405,17 +405,25 @@ private:
     float threshold = 0;
 };
 
-
-
-
-
-
 class DrawNodeSpLinesTest : public DrawNodeBaseTest
 {
 public:
     CREATE_FUNC(DrawNodeSpLinesTest);
 
     DrawNodeSpLinesTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+    void update(float dt);
+};
+
+class DrawNodeSpLinesOpenClosedTest : public DrawNodeBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeSpLinesOpenClosedTest);
+
+    DrawNodeSpLinesOpenClosedTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;

@@ -24,8 +24,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#define LOG_TAG "AudioPlayer"
-
 #include "platform/PlatformConfig.h"
 #include "audio/AudioPlayer.h"
 #include "audio/AudioCache.h"
@@ -460,4 +458,3 @@ bool AudioPlayer::setTime(float time)
     return false;
 }
 }
-#undef LOG_TAG

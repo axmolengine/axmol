@@ -50,27 +50,22 @@ public:
 public:
     /**
     Constructor an empty Rect.
-     * @js NA
      */
     constexpr Rect() { setRect(0.0f, 0.0f, 0.0f, 0.0f); }
     /**
     Constructor a rect.
-     * @js NA
      */
     constexpr Rect(float x, float y, float width, float height) { setRect(x, y, width, height); }
     /**
      Constructor a rect.
-     * @js NA
      */
     constexpr Rect(const Vec2& pos, const Vec2& dimension) { setRect(pos.x, pos.y, dimension.x, dimension.y); }
     /**
     Copy constructor.
-     * @js NA
      * @lua NA
      */
     constexpr Rect(const Rect& other) { setRect(other.origin.x, other.origin.y, other.size.x, other.size.y); }
     /**
-     * @js NA
      * @lua NA
      */
     Rect& operator=(const Rect& other)
@@ -80,7 +75,6 @@ public:
     }
     /**
     Set the x, y, width and height of Rect.
-     * @js NA
      * @lua NA
      */
     constexpr void setRect(float x, float y, float width, float height)
@@ -93,7 +87,6 @@ public:
     }
     /**
     Get the left of the rect.
-     * @js NA
      */
     float getMinX() const  /// return the leftmost x-value of current rect
     {
@@ -101,7 +94,6 @@ public:
     }
     /**
     Get the X coordinate of center point.
-     * @js NA
      */
     float getMidX() const  /// return the midpoint x-value of current rect
     {
@@ -109,7 +101,6 @@ public:
     }
     /**
     Get the right of rect.
-     * @js NA
      */
     float getMaxX() const  /// return the rightmost x-value of current rect
     {
@@ -117,7 +108,6 @@ public:
     }
     /**
     Get the bottom of rect.
-     * @js NA
      */
     float getMinY() const  /// return the bottommost y-value of current rect
     {
@@ -125,7 +115,6 @@ public:
     }
     /**
     Get the Y coordinate of center point.
-     * @js NA
      */
     float getMidY() const  /// return the midpoint y-value of current rect
     {
@@ -133,7 +122,6 @@ public:
     }
     /**
     Get top of rect.
-     * @js NA
      */
     float getMaxY() const  /// return the topmost y-value of current rect
     {
@@ -141,12 +129,10 @@ public:
     }
     /**
     Compare two rects.
-     * @js NA
      */
     bool equals(const Rect& rect) const { return (origin.equals(rect.origin) && size.equals(rect.size)); }
     /**
     Check if the points is contained in the rect.
-     * @js NA
      */
     bool containsPoint(const Vec2& point) const
     {
@@ -161,7 +147,6 @@ public:
     }
     /**
     Check the intersect status of two rects.
-     * @js NA
      */
     bool intersectsRect(const Rect& rect) const
     {
@@ -170,12 +155,10 @@ public:
     }
     /**
     Check the intersect status of the rect and a circle.
-     * @js NA
      */
     bool intersectsCircle(const Vec2& center, float radius) const;
     /**
     Get the min rect which can contain this and rect.
-     * @js NA
      * @lua NA
      */
     Rect unionWithRect(const Rect& rect) const;

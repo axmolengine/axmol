@@ -43,22 +43,18 @@ public:
     static ComRender* create(ax::Node* node, const char* comName);
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onEnter() override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onExit() override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onAdd() override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void onRemove() override;
@@ -66,12 +62,10 @@ public:
     virtual ax::Node* getNode();
     virtual void setNode(ax::Node* node);
     /**
-     *  @js ctor
      */
     ComRender();
     ComRender(ax::Node* node, const char* comName);
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ComRender();

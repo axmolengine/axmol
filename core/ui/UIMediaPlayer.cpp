@@ -1121,6 +1121,12 @@ void MediaPlayer::setStyle(StyleType style)
     _styleType = style;
 }
 
+Node* MediaPlayer::getVirtualRenderer()
+{
+    auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
+    return pvd->_vrender;
+}
+
 void MediaPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     ax::ui::Widget::draw(renderer, transform, flags);
@@ -1131,7 +1137,7 @@ void MediaPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
     if (!vrender || !engine)
         return;
 
-    if (vrender->isVisible() && isPlaying())
+    if (isPlaying())
     {  // render 1 video sample if avaiable
         engine->transferVideoFrame();
     }

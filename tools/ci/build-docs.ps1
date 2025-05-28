@@ -1,7 +1,8 @@
 
 # Can runs on Windows,Linux
 param(
-    $site_dist = $null
+    $site_dist = $null,
+    $min_ver = '2.3' # The minimum version to build docs
 )
 
 $myRoot = $PSScriptRoot
@@ -123,16 +124,23 @@ function  configure_file($infile, $outfile, $vars) {
 
 # query version map to build docs
 $release_tags = $(git tag)
-$verMap = @{'latest' = $null; }
+$verMap = @{}
 foreach ($item in $release_tags) {
     if ([Regex]::Match($item, '^v[0-9]+\.[0-9]+\.[0-9]+$').Success) {
         $docVer = $($item.Split('.')[0..1] -join '.').TrimStart('v')
+        if ($docVer -lt $min_ver) {
+            continue
+        }
         $verMap[$docVer] = $item
     }
 }
-$strVerList = "'$($verMap.Keys -join "','")'"
-Write-Host "$(Out-String -InputObject $verMap)"
 
+$verList = $verMap.GetEnumerator() | Sort-Object Value -Descending | ForEach-Object { $_.Key }
+
+$verMap['latest'] = $null
+
+$strVerList = "'latest','$($verList -join "','")'"
+Write-Host "$(Out-String -InputObject $verMap)"
 
 # set default doc ver to 'latest'
 mkdirs "$site_dist/manual"

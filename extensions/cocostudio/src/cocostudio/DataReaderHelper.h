@@ -49,7 +49,6 @@ namespace cocostudio
 class CocoLoader;
 struct stExpCocoNode;
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL DataReaderHelper : ax::Object
@@ -101,11 +100,9 @@ public:
 
 public:
     /**
-     * @js ctor
      */
     DataReaderHelper();
     /**
-     * @js NA
      * @lua NA
      */
     ~DataReaderHelper();

@@ -83,7 +83,6 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 /** @def AX_ENABLE_CACHE_TEXTURE_DATA
  * Enable it if you want to cache the texture data.
- * Not enabling for Emscripten any more -- doesn't seem necessary and don't want
  * to be different from other platforms unless there's a good reason.
  *
  * @since v0.99.5

@@ -2297,7 +2297,7 @@ static int axlua_Node_enumerateChildren(lua_State* tolua_S)
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 3, 0);
         auto stack = LuaEngine::getInstance()->getLuaStack();
         cobj->enumerateChildren(name, [=](Node* node) -> bool {
-            
+
             int id     = node ? (int)node->_ID : -1;
             int* luaID = node ? &node->_luaID : nullptr;
             toluafix_pushusertype_object(stack->getLuaState(), id, luaID, (void*)node, "ax.Node");
@@ -2895,7 +2895,7 @@ int tolua_cocos2d_BezierBy_create(lua_State* tolua_S)
             return 0;
         }
 
-        ccBezierConfig config;
+        BezierConfig config;
         config.controlPoint_1 = arr[0];
         config.controlPoint_2 = arr[1];
         config.endPosition    = arr[2];
@@ -2956,7 +2956,7 @@ int tolua_cocos2d_BezierTo_create(lua_State* tolua_S)
             return 0;
         }
 
-        ccBezierConfig config;
+        BezierConfig config;
         config.controlPoint_1 = arr[0];
         config.controlPoint_2 = arr[1];
         config.endPosition    = arr[2];

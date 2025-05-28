@@ -1,4 +1,4 @@
-name: ci
+name: build
 
 on:
   push:
@@ -28,7 +28,7 @@ on:
 env:
   __1K_CXXSTD: '${{ inputs.cxxstd }}'
 
-run-name: 'ci@c++${{ inputs.cxxstd || 20 }}'
+run-name: 'build@c++${{ inputs.cxxstd || 20 }}'
 
 jobs:
   win32:
@@ -63,7 +63,7 @@ jobs:
             submodules: 'recursive'
         - name: Build
           shell: pwsh
-          run: .\tools\cmdline\axmol -p winuwp -a x64 -O0
+          run: .\tools\cmdline\axmol -p winuwp -a x64 -O3
   win32-clang:
         runs-on: windows-latest
         env:
@@ -75,7 +75,7 @@ jobs:
             submodules: 'recursive'
         - name: Build
           shell: pwsh
-          run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -sdk $env:WINSDK_VER
+          run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -sdk $env:WINSDK_VER -O3
   linux:
     runs-on: ubuntu-latest
     steps:
@@ -159,7 +159,7 @@ jobs:
         submodules: 'recursive'
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/axmol -p wasm -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8' -j2 -t 'cpp-tests,fairygui-tests,lua-tests'
+      run: ./tools/cmdline/axmol -p wasm -O3 -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8' -j2 -t 'cpp-tests,fairygui-tests,lua-tests'
     - uses: actions/upload-artifact@v4
       with:
         name: wasm

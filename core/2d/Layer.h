@@ -232,13 +232,11 @@ public:
 
     virtual bool init() override;
     /** Initializes the Layer with a gradient between start and end.
-     * @js init
      * @lua init
      */
     bool initWithColor(const Color4B& start, const Color4B& end);
 
     /** Initializes the Layer with a gradient between start and end in the direction of v.
-     * @js init
      * @lua init
      */
     bool initWithColor(const Color4B& start, const Color4B& end, const Vec2& v);
@@ -362,7 +360,6 @@ public:
 
     /** Creates a LayerMultiplex with an array of layers.
      @since v2.1
-     * @js NA
      *
      * @param arrayOfLayers An array of layers.
      * @return An autoreleased LayerMultiplex object.
@@ -381,7 +378,6 @@ public:
     /** Creates a LayerMultiplex with one layer.
      * Lua script can not init with undetermined number of variables
      * so add these functions to be used with lua.
-     * @js NA
      * @lua NA
      *
      * @param layer A certain layer.
@@ -414,18 +410,15 @@ public:
     virtual std::string getDescription() const override;
 
     /**
-     * @js ctor
      */
     LayerMultiplex();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~LayerMultiplex();
 
     virtual bool init() override;
     /** initializes a MultiplexLayer with one or more layers using a variable argument list.
-     * @js NA
      * @lua NA
      */
     bool initWithLayers(Node* layer, va_list params);

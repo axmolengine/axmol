@@ -32,7 +32,14 @@ endif()
 
 # import minimal axslcc.cmake for shader compiler support
 # the function: ax_target_compile_shaders avaiable from it
-set(AXSLCC_FIND_PROG_ROOT "${_AX_ROOT}/tools/external/axslcc" "$ENV{AX_ROOT}/tools/external/axslcc")
+file(TO_CMAKE_PATH "${_AX_ROOT}/tools/external/axslcc" _AXSLCC_PATH)
+file(TO_CMAKE_PATH "$ENV{AX_ROOT}/tools/external/axslcc" _AXSLCC_PATH_ENV)
+set(AXSLCC_FIND_PROG_ROOT "${_AXSLCC_PATH}")
+if(NOT _AXSLCC_PATH STREQUAL _AXSLCC_PATH_ENV)
+    message(AUTHOR_WARNING "Add engine ${_AXSLCC_PATH_ENV} as additional path to find axlscc for isolate project")
+    list(APPEND AXSLCC_FIND_PROG_ROOT "${_AXSLCC_PATH_ENV}")
+endif()
+
 include(AXSLCC)
 
 # include helper functions

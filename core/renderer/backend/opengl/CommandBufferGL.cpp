@@ -40,6 +40,12 @@
 
 NS_AX_BACKEND_BEGIN
 
+#if AX_GLES_PROFILE != 200 && AX_TARGET_PLATFORM != AX_PLATFORM_WASM
+#    define AX_HAVE_MAP_BUFFER_RANGE 1
+#else
+#    define AX_HAVE_MAP_BUFFER_RANGE 0
+#endif
+
 namespace
 {
 void applyTexture(TextureBackend* texture, int slot, int index)
@@ -469,7 +475,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
     auto bufferSize = bytesPerRow * height;
-#if AX_GLES_PROFILE != 200
+#if AX_HAVE_MAP_BUFFER_RANGE
     GLuint pbo;
     glGenBuffers(1, &pbo);
     __gl->bindBuffer(BufferType::PIXEL_PACK_BUFFER, pbo);
@@ -507,14 +513,14 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
             // for cache for restore on EGL context resume, don't need flip
             pbd._width  = width;
             pbd._height = height;
-#if AX_GLES_PROFILE != 200
+#if AX_HAVE_MAP_BUFFER_RANGE
             pbd._data.copy(buffer_ptr, static_cast<ssize_t>(bufferSize));
 #else
             static_cast<axstd::byte_buffer&>(pbd._data).swap(buffer);
 #endif
         }
     }
-#if AX_GLES_PROFILE != 200
+#if AX_HAVE_MAP_BUFFER_RANGE
     glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
     __gl->bindBuffer(BufferType::PIXEL_PACK_BUFFER, 0);
     glDeleteBuffers(1, &pbo);

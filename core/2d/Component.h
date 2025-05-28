@@ -51,7 +51,6 @@ public:
     static Component* create();
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~Component();
@@ -76,7 +75,6 @@ public:
     virtual void onRemove();
 
     /**
-     * @js ctor
      */
     Component();
 

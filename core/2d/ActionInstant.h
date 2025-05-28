@@ -360,7 +360,6 @@ private:
 
 /** @class CallFuncN
  * @brief Calls a 'callback' with the node as the first argument. N means Node.
- * @js NA
  */
 class AX_DLL CallFuncN : public CallFunc
 {

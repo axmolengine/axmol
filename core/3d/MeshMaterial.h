@@ -173,7 +173,6 @@ protected:
 
 /**
  * @brief MeshMaterialCache: the MeshRenderer material cache, it can only cache textures for now.
- * @js NA
  * @lua NA
  */
 class MeshMaterialCache

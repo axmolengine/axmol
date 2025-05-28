@@ -131,14 +131,12 @@ public:
     typedef std::function<void(Object*, int)> ccWidgetEventCallback;
     /**
      * Default constructor
-     * @js ctor
      * @lua new
      */
     Widget();
 
     /**
      * Default destructor
-     * @js NA
      * @lua NA
      */
     virtual ~Widget();
@@ -250,7 +248,6 @@ public:
     float getTopBoundary() const;
 
     /**
-     * @js NA
      */
     virtual void visit(ax::Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 

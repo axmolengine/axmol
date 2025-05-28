@@ -81,11 +81,9 @@ public:
      */
     static TextureAtlas* createWithTexture(Texture2D* texture, ssize_t capacity);
     /**
-     * @js ctor
      */
     TextureAtlas();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~TextureAtlas();
@@ -196,7 +194,6 @@ public:
     void setDirty(bool bDirty) { _dirty = bDirty; }
 
     /**Get quads total amount.
-     * @js NA
      * @lua NA
      */
     virtual std::string getDescription() const;

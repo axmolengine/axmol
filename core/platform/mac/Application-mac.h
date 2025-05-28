@@ -38,11 +38,9 @@ class AX_DLL Application : public ApplicationBase
 {
 public:
     /**
-     * @js ctor
      */
     Application();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~Application();
@@ -55,7 +53,6 @@ public:
 
     /**
     @brief  Run the message loop.
-    * @js NA
     * @lua NA
     */
     int run();

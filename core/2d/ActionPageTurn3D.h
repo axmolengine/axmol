@@ -50,7 +50,6 @@ class AX_DLL PageTurn3D : public Grid3DAction
 {
 public:
     /**
-     * @js NA
      */
     virtual GridBase* getGrid() override;
 

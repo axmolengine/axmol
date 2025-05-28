@@ -54,12 +54,10 @@ class AX_EX_DLL ControlColourPicker : public Control
 public:
     static ControlColourPicker* create();
     /**
-     * @js ctor
      * @lua new
      */
     ControlColourPicker();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ControlColourPicker();

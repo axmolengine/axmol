@@ -64,7 +64,6 @@ public:
     };
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ApplicationBase();
@@ -73,21 +72,18 @@ public:
      * @brief    Implement Director and Scene init code here.
      * @return true    Initialize success, app continue.
      * @return false   Initialize failed, app terminate.
-     * @js NA
      * @lua NA
      */
     virtual bool applicationDidFinishLaunching() = 0;
 
     /**
      * @brief  This function will be called when the application enters background.
-     * @js NA
      * @lua NA
      */
     virtual void applicationDidEnterBackground() = 0;
 
     /**
      * @brief  This function will be called when the application enters foreground.
-     * @js NA
      * @lua NA
      */
     virtual void applicationWillEnterForeground() = 0;
@@ -95,7 +91,6 @@ public:
     /**
      * @brief    Callback by Director for limit FPS.
      * @param interval The time, expressed in seconds, between current frame and next.
-     * @js NA
      * @lua NA
      */
     virtual void setAnimationInterval(float interval) = 0;
@@ -113,7 +108,6 @@ public:
     /**
     @brief Get current language config.
     @return Current language config.
-    * @js NA
     * @lua NA
     */
     virtual LanguageType getCurrentLanguage() = 0;
@@ -121,21 +115,18 @@ public:
     /**
      @brief Get current language iso 639-1 code.
      @return Current language iso 639-1 code.
-     * @js NA
      * @lua NA
      */
     virtual const char* getCurrentLanguageCode() = 0;
 
     /**
      @brief Get target platform.
-     * @js NA
      * @lua NA
      */
     virtual Platform getTargetPlatform() = 0;
 
     /**
      @brief Get application version.
-     * @js NA
      * @lua NA
      */
     virtual std::string getVersion() = 0;
@@ -144,7 +135,6 @@ public:
      @brief Open url in default browser.
      @param String with url to open.
      @return True if the resource located by the URL was successfully opened; otherwise false.
-     * @js NA
      * @lua NA
      */
     virtual bool openURL(std::string_view url) = 0;

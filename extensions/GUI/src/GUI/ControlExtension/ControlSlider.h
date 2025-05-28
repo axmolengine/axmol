@@ -81,12 +81,10 @@ public:
                                  Sprite* thumbSprite,
                                  Sprite* selectedThumbSprite);
     /**
-     * @js ctor
      * @lua new
      */
     ControlSlider();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ControlSlider();

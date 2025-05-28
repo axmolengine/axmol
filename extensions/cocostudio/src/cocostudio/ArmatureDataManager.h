@@ -51,11 +51,9 @@ public:
 
 protected:
     /**
-     * @js ctor
      */
     ArmatureDataManager(void);
     /**
-     * @js NA
      * @lua NA
      */
     ~ArmatureDataManager(void);

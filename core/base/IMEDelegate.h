@@ -61,21 +61,18 @@ class AX_DLL IMEDelegate
 public:
     /**
      * Default constructor.
-     * @js NA
      * @lua NA
      */
     virtual ~IMEDelegate();
 
     /**
      * Default destructor.
-     * @js NA
      * @lua NA
      */
     virtual bool attachWithIME();
 
     /**
      * Determine whether the IME is detached or not.
-     * @js NA
      * @lua NA
      */
     virtual bool detachWithIME();
@@ -87,55 +84,47 @@ protected:
     @brief    Decide if the delegate instance is ready to receive an IME message.
 
     Called by IMEDispatcher.
-    * @js NA
     * @lua NA
     */
     virtual bool canAttachWithIME() { return false; }
     /**
     @brief    When the delegate detaches from the IME, this method is called by IMEDispatcher.
-    * @js NA
     * @lua NA
     */
     virtual void didAttachWithIME() {}
 
     /**
     @brief    Decide if the delegate instance can stop receiving IME messages.
-    * @js NA
     * @lua NA
     */
     virtual bool canDetachWithIME() { return false; }
 
     /**
     @brief    When the delegate detaches from the IME, this method is called by IMEDispatcher.
-    * @js NA
     * @lua NA
     */
     virtual void didDetachWithIME() {}
 
     /**
     @brief    Called by IMEDispatcher when text input received from the IME.
-    * @js NA
     * @lua NA
     */
     virtual void insertText(const char* /*text*/, size_t /*len*/) {}
 
     /**
     @brief    Called by IMEDispatcher after the user clicks the backward key.
-    * @js NA
     * @lua NA
     */
     virtual void deleteBackward(size_t numChars) {}
 
     /**
     @brief    Called by IMEDispatcher after the user press control key.
-    * @js NA
     * @lua NA
     */
     virtual void controlKey(EventKeyboard::KeyCode /*keyCode*/) {}
 
     /**
     @brief    Called by IMEDispatcher for text stored in delegate.
-    * @js NA
     * @lua NA
     */
     virtual std::string_view getContentText() { return STD_STRING_EMPTY; }
@@ -144,29 +133,24 @@ protected:
     // keyboard show/hide notification
     //////////////////////////////////////////////////////////////////////////
     /**
-     * @js NA
      * @lua NA
      */
     virtual void keyboardWillShow(IMEKeyboardNotificationInfo& /*info*/) {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual void keyboardDidShow(IMEKeyboardNotificationInfo& /*info*/) {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual void keyboardWillHide(IMEKeyboardNotificationInfo& /*info*/) {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual void keyboardDidHide(IMEKeyboardNotificationInfo& /*info*/) {}
 
 protected:
     /**
-     * @js NA
      * @lua NA
      */
     IMEDelegate();

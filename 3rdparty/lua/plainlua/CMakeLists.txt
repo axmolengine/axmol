@@ -20,7 +20,12 @@ if(WIN32)
     #     target_link_libraries(${target_name} PRIVATE runtimeobject)
     # endif()
 else()
-    add_library(${target_name} ${LUA_CORE})
+    if (BUILD_SHARED_LIBS AND NOT WINRT)
+        set(LUA_BUILD_AS_DLL FALSE)
+        add_library(${target_name} SHARED ${LUA_CORE} ${LUA_SRC_PATH}/plainlua.def)
+    else()
+        add_library(${target_name} ${LUA_CORE})
+    endif()
 endif()
 
 target_compile_definitions(${target_name} 

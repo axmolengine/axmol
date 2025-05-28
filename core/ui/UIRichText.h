@@ -88,7 +88,6 @@ class AX_GUI_DLL RichElementText : public RichElement
 public:
     /**
      *@brief Default constructor.
-     * @js ctor
      * @lua new
      */
     RichElementText() : _fontSize(0), _flags(0), _outlineSize(0), _shadowBlurRadius(0) { _type = Type::TEXT; }
@@ -201,7 +200,6 @@ class AX_GUI_DLL RichElementImage : public RichElement
 public:
     /**
      * @brief Default constructor.
-     * @js ctor
      * @lua new
      *
      */
@@ -276,14 +274,12 @@ class AX_GUI_DLL RichElementCustomNode : public RichElement
 public:
     /**
      * @brief Default constructor.
-     * @js ctor
      * @lua new
      */
     RichElementCustomNode() { _type = Type::CUSTOM; }
 
     /**
      * @brief Default destructor.
-     * @js NA
      * @lua NA
      */
     ~RichElementCustomNode() override { AX_SAFE_RELEASE(_customNode); }
@@ -331,7 +327,6 @@ class AX_GUI_DLL RichElementNewLine : public RichElement
 public:
     /**
      * @brief Default constructor.
-     * @js ctor
      * @lua new
      *
      */
@@ -339,7 +334,6 @@ public:
 
     /**
      * @brief Default destructor.
-     * @js NA
      * @lua NA
      */
     ~RichElementNewLine() override = default;
@@ -455,14 +449,12 @@ public:
 
     /**
      * @brief Default constructor.
-     * @js ctor
      * @lua new
      */
     RichText();
 
     /**
      * @brief Default destructor.
-     * @js NA
      * @lua NA
      */
     ~RichText() override;

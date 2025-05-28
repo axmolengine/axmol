@@ -35,7 +35,7 @@ namespace ax {
 
 namespace ax { namespace network
 {
-    class DownloadTaskEmscripten;
+    class DownloadContextEmscripten;
 
     class DownloaderEmscripten : public IDownloaderImpl
     {
@@ -43,7 +43,6 @@ namespace ax { namespace network
         DownloaderEmscripten(const DownloaderHints& hints);
         virtual ~DownloaderEmscripten();
 
-        // virtual IDownloadTask *createCoTask(std::shared_ptr<const DownloadTask>& task) override;
         virtual void startTask(std::shared_ptr<DownloadTask>& task) override;
 
     protected:
@@ -51,7 +50,7 @@ namespace ax { namespace network
 
         DownloaderHints hints;
 
-        std::unordered_map<unsigned int, DownloadTaskEmscripten*> _taskMap;
+        std::unordered_map<unsigned int, DownloadContextEmscripten*> _taskMap;
 
         static void onError(emscripten_fetch_t *fetch);
 

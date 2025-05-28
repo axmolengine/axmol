@@ -40,14 +40,12 @@ namespace ax
 
 /**
  * A pool for managing autorelease objects.
- * @js NA
  */
 class AX_DLL AutoreleasePool
 {
 public:
     /**
      * @warning Don't create an autorelease pool in heap, create it in stack.
-     * @js NA
      * @lua NA
      */
     AutoreleasePool();
@@ -55,7 +53,6 @@ public:
     /**
      * Create an autorelease pool with specific name. This name is useful for debugging.
      * @warning Don't create an autorelease pool in heap, create it in stack.
-     * @js NA
      * @lua NA
      *
      * @param name The name of created autorelease pool.
@@ -63,7 +60,6 @@ public:
     AutoreleasePool(std::string_view name);
 
     /**
-     * @js NA
      * @lua NA
      */
     ~AutoreleasePool();
@@ -76,7 +72,6 @@ public:
      * the same times as it was added.
      *
      * @param object    The object to be added into the autorelease pool.
-     * @js NA
      * @lua NA
      */
     void addObject(Object* object);
@@ -86,7 +81,6 @@ public:
      *
      * It will invoke each element's `release()` function.
      *
-     * @js NA
      * @lua NA
      */
     void clear();
@@ -97,7 +91,6 @@ public:
      *
      * @return True if autorelease pool is clearing, false if not.
      *
-     * @js NA
      * @lua NA
      */
     bool isClearing() const { return _isClearing; };
@@ -108,7 +101,6 @@ public:
      *
      * @param object The object to be checked.
      * @return True if the autorelease pool contains the object, false if not
-     * @js NA
      * @lua NA
      */
     bool contains(Object* object) const;
@@ -119,7 +111,6 @@ public:
      * The result will look like:
      * Object pointer address     object id     reference count
      *
-     * @js NA
      * @lua NA
      */
     void dump();

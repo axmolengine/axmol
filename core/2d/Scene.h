@@ -82,7 +82,6 @@ public:
      *
      * @param size The predefined size of scene.
      * @return An autoreleased Scene object.
-     * @js NA
      */
     static Scene* createWithSize(const Vec2& size);
 
@@ -92,19 +91,16 @@ public:
     /** Get all cameras.
      *
      * @return The vector of all cameras, ordered by camera depth.
-     * @js NA
      */
     const std::vector<Camera*>& getCameras();
 
     /** Get the default camera.
-     * @js NA
      * @return The default camera of scene.
      */
     Camera* getDefaultCamera() const { return _defaultCamera; }
 
     /** Get lights.
      * @return The vector of lights.
-     * @js NA
      */
     const std::vector<BaseLight*>& getLights() const { return _lights; }
 
@@ -112,7 +108,6 @@ public:
      * @param renderer The renderer use to render the scene.
      * @param eyeTransform The AdditionalTransform of camera.
      * @param eyeProjection The projection matrix of camera.
-     * @js NA
      */
     virtual void render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eyeProjection = nullptr);
 
@@ -162,7 +157,6 @@ public:
 #    if defined(AX_ENABLE_PHYSICS)
     /** Get the physics world of the scene.
      * @return The physics world of the scene.
-     * @js NA
      */
     PhysicsWorld* getPhysicsWorld() const { return _physicsWorld; }
 #    endif
@@ -170,7 +164,6 @@ public:
 #    if defined(AX_ENABLE_3D_PHYSICS) && AX_ENABLE_BULLET_INTEGRATION
     /** Get the 3d physics world of the scene.
      * @return The 3d physics world of the scene.
-     * @js NA
      */
     Physics3DWorld* getPhysics3DWorld() { return _physics3DWorld; }
 
@@ -182,7 +175,6 @@ public:
 
     /** Create a scene with physics.
      * @return An autoreleased Scene object with physics.
-     * @js NA
      */
     static Scene* createWithPhysics();
 

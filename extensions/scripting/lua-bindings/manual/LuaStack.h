@@ -46,7 +46,6 @@ namespace ax
  * depended on the lua_State. In the current mechanism, there is only one lua_State in one LuaStack object.
  *
  * @lua NA
- * @js NA
  */
 class LuaStack : public Object
 {

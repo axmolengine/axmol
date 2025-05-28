@@ -3,6 +3,11 @@
 
 if(BUILD_SHARED_LIBS)
   cmake_policy(SET CMP0079 NEW)
+
+  # Enable -fPIC flag when compiling as shared libs...
+  if(UNIX AND NOT ANDROID)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+  endif()
 endif()
 
 function(setup_ax_extension_config target_name)
@@ -125,6 +130,11 @@ endif()
 
 if(AX_ENABLE_EXT_JSONDEFAULT)
   add_subdirectory(JSONDefault)
+endif()
+
+# Disable -fPIC flag for other libs...
+if(BUILD_SHARED_LIBS AND UNIX AND NOT ANDROID)
+  set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
 endif()
 
 message(STATUS "Enabled ${_AX_CORE_LIB} extensions:${_AX_EXTENSION_LIBS}")

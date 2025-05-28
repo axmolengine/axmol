@@ -103,6 +103,7 @@ Some highlights:
 - **Universal Windows Platform** (UWP) support for Xbox consoles
 - **Apple M1 and Android x64 support** (by @pietpukkel)
 - **Windows x64 build support**
+- **Powerful cross-platform build system**
 - Improved Windows workflow, supporting linking with engine prebuilt libs. Please read the [Windows workflow guide](https://github.com/axmolengine/axmol/issues/564).
 - Refactored AudioEngine, OpenAL for all platforms:
     - [OpenAL Soft](https://github.com/kcat/openal-soft) (pass `-DAX_USE_ALSOFT=ON` to CMake to force enabling it)

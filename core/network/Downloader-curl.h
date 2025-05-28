@@ -36,7 +36,7 @@ class Scheduler;
 
 namespace network
 {
-class DownloadTaskCURL;
+class DownloadContextCURL;
 class DownloaderHints;
 class DownloaderCURL;
 

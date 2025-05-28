@@ -111,6 +111,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 - **Apple M1 和 Android x64 支持** (by @pietpukkel)。
 - **Windows x64 构建支持**。
 - **Windows SIMD 加速指令矩阵计算支持**。
+- **强大的跨平台构建系统**。
 - 支持链接引擎预编译库。 详见 [Windows 工作流指导](https://github.com/axmolengine/axmol/issues/564)。
 - 重构 AudioEngine，所有平台均使用 OpenAL 并新增 `.wav` 音频格式支持。
 - 使用内存映射文件 [mio](https://github.com/mandreyel/mio) 重构 UserDefault，速度提升百倍。 

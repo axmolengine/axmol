@@ -6,7 +6,8 @@ set(_AX_AUDIO_HEADER
     audio/AudioMacros.h
     audio/AudioDecoderManager.h
     audio/AudioDecoder.h
-    audio/AudioDecoderOgg.h
+    audio/AudioDecoderVorbis.h
+    audio/AudioDecoderOpus.h
     audio/AudioPlayer.h
     audio/AudioCache.h
     audio/AudioEngineImpl.h
@@ -16,7 +17,8 @@ set(_AX_AUDIO_SRC
     audio/AudioEngine.cpp
     audio/AudioDecoderManager.cpp
     audio/AudioDecoder.cpp
-    audio/AudioDecoderOgg.cpp
+    audio/AudioDecoderVorbis.cpp
+    audio/AudioDecoderOpus.cpp
     audio/AudioPlayer.cpp
     audio/AudioCache.cpp
     audio/AudioEngineImpl.cpp

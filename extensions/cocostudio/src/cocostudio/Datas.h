@@ -63,7 +63,6 @@ namespace cocostudio
 
 /**
  * The base node include a lot of attributes.
- * @js NA
  * @lua NA
  */
 class CCS_DLL BaseData : public ax::Object
@@ -72,11 +71,9 @@ public:
     AX_CREATE_NO_PARAM_NO_INIT(BaseData)
 public:
     /**
-     * @js ctor
      */
     BaseData();
     /**
-     * @js NA
      * @lua NA
      */
     ~BaseData(void);
@@ -132,7 +129,6 @@ enum DisplayType
     CS_DISPLAY_MAX
 };
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL DisplayData : public ax::Object
@@ -144,11 +140,9 @@ public:
 
 public:
     /**
-     * @js ctor
      */
     DisplayData();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~DisplayData(void) {}
@@ -160,7 +154,6 @@ public:
 };
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL SpriteDisplayData : public DisplayData
@@ -169,11 +162,9 @@ public:
     AX_CREATE_NO_PARAM_NO_INIT(SpriteDisplayData)
 public:
     /**
-     * @js ctor
      */
     SpriteDisplayData();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~SpriteDisplayData(){};
@@ -185,7 +176,6 @@ public:
 };
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ArmatureDisplayData : public DisplayData
@@ -194,18 +184,15 @@ public:
     AX_CREATE_NO_PARAM_NO_INIT(ArmatureDisplayData)
 public:
     /**
-     * @js ctor
      */
     ArmatureDisplayData();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ArmatureDisplayData() {}
 };
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ParticleDisplayData : public DisplayData
@@ -214,11 +201,9 @@ public:
     AX_CREATE_NO_PARAM_NO_INIT(ParticleDisplayData)
 public:
     /**
-     * @js ctor
      */
     ParticleDisplayData();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleDisplayData(){};
@@ -228,7 +213,6 @@ public:
  * BoneData used to init a Bone.
  * BoneData keeps a DisplayData list, a Bone can have many display to change.
  * The display information saved in the DisplayData
- * @js NA
  * @lua NA
  */
 class CCS_DLL BoneData : public BaseData
@@ -237,11 +221,9 @@ public:
     AX_CREATE_NO_PARAM(BoneData)
 public:
     /**
-     * @js ctor
      */
     BoneData(void);
     /**
-     * @js NA
      * @lua NA
      */
     ~BoneData(void);
@@ -262,7 +244,6 @@ public:
  * ArmatureData saved the Armature name and Bonedata needed for the CCBones in this Armature
  * When we create a Armature, we need to get each Bone's BoneData as it's init information.
  * So we can get a BoneData from the Dictionary saved in the ArmatureData.
- * @js NA
  * @lua NA
  */
 class CCS_DLL ArmatureData : public ax::Object
@@ -271,11 +252,9 @@ public:
     AX_CREATE_NO_PARAM(ArmatureData)
 public:
     /**
-     * @js ctor
      */
     ArmatureData();
     /**
-     * @js NA
      * @lua NA
      */
     ~ArmatureData();
@@ -309,7 +288,6 @@ enum BlendType
 };
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL FrameData : public BaseData
@@ -318,11 +296,9 @@ public:
     AX_CREATE_NO_PARAM_NO_INIT(FrameData)
 public:
     /**
-     * @js ctor
      */
     FrameData();
     /**
-     * @js NA
      * @lua NA
      */
     ~FrameData();
@@ -357,7 +333,6 @@ public:
 };
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL MovementBoneData : public ax::Object
@@ -366,11 +341,9 @@ public:
     AX_CREATE_NO_PARAM(MovementBoneData)
 public:
     /**
-     * @js ctor
      */
     MovementBoneData();
     /**
-     * @js NA
      * @lua NA
      */
     ~MovementBoneData(void);
@@ -390,7 +363,6 @@ public:
 };
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL MovementData : public ax::Object
@@ -399,11 +371,9 @@ public:
     AX_CREATE_NO_PARAM_NO_INIT(MovementData)
 public:
     /**
-     * @js ctor
      */
     MovementData(void);
     /**
-     * @js NA
      * @lua NA
      */
     ~MovementData(void);
@@ -453,7 +423,6 @@ public:
  *  AnimationData include all movement information for the Armature
  *  The struct is AnimationData -> MovementData -> MovementBoneData -> FrameData
  *                                              -> MovementFrameData
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL AnimationData : public ax::Object
@@ -462,11 +431,9 @@ public:
     AX_CREATE_NO_PARAM_NO_INIT(AnimationData)
 public:
     /**
-     * @js ctor
      */
     AnimationData(void);
     /**
-     * @js NA
      * @lua NA
      */
     ~AnimationData(void);
@@ -483,7 +450,6 @@ public:
 
 /*
  * ContourData include a contour vertex information
- * @js NA
  * @lua NA
  */
 class CCS_DLL ContourData : public ax::Object
@@ -492,11 +458,9 @@ public:
     AX_CREATE_NO_PARAM(ContourData)
 public:
     /**
-     * @js ctor
      */
     ContourData();
     /**
-     * @js NA
      * @lua NA
      */
     ~ContourData(void);
@@ -510,7 +474,6 @@ public:
 
 /*
  * TextureData include a texture's information
- * @js NA
  * @lua NA
  */
 class CCS_DLL TextureData : public ax::Object
@@ -519,11 +482,9 @@ public:
     AX_CREATE_NO_PARAM(TextureData)
 public:
     /**
-     * @js ctor
      */
     TextureData();
     /**
-     * @js NA
      * @lua NA
      */
     ~TextureData(void);

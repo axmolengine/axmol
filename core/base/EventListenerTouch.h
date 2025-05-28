@@ -43,7 +43,6 @@ class Touch;
 
 /** @class EventListenerTouchOneByOne
  * @brief Single touch event listener.
- * @js cc._EventListenerTouchOneByOne
  */
 class AX_DLL EventListenerTouchOneByOne : public EventListener
 {
@@ -56,7 +55,6 @@ public:
 
     /**
      * Destructor.
-     * @js NA
      */
     virtual ~EventListenerTouchOneByOne();
 
@@ -109,7 +107,6 @@ public:
      */
     static EventListenerTouchAllAtOnce* create();
     /** Destructor.
-     * @js NA
      */
     virtual ~EventListenerTouchAllAtOnce();
 

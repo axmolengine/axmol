@@ -55,7 +55,6 @@ Special features and Limitations:
 - It supports subrects.
 - It supports batched rendering since 1.1.
 @since v0.8
-@js NA
 */
 class AX_DLL ParticleSystemQuad : public ParticleSystem
 {
@@ -95,7 +94,6 @@ public:
 
     /** Sets a new texture with a rect. The rect is in Points.
      @since v0.99.4
-     * @js NA
      * @lua NA
      *
      * @param texture A given texture.
@@ -104,7 +102,6 @@ public:
     void setTextureWithRect(Texture2D* texture, const Rect& rect);
 
     /** Listen the event that renderer was recreated on Android/WP8.
-     * @js NA
      * @lua NA
      *
      * @param event the event that renderer was recreated on Android/WP8.
@@ -112,28 +109,23 @@ public:
     void listenRendererRecreated(EventCustom* event);
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual void setTexture(Texture2D* texture) override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void updateParticleQuads() override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual void setBatchNode(ParticleBatchNode* batchNode) override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void setTotalParticles(int tp) override;
@@ -141,18 +133,15 @@ public:
     virtual std::string getDescription() const override;
 
     /**
-     * @js ctor
      */
     ParticleSystemQuad();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleSystemQuad();
 
     // Overrides
     /**
-     * @js NA
      * @lua NA
      */
     virtual bool initWithTotalParticles(int numberOfParticles) override;

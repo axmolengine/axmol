@@ -45,17 +45,14 @@ class AX_EX_DLL ScrollViewDelegate
 {
 public:
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ScrollViewDelegate() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual void scrollViewDidScroll(ScrollView* view){};
     /**
-     * @js NA
      * @lua NA
      */
     virtual void scrollViewDidZoom(ScrollView* view){};
@@ -91,12 +88,10 @@ public:
      */
     static ScrollView* create();
     /**
-     * @js ctor
      * @lua new
      */
     ScrollView();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ScrollView();
@@ -214,7 +209,6 @@ public:
     Direction getDirection() const { return _direction; }
     virtual void setDirection(Direction eDirection) { _direction = eDirection; }
     /**
-     * @js NA
      * @lua NA
      */
     ScrollViewDelegate* getDelegate() { return _delegate; }
@@ -244,7 +238,6 @@ public:
     virtual void setContentSize(const Size& size) override;
     virtual const Size& getContentSize() const override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;

@@ -5,7 +5,7 @@
 - **PowerShell**: used to install Axmol. PowerShell 7 is recommended, it supports Windows, macOS and Linux.
   - Quick installation: 
      - macOS, Ubuntu, ArchLinux: run `setup.ps1` in `axmol` root directory (recommended).
-     - Windows 10+: system installed PowerShell 5.x should work, but in that case you'll need to run the command `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force` in order to allow PowerShell script file to run. This will allow execution of PowerShell scripts for the current process.
+     - Windows 10+: system installed PowerShell 5.x should work. You will need to run the command `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force` in order to allow PowerShell script to run. This will allow execution of PowerShell scripts for the current user, which is required if you have downloaded the ZIP release of Axmol. If you instead cloned the Axmol repository, then you can use `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force` instead, which is more secure.
   - Manual installation: [Instructions](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) /  [Download](https://github.com/PowerShell/PowerShell/releases)
 - **CMake 3.28.1+**
     - Manual installation is recommended ([download](https://cmake.org/download/)). Make sure to add CMake bin to the system `PATH`, otherwise `axmol build` will auto-setup it to `tools/external/cmake`.
@@ -162,18 +162,19 @@ Please see the [Windows workflow guide](https://github.com/axmolengine/axmol/iss
 
 ### Android (with Android Studio)
 
-  1. Install [Android Studio 2024.2.1+](https://developer.android.com/studio).
+  1. Install [Android Studio 2024.3.2+](https://developer.android.com/studio).
   2. When starting Android Studio for the first time, it will guide you through the installation of the SDK and other tools. Please make sure that you do install them.
   3. Ensure that the ANDROID_HOME environment variable is set up correctly to point to the Android SDK folder.
   4. Open a *new* Powershell instance, and enter the `axmol` root directory in Powershell.
   5. Run `./setup.ps1 -p android` to download the a supported version of the NDK, which in this case is r23d. You can set a project to use a different version of the NDK.
   6. Start Android Studio and choose [Open an existing Android Studio Project] and select your project. For example, the existing `cpp-test` project located in `axmol\tests\cpp-tests\proj.android`.
   7. Start Android Studio and open 'Tools' -> 'SDKManager', then switch to 'SDK Tools', check the 'Show Package Details' field, and choose the following tools clicking the button 'Apply' to install them:  
-     - Android SDK Platform 34  
-     - Android Gradle Plugin (AGP) 8.7.3
-     - Android SDK Build-Tools 34.0.0 match with AGP, refer to: <https://developer.android.com/studio/releases/gradle-plugin>
-     - Gradle 8.11.1
+     - Android SDK Platform 36
+     - Android Gradle Plugin (AGP) 8.10.0
+     - Android SDK Build-Tools 35.0.0 match with AGP, refer to: <https://developer.android.com/studio/releases/gradle-plugin>
+     - Gradle 8.13
      - NDK r23c, if you need support Android 15 16KB page size, you must use r23d or r27+
+     - __IMPORTANT__: axmol itself not use all c++20 features, so just require ndk-r23c+, if you need more c++20 feature in your game project, consider use NDK r26+
   8. Wait for the `Gradle sync` to finish.
 
 Note: if you use non-SDK provided CMake, you will need to download `ninja` from <https://github.com/ninja-build/ninja/releases>, and copy `ninja.exe` to CMake's bin directory.

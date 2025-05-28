@@ -40,7 +40,6 @@ namespace ax
 
 /** @class EventListenerAcceleration
  * @brief Acceleration event listener.
- * @js NA
  */
 class AX_DLL EventListenerAcceleration : public EventListener
 {

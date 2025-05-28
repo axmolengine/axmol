@@ -38,11 +38,9 @@ class CCS_DLL ComAttribute : public ax::Component
     DECLARE_CLASS_COMPONENT_INFO
 public:
     /**
-     * @js ctor
      */
     ComAttribute(void);
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ComAttribute(void);

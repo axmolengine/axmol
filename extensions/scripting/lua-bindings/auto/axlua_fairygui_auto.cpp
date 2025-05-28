@@ -5139,6 +5139,103 @@ int lua_ax_fairygui_GObject_setTooltips(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_fairygui_GObject_getBlendMode(lua_State* tolua_S)
+{
+    int argc = 0;
+    fairygui::GObject* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"fgui.GObject",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (fairygui::GObject*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_fairygui_GObject_getBlendMode'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_getBlendMode'", nullptr);
+            return 0;
+        }
+        int ret = (int)cobj->getBlendMode();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GObject:getBlendMode",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_fairygui_GObject_getBlendMode'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_fairygui_GObject_setBlendMode(lua_State* tolua_S)
+{
+    int argc = 0;
+    fairygui::GObject* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"fgui.GObject",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (fairygui::GObject*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_fairygui_GObject_setBlendMode'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        fairygui::BlendMode arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GObject:setBlendMode");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setBlendMode'", nullptr);
+            return 0;
+        }
+        cobj->setBlendMode(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GObject:setBlendMode",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_fairygui_GObject_setBlendMode'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_fairygui_GObject_setData(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6922,6 +7019,8 @@ int lua_register_ax_fairygui_GObject(lua_State* tolua_S)
         tolua_function(tolua_S,"setIcon",lua_ax_fairygui_GObject_setIcon);
         tolua_function(tolua_S,"getTooltips",lua_ax_fairygui_GObject_getTooltips);
         tolua_function(tolua_S,"setTooltips",lua_ax_fairygui_GObject_setTooltips);
+        tolua_function(tolua_S,"getBlendMode",lua_ax_fairygui_GObject_getBlendMode);
+        tolua_function(tolua_S,"setBlendMode",lua_ax_fairygui_GObject_setBlendMode);
         tolua_function(tolua_S,"setData",lua_ax_fairygui_GObject_setData);
         tolua_function(tolua_S,"getCustomData",lua_ax_fairygui_GObject_getCustomData);
         tolua_function(tolua_S,"setCustomData",lua_ax_fairygui_GObject_setCustomData);

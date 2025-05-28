@@ -27,8 +27,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __ACTION_CCINTERVAL_ACTION_H__
-#define __ACTION_CCINTERVAL_ACTION_H__
+#ifndef __ACTION_INTERVAL_ACTION_H__
+#define __ACTION_INTERVAL_ACTION_H__
 
 #include <vector>
 
@@ -152,7 +152,6 @@ public:
      * @param action1 The first sequenceable action.
      * @param args The va_list variable.
      * @return An autoreleased Sequence object.
-     * @js NA
      * @note ATTENTION! Last entry must be a 'nullptr' to correctly terminate the list.
      */
     static Sequence* createWithVariableList(FiniteTimeAction* action1, va_list args);
@@ -160,7 +159,6 @@ public:
      * @param actionOne The first sequenceable action.
      * @param actionTwo The second sequenceable action.
      * @return An autoreleased Sequence object.
-     * @js NA
      */
     static Sequence* createWithTwoActions(FiniteTimeAction* actionOne, FiniteTimeAction* actionTwo);
 
@@ -342,7 +340,6 @@ public:
      * @param action1   The first sequenceable action.
      * @param args  The va_list variable.
      * @return  An autoreleased Spawn object.
-     * @js NA
      */
     static Spawn* createWithVariableList(FiniteTimeAction* action1, va_list args);
 
@@ -358,7 +355,6 @@ public:
      * @param action1   The first spawned action.
      * @param action2   The second spawned action.
      * @return An autoreleased Spawn object.
-     * @js NA
      */
     static Spawn* createWithTwoActions(FiniteTimeAction* action1, FiniteTimeAction* action2);
 
@@ -892,7 +888,7 @@ private:
 
 /** @struct Bezier configuration structure
  */
-typedef struct _ccBezierConfig
+struct BezierConfig
 {
     //! end position of the bezier
     Vec2 endPosition;
@@ -900,7 +896,9 @@ typedef struct _ccBezierConfig
     Vec2 controlPoint_1;
     //! Bezier control point 2
     Vec2 controlPoint_2;
-} ccBezierConfig;
+};
+
+using ccBezierConfig [[deprecated("Use BezierConfig instead.")]] = BezierConfig;
 
 /** @class BezierBy
  * @brief An action that moves the target with a cubic Bezier curve by a certain distance.
@@ -918,7 +916,7 @@ public:
      * in lua: local create(local t, local table)
      * @endcode
      */
-    static BezierBy* create(float t, const ccBezierConfig& c);
+    static BezierBy* create(float t, const BezierConfig& c);
 
     //
     // Overrides
@@ -938,10 +936,10 @@ public:
      * initializes the action with a duration and a bezier configuration
      * @param t in seconds
      */
-    bool initWithDuration(float t, const ccBezierConfig& c);
+    bool initWithDuration(float t, const BezierConfig& c);
 
 protected:
-    ccBezierConfig _config;
+    BezierConfig _config;
     Vec2 _startPosition;
     Vec2 _previousPosition;
 
@@ -966,7 +964,7 @@ public:
      * in lua: local create(local t, local table)
      * @endcode
      */
-    static BezierTo* create(float t, const ccBezierConfig& c);
+    static BezierTo* create(float t, const BezierConfig& c);
 
     //
     // Overrides
@@ -980,10 +978,10 @@ public:
     /**
      * @param t In seconds.
      */
-    bool initWithDuration(float t, const ccBezierConfig& c);
+    bool initWithDuration(float t, const BezierConfig& c);
 
 protected:
-    ccBezierConfig _toConfig;
+    BezierConfig _toConfig;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(BezierTo);
@@ -1231,7 +1229,6 @@ public:
     virtual FadeTo* reverse() const override;
 
     /**
-     * @js NA
      */
     void setReverseAction(FadeTo* ac);
 
@@ -1264,7 +1261,6 @@ public:
     virtual FadeTo* reverse() const override;
 
     /**
-     * @js NA
      */
     void setReverseAction(FadeTo* ac);
 
@@ -1620,4 +1616,4 @@ private:
 
 }
 
-#endif  //__ACTION_CCINTERVAL_ACTION_H__
+#endif

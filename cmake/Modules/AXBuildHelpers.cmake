@@ -27,7 +27,7 @@ function(ax_sync_target_res ax_target)
     ax_def_sync_resource_target(${ax_target} ${sync_target_name})
 
     if(NOT TARGET ${sync_target_name})
-        message(WARNING "SyncResource targe for ${ax_target} is not defined")
+        message(AUTHOR_WARNING "SyncResource targe for ${ax_target} is not defined")
         return()
     endif()
 
@@ -561,15 +561,16 @@ macro (ax_setup_app_props app_name)
         set(CMAKE_EXECUTABLE_SUFFIX ".html")
         target_link_options(${app_name} PRIVATE
                             "-sEXPORTED_FUNCTIONS=[${AX_WASM_EXPORTS}]"
-                            "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap]"
+                            "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap,HEAPU8]"
                             )
-        set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s STACK_SIZE=4mb -s INITIAL_MEMORY=512MB --shell-file ${AX_WASM_SHELL_FILE} --use-preload-cache")
-        # Disable wasm, generate js build?
-        # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s WASM=0")
-        # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s SEPARATE_DWARF_URL=https://xxx:8080/axmolwasm/axmolwasm/build/HelloLua.debug.wasm")
-        # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gseparate-dwarf=HelloLua.debug.wasm")
+        set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s STACK_SIZE=4mb --shell-file ${AX_WASM_SHELL_FILE} --use-preload-cache")
+        # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s SEPARATE_DWARF_URL=http://127.0.0.1:6931/${app_name}.debug.wasm")
+        # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gseparate-dwarf=${CMAKE_BINARY_DIR}/bin/${app_name}/${app_name}.debug.wasm")
+        # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gsplit-dwarf")
 
-        set(_APP_RES_FOLDER "${_APP_SOURCE_DIR}/Content")
+        if (NOT DEFINED _APP_RES_FOLDER)
+            set(_APP_RES_FOLDER "${_APP_SOURCE_DIR}/Content")
+        endif()
         foreach(FOLDER IN LISTS _APP_RES_FOLDER)
             string(APPEND EMSCRIPTEN_LINK_FLAGS " --preload-file ${FOLDER}/@/")
         endforeach()

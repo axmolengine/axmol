@@ -39,7 +39,7 @@ namespace ax
 namespace network
 {
 
-class IDownloadTask;
+class IDownloadContext;
 class IDownloaderImpl;
 class Downloader;
 class DownloaderCURL;
@@ -94,7 +94,7 @@ public:
 private:
     friend class Downloader;
     friend class DownloaderCURL;
-    std::unique_ptr<IDownloadTask> _coTask;
+    std::shared_ptr<IDownloadContext> _context{nullptr};
 };
 
 class AX_DLL DownloaderHints

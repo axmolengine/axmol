@@ -73,7 +73,7 @@ Data Device::getTextureDataForText(std::string_view text, const FontDefinition& 
         var align = $6;
 
         var canvas = Module.axmolSharedCanvas = Module.axmolSharedCanvas || document.createElement("canvas");
-        var context = canvas.getContext("2d");
+        var context = canvas.getContext('2d', { willReadFrequently: true });
         context.font = fontSize + "px " + fontName;
 
         var canvasWidth = dimWidth;

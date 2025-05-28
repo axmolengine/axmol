@@ -50,14 +50,12 @@ class AX_GUI_DLL RelativeBox : public Layout
 public:
     /**
      * Default constructor.
-     * @js ctor
      * @lua new
      */
     RelativeBox();
 
     /**
      * Default destructor.
-     * @js NA
      * @lua NA
      */
     virtual ~RelativeBox();

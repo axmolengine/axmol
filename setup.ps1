@@ -254,109 +254,115 @@ else {
         }
     }
 
-    if ("$env:SHELL" -like '*/zsh') {
-        updateUnixProfile ~/.zshrc
-    }
-    else { # traits undetermined shell as bash
-        if (!$IsMacOS) {
-            updateUnixProfile ~/.bashrc
+    if ($IsMacOS) {
+        # for terminal
+        if ("$env:SHELL" -like '*/zsh') {
+            updateUnixProfile ~/.zshrc
         } else {
             updateUnixProfile ~/.bash_profile
         }
-    }
-
-    if ($IsMacOS) {
-        # for GUI app, android studio can find AX_ROOT
+        # for GUI apps, android studio can find AX_ROOT
         launchctl setenv AX_ROOT $env:AX_ROOT
-    }
-}
-
-if ($IsLinux) {
-    if ($(Get-Command 'dpkg' -ErrorAction SilentlyContinue)) {
-        $LinuxDistro = 'Debian'
-    }
-    elseif ($(Get-Command 'pacman' -ErrorAction SilentlyContinue)) {
-        $LinuxDistro = 'Arch'
-    }
-    else {
-        $LinuxDistro = 'Linux'
-    }
-
-    Write-Host "Are you continue install linux dependencies for axmol? (y/N) " -NoNewline
-    $answer = Read-Host
-    if ($answer -like 'y*') {
-        if ($LinuxDistro -eq 'Debian') {
-            println "It will take few minutes"
-            $os_name = $PSVersionTable.OS
-            $os_ver = [Regex]::Match($os_name, '(\d+\.)+(\*|\d+)(\-[a-z0-9]+)?').Value
-            if (($os_name -match 'Ubuntu' -and [VersionEx]$os_ver -ge [VersionEx]'24.04') -or 
-            ($os_name -match 'Debian' -and [VersionEx]$os_ver -ge [VersionEx]'13')) {
-                $webkit2gtk_dev = 'libwebkit2gtk-4.1-dev'
-            }
-            else {
-                $webkit2gtk_dev = 'libwebkit2gtk-4.0-dev'
-            }
-
-            sudo apt update
-            # for vm, libxxf86vm-dev also required
-
-            $DEPENDS = @()
-
-            $DEPENDS += 'libx11-dev'
-            $DEPENDS += 'automake'
-            $DEPENDS += 'libtool'
-            $DEPENDS += 'cmake'
-            $DEPENDS += 'libxmu-dev'
-            $DEPENDS += 'libglu1-mesa-dev'
-            $DEPENDS += 'libgl2ps-dev'
-            $DEPENDS += 'libxi-dev'
-            $DEPENDS += 'libfontconfig1-dev'
-            $DEPENDS += 'libgtk-3-dev'
-            $DEPENDS += $webkit2gtk_dev
-            $DEPENDS += 'binutils'
-            $DEPENDS += 'g++'
-            $DEPENDS += 'libasound2-dev'
-            $DEPENDS += 'libxxf86vm-dev'
-            $DEPENDS += 'libvlc-dev', 'libvlccore-dev', 'vlc'
-
-            # if vlc encouter codec error, install
-            # sudo apt install ubuntu-restricted-extras
-            println "Install packages: $DEPENDS ..."
-            sudo apt install --allow-unauthenticated --yes $DEPENDS > /dev/null
+    } elseif($IsLinux) {
+        # determine distro
+        if ($(Get-Command 'dpkg' -ErrorAction SilentlyContinue)) {
+            $LinuxDistro = 'Debian'
         }
-        elseif ($LinuxDistro -eq 'Arch') {
-            $mirror_list = [System.IO.File]::ReadAllText('/etc/pacman.d/mirrorlist')
-            $tsinghua_mirror = 'https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch'
-            if (!$mirror_list.Contains($tsinghua_mirror)) {
-                Write-Host "Are want add tsinghua mirror for speed up package install in china region? (y/N)" -NoNewline
-                $answer = Read-Host
-                if ($answer -like 'y*') {
-                    $mirror_list = "$tsinghua_mirror`n$mirror_list"
-                    $mirror_list_tmp_file = (Join-Path $AX_ROOT 'mirrorlist')
-                    [System.IO.File]::WriteAllText($mirror_list_tmp_file, $mirror_list)
-                    sudo mv -f $mirror_list_tmp_file /etc/pacman.d/mirrorlist
-                    sudo pacman -Syyu --noconfirm
-                }
-            }
-
-            $DEPENDS = @(
-                'git',
-                'cmake',
-                'make',
-                'libx11', 
-                'libxrandr',
-                'libxinerama',
-                'libxcursor',
-                'libxi',
-                'fontconfig',
-                'gtk3',
-                'webkit2gtk',
-                'vlc'
-            )
-            sudo pacman -S --needed --noconfirm @DEPENDS
+        elseif ($(Get-Command 'pacman' -ErrorAction SilentlyContinue)) {
+            $LinuxDistro = 'Arch'
         }
         else {
-            println "Warning: current Linux distro isn't officially supported by axmol community"
+            $LinuxDistro = 'Linux'
+        }
+
+        # preferred ~/.profile to ensure GUI apps and terminal works
+        updateUnixProfile ~/.profile
+
+        # ~/.profile not read by bash(1), if ~/.bash_profile or ~/.bash_login
+        if (Test-Path ~/.bash_profile -PathType Leaf) {
+            if ("$env:SHELL" -like '*/zsh') {
+                updateUnixProfile ~/.zshrc
+            } else {
+                updateUnixProfile ~/.bashrc
+            }
+        }
+
+        Write-Host "Are you continue install linux dependencies for axmol? (y/N) " -NoNewline
+        $answer = Read-Host
+        if ($answer -like 'y*') {
+            if ($LinuxDistro -eq 'Debian') {
+                println "It will take few minutes"
+                $os_name = $PSVersionTable.OS
+                $os_ver = [Regex]::Match($os_name, '(\d+\.)+(\*|\d+)(\-[a-z0-9]+)?').Value
+                if (($os_name -match 'Ubuntu' -and [VersionEx]$os_ver -ge [VersionEx]'24.04') -or 
+                ($os_name -match 'Debian' -and [VersionEx]$os_ver -ge [VersionEx]'13')) {
+                    $webkit2gtk_dev = 'libwebkit2gtk-4.1-dev'
+                }
+                else {
+                    $webkit2gtk_dev = 'libwebkit2gtk-4.0-dev'
+                }
+
+                sudo apt update
+                # for vm, libxxf86vm-dev also required
+
+                $DEPENDS = @()
+
+                $DEPENDS += 'libx11-dev'
+                $DEPENDS += 'automake'
+                $DEPENDS += 'libtool'
+                $DEPENDS += 'cmake'
+                $DEPENDS += 'libxmu-dev'
+                $DEPENDS += 'libglu1-mesa-dev'
+                $DEPENDS += 'libgl2ps-dev'
+                $DEPENDS += 'libxi-dev'
+                $DEPENDS += 'libfontconfig1-dev'
+                $DEPENDS += 'libgtk-3-dev'
+                $DEPENDS += $webkit2gtk_dev
+                $DEPENDS += 'binutils'
+                $DEPENDS += 'g++'
+                $DEPENDS += 'libasound2-dev'
+                $DEPENDS += 'libxxf86vm-dev'
+                $DEPENDS += 'libvlc-dev', 'libvlccore-dev', 'vlc'
+
+                # if vlc encouter codec error, install
+                # sudo apt install ubuntu-restricted-extras
+                println "Install packages: $DEPENDS ..."
+                sudo apt install --allow-unauthenticated --yes $DEPENDS > /dev/null
+            }
+            elseif ($LinuxDistro -eq 'Arch') {
+                $mirror_list = [System.IO.File]::ReadAllText('/etc/pacman.d/mirrorlist')
+                $tsinghua_mirror = 'https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch'
+                if (!$mirror_list.Contains($tsinghua_mirror)) {
+                    Write-Host "Are want add tsinghua mirror for speed up package install in china region? (y/N)" -NoNewline
+                    $answer = Read-Host
+                    if ($answer -like 'y*') {
+                        $mirror_list = "$tsinghua_mirror`n$mirror_list"
+                        $mirror_list_tmp_file = (Join-Path $AX_ROOT 'mirrorlist')
+                        [System.IO.File]::WriteAllText($mirror_list_tmp_file, $mirror_list)
+                        sudo mv -f $mirror_list_tmp_file /etc/pacman.d/mirrorlist
+                        sudo pacman -Syyu --noconfirm
+                    }
+                }
+
+                $DEPENDS = @(
+                    'git',
+                    'cmake',
+                    'make',
+                    'libx11', 
+                    'libxrandr',
+                    'libxinerama',
+                    'libxcursor',
+                    'libxi',
+                    'fontconfig',
+                    'gtk3',
+                    'webkit2gtk',
+                    'vlc'
+                )
+                sudo pacman -S --needed --noconfirm @DEPENDS
+            }
+            else {
+                println "Warning: current Linux distro isn't officially supported by axmol community"
+            }
         }
     }
 }
@@ -458,7 +464,7 @@ if ($IsLinux -and (Test-Path '/etc/wsl.conf' -PathType Leaf)) {
     }
 }
 
-$1k.pause("setup successfully, please restart the terminal to make added system variables take effect")
+$1k.pause("setup successfully, please restart the terminal(on linux, need reboot or relogin) to make added system variables take effect")
 
 # Powershell End -------------------------------------------------------
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

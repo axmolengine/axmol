@@ -94,7 +94,6 @@ class FastTMXLayer;
  * object->getProperty(name_of_the_property);
 
  * @since v3.2
- * @js NA
  */
 class AX_DLL FastTMXTiledMap : public Node
 {
@@ -221,11 +220,9 @@ public:
     Vector<ax::FastTMXLayer*> getLayers() const;
 
     /**
-     * @js ctor
      */
     FastTMXTiledMap();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~FastTMXTiledMap() override;

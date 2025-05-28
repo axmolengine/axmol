@@ -52,11 +52,9 @@ class AX_EX_DLL ControlHuePicker : public Control
 public:
     static ControlHuePicker* create(Node* target, Vec2 pos);
     /**
-     * @js ctor
      */
     ControlHuePicker();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ControlHuePicker();

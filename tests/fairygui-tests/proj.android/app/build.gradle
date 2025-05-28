@@ -11,8 +11,8 @@ android {
     def targetSdk = buildProfiles['targetSdk']
 
     // Apply build profiles
-    namespace packageName
-    compileSdk targetSdk.toInteger()
+    namespace = packageName
+    compileSdk = targetSdk.toInteger()
     ndkVersion = buildProfiles['ndkVer']
     if(buildProfiles.containsKey('ndkPath')) {
         ndkPath = buildProfiles['ndkPath']
@@ -35,6 +35,7 @@ android {
         }
 
         ndk {
+            // noinspection ChromeOsAbiSupport
             abiFilters = __1K_ARCHS.split(':').collect{it as String}
         }
     }
@@ -48,7 +49,7 @@ android {
 
     externalNativeBuild {
         cmake {
-            version "$cmakeVer"
+            version = cmakeVer
             path "../../CMakeLists.txt"
         }
     }
@@ -68,7 +69,6 @@ android {
         release {
             debuggable false
             jniDebuggable false
-            renderscriptDebuggable false
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -80,7 +80,6 @@ android {
         debug {
             debuggable true
             jniDebuggable true
-            renderscriptDebuggable true
         }
     }
 

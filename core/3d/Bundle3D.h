@@ -49,7 +49,6 @@ class Animation3D;
  * There are two types of bundle files, c3t and c3b.
  * c3t text file
  * c3b binary file
- * @js NA
  * @lua NA
  */
 class AX_DLL Bundle3D

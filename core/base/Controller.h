@@ -51,7 +51,6 @@ class EventDispatcher;
 /**
  * @class Controller
  * @brief A Controller object represents a connected physical game controller.
- * @js NA
  */
 class AX_DLL Controller
 {

@@ -5,7 +5,7 @@ target_sources(${LIB_NAME}
 )
 
 if(NOT DEFINED FRAMEWORK_SOURCE)
-  message(WARNING
+  message(AUTHOR_WARNING
     "[${LIB_NAME}] Set 'FRAMEWORK_SOURCE' variable to 'axmol' when using axmol rendering."
   )
   set(FRAMEWORK_SOURCE axmol)

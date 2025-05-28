@@ -242,15 +242,32 @@ int64_t FileUtilsAndroid::getFileSize(std::string_view filepath) const
 
 std::vector<std::string> FileUtilsAndroid::listFiles(std::string_view dirPath) const
 {
-
     if (!dirPath.empty() && dirPath[0] == '/')
         return FileUtils::listFiles(dirPath);
 
     std::vector<std::string> fileList;
-    std::string fullPath = fullPathForDirectory(dirPath);
-
     static const std::string apkprefix("assets/");
     std::string relativePath;
+
+    if (obbfile)
+    {
+        std::string fullPath = fullPathForDirectory(dirPath);
+
+        size_t position = fullPath.find(apkprefix);
+        if (0 == position)
+        {
+            // "assets/" is at the beginning of the path and we don't want it
+            relativePath += fullPath.substr(apkprefix.size());
+        }
+        else
+        {
+            relativePath = fullPath;
+        }
+
+        return obbfile->listFiles(relativePath);
+    }
+
+    std::string fullPath = std::string(dirPath); // don't call fullPathForDirectory(dirPath), since empty folders will not return a valid result
     size_t position = fullPath.find(apkprefix);
     if (0 == position)
     {
@@ -261,9 +278,6 @@ std::vector<std::string> FileUtilsAndroid::listFiles(std::string_view dirPath) c
     {
         relativePath = fullPath;
     }
-
-    if (obbfile)
-        return obbfile->listFiles(relativePath);
 
     if (nullptr == assetmanager)
     {
@@ -276,22 +290,8 @@ std::vector<std::string> FileUtilsAndroid::listFiles(std::string_view dirPath) c
         relativePath.erase(relativePath.length() - 1);
     }
 
-    auto* dir = AAssetManager_openDir(assetmanager, relativePath.c_str());
-    if (nullptr == dir)
-    {
-        LOGD("... FileUtilsAndroid::failed to open dir %s", relativePath.c_str());
-        AAssetDir_close(dir);
-        return fileList;
-    }
-    const char* tmpDir = nullptr;
-    while ((tmpDir = AAssetDir_getNextFileName(dir)) != nullptr)
-    {
-        std::string filepath(tmpDir);
-        if (isDirectoryExistInternal(filepath))
-            filepath += "/";
-        fileList.emplace_back(fullPath + filepath);
-    }
-    AAssetDir_close(dir);
+    fileList = JniHelper::callStaticStringArrayMethod("dev/axmol/lib/AxmolEngine", "getAssetsList", relativePath);
+
     return fileList;
 }
 

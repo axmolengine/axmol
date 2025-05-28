@@ -56,7 +56,7 @@ class PointArray;
  * Faster than the "drawing primitives" since they draws everything in one single batch.
  * @since v2.1
  */
-class AX_DLL DrawNode : public Node
+class AX_DLL DrawNode : public Node, public BlendProtocol
 {
 public:
     /** Different draw modus types.
@@ -97,7 +97,6 @@ public:
      * @param point A Vec2 used to point.
      * @param pointSize The point size.
      * @param color The point color.
-     * @js NA
      */
     void drawPoint(const Vec2& point,
                    const float pointSize,
@@ -109,7 +108,6 @@ public:
      * @param position A Vec2 pointer.
      * @param numberOfPoints The number of points.
      * @param color The point color.
-     * @js NA
      */
     void drawPoints(const Vec2* position,
                     unsigned int numberOfPoints,
@@ -122,7 +120,6 @@ public:
      * @param numberOfPoints The number of points.
      * @param pointSize The point size.
      * @param color The point color.
-     * @js NA
      */
     void drawPoints(const Vec2* position,
                     unsigned int numberOfPoints,
@@ -135,7 +132,6 @@ public:
      * @param origin The line origin.
      * @param destination The line destination.
      * @param color The line color.
-     * @js NA
      */
     void drawLine(const Vec2& origin,
                   const Vec2& destination,
@@ -279,11 +275,12 @@ public:
      * @param segments The number of segments.
      * @param color Set the Spline color.
      */
-    void drawCardinalSpline(PointArray* config,
+    void drawCardinalSpline(const PointArray* configIn,
                             float tension,
                             unsigned int segments,
                             const Color4B& color,
-                            float thickness = 1.0f);
+                            float thickness = 1.0f,
+                            bool closed = false);
 
     /** Draws a Catmull Rom path.
      *
@@ -291,7 +288,11 @@ public:
      * @param segments The number of segments.
      * @param color The Catmull Rom color.
      */
-    void drawCatmullRom(PointArray* points, unsigned int segments, const Color4B& color, float thickness = 1.0f);
+    void drawCatmullRom(const PointArray* pointsIn,
+                        unsigned int segments,
+                        const Color4B& color,
+                        float thickness = 1.0f,
+                        bool closed = false);
 
     /** draw a dot at a position, with a given radius and color.
      *
@@ -322,7 +323,6 @@ public:
      * @param origin The rectangle origin.
      * @param destination The rectangle destination.
      * @param color The rectangle color.
-     * @js NA
      */
     void drawSolidRect(const Vec2& origin,
                        const Vec2& destination,
@@ -336,7 +336,6 @@ public:
      * @param poli A solid polygon given a pointer to CGPoint coordinates.
      * @param numberOfPoints The number of vertices measured in points.
      * @param color The solid polygon color.
-     * @js NA
      */
     void drawSolidPoly(const Vec2* poli,
                        unsigned int numberOfPoints,
@@ -356,7 +355,6 @@ public:
      * @param thickness The border of line width.
      * @param borderColor The border of line color.
      * @param drawLineToCenter Whether or not draw the line from the origin to center.
-     * @js NA
      */
     void drawSolidCircle(const Vec2& center,
                          float radius,
@@ -377,7 +375,6 @@ public:
      * @param scaleX The scale value in x.
      * @param scaleY The scale value in y.
      * @param color The solid circle color.
-     * @js NA
      */
     void drawSolidCircle(const Vec2& center,
                          float radius,
@@ -393,7 +390,6 @@ public:
      * @param angle  The circle angle.
      * @param segments The number of segments.
      * @param color The solid circle color.
-     * @js NA
      */
     void drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, const Color4B& color);
 
@@ -408,7 +404,6 @@ public:
      * @param fillColor The solid circle color.
      * @param borderColor The borderColor.
      * @param DrawMode The draw mode
-     * @js NA
      */
     void drawPie(const Vec2& center,
                  float radius,
@@ -433,7 +428,6 @@ public:
      * @param scaleY The scale value in y.
      * @param color The solid circle color.
      * @param DrawMode The draw mode
-     * @js NA
      */
     void drawPie(const Vec2& center,
                  float radius,
@@ -476,7 +470,6 @@ public:
      * @param fillColor The color will fill in polygon.
      * @param thickness The border of line width.
      * @param borderColor The border of line color.
-     * @js NA
      */
     void drawPolygon(const Vec2* verts,
                      int count,
@@ -500,7 +493,6 @@ public:
      * @param p2 The triangle vertex point.
      * @param p3 The triangle vertex point.
      * @param color The triangle color.
-     * @js NA
      */
 
     void drawColoredTriangle(const Vec2* vertices3, const Color4B* color3);
@@ -525,7 +517,7 @@ public:
     /** Get the color mixed mode.
      * @lua NA
      */
-    const BlendFunc& getBlendFunc() const;
+    const BlendFunc& getBlendFunc() const override;
     /** Set the color mixed mode.
      * @code
      * When this function bound into js or lua,the parameter will be changed
@@ -533,7 +525,7 @@ public:
      * @endcode
      * @lua NA
      */
-    void setBlendFunc(const BlendFunc& blendFunc);
+    void setBlendFunc(const BlendFunc& blendFunc) override;
 
     // Overrides
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
@@ -679,7 +671,6 @@ private:
      * @param vertices A Vec2 vertices list.
      * @param count The number of vertices.
      * @param closedPolygon The closedPolygon flag.
-     * @js NA
      */
     axstd::pod_vector<Vec2> _transform(const Vec2* vertices, unsigned int& count, bool closedPolygon = false);
 
@@ -711,13 +702,11 @@ public:
         * Its for performance there
         * false = cocos2dx behaviour => faster but works only on 1.0f thickness
 
-        * @js NA
         */
         void setDrawOrder(bool dO) { drawOrder = dO; };
 
         /** Get the DrawNode drawOrder
          *
-         * @js NA
          */
         bool getDrawOrder(void) { return drawOrder; };
 
@@ -725,61 +714,51 @@ public:
          *
          * @param transform. true/false = On/Off
          *
-         * @js NA
          */
         void setTransform(bool t) { transform = t; };
 
         /** Get the DrawNode transform
          *
-         * @js NA
          */
         bool getTransform(void) { return transform; };
 
         /** Set the DrawNode scale for each drawing primitive after this.
 
-        * @js NA
         */
         void setScale(Vec2 s) { scale = s; };
 
         /** Set the DrawNode rotation for each drawing primitive after this.
 
-        * @js NA
         */
         void setRotation(float r) { rotation = r; };
 
         /** Get the DrawNode rotation for each drawing primitive after this.
 
-        * @js NA
         */
         float getRotation() { return rotation; };
 
         /** Set the DrawNode center of rotation for each drawing primitive after this.
 
-        * @js NA
         */
         void setCenter(Vec2 c) { center = c; };
 
         /** Get the DrawNode center of rotation for each drawing primitive after this.
 
-        * @js NA
         */
         Vec2 getCenter() { return center; };
 
         /** Set the DrawNode position for each drawing primitive after this.
 
-        * @js NA
         */
         void setPosition(Vec2 p) { position = p; };
 
         /** Get the DrawNode position for drawing primitive.
 
-        * @js NA
         */
         Vec2 getPosition() { return position; };
 
         /** Set all default DrawNode properties.
 
-        * @js NA
         */
         void setDefaultValues();
         float getFactor() { return factor; };

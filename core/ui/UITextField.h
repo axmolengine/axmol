@@ -45,7 +45,6 @@ namespace ui
  * @brief A helper class which inherit from @see `TextFieldTTF` and implements the @see `TextFieldDelegate` protocol.
  * It is mainly be used internally by @see `UITextField` class.
  * !!!DEPRECATED since axmol-2.1.3
- * @js NA
  * @lua NA
  */
 class AX_GUI_DLL UICCTextField : public TextFieldTTF, public TextFieldDelegate
@@ -223,7 +222,6 @@ protected:
  * @brief A widget which allows users to input text.
  * The rendering of the input text are based on @see `TextFieldTTF'.
  * If you want to use system control behavior, please use @see `EditBox` instead.
- * @js NA
  * @lua NA
  */
 class AX_GUI_DLL TextField : public Widget
@@ -585,25 +583,21 @@ public:
 
     /**
      * Set enable cursor use.
-     * @js NA
      */
     void setCursorEnabled(bool enabled);
 
     /**
      * Set char showing cursor.
-     * @js NA
      */
     void setCursorChar(char cursor);
 
     /**
      * Set cursor position, if enabled
-     * @js NA
      */
     void setCursorPosition(std::size_t cursorPosition);
 
     /**
      * Set cursor position to hit letter, if enabled
-     * @js NA
      */
     void setCursorFromPoint(const Vec2& point, const Camera* camera);
 

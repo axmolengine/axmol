@@ -36,7 +36,6 @@ namespace cocostudio
 class Bone;
 
 /**! DisplayManager manages Bone's display
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL DisplayManager : public ax::Object

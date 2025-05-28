@@ -36,7 +36,6 @@
 
 /**
  * @addtogroup base
- * @js NA
  * @lua NA
  */
 namespace ax

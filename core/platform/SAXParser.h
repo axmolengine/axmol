@@ -46,17 +46,14 @@ public:
     virtual ~SAXDelegator() {}
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual void startElement(void* ctx, const char* name, const char** atts) = 0;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void endElement(void* ctx, const char* name) = 0;
     /**
-     * @js NA
      * @lua NA
      */
     virtual void textHandler(void* ctx, const char* s, size_t len) = 0;
@@ -76,27 +73,22 @@ public:
     };
 
     /**
-     * @js NA
      * @lua NA
      */
     SAXParser();
     /**
-     * @js NA
      * @lua NA
      */
     ~SAXParser();
     /**
-     * @js NA
      * @lua NA
      */
     bool init(const char* encoding);
     /**
-     * @js NA
      * @lua NA
      */
     bool parse(const char* xmlData, size_t dataLength, ParseOption opt = ParseOption::NORMAL);
     /**
-     * @js NA
      * @lua NA
      */
     bool parse(std::string_view filename, ParseOption opt = ParseOption::NORMAL);
@@ -107,22 +99,18 @@ public:
     bool parseIntrusive(char* xmlData, size_t dataLength, ParseOption opt = ParseOption::NORMAL);
 
     /**
-     * @js NA
      * @lua NA
      */
     void setDelegator(SAXDelegator* delegator);
     /**
-     * @js NA
      * @lua NA
      */
     static void startElement(void* ctx, const AX_XML_CHAR* name, const AX_XML_CHAR** atts);
     /**
-     * @js NA
      * @lua NA
      */
     static void endElement(void* ctx, const AX_XML_CHAR* name);
     /**
-     * @js NA
      * @lua NA
      */
     static void textHandler(void* ctx, const AX_XML_CHAR* name, size_t len);

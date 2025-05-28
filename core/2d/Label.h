@@ -110,7 +110,6 @@ class TextureAtlas;
  * - http://www.n4te.com/hiero/hiero.jnlp (Free, Java)
  * - http://slick.cokeandcode.com/demos/hiero.jnlp (Free, Java)
  * - http://www.angelcode.com/products/bmfont/ (Free, Windows only)
- * @js NA
  */
 class AX_DLL Label : public Node, public LabelProtocol, public BlendProtocol
 {
@@ -712,13 +711,11 @@ public:
 
     /**
      * Constructor of Label.
-     * @js NA
      */
     Label(TextHAlignment hAlignment = TextHAlignment::LEFT, TextVAlignment vAlignment = TextVAlignment::TOP);
 
     /**
      * Destructor of Label.
-     * @js NA
      * @lua NA
      */
     virtual ~Label();
@@ -803,7 +800,7 @@ protected:
     bool setTTFConfigInternal(const TTFConfig& ttfConfig);
     bool updateTTFConfigInternal();
     void setBMFontSizeInternal(float fontSize);
-    bool isHorizontalClamped(float letterPositionX, int lineIndex);
+    bool isHorizontalClamped(float letterPositionX, float letterWidth, int lineIndex);
     void restoreFontSize();
     void updateLetterSpriteScale(Sprite* sprite);
     int getFirstCharLen(const std::u32string& utf32Text, int startIndex, int textLen) const;

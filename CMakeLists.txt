@@ -27,7 +27,7 @@
 
 # build engine library and all tests
 
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.22...4.0)
 
 project(axmol)
 

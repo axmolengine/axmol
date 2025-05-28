@@ -124,18 +124,15 @@ public:
 
     /**
      * Returns a shared instance of the director.
-     * @js _getInstance
      */
     static Director* getInstance();
     static void destroyInstance();
 
     /**
-     * @js ctor
      */
     Director();
 
     /**
-     * @js NA
      * @lua NA
      */
     ~Director();
@@ -180,7 +177,6 @@ public:
 
     /*
      * Gets singleton of TextureCache.
-     * @js NA
      */
     TextureCache* getTextureCache() const;
 
@@ -277,7 +273,6 @@ public:
      * Don't call it if there is already a running scene.
      *
      * It will call pushScene: and then it will call startAnimation
-     * @js NA
      */
     void runWithScene(Scene* scene);
 
@@ -313,7 +308,6 @@ public:
 
     /** Replaces the running scene with a new one. The running scene is terminated.
      * ONLY call it if there is a running scene.
-     * @js NA
      */
     void replaceScene(Scene* scene);
 
@@ -336,7 +330,6 @@ public:
 
     /*
      * Restart the director.
-     * @js NA
      */
     void restart();
 
@@ -371,13 +364,11 @@ public:
 
     /** Sets the OpenGL default values.
      * It will enable alpha blending, disable depth test.
-     * @js NA
      */
     void setGLDefaultValues();
 
     /** Sets clear values for the color buffers,
      * value range of each element is [0.0, 1.0].
-     * @js NA
      */
     void setClearColor(const Color4F& clearColor);
 
@@ -428,13 +419,11 @@ public:
 
     /** Gets the EventDispatcher associated with this director.
      * @since v3.0
-     * @js NA
      */
     EventDispatcher* getEventDispatcher() const { return _eventDispatcher; }
 
     /** Sets the EventDispatcher associated with this director.
      * @since v3.0
-     * @js NA
      */
     void setEventDispatcher(EventDispatcher* dispatcher);
 
@@ -446,7 +435,6 @@ public:
 #ifdef AX_ENABLE_CONSOLE
     /** Returns the Console associated with this director.
      * @since v3.0
-     * @js NA
      */
     Console* getConsole() const { return _console; }
 #endif
@@ -455,23 +443,19 @@ public:
 
     /**
      *  Gets Frame Rate.
-     * @js NA
      */
     float getFrameRate() const { return _frameRate; }
 
     /**
      * Clones a specified type matrix and put it to the top of specified type of matrix stack.
-     * @js NA
      */
     void pushMatrix(MATRIX_STACK_TYPE type);
 
     /** Pops the top matrix of the specified type of matrix stack.
-     * @js NA
      */
     void popMatrix(MATRIX_STACK_TYPE type);
 
     /** Adds an identity matrix to the top of specified type of matrix stack.
-     * @js NA
      */
     void loadIdentityMatrix(MATRIX_STACK_TYPE type);
 
@@ -480,7 +464,6 @@ public:
      *
      * @param type Matrix type.
      * @param mat The matrix that to be added.
-     * @js NA
      */
     void loadMatrix(MATRIX_STACK_TYPE type, const Mat4& mat);
 
@@ -489,19 +472,16 @@ public:
      *
      * @param type Matrix type.
      * @param mat The matrix that to be multiplied.
-     * @js NA
      */
     void multiplyMatrix(MATRIX_STACK_TYPE type, const Mat4& mat);
 
     /**
      * Gets the top matrix of specified type of matrix stack.
-     * @js NA
      */
     const Mat4& getMatrix(MATRIX_STACK_TYPE type) const;
 
     /**
      * Clear all types of matrix stack, and add identity matrix to these matrix stacks.
-     * @js NA
      */
     void resetMatrixStack();
 

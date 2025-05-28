@@ -60,14 +60,12 @@ class AX_GUI_DLL Scale9Sprite : public Sprite
 public:
     /**
      * Default constructor.
-     * @js ctor
      * @lua new
      */
     Scale9Sprite();
 
     /**
      * Default destructor.
-     * @js NA
      * @lua NA
      */
     virtual ~Scale9Sprite();
@@ -360,7 +358,6 @@ public:
      * @param rotated Whether the sprite is rotated or not.
      * @param capInsets The Values to use for the cap insets.
      * @return True if update success, false otherwise.
-     * @js NA
      */
     virtual bool updateWithSprite(Sprite* sprite, const Rect& rect, bool rotated, const Rect& capInsets);
 
@@ -374,7 +371,6 @@ public:
      * @param originalSize The original size of the sprite.
      * @param capInsets The Values to use for the cap insets.
      * @return True if update success, false otherwise.
-     * @js NA
      */
     virtual bool updateWithSprite(Sprite* sprite,
                                   const Rect& rect,
@@ -490,7 +486,6 @@ public:
      * @warning: Don't use setScale9Enabled(false), use setRenderingType(RenderingType::SIMPLE) instead.
      *        The setScale9Enabled(false) is kept only for back back compatibility.
      * @param enabled True to enable 9-slice, false otherwise.
-     * @js NA
      */
     void setScale9Enabled(bool enabled);
 
@@ -498,7 +493,6 @@ public:
      * @brief Query whether the Scale9Sprite is enable 9-slice or not.
      *
      * @return True if 9-slice is enabled, false otherwise.
-     * @js NA
      */
     bool isScale9Enabled() const;
 

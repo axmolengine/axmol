@@ -182,11 +182,9 @@ public:
     virtual void setOpacityModifyRGB(bool bOpacityModifyRGB) override;
 
     /**
-     * @js ctor
      */
     Control();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~Control();

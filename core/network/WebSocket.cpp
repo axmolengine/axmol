@@ -494,8 +494,7 @@ void WebSocket::generateHandshakeSecKey()
 
     auto signContent = _handshakeSecKey;
     signContent += "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"sv;
-    auto digest   = utils::computeDigest(signContent, "sha1"sv, false);
-    _verifySecKey = utils::base64Encode(std::span{digest});
+    _verifySecKey   = utils::computeDigest(signContent, "sha1"sv, utils::DigestPresent::Base64);
 }
 
 void WebSocket::handleNetworkEvent(yasio::io_event* event)

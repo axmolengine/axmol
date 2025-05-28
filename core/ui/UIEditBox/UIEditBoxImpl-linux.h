@@ -48,11 +48,9 @@ class EditBoxImplLinux : public EditBoxImplCommon
 {
 public:
     /**
-     * @js NA
      */
     EditBoxImplLinux(EditBox* pEditText);
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~EditBoxImplLinux();

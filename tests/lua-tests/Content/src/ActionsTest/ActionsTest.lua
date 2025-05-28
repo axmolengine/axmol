@@ -311,12 +311,12 @@ local function ActionCardinalSpline()
 
 	kathia:setPosition(cc.p(size.width / 2, 50))
 	kathia:runAction(seq2)
-    
+
     local drawNode1 = cc.DrawNode:create()
     drawNode1:setPosition(50, 50)
     drawNode1:drawCardinalSpline(array, 0, 100, cc.c4f(0,0,1,1))
     layer:addChild(drawNode1)
-    
+
     local drawNode2 = cc.DrawNode:create()
     drawNode2:setPosition(size.width/2, 50)
     drawNode2:drawCardinalSpline(array, 1, 100, cc.c4f(0,0,1,1))
@@ -368,7 +368,7 @@ local function ActionCatmullRom()
     drawNode1:setPosition(50, 50)
     drawNode1:drawCatmullRom(array, 50, cc.c4f(0,0,1,1))
     layer:addChild(drawNode1)
-    
+
     local drawNode2 = cc.DrawNode:create()
     --drawNode2:setPosition(size.width/2, 50)
     drawNode2:drawCatmullRom(array2, 50, cc.c4f(0,0,1,1))
@@ -390,7 +390,7 @@ local function ActionBezier()
 
 	-- sprite 1
     --[[
-    local bezier = ccBezierConfig()
+    local bezier = BezierConfig()
     bezier.controlPoint_1 = cc.p(0, size.height / 2)
     bezier.controlPoint_2 = cc.p(300, - size.height / 2)
     bezier.endPosition = cc.p(300, 100)
@@ -407,7 +407,7 @@ local function ActionBezier()
     -- sprite 2
     tamara:setPosition(cc.p(80,160))
     --[[
-    local bezier2 = ccBezierConfig()
+    local bezier2 = BezierConfig()
     bezier2.controlPoint_1 = cc.p(100, size.height / 2)
     bezier2.controlPoint_2 = cc.p(200, - size.height / 2)
     bezier2.endPosition = cc.p(240, 160)
@@ -532,7 +532,7 @@ local function ActionAnimate()
     tamara:runAction(cc.Sequence:create(action2, action2:reverse()))
 
 	local animation3 = animation2:clone()
-	
+
     animation3:setLoops(4)
 
     local action3 = cc.Animate:create(animation3)
@@ -945,7 +945,7 @@ local function ActionFollow()
     grossini:runAction(rep)
 
     layer:runAction(cc.Follow:create(grossini, cc.rect(0, 0, size.width * 2 - 100, size.height)))
-    
+
     local drawNode = cc.DrawNode:create()
     local winSize = cc.Director:getInstance():getWinSize()
     local x = winSize.width * 2 - 100
@@ -1252,13 +1252,13 @@ function ActionsTest()
         ActionReverseSequence,
         ActionReverseSequence2,
 		ActionOrbit,
-		ActionFollow,    
+		ActionFollow,
 		ActionTargeted,
-		PauseResumeActions,    
-		ActionIssue1305,    
-		ActionIssue1305_2,    
-		ActionIssue1288,   
-		ActionIssue1288_2,  
+		PauseResumeActions,
+		ActionIssue1305,
+		ActionIssue1305_2,
+		ActionIssue1288,
+		ActionIssue1288_2,
 		ActionIssue1327
     }
     Helper.index = 1

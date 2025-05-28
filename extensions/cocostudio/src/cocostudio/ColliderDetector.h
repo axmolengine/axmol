@@ -45,7 +45,6 @@ namespace cocostudio
 class Bone;
 
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ColliderFilter
@@ -128,7 +127,6 @@ private:
 
 /*
  *  @brief  ContourSprite used to draw the contour of the display
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL ColliderDetector : public ax::Object
@@ -139,11 +137,9 @@ public:
 
 public:
     /**
-     * @js ctor
      */
     ColliderDetector();
     /**
-     * @js NA
      * @lua NA
      */
     ~ColliderDetector(void);

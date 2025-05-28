@@ -89,25 +89,21 @@ public:
     void setCallback(const ccMenuCallback& callbackClick);
 
     /** Set the callback of selected and unselected state to the menu item.
-     * @js NA
      * @lua NA
      */
     void setCallbackSelected(const ccMenuCallback& callbackSelected   = nullptr,
                              const ccMenuCallback& callbackUnSelected = nullptr);
 
     /**
-     * @js NA
      */
     virtual std::string getDescription() const override;
 
     /**
-     * @js ctor
      */
     MenuItem() : _selected(false), _enabled(false), _callbackClick(nullptr)
                , _callbackSelected(nullptr), _callbackUnSelected(nullptr)
     {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~MenuItem();
@@ -171,11 +167,9 @@ public:
     virtual void setEnabled(bool enabled) override;
 
     /**
-     * @js ctor
      */
     MenuItemLabel() : _originalScale(0.0), _label(nullptr) {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~MenuItemLabel();
@@ -217,11 +211,9 @@ public:
                                      const ccMenuCallback& callback);
 
     /**
-     * @js ctor
      */
     MenuItemAtlasFont() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~MenuItemAtlasFont() {}
@@ -261,14 +253,10 @@ public:
     /** Set font size.
      * c++ can not overload static and non-static member functions with the same parameter types.
      * so change the name to setFontSizeObj.
-     * @js setFontSize
-     * @js NA
      */
     void setFontSizeObj(int size);
 
     /** get font size .
-     * @js getFontSize
-     * @js NA
      */
     int getFontSizeObj() const;
 
@@ -276,23 +264,17 @@ public:
      * Set the font name .
      * c++ can not overload static and non-static member functions with the same parameter types.
      * so change the name to setFontNameObj.
-     * @js setFontName
-     * @js NA
      */
     void setFontNameObj(std::string_view name);
 
     /** Returns the name of the Font.
-     * @js getFontNameObj
-     * @js NA
      */
     std::string_view getFontNameObj() const;
 
     /**
-     * @js ctor
      */
     MenuItemFont();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~MenuItemFont();
@@ -418,11 +400,9 @@ public:
     void setDisabledSpriteFrame(SpriteFrame* frame);
 
     /**
-     * @js ctor
      */
     MenuItemImage() {}
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~MenuItemImage() {}
@@ -475,7 +455,6 @@ public:
     /** Gets the array that contains the subitems.
      *You can add/remove items in runtime, and you can replace the array with a new one.
      * @since v0.7.2
-     * @js NA
      * @lua NA
      */
     const Vector<MenuItem*>& getSubItems() const { return _subItems; }
@@ -492,7 +471,6 @@ public:
     virtual void cleanup() override;
 
     /**
-     * @js ctor
      */
     MenuItemToggle() : _selectedIndex(0), _selectedItem(nullptr) {}
 

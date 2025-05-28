@@ -120,12 +120,10 @@ namespace ui {
   {
   public:
     /**
-    * @js NA
     */
     UIEditBoxImplWinrt(EditBox* pEditText);
 
     /**
-    * @js NA
     * @lua NA
     */
     virtual ~UIEditBoxImplWinrt() { };

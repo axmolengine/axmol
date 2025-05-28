@@ -1,4 +1,3 @@
-cmake_minimum_required (VERSION 3.0.0)
 project(EffekseerRendererMetal)
 
 option(USE_INTERNAL_COMMAND_BUFFER "Use Internal Command Buffer" ON)

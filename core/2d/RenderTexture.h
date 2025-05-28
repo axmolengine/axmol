@@ -169,7 +169,6 @@ public:
      *
      * @param eglCacheHint Whether for egl cache, internal use
      * @return An image.
-     * @js NA
      */
     void newImage(std::function<void(RefPtr<Image>)> imageCallback, bool eglCacheHint = false);
 
@@ -318,7 +317,6 @@ public:
      *
      * @param keepMatrix Whether or not use stack matrix computed from scene hierarchy or generate new modelView and
      * projection matrix.
-     * @js NA
      */
     inline void setKeepMatrix(bool keepMatrix) { _keepMatrix = keepMatrix; }
     /**Used for grab part of screen to a texture.
@@ -338,12 +336,10 @@ public:
     /** FIXME: should be protected.
      * but due to a bug in PowerVR + Android,
      * the constructor is public again.
-     * @js ctor
      */
     RenderTexture();
 
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~RenderTexture();

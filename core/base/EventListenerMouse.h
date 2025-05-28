@@ -42,7 +42,6 @@ class Event;
 
 /** @class EventListenerMouse
  * @brief Mouse event listener.
- * @js cc._EventListenerMouse
  */
 class AX_DLL EventListenerMouse : public EventListener
 {

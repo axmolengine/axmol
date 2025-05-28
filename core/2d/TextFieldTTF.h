@@ -48,7 +48,6 @@ class AX_DLL TextFieldDelegate
 public:
     /**
      * Destructor for TextFieldDelegate.
-     * @js NA
      */
     virtual ~TextFieldDelegate() {}
 
@@ -73,7 +72,6 @@ public:
 
     /**
      *@brief    If the sender doesn't want to draw, return true.
-     * @js NA
      */
     virtual bool onVisit(TextFieldTTF* sender, Renderer* renderer, const Mat4& transform, uint32_t flags);
 };
@@ -86,19 +84,16 @@ class AX_DLL TextFieldTTF : public Label, public IMEDelegate
 public:
     /**
      * Default constructor.
-     * @js ctor
      */
     TextFieldTTF();
 
     /**
      * Default destructor.
-     * @js NA
      * @lua NA
      */
     virtual ~TextFieldTTF();
 
     /** Creates a TextFieldTTF from a fontname, alignment, dimension and font size.
-     * @js NA
      */
     static TextFieldTTF* textFieldWithPlaceHolder(std::string_view placeholder,
                                                   const Vec2& dimensions,
@@ -107,7 +102,6 @@ public:
                                                   float fontSize);
 
     /** Creates a TextFieldTTF from a fontname and font size.
-     * @js NA
      */
     static TextFieldTTF* textFieldWithPlaceHolder(std::string_view placeholder,
                                                   std::string_view fontName,
@@ -210,7 +204,6 @@ public:
      * Set enable secure text entry representation.
      * If you want to display password in TextField, this option is very helpful.
      *@param value Whether or not to display text with secure text entry.
-     * @js NA
      */
     virtual void setSecureTextEntry(bool value);
     virtual void setPasswordTextStyle(std::string_view text);
@@ -219,7 +212,6 @@ public:
     /**
      * Query whether the currently display mode is secure text entry or not.
      *@return Whether current text is displayed as secure text entry.
-     * @js NA
      */
     virtual bool isSecureTextEntry() const;
 
@@ -229,25 +221,21 @@ public:
 
     /**
      * Set enable cursor use.
-     * @js NA
      */
     void setCursorEnabled(bool enabled);
 
     /**
      * Set char showing cursor.
-     * @js NA
      */
     void setCursorChar(char cursor);
 
     /**
      * Set cursor position, if enabled
-     * @js NA
      */
     void setCursorPosition(std::size_t cursorPosition);
 
     /**
      * Set cursor position to hit letter, if enabled
-     * @js NA
      */
     void setCursorFromPoint(const Vec2& point, const Camera* camera);
 

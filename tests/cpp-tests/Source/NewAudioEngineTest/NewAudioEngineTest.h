@@ -77,6 +77,24 @@ private:
     ax::Label* _playOverLabel;
 };
 
+class AudioOpusTest : public AudioEngineTestDemo
+{
+public:
+    CREATE_FUNC(AudioOpusTest);
+
+    virtual ~AudioOpusTest();
+
+    virtual bool init() override;
+
+    void onEnter() override;
+
+    virtual std::string title() const override;
+
+private:
+    ax::Label* _stateLabel = nullptr;
+    int _audioID           = -1;
+};
+
 class AudioWavTest : public AudioEngineTestDemo
 {
 public:

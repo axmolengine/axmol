@@ -419,7 +419,7 @@ std::string getStringMD5Hash(std::string_view str)
     return computeDigest(str, "md5"sv);
 }
 
-std::string computeDigest(std::string_view data, std::string_view algorithm, bool toHex)
+std::string computeDigest(std::string_view data, std::string_view algorithm, DigestPresent present)
 {
     unsigned char mdValue[EVP_MAX_MD_SIZE] = {0};
     unsigned int mdLen                     = 0;
@@ -440,11 +440,21 @@ std::string computeDigest(std::string_view data, std::string_view algorithm, boo
     EVP_DigestFinal(mdctx, mdValue, &mdLen);
     EVP_MD_CTX_destroy(mdctx);
 
-    return toHex ? bin2hex(std::string_view{(const char*)mdValue, (size_t)mdLen})
-                 : std::string{(const char*)mdValue, (size_t)mdLen};
+    switch (present)
+    {
+    case DigestPresent::Base64:
+        return base64Encode(std::span<uint8_t>{mdValue, mdLen});
+    case DigestPresent::Hex:
+        return bin2hex(std::string_view{(const char*)mdValue, (size_t)mdLen});
+    default:
+        return std::string{(const char*)mdValue, (size_t)mdLen};
+    }
 }
 
-std::string computeFileDigest(std::string_view filename, std::string_view algorithm, uint32_t bufferSize, bool toHex)
+std::string computeFileDigest(std::string_view filename,
+                              std::string_view algorithm,
+                              uint32_t bufferSize,
+                              DigestPresent present)
 {
     if (filename.empty())
         return std::string{};
@@ -479,8 +489,16 @@ std::string computeFileDigest(std::string_view filename, std::string_view algori
 
     EVP_DigestFinal(mdctx, mdValue, &mdLen);
     EVP_MD_CTX_destroy(mdctx);
-    return toHex ? bin2hex(std::string_view{(const char*)mdValue, (size_t)mdLen})
-                 : std::string{(const char*)mdValue, (size_t)mdLen};
+
+    switch (present)
+    {
+    case DigestPresent::Base64:
+        return base64Encode(std::span<uint8_t>{mdValue, mdLen});
+    case DigestPresent::Hex:
+        return bin2hex(std::string_view{(const char*)mdValue, (size_t)mdLen});
+    default:
+        return std::string{(const char*)mdValue, (size_t)mdLen};
+    }
 }
 
 LanguageType getLanguageTypeByISO2(const char* code)
@@ -945,4 +963,4 @@ AX_DLL uint32_t fourccValue(std::string_view str)
 
 }  // namespace utils
 
-}
+}  // namespace ax

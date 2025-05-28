@@ -29,11 +29,14 @@ Due to Axmol Engine is a fork of Cocos2d-x-4.0, so the [Cocos2d-x AUTHORS](https
 (in alphabetical order)
 
     aismann
-    AsakuraMizu (Asakura Mizu)
     armanhossiny
+    AsakuraMizu (Asakura Mizu)
+    AlexandreK38
     Arvant
     bwaiox
     binxiaojiao
+    blairwang
+    caryyu
     crazyhappygame
     CodeAndWeb
     clawfinger (Dmitry Vassiliev)
@@ -44,11 +47,15 @@ Due to Axmol Engine is a fork of Cocos2d-x-4.0, so the [Cocos2d-x AUTHORS](https
     huizhen
     halx99 (halx99@live.com)
     iAndyHD3
+    IamSanjid
     j-jorge
     Joilnen
+    Janglee123
     lich426 (lich426@gmail.com)
     maksg (Maksymilian Galas)
     nowasm
+    MartinLutherSu
+    NgVThangBz
     Niborski (Pink)
     Obg1 (Oren Bengigi)
     paulocoutinhox (Paulo Coutinho)
@@ -58,5 +65,6 @@ Due to Axmol Engine is a fork of Cocos2d-x-4.0, so the [Cocos2d-x AUTHORS](https
     Tas-I-te (Tan Shjie)
     tkzcfc
     theunwisewolf (TheUnwiseWolf)
+    Tosik86
     weiwest
     Yehsam23

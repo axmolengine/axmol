@@ -47,11 +47,9 @@ class EditBoxImplIOS : public EditBoxImplCommon
 {
 public:
     /**
-     * @js NA
      */
     EditBoxImplIOS(EditBox* pEditText);
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~EditBoxImplIOS();

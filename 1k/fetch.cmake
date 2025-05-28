@@ -4,7 +4,7 @@
 #   _1kfetch_cache_dir
 #   _1kfetch_manifest
 # 
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.23...4.0)
 
 ### 1kdist url
 find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -39,7 +39,7 @@ function(_1kfetch_init)
         set(_1kdist_base_url "${_1kdist_base_url}/${_1kdist_ver}" PARENT_SCOPE)
         set(_1kdist_ver ${_1kdist_ver} PARENT_SCOPE)
     else()
-        message(WARNING "Resolve 1kdist uri fail, ${_1kdist_error}, the _1kfetch_dist will not work")
+        message(AUTHOR_WARNING "Resolve 1kdist uri fail, ${_1kdist_error}, the _1kfetch_dist will not work")
     endif()
 endfunction()
 
@@ -253,5 +253,5 @@ endmacro()
 if(PWSH_PROG)
     _1kfetch_init()
 else()
-    message(WARNING "fetch.cmake: PowerShell is missing, the fetch functions not work, please install from https://github.com/PowerShell/PowerShell/releases")
+    message(AUTHOR_WARNING "fetch.cmake: PowerShell is missing, the fetch functions not work, please install from https://github.com/PowerShell/PowerShell/releases")
 endif()

@@ -48,7 +48,6 @@ public:
      * Meanwhile the callObjcStaticMethod of LuaObjcBridge binding function is wrapped in the luaoc.lua
      *
      * @param L the current lua_State
-     * @js NA
      * @lua NA
      */
     static void luaopen_luaoc(lua_State* L);

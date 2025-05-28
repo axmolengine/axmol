@@ -78,7 +78,6 @@ public:
      * @param tex A given texture.
      * @param capacity A capacity of particles.
      * @return An autoreleased ParticleBatchNode object.
-     * @js NA
      */
     static ParticleBatchNode* createWithTexture(Texture2D* tex, int capacity = kParticleDefaultCapacity);
 
@@ -144,17 +143,14 @@ public:
      */
     virtual void setBlendFunc(const BlendFunc& blendFunc) override;
     /**
-     * @js NA
      * @lua NA
      */
     virtual const BlendFunc& getBlendFunc() const override;
 
     /**
-     * @js ctor
      */
     ParticleBatchNode();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ParticleBatchNode();

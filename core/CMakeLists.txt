@@ -32,7 +32,7 @@
 # include_guard (GLOBAL)
 
 # The version number
-set(_AX_VERSION 2.2)
+set(_AX_VERSION 2.6)
 
 if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
@@ -106,6 +106,7 @@ endif()
 option(AX_ENABLE_PHYSICS "Build Physics support" ON)
 cmake_dependent_option(AX_ENABLE_MEDIA "Build media support" ON "AX_ENABLE_MFMEDIA OR AX_ENABLE_VLC_MEDIA OR APPLE OR ANDROID" OFF)
 option(AX_ENABLE_AUDIO "Build audio support" ON)
+option(AX_ENABLE_OPUS "Build with opus support" ON)
 option(AX_ENABLE_CONSOLE "Build axmol debug tool: console support" ON)
 
 option(AX_ENABLE_3D "Build 3D support" ON)
@@ -139,9 +140,7 @@ cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ${AX_
 cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
 
 option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ${AX_EXT_HINT})
-
-set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "" )
-
+set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "")
 if (WIN32)
     option(WIN32_PATH_USE_ACP "" OFF)
     if(NOT WIN32_PATH_USE_ACP)
@@ -326,10 +325,6 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_AUDIO)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_CONSOLE)
 ax_config_pred(${_AX_CORE_LIB} AX_CORE_PROFILE)
 
-# use 3rdparty libs
-add_subdirectory(${_AX_ROOT}/3rdparty ${ENGINE_BINARY_PATH}/3rdparty)
-target_link_libraries(${_AX_CORE_LIB} 3rdparty)
-
 # add base macro define and compile options
 use_ax_compile_define(${_AX_CORE_LIB})
 use_ax_compile_options(${_AX_CORE_LIB})
@@ -364,7 +359,7 @@ if(XCODE OR VS)
     ax_mark_code_files("${_AX_CORE_LIB}")
 endif()
 
-message("CMake ${_AX_CORE_LIB} target_precompile_headers")
+message(STATUS "CMake precompile headers for ${_AX_CORE_LIB}")
 target_precompile_headers(${_AX_CORE_LIB} PRIVATE
   "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
 )
@@ -406,7 +401,116 @@ if(WINDOWS)
     endif()
 endif()
 
-# axmol math simd intrinsics support
+# axmol math simd intrinsics detection
+# Note: we set default AX_ISA_LEVEL to 2 for sse4.1 for axmol app can runs on large amount devices
+# If you want axmol app runs on more old devices, you can specify in cmake cmdline `-DAX_ISA_LEVEL=1`,
+# otherwise, host compiler generated instructions will crash on old devices which not support high level
+# SIMD instructions.
+
+include(CheckIncludeFile)
+include(CheckCCompilerFlag)
+include(CheckCSourceCompiles)
+include(CheckCXXSourceCompiles)
+set(AX_ISA_LEVEL 2 CACHE STRING "SIMD Instructions Acceleration Level")
+
+# SIMD instrinsics detetion when AX_ISA_LEVEL not 0
+# wasm skip dynamic check
+if(AX_ISA_LEVEL AND NOT WASM)
+    ### check -msse2 flag
+    set(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+    if(MSVC)
+        set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} /WX")
+        check_c_compiler_flag("/arch:SSE2" AX_HAVE_SSE2_SWITCH)
+    else()
+        set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Werror")
+        check_c_compiler_flag(-msse2 AX_HAVE_SSE2_SWITCH)
+    endif()
+    if (AX_HAVE_SSE2_SWITCH)
+        set(AX_HAVE_SSE2_INTRINSICS 1)
+    endif()
+    ### end check -msse2 flag
+
+    macro(ax_check_c_source source outputVar)
+        if (NOT CMAKE_CROSSCOMPILING)
+            check_c_source_runs("${source}" ${outputVar})
+        else()
+            check_c_source_compiles("${source}" ${outputVar})
+        endif()
+    endmacro(ax_check_c_source source var)
+
+    # Checking intel SIMD Intrinsics
+    include(CheckCSourceRuns)
+    if(APPLE)
+        set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mpopcnt")
+    endif()
+    ax_check_c_source("#include <immintrin.h>
+        int main()
+        {
+            __m256 m = _mm256_set_ps(0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f);
+            return (int)*(float*)&m;
+        }" AX_HAVE_AVX2_INTRINSICS)
+    ax_check_c_source("#include <nmmintrin.h>
+        int main()
+        {
+            unsigned int v = 0;
+            return (int)_mm_popcnt_u32(v);
+        }" AX_HAVE_SSE42_INTRINSICS)
+    ax_check_c_source("#include <smmintrin.h>
+        int main()
+        {
+            __m128i shuf = _mm_set_epi8(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0);
+            return *(int*)&shuf;
+        }" AX_HAVE_SSE41_INTRINSICS)
+
+    if (NOT AX_HAVE_SSE2_INTRINSICS)
+        ax_check_c_source("#include <emmintrin.h>
+            int main()
+            {
+                __m128d m = _mm_set_sd(0.0);
+                return (int)*(double*)&m;
+            }" AX_HAVE_SSE2_INTRINSICS)
+    endif()
+
+    set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+
+    ### Checking ARM SIMD neon
+    check_include_file(arm_neon.h AX_HAVE_ARM_NEON_H)
+    if(AX_HAVE_ARM_NEON_H)
+        check_c_source_compiles("#include <arm_neon.h>
+        int main()
+        {
+            int32x4_t ret4 = vdupq_n_s32(0);
+            return vgetq_lane_s32(ret4, 0);
+        }" AX_HAVE_NEON_INTRINSICS)
+    endif()
+
+    set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+    unset(OLD_REQUIRED_FLAGS)
+
+    ### set AX_ISA_SIMD
+    if(AX_HAVE_AVX2_INTRINSICS AND AX_ISA_LEVEL GREATER_EQUAL 4)
+        set(AX_ISA_SIMD "avx2" CACHE STRING "" FORCE)
+    elseif(AX_HAVE_SSE42_INTRINSICS AND AX_ISA_LEVEL GREATER_EQUAL 3)
+        set(AX_ISA_SIMD "sse4.2" CACHE STRING "" FORCE)
+    elseif(AX_HAVE_SSE41_INTRINSICS AND AX_ISA_LEVEL GREATER_EQUAL 2)
+        set(AX_ISA_SIMD "sse4.1" CACHE STRING "" FORCE)
+    elseif(AX_HAVE_SSE2_INTRINSICS AND AX_ISA_LEVEL)
+        set(AX_ISA_SIMD "sse2" CACHE STRING "" FORCE)
+    elseif(AX_HAVE_NEON_INTRINSICS AND AX_ISA_LEVEL)
+        set(AX_ISA_SIMD "neon" CACHE STRING "" FORCE)
+    else()
+        set(AX_ISA_SIMD "null")
+    endif()
+
+    if (WINDOWS)
+        if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+            if (AX_HAVE_SSE41_INTRINSICS AND AX_ISA_LEVEL GREATER_EQUAL 2)
+                add_compile_options("-msse4.1")
+            endif()
+        endif()
+    endif()
+endif()
+
 set(_simdc_defines)
 set(_simdc_options)
 if (NOT WASM) # native platforms auto detect from cmake or preprocessor check
@@ -420,15 +524,16 @@ if (NOT WASM) # native platforms auto detect from cmake or preprocessor check
         endif()
     endif()
 else() # wasm requires user specify SIMD intrinsics manually
-    set(AX_WASM_ISA_SIMD "none" CACHE STRING "")
+    set(AX_WASM_ISA_SIMD "sse4.1" CACHE STRING "")
     string(TOLOWER ${AX_WASM_ISA_SIMD} AX_WASM_ISA_SIMD)
+    set(AX_ISA_SIMD ${AX_WASM_ISA_SIMD} CACHE STRING "" FORCE)
     if(AX_WASM_ISA_SIMD MATCHES "sse")
         message(AUTHOR_WARNING "Using SSE intrinsics for WASM ...")
-        list(APPEND _simdc_defines AX_SSE_INTRINSICS=1 __SSE__=1 __SSE2__=1)
-        list(APPEND _simdc_options -msse -msse2)
+        list(APPEND _simdc_defines AX_SSE_INTRINSICS=1 __SSE__=1 __SSE2__=1 __SSE3__=1 __SSSE3__=1)
+        set(AX_HAVE_SSE2_INTRINSICS TRUE CACHE BOOL "" FORCE)
         if(AX_ISA_LEVEL GREATER_EQUAL 2)
+            set(AX_HAVE_SSE41_INTRINSICS TRUE CACHE BOOL "" FORCE)
             list(APPEND _simdc_defines __SSE4_1__=1)
-            list(APPEND _simdc_options -msse4.1)
         endif()
         list(APPEND _simdc_options -msimd128)
     elseif(AX_WASM_ISA_SIMD MATCHES "neon")
@@ -445,6 +550,12 @@ if(_simdc_defines)
     endif()
 endif()
 
+message(AUTHOR_WARNING "AX_ISA_SIMD=${AX_ISA_SIMD}")
+
+# 3rd libs
+add_subdirectory(${_AX_ROOT}/3rdparty ${ENGINE_BINARY_PATH}/3rdparty)
+target_link_libraries(${_AX_CORE_LIB} 3rdparty)
+
 # engine extensions
 add_subdirectory(${_AX_ROOT}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
@@ -456,6 +567,18 @@ endif()
 
 if(ANDROID)
     add_subdirectory(${_AX_ROOT}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
+    if (BUILD_SHARED_LIBS)
+        # whole archive for jni
+        target_link_libraries(${_AX_CORE_LIB} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
+        if (_AX_LUA_PROJ)
+            add_subdirectory(${_AX_ROOT}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
+            target_link_libraries(${_AX_CORE_LIB} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive)
+        endif()
+
+        if (_AX_LUA_PROJ OR AX_ENABLE_EXT_LUA)
+            target_link_libraries(${_AX_CORE_LIB} ${AX_LUA_ENGINE})
+        endif()
+    endif()
 endif()
 
 if(LINUX)
@@ -465,7 +588,7 @@ if(LINUX)
 
     # including GTK3.0 and WebKit2Gtk4.x
     find_package(PkgConfig REQUIRED)
-    pkg_check_modules(GKT3 REQUIRED gtk+-3.0)
+    pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
 
     set(_webkit2gtk_vers "4.1;4.0")
     foreach(_ver ${_webkit2gtk_vers})
@@ -479,9 +602,3 @@ if(LINUX)
     target_link_directories(${_AX_CORE_LIB} PRIVATE ${GTK3_LIBRARY_DIRS} ${WEBKIT2GTK_LIBRARY_DIRS})
     target_link_libraries(${_AX_CORE_LIB} ${GTK3_LIBRARIES} ${WEBKIT2GTK_LIBRARIES})
 endif()
-
-#if(XCODE)
-#    # Later versions of Xcode clang want to compile C++17 with aligned allocation turned on and this is only supported on iOS 11.0+
-#    # TODO: Only turn this off if ${CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET} < 11.0
-#    target_compile_options(${_AX_CORE_LIB} PUBLIC $<$<COMPILE_LANGUAGE:CXX>:-fno-aligned-allocation>)
-#endif()

@@ -147,7 +147,6 @@ public:
     /**
      * Gets the description string. It makes debugging easier.
      * @return A string
-     * @js NA
      * @lua NA
      */
     virtual std::string getDescription() const;
@@ -177,7 +176,6 @@ public:
 
     /*
      Helper function used by `setLocalZOrder`. Don't use it unless you know what you are doing.
-     @js NA
      */
     virtual void _setLocalZOrder(int z);
 
@@ -431,14 +429,12 @@ public:
      * Sets the position (X, Y, and Z) in its parent's coordinate system.
      *
      * @param position The position (X, Y, and Z) in its parent's coordinate system.
-     * @js NA
      */
     virtual void setPosition3D(const Vec3& position);
     /**
      * Returns the position (X,Y,Z) in its parent's coordinate system.
      *
      * @return The position (X, Y, and Z) in its parent's coordinate system.
-     * @js NA
      */
     virtual Vec3 getPosition3D() const;
 
@@ -453,7 +449,6 @@ public:
      * @see `setGlobalZValue()`
      *
      * @param positionZ  OpenGL Z vertex of this node.
-     * @js setVertexZ
      */
     virtual void setPositionZ(float positionZ);
 
@@ -463,7 +458,6 @@ public:
      * @see setPositionZ(float)
      *
      * @return The position Z coordinate of this node.
-     * @js getVertexZ
      */
     virtual float getPositionZ() const;
 
@@ -616,14 +610,12 @@ public:
      * @warning The physics body doesn't support this.
      *
      * @param rotation The rotation of the node in 3d.
-     * @js NA
      */
     virtual void setRotation3D(const Vec3& rotation);
     /**
      * Returns the rotation (X,Y,Z) in degrees.
      *
      * @return The rotation of the node in 3d.
-     * @js NA
      */
     virtual Vec3 getRotation3D() const;
 
@@ -631,7 +623,6 @@ public:
      * Set rotation by quaternion. You should make sure the quaternion is normalized.
      *
      * @param quat The rotation in quaternion, note that the quat must be normalized.
-     * @js NA
      */
     virtual void setRotationQuat(const Quaternion& quat);
 
@@ -640,7 +631,6 @@ public:
      * RotationZ_X * RotationY * RotationX, it equals to RotationY * RotationX otherwise.
      *
      * @return The rotation in quaternion.
-     * @js NA
      */
     virtual Quaternion getRotationQuat() const;
 
@@ -656,7 +646,6 @@ public:
      * @param rotationX    The X rotation in degrees which performs a horizontal rotational skew.
      *
      * @warning The physics body doesn't support this.
-     * @js setRotationX
      */
     virtual void setRotationSkewX(float rotationX);
 
@@ -666,7 +655,6 @@ public:
      * @see `setRotationSkewX(float)`
      *
      * @return The X rotation in degrees.
-     * @js getRotationX
      */
     virtual float getRotationSkewX() const;
 
@@ -682,7 +670,6 @@ public:
      * @param rotationY    The Y rotation in degrees.
      *
      * @warning The physics body doesn't support this.
-     * @js setRotationY
      */
     virtual void setRotationSkewY(float rotationY);
 
@@ -692,7 +679,6 @@ public:
      * @see `setRotationSkewY(float)`
      *
      * @return The Y rotation in degrees.
-     * @js getRotationY
      */
     virtual float getRotationSkewY() const;
 
@@ -880,7 +866,6 @@ public:
      * Removes this node itself from its parent node.
      * If the node orphan, then nothing happens.
      * @param cleanup   true if all actions and callbacks on this node should be removed, false otherwise.
-     * @js removeFromParent
      * @lua removeFromParent
      */
     virtual void removeFromParentAndCleanup(bool cleanup);
@@ -922,7 +907,6 @@ public:
      * parameter.
      *
      * @param cleanup   True if all running actions on all children nodes should be cleanup, false otherwise.
-     * @js removeAllChildren
      * @lua removeAllChildren
      */
     virtual void removeAllChildrenWithCleanup(bool cleanup);
@@ -1063,7 +1047,6 @@ public:
 
     /**
      * Schedules for lua script.
-     * @js NA
      *
      * @param handler The key to search lua function.
      * @param priority A given priority value.
@@ -1294,7 +1277,6 @@ public:
      *
      * @param selector      A function selector
      * @return Whether the function selector is scheduled.
-     * @js NA
      * @lua NA
      */
     bool isScheduled(SEL_SCHEDULE selector) const;
@@ -1304,7 +1286,6 @@ public:
      *
      * @param key      key of the callback
      * @return Whether the lambda function selector is scheduled.
-     * @js NA
      * @lua NA
      */
     bool isScheduled(std::string_view key) const;

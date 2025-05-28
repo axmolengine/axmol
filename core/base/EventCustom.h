@@ -46,7 +46,6 @@ public:
     /** Constructor.
      *
      * @param eventName A given name of the custom event.
-     * @js ctor
      */
     EventCustom(std::string_view eventName);
 

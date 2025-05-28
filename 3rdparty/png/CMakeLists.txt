@@ -22,11 +22,7 @@ set(${target_name}_src
     pngwutil.c
 )
 
-if (NOT WASM)
-  set(_PNG_ISA_SIMD ${AX_ISA_SIMD})
-else()
-  set(_PNG_ISA_SIMD OFF)
-endif()
+set(_PNG_ISA_SIMD ${AX_ISA_SIMD})
 
 if (_PNG_ISA_SIMD STREQUAL "neon")
   set(libpng_arm_sources
@@ -38,7 +34,7 @@ if (_PNG_ISA_SIMD STREQUAL "neon")
   # PNG_ARM_NEON_IMPLEMENTATION:
   #    1: use instrinsics
   #    2: use handcode
-  set(libpng_optimize_flag "PNG_ARM_NEON_OPT=2")
+  set(libpng_optimize_flag "PNG_ARM_NEON_OPT=1")
 elseif(_PNG_ISA_SIMD MATCHES "sse")
   set(libpng_intel_sources
     intel/intel_init.c

@@ -59,14 +59,12 @@ class AX_DLL GridBase : public Object
 public:
     /**
     Destructor.
-     * @js NA
      * @lua NA
      */
     virtual ~GridBase();
 
     /**@{
      Interface for custom action when before or after draw.
-     @js NA
      */
     virtual void beforeBlit() {}
     virtual void afterBlit() {}
@@ -187,24 +185,20 @@ public:
     static Grid3D* create(const Vec2& gridSize, Texture2D* texture, bool flipped, const Rect& rect);
     /**
      Constructor.
-     * @js ctor
      */
     Grid3D();
     /**
      Destructor.
-     * @js NA
      * @lua NA
      */
     ~Grid3D();
 
     /** Returns the vertex at a given position.
-     * @js NA
      * @lua NA
      */
     Vec3 getVertex(const Vec2& pos) const;
 
     /** Returns the original (non-transformed) vertex at a given position.
-     * @js NA
      * @lua NA
      */
     Vec3 getOriginalVertex(const Vec2& pos) const;
@@ -225,7 +219,6 @@ public:
 
     /**@{
      Getter and Setter for depth test state when blit.
-     @js NA
      */
     void setNeedDepthTestForBlit(bool neededDepthTest) { _needDepthTestForBlit = neededDepthTest; }
     bool getNeedDepthTestForBlit() const { return _needDepthTestForBlit; }
@@ -269,12 +262,10 @@ public:
     /**@}*/
 
     /** Returns the tile at the given position.
-     * @js NA
      * @lua NA
      */
     Quad3 getTile(const Vec2& pos) const;
     /** Returns the original tile (untransformed) at the given position.
-     * @js NA
      * @lua NA
      */
     Quad3 getOriginalTile(const Vec2& pos) const;
@@ -287,12 +278,10 @@ public:
 protected:
     /**
      Constructor.
-     * @js ctor
      */
     TiledGrid3D() = default;
     /**
      Destructor.
-     * @js NA
      * @lua NA
      */
     ~TiledGrid3D();

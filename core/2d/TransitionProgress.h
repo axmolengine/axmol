@@ -93,7 +93,6 @@ public:
     static TransitionProgressRadialCCW* create(float t, Scene* scene);
 
     /**
-     * @js ctor
      */
     TransitionProgressRadialCCW() {}
     virtual ~TransitionProgressRadialCCW() {}
@@ -121,7 +120,6 @@ public:
     static TransitionProgressRadialCW* create(float t, Scene* scene);
 
     /**
-     * @js ctor
      */
     TransitionProgressRadialCW() {}
     virtual ~TransitionProgressRadialCW() {}
@@ -149,7 +147,6 @@ public:
     static TransitionProgressHorizontal* create(float t, Scene* scene);
 
     /**
-     * @js ctor
      */
     TransitionProgressHorizontal() {}
     virtual ~TransitionProgressHorizontal() {}
@@ -176,7 +173,6 @@ public:
     static TransitionProgressVertical* create(float t, Scene* scene);
 
     /**
-     * @js ctor
      */
     TransitionProgressVertical() {}
     virtual ~TransitionProgressVertical() {}
@@ -203,7 +199,6 @@ public:
     static TransitionProgressInOut* create(float t, Scene* scene);
 
     /**
-     * @js ctor
      */
     TransitionProgressInOut() {}
     virtual ~TransitionProgressInOut() {}
@@ -232,7 +227,6 @@ public:
     static TransitionProgressOutIn* create(float t, Scene* scene);
 
     /**
-     * @js ctor
      */
     TransitionProgressOutIn() {}
     virtual ~TransitionProgressOutIn() {}

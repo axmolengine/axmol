@@ -50,14 +50,12 @@ class AX_GUI_DLL ScrollViewBar : public ProtectedNode
 public:
     /**
      * Default constructor
-     * @js ctor
      * @lua new
      */
     ScrollViewBar(ScrollView* parent, ScrollView::Direction direction);
 
     /**
      * Default destructor
-     * @js NA
      * @lua NA
      */
     virtual ~ScrollViewBar();

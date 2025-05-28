@@ -108,9 +108,8 @@
 #   (this is compatible with the same CMake variables in zlib's CMake
 #   support).
 
-# To minimize the number of cmake_policy() workarounds,
-# CMake >= 3 is requested.
-cmake_minimum_required(VERSION 3.0...3.5)
+# CMake 3.12 provides for IMPORTED targets for common libraries like zlib, libpng and bzip2
+cmake_minimum_required(VERSION 3.12)
 
 if (NOT CMAKE_VERSION VERSION_LESS 3.3)
   # Allow symbol visibility settings also on static libraries. CMake < 3.3

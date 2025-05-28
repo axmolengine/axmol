@@ -42,7 +42,6 @@ class Event;
 
 /** @class EventListenerKeyboard
  * @brief Keyboard event listener.
- * @js cc._EventListenerKeyboard
  */
 class AX_DLL EventListenerKeyboard : public EventListener
 {

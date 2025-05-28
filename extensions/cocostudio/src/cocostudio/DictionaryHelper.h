@@ -25,8 +25,7 @@ THE SOFTWARE.
 #ifndef __DICTIONARYHELPER_H__
 #define __DICTIONARYHELPER_H__
 
-#include "rapidjson/rapidjson.h"
-#include "rapidjson/document.h"
+#include "rapidjson/document-wrapper.h"
 
 #include "CocosStudioExport.h"
 
@@ -35,7 +34,6 @@ THE SOFTWARE.
 namespace cocostudio
 {
 /**
- *  @js NA
  *  @lua NA
  */
 class CCS_DLL DictionaryHelper

@@ -71,16 +71,13 @@ public:
 
 public:
     /**
-     * @js ctor
      */
     TextureCache();
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~TextureCache();
     /**
-     * @js NA
      * @lua NA
      */
     virtual std::string getDescription() const;
@@ -269,7 +266,6 @@ class VolatileTexture
 private:
     VolatileTexture(Texture2D* t);
     /**
-     * @js NA
      * @lua NA
      */
     ~VolatileTexture();

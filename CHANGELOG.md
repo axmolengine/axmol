@@ -1,15 +1,97 @@
-## axmo-2.5.0 ?? 2025
+## axmol-2.6.0 May.23 2025
+
+### Significant changes relative to 2.5.0:
+
+- Update android devenv to support android 16 by @halx99 in https://github.com/axmolengine/axmol/pull/2546
+- Update Android Studio minimum required version to `2024.3.2`
+
+### Bug fixes
+
+- Fix #2548 Downloader-curl may crash or hang in download thread in https://github.com/axmolengine/axmol/pull/2549 by @halx99
+- Fix #2545 install pwsh fail on ubuntu-25.04 by @halx99
+- Fix wasm build fail on windows by @halx99 in https://github.com/axmolengine/axmol/pull/2511
+- Fix PNG_ARM_NEON_OPT flag by @halx99 in https://github.com/axmolengine/axmol/pull/2512
+- Fix #2504 play opus audio fail when build with Apple OpenAL.framework by @halx99 in https://github.com/axmolengine/axmol/pull/2506
+- Fix typo in pkg_check_modules for GTK3. by @j-jorge in https://github.com/axmolengine/axmol/pull/2534
+- Fix character, underline and strikethrough drawing over label boundary for Overflow::CLAMP mode by @rh101 in https://github.com/axmolengine/axmol/pull/2515
+- Fix for clamped and left-aligned text with certain character sets by @rh101 in https://github.com/axmolengine/axmol/pull/2518
+- Fix wasm raise runtime error due to HEAPU8 was not exported by @halx99
+- Fix decompressGZ infinite-loop when input data invalid by @halx99 in https://github.com/axmolengine/axmol/pull/2544
+
+### Improvements
+
+- Improve ZipUtils::decompressGZ by @halx99 in https://github.com/axmolengine/axmol/pull/2544
+  - Parsing uncompress size and reserve exactly avoid waste memory
+  - Valid input size
+- Improve ogg audio files, detect codec via file header by @halx99 in https://github.com/axmolengine/axmol/pull/2500
+- Clarify required execution policy settings in PowerShell for IDE builds by @rh101 in https://github.com/axmolengine/axmol/pull/2505
+- Enable verbose logging for android projects by @sarooptech in https://github.com/axmolengine/axmol/pull/2509
+- Link prebuilt opus by @halx99 in https://github.com/axmolengine/axmol/pull/2514
+- DevSetup, added mention of NDK r26+ for C++20 support under Android Studio by @danialias in https://github.com/axmolengine/axmol/pull/2524
+- Update 3rd libs by @halx99 in https://github.com/axmolengine/axmol/pull/2527
+- [FairyGUI] Add support for blending by @rh101 in https://github.com/axmolengine/axmol/pull/2532
+- Committing luabindings for commit 8dab60e by @axmol-bot in https://github.com/axmolengine/axmol/pull/2533
+- Undef the pre-processor definitions to stay unity build friendly by @j-jorge in https://github.com/axmolengine/axmol/pull/2535
+- Rename ccBezierConfig as BezierConfig. by @j-jorge in https://github.com/axmolengine/axmol/pull/2536
+- Committing luabindings for commit 876b5e4 by @axmol-bot in https://github.com/axmolengine/axmol/pull/2537
+- Clipper2 1.5.3 by @aismann in https://github.com/axmolengine/axmol/pull/2541
+- Set preferred emsdk version to 3.1.73 for chrome can debug axmol wasm app properly by @halx99
+- Improve android sdk root lookup prompt, refer https://github.com/axmolengine/axmol/discussions/2494, https://github.com/axmolengine/axmol/discussions/2493 by @halx99
+- Fix gradle lint warnings by @halx99
+- Improve utils::computeDigest to support base64 digest present by @halx99
+- Improve linux android studio support by @halx99
+- Improve Improve linux env setup by @halx99
+- Improve isolate project axslcc find prompt by @halx99
+- Move simd intrinsics detection from 3rd into core by @halx99
+- Add minimum version to build docs support by @halx99, now the ci will only build & deploy axmol-2.3+ docs
+- Remove deprecated DSL config: renderscriptDebuggable by @halx99 in https://github.com/axmolengine/axmol/pull/2546
+- Implement ui::MediaPlayer::getVirtualRenderer by @halx99
+
+### SDKs & Tools updates
+
+- agp: 8.7.3 => 8.10.0
+- android target sdk: 35 => 36
+- android sdk build tools: 34.0.0 => 35.0.0
+
+### 3rdparty updates
+
+- cares: 1.34.4 => 1.34.5
+- Clipper2: 1.5.2 => 1.5.3
+- doctest: 2.4.11 => 2.4.12
+- fmtlib: 11.1.4 => 11.2.0
+- llhttp: 9.2.1 => 9.3.0
+- luajit: 2.1-a4f56a4 => 2.1-eec7a80
+- libpng: 1.6.47 => 1.6.48
+- openssl: 3.0.16 => 3.5.0
+
+## axmol-2.5.0 Apr.5 2025
 
 ### Bug fixes
 
 - Fix for invalid event listener ID lookup by @rh101 in https://github.com/axmolengine/axmol/pull/2445
 - Fix #2415 c++23 compile error by @halx99
+- Fix #2470 wasm CommandBufferGL::readPixels not work by @halx99
 
 ### Improvements
 
+- Ensure fseeko available on ndk > 23 by @halx99 in https://github.com/axmolengine/axmol/pull/2490
+- Add play .opus audio files support by @halx99 in https://github.com/axmolengine/axmol/pull/2488
+- Auto install missing msvc toolset with specified version by @halx99
+- make some warn message can suppressed by @halx99
+- Fix winuwp ci due to github action vm disk space insufficient by @halx99
+- [Android] FileUtils::listFiles implementation that works with empty folders by @rh101 in https://github.com/axmolengine/axmol/pull/2463
+- [WASM] set _APP_RES_FOLDER if not defined to be able to specify directories of Resources by @AlexandreK38 in https://github.com/axmolengine/axmol/pull/2483
+- Fix setup and BUILD_SHARED_LIBS for Linux by @IamSanjid in https://github.com/axmolengine/axmol/pull/2481
+- Add supporting 'closed' Splines for DrawNode by @aismann in https://github.com/axmolengine/axmol/pull/2476
+- Add GLView::setInteractive by @AlexandreK38 in https://github.com/axmolengine/axmol/pull/2465
+- Fix BUILD_SHARED_LIBS for Android by @IamSanjid in https://github.com/axmolengine/axmol/pull/2462
+- Fix some deprecated methods not available in gradle 9.0 by @halx99
+- Fix #2457 support overwrite build profiles by .axproj by @halx99 in https://github.com/axmolengine/axmol/pull/2460
+- Prevent getCurrentTime() from returning 0 at the end of the audio track playback by @rh101 in https://github.com/axmolengine/axmol/pull/2452
 - Improve RichText XML parsing by @rh101 in https://github.com/axmolengine/axmol/pull/2420
 - Renamed forgotten ccConfig.h to Config.h by @aismann in https://github.com/axmolengine/axmol/pull/2422
 - Allow the use of em and % units for font size in RichText XML by @rh101 in https://github.com/axmolengine/axmol/pull/2421
+- Minor FastTMXLayer performance optimization by @hasikill in https://github.com/axmolengine/axmol/pull/2437
 - Add production ready wasm page by @paulocoutinhox in https://github.com/axmolengine/axmol/pull/2428
 - [Template] Add missing override specifier to destructor by @rh101 in https://github.com/axmolengine/axmol/pull/2433
 - [Android] Ensure c++ object model consistency by @halx99 in https://github.com/axmolengine/axmol/pull/2434
@@ -29,12 +111,15 @@
 ### SDKs & Tools updates
 
 - gradle: 8.11.1 ==> 8.13
+- cmake: 3.31.5 ==> 4.0.0
+- emsdk: 4.0.3 ==> 4.0.6
 
 ### 3rdparty updates
 
 - yasio: 4.3.1 ==> 4.3.2
 - fmtlib: 11.1.3 ==> 11.1.4
 - flatbuffers: 24.3.25 ==> 25.2.10
+- robin_map: 1.2.1 ==> 1.4.0
 
 ## axmol-2.4.0 Feb.23 2025
 
@@ -92,7 +177,7 @@
 - clipper2: 1.4.0 ==> 1.5.2
 - curl: 8.11.1 ==> 8.12.1
 - libpng: 1.6.45 ==> 1.6.47
-- fmt: 11.1.2 ==> 11.1.3
+- fmtlib: 11.1.2 ==> 11.1.3
 - openssl: 3.0.15 ==> 3.0.16
 
 ## axmol-2.3.2 Jan.21 2025
@@ -122,7 +207,7 @@
 ### 3rdparty updates
 
 - libpng: 1.6.44 ==> 1.6.45
-- fmt: 11.1.1 ==> 11.1.2
+- fmtlib: 11.1.1 ==> 11.1.2
 - luajit: 2.1-f73e649 ==> 2.1-a4f56a4
 
 ## axmol-2.3.1 Jan.5 2025
@@ -192,7 +277,7 @@
 - astcenc: 4.8.0 ==> 5.1.0
 - c-ares: 1.34.1 ==> 1.34.4
 - curl: 8.10.1 ==> 8.11.1
-- fmt: 11.0.1 ==> 11.1.1
+- fmtlib: 11.0.1 ==> 11.1.1
 - oboe: 1.9.0 ==> 1.9.3
 - webp: 1.4.0 ==> 1.5.0
 - jpeg-turbo: 3.0.4 ==> 3.1.0
@@ -810,7 +895,7 @@
 - simdjson(NEW): 3.6.3
 - webp: 1.3.1 ==> 1.3.2
 - yasio: 4.1.0 ==> 4.1.4
-- fmt: 10.1.1 ==> 10.2.1
+- fmtlib: 10.1.1 ==> 10.2.1
 - imgui: 1.89.8 ==> 1.90.1
 
 Notes:

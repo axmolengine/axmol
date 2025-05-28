@@ -4,14 +4,14 @@ apply from: 'axmol.gradle'
 def buildProfiles = AxmolUtils.resolveBasicBuildProfiles(project)
 
 android {
-    namespace "dev.axmol.lib"
+    namespace = 'dev.axmol.lib'
     def targetSdk = buildProfiles['targetSdk']
     def minSdk = buildProfiles['minSdk']
-    compileSdk targetSdk.toInteger()
+    compileSdk = targetSdk.toInteger()
 
     defaultConfig {
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
+        minSdkVersion = minSdk
+        targetSdkVersion = targetSdk
         versionCode 1
         versionName "1.0"
     }
@@ -29,7 +29,7 @@ android {
         }
     }
     buildFeatures {
-        aidl true
+        aidl = true
     }
 }
 

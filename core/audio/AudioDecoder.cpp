@@ -28,8 +28,6 @@
 #include "audio/AudioMacros.h"
 #include "platform/FileUtils.h"
 
-#define LOG_TAG "AudioDecoder"
-
 namespace ax
 {
 
@@ -103,5 +101,3 @@ AUDIO_SOURCE_FORMAT AudioDecoder::getSourceFormat() const
     return _sourceFormat;
 }
 }  // namespace ax
-
-#undef LOG_TAG

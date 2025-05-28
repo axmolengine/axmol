@@ -50,7 +50,6 @@ class AX_DLL ActionTweenDelegate
 {
 public:
     /**
-     * @js NA
      * @lua NA
      */
     virtual ~ActionTweenDelegate() {}

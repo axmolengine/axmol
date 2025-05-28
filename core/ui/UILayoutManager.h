@@ -67,7 +67,6 @@ public:
  *@brief Linear vertical layout class.
  * Note: This class is used only by @see `Layout` class.
  * @lua NA
- * @js NA
  */
 class AX_GUI_DLL LinearVerticalLayoutManager : public LayoutManager
 {
@@ -84,7 +83,6 @@ private:
  *@brief Linear horizontal layout class.
  *Note: This class is used only by @see `Layout` class.
  * @lua NA
- * @js NA
  */
 class AX_GUI_DLL LinearHorizontalLayoutManager : public LayoutManager
 {
@@ -101,7 +99,6 @@ private:
  *@brief Linear vertical layout class.
  * Note: This class is used only by @see `Layout` class.
  * @lua NA
- * @js NA
  */
 class AX_GUI_DLL LinearCenterVerticalLayoutManager : public LayoutManager
 {
@@ -118,7 +115,6 @@ private:
  *@brief Linear horizontal layout class.
  * Note: This class is used only by @see `Layout` class.
  * @lua NA
- * @js NA
  */
 class AX_GUI_DLL LinearCenterHorizontalLayoutManager : public LayoutManager
 {
@@ -136,7 +132,6 @@ private:
  *@brief Relative layout class.
  *Note: This class is used only by `Layout` class.
  * @lua NA
- * @js NA
  */
 class AX_GUI_DLL RelativeLayoutManager : public LayoutManager
 {

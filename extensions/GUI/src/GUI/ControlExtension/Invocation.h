@@ -53,17 +53,14 @@ class AX_EX_DLL Invocation : public Object
 {
 public:
     /**
-     * @js NA
      * @lua NA
      */
     static Invocation* create(Object* target, Control::Handler action, Control::EventType controlEvent);
     /**
-     * @js NA
      * @lua NA
      */
     Invocation(Object* target, Control::Handler action, Control::EventType controlEvent);
     /**
-     * @js NA
      * @lua NA
      */
     void invoke(Object* sender);

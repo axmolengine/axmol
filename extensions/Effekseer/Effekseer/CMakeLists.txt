@@ -1,5 +1,4 @@
 project(Effekseer)
-cmake_minimum_required(VERSION 3.1)
 
 FIND_PACKAGE(Threads REQUIRED)
 

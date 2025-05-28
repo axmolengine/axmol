@@ -47,7 +47,6 @@ class AX_DLL Touch : public Object
 public:
     /**
      * Dispatch mode, how the touches are dispatched.
-     * @js NA
      */
     enum class DispatchMode
     {
@@ -56,7 +55,6 @@ public:
     };
 
     /** Constructor.
-     * @js ctor
      */
     Touch() : _id(0), _startPointCaptured(false), _curForce(0.f), _maxForce(0.f) {}
 
@@ -142,7 +140,6 @@ public:
         }
     }
     /** Get touch id.
-     * @js getId
      * @lua getId
      *
      * @return The id of touch.
