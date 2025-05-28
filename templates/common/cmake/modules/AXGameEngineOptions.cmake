@@ -36,3 +36,7 @@ set(AX_ENABLE_PHYSICS ON CACHE BOOL "Build Physics support" FORCE)
 set(AX_ENABLE_AUDIO ON CACHE BOOL "Build audio support" FORCE)
 set(AX_ENABLE_WEBSOCKET ON CACHE BOOL "Build Websocket client based on yasio" FORCE)
 set(AX_ENABLE_HTTP ON CACHE BOOL "Build HTTP client based on yasio" FORCE)
+set(AX_ENABLE_OPUS ON CACHE BOOL "Build with opus support" FORCE)
+
+# WEBVIEW2 - default: ON for WIN32 and WINRT
+#set(AX_ENABLE_MSEDGE_WEBVIEW2 ON CACHE BOOL "Disable msedge webview2")
