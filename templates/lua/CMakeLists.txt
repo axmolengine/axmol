@@ -39,6 +39,7 @@ set(CMAKE_MODULE_PATH
 
 # Important when BUILD_SHARED_LIBS option is set to TRUE
 set(_AX_LUA_PROJ TRUE)
+set(_AX_USE_PREBUILT FALSE)
 
 # NOTE: The order of the cmake module "include(AXGame...)" statements matters
 include(AXGameEngineOptions)
