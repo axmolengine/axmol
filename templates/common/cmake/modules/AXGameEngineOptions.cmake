@@ -3,7 +3,7 @@
 # {build_dir}/CMakeCache.txt file and then re-run the `axmol build ...` command in 
 # order for the new setting to take effect. Alternatively, you can also delete the 
 # entire build folder and then re-run the `axmol build` command.
-set(AX_EXT_HINT ON CACHE BOOL "The default extensions hint" FORCE)
+#set(AX_EXT_HINT ON CACHE BOOL "The default extensions hint" FORCE)
 
 # The following are by default set the same as the AX_EXT_HINT flag above - default: ON
 # Uncomment the lines below to set them individually
@@ -18,14 +18,14 @@ set(AX_EXT_HINT ON CACHE BOOL "The default extensions hint" FORCE)
 #set(AX_ENABLE_EXT_JSONDEFAULT OFF CACHE BOOL "Build extension JSONDefault" FORCE)
 
 # 3D Support - - default: ON
-set(AX_ENABLE_3D ON CACHE BOOL "Build 3D support" FORCE)
+#set(AX_ENABLE_3D ON CACHE BOOL "Build 3D support" FORCE)
 # These depend on AX_EXT_HINT & AX_ENABLE_3D
 #set(AX_ENABLE_EXT_PARTICLE3D ON CACHE BOOL "Build extension Particle3D" FORCE)
 #set(AX_ENABLE_3D_PHYSICS ON CACHE BOOL "Build Physics3D support" FORCE)
 #set(AX_ENABLE_NAVMESH ON CACHE BOOL "Build NavMesh support" FORCE)
 
 # Physics Support - - default: ON
-set(AX_ENABLE_PHYSICS ON CACHE BOOL "Build Physics support" FORCE)
+#set(AX_ENABLE_PHYSICS ON CACHE BOOL "Build Physics support" FORCE)
 # These depend on AX_EXT_HINT & AX_ENABLE_PHYSICS
 #set(AX_ENABLE_EXT_PHYSICS_NODE ON CACHE BOOL "Build extension physics-nodes" FORCE)
 
@@ -38,10 +38,10 @@ set(AX_ENABLE_PHYSICS ON CACHE BOOL "Build Physics support" FORCE)
 #set(AX_ENABLE_EXT_EFFEKSEER OFF CACHE BOOL "Build extension Effekseer" FORCE)
 
 # Code modules that can be disabled - default: ON
-set(AX_ENABLE_AUDIO ON CACHE BOOL "Build audio support" FORCE)
-set(AX_ENABLE_WEBSOCKET ON CACHE BOOL "Build Websocket client based on yasio" FORCE)
-set(AX_ENABLE_HTTP ON CACHE BOOL "Build HTTP client based on yasio" FORCE)
-set(AX_ENABLE_OPUS ON CACHE BOOL "Build with opus support" FORCE)
+#set(AX_ENABLE_AUDIO ON CACHE BOOL "Build audio support" FORCE)
+#set(AX_ENABLE_WEBSOCKET ON CACHE BOOL "Build Websocket client based on yasio" FORCE)
+#set(AX_ENABLE_HTTP ON CACHE BOOL "Build HTTP client based on yasio" FORCE)
+#set(AX_ENABLE_OPUS ON CACHE BOOL "Build with opus support" FORCE)
 
 # WEBVIEW2 - default: ON for WIN32 and WINRT
 #set(AX_ENABLE_MSEDGE_WEBVIEW2 ON CACHE BOOL "Disable msedge webview2")
