@@ -45,8 +45,9 @@ jobs:
     - name: Check prebuilt workflow
       shell: pwsh
       run: |
-        .\tools\cmdline\axmol new HelloCpp
-        .\tools\cmdline\axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build'
+        ./setup.ps1
+        axmol new HelloCpp
+        axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build'
     - uses: actions/upload-artifact@v4
       with:
         name: windows_x64
