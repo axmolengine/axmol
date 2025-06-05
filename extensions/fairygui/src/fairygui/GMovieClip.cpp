@@ -462,9 +462,14 @@ void ActionMovieClip::drawFrame()
 
     _displayFrame = _frame;
     AnimationFrame* frame = frames.at(_frame);
-    //auto blend = static_cast<Sprite*>(_target)->getBlendFunc();
-    static_cast<Sprite*>(_target)->setSpriteFrame(frame->getSpriteFrame());
-    //static_cast<Sprite*>(_target)->setBlendFunc(blend);
+
+    auto sprite = static_cast<Sprite*>(_target);
+    if (sprite == nullptr)
+        return;
+
+    auto currentBlend = sprite->getBlendFunc();
+    sprite->setSpriteFrame(frame->getSpriteFrame());
+    sprite->setBlendFunc(currentBlend);
 }
 
 NS_FGUI_END
