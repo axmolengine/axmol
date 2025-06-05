@@ -1,4 +1,4 @@
-/* auto-generated on 2025-01-27 20:34:35 -0500. Do not edit! */
+/* auto-generated on 2025-06-04 00:22:10 -0400. Do not edit! */
 /* including simdjson.h:  */
 /* begin file simdjson.h */
 #ifndef SIMDJSON_H
@@ -393,7 +393,7 @@ double from_chars(const char *first, const char* end) noexcept;
 }
 
 #ifndef SIMDJSON_EXCEPTIONS
-#if __cpp_exceptions
+#if defined(__cpp_exceptions) || defined(_CPPUNWIND)
 #define SIMDJSON_EXCEPTIONS 1
 #else
 #define SIMDJSON_EXCEPTIONS 0
@@ -596,12 +596,14 @@ double from_chars(const char *first, const char* end) noexcept;
 // even if we do not have C++17 support.
 #ifdef __cpp_lib_string_view
 #define SIMDJSON_HAS_STRING_VIEW
+#include <string_view>
 #endif
 
 // Some systems have string_view even if we do not have C++17 support,
 // and even if __cpp_lib_string_view is undefined, it is the case
 // with Apple clang version 11.
 // We must handle it. *This is important.*
+#ifndef _MSC_VER
 #ifndef SIMDJSON_HAS_STRING_VIEW
 #if defined __has_include
 // do not combine the next #if with the previous one (unsafe)
@@ -617,6 +619,7 @@ double from_chars(const char *first, const char* end) noexcept;
 #endif // __has_include (<string_view>)
 #endif // defined __has_include
 #endif // def SIMDJSON_HAS_STRING_VIEW
+#endif // def _MSC_VER
 // end of complicated but important routine to try to detect string_view.
 
 //
@@ -796,22 +799,22 @@ inline namespace literals {
 inline namespace string_view_literals {
 
 
-constexpr std::string_view operator "" _sv( const char* str, size_t len ) noexcept  // (1)
+constexpr std::string_view operator ""_sv( const char* str, size_t len ) noexcept  // (1)
 {
     return std::string_view{ str, len };
 }
 
-constexpr std::u16string_view operator "" _sv( const char16_t* str, size_t len ) noexcept  // (2)
+constexpr std::u16string_view operator ""_sv( const char16_t* str, size_t len ) noexcept  // (2)
 {
     return std::u16string_view{ str, len };
 }
 
-constexpr std::u32string_view operator "" _sv( const char32_t* str, size_t len ) noexcept  // (3)
+constexpr std::u32string_view operator ""_sv( const char32_t* str, size_t len ) noexcept  // (3)
 {
     return std::u32string_view{ str, len };
 }
 
-constexpr std::wstring_view operator "" _sv( const wchar_t* str, size_t len ) noexcept  // (4)
+constexpr std::wstring_view operator ""_sv( const wchar_t* str, size_t len ) noexcept  // (4)
 {
     return std::wstring_view{ str, len };
 }
@@ -2142,22 +2145,22 @@ nssv_inline_ns namespace string_view_literals {
 
 #if nssv_CONFIG_STD_SV_OPERATOR && nssv_HAVE_STD_DEFINED_LITERALS
 
-nssv_constexpr nonstd::sv_lite::string_view operator "" sv( const char* str, size_t len ) nssv_noexcept  // (1)
+nssv_constexpr nonstd::sv_lite::string_view operator ""sv( const char* str, size_t len ) nssv_noexcept  // (1)
 {
     return nonstd::sv_lite::string_view{ str, len };
 }
 
-nssv_constexpr nonstd::sv_lite::u16string_view operator "" sv( const char16_t* str, size_t len ) nssv_noexcept  // (2)
+nssv_constexpr nonstd::sv_lite::u16string_view operator ""sv( const char16_t* str, size_t len ) nssv_noexcept  // (2)
 {
     return nonstd::sv_lite::u16string_view{ str, len };
 }
 
-nssv_constexpr nonstd::sv_lite::u32string_view operator "" sv( const char32_t* str, size_t len ) nssv_noexcept  // (3)
+nssv_constexpr nonstd::sv_lite::u32string_view operator ""sv( const char32_t* str, size_t len ) nssv_noexcept  // (3)
 {
     return nonstd::sv_lite::u32string_view{ str, len };
 }
 
-nssv_constexpr nonstd::sv_lite::wstring_view operator "" sv( const wchar_t* str, size_t len ) nssv_noexcept  // (4)
+nssv_constexpr nonstd::sv_lite::wstring_view operator ""sv( const wchar_t* str, size_t len ) nssv_noexcept  // (4)
 {
     return nonstd::sv_lite::wstring_view{ str, len };
 }
@@ -2166,22 +2169,22 @@ nssv_constexpr nonstd::sv_lite::wstring_view operator "" sv( const wchar_t* str,
 
 #if nssv_CONFIG_USR_SV_OPERATOR
 
-nssv_constexpr nonstd::sv_lite::string_view operator "" _sv( const char* str, size_t len ) nssv_noexcept  // (1)
+nssv_constexpr nonstd::sv_lite::string_view operator ""_sv( const char* str, size_t len ) nssv_noexcept  // (1)
 {
     return nonstd::sv_lite::string_view{ str, len };
 }
 
-nssv_constexpr nonstd::sv_lite::u16string_view operator "" _sv( const char16_t* str, size_t len ) nssv_noexcept  // (2)
+nssv_constexpr nonstd::sv_lite::u16string_view operator ""_sv( const char16_t* str, size_t len ) nssv_noexcept  // (2)
 {
     return nonstd::sv_lite::u16string_view{ str, len };
 }
 
-nssv_constexpr nonstd::sv_lite::u32string_view operator "" _sv( const char32_t* str, size_t len ) nssv_noexcept  // (3)
+nssv_constexpr nonstd::sv_lite::u32string_view operator ""_sv( const char32_t* str, size_t len ) nssv_noexcept  // (3)
 {
     return nonstd::sv_lite::u32string_view{ str, len };
 }
 
-nssv_constexpr nonstd::sv_lite::wstring_view operator "" _sv( const wchar_t* str, size_t len ) nssv_noexcept  // (4)
+nssv_constexpr nonstd::sv_lite::wstring_view operator ""_sv( const wchar_t* str, size_t len ) nssv_noexcept  // (4)
 {
     return nonstd::sv_lite::wstring_view{ str, len };
 }
@@ -2437,7 +2440,7 @@ namespace std {
 #define SIMDJSON_SIMDJSON_VERSION_H
 
 /** The version of simdjson being used (major.minor.revision) */
-#define SIMDJSON_VERSION "3.12.0"
+#define SIMDJSON_VERSION "3.13.0"
 
 namespace simdjson {
 enum {
@@ -2448,7 +2451,7 @@ enum {
   /**
    * The minor version (major.MINOR.revision) of simdjson being used.
    */
-  SIMDJSON_VERSION_MINOR = 12,
+  SIMDJSON_VERSION_MINOR = 13,
   /**
    * The revision (major.minor.REVISION) of simdjson being used.
    */
@@ -2494,7 +2497,7 @@ enum error_code {
   SUCCESS = 0,                ///< No error
   CAPACITY,                   ///< This parser can't support a document that big
   MEMALLOC,                   ///< Error allocating memory, most likely out of memory
-  TAPE_ERROR,                 ///< Something went wrong, this is a generic error
+  TAPE_ERROR,                 ///< Something went wrong, this is a generic error. Fatal/unrecoverable error.
   DEPTH_ERROR,                ///< Your document exceeds the user-specified depth limitation
   STRING_ERROR,               ///< Problem while parsing a string
   T_ATOM_ERROR,               ///< Problem while parsing an atom starting with the letter 't'
@@ -2519,12 +2522,20 @@ enum error_code {
   PARSER_IN_USE,              ///< parser is already in use.
   OUT_OF_ORDER_ITERATION,     ///< tried to iterate an array or object out of order (checked when SIMDJSON_DEVELOPMENT_CHECKS=1)
   INSUFFICIENT_PADDING,       ///< The JSON doesn't have enough padding for simdjson to safely parse it.
-  INCOMPLETE_ARRAY_OR_OBJECT, ///< The document ends early.
+  INCOMPLETE_ARRAY_OR_OBJECT, ///< The document ends early. Fatal/unrecoverable error.
   SCALAR_DOCUMENT_AS_VALUE,   ///< A scalar document is treated as a value.
   OUT_OF_BOUNDS,              ///< Attempted to access location outside of document.
   TRAILING_CONTENT,           ///< Unexpected trailing content in the JSON input
   NUM_ERROR_CODES
 };
+
+/**
+ * Some errors are fatal and invalidate the document. This function returns true if the
+ * error is fatal. It returns true for TAPE_ERROR and INCOMPLETE_ARRAY_OR_OBJECT.
+ * Once a fatal error is encountered, the on-demand document is no longer valid and
+ * processing should stop.
+ */
+ inline bool is_fatal(error_code error) noexcept;
 
 /**
  * It is the convention throughout the code that  the macro SIMDJSON_DEVELOPMENT_CHECKS determines whether
@@ -2662,6 +2673,7 @@ struct simdjson_result_base : protected std::pair<T, error_code> {
    * @throw simdjson_error if there was an error.
    */
   simdjson_inline operator T&&() && noexcept(false);
+
 #endif // SIMDJSON_EXCEPTIONS
 
   /**
@@ -2718,7 +2730,17 @@ struct simdjson_result : public internal::simdjson_result_base<T> {
    * @param value The variable to assign the value to. May not be set if there is an error.
    */
   simdjson_warn_unused simdjson_inline error_code get(T &value) && noexcept;
-
+//
+  /**
+   * Copy the value to a provided std::string, only enabled for std::string_view.
+   *
+   * @param value The variable to assign the value to. May not be set if there is an error.
+   */
+  simdjson_warn_unused simdjson_inline error_code get(std::string &value) && noexcept
+#if SIMDJSON_SUPPORTS_DESERIALIZATION
+  requires (!std::is_same_v<T, std::string>)
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
+  ;
   /**
    * The error.
    */
@@ -2828,14 +2850,30 @@ SIMDJSON_IMPL_CONCEPT(op_append, operator+=)
 #undef SIMDJSON_IMPL_CONCEPT
 } // namespace details
 
+
+template <typename T>
+concept string_view_like = std::is_convertible_v<T, std::string_view> &&
+                           !std::is_convertible_v<T, const char*>;
+
+template<typename T>
+concept constructible_from_string_view = std::is_constructible_v<T, std::string_view>
+                                        && !std::is_same_v<T, std::string_view>
+                                        && std::is_default_constructible_v<T>;
+
+template<typename M>
+concept string_view_keyed_map = string_view_like<typename M::key_type>
+              && requires(std::remove_cvref_t<M>& m, typename M::key_type sv, typename M::mapped_type v) {
+    { m.emplace(sv, v) } -> std::same_as<std::pair<typename M::iterator, bool>>;
+};
+
 /// Check if T is a container that we can append to, including:
 ///   std::vector, std::deque, std::list, std::string, ...
 template <typename T>
 concept appendable_containers =
-    details::supports_emplace_back<T> || details::supports_emplace<T> ||
+    (details::supports_emplace_back<T> || details::supports_emplace<T> ||
     details::supports_push_back<T> || details::supports_push<T> ||
     details::supports_add<T> || details::supports_append<T> ||
-    details::supports_insert<T>;
+    details::supports_insert<T>) && !string_view_keyed_map<T>;
 
 /// Insert into the container however possible
 template <appendable_containers T, typename... Args>
@@ -2902,6 +2940,8 @@ concept optional_type = requires(std::remove_cvref_t<T> obj) {
   };
   { static_cast<bool>(obj) } -> std::same_as<bool>; // convertible to bool
 };
+
+
 
 } // namespace concepts
 } // namespace simdjson
@@ -2970,6 +3010,11 @@ enum class tape_type;
 #include <iostream>
 
 namespace simdjson {
+
+inline bool is_fatal(error_code error) noexcept {
+  return error == TAPE_ERROR || error == INCOMPLETE_ARRAY_OR_OBJECT;
+}
+
 namespace internal {
   // We store the error code so we can validate the error message is associated with the right code
   struct error_code_info {
@@ -3089,6 +3134,23 @@ simdjson_inline void simdjson_result<T>::tie(T &value, error_code &error) && noe
 template<typename T>
 simdjson_warn_unused simdjson_inline error_code simdjson_result<T>::get(T &value) && noexcept {
   return std::forward<internal::simdjson_result_base<T>>(*this).get(value);
+}
+
+template<typename T>
+simdjson_warn_unused simdjson_inline error_code
+simdjson_result<T>::get(std::string &value) && noexcept
+#if SIMDJSON_SUPPORTS_DESERIALIZATION
+requires (!std::is_same_v<T, std::string>)
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
+{
+  // SFINAE : n'active que pour T = std::string_view
+  static_assert(std::is_same<T, std::string_view>::value, "simdjson_result<T>::get(std::string&) n'est disponible que pour T = std::string_view");
+  std::string_view v;
+  error_code error = std::forward<simdjson_result<T>>(*this).get(v);
+  if (!error) {
+    value.assign(v.data(), v.size());
+  }
+  return error;
 }
 
 template<typename T>
@@ -4656,7 +4718,7 @@ public:
    * The memory allocation is strict: you
    * can you use this function to increase
    * or lower the amount of allocated memory.
-   * Passsing zero clears the memory.
+   * Passing zero clears the memory.
    */
   error_code allocate(size_t len) noexcept;
   /** @private Capacity in bytes, in terms
@@ -5013,7 +5075,7 @@ public:
    * arrays or objects) MUST be separated with whitespace.
    *
    * The documents must not exceed batch_size bytes (by default 1MB) or they will fail to parse.
-   * Setting batch_size to excessively large or excesively small values may impact negatively the
+   * Setting batch_size to excessively large or excessively small values may impact negatively the
    * performance.
    *
    * ### Error Handling
@@ -5107,7 +5169,7 @@ public:
    * arrays or objects) MUST be separated with whitespace.
    *
    * The documents must not exceed batch_size bytes (by default 1MB) or they will fail to parse.
-   * Setting batch_size to excessively large or excesively small values may impact negatively the
+   * Setting batch_size to excessively large or excessively small values may impact negatively the
    * performance.
    *
    * ### Error Handling
@@ -6814,7 +6876,7 @@ std::string prettify(simdjson_result<T> x) {
 #define SIMDJSON_JSONPATHUTIL_H
 
 #include <string>
-#include <string_view>
+/* skipped duplicate #include "simdjson/common_defs.h" */
 
 namespace simdjson {
 /**
@@ -11599,7 +11661,7 @@ simdjson_inline bool compute_float_64(int64_t power, uint64_t i, bool negative, 
   // floor(log(5**power)/log(2))
   //
   // Note that this is not magic: 152170/(1<<16) is
-  // approximatively equal to log(5)/log(2).
+  // approximately equal to log(5)/log(2).
   // The 1<<16 value is a power of two; we could use a
   // larger power of 2 if we wanted to.
   //
@@ -12109,7 +12171,16 @@ simdjson_inline error_code parse_number(const uint8_t *const src, W &writer) {
   if (i > uint64_t(INT64_MAX)) {
     WRITE_UNSIGNED(i, src, writer);
   } else {
-    WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+    if(i == 0 && negative) {
+      // We have to write -0.0 instead of 0
+      WRITE_DOUBLE(-0.0, src, writer);
+    } else {
+      WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+    }
+#else
+  WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#endif
   }
   if (jsoncharutils::is_not_structural_or_whitespace(*p)) { return INVALID_NUMBER(src); }
   return SUCCESS;
@@ -12570,6 +12641,12 @@ simdjson_unused simdjson_inline simdjson_result<number_type> get_number_type(con
       if (simdjson_unlikely(digit_count == 19 && memcmp(src, smaller_big_integer, 19) > 0)) {
         return number_type::big_integer;
       }
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+      if(digit_count == 1 && src[0] == '0') {
+        // We have to write -0.0 instead of 0
+        return number_type::floating_point_number;
+      }
+#endif
       return number_type::signed_integer;
     }
     // Let us check if we have a big integer (>=2**64).
@@ -13707,7 +13784,7 @@ simdjson_inline bool compute_float_64(int64_t power, uint64_t i, bool negative, 
   // floor(log(5**power)/log(2))
   //
   // Note that this is not magic: 152170/(1<<16) is
-  // approximatively equal to log(5)/log(2).
+  // approximately equal to log(5)/log(2).
   // The 1<<16 value is a power of two; we could use a
   // larger power of 2 if we wanted to.
   //
@@ -14217,7 +14294,16 @@ simdjson_inline error_code parse_number(const uint8_t *const src, W &writer) {
   if (i > uint64_t(INT64_MAX)) {
     WRITE_UNSIGNED(i, src, writer);
   } else {
-    WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+    if(i == 0 && negative) {
+      // We have to write -0.0 instead of 0
+      WRITE_DOUBLE(-0.0, src, writer);
+    } else {
+      WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+    }
+#else
+  WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#endif
   }
   if (jsoncharutils::is_not_structural_or_whitespace(*p)) { return INVALID_NUMBER(src); }
   return SUCCESS;
@@ -14678,6 +14764,12 @@ simdjson_unused simdjson_inline simdjson_result<number_type> get_number_type(con
       if (simdjson_unlikely(digit_count == 19 && memcmp(src, smaller_big_integer, 19) > 0)) {
         return number_type::big_integer;
       }
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+      if(digit_count == 1 && src[0] == '0') {
+        // We have to write -0.0 instead of 0
+        return number_type::floating_point_number;
+      }
+#endif
       return number_type::signed_integer;
     }
     // Let us check if we have a big integer (>=2**64).
@@ -16307,7 +16399,7 @@ simdjson_inline bool compute_float_64(int64_t power, uint64_t i, bool negative, 
   // floor(log(5**power)/log(2))
   //
   // Note that this is not magic: 152170/(1<<16) is
-  // approximatively equal to log(5)/log(2).
+  // approximately equal to log(5)/log(2).
   // The 1<<16 value is a power of two; we could use a
   // larger power of 2 if we wanted to.
   //
@@ -16817,7 +16909,16 @@ simdjson_inline error_code parse_number(const uint8_t *const src, W &writer) {
   if (i > uint64_t(INT64_MAX)) {
     WRITE_UNSIGNED(i, src, writer);
   } else {
-    WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+    if(i == 0 && negative) {
+      // We have to write -0.0 instead of 0
+      WRITE_DOUBLE(-0.0, src, writer);
+    } else {
+      WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+    }
+#else
+  WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#endif
   }
   if (jsoncharutils::is_not_structural_or_whitespace(*p)) { return INVALID_NUMBER(src); }
   return SUCCESS;
@@ -17278,6 +17379,12 @@ simdjson_unused simdjson_inline simdjson_result<number_type> get_number_type(con
       if (simdjson_unlikely(digit_count == 19 && memcmp(src, smaller_big_integer, 19) > 0)) {
         return number_type::big_integer;
       }
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+      if(digit_count == 1 && src[0] == '0') {
+        // We have to write -0.0 instead of 0
+        return number_type::floating_point_number;
+      }
+#endif
       return number_type::signed_integer;
     }
     // Let us check if we have a big integer (>=2**64).
@@ -17948,14 +18055,18 @@ namespace simd {
 
     // Copies to 'output" all bytes corresponding to a 0 in the mask (interpreted as a bitset).
     // Passing a 0 value for mask would be equivalent to writing out every byte to output.
-    // Only the first 32 - count_ones(mask) bytes of the result are significant but 32 bytes
+    // Only the first 64 - count_ones(mask) bytes of the result are significant but 64 bytes
     // get written.
     // Design consideration: it seems like a function with the
     // signature simd8<L> compress(uint32_t mask) would be
     // sensible, but the AVX ISA makes this kind of approach difficult.
     template<typename L>
     simdjson_inline void compress(uint64_t mask, L * output) const {
-      _mm512_mask_compressstoreu_epi8 (output,~mask,*this);
+      // we deliberately avoid _mm512_mask_compressstoreu_epi8 for portability
+      // (AMD Zen4 has terrible performance with it, it is effectively broken)
+      // _mm512_mask_compressstoreu_epi8 (output,~mask,*this);
+      __m512i compressed = _mm512_maskz_compress_epi8(~mask, *this);
+      _mm512_storeu_si512(output, compressed); // could use a mask
     }
 
     template<typename L>
@@ -18900,7 +19011,7 @@ simdjson_inline bool compute_float_64(int64_t power, uint64_t i, bool negative, 
   // floor(log(5**power)/log(2))
   //
   // Note that this is not magic: 152170/(1<<16) is
-  // approximatively equal to log(5)/log(2).
+  // approximately equal to log(5)/log(2).
   // The 1<<16 value is a power of two; we could use a
   // larger power of 2 if we wanted to.
   //
@@ -19410,7 +19521,16 @@ simdjson_inline error_code parse_number(const uint8_t *const src, W &writer) {
   if (i > uint64_t(INT64_MAX)) {
     WRITE_UNSIGNED(i, src, writer);
   } else {
-    WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+    if(i == 0 && negative) {
+      // We have to write -0.0 instead of 0
+      WRITE_DOUBLE(-0.0, src, writer);
+    } else {
+      WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+    }
+#else
+  WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#endif
   }
   if (jsoncharutils::is_not_structural_or_whitespace(*p)) { return INVALID_NUMBER(src); }
   return SUCCESS;
@@ -19871,6 +19991,12 @@ simdjson_unused simdjson_inline simdjson_result<number_type> get_number_type(con
       if (simdjson_unlikely(digit_count == 19 && memcmp(src, smaller_big_integer, 19) > 0)) {
         return number_type::big_integer;
       }
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+      if(digit_count == 1 && src[0] == '0') {
+        // We have to write -0.0 instead of 0
+        return number_type::floating_point_number;
+      }
+#endif
       return number_type::signed_integer;
     }
     // Let us check if we have a big integer (>=2**64).
@@ -21614,7 +21740,7 @@ simdjson_inline bool compute_float_64(int64_t power, uint64_t i, bool negative, 
   // floor(log(5**power)/log(2))
   //
   // Note that this is not magic: 152170/(1<<16) is
-  // approximatively equal to log(5)/log(2).
+  // approximately equal to log(5)/log(2).
   // The 1<<16 value is a power of two; we could use a
   // larger power of 2 if we wanted to.
   //
@@ -22124,7 +22250,16 @@ simdjson_inline error_code parse_number(const uint8_t *const src, W &writer) {
   if (i > uint64_t(INT64_MAX)) {
     WRITE_UNSIGNED(i, src, writer);
   } else {
-    WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+    if(i == 0 && negative) {
+      // We have to write -0.0 instead of 0
+      WRITE_DOUBLE(-0.0, src, writer);
+    } else {
+      WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+    }
+#else
+  WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#endif
   }
   if (jsoncharutils::is_not_structural_or_whitespace(*p)) { return INVALID_NUMBER(src); }
   return SUCCESS;
@@ -22585,6 +22720,12 @@ simdjson_unused simdjson_inline simdjson_result<number_type> get_number_type(con
       if (simdjson_unlikely(digit_count == 19 && memcmp(src, smaller_big_integer, 19) > 0)) {
         return number_type::big_integer;
       }
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+      if(digit_count == 1 && src[0] == '0') {
+        // We have to write -0.0 instead of 0
+        return number_type::floating_point_number;
+      }
+#endif
       return number_type::signed_integer;
     }
     // Let us check if we have a big integer (>=2**64).
@@ -24645,7 +24786,7 @@ simdjson_inline bool compute_float_64(int64_t power, uint64_t i, bool negative, 
   // floor(log(5**power)/log(2))
   //
   // Note that this is not magic: 152170/(1<<16) is
-  // approximatively equal to log(5)/log(2).
+  // approximately equal to log(5)/log(2).
   // The 1<<16 value is a power of two; we could use a
   // larger power of 2 if we wanted to.
   //
@@ -25155,7 +25296,16 @@ simdjson_inline error_code parse_number(const uint8_t *const src, W &writer) {
   if (i > uint64_t(INT64_MAX)) {
     WRITE_UNSIGNED(i, src, writer);
   } else {
-    WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+    if(i == 0 && negative) {
+      // We have to write -0.0 instead of 0
+      WRITE_DOUBLE(-0.0, src, writer);
+    } else {
+      WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+    }
+#else
+  WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#endif
   }
   if (jsoncharutils::is_not_structural_or_whitespace(*p)) { return INVALID_NUMBER(src); }
   return SUCCESS;
@@ -25616,6 +25766,12 @@ simdjson_unused simdjson_inline simdjson_result<number_type> get_number_type(con
       if (simdjson_unlikely(digit_count == 19 && memcmp(src, smaller_big_integer, 19) > 0)) {
         return number_type::big_integer;
       }
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+      if(digit_count == 1 && src[0] == '0') {
+        // We have to write -0.0 instead of 0
+        return number_type::floating_point_number;
+      }
+#endif
       return number_type::signed_integer;
     }
     // Let us check if we have a big integer (>=2**64).
@@ -27153,7 +27309,7 @@ simdjson_inline bool compute_float_64(int64_t power, uint64_t i, bool negative, 
   // floor(log(5**power)/log(2))
   //
   // Note that this is not magic: 152170/(1<<16) is
-  // approximatively equal to log(5)/log(2).
+  // approximately equal to log(5)/log(2).
   // The 1<<16 value is a power of two; we could use a
   // larger power of 2 if we wanted to.
   //
@@ -27663,7 +27819,16 @@ simdjson_inline error_code parse_number(const uint8_t *const src, W &writer) {
   if (i > uint64_t(INT64_MAX)) {
     WRITE_UNSIGNED(i, src, writer);
   } else {
-    WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+    if(i == 0 && negative) {
+      // We have to write -0.0 instead of 0
+      WRITE_DOUBLE(-0.0, src, writer);
+    } else {
+      WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+    }
+#else
+  WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#endif
   }
   if (jsoncharutils::is_not_structural_or_whitespace(*p)) { return INVALID_NUMBER(src); }
   return SUCCESS;
@@ -28124,6 +28289,12 @@ simdjson_unused simdjson_inline simdjson_result<number_type> get_number_type(con
       if (simdjson_unlikely(digit_count == 19 && memcmp(src, smaller_big_integer, 19) > 0)) {
         return number_type::big_integer;
       }
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+      if(digit_count == 1 && src[0] == '0') {
+        // We have to write -0.0 instead of 0
+        return number_type::floating_point_number;
+      }
+#endif
       return number_type::signed_integer;
     }
     // Let us check if we have a big integer (>=2**64).
@@ -29674,7 +29845,7 @@ simdjson_inline bool compute_float_64(int64_t power, uint64_t i, bool negative, 
   // floor(log(5**power)/log(2))
   //
   // Note that this is not magic: 152170/(1<<16) is
-  // approximatively equal to log(5)/log(2).
+  // approximately equal to log(5)/log(2).
   // The 1<<16 value is a power of two; we could use a
   // larger power of 2 if we wanted to.
   //
@@ -30184,7 +30355,16 @@ simdjson_inline error_code parse_number(const uint8_t *const src, W &writer) {
   if (i > uint64_t(INT64_MAX)) {
     WRITE_UNSIGNED(i, src, writer);
   } else {
-    WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+    if(i == 0 && negative) {
+      // We have to write -0.0 instead of 0
+      WRITE_DOUBLE(-0.0, src, writer);
+    } else {
+      WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+    }
+#else
+  WRITE_INTEGER(negative ? (~i+1) : i, src, writer);
+#endif
   }
   if (jsoncharutils::is_not_structural_or_whitespace(*p)) { return INVALID_NUMBER(src); }
   return SUCCESS;
@@ -30645,6 +30825,12 @@ simdjson_unused simdjson_inline simdjson_result<number_type> get_number_type(con
       if (simdjson_unlikely(digit_count == 19 && memcmp(src, smaller_big_integer, 19) > 0)) {
         return number_type::big_integer;
       }
+#if SIMDJSON_MINUS_ZERO_AS_FLOAT
+      if(digit_count == 1 && src[0] == '0') {
+        // We have to write -0.0 instead of 0
+        return number_type::floating_point_number;
+      }
+#endif
       return number_type::signed_integer;
     }
     // Let us check if we have a big integer (>=2**64).
@@ -32143,7 +32329,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_object() noexcept;
   /**
@@ -32153,7 +32340,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_object() noexcept;
 
@@ -32275,7 +32463,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_array() noexcept;
   /**
@@ -32285,7 +32474,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_array() noexcept;
 
@@ -32583,22 +32773,28 @@ public:
     noexcept
 #endif
  {
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    if constexpr (custom_deserializable<T, value>) {
+  #if SIMDJSON_SUPPORTS_DESERIALIZATION
+  if constexpr (custom_deserializable<T, value>) {
       return deserialize(*this, out);
-    } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
-      static_cast<void>(out); // to get rid of unused errors
-      return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    }
+  } else {
+    static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+      "And you do not seem to have added support for it. Indeed, we have that "
+      "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+      "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, or bool.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+  }
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
 #endif
   }
 
@@ -35233,20 +35429,27 @@ public:
     if constexpr (custom_deserializable<T, document>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_deprecated simdjson_inline error_code get(T &out) && noexcept;
 
@@ -35808,20 +36011,27 @@ public:
     if constexpr (custom_deserializable<T, document_reference>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_inline error_code get(T &out) && noexcept;
   simdjson_inline simdjson_result<std::string_view> raw_json() noexcept;
@@ -36996,6 +37206,16 @@ error_code tag_invoke(deserialize_tag, auto &val, T &out) noexcept {
   return SUCCESS;
 }
 
+template <concepts::constructible_from_string_view T, typename ValT>
+  requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(std::is_nothrow_constructible_v<T, std::string_view>) {
+  std::string_view str;
+  SIMDJSON_TRY(val.get_string().get(str));
+  out = T{str};
+  return SUCCESS;
+}
+
+
 /**
  * STL containers have several constructors including one that takes a single
  * size argument. Thus, some compilers (Visual Studio) will not be able to
@@ -37039,6 +37259,39 @@ error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
   }
   return SUCCESS;
 }
+
+
+/**
+ * We want to support std::map and std::unordered_map but only for
+ * string-keyed types.
+ */
+ template <concepts::string_view_keyed_map T, typename ValT>
+ requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
+  using value_type = typename std::remove_cvref_t<T>::mapped_type;
+  static_assert(
+     deserializable<value_type, ValT>,
+     "The specified value type inside the container must itself be deserializable");
+  static_assert(
+      std::is_default_constructible_v<value_type>,
+      "The specified value type inside the container must default constructible.");
+ arm64::ondemand::object obj;
+ SIMDJSON_TRY(val.get_object().get(obj));
+ for (auto field : obj) {
+    std::string_view key;
+    SIMDJSON_TRY(field.unescaped_key().get(key));
+    value_type this_value;
+    SIMDJSON_TRY(field.value().get<value_type>().get(this_value));
+    [[maybe_unused]] std::pair<typename T::iterator, bool> result = out.emplace(key, this_value);
+    // unclear what to do if the key already exists
+    // if (result.second == false) {
+    //   // key already exists
+    // }
+ }
+ (void)out;
+ return SUCCESS;
+}
+
 
 
 
@@ -42265,19 +42518,23 @@ simdjson_warn_unused simdjson_inline simdjson_result<double> value_iterator::get
   }
   return result;
 }
+
 simdjson_warn_unused simdjson_inline simdjson_result<bool> value_iterator::get_root_bool(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("bool");
-  uint8_t tmpbuf[5+1+1]; // +1 for null termination
-  tmpbuf[5+1] = '\0'; // make sure that buffer is always null terminated.
-  if (!_json_iter->copy_to_buffer(json, max_len, tmpbuf, 5+1)) { return incorrect_type_error("Not a boolean"); }
-  auto result = parse_bool(tmpbuf);
-  if(result.error() == SUCCESS) {
-    if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
-    advance_root_scalar("bool");
-  }
-  return result;
+  // We have a boolean if we have either "true" or "false" and the next character is either
+  // a structural character or whitespace. We also check that the length is correct:
+  // "true" and "false" are 4 and 5 characters long, respectively.
+  bool value_true = (max_len >= 4 && !atomparsing::str4ncmp(json, "true") &&
+  (max_len == 4 || jsoncharutils::is_structural_or_whitespace(json[4])));
+  bool value_false = (max_len >= 5 && !atomparsing::str4ncmp(json, "false") &&
+  (max_len == 5 || jsoncharutils::is_structural_or_whitespace(json[5])));
+  if(value_true == false && value_false == false) { return incorrect_type_error("Not a boolean"); }
+  if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
+  advance_root_scalar("bool");
+  return value_true;
 }
+
 simdjson_inline simdjson_result<bool> value_iterator::is_root_null(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("null");
@@ -43119,7 +43376,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_object() noexcept;
   /**
@@ -43129,7 +43387,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_object() noexcept;
 
@@ -43251,7 +43510,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_array() noexcept;
   /**
@@ -43261,7 +43521,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_array() noexcept;
 
@@ -43559,22 +43820,28 @@ public:
     noexcept
 #endif
  {
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    if constexpr (custom_deserializable<T, value>) {
+  #if SIMDJSON_SUPPORTS_DESERIALIZATION
+  if constexpr (custom_deserializable<T, value>) {
       return deserialize(*this, out);
-    } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
-      static_cast<void>(out); // to get rid of unused errors
-      return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    }
+  } else {
+    static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+      "And you do not seem to have added support for it. Indeed, we have that "
+      "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+      "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, or bool.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+  }
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
 #endif
   }
 
@@ -46209,20 +46476,27 @@ public:
     if constexpr (custom_deserializable<T, document>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_deprecated simdjson_inline error_code get(T &out) && noexcept;
 
@@ -46784,20 +47058,27 @@ public:
     if constexpr (custom_deserializable<T, document_reference>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_inline error_code get(T &out) && noexcept;
   simdjson_inline simdjson_result<std::string_view> raw_json() noexcept;
@@ -47972,6 +48253,16 @@ error_code tag_invoke(deserialize_tag, auto &val, T &out) noexcept {
   return SUCCESS;
 }
 
+template <concepts::constructible_from_string_view T, typename ValT>
+  requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(std::is_nothrow_constructible_v<T, std::string_view>) {
+  std::string_view str;
+  SIMDJSON_TRY(val.get_string().get(str));
+  out = T{str};
+  return SUCCESS;
+}
+
+
 /**
  * STL containers have several constructors including one that takes a single
  * size argument. Thus, some compilers (Visual Studio) will not be able to
@@ -48015,6 +48306,39 @@ error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
   }
   return SUCCESS;
 }
+
+
+/**
+ * We want to support std::map and std::unordered_map but only for
+ * string-keyed types.
+ */
+ template <concepts::string_view_keyed_map T, typename ValT>
+ requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
+  using value_type = typename std::remove_cvref_t<T>::mapped_type;
+  static_assert(
+     deserializable<value_type, ValT>,
+     "The specified value type inside the container must itself be deserializable");
+  static_assert(
+      std::is_default_constructible_v<value_type>,
+      "The specified value type inside the container must default constructible.");
+ fallback::ondemand::object obj;
+ SIMDJSON_TRY(val.get_object().get(obj));
+ for (auto field : obj) {
+    std::string_view key;
+    SIMDJSON_TRY(field.unescaped_key().get(key));
+    value_type this_value;
+    SIMDJSON_TRY(field.value().get<value_type>().get(this_value));
+    [[maybe_unused]] std::pair<typename T::iterator, bool> result = out.emplace(key, this_value);
+    // unclear what to do if the key already exists
+    // if (result.second == false) {
+    //   // key already exists
+    // }
+ }
+ (void)out;
+ return SUCCESS;
+}
+
 
 
 
@@ -53241,19 +53565,23 @@ simdjson_warn_unused simdjson_inline simdjson_result<double> value_iterator::get
   }
   return result;
 }
+
 simdjson_warn_unused simdjson_inline simdjson_result<bool> value_iterator::get_root_bool(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("bool");
-  uint8_t tmpbuf[5+1+1]; // +1 for null termination
-  tmpbuf[5+1] = '\0'; // make sure that buffer is always null terminated.
-  if (!_json_iter->copy_to_buffer(json, max_len, tmpbuf, 5+1)) { return incorrect_type_error("Not a boolean"); }
-  auto result = parse_bool(tmpbuf);
-  if(result.error() == SUCCESS) {
-    if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
-    advance_root_scalar("bool");
-  }
-  return result;
+  // We have a boolean if we have either "true" or "false" and the next character is either
+  // a structural character or whitespace. We also check that the length is correct:
+  // "true" and "false" are 4 and 5 characters long, respectively.
+  bool value_true = (max_len >= 4 && !atomparsing::str4ncmp(json, "true") &&
+  (max_len == 4 || jsoncharutils::is_structural_or_whitespace(json[4])));
+  bool value_false = (max_len >= 5 && !atomparsing::str4ncmp(json, "false") &&
+  (max_len == 5 || jsoncharutils::is_structural_or_whitespace(json[5])));
+  if(value_true == false && value_false == false) { return incorrect_type_error("Not a boolean"); }
+  if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
+  advance_root_scalar("bool");
+  return value_true;
 }
+
 simdjson_inline simdjson_result<bool> value_iterator::is_root_null(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("null");
@@ -54587,7 +54915,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_object() noexcept;
   /**
@@ -54597,7 +54926,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_object() noexcept;
 
@@ -54719,7 +55049,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_array() noexcept;
   /**
@@ -54729,7 +55060,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_array() noexcept;
 
@@ -55027,22 +55359,28 @@ public:
     noexcept
 #endif
  {
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    if constexpr (custom_deserializable<T, value>) {
+  #if SIMDJSON_SUPPORTS_DESERIALIZATION
+  if constexpr (custom_deserializable<T, value>) {
       return deserialize(*this, out);
-    } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
-      static_cast<void>(out); // to get rid of unused errors
-      return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    }
+  } else {
+    static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+      "And you do not seem to have added support for it. Indeed, we have that "
+      "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+      "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, or bool.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+  }
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
 #endif
   }
 
@@ -57677,20 +58015,27 @@ public:
     if constexpr (custom_deserializable<T, document>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_deprecated simdjson_inline error_code get(T &out) && noexcept;
 
@@ -58252,20 +58597,27 @@ public:
     if constexpr (custom_deserializable<T, document_reference>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_inline error_code get(T &out) && noexcept;
   simdjson_inline simdjson_result<std::string_view> raw_json() noexcept;
@@ -59440,6 +59792,16 @@ error_code tag_invoke(deserialize_tag, auto &val, T &out) noexcept {
   return SUCCESS;
 }
 
+template <concepts::constructible_from_string_view T, typename ValT>
+  requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(std::is_nothrow_constructible_v<T, std::string_view>) {
+  std::string_view str;
+  SIMDJSON_TRY(val.get_string().get(str));
+  out = T{str};
+  return SUCCESS;
+}
+
+
 /**
  * STL containers have several constructors including one that takes a single
  * size argument. Thus, some compilers (Visual Studio) will not be able to
@@ -59483,6 +59845,39 @@ error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
   }
   return SUCCESS;
 }
+
+
+/**
+ * We want to support std::map and std::unordered_map but only for
+ * string-keyed types.
+ */
+ template <concepts::string_view_keyed_map T, typename ValT>
+ requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
+  using value_type = typename std::remove_cvref_t<T>::mapped_type;
+  static_assert(
+     deserializable<value_type, ValT>,
+     "The specified value type inside the container must itself be deserializable");
+  static_assert(
+      std::is_default_constructible_v<value_type>,
+      "The specified value type inside the container must default constructible.");
+ haswell::ondemand::object obj;
+ SIMDJSON_TRY(val.get_object().get(obj));
+ for (auto field : obj) {
+    std::string_view key;
+    SIMDJSON_TRY(field.unescaped_key().get(key));
+    value_type this_value;
+    SIMDJSON_TRY(field.value().get<value_type>().get(this_value));
+    [[maybe_unused]] std::pair<typename T::iterator, bool> result = out.emplace(key, this_value);
+    // unclear what to do if the key already exists
+    // if (result.second == false) {
+    //   // key already exists
+    // }
+ }
+ (void)out;
+ return SUCCESS;
+}
+
 
 
 
@@ -64709,19 +65104,23 @@ simdjson_warn_unused simdjson_inline simdjson_result<double> value_iterator::get
   }
   return result;
 }
+
 simdjson_warn_unused simdjson_inline simdjson_result<bool> value_iterator::get_root_bool(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("bool");
-  uint8_t tmpbuf[5+1+1]; // +1 for null termination
-  tmpbuf[5+1] = '\0'; // make sure that buffer is always null terminated.
-  if (!_json_iter->copy_to_buffer(json, max_len, tmpbuf, 5+1)) { return incorrect_type_error("Not a boolean"); }
-  auto result = parse_bool(tmpbuf);
-  if(result.error() == SUCCESS) {
-    if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
-    advance_root_scalar("bool");
-  }
-  return result;
+  // We have a boolean if we have either "true" or "false" and the next character is either
+  // a structural character or whitespace. We also check that the length is correct:
+  // "true" and "false" are 4 and 5 characters long, respectively.
+  bool value_true = (max_len >= 4 && !atomparsing::str4ncmp(json, "true") &&
+  (max_len == 4 || jsoncharutils::is_structural_or_whitespace(json[4])));
+  bool value_false = (max_len >= 5 && !atomparsing::str4ncmp(json, "false") &&
+  (max_len == 5 || jsoncharutils::is_structural_or_whitespace(json[5])));
+  if(value_true == false && value_false == false) { return incorrect_type_error("Not a boolean"); }
+  if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
+  advance_root_scalar("bool");
+  return value_true;
 }
+
 simdjson_inline simdjson_result<bool> value_iterator::is_root_null(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("null");
@@ -65401,14 +65800,18 @@ namespace simd {
 
     // Copies to 'output" all bytes corresponding to a 0 in the mask (interpreted as a bitset).
     // Passing a 0 value for mask would be equivalent to writing out every byte to output.
-    // Only the first 32 - count_ones(mask) bytes of the result are significant but 32 bytes
+    // Only the first 64 - count_ones(mask) bytes of the result are significant but 64 bytes
     // get written.
     // Design consideration: it seems like a function with the
     // signature simd8<L> compress(uint32_t mask) would be
     // sensible, but the AVX ISA makes this kind of approach difficult.
     template<typename L>
     simdjson_inline void compress(uint64_t mask, L * output) const {
-      _mm512_mask_compressstoreu_epi8 (output,~mask,*this);
+      // we deliberately avoid _mm512_mask_compressstoreu_epi8 for portability
+      // (AMD Zen4 has terrible performance with it, it is effectively broken)
+      // _mm512_mask_compressstoreu_epi8 (output,~mask,*this);
+      __m512i compressed = _mm512_maskz_compress_epi8(~mask, *this);
+      _mm512_storeu_si512(output, compressed); // could use a mask
     }
 
     template<typename L>
@@ -66048,7 +66451,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_object() noexcept;
   /**
@@ -66058,7 +66462,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_object() noexcept;
 
@@ -66180,7 +66585,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_array() noexcept;
   /**
@@ -66190,7 +66596,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_array() noexcept;
 
@@ -66488,22 +66895,28 @@ public:
     noexcept
 #endif
  {
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    if constexpr (custom_deserializable<T, value>) {
+  #if SIMDJSON_SUPPORTS_DESERIALIZATION
+  if constexpr (custom_deserializable<T, value>) {
       return deserialize(*this, out);
-    } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
-      static_cast<void>(out); // to get rid of unused errors
-      return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    }
+  } else {
+    static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+      "And you do not seem to have added support for it. Indeed, we have that "
+      "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+      "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, or bool.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+  }
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
 #endif
   }
 
@@ -69138,20 +69551,27 @@ public:
     if constexpr (custom_deserializable<T, document>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_deprecated simdjson_inline error_code get(T &out) && noexcept;
 
@@ -69713,20 +70133,27 @@ public:
     if constexpr (custom_deserializable<T, document_reference>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_inline error_code get(T &out) && noexcept;
   simdjson_inline simdjson_result<std::string_view> raw_json() noexcept;
@@ -70901,6 +71328,16 @@ error_code tag_invoke(deserialize_tag, auto &val, T &out) noexcept {
   return SUCCESS;
 }
 
+template <concepts::constructible_from_string_view T, typename ValT>
+  requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(std::is_nothrow_constructible_v<T, std::string_view>) {
+  std::string_view str;
+  SIMDJSON_TRY(val.get_string().get(str));
+  out = T{str};
+  return SUCCESS;
+}
+
+
 /**
  * STL containers have several constructors including one that takes a single
  * size argument. Thus, some compilers (Visual Studio) will not be able to
@@ -70944,6 +71381,39 @@ error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
   }
   return SUCCESS;
 }
+
+
+/**
+ * We want to support std::map and std::unordered_map but only for
+ * string-keyed types.
+ */
+ template <concepts::string_view_keyed_map T, typename ValT>
+ requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
+  using value_type = typename std::remove_cvref_t<T>::mapped_type;
+  static_assert(
+     deserializable<value_type, ValT>,
+     "The specified value type inside the container must itself be deserializable");
+  static_assert(
+      std::is_default_constructible_v<value_type>,
+      "The specified value type inside the container must default constructible.");
+ icelake::ondemand::object obj;
+ SIMDJSON_TRY(val.get_object().get(obj));
+ for (auto field : obj) {
+    std::string_view key;
+    SIMDJSON_TRY(field.unescaped_key().get(key));
+    value_type this_value;
+    SIMDJSON_TRY(field.value().get<value_type>().get(this_value));
+    [[maybe_unused]] std::pair<typename T::iterator, bool> result = out.emplace(key, this_value);
+    // unclear what to do if the key already exists
+    // if (result.second == false) {
+    //   // key already exists
+    // }
+ }
+ (void)out;
+ return SUCCESS;
+}
+
 
 
 
@@ -76170,19 +76640,23 @@ simdjson_warn_unused simdjson_inline simdjson_result<double> value_iterator::get
   }
   return result;
 }
+
 simdjson_warn_unused simdjson_inline simdjson_result<bool> value_iterator::get_root_bool(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("bool");
-  uint8_t tmpbuf[5+1+1]; // +1 for null termination
-  tmpbuf[5+1] = '\0'; // make sure that buffer is always null terminated.
-  if (!_json_iter->copy_to_buffer(json, max_len, tmpbuf, 5+1)) { return incorrect_type_error("Not a boolean"); }
-  auto result = parse_bool(tmpbuf);
-  if(result.error() == SUCCESS) {
-    if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
-    advance_root_scalar("bool");
-  }
-  return result;
+  // We have a boolean if we have either "true" or "false" and the next character is either
+  // a structural character or whitespace. We also check that the length is correct:
+  // "true" and "false" are 4 and 5 characters long, respectively.
+  bool value_true = (max_len >= 4 && !atomparsing::str4ncmp(json, "true") &&
+  (max_len == 4 || jsoncharutils::is_structural_or_whitespace(json[4])));
+  bool value_false = (max_len >= 5 && !atomparsing::str4ncmp(json, "false") &&
+  (max_len == 5 || jsoncharutils::is_structural_or_whitespace(json[5])));
+  if(value_true == false && value_false == false) { return incorrect_type_error("Not a boolean"); }
+  if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
+  advance_root_scalar("bool");
+  return value_true;
 }
+
 simdjson_inline simdjson_result<bool> value_iterator::is_root_null(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("null");
@@ -77630,7 +78104,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_object() noexcept;
   /**
@@ -77640,7 +78115,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_object() noexcept;
 
@@ -77762,7 +78238,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_array() noexcept;
   /**
@@ -77772,7 +78249,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_array() noexcept;
 
@@ -78070,22 +78548,28 @@ public:
     noexcept
 #endif
  {
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    if constexpr (custom_deserializable<T, value>) {
+  #if SIMDJSON_SUPPORTS_DESERIALIZATION
+  if constexpr (custom_deserializable<T, value>) {
       return deserialize(*this, out);
-    } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
-      static_cast<void>(out); // to get rid of unused errors
-      return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    }
+  } else {
+    static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+      "And you do not seem to have added support for it. Indeed, we have that "
+      "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+      "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, or bool.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+  }
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
 #endif
   }
 
@@ -80720,20 +81204,27 @@ public:
     if constexpr (custom_deserializable<T, document>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_deprecated simdjson_inline error_code get(T &out) && noexcept;
 
@@ -81295,20 +81786,27 @@ public:
     if constexpr (custom_deserializable<T, document_reference>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_inline error_code get(T &out) && noexcept;
   simdjson_inline simdjson_result<std::string_view> raw_json() noexcept;
@@ -82483,6 +82981,16 @@ error_code tag_invoke(deserialize_tag, auto &val, T &out) noexcept {
   return SUCCESS;
 }
 
+template <concepts::constructible_from_string_view T, typename ValT>
+  requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(std::is_nothrow_constructible_v<T, std::string_view>) {
+  std::string_view str;
+  SIMDJSON_TRY(val.get_string().get(str));
+  out = T{str};
+  return SUCCESS;
+}
+
+
 /**
  * STL containers have several constructors including one that takes a single
  * size argument. Thus, some compilers (Visual Studio) will not be able to
@@ -82526,6 +83034,39 @@ error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
   }
   return SUCCESS;
 }
+
+
+/**
+ * We want to support std::map and std::unordered_map but only for
+ * string-keyed types.
+ */
+ template <concepts::string_view_keyed_map T, typename ValT>
+ requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
+  using value_type = typename std::remove_cvref_t<T>::mapped_type;
+  static_assert(
+     deserializable<value_type, ValT>,
+     "The specified value type inside the container must itself be deserializable");
+  static_assert(
+      std::is_default_constructible_v<value_type>,
+      "The specified value type inside the container must default constructible.");
+ ppc64::ondemand::object obj;
+ SIMDJSON_TRY(val.get_object().get(obj));
+ for (auto field : obj) {
+    std::string_view key;
+    SIMDJSON_TRY(field.unescaped_key().get(key));
+    value_type this_value;
+    SIMDJSON_TRY(field.value().get<value_type>().get(this_value));
+    [[maybe_unused]] std::pair<typename T::iterator, bool> result = out.emplace(key, this_value);
+    // unclear what to do if the key already exists
+    // if (result.second == false) {
+    //   // key already exists
+    // }
+ }
+ (void)out;
+ return SUCCESS;
+}
+
 
 
 
@@ -87752,19 +88293,23 @@ simdjson_warn_unused simdjson_inline simdjson_result<double> value_iterator::get
   }
   return result;
 }
+
 simdjson_warn_unused simdjson_inline simdjson_result<bool> value_iterator::get_root_bool(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("bool");
-  uint8_t tmpbuf[5+1+1]; // +1 for null termination
-  tmpbuf[5+1] = '\0'; // make sure that buffer is always null terminated.
-  if (!_json_iter->copy_to_buffer(json, max_len, tmpbuf, 5+1)) { return incorrect_type_error("Not a boolean"); }
-  auto result = parse_bool(tmpbuf);
-  if(result.error() == SUCCESS) {
-    if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
-    advance_root_scalar("bool");
-  }
-  return result;
+  // We have a boolean if we have either "true" or "false" and the next character is either
+  // a structural character or whitespace. We also check that the length is correct:
+  // "true" and "false" are 4 and 5 characters long, respectively.
+  bool value_true = (max_len >= 4 && !atomparsing::str4ncmp(json, "true") &&
+  (max_len == 4 || jsoncharutils::is_structural_or_whitespace(json[4])));
+  bool value_false = (max_len >= 5 && !atomparsing::str4ncmp(json, "false") &&
+  (max_len == 5 || jsoncharutils::is_structural_or_whitespace(json[5])));
+  if(value_true == false && value_false == false) { return incorrect_type_error("Not a boolean"); }
+  if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
+  advance_root_scalar("bool");
+  return value_true;
 }
+
 simdjson_inline simdjson_result<bool> value_iterator::is_root_null(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("null");
@@ -89529,7 +90074,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_object() noexcept;
   /**
@@ -89539,7 +90085,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_object() noexcept;
 
@@ -89661,7 +90208,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_array() noexcept;
   /**
@@ -89671,7 +90219,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_array() noexcept;
 
@@ -89969,22 +90518,28 @@ public:
     noexcept
 #endif
  {
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    if constexpr (custom_deserializable<T, value>) {
+  #if SIMDJSON_SUPPORTS_DESERIALIZATION
+  if constexpr (custom_deserializable<T, value>) {
       return deserialize(*this, out);
-    } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
-      static_cast<void>(out); // to get rid of unused errors
-      return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    }
+  } else {
+    static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+      "And you do not seem to have added support for it. Indeed, we have that "
+      "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+      "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, or bool.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+  }
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
 #endif
   }
 
@@ -92619,20 +93174,27 @@ public:
     if constexpr (custom_deserializable<T, document>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_deprecated simdjson_inline error_code get(T &out) && noexcept;
 
@@ -93194,20 +93756,27 @@ public:
     if constexpr (custom_deserializable<T, document_reference>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_inline error_code get(T &out) && noexcept;
   simdjson_inline simdjson_result<std::string_view> raw_json() noexcept;
@@ -94382,6 +94951,16 @@ error_code tag_invoke(deserialize_tag, auto &val, T &out) noexcept {
   return SUCCESS;
 }
 
+template <concepts::constructible_from_string_view T, typename ValT>
+  requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(std::is_nothrow_constructible_v<T, std::string_view>) {
+  std::string_view str;
+  SIMDJSON_TRY(val.get_string().get(str));
+  out = T{str};
+  return SUCCESS;
+}
+
+
 /**
  * STL containers have several constructors including one that takes a single
  * size argument. Thus, some compilers (Visual Studio) will not be able to
@@ -94425,6 +95004,39 @@ error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
   }
   return SUCCESS;
 }
+
+
+/**
+ * We want to support std::map and std::unordered_map but only for
+ * string-keyed types.
+ */
+ template <concepts::string_view_keyed_map T, typename ValT>
+ requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
+  using value_type = typename std::remove_cvref_t<T>::mapped_type;
+  static_assert(
+     deserializable<value_type, ValT>,
+     "The specified value type inside the container must itself be deserializable");
+  static_assert(
+      std::is_default_constructible_v<value_type>,
+      "The specified value type inside the container must default constructible.");
+ westmere::ondemand::object obj;
+ SIMDJSON_TRY(val.get_object().get(obj));
+ for (auto field : obj) {
+    std::string_view key;
+    SIMDJSON_TRY(field.unescaped_key().get(key));
+    value_type this_value;
+    SIMDJSON_TRY(field.value().get<value_type>().get(this_value));
+    [[maybe_unused]] std::pair<typename T::iterator, bool> result = out.emplace(key, this_value);
+    // unclear what to do if the key already exists
+    // if (result.second == false) {
+    //   // key already exists
+    // }
+ }
+ (void)out;
+ return SUCCESS;
+}
+
 
 
 
@@ -99651,19 +100263,23 @@ simdjson_warn_unused simdjson_inline simdjson_result<double> value_iterator::get
   }
   return result;
 }
+
 simdjson_warn_unused simdjson_inline simdjson_result<bool> value_iterator::get_root_bool(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("bool");
-  uint8_t tmpbuf[5+1+1]; // +1 for null termination
-  tmpbuf[5+1] = '\0'; // make sure that buffer is always null terminated.
-  if (!_json_iter->copy_to_buffer(json, max_len, tmpbuf, 5+1)) { return incorrect_type_error("Not a boolean"); }
-  auto result = parse_bool(tmpbuf);
-  if(result.error() == SUCCESS) {
-    if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
-    advance_root_scalar("bool");
-  }
-  return result;
+  // We have a boolean if we have either "true" or "false" and the next character is either
+  // a structural character or whitespace. We also check that the length is correct:
+  // "true" and "false" are 4 and 5 characters long, respectively.
+  bool value_true = (max_len >= 4 && !atomparsing::str4ncmp(json, "true") &&
+  (max_len == 4 || jsoncharutils::is_structural_or_whitespace(json[4])));
+  bool value_false = (max_len >= 5 && !atomparsing::str4ncmp(json, "false") &&
+  (max_len == 5 || jsoncharutils::is_structural_or_whitespace(json[5])));
+  if(value_true == false && value_false == false) { return incorrect_type_error("Not a boolean"); }
+  if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
+  advance_root_scalar("bool");
+  return value_true;
 }
+
 simdjson_inline simdjson_result<bool> value_iterator::is_root_null(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("null");
@@ -100905,7 +101521,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_object() noexcept;
   /**
@@ -100915,7 +101532,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_object() noexcept;
 
@@ -101037,7 +101655,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_array() noexcept;
   /**
@@ -101047,7 +101666,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_array() noexcept;
 
@@ -101345,22 +101965,28 @@ public:
     noexcept
 #endif
  {
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    if constexpr (custom_deserializable<T, value>) {
+  #if SIMDJSON_SUPPORTS_DESERIALIZATION
+  if constexpr (custom_deserializable<T, value>) {
       return deserialize(*this, out);
-    } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
-      static_cast<void>(out); // to get rid of unused errors
-      return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    }
+  } else {
+    static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+      "And you do not seem to have added support for it. Indeed, we have that "
+      "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+      "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, or bool.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+  }
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
 #endif
   }
 
@@ -103995,20 +104621,27 @@ public:
     if constexpr (custom_deserializable<T, document>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_deprecated simdjson_inline error_code get(T &out) && noexcept;
 
@@ -104570,20 +105203,27 @@ public:
     if constexpr (custom_deserializable<T, document_reference>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_inline error_code get(T &out) && noexcept;
   simdjson_inline simdjson_result<std::string_view> raw_json() noexcept;
@@ -105758,6 +106398,16 @@ error_code tag_invoke(deserialize_tag, auto &val, T &out) noexcept {
   return SUCCESS;
 }
 
+template <concepts::constructible_from_string_view T, typename ValT>
+  requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(std::is_nothrow_constructible_v<T, std::string_view>) {
+  std::string_view str;
+  SIMDJSON_TRY(val.get_string().get(str));
+  out = T{str};
+  return SUCCESS;
+}
+
+
 /**
  * STL containers have several constructors including one that takes a single
  * size argument. Thus, some compilers (Visual Studio) will not be able to
@@ -105801,6 +106451,39 @@ error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
   }
   return SUCCESS;
 }
+
+
+/**
+ * We want to support std::map and std::unordered_map but only for
+ * string-keyed types.
+ */
+ template <concepts::string_view_keyed_map T, typename ValT>
+ requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
+  using value_type = typename std::remove_cvref_t<T>::mapped_type;
+  static_assert(
+     deserializable<value_type, ValT>,
+     "The specified value type inside the container must itself be deserializable");
+  static_assert(
+      std::is_default_constructible_v<value_type>,
+      "The specified value type inside the container must default constructible.");
+ lsx::ondemand::object obj;
+ SIMDJSON_TRY(val.get_object().get(obj));
+ for (auto field : obj) {
+    std::string_view key;
+    SIMDJSON_TRY(field.unescaped_key().get(key));
+    value_type this_value;
+    SIMDJSON_TRY(field.value().get<value_type>().get(this_value));
+    [[maybe_unused]] std::pair<typename T::iterator, bool> result = out.emplace(key, this_value);
+    // unclear what to do if the key already exists
+    // if (result.second == false) {
+    //   // key already exists
+    // }
+ }
+ (void)out;
+ return SUCCESS;
+}
+
 
 
 
@@ -111027,19 +111710,23 @@ simdjson_warn_unused simdjson_inline simdjson_result<double> value_iterator::get
   }
   return result;
 }
+
 simdjson_warn_unused simdjson_inline simdjson_result<bool> value_iterator::get_root_bool(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("bool");
-  uint8_t tmpbuf[5+1+1]; // +1 for null termination
-  tmpbuf[5+1] = '\0'; // make sure that buffer is always null terminated.
-  if (!_json_iter->copy_to_buffer(json, max_len, tmpbuf, 5+1)) { return incorrect_type_error("Not a boolean"); }
-  auto result = parse_bool(tmpbuf);
-  if(result.error() == SUCCESS) {
-    if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
-    advance_root_scalar("bool");
-  }
-  return result;
+  // We have a boolean if we have either "true" or "false" and the next character is either
+  // a structural character or whitespace. We also check that the length is correct:
+  // "true" and "false" are 4 and 5 characters long, respectively.
+  bool value_true = (max_len >= 4 && !atomparsing::str4ncmp(json, "true") &&
+  (max_len == 4 || jsoncharutils::is_structural_or_whitespace(json[4])));
+  bool value_false = (max_len >= 5 && !atomparsing::str4ncmp(json, "false") &&
+  (max_len == 5 || jsoncharutils::is_structural_or_whitespace(json[5])));
+  if(value_true == false && value_false == false) { return incorrect_type_error("Not a boolean"); }
+  if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
+  advance_root_scalar("bool");
+  return value_true;
 }
+
 simdjson_inline simdjson_result<bool> value_iterator::is_root_null(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("null");
@@ -112294,7 +112981,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_object() noexcept;
   /**
@@ -112304,7 +112992,8 @@ public:
    *
    * @returns Whether the object had any fields (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_object() noexcept;
 
@@ -112426,7 +113115,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_array() noexcept;
   /**
@@ -112436,7 +113126,8 @@ public:
    *
    * @returns Whether the array had any elements (returns false for empty).
    * @error INCOMPLETE_ARRAY_OR_OBJECT If there are no more tokens (implying the *parent*
-   *        array or object is incomplete).
+   *        array or object is incomplete). An INCOMPLETE_ARRAY_OR_OBJECT is an unrecoverable error that
+   *        invalidates the document.
    */
   simdjson_warn_unused simdjson_inline simdjson_result<bool> started_root_array() noexcept;
 
@@ -112734,22 +113425,28 @@ public:
     noexcept
 #endif
  {
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    if constexpr (custom_deserializable<T, value>) {
+  #if SIMDJSON_SUPPORTS_DESERIALIZATION
+  if constexpr (custom_deserializable<T, value>) {
       return deserialize(*this, out);
-    } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
-      static_cast<void>(out); // to get rid of unused errors
-      return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
-    }
+  } else {
+    static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+      "And you do not seem to have added support for it. Indeed, we have that "
+      "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+      "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, or bool.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+  }
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
 #endif
   }
 
@@ -115384,20 +116081,27 @@ public:
     if constexpr (custom_deserializable<T, document>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_deprecated simdjson_inline error_code get(T &out) && noexcept;
 
@@ -115959,20 +116663,27 @@ public:
     if constexpr (custom_deserializable<T, document_reference>) {
         return deserialize(*this, out);
     } else {
-#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
-      // Unless the simdjson library or the user provides an inline implementation, calling this method should
-      // immediately fail.
-      static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
-        "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
-        "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
-        " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
-        " You may also add support for custom types, see our documentation.");
+      static_assert(!sizeof(T), "The get<T> method with type T is not implemented by the simdjson library. "
+        "And you do not seem to have added support for it. Indeed, we have that "
+        "simdjson::custom_deserializable<T> is false and the type T is not a default type "
+        "such as ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+        "int64_t, double, or bool.");
       static_cast<void>(out); // to get rid of unused errors
       return UNINITIALIZED;
-#if SIMDJSON_SUPPORTS_DESERIALIZATION
     }
-#endif
+#else // SIMDJSON_SUPPORTS_DESERIALIZATION
+    // Unless the simdjson library or the user provides an inline implementation, calling this method should
+    // immediately fail.
+    static_assert(!sizeof(T), "The get method with given type is not implemented by the simdjson library. "
+      "The supported types are ondemand::object, ondemand::array, raw_json_string, std::string_view, uint64_t, "
+      "int64_t, double, and bool. We recommend you use get_double(), get_bool(), get_uint64(), get_int64(), "
+      " get_object(), get_array(), get_raw_json_string(), or get_string() instead of the get template."
+      " You may also add support for custom types, see our documentation.");
+    static_cast<void>(out); // to get rid of unused errors
+    return UNINITIALIZED;
+#endif // SIMDJSON_SUPPORTS_DESERIALIZATION
   }
+
   /** @overload template<typename T> error_code get(T &out) & noexcept */
   template<typename T> simdjson_inline error_code get(T &out) && noexcept;
   simdjson_inline simdjson_result<std::string_view> raw_json() noexcept;
@@ -117147,6 +117858,16 @@ error_code tag_invoke(deserialize_tag, auto &val, T &out) noexcept {
   return SUCCESS;
 }
 
+template <concepts::constructible_from_string_view T, typename ValT>
+  requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(std::is_nothrow_constructible_v<T, std::string_view>) {
+  std::string_view str;
+  SIMDJSON_TRY(val.get_string().get(str));
+  out = T{str};
+  return SUCCESS;
+}
+
+
 /**
  * STL containers have several constructors including one that takes a single
  * size argument. Thus, some compilers (Visual Studio) will not be able to
@@ -117190,6 +117911,39 @@ error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
   }
   return SUCCESS;
 }
+
+
+/**
+ * We want to support std::map and std::unordered_map but only for
+ * string-keyed types.
+ */
+ template <concepts::string_view_keyed_map T, typename ValT>
+ requires(!require_custom_serialization<T>)
+error_code tag_invoke(deserialize_tag, ValT &val, T &out) noexcept(false) {
+  using value_type = typename std::remove_cvref_t<T>::mapped_type;
+  static_assert(
+     deserializable<value_type, ValT>,
+     "The specified value type inside the container must itself be deserializable");
+  static_assert(
+      std::is_default_constructible_v<value_type>,
+      "The specified value type inside the container must default constructible.");
+ lasx::ondemand::object obj;
+ SIMDJSON_TRY(val.get_object().get(obj));
+ for (auto field : obj) {
+    std::string_view key;
+    SIMDJSON_TRY(field.unescaped_key().get(key));
+    value_type this_value;
+    SIMDJSON_TRY(field.value().get<value_type>().get(this_value));
+    [[maybe_unused]] std::pair<typename T::iterator, bool> result = out.emplace(key, this_value);
+    // unclear what to do if the key already exists
+    // if (result.second == false) {
+    //   // key already exists
+    // }
+ }
+ (void)out;
+ return SUCCESS;
+}
+
 
 
 
@@ -122416,19 +123170,23 @@ simdjson_warn_unused simdjson_inline simdjson_result<double> value_iterator::get
   }
   return result;
 }
+
 simdjson_warn_unused simdjson_inline simdjson_result<bool> value_iterator::get_root_bool(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("bool");
-  uint8_t tmpbuf[5+1+1]; // +1 for null termination
-  tmpbuf[5+1] = '\0'; // make sure that buffer is always null terminated.
-  if (!_json_iter->copy_to_buffer(json, max_len, tmpbuf, 5+1)) { return incorrect_type_error("Not a boolean"); }
-  auto result = parse_bool(tmpbuf);
-  if(result.error() == SUCCESS) {
-    if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
-    advance_root_scalar("bool");
-  }
-  return result;
+  // We have a boolean if we have either "true" or "false" and the next character is either
+  // a structural character or whitespace. We also check that the length is correct:
+  // "true" and "false" are 4 and 5 characters long, respectively.
+  bool value_true = (max_len >= 4 && !atomparsing::str4ncmp(json, "true") &&
+  (max_len == 4 || jsoncharutils::is_structural_or_whitespace(json[4])));
+  bool value_false = (max_len >= 5 && !atomparsing::str4ncmp(json, "false") &&
+  (max_len == 5 || jsoncharutils::is_structural_or_whitespace(json[5])));
+  if(value_true == false && value_false == false) { return incorrect_type_error("Not a boolean"); }
+  if (check_trailing && !_json_iter->is_single_token()) { return TRAILING_CONTENT; }
+  advance_root_scalar("bool");
+  return value_true;
 }
+
 simdjson_inline simdjson_result<bool> value_iterator::is_root_null(bool check_trailing) noexcept {
   auto max_len = peek_root_length();
   auto json = peek_root_scalar("null");
