@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply from: project(':libaxmol').projectDir.toString() + "/axmol.gradle"
+apply from: project(':libaxmol').projectDir.toString() + "/../dsl/axmol.gradle"
 
 // Resolve build profiles
 def buildProfiles = AxmolUtils.resolveBuildProfiles(project)

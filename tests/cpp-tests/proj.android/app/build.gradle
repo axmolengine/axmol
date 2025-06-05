@@ -1,9 +1,10 @@
 apply plugin: 'com.android.application'
-apply from: project(':libaxmol').projectDir.toString() + "/axutils.gradle"
+apply from: project(':libaxmol').projectDir.toString() + "/../dsl/axmol.gradle"
 
-android {
-    // Resolve build profiles
-    def buildProfiles = AxmolUtils.resolveBuildProfiles(project)
+// Resolve build profiles
+def buildProfiles = AxmolUtils.resolveBuildProfiles(project)
+
+android {    
     def packageName = buildProfiles['packageName']
     def cmakeVer = buildProfiles['cmakeVer']
     def cmakeOptions = Eval.me(buildProfiles['cmakeOptions'])

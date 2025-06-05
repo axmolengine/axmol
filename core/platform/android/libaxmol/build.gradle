@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply from: 'axmol.gradle'
+apply from: '../dsl/axmol.gradle'
 
 def buildProfiles = AxmolUtils.resolveBasicBuildProfiles(project)
 

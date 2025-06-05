@@ -138,8 +138,14 @@ class AxmolUtils {
             def symlinkDir = joinPath(sdkRoot, 'cmake', buildProfiles['cmakeVer'])
             def symlinkDirFile = new File(symlinkDir)
             if (!symlinkDirFile.exists()) {
-                println "Creating symlinkd ${symlinkDir} ==> ${cmakeDir} ..."
-                Files.createSymbolicLink(symlinkDirFile.toPath(), new File(cmakeDir).toPath())
+                println "Creating symlink ${symlinkDir} ==> ${cmakeDir} ..."
+
+                def parentDir = symlinkDirFile.parentFile
+                if(!parentDir.exists()) {
+                    parentDir.mkdirs()
+                }
+
+                createSymbolicLink(symlinkDirFile, new File(cmakeDir))
             } else {
                 println "The symlinkd ${symlinkDir} ==> ${cmakeDir} exist"
             }
@@ -326,6 +332,7 @@ class AxmolUtils {
         def foundCMakeVer = null
         def index = 0
         for(item in cmakeBinDirs) {
+            println "find cmake in ${item}"
             foundCMakeVer = findCMakeFromBinDir(cmakeVer, item, allowNewerCMake)
             if(foundCMakeVer != null) {
                 break
@@ -463,6 +470,19 @@ class AxmolUtils {
 
     private static boolean isWindows() {
         return System.getProperty("os.name").toLowerCase().contains("windows")
+    }
+
+    static void createSymbolicLink(File linkDir, File targetDir) {
+        if (isWindows()) {
+            def command = ["cmd", "/c", "mklink", "/J", linkDir, targetDir]
+            def proc = command.execute()
+            proc.waitFor()
+            if (proc.exitValue() != 0) {
+                println "Create Junction fail: ${proc.err.text}"
+            }
+        } else {
+            Files.createSymbolicLink(linkDir.toPath(), targetDir.toPath())
+        }
     }
 }
 

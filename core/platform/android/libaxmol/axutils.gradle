@@ -1,3 +1,0 @@
-// this file only for compatible purpose
-def scriptDir = project(':libaxmol').projectDir
-apply from: "${scriptDir}/axmol.gradle"
