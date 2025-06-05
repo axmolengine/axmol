@@ -332,7 +332,7 @@ if ($prerelease -eq 'false') {
     $changelog_lines = Get-Content (Join-Path $AX_ROOT 'CHANGELOG.md')
     $release_count = 0
     foreach ($line in $changelog_lines) {
-        if ($line.StartsWith('## axmol-')) {
+        if ($line.StartsWith('# axmol-')) {
             ++$release_count
             if ($release_count -lt 2) {
                 $release_note_content += "*The $version release is a minor ``LTS`` release for bugfixes and improvements*`n"
@@ -355,13 +355,13 @@ New-Item -Path $release_note -ItemType File -Value $release_note_content -Force
 # create axmol build system package
 Write-Host "Creating build system package $bs_pkg_file_path ..."
 $total= Compress-ArchiveEx @bs_pkg_compress_args -Force
-$bs_md5_digest = (Get-FileHash $bs_pkg_file_path -Algorithm MD5).Hash
+$bs_md5_digest = (Get-FileHash $bs_pkg_file_path -Algorithm MD5).Hash.ToLower()
 Write-Host "Create build system package $bs_pkg_file_path done, ${total} files found, MD5: $bs_md5_digest"
 
 # create main package
 Write-Host "Creating main package $pkg_file_path ..."
 $total = Compress-ArchiveEx @main_pkg_compress_args -Force
-$md5_digest = (Get-FileHash $pkg_file_path -Algorithm MD5).Hash
+$md5_digest = (Get-FileHash $pkg_file_path -Algorithm MD5).Hash.ToLower()
 Write-Host "Create main package $pkg_file_path done, ${total} files found, MD5: $md5_digest"
 
 Pop-Location

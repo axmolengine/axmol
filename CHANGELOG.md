@@ -1,11 +1,47 @@
-## axmol-2.6.0 May.23 2025
+# axmol-2.6.1 Jun.6 2025
 
-### Significant changes relative to 2.5.0:
+## Bug fixes
+
+- Fix https://github.com/axmolengine/axmol/issues/2559 crash on android armv7 by @halx99
+- Fix blending so that the fairygui animation clip renders with the correct blend function by @thienphuoc in https://github.com/axmolengine/axmol/pull/2560
+- Fix opus not link when linking prebuilt engine to axmol apps by @halx99
+- Fix build win32 by clang fail due to openal set incorrect preprocessors by @halx99
+- Fix gradle can't lookup cmake from `axmol/tools/external/cmake`
+
+## Improvements
+
+- No longer use android legacy cmake toolchain file by @halx99
+- Add build options to game cmake module for easier access by @rh101 in https://github.com/axmolengine/axmol/pull/2553
+- Move AXGameFinalSetup.cmake to cpp and lua templates because of differences in code by @rh101 in https://github.com/axmolengine/axmol/pull/2557
+- Add win prebuilt workflow check ci by @halx99 in https://github.com/axmolengine/axmol/pull/2558
+- Improve gradle scripts by @halx99 in https://github.com/axmolengine/axmol/pull/2561
+- Holding a VM reference to the android asset manager jobject to prevent its being garbage collected while the native object is in use by @halx99
+- Remove unused workaround code by @halx99
+- Ensure setup correct version for android buildtools and target_sdk by @halx99
+- Move `axmol.gradle` outside the `libaxmol` gradle project by @halx99
+
+## SDKs & Tools updates
+
+- cmdlinetools: 12.0 => 19.0
+
+## 3rdparty updates
+
+- astcenc: 5.2.0 => 5.3.0
+- luajit: 2.1-eec7a80 => 2.1-f9140a6
+- openssl: 3.5.0 => 3.0.16
+
+## New Contributors
+
+- @thienphuoc made their first contribution in https://github.com/axmolengine/axmol/pull/2560
+
+# axmol-2.6.0 May.23 2025
+
+## Significant changes relative to 2.5.0:
 
 - Update android devenv to support android 16 by @halx99 in https://github.com/axmolengine/axmol/pull/2546
 - Update Android Studio minimum required version to `2024.3.2`
 
-### Bug fixes
+## Bug fixes
 
 - Fix #2548 Downloader-curl may crash or hang in download thread in https://github.com/axmolengine/axmol/pull/2549 by @halx99
 - Fix #2545 install pwsh fail on ubuntu-25.04 by @halx99
@@ -18,7 +54,7 @@
 - Fix wasm raise runtime error due to HEAPU8 was not exported by @halx99
 - Fix decompressGZ infinite-loop when input data invalid by @halx99 in https://github.com/axmolengine/axmol/pull/2544
 
-### Improvements
+## Improvements
 
 - Improve ZipUtils::decompressGZ by @halx99 in https://github.com/axmolengine/axmol/pull/2544
   - Parsing uncompress size and reserve exactly avoid waste memory
@@ -47,13 +83,13 @@
 - Remove deprecated DSL config: renderscriptDebuggable by @halx99 in https://github.com/axmolengine/axmol/pull/2546
 - Implement ui::MediaPlayer::getVirtualRenderer by @halx99
 
-### SDKs & Tools updates
+## SDKs & Tools updates
 
 - agp: 8.7.3 => 8.10.0
 - android target sdk: 35 => 36
 - android sdk build tools: 34.0.0 => 35.0.0
 
-### 3rdparty updates
+## 3rdparty updates
 
 - cares: 1.34.4 => 1.34.5
 - Clipper2: 1.5.2 => 1.5.3
@@ -64,15 +100,15 @@
 - libpng: 1.6.47 => 1.6.48
 - openssl: 3.0.16 => 3.5.0
 
-## axmol-2.5.0 Apr.5 2025
+# axmol-2.5.0 Apr.5 2025
 
-### Bug fixes
+## Bug fixes
 
 - Fix for invalid event listener ID lookup by @rh101 in https://github.com/axmolengine/axmol/pull/2445
 - Fix #2415 c++23 compile error by @halx99
 - Fix #2470 wasm CommandBufferGL::readPixels not work by @halx99
 
-### Improvements
+## Improvements
 
 - Ensure fseeko available on ndk > 23 by @halx99 in https://github.com/axmolengine/axmol/pull/2490
 - Add play .opus audio files support by @halx99 in https://github.com/axmolengine/axmol/pull/2488
@@ -108,22 +144,22 @@
 - [CI] Make run name dynamic with c++ standard mark
 - [CI] Improve sites build
 
-### SDKs & Tools updates
+## SDKs & Tools updates
 
 - gradle: 8.11.1 ==> 8.13
 - cmake: 3.31.5 ==> 4.0.0
 - emsdk: 4.0.3 ==> 4.0.6
 
-### 3rdparty updates
+## 3rdparty updates
 
 - yasio: 4.3.1 ==> 4.3.2
 - fmtlib: 11.1.3 ==> 11.1.4
 - flatbuffers: 24.3.25 ==> 25.2.10
 - robin_map: 1.2.1 ==> 1.4.0
 
-## axmol-2.4.0 Feb.23 2025
+# axmol-2.4.0 Feb.23 2025
 
-### Bug fixes
+## Bug fixes
 
 - Fix build wasm fail with `-O0` by @halx99
 - Fix #2370 module 'bitop' not found by @halx99
@@ -132,7 +168,7 @@
 - Fix: when these extensions set to OFF, compiles by @blairwang in https://github.com/axmolengine/axmol/pull/2347
 - Fix tilemap culling by @DelinWorks in https://github.com/axmolengine/axmol/pull/2403
 
-### Improvements
+## Improvements
 
 - Improve build system, support select msvc toolset version by @halx99
 - Improve Label: underline, strikethrough and color by @aismann in https://github.com/axmolengine/axmol/pull/2382
@@ -167,11 +203,11 @@
 - [Android] Add a way to disable interactions on the SurfaceView by @AlexandreK38 in https://github.com/axmolengine/axmol/pull/2410
 
 
-### SDKs updates
+## SDKs updates
 
 - emsdk: 3.1.73 ==> 4.0.3
 
-### 3rdparty updates
+## 3rdparty updates
 
 - astcenc: 5.1.0 ==> 5.2.0
 - clipper2: 1.4.0 ==> 1.5.2
@@ -180,16 +216,16 @@
 - fmtlib: 11.1.2 ==> 11.1.3
 - openssl: 3.0.15 ==> 3.0.16
 
-## axmol-2.3.2 Jan.21 2025
+# axmol-2.3.2 Jan.21 2025
 
-### Bug fixes
+## Bug fixes
 
 - Fix bit op error on lua < 5.4 by @halx99
 - Fix luajit luaL_openlibs crash on android by @halx99
 - Fix setup.ps1 Error in parsing PowerShell and OS versions by @halx99
 - Fix cpp template scene listeners leaked by @halx99
 
-### Improvements
+## Improvements
 
 - Fix clang19 compile warnings
 - Improve 7z cmdline compatibility
@@ -204,32 +240,32 @@
 - Committing luabindings for commit 3da481f by @axmol-bot in https://github.com/axmolengine/axmol/pull/2335
 - Add more fine-grained callbacks supports for MenuItem by @MartinLutherSu in https://github.com/axmolengine/axmol/pull/2342
 
-### 3rdparty updates
+## 3rdparty updates
 
 - libpng: 1.6.44 ==> 1.6.45
 - fmtlib: 11.1.1 ==> 11.1.2
 - luajit: 2.1-f73e649 ==> 2.1-a4f56a4
 
-## axmol-2.3.1 Jan.5 2025
+# axmol-2.3.1 Jan.5 2025
 
-### Bug fixes
+## Bug fixes
 
 - Fix RenderTexture internal sprite positioning and test cases by @rh101 in https://github.com/axmolengine/axmol/pull/2301
 - Fix imgui compile and link error for wasm by @halx99 in https://github.com/axmolengine/axmol/pull/2297
 - Fix continues drawCardinalSplines() drawing outside the control points on last control point by @aismann in https://github.com/axmolengine/axmol/pull/2303
 
-### Improvements
+## Improvements
 
 - Improve CI, raise error when build fail by @halx99
 - Improve DevSetup.md by @rh101 in https://github.com/axmolengine/axmol/pull/2298
 
-### 3rdparty updates
+## 3rdparty updates
 
 - xxhash: 0.8.2 ==> 0.8.3
 
-## axmol-2.3.0 Jan.1 2025
+# axmol-2.3.0 Jan.1 2025
 
-### Significant changes relative to 2.2.x:
+## Significant changes relative to 2.2.x:
 
 - Add android15 16KB page size support by @halx99 in https://github.com/axmolengine/axmol/pull/2268
 - Improve build profiles by @halx99 in https://github.com/axmolengine/axmol/pull/2273
@@ -241,7 +277,7 @@
 - Download package to `cache` instead `tools/external`
 - Add build android `.aab` support via `axmol -p android -aab`
 
-### Bug fixes
+## Bug fixes
 
 - Fix Label create with long string cause random crash in windows by @halx99
 - Fix DrawNode::drawPie(DrawMode::Line, thickness =1) draw a closed line (like DrawMode::Semi) wrong by @aismann in https://github.com/axmolengine/axmol/pull/2217
@@ -250,7 +286,7 @@
 - Fix android class name paths incorrect by @rh101 in https://github.com/axmolengine/axmol/pull/2276
 - Fix renderer test case batching by @rh101 in https://github.com/axmolengine/axmol/pull/2291
 
-### Improvements
+## Improvements
 
 - Improve DrawNode::drawPie() by @aismann in https://github.com/axmolengine/axmol/pull/2222
 - Metal: enable mipmap support by @smilediver in https://github.com/axmolengine/axmol/pull/2235
@@ -265,14 +301,14 @@
 - Remove TTF Font charCode 65535 limit by @halx99
 - Allow publish from specified commitish for ci
 
-### SDKs updates
+## SDKs updates
 
 - emsdk: 3.1.67 ==> 3.1.73
 - AGP: 8.4.0 ==> 8.7.3
 - gradle: 8.8.0 ==> 8.11.1
 - android target sdk: 34 ==> 35
 
-### 3rdparty updates
+## 3rdparty updates
 
 - astcenc: 4.8.0 ==> 5.1.0
 - c-ares: 1.34.1 ==> 1.34.4
@@ -284,15 +320,15 @@
 - luajit: 2.1-97813fb ==> 2.1-f73e649
 - imgui: 1.90.6 ==> 1.91.6
 
-## axmol-2.2.1 Oct.22 2024
+# axmol-2.2.1 Oct.22 2024
 
-### Bug fixes
+## Bug fixes
 
 - Fix curl link error on macOS
 
-## axmol-2.2.0 Oct.20 2024
+# axmol-2.2.0 Oct.20 2024
 
-### Significant changes relative to 2.1.5:
+## Significant changes relative to 2.1.5:
 
 - Enable vsync by default by @halx99 in https://github.com/axmolengine/axmol/pull/2118
 - Improve android media player, also fix #2101 by @halx99 in https://github.com/axmolengine/axmol/pull/2109
@@ -300,7 +336,7 @@
 - No longer add sprite as child of RenderTexture by @halx99 in https://github.com/axmolengine/axmol/pull/2149
 - API change too: remove all DrawNode setLineWidth() stuff by @aismann in https://github.com/axmolengine/axmol/pull/2172
 
-### Bug fixes
+## Bug fixes
 
 - Fix invalidated iterator access in `Scheduler::unscheduleAllWithMinPriority()` by @smilediver in https://github.com/axmolengine/axmol/pull/2194
 - Fix label in PauseTest. by @Tosik86 in https://github.com/axmolengine/axmol/pull/2157
@@ -322,7 +358,7 @@
 - Fix android fps issue when certain animation intervals are set by @rh101 in https://github.com/axmolengine/axmol/pull/2162
 - Fix DownloaderCURL too many open files and other fixes by @smilediver in https://github.com/axmolengine/axmol/pull/2182
  
-### Improvements
+## Improvements
 
 - [ImGui] Allow setting of custom font config to enable merging of multiple fonts and other features by @rh101 in https://github.com/axmolengine/axmol/pull/2085
 - Update DevSetup.md with iOS simulator build commands by @rh101 in https://github.com/axmolengine/axmol/pull/2087
@@ -354,11 +390,11 @@
 - Update controller.cpp Add small hint that the DrawNode tests be "not finished": "Node: Draw (WIP)" by @aismann in https://github.com/axmolengine/axmol/pull/2189
 - DrawNode calls: replacing Color4F with Color4B (without the 'test' folder!) by @aismann in https://github.com/axmolengine/axmol/pull/2192
 
-### SDKs updates
+## SDKs updates
 
 - emsdk: 3.1.63 ==> 3.1.67
 
-### 3rdparty updates
+## 3rdparty updates
 
 - glad: 2.0.6 ==> 2.0.8
 - curl: 8.9.1 ==> 8.10.1
@@ -373,9 +409,9 @@
 - rapidjson: 1.1.0-b4a6da3 ==> 1.1.0-815e6e7
 - freetype: 2.13.2 ==> 2.13.3
 
-## axmol-2.1.5 Aug.11 2024
+# axmol-2.1.5 Aug.11 2024
 
-### Significant changes relative to 2.1.4:
+## Significant changes relative to 2.1.4:
 
 - Add render I420 video support by @halx99 in https://github.com/axmolengine/axmol/pull/2050 , also fix issue #2049 reported by @SimplyJpk
 - Refactor math simd by @halx99 in https://github.com/axmolengine/axmol/pull/2070, proposed by @huiguochen and @smilediver
@@ -393,7 +429,7 @@
   - Mark all FileUtils offthread APIs deprecated
 - Remove arch suffix of host default build output directory for axmol cmdline
 
-### Bug Fixes
+## Bug Fixes
 
 - Fix checkReallySupportsASTC does not work on ios device reported by @BIGCATDOG in https://github.com/axmolengine/axmol/issues/2078
 - Fix ImGui index draw info incorrect by @rh101 in https://github.com/axmolengine/axmol/pull/2052
@@ -407,7 +443,7 @@
 - Fix unexpected libpng from system used
 - Fix #1751, use coroutine control AutoTest flow
 
-### Improvements
+## Improvements
 
 - Enhance Color4F and method naming change by @rh101 in https://github.com/axmolengine/axmol/pull/2072
 - Improve FastRNG implementation by @DelinWorks in https://github.com/axmolengine/axmol/pull/2056
@@ -418,11 +454,11 @@
 - Add OpenType font (.otf) to the noCompress list by @danialias in https://github.com/axmolengine/axmol/pull/2077
 - Update DrawNodeEx aka DrawNodeV2 to 0.95.1 by @aismann in https://github.com/axmolengine/axmol/pull/2079
 
-### SDKs updates
+## SDKs updates
 
 - cppwinrt: 2.0.240111.5 ==> 2.0.240405.15
 
-### 3rdparty updates
+## 3rdparty updates
 
 - box2d: 2.4.1 ==> 2.4.2
 - curl: 8.8.0 ==> 8.9.1
@@ -430,9 +466,9 @@
 - lz4: 1.9.4 ==> 1.10.0
 - c-ares: 1.32.2 ==> 1.33.0
 
-## axmol-2.1.4 Jun.20 2024
+# axmol-2.1.4 Jun.20 2024
 
-### Significant changes relative to 2.1.3:
+## Significant changes relative to 2.1.3:
 
 - Add JobSystem support by @halx99
 - Add cmake option AX_WASM_INITIAL_MEMORY
@@ -444,7 +480,7 @@
 - Improve RenderTarget by @smilediver in https://github.com/axmolengine/axmol/pull/1996
 - Make apple controller to support four players by @paulocoutinhox in https://github.com/axmolengine/axmol/pull/2009
 
-### Deprecated
+## Deprecated
 
 - `AsyncTaskPool`, use `JobSystem` instead.
 - `AXLOG`, `AXLOGINFO`, `AXLOGWARN`, `AXLOGERROR`, use `AXLOGD`, `AXLOGI`, `AXLOGE` instead.
@@ -454,7 +490,7 @@
   - Change AXLOGI to more appropriate AXLOGD for several log calls by @rh101 in https://github.com/axmolengine/axmol/pull/2028
 - `StringUtils::format`, use `fmt::format` instead.
 
-### Bug Fixes
+## Bug Fixes
 
 - Fix call to incorrect java method by @rh101 in https://github.com/axmolengine/axmol/pull/2015
 - Fix Callback and store Renderer Image type by @AlexandreK38 in https://github.com/axmolengine/axmol/pull/1945
@@ -465,7 +501,7 @@
 - Fix prebuilt, add ax_link_ext macro by @iAndyHD3 in https://github.com/axmolengine/axmol/pull/2022
 - Fix #1943, Make extension luabinding can be controlled by AX_EXT_HINT by @halx99, reported by @iAndyHD3
 
-### Improvements
+## Improvements
 
 - Add ability to change Inspector's font size by @IamSanjid in https://github.com/axmolengine/axmol/pull/1932
 - Calculate safe area inset values for android devices with rounded corners by @rh101 in https://github.com/axmolengine/axmol/pull/1934
@@ -493,13 +529,13 @@
 - Some warning and other minor fixes by @smilediver in https://github.com/axmolengine/axmol/pull/2038
 
 
-### sdks & tools updates
+## sdks & tools updates
 
 - gradle: 8.7 ==> 8.8
 - AGP: 8.2.2 ==> 8.4.0
 - emsdk: 3.1.59 ==> 3.1.63
 
-### 3rdparty updates
+## 3rdparty updates
 
 - openssl: 3.0.13 ==> 3.3.1
 - Clipper2: 1.3.0 ==> 1.4.0
@@ -511,9 +547,9 @@
 - c-ares: 1.29.0 ==> 1.32.2
 - luajit: 2.1-d06beb0 ==> 2.1-04dca79
 
-## axmol-2.1.3 May.26 2024
+# axmol-2.1.3 May.26 2024
 
-### Significant changes relative to 2.1.2:
+## Significant changes relative to 2.1.2:
 
 - Implement cross-platform media controller for video playback by @rh101 in https://github.com/axmolengine/axmol/pull/1845
   - Adjust media control positioning if video aspect ratio is maintained by @rh101 in https://github.com/axmolengine/axmol/pull/1851
@@ -534,7 +570,7 @@
 - Add AXLOGD,AXLOGI,... functions for lua
 - Add axmol cmdline build option to specify build optimize flag: `-O0`(Debug), `-O1`(MinSizeRel), `-O2`(RelWithDebInfo), `-O3`(Release)
 
-### Breaking Changes
+## Breaking Changes
 
 - Rename `ax::Ref` ==> `ax::Object`
 - Remove `ax::log`, use `AXLOGD` instead
@@ -546,12 +582,12 @@
 - Remove unused API: ax::LuaLog
 - Change parameter 'sharedRT' of RenderTexture::create to false
 
-### Mark as deprecated
+## Mark as deprecated
 
 - `2d/TextFieldTTF`
 - `ui/UITextField`, use `ui/TextFieldEx` instead
 
-### BugFixes
+## BugFixes
 
 - Fix fullscreen incorrect in retina display by @halx99, reported by @TyelorD
 - Fix same uniforms in fragment and vertex shaders not working in Metal by @smilediver in https://github.com/axmolengine/axmol/pull/1808
@@ -583,7 +619,7 @@
 - Fix system font blurring by in @DelinWorks in https://github.com/axmolengine/axmol/pull/1907
 - Fix android ImGui crash due to invalid pointer by @rh101 in https://github.com/axmolengine/axmol/pull/1920
 
-### Improvements
+## Improvements
 
 - Update ios/tvos LaunchScreen.storyboard to 11.0+, also fix xcode15.4 build error
 - Update prebuilt tool `glslcc` to 1.9.5, macos-arm64 support and built for macos-10.15+
@@ -629,14 +665,14 @@
 - Do image processing to reverse premultiplied alpha in separate thread by @rh101 in https://github.com/axmolengine/axmol/pull/1929
 
 
-### sdks & tools updates
+## sdks & tools updates
 
 - emsdk: 3.1.53 ==> 3.1.60
 - AGP: 8.2.1 ==> 8.2.2
 - androidx.media3: 1.0.2 ==> 1.2.1
 - glslcc: 1.9.4 ==> 1.9.5
 
-### 3rdparty updates
+## 3rdparty updates
 
 - simdjson: 3.7.0 ==> 3.9.2
 - flatbuffers: 2.0.8 ==> 24.3.25
@@ -651,9 +687,9 @@
 - c-ares: 1.25.0 ==> 1.29.0
 - imgui: 1.90.4 ==> 1.90.6
 
-## axmol-2.1.2 Feb.25 2024
+# axmol-2.1.2 Feb.25 2024
 
-### BugFixes
+## BugFixes
 
 - Fix screen size incorrect in retina display by @halx99 in https://github.com/axmolengine/axmol/pull/1692, reported by @IcemarkUK
 - Fix view size incorrect when frameZoomFactor not 1.0 by @halx99 in https://github.com/axmolengine/axmol/pull/1694
@@ -671,7 +707,7 @@
 - Fix c-ares link issue
 - Fix DrawNode luabinding color type mismatch by @halx99, reported by @qq461787436
 
-### Improvements
+## Improvements
 
 - Change extension folder structure to reduce file name conflicts by @rh101 in https://github.com/axmolengine/axmol/pull/1647
 - Committing luabindings for commit 9f8962d by @axmol-bot in https://github.com/axmolengine/axmol/pull/1648
@@ -698,11 +734,11 @@
 - Don't use fmt header only by @halx99 in https://github.com/axmolengine/axmol/pull/1707
 - Don't use yasio header only by @halx99
 
-### SDKs updates
+## SDKs updates
 
 - cppwinrt: 2.0.230706.1 ==> 2.0.240111.5
 
-### 3rdparty updates
+## 3rdparty updates
 
 - glad: 2.0.4 ==> 2.0.5
 - yasio: 4.2.0 ==> 4.2.1
@@ -713,9 +749,9 @@
 - simdjson: 3.6.4 ==> 3.7.0
 - imgui: 1.90.1 ==> 1.90.4
 
-## axmol-2.1.1 Feb.2 2024
+# axmol-2.1.1 Feb.2 2024
 
-### BugFixes
+## BugFixes
 
 - Fix shaders not copying to final build on macOS for non Xcode builds by @smilediver
 - Fix `Scheduler::pauseTarget` can't timer targets, reported by @shaniamjad6
@@ -728,15 +764,15 @@
 - Fix build win32 with clang error
 - Fix ci build-site download unexpected artifacts from appveyor
 
-### Breaking changes
+## Breaking changes
 
 - Rename android entrypoint: `cocos_android_app_init` ==> `axmol_android_app_init`
 
-### Improvements
+## Improvements
 
 - Add some utils functions and lua support by @bintester
 
-### 3rdparties updates
+## 3rdparties updates
 
 - simdjson: 3.6.3 ==> 3.6.4
 - curl: 8.5.0 ==> 8.6.0
@@ -748,9 +784,9 @@
 - luajit: 2.1-43d0a19 ==> 2.1-9cc2e42
 
 
-## axmol-2.1.0 Jan.20 2024
+# axmol-2.1.0 Jan.20 2024
 
-### Significant changes relative to 2.0.0:
+## Significant changes relative to 2.0.0:
 
 - Migrate Windows UWP from C++/CX to [cppwinrt](https://github.com/microsoft/cppwinrt) for c++20 codebase by @halx99
 - Refactor Target Platforms Enums
@@ -786,14 +822,14 @@
 - Add multi UserDefault support by @armanhossiny
 - Add fixedUpdate method to Scene by @lich426
 
-### Mark as deprecated, and will be removed in next release axmol-2.2.0
+## Mark as deprecated, and will be removed in next release axmol-2.2.0
 - 32bit build
 - Extensions
     - DragonBones
     - GUI
 - Zwoptex (Commented on cpp-test)
 
-### BugFixes
+## BugFixes
 
 - Fix translated metal shader texture order does not follow GLSL binding order
 - Fix GLES3 shader scalar array layout incorrect
@@ -831,7 +867,7 @@
 - Fix AudioPlayer seek to incorrect frame after setTime invoked by @GuoliangWang
 
 
-### Improvements
+## Improvements
 
 - Improve `setup.ps1`, auto set windows `powershell.exe` execution policy to `Bypass`
 - Reduce memory usage when using getFileMD5Hash function by @rh101
@@ -876,11 +912,11 @@
   - RELEASE_KEY_PASSWORD ==> KEY_PASSWORD
 - Enable template projects' `aidl` by default for In-app purchases by @armanhossiny
 
-### Breaking changes
+## Breaking changes
 
 - Rename glview to correct representative name: `OpenGLView` ==> `GLView` by @paulocoutinhox
 
-### 3rdparties updates
+## 3rdparties updates
 
 - astcenc: 4.5.0 ==> 4.7.0
 - c-ares: 1.19.1 ==> 1.25.0
@@ -902,7 +938,7 @@ Notes:
 
 - WASM require win8.1+ on windows
 
-## axmol-2.0.0 Sep.9 2023
+# axmol-2.0.0 Sep.9 2023
 
 -  Add *experimental* WebAssembly build support(WebGL 2.0) by [@nowasm](https://github.com/nowasm)
     - List of known issues maybe *help wanted*
@@ -948,7 +984,7 @@ Notes:
 - Many other improvements
   
   
-## axmol-1.0.1 Sep.8 2023
+# axmol-1.0.1 Sep.8 2023
 
 - [NEW] Add [`install-pwsh.sh`](https://github.com/axmolengine/axmol/blob/dev/install-pwsh.sh) to make installing powershell on `macOS`, `Ubuntu`, `ArchLinux` more easier
 - [NEW] **Axmol console next**, now almost powershell (except luabinding generator required python3)
