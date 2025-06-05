@@ -42,7 +42,7 @@ public:
 
     virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t transformFlags) override
     {
-        glDisable(GL_CULL_FACE);
+        renderer->setCullMode(CullMode::NONE);
         SkeletonAnimation::draw(renderer, transform, transformFlags);
         //RenderState::StateBlock::invalidate(ax::RenderState::StateBlock::RS_ALL_ONES);
     }
