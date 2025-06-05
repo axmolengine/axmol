@@ -194,7 +194,7 @@ list(APPEND GAME_HEADER
      Source/ReleasePoolTest/ReleasePoolTest.h
      Source/InputTest/MouseTest.h
      Source/SpineTest/SpineTest.h
-    #  Source/Scene3DTest/Scene3DTest.h
+     Source/Scene3DTest/Scene3DTest.h
      Source/ParticleTest/ParticleTest.h
      Source/EffectsTest/EffectsTest.h
      Source/UITest/UITest.h
@@ -319,7 +319,7 @@ list(APPEND GAME_SOURCE
      Source/ShaderTest/ShaderTest.cpp
      Source/ShaderTest/ShaderTest2.cpp
      Source/SpineTest/SpineTest.cpp
-    #  Source/Scene3DTest/Scene3DTest.cpp
+     Source/Scene3DTest/Scene3DTest.cpp
      Source/MeshRendererTest/DrawNode3D.cpp
      Source/DrawNodeTest/DrawNodeTest.cpp
      Source/MeshRendererTest/MeshRendererTest.cpp
