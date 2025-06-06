@@ -35,10 +35,44 @@ bool Bug350Layer::init()
 {
     if (BugsTestBase::init())
     {
-        auto size       = Director::getInstance()->getWinSize();
-        auto background = Sprite::create("Hello.png");
-        background->setPosition(size.width / 2, size.height / 2);
-        addChild(background);
+        // auto size       = Director::getInstance()->getWinSize();
+        // auto background = Sprite::create("Hello.png");
+        // background->setPosition(size.width / 2, size.height / 2);
+        // addChild(background);
+
+        auto visibleSize = Director::getInstance()->getVisibleSize();
+        Vec2 origin      = Director::getInstance()->getVisibleOrigin();
+
+        //    https:  // rezghob.com/different-sprite-types/
+
+        auto spriteCache = SpriteFrameCache::getInstance();
+        //      spriteCache->addSpriteFramesWithFile("sprites_quad.plist");
+        spriteCache->addSpriteFramesWithFile("sprites_poly.plist");
+
+        for (int i = 0; i < 10000; i++)
+        {
+            auto sprite1 = Sprite::createWithSpriteFrameName("PolySprite1.png");
+    //       sprite1->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+            sprite1->setPosition(50*AXRANDOM_MINUS1_1() + origin.x + visibleSize.width / 2,
+                                 50*AXRANDOM_MINUS1_1() + origin.y + visibleSize.height / 2);
+            sprite1->setScale(5);
+            sprite1->setColor(Color3B::RED);
+            this->addChild(sprite1);
+
+            auto sprite2 = Sprite::createWithSpriteFrameName("PolySprite2.png");
+            sprite2->setPosition(origin.x + visibleSize.width / 4, origin.y + visibleSize.height / 2);
+            sprite2->setScale(5);
+            sprite2->setTexture(sprite1->getTexture());
+            //    sprite2->setColor(Color3B::BLUE);
+            this->addChild(sprite2);
+
+            auto sprite3 = Sprite::createWithSpriteFrameName("PolySprite3.png");
+            sprite3->setPosition(origin.x + visibleSize.width / 1.3, origin.y + visibleSize.height / 2);
+            sprite3->setScale(5);
+                sprite3->setColor(Color3B::BLUE);
+            this->addChild(sprite3);
+        }
+
         return true;
     }
 
