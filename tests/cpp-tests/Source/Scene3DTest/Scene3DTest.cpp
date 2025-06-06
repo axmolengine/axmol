@@ -35,6 +35,8 @@
 using namespace ax;
 using namespace spine;
 
+static AxmolTextureLoader textureLoader;
+
 class SkeletonAnimationCullingFix : public SkeletonAnimation
 {
 public:
@@ -52,7 +54,7 @@ public:
                                                        float scale = 1)
     {
         SkeletonAnimationCullingFix* node = new SkeletonAnimationCullingFix();
-        spine::Atlas* atlas               = new spine::Atlas(std::string(atlasFile).c_str(), nullptr);
+        spine::Atlas* atlas               = new spine::Atlas(std::string(atlasFile).c_str(), &textureLoader);
         node->initWithJsonFile(std::string(skeletonDataFile), atlas, scale);
         node->autorelease();
         return node;
@@ -682,9 +684,9 @@ void Scene3DTestScene::createDetailDlg()
     // add a spine ffd animation on it
     auto skeletonNode =
         SkeletonAnimationCullingFix::createWithFile("spine/goblins-pro.json", "spine/goblins.atlas", 1.5f);
+    skeletonNode->setSlotsToSetupPose();
     skeletonNode->setAnimation(0, "walk", true);
     skeletonNode->setSkin("goblin");
-
     skeletonNode->setScale(0.25);
     Size windowSize = Director::getInstance()->getWinSize();
     skeletonNode->setPosition(Vec2(dlgSize.width / 2, remove->getContentSize().height / 2 + 2 * margin));
@@ -863,7 +865,7 @@ void Scene3DTestScene::onTouchEnd(Touch* touch, ax::Event* event)
             dir.y = 0;
             dir.normalize();
             _player->_headingAngle = -1 * acos(dir.dot(Vec3(0, 0, -1)));
-            dir.cross(dir, Vec3(0, 0, -1), &_player->_headingAxis);
+            Vec3::cross(dir, Vec3(0, 0, -1), &_player->_headingAxis);
             _player->_targetPos = collisionPoint;
             _player->forward();
         }
