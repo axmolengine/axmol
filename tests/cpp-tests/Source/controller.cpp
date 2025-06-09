@@ -46,7 +46,7 @@ public:
 #    pragma message("The optional extension Effekseer is enabled.")
         addTest("Effekseer", []() { return new EffekseerTests(); });
 #endif
-//        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
+        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
         addTest("ImGui", []() { return new ImGuiTests(); });
 #endif

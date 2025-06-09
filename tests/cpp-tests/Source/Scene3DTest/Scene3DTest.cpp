@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -26,13 +27,15 @@
 
 #include "ui/CocosGUI.h"
 #include "renderer/RenderState.h"
-#include <spine/spine-cocos2dx.h>
+#include <spine/spine-axmol.h>
 
 #include "../testResource.h"
 #include "../TerrainTest/TerrainTest.h"
 
 using namespace ax;
 using namespace spine;
+
+static AxmolTextureLoader textureLoader;
 
 class SkeletonAnimationCullingFix : public SkeletonAnimation
 {
@@ -41,9 +44,9 @@ public:
 
     virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t transformFlags) override
     {
-        glDisable(GL_CULL_FACE);
+        renderer->setCullMode(CullMode::NONE);
         SkeletonAnimation::draw(renderer, transform, transformFlags);
-        RenderState::StateBlock::invalidate(ax::RenderState::StateBlock::RS_ALL_ONES);
+        //RenderState::StateBlock::invalidate(ax::RenderState::StateBlock::RS_ALL_ONES);
     }
 
     static SkeletonAnimationCullingFix* createWithFile(std::string_view skeletonDataFile,
@@ -51,8 +54,8 @@ public:
                                                        float scale = 1)
     {
         SkeletonAnimationCullingFix* node = new SkeletonAnimationCullingFix();
-        spAtlas* atlas                    = spAtlas_createFromFile(atlasFile.c_str(), 0);
-        node->initWithJsonFile(skeletonDataFile, atlas, scale);
+        spine::Atlas* atlas               = new spine::Atlas(std::string(atlasFile).c_str(), &textureLoader);
+        node->initWithJsonFile(std::string(skeletonDataFile), atlas, scale);
         node->autorelease();
         return node;
     }
@@ -77,12 +80,12 @@ class Scene3DTestScene : public TestCase
 public:
     CREATE_FUNC(Scene3DTestScene);
 
-    bool onTouchBegan(Touch* touch, Event* event) { return true; }
-    void onTouchEnd(Touch*, Event*);
+    bool onTouchBegan(Touch* touch, ax::Event* event) { return true; }
+    void onTouchEnd(Touch*, ax::Event*);
 
 private:
     Scene3DTestScene();
-    virtual ~Scene3DTestScene();
+    ~Scene3DTestScene() override;
     bool init() override;
 
     void createWorld3D();
@@ -364,8 +367,8 @@ void Scene3DTestScene::createWorld3D()
 {
     // create skybox
     // create and set our custom shader
-    auto shader = GLProgram::createWithFilenames("MeshRendererTest/cube_map.vert", "MeshRendererTest/cube_map.frag");
-    auto state  = GLProgramState::create(shader);
+    auto shader = ProgramManager::getInstance()->loadProgram("custom/cube_map_vs", "custom/cube_map_fs");
+    auto state  = new ProgramState(shader);
 
     // create the second texture for cylinder
     _textureCube = TextureCube::create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
@@ -373,14 +376,15 @@ void Scene3DTestScene::createWorld3D()
                                        "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg");
     // set texture parameters
     Texture2D::TexParams tRepeatParams;
-    tRepeatParams.magFilter    = GL_LINEAR;
-    tRepeatParams.minFilter    = GL_LINEAR;
-    tRepeatParams.sAddressMode = GL_MIRRORED_REPEAT;
-    tRepeatParams.tAddressMode = GL_MIRRORED_REPEAT;
+    tRepeatParams.magFilter    = backend::SamplerFilter::LINEAR;
+    tRepeatParams.minFilter    = backend::SamplerFilter::LINEAR;
+    tRepeatParams.sAddressMode = backend::SamplerAddressMode::MIRROR_REPEAT;
+    tRepeatParams.tAddressMode = backend::SamplerAddressMode::MIRROR_REPEAT;
     _textureCube->setTexParameters(tRepeatParams);
 
     // pass the texture sampler to our custom shader
-    state->setUniformTexture("u_cubeTex", _textureCube);
+    const auto cubeTexLoc = state->getUniformLocation("u_cubeTex");
+    state->setUniform(cubeTexLoc, _textureCube, sizeof(ax::TextureCube));
 
     // add skybox
     _skyBox = Skybox::create();
@@ -419,7 +423,7 @@ void Scene3DTestScene::createWorld3D()
     rootps->setPosition3D(Vec3(0, 150, 0));
     auto moveby  = MoveBy::create(2.0f, Vec2(50.0f, 0.0f));
     auto moveby1 = MoveBy::create(2.0f, Vec2(-50.0f, 0.0f));
-    rootps->runAction(RepeatForever::create(Sequence::create(moveby, moveby1, nullptr)));
+    rootps->runAction(RepeatForever::create(ax::Sequence::create(moveby, moveby1, nullptr)));
     rootps->startParticleSystem();
 
     _player->addChild(rootps, 0);
@@ -831,7 +835,7 @@ void Scene3DTestScene::createDescDlg()
     }
 }
 
-void Scene3DTestScene::onTouchEnd(Touch* touch, Event* event)
+void Scene3DTestScene::onTouchEnd(Touch* touch, ax::Event* event)
 {
     auto location = touch->getLocation();
     auto camera   = _gameCameras[CAMERA_WORLD_3D_SCENE];
@@ -861,7 +865,7 @@ void Scene3DTestScene::onTouchEnd(Touch* touch, Event* event)
             dir.y = 0;
             dir.normalize();
             _player->_headingAngle = -1 * acos(dir.dot(Vec3(0, 0, -1)));
-            dir.cross(dir, Vec3(0, 0, -1), &_player->_headingAxis);
+            Vec3::cross(dir, Vec3(0, 0, -1), &_player->_headingAxis);
             _player->_targetPos = collisionPoint;
             _player->forward();
         }
