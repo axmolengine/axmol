@@ -346,7 +346,7 @@ void SDFGen::onImGuiDraw()
         }
 
         ImGui::Separator();
-        ImGui::Text("Atals View:");
+        ImGui::Text("Atlas View:");
         ImGuiPresenter::getInstance()->image(_atlasViewer, ImVec2(viewerSize.width, viewerSize.height));
     }
 
