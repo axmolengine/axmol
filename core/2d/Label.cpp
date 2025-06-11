@@ -1090,7 +1090,7 @@ bool Label::alignText()
         return true;
     }
 
-    bool ret = true;
+    bool ret     = true;
     do
     {
         _fontAtlas->prepareLetterDefinitions(_utf32Text);
@@ -1126,40 +1126,59 @@ bool Label::alignText()
         _lengthOfString    = 0;
         _textDesiredHeight = 0.f;
         _linesWidth.clear();
+
+        const auto currentFontSize = getRenderingFontSize();
+        const auto atLimit         = currentFontSize <= 1.f;
+
+        bool redoProcess;
         if (_maxLineWidth > 0.f && !_lineBreakWithoutSpaces)
         {
-            multilineTextWrapByWord();
+            redoProcess = !multilineTextWrapByWord(atLimit);
         }
         else
         {
-            multilineTextWrapByChar();
+            redoProcess = !multilineTextWrapByChar(atLimit);
         }
-        computeAlignmentOffset();
 
-        if (_overflow == Overflow::SHRINK)
+        if (!redoProcess && _overflow == Overflow::SHRINK && !atLimit)
         {
-            float fontSize = this->getRenderingFontSize();
+            auto fontSize = this->getRenderingFontSize();
 
-            if (fontSize > 0 && isVerticalClamp())
+            if (fontSize > 0)
             {
-                this->shrinkLabelToContentSize(AX_CALLBACK_0(Label::isVerticalClamp, this));
+                if (isVerticalClamp() || isHorizontalClamp())
+                {
+                    redoProcess = true;
+                }
             }
         }
 
-        if (!updateQuads())
+        if (redoProcess && currentFontSize > 1)
         {
-            ret = false;
-            if (_overflow == Overflow::SHRINK)
+            auto newFontSize = currentFontSize - 1;
+            if (newFontSize >= 1)
             {
-                this->shrinkLabelToContentSize(AX_CALLBACK_0(Label::isHorizontalClamp, this));
+                scaleFontSize(newFontSize);
+                if (_currentLabelType == LabelType::BMFONT)
+                {
+                    resetAtlas();
+                }
+
+                continue;
             }
-            break;
         }
 
-        updateLabelLetters();
+        break;
 
-        updateColor();
-    } while (0);
+    } while (true);
+
+    computeAlignmentOffset();
+
+    updateQuads();
+
+    updateLabelLetters();
+
+    updateColor();
 
     return ret;
 }
@@ -1231,7 +1250,7 @@ bool Label::updateQuads()
             }
 
             auto lineIndex = _lettersInfo[ctr].lineIndex;
-            auto px        = _lettersInfo[ctr].positionX + _linesOffsetX[lineIndex];
+            auto px        = _lettersInfo[ctr].positionX;
 
             if (_labelWidth > 0.f)
             {
@@ -1240,18 +1259,6 @@ bool Label::updateQuads()
                     if (_overflow == Overflow::CLAMP)
                     {
                         _reusedRect.size.width = 0;
-                    }
-                    else if (_overflow == Overflow::SHRINK)
-                    {
-                        if (_contentSize.width > letterDef.width)
-                        {
-                            ret = false;
-                            break;
-                        }
-                        else
-                        {
-                            _reusedRect.size.width = 0;
-                        }
                     }
                 }
             }
@@ -1358,7 +1365,7 @@ void Label::scaleFontSize(float fontSize)
 
     if (shouldUpdateContent)
     {
-        this->updateContent();
+        this->resetAtlas();
     }
 }
 
@@ -1701,6 +1708,37 @@ void Label::setCameraMask(unsigned short mask, bool applyChildren)
     if (_shadowNode)
     {
         _shadowNode->setCameraMask(mask, applyChildren);
+    }
+}
+
+void Label::resetAtlas()
+{
+    if (_systemFontDirty)
+    {
+        if (_fontAtlas)
+        {
+            _batchNodes.clear();
+            _batchCommands.clear();
+            AX_SAFE_RELEASE_NULL(_reusedLetter);
+            FontAtlasCache::releaseFontAtlas(_fontAtlas);
+            _fontAtlas = nullptr;
+        }
+
+        _systemFontDirty = false;
+    }
+
+    AX_SAFE_RELEASE_NULL(_textSprite);
+    AX_SAFE_RELEASE_NULL(_shadowNode);
+
+    if (_fontAtlas)
+    {
+        std::u32string utf32String;
+        if (StringUtils::UTF8ToUTF32(_utf8Text, utf32String))
+        {
+            _utf32Text = utf32String;
+        }
+
+        computeHorizontalKernings(_utf32Text);
     }
 }
 
@@ -2868,7 +2906,7 @@ void Label::updateFontScale()
     }
 }
 
-bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int, int)>& nextTokenLen)
+bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
 {
     int textLen               = getStringLength();
     int lineIndex             = 0;
@@ -2904,7 +2942,31 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
             continue;
         }
 
-        auto tokenLen         = nextTokenLen(_utf32Text, index, textLen);
+        int tokenLen;
+        if (breakOnChar)
+        {
+            tokenLen = getFirstCharLen(_utf32Text, index, textLen);
+        }
+        else
+        {
+            tokenLen = getFirstWordLen(_utf32Text, index, textLen);
+            if (!ignoreOverflow && !_lineBreakWithoutSpaces && tokenLen > 0 && (index + tokenLen) < textLen)
+            {
+                auto tokenLastChar = _utf32Text[index + tokenLen - 1];
+                if (!StringUtils::isCJKUnicode(tokenLastChar) && !StringUtils::isUnicodeSpace(tokenLastChar))
+                {
+                    // Work out if this token is valid based on the desired output
+                    auto nextChar = _utf32Text[index + tokenLen];
+                    if (_overflow == Overflow::SHRINK && !StringUtils::isUnicodeSpace(nextChar) &&
+                        !StringUtils::isCJKUnicode(nextChar))
+                    {
+                        // No point continuing here
+                        return false;
+                    }
+                }
+            }
+        }
+
         float tokenHighestY   = highestY;
         float tokenLowestY    = lowestY;
         float tokenRight      = letterRight;
@@ -2979,10 +3041,8 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
             }
             nextChangeSize = true;
 
-            if (tokenHighestY < letterPosition.y)
-                tokenHighestY = letterPosition.y;
-            if (tokenLowestY > letterPosition.y - letterDef.height * _fontScale)
-                tokenLowestY = letterPosition.y - letterDef.height * _fontScale;
+            tokenHighestY = std::max(tokenHighestY, letterPosition.y);
+            tokenLowestY = std::min(tokenLowestY, letterPosition.y - letterDef.height * _fontScale);
         }
 
         if (newLine)
@@ -2992,10 +3052,8 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
 
         nextTokenX  = nextLetterX;
         letterRight = tokenRight;
-        if (highestY < tokenHighestY)
-            highestY = tokenHighestY;
-        if (lowestY > tokenLowestY)
-            lowestY = tokenLowestY;
+        highestY = std::max(highestY, tokenHighestY);
+        lowestY = std::min(lowestY, tokenLowestY);
 
         index += tokenLen;
     }
@@ -3010,8 +3068,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
         _linesWidth.emplace_back(letterRight - nextWhitespaceWidth);
         for (auto&& lineWidth : _linesWidth)
         {
-            if (longestLine < lineWidth)
-                longestLine = lineWidth;
+            longestLine = std::max(longestLine, lineWidth);
         }
     }
 
@@ -3036,14 +3093,14 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
     return true;
 }
 
-bool Label::multilineTextWrapByWord()
+bool Label::multilineTextWrapByWord(bool ignoreOverflow)
 {
-    return multilineTextWrap(AX_CALLBACK_3(Label::getFirstWordLen, this));
+    return multilineTextWrap(false, ignoreOverflow);
 }
 
-bool Label::multilineTextWrapByChar()
+bool Label::multilineTextWrapByChar(bool ignoreOverflow)
 {
-    return multilineTextWrap(AX_CALLBACK_3(Label::getFirstCharLen, this));
+    return multilineTextWrap(true, ignoreOverflow);
 }
 
 bool Label::isVerticalClamp()

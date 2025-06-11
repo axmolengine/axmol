@@ -762,6 +762,8 @@ protected:
         CustomCommand shadowCommand;
     };
 
+    void resetAtlas();
+
     virtual void setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled = false, bool useA8Shader = false);
     bool getFontLetterDef(char32_t character, FontLetterDefinition& letterDef) const;
 
@@ -769,9 +771,9 @@ protected:
 
     void drawSelf(bool visibleByCamera, Renderer* renderer, uint32_t flags);
 
-    bool multilineTextWrapByChar();
-    bool multilineTextWrapByWord();
-    bool multilineTextWrap(const std::function<int(const std::u32string&, int, int)>& lambda);
+    bool multilineTextWrapByChar(bool ignoreOverflow = false);
+    bool multilineTextWrapByWord(bool ignoreOverflow = false);
+    bool multilineTextWrap(bool breakOnChar, bool ignoreOverflow);
     void shrinkLabelToContentSize(const std::function<bool(void)>& lambda);
     bool isHorizontalClamp();
     bool isVerticalClamp();
