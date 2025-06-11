@@ -229,7 +229,7 @@ void FontAtlas::initWithSettings(void* opaque /*simdjson::ondemand::document*/)
         auto letterInfo   = field.value();
         tempDef.U         = static_cast<float>(letterInfo["U"].get_double());
         tempDef.V         = static_cast<float>(letterInfo["V"].get_double());
-        tempDef.xAdvance  = static_cast<float>(letterInfo["advance"].get_double());
+        tempDef.xAdvance  = static_cast<int>(letterInfo["advance"].get_double());
         tempDef.width     = static_cast<float>(letterInfo["width"].get_double());
         tempDef.height    = static_cast<float>(letterInfo["height"].get_double());
         tempDef.offsetX   = static_cast<float>(letterInfo["offsetX"].get_double());
@@ -421,10 +421,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
                 }
             }
             glyphHeight = static_cast<int>(bitmapHeight) + _letterPadding + _letterEdgeExtend;
-            if (glyphHeight > _currLineHeight)
-            {
-                _currLineHeight = glyphHeight;
-            }
+            _currLineHeight = std::max(glyphHeight, _currLineHeight);
             charRenderer->renderCharAt(_currentPageData, (int)_currentPageOrigX + adjustForExtend,
                                        (int)_currentPageOrigY + adjustForExtend, bitmap, bitmapWidth, bitmapHeight,
                                         _width, _height);
@@ -442,8 +439,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
         }
         else
         {
-            if (bitmap)
-                delete[] bitmap;
+            delete[] bitmap;
 
             tempDef.validDefinition = !!tempDef.xAdvance;
             tempDef.width           = 0;
