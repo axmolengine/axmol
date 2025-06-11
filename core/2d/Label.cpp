@@ -2950,15 +2950,15 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
         else
         {
             tokenLen = getFirstWordLen(_utf32Text, index, textLen);
-            if (!ignoreOverflow && !_lineBreakWithoutSpaces && tokenLen > 0 && (index + tokenLen) < textLen)
+            if (!ignoreOverflow && _overflow == Overflow::SHRINK && !_lineBreakWithoutSpaces && tokenLen > 0 &&
+                (index + tokenLen) < textLen)
             {
                 auto tokenLastChar = _utf32Text[index + tokenLen - 1];
                 if (!StringUtils::isCJKUnicode(tokenLastChar) && !StringUtils::isUnicodeSpace(tokenLastChar))
                 {
                     // Work out if this token is valid based on the desired output
                     auto nextChar = _utf32Text[index + tokenLen];
-                    if (_overflow == Overflow::SHRINK && !StringUtils::isUnicodeSpace(nextChar) &&
-                        !StringUtils::isCJKUnicode(nextChar))
+                    if (!StringUtils::isUnicodeSpace(nextChar) && !StringUtils::isCJKUnicode(nextChar))
                     {
                         // No point continuing here
                         return false;
@@ -3125,7 +3125,7 @@ bool Label::isHorizontalClamp()
         {
             auto& letterDef = _fontAtlas->_letterDefinitions[_lettersInfo[ctr].utf32Char];
 
-            auto px        = _lettersInfo[ctr].positionX + letterDef.width / 2 * _fontScale;
+            auto px        = _lettersInfo[ctr].positionX + letterDef.width * _fontScale;
             auto lineIndex = _lettersInfo[ctr].lineIndex;
 
             if (_labelWidth > 0.f)
