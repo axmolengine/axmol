@@ -707,6 +707,7 @@ public:
     void updateDrawNodeSize(const ax::Size& drawNodeSize);
     ax::extension::ControlStepper* makeControlStepper();
     void valueChanged(ax::Object* sender, ax::extension::Control::EventType controlEvent);
+    void onExit() override;
 
 protected:
     void setAlignmentLeft(ax::Object* sender);

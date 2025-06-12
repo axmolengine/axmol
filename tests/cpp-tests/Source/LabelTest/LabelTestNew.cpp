@@ -2293,6 +2293,8 @@ void LabelLayoutBaseTest::initFontSizeChange(const ax::Size& size)
 {
     auto fontSizeLabel = Label::createWithSystemFont("font size:20", "Arial", 10);
     fontSizeLabel->setName("fontSize");
+    auto renderedFontSizeLabel = Label::createWithSystemFont("rendered font size:20", "Arial", 10);
+    renderedFontSizeLabel->setName("renderedFontSize");
 
     ControlStepper* stepper = this->makeControlStepper();
     stepper->setPosition(size.width * 0.5 - stepper->getContentSize().width / 2, size.height * 0.8);
@@ -2307,6 +2309,9 @@ void LabelLayoutBaseTest::initFontSizeChange(const ax::Size& size)
         stepper->getPosition() -
         Vec2(stepper->getContentSize().width / 2 + fontSizeLabel->getContentSize().width / 2, 0.0f));
     this->addChild(fontSizeLabel);
+
+    renderedFontSizeLabel->setPosition(fontSizeLabel->getPosition() - Vec2(0, 10));
+    this->addChild(renderedFontSizeLabel);
 }
 
 void LabelLayoutBaseTest::initWrapOption(const ax::Size& size)
@@ -2443,6 +2448,12 @@ void LabelLayoutBaseTest::initSliders(const ax::Size& size)
     slider->setPercent(52);
     addChild(slider);
 
+    auto slider1Label = Label::createWithSystemFont(fmt::format("{}%", slider->getPercent()), "Arial", 10);
+    slider1Label->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    slider1Label->setPosition(slider->getBoundingBox().size.width / 2.0f, slider->getBoundingBox().size.height + 4);
+    slider1Label->setName("percentageLabel");
+    slider->addChild(slider1Label);
+
     auto slider2 = ui::Slider::create();
     slider2->setTag(2);
     slider2->setTouchEnabled(true);
@@ -2450,12 +2461,19 @@ void LabelLayoutBaseTest::initSliders(const ax::Size& size)
     slider2->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
     slider2->loadProgressBarTexture("cocosui/sliderProgress.png");
     slider2->setPosition(Vec2(size.width * 0.2f, size.height / 2.0f));
-    slider2->setRotation(90);
+    slider2->setRotation(-90);
     slider2->setPercent(52);
     addChild(slider2);
+
+    auto slider2Label = Label::createWithSystemFont(fmt::format("{}%", slider2->getPercent()), "Arial", 10);
+    slider2Label->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    slider2Label->setPosition(slider2->getBoundingBox().size.height / 2.0f, slider2->getBoundingBox().size.width + 4);
+    slider2Label->setName("percentageLabel");
+    slider2->addChild(slider2Label);
+
     auto winSize = Director::getInstance()->getVisibleSize();
 
-    slider->addEventListener([this, slider, winSize](Object* /*sender*/, Slider::EventType event) {
+    slider->addEventListener([this, slider, winSize, slider1Label](Object* /*sender*/, Slider::EventType event) {
         float percent     = slider->getPercent();
         auto labelSize    = _label->getContentSize();
         auto drawNodeSize = Size(percent / 100.0 * winSize.width, labelSize.height);
@@ -2465,9 +2483,16 @@ void LabelLayoutBaseTest::initSliders(const ax::Size& size)
         }
         _label->setDimensions(drawNodeSize.width, drawNodeSize.height);
         this->updateDrawNodeSize(drawNodeSize);
+
+        slider1Label->setString(fmt::format("{}%", percent));
+
+        scheduleOnce([this](float) {
+            auto renderedFontSizeLabel = (Label*)this->getChildByName("renderedFontSize");
+            renderedFontSizeLabel->setString(fmt::format("rendered font size:{}", _label->getRenderingFontSize()));
+        }, 0.0f, "update_font_size");
     });
 
-    slider2->addEventListener([this, slider2, winSize](Object* /*sender*/, Slider::EventType event) {
+    slider2->addEventListener([this, slider2, winSize, slider2Label](Object* /*sender*/, Slider::EventType event) {
         float percent     = slider2->getPercent();
         auto labelSize    = _label->getContentSize();
         auto drawNodeSize = Size(labelSize.width, percent / 100.0 * winSize.height);
@@ -2477,6 +2502,13 @@ void LabelLayoutBaseTest::initSliders(const ax::Size& size)
         }
         _label->setDimensions(drawNodeSize.width, drawNodeSize.height);
         this->updateDrawNodeSize(drawNodeSize);
+
+        slider2Label->setString(fmt::format("{}%", percent));
+
+        scheduleOnce([this](float) {
+            auto renderedFontSizeLabel = (Label*)this->getChildByName("renderedFontSize");
+            renderedFontSizeLabel->setString(fmt::format("rendered font size:{}", _label->getRenderingFontSize()));
+        }, 0.0f, "update_font_size");
     });
 }
 
@@ -2562,6 +2594,13 @@ void LabelLayoutBaseTest::valueChanged(ax::Object* sender, ax::extension::Contro
     //    letterSprite->runAction(Sequence::create(moveBy, moveBy->clone()->reverse(), nullptr ));
     //
     //    AXLOGD("label line height = {}", _label->getLineHeight());
+}
+
+void LabelLayoutBaseTest::onExit()
+{
+    unschedule("update_font_size");
+
+    AtlasDemoNew::onExit();
 }
 
 void LabelLayoutBaseTest::updateDrawNodeSize(const ax::Size& drawNodeSize)
@@ -2920,6 +2959,12 @@ LabelSystemFontTest::LabelSystemFontTest()
         }
         _label->setDimensions(drawNodeSize.width, drawNodeSize.height);
         this->updateDrawNodeSize(drawNodeSize);
+
+        auto label = static_cast<Label*>(slider1->getChildByName("percentageLabel"));
+        if (label)
+        {
+            label->setString(fmt::format("{}%", percent));
+        }
     });
 
     auto label = Label::createWithSystemFont("char Line break:", "Arial", 10);
