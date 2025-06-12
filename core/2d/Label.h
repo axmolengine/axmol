@@ -741,6 +741,8 @@ protected:
         float positionY;
         int atlasIndex;
         int lineIndex;
+        float offsetX;
+        float offsetY;
     };
 
     struct BatchCommand
@@ -783,7 +785,12 @@ protected:
     void computeAlignmentOffset();
     bool computeHorizontalKernings(const std::u32string& stringToRender);
 
-    void recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex);
+    void recordLetterInfo(const ax::Vec2& point,
+                          char32_t utf32Char,
+                          int letterIndex,
+                          int lineIndex,
+                          float offsetX,
+                          float offsetY);
     void recordPlaceholderInfo(int letterIndex, char32_t utf16Char);
 
     bool updateQuads();
@@ -801,7 +808,7 @@ protected:
     bool setTTFConfigInternal(const TTFConfig& ttfConfig);
     bool updateTTFConfigInternal();
     void setBMFontSizeInternal(float fontSize);
-    bool isLetterHorizontallyClamped(float letterPositionX, float letterWidth, int lineIndex);
+    bool isLetterHorizontallyClamped(float letterPositionX, float letterWidth, int lineIndex, float offsetX);
     void restoreFontSize();
     void updateLetterSpriteScale(Sprite* sprite);
     int getFirstCharLen(const std::u32string& utf32Text, int startIndex, int textLen) const;

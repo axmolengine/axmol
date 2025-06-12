@@ -1191,10 +1191,12 @@ bool Label::computeHorizontalKernings(const std::u32string& stringToRender)
         return true;
 }
 
-bool Label::isLetterHorizontallyClamped(float letterPositionX, float letterWidth, int lineIndex)
+bool Label::isLetterHorizontallyClamped(float letterPositionX, float letterWidth, int lineIndex, float offsetX)
 {
-    auto wordWidth       = this->_linesWidth[lineIndex];
-    bool letterOverClamp = ((letterPositionX + letterWidth) > _contentSize.width || (letterPositionX + letterWidth / 2) < 0);
+    const auto wordWidth       = this->_linesWidth[lineIndex];
+    const auto minPos          = offsetX < 0 ? letterPositionX - offsetX : letterPositionX;
+    const auto maxPos          = letterPositionX + letterWidth;
+    const auto letterOverClamp = maxPos >= _contentSize.width || minPos < 0;
     if (!_enableWrap)
     {
         return letterOverClamp;
@@ -1215,16 +1217,17 @@ bool Label::updateQuads()
 
     for (int ctr = 0; ctr < _lengthOfString; ++ctr)
     {
-        if (_lettersInfo[ctr].valid)
+        auto& letterInfo = _lettersInfo[ctr];
+        if (letterInfo.valid)
         {
-            auto& letterDef = _fontAtlas->_letterDefinitions[_lettersInfo[ctr].utf32Char];
+            auto& letterDef = _fontAtlas->_letterDefinitions[letterInfo.utf32Char];
 
             _reusedRect.size.height = letterDef.height;
             _reusedRect.size.width  = letterDef.width;
             _reusedRect.origin.x    = letterDef.U;
             _reusedRect.origin.y    = letterDef.V;
 
-            auto py = _lettersInfo[ctr].positionY + _letterOffsetY;
+            auto py = letterInfo.positionY + _letterOffsetY;
             if (_labelHeight > 0.f)
             {
                 if (py > _tailoredTopY)
@@ -1240,14 +1243,15 @@ bool Label::updateQuads()
                 }
             }
 
-            auto lineIndex = _lettersInfo[ctr].lineIndex;
-            auto px        = _lettersInfo[ctr].positionX;
+            auto lineIndex = letterInfo.lineIndex;
+            auto px        = letterInfo.positionX + _linesOffsetX[lineIndex];
+            auto offsetX   = letterInfo.offsetX;
 
             if (_labelWidth > 0.f)
             {
-                if (this->isLetterHorizontallyClamped(px, letterDef.width * _fontScale, lineIndex))
+                if (this->isLetterHorizontallyClamped(px, letterDef.width * _fontScale, lineIndex, offsetX))
                 {
-                    if (_overflow == Overflow::CLAMP || _overflow == Overflow::SHRINK)
+                    if (_overflow == Overflow::CLAMP)
                     {
                         _reusedRect.size.width = 0;
                     }
@@ -1257,10 +1261,10 @@ bool Label::updateQuads()
             if (_reusedRect.size.height > 0.f && _reusedRect.size.width > 0.f)
             {
                 _reusedLetter->setTextureRect(_reusedRect, letterDef.rotated, _reusedRect.size);
-                float letterPositionX = _lettersInfo[ctr].positionX + _linesOffsetX[_lettersInfo[ctr].lineIndex];
+                float letterPositionX = letterInfo.positionX + _linesOffsetX[lineIndex];
                 _reusedLetter->setPosition(letterPositionX, py);
                 auto index = static_cast<int>(_batchNodes.at(letterDef.textureID)->getTextureAtlas()->getTotalQuads());
-                _lettersInfo[ctr].atlasIndex = index;
+                letterInfo.atlasIndex = index;
 
                 this->updateLetterSpriteScale(_reusedLetter);
 
@@ -2987,7 +2991,7 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
                 letterPosition.x = letterX;
             }
             letterPosition.y = (nextTokenY - letterDef.offsetY * _fontScale) / contentScaleFactor;
-            recordLetterInfo(letterPosition, character, letterIndex, lineIndex);
+            recordLetterInfo(letterPosition, character, letterIndex, lineIndex, letterDef.offsetX, letterDef.offsetY);
 
             if (nextChangeSize)
             {
@@ -3130,7 +3134,7 @@ bool Label::isHorizontalClamp()
     return letterClamp;
 }
 
-void Label::recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex)
+void Label::recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex, float offsetX, float offsetY)
 {
     if (static_cast<std::size_t>(letterIndex) >= _lettersInfo.size())
     {
@@ -3143,6 +3147,8 @@ void Label::recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int lett
     _lettersInfo[letterIndex].positionX  = point.x;
     _lettersInfo[letterIndex].positionY  = point.y;
     _lettersInfo[letterIndex].atlasIndex = -1;
+    _lettersInfo[letterIndex].offsetX    = offsetX;
+    _lettersInfo[letterIndex].offsetY    = offsetY;
 }
 
 void Label::recordPlaceholderInfo(int letterIndex, char32_t utf32Char)
