@@ -1522,7 +1522,7 @@ function setup_msvc() {
 function setup_xcode() {
     $xcode_prog, $xcode_ver = find_prog -name 'xcode' -cmd "xcodebuild" -params @('-version')
     if (!$xcode_prog) {
-        throw "Missing Xcode, please install"
+        throw "The command 'xcodebuild' not work, if you confirm Xcode was installed on this computer, please execute 'sudo xcode-select -switch /Applications/Xcode.app' and try again"
     }
 }
 
