@@ -9,24 +9,27 @@ struct ImFont;
 
 struct CircleData
 {
+    ax::Color rgba;
     b2Vec2 position;
     float radius;
-    ax::Color rgba;
+    float padding;
 };
 
 struct SolidCircleData
 {
     b2Transform transform;
-    float radius;
     ax::Color rgba;
+    float radius;
+    float padding[3];
 };
 
 struct CapsuleData
 {
     b2Transform transform;
+    ax::Color rgba;
     float radius;
     float length;
-    ax::Color rgba;
+    float padding[2];
 };
 
 class Box2DTestDebugDrawNode : public ax::extension::PhysicsDebugNode
