@@ -762,7 +762,7 @@ protected:
         CustomCommand shadowCommand;
     };
 
-    void resetAtlas();
+    void clearTextures();
 
     virtual void setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled = false, bool useA8Shader = false);
     bool getFontLetterDef(char32_t character, FontLetterDefinition& letterDef) const;
@@ -774,7 +774,6 @@ protected:
     bool multilineTextWrapByChar(bool ignoreOverflow = false);
     bool multilineTextWrapByWord(bool ignoreOverflow = false);
     bool multilineTextWrap(bool breakOnChar, bool ignoreOverflow);
-    void shrinkLabelToContentSize(const std::function<bool(void)>& lambda);
     bool isHorizontalClamp();
     bool isVerticalClamp();
     void rescaleWithOriginalFontSize();
@@ -802,7 +801,7 @@ protected:
     bool setTTFConfigInternal(const TTFConfig& ttfConfig);
     bool updateTTFConfigInternal();
     void setBMFontSizeInternal(float fontSize);
-    bool isHorizontalClamped(float letterPositionX, float letterWidth, int lineIndex);
+    bool isLetterHorizontallyClamped(float letterPositionX, float letterWidth, int lineIndex);
     void restoreFontSize();
     void updateLetterSpriteScale(Sprite* sprite);
     int getFirstCharLen(const std::u32string& utf32Text, int startIndex, int textLen) const;
