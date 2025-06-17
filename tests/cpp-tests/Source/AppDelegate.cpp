@@ -85,7 +85,9 @@ bool AppDelegate::applicationDidFinishLaunching()
         director->setGLView(glView);
     }
 
-    director->setStatsDisplay(true);
+    const char* const autotest_capture =
+        std::getenv("AXMOL_AUTOTEST_CAPTURE_DIR");
+    director->setStatsDisplay(!autotest_capture || !autotest_capture[0]);
 
 #ifdef AX_PLATFORM_PC
     director->setAnimationInterval(1.0f / glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate);
