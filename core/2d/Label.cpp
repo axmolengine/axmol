@@ -663,7 +663,7 @@ void Label::reset()
         _lineDrawNode = nullptr;
     }
     _strikethroughEnabled = false;
-    _underlineEnabled = false;
+    _underlineEnabled     = false;
     setRotationSkewX(0);  // reverse italics
 }
 
@@ -1067,9 +1067,11 @@ void Label::updateLabelLetters()
                         letterSprite->setAtlasIndex(_lettersInfo[letterIndex].atlasIndex);
                     }
 
-                    auto px = letterInfo.positionX + letterDef.width / 2 + _linesOffsetX[letterInfo.lineIndex];
-                    auto py = letterInfo.positionY - letterDef.height / 2 + _letterOffsetY;
+                    auto px =
+                        letterInfo.positionX + _fontScale * uvRect.size.width / 2 + _linesOffsetX[letterInfo.lineIndex];
+                    auto py = letterInfo.positionY - _fontScale * uvRect.size.height / 2 + _letterOffsetY;
                     letterSprite->setPosition(px, py);
+                    letterSprite->setOpacity(_realOpacity);
                 }
                 else
                 {
@@ -1507,7 +1509,7 @@ void Label::enableUnderline()
         _lineDrawNode->setGlobalZOrder(getGlobalZOrder());
         _lineDrawNode->setOpacity(_displayedOpacity);
         _lineDrawNode->properties.setFactor(_lineDrawNode->properties.getFactor() *
-                                            2.0f);  // 2.0f: Makes the line smaller 
+                                            2.0f);  // 2.0f: Makes the line smaller
         addChild(_lineDrawNode, 100000);
     }
 }
@@ -1526,8 +1528,8 @@ void Label::enableStrikethrough()
         _lineDrawNode->setGlobalZOrder(getGlobalZOrder());
         _lineDrawNode->setOpacity(_displayedOpacity);
         _lineDrawNode->properties.setFactor(_lineDrawNode->properties.getFactor() *
-                                            2.0f);  // 2.0f: Makes the line smaller 
-        addChild(_lineDrawNode, 100000); 
+                                            2.0f);  // 2.0f: Makes the line smaller
+        addChild(_lineDrawNode, 100000);
     }
 }
 
@@ -1811,12 +1813,13 @@ void Label::updateContent()
                 nextY -= lineHeight + lineSpacing;
             }
         }
-        else if (_textSprite) // ...and is the logic for System fonts
+        else if (_textSprite)  // ...and is the logic for System fonts
         {
             computeStringNumLines();
             const auto spriteSize = _textSprite->getContentSize();
 
-            // FIXME: system fonts don't report the height of the font correctly. only the size of the texture, which is POT
+            // FIXME: system fonts don't report the height of the font correctly. only the size of the texture, which is
+            // POT
             // FIXME: Might not work with different vertical alignments
             const auto lineSize  = spriteSize.height / static_cast<float>(_numberOfLines);
             const auto thickness = std::max(std::ceil(lineSize * 0.12f * 2) / 2.f, 2.f);
@@ -1832,9 +1835,9 @@ void Label::updateContent()
             }
 
             if (_strikethroughEnabled)
-            {  
+            {
                 const auto baseY = lineSize - lineSize / 2;
-                
+
                 for (int i = 0; i < _numberOfLines; ++i)
                 {
                     float y = baseY + lineSize * i;
@@ -2495,8 +2498,8 @@ void Label::setTextColor(const Color4B& color)
     _textColorF.a = _textColor.a / 255.0f;
 
     //  System font and TTF using setColor for Outline/Glow!");
-    if (_currentLabelType != LabelType::TTF && _currentLabelType != LabelType::STRING_TEXTURE) 
-        setColor(Color3B(color)); 
+    if (_currentLabelType != LabelType::TTF && _currentLabelType != LabelType::STRING_TEXTURE)
+        setColor(Color3B(color));
 }
 
 void Label::updateColor()
@@ -2968,7 +2971,7 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
             {
                 recordPlaceholderInfo(letterIndex, character);
                 AXLOGW("LabelTextFormatter error: can't find letter definition in font file for letter: 0x{:x}",
-                      static_cast<uint32_t>(character));
+                       static_cast<uint32_t>(character));
                 continue;
             }
 
@@ -3015,7 +3018,7 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
             nextChangeSize = true;
 
             tokenHighestY = std::max(tokenHighestY, letterPosition.y);
-            tokenLowestY = std::min(tokenLowestY, letterPosition.y - letterDef.height * _fontScale);
+            tokenLowestY  = std::min(tokenLowestY, letterPosition.y - letterDef.height * _fontScale);
         }
 
         if (newLine)
@@ -3025,8 +3028,8 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
 
         nextTokenX  = nextLetterX;
         letterRight = tokenRight;
-        highestY = std::max(highestY, tokenHighestY);
-        lowestY = std::min(lowestY, tokenLowestY);
+        highestY    = std::max(highestY, tokenHighestY);
+        lowestY     = std::min(lowestY, tokenLowestY);
 
         index += tokenLen;
     }
@@ -3134,18 +3137,23 @@ bool Label::isHorizontalClamp()
     return letterClamp;
 }
 
-void Label::recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex, float offsetX, float offsetY)
+void Label::recordLetterInfo(const ax::Vec2& point,
+                             char32_t utf32Char,
+                             int letterIndex,
+                             int lineIndex,
+                             float offsetX,
+                             float offsetY)
 {
     if (static_cast<std::size_t>(letterIndex) >= _lettersInfo.size())
     {
         LetterInfo tmpInfo;
         _lettersInfo.emplace_back(tmpInfo);
     }
-    _lettersInfo[letterIndex].lineIndex  = lineIndex;
-    _lettersInfo[letterIndex].utf32Char  = utf32Char;
-    _lettersInfo[letterIndex].valid      = _fontAtlas->_letterDefinitions[utf32Char].validDefinition && utf32Char != ' ';
-    _lettersInfo[letterIndex].positionX  = point.x;
-    _lettersInfo[letterIndex].positionY  = point.y;
+    _lettersInfo[letterIndex].lineIndex = lineIndex;
+    _lettersInfo[letterIndex].utf32Char = utf32Char;
+    _lettersInfo[letterIndex].valid     = _fontAtlas->_letterDefinitions[utf32Char].validDefinition && utf32Char != ' ';
+    _lettersInfo[letterIndex].positionX = point.x;
+    _lettersInfo[letterIndex].positionY = point.y;
     _lettersInfo[letterIndex].atlasIndex = -1;
     _lettersInfo[letterIndex].offsetX    = offsetX;
     _lettersInfo[letterIndex].offsetY    = offsetY;
@@ -3162,4 +3170,4 @@ void Label::recordPlaceholderInfo(int letterIndex, char32_t utf32Char)
     _lettersInfo[letterIndex].valid     = false;
 }
 
-}
+}  // namespace ax
