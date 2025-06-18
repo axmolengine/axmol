@@ -1288,10 +1288,10 @@ bool Bundle3D::loadSkinDataBinary(SkinData* skindata)
     if (!seekToFirstType(BUNDLE_TYPE_MESHSKIN))
         return false;
 
-    std::string_view boneName = _binaryReader.read_v32();
-
     try
     {
+        std::string_view boneName = _binaryReader.read_v32();
+
         // transform
         float bindShape[16];
         if (!_binaryReader.read_blob(bindShape))
@@ -2270,7 +2270,7 @@ Reference* Bundle3D::seekToFirstType(unsigned int type, std::string_view id)
             }
 
             // Found a match
-            if (_binaryReader.seek(ref->offset, SEEK_SET) == false)
+            if (_binaryReader.seek(ref->offset, SEEK_SET) != ref->offset)
             {
                 AXLOGW("warning: Failed to seek to object '{}' in bundle '{}'.", ref->id, _path);
                 return nullptr;
