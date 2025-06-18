@@ -369,16 +369,10 @@ function display.newSprite(source, x, y, params)
             end
 
             -- create sprite from image file
-            if display.TEXTURES_PIXEL_FORMAT[source] then
-                cc.Texture2D:setDefaultAlphaPixelFormat(display.TEXTURES_PIXEL_FORMAT[source])
-            end
             if not scale9 then
                 sprite = spriteClass:create(source)
             else
                 sprite = spriteClass:create(source, params.rect, params.capInsets)
-            end
-            if display.TEXTURES_PIXEL_FORMAT[source] then
-                cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE_PF_BGRA8)
             end
             break
         elseif sourceType ~= "userdata" then
@@ -494,16 +488,10 @@ function display.removeImage(imageFilename)
 end
 
 function display.loadSpriteFrames(dataFilename, imageFilename, callback)
-    if display.TEXTURES_PIXEL_FORMAT[imageFilename] then
-        cc.Texture2D:setDefaultAlphaPixelFormat(display.TEXTURES_PIXEL_FORMAT[imageFilename])
-    end
     if not callback then
         spriteFrameCache:addSpriteFrames(dataFilename, imageFilename)
     else
         spriteFrameCache:addSpriteFramesAsync(dataFilename, imageFilename, callback)
-    end
-    if display.TEXTURES_PIXEL_FORMAT[imageFilename] then
-        cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE_PF_BGRA8)
     end
 end
 

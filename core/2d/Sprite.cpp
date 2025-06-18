@@ -75,7 +75,7 @@ Sprite* Sprite::createWithTexture(Texture2D* texture, const Rect& rect, bool rot
 
 Sprite* Sprite::create(std::string_view filename)
 {
-    return Sprite::create(filename, Texture2D::getDefaultAlphaPixelFormat());
+    return Sprite::create(filename, PixelFormat::NONE);
 }
 
 Sprite* Sprite::create(std::string_view filename, PixelFormat format)
@@ -187,7 +187,7 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect)
 
 bool Sprite::initWithFile(std::string_view filename)
 {
-    return initWithFile(filename, Texture2D::getDefaultAlphaPixelFormat());
+    return initWithFile(filename, PixelFormat::NONE);
 }
 
 bool Sprite::initWithFile(std::string_view filename, PixelFormat format)

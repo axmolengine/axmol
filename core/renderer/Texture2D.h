@@ -92,36 +92,6 @@ public:
     using TexParams = backend::SamplerDescriptor;
 
 public:
-    /** sets the default pixel format for UIImagescontains alpha channel.
-
-     @param format
-     If the UIImage contains alpha channel, then the options are:
-     - generate 32-bit textures: backend::PixelFormat::RGBA8 (default one)
-     - generate 24-bit textures: backend::PixelFormat::RGB8
-     - generate 16-bit textures: backend::PixelFormat::RGBA4
-     - generate 16-bit textures: backend::PixelFormat::RGB5A1
-     - generate 16-bit textures: backend::PixelFormat::RGB565
-     - generate 8-bit textures: backend::PixelFormat::R8 (only use it if you use just 1 color)
-     - generate 16-bit textures: backend::PixelFormat::RG8 (only use it if you use just 2 color)
-
-     How does it work ?
-     - If the image is an RGBA (with Alpha) then the default pixel format will be used (it can be a 8-bit, 16-bit or
-     32-bit texture)
-     - If the image is an RGB (without Alpha) then: If the default pixel format is RGBA8888 then a RGBA8888 (32-bit)
-     will be used. Otherwise a RGB565 (16-bit texture) will be used.
-
-     This parameter is not valid for PVR / PVR.CCZ images.
-
-     @since v0.8
-     */
-    static void setDefaultAlphaPixelFormat(backend::PixelFormat format);
-
-    /** Returns the alpha pixel format.
-     @since v0.8
-     */
-    static backend::PixelFormat getDefaultAlphaPixelFormat();
-
-public:
     /**
      */
     Texture2D();
@@ -197,6 +167,7 @@ public:
     @param width Specifies the width of the texture subimage.
     @param height Specifies the height of the texture subimage.
     */
+    bool updateWithImage(Image* image, int index = 0);
     bool updateWithImage(Image* image, backend::PixelFormat format, int index = 0);
     bool updateWithData(const void* data,
                         ssize_t dataLen,
@@ -240,21 +211,19 @@ public:
     /**
     Initializes a texture from a UIImage object.
 
-    We will use the format you specified with setDefaultAlphaPixelFormat to convert the image for texture.
+    We will use the pixel format of the image.
     NOTE: It will not convert the pvr image file.
     @param image An UIImage object.
     */
     bool initWithImage(Image* image);
 
     /**
-    Initializes a texture from a UIImage object.
+    Initializes a texture from an Image object and convert it to the given
+    format if necessary.
 
-    We will use the format you passed to the function to convert the image format to the texture format.
-    If you pass PixelFormat::NONE, we will auto detect the image render type and use that type for texture to render.
-    @param image An UIImage object.
-    @param format Texture pixel formats.
-    **/
-    bool initWithImage(Image* image, backend::PixelFormat format);
+    NOTE: It will not convert the pvr image file.
+    */
+    bool initWithImage(Image* image, PixelFormat format);
 
     /** Initializes a texture from a string with dimensions, alignment, font name and font size.
 
