@@ -32,6 +32,9 @@
 #include "BaseTest.h"
 #include "extensions/axmol-ext.h"
 
+#include <charconv>
+#include <system_error>
+
 using namespace ax;
 
 AppDelegate::AppDelegate() : _testController(nullptr) {}
@@ -129,7 +132,20 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     _testController = TestController::getInstance();
 
-    if (std::getenv("AXMOL_START_AUTOTEST"))
+    const char* const autotest_env = std::getenv("AXMOL_START_AUTOTEST");
+    int autotest = 0;
+    if (autotest_env)
+    {
+      const std::from_chars_result r =
+          std::from_chars
+          (autotest_env, autotest_env + std::strlen(autotest_env), autotest);
+      if (r.ec != std::errc{})
+        AXLOGW("Could not parse AXMOL_START_AUTOTEST: {}.",
+               std::make_error_code(r.ec).message());
+
+    }
+
+    if (autotest != 0)
     {
         _testController->startAutoTest();
     }
