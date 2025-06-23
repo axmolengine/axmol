@@ -30,9 +30,8 @@ TextureAtlasData* CCFactory::_buildTextureAtlasData(TextureAtlasData* textureAtl
             auto texture            = textureCache->getTextureForKey(textureAtlasData->imagePath);
             if (texture == nullptr)
             {
-                const auto defaultPixelFormat = ax::Texture2D::getDefaultAlphaPixelFormat();
-                auto pixelFormat              = defaultPixelFormat;
-#if COCOS2D_VERSION >= 0x00040000
+                ax::backend::PixelFormat pixelFormat =
+                    ax::backend::PixelFormat::NONE;
                 switch (textureAtlasData->format)
                 {
                 case TextureFormat::RGBA8888:
@@ -63,38 +62,6 @@ TextureAtlasData* CCFactory::_buildTextureAtlasData(TextureAtlasData* textureAtl
                 default:
                     break;
                 }
-#else
-                switch (textureAtlasData->format)
-                {
-                case TextureFormat::RGBA8888:
-                    pixelFormat = ax::Texture2D::PixelFormat::RGBA8;
-                    break;
-
-                case TextureFormat::BGRA8888:
-                    pixelFormat = ax::Texture2D::PixelFormat::BGRA8;
-                    break;
-
-                case TextureFormat::RGBA4444:
-                    pixelFormat = ax::Texture2D::PixelFormat::RGBA4;
-                    break;
-
-                case TextureFormat::RGB888:
-                    pixelFormat = ax::Texture2D::PixelFormat::RGB8;
-                    break;
-
-                case TextureFormat::RGB565:
-                    pixelFormat = ax::Texture2D::PixelFormat::RGB565;
-                    break;
-
-                case TextureFormat::RGBA5551:
-                    pixelFormat = ax::Texture2D::PixelFormat::RGB5A1;
-                    break;
-
-                case TextureFormat::DEFAULT:
-                default:
-                    break;
-                }
-#endif
 
                 texture = textureCache->addImage(textureAtlasData->imagePath, pixelFormat);
             }

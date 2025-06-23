@@ -68,11 +68,7 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
     }
 
     // test loading atlases without PixelFormat specified
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGB5A1);
-    loadSpriteFrames("Images/sprite_frames_test/test_NoFormat.plist", backend::PixelFormat::RGB5A1);
-
-    // restore default alpha pixel format
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_NoFormat.plist", backend::PixelFormat::RGBA8);
 }
 
 void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file,
@@ -290,39 +286,7 @@ protected:
                                  std::string_view atlasPath,
                                  SpriteFrameCache& cache)
     {
-        std::string pixelFormatName;
-        auto&& metaItr = doc.FindMember("meta");
-        if (metaItr != doc.MemberEnd())
-        {
-            auto&& pixelFormatItr = metaItr->value.FindMember("format");
-            if (pixelFormatItr != metaItr->value.MemberEnd())
-            {
-                pixelFormatName = pixelFormatItr->value.GetString();
-            }
-        }
-
-        Texture2D* texture                                                        = nullptr;
-        static std::unordered_map<std::string, backend::PixelFormat> pixelFormats = {
-            {"RGBA8888", backend::PixelFormat::RGBA8},
-            {"RGBA4444", backend::PixelFormat::RGBA4},
-            {"RGB5A1", backend::PixelFormat::RGB5A1},
-            {"RGBA5551", backend::PixelFormat::RGB5A1},
-            {"RGB565", backend::PixelFormat::RGB565},
-            {"R8", backend::PixelFormat::R8},
-            {"RG8", backend::PixelFormat::RG8},
-            //{"BGRA8888", backend::PixelFormat::BGRA8888}, no Image conversion RGBA -> BGRA
-            {"RGB888", backend::PixelFormat::RGB8}};
-
-        const auto pixelFormatIt = pixelFormats.find(pixelFormatName);
-        if (pixelFormatIt != pixelFormats.end())
-        {
-            const backend::PixelFormat pixelFormat        = (*pixelFormatIt).second;
-            texture = Director::getInstance()->getTextureCache()->addImage(texturePath, pixelFormat);
-        }
-        else
-        {
-            texture = Director::getInstance()->getTextureCache()->addImage(texturePath);
-        }
+        Texture2D* const texture = Director::getInstance()->getTextureCache()->addImage(texturePath);
 
         if (texture)
         {

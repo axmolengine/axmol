@@ -56,12 +56,6 @@ THE SOFTWARE.
 namespace ax
 {
 
-// CLASS IMPLEMENTATIONS:
-
-// If the image has alpha, you can create RGBA8 (32-bit) or RGBA4 (16-bit) or RGB5A1 (16-bit)
-// Default is: RGBA8888 (32-bit textures)
-static backend::PixelFormat g_defaultAlphaPixelFormat = backend::PixelFormat::RGBA8;
-
 Texture2D::Texture2D()
     : _pixelFormat(backend::PixelFormat::NONE)
     , _pixelsWide(0)
@@ -188,6 +182,11 @@ bool Texture2D::initWithMipmaps(MipmapInfo* mipmaps,
     return true;
 }
 
+bool Texture2D::updateWithImage(Image* image, int index)
+{
+    return updateWithImage(image, image->getPixelFormat(), index);
+}
+
 bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int index)
 {
     if (image == nullptr)
@@ -237,34 +236,24 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     default:
         break;
     }
-#elif !AX_GLES_PROFILE
-    // Non-GLES doesn't support follow render formats, needs convert PixelFormat::RGBA8
-    // Note: axmol-1.1 deprecated A8, L8, LA8 as renderFormat, preferred R8, RG8
-    switch (renderFormat)
-    {
-    case PixelFormat::R8:
-    case PixelFormat::RG8:
-        // Note: conversion to RGBA8 will happends
-        renderFormat = PixelFormat::RGBA8;
-    }
 #endif
 
     if (image->getNumberOfMipmaps() > 1)
     {
-        if (renderFormat != image->getPixelFormat())
+        if (renderFormat != imagePixelFormat)
         {
             AXLOGW("WARNING: This image has more than 1 mipmaps and we will not convert the data format");
         }
 
         // pixel format of data is not converted, renderFormat can be different from pixelFormat
         // it will be done later
-        updateWithMipmaps(image->getMipmaps(), image->getNumberOfMipmaps(), image->getPixelFormat(), renderFormat, imageHeight, imageWidth, image->hasPremultipliedAlpha(), index);
+        updateWithMipmaps(image->getMipmaps(), image->getNumberOfMipmaps(), imagePixelFormat, renderFormat, imageHeight, imageWidth, image->hasPremultipliedAlpha(), index);
     }
     else if (image->isCompressed())
     {  // !Only hardware support texture will be compression PixelFormat, otherwise, will convert to RGBA8 duraing image
        // load
         renderFormat = imagePixelFormat;
-        updateWithData(tempData, tempDataLen, image->getPixelFormat(), image->getPixelFormat(), imageWidth, imageHeight, image->hasPremultipliedAlpha(), index);
+        updateWithData(tempData, tempDataLen, imagePixelFormat, image->getPixelFormat(), imageWidth, imageHeight, image->hasPremultipliedAlpha(), index);
     }
     else
     {
@@ -448,7 +437,13 @@ bool Texture2D::updateWithSubData(void* data, int offsetX, int offsetY, int widt
 // implementation Texture2D (Image)
 bool Texture2D::initWithImage(Image* image)
 {
-    return initWithImage(image, g_defaultAlphaPixelFormat);
+    if (image == nullptr)
+    {
+        AXLOGW("Texture2D. Can't create Texture. UIImage is nil");
+        return false;
+    }
+
+    return initWithImage(image, image->getPixelFormat());
 }
 
 bool Texture2D::initWithImage(Image* image, backend::PixelFormat format)
@@ -532,10 +527,6 @@ bool Texture2D::initWithString(std::string_view text, const FontDefinition& text
     AXASSERT(textDefinition._stroke._strokeEnabled == false, "Currently stroke only supported on iOS and Android!");
 #endif
 
-    PixelFormat pixelFormat    = g_defaultAlphaPixelFormat;
-    unsigned char* outTempData = nullptr;
-    size_t outTempDataLen      = 0;
-
     int imageWidth;
     int imageHeight;
     auto textDef            = textDefinition;
@@ -560,16 +551,10 @@ bool Texture2D::initWithString(std::string_view text, const FontDefinition& text
     }
 
     Vec2 imageSize = Vec2((float)imageWidth, (float)imageHeight);
-    pixelFormat =
-        backend::PixelFormatUtils::convertDataToFormat(outData.getBytes(), imageWidth * imageHeight * 4,
-                                                       PixelFormat::RGBA8, pixelFormat, &outTempData, &outTempDataLen);
+    const PixelFormat pixelFormat = PixelFormat::RGBA8;
 
-    ret = initWithData(outTempData, outTempDataLen, pixelFormat, imageWidth, imageHeight);
+    ret = initWithData(outData.getBytes(), imageWidth * imageHeight * 4, pixelFormat, imageWidth, imageHeight);
 
-    if (outTempData != nullptr && outTempData != outData.getBytes())
-    {
-        free(outTempData);
-    }
     setPremultipliedAlpha(hasPremultipliedAlpha);
 
     return ret;
@@ -645,21 +630,6 @@ void Texture2D::setAntiAliasTexParameters()
 const char* Texture2D::getStringForFormat() const
 {
     return backend::PixelFormatUtils::getFormatDescriptor(_pixelFormat).name;
-}
-
-//
-// Texture options for images that contains alpha
-//
-// implementation Texture2D (PixelFormat)
-
-void Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat format)
-{
-    g_defaultAlphaPixelFormat = format;
-}
-
-backend::PixelFormat Texture2D::getDefaultAlphaPixelFormat()
-{
-    return g_defaultAlphaPixelFormat;
 }
 
 unsigned int Texture2D::getBitsPerPixelForFormat(backend::PixelFormat format) const

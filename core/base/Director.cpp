@@ -229,15 +229,6 @@ void Director::setDefaultValues()
     else
         AXASSERT(false, "Invalid projection value");
 
-    // Default pixel format for PNG images with alpha
-    std::string pixel_format = conf->getValue("axmol.texture.pixel_format_for_png", Value("rgba8888")).asString();
-    if (pixel_format == "rgba8888")
-        Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
-    else if (pixel_format == "rgba4444")
-        Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA4);
-    else if (pixel_format == "rgba5551")
-        Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGB5A1);
-
     /* !!!Notes
     ** All compressed image should do PMA at texture convert tools(such as astcenc-2.2+ with -pp-premultiply)
     ** or GPU fragment shader
@@ -1318,7 +1309,7 @@ void Director::createStatsLabel()
         return;
     }
 
-    texture = _textureCache->addImage(image, "/ax_fps_images", PixelFormat::RGBA4);
+    texture = _textureCache->addImage(image, "/ax_fps_images");
     AX_SAFE_RELEASE(image);
 
     /*

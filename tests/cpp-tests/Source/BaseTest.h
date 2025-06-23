@@ -115,6 +115,8 @@ private:
     TestSuite* _testSuite;
     float _runTime;
     std::string _testCaseName;
+
+    bool _enableInspector = false;
 };
 
 /**

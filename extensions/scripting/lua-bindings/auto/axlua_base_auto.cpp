@@ -3464,18 +3464,14 @@ int lua_ax_base_Texture2D_updateWithImage(lua_State* tolua_S)
     int argc = 0;
     ax::Texture2D* cobj = nullptr;
     bool ok  = true;
-
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Texture2D",0,&tolua_err)) goto tolua_lerror;
 #endif
-
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
-
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -3483,46 +3479,72 @@ int lua_ax_base_Texture2D_updateWithImage(lua_State* tolua_S)
         return 0;
     }
 #endif
-
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
-    {
-        ax::Image* arg0;
-        ax::backend::PixelFormat arg1;
+    do{
+        if (argc == 2) {
+            ax::Image* arg0;
+            ok &= luaval_to_object<ax::Image>(tolua_S, 2, "ax.Image",&arg0, "ax.Texture2D:updateWithImage");
 
-        ok &= luaval_to_object<ax::Image>(tolua_S, 2, "ax.Image",&arg0, "ax.Texture2D:updateWithImage");
+            if (!ok) { break; }
+            ax::backend::PixelFormat arg1;
+            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateWithImage");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateWithImage");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateWithImage'", nullptr);
-            return 0;
+            if (!ok) { break; }
+            bool ret = cobj->updateWithImage(arg0, arg1);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
         }
-        auto&& ret = cobj->updateWithImage(arg0, arg1);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    if (argc == 3) 
-    {
-        ax::Image* arg0;
-        ax::backend::PixelFormat arg1;
-        int arg2;
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 3) {
+            ax::Image* arg0;
+            ok &= luaval_to_object<ax::Image>(tolua_S, 2, "ax.Image",&arg0, "ax.Texture2D:updateWithImage");
 
-        ok &= luaval_to_object<ax::Image>(tolua_S, 2, "ax.Image",&arg0, "ax.Texture2D:updateWithImage");
+            if (!ok) { break; }
+            ax::backend::PixelFormat arg1;
+            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateWithImage");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateWithImage");
+            if (!ok) { break; }
+            int arg2;
+            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateWithImage");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateWithImage");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateWithImage'", nullptr);
-            return 0;
+            if (!ok) { break; }
+            bool ret = cobj->updateWithImage(arg0, arg1, arg2);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
         }
-        auto&& ret = cobj->updateWithImage(arg0, arg1, arg2);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Texture2D:updateWithImage",argc, 2);
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 1) {
+            ax::Image* arg0;
+            ok &= luaval_to_object<ax::Image>(tolua_S, 2, "ax.Image",&arg0, "ax.Texture2D:updateWithImage");
+
+            if (!ok) { break; }
+            bool ret = cobj->updateWithImage(arg0);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 2) {
+            ax::Image* arg0;
+            ok &= luaval_to_object<ax::Image>(tolua_S, 2, "ax.Image",&arg0, "ax.Texture2D:updateWithImage");
+
+            if (!ok) { break; }
+            int arg1;
+            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateWithImage");
+
+            if (!ok) { break; }
+            bool ret = cobj->updateWithImage(arg0, arg1);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.Texture2D:updateWithImage",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -5271,76 +5293,6 @@ int lua_ax_base_Texture2D_getPath(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Texture2D_setDefaultAlphaPixelFormat(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.Texture2D",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 1)
-    {
-        ax::backend::PixelFormat arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Texture2D:setDefaultAlphaPixelFormat");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_setDefaultAlphaPixelFormat'", nullptr);
-            return 0;
-        }
-        ax::Texture2D::setDefaultAlphaPixelFormat(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Texture2D:setDefaultAlphaPixelFormat",argc, 1);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Texture2D_setDefaultAlphaPixelFormat'.",&tolua_err);
-#endif
-    return 0;
-}
-int lua_ax_base_Texture2D_getDefaultAlphaPixelFormat(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.Texture2D",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_getDefaultAlphaPixelFormat'", nullptr);
-            return 0;
-        }
-        int ret = (int)ax::Texture2D::getDefaultAlphaPixelFormat();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Texture2D:getDefaultAlphaPixelFormat",argc, 0);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Texture2D_getDefaultAlphaPixelFormat'.",&tolua_err);
-#endif
-    return 0;
-}
 int lua_ax_base_Texture2D_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5421,8 +5373,6 @@ int lua_register_ax_base_Texture2D(lua_State* tolua_S)
         tolua_function(tolua_S,"setMaxT",lua_ax_base_Texture2D_setMaxT);
         tolua_function(tolua_S,"getContentSize",lua_ax_base_Texture2D_getContentSize);
         tolua_function(tolua_S,"getPath",lua_ax_base_Texture2D_getPath);
-        tolua_function(tolua_S,"setDefaultAlphaPixelFormat", lua_ax_base_Texture2D_setDefaultAlphaPixelFormat);
-        tolua_function(tolua_S,"getDefaultAlphaPixelFormat", lua_ax_base_Texture2D_getDefaultAlphaPixelFormat);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Texture2D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Texture2D";
@@ -13192,6 +13142,103 @@ int lua_ax_base_Node_initLayer(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Node_setPhysicsBody(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Node* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Node",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setPhysicsBody'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::PhysicsBody* arg0;
+
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.Node:setPhysicsBody");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setPhysicsBody'", nullptr);
+            return 0;
+        }
+        cobj->setPhysicsBody(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:setPhysicsBody",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_setPhysicsBody'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Node_getPhysicsBody(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Node* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Node",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getPhysicsBody'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_getPhysicsBody'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getPhysicsBody();
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:getPhysicsBody",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_getPhysicsBody'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Node_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -13454,6 +13501,8 @@ int lua_register_ax_base_Node(lua_State* tolua_S)
         tolua_function(tolua_S,"resetChild",lua_ax_base_Node_resetChild);
         tolua_function(tolua_S,"init",lua_ax_base_Node_init);
         tolua_function(tolua_S,"initLayer",lua_ax_base_Node_initLayer);
+        tolua_function(tolua_S,"setPhysicsBody",lua_ax_base_Node_setPhysicsBody);
+        tolua_function(tolua_S,"getPhysicsBody",lua_ax_base_Node_getPhysicsBody);
         tolua_function(tolua_S,"create", lua_ax_base_Node_create);
         tolua_function(tolua_S,"getAttachedNodeCount", lua_ax_base_Node_getAttachedNodeCount);
     tolua_endmodule(tolua_S);
@@ -53090,56 +53139,6 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_drawPie'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_DrawNode_setIsConvex(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::DrawNode* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_setIsConvex'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.DrawNode:setIsConvex");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_setIsConvex'", nullptr);
-            return 0;
-        }
-        cobj->setIsConvex(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:setIsConvex",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_setIsConvex'.",&tolua_err);
 #endif
 
     return 0;

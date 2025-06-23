@@ -75,7 +75,7 @@ Sprite* Sprite::createWithTexture(Texture2D* texture, const Rect& rect, bool rot
 
 Sprite* Sprite::create(std::string_view filename)
 {
-    return Sprite::create(filename, Texture2D::getDefaultAlphaPixelFormat());
+    return Sprite::create(filename, PixelFormat::NONE);
 }
 
 Sprite* Sprite::create(std::string_view filename, PixelFormat format)
@@ -187,7 +187,7 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect)
 
 bool Sprite::initWithFile(std::string_view filename)
 {
-    return initWithFile(filename, Texture2D::getDefaultAlphaPixelFormat());
+    return initWithFile(filename, PixelFormat::NONE);
 }
 
 bool Sprite::initWithFile(std::string_view filename, PixelFormat format)
@@ -434,7 +434,25 @@ void Sprite::setTexture(Texture2D* texture)
     }
 
     if (needsUpdatePS)
-        setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+    {
+        const PixelFormat pixelFormat = _texture->getPixelFormat();
+
+        switch(pixelFormat)
+          {
+          case PixelFormat::R8:
+            setProgramState(backend::ProgramType::POSITION_TEXTURE_GRAY);
+            break;
+          case PixelFormat::RG8:
+            setProgramState(backend::ProgramType::POSITION_TEXTURE_GRAY_ALPHA);
+            break;
+          case PixelFormat::RGBA8:
+            setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+            break;
+          default:
+            AXLOGW("Warning: Sprite::setTexture() unhandled pixel format {}", (int)pixelFormat);
+            setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+          }
+    }
     else
         updateProgramStateTexture(_texture);
 }
