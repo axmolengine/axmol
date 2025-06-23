@@ -82,6 +82,7 @@ private:
     TestSuite* _testSuite;
 
     ax::Node* _autoTestRunner{nullptr};
+    std::string _autoTestCaptureDirectory;
 
     ax::Director* _director;
     ax::EventListenerTouchOneByOne* _touchListener;

@@ -161,6 +161,15 @@ void TestController::startAutoTest()
 {
     if (_stopAutoTest)
     {
+        const char* const captureDir = std::getenv("AXMOL_AUTOTEST_CAPTURE_DIR");
+        if (captureDir)
+        {
+            _autoTestCaptureDirectory = captureDir;
+            _autoTestCaptureDirectory += '/';
+        }
+        else
+          _autoTestCaptureDirectory.clear();
+
         _stopAutoTest   = false;
         _logIndentation = "";
 
@@ -185,7 +194,7 @@ Coroutine TestController::traverseTestList(TestList* testList)
          _logIndentation += LOG_INDENTATION;
      }
 
-     co_yield DelayTime::create(0.5);  
+     co_yield DelayTime::create(0.5);
      AXLOGD("{}{}Begin traverse TestList:{}", LOG_TAG, _logIndentation, testList->getTestName());
 
      auto scheduler = _director->getScheduler();
@@ -197,7 +206,7 @@ Coroutine TestController::traverseTestList(TestList* testList)
          while (_isRunInBackground)
          {
              AXLOGD("_director is paused");
-             co_yield DelayTime::create(0.5);  
+             co_yield DelayTime::create(0.5);
          }
          if (callback)
          {
@@ -234,6 +243,7 @@ Coroutine TestController::traverseTestList(TestList* testList)
          {
              // Backs up one level and release TestList object.
              testList->_parentTest->runThisTest();
+
              testList->release();
          }
 
@@ -284,7 +294,7 @@ Coroutine TestController::traverseTestList(TestList* testList)
              {
                  testCase         = (TestCase*)transitionScene->getInScene();
                  testCaseDuration = transitionScene->getDuration() + 0.5f;
-                 
+
              }
              else
              {
@@ -298,7 +308,27 @@ Coroutine TestController::traverseTestList(TestList* testList)
 
              testScene = scene;
 
-             co_yield DelayTime::create(testCaseDuration);
+             CallFunc* capture;
+             if (_autoTestCaptureDirectory.empty())
+               capture = nullptr;
+             else
+               capture = CallFunc::create
+                 ([this, testSuite, testCase]() -> void
+                 {
+                     ax::utils::captureScreen
+                     ([this, testSuite, testCase]
+                      (ax::RefPtr<ax::Image> image) -> void
+                     {
+                         std::string file_name =
+                           testSuite->getTestName() + '-'
+                           + testCase->getTestCaseName();
+
+                         image->saveToFile
+                           (_autoTestCaptureDirectory + file_name + ".png");
+                     });
+                 });
+
+             co_yield Sequence::create(DelayTime::create(testCaseDuration), capture, nullptr);
          }
 
          if (_stopAutoTest)

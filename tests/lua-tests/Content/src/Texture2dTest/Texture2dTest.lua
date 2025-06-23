@@ -822,8 +822,7 @@ local function TexturePixelFormat()
     ret:addChild(background, -1)
 
     -- RGBA 8888 image (32-bit)
-    cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE_PF_RGBA8)
-    local sprite1 = cc.Sprite:create("Images/test-rgba1.png")
+    local sprite1 = cc.Sprite:create("Images/test-rgba1.png", cc.TEXTURE_PF_RGBA8)
     sprite1:setPosition(cc.p(1*s.width/7, s.height/2+32))
     ret:addChild(sprite1, 0)
 
@@ -831,8 +830,7 @@ local function TexturePixelFormat()
     cc.Director:getInstance():getTextureCache():removeTexture(sprite1:getTexture())
 
     -- RGBA 4444 image (16-bit)
-    cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE_PF_RGBA4)
-    local sprite2 = cc.Sprite:create("Images/test-rgba1.png")
+    local sprite2 = cc.Sprite:create("Images/test-rgba1.png", cc.TEXTURE_PF_RGBA4)
     sprite2:setPosition(cc.p(2*s.width/7, s.height/2-32))
     ret:addChild(sprite2, 0)
 
@@ -840,8 +838,7 @@ local function TexturePixelFormat()
     cc.Director:getInstance():getTextureCache():removeTexture(sprite2:getTexture())
 
     -- RGB5A1 image (16-bit)
-    cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE_PF_RGB5A1)
-    local sprite3 = cc.Sprite:create("Images/test-rgba1.png")
+    local sprite3 = cc.Sprite:create("Images/test-rgba1.png", cc.TEXTURE_PF_RGB5A1)
     sprite3:setPosition(cc.p(3*s.width/7, s.height/2+32))
     ret:addChild(sprite3, 0)
 
@@ -849,8 +846,7 @@ local function TexturePixelFormat()
     cc.Director:getInstance():getTextureCache():removeTexture(sprite3:getTexture())
 
     -- RGB888 image
-    cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE_PF_RGB8 )
-    local sprite4 = cc.Sprite:create("Images/test-rgba1.png")
+    local sprite4 = cc.Sprite:create("Images/test-rgba1.png", cc.TEXTURE_PF_RGB8)
     sprite4:setPosition(cc.p(4*s.width/7, s.height/2-32))
     ret:addChild(sprite4, 0)
 
@@ -858,8 +854,7 @@ local function TexturePixelFormat()
     cc.Director:getInstance():getTextureCache():removeTexture(sprite4:getTexture())
 
     -- RGB565 image (16-bit)
-    cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE_PF_RGB565)
-    local sprite5 = cc.Sprite:create("Images/test-rgba1.png")
+    local sprite5 = cc.Sprite:create("Images/test-rgba1.png", cc.TEXTURE_PF_RGB565)
     sprite5:setPosition(cc.p(5*s.width/7, s.height/2+32))
     ret:addChild(sprite5, 0)
 
@@ -867,8 +862,7 @@ local function TexturePixelFormat()
     cc.Director:getInstance():getTextureCache():removeTexture(sprite5:getTexture())
 
     -- A8 image (8-bit)
-    cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE_PF_A8 )
-    local sprite6 = cc.Sprite:create("Images/test-rgba1.png")
+    local sprite6 = cc.Sprite:create("Images/test-rgba1.png", cc.TEXTURE_PF_A8)
     sprite6:setPosition(cc.p(6*s.width/7, s.height/2-32))
     ret:addChild(sprite6, 0)
 
@@ -891,7 +885,6 @@ local function TexturePixelFormat()
     sprite5:runAction(seq_4ever5)
 
     -- restore default
-    cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE_PF_RGBA8)
     print(cc.Director:getInstance():getTextureCache():getCachedTextureInfo())
     return ret
 end
@@ -1169,10 +1162,10 @@ local function TextureDrawAtPoint()
         director:loadMatrix(cc.MATRIX_STACK_TYPE.MODELVIEW, transform)
 
         local s = cc.Director:getInstance():getWinSize()
-    
+
         m_pTex1:drawAtPoint(cc.p(s.width/2-50, s.height/2 - 50), globalZOrder)
         m_pTex2F:drawAtPoint(cc.p(s.width/2+50, s.height/2 - 50), globalZOrder)
-    
+
         director:popMatrix(cc.MATRIX_STACK_TYPE.MODELVIEW)
     end
 
@@ -1368,8 +1361,7 @@ local function TexturePVRv3Premult()
     transformSprite(pvr2)
 
     -- PNG
-    cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE_PF_RGBA8)
-    cc.Director:getInstance():getTextureCache():removeTextureForKey("Images/grossinis_sister1-testalpha.png")
+    cc.Director:getInstance():getTextureCache():removeTextureForKey("Images/grossinis_sister1-testalpha.png", cc.TEXTURE_PF_RGBA8)
     local png = cc.Sprite:create("Images/grossinis_sister1-testalpha.png")
     ret:addChild(png, 0)
     png:setPosition(cc.p(size.width/4*3, size.height/2))
@@ -1433,7 +1425,7 @@ function Texture2dTestMain()
         TextureDrawInRect
     }
     Helper.index = 1
-    
+
     scene:addChild(TextureMemoryAlloc())
     scene:addChild(CreateBackMenuItem())
     return scene

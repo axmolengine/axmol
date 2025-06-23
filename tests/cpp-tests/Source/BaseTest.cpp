@@ -427,6 +427,12 @@ bool TestCase::init()
 {
     if (Scene::init())
     {
+        const char* const autotest_capture =
+          std::getenv("AXMOL_AUTOTEST_CAPTURE_DIR");
+        // Disable the inspector if we are capturing the scene because its
+        // rendering changes from one run to the next.
+        _enableInspector = !autotest_capture || !autotest_capture[0];
+
         // add title and subtitle
         TTFConfig ttfConfig("fonts/arial.ttf", 26);
         _titleLabel = Label::createWithTTF(ttfConfig, title());
@@ -478,7 +484,7 @@ void TestCase::onEnter()
 
     if (_testSuite)
     {
-        _titleLabel->setString(fmt::format("{}:{}", static_cast<int>(_testSuite->getCurrTestIndex() + 1), 
+        _titleLabel->setString(fmt::format("{}:{}", static_cast<int>(_testSuite->getCurrTestIndex() + 1),
                                title()));
     }
     else
@@ -495,14 +501,16 @@ void TestCase::onEnter()
     }
 
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
-    extension::Inspector::getInstance()->openForScene(this);
+    if (_enableInspector)
+        extension::Inspector::getInstance()->openForScene(this);
 #endif
 }
 
 void TestCase::onExit()
 {
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
-    extension::Inspector::getInstance()->close();
+    if (_enableInspector)
+        extension::Inspector::getInstance()->close();
 #endif
     Scene::onExit();
 }

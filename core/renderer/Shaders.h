@@ -47,6 +47,8 @@ extern AX_DLL const std::string_view positionTexture_frag;
 extern AX_DLL const std::string_view positionTextureColor_vert;
 extern AX_DLL const std::string_view positionTextureColor_frag;
 extern AX_DLL const std::string_view positionTextureColorAlphaTest_frag;
+extern AX_DLL const std::string_view positionTextureGray_frag;
+extern AX_DLL const std::string_view positionTextureGrayAlpha_frag;
 extern AX_DLL const std::string_view label_normal_frag;
 extern AX_DLL const std::string_view label_outline_frag;
 extern AX_DLL const std::string_view label_distanceNormal_frag;

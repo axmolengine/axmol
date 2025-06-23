@@ -87,7 +87,7 @@ public:
         : filename(fn)
         , callback(f)
         , callbackKey(key)
-        , pixelFormat(Texture2D::getDefaultAlphaPixelFormat())
+        , pixelFormat(PixelFormat::NONE)
         , loadSuccess(false)
     {}
 
@@ -433,7 +433,7 @@ Texture2D* TextureCache::getDummyTexture()
 
 Texture2D* TextureCache::addImage(std::string_view path)
 {
-    return addImage(path, Texture2D::getDefaultAlphaPixelFormat());
+    return addImage(path, PixelFormat::NONE);
 }
 
 Texture2D* TextureCache::addImage(std::string_view path, PixelFormat format)
@@ -516,7 +516,7 @@ void TextureCache::parseNinePatchImage(ax::Image* image, ax::Texture2D* texture,
 
 Texture2D* TextureCache::addImage(Image* image, std::string_view key)
 {
-    return addImage(image, key, Texture2D::getDefaultAlphaPixelFormat());
+    return addImage(image, key, PixelFormat::NONE);
 }
 
 Texture2D* TextureCache::addImage(Image* image, std::string_view key, PixelFormat format)
