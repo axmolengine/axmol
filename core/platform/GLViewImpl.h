@@ -174,6 +174,7 @@ protected:
     void onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y);
 #if defined(__EMSCRIPTEN__)
     void onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent);
+    void onWebClickCallback();
 #endif
     void onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y);
     void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);

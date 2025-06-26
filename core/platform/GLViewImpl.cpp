@@ -122,6 +122,12 @@ public:
             _view->onWebTouchCallback(eventType, touchEvent);
         return EM_FALSE;
     }
+
+    static void onWebClickCallback()
+    {
+        if (_view)
+            _view->onWebClickCallback();
+    }
 #endif
 
     static void onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y)
@@ -617,6 +623,14 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
         emscripten_set_touchend_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, 1, GLFWEventHandler::onWebTouchCallback);
         emscripten_set_touchmove_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, 1, GLFWEventHandler::onWebTouchCallback);
         emscripten_set_touchcancel_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, 1, GLFWEventHandler::onWebTouchCallback);
+    }
+    else
+    {
+        EM_ASM({
+            document.addEventListener('click', function(event){
+                Module.ccall("axmol_onwebclickcallback");
+            });
+        });
     }
     // clang-format on
 #endif
@@ -1196,6 +1210,19 @@ void GLViewImpl::onWebTouchCallback(int eventType, const EmscriptenTouchEvent* t
         }
     }
 }
+
+void GLViewImpl::onWebClickCallback()
+{
+    if (!_isTouchDevice)
+    {
+        if (_captured)
+        {
+            _captured   = false;
+            intptr_t id = 0;
+            this->handleTouchesCancel(1, &id, &_mouseX, &_mouseY);
+        }
+    }
+}
 #endif
 
 void GLViewImpl::onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y)
@@ -1443,3 +1470,13 @@ bool GLViewImpl::loadGL()
 #endif
 
 }  // namespace ax
+
+#if defined(__EMSCRIPTEN__)
+extern "C"
+{
+    void axmol_onwebclickcallback()
+    {
+        ax::GLFWEventHandler::onWebClickCallback();
+    }
+}
+#endif
