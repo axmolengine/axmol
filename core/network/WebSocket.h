@@ -137,7 +137,7 @@ public:
     public:
         CloseEvent() { this->_type = Type::ON_CLOSE; }
     };
-    
+
     class ErrorEvent : public Event
     {
     public:
