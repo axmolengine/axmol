@@ -975,6 +975,11 @@ void EventDispatcher::dispatchEvent(Event* event, bool forced)
         dispatchTouchEvent(static_cast<EventTouch*>(event));
         return;
     }
+    else if (event->getType() == Event::Type::MOUSE)
+    {
+        dispatchMouseEvent(static_cast<EventMouse*>(event));
+        return;
+    }
 
     auto listenerID = __getListenerID(event);
 
@@ -1202,6 +1207,88 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
         {
             return;
         }
+    }
+
+    updateListeners(event);
+}
+
+void EventDispatcher::dispatchMouseEvent(EventMouse* event)
+{
+    sortEventListeners(EventListenerMouse::LISTENER_ID);
+
+    auto listeners = getListeners(EventListenerMouse::LISTENER_ID);
+
+    // If there aren't any mouse listeners, return directly.
+    if (nullptr == listeners)
+        return;
+
+    bool isSwallowed = false;
+
+    auto onMouseEvent = [&](EventListener* l) -> bool {  // Return true to break
+        EventListenerMouse* listener = static_cast<EventListenerMouse*>(l);
+
+        // Skip if the listener was removed.
+        if (!listener->_isRegistered)
+            return false;
+
+        event->setCurrentTarget(listener->_node);
+
+        bool isClaimed = false;
+
+        switch (event->getMouseEventType())
+        {
+        case EventMouse::MouseEventType::MOUSE_UP:
+            if (listener->onMouseUp)
+            {
+                isClaimed = listener->onMouseUp(event);
+            }
+            break;
+        case EventMouse::MouseEventType::MOUSE_DOWN:
+            if (listener->onMouseDown)
+            {
+                isClaimed = listener->onMouseDown(event);
+            }
+            break;
+        case EventMouse::MouseEventType::MOUSE_MOVE:
+            if (listener->onMouseMove)
+            {
+                isClaimed = listener->onMouseMove(event);
+            }
+            break;
+        case EventMouse::MouseEventType::MOUSE_SCROLL:
+            if (listener->onMouseScroll)
+            {
+                isClaimed = listener->onMouseScroll(event);
+            }
+            break;
+        case EventMouse::MouseEventType::MOUSE_NONE:
+            break;
+        default:
+            AXASSERT(false, "The type is invalid.");
+            break;
+        }
+        
+
+        // If the event was stopped, return directly.
+        if (event->isStopped())
+        {
+            updateListeners(event);
+            return true;
+        }
+
+        if (isClaimed && listener->_isRegistered && listener->_needSwallow)
+        {
+            return true;
+        }
+
+        return false;
+    };
+
+    //
+    dispatchTouchEventToListeners(listeners, onMouseEvent);
+    if (event->isStopped())
+    {
+        return;
     }
 
     updateListeners(event);

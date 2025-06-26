@@ -357,6 +357,7 @@ public:
     void onTouchMoved(Touch* touch, Event* unusedEvent) override;
     void onTouchEnded(Touch* touch, Event* unusedEvent) override;
     void onTouchCancelled(Touch* touch, Event* unusedEvent) override;
+    bool onMouseScroll(Event* event) override;
     void update(float dt) override;
 
     /**

@@ -87,6 +87,7 @@ ScrollView::ScrollView()
     , _scrollTime(DEFAULT_TIME_IN_SEC_FOR_SCROLL_TO_ITEM)
 {
     setTouchEnabled(true);
+    setMouseEnabled(true);
     _propagateTouchEvents = false;
 }
 
@@ -131,6 +132,7 @@ bool ScrollView::init()
         {
             initScrollBar();
         }
+
         return true;
     }
     return false;
@@ -1084,6 +1086,35 @@ void ScrollView::onTouchCancelled(Touch* touch, Event* unusedEvent)
         handleReleaseLogic(touch);
     }
     _isInterceptTouch = false;
+}
+
+bool ScrollView::onMouseScroll(Event* event)
+{
+    bool pass = Widget::onMouseScroll(event);
+
+    if(pass)
+    {
+        auto mouseEvent = static_cast<EventMouse*>(event);
+        float mouseFactor = 10.f;
+        Vec2 move;
+
+        if (_direction == Direction::HORIZONTAL)
+        {
+            move = Vec2(mouseEvent->getScrollY()*mouseFactor, 0.f);
+        }
+        else
+        {
+            move = Vec2(0.f, mouseEvent->getScrollY()*mouseFactor);
+        }
+
+        bool origBounce = _bounceEnabled;
+        _bounceEnabled = false;
+        scrollChildren(move);
+        _bounceEnabled = origBounce;
+        processScrollingEndedEvent();
+    }
+
+    return pass;
 }
 
 void ScrollView::update(float dt)

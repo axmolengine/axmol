@@ -176,6 +176,9 @@ Widget::Widget()
     , _ccEventCallback(nullptr)
     , _callbackType("")
     , _callbackName("")
+    , _mouseEnabled(false)
+    , _mouseListener(nullptr)
+    , _mouseHitted(false)
 {}
 
 Widget::~Widget()
@@ -606,6 +609,36 @@ bool Widget::isTouchEnabled() const
     return _touchEnabled;
 }
 
+void Widget::setMouseEnabled(bool enable)
+{
+    if (enable == _mouseEnabled)
+    {
+        return;
+    }
+    _mouseEnabled = enable;
+    if (_mouseEnabled)
+    {
+        _mouseListener = EventListenerMouse::create();
+        AX_SAFE_RETAIN(_mouseListener);
+        _mouseListener->setSwallowMouse(true);
+        _mouseListener->onMouseUp = AX_CALLBACK_1(Widget::onMouseUp, this);
+        _mouseListener->onMouseDown = AX_CALLBACK_1(Widget::onMouseDown, this);
+        _mouseListener->onMouseMove = AX_CALLBACK_1(Widget::onMouseMove, this);
+        _mouseListener->onMouseScroll = AX_CALLBACK_1(Widget::onMouseScroll, this);
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
+    }
+    else
+    {
+        _eventDispatcher->removeEventListener(_mouseListener);
+        AX_SAFE_RELEASE_NULL(_mouseListener);
+    }
+}
+
+bool Widget::isMouseEnabled() const
+{
+    return _mouseEnabled;
+}
+
 bool Widget::isHighlighted() const
 {
     return _highlight;
@@ -919,6 +952,66 @@ void Widget::cancelUpEvent()
     this->release();
 }
 
+void Widget::setSwallowMouse(bool swallow)
+{
+    if (_mouseListener)
+    {
+        _mouseListener->setSwallowMouse(swallow);
+    }
+}
+
+bool Widget::isSwallowMouse() const
+{
+    if (_mouseListener)
+    {
+        return _mouseListener->isSwallowMouse();
+    }
+    return false;
+}
+
+bool Widget::onMouseEvent(Event* event)
+{
+    _mouseHitted = false;
+    if (isVisible() && isEnabled() && isAncestorsEnabled() && isAncestorsVisible(this))
+    {
+        auto scrollPosition = static_cast<EventMouse*>(event)->getLocation();
+        auto camera         = Camera::getVisitingCamera();
+        if (hitTest(scrollPosition, camera, nullptr))
+        {
+            if (isClippingParentContainsPoint(scrollPosition))
+            {
+                _mouseHitted = true;
+            }
+        }
+    }
+    if (!_mouseHitted)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool Widget::onMouseUp(Event* event)
+{
+    return onMouseEvent(event);
+}
+
+bool Widget::onMouseDown(Event* event)
+{
+    return onMouseEvent(event);
+}
+
+bool Widget::onMouseMove(Event* event)
+{
+    return onMouseEvent(event);
+}
+
+bool Widget::onMouseScroll(Event* event)
+{
+    return onMouseEvent(event);
+}
+
 void Widget::addTouchEventListener(const ccWidgetTouchCallback& callback)
 {
     this->_touchEventCallback = callback;
@@ -1207,6 +1300,7 @@ void Widget::copyProperties(Widget* widget)
     setVisible(widget->isVisible());
     setBright(widget->isBright());
     setTouchEnabled(widget->isTouchEnabled());
+    setMouseEnabled(widget->isMouseEnabled());
     setLocalZOrder(widget->getLocalZOrder());
     setTag(widget->getTag());
     setName(widget->getName());

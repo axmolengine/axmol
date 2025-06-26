@@ -54,17 +54,33 @@ public:
      */
     static EventListenerMouse* create();
 
+    /** Whether or not to swall scrolls.
+     *
+     * @param needSwallow True if needs to swall scroll.
+     */
+    void setSwallowMouse(bool needSwallow);
+    /** Is swall scroll or not.
+     *
+     * @return True if needs to swall scroll.
+     */
+    bool isSwallowMouse();
+
     /// Overrides
     virtual EventListenerMouse* clone() override;
     virtual bool checkAvailable() override;
 
-    std::function<void(EventMouse* event)> onMouseDown;
-    std::function<void(EventMouse* event)> onMouseUp;
-    std::function<void(EventMouse* event)> onMouseMove;
-    std::function<void(EventMouse* event)> onMouseScroll;
+    std::function<bool(EventMouse* event)> onMouseDown;
+    std::function<bool(EventMouse* event)> onMouseUp;
+    std::function<bool(EventMouse* event)> onMouseMove;
+    std::function<bool(EventMouse* event)> onMouseScroll;
 
     EventListenerMouse();
     bool init();
+
+private:
+    bool _needSwallow;
+
+    friend class EventDispatcher;
 };
 
 }

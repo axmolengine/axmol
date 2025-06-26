@@ -36,6 +36,16 @@ bool EventListenerMouse::checkAvailable()
     return true;
 }
 
+void EventListenerMouse::setSwallowMouse(bool needSwallow)
+{
+    _needSwallow = needSwallow;
+}
+
+bool EventListenerMouse::isSwallowMouse()
+{
+    return _needSwallow;
+}
+
 EventListenerMouse* EventListenerMouse::create()
 {
     auto ret = new EventListenerMouse();
@@ -60,6 +70,7 @@ EventListenerMouse* EventListenerMouse::clone()
         ret->onMouseDown   = onMouseDown;
         ret->onMouseMove   = onMouseMove;
         ret->onMouseScroll = onMouseScroll;
+        ret->_needSwallow  = _needSwallow;
     }
     else
     {
@@ -69,7 +80,11 @@ EventListenerMouse* EventListenerMouse::clone()
 }
 
 EventListenerMouse::EventListenerMouse()
-    : onMouseDown(nullptr), onMouseUp(nullptr), onMouseMove(nullptr), onMouseScroll(nullptr)
+    : onMouseDown(nullptr)
+    , onMouseUp(nullptr)
+    , onMouseMove(nullptr)
+    , onMouseScroll(nullptr)
+    , _needSwallow(false)
 {}
 
 bool EventListenerMouse::init()

@@ -41,6 +41,7 @@ namespace ax
 {
 
 class EventListenerTouchOneByOne;
+class EventListenerMouse;
 class Camera;
 
 namespace ui
@@ -201,11 +202,27 @@ public:
     void setBrightStyle(BrightStyle style);
 
     /**
+     * Sets whether the widget is mouse enabled.
+     *
+     * The default value is false, a widget is default to mouse disabled.
+     *
+     * @param enabled   True if the widget is mouse enabled, false if the widget is mouse disabled.
+     */
+    virtual void setMouseEnabled(bool enabled);
+
+    /**
      * Determines if the widget is touch enabled
      *
      * @return true if the widget is touch enabled, false if the widget is touch disabled.
      */
     bool isTouchEnabled() const;
+
+    /**
+     * Determines if the widget is mouse enabled
+     *
+     * @return true if the widget is mouse enabled, false if the widget is mouse disabled.
+     */
+    bool isMouseEnabled() const;
 
     /**
      * Determines if the widget is highlighted
@@ -482,6 +499,30 @@ public:
     virtual void onTouchCancelled(Touch* touch, Event* unusedEvent);
 
     /**
+     * A callback which will be called when a mouse up event is issued.
+     *@param event The mouse event info.
+     */
+    virtual bool onMouseUp(Event* event);
+
+    /**
+     * A callback which will be called when a mouse down event is issued.
+     *@param event The mouse event info.
+     */
+    virtual bool onMouseDown(Event* event);
+
+    /**
+     * A callback which will be called when a mouse move event is issued.
+     *@param event The mouse event info.
+     */
+    virtual bool onMouseMove(Event* event);
+
+    /**
+     * A callback which will be called when a mouse scroll event is issued.
+     *@param event The mouse event info.
+     */
+    virtual bool onMouseScroll(Event* event);
+
+    /**
      * Sets a LayoutParameter to widget.
      *
      * @see LayoutParameter
@@ -601,6 +642,20 @@ public:
      * @since v3.3
      */
     bool isSwallowTouches() const;
+
+     /**
+     * Toggle widget swallow mouse option.
+     * @brief Specify widget to swallow mouse or not
+     * @param swallow True to swallow mouse, false otherwise.
+     */
+    void setSwallowMouse(bool swallow);
+
+    /**
+     * Return whether the widget is swallowing mouse or not
+     * @return Whether mouse is swallowed.
+     */
+    bool isSwallowMouse() const;
+
 
     /**
      * Query whether widget is focused or not.
@@ -758,6 +813,8 @@ protected:
     // call back function called widget's state changed to dark.
     virtual void onPressStateChangedToDisabled();
 
+    virtual bool onMouseEvent(Event* event);
+
     void pushDownEvent();
     void moveEvent();
 
@@ -788,6 +845,7 @@ protected:
     bool _enabled;
     bool _bright;
     bool _touchEnabled;
+    bool _mouseEnabled;
     bool _highlight;
     bool _affectByClipping;
     bool _ignoreSize;
@@ -813,6 +871,9 @@ protected:
     Vec2 _touchBeganPosition;
     Vec2 _touchMovePosition;
     Vec2 _touchEndPosition;
+
+    bool _mouseHitted;
+    EventListenerMouse* _mouseListener;
 
     bool _flippedX;
     bool _flippedY;

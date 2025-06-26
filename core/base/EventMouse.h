@@ -76,6 +76,12 @@ public:
      */
     EventMouse(MouseEventType mouseEventCode);
 
+    /** Get mouse event type.
+     *
+     * @return The type of the event.
+     */
+    MouseEventType getMouseEventType() const { return _mouseEventType; }
+
     /** Set mouse scroll data.
      *
      * @param scrollX The scroll data of x axis.
