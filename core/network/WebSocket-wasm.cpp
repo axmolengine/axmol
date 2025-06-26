@@ -23,7 +23,6 @@
  ****************************************************************************/
 
 #include "network/WebSocket-wasm.h"
-#include "yasio/errc.hpp"
 #include "base/Logging.h"
 
 namespace ax
@@ -58,7 +57,7 @@ EM_BOOL WebSocket::em_ws_onclose(int eventType, const EmscriptenWebSocketCloseEv
     if (!ws || !ws->_delegate)
         return EM_TRUE;
     ws->_state = WebSocket::State::CLOSED;
-    ws->_delegate->onClose(ws);
+    ws->_delegate->onClose(ws, (uint16_t)websocketEvent->code, websocketEvent->reason);
     return EM_TRUE;
 }
 
@@ -77,7 +76,13 @@ EM_BOOL WebSocket::em_ws_onmessage(int eventType, const EmscriptenWebSocketMessa
 
 WebSocket::WebSocket() {}
 
-WebSocket::~WebSocket() {}
+WebSocket::~WebSocket()
+{
+    if (_wsfd >= 0)
+    {
+        emscripten_websocket_delete(_wsfd);
+    }
+}
 
 bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view caFilePath, std::string_view protocols)
 {
@@ -95,7 +100,7 @@ bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view 
     EmscriptenWebSocketCreateAttributes ws_attrs = {_url.c_str(),
                                                     _subProtocols.empty() ? nullptr : _subProtocols.c_str(), EM_TRUE};
 
-    AXLOGD("ws open url: {}, protocols: {}", ws_attrs.url, ws_attrs.protocols);
+    AXLOGD("ws open url: {}, protocols: {}", ws_attrs.url, ws_attrs.protocols ? ws_attrs.protocols : "");
 
     _state = WebSocket::State::CONNECTING;
     _wsfd = emscripten_websocket_new(&ws_attrs);
@@ -120,7 +125,7 @@ void WebSocket::send(std::string_view message)
 {
     auto error = emscripten_websocket_send_utf8_text(_wsfd, message.data());
     if (error)
-        AXLOGW("Failed to emscripten_websocket_send_binary(): {}", error);
+        AXLOGW("Failed to emscripten_websocket_send_utf8_text(): {}", error);
 }
 
 /**
@@ -141,9 +146,9 @@ void WebSocket::send(const void* data, unsigned int len)
  *  @brief Closes the connection to server synchronously.
  *  @note It's a synchronous method, it will not return until websocket thread exits.
  */
-void WebSocket::close()
+void WebSocket::close(uint16_t code, std::string_view reason)
 {
-    closeAsync();  // TODO
+    closeAsync(code, reason);
 }
 
 /**
@@ -152,12 +157,12 @@ void WebSocket::close()
  *        If using 'closeAsync' to close websocket connection,
  *        be careful of not using destructed variables in the callback of 'onClose'.
  */
-void WebSocket::closeAsync()
+void WebSocket::closeAsync(uint16_t code, std::string_view reason)
 {
     // close code: Uncaught DOMException: Failed to execute 'close' on 'WebSocket':
     // The code must be either 1000, or between 3000 and 4999. 1024 is neither.
     EMSCRIPTEN_RESULT error =
-        emscripten_websocket_close(_wsfd, 3000 - yasio::errc::shutdown_by_localhost, "shutdown by localhost");
+        emscripten_websocket_close(_wsfd, (unsigned short)code, reason.data());
     if (!error)
         _state = WebSocket::State::CLOSING;
     else

@@ -122,7 +122,7 @@ public:
          *
          * @param ws The WebSocket object connected.
          */
-        virtual void onClose(WebSocket* ws) = 0;
+        virtual void onClose(WebSocket* ws, uint16_t code, std::string_view reason) = 0;
         /**
          * This function is to be called in the following cases:
          * 1. client connection is failed.
@@ -175,7 +175,7 @@ public:
      *  @brief Closes the connection to server synchronously.
      *  @note It's a synchronous method, it will not return until websocket thread exits.
      */
-    void close();
+    void close(uint16_t code = 1000, std::string_view reason = "Normal closure");
 
     /**
      *  @brief Closes the connection to server asynchronously.
@@ -183,7 +183,7 @@ public:
      *        If using 'closeAsync' to close websocket connection,
      *        be careful of not using destructed variables in the callback of 'onClose'.
      */
-    void closeAsync();
+    void closeAsync(uint16_t code = 1000, std::string_view reason = "Normal closure");
 
     /**
      *  @brief Gets current state of connection.

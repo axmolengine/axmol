@@ -137,7 +137,7 @@ public:
     public:
         CloseEvent() { this->_type = Type::ON_CLOSE; }
     };
-
+    
     class ErrorEvent : public Event
     {
     public:
@@ -220,8 +220,10 @@ public:
          * _readyState is State::CLOSING,this function is to be called.
          *
          * @param ws The WebSocket object connected.
+         * @param code the close code.
+         * @param reason the close reason.
          */
-        virtual void onClose(WebSocket* ws) = 0;
+        virtual void onClose(WebSocket* ws, uint16_t code, std::string_view reason) = 0;
         /**
          * This function is to be called in the following cases:
          * 1. client connection is failed.
@@ -273,7 +275,7 @@ public:
      *  @brief Closes the connection to server synchronously.
      *  @note It's a synchronous method, it will not return until websocket thread exits.
      */
-    void close();
+    void close(uint16_t code = 1000, std::string_view reason = "Normal closure");
 
     /**
      *  @brief Closes the connection to server asynchronously.
@@ -281,7 +283,7 @@ public:
      *        If using 'closeAsync' to close websocket connection,
      *        be careful of not using destructed variables in the callback of 'onClose'.
      */
-    void closeAsync();
+    void closeAsync(uint16_t code = 1000, std::string_view reason = "Normal closure");
 
     /**
      *  @brief Gets current state of connection.
@@ -423,6 +425,8 @@ protected:
     /// the http status code returned from server, e.g. 200, 404, refer to
     /// https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
     int _responseCode = -1;
+    uint16_t _closeCode;
+    std::string _closeReason;
 
     // for receiveData
     yasio::sbyte_buffer _receivedData;

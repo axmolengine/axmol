@@ -43,7 +43,7 @@ public:
     ~LuaWebSocket() override;;
     void onOpen(WebSocket* ws) override;
     void onMessage(WebSocket* ws, const WebSocket::Data& data) override;
-    void onClose(WebSocket* ws) override;
+    void onClose(WebSocket* ws, uint16_t code, std::string_view reason) override;
     void onError(WebSocket* ws, const WebSocket::ErrorCode& error) override;
     
     enum WebSocketScriptHandlerType

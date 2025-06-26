@@ -232,11 +232,13 @@ bool WebSocket::open(Delegate* delegate,
                      std::string_view caFilePath,
                      std::string_view protocols)
 {
-    _delegate   = delegate;
-    _url        = url;
-    _caFilePath = FileUtils::getInstance()->fullPathForFilename(caFilePath);
-    _requestUri = Uri::parse(url);
-    _protocols  = protocols;
+    _delegate    = delegate;
+    _url         = url;
+    _caFilePath  = FileUtils::getInstance()->fullPathForFilename(caFilePath);
+    _requestUri  = Uri::parse(url);
+    _protocols   = protocols;
+    _closeCode   = ws::detail::close_code::none;
+    _closeReason = "";
 
     setupParsers();
     generateHandshakeSecKey();
@@ -283,7 +285,7 @@ void WebSocket::dispatchEvents()
                 _delegate->onOpen(this);
                 break;
             case Event::Type::ON_CLOSE:
-                _delegate->onClose(this);
+                _delegate->onClose(this, _closeCode, _closeReason);
                 break;
             case Event::Type::ON_ERROR:
                 _delegate->onError(this, static_cast<ErrorEvent*>(event)->getErrorCode());
@@ -388,6 +390,14 @@ int WebSocket::on_frame_end(websocket_parser* parser)
             break;
         case WS_OP_CLOSE:
             AXLOGD("WS: control frame: CLOSE");
+            if (ws->_receivedData.size() > 1)
+            {
+                if(ws->_closeCode == 0)
+                    ws->_closeCode = ((uint16_t) ws->_receivedData.data()[0]) << 8 | ws->_receivedData.data()[1];
+                
+                if (ws->_receivedData.size() > 2 && ws->_closeReason.empty())
+                    ws->_closeReason = std::string(ws->_receivedData.data()[3], ws->_receivedData.size() - 2);
+            }
             break;
         case WS_OP_PING:
             AXLOGD("WS: control frame: PING");
@@ -436,13 +446,27 @@ void WebSocket::send(const void* data, unsigned int len)
  *  @brief Closes the connection to server synchronously.
  *  @note It's a synchronous method, it will not return until websocket thread exits.
  */
-void WebSocket::close()
+void WebSocket::close(uint16_t code, std::string_view reason)
 {
     if (_state < State::CLOSING)
     {
+        _closeCode   = code;
+        _closeReason = reason;
+        
         if (_service->is_open(0))
         {
             _state = State::CLOSING;
+            
+            char closeData[sizeof(code)+reason.size()];
+            memcpy(closeData, &code, sizeof(code));
+            
+            if (!reason.empty())
+            {
+                memcpy(closeData+sizeof(code), reason.data(), reason.size());
+            }
+            
+            WebSocketProtocol::sendFrame(*this, closeData, sizeof(closeData), ws::detail::opcode::close);
+            
             _service->close(0);
 
             if (_transport)
@@ -470,7 +494,7 @@ void WebSocket::close()
  *        If using 'closeAsync' to close websocket connection,
  *        be careful of not using destructed variables in the callback of 'onClose'.
  */
-void WebSocket::closeAsync()
+void WebSocket::closeAsync(uint16_t code, std::string_view reason)
 {
     if (_state < State::CLOSING)
     {
@@ -494,7 +518,8 @@ void WebSocket::generateHandshakeSecKey()
 
     auto signContent = _handshakeSecKey;
     signContent += "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"sv;
-    _verifySecKey   = utils::computeDigest(signContent, "sha1"sv, utils::DigestPresent::Base64);
+    auto digest   = utils::computeDigest(signContent, "sha1"sv, false);
+    _verifySecKey = utils::base64Encode(std::span{digest});
 }
 
 void WebSocket::handleNetworkEvent(yasio::io_event* event)
@@ -633,6 +658,11 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
         break;
     case YEK_ON_CLOSE:
         _transport = nullptr;
+        if(_closeCode == ws::detail::close_code::none)
+        {
+            _closeCode = ws::detail::close_code::abnormal;
+            _closeReason = "Abnormal close";
+        }
         if (_state == State::OPEN || _state == State::CLOSING)
         {
             _state = State::CLOSED;

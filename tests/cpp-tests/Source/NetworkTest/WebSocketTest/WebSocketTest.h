@@ -54,7 +54,7 @@ public:
     
     virtual void onOpen(ax::network::WebSocket* ws)override;
     virtual void onMessage(ax::network::WebSocket* ws, const ax::network::WebSocket::Data& data)override;
-    virtual void onClose(ax::network::WebSocket* ws)override;
+    virtual void onClose(ax::network::WebSocket* ws, uint16_t code, std::string_view reason)override;
     virtual void onError(ax::network::WebSocket* ws, const ax::network::WebSocket::ErrorCode& error)override;
     
     // Menu Callbacks
@@ -113,7 +113,7 @@ public:
     
     virtual void onOpen(ax::network::WebSocket* ws)override;
     virtual void onMessage(ax::network::WebSocket* ws, const ax::network::WebSocket::Data& data)override;
-    virtual void onClose(ax::network::WebSocket* ws)override;
+    virtual void onClose(ax::network::WebSocket* ws, uint16_t code, std::string_view reason)override;
     virtual void onError(ax::network::WebSocket* ws, const ax::network::WebSocket::ErrorCode& error)override;
     
     // Menu Callbacks

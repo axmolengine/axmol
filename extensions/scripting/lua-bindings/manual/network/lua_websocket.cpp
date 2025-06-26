@@ -116,7 +116,7 @@ void LuaWebSocket::onMessage(WebSocket* ws, const WebSocket::Data& data)
     }
 }
     
-void LuaWebSocket::onClose(WebSocket* ws)
+void LuaWebSocket::onClose(WebSocket* ws, uint16_t code, std::string_view reason)
 {
     LuaWebSocket* luaWs = dynamic_cast<LuaWebSocket*>(ws);
     if (NULL != luaWs) {

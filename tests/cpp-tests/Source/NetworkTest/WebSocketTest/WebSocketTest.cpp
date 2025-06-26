@@ -243,7 +243,7 @@ void WebSocketTest::onMessage(network::WebSocket* ws, const network::WebSocket::
     }
 }
 
-void WebSocketTest::onClose(network::WebSocket* ws)
+void WebSocketTest::onClose(network::WebSocket* ws, uint16_t code, std::string_view reason)
 {
     AXLOGD("onClose: websocket instance ({}) closed.", fmt::ptr(ws));
     if (ws == _wsiSendText)
@@ -402,7 +402,7 @@ void WebSocketCloseTest::onMessage(network::WebSocket* ws, const network::WebSoc
     AXLOGD("Websocket get message from {}", fmt::ptr(ws));
 }
 
-void WebSocketCloseTest::onClose(network::WebSocket* ws)
+void WebSocketCloseTest::onClose(network::WebSocket* ws, uint16_t code, std::string_view reason)
 {
     AXLOGD("websocket ({}) closed.", fmt::ptr(ws));
     // if (ws == _wsiTest) {
@@ -546,7 +546,7 @@ void WebSocketDelayTest::onMessage(network::WebSocket* ws, const network::WebSoc
     }
 }
 
-void WebSocketDelayTest::onClose(network::WebSocket* ws)
+void WebSocketDelayTest::onClose(network::WebSocket* ws, uint16_t code, std::string_view reason)
 {
     AXLOGD("onClose: websocket instance ({}) closed.", fmt::ptr(ws));
     if (ws == _wsiSendText)
