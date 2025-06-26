@@ -54,6 +54,7 @@ default is: `navigator.hardwareConcurrency`
 - AX_WASM_ENABLE_DEVTOOLS: whether enable web devtools aka `pause`, `resume`, `step` buttons in webpage, default: `TRUE`
 - AX_WASM_INITIAL_MEMORY: set the wasm initial memory size, default `1024MB`
 - AX_WASM_ISA_SIMD: specify the wasm simd intrinsics type, default `none`, supports `sse`, `neon`, note the `wasm-simd` not support by axmol yet
+- AX_WASM_TIMING_USE_TIMEOUT: force the wasm emscripten loop timing to use `Timeout` with FPS value of `Application::setAnimationInterval` (app still run on focus lost), default is `FALSE` with timing `requestAnimationFrame` (no run on focus lost). See https://emscripten.org/docs/api_reference/emscripten.h.html#c.emscripten_set_main_loop_timing
 
 ## The options for axmol apps
 

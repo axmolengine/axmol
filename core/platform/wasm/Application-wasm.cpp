@@ -196,7 +196,12 @@ int Application::run()
     as the browser’s requestAnimationFrame will make sure you render at a proper smooth rate
     that lines up properly with the browser and monitor.
     */
+#if AX_WASM_TIMING_USE_TIMEOUT
+    double fps = ceil(1.0 / (static_cast<double>(s_animationInterval) / NANOSECONDSPERSECOND));
+    emscripten_set_main_loop(updateFrame, static_cast<int>(fps), false);
+#else
     emscripten_set_main_loop(updateFrame, -1, false);
+#endif
 
     return 0;
 }
