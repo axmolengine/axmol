@@ -1048,6 +1048,7 @@ void Director::reset()
     AX_SAFE_RELEASE_NULL(_FPSLabel);
     AX_SAFE_RELEASE_NULL(_drawnBatchesLabel);
     AX_SAFE_RELEASE_NULL(_drawnVerticesLabel);
+    _isStatusLabelUpdated = true;
 
     // purge bitmap cache
     FontFNT::purgeCachedData();
