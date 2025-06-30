@@ -558,7 +558,7 @@ bool InputProcessor::onMouseDown(ax::EventMouse * event)
 bool InputProcessor::onMouseUp(ax::EventMouse * event)
 {
     if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT)
-        return;
+        return true;
 
     auto camera = Camera::getVisitingCamera();
     Vec2 pt = event->getLocation();
@@ -692,8 +692,6 @@ bool InputProcessor::onMouseScroll(ax::EventMouse * event)
     ti->mouseWheelDelta = 0;
 
     _activeProcessor = nullptr;
-
-    AXLOG("InputProcessor::onMouseScroll %p", this);
 
     return true;
 }
