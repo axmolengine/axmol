@@ -457,15 +457,15 @@ void WebSocket::close(uint16_t code, std::string_view reason)
         {
             _state = State::CLOSING;
             
-            char closeData[sizeof(code)+_closeReason.size()];
-            memcpy(closeData, &code, sizeof(code));
+            std::vector<char> closeData(sizeof(_closeCode)+reason.size());
+            memcpy(closeData.data(), &_closeCode, sizeof(_closeCode));
             
             if (!reason.empty())
             {
-                memcpy(closeData+sizeof(code), _closeReason.data(), _closeReason.size());
+                memcpy(closeData.data()+sizeof(_closeCode), reason.data(), reason.size());
             }
             
-            WebSocketProtocol::sendFrame(*this, closeData, sizeof(closeData), ws::detail::opcode::close);
+            WebSocketProtocol::sendFrame(*this, closeData.data(), closeData.size(), ws::detail::opcode::close);
             
             _service->close(0);
 
