@@ -451,7 +451,7 @@ void WebSocket::close(uint16_t code, std::string_view reason)
     if (_state < State::CLOSING)
     {
         _closeCode   = code;
-        _closeReason = std::string(reason);
+        _closeReason = reason;
         
         if (_service->is_open(0))
         {
