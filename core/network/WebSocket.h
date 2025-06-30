@@ -275,7 +275,7 @@ public:
      *  @brief Closes the connection to server synchronously.
      *  @note It's a synchronous method, it will not return until websocket thread exits.
      */
-    void close(uint16_t code = 1000, std::string_view reason = "Normal closure");
+    void close(uint16_t code = 1000, std::string_view reason = "Normal close");
 
     /**
      *  @brief Closes the connection to server asynchronously.
@@ -283,7 +283,7 @@ public:
      *        If using 'closeAsync' to close websocket connection,
      *        be careful of not using destructed variables in the callback of 'onClose'.
      */
-    void closeAsync(uint16_t code = 1000, std::string_view reason = "Normal closure");
+    void closeAsync(uint16_t code = 1000, std::string_view reason = "Normal close");
 
     /**
      *  @brief Gets current state of connection.
