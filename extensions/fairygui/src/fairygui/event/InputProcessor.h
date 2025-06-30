@@ -43,10 +43,10 @@ private:
     void onTouchEnded(ax::Touch * touch, ax::Event *);
     void onTouchCancelled(ax::Touch * touch, ax::Event *);
 
-    void onMouseDown(ax::EventMouse* event);
-    void onMouseUp(ax::EventMouse* event);
-    void onMouseMove(ax::EventMouse* event);
-    void onMouseScroll(ax::EventMouse* event);
+    bool onMouseDown(ax::EventMouse* event);
+    bool onMouseUp(ax::EventMouse* event);
+    bool onMouseMove(ax::EventMouse* event);
+    bool onMouseScroll(ax::EventMouse* event);
 
     void onKeyDown(ax::EventKeyboard::KeyCode keyCode, ax::Event*);
     void onKeyUp(ax::EventKeyboard::KeyCode keyCode, ax::Event*);

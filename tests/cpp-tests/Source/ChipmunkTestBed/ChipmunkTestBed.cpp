@@ -425,7 +425,7 @@ void ChipmunkTestBed::onEnter()
     label->setString("");
 }
 
-void ChipmunkTestBed::onMouseDown(Event* event)
+bool ChipmunkTestBed::onMouseDown(Event* event)
 {
     EventMouse* e = (EventMouse*)event;
 
@@ -461,9 +461,11 @@ void ChipmunkTestBed::onMouseDown(Event* event)
         ChipmunkDemoRightDown  = cpTrue;
         ChipmunkDemoRightClick = cpTrue;
     }
+
+    return true;
 }
 
-void ChipmunkTestBed::onMouseUp(Event* event)
+bool ChipmunkTestBed::onMouseUp(Event* event)
 {
     EventMouse* e = (EventMouse*)event;
     mousePresses  = false;
@@ -476,9 +478,11 @@ void ChipmunkTestBed::onMouseUp(Event* event)
     ChipmunkDemoLeftDown   = cpFalse;
     ChipmunkDemoRightDown  = cpFalse;
     ChipmunkDemoRightClick = cpFalse;
+
+    return true;
 }
 
-void ChipmunkTestBed::onMouseMove(Event* event)
+bool ChipmunkTestBed::onMouseMove(Event* event)
 {
     EventMouse* e = (EventMouse*)event;
     auto pt = e->getLocation();
@@ -486,6 +490,8 @@ void ChipmunkTestBed::onMouseMove(Event* event)
     ChipmunkDemoMouse.y = pt.y - physicsDebugNodeOffset.y;
 
     cpBodySetPosition(mouse_body, ChipmunkDemoMouse);
+
+    return true;
 }
 
 void ChipmunkTestBed::updateInit(ChipmunkDemo tt)

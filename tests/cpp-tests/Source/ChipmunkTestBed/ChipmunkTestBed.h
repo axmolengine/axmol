@@ -48,9 +48,9 @@ public:
     void update(float dt) override;
     virtual void initPhysics();
 
-    void onMouseDown(ax::Event* event);
-    void onMouseUp(ax::Event* event);
-    void onMouseMove(ax::Event* event);
+    bool onMouseDown(ax::Event* event);
+    bool onMouseUp(ax::Event* event);
+    bool onMouseMove(ax::Event* event);
     void DrawInfo();
     void updateInit(ChipmunkDemo tt);
 

@@ -288,11 +288,13 @@ bool IKExample::init()
     // the current mouse location. The location is converted
     // to the skeleton's coordinate system.
     EventListenerMouse* mouseListener = EventListenerMouse::create();
-    mouseListener->onMouseMove        = [this](ax::Event* event) -> void {
+    mouseListener->onMouseMove        = [this](ax::Event* event) -> bool {
         // convert the mosue location to the skeleton's coordinate space
         // and store it.
         EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
         position               = skeletonNode->convertToNodeSpace(mouseEvent->getLocationInView());
+
+        return true;
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 

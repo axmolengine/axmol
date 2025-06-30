@@ -523,10 +523,10 @@ void InputProcessor::onTouchCancelled(Touch* touch, Event* /*unusedEvent*/)
     _activeProcessor = nullptr;
 }
 
-void InputProcessor::onMouseDown(ax::EventMouse * event)
+bool InputProcessor::onMouseDown(ax::EventMouse * event)
 {
     if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT)
-        return;
+        return true;
 
     auto camera = Camera::getVisitingCamera();
     Vec2 pt = event->getLocation();
@@ -551,9 +551,11 @@ void InputProcessor::onMouseDown(ax::EventMouse * event)
     target->bubbleEvent(UIEventType::TouchBegin);
 
     _activeProcessor = nullptr;
+
+    return true;
 }
 
-void InputProcessor::onMouseUp(ax::EventMouse * event)
+bool InputProcessor::onMouseUp(ax::EventMouse * event)
 {
     if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT)
         return;
@@ -615,16 +617,18 @@ void InputProcessor::onMouseUp(ax::EventMouse * event)
     ti->button = EventMouse::MouseButton::BUTTON_UNSET;
 
     _activeProcessor = nullptr;
+
+    return true;
 }
 
-void InputProcessor::onMouseMove(ax::EventMouse * event)
+bool InputProcessor::onMouseMove(ax::EventMouse * event)
 {
     TouchInfo* ti = getTouch(0);
     auto pt = event->getLocation();
     Vec2 npos = UIRoot->worldToRoot(pt);
     if (std::abs(ti->pos.x - npos.x) < 1
         && std::abs(ti->pos.y - npos.y) < 1)
-        return;
+        return true;
 
     auto camera = Camera::getVisitingCamera();
     GObject* target = _owner->hitTest(pt, camera);
@@ -664,9 +668,11 @@ void InputProcessor::onMouseMove(ax::EventMouse * event)
     }
 
     _activeProcessor = nullptr;
+
+    return true;
 }
 
-void InputProcessor::onMouseScroll(ax::EventMouse * event)
+bool InputProcessor::onMouseScroll(ax::EventMouse * event)
 {
     auto camera = Camera::getVisitingCamera();
     Vec2 pt = event->getLocation();
@@ -686,6 +692,10 @@ void InputProcessor::onMouseScroll(ax::EventMouse * event)
     ti->mouseWheelDelta = 0;
 
     _activeProcessor = nullptr;
+
+    AXLOG("InputProcessor::onMouseScroll %p", this);
+
+    return true;
 }
 
 void InputProcessor::onKeyDown(ax::EventKeyboard::KeyCode keyCode, ax::Event * event)

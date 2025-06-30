@@ -1095,7 +1095,7 @@ bool ScrollView::onMouseScroll(Event* event)
     if(pass)
     {
         auto mouseEvent = static_cast<EventMouse*>(event);
-        float mouseFactor = 10.f;
+        float mouseFactor = 20.f;
         Vec2 move;
 
         if (_direction == Direction::HORIZONTAL)

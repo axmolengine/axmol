@@ -187,7 +187,7 @@ void Box2DTestBed::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
     m_test->KeyboardUp((static_cast<int>(code) - 59));  // its a bad hack!
 }
 
-void Box2DTestBed::onMouseDown(Event* event)
+bool Box2DTestBed::onMouseDown(Event* event)
 {
     EventMouse* e = (EventMouse*)event;
     button[(int)EventMouse::MouseButton::BUTTON_LEFT]   = false;
@@ -205,16 +205,20 @@ void Box2DTestBed::onMouseDown(Event* event)
         button[(int)EventMouse::MouseButton::BUTTON_MIDDLE] = true;
         break;
     }
+
+    return true;
 }
 
-void Box2DTestBed::onMouseUp(Event* event)
+bool Box2DTestBed::onMouseUp(Event* event)
 {
     button[(int)EventMouse::MouseButton::BUTTON_LEFT]   = false;
     button[(int)EventMouse::MouseButton::BUTTON_RIGHT]  = false;
     button[(int)EventMouse::MouseButton::BUTTON_MIDDLE] = false;
+
+    return true;
 }
 
-void Box2DTestBed::onMouseMove(Event* event)
+bool Box2DTestBed::onMouseMove(Event* event)
 {
     EventMouse* e = (EventMouse*)event;
     auto pt = e->getLocation();
@@ -226,12 +230,16 @@ void Box2DTestBed::onMouseMove(Event* event)
         (pos.y < oldPos.y) ? g_debugDraw.debugNodeOffset.y -= 2 : g_debugDraw.debugNodeOffset.y += 2;
     }
     oldPos = pos;
+
+    return true;
 }
 
-void Box2DTestBed::onMouseScroll(Event* event)
+bool Box2DTestBed::onMouseScroll(Event* event)
 {
     EventMouse* e = (EventMouse*)event;
     g_debugDraw.mRatio += e->getScrollY();
+
+    return true;
 }
 
 void Box2DTestBed::onEnter()

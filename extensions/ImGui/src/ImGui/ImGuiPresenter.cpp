@@ -178,13 +178,9 @@ public:
         _trackLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, _trackLayer);
 
         // add by halx99
-        auto stopAnyMouse = [=](EventMouse* event) {
-            if (ImGui::GetIO().WantCaptureMouse)
-            {
-                event->stopPropagation();
-            }
-        };
-        auto mouseListener         = EventListenerMouse::create();
+        auto stopAnyMouse = [=](EventMouse* event) -> bool { return ImGui::GetIO().WantCaptureMouse; };
+        auto mouseListener = EventListenerMouse::create();
+        mouseListener->setSwallowMouse(true);
         mouseListener->onMouseDown = mouseListener->onMouseUp = stopAnyMouse;
         _trackLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(mouseListener, _trackLayer);
         scene->addChild(_trackLayer, INT_MAX);
@@ -242,13 +238,9 @@ public:
         eventDispatcher->addEventListenerWithFixedPriority(_touchListener, highestPriority);
 
         // add by halx99
-        auto stopAnyMouse = [=](EventMouse* event) {
-            if (ImGui::GetIO().WantCaptureMouse)
-            {
-                event->stopPropagation();
-            }
-        };
-        _mouseListener              = utils::newInstance<EventListenerMouse>();
+        auto stopAnyMouse = [=](EventMouse* event) -> bool { return ImGui::GetIO().WantCaptureMouse; };
+        _mouseListener = utils::newInstance<EventListenerMouse>();
+        _mouseListener->setSwallowMouse(true);
         _mouseListener->onMouseDown = _mouseListener->onMouseUp = stopAnyMouse;
         eventDispatcher->addEventListenerWithFixedPriority(_mouseListener, highestPriority);
 #endif

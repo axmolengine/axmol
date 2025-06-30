@@ -166,28 +166,32 @@ void MainScene::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event
     }
 }
 
-void MainScene::onMouseDown(Event* event)
+bool MainScene::onMouseDown(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
     // AXLOGD("onMouseDown detected, Key: %d", static_cast<int>(e->getMouseButton()));
+    return true;
 }
 
-void MainScene::onMouseUp(Event* event)
+bool MainScene::onMouseUp(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
     AXLOGD("onMouseUp detected, Key: %d", static_cast<int>(e->getMouseButton()));
+    return true;
 }
 
-void MainScene::onMouseMove(Event* event)
+bool MainScene::onMouseMove(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
     // AXLOGD("onMouseMove detected, X:{}  Y:{}", e->getCursorX(), e->getCursorY());
+    return true;
 }
 
-void MainScene::onMouseScroll(Event* event)
+bool MainScene::onMouseScroll(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
     // AXLOGD("onMouseScroll detected, X:{}  Y:{}", e->getScrollX(), e->getScrollY());
+    return true;
 }
 
 void MainScene::onKeyPressed(EventKeyboard::KeyCode code, Event* event)

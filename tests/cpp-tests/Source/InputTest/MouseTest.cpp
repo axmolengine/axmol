@@ -73,35 +73,43 @@ MouseEventTest::~MouseEventTest()
     _eventDispatcher->removeEventListener(_mouseListener);
 }
 
-void MouseEventTest::onMouseDown(Event* event)
+bool MouseEventTest::onMouseDown(Event* event)
 {
     EventMouse* e   = (EventMouse*)event;
     std::string str = "Mouse Down detected, Key: ";
     str += tostr(static_cast<int>(e->getMouseButton()));
     _labelAction->setString(str.c_str());
+
+    return true;
 }
 
-void MouseEventTest::onMouseUp(Event* event)
+bool MouseEventTest::onMouseUp(Event* event)
 {
     EventMouse* e   = (EventMouse*)event;
     std::string str = "Mouse Up detected, Key: ";
     str += tostr(static_cast<int>(e->getMouseButton()));
     _labelAction->setString(str.c_str());
+
+    return true;
 }
 
-void MouseEventTest::onMouseMove(Event* event)
+bool MouseEventTest::onMouseMove(Event* event)
 {
     EventMouse* e   = (EventMouse*)event;
     auto loc = e->getLocation();
     std::string str = fmt::format("MousePosition:({},{})", loc.x, loc.y);
     _labelPosition->setString(str);
+
+    return true;
 }
 
-void MouseEventTest::onMouseScroll(Event* event)
+bool MouseEventTest::onMouseScroll(Event* event)
 {
     EventMouse* e   = (EventMouse*)event;
     std::string str = fmt::format("Mouse Scroll detected, X:{} Y:{}", e->getScrollX(), e->getScrollY());
     _labelAction->setString(str.c_str());
+
+    return true;
 }
 
 std::string MouseEventTest::title() const
@@ -124,9 +132,15 @@ HideMouseTest::HideMouseTest()
 {
 
     _lis              = EventListenerMouse::create();
-    _lis->onMouseDown = [](Event* e) { Director::getInstance()->getGLView()->setCursorVisible(false); };
+    _lis->onMouseDown = [](Event* e) -> bool {
+        Director::getInstance()->getGLView()->setCursorVisible(false);
+        return true;
+    };
 
-    _lis->onMouseUp = [](Event* e) { Director::getInstance()->getGLView()->setCursorVisible(true); };
+    _lis->onMouseUp = [](Event* e) -> bool {
+        Director::getInstance()->getGLView()->setCursorVisible(true);
+        return true;
+    };
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_lis, this);
 }

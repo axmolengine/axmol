@@ -73,10 +73,10 @@ public:
     void onKeyPressed(ax::EventKeyboard::KeyCode code, ax::Event* event);
     void onKeyReleased(ax::EventKeyboard::KeyCode code, ax::Event* event);
 
-    void onMouseDown(ax::Event* event);
-    void onMouseUp(ax::Event* event);
-    void onMouseMove(ax::Event* event);
-    void onMouseScroll(ax::Event* event);
+    bool onMouseDown(ax::Event* event);
+    bool onMouseUp(ax::Event* event);
+    bool onMouseMove(ax::Event* event);
+    bool onMouseScroll(ax::Event* event);
 
     ax::EventListenerTouchOneByOne* _touchListener;
     ax::EventListenerKeyboard* _keyboardListener;
