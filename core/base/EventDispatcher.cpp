@@ -1222,8 +1222,6 @@ void EventDispatcher::dispatchMouseEvent(EventMouse* event)
     if (nullptr == listeners)
         return;
 
-    bool isSwallowed = false;
-
     auto onMouseEvent = [&](EventListener* l) -> bool {  // Return true to break
         EventListenerMouse* listener = static_cast<EventListenerMouse*>(l);
 
