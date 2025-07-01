@@ -366,9 +366,6 @@ bool Scene3DTestScene::init()
 void Scene3DTestScene::createWorld3D()
 {
     // create skybox
-    // create and set our custom shader
-    auto shader = ProgramManager::getInstance()->loadProgram("custom/cube_map_vs", "custom/cube_map_fs");
-    auto state  = new ProgramState(shader);
 
     // create the second texture for cylinder
     _textureCube = TextureCube::create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
@@ -381,10 +378,6 @@ void Scene3DTestScene::createWorld3D()
     tRepeatParams.sAddressMode = backend::SamplerAddressMode::MIRROR_REPEAT;
     tRepeatParams.tAddressMode = backend::SamplerAddressMode::MIRROR_REPEAT;
     _textureCube->setTexParameters(tRepeatParams);
-
-    // pass the texture sampler to our custom shader
-    const auto cubeTexLoc = state->getUniformLocation("u_cubeTex");
-    state->setUniform(cubeTexLoc, _textureCube, sizeof(ax::TextureCube));
 
     // add skybox
     _skyBox = Skybox::create();

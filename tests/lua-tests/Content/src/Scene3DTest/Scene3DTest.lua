@@ -310,10 +310,7 @@ function Scene3DTest:create3DWorld()
     self._player:addChild(rootps, 0)
 
     --then, create skybox
-    --create and set our custom shader
 
-    local program = axb.ProgramManager:getInstance():loadProgram('custom/cube_map_vs', 'custom/cube_map_fs')
-    local state = ccb.ProgramState:new(program)
     --create the second texture for cylinder
     self._textureCube = cc.TextureCube:create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
                                        "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",
@@ -322,10 +319,6 @@ function Scene3DTest:create3DWorld()
     --set texture parameters
     local tRepeatParams = { magFilter = ccb.SamplerFilter.LINEAR , minFilter = ccb.SamplerFilter.LINEAR , sAddressMode = ccb.SamplerAddressMode.MIRRORED_REPEAT  , tAddressMode = ccb.SamplerAddressMode.MIRRORED_REPEAT }
     self._textureCube:setTexParameters(tRepeatParams)
-
-    --pass the texture sampler to our custom shader
-    local cubeTexLoc = state:getUniformLocation("u_cubeTex")
-    state:setTexture(cubeTexLoc, 0, self._textureCube:getBackendTexture())
 
     --add skybox
     self._skyBox = cc.Skybox:create()

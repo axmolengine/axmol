@@ -336,7 +336,7 @@ protected:
      * @param data Specifies the new values to be used for the specified uniform variable.
      * @param size Specifies the uniform data size.
      */
-    void setVertexUniform(int location, const void* data, std::size_t size, std::size_t offset);
+    void setVertexUniform(int location, const void* data, std::size_t size, int offset);
 
 #ifdef AX_USE_METAL
     /**
@@ -345,7 +345,7 @@ protected:
      * @param data Specifies the new values to be used for the specified uniform variable.
      * @param size Specifies the uniform data size.
      */
-    void setFragmentUniform(int location, const void* data, std::size_t size, std::size_t offset);
+    void setFragmentUniform(int location, const void* data, std::size_t size, int offset);
 #endif
 
     /**

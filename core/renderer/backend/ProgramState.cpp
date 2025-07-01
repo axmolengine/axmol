@@ -262,10 +262,11 @@ void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, c
 #endif
 }
 
-void ProgramState::setVertexUniform(int location, const void* data, std::size_t size, std::size_t offset)
+void ProgramState::setVertexUniform(int location, const void* data, std::size_t size, int offset)
 {
-    if (location < 0)
+    if (location < 0 || offset < 0)
         return;
+
 #if AX_GLES_PROFILE != 200
     assert(location + offset + size <= _vertexUniformBufferSize);
     memcpy(_uniformBuffers.data() + location + offset, data, size);
@@ -276,9 +277,9 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
 }
 
 #ifdef AX_USE_METAL
-void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size, std::size_t offset)
+void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size, int offset)
 {
-    if (location < 0)
+    if (location < 0 || offset < 0)
         return;
 
     memcpy(_uniformBuffers.data() + _vertexUniformBufferSize + location + offset, data, size);

@@ -1076,7 +1076,7 @@ void Director::cleanupDirector()
 {
     reset();
 
-    // cleanup graphics before release glView, otherwise, will cause crash on linux
+    // should cleanup graphics resources before release glView, otherwise, will cause crash on linux
     AX_SAFE_DELETE(_renderer);
     backend::DriverBase::destroyInstance();
 
