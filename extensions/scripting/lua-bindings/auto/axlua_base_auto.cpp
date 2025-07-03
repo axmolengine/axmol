@@ -35642,6 +35642,53 @@ int lua_register_ax_base_EventListenerKeyboard(lua_State* tolua_S)
     return 1;
 }
 
+int lua_ax_base_EventMouse_getMouseEventType(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::EventMouse* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_getMouseEventType'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_getMouseEventType'", nullptr);
+            return 0;
+        }
+        int ret = (int)cobj->getMouseEventType();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:getMouseEventType",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_getMouseEventType'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_EventMouse_setScrollData(lua_State* tolua_S)
 {
     int argc = 0;
@@ -36324,6 +36371,7 @@ int lua_register_ax_base_EventMouse(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"EventMouse");
         tolua_function(tolua_S,"new",lua_ax_base_EventMouse_constructor);
+        tolua_function(tolua_S,"getMouseEventType",lua_ax_base_EventMouse_getMouseEventType);
         tolua_function(tolua_S,"setScrollData",lua_ax_base_EventMouse_setScrollData);
         tolua_function(tolua_S,"getScrollX",lua_ax_base_EventMouse_getScrollX);
         tolua_function(tolua_S,"getScrollY",lua_ax_base_EventMouse_getScrollY);
@@ -36344,6 +36392,103 @@ int lua_register_ax_base_EventMouse(lua_State* tolua_S)
     return 1;
 }
 
+int lua_ax_base_EventListenerMouse_setSwallowMouse(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::EventListenerMouse* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerMouse",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::EventListenerMouse*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListenerMouse_setSwallowMouse'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.EventListenerMouse:setSwallowMouse");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerMouse_setSwallowMouse'", nullptr);
+            return 0;
+        }
+        cobj->setSwallowMouse(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerMouse:setSwallowMouse",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerMouse_setSwallowMouse'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_EventListenerMouse_isSwallowMouse(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::EventListenerMouse* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerMouse",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::EventListenerMouse*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListenerMouse_isSwallowMouse'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerMouse_isSwallowMouse'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->isSwallowMouse();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerMouse:isSwallowMouse",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerMouse_isSwallowMouse'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_EventListenerMouse_init(lua_State* tolua_S)
 {
     int argc = 0;
@@ -36441,6 +36586,8 @@ int lua_register_ax_base_EventListenerMouse(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"EventListenerMouse");
         tolua_function(tolua_S,"new",lua_ax_base_EventListenerMouse_constructor);
+        tolua_function(tolua_S,"setSwallowMouse",lua_ax_base_EventListenerMouse_setSwallowMouse);
+        tolua_function(tolua_S,"isSwallowMouse",lua_ax_base_EventListenerMouse_isSwallowMouse);
         tolua_function(tolua_S,"init",lua_ax_base_EventListenerMouse_init);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::EventListenerMouse).name(); // rtti is literal storage

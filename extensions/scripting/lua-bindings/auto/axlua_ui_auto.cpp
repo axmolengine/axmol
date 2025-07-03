@@ -1164,6 +1164,56 @@ int lua_ax_ui_Widget_setBrightStyle(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_ui_Widget_setMouseEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::Widget* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_Widget_setMouseEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setMouseEnabled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setMouseEnabled'", nullptr);
+            return 0;
+        }
+        cobj->setMouseEnabled(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:setMouseEnabled",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_setMouseEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_ui_Widget_isTouchEnabled(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1207,6 +1257,53 @@ int lua_ax_ui_Widget_isTouchEnabled(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_isTouchEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_Widget_isMouseEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::Widget* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_Widget_isMouseEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isMouseEnabled'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->isMouseEnabled();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:isMouseEnabled",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_isMouseEnabled'.",&tolua_err);
 #endif
 
     return 0;
@@ -2419,6 +2516,206 @@ int lua_ax_ui_Widget_hitTest(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_ui_Widget_onMouseUp(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::Widget* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_Widget_onMouseUp'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Event* arg0;
+
+        ok &= luaval_to_object<ax::Event>(tolua_S, 2, "ax.Event",&arg0, "axui.Widget:onMouseUp");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_onMouseUp'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->onMouseUp(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:onMouseUp",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_onMouseUp'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_Widget_onMouseDown(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::Widget* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_Widget_onMouseDown'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Event* arg0;
+
+        ok &= luaval_to_object<ax::Event>(tolua_S, 2, "ax.Event",&arg0, "axui.Widget:onMouseDown");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_onMouseDown'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->onMouseDown(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:onMouseDown",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_onMouseDown'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_Widget_onMouseMove(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::Widget* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_Widget_onMouseMove'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Event* arg0;
+
+        ok &= luaval_to_object<ax::Event>(tolua_S, 2, "ax.Event",&arg0, "axui.Widget:onMouseMove");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_onMouseMove'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->onMouseMove(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:onMouseMove",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_onMouseMove'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_Widget_onMouseScroll(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::Widget* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_Widget_onMouseScroll'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Event* arg0;
+
+        ok &= luaval_to_object<ax::Event>(tolua_S, 2, "ax.Event",&arg0, "axui.Widget:onMouseScroll");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_onMouseScroll'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->onMouseScroll(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:onMouseScroll",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_onMouseScroll'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_ui_Widget_setLayoutParameter(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3092,6 +3389,103 @@ int lua_ax_ui_Widget_isSwallowTouches(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_isSwallowTouches'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_Widget_setSwallowMouse(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::Widget* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_Widget_setSwallowMouse'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setSwallowMouse");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setSwallowMouse'", nullptr);
+            return 0;
+        }
+        cobj->setSwallowMouse(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:setSwallowMouse",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_setSwallowMouse'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_Widget_isSwallowMouse(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::Widget* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_Widget_isSwallowMouse'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isSwallowMouse'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->isSwallowMouse();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:isSwallowMouse",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_isSwallowMouse'.",&tolua_err);
 #endif
 
     return 0;
@@ -4156,7 +4550,9 @@ int lua_register_ax_ui_Widget(lua_State* tolua_S)
         tolua_function(tolua_S,"isBright",lua_ax_ui_Widget_isBright);
         tolua_function(tolua_S,"setTouchEnabled",lua_ax_ui_Widget_setTouchEnabled);
         tolua_function(tolua_S,"setBrightStyle",lua_ax_ui_Widget_setBrightStyle);
+        tolua_function(tolua_S,"setMouseEnabled",lua_ax_ui_Widget_setMouseEnabled);
         tolua_function(tolua_S,"isTouchEnabled",lua_ax_ui_Widget_isTouchEnabled);
+        tolua_function(tolua_S,"isMouseEnabled",lua_ax_ui_Widget_isMouseEnabled);
         tolua_function(tolua_S,"isHighlighted",lua_ax_ui_Widget_isHighlighted);
         tolua_function(tolua_S,"setHighlighted",lua_ax_ui_Widget_setHighlighted);
         tolua_function(tolua_S,"getLeftBoundary",lua_ax_ui_Widget_getLeftBoundary);
@@ -4182,6 +4578,10 @@ int lua_register_ax_ui_Widget(lua_State* tolua_S)
         tolua_function(tolua_S,"getLayoutSize",lua_ax_ui_Widget_getLayoutSize);
         tolua_function(tolua_S,"getSizePercent",lua_ax_ui_Widget_getSizePercent);
         tolua_function(tolua_S,"hitTest",lua_ax_ui_Widget_hitTest);
+        tolua_function(tolua_S,"onMouseUp",lua_ax_ui_Widget_onMouseUp);
+        tolua_function(tolua_S,"onMouseDown",lua_ax_ui_Widget_onMouseDown);
+        tolua_function(tolua_S,"onMouseMove",lua_ax_ui_Widget_onMouseMove);
+        tolua_function(tolua_S,"onMouseScroll",lua_ax_ui_Widget_onMouseScroll);
         tolua_function(tolua_S,"setLayoutParameter",lua_ax_ui_Widget_setLayoutParameter);
         tolua_function(tolua_S,"getLayoutParameter",lua_ax_ui_Widget_getLayoutParameter);
         tolua_function(tolua_S,"ignoreContentAdaptWithSize",lua_ax_ui_Widget_ignoreContentAdaptWithSize);
@@ -4196,6 +4596,8 @@ int lua_register_ax_ui_Widget(lua_State* tolua_S)
         tolua_function(tolua_S,"isPropagateTouchEvents",lua_ax_ui_Widget_isPropagateTouchEvents);
         tolua_function(tolua_S,"setSwallowTouches",lua_ax_ui_Widget_setSwallowTouches);
         tolua_function(tolua_S,"isSwallowTouches",lua_ax_ui_Widget_isSwallowTouches);
+        tolua_function(tolua_S,"setSwallowMouse",lua_ax_ui_Widget_setSwallowMouse);
+        tolua_function(tolua_S,"isSwallowMouse",lua_ax_ui_Widget_isSwallowMouse);
         tolua_function(tolua_S,"isFocused",lua_ax_ui_Widget_isFocused);
         tolua_function(tolua_S,"setFocused",lua_ax_ui_Widget_setFocused);
         tolua_function(tolua_S,"isFocusEnabled",lua_ax_ui_Widget_isFocusEnabled);
