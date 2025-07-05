@@ -54,23 +54,6 @@ public:
     inline static const std::string_view GLYPH_RANGES_THAI_ID            = "__THAI_GLYPH__";
     inline static const std::string_view GLYPH_RANGES_VIETNAMESE_ID      = "__VIETNAMESE_GLYPH__";
 
-    // predefined glyph ranges by imgui
-    enum class GLYPH_RANGES
-    {
-        NONE,
-        DEFAULT,
-        GREEK,
-        KOREAN,
-        CHINESE_GENERAL,
-        CHINESE_FULL,
-        JAPANESE,
-        CYRILLIC,
-        THAI,
-        VIETNAMESE
-    };
-
-    static std::string_view getGlyphRangesId(GLYPH_RANGES glyphRanges);
-
     enum
     {
         DEFAULT_FONT_SIZE = 13  // see imgui.cpp
@@ -91,7 +74,10 @@ public:
     /// <returns>The final contentZoomFactor = userScale * dpiScale</returns>
     float enableDPIScale(float userScale = 1.0f);
 
-    float getContentZoomFactor() const { return _contentZoomFactor; }
+    // DEPRECATED, use getMainScale instead
+    float getContentZoomFactor() const { return getMainScale(); }
+
+    float getMainScale() const { return _mainScale; }
 
     void setViewResolution(float width, float height);
 
@@ -102,45 +88,8 @@ public:
     /// <param name="fontSize"></param>
     /// <param name="glyphRange"></param>
     /// <param name="fontConfig"></param>
-    void addFont(std::string_view fontFile,
-                 float fontSize                 = DEFAULT_FONT_SIZE,
-                 GLYPH_RANGES glyphRange        = GLYPH_RANGES::NONE,
-                 const ImFontConfig& fontConfig = ImFontConfig());
-    /// <summary>
-    /// Add ImGui font with contentZoomFactor and use pre-existing glyph range for the specified font
-    /// </summary>
-    /// <param name="fontFile"></param>
-    /// <param name="fontSize"></param>
-    /// <param name="glyphRangesId"></param>
-    /// <param name="fontConfig"></param>
-    void addFont(std::string_view fontFile,
-                 float fontSize,
-                 std::string_view glyphRangesId,
-                 const ImFontConfig& fontConfig = ImFontConfig());
-    /// <summary>
-    /// Add ImGui font with contentZoomFactor and use specified custom glyph range for the specified font
-    /// </summary>
-    /// <param name="fontFile"></param>
-    /// <param name="fontSize"></param>
-    /// <param name="glyphRanges">The glyph range vector must end with 0 and it should be included in the size</param>
-    /// <param name="fontConfig"></param>
-    void addFont(std::string_view fontFile,
-                 float fontSize,
-                 const std::vector<ImWchar>& glyphRanges,
-                 const ImFontConfig& fontConfig = ImFontConfig());
-    /// <summary>
-    /// Add ImGui font with contentZoomFactor and use custom glyph range and specify a custom id
-    /// </summary>
-    /// <param name="fontFile"></param>
-    /// <param name="fontSize"></param>
-    /// <param name="glyphRangesId">Custom Lookup Id</param>
-    /// <param name="glyphRanges">The glyph range vector must end with 0 and it should be included in the size</param>
-    /// <param name="fontConfig"></param>
-    void addFont(std::string_view fontFile,
-                 float fontSize,
-                 std::string_view glyphRangesId,
-                 const std::vector<ImWchar>& glyphRanges,
-                 const ImFontConfig& fontConfig = ImFontConfig());
+    void addFont(std::string_view fontFile, float fontSize = DEFAULT_FONT_SIZE);
+
     void removeFont(std::string_view fontFile);
     void clearFonts();
 
@@ -189,9 +138,7 @@ public:
                      const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
 
     void node(Node* node, const ImVec4& tint_col = ImVec4(1, 1, 1, 1), const ImVec4& border_col = ImVec4(0, 0, 0, 0));
-    bool nodeButton(Node* node,
-                    const ImVec4& bg_col   = ImVec4(0, 0, 0, 0),
-                    const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
+    bool nodeButton(Node* node, const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
 
     std::tuple<ImTextureID, int> useTexture(Texture2D* texture);
     std::tuple<ImTextureID, ImVec2, ImVec2, int> useSprite(Sprite* sprite);
@@ -203,15 +150,10 @@ public:
     static void setLabelColor(Label* label, bool disabled = false);
     static void setLabelColor(Label* label, ImGuiCol col);
 
-    ImWchar* addGlyphRanges(GLYPH_RANGES glyphRange);
-    ImWchar* addGlyphRanges(std::string_view key, const std::vector<ImWchar>& ranges);
-    void removeGlyphRanges(std::string_view key);
-    void clearGlyphRanges();
-    static void mergeFontGlyphs(ImFont* dst, ImFont* src, ImWchar start, ImWchar end);
     int objectRef(Object* p);
 
 private:
-    static void loadCustomFonts(void*);
+    static void updateFonts(void*);
 
     // perform draw ImGui stubs
     void beginFrame();
@@ -234,26 +176,11 @@ private:
     // cocos objects should be retained until next frame
     Vector<Object*> _usedObjs;
 
-    hlookup::string_map<std::vector<ImWchar>> _glyphRanges;
-    std::unordered_set<uintptr_t> _usedGlyphRanges;  // there should be one intance of "each glyph ranges"
-    // temporarily stores the current erased/replaced ranges, gets cleared in the next `loadCustomFonts` interation
-    std::vector<std::vector<ImWchar>> _eraseGlyphRanges;
-
-    float _contentZoomFactor = 1.0f;
+    float _mainScale = 1.0f;
 
     int64_t _beginFrames = 0;
 
-    Texture2D* _fontsTexture = nullptr;
-
-    struct FontInfo
-    {
-        float fontSize;
-        ImWchar* glyphRanges;
-        std::string glyphRangesId;
-        ImFontConfig fontConfig;
-    };
-
-    hlookup::string_map<FontInfo> _fontsInfoMap;
+    hlookup::string_map<float> _fontsInfoMap;
 
     bool _purgeNextLoop = false;
 };

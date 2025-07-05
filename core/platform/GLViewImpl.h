@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "base/Object.h"
 #include "platform/Common.h"
 #include "platform/GLView.h"
-#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
 #if defined(__EMSCRIPTEN__)
 #    include "base/axstd.h"
 struct EmscriptenMouseEvent;

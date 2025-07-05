@@ -274,6 +274,9 @@ void Texture2DGL::updateSubData(std::size_t xoffset,
     if (!_textureInfo.ensure(index, GL_TEXTURE_2D))
         return;
 
+    // !IMPORTANT: Set the unpack alignment to 1 byte to avoid issues with width or height no align with 4.
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
     glTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, _textureInfo.format, _textureInfo.type,
                     data);
     CHECK_GL_ERROR_DEBUG();
