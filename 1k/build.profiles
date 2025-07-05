@@ -10,7 +10,7 @@ axslcc=1.9.6+
 
 # The cmake, @gradle @axmol-cmdline
 # as latest as possible
-cmake=3.30.0~4.0.2+
+cmake=3.30.0~4.0.3+
 
 # The ninja
 ninja=1.10.0~1.12.1+
@@ -58,11 +58,11 @@ min_sdk=17
 
 # The gradle version, @setup.ps1
 # as latest as possible
-gradle=8.13
+gradle=8.14.3
 
 # The android gradle plugin, @setup.ps1
 # as stable as possible, match with build-tools,android-studio
-agp=8.10.0
+agp=8.11.0
 
 # The android build-tools, @axmol-cmdline @gradle
 # as stable as possible, match with agp,android-studio
@@ -70,7 +70,7 @@ buildtools=35.0.0
 
 # The android studio, @hint
 # as latest as possible, but match with agp, build-tools
-androidstudio=2024.3.2+
+androidstudio=2025.1.1+
 
 # The android dependencies managed by @gradle 
 appcompat=1.7.0
