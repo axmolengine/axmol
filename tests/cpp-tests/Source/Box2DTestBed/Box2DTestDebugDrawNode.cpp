@@ -280,7 +280,7 @@ void Box2DTestDebugDrawNode::DrawString(int x, int y, const char* pszFormat, ...
     ImGui::Begin("Overlay", nullptr,
                  ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize |
                      ImGuiWindowFlags_NoScrollbar);
-    ImGui::PushFont(g_draw.m_regularFont);
+    ImGui::PushFont(g_draw.m_regularFont, ImGui::GetStyle().FontSizeBase);
     ImGui::SetCursorPos(ImVec2(float(x), float(y)));
     ImGui::TextColoredV(ImColor(230, 153, 153, 255), pszFormat, arg);
     ImGui::PopFont();

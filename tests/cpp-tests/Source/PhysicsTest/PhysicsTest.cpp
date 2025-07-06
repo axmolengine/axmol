@@ -129,10 +129,11 @@ void PhysicsDemo::onEnter()
                            VisibleRect::top().y - item->getContentSize().height / 2 - 10));
 }
 
-void PhysicsDemo::onMouseDown(Event* event)
+bool PhysicsDemo::onMouseDown(Event* event)
 {
     EventMouse* e   = (EventMouse*)event;
     AXLOGI("PhysicsDemo::onMouseDown: ({},{})", e->getLocation().x, e->getLocation().y);
+    return true;
 }
 
 Sprite* PhysicsDemo::addGrossiniAtPosition(Vec2 p, float scale /* = 1.0*/)
