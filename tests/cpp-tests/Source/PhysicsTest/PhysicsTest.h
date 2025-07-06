@@ -63,7 +63,7 @@ public:
     void onTouchMoved(ax::Touch* touch, ax::Event* event);
     void onTouchEnded(ax::Touch* touch, ax::Event* event);
 
-    void onMouseDown(ax::Event* event);
+    bool onMouseDown(ax::Event* event);
 
     void toggleDebug();
 
