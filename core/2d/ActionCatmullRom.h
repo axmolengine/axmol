@@ -318,7 +318,7 @@ public:
 
 /** Returns the Cardinal Spline position for a given set of control points, tension and time */
 extern AX_DLL Vec2
-ccCardinalSplineAt(const Vec2& p0, const Vec2& p1, const Vec2& p2, const Vec2& p3, float tension, float t);
+cardinalSplineAt(const Vec2& p0, const Vec2& p1, const Vec2& p2, const Vec2& p3, float tension, float t);
 
 // end of actions group
 /// @}

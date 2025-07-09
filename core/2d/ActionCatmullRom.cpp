@@ -165,7 +165,7 @@ void PointArray::reverseInline()
 }
 
 // CatmullRom Spline formula:
-Vec2 ccCardinalSplineAt(const Vec2& p0, const Vec2& p1, const Vec2& p2, const Vec2& p3, float tension, float t)
+Vec2 cardinalSplineAt(const Vec2& p0, const Vec2& p1, const Vec2& p2, const Vec2& p3, float tension, float t)
 {
     float t2 = t * t;
     float t3 = t2 * t;
@@ -275,7 +275,7 @@ void CardinalSplineTo::update(float time)
     Vec2 pp2 = _points->getControlPointAtIndex(p + 1);
     Vec2 pp3 = _points->getControlPointAtIndex(p + 2);
 
-    Vec2 newPos = ccCardinalSplineAt(pp0, pp1, pp2, pp3, _tension, lt);
+    Vec2 newPos = cardinalSplineAt(pp0, pp1, pp2, pp3, _tension, lt);
 
 #if AX_ENABLE_STACKABLE_ACTIONS
     // Support for stacked actions

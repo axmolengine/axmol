@@ -41,11 +41,11 @@ namespace ax
 
 /** converts a line to a polygon */
 void AX_DLL
-ccVertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned int offset, unsigned int nuPoints);
+vertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned int offset, unsigned int nuPoints);
 
 /** returns whether or not the line intersects */
 bool AX_DLL
-ccVertexLineIntersect(float Ax, float Ay, float Bx, float By, float Cx, float Cy, float Dx, float Dy, float* T);
+vertexLineIntersect(float Ax, float Ay, float Bx, float By, float Cx, float Cy, float Dx, float Dy, float* T);
 
 }
 

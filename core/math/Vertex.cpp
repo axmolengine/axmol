@@ -31,7 +31,7 @@
 namespace ax
 {
 
-void ccVertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned int offset, unsigned int nuPoints)
+void vertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned int offset, unsigned int nuPoints)
 {
     nuPoints += offset;
     if (nuPoints <= 1)
@@ -91,7 +91,7 @@ void ccVertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned 
         float s;
         // BOOL fixVertex = !ccpLineIntersect(Vec2(p1.x, p1.y), Vec2(p4.x, p4.y), Vec2(p2.x, p2.y), Vec2(p3.x, p3.y),
         // &s, &t);
-        bool fixVertex = !ccVertexLineIntersect(p1.x, p1.y, p4.x, p4.y, p2.x, p2.y, p3.x, p3.y, &s);
+        bool fixVertex = !vertexLineIntersect(p1.x, p1.y, p4.x, p4.y, p2.x, p2.y, p3.x, p3.y, &s);
         if (!fixVertex)
             if (s < 0.0f || s > 1.0f)
                 fixVertex = true;
@@ -104,7 +104,7 @@ void ccVertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned 
     }
 }
 
-bool ccVertexLineIntersect(float Ax, float Ay, float Bx, float By, float Cx, float Cy, float Dx, float Dy, float* T)
+bool vertexLineIntersect(float Ax, float Ay, float Bx, float By, float Cx, float Cy, float Dx, float Dy, float* T)
 {
     float distAB, theCos, theSin, newX;
 

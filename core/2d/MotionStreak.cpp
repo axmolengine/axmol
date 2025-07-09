@@ -376,11 +376,11 @@ void MotionStreak::update(float delta)
         {
             if (_nuPoints > 1)
             {
-                ccVertexLineToPolygon(_pointVertexes, _stroke, _vertices, _nuPoints, 1);
+                vertexLineToPolygon(_pointVertexes, _stroke, _vertices, _nuPoints, 1);
             }
             else
             {
-                ccVertexLineToPolygon(_pointVertexes, _stroke, _vertices, 0, 2);
+                vertexLineToPolygon(_pointVertexes, _stroke, _vertices, 0, 2);
             }
         }
 
@@ -388,7 +388,7 @@ void MotionStreak::update(float delta)
     }
 
     if (!_fastMode)
-        ccVertexLineToPolygon(_pointVertexes, _stroke, _vertices, 0, _nuPoints);
+        vertexLineToPolygon(_pointVertexes, _stroke, _vertices, 0, _nuPoints);
 
     // Updated Tex Coords only if they are different than previous step
     if (_nuPoints && _previousNuPoints != _nuPoints)

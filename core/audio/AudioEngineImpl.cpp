@@ -50,9 +50,11 @@ static ALCdevice* s_ALDevice       = nullptr;
 static ALCcontext* s_ALContext     = nullptr;
 static ax::AudioEngineImpl* s_instance = nullptr;
 
-static void axmolPauseAudioDevice()
+namespace ax
 {
-    AXLOGD("{}", "===> axmolPauseAudioDevice");
+static void pauseAudioDevice()
+{
+    AXLOGD("{}", "===> pauseAudioDevice");
 #if AX_USE_ALSOFT
     alcDevicePauseSOFT(s_ALDevice);
 #else
@@ -61,9 +63,9 @@ static void axmolPauseAudioDevice()
 #endif
 }
 
-static void axmolResumeAudioDevice()
+static void resumeAudioDevice()
 {
-    AXLOGD("{}", "===> axmolResumeAudioDevice");
+    AXLOGD("{}", "===> resumeAudioDevice");
 #if AX_USE_ALSOFT
     alcDeviceResumeSOFT(s_ALDevice);
 #else
@@ -71,6 +73,7 @@ static void axmolResumeAudioDevice()
         alcMakeContextCurrent(nullptr);
     alcMakeContextCurrent(s_ALContext);
 #endif
+}
 }
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
@@ -138,7 +141,7 @@ static void axmolResumeAudioDevice()
             AXLOGD("AVAudioSessionInterruptionTypeBegan, alcMakeContextCurrent(nullptr)");
 
             // We always pause device when interruption began
-            axmolPauseAudioDevice();
+            ax::pauseAudioDevice();
         }
         else if (reason == AVAudioSessionInterruptionTypeEnded)
         {
@@ -151,7 +154,7 @@ static void axmolResumeAudioDevice()
                     "alcMakeContextCurrent(s_ALContext)");
                 NSError* error = nil;
                 [[AVAudioSession sharedInstance] setActive:YES error:&error];
-                axmolResumeAudioDevice();
+                ax::resumeAudioDevice();
                 if (ax::Director::getInstance()->isPaused())
                 {
                     AXLOGD("AVAudioSessionInterruptionTypeEnded, director was paused, try to resume it.");
@@ -178,7 +181,7 @@ static void axmolResumeAudioDevice()
         {
             resumeOnBecomingActive = false;
             if (!isAudioSessionInterrupted)
-                axmolPauseAudioDevice();
+                ax::pauseAudioDevice();
             
             AXLOGD("UIApplicationDidBecomeActiveNotification, resume audio device");
             NSError* error = nil;
@@ -190,7 +193,7 @@ static void axmolResumeAudioDevice()
             }
             [[AVAudioSession sharedInstance] setActive:YES error:&error];
 
-            axmolResumeAudioDevice();
+            ax::resumeAudioDevice();
         }
         else if (isAudioSessionInterrupted)
         {
@@ -207,8 +210,8 @@ static void axmolResumeAudioDevice()
          */
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive)
         { // older device (e.g iphone7)
-            axmolPauseAudioDevice();
-            axmolResumeAudioDevice();
+            ax::pauseAudioDevice();
+            ax::resumeAudioDevice();
         }
         else
         { // newer device (at least iphone13)
