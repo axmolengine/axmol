@@ -3534,12 +3534,16 @@ COMPAT53_API void luaL_requiref(lua_State *L, const char *modname,
 
 #endif /* Lua 5.2 only */
 
+#if LUA_VERSION_NUM >= 505
+#  define LUA_ERRGCMM (LUA_ERRERR + 2)
+#endif
+
 /* other Lua versions */
-#if !defined(LUA_VERSION_NUM) || LUA_VERSION_NUM < 501 || LUA_VERSION_NUM > 504
+#if !defined(LUA_VERSION_NUM) || LUA_VERSION_NUM < 501 || LUA_VERSION_NUM > 505
 
-#  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, 5.3, or 5.4)"
+#  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, 5.3, 5.4 or 5.5)"
 
-#endif /* other Lua versions except 5.1, 5.2, 5.3, and 5.4 */
+#endif /* other Lua versions except 5.1, 5.2, 5.3, 5.4, 5.5 */
 
 /* helper macro for defining continuation functions (for every version
 * *except* Lua 5.2) */
@@ -28246,7 +28250,7 @@ namespace sol {
 		}
 
 		state(lua_CFunction panic, lua_Alloc alfunc, void* alpointer = nullptr)
-		: unique_base(lua_newstate(alfunc, alpointer)), state_view(unique_base::get()) {
+		: unique_base(lua_newstate(alfunc, alpointer, 0)), state_view(unique_base::get()) {
 			set_default_state(unique_base::get(), panic);
 		}
 
