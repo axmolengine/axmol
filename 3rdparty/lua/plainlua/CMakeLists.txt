@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-set(_LUA_VERSION "5.4.8")
+set (_LUA_VERSION "5.5.0")
 set(lib_name plainlua)
 
 set(LUA_SRC_PATH ${CMAKE_CURRENT_LIST_DIR})
