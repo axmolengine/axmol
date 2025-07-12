@@ -250,20 +250,25 @@ usage: axmol new -p dev.axmol.hellocpp -d path/to/project -l cpp --portrait <Pro
 Creates a new project.
 
 positional arguments:
-    PROJECT_NAME          Set the project name.
+    PROJECT_NAME        [mandatory] Set the project name.
 
 options:
     -h                  Show this help message and exit
     -p PACKAGE_NAME
-                        Set a package name for project.
+                        [optional] Set a package name for project, default is dev.axmol.demo.
     -d DIRECTORY
-                        Set the path where to place the new project.
+                        [optional] Set the path where to place the new project, default is current directory.
     -l {cpp,lua}
-                        Major programming language you want to use, should be [cpp | lua]
+                        [optional] Major programming language you want to use, should be [cpp | lua], default is cpp.
     --portrait
-                        Set the project be portrait.
+                        [optional] set the project be portrait, default is landscape.
     -i[solated]
-                        optionl, if present, will copy full engine sources to path/to/project/axmol
+                        [optional] if present, will copy full engine sources to path/to/project/axmol
+    -r[epair]
+                        [optional] if present, will create missing common files in the project directory without overwriting existing content.
+    -f[orceOverwrite]
+                        [optional] if present, will overwrite existing files in the project directory, except for the .axproj file, the Content folder, and the Source folder.
+
 "@;
     };
     build  = @{
