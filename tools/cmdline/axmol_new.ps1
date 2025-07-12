@@ -2,7 +2,8 @@ param(
     $packageName,
     $directory,
     $lang,
-    [switch]$isolated
+    [switch]$isolated,
+    [switch]$repair
 )
 
 $params = [System.Collections.ArrayList]$args
@@ -40,9 +41,8 @@ if(!(Test-Path $sourcePath)) {
 
 $destinationPath = Join-Path $directory $projectName
 
-if(!(Test-Path $destinationPath -PathType Container)) {
-    Copy-Item $sourcePath $destinationPath -Recurse -Container -Force
-} else {
+$projectExists = Test-Path $destinationPath -PathType Container
+if($projectExists -and !$repair) {
     println "$destinationPath folder is already exist."
     return
 }
@@ -53,13 +53,52 @@ $template_cfg_file = Join-Path $sourcePath 'axproj-template.json'
 $template_cfg = ConvertFrom-Json (Get-Content $template_cfg_file -Raw)
 
 # variable for replace
-$projectDir = $(Resolve-Path $destinationPath).Path
-
 println "Creating project $projectName ..."
 println "==> packageName: $packageName"
 println "==> destinationPath: $destinationPath"
 println "==> lang: $lang"
 println "==> is_portrait: $is_portrait"
+
+# copy language spec files
+if(!$projectExists) {
+    Copy-Item $sourcePath $destinationPath -Recurse -Container -Force
+}
+
+$projectDir = $(Resolve-Path $destinationPath).Path
+
+function repair_directories ($Source, $Destination) {
+    if($Source -match '[\\/]\*$') {
+        $Source = $Source -replace '[\\/]\*$', ''
+    }
+
+    if (-not (Test-Path -LiteralPath $Source)) {
+        Throw "Source path '$Source' does not exist."
+    }
+
+    if (-not (Test-Path -LiteralPath $Destination)) {
+        New-Item -ItemType Directory $Destination | Out-Null
+    }
+
+    Get-ChildItem -LiteralPath $Source | ForEach-Object {
+        $target = Join-Path -Path $Destination -ChildPath $_.Name
+
+        if ($_.PSIsContainer) {
+            if (-not (Test-Path -LiteralPath $target)) {
+                New-Item -ItemType Directory $target | Out-Null
+            }
+            repair_directories -Source $_.FullName -Destination $target
+        }
+        else {
+            if (!(Test-Path $target -PathType Leaf)) {
+                println "Repairing: $target"
+                Copy-Item $_.FullName -Destination $target -Force
+            }
+            else {
+                println "Skipping repairing: $target, already exists."
+            }
+        }
+    }
+}
 
 # actionParam
 #   rep
@@ -92,10 +131,16 @@ function perform_action($actionParam) {
             }
         }
         'cp' {
+            $to = realpath $to
             if (!$actionParam.is_dir) {
-                Copy-Item -Path $from -Destination $to -Force
+                if (!$repair -or !(Test-Path $to -PathType Leaf)) { Copy-Item -Path $from -Destination $to -Force }
+                else { println "Skipping repairing: $to, already exists." }
             } else {
-                Copy-Item -Path $from -Destination $to -Recurse -Container -Force
+                if(!$repair) {
+                    Copy-Item -Path $from -Destination $to -Recurse -Container -Force
+                } else {
+                    repair_directories -Source $from -Destination $to
+                }
             }
         }
         'ren' {
@@ -138,6 +183,11 @@ if($isolated) {
     )
     foreach($path in $_ax_source_folders) {
         $source_path = Join-Path $env:AX_ROOT $path
+        $dest_path = Join-Path $_ax_root $path
+        if ($repair -and (Test-Path $dest_path)) {
+            println println "Skipping repairing: $dest_path, already exists."
+            continue
+        }
         if(Test-Path $source_path -PathType Container) {
             Copy-Item $source_path $_ax_root -Container -Recurse -Force
         } else {
@@ -147,7 +197,12 @@ if($isolated) {
 }
 
 # write .axproj
-$axprojInfo = "package_name=$packageName`nengine_version=$axmolVersion`nproject_type=$lang"
-Set-Content -Path "$projectDir/.axproj" -Value $axprojInfo
+$proj_file = Join-Path $projectDir '.axproj'
+if (!$repair -or !(Test-Path $proj_file -PathType Leaf)) {
+    $axprojInfo = "package_name=$packageName`nengine_version=$axmolVersion`nproject_type=$lang"
+    Set-Content -Path $proj_file -Value $axprojInfo
+} else {
+    println "Skipping repairing: $proj_file, already exists."
+}
 
 println "Create project $projectName done."

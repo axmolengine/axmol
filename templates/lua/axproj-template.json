@@ -9,12 +9,17 @@
         {
             "action": "cp",
             "from": "$env:AX_ROOT/.clang-format",
-            "to": "${projectDir}/"
+            "to": "${projectDir}/.clang-format"
         },
         {
             "action": "cp",
             "from": "$env:AX_ROOT/.editorconfig",
-            "to": "${projectDir}/"
+            "to": "${projectDir}/.editorconfig"
+        },
+        {
+            "action": "cp",
+            "from": "$env:AX_ROOT/.gitignore",
+            "to": "${projectDir}/.gitignore"
         },
         {
             "action": "rep",
@@ -50,7 +55,7 @@
         {
             "action": "cp",
             "from": "$env:AX_ROOT/extensions/scripting/lua-bindings/manual/lua_module_register.h",
-            "to": "${projectDir}/Source/"
+            "to": "${projectDir}/Source/lua_module_register.h"
         },
         {
             "action": "ren",

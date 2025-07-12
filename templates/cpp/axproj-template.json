@@ -9,12 +9,17 @@
         {
             "action": "cp",
             "from": "$env:AX_ROOT/.clang-format",
-            "to": "${projectDir}/"
+            "to": "${projectDir}/.clang-format"
         },
         {
             "action": "cp",
             "from": "$env:AX_ROOT/.editorconfig",
-            "to": "${projectDir}/"
+            "to": "${projectDir}/.editorconfig"
+        },
+        {
+            "action": "cp",
+            "from": "$env:AX_ROOT/.gitignore",
+            "to": "${projectDir}/.gitignore"
         },
         {
             "action": "rep",
