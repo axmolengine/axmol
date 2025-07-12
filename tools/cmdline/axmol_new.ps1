@@ -47,13 +47,19 @@ if($projectExists -and !$repair) {
     return
 }
 
+if(!$projectExists) { $repair = $false }
+
 # replace, file/files, from/pattern
 
 $template_cfg_file = Join-Path $sourcePath 'axproj-template.json'
 $template_cfg = ConvertFrom-Json (Get-Content $template_cfg_file -Raw)
 
 # variable for replace
-println "Creating project $projectName ..."
+if(!$repair) {
+    println "Creating project $projectName ..."
+} else {
+    println "Repairing project $projectName ..."
+}
 println "==> packageName: $packageName"
 println "==> destinationPath: $destinationPath"
 println "==> lang: $lang"
@@ -205,4 +211,8 @@ if (!$repair -or !(Test-Path $proj_file -PathType Leaf)) {
     println "Skipping repairing: $proj_file, already exists."
 }
 
-println "Create project $projectName done."
+if(!$repair) {
+    println "Create project $projectName done."
+} else {
+    println "Repair project $projectName done."
+}
