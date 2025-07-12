@@ -3,7 +3,8 @@ param(
     $directory,
     $lang,
     [switch]$isolated,
-    [switch]$repair
+    [switch]$repair,
+    [switch]$forceOverwrite
 )
 
 $params = [System.Collections.ArrayList]$args
@@ -99,6 +100,10 @@ function repair_directories ($Source, $Destination) {
                 println "Repairing: $target"
                 Copy-Item $_.FullName -Destination $target -Force
             }
+            elseif($forceOverwrite) {
+                println "Overwriting: $target"
+                Copy-Item $_.FullName -Destination $target -Force
+            }
             else {
                 println "Skipping repairing: $target, already exists."
             }
@@ -138,12 +143,24 @@ function perform_action($actionParam) {
         }
         'cp' {
             $to = realpath $to
-            if (!$actionParam.is_dir) {
-                if (!$repair -or !(Test-Path $to -PathType Leaf)) { Copy-Item -Path $from -Destination $to -Force }
-                else { println "Skipping repairing: $to, already exists." }
-            } else {
-                if(!$repair) {
+            if(!$repair) {
+                if(!$actionParam.is_dir) {
+                    Copy-Item -Path $from -Destination $to -Force
+                }
+                else {
                     Copy-Item -Path $from -Destination $to -Recurse -Container -Force
+                }
+            } else {
+                if (!$actionParam.is_dir) {
+                    if (!(Test-Path $to -PathType Leaf)) { 
+                        println "Repairing: $to"
+                        Copy-Item -Path $from -Destination $to -Force 
+                    }
+                    elseif($forceOverwrite) {
+                        println "Overwriting: $to"
+                        Copy-Item -Path $from -Destination $to -Force
+                    }
+                    else { println "Skipping repairing: $to, already exists." }
                 } else {
                     repair_directories -Source $from -Destination $to
                 }
