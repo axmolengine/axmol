@@ -2,6 +2,22 @@
 
 forked from https://github.com/Xrysnow/cocos2d-x-imgui and add many improvements
 
+## axmol spec sources
+
+- src/ImGuiPresenter.h
+- src/ImGuiPresenter.cpp
+- src/backends/imgui_impl_axmol.h
+- src/backends/imgui_impl_axmol.cpp
+- src/backends/imgui_impl_glfw.h
+- src/backends/imgui_impl_glfw.cpp
+- src/backends/imgui_impl_android.h
+- src/backends/imgui_impl_android.cpp
+
+## Updating imgui
+
+- Sync all files src/ImGui/imgui* from Dear ImGui official, but reserve imgui_conf.h macros: `IMGUI_DISABLE_OBSOLETE_FUNCTIONS`, `IMGUI_ENABLE_FREETYPE`
+- Compare src/backends/imgui_impl_glfw with Dear ImGui official, merge necessary change lines
+
 ## Improvements
 
 * Refactor imgui axmol render backend

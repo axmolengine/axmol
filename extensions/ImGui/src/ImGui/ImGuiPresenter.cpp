@@ -25,15 +25,15 @@ THE SOFTWARE.
 #include "ImGuiPresenter.h"
 #include <assert.h>
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#    include "imgui_impl_android.h"
+#    include "backends/imgui_impl_android.h"
 #else
-#    include "imgui_impl_glfw.h"
+#    include "backends/imgui_impl_glfw.h"
 #endif
 
-#include "imgui_impl_axmol.h"
+#include "backends/imgui_impl_axmol.h"
 
-#include "imgui/imgui_internal.h"
-#include "imgui/misc/freetype/imgui_freetype.h"
+#include "imgui_internal.h"
+#include "misc/freetype/imgui_freetype.h"
 
 #include "xxhash.h"
 

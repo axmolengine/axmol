@@ -1,39 +1,36 @@
 set(target_name ImGui)
 
-include_directories(src/ImGui/imgui)
-
 set(HEADER
     src/ImGui/ImGuiPresenter.h
-    src/ImGui/imgui/imconfig.h
-    src/ImGui/imgui/imgui.h
-    src/ImGui/imgui/imgui_internal.h
-    src/ImGui/imgui/imstb_rectpack.h
-    src/ImGui/imgui/imstb_textedit.h
-    src/ImGui/imgui/imstb_truetype.h
-    src/ImGui/imgui/misc/cpp/imgui_stdlib.h
-    src/ImGui/imgui/misc/freetype/imgui_freetype.h
+    src/ImGui/imconfig.h
+    src/ImGui/imgui.h
+    src/ImGui/imgui_internal.h
+    src/ImGui/imstb_rectpack.h
+    src/ImGui/imstb_textedit.h
+    src/ImGui/misc/cpp/imgui_stdlib.h
+    src/ImGui/misc/freetype/imgui_freetype.h
 )
 
 set(SOURCE
     src/ImGui/ImGuiPresenter.cpp
-    src/ImGui/imgui/imgui.cpp
-    src/ImGui/imgui/imgui_demo.cpp
-    src/ImGui/imgui/imgui_draw.cpp
-    src/ImGui/imgui/imgui_widgets.cpp
-    src/ImGui/imgui/imgui_tables.cpp
-    src/ImGui/imgui/misc/cpp/imgui_stdlib.cpp
-    src/ImGui/imgui/misc/freetype/imgui_freetype.cpp
+    src/ImGui/imgui.cpp
+    src/ImGui/imgui_demo.cpp
+    src/ImGui/imgui_draw.cpp
+    src/ImGui/imgui_widgets.cpp
+    src/ImGui/imgui_tables.cpp
+    src/ImGui/misc/cpp/imgui_stdlib.cpp
+    src/ImGui/misc/freetype/imgui_freetype.cpp
 )
 
-list(APPEND SOURCE src/ImGui/imgui_impl_axmol.cpp)
-list(APPEND HEADER src/ImGui/imgui_impl_axmol.h)
+list(APPEND SOURCE src/ImGui/backends/imgui_impl_axmol.cpp)
+list(APPEND HEADER src/ImGui/backends/imgui_impl_axmol.h)
 
 if(ANDROID)
-    list(APPEND SOURCE src/ImGui/imgui_impl_android.cpp)
-    list(APPEND HEADER src/ImGui/imgui_impl_android.h)
+    list(APPEND SOURCE src/ImGui/backends/imgui_impl_android.cpp)
+    list(APPEND HEADER src/ImGui/backends/imgui_impl_android.h)
 else()
-    list(APPEND SOURCE src/ImGui/imgui_impl_glfw.cpp)
-    list(APPEND HEADER src/ImGui/imgui_impl_glfw.h)
+    list(APPEND SOURCE src/ImGui/backends/imgui_impl_glfw.cpp)
+    list(APPEND HEADER src/ImGui/backends/imgui_impl_glfw.h)
 endif()
 
 add_library(${target_name} STATIC
@@ -45,11 +42,8 @@ if(WASM)
 endif()
 
 target_include_directories(${target_name} 
-    PUBLIC src
-    PUBLIC src/ImGui/imgui
-    
+    PRIVATE src/ImGui
     INTERFACE src
-    INTERFACE src/ImGui/imgui
     )
 
 ax_find_shaders(${CMAKE_CURRENT_LIST_DIR}/shaders IMGUI_SHADER_SOURCES)

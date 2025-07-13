@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "axmol.h"
 #include "extensions/ExtensionMacros.h"
 
-#include "imgui/imgui.h"
+#include "imgui.h"
 
 // #define HAVE_IMGUI_MARKDOWN 1
 
