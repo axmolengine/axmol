@@ -88,11 +88,11 @@ if(WINDOWS)
     # not support other compile tools except MSVC for now
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         message(STATUS "Using Windows clang generate axmol project, CLANG_VERSION: ${CLANG_VERSION_STRING}")
-        set(FUZZ_CLANG TRUE)
+        set(FUZZ_CLANG TRUE) # clang-cl or clang++
         if (NOT MSVC)
-            set(FULL_CLANG TRUE)
+            set(FULL_CLANG TRUE) # clang++
         else()
-            set(FUZZ_MSVC TRUE)
+            set(FUZZ_MSVC TRUE) # clang-cl
         endif()
     elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
         # Visual Studio 2015, MSVC_VERSION 1900      (v140 toolset)
@@ -205,7 +205,7 @@ if(EMSCRIPTEN)
     # fix build fail on windows host when cmake invoking emscan-deps (raise unknown options)
     set(_AX_EM_C_FLAGS "-sUSE_LIBJPEG=1")
     set(_AX_EM_LD_FLAGS -ljpeg)
-    
+
     set(AX_WASM_THREADS "4" CACHE STRING "Wasm threads count")
     set(_threads_hint "")
     if (AX_WASM_THREADS STREQUAL "auto") # not empty string or not 0

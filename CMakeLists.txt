@@ -1,4 +1,4 @@
-#/****************************************************************************
+# /****************************************************************************
 # Copyright (c) 2013 cocos2d-x.org
 # Copyright (c) 2014 martell malone
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
@@ -46,7 +46,6 @@ include(PreventInSourceBuilds)
 include(AXBuildSet)
 
 option(AX_BUILD_TESTS "Build cpp & lua tests" ON)
-# option(AX_BUILD_TOOLS "Build tools" ON)
 
 add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
 
@@ -54,7 +53,6 @@ add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
 set(BUILD_ENGINE_DONE ON)
 
 if(AX_BUILD_TESTS)
-
     message(STATUS "CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
 
     macro(add_test_target target_name dir)
@@ -62,14 +60,14 @@ if(AX_BUILD_TESTS)
         set_target_properties(${target_name} PROPERTIES FOLDER "Apps")
     endmacro()
 
-	# add cpp tests default
+    # add cpp tests default
     add_test_target(cpp-tests ${_AX_ROOT}/tests/cpp-tests)
 
     if(LINUX OR MACOSX OR WINDOWS)
         add_test_target(unit-tests ${_AX_ROOT}/tests/unit-tests)
     endif()
 
-	# add fairygui tests when fairygui extension is enabled
+    # add fairygui tests when fairygui extension is enabled
     if(AX_ENABLE_EXT_FAIRYGUI)
         add_test_target(fairygui-tests ${_AX_ROOT}/tests/fairygui-tests)
     endif()
@@ -81,5 +79,4 @@ if(AX_BUILD_TESTS)
     if(AX_ENABLE_EXT_LUA)
         add_test_target(lua-tests ${_AX_ROOT}/tests/lua-tests)
     endif(AX_ENABLE_EXT_LUA)
-
 endif()
