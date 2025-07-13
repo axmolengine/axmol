@@ -25,7 +25,7 @@
 
 #include "lua-bindings/manual/base/axlua_base_manual.hpp"
 
-#if defined(AX_ENABLE_PHYSICS) && 0
+#if defined(AX_ENABLE_PHYSICS)
 #    include "lua-bindings/manual/tolua_fix.h"
 #    include "lua-bindings/manual/LuaBasicConversions.h"
 #    include "lua-bindings/manual/LuaValue.h"
@@ -979,13 +979,16 @@ int axlua_physics_PhysicsColliderPolygon_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S) - 1;
 
-    if (argc == 1)
+    if (argc == 2)
     {
-        ax::Vec2* arg0;
-        int arg1 = 0;
+        ax::PhysicsBody* arg0;
+        ax::Vec2* arg1;
+        int arg2 = 0;
         do
         {
-            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsColliderPolygon:create");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody", &arg0,
+                                                    "ax.PhysicsColliderPolygon:create");
+            ok = luaval_to_array_of_vec2(tolua_S, 3, &arg1, &arg2, "ax.PhysicsColliderPolygon:create");
             if (nullptr == arg0)
             {
                 LUA_PRECONDITION(arg0, "Invalid Native Object");
@@ -994,63 +997,69 @@ int axlua_physics_PhysicsColliderPolygon_create(lua_State* tolua_S)
 
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
-            return 0;
-        }
-        ax::PhysicsColliderPolygon* ret = ax::PhysicsColliderPolygon::create(arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
-        object_to_luaval<ax::PhysicsColliderPolygon>(tolua_S, "ax.PhysicsColliderPolygon",
-                                                       (ax::PhysicsColliderPolygon*)ret);
-        return 1;
-    }
-    if (argc == 2)
-    {
-        ax::Vec2* arg0;
-        int arg1 = 0;
-        ax::PhysicsMaterial arg2;
-        do
-        {
-            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsColliderPolygon:create");
-            if (nullptr == arg0)
-            {
-                LUA_PRECONDITION(arg0, "Invalid Native Object");
-            }
-        } while (0);
-        ok &= luaval_to_physics_material(tolua_S, 3, &arg2, "ax.PhysicsColliderPolygon:create");
-        if (!ok)
-        {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            AX_SAFE_DELETE_ARRAY(arg1);
             return 0;
         }
         ax::PhysicsColliderPolygon* ret = ax::PhysicsColliderPolygon::create(arg0, arg1, arg2);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderPolygon>(tolua_S, "ax.PhysicsColliderPolygon",
                                                        (ax::PhysicsColliderPolygon*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        ax::Vec2* arg0;
-        int arg1 = 0;
-        ax::PhysicsMaterial arg2;
-        ax::Vec2 arg3;
+        ax::PhysicsBody* arg0;
+        ax::Vec2* arg1;
+        int arg2 = 0;
+        ax::PhysicsMaterial arg3;
         do
         {
-            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsColliderPolygon:create");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody", &arg0,
+                                                    "ax.PhysicsColliderPolygon:create");
+            ok = luaval_to_array_of_vec2(tolua_S, 3, &arg1, &arg2, "ax.PhysicsColliderPolygon:create");
             if (nullptr == arg0)
             {
                 LUA_PRECONDITION(arg0, "Invalid Native Object");
             }
         } while (0);
-        ok &= luaval_to_physics_material(tolua_S, 3, &arg2, "ax.PhysicsColliderPolygon:create");
-        ok &= luaval_to_vec2(tolua_S, 4, &arg3, "ax.PhysicsColliderPolygon:create");
+        ok &= luaval_to_physics_material(tolua_S, 4, &arg3, "ax.PhysicsColliderPolygon:create");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            AX_SAFE_DELETE_ARRAY(arg1);
             return 0;
         }
         ax::PhysicsColliderPolygon* ret = ax::PhysicsColliderPolygon::create(arg0, arg1, arg2, arg3);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        AX_SAFE_DELETE_ARRAY(arg1);
+        object_to_luaval<ax::PhysicsColliderPolygon>(tolua_S, "ax.PhysicsColliderPolygon",
+                                                       (ax::PhysicsColliderPolygon*)ret);
+        return 1;
+    }
+    if (argc == 4)
+    {
+        ax::PhysicsBody* arg0;
+        ax::Vec2* arg1;
+        int arg2 = 0;
+        ax::PhysicsMaterial arg3;
+        ax::Vec2 arg4;
+        do
+        {
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody", &arg0,
+                                                    "ax.PhysicsColliderPolygon:create");
+            ok = luaval_to_array_of_vec2(tolua_S, 3, &arg1, &arg2, "ax.PhysicsColliderPolygon:create");
+            if (nullptr == arg0)
+            {
+                LUA_PRECONDITION(arg0, "Invalid Native Object");
+            }
+        } while (0);
+        ok &= luaval_to_physics_material(tolua_S, 4, &arg3, "ax.PhysicsColliderPolygon:create");
+        ok &= luaval_to_vec2(tolua_S, 5, &arg4, "ax.PhysicsColliderPolygon:create");
+        if (!ok)
+        {
+            AX_SAFE_DELETE_ARRAY(arg1);
+            return 0;
+        }
+        ax::PhysicsColliderPolygon* ret = ax::PhysicsColliderPolygon::create(arg0, arg1, arg2, arg3, arg4);
+        AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderPolygon>(tolua_S, "ax.PhysicsColliderPolygon",
                                                        (ax::PhysicsColliderPolygon*)ret);
         return 1;
@@ -1106,80 +1115,6 @@ int axlua_physics_PhysicsColliderPolygon_calculateArea(lua_State* tolua_S)
 #    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'axlua_physics_PhysicsColliderPolygon_calculateArea'.", &tolua_err);
-#    endif
-    return 0;
-}
-int axlua_physics_PhysicsColliderPolygon_calculateMoment(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#    if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#    endif
-
-#    if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S, 1, "ax.PhysicsColliderPolygon", 0, &tolua_err))
-        goto tolua_lerror;
-#    endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 2)
-    {
-        double arg0;
-        ax::Vec2* arg1;
-        int arg2 = 0;
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PhysicsColliderPolygon:calculateMoment");
-        do
-        {
-            ok = luaval_to_array_of_vec2(tolua_S, 3, &arg1, &arg2, "ax.PhysicsColliderPolygon:calculateMoment");
-            if (nullptr == arg1)
-            {
-                LUA_PRECONDITION(arg1, "Invalid Native Object");
-            }
-        } while (0);
-        if (!ok)
-        {
-            AX_SAFE_DELETE_ARRAY(arg1);
-            return 0;
-        }
-        double ret = ax::PhysicsColliderPolygon::calculateMoment(arg0, arg1, arg2);
-        AX_SAFE_DELETE_ARRAY(arg1);
-        tolua_pushnumber(tolua_S, (lua_Number)ret);
-        return 1;
-    }
-    if (argc == 2)
-    {
-        double arg0;
-        ax::Vec2* arg1;
-        int arg2 = 0;
-        ax::Vec2 arg3;
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PhysicsColliderPolygon:calculateMoment");
-        do
-        {
-            ok = luaval_to_array_of_vec2(tolua_S, 3, &arg1, &arg2, "ax.PhysicsColliderPolygon:calculateMoment");
-            if (nullptr == arg1)
-            {
-                LUA_PRECONDITION(arg1, "Invalid Native Object");
-            }
-        } while (0);
-        ok &= luaval_to_vec2(tolua_S, 4, &arg3, "ax.PhysicsColliderPolygon:calculateMoment");
-        if (!ok)
-        {
-            AX_SAFE_DELETE_ARRAY(arg1);
-            return 0;
-        }
-        double ret = ax::PhysicsColliderPolygon::calculateMoment(arg0, arg1, arg2, arg3);
-        AX_SAFE_DELETE_ARRAY(arg1);
-        tolua_pushnumber(tolua_S, (lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "calculateMoment", argc, 3);
-    return 0;
-#    if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_physics_PhysicsColliderPolygon_calculateMoment'.", &tolua_err);
 #    endif
     return 0;
 }
@@ -1446,77 +1381,86 @@ int axlua_physics_PhysicsColliderEdgePolygon_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S) - 1;
 
-    if (argc == 1)
-    {
-        ax::Vec2* arg0;
-        int arg1 = 0;
-        do
-        {
-            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsColliderEdgePolygon:create");
-            if (nullptr == arg0)
-            {
-                LUA_PRECONDITION(arg0, "Invalid Native Object");
-            }
-        } while (0);
-        if (!ok)
-        {
-            AX_SAFE_DELETE_ARRAY(arg0);
-            return 0;
-        }
-        ax::PhysicsColliderEdgePolygon* ret = ax::PhysicsColliderEdgePolygon::create(arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
-        object_to_luaval<ax::PhysicsColliderEdgePolygon>(tolua_S, "ax.PhysicsColliderEdgePolygon",
-                                                           (ax::PhysicsColliderEdgePolygon*)ret);
-        return 1;
-    }
     if (argc == 2)
     {
-        ax::Vec2* arg0;
-        int arg1 = 0;
-        ax::PhysicsMaterial arg2;
+        ax::PhysicsBody* arg0;
+        ax::Vec2* arg1;
+        int arg2 = 0;
         do
         {
-            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsColliderEdgePolygon:create");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody", &arg0,
+                                                    "ax.PhysicsColliderEdgePolygon:create");
+            ok = luaval_to_array_of_vec2(tolua_S, 3, &arg1, &arg2, "ax.PhysicsColliderEdgePolygon:create");
             if (nullptr == arg0)
             {
                 LUA_PRECONDITION(arg0, "Invalid Native Object");
             }
         } while (0);
-        ok &= luaval_to_physics_material(tolua_S, 3, &arg2, "ax.PhysicsColliderEdgePolygon:create");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            AX_SAFE_DELETE_ARRAY(arg1);
             return 0;
         }
         ax::PhysicsColliderEdgePolygon* ret = ax::PhysicsColliderEdgePolygon::create(arg0, arg1, arg2);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderEdgePolygon>(tolua_S, "ax.PhysicsColliderEdgePolygon",
                                                            (ax::PhysicsColliderEdgePolygon*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        ax::Vec2* arg0;
-        int arg1 = 0;
-        ax::PhysicsMaterial arg2;
-        double arg3;
+        ax::PhysicsBody* arg0;
+        ax::Vec2* arg1;
+        int arg2 = 0;
+        ax::PhysicsMaterial arg3;
         do
         {
-            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsColliderEdgePolygon:create");
-            if (nullptr == arg0)
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody", &arg0,
+                                                    "ax.PhysicsColliderEdgePolygon:create");
+            ok = luaval_to_array_of_vec2(tolua_S, 3, &arg1, &arg2, "ax.PhysicsColliderEdgePolygon:create");
+            if (nullptr == arg1)
             {
-                LUA_PRECONDITION(arg0, "Invalid Native Object");
+                LUA_PRECONDITION(arg1, "Invalid Native Object");
             }
         } while (0);
-        ok &= luaval_to_physics_material(tolua_S, 3, &arg2, "ax.PhysicsColliderEdgePolygon:create");
-        ok &= luaval_to_number(tolua_S, 4, &arg3, "ax.PhysicsColliderEdgePolygon:create");
+        ok &= luaval_to_physics_material(tolua_S, 4, &arg3, "ax.PhysicsColliderEdgePolygon:create");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            AX_SAFE_DELETE_ARRAY(arg1);
             return 0;
         }
         ax::PhysicsColliderEdgePolygon* ret = ax::PhysicsColliderEdgePolygon::create(arg0, arg1, arg2, arg3);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        AX_SAFE_DELETE_ARRAY(arg1);
+        object_to_luaval<ax::PhysicsColliderEdgePolygon>(tolua_S, "ax.PhysicsColliderEdgePolygon",
+                                                           (ax::PhysicsColliderEdgePolygon*)ret);
+        return 1;
+    }
+    if (argc == 4)
+    {
+        ax::PhysicsBody* arg0;
+        ax::Vec2* arg1;
+        int arg2 = 0;
+        ax::PhysicsMaterial arg3;
+        double arg4;
+        do
+        {
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody", &arg0,
+                                                    "ax.PhysicsColliderEdgePolygon:create");
+            ok = luaval_to_array_of_vec2(tolua_S, 3, &arg1, &arg2, "ax.PhysicsColliderEdgePolygon:create");
+            if (nullptr == arg1)
+            {
+                LUA_PRECONDITION(arg1, "Invalid Native Object");
+            }
+        } while (0);
+        ok &= luaval_to_physics_material(tolua_S, 4, &arg3, "ax.PhysicsColliderEdgePolygon:create");
+        ok &= luaval_to_number(tolua_S, 5, &arg4, "ax.PhysicsColliderEdgePolygon:create");
+        if (!ok)
+        {
+            AX_SAFE_DELETE_ARRAY(arg1);
+            return 0;
+        }
+        ax::PhysicsColliderEdgePolygon* ret = ax::PhysicsColliderEdgePolygon::create(arg0, arg1, arg2, arg3, arg4);
+        AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderEdgePolygon>(tolua_S, "ax.PhysicsColliderEdgePolygon",
                                                            (ax::PhysicsColliderEdgePolygon*)ret);
         return 1;
@@ -1546,77 +1490,86 @@ int axlua_physics_PhysicsColliderEdgeChain_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S) - 1;
 
-    if (argc == 1)
-    {
-        ax::Vec2* arg0;
-        int arg1 = 0;
-        do
-        {
-            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsColliderEdgeChain:create");
-            if (nullptr == arg0)
-            {
-                LUA_PRECONDITION(arg0, "Invalid Native Object");
-            }
-        } while (0);
-        if (!ok)
-        {
-            AX_SAFE_DELETE_ARRAY(arg0);
-            return 0;
-        }
-        ax::PhysicsColliderEdgeChain* ret = ax::PhysicsColliderEdgeChain::create(arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
-        object_to_luaval<ax::PhysicsColliderEdgeChain>(tolua_S, "ax.PhysicsColliderEdgeChain",
-                                                         (ax::PhysicsColliderEdgeChain*)ret);
-        return 1;
-    }
     if (argc == 2)
     {
-        ax::Vec2* arg0;
-        int arg1 = 0;
-        ax::PhysicsMaterial arg2;
+        ax::PhysicsBody* arg0;
+        ax::Vec2* arg1;
+        int arg2 = 0;
         do
         {
-            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsColliderEdgeChain:create");
-            if (nullptr == arg0)
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody", &arg0,
+                                                    "ax.PhysicsColliderEdgePolygon:create");
+            ok = luaval_to_array_of_vec2(tolua_S, 3, &arg1, &arg2, "ax.PhysicsColliderEdgeChain:create");
+            if (nullptr == arg1)
             {
-                LUA_PRECONDITION(arg0, "Invalid Native Object");
+                LUA_PRECONDITION(arg1, "Invalid Native Object");
             }
         } while (0);
-        ok &= luaval_to_physics_material(tolua_S, 3, &arg2, "ax.PhysicsColliderEdgeChain:create");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            AX_SAFE_DELETE_ARRAY(arg1);
             return 0;
         }
         ax::PhysicsColliderEdgeChain* ret = ax::PhysicsColliderEdgeChain::create(arg0, arg1, arg2);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderEdgeChain>(tolua_S, "ax.PhysicsColliderEdgeChain",
                                                          (ax::PhysicsColliderEdgeChain*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        ax::Vec2* arg0;
-        int arg1 = 0;
-        ax::PhysicsMaterial arg2;
-        double arg3;
+        ax::PhysicsBody* arg0;
+        ax::Vec2* arg1;
+        int arg2 = 0;
+        ax::PhysicsMaterial arg3;
         do
         {
-            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsColliderEdgeChain:create");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody", &arg0,
+                                                    "ax.PhysicsColliderEdgePolygon:create");
+            ok = luaval_to_array_of_vec2(tolua_S, 3, &arg1, &arg2, "ax.PhysicsColliderEdgeChain:create");
             if (nullptr == arg0)
             {
                 LUA_PRECONDITION(arg0, "Invalid Native Object");
             }
         } while (0);
-        ok &= luaval_to_physics_material(tolua_S, 3, &arg2, "ax.PhysicsColliderEdgeChain:create");
-        ok &= luaval_to_number(tolua_S, 4, &arg3, "ax.PhysicsColliderEdgeChain:create");
+        ok &= luaval_to_physics_material(tolua_S, 4, &arg3, "ax.PhysicsColliderEdgeChain:create");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            AX_SAFE_DELETE_ARRAY(arg1);
             return 0;
         }
         ax::PhysicsColliderEdgeChain* ret = ax::PhysicsColliderEdgeChain::create(arg0, arg1, arg2, arg3);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        AX_SAFE_DELETE_ARRAY(arg1);
+        object_to_luaval<ax::PhysicsColliderEdgeChain>(tolua_S, "ax.PhysicsColliderEdgeChain",
+                                                         (ax::PhysicsColliderEdgeChain*)ret);
+        return 1;
+    }
+    if (argc == 4)
+    {
+        ax::PhysicsBody* arg0;
+        ax::Vec2* arg1;
+        int arg2 = 0;
+        ax::PhysicsMaterial arg3;
+        double arg4;
+        do
+        {
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody", &arg0,
+                                                    "ax.PhysicsColliderEdgePolygon:create");
+            ok = luaval_to_array_of_vec2(tolua_S, 3, &arg1, &arg2, "ax.PhysicsColliderEdgeChain:create");
+            if (nullptr == arg0)
+            {
+                LUA_PRECONDITION(arg0, "Invalid Native Object");
+            }
+        } while (0);
+        ok &= luaval_to_physics_material(tolua_S, 4, &arg3, "ax.PhysicsColliderEdgeChain:create");
+        ok &= luaval_to_number(tolua_S, 5, &arg4, "ax.PhysicsColliderEdgeChain:create");
+        if (!ok)
+        {
+            AX_SAFE_DELETE_ARRAY(arg1);
+            return 0;
+        }
+        ax::PhysicsColliderEdgeChain* ret = ax::PhysicsColliderEdgeChain::create(arg0, arg1, arg2, arg3, arg4);
+        AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderEdgeChain>(tolua_S, "ax.PhysicsColliderEdgeChain",
                                                          (ax::PhysicsColliderEdgeChain*)ret);
         return 1;
@@ -1699,9 +1652,6 @@ int register_all_ax_physics_manual(lua_State* tolua_S)
         lua_rawset(tolua_S, -3);
         lua_pushstring(tolua_S, "calculateArea");
         lua_pushcfunction(tolua_S, axlua_physics_PhysicsColliderPolygon_calculateArea);
-        lua_rawset(tolua_S, -3);
-        lua_pushstring(tolua_S, "calculateMoment");
-        lua_pushcfunction(tolua_S, axlua_physics_PhysicsColliderPolygon_calculateMoment);
         lua_rawset(tolua_S, -3);
     }
     lua_pop(tolua_S, 1);

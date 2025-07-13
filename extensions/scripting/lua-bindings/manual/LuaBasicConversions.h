@@ -38,7 +38,7 @@
 #include "3d/Bundle3D.h"
 #include "base/Value.h"
 #include "base/Types.h"
-#    if defined(AX_ENABLE_PHYSICS) && 0
+#    if defined(AX_ENABLE_PHYSICS)
 #include "physics/PhysicsContact.h"
 #include "physics/PhysicsJoint.h"
 #include "physics/PhysicsWorld.h"
@@ -309,7 +309,7 @@ extern bool luaval_to_color32(lua_State* L, int lo, Color32* outValue, const cha
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 extern bool luaval_to_color(lua_State* L, int lo, ax::Color* outValue, const char* funcName = "");
-#if defined(AX_ENABLE_PHYSICS) && 0
+#if defined(AX_ENABLE_PHYSICS)
 
 /**
  * Get a PhysicsMaterial object value from the given acceptable index of stack.
@@ -961,7 +961,7 @@ extern void color_to_luaval(lua_State* L, const ax::Color& cc);
 
 void std_thread_id_to_luaval(lua_State* L, const std::thread::id& value);
 
-#if defined(AX_ENABLE_PHYSICS) && 0
+#if defined(AX_ENABLE_PHYSICS)
 
 /**
  * Push a table converted from a ax::PhysicsMaterial object into the Lua stack.
@@ -980,7 +980,7 @@ extern void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm);
  * @param L the current lua_State.
  * @param info a ax::PhysicsRayCastInfo object.
  */
-extern void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info);
+extern void physics_raycastinfo_to_luaval(lua_State* L, const ax::PhysicsRayCastInfo& info);
 
 /**
  * Push a table converted from a ax::PhysicsContactData object into the Lua stack.
@@ -989,7 +989,7 @@ extern void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo
  * @param L the current lua_State.
  * @param data a ax::PhysicsContactData object.
  */
-extern void physics_contactdata_to_luaval(lua_State* L, const PhysicsContactData* data);
+extern void physics_contactdata_to_luaval(lua_State* L, const ax::PhysicsContactData* data);
 #endif  // #if defined(AX_ENABLE_PHYSICS)
 
 /**
