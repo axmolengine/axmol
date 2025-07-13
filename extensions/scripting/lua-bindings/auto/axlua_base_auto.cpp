@@ -26,7 +26,7 @@ int lua_ax_base_Object_retain(lua_State* tolua_S)
     cobj = (ax::Object*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Object_retain'", nullptr);
         return 0;
@@ -73,7 +73,7 @@ int lua_ax_base_Object_release(lua_State* tolua_S)
     cobj = (ax::Object*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Object_release'", nullptr);
         return 0;
@@ -120,7 +120,7 @@ int lua_ax_base_Object_getReferenceCount(lua_State* tolua_S)
     cobj = (ax::Object*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Object_getReferenceCount'", nullptr);
         return 0;
@@ -189,7 +189,7 @@ int lua_ax_base_EventListener_checkAvailable(lua_State* tolua_S)
     cobj = (ax::EventListener*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListener_checkAvailable'", nullptr);
         return 0;
@@ -236,7 +236,7 @@ int lua_ax_base_EventListener_clone(lua_State* tolua_S)
     cobj = (ax::EventListener*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListener_clone'", nullptr);
         return 0;
@@ -283,7 +283,7 @@ int lua_ax_base_EventListener_setEnabled(lua_State* tolua_S)
     cobj = (ax::EventListener*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListener_setEnabled'", nullptr);
         return 0;
@@ -333,7 +333,7 @@ int lua_ax_base_EventListener_isEnabled(lua_State* tolua_S)
     cobj = (ax::EventListener*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListener_isEnabled'", nullptr);
         return 0;
@@ -460,7 +460,7 @@ int lua_ax_base_ShaderCache_purge(lua_State* tolua_S)
     cobj = (ax::backend::ShaderCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ShaderCache_purge'", nullptr);
         return 0;
@@ -507,7 +507,7 @@ int lua_ax_base_ShaderCache_newVertexShaderModule(lua_State* tolua_S)
     cobj = (ax::backend::ShaderCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ShaderCache_newVertexShaderModule'", nullptr);
         return 0;
@@ -557,7 +557,7 @@ int lua_ax_base_ShaderCache_newFragmentShaderModule(lua_State* tolua_S)
     cobj = (ax::backend::ShaderCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ShaderCache_newFragmentShaderModule'", nullptr);
         return 0;
@@ -607,7 +607,7 @@ int lua_ax_base_ShaderCache_removeUnusedShader(lua_State* tolua_S)
     cobj = (ax::backend::ShaderCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ShaderCache_removeUnusedShader'", nullptr);
         return 0;
@@ -747,7 +747,7 @@ int lua_ax_base_Texture2D_updateWithImage(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_updateWithImage'", nullptr);
         return 0;
@@ -820,7 +820,7 @@ int lua_ax_base_Texture2D_updateWithMipmaps(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_updateWithMipmaps'", nullptr);
         return 0;
@@ -955,7 +955,7 @@ int lua_ax_base_Texture2D_updateWithSubData(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_updateWithSubData'", nullptr);
         return 0;
@@ -1048,7 +1048,7 @@ int lua_ax_base_Texture2D_drawAtPoint(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_drawAtPoint'", nullptr);
         return 0;
@@ -1101,7 +1101,7 @@ int lua_ax_base_Texture2D_drawInRect(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_drawInRect'", nullptr);
         return 0;
@@ -1440,7 +1440,7 @@ int lua_ax_base_Texture2D_updateTextureDescriptor(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_updateTextureDescriptor'", nullptr);
         return 0;
@@ -1509,7 +1509,7 @@ int lua_ax_base_Texture2D_setRenderTarget(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_setRenderTarget'", nullptr);
         return 0;
@@ -1559,7 +1559,7 @@ int lua_ax_base_Texture2D_isRenderTarget(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_isRenderTarget'", nullptr);
         return 0;
@@ -1606,7 +1606,7 @@ int lua_ax_base_Texture2D_generateMipmap(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_generateMipmap'", nullptr);
         return 0;
@@ -1653,7 +1653,7 @@ int lua_ax_base_Texture2D_setAntiAliasTexParameters(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_setAntiAliasTexParameters'", nullptr);
         return 0;
@@ -1700,7 +1700,7 @@ int lua_ax_base_Texture2D_setAliasTexParameters(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_setAliasTexParameters'", nullptr);
         return 0;
@@ -1747,7 +1747,7 @@ int lua_ax_base_Texture2D_getStringForFormat(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_getStringForFormat'", nullptr);
         return 0;
@@ -1845,7 +1845,7 @@ int lua_ax_base_Texture2D_getContentSizeInPixels(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_getContentSizeInPixels'", nullptr);
         return 0;
@@ -1892,7 +1892,7 @@ int lua_ax_base_Texture2D_hasPremultipliedAlpha(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_hasPremultipliedAlpha'", nullptr);
         return 0;
@@ -1939,7 +1939,7 @@ int lua_ax_base_Texture2D_setPremultipliedAlpha(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_setPremultipliedAlpha'", nullptr);
         return 0;
@@ -1989,7 +1989,7 @@ int lua_ax_base_Texture2D_hasMipmaps(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_hasMipmaps'", nullptr);
         return 0;
@@ -2036,7 +2036,7 @@ int lua_ax_base_Texture2D_getPixelFormat(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_getPixelFormat'", nullptr);
         return 0;
@@ -2083,7 +2083,7 @@ int lua_ax_base_Texture2D_getSamplerFlags(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_getSamplerFlags'", nullptr);
         return 0;
@@ -2130,7 +2130,7 @@ int lua_ax_base_Texture2D_getPixelsWide(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_getPixelsWide'", nullptr);
         return 0;
@@ -2177,7 +2177,7 @@ int lua_ax_base_Texture2D_getPixelsHigh(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_getPixelsHigh'", nullptr);
         return 0;
@@ -2224,7 +2224,7 @@ int lua_ax_base_Texture2D_getBackendTexture(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_getBackendTexture'", nullptr);
         return 0;
@@ -2271,7 +2271,7 @@ int lua_ax_base_Texture2D_getMaxS(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_getMaxS'", nullptr);
         return 0;
@@ -2318,7 +2318,7 @@ int lua_ax_base_Texture2D_setMaxS(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_setMaxS'", nullptr);
         return 0;
@@ -2368,7 +2368,7 @@ int lua_ax_base_Texture2D_getMaxT(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_getMaxT'", nullptr);
         return 0;
@@ -2415,7 +2415,7 @@ int lua_ax_base_Texture2D_setMaxT(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_setMaxT'", nullptr);
         return 0;
@@ -2465,7 +2465,7 @@ int lua_ax_base_Texture2D_getContentSize(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_getContentSize'", nullptr);
         return 0;
@@ -2512,7 +2512,7 @@ int lua_ax_base_Texture2D_getPath(lua_State* tolua_S)
     cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_getPath'", nullptr);
         return 0;
@@ -2718,7 +2718,7 @@ int lua_ax_base_Touch_getLocation(lua_State* tolua_S)
     cobj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Touch_getLocation'", nullptr);
         return 0;
@@ -2765,7 +2765,7 @@ int lua_ax_base_Touch_getPreviousLocation(lua_State* tolua_S)
     cobj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Touch_getPreviousLocation'", nullptr);
         return 0;
@@ -2812,7 +2812,7 @@ int lua_ax_base_Touch_getStartLocation(lua_State* tolua_S)
     cobj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Touch_getStartLocation'", nullptr);
         return 0;
@@ -2859,7 +2859,7 @@ int lua_ax_base_Touch_getDelta(lua_State* tolua_S)
     cobj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Touch_getDelta'", nullptr);
         return 0;
@@ -2906,7 +2906,7 @@ int lua_ax_base_Touch_getLocationInView(lua_State* tolua_S)
     cobj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Touch_getLocationInView'", nullptr);
         return 0;
@@ -2953,7 +2953,7 @@ int lua_ax_base_Touch_getPreviousLocationInView(lua_State* tolua_S)
     cobj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Touch_getPreviousLocationInView'", nullptr);
         return 0;
@@ -3000,7 +3000,7 @@ int lua_ax_base_Touch_getStartLocationInView(lua_State* tolua_S)
     cobj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Touch_getStartLocationInView'", nullptr);
         return 0;
@@ -3126,7 +3126,7 @@ int lua_ax_base_Touch_getID(lua_State* tolua_S)
     cobj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Touch_getID'", nullptr);
         return 0;
@@ -3173,7 +3173,7 @@ int lua_ax_base_Touch_getCurrentForce(lua_State* tolua_S)
     cobj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Touch_getCurrentForce'", nullptr);
         return 0;
@@ -3220,7 +3220,7 @@ int lua_ax_base_Touch_getMaxForce(lua_State* tolua_S)
     cobj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Touch_getMaxForce'", nullptr);
         return 0;
@@ -3335,7 +3335,7 @@ int lua_ax_base_Event_getType(lua_State* tolua_S)
     cobj = (ax::Event*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Event_getType'", nullptr);
         return 0;
@@ -3382,7 +3382,7 @@ int lua_ax_base_Event_stopPropagation(lua_State* tolua_S)
     cobj = (ax::Event*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Event_stopPropagation'", nullptr);
         return 0;
@@ -3429,7 +3429,7 @@ int lua_ax_base_Event_isStopped(lua_State* tolua_S)
     cobj = (ax::Event*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Event_isStopped'", nullptr);
         return 0;
@@ -3476,7 +3476,7 @@ int lua_ax_base_Event_getCurrentTarget(lua_State* tolua_S)
     cobj = (ax::Event*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Event_getCurrentTarget'", nullptr);
         return 0;
@@ -3587,7 +3587,7 @@ int lua_ax_base_EventTouch_getEventCode(lua_State* tolua_S)
     cobj = (ax::EventTouch*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventTouch_getEventCode'", nullptr);
         return 0;
@@ -3634,7 +3634,7 @@ int lua_ax_base_EventTouch_setEventCode(lua_State* tolua_S)
     cobj = (ax::EventTouch*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventTouch_setEventCode'", nullptr);
         return 0;
@@ -3806,7 +3806,7 @@ int lua_ax_base_Component_init(lua_State* tolua_S)
     cobj = (ax::Component*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Component_init'", nullptr);
         return 0;
@@ -3853,7 +3853,7 @@ int lua_ax_base_Component_isEnabled(lua_State* tolua_S)
     cobj = (ax::Component*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Component_isEnabled'", nullptr);
         return 0;
@@ -3900,7 +3900,7 @@ int lua_ax_base_Component_setEnabled(lua_State* tolua_S)
     cobj = (ax::Component*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Component_setEnabled'", nullptr);
         return 0;
@@ -3950,7 +3950,7 @@ int lua_ax_base_Component_getName(lua_State* tolua_S)
     cobj = (ax::Component*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Component_getName'", nullptr);
         return 0;
@@ -3997,7 +3997,7 @@ int lua_ax_base_Component_setName(lua_State* tolua_S)
     cobj = (ax::Component*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Component_setName'", nullptr);
         return 0;
@@ -4047,7 +4047,7 @@ int lua_ax_base_Component_getOwner(lua_State* tolua_S)
     cobj = (ax::Component*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Component_getOwner'", nullptr);
         return 0;
@@ -4094,7 +4094,7 @@ int lua_ax_base_Component_setOwner(lua_State* tolua_S)
     cobj = (ax::Component*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Component_setOwner'", nullptr);
         return 0;
@@ -4144,7 +4144,7 @@ int lua_ax_base_Component_update(lua_State* tolua_S)
     cobj = (ax::Component*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Component_update'", nullptr);
         return 0;
@@ -4194,7 +4194,7 @@ int lua_ax_base_Component_onAdd(lua_State* tolua_S)
     cobj = (ax::Component*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Component_onAdd'", nullptr);
         return 0;
@@ -4241,7 +4241,7 @@ int lua_ax_base_Component_onRemove(lua_State* tolua_S)
     cobj = (ax::Component*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Component_onRemove'", nullptr);
         return 0;
@@ -4352,7 +4352,7 @@ int lua_ax_base_Node_getDescription(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getDescription'", nullptr);
         return 0;
@@ -4399,7 +4399,7 @@ int lua_ax_base_Node_setLocalZOrder(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setLocalZOrder'", nullptr);
         return 0;
@@ -4449,7 +4449,7 @@ int lua_ax_base_Node_updateOrderOfArrival(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_updateOrderOfArrival'", nullptr);
         return 0;
@@ -4496,7 +4496,7 @@ int lua_ax_base_Node_getLocalZOrder(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getLocalZOrder'", nullptr);
         return 0;
@@ -4543,7 +4543,7 @@ int lua_ax_base_Node_setGlobalZOrder(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setGlobalZOrder'", nullptr);
         return 0;
@@ -4593,7 +4593,7 @@ int lua_ax_base_Node_getGlobalZOrder(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getGlobalZOrder'", nullptr);
         return 0;
@@ -4640,7 +4640,7 @@ int lua_ax_base_Node_setScaleX(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setScaleX'", nullptr);
         return 0;
@@ -4690,7 +4690,7 @@ int lua_ax_base_Node_getScaleX(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getScaleX'", nullptr);
         return 0;
@@ -4737,7 +4737,7 @@ int lua_ax_base_Node_setScaleY(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setScaleY'", nullptr);
         return 0;
@@ -4787,7 +4787,7 @@ int lua_ax_base_Node_getScaleY(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getScaleY'", nullptr);
         return 0;
@@ -4834,7 +4834,7 @@ int lua_ax_base_Node_setScaleZ(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setScaleZ'", nullptr);
         return 0;
@@ -4884,7 +4884,7 @@ int lua_ax_base_Node_getScaleZ(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getScaleZ'", nullptr);
         return 0;
@@ -4990,7 +4990,7 @@ int lua_ax_base_Node_getScale(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getScale'", nullptr);
         return 0;
@@ -5096,7 +5096,7 @@ int lua_ax_base_Node_setPositionNormalized(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setPositionNormalized'", nullptr);
         return 0;
@@ -5146,7 +5146,7 @@ int lua_ax_base_Node_setNormalizedPosition(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setNormalizedPosition'", nullptr);
         return 0;
@@ -5196,7 +5196,7 @@ int lua_ax_base_Node_getPositionNormalized(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getPositionNormalized'", nullptr);
         return 0;
@@ -5243,7 +5243,7 @@ int lua_ax_base_Node_getNormalizedPosition(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getNormalizedPosition'", nullptr);
         return 0;
@@ -5290,7 +5290,7 @@ int lua_ax_base_Node_setPositionX(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setPositionX'", nullptr);
         return 0;
@@ -5340,7 +5340,7 @@ int lua_ax_base_Node_getPositionX(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getPositionX'", nullptr);
         return 0;
@@ -5387,7 +5387,7 @@ int lua_ax_base_Node_setPositionY(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setPositionY'", nullptr);
         return 0;
@@ -5437,7 +5437,7 @@ int lua_ax_base_Node_getPositionY(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getPositionY'", nullptr);
         return 0;
@@ -5484,7 +5484,7 @@ int lua_ax_base_Node_setPosition3D(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setPosition3D'", nullptr);
         return 0;
@@ -5534,7 +5534,7 @@ int lua_ax_base_Node_getPosition3D(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getPosition3D'", nullptr);
         return 0;
@@ -5581,7 +5581,7 @@ int lua_ax_base_Node_setPositionZ(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setPositionZ'", nullptr);
         return 0;
@@ -5631,7 +5631,7 @@ int lua_ax_base_Node_getPositionZ(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getPositionZ'", nullptr);
         return 0;
@@ -5678,7 +5678,7 @@ int lua_ax_base_Node_setSkewX(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setSkewX'", nullptr);
         return 0;
@@ -5728,7 +5728,7 @@ int lua_ax_base_Node_getSkewX(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getSkewX'", nullptr);
         return 0;
@@ -5775,7 +5775,7 @@ int lua_ax_base_Node_setSkewY(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setSkewY'", nullptr);
         return 0;
@@ -5825,7 +5825,7 @@ int lua_ax_base_Node_getSkewY(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getSkewY'", nullptr);
         return 0;
@@ -5872,7 +5872,7 @@ int lua_ax_base_Node_getAnchorPoint(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getAnchorPoint'", nullptr);
         return 0;
@@ -5919,7 +5919,7 @@ int lua_ax_base_Node_getAnchorPointInPoints(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getAnchorPointInPoints'", nullptr);
         return 0;
@@ -5966,7 +5966,7 @@ int lua_ax_base_Node_getContentSize(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getContentSize'", nullptr);
         return 0;
@@ -6013,7 +6013,7 @@ int lua_ax_base_Node_hitTest(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_hitTest'", nullptr);
         return 0;
@@ -6063,7 +6063,7 @@ int lua_ax_base_Node_setVisible(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setVisible'", nullptr);
         return 0;
@@ -6113,7 +6113,7 @@ int lua_ax_base_Node_isVisible(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_isVisible'", nullptr);
         return 0;
@@ -6160,7 +6160,7 @@ int lua_ax_base_Node_setRotation(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setRotation'", nullptr);
         return 0;
@@ -6210,7 +6210,7 @@ int lua_ax_base_Node_getRotation(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getRotation'", nullptr);
         return 0;
@@ -6257,7 +6257,7 @@ int lua_ax_base_Node_setRotation3D(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setRotation3D'", nullptr);
         return 0;
@@ -6307,7 +6307,7 @@ int lua_ax_base_Node_getRotation3D(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getRotation3D'", nullptr);
         return 0;
@@ -6354,7 +6354,7 @@ int lua_ax_base_Node_setRotationSkewX(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setRotationSkewX'", nullptr);
         return 0;
@@ -6404,7 +6404,7 @@ int lua_ax_base_Node_getRotationSkewX(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getRotationSkewX'", nullptr);
         return 0;
@@ -6451,7 +6451,7 @@ int lua_ax_base_Node_setRotationSkewY(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setRotationSkewY'", nullptr);
         return 0;
@@ -6501,7 +6501,7 @@ int lua_ax_base_Node_getRotationSkewY(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getRotationSkewY'", nullptr);
         return 0;
@@ -6548,7 +6548,7 @@ int lua_ax_base_Node_setIgnoreAnchorPointForPosition(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setIgnoreAnchorPointForPosition'", nullptr);
         return 0;
@@ -6598,7 +6598,7 @@ int lua_ax_base_Node_isIgnoreAnchorPointForPosition(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_isIgnoreAnchorPointForPosition'", nullptr);
         return 0;
@@ -6744,7 +6744,7 @@ int lua_ax_base_Node_getChildByTag(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getChildByTag'", nullptr);
         return 0;
@@ -6794,7 +6794,7 @@ int lua_ax_base_Node_getChildByName(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getChildByName'", nullptr);
         return 0;
@@ -6891,7 +6891,7 @@ int lua_ax_base_Node_getChildrenCount(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getChildrenCount'", nullptr);
         return 0;
@@ -6938,7 +6938,7 @@ int lua_ax_base_Node_setParent(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setParent'", nullptr);
         return 0;
@@ -7086,7 +7086,7 @@ int lua_ax_base_Node_removeChild(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_removeChild'", nullptr);
         return 0;
@@ -7153,7 +7153,7 @@ int lua_ax_base_Node_removeChildByTag(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_removeChildByTag'", nullptr);
         return 0;
@@ -7220,7 +7220,7 @@ int lua_ax_base_Node_removeChildByName(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_removeChildByName'", nullptr);
         return 0;
@@ -7338,7 +7338,7 @@ int lua_ax_base_Node_reorderChild(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_reorderChild'", nullptr);
         return 0;
@@ -7391,7 +7391,7 @@ int lua_ax_base_Node_sortAllChildren(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_sortAllChildren'", nullptr);
         return 0;
@@ -7438,7 +7438,7 @@ int lua_ax_base_Node_getTag(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getTag'", nullptr);
         return 0;
@@ -7485,7 +7485,7 @@ int lua_ax_base_Node_setTag(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setTag'", nullptr);
         return 0;
@@ -7535,7 +7535,7 @@ int lua_ax_base_Node_getName(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getName'", nullptr);
         return 0;
@@ -7582,7 +7582,7 @@ int lua_ax_base_Node_setName(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setName'", nullptr);
         return 0;
@@ -7632,7 +7632,7 @@ int lua_ax_base_Node_setUserObject(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setUserObject'", nullptr);
         return 0;
@@ -7682,7 +7682,7 @@ int lua_ax_base_Node_isRunning(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_isRunning'", nullptr);
         return 0;
@@ -7729,7 +7729,7 @@ int lua_ax_base_Node_cleanup(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_cleanup'", nullptr);
         return 0;
@@ -7894,7 +7894,7 @@ int lua_ax_base_Node_getScene(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getScene'", nullptr);
         return 0;
@@ -7941,7 +7941,7 @@ int lua_ax_base_Node_getBoundingBox(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getBoundingBox'", nullptr);
         return 0;
@@ -7988,7 +7988,7 @@ int lua_ax_base_Node_setEventDispatcher(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setEventDispatcher'", nullptr);
         return 0;
@@ -8038,7 +8038,7 @@ int lua_ax_base_Node_getEventDispatcher(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getEventDispatcher'", nullptr);
         return 0;
@@ -8085,7 +8085,7 @@ int lua_ax_base_Node_setActionManager(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setActionManager'", nullptr);
         return 0;
@@ -8182,7 +8182,7 @@ int lua_ax_base_Node_runAction(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_runAction'", nullptr);
         return 0;
@@ -8232,7 +8232,7 @@ int lua_ax_base_Node_stopAllActions(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_stopAllActions'", nullptr);
         return 0;
@@ -8279,7 +8279,7 @@ int lua_ax_base_Node_stopAction(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_stopAction'", nullptr);
         return 0;
@@ -8329,7 +8329,7 @@ int lua_ax_base_Node_stopActionByTag(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_stopActionByTag'", nullptr);
         return 0;
@@ -8379,7 +8379,7 @@ int lua_ax_base_Node_stopAllActionsByTag(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_stopAllActionsByTag'", nullptr);
         return 0;
@@ -8429,7 +8429,7 @@ int lua_ax_base_Node_stopActionsByFlags(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_stopActionsByFlags'", nullptr);
         return 0;
@@ -8479,7 +8479,7 @@ int lua_ax_base_Node_getActionByTag(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getActionByTag'", nullptr);
         return 0;
@@ -8529,7 +8529,7 @@ int lua_ax_base_Node_getNumberOfRunningActions(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getNumberOfRunningActions'", nullptr);
         return 0;
@@ -8576,7 +8576,7 @@ int lua_ax_base_Node_getNumberOfRunningActionsByTag(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getNumberOfRunningActionsByTag'", nullptr);
         return 0;
@@ -8626,7 +8626,7 @@ int lua_ax_base_Node_setScheduler(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setScheduler'", nullptr);
         return 0;
@@ -8723,7 +8723,7 @@ int lua_ax_base_Node_isScheduled(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_isScheduled'", nullptr);
         return 0;
@@ -8773,7 +8773,7 @@ int lua_ax_base_Node_resume(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_resume'", nullptr);
         return 0;
@@ -8820,7 +8820,7 @@ int lua_ax_base_Node_pause(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_pause'", nullptr);
         return 0;
@@ -8867,7 +8867,7 @@ int lua_ax_base_Node_update(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_update'", nullptr);
         return 0;
@@ -8917,7 +8917,7 @@ int lua_ax_base_Node_updateTransform(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_updateTransform'", nullptr);
         return 0;
@@ -9066,7 +9066,7 @@ int lua_ax_base_Node_setNodeToParentTransform(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setNodeToParentTransform'", nullptr);
         return 0;
@@ -9116,7 +9116,7 @@ int lua_ax_base_Node_getParentToNodeTransform(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getParentToNodeTransform'", nullptr);
         return 0;
@@ -9163,7 +9163,7 @@ int lua_ax_base_Node_getParentToNodeAffineTransform(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getParentToNodeAffineTransform'", nullptr);
         return 0;
@@ -9210,7 +9210,7 @@ int lua_ax_base_Node_getNodeToWorldTransform(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getNodeToWorldTransform'", nullptr);
         return 0;
@@ -9257,7 +9257,7 @@ int lua_ax_base_Node_getNodeToWorldAffineTransform(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getNodeToWorldAffineTransform'", nullptr);
         return 0;
@@ -9304,7 +9304,7 @@ int lua_ax_base_Node_getWorldToNodeTransform(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getWorldToNodeTransform'", nullptr);
         return 0;
@@ -9351,7 +9351,7 @@ int lua_ax_base_Node_getWorldToNodeAffineTransform(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getWorldToNodeAffineTransform'", nullptr);
         return 0;
@@ -9398,7 +9398,7 @@ int lua_ax_base_Node_convertToNodeSpace(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_convertToNodeSpace'", nullptr);
         return 0;
@@ -9448,7 +9448,7 @@ int lua_ax_base_Node_convertToWorldSpace(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_convertToWorldSpace'", nullptr);
         return 0;
@@ -9498,7 +9498,7 @@ int lua_ax_base_Node_convertToNodeSpaceAR(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_convertToNodeSpaceAR'", nullptr);
         return 0;
@@ -9548,7 +9548,7 @@ int lua_ax_base_Node_convertToWorldSpaceAR(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_convertToWorldSpaceAR'", nullptr);
         return 0;
@@ -9598,7 +9598,7 @@ int lua_ax_base_Node_convertTouchToNodeSpace(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_convertTouchToNodeSpace'", nullptr);
         return 0;
@@ -9648,7 +9648,7 @@ int lua_ax_base_Node_convertTouchToNodeSpaceAR(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_convertTouchToNodeSpaceAR'", nullptr);
         return 0;
@@ -9698,7 +9698,7 @@ int lua_ax_base_Node_getWorldPosition(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getWorldPosition'", nullptr);
         return 0;
@@ -9745,7 +9745,7 @@ int lua_ax_base_Node_setWorldPosition(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setWorldPosition'", nullptr);
         return 0;
@@ -9795,7 +9795,7 @@ int lua_ax_base_Node_getComponent(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getComponent'", nullptr);
         return 0;
@@ -9845,7 +9845,7 @@ int lua_ax_base_Node_addComponent(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_addComponent'", nullptr);
         return 0;
@@ -9950,7 +9950,7 @@ int lua_ax_base_Node_removeAllComponents(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_removeAllComponents'", nullptr);
         return 0;
@@ -9997,7 +9997,7 @@ int lua_ax_base_Node_getOpacity(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getOpacity'", nullptr);
         return 0;
@@ -10044,7 +10044,7 @@ int lua_ax_base_Node_getDisplayedOpacity(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getDisplayedOpacity'", nullptr);
         return 0;
@@ -10091,7 +10091,7 @@ int lua_ax_base_Node_setOpacity(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setOpacity'", nullptr);
         return 0;
@@ -10141,7 +10141,7 @@ int lua_ax_base_Node_updateDisplayedOpacity(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_updateDisplayedOpacity'", nullptr);
         return 0;
@@ -10191,7 +10191,7 @@ int lua_ax_base_Node_isCascadeOpacityEnabled(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_isCascadeOpacityEnabled'", nullptr);
         return 0;
@@ -10238,7 +10238,7 @@ int lua_ax_base_Node_setCascadeOpacityEnabled(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setCascadeOpacityEnabled'", nullptr);
         return 0;
@@ -10288,7 +10288,7 @@ int lua_ax_base_Node_getColor(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getColor'", nullptr);
         return 0;
@@ -10335,7 +10335,7 @@ int lua_ax_base_Node_getDisplayedColor(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getDisplayedColor'", nullptr);
         return 0;
@@ -10382,7 +10382,7 @@ int lua_ax_base_Node_setColor(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setColor'", nullptr);
         return 0;
@@ -10432,7 +10432,7 @@ int lua_ax_base_Node_updateDisplayedColor(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_updateDisplayedColor'", nullptr);
         return 0;
@@ -10482,7 +10482,7 @@ int lua_ax_base_Node_isCascadeColorEnabled(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_isCascadeColorEnabled'", nullptr);
         return 0;
@@ -10529,7 +10529,7 @@ int lua_ax_base_Node_setCascadeColorEnabled(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setCascadeColorEnabled'", nullptr);
         return 0;
@@ -10579,7 +10579,7 @@ int lua_ax_base_Node_setOpacityModifyRGB(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setOpacityModifyRGB'", nullptr);
         return 0;
@@ -10629,7 +10629,7 @@ int lua_ax_base_Node_isOpacityModifyRGB(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_isOpacityModifyRGB'", nullptr);
         return 0;
@@ -10676,7 +10676,7 @@ int lua_ax_base_Node_setOnEnterCallback(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setOnEnterCallback'", nullptr);
         return 0;
@@ -10730,7 +10730,7 @@ int lua_ax_base_Node_setOnExitCallback(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setOnExitCallback'", nullptr);
         return 0;
@@ -10784,7 +10784,7 @@ int lua_ax_base_Node_setOnEnterTransitionDidFinishCallback(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setOnEnterTransitionDidFinishCallback'", nullptr);
         return 0;
@@ -10838,7 +10838,7 @@ int lua_ax_base_Node_getOnEnterTransitionDidFinishCallback(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getOnEnterTransitionDidFinishCallback'", nullptr);
         return 0;
@@ -10885,7 +10885,7 @@ int lua_ax_base_Node_setOnExitTransitionDidStartCallback(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setOnExitTransitionDidStartCallback'", nullptr);
         return 0;
@@ -10939,7 +10939,7 @@ int lua_ax_base_Node_getOnExitTransitionDidStartCallback(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getOnExitTransitionDidStartCallback'", nullptr);
         return 0;
@@ -10986,7 +10986,7 @@ int lua_ax_base_Node_getCameraMask(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getCameraMask'", nullptr);
         return 0;
@@ -11033,7 +11033,7 @@ int lua_ax_base_Node_setCameraMask(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setCameraMask'", nullptr);
         return 0;
@@ -11100,7 +11100,7 @@ int lua_ax_base_Node_applyMaskOnEnter(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_applyMaskOnEnter'", nullptr);
         return 0;
@@ -11221,7 +11221,7 @@ int lua_ax_base_Node_setProgramStateWithRegistry(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setProgramStateWithRegistry'", nullptr);
         return 0;
@@ -11274,7 +11274,7 @@ int lua_ax_base_Node_setProgramStateByProgramId(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setProgramStateByProgramId'", nullptr);
         return 0;
@@ -11324,7 +11324,7 @@ int lua_ax_base_Node_getProgramState(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getProgramState'", nullptr);
         return 0;
@@ -11371,7 +11371,7 @@ int lua_ax_base_Node_updateProgramStateTexture(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_updateProgramStateTexture'", nullptr);
         return 0;
@@ -11421,7 +11421,7 @@ int lua_ax_base_Node_resetChild(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_resetChild'", nullptr);
         return 0;
@@ -11474,7 +11474,7 @@ int lua_ax_base_Node_init(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_init'", nullptr);
         return 0;
@@ -11521,7 +11521,7 @@ int lua_ax_base_Node_initLayer(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_initLayer'", nullptr);
         return 0;
@@ -11568,7 +11568,7 @@ int lua_ax_base_Node_setPhysicsBody(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_setPhysicsBody'", nullptr);
         return 0;
@@ -11618,7 +11618,7 @@ int lua_ax_base_Node_getPhysicsBody(lua_State* tolua_S)
     cobj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Node_getPhysicsBody'", nullptr);
         return 0;
@@ -11938,7 +11938,7 @@ int lua_ax_base_Scene_getDefaultCamera(lua_State* tolua_S)
     cobj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scene_getDefaultCamera'", nullptr);
         return 0;
@@ -11985,7 +11985,7 @@ int lua_ax_base_Scene_render(lua_State* tolua_S)
     cobj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scene_render'", nullptr);
         return 0;
@@ -12058,7 +12058,7 @@ int lua_ax_base_Scene_initWithSize(lua_State* tolua_S)
     cobj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scene_initWithSize'", nullptr);
         return 0;
@@ -12108,7 +12108,7 @@ int lua_ax_base_Scene_setCameraOrderDirty(lua_State* tolua_S)
     cobj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scene_setCameraOrderDirty'", nullptr);
         return 0;
@@ -12155,7 +12155,7 @@ int lua_ax_base_Scene_onProjectionChanged(lua_State* tolua_S)
     cobj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scene_onProjectionChanged'", nullptr);
         return 0;
@@ -12187,53 +12187,6 @@ int lua_ax_base_Scene_onProjectionChanged(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Scene_getPhysicsWorld(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Scene* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Scene",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scene_getPhysicsWorld'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_getPhysicsWorld'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->getPhysicsWorld();
-        object_to_luaval<ax::PhysicsWorld>(tolua_S, "ax.PhysicsWorld",(ax::PhysicsWorld*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:getPhysicsWorld",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_getPhysicsWorld'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_Scene_initWithPhysics(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12252,7 +12205,7 @@ int lua_ax_base_Scene_initWithPhysics(lua_State* tolua_S)
     cobj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scene_initWithPhysics'", nullptr);
         return 0;
@@ -12299,7 +12252,7 @@ int lua_ax_base_Scene_initPhysicsWorld(lua_State* tolua_S)
     cobj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scene_initPhysicsWorld'", nullptr);
         return 0;
@@ -12346,7 +12299,7 @@ int lua_ax_base_Scene_fixedUpdate(lua_State* tolua_S)
     cobj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scene_fixedUpdate'", nullptr);
         return 0;
@@ -12396,7 +12349,7 @@ int lua_ax_base_Scene_stepPhysicsAndNavigation(lua_State* tolua_S)
     cobj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scene_stepPhysicsAndNavigation'", nullptr);
         return 0;
@@ -12587,7 +12540,6 @@ int lua_register_ax_base_Scene(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSize",lua_ax_base_Scene_initWithSize);
         tolua_function(tolua_S,"setCameraOrderDirty",lua_ax_base_Scene_setCameraOrderDirty);
         tolua_function(tolua_S,"onProjectionChanged",lua_ax_base_Scene_onProjectionChanged);
-        tolua_function(tolua_S,"getPhysicsWorld",lua_ax_base_Scene_getPhysicsWorld);
         tolua_function(tolua_S,"initWithPhysics",lua_ax_base_Scene_initWithPhysics);
         tolua_function(tolua_S,"initPhysicsWorld",lua_ax_base_Scene_initPhysicsWorld);
         tolua_function(tolua_S,"fixedUpdate",lua_ax_base_Scene_fixedUpdate);
@@ -12620,7 +12572,7 @@ int lua_ax_base_GLView_end(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_end'", nullptr);
         return 0;
@@ -12667,7 +12619,7 @@ int lua_ax_base_GLView_isOpenGLReady(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_isOpenGLReady'", nullptr);
         return 0;
@@ -12714,7 +12666,7 @@ int lua_ax_base_GLView_swapBuffers(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_swapBuffers'", nullptr);
         return 0;
@@ -12761,7 +12713,7 @@ int lua_ax_base_GLView_setIMEKeyboardState(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setIMEKeyboardState'", nullptr);
         return 0;
@@ -12811,7 +12763,7 @@ int lua_ax_base_GLView_windowShouldClose(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_windowShouldClose'", nullptr);
         return 0;
@@ -12858,7 +12810,7 @@ int lua_ax_base_GLView_pollEvents(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_pollEvents'", nullptr);
         return 0;
@@ -12905,7 +12857,7 @@ int lua_ax_base_GLView_getFrameSize(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getFrameSize'", nullptr);
         return 0;
@@ -12952,7 +12904,7 @@ int lua_ax_base_GLView_setFrameSize(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setFrameSize'", nullptr);
         return 0;
@@ -13005,7 +12957,7 @@ int lua_ax_base_GLView_setFrameZoomFactor(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setFrameZoomFactor'", nullptr);
         return 0;
@@ -13055,7 +13007,7 @@ int lua_ax_base_GLView_getFrameZoomFactor(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getFrameZoomFactor'", nullptr);
         return 0;
@@ -13102,7 +13054,7 @@ int lua_ax_base_GLView_setCursorVisible(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setCursorVisible'", nullptr);
         return 0;
@@ -13152,7 +13104,7 @@ int lua_ax_base_GLView_getRetinaFactor(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getRetinaFactor'", nullptr);
         return 0;
@@ -13199,7 +13151,7 @@ int lua_ax_base_GLView_setContentScaleFactor(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setContentScaleFactor'", nullptr);
         return 0;
@@ -13249,7 +13201,7 @@ int lua_ax_base_GLView_getContentScaleFactor(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getContentScaleFactor'", nullptr);
         return 0;
@@ -13296,7 +13248,7 @@ int lua_ax_base_GLView_isRetinaDisplay(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_isRetinaDisplay'", nullptr);
         return 0;
@@ -13343,7 +13295,7 @@ int lua_ax_base_GLView_getVisibleSize(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getVisibleSize'", nullptr);
         return 0;
@@ -13390,7 +13342,7 @@ int lua_ax_base_GLView_getVisibleOrigin(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getVisibleOrigin'", nullptr);
         return 0;
@@ -13437,7 +13389,7 @@ int lua_ax_base_GLView_getVisibleRect(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getVisibleRect'", nullptr);
         return 0;
@@ -13484,7 +13436,7 @@ int lua_ax_base_GLView_getSafeAreaRect(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getSafeAreaRect'", nullptr);
         return 0;
@@ -13531,7 +13483,7 @@ int lua_ax_base_GLView_setDesignResolutionSize(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setDesignResolutionSize'", nullptr);
         return 0;
@@ -13587,7 +13539,7 @@ int lua_ax_base_GLView_getDesignResolutionSize(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getDesignResolutionSize'", nullptr);
         return 0;
@@ -13634,7 +13586,7 @@ int lua_ax_base_GLView_setViewPortInPoints(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setViewPortInPoints'", nullptr);
         return 0;
@@ -13693,7 +13645,7 @@ int lua_ax_base_GLView_setScissorInPoints(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setScissorInPoints'", nullptr);
         return 0;
@@ -13752,7 +13704,7 @@ int lua_ax_base_GLView_isScissorEnabled(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_isScissorEnabled'", nullptr);
         return 0;
@@ -13799,7 +13751,7 @@ int lua_ax_base_GLView_getScissorRect(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getScissorRect'", nullptr);
         return 0;
@@ -13846,7 +13798,7 @@ int lua_ax_base_GLView_setViewName(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setViewName'", nullptr);
         return 0;
@@ -13896,7 +13848,7 @@ int lua_ax_base_GLView_getViewName(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getViewName'", nullptr);
         return 0;
@@ -13998,7 +13950,7 @@ int lua_ax_base_GLView_setDefaultIcon(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setDefaultIcon'", nullptr);
         return 0;
@@ -14045,7 +13997,7 @@ int lua_ax_base_GLView_getViewPortRect(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getViewPortRect'", nullptr);
         return 0;
@@ -14092,7 +14044,7 @@ int lua_ax_base_GLView_getScaleX(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getScaleX'", nullptr);
         return 0;
@@ -14139,7 +14091,7 @@ int lua_ax_base_GLView_getScaleY(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getScaleY'", nullptr);
         return 0;
@@ -14186,7 +14138,7 @@ int lua_ax_base_GLView_getResolutionPolicy(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getResolutionPolicy'", nullptr);
         return 0;
@@ -14233,7 +14185,7 @@ int lua_ax_base_GLView_renderScene(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_renderScene'", nullptr);
         return 0;
@@ -14286,7 +14238,7 @@ int lua_ax_base_GLView_setInteractive(lua_State* tolua_S)
     cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setInteractive'", nullptr);
         return 0;
@@ -14463,7 +14415,7 @@ int lua_ax_base_Director_init(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_init'", nullptr);
         return 0;
@@ -14510,7 +14462,7 @@ int lua_ax_base_Director_getRunningScene(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getRunningScene'", nullptr);
         return 0;
@@ -14557,7 +14509,7 @@ int lua_ax_base_Director_getNextScene(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getNextScene'", nullptr);
         return 0;
@@ -14604,7 +14556,7 @@ int lua_ax_base_Director_getAnimationInterval(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getAnimationInterval'", nullptr);
         return 0;
@@ -14651,7 +14603,7 @@ int lua_ax_base_Director_setAnimationInterval(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setAnimationInterval'", nullptr);
         return 0;
@@ -14701,7 +14653,7 @@ int lua_ax_base_Director_isStatsDisplay(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_isStatsDisplay'", nullptr);
         return 0;
@@ -14748,7 +14700,7 @@ int lua_ax_base_Director_setStatsDisplay(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setStatsDisplay'", nullptr);
         return 0;
@@ -14798,7 +14750,7 @@ int lua_ax_base_Director_getSecondsPerFrame(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getSecondsPerFrame'", nullptr);
         return 0;
@@ -14845,7 +14797,7 @@ int lua_ax_base_Director_setStatsAnchor(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setStatsAnchor'", nullptr);
         return 0;
@@ -14906,7 +14858,7 @@ int lua_ax_base_Director_getGLView(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getGLView'", nullptr);
         return 0;
@@ -14953,7 +14905,7 @@ int lua_ax_base_Director_setGLView(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setGLView'", nullptr);
         return 0;
@@ -15003,7 +14955,7 @@ int lua_ax_base_Director_getTextureCache(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getTextureCache'", nullptr);
         return 0;
@@ -15050,7 +15002,7 @@ int lua_ax_base_Director_isNextDeltaTimeZero(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_isNextDeltaTimeZero'", nullptr);
         return 0;
@@ -15097,7 +15049,7 @@ int lua_ax_base_Director_setNextDeltaTimeZero(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setNextDeltaTimeZero'", nullptr);
         return 0;
@@ -15147,7 +15099,7 @@ int lua_ax_base_Director_isPaused(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_isPaused'", nullptr);
         return 0;
@@ -15194,7 +15146,7 @@ int lua_ax_base_Director_getTotalFrames(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getTotalFrames'", nullptr);
         return 0;
@@ -15241,7 +15193,7 @@ int lua_ax_base_Director_setProjection(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setProjection'", nullptr);
         return 0;
@@ -15291,7 +15243,7 @@ int lua_ax_base_Director_setViewport(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setViewport'", nullptr);
         return 0;
@@ -15338,7 +15290,7 @@ int lua_ax_base_Director_isSendCleanupToScene(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_isSendCleanupToScene'", nullptr);
         return 0;
@@ -15385,7 +15337,7 @@ int lua_ax_base_Director_getNotificationNode(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getNotificationNode'", nullptr);
         return 0;
@@ -15432,7 +15384,7 @@ int lua_ax_base_Director_setNotificationNode(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setNotificationNode'", nullptr);
         return 0;
@@ -15482,7 +15434,7 @@ int lua_ax_base_Director_getWinSize(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getWinSize'", nullptr);
         return 0;
@@ -15529,7 +15481,7 @@ int lua_ax_base_Director_getWinSizeInPixels(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getWinSizeInPixels'", nullptr);
         return 0;
@@ -15576,7 +15528,7 @@ int lua_ax_base_Director_getVisibleSize(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getVisibleSize'", nullptr);
         return 0;
@@ -15623,7 +15575,7 @@ int lua_ax_base_Director_getVisibleOrigin(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getVisibleOrigin'", nullptr);
         return 0;
@@ -15670,7 +15622,7 @@ int lua_ax_base_Director_getSafeAreaRect(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getSafeAreaRect'", nullptr);
         return 0;
@@ -15717,7 +15669,7 @@ int lua_ax_base_Director_convertToGL(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_convertToGL'", nullptr);
         return 0;
@@ -15767,7 +15719,7 @@ int lua_ax_base_Director_convertToUI(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_convertToUI'", nullptr);
         return 0;
@@ -15817,7 +15769,7 @@ int lua_ax_base_Director_getZEye(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getZEye'", nullptr);
         return 0;
@@ -15864,7 +15816,7 @@ int lua_ax_base_Director_runWithScene(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_runWithScene'", nullptr);
         return 0;
@@ -15914,7 +15866,7 @@ int lua_ax_base_Director_pushScene(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_pushScene'", nullptr);
         return 0;
@@ -15964,7 +15916,7 @@ int lua_ax_base_Director_popScene(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_popScene'", nullptr);
         return 0;
@@ -16011,7 +15963,7 @@ int lua_ax_base_Director_popToRootScene(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_popToRootScene'", nullptr);
         return 0;
@@ -16058,7 +16010,7 @@ int lua_ax_base_Director_popToSceneStackLevel(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_popToSceneStackLevel'", nullptr);
         return 0;
@@ -16108,7 +16060,7 @@ int lua_ax_base_Director_replaceScene(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_replaceScene'", nullptr);
         return 0;
@@ -16158,7 +16110,7 @@ int lua_ax_base_Director_end(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_end'", nullptr);
         return 0;
@@ -16205,7 +16157,7 @@ int lua_ax_base_Director_pause(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_pause'", nullptr);
         return 0;
@@ -16252,7 +16204,7 @@ int lua_ax_base_Director_resume(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_resume'", nullptr);
         return 0;
@@ -16299,7 +16251,7 @@ int lua_ax_base_Director_restart(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_restart'", nullptr);
         return 0;
@@ -16346,7 +16298,7 @@ int lua_ax_base_Director_stopAnimation(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_stopAnimation'", nullptr);
         return 0;
@@ -16393,7 +16345,7 @@ int lua_ax_base_Director_startAnimation(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_startAnimation'", nullptr);
         return 0;
@@ -16440,7 +16392,7 @@ int lua_ax_base_Director_drawScene(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_drawScene'", nullptr);
         return 0;
@@ -16487,7 +16439,7 @@ int lua_ax_base_Director_purgeCachedData(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_purgeCachedData'", nullptr);
         return 0;
@@ -16534,7 +16486,7 @@ int lua_ax_base_Director_setDefaultValues(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setDefaultValues'", nullptr);
         return 0;
@@ -16581,7 +16533,7 @@ int lua_ax_base_Director_setGLDefaultValues(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setGLDefaultValues'", nullptr);
         return 0;
@@ -16628,7 +16580,7 @@ int lua_ax_base_Director_setClearColor(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setClearColor'", nullptr);
         return 0;
@@ -16729,7 +16681,7 @@ int lua_ax_base_Director_setContentScaleFactor(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setContentScaleFactor'", nullptr);
         return 0;
@@ -16779,7 +16731,7 @@ int lua_ax_base_Director_getContentScaleFactor(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getContentScaleFactor'", nullptr);
         return 0;
@@ -16826,7 +16778,7 @@ int lua_ax_base_Director_getScheduler(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getScheduler'", nullptr);
         return 0;
@@ -16873,7 +16825,7 @@ int lua_ax_base_Director_setScheduler(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setScheduler'", nullptr);
         return 0;
@@ -16923,7 +16875,7 @@ int lua_ax_base_Director_getActionManager(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getActionManager'", nullptr);
         return 0;
@@ -16970,7 +16922,7 @@ int lua_ax_base_Director_setActionManager(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setActionManager'", nullptr);
         return 0;
@@ -17020,7 +16972,7 @@ int lua_ax_base_Director_getEventDispatcher(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getEventDispatcher'", nullptr);
         return 0;
@@ -17067,7 +17019,7 @@ int lua_ax_base_Director_setEventDispatcher(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setEventDispatcher'", nullptr);
         return 0;
@@ -17117,7 +17069,7 @@ int lua_ax_base_Director_getRenderer(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getRenderer'", nullptr);
         return 0;
@@ -17164,7 +17116,7 @@ int lua_ax_base_Director_getDeltaTime(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getDeltaTime'", nullptr);
         return 0;
@@ -17211,7 +17163,7 @@ int lua_ax_base_Director_getFrameRate(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getFrameRate'", nullptr);
         return 0;
@@ -17258,7 +17210,7 @@ int lua_ax_base_Director_pushMatrix(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_pushMatrix'", nullptr);
         return 0;
@@ -17308,7 +17260,7 @@ int lua_ax_base_Director_popMatrix(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_popMatrix'", nullptr);
         return 0;
@@ -17358,7 +17310,7 @@ int lua_ax_base_Director_loadIdentityMatrix(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_loadIdentityMatrix'", nullptr);
         return 0;
@@ -17408,7 +17360,7 @@ int lua_ax_base_Director_loadMatrix(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_loadMatrix'", nullptr);
         return 0;
@@ -17461,7 +17413,7 @@ int lua_ax_base_Director_multiplyMatrix(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_multiplyMatrix'", nullptr);
         return 0;
@@ -17514,7 +17466,7 @@ int lua_ax_base_Director_getMatrix(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getMatrix'", nullptr);
         return 0;
@@ -17564,7 +17516,7 @@ int lua_ax_base_Director_resetMatrixStack(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_resetMatrixStack'", nullptr);
         return 0;
@@ -17611,7 +17563,7 @@ int lua_ax_base_Director_getAxmolThreadId(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getAxmolThreadId'", nullptr);
         return 0;
@@ -17658,7 +17610,7 @@ int lua_ax_base_Director_setChildrenIndexerEnabled(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setChildrenIndexerEnabled'", nullptr);
         return 0;
@@ -17708,7 +17660,7 @@ int lua_ax_base_Director_isChildrenIndexerEnabled(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_isChildrenIndexerEnabled'", nullptr);
         return 0;
@@ -17755,7 +17707,7 @@ int lua_ax_base_Director_isValid(lua_State* tolua_S)
     cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_isValid'", nullptr);
         return 0;
@@ -17960,7 +17912,7 @@ int lua_ax_base_Timer_setupTimerWithInterval(lua_State* tolua_S)
     cobj = (ax::Timer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Timer_setupTimerWithInterval'", nullptr);
         return 0;
@@ -18016,7 +17968,7 @@ int lua_ax_base_Timer_setAborted(lua_State* tolua_S)
     cobj = (ax::Timer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Timer_setAborted'", nullptr);
         return 0;
@@ -18063,7 +18015,7 @@ int lua_ax_base_Timer_isAborted(lua_State* tolua_S)
     cobj = (ax::Timer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Timer_isAborted'", nullptr);
         return 0;
@@ -18110,7 +18062,7 @@ int lua_ax_base_Timer_isExhausted(lua_State* tolua_S)
     cobj = (ax::Timer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Timer_isExhausted'", nullptr);
         return 0;
@@ -18157,7 +18109,7 @@ int lua_ax_base_Timer_trigger(lua_State* tolua_S)
     cobj = (ax::Timer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Timer_trigger'", nullptr);
         return 0;
@@ -18207,7 +18159,7 @@ int lua_ax_base_Timer_cancel(lua_State* tolua_S)
     cobj = (ax::Timer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Timer_cancel'", nullptr);
         return 0;
@@ -18254,7 +18206,7 @@ int lua_ax_base_Timer_update(lua_State* tolua_S)
     cobj = (ax::Timer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Timer_update'", nullptr);
         return 0;
@@ -18330,7 +18282,7 @@ int lua_ax_base_Scheduler_getTimeScale(lua_State* tolua_S)
     cobj = (ax::Scheduler*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scheduler_getTimeScale'", nullptr);
         return 0;
@@ -18377,7 +18329,7 @@ int lua_ax_base_Scheduler_setTimeScale(lua_State* tolua_S)
     cobj = (ax::Scheduler*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scheduler_setTimeScale'", nullptr);
         return 0;
@@ -18427,7 +18379,7 @@ int lua_ax_base_Scheduler_runOnAxmolThread(lua_State* tolua_S)
     cobj = (ax::Scheduler*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scheduler_runOnAxmolThread'", nullptr);
         return 0;
@@ -18481,7 +18433,7 @@ int lua_ax_base_Scheduler_removeAllPendingActions(lua_State* tolua_S)
     cobj = (ax::Scheduler*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scheduler_removeAllPendingActions'", nullptr);
         return 0;
@@ -18589,7 +18541,7 @@ int lua_ax_base_Action_clone(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_clone'", nullptr);
         return 0;
@@ -18636,7 +18588,7 @@ int lua_ax_base_Action_reverse(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_reverse'", nullptr);
         return 0;
@@ -18683,7 +18635,7 @@ int lua_ax_base_Action_isDone(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_isDone'", nullptr);
         return 0;
@@ -18730,7 +18682,7 @@ int lua_ax_base_Action_startWithTarget(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_startWithTarget'", nullptr);
         return 0;
@@ -18780,7 +18732,7 @@ int lua_ax_base_Action_stop(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_stop'", nullptr);
         return 0;
@@ -18827,7 +18779,7 @@ int lua_ax_base_Action_step(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_step'", nullptr);
         return 0;
@@ -18877,7 +18829,7 @@ int lua_ax_base_Action_update(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_update'", nullptr);
         return 0;
@@ -18927,7 +18879,7 @@ int lua_ax_base_Action_getTarget(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_getTarget'", nullptr);
         return 0;
@@ -18974,7 +18926,7 @@ int lua_ax_base_Action_setTarget(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_setTarget'", nullptr);
         return 0;
@@ -19024,7 +18976,7 @@ int lua_ax_base_Action_getOriginalTarget(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_getOriginalTarget'", nullptr);
         return 0;
@@ -19071,7 +19023,7 @@ int lua_ax_base_Action_setOriginalTarget(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_setOriginalTarget'", nullptr);
         return 0;
@@ -19121,7 +19073,7 @@ int lua_ax_base_Action_getTag(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_getTag'", nullptr);
         return 0;
@@ -19168,7 +19120,7 @@ int lua_ax_base_Action_setTag(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_setTag'", nullptr);
         return 0;
@@ -19218,7 +19170,7 @@ int lua_ax_base_Action_getFlags(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_getFlags'", nullptr);
         return 0;
@@ -19265,7 +19217,7 @@ int lua_ax_base_Action_setFlags(lua_State* tolua_S)
     cobj = (ax::Action*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Action_setFlags'", nullptr);
         return 0;
@@ -19349,7 +19301,7 @@ int lua_ax_base_FiniteTimeAction_getDuration(lua_State* tolua_S)
     cobj = (ax::FiniteTimeAction*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FiniteTimeAction_getDuration'", nullptr);
         return 0;
@@ -19396,7 +19348,7 @@ int lua_ax_base_FiniteTimeAction_setDuration(lua_State* tolua_S)
     cobj = (ax::FiniteTimeAction*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FiniteTimeAction_setDuration'", nullptr);
         return 0;
@@ -19467,7 +19419,7 @@ int lua_ax_base_Speed_getSpeed(lua_State* tolua_S)
     cobj = (ax::Speed*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Speed_getSpeed'", nullptr);
         return 0;
@@ -19514,7 +19466,7 @@ int lua_ax_base_Speed_setSpeed(lua_State* tolua_S)
     cobj = (ax::Speed*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Speed_setSpeed'", nullptr);
         return 0;
@@ -19564,7 +19516,7 @@ int lua_ax_base_Speed_setInnerAction(lua_State* tolua_S)
     cobj = (ax::Speed*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Speed_setInnerAction'", nullptr);
         return 0;
@@ -19614,7 +19566,7 @@ int lua_ax_base_Speed_getInnerAction(lua_State* tolua_S)
     cobj = (ax::Speed*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Speed_getInnerAction'", nullptr);
         return 0;
@@ -19661,7 +19613,7 @@ int lua_ax_base_Speed_initWithAction(lua_State* tolua_S)
     cobj = (ax::Speed*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Speed_initWithAction'", nullptr);
         return 0;
@@ -19815,7 +19767,7 @@ int lua_ax_base_Follow_isBoundarySet(lua_State* tolua_S)
     cobj = (ax::Follow*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Follow_isBoundarySet'", nullptr);
         return 0;
@@ -19862,7 +19814,7 @@ int lua_ax_base_Follow_setBoundarySet(lua_State* tolua_S)
     cobj = (ax::Follow*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Follow_setBoundarySet'", nullptr);
         return 0;
@@ -19912,7 +19864,7 @@ int lua_ax_base_Follow_initWithTarget(lua_State* tolua_S)
     cobj = (ax::Follow*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Follow_initWithTarget'", nullptr);
         return 0;
@@ -19979,7 +19931,7 @@ int lua_ax_base_Follow_initWithTargetAndOffset(lua_State* tolua_S)
     cobj = (ax::Follow*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Follow_initWithTargetAndOffset'", nullptr);
         return 0;
@@ -20231,7 +20183,7 @@ int lua_ax_base_Image_initWithImageFile(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_initWithImageFile'", nullptr);
         return 0;
@@ -20281,7 +20233,7 @@ int lua_ax_base_Image_flipRawData(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_flipRawData'", nullptr);
         return 0;
@@ -20328,7 +20280,7 @@ int lua_ax_base_Image_getFileType(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_getFileType'", nullptr);
         return 0;
@@ -20375,7 +20327,7 @@ int lua_ax_base_Image_getPixelFormat(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_getPixelFormat'", nullptr);
         return 0;
@@ -20422,7 +20374,7 @@ int lua_ax_base_Image_getWidth(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_getWidth'", nullptr);
         return 0;
@@ -20469,7 +20421,7 @@ int lua_ax_base_Image_getHeight(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_getHeight'", nullptr);
         return 0;
@@ -20516,7 +20468,7 @@ int lua_ax_base_Image_getNumberOfMipmaps(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_getNumberOfMipmaps'", nullptr);
         return 0;
@@ -20563,7 +20515,7 @@ int lua_ax_base_Image_hasPremultipliedAlpha(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_hasPremultipliedAlpha'", nullptr);
         return 0;
@@ -20610,7 +20562,7 @@ int lua_ax_base_Image_getFilePath(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_getFilePath'", nullptr);
         return 0;
@@ -20657,7 +20609,7 @@ int lua_ax_base_Image_getBitPerPixel(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_getBitPerPixel'", nullptr);
         return 0;
@@ -20704,7 +20656,7 @@ int lua_ax_base_Image_hasAlpha(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_hasAlpha'", nullptr);
         return 0;
@@ -20751,7 +20703,7 @@ int lua_ax_base_Image_isCompressed(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_isCompressed'", nullptr);
         return 0;
@@ -20798,7 +20750,7 @@ int lua_ax_base_Image_saveToFile(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_saveToFile'", nullptr);
         return 0;
@@ -20865,7 +20817,7 @@ int lua_ax_base_Image_premultiplyAlpha(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_premultiplyAlpha'", nullptr);
         return 0;
@@ -20912,7 +20864,7 @@ int lua_ax_base_Image_reversePremultipliedAlpha(lua_State* tolua_S)
     cobj = (ax::Image*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Image_reversePremultipliedAlpha'", nullptr);
         return 0;
@@ -21144,7 +21096,7 @@ int lua_ax_base_PolygonInfo_setQuad(lua_State* tolua_S)
     cobj = (ax::PolygonInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_PolygonInfo_setQuad'", nullptr);
         return 0;
@@ -21195,7 +21147,7 @@ int lua_ax_base_PolygonInfo_setQuads(lua_State* tolua_S)
     cobj = (ax::PolygonInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_PolygonInfo_setQuads'", nullptr);
         return 0;
@@ -21249,7 +21201,7 @@ int lua_ax_base_PolygonInfo_setTriangles(lua_State* tolua_S)
     cobj = (ax::PolygonInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_PolygonInfo_setTriangles'", nullptr);
         return 0;
@@ -21300,7 +21252,7 @@ int lua_ax_base_PolygonInfo_getVertCount(lua_State* tolua_S)
     cobj = (ax::PolygonInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_PolygonInfo_getVertCount'", nullptr);
         return 0;
@@ -21347,7 +21299,7 @@ int lua_ax_base_PolygonInfo_getTrianglesCount(lua_State* tolua_S)
     cobj = (ax::PolygonInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_PolygonInfo_getTrianglesCount'", nullptr);
         return 0;
@@ -21394,7 +21346,7 @@ int lua_ax_base_PolygonInfo_getArea(lua_State* tolua_S)
     cobj = (ax::PolygonInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_PolygonInfo_getArea'", nullptr);
         return 0;
@@ -21441,7 +21393,7 @@ int lua_ax_base_PolygonInfo_getRect(lua_State* tolua_S)
     cobj = (ax::PolygonInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_PolygonInfo_getRect'", nullptr);
         return 0;
@@ -21488,7 +21440,7 @@ int lua_ax_base_PolygonInfo_setRect(lua_State* tolua_S)
     cobj = (ax::PolygonInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_PolygonInfo_setRect'", nullptr);
         return 0;
@@ -21538,7 +21490,7 @@ int lua_ax_base_PolygonInfo_getFilename(lua_State* tolua_S)
     cobj = (ax::PolygonInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_PolygonInfo_getFilename'", nullptr);
         return 0;
@@ -21585,7 +21537,7 @@ int lua_ax_base_PolygonInfo_setFilename(lua_State* tolua_S)
     cobj = (ax::PolygonInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_PolygonInfo_setFilename'", nullptr);
         return 0;
@@ -21758,7 +21710,7 @@ int lua_ax_base_SpriteFrame_getRectInPixels(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_getRectInPixels'", nullptr);
         return 0;
@@ -21805,7 +21757,7 @@ int lua_ax_base_SpriteFrame_setRectInPixels(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_setRectInPixels'", nullptr);
         return 0;
@@ -21855,7 +21807,7 @@ int lua_ax_base_SpriteFrame_isRotated(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_isRotated'", nullptr);
         return 0;
@@ -21902,7 +21854,7 @@ int lua_ax_base_SpriteFrame_setRotated(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_setRotated'", nullptr);
         return 0;
@@ -21952,7 +21904,7 @@ int lua_ax_base_SpriteFrame_getRect(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_getRect'", nullptr);
         return 0;
@@ -21999,7 +21951,7 @@ int lua_ax_base_SpriteFrame_setRect(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_setRect'", nullptr);
         return 0;
@@ -22049,7 +22001,7 @@ int lua_ax_base_SpriteFrame_getCenterRect(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_getCenterRect'", nullptr);
         return 0;
@@ -22096,7 +22048,7 @@ int lua_ax_base_SpriteFrame_setCenterRectInPixels(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_setCenterRectInPixels'", nullptr);
         return 0;
@@ -22146,7 +22098,7 @@ int lua_ax_base_SpriteFrame_hasCenterRect(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_hasCenterRect'", nullptr);
         return 0;
@@ -22193,7 +22145,7 @@ int lua_ax_base_SpriteFrame_getOffsetInPixels(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_getOffsetInPixels'", nullptr);
         return 0;
@@ -22240,7 +22192,7 @@ int lua_ax_base_SpriteFrame_setOffsetInPixels(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_setOffsetInPixels'", nullptr);
         return 0;
@@ -22290,7 +22242,7 @@ int lua_ax_base_SpriteFrame_getOriginalSizeInPixels(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_getOriginalSizeInPixels'", nullptr);
         return 0;
@@ -22337,7 +22289,7 @@ int lua_ax_base_SpriteFrame_setOriginalSizeInPixels(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_setOriginalSizeInPixels'", nullptr);
         return 0;
@@ -22387,7 +22339,7 @@ int lua_ax_base_SpriteFrame_getOriginalSize(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_getOriginalSize'", nullptr);
         return 0;
@@ -22434,7 +22386,7 @@ int lua_ax_base_SpriteFrame_setOriginalSize(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_setOriginalSize'", nullptr);
         return 0;
@@ -22484,7 +22436,7 @@ int lua_ax_base_SpriteFrame_getTexture(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_getTexture'", nullptr);
         return 0;
@@ -22531,7 +22483,7 @@ int lua_ax_base_SpriteFrame_setTexture(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_setTexture'", nullptr);
         return 0;
@@ -22581,7 +22533,7 @@ int lua_ax_base_SpriteFrame_getOffset(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_getOffset'", nullptr);
         return 0;
@@ -22628,7 +22580,7 @@ int lua_ax_base_SpriteFrame_setOffset(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_setOffset'", nullptr);
         return 0;
@@ -22678,7 +22630,7 @@ int lua_ax_base_SpriteFrame_getAnchorPoint(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_getAnchorPoint'", nullptr);
         return 0;
@@ -22725,7 +22677,7 @@ int lua_ax_base_SpriteFrame_setAnchorPoint(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_setAnchorPoint'", nullptr);
         return 0;
@@ -22775,7 +22727,7 @@ int lua_ax_base_SpriteFrame_hasAnchorPoint(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_hasAnchorPoint'", nullptr);
         return 0;
@@ -22822,7 +22774,7 @@ int lua_ax_base_SpriteFrame_clone(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_clone'", nullptr);
         return 0;
@@ -23019,7 +22971,7 @@ int lua_ax_base_SpriteFrame_getName(lua_State* tolua_S)
     cobj = (ax::SpriteFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrame_getName'", nullptr);
         return 0;
@@ -23277,7 +23229,7 @@ int lua_ax_base_AnimationFrame_getSpriteFrame(lua_State* tolua_S)
     cobj = (ax::AnimationFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationFrame_getSpriteFrame'", nullptr);
         return 0;
@@ -23324,7 +23276,7 @@ int lua_ax_base_AnimationFrame_setSpriteFrame(lua_State* tolua_S)
     cobj = (ax::AnimationFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationFrame_setSpriteFrame'", nullptr);
         return 0;
@@ -23374,7 +23326,7 @@ int lua_ax_base_AnimationFrame_getDelayUnits(lua_State* tolua_S)
     cobj = (ax::AnimationFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationFrame_getDelayUnits'", nullptr);
         return 0;
@@ -23421,7 +23373,7 @@ int lua_ax_base_AnimationFrame_setDelayUnits(lua_State* tolua_S)
     cobj = (ax::AnimationFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationFrame_setDelayUnits'", nullptr);
         return 0;
@@ -23518,7 +23470,7 @@ int lua_ax_base_AnimationFrame_setUserInfo(lua_State* tolua_S)
     cobj = (ax::AnimationFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationFrame_setUserInfo'", nullptr);
         return 0;
@@ -23568,7 +23520,7 @@ int lua_ax_base_AnimationFrame_clone(lua_State* tolua_S)
     cobj = (ax::AnimationFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationFrame_clone'", nullptr);
         return 0;
@@ -23615,7 +23567,7 @@ int lua_ax_base_AnimationFrame_initWithSpriteFrame(lua_State* tolua_S)
     cobj = (ax::AnimationFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationFrame_initWithSpriteFrame'", nullptr);
         return 0;
@@ -23777,7 +23729,7 @@ int lua_ax_base_Animation_addSpriteFrame(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_addSpriteFrame'", nullptr);
         return 0;
@@ -23827,7 +23779,7 @@ int lua_ax_base_Animation_addSpriteFrameWithFile(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_addSpriteFrameWithFile'", nullptr);
         return 0;
@@ -23877,7 +23829,7 @@ int lua_ax_base_Animation_addSpriteFrameWithTexture(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_addSpriteFrameWithTexture'", nullptr);
         return 0;
@@ -23930,7 +23882,7 @@ int lua_ax_base_Animation_getTotalDelayUnits(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_getTotalDelayUnits'", nullptr);
         return 0;
@@ -23977,7 +23929,7 @@ int lua_ax_base_Animation_setDelayPerUnit(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_setDelayPerUnit'", nullptr);
         return 0;
@@ -24027,7 +23979,7 @@ int lua_ax_base_Animation_getDelayPerUnit(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_getDelayPerUnit'", nullptr);
         return 0;
@@ -24074,7 +24026,7 @@ int lua_ax_base_Animation_getDuration(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_getDuration'", nullptr);
         return 0;
@@ -24121,7 +24073,7 @@ int lua_ax_base_Animation_getFrames(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_getFrames'", nullptr);
         return 0;
@@ -24168,7 +24120,7 @@ int lua_ax_base_Animation_setFrames(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_setFrames'", nullptr);
         return 0;
@@ -24218,7 +24170,7 @@ int lua_ax_base_Animation_getRestoreOriginalFrame(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_getRestoreOriginalFrame'", nullptr);
         return 0;
@@ -24265,7 +24217,7 @@ int lua_ax_base_Animation_setRestoreOriginalFrame(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_setRestoreOriginalFrame'", nullptr);
         return 0;
@@ -24315,7 +24267,7 @@ int lua_ax_base_Animation_getLoops(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_getLoops'", nullptr);
         return 0;
@@ -24362,7 +24314,7 @@ int lua_ax_base_Animation_setLoops(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_setLoops'", nullptr);
         return 0;
@@ -24412,7 +24364,7 @@ int lua_ax_base_Animation_clone(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_clone'", nullptr);
         return 0;
@@ -24459,7 +24411,7 @@ int lua_ax_base_Animation_init(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_init'", nullptr);
         return 0;
@@ -24506,7 +24458,7 @@ int lua_ax_base_Animation_initWithSpriteFrames(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_initWithSpriteFrames'", nullptr);
         return 0;
@@ -24593,7 +24545,7 @@ int lua_ax_base_Animation_initWithAnimationFrames(lua_State* tolua_S)
     cobj = (ax::Animation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animation_initWithAnimationFrames'", nullptr);
         return 0;
@@ -24860,7 +24812,7 @@ int lua_ax_base_ActionInterval_getElapsed(lua_State* tolua_S)
     cobj = (ax::ActionInterval*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionInterval_getElapsed'", nullptr);
         return 0;
@@ -24907,7 +24859,7 @@ int lua_ax_base_ActionInterval_setAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::ActionInterval*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionInterval_setAmplitudeRate'", nullptr);
         return 0;
@@ -24957,7 +24909,7 @@ int lua_ax_base_ActionInterval_getAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::ActionInterval*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionInterval_getAmplitudeRate'", nullptr);
         return 0;
@@ -25004,7 +24956,7 @@ int lua_ax_base_ActionInterval_initWithDuration(lua_State* tolua_S)
     cobj = (ax::ActionInterval*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionInterval_initWithDuration'", nullptr);
         return 0;
@@ -25077,7 +25029,7 @@ int lua_ax_base_Sequence_initWithTwoActions(lua_State* tolua_S)
     cobj = (ax::Sequence*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sequence_initWithTwoActions'", nullptr);
         return 0;
@@ -25130,7 +25082,7 @@ int lua_ax_base_Sequence_init(lua_State* tolua_S)
     cobj = (ax::Sequence*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sequence_init'", nullptr);
         return 0;
@@ -25239,7 +25191,7 @@ int lua_ax_base_Repeat_setInnerAction(lua_State* tolua_S)
     cobj = (ax::Repeat*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Repeat_setInnerAction'", nullptr);
         return 0;
@@ -25289,7 +25241,7 @@ int lua_ax_base_Repeat_getInnerAction(lua_State* tolua_S)
     cobj = (ax::Repeat*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Repeat_getInnerAction'", nullptr);
         return 0;
@@ -25336,7 +25288,7 @@ int lua_ax_base_Repeat_initWithAction(lua_State* tolua_S)
     cobj = (ax::Repeat*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Repeat_initWithAction'", nullptr);
         return 0;
@@ -25488,7 +25440,7 @@ int lua_ax_base_RepeatForever_setInnerAction(lua_State* tolua_S)
     cobj = (ax::RepeatForever*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RepeatForever_setInnerAction'", nullptr);
         return 0;
@@ -25538,7 +25490,7 @@ int lua_ax_base_RepeatForever_getInnerAction(lua_State* tolua_S)
     cobj = (ax::RepeatForever*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RepeatForever_getInnerAction'", nullptr);
         return 0;
@@ -25585,7 +25537,7 @@ int lua_ax_base_RepeatForever_initWithAction(lua_State* tolua_S)
     cobj = (ax::RepeatForever*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RepeatForever_initWithAction'", nullptr);
         return 0;
@@ -25732,7 +25684,7 @@ int lua_ax_base_Spawn_initWithTwoActions(lua_State* tolua_S)
     cobj = (ax::Spawn*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Spawn_initWithTwoActions'", nullptr);
         return 0;
@@ -25785,7 +25737,7 @@ int lua_ax_base_Spawn_init(lua_State* tolua_S)
     cobj = (ax::Spawn*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Spawn_init'", nullptr);
         return 0;
@@ -26660,7 +26612,7 @@ int lua_ax_base_SkewTo_initWithDuration(lua_State* tolua_S)
     cobj = (ax::SkewTo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SkewTo_initWithDuration'", nullptr);
         return 0;
@@ -26815,7 +26767,7 @@ int lua_ax_base_SkewBy_initWithDuration(lua_State* tolua_S)
     cobj = (ax::SkewBy*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SkewBy_initWithDuration'", nullptr);
         return 0;
@@ -26970,7 +26922,7 @@ int lua_ax_base_JumpBy_initWithDuration(lua_State* tolua_S)
     cobj = (ax::JumpBy*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_JumpBy_initWithDuration'", nullptr);
         return 0;
@@ -27130,7 +27082,7 @@ int lua_ax_base_JumpTo_initWithDuration(lua_State* tolua_S)
     cobj = (ax::JumpTo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_JumpTo_initWithDuration'", nullptr);
         return 0;
@@ -27290,7 +27242,7 @@ int lua_ax_base_BezierBy_initWithDuration(lua_State* tolua_S)
     cobj = (ax::BezierBy*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_BezierBy_initWithDuration'", nullptr);
         return 0;
@@ -27402,7 +27354,7 @@ int lua_ax_base_BezierTo_initWithDuration(lua_State* tolua_S)
     cobj = (ax::BezierTo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_BezierTo_initWithDuration'", nullptr);
         return 0;
@@ -27880,7 +27832,7 @@ int lua_ax_base_Blink_initWithDuration(lua_State* tolua_S)
     cobj = (ax::Blink*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Blink_initWithDuration'", nullptr);
         return 0;
@@ -28030,7 +27982,7 @@ int lua_ax_base_FadeTo_initWithDuration(lua_State* tolua_S)
     cobj = (ax::FadeTo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FadeTo_initWithDuration'", nullptr);
         return 0;
@@ -28180,7 +28132,7 @@ int lua_ax_base_FadeIn_setReverseAction(lua_State* tolua_S)
     cobj = (ax::FadeIn*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FadeIn_setReverseAction'", nullptr);
         return 0;
@@ -28325,7 +28277,7 @@ int lua_ax_base_FadeOut_setReverseAction(lua_State* tolua_S)
     cobj = (ax::FadeOut*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FadeOut_setReverseAction'", nullptr);
         return 0;
@@ -28470,7 +28422,7 @@ int lua_ax_base_TintTo_initWithDuration(lua_State* tolua_S)
     cobj = (ax::TintTo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TintTo_initWithDuration'", nullptr);
         return 0;
@@ -28648,7 +28600,7 @@ int lua_ax_base_TintBy_initWithDuration(lua_State* tolua_S)
     cobj = (ax::TintBy*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TintBy_initWithDuration'", nullptr);
         return 0;
@@ -28902,7 +28854,7 @@ int lua_ax_base_Animate_setAnimation(lua_State* tolua_S)
     cobj = (ax::Animate*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animate_setAnimation'", nullptr);
         return 0;
@@ -28999,7 +28951,7 @@ int lua_ax_base_Animate_getCurrentFrameIndex(lua_State* tolua_S)
     cobj = (ax::Animate*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animate_getCurrentFrameIndex'", nullptr);
         return 0;
@@ -29046,7 +28998,7 @@ int lua_ax_base_Animate_initWithAnimation(lua_State* tolua_S)
     cobj = (ax::Animate*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Animate_initWithAnimation'", nullptr);
         return 0;
@@ -29194,7 +29146,7 @@ int lua_ax_base_TargetedAction_setForcedTarget(lua_State* tolua_S)
     cobj = (ax::TargetedAction*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TargetedAction_setForcedTarget'", nullptr);
         return 0;
@@ -29291,7 +29243,7 @@ int lua_ax_base_TargetedAction_initWithTarget(lua_State* tolua_S)
     cobj = (ax::TargetedAction*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TargetedAction_initWithTarget'", nullptr);
         return 0;
@@ -29443,7 +29395,7 @@ int lua_ax_base_ActionFloat_initWithDuration(lua_State* tolua_S)
     cobj = (ax::ActionFloat*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionFloat_initWithDuration'", nullptr);
         return 0;
@@ -29611,7 +29563,7 @@ int lua_ax_base_Properties_getNextProperty(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getNextProperty'", nullptr);
         return 0;
@@ -29658,7 +29610,7 @@ int lua_ax_base_Properties_getNextNamespace(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getNextNamespace'", nullptr);
         return 0;
@@ -29705,7 +29657,7 @@ int lua_ax_base_Properties_rewind(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_rewind'", nullptr);
         return 0;
@@ -29839,7 +29791,7 @@ int lua_ax_base_Properties_getId(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getId'", nullptr);
         return 0;
@@ -29886,7 +29838,7 @@ int lua_ax_base_Properties_exists(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_exists'", nullptr);
         return 0;
@@ -29936,7 +29888,7 @@ int lua_ax_base_Properties_getType(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getType'", nullptr);
         return 0;
@@ -29997,7 +29949,7 @@ int lua_ax_base_Properties_getString(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getString'", nullptr);
         return 0;
@@ -30075,7 +30027,7 @@ int lua_ax_base_Properties_setString(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_setString'", nullptr);
         return 0;
@@ -30128,7 +30080,7 @@ int lua_ax_base_Properties_getBool(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getBool'", nullptr);
         return 0;
@@ -30206,7 +30158,7 @@ int lua_ax_base_Properties_getInt(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getInt'", nullptr);
         return 0;
@@ -30267,7 +30219,7 @@ int lua_ax_base_Properties_getFloat(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getFloat'", nullptr);
         return 0;
@@ -30328,7 +30280,7 @@ int lua_ax_base_Properties_getMat4(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getMat4'", nullptr);
         return 0;
@@ -30381,7 +30333,7 @@ int lua_ax_base_Properties_getVec2(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getVec2'", nullptr);
         return 0;
@@ -30434,7 +30386,7 @@ int lua_ax_base_Properties_getVec3(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getVec3'", nullptr);
         return 0;
@@ -30487,7 +30439,7 @@ int lua_ax_base_Properties_getVec4(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getVec4'", nullptr);
         return 0;
@@ -30540,7 +30492,7 @@ int lua_ax_base_Properties_getQuaternionFromAxisAngle(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getQuaternionFromAxisAngle'", nullptr);
         return 0;
@@ -30656,7 +30608,7 @@ int lua_ax_base_Properties_getPath(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getPath'", nullptr);
         return 0;
@@ -30710,7 +30662,7 @@ int lua_ax_base_Properties_getVariable(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_getVariable'", nullptr);
         return 0;
@@ -30777,7 +30729,7 @@ int lua_ax_base_Properties_setVariable(lua_State* tolua_S)
     cobj = (ax::Properties*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Properties_setVariable'", nullptr);
         return 0;
@@ -31435,7 +31387,7 @@ int lua_ax_base_UserDefault_setBoolForKey(lua_State* tolua_S)
     cobj = (ax::UserDefault*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_UserDefault_setBoolForKey'", nullptr);
         return 0;
@@ -31488,7 +31440,7 @@ int lua_ax_base_UserDefault_setIntegerForKey(lua_State* tolua_S)
     cobj = (ax::UserDefault*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_UserDefault_setIntegerForKey'", nullptr);
         return 0;
@@ -31541,7 +31493,7 @@ int lua_ax_base_UserDefault_setLargeIntForKey(lua_State* tolua_S)
     cobj = (ax::UserDefault*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_UserDefault_setLargeIntForKey'", nullptr);
         return 0;
@@ -31594,7 +31546,7 @@ int lua_ax_base_UserDefault_setFloatForKey(lua_State* tolua_S)
     cobj = (ax::UserDefault*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_UserDefault_setFloatForKey'", nullptr);
         return 0;
@@ -31647,7 +31599,7 @@ int lua_ax_base_UserDefault_setDoubleForKey(lua_State* tolua_S)
     cobj = (ax::UserDefault*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_UserDefault_setDoubleForKey'", nullptr);
         return 0;
@@ -31700,7 +31652,7 @@ int lua_ax_base_UserDefault_setStringForKey(lua_State* tolua_S)
     cobj = (ax::UserDefault*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_UserDefault_setStringForKey'", nullptr);
         return 0;
@@ -31753,7 +31705,7 @@ int lua_ax_base_UserDefault_flush(lua_State* tolua_S)
     cobj = (ax::UserDefault*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_UserDefault_flush'", nullptr);
         return 0;
@@ -31800,7 +31752,7 @@ int lua_ax_base_UserDefault_deleteValueForKey(lua_State* tolua_S)
     cobj = (ax::UserDefault*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_UserDefault_deleteValueForKey'", nullptr);
         return 0;
@@ -31850,7 +31802,7 @@ int lua_ax_base_UserDefault_setEncryptEnabled(lua_State* tolua_S)
     cobj = (ax::UserDefault*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_UserDefault_setEncryptEnabled'", nullptr);
         return 0;
@@ -32023,7 +31975,7 @@ int lua_ax_base_FileUtils_purgeCachedEntries(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_purgeCachedEntries'", nullptr);
         return 0;
@@ -32070,7 +32022,7 @@ int lua_ax_base_FileUtils_getStringFromFile(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_getStringFromFile'", nullptr);
         return 0;
@@ -32120,7 +32072,7 @@ int lua_ax_base_FileUtils_fullPathForFilename(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_fullPathForFilename'", nullptr);
         return 0;
@@ -32170,7 +32122,7 @@ int lua_ax_base_FileUtils_fullPathFromRelativeFile(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_fullPathFromRelativeFile'", nullptr);
         return 0;
@@ -32223,7 +32175,7 @@ int lua_ax_base_FileUtils_fullPathForDirectory(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_fullPathForDirectory'", nullptr);
         return 0;
@@ -32273,7 +32225,7 @@ int lua_ax_base_FileUtils_setSearchPaths(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_setSearchPaths'", nullptr);
         return 0;
@@ -32323,7 +32275,7 @@ int lua_ax_base_FileUtils_getDefaultResourceRootPath(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_getDefaultResourceRootPath'", nullptr);
         return 0;
@@ -32370,7 +32322,7 @@ int lua_ax_base_FileUtils_setDefaultResourceRootPath(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_setDefaultResourceRootPath'", nullptr);
         return 0;
@@ -32420,7 +32372,7 @@ int lua_ax_base_FileUtils_addSearchPath(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_addSearchPath'", nullptr);
         return 0;
@@ -32487,7 +32439,7 @@ int lua_ax_base_FileUtils_getSearchPaths(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_getSearchPaths'", nullptr);
         return 0;
@@ -32534,7 +32486,7 @@ int lua_ax_base_FileUtils_getOriginalSearchPaths(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_getOriginalSearchPaths'", nullptr);
         return 0;
@@ -32581,7 +32533,7 @@ int lua_ax_base_FileUtils_getWritablePath(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_getWritablePath'", nullptr);
         return 0;
@@ -32628,7 +32580,7 @@ int lua_ax_base_FileUtils_getNativeWritableAbsolutePath(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_getNativeWritableAbsolutePath'", nullptr);
         return 0;
@@ -32675,7 +32627,7 @@ int lua_ax_base_FileUtils_setWritablePath(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_setWritablePath'", nullptr);
         return 0;
@@ -32725,7 +32677,7 @@ int lua_ax_base_FileUtils_setPopupNotify(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_setPopupNotify'", nullptr);
         return 0;
@@ -32775,7 +32727,7 @@ int lua_ax_base_FileUtils_isPopupNotify(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_isPopupNotify'", nullptr);
         return 0;
@@ -32822,7 +32774,7 @@ int lua_ax_base_FileUtils_getValueMapFromFile(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_getValueMapFromFile'", nullptr);
         return 0;
@@ -32872,7 +32824,7 @@ int lua_ax_base_FileUtils_getValueMapFromData(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_getValueMapFromData'", nullptr);
         return 0;
@@ -32925,7 +32877,7 @@ int lua_ax_base_FileUtils_writeToFile(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_writeToFile'", nullptr);
         return 0;
@@ -32978,7 +32930,7 @@ int lua_ax_base_FileUtils_writeStringToFile(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_writeStringToFile'", nullptr);
         return 0;
@@ -33031,7 +32983,7 @@ int lua_ax_base_FileUtils_writeValueMapToFile(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_writeValueMapToFile'", nullptr);
         return 0;
@@ -33084,7 +33036,7 @@ int lua_ax_base_FileUtils_writeValueVectorToFile(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_writeValueVectorToFile'", nullptr);
         return 0;
@@ -33137,7 +33089,7 @@ int lua_ax_base_FileUtils_getValueVectorFromFile(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_getValueVectorFromFile'", nullptr);
         return 0;
@@ -33187,7 +33139,7 @@ int lua_ax_base_FileUtils_isFileExist(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_isFileExist'", nullptr);
         return 0;
@@ -33237,7 +33189,7 @@ int lua_ax_base_FileUtils_isAbsolutePath(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_isAbsolutePath'", nullptr);
         return 0;
@@ -33287,7 +33239,7 @@ int lua_ax_base_FileUtils_isDirectoryExist(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_isDirectoryExist'", nullptr);
         return 0;
@@ -33337,7 +33289,7 @@ int lua_ax_base_FileUtils_createDirectories(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_createDirectories'", nullptr);
         return 0;
@@ -33387,7 +33339,7 @@ int lua_ax_base_FileUtils_removeDirectory(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_removeDirectory'", nullptr);
         return 0;
@@ -33437,7 +33389,7 @@ int lua_ax_base_FileUtils_removeFile(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_removeFile'", nullptr);
         return 0;
@@ -33554,7 +33506,7 @@ int lua_ax_base_FileUtils_getFileSize(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_getFileSize'", nullptr);
         return 0;
@@ -33604,7 +33556,7 @@ int lua_ax_base_FileUtils_listFiles(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_listFiles'", nullptr);
         return 0;
@@ -33654,7 +33606,7 @@ int lua_ax_base_FileUtils_listFilesRecursively(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_listFilesRecursively'", nullptr);
         return 0;
@@ -33707,7 +33659,7 @@ int lua_ax_base_FileUtils_isFileExistInternal(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_isFileExistInternal'", nullptr);
         return 0;
@@ -33757,7 +33709,7 @@ int lua_ax_base_FileUtils_isDirectoryExistInternal(lua_State* tolua_S)
     cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_isDirectoryExistInternal'", nullptr);
         return 0;
@@ -34177,7 +34129,7 @@ int lua_ax_base_EventCustom_getEventName(lua_State* tolua_S)
     cobj = (ax::EventCustom*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventCustom_getEventName'", nullptr);
         return 0;
@@ -34285,7 +34237,7 @@ int lua_ax_base_EventDispatcher_addEventListenerWithSceneGraphPriority(lua_State
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_addEventListenerWithSceneGraphPriority'", nullptr);
         return 0;
@@ -34338,7 +34290,7 @@ int lua_ax_base_EventDispatcher_addEventListenerWithFixedPriority(lua_State* tol
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_addEventListenerWithFixedPriority'", nullptr);
         return 0;
@@ -34391,7 +34343,7 @@ int lua_ax_base_EventDispatcher_addCustomEventListener(lua_State* tolua_S)
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_addCustomEventListener'", nullptr);
         return 0;
@@ -34448,7 +34400,7 @@ int lua_ax_base_EventDispatcher_removeEventListener(lua_State* tolua_S)
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_removeEventListener'", nullptr);
         return 0;
@@ -34498,7 +34450,7 @@ int lua_ax_base_EventDispatcher_removeEventListenersForType(lua_State* tolua_S)
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_removeEventListenersForType'", nullptr);
         return 0;
@@ -34548,7 +34500,7 @@ int lua_ax_base_EventDispatcher_removeEventListenersForTarget(lua_State* tolua_S
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_removeEventListenersForTarget'", nullptr);
         return 0;
@@ -34615,7 +34567,7 @@ int lua_ax_base_EventDispatcher_removeCustomEventListeners(lua_State* tolua_S)
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_removeCustomEventListeners'", nullptr);
         return 0;
@@ -34665,7 +34617,7 @@ int lua_ax_base_EventDispatcher_removeAllEventListeners(lua_State* tolua_S)
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_removeAllEventListeners'", nullptr);
         return 0;
@@ -34712,7 +34664,7 @@ int lua_ax_base_EventDispatcher_pauseEventListenersForTarget(lua_State* tolua_S)
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_pauseEventListenersForTarget'", nullptr);
         return 0;
@@ -34779,7 +34731,7 @@ int lua_ax_base_EventDispatcher_resumeEventListenersForTarget(lua_State* tolua_S
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_resumeEventListenersForTarget'", nullptr);
         return 0;
@@ -34846,7 +34798,7 @@ int lua_ax_base_EventDispatcher_setPriority(lua_State* tolua_S)
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_setPriority'", nullptr);
         return 0;
@@ -34899,7 +34851,7 @@ int lua_ax_base_EventDispatcher_setEnabled(lua_State* tolua_S)
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_setEnabled'", nullptr);
         return 0;
@@ -34949,7 +34901,7 @@ int lua_ax_base_EventDispatcher_isEnabled(lua_State* tolua_S)
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_isEnabled'", nullptr);
         return 0;
@@ -34996,7 +34948,7 @@ int lua_ax_base_EventDispatcher_dispatchEvent(lua_State* tolua_S)
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_dispatchEvent'", nullptr);
         return 0;
@@ -35063,7 +35015,7 @@ int lua_ax_base_EventDispatcher_dispatchCustomEvent(lua_State* tolua_S)
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_dispatchCustomEvent'", nullptr);
         return 0;
@@ -35152,7 +35104,7 @@ int lua_ax_base_EventDispatcher_hasEventListener(lua_State* tolua_S)
     cobj = (ax::EventDispatcher*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventDispatcher_hasEventListener'", nullptr);
         return 0;
@@ -35338,7 +35290,7 @@ int lua_ax_base_EventListenerAcceleration_init(lua_State* tolua_S)
     cobj = (ax::EventListenerAcceleration*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListenerAcceleration_init'", nullptr);
         return 0;
@@ -35450,7 +35402,7 @@ int lua_ax_base_EventListenerFocus_init(lua_State* tolua_S)
     cobj = (ax::EventListenerFocus*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListenerFocus_init'", nullptr);
         return 0;
@@ -35555,7 +35507,7 @@ int lua_ax_base_EventListenerKeyboard_init(lua_State* tolua_S)
     cobj = (ax::EventListenerKeyboard*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListenerKeyboard_init'", nullptr);
         return 0;
@@ -35660,7 +35612,7 @@ int lua_ax_base_EventMouse_getMouseEventType(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_getMouseEventType'", nullptr);
         return 0;
@@ -35707,7 +35659,7 @@ int lua_ax_base_EventMouse_setScrollData(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_setScrollData'", nullptr);
         return 0;
@@ -35760,7 +35712,7 @@ int lua_ax_base_EventMouse_getScrollX(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_getScrollX'", nullptr);
         return 0;
@@ -35807,7 +35759,7 @@ int lua_ax_base_EventMouse_getScrollY(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_getScrollY'", nullptr);
         return 0;
@@ -35854,7 +35806,7 @@ int lua_ax_base_EventMouse_setMouseInfo(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_setMouseInfo'", nullptr);
         return 0;
@@ -35910,7 +35862,7 @@ int lua_ax_base_EventMouse_setMouseButton(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_setMouseButton'", nullptr);
         return 0;
@@ -35960,7 +35912,7 @@ int lua_ax_base_EventMouse_getMouseButton(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_getMouseButton'", nullptr);
         return 0;
@@ -36007,7 +35959,7 @@ int lua_ax_base_EventMouse_getLocation(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_getLocation'", nullptr);
         return 0;
@@ -36054,7 +36006,7 @@ int lua_ax_base_EventMouse_getPreviousLocation(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_getPreviousLocation'", nullptr);
         return 0;
@@ -36101,7 +36053,7 @@ int lua_ax_base_EventMouse_getStartLocation(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_getStartLocation'", nullptr);
         return 0;
@@ -36148,7 +36100,7 @@ int lua_ax_base_EventMouse_getDelta(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_getDelta'", nullptr);
         return 0;
@@ -36195,7 +36147,7 @@ int lua_ax_base_EventMouse_getLocationInView(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_getLocationInView'", nullptr);
         return 0;
@@ -36242,7 +36194,7 @@ int lua_ax_base_EventMouse_getPreviousLocationInView(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_getPreviousLocationInView'", nullptr);
         return 0;
@@ -36289,7 +36241,7 @@ int lua_ax_base_EventMouse_getStartLocationInView(lua_State* tolua_S)
     cobj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventMouse_getStartLocationInView'", nullptr);
         return 0;
@@ -36410,7 +36362,7 @@ int lua_ax_base_EventListenerMouse_setSwallowMouse(lua_State* tolua_S)
     cobj = (ax::EventListenerMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListenerMouse_setSwallowMouse'", nullptr);
         return 0;
@@ -36460,7 +36412,7 @@ int lua_ax_base_EventListenerMouse_isSwallowMouse(lua_State* tolua_S)
     cobj = (ax::EventListenerMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListenerMouse_isSwallowMouse'", nullptr);
         return 0;
@@ -36507,7 +36459,7 @@ int lua_ax_base_EventListenerMouse_init(lua_State* tolua_S)
     cobj = (ax::EventListenerMouse*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListenerMouse_init'", nullptr);
         return 0;
@@ -36633,7 +36585,7 @@ int lua_ax_base_EventListenerTouchOneByOne_setSwallowTouches(lua_State* tolua_S)
     cobj = (ax::EventListenerTouchOneByOne*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListenerTouchOneByOne_setSwallowTouches'", nullptr);
         return 0;
@@ -36683,7 +36635,7 @@ int lua_ax_base_EventListenerTouchOneByOne_isSwallowTouches(lua_State* tolua_S)
     cobj = (ax::EventListenerTouchOneByOne*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListenerTouchOneByOne_isSwallowTouches'", nullptr);
         return 0;
@@ -36730,7 +36682,7 @@ int lua_ax_base_EventListenerTouchOneByOne_init(lua_State* tolua_S)
     cobj = (ax::EventListenerTouchOneByOne*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListenerTouchOneByOne_init'", nullptr);
         return 0;
@@ -36837,7 +36789,7 @@ int lua_ax_base_EventListenerTouchAllAtOnce_init(lua_State* tolua_S)
     cobj = (ax::EventListenerTouchAllAtOnce*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventListenerTouchAllAtOnce_init'", nullptr);
         return 0;
@@ -36942,7 +36894,7 @@ int lua_ax_base_EventController_getControllerEventType(lua_State* tolua_S)
     cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventController_getControllerEventType'", nullptr);
         return 0;
@@ -36989,7 +36941,7 @@ int lua_ax_base_EventController_getController(lua_State* tolua_S)
     cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventController_getController'", nullptr);
         return 0;
@@ -37036,7 +36988,7 @@ int lua_ax_base_EventController_getKeyCode(lua_State* tolua_S)
     cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventController_getKeyCode'", nullptr);
         return 0;
@@ -37083,7 +37035,7 @@ int lua_ax_base_EventController_setKeyCode(lua_State* tolua_S)
     cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventController_setKeyCode'", nullptr);
         return 0;
@@ -37133,7 +37085,7 @@ int lua_ax_base_EventController_setConnectStatus(lua_State* tolua_S)
     cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventController_setConnectStatus'", nullptr);
         return 0;
@@ -37183,7 +37135,7 @@ int lua_ax_base_EventController_isConnected(lua_State* tolua_S)
     cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EventController_isConnected'", nullptr);
         return 0;
@@ -37385,7 +37337,7 @@ int lua_ax_base_ActionCamera_getEye(lua_State* tolua_S)
     cobj = (ax::ActionCamera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionCamera_getEye'", nullptr);
         return 0;
@@ -37432,7 +37384,7 @@ int lua_ax_base_ActionCamera_setCenter(lua_State* tolua_S)
     cobj = (ax::ActionCamera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionCamera_setCenter'", nullptr);
         return 0;
@@ -37482,7 +37434,7 @@ int lua_ax_base_ActionCamera_getCenter(lua_State* tolua_S)
     cobj = (ax::ActionCamera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionCamera_getCenter'", nullptr);
         return 0;
@@ -37529,7 +37481,7 @@ int lua_ax_base_ActionCamera_setUp(lua_State* tolua_S)
     cobj = (ax::ActionCamera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionCamera_setUp'", nullptr);
         return 0;
@@ -37579,7 +37531,7 @@ int lua_ax_base_ActionCamera_getUp(lua_State* tolua_S)
     cobj = (ax::ActionCamera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionCamera_getUp'", nullptr);
         return 0;
@@ -37689,7 +37641,7 @@ int lua_ax_base_OrbitCamera_initWithDuration(lua_State* tolua_S)
     cobj = (ax::OrbitCamera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_OrbitCamera_initWithDuration'", nullptr);
         return 0;
@@ -37864,7 +37816,7 @@ int lua_ax_base_CardinalSplineTo_initWithDuration(lua_State* tolua_S)
     cobj = (ax::CardinalSplineTo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CardinalSplineTo_initWithDuration'", nullptr);
         return 0;
@@ -37920,7 +37872,7 @@ int lua_ax_base_CardinalSplineTo_updatePosition(lua_State* tolua_S)
     cobj = (ax::CardinalSplineTo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CardinalSplineTo_updatePosition'", nullptr);
         return 0;
@@ -37970,7 +37922,7 @@ int lua_ax_base_CardinalSplineTo_getPoints(lua_State* tolua_S)
     cobj = (ax::CardinalSplineTo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CardinalSplineTo_getPoints'", nullptr);
         return 0;
@@ -38134,7 +38086,7 @@ int lua_ax_base_CatmullRomTo_initWithDuration(lua_State* tolua_S)
     cobj = (ax::CatmullRomTo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CatmullRomTo_initWithDuration'", nullptr);
         return 0;
@@ -38207,7 +38159,7 @@ int lua_ax_base_CatmullRomBy_initWithDuration(lua_State* tolua_S)
     cobj = (ax::CatmullRomBy*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CatmullRomBy_initWithDuration'", nullptr);
         return 0;
@@ -38280,7 +38232,7 @@ int lua_ax_base_ActionEase_getInnerAction(lua_State* tolua_S)
     cobj = (ax::ActionEase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionEase_getInnerAction'", nullptr);
         return 0;
@@ -38327,7 +38279,7 @@ int lua_ax_base_ActionEase_initWithAction(lua_State* tolua_S)
     cobj = (ax::ActionEase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionEase_initWithAction'", nullptr);
         return 0;
@@ -38398,7 +38350,7 @@ int lua_ax_base_EaseRateAction_setRate(lua_State* tolua_S)
     cobj = (ax::EaseRateAction*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EaseRateAction_setRate'", nullptr);
         return 0;
@@ -38448,7 +38400,7 @@ int lua_ax_base_EaseRateAction_getRate(lua_State* tolua_S)
     cobj = (ax::EaseRateAction*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EaseRateAction_getRate'", nullptr);
         return 0;
@@ -38495,7 +38447,7 @@ int lua_ax_base_EaseRateAction_initWithAction(lua_State* tolua_S)
     cobj = (ax::EaseRateAction*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EaseRateAction_initWithAction'", nullptr);
         return 0;
@@ -41454,7 +41406,7 @@ int lua_ax_base_EaseElastic_getPeriod(lua_State* tolua_S)
     cobj = (ax::EaseElastic*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EaseElastic_getPeriod'", nullptr);
         return 0;
@@ -41501,7 +41453,7 @@ int lua_ax_base_EaseElastic_setPeriod(lua_State* tolua_S)
     cobj = (ax::EaseElastic*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EaseElastic_setPeriod'", nullptr);
         return 0;
@@ -41551,7 +41503,7 @@ int lua_ax_base_EaseElastic_initWithAction(lua_State* tolua_S)
     cobj = (ax::EaseElastic*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EaseElastic_initWithAction'", nullptr);
         return 0;
@@ -41967,7 +41919,7 @@ int lua_ax_base_EaseBezierAction_setBezierParamer(lua_State* tolua_S)
     cobj = (ax::EaseBezierAction*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_EaseBezierAction_setBezierParamer'", nullptr);
         return 0;
@@ -42416,7 +42368,7 @@ int lua_ax_base_RemoveSelf_init(lua_State* tolua_S)
     cobj = (ax::RemoveSelf*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RemoveSelf_init'", nullptr);
         return 0;
@@ -42572,7 +42524,7 @@ int lua_ax_base_FlipX_initWithFlipX(lua_State* tolua_S)
     cobj = (ax::FlipX*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FlipX_initWithFlipX'", nullptr);
         return 0;
@@ -42717,7 +42669,7 @@ int lua_ax_base_FlipY_initWithFlipY(lua_State* tolua_S)
     cobj = (ax::FlipY*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FlipY_initWithFlipY'", nullptr);
         return 0;
@@ -42862,7 +42814,7 @@ int lua_ax_base_Place_initWithPosition(lua_State* tolua_S)
     cobj = (ax::Place*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Place_initWithPosition'", nullptr);
         return 0;
@@ -43007,7 +42959,7 @@ int lua_ax_base_CallFunc_execute(lua_State* tolua_S)
     cobj = (ax::CallFunc*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CallFunc_execute'", nullptr);
         return 0;
@@ -43112,7 +43064,7 @@ int lua_ax_base_GridAction_getGrid(lua_State* tolua_S)
     cobj = (ax::GridAction*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridAction_getGrid'", nullptr);
         return 0;
@@ -43159,7 +43111,7 @@ int lua_ax_base_GridAction_initWithDuration(lua_State* tolua_S)
     cobj = (ax::GridAction*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridAction_initWithDuration'", nullptr);
         return 0;
@@ -43233,7 +43185,7 @@ int lua_ax_base_Grid3DAction_getGridRect(lua_State* tolua_S)
     cobj = (ax::Grid3DAction*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Grid3DAction_getGridRect'", nullptr);
         return 0;
@@ -43411,7 +43363,7 @@ int lua_ax_base_ReuseGrid_initWithTimes(lua_State* tolua_S)
     cobj = (ax::ReuseGrid*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ReuseGrid_initWithTimes'", nullptr);
         return 0;
@@ -43556,7 +43508,7 @@ int lua_ax_base_Waves3D_getAmplitude(lua_State* tolua_S)
     cobj = (ax::Waves3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Waves3D_getAmplitude'", nullptr);
         return 0;
@@ -43603,7 +43555,7 @@ int lua_ax_base_Waves3D_setAmplitude(lua_State* tolua_S)
     cobj = (ax::Waves3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Waves3D_setAmplitude'", nullptr);
         return 0;
@@ -43653,7 +43605,7 @@ int lua_ax_base_Waves3D_getAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::Waves3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Waves3D_getAmplitudeRate'", nullptr);
         return 0;
@@ -43700,7 +43652,7 @@ int lua_ax_base_Waves3D_setAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::Waves3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Waves3D_setAmplitudeRate'", nullptr);
         return 0;
@@ -43750,7 +43702,7 @@ int lua_ax_base_Waves3D_initWithDuration(lua_State* tolua_S)
     cobj = (ax::Waves3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Waves3D_initWithDuration'", nullptr);
         return 0;
@@ -43914,7 +43866,7 @@ int lua_ax_base_FlipX3D_initWithDuration(lua_State* tolua_S)
     cobj = (ax::FlipX3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FlipX3D_initWithDuration'", nullptr);
         return 0;
@@ -43964,7 +43916,7 @@ int lua_ax_base_FlipX3D_initWithSize(lua_State* tolua_S)
     cobj = (ax::FlipX3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FlipX3D_initWithSize'", nullptr);
         return 0;
@@ -44207,7 +44159,7 @@ int lua_ax_base_Lens3D_getLensEffect(lua_State* tolua_S)
     cobj = (ax::Lens3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Lens3D_getLensEffect'", nullptr);
         return 0;
@@ -44254,7 +44206,7 @@ int lua_ax_base_Lens3D_setLensEffect(lua_State* tolua_S)
     cobj = (ax::Lens3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Lens3D_setLensEffect'", nullptr);
         return 0;
@@ -44304,7 +44256,7 @@ int lua_ax_base_Lens3D_setConcave(lua_State* tolua_S)
     cobj = (ax::Lens3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Lens3D_setConcave'", nullptr);
         return 0;
@@ -44354,7 +44306,7 @@ int lua_ax_base_Lens3D_getPosition(lua_State* tolua_S)
     cobj = (ax::Lens3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Lens3D_getPosition'", nullptr);
         return 0;
@@ -44401,7 +44353,7 @@ int lua_ax_base_Lens3D_setPosition(lua_State* tolua_S)
     cobj = (ax::Lens3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Lens3D_setPosition'", nullptr);
         return 0;
@@ -44451,7 +44403,7 @@ int lua_ax_base_Lens3D_initWithDuration(lua_State* tolua_S)
     cobj = (ax::Lens3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Lens3D_initWithDuration'", nullptr);
         return 0;
@@ -44616,7 +44568,7 @@ int lua_ax_base_Ripple3D_getPosition(lua_State* tolua_S)
     cobj = (ax::Ripple3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ripple3D_getPosition'", nullptr);
         return 0;
@@ -44663,7 +44615,7 @@ int lua_ax_base_Ripple3D_setPosition(lua_State* tolua_S)
     cobj = (ax::Ripple3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ripple3D_setPosition'", nullptr);
         return 0;
@@ -44713,7 +44665,7 @@ int lua_ax_base_Ripple3D_getAmplitude(lua_State* tolua_S)
     cobj = (ax::Ripple3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ripple3D_getAmplitude'", nullptr);
         return 0;
@@ -44760,7 +44712,7 @@ int lua_ax_base_Ripple3D_setAmplitude(lua_State* tolua_S)
     cobj = (ax::Ripple3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ripple3D_setAmplitude'", nullptr);
         return 0;
@@ -44810,7 +44762,7 @@ int lua_ax_base_Ripple3D_getAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::Ripple3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ripple3D_getAmplitudeRate'", nullptr);
         return 0;
@@ -44857,7 +44809,7 @@ int lua_ax_base_Ripple3D_setAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::Ripple3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ripple3D_setAmplitudeRate'", nullptr);
         return 0;
@@ -44907,7 +44859,7 @@ int lua_ax_base_Ripple3D_initWithDuration(lua_State* tolua_S)
     cobj = (ax::Ripple3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Ripple3D_initWithDuration'", nullptr);
         return 0;
@@ -45083,7 +45035,7 @@ int lua_ax_base_Shaky3D_initWithDuration(lua_State* tolua_S)
     cobj = (ax::Shaky3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Shaky3D_initWithDuration'", nullptr);
         return 0;
@@ -45243,7 +45195,7 @@ int lua_ax_base_Liquid_getAmplitude(lua_State* tolua_S)
     cobj = (ax::Liquid*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Liquid_getAmplitude'", nullptr);
         return 0;
@@ -45290,7 +45242,7 @@ int lua_ax_base_Liquid_setAmplitude(lua_State* tolua_S)
     cobj = (ax::Liquid*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Liquid_setAmplitude'", nullptr);
         return 0;
@@ -45340,7 +45292,7 @@ int lua_ax_base_Liquid_getAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::Liquid*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Liquid_getAmplitudeRate'", nullptr);
         return 0;
@@ -45387,7 +45339,7 @@ int lua_ax_base_Liquid_setAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::Liquid*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Liquid_setAmplitudeRate'", nullptr);
         return 0;
@@ -45437,7 +45389,7 @@ int lua_ax_base_Liquid_initWithDuration(lua_State* tolua_S)
     cobj = (ax::Liquid*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Liquid_initWithDuration'", nullptr);
         return 0;
@@ -45601,7 +45553,7 @@ int lua_ax_base_Waves_getAmplitude(lua_State* tolua_S)
     cobj = (ax::Waves*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Waves_getAmplitude'", nullptr);
         return 0;
@@ -45648,7 +45600,7 @@ int lua_ax_base_Waves_setAmplitude(lua_State* tolua_S)
     cobj = (ax::Waves*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Waves_setAmplitude'", nullptr);
         return 0;
@@ -45698,7 +45650,7 @@ int lua_ax_base_Waves_getAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::Waves*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Waves_getAmplitudeRate'", nullptr);
         return 0;
@@ -45745,7 +45697,7 @@ int lua_ax_base_Waves_setAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::Waves*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Waves_setAmplitudeRate'", nullptr);
         return 0;
@@ -45795,7 +45747,7 @@ int lua_ax_base_Waves_initWithDuration(lua_State* tolua_S)
     cobj = (ax::Waves*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Waves_initWithDuration'", nullptr);
         return 0;
@@ -45969,7 +45921,7 @@ int lua_ax_base_Twirl_getPosition(lua_State* tolua_S)
     cobj = (ax::Twirl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Twirl_getPosition'", nullptr);
         return 0;
@@ -46016,7 +45968,7 @@ int lua_ax_base_Twirl_setPosition(lua_State* tolua_S)
     cobj = (ax::Twirl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Twirl_setPosition'", nullptr);
         return 0;
@@ -46066,7 +46018,7 @@ int lua_ax_base_Twirl_getAmplitude(lua_State* tolua_S)
     cobj = (ax::Twirl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Twirl_getAmplitude'", nullptr);
         return 0;
@@ -46113,7 +46065,7 @@ int lua_ax_base_Twirl_setAmplitude(lua_State* tolua_S)
     cobj = (ax::Twirl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Twirl_setAmplitude'", nullptr);
         return 0;
@@ -46163,7 +46115,7 @@ int lua_ax_base_Twirl_getAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::Twirl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Twirl_getAmplitudeRate'", nullptr);
         return 0;
@@ -46210,7 +46162,7 @@ int lua_ax_base_Twirl_setAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::Twirl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Twirl_setAmplitudeRate'", nullptr);
         return 0;
@@ -46260,7 +46212,7 @@ int lua_ax_base_Twirl_initWithDuration(lua_State* tolua_S)
     cobj = (ax::Twirl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Twirl_initWithDuration'", nullptr);
         return 0;
@@ -46431,7 +46383,7 @@ int lua_ax_base_ActionManager_addAction(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_addAction'", nullptr);
         return 0;
@@ -46487,7 +46439,7 @@ int lua_ax_base_ActionManager_removeAllActions(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_removeAllActions'", nullptr);
         return 0;
@@ -46534,7 +46486,7 @@ int lua_ax_base_ActionManager_removeAllActionsFromTarget(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_removeAllActionsFromTarget'", nullptr);
         return 0;
@@ -46584,7 +46536,7 @@ int lua_ax_base_ActionManager_removeAction(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_removeAction'", nullptr);
         return 0;
@@ -46634,7 +46586,7 @@ int lua_ax_base_ActionManager_removeActionByTag(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_removeActionByTag'", nullptr);
         return 0;
@@ -46687,7 +46639,7 @@ int lua_ax_base_ActionManager_removeAllActionsByTag(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_removeAllActionsByTag'", nullptr);
         return 0;
@@ -46740,7 +46692,7 @@ int lua_ax_base_ActionManager_removeActionsByFlags(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_removeActionsByFlags'", nullptr);
         return 0;
@@ -46793,7 +46745,7 @@ int lua_ax_base_ActionManager_getActionByTag(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_getActionByTag'", nullptr);
         return 0;
@@ -46846,7 +46798,7 @@ int lua_ax_base_ActionManager_getNumberOfRunningActionsInTarget(lua_State* tolua
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_getNumberOfRunningActionsInTarget'", nullptr);
         return 0;
@@ -46896,7 +46848,7 @@ int lua_ax_base_ActionManager_getNumberOfRunningActions(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_getNumberOfRunningActions'", nullptr);
         return 0;
@@ -46943,7 +46895,7 @@ int lua_ax_base_ActionManager_getNumberOfRunningActionsInTargetByTag(lua_State* 
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_getNumberOfRunningActionsInTargetByTag'", nullptr);
         return 0;
@@ -46996,7 +46948,7 @@ int lua_ax_base_ActionManager_pauseTarget(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_pauseTarget'", nullptr);
         return 0;
@@ -47046,7 +46998,7 @@ int lua_ax_base_ActionManager_resumeTarget(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_resumeTarget'", nullptr);
         return 0;
@@ -47096,7 +47048,7 @@ int lua_ax_base_ActionManager_pauseAllRunningActions(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_pauseAllRunningActions'", nullptr);
         return 0;
@@ -47143,7 +47095,7 @@ int lua_ax_base_ActionManager_resumeTargets(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_resumeTargets'", nullptr);
         return 0;
@@ -47193,7 +47145,7 @@ int lua_ax_base_ActionManager_update(lua_State* tolua_S)
     cobj = (ax::ActionManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionManager_update'", nullptr);
         return 0;
@@ -47374,7 +47326,7 @@ int lua_ax_base_ProgressTo_initWithDuration(lua_State* tolua_S)
     cobj = (ax::ProgressTo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTo_initWithDuration'", nullptr);
         return 0;
@@ -47524,7 +47476,7 @@ int lua_ax_base_ProgressFromTo_initWithDuration(lua_State* tolua_S)
     cobj = (ax::ProgressFromTo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressFromTo_initWithDuration'", nullptr);
         return 0;
@@ -47679,7 +47631,7 @@ int lua_ax_base_ShakyTiles3D_initWithDuration(lua_State* tolua_S)
     cobj = (ax::ShakyTiles3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ShakyTiles3D_initWithDuration'", nullptr);
         return 0;
@@ -47839,7 +47791,7 @@ int lua_ax_base_ShatteredTiles3D_initWithDuration(lua_State* tolua_S)
     cobj = (ax::ShatteredTiles3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ShatteredTiles3D_initWithDuration'", nullptr);
         return 0;
@@ -47999,7 +47951,7 @@ int lua_ax_base_ShuffleTiles_getDelta(lua_State* tolua_S)
     cobj = (ax::ShuffleTiles*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ShuffleTiles_getDelta'", nullptr);
         return 0;
@@ -48049,7 +48001,7 @@ int lua_ax_base_ShuffleTiles_initWithDuration(lua_State* tolua_S)
     cobj = (ax::ShuffleTiles*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ShuffleTiles_initWithDuration'", nullptr);
         return 0;
@@ -48205,7 +48157,7 @@ int lua_ax_base_FadeOutTRTiles_testFunc(lua_State* tolua_S)
     cobj = (ax::FadeOutTRTiles*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FadeOutTRTiles_testFunc'", nullptr);
         return 0;
@@ -48258,7 +48210,7 @@ int lua_ax_base_FadeOutTRTiles_turnOnTile(lua_State* tolua_S)
     cobj = (ax::FadeOutTRTiles*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FadeOutTRTiles_turnOnTile'", nullptr);
         return 0;
@@ -48308,7 +48260,7 @@ int lua_ax_base_FadeOutTRTiles_turnOffTile(lua_State* tolua_S)
     cobj = (ax::FadeOutTRTiles*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FadeOutTRTiles_turnOffTile'", nullptr);
         return 0;
@@ -48358,7 +48310,7 @@ int lua_ax_base_FadeOutTRTiles_transformTile(lua_State* tolua_S)
     cobj = (ax::FadeOutTRTiles*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FadeOutTRTiles_transformTile'", nullptr);
         return 0;
@@ -48799,7 +48751,7 @@ int lua_ax_base_TurnOffTiles_turnOnTile(lua_State* tolua_S)
     cobj = (ax::TurnOffTiles*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TurnOffTiles_turnOnTile'", nullptr);
         return 0;
@@ -48849,7 +48801,7 @@ int lua_ax_base_TurnOffTiles_turnOffTile(lua_State* tolua_S)
     cobj = (ax::TurnOffTiles*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TurnOffTiles_turnOffTile'", nullptr);
         return 0;
@@ -48899,7 +48851,7 @@ int lua_ax_base_TurnOffTiles_initWithDuration(lua_State* tolua_S)
     cobj = (ax::TurnOffTiles*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TurnOffTiles_initWithDuration'", nullptr);
         return 0;
@@ -49073,7 +49025,7 @@ int lua_ax_base_WavesTiles3D_getAmplitude(lua_State* tolua_S)
     cobj = (ax::WavesTiles3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_WavesTiles3D_getAmplitude'", nullptr);
         return 0;
@@ -49120,7 +49072,7 @@ int lua_ax_base_WavesTiles3D_setAmplitude(lua_State* tolua_S)
     cobj = (ax::WavesTiles3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_WavesTiles3D_setAmplitude'", nullptr);
         return 0;
@@ -49170,7 +49122,7 @@ int lua_ax_base_WavesTiles3D_getAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::WavesTiles3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_WavesTiles3D_getAmplitudeRate'", nullptr);
         return 0;
@@ -49217,7 +49169,7 @@ int lua_ax_base_WavesTiles3D_setAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::WavesTiles3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_WavesTiles3D_setAmplitudeRate'", nullptr);
         return 0;
@@ -49267,7 +49219,7 @@ int lua_ax_base_WavesTiles3D_initWithDuration(lua_State* tolua_S)
     cobj = (ax::WavesTiles3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_WavesTiles3D_initWithDuration'", nullptr);
         return 0;
@@ -49431,7 +49383,7 @@ int lua_ax_base_JumpTiles3D_getAmplitude(lua_State* tolua_S)
     cobj = (ax::JumpTiles3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_JumpTiles3D_getAmplitude'", nullptr);
         return 0;
@@ -49478,7 +49430,7 @@ int lua_ax_base_JumpTiles3D_setAmplitude(lua_State* tolua_S)
     cobj = (ax::JumpTiles3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_JumpTiles3D_setAmplitude'", nullptr);
         return 0;
@@ -49528,7 +49480,7 @@ int lua_ax_base_JumpTiles3D_getAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::JumpTiles3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_JumpTiles3D_getAmplitudeRate'", nullptr);
         return 0;
@@ -49575,7 +49527,7 @@ int lua_ax_base_JumpTiles3D_setAmplitudeRate(lua_State* tolua_S)
     cobj = (ax::JumpTiles3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_JumpTiles3D_setAmplitudeRate'", nullptr);
         return 0;
@@ -49625,7 +49577,7 @@ int lua_ax_base_JumpTiles3D_initWithDuration(lua_State* tolua_S)
     cobj = (ax::JumpTiles3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_JumpTiles3D_initWithDuration'", nullptr);
         return 0;
@@ -49789,7 +49741,7 @@ int lua_ax_base_SplitRows_initWithDuration(lua_State* tolua_S)
     cobj = (ax::SplitRows*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SplitRows_initWithDuration'", nullptr);
         return 0;
@@ -49939,7 +49891,7 @@ int lua_ax_base_SplitCols_initWithDuration(lua_State* tolua_S)
     cobj = (ax::SplitCols*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SplitCols_initWithDuration'", nullptr);
         return 0;
@@ -50089,7 +50041,7 @@ int lua_ax_base_ActionTween_initWithDuration(lua_State* tolua_S)
     cobj = (ax::ActionTween*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionTween_initWithDuration'", nullptr);
         return 0;
@@ -50211,7 +50163,7 @@ int lua_ax_base_ActionCoroutine_initWithCoroutine(lua_State* tolua_S)
     cobj = (ax::ActionCoroutine*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ActionCoroutine_initWithCoroutine'", nullptr);
         return 0;
@@ -50364,7 +50316,7 @@ int lua_ax_base_AtlasNode_updateAtlasValues(lua_State* tolua_S)
     cobj = (ax::AtlasNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AtlasNode_updateAtlasValues'", nullptr);
         return 0;
@@ -50411,7 +50363,7 @@ int lua_ax_base_AtlasNode_getTexture(lua_State* tolua_S)
     cobj = (ax::AtlasNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AtlasNode_getTexture'", nullptr);
         return 0;
@@ -50458,7 +50410,7 @@ int lua_ax_base_AtlasNode_setTexture(lua_State* tolua_S)
     cobj = (ax::AtlasNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AtlasNode_setTexture'", nullptr);
         return 0;
@@ -50508,7 +50460,7 @@ int lua_ax_base_AtlasNode_setBlendFunc(lua_State* tolua_S)
     cobj = (ax::AtlasNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AtlasNode_setBlendFunc'", nullptr);
         return 0;
@@ -50558,7 +50510,7 @@ int lua_ax_base_AtlasNode_getBlendFunc(lua_State* tolua_S)
     cobj = (ax::AtlasNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AtlasNode_getBlendFunc'", nullptr);
         return 0;
@@ -50605,7 +50557,7 @@ int lua_ax_base_AtlasNode_setTextureAtlas(lua_State* tolua_S)
     cobj = (ax::AtlasNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AtlasNode_setTextureAtlas'", nullptr);
         return 0;
@@ -50655,7 +50607,7 @@ int lua_ax_base_AtlasNode_getTextureAtlas(lua_State* tolua_S)
     cobj = (ax::AtlasNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AtlasNode_getTextureAtlas'", nullptr);
         return 0;
@@ -50702,7 +50654,7 @@ int lua_ax_base_AtlasNode_setQuadsToDraw(lua_State* tolua_S)
     cobj = (ax::AtlasNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AtlasNode_setQuadsToDraw'", nullptr);
         return 0;
@@ -50752,7 +50704,7 @@ int lua_ax_base_AtlasNode_getQuadsToDraw(lua_State* tolua_S)
     cobj = (ax::AtlasNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AtlasNode_getQuadsToDraw'", nullptr);
         return 0;
@@ -50799,7 +50751,7 @@ int lua_ax_base_AtlasNode_initWithTileFile(lua_State* tolua_S)
     cobj = (ax::AtlasNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AtlasNode_initWithTileFile'", nullptr);
         return 0;
@@ -50858,7 +50810,7 @@ int lua_ax_base_AtlasNode_initWithTexture(lua_State* tolua_S)
     cobj = (ax::AtlasNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AtlasNode_initWithTexture'", nullptr);
         return 0;
@@ -51028,7 +50980,7 @@ int lua_ax_base_ClippingNode_getStencil(lua_State* tolua_S)
     cobj = (ax::ClippingNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ClippingNode_getStencil'", nullptr);
         return 0;
@@ -51075,7 +51027,7 @@ int lua_ax_base_ClippingNode_setStencil(lua_State* tolua_S)
     cobj = (ax::ClippingNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ClippingNode_setStencil'", nullptr);
         return 0;
@@ -51142,7 +51094,7 @@ int lua_ax_base_ClippingNode_hasContent(lua_State* tolua_S)
     cobj = (ax::ClippingNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ClippingNode_hasContent'", nullptr);
         return 0;
@@ -51189,7 +51141,7 @@ int lua_ax_base_ClippingNode_getAlphaThreshold(lua_State* tolua_S)
     cobj = (ax::ClippingNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ClippingNode_getAlphaThreshold'", nullptr);
         return 0;
@@ -51236,7 +51188,7 @@ int lua_ax_base_ClippingNode_setAlphaThreshold(lua_State* tolua_S)
     cobj = (ax::ClippingNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ClippingNode_setAlphaThreshold'", nullptr);
         return 0;
@@ -51286,7 +51238,7 @@ int lua_ax_base_ClippingNode_isInverted(lua_State* tolua_S)
     cobj = (ax::ClippingNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ClippingNode_isInverted'", nullptr);
         return 0;
@@ -51333,7 +51285,7 @@ int lua_ax_base_ClippingNode_setInverted(lua_State* tolua_S)
     cobj = (ax::ClippingNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ClippingNode_setInverted'", nullptr);
         return 0;
@@ -51383,7 +51335,7 @@ int lua_ax_base_ClippingNode_init(lua_State* tolua_S)
     cobj = (ax::ClippingNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ClippingNode_init'", nullptr);
         return 0;
@@ -51506,7 +51458,7 @@ int lua_ax_base_ClippingRectangleNode_getClippingRegion(lua_State* tolua_S)
     cobj = (ax::ClippingRectangleNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ClippingRectangleNode_getClippingRegion'", nullptr);
         return 0;
@@ -51553,7 +51505,7 @@ int lua_ax_base_ClippingRectangleNode_setClippingRegion(lua_State* tolua_S)
     cobj = (ax::ClippingRectangleNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ClippingRectangleNode_setClippingRegion'", nullptr);
         return 0;
@@ -51603,7 +51555,7 @@ int lua_ax_base_ClippingRectangleNode_isClippingEnabled(lua_State* tolua_S)
     cobj = (ax::ClippingRectangleNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ClippingRectangleNode_isClippingEnabled'", nullptr);
         return 0;
@@ -51650,7 +51602,7 @@ int lua_ax_base_ClippingRectangleNode_setClippingEnabled(lua_State* tolua_S)
     cobj = (ax::ClippingRectangleNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ClippingRectangleNode_setClippingEnabled'", nullptr);
         return 0;
@@ -51769,7 +51721,7 @@ int lua_ax_base_DrawNode_drawPoint(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_drawPoint'", nullptr);
         return 0;
@@ -51848,7 +51800,7 @@ int lua_ax_base_DrawNode_drawLine(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_drawLine'", nullptr);
         return 0;
@@ -52300,7 +52252,7 @@ int lua_ax_base_DrawNode_drawStar(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_drawStar'", nullptr);
         return 0;
@@ -52391,7 +52343,7 @@ int lua_ax_base_DrawNode_drawSolidStar(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_drawSolidStar'", nullptr);
         return 0;
@@ -52488,7 +52440,7 @@ int lua_ax_base_DrawNode_drawQuadBezier(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_drawQuadBezier'", nullptr);
         return 0;
@@ -52579,7 +52531,7 @@ int lua_ax_base_DrawNode_drawCubicBezier(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_drawCubicBezier'", nullptr);
         return 0;
@@ -52676,7 +52628,7 @@ int lua_ax_base_DrawNode_drawDot(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_drawDot'", nullptr);
         return 0;
@@ -52732,7 +52684,7 @@ int lua_ax_base_DrawNode_drawSolidRect(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_drawSolidRect'", nullptr);
         return 0;
@@ -53283,7 +53235,7 @@ int lua_ax_base_DrawNode_setIsConvex(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_setIsConvex'", nullptr);
         return 0;
@@ -53333,7 +53285,7 @@ int lua_ax_base_DrawNode_drawSegment(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_drawSegment'", nullptr);
         return 0;
@@ -53447,7 +53399,7 @@ int lua_ax_base_DrawNode_drawColoredTriangle(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_drawColoredTriangle'", nullptr);
         return 0;
@@ -53707,7 +53659,7 @@ int lua_ax_base_DrawNode_clear(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_clear'", nullptr);
         return 0;
@@ -53754,7 +53706,7 @@ int lua_ax_base_DrawNode_getBlendFunc(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_getBlendFunc'", nullptr);
         return 0;
@@ -53801,7 +53753,7 @@ int lua_ax_base_DrawNode_setBlendFunc(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_setBlendFunc'", nullptr);
         return 0;
@@ -53851,7 +53803,7 @@ int lua_ax_base_DrawNode_setIsolated(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_setIsolated'", nullptr);
         return 0;
@@ -53901,7 +53853,7 @@ int lua_ax_base_DrawNode_isIsolated(lua_State* tolua_S)
     cobj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DrawNode_isIsolated'", nullptr);
         return 0;
@@ -54062,7 +54014,7 @@ int lua_ax_base_Label_setTTFConfig(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setTTFConfig'", nullptr);
         return 0;
@@ -54112,7 +54064,7 @@ int lua_ax_base_Label_getTTFConfig(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getTTFConfig'", nullptr);
         return 0;
@@ -54298,7 +54250,7 @@ int lua_ax_base_Label_getBMFontFilePath(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getBMFontFilePath'", nullptr);
         return 0;
@@ -54436,7 +54388,7 @@ int lua_ax_base_Label_setSystemFontName(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setSystemFontName'", nullptr);
         return 0;
@@ -54486,7 +54438,7 @@ int lua_ax_base_Label_getSystemFontName(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getSystemFontName'", nullptr);
         return 0;
@@ -54533,7 +54485,7 @@ int lua_ax_base_Label_setSystemFontSize(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setSystemFontSize'", nullptr);
         return 0;
@@ -54583,7 +54535,7 @@ int lua_ax_base_Label_getSystemFontSize(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getSystemFontSize'", nullptr);
         return 0;
@@ -54630,7 +54582,7 @@ int lua_ax_base_Label_requestSystemFontRefresh(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_requestSystemFontRefresh'", nullptr);
         return 0;
@@ -54677,7 +54629,7 @@ int lua_ax_base_Label_setString(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setString'", nullptr);
         return 0;
@@ -54727,7 +54679,7 @@ int lua_ax_base_Label_getString(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getString'", nullptr);
         return 0;
@@ -54774,7 +54726,7 @@ int lua_ax_base_Label_getStringNumLines(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getStringNumLines'", nullptr);
         return 0;
@@ -54821,7 +54773,7 @@ int lua_ax_base_Label_getStringLength(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getStringLength'", nullptr);
         return 0;
@@ -54868,7 +54820,7 @@ int lua_ax_base_Label_setTextColor(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setTextColor'", nullptr);
         return 0;
@@ -54918,7 +54870,7 @@ int lua_ax_base_Label_getTextColor(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getTextColor'", nullptr);
         return 0;
@@ -54965,7 +54917,7 @@ int lua_ax_base_Label_enableShadow(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_enableShadow'", nullptr);
         return 0;
@@ -55063,7 +55015,7 @@ int lua_ax_base_Label_enableOutline(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_enableOutline'", nullptr);
         return 0;
@@ -55130,7 +55082,7 @@ int lua_ax_base_Label_enableGlow(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_enableGlow'", nullptr);
         return 0;
@@ -55180,7 +55132,7 @@ int lua_ax_base_Label_enableItalics(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_enableItalics'", nullptr);
         return 0;
@@ -55227,7 +55179,7 @@ int lua_ax_base_Label_enableBold(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_enableBold'", nullptr);
         return 0;
@@ -55274,7 +55226,7 @@ int lua_ax_base_Label_enableUnderline(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_enableUnderline'", nullptr);
         return 0;
@@ -55321,7 +55273,7 @@ int lua_ax_base_Label_enableStrikethrough(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_enableStrikethrough'", nullptr);
         return 0;
@@ -55419,7 +55371,7 @@ int lua_ax_base_Label_isShadowEnabled(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_isShadowEnabled'", nullptr);
         return 0;
@@ -55466,7 +55418,7 @@ int lua_ax_base_Label_getShadowOffset(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getShadowOffset'", nullptr);
         return 0;
@@ -55513,7 +55465,7 @@ int lua_ax_base_Label_getShadowBlurRadius(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getShadowBlurRadius'", nullptr);
         return 0;
@@ -55560,7 +55512,7 @@ int lua_ax_base_Label_getShadowColor(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getShadowColor'", nullptr);
         return 0;
@@ -55607,7 +55559,7 @@ int lua_ax_base_Label_getOutlineSize(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getOutlineSize'", nullptr);
         return 0;
@@ -55654,7 +55606,7 @@ int lua_ax_base_Label_getLabelEffectType(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getLabelEffectType'", nullptr);
         return 0;
@@ -55701,7 +55653,7 @@ int lua_ax_base_Label_getEffectColor(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getEffectColor'", nullptr);
         return 0;
@@ -55807,7 +55759,7 @@ int lua_ax_base_Label_getTextAlignment(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getTextAlignment'", nullptr);
         return 0;
@@ -55854,7 +55806,7 @@ int lua_ax_base_Label_setHorizontalAlignment(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setHorizontalAlignment'", nullptr);
         return 0;
@@ -55904,7 +55856,7 @@ int lua_ax_base_Label_getHorizontalAlignment(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getHorizontalAlignment'", nullptr);
         return 0;
@@ -55951,7 +55903,7 @@ int lua_ax_base_Label_setVerticalAlignment(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setVerticalAlignment'", nullptr);
         return 0;
@@ -56001,7 +55953,7 @@ int lua_ax_base_Label_getVerticalAlignment(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getVerticalAlignment'", nullptr);
         return 0;
@@ -56048,7 +56000,7 @@ int lua_ax_base_Label_setLineBreakWithoutSpace(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setLineBreakWithoutSpace'", nullptr);
         return 0;
@@ -56098,7 +56050,7 @@ int lua_ax_base_Label_setMaxLineWidth(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setMaxLineWidth'", nullptr);
         return 0;
@@ -56148,7 +56100,7 @@ int lua_ax_base_Label_getMaxLineWidth(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getMaxLineWidth'", nullptr);
         return 0;
@@ -56195,7 +56147,7 @@ int lua_ax_base_Label_setTTFFaceSize(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setTTFFaceSize'", nullptr);
         return 0;
@@ -56245,7 +56197,7 @@ int lua_ax_base_Label_getTTFFaceSize(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getTTFFaceSize'", nullptr);
         return 0;
@@ -56292,7 +56244,7 @@ int lua_ax_base_Label_setBMFontSize(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setBMFontSize'", nullptr);
         return 0;
@@ -56342,7 +56294,7 @@ int lua_ax_base_Label_getBMFontSize(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getBMFontSize'", nullptr);
         return 0;
@@ -56389,7 +56341,7 @@ int lua_ax_base_Label_enableWrap(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_enableWrap'", nullptr);
         return 0;
@@ -56439,7 +56391,7 @@ int lua_ax_base_Label_isWrapEnabled(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_isWrapEnabled'", nullptr);
         return 0;
@@ -56486,7 +56438,7 @@ int lua_ax_base_Label_setOverflow(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setOverflow'", nullptr);
         return 0;
@@ -56536,7 +56488,7 @@ int lua_ax_base_Label_getOverflow(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getOverflow'", nullptr);
         return 0;
@@ -56583,7 +56535,7 @@ int lua_ax_base_Label_setWidth(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setWidth'", nullptr);
         return 0;
@@ -56633,7 +56585,7 @@ int lua_ax_base_Label_getWidth(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getWidth'", nullptr);
         return 0;
@@ -56680,7 +56632,7 @@ int lua_ax_base_Label_setHeight(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setHeight'", nullptr);
         return 0;
@@ -56730,7 +56682,7 @@ int lua_ax_base_Label_getHeight(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getHeight'", nullptr);
         return 0;
@@ -56777,7 +56729,7 @@ int lua_ax_base_Label_setDimensions(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setDimensions'", nullptr);
         return 0;
@@ -56830,7 +56782,7 @@ int lua_ax_base_Label_getDimensions(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getDimensions'", nullptr);
         return 0;
@@ -56877,7 +56829,7 @@ int lua_ax_base_Label_updateContent(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_updateContent'", nullptr);
         return 0;
@@ -56924,7 +56876,7 @@ int lua_ax_base_Label_getLetter(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getLetter'", nullptr);
         return 0;
@@ -56974,7 +56926,7 @@ int lua_ax_base_Label_setClipMarginEnabled(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setClipMarginEnabled'", nullptr);
         return 0;
@@ -57024,7 +56976,7 @@ int lua_ax_base_Label_isClipMarginEnabled(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_isClipMarginEnabled'", nullptr);
         return 0;
@@ -57071,7 +57023,7 @@ int lua_ax_base_Label_setLineHeight(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setLineHeight'", nullptr);
         return 0;
@@ -57121,7 +57073,7 @@ int lua_ax_base_Label_getLineHeight(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getLineHeight'", nullptr);
         return 0;
@@ -57168,7 +57120,7 @@ int lua_ax_base_Label_setLineSpacing(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setLineSpacing'", nullptr);
         return 0;
@@ -57218,7 +57170,7 @@ int lua_ax_base_Label_getLineSpacing(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getLineSpacing'", nullptr);
         return 0;
@@ -57265,7 +57217,7 @@ int lua_ax_base_Label_getLabelType(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getLabelType'", nullptr);
         return 0;
@@ -57312,7 +57264,7 @@ int lua_ax_base_Label_getRenderingFontSize(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getRenderingFontSize'", nullptr);
         return 0;
@@ -57359,7 +57311,7 @@ int lua_ax_base_Label_setAdditionalKerning(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setAdditionalKerning'", nullptr);
         return 0;
@@ -57409,7 +57361,7 @@ int lua_ax_base_Label_getAdditionalKerning(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getAdditionalKerning'", nullptr);
         return 0;
@@ -57456,7 +57408,7 @@ int lua_ax_base_Label_getFontAtlas(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getFontAtlas'", nullptr);
         return 0;
@@ -57503,7 +57455,7 @@ int lua_ax_base_Label_getBlendFunc(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getBlendFunc'", nullptr);
         return 0;
@@ -57550,7 +57502,7 @@ int lua_ax_base_Label_setBlendFunc(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_setBlendFunc'", nullptr);
         return 0;
@@ -57600,7 +57552,7 @@ int lua_ax_base_Label_removeAllChildrenWithCleanup(lua_State* tolua_S)
     cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_removeAllChildrenWithCleanup'", nullptr);
         return 0;
@@ -58390,7 +58342,7 @@ int lua_ax_base_LabelAtlas_setString(lua_State* tolua_S)
     cobj = (ax::LabelAtlas*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LabelAtlas_setString'", nullptr);
         return 0;
@@ -58440,7 +58392,7 @@ int lua_ax_base_LabelAtlas_getString(lua_State* tolua_S)
     cobj = (ax::LabelAtlas*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LabelAtlas_getString'", nullptr);
         return 0;
@@ -58636,7 +58588,7 @@ int lua_ax_base_Sprite_getBatchNode(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_getBatchNode'", nullptr);
         return 0;
@@ -58683,7 +58635,7 @@ int lua_ax_base_Sprite_setBatchNode(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setBatchNode'", nullptr);
         return 0;
@@ -58788,7 +58740,7 @@ int lua_ax_base_Sprite_getTexture(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_getTexture'", nullptr);
         return 0;
@@ -58898,7 +58850,7 @@ int lua_ax_base_Sprite_setVertexRect(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setVertexRect'", nullptr);
         return 0;
@@ -58948,7 +58900,7 @@ int lua_ax_base_Sprite_setCenterRectNormalized(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setCenterRectNormalized'", nullptr);
         return 0;
@@ -58998,7 +58950,7 @@ int lua_ax_base_Sprite_getCenterRectNormalized(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_getCenterRectNormalized'", nullptr);
         return 0;
@@ -59045,7 +58997,7 @@ int lua_ax_base_Sprite_setCenterRect(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setCenterRect'", nullptr);
         return 0;
@@ -59095,7 +59047,7 @@ int lua_ax_base_Sprite_getCenterRect(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_getCenterRect'", nullptr);
         return 0;
@@ -59197,7 +59149,7 @@ int lua_ax_base_Sprite_isFrameDisplayed(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_isFrameDisplayed'", nullptr);
         return 0;
@@ -59247,7 +59199,7 @@ int lua_ax_base_Sprite_getSpriteFrame(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_getSpriteFrame'", nullptr);
         return 0;
@@ -59294,7 +59246,7 @@ int lua_ax_base_Sprite_setDisplayFrameWithAnimationName(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setDisplayFrameWithAnimationName'", nullptr);
         return 0;
@@ -59347,7 +59299,7 @@ int lua_ax_base_Sprite_isDirty(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_isDirty'", nullptr);
         return 0;
@@ -59394,7 +59346,7 @@ int lua_ax_base_Sprite_setDirty(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setDirty'", nullptr);
         return 0;
@@ -59444,7 +59396,7 @@ int lua_ax_base_Sprite_removeAllChildrenWithCleanup(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_removeAllChildrenWithCleanup'", nullptr);
         return 0;
@@ -59494,7 +59446,7 @@ int lua_ax_base_Sprite_isTextureRectRotated(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_isTextureRectRotated'", nullptr);
         return 0;
@@ -59541,7 +59493,7 @@ int lua_ax_base_Sprite_getAtlasIndex(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_getAtlasIndex'", nullptr);
         return 0;
@@ -59588,7 +59540,7 @@ int lua_ax_base_Sprite_setAtlasIndex(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setAtlasIndex'", nullptr);
         return 0;
@@ -59638,7 +59590,7 @@ int lua_ax_base_Sprite_getTextureRect(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_getTextureRect'", nullptr);
         return 0;
@@ -59685,7 +59637,7 @@ int lua_ax_base_Sprite_getTextureAtlas(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_getTextureAtlas'", nullptr);
         return 0;
@@ -59732,7 +59684,7 @@ int lua_ax_base_Sprite_setTextureAtlas(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setTextureAtlas'", nullptr);
         return 0;
@@ -59782,7 +59734,7 @@ int lua_ax_base_Sprite_getOffsetPosition(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_getOffsetPosition'", nullptr);
         return 0;
@@ -59829,7 +59781,7 @@ int lua_ax_base_Sprite_isFlippedX(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_isFlippedX'", nullptr);
         return 0;
@@ -59876,7 +59828,7 @@ int lua_ax_base_Sprite_setFlippedX(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setFlippedX'", nullptr);
         return 0;
@@ -59926,7 +59878,7 @@ int lua_ax_base_Sprite_isFlippedY(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_isFlippedY'", nullptr);
         return 0;
@@ -59973,7 +59925,7 @@ int lua_ax_base_Sprite_setFlippedY(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setFlippedY'", nullptr);
         return 0;
@@ -60023,7 +59975,7 @@ int lua_ax_base_Sprite_setStretchEnabled(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setStretchEnabled'", nullptr);
         return 0;
@@ -60073,7 +60025,7 @@ int lua_ax_base_Sprite_isStretchEnabled(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_isStretchEnabled'", nullptr);
         return 0;
@@ -60120,7 +60072,7 @@ int lua_ax_base_Sprite_setBlendFunc(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setBlendFunc'", nullptr);
         return 0;
@@ -60170,7 +60122,7 @@ int lua_ax_base_Sprite_getBlendFunc(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_getBlendFunc'", nullptr);
         return 0;
@@ -60217,7 +60169,7 @@ int lua_ax_base_Sprite_getResourceType(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_getResourceType'", nullptr);
         return 0;
@@ -60264,7 +60216,7 @@ int lua_ax_base_Sprite_getResourceName(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_getResourceName'", nullptr);
         return 0;
@@ -60390,7 +60342,7 @@ int lua_ax_base_Sprite_initWithSpriteFrame(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_initWithSpriteFrame'", nullptr);
         return 0;
@@ -60440,7 +60392,7 @@ int lua_ax_base_Sprite_initWithSpriteFrameName(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_initWithSpriteFrameName'", nullptr);
         return 0;
@@ -60565,7 +60517,7 @@ int lua_ax_base_Sprite_initWithImageData(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_initWithImageData'", nullptr);
         return 0;
@@ -60618,7 +60570,7 @@ int lua_ax_base_Sprite_setVertexLayout(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setVertexLayout'", nullptr);
         return 0;
@@ -60665,7 +60617,7 @@ int lua_ax_base_Sprite_setAutoUpdatePS(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setAutoUpdatePS'", nullptr);
         return 0;
@@ -60715,7 +60667,7 @@ int lua_ax_base_Sprite_setAutoSize(lua_State* tolua_S)
     cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setAutoSize'", nullptr);
         return 0;
@@ -61063,7 +61015,7 @@ int lua_ax_base_LayerColor_changeWidth(lua_State* tolua_S)
     cobj = (ax::LayerColor*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerColor_changeWidth'", nullptr);
         return 0;
@@ -61113,7 +61065,7 @@ int lua_ax_base_LayerColor_changeHeight(lua_State* tolua_S)
     cobj = (ax::LayerColor*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerColor_changeHeight'", nullptr);
         return 0;
@@ -61163,7 +61115,7 @@ int lua_ax_base_LayerColor_changeWidthAndHeight(lua_State* tolua_S)
     cobj = (ax::LayerColor*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerColor_changeWidthAndHeight'", nullptr);
         return 0;
@@ -61405,7 +61357,7 @@ int lua_ax_base_LayerGradient_setCompressedInterpolation(lua_State* tolua_S)
     cobj = (ax::LayerGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerGradient_setCompressedInterpolation'", nullptr);
         return 0;
@@ -61455,7 +61407,7 @@ int lua_ax_base_LayerGradient_isCompressedInterpolation(lua_State* tolua_S)
     cobj = (ax::LayerGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerGradient_isCompressedInterpolation'", nullptr);
         return 0;
@@ -61502,7 +61454,7 @@ int lua_ax_base_LayerGradient_setStartColor(lua_State* tolua_S)
     cobj = (ax::LayerGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerGradient_setStartColor'", nullptr);
         return 0;
@@ -61552,7 +61504,7 @@ int lua_ax_base_LayerGradient_getStartColor(lua_State* tolua_S)
     cobj = (ax::LayerGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerGradient_getStartColor'", nullptr);
         return 0;
@@ -61599,7 +61551,7 @@ int lua_ax_base_LayerGradient_setEndColor(lua_State* tolua_S)
     cobj = (ax::LayerGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerGradient_setEndColor'", nullptr);
         return 0;
@@ -61649,7 +61601,7 @@ int lua_ax_base_LayerGradient_getEndColor(lua_State* tolua_S)
     cobj = (ax::LayerGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerGradient_getEndColor'", nullptr);
         return 0;
@@ -61696,7 +61648,7 @@ int lua_ax_base_LayerGradient_setStartOpacity(lua_State* tolua_S)
     cobj = (ax::LayerGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerGradient_setStartOpacity'", nullptr);
         return 0;
@@ -61746,7 +61698,7 @@ int lua_ax_base_LayerGradient_getStartOpacity(lua_State* tolua_S)
     cobj = (ax::LayerGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerGradient_getStartOpacity'", nullptr);
         return 0;
@@ -61793,7 +61745,7 @@ int lua_ax_base_LayerGradient_setEndOpacity(lua_State* tolua_S)
     cobj = (ax::LayerGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerGradient_setEndOpacity'", nullptr);
         return 0;
@@ -61843,7 +61795,7 @@ int lua_ax_base_LayerGradient_getEndOpacity(lua_State* tolua_S)
     cobj = (ax::LayerGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerGradient_getEndOpacity'", nullptr);
         return 0;
@@ -61890,7 +61842,7 @@ int lua_ax_base_LayerGradient_setVector(lua_State* tolua_S)
     cobj = (ax::LayerGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerGradient_setVector'", nullptr);
         return 0;
@@ -61940,7 +61892,7 @@ int lua_ax_base_LayerGradient_getVector(lua_State* tolua_S)
     cobj = (ax::LayerGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerGradient_getVector'", nullptr);
         return 0;
@@ -62192,7 +62144,7 @@ int lua_ax_base_LayerRadialGradient_setStartOpacity(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_setStartOpacity'", nullptr);
         return 0;
@@ -62242,7 +62194,7 @@ int lua_ax_base_LayerRadialGradient_getStartOpacity(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_getStartOpacity'", nullptr);
         return 0;
@@ -62289,7 +62241,7 @@ int lua_ax_base_LayerRadialGradient_setEndOpacity(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_setEndOpacity'", nullptr);
         return 0;
@@ -62339,7 +62291,7 @@ int lua_ax_base_LayerRadialGradient_getEndOpacity(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_getEndOpacity'", nullptr);
         return 0;
@@ -62386,7 +62338,7 @@ int lua_ax_base_LayerRadialGradient_setRadius(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_setRadius'", nullptr);
         return 0;
@@ -62436,7 +62388,7 @@ int lua_ax_base_LayerRadialGradient_getRadius(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_getRadius'", nullptr);
         return 0;
@@ -62483,7 +62435,7 @@ int lua_ax_base_LayerRadialGradient_setCenter(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_setCenter'", nullptr);
         return 0;
@@ -62533,7 +62485,7 @@ int lua_ax_base_LayerRadialGradient_getCenter(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_getCenter'", nullptr);
         return 0;
@@ -62580,7 +62532,7 @@ int lua_ax_base_LayerRadialGradient_setExpand(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_setExpand'", nullptr);
         return 0;
@@ -62630,7 +62582,7 @@ int lua_ax_base_LayerRadialGradient_getExpand(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_getExpand'", nullptr);
         return 0;
@@ -62732,7 +62684,7 @@ int lua_ax_base_LayerRadialGradient_getStartColor(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_getStartColor'", nullptr);
         return 0;
@@ -62779,7 +62731,7 @@ int lua_ax_base_LayerRadialGradient_getStartColor3B(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_getStartColor3B'", nullptr);
         return 0;
@@ -62881,7 +62833,7 @@ int lua_ax_base_LayerRadialGradient_getEndColor(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_getEndColor'", nullptr);
         return 0;
@@ -62928,7 +62880,7 @@ int lua_ax_base_LayerRadialGradient_getEndColor3B(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_getEndColor3B'", nullptr);
         return 0;
@@ -62975,7 +62927,7 @@ int lua_ax_base_LayerRadialGradient_setBlendFunc(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_setBlendFunc'", nullptr);
         return 0;
@@ -63025,7 +62977,7 @@ int lua_ax_base_LayerRadialGradient_getBlendFunc(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_getBlendFunc'", nullptr);
         return 0;
@@ -63072,7 +63024,7 @@ int lua_ax_base_LayerRadialGradient_initWithColor(lua_State* tolua_S)
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_initWithColor'", nullptr);
         return 0;
@@ -63268,7 +63220,7 @@ int lua_ax_base_LayerMultiplex_addLayer(lua_State* tolua_S)
     cobj = (ax::LayerMultiplex*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerMultiplex_addLayer'", nullptr);
         return 0;
@@ -63377,7 +63329,7 @@ int lua_ax_base_LayerMultiplex_switchToAndReleaseMe(lua_State* tolua_S)
     cobj = (ax::LayerMultiplex*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerMultiplex_switchToAndReleaseMe'", nullptr);
         return 0;
@@ -63427,7 +63379,7 @@ int lua_ax_base_LayerMultiplex_initWithArray(lua_State* tolua_S)
     cobj = (ax::LayerMultiplex*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerMultiplex_initWithArray'", nullptr);
         return 0;
@@ -63538,7 +63490,7 @@ int lua_ax_base_MenuItem_rect(lua_State* tolua_S)
     cobj = (ax::MenuItem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItem_rect'", nullptr);
         return 0;
@@ -63585,7 +63537,7 @@ int lua_ax_base_MenuItem_activate(lua_State* tolua_S)
     cobj = (ax::MenuItem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItem_activate'", nullptr);
         return 0;
@@ -63632,7 +63584,7 @@ int lua_ax_base_MenuItem_selected(lua_State* tolua_S)
     cobj = (ax::MenuItem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItem_selected'", nullptr);
         return 0;
@@ -63679,7 +63631,7 @@ int lua_ax_base_MenuItem_unselected(lua_State* tolua_S)
     cobj = (ax::MenuItem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItem_unselected'", nullptr);
         return 0;
@@ -63726,7 +63678,7 @@ int lua_ax_base_MenuItem_isEnabled(lua_State* tolua_S)
     cobj = (ax::MenuItem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItem_isEnabled'", nullptr);
         return 0;
@@ -63773,7 +63725,7 @@ int lua_ax_base_MenuItem_setEnabled(lua_State* tolua_S)
     cobj = (ax::MenuItem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItem_setEnabled'", nullptr);
         return 0;
@@ -63823,7 +63775,7 @@ int lua_ax_base_MenuItem_isSelected(lua_State* tolua_S)
     cobj = (ax::MenuItem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItem_isSelected'", nullptr);
         return 0;
@@ -63934,7 +63886,7 @@ int lua_ax_base_MenuItemLabel_setString(lua_State* tolua_S)
     cobj = (ax::MenuItemLabel*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemLabel_setString'", nullptr);
         return 0;
@@ -63984,7 +63936,7 @@ int lua_ax_base_MenuItemLabel_getString(lua_State* tolua_S)
     cobj = (ax::MenuItemLabel*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemLabel_getString'", nullptr);
         return 0;
@@ -64031,7 +63983,7 @@ int lua_ax_base_MenuItemLabel_getDisabledColor(lua_State* tolua_S)
     cobj = (ax::MenuItemLabel*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemLabel_getDisabledColor'", nullptr);
         return 0;
@@ -64078,7 +64030,7 @@ int lua_ax_base_MenuItemLabel_setDisabledColor(lua_State* tolua_S)
     cobj = (ax::MenuItemLabel*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemLabel_setDisabledColor'", nullptr);
         return 0;
@@ -64128,7 +64080,7 @@ int lua_ax_base_MenuItemLabel_getLabel(lua_State* tolua_S)
     cobj = (ax::MenuItemLabel*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemLabel_getLabel'", nullptr);
         return 0;
@@ -64175,7 +64127,7 @@ int lua_ax_base_MenuItemLabel_setLabel(lua_State* tolua_S)
     cobj = (ax::MenuItemLabel*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemLabel_setLabel'", nullptr);
         return 0;
@@ -64225,7 +64177,7 @@ int lua_ax_base_MenuItemLabel_initWithLabel(lua_State* tolua_S)
     cobj = (ax::MenuItemLabel*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemLabel_initWithLabel'", nullptr);
         return 0;
@@ -64346,7 +64298,7 @@ int lua_ax_base_MenuItemAtlasFont_initWithString(lua_State* tolua_S)
     cobj = (ax::MenuItemAtlasFont*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemAtlasFont_initWithString'", nullptr);
         return 0;
@@ -64473,7 +64425,7 @@ int lua_ax_base_MenuItemFont_setFontSizeObj(lua_State* tolua_S)
     cobj = (ax::MenuItemFont*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemFont_setFontSizeObj'", nullptr);
         return 0;
@@ -64523,7 +64475,7 @@ int lua_ax_base_MenuItemFont_getFontSizeObj(lua_State* tolua_S)
     cobj = (ax::MenuItemFont*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemFont_getFontSizeObj'", nullptr);
         return 0;
@@ -64570,7 +64522,7 @@ int lua_ax_base_MenuItemFont_setFontNameObj(lua_State* tolua_S)
     cobj = (ax::MenuItemFont*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemFont_setFontNameObj'", nullptr);
         return 0;
@@ -64620,7 +64572,7 @@ int lua_ax_base_MenuItemFont_getFontNameObj(lua_State* tolua_S)
     cobj = (ax::MenuItemFont*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemFont_getFontNameObj'", nullptr);
         return 0;
@@ -64667,7 +64619,7 @@ int lua_ax_base_MenuItemFont_initWithString(lua_State* tolua_S)
     cobj = (ax::MenuItemFont*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemFont_initWithString'", nullptr);
         return 0;
@@ -64930,7 +64882,7 @@ int lua_ax_base_MenuItemSprite_getNormalImage(lua_State* tolua_S)
     cobj = (ax::MenuItemSprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemSprite_getNormalImage'", nullptr);
         return 0;
@@ -64977,7 +64929,7 @@ int lua_ax_base_MenuItemSprite_setNormalImage(lua_State* tolua_S)
     cobj = (ax::MenuItemSprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemSprite_setNormalImage'", nullptr);
         return 0;
@@ -65027,7 +64979,7 @@ int lua_ax_base_MenuItemSprite_getSelectedImage(lua_State* tolua_S)
     cobj = (ax::MenuItemSprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemSprite_getSelectedImage'", nullptr);
         return 0;
@@ -65074,7 +65026,7 @@ int lua_ax_base_MenuItemSprite_setSelectedImage(lua_State* tolua_S)
     cobj = (ax::MenuItemSprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemSprite_setSelectedImage'", nullptr);
         return 0;
@@ -65124,7 +65076,7 @@ int lua_ax_base_MenuItemSprite_getDisabledImage(lua_State* tolua_S)
     cobj = (ax::MenuItemSprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemSprite_getDisabledImage'", nullptr);
         return 0;
@@ -65171,7 +65123,7 @@ int lua_ax_base_MenuItemSprite_setDisabledImage(lua_State* tolua_S)
     cobj = (ax::MenuItemSprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemSprite_setDisabledImage'", nullptr);
         return 0;
@@ -65221,7 +65173,7 @@ int lua_ax_base_MenuItemSprite_selected(lua_State* tolua_S)
     cobj = (ax::MenuItemSprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemSprite_selected'", nullptr);
         return 0;
@@ -65268,7 +65220,7 @@ int lua_ax_base_MenuItemSprite_unselected(lua_State* tolua_S)
     cobj = (ax::MenuItemSprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemSprite_unselected'", nullptr);
         return 0;
@@ -65315,7 +65267,7 @@ int lua_ax_base_MenuItemSprite_setEnabled(lua_State* tolua_S)
     cobj = (ax::MenuItemSprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemSprite_setEnabled'", nullptr);
         return 0;
@@ -65365,7 +65317,7 @@ int lua_ax_base_MenuItemSprite_initWithNormalSprite(lua_State* tolua_S)
     cobj = (ax::MenuItemSprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemSprite_initWithNormalSprite'", nullptr);
         return 0;
@@ -65495,7 +65447,7 @@ int lua_ax_base_MenuItemImage_setNormalSpriteFrame(lua_State* tolua_S)
     cobj = (ax::MenuItemImage*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemImage_setNormalSpriteFrame'", nullptr);
         return 0;
@@ -65545,7 +65497,7 @@ int lua_ax_base_MenuItemImage_setSelectedSpriteFrame(lua_State* tolua_S)
     cobj = (ax::MenuItemImage*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemImage_setSelectedSpriteFrame'", nullptr);
         return 0;
@@ -65595,7 +65547,7 @@ int lua_ax_base_MenuItemImage_setDisabledSpriteFrame(lua_State* tolua_S)
     cobj = (ax::MenuItemImage*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemImage_setDisabledSpriteFrame'", nullptr);
         return 0;
@@ -65645,7 +65597,7 @@ int lua_ax_base_MenuItemImage_init(lua_State* tolua_S)
     cobj = (ax::MenuItemImage*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemImage_init'", nullptr);
         return 0;
@@ -65692,7 +65644,7 @@ int lua_ax_base_MenuItemImage_initWithNormalImage(lua_State* tolua_S)
     cobj = (ax::MenuItemImage*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemImage_initWithNormalImage'", nullptr);
         return 0;
@@ -65817,7 +65769,7 @@ int lua_ax_base_MenuItemToggle_addSubItem(lua_State* tolua_S)
     cobj = (ax::MenuItemToggle*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemToggle_addSubItem'", nullptr);
         return 0;
@@ -65867,7 +65819,7 @@ int lua_ax_base_MenuItemToggle_getSelectedItem(lua_State* tolua_S)
     cobj = (ax::MenuItemToggle*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemToggle_getSelectedItem'", nullptr);
         return 0;
@@ -65914,7 +65866,7 @@ int lua_ax_base_MenuItemToggle_getSelectedIndex(lua_State* tolua_S)
     cobj = (ax::MenuItemToggle*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemToggle_getSelectedIndex'", nullptr);
         return 0;
@@ -65961,7 +65913,7 @@ int lua_ax_base_MenuItemToggle_setSelectedIndex(lua_State* tolua_S)
     cobj = (ax::MenuItemToggle*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemToggle_setSelectedIndex'", nullptr);
         return 0;
@@ -66011,7 +65963,7 @@ int lua_ax_base_MenuItemToggle_setSubItems(lua_State* tolua_S)
     cobj = (ax::MenuItemToggle*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemToggle_setSubItems'", nullptr);
         return 0;
@@ -66061,7 +66013,7 @@ int lua_ax_base_MenuItemToggle_initWithItem(lua_State* tolua_S)
     cobj = (ax::MenuItemToggle*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MenuItemToggle_initWithItem'", nullptr);
         return 0;
@@ -66174,7 +66126,7 @@ int lua_ax_base_Menu_alignItemsVertically(lua_State* tolua_S)
     cobj = (ax::Menu*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Menu_alignItemsVertically'", nullptr);
         return 0;
@@ -66221,7 +66173,7 @@ int lua_ax_base_Menu_alignItemsVerticallyWithPadding(lua_State* tolua_S)
     cobj = (ax::Menu*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Menu_alignItemsVerticallyWithPadding'", nullptr);
         return 0;
@@ -66271,7 +66223,7 @@ int lua_ax_base_Menu_alignItemsHorizontally(lua_State* tolua_S)
     cobj = (ax::Menu*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Menu_alignItemsHorizontally'", nullptr);
         return 0;
@@ -66318,7 +66270,7 @@ int lua_ax_base_Menu_alignItemsHorizontallyWithPadding(lua_State* tolua_S)
     cobj = (ax::Menu*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Menu_alignItemsHorizontallyWithPadding'", nullptr);
         return 0;
@@ -66368,7 +66320,7 @@ int lua_ax_base_Menu_isEnabled(lua_State* tolua_S)
     cobj = (ax::Menu*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Menu_isEnabled'", nullptr);
         return 0;
@@ -66415,7 +66367,7 @@ int lua_ax_base_Menu_setEnabled(lua_State* tolua_S)
     cobj = (ax::Menu*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Menu_setEnabled'", nullptr);
         return 0;
@@ -66465,7 +66417,7 @@ int lua_ax_base_Menu_initWithArray(lua_State* tolua_S)
     cobj = (ax::Menu*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Menu_initWithArray'", nullptr);
         return 0;
@@ -66579,7 +66531,7 @@ int lua_ax_base_MotionStreak_getTexture(lua_State* tolua_S)
     cobj = (ax::MotionStreak*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak_getTexture'", nullptr);
         return 0;
@@ -66626,7 +66578,7 @@ int lua_ax_base_MotionStreak_setTexture(lua_State* tolua_S)
     cobj = (ax::MotionStreak*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak_setTexture'", nullptr);
         return 0;
@@ -66676,7 +66628,7 @@ int lua_ax_base_MotionStreak_setBlendFunc(lua_State* tolua_S)
     cobj = (ax::MotionStreak*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak_setBlendFunc'", nullptr);
         return 0;
@@ -66726,7 +66678,7 @@ int lua_ax_base_MotionStreak_getBlendFunc(lua_State* tolua_S)
     cobj = (ax::MotionStreak*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak_getBlendFunc'", nullptr);
         return 0;
@@ -66773,7 +66725,7 @@ int lua_ax_base_MotionStreak_tintWithColor(lua_State* tolua_S)
     cobj = (ax::MotionStreak*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak_tintWithColor'", nullptr);
         return 0;
@@ -66823,7 +66775,7 @@ int lua_ax_base_MotionStreak_reset(lua_State* tolua_S)
     cobj = (ax::MotionStreak*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak_reset'", nullptr);
         return 0;
@@ -66870,7 +66822,7 @@ int lua_ax_base_MotionStreak_isFastMode(lua_State* tolua_S)
     cobj = (ax::MotionStreak*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak_isFastMode'", nullptr);
         return 0;
@@ -66917,7 +66869,7 @@ int lua_ax_base_MotionStreak_setFastMode(lua_State* tolua_S)
     cobj = (ax::MotionStreak*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak_setFastMode'", nullptr);
         return 0;
@@ -66967,7 +66919,7 @@ int lua_ax_base_MotionStreak_getStroke(lua_State* tolua_S)
     cobj = (ax::MotionStreak*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak_getStroke'", nullptr);
         return 0;
@@ -67014,7 +66966,7 @@ int lua_ax_base_MotionStreak_setStroke(lua_State* tolua_S)
     cobj = (ax::MotionStreak*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak_setStroke'", nullptr);
         return 0;
@@ -67064,7 +67016,7 @@ int lua_ax_base_MotionStreak_isStartingPositionInitialized(lua_State* tolua_S)
     cobj = (ax::MotionStreak*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak_isStartingPositionInitialized'", nullptr);
         return 0;
@@ -67111,7 +67063,7 @@ int lua_ax_base_MotionStreak_setStartingPositionInitialized(lua_State* tolua_S)
     cobj = (ax::MotionStreak*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak_setStartingPositionInitialized'", nullptr);
         return 0;
@@ -67438,7 +67390,7 @@ int lua_ax_base_NodeGrid_setGrid(lua_State* tolua_S)
     cobj = (ax::NodeGrid*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_NodeGrid_setGrid'", nullptr);
         return 0;
@@ -67488,7 +67440,7 @@ int lua_ax_base_NodeGrid_setTarget(lua_State* tolua_S)
     cobj = (ax::NodeGrid*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_NodeGrid_setTarget'", nullptr);
         return 0;
@@ -67538,7 +67490,7 @@ int lua_ax_base_NodeGrid_setGridRect(lua_State* tolua_S)
     cobj = (ax::NodeGrid*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_NodeGrid_setGridRect'", nullptr);
         return 0;
@@ -67588,7 +67540,7 @@ int lua_ax_base_NodeGrid_getGridRect(lua_State* tolua_S)
     cobj = (ax::NodeGrid*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_NodeGrid_getGridRect'", nullptr);
         return 0;
@@ -67743,7 +67695,7 @@ int lua_ax_base_ParticleBatchNode_insertChild(lua_State* tolua_S)
     cobj = (ax::ParticleBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleBatchNode_insertChild'", nullptr);
         return 0;
@@ -67796,7 +67748,7 @@ int lua_ax_base_ParticleBatchNode_removeChildAtIndex(lua_State* tolua_S)
     cobj = (ax::ParticleBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleBatchNode_removeChildAtIndex'", nullptr);
         return 0;
@@ -67849,7 +67801,7 @@ int lua_ax_base_ParticleBatchNode_removeAllChildrenWithCleanup(lua_State* tolua_
     cobj = (ax::ParticleBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleBatchNode_removeAllChildrenWithCleanup'", nullptr);
         return 0;
@@ -67899,7 +67851,7 @@ int lua_ax_base_ParticleBatchNode_disableParticle(lua_State* tolua_S)
     cobj = (ax::ParticleBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleBatchNode_disableParticle'", nullptr);
         return 0;
@@ -67949,7 +67901,7 @@ int lua_ax_base_ParticleBatchNode_getTextureAtlas(lua_State* tolua_S)
     cobj = (ax::ParticleBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleBatchNode_getTextureAtlas'", nullptr);
         return 0;
@@ -67996,7 +67948,7 @@ int lua_ax_base_ParticleBatchNode_setTextureAtlas(lua_State* tolua_S)
     cobj = (ax::ParticleBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleBatchNode_setTextureAtlas'", nullptr);
         return 0;
@@ -68046,7 +67998,7 @@ int lua_ax_base_ParticleBatchNode_getTexture(lua_State* tolua_S)
     cobj = (ax::ParticleBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleBatchNode_getTexture'", nullptr);
         return 0;
@@ -68093,7 +68045,7 @@ int lua_ax_base_ParticleBatchNode_setTexture(lua_State* tolua_S)
     cobj = (ax::ParticleBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleBatchNode_setTexture'", nullptr);
         return 0;
@@ -68143,7 +68095,7 @@ int lua_ax_base_ParticleBatchNode_setBlendFunc(lua_State* tolua_S)
     cobj = (ax::ParticleBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleBatchNode_setBlendFunc'", nullptr);
         return 0;
@@ -68193,7 +68145,7 @@ int lua_ax_base_ParticleBatchNode_getBlendFunc(lua_State* tolua_S)
     cobj = (ax::ParticleBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleBatchNode_getBlendFunc'", nullptr);
         return 0;
@@ -68240,7 +68192,7 @@ int lua_ax_base_ParticleBatchNode_initWithTexture(lua_State* tolua_S)
     cobj = (ax::ParticleBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleBatchNode_initWithTexture'", nullptr);
         return 0;
@@ -68293,7 +68245,7 @@ int lua_ax_base_ParticleBatchNode_initWithFile(lua_State* tolua_S)
     cobj = (ax::ParticleBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleBatchNode_initWithFile'", nullptr);
         return 0;
@@ -68538,7 +68490,7 @@ int lua_ax_base_SpriteFrameCache_init(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_init'", nullptr);
         return 0;
@@ -68716,7 +68668,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFrame(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_addSpriteFrame'", nullptr);
         return 0;
@@ -68769,7 +68721,7 @@ int lua_ax_base_SpriteFrameCache_isSpriteFramesWithFileLoaded(lua_State* tolua_S
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_isSpriteFramesWithFileLoaded'", nullptr);
         return 0;
@@ -68819,7 +68771,7 @@ int lua_ax_base_SpriteFrameCache_removeSpriteFrames(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_removeSpriteFrames'", nullptr);
         return 0;
@@ -68866,7 +68818,7 @@ int lua_ax_base_SpriteFrameCache_removeUnusedSpriteFrames(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_removeUnusedSpriteFrames'", nullptr);
         return 0;
@@ -68913,7 +68865,7 @@ int lua_ax_base_SpriteFrameCache_removeUnusedSpriteSheets(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_removeUnusedSpriteSheets'", nullptr);
         return 0;
@@ -68960,7 +68912,7 @@ int lua_ax_base_SpriteFrameCache_removeSpriteFrameByName(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_removeSpriteFrameByName'", nullptr);
         return 0;
@@ -69010,7 +68962,7 @@ int lua_ax_base_SpriteFrameCache_removeSpriteFramesFromFile(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_removeSpriteFramesFromFile'", nullptr);
         return 0;
@@ -69060,7 +69012,7 @@ int lua_ax_base_SpriteFrameCache_removeSpriteFramesFromFileContent(lua_State* to
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_removeSpriteFramesFromFileContent'", nullptr);
         return 0;
@@ -69110,7 +69062,7 @@ int lua_ax_base_SpriteFrameCache_removeSpriteFramesFromTexture(lua_State* tolua_
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_removeSpriteFramesFromTexture'", nullptr);
         return 0;
@@ -69160,7 +69112,7 @@ int lua_ax_base_SpriteFrameCache_getSpriteFrameByName(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_getSpriteFrameByName'", nullptr);
         return 0;
@@ -69210,7 +69162,7 @@ int lua_ax_base_SpriteFrameCache_reloadTexture(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_reloadTexture'", nullptr);
         return 0;
@@ -69260,7 +69212,7 @@ int lua_ax_base_SpriteFrameCache_findFrame(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_findFrame'", nullptr);
         return 0;
@@ -69310,7 +69262,7 @@ int lua_ax_base_SpriteFrameCache_getSpriteFrameName(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_getSpriteFrameName'", nullptr);
         return 0;
@@ -69360,7 +69312,7 @@ int lua_ax_base_SpriteFrameCache_eraseFrame(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_eraseFrame'", nullptr);
         return 0;
@@ -69410,7 +69362,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFrameCapInset(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_addSpriteFrameCapInset'", nullptr);
         return 0;
@@ -69466,7 +69418,7 @@ int lua_ax_base_SpriteFrameCache_deregisterSpriteSheetLoader(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_deregisterSpriteSheetLoader'", nullptr);
         return 0;
@@ -69516,7 +69468,7 @@ int lua_ax_base_SpriteFrameCache_getSpriteSheetLoader(lua_State* tolua_S)
     cobj = (ax::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteFrameCache_getSpriteSheetLoader'", nullptr);
         return 0;
@@ -69674,7 +69626,7 @@ int lua_ax_base_ParticleData_init(lua_State* tolua_S)
     cobj = (ax::ParticleData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleData_init'", nullptr);
         return 0;
@@ -69724,7 +69676,7 @@ int lua_ax_base_ParticleData_release(lua_State* tolua_S)
     cobj = (ax::ParticleData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleData_release'", nullptr);
         return 0;
@@ -69771,7 +69723,7 @@ int lua_ax_base_ParticleData_getMaxCount(lua_State* tolua_S)
     cobj = (ax::ParticleData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleData_getMaxCount'", nullptr);
         return 0;
@@ -69818,7 +69770,7 @@ int lua_ax_base_ParticleData_copyParticle(lua_State* tolua_S)
     cobj = (ax::ParticleData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleData_copyParticle'", nullptr);
         return 0;
@@ -70192,7 +70144,7 @@ int lua_ax_base_ParticleEmissionMaskCache_removeMask(lua_State* tolua_S)
     cobj = (ax::ParticleEmissionMaskCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleEmissionMaskCache_removeMask'", nullptr);
         return 0;
@@ -70242,7 +70194,7 @@ int lua_ax_base_ParticleEmissionMaskCache_removeAllMasks(lua_State* tolua_S)
     cobj = (ax::ParticleEmissionMaskCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleEmissionMaskCache_removeAllMasks'", nullptr);
         return 0;
@@ -70347,7 +70299,7 @@ int lua_ax_base_ParticleSystem_addParticles(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_addParticles'", nullptr);
         return 0;
@@ -70434,7 +70386,7 @@ int lua_ax_base_ParticleSystem_stopSystem(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_stopSystem'", nullptr);
         return 0;
@@ -70481,7 +70433,7 @@ int lua_ax_base_ParticleSystem_resetSystem(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_resetSystem'", nullptr);
         return 0;
@@ -70528,7 +70480,7 @@ int lua_ax_base_ParticleSystem_isFull(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isFull'", nullptr);
         return 0;
@@ -70575,7 +70527,7 @@ int lua_ax_base_ParticleSystem_updateParticleQuads(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_updateParticleQuads'", nullptr);
         return 0;
@@ -70622,7 +70574,7 @@ int lua_ax_base_ParticleSystem_postStep(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_postStep'", nullptr);
         return 0;
@@ -70669,7 +70621,7 @@ int lua_ax_base_ParticleSystem_updateWithNoTime(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_updateWithNoTime'", nullptr);
         return 0;
@@ -70716,7 +70668,7 @@ int lua_ax_base_ParticleSystem_isAutoRemoveOnFinish(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isAutoRemoveOnFinish'", nullptr);
         return 0;
@@ -70763,7 +70715,7 @@ int lua_ax_base_ParticleSystem_setAutoRemoveOnFinish(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setAutoRemoveOnFinish'", nullptr);
         return 0;
@@ -70813,7 +70765,7 @@ int lua_ax_base_ParticleSystem_getGravity(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getGravity'", nullptr);
         return 0;
@@ -70860,7 +70812,7 @@ int lua_ax_base_ParticleSystem_setGravity(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setGravity'", nullptr);
         return 0;
@@ -70910,7 +70862,7 @@ int lua_ax_base_ParticleSystem_getSpeed(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getSpeed'", nullptr);
         return 0;
@@ -70957,7 +70909,7 @@ int lua_ax_base_ParticleSystem_setSpeed(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setSpeed'", nullptr);
         return 0;
@@ -71007,7 +70959,7 @@ int lua_ax_base_ParticleSystem_getSpeedVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getSpeedVar'", nullptr);
         return 0;
@@ -71054,7 +71006,7 @@ int lua_ax_base_ParticleSystem_setSpeedVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setSpeedVar'", nullptr);
         return 0;
@@ -71104,7 +71056,7 @@ int lua_ax_base_ParticleSystem_getTangentialAccel(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getTangentialAccel'", nullptr);
         return 0;
@@ -71151,7 +71103,7 @@ int lua_ax_base_ParticleSystem_setTangentialAccel(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setTangentialAccel'", nullptr);
         return 0;
@@ -71201,7 +71153,7 @@ int lua_ax_base_ParticleSystem_getTangentialAccelVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getTangentialAccelVar'", nullptr);
         return 0;
@@ -71248,7 +71200,7 @@ int lua_ax_base_ParticleSystem_setTangentialAccelVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setTangentialAccelVar'", nullptr);
         return 0;
@@ -71298,7 +71250,7 @@ int lua_ax_base_ParticleSystem_getRadialAccel(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getRadialAccel'", nullptr);
         return 0;
@@ -71345,7 +71297,7 @@ int lua_ax_base_ParticleSystem_setRadialAccel(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setRadialAccel'", nullptr);
         return 0;
@@ -71395,7 +71347,7 @@ int lua_ax_base_ParticleSystem_getRadialAccelVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getRadialAccelVar'", nullptr);
         return 0;
@@ -71442,7 +71394,7 @@ int lua_ax_base_ParticleSystem_setRadialAccelVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setRadialAccelVar'", nullptr);
         return 0;
@@ -71492,7 +71444,7 @@ int lua_ax_base_ParticleSystem_getRotationIsDir(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getRotationIsDir'", nullptr);
         return 0;
@@ -71539,7 +71491,7 @@ int lua_ax_base_ParticleSystem_setRotationIsDir(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setRotationIsDir'", nullptr);
         return 0;
@@ -71589,7 +71541,7 @@ int lua_ax_base_ParticleSystem_getStartRadius(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getStartRadius'", nullptr);
         return 0;
@@ -71636,7 +71588,7 @@ int lua_ax_base_ParticleSystem_setStartRadius(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setStartRadius'", nullptr);
         return 0;
@@ -71686,7 +71638,7 @@ int lua_ax_base_ParticleSystem_getStartRadiusVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getStartRadiusVar'", nullptr);
         return 0;
@@ -71733,7 +71685,7 @@ int lua_ax_base_ParticleSystem_setStartRadiusVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setStartRadiusVar'", nullptr);
         return 0;
@@ -71783,7 +71735,7 @@ int lua_ax_base_ParticleSystem_getEndRadius(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getEndRadius'", nullptr);
         return 0;
@@ -71830,7 +71782,7 @@ int lua_ax_base_ParticleSystem_setEndRadius(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEndRadius'", nullptr);
         return 0;
@@ -71880,7 +71832,7 @@ int lua_ax_base_ParticleSystem_getEndRadiusVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getEndRadiusVar'", nullptr);
         return 0;
@@ -71927,7 +71879,7 @@ int lua_ax_base_ParticleSystem_setEndRadiusVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEndRadiusVar'", nullptr);
         return 0;
@@ -71977,7 +71929,7 @@ int lua_ax_base_ParticleSystem_getRotatePerSecond(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getRotatePerSecond'", nullptr);
         return 0;
@@ -72024,7 +71976,7 @@ int lua_ax_base_ParticleSystem_setRotatePerSecond(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setRotatePerSecond'", nullptr);
         return 0;
@@ -72074,7 +72026,7 @@ int lua_ax_base_ParticleSystem_getRotatePerSecondVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getRotatePerSecondVar'", nullptr);
         return 0;
@@ -72121,7 +72073,7 @@ int lua_ax_base_ParticleSystem_setRotatePerSecondVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setRotatePerSecondVar'", nullptr);
         return 0;
@@ -72171,7 +72123,7 @@ int lua_ax_base_ParticleSystem_isActive(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isActive'", nullptr);
         return 0;
@@ -72218,7 +72170,7 @@ int lua_ax_base_ParticleSystem_isBlendAdditive(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isBlendAdditive'", nullptr);
         return 0;
@@ -72265,7 +72217,7 @@ int lua_ax_base_ParticleSystem_setBlendAdditive(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setBlendAdditive'", nullptr);
         return 0;
@@ -72315,7 +72267,7 @@ int lua_ax_base_ParticleSystem_getBatchNode(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getBatchNode'", nullptr);
         return 0;
@@ -72362,7 +72314,7 @@ int lua_ax_base_ParticleSystem_setBatchNode(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setBatchNode'", nullptr);
         return 0;
@@ -72412,7 +72364,7 @@ int lua_ax_base_ParticleSystem_getAtlasIndex(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getAtlasIndex'", nullptr);
         return 0;
@@ -72459,7 +72411,7 @@ int lua_ax_base_ParticleSystem_setAtlasIndex(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setAtlasIndex'", nullptr);
         return 0;
@@ -72509,7 +72461,7 @@ int lua_ax_base_ParticleSystem_getParticleCount(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getParticleCount'", nullptr);
         return 0;
@@ -72556,7 +72508,7 @@ int lua_ax_base_ParticleSystem_getDuration(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getDuration'", nullptr);
         return 0;
@@ -72603,7 +72555,7 @@ int lua_ax_base_ParticleSystem_setDuration(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setDuration'", nullptr);
         return 0;
@@ -72653,7 +72605,7 @@ int lua_ax_base_ParticleSystem_getSourcePosition(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getSourcePosition'", nullptr);
         return 0;
@@ -72700,7 +72652,7 @@ int lua_ax_base_ParticleSystem_setSourcePosition(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setSourcePosition'", nullptr);
         return 0;
@@ -72750,7 +72702,7 @@ int lua_ax_base_ParticleSystem_getPosVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getPosVar'", nullptr);
         return 0;
@@ -72797,7 +72749,7 @@ int lua_ax_base_ParticleSystem_setPosVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setPosVar'", nullptr);
         return 0;
@@ -72847,7 +72799,7 @@ int lua_ax_base_ParticleSystem_getLife(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getLife'", nullptr);
         return 0;
@@ -72894,7 +72846,7 @@ int lua_ax_base_ParticleSystem_setLife(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setLife'", nullptr);
         return 0;
@@ -72944,7 +72896,7 @@ int lua_ax_base_ParticleSystem_getLifeVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getLifeVar'", nullptr);
         return 0;
@@ -72991,7 +72943,7 @@ int lua_ax_base_ParticleSystem_setLifeVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setLifeVar'", nullptr);
         return 0;
@@ -73041,7 +72993,7 @@ int lua_ax_base_ParticleSystem_getAngle(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getAngle'", nullptr);
         return 0;
@@ -73088,7 +73040,7 @@ int lua_ax_base_ParticleSystem_setAngle(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setAngle'", nullptr);
         return 0;
@@ -73138,7 +73090,7 @@ int lua_ax_base_ParticleSystem_getAngleVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getAngleVar'", nullptr);
         return 0;
@@ -73185,7 +73137,7 @@ int lua_ax_base_ParticleSystem_setAngleVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setAngleVar'", nullptr);
         return 0;
@@ -73235,7 +73187,7 @@ int lua_ax_base_ParticleSystem_getEmitterMode(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getEmitterMode'", nullptr);
         return 0;
@@ -73282,7 +73234,7 @@ int lua_ax_base_ParticleSystem_setEmitterMode(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEmitterMode'", nullptr);
         return 0;
@@ -73332,7 +73284,7 @@ int lua_ax_base_ParticleSystem_getStartSize(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getStartSize'", nullptr);
         return 0;
@@ -73379,7 +73331,7 @@ int lua_ax_base_ParticleSystem_setStartSize(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setStartSize'", nullptr);
         return 0;
@@ -73429,7 +73381,7 @@ int lua_ax_base_ParticleSystem_getStartSizeVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getStartSizeVar'", nullptr);
         return 0;
@@ -73476,7 +73428,7 @@ int lua_ax_base_ParticleSystem_setStartSizeVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setStartSizeVar'", nullptr);
         return 0;
@@ -73526,7 +73478,7 @@ int lua_ax_base_ParticleSystem_getEndSize(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getEndSize'", nullptr);
         return 0;
@@ -73573,7 +73525,7 @@ int lua_ax_base_ParticleSystem_setEndSize(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEndSize'", nullptr);
         return 0;
@@ -73623,7 +73575,7 @@ int lua_ax_base_ParticleSystem_getEndSizeVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getEndSizeVar'", nullptr);
         return 0;
@@ -73670,7 +73622,7 @@ int lua_ax_base_ParticleSystem_setEndSizeVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEndSizeVar'", nullptr);
         return 0;
@@ -73720,7 +73672,7 @@ int lua_ax_base_ParticleSystem_getStartColor(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getStartColor'", nullptr);
         return 0;
@@ -73767,7 +73719,7 @@ int lua_ax_base_ParticleSystem_setStartColor(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setStartColor'", nullptr);
         return 0;
@@ -73817,7 +73769,7 @@ int lua_ax_base_ParticleSystem_getStartColorVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getStartColorVar'", nullptr);
         return 0;
@@ -73864,7 +73816,7 @@ int lua_ax_base_ParticleSystem_setStartColorVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setStartColorVar'", nullptr);
         return 0;
@@ -73914,7 +73866,7 @@ int lua_ax_base_ParticleSystem_getEndColor(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getEndColor'", nullptr);
         return 0;
@@ -73961,7 +73913,7 @@ int lua_ax_base_ParticleSystem_setEndColor(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEndColor'", nullptr);
         return 0;
@@ -74011,7 +73963,7 @@ int lua_ax_base_ParticleSystem_getEndColorVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getEndColorVar'", nullptr);
         return 0;
@@ -74058,7 +74010,7 @@ int lua_ax_base_ParticleSystem_setEndColorVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEndColorVar'", nullptr);
         return 0;
@@ -74108,7 +74060,7 @@ int lua_ax_base_ParticleSystem_useHSV(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_useHSV'", nullptr);
         return 0;
@@ -74158,7 +74110,7 @@ int lua_ax_base_ParticleSystem_isHSV(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isHSV'", nullptr);
         return 0;
@@ -74205,7 +74157,7 @@ int lua_ax_base_ParticleSystem_getHue(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getHue'", nullptr);
         return 0;
@@ -74252,7 +74204,7 @@ int lua_ax_base_ParticleSystem_setHue(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setHue'", nullptr);
         return 0;
@@ -74302,7 +74254,7 @@ int lua_ax_base_ParticleSystem_getHueVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getHueVar'", nullptr);
         return 0;
@@ -74349,7 +74301,7 @@ int lua_ax_base_ParticleSystem_setHueVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setHueVar'", nullptr);
         return 0;
@@ -74399,7 +74351,7 @@ int lua_ax_base_ParticleSystem_getHSV(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getHSV'", nullptr);
         return 0;
@@ -74446,7 +74398,7 @@ int lua_ax_base_ParticleSystem_setHSV(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setHSV'", nullptr);
         return 0;
@@ -74497,7 +74449,7 @@ int lua_ax_base_ParticleSystem_getHSVVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getHSVVar'", nullptr);
         return 0;
@@ -74544,7 +74496,7 @@ int lua_ax_base_ParticleSystem_setHSVVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setHSVVar'", nullptr);
         return 0;
@@ -74595,7 +74547,7 @@ int lua_ax_base_ParticleSystem_getStartSpin(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getStartSpin'", nullptr);
         return 0;
@@ -74642,7 +74594,7 @@ int lua_ax_base_ParticleSystem_setStartSpin(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setStartSpin'", nullptr);
         return 0;
@@ -74692,7 +74644,7 @@ int lua_ax_base_ParticleSystem_getStartSpinVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getStartSpinVar'", nullptr);
         return 0;
@@ -74739,7 +74691,7 @@ int lua_ax_base_ParticleSystem_setStartSpinVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setStartSpinVar'", nullptr);
         return 0;
@@ -74789,7 +74741,7 @@ int lua_ax_base_ParticleSystem_getEndSpin(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getEndSpin'", nullptr);
         return 0;
@@ -74836,7 +74788,7 @@ int lua_ax_base_ParticleSystem_setEndSpin(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEndSpin'", nullptr);
         return 0;
@@ -74886,7 +74838,7 @@ int lua_ax_base_ParticleSystem_getEndSpinVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getEndSpinVar'", nullptr);
         return 0;
@@ -74933,7 +74885,7 @@ int lua_ax_base_ParticleSystem_setEndSpinVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEndSpinVar'", nullptr);
         return 0;
@@ -74983,7 +74935,7 @@ int lua_ax_base_ParticleSystem_getSpawnAngle(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getSpawnAngle'", nullptr);
         return 0;
@@ -75030,7 +74982,7 @@ int lua_ax_base_ParticleSystem_setSpawnAngle(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setSpawnAngle'", nullptr);
         return 0;
@@ -75080,7 +75032,7 @@ int lua_ax_base_ParticleSystem_getSpawnAngleVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getSpawnAngleVar'", nullptr);
         return 0;
@@ -75127,7 +75079,7 @@ int lua_ax_base_ParticleSystem_setSpawnAngleVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setSpawnAngleVar'", nullptr);
         return 0;
@@ -75177,7 +75129,7 @@ int lua_ax_base_ParticleSystem_getSpawnFadeIn(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getSpawnFadeIn'", nullptr);
         return 0;
@@ -75224,7 +75176,7 @@ int lua_ax_base_ParticleSystem_setSpawnFadeIn(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setSpawnFadeIn'", nullptr);
         return 0;
@@ -75274,7 +75226,7 @@ int lua_ax_base_ParticleSystem_getSpawnFadeInVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getSpawnFadeInVar'", nullptr);
         return 0;
@@ -75321,7 +75273,7 @@ int lua_ax_base_ParticleSystem_setSpawnFadeInVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setSpawnFadeInVar'", nullptr);
         return 0;
@@ -75371,7 +75323,7 @@ int lua_ax_base_ParticleSystem_getSpawnScaleIn(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getSpawnScaleIn'", nullptr);
         return 0;
@@ -75418,7 +75370,7 @@ int lua_ax_base_ParticleSystem_setSpawnScaleIn(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setSpawnScaleIn'", nullptr);
         return 0;
@@ -75468,7 +75420,7 @@ int lua_ax_base_ParticleSystem_getSpawnScaleInVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getSpawnScaleInVar'", nullptr);
         return 0;
@@ -75515,7 +75467,7 @@ int lua_ax_base_ParticleSystem_setSpawnScaleInVar(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setSpawnScaleInVar'", nullptr);
         return 0;
@@ -75565,7 +75517,7 @@ int lua_ax_base_ParticleSystem_getEmissionRate(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getEmissionRate'", nullptr);
         return 0;
@@ -75612,7 +75564,7 @@ int lua_ax_base_ParticleSystem_setEmissionRate(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEmissionRate'", nullptr);
         return 0;
@@ -75662,7 +75614,7 @@ int lua_ax_base_ParticleSystem_getTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getTotalParticles'", nullptr);
         return 0;
@@ -75709,7 +75661,7 @@ int lua_ax_base_ParticleSystem_setTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setTotalParticles'", nullptr);
         return 0;
@@ -75759,7 +75711,7 @@ int lua_ax_base_ParticleSystem_setLifeAnimation(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setLifeAnimation'", nullptr);
         return 0;
@@ -75809,7 +75761,7 @@ int lua_ax_base_ParticleSystem_setEmitterAnimation(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEmitterAnimation'", nullptr);
         return 0;
@@ -75859,7 +75811,7 @@ int lua_ax_base_ParticleSystem_setLoopAnimation(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setLoopAnimation'", nullptr);
         return 0;
@@ -75909,7 +75861,7 @@ int lua_ax_base_ParticleSystem_isLifeAnimated(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isLifeAnimated'", nullptr);
         return 0;
@@ -75956,7 +75908,7 @@ int lua_ax_base_ParticleSystem_isEmitterAnimated(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isEmitterAnimated'", nullptr);
         return 0;
@@ -76003,7 +75955,7 @@ int lua_ax_base_ParticleSystem_isLoopAnimated(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isLoopAnimated'", nullptr);
         return 0;
@@ -76050,7 +76002,7 @@ int lua_ax_base_ParticleSystem_getTotalAnimationIndices(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getTotalAnimationIndices'", nullptr);
         return 0;
@@ -76097,7 +76049,7 @@ int lua_ax_base_ParticleSystem_setAnimationReverse(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setAnimationReverse'", nullptr);
         return 0;
@@ -76147,7 +76099,7 @@ int lua_ax_base_ParticleSystem_isAnimationReversed(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isAnimationReversed'", nullptr);
         return 0;
@@ -76194,7 +76146,7 @@ int lua_ax_base_ParticleSystem_resetAnimationIndices(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_resetAnimationIndices'", nullptr);
         return 0;
@@ -76241,7 +76193,7 @@ int lua_ax_base_ParticleSystem_resetAnimationDescriptors(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_resetAnimationDescriptors'", nullptr);
         return 0;
@@ -76288,7 +76240,7 @@ int lua_ax_base_ParticleSystem_setMultiAnimationRandomSpecific(lua_State* tolua_
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setMultiAnimationRandomSpecific'", nullptr);
         return 0;
@@ -76338,7 +76290,7 @@ int lua_ax_base_ParticleSystem_setMultiAnimationRandom(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setMultiAnimationRandom'", nullptr);
         return 0;
@@ -76575,7 +76527,7 @@ int lua_ax_base_ParticleSystem_setRectForUndefinedIndices(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setRectForUndefinedIndices'", nullptr);
         return 0;
@@ -76736,7 +76688,7 @@ int lua_ax_base_ParticleSystem_setAnimationSpeedTimescaleIndependent(lua_State* 
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setAnimationSpeedTimescaleIndependent'", nullptr);
         return 0;
@@ -76786,7 +76738,7 @@ int lua_ax_base_ParticleSystem_isAnimationSpeedTimescaleIndependent(lua_State* t
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isAnimationSpeedTimescaleIndependent'", nullptr);
         return 0;
@@ -76833,7 +76785,7 @@ int lua_ax_base_ParticleSystem_setEmissionShapes(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEmissionShapes'", nullptr);
         return 0;
@@ -76883,7 +76835,7 @@ int lua_ax_base_ParticleSystem_isEmissionShapes(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isEmissionShapes'", nullptr);
         return 0;
@@ -76930,7 +76882,7 @@ int lua_ax_base_ParticleSystem_resetEmissionShapes(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_resetEmissionShapes'", nullptr);
         return 0;
@@ -76977,7 +76929,7 @@ int lua_ax_base_ParticleSystem_addEmissionShape(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_addEmissionShape'", nullptr);
         return 0;
@@ -77028,7 +76980,7 @@ int lua_ax_base_ParticleSystem_setEmissionShape(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setEmissionShape'", nullptr);
         return 0;
@@ -77082,7 +77034,7 @@ int lua_ax_base_ParticleSystem_getPositionType(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getPositionType'", nullptr);
         return 0;
@@ -77129,7 +77081,7 @@ int lua_ax_base_ParticleSystem_setPositionType(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setPositionType'", nullptr);
         return 0;
@@ -77179,7 +77131,7 @@ int lua_ax_base_ParticleSystem_simulate(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_simulate'", nullptr);
         return 0;
@@ -77257,7 +77209,7 @@ int lua_ax_base_ParticleSystem_resimulate(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_resimulate'", nullptr);
         return 0;
@@ -77335,7 +77287,7 @@ int lua_ax_base_ParticleSystem_getTexture(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getTexture'", nullptr);
         return 0;
@@ -77382,7 +77334,7 @@ int lua_ax_base_ParticleSystem_setTexture(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setTexture'", nullptr);
         return 0;
@@ -77432,7 +77384,7 @@ int lua_ax_base_ParticleSystem_setBlendFunc(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setBlendFunc'", nullptr);
         return 0;
@@ -77482,7 +77434,7 @@ int lua_ax_base_ParticleSystem_getBlendFunc(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getBlendFunc'", nullptr);
         return 0;
@@ -77529,7 +77481,7 @@ int lua_ax_base_ParticleSystem_getResourceFile(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getResourceFile'", nullptr);
         return 0;
@@ -77576,7 +77528,7 @@ int lua_ax_base_ParticleSystem_start(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_start'", nullptr);
         return 0;
@@ -77623,7 +77575,7 @@ int lua_ax_base_ParticleSystem_stop(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_stop'", nullptr);
         return 0;
@@ -77670,7 +77622,7 @@ int lua_ax_base_ParticleSystem_setSourcePositionCompatible(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setSourcePositionCompatible'", nullptr);
         return 0;
@@ -77720,7 +77672,7 @@ int lua_ax_base_ParticleSystem_isSourcePositionCompatible(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isSourcePositionCompatible'", nullptr);
         return 0;
@@ -77767,7 +77719,7 @@ int lua_ax_base_ParticleSystem_initWithFile(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_initWithFile'", nullptr);
         return 0;
@@ -77876,7 +77828,7 @@ int lua_ax_base_ParticleSystem_initWithTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_initWithTotalParticles'", nullptr);
         return 0;
@@ -77926,7 +77878,7 @@ int lua_ax_base_ParticleSystem_isPaused(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_isPaused'", nullptr);
         return 0;
@@ -77973,7 +77925,7 @@ int lua_ax_base_ParticleSystem_pauseEmissions(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_pauseEmissions'", nullptr);
         return 0;
@@ -78020,7 +77972,7 @@ int lua_ax_base_ParticleSystem_resumeEmissions(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_resumeEmissions'", nullptr);
         return 0;
@@ -78067,7 +78019,7 @@ int lua_ax_base_ParticleSystem_getFixedFPS(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getFixedFPS'", nullptr);
         return 0;
@@ -78114,7 +78066,7 @@ int lua_ax_base_ParticleSystem_setFixedFPS(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setFixedFPS'", nullptr);
         return 0;
@@ -78175,7 +78127,7 @@ int lua_ax_base_ParticleSystem_getTimeScale(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_getTimeScale'", nullptr);
         return 0;
@@ -78222,7 +78174,7 @@ int lua_ax_base_ParticleSystem_setTimeScale(lua_State* tolua_S)
     cobj = (ax::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystem_setTimeScale'", nullptr);
         return 0;
@@ -79081,7 +79033,7 @@ int lua_ax_base_ParticleSystemQuad_setDisplayFrame(lua_State* tolua_S)
     cobj = (ax::ParticleSystemQuad*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystemQuad_setDisplayFrame'", nullptr);
         return 0;
@@ -79131,7 +79083,7 @@ int lua_ax_base_ParticleSystemQuad_setTextureWithRect(lua_State* tolua_S)
     cobj = (ax::ParticleSystemQuad*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystemQuad_setTextureWithRect'", nullptr);
         return 0;
@@ -79184,7 +79136,7 @@ int lua_ax_base_ParticleSystemQuad_listenRendererRecreated(lua_State* tolua_S)
     cobj = (ax::ParticleSystemQuad*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSystemQuad_listenRendererRecreated'", nullptr);
         return 0;
@@ -79519,7 +79471,7 @@ int lua_ax_base_ParticleFireworks_init(lua_State* tolua_S)
     cobj = (ax::ParticleFireworks*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleFireworks_init'", nullptr);
         return 0;
@@ -79566,7 +79518,7 @@ int lua_ax_base_ParticleFireworks_initWithTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleFireworks*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleFireworks_initWithTotalParticles'", nullptr);
         return 0;
@@ -79747,7 +79699,7 @@ int lua_ax_base_ParticleSun_init(lua_State* tolua_S)
     cobj = (ax::ParticleSun*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSun_init'", nullptr);
         return 0;
@@ -79794,7 +79746,7 @@ int lua_ax_base_ParticleSun_initWithTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleSun*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSun_initWithTotalParticles'", nullptr);
         return 0;
@@ -79975,7 +79927,7 @@ int lua_ax_base_ParticleGalaxy_init(lua_State* tolua_S)
     cobj = (ax::ParticleGalaxy*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleGalaxy_init'", nullptr);
         return 0;
@@ -80022,7 +79974,7 @@ int lua_ax_base_ParticleGalaxy_initWithTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleGalaxy*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleGalaxy_initWithTotalParticles'", nullptr);
         return 0;
@@ -80203,7 +80155,7 @@ int lua_ax_base_ParticleFlower_init(lua_State* tolua_S)
     cobj = (ax::ParticleFlower*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleFlower_init'", nullptr);
         return 0;
@@ -80250,7 +80202,7 @@ int lua_ax_base_ParticleFlower_initWithTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleFlower*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleFlower_initWithTotalParticles'", nullptr);
         return 0;
@@ -80431,7 +80383,7 @@ int lua_ax_base_ParticleMeteor_init(lua_State* tolua_S)
     cobj = (ax::ParticleMeteor*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleMeteor_init'", nullptr);
         return 0;
@@ -80478,7 +80430,7 @@ int lua_ax_base_ParticleMeteor_initWithTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleMeteor*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleMeteor_initWithTotalParticles'", nullptr);
         return 0;
@@ -80659,7 +80611,7 @@ int lua_ax_base_ParticleSpiral_init(lua_State* tolua_S)
     cobj = (ax::ParticleSpiral*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSpiral_init'", nullptr);
         return 0;
@@ -80706,7 +80658,7 @@ int lua_ax_base_ParticleSpiral_initWithTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleSpiral*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSpiral_initWithTotalParticles'", nullptr);
         return 0;
@@ -80887,7 +80839,7 @@ int lua_ax_base_ParticleExplosion_init(lua_State* tolua_S)
     cobj = (ax::ParticleExplosion*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleExplosion_init'", nullptr);
         return 0;
@@ -80934,7 +80886,7 @@ int lua_ax_base_ParticleExplosion_initWithTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleExplosion*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleExplosion_initWithTotalParticles'", nullptr);
         return 0;
@@ -81115,7 +81067,7 @@ int lua_ax_base_ParticleSmoke_init(lua_State* tolua_S)
     cobj = (ax::ParticleSmoke*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSmoke_init'", nullptr);
         return 0;
@@ -81162,7 +81114,7 @@ int lua_ax_base_ParticleSmoke_initWithTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleSmoke*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSmoke_initWithTotalParticles'", nullptr);
         return 0;
@@ -81343,7 +81295,7 @@ int lua_ax_base_ParticleSnow_init(lua_State* tolua_S)
     cobj = (ax::ParticleSnow*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSnow_init'", nullptr);
         return 0;
@@ -81390,7 +81342,7 @@ int lua_ax_base_ParticleSnow_initWithTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleSnow*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleSnow_initWithTotalParticles'", nullptr);
         return 0;
@@ -81571,7 +81523,7 @@ int lua_ax_base_ParticleRain_init(lua_State* tolua_S)
     cobj = (ax::ParticleRain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleRain_init'", nullptr);
         return 0;
@@ -81618,7 +81570,7 @@ int lua_ax_base_ParticleRain_initWithTotalParticles(lua_State* tolua_S)
     cobj = (ax::ParticleRain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParticleRain_initWithTotalParticles'", nullptr);
         return 0;
@@ -81799,7 +81751,7 @@ int lua_ax_base_ProgressTimer_getType(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_getType'", nullptr);
         return 0;
@@ -81846,7 +81798,7 @@ int lua_ax_base_ProgressTimer_getPercentage(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_getPercentage'", nullptr);
         return 0;
@@ -81893,7 +81845,7 @@ int lua_ax_base_ProgressTimer_getSprite(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_getSprite'", nullptr);
         return 0;
@@ -81940,7 +81892,7 @@ int lua_ax_base_ProgressTimer_setPercentage(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_setPercentage'", nullptr);
         return 0;
@@ -81990,7 +81942,7 @@ int lua_ax_base_ProgressTimer_setSprite(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_setSprite'", nullptr);
         return 0;
@@ -82040,7 +81992,7 @@ int lua_ax_base_ProgressTimer_setType(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_setType'", nullptr);
         return 0;
@@ -82090,7 +82042,7 @@ int lua_ax_base_ProgressTimer_isReverseDirection(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_isReverseDirection'", nullptr);
         return 0;
@@ -82137,7 +82089,7 @@ int lua_ax_base_ProgressTimer_setReverseDirection(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_setReverseDirection'", nullptr);
         return 0;
@@ -82187,7 +82139,7 @@ int lua_ax_base_ProgressTimer_setMidpoint(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_setMidpoint'", nullptr);
         return 0;
@@ -82237,7 +82189,7 @@ int lua_ax_base_ProgressTimer_getMidpoint(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_getMidpoint'", nullptr);
         return 0;
@@ -82284,7 +82236,7 @@ int lua_ax_base_ProgressTimer_setBarChangeRate(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_setBarChangeRate'", nullptr);
         return 0;
@@ -82334,7 +82286,7 @@ int lua_ax_base_ProgressTimer_getBarChangeRate(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_getBarChangeRate'", nullptr);
         return 0;
@@ -82381,7 +82333,7 @@ int lua_ax_base_ProgressTimer_initWithSprite(lua_State* tolua_S)
     cobj = (ax::ProgressTimer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProgressTimer_initWithSprite'", nullptr);
         return 0;
@@ -82617,7 +82569,7 @@ int lua_ax_base_ProtectedNode_getProtectedChildByTag(lua_State* tolua_S)
     cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_getProtectedChildByTag'", nullptr);
         return 0;
@@ -82667,7 +82619,7 @@ int lua_ax_base_ProtectedNode_getProtectedChildByName(lua_State* tolua_S)
     cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_getProtectedChildByName'", nullptr);
         return 0;
@@ -82717,7 +82669,7 @@ int lua_ax_base_ProtectedNode_removeProtectedChild(lua_State* tolua_S)
     cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_removeProtectedChild'", nullptr);
         return 0;
@@ -82784,7 +82736,7 @@ int lua_ax_base_ProtectedNode_removeProtectedChildByTag(lua_State* tolua_S)
     cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_removeProtectedChildByTag'", nullptr);
         return 0;
@@ -82851,7 +82803,7 @@ int lua_ax_base_ProtectedNode_removeAllProtectedChildren(lua_State* tolua_S)
     cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_removeAllProtectedChildren'", nullptr);
         return 0;
@@ -82898,7 +82850,7 @@ int lua_ax_base_ProtectedNode_removeAllProtectedChildrenWithCleanup(lua_State* t
     cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_removeAllProtectedChildrenWithCleanup'", nullptr);
         return 0;
@@ -82948,7 +82900,7 @@ int lua_ax_base_ProtectedNode_reorderProtectedChild(lua_State* tolua_S)
     cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_reorderProtectedChild'", nullptr);
         return 0;
@@ -83001,7 +82953,7 @@ int lua_ax_base_ProtectedNode_sortAllProtectedChildren(lua_State* tolua_S)
     cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_sortAllProtectedChildren'", nullptr);
         return 0;
@@ -83048,7 +83000,7 @@ int lua_ax_base_ProtectedNode_getProtectedChildren(lua_State* tolua_S)
     cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_getProtectedChildren'", nullptr);
         return 0;
@@ -83095,7 +83047,7 @@ int lua_ax_base_ProtectedNode_disableCascadeColor(lua_State* tolua_S)
     cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_disableCascadeColor'", nullptr);
         return 0;
@@ -83142,7 +83094,7 @@ int lua_ax_base_ProtectedNode_disableCascadeOpacity(lua_State* tolua_S)
     cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_disableCascadeOpacity'", nullptr);
         return 0;
@@ -83293,7 +83245,7 @@ int lua_ax_base_RenderTexture_begin(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_begin'", nullptr);
         return 0;
@@ -83455,7 +83407,7 @@ int lua_ax_base_RenderTexture_end(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_end'", nullptr);
         return 0;
@@ -83502,7 +83454,7 @@ int lua_ax_base_RenderTexture_clear(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_clear'", nullptr);
         return 0;
@@ -83561,7 +83513,7 @@ int lua_ax_base_RenderTexture_clearDepth(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_clearDepth'", nullptr);
         return 0;
@@ -83611,7 +83563,7 @@ int lua_ax_base_RenderTexture_clearStencil(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_clearStencil'", nullptr);
         return 0;
@@ -83919,7 +83871,7 @@ int lua_ax_base_RenderTexture_getClearFlags(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_getClearFlags'", nullptr);
         return 0;
@@ -83966,7 +83918,7 @@ int lua_ax_base_RenderTexture_setClearFlags(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_setClearFlags'", nullptr);
         return 0;
@@ -84016,7 +83968,7 @@ int lua_ax_base_RenderTexture_getClearColor(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_getClearColor'", nullptr);
         return 0;
@@ -84063,7 +84015,7 @@ int lua_ax_base_RenderTexture_setClearColor(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_setClearColor'", nullptr);
         return 0;
@@ -84113,7 +84065,7 @@ int lua_ax_base_RenderTexture_getClearDepth(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_getClearDepth'", nullptr);
         return 0;
@@ -84160,7 +84112,7 @@ int lua_ax_base_RenderTexture_setClearDepth(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_setClearDepth'", nullptr);
         return 0;
@@ -84210,7 +84162,7 @@ int lua_ax_base_RenderTexture_getClearStencil(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_getClearStencil'", nullptr);
         return 0;
@@ -84257,7 +84209,7 @@ int lua_ax_base_RenderTexture_setClearStencil(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_setClearStencil'", nullptr);
         return 0;
@@ -84307,7 +84259,7 @@ int lua_ax_base_RenderTexture_isAutoDraw(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_isAutoDraw'", nullptr);
         return 0;
@@ -84354,7 +84306,7 @@ int lua_ax_base_RenderTexture_setAutoDraw(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_setAutoDraw'", nullptr);
         return 0;
@@ -84404,7 +84356,7 @@ int lua_ax_base_RenderTexture_getSprite(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_getSprite'", nullptr);
         return 0;
@@ -84451,7 +84403,7 @@ int lua_ax_base_RenderTexture_getRenderTarget(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_getRenderTarget'", nullptr);
         return 0;
@@ -84498,7 +84450,7 @@ int lua_ax_base_RenderTexture_setKeepMatrix(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_setKeepMatrix'", nullptr);
         return 0;
@@ -84548,7 +84500,7 @@ int lua_ax_base_RenderTexture_setVirtualViewport(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_setVirtualViewport'", nullptr);
         return 0;
@@ -84604,7 +84556,7 @@ int lua_ax_base_RenderTexture_isSharedRenderTarget(lua_State* tolua_S)
     cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderTexture_isSharedRenderTarget'", nullptr);
         return 0;
@@ -85005,7 +84957,7 @@ int lua_ax_base_TransitionEaseScene_easeActionWithAction(lua_State* tolua_S)
     cobj = (ax::TransitionEaseScene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionEaseScene_easeActionWithAction'", nullptr);
         return 0;
@@ -85075,7 +85027,7 @@ int lua_ax_base_TransitionScene_finish(lua_State* tolua_S)
     cobj = (ax::TransitionScene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionScene_finish'", nullptr);
         return 0;
@@ -85122,7 +85074,7 @@ int lua_ax_base_TransitionScene_hideOutShowIn(lua_State* tolua_S)
     cobj = (ax::TransitionScene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionScene_hideOutShowIn'", nullptr);
         return 0;
@@ -85169,7 +85121,7 @@ int lua_ax_base_TransitionScene_getInScene(lua_State* tolua_S)
     cobj = (ax::TransitionScene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionScene_getInScene'", nullptr);
         return 0;
@@ -85216,7 +85168,7 @@ int lua_ax_base_TransitionScene_getDuration(lua_State* tolua_S)
     cobj = (ax::TransitionScene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionScene_getDuration'", nullptr);
         return 0;
@@ -85263,7 +85215,7 @@ int lua_ax_base_TransitionScene_initWithDuration(lua_State* tolua_S)
     cobj = (ax::TransitionScene*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionScene_initWithDuration'", nullptr);
         return 0;
@@ -85417,7 +85369,7 @@ int lua_ax_base_TransitionSceneOriented_initWithDuration(lua_State* tolua_S)
     cobj = (ax::TransitionSceneOriented*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionSceneOriented_initWithDuration'", nullptr);
         return 0;
@@ -85764,7 +85716,7 @@ int lua_ax_base_TransitionMoveInL_action(lua_State* tolua_S)
     cobj = (ax::TransitionMoveInL*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionMoveInL_action'", nullptr);
         return 0;
@@ -85811,7 +85763,7 @@ int lua_ax_base_TransitionMoveInL_easeActionWithAction(lua_State* tolua_S)
     cobj = (ax::TransitionMoveInL*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionMoveInL_easeActionWithAction'", nullptr);
         return 0;
@@ -86247,7 +86199,7 @@ int lua_ax_base_TransitionSlideInL_easeActionWithAction(lua_State* tolua_S)
     cobj = (ax::TransitionSlideInL*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionSlideInL_easeActionWithAction'", nullptr);
         return 0;
@@ -86297,7 +86249,7 @@ int lua_ax_base_TransitionSlideInL_action(lua_State* tolua_S)
     cobj = (ax::TransitionSlideInL*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionSlideInL_action'", nullptr);
         return 0;
@@ -86730,7 +86682,7 @@ int lua_ax_base_TransitionShrinkGrow_easeActionWithAction(lua_State* tolua_S)
     cobj = (ax::TransitionShrinkGrow*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionShrinkGrow_easeActionWithAction'", nullptr);
         return 0;
@@ -87846,7 +87798,7 @@ int lua_ax_base_TransitionTurnOffTiles_easeActionWithAction(lua_State* tolua_S)
     cobj = (ax::TransitionTurnOffTiles*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionTurnOffTiles_easeActionWithAction'", nullptr);
         return 0;
@@ -87993,7 +87945,7 @@ int lua_ax_base_TransitionSplitCols_action(lua_State* tolua_S)
     cobj = (ax::TransitionSplitCols*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionSplitCols_action'", nullptr);
         return 0;
@@ -88040,7 +87992,7 @@ int lua_ax_base_TransitionSplitCols_easeActionWithAction(lua_State* tolua_S)
     cobj = (ax::TransitionSplitCols*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionSplitCols_easeActionWithAction'", nullptr);
         return 0;
@@ -88284,7 +88236,7 @@ int lua_ax_base_TransitionFadeTR_actionWithSize(lua_State* tolua_S)
     cobj = (ax::TransitionFadeTR*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionFadeTR_actionWithSize'", nullptr);
         return 0;
@@ -88334,7 +88286,7 @@ int lua_ax_base_TransitionFadeTR_easeActionWithAction(lua_State* tolua_S)
     cobj = (ax::TransitionFadeTR*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionFadeTR_easeActionWithAction'", nullptr);
         return 0;
@@ -88770,7 +88722,7 @@ int lua_ax_base_TransitionPageTurn_initWithDuration(lua_State* tolua_S)
     cobj = (ax::TransitionPageTurn*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionPageTurn_initWithDuration'", nullptr);
         return 0;
@@ -88826,7 +88778,7 @@ int lua_ax_base_TransitionPageTurn_actionWithSize(lua_State* tolua_S)
     cobj = (ax::TransitionPageTurn*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TransitionPageTurn_actionWithSize'", nullptr);
         return 0;
@@ -89648,7 +89600,7 @@ int lua_ax_base_Camera_getCameraFlag(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getCameraFlag'", nullptr);
         return 0;
@@ -89695,7 +89647,7 @@ int lua_ax_base_Camera_setCameraFlag(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_setCameraFlag'", nullptr);
         return 0;
@@ -89745,7 +89697,7 @@ int lua_ax_base_Camera_lookAt(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_lookAt'", nullptr);
         return 0;
@@ -89812,7 +89764,7 @@ int lua_ax_base_Camera_getProjectionMatrix(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getProjectionMatrix'", nullptr);
         return 0;
@@ -89859,7 +89811,7 @@ int lua_ax_base_Camera_getViewMatrix(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getViewMatrix'", nullptr);
         return 0;
@@ -89906,7 +89858,7 @@ int lua_ax_base_Camera_getViewProjectionMatrix(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getViewProjectionMatrix'", nullptr);
         return 0;
@@ -89953,7 +89905,7 @@ int lua_ax_base_Camera_project(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_project'", nullptr);
         return 0;
@@ -90003,7 +89955,7 @@ int lua_ax_base_Camera_projectGL(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_projectGL'", nullptr);
         return 0;
@@ -90053,7 +90005,7 @@ int lua_ax_base_Camera_isVisibleInFrustum(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_isVisibleInFrustum'", nullptr);
         return 0;
@@ -90103,7 +90055,7 @@ int lua_ax_base_Camera_getDepthInView(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getDepthInView'", nullptr);
         return 0;
@@ -90153,7 +90105,7 @@ int lua_ax_base_Camera_setDepth(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_setDepth'", nullptr);
         return 0;
@@ -90203,7 +90155,7 @@ int lua_ax_base_Camera_getDepth(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getDepth'", nullptr);
         return 0;
@@ -90250,7 +90202,7 @@ int lua_ax_base_Camera_getRenderOrder(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getRenderOrder'", nullptr);
         return 0;
@@ -90297,7 +90249,7 @@ int lua_ax_base_Camera_getFOV(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getFOV'", nullptr);
         return 0;
@@ -90344,7 +90296,7 @@ int lua_ax_base_Camera_setFOV(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_setFOV'", nullptr);
         return 0;
@@ -90394,7 +90346,7 @@ int lua_ax_base_Camera_getFarPlane(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getFarPlane'", nullptr);
         return 0;
@@ -90441,7 +90393,7 @@ int lua_ax_base_Camera_setFarPlane(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_setFarPlane'", nullptr);
         return 0;
@@ -90491,7 +90443,7 @@ int lua_ax_base_Camera_getNearPlane(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getNearPlane'", nullptr);
         return 0;
@@ -90538,7 +90490,7 @@ int lua_ax_base_Camera_setNearPlane(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_setNearPlane'", nullptr);
         return 0;
@@ -90588,7 +90540,7 @@ int lua_ax_base_Camera_getZoom(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getZoom'", nullptr);
         return 0;
@@ -90635,7 +90587,7 @@ int lua_ax_base_Camera_setZoom(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_setZoom'", nullptr);
         return 0;
@@ -90685,7 +90637,7 @@ int lua_ax_base_Camera_applyZoom(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_applyZoom'", nullptr);
         return 0;
@@ -90732,7 +90684,7 @@ int lua_ax_base_Camera_clearBackground(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_clearBackground'", nullptr);
         return 0;
@@ -90779,7 +90731,7 @@ int lua_ax_base_Camera_apply(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_apply'", nullptr);
         return 0;
@@ -90826,7 +90778,7 @@ int lua_ax_base_Camera_isViewProjectionUpdated(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_isViewProjectionUpdated'", nullptr);
         return 0;
@@ -90873,7 +90825,7 @@ int lua_ax_base_Camera_setBackgroundBrush(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_setBackgroundBrush'", nullptr);
         return 0;
@@ -90923,7 +90875,7 @@ int lua_ax_base_Camera_getBackgroundBrush(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getBackgroundBrush'", nullptr);
         return 0;
@@ -90970,7 +90922,7 @@ int lua_ax_base_Camera_isBrushValid(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_isBrushValid'", nullptr);
         return 0;
@@ -91017,7 +90969,7 @@ int lua_ax_base_Camera_setScene(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_setScene'", nullptr);
         return 0;
@@ -91067,7 +91019,7 @@ int lua_ax_base_Camera_setAdditionalProjection(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_setAdditionalProjection'", nullptr);
         return 0;
@@ -91117,7 +91069,7 @@ int lua_ax_base_Camera_initDefault(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_initDefault'", nullptr);
         return 0;
@@ -91164,7 +91116,7 @@ int lua_ax_base_Camera_initPerspective(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_initPerspective'", nullptr);
         return 0;
@@ -91223,7 +91175,7 @@ int lua_ax_base_Camera_initOrthographic(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_initOrthographic'", nullptr);
         return 0;
@@ -91282,7 +91234,7 @@ int lua_ax_base_Camera_applyViewport(lua_State* tolua_S)
     cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_applyViewport'", nullptr);
         return 0;
@@ -91684,7 +91636,7 @@ int lua_ax_base_CameraBackgroundBrush_getBrushType(lua_State* tolua_S)
     cobj = (ax::CameraBackgroundBrush*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CameraBackgroundBrush_getBrushType'", nullptr);
         return 0;
@@ -91731,7 +91683,7 @@ int lua_ax_base_CameraBackgroundBrush_drawBackground(lua_State* tolua_S)
     cobj = (ax::CameraBackgroundBrush*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CameraBackgroundBrush_drawBackground'", nullptr);
         return 0;
@@ -91781,7 +91733,7 @@ int lua_ax_base_CameraBackgroundBrush_isValid(lua_State* tolua_S)
     cobj = (ax::CameraBackgroundBrush*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CameraBackgroundBrush_isValid'", nullptr);
         return 0;
@@ -91828,7 +91780,7 @@ int lua_ax_base_CameraBackgroundBrush_init(lua_State* tolua_S)
     cobj = (ax::CameraBackgroundBrush*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CameraBackgroundBrush_init'", nullptr);
         return 0;
@@ -92105,7 +92057,7 @@ int lua_ax_base_CameraBackgroundDepthBrush_setDepth(lua_State* tolua_S)
     cobj = (ax::CameraBackgroundDepthBrush*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CameraBackgroundDepthBrush_setDepth'", nullptr);
         return 0;
@@ -92250,7 +92202,7 @@ int lua_ax_base_CameraBackgroundColorBrush_setColor(lua_State* tolua_S)
     cobj = (ax::CameraBackgroundColorBrush*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CameraBackgroundColorBrush_setColor'", nullptr);
         return 0;
@@ -92397,7 +92349,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_setTexture(lua_State* tolua_S)
     cobj = (ax::CameraBackgroundSkyBoxBrush*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CameraBackgroundSkyBoxBrush_setTexture'", nullptr);
         return 0;
@@ -92447,7 +92399,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_getTexture(lua_State* tolua_S)
     cobj = (ax::CameraBackgroundSkyBoxBrush*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CameraBackgroundSkyBoxBrush_getTexture'", nullptr);
         return 0;
@@ -92494,7 +92446,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_isActived(lua_State* tolua_S)
     cobj = (ax::CameraBackgroundSkyBoxBrush*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CameraBackgroundSkyBoxBrush_isActived'", nullptr);
         return 0;
@@ -92541,7 +92493,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_setActived(lua_State* tolua_S)
     cobj = (ax::CameraBackgroundSkyBoxBrush*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CameraBackgroundSkyBoxBrush_setActived'", nullptr);
         return 0;
@@ -92591,7 +92543,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_setTextureValid(lua_State* tolua_S)
     cobj = (ax::CameraBackgroundSkyBoxBrush*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_CameraBackgroundSkyBoxBrush_setTextureValid'", nullptr);
         return 0;
@@ -92764,7 +92716,7 @@ int lua_ax_base_GridBase_beforeBlit(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_beforeBlit'", nullptr);
         return 0;
@@ -92811,7 +92763,7 @@ int lua_ax_base_GridBase_afterBlit(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_afterBlit'", nullptr);
         return 0;
@@ -92858,7 +92810,7 @@ int lua_ax_base_GridBase_blit(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_blit'", nullptr);
         return 0;
@@ -92905,7 +92857,7 @@ int lua_ax_base_GridBase_reuse(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_reuse'", nullptr);
         return 0;
@@ -92952,7 +92904,7 @@ int lua_ax_base_GridBase_calculateVertexPoints(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_calculateVertexPoints'", nullptr);
         return 0;
@@ -93102,7 +93054,7 @@ int lua_ax_base_GridBase_isActive(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_isActive'", nullptr);
         return 0;
@@ -93149,7 +93101,7 @@ int lua_ax_base_GridBase_setActive(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_setActive'", nullptr);
         return 0;
@@ -93199,7 +93151,7 @@ int lua_ax_base_GridBase_getReuseGrid(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_getReuseGrid'", nullptr);
         return 0;
@@ -93246,7 +93198,7 @@ int lua_ax_base_GridBase_setReuseGrid(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_setReuseGrid'", nullptr);
         return 0;
@@ -93296,7 +93248,7 @@ int lua_ax_base_GridBase_getGridSize(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_getGridSize'", nullptr);
         return 0;
@@ -93343,7 +93295,7 @@ int lua_ax_base_GridBase_setGridSize(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_setGridSize'", nullptr);
         return 0;
@@ -93393,7 +93345,7 @@ int lua_ax_base_GridBase_getStep(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_getStep'", nullptr);
         return 0;
@@ -93440,7 +93392,7 @@ int lua_ax_base_GridBase_setStep(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_setStep'", nullptr);
         return 0;
@@ -93490,7 +93442,7 @@ int lua_ax_base_GridBase_isTextureFlipped(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_isTextureFlipped'", nullptr);
         return 0;
@@ -93537,7 +93489,7 @@ int lua_ax_base_GridBase_setTextureFlipped(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_setTextureFlipped'", nullptr);
         return 0;
@@ -93587,7 +93539,7 @@ int lua_ax_base_GridBase_beforeDraw(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_beforeDraw'", nullptr);
         return 0;
@@ -93634,7 +93586,7 @@ int lua_ax_base_GridBase_afterDraw(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_afterDraw'", nullptr);
         return 0;
@@ -93684,7 +93636,7 @@ int lua_ax_base_GridBase_set2DProjection(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_set2DProjection'", nullptr);
         return 0;
@@ -93731,7 +93683,7 @@ int lua_ax_base_GridBase_setGridRect(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_setGridRect'", nullptr);
         return 0;
@@ -93781,7 +93733,7 @@ int lua_ax_base_GridBase_getGridRect(lua_State* tolua_S)
     cobj = (ax::GridBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GridBase_getGridRect'", nullptr);
         return 0;
@@ -93868,7 +93820,7 @@ int lua_ax_base_Grid3D_setNeedDepthTestForBlit(lua_State* tolua_S)
     cobj = (ax::Grid3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Grid3D_setNeedDepthTestForBlit'", nullptr);
         return 0;
@@ -93918,7 +93870,7 @@ int lua_ax_base_Grid3D_getNeedDepthTestForBlit(lua_State* tolua_S)
     cobj = (ax::Grid3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Grid3D_getNeedDepthTestForBlit'", nullptr);
         return 0;
@@ -94229,7 +94181,7 @@ int lua_ax_base_BaseLight_getLightType(lua_State* tolua_S)
     cobj = (ax::BaseLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_BaseLight_getLightType'", nullptr);
         return 0;
@@ -94276,7 +94228,7 @@ int lua_ax_base_BaseLight_getIntensity(lua_State* tolua_S)
     cobj = (ax::BaseLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_BaseLight_getIntensity'", nullptr);
         return 0;
@@ -94323,7 +94275,7 @@ int lua_ax_base_BaseLight_setIntensity(lua_State* tolua_S)
     cobj = (ax::BaseLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_BaseLight_setIntensity'", nullptr);
         return 0;
@@ -94373,7 +94325,7 @@ int lua_ax_base_BaseLight_getLightFlag(lua_State* tolua_S)
     cobj = (ax::BaseLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_BaseLight_getLightFlag'", nullptr);
         return 0;
@@ -94420,7 +94372,7 @@ int lua_ax_base_BaseLight_setLightFlag(lua_State* tolua_S)
     cobj = (ax::BaseLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_BaseLight_setLightFlag'", nullptr);
         return 0;
@@ -94470,7 +94422,7 @@ int lua_ax_base_BaseLight_setEnabled(lua_State* tolua_S)
     cobj = (ax::BaseLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_BaseLight_setEnabled'", nullptr);
         return 0;
@@ -94520,7 +94472,7 @@ int lua_ax_base_BaseLight_isEnabled(lua_State* tolua_S)
     cobj = (ax::BaseLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_BaseLight_isEnabled'", nullptr);
         return 0;
@@ -94593,7 +94545,7 @@ int lua_ax_base_DirectionLight_setDirection(lua_State* tolua_S)
     cobj = (ax::DirectionLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DirectionLight_setDirection'", nullptr);
         return 0;
@@ -94643,7 +94595,7 @@ int lua_ax_base_DirectionLight_getDirection(lua_State* tolua_S)
     cobj = (ax::DirectionLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DirectionLight_getDirection'", nullptr);
         return 0;
@@ -94690,7 +94642,7 @@ int lua_ax_base_DirectionLight_getDirectionInWorld(lua_State* tolua_S)
     cobj = (ax::DirectionLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_DirectionLight_getDirectionInWorld'", nullptr);
         return 0;
@@ -94836,7 +94788,7 @@ int lua_ax_base_PointLight_getRange(lua_State* tolua_S)
     cobj = (ax::PointLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_PointLight_getRange'", nullptr);
         return 0;
@@ -94883,7 +94835,7 @@ int lua_ax_base_PointLight_setRange(lua_State* tolua_S)
     cobj = (ax::PointLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_PointLight_setRange'", nullptr);
         return 0;
@@ -95033,7 +94985,7 @@ int lua_ax_base_SpotLight_setDirection(lua_State* tolua_S)
     cobj = (ax::SpotLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpotLight_setDirection'", nullptr);
         return 0;
@@ -95083,7 +95035,7 @@ int lua_ax_base_SpotLight_getDirection(lua_State* tolua_S)
     cobj = (ax::SpotLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpotLight_getDirection'", nullptr);
         return 0;
@@ -95130,7 +95082,7 @@ int lua_ax_base_SpotLight_getDirectionInWorld(lua_State* tolua_S)
     cobj = (ax::SpotLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpotLight_getDirectionInWorld'", nullptr);
         return 0;
@@ -95177,7 +95129,7 @@ int lua_ax_base_SpotLight_setRange(lua_State* tolua_S)
     cobj = (ax::SpotLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpotLight_setRange'", nullptr);
         return 0;
@@ -95227,7 +95179,7 @@ int lua_ax_base_SpotLight_getRange(lua_State* tolua_S)
     cobj = (ax::SpotLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpotLight_getRange'", nullptr);
         return 0;
@@ -95274,7 +95226,7 @@ int lua_ax_base_SpotLight_setInnerAngle(lua_State* tolua_S)
     cobj = (ax::SpotLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpotLight_setInnerAngle'", nullptr);
         return 0;
@@ -95324,7 +95276,7 @@ int lua_ax_base_SpotLight_getInnerAngle(lua_State* tolua_S)
     cobj = (ax::SpotLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpotLight_getInnerAngle'", nullptr);
         return 0;
@@ -95371,7 +95323,7 @@ int lua_ax_base_SpotLight_getCosInnerAngle(lua_State* tolua_S)
     cobj = (ax::SpotLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpotLight_getCosInnerAngle'", nullptr);
         return 0;
@@ -95418,7 +95370,7 @@ int lua_ax_base_SpotLight_setOuterAngle(lua_State* tolua_S)
     cobj = (ax::SpotLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpotLight_setOuterAngle'", nullptr);
         return 0;
@@ -95468,7 +95420,7 @@ int lua_ax_base_SpotLight_getOuterAngle(lua_State* tolua_S)
     cobj = (ax::SpotLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpotLight_getOuterAngle'", nullptr);
         return 0;
@@ -95515,7 +95467,7 @@ int lua_ax_base_SpotLight_getCosOuterAngle(lua_State* tolua_S)
     cobj = (ax::SpotLight*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpotLight_getCosOuterAngle'", nullptr);
         return 0;
@@ -95771,7 +95723,7 @@ int lua_ax_base_RenderState_getName(lua_State* tolua_S)
     cobj = (ax::RenderState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderState_getName'", nullptr);
         return 0;
@@ -95818,7 +95770,7 @@ int lua_ax_base_RenderState_bindPass(lua_State* tolua_S)
     cobj = (ax::RenderState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderState_bindPass'", nullptr);
         return 0;
@@ -95892,7 +95844,7 @@ int lua_ax_base_Technique_addPass(lua_State* tolua_S)
     cobj = (ax::Technique*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Technique_addPass'", nullptr);
         return 0;
@@ -95942,7 +95894,7 @@ int lua_ax_base_Technique_getName(lua_State* tolua_S)
     cobj = (ax::Technique*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Technique_getName'", nullptr);
         return 0;
@@ -95989,7 +95941,7 @@ int lua_ax_base_Technique_getPassByIndex(lua_State* tolua_S)
     cobj = (ax::Technique*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Technique_getPassByIndex'", nullptr);
         return 0;
@@ -96039,7 +95991,7 @@ int lua_ax_base_Technique_getPassCount(lua_State* tolua_S)
     cobj = (ax::Technique*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Technique_getPassCount'", nullptr);
         return 0;
@@ -96086,7 +96038,7 @@ int lua_ax_base_Technique_getPasses(lua_State* tolua_S)
     cobj = (ax::Technique*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Technique_getPasses'", nullptr);
         return 0;
@@ -96133,7 +96085,7 @@ int lua_ax_base_Technique_clone(lua_State* tolua_S)
     cobj = (ax::Technique*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Technique_clone'", nullptr);
         return 0;
@@ -96180,7 +96132,7 @@ int lua_ax_base_Technique_setMaterial(lua_State* tolua_S)
     cobj = (ax::Technique*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Technique_setMaterial'", nullptr);
         return 0;
@@ -96332,7 +96284,7 @@ int lua_ax_base_Material_draw(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_draw'", nullptr);
         return 0;
@@ -96403,7 +96355,7 @@ int lua_ax_base_Material_getName(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_getName'", nullptr);
         return 0;
@@ -96450,7 +96402,7 @@ int lua_ax_base_Material_setName(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_setName'", nullptr);
         return 0;
@@ -96500,7 +96452,7 @@ int lua_ax_base_Material_getTechniqueByName(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_getTechniqueByName'", nullptr);
         return 0;
@@ -96550,7 +96502,7 @@ int lua_ax_base_Material_getTechniqueByIndex(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_getTechniqueByIndex'", nullptr);
         return 0;
@@ -96600,7 +96552,7 @@ int lua_ax_base_Material_getTechnique(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_getTechnique'", nullptr);
         return 0;
@@ -96647,7 +96599,7 @@ int lua_ax_base_Material_getTechniques(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_getTechniques'", nullptr);
         return 0;
@@ -96694,7 +96646,7 @@ int lua_ax_base_Material_getTechniqueCount(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_getTechniqueCount'", nullptr);
         return 0;
@@ -96741,7 +96693,7 @@ int lua_ax_base_Material_addTechnique(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_addTechnique'", nullptr);
         return 0;
@@ -96791,7 +96743,7 @@ int lua_ax_base_Material_setTechnique(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_setTechnique'", nullptr);
         return 0;
@@ -96841,7 +96793,7 @@ int lua_ax_base_Material_clone(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_clone'", nullptr);
         return 0;
@@ -96888,7 +96840,7 @@ int lua_ax_base_Material_getRenderState(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_getRenderState'", nullptr);
         return 0;
@@ -96935,7 +96887,7 @@ int lua_ax_base_Material_setPrimitiveType(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_setPrimitiveType'", nullptr);
         return 0;
@@ -96985,7 +96937,7 @@ int lua_ax_base_Material_getPrimitiveType(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_getPrimitiveType'", nullptr);
         return 0;
@@ -97032,7 +96984,7 @@ int lua_ax_base_Material_setTransparent(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_setTransparent'", nullptr);
         return 0;
@@ -97082,7 +97034,7 @@ int lua_ax_base_Material_isTransparent(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_isTransparent'", nullptr);
         return 0;
@@ -97129,7 +97081,7 @@ int lua_ax_base_Material_setForce2DQueue(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_setForce2DQueue'", nullptr);
         return 0;
@@ -97179,7 +97131,7 @@ int lua_ax_base_Material_isForce2DQueue(lua_State* tolua_S)
     cobj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Material_isForce2DQueue'", nullptr);
         return 0;
@@ -97374,7 +97326,7 @@ int lua_ax_base_Pass_getProgramState(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_getProgramState'", nullptr);
         return 0;
@@ -97421,7 +97373,7 @@ int lua_ax_base_Pass_draw(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_draw'", nullptr);
         return 0;
@@ -97492,7 +97444,7 @@ int lua_ax_base_Pass_setVertexAttribBinding(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setVertexAttribBinding'", nullptr);
         return 0;
@@ -97542,7 +97494,7 @@ int lua_ax_base_Pass_getVertexAttributeBinding(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_getVertexAttributeBinding'", nullptr);
         return 0;
@@ -97589,7 +97541,7 @@ int lua_ax_base_Pass_setName(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setName'", nullptr);
         return 0;
@@ -97639,7 +97591,7 @@ int lua_ax_base_Pass_getName(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_getName'", nullptr);
         return 0;
@@ -97686,7 +97638,7 @@ int lua_ax_base_Pass_clone(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_clone'", nullptr);
         return 0;
@@ -97733,7 +97685,7 @@ int lua_ax_base_Pass_setTechnique(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setTechnique'", nullptr);
         return 0;
@@ -97783,7 +97735,7 @@ int lua_ax_base_Pass_updateMVPUniform(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_updateMVPUniform'", nullptr);
         return 0;
@@ -97833,7 +97785,7 @@ int lua_ax_base_Pass_setUniformTexture(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformTexture'", nullptr);
         return 0;
@@ -97886,7 +97838,7 @@ int lua_ax_base_Pass_setUniformNormTexture(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformNormTexture'", nullptr);
         return 0;
@@ -97939,7 +97891,7 @@ int lua_ax_base_Pass_setUniformColor(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformColor'", nullptr);
         return 0;
@@ -97993,7 +97945,7 @@ int lua_ax_base_Pass_setUniformMatrixPalette(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformMatrixPalette'", nullptr);
         return 0;
@@ -98047,7 +97999,7 @@ int lua_ax_base_Pass_setUniformDirLightColor(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformDirLightColor'", nullptr);
         return 0;
@@ -98101,7 +98053,7 @@ int lua_ax_base_Pass_setUniformDirLightDir(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformDirLightDir'", nullptr);
         return 0;
@@ -98155,7 +98107,7 @@ int lua_ax_base_Pass_setUniformPointLightColor(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformPointLightColor'", nullptr);
         return 0;
@@ -98209,7 +98161,7 @@ int lua_ax_base_Pass_setUniformPointLightPosition(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformPointLightPosition'", nullptr);
         return 0;
@@ -98263,7 +98215,7 @@ int lua_ax_base_Pass_setUniformPointLightRangeInverse(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformPointLightRangeInverse'", nullptr);
         return 0;
@@ -98317,7 +98269,7 @@ int lua_ax_base_Pass_setUniformSpotLightColor(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformSpotLightColor'", nullptr);
         return 0;
@@ -98371,7 +98323,7 @@ int lua_ax_base_Pass_setUniformSpotLightPosition(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformSpotLightPosition'", nullptr);
         return 0;
@@ -98425,7 +98377,7 @@ int lua_ax_base_Pass_setUniformSpotLightDir(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformSpotLightDir'", nullptr);
         return 0;
@@ -98479,7 +98431,7 @@ int lua_ax_base_Pass_setUniformSpotLightInnerAngleCos(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformSpotLightInnerAngleCos'", nullptr);
         return 0;
@@ -98533,7 +98485,7 @@ int lua_ax_base_Pass_setUniformSpotLightOuterAngleCos(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformSpotLightOuterAngleCos'", nullptr);
         return 0;
@@ -98587,7 +98539,7 @@ int lua_ax_base_Pass_setUniformSpotLightRangeInverse(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformSpotLightRangeInverse'", nullptr);
         return 0;
@@ -98641,7 +98593,7 @@ int lua_ax_base_Pass_setUniformAmbientLigthColor(lua_State* tolua_S)
     cobj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setUniformAmbientLigthColor'", nullptr);
         return 0;
@@ -98815,7 +98767,7 @@ int lua_ax_base_Renderer_init(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_init'", nullptr);
         return 0;
@@ -98862,7 +98814,7 @@ int lua_ax_base_Renderer_addCallbackCommand(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_addCallbackCommand'", nullptr);
         return 0;
@@ -98996,7 +98948,7 @@ int lua_ax_base_Renderer_getNextGroupCommand(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getNextGroupCommand'", nullptr);
         return 0;
@@ -99043,7 +98995,7 @@ int lua_ax_base_Renderer_pushGroup(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_pushGroup'", nullptr);
         return 0;
@@ -99093,7 +99045,7 @@ int lua_ax_base_Renderer_popGroup(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_popGroup'", nullptr);
         return 0;
@@ -99140,7 +99092,7 @@ int lua_ax_base_Renderer_createRenderQueue(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_createRenderQueue'", nullptr);
         return 0;
@@ -99187,7 +99139,7 @@ int lua_ax_base_Renderer_render(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_render'", nullptr);
         return 0;
@@ -99234,7 +99186,7 @@ int lua_ax_base_Renderer_clean(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_clean'", nullptr);
         return 0;
@@ -99281,7 +99233,7 @@ int lua_ax_base_Renderer_getDrawnBatches(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getDrawnBatches'", nullptr);
         return 0;
@@ -99328,7 +99280,7 @@ int lua_ax_base_Renderer_addDrawnBatches(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_addDrawnBatches'", nullptr);
         return 0;
@@ -99378,7 +99330,7 @@ int lua_ax_base_Renderer_getDrawnVertices(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getDrawnVertices'", nullptr);
         return 0;
@@ -99425,7 +99377,7 @@ int lua_ax_base_Renderer_addDrawnVertices(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_addDrawnVertices'", nullptr);
         return 0;
@@ -99475,7 +99427,7 @@ int lua_ax_base_Renderer_clearDrawStats(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_clearDrawStats'", nullptr);
         return 0;
@@ -99522,7 +99474,7 @@ int lua_ax_base_Renderer_getRenderTarget(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getRenderTarget'", nullptr);
         return 0;
@@ -99569,7 +99521,7 @@ int lua_ax_base_Renderer_setRenderTarget(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setRenderTarget'", nullptr);
         return 0;
@@ -99619,7 +99571,7 @@ int lua_ax_base_Renderer_getDefaultRenderTarget(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getDefaultRenderTarget'", nullptr);
         return 0;
@@ -99666,7 +99618,7 @@ int lua_ax_base_Renderer_getOffscreenRenderTarget(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getOffscreenRenderTarget'", nullptr);
         return 0;
@@ -99713,7 +99665,7 @@ int lua_ax_base_Renderer_clear(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_clear'", nullptr);
         return 0;
@@ -99775,7 +99727,7 @@ int lua_ax_base_Renderer_getClearColor(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getClearColor'", nullptr);
         return 0;
@@ -99822,7 +99774,7 @@ int lua_ax_base_Renderer_getClearDepth(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getClearDepth'", nullptr);
         return 0;
@@ -99869,7 +99821,7 @@ int lua_ax_base_Renderer_getClearStencil(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getClearStencil'", nullptr);
         return 0;
@@ -99916,7 +99868,7 @@ int lua_ax_base_Renderer_getClearFlag(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getClearFlag'", nullptr);
         return 0;
@@ -99963,7 +99915,7 @@ int lua_ax_base_Renderer_setDepthTest(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setDepthTest'", nullptr);
         return 0;
@@ -100013,7 +99965,7 @@ int lua_ax_base_Renderer_setDepthWrite(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setDepthWrite'", nullptr);
         return 0;
@@ -100063,7 +100015,7 @@ int lua_ax_base_Renderer_setDepthCompareFunction(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setDepthCompareFunction'", nullptr);
         return 0;
@@ -100113,7 +100065,7 @@ int lua_ax_base_Renderer_getDepthTest(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getDepthTest'", nullptr);
         return 0;
@@ -100160,7 +100112,7 @@ int lua_ax_base_Renderer_getDepthWrite(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getDepthWrite'", nullptr);
         return 0;
@@ -100207,7 +100159,7 @@ int lua_ax_base_Renderer_getDepthCompareFunction(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getDepthCompareFunction'", nullptr);
         return 0;
@@ -100254,7 +100206,7 @@ int lua_ax_base_Renderer_setStencilTest(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setStencilTest'", nullptr);
         return 0;
@@ -100304,7 +100256,7 @@ int lua_ax_base_Renderer_setStencilCompareFunction(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setStencilCompareFunction'", nullptr);
         return 0;
@@ -100360,7 +100312,7 @@ int lua_ax_base_Renderer_setStencilOperation(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setStencilOperation'", nullptr);
         return 0;
@@ -100416,7 +100368,7 @@ int lua_ax_base_Renderer_setStencilWriteMask(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setStencilWriteMask'", nullptr);
         return 0;
@@ -100466,7 +100418,7 @@ int lua_ax_base_Renderer_getStencilTest(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getStencilTest'", nullptr);
         return 0;
@@ -100513,7 +100465,7 @@ int lua_ax_base_Renderer_getStencilFailureOperation(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getStencilFailureOperation'", nullptr);
         return 0;
@@ -100560,7 +100512,7 @@ int lua_ax_base_Renderer_getStencilPassDepthFailureOperation(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getStencilPassDepthFailureOperation'", nullptr);
         return 0;
@@ -100607,7 +100559,7 @@ int lua_ax_base_Renderer_getStencilDepthPassOperation(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getStencilDepthPassOperation'", nullptr);
         return 0;
@@ -100654,7 +100606,7 @@ int lua_ax_base_Renderer_getStencilCompareFunction(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getStencilCompareFunction'", nullptr);
         return 0;
@@ -100701,7 +100653,7 @@ int lua_ax_base_Renderer_getStencilReadMask(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getStencilReadMask'", nullptr);
         return 0;
@@ -100748,7 +100700,7 @@ int lua_ax_base_Renderer_getStencilWriteMask(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getStencilWriteMask'", nullptr);
         return 0;
@@ -100795,7 +100747,7 @@ int lua_ax_base_Renderer_getStencilReferenceValue(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getStencilReferenceValue'", nullptr);
         return 0;
@@ -100842,7 +100794,7 @@ int lua_ax_base_Renderer_setDepthStencilDesc(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setDepthStencilDesc'", nullptr);
         return 0;
@@ -100893,7 +100845,7 @@ int lua_ax_base_Renderer_getDepthStencilDesc(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getDepthStencilDesc'", nullptr);
         return 0;
@@ -100940,7 +100892,7 @@ int lua_ax_base_Renderer_setCullMode(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setCullMode'", nullptr);
         return 0;
@@ -100990,7 +100942,7 @@ int lua_ax_base_Renderer_getCullMode(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getCullMode'", nullptr);
         return 0;
@@ -101037,7 +100989,7 @@ int lua_ax_base_Renderer_setWinding(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setWinding'", nullptr);
         return 0;
@@ -101087,7 +101039,7 @@ int lua_ax_base_Renderer_getWinding(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getWinding'", nullptr);
         return 0;
@@ -101134,7 +101086,7 @@ int lua_ax_base_Renderer_setViewPort(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setViewPort'", nullptr);
         return 0;
@@ -101193,7 +101145,7 @@ int lua_ax_base_Renderer_getViewport(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getViewport'", nullptr);
         return 0;
@@ -101240,7 +101192,7 @@ int lua_ax_base_Renderer_setScissorTest(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setScissorTest'", nullptr);
         return 0;
@@ -101290,7 +101242,7 @@ int lua_ax_base_Renderer_setScissorRect(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setScissorRect'", nullptr);
         return 0;
@@ -101349,7 +101301,7 @@ int lua_ax_base_Renderer_getScissorTest(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getScissorTest'", nullptr);
         return 0;
@@ -101396,7 +101348,7 @@ int lua_ax_base_Renderer_getScissorRect(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getScissorRect'", nullptr);
         return 0;
@@ -101443,7 +101395,7 @@ int lua_ax_base_Renderer_checkVisibility(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_checkVisibility'", nullptr);
         return 0;
@@ -101496,7 +101448,7 @@ int lua_ax_base_Renderer_readPixels(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_readPixels'", nullptr);
         return 0;
@@ -101553,7 +101505,7 @@ int lua_ax_base_Renderer_beginRenderPass(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_beginRenderPass'", nullptr);
         return 0;
@@ -101600,7 +101552,7 @@ int lua_ax_base_Renderer_endRenderPass(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_endRenderPass'", nullptr);
         return 0;
@@ -101647,7 +101599,7 @@ int lua_ax_base_Renderer_nextCallbackCommand(lua_State* tolua_S)
     cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_nextCallbackCommand'", nullptr);
         return 0;
@@ -101807,7 +101759,7 @@ int lua_ax_base_TextureCache_getDescription(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_getDescription'", nullptr);
         return 0;
@@ -101909,7 +101861,7 @@ int lua_ax_base_TextureCache_getDummyTexture(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_getDummyTexture'", nullptr);
         return 0;
@@ -102067,7 +102019,7 @@ int lua_ax_base_TextureCache_unbindImageAsync(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_unbindImageAsync'", nullptr);
         return 0;
@@ -102117,7 +102069,7 @@ int lua_ax_base_TextureCache_unbindAllImageAsync(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_unbindAllImageAsync'", nullptr);
         return 0;
@@ -102164,7 +102116,7 @@ int lua_ax_base_TextureCache_getTextureForKey(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_getTextureForKey'", nullptr);
         return 0;
@@ -102214,7 +102166,7 @@ int lua_ax_base_TextureCache_reloadTexture(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_reloadTexture'", nullptr);
         return 0;
@@ -102264,7 +102216,7 @@ int lua_ax_base_TextureCache_removeAllTextures(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_removeAllTextures'", nullptr);
         return 0;
@@ -102311,7 +102263,7 @@ int lua_ax_base_TextureCache_removeUnusedTextures(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_removeUnusedTextures'", nullptr);
         return 0;
@@ -102358,7 +102310,7 @@ int lua_ax_base_TextureCache_removeTexture(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_removeTexture'", nullptr);
         return 0;
@@ -102408,7 +102360,7 @@ int lua_ax_base_TextureCache_removeTextureForKey(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_removeTextureForKey'", nullptr);
         return 0;
@@ -102458,7 +102410,7 @@ int lua_ax_base_TextureCache_getCachedTextureInfo(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_getCachedTextureInfo'", nullptr);
         return 0;
@@ -102505,7 +102457,7 @@ int lua_ax_base_TextureCache_waitForQuit(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_waitForQuit'", nullptr);
         return 0;
@@ -102552,7 +102504,7 @@ int lua_ax_base_TextureCache_getTextureFilePath(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_getTextureFilePath'", nullptr);
         return 0;
@@ -102602,7 +102554,7 @@ int lua_ax_base_TextureCache_renameTextureWithKey(lua_State* tolua_S)
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_renameTextureWithKey'", nullptr);
         return 0;
@@ -103253,7 +103205,7 @@ int lua_ax_base_Application_setAnimationInterval(lua_State* tolua_S)
     cobj = (ax::Application*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Application_setAnimationInterval'", nullptr);
         return 0;
@@ -103303,7 +103255,7 @@ int lua_ax_base_Application_getCurrentLanguage(lua_State* tolua_S)
     cobj = (ax::Application*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Application_getCurrentLanguage'", nullptr);
         return 0;
@@ -103350,7 +103302,7 @@ int lua_ax_base_Application_getCurrentLanguageCode(lua_State* tolua_S)
     cobj = (ax::Application*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Application_getCurrentLanguageCode'", nullptr);
         return 0;
@@ -103397,7 +103349,7 @@ int lua_ax_base_Application_getTargetPlatform(lua_State* tolua_S)
     cobj = (ax::Application*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Application_getTargetPlatform'", nullptr);
         return 0;
@@ -103444,7 +103396,7 @@ int lua_ax_base_Application_getVersion(lua_State* tolua_S)
     cobj = (ax::Application*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Application_getVersion'", nullptr);
         return 0;
@@ -103491,7 +103443,7 @@ int lua_ax_base_Application_openURL(lua_State* tolua_S)
     cobj = (ax::Application*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Application_openURL'", nullptr);
         return 0;
@@ -103769,7 +103721,7 @@ int lua_ax_base_AnimationCache_init(lua_State* tolua_S)
     cobj = (ax::AnimationCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationCache_init'", nullptr);
         return 0;
@@ -103816,7 +103768,7 @@ int lua_ax_base_AnimationCache_addAnimation(lua_State* tolua_S)
     cobj = (ax::AnimationCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationCache_addAnimation'", nullptr);
         return 0;
@@ -103869,7 +103821,7 @@ int lua_ax_base_AnimationCache_removeAnimation(lua_State* tolua_S)
     cobj = (ax::AnimationCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationCache_removeAnimation'", nullptr);
         return 0;
@@ -103919,7 +103871,7 @@ int lua_ax_base_AnimationCache_getAnimation(lua_State* tolua_S)
     cobj = (ax::AnimationCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationCache_getAnimation'", nullptr);
         return 0;
@@ -103969,7 +103921,7 @@ int lua_ax_base_AnimationCache_addAnimationsWithDictionary(lua_State* tolua_S)
     cobj = (ax::AnimationCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationCache_addAnimationsWithDictionary'", nullptr);
         return 0;
@@ -104022,7 +103974,7 @@ int lua_ax_base_AnimationCache_addAnimationsWithFile(lua_State* tolua_S)
     cobj = (ax::AnimationCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_AnimationCache_addAnimationsWithFile'", nullptr);
         return 0;
@@ -104203,7 +104155,7 @@ int lua_ax_base_SpriteBatchNode_getTextureAtlas(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_getTextureAtlas'", nullptr);
         return 0;
@@ -104250,7 +104202,7 @@ int lua_ax_base_SpriteBatchNode_setTextureAtlas(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_setTextureAtlas'", nullptr);
         return 0;
@@ -104300,7 +104252,7 @@ int lua_ax_base_SpriteBatchNode_increaseAtlasCapacity(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_increaseAtlasCapacity'", nullptr);
         return 0;
@@ -104347,7 +104299,7 @@ int lua_ax_base_SpriteBatchNode_removeChildAtIndex(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_removeChildAtIndex'", nullptr);
         return 0;
@@ -104400,7 +104352,7 @@ int lua_ax_base_SpriteBatchNode_appendChild(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_appendChild'", nullptr);
         return 0;
@@ -104450,7 +104402,7 @@ int lua_ax_base_SpriteBatchNode_removeSpriteFromAtlas(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_removeSpriteFromAtlas'", nullptr);
         return 0;
@@ -104500,7 +104452,7 @@ int lua_ax_base_SpriteBatchNode_rebuildIndexInOrder(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_rebuildIndexInOrder'", nullptr);
         return 0;
@@ -104553,7 +104505,7 @@ int lua_ax_base_SpriteBatchNode_highestAtlasIndexInChild(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_highestAtlasIndexInChild'", nullptr);
         return 0;
@@ -104603,7 +104555,7 @@ int lua_ax_base_SpriteBatchNode_lowestAtlasIndexInChild(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_lowestAtlasIndexInChild'", nullptr);
         return 0;
@@ -104653,7 +104605,7 @@ int lua_ax_base_SpriteBatchNode_atlasIndexForChild(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_atlasIndexForChild'", nullptr);
         return 0;
@@ -104706,7 +104658,7 @@ int lua_ax_base_SpriteBatchNode_reorderBatch(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_reorderBatch'", nullptr);
         return 0;
@@ -104756,7 +104708,7 @@ int lua_ax_base_SpriteBatchNode_getTexture(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_getTexture'", nullptr);
         return 0;
@@ -104803,7 +104755,7 @@ int lua_ax_base_SpriteBatchNode_setTexture(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_setTexture'", nullptr);
         return 0;
@@ -104853,7 +104805,7 @@ int lua_ax_base_SpriteBatchNode_setBlendFunc(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_setBlendFunc'", nullptr);
         return 0;
@@ -104903,7 +104855,7 @@ int lua_ax_base_SpriteBatchNode_getBlendFunc(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_getBlendFunc'", nullptr);
         return 0;
@@ -104950,7 +104902,7 @@ int lua_ax_base_SpriteBatchNode_removeAllChildrenWithCleanup(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_removeAllChildrenWithCleanup'", nullptr);
         return 0;
@@ -105000,7 +104952,7 @@ int lua_ax_base_SpriteBatchNode_insertQuadFromSprite(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_insertQuadFromSprite'", nullptr);
         return 0;
@@ -105053,7 +105005,7 @@ int lua_ax_base_SpriteBatchNode_addSpriteWithoutQuad(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_addSpriteWithoutQuad'", nullptr);
         return 0;
@@ -105109,7 +105061,7 @@ int lua_ax_base_SpriteBatchNode_reserveCapacity(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_reserveCapacity'", nullptr);
         return 0;
@@ -105159,7 +105111,7 @@ int lua_ax_base_SpriteBatchNode_initWithTexture(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_initWithTexture'", nullptr);
         return 0;
@@ -105226,7 +105178,7 @@ int lua_ax_base_SpriteBatchNode_initWithFile(lua_State* tolua_S)
     cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_SpriteBatchNode_initWithFile'", nullptr);
         return 0;
@@ -105475,7 +105427,7 @@ int lua_ax_base_ParallaxNode_addChild(lua_State* tolua_S)
     cobj = (ax::ParallaxNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParallaxNode_addChild'", nullptr);
         return 0;
@@ -105534,7 +105486,7 @@ int lua_ax_base_ParallaxNode_removeAllChildrenWithCleanup(lua_State* tolua_S)
     cobj = (ax::ParallaxNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ParallaxNode_removeAllChildrenWithCleanup'", nullptr);
         return 0;
@@ -105678,7 +105630,7 @@ int lua_ax_base_TMXObjectGroup_getGroupName(lua_State* tolua_S)
     cobj = (ax::TMXObjectGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXObjectGroup_getGroupName'", nullptr);
         return 0;
@@ -105725,7 +105677,7 @@ int lua_ax_base_TMXObjectGroup_setGroupName(lua_State* tolua_S)
     cobj = (ax::TMXObjectGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXObjectGroup_setGroupName'", nullptr);
         return 0;
@@ -105775,7 +105727,7 @@ int lua_ax_base_TMXObjectGroup_getProperty(lua_State* tolua_S)
     cobj = (ax::TMXObjectGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXObjectGroup_getProperty'", nullptr);
         return 0;
@@ -105825,7 +105777,7 @@ int lua_ax_base_TMXObjectGroup_getObject(lua_State* tolua_S)
     cobj = (ax::TMXObjectGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXObjectGroup_getObject'", nullptr);
         return 0;
@@ -105875,7 +105827,7 @@ int lua_ax_base_TMXObjectGroup_getPositionOffset(lua_State* tolua_S)
     cobj = (ax::TMXObjectGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXObjectGroup_getPositionOffset'", nullptr);
         return 0;
@@ -105922,7 +105874,7 @@ int lua_ax_base_TMXObjectGroup_setPositionOffset(lua_State* tolua_S)
     cobj = (ax::TMXObjectGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXObjectGroup_setPositionOffset'", nullptr);
         return 0;
@@ -106019,7 +105971,7 @@ int lua_ax_base_TMXObjectGroup_setProperties(lua_State* tolua_S)
     cobj = (ax::TMXObjectGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXObjectGroup_setProperties'", nullptr);
         return 0;
@@ -106116,7 +106068,7 @@ int lua_ax_base_TMXObjectGroup_setObjects(lua_State* tolua_S)
     cobj = (ax::TMXObjectGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXObjectGroup_setObjects'", nullptr);
         return 0;
@@ -106233,7 +106185,7 @@ int lua_ax_base_TMXLayerInfo_setProperties(lua_State* tolua_S)
     cobj = (ax::TMXLayerInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXLayerInfo_setProperties'", nullptr);
         return 0;
@@ -106283,7 +106235,7 @@ int lua_ax_base_TMXLayerInfo_getProperties(lua_State* tolua_S)
     cobj = (ax::TMXLayerInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXLayerInfo_getProperties'", nullptr);
         return 0;
@@ -106389,7 +106341,7 @@ int lua_ax_base_TMXTilesetInfo_getRectForGID(lua_State* tolua_S)
     cobj = (ax::TMXTilesetInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXTilesetInfo_getRectForGID'", nullptr);
         return 0;
@@ -106497,7 +106449,7 @@ int lua_ax_base_TMXMapInfo_initWithTMXFile(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_initWithTMXFile'", nullptr);
         return 0;
@@ -106547,7 +106499,7 @@ int lua_ax_base_TMXMapInfo_initWithXML(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_initWithXML'", nullptr);
         return 0;
@@ -106600,7 +106552,7 @@ int lua_ax_base_TMXMapInfo_parseXMLFile(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_parseXMLFile'", nullptr);
         return 0;
@@ -106650,7 +106602,7 @@ int lua_ax_base_TMXMapInfo_parseXMLString(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_parseXMLString'", nullptr);
         return 0;
@@ -106700,7 +106652,7 @@ int lua_ax_base_TMXMapInfo_getTileProperties(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getTileProperties'", nullptr);
         return 0;
@@ -106747,7 +106699,7 @@ int lua_ax_base_TMXMapInfo_setTileProperties(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setTileProperties'", nullptr);
         return 0;
@@ -106797,7 +106749,7 @@ int lua_ax_base_TMXMapInfo_getOrientation(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getOrientation'", nullptr);
         return 0;
@@ -106844,7 +106796,7 @@ int lua_ax_base_TMXMapInfo_setOrientation(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setOrientation'", nullptr);
         return 0;
@@ -106894,7 +106846,7 @@ int lua_ax_base_TMXMapInfo_getStaggerAxis(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getStaggerAxis'", nullptr);
         return 0;
@@ -106941,7 +106893,7 @@ int lua_ax_base_TMXMapInfo_setStaggerAxis(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setStaggerAxis'", nullptr);
         return 0;
@@ -106991,7 +106943,7 @@ int lua_ax_base_TMXMapInfo_getStaggerIndex(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getStaggerIndex'", nullptr);
         return 0;
@@ -107038,7 +106990,7 @@ int lua_ax_base_TMXMapInfo_setStaggerIndex(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setStaggerIndex'", nullptr);
         return 0;
@@ -107088,7 +107040,7 @@ int lua_ax_base_TMXMapInfo_getHexSideLength(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getHexSideLength'", nullptr);
         return 0;
@@ -107135,7 +107087,7 @@ int lua_ax_base_TMXMapInfo_setHexSideLength(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setHexSideLength'", nullptr);
         return 0;
@@ -107185,7 +107137,7 @@ int lua_ax_base_TMXMapInfo_getMapSize(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getMapSize'", nullptr);
         return 0;
@@ -107232,7 +107184,7 @@ int lua_ax_base_TMXMapInfo_setMapSize(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setMapSize'", nullptr);
         return 0;
@@ -107282,7 +107234,7 @@ int lua_ax_base_TMXMapInfo_getTileSize(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getTileSize'", nullptr);
         return 0;
@@ -107329,7 +107281,7 @@ int lua_ax_base_TMXMapInfo_setTileSize(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setTileSize'", nullptr);
         return 0;
@@ -107426,7 +107378,7 @@ int lua_ax_base_TMXMapInfo_setLayers(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setLayers'", nullptr);
         return 0;
@@ -107523,7 +107475,7 @@ int lua_ax_base_TMXMapInfo_setTilesets(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setTilesets'", nullptr);
         return 0;
@@ -107620,7 +107572,7 @@ int lua_ax_base_TMXMapInfo_setObjectGroups(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setObjectGroups'", nullptr);
         return 0;
@@ -107670,7 +107622,7 @@ int lua_ax_base_TMXMapInfo_getParentElement(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getParentElement'", nullptr);
         return 0;
@@ -107717,7 +107669,7 @@ int lua_ax_base_TMXMapInfo_setParentElement(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setParentElement'", nullptr);
         return 0;
@@ -107767,7 +107719,7 @@ int lua_ax_base_TMXMapInfo_getParentGID(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getParentGID'", nullptr);
         return 0;
@@ -107814,7 +107766,7 @@ int lua_ax_base_TMXMapInfo_setParentGID(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setParentGID'", nullptr);
         return 0;
@@ -107864,7 +107816,7 @@ int lua_ax_base_TMXMapInfo_getLayerAttribs(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getLayerAttribs'", nullptr);
         return 0;
@@ -107911,7 +107863,7 @@ int lua_ax_base_TMXMapInfo_setLayerAttribs(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setLayerAttribs'", nullptr);
         return 0;
@@ -107961,7 +107913,7 @@ int lua_ax_base_TMXMapInfo_isStoringCharacters(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_isStoringCharacters'", nullptr);
         return 0;
@@ -108008,7 +107960,7 @@ int lua_ax_base_TMXMapInfo_setStoringCharacters(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setStoringCharacters'", nullptr);
         return 0;
@@ -108105,7 +108057,7 @@ int lua_ax_base_TMXMapInfo_setProperties(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setProperties'", nullptr);
         return 0;
@@ -108155,7 +108107,7 @@ int lua_ax_base_TMXMapInfo_getCurrentString(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getCurrentString'", nullptr);
         return 0;
@@ -108202,7 +108154,7 @@ int lua_ax_base_TMXMapInfo_setCurrentString(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setCurrentString'", nullptr);
         return 0;
@@ -108252,7 +108204,7 @@ int lua_ax_base_TMXMapInfo_getTMXFileName(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getTMXFileName'", nullptr);
         return 0;
@@ -108299,7 +108251,7 @@ int lua_ax_base_TMXMapInfo_setTMXFileName(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_setTMXFileName'", nullptr);
         return 0;
@@ -108349,7 +108301,7 @@ int lua_ax_base_TMXMapInfo_getExternalTilesetFileName(lua_State* tolua_S)
     cobj = (ax::TMXMapInfo*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXMapInfo_getExternalTilesetFileName'", nullptr);
         return 0;
@@ -108568,7 +108520,7 @@ int lua_ax_base_TileMapAtlas_initWithTileFile(lua_State* tolua_S)
     cobj = (ax::TileMapAtlas*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TileMapAtlas_initWithTileFile'", nullptr);
         return 0;
@@ -108627,7 +108579,7 @@ int lua_ax_base_TileMapAtlas_getTileAt(lua_State* tolua_S)
     cobj = (ax::TileMapAtlas*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TileMapAtlas_getTileAt'", nullptr);
         return 0;
@@ -108677,7 +108629,7 @@ int lua_ax_base_TileMapAtlas_setTile(lua_State* tolua_S)
     cobj = (ax::TileMapAtlas*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TileMapAtlas_setTile'", nullptr);
         return 0;
@@ -108730,7 +108682,7 @@ int lua_ax_base_TileMapAtlas_releaseMap(lua_State* tolua_S)
     cobj = (ax::TileMapAtlas*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TileMapAtlas_releaseMap'", nullptr);
         return 0;
@@ -108948,7 +108900,7 @@ int lua_ax_base_FastTMXLayer_removeTileAt(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_removeTileAt'", nullptr);
         return 0;
@@ -108998,7 +108950,7 @@ int lua_ax_base_FastTMXLayer_getPositionAt(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_getPositionAt'", nullptr);
         return 0;
@@ -109048,7 +109000,7 @@ int lua_ax_base_FastTMXLayer_getProperty(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_getProperty'", nullptr);
         return 0;
@@ -109098,7 +109050,7 @@ int lua_ax_base_FastTMXLayer_setupTiles(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_setupTiles'", nullptr);
         return 0;
@@ -109145,7 +109097,7 @@ int lua_ax_base_FastTMXLayer_getLayerName(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_getLayerName'", nullptr);
         return 0;
@@ -109192,7 +109144,7 @@ int lua_ax_base_FastTMXLayer_setLayerName(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_setLayerName'", nullptr);
         return 0;
@@ -109242,7 +109194,7 @@ int lua_ax_base_FastTMXLayer_getLayerSize(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_getLayerSize'", nullptr);
         return 0;
@@ -109289,7 +109241,7 @@ int lua_ax_base_FastTMXLayer_setLayerSize(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_setLayerSize'", nullptr);
         return 0;
@@ -109339,7 +109291,7 @@ int lua_ax_base_FastTMXLayer_getMapTileSize(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_getMapTileSize'", nullptr);
         return 0;
@@ -109386,7 +109338,7 @@ int lua_ax_base_FastTMXLayer_setMapTileSize(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_setMapTileSize'", nullptr);
         return 0;
@@ -109436,7 +109388,7 @@ int lua_ax_base_FastTMXLayer_getTileSet(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_getTileSet'", nullptr);
         return 0;
@@ -109483,7 +109435,7 @@ int lua_ax_base_FastTMXLayer_setTileSet(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_setTileSet'", nullptr);
         return 0;
@@ -109533,7 +109485,7 @@ int lua_ax_base_FastTMXLayer_getLayerOrientation(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_getLayerOrientation'", nullptr);
         return 0;
@@ -109580,7 +109532,7 @@ int lua_ax_base_FastTMXLayer_setLayerOrientation(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_setLayerOrientation'", nullptr);
         return 0;
@@ -109677,7 +109629,7 @@ int lua_ax_base_FastTMXLayer_setProperties(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_setProperties'", nullptr);
         return 0;
@@ -109727,7 +109679,7 @@ int lua_ax_base_FastTMXLayer_getTileAt(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_getTileAt'", nullptr);
         return 0;
@@ -109777,7 +109729,7 @@ int lua_ax_base_FastTMXLayer_setupTileSprite(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_setupTileSprite'", nullptr);
         return 0;
@@ -109833,7 +109785,7 @@ int lua_ax_base_FastTMXLayer_getAnimTileCoord(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_getAnimTileCoord'", nullptr);
         return 0;
@@ -109880,7 +109832,7 @@ int lua_ax_base_FastTMXLayer_hasTileAnimation(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_hasTileAnimation'", nullptr);
         return 0;
@@ -109927,7 +109879,7 @@ int lua_ax_base_FastTMXLayer_getTileAnimManager(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_getTileAnimManager'", nullptr);
         return 0;
@@ -109974,7 +109926,7 @@ int lua_ax_base_FastTMXLayer_initWithTilesetInfo(lua_State* tolua_S)
     cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXLayer_initWithTilesetInfo'", nullptr);
         return 0;
@@ -110151,7 +110103,7 @@ int lua_ax_base_TMXTileAnimTask_start(lua_State* tolua_S)
     cobj = (ax::TMXTileAnimTask*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXTileAnimTask_start'", nullptr);
         return 0;
@@ -110198,7 +110150,7 @@ int lua_ax_base_TMXTileAnimTask_stop(lua_State* tolua_S)
     cobj = (ax::TMXTileAnimTask*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXTileAnimTask_stop'", nullptr);
         return 0;
@@ -110245,7 +110197,7 @@ int lua_ax_base_TMXTileAnimTask_isRunning(lua_State* tolua_S)
     cobj = (ax::TMXTileAnimTask*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXTileAnimTask_isRunning'", nullptr);
         return 0;
@@ -110451,7 +110403,7 @@ int lua_ax_base_TMXTileAnimManager_startAll(lua_State* tolua_S)
     cobj = (ax::TMXTileAnimManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXTileAnimManager_startAll'", nullptr);
         return 0;
@@ -110498,7 +110450,7 @@ int lua_ax_base_TMXTileAnimManager_stopAll(lua_State* tolua_S)
     cobj = (ax::TMXTileAnimManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXTileAnimManager_stopAll'", nullptr);
         return 0;
@@ -110545,7 +110497,7 @@ int lua_ax_base_TMXTileAnimManager_getTasks(lua_State* tolua_S)
     cobj = (ax::TMXTileAnimManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TMXTileAnimManager_getTasks'", nullptr);
         return 0;
@@ -110692,7 +110644,7 @@ int lua_ax_base_FastTMXTiledMap_getLayer(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getLayer'", nullptr);
         return 0;
@@ -110742,7 +110694,7 @@ int lua_ax_base_FastTMXTiledMap_getObjectGroup(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getObjectGroup'", nullptr);
         return 0;
@@ -110792,7 +110744,7 @@ int lua_ax_base_FastTMXTiledMap_getProperty(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getProperty'", nullptr);
         return 0;
@@ -110842,7 +110794,7 @@ int lua_ax_base_FastTMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getPropertiesForGID'", nullptr);
         return 0;
@@ -110892,7 +110844,7 @@ int lua_ax_base_FastTMXTiledMap_getMapSize(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getMapSize'", nullptr);
         return 0;
@@ -110939,7 +110891,7 @@ int lua_ax_base_FastTMXTiledMap_setMapSize(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_setMapSize'", nullptr);
         return 0;
@@ -110989,7 +110941,7 @@ int lua_ax_base_FastTMXTiledMap_getTileSize(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getTileSize'", nullptr);
         return 0;
@@ -111036,7 +110988,7 @@ int lua_ax_base_FastTMXTiledMap_setTileSize(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_setTileSize'", nullptr);
         return 0;
@@ -111086,7 +111038,7 @@ int lua_ax_base_FastTMXTiledMap_getMapOrientation(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getMapOrientation'", nullptr);
         return 0;
@@ -111133,7 +111085,7 @@ int lua_ax_base_FastTMXTiledMap_setMapOrientation(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_setMapOrientation'", nullptr);
         return 0;
@@ -111230,7 +111182,7 @@ int lua_ax_base_FastTMXTiledMap_setObjectGroups(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_setObjectGroups'", nullptr);
         return 0;
@@ -111280,7 +111232,7 @@ int lua_ax_base_FastTMXTiledMap_getProperties(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getProperties'", nullptr);
         return 0;
@@ -111327,7 +111279,7 @@ int lua_ax_base_FastTMXTiledMap_setProperties(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_setProperties'", nullptr);
         return 0;
@@ -111377,7 +111329,7 @@ int lua_ax_base_FastTMXTiledMap_setTileAnimEnabled(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_setTileAnimEnabled'", nullptr);
         return 0;
@@ -111427,7 +111379,7 @@ int lua_ax_base_FastTMXTiledMap_getLayerCount(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getLayerCount'", nullptr);
         return 0;
@@ -111474,7 +111426,7 @@ int lua_ax_base_FastTMXTiledMap_getResourceFile(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getResourceFile'", nullptr);
         return 0;
@@ -111521,7 +111473,7 @@ int lua_ax_base_FastTMXTiledMap_getMapInfo(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getMapInfo'", nullptr);
         return 0;
@@ -111568,7 +111520,7 @@ int lua_ax_base_FastTMXTiledMap_getTilesetInfo(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getTilesetInfo'", nullptr);
         return 0;
@@ -111618,7 +111570,7 @@ int lua_ax_base_FastTMXTiledMap_getLayers(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_getLayers'", nullptr);
         return 0;
@@ -111665,7 +111617,7 @@ int lua_ax_base_FastTMXTiledMap_initWithTMXFile(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_initWithTMXFile'", nullptr);
         return 0;
@@ -111732,7 +111684,7 @@ int lua_ax_base_FastTMXTiledMap_initWithXML(lua_State* tolua_S)
     cobj = (ax::FastTMXTiledMap*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FastTMXTiledMap_initWithXML'", nullptr);
         return 0;
@@ -111992,7 +111944,7 @@ int lua_ax_base_MotionStreak3D_tintWithColor(lua_State* tolua_S)
     cobj = (ax::MotionStreak3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak3D_tintWithColor'", nullptr);
         return 0;
@@ -112042,7 +111994,7 @@ int lua_ax_base_MotionStreak3D_reset(lua_State* tolua_S)
     cobj = (ax::MotionStreak3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak3D_reset'", nullptr);
         return 0;
@@ -112089,7 +112041,7 @@ int lua_ax_base_MotionStreak3D_getStroke(lua_State* tolua_S)
     cobj = (ax::MotionStreak3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak3D_getStroke'", nullptr);
         return 0;
@@ -112136,7 +112088,7 @@ int lua_ax_base_MotionStreak3D_setStroke(lua_State* tolua_S)
     cobj = (ax::MotionStreak3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak3D_setStroke'", nullptr);
         return 0;
@@ -112186,7 +112138,7 @@ int lua_ax_base_MotionStreak3D_isStartingPositionInitialized(lua_State* tolua_S)
     cobj = (ax::MotionStreak3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak3D_isStartingPositionInitialized'", nullptr);
         return 0;
@@ -112233,7 +112185,7 @@ int lua_ax_base_MotionStreak3D_setStartingPositionInitialized(lua_State* tolua_S
     cobj = (ax::MotionStreak3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak3D_setStartingPositionInitialized'", nullptr);
         return 0;
@@ -112283,7 +112235,7 @@ int lua_ax_base_MotionStreak3D_getTexture(lua_State* tolua_S)
     cobj = (ax::MotionStreak3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak3D_getTexture'", nullptr);
         return 0;
@@ -112330,7 +112282,7 @@ int lua_ax_base_MotionStreak3D_setTexture(lua_State* tolua_S)
     cobj = (ax::MotionStreak3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak3D_setTexture'", nullptr);
         return 0;
@@ -112380,7 +112332,7 @@ int lua_ax_base_MotionStreak3D_setBlendFunc(lua_State* tolua_S)
     cobj = (ax::MotionStreak3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak3D_setBlendFunc'", nullptr);
         return 0;
@@ -112430,7 +112382,7 @@ int lua_ax_base_MotionStreak3D_getBlendFunc(lua_State* tolua_S)
     cobj = (ax::MotionStreak3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak3D_getBlendFunc'", nullptr);
         return 0;
@@ -112477,7 +112429,7 @@ int lua_ax_base_MotionStreak3D_setSweepAxis(lua_State* tolua_S)
     cobj = (ax::MotionStreak3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak3D_setSweepAxis'", nullptr);
         return 0;
@@ -112527,7 +112479,7 @@ int lua_ax_base_MotionStreak3D_getSweepAxis(lua_State* tolua_S)
     cobj = (ax::MotionStreak3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_MotionStreak3D_getSweepAxis'", nullptr);
         return 0;
@@ -112804,7 +112756,7 @@ int lua_ax_base_ComponentLua_getScriptObject(lua_State* tolua_S)
     cobj = (ax::ComponentLua*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ComponentLua_getScriptObject'", nullptr);
         return 0;
@@ -112851,7 +112803,7 @@ int lua_ax_base_ComponentLua_update(lua_State* tolua_S)
     cobj = (ax::ComponentLua*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ComponentLua_update'", nullptr);
         return 0;

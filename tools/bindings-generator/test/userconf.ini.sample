@@ -1,4 +1,0 @@
-[DEFAULT]
-androidndkdir=/path/to/android-ndk
-clangllvmdir=/path/to/clang+llvm-3.4
-cxxgeneratordir=/path/to/bindings-generator

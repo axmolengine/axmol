@@ -531,7 +531,7 @@ int lua_ax_backend_Program_getMaxVertexLocation(lua_State* tolua_S)
     cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getMaxVertexLocation'", nullptr);
         return 0;
@@ -578,7 +578,7 @@ int lua_ax_backend_Program_getMaxFragmentLocation(lua_State* tolua_S)
     cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getMaxFragmentLocation'", nullptr);
         return 0;
@@ -625,7 +625,7 @@ int lua_ax_backend_Program_getActiveAttributes(lua_State* tolua_S)
     cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getActiveAttributes'", nullptr);
         return 0;
@@ -672,7 +672,7 @@ int lua_ax_backend_Program_getVertexShader(lua_State* tolua_S)
     cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getVertexShader'", nullptr);
         return 0;
@@ -719,7 +719,7 @@ int lua_ax_backend_Program_getFragmentShader(lua_State* tolua_S)
     cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getFragmentShader'", nullptr);
         return 0;
@@ -766,7 +766,7 @@ int lua_ax_backend_Program_setupVertexLayout(lua_State* tolua_S)
     cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_setupVertexLayout'", nullptr);
         return 0;
@@ -816,7 +816,7 @@ int lua_ax_backend_Program_getProgramType(lua_State* tolua_S)
     cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getProgramType'", nullptr);
         return 0;
@@ -863,7 +863,7 @@ int lua_ax_backend_Program_getProgramId(lua_State* tolua_S)
     cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getProgramId'", nullptr);
         return 0;
@@ -910,7 +910,7 @@ int lua_ax_backend_Program_getUniformBufferSize(lua_State* tolua_S)
     cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getUniformBufferSize'", nullptr);
         return 0;
@@ -960,7 +960,7 @@ int lua_ax_backend_Program_getVertexLayout(lua_State* tolua_S)
     cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getVertexLayout'", nullptr);
         return 0;
@@ -1075,7 +1075,7 @@ int lua_ax_backend_VertexLayout_getStride(lua_State* tolua_S)
     cobj = (ax::backend::VertexLayout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_VertexLayout_getStride'", nullptr);
         return 0;
@@ -1122,7 +1122,7 @@ int lua_ax_backend_VertexLayout_getVertexStepMode(lua_State* tolua_S)
     cobj = (ax::backend::VertexLayout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_VertexLayout_getVertexStepMode'", nullptr);
         return 0;
@@ -1169,7 +1169,7 @@ int lua_ax_backend_VertexLayout_isValid(lua_State* tolua_S)
     cobj = (ax::backend::VertexLayout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_VertexLayout_isValid'", nullptr);
         return 0;
@@ -1274,7 +1274,7 @@ int lua_ax_backend_ProgramState_clone(lua_State* tolua_S)
     cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_clone'", nullptr);
         return 0;
@@ -1321,7 +1321,7 @@ int lua_ax_backend_ProgramState_getProgram(lua_State* tolua_S)
     cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_getProgram'", nullptr);
         return 0;
@@ -1510,7 +1510,7 @@ int lua_ax_backend_ProgramState_setParameterAutoBinding(lua_State* tolua_S)
     cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_setParameterAutoBinding'", nullptr);
         return 0;
@@ -1563,7 +1563,7 @@ int lua_ax_backend_ProgramState_getMutableVertexLayout(lua_State* tolua_S)
     cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_getMutableVertexLayout'", nullptr);
         return 0;
@@ -1610,7 +1610,7 @@ int lua_ax_backend_ProgramState_setSharedVertexLayout(lua_State* tolua_S)
     cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_setSharedVertexLayout'", nullptr);
         return 0;
@@ -1660,7 +1660,7 @@ int lua_ax_backend_ProgramState_getBatchId(lua_State* tolua_S)
     cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_getBatchId'", nullptr);
         return 0;
@@ -1707,7 +1707,7 @@ int lua_ax_backend_ProgramState_isBatchable(lua_State* tolua_S)
     cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_isBatchable'", nullptr);
         return 0;
@@ -1754,7 +1754,7 @@ int lua_ax_backend_ProgramState_updateBatchId(lua_State* tolua_S)
     cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_updateBatchId'", nullptr);
         return 0;
@@ -1801,7 +1801,7 @@ int lua_ax_backend_ProgramState_validateSharedVertexLayout(lua_State* tolua_S)
     cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_validateSharedVertexLayout'", nullptr);
         return 0;
@@ -1922,7 +1922,7 @@ int lua_ax_backend_TextureBackend_updateSamplerDescriptor(lua_State* tolua_S)
     cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_updateSamplerDescriptor'", nullptr);
         return 0;
@@ -1972,7 +1972,7 @@ int lua_ax_backend_TextureBackend_generateMipmaps(lua_State* tolua_S)
     cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_generateMipmaps'", nullptr);
         return 0;
@@ -2019,7 +2019,7 @@ int lua_ax_backend_TextureBackend_updateTextureDescriptor(lua_State* tolua_S)
     cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_updateTextureDescriptor'", nullptr);
         return 0;
@@ -2088,7 +2088,7 @@ int lua_ax_backend_TextureBackend_getTextureFormat(lua_State* tolua_S)
     cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getTextureFormat'", nullptr);
         return 0;
@@ -2135,7 +2135,7 @@ int lua_ax_backend_TextureBackend_getTextureUsage(lua_State* tolua_S)
     cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getTextureUsage'", nullptr);
         return 0;
@@ -2182,7 +2182,7 @@ int lua_ax_backend_TextureBackend_getTextureType(lua_State* tolua_S)
     cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getTextureType'", nullptr);
         return 0;
@@ -2229,7 +2229,7 @@ int lua_ax_backend_TextureBackend_hasMipmaps(lua_State* tolua_S)
     cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_hasMipmaps'", nullptr);
         return 0;
@@ -2276,7 +2276,7 @@ int lua_ax_backend_TextureBackend_getCount(lua_State* tolua_S)
     cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getCount'", nullptr);
         return 0;
@@ -2323,7 +2323,7 @@ int lua_ax_backend_TextureBackend_getHandler(lua_State* tolua_S)
     cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getHandler'", nullptr);
         return 0;
@@ -2384,7 +2384,7 @@ int lua_ax_backend_TextureBackend_getWidth(lua_State* tolua_S)
     cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getWidth'", nullptr);
         return 0;
@@ -2431,7 +2431,7 @@ int lua_ax_backend_TextureBackend_getHeight(lua_State* tolua_S)
     cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getHeight'", nullptr);
         return 0;
@@ -2508,7 +2508,7 @@ int lua_ax_backend_Texture2DBackend_getWidth(lua_State* tolua_S)
     cobj = (ax::backend::Texture2DBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Texture2DBackend_getWidth'", nullptr);
         return 0;
@@ -2555,7 +2555,7 @@ int lua_ax_backend_Texture2DBackend_getHeight(lua_State* tolua_S)
     cobj = (ax::backend::Texture2DBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Texture2DBackend_getHeight'", nullptr);
         return 0;
@@ -2623,7 +2623,7 @@ int lua_ax_backend_TextureCubemapBackend_updateFaceData(lua_State* tolua_S)
     cobj = (ax::backend::TextureCubemapBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureCubemapBackend_updateFaceData'", nullptr);
         return 0;
@@ -2718,7 +2718,7 @@ int lua_ax_backend_DriverBase_newDefaultRenderTarget(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_newDefaultRenderTarget'", nullptr);
         return 0;
@@ -2765,7 +2765,7 @@ int lua_ax_backend_DriverBase_newRenderTarget(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
         return 0;
@@ -2863,7 +2863,7 @@ int lua_ax_backend_DriverBase_newDepthStencilState(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_newDepthStencilState'", nullptr);
         return 0;
@@ -2910,7 +2910,7 @@ int lua_ax_backend_DriverBase_newProgram(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_newProgram'", nullptr);
         return 0;
@@ -2963,7 +2963,7 @@ int lua_ax_backend_DriverBase_resetState(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_resetState'", nullptr);
         return 0;
@@ -3010,7 +3010,7 @@ int lua_ax_backend_DriverBase_getVendor(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getVendor'", nullptr);
         return 0;
@@ -3057,7 +3057,7 @@ int lua_ax_backend_DriverBase_getRenderer(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getRenderer'", nullptr);
         return 0;
@@ -3104,7 +3104,7 @@ int lua_ax_backend_DriverBase_getVersion(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getVersion'", nullptr);
         return 0;
@@ -3151,7 +3151,7 @@ int lua_ax_backend_DriverBase_getShaderVersion(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getShaderVersion'", nullptr);
         return 0;
@@ -3198,7 +3198,7 @@ int lua_ax_backend_DriverBase_hasExtension(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_hasExtension'", nullptr);
         return 0;
@@ -3248,7 +3248,7 @@ int lua_ax_backend_DriverBase_dumpExtensions(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_dumpExtensions'", nullptr);
         return 0;
@@ -3295,7 +3295,7 @@ int lua_ax_backend_DriverBase_checkForFeatureSupported(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_checkForFeatureSupported'", nullptr);
         return 0;
@@ -3345,7 +3345,7 @@ int lua_ax_backend_DriverBase_getMaxTextureSize(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getMaxTextureSize'", nullptr);
         return 0;
@@ -3392,7 +3392,7 @@ int lua_ax_backend_DriverBase_getMaxAttributes(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getMaxAttributes'", nullptr);
         return 0;
@@ -3439,7 +3439,7 @@ int lua_ax_backend_DriverBase_getMaxTextureUnits(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getMaxTextureUnits'", nullptr);
         return 0;
@@ -3486,7 +3486,7 @@ int lua_ax_backend_DriverBase_getMaxSamplesAllowed(lua_State* tolua_S)
     cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getMaxSamplesAllowed'", nullptr);
         return 0;
@@ -3638,7 +3638,7 @@ int lua_ax_backend_ProgramManager_getBuiltinProgram(lua_State* tolua_S)
     cobj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramManager_getBuiltinProgram'", nullptr);
         return 0;
@@ -3688,7 +3688,7 @@ int lua_ax_backend_ProgramManager_registerCustomProgram(lua_State* tolua_S)
     cobj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramManager_registerCustomProgram'", nullptr);
         return 0;
@@ -3863,7 +3863,7 @@ int lua_ax_backend_ProgramManager_unloadProgram(lua_State* tolua_S)
     cobj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramManager_unloadProgram'", nullptr);
         return 0;
@@ -3913,7 +3913,7 @@ int lua_ax_backend_ProgramManager_unloadUnusedPrograms(lua_State* tolua_S)
     cobj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramManager_unloadUnusedPrograms'", nullptr);
         return 0;
@@ -3960,7 +3960,7 @@ int lua_ax_backend_ProgramManager_unloadAllPrograms(lua_State* tolua_S)
     cobj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramManager_unloadAllPrograms'", nullptr);
         return 0;

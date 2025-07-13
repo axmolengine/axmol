@@ -7,10 +7,12 @@
 import argparse
 import sys
 import os, os.path
-import shutil
 import subprocess
 import re
 from contextlib import contextmanager
+
+import io
+import configparser
 
 g_debug_mode = False
 # debug only
@@ -32,7 +34,7 @@ def _check_ndk_root_env():
         sdkRoot = os.environ.get('ANDROID_HOME', None)
         for _, ndkVers, _ in os.walk("{0}{1}ndk".format(sdkRoot, os.path.sep)):
             for ndkVer in ndkVers:
-                if (ndkVer == '23.2.8568313'):
+                if (ndkVer >= '23.2.8568313'):
                     ANDROID_NDK = "{0}{1}ndk{1}{2}".format(sdkRoot, os.path.sep, ndkVer)
                     break
             break
@@ -69,28 +71,7 @@ def _find_first_file_in_dir(dir, fn):
           if searchPath is not None:
               return searchPath
     else:
-        return None          
-
-def _find_all_files_match(dir, cond, all):
-    if cond(dir):
-        all.append(dir)
-    elif os.path.isdir(dir):
-        for subdir in os.listdir(dir):
-            _find_all_files_match(os.path.join(dir, subdir), cond, all)
-
-
-def _find_toolchain_include_path():
-    global g_ndk_root
-    '''
-    Search gcc prebuilt include path
-    for instance: "$ANDROID_NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/include"
-    '''
-    foundFiles = []
-    _find_all_files_match(os.path.join(g_ndk_root, "toolchains"), lambda x : os.path.basename(x) == "stdarg.h" and "arm-linux-androideabi" in x , foundFiles)
-    if len(foundFiles) == 0:
-        return ""
-    else:
-        return "-I" + os.path.dirname(foundFiles[0])
+        return None
 
 def _find_llvm_include_path():
     '''
@@ -104,18 +85,7 @@ def _find_llvm_include_path():
     versionDir = os.path.dirname(versionFile)
     includeDir = _find_first_file_in_dir(versionDir, "stdarg.h")
     llvmIncludePath = os.path.dirname(includeDir)
-    return "-I"+llvmIncludePath
-  
-
-def _defaultIncludePath():
-    '''default include path for libclang, llvm & gcc include path
-    '''
-    llvmInclude = _find_llvm_include_path()
-    toolchainInclude = _find_toolchain_include_path()
-    exactIncludes =  llvmInclude + " " + toolchainInclude
-    return exactIncludes
-
-
+    return llvmIncludePath
 class CmdError(Exception):
     pass
 
@@ -132,6 +102,18 @@ def _run_cmd(command):
     if ret != 0:
         message = "Error running command"
         raise CmdError(message)
+
+def get_ndk_major_version():
+    ndk_source_props = configparser.ConfigParser()
+    ndk_source_props_path = os.path.join(g_ndk_root, 'source.properties')
+    with open(ndk_source_props_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    content = '[DEFAULT]\n' + content
+    print(f'content: {content}')
+    ndk_source_props.read_file(io.StringIO(content))
+    ndk_ver = ndk_source_props.get('DEFAULT', 'Pkg.Revision', fallback='0.0.0')
+    ndk_major = int(ndk_ver.split('.')[0])
+    return ndk_major
 
 def main():
     global g_ndk_root
@@ -176,47 +158,50 @@ def main():
         print('path: %s or path: %s are not valid! ' % (x86_llvm_path, x64_llvm_path))
         sys.exit(1)
 
-    # x86_gcc_toolchain_path = ""
-    # x64_gcc_toolchain_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s-%s' % (cur_platform, 'x86_64')))
-    # if not os.path.exists(x64_gcc_toolchain_path):
-    #     x86_gcc_toolchain_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s' % (cur_platform)))
-    # if not os.path.exists(x86_gcc_toolchain_path):
-    #     x86_gcc_toolchain_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s-%s' % (cur_platform, 'x86')))
-
-    # if os.path.isdir(x64_gcc_toolchain_path):
-    #     gcc_toolchain_path = x64_gcc_toolchain_path
-    # elif os.path.isdir(x86_gcc_toolchain_path):
-    #     gcc_toolchain_path = x86_gcc_toolchain_path
-    # else:
-    #     print('gcc toolchain not found!')
-    #     print('path: %s or path: %s are not valid! ' % (x64_gcc_toolchain_path, x86_gcc_toolchain_path))
-    #     sys.exit(1)
-
-
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
     ax_root = os.path.abspath(os.path.join(project_root, ''))
     cxx_generator_root = os.path.abspath(os.path.join(project_root, 'tools/bindings-generator'))
 
-    extraFlags = _defaultIncludePath()
-    extraFlags += ' -DAX_ENABLE_MEDIA=1'
-    extraFlags += ' -D__cpp_coroutines=201703'
+    # clang flags
+    clang_flags = "-nostdinc -x c++ -std=c++23 -fsigned-char"
 
-    
+    # determine android flags
+    android_flags = '-target armv7-none-linux-androideabi -D_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS -DANDROID -D__ANDROID_API__=21'
+    # libc++ c++ header
+    android_flags += ' -isystem %s/sysroot/usr/include/c++/v1' % llvm_path
+    # Clang internal header: stddef.h, stdarg.h ...
+    android_flags += ' -isystem %s' % _find_llvm_include_path()
+    # sysroot c header
+    android_flags += ' -isystem %s/sysroot/usr/include' % llvm_path
+    android_flags += ' -isystem %s/sysroot/usr/include/arm-linux-androideabi' % llvm_path
+
+    # if get_ndk_major_version() >= 26:
+    #     cxx_default_include = '-I%s/sysroot/usr/include/c++/v1' % llvm_path
+    #     extra_flags += f' {cxx_default_include}'
+
+    # extra flags
+    extra_flags = '-DAX_ENABLE_MEDIA=1'
+    extra_flags += ' -D__cpp_coroutines=201703'
+    extra_flags += ' -D__builtin_neon_vbslq_f16(...)=(float16x8_t{})'
+    extra_flags += ' -D__builtin_neon_vbsl_f16(...)=(float16x4_t{})'
+    extra_flags += ' -D__builtin_neon_vtrnq_f16(...)'
+    extra_flags += ' -D__builtin_neon_vtrn_f16(...)'
+    extra_flags += ' -D__builtin_neon_vuzpq_f16(...)'
+    extra_flags += ' -D__builtin_neon_vuzp_f16(...)'
+    extra_flags += ' -D__builtin_neon_vzipq_f16(...)'
+    extra_flags += ' -D__builtin_neon_vzip_f16(...)'
+
     # save config to file
-    if(sys.version_info.major >= 3):
-        import configparser # import ConfigParser
-        config = configparser.ConfigParser()
-    else:
-        import ConfigParser
-        config = ConfigParser.ConfigParser()
+    
+    config = configparser.ConfigParser()
     
     config.set('DEFAULT', 'androidndkdir', g_ndk_root)
     config.set('DEFAULT', 'clangllvmdir', llvm_path)
-    # config.set('DEFAULT', 'gcc_toolchain_dir', gcc_toolchain_path)
     config.set('DEFAULT', 'axdir', ax_root)
     config.set('DEFAULT', 'cxxgeneratordir', cxx_generator_root)
-    config.set('DEFAULT', 'extra_flags', extraFlags)
-    config.set('DEFAULT', 'cxx_std', 'c++20')
+    config.set('DEFAULT', 'extra_flags', extra_flags)
+    config.set('DEFAULT', 'clang_flags', clang_flags)
+    config.set('DEFAULT', 'android_flags', android_flags)
 
     conf_ini_file = os.path.abspath(os.path.join(os.path.dirname(__file__), 'userconf.ini'))
 

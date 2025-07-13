@@ -543,7 +543,7 @@ class NativeType(object):
                     lambda_display_name = lambda_display_name.replace("::__ndk1", "")
                     lambda_display_name = normalize_type_str(lambda_display_name)
                     nt.namespaced_name = lambda_display_name
-                    r = re.compile('function<([^\s]+).*\((.*)\)>').search(nt.namespaced_name)
+                    r = re.compile('function<([^\\s]+).*\\((.*)\\)>').search(nt.namespaced_name)
                     (ret_type, params) = r.groups()
                     params = filter(None, params.split(", "))
 
@@ -755,7 +755,7 @@ class NativeField(object):
         self.name = cursor.displayname
         self.kind = cursor.type.kind
         self.location = cursor.location
-        member_field_re = re.compile('m_(\w+)')
+        member_field_re = re.compile('m_(\\w+)')
         match = member_field_re.match(self.name)
         self.signature_name = self.name
         self.ntype  = NativeType.from_type(cursor.type)
@@ -845,18 +845,18 @@ class NativeFunction(object):
             return ""
 
         regular_replace_list = [
-            ("(\s)*//!",""),
-            ("(\s)*//",""),
-            ("(\s)*/\*\*",""),
-            ("(\s)*/\*",""),
-            ("\*/",""),
+            ("(\\s)*//!",""),
+            ("(\\s)*//",""),
+            ("(\\s)*/\\*\\*",""),
+            ("(\\s)*/\\*",""),
+            ("\\*/",""),
             ("\r\n", "\n"),
-            ("\n(\s)*\*", "\n"),
-            ("\n(\s)*@","\n"),
-            ("\n(\s)*","\n"),
-            ("\n(\s)*\n", "\n"),
-            ("^(\s)*\n",""),
-            ("\n(\s)*$", ""),
+            ("\n(\\s)*\\*", "\n"),
+            ("\n(\\s)*@","\n"),
+            ("\n(\\s)*","\n"),
+            ("\n(\\s)*\n", "\n"),
+            ("^(\\s)*\n",""),
+            ("\n(\\s)*$", ""),
             ("\n","<br>\n"),
             ("\n", "\n-- ")
         ]
@@ -943,18 +943,18 @@ class NativeOverloadedFunction(object):
             return ""
 
         regular_replace_list = [
-            ("(\s)*//!",""),
-            ("(\s)*//",""),
-            ("(\s)*/\*\*",""),
-            ("(\s)*/\*",""),
-            ("\*/",""),
+            ("(\\s)*//!",""),
+            ("(\\s)*//",""),
+            ("(\\s)*/\\*\\*",""),
+            ("(\\s)*/\\*",""),
+            ("\\*/",""),
             ("\r\n", "\n"),
-            ("\n(\s)*\*", "\n"),
-            ("\n(\s)*@","\n"),
-            ("\n(\s)*","\n"),
-            ("\n(\s)*\n", "\n"),
-            ("^(\s)*\n",""),
-            ("\n(\s)*$", ""),
+            ("\n(\\s)*\\*", "\n"),
+            ("\n(\\s)*@","\n"),
+            ("\n(\\s)*","\n"),
+            ("\n(\\s)*\n", "\n"),
+            ("^(\\s)*\n",""),
+            ("\n(\\s)*$", ""),
             ("\n","<br>\n"),
             ("\n", "\n-- ")
         ]
@@ -1363,7 +1363,6 @@ class Generator(object):
         self.macro_judgement = opts['macro_judgement']
         self.hpp_headers = opts['hpp_headers']
         self.cpp_headers = opts['cpp_headers']
-        self.win32_clang_flags = opts['win32_clang_flags']
 
         extend_clang_args = []
 
@@ -1378,15 +1377,14 @@ class Generator(object):
         if len(extend_clang_args) > 0:
             self.clang_args.extend(extend_clang_args)
 
-        if sys.platform == 'win32' and self.win32_clang_flags != None:
-            self.clang_args.extend(self.win32_clang_flags)
+        print(f'clang_args={self.clang_args}')
 
         if opts['skip']:
             list_of_skips = re.split(",\n?", opts['skip'])
             for skip in list_of_skips:
                 class_name, methods = skip.split("::")
                 self.skip_classes[class_name] = []
-                match = re.match("\[([^]]+)\]", methods)
+                match = re.match("\\[([^]]+)\\]", methods)
                 if match:
                     self.skip_classes[class_name] = match.group(1).split(" ")
                 else:
@@ -1396,7 +1394,7 @@ class Generator(object):
             for field in list_of_fields:
                 class_name, fields = field.split("::")
                 self.bind_fields[class_name] = []
-                match = re.match("\[([^]]+)\]", fields)
+                match = re.match("\\[([^]]+)\\]", fields)
                 if match:
                     self.bind_fields[class_name] = match.group(1).split(" ")
                 else:
@@ -1406,7 +1404,7 @@ class Generator(object):
             for rename in list_of_function_renames:
                 class_name, methods = rename.split("::")
                 self.rename_functions[class_name] = {}
-                match = re.match("\[([^]]+)\]", methods)
+                match = re.match("\\[([^]]+)\\]", methods)
                 if match:
                     list_of_methods = match.group(1).split(" ")
                     for pair in list_of_methods:
@@ -1915,7 +1913,7 @@ def generate_one(cfg, section, target, outdir, out_file):
                 'replace_headers': config.get(s, 'replace_headers') if config.has_option(s, 'replace_headers') else None,
                 'classes': config.get(s, 'classes').split(' '),
                 'classes_need_extend': config.get(s, 'classes_need_extend').split(' ') if config.has_option(s, 'classes_need_extend') else [],
-                'clang_args': (config.get(s, 'extra_arguments') or "").split(" "),
+                'clang_args': (config.get(s, 'evaluated_args') or "").split(" "),
                 'target': os.path.join(workingdir, "targets", t),
                 'outdir': outdir,
                 'search_paths': os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'core')) + ";" + os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'extensions/scripting')) + ";" + os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'extensions/spine/src')) + ";" + os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'extensions/spine/runtime')) + ";" + os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'extensions/cocostudio/src')) + ";" + os.path.abspath(os.path.join(config.get('DEFAULT', 'axdir'), 'extensions/fairygui/src')) + ";" + os.path.abspath(config.get('DEFAULT', 'axdir')),
@@ -1935,7 +1933,6 @@ def generate_one(cfg, section, target, outdir, out_file):
                 'macro_judgement': config.get(s, 'macro_judgement') if config.has_option(s, 'macro_judgement') else None,
                 'hpp_headers': config.get(s, 'hpp_headers').split(' ') if config.has_option(s, 'hpp_headers') else None,
                 'cpp_headers': config.get(s, 'cpp_headers').split(' ') if config.has_option(s, 'cpp_headers') else None,
-                'win32_clang_flags': (config.get(s, 'win32_clang_flags') or "").split(" ") if config.has_option(s, 'win32_clang_flags') else None
                 }
             generator = Generator(gen_opts)
             generator.generate_code()

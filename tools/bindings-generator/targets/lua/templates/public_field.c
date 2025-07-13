@@ -10,7 +10,7 @@ int ${signature_name}_get${name}(lua_State* tolua_S)
     cobj = (${namespaced_class_name}*)tolua_tousertype(tolua_S,1,0);
 
 \#if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function '${signature_name}_get${name}'", nullptr);
         return 0;
@@ -57,7 +57,7 @@ int ${signature_name}_set${name}(lua_State* tolua_S)
     cobj = (${namespaced_class_name}*)tolua_tousertype(tolua_S,1,0);
 
 \#if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function '${signature_name}_set${name}'", nullptr);
         return 0;

@@ -23,7 +23,7 @@ int lua_ax_studio_ActionFrame_setFrameIndex(lua_State* tolua_S)
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionFrame_setFrameIndex'", nullptr);
         return 0;
@@ -73,7 +73,7 @@ int lua_ax_studio_ActionFrame_getFrameIndex(lua_State* tolua_S)
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionFrame_getFrameIndex'", nullptr);
         return 0;
@@ -120,7 +120,7 @@ int lua_ax_studio_ActionFrame_setFrameTime(lua_State* tolua_S)
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionFrame_setFrameTime'", nullptr);
         return 0;
@@ -170,7 +170,7 @@ int lua_ax_studio_ActionFrame_getFrameTime(lua_State* tolua_S)
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionFrame_getFrameTime'", nullptr);
         return 0;
@@ -217,7 +217,7 @@ int lua_ax_studio_ActionFrame_setFrameType(lua_State* tolua_S)
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionFrame_setFrameType'", nullptr);
         return 0;
@@ -267,7 +267,7 @@ int lua_ax_studio_ActionFrame_getFrameType(lua_State* tolua_S)
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionFrame_getFrameType'", nullptr);
         return 0;
@@ -314,7 +314,7 @@ int lua_ax_studio_ActionFrame_setEasingType(lua_State* tolua_S)
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionFrame_setEasingType'", nullptr);
         return 0;
@@ -364,7 +364,7 @@ int lua_ax_studio_ActionFrame_getEasingType(lua_State* tolua_S)
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionFrame_getEasingType'", nullptr);
         return 0;
@@ -470,7 +470,7 @@ int lua_ax_studio_ActionFrame_setEasingParameter(lua_State* tolua_S)
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionFrame_setEasingParameter'", nullptr);
         return 0;
@@ -587,7 +587,7 @@ int lua_ax_studio_ActionMoveFrame_setPosition(lua_State* tolua_S)
     cobj = (cocostudio::ActionMoveFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionMoveFrame_setPosition'", nullptr);
         return 0;
@@ -637,7 +637,7 @@ int lua_ax_studio_ActionMoveFrame_getPosition(lua_State* tolua_S)
     cobj = (cocostudio::ActionMoveFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionMoveFrame_getPosition'", nullptr);
         return 0;
@@ -684,7 +684,7 @@ int lua_ax_studio_ActionMoveFrame_getAction(lua_State* tolua_S)
     cobj = (cocostudio::ActionMoveFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionMoveFrame_getAction'", nullptr);
         return 0;
@@ -794,7 +794,7 @@ int lua_ax_studio_ActionScaleFrame_setScaleX(lua_State* tolua_S)
     cobj = (cocostudio::ActionScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionScaleFrame_setScaleX'", nullptr);
         return 0;
@@ -844,7 +844,7 @@ int lua_ax_studio_ActionScaleFrame_getScaleX(lua_State* tolua_S)
     cobj = (cocostudio::ActionScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionScaleFrame_getScaleX'", nullptr);
         return 0;
@@ -891,7 +891,7 @@ int lua_ax_studio_ActionScaleFrame_setScaleY(lua_State* tolua_S)
     cobj = (cocostudio::ActionScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionScaleFrame_setScaleY'", nullptr);
         return 0;
@@ -941,7 +941,7 @@ int lua_ax_studio_ActionScaleFrame_getScaleY(lua_State* tolua_S)
     cobj = (cocostudio::ActionScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionScaleFrame_getScaleY'", nullptr);
         return 0;
@@ -988,7 +988,7 @@ int lua_ax_studio_ActionScaleFrame_getAction(lua_State* tolua_S)
     cobj = (cocostudio::ActionScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionScaleFrame_getAction'", nullptr);
         return 0;
@@ -1100,7 +1100,7 @@ int lua_ax_studio_ActionRotationFrame_setRotation(lua_State* tolua_S)
     cobj = (cocostudio::ActionRotationFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionRotationFrame_setRotation'", nullptr);
         return 0;
@@ -1150,7 +1150,7 @@ int lua_ax_studio_ActionRotationFrame_getRotation(lua_State* tolua_S)
     cobj = (cocostudio::ActionRotationFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionRotationFrame_getRotation'", nullptr);
         return 0;
@@ -1316,7 +1316,7 @@ int lua_ax_studio_ActionFadeFrame_setOpacity(lua_State* tolua_S)
     cobj = (cocostudio::ActionFadeFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionFadeFrame_setOpacity'", nullptr);
         return 0;
@@ -1366,7 +1366,7 @@ int lua_ax_studio_ActionFadeFrame_getOpacity(lua_State* tolua_S)
     cobj = (cocostudio::ActionFadeFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionFadeFrame_getOpacity'", nullptr);
         return 0;
@@ -1413,7 +1413,7 @@ int lua_ax_studio_ActionFadeFrame_getAction(lua_State* tolua_S)
     cobj = (cocostudio::ActionFadeFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionFadeFrame_getAction'", nullptr);
         return 0;
@@ -1523,7 +1523,7 @@ int lua_ax_studio_ActionTintFrame_setColor(lua_State* tolua_S)
     cobj = (cocostudio::ActionTintFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTintFrame_setColor'", nullptr);
         return 0;
@@ -1573,7 +1573,7 @@ int lua_ax_studio_ActionTintFrame_getColor(lua_State* tolua_S)
     cobj = (cocostudio::ActionTintFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTintFrame_getColor'", nullptr);
         return 0;
@@ -1620,7 +1620,7 @@ int lua_ax_studio_ActionTintFrame_getAction(lua_State* tolua_S)
     cobj = (cocostudio::ActionTintFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTintFrame_getAction'", nullptr);
         return 0;
@@ -1730,7 +1730,7 @@ int lua_ax_studio_ActionObject_setName(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_setName'", nullptr);
         return 0;
@@ -1780,7 +1780,7 @@ int lua_ax_studio_ActionObject_getName(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_getName'", nullptr);
         return 0;
@@ -1827,7 +1827,7 @@ int lua_ax_studio_ActionObject_setLoop(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_setLoop'", nullptr);
         return 0;
@@ -1877,7 +1877,7 @@ int lua_ax_studio_ActionObject_getLoop(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_getLoop'", nullptr);
         return 0;
@@ -1924,7 +1924,7 @@ int lua_ax_studio_ActionObject_setUnitTime(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_setUnitTime'", nullptr);
         return 0;
@@ -1974,7 +1974,7 @@ int lua_ax_studio_ActionObject_getUnitTime(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_getUnitTime'", nullptr);
         return 0;
@@ -2021,7 +2021,7 @@ int lua_ax_studio_ActionObject_setCurrentTime(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_setCurrentTime'", nullptr);
         return 0;
@@ -2071,7 +2071,7 @@ int lua_ax_studio_ActionObject_getCurrentTime(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_getCurrentTime'", nullptr);
         return 0;
@@ -2118,7 +2118,7 @@ int lua_ax_studio_ActionObject_getTotalTime(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_getTotalTime'", nullptr);
         return 0;
@@ -2165,7 +2165,7 @@ int lua_ax_studio_ActionObject_isPlaying(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_isPlaying'", nullptr);
         return 0;
@@ -2263,7 +2263,7 @@ int lua_ax_studio_ActionObject_pause(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_pause'", nullptr);
         return 0;
@@ -2310,7 +2310,7 @@ int lua_ax_studio_ActionObject_stop(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_stop'", nullptr);
         return 0;
@@ -2357,7 +2357,7 @@ int lua_ax_studio_ActionObject_addActionNode(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_addActionNode'", nullptr);
         return 0;
@@ -2407,7 +2407,7 @@ int lua_ax_studio_ActionObject_removeActionNode(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_removeActionNode'", nullptr);
         return 0;
@@ -2457,7 +2457,7 @@ int lua_ax_studio_ActionObject_updateToFrameByTime(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_updateToFrameByTime'", nullptr);
         return 0;
@@ -2507,7 +2507,7 @@ int lua_ax_studio_ActionObject_simulationActionUpdate(lua_State* tolua_S)
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionObject_simulationActionUpdate'", nullptr);
         return 0;
@@ -2631,7 +2631,7 @@ int lua_ax_studio_ActionManagerEx_getActionByName(lua_State* tolua_S)
     cobj = (cocostudio::ActionManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionManagerEx_getActionByName'", nullptr);
         return 0;
@@ -2751,7 +2751,7 @@ int lua_ax_studio_ActionManagerEx_stopActionByName(lua_State* tolua_S)
     cobj = (cocostudio::ActionManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionManagerEx_stopActionByName'", nullptr);
         return 0;
@@ -2804,7 +2804,7 @@ int lua_ax_studio_ActionManagerEx_releaseActions(lua_State* tolua_S)
     cobj = (cocostudio::ActionManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionManagerEx_releaseActions'", nullptr);
         return 0;
@@ -2851,7 +2851,7 @@ int lua_ax_studio_ActionManagerEx_getStudioVersionNumber(lua_State* tolua_S)
     cobj = (cocostudio::ActionManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionManagerEx_getStudioVersionNumber'", nullptr);
         return 0;
@@ -2992,7 +2992,7 @@ int lua_ax_studio_BaseData_setColor(lua_State* tolua_S)
     cobj = (cocostudio::BaseData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BaseData_setColor'", nullptr);
         return 0;
@@ -3042,7 +3042,7 @@ int lua_ax_studio_BaseData_getColor(lua_State* tolua_S)
     cobj = (cocostudio::BaseData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BaseData_getColor'", nullptr);
         return 0;
@@ -3183,7 +3183,7 @@ int lua_ax_studio_DisplayData_copy(lua_State* tolua_S)
     cobj = (cocostudio::DisplayData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayData_copy'", nullptr);
         return 0;
@@ -3363,7 +3363,7 @@ int lua_ax_studio_SpriteDisplayData_copy(lua_State* tolua_S)
     cobj = (cocostudio::SpriteDisplayData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_SpriteDisplayData_copy'", nullptr);
         return 0;
@@ -3690,7 +3690,7 @@ int lua_ax_studio_BoneData_init(lua_State* tolua_S)
     cobj = (cocostudio::BoneData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneData_init'", nullptr);
         return 0;
@@ -3737,7 +3737,7 @@ int lua_ax_studio_BoneData_addDisplayData(lua_State* tolua_S)
     cobj = (cocostudio::BoneData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneData_addDisplayData'", nullptr);
         return 0;
@@ -3787,7 +3787,7 @@ int lua_ax_studio_BoneData_getDisplayData(lua_State* tolua_S)
     cobj = (cocostudio::BoneData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneData_getDisplayData'", nullptr);
         return 0;
@@ -3932,7 +3932,7 @@ int lua_ax_studio_ArmatureData_init(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureData_init'", nullptr);
         return 0;
@@ -3979,7 +3979,7 @@ int lua_ax_studio_ArmatureData_addBoneData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureData_addBoneData'", nullptr);
         return 0;
@@ -4029,7 +4029,7 @@ int lua_ax_studio_ArmatureData_getBoneData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureData_getBoneData'", nullptr);
         return 0;
@@ -4174,7 +4174,7 @@ int lua_ax_studio_FrameData_copy(lua_State* tolua_S)
     cobj = (cocostudio::FrameData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_FrameData_copy'", nullptr);
         return 0;
@@ -4317,7 +4317,7 @@ int lua_ax_studio_MovementBoneData_init(lua_State* tolua_S)
     cobj = (cocostudio::MovementBoneData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_MovementBoneData_init'", nullptr);
         return 0;
@@ -4364,7 +4364,7 @@ int lua_ax_studio_MovementBoneData_addFrameData(lua_State* tolua_S)
     cobj = (cocostudio::MovementBoneData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_MovementBoneData_addFrameData'", nullptr);
         return 0;
@@ -4414,7 +4414,7 @@ int lua_ax_studio_MovementBoneData_getFrameData(lua_State* tolua_S)
     cobj = (cocostudio::MovementBoneData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_MovementBoneData_getFrameData'", nullptr);
         return 0;
@@ -4559,7 +4559,7 @@ int lua_ax_studio_MovementData_addMovementBoneData(lua_State* tolua_S)
     cobj = (cocostudio::MovementData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_MovementData_addMovementBoneData'", nullptr);
         return 0;
@@ -4609,7 +4609,7 @@ int lua_ax_studio_MovementData_getMovementBoneData(lua_State* tolua_S)
     cobj = (cocostudio::MovementData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_MovementData_getMovementBoneData'", nullptr);
         return 0;
@@ -4753,7 +4753,7 @@ int lua_ax_studio_AnimationData_addMovement(lua_State* tolua_S)
     cobj = (cocostudio::AnimationData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_AnimationData_addMovement'", nullptr);
         return 0;
@@ -4803,7 +4803,7 @@ int lua_ax_studio_AnimationData_getMovement(lua_State* tolua_S)
     cobj = (cocostudio::AnimationData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_AnimationData_getMovement'", nullptr);
         return 0;
@@ -4853,7 +4853,7 @@ int lua_ax_studio_AnimationData_getMovementCount(lua_State* tolua_S)
     cobj = (cocostudio::AnimationData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_AnimationData_getMovementCount'", nullptr);
         return 0;
@@ -4995,7 +4995,7 @@ int lua_ax_studio_ContourData_init(lua_State* tolua_S)
     cobj = (cocostudio::ContourData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ContourData_init'", nullptr);
         return 0;
@@ -5042,7 +5042,7 @@ int lua_ax_studio_ContourData_addVertex(lua_State* tolua_S)
     cobj = (cocostudio::ContourData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ContourData_addVertex'", nullptr);
         return 0;
@@ -5186,7 +5186,7 @@ int lua_ax_studio_TextureData_init(lua_State* tolua_S)
     cobj = (cocostudio::TextureData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_TextureData_init'", nullptr);
         return 0;
@@ -5233,7 +5233,7 @@ int lua_ax_studio_TextureData_addContourData(lua_State* tolua_S)
     cobj = (cocostudio::TextureData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_TextureData_addContourData'", nullptr);
         return 0;
@@ -5283,7 +5283,7 @@ int lua_ax_studio_TextureData_getContourData(lua_State* tolua_S)
     cobj = (cocostudio::TextureData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_TextureData_getContourData'", nullptr);
         return 0;
@@ -5428,7 +5428,7 @@ int lua_ax_studio_Tween_init(lua_State* tolua_S)
     cobj = (cocostudio::Tween*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Tween_init'", nullptr);
         return 0;
@@ -5478,7 +5478,7 @@ int lua_ax_studio_Tween_play(lua_State* tolua_S)
     cobj = (cocostudio::Tween*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Tween_play'", nullptr);
         return 0;
@@ -5540,7 +5540,7 @@ int lua_ax_studio_Tween_setAnimation(lua_State* tolua_S)
     cobj = (cocostudio::Tween*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Tween_setAnimation'", nullptr);
         return 0;
@@ -5590,7 +5590,7 @@ int lua_ax_studio_Tween_getAnimation(lua_State* tolua_S)
     cobj = (cocostudio::Tween*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Tween_getAnimation'", nullptr);
         return 0;
@@ -5637,7 +5637,7 @@ int lua_ax_studio_Tween_gotoAndPlay(lua_State* tolua_S)
     cobj = (cocostudio::Tween*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Tween_gotoAndPlay'", nullptr);
         return 0;
@@ -5687,7 +5687,7 @@ int lua_ax_studio_Tween_gotoAndPause(lua_State* tolua_S)
     cobj = (cocostudio::Tween*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Tween_gotoAndPause'", nullptr);
         return 0;
@@ -5837,7 +5837,7 @@ int lua_ax_studio_DisplayManager_init(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_init'", nullptr);
         return 0;
@@ -5950,7 +5950,7 @@ int lua_ax_studio_DisplayManager_removeDisplay(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_removeDisplay'", nullptr);
         return 0;
@@ -6000,7 +6000,7 @@ int lua_ax_studio_DisplayManager_getDecorativeDisplayList(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_getDecorativeDisplayList'", nullptr);
         return 0;
@@ -6047,7 +6047,7 @@ int lua_ax_studio_DisplayManager_changeDisplayWithIndex(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_changeDisplayWithIndex'", nullptr);
         return 0;
@@ -6100,7 +6100,7 @@ int lua_ax_studio_DisplayManager_changeDisplayWithName(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_changeDisplayWithName'", nullptr);
         return 0;
@@ -6153,7 +6153,7 @@ int lua_ax_studio_DisplayManager_getDisplayRenderNode(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_getDisplayRenderNode'", nullptr);
         return 0;
@@ -6200,7 +6200,7 @@ int lua_ax_studio_DisplayManager_getDisplayRenderNodeType(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_getDisplayRenderNodeType'", nullptr);
         return 0;
@@ -6247,7 +6247,7 @@ int lua_ax_studio_DisplayManager_getCurrentDisplayIndex(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_getCurrentDisplayIndex'", nullptr);
         return 0;
@@ -6294,7 +6294,7 @@ int lua_ax_studio_DisplayManager_setVisible(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_setVisible'", nullptr);
         return 0;
@@ -6344,7 +6344,7 @@ int lua_ax_studio_DisplayManager_isVisible(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_isVisible'", nullptr);
         return 0;
@@ -6391,7 +6391,7 @@ int lua_ax_studio_DisplayManager_getContentSize(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_getContentSize'", nullptr);
         return 0;
@@ -6438,7 +6438,7 @@ int lua_ax_studio_DisplayManager_getBoundingBox(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_getBoundingBox'", nullptr);
         return 0;
@@ -6485,7 +6485,7 @@ int lua_ax_studio_DisplayManager_getAnchorPoint(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_getAnchorPoint'", nullptr);
         return 0;
@@ -6532,7 +6532,7 @@ int lua_ax_studio_DisplayManager_getAnchorPointInPoints(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_getAnchorPointInPoints'", nullptr);
         return 0;
@@ -6638,7 +6638,7 @@ int lua_ax_studio_DisplayManager_setForceChangeDisplay(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_setForceChangeDisplay'", nullptr);
         return 0;
@@ -6688,7 +6688,7 @@ int lua_ax_studio_DisplayManager_isForceChangeDisplay(lua_State* tolua_S)
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_DisplayManager_isForceChangeDisplay'", nullptr);
         return 0;
@@ -6847,7 +6847,7 @@ int lua_ax_studio_Bone_init(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_init'", nullptr);
         return 0;
@@ -6960,7 +6960,7 @@ int lua_ax_studio_Bone_removeDisplay(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_removeDisplay'", nullptr);
         return 0;
@@ -7010,7 +7010,7 @@ int lua_ax_studio_Bone_changeDisplayWithIndex(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_changeDisplayWithIndex'", nullptr);
         return 0;
@@ -7063,7 +7063,7 @@ int lua_ax_studio_Bone_changeDisplayWithName(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_changeDisplayWithName'", nullptr);
         return 0;
@@ -7116,7 +7116,7 @@ int lua_ax_studio_Bone_addChildBone(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_addChildBone'", nullptr);
         return 0;
@@ -7166,7 +7166,7 @@ int lua_ax_studio_Bone_setParentBone(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_setParentBone'", nullptr);
         return 0;
@@ -7216,7 +7216,7 @@ int lua_ax_studio_Bone_getParentBone(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getParentBone'", nullptr);
         return 0;
@@ -7263,7 +7263,7 @@ int lua_ax_studio_Bone_removeFromParent(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_removeFromParent'", nullptr);
         return 0;
@@ -7313,7 +7313,7 @@ int lua_ax_studio_Bone_removeChildBone(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_removeChildBone'", nullptr);
         return 0;
@@ -7366,7 +7366,7 @@ int lua_ax_studio_Bone_updateColor(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_updateColor'", nullptr);
         return 0;
@@ -7413,7 +7413,7 @@ int lua_ax_studio_Bone_updateZOrder(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_updateZOrder'", nullptr);
         return 0;
@@ -7460,7 +7460,7 @@ int lua_ax_studio_Bone_getTween(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getTween'", nullptr);
         return 0;
@@ -7507,7 +7507,7 @@ int lua_ax_studio_Bone_setTransformDirty(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_setTransformDirty'", nullptr);
         return 0;
@@ -7557,7 +7557,7 @@ int lua_ax_studio_Bone_isTransformDirty(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_isTransformDirty'", nullptr);
         return 0;
@@ -7604,7 +7604,7 @@ int lua_ax_studio_Bone_getNodeToArmatureTransform(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getNodeToArmatureTransform'", nullptr);
         return 0;
@@ -7651,7 +7651,7 @@ int lua_ax_studio_Bone_getDisplayRenderNode(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getDisplayRenderNode'", nullptr);
         return 0;
@@ -7698,7 +7698,7 @@ int lua_ax_studio_Bone_getDisplayRenderNodeType(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getDisplayRenderNodeType'", nullptr);
         return 0;
@@ -7745,7 +7745,7 @@ int lua_ax_studio_Bone_getColliderDetector(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getColliderDetector'", nullptr);
         return 0;
@@ -7792,7 +7792,7 @@ int lua_ax_studio_Bone_setBoneData(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_setBoneData'", nullptr);
         return 0;
@@ -7842,7 +7842,7 @@ int lua_ax_studio_Bone_getBoneData(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getBoneData'", nullptr);
         return 0;
@@ -7889,7 +7889,7 @@ int lua_ax_studio_Bone_setArmature(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_setArmature'", nullptr);
         return 0;
@@ -7939,7 +7939,7 @@ int lua_ax_studio_Bone_getArmature(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getArmature'", nullptr);
         return 0;
@@ -7986,7 +7986,7 @@ int lua_ax_studio_Bone_setChildArmature(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_setChildArmature'", nullptr);
         return 0;
@@ -8036,7 +8036,7 @@ int lua_ax_studio_Bone_getChildArmature(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getChildArmature'", nullptr);
         return 0;
@@ -8083,7 +8083,7 @@ int lua_ax_studio_Bone_getDisplayManager(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getDisplayManager'", nullptr);
         return 0;
@@ -8130,7 +8130,7 @@ int lua_ax_studio_Bone_setIgnoreMovementBoneData(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_setIgnoreMovementBoneData'", nullptr);
         return 0;
@@ -8180,7 +8180,7 @@ int lua_ax_studio_Bone_isIgnoreMovementBoneData(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_isIgnoreMovementBoneData'", nullptr);
         return 0;
@@ -8227,7 +8227,7 @@ int lua_ax_studio_Bone_setBlendFunc(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_setBlendFunc'", nullptr);
         return 0;
@@ -8277,7 +8277,7 @@ int lua_ax_studio_Bone_getBlendFunc(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getBlendFunc'", nullptr);
         return 0;
@@ -8324,7 +8324,7 @@ int lua_ax_studio_Bone_setBlendDirty(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_setBlendDirty'", nullptr);
         return 0;
@@ -8374,7 +8374,7 @@ int lua_ax_studio_Bone_isBlendDirty(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_isBlendDirty'", nullptr);
         return 0;
@@ -8421,7 +8421,7 @@ int lua_ax_studio_Bone_getTweenData(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getTweenData'", nullptr);
         return 0;
@@ -8468,7 +8468,7 @@ int lua_ax_studio_Bone_getWorldInfo(lua_State* tolua_S)
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_getWorldInfo'", nullptr);
         return 0;
@@ -8706,7 +8706,7 @@ int lua_ax_studio_ArmatureAnimation_init(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_init'", nullptr);
         return 0;
@@ -8756,7 +8756,7 @@ int lua_ax_studio_ArmatureAnimation_setSpeedScale(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_setSpeedScale'", nullptr);
         return 0;
@@ -8806,7 +8806,7 @@ int lua_ax_studio_ArmatureAnimation_getSpeedScale(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_getSpeedScale'", nullptr);
         return 0;
@@ -8853,7 +8853,7 @@ int lua_ax_studio_ArmatureAnimation_play(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_play'", nullptr);
         return 0;
@@ -8940,7 +8940,7 @@ int lua_ax_studio_ArmatureAnimation_playWithIndex(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_playWithIndex'", nullptr);
         return 0;
@@ -9027,7 +9027,7 @@ int lua_ax_studio_ArmatureAnimation_playWithNames(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_playWithNames'", nullptr);
         return 0;
@@ -9114,7 +9114,7 @@ int lua_ax_studio_ArmatureAnimation_playWithIndexes(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_playWithIndexes'", nullptr);
         return 0;
@@ -9201,7 +9201,7 @@ int lua_ax_studio_ArmatureAnimation_gotoAndPlay(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_gotoAndPlay'", nullptr);
         return 0;
@@ -9251,7 +9251,7 @@ int lua_ax_studio_ArmatureAnimation_gotoAndPause(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_gotoAndPause'", nullptr);
         return 0;
@@ -9301,7 +9301,7 @@ int lua_ax_studio_ArmatureAnimation_getMovementCount(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_getMovementCount'", nullptr);
         return 0;
@@ -9348,7 +9348,7 @@ int lua_ax_studio_ArmatureAnimation_getCurrentMovementID(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_getCurrentMovementID'", nullptr);
         return 0;
@@ -9395,7 +9395,7 @@ int lua_ax_studio_ArmatureAnimation_setAnimationData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_setAnimationData'", nullptr);
         return 0;
@@ -9445,7 +9445,7 @@ int lua_ax_studio_ArmatureAnimation_getAnimationData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureAnimation_getAnimationData'", nullptr);
         return 0;
@@ -9599,7 +9599,7 @@ int lua_ax_studio_ArmatureDataManager_init(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_init'", nullptr);
         return 0;
@@ -9646,7 +9646,7 @@ int lua_ax_studio_ArmatureDataManager_addArmatureData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_addArmatureData'", nullptr);
         return 0;
@@ -9719,7 +9719,7 @@ int lua_ax_studio_ArmatureDataManager_getArmatureData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_getArmatureData'", nullptr);
         return 0;
@@ -9769,7 +9769,7 @@ int lua_ax_studio_ArmatureDataManager_removeArmatureData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_removeArmatureData'", nullptr);
         return 0;
@@ -9819,7 +9819,7 @@ int lua_ax_studio_ArmatureDataManager_addAnimationData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_addAnimationData'", nullptr);
         return 0;
@@ -9892,7 +9892,7 @@ int lua_ax_studio_ArmatureDataManager_getAnimationData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_getAnimationData'", nullptr);
         return 0;
@@ -9942,7 +9942,7 @@ int lua_ax_studio_ArmatureDataManager_removeAnimationData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_removeAnimationData'", nullptr);
         return 0;
@@ -9992,7 +9992,7 @@ int lua_ax_studio_ArmatureDataManager_addTextureData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_addTextureData'", nullptr);
         return 0;
@@ -10065,7 +10065,7 @@ int lua_ax_studio_ArmatureDataManager_getTextureData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_getTextureData'", nullptr);
         return 0;
@@ -10115,7 +10115,7 @@ int lua_ax_studio_ArmatureDataManager_removeTextureData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_removeTextureData'", nullptr);
         return 0;
@@ -10228,7 +10228,7 @@ int lua_ax_studio_ArmatureDataManager_addSpriteFrameFromFile(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_addSpriteFrameFromFile'", nullptr);
         return 0;
@@ -10301,7 +10301,7 @@ int lua_ax_studio_ArmatureDataManager_removeArmatureFileInfo(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_removeArmatureFileInfo'", nullptr);
         return 0;
@@ -10351,7 +10351,7 @@ int lua_ax_studio_ArmatureDataManager_isAutoLoadSpriteFile(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_isAutoLoadSpriteFile'", nullptr);
         return 0;
@@ -10398,7 +10398,7 @@ int lua_ax_studio_ArmatureDataManager_getArmatureDatas(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_getArmatureDatas'", nullptr);
         return 0;
@@ -10445,7 +10445,7 @@ int lua_ax_studio_ArmatureDataManager_getAnimationDatas(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_getAnimationDatas'", nullptr);
         return 0;
@@ -10492,7 +10492,7 @@ int lua_ax_studio_ArmatureDataManager_getTextureDatas(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_getTextureDatas'", nullptr);
         return 0;
@@ -10539,7 +10539,7 @@ int lua_ax_studio_ArmatureDataManager_addRelativeData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_addRelativeData'", nullptr);
         return 0;
@@ -10589,7 +10589,7 @@ int lua_ax_studio_ArmatureDataManager_getRelativeData(lua_State* tolua_S)
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ArmatureDataManager_getRelativeData'", nullptr);
         return 0;
@@ -10806,7 +10806,7 @@ int lua_ax_studio_Armature_addBone(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_addBone'", nullptr);
         return 0;
@@ -10859,7 +10859,7 @@ int lua_ax_studio_Armature_getBone(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_getBone'", nullptr);
         return 0;
@@ -10909,7 +10909,7 @@ int lua_ax_studio_Armature_changeBoneParent(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_changeBoneParent'", nullptr);
         return 0;
@@ -10962,7 +10962,7 @@ int lua_ax_studio_Armature_removeBone(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_removeBone'", nullptr);
         return 0;
@@ -11015,7 +11015,7 @@ int lua_ax_studio_Armature_getBoneDic(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_getBoneDic'", nullptr);
         return 0;
@@ -11062,7 +11062,7 @@ int lua_ax_studio_Armature_getBoneAtPoint(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_getBoneAtPoint'", nullptr);
         return 0;
@@ -11115,7 +11115,7 @@ int lua_ax_studio_Armature_setBlendFunc(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_setBlendFunc'", nullptr);
         return 0;
@@ -11165,7 +11165,7 @@ int lua_ax_studio_Armature_getBlendFunc(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_getBlendFunc'", nullptr);
         return 0;
@@ -11212,7 +11212,7 @@ int lua_ax_studio_Armature_updateOffsetPoint(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_updateOffsetPoint'", nullptr);
         return 0;
@@ -11259,7 +11259,7 @@ int lua_ax_studio_Armature_getOffsetPoints(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_getOffsetPoints'", nullptr);
         return 0;
@@ -11306,7 +11306,7 @@ int lua_ax_studio_Armature_setAnimation(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_setAnimation'", nullptr);
         return 0;
@@ -11356,7 +11356,7 @@ int lua_ax_studio_Armature_getAnimation(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_getAnimation'", nullptr);
         return 0;
@@ -11403,7 +11403,7 @@ int lua_ax_studio_Armature_getArmatureTransformDirty(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_getArmatureTransformDirty'", nullptr);
         return 0;
@@ -11450,7 +11450,7 @@ int lua_ax_studio_Armature_setArmatureData(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_setArmatureData'", nullptr);
         return 0;
@@ -11500,7 +11500,7 @@ int lua_ax_studio_Armature_getArmatureData(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_getArmatureData'", nullptr);
         return 0;
@@ -11547,7 +11547,7 @@ int lua_ax_studio_Armature_setParentBone(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_setParentBone'", nullptr);
         return 0;
@@ -11597,7 +11597,7 @@ int lua_ax_studio_Armature_getParentBone(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_getParentBone'", nullptr);
         return 0;
@@ -11644,7 +11644,7 @@ int lua_ax_studio_Armature_setVersion(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_setVersion'", nullptr);
         return 0;
@@ -11694,7 +11694,7 @@ int lua_ax_studio_Armature_getVersion(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_getVersion'", nullptr);
         return 0;
@@ -11741,7 +11741,7 @@ int lua_ax_studio_Armature_setBatchNode(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_setBatchNode'", nullptr);
         return 0;
@@ -11791,7 +11791,7 @@ int lua_ax_studio_Armature_getBatchNode(lua_State* tolua_S)
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Armature_getBatchNode'", nullptr);
         return 0;
@@ -11979,7 +11979,7 @@ int lua_ax_studio_Skin_updateArmatureTransform(lua_State* tolua_S)
     cobj = (cocostudio::Skin*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Skin_updateArmatureTransform'", nullptr);
         return 0;
@@ -12026,7 +12026,7 @@ int lua_ax_studio_Skin_getNodeToWorldTransformAR(lua_State* tolua_S)
     cobj = (cocostudio::Skin*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Skin_getNodeToWorldTransformAR'", nullptr);
         return 0;
@@ -12073,7 +12073,7 @@ int lua_ax_studio_Skin_setBone(lua_State* tolua_S)
     cobj = (cocostudio::Skin*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Skin_setBone'", nullptr);
         return 0;
@@ -12123,7 +12123,7 @@ int lua_ax_studio_Skin_getBone(lua_State* tolua_S)
     cobj = (cocostudio::Skin*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Skin_getBone'", nullptr);
         return 0;
@@ -12170,7 +12170,7 @@ int lua_ax_studio_Skin_getDisplayName(lua_State* tolua_S)
     cobj = (cocostudio::Skin*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Skin_getDisplayName'", nullptr);
         return 0;
@@ -12362,7 +12362,7 @@ int lua_ax_studio_ComAttribute_setInt(lua_State* tolua_S)
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAttribute_setInt'", nullptr);
         return 0;
@@ -12415,7 +12415,7 @@ int lua_ax_studio_ComAttribute_setFloat(lua_State* tolua_S)
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAttribute_setFloat'", nullptr);
         return 0;
@@ -12468,7 +12468,7 @@ int lua_ax_studio_ComAttribute_setBool(lua_State* tolua_S)
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAttribute_setBool'", nullptr);
         return 0;
@@ -12521,7 +12521,7 @@ int lua_ax_studio_ComAttribute_setString(lua_State* tolua_S)
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAttribute_setString'", nullptr);
         return 0;
@@ -12574,7 +12574,7 @@ int lua_ax_studio_ComAttribute_getInt(lua_State* tolua_S)
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAttribute_getInt'", nullptr);
         return 0;
@@ -12641,7 +12641,7 @@ int lua_ax_studio_ComAttribute_getFloat(lua_State* tolua_S)
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAttribute_getFloat'", nullptr);
         return 0;
@@ -12708,7 +12708,7 @@ int lua_ax_studio_ComAttribute_getBool(lua_State* tolua_S)
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAttribute_getBool'", nullptr);
         return 0;
@@ -12775,7 +12775,7 @@ int lua_ax_studio_ComAttribute_getString(lua_State* tolua_S)
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAttribute_getString'", nullptr);
         return 0;
@@ -12842,7 +12842,7 @@ int lua_ax_studio_ComAttribute_parse(lua_State* tolua_S)
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAttribute_parse'", nullptr);
         return 0;
@@ -12990,7 +12990,7 @@ int lua_ax_studio_ComAudio_end(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_end'", nullptr);
         return 0;
@@ -13037,7 +13037,7 @@ int lua_ax_studio_ComAudio_preloadBackgroundMusic(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_preloadBackgroundMusic'", nullptr);
         return 0;
@@ -13205,7 +13205,7 @@ int lua_ax_studio_ComAudio_pauseBackgroundMusic(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_pauseBackgroundMusic'", nullptr);
         return 0;
@@ -13252,7 +13252,7 @@ int lua_ax_studio_ComAudio_resumeBackgroundMusic(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_resumeBackgroundMusic'", nullptr);
         return 0;
@@ -13299,7 +13299,7 @@ int lua_ax_studio_ComAudio_rewindBackgroundMusic(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_rewindBackgroundMusic'", nullptr);
         return 0;
@@ -13346,7 +13346,7 @@ int lua_ax_studio_ComAudio_willPlayBackgroundMusic(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_willPlayBackgroundMusic'", nullptr);
         return 0;
@@ -13393,7 +13393,7 @@ int lua_ax_studio_ComAudio_isBackgroundMusicPlaying(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_isBackgroundMusicPlaying'", nullptr);
         return 0;
@@ -13440,7 +13440,7 @@ int lua_ax_studio_ComAudio_getBackgroundMusicVolume(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_getBackgroundMusicVolume'", nullptr);
         return 0;
@@ -13487,7 +13487,7 @@ int lua_ax_studio_ComAudio_setBackgroundMusicVolume(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_setBackgroundMusicVolume'", nullptr);
         return 0;
@@ -13537,7 +13537,7 @@ int lua_ax_studio_ComAudio_getEffectsVolume(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_getEffectsVolume'", nullptr);
         return 0;
@@ -13584,7 +13584,7 @@ int lua_ax_studio_ComAudio_setEffectsVolume(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_setEffectsVolume'", nullptr);
         return 0;
@@ -13701,7 +13701,7 @@ int lua_ax_studio_ComAudio_pauseEffect(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_pauseEffect'", nullptr);
         return 0;
@@ -13751,7 +13751,7 @@ int lua_ax_studio_ComAudio_pauseAllEffects(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_pauseAllEffects'", nullptr);
         return 0;
@@ -13798,7 +13798,7 @@ int lua_ax_studio_ComAudio_resumeEffect(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_resumeEffect'", nullptr);
         return 0;
@@ -13848,7 +13848,7 @@ int lua_ax_studio_ComAudio_resumeAllEffects(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_resumeAllEffects'", nullptr);
         return 0;
@@ -13895,7 +13895,7 @@ int lua_ax_studio_ComAudio_stopEffect(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_stopEffect'", nullptr);
         return 0;
@@ -13945,7 +13945,7 @@ int lua_ax_studio_ComAudio_stopAllEffects(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_stopAllEffects'", nullptr);
         return 0;
@@ -13992,7 +13992,7 @@ int lua_ax_studio_ComAudio_preloadEffect(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_preloadEffect'", nullptr);
         return 0;
@@ -14042,7 +14042,7 @@ int lua_ax_studio_ComAudio_unloadEffect(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_unloadEffect'", nullptr);
         return 0;
@@ -14092,7 +14092,7 @@ int lua_ax_studio_ComAudio_setFile(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_setFile'", nullptr);
         return 0;
@@ -14142,7 +14142,7 @@ int lua_ax_studio_ComAudio_getFile(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_getFile'", nullptr);
         return 0;
@@ -14189,7 +14189,7 @@ int lua_ax_studio_ComAudio_setLoop(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_setLoop'", nullptr);
         return 0;
@@ -14239,7 +14239,7 @@ int lua_ax_studio_ComAudio_isLoop(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_isLoop'", nullptr);
         return 0;
@@ -14286,7 +14286,7 @@ int lua_ax_studio_ComAudio_start(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_start'", nullptr);
         return 0;
@@ -14333,7 +14333,7 @@ int lua_ax_studio_ComAudio_stop(lua_State* tolua_S)
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComAudio_stop'", nullptr);
         return 0;
@@ -14624,7 +14624,7 @@ int lua_ax_studio_ComRender_getNode(lua_State* tolua_S)
     cobj = (cocostudio::ComRender*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComRender_getNode'", nullptr);
         return 0;
@@ -14671,7 +14671,7 @@ int lua_ax_studio_ComRender_setNode(lua_State* tolua_S)
     cobj = (cocostudio::ComRender*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComRender_setNode'", nullptr);
         return 0;
@@ -14826,7 +14826,7 @@ int lua_ax_studio_GUIReader_widgetFromJsonFile(lua_State* tolua_S)
     cobj = (cocostudio::GUIReader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_GUIReader_widgetFromJsonFile'", nullptr);
         return 0;
@@ -14876,7 +14876,7 @@ int lua_ax_studio_GUIReader_widgetFromBinaryFile(lua_State* tolua_S)
     cobj = (cocostudio::GUIReader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_GUIReader_widgetFromBinaryFile'", nullptr);
         return 0;
@@ -14926,7 +14926,7 @@ int lua_ax_studio_GUIReader_getVersionInteger(lua_State* tolua_S)
     cobj = (cocostudio::GUIReader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_GUIReader_getVersionInteger'", nullptr);
         return 0;
@@ -14976,7 +14976,7 @@ int lua_ax_studio_GUIReader_setFilePath(lua_State* tolua_S)
     cobj = (cocostudio::GUIReader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_GUIReader_setFilePath'", nullptr);
         return 0;
@@ -15026,7 +15026,7 @@ int lua_ax_studio_GUIReader_getFilePath(lua_State* tolua_S)
     cobj = (cocostudio::GUIReader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_GUIReader_getFilePath'", nullptr);
         return 0;
@@ -15167,7 +15167,7 @@ int lua_ax_studio_SceneReader_createNodeWithSceneFile(lua_State* tolua_S)
     cobj = (cocostudio::SceneReader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_SceneReader_createNodeWithSceneFile'", nullptr);
         return 0;
@@ -15234,7 +15234,7 @@ int lua_ax_studio_SceneReader_setTarget(lua_State* tolua_S)
     cobj = (cocostudio::SceneReader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_SceneReader_setTarget'", nullptr);
         return 0;
@@ -15288,7 +15288,7 @@ int lua_ax_studio_SceneReader_getNodeByTag(lua_State* tolua_S)
     cobj = (cocostudio::SceneReader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_SceneReader_getNodeByTag'", nullptr);
         return 0;
@@ -15338,7 +15338,7 @@ int lua_ax_studio_SceneReader_getAttachComponentType(lua_State* tolua_S)
     cobj = (cocostudio::SceneReader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_SceneReader_getAttachComponentType'", nullptr);
         return 0;
@@ -15513,7 +15513,7 @@ int lua_ax_studio_ActionTimelineCache_init(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineCache_init'", nullptr);
         return 0;
@@ -15560,7 +15560,7 @@ int lua_ax_studio_ActionTimelineCache_removeAction(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineCache_removeAction'", nullptr);
         return 0;
@@ -15610,7 +15610,7 @@ int lua_ax_studio_ActionTimelineCache_createActionFromJson(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineCache_createActionFromJson'", nullptr);
         return 0;
@@ -15660,7 +15660,7 @@ int lua_ax_studio_ActionTimelineCache_createActionFromContent(lua_State* tolua_S
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineCache_createActionFromContent'", nullptr);
         return 0;
@@ -15713,7 +15713,7 @@ int lua_ax_studio_ActionTimelineCache_loadAnimationActionWithFile(lua_State* tol
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineCache_loadAnimationActionWithFile'", nullptr);
         return 0;
@@ -15763,7 +15763,7 @@ int lua_ax_studio_ActionTimelineCache_loadAnimationActionWithContent(lua_State* 
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineCache_loadAnimationActionWithContent'", nullptr);
         return 0;
@@ -15816,7 +15816,7 @@ int lua_ax_studio_ActionTimelineCache_createActionWithFlatBuffersFile(lua_State*
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineCache_createActionWithFlatBuffersFile'", nullptr);
         return 0;
@@ -15866,7 +15866,7 @@ int lua_ax_studio_ActionTimelineCache_loadAnimationActionWithFlatBuffersFile(lua
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineCache_loadAnimationActionWithFlatBuffersFile'", nullptr);
         return 0;
@@ -15916,7 +15916,7 @@ int lua_ax_studio_ActionTimelineCache_createActionWithFlatBuffersForSimulator(lu
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineCache_createActionWithFlatBuffersForSimulator'", nullptr);
         return 0;
@@ -16066,7 +16066,7 @@ int lua_ax_studio_Frame_setFrameIndex(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_setFrameIndex'", nullptr);
         return 0;
@@ -16116,7 +16116,7 @@ int lua_ax_studio_Frame_getFrameIndex(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_getFrameIndex'", nullptr);
         return 0;
@@ -16163,7 +16163,7 @@ int lua_ax_studio_Frame_setTimeline(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_setTimeline'", nullptr);
         return 0;
@@ -16213,7 +16213,7 @@ int lua_ax_studio_Frame_getTimeline(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_getTimeline'", nullptr);
         return 0;
@@ -16260,7 +16260,7 @@ int lua_ax_studio_Frame_setNode(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_setNode'", nullptr);
         return 0;
@@ -16310,7 +16310,7 @@ int lua_ax_studio_Frame_getNode(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_getNode'", nullptr);
         return 0;
@@ -16357,7 +16357,7 @@ int lua_ax_studio_Frame_setTween(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_setTween'", nullptr);
         return 0;
@@ -16407,7 +16407,7 @@ int lua_ax_studio_Frame_isTween(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_isTween'", nullptr);
         return 0;
@@ -16454,7 +16454,7 @@ int lua_ax_studio_Frame_setTweenType(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_setTweenType'", nullptr);
         return 0;
@@ -16504,7 +16504,7 @@ int lua_ax_studio_Frame_getTweenType(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_getTweenType'", nullptr);
         return 0;
@@ -16551,7 +16551,7 @@ int lua_ax_studio_Frame_setEasingParams(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_setEasingParams'", nullptr);
         return 0;
@@ -16601,7 +16601,7 @@ int lua_ax_studio_Frame_getEasingParams(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_getEasingParams'", nullptr);
         return 0;
@@ -16648,7 +16648,7 @@ int lua_ax_studio_Frame_isEnterWhenPassed(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_isEnterWhenPassed'", nullptr);
         return 0;
@@ -16695,7 +16695,7 @@ int lua_ax_studio_Frame_apply(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_apply'", nullptr);
         return 0;
@@ -16745,7 +16745,7 @@ int lua_ax_studio_Frame_clone(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Frame_clone'", nullptr);
         return 0;
@@ -16826,7 +16826,7 @@ int lua_ax_studio_VisibleFrame_setVisible(lua_State* tolua_S)
     cobj = (cocostudio::timeline::VisibleFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_VisibleFrame_setVisible'", nullptr);
         return 0;
@@ -16876,7 +16876,7 @@ int lua_ax_studio_VisibleFrame_isVisible(lua_State* tolua_S)
     cobj = (cocostudio::timeline::VisibleFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_VisibleFrame_isVisible'", nullptr);
         return 0;
@@ -17017,7 +17017,7 @@ int lua_ax_studio_TextureFrame_setTextureName(lua_State* tolua_S)
     cobj = (cocostudio::timeline::TextureFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_TextureFrame_setTextureName'", nullptr);
         return 0;
@@ -17067,7 +17067,7 @@ int lua_ax_studio_TextureFrame_getTextureName(lua_State* tolua_S)
     cobj = (cocostudio::timeline::TextureFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_TextureFrame_getTextureName'", nullptr);
         return 0;
@@ -17208,7 +17208,7 @@ int lua_ax_studio_RotationFrame_setRotation(lua_State* tolua_S)
     cobj = (cocostudio::timeline::RotationFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_RotationFrame_setRotation'", nullptr);
         return 0;
@@ -17258,7 +17258,7 @@ int lua_ax_studio_RotationFrame_getRotation(lua_State* tolua_S)
     cobj = (cocostudio::timeline::RotationFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_RotationFrame_getRotation'", nullptr);
         return 0;
@@ -17399,7 +17399,7 @@ int lua_ax_studio_SkewFrame_setSkewX(lua_State* tolua_S)
     cobj = (cocostudio::timeline::SkewFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_SkewFrame_setSkewX'", nullptr);
         return 0;
@@ -17449,7 +17449,7 @@ int lua_ax_studio_SkewFrame_getSkewX(lua_State* tolua_S)
     cobj = (cocostudio::timeline::SkewFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_SkewFrame_getSkewX'", nullptr);
         return 0;
@@ -17496,7 +17496,7 @@ int lua_ax_studio_SkewFrame_setSkewY(lua_State* tolua_S)
     cobj = (cocostudio::timeline::SkewFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_SkewFrame_setSkewY'", nullptr);
         return 0;
@@ -17546,7 +17546,7 @@ int lua_ax_studio_SkewFrame_getSkewY(lua_State* tolua_S)
     cobj = (cocostudio::timeline::SkewFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_SkewFrame_getSkewY'", nullptr);
         return 0;
@@ -17781,7 +17781,7 @@ int lua_ax_studio_PositionFrame_setPosition(lua_State* tolua_S)
     cobj = (cocostudio::timeline::PositionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_PositionFrame_setPosition'", nullptr);
         return 0;
@@ -17831,7 +17831,7 @@ int lua_ax_studio_PositionFrame_getPosition(lua_State* tolua_S)
     cobj = (cocostudio::timeline::PositionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_PositionFrame_getPosition'", nullptr);
         return 0;
@@ -17878,7 +17878,7 @@ int lua_ax_studio_PositionFrame_setX(lua_State* tolua_S)
     cobj = (cocostudio::timeline::PositionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_PositionFrame_setX'", nullptr);
         return 0;
@@ -17928,7 +17928,7 @@ int lua_ax_studio_PositionFrame_setY(lua_State* tolua_S)
     cobj = (cocostudio::timeline::PositionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_PositionFrame_setY'", nullptr);
         return 0;
@@ -17978,7 +17978,7 @@ int lua_ax_studio_PositionFrame_getX(lua_State* tolua_S)
     cobj = (cocostudio::timeline::PositionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_PositionFrame_getX'", nullptr);
         return 0;
@@ -18025,7 +18025,7 @@ int lua_ax_studio_PositionFrame_getY(lua_State* tolua_S)
     cobj = (cocostudio::timeline::PositionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_PositionFrame_getY'", nullptr);
         return 0;
@@ -18170,7 +18170,7 @@ int lua_ax_studio_ScaleFrame_setScale(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ScaleFrame_setScale'", nullptr);
         return 0;
@@ -18220,7 +18220,7 @@ int lua_ax_studio_ScaleFrame_setScaleX(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ScaleFrame_setScaleX'", nullptr);
         return 0;
@@ -18270,7 +18270,7 @@ int lua_ax_studio_ScaleFrame_getScaleX(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ScaleFrame_getScaleX'", nullptr);
         return 0;
@@ -18317,7 +18317,7 @@ int lua_ax_studio_ScaleFrame_setScaleY(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ScaleFrame_setScaleY'", nullptr);
         return 0;
@@ -18367,7 +18367,7 @@ int lua_ax_studio_ScaleFrame_getScaleY(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ScaleFrame_getScaleY'", nullptr);
         return 0;
@@ -18511,7 +18511,7 @@ int lua_ax_studio_AnchorPointFrame_setAnchorPoint(lua_State* tolua_S)
     cobj = (cocostudio::timeline::AnchorPointFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_AnchorPointFrame_setAnchorPoint'", nullptr);
         return 0;
@@ -18561,7 +18561,7 @@ int lua_ax_studio_AnchorPointFrame_getAnchorPoint(lua_State* tolua_S)
     cobj = (cocostudio::timeline::AnchorPointFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_AnchorPointFrame_getAnchorPoint'", nullptr);
         return 0;
@@ -18702,7 +18702,7 @@ int lua_ax_studio_InnerActionFrame_setInnerActionType(lua_State* tolua_S)
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_InnerActionFrame_setInnerActionType'", nullptr);
         return 0;
@@ -18752,7 +18752,7 @@ int lua_ax_studio_InnerActionFrame_getInnerActionType(lua_State* tolua_S)
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_InnerActionFrame_getInnerActionType'", nullptr);
         return 0;
@@ -18799,7 +18799,7 @@ int lua_ax_studio_InnerActionFrame_setEnterWithName(lua_State* tolua_S)
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_InnerActionFrame_setEnterWithName'", nullptr);
         return 0;
@@ -18849,7 +18849,7 @@ int lua_ax_studio_InnerActionFrame_setStartFrameIndex(lua_State* tolua_S)
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_InnerActionFrame_setStartFrameIndex'", nullptr);
         return 0;
@@ -18899,7 +18899,7 @@ int lua_ax_studio_InnerActionFrame_getStartFrameIndex(lua_State* tolua_S)
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_InnerActionFrame_getStartFrameIndex'", nullptr);
         return 0;
@@ -18946,7 +18946,7 @@ int lua_ax_studio_InnerActionFrame_setEndFrameIndex(lua_State* tolua_S)
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_InnerActionFrame_setEndFrameIndex'", nullptr);
         return 0;
@@ -18996,7 +18996,7 @@ int lua_ax_studio_InnerActionFrame_getEndFrameIndex(lua_State* tolua_S)
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_InnerActionFrame_getEndFrameIndex'", nullptr);
         return 0;
@@ -19043,7 +19043,7 @@ int lua_ax_studio_InnerActionFrame_setAnimationName(lua_State* tolua_S)
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_InnerActionFrame_setAnimationName'", nullptr);
         return 0;
@@ -19093,7 +19093,7 @@ int lua_ax_studio_InnerActionFrame_setSingleFrameIndex(lua_State* tolua_S)
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_InnerActionFrame_setSingleFrameIndex'", nullptr);
         return 0;
@@ -19143,7 +19143,7 @@ int lua_ax_studio_InnerActionFrame_getSingleFrameIndex(lua_State* tolua_S)
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_InnerActionFrame_getSingleFrameIndex'", nullptr);
         return 0;
@@ -19292,7 +19292,7 @@ int lua_ax_studio_ColorFrame_setColor(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ColorFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ColorFrame_setColor'", nullptr);
         return 0;
@@ -19342,7 +19342,7 @@ int lua_ax_studio_ColorFrame_getColor(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ColorFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ColorFrame_getColor'", nullptr);
         return 0;
@@ -19483,7 +19483,7 @@ int lua_ax_studio_AlphaFrame_setAlpha(lua_State* tolua_S)
     cobj = (cocostudio::timeline::AlphaFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_AlphaFrame_setAlpha'", nullptr);
         return 0;
@@ -19533,7 +19533,7 @@ int lua_ax_studio_AlphaFrame_getAlpha(lua_State* tolua_S)
     cobj = (cocostudio::timeline::AlphaFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_AlphaFrame_getAlpha'", nullptr);
         return 0;
@@ -19674,7 +19674,7 @@ int lua_ax_studio_EventFrame_init(lua_State* tolua_S)
     cobj = (cocostudio::timeline::EventFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_EventFrame_init'", nullptr);
         return 0;
@@ -19721,7 +19721,7 @@ int lua_ax_studio_EventFrame_setEvent(lua_State* tolua_S)
     cobj = (cocostudio::timeline::EventFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_EventFrame_setEvent'", nullptr);
         return 0;
@@ -19771,7 +19771,7 @@ int lua_ax_studio_EventFrame_getEvent(lua_State* tolua_S)
     cobj = (cocostudio::timeline::EventFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_EventFrame_getEvent'", nullptr);
         return 0;
@@ -19913,7 +19913,7 @@ int lua_ax_studio_ZOrderFrame_setZOrder(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ZOrderFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ZOrderFrame_setZOrder'", nullptr);
         return 0;
@@ -19963,7 +19963,7 @@ int lua_ax_studio_ZOrderFrame_getZOrder(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ZOrderFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ZOrderFrame_getZOrder'", nullptr);
         return 0;
@@ -20104,7 +20104,7 @@ int lua_ax_studio_BlendFuncFrame_getBlendFunc(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BlendFuncFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BlendFuncFrame_getBlendFunc'", nullptr);
         return 0;
@@ -20151,7 +20151,7 @@ int lua_ax_studio_BlendFuncFrame_setBlendFunc(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BlendFuncFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BlendFuncFrame_setBlendFunc'", nullptr);
         return 0;
@@ -20295,7 +20295,7 @@ int lua_ax_studio_PlayableFrame_getPlayableAct(lua_State* tolua_S)
     cobj = (cocostudio::timeline::PlayableFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_PlayableFrame_getPlayableAct'", nullptr);
         return 0;
@@ -20342,7 +20342,7 @@ int lua_ax_studio_PlayableFrame_setPlayableAct(lua_State* tolua_S)
     cobj = (cocostudio::timeline::PlayableFrame*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_PlayableFrame_setPlayableAct'", nullptr);
         return 0;
@@ -20486,7 +20486,7 @@ int lua_ax_studio_Timeline_gotoFrame(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_gotoFrame'", nullptr);
         return 0;
@@ -20536,7 +20536,7 @@ int lua_ax_studio_Timeline_stepToFrame(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_stepToFrame'", nullptr);
         return 0;
@@ -20586,7 +20586,7 @@ int lua_ax_studio_Timeline_getFrames(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_getFrames'", nullptr);
         return 0;
@@ -20633,7 +20633,7 @@ int lua_ax_studio_Timeline_addFrame(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_addFrame'", nullptr);
         return 0;
@@ -20683,7 +20683,7 @@ int lua_ax_studio_Timeline_insertFrame(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_insertFrame'", nullptr);
         return 0;
@@ -20736,7 +20736,7 @@ int lua_ax_studio_Timeline_removeFrame(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_removeFrame'", nullptr);
         return 0;
@@ -20786,7 +20786,7 @@ int lua_ax_studio_Timeline_setActionTag(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_setActionTag'", nullptr);
         return 0;
@@ -20836,7 +20836,7 @@ int lua_ax_studio_Timeline_getActionTag(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_getActionTag'", nullptr);
         return 0;
@@ -20883,7 +20883,7 @@ int lua_ax_studio_Timeline_setNode(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_setNode'", nullptr);
         return 0;
@@ -20933,7 +20933,7 @@ int lua_ax_studio_Timeline_getNode(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_getNode'", nullptr);
         return 0;
@@ -20980,7 +20980,7 @@ int lua_ax_studio_Timeline_setActionTimeline(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_setActionTimeline'", nullptr);
         return 0;
@@ -21030,7 +21030,7 @@ int lua_ax_studio_Timeline_getActionTimeline(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_getActionTimeline'", nullptr);
         return 0;
@@ -21077,7 +21077,7 @@ int lua_ax_studio_Timeline_clone(lua_State* tolua_S)
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Timeline_clone'", nullptr);
         return 0;
@@ -21229,7 +21229,7 @@ int lua_ax_studio_ActionTimelineData_setActionTag(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimelineData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineData_setActionTag'", nullptr);
         return 0;
@@ -21279,7 +21279,7 @@ int lua_ax_studio_ActionTimelineData_getActionTag(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimelineData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineData_getActionTag'", nullptr);
         return 0;
@@ -21326,7 +21326,7 @@ int lua_ax_studio_ActionTimelineData_init(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimelineData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineData_init'", nullptr);
         return 0;
@@ -21473,7 +21473,7 @@ int lua_ax_studio_ActionTimeline_play(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_play'", nullptr);
         return 0;
@@ -21526,7 +21526,7 @@ int lua_ax_studio_ActionTimeline_init(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_init'", nullptr);
         return 0;
@@ -21676,7 +21676,7 @@ int lua_ax_studio_ActionTimeline_gotoFrameAndPause(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_gotoFrameAndPause'", nullptr);
         return 0;
@@ -21726,7 +21726,7 @@ int lua_ax_studio_ActionTimeline_pause(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_pause'", nullptr);
         return 0;
@@ -21773,7 +21773,7 @@ int lua_ax_studio_ActionTimeline_resume(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_resume'", nullptr);
         return 0;
@@ -21820,7 +21820,7 @@ int lua_ax_studio_ActionTimeline_isPlaying(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_isPlaying'", nullptr);
         return 0;
@@ -21867,7 +21867,7 @@ int lua_ax_studio_ActionTimeline_setTimeSpeed(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_setTimeSpeed'", nullptr);
         return 0;
@@ -21917,7 +21917,7 @@ int lua_ax_studio_ActionTimeline_getTimeSpeed(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_getTimeSpeed'", nullptr);
         return 0;
@@ -21964,7 +21964,7 @@ int lua_ax_studio_ActionTimeline_setDuration(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_setDuration'", nullptr);
         return 0;
@@ -22014,7 +22014,7 @@ int lua_ax_studio_ActionTimeline_getDuration(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_getDuration'", nullptr);
         return 0;
@@ -22061,7 +22061,7 @@ int lua_ax_studio_ActionTimeline_getStartFrame(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_getStartFrame'", nullptr);
         return 0;
@@ -22108,7 +22108,7 @@ int lua_ax_studio_ActionTimeline_getEndFrame(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_getEndFrame'", nullptr);
         return 0;
@@ -22155,7 +22155,7 @@ int lua_ax_studio_ActionTimeline_setCurrentFrame(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_setCurrentFrame'", nullptr);
         return 0;
@@ -22205,7 +22205,7 @@ int lua_ax_studio_ActionTimeline_getCurrentFrame(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_getCurrentFrame'", nullptr);
         return 0;
@@ -22252,7 +22252,7 @@ int lua_ax_studio_ActionTimeline_addTimeline(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_addTimeline'", nullptr);
         return 0;
@@ -22302,7 +22302,7 @@ int lua_ax_studio_ActionTimeline_removeTimeline(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_removeTimeline'", nullptr);
         return 0;
@@ -22352,7 +22352,7 @@ int lua_ax_studio_ActionTimeline_getTimelines(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_getTimelines'", nullptr);
         return 0;
@@ -22399,7 +22399,7 @@ int lua_ax_studio_ActionTimeline_addAnimationInfo(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_addAnimationInfo'", nullptr);
         return 0;
@@ -22449,7 +22449,7 @@ int lua_ax_studio_ActionTimeline_removeAnimationInfo(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_removeAnimationInfo'", nullptr);
         return 0;
@@ -22499,7 +22499,7 @@ int lua_ax_studio_ActionTimeline_IsAnimationInfoExists(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_IsAnimationInfoExists'", nullptr);
         return 0;
@@ -22549,7 +22549,7 @@ int lua_ax_studio_ActionTimeline_getAnimationInfo(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_getAnimationInfo'", nullptr);
         return 0;
@@ -22599,7 +22599,7 @@ int lua_ax_studio_ActionTimeline_setAnimationEndCallFunc(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_setAnimationEndCallFunc'", nullptr);
         return 0;
@@ -22656,7 +22656,7 @@ int lua_ax_studio_ActionTimeline_clearFrameEventCallFunc(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_clearFrameEventCallFunc'", nullptr);
         return 0;
@@ -22703,7 +22703,7 @@ int lua_ax_studio_ActionTimeline_setLastFrameCallFunc(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_setLastFrameCallFunc'", nullptr);
         return 0;
@@ -22757,7 +22757,7 @@ int lua_ax_studio_ActionTimeline_clearLastFrameCallFunc(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_clearLastFrameCallFunc'", nullptr);
         return 0;
@@ -22804,7 +22804,7 @@ int lua_ax_studio_ActionTimeline_addFrameEndCallFunc(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_addFrameEndCallFunc'", nullptr);
         return 0;
@@ -22864,7 +22864,7 @@ int lua_ax_studio_ActionTimeline_removeFrameEndCallFunc(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_removeFrameEndCallFunc'", nullptr);
         return 0;
@@ -22917,7 +22917,7 @@ int lua_ax_studio_ActionTimeline_removeFrameEndCallFuncs(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_removeFrameEndCallFuncs'", nullptr);
         return 0;
@@ -22967,7 +22967,7 @@ int lua_ax_studio_ActionTimeline_clearFrameEndCallFuncs(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_clearFrameEndCallFuncs'", nullptr);
         return 0;
@@ -23014,7 +23014,7 @@ int lua_ax_studio_ActionTimeline_start(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimeline_start'", nullptr);
         return 0;
@@ -23184,7 +23184,7 @@ int lua_ax_studio_ActionTimelineNode_init(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimelineNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineNode_init'", nullptr);
         return 0;
@@ -23237,7 +23237,7 @@ int lua_ax_studio_ActionTimelineNode_setRoot(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimelineNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineNode_setRoot'", nullptr);
         return 0;
@@ -23287,7 +23287,7 @@ int lua_ax_studio_ActionTimelineNode_getRoot(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimelineNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineNode_getRoot'", nullptr);
         return 0;
@@ -23334,7 +23334,7 @@ int lua_ax_studio_ActionTimelineNode_setActionTimeline(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimelineNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineNode_setActionTimeline'", nullptr);
         return 0;
@@ -23384,7 +23384,7 @@ int lua_ax_studio_ActionTimelineNode_getActionTimeline(lua_State* tolua_S)
     cobj = (cocostudio::timeline::ActionTimelineNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ActionTimelineNode_getActionTimeline'", nullptr);
         return 0;
@@ -23579,7 +23579,7 @@ int lua_ax_studio_BoneNode_getRootSkeletonNode(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_getRootSkeletonNode'", nullptr);
         return 0;
@@ -23626,7 +23626,7 @@ int lua_ax_studio_BoneNode_getAllSubBones(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_getAllSubBones'", nullptr);
         return 0;
@@ -23803,7 +23803,7 @@ int lua_ax_studio_BoneNode_getVisibleSkins(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_getVisibleSkins'", nullptr);
         return 0;
@@ -23897,7 +23897,7 @@ int lua_ax_studio_BoneNode_getAllSubSkins(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_getAllSubSkins'", nullptr);
         return 0;
@@ -23944,7 +23944,7 @@ int lua_ax_studio_BoneNode_setBlendFunc(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_setBlendFunc'", nullptr);
         return 0;
@@ -23994,7 +23994,7 @@ int lua_ax_studio_BoneNode_getBlendFunc(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_getBlendFunc'", nullptr);
         return 0;
@@ -24041,7 +24041,7 @@ int lua_ax_studio_BoneNode_setDebugDrawEnabled(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_setDebugDrawEnabled'", nullptr);
         return 0;
@@ -24091,7 +24091,7 @@ int lua_ax_studio_BoneNode_isDebugDrawEnabled(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_isDebugDrawEnabled'", nullptr);
         return 0;
@@ -24138,7 +24138,7 @@ int lua_ax_studio_BoneNode_setDebugDrawLength(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_setDebugDrawLength'", nullptr);
         return 0;
@@ -24188,7 +24188,7 @@ int lua_ax_studio_BoneNode_getDebugDrawLength(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_getDebugDrawLength'", nullptr);
         return 0;
@@ -24235,7 +24235,7 @@ int lua_ax_studio_BoneNode_setDebugDrawWidth(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_setDebugDrawWidth'", nullptr);
         return 0;
@@ -24285,7 +24285,7 @@ int lua_ax_studio_BoneNode_getDebugDrawWidth(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_getDebugDrawWidth'", nullptr);
         return 0;
@@ -24332,7 +24332,7 @@ int lua_ax_studio_BoneNode_setDebugDrawColor(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_setDebugDrawColor'", nullptr);
         return 0;
@@ -24382,7 +24382,7 @@ int lua_ax_studio_BoneNode_getDebugDrawColor(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_getDebugDrawColor'", nullptr);
         return 0;
@@ -24429,7 +24429,7 @@ int lua_ax_studio_BoneNode_getVisibleSkinsRect(lua_State* tolua_S)
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_BoneNode_getVisibleSkinsRect'", nullptr);
         return 0;
@@ -24598,7 +24598,7 @@ int lua_ax_studio_SkeletonNode_getBoneNode(lua_State* tolua_S)
     cobj = (cocostudio::timeline::SkeletonNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_SkeletonNode_getBoneNode'", nullptr);
         return 0;
@@ -24648,7 +24648,7 @@ int lua_ax_studio_SkeletonNode_getAllSubBonesMap(lua_State* tolua_S)
     cobj = (cocostudio::timeline::SkeletonNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_SkeletonNode_getAllSubBonesMap'", nullptr);
         return 0;
@@ -24750,7 +24750,7 @@ int lua_ax_studio_SkeletonNode_addSkinGroup(lua_State* tolua_S)
     cobj = (cocostudio::timeline::SkeletonNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_SkeletonNode_addSkinGroup'", nullptr);
         return 0;
@@ -24899,7 +24899,7 @@ int lua_ax_studio_ComExtensionData_setCustomProperty(lua_State* tolua_S)
     cobj = (cocostudio::ComExtensionData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComExtensionData_setCustomProperty'", nullptr);
         return 0;
@@ -24949,7 +24949,7 @@ int lua_ax_studio_ComExtensionData_getCustomProperty(lua_State* tolua_S)
     cobj = (cocostudio::ComExtensionData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComExtensionData_getCustomProperty'", nullptr);
         return 0;
@@ -24996,7 +24996,7 @@ int lua_ax_studio_ComExtensionData_setActionTag(lua_State* tolua_S)
     cobj = (cocostudio::ComExtensionData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComExtensionData_setActionTag'", nullptr);
         return 0;
@@ -25046,7 +25046,7 @@ int lua_ax_studio_ComExtensionData_getActionTag(lua_State* tolua_S)
     cobj = (cocostudio::ComExtensionData*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_ComExtensionData_getActionTag'", nullptr);
         return 0;

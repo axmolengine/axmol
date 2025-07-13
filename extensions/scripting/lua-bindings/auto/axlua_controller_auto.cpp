@@ -22,7 +22,7 @@ int lua_ax_controller_Controller_getDeviceName(lua_State* tolua_S)
     cobj = (ax::Controller*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_controller_Controller_getDeviceName'", nullptr);
         return 0;
@@ -69,7 +69,7 @@ int lua_ax_controller_Controller_getDeviceId(lua_State* tolua_S)
     cobj = (ax::Controller*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_controller_Controller_getDeviceId'", nullptr);
         return 0;
@@ -116,7 +116,7 @@ int lua_ax_controller_Controller_isConnected(lua_State* tolua_S)
     cobj = (ax::Controller*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_controller_Controller_isConnected'", nullptr);
         return 0;
@@ -163,7 +163,7 @@ int lua_ax_controller_Controller_receiveExternalKeyEvent(lua_State* tolua_S)
     cobj = (ax::Controller*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_controller_Controller_receiveExternalKeyEvent'", nullptr);
         return 0;
@@ -216,7 +216,7 @@ int lua_ax_controller_Controller_setTag(lua_State* tolua_S)
     cobj = (ax::Controller*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_controller_Controller_setTag'", nullptr);
         return 0;
@@ -266,7 +266,7 @@ int lua_ax_controller_Controller_getTag(lua_State* tolua_S)
     cobj = (ax::Controller*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_controller_Controller_getTag'", nullptr);
         return 0;
@@ -482,7 +482,7 @@ int lua_ax_controller_EventController_getControllerEventType(lua_State* tolua_S)
     cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_controller_EventController_getControllerEventType'", nullptr);
         return 0;
@@ -529,7 +529,7 @@ int lua_ax_controller_EventController_getController(lua_State* tolua_S)
     cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_controller_EventController_getController'", nullptr);
         return 0;
@@ -576,7 +576,7 @@ int lua_ax_controller_EventController_getKeyCode(lua_State* tolua_S)
     cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_controller_EventController_getKeyCode'", nullptr);
         return 0;
@@ -623,7 +623,7 @@ int lua_ax_controller_EventController_setKeyCode(lua_State* tolua_S)
     cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_controller_EventController_setKeyCode'", nullptr);
         return 0;
@@ -673,7 +673,7 @@ int lua_ax_controller_EventController_setConnectStatus(lua_State* tolua_S)
     cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_controller_EventController_setConnectStatus'", nullptr);
         return 0;
@@ -723,7 +723,7 @@ int lua_ax_controller_EventController_isConnected(lua_State* tolua_S)
     cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_controller_EventController_isConnected'", nullptr);
         return 0;

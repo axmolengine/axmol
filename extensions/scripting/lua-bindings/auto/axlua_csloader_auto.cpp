@@ -21,7 +21,7 @@ int lua_ax_csloader_CSLoader_init(lua_State* tolua_S)
     cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_init'", nullptr);
         return 0;
@@ -68,7 +68,7 @@ int lua_ax_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
     cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_createNodeFromJson'", nullptr);
         return 0;
@@ -118,7 +118,7 @@ int lua_ax_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
     cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_loadNodeWithFile'", nullptr);
         return 0;
@@ -168,7 +168,7 @@ int lua_ax_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
     cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_loadNodeWithContent'", nullptr);
         return 0;
@@ -218,7 +218,7 @@ int lua_ax_csloader_CSLoader_setRecordJsonPath(lua_State* tolua_S)
     cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_setRecordJsonPath'", nullptr);
         return 0;
@@ -268,7 +268,7 @@ int lua_ax_csloader_CSLoader_isRecordJsonPath(lua_State* tolua_S)
     cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_isRecordJsonPath'", nullptr);
         return 0;
@@ -315,7 +315,7 @@ int lua_ax_csloader_CSLoader_setJsonPath(lua_State* tolua_S)
     cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_setJsonPath'", nullptr);
         return 0;
@@ -365,7 +365,7 @@ int lua_ax_csloader_CSLoader_getJsonPath(lua_State* tolua_S)
     cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_getJsonPath'", nullptr);
         return 0;
@@ -412,7 +412,7 @@ int lua_ax_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolua_S)
     cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_createNodeWithFlatBuffersFile'", nullptr);
         return 0;
@@ -462,7 +462,7 @@ int lua_ax_csloader_CSLoader_bindCallback(lua_State* tolua_S)
     cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_bindCallback'", nullptr);
         return 0;
@@ -521,7 +521,7 @@ int lua_ax_csloader_CSLoader_createNodeWithFlatBuffersForSimulator(lua_State* to
     cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_createNodeWithFlatBuffersForSimulator'", nullptr);
         return 0;
