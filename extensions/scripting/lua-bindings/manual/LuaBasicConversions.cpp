@@ -2255,7 +2255,7 @@ int vec4_to_luaval(lua_State* L, const ax::Vec4& vec4)
     return 1;
 }
 
-#if defined(AX_ENABLE_PHYSICS)  && 0
+#if defined(AX_ENABLE_PHYSICS)
 void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm)
 {
     if (nullptr == L)
