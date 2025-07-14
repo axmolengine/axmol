@@ -226,7 +226,7 @@ struct DownloaderTest : public TestCase
             float percent = float(task.progressInfo.totalBytesReceived * 100) / task.progressInfo.totalBytesExpected;
             bar->setPercent(percent);
             char buf[128];
-            sprintf(buf, "%.1f%%[total %d KB]", percent, int(task.progressInfo.totalBytesExpected / 1024));
+            fmt::format_to(buf, "{:.1f}%[total {} KB]", percent, int(task.progressInfo.totalBytesExpected / 1024));
 
             auto status = (Label*)view->getChildByTag(TAG_STATUS);
             status->setString(buf);
@@ -344,8 +344,8 @@ struct DownloaderMultiTask : public TestCase
         // add 64 download task at same time.
         for (int i = 0; i < 64; i++)
         {
-            sprintf(name, "%d_%s", i, sNameList[0]);
-            sprintf(path, "%sCppTests/DownloaderTest/%s", FileUtils::getInstance()->getWritablePath().c_str(), name);
+            fmt::format_to(name, "{}_{}", i, sNameList[0]);
+            fmt::format_to(path, "{}CppTests/DownloaderTest/{}", FileUtils::getInstance()->getWritablePath().c_str(), name);
             AXLOGI("downloader task create: {}", name);
             this->downloader->createDownloadFileTask(sURLList[0], path, name);
         }

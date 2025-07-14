@@ -27,7 +27,7 @@
 #import "testsAppDelegate.h"
 
 #import "platform/ios/EAGLView-ios.h"
-#import "cocos2d.h"
+#import "axmol.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
 
@@ -36,7 +36,7 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
-// cocos2d application instance
+// axmol application instance
 static AppDelegate s_sharedApplication;
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
@@ -44,54 +44,15 @@ static AppDelegate s_sharedApplication;
 
     ax::Application* app = ax::Application::getInstance();
     app->initGLContextAttrs();
-    ax::GLViewImpl::convertAttrs();
 
     // Override point for customization after application launch.
 
-    // Add the view controller's view to the window and display.
-    window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-
-    // Init the EAGLView
-    EAGLView* eaglView = [EAGLView viewWithFrame:[window bounds]
-                                         pixelFormat:(NSString*)ax::GLViewImpl::_pixelFormat
-                                         depthFormat:ax::GLViewImpl::_depthFormat
-                                  preserveBackbuffer:NO
-                                          sharegroup:nil
-                                       multiSampling:ax::GLViewImpl::_multisamplingCount > 0 ? YES : NO
-                                     numberOfSamples:ax::GLViewImpl::_multisamplingCount];
-
-#if !defined(AX_TARGET_OS_TVOS)
-    [eaglView setMultipleTouchEnabled:YES];
-#endif
-
-    // Use RootViewController manage EAGLView
+    auto renderView = ax::GLViewImpl::createWithFullScreen("axmol2");
     viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
-#if !defined(AX_TARGET_OS_TVOS)
-    viewController.extendedLayoutIncludesOpaqueBars = YES;
-#endif
-    viewController.view = eaglView;
-
-    // Set RootViewController to window
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 6.0)
-    {
-        // warning: addSubView doesn't work on iOS6
-        [window addSubview:viewController.view];
-    }
-    else
-    {
-        // use this method on ios6
-        [window setRootViewController:viewController];
-    }
-
-    [window makeKeyAndVisible];
-
-#if !defined(AX_TARGET_OS_TVOS)
-    [viewController prefersStatusBarHidden];
-#endif
+    renderView->showWindow(viewController);
 
     // IMPORTANT: Setting the GLView should be done after creating the RootViewController
-    ax::GLView* glView = ax::GLViewImpl::createWithEAGLView(eaglView);
-    ax::Director::getInstance()->setGLView(glView);
+    ax::Director::getInstance()->setGLView(renderView);
 
     app->run();
 

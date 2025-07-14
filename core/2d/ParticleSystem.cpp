@@ -41,7 +41,7 @@ THE SOFTWARE.
 //
 // IMPORTANT: Particle Designer is supported by cocos2d, but
 // 'Radius Mode' in Particle Designer uses a fixed emit rate of 30 hz. Since that can't be guaranteed in cocos2d,
-//  cocos2d uses a another approach, but the results are almost identical.
+//  axmol uses a another approach, but the results are almost identical.
 //
 
 #include "2d/ParticleSystem.h"
@@ -75,9 +75,9 @@ namespace ax
 // Radius mode support, from 71 squared
 //        http://particledesigner.71squared.com/
 //
-// IMPORTANT: Particle Designer is supported by cocos2d, but
-// 'Radius Mode' in Particle Designer uses a fixed emit rate of 30 hz. Since that can't be guaranteed in cocos2d,
-//  cocos2d uses a another approach, but the results are almost identical.
+// IMPORTANT: Particle Designer is supported by axmol, but
+// 'Radius Mode' in Particle Designer uses a fixed emit rate of 30 hz. Since that can't be guaranteed in axmol,
+//  axmol uses a another approach, but the results are almost identical.
 //
 
 inline void normalize_point(float x, float y, particle_point* out)

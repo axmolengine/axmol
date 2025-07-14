@@ -37,8 +37,8 @@ namespace ax
 class AX_DLL GLViewImpl : public GLView
 {
 public:
-    /** creates a GLViewImpl with a objective-c CCEAGLViewImpl instance */
-    static GLViewImpl* createWithEAGLView(void* eaGLView);
+    /** DEPRECATED creates a GLViewImpl with a objective-c CCEAGLViewImpl instance */
+    AX_DEPRECATED(2.8) static GLViewImpl* createWithEAGLView(void* eaGLView);
 
     /** creates a GLViewImpl with a title name in fullscreen mode */
     static GLViewImpl* create(std::string_view viewName);
@@ -52,10 +52,16 @@ public:
     /** creates a GLViewImpl with a name in fullscreen mode */
     static GLViewImpl* createWithFullScreen(std::string_view viewName);
 
-    static void convertAttrs();
-    static void* _pixelFormat;
-    static int _depthFormat;
+    AX_DEPRECATED(2.8) static void convertAttrs() { choosePixelFormats(); }
+    static void choosePixelFormats();
+    static PixelFormat _pixelFormat;
+    static PixelFormat _depthFormat;
     static int _multisamplingCount;
+    
+    /** @since axmol-2.8.0, sets multi touch enabled */
+    void setMultipleTouchEnabled(bool enabled);
+    
+    void showWindow(void* viewController);
 
     /** sets the content scale factor */
     virtual bool setContentScaleFactor(float contentScaleFactor) override;
@@ -68,6 +74,9 @@ public:
 
     /** returns the objective-c EAGLView instance */
     virtual void* getEAGLView() const override { return _eaglView; }
+    
+    /** returns the objective-c UIWindow instance */
+    void* getUIWindow() const { return _uiWindow; }
 
     // overrides
     virtual bool isOpenGLReady() override;
@@ -89,6 +98,7 @@ protected:
 
     // the objective-c EAGLView instance
     void* _eaglView;
+    void* _uiWindow;
 };
 
 }

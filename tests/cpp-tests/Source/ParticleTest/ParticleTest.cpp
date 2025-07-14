@@ -3011,7 +3011,7 @@ void PremultipliedAlphaTest::onEnter()
     // Particle Designer "normal" blend func causes black halo on premul textures (ignores multiplication)
     // this->emitter.blendFunc = (BlendFunc){ BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA };
 
-    // Cocos2d "normal" blend func for premul causes alpha to be ignored (oversaturates colors)
+    // axmol "normal" blend func for premul causes alpha to be ignored (oversaturates colors)
     _emitter->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
 
     AXASSERT(_emitter->isOpacityModifyRGB(), "Particle texture does not have premultiplied alpha, test is useless");

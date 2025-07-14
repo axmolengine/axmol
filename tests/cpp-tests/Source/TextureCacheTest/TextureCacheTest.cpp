@@ -46,7 +46,7 @@ void TextureCacheTest::loadingCallBack(ax::Texture2D* texture)
 {
     ++_numberOfLoadedSprites;
     char tmp[10];
-    sprintf(tmp, "%%%d", (int)(((float)_numberOfLoadedSprites / _numberOfSprites) * 100));
+    fmt::format_to(tmp, "%{}", (int)(((float)_numberOfLoadedSprites / _numberOfSprites) * 100));
     _labelPercent->setString(tmp);
 
     if (_numberOfLoadedSprites == _numberOfSprites)

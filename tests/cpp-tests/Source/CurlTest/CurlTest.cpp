@@ -113,7 +113,7 @@ void CurlTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
         }
         else
         {
-            sprintf(buffer, "code: %i", res);
+            fmt::format_to(buffer, "code: {}", (int)res);
             _label->setString(buffer);
         }
     }

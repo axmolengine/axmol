@@ -173,7 +173,7 @@ void ParticleSystemQuad::initTexCoordsWithRect(const Rect& pointRect)
     float top    = bottom + rect.size.height / high;
 #endif  // ! AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
 
-    // Important. Texture in cocos2d are inverted, so the Y component should be inverted
+    // Important. Texture in axmol are inverted, so the Y component should be inverted
     std::swap(top, bottom);
 
     V3F_C4B_T2F_Quad* quads = nullptr;

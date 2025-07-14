@@ -3609,8 +3609,8 @@ void DrawNodeSpLinesOpenClosedTest::update(float dt)
         array->addControlPoint(Vec2(p.x, p.y));
     }
 
-    drawNode->drawCardinalSpline(array, 0.0f, points.size() * 20, Color4F::GREEN, 1.0f, true);
-    drawNode->drawCardinalSpline(array, 0.0f, points.size() * 20, Color4F::RED, 1.0f, false);
+    drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color4F::GREEN, 1.0f, true);
+    drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color4F::RED, 1.0f, false);
 
 }
 

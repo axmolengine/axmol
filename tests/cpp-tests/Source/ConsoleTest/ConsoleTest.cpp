@@ -108,9 +108,7 @@ ConsoleUploadFile::ConsoleUploadFile()
 {
     std::srand((unsigned)time(nullptr));
     int id = rand() % 100000;
-    char buf[32];
-    sprintf(buf, "%d", id);
-    _targetFileName = std::string("grossini") + buf + ".png";
+    _targetFileName = fmt::format("grossini{}.png", id);
 
     std::thread t = std::thread(&ConsoleUploadFile::uploadFile, this);
     t.detach();

@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -458,10 +459,10 @@ public:
       */
     void resumeTargets(const std::set<void*>& targetsToResume);
 
-    /** Calls a function on the cocos2d thread. Useful when you need to call a cocos2d function from another thread.
+    /** Calls a function on the axmol thread. Useful when you need to call a axmol function from another thread.
      This function is thread safe.
-     @param function The function to be run in cocos2d thread.
-     @since v3.0
+     @param function The function to be run in axmol thread.
+     @since axmol
      */
     void runOnAxmolThread(std::function<void()> action);
 #ifndef AX_CORE_PROFILE

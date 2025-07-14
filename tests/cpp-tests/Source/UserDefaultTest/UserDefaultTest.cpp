@@ -174,30 +174,30 @@ void UserDefaultTest::printValue()
     char strTemp[256] = "";
     // print value
     std::string_view ret = UserDefault::getInstance()->getStringForKey("string");
-    sprintf(strTemp, "string is %s", ret.data());
+    fmt::format_to(strTemp, "string is {}", ret);
     this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
 
     double d = UserDefault::getInstance()->getDoubleForKey("double");
-    sprintf(strTemp, "double is %f", d);
+    fmt::format_to(strTemp, "double is %f", d);
     this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
 
     int i = UserDefault::getInstance()->getIntegerForKey("integer");
-    sprintf(strTemp, "integer is %d", i);
+    fmt::format_to(strTemp, "integer is %d", i);
     this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
 
     float f = UserDefault::getInstance()->getFloatForKey("float");
-    sprintf(strTemp, "float is %f", f);
+    fmt::format_to(strTemp, "float is %f", f);
     this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
 
     bool b = UserDefault::getInstance()->getBoolForKey("bool");
     if (b)
     {
-        sprintf(strTemp, "bool is true");
+        fmt::format_to(strTemp, "{}", "bool is true");
         this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
     }
     else
     {
-        sprintf(strTemp, "bool is false");
+        fmt::format_to(strTemp, "{}", "bool is false");
         this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
     }
 }

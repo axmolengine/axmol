@@ -302,7 +302,7 @@ void FastTMXLayer::setupTiles()
 
     // CFByteOrder o = CFByteOrderGetCurrent();
 
-    // Parse cocos2d properties
+    // Parse axmol properties
     this->parseInternalProperties();
 
     auto& screenSize = _director->getWinSize();

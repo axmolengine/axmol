@@ -649,7 +649,7 @@ void ActionAnimate::onEnter()
     for (int i = 1; i < 15; i++)
     {
         char szName[100] = {0};
-        sprintf(szName, "Images/grossini_dance_%02d.png", i);
+        fmt::format_to(szName, "Images/grossini_dance_{:02d}.png", i);
         animation->addSpriteFrameWithFile(szName);
     }
     // should last 2.8 seconds. And there are 14 frames.

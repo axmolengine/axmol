@@ -865,9 +865,8 @@ void UIScrollViewStopScrollingTest::update(float dt)
         if (_remainingTime > 0.0f)
         {
             // Update timer caption.
-            char strRemainingTime[100];
-            sprintf(strRemainingTime, "Stop scrolling in %.1f sec.", _remainingTime);
-            _displayValueLabel->setString(std::string(strRemainingTime));
+            std::string strRemainingTime = fmt::format("Stop scrolling in {:.1f} sec.", _remainingTime);
+            _displayValueLabel->setString(strRemainingTime);
         }
         else
         {

@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 /**
  * @file
- * cocos2d (cc) configuration file.
+ * axmol (cc) configuration file.
  */
 
 /** @def AX_ENABLE_STACKABLE_ACTIONS
@@ -47,7 +47,7 @@ THE SOFTWARE.
 #endif
 
 /** @def AX_ENABLE_GL_STATE_CACHE
- * If enabled, cocos2d will maintain an OpenGL state cache internally to avoid unnecessary switches.
+ * If enabled, axmol will maintain an OpenGL state cache internally to avoid unnecessary switches.
  * In order to use them, you have to use the following functions, instead of the GL ones:
  *  - ccGLUseProgram() instead of glUseProgram().
  *  - GL::deleteProgram() instead of glDeleteProgram().
@@ -156,7 +156,7 @@ THE SOFTWARE.
 #endif
 
 /** @def AX_TEXTURE_ATLAS_USE_VAO
- * By default, TextureAtlas (used by many cocos2d classes) will use VAO (Vertex Array Objects).
+ * By default, TextureAtlas (used by many axmol classes) will use VAO (Vertex Array Objects).
  * Apple recommends its usage but they might consume a lot of memory, specially if you use many of them.
  * So for certain cases, where you might need hundreds of VAO objects, it might be a good idea to disable it.
  * To disable it set it to 0. Enabled by default.

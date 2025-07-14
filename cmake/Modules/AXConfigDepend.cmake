@@ -58,7 +58,6 @@ macro(ax_depend)
       list(APPEND PREBUILT_SPECIFIC_LIBS GLFW3)
 
       find_library(COCOA_LIBRARY Cocoa)
-      find_library(OPENGL_LIBRARY OpenGL)
       find_library(APPLICATIONSERVICES_LIBRARY ApplicationServices)
       find_library(IOKIT_LIBRARY IOKit)
       find_library(APPKIT_LIBRARY AppKit)
@@ -67,7 +66,6 @@ macro(ax_depend)
       find_library(SYSTEMCONFIGURATION_LIBRARY SystemConfiguration)
       list(APPEND PLATFORM_SPECIFIC_LIBS
         ${COCOA_LIBRARY}
-        ${OPENGL_LIBRARY}
         ${APPLICATIONSERVICES_LIBRARY}
         ${IOKIT_LIBRARY}
         ${_AX_APPLE_LIBS}
@@ -76,10 +74,13 @@ macro(ax_depend)
         ${COREAUDIO_LIBRARY}
         ${SYSTEMCONFIGURATION_LIBRARY}
       )
+      if(AX_USE_COMPAT_GL)
+        find_library(OPENGL_LIBRARY OpenGL)
+        list(APPEND PLATFORM_SPECIFIC_LIBS ${OPENGL_LIBRARY})
+      endif()
     elseif(IOS)
       # Locate system libraries on iOS
       find_library(UIKIT_LIBRARY UIKit)
-      find_library(OPENGLES_LIBRARY OpenGLES)
       find_library(AVKIT_LIBRARY AVKit)
       find_library(CORE_TEXT_LIBRARY CoreText)
       find_library(SECURITY_LIBRARY Security)
@@ -92,7 +93,6 @@ macro(ax_depend)
 
       list(APPEND PLATFORM_SPECIFIC_LIBS
         ${UIKIT_LIBRARY}
-        ${OPENGLES_LIBRARY}
         ${AVKIT_LIBRARY}
         ${CORE_TEXT_LIBRARY}
         ${SECURITY_LIBRARY}
@@ -100,6 +100,11 @@ macro(ax_depend)
         ${AV_FOUNDATION_LIBRARY}
         ${_AX_APPLE_LIBS}
       )
+
+      if(AX_USE_COMPAT_GL)
+        find_library(OPENGLES_LIBRARY OpenGLES)
+        list(APPEND PLATFORM_SPECIFIC_LIBS ${OPENGLES_LIBRARY})
+      endif()
 
       if(NOT TVOS)
         list(APPEND PLATFORM_SPECIFIC_LIBS

@@ -522,7 +522,7 @@ function(ax_setup_app_config app_name)
   if(XCODE AND AX_ENABLE_AUDIO AND AX_USE_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
     # Embedded soft_oal embedded framework
     # XCODE_LINK_BUILD_PHASE_MODE BUILT_ONLY
-    # ???CMake BUG: XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY works for first app
+    # ???Xcode limition: XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY works for first app
     message(STATUS "Embedding framework soft_oal to ${app_name}...")
     set_target_properties(${app_name} PROPERTIES
       XCODE_LINK_BUILD_PHASE_MODE KNOWN_LOCATION

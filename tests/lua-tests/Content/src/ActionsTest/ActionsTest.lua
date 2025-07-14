@@ -184,7 +184,7 @@ local function ActionRotationalSkewVSStandardSkew()
     box:setIgnoreAnchorPointForPosition(false);
     box:setPosition(cc.p(s.width/2, s.height - 100 - box:getContentSize().height/2));
     layer:addChild(box);
-    local label = cc.Label:createWithTTF("Standard cocos2d Skew", s_markerFeltFontPath, 16);
+    local label = cc.Label:createWithTTF("Standard axmol Skew", s_markerFeltFontPath, 16);
     label:setAnchorPoint(cc.p(0.5, 0.5))
     label:setPosition(cc.p(s.width/2, s.height - 100 + label:getContentSize().height));
     layer:addChild(label);

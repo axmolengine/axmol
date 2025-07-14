@@ -1756,7 +1756,7 @@ void TextureAsync::loadImages(float dt)
         for (int j = 0; j < 8; j++)
         {
             char szSpriteName[100] = {0};
-            sprintf(szSpriteName, "Images/sprites_test/sprite-%d-%d.png", i, j);
+            fmt::format_to(szSpriteName, "Images/sprites_test/sprite-{}-{}.png", i, j);
             textureCache->addImageAsync(szSpriteName, AX_CALLBACK_1(TextureAsync::imageLoaded, this));
         }
     }

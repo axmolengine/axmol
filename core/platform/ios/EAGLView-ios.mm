@@ -116,12 +116,12 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     return [[[self alloc] initWithFrame:frame] autorelease];
 }
 
-+ (id)viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format
++ (id)viewWithFrame:(CGRect)frame pixelFormat:(int)format
 {
     return [[[self alloc] initWithFrame:frame pixelFormat:format] autorelease];
 }
 
-+ (id)viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth
++ (id)viewWithFrame:(CGRect)frame pixelFormat:(int)format depthFormat:(int)depth
 {
     return [[[self alloc] initWithFrame:frame
                             pixelFormat:format
@@ -133,10 +133,10 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 }
 
 + (id)viewWithFrame:(CGRect)frame
-           pixelFormat:(NSString*)format
-           depthFormat:(GLuint)depth
+           pixelFormat:(int)format
+           depthFormat:(int)depth
     preserveBackbuffer:(BOOL)retained
-            sharegroup:(EAGLSharegroup*)sharegroup
+            sharegroup:(void*)sharegroup
          multiSampling:(BOOL)multisampling
        numberOfSamples:(unsigned int)samples
 {
@@ -152,7 +152,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 - (id)initWithFrame:(CGRect)frame
 {
     return [self initWithFrame:frame
-                   pixelFormat:kEAGLColorFormatRGB565
+                   pixelFormat:(int)ax::PixelFormat::RGB565
                    depthFormat:0
             preserveBackbuffer:NO
                     sharegroup:nil
@@ -160,7 +160,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
                numberOfSamples:0];
 }
 
-- (id)initWithFrame:(CGRect)frame pixelFormat:(NSString*)format
+- (id)initWithFrame:(CGRect)frame pixelFormat:(int)format
 {
     return [self initWithFrame:frame
                    pixelFormat:format
@@ -172,10 +172,11 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 }
 
 - (id)initWithFrame:(CGRect)frame
-           pixelFormat:(NSString*)format
-           depthFormat:(GLuint)depth
+           pixelFormat:(int)format
+           depthFormat:(int)depth
     preserveBackbuffer:(BOOL)retained
-            sharegroup:(EAGLSharegroup*)sharegroup
+            sharegroup:(void*)sharegroup
+
          multiSampling:(BOOL)sampling
        numberOfSamples:(unsigned int)nSamples
 {
@@ -191,6 +192,9 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         }
 
 #if defined(AX_USE_METAL)
+        AX_UNUSED_PARAM(format);
+        AX_UNUSED_PARAM(depth);
+        AX_UNUSED_PARAM(sharegroup);
         id<MTLDevice> device = MTLCreateSystemDefaultDevice();
         if (!device)
         {
@@ -229,8 +233,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #else
         CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
 
-        pixelformat_      = kEAGLColorFormatRGB565;
-        depthFormat_      = 0;  // GL_DEPTH_COMPONENT24_OES;
+        pixelformat_      = (int)ax::PixelFormat::RGB565;
+        depthFormat_      = (int)ax::PixelFormat::D24S8;
         multiSampling_    = NO;
         requestedSamples_ = 0;
         size_             = [eaglLayer bounds].size;
@@ -259,19 +263,23 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 }
 
 #if !defined(AX_USE_METAL)
-- (BOOL)setupSurfaceWithSharegroup:(EAGLSharegroup*)sharegroup
+- (BOOL)setupSurfaceWithSharegroup:(void*)sharegroup
 {
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
+    
+    NSString* platformPF = pixelformat_ == (int)ax::PixelFormat::RGB565 ? kEAGLColorFormatRGB565 : kEAGLColorFormatRGBA8;
 
     eaglLayer.opaque = YES;
     eaglLayer.drawableProperties =
         [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:preserveBackbuffer_],
-                                                   kEAGLDrawablePropertyRetainedBacking, pixelformat_,
+                                                   kEAGLDrawablePropertyRetainedBacking, platformPF,
                                                    kEAGLDrawablePropertyColorFormat, nil];
 
-    renderer_ = [[ES3Renderer alloc] initWithDepthFormat:depthFormat_
-                                           withPixelFormat:[self convertPixelFormat:pixelformat_]
-                                            withSharegroup:sharegroup
+    auto depth = depthFormat_ == (int)ax::PixelFormat::D24S8 ? GL_DEPTH24_STENCIL8 : 0;
+    auto pixel = pixelformat_ == (int)ax::PixelFormat::RGB565 ? GL_RGB565 : GL_RGBA8_OES;
+    renderer_ = [[ES3Renderer alloc] initWithDepthFormat:depth
+                                           withPixelFormat:pixel
+                                            withSharegroup:(EAGLSharegroup*)sharegroup
                                          withMultiSampling:multiSampling_
                                        withNumberOfSamples:requestedSamples_];
 
@@ -398,17 +406,9 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         glBindFramebuffer(GL_FRAMEBUFFER, [renderer_ msaaFrameBuffer]);
 }
 
-- (unsigned int)convertPixelFormat:(NSString*)pixelFormat
+- (unsigned int)convertPixelFormat:(int)pixelFormat
 {
-    // define the pixel format
-    GLenum pFormat;
-
-    if ([pixelFormat isEqualToString:@"EAGLColorFormat565"])
-        pFormat = GL_RGB565;
-    else
-        pFormat = GL_RGBA8_OES;
-
-    return pFormat;
+    return pixelFormat == (int)ax::PixelFormat::RGB565 ? GL_RGB565 : GL_RGBA8_OES;
 }
 #endif
 

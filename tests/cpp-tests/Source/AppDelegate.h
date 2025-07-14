@@ -31,7 +31,7 @@
 
 class TestController;
 /**
-@brief    The cocos2d Application.
+@brief    The axmol Application.
 
 Private inheritance here hides part of interface from Director.
 */

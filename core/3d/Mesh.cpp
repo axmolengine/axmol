@@ -152,7 +152,7 @@ void Mesh::shrinkToFitInstances()
 {
     if (_instanceCount > _instances.size())
     {
-        _instanceCount                = _instances.size();
+        _instanceCount                = static_cast<int>(_instances.size());
         _instanceTransformBufferDirty = true;
     }
 }
@@ -538,7 +538,7 @@ void Mesh::draw(Renderer* renderer,
         if (_instancing && _instances.size() > 0)
         {
             command.setDrawType(CustomCommand::DrawType::ELEMENT_INSTANCE);
-            command.setInstanceBuffer(_instanceTransformBuffer, _instances.size());
+            command.setInstanceBuffer(_instanceTransformBuffer, static_cast<int>(_instances.size()));
         }
         else if (_instancing)
             return;

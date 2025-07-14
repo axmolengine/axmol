@@ -1,8 +1,8 @@
 /****************************************************************************
- Copyright(c) 2016 cocos2d - x.org
+ Copyright(c) 2016 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- http ://www.cocos2d-x.org
+ https://axmol.dev
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files(the "Software"), to deal
@@ -102,9 +102,8 @@ bool UITabControlTest::init()
 
         tab->setTabChangedEventListener([displayText](int index, TabControl::EventType evtType) {
             displayText->retain();
-            char display[20];
-            sprintf(display, "tab %d selected", index);
-            displayText->setString(display);
+            std::string text = fmt::format("tab {} selected", index);
+            displayText->setString(text);
             displayText->release();
         });
 

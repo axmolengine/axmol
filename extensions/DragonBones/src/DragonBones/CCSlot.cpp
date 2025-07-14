@@ -1,4 +1,4 @@
-﻿#include "CCSlot.h"
+#include "CCSlot.h"
 #include "CCTextureAtlasData.h"
 #include "CCArmatureDisplay.h"
 
@@ -293,7 +293,7 @@ void CCSlot::_updateMesh()
         const auto intArray    = data->intArray;
         const auto floatArray  = data->floatArray;
         const auto vertexCount = (std::size_t)intArray[verticesData->offset + (unsigned)BinaryOffset::MeshVertexCount];
-        int vertexOffset       = (std::size_t)intArray[verticesData->offset + (unsigned)BinaryOffset::MeshFloatOffset];
+        int vertexOffset       = intArray[verticesData->offset + (unsigned)BinaryOffset::MeshFloatOffset];
 
         if (vertexOffset < 0)
         {

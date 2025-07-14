@@ -525,7 +525,7 @@ void DrawNode::drawCardinalSpline(const PointArray* configIn,
     // Dont draw the first and the last point
     if (closed && config->count() > 2)
     {
-        auto seg = segments / (config->count() - 2);
+        auto seg = static_cast<int>(segments / (config->count() - 2));
         for (int i = seg; i < segments - seg; i++)
             _vertices[i - seg] = _vertices[i];
         segments -= (seg + seg);

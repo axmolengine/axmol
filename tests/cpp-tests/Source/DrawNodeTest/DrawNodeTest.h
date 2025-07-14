@@ -99,7 +99,7 @@ public:
     void setDrawOrder(Object* sender);
     void setTransform(Object* sender);
 
-    void update(float dt);
+    void update(float dt) override;
 
     virtual std::string title() const override;
     void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
@@ -173,8 +173,8 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
-    void onEnter();
+    void update(float dt) override;
+    void onEnter() override;
 
 private:
     ax::Vec2* verticesObj1[10];
@@ -196,8 +196,8 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
-    void onEnter();
+    void update(float dt) override;
+    void onEnter() override;
 
 private:
     ax::Vec2* verticesObj1[10];
@@ -220,8 +220,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void update(float dt);
-    void onEnter();
+    void update(float dt) override;
+    void onEnter() override;
 
 private:
     ax::Label* _thicknessLabel;
@@ -238,8 +238,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void update(float dt);
-    void onEnter();
+    void update(float dt) override;
+    void onEnter() override;
 
 private:
     // ax::Label* _lineWidthLabel;
@@ -285,8 +285,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void update(float dt);
-    void onEnter();
+    void update(float dt) override;
+    void onEnter() override;
 
 };
 
@@ -300,8 +300,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void update(float dt);
-    void onEnter();
+    void update(float dt) override;
+    void onEnter() override;
 
     void drawAll();
 
@@ -347,7 +347,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void update(float dt);
+    void update(float dt) override;
     void drawAllv2(ax::DrawNode* drawNode, bool drawOrder);
     void drawAllv1(ax::DrawNode* drawNode);
 
@@ -368,8 +368,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void update(float dt);
-    void onEnter();
+    void update(float dt) override;
+    void onEnter() override;
 
     void changeThreshold(Object* pSender, ax::ui::Slider::EventType type);
     void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);
@@ -392,8 +392,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void update(float dt);
-    void onEnter();
+    void update(float dt) override;
+    void onEnter() override;
 
     void changeThreshold(Object* pSender, ax::ui::Slider::EventType type);
     void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);
@@ -415,7 +415,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void update(float dt);
+    void update(float dt) override;
 };
 
 class DrawNodeSpLinesOpenClosedTest : public DrawNodeBaseTest
@@ -430,7 +430,7 @@ public:
 
     void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     void addNewControlPoint(ax::Vec2 p);
-    void update(float dt);
+    void update(float dt) override;
 
 private:
     ax::DrawNode* drawNodeCP = nullptr;
@@ -449,7 +449,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void update(float dt);
+    void update(float dt) override;
     void renderLine(float x1, float x2, float y, ax::Color4F color, float angle);
 
 private:

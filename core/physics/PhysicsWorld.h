@@ -66,7 +66,7 @@ typedef struct PhysicsRayCastInfo
     // FIXME: correct thing to do is use `cpFloat` instead of float.
     // but in order to do so, we should include "chipmunk_types.h"
     // in Chipmunk v7.0, chipmunk_types includes all the mac types that
-    // conflicts with cocos2d Vec2, Point,... etc types. And all the CocosStudio
+    // conflicts with axmol Vec2, Point,... etc types. And all the CocosStudio
     // lib will need to use the `ax::` namespace prefix. And it is easier to do this
     // than change all the cocosstudio library (and also users code)
     float fraction;

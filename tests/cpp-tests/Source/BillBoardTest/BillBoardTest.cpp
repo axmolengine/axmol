@@ -257,7 +257,7 @@ void BillBoardTest::addNewAniBillBoardWithCoords(Vec3 p)
         for (int i = 1; i < 15; i++)
         {
             char szName1[100] = {0};
-            sprintf(szName1, "Images/grossini_dance_%02d.png", i);
+            fmt::format_to(szName1, "Images/grossini_dance_{:02d}.png", i);
             animation->addSpriteFrameWithFile(szName1);
         }
         // should last 2.8 seconds. And there are 14 frames.

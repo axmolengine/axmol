@@ -895,8 +895,8 @@ void CameraCullingDemo::addMeshCallback(Object* sender)
     _layer3D->setCameraMask((unsigned short)CameraFlag::USER1);
 
     // update sprite number
-    char szText[16];
-    sprintf(szText, "%d sprits", static_cast<int32_t>(_layer3D->getChildrenCount()));
+    char szText[64];
+    fmt::format_to(szText, "{} sprits", static_cast<int32_t>(_layer3D->getChildrenCount()));
     _labelMeshCount->setString(szText);
 }
 
@@ -924,8 +924,8 @@ void CameraCullingDemo::delMeshCallback(Object* sender)
     _layer3D->setCameraMask((unsigned short)CameraFlag::USER1);
 
     // update sprite number
-    char szText[16];
-    sprintf(szText, "%d sprits", static_cast<int32_t>(_layer3D->getChildrenCount()));
+    char szText[64];
+    fmt::format_to(szText, "{} sprits", static_cast<int32_t>(_layer3D->getChildrenCount()));
     _labelMeshCount->setString(szText);
 }
 

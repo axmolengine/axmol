@@ -190,7 +190,7 @@ public:
      * code.
      *
      *  @code
-     *  NS_AX_BEGIN // ResizableBufferAdapter needed in cocos2d namespace.
+     *  NS_AX_BEGIN // ResizableBufferAdapter needed in axmol namespace.
      *  template<>
      *  class ResizableBufferAdapter<AlreadyExistsBuffer> : public ResizableBuffer {
      *  public:

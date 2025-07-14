@@ -25,7 +25,7 @@
 
 //
 // Accelerometer + Chipmunk physics + multi touches example
-// a cocos2d example
+// a axmol example
 // https://axmol.dev/
 //
 

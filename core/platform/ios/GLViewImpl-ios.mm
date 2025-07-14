@@ -2,6 +2,7 @@
  Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -34,8 +35,8 @@
 namespace ax
 {
 
-void* GLViewImpl::_pixelFormat      = kEAGLColorFormatRGB565;
-int GLViewImpl::_depthFormat        = GL_DEPTH_COMPONENT16;
+PixelFormat GLViewImpl::_pixelFormat        = PixelFormat::RGB565;
+PixelFormat GLViewImpl::_depthFormat        = PixelFormat::D24S8;
 int GLViewImpl::_multisamplingCount = 0;
 
 GLViewImpl* GLViewImpl::createWithEAGLView(void* eaglView)
@@ -89,17 +90,17 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
     return nullptr;
 }
 
-void GLViewImpl::convertAttrs()
+void GLViewImpl::choosePixelFormats()
 {
     if (_glContextAttrs.redBits == 8 && _glContextAttrs.greenBits == 8 && _glContextAttrs.blueBits == 8 &&
         _glContextAttrs.alphaBits == 8)
     {
-        _pixelFormat = kEAGLColorFormatRGBA8;
+        _pixelFormat = PixelFormat::RGBA8;
     }
     else if (_glContextAttrs.redBits == 5 && _glContextAttrs.greenBits == 6 && _glContextAttrs.blueBits == 5 &&
              _glContextAttrs.alphaBits == 0)
     {
-        _pixelFormat = kEAGLColorFormatRGB565;
+        _pixelFormat = PixelFormat::RGB565;
     }
     else
     {
@@ -108,11 +109,11 @@ void GLViewImpl::convertAttrs()
 
     if (_glContextAttrs.depthBits == 24 && _glContextAttrs.stencilBits == 8)
     {
-        _depthFormat = GL_DEPTH24_STENCIL8_OES;
+        _depthFormat = PixelFormat::D24S8;
     }
     else if (_glContextAttrs.depthBits == 0 && _glContextAttrs.stencilBits == 0)
     {
-        _depthFormat = 0;
+        _depthFormat = PixelFormat::NONE;
     }
     else
     {
@@ -142,17 +143,24 @@ bool GLViewImpl::initWithEAGLView(void* eaglView)
     return true;
 }
 
-bool GLViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool /*resizable*/)
+bool GLViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& rect, float frameZoomFactor, bool /*resizable*/)
 {
     CGRect r = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
-    convertAttrs();
+    choosePixelFormats();
+    
+    // UI Window
+    auto window = [[UIWindow alloc] initWithFrame:r];
+    
+    _uiWindow = window;
+    
+    // EAGLView, PlatformRenderView
     EAGLView* eaglView = [EAGLView viewWithFrame:r
-                                         pixelFormat:(NSString*)_pixelFormat
-                                         depthFormat:_depthFormat
+                                         pixelFormat:(int)_pixelFormat
+                                         depthFormat:(int)_depthFormat
                                   preserveBackbuffer:NO
                                           sharegroup:nil
-                                       multiSampling:NO
-                                     numberOfSamples:0];
+                                     multiSampling:_multisamplingCount > 0 ? YES : NO
+                                     numberOfSamples:_multisamplingCount];
 
     // Not available on tvOS
 #if !defined(AX_TARGET_OS_TVOS)
@@ -178,6 +186,50 @@ bool GLViewImpl::initWithFullScreen(std::string_view viewName)
     r.size.height = rect.size.height;
 
     return initWithRect(viewName, r, 1);
+}
+
+void GLViewImpl::setMultipleTouchEnabled(bool enabled)
+{
+#if !defined(AX_TARGET_OS_TVOS)
+    [(EAGLView*)_eaglView setMultipleTouchEnabled:enabled];
+#else
+    AX_UNUSED_PARAM(enabled);
+#endif
+}
+
+void GLViewImpl::showWindow(void* viewController)
+{
+    auto window = (UIWindow*)_uiWindow;
+    auto controller = (UIViewController*)viewController;
+
+#if !defined(AX_TARGET_OS_TVOS)
+    controller.extendedLayoutIncludesOpaqueBars = YES;
+#endif
+    controller.view = (EAGLView*)_eaglView;
+    
+    // Set RootViewController to window
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 6.0)
+    {
+        // warning: addSubView doesn't work on iOS6
+        [window addSubview:controller.view];
+    }
+    else
+    {
+        // use this method on ios6
+        [window setRootViewController:controller];
+    }
+
+    [window makeKeyAndVisible];
+
+#if !defined(AX_TARGET_OS_TVOS)
+    [controller prefersStatusBarHidden];
+#endif
+    
+    // Launching the app with the arguments -NSAllowsDefaultLineBreakStrategy NO to force back to the old behavior.
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 13.0f)
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSAllowsDefaultLineBreakStrategy"];
+    }
 }
 
 bool GLViewImpl::isOpenGLReady()

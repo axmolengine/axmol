@@ -124,7 +124,7 @@ bool LabelAtlas::initWithString(std::string_view theString, std::string_view fnt
 
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(pathStr);
 
-    AXASSERT(dict["version"].asInt() == 1, "Unsupported version. Upgrade cocos2d version");
+    AXASSERT(dict["version"].asInt() == 1, "Unsupported version. Upgrade axmol version");
 
     std::string textureFilename = relPathStr + dict["textureFilename"].asString();
 

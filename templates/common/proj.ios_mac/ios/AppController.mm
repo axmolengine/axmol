@@ -32,8 +32,6 @@
 
 @implementation AppController
 
-@synthesize window;
-
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -47,48 +45,21 @@ static AppDelegate s_sharedApplication;
 
     // Initialize the GLView attributes
     app->initGLContextAttrs();
-    ax::GLViewImpl::convertAttrs();
 
     // Override point for customization after application launch.
 
-    // Add the view controller's view to the window and display.
-    window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    auto renderView = ax::GLViewImpl::createWithFullScreen("axmol2");
+    _viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
 
-    // Use RootViewController to manage EAGLView
-    _viewController                       = [[RootViewController alloc] init];
-#if !defined(AX_TARGET_OS_TVOS)
-    _viewController.wantsFullScreenLayout = YES;
-#endif
+    // uncumment if you want disable multiple touches
+    // renderView->setMultipleTouchEnabled(false);
 
-    // Set RootViewController to window
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 6.0)
-    {
-        // warning: addSubView doesn't work on iOS6
-        [window addSubview:_viewController.view];
-    }
-    else
-    {
-        // use this method on ios6
-        [window setRootViewController:_viewController];
-    }
-
-    [window makeKeyAndVisible];
-
-#if !defined(AX_TARGET_OS_TVOS)
-    [[UIApplication sharedApplication] setStatusBarHidden:true];
-#endif
-
-    // Launching the app with the arguments -NSAllowsDefaultLineBreakStrategy NO to force back to the old behavior.
-    if ([[UIDevice currentDevice].systemVersion floatValue] >= 13.0f)
-    {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSAllowsDefaultLineBreakStrategy"];
-    }
+    renderView->showWindow(_viewController);
 
     // IMPORTANT: Setting the GLView should be done after creating the RootViewController
-    ax::GLView* glView = ax::GLViewImpl::createWithEAGLView((__bridge void*)_viewController.view);
-    ax::Director::getInstance()->setGLView(glView);
+    ax::Director::getInstance()->setGLView(renderView);
 
-    // run the cocos2d-x game scene
+    // run the axmol game scene
     app->run();
 
     return YES;
@@ -154,11 +125,9 @@ static AppDelegate s_sharedApplication;
      */
 }
 
-#if __has_feature(objc_arc)
-#else
+#if !__has_feature(objc_arc)
 - (void)dealloc
 {
-    [window release];
     [_viewController release];
     [super dealloc];
 }
