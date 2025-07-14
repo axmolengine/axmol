@@ -5,35 +5,36 @@ set(target_name ${lib_name})
 project(${lib_name})
 
 set(${target_name}_src
-    png.c
-    pngerror.c
-    pngget.c
-    pngmem.c
-    pngpread.c
-    pngread.c
-    pngrio.c
-    pngrtran.c
-    pngrutil.c
-    pngset.c
-    pngtrans.c
-    pngwio.c
-    pngwrite.c
-    pngwtran.c
-    pngwutil.c
+  png.c
+  pngerror.c
+  pngget.c
+  pngmem.c
+  pngpread.c
+  pngread.c
+  pngrio.c
+  pngrtran.c
+  pngrutil.c
+  pngset.c
+  pngtrans.c
+  pngwio.c
+  pngwrite.c
+  pngwtran.c
+  pngwutil.c
 )
 
 set(_PNG_ISA_SIMD ${AX_ISA_SIMD})
 
-if (_PNG_ISA_SIMD STREQUAL "neon")
+if(_PNG_ISA_SIMD STREQUAL "neon")
   set(libpng_arm_sources
     arm/arm_init.c
     arm/filter_neon_intrinsics.c
     arm/palette_neon_intrinsics.c)
+
   # notes:
-  #  - android armv7: needs PNG_ARM_NEON_CHECK_SUPPORTED for very older devices, but axmol no longer support them
+  # - android armv7: needs PNG_ARM_NEON_CHECK_SUPPORTED for very older devices, but axmol no longer support them
   # PNG_ARM_NEON_IMPLEMENTATION:
-  #    1: use instrinsics
-  #    2: use handcode
+  # 1: use instrinsics
+  # 2: use handcode
   set(libpng_optimize_flag "PNG_ARM_NEON_OPT=1")
 elseif(_PNG_ISA_SIMD MATCHES "sse")
   set(libpng_intel_sources
@@ -55,13 +56,14 @@ set(PNG_INCLUDE_DIR "${PNG_PNG_INCLUDE_DIR}" CACHE INTERNAL "" FORCE)
 target_include_directories(${target_name} PUBLIC "${PNG_INCLUDE_DIR}")
 
 if(_PNG_ISA_SIMD)
-    target_compile_definitions(${target_name} PUBLIC ${libpng_optimize_flag})
+  target_compile_definitions(${target_name} PUBLIC ${libpng_optimize_flag})
 endif()
 
 target_include_directories(${target_name} PRIVATE "${ZLIB_INCLUDE_DIR}")
+
 if(ANDROID)
-    target_include_directories(${target_name} PRIVATE ${cpufeatures_include_dir})
-    target_link_libraries(${target_name} INTERFACE cpufeatures)
+  target_include_directories(${target_name} PRIVATE ${cpufeatures_include_dir})
+  target_link_libraries(${target_name} INTERFACE cpufeatures)
 endif()
 
 # Export png as PNG::PNG to avoid cmake builtin FindPNG.cmake add target again

@@ -15,6 +15,7 @@ set_target_properties(${target_name} PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${luajit_INC_DIR}"
   INTERFACE_COMPILE_DEFINITIONS USING_LUAJIT=1 # for lua-cjson
 )
+
 if(WINDOWS)
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_LOCATION "${luajit_LIB_DIR}/lua51.dll"

@@ -20,7 +20,7 @@ else()
 endif()
 
 set_target_properties(${target_name} PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${opus_INC_DIR}"
+  INTERFACE_INCLUDE_DIRECTORIES "${opus_INC_DIR}"
 )
 
 add_library(Opus::opus ALIAS ${target_name})

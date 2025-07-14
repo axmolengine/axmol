@@ -19,7 +19,7 @@ option(AX_WITH_LLHTTP "Build with internal LLHTTP support" ON)
 option(AX_WITH_LZ4 "Build with internal lz4 support" OFF)
 
 if(LINUX OR MACOSX OR WINDOWS)
-    option(AX_WITH_DOCTEST "Build with doctest support" ON)
+  option(AX_WITH_DOCTEST "Build with doctest support" ON)
 endif()
 
 # by default, enable ios,macOS openal-soft framework for legal license LGPL-2.1
@@ -35,31 +35,31 @@ option(
   OFF
 )
 
-set(ANDROID_SHARED_LOADS "" CACHE INTERNAL "The android shared libraries load source code" )
-set(ANDROID_SHARED_LOAD_FILE_NAME "SharedLoader.java" CACHE INTERNAL "The android shared load java file name" )
-set(ANDROID_SHARED_LOAD_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${ANDROID_SHARED_LOAD_FILE_NAME}.in" CACHE INTERNAL "The android shared libraries load config code file" )
+set(ANDROID_SHARED_LOADS "" CACHE INTERNAL "The android shared libraries load source code")
+set(ANDROID_SHARED_LOAD_FILE_NAME "SharedLoader.java" CACHE INTERNAL "The android shared load java file name")
+set(ANDROID_SHARED_LOAD_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${ANDROID_SHARED_LOAD_FILE_NAME}.in" CACHE INTERNAL "The android shared libraries load config code file")
 
 cmake_policy(SET CMP0079 NEW)
 
 # Enable -fPIC flag when compiling as shared libs...
 if(BUILD_SHARED_LIBS AND UNIX AND NOT ANDROID)
-    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
-if (WINRT)
+if(WINRT)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS=1)
 endif()
 
 if(NOT DEFINED AX_USE_LUAJIT)
-    set(AX_USE_LUAJIT FALSE CACHE INTERNAL "Use luajit instead plainlua")
+  set(AX_USE_LUAJIT FALSE CACHE INTERNAL "Use luajit instead plainlua")
 endif()
 
 if(NOT AX_USE_LUAJIT)
-    message(STATUS "Using plainlua https://lua.org")
-    set (AX_LUA_ENGINE "plainlua"  CACHE INTERNAL "")
+  message(STATUS "Using plainlua https://lua.org")
+  set(AX_LUA_ENGINE "plainlua" CACHE INTERNAL "")
 else()
-    message(STATUS "Using luajit https://luajit.org")
-    set (AX_LUA_ENGINE "luajit"  CACHE INTERNAL "")
+  message(STATUS "Using luajit https://luajit.org")
+  set(AX_LUA_ENGINE "luajit" CACHE INTERNAL "")
 endif()
 
 add_library(3rdparty INTERFACE)
@@ -71,63 +71,68 @@ set(_1kfetch_manifest "${_AX_ROOT}/manifest.json" CACHE STRING "" FORCE)
 include(${_AX_ROOT}/1k/fetch.cmake)
 
 function(ax_add_3rd source_dir)
-    set(options EXCLUDE_FROM_ALL NO_LINK)
-    set(multiValueArgs TARGETS OPTIONS)
-    cmake_parse_arguments(opt "${options}" "" "${multiValueArgs}" ${ARGN})
+  set(options EXCLUDE_FROM_ALL NO_LINK)
+  set(multiValueArgs TARGETS OPTIONS)
+  cmake_parse_arguments(opt "${options}" "" "${multiValueArgs}" ${ARGN})
 
-    foreach(OPTION ${opt_OPTIONS})
-        _1kparse_option("${OPTION}")
-        set(${OPTION_KEY} "${OPTION_VALUE}" CACHE BOOL "" FORCE)
-    endforeach()
+  foreach(OPTION ${opt_OPTIONS})
+    _1kparse_option("${OPTION}")
+    set(${OPTION_KEY} "${OPTION_VALUE}" CACHE BOOL "" FORCE)
+  endforeach()
 
-    set(binary_dir "")
-    if(IS_ABSOLUTE ${source_dir})
-        string(LENGTH "${_AX_ROOT}/cache/" _offset)
-        string(LENGTH ${source_dir} _len)
-        math(EXPR _len "${_len} - ${_offset}" OUTPUT_FORMAT DECIMAL)
-        string(SUBSTRING ${source_dir} ${_offset} ${_len} _path)
-        set(binary_dir "${ENGINE_BINARY_PATH}/3rdparty/${_path}")
-    endif()
+  set(binary_dir "")
 
-    if (opt_EXCLUDE_FROM_ALL)
-        add_subdirectory(${source_dir} ${binary_dir} EXCLUDE_FROM_ALL)
+  if(IS_ABSOLUTE ${source_dir})
+    string(LENGTH "${_AX_ROOT}/cache/" _offset)
+    string(LENGTH ${source_dir} _len)
+    math(EXPR _len "${_len} - ${_offset}" OUTPUT_FORMAT DECIMAL)
+    string(SUBSTRING ${source_dir} ${_offset} ${_len} _path)
+    set(binary_dir "${ENGINE_BINARY_PATH}/3rdparty/${_path}")
+  endif()
+
+  if(opt_EXCLUDE_FROM_ALL)
+    add_subdirectory(${source_dir} ${binary_dir} EXCLUDE_FROM_ALL)
+  else()
+    add_subdirectory(${source_dir} ${binary_dir})
+  endif()
+
+  if(NOT opt_TARGETS) # if opt_TARGETS not specified use source_dir as target name
+    list(APPEND opt_TARGETS ${source_dir})
+  endif()
+
+  foreach(tgt ${opt_TARGETS})
+    get_target_property(tgt_type ${tgt} TYPE)
+
+    if(NOT ${opt_NO_LINK})
+      if(tgt_type STREQUAL "STATIC_LIBRARY" OR tgt_type STREQUAL "SHARED_LIBRARY" OR tgt_type STREQUAL "INTERFACE_LIBRARY")
+        target_link_libraries(3rdparty INTERFACE ${tgt})
+      endif()
     else()
-        add_subdirectory(${source_dir} ${binary_dir})
+      add_dependencies(3rdparty ${tgt})
     endif()
 
-    if(NOT opt_TARGETS) # if opt_TARGETS not specified use source_dir as target name
-        list(APPEND opt_TARGETS ${source_dir})
+    get_target_property(is_imported_lib ${tgt} IMPORTED)
+
+    if((NOT is_imported_lib) AND(NOT(tgt_type STREQUAL "INTERFACE_LIBRARY")))
+      set_target_properties(${tgt} PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+        FOLDER "3rdparty"
+      )
     endif()
-    foreach(tgt ${opt_TARGETS})
-        get_target_property(tgt_type ${tgt} TYPE)
-        if (NOT ${opt_NO_LINK})
-            if(tgt_type STREQUAL "STATIC_LIBRARY" OR tgt_type STREQUAL "SHARED_LIBRARY" OR tgt_type STREQUAL "INTERFACE_LIBRARY")
-                target_link_libraries(3rdparty INTERFACE ${tgt})
-            endif()
-        else()
-            add_dependencies(3rdparty ${tgt})
-        endif()
-        get_target_property(is_imported_lib ${tgt} IMPORTED)
-        if ((NOT is_imported_lib) AND (NOT (tgt_type STREQUAL "INTERFACE_LIBRARY")))
-            set_target_properties(${tgt} PROPERTIES
-                ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-                LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-                RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-                FOLDER "3rdparty"
-            )
-        endif()
-    endforeach()
+  endforeach()
 endfunction()
 
 # bellow are header only libs
 target_include_directories(3rdparty
-    INTERFACE "robin-map/include"
+  INTERFACE "robin-map/include"
 )
 
-if (ANDROID)
-    target_include_directories(3rdparty
-        INTERFACE "jni.hpp/include"
-    )
+if(ANDROID)
+  target_include_directories(3rdparty
+    INTERFACE "jni.hpp/include"
+  )
 endif()
 
 ax_add_3rd(fmt)
@@ -136,254 +141,266 @@ ax_add_3rd(fmt)
 
 # cpufeatures
 if(ANDROID)
-    add_subdirectory(android-specific/cpufeatures)
+  add_subdirectory(android-specific/cpufeatures)
 endif()
 
 ax_add_3rd(zlib)
 
 if(NOT EMSCRIPTEN)
-    option(AX_WITH_WEBSOCKET_PARSER "Build with websocket parser" ON)
-    if (AX_WITH_WEBSOCKET_PARSER)
-        ax_add_3rd(websocket-parser)
-    endif()
+  option(AX_WITH_WEBSOCKET_PARSER "Build with websocket parser" ON)
+
+  if(AX_WITH_WEBSOCKET_PARSER)
+    ax_add_3rd(websocket-parser)
+  endif()
 endif()
 
 # libpng
 ax_add_3rd(png)
 
 if(AX_ENABLE_PHYSICS)
-    set(box2d_opts "BOX2D_BUILD_UNIT_TESTS OFF" "BOX2D_BUILD_TESTBED OFF")
-    ax_add_3rd(box2d OPTIONS ${box2d_opts})
+  set(box2d_opts "BOX2D_BUILD_UNIT_TESTS OFF" "BOX2D_BUILD_TESTBED OFF")
+  ax_add_3rd(box2d OPTIONS ${box2d_opts})
 endif()
 
 if(AX_ENABLE_PHYSICS)
-    ax_add_3rd(chipmunk OPTIONS
-        "CP_BUILD_SHARED OFF"
-        "CP_BUILD_STATIC ON"
-        "CP_BUILD_DEMOS OFF"
-        "CP_INSTALL_STATIC OFF"
-    )
-    set_target_properties(chipmunk PROPERTIES
-      INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/chipmunk/include"
-    )
+  ax_add_3rd(chipmunk OPTIONS
+    "CP_BUILD_SHARED OFF"
+    "CP_BUILD_STATIC ON"
+    "CP_BUILD_DEMOS OFF"
+    "CP_INSTALL_STATIC OFF"
+  )
+  set_target_properties(chipmunk PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/chipmunk/include"
+  )
 
-    # !important axmol not use double precision
-    target_compile_definitions(chipmunk PUBLIC CP_USE_CGTYPES=0)
-    target_compile_definitions(chipmunk PUBLIC CP_USE_DOUBLES=0)
+  # !important axmol not use double precision
+  target_compile_definitions(chipmunk PUBLIC CP_USE_CGTYPES=0)
+  target_compile_definitions(chipmunk PUBLIC CP_USE_DOUBLES=0)
 endif()
 
 ax_add_3rd(freetype OPTIONS
-    "DISABLE_FORCE_DEBUG_POSTFIX ON"
-    "SKIP_INSTALL_ALL TRUE"
-    "FT_DISABLE_HARFBUZZ TRUE"
-    "FT_DISABLE_BROTLI TRUE"
-    "FT_DISABLE_BZIP2 TRUE"
+  "DISABLE_FORCE_DEBUG_POSTFIX ON"
+  "SKIP_INSTALL_ALL TRUE"
+  "FT_DISABLE_HARFBUZZ TRUE"
+  "FT_DISABLE_BROTLI TRUE"
+  "FT_DISABLE_BZIP2 TRUE"
 )
 target_include_directories(freetype PRIVATE "${PNG_INCLUDE_DIR}")
-if (WINRT)
-    target_compile_definitions(freetype PUBLIC "generic=GenericFromFreeTypeLibrary")
+
+if(WINRT)
+  target_compile_definitions(freetype PUBLIC "generic=GenericFromFreeTypeLibrary")
 endif()
+
 target_include_directories(3rdparty INTERFACE "freetype/include")
 
 if(AX_ENABLE_NAVMESH)
-    ax_add_3rd(recast)
+  ax_add_3rd(recast)
 endif()
 
 if(AX_ENABLE_3D_PHYSICS)
-    ax_add_3rd(bullet)
+  ax_add_3rd(bullet)
 endif()
 
 if(AX_WITH_JPEG AND NOT WINRT AND NOT EMSCRIPTEN)
-    ax_add_3rd(jpeg-turbo)
+  ax_add_3rd(jpeg-turbo)
 endif()
 
 add_subdirectory(openssl)
+
 if(ANDROID OR LINUX)
-    target_link_libraries(OpenSSL::SSL INTERFACE OpenSSL::Crypto)
-    target_link_libraries(3rdparty INTERFACE OpenSSL::SSL)
+  target_link_libraries(OpenSSL::SSL INTERFACE OpenSSL::Crypto)
+  target_link_libraries(3rdparty INTERFACE OpenSSL::SSL)
 else()
-    target_link_libraries(3rdparty
-                        INTERFACE OpenSSL::Crypto
-                        INTERFACE OpenSSL::SSL)
+  target_link_libraries(3rdparty
+    INTERFACE OpenSSL::Crypto
+    INTERFACE OpenSSL::SSL)
 endif()
+
 target_compile_definitions(3rdparty INTERFACE OPENSSL_SUPPRESS_DEPRECATED=1)
 
 if(AX_WITH_WEBP)
-    ax_add_3rd(webp)
+  ax_add_3rd(webp)
 endif()
 
 ax_add_3rd(pugixml)
 ax_add_3rd(xxhash)
 
-if (AX_WITH_FASTLZ)
-    ax_add_3rd(fastlz)
+if(AX_WITH_FASTLZ)
+  ax_add_3rd(fastlz)
 endif()
 
 if(AX_WITH_CLIPPER2)
-    ax_add_3rd(clipper2)
+  ax_add_3rd(clipper2)
 endif()
 
 ax_add_3rd(ConvertUTF)
 
 if(AX_WITH_POLY2TRI)
-    ax_add_3rd(poly2tri)
-    target_compile_definitions(poly2tri PUBLIC P2T_STATIC_EXPORTS)
+  ax_add_3rd(poly2tri)
+  target_compile_definitions(poly2tri PUBLIC P2T_STATIC_EXPORTS)
 endif()
 
 if(AX_WITH_ASTCENC)
-    ax_add_3rd(astcenc)
+  ax_add_3rd(astcenc)
 endif()
 
 # use lua/js specific libs by property to prevent conflict
 if(AX_ENABLE_EXT_LUA)
-    add_subdirectory(lua/${AX_LUA_ENGINE})
-    add_subdirectory(lua/tolua)
-    add_subdirectory(lua/lua-cjson)
-    set_property(TARGET 3rdparty APPEND PROPERTY
-        AX_LUA_DEPEND ${AX_LUA_ENGINE} tolua lua-cjson
-    )
-    if (AX_USE_LUAJIT)
-        target_compile_definitions(lua-cjson PRIVATE USING_LUAJIT=1)
-    endif()
+  add_subdirectory(lua/${AX_LUA_ENGINE})
+  add_subdirectory(lua/tolua)
+  add_subdirectory(lua/lua-cjson)
+  set_property(TARGET 3rdparty APPEND PROPERTY
+    AX_LUA_DEPEND ${AX_LUA_ENGINE} tolua lua-cjson
+  )
+
+  if(AX_USE_LUAJIT)
+    target_compile_definitions(lua-cjson PRIVATE USING_LUAJIT=1)
+  endif()
 endif()
 
 if(AX_WITH_CURL AND NOT EMSCRIPTEN)
-    ax_add_3rd(curl)
-    if(ANDROID OR LINUX)
-        target_link_libraries(curl INTERFACE OpenSSL::SSL)
-    endif()
+  ax_add_3rd(curl)
+
+  if(ANDROID OR LINUX)
+    target_link_libraries(curl INTERFACE OpenSSL::SSL)
+  endif()
 endif()
 
-if (AX_ENABLE_AUDIO)
-    # The openal-soft(LGPL 2.1)
-    if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
-        set(alsoft_opts "ALSOFT_DLOPEN OFF" "ALSOFT_UTILS OFF" "ALSOFT_EXAMPLES OFF" "ALSOFT_INSTALL OFF")
+if(AX_ENABLE_AUDIO)
+  # The openal-soft(LGPL 2.1)
+  if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
+    set(alsoft_opts "ALSOFT_DLOPEN OFF" "ALSOFT_UTILS OFF" "ALSOFT_EXAMPLES OFF" "ALSOFT_INSTALL OFF")
 
-        if (AX_USE_ALSOFT_STATIC)
-            list(APPEND alsoft_opts "LIBTYPE STATIC")
-        endif()
-
-        if (ANDROID)
-            if(AX_WITH_OBOE)
-                _1kfetch(oboe)
-                set(ALSOFT_BACKEND_OPENSL OFF CACHE BOOL "Enable OpenSL backend" FORCE)
-                set(OBOE_SOURCE "${oboe_SOURCE_DIR}" CACHE STRING "Source directory for Oboe." FORCE)
-            endif()
-            list(APPEND alsoft_opts "ALSOFT_RTKIT OFF"
-                "ALSOFT_BACKEND_PIPEWIRE OFF"
-                "ALSOFT_BACKEND_PULSEAUDIO OFF"
-                "ALSOFT_BACKEND_ALSA OFF"
-                "ALSOFT_BACKEND_OSS OFF"
-                "ALSOFT_BACKEND_SOLARIS OFF"
-                "ALSOFT_BACKEND_SNDIO OFF"
-                "ALSOFT_BACKEND_JACK OFF"
-                "ALSOFT_BACKEND_PORTAUDIO OFF"
-                "ALSOFT_BACKEND_SDL2 OFF")
-            set(ALSOFT_RTKIT OFF CACHE BOOL "Enable RTKit support" FORCE)
-        elseif(WINDOWS)
-            list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
-        endif()
-
-        if(WINRT)
-            set(ALSOFT_CPPWINRT_VERSION ${AX_CPPWINRT_VERSION} CACHE STRING "" FORCE)
-        endif()
-
-        ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS alcommon;OpenAL OPTIONS ${alsoft_opts})
-
-        target_include_directories(3rdparty INTERFACE openal)
-        target_compile_definitions(3rdparty INTERFACE AX_USE_ALSOFT=1)
-        set_target_properties(OpenAL alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
-
-        if (AX_USE_ALSOFT_STATIC)
-            target_compile_definitions(3rdparty INTERFACE AL_LIBTYPE_STATIC=1)
-        elseif(ANDROID)
-            set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
-            target_link_options(OpenAL PRIVATE "${_16KPAGE_SIZE_LD_FLAGS}")
-        endif()
+    if(AX_USE_ALSOFT_STATIC)
+      list(APPEND alsoft_opts "LIBTYPE STATIC")
     endif()
 
-    # opus
-    if(AX_ENABLE_OPUS)
-        ax_add_3rd(opus)
+    if(ANDROID)
+      if(AX_WITH_OBOE)
+        _1kfetch(oboe)
+        set(ALSOFT_BACKEND_OPENSL OFF CACHE BOOL "Enable OpenSL backend" FORCE)
+        set(OBOE_SOURCE "${oboe_SOURCE_DIR}" CACHE STRING "Source directory for Oboe." FORCE)
+      endif()
+
+      list(APPEND alsoft_opts "ALSOFT_RTKIT OFF"
+        "ALSOFT_BACKEND_PIPEWIRE OFF"
+        "ALSOFT_BACKEND_PULSEAUDIO OFF"
+        "ALSOFT_BACKEND_ALSA OFF"
+        "ALSOFT_BACKEND_OSS OFF"
+        "ALSOFT_BACKEND_SOLARIS OFF"
+        "ALSOFT_BACKEND_SNDIO OFF"
+        "ALSOFT_BACKEND_JACK OFF"
+        "ALSOFT_BACKEND_PORTAUDIO OFF"
+        "ALSOFT_BACKEND_SDL2 OFF")
+      set(ALSOFT_RTKIT OFF CACHE BOOL "Enable RTKit support" FORCE)
+    elseif(WINDOWS)
+      list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
     endif()
 
-    # The ogg contains vorbis & opus(optional) decoders
-    ax_add_3rd(ogg)
+    if(WINRT)
+      set(ALSOFT_CPPWINRT_VERSION ${AX_CPPWINRT_VERSION} CACHE STRING "" FORCE)
+    endif()
+
+    ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS alcommon;OpenAL OPTIONS ${alsoft_opts})
+
+    target_include_directories(3rdparty INTERFACE openal)
+    target_compile_definitions(3rdparty INTERFACE AX_USE_ALSOFT=1)
+    set_target_properties(OpenAL alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
+
+    if(AX_USE_ALSOFT_STATIC)
+      target_compile_definitions(3rdparty INTERFACE AL_LIBTYPE_STATIC=1)
+    elseif(ANDROID)
+      set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads")
+      target_link_options(OpenAL PRIVATE "${_16KPAGE_SIZE_LD_FLAGS}")
+    endif()
+  endif()
+
+  # opus
+  if(AX_ENABLE_OPUS)
+    ax_add_3rd(opus)
+  endif()
+
+  # The ogg contains vorbis & opus(optional) decoders
+  ax_add_3rd(ogg)
 endif()
 
 if(WINDOWS OR LINUX OR ANDROID OR WASM)
-    ax_add_3rd(glad)
+  ax_add_3rd(glad)
 endif()
 
 if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX)
-    if(NOT LINUX)
-        ax_add_3rd(glfw OPTIONS
-          "GLFW_BUILD_DOCS OFF"
-          "GLFW_INSTALL OFF"
-        )
-    else()
-        ax_add_3rd(glfw OPTIONS
-          "GLFW_BUILD_X11 ON"
-          "GLFW_BUILD_WAYLAND OFF"
-          "GLFW_BUILD_DOCS OFF"
-          "GLFW_INSTALL OFF"
-        )
-    endif()
-    set_target_properties(glfw PROPERTIES OUTPUT_NAME glfw)
-    if(NOT WINDOWS)
-        target_link_libraries(3rdparty INTERFACE pthread)
-    endif()
-    target_include_directories(3rdparty INTERFACE "glfw/include/GLFW")
+  if(NOT LINUX)
+    ax_add_3rd(glfw OPTIONS
+      "GLFW_BUILD_DOCS OFF"
+      "GLFW_INSTALL OFF"
+    )
+  else()
+    ax_add_3rd(glfw OPTIONS
+      "GLFW_BUILD_X11 ON"
+      "GLFW_BUILD_WAYLAND OFF"
+      "GLFW_BUILD_DOCS OFF"
+      "GLFW_INSTALL OFF"
+    )
+  endif()
+
+  set_target_properties(glfw PROPERTIES OUTPUT_NAME glfw)
+
+  if(NOT WINDOWS)
+    target_link_libraries(3rdparty INTERFACE pthread)
+  endif()
+
+  target_include_directories(3rdparty INTERFACE "glfw/include/GLFW")
 endif()
 
 # unzip depend on zlib
 if(AX_WITH_UNZIP)
-    ax_add_3rd(unzip)
+  ax_add_3rd(unzip)
 endif()
 
 if(AX_WITH_CARES)
-    ax_add_3rd(c-ares)
+  ax_add_3rd(c-ares)
 endif()
 
 if(AX_WITH_LLHTTP)
-    ax_add_3rd(llhttp)
+  ax_add_3rd(llhttp)
 endif()
 
 # libvlc
-if (AX_ENABLE_VLC_MEDIA AND (NOT _AX_HAVE_VLC))
-    message(STATUS "Using axmol prebuilt libvlc")
-    ax_add_3rd(vlc TARGETS VLC::vlc;VLC::vlccore)
+if(AX_ENABLE_VLC_MEDIA AND(NOT _AX_HAVE_VLC))
+  message(STATUS "Using axmol prebuilt libvlc")
+  ax_add_3rd(vlc TARGETS VLC::vlc;VLC::vlccore)
 endif()
 
 if(AX_WITH_LZ4)
-    if (NOT BUILD_SHARED_LIBS)
-        set(lz4_tgt lz4_static)
-    else()
-        set(lz4_tgt lz4_shared)
-    endif()
-    _1kfetch(lz4)
-    ax_add_3rd(${lz4_SOURCE_DIR}/build/cmake NO_LINK TARGETS ${lz4_tgt} OPTIONS
-      "LZ4_BUILD_CLI OFF"
-      "LZ4_BUILD_LEGACY_LZ4C OFF"
-    )
+  if(NOT BUILD_SHARED_LIBS)
+    set(lz4_tgt lz4_static)
+  else()
+    set(lz4_tgt lz4_shared)
+  endif()
+
+  _1kfetch(lz4)
+  ax_add_3rd(${lz4_SOURCE_DIR}/build/cmake NO_LINK TARGETS ${lz4_tgt} OPTIONS
+    "LZ4_BUILD_CLI OFF"
+    "LZ4_BUILD_LEGACY_LZ4C OFF"
+  )
 endif()
 
 if(AX_WITH_DOCTEST)
-    ax_add_3rd(doctest NO_LINK)
+  ax_add_3rd(doctest NO_LINK)
 endif()
 
 # kcp
 if(AX_WITH_KCP)
-    _1kfetch(kcp)
-    ax_add_3rd(${kcp_SOURCE_DIR} TARGETS kcp)
+  _1kfetch(kcp)
+  ax_add_3rd(${kcp_SOURCE_DIR} TARGETS kcp)
 endif()
 
-if (WIN32)
-    if (WINRT)
-        ax_add_3rd(angle TARGETS angle::GLESv2;angle::EGL)
-    else()
-        add_subdirectory(angle)
-    endif()
+if(WIN32)
+  if(WINRT)
+    ax_add_3rd(angle TARGETS angle::GLESv2;angle::EGL)
+  else()
+    add_subdirectory(angle)
+  endif()
 endif()
 
 # yasio
@@ -392,15 +409,15 @@ ax_add_3rd(yasio)
 # simdjson
 ax_add_3rd(simdjson)
 
-if (ANDROID)
-    function(config_android_shared_libs package_name target_folder)
-        string(REPLACE "." "/" package_path ${package_name})
-        set(ANDROID_PACKAGE_NAME ${package_name})
-        configure_file(${ANDROID_SHARED_LOAD_FILE_PATH} ${target_folder}/${package_path}/${ANDROID_SHARED_LOAD_FILE_NAME} @ONLY)
-    endfunction()
+if(ANDROID)
+  function(config_android_shared_libs package_name target_folder)
+    string(REPLACE "." "/" package_path ${package_name})
+    set(ANDROID_PACKAGE_NAME ${package_name})
+    configure_file(${ANDROID_SHARED_LOAD_FILE_PATH} ${target_folder}/${package_path}/${ANDROID_SHARED_LOAD_FILE_NAME} @ONLY)
+  endfunction()
 endif()
 
 # Disable -fPIC flag for other libs...
 if(BUILD_SHARED_LIBS AND UNIX AND NOT ANDROID)
-    set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
+  set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
 endif()

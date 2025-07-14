@@ -1,191 +1,191 @@
 if(WINDOWS)
-    if(NOT WINRT)
-        set(_AX_UI_SPECIFIC_HEADER
-            ui/UIEditBox/UIEditBoxImpl-win32.h
-            )
-        set(_AX_UI_SPECIFIC_SRC
-            ui/UIEditBox/UIEditBoxImpl-win32.cpp
-            )
-    else()
-        set(_AX_UI_SPECIFIC_HEADER
-            ui/UIEditBox/UIEditBoxImpl-winrt.h
-            )
-        set(_AX_UI_SPECIFIC_SRC
-            ui/UIEditBox/UIEditBoxImpl-winrt.cpp
-            )
-    endif()
-
-    if(AX_ENABLE_MSEDGE_WEBVIEW2)
-        list(APPEND _AX_UI_SPECIFIC_HEADER ui/UIWebView/UIWebViewImpl-win32.h ui/UIWebView/UIWebView.h)
-        list(APPEND _AX_UI_SPECIFIC_SRC ui/UIWebView/UIWebViewImpl-win32.cpp ui/UIWebView/UIWebView.cpp)
-    endif()
-elseif(APPLE)
-    if(MACOSX)
-        set(_AX_UI_SPECIFIC_HEADER
-            ui/UIEditBox/UIEditBoxImpl-mac.h
-            ui/UIEditBox/Mac/UIPasswordTextField.h
-            ui/UIEditBox/Mac/UIMultilineTextField.h
-            ui/UIEditBox/Mac/UITextInput.h
-            ui/UIEditBox/Mac/UIEditBoxMac.h
-            ui/UIEditBox/Mac/UISingleLineTextField.h
-            ui/UIEditBox/Mac/UITextFieldFormatter.h
-            )
-        set(_AX_UI_SPECIFIC_SRC
-            ui/UIEditBox/UIEditBoxImpl-mac.mm
-            ui/UIEditBox/Mac/UIEditBoxMac.mm
-            ui/UIEditBox/Mac/UIMultilineTextField.m
-            ui/UIEditBox/Mac/UIPasswordTextField.m
-            ui/UIEditBox/Mac/UISingleLineTextField.m
-            ui/UIEditBox/Mac/UITextFieldFormatter.m
-            )
-    elseif(IOS)
-        if (TVOS)
-            set(_AX_UI_SPECIFIC_HEADER
-                ui/UIEditBox/UIEditBoxImpl-ios.h
-                ui/UIEditBox/iOS/UIEditBoxIOS.h
-                ui/UIEditBox/iOS/UIMultilineTextField.h
-                ui/UIEditBox/iOS/UITextInput.h
-                ui/UIEditBox/iOS/UITextView+UITextInput.h
-                ui/UIEditBox/iOS/UITextField+UITextInput.h
-                ui/UIEditBox/iOS/UISingleLineTextField.h
-                )
-            set(_AX_UI_SPECIFIC_SRC
-                ui/UIEditBox/UIEditBoxImpl-ios.mm
-                ui/UIEditBox/iOS/UIEditBoxIOS.mm
-                ui/UIEditBox/iOS/UIMultilineTextField.mm
-                ui/UIEditBox/iOS/UISingleLineTextField.mm
-                ui/UIEditBox/iOS/UITextField+UITextInput.mm
-                ui/UIEditBox/iOS/UITextView+UITextInput.mm
-                )
-        else()
-            set(_AX_UI_SPECIFIC_HEADER
-                ui/UIWebView/UIWebView.h
-                ui/UIWebView/UIWebViewImpl-ios.h
-                ui/UIEditBox/UIEditBoxImpl-ios.h
-                ui/UIEditBox/iOS/UIEditBoxIOS.h
-                ui/UIEditBox/iOS/UIMultilineTextField.h
-                ui/UIEditBox/iOS/UITextInput.h
-                ui/UIEditBox/iOS/UITextView+UITextInput.h
-                ui/UIEditBox/iOS/UITextField+UITextInput.h
-                ui/UIEditBox/iOS/UISingleLineTextField.h
-                )
-            set(_AX_UI_SPECIFIC_SRC
-                ui/UIWebView/UIWebView.mm
-                ui/UIWebView/UIWebViewImpl-ios.mm
-                ui/UIEditBox/UIEditBoxImpl-ios.mm
-                ui/UIEditBox/iOS/UIEditBoxIOS.mm
-                ui/UIEditBox/iOS/UIMultilineTextField.mm
-                ui/UIEditBox/iOS/UISingleLineTextField.mm
-                ui/UIEditBox/iOS/UITextField+UITextInput.mm
-                ui/UIEditBox/iOS/UITextView+UITextInput.mm
-                )
-        endif()
-    endif()
-elseif(LINUX)
+  if(NOT WINRT)
     set(_AX_UI_SPECIFIC_HEADER
-        ui/UIEditBox/UIEditBoxImpl-linux.h
-        ui/UIWebView/UIWebView.h
-        ui/UIWebView/UIWebViewImpl-linux.h
-        )
-    set(_AX_UI_SPECIFIC_SRC
-        ui/UIEditBox/UIEditBoxImpl-linux.cpp
-        ui/UIWebView/UIWebViewImpl-linux.cpp
-        ui/UIWebView/UIWebView.cpp
-        )
-elseif(EMSCRIPTEN)
-    set(_AX_UI_SPECIFIC_SRC
-        ui/UIEditBox/UIEditBoxImpl-wasm.cpp
+      ui/UIEditBox/UIEditBoxImpl-win32.h
     )
-elseif(ANDROID)
-    set(_AX_UI_SPECIFIC_HEADER
-        ui/UIWebView/UIWebView.h
-        ui/UIWebView/UIWebViewImpl-android.h
-        ui/UIEditBox/UIEditBoxImpl-android.h
-        )
     set(_AX_UI_SPECIFIC_SRC
-        ui/UIEditBox/UIEditBoxImpl-android.cpp
-        ui/UIWebView/UIWebViewImpl-android.cpp
-        # it's special for android, not a common file
-        ui/UIWebView/UIWebView.cpp
-        )
+      ui/UIEditBox/UIEditBoxImpl-win32.cpp
+    )
+  else()
+    set(_AX_UI_SPECIFIC_HEADER
+      ui/UIEditBox/UIEditBoxImpl-winrt.h
+    )
+    set(_AX_UI_SPECIFIC_SRC
+      ui/UIEditBox/UIEditBoxImpl-winrt.cpp
+    )
+  endif()
 
+  if(AX_ENABLE_MSEDGE_WEBVIEW2)
+    list(APPEND _AX_UI_SPECIFIC_HEADER ui/UIWebView/UIWebViewImpl-win32.h ui/UIWebView/UIWebView.h)
+    list(APPEND _AX_UI_SPECIFIC_SRC ui/UIWebView/UIWebViewImpl-win32.cpp ui/UIWebView/UIWebView.cpp)
+  endif()
+elseif(APPLE)
+  if(MACOSX)
+    set(_AX_UI_SPECIFIC_HEADER
+      ui/UIEditBox/UIEditBoxImpl-mac.h
+      ui/UIEditBox/Mac/UIPasswordTextField.h
+      ui/UIEditBox/Mac/UIMultilineTextField.h
+      ui/UIEditBox/Mac/UITextInput.h
+      ui/UIEditBox/Mac/UIEditBoxMac.h
+      ui/UIEditBox/Mac/UISingleLineTextField.h
+      ui/UIEditBox/Mac/UITextFieldFormatter.h
+    )
+    set(_AX_UI_SPECIFIC_SRC
+      ui/UIEditBox/UIEditBoxImpl-mac.mm
+      ui/UIEditBox/Mac/UIEditBoxMac.mm
+      ui/UIEditBox/Mac/UIMultilineTextField.m
+      ui/UIEditBox/Mac/UIPasswordTextField.m
+      ui/UIEditBox/Mac/UISingleLineTextField.m
+      ui/UIEditBox/Mac/UITextFieldFormatter.m
+    )
+  elseif(IOS)
+    if(TVOS)
+      set(_AX_UI_SPECIFIC_HEADER
+        ui/UIEditBox/UIEditBoxImpl-ios.h
+        ui/UIEditBox/iOS/UIEditBoxIOS.h
+        ui/UIEditBox/iOS/UIMultilineTextField.h
+        ui/UIEditBox/iOS/UITextInput.h
+        ui/UIEditBox/iOS/UITextView+UITextInput.h
+        ui/UIEditBox/iOS/UITextField+UITextInput.h
+        ui/UIEditBox/iOS/UISingleLineTextField.h
+      )
+      set(_AX_UI_SPECIFIC_SRC
+        ui/UIEditBox/UIEditBoxImpl-ios.mm
+        ui/UIEditBox/iOS/UIEditBoxIOS.mm
+        ui/UIEditBox/iOS/UIMultilineTextField.mm
+        ui/UIEditBox/iOS/UISingleLineTextField.mm
+        ui/UIEditBox/iOS/UITextField+UITextInput.mm
+        ui/UIEditBox/iOS/UITextView+UITextInput.mm
+      )
+    else()
+      set(_AX_UI_SPECIFIC_HEADER
+        ui/UIWebView/UIWebView.h
+        ui/UIWebView/UIWebViewImpl-ios.h
+        ui/UIEditBox/UIEditBoxImpl-ios.h
+        ui/UIEditBox/iOS/UIEditBoxIOS.h
+        ui/UIEditBox/iOS/UIMultilineTextField.h
+        ui/UIEditBox/iOS/UITextInput.h
+        ui/UIEditBox/iOS/UITextView+UITextInput.h
+        ui/UIEditBox/iOS/UITextField+UITextInput.h
+        ui/UIEditBox/iOS/UISingleLineTextField.h
+      )
+      set(_AX_UI_SPECIFIC_SRC
+        ui/UIWebView/UIWebView.mm
+        ui/UIWebView/UIWebViewImpl-ios.mm
+        ui/UIEditBox/UIEditBoxImpl-ios.mm
+        ui/UIEditBox/iOS/UIEditBoxIOS.mm
+        ui/UIEditBox/iOS/UIMultilineTextField.mm
+        ui/UIEditBox/iOS/UISingleLineTextField.mm
+        ui/UIEditBox/iOS/UITextField+UITextInput.mm
+        ui/UIEditBox/iOS/UITextView+UITextInput.mm
+      )
+    endif()
+  endif()
+elseif(LINUX)
+  set(_AX_UI_SPECIFIC_HEADER
+    ui/UIEditBox/UIEditBoxImpl-linux.h
+    ui/UIWebView/UIWebView.h
+    ui/UIWebView/UIWebViewImpl-linux.h
+  )
+  set(_AX_UI_SPECIFIC_SRC
+    ui/UIEditBox/UIEditBoxImpl-linux.cpp
+    ui/UIWebView/UIWebViewImpl-linux.cpp
+    ui/UIWebView/UIWebView.cpp
+  )
+elseif(EMSCRIPTEN)
+  set(_AX_UI_SPECIFIC_SRC
+    ui/UIEditBox/UIEditBoxImpl-wasm.cpp
+  )
+elseif(ANDROID)
+  set(_AX_UI_SPECIFIC_HEADER
+    ui/UIWebView/UIWebView.h
+    ui/UIWebView/UIWebViewImpl-android.h
+    ui/UIEditBox/UIEditBoxImpl-android.h
+  )
+  set(_AX_UI_SPECIFIC_SRC
+    ui/UIEditBox/UIEditBoxImpl-android.cpp
+    ui/UIWebView/UIWebViewImpl-android.cpp
+
+    # it's special for android, not a common file
+    ui/UIWebView/UIWebView.cpp
+  )
 endif()
 
 if(AX_ENABLE_MEDIA)
-   set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
-   set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
+  set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
+  set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
 endif()
 
 set(_AX_UI_HEADER
-    ${_AX_UI_SPECIFIC_HEADER}
-    ui/axmol-ui.h
-    ui/GUIDefine.h
-    ui/GUIExport.h
-    ui/UIAbstractCheckButton.h
-    ui/UIButton.h
-    ui/UICheckBox.h
-    ui/LayoutHelper.h
-    ui/UIHBox.h
-    ui/UIHelper.h
-    ui/UIImageView.h
-    ui/UILayout.h
-    ui/UILayoutComponent.h
-    ui/UILayoutManager.h
-    ui/UILayoutParameter.h
-    ui/UIListView.h
-    ui/UILoadingBar.h
-    ui/UIPageView.h
-    ui/UIPageViewIndicator.h
-    ui/UIRadioButton.h
-    ui/UIRelativeBox.h
-    ui/UIRichText.h
-    ui/UIScale9Sprite.h
-    ui/UIScrollView.h
-    ui/UIScrollViewBar.h
-    ui/UISlider.h
-    ui/UITabControl.h
-    ui/UIText.h
-    ui/UITextAtlas.h
-    ui/UITextBMFont.h
-    ui/UITextField.h
-    ui/UITextFieldEx.h
-    ui/UIVBox.h
-    ui/UIWidget.h
-    )
+  ${_AX_UI_SPECIFIC_HEADER}
+  ui/axmol-ui.h
+  ui/GUIDefine.h
+  ui/GUIExport.h
+  ui/UIAbstractCheckButton.h
+  ui/UIButton.h
+  ui/UICheckBox.h
+  ui/LayoutHelper.h
+  ui/UIHBox.h
+  ui/UIHelper.h
+  ui/UIImageView.h
+  ui/UILayout.h
+  ui/UILayoutComponent.h
+  ui/UILayoutManager.h
+  ui/UILayoutParameter.h
+  ui/UIListView.h
+  ui/UILoadingBar.h
+  ui/UIPageView.h
+  ui/UIPageViewIndicator.h
+  ui/UIRadioButton.h
+  ui/UIRelativeBox.h
+  ui/UIRichText.h
+  ui/UIScale9Sprite.h
+  ui/UIScrollView.h
+  ui/UIScrollViewBar.h
+  ui/UISlider.h
+  ui/UITabControl.h
+  ui/UIText.h
+  ui/UITextAtlas.h
+  ui/UITextBMFont.h
+  ui/UITextField.h
+  ui/UITextFieldEx.h
+  ui/UIVBox.h
+  ui/UIWidget.h
+)
 
 set(_AX_UI_SRC
-    ${_AX_UI_SPECIFIC_SRC}
-    ui/axmol-ui.cpp
-    ui/UIButton.cpp
-    ui/UIAbstractCheckButton.cpp
-    ui/UICheckBox.cpp
-    ui/UIRadioButton.cpp
-    ui/LayoutHelper.cpp
-    ui/UIHBox.cpp
-    ui/UIHelper.cpp
-    ui/UIImageView.cpp
-    ui/UILayout.cpp
-    ui/UILayoutManager.cpp
-    ui/UILayoutParameter.cpp
-    ui/UIListView.cpp
-    ui/UILoadingBar.cpp
-    ui/UIPageView.cpp
-    ui/UIPageViewIndicator.cpp
-    ui/UIRelativeBox.cpp
-    ui/UIRichText.cpp
-    ui/UIScale9Sprite.cpp
-    ui/UIScrollView.cpp
-    ui/UIScrollViewBar.cpp
-    ui/UISlider.cpp
-    ui/UIText.cpp
-    ui/UITextAtlas.cpp
-    ui/UITextBMFont.cpp
-    ui/UITextField.cpp
-    ui/UIVBox.cpp
-    ui/UIWidget.cpp
-    ui/UIEditBox/UIEditBox.cpp
-    ui/UILayoutComponent.cpp
-    ui/UIEditBox/UIEditBoxImpl-common.cpp
-    ui/UITabControl.cpp
-    ui/UITextFieldEx.cpp
-    )
+  ${_AX_UI_SPECIFIC_SRC}
+  ui/axmol-ui.cpp
+  ui/UIButton.cpp
+  ui/UIAbstractCheckButton.cpp
+  ui/UICheckBox.cpp
+  ui/UIRadioButton.cpp
+  ui/LayoutHelper.cpp
+  ui/UIHBox.cpp
+  ui/UIHelper.cpp
+  ui/UIImageView.cpp
+  ui/UILayout.cpp
+  ui/UILayoutManager.cpp
+  ui/UILayoutParameter.cpp
+  ui/UIListView.cpp
+  ui/UILoadingBar.cpp
+  ui/UIPageView.cpp
+  ui/UIPageViewIndicator.cpp
+  ui/UIRelativeBox.cpp
+  ui/UIRichText.cpp
+  ui/UIScale9Sprite.cpp
+  ui/UIScrollView.cpp
+  ui/UIScrollViewBar.cpp
+  ui/UISlider.cpp
+  ui/UIText.cpp
+  ui/UITextAtlas.cpp
+  ui/UITextBMFont.cpp
+  ui/UITextField.cpp
+  ui/UIVBox.cpp
+  ui/UIWidget.cpp
+  ui/UIEditBox/UIEditBox.cpp
+  ui/UILayoutComponent.cpp
+  ui/UIEditBox/UIEditBoxImpl-common.cpp
+  ui/UITabControl.cpp
+  ui/UITextFieldEx.cpp
+)

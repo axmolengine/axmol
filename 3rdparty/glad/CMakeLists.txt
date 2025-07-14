@@ -13,14 +13,15 @@ if(BUILD_SHARED_LIBS)
     PUBLIC GLAD_API_CALL_EXPORT=1
     PRIVATE GLAD_API_CALL_EXPORT_BUILD=1
   )
-  if (NOT WINDOWS AND AX_USE_GL)
+
+  if(NOT WINDOWS AND AX_USE_GL)
     target_link_libraries(${target_name} EGL)
   endif()
 endif()
 
 if(ANDROID)
-  target_compile_definitions(${target_name} 
-    PUBLIC GLAD_GLES2=1 
+  target_compile_definitions(${target_name}
+    PUBLIC GLAD_GLES2=1
     PUBLIC GLAD_GLES2_USE_SYSTEM_EGL=1 # refer: https://github.com/Dav1dde/glad/pull/438
   )
 endif()

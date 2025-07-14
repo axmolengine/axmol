@@ -1,4 +1,4 @@
-#/****************************************************************************
+# /****************************************************************************
 # Copyright (c) 2013-2014 cocos2d-x.org
 # Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 #
@@ -30,11 +30,11 @@ set(APP_NAME Dummy)
 project(${APP_NAME})
 
 if(XCODE)
-    set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
+  set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
 endif()
 
 set(CMAKE_MODULE_PATH
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
 )
 
 # Important when BUILD_SHARED_LIBS option is set to TRUE
@@ -47,11 +47,11 @@ include(AXGameEngineSetup)
 
 # The common cross-platforms source files and header files
 file(GLOB_RECURSE GAME_HEADER
-    Source/*.h Source/*.hpp
-    )
+  Source/*.h Source/*.hpp
+)
 file(GLOB_RECURSE GAME_SOURCE
-    Source/*.cpp Source/*.c
-    )
+  Source/*.cpp Source/*.c
+)
 
 set(GAME_INC_DIRS
   "${CMAKE_CURRENT_SOURCE_DIR}/Source"
@@ -61,20 +61,20 @@ set(content_folder "${CMAKE_CURRENT_SOURCE_DIR}/Content")
 set(engine_script_folder "${_AX_ROOT}/extensions/scripting/lua-bindings/script")
 
 if(APPLE)
-    ax_mark_multi_resources(content_files RES_TO "Resources" FOLDERS ${content_folder})
-    set(common_content_files ${content_files})
+  ax_mark_multi_resources(content_files RES_TO "Resources" FOLDERS ${content_folder})
+  set(common_content_files ${content_files})
 elseif(WINDOWS)
-    ax_mark_multi_resources(content_files RES_TO "Content" FOLDERS ${content_folder})
-    set(common_content_files ${content_files})
+  ax_mark_multi_resources(content_files RES_TO "Content" FOLDERS ${content_folder})
+  set(common_content_files ${content_files})
 endif()
 
 include(AXGameSourceSetup)
 
 # mark app complie info and libs info
 set(APP_SOURCES
-    ${GAME_HEADER}
-    ${GAME_SOURCE}
-    )
+  ${GAME_HEADER}
+  ${GAME_SOURCE}
+)
 
 include(AXGameTargetSetup)
 
@@ -82,7 +82,6 @@ include(AXGameTargetSetup)
 ax_setup_app_config(${APP_NAME})
 
 # Add any libraries you need to link to the project after this point
-
 
 # Default Platform-specific setup
 include(AXGamePlatformSetup)

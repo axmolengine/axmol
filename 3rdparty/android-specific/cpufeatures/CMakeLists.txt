@@ -8,6 +8,6 @@ add_library(${target_name} ${CMAKE_ANDROID_NDK}/sources/android/cpufeatures/cpu-
 set(cpufeatures_include_dir ${CMAKE_ANDROID_NDK}/sources/android/cpufeatures CACHE INTERNAL "cpufeatures include directory")
 
 set_target_properties(${target_name} PROPERTIES
-      INTERFACE_INCLUDE_DIRECTORIES ${cpufeatures_include_dir})
+  INTERFACE_INCLUDE_DIRECTORIES ${cpufeatures_include_dir})
 
 target_link_libraries(${target_name} dl)

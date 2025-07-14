@@ -1,10 +1,11 @@
 # print cmake debug info
 set(CMAKE_DEBUG_TARGET_PROPERTIES
-    # INCLUDE_DIRECTORIES
-    # COMPILE_DEFINITIONS
-    # COMPILE_OPTIONS
-    # AUTOUIC_OPTIONS
-    # POSITION_INDEPENDENT_CODE
+
+  # INCLUDE_DIRECTORIES
+  # COMPILE_DEFINITIONS
+  # COMPILE_OPTIONS
+  # AUTOUIC_OPTIONS
+  # POSITION_INDEPENDENT_CODE
 )
 
 # The ``OLD`` behavior for this policy is to set ``OpenGL_GL_PREFERENCE`` to
@@ -17,17 +18,17 @@ cmake_policy(SET CMP0072 NEW)
 set(ENGINE_BINARY_PATH ${PROJECT_BINARY_DIR}/engine)
 
 if(CMAKE_TOOLCHAIN_FILE)
-    message(STATUS "Using toolchain file:" ${CMAKE_TOOLCHAIN_FILE})
+  message(STATUS "Using toolchain file:" ${CMAKE_TOOLCHAIN_FILE})
 endif()
 
 # hold the extensions list to auto link to app
 set(_AX_EXTENSION_LIBS "" CACHE INTERNAL "extensions for auto link to target application")
 
 # configure android AXSLCC compile output, this is the first include cmake module
-if (ANDROID)
-    file(TO_NATIVE_PATH "${_AX_ANDROID_PROJECT_DIR}/build/runtime/axslc" _AXSLCC_OUT_DIR)
-    set(AXSLCC_OUT_DIR "${_AXSLCC_OUT_DIR}" CACHE STRING "" FORCE)
-    message(AUTHOR_WARNING "Set AXSLCC_OUT_DIR to ${AXSLCC_OUT_DIR} for android")
+if(ANDROID)
+  file(TO_NATIVE_PATH "${_AX_ANDROID_PROJECT_DIR}/build/runtime/axslc" _AXSLCC_OUT_DIR)
+  set(AXSLCC_OUT_DIR "${_AXSLCC_OUT_DIR}" CACHE STRING "" FORCE)
+  message(AUTHOR_WARNING "Set AXSLCC_OUT_DIR to ${AXSLCC_OUT_DIR} for android")
 endif()
 
 # import minimal axslcc.cmake for shader compiler support
@@ -35,9 +36,10 @@ endif()
 file(TO_CMAKE_PATH "${_AX_ROOT}/tools/external/axslcc" _AXSLCC_PATH)
 file(TO_CMAKE_PATH "$ENV{AX_ROOT}/tools/external/axslcc" _AXSLCC_PATH_ENV)
 set(AXSLCC_FIND_PROG_ROOT "${_AXSLCC_PATH}")
+
 if(NOT _AXSLCC_PATH STREQUAL _AXSLCC_PATH_ENV)
-    message(AUTHOR_WARNING "Add engine ${_AXSLCC_PATH_ENV} as additional path to find axlscc for isolate project")
-    list(APPEND AXSLCC_FIND_PROG_ROOT "${_AXSLCC_PATH_ENV}")
+  message(AUTHOR_WARNING "Add engine ${_AXSLCC_PATH_ENV} as additional path to find axlscc for isolate project")
+  list(APPEND AXSLCC_FIND_PROG_ROOT "${_AXSLCC_PATH_ENV}")
 endif()
 
 include(AXSLCC)
@@ -65,6 +67,7 @@ message(STATUS "PROJECT_NAME:" ${PROJECT_NAME})
 message(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
 message(STATUS "_AX_ROOT:" ${_AX_ROOT})
 message(STATUS "CMAKE_MODULE_PATH:" ${CMAKE_MODULE_PATH})
+
 # delete binary dir if you hope a full clean re-build
 message(STATUS "PROJECT_BINARY_DIR:" ${PROJECT_BINARY_DIR})
 message(STATUS "ENGINE_BINARY_PATH:" ${ENGINE_BINARY_PATH})

@@ -4,7 +4,7 @@ set(lib_name vlc)
 project(${lib_name})
 
 if(WIN32)
-   set(vlc_suffix win)
+  set(vlc_suffix win)
 elseif(LINUX)
   set(vlc_suffix linux)
 else()
@@ -21,7 +21,7 @@ macro(set_vlc_sub_target sub_target_name sub_lib_name)
     INTERFACE_INCLUDE_DIRECTORIES "${vlc_SOURCE_DIR}/include"
   )
 
-  if (LINUX)
+  if(LINUX)
     set(imp_lib_name "${vlc_SOURCE_DIR}/lib/lib${sub_lib_name}.so")
     set_target_properties(${sub_target_name} PROPERTIES
       IMPORTED_LOCATION "${vlc_SOURCE_DIR}/lib/lib${sub_lib_name}.so"

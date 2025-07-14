@@ -4,7 +4,7 @@ set(target_name ${lib_name})
 
 project(${lib_name})
 
-file(GLOB_RECURSE CLIPPER_SOURCES  *.h;*.cpp)
+file(GLOB_RECURSE CLIPPER_SOURCES *.h;*.cpp)
 
 add_library(${target_name} STATIC ${CLIPPER_SOURCES})
 

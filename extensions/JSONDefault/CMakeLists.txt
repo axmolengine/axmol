@@ -4,8 +4,8 @@ FILE(GLOB JSON_DEFAULT_HEADER src/JSONDefault/*.h)
 FILE(GLOB JSON_DEFAULT_SOURCE src/JSONDefault/*.cpp)
 
 add_library(${target_name} STATIC
-        ${JSON_DEFAULT_HEADER} 
-        ${JSON_DEFAULT_SOURCE})
+  ${JSON_DEFAULT_HEADER}
+  ${JSON_DEFAULT_SOURCE})
 
 target_include_directories(${target_name} PUBLIC src)
 

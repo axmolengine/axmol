@@ -5,11 +5,12 @@ set(target_name ${lib_name})
 project(${lib_name})
 
 set(${target_name}_src
-   pugixml.cpp
-  )
-  
+  pugixml.cpp
+)
+
 if(WINDOWS)
   add_library(${target_name} ${${target_name}_src})
+
   if(BUILD_SHARED_LIBS)
     target_compile_definitions(${target_name} PRIVATE $<$<CXX_COMPILER_ID:MSVC>:PUGIXML_API=__declspec\(dllexport\)>)
   endif()
@@ -25,7 +26,7 @@ set_target_properties(${target_name} PROPERTIES
 )
 
 if(BUILD_SHARED_LIBS AND MSVC)
-    set_target_properties(${target_name} PROPERTIES
-        INTERFACE_COMPILE_DEFINITIONS PUGIXML_API=__declspec\(dllimport\)
-    )
+  set_target_properties(${target_name} PROPERTIES
+    INTERFACE_COMPILE_DEFINITIONS PUGIXML_API=__declspec\(dllimport\)
+  )
 endif()

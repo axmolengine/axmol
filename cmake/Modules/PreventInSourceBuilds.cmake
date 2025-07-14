@@ -44,4 +44,3 @@ function(AssureOutOfSourceBuilds)
 endfunction()
 
 AssureOutOfSourceBuilds()
-

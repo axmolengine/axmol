@@ -16,7 +16,6 @@ if(WINDOWS)
     INTERFACE_COMPILE_DEFINITIONS ZLIB_DLL=1
   )
 elseif(APPLE)
-  
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_LOCATION "${zlib_LIB_DIR}/zlib.xcframework"
   )
@@ -27,7 +26,7 @@ else()
 endif()
 
 set_target_properties(${target_name} PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${zlib_INC_DIR}"
+  INTERFACE_INCLUDE_DIRECTORIES "${zlib_INC_DIR}"
 )
 
 # Export zlib as ZLIB::ZLIB to avoid cmake builtin FindPNG.cmake add target again

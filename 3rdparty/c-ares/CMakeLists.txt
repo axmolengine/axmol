@@ -16,9 +16,9 @@ set_target_properties(${target_name} PROPERTIES
   INTERFACE_COMPILE_DEFINITIONS CARES_STATICLIB=1
 )
 
-if (APPLE)
+if(APPLE)
   set_target_properties(${target_name} PROPERTIES
-      INTERFACE_LINK_LIBRARIES resolv
+    INTERFACE_LINK_LIBRARIES resolv
   )
 endif()
 
@@ -36,4 +36,4 @@ else()
   )
 endif()
 
-set(CARES_INCLUDE_DIR "${cares_INC_DIR}" CACHE STRING "c-ares Include Directory" )
+set(CARES_INCLUDE_DIR "${cares_INC_DIR}" CACHE STRING "c-ares Include Directory")

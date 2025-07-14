@@ -32,7 +32,7 @@ cmake_minimum_required(VERSION 3.22...4.0)
 project(axmol)
 
 if(XCODE)
-    set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
+  set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
 endif()
 
 # ax root path
@@ -53,30 +53,30 @@ add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
 set(BUILD_ENGINE_DONE ON)
 
 if(AX_BUILD_TESTS)
-    message(STATUS "CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
+  message(STATUS "CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
 
-    macro(add_test_target target_name dir)
-        add_subdirectory(${dir} ${CMAKE_BINARY_DIR}/tests/${target_name})
-        set_target_properties(${target_name} PROPERTIES FOLDER "Apps")
-    endmacro()
+  macro(add_test_target target_name dir)
+    add_subdirectory(${dir} ${CMAKE_BINARY_DIR}/tests/${target_name})
+    set_target_properties(${target_name} PROPERTIES FOLDER "Apps")
+  endmacro()
 
-    # add cpp tests default
-    add_test_target(cpp-tests ${_AX_ROOT}/tests/cpp-tests)
+  # add cpp tests default
+  add_test_target(cpp-tests ${_AX_ROOT}/tests/cpp-tests)
 
-    if(LINUX OR MACOSX OR WINDOWS)
-        add_test_target(unit-tests ${_AX_ROOT}/tests/unit-tests)
-    endif()
+  if(LINUX OR MACOSX OR WINDOWS)
+    add_test_target(unit-tests ${_AX_ROOT}/tests/unit-tests)
+  endif()
 
-    # add fairygui tests when fairygui extension is enabled
-    if(AX_ENABLE_EXT_FAIRYGUI)
-        add_test_target(fairygui-tests ${_AX_ROOT}/tests/fairygui-tests)
-    endif()
+  # add fairygui tests when fairygui extension is enabled
+  if(AX_ENABLE_EXT_FAIRYGUI)
+    add_test_target(fairygui-tests ${_AX_ROOT}/tests/fairygui-tests)
+  endif()
 
-    if(AX_ENABLE_EXT_LIVE2D)
-        add_test_target(live2d-tests ${_AX_ROOT}/tests/live2d-tests)
-    endif()
+  if(AX_ENABLE_EXT_LIVE2D)
+    add_test_target(live2d-tests ${_AX_ROOT}/tests/live2d-tests)
+  endif()
 
-    if(AX_ENABLE_EXT_LUA)
-        add_test_target(lua-tests ${_AX_ROOT}/tests/lua-tests)
-    endif(AX_ENABLE_EXT_LUA)
+  if(AX_ENABLE_EXT_LUA)
+    add_test_target(lua-tests ${_AX_ROOT}/tests/lua-tests)
+  endif(AX_ENABLE_EXT_LUA)
 endif()
