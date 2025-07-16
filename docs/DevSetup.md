@@ -244,8 +244,10 @@ Notes: if you need debug in VSCode, remember to choose `CMake: [Debug]` in the W
 
 ### WebAssembly
 
-Build & Run/Debug
+Build & Run/Debug  
 
 1. Install [`C/C++ DevTools Support (DWARF) Chrome extension`](https://goo.gle/wasm-debugging-extension)
 2. Execute `axmol run -p wasm -O2` or `axmol run -p wasm -O0` in your axmol project root
 3. Now you can debug axmol apps via Chrome DevTools, for more details, refer to: [Debug C/C++ WebAssembly](https://developer.chrome.com/docs/devtools/wasm)
+
+*Note: When build axmol wasm apps with emsdk-4.0+, can't debug properly on windows, due to many developer works on windows (`linux` or `macos` no this issue), so axmol set emsdk default version to `3.1.73` in `1k/build.profiles` ensure developer can debug axmol wasm apps properly. if you use `linux` or `macos`, you can set emsdk to 4.0+ in your `.axproj`, for example `emsdk=4.0.11`.*
