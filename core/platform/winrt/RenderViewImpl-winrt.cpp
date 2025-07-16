@@ -44,7 +44,7 @@ THE SOFTWARE.
 namespace ax
 {
 
-static RenderViewImpl* s_pEglView = nullptr;
+static RenderViewImpl* s_renderView = nullptr;
 
 static EventMouse::MouseButton checkMouseButton(Windows::UI::Core::PointerEventArgs const& args)
 {
@@ -116,7 +116,7 @@ RenderViewImpl::RenderViewImpl()
     , m_appShouldExit(false)
     , _lastMouseButtonPressed(EventMouse::MouseButton::BUTTON_UNSET)
 {
-    s_pEglView = this;
+    s_renderView = this;
     _viewName  = "axmol2";
     m_keyboard = KeyBoardWinRT();
 
@@ -127,8 +127,8 @@ RenderViewImpl::RenderViewImpl()
 
 RenderViewImpl::~RenderViewImpl()
 {
-    AX_ASSERT(this == s_pEglView);
-    s_pEglView = nullptr;
+    AX_ASSERT(this == s_renderView);
+    s_renderView = nullptr;
 }
 
 bool RenderViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor)
@@ -452,7 +452,7 @@ void RenderViewImpl::centerWindow()
 
 RenderViewImpl* RenderViewImpl::sharedRenderView()
 {
-    return s_pEglView;
+    return s_renderView;
 }
 
 int RenderViewImpl::Run()

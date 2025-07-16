@@ -85,7 +85,7 @@ guava=33.3.1
 # The emsdk version, as stable as possible
 # Notes:
 # - emscan-deps available since emsdk-4.0.3, but it's still not work properly
-# - since emsdk-4.0.0+ can't be debugging via chrome properly
+# - since emsdk-4.0.0+ can't be debugging via chrome properly on windows (macos and linux no this issue)
 # - axmol can build with emsdk-3.1.73+
 # - please use emsdk-3.1.73 if you want debug axmol wasm app properly
 emsdk=3.1.73+

@@ -406,16 +406,15 @@ void Renderer::render()
 {
     // TODO: setup camera or MVP
     _isRendering = true;
-    //    if (_glViewAssigned)
+
+    // Process render commands
+    // 1. Sort render commands based on ID
+    for (auto&& renderqueue : _renderGroups)
     {
-        // Process render commands
-        // 1. Sort render commands based on ID
-        for (auto&& renderqueue : _renderGroups)
-        {
-            renderqueue.sort();
-        }
-        visitRenderQueue(_renderGroups[0]);
+        renderqueue.sort();
     }
+    visitRenderQueue(_renderGroups[0]);
+
     clean();
     _isRendering = false;
 }

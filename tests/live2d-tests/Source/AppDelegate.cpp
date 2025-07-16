@@ -68,15 +68,15 @@ bool AppDelegate::applicationDidFinishLaunching()
 {
     // initialize director
     auto director = Director::getInstance();
-    auto glView = director->getRenderView();
-    if(!glView)
+    auto renderView = director->getRenderView();
+    if(!renderView)
     {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-        glView = RenderViewImpl::createWithRect("Demo", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        renderView = RenderViewImpl::createWithRect("Demo", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
-        glView = RenderViewImpl::create("Demo");
+        renderView = RenderViewImpl::create("Demo");
 #endif
-        director->setRenderView(glView);
+        director->setRenderView(renderView);
     }
 
     // turn on display FPS
@@ -86,8 +86,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->setAnimationInterval(1.0f / 60);
 
     // Set the design resolution
-    glView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::SHOW_ALL);
-//    auto frameSize = glView->getFrameSize();
+    renderView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::SHOW_ALL);
+//    auto frameSize = renderView->getFrameSize();
 //    // if the frame's height is larger than the height of medium size.
 //    if (frameSize.height > mediumResolutionSize.height)
 //    {

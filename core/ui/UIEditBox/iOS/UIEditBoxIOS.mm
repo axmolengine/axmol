@@ -320,9 +320,9 @@
 - (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)distance
 {
     auto view            = ax::Director::getInstance()->getRenderView();
-    EARenderView* eaglView = (EARenderView*)view->getEARenderView();
+    EARenderView* eaView = (__bridge EARenderView*)view->getEARenderView();
 
-    [eaglView doAnimationWhenKeyboardMoveWithDuration:duration distance:distance];
+    [eaView doAnimationWhenKeyboardMoveWithDuration:duration distance:distance];
 }
 
 - (void)updateFrame:(CGRect)rect
@@ -337,9 +337,9 @@
 - (void)openKeyboard
 {
     auto view            = ax::Director::getInstance()->getRenderView();
-    EARenderView* eaglView = (EARenderView*)view->getEARenderView();
+    EARenderView* eaView = (__bridge EARenderView*)view->getEARenderView();
 
-    [eaglView addSubview:self.textInput];
+    [eaView addSubview:self.textInput];
     [self.textInput becomeFirstResponder];
 }
 
@@ -362,9 +362,9 @@
 - (void)animationSelector
 {
     auto view            = ax::Director::getInstance()->getRenderView();
-    EARenderView* eaglView = (EARenderView*)view->getEARenderView();
+    EARenderView* eaView = (__bridge EARenderView*)view->getEARenderView();
 
-    [eaglView doAnimationWhenAnotherEditBeClicked];
+    [eaView doAnimationWhenAnotherEditBeClicked];
 }
 
 #pragma mark - UITextView delegate methods
@@ -376,9 +376,9 @@
     _returnPressed = NO;
 
     auto view            = ax::Director::getInstance()->getRenderView();
-    EARenderView* eaglView = (EARenderView*)view->getEARenderView();
+    EARenderView* eaView = (__bridge EARenderView*)view->getEARenderView();
 
-    if ([eaglView isKeyboardShown])
+    if ([eaView isKeyboardShown])
     {
         [self performSelector:@selector(animationSelector) withObject:nil afterDelay:0.0f];
     }
@@ -469,9 +469,9 @@
     _returnPressed = NO;
 
     auto view            = ax::Director::getInstance()->getRenderView();
-    EARenderView* eaglView = (EARenderView*)view->getEARenderView();
+    EARenderView* eaView = (__bridge EARenderView*)view->getEARenderView();
 
-    if ([eaglView isKeyboardShown])
+    if ([eaView isKeyboardShown])
     {
         [self performSelector:@selector(animationSelector) withObject:nil afterDelay:0.0f];
     }

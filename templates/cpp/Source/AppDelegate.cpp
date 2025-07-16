@@ -56,17 +56,17 @@ bool AppDelegate::applicationDidFinishLaunching()
 {
     // initialize director
     auto director = Director::getInstance();
-    auto glView   = director->getRenderView();
-    if (!glView)
+    auto renderView   = director->getRenderView();
+    if (!renderView)
     {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || \
     (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-        glView = RenderViewImpl::createWithRect(
+        renderView = RenderViewImpl::createWithRect(
             "Dummy", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
-        glView = RenderViewImpl::create("Dummy");
+        renderView = RenderViewImpl::create("Dummy");
 #endif
-        director->setRenderView(glView);
+        director->setRenderView(renderView);
     }
 
     // turn on display FPS
@@ -76,7 +76,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->setAnimationInterval(1.0f / 60);
 
     // Set the design resolution
-    glView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
+    renderView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
                                     ResolutionPolicy::SHOW_ALL);
 
     // create a scene. it's an autorelease object

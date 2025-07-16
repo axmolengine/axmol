@@ -122,7 +122,7 @@
 
 - Update android devenv to support android 16 by @halx99 in https://github.com/axmolengine/axmol/pull/2546
 - Update Android Studio minimum required version to `2024.3.2`
-- **Downgrade emsdk from `4.0.6` to `3.1.73` due to axmol apps can't be debugging via chrome properly when build with emsdk-4.0+, the breakpoint can't be trigger by default, or triggerd, but can't watch any variables even through build with -O0**
+- **Downgrade emsdk from `4.0.6` to `3.1.73` due to axmol apps can't be debugging via chrome properly on windows when build with emsdk-4.0+, the debugger will always report `No debug information for function "<func_name_signature>"`, and can't watch any variables even through build with `-O0`**
 
 ## Bug fixes
 

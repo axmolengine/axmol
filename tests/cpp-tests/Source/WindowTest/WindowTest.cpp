@@ -111,14 +111,14 @@ void WindowTestResizedAndPositioned::onEnter()
     WindowTest::onEnter();
 
     auto s = _director->getWinSize();
-    auto glView = static_cast<RenderViewImpl*>(_director->getRenderView());
+    auto renderView = static_cast<RenderViewImpl*>(_director->getRenderView());
 
     int x = 0;
     int y = 0;
     int width = 0;
     int height = 0;
-    glView->getWindowPosition(&x, &y);
-    glView->getWindowSize(&width, &height);
+    renderView->getWindowPosition(&x, &y);
+    renderView->getWindowSize(&width, &height);
 
     label1 = Label::createWithTTF(fmt::format("pos : {}, {}", x, y), "fonts/Marker Felt.ttf", 16.0f);
     label1->setPosition(s.width / 3 * 1, s.height / 2);

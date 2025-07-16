@@ -70,19 +70,19 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // initialize director
     auto director = Director::getInstance();
-    auto glView   = director->getRenderView();
-    if (!glView)
+    auto renderView   = director->getRenderView();
+    if (!renderView)
     {
         std::string title = "Cpp Tests";
 #ifndef NDEBUG
         title += " *Debug*",
 #endif
 #ifdef AX_PLATFORM_PC
-        glView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);
+        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);
 #else
-        glView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
+        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
 #endif
-        director->setRenderView(glView);
+        director->setRenderView(renderView);
     }
 
     director->setStatsDisplay(true);
@@ -93,7 +93,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->setAnimationInterval(1.0f / 60);
 #endif
 
-    auto screenSize = glView->getFrameSize();
+    auto screenSize = renderView->getFrameSize();
 
     auto fileUtils = FileUtils::getInstance();
     std::vector<std::string> searchPaths;
@@ -119,7 +119,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     std::copy(oldSearchPaths.begin(), oldSearchPaths.end(), std::back_inserter(searchPaths));
     fileUtils->setSearchPaths(searchPaths);
 
-    glView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);
+    renderView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);
 
     // Enable Remote Console
     auto console = director->getConsole();

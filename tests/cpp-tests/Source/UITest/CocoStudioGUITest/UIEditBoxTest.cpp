@@ -44,9 +44,9 @@ bool UIEditBoxTest::init()
 {
     if (UIScene::init())
     {
-        auto glView        = Director::getInstance()->getRenderView();
-        auto visibleOrigin = glView->getVisibleOrigin();
-        auto visibleSize   = glView->getVisibleSize();
+        auto renderView        = Director::getInstance()->getRenderView();
+        auto visibleOrigin = renderView->getVisibleOrigin();
+        auto visibleSize   = renderView->getVisibleSize();
 
         auto pBg = Sprite::create("Images/HelloWorld.png");
         pBg->setPosition(Vec2(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height / 2));
@@ -178,9 +178,9 @@ bool UIEditBoxTestToggleVisibility::init()
 {
     if (UIScene::init())
     {
-        auto glView        = Director::getInstance()->getRenderView();
-        auto visibleOrigin = glView->getVisibleOrigin();
-        auto visibleSize   = glView->getVisibleSize();
+        auto renderView        = Director::getInstance()->getRenderView();
+        auto visibleOrigin = renderView->getVisibleOrigin();
+        auto visibleSize   = renderView->getVisibleSize();
 
         auto pBg = Sprite::create("Images/HelloWorld.png");
         pBg->setPosition(Vec2(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height / 2));
@@ -307,9 +307,9 @@ bool UIEditBoxTestTextHorizontalAlignment::init()
         return false;
     }
 
-    const auto glView        = Director::getInstance()->getRenderView();
-    const auto visibleOrigin = glView->getVisibleOrigin();
-    const auto visibleSize   = glView->getVisibleSize();
+    const auto renderView        = Director::getInstance()->getRenderView();
+    const auto visibleOrigin = renderView->getVisibleOrigin();
+    const auto visibleSize   = renderView->getVisibleSize();
     const auto editBoxSize   = Size(visibleSize.width - 100, visibleSize.height * 0.1f);
 
     const auto createEditBox = [this, editBoxSize, visibleOrigin, visibleSize](
@@ -343,9 +343,9 @@ bool UIEditBoxTestPressedAndDisabled::init()
         return false;
     }
 
-    auto glView            = Director::getInstance()->getRenderView();
-    auto visibleOrigin     = glView->getVisibleOrigin();
-    auto visibleSize       = glView->getVisibleSize();
+    auto renderView            = Director::getInstance()->getRenderView();
+    auto visibleOrigin     = renderView->getVisibleOrigin();
+    auto visibleSize       = renderView->getVisibleSize();
     const auto editBoxSize = Size(visibleSize.width - 100, visibleSize.height * 0.1f);
 
     ui::EditBox* editbox =

@@ -164,12 +164,12 @@ void TestList::runThisTest()
      * otherwise, the layout will incorrect
      */
 
-    RenderViewImpl* glView = (RenderViewImpl*)Director::getInstance()->getRenderView();
+    RenderViewImpl* renderView = (RenderViewImpl*)Director::getInstance()->getRenderView();
 #if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
-    glView->setWindowed(g_resourceSize.width, g_resourceSize.height);
+    renderView->setWindowed(g_resourceSize.width, g_resourceSize.height);
 #endif
 
-    glView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);
+    renderView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);
 
     auto director = Director::getInstance();
     auto scene    = Scene::create();

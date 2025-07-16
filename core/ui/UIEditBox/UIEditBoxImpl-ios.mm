@@ -182,9 +182,9 @@ void EditBoxImplIOS::setNativeVisible(bool visible)
 void EditBoxImplIOS::updateNativeFrame(const Rect& rect)
 {
     auto renderView          = ax::Director::getInstance()->getRenderView();
-    EARenderView* eaglView = (EARenderView*)renderView->getEARenderView();
+    EARenderView* eaView = (__bridge EARenderView*)renderView->getEARenderView();
 
-    float factor = eaglView.contentScaleFactor;
+    float factor = eaView.contentScaleFactor;
 
     [_systemControl updateFrame:CGRectMake(rect.origin.x / factor, rect.origin.y / factor, rect.size.width / factor,
                                            rect.size.height / factor)];
@@ -210,8 +210,8 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 {
     AXASSERT(fontName != nullptr, "fontName can't be nullptr");
-    EARenderView* eaglView = static_cast<EARenderView*>(ax::Director::getInstance()->getRenderView()->getEARenderView());
-    float retinaFactor   = eaglView.contentScaleFactor;
+    auto eaView = static_cast<EARenderView*>(ax::Director::getInstance()->getRenderView()->getEARenderView());
+    float retinaFactor   = eaView.contentScaleFactor;
     NSString* fntName    = [NSString stringWithUTF8String:fontName];
 
     fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];

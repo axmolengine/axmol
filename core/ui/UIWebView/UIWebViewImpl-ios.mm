@@ -133,8 +133,8 @@
     if (!self.wkWebView.superview)
     {
         auto view     = ax::Director::getInstance()->getRenderView();
-        auto eaglView = (EARenderView*)view->getEARenderView();
-        [eaglView addSubview:self.wkWebView];
+        auto eaView = (__bridge EARenderView*)view->getEARenderView();
+        [eaView addSubview:self.wkWebView];
     }
 }
 

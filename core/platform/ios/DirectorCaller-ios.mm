@@ -139,7 +139,7 @@ static id s_sharedDirectorCaller;
     {
         ax::Director* director = ax::Director::getInstance();
 #if AX_GLES_PROFILE
-        EAGLContext* context = [(EARenderView*)director->getRenderView()->getEARenderView() context];
+        EAGLContext* context = [(__bridge EARenderView*)director->getRenderView()->getEARenderView() context];
         if (context != [EAGLContext currentContext])
             glFlush();
 

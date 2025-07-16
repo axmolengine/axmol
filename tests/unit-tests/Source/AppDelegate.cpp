@@ -54,16 +54,16 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // initialize director
     auto director = Director::getInstance();
-    auto glView   = director->getRenderView();
-    if (!glView)
+    auto renderView   = director->getRenderView();
+    if (!renderView)
     {
         std::string title = "Unit Tests";
         #ifdef AX_PLATFORM_PC
-            glView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
+            renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
         #else
-            glView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
+            renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
         #endif
-        director->setRenderView(glView);
+        director->setRenderView(renderView);
     }
 
     director->setStatsDisplay(true);
@@ -74,9 +74,9 @@ bool AppDelegate::applicationDidFinishLaunching()
         director->setAnimationInterval(1.0f / 60);
     #endif
 
-    auto screenSize = glView->getFrameSize();
+    auto screenSize = renderView->getFrameSize();
 
-    glView->setDesignResolutionSize(gWindowSize.x, gWindowSize.y, ResolutionPolicy::SHOW_ALL);
+    renderView->setDesignResolutionSize(gWindowSize.x, gWindowSize.y, ResolutionPolicy::SHOW_ALL);
 
     return true;
 }

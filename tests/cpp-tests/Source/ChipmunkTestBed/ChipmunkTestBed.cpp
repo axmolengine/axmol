@@ -309,9 +309,9 @@ ChipmunkTestBed::ChipmunkTestBed()
     // halx99: since axmol init scene default camera at 'initWithXXX' function, only change design size at scene
     // construct is ok see also: https://github.com/axmolengine/axmol/commit/581a7921554c09746616759d5a5ca6ce9d3eaa22
     auto director = Director::getInstance();
-    auto glView   = director->getRenderView();
+    auto renderView   = director->getRenderView();
     Size designSize(g_designSize.width * 0.85, g_designSize.height * 0.85);
-    glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
+    renderView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
 
     // creating a keyboard event listener
     auto listener          = EventListenerKeyboard::create();

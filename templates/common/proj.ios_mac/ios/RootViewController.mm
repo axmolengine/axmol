@@ -80,15 +80,15 @@ customization that is not appropriate for viewDidLoad.
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
-    auto glView = ax::Director::getInstance()->getRenderView();
+    auto renderView = ax::Director::getInstance()->getRenderView();
 
-    if (glView)
+    if (renderView)
     {
-        EARenderView* eaglView = (__bridge EARenderView*)glView->getEARenderView();
+        EARenderView* eaView = (__bridge EARenderView*)renderView->getEARenderView();
 
-        if (eaglView)
+        if (eaView)
         {
-            CGSize s = CGSizeMake([eaglView getWidth], [eaglView getHeight]);
+            CGSize s = CGSizeMake([eaView getWidth], [eaView getHeight]);
             ax::Application::getInstance()->applicationScreenSizeChanged((int)s.width, (int)s.height);
         }
     }
