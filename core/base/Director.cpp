@@ -264,7 +264,7 @@ void Director::setDefaultValues()
 void Director::setGLDefaultValues()
 {
     // This method SHOULD be called only after glView_ was initialized
-    AXASSERT(_glView, "opengl view should not be null");
+    AXASSERT(_renderView, "opengl view should not be null");
 
     _renderer->setDepthTest(false);
     _renderer->setDepthCompareFunction(backend::CompareFunction::LESS_EQUAL);
@@ -279,9 +279,9 @@ void Director::drawScene()
     // calculate "global" dt
     calculateDeltaTime();
 
-    if (_glView)
+    if (_renderView)
     {
-        _glView->pollEvents();
+        _renderView->pollEvents();
     }
 
     // tick before glClear: issue #533
@@ -316,8 +316,8 @@ void Director::drawScene()
         _renderer->clearDrawStats();
 
         // render the scene
-        if (_glView)
-            _glView->renderScene(_runningScene, _renderer);
+        if (_renderView)
+            _renderView->renderScene(_runningScene, _renderer);
 
         _eventDispatcher->dispatchEvent(_eventAfterVisit);
     }
@@ -346,9 +346,9 @@ void Director::drawScene()
     _totalFrames++;
 
     // swap buffers
-    if (_glView)
+    if (_renderView)
     {
-        _glView->swapBuffers();
+        _renderView->swapBuffers();
     }
 
     _renderer->endFrame();
@@ -399,26 +399,26 @@ void Director::setRenderView(RenderView* renderView)
 {
     AXASSERT(renderView, "opengl view should not be null");
 
-    if (_glView != renderView)
+    if (_renderView != renderView)
     {
         // Configuration. Gather GPU info
         Configuration* conf = Configuration::getInstance();
         conf->gatherGPUInfo();
         AXLOGI("{}\n", conf->getInfo());
 
-        if (_glView)
-            _glView->release();
-        _glView = renderView;
-        _glView->retain();
+        if (_renderView)
+            _renderView->release();
+        _renderView = renderView;
+        _renderView->retain();
 
         // set size
-        _winSizeInPoints = _glView->getDesignResolutionSize();
+        _winSizeInPoints = _renderView->getDesignResolutionSize();
 
         _isStatusLabelUpdated = true;
 
         _renderer->init();
 
-        if (_glView)
+        if (_renderView)
         {
             setGLDefaultValues();
         }
@@ -451,9 +451,9 @@ void Director::destroyTextureCache()
 
 void Director::setViewport()
 {
-    if (_glView)
+    if (_renderView)
     {
-        _glView->setViewPortInPoints(0, 0, _winSizeInPoints.width, _winSizeInPoints.height);
+        _renderView->setViewPortInPoints(0, 0, _winSizeInPoints.width, _winSizeInPoints.height);
     }
 }
 
@@ -721,7 +721,7 @@ Vec2 Director::convertToGL(const Vec2& uiPoint)
     // Calculate z=0 using -> transform*[0, 0, 0, 1]/w
     float zClip = transform.m[14] / transform.m[15];
 
-    Vec2 glSize = _glView->getDesignResolutionSize();
+    Vec2 glSize = _renderView->getDesignResolutionSize();
     Vec4 clipCoord(2.0f * uiPoint.x / glSize.width - 1.0f, 1.0f - 2.0f * uiPoint.y / glSize.height, zClip, 1);
 
     Vec4 glCoord;
@@ -753,7 +753,7 @@ Vec2 Director::convertToUI(const Vec2& glPoint)
     clipCoord.y = clipCoord.y / clipCoord.w;
     clipCoord.z = clipCoord.z / clipCoord.w;
 
-    Vec2 glSize  = _glView->getDesignResolutionSize();
+    Vec2 glSize  = _renderView->getDesignResolutionSize();
     float factor = 1.0f / glCoord.w;
     return Vec2(glSize.width * (clipCoord.x * 0.5f + 0.5f) * factor,
                 glSize.height * (-clipCoord.y * 0.5f + 0.5f) * factor);
@@ -771,9 +771,9 @@ Vec2 Director::getWinSizeInPixels() const
 
 Vec2 Director::getVisibleSize() const
 {
-    if (_glView)
+    if (_renderView)
     {
-        return _glView->getVisibleSize();
+        return _renderView->getVisibleSize();
     }
     else
     {
@@ -783,9 +783,9 @@ Vec2 Director::getVisibleSize() const
 
 Vec2 Director::getVisibleOrigin() const
 {
-    if (_glView)
+    if (_renderView)
     {
-        return _glView->getVisibleOrigin();
+        return _renderView->getVisibleOrigin();
     }
     else
     {
@@ -795,9 +795,9 @@ Vec2 Director::getVisibleOrigin() const
 
 Rect Director::getSafeAreaRect() const
 {
-    if (_glView)
+    if (_renderView)
     {
-        return _glView->getSafeAreaRect();
+        return _renderView->getSafeAreaRect();
     }
     else
     {
@@ -1082,10 +1082,10 @@ void Director::cleanupDirector()
     backend::DriverBase::destroyInstance();
 
     // OpenGL view
-    if (_glView)
+    if (_renderView)
     {
-        _glView->end();
-        _glView = nullptr;
+        _renderView->end();
+        _renderView = nullptr;
     }
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
@@ -1522,7 +1522,7 @@ void Director::queueOperation(AsyncOperation op, void* param)
 #if defined(AX_PLATFORM_PC)
     _operations.enqueue([=]() { op(param); });
 #else
-    _glView->queueOperation(op, param);
+    _renderView->queueOperation(op, param);
 #endif
 }
 

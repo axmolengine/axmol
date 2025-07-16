@@ -168,7 +168,7 @@ public:
      * Get the RenderView.
      * @lua NA
      */
-    RenderView* getRenderView() { return _glView; }
+    RenderView* getRenderView() { return _renderView; }
     /**
      * Sets the RenderView.
      * @lua NA
@@ -580,9 +580,9 @@ protected:
     float _deltaTime              = 0.0f;
     bool _deltaTimePassedByCaller = false;
 
-    /* The _glView, where everything is rendered, RenderView is a abstract class,cocos2d-x provide RenderViewImpl
+    /* The _renderView, where everything is rendered, RenderView is a abstract class,cocos2d-x provide RenderViewImpl
      which inherit from it as default renderer context,you can have your own by inherit from it*/
-    RenderView* _glView = nullptr;
+    RenderView* _renderView = nullptr;
 
     JobSystem* _jobSystem = nullptr;
 
