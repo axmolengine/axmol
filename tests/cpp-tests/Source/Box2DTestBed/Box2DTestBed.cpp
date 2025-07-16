@@ -31,7 +31,7 @@
 #include "samples/sample.h"
 #include "samples/settings.h"
 #include "samples/TaskScheduler.h"
-#include "GLView.h"
+#include "platform/RenderView.h"
 
 using namespace ax;
 USING_NS_AX_EXT;

@@ -101,7 +101,7 @@ static void b2DrawSolidCapsule(b2Vec2 pt1, b2Vec2 pt2, float radius, b2HexColor 
 bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
 {
     g_pDebugDrawNode = this;
-    g_mainWindow     = static_cast<GLViewImpl*>(_director->getGLView())->getWindow();
+    g_mainWindow     = static_cast<RenderViewImpl*>(_director->getRenderView())->getWindow();
 
     bool ret = ax::extension::PhysicsDebugNode::initWithWorld(worldId);
 
@@ -417,7 +417,7 @@ void Box2DTestDebugDrawNode::submitDrawCommand(Renderer* renderer, CustomCommand
     auto mvpLocation         = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
     pipelineDescriptor.programState->setUniform(mvpLocation, matrixMVP.m, sizeof(matrixMVP.m));
 
-    auto viewHeight      = _director->getGLView()->getDesignResolutionSize().height;
+    auto viewHeight      = _director->getRenderView()->getDesignResolutionSize().height;
     constexpr float zoom = 25.0 * 2.35f;
     float pixelScale     = viewHeight / zoom;
     auto uniformLocation = pipelineDescriptor.programState->getUniformLocation("u_pixelScale");
